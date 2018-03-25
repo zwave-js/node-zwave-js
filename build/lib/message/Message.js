@@ -4,9 +4,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const logger_1 = require("../util/logger");
 /**
- * Represents a ZWave frame for communication with the serial interface
+ * Represents a ZWave message for communication with the serial interface
  */
-class Frame {
+class Message {
     // implementation
     constructor(typeOrPayload, funcType, expResponse, payload) {
         // decide which implementation we follow
@@ -18,17 +18,17 @@ class Frame {
             payload = typeOrPayload;
         }
         // These properties are filled from declared metadata if not provided
-        this.type = type || getFrameType(this);
+        this.type = type || getMessageType(this);
         this.functionType = funcType || getFunctionType(this);
         this.expectedResponse = expResponse || getExpectedResponse(this);
         // This is taken from the constructor args
         this.payload = payload;
     }
-    /** Serializes this frame into a Buffer */
+    /** Serializes this message into a Buffer */
     serialize() {
         const payloadLength = this.payload != null ? this.payload.length : 0;
         const ret = Buffer.allocUnsafe(payloadLength + 5);
-        ret[0] = 1 /* SOF */;
+        ret[0] = MessageHeaders.SOF;
         // length of the following data, including the checksum
         ret[1] = payloadLength + 3;
         // write the remaining data
@@ -41,54 +41,88 @@ class Frame {
         return ret;
     }
     /**
-     * Deserializes a frame of this type from a Buffer
+     * Checks if there's enough data in the buffer to deserialize
+     */
+    static isComplete(data) {
+        if (!data || !data.length || data.length < 5)
+            return false; // not yet
+        // check the length again, this time with the transmitted length
+        const remainingLength = data[1];
+        const messageLength = remainingLength + 2;
+        if (data.length < messageLength)
+            return false; // not yet
+        return true; // probably, but the checksum may be wrong
+    }
+    /**
+     * Retrieves the correct constructor for the next message in the given Buffer.
+     * It is assumed that the buffer has been checked beforehand
+     */
+    static getConstructor(data) {
+        return getMessageConstructor(data[2], data[3]) || Message;
+    }
+    /**
+     * Deserializes a message of this type from a Buffer
      * @returns must return the total number of bytes read
      */
     deserialize(data) {
         // SOF, length, type, commandId and checksum must be present
         if (!data || !data.length || data.length < 5) {
-            throw new ZWaveError_1.ZWaveError("Could not deserialize the data frame because it was truncated", ZWaveError_1.ZWaveErrorCodes.PacketFormat_Truncated);
+            throw new ZWaveError_1.ZWaveError("Could not deserialize the data message because it was truncated", ZWaveError_1.ZWaveErrorCodes.PacketFormat_Truncated);
         }
         // the packet has to start with SOF
-        if (data[0] !== 1 /* SOF */) {
-            throw new ZWaveError_1.ZWaveError("Could not deserialize the data frame because it does not start with SOF", ZWaveError_1.ZWaveErrorCodes.PacketFormat_Invalid);
+        if (data[0] !== MessageHeaders.SOF) {
+            throw new ZWaveError_1.ZWaveError("Could not deserialize the data message because it does not start with SOF", ZWaveError_1.ZWaveErrorCodes.PacketFormat_Invalid);
         }
-        // check the lenght again, this time with the transmitted length
+        // check the length again, this time with the transmitted length
         const remainingLength = data[1];
-        const frameLength = remainingLength + 2;
-        if (data.length < frameLength) {
-            throw new ZWaveError_1.ZWaveError("Could not deserialize the data frame because it was truncated", ZWaveError_1.ZWaveErrorCodes.PacketFormat_Truncated);
+        const messageLength = remainingLength + 2;
+        if (data.length < messageLength) {
+            throw new ZWaveError_1.ZWaveError("Could not deserialize the data message because it was truncated", ZWaveError_1.ZWaveErrorCodes.PacketFormat_Truncated);
         }
         // check the checksum
-        const expectedChecksum = computeChecksum(data.slice(0, frameLength));
-        if (data[frameLength - 1] !== expectedChecksum) {
-            throw new ZWaveError_1.ZWaveError("Could not deserialize the data frame because the checksum didn't match", ZWaveError_1.ZWaveErrorCodes.PacketFormat_Checksum);
+        const expectedChecksum = computeChecksum(data.slice(0, messageLength));
+        if (data[messageLength - 1] !== expectedChecksum) {
+            throw new ZWaveError_1.ZWaveError("Could not deserialize the data message because the checksum didn't match", ZWaveError_1.ZWaveErrorCodes.PacketFormat_Checksum);
         }
         this.type = data[2];
         this.functionType = data[3];
-        const payloadLength = frameLength - 5;
+        const payloadLength = messageLength - 5;
         this.payload = data.slice(4, 4 + payloadLength);
-        // return the total number of bytes in this frame
-        return frameLength;
+        // return the total number of bytes in this message
+        return messageLength;
+    }
+    toJSON() {
+        return {
+            type: MessageType[this.type],
+            functionType: FunctionType[this.functionType],
+            payload: this.payload.toString("hex"),
+        };
     }
 }
-exports.Frame = Frame;
-function computeChecksum(frame) {
+exports.Message = Message;
+function computeChecksum(message) {
     let ret = 0xff;
     // exclude SOF and checksum byte from the computation
-    for (let i = 1; i < frame.length - 1; i++) {
-        ret ^= frame[i];
+    for (let i = 1; i < message.length - 1; i++) {
+        ret ^= message[i];
     }
     return ret;
 }
-/** Indicates the type of a data frame */
-var FrameType;
-(function (FrameType) {
-    FrameType[FrameType["Request"] = 0] = "Request";
-    FrameType[FrameType["Response"] = 1] = "Response";
-})(FrameType = exports.FrameType || (exports.FrameType = {}));
+var MessageHeaders;
+(function (MessageHeaders) {
+    MessageHeaders[MessageHeaders["SOF"] = 1] = "SOF";
+    MessageHeaders[MessageHeaders["ACK"] = 6] = "ACK";
+    MessageHeaders[MessageHeaders["NAK"] = 21] = "NAK";
+    MessageHeaders[MessageHeaders["CAN"] = 24] = "CAN";
+})(MessageHeaders = exports.MessageHeaders || (exports.MessageHeaders = {}));
+/** Indicates the type of a data message */
+var MessageType;
+(function (MessageType) {
+    MessageType[MessageType["Request"] = 0] = "Request";
+    MessageType[MessageType["Response"] = 1] = "Response";
+})(MessageType = exports.MessageType || (exports.MessageType = {}));
 /**
- * Complete list of function IDs for data frames.
+ * Complete list of function IDs for data messages.
  * IDs started with FUNC_ID are straight from OZW and not implemented here yet
  */
 var FunctionType;
@@ -147,52 +181,50 @@ exports.METADATA_messageTypeMap = Symbol("messageTypeMap");
 exports.METADATA_expectedResponse = Symbol("expectedResponse");
 (function initFunctionTypeMap() {
     const map = new Map();
-    Reflect.defineMetadata(exports.METADATA_messageTypeMap, map, Frame);
+    Reflect.defineMetadata(exports.METADATA_messageTypeMap, map, Message);
 })();
-function getMessageTypeMapKey(frameType, functionType) {
-    return JSON.stringify({ frameType, functionType });
+function getMessageTypeMapKey(messageType, functionType) {
+    return JSON.stringify({ messageType, functionType });
 }
 /**
- * Defines the frame and function type associated with a Z-Wave message
+ * Defines the message and function type associated with a Z-Wave message
  */
-function messageTypes(frameType, functionType) {
+function messageTypes(messageType, functionType) {
     return (messageClass) => {
-        // get the class constructor
-        const constr = messageClass;
-        logger_1.log(`${constr.name}: defining frame type ${frameType} and function type ${functionType}`, "silly");
+        logger_1.log(`${messageClass.name}: defining message type ${messageType} and function type ${functionType}`, "silly");
         // and store the metadata
-        Reflect.defineMetadata(exports.METADATA_messageTypes, { frameType, functionType }, constr);
-        // also store a map in the Frame metadata for lookup.
-        const map = Reflect.getMetadata(exports.METADATA_messageTypeMap, Frame) || new Map();
-        map.set(getMessageTypeMapKey(frameType, functionType), constr);
-        Reflect.defineMetadata(exports.METADATA_messageTypeMap, map, Frame);
+        Reflect.defineMetadata(exports.METADATA_messageTypes, { messageType, functionType }, messageClass);
+        // also store a map in the Message metadata for lookup.
+        const map = Reflect.getMetadata(exports.METADATA_messageTypeMap, Message) || new Map();
+        map.set(getMessageTypeMapKey(messageType, functionType), messageClass);
+        Reflect.defineMetadata(exports.METADATA_messageTypeMap, map, Message);
     };
 }
 exports.messageTypes = messageTypes;
 /**
- * Retrieves the frame type defined for a Z-Wave message class
+ * Retrieves the message type defined for a Z-Wave message class
  */
-function getFrameType(messageClass) {
+function getMessageType(messageClass) {
     // get the class constructor
     const constr = messageClass.constructor;
     // retrieve the current metadata
     const meta = Reflect.getMetadata(exports.METADATA_messageTypes, constr);
-    const ret = meta && meta.frameType;
-    logger_1.log(`${constr.name}: retrieving frame type => ${ret}`, "silly");
+    const ret = meta && meta.messageType;
+    logger_1.log(`${constr.name}: retrieving message type => ${ret}`, "silly");
     return ret;
 }
-exports.getFrameType = getFrameType;
+exports.getMessageType = getMessageType;
 /**
- * Retrieves the frame type defined for a Z-Wave message class
+ * Retrieves the message type defined for a Z-Wave message class
  */
-function getFrameTypeStatic(classConstructor) {
+function getMessageTypeStatic(classConstructor) {
     // retrieve the current metadata
     const meta = Reflect.getMetadata(exports.METADATA_messageTypes, classConstructor);
-    const ret = meta && meta.frameType;
-    logger_1.log(`${classConstructor.name}: retrieving frame type => ${ret}`, "silly");
+    const ret = meta && meta.messageType;
+    logger_1.log(`${classConstructor.name}: retrieving message type => ${ret}`, "silly");
     return ret;
 }
-exports.getFrameTypeStatic = getFrameTypeStatic;
+exports.getMessageTypeStatic = getMessageTypeStatic;
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
@@ -218,25 +250,23 @@ function getFunctionTypeStatic(classConstructor) {
 }
 exports.getFunctionTypeStatic = getFunctionTypeStatic;
 /**
- * Looks up the message constructor for a given frame type and function type
+ * Looks up the message constructor for a given message type and function type
  */
-function getFrameConstructor(frameType, functionType) {
-    // also store it in the Frame class for lookup purposes
-    const functionTypeMap = Reflect.getMetadata(exports.METADATA_messageTypeMap, Frame);
+function getMessageConstructor(messageType, functionType) {
+    // also store it in the Message class for lookup purposes
+    const functionTypeMap = Reflect.getMetadata(exports.METADATA_messageTypeMap, Message);
     if (functionTypeMap != null)
-        return functionTypeMap.get(getMessageTypeMapKey(frameType, functionType));
+        return functionTypeMap.get(getMessageTypeMapKey(messageType, functionType));
 }
-exports.getFrameConstructor = getFrameConstructor;
+exports.getMessageConstructor = getMessageConstructor;
 /**
  * Defines the expected response associated with a Z-Wave message
  */
 function expectedResponse(type) {
     return (messageClass) => {
-        // get the class constructor
-        const constr = messageClass.constructor;
-        logger_1.log(`${constr.name}: defining expected response ${type}`, "silly");
+        logger_1.log(`${messageClass.name}: defining expected response ${type}`, "silly");
         // and store the metadata
-        Reflect.defineMetadata(exports.METADATA_expectedResponse, type, constr);
+        Reflect.defineMetadata(exports.METADATA_expectedResponse, type, messageClass);
     };
 }
 exports.expectedResponse = expectedResponse;

@@ -1,4 +1,4 @@
-import { expectedResponse, Frame, FrameType,  FunctionType, messageTypes} from "../frame/Frame";
+import { expectedResponse, FunctionType, Message,  MessageType, messageTypes} from "../message/Message";
 import { cpp2js } from "../util/strings";
 
 export enum ControllerTypes {
@@ -13,14 +13,14 @@ export enum ControllerTypes {
 	"Device under Test",
 }
 
-@messageTypes(FrameType.Request, FunctionType.GetControllerVersion)
+@messageTypes(MessageType.Request, FunctionType.GetControllerVersion)
 @expectedResponse(FunctionType.GetControllerVersion)
-export class GetControllerVersionRequest extends Frame {
+export class GetControllerVersionRequest extends Message {
 
 }
 
-@messageTypes(FrameType.Response, FunctionType.GetControllerVersion)
-export class GetControllerVersionResponse extends Frame {
+@messageTypes(MessageType.Response, FunctionType.GetControllerVersion)
+export class GetControllerVersionResponse extends Message {
 
 	public controllerType: ControllerTypes;
 	public controllerVersion: string;

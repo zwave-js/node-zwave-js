@@ -9,9 +9,9 @@ export interface Constructable<T> {
 }
 
 /**
- * Represents a ZWave frame for communication with the serial interface
+ * Represents a ZWave message for communication with the serial interface
  */
-export class Frame {
+export class Message {
 
 	// #1
 	constructor(
@@ -20,7 +20,7 @@ export class Frame {
 
 	// #2
 	constructor(
-		type: FrameType,
+		type: MessageType,
 		funcType: FunctionType,
 		expResponse: FunctionType,
 		payload?: Buffer,
@@ -28,14 +28,14 @@ export class Frame {
 
 	// implementation
 	constructor(
-		typeOrPayload?: FrameType | Buffer,
+		typeOrPayload?: MessageType | Buffer,
 		funcType?: FunctionType,
 		expResponse?: FunctionType,
 		payload?: Buffer, // TODO: Length limit 255
 	) {
 
 		// decide which implementation we follow
-		let type: FrameType;
+		let type: MessageType;
 		if (typeof typeOrPayload === "number") { // #2
 			type = typeOrPayload;
 		} else if (typeOrPayload instanceof Buffer) { // #1
@@ -43,24 +43,24 @@ export class Frame {
 		}
 
 		// These properties are filled from declared metadata if not provided
-		this.type = type || getFrameType(this);
+		this.type = type || getMessageType(this);
 		this.functionType = funcType || getFunctionType(this);
 		this.expectedResponse = expResponse || getExpectedResponse(this);
 		// This is taken from the constructor args
 		this.payload = payload;
 	}
 
-	public type: FrameType;
+	public type: MessageType;
 	public functionType: FunctionType;
 	public expectedResponse: FunctionType;
 	public payload: Buffer; // TODO: Length limit 255
 
-	/** Serializes this frame into a Buffer */
+	/** Serializes this message into a Buffer */
 	public serialize(): Buffer {
 		const payloadLength = this.payload != null ? this.payload.length : 0;
 
 		const ret = Buffer.allocUnsafe(payloadLength + 5);
-		ret[0] = FrameHeaders.SOF;
+		ret[0] = MessageHeaders.SOF;
 		// length of the following data, including the checksum
 		ret[1] = payloadLength + 3;
 		// write the remaining data
@@ -73,77 +73,107 @@ export class Frame {
 	}
 
 	/**
-	 * Deserializes a frame of this type from a Buffer
+	 * Checks if there's enough data in the buffer to deserialize
+	 */
+	public static isComplete(data: Buffer): boolean {
+		if (!data || !data.length || data.length < 5) return false; // not yet
+
+		// check the length again, this time with the transmitted length
+		const remainingLength = data[1];
+		const messageLength = remainingLength + 2;
+		if (data.length < messageLength) return false; // not yet
+
+		return true; // probably, but the checksum may be wrong
+	}
+
+	/**
+	 * Retrieves the correct constructor for the next message in the given Buffer.
+	 * It is assumed that the buffer has been checked beforehand
+	 */
+	public static getConstructor(data: Buffer): Constructable<Message> {
+		return getMessageConstructor(data[2], data[3]) || Message;
+	}
+
+	/**
+	 * Deserializes a message of this type from a Buffer
 	 * @returns must return the total number of bytes read
 	 */
 	public deserialize(data: Buffer): number {
 		// SOF, length, type, commandId and checksum must be present
 		if (!data || !data.length || data.length < 5) {
 			throw new ZWaveError(
-				"Could not deserialize the data frame because it was truncated",
+				"Could not deserialize the data message because it was truncated",
 				ZWaveErrorCodes.PacketFormat_Truncated,
 			);
 		}
 		// the packet has to start with SOF
-		if (data[0] !== FrameHeaders.SOF) {
+		if (data[0] !== MessageHeaders.SOF) {
 			throw new ZWaveError(
-				"Could not deserialize the data frame because it does not start with SOF",
+				"Could not deserialize the data message because it does not start with SOF",
 				ZWaveErrorCodes.PacketFormat_Invalid,
 			);
 		}
-		// check the lenght again, this time with the transmitted length
+		// check the length again, this time with the transmitted length
 		const remainingLength = data[1];
-		const frameLength = remainingLength + 2;
-		if (data.length < frameLength) {
+		const messageLength = remainingLength + 2;
+		if (data.length < messageLength) {
 			throw new ZWaveError(
-				"Could not deserialize the data frame because it was truncated",
+				"Could not deserialize the data message because it was truncated",
 				ZWaveErrorCodes.PacketFormat_Truncated,
 			);
 		}
 		// check the checksum
-		const expectedChecksum = computeChecksum(data.slice(0, frameLength));
-		if (data[frameLength - 1] !== expectedChecksum) {
+		const expectedChecksum = computeChecksum(data.slice(0, messageLength));
+		if (data[messageLength - 1] !== expectedChecksum) {
 			throw new ZWaveError(
-				"Could not deserialize the data frame because the checksum didn't match",
+				"Could not deserialize the data message because the checksum didn't match",
 				ZWaveErrorCodes.PacketFormat_Checksum,
 			);
 		}
 
 		this.type = data[2];
 		this.functionType = data[3];
-		const payloadLength = frameLength - 5;
+		const payloadLength = messageLength - 5;
 		this.payload = data.slice(4, 4 + payloadLength);
 
-		// return the total number of bytes in this frame
-		return frameLength;
+		// return the total number of bytes in this message
+		return messageLength;
+	}
+
+	public toJSON() {
+		return {
+			type: MessageType[this.type],
+			functionType: FunctionType[this.functionType],
+			payload: this.payload.toString("hex"),
+		};
 	}
 
 }
 
-function computeChecksum(frame: Buffer): number {
+function computeChecksum(message: Buffer): number {
 	let ret = 0xff;
 	// exclude SOF and checksum byte from the computation
-	for (let i = 1; i < frame.length - 1; i++) {
-		ret ^= frame[i];
+	for (let i = 1; i < message.length - 1; i++) {
+		ret ^= message[i];
 	}
 	return ret;
 }
 
-export const enum FrameHeaders {
+export enum MessageHeaders {
 	SOF = 0x01,
 	ACK = 0x06,
 	NAK = 0x15,
 	CAN = 0x18,
 }
 
-/** Indicates the type of a data frame */
-export enum FrameType {
+/** Indicates the type of a data message */
+export enum MessageType {
 	Request = 0x0,
 	Response = 0x1,
 }
 
 /**
- * Complete list of function IDs for data frames.
+ * Complete list of function IDs for data messages.
  * IDs started with FUNC_ID are straight from OZW and not implemented here yet
  */
 export enum FunctionType {
@@ -187,12 +217,12 @@ export enum FunctionType {
 	FUNC_ID_ZW_GET_ROUTING_INFO = 0x80,	// Get a specified node's neighbor information from the controller
 	FUNC_ID_SERIAL_API_SLAVE_NODE_INFO = 0xA0,	// Set application virtual slave node information
 	FUNC_ID_APPLICATION_SLAVE_COMMAND_HANDLER = 0xA1,	// Slave command handler
-	FUNC_ID_ZW_SEND_SLAVE_NODE_INFO = 0xA2,	// Send a slave node information frame
+	FUNC_ID_ZW_SEND_SLAVE_NODE_INFO = 0xA2,	// Send a slave node information message
 	FUNC_ID_ZW_SEND_SLAVE_DATA = 0xA3,	// Send data from slave
 	FUNC_ID_ZW_SET_SLAVE_LEARN_MODE = 0xA4,	// Enter slave learn mode
 	FUNC_ID_ZW_GET_VIRTUAL_NODES = 0xA5,	// Return all virtual nodes
 	FUNC_ID_ZW_IS_VIRTUAL_NODE = 0xA6,	// Virtual node test
-	FUNC_ID_ZW_SET_PROMISCUOUS_MODE = 0xD0,	// Set controller into promiscuous mode to listen to all frames
+	FUNC_ID_ZW_SET_PROMISCUOUS_MODE = 0xD0,	// Set controller into promiscuous mode to listen to all messages
 	FUNC_ID_PROMISCUOUS_APPLICATION_COMMAND_HANDLER = 0xD1,
 }
 
@@ -205,62 +235,60 @@ export const METADATA_expectedResponse = Symbol("expectedResponse");
 // tslint:enable:variable-name
 
 // Pre-create the lookup maps for the contructors
-type MessageTypeMap = Map<string, Constructable<Frame>>;
+type MessageTypeMap = Map<string, Constructable<Message>>;
 (function initFunctionTypeMap() {
 	const map: MessageTypeMap = new Map();
-	Reflect.defineMetadata(METADATA_messageTypeMap, map, Frame);
+	Reflect.defineMetadata(METADATA_messageTypeMap, map, Message);
 })();
 
-function getMessageTypeMapKey(frameType: FrameType, functionType: FunctionType): string {
-	return JSON.stringify({frameType, functionType});
+function getMessageTypeMapKey(messageType: MessageType, functionType: FunctionType): string {
+	return JSON.stringify({messageType, functionType});
 }
 
 /**
- * Defines the frame and function type associated with a Z-Wave message
+ * Defines the message and function type associated with a Z-Wave message
  */
-export function messageTypes(frameType: FrameType, functionType: FunctionType): ClassDecorator {
+export function messageTypes(messageType: MessageType, functionType: FunctionType): ClassDecorator {
 	return (messageClass) => {
-		// get the class constructor
-		const constr = messageClass;
-		log(`${constr.name}: defining frame type ${frameType} and function type ${functionType}`, "silly");
+		log(`${messageClass.name}: defining message type ${messageType} and function type ${functionType}`, "silly");
 		// and store the metadata
-		Reflect.defineMetadata(METADATA_messageTypes, {frameType, functionType}, constr);
+		Reflect.defineMetadata(METADATA_messageTypes, {messageType, functionType}, messageClass);
 
-		// also store a map in the Frame metadata for lookup.
-		const map: MessageTypeMap = Reflect.getMetadata(METADATA_messageTypeMap, Frame) || new Map();
-		map.set(getMessageTypeMapKey(frameType, functionType), constr as any as Constructable<Frame>);
-		Reflect.defineMetadata(METADATA_messageTypeMap, map, Frame);
+		// also store a map in the Message metadata for lookup.
+		const map: MessageTypeMap = Reflect.getMetadata(METADATA_messageTypeMap, Message) || new Map();
+		map.set(getMessageTypeMapKey(messageType, functionType), messageClass as any as Constructable<Message>);
+		Reflect.defineMetadata(METADATA_messageTypeMap, map, Message);
 	};
 }
 
 /**
- * Retrieves the frame type defined for a Z-Wave message class
+ * Retrieves the message type defined for a Z-Wave message class
  */
-export function getFrameType<T extends Frame>(messageClass: T): FrameType {
+export function getMessageType<T extends Message>(messageClass: T): MessageType {
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
 	const meta = Reflect.getMetadata(METADATA_messageTypes, constr);
-	const ret = meta && meta.frameType;
-	log(`${constr.name}: retrieving frame type => ${ret}`, "silly");
+	const ret = meta && meta.messageType;
+	log(`${constr.name}: retrieving message type => ${ret}`, "silly");
 	return ret;
 }
 
 /**
- * Retrieves the frame type defined for a Z-Wave message class
+ * Retrieves the message type defined for a Z-Wave message class
  */
-export function getFrameTypeStatic<T extends Constructable<Frame>>(classConstructor: T): FrameType {
+export function getMessageTypeStatic<T extends Constructable<Message>>(classConstructor: T): MessageType {
 	// retrieve the current metadata
 	const meta = Reflect.getMetadata(METADATA_messageTypes, classConstructor);
-	const ret = meta && meta.frameType;
-	log(`${classConstructor.name}: retrieving frame type => ${ret}`, "silly");
+	const ret = meta && meta.messageType;
+	log(`${classConstructor.name}: retrieving message type => ${ret}`, "silly");
 	return ret;
 }
 
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export function getFunctionType<T extends Frame>(messageClass: T): FunctionType {
+export function getFunctionType<T extends Message>(messageClass: T): FunctionType {
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
@@ -273,7 +301,7 @@ export function getFunctionType<T extends Frame>(messageClass: T): FunctionType 
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export function getFunctionTypeStatic<T extends Constructable<Frame>>(classConstructor: T): FunctionType {
+export function getFunctionTypeStatic<T extends Constructable<Message>>(classConstructor: T): FunctionType {
 	// retrieve the current metadata
 	const meta = Reflect.getMetadata(METADATA_messageTypes, classConstructor);
 	const ret = meta && meta.functionType;
@@ -282,12 +310,12 @@ export function getFunctionTypeStatic<T extends Constructable<Frame>>(classConst
 }
 
 /**
- * Looks up the message constructor for a given frame type and function type
+ * Looks up the message constructor for a given message type and function type
  */
-export function getFrameConstructor(frameType: FrameType, functionType: FunctionType): Constructable<Frame> {
-	// also store it in the Frame class for lookup purposes
-	const functionTypeMap = Reflect.getMetadata(METADATA_messageTypeMap, Frame) as MessageTypeMap;
-	if (functionTypeMap != null) return functionTypeMap.get(getMessageTypeMapKey(frameType, functionType));
+export function getMessageConstructor(messageType: MessageType, functionType: FunctionType): Constructable<Message> {
+	// also store it in the Message class for lookup purposes
+	const functionTypeMap = Reflect.getMetadata(METADATA_messageTypeMap, Message) as MessageTypeMap;
+	if (functionTypeMap != null) return functionTypeMap.get(getMessageTypeMapKey(messageType, functionType));
 }
 
 /**
@@ -295,18 +323,16 @@ export function getFrameConstructor(frameType: FrameType, functionType: Function
  */
 export function expectedResponse(type: FunctionType): ClassDecorator {
 	return (messageClass) => {
-		// get the class constructor
-		const constr = messageClass.constructor;
-		log(`${constr.name}: defining expected response ${type}`, "silly");
+		log(`${messageClass.name}: defining expected response ${type}`, "silly");
 		// and store the metadata
-		Reflect.defineMetadata(METADATA_expectedResponse, type, constr);
+		Reflect.defineMetadata(METADATA_expectedResponse, type, messageClass);
 	};
 }
 
 /**
  * Retrieves the expected response defined for a Z-Wave message class
  */
-export function getExpectedResponse<T extends Frame>(messageClass: T): FunctionType {
+export function getExpectedResponse<T extends Message>(messageClass: T): FunctionType {
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
@@ -318,7 +344,7 @@ export function getExpectedResponse<T extends Frame>(messageClass: T): FunctionT
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export function getExpectedResponseStatic<T extends Constructable<Frame>>(classConstructor: T): FunctionType {
+export function getExpectedResponseStatic<T extends Constructable<Message>>(classConstructor: T): FunctionType {
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_expectedResponse, classConstructor);
 	log(`${classConstructor.name}: retrieving expected response => ${ret}`, "silly");

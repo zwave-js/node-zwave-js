@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { Frame } from "../frame/Frame";
+import { Message } from "../message/Message";
 export declare enum ControllerTypes {
     "Unknown" = 0,
     "Static Controller" = 1,
@@ -11,9 +11,9 @@ export declare enum ControllerTypes {
     "Bridge Controller" = 7,
     "Device under Test" = 8,
 }
-export declare class GetControllerVersionRequest extends Frame {
+export declare class GetControllerVersionRequest extends Message {
 }
-export declare class GetControllerVersionResponse extends Frame {
+export declare class GetControllerVersionResponse extends Message {
     controllerType: ControllerTypes;
     controllerVersion: string;
     deserialize(data: Buffer): number;

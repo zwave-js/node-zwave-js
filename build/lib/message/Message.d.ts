@@ -3,36 +3,50 @@ export interface Constructable<T> {
     new (...constructorArgs: any[]): T;
 }
 /**
- * Represents a ZWave frame for communication with the serial interface
+ * Represents a ZWave message for communication with the serial interface
  */
-export declare class Frame {
+export declare class Message {
     constructor(payload?: Buffer);
-    constructor(type: FrameType, funcType: FunctionType, expResponse: FunctionType, payload?: Buffer);
-    type: FrameType;
+    constructor(type: MessageType, funcType: FunctionType, expResponse: FunctionType, payload?: Buffer);
+    type: MessageType;
     functionType: FunctionType;
     expectedResponse: FunctionType;
     payload: Buffer;
-    /** Serializes this frame into a Buffer */
+    /** Serializes this message into a Buffer */
     serialize(): Buffer;
     /**
-     * Deserializes a frame of this type from a Buffer
+     * Checks if there's enough data in the buffer to deserialize
+     */
+    static isComplete(data: Buffer): boolean;
+    /**
+     * Retrieves the correct constructor for the next message in the given Buffer.
+     * It is assumed that the buffer has been checked beforehand
+     */
+    static getConstructor(data: Buffer): Constructable<Message>;
+    /**
+     * Deserializes a message of this type from a Buffer
      * @returns must return the total number of bytes read
      */
     deserialize(data: Buffer): number;
+    toJSON(): {
+        type: string;
+        functionType: string;
+        payload: string;
+    };
 }
-export declare const enum FrameHeaders {
+export declare enum MessageHeaders {
     SOF = 1,
     ACK = 6,
     NAK = 21,
     CAN = 24,
 }
-/** Indicates the type of a data frame */
-export declare enum FrameType {
+/** Indicates the type of a data message */
+export declare enum MessageType {
     Request = 0,
     Response = 1,
 }
 /**
- * Complete list of function IDs for data frames.
+ * Complete list of function IDs for data messages.
  * IDs started with FUNC_ID are straight from OZW and not implemented here yet
  */
 export declare enum FunctionType {
@@ -86,29 +100,29 @@ export declare const METADATA_messageTypes: unique symbol;
 export declare const METADATA_messageTypeMap: unique symbol;
 export declare const METADATA_expectedResponse: unique symbol;
 /**
- * Defines the frame and function type associated with a Z-Wave message
+ * Defines the message and function type associated with a Z-Wave message
  */
-export declare function messageTypes(frameType: FrameType, functionType: FunctionType): ClassDecorator;
+export declare function messageTypes(messageType: MessageType, functionType: FunctionType): ClassDecorator;
 /**
- * Retrieves the frame type defined for a Z-Wave message class
+ * Retrieves the message type defined for a Z-Wave message class
  */
-export declare function getFrameType<T extends Frame>(messageClass: T): FrameType;
+export declare function getMessageType<T extends Message>(messageClass: T): MessageType;
 /**
- * Retrieves the frame type defined for a Z-Wave message class
+ * Retrieves the message type defined for a Z-Wave message class
  */
-export declare function getFrameTypeStatic<T extends Constructable<Frame>>(classConstructor: T): FrameType;
-/**
- * Retrieves the function type defined for a Z-Wave message class
- */
-export declare function getFunctionType<T extends Frame>(messageClass: T): FunctionType;
+export declare function getMessageTypeStatic<T extends Constructable<Message>>(classConstructor: T): MessageType;
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export declare function getFunctionTypeStatic<T extends Constructable<Frame>>(classConstructor: T): FunctionType;
+export declare function getFunctionType<T extends Message>(messageClass: T): FunctionType;
 /**
- * Looks up the message constructor for a given frame type and function type
+ * Retrieves the function type defined for a Z-Wave message class
  */
-export declare function getFrameConstructor(frameType: FrameType, functionType: FunctionType): Constructable<Frame>;
+export declare function getFunctionTypeStatic<T extends Constructable<Message>>(classConstructor: T): FunctionType;
+/**
+ * Looks up the message constructor for a given message type and function type
+ */
+export declare function getMessageConstructor(messageType: MessageType, functionType: FunctionType): Constructable<Message>;
 /**
  * Defines the expected response associated with a Z-Wave message
  */
@@ -116,8 +130,8 @@ export declare function expectedResponse(type: FunctionType): ClassDecorator;
 /**
  * Retrieves the expected response defined for a Z-Wave message class
  */
-export declare function getExpectedResponse<T extends Frame>(messageClass: T): FunctionType;
+export declare function getExpectedResponse<T extends Message>(messageClass: T): FunctionType;
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export declare function getExpectedResponseStatic<T extends Constructable<Frame>>(classConstructor: T): FunctionType;
+export declare function getExpectedResponseStatic<T extends Constructable<Message>>(classConstructor: T): FunctionType;

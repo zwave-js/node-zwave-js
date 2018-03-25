@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Frame_1 = require("../frame/Frame");
+const Message_1 = require("../message/Message");
 const strings_1 = require("../util/strings");
 var ControllerTypes;
 (function (ControllerTypes) {
@@ -20,14 +20,14 @@ var ControllerTypes;
     ControllerTypes[ControllerTypes["Bridge Controller"] = 7] = "Bridge Controller";
     ControllerTypes[ControllerTypes["Device under Test"] = 8] = "Device under Test";
 })(ControllerTypes = exports.ControllerTypes || (exports.ControllerTypes = {}));
-let GetControllerVersionRequest = class GetControllerVersionRequest extends Frame_1.Frame {
+let GetControllerVersionRequest = class GetControllerVersionRequest extends Message_1.Message {
 };
 GetControllerVersionRequest = __decorate([
-    Frame_1.messageTypes(Frame_1.FrameType.Request, Frame_1.FunctionType.GetControllerVersion),
-    Frame_1.expectedResponse(Frame_1.FunctionType.GetControllerVersion)
+    Message_1.messageTypes(Message_1.MessageType.Request, Message_1.FunctionType.GetControllerVersion),
+    Message_1.expectedResponse(Message_1.FunctionType.GetControllerVersion)
 ], GetControllerVersionRequest);
 exports.GetControllerVersionRequest = GetControllerVersionRequest;
-let GetControllerVersionResponse = class GetControllerVersionResponse extends Frame_1.Frame {
+let GetControllerVersionResponse = class GetControllerVersionResponse extends Message_1.Message {
     deserialize(data) {
         const ret = super.deserialize(data);
         // The payload consists of a zero-terminated string and a uint8 for the controller type
@@ -37,6 +37,6 @@ let GetControllerVersionResponse = class GetControllerVersionResponse extends Fr
     }
 };
 GetControllerVersionResponse = __decorate([
-    Frame_1.messageTypes(Frame_1.FrameType.Response, Frame_1.FunctionType.GetControllerVersion)
+    Message_1.messageTypes(Message_1.MessageType.Response, Message_1.FunctionType.GetControllerVersion)
 ], GetControllerVersionResponse);
 exports.GetControllerVersionResponse = GetControllerVersionResponse;
