@@ -15,3 +15,10 @@ export function padStart(str: string, targetLen: number, fill: string = " "): st
 	const repeats = Math.ceil(missingLength / fill.length);
 	return fill.repeat(repeats).substr(0, missingLength) + str;
 }
+
+/** Translates a null-terminated (C++) string to JS */
+export function cpp2js(str: string): string {
+	const nullIndex = str.indexOf("\0");
+	if (nullIndex === -1) return str;
+	return str.substr(0, nullIndex);
+}

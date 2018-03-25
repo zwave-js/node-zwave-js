@@ -16,3 +16,5 @@ coverage/
 maintenance/
 .travis.yml
 .circleci/
+rfc/
+docs/

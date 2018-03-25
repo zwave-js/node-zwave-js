@@ -1,12 +1,12 @@
 import { assert, expect } from "chai";
-import { ZWaveError, ZWaveErrorCodes } from "./zwave-error";
+import { ZWaveError, ZWaveErrorCodes } from "./ZWaveError";
 // tslint:disable:no-unused-expression
 
-describe("lib/ZWave-error => ", () => {
+describe("lib/ZWaveError => ", () => {
 
-	const err = new ZWaveError("Test message", ZWaveErrorCodes.ConnectionFailed);
+	const err = new ZWaveError("Test message", ZWaveErrorCodes.PacketFormat_Invalid);
 	function thisThrows() {
-		throw new ZWaveError("Test message", ZWaveErrorCodes.ConnectionFailed);
+		throw new ZWaveError("Test message", ZWaveErrorCodes.PacketFormat_Invalid);
 	}
 	it("should be of type Error", () => {
 		assert(err instanceof Error);
@@ -17,7 +17,7 @@ describe("lib/ZWave-error => ", () => {
 		try {
 			thisThrows();
 		} catch (e) {
-			expect(e.code).to.equal(ZWaveErrorCodes.ConnectionFailed);
+			expect(e.code).to.equal(ZWaveErrorCodes.PacketFormat_Invalid);
 		}
 	});
 

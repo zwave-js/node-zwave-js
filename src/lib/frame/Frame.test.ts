@@ -3,10 +3,10 @@
 import { expect, should } from "chai";
 should();
 
-import { ZWaveError, ZWaveErrorCodes } from "../zwave-error";
-import { DataFrame, DataFrameType } from "./data-frame";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { Frame, FrameType } from "./Frame";
 
-describe.only("lib/frame/data-frame => ", () => {
+describe.only("lib/frame/Frame => ", () => {
 	it("should deserialize and serialize correctly", () => {
 
 		const okayFrames = [
@@ -16,7 +16,7 @@ describe.only("lib/frame/data-frame => ", () => {
 			Buffer.from([0x01, 0x0a, 0x00, 0x13, 0x03, 0x03, 0x8e, 0x02, 0x04, 0x25, 0x40, 0x0b]),
 		];
 		for (const original of okayFrames) {
-			const parsed = new DataFrame();
+			const parsed = new Frame();
 			parsed.deserialize(original);
 			expect(parsed.serialize()).to.deep.equal(original);
 		}
@@ -25,9 +25,9 @@ describe.only("lib/frame/data-frame => ", () => {
 	it("should serialize correctly when the payload is null", () => {
 		// synthetic frame
 		const expected = Buffer.from([0x01, 0x03, 0x00, 0xff, 0x03]);
-		const frame = new DataFrame();
-		frame.type = DataFrameType.Request;
-		frame.commandId = 0xff;
+		const frame = new Frame();
+		frame.type = FrameType.Request;
+		frame.functionType = 0xff;
 		expect(frame.serialize()).to.deep.equal(expected);
 	});
 
@@ -46,7 +46,7 @@ describe.only("lib/frame/data-frame => ", () => {
 			[Buffer.from([0x01, 0x05, 0x00, 0x47, 0x04, 0x20, 0x98]), "checksum", ZWaveErrorCodes.PacketFormat_Checksum],
 		];
 		for (const [frame, msg, code] of brokenFrames) {
-			const parsed = new DataFrame();
+			const parsed = new Frame();
 			expect(() => parsed.deserialize(frame))
 				.to.throw(msg)
 				.and.be.an.instanceof(ZWaveError)
