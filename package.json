@@ -2,7 +2,7 @@
   "name": "zwave-js",
   "version": "0.0.1",
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
-  "keywords": [ ],
+  "keywords": [],
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "author": {
@@ -49,7 +49,8 @@
     "yargs": "^11.0.0"
   },
   "dependencies": {
-    "debug": "^3.1.0"
+    "debug": "^3.1.0",
+    "serialport": "^6.1.1"
   },
   "scripts": {
     "build": "tsc",

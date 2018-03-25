@@ -9,3 +9,8 @@ Z-Wave driver written entirely in JavaScript/TypeScript
 ===
 
 This is not working yet. Just reserving my spot on npm.
+
+===
+
+Helpful links:
+* https://github.com/yepher/RaZBerry
