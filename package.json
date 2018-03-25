@@ -1,0 +1,92 @@
+{
+  "name": "zwave-js",
+  "version": "0.0.1",
+  "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
+  "keywords": [ ],
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "author": {
+    "name": "AlCalzone",
+    "email": "d.griesel@gmx.net"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/AlCalzone/node-zwave-js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlCalzone/node-zwave-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AlCalzone/node-zwave-js/issues"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.2",
+    "@types/chai-as-promised": "^7.1.0",
+    "@types/debug": "0.0.30",
+    "@types/mocha": "^2.2.48",
+    "@types/node": "^6.0.90",
+    "@types/proxyquire": "^1.3.28",
+    "@types/sinon": "^4.1.3",
+    "@types/sinon-chai": "^2.7.29",
+    "@types/yargs": "^11.0.0",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "colors": "^1.1.2",
+    "coveralls": "^3.0.0",
+    "mocha": "^5.0.0",
+    "nyc": "^11.4.1",
+    "proxyquire": "^1.8.0",
+    "rimraf": "^2.6.2",
+    "semver": "^5.5.0",
+    "sinon": "^4.2.2",
+    "sinon-chai": "^2.14.0",
+    "source-map-support": "^0.5.3",
+    "ts-node": "^4.1.0",
+    "tslint": "^5.9.1",
+    "typescript": "^2.7.1",
+    "yargs": "^11.0.0"
+  },
+  "dependencies": {
+    "debug": "^3.1.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prebuild": "rimraf ./build",
+    "watch": "tsc --watch",
+    "test:ts": "node_modules/.bin/mocha",
+    "test": "npm run test:ts",
+    "coverage": "node_modules/.bin/nyc npm test",
+    "coveralls": "node_modules/.bin/nyc report --reporter=text-lcov | coveralls -v",
+    "show-coverage": "npm run coverage && start ./coverage/index.html",
+    "lint:ts": "tslint",
+    "lint": "npm run lint:ts \"src/**/*.ts\"",
+    "release": "node --require ts-node/register maintenance/release.ts"
+  },
+  "nyc": {
+    "all": true,
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "build/**",
+      "src/**/*.test.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register",
+      "source-map-support/register"
+    ],
+    "reporter": [
+      "text-summary",
+      "html",
+      "lcov"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  },
+  "readme": "README.md"
+}

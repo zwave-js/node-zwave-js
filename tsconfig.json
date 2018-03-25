@@ -1,0 +1,28 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "declaration": true,
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noEmitOnError": true,
+        "noImplicitAny": true,
+        "outDir": "build/",
+        "removeComments": false,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "sourceMap": false,
+        "inlineSourceMap": false,
+        "stripInternal": true,
+        "target": "es2015",
+        "strictPropertyInitialization": true,
+        "watch": false // true breaks circleci
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "src/**/*.test.ts",
+        "build/**",
+        "node_modules/**"
+    ]
+}
