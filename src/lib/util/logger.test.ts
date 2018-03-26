@@ -10,7 +10,7 @@ const debugSpy = stub();
 import * as proxyquire from "proxyquire";
 const { log, setCustomLogger } = proxyquire("./logger", {
 	debug: stub().callsFake(namespace => {
-		if (namespace === "node-tradfri-client") return debugSpy;
+		if (namespace === "zwave") return debugSpy;
 		return debugPackage(namespace);
 	}),
 });

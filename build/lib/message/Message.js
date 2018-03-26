@@ -18,9 +18,9 @@ class Message {
             payload = typeOrPayload;
         }
         // These properties are filled from declared metadata if not provided
-        this.type = type || getMessageType(this);
-        this.functionType = funcType || getFunctionType(this);
-        this.expectedResponse = expResponse || getExpectedResponse(this);
+        this.type = type != null ? type : getMessageType(this);
+        this.functionType = funcType != null ? funcType : getFunctionType(this);
+        this.expectedResponse = expResponse != null ? expResponse : getExpectedResponse(this);
         // This is taken from the constructor args
         this.payload = payload;
     }
@@ -92,11 +92,15 @@ class Message {
         return messageLength;
     }
     toJSON() {
-        return {
+        const ret = {
             type: MessageType[this.type],
             functionType: FunctionType[this.functionType],
-            payload: this.payload.toString("hex"),
         };
+        if (this.expectedResponse != null)
+            ret.expectedResponse = FunctionType[this.functionType];
+        if (this.payload != null)
+            ret.payload = this.payload.toString("hex");
+        return ret;
     }
 }
 exports.Message = Message;

@@ -43,9 +43,9 @@ export class Message {
 		}
 
 		// These properties are filled from declared metadata if not provided
-		this.type = type || getMessageType(this);
-		this.functionType = funcType || getFunctionType(this);
-		this.expectedResponse = expResponse || getExpectedResponse(this);
+		this.type = type != null ? type : getMessageType(this);
+		this.functionType = funcType != null ? funcType : getFunctionType(this);
+		this.expectedResponse = expResponse != null ? expResponse : getExpectedResponse(this);
 		// This is taken from the constructor args
 		this.payload = payload;
 	}
@@ -141,11 +141,13 @@ export class Message {
 	}
 
 	public toJSON() {
-		return {
+		const ret: any = {
 			type: MessageType[this.type],
 			functionType: FunctionType[this.functionType],
-			payload: this.payload.toString("hex"),
 		};
+		if (this.expectedResponse != null) ret.expectedResponse = FunctionType[this.functionType];
+		if (this.payload != null) ret.payload = this.payload.toString("hex");
+		return ret;
 	}
 
 }
@@ -242,7 +244,7 @@ type MessageTypeMap = Map<string, Constructable<Message>>;
 })();
 
 function getMessageTypeMapKey(messageType: MessageType, functionType: FunctionType): string {
-	return JSON.stringify({messageType, functionType});
+	return JSON.stringify({ messageType, functionType });
 }
 
 /**
@@ -252,7 +254,7 @@ export function messageTypes(messageType: MessageType, functionType: FunctionTyp
 	return (messageClass) => {
 		log(`${messageClass.name}: defining message type ${messageType} and function type ${functionType}`, "silly");
 		// and store the metadata
-		Reflect.defineMetadata(METADATA_messageTypes, {messageType, functionType}, messageClass);
+		Reflect.defineMetadata(METADATA_messageTypes, { messageType, functionType }, messageClass);
 
 		// also store a map in the Message metadata for lookup.
 		const map: MessageTypeMap = Reflect.getMetadata(METADATA_messageTypeMap, Message) || new Map();

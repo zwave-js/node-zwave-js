@@ -28,11 +28,7 @@ export declare class Message {
      * @returns must return the total number of bytes read
      */
     deserialize(data: Buffer): number;
-    toJSON(): {
-        type: string;
-        functionType: string;
-        payload: string;
-    };
+    toJSON(): any;
 }
 export declare enum MessageHeaders {
     SOF = 1,
