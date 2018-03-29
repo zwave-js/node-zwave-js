@@ -108,23 +108,27 @@ describe("lib/message/Message => ", () => {
 	it("toJSON() should return a semi-readable JSON representation", () => {
 		const msg1 = new Message(MessageType.Request, FunctionType.GetControllerVersion, null);
 		const json1 = {
+			name: msg1.constructor.name,
 			type: "Request",
 			functionType: "GetControllerVersion",
 		};
 		const msg2 = new Message(MessageType.Request, FunctionType.GetControllerVersion, null, Buffer.from("aabbcc", "hex"));
 		const json2 = {
+			name: msg2.constructor.name,
 			type: "Request",
 			functionType: "GetControllerVersion",
 			payload: "aabbcc",
 		};
 		const msg3 = new Message(MessageType.Response, FunctionType.GetControllerVersion, FunctionType.GetControllerVersion);
 		const json3 = {
+			name: msg3.constructor.name,
 			type: "Response",
 			functionType: "GetControllerVersion",
 			expectedResponse: "GetControllerVersion",
 		};
 		const msg4 = new Message(MessageType.Request, FunctionType.GetControllerVersion, FunctionType.GetControllerVersion, Buffer.from("aabbcc", "hex"));
 		const json4 = {
+			name: msg4.constructor.name,
 			type: "Request",
 			functionType: "GetControllerVersion",
 			expectedResponse: "GetControllerVersion",
@@ -141,6 +145,11 @@ describe("lib/message/Message => ", () => {
 		const buf = Buffer.from([1, 2, 3]);
 		const msg = new Message(buf);
 		expect(msg.payload).to.deep.equal(buf);
+	});
+
+	it("getConstructor should return `Message` for an unknown packet type", () => {
+		const unknown = Buffer.from([0x01, 0x03, 0x00, 0x00, 0xfc]);
+		Message.getConstructor(unknown).should.equal(Message);
 	});
 
 });

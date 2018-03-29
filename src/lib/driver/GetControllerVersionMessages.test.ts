@@ -53,6 +53,7 @@ describe("lib/driver/GetControllerVersionResponse => ", () => {
 	it("its constructor should be retrieved for Response & GetControllerVersion", () => {
 		const constr = Message.getConstructor(rawBuf);
 		constr.should.equal(GetControllerVersionResponse);
+		constr.should.not.equal(Message);
 	});
 
 });

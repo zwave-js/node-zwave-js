@@ -65,7 +65,8 @@
     "show-coverage": "npm run coverage && start ./coverage/index.html",
     "lint:ts": "tslint",
     "lint": "npm run lint:ts \"src/**/*.ts\"",
-    "release": "node --require ts-node/register maintenance/release.ts"
+    "release": "node --require ts-node/register maintenance/release.ts",
+    "usbdebug": "cmd.exe /c \"test\\usbdebug.bat\""
   },
   "nyc": {
     "all": true,

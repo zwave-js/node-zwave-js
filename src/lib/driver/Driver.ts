@@ -10,7 +10,7 @@ interface PendingRequest {
 	originalMessage: Message;
 	ackPending: boolean;
 	response: Message;
-	promise: DeferredPromise<Message>;
+	promise: DeferredPromise<Message | void>;
 	// TODO: add a way to expire these
 	// TODO: add a way to resend these
 }
@@ -37,12 +37,27 @@ export class Driver extends EventEmitter {
 	) {
 		super();
 		// register some cleanup handlers in case the program doesn't get closed cleanly
-		process.on("exit", () => this.destroy());
-		process.on("SIGINT", () => this.destroy());
-		process.on("uncaughtException", () => this.destroy());
+		process.on("exit", this._cleanupHandler);
+		process.on("SIGINT", this._cleanupHandler);
+		process.on("uncaughtException", this._cleanupHandler);
 	}
 
+	private _wasStarted: boolean = false;
+	private _isOpen: boolean = false;
+	/** Start the driver */
 	public start(): Promise<void> {
+		// avoid starting twice
+		if (this._wasDestroyed) {
+			return Promise.reject(
+				new ZWaveError(
+					"The driver was destroyed. Create a new instance and start that one.",
+					ZWaveErrorCodes.Driver_Destroyed,
+				),
+			);
+		}
+		if (this._wasStarted) return;
+		this._wasStarted = true;
+
 		return new Promise((resolve, reject) => {
 			log(`starting driver...`, "debug");
 			this.serial = new SerialPort(
@@ -58,15 +73,19 @@ export class Driver extends EventEmitter {
 			this.serial
 				.on("open", () => {
 					log("serial port opened", "debug");
+					this._isOpen = true;
 					resolve();
 					this.reset();
-					this.serialport_onOpen();
 				})
 				.on("data", this.serialport_onData.bind(this))
 				.on("error", err => {
 					log("serial port errored: " + err, "error");
-					reject(err); // this has no effect if the promise is already resolved
-					this.serialport_onError(err);
+					if (this._isOpen) {
+						this.serialport_onError(err);
+					} else {
+						reject(err);
+						this.destroy();
+					}
 				})
 				;
 			this.serial.open();
@@ -74,7 +93,10 @@ export class Driver extends EventEmitter {
 	}
 
 	private reset() {
-		// TODO: sent NAK to re-sync communication
+		this.ensureReady();
+
+		// re-sync communication
+		this.send(MessageHeaders.NAK);
 
 		// clear buffers
 		this.receiveBuffer = Buffer.from([]);
@@ -86,11 +108,25 @@ export class Driver extends EventEmitter {
 		this.currentTransaction = null;
 	}
 
+	private _wasDestroyed: boolean = false;
+	private ensureReady(): void {
+		if (this._wasStarted && this._isOpen && !this._wasDestroyed) return;
+		throw new ZWaveError(
+			"The driver is not ready or has been destroyed",
+			ZWaveErrorCodes.Driver_NotReady,
+		);
+	}
+
+	private _cleanupHandler = () => this.destroy();
 	/**
 	 * Terminates the driver instance and closes the underlying serial connection.
 	 * Must be called under any circumstances.
 	 */
 	public destroy() {
+		this._wasDestroyed = true;
+		process.removeListener("exit", this._cleanupHandler);
+		process.removeListener("SIGINT", this._cleanupHandler);
+		process.removeListener("uncaughtException", this._cleanupHandler);
 		// the serialport must be closed in any case
 		if (this.serial != null) {
 			this.serial.close();
@@ -98,21 +134,25 @@ export class Driver extends EventEmitter {
 		}
 	}
 
-	private serialport_onOpen() {
-		// TODO: do we need this?
-	}
-
 	private serialport_onError(err: Error) {
 		this.emit("error", err);
 	}
 
+	private onInvalidData() {
+		this.emit("error", new ZWaveError(
+			"The receive buffer contains invalid data, resetting...",
+			ZWaveErrorCodes.Driver_InvalidDataReceived,
+		));
+		this.reset();
+	}
+
 	private serialport_onData(data: Buffer) {
-		log(`received data: ${data.toString("hex")}`, "debug");
+		log(`received data: 0x${data.toString("hex")}`, "debug");
 		// append the new data to our receive buffer
 		this.receiveBuffer = Buffer.concat([this.receiveBuffer, data]);
-		log(`receiveBuffer: ${this.receiveBuffer.toString("hex")}`, "debug");
+		log(`receiveBuffer: 0x${this.receiveBuffer.toString("hex")}`, "debug");
 
-		while (true) { // TODO: add a way to interrupt
+		while (this.receiveBuffer.length > 0) { // TODO: add a way to interrupt
 
 			if (this.receiveBuffer[0] !== MessageHeaders.SOF) {
 				switch (this.receiveBuffer[0]) {
@@ -130,23 +170,41 @@ export class Driver extends EventEmitter {
 						break;
 					}
 					default: {
-						// TODO: handle invalid data
-						throw new Error("invalid data");
+						this.onInvalidData();
+						return;
 					}
 				}
 				this.receiveBuffer = skipBytes(this.receiveBuffer, 1);
+				continue;
 			}
 
 			// nothing to do yet, wait for the next data
 			const msgComplete = Message.isComplete(this.receiveBuffer);
-			log(`message complete: ${msgComplete}`, "debug");
-			if (!msgComplete) return;
+			if (!msgComplete) {
+				log(`the receive buffer contains an incomplete message, waiting for the next chunk...`, "debug");
+				return;
+			}
 
 			// parse a message - first find the correct constructor
 			// tslint:disable-next-line:variable-name
 			const MessageConstructor = Message.getConstructor(this.receiveBuffer);
 			const msg = new MessageConstructor();
-			const readBytes = msg.deserialize(this.receiveBuffer);
+			let readBytes: number;
+			try {
+				readBytes = msg.deserialize(this.receiveBuffer);
+			} catch (e) {
+				if (e instanceof ZWaveError) {
+					if (
+						e.code === ZWaveErrorCodes.PacketFormat_Invalid
+						|| e.code === ZWaveErrorCodes.PacketFormat_Checksum
+					) {
+						this.onInvalidData();
+						return;
+					}
+				}
+				// pass it through;
+				throw e;
+			}
 			// and cut the read bytes from our buffer
 			this.receiveBuffer = Buffer.from(this.receiveBuffer.slice(readBytes));
 
@@ -161,11 +219,13 @@ export class Driver extends EventEmitter {
 			break;
 		}
 
+		log(`the receive buffer is empty, waiting for the next chunk...`, "debug");
+
 	}
 
 	private handleResponse(msg: Message) {
 		// TODO: find a nice way to serialize the messages
-		log(`handling response for message ${JSON.stringify(msg, null, 4)}`, "debug");
+		log(`handling response ${JSON.stringify(msg, null, 4)}`, "debug");
 
 		// if we have a pending request, check if that is waiting for this message
 		if (
@@ -174,10 +234,12 @@ export class Driver extends EventEmitter {
 			this.currentTransaction.originalMessage.expectedResponse === msg.functionType
 		) {
 			if (!this.currentTransaction.ackPending) {
+				log(`resolving transaction with ${msg}`, "debug");
 				this.currentTransaction.promise.resolve(msg);
 				this.currentTransaction = null;
 			} else {
 				// wait for the ack, it might be received out of order
+				log(`no ACK received yet, remembering response ${msg}`, "debug");
 				this.currentTransaction.response = msg;
 			}
 			return;
@@ -191,22 +253,28 @@ export class Driver extends EventEmitter {
 	}
 
 	private handleACK() {
-		log("ACK received", "debug");
 		// if we have a pending request waiting for the ACK, ACK it
+		const trnsact = this.currentTransaction;
 		if (
-			this.currentTransaction != null &&
-			this.currentTransaction.ackPending
+			trnsact != null &&
+			trnsact.ackPending
 		) {
-			this.currentTransaction.ackPending = false;
-			if (this.currentTransaction.response != null) {
+			log("ACK received for current transaction", "debug");
+			trnsact.ackPending = false;
+			if (
+				trnsact.originalMessage.expectedResponse == null
+				|| trnsact.response != null
+			) {
 				// if the response has been received prior to this, resolve the request
-				this.currentTransaction.promise.resolve(this.currentTransaction.response);
-				this.currentTransaction = null;
-				return;
+				// if no response was expected, also resolve the request
+				trnsact.promise.resolve(trnsact.response);
+				delete this.currentTransaction;
 			}
+			return;
 		}
 
 		// TODO: what to do with this ACK?
+		log("ACK received but I don't know what it belongs to...", "debug");
 	}
 
 	private handleNAK() {
@@ -220,7 +288,9 @@ export class Driver extends EventEmitter {
 	}
 
 	/** Sends a message to the Z-Wave stick */
-	public sendMessage(msg: Message): Promise<Message> {
+	public async sendMessage(msg: Message): Promise<Message> {
+		this.ensureReady();
+
 		const promise = createDeferredPromise<Message>();
 		const transaction: PendingRequest = {
 			ackPending: true,
@@ -274,33 +344,43 @@ export class Driver extends EventEmitter {
 		}
 
 		// start working it off now (maybe)
-		this.workOffSendQueue();
+		setImmediate(() => this.workOffSendQueue());
 	}
 
+	private sendQueueTimer: NodeJS.Timer;
 	private workOffSendQueue() {
+		if (this.sendQueueTimer != null) {
+			clearTimeout(this.sendQueueTimer);
+			delete this.sendQueueTimer;
+		}
 		// we are still waiting for the current transaction to finish
 		if (this.currentTransaction != null) {
 			log(`workOffSendQueue > skipping because a transaction is pending`, "debug");
 			return;
 		}
 
-		const nextMsg = this.sendQueue.shift();
-		if (!(nextMsg instanceof Message)) {
-			// this is a pending request
-			this.currentTransaction = nextMsg;
+		if (this.sendQueue.length > 0) {
+			const nextMsg = this.sendQueue.shift();
+			if (!(nextMsg instanceof Message)) {
+				// this is a pending request
+				log(`workOffSendQueue > setting current transaction`, "debug");
+				this.currentTransaction = nextMsg;
+			}
+
+			log(`workOffSendQueue > sending next message... remaining queue length = ${this.sendQueue.length}`, "debug");
+			this.doSend(nextMsg);
+		} else {
+			log(`workOffSendQueue > queue is empty`, "debug");
 		}
 
-		log(`workOffSendQueue > sending next message... remaining queue length = ${this.sendQueue.length}`, "debug");
-		this.doSend(nextMsg);
-
 		// to avoid any deadlocks we didn't think of, re-call this later
-		setTimeout(() => this.workOffSendQueue(), 1000);
+		this.sendQueueTimer = setTimeout(() => this.workOffSendQueue(), 1000);
 	}
 
 	private doSend(data: MessageHeaders | Message | PendingRequest) {
 		if (typeof data === "number") {
 			// 1-byte-responses
-			this.serial.write([data]);
+			this.serial.write(Buffer.from([data]));
 		} else {
 			// TODO: queue for retransmission
 			const msg = data instanceof Message ?

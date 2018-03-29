@@ -67,22 +67,22 @@ class Message {
     deserialize(data) {
         // SOF, length, type, commandId and checksum must be present
         if (!data || !data.length || data.length < 5) {
-            throw new ZWaveError_1.ZWaveError("Could not deserialize the data message because it was truncated", ZWaveError_1.ZWaveErrorCodes.PacketFormat_Truncated);
+            throw new ZWaveError_1.ZWaveError("Could not deserialize the message because it was truncated", ZWaveError_1.ZWaveErrorCodes.PacketFormat_Truncated);
         }
         // the packet has to start with SOF
         if (data[0] !== MessageHeaders.SOF) {
-            throw new ZWaveError_1.ZWaveError("Could not deserialize the data message because it does not start with SOF", ZWaveError_1.ZWaveErrorCodes.PacketFormat_Invalid);
+            throw new ZWaveError_1.ZWaveError("Could not deserialize the message because it does not start with SOF", ZWaveError_1.ZWaveErrorCodes.PacketFormat_Invalid);
         }
         // check the length again, this time with the transmitted length
         const remainingLength = data[1];
         const messageLength = remainingLength + 2;
         if (data.length < messageLength) {
-            throw new ZWaveError_1.ZWaveError("Could not deserialize the data message because it was truncated", ZWaveError_1.ZWaveErrorCodes.PacketFormat_Truncated);
+            throw new ZWaveError_1.ZWaveError("Could not deserialize the message because it was truncated", ZWaveError_1.ZWaveErrorCodes.PacketFormat_Truncated);
         }
         // check the checksum
         const expectedChecksum = computeChecksum(data.slice(0, messageLength));
         if (data[messageLength - 1] !== expectedChecksum) {
-            throw new ZWaveError_1.ZWaveError("Could not deserialize the data message because the checksum didn't match", ZWaveError_1.ZWaveErrorCodes.PacketFormat_Checksum);
+            throw new ZWaveError_1.ZWaveError("Could not deserialize the message because the checksum didn't match", ZWaveError_1.ZWaveErrorCodes.PacketFormat_Checksum);
         }
         this.type = data[2];
         this.functionType = data[3];
@@ -93,8 +93,9 @@ class Message {
     }
     toJSON() {
         const ret = {
+            name: this.constructor.name,
             type: MessageType[this.type],
-            functionType: FunctionType[this.functionType],
+            functionType: FunctionType[this.functionType] || num2hex(this.functionType),
         };
         if (this.expectedResponse != null)
             ret.expectedResponse = FunctionType[this.functionType];
@@ -183,10 +184,6 @@ var FunctionType;
 exports.METADATA_messageTypes = Symbol("messageTypes");
 exports.METADATA_messageTypeMap = Symbol("messageTypeMap");
 exports.METADATA_expectedResponse = Symbol("expectedResponse");
-(function initFunctionTypeMap() {
-    const map = new Map();
-    Reflect.defineMetadata(exports.METADATA_messageTypeMap, map, Message);
-})();
 function getMessageTypeMapKey(messageType, functionType) {
     return JSON.stringify({ messageType, functionType });
 }
@@ -195,7 +192,7 @@ function getMessageTypeMapKey(messageType, functionType) {
  */
 function messageTypes(messageType, functionType) {
     return (messageClass) => {
-        logger_1.log(`${messageClass.name}: defining message type ${messageType} and function type ${functionType}`, "silly");
+        logger_1.log(`${messageClass.name}: defining message type ${num2hex(messageType)} and function type ${num2hex(functionType)}`, "silly");
         // and store the metadata
         Reflect.defineMetadata(exports.METADATA_messageTypes, { messageType, functionType }, messageClass);
         // also store a map in the Message metadata for lookup.
@@ -214,7 +211,7 @@ function getMessageType(messageClass) {
     // retrieve the current metadata
     const meta = Reflect.getMetadata(exports.METADATA_messageTypes, constr);
     const ret = meta && meta.messageType;
-    logger_1.log(`${constr.name}: retrieving message type => ${ret}`, "silly");
+    logger_1.log(`${constr.name}: retrieving message type => ${num2hex(ret)}`, "silly");
     return ret;
 }
 exports.getMessageType = getMessageType;
@@ -225,7 +222,7 @@ function getMessageTypeStatic(classConstructor) {
     // retrieve the current metadata
     const meta = Reflect.getMetadata(exports.METADATA_messageTypes, classConstructor);
     const ret = meta && meta.messageType;
-    logger_1.log(`${classConstructor.name}: retrieving message type => ${ret}`, "silly");
+    logger_1.log(`${classConstructor.name}: retrieving message type => ${num2hex(ret)}`, "silly");
     return ret;
 }
 exports.getMessageTypeStatic = getMessageTypeStatic;
@@ -238,7 +235,7 @@ function getFunctionType(messageClass) {
     // retrieve the current metadata
     const meta = Reflect.getMetadata(exports.METADATA_messageTypes, constr);
     const ret = meta && meta.functionType;
-    logger_1.log(`${constr.name}: retrieving function type => ${ret}`, "silly");
+    logger_1.log(`${constr.name}: retrieving function type => ${num2hex(ret)}`, "silly");
     return ret;
 }
 exports.getFunctionType = getFunctionType;
@@ -249,7 +246,7 @@ function getFunctionTypeStatic(classConstructor) {
     // retrieve the current metadata
     const meta = Reflect.getMetadata(exports.METADATA_messageTypes, classConstructor);
     const ret = meta && meta.functionType;
-    logger_1.log(`${classConstructor.name}: retrieving function type => ${ret}`, "silly");
+    logger_1.log(`${classConstructor.name}: retrieving function type => ${num2hex(ret)}`, "silly");
     return ret;
 }
 exports.getFunctionTypeStatic = getFunctionTypeStatic;
@@ -268,7 +265,7 @@ exports.getMessageConstructor = getMessageConstructor;
  */
 function expectedResponse(type) {
     return (messageClass) => {
-        logger_1.log(`${messageClass.name}: defining expected response ${type}`, "silly");
+        logger_1.log(`${messageClass.name}: defining expected response ${num2hex(type)}`, "silly");
         // and store the metadata
         Reflect.defineMetadata(exports.METADATA_expectedResponse, type, messageClass);
     };
@@ -282,7 +279,7 @@ function getExpectedResponse(messageClass) {
     const constr = messageClass.constructor;
     // retrieve the current metadata
     const ret = Reflect.getMetadata(exports.METADATA_expectedResponse, constr);
-    logger_1.log(`${constr.name}: retrieving expected response => ${ret}`, "silly");
+    logger_1.log(`${constr.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
     return ret;
 }
 exports.getExpectedResponse = getExpectedResponse;
@@ -292,7 +289,15 @@ exports.getExpectedResponse = getExpectedResponse;
 function getExpectedResponseStatic(classConstructor) {
     // retrieve the current metadata
     const ret = Reflect.getMetadata(exports.METADATA_expectedResponse, classConstructor);
-    logger_1.log(`${classConstructor.name}: retrieving expected response => ${ret}`, "silly");
+    logger_1.log(`${classConstructor.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
     return ret;
 }
 exports.getExpectedResponseStatic = getExpectedResponseStatic;
+function num2hex(val) {
+    if (val == null)
+        return "undefined";
+    let ret = val.toString(16);
+    if (ret.length % 2 !== 0)
+        ret = "0" + ret;
+    return "0x" + ret;
+}

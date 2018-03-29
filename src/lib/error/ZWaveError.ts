@@ -2,6 +2,10 @@ export enum ZWaveErrorCodes {
 	PacketFormat_Truncated,
 	PacketFormat_Invalid,
 	PacketFormat_Checksum,
+
+	Driver_Destroyed,
+	Driver_NotReady,
+	Driver_InvalidDataReceived,
 }
 
 export class ZWaveError extends Error {

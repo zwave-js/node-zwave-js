@@ -102,14 +102,14 @@ export class Message {
 		// SOF, length, type, commandId and checksum must be present
 		if (!data || !data.length || data.length < 5) {
 			throw new ZWaveError(
-				"Could not deserialize the data message because it was truncated",
+				"Could not deserialize the message because it was truncated",
 				ZWaveErrorCodes.PacketFormat_Truncated,
 			);
 		}
 		// the packet has to start with SOF
 		if (data[0] !== MessageHeaders.SOF) {
 			throw new ZWaveError(
-				"Could not deserialize the data message because it does not start with SOF",
+				"Could not deserialize the message because it does not start with SOF",
 				ZWaveErrorCodes.PacketFormat_Invalid,
 			);
 		}
@@ -118,7 +118,7 @@ export class Message {
 		const messageLength = remainingLength + 2;
 		if (data.length < messageLength) {
 			throw new ZWaveError(
-				"Could not deserialize the data message because it was truncated",
+				"Could not deserialize the message because it was truncated",
 				ZWaveErrorCodes.PacketFormat_Truncated,
 			);
 		}
@@ -126,7 +126,7 @@ export class Message {
 		const expectedChecksum = computeChecksum(data.slice(0, messageLength));
 		if (data[messageLength - 1] !== expectedChecksum) {
 			throw new ZWaveError(
-				"Could not deserialize the data message because the checksum didn't match",
+				"Could not deserialize the message because the checksum didn't match",
 				ZWaveErrorCodes.PacketFormat_Checksum,
 			);
 		}
@@ -142,8 +142,9 @@ export class Message {
 
 	public toJSON() {
 		const ret: any = {
+			name: this.constructor.name,
 			type: MessageType[this.type],
-			functionType: FunctionType[this.functionType],
+			functionType: FunctionType[this.functionType] || num2hex(this.functionType),
 		};
 		if (this.expectedResponse != null) ret.expectedResponse = FunctionType[this.functionType];
 		if (this.payload != null) ret.payload = this.payload.toString("hex");
@@ -238,10 +239,6 @@ export const METADATA_expectedResponse = Symbol("expectedResponse");
 
 // Pre-create the lookup maps for the contructors
 type MessageTypeMap = Map<string, Constructable<Message>>;
-(function initFunctionTypeMap() {
-	const map: MessageTypeMap = new Map();
-	Reflect.defineMetadata(METADATA_messageTypeMap, map, Message);
-})();
 
 function getMessageTypeMapKey(messageType: MessageType, functionType: FunctionType): string {
 	return JSON.stringify({ messageType, functionType });
@@ -252,7 +249,7 @@ function getMessageTypeMapKey(messageType: MessageType, functionType: FunctionTy
  */
 export function messageTypes(messageType: MessageType, functionType: FunctionType): ClassDecorator {
 	return (messageClass) => {
-		log(`${messageClass.name}: defining message type ${messageType} and function type ${functionType}`, "silly");
+		log(`${messageClass.name}: defining message type ${num2hex(messageType)} and function type ${num2hex(functionType)}`, "silly");
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_messageTypes, { messageType, functionType }, messageClass);
 
@@ -272,7 +269,7 @@ export function getMessageType<T extends Message>(messageClass: T): MessageType 
 	// retrieve the current metadata
 	const meta = Reflect.getMetadata(METADATA_messageTypes, constr);
 	const ret = meta && meta.messageType;
-	log(`${constr.name}: retrieving message type => ${ret}`, "silly");
+	log(`${constr.name}: retrieving message type => ${num2hex(ret)}`, "silly");
 	return ret;
 }
 
@@ -283,7 +280,7 @@ export function getMessageTypeStatic<T extends Constructable<Message>>(classCons
 	// retrieve the current metadata
 	const meta = Reflect.getMetadata(METADATA_messageTypes, classConstructor);
 	const ret = meta && meta.messageType;
-	log(`${classConstructor.name}: retrieving message type => ${ret}`, "silly");
+	log(`${classConstructor.name}: retrieving message type => ${num2hex(ret)}`, "silly");
 	return ret;
 }
 
@@ -296,7 +293,7 @@ export function getFunctionType<T extends Message>(messageClass: T): FunctionTyp
 	// retrieve the current metadata
 	const meta = Reflect.getMetadata(METADATA_messageTypes, constr);
 	const ret = meta && meta.functionType;
-	log(`${constr.name}: retrieving function type => ${ret}`, "silly");
+	log(`${constr.name}: retrieving function type => ${num2hex(ret)}`, "silly");
 	return ret;
 }
 
@@ -307,7 +304,7 @@ export function getFunctionTypeStatic<T extends Constructable<Message>>(classCon
 	// retrieve the current metadata
 	const meta = Reflect.getMetadata(METADATA_messageTypes, classConstructor);
 	const ret = meta && meta.functionType;
-	log(`${classConstructor.name}: retrieving function type => ${ret}`, "silly");
+	log(`${classConstructor.name}: retrieving function type => ${num2hex(ret)}`, "silly");
 	return ret;
 }
 
@@ -325,7 +322,7 @@ export function getMessageConstructor(messageType: MessageType, functionType: Fu
  */
 export function expectedResponse(type: FunctionType): ClassDecorator {
 	return (messageClass) => {
-		log(`${messageClass.name}: defining expected response ${type}`, "silly");
+		log(`${messageClass.name}: defining expected response ${num2hex(type)}`, "silly");
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_expectedResponse, type, messageClass);
 	};
@@ -339,7 +336,7 @@ export function getExpectedResponse<T extends Message>(messageClass: T): Functio
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_expectedResponse, constr);
-	log(`${constr.name}: retrieving expected response => ${ret}`, "silly");
+	log(`${constr.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
 	return ret;
 }
 
@@ -349,6 +346,13 @@ export function getExpectedResponse<T extends Message>(messageClass: T): Functio
 export function getExpectedResponseStatic<T extends Constructable<Message>>(classConstructor: T): FunctionType {
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_expectedResponse, classConstructor);
-	log(`${classConstructor.name}: retrieving expected response => ${ret}`, "silly");
+	log(`${classConstructor.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
 	return ret;
+}
+
+function num2hex(val: number | undefined | null): string {
+	if (val == null) return "undefined";
+	let ret = val.toString(16);
+	if (ret.length % 2 !== 0) ret = "0" + ret;
+	return "0x" + ret;
 }
