@@ -1,6 +1,7 @@
 /// <reference types="node" />
 import { EventEmitter } from "events";
 import { Message } from "../message/Message";
+import { ZWaveController } from "./Controller";
 export declare type ZWaveOptions = Partial<{
     empty: never;
 }>;
@@ -14,11 +15,14 @@ export declare class Driver extends EventEmitter {
     /** The currently pending request */
     private currentTransaction;
     private sendQueue;
+    private _controller;
+    readonly controller: ZWaveController;
     constructor(port: string, options?: ZWaveOptions);
     private _wasStarted;
     private _isOpen;
     /** Start the driver */
     start(): Promise<void>;
+    private beginInterview();
     private reset();
     private _wasDestroyed;
     private ensureReady();
@@ -37,7 +41,7 @@ export declare class Driver extends EventEmitter {
     private handleNAK();
     private handleCAN();
     /** Sends a message to the Z-Wave stick */
-    sendMessage(msg: Message): Promise<Message>;
+    sendMessage<TResponse extends Message = Message>(msg: Message, skipSupportCheck?: boolean): Promise<TResponse>;
     /**
      * Queues a message for sending
      * @param message The message to send

@@ -27,3 +27,12 @@ function cpp2js(str) {
     return str.substr(0, nullIndex);
 }
 exports.cpp2js = cpp2js;
+function num2hex(val) {
+    if (val == null)
+        return "undefined";
+    let ret = val.toString(16);
+    if (ret.length % 2 !== 0)
+        ret = "0" + ret;
+    return "0x" + ret;
+}
+exports.num2hex = num2hex;

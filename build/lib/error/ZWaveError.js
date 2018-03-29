@@ -8,6 +8,7 @@ var ZWaveErrorCodes;
     ZWaveErrorCodes[ZWaveErrorCodes["Driver_Destroyed"] = 3] = "Driver_Destroyed";
     ZWaveErrorCodes[ZWaveErrorCodes["Driver_NotReady"] = 4] = "Driver_NotReady";
     ZWaveErrorCodes[ZWaveErrorCodes["Driver_InvalidDataReceived"] = 5] = "Driver_InvalidDataReceived";
+    ZWaveErrorCodes[ZWaveErrorCodes["Driver_NotSupported"] = 6] = "Driver_NotSupported";
 })(ZWaveErrorCodes = exports.ZWaveErrorCodes || (exports.ZWaveErrorCodes = {}));
 class ZWaveError extends Error {
     constructor(message, code) {

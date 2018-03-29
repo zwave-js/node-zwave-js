@@ -14,8 +14,8 @@ const ZWaveError_1 = require("../error/ZWaveError");
 const Message_1 = require("../message/Message");
 const defer_promise_1 = require("../util/defer-promise");
 const logger_1 = require("../util/logger");
+const Controller_1 = require("./Controller");
 class Driver extends events_1.EventEmitter {
-    // TODO: add a way to subscribe to nodes
     constructor(port, options) {
         super();
         this.port = port;
@@ -28,6 +28,9 @@ class Driver extends events_1.EventEmitter {
         process.on("exit", this._cleanupHandler);
         process.on("SIGINT", this._cleanupHandler);
         process.on("uncaughtException", this._cleanupHandler);
+    }
+    get controller() {
+        return this._controller;
     }
     /** Start the driver */
     start() {
@@ -53,6 +56,7 @@ class Driver extends events_1.EventEmitter {
                 this._isOpen = true;
                 resolve();
                 this.reset();
+                setImmediate(() => this.beginInterview());
             })
                 .on("data", this.serialport_onData.bind(this))
                 .on("error", err => {
@@ -66,6 +70,14 @@ class Driver extends events_1.EventEmitter {
                 }
             });
             this.serial.open();
+        });
+    }
+    beginInterview() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this._controller = new Controller_1.ZWaveController();
+            yield this._controller.interview(this);
+            logger_1.log("interview done!", "debug");
+            this.emit("driver ready");
         });
     }
     reset() {
@@ -228,9 +240,12 @@ class Driver extends events_1.EventEmitter {
         logger_1.log("CAN received", "debug");
     }
     /** Sends a message to the Z-Wave stick */
-    sendMessage(msg) {
+    sendMessage(msg, skipSupportCheck = false) {
         return __awaiter(this, void 0, void 0, function* () {
             this.ensureReady();
+            if (!skipSupportCheck && this.controller != null && !this.controller.isFunctionSupported(msg.functionType)) {
+                throw new ZWaveError_1.ZWaveError(`Your hardware does not support the ${Message_1.FunctionType[msg.functionType]} function`, ZWaveError_1.ZWaveErrorCodes.Driver_NotSupported);
+            }
             const promise = defer_promise_1.createDeferredPromise();
             const transaction = {
                 ackPending: true,
@@ -301,6 +316,7 @@ class Driver extends events_1.EventEmitter {
         }
         else {
             logger_1.log(`workOffSendQueue > queue is empty`, "debug");
+            return;
         }
         // to avoid any deadlocks we didn't think of, re-call this later
         this.sendQueueTimer = setTimeout(() => this.workOffSendQueue(), 1000);

@@ -3,6 +3,7 @@
 import { GetControllerVersionRequest } from "../driver/GetControllerVersionMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { log } from "../util/logger";
+import { num2hex } from "../util/strings";
 
 export interface Constructable<T> {
 	new(...constructorArgs: any[]): T;
@@ -180,6 +181,18 @@ export enum MessageType {
  * IDs started with FUNC_ID are straight from OZW and not implemented here yet
  */
 export enum FunctionType {
+	FUNC_ID_SERIAL_API_GET_INIT_DATA = 0x02,
+	FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION = 0x03,
+	FUNC_ID_APPLICATION_COMMAND_HANDLER = 0x04,
+
+	GetControllerCapabilities = 0x05,
+
+	FUNC_ID_SERIAL_API_SET_TIMEOUTS = 0x06,
+
+	GetSerialApiCapabilities = 0x07,
+
+	FUNC_ID_SERIAL_API_SOFT_RESET = 0x08,
+
 	FUNC_ID_ZW_SEND_NODE_INFORMATION = 0x12,
 	FUNC_ID_ZW_SEND_DATA = 0x13,
 
@@ -187,7 +200,9 @@ export enum FunctionType {
 
 	FUNC_ID_ZW_R_F_POWER_LEVEL_SET = 0x17,
 	FUNC_ID_ZW_GET_RANDOM = 0x1c,
-	FUNC_ID_ZW_MEMORY_GET_ID = 0x20,
+
+	GetControllerId = 0x20, // Get Home ID and Controller Node ID
+
 	FUNC_ID_MEMORY_GET_BYTE = 0x21,
 	FUNC_ID_ZW_READ_MEMORY = 0x23,
 	FUNC_ID_ZW_SET_LEARN_NODE_STATE = 0x40,	// Not implemented
@@ -210,7 +225,9 @@ export enum FunctionType {
 	FUNC_ID_ZW_REQUEST_NETWORK_UPDATE = 0x53,	// Network update for a SUC(?)
 	FUNC_ID_ZW_SET_SUC_NODE_ID = 0x54,	// Identify a Static Update Controller node id
 	FUNC_ID_ZW_DELETE_SUC_RETURN_ROUTE = 0x55,	// Remove return routes to the SUC
-	FUNC_ID_ZW_GET_SUC_NODE_ID = 0x56,	// Try to retrieve a Static Update Controller node id (zero if no SUC present)
+
+	GetSUCNodeId = 0x56, // Try to retrieve a Static Update Controller node id (zero if no SUC present)
+
 	FUNC_ID_ZW_REQUEST_NODE_NEIGHBOR_UPDATE_OPTIONS = 0x5a,	// Allow options for request node neighbor update
 	FUNC_ID_ZW_EXPLORE_REQUEST_INCLUSION = 0x5e,	// supports NWI
 	FUNC_ID_ZW_REQUEST_NODE_INFO = 0x60,	// Get info (supported command classes) for the specified node
@@ -348,11 +365,4 @@ export function getExpectedResponseStatic<T extends Constructable<Message>>(clas
 	const ret = Reflect.getMetadata(METADATA_expectedResponse, classConstructor);
 	log(`${classConstructor.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
 	return ret;
-}
-
-function num2hex(val: number | undefined | null): string {
-	if (val == null) return "undefined";
-	let ret = val.toString(16);
-	if (ret.length % 2 !== 0) ret = "0" + ret;
-	return "0x" + ret;
 }

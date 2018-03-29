@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const logger_1 = require("../util/logger");
+const strings_1 = require("../util/strings");
 /**
  * Represents a ZWave message for communication with the serial interface
  */
@@ -95,7 +96,7 @@ class Message {
         const ret = {
             name: this.constructor.name,
             type: MessageType[this.type],
-            functionType: FunctionType[this.functionType] || num2hex(this.functionType),
+            functionType: FunctionType[this.functionType] || strings_1.num2hex(this.functionType),
         };
         if (this.expectedResponse != null)
             ret.expectedResponse = FunctionType[this.functionType];
@@ -132,12 +133,19 @@ var MessageType;
  */
 var FunctionType;
 (function (FunctionType) {
+    FunctionType[FunctionType["FUNC_ID_SERIAL_API_GET_INIT_DATA"] = 2] = "FUNC_ID_SERIAL_API_GET_INIT_DATA";
+    FunctionType[FunctionType["FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION"] = 3] = "FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION";
+    FunctionType[FunctionType["FUNC_ID_APPLICATION_COMMAND_HANDLER"] = 4] = "FUNC_ID_APPLICATION_COMMAND_HANDLER";
+    FunctionType[FunctionType["GetControllerCapabilities"] = 5] = "GetControllerCapabilities";
+    FunctionType[FunctionType["FUNC_ID_SERIAL_API_SET_TIMEOUTS"] = 6] = "FUNC_ID_SERIAL_API_SET_TIMEOUTS";
+    FunctionType[FunctionType["GetSerialApiCapabilities"] = 7] = "GetSerialApiCapabilities";
+    FunctionType[FunctionType["FUNC_ID_SERIAL_API_SOFT_RESET"] = 8] = "FUNC_ID_SERIAL_API_SOFT_RESET";
     FunctionType[FunctionType["FUNC_ID_ZW_SEND_NODE_INFORMATION"] = 18] = "FUNC_ID_ZW_SEND_NODE_INFORMATION";
     FunctionType[FunctionType["FUNC_ID_ZW_SEND_DATA"] = 19] = "FUNC_ID_ZW_SEND_DATA";
     FunctionType[FunctionType["GetControllerVersion"] = 21] = "GetControllerVersion";
     FunctionType[FunctionType["FUNC_ID_ZW_R_F_POWER_LEVEL_SET"] = 23] = "FUNC_ID_ZW_R_F_POWER_LEVEL_SET";
     FunctionType[FunctionType["FUNC_ID_ZW_GET_RANDOM"] = 28] = "FUNC_ID_ZW_GET_RANDOM";
-    FunctionType[FunctionType["FUNC_ID_ZW_MEMORY_GET_ID"] = 32] = "FUNC_ID_ZW_MEMORY_GET_ID";
+    FunctionType[FunctionType["GetControllerId"] = 32] = "GetControllerId";
     FunctionType[FunctionType["FUNC_ID_MEMORY_GET_BYTE"] = 33] = "FUNC_ID_MEMORY_GET_BYTE";
     FunctionType[FunctionType["FUNC_ID_ZW_READ_MEMORY"] = 35] = "FUNC_ID_ZW_READ_MEMORY";
     FunctionType[FunctionType["FUNC_ID_ZW_SET_LEARN_NODE_STATE"] = 64] = "FUNC_ID_ZW_SET_LEARN_NODE_STATE";
@@ -160,7 +168,7 @@ var FunctionType;
     FunctionType[FunctionType["FUNC_ID_ZW_REQUEST_NETWORK_UPDATE"] = 83] = "FUNC_ID_ZW_REQUEST_NETWORK_UPDATE";
     FunctionType[FunctionType["FUNC_ID_ZW_SET_SUC_NODE_ID"] = 84] = "FUNC_ID_ZW_SET_SUC_NODE_ID";
     FunctionType[FunctionType["FUNC_ID_ZW_DELETE_SUC_RETURN_ROUTE"] = 85] = "FUNC_ID_ZW_DELETE_SUC_RETURN_ROUTE";
-    FunctionType[FunctionType["FUNC_ID_ZW_GET_SUC_NODE_ID"] = 86] = "FUNC_ID_ZW_GET_SUC_NODE_ID";
+    FunctionType[FunctionType["GetSUCNodeId"] = 86] = "GetSUCNodeId";
     FunctionType[FunctionType["FUNC_ID_ZW_REQUEST_NODE_NEIGHBOR_UPDATE_OPTIONS"] = 90] = "FUNC_ID_ZW_REQUEST_NODE_NEIGHBOR_UPDATE_OPTIONS";
     FunctionType[FunctionType["FUNC_ID_ZW_EXPLORE_REQUEST_INCLUSION"] = 94] = "FUNC_ID_ZW_EXPLORE_REQUEST_INCLUSION";
     FunctionType[FunctionType["FUNC_ID_ZW_REQUEST_NODE_INFO"] = 96] = "FUNC_ID_ZW_REQUEST_NODE_INFO";
@@ -192,7 +200,7 @@ function getMessageTypeMapKey(messageType, functionType) {
  */
 function messageTypes(messageType, functionType) {
     return (messageClass) => {
-        logger_1.log(`${messageClass.name}: defining message type ${num2hex(messageType)} and function type ${num2hex(functionType)}`, "silly");
+        logger_1.log(`${messageClass.name}: defining message type ${strings_1.num2hex(messageType)} and function type ${strings_1.num2hex(functionType)}`, "silly");
         // and store the metadata
         Reflect.defineMetadata(exports.METADATA_messageTypes, { messageType, functionType }, messageClass);
         // also store a map in the Message metadata for lookup.
@@ -211,7 +219,7 @@ function getMessageType(messageClass) {
     // retrieve the current metadata
     const meta = Reflect.getMetadata(exports.METADATA_messageTypes, constr);
     const ret = meta && meta.messageType;
-    logger_1.log(`${constr.name}: retrieving message type => ${num2hex(ret)}`, "silly");
+    logger_1.log(`${constr.name}: retrieving message type => ${strings_1.num2hex(ret)}`, "silly");
     return ret;
 }
 exports.getMessageType = getMessageType;
@@ -222,7 +230,7 @@ function getMessageTypeStatic(classConstructor) {
     // retrieve the current metadata
     const meta = Reflect.getMetadata(exports.METADATA_messageTypes, classConstructor);
     const ret = meta && meta.messageType;
-    logger_1.log(`${classConstructor.name}: retrieving message type => ${num2hex(ret)}`, "silly");
+    logger_1.log(`${classConstructor.name}: retrieving message type => ${strings_1.num2hex(ret)}`, "silly");
     return ret;
 }
 exports.getMessageTypeStatic = getMessageTypeStatic;
@@ -235,7 +243,7 @@ function getFunctionType(messageClass) {
     // retrieve the current metadata
     const meta = Reflect.getMetadata(exports.METADATA_messageTypes, constr);
     const ret = meta && meta.functionType;
-    logger_1.log(`${constr.name}: retrieving function type => ${num2hex(ret)}`, "silly");
+    logger_1.log(`${constr.name}: retrieving function type => ${strings_1.num2hex(ret)}`, "silly");
     return ret;
 }
 exports.getFunctionType = getFunctionType;
@@ -246,7 +254,7 @@ function getFunctionTypeStatic(classConstructor) {
     // retrieve the current metadata
     const meta = Reflect.getMetadata(exports.METADATA_messageTypes, classConstructor);
     const ret = meta && meta.functionType;
-    logger_1.log(`${classConstructor.name}: retrieving function type => ${num2hex(ret)}`, "silly");
+    logger_1.log(`${classConstructor.name}: retrieving function type => ${strings_1.num2hex(ret)}`, "silly");
     return ret;
 }
 exports.getFunctionTypeStatic = getFunctionTypeStatic;
@@ -265,7 +273,7 @@ exports.getMessageConstructor = getMessageConstructor;
  */
 function expectedResponse(type) {
     return (messageClass) => {
-        logger_1.log(`${messageClass.name}: defining expected response ${num2hex(type)}`, "silly");
+        logger_1.log(`${messageClass.name}: defining expected response ${strings_1.num2hex(type)}`, "silly");
         // and store the metadata
         Reflect.defineMetadata(exports.METADATA_expectedResponse, type, messageClass);
     };
@@ -279,7 +287,7 @@ function getExpectedResponse(messageClass) {
     const constr = messageClass.constructor;
     // retrieve the current metadata
     const ret = Reflect.getMetadata(exports.METADATA_expectedResponse, constr);
-    logger_1.log(`${constr.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
+    logger_1.log(`${constr.name}: retrieving expected response => ${strings_1.num2hex(ret)}`, "silly");
     return ret;
 }
 exports.getExpectedResponse = getExpectedResponse;
@@ -289,15 +297,7 @@ exports.getExpectedResponse = getExpectedResponse;
 function getExpectedResponseStatic(classConstructor) {
     // retrieve the current metadata
     const ret = Reflect.getMetadata(exports.METADATA_expectedResponse, classConstructor);
-    logger_1.log(`${classConstructor.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
+    logger_1.log(`${classConstructor.name}: retrieving expected response => ${strings_1.num2hex(ret)}`, "silly");
     return ret;
 }
 exports.getExpectedResponseStatic = getExpectedResponseStatic;
-function num2hex(val) {
-    if (val == null)
-        return "undefined";
-    let ret = val.toString(16);
-    if (ret.length % 2 !== 0)
-        ret = "0" + ret;
-    return "0x" + ret;
-}

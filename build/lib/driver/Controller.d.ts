@@ -1,0 +1,36 @@
+import { FunctionType } from "../message/Message";
+import { Driver } from "./Driver";
+import { ControllerTypes } from "./GetControllerVersionMessages";
+export declare class ZWaveController {
+    private _libraryVersion;
+    readonly libraryVersion: string;
+    private _type;
+    readonly type: ControllerTypes;
+    private _homeId;
+    readonly homeId: number;
+    private _ownNodeId;
+    readonly ownNodeId: number;
+    private _isSecondary;
+    readonly isSecondary: boolean;
+    private _isUsingHomeIdFromOtherNetwork;
+    readonly isUsingHomeIdFromOtherNetwork: boolean;
+    private _isSISPresent;
+    readonly isSISPresent: boolean;
+    private _wasRealPrimary;
+    readonly wasRealPrimary: boolean;
+    private _isStaticUpdateController;
+    readonly isStaticUpdateController: boolean;
+    private _serialApiVersion;
+    readonly serialApiVersion: string;
+    private _manufacturerId;
+    readonly manufacturerId: number;
+    private _productType;
+    readonly productType: number;
+    private _productId;
+    readonly productId: number;
+    private _functionBitMask;
+    isFunctionSupported(functionType: FunctionType): boolean;
+    private _sucNodeId;
+    readonly sucNodeId: number;
+    interview(driver: Driver): Promise<void>;
+}

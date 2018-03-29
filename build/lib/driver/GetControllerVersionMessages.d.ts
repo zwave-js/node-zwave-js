@@ -14,7 +14,9 @@ export declare enum ControllerTypes {
 export declare class GetControllerVersionRequest extends Message {
 }
 export declare class GetControllerVersionResponse extends Message {
-    controllerType: ControllerTypes;
-    controllerVersion: string;
+    private _controllerType;
+    readonly controllerType: ControllerTypes;
+    private _libraryVersion;
+    readonly libraryVersion: string;
     deserialize(data: Buffer): number;
 }

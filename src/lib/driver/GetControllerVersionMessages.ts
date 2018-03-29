@@ -22,15 +22,22 @@ export class GetControllerVersionRequest extends Message {
 @messageTypes(MessageType.Response, FunctionType.GetControllerVersion)
 export class GetControllerVersionResponse extends Message {
 
-	public controllerType: ControllerTypes;
-	public controllerVersion: string;
+	private _controllerType: ControllerTypes;
+	public get controllerType() {
+		return this._controllerType;
+	}
+
+	private _libraryVersion: string;
+	public get libraryVersion() {
+		return this._libraryVersion;
+	}
 
 	public deserialize(data: Buffer): number {
 		const ret = super.deserialize(data);
 
 		// The payload consists of a zero-terminated string and a uint8 for the controller type
-		this.controllerVersion = cpp2js(this.payload.toString("ascii"));
-		this.controllerType = this.payload[this.controllerVersion.length + 1];
+		this._libraryVersion = cpp2js(this.payload.toString("ascii"));
+		this._controllerType = this.payload[this.libraryVersion.length + 1];
 
 		return ret;
 	}

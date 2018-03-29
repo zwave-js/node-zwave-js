@@ -22,3 +22,10 @@ export function cpp2js(str: string): string {
 	if (nullIndex === -1) return str;
 	return str.substr(0, nullIndex);
 }
+
+export function num2hex(val: number | undefined | null): string {
+	if (val == null) return "undefined";
+	let ret = val.toString(16);
+	if (ret.length % 2 !== 0) ret = "0" + ret;
+	return "0x" + ret;
+}

@@ -1,9 +1,10 @@
 import { EventEmitter } from "events";
 import * as SerialPort from "serialport";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { Message, MessageHeaders, MessageType } from "../message/Message";
+import { FunctionType, Message, MessageHeaders, MessageType } from "../message/Message";
 import { createDeferredPromise, DeferredPromise } from "../util/defer-promise";
 import { log } from "../util/logger";
+import { ZWaveController } from "./Controller";
 // TODO: expose debug namespaces
 
 interface PendingRequest {
@@ -30,6 +31,11 @@ export class Driver extends EventEmitter {
 	private currentTransaction: PendingRequest;
 	private sendQueue: (PendingRequest | Message)[];
 	// TODO: add a way to subscribe to nodes
+
+	private _controller: ZWaveController;
+	public get controller(): ZWaveController {
+		return this._controller;
+	}
 
 	constructor(
 		private port: string,
@@ -76,6 +82,7 @@ export class Driver extends EventEmitter {
 					this._isOpen = true;
 					resolve();
 					this.reset();
+					setImmediate(() => this.beginInterview());
 				})
 				.on("data", this.serialport_onData.bind(this))
 				.on("error", err => {
@@ -90,6 +97,13 @@ export class Driver extends EventEmitter {
 				;
 			this.serial.open();
 		});
+	}
+
+	private async beginInterview() {
+		this._controller = new ZWaveController();
+		await this._controller.interview(this);
+		log("interview done!", "debug");
+		this.emit("driver ready");
 	}
 
 	private reset() {
@@ -288,10 +302,17 @@ export class Driver extends EventEmitter {
 	}
 
 	/** Sends a message to the Z-Wave stick */
-	public async sendMessage(msg: Message): Promise<Message> {
+	public async sendMessage<TResponse extends Message = Message>(msg: Message, skipSupportCheck: boolean = false): Promise<TResponse> {
 		this.ensureReady();
 
-		const promise = createDeferredPromise<Message>();
+		if (!skipSupportCheck && this.controller != null && !this.controller.isFunctionSupported(msg.functionType)) {
+			throw new ZWaveError(
+				`Your hardware does not support the ${FunctionType[msg.functionType]} function`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+
+		const promise = createDeferredPromise<TResponse>();
 		const transaction: PendingRequest = {
 			ackPending: true,
 			originalMessage: msg,
@@ -371,6 +392,7 @@ export class Driver extends EventEmitter {
 			this.doSend(nextMsg);
 		} else {
 			log(`workOffSendQueue > queue is empty`, "debug");
+			return;
 		}
 
 		// to avoid any deadlocks we didn't think of, re-call this later

@@ -28,11 +28,17 @@ GetControllerVersionRequest = __decorate([
 ], GetControllerVersionRequest);
 exports.GetControllerVersionRequest = GetControllerVersionRequest;
 let GetControllerVersionResponse = class GetControllerVersionResponse extends Message_1.Message {
+    get controllerType() {
+        return this._controllerType;
+    }
+    get libraryVersion() {
+        return this._libraryVersion;
+    }
     deserialize(data) {
         const ret = super.deserialize(data);
         // The payload consists of a zero-terminated string and a uint8 for the controller type
-        this.controllerVersion = strings_1.cpp2js(this.payload.toString("ascii"));
-        this.controllerType = this.payload[this.controllerVersion.length + 1];
+        this._libraryVersion = strings_1.cpp2js(this.payload.toString("ascii"));
+        this._controllerType = this.payload[this.libraryVersion.length + 1];
         return ret;
     }
 };
