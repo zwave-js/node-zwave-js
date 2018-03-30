@@ -32,6 +32,8 @@ export type Baudrate = 9600 | 40000 | 100000;
 export class GetNodeProtocolInfoRequest extends Message {
 
 	constructor()
+	// tslint:disable-next-line:unified-signatures
+	constructor(nodeId: number)
 	constructor(
 		public nodeId?: number,
 	) {

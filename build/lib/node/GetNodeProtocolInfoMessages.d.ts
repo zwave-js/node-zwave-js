@@ -5,6 +5,7 @@ export declare type Baudrate = 9600 | 40000 | 100000;
 export declare class GetNodeProtocolInfoRequest extends Message {
     nodeId: number;
     constructor();
+    constructor(nodeId: number);
     serialize(): Buffer;
     toJSON(): Record<string, any>;
 }
