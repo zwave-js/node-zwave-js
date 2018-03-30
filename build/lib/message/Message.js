@@ -187,7 +187,7 @@ var FunctionType;
     FunctionType[FunctionType["UNKNOWN_FUNC_RTC_TIMER_DELETE"] = 53] = "UNKNOWN_FUNC_RTC_TIMER_DELETE";
     FunctionType[FunctionType["UNKNOWN_FUNC_RTC_TIMER_CALL"] = 54] = "UNKNOWN_FUNC_RTC_TIMER_CALL";
     FunctionType[FunctionType["FUNC_ID_ZW_SET_LEARN_NODE_STATE"] = 64] = "FUNC_ID_ZW_SET_LEARN_NODE_STATE";
-    FunctionType[FunctionType["FUNC_ID_ZW_GET_NODE_PROTOCOL_INFO"] = 65] = "FUNC_ID_ZW_GET_NODE_PROTOCOL_INFO";
+    FunctionType[FunctionType["GetNodeProtocolInfo"] = 65] = "GetNodeProtocolInfo";
     FunctionType[FunctionType["FUNC_ID_ZW_SET_DEFAULT"] = 66] = "FUNC_ID_ZW_SET_DEFAULT";
     FunctionType[FunctionType["FUNC_ID_ZW_NEW_CONTROLLER"] = 67] = "FUNC_ID_ZW_NEW_CONTROLLER";
     FunctionType[FunctionType["FUNC_ID_ZW_REPLICATION_COMMAND_COMPLETE"] = 68] = "FUNC_ID_ZW_REPLICATION_COMMAND_COMPLETE";

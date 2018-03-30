@@ -105,10 +105,15 @@ class Driver extends events_1.EventEmitter {
     }
     beginInterview() {
         return __awaiter(this, void 0, void 0, function* () {
+            // Interview the controller
             this._controller = new Controller_1.ZWaveController();
             yield this._controller.interview(this);
             logger_1.log("driver", "driver ready", "debug");
             this.emit("driver ready");
+            // Now query all nodes
+            for (const node of this._controller.nodes.values()) {
+                node.query();
+            }
         });
     }
     reset() {

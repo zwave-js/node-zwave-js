@@ -251,7 +251,9 @@ export enum FunctionType {
 	UNKNOWN_FUNC_RTC_TIMER_CALL = 0x36, // ??
 
 	FUNC_ID_ZW_SET_LEARN_NODE_STATE = 0x40,	// Not implemented
-	FUNC_ID_ZW_GET_NODE_PROTOCOL_INFO = 0x41,	// Get protocol info (baud rate, listening, etc.) for a given node
+
+	GetNodeProtocolInfo = 0x41,	// Get protocol info (baud rate, listening, etc.) for a given node
+
 	FUNC_ID_ZW_SET_DEFAULT = 0x42,	// Reset controller and node info to default (original) values
 	FUNC_ID_ZW_NEW_CONTROLLER = 0x43,	// Not implemented
 	FUNC_ID_ZW_REPLICATION_COMMAND_COMPLETE = 0x44,	// Replication send data complete

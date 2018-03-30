@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Message_1 = require("../message/Message");
+const node_1 = require("../node/node");
 const logger_1 = require("../util/logger");
 const strings_1 = require("../util/strings");
 const GetControllerCapabilitiesMessages_1 = require("./GetControllerCapabilitiesMessages");
@@ -130,7 +131,7 @@ class ZWaveController {
             // ignore the initVersion, no clue what to do with it
             // create an empty entry in the nodes map so we can initialize them afterwards
             for (const nodeId of initData.nodeIds) {
-                this.nodes.set(nodeId, null);
+                this.nodes.set(nodeId, new node_1.Node(nodeId));
             }
             if (this.type !== GetControllerVersionMessages_1.ControllerTypes["Bridge Controller"] && this.isFunctionSupported(Message_1.FunctionType.SetSerialApiTimeouts)) {
                 const { ack, byte } = driver.options.timeouts;

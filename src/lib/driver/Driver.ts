@@ -135,10 +135,16 @@ export class Driver extends EventEmitter {
 	}
 
 	private async beginInterview() {
+		// Interview the controller
 		this._controller = new ZWaveController();
 		await this._controller.interview(this);
 		log("driver", "driver ready", "debug");
 		this.emit("driver ready");
+
+		// Now query all nodes
+		for (const node of this._controller.nodes.values()) {
+			node.query();
+		}
 	}
 
 	private reset() {
@@ -417,6 +423,9 @@ export class Driver extends EventEmitter {
 		// start working it off now (maybe)
 		setImmediate(() => this.workOffSendQueue());
 	}
+
+	// TODO: assign different priorities
+	// https://github.com/OpenZWave/open-zwave/blob/e8de6b196109e88af06455366ea8f647df0f7904/cpp/src/Driver.h#L587
 
 	private sendQueueTimer: NodeJS.Timer;
 	private workOffSendQueue() {

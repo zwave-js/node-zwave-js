@@ -1,4 +1,5 @@
 import { FunctionType, Message, MessageType } from "../message/Message";
+import { Node, QueryStage } from "../node/node";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
 import { Driver } from "./Driver";
@@ -103,7 +104,7 @@ export class ZWaveController {
 		return this._supportsTimers;
 	}
 
-	public readonly nodes = new Map<number, any>();
+	public readonly nodes = new Map<number, Node>();
 
 //#endregion
 
@@ -166,7 +167,7 @@ export class ZWaveController {
 		// ignore the initVersion, no clue what to do with it
 		// create an empty entry in the nodes map so we can initialize them afterwards
 		for (const nodeId of initData.nodeIds) {
-			this.nodes.set(nodeId, null);
+			this.nodes.set(nodeId, new Node(nodeId));
 		}
 
 		if (this.type !== ControllerTypes["Bridge Controller"] && this.isFunctionSupported(FunctionType.SetSerialApiTimeouts)) {
