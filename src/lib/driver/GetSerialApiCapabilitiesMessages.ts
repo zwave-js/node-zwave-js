@@ -1,5 +1,8 @@
 import { expectedResponse, FunctionType, Message,  MessageType, messageTypes} from "../message/Message";
-import { padStart } from "../util/strings";
+import { num2hex, padStart } from "../util/strings";
+
+const NUM_FUNCTIONS = 256;
+const NUM_FUNCTION_BYTES = NUM_FUNCTIONS / 8;
 
 @messageTypes(MessageType.Request, FunctionType.GetSerialApiCapabilities)
 @expectedResponse(FunctionType.GetSerialApiCapabilities)
@@ -30,9 +33,9 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 		return this._productId;
 	}
 
-	private _functionBitMask: Buffer;
-	public get functionBitMask(): Buffer {
-		return this._functionBitMask;
+	private _supportedFunctionTypes: FunctionType[];
+	public get supportedFunctionTypes(): FunctionType[] {
+		return this._supportedFunctionTypes;
 	}
 
 	public deserialize(data: Buffer): number {
@@ -44,8 +47,13 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 		this._productType = this.payload.readUInt16BE(4);
 		this._productId = this.payload.readUInt16BE(6);
 		// then a 256bit bitmask for the supported command classes follows
-		this._functionBitMask = Buffer.allocUnsafe(256 / 8);
-		this.payload.copy(this._functionBitMask, 0, 8, 8 + this._functionBitMask.length);
+		const functionBitMask = this.payload.slice(8, 8 + NUM_FUNCTION_BYTES);
+		this._supportedFunctionTypes = [];
+		for (let functionType = 1; functionType <= NUM_FUNCTIONS; functionType++) {
+			const byteNum = (functionType - 1) >>> 3; // type / 8
+			const bitNum = (functionType - 1) % 8;
+			if ((functionBitMask[byteNum] & (1 << bitNum)) !== 0) this._supportedFunctionTypes.push(functionType);
+		}
 
 		return ret;
 	}
@@ -56,7 +64,7 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 			manufacturerId: this.manufacturerId,
 			productType: this.productType,
 			productId: this.productId,
-			functionBitMask: "0x" + this.functionBitMask.toString("hex"),
+			supportedFunctionTypes: this.supportedFunctionTypes.map(type => type in FunctionType ? FunctionType[type] : num2hex(type)),
 		});
 	}
 }

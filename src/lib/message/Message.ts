@@ -192,10 +192,13 @@ export enum MessageType {
 
 /**
  * Complete list of function IDs for data messages.
- * IDs started with FUNC_ID are straight from OZW and not implemented here yet
+ * IDs starting with FUNC_ID are straight from OZW and not implemented here yet.
+ * IDS starting with UNKNOWN_FUNC are taken from openhab-zwave and not implemented here yet.
+ * IDs ending with UNKNOWN_<hex-code> are reported by the stick but we don't know what they mean.
  */
 export enum FunctionType {
-	FUNC_ID_SERIAL_API_GET_INIT_DATA = 0x02,
+	GetSerialApiInitData = 0x02,
+
 	FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION = 0x03,
 	FUNC_ID_APPLICATION_COMMAND_HANDLER = 0x04,
 
@@ -205,18 +208,39 @@ export enum FunctionType {
 
 	FUNC_ID_SERIAL_API_SOFT_RESET = 0x08,
 
-	FUNC_ID_ZW_SEND_NODE_INFORMATION = 0x12,
-	FUNC_ID_ZW_SEND_DATA = 0x13,
+	UNKNOWN_FUNC_UNKNOWN_0x09 = 0x09, // ??
+	UNKNOWN_FUNC_UNKNOWN_0x0a = 0x0a, // ??
+
+	UNKNOWN_FUNC_RF_RECEIVE_MODE = 0x10, // Power down the RF section of the stick
+	UNKNOWN_FUNC_SET_SLEEP_MODE = 0x11, // Set the CPU into sleep mode
+
+	FUNC_ID_ZW_SEND_NODE_INFORMATION = 0x12, // Send Node Information Frame of the stick
+	FUNC_ID_ZW_SEND_DATA = 0x13, // Send data
+	UNKNOWN_FUNC_SEND_DATA_MULTI = 0x14, // ??
 
 	GetControllerVersion = 0x15,
 
-	FUNC_ID_ZW_R_F_POWER_LEVEL_SET = 0x17,
-	FUNC_ID_ZW_GET_RANDOM = 0x1c,
+	UNKNOWN_FUNC_SEND_DATA_ABORT = 0x16, // Abort sending data
+
+	FUNC_ID_ZW_R_F_POWER_LEVEL_SET = 0x17, // Set RF Power level
+	UNKNOWN_FUNC_SEND_DATA_META = 0x18, // ??
+	FUNC_ID_ZW_GET_RANDOM = 0x1c, // Returns random data of variable length
 
 	GetControllerId = 0x20, // Get Home ID and Controller Node ID
 
-	FUNC_ID_MEMORY_GET_BYTE = 0x21,
+	FUNC_ID_MEMORY_GET_BYTE = 0x21, // get a byte of memory
+	UNKNOWN_FUNC_MEMORY_PUT_BYTE = 0x22, // write a byte of memory
 	FUNC_ID_ZW_READ_MEMORY = 0x23,
+	UNKNOWN_FUNC_WRITE_MEMORY = 0x24,
+
+	UNKNOWN_FUNC_UNKNOWN_0x27 = 0x27, // ??
+	UNKNOWN_FUNC_UNKNOWN_0x28 = 0x28, // ??
+	UNKNOWN_FUNC_UNKNOWN_0x29 = 0x29, // ??
+	UNKNOWN_FUNC_UNKNOWN_0x2a = 0x2a, // ??
+	UNKNOWN_FUNC_UNKNOWN_0x2b = 0x2b, // ??
+	UNKNOWN_FUNC_UNKNOWN_0x2c = 0x2c, // ??
+	UNKNOWN_FUNC_UNKNOWN_0x2d = 0x2d, // ??
+
 	FUNC_ID_ZW_SET_LEARN_NODE_STATE = 0x40,	// Not implemented
 	FUNC_ID_ZW_GET_NODE_PROTOCOL_INFO = 0x41,	// Get protocol info (baud rate, listening, etc.) for a given node
 	FUNC_ID_ZW_SET_DEFAULT = 0x42,	// Reset controller and node info to default (original) values
@@ -240,13 +264,26 @@ export enum FunctionType {
 
 	GetSUCNodeId = 0x56, // Try to retrieve a Static Update Controller node id (zero if no SUC present)
 
+	UNKNOWN_FUNC_SEND_SUC_ID = 0x57,
+
 	FUNC_ID_ZW_REQUEST_NODE_NEIGHBOR_UPDATE_OPTIONS = 0x5a,	// Allow options for request node neighbor update
 	FUNC_ID_ZW_EXPLORE_REQUEST_INCLUSION = 0x5e,	// supports NWI
 	FUNC_ID_ZW_REQUEST_NODE_INFO = 0x60,	// Get info (supported command classes) for the specified node
 	FUNC_ID_ZW_REMOVE_FAILED_NODE_ID = 0x61,	// Mark a specified node id as failed
 	FUNC_ID_ZW_IS_FAILED_NODE_ID = 0x62,	// Check to see if a specified node has failed
 	FUNC_ID_ZW_REPLACE_FAILED_NODE = 0x63,	// Remove a failed node from the controller's list (?)
+
+	UNKNOWN_FUNC_UNKNOWN_0x66 = 0x66, // ??
+	UNKNOWN_FUNC_UNKNOWN_0x67 = 0x67, // ??
+	UNKNOWN_FUNC_UNKNOWN_0x78 = 0x78, // ??
+
 	FUNC_ID_ZW_GET_ROUTING_INFO = 0x80,	// Get a specified node's neighbor information from the controller
+
+	UNKNOWN_FUNC_LOCK_ROUTE = 0x90, // ??
+	UNKNOWN_FUNC_UNKNOWN_0x92 = 0x92, // ??
+	UNKNOWN_FUNC_UNKNOWN_0x93 = 0x93, // ??
+	UNKNOWN_FUNC_UNKNOWN_0x98 = 0x98, // ??
+
 	FUNC_ID_SERIAL_API_SLAVE_NODE_INFO = 0xA0,	// Set application virtual slave node information
 	FUNC_ID_APPLICATION_SLAVE_COMMAND_HANDLER = 0xA1,	// Slave command handler
 	FUNC_ID_ZW_SEND_SLAVE_NODE_INFO = 0xA2,	// Send a slave node information message
@@ -254,8 +291,29 @@ export enum FunctionType {
 	FUNC_ID_ZW_SET_SLAVE_LEARN_MODE = 0xA4,	// Enter slave learn mode
 	FUNC_ID_ZW_GET_VIRTUAL_NODES = 0xA5,	// Return all virtual nodes
 	FUNC_ID_ZW_IS_VIRTUAL_NODE = 0xA6,	// Virtual node test
+
+	UNKNOWN_FUNC_UNKNOWN_0xB4 = 0xB4, // ??
+
+	UNKNOWN_FUNC_WATCH_DOG_ENABLE = 0xB6,
+	UNKNOWN_FUNC_WATCH_DOG_DISABLE = 0xB7,
+	UNKNOWN_FUNC_WATCH_DOG_KICK = 0xB8,
+	UNKNOWN_FUNC_UNKNOWN_0xB9 = 0xB9, // ??
+	UNKNOWN_FUNC_RF_POWERLEVEL_GET = 0xBA, // Get RF Power level
+
+	UNKNOWN_FUNC_GET_LIBRARY_TYPE = 0xBD,
+	UNKNOWN_FUNC_SEND_TEST_FRAME = 0xBE,
+	UNKNOWN_FUNC_GET_PROTOCOL_STATUS = 0xBF,
+
 	FUNC_ID_ZW_SET_PROMISCUOUS_MODE = 0xD0,	// Set controller into promiscuous mode to listen to all messages
 	FUNC_ID_PROMISCUOUS_APPLICATION_COMMAND_HANDLER = 0xD1,
+
+	UNKNOWN_FUNC_UNKNOWN_0xD2 = 0xD2, // ??
+	UNKNOWN_FUNC_UNKNOWN_0xD3 = 0xD3, // ??
+	UNKNOWN_FUNC_UNKNOWN_0xD4 = 0xD4, // ??
+	UNKNOWN_FUNC_UNKNOWN_0xEF = 0xEF, // ??
+	UNKNOWN_FUNC_UNKNOWN_0xF2 = 0xF2, // ??
+	UNKNOWN_FUNC_UNKNOWN_0xF4 = 0xF4, // ??
+	UNKNOWN_FUNC_UNKNOWN_0xF5 = 0xF5, // ??
 }
 
 // =======================

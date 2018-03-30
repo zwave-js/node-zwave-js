@@ -20,6 +20,8 @@ export declare class ZWaveController {
     readonly wasRealPrimary: boolean;
     private _isStaticUpdateController;
     readonly isStaticUpdateController: boolean;
+    private _isSlave;
+    readonly isSlave: boolean;
     private _serialApiVersion;
     readonly serialApiVersion: string;
     private _manufacturerId;
@@ -28,9 +30,13 @@ export declare class ZWaveController {
     readonly productType: number;
     private _productId;
     readonly productId: number;
-    private _functionBitMask;
+    private _supportedFunctionTypes;
+    readonly supportedFunctionTypes: FunctionType[];
     isFunctionSupported(functionType: FunctionType): boolean;
     private _sucNodeId;
     readonly sucNodeId: number;
+    private _supportsTimers;
+    readonly supportsTimers: boolean;
+    readonly nodes: Map<number, any>;
     interview(driver: Driver): Promise<void>;
 }

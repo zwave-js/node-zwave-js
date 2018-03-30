@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { Message } from "../message/Message";
+import { FunctionType, Message } from "../message/Message";
 export declare class GetSerialApiCapabilitiesRequest extends Message {
 }
 export declare class GetSerialApiCapabilitiesResponse extends Message {
@@ -11,8 +11,8 @@ export declare class GetSerialApiCapabilitiesResponse extends Message {
     readonly productType: number;
     private _productId;
     readonly productId: number;
-    private _functionBitMask;
-    readonly functionBitMask: Buffer;
+    private _supportedFunctionTypes;
+    readonly supportedFunctionTypes: FunctionType[];
     deserialize(data: Buffer): number;
     toJSON(): Record<string, any>;
 }

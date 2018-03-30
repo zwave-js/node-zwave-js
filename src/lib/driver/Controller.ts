@@ -6,10 +6,13 @@ import { GetControllerCapabilitiesRequest, GetControllerCapabilitiesResponse } f
 import { GetControllerIdRequest, GetControllerIdResponse } from "./GetControllerIdMessages";
 import { ControllerTypes, GetControllerVersionRequest, GetControllerVersionResponse } from "./GetControllerVersionMessages";
 import { GetSerialApiCapabilitiesRequest, GetSerialApiCapabilitiesResponse } from "./GetSerialApiCapabilitiesMessages";
+import { GetSerialApiInitDataRequest, GetSerialApiInitDataResponse } from "./GetSerialApiInitDataMessages";
 import { GetSUCNodeIdRequest, GetSUCNodeIdResponse } from "./GetSUCNodeIdMessages";
 import { SetSerialApiTimeoutsRequest, SetSerialApiTimeoutsResponse } from "./SetSerialApiTimeoutsMessages";
 
 export class ZWaveController {
+
+//#region --- Properties ---
 
 	private _libraryVersion: string;
 	public get libraryVersion(): string {
@@ -56,6 +59,11 @@ export class ZWaveController {
 		return this._isStaticUpdateController;
 	}
 
+	private _isSlave: boolean;
+	public get isSlave(): boolean {
+		return this._isSlave;
+	}
+
 	private _serialApiVersion: string;
 	public get serialApiVersion() {
 		return this._serialApiVersion;
@@ -76,17 +84,28 @@ export class ZWaveController {
 		return this._productId;
 	}
 
-	private _functionBitMask: Buffer;
+	private _supportedFunctionTypes: FunctionType[];
+	public get supportedFunctionTypes(): FunctionType[] {
+		return this._supportedFunctionTypes;
+	}
+
 	public isFunctionSupported(functionType: FunctionType): boolean {
-		const byteNum = (functionType - 1) >>> 3; // type / 8
-		const bitNum = (functionType - 1) % 8;
-		return (this._functionBitMask[byteNum] & (1 << bitNum)) !== 0;
+		return this._supportedFunctionTypes.indexOf(functionType) > -1;
 	}
 
 	private _sucNodeId: number;
 	public get sucNodeId(): number {
 		return this._sucNodeId;
 	}
+
+	private _supportsTimers: boolean;
+	public get supportsTimers(): boolean {
+		return this._supportsTimers;
+	}
+
+	public readonly nodes = new Map<number, any>();
+
+//#endregion
 
 	public async interview(driver: Driver): Promise<void> {
 		log("controller", "interviewing controller", "debug");
@@ -119,7 +138,7 @@ export class ZWaveController {
 		this._manufacturerId = apiCaps.manufacturerId;
 		this._productType = apiCaps.productType;
 		this._productId = apiCaps.productId;
-		this._functionBitMask = apiCaps.functionBitMask;
+		this._supportedFunctionTypes = apiCaps.supportedFunctionTypes;
 
 		// now we can check if a function is supported
 
@@ -127,7 +146,7 @@ export class ZWaveController {
 		const suc = await driver.sendMessage<GetSUCNodeIdResponse>(new GetSUCNodeIdRequest(), "none");
 		log("controller", `got suc info: ${stringify(suc)}`, "debug");
 		this._sucNodeId = suc.sucNodeId;
-		// TODO: enable SIS if no SUC
+		// TODO: if configured, enable this controller as SIS if there's no SUC
 		// https://github.com/OpenZWave/open-zwave/blob/a46f3f36271f88eed5aea58899a6cb118ad312a2/cpp/src/Driver.cpp#L2586
 
 		// if it's a bridge controller, request the virtual nodes
@@ -135,8 +154,20 @@ export class ZWaveController {
 			// TODO: send FUNC_ID_ZW_GET_VIRTUAL_NODES message
 		}
 
-		// TODO: Request information about all nodes with the GetInitData message
-		// https://github.com/OpenZWave/open-zwave/blob/a46f3f36271f88eed5aea58899a6cb118ad312a2/cpp/src/Driver.cpp#L2632
+		// Request information about all nodes with the GetInitData message
+		const initData = await driver.sendMessage<GetSerialApiInitDataResponse>(new GetSerialApiInitDataRequest());
+		log("controller", `got init data: ${stringify(initData)}`, "debug");
+		// override the information we might already have
+		this._isSecondary = initData.isSecondary;
+		this._isStaticUpdateController = initData.isStaticUpdateController;
+		// and remember the new info
+		this._isSlave = initData.isSlave;
+		this._supportsTimers = initData.supportsTimers;
+		// ignore the initVersion, no clue what to do with it
+		// create an empty entry in the nodes map so we can initialize them afterwards
+		for (const nodeId of initData.nodeIds) {
+			this.nodes.set(nodeId, null);
+		}
 
 		if (this.type !== ControllerTypes["Bridge Controller"] && this.isFunctionSupported(FunctionType.SetSerialApiTimeouts)) {
 			const { ack, byte } = driver.options.timeouts;

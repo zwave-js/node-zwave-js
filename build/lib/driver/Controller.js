@@ -15,9 +15,14 @@ const GetControllerCapabilitiesMessages_1 = require("./GetControllerCapabilities
 const GetControllerIdMessages_1 = require("./GetControllerIdMessages");
 const GetControllerVersionMessages_1 = require("./GetControllerVersionMessages");
 const GetSerialApiCapabilitiesMessages_1 = require("./GetSerialApiCapabilitiesMessages");
+const GetSerialApiInitDataMessages_1 = require("./GetSerialApiInitDataMessages");
 const GetSUCNodeIdMessages_1 = require("./GetSUCNodeIdMessages");
 const SetSerialApiTimeoutsMessages_1 = require("./SetSerialApiTimeoutsMessages");
 class ZWaveController {
+    constructor() {
+        //#region --- Properties ---
+        this.nodes = new Map();
+    }
     get libraryVersion() {
         return this._libraryVersion;
     }
@@ -45,6 +50,9 @@ class ZWaveController {
     get isStaticUpdateController() {
         return this._isStaticUpdateController;
     }
+    get isSlave() {
+        return this._isSlave;
+    }
     get serialApiVersion() {
         return this._serialApiVersion;
     }
@@ -57,14 +65,19 @@ class ZWaveController {
     get productId() {
         return this._productId;
     }
+    get supportedFunctionTypes() {
+        return this._supportedFunctionTypes;
+    }
     isFunctionSupported(functionType) {
-        const byteNum = (functionType - 1) >>> 3; // type / 8
-        const bitNum = (functionType - 1) % 8;
-        return (this._functionBitMask[byteNum] & (1 << bitNum)) !== 0;
+        return this._supportedFunctionTypes.indexOf(functionType) > -1;
     }
     get sucNodeId() {
         return this._sucNodeId;
     }
+    get supportsTimers() {
+        return this._supportsTimers;
+    }
+    //#endregion
     interview(driver) {
         return __awaiter(this, void 0, void 0, function* () {
             logger_1.log("controller", "interviewing controller", "debug");
@@ -93,20 +106,32 @@ class ZWaveController {
             this._manufacturerId = apiCaps.manufacturerId;
             this._productType = apiCaps.productType;
             this._productId = apiCaps.productId;
-            this._functionBitMask = apiCaps.functionBitMask;
+            this._supportedFunctionTypes = apiCaps.supportedFunctionTypes;
             // now we can check if a function is supported
             // find the SUC
             const suc = yield driver.sendMessage(new GetSUCNodeIdMessages_1.GetSUCNodeIdRequest(), "none");
             logger_1.log("controller", `got suc info: ${strings_1.stringify(suc)}`, "debug");
             this._sucNodeId = suc.sucNodeId;
-            // TODO: enable SIS if no SUC
+            // TODO: if configured, enable this controller as SIS if there's no SUC
             // https://github.com/OpenZWave/open-zwave/blob/a46f3f36271f88eed5aea58899a6cb118ad312a2/cpp/src/Driver.cpp#L2586
             // if it's a bridge controller, request the virtual nodes
             if (this.type === GetControllerVersionMessages_1.ControllerTypes["Bridge Controller"] && this.isFunctionSupported(Message_1.FunctionType.FUNC_ID_ZW_GET_VIRTUAL_NODES)) {
                 // TODO: send FUNC_ID_ZW_GET_VIRTUAL_NODES message
             }
-            // TODO: Request information about all nodes with the GetInitData message
-            // https://github.com/OpenZWave/open-zwave/blob/a46f3f36271f88eed5aea58899a6cb118ad312a2/cpp/src/Driver.cpp#L2632
+            // Request information about all nodes with the GetInitData message
+            const initData = yield driver.sendMessage(new GetSerialApiInitDataMessages_1.GetSerialApiInitDataRequest());
+            logger_1.log("controller", `got init data: ${strings_1.stringify(initData)}`, "debug");
+            // override the information we might already have
+            this._isSecondary = initData.isSecondary;
+            this._isStaticUpdateController = initData.isStaticUpdateController;
+            // and remember the new info
+            this._isSlave = initData.isSlave;
+            this._supportsTimers = initData.supportsTimers;
+            // ignore the initVersion, no clue what to do with it
+            // create an empty entry in the nodes map so we can initialize them afterwards
+            for (const nodeId of initData.nodeIds) {
+                this.nodes.set(nodeId, null);
+            }
             if (this.type !== GetControllerVersionMessages_1.ControllerTypes["Bridge Controller"] && this.isFunctionSupported(Message_1.FunctionType.SetSerialApiTimeouts)) {
                 const { ack, byte } = driver.options.timeouts;
                 logger_1.log("controller", `setting serial API timeouts: ack = ${ack} ms, byte = ${byte} ms`, "debug");

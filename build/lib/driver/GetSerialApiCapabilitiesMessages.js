@@ -7,6 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Message_1 = require("../message/Message");
+const strings_1 = require("../util/strings");
+const NUM_FUNCTIONS = 256;
+const NUM_FUNCTION_BYTES = NUM_FUNCTIONS / 8;
 let GetSerialApiCapabilitiesRequest = class GetSerialApiCapabilitiesRequest extends Message_1.Message {
 };
 GetSerialApiCapabilitiesRequest = __decorate([
@@ -27,8 +30,8 @@ let GetSerialApiCapabilitiesResponse = class GetSerialApiCapabilitiesResponse ex
     get productId() {
         return this._productId;
     }
-    get functionBitMask() {
-        return this._functionBitMask;
+    get supportedFunctionTypes() {
+        return this._supportedFunctionTypes;
     }
     deserialize(data) {
         const ret = super.deserialize(data);
@@ -38,8 +41,14 @@ let GetSerialApiCapabilitiesResponse = class GetSerialApiCapabilitiesResponse ex
         this._productType = this.payload.readUInt16BE(4);
         this._productId = this.payload.readUInt16BE(6);
         // then a 256bit bitmask for the supported command classes follows
-        this._functionBitMask = Buffer.allocUnsafe(256 / 8);
-        this.payload.copy(this._functionBitMask, 0, 8, 8 + this._functionBitMask.length);
+        const functionBitMask = this.payload.slice(8, 8 + NUM_FUNCTION_BYTES);
+        this._supportedFunctionTypes = [];
+        for (let functionType = 1; functionType <= NUM_FUNCTIONS; functionType++) {
+            const byteNum = (functionType - 1) >>> 3; // type / 8
+            const bitNum = (functionType - 1) % 8;
+            if ((functionBitMask[byteNum] & (1 << bitNum)) !== 0)
+                this._supportedFunctionTypes.push(functionType);
+        }
         return ret;
     }
     toJSON() {
@@ -48,7 +57,7 @@ let GetSerialApiCapabilitiesResponse = class GetSerialApiCapabilitiesResponse ex
             manufacturerId: this.manufacturerId,
             productType: this.productType,
             productId: this.productId,
-            functionBitMask: "0x" + this.functionBitMask.toString("hex"),
+            supportedFunctionTypes: this.supportedFunctionTypes.map(type => type in Message_1.FunctionType ? Message_1.FunctionType[type] : strings_1.num2hex(type)),
         });
     }
 };
