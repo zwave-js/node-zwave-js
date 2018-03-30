@@ -1,4 +1,5 @@
 import { expectedResponse, FunctionType, Message,  MessageType, messageTypes} from "../message/Message";
+import { padStart } from "../util/strings";
 
 @messageTypes(MessageType.Request, FunctionType.GetSerialApiCapabilities)
 @expectedResponse(FunctionType.GetSerialApiCapabilities)
@@ -47,5 +48,15 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 		this.payload.copy(this._functionBitMask, 0, 8, 8 + this._functionBitMask.length);
 
 		return ret;
+	}
+
+	public toJSON() {
+		return super.toJSONInherited({
+			serialApiVersion: this.serialApiVersion,
+			manufacturerId: this.manufacturerId,
+			productType: this.productType,
+			productId: this.productId,
+			functionBitMask: "0x" + this.functionBitMask.toString("hex"),
+		});
 	}
 }

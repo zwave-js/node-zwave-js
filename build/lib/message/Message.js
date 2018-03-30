@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const logger_1 = require("../util/logger");
+const object_polyfill_1 = require("../util/object-polyfill");
 const strings_1 = require("../util/strings");
 /**
  * Represents a ZWave message for communication with the serial interface
@@ -93,6 +94,9 @@ class Message {
         return messageLength;
     }
     toJSON() {
+        return this.toJSONInternal();
+    }
+    toJSONInternal() {
         const ret = {
             name: this.constructor.name,
             type: MessageType[this.type],
@@ -102,6 +106,14 @@ class Message {
             ret.expectedResponse = FunctionType[this.functionType];
         if (this.payload != null)
             ret.payload = this.payload.toString("hex");
+        return ret;
+    }
+    toJSONInherited(props) {
+        const ret = this.toJSONInternal();
+        delete ret.payload;
+        for (const [key, value] of object_polyfill_1.entries(props)) {
+            ret[key] = value;
+        }
         return ret;
     }
 }
@@ -137,7 +149,7 @@ var FunctionType;
     FunctionType[FunctionType["FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION"] = 3] = "FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION";
     FunctionType[FunctionType["FUNC_ID_APPLICATION_COMMAND_HANDLER"] = 4] = "FUNC_ID_APPLICATION_COMMAND_HANDLER";
     FunctionType[FunctionType["GetControllerCapabilities"] = 5] = "GetControllerCapabilities";
-    FunctionType[FunctionType["FUNC_ID_SERIAL_API_SET_TIMEOUTS"] = 6] = "FUNC_ID_SERIAL_API_SET_TIMEOUTS";
+    FunctionType[FunctionType["SetSerialApiTimeouts"] = 6] = "SetSerialApiTimeouts";
     FunctionType[FunctionType["GetSerialApiCapabilities"] = 7] = "GetSerialApiCapabilities";
     FunctionType[FunctionType["FUNC_ID_SERIAL_API_SOFT_RESET"] = 8] = "FUNC_ID_SERIAL_API_SOFT_RESET";
     FunctionType[FunctionType["FUNC_ID_ZW_SEND_NODE_INFORMATION"] = 18] = "FUNC_ID_ZW_SEND_NODE_INFORMATION";
@@ -200,7 +212,7 @@ function getMessageTypeMapKey(messageType, functionType) {
  */
 function messageTypes(messageType, functionType) {
     return (messageClass) => {
-        logger_1.log(`${messageClass.name}: defining message type ${strings_1.num2hex(messageType)} and function type ${strings_1.num2hex(functionType)}`, "silly");
+        logger_1.log("protocol", `${messageClass.name}: defining message type ${strings_1.num2hex(messageType)} and function type ${strings_1.num2hex(functionType)}`, "silly");
         // and store the metadata
         Reflect.defineMetadata(exports.METADATA_messageTypes, { messageType, functionType }, messageClass);
         // also store a map in the Message metadata for lookup.
@@ -219,7 +231,7 @@ function getMessageType(messageClass) {
     // retrieve the current metadata
     const meta = Reflect.getMetadata(exports.METADATA_messageTypes, constr);
     const ret = meta && meta.messageType;
-    logger_1.log(`${constr.name}: retrieving message type => ${strings_1.num2hex(ret)}`, "silly");
+    logger_1.log("protocol", `${constr.name}: retrieving message type => ${strings_1.num2hex(ret)}`, "silly");
     return ret;
 }
 exports.getMessageType = getMessageType;
@@ -230,7 +242,7 @@ function getMessageTypeStatic(classConstructor) {
     // retrieve the current metadata
     const meta = Reflect.getMetadata(exports.METADATA_messageTypes, classConstructor);
     const ret = meta && meta.messageType;
-    logger_1.log(`${classConstructor.name}: retrieving message type => ${strings_1.num2hex(ret)}`, "silly");
+    logger_1.log("protocol", `${classConstructor.name}: retrieving message type => ${strings_1.num2hex(ret)}`, "silly");
     return ret;
 }
 exports.getMessageTypeStatic = getMessageTypeStatic;
@@ -243,7 +255,7 @@ function getFunctionType(messageClass) {
     // retrieve the current metadata
     const meta = Reflect.getMetadata(exports.METADATA_messageTypes, constr);
     const ret = meta && meta.functionType;
-    logger_1.log(`${constr.name}: retrieving function type => ${strings_1.num2hex(ret)}`, "silly");
+    logger_1.log("protocol", `${constr.name}: retrieving function type => ${strings_1.num2hex(ret)}`, "silly");
     return ret;
 }
 exports.getFunctionType = getFunctionType;
@@ -254,7 +266,7 @@ function getFunctionTypeStatic(classConstructor) {
     // retrieve the current metadata
     const meta = Reflect.getMetadata(exports.METADATA_messageTypes, classConstructor);
     const ret = meta && meta.functionType;
-    logger_1.log(`${classConstructor.name}: retrieving function type => ${strings_1.num2hex(ret)}`, "silly");
+    logger_1.log("protocol", `${classConstructor.name}: retrieving function type => ${strings_1.num2hex(ret)}`, "silly");
     return ret;
 }
 exports.getFunctionTypeStatic = getFunctionTypeStatic;
@@ -273,7 +285,7 @@ exports.getMessageConstructor = getMessageConstructor;
  */
 function expectedResponse(type) {
     return (messageClass) => {
-        logger_1.log(`${messageClass.name}: defining expected response ${strings_1.num2hex(type)}`, "silly");
+        logger_1.log("protocol", `${messageClass.name}: defining expected response ${strings_1.num2hex(type)}`, "silly");
         // and store the metadata
         Reflect.defineMetadata(exports.METADATA_expectedResponse, type, messageClass);
     };
@@ -287,7 +299,7 @@ function getExpectedResponse(messageClass) {
     const constr = messageClass.constructor;
     // retrieve the current metadata
     const ret = Reflect.getMetadata(exports.METADATA_expectedResponse, constr);
-    logger_1.log(`${constr.name}: retrieving expected response => ${strings_1.num2hex(ret)}`, "silly");
+    logger_1.log("protocol", `${constr.name}: retrieving expected response => ${strings_1.num2hex(ret)}`, "silly");
     return ret;
 }
 exports.getExpectedResponse = getExpectedResponse;
@@ -297,7 +309,7 @@ exports.getExpectedResponse = getExpectedResponse;
 function getExpectedResponseStatic(classConstructor) {
     // retrieve the current metadata
     const ret = Reflect.getMetadata(exports.METADATA_expectedResponse, classConstructor);
-    logger_1.log(`${classConstructor.name}: retrieving expected response => ${strings_1.num2hex(ret)}`, "silly");
+    logger_1.log("protocol", `${classConstructor.name}: retrieving expected response => ${strings_1.num2hex(ret)}`, "silly");
     return ret;
 }
 exports.getExpectedResponseStatic = getExpectedResponseStatic;

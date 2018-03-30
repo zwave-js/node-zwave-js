@@ -29,3 +29,7 @@ export function num2hex(val: number | undefined | null): string {
 	if (ret.length % 2 !== 0) ret = "0" + ret;
 	return "0x" + ret;
 }
+
+export function stringify(arg: any): string {
+	return JSON.stringify(arg, null, 4);
+}

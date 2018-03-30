@@ -42,6 +42,15 @@ let GetSerialApiCapabilitiesResponse = class GetSerialApiCapabilitiesResponse ex
         this.payload.copy(this._functionBitMask, 0, 8, 8 + this._functionBitMask.length);
         return ret;
     }
+    toJSON() {
+        return super.toJSONInherited({
+            serialApiVersion: this.serialApiVersion,
+            manufacturerId: this.manufacturerId,
+            productType: this.productType,
+            productId: this.productId,
+            functionBitMask: "0x" + this.functionBitMask.toString("hex"),
+        });
+    }
 };
 GetSerialApiCapabilitiesResponse = __decorate([
     Message_1.messageTypes(Message_1.MessageType.Response, Message_1.FunctionType.GetSerialApiCapabilities)

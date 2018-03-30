@@ -41,4 +41,11 @@ export class GetControllerVersionResponse extends Message {
 
 		return ret;
 	}
+
+	public toJSON() {
+		return super.toJSONInherited({
+			controllerType: this.controllerType,
+			libraryVersion: this.libraryVersion,
+		});
+	}
 }

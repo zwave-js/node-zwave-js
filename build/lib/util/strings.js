@@ -36,3 +36,7 @@ function num2hex(val) {
     return "0x" + ret;
 }
 exports.num2hex = num2hex;
+function stringify(arg) {
+    return JSON.stringify(arg, null, 4);
+}
+exports.stringify = stringify;

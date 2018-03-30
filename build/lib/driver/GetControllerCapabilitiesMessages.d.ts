@@ -10,4 +10,5 @@ export declare class GetControllerCapabilitiesResponse extends Message {
     readonly wasRealPrimary: boolean;
     readonly isStaticUpdateController: boolean;
     deserialize(data: Buffer): number;
+    toJSON(): Record<string, any>;
 }

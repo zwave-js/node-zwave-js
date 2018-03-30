@@ -46,7 +46,7 @@ describe("lib/driver/GetControllerVersionResponse => ", () => {
 	parsed.deserialize(rawBuf);
 
 	it("should extract the controller version and type", () => {
-		parsed.controllerVersion.should.equal("Z-Wave 4.05");
+		parsed.libraryVersion.should.equal("Z-Wave 4.05");
 		parsed.controllerType.should.equal(ControllerTypes["Static Controller"]);
 	});
 

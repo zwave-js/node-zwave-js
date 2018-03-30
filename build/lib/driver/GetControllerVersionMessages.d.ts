@@ -19,4 +19,5 @@ export declare class GetControllerVersionResponse extends Message {
     private _libraryVersion;
     readonly libraryVersion: string;
     deserialize(data: Buffer): number;
+    toJSON(): Record<string, any>;
 }

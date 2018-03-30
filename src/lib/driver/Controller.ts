@@ -1,12 +1,13 @@
-import { FunctionType } from "../message/Message";
+import { FunctionType, Message, MessageType } from "../message/Message";
 import { log } from "../util/logger";
-import { num2hex } from "../util/strings";
+import { num2hex, stringify } from "../util/strings";
 import { Driver } from "./Driver";
 import { GetControllerCapabilitiesRequest, GetControllerCapabilitiesResponse } from "./GetControllerCapabilitiesMessages";
 import { GetControllerIdRequest, GetControllerIdResponse } from "./GetControllerIdMessages";
 import { ControllerTypes, GetControllerVersionRequest, GetControllerVersionResponse } from "./GetControllerVersionMessages";
 import { GetSerialApiCapabilitiesRequest, GetSerialApiCapabilitiesResponse } from "./GetSerialApiCapabilitiesMessages";
 import { GetSUCNodeIdRequest, GetSUCNodeIdResponse } from "./GetSUCNodeIdMessages";
+import { SetSerialApiTimeoutsRequest, SetSerialApiTimeoutsResponse } from "./SetSerialApiTimeoutsMessages";
 
 export class ZWaveController {
 
@@ -88,22 +89,23 @@ export class ZWaveController {
 	}
 
 	public async interview(driver: Driver): Promise<void> {
-		log("interviewing controller", "debug");
+		log("controller", "interviewing controller", "debug");
+
 		// get basic controller version info
-		const version = await driver.sendMessage<GetControllerVersionResponse>(new GetControllerVersionRequest(), true);
-		log(`got version info: ${JSON.stringify(version)}`, "debug");
+		const version = await driver.sendMessage<GetControllerVersionResponse>(new GetControllerVersionRequest(), "none");
+		log("controller", `got version info: ${stringify(version)}`, "debug");
 		this._libraryVersion = version.libraryVersion;
 		this._type = version.controllerType;
 
 		// get the home and node id of the controller
-		const ids = await driver.sendMessage<GetControllerIdResponse>(new GetControllerIdRequest(), true);
-		log(`got IDs: ${JSON.stringify(ids)}`, "debug");
+		const ids = await driver.sendMessage<GetControllerIdResponse>(new GetControllerIdRequest(), "none");
+		log("controller", `got IDs: ${stringify(ids)}`, "debug");
 		this._homeId = ids.homeId;
 		this._ownNodeId = ids.ownNodeId;
 
 		// find out what the controller can do
-		const ctrlCaps = await driver.sendMessage<GetControllerCapabilitiesResponse>(new GetControllerCapabilitiesRequest(), true);
-		log(`got controller capabilities: ${JSON.stringify(ctrlCaps)}`, "debug");
+		const ctrlCaps = await driver.sendMessage<GetControllerCapabilitiesResponse>(new GetControllerCapabilitiesRequest(), "none");
+		log("controller", `got controller capabilities: ${stringify(ctrlCaps)}`, "debug");
 		this._isSecondary = ctrlCaps.isSecondary;
 		this._isUsingHomeIdFromOtherNetwork = ctrlCaps.isUsingHomeIdFromOtherNetwork;
 		this._isSISPresent = ctrlCaps.isSISPresent;
@@ -111,18 +113,56 @@ export class ZWaveController {
 		this._isStaticUpdateController = ctrlCaps.isStaticUpdateController;
 
 		// find out which part of the API is supported
-		const apiCaps = await driver.sendMessage<GetSerialApiCapabilitiesResponse>(new GetSerialApiCapabilitiesRequest(), true);
-		log(`got api capabilities: ${JSON.stringify(apiCaps)}`, "debug");
+		const apiCaps = await driver.sendMessage<GetSerialApiCapabilitiesResponse>(new GetSerialApiCapabilitiesRequest(), "none");
+		log("controller", `got api capabilities: ${stringify(apiCaps)}`, "debug");
 		this._serialApiVersion = apiCaps.serialApiVersion;
 		this._manufacturerId = apiCaps.manufacturerId;
 		this._productType = apiCaps.productType;
 		this._productId = apiCaps.productId;
 		this._functionBitMask = apiCaps.functionBitMask;
 
+		// now we can check if a function is supported
+
 		// find the SUC
-		const suc = await driver.sendMessage<GetSUCNodeIdResponse>(new GetSUCNodeIdRequest(), true);
-		log(`got suc info: ${JSON.stringify(suc)}`, "debug");
+		const suc = await driver.sendMessage<GetSUCNodeIdResponse>(new GetSUCNodeIdRequest(), "none");
+		log("controller", `got suc info: ${stringify(suc)}`, "debug");
 		this._sucNodeId = suc.sucNodeId;
+		// TODO: enable SIS if no SUC
+		// https://github.com/OpenZWave/open-zwave/blob/a46f3f36271f88eed5aea58899a6cb118ad312a2/cpp/src/Driver.cpp#L2586
+
+		// if it's a bridge controller, request the virtual nodes
+		if (this.type === ControllerTypes["Bridge Controller"] && this.isFunctionSupported(FunctionType.FUNC_ID_ZW_GET_VIRTUAL_NODES)) {
+			// TODO: send FUNC_ID_ZW_GET_VIRTUAL_NODES message
+		}
+
+		// TODO: Request information about all nodes with the GetInitData message
+		// https://github.com/OpenZWave/open-zwave/blob/a46f3f36271f88eed5aea58899a6cb118ad312a2/cpp/src/Driver.cpp#L2632
+
+		if (this.type !== ControllerTypes["Bridge Controller"] && this.isFunctionSupported(FunctionType.SetSerialApiTimeouts)) {
+			const { ack, byte } = driver.options.timeouts;
+			log("controller", `setting serial API timeouts: ack = ${ack} ms, byte = ${byte} ms`, "debug");
+			const resp = await driver.sendMessage<SetSerialApiTimeoutsResponse>(new SetSerialApiTimeoutsRequest(ack, byte));
+			log("controller", `serial API timeouts overwritten. The old values were: ack = ${resp.oldAckTimeout} ms, byte = ${resp.oldByteTimeout} ms`, "debug");
+		}
+
+		// send application info (not sure why tho)
+		if (this.isFunctionSupported(FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION)) {
+			log("controller", `sending application info`, "debug");
+			const appInfoMsg = new Message(
+				MessageType.Request,
+				FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION,
+				null,
+				Buffer.from([
+					0x01, // APPLICATION_NODEINFO_LISTENING
+					0x02, // generic static controller
+					0x01, // specific static PC controller
+					0x00, // length
+				]),
+			);
+			await driver.sendMessage(appInfoMsg, "none");
+		}
+
+		log("controller", "interview done!", "debug");
 	}
 
 }

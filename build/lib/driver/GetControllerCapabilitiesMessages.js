@@ -36,6 +36,15 @@ let GetControllerCapabilitiesResponse = class GetControllerCapabilitiesResponse 
         this._capabilityFlags = this.payload[0];
         return ret;
     }
+    toJSON() {
+        return super.toJSONInherited({
+            isSecondary: this.isSecondary,
+            isUsingHomeIdFromOtherNetwork: this.isUsingHomeIdFromOtherNetwork,
+            isSISPresent: this.isSISPresent,
+            wasRealPrimary: this.wasRealPrimary,
+            isStaticUpdateController: this.isStaticUpdateController,
+        });
+    }
 };
 GetControllerCapabilitiesResponse = __decorate([
     Message_1.messageTypes(Message_1.MessageType.Response, Message_1.FunctionType.GetControllerCapabilities)

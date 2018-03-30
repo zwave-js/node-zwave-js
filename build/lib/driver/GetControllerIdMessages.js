@@ -28,6 +28,12 @@ let GetControllerIdResponse = class GetControllerIdResponse extends Message_1.Me
         this._ownNodeId = this.payload.readUInt8(4);
         return ret;
     }
+    toJSON() {
+        return super.toJSONInherited({
+            homeId: this.homeId,
+            ownNodeId: this.ownNodeId,
+        });
+    }
 };
 GetControllerIdResponse = __decorate([
     Message_1.messageTypes(Message_1.MessageType.Response, Message_1.FunctionType.GetControllerId)

@@ -42,4 +42,15 @@ export class GetControllerCapabilitiesResponse extends Message {
 
 		return ret;
 	}
+
+	public toJSON() {
+		return super.toJSONInherited({
+			isSecondary: this.isSecondary,
+			isUsingHomeIdFromOtherNetwork: this.isUsingHomeIdFromOtherNetwork,
+			isSISPresent: this.isSISPresent,
+			wasRealPrimary: this.wasRealPrimary,
+			isStaticUpdateController: this.isStaticUpdateController,
+		});
+	}
+
 }

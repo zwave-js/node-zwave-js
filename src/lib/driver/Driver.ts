@@ -4,8 +4,9 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, Message, MessageHeaders, MessageType } from "../message/Message";
 import { createDeferredPromise, DeferredPromise } from "../util/defer-promise";
 import { log } from "../util/logger";
+import { entries } from "../util/object-polyfill";
+import { stringify } from "../util/strings";
 import { ZWaveController } from "./Controller";
-// TODO: expose debug namespaces
 
 interface PendingRequest {
 	originalMessage: Message;
@@ -16,10 +17,39 @@ interface PendingRequest {
 	// TODO: add a way to resend these
 }
 
-export type ZWaveOptions = Partial<{
-	// none defined so far
-	empty: never;
-}>;
+export interface ZWaveOptions {
+	timeouts: {
+		/** how long to wait for an ACK */
+		ack: number,
+		/** not sure */
+		byte: number,
+	};
+}
+export type DeepPartial<T> = {[P in keyof T]: Partial<T[P]>};
+
+const defaultOptions: ZWaveOptions = {
+	timeouts: {
+		ack: 1000,
+		byte: 150,
+	},
+};
+function applyDefaultOptions(target: Record<string, any>, source: Record<string, any>): Record<string, any> {
+	target = target || {};
+	for (const [key, value] of entries(source)) {
+		if (!(key in target)) {
+			target[key] = value;
+		} else {
+			if (typeof value === "object") {
+				// merge objects
+				target[key] = applyDefaultOptions(target[key], value);
+			} else if (typeof target[key] !== "undefined") {
+				// don't override single keys
+				target[key] = value;
+			}
+		}
+	}
+	return target;
+}
 
 export class Driver extends EventEmitter {
 
@@ -39,9 +69,14 @@ export class Driver extends EventEmitter {
 
 	constructor(
 		private port: string,
-		private options?: ZWaveOptions,
+		/** @internal */
+		public options?: DeepPartial<ZWaveOptions>,
 	) {
 		super();
+
+		// merge given options with defaults
+		this.options = applyDefaultOptions(this.options, defaultOptions) as ZWaveOptions;
+
 		// register some cleanup handlers in case the program doesn't get closed cleanly
 		process.on("exit", this._cleanupHandler);
 		process.on("SIGINT", this._cleanupHandler);
@@ -65,7 +100,7 @@ export class Driver extends EventEmitter {
 		this._wasStarted = true;
 
 		return new Promise((resolve, reject) => {
-			log(`starting driver...`, "debug");
+			log("driver", `starting driver...`, "debug");
 			this.serial = new SerialPort(
 				this.port,
 				{
@@ -78,7 +113,7 @@ export class Driver extends EventEmitter {
 			);
 			this.serial
 				.on("open", () => {
-					log("serial port opened", "debug");
+					log("driver", "serial port opened", "debug");
 					this._isOpen = true;
 					resolve();
 					this.reset();
@@ -86,7 +121,7 @@ export class Driver extends EventEmitter {
 				})
 				.on("data", this.serialport_onData.bind(this))
 				.on("error", err => {
-					log("serial port errored: " + err, "error");
+					log("driver", "serial port errored: " + err, "error");
 					if (this._isOpen) {
 						this.serialport_onError(err);
 					} else {
@@ -102,12 +137,13 @@ export class Driver extends EventEmitter {
 	private async beginInterview() {
 		this._controller = new ZWaveController();
 		await this._controller.interview(this);
-		log("interview done!", "debug");
+		log("driver", "driver ready", "debug");
 		this.emit("driver ready");
 	}
 
 	private reset() {
 		this.ensureReady();
+		log("driver", "resetting driver instance...", "debug");
 
 		// re-sync communication
 		this.send(MessageHeaders.NAK);
@@ -137,6 +173,7 @@ export class Driver extends EventEmitter {
 	 * Must be called under any circumstances.
 	 */
 	public destroy() {
+		log("driver", "destroying driver instance...", "debug");
 		this._wasDestroyed = true;
 		process.removeListener("exit", this._cleanupHandler);
 		process.removeListener("SIGINT", this._cleanupHandler);
@@ -161,10 +198,10 @@ export class Driver extends EventEmitter {
 	}
 
 	private serialport_onData(data: Buffer) {
-		log(`received data: 0x${data.toString("hex")}`, "debug");
+		log("io", `received data: 0x${data.toString("hex")}`, "debug");
 		// append the new data to our receive buffer
 		this.receiveBuffer = Buffer.concat([this.receiveBuffer, data]);
-		log(`receiveBuffer: 0x${this.receiveBuffer.toString("hex")}`, "debug");
+		log("io", `receiveBuffer: 0x${this.receiveBuffer.toString("hex")}`, "debug");
 
 		while (this.receiveBuffer.length > 0) { // TODO: add a way to interrupt
 
@@ -195,7 +232,7 @@ export class Driver extends EventEmitter {
 			// nothing to do yet, wait for the next data
 			const msgComplete = Message.isComplete(this.receiveBuffer);
 			if (!msgComplete) {
-				log(`the receive buffer contains an incomplete message, waiting for the next chunk...`, "debug");
+				log("io", `the receive buffer contains an incomplete message, waiting for the next chunk...`, "debug");
 				return;
 			}
 
@@ -233,13 +270,13 @@ export class Driver extends EventEmitter {
 			break;
 		}
 
-		log(`the receive buffer is empty, waiting for the next chunk...`, "debug");
+		log("io", `the receive buffer is empty, waiting for the next chunk...`, "debug");
 
 	}
 
 	private handleResponse(msg: Message) {
 		// TODO: find a nice way to serialize the messages
-		log(`handling response ${JSON.stringify(msg, null, 4)}`, "debug");
+		log("driver", `handling response ${stringify(msg)}`, "debug");
 
 		// if we have a pending request, check if that is waiting for this message
 		if (
@@ -248,12 +285,15 @@ export class Driver extends EventEmitter {
 			this.currentTransaction.originalMessage.expectedResponse === msg.functionType
 		) {
 			if (!this.currentTransaction.ackPending) {
-				log(`resolving transaction with ${msg}`, "debug");
+				log("io", `ACK already received, resolving transaction`, "debug");
+				log("driver", `transaction complete`, "debug");
 				this.currentTransaction.promise.resolve(msg);
 				this.currentTransaction = null;
+				// and see if there are messages pending
+				setImmediate(() => this.workOffSendQueue());
 			} else {
 				// wait for the ack, it might be received out of order
-				log(`no ACK received yet, remembering response ${msg}`, "debug");
+				log("io", `no ACK received yet, remembering response`, "debug");
 				this.currentTransaction.response = msg;
 			}
 			return;
@@ -273,44 +313,54 @@ export class Driver extends EventEmitter {
 			trnsact != null &&
 			trnsact.ackPending
 		) {
-			log("ACK received for current transaction", "debug");
+			log("io", "ACK received for current transaction", "debug");
 			trnsact.ackPending = false;
 			if (
 				trnsact.originalMessage.expectedResponse == null
 				|| trnsact.response != null
 			) {
+				log("io", "transaction finished, resolving...", "debug");
+				log("driver", `transaction complete`, "debug");
 				// if the response has been received prior to this, resolve the request
 				// if no response was expected, also resolve the request
 				trnsact.promise.resolve(trnsact.response);
 				delete this.currentTransaction;
+				// and see if there are messages pending
+				setImmediate(() => this.workOffSendQueue());
 			}
 			return;
 		}
 
 		// TODO: what to do with this ACK?
-		log("ACK received but I don't know what it belongs to...", "debug");
+		log("io", "ACK received but I don't know what it belongs to...", "debug");
 	}
 
 	private handleNAK() {
 		// TODO: what to do with this NAK?
-		log("NAK received", "debug");
+		log("io", "NAK received", "debug");
 	}
 
 	private handleCAN() {
 		// TODO: what to do with this CAN?
-		log("CAN received", "debug");
+		log("io", "CAN received", "debug");
 	}
 
 	/** Sends a message to the Z-Wave stick */
-	public async sendMessage<TResponse extends Message = Message>(msg: Message, skipSupportCheck: boolean = false): Promise<TResponse> {
+	public async sendMessage<TResponse extends Message = Message>(msg: Message, supportCheck: "loud" | "silent" | "none" = "loud"): Promise<TResponse> {
 		this.ensureReady();
 
-		if (!skipSupportCheck && this.controller != null && !this.controller.isFunctionSupported(msg.functionType)) {
-			throw new ZWaveError(
-				`Your hardware does not support the ${FunctionType[msg.functionType]} function`,
-				ZWaveErrorCodes.Driver_NotSupported,
-			);
+		if (supportCheck !== "none" && this.controller != null && !this.controller.isFunctionSupported(msg.functionType)) {
+			if (supportCheck === "loud") {
+				throw new ZWaveError(
+					`Your hardware does not support the ${FunctionType[msg.functionType]} function`,
+					ZWaveErrorCodes.Driver_NotSupported,
+				);
+			} else {
+				return undefined;
+			}
 		}
+
+		log("driver", `sending message ${stringify(msg)}`, "debug");
 
 		const promise = createDeferredPromise<TResponse>();
 		const transaction: PendingRequest = {
@@ -336,7 +386,7 @@ export class Driver extends EventEmitter {
 
 		if (typeof data === "number") {
 			// ACK, CAN, NAK
-			log(`sending ${MessageHeaders[data]}`, "debug");
+			log("io", `sending ${MessageHeaders[data]}`, "debug");
 			this.doSend(data);
 			return;
 		}
@@ -345,21 +395,21 @@ export class Driver extends EventEmitter {
 			case "immediate": {
 				// TODO: check if that's okay
 				// Send high-prio messages immediately
-				log(`sending high priority message ${data.toString()} immediately`, "debug");
+				log("io", `sending high priority message ${data.toString()} immediately`, "debug");
 				this.doSend(data);
 				break;
 			}
 			case "normal": {
 				// Put the message in the queue
 				this.sendQueue.push(data);
-				log(`added message to the send queue with normal priority, new length = ${this.sendQueue.length}`, "debug");
+				log("io", `added message to the send queue with normal priority, new length = ${this.sendQueue.length}`, "debug");
 				break;
 			}
 			case "high": {
 				// Put the message in the queue (in first position)
 				// TODO: do we need this in ZWave?
 				this.sendQueue.unshift(data);
-				log(`added message to the send queue with high priority, new length = ${this.sendQueue.length}`, "debug");
+				log("io", `added message to the send queue with high priority, new length = ${this.sendQueue.length}`, "debug");
 				break;
 			}
 		}
@@ -374,26 +424,27 @@ export class Driver extends EventEmitter {
 			clearTimeout(this.sendQueueTimer);
 			delete this.sendQueueTimer;
 		}
+
+		// is there something to send?
+		if (this.sendQueue.length === 0) {
+			log("io", `workOffSendQueue > queue is empty`, "debug");
+			return;
+		}
 		// we are still waiting for the current transaction to finish
 		if (this.currentTransaction != null) {
-			log(`workOffSendQueue > skipping because a transaction is pending`, "debug");
+			log("io", `workOffSendQueue > skipping because a transaction is pending`, "debug");
 			return;
 		}
 
-		if (this.sendQueue.length > 0) {
-			const nextMsg = this.sendQueue.shift();
-			if (!(nextMsg instanceof Message)) {
-				// this is a pending request
-				log(`workOffSendQueue > setting current transaction`, "debug");
-				this.currentTransaction = nextMsg;
-			}
-
-			log(`workOffSendQueue > sending next message... remaining queue length = ${this.sendQueue.length}`, "debug");
-			this.doSend(nextMsg);
-		} else {
-			log(`workOffSendQueue > queue is empty`, "debug");
-			return;
+		const nextMsg = this.sendQueue.shift();
+		if (!(nextMsg instanceof Message)) {
+			// this is a pending request
+			log("io", `workOffSendQueue > setting current transaction`, "debug");
+			this.currentTransaction = nextMsg;
 		}
+
+		log("io", `workOffSendQueue > sending next message... remaining queue length = ${this.sendQueue.length}`, "debug");
+		this.doSend(nextMsg);
 
 		// to avoid any deadlocks we didn't think of, re-call this later
 		this.sendQueueTimer = setTimeout(() => this.workOffSendQueue(), 1000);

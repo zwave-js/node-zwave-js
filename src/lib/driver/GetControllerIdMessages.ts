@@ -28,4 +28,11 @@ export class GetControllerIdResponse extends Message {
 
 		return ret;
 	}
+
+	public toJSON() {
+		return super.toJSONInherited({
+			homeId: this.homeId,
+			ownNodeId: this.ownNodeId,
+		});
+	}
 }

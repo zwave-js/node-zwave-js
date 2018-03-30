@@ -7,4 +7,5 @@ export declare class GetSUCNodeIdResponse extends Message {
     /** The node id of the SUC or 0 if none is present */
     readonly sucNodeId: number;
     deserialize(data: Buffer): number;
+    toJSON(): Record<string, any>;
 }

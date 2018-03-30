@@ -3,6 +3,7 @@
 import { GetControllerVersionRequest } from "../driver/GetControllerVersionMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { log } from "../util/logger";
+import { entries } from "../util/object-polyfill";
 import { num2hex } from "../util/strings";
 
 export interface Constructable<T> {
@@ -142,6 +143,10 @@ export class Message {
 	}
 
 	public toJSON() {
+		return this.toJSONInternal();
+	}
+
+	private toJSONInternal() {
 		const ret: any = {
 			name: this.constructor.name,
 			type: MessageType[this.type],
@@ -149,6 +154,15 @@ export class Message {
 		};
 		if (this.expectedResponse != null) ret.expectedResponse = FunctionType[this.functionType];
 		if (this.payload != null) ret.payload = this.payload.toString("hex");
+		return ret;
+	}
+
+	protected toJSONInherited(props: Record<string, any>): Record<string, any> {
+		const ret = this.toJSONInternal() as Record<string, any>;
+		delete ret.payload;
+		for (const [key, value] of entries(props)) {
+			ret[key] = value;
+		}
 		return ret;
 	}
 
@@ -186,9 +200,7 @@ export enum FunctionType {
 	FUNC_ID_APPLICATION_COMMAND_HANDLER = 0x04,
 
 	GetControllerCapabilities = 0x05,
-
-	FUNC_ID_SERIAL_API_SET_TIMEOUTS = 0x06,
-
+	SetSerialApiTimeouts = 0x06,
 	GetSerialApiCapabilities = 0x07,
 
 	FUNC_ID_SERIAL_API_SOFT_RESET = 0x08,
@@ -266,7 +278,7 @@ function getMessageTypeMapKey(messageType: MessageType, functionType: FunctionTy
  */
 export function messageTypes(messageType: MessageType, functionType: FunctionType): ClassDecorator {
 	return (messageClass) => {
-		log(`${messageClass.name}: defining message type ${num2hex(messageType)} and function type ${num2hex(functionType)}`, "silly");
+		log("protocol", `${messageClass.name}: defining message type ${num2hex(messageType)} and function type ${num2hex(functionType)}`, "silly");
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_messageTypes, { messageType, functionType }, messageClass);
 
@@ -286,7 +298,7 @@ export function getMessageType<T extends Message>(messageClass: T): MessageType 
 	// retrieve the current metadata
 	const meta = Reflect.getMetadata(METADATA_messageTypes, constr);
 	const ret = meta && meta.messageType;
-	log(`${constr.name}: retrieving message type => ${num2hex(ret)}`, "silly");
+	log("protocol", `${constr.name}: retrieving message type => ${num2hex(ret)}`, "silly");
 	return ret;
 }
 
@@ -297,7 +309,7 @@ export function getMessageTypeStatic<T extends Constructable<Message>>(classCons
 	// retrieve the current metadata
 	const meta = Reflect.getMetadata(METADATA_messageTypes, classConstructor);
 	const ret = meta && meta.messageType;
-	log(`${classConstructor.name}: retrieving message type => ${num2hex(ret)}`, "silly");
+	log("protocol", `${classConstructor.name}: retrieving message type => ${num2hex(ret)}`, "silly");
 	return ret;
 }
 
@@ -310,7 +322,7 @@ export function getFunctionType<T extends Message>(messageClass: T): FunctionTyp
 	// retrieve the current metadata
 	const meta = Reflect.getMetadata(METADATA_messageTypes, constr);
 	const ret = meta && meta.functionType;
-	log(`${constr.name}: retrieving function type => ${num2hex(ret)}`, "silly");
+	log("protocol", `${constr.name}: retrieving function type => ${num2hex(ret)}`, "silly");
 	return ret;
 }
 
@@ -321,7 +333,7 @@ export function getFunctionTypeStatic<T extends Constructable<Message>>(classCon
 	// retrieve the current metadata
 	const meta = Reflect.getMetadata(METADATA_messageTypes, classConstructor);
 	const ret = meta && meta.functionType;
-	log(`${classConstructor.name}: retrieving function type => ${num2hex(ret)}`, "silly");
+	log("protocol", `${classConstructor.name}: retrieving function type => ${num2hex(ret)}`, "silly");
 	return ret;
 }
 
@@ -339,7 +351,7 @@ export function getMessageConstructor(messageType: MessageType, functionType: Fu
  */
 export function expectedResponse(type: FunctionType): ClassDecorator {
 	return (messageClass) => {
-		log(`${messageClass.name}: defining expected response ${num2hex(type)}`, "silly");
+		log("protocol", `${messageClass.name}: defining expected response ${num2hex(type)}`, "silly");
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_expectedResponse, type, messageClass);
 	};
@@ -353,7 +365,7 @@ export function getExpectedResponse<T extends Message>(messageClass: T): Functio
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_expectedResponse, constr);
-	log(`${constr.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
+	log("protocol", `${constr.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
 	return ret;
 }
 
@@ -363,6 +375,6 @@ export function getExpectedResponse<T extends Message>(messageClass: T): Functio
 export function getExpectedResponseStatic<T extends Constructable<Message>>(classConstructor: T): FunctionType {
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_expectedResponse, classConstructor);
-	log(`${classConstructor.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
+	log("protocol", `${classConstructor.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
 	return ret;
 }

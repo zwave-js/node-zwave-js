@@ -41,6 +41,12 @@ let GetControllerVersionResponse = class GetControllerVersionResponse extends Me
         this._controllerType = this.payload[this.libraryVersion.length + 1];
         return ret;
     }
+    toJSON() {
+        return super.toJSONInherited({
+            controllerType: this.controllerType,
+            libraryVersion: this.libraryVersion,
+        });
+    }
 };
 GetControllerVersionResponse = __decorate([
     Message_1.messageTypes(Message_1.MessageType.Response, Message_1.FunctionType.GetControllerVersion)

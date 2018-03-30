@@ -14,4 +14,5 @@ export declare class GetSerialApiCapabilitiesResponse extends Message {
     private _functionBitMask;
     readonly functionBitMask: Buffer;
     deserialize(data: Buffer): number;
+    toJSON(): Record<string, any>;
 }

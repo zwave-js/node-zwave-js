@@ -21,9 +21,12 @@ export class GetSUCNodeIdResponse extends Message {
 		// Just a single byte
 		this._sucNodeId = this.payload[0];
 
-		// TODO: enable SIS if no SUC
-		// https://github.com/OpenZWave/open-zwave/blob/a46f3f36271f88eed5aea58899a6cb118ad312a2/cpp/src/Driver.cpp#L2586
-
 		return ret;
+	}
+
+	public toJSON() {
+		return super.toJSONInherited({
+			sucNodeId: this.sucNodeId,
+		});
 	}
 }

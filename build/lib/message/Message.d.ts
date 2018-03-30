@@ -29,6 +29,8 @@ export declare class Message {
      */
     deserialize(data: Buffer): number;
     toJSON(): any;
+    private toJSONInternal();
+    protected toJSONInherited(props: Record<string, any>): Record<string, any>;
 }
 export declare enum MessageHeaders {
     SOF = 1,
@@ -50,7 +52,7 @@ export declare enum FunctionType {
     FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION = 3,
     FUNC_ID_APPLICATION_COMMAND_HANDLER = 4,
     GetControllerCapabilities = 5,
-    FUNC_ID_SERIAL_API_SET_TIMEOUTS = 6,
+    SetSerialApiTimeouts = 6,
     GetSerialApiCapabilities = 7,
     FUNC_ID_SERIAL_API_SOFT_RESET = 8,
     FUNC_ID_ZW_SEND_NODE_INFORMATION = 18,

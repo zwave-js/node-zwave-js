@@ -8,4 +8,5 @@ export declare class GetControllerIdResponse extends Message {
     private _ownNodeId;
     readonly ownNodeId: number;
     deserialize(data: Buffer): number;
+    toJSON(): Record<string, any>;
 }
