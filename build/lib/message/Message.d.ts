@@ -46,7 +46,8 @@ export declare enum MessageType {
 /**
  * Complete list of function IDs for data messages.
  * IDs starting with FUNC_ID are straight from OZW and not implemented here yet.
- * IDS starting with UNKNOWN_FUNC are taken from openhab-zwave and not implemented here yet.
+ * IDs starting with UNKNOWN_FUNC are taken from openhab-zwave and not implemented here yet.
+ * IDs starting with UNKNOWN_FUNC are also taken from https://github.com/yepher/RaZBerry/blob/master/README.md and not implemented yet
  * IDs ending with UNKNOWN_<hex-code> are reported by the stick but we don't know what they mean.
  */
 export declare enum FunctionType {
@@ -70,10 +71,10 @@ export declare enum FunctionType {
     UNKNOWN_FUNC_SEND_DATA_META = 24,
     FUNC_ID_ZW_GET_RANDOM = 28,
     GetControllerId = 32,
-    FUNC_ID_MEMORY_GET_BYTE = 33,
+    UNKNOWN_FUNC_MEMORY_GET_BYTE = 33,
     UNKNOWN_FUNC_MEMORY_PUT_BYTE = 34,
-    FUNC_ID_ZW_READ_MEMORY = 35,
-    UNKNOWN_FUNC_WRITE_MEMORY = 36,
+    UNKNOWN_FUNC_MEMORY_GET_BUFFER = 35,
+    UNKNOWN_FUNC_MEMORY_PUT_BUFFER = 36,
     UNKNOWN_FUNC_UNKNOWN_0x27 = 39,
     UNKNOWN_FUNC_UNKNOWN_0x28 = 40,
     UNKNOWN_FUNC_UNKNOWN_0x29 = 41,
@@ -81,6 +82,13 @@ export declare enum FunctionType {
     UNKNOWN_FUNC_UNKNOWN_0x2b = 43,
     UNKNOWN_FUNC_UNKNOWN_0x2c = 44,
     UNKNOWN_FUNC_UNKNOWN_0x2d = 45,
+    UNKNOWN_FUNC_CLOCK_SET = 48,
+    UNKNOWN_FUNC_CLOCK_GET = 49,
+    UNKNOWN_FUNC_CLOCK_COMPARE = 50,
+    UNKNOWN_FUNC_RTC_TIMER_CREATE = 51,
+    UNKNOWN_FUNC_RTC_TIMER_READ = 52,
+    UNKNOWN_FUNC_RTC_TIMER_DELETE = 53,
+    UNKNOWN_FUNC_RTC_TIMER_CALL = 54,
     FUNC_ID_ZW_SET_LEARN_NODE_STATE = 64,
     FUNC_ID_ZW_GET_NODE_PROTOCOL_INFO = 65,
     FUNC_ID_ZW_SET_DEFAULT = 66,
@@ -103,6 +111,7 @@ export declare enum FunctionType {
     FUNC_ID_ZW_DELETE_SUC_RETURN_ROUTE = 85,
     GetSUCNodeId = 86,
     UNKNOWN_FUNC_SEND_SUC_ID = 87,
+    UNKNOWN_FUNC_REDISCOVERY_NEEDED = 89,
     FUNC_ID_ZW_REQUEST_NODE_NEIGHBOR_UPDATE_OPTIONS = 90,
     FUNC_ID_ZW_EXPLORE_REQUEST_INCLUSION = 94,
     FUNC_ID_ZW_REQUEST_NODE_INFO = 96,
@@ -111,11 +120,22 @@ export declare enum FunctionType {
     FUNC_ID_ZW_REPLACE_FAILED_NODE = 99,
     UNKNOWN_FUNC_UNKNOWN_0x66 = 102,
     UNKNOWN_FUNC_UNKNOWN_0x67 = 103,
+    UNKNOWN_FUNC_TIMER_START = 112,
+    UNKNOWN_FUNC_TIMER_RESTART = 113,
+    UNKNOWN_FUNC_TIMER_CANCEL = 114,
+    UNKNOWN_FUNC_TIMER_CALL = 115,
     UNKNOWN_FUNC_UNKNOWN_0x78 = 120,
     FUNC_ID_ZW_GET_ROUTING_INFO = 128,
-    UNKNOWN_FUNC_LOCK_ROUTE = 144,
+    UNKNOWN_FUNC_GetRoutingTableLine = 128,
+    UNKNOWN_FUNC_GetTXCounter = 129,
+    UNKNOWN_FUNC_ResetTXCounter = 130,
+    UNKNOWN_FUNC_StoreNodeInfo = 131,
+    UNKNOWN_FUNC_StoreHomeId = 132,
+    UNKNOWN_FUNC_LOCK_ROUTE_RESPONSE = 144,
+    UNKNOWN_FUNC_SEND_DATA_ROUTE_DEMO = 145,
     UNKNOWN_FUNC_UNKNOWN_0x92 = 146,
     UNKNOWN_FUNC_UNKNOWN_0x93 = 147,
+    UNKNOWN_FUNC_SERIAL_API_TEST = 149,
     UNKNOWN_FUNC_UNKNOWN_0x98 = 152,
     FUNC_ID_SERIAL_API_SLAVE_NODE_INFO = 160,
     FUNC_ID_APPLICATION_SLAVE_COMMAND_HANDLER = 161,

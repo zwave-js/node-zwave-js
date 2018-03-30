@@ -193,7 +193,8 @@ export enum MessageType {
 /**
  * Complete list of function IDs for data messages.
  * IDs starting with FUNC_ID are straight from OZW and not implemented here yet.
- * IDS starting with UNKNOWN_FUNC are taken from openhab-zwave and not implemented here yet.
+ * IDs starting with UNKNOWN_FUNC are taken from openhab-zwave and not implemented here yet.
+ * IDs starting with UNKNOWN_FUNC are also taken from https://github.com/yepher/RaZBerry/blob/master/README.md and not implemented yet
  * IDs ending with UNKNOWN_<hex-code> are reported by the stick but we don't know what they mean.
  */
 export enum FunctionType {
@@ -228,10 +229,10 @@ export enum FunctionType {
 
 	GetControllerId = 0x20, // Get Home ID and Controller Node ID
 
-	FUNC_ID_MEMORY_GET_BYTE = 0x21, // get a byte of memory
+	UNKNOWN_FUNC_MEMORY_GET_BYTE = 0x21, // get a byte of memory
 	UNKNOWN_FUNC_MEMORY_PUT_BYTE = 0x22, // write a byte of memory
-	FUNC_ID_ZW_READ_MEMORY = 0x23,
-	UNKNOWN_FUNC_WRITE_MEMORY = 0x24,
+	UNKNOWN_FUNC_MEMORY_GET_BUFFER = 0x23,
+	UNKNOWN_FUNC_MEMORY_PUT_BUFFER = 0x24,
 
 	UNKNOWN_FUNC_UNKNOWN_0x27 = 0x27, // ??
 	UNKNOWN_FUNC_UNKNOWN_0x28 = 0x28, // ??
@@ -240,6 +241,14 @@ export enum FunctionType {
 	UNKNOWN_FUNC_UNKNOWN_0x2b = 0x2b, // ??
 	UNKNOWN_FUNC_UNKNOWN_0x2c = 0x2c, // ??
 	UNKNOWN_FUNC_UNKNOWN_0x2d = 0x2d, // ??
+
+	UNKNOWN_FUNC_CLOCK_SET = 0x30, // ??
+	UNKNOWN_FUNC_CLOCK_GET = 0x31, // ??
+	UNKNOWN_FUNC_CLOCK_COMPARE = 0x32, // ??
+	UNKNOWN_FUNC_RTC_TIMER_CREATE = 0x33, // ??
+	UNKNOWN_FUNC_RTC_TIMER_READ = 0x34, // ??
+	UNKNOWN_FUNC_RTC_TIMER_DELETE = 0x35, // ??
+	UNKNOWN_FUNC_RTC_TIMER_CALL = 0x36, // ??
 
 	FUNC_ID_ZW_SET_LEARN_NODE_STATE = 0x40,	// Not implemented
 	FUNC_ID_ZW_GET_NODE_PROTOCOL_INFO = 0x41,	// Get protocol info (baud rate, listening, etc.) for a given node
@@ -265,6 +274,7 @@ export enum FunctionType {
 	GetSUCNodeId = 0x56, // Try to retrieve a Static Update Controller node id (zero if no SUC present)
 
 	UNKNOWN_FUNC_SEND_SUC_ID = 0x57,
+	UNKNOWN_FUNC_REDISCOVERY_NEEDED = 0x59,
 
 	FUNC_ID_ZW_REQUEST_NODE_NEIGHBOR_UPDATE_OPTIONS = 0x5a,	// Allow options for request node neighbor update
 	FUNC_ID_ZW_EXPLORE_REQUEST_INCLUSION = 0x5e,	// supports NWI
@@ -275,13 +285,27 @@ export enum FunctionType {
 
 	UNKNOWN_FUNC_UNKNOWN_0x66 = 0x66, // ??
 	UNKNOWN_FUNC_UNKNOWN_0x67 = 0x67, // ??
+
+	UNKNOWN_FUNC_TIMER_START = 0x70, // ??
+	UNKNOWN_FUNC_TIMER_RESTART = 0x71, // ??
+	UNKNOWN_FUNC_TIMER_CANCEL = 0x72, // ??
+	UNKNOWN_FUNC_TIMER_CALL = 0x73, // ??
+
 	UNKNOWN_FUNC_UNKNOWN_0x78 = 0x78, // ??
 
 	FUNC_ID_ZW_GET_ROUTING_INFO = 0x80,	// Get a specified node's neighbor information from the controller
 
-	UNKNOWN_FUNC_LOCK_ROUTE = 0x90, // ??
+	UNKNOWN_FUNC_GetRoutingTableLine = 0x80, // ??
+	UNKNOWN_FUNC_GetTXCounter = 0x81, // ??
+	UNKNOWN_FUNC_ResetTXCounter = 0x82, // ??
+	UNKNOWN_FUNC_StoreNodeInfo = 0x83, // ??
+	UNKNOWN_FUNC_StoreHomeId = 0x84, // ??
+
+	UNKNOWN_FUNC_LOCK_ROUTE_RESPONSE = 0x90, // ??
+	UNKNOWN_FUNC_SEND_DATA_ROUTE_DEMO = 0x91, // ??
 	UNKNOWN_FUNC_UNKNOWN_0x92 = 0x92, // ??
 	UNKNOWN_FUNC_UNKNOWN_0x93 = 0x93, // ??
+	UNKNOWN_FUNC_SERIAL_API_TEST = 0x95, // ??
 	UNKNOWN_FUNC_UNKNOWN_0x98 = 0x98, // ??
 
 	FUNC_ID_SERIAL_API_SLAVE_NODE_INFO = 0xA0,	// Set application virtual slave node information
