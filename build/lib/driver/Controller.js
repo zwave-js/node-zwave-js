@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Message_1 = require("../message/Message");
-const node_1 = require("../node/node");
+const Node_1 = require("../node/Node");
 const logger_1 = require("../util/logger");
 const strings_1 = require("../util/strings");
 const GetControllerCapabilitiesMessages_1 = require("./GetControllerCapabilitiesMessages");
@@ -20,8 +20,8 @@ const GetSerialApiInitDataMessages_1 = require("./GetSerialApiInitDataMessages")
 const GetSUCNodeIdMessages_1 = require("./GetSUCNodeIdMessages");
 const SetSerialApiTimeoutsMessages_1 = require("./SetSerialApiTimeoutsMessages");
 class ZWaveController {
-    constructor() {
-        //#region --- Properties ---
+    constructor(driver) {
+        this.driver = driver;
         this.nodes = new Map();
     }
     get libraryVersion() {
@@ -79,21 +79,21 @@ class ZWaveController {
         return this._supportsTimers;
     }
     //#endregion
-    interview(driver) {
+    interview() {
         return __awaiter(this, void 0, void 0, function* () {
             logger_1.log("controller", "interviewing controller", "debug");
             // get basic controller version info
-            const version = yield driver.sendMessage(new GetControllerVersionMessages_1.GetControllerVersionRequest(), "none");
+            const version = yield this.driver.sendMessage(new GetControllerVersionMessages_1.GetControllerVersionRequest(), "none");
             logger_1.log("controller", `got version info: ${strings_1.stringify(version)}`, "debug");
             this._libraryVersion = version.libraryVersion;
             this._type = version.controllerType;
             // get the home and node id of the controller
-            const ids = yield driver.sendMessage(new GetControllerIdMessages_1.GetControllerIdRequest(), "none");
+            const ids = yield this.driver.sendMessage(new GetControllerIdMessages_1.GetControllerIdRequest(), "none");
             logger_1.log("controller", `got IDs: ${strings_1.stringify(ids)}`, "debug");
             this._homeId = ids.homeId;
             this._ownNodeId = ids.ownNodeId;
             // find out what the controller can do
-            const ctrlCaps = yield driver.sendMessage(new GetControllerCapabilitiesMessages_1.GetControllerCapabilitiesRequest(), "none");
+            const ctrlCaps = yield this.driver.sendMessage(new GetControllerCapabilitiesMessages_1.GetControllerCapabilitiesRequest(), "none");
             logger_1.log("controller", `got controller capabilities: ${strings_1.stringify(ctrlCaps)}`, "debug");
             this._isSecondary = ctrlCaps.isSecondary;
             this._isUsingHomeIdFromOtherNetwork = ctrlCaps.isUsingHomeIdFromOtherNetwork;
@@ -101,7 +101,7 @@ class ZWaveController {
             this._wasRealPrimary = ctrlCaps.wasRealPrimary;
             this._isStaticUpdateController = ctrlCaps.isStaticUpdateController;
             // find out which part of the API is supported
-            const apiCaps = yield driver.sendMessage(new GetSerialApiCapabilitiesMessages_1.GetSerialApiCapabilitiesRequest(), "none");
+            const apiCaps = yield this.driver.sendMessage(new GetSerialApiCapabilitiesMessages_1.GetSerialApiCapabilitiesRequest(), "none");
             logger_1.log("controller", `got api capabilities: ${strings_1.stringify(apiCaps)}`, "debug");
             this._serialApiVersion = apiCaps.serialApiVersion;
             this._manufacturerId = apiCaps.manufacturerId;
@@ -110,7 +110,7 @@ class ZWaveController {
             this._supportedFunctionTypes = apiCaps.supportedFunctionTypes;
             // now we can check if a function is supported
             // find the SUC
-            const suc = yield driver.sendMessage(new GetSUCNodeIdMessages_1.GetSUCNodeIdRequest(), "none");
+            const suc = yield this.driver.sendMessage(new GetSUCNodeIdMessages_1.GetSUCNodeIdRequest(), "none");
             logger_1.log("controller", `got suc info: ${strings_1.stringify(suc)}`, "debug");
             this._sucNodeId = suc.sucNodeId;
             // TODO: if configured, enable this controller as SIS if there's no SUC
@@ -120,7 +120,7 @@ class ZWaveController {
                 // TODO: send FUNC_ID_ZW_GET_VIRTUAL_NODES message
             }
             // Request information about all nodes with the GetInitData message
-            const initData = yield driver.sendMessage(new GetSerialApiInitDataMessages_1.GetSerialApiInitDataRequest());
+            const initData = yield this.driver.sendMessage(new GetSerialApiInitDataMessages_1.GetSerialApiInitDataRequest());
             logger_1.log("controller", `got init data: ${strings_1.stringify(initData)}`, "debug");
             // override the information we might already have
             this._isSecondary = initData.isSecondary;
@@ -131,12 +131,12 @@ class ZWaveController {
             // ignore the initVersion, no clue what to do with it
             // create an empty entry in the nodes map so we can initialize them afterwards
             for (const nodeId of initData.nodeIds) {
-                this.nodes.set(nodeId, new node_1.Node(nodeId));
+                this.nodes.set(nodeId, new Node_1.Node(nodeId, this.driver));
             }
             if (this.type !== GetControllerVersionMessages_1.ControllerTypes["Bridge Controller"] && this.isFunctionSupported(Message_1.FunctionType.SetSerialApiTimeouts)) {
-                const { ack, byte } = driver.options.timeouts;
+                const { ack, byte } = this.driver.options.timeouts;
                 logger_1.log("controller", `setting serial API timeouts: ack = ${ack} ms, byte = ${byte} ms`, "debug");
-                const resp = yield driver.sendMessage(new SetSerialApiTimeoutsMessages_1.SetSerialApiTimeoutsRequest(ack, byte));
+                const resp = yield this.driver.sendMessage(new SetSerialApiTimeoutsMessages_1.SetSerialApiTimeoutsRequest(ack, byte));
                 logger_1.log("controller", `serial API timeouts overwritten. The old values were: ack = ${resp.oldAckTimeout} ms, byte = ${resp.oldByteTimeout} ms`, "debug");
             }
             // send application info (not sure why tho)
@@ -148,7 +148,7 @@ class ZWaveController {
                     0x01,
                     0x00,
                 ]));
-                yield driver.sendMessage(appInfoMsg, "none");
+                yield this.driver.sendMessage(appInfoMsg, "none");
             }
             logger_1.log("controller", "interview done!", "debug");
         });

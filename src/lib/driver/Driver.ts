@@ -168,14 +168,14 @@ export class Driver extends EventEmitter {
 
 	private async beginInterview() {
 		// Interview the controller
-		this._controller = new ZWaveController();
-		await this._controller.interview(this);
+		this._controller = new ZWaveController(this);
+		await this._controller.interview();
 		log("driver", "driver ready", "debug");
 		this.emit("driver ready");
 
 		// Now query all nodes
 		for (const node of this._controller.nodes.values()) {
-			node.query();
+			node.beginQuery();
 		}
 	}
 

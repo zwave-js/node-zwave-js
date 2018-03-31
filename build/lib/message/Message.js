@@ -13,10 +13,10 @@ class Message {
     constructor(typeOrPayload, funcType, expResponse, payload) {
         // decide which implementation we follow
         let type;
-        if (typeof typeOrPayload === "number") {
+        if (typeof typeOrPayload === "number") { // #2
             type = typeOrPayload;
         }
-        else if (typeOrPayload instanceof Buffer) {
+        else if (typeOrPayload instanceof Buffer) { // #1
             payload = typeOrPayload;
         }
         // These properties are filled from declared metadata if not provided

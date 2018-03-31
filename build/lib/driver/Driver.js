@@ -134,13 +134,13 @@ class Driver extends events_1.EventEmitter {
     beginInterview() {
         return __awaiter(this, void 0, void 0, function* () {
             // Interview the controller
-            this._controller = new Controller_1.ZWaveController();
-            yield this._controller.interview(this);
+            this._controller = new Controller_1.ZWaveController(this);
+            yield this._controller.interview();
             logger_1.log("driver", "driver ready", "debug");
             this.emit("driver ready");
             // Now query all nodes
             for (const node of this._controller.nodes.values()) {
-                node.query();
+                node.beginQuery();
             }
         });
     }
@@ -191,7 +191,7 @@ class Driver extends events_1.EventEmitter {
         // append the new data to our receive buffer
         this.receiveBuffer = Buffer.concat([this.receiveBuffer, data]);
         logger_1.log("io", `receiveBuffer: 0x${this.receiveBuffer.toString("hex")}`, "debug");
-        while (this.receiveBuffer.length > 0) {
+        while (this.receiveBuffer.length > 0) { // TODO: add a way to interrupt
             if (this.receiveBuffer[0] !== Message_1.MessageHeaders.SOF) {
                 switch (this.receiveBuffer[0]) {
                     // single-byte messages - we have a handler for each one

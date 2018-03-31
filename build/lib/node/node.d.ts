@@ -1,3 +1,4 @@
+import { Driver } from "../driver/Driver";
 export declare enum QueryStage {
     None = 0,
     ProtocolInfo = 1,
@@ -21,7 +22,8 @@ export declare enum QueryStage {
 }
 export declare class Node {
     readonly id: number;
-    constructor(id: number);
+    private readonly driver;
+    constructor(id: number, driver: Driver);
     queryStage: QueryStage;
-    query(): void;
+    beginQuery(): void;
 }

@@ -1,3 +1,5 @@
+import { Driver } from "../driver/Driver";
+
 export enum QueryStage {
 	None,					// Query process hasn't started for this node
 	ProtocolInfo,			// Retrieve protocol information
@@ -11,6 +13,10 @@ export enum QueryStage {
 	Versions,				// Retrieve version information
 	Instances,				// Retrieve information about multiple command class instances
 	Static,					// Retrieve static information (doesn't change)
+
+	// ===== the stuff above should never change =====
+	// ===== the stuff below changes frequently, so it has to be redone on every start =====
+
 	CacheLoad,				// Ping a device upon restarting with cached config for the device
 	Associations,			// Retrieve information about associations
 	Neighbors,				// Retrieve node neighbor list
@@ -24,13 +30,14 @@ export class Node {
 
 	constructor(
 		public readonly id: number,
+		private readonly driver: Driver,
 	) {
-		// TODO
+		// TODO restore from cache
 	}
 
 	public queryStage: QueryStage = QueryStage.None;
 
-	public query(): void {
+	public beginQuery(): void {
 		//
 	}
 

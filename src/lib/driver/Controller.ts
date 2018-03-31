@@ -1,5 +1,5 @@
 import { FunctionType, Message, MessageType } from "../message/Message";
-import { Node, QueryStage } from "../node/node";
+import { Node, QueryStage } from "../node/Node";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
 import { Driver } from "./Driver";
@@ -12,6 +12,10 @@ import { GetSUCNodeIdRequest, GetSUCNodeIdResponse } from "./GetSUCNodeIdMessage
 import { SetSerialApiTimeoutsRequest, SetSerialApiTimeoutsResponse } from "./SetSerialApiTimeoutsMessages";
 
 export class ZWaveController {
+
+	constructor(
+		private readonly driver: Driver,
+	) {}
 
 //#region --- Properties ---
 
@@ -108,23 +112,23 @@ export class ZWaveController {
 
 //#endregion
 
-	public async interview(driver: Driver): Promise<void> {
+	public async interview(): Promise<void> {
 		log("controller", "interviewing controller", "debug");
 
 		// get basic controller version info
-		const version = await driver.sendMessage<GetControllerVersionResponse>(new GetControllerVersionRequest(), "none");
+		const version = await this.driver.sendMessage<GetControllerVersionResponse>(new GetControllerVersionRequest(), "none");
 		log("controller", `got version info: ${stringify(version)}`, "debug");
 		this._libraryVersion = version.libraryVersion;
 		this._type = version.controllerType;
 
 		// get the home and node id of the controller
-		const ids = await driver.sendMessage<GetControllerIdResponse>(new GetControllerIdRequest(), "none");
+		const ids = await this.driver.sendMessage<GetControllerIdResponse>(new GetControllerIdRequest(), "none");
 		log("controller", `got IDs: ${stringify(ids)}`, "debug");
 		this._homeId = ids.homeId;
 		this._ownNodeId = ids.ownNodeId;
 
 		// find out what the controller can do
-		const ctrlCaps = await driver.sendMessage<GetControllerCapabilitiesResponse>(new GetControllerCapabilitiesRequest(), "none");
+		const ctrlCaps = await this.driver.sendMessage<GetControllerCapabilitiesResponse>(new GetControllerCapabilitiesRequest(), "none");
 		log("controller", `got controller capabilities: ${stringify(ctrlCaps)}`, "debug");
 		this._isSecondary = ctrlCaps.isSecondary;
 		this._isUsingHomeIdFromOtherNetwork = ctrlCaps.isUsingHomeIdFromOtherNetwork;
@@ -133,7 +137,7 @@ export class ZWaveController {
 		this._isStaticUpdateController = ctrlCaps.isStaticUpdateController;
 
 		// find out which part of the API is supported
-		const apiCaps = await driver.sendMessage<GetSerialApiCapabilitiesResponse>(new GetSerialApiCapabilitiesRequest(), "none");
+		const apiCaps = await this.driver.sendMessage<GetSerialApiCapabilitiesResponse>(new GetSerialApiCapabilitiesRequest(), "none");
 		log("controller", `got api capabilities: ${stringify(apiCaps)}`, "debug");
 		this._serialApiVersion = apiCaps.serialApiVersion;
 		this._manufacturerId = apiCaps.manufacturerId;
@@ -144,7 +148,7 @@ export class ZWaveController {
 		// now we can check if a function is supported
 
 		// find the SUC
-		const suc = await driver.sendMessage<GetSUCNodeIdResponse>(new GetSUCNodeIdRequest(), "none");
+		const suc = await this.driver.sendMessage<GetSUCNodeIdResponse>(new GetSUCNodeIdRequest(), "none");
 		log("controller", `got suc info: ${stringify(suc)}`, "debug");
 		this._sucNodeId = suc.sucNodeId;
 		// TODO: if configured, enable this controller as SIS if there's no SUC
@@ -156,7 +160,7 @@ export class ZWaveController {
 		}
 
 		// Request information about all nodes with the GetInitData message
-		const initData = await driver.sendMessage<GetSerialApiInitDataResponse>(new GetSerialApiInitDataRequest());
+		const initData = await this.driver.sendMessage<GetSerialApiInitDataResponse>(new GetSerialApiInitDataRequest());
 		log("controller", `got init data: ${stringify(initData)}`, "debug");
 		// override the information we might already have
 		this._isSecondary = initData.isSecondary;
@@ -167,13 +171,13 @@ export class ZWaveController {
 		// ignore the initVersion, no clue what to do with it
 		// create an empty entry in the nodes map so we can initialize them afterwards
 		for (const nodeId of initData.nodeIds) {
-			this.nodes.set(nodeId, new Node(nodeId));
+			this.nodes.set(nodeId, new Node(nodeId, this.driver));
 		}
 
 		if (this.type !== ControllerTypes["Bridge Controller"] && this.isFunctionSupported(FunctionType.SetSerialApiTimeouts)) {
-			const { ack, byte } = driver.options.timeouts;
+			const { ack, byte } = this.driver.options.timeouts;
 			log("controller", `setting serial API timeouts: ack = ${ack} ms, byte = ${byte} ms`, "debug");
-			const resp = await driver.sendMessage<SetSerialApiTimeoutsResponse>(new SetSerialApiTimeoutsRequest(ack, byte));
+			const resp = await this.driver.sendMessage<SetSerialApiTimeoutsResponse>(new SetSerialApiTimeoutsRequest(ack, byte));
 			log("controller", `serial API timeouts overwritten. The old values were: ack = ${resp.oldAckTimeout} ms, byte = ${resp.oldByteTimeout} ms`, "debug");
 		}
 
@@ -191,7 +195,7 @@ export class ZWaveController {
 					0x00, // length
 				]),
 			);
-			await driver.sendMessage(appInfoMsg, "none");
+			await this.driver.sendMessage(appInfoMsg, "none");
 		}
 
 		log("controller", "interview done!", "debug");

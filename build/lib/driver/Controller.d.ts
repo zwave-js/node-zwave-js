@@ -1,8 +1,10 @@
 import { FunctionType } from "../message/Message";
-import { Node } from "../node/node";
+import { Node } from "../node/Node";
 import { Driver } from "./Driver";
 import { ControllerTypes } from "./GetControllerVersionMessages";
 export declare class ZWaveController {
+    private readonly driver;
+    constructor(driver: Driver);
     private _libraryVersion;
     readonly libraryVersion: string;
     private _type;
@@ -39,5 +41,5 @@ export declare class ZWaveController {
     private _supportsTimers;
     readonly supportsTimers: boolean;
     readonly nodes: Map<number, Node>;
-    interview(driver: Driver): Promise<void>;
+    interview(): Promise<void>;
 }

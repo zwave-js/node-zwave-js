@@ -14,6 +14,8 @@ var QueryStage;
     QueryStage[QueryStage["Versions"] = 9] = "Versions";
     QueryStage[QueryStage["Instances"] = 10] = "Instances";
     QueryStage[QueryStage["Static"] = 11] = "Static";
+    // ===== the stuff above should never change =====
+    // ===== the stuff below changes frequently, so it has to be redone on every start =====
     QueryStage[QueryStage["CacheLoad"] = 12] = "CacheLoad";
     QueryStage[QueryStage["Associations"] = 13] = "Associations";
     QueryStage[QueryStage["Neighbors"] = 14] = "Neighbors";
@@ -23,12 +25,13 @@ var QueryStage;
     QueryStage[QueryStage["Complete"] = 18] = "Complete";
 })(QueryStage = exports.QueryStage || (exports.QueryStage = {}));
 class Node {
-    constructor(id) {
+    constructor(id, driver) {
         this.id = id;
+        this.driver = driver;
         this.queryStage = QueryStage.None;
-        // TODO
+        // TODO restore from cache
     }
-    query() {
+    beginQuery() {
         //
     }
 }
