@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-/** A dictionary of all active and deprecatedes as of 2018-03-30 */
+/* A dictionary of all command classes as of 2018-03-30 */
 var CommandClasses;
 (function (CommandClasses) {
     CommandClasses[CommandClasses["Alarm"] = 113] = "Alarm";

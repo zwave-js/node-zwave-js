@@ -1,4 +1,7 @@
-/** A dictionary of all active and deprecatedes as of 2018-03-30 */
+
+
+
+/* A dictionary of all command classes as of 2018-03-30 */
 export enum CommandClasses {
 	"Alarm" = 0x71,
 	"Alarm Sensor" = 0x9C,

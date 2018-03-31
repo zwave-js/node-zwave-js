@@ -13,6 +13,7 @@ export interface ZWaveOptions {
 export declare type DeepPartial<T> = {
     [P in keyof T]: Partial<T[P]>;
 };
+export declare type MessageSupportCheck = "loud" | "silent" | "none";
 export declare class Driver extends EventEmitter {
     private port;
     /** @internal */
@@ -61,7 +62,9 @@ export declare class Driver extends EventEmitter {
      * @param priority The priority of the message to send. If none is given, the defined default priority of the message
      * class will be used.
      */
-    sendMessage<TResponse extends Message = Message>(msg: Message, supportCheck?: "loud" | "silent" | "none", priority?: MessagePriority): Promise<TResponse>;
+    sendMessage<TResponse extends Message = Message>(msg: Message, priority?: MessagePriority): Promise<TResponse>;
+    sendMessage<TResponse extends Message = Message>(msg: Message, supportCheck?: MessageSupportCheck): Promise<TResponse>;
+    sendMessage<TResponse extends Message = Message>(msg: Message, priority: MessagePriority, supportCheck: MessageSupportCheck): Promise<TResponse>;
     /**
      * Sends a low-level message like ACK, NAK or CAN immediately
      * @param message The low-level message to send

@@ -43,6 +43,7 @@ export declare enum MessagePriority {
     NodeQuery = 6,
     Poll = 7,
 }
+export declare function isMessagePriority(val: any): val is MessagePriority;
 export declare enum MessageHeaders {
     SOF = 1,
     ACK = 6,
@@ -74,7 +75,7 @@ export declare enum FunctionType {
     UNKNOWN_FUNC_RF_RECEIVE_MODE = 16,
     UNKNOWN_FUNC_SET_SLEEP_MODE = 17,
     FUNC_ID_ZW_SEND_NODE_INFORMATION = 18,
-    FUNC_ID_ZW_SEND_DATA = 19,
+    SendData = 19,
     UNKNOWN_FUNC_SEND_DATA_MULTI = 20,
     GetControllerVersion = 21,
     UNKNOWN_FUNC_SEND_DATA_ABORT = 22,

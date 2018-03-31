@@ -112,7 +112,8 @@ class Message {
         const ret = this.toJSONInternal();
         delete ret.payload;
         for (const [key, value] of object_polyfill_1.entries(props)) {
-            ret[key] = value;
+            if (value !== undefined)
+                ret[key] = value;
         }
         return ret;
     }
@@ -151,6 +152,10 @@ var MessagePriority;
     // nothing else needs to be done
     MessagePriority[MessagePriority["Poll"] = 7] = "Poll";
 })(MessagePriority = exports.MessagePriority || (exports.MessagePriority = {}));
+function isMessagePriority(val) {
+    return typeof val === "number" && val in MessagePriority;
+}
+exports.isMessagePriority = isMessagePriority;
 var MessageHeaders;
 (function (MessageHeaders) {
     MessageHeaders[MessageHeaders["SOF"] = 1] = "SOF";
@@ -185,7 +190,7 @@ var FunctionType;
     FunctionType[FunctionType["UNKNOWN_FUNC_RF_RECEIVE_MODE"] = 16] = "UNKNOWN_FUNC_RF_RECEIVE_MODE";
     FunctionType[FunctionType["UNKNOWN_FUNC_SET_SLEEP_MODE"] = 17] = "UNKNOWN_FUNC_SET_SLEEP_MODE";
     FunctionType[FunctionType["FUNC_ID_ZW_SEND_NODE_INFORMATION"] = 18] = "FUNC_ID_ZW_SEND_NODE_INFORMATION";
-    FunctionType[FunctionType["FUNC_ID_ZW_SEND_DATA"] = 19] = "FUNC_ID_ZW_SEND_DATA";
+    FunctionType[FunctionType["SendData"] = 19] = "SendData";
     FunctionType[FunctionType["UNKNOWN_FUNC_SEND_DATA_MULTI"] = 20] = "UNKNOWN_FUNC_SEND_DATA_MULTI";
     FunctionType[FunctionType["GetControllerVersion"] = 21] = "GetControllerVersion";
     FunctionType[FunctionType["UNKNOWN_FUNC_SEND_DATA_ABORT"] = 22] = "UNKNOWN_FUNC_SEND_DATA_ABORT";

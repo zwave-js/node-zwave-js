@@ -161,7 +161,7 @@ export class Message {
 		const ret = this.toJSONInternal() as Record<string, any>;
 		delete ret.payload;
 		for (const [key, value] of entries(props)) {
-			ret[key] = value;
+			if (value !== undefined) ret[key] = value;
 		}
 		return ret;
 	}
@@ -200,6 +200,9 @@ export enum MessagePriority {
 	// Some devices need their state to be polled at regular intervals. Only do that when
 	// nothing else needs to be done
 	Poll,
+}
+export function isMessagePriority(val: any): val is MessagePriority {
+	return typeof val === "number" && val in MessagePriority;
 }
 
 export enum MessageHeaders {
@@ -241,7 +244,9 @@ export enum FunctionType {
 	UNKNOWN_FUNC_SET_SLEEP_MODE = 0x11, // Set the CPU into sleep mode
 
 	FUNC_ID_ZW_SEND_NODE_INFORMATION = 0x12, // Send Node Information Frame of the stick
-	FUNC_ID_ZW_SEND_DATA = 0x13, // Send data
+
+	SendData = 0x13, // Send data
+
 	UNKNOWN_FUNC_SEND_DATA_MULTI = 0x14, // ??
 
 	GetControllerVersion = 0x15,

@@ -69,6 +69,11 @@ function applyDefaultOptions(target, source) {
     }
     return target;
 }
+function isMessageSupportCheck(val) {
+    return val === "loud"
+        || val === "silent"
+        || val === "none";
+}
 class Driver extends events_1.EventEmitter {
     constructor(port, 
     /** @internal */
@@ -138,9 +143,9 @@ class Driver extends events_1.EventEmitter {
             yield this._controller.interview();
             logger_1.log("driver", "driver ready", "debug");
             this.emit("driver ready");
-            // Now query all nodes
+            // Now interview all nodes
             for (const node of this._controller.nodes.values()) {
-                node.beginQuery();
+                node.beginInterview();
             }
         });
     }
@@ -312,21 +317,25 @@ class Driver extends events_1.EventEmitter {
         // TODO: what to do with this CAN?
         logger_1.log("io", "CAN received", "debug");
     }
-    /**
-     * Sends a message with default priority to the Z-Wave stick
-     * @param msg The message to send
-     * @param supportCheck How to check for the support of the message to send. If the message is not supported:
-     * * "loud" means the call will throw
-     * * "silent" means the call will resolve with `undefined`
-     * * "none" means the message will be sent anyways. This is useful if the capabilities haven't been determined yet.
-     * @param priority The priority of the message to send. If none is given, the defined default priority of the message
-     * class will be used.
-     */
-    sendMessage(msg, supportCheck = "loud", priority = Message_1.getDefaultPriority(msg)) {
+    // tslint:enable:unified-signatures
+    sendMessage(msg, priorityOrCheck, supportCheck) {
         return __awaiter(this, void 0, void 0, function* () {
+            // sort out the arguments
+            if (isMessageSupportCheck(priorityOrCheck)) {
+                supportCheck = priorityOrCheck;
+                priorityOrCheck = undefined;
+            }
+            // now priorityOrCheck is either undefined or a MessagePriority
+            const priority = priorityOrCheck != null
+                ? priorityOrCheck
+                : Message_1.getDefaultPriority(msg);
+            if (supportCheck == null)
+                supportCheck = "loud";
             this.ensureReady();
             if (priority == null) {
-                throw new ZWaveError_1.ZWaveError(`No default priority has been defined for ${msg.constructor.name}, so you have to provide one for your message`, ZWaveError_1.ZWaveErrorCodes.Driver_NoPriority);
+                const className = msg.constructor.name;
+                const msgTypeName = Message_1.FunctionType[msg.functionType];
+                throw new ZWaveError_1.ZWaveError(`No default priority has been defined for ${className} (${msgTypeName}), so you have to provide one for your message`, ZWaveError_1.ZWaveErrorCodes.Driver_NoPriority);
             }
             if (supportCheck !== "none"
                 && this.controller != null

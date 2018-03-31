@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
 import * as SerialPort from "serialport";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { FunctionType, getDefaultPriority, Message, MessageHeaders, MessagePriority, MessageType, messageTypes } from "../message/Message";
+import { FunctionType, getDefaultPriority, isMessagePriority, Message, MessageHeaders, MessagePriority, MessageType, messageTypes } from "../message/Message";
 import { Comparable, compareNumberOrString, CompareResult } from "../util/comparable";
 import { createDeferredPromise, DeferredPromise } from "../util/defer-promise";
 import { log } from "../util/logger";
@@ -81,6 +81,14 @@ function applyDefaultOptions(target: Record<string, any>, source: Record<string,
 		}
 	}
 	return target;
+}
+
+export type MessageSupportCheck = "loud" | "silent" | "none";
+function isMessageSupportCheck(val: any): val is MessageSupportCheck {
+	return val === "loud"
+		|| val === "silent"
+		|| val === "none"
+		;
 }
 
 export class Driver extends EventEmitter {
@@ -173,9 +181,9 @@ export class Driver extends EventEmitter {
 		log("driver", "driver ready", "debug");
 		this.emit("driver ready");
 
-		// Now query all nodes
+		// Now interview all nodes
 		for (const node of this._controller.nodes.values()) {
-			node.beginQuery();
+			node.beginInterview();
 		}
 	}
 
@@ -383,6 +391,7 @@ export class Driver extends EventEmitter {
 		log("io", "CAN received", "debug");
 	}
 
+	// tslint:disable:unified-signatures
 	/**
 	 * Sends a message with default priority to the Z-Wave stick
 	 * @param msg The message to send
@@ -395,15 +404,45 @@ export class Driver extends EventEmitter {
 	 */
 	public async sendMessage<TResponse extends Message = Message>(
 		msg: Message,
-		supportCheck: "loud" | "silent" | "none" = "loud",
-		priority: MessagePriority = getDefaultPriority(msg),
+		priority?: MessagePriority,
+	): Promise<TResponse>;
+
+	public async sendMessage<TResponse extends Message = Message>(
+		msg: Message,
+		supportCheck?: MessageSupportCheck,
+	): Promise<TResponse>;
+
+	public async sendMessage<TResponse extends Message = Message>(
+		msg: Message,
+		priority: MessagePriority,
+		supportCheck: MessageSupportCheck,
+	): Promise<TResponse>;
+	// tslint:enable:unified-signatures
+
+	public async sendMessage<TResponse extends Message = Message>(
+		msg: Message,
+		priorityOrCheck?: MessagePriority | MessageSupportCheck,
+		supportCheck?: MessageSupportCheck,
 	): Promise<TResponse> {
+
+		// sort out the arguments
+		if (isMessageSupportCheck(priorityOrCheck)) {
+			supportCheck = priorityOrCheck;
+			priorityOrCheck = undefined;
+		}
+		// now priorityOrCheck is either undefined or a MessagePriority
+		const priority: MessagePriority = priorityOrCheck != null
+			? priorityOrCheck as MessagePriority
+			: getDefaultPriority(msg);
+		if (supportCheck == null) supportCheck = "loud";
 
 		this.ensureReady();
 
 		if (priority == null) {
+			const className = msg.constructor.name;
+			const msgTypeName = FunctionType[msg.functionType];
 			throw new ZWaveError(
-				`No default priority has been defined for ${msg.constructor.name}, so you have to provide one for your message`,
+				`No default priority has been defined for ${className} (${msgTypeName}), so you have to provide one for your message`,
 				ZWaveErrorCodes.Driver_NoPriority,
 			);
 		}

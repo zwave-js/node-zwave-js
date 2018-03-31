@@ -1,4 +1,3 @@
-/** A dictionary of all active and deprecatedes as of 2018-03-30 */
 export declare enum CommandClasses {
     "Alarm" = 113,
     "Alarm Sensor" = 156,

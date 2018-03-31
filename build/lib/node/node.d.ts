@@ -1,5 +1,35 @@
 import { Driver } from "../driver/Driver";
-export declare enum QueryStage {
+import { DeviceClass } from "./DeviceClass";
+import { Baudrate } from "./GetNodeProtocolInfoMessages";
+export declare class Node {
+    readonly id: number;
+    private readonly driver;
+    constructor(id: number, driver: Driver);
+    private readonly logPrefix;
+    private _deviceClass;
+    readonly deviceClass: DeviceClass;
+    private _isListening;
+    readonly isListening: boolean;
+    private _isFrequentListening;
+    readonly isFrequentListening: boolean;
+    private _isRouting;
+    readonly isRouting: boolean;
+    private _maxBaudRate;
+    readonly maxBaudRate: Baudrate;
+    private _isSecure;
+    readonly isSecure: boolean;
+    private _version;
+    readonly version: number;
+    private _isBeaming;
+    readonly isBeaming: boolean;
+    private supportedCCs;
+    private controllableCCs;
+    /** This tells us which interview stage was last completed */
+    interviewStage: InterviewStage;
+    beginInterview(): Promise<void>;
+    private queryProtocolInfo();
+}
+export declare enum InterviewStage {
     None = 0,
     ProtocolInfo = 1,
     Probe = 2,
@@ -19,11 +49,4 @@ export declare enum QueryStage {
     Dynamic = 16,
     Configuration = 17,
     Complete = 18,
-}
-export declare class Node {
-    readonly id: number;
-    private readonly driver;
-    constructor(id: number, driver: Driver);
-    queryStage: QueryStage;
-    beginQuery(): void;
 }
