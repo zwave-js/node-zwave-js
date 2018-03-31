@@ -1,7 +1,8 @@
-import { expectedResponse, FunctionType, Message,  MessageType, messageTypes} from "../message/Message";
+import { expectedResponse, FunctionType, Message,  MessagePriority, MessageType, messageTypes, priority} from "../message/Message";
 
 @messageTypes(MessageType.Request, FunctionType.SetSerialApiTimeouts)
 @expectedResponse(FunctionType.SetSerialApiTimeouts)
+@priority(MessagePriority.Controller)
 export class SetSerialApiTimeoutsRequest extends Message {
 
 	constructor()

@@ -13,7 +13,8 @@ let GetSerialApiInitDataRequest = class GetSerialApiInitDataRequest extends Mess
 };
 GetSerialApiInitDataRequest = __decorate([
     Message_1.messageTypes(Message_1.MessageType.Request, Message_1.FunctionType.GetSerialApiInitData),
-    Message_1.expectedResponse(Message_1.FunctionType.GetSerialApiInitData)
+    Message_1.expectedResponse(Message_1.FunctionType.GetSerialApiInitData),
+    Message_1.priority(Message_1.MessagePriority.Controller)
 ], GetSerialApiInitDataRequest);
 exports.GetSerialApiInitDataRequest = GetSerialApiInitDataRequest;
 let GetSerialApiInitDataResponse = class GetSerialApiInitDataResponse extends Message_1.Message {

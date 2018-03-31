@@ -14,7 +14,8 @@ let GetSerialApiCapabilitiesRequest = class GetSerialApiCapabilitiesRequest exte
 };
 GetSerialApiCapabilitiesRequest = __decorate([
     Message_1.messageTypes(Message_1.MessageType.Request, Message_1.FunctionType.GetSerialApiCapabilities),
-    Message_1.expectedResponse(Message_1.FunctionType.GetSerialApiCapabilities)
+    Message_1.expectedResponse(Message_1.FunctionType.GetSerialApiCapabilities),
+    Message_1.priority(Message_1.MessagePriority.Controller)
 ], GetSerialApiCapabilitiesRequest);
 exports.GetSerialApiCapabilitiesRequest = GetSerialApiCapabilitiesRequest;
 let GetSerialApiCapabilitiesResponse = class GetSerialApiCapabilitiesResponse extends Message_1.Message {

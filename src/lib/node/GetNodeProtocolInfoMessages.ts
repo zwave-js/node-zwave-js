@@ -1,4 +1,4 @@
-import { expectedResponse, FunctionType, Message,  MessageType, messageTypes} from "../message/Message";
+import { expectedResponse, FunctionType, Message,  MessagePriority, MessageType, messageTypes, priority} from "../message/Message";
 import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
 
 const enum NodeCapabilityFlags {
@@ -29,6 +29,7 @@ export type Baudrate = 9600 | 40000 | 100000;
 
 @messageTypes(MessageType.Request, FunctionType.GetNodeProtocolInfo)
 @expectedResponse(FunctionType.GetNodeProtocolInfo)
+@priority(MessagePriority.NodeQuery)
 export class GetNodeProtocolInfoRequest extends Message {
 
 	constructor()

@@ -11,7 +11,8 @@ let GetSUCNodeIdRequest = class GetSUCNodeIdRequest extends Message_1.Message {
 };
 GetSUCNodeIdRequest = __decorate([
     Message_1.messageTypes(Message_1.MessageType.Request, Message_1.FunctionType.GetSUCNodeId),
-    Message_1.expectedResponse(Message_1.FunctionType.GetSUCNodeId)
+    Message_1.expectedResponse(Message_1.FunctionType.GetSUCNodeId),
+    Message_1.priority(Message_1.MessagePriority.Controller)
 ], GetSUCNodeIdRequest);
 exports.GetSUCNodeIdRequest = GetSUCNodeIdRequest;
 let GetSUCNodeIdResponse = class GetSUCNodeIdResponse extends Message_1.Message {

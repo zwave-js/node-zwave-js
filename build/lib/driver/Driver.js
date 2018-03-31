@@ -12,11 +12,38 @@ const events_1 = require("events");
 const SerialPort = require("serialport");
 const ZWaveError_1 = require("../error/ZWaveError");
 const Message_1 = require("../message/Message");
+const comparable_1 = require("../util/comparable");
 const defer_promise_1 = require("../util/defer-promise");
 const logger_1 = require("../util/logger");
 const object_polyfill_1 = require("../util/object-polyfill");
+const sorted_list_1 = require("../util/sorted-list");
 const strings_1 = require("../util/strings");
 const Controller_1 = require("./Controller");
+/** Returns a timestamp with nano-second precision */
+function highResTimestamp() {
+    const [s, ns] = process.hrtime();
+    return s * 1e9 + ns;
+}
+class Transaction {
+    constructor(message, promise, priority, timestamp = highResTimestamp(), ackPending = true, response) {
+        this.message = message;
+        this.promise = promise;
+        this.priority = priority;
+        this.timestamp = timestamp;
+        this.ackPending = ackPending;
+        this.response = response;
+    }
+    compareTo(other) {
+        // first sort by priority
+        if (this.priority < other.priority)
+            return -1;
+        else if (this.priority > other.priority)
+            return 1;
+        // for equal priority, sort by the timestamp
+        return comparable_1.compareNumberOrString(other.timestamp, this.timestamp);
+        // TODO: do we need to sort by the message itself?
+    }
+}
 const defaultOptions = {
     timeouts: {
         ack: 1000,
@@ -49,6 +76,7 @@ class Driver extends events_1.EventEmitter {
         super();
         this.port = port;
         this.options = options;
+        this.sendQueue = new sorted_list_1.SortedList();
         this._wasStarted = false;
         this._isOpen = false;
         this._wasDestroyed = false;
@@ -123,7 +151,7 @@ class Driver extends events_1.EventEmitter {
         this.send(Message_1.MessageHeaders.NAK);
         // clear buffers
         this.receiveBuffer = Buffer.from([]);
-        this.sendQueue = [];
+        this.sendQueue.clear();
         // clear the currently pending request
         if (this.currentTransaction != null && this.currentTransaction.promise != null) {
             this.currentTransaction.promise.reject("The driver was reset");
@@ -231,8 +259,8 @@ class Driver extends events_1.EventEmitter {
         logger_1.log("driver", `handling response ${strings_1.stringify(msg)}`, "debug");
         // if we have a pending request, check if that is waiting for this message
         if (this.currentTransaction != null &&
-            this.currentTransaction.originalMessage != null &&
-            this.currentTransaction.originalMessage.expectedResponse === msg.functionType) {
+            this.currentTransaction.message != null &&
+            this.currentTransaction.message.expectedResponse === msg.functionType) {
             if (!this.currentTransaction.ackPending) {
                 logger_1.log("io", `ACK already received, resolving transaction`, "debug");
                 logger_1.log("driver", `transaction complete`, "debug");
@@ -260,7 +288,7 @@ class Driver extends events_1.EventEmitter {
             trnsact.ackPending) {
             logger_1.log("io", "ACK received for current transaction", "debug");
             trnsact.ackPending = false;
-            if (trnsact.originalMessage.expectedResponse == null
+            if (trnsact.message.expectedResponse == null
                 || trnsact.response != null) {
                 logger_1.log("io", "transaction finished, resolving...", "debug");
                 logger_1.log("driver", `transaction complete`, "debug");
@@ -284,11 +312,25 @@ class Driver extends events_1.EventEmitter {
         // TODO: what to do with this CAN?
         logger_1.log("io", "CAN received", "debug");
     }
-    /** Sends a message to the Z-Wave stick */
-    sendMessage(msg, supportCheck = "loud") {
+    /**
+     * Sends a message with default priority to the Z-Wave stick
+     * @param msg The message to send
+     * @param supportCheck How to check for the support of the message to send. If the message is not supported:
+     * * "loud" means the call will throw
+     * * "silent" means the call will resolve with `undefined`
+     * * "none" means the message will be sent anyways. This is useful if the capabilities haven't been determined yet.
+     * @param priority The priority of the message to send. If none is given, the defined default priority of the message
+     * class will be used.
+     */
+    sendMessage(msg, supportCheck = "loud", priority = Message_1.getDefaultPriority(msg)) {
         return __awaiter(this, void 0, void 0, function* () {
             this.ensureReady();
-            if (supportCheck !== "none" && this.controller != null && !this.controller.isFunctionSupported(msg.functionType)) {
+            if (priority == null) {
+                throw new ZWaveError_1.ZWaveError(`No default priority has been defined for ${msg.constructor.name}, so you have to provide one for your message`, ZWaveError_1.ZWaveErrorCodes.Driver_NoPriority);
+            }
+            if (supportCheck !== "none"
+                && this.controller != null
+                && !this.controller.isFunctionSupported(msg.functionType)) {
                 if (supportCheck === "loud") {
                     throw new ZWaveError_1.ZWaveError(`Your hardware does not support the ${Message_1.FunctionType[msg.functionType]} function`, ZWaveError_1.ZWaveErrorCodes.Driver_NotSupported);
                 }
@@ -296,54 +338,26 @@ class Driver extends events_1.EventEmitter {
                     return undefined;
                 }
             }
-            logger_1.log("driver", `sending message ${strings_1.stringify(msg)}`, "debug");
+            logger_1.log("driver", `sending message ${strings_1.stringify(msg)} with priority ${Message_1.MessagePriority[priority]} (${priority})`, "debug");
+            // create the transaction and enqueue it
             const promise = defer_promise_1.createDeferredPromise();
-            const transaction = {
-                ackPending: true,
-                originalMessage: msg,
-                promise,
-                response: null,
-            };
-            this.send(transaction);
+            const transaction = new Transaction(msg, promise, priority);
+            logger_1.log("io", `added message to the send queue, new length = ${this.sendQueue.length}`, "debug");
+            this.sendQueue.add(transaction);
+            // start sending now (maybe)
+            setImmediate(() => this.workOffSendQueue());
             return promise;
         });
     }
     /**
-     * Queues a message for sending
-     * @param message The message to send
-     * @param highPriority Whether the message should be prioritized
+     * Sends a low-level message like ACK, NAK or CAN immediately
+     * @param message The low-level message to send
      */
-    send(data, priority = "normal") {
-        if (typeof data === "number") {
-            // ACK, CAN, NAK
-            logger_1.log("io", `sending ${Message_1.MessageHeaders[data]}`, "debug");
-            this.doSend(data);
-            return;
-        }
-        switch (priority) {
-            case "immediate": {
-                // TODO: check if that's okay
-                // Send high-prio messages immediately
-                logger_1.log("io", `sending high priority message ${data.toString()} immediately`, "debug");
-                this.doSend(data);
-                break;
-            }
-            case "normal": {
-                // Put the message in the queue
-                this.sendQueue.push(data);
-                logger_1.log("io", `added message to the send queue with normal priority, new length = ${this.sendQueue.length}`, "debug");
-                break;
-            }
-            case "high": {
-                // Put the message in the queue (in first position)
-                // TODO: do we need this in ZWave?
-                this.sendQueue.unshift(data);
-                logger_1.log("io", `added message to the send queue with high priority, new length = ${this.sendQueue.length}`, "debug");
-                break;
-            }
-        }
-        // start working it off now (maybe)
-        setImmediate(() => this.workOffSendQueue());
+    send(header) {
+        // ACK, CAN, NAK
+        logger_1.log("io", `sending ${Message_1.MessageHeaders[header]}`, "debug");
+        this.doSend(Buffer.from([header]));
+        return;
     }
     workOffSendQueue() {
         if (this.sendQueueTimer != null) {
@@ -360,30 +374,16 @@ class Driver extends events_1.EventEmitter {
             logger_1.log("io", `workOffSendQueue > skipping because a transaction is pending`, "debug");
             return;
         }
-        const nextMsg = this.sendQueue.shift();
-        if (!(nextMsg instanceof Message_1.Message)) {
-            // this is a pending request
-            logger_1.log("io", `workOffSendQueue > setting current transaction`, "debug");
-            this.currentTransaction = nextMsg;
-        }
+        // get the next transaction
+        const next = this.sendQueue.shift();
         logger_1.log("io", `workOffSendQueue > sending next message... remaining queue length = ${this.sendQueue.length}`, "debug");
-        this.doSend(nextMsg);
+        this.currentTransaction = next;
+        this.doSend(next.message.serialize());
         // to avoid any deadlocks we didn't think of, re-call this later
         this.sendQueueTimer = setTimeout(() => this.workOffSendQueue(), 1000);
     }
     doSend(data) {
-        if (typeof data === "number") {
-            // 1-byte-responses
-            this.serial.write(Buffer.from([data]));
-        }
-        else {
-            // TODO: queue for retransmission
-            const msg = data instanceof Message_1.Message ?
-                data :
-                data.originalMessage;
-            this.serial.write(msg.serialize());
-        }
-        // TODO: find out if we need to drain
+        this.serial.write(data);
     }
 }
 exports.Driver = Driver;

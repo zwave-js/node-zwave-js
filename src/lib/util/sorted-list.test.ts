@@ -63,6 +63,24 @@ describe("lib/util/sorted-list => ", () => {
 		expect(list.toArray()).to.deep.equal(expected);
 	});
 
+	it("shift() should remove the smallest item in the list and return it", () => {
+		const containedItems = [2, -1, 5, 4, 9, 8];
+		const list = new SortedList(containedItems);
+		const expected = [2, 5, 4, 9, 8].sort();
+		list.shift().should.equal(-1);
+		list.length.should.equal(expected.length);
+		expect(list.toArray()).to.deep.equal(expected);
+	});
+
+	it("pop() should remove the largest item in the list and return it", () => {
+		const containedItems = [2, -1, 5, 4, 9, 8];
+		const list = new SortedList(containedItems);
+		const expected = [2, -1, 5, 4, 8].sort();
+		list.pop().should.equal(9);
+		list.length.should.equal(expected.length);
+		expect(list.toArray()).to.deep.equal(expected);
+	});
+
 	it("adding items to an empty list should work", () => {
 		const list = new SortedList<number>();
 		list.add(3).should.equal(1);
@@ -124,6 +142,20 @@ describe("lib/util/sorted-list => ", () => {
 		const comparer = stub().returns(0);
 		const list = new SortedList([{}, {}], comparer);
 		comparer.should.have.been.called;
+	});
+
+	it("should compare custom items using their compareTo method if it exists", () => {
+		const largeObj = {compareTo: stub().returns(1)};
+		const smallObj = {compareTo: stub().returns(-1)};
+		const list = new SortedList([largeObj, smallObj]);
+		expect(largeObj.compareTo.called || smallObj.compareTo.called).to.be.true;
+		expect(list.toArray()).to.deep.equal([smallObj, largeObj]);
+	});
+
+	it("should complain if only one item has a compareTo method", () => {
+		const largeObj = {compareTo: stub().returns(1)};
+		const smallObj = {};
+		expect(() => new SortedList([largeObj, smallObj])).to.throw("comparer");
 	});
 
 });

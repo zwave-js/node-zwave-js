@@ -32,6 +32,17 @@ export declare class Message {
     private toJSONInternal();
     protected toJSONInherited(props: Record<string, any>): Record<string, any>;
 }
+/** The priority of messages, sorted from high (0) to low (>0) */
+export declare enum MessagePriority {
+    Controller = 0,
+    Security = 1,
+    Ping = 2,
+    MultistepController = 3,
+    WakeUp = 4,
+    Normal = 5,
+    NodeQuery = 6,
+    Poll = 7,
+}
 export declare enum MessageHeaders {
     SOF = 1,
     ACK = 6,
@@ -166,6 +177,7 @@ export declare enum FunctionType {
 export declare const METADATA_messageTypes: unique symbol;
 export declare const METADATA_messageTypeMap: unique symbol;
 export declare const METADATA_expectedResponse: unique symbol;
+export declare const METADATA_priority: unique symbol;
 /**
  * Defines the message and function type associated with a Z-Wave message
  */
@@ -202,3 +214,15 @@ export declare function getExpectedResponse<T extends Message>(messageClass: T):
  * Retrieves the function type defined for a Z-Wave message class
  */
 export declare function getExpectedResponseStatic<T extends Constructable<Message>>(classConstructor: T): FunctionType;
+/**
+ * Defines the default priority associated with a Z-Wave message
+ */
+export declare function priority(prio: MessagePriority): ClassDecorator;
+/**
+ * Retrieves the default priority defined for a Z-Wave message class
+ */
+export declare function getDefaultPriority<T extends Message>(messageClass: T): MessagePriority;
+/**
+ * Retrieves the function type defined for a Z-Wave message class
+ */
+export declare function getDefaultPriorityStatic<T extends Constructable<Message>>(classConstructor: T): MessagePriority;

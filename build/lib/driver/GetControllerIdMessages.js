@@ -11,7 +11,8 @@ let GetControllerIdRequest = class GetControllerIdRequest extends Message_1.Mess
 };
 GetControllerIdRequest = __decorate([
     Message_1.messageTypes(Message_1.MessageType.Request, Message_1.FunctionType.GetControllerId),
-    Message_1.expectedResponse(Message_1.FunctionType.GetControllerId)
+    Message_1.expectedResponse(Message_1.FunctionType.GetControllerId),
+    Message_1.priority(Message_1.MessagePriority.Controller)
 ], GetControllerIdRequest);
 exports.GetControllerIdRequest = GetControllerIdRequest;
 let GetControllerIdResponse = class GetControllerIdResponse extends Message_1.Message {

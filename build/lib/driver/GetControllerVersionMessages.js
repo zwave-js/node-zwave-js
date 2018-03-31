@@ -24,7 +24,8 @@ let GetControllerVersionRequest = class GetControllerVersionRequest extends Mess
 };
 GetControllerVersionRequest = __decorate([
     Message_1.messageTypes(Message_1.MessageType.Request, Message_1.FunctionType.GetControllerVersion),
-    Message_1.expectedResponse(Message_1.FunctionType.GetControllerVersion)
+    Message_1.expectedResponse(Message_1.FunctionType.GetControllerVersion),
+    Message_1.priority(Message_1.MessagePriority.Controller)
 ], GetControllerVersionRequest);
 exports.GetControllerVersionRequest = GetControllerVersionRequest;
 let GetControllerVersionResponse = class GetControllerVersionResponse extends Message_1.Message {

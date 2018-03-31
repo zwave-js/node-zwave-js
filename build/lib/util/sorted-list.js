@@ -1,22 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const comparable_1 = require("./comparable");
 function defaultComparer(a, b) {
     if (typeof a === "string" || typeof a === "number") {
-        return b > a ? 1 :
-            b === a ? 0 :
-                -1;
+        return comparable_1.compareNumberOrString(a, b);
     }
-    throw new Error("A sorted list that does not contain strings or numbers needs a custom comparer function");
+    if (comparable_1.isComparable(a) && comparable_1.isComparable(b)) {
+        return b.compareTo(a);
+    }
+    throw new Error("For sorted lists with element types other than number or string, provide a custom comparer or implement Comparable<T> on the elements");
 }
-// // tslint:disable-next-line:no-namespace
-// namespace SortedListNode {
-// 	export function isFirst() {
-// 		return this.prev == null;
-// 	}
-// 	export function isLast() {
-// 		return this.next == null;
-// 	}
-// }
 /**
  * Seeks the list from the beginning and finds the position to add the new item
  */
@@ -104,8 +97,27 @@ class SortedList {
         if (this._length === 0)
             return;
         const node = findNode(this.first, item, this.comparer);
-        if (node == null)
+        if (node != null)
+            this.removeNode(node);
+    }
+    /** Removes the first item from the list and returns it */
+    shift() {
+        if (this._length === 0)
             return;
+        const node = this.first;
+        this.removeNode(node);
+        return node.value;
+    }
+    /** Removes the last item from the list and returns it */
+    pop() {
+        if (this._length === 0)
+            return;
+        const node = this.last;
+        this.removeNode(node);
+        return node.value;
+    }
+    /** Removes a specific node from the list */
+    removeNode(node) {
         // remove the node from the chain
         if (node.prev != null) {
             node.prev.next = node.next;

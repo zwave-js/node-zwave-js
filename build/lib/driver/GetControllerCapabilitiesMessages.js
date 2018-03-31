@@ -11,7 +11,8 @@ let GetControllerCapabilitiesRequest = class GetControllerCapabilitiesRequest ex
 };
 GetControllerCapabilitiesRequest = __decorate([
     Message_1.messageTypes(Message_1.MessageType.Request, Message_1.FunctionType.GetControllerCapabilities),
-    Message_1.expectedResponse(Message_1.FunctionType.GetControllerCapabilities)
+    Message_1.expectedResponse(Message_1.FunctionType.GetControllerCapabilities),
+    Message_1.priority(Message_1.MessagePriority.Controller)
 ], GetControllerCapabilitiesRequest);
 exports.GetControllerCapabilitiesRequest = GetControllerCapabilitiesRequest;
 let GetControllerCapabilitiesResponse = class GetControllerCapabilitiesResponse extends Message_1.Message {

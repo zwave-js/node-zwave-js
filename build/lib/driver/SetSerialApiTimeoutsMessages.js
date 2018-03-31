@@ -33,6 +33,7 @@ let SetSerialApiTimeoutsRequest = class SetSerialApiTimeoutsRequest extends Mess
 SetSerialApiTimeoutsRequest = __decorate([
     Message_1.messageTypes(Message_1.MessageType.Request, Message_1.FunctionType.SetSerialApiTimeouts),
     Message_1.expectedResponse(Message_1.FunctionType.SetSerialApiTimeouts),
+    Message_1.priority(Message_1.MessagePriority.Controller),
     __metadata("design:paramtypes", [Number, Number])
 ], SetSerialApiTimeoutsRequest);
 exports.SetSerialApiTimeoutsRequest = SetSerialApiTimeoutsRequest;

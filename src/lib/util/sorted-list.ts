@@ -1,13 +1,13 @@
-export type Comparer<T> = (a: T, b: T) => -1 | 0 | 1;
+import { compareNumberOrString, Comparer, CompareResult, isComparable } from "./comparable";
 
-function defaultComparer<T>(a: T, b: T) {
+function defaultComparer<T>(a: T, b: T): CompareResult {
 	if (typeof a === "string" || typeof a === "number") {
-		return b > a ? 1 :
-			b === a ? 0 :
-				-1
-			;
+		return compareNumberOrString(a, b as any as number | string);
 	}
-	throw new Error("A sorted list that does not contain strings or numbers needs a custom comparer function");
+	if (isComparable(a) && isComparable(b)) {
+		return b.compareTo(a);
+	}
+	throw new Error("For sorted lists with element types other than number or string, provide a custom comparer or implement Comparable<T> on the elements");
 }
 
 interface SortedListNode<T> {
@@ -15,16 +15,6 @@ interface SortedListNode<T> {
 	prev: SortedListNode<T>;
 	next: SortedListNode<T>;
 }
-
-// // tslint:disable-next-line:no-namespace
-// namespace SortedListNode {
-// 	export function isFirst() {
-// 		return this.prev == null;
-// 	}
-// 	export function isLast() {
-// 		return this.next == null;
-// 	}
-// }
 
 /**
  * Seeks the list from the beginning and finds the position to add the new item
@@ -121,8 +111,27 @@ export class SortedList<T> {
 		if (this._length === 0) return;
 
 		const node = findNode(this.first, item, this.comparer);
-		if (node == null) return;
+		if (node != null) this.removeNode(node);
+	}
 
+	/** Removes the first item from the list and returns it */
+	public shift(): T {
+		if (this._length === 0) return;
+		const node = this.first;
+		this.removeNode(node);
+		return node.value;
+	}
+
+	/** Removes the last item from the list and returns it */
+	public pop(): T {
+		if (this._length === 0) return;
+		const node = this.last;
+		this.removeNode(node);
+		return node.value;
+	}
+
+	/** Removes a specific node from the list */
+	private removeNode(node: SortedListNode<T>) {
 		// remove the node from the chain
 		if (node.prev != null) {
 			node.prev.next = node.next;

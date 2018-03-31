@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { EventEmitter } from "events";
-import { Message } from "../message/Message";
+import { Message, MessagePriority } from "../message/Message";
 import { ZWaveController } from "./Controller";
 export interface ZWaveOptions {
     timeouts: {
@@ -51,14 +51,22 @@ export declare class Driver extends EventEmitter {
     private handleACK();
     private handleNAK();
     private handleCAN();
-    /** Sends a message to the Z-Wave stick */
-    sendMessage<TResponse extends Message = Message>(msg: Message, supportCheck?: "loud" | "silent" | "none"): Promise<TResponse>;
     /**
-     * Queues a message for sending
-     * @param message The message to send
-     * @param highPriority Whether the message should be prioritized
+     * Sends a message with default priority to the Z-Wave stick
+     * @param msg The message to send
+     * @param supportCheck How to check for the support of the message to send. If the message is not supported:
+     * * "loud" means the call will throw
+     * * "silent" means the call will resolve with `undefined`
+     * * "none" means the message will be sent anyways. This is useful if the capabilities haven't been determined yet.
+     * @param priority The priority of the message to send. If none is given, the defined default priority of the message
+     * class will be used.
      */
-    private send(data, priority?);
+    sendMessage<TResponse extends Message = Message>(msg: Message, supportCheck?: "loud" | "silent" | "none", priority?: MessagePriority): Promise<TResponse>;
+    /**
+     * Sends a low-level message like ACK, NAK or CAN immediately
+     * @param message The low-level message to send
+     */
+    private send(header);
     private sendQueueTimer;
     private workOffSendQueue();
     private doSend(data);

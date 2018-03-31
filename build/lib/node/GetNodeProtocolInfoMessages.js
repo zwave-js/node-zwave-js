@@ -29,6 +29,7 @@ let GetNodeProtocolInfoRequest = class GetNodeProtocolInfoRequest extends Messag
 GetNodeProtocolInfoRequest = __decorate([
     Message_1.messageTypes(Message_1.MessageType.Request, Message_1.FunctionType.GetNodeProtocolInfo),
     Message_1.expectedResponse(Message_1.FunctionType.GetNodeProtocolInfo),
+    Message_1.priority(Message_1.MessagePriority.NodeQuery),
     __metadata("design:paramtypes", [Number])
 ], GetNodeProtocolInfoRequest);
 exports.GetNodeProtocolInfoRequest = GetNodeProtocolInfoRequest;

@@ -6,6 +6,7 @@ export declare enum ZWaveErrorCodes {
     Driver_NotReady = 4,
     Driver_InvalidDataReceived = 5,
     Driver_NotSupported = 6,
+    Driver_NoPriority = 7,
 }
 export declare class ZWaveError extends Error {
     readonly message: string;

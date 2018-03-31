@@ -126,6 +126,31 @@ function computeChecksum(message) {
     }
     return ret;
 }
+/** The priority of messages, sorted from high (0) to low (>0) */
+var MessagePriority;
+(function (MessagePriority) {
+    // Controller commands are not to be interrupted and usually finish quickly
+    MessagePriority[MessagePriority["Controller"] = 0] = "Controller";
+    // The security queue is the highest actual priority because secured messages
+    // require an encryption handshake before sending new messages
+    MessagePriority[MessagePriority["Security"] = 1] = "Security";
+    // Pings (NoOP) are used for device probing at startup and for network diagnostics
+    MessagePriority[MessagePriority["Ping"] = 2] = "Ping";
+    // Multistep controller commands typically require user interaction but still
+    // should happen at a higher priority than any node data exchange
+    MessagePriority[MessagePriority["MultistepController"] = 3] = "MultistepController";
+    // Whenever sleeping devices wake up, their queued messages must be handled quickly
+    // because they want to go to sleep soon. So prioritize them over non-sleeping devices
+    MessagePriority[MessagePriority["WakeUp"] = 4] = "WakeUp";
+    // Normal operation and node data exchange
+    MessagePriority[MessagePriority["Normal"] = 5] = "Normal";
+    // Node querying is expensive and happens whenever a new node is discovered.
+    // In order to keep the system responsive, give them a lower priority
+    MessagePriority[MessagePriority["NodeQuery"] = 6] = "NodeQuery";
+    // Some devices need their state to be polled at regular intervals. Only do that when
+    // nothing else needs to be done
+    MessagePriority[MessagePriority["Poll"] = 7] = "Poll";
+})(MessagePriority = exports.MessagePriority || (exports.MessagePriority = {}));
 var MessageHeaders;
 (function (MessageHeaders) {
     MessageHeaders[MessageHeaders["SOF"] = 1] = "SOF";
@@ -266,6 +291,7 @@ var FunctionType;
 exports.METADATA_messageTypes = Symbol("messageTypes");
 exports.METADATA_messageTypeMap = Symbol("messageTypeMap");
 exports.METADATA_expectedResponse = Symbol("expectedResponse");
+exports.METADATA_priority = Symbol("priority");
 function getMessageTypeMapKey(messageType, functionType) {
     return JSON.stringify({ messageType, functionType });
 }
@@ -375,3 +401,36 @@ function getExpectedResponseStatic(classConstructor) {
     return ret;
 }
 exports.getExpectedResponseStatic = getExpectedResponseStatic;
+/**
+ * Defines the default priority associated with a Z-Wave message
+ */
+function priority(prio) {
+    return (messageClass) => {
+        logger_1.log("protocol", `${messageClass.name}: defining default priority ${MessagePriority[prio]} (${prio})`, "silly");
+        // and store the metadata
+        Reflect.defineMetadata(exports.METADATA_priority, prio, messageClass);
+    };
+}
+exports.priority = priority;
+/**
+ * Retrieves the default priority defined for a Z-Wave message class
+ */
+function getDefaultPriority(messageClass) {
+    // get the class constructor
+    const constr = messageClass.constructor;
+    // retrieve the current metadata
+    const ret = Reflect.getMetadata(exports.METADATA_priority, constr);
+    logger_1.log("protocol", `${constr.name}: retrieving default priority => ${MessagePriority[ret]} (${ret})`, "silly");
+    return ret;
+}
+exports.getDefaultPriority = getDefaultPriority;
+/**
+ * Retrieves the function type defined for a Z-Wave message class
+ */
+function getDefaultPriorityStatic(classConstructor) {
+    // retrieve the current metadata
+    const ret = Reflect.getMetadata(exports.METADATA_priority, classConstructor);
+    logger_1.log("protocol", `${classConstructor.name}: retrieving default priority => ${MessagePriority[ret]} (${ret})`, "silly");
+    return ret;
+}
+exports.getDefaultPriorityStatic = getDefaultPriorityStatic;

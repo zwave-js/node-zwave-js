@@ -1,7 +1,8 @@
-import { expectedResponse, FunctionType, Message, MessageType, messageTypes } from "../message/Message";
+import { expectedResponse, FunctionType, Message, MessagePriority, MessageType, messageTypes, priority } from "../message/Message";
 
 @messageTypes(MessageType.Request, FunctionType.GetSUCNodeId)
 @expectedResponse(FunctionType.GetSUCNodeId)
+@priority(MessagePriority.Controller)
 export class GetSUCNodeIdRequest extends Message {
 
 }

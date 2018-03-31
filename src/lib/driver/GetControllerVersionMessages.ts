@@ -1,4 +1,4 @@
-import { expectedResponse, FunctionType, Message,  MessageType, messageTypes} from "../message/Message";
+import { expectedResponse, FunctionType, Message,  MessagePriority, MessageType, messageTypes, priority} from "../message/Message";
 import { cpp2js } from "../util/strings";
 
 export enum ControllerTypes {
@@ -15,6 +15,7 @@ export enum ControllerTypes {
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerVersion)
 @expectedResponse(FunctionType.GetControllerVersion)
+@priority(MessagePriority.Controller)
 export class GetControllerVersionRequest extends Message {
 
 }

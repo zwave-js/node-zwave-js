@@ -1,4 +1,4 @@
-import { expectedResponse, FunctionType, Message, MessageType, messageTypes } from "../message/Message";
+import { expectedResponse, FunctionType, Message, MessagePriority, MessageType, messageTypes, priority } from "../message/Message";
 
 const MAX_NODES = 232; // max number of nodes in a ZWave network
 const NUM_NODE_BYTES = MAX_NODES / 8; // corresponding number of bytes in a bit mask
@@ -12,6 +12,7 @@ export const enum InitCapabilityFlags {
 
 @messageTypes(MessageType.Request, FunctionType.GetSerialApiInitData)
 @expectedResponse(FunctionType.GetSerialApiInitData)
+@priority(MessagePriority.Controller)
 export class GetSerialApiInitDataRequest extends Message {
 
 }

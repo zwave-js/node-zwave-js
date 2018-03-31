@@ -1,4 +1,4 @@
-import { expectedResponse, FunctionType, Message,  MessageType, messageTypes} from "../message/Message";
+import { expectedResponse, FunctionType, Message,  MessagePriority, MessageType, messageTypes, priority} from "../message/Message";
 import { num2hex, padStart } from "../util/strings";
 
 const NUM_FUNCTIONS = 256;
@@ -6,6 +6,7 @@ const NUM_FUNCTION_BYTES = NUM_FUNCTIONS / 8;
 
 @messageTypes(MessageType.Request, FunctionType.GetSerialApiCapabilities)
 @expectedResponse(FunctionType.GetSerialApiCapabilities)
+@priority(MessagePriority.Controller)
 export class GetSerialApiCapabilitiesRequest extends Message {
 
 }

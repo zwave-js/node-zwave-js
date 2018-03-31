@@ -7,6 +7,7 @@ export enum ZWaveErrorCodes {
 	Driver_NotReady,
 	Driver_InvalidDataReceived,
 	Driver_NotSupported,
+	Driver_NoPriority,
 }
 
 export class ZWaveError extends Error {

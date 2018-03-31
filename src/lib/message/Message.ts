@@ -177,6 +177,31 @@ function computeChecksum(message: Buffer): number {
 	return ret;
 }
 
+/** The priority of messages, sorted from high (0) to low (>0) */
+export enum MessagePriority {
+	// Controller commands are not to be interrupted and usually finish quickly
+	Controller = 0,
+	// The security queue is the highest actual priority because secured messages
+	// require an encryption handshake before sending new messages
+	Security,
+	// Pings (NoOP) are used for device probing at startup and for network diagnostics
+	Ping,
+	// Multistep controller commands typically require user interaction but still
+	// should happen at a higher priority than any node data exchange
+	MultistepController,
+	// Whenever sleeping devices wake up, their queued messages must be handled quickly
+	// because they want to go to sleep soon. So prioritize them over non-sleeping devices
+	WakeUp,
+	// Normal operation and node data exchange
+	Normal,
+	// Node querying is expensive and happens whenever a new node is discovered.
+	// In order to keep the system responsive, give them a lower priority
+	NodeQuery,
+	// Some devices need their state to be polled at regular intervals. Only do that when
+	// nothing else needs to be done
+	Poll,
+}
+
 export enum MessageHeaders {
 	SOF = 0x01,
 	ACK = 0x06,
@@ -348,6 +373,7 @@ export enum FunctionType {
 export const METADATA_messageTypes = Symbol("messageTypes");
 export const METADATA_messageTypeMap = Symbol("messageTypeMap");
 export const METADATA_expectedResponse = Symbol("expectedResponse");
+export const METADATA_priority = Symbol("priority");
 // tslint:enable:variable-name
 
 // Pre-create the lookup maps for the contructors
@@ -460,5 +486,38 @@ export function getExpectedResponseStatic<T extends Constructable<Message>>(clas
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_expectedResponse, classConstructor);
 	log("protocol", `${classConstructor.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
+	return ret;
+}
+
+/**
+ * Defines the default priority associated with a Z-Wave message
+ */
+export function priority(prio: MessagePriority): ClassDecorator {
+	return (messageClass) => {
+		log("protocol", `${messageClass.name}: defining default priority ${MessagePriority[prio]} (${prio})`, "silly");
+		// and store the metadata
+		Reflect.defineMetadata(METADATA_priority, prio, messageClass);
+	};
+}
+
+/**
+ * Retrieves the default priority defined for a Z-Wave message class
+ */
+export function getDefaultPriority<T extends Message>(messageClass: T): MessagePriority {
+	// get the class constructor
+	const constr = messageClass.constructor;
+	// retrieve the current metadata
+	const ret = Reflect.getMetadata(METADATA_priority, constr);
+	log("protocol", `${constr.name}: retrieving default priority => ${MessagePriority[ret]} (${ret})`, "silly");
+	return ret;
+}
+
+/**
+ * Retrieves the function type defined for a Z-Wave message class
+ */
+export function getDefaultPriorityStatic<T extends Constructable<Message>>(classConstructor: T): MessagePriority {
+	// retrieve the current metadata
+	const ret = Reflect.getMetadata(METADATA_priority, classConstructor);
+	log("protocol", `${classConstructor.name}: retrieving default priority => ${MessagePriority[ret]} (${ret})`, "silly");
 	return ret;
 }

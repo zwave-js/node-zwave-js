@@ -1,4 +1,4 @@
-import { expectedResponse, FunctionType, Message,  MessageType, messageTypes} from "../message/Message";
+import { expectedResponse, FunctionType, Message,  MessagePriority, MessageType, messageTypes, priority} from "../message/Message";
 
 const enum ControllerCapabilityFlags {
 	Secondary = 1 << 0, // Controller is a secondary
@@ -10,6 +10,7 @@ const enum ControllerCapabilityFlags {
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerCapabilities)
 @expectedResponse(FunctionType.GetControllerCapabilities)
+@priority(MessagePriority.Controller)
 export class GetControllerCapabilitiesRequest extends Message {
 
 }
