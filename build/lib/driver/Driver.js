@@ -128,7 +128,8 @@ class Driver extends events_1.EventEmitter {
             this.emit("driver ready");
             // Now interview all nodes
             for (const node of this._controller.nodes.values()) {
-                node.beginInterview();
+                // TODO: retry on failure or something...
+                node.interview().catch(e => "node interview failed: " + e.message);
             }
         });
     }
@@ -348,11 +349,16 @@ class Driver extends events_1.EventEmitter {
     }
     handleNAK() {
         // TODO: what to do with this NAK?
-        logger_1.log("io", "NAK received", "debug");
+        logger_1.log("io", "NAK received. TODO: handle it", "warn");
     }
     handleCAN() {
         // TODO: what to do with this CAN?
-        logger_1.log("io", "CAN received", "debug");
+        logger_1.log("io", "CAN received - dropping current transaction. TODO: handle retransmission", "warn");
+        if (this.currentTransaction != null
+            && this.currentTransaction.promise != null) {
+            logger_1.log("io", "  the dropped message is " + strings_1.stringify(this.currentTransaction.message), "warn");
+            this.currentTransaction.promise.reject(new ZWaveError_1.ZWaveError("The message was dropped by the controller", ZWaveError_1.ZWaveErrorCodes.Controller_MessageDropped));
+        }
     }
     // tslint:enable:unified-signatures
     sendMessage(msg, priorityOrCheck, supportCheck) {
@@ -388,8 +394,8 @@ class Driver extends events_1.EventEmitter {
             // create the transaction and enqueue it
             const promise = defer_promise_1.createDeferredPromise();
             const transaction = new Transaction_1.Transaction(msg, promise, priority);
-            logger_1.log("io", `added message to the send queue, new length = ${this.sendQueue.length}`, "debug");
             this.sendQueue.add(transaction);
+            logger_1.log("io", `added message to the send queue, new length = ${this.sendQueue.length}`, "debug");
             // start sending now (maybe)
             setImmediate(() => this.workOffSendQueue());
             return promise;

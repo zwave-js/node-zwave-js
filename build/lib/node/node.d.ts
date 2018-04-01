@@ -26,7 +26,7 @@ export declare class Node {
     private controllableCCs;
     /** This tells us which interview stage was last completed */
     interviewStage: InterviewStage;
-    beginInterview(): Promise<void>;
+    interview(): Promise<void>;
     private queryProtocolInfo();
 }
 export declare enum InterviewStage {

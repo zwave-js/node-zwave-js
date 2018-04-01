@@ -160,7 +160,8 @@ export class Driver extends EventEmitter {
 
 		// Now interview all nodes
 		for (const node of this._controller.nodes.values()) {
-			node.beginInterview();
+			// TODO: retry on failure or something...
+			node.interview().catch(e => "node interview failed: " + e.message);
 		}
 	}
 
@@ -416,12 +417,22 @@ export class Driver extends EventEmitter {
 
 	private handleNAK() {
 		// TODO: what to do with this NAK?
-		log("io", "NAK received", "debug");
+		log("io", "NAK received. TODO: handle it", "warn");
 	}
 
 	private handleCAN() {
 		// TODO: what to do with this CAN?
-		log("io", "CAN received", "debug");
+		log("io", "CAN received - dropping current transaction. TODO: handle retransmission", "warn");
+		if (
+			this.currentTransaction != null
+			&& this.currentTransaction.promise != null
+		) {
+			log("io", "  the dropped message is " + stringify(this.currentTransaction.message), "warn");
+			this.currentTransaction.promise.reject(new ZWaveError(
+				"The message was dropped by the controller",
+				ZWaveErrorCodes.Controller_MessageDropped,
+			));
+		}
 	}
 
 	// tslint:disable:unified-signatures
@@ -504,8 +515,8 @@ export class Driver extends EventEmitter {
 			priority,
 		);
 
-		log("io", `added message to the send queue, new length = ${this.sendQueue.length}`, "debug");
 		this.sendQueue.add(transaction);
+		log("io", `added message to the send queue, new length = ${this.sendQueue.length}`, "debug");
 		// start sending now (maybe)
 		setImmediate(() => this.workOffSendQueue());
 

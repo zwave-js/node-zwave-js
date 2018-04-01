@@ -66,7 +66,7 @@ export class Node {
 
 //#endregion
 
-	public async beginInterview() {
+	public async interview() {
 		log("controller", `${this.logPrefix}beginning interview... last completed step: ${InterviewStage[this.interviewStage]}`, "debug");
 		if (this.interviewStage === InterviewStage.None) {
 			// do a full interview starting with the protocol info

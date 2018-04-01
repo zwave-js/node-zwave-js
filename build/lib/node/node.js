@@ -49,7 +49,7 @@ class Node {
         return this._isBeaming;
     }
     //#endregion
-    beginInterview() {
+    interview() {
         return __awaiter(this, void 0, void 0, function* () {
             logger_1.log("controller", `${this.logPrefix}beginning interview... last completed step: ${InterviewStage[this.interviewStage]}`, "debug");
             if (this.interviewStage === InterviewStage.None) {

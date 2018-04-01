@@ -10,6 +10,7 @@ var ZWaveErrorCodes;
     ZWaveErrorCodes[ZWaveErrorCodes["Driver_InvalidDataReceived"] = 5] = "Driver_InvalidDataReceived";
     ZWaveErrorCodes[ZWaveErrorCodes["Driver_NotSupported"] = 6] = "Driver_NotSupported";
     ZWaveErrorCodes[ZWaveErrorCodes["Driver_NoPriority"] = 7] = "Driver_NoPriority";
+    ZWaveErrorCodes[ZWaveErrorCodes["Controller_MessageDropped"] = 8] = "Controller_MessageDropped";
 })(ZWaveErrorCodes = exports.ZWaveErrorCodes || (exports.ZWaveErrorCodes = {}));
 class ZWaveError extends Error {
     constructor(message, code) {
