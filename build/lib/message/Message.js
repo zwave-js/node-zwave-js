@@ -93,6 +93,14 @@ class Message {
         // return the total number of bytes in this message
         return messageLength;
     }
+    /** Returns the slice of data which represents the message payload */
+    static getPayload(data) {
+        // we assume the message has been tested already for completeness
+        const remainingLength = data[1];
+        const messageLength = remainingLength + 2;
+        const payloadLength = messageLength - 5;
+        return data.slice(4, 4 + payloadLength);
+    }
     toJSON() {
         return this.toJSONInternal();
     }
@@ -367,7 +375,7 @@ exports.getFunctionTypeStatic = getFunctionTypeStatic;
  * Looks up the message constructor for a given message type and function type
  */
 function getMessageConstructor(messageType, functionType) {
-    // also store it in the Message class for lookup purposes
+    // Retrieve the constructor map from the Message class
     const functionTypeMap = Reflect.getMetadata(exports.METADATA_messageTypeMap, Message);
     if (functionTypeMap != null)
         return functionTypeMap.get(getMessageTypeMapKey(messageType, functionType));

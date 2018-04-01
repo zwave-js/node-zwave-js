@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const CommandClass_1 = require("../commandclass/CommandClass");
+const SendDataMessages_1 = require("../commandclass/SendDataMessages");
 const strings_1 = require("../util/strings");
 var BasicDeviceClasses;
 (function (BasicDeviceClasses) {
@@ -84,8 +84,8 @@ function defineGeneric(name, mandatorySupportedCCs, mandatoryControlCCs, ...spec
     if (specificDeviceClasses == null)
         specificDeviceClasses = [];
     // All devices must support the BASIC command class
-    if (mandatorySupportedCCs.indexOf(CommandClass_1.CommandClasses.Basic) === -1)
-        mandatorySupportedCCs.unshift(CommandClass_1.CommandClasses.Basic);
+    if (mandatorySupportedCCs.indexOf(SendDataMessages_1.CommandClasses.Basic) === -1)
+        mandatorySupportedCCs.unshift(SendDataMessages_1.CommandClasses.Basic);
     // All devices have a non-specific version
     if (!specificDeviceClasses.some(spec => spec.key === SpecificDeviceClass.NOT_USED.key)) {
         specificDeviceClasses.unshift(SpecificDeviceClass.NOT_USED);
@@ -107,7 +107,7 @@ class DeviceClass {
             }, []);
         // remove basic CC if it's forbidden by the specific class
         if (specific.basicCCForbidden) {
-            const basicIndex = this._mandatorySupportedCCs.indexOf(CommandClass_1.CommandClasses.Basic);
+            const basicIndex = this._mandatorySupportedCCs.indexOf(SendDataMessages_1.CommandClasses.Basic);
             if (basicIndex > -1)
                 this._mandatorySupportedCCs.splice(basicIndex, 1);
         }
@@ -130,8 +130,8 @@ class DeviceClass {
             basic: BasicDeviceClasses[this.basic],
             generic: this.generic.name,
             specific: this.specific.name,
-            mandatorySupportedCCs: this._mandatorySupportedCCs.map(cc => CommandClass_1.CommandClasses[cc]),
-            mandatoryControlCCs: this._mandatoryControlCCs.map(cc => CommandClass_1.CommandClasses[cc]),
+            mandatorySupportedCCs: this._mandatorySupportedCCs.map(cc => SendDataMessages_1.CommandClasses[cc]),
+            mandatoryControlCCs: this._mandatoryControlCCs.map(cc => SendDataMessages_1.CommandClasses[cc]),
         };
     }
 }
@@ -139,290 +139,290 @@ exports.DeviceClass = DeviceClass;
 // =================================================
 // Here the definitions for all device classes begin
 defineGeneric("Alarm Sensor", null, null, new SpecificDeviceClass("Basic Routing Alarm Sensor", 0x01, [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
-    CommandClass_1.CommandClasses.Association,
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses.Association,
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ], [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
 ]), new SpecificDeviceClass("Routing Alarm Sensor", 0x02, [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
-    CommandClass_1.CommandClasses.Association,
-    CommandClass_1.CommandClasses.Battery,
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses.Association,
+    SendDataMessages_1.CommandClasses.Battery,
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ], [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
 ]), new SpecificDeviceClass("Basic Zensor Net Alarm Sensor", 0x03, [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ], [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
 ]), new SpecificDeviceClass("Zensor Net Alarm Sensor", 0x04, [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
-    CommandClass_1.CommandClasses.Battery,
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses.Battery,
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ], [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
 ]), new SpecificDeviceClass("Advanced Zensor Net Alarm Sensor", 0x05, [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
-    CommandClass_1.CommandClasses.Association,
-    CommandClass_1.CommandClasses.Battery,
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses.Association,
+    SendDataMessages_1.CommandClasses.Battery,
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ], [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
 ]), new SpecificDeviceClass("Basic Routing Smoke Sensor", 0x06, [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
-    CommandClass_1.CommandClasses.Association,
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses.Association,
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ], [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
 ]), new SpecificDeviceClass("Routing Smoke Sensor", 0x07, [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
-    CommandClass_1.CommandClasses.Association,
-    CommandClass_1.CommandClasses.Battery,
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses.Association,
+    SendDataMessages_1.CommandClasses.Battery,
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ], [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
 ]), new SpecificDeviceClass("Basic Zensor Net Smoke Sensor", 0x08, [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ], [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
 ]), new SpecificDeviceClass("Zensor Net Smoke Sensor", 0x09, [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
-    CommandClass_1.CommandClasses.Battery,
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses.Battery,
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ], [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
 ]), new SpecificDeviceClass("Advanced Zensor Net Smoke Sensor", 0x0A, [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
-    CommandClass_1.CommandClasses.Association,
-    CommandClass_1.CommandClasses.Battery,
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses.Association,
+    SendDataMessages_1.CommandClasses.Battery,
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ], [
-    CommandClass_1.CommandClasses["Alarm Sensor"],
+    SendDataMessages_1.CommandClasses["Alarm Sensor"],
 ]));
 defineGeneric("AV Control Point", null, null, new SpecificDeviceClass("Doorbell", 0x12, [
-    CommandClass_1.CommandClasses["Binary Sensor"],
-    CommandClass_1.CommandClasses.Association,
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Binary Sensor"],
+    SendDataMessages_1.CommandClasses.Association,
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ]), new SpecificDeviceClass("Satellite Receiver", 0x04, [
-    CommandClass_1.CommandClasses["Simple AV Control"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Simple AV Control"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ]), new SpecificDeviceClass("Satellite Receiver V2", 0x11, [
     // Basic is automatically included
-    CommandClass_1.CommandClasses["Simple AV Control"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Simple AV Control"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ]));
-defineGeneric("Binary Sensor", [CommandClass_1.CommandClasses["Binary Sensor"]], null, new SpecificDeviceClass("Routing Binary Sensor", 0x01));
-defineGeneric("Binary Switch", [CommandClass_1.CommandClasses["Binary Switch"]], null, new SpecificDeviceClass("Binary Power Switch", 0x01, [
-    CommandClass_1.CommandClasses["All Switch"],
+defineGeneric("Binary Sensor", [SendDataMessages_1.CommandClasses["Binary Sensor"]], null, new SpecificDeviceClass("Routing Binary Sensor", 0x01));
+defineGeneric("Binary Switch", [SendDataMessages_1.CommandClasses["Binary Switch"]], null, new SpecificDeviceClass("Binary Power Switch", 0x01, [
+    SendDataMessages_1.CommandClasses["All Switch"],
 ]), new SpecificDeviceClass("Binary Scene Switch", 0x03, [
-    CommandClass_1.CommandClasses["All Switch"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses["Scene Activation"],
-    CommandClass_1.CommandClasses["Scene Actuator Configuration"],
+    SendDataMessages_1.CommandClasses["All Switch"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses["Scene Activation"],
+    SendDataMessages_1.CommandClasses["Scene Actuator Configuration"],
 ]), new SpecificDeviceClass("Binary Tunable Color Light", 0x02, [
-    CommandClass_1.CommandClasses["All Switch"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses["Color Switch"],
+    SendDataMessages_1.CommandClasses["All Switch"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses["Color Switch"],
 ]), new SpecificDeviceClass("Irrigation Control", 0x07));
 defineGeneric("Display", null, null, new SpecificDeviceClass("Simple Display", 0x01, [
-    CommandClass_1.CommandClasses["Screen Attributes"],
-    CommandClass_1.CommandClasses["Screen Meta Data"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Screen Attributes"],
+    SendDataMessages_1.CommandClasses["Screen Meta Data"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ]));
 defineGeneric("Entry Control", null, null, new SpecificDeviceClass("Door Lock", 0x01, [
-    CommandClass_1.CommandClasses.Lock,
+    SendDataMessages_1.CommandClasses.Lock,
 ]), new SpecificDeviceClass("Advanced Door Lock", 0x02, [
-    CommandClass_1.CommandClasses["Door Lock"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Door Lock"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ]), new SpecificDeviceClass("Secure Keypad Door Lock", 0x03, [
-    CommandClass_1.CommandClasses["Door Lock"],
-    CommandClass_1.CommandClasses["User Code"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Security,
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Door Lock"],
+    SendDataMessages_1.CommandClasses["User Code"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Security,
+    SendDataMessages_1.CommandClasses.Version,
 ]), new SpecificDeviceClass("Secure Lockbox", 0x0A, [
-    CommandClass_1.CommandClasses.Alarm,
-    CommandClass_1.CommandClasses.Association,
-    CommandClass_1.CommandClasses["Door Lock"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Security,
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses.Alarm,
+    SendDataMessages_1.CommandClasses.Association,
+    SendDataMessages_1.CommandClasses["Door Lock"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Security,
+    SendDataMessages_1.CommandClasses.Version,
 ], null, true /* No BASIC CC */), new SpecificDeviceClass("Secure Keypad", 0x0B, [
-    CommandClass_1.CommandClasses["Device Reset Locally"],
-    CommandClass_1.CommandClasses["Entry Control"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Security,
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Device Reset Locally"],
+    SendDataMessages_1.CommandClasses["Entry Control"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Security,
+    SendDataMessages_1.CommandClasses.Version,
 ]));
 defineGeneric("Meter", null, null, new SpecificDeviceClass("Simple Meter", 0x01, [
-    CommandClass_1.CommandClasses.Meter,
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses.Meter,
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ]), new SpecificDeviceClass("Advanced Energy Control", 0x02, [
-    CommandClass_1.CommandClasses["Meter Table Monitor"],
-    CommandClass_1.CommandClasses["Meter Table Configuration"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Meter Table Monitor"],
+    SendDataMessages_1.CommandClasses["Meter Table Configuration"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ]));
-defineGeneric("Multilevel Sensor", [CommandClass_1.CommandClasses["Multilevel Sensor"]], null, new SpecificDeviceClass("Routing Multilevel Sensor", 0x01));
-defineGeneric("Multilevel Switch", [CommandClass_1.CommandClasses["Multilevel Switch"]], null, new SpecificDeviceClass("Multilevel Power Switch", 0x01, [
-    CommandClass_1.CommandClasses["All Switch"],
+defineGeneric("Multilevel Sensor", [SendDataMessages_1.CommandClasses["Multilevel Sensor"]], null, new SpecificDeviceClass("Routing Multilevel Sensor", 0x01));
+defineGeneric("Multilevel Switch", [SendDataMessages_1.CommandClasses["Multilevel Switch"]], null, new SpecificDeviceClass("Multilevel Power Switch", 0x01, [
+    SendDataMessages_1.CommandClasses["All Switch"],
 ]), new SpecificDeviceClass("Multilevel Scene Switch", 0x04, [
-    CommandClass_1.CommandClasses["All Switch"],
-    CommandClass_1.CommandClasses["Scene Activation"],
-    CommandClass_1.CommandClasses["Scene Actuator Configuration"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses["All Switch"],
+    SendDataMessages_1.CommandClasses["Scene Activation"],
+    SendDataMessages_1.CommandClasses["Scene Actuator Configuration"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
 ]), new SpecificDeviceClass("Multiposition Motor", 0x03, [
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ]), new SpecificDeviceClass("Motor Control Class A", 0x05, [
-    CommandClass_1.CommandClasses["Binary Switch"],
-    CommandClass_1.CommandClasses["Multilevel Switch"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Binary Switch"],
+    SendDataMessages_1.CommandClasses["Multilevel Switch"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ]), new SpecificDeviceClass("Motor Control Class B", 0x06, [
-    CommandClass_1.CommandClasses["Binary Switch"],
-    CommandClass_1.CommandClasses["Multilevel Switch"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Binary Switch"],
+    SendDataMessages_1.CommandClasses["Multilevel Switch"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ]), new SpecificDeviceClass("Motor Control Class C", 0x07, [
-    CommandClass_1.CommandClasses["Binary Switch"],
-    CommandClass_1.CommandClasses["Multilevel Switch"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Binary Switch"],
+    SendDataMessages_1.CommandClasses["Multilevel Switch"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ]));
-defineGeneric("Pulse Meter", [CommandClass_1.CommandClasses["Pulse Meter"]], null);
+defineGeneric("Pulse Meter", [SendDataMessages_1.CommandClasses["Pulse Meter"]], null);
 defineGeneric("Remote Controller", null, null, new SpecificDeviceClass("Portable Remote Controller", 0x01), new SpecificDeviceClass("Portable Scene Controller", 0x02, [
-    CommandClass_1.CommandClasses.Association,
-    CommandClass_1.CommandClasses["Scene Controller Configuration"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Association,
+    SendDataMessages_1.CommandClasses["Scene Controller Configuration"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
 ], [
-    CommandClass_1.CommandClasses["Scene Activation"],
+    SendDataMessages_1.CommandClasses["Scene Activation"],
 ]), new SpecificDeviceClass("Portable Installer Tool", 0x03, [
-    CommandClass_1.CommandClasses["Controller Replication"],
-    CommandClass_1.CommandClasses["Multi Command"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Controller Replication"],
+    SendDataMessages_1.CommandClasses["Multi Command"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ], [
-    CommandClass_1.CommandClasses.Association,
-    CommandClass_1.CommandClasses.Configuration,
-    CommandClass_1.CommandClasses["Controller Replication"],
-    CommandClass_1.CommandClasses["Multi Channel"],
-    CommandClass_1.CommandClasses["Multi Channel Association"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
-    CommandClass_1.CommandClasses["Wake Up"],
+    SendDataMessages_1.CommandClasses.Association,
+    SendDataMessages_1.CommandClasses.Configuration,
+    SendDataMessages_1.CommandClasses["Controller Replication"],
+    SendDataMessages_1.CommandClasses["Multi Channel"],
+    SendDataMessages_1.CommandClasses["Multi Channel Association"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Wake Up"],
 ]));
 defineGeneric("Remote Switch", null, null, new SpecificDeviceClass("Binary Remote Switch", 0x01, null, [
-    CommandClass_1.CommandClasses["Binary Switch"],
+    SendDataMessages_1.CommandClasses["Binary Switch"],
 ]), new SpecificDeviceClass("Multilevel Remote Switch", 0x02, null, [
-    CommandClass_1.CommandClasses["Multilevel Switch"],
+    SendDataMessages_1.CommandClasses["Multilevel Switch"],
 ]), new SpecificDeviceClass("Binary Toggle Remote Switch", 0x03, null, [
-    CommandClass_1.CommandClasses["Binary Toggle Switch"],
+    SendDataMessages_1.CommandClasses["Binary Toggle Switch"],
 ]), new SpecificDeviceClass("Multilevel Toggle Remote Switch", 0x04, null, [
-    CommandClass_1.CommandClasses["Multilevel Toggle Switch"],
+    SendDataMessages_1.CommandClasses["Multilevel Toggle Switch"],
 ]));
 defineGeneric("Repeater Slave", null, null, new SpecificDeviceClass("Basic Repeater Slave", 0x01));
 defineGeneric("Semi-Interoperable", [
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
-    CommandClass_1.CommandClasses.Proprietary,
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses.Proprietary,
 ], null, new SpecificDeviceClass("Energy Production", 0x01, [
-    CommandClass_1.CommandClasses["Energy Production"],
+    SendDataMessages_1.CommandClasses["Energy Production"],
 ]));
-defineGeneric("Static Controller", null, [CommandClass_1.CommandClasses.Basic], new SpecificDeviceClass("PC Controller", 0x01), new SpecificDeviceClass("Scene Controller", 0x02, [
-    CommandClass_1.CommandClasses.Association,
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses["Scene Controller Configuration"],
+defineGeneric("Static Controller", null, [SendDataMessages_1.CommandClasses.Basic], new SpecificDeviceClass("PC Controller", 0x01), new SpecificDeviceClass("Scene Controller", 0x02, [
+    SendDataMessages_1.CommandClasses.Association,
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses["Scene Controller Configuration"],
 ], [
-    CommandClass_1.CommandClasses["Scene Activation"],
+    SendDataMessages_1.CommandClasses["Scene Activation"],
 ]), new SpecificDeviceClass("Static Installer Tool", 0x03, [
-    CommandClass_1.CommandClasses["Controller Replication"],
-    CommandClass_1.CommandClasses["Multi Command"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Controller Replication"],
+    SendDataMessages_1.CommandClasses["Multi Command"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ], [
-    CommandClass_1.CommandClasses.Association,
-    CommandClass_1.CommandClasses.Configuration,
-    CommandClass_1.CommandClasses["Controller Replication"],
-    CommandClass_1.CommandClasses["Multi Channel"],
-    CommandClass_1.CommandClasses["Multi Channel Association"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
-    CommandClass_1.CommandClasses["Wake Up"],
+    SendDataMessages_1.CommandClasses.Association,
+    SendDataMessages_1.CommandClasses.Configuration,
+    SendDataMessages_1.CommandClasses["Controller Replication"],
+    SendDataMessages_1.CommandClasses["Multi Channel"],
+    SendDataMessages_1.CommandClasses["Multi Channel Association"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Wake Up"],
 ]), new SpecificDeviceClass("Gateway", 0x07, [
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Security,
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Security,
+    SendDataMessages_1.CommandClasses.Version,
 ], [
-    CommandClass_1.CommandClasses.Security,
-    CommandClass_1.CommandClasses["Multi Channel"],
+    SendDataMessages_1.CommandClasses.Security,
+    SendDataMessages_1.CommandClasses["Multi Channel"],
 ]));
 defineGeneric("Thermostat", null, null, new SpecificDeviceClass("Thermostat Heating", 0x01), new SpecificDeviceClass("Thermostat General", 0x02, [
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses["Thermostat Mode"],
-    CommandClass_1.CommandClasses["Thermostat Setpoint"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses["Thermostat Mode"],
+    SendDataMessages_1.CommandClasses["Thermostat Setpoint"],
 ]), new SpecificDeviceClass("Thermostat General V2", 0x06, [
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses["Thermostat Mode"],
-    CommandClass_1.CommandClasses["Thermostat Setpoint"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses["Thermostat Mode"],
+    SendDataMessages_1.CommandClasses["Thermostat Setpoint"],
+    SendDataMessages_1.CommandClasses.Version,
 ]), new SpecificDeviceClass("Setback Schedule Thermostat", 0x03, [
-    CommandClass_1.CommandClasses["Climate Control Schedule"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses["Multi Command"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Climate Control Schedule"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses["Multi Command"],
+    SendDataMessages_1.CommandClasses.Version,
 ], [
-    CommandClass_1.CommandClasses["Climate Control Schedule"],
-    CommandClass_1.CommandClasses["Multi Command"],
-    CommandClass_1.CommandClasses.Clock,
+    SendDataMessages_1.CommandClasses["Climate Control Schedule"],
+    SendDataMessages_1.CommandClasses["Multi Command"],
+    SendDataMessages_1.CommandClasses.Clock,
 ]), new SpecificDeviceClass("Setback Thermostat", 0x05, [
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses["Thermostat Mode"],
-    CommandClass_1.CommandClasses["Thermostat Setpoint"],
-    CommandClass_1.CommandClasses["Thermostat Setback"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses["Thermostat Mode"],
+    SendDataMessages_1.CommandClasses["Thermostat Setpoint"],
+    SendDataMessages_1.CommandClasses["Thermostat Setback"],
+    SendDataMessages_1.CommandClasses.Version,
 ]), new SpecificDeviceClass("Setpoint Thermostat", 0x04, [
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses["Multi Command"],
-    CommandClass_1.CommandClasses["Thermostat Setpoint"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses["Multi Command"],
+    SendDataMessages_1.CommandClasses["Thermostat Setpoint"],
+    SendDataMessages_1.CommandClasses.Version,
 ], [
-    CommandClass_1.CommandClasses["Multi Command"],
-    CommandClass_1.CommandClasses["Thermostat Setpoint"],
+    SendDataMessages_1.CommandClasses["Multi Command"],
+    SendDataMessages_1.CommandClasses["Thermostat Setpoint"],
 ]));
 defineGeneric("Toggle Switch", null, null, new SpecificDeviceClass("Binary Toggle Switch", 0x01, [
-    CommandClass_1.CommandClasses["Binary Switch"],
-    CommandClass_1.CommandClasses["Binary Toggle Switch"],
+    SendDataMessages_1.CommandClasses["Binary Switch"],
+    SendDataMessages_1.CommandClasses["Binary Toggle Switch"],
 ]), new SpecificDeviceClass("Multilevel Toggle Switch", 0x02, [
-    CommandClass_1.CommandClasses["Multilevel Switch"],
-    CommandClass_1.CommandClasses["Multilevel Toggle Switch"],
+    SendDataMessages_1.CommandClasses["Multilevel Switch"],
+    SendDataMessages_1.CommandClasses["Multilevel Toggle Switch"],
 ]));
 defineGeneric("Ventilation", null, null, new SpecificDeviceClass("Residential Heat Recovery Ventilation", 0x01, [
-    CommandClass_1.CommandClasses["HRV Control"],
-    CommandClass_1.CommandClasses["HRV Status"],
-    CommandClass_1.CommandClasses["Manufacturer Specific"],
-    CommandClass_1.CommandClasses.Version,
+    SendDataMessages_1.CommandClasses["HRV Control"],
+    SendDataMessages_1.CommandClasses["HRV Status"],
+    SendDataMessages_1.CommandClasses["Manufacturer Specific"],
+    SendDataMessages_1.CommandClasses.Version,
 ]));
 defineGeneric("Window Covering", null, null, new SpecificDeviceClass("Simple Window Covering Control", 0x01, [
-    CommandClass_1.CommandClasses["Basic Window Covering"],
+    SendDataMessages_1.CommandClasses["Basic Window Covering"],
 ]));
 // /* Device class Entry Control */
 // #define GENERIC_TYPE_ENTRY_CONTROL                                                       0x40 /*Entry Control*/

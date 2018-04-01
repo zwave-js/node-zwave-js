@@ -9,12 +9,12 @@ import * as proxyquire from "proxyquire";
 import { MockRequestMessageWithExpectation, MockRequestMessageWithExpectation_FunctionType, MockRequestMessageWithoutExpectation, MockResponseMessage, MockSerialPort } from "../../../test/mocks";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { getExpectedResponse, getExpectedResponseStatic, Message, MessageHeaders } from "../message/Message";
-import { Driver as OriginalDriver, ZWaveOptions } from "./Driver";
+import { DeepPartial, Driver as OriginalDriver, ZWaveOptions } from "./Driver";
 
 const { Driver } = proxyquire("./Driver", {
 	serialport: MockSerialPort,
 }) as {
-		Driver: OriginalDriver & { new(port: string, options?: ZWaveOptions): OriginalDriver },
+		Driver: OriginalDriver & { new(port: string, options?: DeepPartial<ZWaveOptions>): OriginalDriver },
 	};
 
 const PORT_ADDRESS = "/tty/FAKE";
@@ -27,7 +27,7 @@ function assertZWaveError(actual: any, errorCode: ZWaveErrorCodes) {
 async function createAndStartDriver() {
 	const clock = useFakeTimers();
 
-	const driver = new Driver(PORT_ADDRESS);
+	const driver = new Driver(PORT_ADDRESS, {skipInterview: true});
 	const startPromise = driver.start();
 	const portInstance = MockSerialPort.getInstance(PORT_ADDRESS);
 	portInstance.doOpen();
@@ -49,7 +49,7 @@ describe("lib/driver/Driver => ", () => {
 	describe("starting it => ", () => {
 
 		it("should open a new serialport", () => {
-			const driver = new Driver(PORT_ADDRESS);
+			const driver = new Driver(PORT_ADDRESS, {skipInterview: true});
 			// start the driver
 			driver.start();
 
@@ -59,7 +59,7 @@ describe("lib/driver/Driver => ", () => {
 		});
 
 		it("should only work once", () => {
-			const driver = new Driver(PORT_ADDRESS);
+			const driver = new Driver(PORT_ADDRESS, {skipInterview: true});
 			// start the driver twice
 			driver.start();
 			driver.start();
@@ -70,7 +70,7 @@ describe("lib/driver/Driver => ", () => {
 		});
 
 		it("the start promise should only be fulfilled after the port was opened", async () => {
-			const driver = new Driver(PORT_ADDRESS);
+			const driver = new Driver(PORT_ADDRESS, {skipInterview: true});
 
 			// start the driver
 			const fulfilledSpy = spy();
@@ -86,7 +86,7 @@ describe("lib/driver/Driver => ", () => {
 		});
 
 		it("the start promise should be rejected if the port opening fails", async () => {
-			const driver = new Driver(PORT_ADDRESS);
+			const driver = new Driver(PORT_ADDRESS, {skipInterview: true});
 
 			// start the driver
 			const startPromise = driver.start();
@@ -100,7 +100,7 @@ describe("lib/driver/Driver => ", () => {
 		});
 
 		it("after a failed start, starting again should not be possible", async () => {
-			const driver = new Driver(PORT_ADDRESS);
+			const driver = new Driver(PORT_ADDRESS, {skipInterview: true});
 
 			// start the driver
 			const startPromise = driver.start();
@@ -120,7 +120,7 @@ describe("lib/driver/Driver => ", () => {
 
 	describe("sending messages => ", () => {
 		it("should not be possible if the driver wasn't started", async () => {
-			const driver = new Driver(PORT_ADDRESS);
+			const driver = new Driver(PORT_ADDRESS, {skipInterview: true});
 
 			const msg = new Message();
 			await driver.sendMessage(msg).should.be.rejected
@@ -130,7 +130,7 @@ describe("lib/driver/Driver => ", () => {
 		});
 
 		it("should not be possible if the driver hasn't completed starting", async () => {
-			const driver = new Driver(PORT_ADDRESS);
+			const driver = new Driver(PORT_ADDRESS, {skipInterview: true});
 
 			// start the driver, but don't open the serial port yet
 			driver.start();
@@ -143,7 +143,7 @@ describe("lib/driver/Driver => ", () => {
 		});
 
 		it("should not be possible if the driver failed to start", async () => {
-			const driver = new Driver(PORT_ADDRESS);
+			const driver = new Driver(PORT_ADDRESS, {skipInterview: true});
 
 			// start the driver
 			const startPromise = driver.start();

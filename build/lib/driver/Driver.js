@@ -10,45 +10,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const events_1 = require("events");
 const SerialPort = require("serialport");
+const SendDataMessages_1 = require("../commandclass/SendDataMessages");
 const ZWaveError_1 = require("../error/ZWaveError");
 const Message_1 = require("../message/Message");
-const comparable_1 = require("../util/comparable");
 const defer_promise_1 = require("../util/defer-promise");
 const logger_1 = require("../util/logger");
 const object_polyfill_1 = require("../util/object-polyfill");
 const sorted_list_1 = require("../util/sorted-list");
 const strings_1 = require("../util/strings");
 const Controller_1 = require("./Controller");
-/** Returns a timestamp with nano-second precision */
-function highResTimestamp() {
-    const [s, ns] = process.hrtime();
-    return s * 1e9 + ns;
-}
-class Transaction {
-    constructor(message, promise, priority, timestamp = highResTimestamp(), ackPending = true, response) {
-        this.message = message;
-        this.promise = promise;
-        this.priority = priority;
-        this.timestamp = timestamp;
-        this.ackPending = ackPending;
-        this.response = response;
-    }
-    compareTo(other) {
-        // first sort by priority
-        if (this.priority < other.priority)
-            return -1;
-        else if (this.priority > other.priority)
-            return 1;
-        // for equal priority, sort by the timestamp
-        return comparable_1.compareNumberOrString(other.timestamp, this.timestamp);
-        // TODO: do we need to sort by the message itself?
-    }
-}
+const Transaction_1 = require("./Transaction");
 const defaultOptions = {
     timeouts: {
         ack: 1000,
         byte: 150,
     },
+    skipInterview: false,
 };
 function applyDefaultOptions(target, source) {
     target = target || {};
@@ -61,7 +38,7 @@ function applyDefaultOptions(target, source) {
                 // merge objects
                 target[key] = applyDefaultOptions(target[key], value);
             }
-            else if (typeof target[key] !== "undefined") {
+            else if (typeof target[key] === "undefined") {
                 // don't override single keys
                 target[key] = value;
             }
@@ -82,6 +59,10 @@ class Driver extends events_1.EventEmitter {
         this.port = port;
         this.options = options;
         this.sendQueue = new sorted_list_1.SortedList();
+        /** A map of handlers for all sorts of requests */
+        this.requestHandlers = new Map();
+        /** A map of handlers specifically for send data requests */
+        this.sendDataRequestHandlers = new Map();
         this._wasStarted = false;
         this._isOpen = false;
         this._wasDestroyed = false;
@@ -118,9 +99,10 @@ class Driver extends events_1.EventEmitter {
                 .on("open", () => {
                 logger_1.log("driver", "serial port opened", "debug");
                 this._isOpen = true;
-                resolve();
                 this.reset();
-                setImmediate(() => this.beginInterview());
+                resolve();
+                if (!this.options.skipInterview)
+                    setImmediate(() => this.beginInterview());
             })
                 .on("data", this.serialport_onData.bind(this))
                 .on("error", err => {
@@ -228,7 +210,14 @@ class Driver extends events_1.EventEmitter {
             }
             // parse a message - first find the correct constructor
             // tslint:disable-next-line:variable-name
-            const MessageConstructor = Message_1.Message.getConstructor(this.receiveBuffer);
+            let MessageConstructor;
+            // We introduce special handling for the SendData requests as those go a level deeper
+            if (SendDataMessages_1.SendDataRequest.isSendDataRequest(this.receiveBuffer)) {
+                MessageConstructor = SendDataMessages_1.SendDataRequest.getConstructor(this.receiveBuffer);
+            }
+            else {
+                MessageConstructor = Message_1.Message.getConstructor(this.receiveBuffer);
+            }
             const msg = new MessageConstructor();
             let readBytes;
             try {
@@ -283,8 +272,55 @@ class Driver extends events_1.EventEmitter {
         }
         // TODO: what to do with this message?
     }
+    /**
+     * Registers a handler for all kinds of request messages
+     * @param fnType The function type to register the handler for
+     * @param handler The request handler callback
+     */
+    registerRequestHandler(fnType, handler) {
+        if (fnType === Message_1.FunctionType.SendData) {
+            throw new Error("Cannot register a generic request handler for SendData requests. " +
+                "Use `registerSendDataRequestHandler()` instead!");
+        }
+        const handlers = this.requestHandlers.has(fnType) ? this.requestHandlers.get(fnType) : [];
+        handlers.push(handler);
+        logger_1.log("driver", `adding request handler for ${Message_1.FunctionType[fnType]} (${fnType})... ${handlers.length} registered`, "debug");
+        this.requestHandlers.set(fnType, handlers);
+    }
+    /**
+     * Registers a handler for SendData request messages
+     * @param cc The command class to register the handler for
+     * @param handler The request handler callback
+     */
+    registerSendDataRequestHandler(cc, handler) {
+        const handlers = this.sendDataRequestHandlers.has(cc) ? this.sendDataRequestHandlers.get(cc) : [];
+        handlers.push(handler);
+        logger_1.log("driver", `adding send data request handler for ${SendDataMessages_1.CommandClasses[cc]} (${cc})... ${handlers.length} registered`, "debug");
+        this.sendDataRequestHandlers.set(cc, handlers);
+    }
     handleRequest(msg) {
-        logger_1.log("TODO: implement request handler for messages", "warn");
+        let handled = false;
+        let handlers;
+        if (msg instanceof SendDataMessages_1.SendDataRequest) {
+            logger_1.log("driver", `handling send data request for ${Message_1.FunctionType[msg.functionType]} (${msg.functionType})`, "debug");
+            handlers = this.sendDataRequestHandlers.get(msg.cc);
+        }
+        else {
+            logger_1.log("driver", `handling request for ${Message_1.FunctionType[msg.functionType]} (${msg.functionType})`, "debug");
+            handlers = this.requestHandlers.get(msg.functionType);
+        }
+        if (handlers != null && handlers.length > 0) {
+            logger_1.log("driver", `  ${handlers.length} handler${handlers.length !== 1 ? "s" : ""} registered!`, "warn");
+            for (let i = 1; !handled && i <= handlers.length; i++) {
+                logger_1.log("driver", `  invoking handler #${i}`, "warn");
+                handled = handlers[i](msg);
+                if (handled)
+                    logger_1.log("driver", `  message was handled`, "warn");
+            }
+        }
+        else {
+            logger_1.log("driver", "  no handlers registered!", "warn");
+        }
     }
     handleACK() {
         // if we have a pending request waiting for the ACK, ACK it
@@ -350,7 +386,7 @@ class Driver extends events_1.EventEmitter {
             logger_1.log("driver", `sending message ${strings_1.stringify(msg)} with priority ${Message_1.MessagePriority[priority]} (${priority})`, "debug");
             // create the transaction and enqueue it
             const promise = defer_promise_1.createDeferredPromise();
-            const transaction = new Transaction(msg, promise, priority);
+            const transaction = new Transaction_1.Transaction(msg, promise, priority);
             logger_1.log("io", `added message to the send queue, new length = ${this.sendQueue.length}`, "debug");
             this.sendQueue.add(transaction);
             // start sending now (maybe)

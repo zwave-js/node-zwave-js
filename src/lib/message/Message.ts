@@ -142,6 +142,15 @@ export class Message {
 		return messageLength;
 	}
 
+	/** Returns the slice of data which represents the message payload */
+	public static getPayload(data: Buffer): Buffer {
+		// we assume the message has been tested already for completeness
+		const remainingLength = data[1];
+		const messageLength = remainingLength + 2;
+		const payloadLength = messageLength - 5;
+		return data.slice(4, 4 + payloadLength);
+	}
+
 	public toJSON() {
 		return this.toJSONInternal();
 	}
@@ -381,7 +390,6 @@ export const METADATA_expectedResponse = Symbol("expectedResponse");
 export const METADATA_priority = Symbol("priority");
 // tslint:enable:variable-name
 
-// Pre-create the lookup maps for the contructors
 type MessageTypeMap = Map<string, Constructable<Message>>;
 
 function getMessageTypeMapKey(messageType: MessageType, functionType: FunctionType): string {
@@ -456,7 +464,7 @@ export function getFunctionTypeStatic<T extends Constructable<Message>>(classCon
  * Looks up the message constructor for a given message type and function type
  */
 export function getMessageConstructor(messageType: MessageType, functionType: FunctionType): Constructable<Message> {
-	// also store it in the Message class for lookup purposes
+	// Retrieve the constructor map from the Message class
 	const functionTypeMap = Reflect.getMetadata(METADATA_messageTypeMap, Message) as MessageTypeMap;
 	if (functionTypeMap != null) return functionTypeMap.get(getMessageTypeMapKey(messageType, functionType));
 }

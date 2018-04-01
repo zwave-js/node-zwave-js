@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Message_1 = require("../message/Message");
+const CommandClass_1 = require("../commandclass/CommandClass");
 var TransmitOptions;
 (function (TransmitOptions) {
     TransmitOptions[TransmitOptions["NotSet"] = 0] = "NotSet";
@@ -20,6 +21,7 @@ var TransmitOptions;
     TransmitOptions[TransmitOptions["Explore"] = 32] = "Explore";
     TransmitOptions[TransmitOptions["DEFAULT"] = 37] = "DEFAULT";
 })(TransmitOptions = exports.TransmitOptions || (exports.TransmitOptions = {}));
+// TODO: what is this?
 var TransmitStatus;
 (function (TransmitStatus) {
     TransmitStatus[TransmitStatus["OK"] = 0] = "OK";
@@ -36,16 +38,27 @@ function getNextCallbackId() {
     return lastCallbackId;
 }
 let SendDataRequest = class SendDataRequest extends Message_1.Message {
-    constructor(nodeId, data, transmitOptions, callbackId) {
+    constructor(
+    /** The ID of the node this request is addressed to/from */
+    nodeId, 
+    /** The command this message contains */
+    commandClass, 
+    /** The payload for the command */
+    ccPayload, 
+    /** Options regarding the transmission of the message */
+    transmitOptions, 
+    /** A callback ID to map requests and responses */
+    callbackId) {
         super();
         this.nodeId = nodeId;
-        this.data = data;
+        this.commandClass = commandClass;
+        this.ccPayload = ccPayload;
         this.transmitOptions = transmitOptions;
         this.callbackId = callbackId;
         if (nodeId != null) {
             // non-empty constructor -> define default values
-            if (this.data == null)
-                this.data = Buffer.from([]);
+            if (this.ccPayload == null)
+                this.ccPayload = Buffer.from([]);
             if (this.transmitOptions == null)
                 this.transmitOptions = TransmitOptions.DEFAULT;
             if (this.callbackId == null)
@@ -54,10 +67,12 @@ let SendDataRequest = class SendDataRequest extends Message_1.Message {
     }
     // tslint:enable:unified-signatures
     serialize() {
-        const ret = Buffer.allocUnsafe(this.data.length + 4);
+        const ret = Buffer.allocUnsafe(this.ccPayload.length + 5);
         ret[0] = this.nodeId;
-        ret[1] = this.data.length;
-        this.data.copy(ret, 2);
+        // the serialized length includes the command class itself
+        ret[1] = this.ccPayload.length + 1;
+        ret[2] = this.commandClass;
+        this.ccPayload.copy(ret, 3);
         ret[ret.length - 2] = this.transmitOptions;
         ret[ret.length - 1] = this.callbackId;
         this.payload = ret;
@@ -66,9 +81,11 @@ let SendDataRequest = class SendDataRequest extends Message_1.Message {
     deserialize(data) {
         const ret = super.deserialize(data);
         this.nodeId = this.payload[0];
-        const dataLength = this.payload[1];
-        this.data = Buffer.allocUnsafe(dataLength);
-        this.payload.copy(this.data, 0, 2, 2 + dataLength);
+        // the serialized length includes the command class itself
+        const dataLength = this.payload[1] - 1;
+        this.commandClass = this.payload[2];
+        this.ccPayload = Buffer.allocUnsafe(dataLength);
+        this.payload.copy(this.ccPayload, 0, 3, 3 + dataLength);
         this.transmitOptions = this.payload[this.payload.length - 2];
         this.callbackId = this.payload[this.payload.length - 1];
         return ret;
@@ -78,7 +95,7 @@ let SendDataRequest = class SendDataRequest extends Message_1.Message {
             nodeId: this.nodeId,
             transmitOptions: this.transmitOptions,
             callbackId: this.callbackId,
-            data: this.data.toString("hex"),
+            data: this.ccPayload.toString("hex"),
         });
     }
 };
@@ -86,7 +103,7 @@ SendDataRequest = __decorate([
     Message_1.messageTypes(Message_1.MessageType.Request, Message_1.FunctionType.SendData),
     Message_1.expectedResponse(Message_1.FunctionType.SendData),
     Message_1.priority(Message_1.MessagePriority.Normal),
-    __metadata("design:paramtypes", [Number, Buffer, Number, Number])
+    __metadata("design:paramtypes", [Number, Number, Buffer, Number, Number])
 ], SendDataRequest);
 exports.SendDataRequest = SendDataRequest;
 let SendDataResponse = class SendDataResponse extends Message_1.Message {

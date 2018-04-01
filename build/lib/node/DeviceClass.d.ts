@@ -1,4 +1,4 @@
-import { CommandClasses } from "../commandclass/CommandClass";
+import { CommandClasses } from "../commandclass/SendDataMessages";
 export declare enum BasicDeviceClasses {
     "Controller" = 1,
     "Routing Slave" = 2,

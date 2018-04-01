@@ -1,4 +1,4 @@
-import { CommandClasses } from "../commandclass/CommandClass";
+import { CommandClasses } from "../commandclass/SendDataMessages";
 import { num2hex } from "../util/strings";
 
 export enum BasicDeviceClasses {

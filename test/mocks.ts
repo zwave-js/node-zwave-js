@@ -6,7 +6,7 @@ import { SinonStub, spy, stub } from "sinon";
 
 import { EventEmitter } from "events";
 import * as SerialPort from "serialport";
-import { expectedResponse, FunctionType, Message, MessageType, messageTypes } from "../src/lib/message/Message";
+import { expectedResponse, FunctionType, Message, MessageType, messageTypes, priority, MessagePriority } from "../src/lib/message/Message";
 
 const instances = new Map<string, MockSerialPort>();
 
@@ -77,12 +77,14 @@ export const MockResponseMessage_FunctionType = 0xff as FunctionType;
 
 @messageTypes(MessageType.Request, MockRequestMessageWithExpectation_FunctionType)
 @expectedResponse(MockResponseMessage_FunctionType)
+@priority(MessagePriority.Normal)
 // @ts-ignore decorators are working
 export class MockRequestMessageWithExpectation extends Message {
 
 }
 
 @messageTypes(MessageType.Request, MockRequestMessageWithoutExpectation_FunctionType)
+@priority(MessagePriority.Normal)
 // @ts-ignore decorators are working
 export class MockRequestMessageWithoutExpectation extends Message {
 

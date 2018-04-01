@@ -1,7 +1,8 @@
 import { EventEmitter } from "events";
 import * as SerialPort from "serialport";
+import { CommandClasses, SendDataRequest } from "../commandclass/SendDataMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { FunctionType, getDefaultPriority, isMessagePriority, Message, MessageHeaders, MessagePriority, MessageType, messageTypes } from "../message/Message";
+import { Constructable, FunctionType, getDefaultPriority, isMessagePriority, Message, MessageHeaders, MessagePriority, MessageType, messageTypes } from "../message/Message";
 import { Comparable, compareNumberOrString, CompareResult } from "../util/comparable";
 import { createDeferredPromise, DeferredPromise } from "../util/defer-promise";
 import { log } from "../util/logger";
@@ -9,44 +10,7 @@ import { entries } from "../util/object-polyfill";
 import { SortedList } from "../util/sorted-list";
 import { stringify } from "../util/strings";
 import { ZWaveController } from "./Controller";
-
-/** Returns a timestamp with nano-second precision */
-function highResTimestamp(): number {
-	const [s, ns] = process.hrtime();
-	return s * 1e9 + ns;
-}
-
-class Transaction implements Comparable<Transaction> {
-
-	constructor(
-		message: Message,
-		promise: DeferredPromise<Message | void>,
-		priority: MessagePriority,
-	);
-	constructor(
-		public readonly message: Message,
-		public readonly promise: DeferredPromise<Message | void>,
-		public readonly priority: MessagePriority,
-		public timestamp: number = highResTimestamp(),
-		public ackPending: boolean = true,
-		public response?: Message,
-	) {
-	}
-
-	public compareTo(other: Transaction): CompareResult {
-		// first sort by priority
-		if (this.priority < other.priority) return -1;
-		else if (this.priority > other.priority) return 1;
-
-		// for equal priority, sort by the timestamp
-		return compareNumberOrString(other.timestamp, this.timestamp);
-
-		// TODO: do we need to sort by the message itself?
-	}
-
-	// TODO: add a way to expire these
-	// TODO: add a way to resend these
-}
+import { Transaction } from "./Transaction";
 
 export interface ZWaveOptions {
 	// TODO: this probably refers to the stick waiting for a response from the node:
@@ -56,14 +20,20 @@ export interface ZWaveOptions {
 		/** not sure */
 		byte: number,
 	};
+	/**
+	 * @internal
+	 * Set this to true to skip the controller interview. Useful for testing purposes
+	 */
+	skipInterview?: boolean;
 }
-export type DeepPartial<T> = {[P in keyof T]: Partial<T[P]>};
+export type DeepPartial<T> = {[P in keyof T]+?: DeepPartial<T[P]>};
 
 const defaultOptions: ZWaveOptions = {
 	timeouts: {
 		ack: 1000,
 		byte: 150,
 	},
+	skipInterview: false,
 };
 function applyDefaultOptions(target: Record<string, any>, source: Record<string, any>): Record<string, any> {
 	target = target || {};
@@ -74,7 +44,7 @@ function applyDefaultOptions(target: Record<string, any>, source: Record<string,
 			if (typeof value === "object") {
 				// merge objects
 				target[key] = applyDefaultOptions(target[key], value);
-			} else if (typeof target[key] !== "undefined") {
+			} else if (typeof target[key] === "undefined") {
 				// don't override single keys
 				target[key] = value;
 			}
@@ -91,6 +61,8 @@ function isMessageSupportCheck(val: any): val is MessageSupportCheck {
 		;
 }
 
+export type RequestHandler<T extends Message = Message> = (msg: T) => boolean;
+
 export class Driver extends EventEmitter {
 
 	/** The serial port instance */
@@ -100,6 +72,10 @@ export class Driver extends EventEmitter {
 	/** The currently pending request */
 	private currentTransaction: Transaction;
 	private sendQueue = new SortedList<Transaction>();
+	/** A map of handlers for all sorts of requests */
+	private requestHandlers = new Map<FunctionType, RequestHandler[]>();
+	/** A map of handlers specifically for send data requests */
+	private sendDataRequestHandlers = new Map<CommandClasses, RequestHandler<SendDataRequest>[]>();
 	// TODO: add a way to subscribe to nodes
 
 	private _controller: ZWaveController;
@@ -155,9 +131,9 @@ export class Driver extends EventEmitter {
 				.on("open", () => {
 					log("driver", "serial port opened", "debug");
 					this._isOpen = true;
-					resolve();
 					this.reset();
-					setImmediate(() => this.beginInterview());
+					resolve();
+					if (!this.options.skipInterview) setImmediate(() => this.beginInterview());
 				})
 				.on("data", this.serialport_onData.bind(this))
 				.on("error", err => {
@@ -284,7 +260,13 @@ export class Driver extends EventEmitter {
 
 			// parse a message - first find the correct constructor
 			// tslint:disable-next-line:variable-name
-			const MessageConstructor = Message.getConstructor(this.receiveBuffer);
+			let MessageConstructor: Constructable<Message>;
+			// We introduce special handling for the SendData requests as those go a level deeper
+			if (SendDataRequest.isSendDataRequest(this.receiveBuffer)) {
+				MessageConstructor = SendDataRequest.getConstructor(this.receiveBuffer);
+			} else {
+				MessageConstructor = Message.getConstructor(this.receiveBuffer);
+			}
 			const msg = new MessageConstructor();
 			let readBytes: number;
 			try {
@@ -348,8 +330,58 @@ export class Driver extends EventEmitter {
 		// TODO: what to do with this message?
 	}
 
-	private handleRequest(msg: Message) {
-		log("TODO: implement request handler for messages", "warn");
+	/**
+	 * Registers a handler for all kinds of request messages
+	 * @param fnType The function type to register the handler for
+	 * @param handler The request handler callback
+	 */
+	public registerRequestHandler(fnType: FunctionType, handler: RequestHandler): void {
+		if (fnType === FunctionType.SendData) {
+			throw new Error(
+				"Cannot register a generic request handler for SendData requests. " +
+				"Use `registerSendDataRequestHandler()` instead!",
+			);
+		}
+		const handlers = this.requestHandlers.has(fnType) ? this.requestHandlers.get(fnType) : [];
+		handlers.push(handler);
+		log("driver", `adding request handler for ${FunctionType[fnType]} (${fnType})... ${handlers.length} registered`, "debug");
+		this.requestHandlers.set(fnType, handlers);
+	}
+
+	/**
+	 * Registers a handler for SendData request messages
+	 * @param cc The command class to register the handler for
+	 * @param handler The request handler callback
+	 */
+	public registerSendDataRequestHandler(cc: CommandClasses, handler: RequestHandler<SendDataRequest>): void {
+		const handlers = this.sendDataRequestHandlers.has(cc) ? this.sendDataRequestHandlers.get(cc) : [];
+		handlers.push(handler);
+		log("driver", `adding send data request handler for ${CommandClasses[cc]} (${cc})... ${handlers.length} registered`, "debug");
+		this.sendDataRequestHandlers.set(cc, handlers);
+	}
+
+	private handleRequest(msg: Message | SendDataRequest) {
+		let handled: boolean = false;
+		let handlers: RequestHandler[];
+
+		if (msg instanceof SendDataRequest) {
+			log("driver", `handling send data request for ${FunctionType[msg.functionType]} (${msg.functionType})`, "debug");
+			handlers = this.sendDataRequestHandlers.get(msg.cc);
+		} else {
+			log("driver", `handling request for ${FunctionType[msg.functionType]} (${msg.functionType})`, "debug");
+			handlers = this.requestHandlers.get(msg.functionType);
+		}
+
+		if (handlers != null && handlers.length > 0) {
+			log("driver", `  ${handlers.length} handler${handlers.length !== 1 ? "s" : ""} registered!`, "warn");
+			for (let i = 1; !handled && i <= handlers.length; i++) {
+				log("driver", `  invoking handler #${i}`, "warn");
+				handled = handlers[i](msg as SendDataRequest);
+				if (handled) log("driver", `  message was handled`, "warn");
+			}
+		} else {
+			log("driver", "  no handlers registered!", "warn");
+		}
 	}
 
 	private handleACK() {

@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { Message } from "../message/Message";
+import { CommandClasses } from "../commandclass/CommandClass";
 export declare enum TransmitOptions {
     NotSet = 0,
     ACK = 1,
@@ -17,12 +18,18 @@ export declare enum TransmitStatus {
     NoRoute = 4,
 }
 export declare class SendDataRequest extends Message {
+    /** The ID of the node this request is addressed to/from */
     nodeId: number;
-    data: Buffer;
+    /** The command this message contains */
+    commandClass: CommandClasses;
+    /** The payload for the command */
+    ccPayload: Buffer;
+    /** Options regarding the transmission of the message */
     transmitOptions: TransmitOptions;
+    /** A callback ID to map requests and responses */
     callbackId: number;
     constructor();
-    constructor(nodeId: number, data?: Buffer, transmitOptions?: TransmitOptions, callbackId?: number);
+    constructor(nodeId: number, commandClass: CommandClasses, ccPayload?: Buffer, transmitOptions?: TransmitOptions, callbackId?: number);
     serialize(): Buffer;
     deserialize(data: Buffer): number;
     toJSON(): Record<string, any>;

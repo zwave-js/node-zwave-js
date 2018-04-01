@@ -1,6 +1,7 @@
 /// <reference types="node" />
 import { EventEmitter } from "events";
-import { Message, MessagePriority } from "../message/Message";
+import { CommandClasses, SendDataRequest } from "../commandclass/SendDataMessages";
+import { FunctionType, Message, MessagePriority } from "../message/Message";
 import { ZWaveController } from "./Controller";
 export interface ZWaveOptions {
     timeouts: {
@@ -11,9 +12,10 @@ export interface ZWaveOptions {
     };
 }
 export declare type DeepPartial<T> = {
-    [P in keyof T]: Partial<T[P]>;
+    [P in keyof T]+?: DeepPartial<T[P]>;
 };
 export declare type MessageSupportCheck = "loud" | "silent" | "none";
+export declare type RequestHandler<T extends Message = Message> = (msg: T) => boolean;
 export declare class Driver extends EventEmitter {
     private port;
     /** @internal */
@@ -25,6 +27,10 @@ export declare class Driver extends EventEmitter {
     /** The currently pending request */
     private currentTransaction;
     private sendQueue;
+    /** A map of handlers for all sorts of requests */
+    private requestHandlers;
+    /** A map of handlers specifically for send data requests */
+    private sendDataRequestHandlers;
     private _controller;
     readonly controller: ZWaveController;
     constructor(port: string, 
@@ -48,6 +54,18 @@ export declare class Driver extends EventEmitter {
     private onInvalidData();
     private serialport_onData(data);
     private handleResponse(msg);
+    /**
+     * Registers a handler for all kinds of request messages
+     * @param fnType The function type to register the handler for
+     * @param handler The request handler callback
+     */
+    registerRequestHandler(fnType: FunctionType, handler: RequestHandler): void;
+    /**
+     * Registers a handler for SendData request messages
+     * @param cc The command class to register the handler for
+     * @param handler The request handler callback
+     */
+    registerSendDataRequestHandler(cc: CommandClasses, handler: RequestHandler<SendDataRequest>): void;
     private handleRequest(msg);
     private handleACK();
     private handleNAK();
