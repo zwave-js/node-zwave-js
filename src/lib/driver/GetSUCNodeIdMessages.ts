@@ -1,4 +1,5 @@
-import { expectedResponse, FunctionType, Message, MessagePriority, MessageType, messageTypes, priority } from "../message/Message";
+import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
 
 @messageTypes(MessageType.Request, FunctionType.GetSUCNodeId)
 @expectedResponse(FunctionType.GetSUCNodeId)

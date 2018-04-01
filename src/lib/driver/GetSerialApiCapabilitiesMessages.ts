@@ -1,4 +1,5 @@
-import { expectedResponse, FunctionType, Message,  MessagePriority, MessageType, messageTypes, priority} from "../message/Message";
+import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
 import { num2hex, padStart } from "../util/strings";
 
 const NUM_FUNCTIONS = 256;

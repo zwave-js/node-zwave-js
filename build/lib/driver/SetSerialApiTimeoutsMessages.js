@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
 let SetSerialApiTimeoutsRequest = class SetSerialApiTimeoutsRequest extends Message_1.Message {
     constructor(ackTimeout, byteTimeout) {
@@ -31,9 +32,9 @@ let SetSerialApiTimeoutsRequest = class SetSerialApiTimeoutsRequest extends Mess
     }
 };
 SetSerialApiTimeoutsRequest = __decorate([
-    Message_1.messageTypes(Message_1.MessageType.Request, Message_1.FunctionType.SetSerialApiTimeouts),
-    Message_1.expectedResponse(Message_1.FunctionType.SetSerialApiTimeouts),
-    Message_1.priority(Message_1.MessagePriority.Controller),
+    Message_1.messageTypes(Constants_1.MessageType.Request, Constants_1.FunctionType.SetSerialApiTimeouts),
+    Message_1.expectedResponse(Constants_1.FunctionType.SetSerialApiTimeouts),
+    Message_1.priority(Constants_1.MessagePriority.Controller),
     __metadata("design:paramtypes", [Number, Number])
 ], SetSerialApiTimeoutsRequest);
 exports.SetSerialApiTimeoutsRequest = SetSerialApiTimeoutsRequest;
@@ -58,6 +59,6 @@ let SetSerialApiTimeoutsResponse = class SetSerialApiTimeoutsResponse extends Me
     }
 };
 SetSerialApiTimeoutsResponse = __decorate([
-    Message_1.messageTypes(Message_1.MessageType.Response, Message_1.FunctionType.SetSerialApiTimeouts)
+    Message_1.messageTypes(Constants_1.MessageType.Response, Constants_1.FunctionType.SetSerialApiTimeouts)
 ], SetSerialApiTimeoutsResponse);
 exports.SetSerialApiTimeoutsResponse = SetSerialApiTimeoutsResponse;

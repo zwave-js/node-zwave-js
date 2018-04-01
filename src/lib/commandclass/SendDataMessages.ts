@@ -1,4 +1,5 @@
-import { Constructable, expectedResponse, FunctionType, Message, MessagePriority, MessageType, messageTypes, priority } from "../message/Message";
+import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import { Constructable, expectedResponse, Message, messageTypes, priority} from "../message/Message";
 import { log } from "../util/logger";
 
 export enum TransmitOptions {

@@ -1,7 +1,8 @@
 /// <reference types="node" />
 import { EventEmitter } from "events";
 import { CommandClasses, SendDataRequest } from "../commandclass/SendDataMessages";
-import { FunctionType, Message, MessagePriority } from "../message/Message";
+import { FunctionType, MessagePriority } from "../message/Constants";
+import { Message } from "../message/Message";
 import { ZWaveController } from "./Controller";
 export interface ZWaveOptions {
     timeouts: {

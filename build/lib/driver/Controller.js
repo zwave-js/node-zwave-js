@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
 const Node_1 = require("../node/Node");
 const logger_1 = require("../util/logger");
@@ -127,7 +128,7 @@ class ZWaveController {
             logger_1.log("controller", `  product ID:          ${strings_1.num2hex(this._productId)}`, "debug");
             logger_1.log("controller", `  supported functions:`, "debug");
             for (const fn of this._supportedFunctionTypes) {
-                logger_1.log("controller", `    ${Message_1.FunctionType[fn]} (${strings_1.num2hex(fn)})`, "debug");
+                logger_1.log("controller", `    ${Constants_1.FunctionType[fn]} (${strings_1.num2hex(fn)})`, "debug");
             }
             // now we can check if a function is supported
             // find the SUC
@@ -143,7 +144,7 @@ class ZWaveController {
             // TODO: if configured, enable this controller as SIS if there's no SUC
             // https://github.com/OpenZWave/open-zwave/blob/a46f3f36271f88eed5aea58899a6cb118ad312a2/cpp/src/Driver.cpp#L2586
             // if it's a bridge controller, request the virtual nodes
-            if (this.type === GetControllerVersionMessages_1.ControllerTypes["Bridge Controller"] && this.isFunctionSupported(Message_1.FunctionType.FUNC_ID_ZW_GET_VIRTUAL_NODES)) {
+            if (this.type === GetControllerVersionMessages_1.ControllerTypes["Bridge Controller"] && this.isFunctionSupported(Constants_1.FunctionType.FUNC_ID_ZW_GET_VIRTUAL_NODES)) {
                 // TODO: send FUNC_ID_ZW_GET_VIRTUAL_NODES message
             }
             // Request information about all nodes with the GetInitData message
@@ -166,22 +167,22 @@ class ZWaveController {
             for (const nodeId of initData.nodeIds) {
                 this.nodes.set(nodeId, new Node_1.Node(nodeId, this.driver));
             }
-            if (this.type !== GetControllerVersionMessages_1.ControllerTypes["Bridge Controller"] && this.isFunctionSupported(Message_1.FunctionType.SetSerialApiTimeouts)) {
+            if (this.type !== GetControllerVersionMessages_1.ControllerTypes["Bridge Controller"] && this.isFunctionSupported(Constants_1.FunctionType.SetSerialApiTimeouts)) {
                 const { ack, byte } = this.driver.options.timeouts;
                 logger_1.log("controller", `setting serial API timeouts: ack = ${ack} ms, byte = ${byte} ms`, "debug");
                 const resp = yield this.driver.sendMessage(new SetSerialApiTimeoutsMessages_1.SetSerialApiTimeoutsRequest(ack, byte));
                 logger_1.log("controller", `serial API timeouts overwritten. The old values were: ack = ${resp.oldAckTimeout} ms, byte = ${resp.oldByteTimeout} ms`, "debug");
             }
             // send application info (not sure why tho)
-            if (this.isFunctionSupported(Message_1.FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION)) {
+            if (this.isFunctionSupported(Constants_1.FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION)) {
                 logger_1.log("controller", `sending application info...`, "debug");
-                const appInfoMsg = new Message_1.Message(Message_1.MessageType.Request, Message_1.FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION, null, Buffer.from([
+                const appInfoMsg = new Message_1.Message(Constants_1.MessageType.Request, Constants_1.FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION, null, Buffer.from([
                     0x01,
                     0x02,
                     0x01,
                     0x00,
                 ]));
-                yield this.driver.sendMessage(appInfoMsg, Message_1.MessagePriority.Controller, "none");
+                yield this.driver.sendMessage(appInfoMsg, Constants_1.MessagePriority.Controller, "none");
             }
             logger_1.log("controller", "interview completed", "debug");
         });

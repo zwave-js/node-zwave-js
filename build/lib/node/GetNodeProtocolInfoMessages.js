@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
 const DeviceClass_1 = require("./DeviceClass");
 let GetNodeProtocolInfoRequest = class GetNodeProtocolInfoRequest extends Message_1.Message {
@@ -27,9 +28,9 @@ let GetNodeProtocolInfoRequest = class GetNodeProtocolInfoRequest extends Messag
     }
 };
 GetNodeProtocolInfoRequest = __decorate([
-    Message_1.messageTypes(Message_1.MessageType.Request, Message_1.FunctionType.GetNodeProtocolInfo),
-    Message_1.expectedResponse(Message_1.FunctionType.GetNodeProtocolInfo),
-    Message_1.priority(Message_1.MessagePriority.NodeQuery),
+    Message_1.messageTypes(Constants_1.MessageType.Request, Constants_1.FunctionType.GetNodeProtocolInfo),
+    Message_1.expectedResponse(Constants_1.FunctionType.GetNodeProtocolInfo),
+    Message_1.priority(Constants_1.MessagePriority.NodeQuery),
     __metadata("design:paramtypes", [Number])
 ], GetNodeProtocolInfoRequest);
 exports.GetNodeProtocolInfoRequest = GetNodeProtocolInfoRequest;
@@ -101,6 +102,6 @@ let GetNodeProtocolInfoResponse = class GetNodeProtocolInfoResponse extends Mess
     }
 };
 GetNodeProtocolInfoResponse = __decorate([
-    Message_1.messageTypes(Message_1.MessageType.Response, Message_1.FunctionType.GetNodeProtocolInfo)
+    Message_1.messageTypes(Constants_1.MessageType.Response, Constants_1.FunctionType.GetNodeProtocolInfo)
 ], GetNodeProtocolInfoResponse);
 exports.GetNodeProtocolInfoResponse = GetNodeProtocolInfoResponse;

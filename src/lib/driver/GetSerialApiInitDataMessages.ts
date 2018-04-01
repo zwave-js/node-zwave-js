@@ -1,4 +1,5 @@
-import { expectedResponse, FunctionType, Message, MessagePriority, MessageType, messageTypes, priority } from "../message/Message";
+import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
 
 const MAX_NODES = 232; // max number of nodes in a ZWave network
 const NUM_NODE_BYTES = MAX_NODES / 8; // corresponding number of bytes in a bit mask

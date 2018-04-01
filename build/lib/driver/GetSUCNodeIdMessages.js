@@ -6,13 +6,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
 let GetSUCNodeIdRequest = class GetSUCNodeIdRequest extends Message_1.Message {
 };
 GetSUCNodeIdRequest = __decorate([
-    Message_1.messageTypes(Message_1.MessageType.Request, Message_1.FunctionType.GetSUCNodeId),
-    Message_1.expectedResponse(Message_1.FunctionType.GetSUCNodeId),
-    Message_1.priority(Message_1.MessagePriority.Controller)
+    Message_1.messageTypes(Constants_1.MessageType.Request, Constants_1.FunctionType.GetSUCNodeId),
+    Message_1.expectedResponse(Constants_1.FunctionType.GetSUCNodeId),
+    Message_1.priority(Constants_1.MessagePriority.Controller)
 ], GetSUCNodeIdRequest);
 exports.GetSUCNodeIdRequest = GetSUCNodeIdRequest;
 let GetSUCNodeIdResponse = class GetSUCNodeIdResponse extends Message_1.Message {
@@ -33,6 +34,6 @@ let GetSUCNodeIdResponse = class GetSUCNodeIdResponse extends Message_1.Message 
     }
 };
 GetSUCNodeIdResponse = __decorate([
-    Message_1.messageTypes(Message_1.MessageType.Response, Message_1.FunctionType.GetSUCNodeId)
+    Message_1.messageTypes(Constants_1.MessageType.Response, Constants_1.FunctionType.GetSUCNodeId)
 ], GetSUCNodeIdResponse);
 exports.GetSUCNodeIdResponse = GetSUCNodeIdResponse;

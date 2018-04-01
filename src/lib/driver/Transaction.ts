@@ -1,4 +1,5 @@
-import { Message, MessagePriority } from "../message/Message";
+import { MessagePriority } from "../message/Constants";
+import { Message } from "../message/Message";
 import { Comparable, compareNumberOrString, CompareResult } from "../util/comparable";
 import { DeferredPromise } from "../util/defer-promise";
 

@@ -12,6 +12,7 @@ const events_1 = require("events");
 const SerialPort = require("serialport");
 const SendDataMessages_1 = require("../commandclass/SendDataMessages");
 const ZWaveError_1 = require("../error/ZWaveError");
+const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
 const defer_promise_1 = require("../util/defer-promise");
 const logger_1 = require("../util/logger");
@@ -135,7 +136,7 @@ class Driver extends events_1.EventEmitter {
         this.ensureReady();
         logger_1.log("driver", "resetting driver instance...", "debug");
         // re-sync communication
-        this.send(Message_1.MessageHeaders.NAK);
+        this.send(Constants_1.MessageHeaders.NAK);
         // clear buffers
         this.receiveBuffer = Buffer.from([]);
         this.sendQueue.clear();
@@ -179,18 +180,18 @@ class Driver extends events_1.EventEmitter {
         this.receiveBuffer = Buffer.concat([this.receiveBuffer, data]);
         logger_1.log("io", `receiveBuffer: 0x${this.receiveBuffer.toString("hex")}`, "debug");
         while (this.receiveBuffer.length > 0) { // TODO: add a way to interrupt
-            if (this.receiveBuffer[0] !== Message_1.MessageHeaders.SOF) {
+            if (this.receiveBuffer[0] !== Constants_1.MessageHeaders.SOF) {
                 switch (this.receiveBuffer[0]) {
                     // single-byte messages - we have a handler for each one
-                    case Message_1.MessageHeaders.ACK: {
+                    case Constants_1.MessageHeaders.ACK: {
                         this.handleACK();
                         break;
                     }
-                    case Message_1.MessageHeaders.NAK: {
+                    case Constants_1.MessageHeaders.NAK: {
                         this.handleNAK();
                         break;
                     }
-                    case Message_1.MessageHeaders.CAN: {
+                    case Constants_1.MessageHeaders.CAN: {
                         this.handleCAN();
                         break;
                     }
@@ -237,11 +238,11 @@ class Driver extends events_1.EventEmitter {
             // and cut the read bytes from our buffer
             this.receiveBuffer = Buffer.from(this.receiveBuffer.slice(readBytes));
             // all good, send ACK
-            this.send(Message_1.MessageHeaders.ACK);
-            if (msg.type === Message_1.MessageType.Response) {
+            this.send(Constants_1.MessageHeaders.ACK);
+            if (msg.type === Constants_1.MessageType.Response) {
                 this.handleResponse(msg);
             }
-            else if (msg.type === Message_1.MessageType.Request) {
+            else if (msg.type === Constants_1.MessageType.Request) {
                 this.handleRequest(msg);
             }
             break;
@@ -278,13 +279,13 @@ class Driver extends events_1.EventEmitter {
      * @param handler The request handler callback
      */
     registerRequestHandler(fnType, handler) {
-        if (fnType === Message_1.FunctionType.SendData) {
+        if (fnType === Constants_1.FunctionType.SendData) {
             throw new Error("Cannot register a generic request handler for SendData requests. " +
                 "Use `registerSendDataRequestHandler()` instead!");
         }
         const handlers = this.requestHandlers.has(fnType) ? this.requestHandlers.get(fnType) : [];
         handlers.push(handler);
-        logger_1.log("driver", `adding request handler for ${Message_1.FunctionType[fnType]} (${fnType})... ${handlers.length} registered`, "debug");
+        logger_1.log("driver", `adding request handler for ${Constants_1.FunctionType[fnType]} (${fnType})... ${handlers.length} registered`, "debug");
         this.requestHandlers.set(fnType, handlers);
     }
     /**
@@ -302,11 +303,11 @@ class Driver extends events_1.EventEmitter {
         let handled = false;
         let handlers;
         if (msg instanceof SendDataMessages_1.SendDataRequest) {
-            logger_1.log("driver", `handling send data request for ${Message_1.FunctionType[msg.functionType]} (${msg.functionType})`, "debug");
+            logger_1.log("driver", `handling send data request for ${Constants_1.FunctionType[msg.functionType]} (${msg.functionType})`, "debug");
             handlers = this.sendDataRequestHandlers.get(msg.cc);
         }
         else {
-            logger_1.log("driver", `handling request for ${Message_1.FunctionType[msg.functionType]} (${msg.functionType})`, "debug");
+            logger_1.log("driver", `handling request for ${Constants_1.FunctionType[msg.functionType]} (${msg.functionType})`, "debug");
             handlers = this.requestHandlers.get(msg.functionType);
         }
         if (handlers != null && handlers.length > 0) {
@@ -370,20 +371,20 @@ class Driver extends events_1.EventEmitter {
             this.ensureReady();
             if (priority == null) {
                 const className = msg.constructor.name;
-                const msgTypeName = Message_1.FunctionType[msg.functionType];
+                const msgTypeName = Constants_1.FunctionType[msg.functionType];
                 throw new ZWaveError_1.ZWaveError(`No default priority has been defined for ${className} (${msgTypeName}), so you have to provide one for your message`, ZWaveError_1.ZWaveErrorCodes.Driver_NoPriority);
             }
             if (supportCheck !== "none"
                 && this.controller != null
                 && !this.controller.isFunctionSupported(msg.functionType)) {
                 if (supportCheck === "loud") {
-                    throw new ZWaveError_1.ZWaveError(`Your hardware does not support the ${Message_1.FunctionType[msg.functionType]} function`, ZWaveError_1.ZWaveErrorCodes.Driver_NotSupported);
+                    throw new ZWaveError_1.ZWaveError(`Your hardware does not support the ${Constants_1.FunctionType[msg.functionType]} function`, ZWaveError_1.ZWaveErrorCodes.Driver_NotSupported);
                 }
                 else {
                     return undefined;
                 }
             }
-            logger_1.log("driver", `sending message ${strings_1.stringify(msg)} with priority ${Message_1.MessagePriority[priority]} (${priority})`, "debug");
+            logger_1.log("driver", `sending message ${strings_1.stringify(msg)} with priority ${Constants_1.MessagePriority[priority]} (${priority})`, "debug");
             // create the transaction and enqueue it
             const promise = defer_promise_1.createDeferredPromise();
             const transaction = new Transaction_1.Transaction(msg, promise, priority);
@@ -400,7 +401,7 @@ class Driver extends events_1.EventEmitter {
      */
     send(header) {
         // ACK, CAN, NAK
-        logger_1.log("io", `sending ${Message_1.MessageHeaders[header]}`, "debug");
+        logger_1.log("io", `sending ${Constants_1.MessageHeaders[header]}`, "debug");
         this.doSend(Buffer.from([header]));
         return;
     }

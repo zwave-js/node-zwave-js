@@ -6,6 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
 const strings_1 = require("../util/strings");
 const NUM_FUNCTIONS = 256;
@@ -13,9 +14,9 @@ const NUM_FUNCTION_BYTES = NUM_FUNCTIONS / 8;
 let GetSerialApiCapabilitiesRequest = class GetSerialApiCapabilitiesRequest extends Message_1.Message {
 };
 GetSerialApiCapabilitiesRequest = __decorate([
-    Message_1.messageTypes(Message_1.MessageType.Request, Message_1.FunctionType.GetSerialApiCapabilities),
-    Message_1.expectedResponse(Message_1.FunctionType.GetSerialApiCapabilities),
-    Message_1.priority(Message_1.MessagePriority.Controller)
+    Message_1.messageTypes(Constants_1.MessageType.Request, Constants_1.FunctionType.GetSerialApiCapabilities),
+    Message_1.expectedResponse(Constants_1.FunctionType.GetSerialApiCapabilities),
+    Message_1.priority(Constants_1.MessagePriority.Controller)
 ], GetSerialApiCapabilitiesRequest);
 exports.GetSerialApiCapabilitiesRequest = GetSerialApiCapabilitiesRequest;
 let GetSerialApiCapabilitiesResponse = class GetSerialApiCapabilitiesResponse extends Message_1.Message {
@@ -58,11 +59,11 @@ let GetSerialApiCapabilitiesResponse = class GetSerialApiCapabilitiesResponse ex
             manufacturerId: this.manufacturerId,
             productType: this.productType,
             productId: this.productId,
-            supportedFunctionTypes: this.supportedFunctionTypes.map(type => type in Message_1.FunctionType ? Message_1.FunctionType[type] : strings_1.num2hex(type)),
+            supportedFunctionTypes: this.supportedFunctionTypes.map(type => type in Constants_1.FunctionType ? Constants_1.FunctionType[type] : strings_1.num2hex(type)),
         });
     }
 };
 GetSerialApiCapabilitiesResponse = __decorate([
-    Message_1.messageTypes(Message_1.MessageType.Response, Message_1.FunctionType.GetSerialApiCapabilities)
+    Message_1.messageTypes(Constants_1.MessageType.Response, Constants_1.FunctionType.GetSerialApiCapabilities)
 ], GetSerialApiCapabilitiesResponse);
 exports.GetSerialApiCapabilitiesResponse = GetSerialApiCapabilitiesResponse;

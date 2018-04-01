@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
 const logger_1 = require("../util/logger");
 var TransmitOptions;
@@ -101,7 +102,7 @@ let SendDataRequest = SendDataRequest_1 = class SendDataRequest extends Message_
     static isSendDataRequest(data) {
         const msgType = data[2];
         const fnType = data[3];
-        return msgType === Message_1.MessageType.Request && fnType === Message_1.FunctionType.SendData;
+        return msgType === Constants_1.MessageType.Request && fnType === Constants_1.FunctionType.SendData;
     }
     /**
      * Extracts the command class from a serialized SendDataRequest
@@ -129,9 +130,9 @@ let SendDataRequest = SendDataRequest_1 = class SendDataRequest extends Message_
     }
 };
 SendDataRequest = SendDataRequest_1 = __decorate([
-    Message_1.messageTypes(Message_1.MessageType.Request, Message_1.FunctionType.SendData),
-    Message_1.expectedResponse(Message_1.FunctionType.SendData),
-    Message_1.priority(Message_1.MessagePriority.Normal),
+    Message_1.messageTypes(Constants_1.MessageType.Request, Constants_1.FunctionType.SendData),
+    Message_1.expectedResponse(Constants_1.FunctionType.SendData),
+    Message_1.priority(Constants_1.MessagePriority.Normal),
     __metadata("design:paramtypes", [Number, Number, Buffer, Number, Number])
 ], SendDataRequest);
 exports.SendDataRequest = SendDataRequest;
@@ -157,7 +158,7 @@ let SendDataResponse = class SendDataResponse extends Message_1.Message {
     }
 };
 SendDataResponse = __decorate([
-    Message_1.messageTypes(Message_1.MessageType.Response, Message_1.FunctionType.SendData)
+    Message_1.messageTypes(Constants_1.MessageType.Response, Constants_1.FunctionType.SendData)
 ], SendDataResponse);
 exports.SendDataResponse = SendDataResponse;
 /* A dictionary of all command classes as of 2018-03-30 */

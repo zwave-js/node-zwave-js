@@ -1,4 +1,5 @@
-import { FunctionType, Message, MessagePriority, MessageType } from "../message/Message";
+import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import { Message } from "../message/Message";
 import { Node } from "../node/Node";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";

@@ -1,4 +1,4 @@
-import { FunctionType } from "../message/Message";
+import { FunctionType } from "../message/Constants";
 import { Node } from "../node/Node";
 import { Driver } from "./Driver";
 import { ControllerTypes } from "./GetControllerVersionMessages";

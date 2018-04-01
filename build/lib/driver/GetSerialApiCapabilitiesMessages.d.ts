@@ -1,5 +1,6 @@
 /// <reference types="node" />
-import { FunctionType, Message } from "../message/Message";
+import { FunctionType } from "../message/Constants";
+import { Message } from "../message/Message";
 export declare class GetSerialApiCapabilitiesRequest extends Message {
 }
 export declare class GetSerialApiCapabilitiesResponse extends Message {
