@@ -1,6 +1,6 @@
+import { Driver } from "../driver/Driver";
 import { FunctionType } from "../message/Constants";
 import { Node } from "../node/Node";
-import { Driver } from "./Driver";
 import { ControllerTypes } from "./GetControllerVersionMessages";
 export declare class ZWaveController {
     private readonly driver;

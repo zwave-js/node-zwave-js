@@ -1,9 +1,9 @@
 /// <reference types="node" />
 import { EventEmitter } from "events";
 import { CommandClasses, SendDataRequest } from "../commandclass/SendDataMessages";
+import { ZWaveController } from "../controller/Controller";
 import { FunctionType, MessagePriority } from "../message/Constants";
 import { Message } from "../message/Message";
-import { ZWaveController } from "./Controller";
 export interface ZWaveOptions {
     timeouts: {
         /** how long to wait for an ACK */

@@ -1,6 +1,7 @@
 import { EventEmitter } from "events";
 import * as SerialPort from "serialport";
 import { CommandClasses, SendDataRequest } from "../commandclass/SendDataMessages";
+import { ZWaveController } from "../controller/Controller";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "../message/Constants";
 import { Constructable, getDefaultPriority, Message, messageTypes } from "../message/Message";
@@ -10,7 +11,6 @@ import { log } from "../util/logger";
 import { entries } from "../util/object-polyfill";
 import { SortedList } from "../util/sorted-list";
 import { stringify } from "../util/strings";
-import { ZWaveController } from "./Controller";
 import { Transaction } from "./Transaction";
 
 export interface ZWaveOptions {

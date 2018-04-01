@@ -1,6 +1,5 @@
 /// <reference types="reflect-metadata" />
 
-import { GetControllerVersionRequest } from "../driver/GetControllerVersionMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { log } from "../util/logger";
 import { entries } from "../util/object-polyfill";

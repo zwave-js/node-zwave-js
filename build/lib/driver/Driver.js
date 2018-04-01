@@ -11,6 +11,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const events_1 = require("events");
 const SerialPort = require("serialport");
 const SendDataMessages_1 = require("../commandclass/SendDataMessages");
+const Controller_1 = require("../controller/Controller");
 const ZWaveError_1 = require("../error/ZWaveError");
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
@@ -19,7 +20,6 @@ const logger_1 = require("../util/logger");
 const object_polyfill_1 = require("../util/object-polyfill");
 const sorted_list_1 = require("../util/sorted-list");
 const strings_1 = require("../util/strings");
-const Controller_1 = require("./Controller");
 const Transaction_1 = require("./Transaction");
 const defaultOptions = {
     timeouts: {
