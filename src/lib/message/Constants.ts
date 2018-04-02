@@ -50,7 +50,8 @@ export enum FunctionType {
 	GetSerialApiInitData = 0x02,
 
 	FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION = 0x03,
-	FUNC_ID_APPLICATION_COMMAND_HANDLER = 0x04,
+
+	ApplicationCommand = 0x04, // A message from another node
 
 	GetControllerCapabilities = 0x05,
 	SetSerialApiTimeouts = 0x06,
@@ -104,8 +105,8 @@ export enum FunctionType {
 	FUNC_ID_ZW_SET_LEARN_NODE_STATE = 0x40,	// Not implemented
 
 	GetNodeProtocolInfo = 0x41,	// Get protocol info (baud rate, listening, etc.) for a given node
+	HardReset = 0x42,	// Reset controller and node info to default (original) values
 
-	FUNC_ID_ZW_SET_DEFAULT = 0x42,	// Reset controller and node info to default (original) values
 	FUNC_ID_ZW_NEW_CONTROLLER = 0x43,	// Not implemented
 	FUNC_ID_ZW_REPLICATION_COMMAND_COMPLETE = 0x44,	// Replication send data complete
 	FUNC_ID_ZW_REPLICATION_SEND_DATA = 0x45,	// Replication send data

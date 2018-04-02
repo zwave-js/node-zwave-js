@@ -10,6 +10,7 @@ export enum ZWaveErrorCodes {
 	Driver_NoPriority,
 
 	Controller_MessageDropped,
+	Controller_InclusionFailed,
 }
 
 export class ZWaveError extends Error {

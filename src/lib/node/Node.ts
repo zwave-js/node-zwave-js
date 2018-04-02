@@ -1,17 +1,23 @@
-import { CommandClasses } from "../commandclass/SendDataMessages";
+import { CommandClasses, CommandClass } from "../commandclass/CommandClass";
 import { Driver } from "../driver/Driver";
 import { log } from "../util/logger";
-import { num2hex, padStart } from "../util/strings";
+import { num2hex, padStart, stringify } from "../util/strings";
 import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
 import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "./GetNodeProtocolInfoMessages";
 
-export class Node {
+export class ZWaveNode {
 
 	constructor(
 		public readonly id: number,
 		private readonly driver: Driver,
+		deviceClass?: DeviceClass,
+		supportedCCs: CommandClasses[] = [],
+		controlledCCs: CommandClasses[] = [],
 	) {
 		// TODO restore from cache
+		this._deviceClass = deviceClass;
+		this._supportedCCs = supportedCCs;
+		this._controlledCCs = controlledCCs;
 	}
 
 //#region --- properties ---
@@ -58,8 +64,15 @@ export class Node {
 		return this._isBeaming;
 	}
 
-	private supportedCCs: CommandClasses[] = [];
-	private controllableCCs: CommandClasses[] = [];
+	private _supportedCCs: CommandClasses[];
+	public get supportedCCs(): CommandClasses[] {
+		return this._supportedCCs;
+	}
+
+	private _controlledCCs: CommandClasses[];
+	public get controlledCCs(): CommandClasses[] {
+		return this._controlledCCs;
+	}
 
 	/** This tells us which interview stage was last completed */
 	public interviewStage: InterviewStage = InterviewStage.None;
@@ -108,6 +121,12 @@ export class Node {
 		log("controller", `${this.logPrefix}  version:               ${this.version}`, "debug");
 
 		this.interviewStage = InterviewStage.ProtocolInfo;
+	}
+
+	/** Handles an ApplicationCommandRequest sent from a node */
+	public async handleCommand(command: CommandClass): Promise<void> {
+		log("controller", `${this.logPrefix}handling application command ${stringify(command)} - TODO`, "debug");
+		// TODO
 	}
 
 }

@@ -1,5 +1,6 @@
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
+import { num2hex } from "../util/strings";
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerId)
 @expectedResponse(FunctionType.GetControllerId)
@@ -33,7 +34,7 @@ export class GetControllerIdResponse extends Message {
 
 	public toJSON() {
 		return super.toJSONInherited({
-			homeId: this.homeId,
+			homeId: num2hex(this.homeId),
 			ownNodeId: this.ownNodeId,
 		});
 	}

@@ -1,24 +1,42 @@
-import { Driver } from "../driver/Driver";
+import { EventEmitter } from "events";
+import { CommandClasses } from "../commandclass/CommandClass";
+import { Driver, RequestHandler } from "../driver/Driver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { Message } from "../message/Message";
-import { Node } from "../node/Node";
+import { BasicDeviceClasses, DeviceClass } from "../node/DeviceClass";
+import { ZWaveNode } from "../node/Node";
+import { createDeferredPromise, DeferredPromise } from "../util/defer-promise";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
+import { AddNodeStatus, AddNodeToNetworkRequest, AddNodeType } from "./AddNodeToNetworkRequest";
 import { GetControllerCapabilitiesRequest, GetControllerCapabilitiesResponse } from "./GetControllerCapabilitiesMessages";
 import { GetControllerIdRequest, GetControllerIdResponse } from "./GetControllerIdMessages";
 import { ControllerTypes, GetControllerVersionRequest, GetControllerVersionResponse } from "./GetControllerVersionMessages";
 import { GetSerialApiCapabilitiesRequest, GetSerialApiCapabilitiesResponse } from "./GetSerialApiCapabilitiesMessages";
 import { GetSerialApiInitDataRequest, GetSerialApiInitDataResponse } from "./GetSerialApiInitDataMessages";
 import { GetSUCNodeIdRequest, GetSUCNodeIdResponse } from "./GetSUCNodeIdMessages";
+import { HardResetRequest } from "./HardResetRequest";
 import { SetSerialApiTimeoutsRequest, SetSerialApiTimeoutsResponse } from "./SetSerialApiTimeoutsMessages";
 
-export class ZWaveController {
+// TODO: interface the exposed events
 
+export class ZWaveController extends EventEmitter {
+
+	/** @internal */
 	constructor(
 		private readonly driver: Driver,
-	) {}
+	) {
+		super();
 
-//#region --- Properties ---
+		// register message handlers
+		driver.registerRequestHandler(
+			FunctionType.AddNodeToNetwork,
+			this.handleAddNodeRequest.bind(this),
+		);
+	}
+
+	//#region --- Properties ---
 
 	private _libraryVersion: string;
 	public get libraryVersion(): string {
@@ -96,6 +114,12 @@ export class ZWaveController {
 	}
 
 	public isFunctionSupported(functionType: FunctionType): boolean {
+		if (this._supportedFunctionTypes == null) {
+			throw new ZWaveError(
+				"Cannot check yet if a function is supported by the controller. The interview process has not been completed.",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
 		return this._supportedFunctionTypes.indexOf(functionType) > -1;
 	}
 
@@ -109,9 +133,9 @@ export class ZWaveController {
 		return this._supportsTimers;
 	}
 
-	public readonly nodes = new Map<number, Node>();
+	public readonly nodes = new Map<number, ZWaveNode>();
 
-//#endregion
+	//#endregion
 
 	public async interview(): Promise<void> {
 		log("controller", "beginning interview...", "debug");
@@ -204,7 +228,7 @@ export class ZWaveController {
 		log("controller", `  nodes in the network:       ${initData.nodeIds.join(", ")}`, "debug");
 		// create an empty entry in the nodes map so we can initialize them afterwards
 		for (const nodeId of initData.nodeIds) {
-			this.nodes.set(nodeId, new Node(nodeId, this.driver));
+			this.nodes.set(nodeId, new ZWaveNode(nodeId, this.driver));
 		}
 
 		if (this.type !== ControllerTypes["Bridge Controller"] && this.isFunctionSupported(FunctionType.SetSerialApiTimeouts)) {
@@ -232,6 +256,159 @@ export class ZWaveController {
 		}
 
 		log("controller", "interview completed", "debug");
+	}
+
+	/**
+	 * Performs a hard reset on the controller. This wipes out all configuration!
+	 * Warning: The driver needs to re-interview the controller, so don't call this directly
+	 * @internal
+	 */
+	public hardReset(): Promise<void> {
+		log("controller", "performing hard reset...", "debug");
+		return new Promise(async (resolve, reject) => {
+			// handle the incoming message
+			const handler: RequestHandler = (msg) => {
+				log("controller", `  hard reset succeeded`, "debug");
+				resolve();
+				return true;
+			};
+			this.driver.registerRequestHandler(FunctionType.HardReset, handler, true);
+			// begin the reset process
+			try {
+				await this.driver.sendMessage(new HardResetRequest());
+			} catch (e) {
+				// in any case unregister the handler
+				log("controller", `  hard reset failed: ${e.message}`, "debug");
+				this.driver.unregisterRequestHandler(FunctionType.HardReset, handler);
+				reject(e);
+			}
+		});
+	}
+
+	private _inclusionActive: boolean = false;
+	private _beginInclusionPromise: DeferredPromise<boolean>;
+	private _stopInclusionPromise: DeferredPromise<boolean>;
+	private _nodePendingInclusion: ZWaveNode;
+	public async beginInclusion(): Promise<boolean> {
+		// don't start it twice
+		if (this._inclusionActive) return false;
+		this._inclusionActive = true;
+
+		log("controller", `starting inclusion process...`, "debug");
+
+		// create the promise we're going to return
+		this._beginInclusionPromise = createDeferredPromise();
+
+		// kick off the inclusion process
+		await this.driver.sendMessage(
+			new AddNodeToNetworkRequest(AddNodeType.Any, true, true),
+		);
+
+		await this._beginInclusionPromise;
+	}
+
+	public async stopInclusion(): Promise<boolean> {
+		// don't stop it twice
+		if (!this._inclusionActive) return false;
+		this._inclusionActive = false;
+
+		log("controller", `stopping inclusion process...`, "debug");
+
+		// create the promise we're going to return
+		this._stopInclusionPromise = createDeferredPromise();
+
+		// kick off the inclusion process
+		await this.driver.sendMessage(
+			new AddNodeToNetworkRequest(AddNodeType.Stop, true, true),
+		);
+
+		await this._stopInclusionPromise;
+		log("controller", `the inclusion process was stopped`, "debug");
+	}
+
+	private async handleAddNodeRequest(msg: AddNodeToNetworkRequest) {
+		log("controller", `handling add node request (status = ${AddNodeStatus[msg.status]})`, "debug");
+		if (!this._inclusionActive && msg.status !== AddNodeStatus.Done) {
+			log("controller", `  inclusion is NOT active, ignoring it...`, "debug");
+			return;
+		}
+
+		switch (msg.status) {
+			case AddNodeStatus.Ready:
+				// this is called when inclusion was started successfully
+				log("controller", `  the controller is now ready to add nodes`, "debug");
+				if (this._beginInclusionPromise != null) this._beginInclusionPromise.resolve(true);
+				return;
+			case AddNodeStatus.Failed:
+				// this is called when inclusion could not be started...
+				if (this._beginInclusionPromise != null) {
+					log("controller", `  starting the inclusion failed`, "debug");
+					this._beginInclusionPromise.reject(new ZWaveError(
+						"The inclusion could not be started.",
+						ZWaveErrorCodes.Controller_InclusionFailed,
+					));
+				} else {
+					// ...or adding a node failed
+					log("controller", `  adding the node failed`, "debug");
+					this.emit("inclusion failed");
+				}
+				// in any case, stop the inclusion process so we don't accidentally add another node
+				try {
+					await this.stopInclusion();
+				} catch (e) { /* ok */}
+				return;
+			case AddNodeStatus.AddingSlave: {
+				// this is called when a new node is added
+				this._nodePendingInclusion = new ZWaveNode(
+					msg.statusContext.nodeId,
+					this.driver,
+					new DeviceClass(
+						msg.statusContext.basic,
+						msg.statusContext.generic,
+						msg.statusContext.specific,
+					),
+					msg.statusContext.supportedCCs,
+					msg.statusContext.controlledCCs,
+				);
+				return;
+			}
+			case AddNodeStatus.ProtocolDone: {
+				// this is called after a new node is added
+				// stop the inclusion process so we don't accidentally add another node
+				try {
+					await this.stopInclusion();
+				} catch (e) { /* ok */}
+				return;
+			}
+			case AddNodeStatus.Done: {
+				// this is called when the inclusion was completed
+				log("controller", `done called for ${msg.statusContext.nodeId}`, "debug");
+				// stopping the inclusion was acknowledged by the controller
+				if (this._stopInclusionPromise != null) this._stopInclusionPromise.resolve();
+
+				if (this._nodePendingInclusion != null) {
+					const newNode = this._nodePendingInclusion;
+					log("controller", `finished adding node ${newNode.id}:`, "debug");
+					log("controller", `  basic device class:    ${BasicDeviceClasses[newNode.deviceClass.basic]} (${num2hex(newNode.deviceClass.basic)})`, "debug");
+					log("controller", `  generic device class:  ${newNode.deviceClass.generic.name} (${num2hex(newNode.deviceClass.generic.key)})`, "debug");
+					log("controller", `  specific device class: ${newNode.deviceClass.specific.name} (${num2hex(newNode.deviceClass.specific.key)})`, "debug");
+					log("controller", `  supported CCs:`, "debug");
+					for (const cc of newNode.supportedCCs) {
+						log("controller", `    ${CommandClasses[cc]} (${num2hex(cc)})`, "debug");
+					}
+					log("controller", `  controlled CCs:`, "debug");
+					for (const cc of newNode.controlledCCs) {
+						log("controller", `    ${CommandClasses[cc]} (${num2hex(cc)})`, "debug");
+					}
+
+					// remember the node
+					this.nodes.set(newNode.id, newNode);
+					delete this._nodePendingInclusion;
+					// and notify listeners
+					this.emit("node added", newNode);
+				}
+			}
+		}
 	}
 
 }

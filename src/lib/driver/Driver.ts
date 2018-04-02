@@ -1,6 +1,8 @@
 import { EventEmitter } from "events";
 import * as SerialPort from "serialport";
-import { CommandClasses, SendDataRequest } from "../commandclass/SendDataMessages";
+import { ApplicationCommandRequest } from "../commandclass/ApplicationCommandRequest";
+import { CommandClasses } from "../commandclass/CommandClass";
+import { SendDataRequest } from "../commandclass/SendDataMessages";
 import { ZWaveController } from "../controller/Controller";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "../message/Constants";
@@ -10,7 +12,7 @@ import { createDeferredPromise, DeferredPromise } from "../util/defer-promise";
 import { log } from "../util/logger";
 import { entries } from "../util/object-polyfill";
 import { SortedList } from "../util/sorted-list";
-import { stringify } from "../util/strings";
+import { num2hex, stringify } from "../util/strings";
 import { Transaction } from "./Transaction";
 
 export interface ZWaveOptions {
@@ -27,7 +29,7 @@ export interface ZWaveOptions {
 	 */
 	skipInterview?: boolean;
 }
-export type DeepPartial<T> = {[P in keyof T]+?: DeepPartial<T[P]>};
+export type DeepPartial<T> = { [P in keyof T]+?: DeepPartial<T[P]> };
 
 const defaultOptions: ZWaveOptions = {
 	timeouts: {
@@ -63,6 +65,12 @@ function isMessageSupportCheck(val: any): val is MessageSupportCheck {
 }
 
 export type RequestHandler<T extends Message = Message> = (msg: T) => boolean;
+interface RequestHandlerEntry<T extends Message = Message> {
+	invoke: RequestHandler<T>;
+	oneTime: boolean;
+}
+
+// TODO: Interface the emitted events
 
 export class Driver extends EventEmitter {
 
@@ -74,10 +82,9 @@ export class Driver extends EventEmitter {
 	private currentTransaction: Transaction;
 	private sendQueue = new SortedList<Transaction>();
 	/** A map of handlers for all sorts of requests */
-	private requestHandlers = new Map<FunctionType, RequestHandler[]>();
+	private requestHandlers = new Map<FunctionType, RequestHandlerEntry[]>();
 	/** A map of handlers specifically for send data requests */
-	private sendDataRequestHandlers = new Map<CommandClasses, RequestHandler<SendDataRequest>[]>();
-	// TODO: add a way to subscribe to nodes
+	private sendDataRequestHandlers = new Map<CommandClasses, RequestHandlerEntry<SendDataRequest>[]>();
 
 	private _controller: ZWaveController;
 	public get controller(): ZWaveController {
@@ -129,12 +136,13 @@ export class Driver extends EventEmitter {
 				},
 			);
 			this.serial
-				.on("open", () => {
+				.on("open", async () => {
 					log("driver", "serial port opened", "debug");
 					this._isOpen = true;
-					this.reset();
+					this.resetIO();
 					resolve();
-					if (!this.options.skipInterview) setImmediate(() => this.beginInterview());
+
+					setImmediate(() => this.initializeControllerAndNodes());
 				})
 				.on("data", this.serialport_onData.bind(this))
 				.on("error", err => {
@@ -151,21 +159,43 @@ export class Driver extends EventEmitter {
 		});
 	}
 
-	private async beginInterview() {
-		// Interview the controller
-		this._controller = new ZWaveController(this);
-		await this._controller.interview();
+	private _controllerInterviewed: boolean = false;
+	private async initializeControllerAndNodes() {
+
+		if (this._controller == null) this._controller = new ZWaveController(this);
+		if (!this.options.skipInterview) {
+			// Interview the controller
+			await this._controller.interview();
+		}
+
+		// in any case we need to emit the driver ready event here
+		this._controllerInterviewed = true;
 		log("driver", "driver ready", "debug");
 		this.emit("driver ready");
 
-		// Now interview all nodes
-		for (const node of this._controller.nodes.values()) {
-			// TODO: retry on failure or something...
-			node.interview().catch(e => "node interview failed: " + e.message);
+		if (!this.options.skipInterview) {
+			// Now interview all nodes
+			// don't await them, so the beginInterview method returns
+			for (const node of this._controller.nodes.values()) {
+				// TODO: retry on failure or something...
+				node.interview().catch(e => "node interview failed: " + e.message);
+			}
 		}
 	}
 
-	private reset() {
+	/**
+	 * Performs a hard reset on the controller. This wipes out all configuration!
+	 */
+	public async hardReset() {
+		this.ensureReady(true);
+		await this._controller.hardReset();
+
+		this._controllerInterviewed = false;
+		this.initializeControllerAndNodes();
+	}
+
+	/** Resets the IO layer */
+	private resetIO() {
 		this.ensureReady();
 		log("driver", "resetting driver instance...", "debug");
 
@@ -183,12 +213,23 @@ export class Driver extends EventEmitter {
 	}
 
 	private _wasDestroyed: boolean = false;
-	private ensureReady(): void {
-		if (this._wasStarted && this._isOpen && !this._wasDestroyed) return;
-		throw new ZWaveError(
-			"The driver is not ready or has been destroyed",
-			ZWaveErrorCodes.Driver_NotReady,
-		);
+	private ensureReady(includingController: boolean = false): void {
+		if (
+			!this._wasStarted
+			|| !this._isOpen
+			|| this._wasDestroyed
+		) {
+			throw new ZWaveError(
+				"The driver is not ready or has been destroyed",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		if (includingController && !this._controllerInterviewed) {
+			throw new ZWaveError(
+				"The controller is not ready yet",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
 	}
 
 	private _cleanupHandler = () => this.destroy();
@@ -218,7 +259,7 @@ export class Driver extends EventEmitter {
 			"The receive buffer contains invalid data, resetting...",
 			ZWaveErrorCodes.Driver_InvalidDataReceived,
 		));
-		this.reset();
+		this.resetIO();
 	}
 
 	private serialport_onData(data: Buffer) {
@@ -261,14 +302,18 @@ export class Driver extends EventEmitter {
 			}
 
 			// parse a message - first find the correct constructor
+			// // tslint:disable-next-line:variable-name
+			// let MessageConstructor: Constructable<Message>;
+			// // We introduce special handling for the SendData requests
+			// // as those are differentiated by the comman dclass
+			// if (Message.is(MessageType.Request, FunctionType.SendData, this.receiveBuffer)) {
+			// 	MessageConstructor = SendDataRequest.getConstructor(this.receiveBuffer);
+			// } else {
+			// 	MessageConstructor = Message.getConstructor(this.receiveBuffer);
+			// }
+
 			// tslint:disable-next-line:variable-name
-			let MessageConstructor: Constructable<Message>;
-			// We introduce special handling for the SendData requests as those go a level deeper
-			if (SendDataRequest.isSendDataRequest(this.receiveBuffer)) {
-				MessageConstructor = SendDataRequest.getConstructor(this.receiveBuffer);
-			} else {
-				MessageConstructor = Message.getConstructor(this.receiveBuffer);
-			}
+			const MessageConstructor = Message.getConstructor(this.receiveBuffer);
 			const msg = new MessageConstructor();
 			let readBytes: number;
 			try {
@@ -336,8 +381,9 @@ export class Driver extends EventEmitter {
 	 * Registers a handler for all kinds of request messages
 	 * @param fnType The function type to register the handler for
 	 * @param handler The request handler callback
+	 * @param oneTime Whether the handler should be removed after its first successful invocation
 	 */
-	public registerRequestHandler(fnType: FunctionType, handler: RequestHandler): void {
+	public registerRequestHandler(fnType: FunctionType, handler: RequestHandler, oneTime: boolean = false): void {
 		if (fnType === FunctionType.SendData) {
 			throw new Error(
 				"Cannot register a generic request handler for SendData requests. " +
@@ -345,8 +391,33 @@ export class Driver extends EventEmitter {
 			);
 		}
 		const handlers = this.requestHandlers.has(fnType) ? this.requestHandlers.get(fnType) : [];
-		handlers.push(handler);
-		log("driver", `adding request handler for ${FunctionType[fnType]} (${fnType})... ${handlers.length} registered`, "debug");
+		const entry: RequestHandlerEntry = { invoke: handler, oneTime };
+		handlers.push(entry);
+		log("driver", `added${oneTime ? "one-time" : ""} request handler for ${FunctionType[fnType]} (${fnType})... ${handlers.length} registered`, "debug");
+		this.requestHandlers.set(fnType, handlers);
+	}
+
+	/**
+	 * Unregisters a handler for all kinds of request messages
+	 * @param fnType The function type to unregister the handler for
+	 * @param handler The previously registered request handler callback
+	 */
+	public unregisterRequestHandler(fnType: FunctionType, handler: RequestHandler): void {
+		if (fnType === FunctionType.SendData) {
+			throw new Error(
+				"Cannot unregister a generic request handler for SendData requests. " +
+				"Use `unregisterSendDataRequestHandler()` instead!",
+			);
+		}
+		const handlers = this.requestHandlers.has(fnType) ? this.requestHandlers.get(fnType) : [];
+		for (let i = 0, entry = handlers[i]; i < handlers.length; i++) {
+			// remove the handler if it was found
+			if (entry.invoke === handler) {
+				handlers.splice(i, 1);
+				break;
+			}
+		}
+		log("driver", `removed request handler for ${FunctionType[fnType]} (${fnType})... ${handlers.length} left`, "debug");
 		this.requestHandlers.set(fnType, handlers);
 	}
 
@@ -355,31 +426,80 @@ export class Driver extends EventEmitter {
 	 * @param cc The command class to register the handler for
 	 * @param handler The request handler callback
 	 */
-	public registerSendDataRequestHandler(cc: CommandClasses, handler: RequestHandler<SendDataRequest>): void {
+	public registerSendDataRequestHandler(cc: CommandClasses, handler: RequestHandler<SendDataRequest>, oneTime: boolean = false): void {
 		const handlers = this.sendDataRequestHandlers.has(cc) ? this.sendDataRequestHandlers.get(cc) : [];
-		handlers.push(handler);
-		log("driver", `adding send data request handler for ${CommandClasses[cc]} (${cc})... ${handlers.length} registered`, "debug");
+		const entry: RequestHandlerEntry = { invoke: handler, oneTime };
+		handlers.push(entry);
+		log("driver", `added${oneTime ? "one-time" : ""} send data request handler for ${CommandClasses[cc]} (${cc})... ${handlers.length} registered`, "debug");
+		this.sendDataRequestHandlers.set(cc, handlers);
+	}
+
+	/**
+	 * Unregisters a handler for SendData request messages
+	 * @param cc The command class to unregister the handler for
+	 * @param handler The previously registered request handler callback
+	 */
+	public unregisterSendDataRequestHandler(cc: CommandClasses, handler: RequestHandler<SendDataRequest>): void {
+		const handlers = this.sendDataRequestHandlers.has(cc) ? this.sendDataRequestHandlers.get(cc) : [];
+		for (let i = 0, entry = handlers[i]; i < handlers.length; i++) {
+			// remove the handler if it was found
+			if (entry.invoke === handler) {
+				handlers.splice(i, 1);
+				break;
+			}
+		}
+		log("driver", `removed send data request handler for ${CommandClasses[cc]} (${cc})... ${handlers.length} left`, "debug");
 		this.sendDataRequestHandlers.set(cc, handlers);
 	}
 
 	private handleRequest(msg: Message | SendDataRequest) {
-		let handled: boolean = false;
-		let handlers: RequestHandler[];
+		let handlers: RequestHandlerEntry[];
 
-		if (msg instanceof SendDataRequest) {
-			log("driver", `handling send data request for ${FunctionType[msg.functionType]} (${msg.functionType})`, "debug");
-			handlers = this.sendDataRequestHandlers.get(msg.cc);
+		if (msg instanceof ApplicationCommandRequest) {
+			// we handle ApplicationCommandRequests differently because they are handled by the nodes directly
+			const cc = msg.command.command;
+			const nodeId = msg.command.nodeId;
+			log("driver", `handling application command request ${CommandClasses[cc]} (${num2hex(cc)}) for node ${nodeId}`, "debug");
+			// cannot handle ApplicationCommandRequests without a controller
+			if (this.controller == null) {
+				log("driver", `  the controller is not ready yet, discarding...`, "debug");
+				return;
+			} else if (!this.controller.nodes.has(nodeId)) {
+				log("driver", `  the node is unknown or not initialized yet, discarding...`, "debug");
+				return;
+			}
+
+			// dispatch the command to the node itself
+			const node = this.controller.nodes.get(nodeId);
+			node.handleCommand(msg.command);
+
+			return;
+		} else if (msg instanceof SendDataRequest) {
+			// we handle SendDataRequests differently because their handlers are organized by the command class
+			const cc = msg.command.command;
+			log("driver", `handling send data request ${CommandClasses[cc]} (${num2hex(cc)}) for node ${msg.command.nodeId}`, "debug");
+			handlers = this.sendDataRequestHandlers.get(cc);
 		} else {
-			log("driver", `handling request for ${FunctionType[msg.functionType]} (${msg.functionType})`, "debug");
+			log("driver", `handling request ${FunctionType[msg.functionType]} (${msg.functionType})`, "debug");
 			handlers = this.requestHandlers.get(msg.functionType);
 		}
+		log("driver", `  ${stringify(msg)}`, "debug");
 
 		if (handlers != null && handlers.length > 0) {
-			log("driver", `  ${handlers.length} handler${handlers.length !== 1 ? "s" : ""} registered!`, "warn");
-			for (let i = 1; !handled && i <= handlers.length; i++) {
-				log("driver", `  invoking handler #${i}`, "warn");
-				handled = handlers[i](msg as SendDataRequest);
-				if (handled) log("driver", `  message was handled`, "warn");
+			log("driver", `  ${handlers.length} handler${handlers.length !== 1 ? "s" : ""} registered!`, "debug");
+			// loop through all handlers and find the first one that returns true to indicate that it handled the message
+			for (let i = 0; i <= handlers.length; i++) {
+				log("driver", `  invoking handler #${i - 1}`, "debug");
+				const handler = handlers[i];
+				if (handler.invoke(msg)) {
+					log("driver", `  message was handled`, "debug");
+					if (handler.oneTime) {
+						log("driver", "  one-time handler was successfully called, removing it...", "debug");
+						handlers.splice(i, 1);
+					}
+					// don't invoke any more handlers
+					break;
+				}
 			}
 		} else {
 			log("driver", "  no handlers registered!", "warn");
