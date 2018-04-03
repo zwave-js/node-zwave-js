@@ -3,9 +3,11 @@
 import { expect, should } from "chai";
 should();
 
-import { FunctionType, getExpectedResponse, getFunctionType, getMessageType, Message, MessageType } from "../message/Message";
+import { FunctionType, MessageType } from "../message/Constants";
+import { getExpectedResponse, getFunctionType, getMessageType, Message } from "../message/Message";
+import { CommandClass, CommandClasses } from "./CommandClass";
 import { NoOperationCC } from "./NoOperationCC";
-import { CommandClasses, SendDataRequest, SendDataResponse, TransmitOptions } from "./SendDataMessages";
+import { SendDataRequest, SendDataResponse, TransmitOptions } from "./SendDataMessages";
 
 describe("lib/commandclass/SendDataRequest => ", () => {
 	const req = new SendDataRequest();
@@ -31,30 +33,32 @@ describe("lib/commandclass/SendDataRequest => ", () => {
 		const parsed = new SendDataRequest();
 		parsed.deserialize(rawBuf);
 
-		parsed.nodeId.should.equal(11);
-		parsed.cc.should.equal(CommandClasses["Multilevel Switch"]);
-		parsed.ccPayload.should.deep.equal(Buffer.from([0x02]));
+		parsed.command.should.be.an.instanceof(CommandClass);
+		parsed.command.nodeId.should.equal(11);
+		parsed.command.command.should.equal(CommandClasses["Multilevel Switch"]);
+		parsed.command.payload.should.deep.equal(Buffer.from([0x02]));
+
 		parsed.transmitOptions.should.equal(TransmitOptions.DEFAULT);
 		parsed.callbackId.should.equal(0x27);
 	});
 
 	it("should retrieve the correct CC constructor", () => {
 		// we use a NoOP message here as the other CCs aren't implemented yet
-		const noop = Buffer.from("010900130d0200002515da", "hex");
-		SendDataRequest.isSendDataRequest(noop).should.be.true;
-		const constr = SendDataRequest.getConstructor(noop);
-		constr.should.equal(NoOperationCC);
-		constr.should.not.equal(Message);
-		constr.should.not.equal(SendDataRequest);
+		const raw = Buffer.from("010900130d0200002515da", "hex");
+		Message.getConstructor(raw).should.equal(SendDataRequest);
+
+		const srq = new SendDataRequest();
+		srq.deserialize(raw);
+		srq.command.should.be.an.instanceof(NoOperationCC);
 	});
 
-	const createRequest = function *() {
-		while (true) yield new SendDataRequest(1, CommandClasses["No Operation"]);
+	const createRequest = function*() {
+		const noOp = new NoOperationCC(2);
+		while (true) yield new SendDataRequest(noOp);
 	}();
 
-	it("new ones should have an empty CC payload, default transmit options and a numeric callback id", () => {
+	it("new ones should have default transmit options and a numeric callback id", () => {
 		const newOne = createRequest.next().value;
-		newOne.ccPayload.should.deep.equal(Buffer.from([]));
 		newOne.transmitOptions.should.equal(TransmitOptions.DEFAULT);
 		newOne.callbackId.should.be.a("number");
 	});
@@ -85,7 +89,7 @@ describe("lib/driver/SendDataResponse => ", () => {
 	it("with type Response", () => {
 		getMessageType(res).should.equal(MessageType.Response);
 	});
-	it("and a function type GetControllerVersion", () => {
+	it("and a function type SendData", () => {
 		getFunctionType(res).should.equal(FunctionType.SendData);
 	});
 	it("that expects NO response", () => {

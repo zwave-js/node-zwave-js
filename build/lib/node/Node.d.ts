@@ -1,4 +1,4 @@
-import { CommandClasses, CommandClass } from "../commandclass/CommandClass";
+import { CommandClass, CommandClasses } from "../commandclass/CommandClass";
 import { Driver } from "../driver/Driver";
 import { DeviceClass } from "./DeviceClass";
 import { Baudrate } from "./GetNodeProtocolInfoMessages";

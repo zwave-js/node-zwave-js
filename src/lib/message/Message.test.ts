@@ -4,7 +4,8 @@ import { expect, should } from "chai";
 should();
 
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { FunctionType, Message, MessageType } from "./Message";
+import { FunctionType, MessageType } from "./Constants";
+import { Message } from "./Message";
 
 describe("lib/message/Message => ", () => {
 	it("should deserialize and serialize correctly", () => {

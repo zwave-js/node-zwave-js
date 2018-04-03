@@ -1,4 +1,4 @@
-import { CommandClasses, CommandClass } from "../commandclass/CommandClass";
+import { CommandClass, CommandClasses } from "../commandclass/CommandClass";
 import { Driver } from "../driver/Driver";
 import { log } from "../util/logger";
 import { num2hex, padStart, stringify } from "../util/strings";

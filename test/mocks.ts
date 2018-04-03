@@ -6,7 +6,8 @@ import { SinonStub, spy, stub } from "sinon";
 
 import { EventEmitter } from "events";
 import * as SerialPort from "serialport";
-import { expectedResponse, FunctionType, Message, MessageType, messageTypes, priority, MessagePriority } from "../src/lib/message/Message";
+import { FunctionType, MessagePriority, MessageType } from "../src/lib/message/Constants";
+import { expectedResponse, Message, messageTypes, priority } from "../src/lib/message/Message";
 
 const instances = new Map<string, MockSerialPort>();
 

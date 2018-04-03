@@ -3,7 +3,8 @@
 import { expect, should } from "chai";
 should();
 
-import { FunctionType, getExpectedResponse, getFunctionType, getMessageType, Message, MessageType } from "../message/Message";
+import { FunctionType, MessageType } from "../message/Constants";
+import { getExpectedResponse, getFunctionType, getMessageType, Message } from "../message/Message";
 import { ControllerTypes, GetControllerVersionRequest, GetControllerVersionResponse } from "./GetControllerVersionMessages";
 
 describe("lib/driver/GetControllerVersionRequest => ", () => {

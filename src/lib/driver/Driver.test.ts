@@ -8,8 +8,9 @@ import { SinonFakeTimers, spy, stub, useFakeTimers } from "sinon";
 import * as proxyquire from "proxyquire";
 import { MockRequestMessageWithExpectation, MockRequestMessageWithExpectation_FunctionType, MockRequestMessageWithoutExpectation, MockResponseMessage, MockSerialPort } from "../../../test/mocks";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { getExpectedResponse, getExpectedResponseStatic, Message, MessageHeaders } from "../message/Message";
+import { getExpectedResponse, getExpectedResponseStatic, Message } from "../message/Message";
 import { DeepPartial, Driver as OriginalDriver, ZWaveOptions } from "./Driver";
+import { MessageHeaders } from "../message/Constants";
 
 const { Driver } = proxyquire("./Driver", {
 	serialport: MockSerialPort,

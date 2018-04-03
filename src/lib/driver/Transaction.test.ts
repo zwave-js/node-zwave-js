@@ -3,7 +3,7 @@
 import { expect, should } from "chai";
 should();
 
-import { MessagePriority } from "../message/Message";
+import { MessagePriority } from "../message/Constants";
 import { Transaction } from "./Transaction";
 
 describe("lib/driver/Transaction => ", () => {
