@@ -55,7 +55,7 @@ class CommandClass {
             nodeId: this.nodeId,
             command: CommandClasses[this.command] || strings_1.num2hex(this.command),
         };
-        if (this.payload != null)
+        if (this.payload != null && this.payload.length > 0)
             ret.payload = "0x" + this.payload.toString("hex");
         return ret;
     }

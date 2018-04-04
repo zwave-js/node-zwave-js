@@ -1,4 +1,6 @@
 import { CommandClass, CommandClasses } from "../commandclass/CommandClass";
+import { NoOperationCC } from "../commandclass/NoOperationCC";
+import { SendDataRequest, SendDataResponse, TransmitStatus } from "../commandclass/SendDataMessages";
 import { Driver } from "../driver/Driver";
 import { log } from "../util/logger";
 import { num2hex, padStart, stringify } from "../util/strings";
@@ -20,7 +22,7 @@ export class ZWaveNode {
 		this._controlledCCs = controlledCCs;
 	}
 
-//#region --- properties ---
+	//#region --- properties ---
 
 	private readonly logPrefix = `[Node ${padStart(this.id.toString(), 3, "0")}] `;
 
@@ -77,15 +79,20 @@ export class ZWaveNode {
 	/** This tells us which interview stage was last completed */
 	public interviewStage: InterviewStage = InterviewStage.None;
 
-//#endregion
+	//#endregion
 
 	public async interview() {
 		log("controller", `${this.logPrefix}beginning interview... last completed step: ${InterviewStage[this.interviewStage]}`, "debug");
+
+		// before each step check if we need to do it
 		if (this.interviewStage === InterviewStage.None) {
 			// do a full interview starting with the protocol info
 			log("controller", `${this.logPrefix}new Node, doing a full interview...`, "debug");
 
 			await this.queryProtocolInfo();
+		}
+		if (this.interviewStage === InterviewStage.ProtocolInfo) {
+			await this.ping();
 		}
 
 		// for testing purposes we skip to the end
@@ -93,6 +100,7 @@ export class ZWaveNode {
 		log("controller", `${this.logPrefix}interview completed`, "debug");
 	}
 
+	/** Step #1 of the node interview */
 	private async queryProtocolInfo() {
 		log("controller", `${this.logPrefix}querying protocol info`, "debug");
 		const resp = await this.driver.sendMessage<GetNodeProtocolInfoResponse>(
@@ -123,6 +131,24 @@ export class ZWaveNode {
 		this.interviewStage = InterviewStage.ProtocolInfo;
 	}
 
+	/** Step #2 of the node interview */
+	private async ping() {
+		log("controller", `${this.logPrefix}pinging the node...`, "debug");
+
+		try {
+			const request = new SendDataRequest(new NoOperationCC(this.id));
+			const response = await this.driver.sendMessage<SendDataResponse | SendDataRequest>(request);
+			if (response instanceof SendDataResponse) {
+				throw new Error(`Ping was not sent: ${response.errorCode}`);
+			} else {
+				log("controller", `${this.logPrefix}  controller responded to ping with ${TransmitStatus[response.transmitStatus]}`, "debug");
+			}
+			// TODO: time out the ping
+		} catch (e) {
+			log("controller", `${this.logPrefix}  ping failed: ${e.message}`, "debug");
+		}
+	}
+
 	/** Handles an ApplicationCommandRequest sent from a node */
 	public async handleCommand(command: CommandClass): Promise<void> {
 		log("controller", `${this.logPrefix}handling application command ${stringify(command)} - TODO`, "debug");
@@ -134,7 +160,7 @@ export class ZWaveNode {
 export enum InterviewStage {
 	None,					// Query process hasn't started for this node
 	ProtocolInfo,			// Retrieve protocol information
-	Probe,					// Ping device to see if alive
+	Ping,					// Ping device to see if alive
 	WakeUp,					// Start wake up process if a sleeping node
 	ManufacturerSpecific1,	// Retrieve manufacturer name and product ids if ProtocolInfo lets us
 	NodeInfo,				// Retrieve info about supported, controlled command classes

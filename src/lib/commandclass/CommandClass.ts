@@ -73,7 +73,7 @@ export class CommandClass {
 			nodeId: this.nodeId,
 			command: CommandClasses[this.command] || num2hex(this.command),
 		};
-		if (this.payload != null) ret.payload = "0x" + this.payload.toString("hex");
+		if (this.payload != null && this.payload.length > 0) ret.payload = "0x" + this.payload.toString("hex");
 		return ret;
 	}
 

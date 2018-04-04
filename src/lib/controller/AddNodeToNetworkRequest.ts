@@ -117,8 +117,8 @@ export class AddNodeToNetworkRequest extends Message {
 						continue;
 					}
 					(isAfterMark
-						? this._statusContext.supportedCCs
-						: this._statusContext.controlledCCs
+						? this._statusContext.controlledCCs
+						: this._statusContext.supportedCCs
 					).push(cc);
 				}
 				break;

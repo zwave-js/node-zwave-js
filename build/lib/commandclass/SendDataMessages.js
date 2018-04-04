@@ -32,12 +32,23 @@ var TransmitStatus;
     TransmitStatus[TransmitStatus["NotIdle"] = 3] = "NotIdle";
     TransmitStatus[TransmitStatus["NoRoute"] = 4] = "NoRoute";
 })(TransmitStatus = exports.TransmitStatus || (exports.TransmitStatus = {}));
-let lastCallbackId = 0;
+let lastCallbackId = 0xff;
 function getNextCallbackId() {
-    lastCallbackId++;
-    if (lastCallbackId > 0xff)
-        lastCallbackId = 1;
+    lastCallbackId = (lastCallbackId + 1) & 0xff;
+    // callback IDs below 10 are reserved for nonce messages
+    if (lastCallbackId < 10)
+        lastCallbackId = 10;
     return lastCallbackId;
+}
+// SendDataRequests need specialized handling for the responses
+// We might receive a SendDataResponse indicating that the request failed
+// or we might have to wait for a SendDataRequest giving us more info about what happened
+function isExpectedResponseToSendDataRequest(sent, received) {
+    // Quick check for the function type instead of using the prototype
+    if (received.functionType !== Constants_1.FunctionType.SendData)
+        return false;
+    // A SendDataRequest has to have the correct callback ID to be expected
+    return (received instanceof SendDataRequest && received.callbackId === sent.callbackId);
 }
 let SendDataRequest = class SendDataRequest extends Message_1.Message {
     constructor(
@@ -59,7 +70,9 @@ let SendDataRequest = class SendDataRequest extends Message_1.Message {
                 this.callbackId = getNextCallbackId();
         }
     }
-    // tslint:enable:unified-signatures
+    get transmitStatus() {
+        return this._transmitStatus;
+    }
     serialize() {
         if (this.command == null) {
             throw new ZWaveError_1.ZWaveError("Cannot serialize a SendData message without a command", ZWaveError_1.ZWaveErrorCodes.PacketFormat_Invalid);
@@ -74,14 +87,12 @@ let SendDataRequest = class SendDataRequest extends Message_1.Message {
         ]);
         return super.serialize();
     }
+    // We deserialize SendData requests differently as the controller responses have a different format
     deserialize(data) {
         const ret = super.deserialize(data);
-        // the data is the command class
-        const serializedCC = this.payload.slice(0, this.payload.length - 2);
-        this.command = CommandClass_1.CommandClass.from(serializedCC);
-        // followed by two bytes for tx and callback
-        this.transmitOptions = this.payload[this.payload.length - 2];
-        this.callbackId = this.payload[this.payload.length - 1];
+        this.callbackId = this.payload[0];
+        this._transmitStatus = this.payload[1];
+        // not sure what bytes 2 and 3 mean
         return ret;
     }
     toJSON() {
@@ -91,10 +102,14 @@ let SendDataRequest = class SendDataRequest extends Message_1.Message {
             command: this.command,
         });
     }
+    /** Checks if a received SendDataRequest indicates that sending failed */
+    isFailed() {
+        return this._transmitStatus !== TransmitStatus.OK;
+    }
 };
 SendDataRequest = __decorate([
     Message_1.messageTypes(Constants_1.MessageType.Request, Constants_1.FunctionType.SendData),
-    Message_1.expectedResponse(Constants_1.FunctionType.SendData),
+    Message_1.expectedResponse(isExpectedResponseToSendDataRequest),
     Message_1.priority(Constants_1.MessagePriority.Normal),
     __metadata("design:paramtypes", [CommandClass_1.CommandClass, Number, Number])
 ], SendDataRequest);

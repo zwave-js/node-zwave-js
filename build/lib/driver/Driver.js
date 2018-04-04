@@ -166,7 +166,7 @@ class Driver extends events_1.EventEmitter {
         this.sendQueue.clear();
         // clear the currently pending request
         if (this.currentTransaction != null && this.currentTransaction.promise != null) {
-            this.currentTransaction.promise.reject("The driver was reset");
+            this.currentTransaction.promise.reject(new ZWaveError_1.ZWaveError("The driver was reset", ZWaveError_1.ZWaveErrorCodes.Driver_Reset));
         }
         this.currentTransaction = null;
     }
@@ -238,16 +238,6 @@ class Driver extends events_1.EventEmitter {
                 logger_1.log("io", `the receive buffer contains an incomplete message, waiting for the next chunk...`, "debug");
                 return;
             }
-            // parse a message - first find the correct constructor
-            // // tslint:disable-next-line:variable-name
-            // let MessageConstructor: Constructable<Message>;
-            // // We introduce special handling for the SendData requests
-            // // as those are differentiated by the comman dclass
-            // if (Message.is(MessageType.Request, FunctionType.SendData, this.receiveBuffer)) {
-            // 	MessageConstructor = SendDataRequest.getConstructor(this.receiveBuffer);
-            // } else {
-            // 	MessageConstructor = Message.getConstructor(this.receiveBuffer);
-            // }
             // tslint:disable-next-line:variable-name
             const MessageConstructor = Message_1.Message.getConstructor(this.receiveBuffer);
             const msg = new MessageConstructor();
@@ -270,39 +260,79 @@ class Driver extends events_1.EventEmitter {
             this.receiveBuffer = Buffer.from(this.receiveBuffer.slice(readBytes));
             // all good, send ACK
             this.send(Constants_1.MessageHeaders.ACK);
-            if (msg.type === Constants_1.MessageType.Response) {
-                this.handleResponse(msg);
-            }
-            else if (msg.type === Constants_1.MessageType.Request) {
-                this.handleRequest(msg);
-            }
+            // and handle the response
+            this.handleMessage(msg);
             break;
         }
         logger_1.log("io", `the receive buffer is empty, waiting for the next chunk...`, "debug");
     }
-    handleResponse(msg) {
+    handleMessage(msg) {
         // TODO: find a nice way to serialize the messages
         logger_1.log("driver", `handling response ${strings_1.stringify(msg)}`, "debug");
-        // if we have a pending request, check if that is waiting for this message
-        if (this.currentTransaction != null &&
-            this.currentTransaction.message != null &&
-            this.currentTransaction.message.expectedResponse === msg.functionType) {
-            if (!this.currentTransaction.ackPending) {
-                logger_1.log("io", `ACK already received, resolving transaction`, "debug");
-                logger_1.log("driver", `transaction complete`, "debug");
-                this.currentTransaction.promise.resolve(msg);
-                this.currentTransaction = null;
-                // and see if there are messages pending
-                setImmediate(() => this.workOffSendQueue());
+        // First do special handling for failed SendData requests
+        if (msg.functionType === Constants_1.FunctionType.SendData) {
+            if (this.handleSendDataMessageWithPotentialFailure(msg)) {
+                // if the message was handled in the handler method, don't continue handling it
+                return;
             }
-            else {
-                // wait for the ack, it might be received out of order
-                logger_1.log("io", `no ACK received yet, remembering response`, "debug");
-                this.currentTransaction.response = msg;
-            }
-            return;
         }
-        // TODO: what to do with this message?
+        // if we have a pending request, check if that is waiting for this message
+        if (this.currentTransaction != null) {
+            if (this.currentTransaction.isExpectedResponse(msg)) { // the message was final, so it resolves the transaction
+                logger_1.log("io", `  received expected response to current transaction`, "debug");
+                this.currentTransaction.response = msg;
+                if (!this.currentTransaction.ackPending) {
+                    logger_1.log("io", `  ACK already received, resolving transaction`, "debug");
+                    logger_1.log("driver", `  transaction complete`, "debug");
+                    this.resolveCurrentTransaction();
+                }
+                else {
+                    // wait for the ack, it might be received out of order
+                    logger_1.log("io", `  no ACK received yet, remembering response`, "debug");
+                }
+                // if the response was expected, don't check any more handlers
+                return;
+            }
+        }
+        if (msg.type === Constants_1.MessageType.Request) {
+            // This is a request we might have registered handlers for
+            this.handleRequest(msg);
+        }
+        else {
+            logger_1.log("driver", `  unexpected response, discarding...`, "debug");
+        }
+    }
+    /**
+     * Checks a send data message for failure and tries to handle it
+     * @param msg The received send data message
+     * @returns true if the message was handled
+     */
+    handleSendDataMessageWithPotentialFailure(msg) {
+        if (msg instanceof SendDataMessages_1.SendDataResponse) {
+            if (!msg.wasSent) {
+                // The message was not sent
+                logger_1.log("io", `  a send data request could not be sent, dropping the transaction`, "debug");
+                if (this.currentTransaction != null
+                    && this.currentTransaction.promise != null) {
+                    this.rejectCurrentTransaction(new ZWaveError_1.ZWaveError(`The message could not be sent (code ${msg.errorCode})`, ZWaveError_1.ZWaveErrorCodes.Controller_MessageDropped));
+                }
+            }
+            // a SendDataResponse should not undergo further processing
+            return true;
+        }
+        else if (msg instanceof SendDataMessages_1.SendDataRequest) {
+            // no error, so we don't handle it here
+            if (!msg.isFailed())
+                return false;
+            // The message was sent but an error happened during transmission
+            // TODO: implement retransmission!
+            logger_1.log("io", `  The node did not respond to a send data request, dropping the transaction`, "debug");
+            if (this.currentTransaction != null
+                && this.currentTransaction.promise != null) {
+                this.rejectCurrentTransaction(new ZWaveError_1.ZWaveError(`The node did not respond (${SendDataMessages_1.TransmitStatus[msg.transmitStatus]})`, ZWaveError_1.ZWaveErrorCodes.Controller_MessageDropped));
+            }
+            return true;
+        }
     }
     /**
      * Registers a handler for all kinds of request messages
@@ -318,7 +348,7 @@ class Driver extends events_1.EventEmitter {
         const handlers = this.requestHandlers.has(fnType) ? this.requestHandlers.get(fnType) : [];
         const entry = { invoke: handler, oneTime };
         handlers.push(entry);
-        logger_1.log("driver", `added${oneTime ? "one-time" : ""} request handler for ${Constants_1.FunctionType[fnType]} (${fnType})... ${handlers.length} registered`, "debug");
+        logger_1.log("driver", `added${oneTime ? " one-time" : ""} request handler for ${Constants_1.FunctionType[fnType]} (${fnType})... ${handlers.length} registered`, "debug");
         this.requestHandlers.set(fnType, handlers);
     }
     /**
@@ -351,7 +381,7 @@ class Driver extends events_1.EventEmitter {
         const handlers = this.sendDataRequestHandlers.has(cc) ? this.sendDataRequestHandlers.get(cc) : [];
         const entry = { invoke: handler, oneTime };
         handlers.push(entry);
-        logger_1.log("driver", `added${oneTime ? "one-time" : ""} send data request handler for ${CommandClass_1.CommandClasses[cc]} (${cc})... ${handlers.length} registered`, "debug");
+        logger_1.log("driver", `added${oneTime ? " one-time" : ""} send data request handler for ${CommandClass_1.CommandClasses[cc]} (${cc})... ${handlers.length} registered`, "debug");
         this.sendDataRequestHandlers.set(cc, handlers);
     }
     /**
@@ -392,7 +422,7 @@ class Driver extends events_1.EventEmitter {
             node.handleCommand(msg.command);
             return;
         }
-        else if (msg instanceof SendDataMessages_1.SendDataRequest) {
+        else if (msg instanceof SendDataMessages_1.SendDataRequest && msg.command != null) {
             // we handle SendDataRequests differently because their handlers are organized by the command class
             const cc = msg.command.command;
             logger_1.log("driver", `handling send data request ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)}) for node ${msg.command.nodeId}`, "debug");
@@ -407,7 +437,7 @@ class Driver extends events_1.EventEmitter {
             logger_1.log("driver", `  ${handlers.length} handler${handlers.length !== 1 ? "s" : ""} registered!`, "debug");
             // loop through all handlers and find the first one that returns true to indicate that it handled the message
             for (let i = 0; i <= handlers.length; i++) {
-                logger_1.log("driver", `  invoking handler #${i - 1}`, "debug");
+                logger_1.log("driver", `  invoking handler #${i}`, "debug");
                 const handler = handlers[i];
                 if (handler.invoke(msg)) {
                     logger_1.log("driver", `  message was handled`, "debug");
@@ -437,10 +467,7 @@ class Driver extends events_1.EventEmitter {
                 logger_1.log("driver", `transaction complete`, "debug");
                 // if the response has been received prior to this, resolve the request
                 // if no response was expected, also resolve the request
-                trnsact.promise.resolve(trnsact.response);
-                delete this.currentTransaction;
-                // and see if there are messages pending
-                setImmediate(() => this.workOffSendQueue());
+                this.resolveCurrentTransaction(false);
             }
             return;
         }
@@ -457,8 +484,30 @@ class Driver extends events_1.EventEmitter {
         if (this.currentTransaction != null
             && this.currentTransaction.promise != null) {
             logger_1.log("io", "  the dropped message is " + strings_1.stringify(this.currentTransaction.message), "warn");
-            this.currentTransaction.promise.reject(new ZWaveError_1.ZWaveError("The message was dropped by the controller", ZWaveError_1.ZWaveErrorCodes.Controller_MessageDropped));
+            this.rejectCurrentTransaction(new ZWaveError_1.ZWaveError("The message was dropped by the controller", ZWaveError_1.ZWaveErrorCodes.Controller_MessageDropped), false /* don't resume queue, that happens automatically */);
         }
+    }
+    /**
+     * Resolves the current transaction with the given value
+     * and resumes the queue handling
+     */
+    resolveCurrentTransaction(resumeQueue = true) {
+        this.currentTransaction.promise.resolve(this.currentTransaction.response);
+        this.currentTransaction = null;
+        // and see if there are messages pending
+        if (resumeQueue)
+            setImmediate(() => this.workOffSendQueue());
+    }
+    /**
+     * Rejects the current transaction with the given value
+     * and resumes the queue handling
+     */
+    rejectCurrentTransaction(reason, resumeQueue = true) {
+        this.currentTransaction.promise.reject(reason);
+        this.currentTransaction = null;
+        // and see if there are messages pending
+        if (resumeQueue)
+            setImmediate(() => this.workOffSendQueue());
     }
     // tslint:enable:unified-signatures
     sendMessage(msg, priorityOrCheck, supportCheck) {

@@ -8,6 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const NoOperationCC_1 = require("../commandclass/NoOperationCC");
+const SendDataMessages_1 = require("../commandclass/SendDataMessages");
 const logger_1 = require("../util/logger");
 const strings_1 = require("../util/strings");
 const DeviceClass_1 = require("./DeviceClass");
@@ -59,16 +61,21 @@ class ZWaveNode {
     interview() {
         return __awaiter(this, void 0, void 0, function* () {
             logger_1.log("controller", `${this.logPrefix}beginning interview... last completed step: ${InterviewStage[this.interviewStage]}`, "debug");
+            // before each step check if we need to do it
             if (this.interviewStage === InterviewStage.None) {
                 // do a full interview starting with the protocol info
                 logger_1.log("controller", `${this.logPrefix}new Node, doing a full interview...`, "debug");
                 yield this.queryProtocolInfo();
+            }
+            if (this.interviewStage === InterviewStage.ProtocolInfo) {
+                yield this.ping();
             }
             // for testing purposes we skip to the end
             this.interviewStage = InterviewStage.Complete;
             logger_1.log("controller", `${this.logPrefix}interview completed`, "debug");
         });
     }
+    /** Step #1 of the node interview */
     queryProtocolInfo() {
         return __awaiter(this, void 0, void 0, function* () {
             logger_1.log("controller", `${this.logPrefix}querying protocol info`, "debug");
@@ -96,6 +103,26 @@ class ZWaveNode {
             this.interviewStage = InterviewStage.ProtocolInfo;
         });
     }
+    /** Step #2 of the node interview */
+    ping() {
+        return __awaiter(this, void 0, void 0, function* () {
+            logger_1.log("controller", `${this.logPrefix}pinging the node...`, "debug");
+            try {
+                const request = new SendDataMessages_1.SendDataRequest(new NoOperationCC_1.NoOperationCC(this.id));
+                const response = yield this.driver.sendMessage(request);
+                if (response instanceof SendDataMessages_1.SendDataResponse) {
+                    throw new Error(`Ping was not sent: ${response.errorCode}`);
+                }
+                else {
+                    logger_1.log("controller", `${this.logPrefix}  controller responded to ping with ${SendDataMessages_1.TransmitStatus[response.transmitStatus]}`, "debug");
+                }
+                // TODO: time out the ping
+            }
+            catch (e) {
+                logger_1.log("controller", `${this.logPrefix}  ping failed: ${e.message}`, "debug");
+            }
+        });
+    }
     /** Handles an ApplicationCommandRequest sent from a node */
     handleCommand(command) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -109,7 +136,7 @@ var InterviewStage;
 (function (InterviewStage) {
     InterviewStage[InterviewStage["None"] = 0] = "None";
     InterviewStage[InterviewStage["ProtocolInfo"] = 1] = "ProtocolInfo";
-    InterviewStage[InterviewStage["Probe"] = 2] = "Probe";
+    InterviewStage[InterviewStage["Ping"] = 2] = "Ping";
     InterviewStage[InterviewStage["WakeUp"] = 3] = "WakeUp";
     InterviewStage[InterviewStage["ManufacturerSpecific1"] = 4] = "ManufacturerSpecific1";
     InterviewStage[InterviewStage["NodeInfo"] = 5] = "NodeInfo";

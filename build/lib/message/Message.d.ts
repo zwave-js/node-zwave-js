@@ -8,10 +8,10 @@ export interface Constructable<T> {
  */
 export declare class Message {
     constructor(payload?: Buffer);
-    constructor(type: MessageType, funcType: FunctionType, expResponse: FunctionType, payload?: Buffer);
+    constructor(type: MessageType, funcType: FunctionType, expResponse: FunctionType | ResponsePredicate, payload?: Buffer);
     type: MessageType;
     functionType: FunctionType;
-    expectedResponse: FunctionType;
+    expectedResponse: FunctionType | ResponsePredicate;
     payload: Buffer;
     /** Serializes this message into a Buffer */
     serialize(): Buffer;
@@ -40,6 +40,10 @@ export declare const METADATA_messageTypeMap: unique symbol;
 export declare const METADATA_expectedResponse: unique symbol;
 export declare const METADATA_priority: unique symbol;
 /**
+ * A predicate function to test if a received message matches to the sent message
+ */
+export declare type ResponsePredicate = (sentMessage: Message, receivedMessage: Message) => boolean;
+/**
  * Defines the message and function type associated with a Z-Wave message
  */
 export declare function messageTypes(messageType: MessageType, functionType: FunctionType): ClassDecorator;
@@ -67,14 +71,15 @@ export declare function getMessageConstructor(messageType: MessageType, function
  * Defines the expected response associated with a Z-Wave message
  */
 export declare function expectedResponse(type: FunctionType): ClassDecorator;
+export declare function expectedResponse(predicate: ResponsePredicate): ClassDecorator;
 /**
  * Retrieves the expected response defined for a Z-Wave message class
  */
-export declare function getExpectedResponse<T extends Message>(messageClass: T): FunctionType;
+export declare function getExpectedResponse<T extends Message>(messageClass: T): FunctionType | ResponsePredicate;
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export declare function getExpectedResponseStatic<T extends Constructable<Message>>(classConstructor: T): FunctionType;
+export declare function getExpectedResponseStatic<T extends Constructable<Message>>(classConstructor: T): FunctionType | ResponsePredicate;
 /**
  * Defines the default priority associated with a Z-Wave message
  */

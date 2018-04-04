@@ -30,14 +30,17 @@ export declare class ZWaveNode {
     /** This tells us which interview stage was last completed */
     interviewStage: InterviewStage;
     interview(): Promise<void>;
+    /** Step #1 of the node interview */
     private queryProtocolInfo();
+    /** Step #2 of the node interview */
+    private ping();
     /** Handles an ApplicationCommandRequest sent from a node */
     handleCommand(command: CommandClass): Promise<void>;
 }
 export declare enum InterviewStage {
     None = 0,
     ProtocolInfo = 1,
-    Probe = 2,
+    Ping = 2,
     WakeUp = 3,
     ManufacturerSpecific1 = 4,
     NodeInfo = 5,

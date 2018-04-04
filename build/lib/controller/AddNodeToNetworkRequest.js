@@ -101,8 +101,8 @@ let AddNodeToNetworkRequest = class AddNodeToNetworkRequest extends Message_1.Me
                         continue;
                     }
                     (isAfterMark
-                        ? this._statusContext.supportedCCs
-                        : this._statusContext.controlledCCs).push(cc);
+                        ? this._statusContext.controlledCCs
+                        : this._statusContext.supportedCCs).push(cc);
                 }
                 break;
             }

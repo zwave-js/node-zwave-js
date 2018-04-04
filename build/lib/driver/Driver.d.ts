@@ -61,7 +61,13 @@ export declare class Driver extends EventEmitter {
     private serialport_onError(err);
     private onInvalidData();
     private serialport_onData(data);
-    private handleResponse(msg);
+    private handleMessage(msg);
+    /**
+     * Checks a send data message for failure and tries to handle it
+     * @param msg The received send data message
+     * @returns true if the message was handled
+     */
+    private handleSendDataMessageWithPotentialFailure(msg);
     /**
      * Registers a handler for all kinds of request messages
      * @param fnType The function type to register the handler for
@@ -91,6 +97,16 @@ export declare class Driver extends EventEmitter {
     private handleACK();
     private handleNAK();
     private handleCAN();
+    /**
+     * Resolves the current transaction with the given value
+     * and resumes the queue handling
+     */
+    private resolveCurrentTransaction(resumeQueue?);
+    /**
+     * Rejects the current transaction with the given value
+     * and resumes the queue handling
+     */
+    private rejectCurrentTransaction(reason, resumeQueue?);
     /**
      * Sends a message with default priority to the Z-Wave stick
      * @param msg The message to send

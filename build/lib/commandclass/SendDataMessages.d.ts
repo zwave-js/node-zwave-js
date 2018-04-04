@@ -26,9 +26,13 @@ export declare class SendDataRequest extends Message {
     callbackId: number;
     constructor();
     constructor(command: CommandClass, transmitOptions?: TransmitOptions, callbackId?: number);
+    private _transmitStatus;
+    readonly transmitStatus: TransmitStatus;
     serialize(): Buffer;
     deserialize(data: Buffer): number;
     toJSON(): Record<string, any>;
+    /** Checks if a received SendDataRequest indicates that sending failed */
+    isFailed(): boolean;
 }
 export declare class SendDataResponse extends Message {
     private _wasSent;

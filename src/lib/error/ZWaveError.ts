@@ -3,6 +3,7 @@ export enum ZWaveErrorCodes {
 	PacketFormat_Invalid,
 	PacketFormat_Checksum,
 
+	Driver_Reset,
 	Driver_Destroyed,
 	Driver_NotReady,
 	Driver_InvalidDataReceived,

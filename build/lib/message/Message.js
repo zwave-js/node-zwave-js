@@ -228,17 +228,22 @@ function getMessageConstructor(messageType, functionType) {
         return functionTypeMap.get(getMessageTypeMapKey(messageType, functionType));
 }
 exports.getMessageConstructor = getMessageConstructor;
-/**
- * Defines the expected response associated with a Z-Wave message
- */
-function expectedResponse(type) {
+function expectedResponse(typeOrPredicate) {
     return (messageClass) => {
-        logger_1.log("protocol", `${messageClass.name}: defining expected response ${strings_1.num2hex(type)}`, "silly");
+        if (typeof typeOrPredicate === "number") {
+            const type = typeOrPredicate;
+            logger_1.log("protocol", `${messageClass.name}: defining expected response ${strings_1.num2hex(type)}`, "silly");
+        }
+        else {
+            const predicate = typeOrPredicate;
+            logger_1.log("protocol", `${messageClass.name}: defining expected response [Predicate${predicate.name.length > 0 ? " " + predicate.name : ""}]`, "silly");
+        }
         // and store the metadata
-        Reflect.defineMetadata(exports.METADATA_expectedResponse, type, messageClass);
+        Reflect.defineMetadata(exports.METADATA_expectedResponse, typeOrPredicate, messageClass);
     };
 }
 exports.expectedResponse = expectedResponse;
+// tslint:enable:unified-signatures
 /**
  * Retrieves the expected response defined for a Z-Wave message class
  */
@@ -247,7 +252,12 @@ function getExpectedResponse(messageClass) {
     const constr = messageClass.constructor;
     // retrieve the current metadata
     const ret = Reflect.getMetadata(exports.METADATA_expectedResponse, constr);
-    logger_1.log("protocol", `${constr.name}: retrieving expected response => ${strings_1.num2hex(ret)}`, "silly");
+    if (typeof ret === "number") {
+        logger_1.log("protocol", `${constr.name}: retrieving expected response => ${strings_1.num2hex(ret)}`, "silly");
+    }
+    else if (typeof ret === "function") {
+        logger_1.log("protocol", `${constr.name}: retrieving expected response => [Predicate${ret.name.length > 0 ? " " + ret.name : ""}]`, "silly");
+    }
     return ret;
 }
 exports.getExpectedResponse = getExpectedResponse;
@@ -257,7 +267,12 @@ exports.getExpectedResponse = getExpectedResponse;
 function getExpectedResponseStatic(classConstructor) {
     // retrieve the current metadata
     const ret = Reflect.getMetadata(exports.METADATA_expectedResponse, classConstructor);
-    logger_1.log("protocol", `${classConstructor.name}: retrieving expected response => ${strings_1.num2hex(ret)}`, "silly");
+    if (typeof ret === "number") {
+        logger_1.log("protocol", `${classConstructor.name}: retrieving expected response => ${strings_1.num2hex(ret)}`, "silly");
+    }
+    else if (typeof ret === "function") {
+        logger_1.log("protocol", `${classConstructor.name}: retrieving expected response => [Predicate${ret.name.length > 0 ? " " + ret.name : ""}]`, "silly");
+    }
     return ret;
 }
 exports.getExpectedResponseStatic = getExpectedResponseStatic;

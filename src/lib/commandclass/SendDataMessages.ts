@@ -26,15 +26,27 @@ export enum TransmitStatus {
 	NoRoute = 0x04, // Tranmission complete, no return route
 }
 
-let lastCallbackId = 0;
+let lastCallbackId = 0xff;
 function getNextCallbackId(): number {
-	lastCallbackId++;
-	if (lastCallbackId > 0xff) lastCallbackId = 1;
+	lastCallbackId = (lastCallbackId + 1) & 0xff;
+	// callback IDs below 10 are reserved for nonce messages
+	if (lastCallbackId < 10) lastCallbackId = 10;
 	return lastCallbackId;
 }
 
+// SendDataRequests need specialized handling for the responses
+// We might receive a SendDataResponse indicating that the request failed
+// or we might have to wait for a SendDataRequest giving us more info about what happened
+function isExpectedResponseToSendDataRequest(sent: SendDataRequest, received: Message): boolean {
+	// Quick check for the function type instead of using the prototype
+	if (received.functionType !== FunctionType.SendData) return false;
+
+	// A SendDataRequest has to have the correct callback ID to be expected
+	return (received instanceof SendDataRequest && received.callbackId === sent.callbackId);
+}
+
 @messageTypes(MessageType.Request, FunctionType.SendData)
-@expectedResponse(FunctionType.SendData)
+@expectedResponse(isExpectedResponseToSendDataRequest)
 @priority(MessagePriority.Normal)
 export class SendDataRequest extends Message {
 
@@ -64,6 +76,11 @@ export class SendDataRequest extends Message {
 	}
 	// tslint:enable:unified-signatures
 
+	private _transmitStatus: TransmitStatus;
+	public get transmitStatus(): TransmitStatus {
+		return this._transmitStatus;
+	}
+
 	public serialize(): Buffer {
 		if (this.command == null) {
 			throw new ZWaveError(
@@ -83,15 +100,13 @@ export class SendDataRequest extends Message {
 		return super.serialize();
 	}
 
+	// We deserialize SendData requests differently as the controller responses have a different format
 	public deserialize(data: Buffer): number {
 		const ret = super.deserialize(data);
 
-		// the data is the command class
-		const serializedCC = this.payload.slice(0, this.payload.length - 2);
-		this.command = CommandClass.from(serializedCC);
-		// followed by two bytes for tx and callback
-		this.transmitOptions = this.payload[this.payload.length - 2];
-		this.callbackId = this.payload[this.payload.length - 1];
+		this.callbackId = this.payload[0];
+		this._transmitStatus = this.payload[1];
+		// not sure what bytes 2 and 3 mean
 
 		return ret;
 	}
@@ -102,6 +117,11 @@ export class SendDataRequest extends Message {
 			callbackId: this.callbackId,
 			command: this.command,
 		});
+	}
+
+	/** Checks if a received SendDataRequest indicates that sending failed */
+	public isFailed(): boolean {
+		return this._transmitStatus !== TransmitStatus.OK;
 	}
 }
 

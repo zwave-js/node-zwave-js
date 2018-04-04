@@ -63,13 +63,13 @@ describe("lib/commandclass/SendDataRequest => ", () => {
 		newOne.callbackId.should.be.a("number");
 	});
 
-	it("the automatically created callback ID should be incremented and wrap from 0xff back to 0x01", () => {
+	it("the automatically created callback ID should be incremented and wrap from 0xff back to 10", () => {
 		let lastCallbackId: number;
 		let increment = 0;
 		for (const next of createRequest) {
 			if (++increment > 300) throw new Error("incrementing the callback ID does not work somehow");
 			if (lastCallbackId === 0xff) {
-				next.callbackId.should.equal(1);
+				next.callbackId.should.equal(10);
 				break;
 			} else if (lastCallbackId != null) {
 				next.callbackId.should.equal(lastCallbackId + 1);
