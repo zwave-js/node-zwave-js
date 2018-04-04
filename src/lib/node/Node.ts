@@ -2,6 +2,7 @@ import { CommandClass, CommandClasses } from "../commandclass/CommandClass";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { SendDataRequest, SendDataResponse, TransmitStatus } from "../commandclass/SendDataMessages";
 import { Driver } from "../driver/Driver";
+import { MessagePriority } from "../message/Constants";
 import { log } from "../util/logger";
 import { num2hex, padStart, stringify } from "../util/strings";
 import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
@@ -81,17 +82,24 @@ export class ZWaveNode {
 
 	//#endregion
 
+	public isControllerNode(): boolean {
+		return this.id === this.driver.controller.ownNodeId;
+	}
+
 	public async interview() {
 		log("controller", `${this.logPrefix}beginning interview... last completed step: ${InterviewStage[this.interviewStage]}`, "debug");
 
-		// before each step check if we need to do it
+		// before each step check if it is necessary
+
 		if (this.interviewStage === InterviewStage.None) {
 			// do a full interview starting with the protocol info
 			log("controller", `${this.logPrefix}new Node, doing a full interview...`, "debug");
 
 			await this.queryProtocolInfo();
 		}
+		// TODO: delay pinging of nodes that are not listening or sleeping
 		if (this.interviewStage === InterviewStage.ProtocolInfo) {
+			// after getting the protocol info, ping the nodes
 			await this.ping();
 		}
 
@@ -133,20 +141,22 @@ export class ZWaveNode {
 
 	/** Step #2 of the node interview */
 	private async ping() {
-		log("controller", `${this.logPrefix}pinging the node...`, "debug");
+		if (this.isControllerNode()) {
+			log("controller", `${this.logPrefix}not pinging the controller...`, "debug");
+		} else {
+			log("controller", `${this.logPrefix}pinging the node...`, "debug");
 
-		try {
-			const request = new SendDataRequest(new NoOperationCC(this.id));
-			const response = await this.driver.sendMessage<SendDataResponse | SendDataRequest>(request);
-			if (response instanceof SendDataResponse) {
-				throw new Error(`Ping was not sent: ${response.errorCode}`);
-			} else {
-				log("controller", `${this.logPrefix}  controller responded to ping with ${TransmitStatus[response.transmitStatus]}`, "debug");
+			try {
+				const request = new SendDataRequest(new NoOperationCC(this.id));
+				// set the priority manually, as SendData can be Application level too
+				const response = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.NodeQuery);
+				log("controller", `${this.logPrefix}  ping succeeded`, "debug");
+				// TODO: time out the ping
+			} catch (e) {
+				log("controller", `${this.logPrefix}  ping failed: ${e.message}`, "debug");
 			}
-			// TODO: time out the ping
-		} catch (e) {
-			log("controller", `${this.logPrefix}  ping failed: ${e.message}`, "debug");
 		}
+		this.interviewStage = InterviewStage.Ping;
 	}
 
 	/** Handles an ApplicationCommandRequest sent from a node */

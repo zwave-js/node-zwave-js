@@ -29,6 +29,7 @@ export declare class ZWaveNode {
     readonly controlledCCs: CommandClasses[];
     /** This tells us which interview stage was last completed */
     interviewStage: InterviewStage;
+    isControllerNode(): boolean;
     interview(): Promise<void>;
     /** Step #1 of the node interview */
     private queryProtocolInfo();
