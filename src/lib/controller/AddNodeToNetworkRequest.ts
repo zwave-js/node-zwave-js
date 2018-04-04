@@ -2,6 +2,7 @@ import { CommandClasses } from "../commandclass/CommandClass";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
 import { BasicDeviceClasses, GenericDeviceClass, SpecificDeviceClass } from "../node/DeviceClass";
+import { parseNodeInformation } from "../node/NodeInfo";
 
 export enum AddNodeType {
 	Any = 1,
@@ -95,32 +96,8 @@ export class AddNodeToNetworkRequest extends Message {
 				break;
 
 			case AddNodeStatus.AddingSlave: {
-				// the payload contains the node ID, basic, generic and specific class, and a list of CCs
-				this._statusContext = {
-					nodeId: this.payload[2],
-					// length is 3
-					basic: this.payload[4],
-					generic: GenericDeviceClass.get(this.payload[5]),
-					specific: SpecificDeviceClass.get(this.payload[5], this.payload[6]),
-					supportedCCs: [],
-					controlledCCs: [],
-				};
-				// split the CCs into supported/controlled
-				// tslint:disable-next-line:variable-name
-				const CCs = [...this.payload.slice(7)];
-				let isAfterMark: boolean = false;
-				for (const cc of CCs) {
-					// CCs before the support/control mark are supported
-					// CCs after the support/control mark are controlled
-					if (cc === CommandClasses["Support/Control Mark"]) {
-						isAfterMark = true;
-						continue;
-					}
-					(isAfterMark
-						? this._statusContext.controlledCCs
-						: this._statusContext.supportedCCs
-					).push(cc);
-				}
+				// the payload contains a node information frame
+				this._statusContext = parseNodeInformation(this.payload.slice(2));
 				break;
 			}
 		}

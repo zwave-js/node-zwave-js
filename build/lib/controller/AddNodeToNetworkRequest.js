@@ -9,10 +9,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const CommandClass_1 = require("../commandclass/CommandClass");
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
-const DeviceClass_1 = require("../node/DeviceClass");
+const NodeInfo_1 = require("../node/NodeInfo");
 var AddNodeType;
 (function (AddNodeType) {
     AddNodeType[AddNodeType["Any"] = 1] = "Any";
@@ -79,31 +78,8 @@ let AddNodeToNetworkRequest = class AddNodeToNetworkRequest extends Message_1.Me
                 this._statusContext = { nodeId: this.payload[2] };
                 break;
             case AddNodeStatus.AddingSlave: {
-                // the payload contains the node ID, basic, generic and specific class, and a list of CCs
-                this._statusContext = {
-                    nodeId: this.payload[2],
-                    // length is 3
-                    basic: this.payload[4],
-                    generic: DeviceClass_1.GenericDeviceClass.get(this.payload[5]),
-                    specific: DeviceClass_1.SpecificDeviceClass.get(this.payload[5], this.payload[6]),
-                    supportedCCs: [],
-                    controlledCCs: [],
-                };
-                // split the CCs into supported/controlled
-                // tslint:disable-next-line:variable-name
-                const CCs = [...this.payload.slice(7)];
-                let isAfterMark = false;
-                for (const cc of CCs) {
-                    // CCs before the support/control mark are supported
-                    // CCs after the support/control mark are controlled
-                    if (cc === CommandClass_1.CommandClasses["Support/Control Mark"]) {
-                        isAfterMark = true;
-                        continue;
-                    }
-                    (isAfterMark
-                        ? this._statusContext.controlledCCs
-                        : this._statusContext.supportedCCs).push(cc);
-                }
+                // the payload contains a node information frame
+                this._statusContext = NodeInfo_1.parseNodeInformation(this.payload.slice(2));
                 break;
             }
         }

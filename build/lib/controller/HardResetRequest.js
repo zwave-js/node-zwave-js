@@ -17,11 +17,3 @@ HardResetRequest = __decorate([
     Message_1.priority(Constants_1.MessagePriority.Controller)
 ], HardResetRequest);
 exports.HardResetRequest = HardResetRequest;
-// @messageTypes(MessageType.Response, FunctionType.HardReset)
-// export class HardResetResponse extends Message {
-// 	public deserialize(data: Buffer): number {
-// 		const ret = super.deserialize(data);
-// 		// Parse payload here
-// 		return ret;
-// 	}
-// }

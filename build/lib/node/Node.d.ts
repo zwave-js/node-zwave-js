@@ -30,11 +30,17 @@ export declare class ZWaveNode {
     /** This tells us which interview stage was last completed */
     interviewStage: InterviewStage;
     isControllerNode(): boolean;
+    /** Tests if this node supports the given CommandClass */
+    supportsCC(cc: CommandClasses): boolean;
+    /** Tests if this node controls the given CommandClass */
+    controlsCC(cc: CommandClasses): boolean;
     interview(): Promise<void>;
     /** Step #1 of the node interview */
     private queryProtocolInfo();
     /** Step #2 of the node interview */
     private ping();
+    /** Step #5 of the node interview */
+    private getNodeInfo();
     /** Handles an ApplicationCommandRequest sent from a node */
     handleCommand(command: CommandClass): Promise<void>;
 }

@@ -8,15 +8,3 @@ export class HardResetRequest extends Message {
 	// the response "request" contains one payload byte
 	// it was 0xc1 in our case (0b1100_0001), but we don't know what it means
 }
-
-// @messageTypes(MessageType.Response, FunctionType.HardReset)
-// export class HardResetResponse extends Message {
-
-// 	public deserialize(data: Buffer): number {
-// 		const ret = super.deserialize(data);
-
-// 		// Parse payload here
-
-// 		return ret;
-// 	}
-// }

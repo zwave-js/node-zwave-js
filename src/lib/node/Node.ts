@@ -7,6 +7,8 @@ import { log } from "../util/logger";
 import { num2hex, padStart, stringify } from "../util/strings";
 import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
 import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "./GetNodeProtocolInfoMessages";
+import { RequestNodeInfoResponse, RequestNodeInfoRequest } from "./RequestNodeInfoMessages";
+import { ApplicationUpdateRequest } from "../controller/ApplicationUpdateRequest";
 
 export class ZWaveNode {
 
@@ -86,6 +88,18 @@ export class ZWaveNode {
 		return this.id === this.driver.controller.ownNodeId;
 	}
 
+	/** Tests if this node supports the given CommandClass */
+	public supportsCC(cc: CommandClasses): boolean {
+		return this._supportedCCs.indexOf(cc) !== -1;
+	}
+
+	/** Tests if this node controls the given CommandClass */
+	public controlsCC(cc: CommandClasses): boolean {
+		return this._controlledCCs.indexOf(cc) !== -1;
+	}
+
+	//#region --- interview ---
+
 	public async interview() {
 		log("controller", `${this.logPrefix}beginning interview... last completed step: ${InterviewStage[this.interviewStage]}`, "debug");
 
@@ -101,6 +115,11 @@ export class ZWaveNode {
 		if (this.interviewStage === InterviewStage.ProtocolInfo) {
 			// after getting the protocol info, ping the nodes
 			await this.ping();
+		}
+		// TODO: WakeUp
+		// TODO: ManufacturerSpecific1
+		if (this.interviewStage === InterviewStage.ManufacturerSpecific1) {
+			await this.getNodeInfo();
 		}
 
 		// for testing purposes we skip to the end
@@ -159,6 +178,25 @@ export class ZWaveNode {
 		this.interviewStage = InterviewStage.Ping;
 	}
 
+	/** Step #5 of the node interview */
+	private async getNodeInfo() {
+		log("controller", `${this.logPrefix}querying node info`, "debug");
+		const resp = await this.driver.sendMessage<RequestNodeInfoResponse | ApplicationUpdateRequest>(
+			new RequestNodeInfoRequest(this.id),
+		);
+		if (resp instanceof RequestNodeInfoResponse && !resp.wasSent) {
+			log("controller", `${this.logPrefix}  querying the node info failed`, "debug");
+		} else if (resp instanceof ApplicationUpdateRequest) {
+			// TODO: log the received values
+			log("controller", `${this.logPrefix}  received the node info`, "debug");
+			this._supportedCCs = resp.nodeInformation.supportedCCs;
+			this._controlledCCs = resp.nodeInformation.controlledCCs;
+		}
+		this.interviewStage = InterviewStage.NodeInfo;
+	}
+
+	//#endregion
+
 	/** Handles an ApplicationCommandRequest sent from a node */
 	public async handleCommand(command: CommandClass): Promise<void> {
 		log("controller", `${this.logPrefix}handling application command ${stringify(command)} - TODO`, "debug");
@@ -167,6 +205,7 @@ export class ZWaveNode {
 
 }
 
+// TODO: This order is not optimal, check how OpenHAB does it
 export enum InterviewStage {
 	None,					// Query process hasn't started for this node
 	ProtocolInfo,			// Retrieve protocol information

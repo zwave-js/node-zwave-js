@@ -113,7 +113,7 @@ export enum FunctionType {
 	FUNC_ID_ZW_ASSIGN_RETURN_ROUTE = 0x46,	// Assign a return route from the specified node to the controller
 	FUNC_ID_ZW_DELETE_RETURN_ROUTE = 0x47,	// Delete all return routes from the specified node
 	FUNC_ID_ZW_REQUEST_NODE_NEIGHBOR_UPDATE = 0x48,	// Ask the specified node to update its neighbors (then read them from the controller)
-	FUNC_ID_ZW_APPLICATION_UPDATE = 0x49,	// Get a list of supported (and controller) command classes
+	ApplicationUpdateRequest = 0x49,	// Get a list of supported (and controller) command classes
 
 	AddNodeToNetwork = 0x4a,	// Control the addnode (or addcontroller) process...start, stop, etc.
 
@@ -134,7 +134,9 @@ export enum FunctionType {
 
 	FUNC_ID_ZW_REQUEST_NODE_NEIGHBOR_UPDATE_OPTIONS = 0x5a,	// Allow options for request node neighbor update
 	FUNC_ID_ZW_EXPLORE_REQUEST_INCLUSION = 0x5e,	// supports NWI
-	FUNC_ID_ZW_REQUEST_NODE_INFO = 0x60,	// Get info (supported command classes) for the specified node
+
+	RequestNodeInfo = 0x60,	// Get info (supported command classes) for the specified node
+
 	FUNC_ID_ZW_REMOVE_FAILED_NODE_ID = 0x61,	// Mark a specified node id as failed
 	FUNC_ID_ZW_IS_FAILED_NODE_ID = 0x62,	// Check to see if a specified node has failed
 	FUNC_ID_ZW_REPLACE_FAILED_NODE = 0x63,	// Remove a failed node from the controller's list (?)

@@ -15,6 +15,8 @@ const logger_1 = require("../util/logger");
 const strings_1 = require("../util/strings");
 const DeviceClass_1 = require("./DeviceClass");
 const GetNodeProtocolInfoMessages_1 = require("./GetNodeProtocolInfoMessages");
+const RequestNodeInfoMessages_1 = require("./RequestNodeInfoMessages");
+const ApplicationUpdateRequest_1 = require("../controller/ApplicationUpdateRequest");
 class ZWaveNode {
     constructor(id, driver, deviceClass, supportedCCs = [], controlledCCs = []) {
         this.id = id;
@@ -62,6 +64,15 @@ class ZWaveNode {
     isControllerNode() {
         return this.id === this.driver.controller.ownNodeId;
     }
+    /** Tests if this node supports the given CommandClass */
+    supportsCC(cc) {
+        return this._supportedCCs.indexOf(cc) !== -1;
+    }
+    /** Tests if this node controls the given CommandClass */
+    controlsCC(cc) {
+        return this._controlledCCs.indexOf(cc) !== -1;
+    }
+    //#region --- interview ---
     interview() {
         return __awaiter(this, void 0, void 0, function* () {
             logger_1.log("controller", `${this.logPrefix}beginning interview... last completed step: ${InterviewStage[this.interviewStage]}`, "debug");
@@ -75,6 +86,11 @@ class ZWaveNode {
             if (this.interviewStage === InterviewStage.ProtocolInfo) {
                 // after getting the protocol info, ping the nodes
                 yield this.ping();
+            }
+            // TODO: WakeUp
+            // TODO: ManufacturerSpecific1
+            if (this.interviewStage === InterviewStage.ManufacturerSpecific1) {
+                yield this.getNodeInfo();
             }
             // for testing purposes we skip to the end
             this.interviewStage = InterviewStage.Complete;
@@ -131,6 +147,24 @@ class ZWaveNode {
             this.interviewStage = InterviewStage.Ping;
         });
     }
+    /** Step #5 of the node interview */
+    getNodeInfo() {
+        return __awaiter(this, void 0, void 0, function* () {
+            logger_1.log("controller", `${this.logPrefix}querying node info`, "debug");
+            const resp = yield this.driver.sendMessage(new RequestNodeInfoMessages_1.RequestNodeInfoRequest(this.id));
+            if (resp instanceof RequestNodeInfoMessages_1.RequestNodeInfoResponse && !resp.wasSent) {
+                logger_1.log("controller", `${this.logPrefix}  querying the node info failed`, "debug");
+            }
+            else if (resp instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest) {
+                // TODO: log the received values
+                logger_1.log("controller", `${this.logPrefix}  received the node info`, "debug");
+                this._supportedCCs = resp.nodeInformation.supportedCCs;
+                this._controlledCCs = resp.nodeInformation.controlledCCs;
+            }
+            this.interviewStage = InterviewStage.NodeInfo;
+        });
+    }
+    //#endregion
     /** Handles an ApplicationCommandRequest sent from a node */
     handleCommand(command) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -140,6 +174,7 @@ class ZWaveNode {
     }
 }
 exports.ZWaveNode = ZWaveNode;
+// TODO: This order is not optimal, check how OpenHAB does it
 var InterviewStage;
 (function (InterviewStage) {
     InterviewStage[InterviewStage["None"] = 0] = "None";
