@@ -14,13 +14,9 @@ export declare class CommandClass {
     payload: Buffer;
     constructor();
     constructor(nodeId: number, command?: CommandClasses, payload?: Buffer);
+    private _version;
     /** The version of the command class used */
     version: number;
-    /**
-     * Returns the maximum implemented version of this command class.
-     * Override in the CC implementations to specify what is supported
-     */
-    static readonly maxImplementedVersion: number;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
     /**
@@ -35,6 +31,7 @@ export declare class CommandClass {
 }
 export declare const METADATA_commandClass: unique symbol;
 export declare const METADATA_commandClassMap: unique symbol;
+export declare const METADATA_version: unique symbol;
 /**
  * Defines the command class associated with a Z-Wave message
  */
@@ -52,9 +49,17 @@ export declare function getCommandClassStatic<T extends Constructable<CommandCla
  */
 export declare function getCCConstructor(cc: CommandClasses): Constructable<CommandClass>;
 /**
- * Looks up the maximum implemented command class version
+ * Defines the implemented version of a Z-Wave command class
  */
-export declare function getMaxImplementedCCVersion(cc: CommandClasses): number;
+export declare function implementedVersion(version: number): ClassDecorator;
+/**
+ * Retrieves the implemented version defined for a Z-Wave command class
+ */
+export declare function getImplementedVersion<T extends CommandClass>(cc: T | CommandClasses): number;
+/**
+ * Retrieves the implemented version defined for a Z-Wave command class
+ */
+export declare function getImplementedVersionStatic<T extends Constructable<CommandClass>>(classConstructor: T): number;
 export declare enum CommandClasses {
     "Alarm" = 113,
     "Alarm Sensor" = 156,

@@ -1,5 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { CommandClass, commandClass, CommandClasses } from "./CommandClass";
+import { CommandClass, commandClass, CommandClasses, implementedVersion } from "./CommandClass";
 
 export enum VersionCommand {
 	Get = 0x11,
@@ -24,9 +24,8 @@ export enum ZWaveLibraryTypes {
 }
 
 @commandClass(CommandClasses.Version)
+@implementedVersion(1)
 export class VersionCC extends CommandClass {
-
-	public static readonly maxSupportedVersion: number = 1;
 
 	// tslint:disable:unified-signatures
 	constructor(nodeId?: number);

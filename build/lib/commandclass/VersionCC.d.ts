@@ -24,7 +24,6 @@ export declare class VersionCC extends CommandClass {
     nodeId: number;
     versionCommand: VersionCommand;
     requestedCC: CommandClasses;
-    static readonly maxSupportedVersion: number;
     constructor(nodeId?: number);
     constructor(nodeId: number, command: VersionCommand.Get);
     constructor(nodeId: number, command: VersionCommand.CommandClassGet, requestedCC: CommandClasses);

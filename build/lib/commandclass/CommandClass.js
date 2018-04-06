@@ -1,19 +1,38 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const ZWaveError_1 = require("../error/ZWaveError");
 const logger_1 = require("../util/logger");
 const object_polyfill_1 = require("../util/object-polyfill");
 const strings_1 = require("../util/strings");
-class CommandClass {
+let CommandClass = CommandClass_1 = class CommandClass {
     // implementation
     constructor(nodeId, command, payload = Buffer.from([])) {
         this.nodeId = nodeId;
         this.command = command;
         this.payload = payload;
         // tslint:enable:unified-signatures
-        /** The version of the command class used */
-        this.version = 1;
+        this._version = 1;
         // Extract the cc from declared metadata if not provided
         this.command = command != null ? command : getCommandClass(this);
+    }
+    /** The version of the command class used */
+    get version() {
+        return this._version;
+    }
+    set version(v) {
+        if (v > getImplementedVersion(this)) {
+            throw new ZWaveError_1.ZWaveError(`${this.constructor.name}: Cannot set the version to ${v} because it is greater than the implemented version (${getImplementedVersion(this)})`, ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
+        }
+        this._version = v;
     }
     serialize() {
         const payloadLength = this.payload != null ? this.payload.length : 0;
@@ -40,11 +59,11 @@ class CommandClass {
      */
     static getConstructor(ccData) {
         const cc = ccData[2];
-        return getCCConstructor(cc) || CommandClass;
+        return getCCConstructor(cc) || CommandClass_1;
     }
     static from(serializedCC) {
         // tslint:disable-next-line:variable-name
-        const Constructor = CommandClass.getConstructor(serializedCC);
+        const Constructor = CommandClass_1.getConstructor(serializedCC);
         const ret = new Constructor();
         ret.deserialize(serializedCC);
         return ret;
@@ -70,18 +89,19 @@ class CommandClass {
         }
         return ret;
     }
-}
-/**
- * Returns the maximum implemented version of this command class.
- * Override in the CC implementations to specify what is supported
- */
-CommandClass.maxImplementedVersion = 0;
+};
+CommandClass = CommandClass_1 = __decorate([
+    implementedVersion(Number.POSITIVE_INFINITY) // per default don't impose any restrictions on the version
+    ,
+    __metadata("design:paramtypes", [Number, Number, Buffer])
+], CommandClass);
 exports.CommandClass = CommandClass;
 // =======================
 // use decorators to link command class values to actual command classes
 // tslint:disable:variable-name
 exports.METADATA_commandClass = Symbol("commandClass");
 exports.METADATA_commandClassMap = Symbol("commandClassMap");
+exports.METADATA_version = Symbol("version");
 /**
  * Defines the command class associated with a Z-Wave message
  */
@@ -130,16 +150,47 @@ function getCCConstructor(cc) {
 }
 exports.getCCConstructor = getCCConstructor;
 /**
- * Looks up the maximum implemented command class version
+ * Defines the implemented version of a Z-Wave command class
  */
-function getMaxImplementedCCVersion(cc) {
-    // tslint:disable-next-line:variable-name
-    const CCClass = getCCConstructor(cc);
-    if (CCClass != null)
-        return CCClass.maxImplementedVersion;
-    return 0;
+function implementedVersion(version) {
+    return (ccClass) => {
+        logger_1.log("protocol", `${ccClass.name}: defining implemented version ${version}`, "silly");
+        // and store the metadata
+        Reflect.defineMetadata(exports.METADATA_version, version, ccClass);
+    };
 }
-exports.getMaxImplementedCCVersion = getMaxImplementedCCVersion;
+exports.implementedVersion = implementedVersion;
+/**
+ * Retrieves the implemented version defined for a Z-Wave command class
+ */
+function getImplementedVersion(cc) {
+    // get the class constructor
+    let constr;
+    let constrName;
+    if (typeof cc === "number") {
+        constr = getCCConstructor(cc);
+        constrName = constr != null ? constr.name : CommandClasses[cc];
+    }
+    else {
+        constr = cc.constructor;
+        constrName = constr.name;
+    }
+    // retrieve the current metadata
+    const ret = constr != null ? Reflect.getMetadata(exports.METADATA_version, constr) : 0;
+    logger_1.log("protocol", `${constrName}: retrieving implemented version => ${ret}`, "silly");
+    return ret;
+}
+exports.getImplementedVersion = getImplementedVersion;
+/**
+ * Retrieves the implemented version defined for a Z-Wave command class
+ */
+function getImplementedVersionStatic(classConstructor) {
+    // retrieve the current metadata
+    const ret = Reflect.getMetadata(exports.METADATA_version, classConstructor);
+    logger_1.log("protocol", `${classConstructor.name}: retrieving implemented version => ${ret}`, "silly");
+    return ret;
+}
+exports.getImplementedVersionStatic = getImplementedVersionStatic;
 /* A dictionary of all command classes as of 2018-03-30 */
 var CommandClasses;
 (function (CommandClasses) {
@@ -262,3 +313,4 @@ var CommandClasses;
     CommandClasses[CommandClasses["Z/IP Portal"] = 97] = "Z/IP Portal";
     CommandClasses[CommandClasses["Z-Wave Plus Info"] = 94] = "Z-Wave Plus Info";
 })(CommandClasses = exports.CommandClasses || (exports.CommandClasses = {}));
+var CommandClass_1;

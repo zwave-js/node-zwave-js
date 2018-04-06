@@ -403,6 +403,11 @@ class Driver extends events_1.EventEmitter {
     }
     handleRequest(msg) {
         let handlers;
+        // TODO: find a nice way to observe the different stages of a response.
+        // for example a SendDataRequest with a VersionCC gets 3 responses:
+        // 1. SendDataResponse with info if the data was sent
+        // 2. SendDataRequest with info if the node responded
+        // 3. ApplicationCommandRequest with the actual response
         if (msg instanceof ApplicationCommandRequest_1.ApplicationCommandRequest) {
             // we handle ApplicationCommandRequests differently because they are handled by the nodes directly
             const cc = msg.command.command;

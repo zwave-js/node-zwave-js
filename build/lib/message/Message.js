@@ -300,7 +300,7 @@ function getDefaultPriority(messageClass) {
 }
 exports.getDefaultPriority = getDefaultPriority;
 /**
- * Retrieves the function type defined for a Z-Wave message class
+ * Retrieves the default priority defined for a Z-Wave message class
  */
 function getDefaultPriorityStatic(classConstructor) {
     // retrieve the current metadata

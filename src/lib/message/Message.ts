@@ -372,7 +372,7 @@ export function getDefaultPriority<T extends Message>(messageClass: T): MessageP
 }
 
 /**
- * Retrieves the function type defined for a Z-Wave message class
+ * Retrieves the default priority defined for a Z-Wave message class
  */
 export function getDefaultPriorityStatic<T extends Constructable<Message>>(classConstructor: T): MessagePriority {
 	// retrieve the current metadata

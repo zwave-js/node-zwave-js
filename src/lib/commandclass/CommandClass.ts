@@ -1,3 +1,4 @@
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Constructable } from "../message/Message";
 import { log } from "../util/logger";
 import { entries } from "../util/object-polyfill";
@@ -13,6 +14,7 @@ export interface CommandClassStatic {
 	readonly maxImplementedVersion: number;
 }
 
+@implementedVersion(Number.POSITIVE_INFINITY) // per default don't impose any restrictions on the version
 export class CommandClass {
 
 	// tslint:disable:unified-signatures
@@ -35,14 +37,20 @@ export class CommandClass {
 	}
 	// tslint:enable:unified-signatures
 
+	private _version: number = 1;
 	/** The version of the command class used */
-	public version: number = 1;
-
-	/**
-	 * Returns the maximum implemented version of this command class.
-	 * Override in the CC implementations to specify what is supported
-	 */
-	public static readonly maxImplementedVersion: number = 0;
+	public get version(): number {
+		return this._version;
+	}
+	public set version(v: number) {
+		if (v > getImplementedVersion(this)) {
+			throw new ZWaveError(
+				`${this.constructor.name}: Cannot set the version to ${v} because it is greater than the implemented version (${getImplementedVersion(this)})`,
+				ZWaveErrorCodes.CC_Invalid,
+			);
+		}
+		this._version = v;
+	}
 
 	public serialize(): Buffer {
 		const payloadLength = this.payload != null ? this.payload.length : 0;
@@ -112,6 +120,7 @@ export class CommandClass {
 // tslint:disable:variable-name
 export const METADATA_commandClass = Symbol("commandClass");
 export const METADATA_commandClassMap = Symbol("commandClassMap");
+export const METADATA_version = Symbol("version");
 // tslint:enable:variable-name
 
 // Pre-create the lookup maps for the contructors
@@ -165,13 +174,44 @@ export function getCCConstructor(cc: CommandClasses): Constructable<CommandClass
 }
 
 /**
- * Looks up the maximum implemented command class version
+ * Defines the implemented version of a Z-Wave command class
  */
-export function getMaxImplementedCCVersion(cc: CommandClasses): number {
-	// tslint:disable-next-line:variable-name
-	const CCClass = getCCConstructor(cc) as any as CommandClassStatic;
-	if (CCClass != null) return CCClass.maxImplementedVersion;
-	return 0;
+export function implementedVersion(version: number): ClassDecorator {
+	return (ccClass) => {
+		log("protocol", `${ccClass.name}: defining implemented version ${version}`, "silly");
+		// and store the metadata
+		Reflect.defineMetadata(METADATA_version, version, ccClass);
+	};
+}
+
+/**
+ * Retrieves the implemented version defined for a Z-Wave command class
+ */
+export function getImplementedVersion<T extends CommandClass>(cc: T | CommandClasses): number {
+	// get the class constructor
+	let constr: Constructable<CommandClass>;
+	let constrName: string;
+	if (typeof cc === "number") {
+		constr = getCCConstructor(cc);
+		constrName = constr != null ? constr.name : CommandClasses[cc];
+	} else {
+		constr = cc.constructor as Constructable<CommandClass>;
+		constrName = constr.name;
+	}
+	// retrieve the current metadata
+	const ret = constr != null ? Reflect.getMetadata(METADATA_version, constr) : 0;
+	log("protocol", `${constrName}: retrieving implemented version => ${ret}`, "silly");
+	return ret;
+}
+
+/**
+ * Retrieves the implemented version defined for a Z-Wave command class
+ */
+export function getImplementedVersionStatic<T extends Constructable<CommandClass>>(classConstructor: T): number {
+	// retrieve the current metadata
+	const ret = Reflect.getMetadata(METADATA_version, classConstructor);
+	log("protocol", `${classConstructor.name}: retrieving implemented version => ${ret}`, "silly");
+	return ret;
 }
 
 /* A dictionary of all command classes as of 2018-03-30 */

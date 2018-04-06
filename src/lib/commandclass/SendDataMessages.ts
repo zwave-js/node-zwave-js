@@ -111,6 +111,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass> extends
 		this.callbackId = this.payload[0];
 		this._transmitStatus = this.payload[1];
 		// not sure what bytes 2 and 3 mean
+		// the CC seems not to be included in this, but rather come in an application command later
 
 		return ret;
 	}
@@ -120,6 +121,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass> extends
 			transmitOptions: this.transmitOptions,
 			callbackId: this.callbackId,
 			command: this.command,
+			transmitStatus: this.transmitStatus,
 		});
 	}
 

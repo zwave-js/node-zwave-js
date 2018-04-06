@@ -87,9 +87,9 @@ let VersionCC = class VersionCC extends CommandClass_1.CommandClass {
         }
     }
 };
-VersionCC.maxSupportedVersion = 1;
 VersionCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses.Version),
+    CommandClass_1.implementedVersion(1),
     __metadata("design:paramtypes", [Number, Number, Number])
 ], VersionCC);
 exports.VersionCC = VersionCC;

@@ -180,19 +180,24 @@ class ZWaveNode {
     /** Step #5 of the node interview */
     getNodeInfo() {
         return __awaiter(this, void 0, void 0, function* () {
-            logger_1.log("controller", `${this.logPrefix}querying node info`, "debug");
-            const resp = yield this.driver.sendMessage(new RequestNodeInfoMessages_1.RequestNodeInfoRequest(this.id));
-            if (resp instanceof RequestNodeInfoMessages_1.RequestNodeInfoResponse && !resp.wasSent
-                || resp instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest && resp.updateType === ApplicationUpdateRequest_1.ApplicationUpdateTypes.NodeInfo_RequestFailed) {
-                logger_1.log("controller", `${this.logPrefix}  querying the node info failed`, "debug");
+            if (this.isControllerNode()) {
+                logger_1.log("controller", `${this.logPrefix}not querying node info from the controller...`, "debug");
             }
-            else if (resp instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest) {
-                // TODO: log the received values
-                logger_1.log("controller", `${this.logPrefix}  received the node info`, "debug");
-                for (const cc of resp.nodeInformation.supportedCCs)
-                    this.addCC(cc, { isSupported: true });
-                for (const cc of resp.nodeInformation.controlledCCs)
-                    this.addCC(cc, { isControlled: true });
+            else {
+                logger_1.log("controller", `${this.logPrefix}querying node info`, "debug");
+                const resp = yield this.driver.sendMessage(new RequestNodeInfoMessages_1.RequestNodeInfoRequest(this.id));
+                if (resp instanceof RequestNodeInfoMessages_1.RequestNodeInfoResponse && !resp.wasSent
+                    || resp instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest && resp.updateType === ApplicationUpdateRequest_1.ApplicationUpdateTypes.NodeInfo_RequestFailed) {
+                    logger_1.log("controller", `${this.logPrefix}  querying the node info failed`, "debug");
+                }
+                else if (resp instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest) {
+                    // TODO: log the received values
+                    logger_1.log("controller", `${this.logPrefix}  received the node info`, "debug");
+                    for (const cc of resp.nodeInformation.supportedCCs)
+                        this.addCC(cc, { isSupported: true });
+                    for (const cc of resp.nodeInformation.controlledCCs)
+                        this.addCC(cc, { isControlled: true });
+                }
             }
             this.interviewStage = InterviewStage.NodeInfo;
         });
@@ -203,9 +208,9 @@ class ZWaveNode {
             logger_1.log("controller", `${this.logPrefix}querying CC versions`, "debug");
             for (const [cc, info] of this._commandClasses.entries()) {
                 // only query the ones we support a version > 1 for
-                const maxImplemented = CommandClass_1.getMaxImplementedCCVersion(cc);
-                if (maxImplemented <= 1) {
-                    logger_1.log("controller", `${this.logPrefix}  skipping query for ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)}) because max implemented version is ${maxImplemented}`, "debug");
+                const maxImplemented = CommandClass_1.getImplementedVersion(cc);
+                if (maxImplemented < 1) {
+                    // log("controller", `${this.logPrefix}  skipping query for ${CommandClasses[cc]} (${num2hex(cc)}) because max implemented version is ${maxImplemented}`, "debug");
                     continue;
                 }
                 const versionCC = new VersionCC_1.VersionCC(this.id, VersionCC_1.VersionCommand.CommandClassGet, cc);
@@ -213,11 +218,8 @@ class ZWaveNode {
                 try {
                     logger_1.log("controller", `${this.logPrefix}  querying the CC version for ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)})`, "debug");
                     // query the CC version
-                    const response = yield this.driver.sendMessage(request, Constants_1.MessagePriority.NodeQuery);
-                    // and remember the response
-                    const supportedVersion = response.command.ccVersion;
-                    this.addCC(cc, { version: supportedVersion });
-                    logger_1.log("controller", `${this.logPrefix}  ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)}) supported in version ${supportedVersion}`, "debug");
+                    yield this.driver.sendMessage(request, Constants_1.MessagePriority.NodeQuery);
+                    logger_1.log("controller", `${this.logPrefix}  querying the CC version successful... The response will come later`, "debug");
                 }
                 catch (e) {
                     logger_1.log("controller", `${this.logPrefix}  querying the CC version failed: ${e.message}`, "debug");
@@ -230,8 +232,26 @@ class ZWaveNode {
     /** Handles an ApplicationCommandRequest sent from a node */
     handleCommand(command) {
         return __awaiter(this, void 0, void 0, function* () {
-            logger_1.log("controller", `${this.logPrefix}handling application command ${strings_1.stringify(command)} - TODO`, "debug");
-            // TODO
+            switch (command.command) {
+                case CommandClass_1.CommandClasses.Version: {
+                    // The node reported its supported versions
+                    const versionCC = command;
+                    if (versionCC.versionCommand === VersionCC_1.VersionCommand.Report) {
+                        // TODO: handle the node version report
+                    }
+                    else if (versionCC.versionCommand === VersionCC_1.VersionCommand.CommandClassReport) {
+                        // Remember which CC version this node supports
+                        const cc = versionCC.requestedCC;
+                        const supportedVersion = versionCC.ccVersion;
+                        this.addCC(cc, { version: supportedVersion });
+                        logger_1.log("controller", `${this.logPrefix}supports CC ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)}) in version ${supportedVersion}`, "debug");
+                    }
+                    break;
+                }
+                default: {
+                    logger_1.log("controller", `${this.logPrefix}TODO: no handler for application command ${strings_1.stringify(command)}`, "debug");
+                }
+            }
         });
     }
 }

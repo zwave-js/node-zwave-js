@@ -17,8 +17,8 @@ let NoOperationCC = class NoOperationCC extends CommandClass_1.CommandClass {
         // parse this.payload
     }
 };
-NoOperationCC.maxSupportedVersion = 1;
 NoOperationCC = __decorate([
-    CommandClass_1.commandClass(CommandClass_1.CommandClasses["No Operation"])
+    CommandClass_1.commandClass(CommandClass_1.CommandClasses["No Operation"]),
+    CommandClass_1.implementedVersion(1)
 ], NoOperationCC);
 exports.NoOperationCC = NoOperationCC;

@@ -1,9 +1,8 @@
-import { CommandClass, commandClass, CommandClasses } from "./CommandClass";
+import { CommandClass, commandClass, CommandClasses, implementedVersion } from "./CommandClass";
 
 @commandClass(CommandClasses["No Operation"])
+@implementedVersion(1)
 export class NoOperationCC extends CommandClass {
-
-	public static readonly maxSupportedVersion: number = 1;
 
 	public serialize(): Buffer {
 		// define this.payload
