@@ -1,4 +1,3 @@
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Constructable } from "../message/Message";
 import { log } from "../util/logger";
 import { entries } from "../util/object-polyfill";
@@ -43,12 +42,6 @@ export class CommandClass {
 		return this._version;
 	}
 	public set version(v: number) {
-		if (v > getImplementedVersion(this)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: Cannot set the version to ${v} because it is greater than the implemented version (${getImplementedVersion(this)})`,
-				ZWaveErrorCodes.CC_Invalid,
-			);
-		}
 		this._version = v;
 	}
 
@@ -72,6 +65,14 @@ export class CommandClass {
 		this.command = data[2];
 		this.payload = Buffer.allocUnsafe(dataLength);
 		data.copy(this.payload, 0, 3, 3 + dataLength);
+	}
+
+	public static getNodeId(ccData: Buffer): number {
+		return ccData[0];
+	}
+
+	public static getCommandClass(ccData: Buffer): CommandClasses {
+		return ccData[2];
 	}
 
 	/**

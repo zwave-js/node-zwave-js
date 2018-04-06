@@ -1,7 +1,8 @@
 import { EventEmitter } from "events";
 import * as SerialPort from "serialport";
 import { ApplicationCommandRequest } from "../commandclass/ApplicationCommandRequest";
-import { CommandClasses } from "../commandclass/CommandClass";
+import { CommandClasses, getImplementedVersion } from "../commandclass/CommandClass";
+import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { SendDataRequest, SendDataResponse, TransmitStatus } from "../commandclass/SendDataMessages";
 import { ZWaveController } from "../controller/Controller";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -179,6 +180,30 @@ export class Driver extends EventEmitter {
 			for (const node of this._controller.nodes.values()) {
 				// TODO: retry on failure or something...
 				node.interview().catch(e => log("controller", "node interview failed: " + e, "error"));
+			}
+		}
+	}
+
+	/**
+	 * Finds the version of a given CC the given node supports. Returns 0 when the CC is not supported.
+	 */
+	public getSupportedCCVersionForNode(nodeId: number, cc: CommandClasses): number {
+		if (this.controller == null || !this.controller.nodes.has(nodeId)) return 0;
+		return this.controller.nodes.get(nodeId).getCCVersion(cc);
+
+	}
+
+	public getSafeCCVersionForNode(nodeId: number, cc: CommandClasses): number {
+		const supportedVersion = this.getSupportedCCVersionForNode(nodeId, cc);
+		if (supportedVersion === 0) {
+			// For unsupported CCs use version 1, no matter what
+			return 1;
+		} else {
+			// For supported versions find the maximum version supported by both the
+			// node and this library
+			const implementedVersion = getImplementedVersion(cc);
+			if (implementedVersion !== 0 && implementedVersion !== Number.POSITIVE_INFINITY) {
+				return Math.min(supportedVersion, implementedVersion);
 			}
 		}
 	}
@@ -751,8 +776,15 @@ export class Driver extends EventEmitter {
 		// get the next transaction
 		const next = this.sendQueue.shift();
 		this.currentTransaction = next;
-		const data = next.message.serialize();
+		const msg = next.message;
 		log("io", `workOffSendQueue > sending next message (${FunctionType[next.message.functionType]})...`, "debug");
+		// for messages containing a CC, i.e. a SendDataRequest, set the CC version as high as possible
+		if (isCommandClassContainer(msg)) {
+			const cc = msg.command.command;
+			msg.command.version = this.getSafeCCVersionForNode(msg.command.nodeId, cc);
+			log("io", `  CC = ${CommandClasses[cc]} (${num2hex(cc)}) => using version ${msg.command.version}`, "debug");
+		}
+		const data = next.message.serialize();
 		log("io", `  data = 0x${data.toString("hex")}`, "debug");
 		log("io", `  remaining queue length = ${this.sendQueue.length}`, "debug");
 		this.doSend(next.message.serialize());

@@ -9,7 +9,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const ZWaveError_1 = require("../error/ZWaveError");
 const logger_1 = require("../util/logger");
 const object_polyfill_1 = require("../util/object-polyfill");
 const strings_1 = require("../util/strings");
@@ -29,9 +28,6 @@ let CommandClass = CommandClass_1 = class CommandClass {
         return this._version;
     }
     set version(v) {
-        if (v > getImplementedVersion(this)) {
-            throw new ZWaveError_1.ZWaveError(`${this.constructor.name}: Cannot set the version to ${v} because it is greater than the implemented version (${getImplementedVersion(this)})`, ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
-        }
         this._version = v;
     }
     serialize() {
@@ -52,6 +48,12 @@ let CommandClass = CommandClass_1 = class CommandClass {
         this.command = data[2];
         this.payload = Buffer.allocUnsafe(dataLength);
         data.copy(this.payload, 0, 3, 3 + dataLength);
+    }
+    static getNodeId(ccData) {
+        return ccData[0];
+    }
+    static getCommandClass(ccData) {
+        return ccData[2];
     }
     /**
      * Retrieves the correct constructor for the CommandClass in the given Buffer.

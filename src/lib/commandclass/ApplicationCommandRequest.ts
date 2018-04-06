@@ -40,6 +40,10 @@ export class ApplicationCommandRequest extends Message implements ICommandClassC
 		this._isBroadcast = (status & StatusFlags.Broadcast) !== 0;
 		this._routedBusy = (status & StatusFlags.RoutedBusy) !== 0;
 		// followed by a command class
+		// const serializedCC = this.payload.slice(1);
+		// const cc = CommandClass.getCommandClass(serializedCC);
+		// const nodeId = CommandClass.getNodeId(serializedCC);
+		// const ccVersion = this.driver != null ? this.driver.getSupportedCCVersionForNode(nodeId, cc) : undefined;
 		this._command = CommandClass.from(this.payload.slice(1));
 
 		return ret;

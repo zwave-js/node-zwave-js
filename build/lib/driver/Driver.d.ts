@@ -45,6 +45,11 @@ export declare class Driver extends EventEmitter {
     private _controllerInterviewed;
     private initializeControllerAndNodes();
     /**
+     * Finds the version of a given CC the given node supports. Returns 0 when the CC is not supported.
+     */
+    getSupportedCCVersionForNode(nodeId: number, cc: CommandClasses): number;
+    getSafeCCVersionForNode(nodeId: number, cc: CommandClasses): number;
+    /**
      * Performs a hard reset on the controller. This wipes out all configuration!
      */
     hardReset(): Promise<void>;

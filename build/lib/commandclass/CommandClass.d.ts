@@ -19,6 +19,8 @@ export declare class CommandClass {
     version: number;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
+    static getNodeId(ccData: Buffer): number;
+    static getCommandClass(ccData: Buffer): CommandClasses;
     /**
      * Retrieves the correct constructor for the CommandClass in the given Buffer.
      * It is assumed that the buffer only contains the serialized CC.
