@@ -9,10 +9,12 @@ class CommandClass {
         this.nodeId = nodeId;
         this.command = command;
         this.payload = payload;
+        // tslint:enable:unified-signatures
+        /** The version of the command class used */
+        this.version = 1;
         // Extract the cc from declared metadata if not provided
         this.command = command != null ? command : getCommandClass(this);
     }
-    // tslint:enable:unified-signatures
     serialize() {
         const payloadLength = this.payload != null ? this.payload.length : 0;
         const ret = Buffer.allocUnsafe(payloadLength + 3);
@@ -69,6 +71,11 @@ class CommandClass {
         return ret;
     }
 }
+/**
+ * Returns the maximum implemented version of this command class.
+ * Override in the CC implementations to specify what is supported
+ */
+CommandClass.maxImplementedVersion = 0;
 exports.CommandClass = CommandClass;
 // =======================
 // use decorators to link command class values to actual command classes
@@ -122,6 +129,17 @@ function getCCConstructor(cc) {
         return map.get(cc);
 }
 exports.getCCConstructor = getCCConstructor;
+/**
+ * Looks up the maximum implemented command class version
+ */
+function getMaxImplementedCCVersion(cc) {
+    // tslint:disable-next-line:variable-name
+    const CCClass = getCCConstructor(cc);
+    if (CCClass != null)
+        return CCClass.maxImplementedVersion;
+    return 0;
+}
+exports.getMaxImplementedCCVersion = getMaxImplementedCCVersion;
 /* A dictionary of all command classes as of 2018-03-30 */
 var CommandClasses;
 (function (CommandClasses) {

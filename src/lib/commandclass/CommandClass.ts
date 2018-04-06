@@ -3,6 +3,16 @@ import { log } from "../util/logger";
 import { entries } from "../util/object-polyfill";
 import { num2hex } from "../util/strings";
 
+export interface CommandClassInfo {
+	isSupported: boolean;
+	isControlled: boolean;
+	version: number;
+}
+
+export interface CommandClassStatic {
+	readonly maxImplementedVersion: number;
+}
+
 export class CommandClass {
 
 	// tslint:disable:unified-signatures
@@ -24,6 +34,15 @@ export class CommandClass {
 		this.command = command != null ? command : getCommandClass(this);
 	}
 	// tslint:enable:unified-signatures
+
+	/** The version of the command class used */
+	public version: number = 1;
+
+	/**
+	 * Returns the maximum implemented version of this command class.
+	 * Override in the CC implementations to specify what is supported
+	 */
+	public static readonly maxImplementedVersion: number = 0;
 
 	public serialize(): Buffer {
 		const payloadLength = this.payload != null ? this.payload.length : 0;
@@ -143,6 +162,16 @@ export function getCCConstructor(cc: CommandClasses): Constructable<CommandClass
 	// Retrieve the constructor map from the CommandClass class
 	const map = Reflect.getMetadata(METADATA_commandClassMap, CommandClass) as CommandClassMap;
 	if (map != null) return map.get(cc);
+}
+
+/**
+ * Looks up the maximum implemented command class version
+ */
+export function getMaxImplementedCCVersion(cc: CommandClasses): number {
+	// tslint:disable-next-line:variable-name
+	const CCClass = getCCConstructor(cc) as any as CommandClassStatic;
+	if (CCClass != null) return CCClass.maxImplementedVersion;
+	return 0;
 }
 
 /* A dictionary of all command classes as of 2018-03-30 */

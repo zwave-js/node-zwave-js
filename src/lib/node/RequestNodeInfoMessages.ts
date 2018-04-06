@@ -2,6 +2,7 @@ import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
 import { log } from "../util/logger";
+import { INodeQuery } from "./INodeQuery";
 
 function isExpectedResponseToRequestNodeInfoRequest(sent: RequestNodeInfoRequest, received: Message): boolean {
 	// A failure to send is an expected response
@@ -21,13 +22,14 @@ function isExpectedResponseToRequestNodeInfoRequest(sent: RequestNodeInfoRequest
 @messageTypes(MessageType.Request, FunctionType.RequestNodeInfo)
 @expectedResponse(isExpectedResponseToRequestNodeInfoRequest)
 @priority(MessagePriority.NodeQuery)
-export class RequestNodeInfoRequest extends Message {
+export class RequestNodeInfoRequest extends Message implements INodeQuery {
 
-	constructor(
-		public nodeId?: number,
-	) {
+	constructor(nodeId?: number) {
 		super();
+		this.nodeId = nodeId;
 	}
+
+	public nodeId: number;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.nodeId]);

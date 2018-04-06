@@ -1,8 +1,9 @@
 /// <reference types="node" />
 import { Message } from "../message/Message";
-export declare class RequestNodeInfoRequest extends Message {
-    nodeId: number;
+import { INodeQuery } from "./INodeQuery";
+export declare class RequestNodeInfoRequest extends Message implements INodeQuery {
     constructor(nodeId?: number);
+    nodeId: number;
     serialize(): Buffer;
     toJSON(): Record<string, any>;
 }

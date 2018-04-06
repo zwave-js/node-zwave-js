@@ -1,5 +1,6 @@
 import { EventEmitter } from "events";
 import { CommandClasses } from "../commandclass/CommandClass";
+import { ZWaveLibraryTypes } from "../commandclass/VersionCC";
 import { Driver, RequestHandler } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
@@ -12,7 +13,7 @@ import { num2hex, stringify } from "../util/strings";
 import { AddNodeStatus, AddNodeToNetworkRequest, AddNodeType } from "./AddNodeToNetworkRequest";
 import { GetControllerCapabilitiesRequest, GetControllerCapabilitiesResponse } from "./GetControllerCapabilitiesMessages";
 import { GetControllerIdRequest, GetControllerIdResponse } from "./GetControllerIdMessages";
-import { ControllerTypes, GetControllerVersionRequest, GetControllerVersionResponse } from "./GetControllerVersionMessages";
+import { GetControllerVersionRequest, GetControllerVersionResponse } from "./GetControllerVersionMessages";
 import { GetSerialApiCapabilitiesRequest, GetSerialApiCapabilitiesResponse } from "./GetSerialApiCapabilitiesMessages";
 import { GetSerialApiInitDataRequest, GetSerialApiInitDataResponse } from "./GetSerialApiInitDataMessages";
 import { GetSUCNodeIdRequest, GetSUCNodeIdResponse } from "./GetSUCNodeIdMessages";
@@ -43,8 +44,8 @@ export class ZWaveController extends EventEmitter {
 		return this._libraryVersion;
 	}
 
-	private _type: ControllerTypes;
-	public get type(): ControllerTypes {
+	private _type: ZWaveLibraryTypes;
+	public get type(): ZWaveLibraryTypes {
 		return this._type;
 	}
 
@@ -146,7 +147,7 @@ export class ZWaveController extends EventEmitter {
 		this._libraryVersion = version.libraryVersion;
 		this._type = version.controllerType;
 		log("controller", `received version info:`, "debug");
-		log("controller", `  controller type: ${ControllerTypes[this._type]}`, "debug");
+		log("controller", `  controller type: ${ZWaveLibraryTypes[this._type]}`, "debug");
 		log("controller", `  library version: ${this._libraryVersion}`, "debug");
 
 		// get the home and node id of the controller
@@ -206,7 +207,7 @@ export class ZWaveController extends EventEmitter {
 		// https://github.com/OpenZWave/open-zwave/blob/a46f3f36271f88eed5aea58899a6cb118ad312a2/cpp/src/Driver.cpp#L2586
 
 		// if it's a bridge controller, request the virtual nodes
-		if (this.type === ControllerTypes["Bridge Controller"] && this.isFunctionSupported(FunctionType.FUNC_ID_ZW_GET_VIRTUAL_NODES)) {
+		if (this.type === ZWaveLibraryTypes["Bridge Controller"] && this.isFunctionSupported(FunctionType.FUNC_ID_ZW_GET_VIRTUAL_NODES)) {
 			// TODO: send FUNC_ID_ZW_GET_VIRTUAL_NODES message
 		}
 
@@ -231,7 +232,7 @@ export class ZWaveController extends EventEmitter {
 			this.nodes.set(nodeId, new ZWaveNode(nodeId, this.driver));
 		}
 
-		if (this.type !== ControllerTypes["Bridge Controller"] && this.isFunctionSupported(FunctionType.SetSerialApiTimeouts)) {
+		if (this.type !== ZWaveLibraryTypes["Bridge Controller"] && this.isFunctionSupported(FunctionType.SetSerialApiTimeouts)) {
 			const { ack, byte } = this.driver.options.timeouts;
 			log("controller", `setting serial API timeouts: ack = ${ack} ms, byte = ${byte} ms`, "debug");
 			const resp = await this.driver.sendMessage<SetSerialApiTimeoutsResponse>(new SetSerialApiTimeoutsRequest(ack, byte));
@@ -393,12 +394,12 @@ export class ZWaveController extends EventEmitter {
 					log("controller", `  generic device class:  ${newNode.deviceClass.generic.name} (${num2hex(newNode.deviceClass.generic.key)})`, "debug");
 					log("controller", `  specific device class: ${newNode.deviceClass.specific.name} (${num2hex(newNode.deviceClass.specific.key)})`, "debug");
 					log("controller", `  supported CCs:`, "debug");
-					for (const cc of newNode.supportedCCs) {
-						log("controller", `    ${CommandClasses[cc]} (${num2hex(cc)})`, "debug");
+					for (const [cc, info] of newNode.commandClasses.entries()) {
+						if (info.isSupported) log("controller", `    ${CommandClasses[cc]} (${num2hex(cc)})`, "debug");
 					}
 					log("controller", `  controlled CCs:`, "debug");
-					for (const cc of newNode.controlledCCs) {
-						log("controller", `    ${CommandClasses[cc]} (${num2hex(cc)})`, "debug");
+					for (const [cc, info] of newNode.commandClasses.entries()) {
+						if (info.isControlled) log("controller", `    ${CommandClasses[cc]} (${num2hex(cc)})`, "debug");
 					}
 
 					// remember the node

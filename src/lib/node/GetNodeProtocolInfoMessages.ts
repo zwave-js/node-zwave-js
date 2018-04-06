@@ -1,6 +1,7 @@
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
 import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
+import { INodeQuery } from "./INodeQuery";
 
 const enum NodeCapabilityFlags {
 	Listening = 1 << 7,
@@ -31,16 +32,14 @@ export type Baudrate = 9600 | 40000 | 100000;
 @messageTypes(MessageType.Request, FunctionType.GetNodeProtocolInfo)
 @expectedResponse(FunctionType.GetNodeProtocolInfo)
 @priority(MessagePriority.NodeQuery)
-export class GetNodeProtocolInfoRequest extends Message {
+export class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
 
-	constructor()
-	// tslint:disable-next-line:unified-signatures
-	constructor(nodeId: number)
-	constructor(
-		public nodeId?: number,
-	) {
+	constructor(nodeId?: number) {
 		super();
+		this.nodeId = nodeId;
 	}
+
+	public nodeId: number;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.nodeId]);

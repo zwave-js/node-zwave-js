@@ -8,9 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const CommandClass_1 = require("../commandclass/CommandClass");
 const ICommandClassContainer_1 = require("../commandclass/ICommandClassContainer");
 const NoOperationCC_1 = require("../commandclass/NoOperationCC");
 const SendDataMessages_1 = require("../commandclass/SendDataMessages");
+const VersionCC_1 = require("../commandclass/VersionCC");
 const ApplicationUpdateRequest_1 = require("../controller/ApplicationUpdateRequest");
 const Constants_1 = require("../message/Constants");
 const logger_1 = require("../util/logger");
@@ -33,12 +35,15 @@ class ZWaveNode {
         this.driver = driver;
         //#region --- properties ---
         this.logPrefix = `[Node ${strings_1.padStart(this.id.toString(), 3, "0")}] `;
+        this._commandClasses = new Map();
         /** This tells us which interview stage was last completed */
         this.interviewStage = InterviewStage.None;
         // TODO restore from cache
         this._deviceClass = deviceClass;
-        this._supportedCCs = supportedCCs;
-        this._controlledCCs = controlledCCs;
+        for (const cc of supportedCCs)
+            this.addCC(cc, { isSupported: true });
+        for (const cc of controlledCCs)
+            this.addCC(cc, { isControlled: true });
     }
     get deviceClass() {
         return this._deviceClass;
@@ -64,23 +69,35 @@ class ZWaveNode {
     get isBeaming() {
         return this._isBeaming;
     }
-    get supportedCCs() {
-        return this._supportedCCs;
-    }
-    get controlledCCs() {
-        return this._controlledCCs;
+    get commandClasses() {
+        return this._commandClasses;
     }
     //#endregion
     isControllerNode() {
         return this.id === this.driver.controller.ownNodeId;
     }
+    addCC(cc, info) {
+        let ccInfo = this._commandClasses.has(cc)
+            ? this._commandClasses.get(cc)
+            : {
+                isSupported: false,
+                isControlled: false,
+                version: 0,
+            };
+        ccInfo = Object.assign(ccInfo, info);
+        this._commandClasses.set(cc, ccInfo);
+    }
     /** Tests if this node supports the given CommandClass */
     supportsCC(cc) {
-        return this._supportedCCs.indexOf(cc) !== -1;
+        return this._commandClasses.has(cc) && this._commandClasses.get(cc).isSupported;
     }
     /** Tests if this node controls the given CommandClass */
     controlsCC(cc) {
-        return this._controlledCCs.indexOf(cc) !== -1;
+        return this._commandClasses.has(cc) && this._commandClasses.get(cc).isControlled;
+    }
+    /** Checks the supported version of a given CommandClass */
+    getCCVersion(cc) {
+        return this._commandClasses.has(cc) ? this._commandClasses.get(cc).version : 0;
     }
     //#region --- interview ---
     interview() {
@@ -99,8 +116,11 @@ class ZWaveNode {
             }
             // TODO: WakeUp
             // TODO: ManufacturerSpecific1
-            if (this.interviewStage === InterviewStage.Ping) {
+            if (this.interviewStage === InterviewStage.Ping /* TODO: change .Ping to .ManufacturerSpecific1 */) {
                 yield this.getNodeInfo();
+            }
+            if (this.interviewStage === InterviewStage.NodeInfo /* TODO: change .NodeInfo to .Versions */) {
+                yield this.queryCCVersions();
             }
             // for testing purposes we skip to the end
             this.interviewStage = InterviewStage.Complete;
@@ -169,10 +189,41 @@ class ZWaveNode {
             else if (resp instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest) {
                 // TODO: log the received values
                 logger_1.log("controller", `${this.logPrefix}  received the node info`, "debug");
-                this._supportedCCs = resp.nodeInformation.supportedCCs;
-                this._controlledCCs = resp.nodeInformation.controlledCCs;
+                for (const cc of resp.nodeInformation.supportedCCs)
+                    this.addCC(cc, { isSupported: true });
+                for (const cc of resp.nodeInformation.controlledCCs)
+                    this.addCC(cc, { isControlled: true });
             }
             this.interviewStage = InterviewStage.NodeInfo;
+        });
+    }
+    /** Step #9 of the node interview */
+    queryCCVersions() {
+        return __awaiter(this, void 0, void 0, function* () {
+            logger_1.log("controller", `${this.logPrefix}querying CC versions`, "debug");
+            for (const [cc, info] of this._commandClasses.entries()) {
+                // only query the ones we support a version > 1 for
+                const maxImplemented = CommandClass_1.getMaxImplementedCCVersion(cc);
+                if (maxImplemented <= 1) {
+                    logger_1.log("controller", `${this.logPrefix}  skipping query for ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)}) because max implemented version is ${maxImplemented}`, "debug");
+                    continue;
+                }
+                const versionCC = new VersionCC_1.VersionCC(this.id, VersionCC_1.VersionCommand.CommandClassGet, cc);
+                const request = new SendDataMessages_1.SendDataRequest(versionCC);
+                try {
+                    logger_1.log("controller", `${this.logPrefix}  querying the CC version for ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)})`, "debug");
+                    // query the CC version
+                    const response = yield this.driver.sendMessage(request, Constants_1.MessagePriority.NodeQuery);
+                    // and remember the response
+                    const supportedVersion = response.command.ccVersion;
+                    this.addCC(cc, { version: supportedVersion });
+                    logger_1.log("controller", `${this.logPrefix}  ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)}) supported in version ${supportedVersion}`, "debug");
+                }
+                catch (e) {
+                    logger_1.log("controller", `${this.logPrefix}  querying the CC version failed: ${e.message}`, "debug");
+                }
+            }
+            this.interviewStage = InterviewStage.Versions;
         });
     }
     //#endregion

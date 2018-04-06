@@ -18,15 +18,15 @@ export declare enum TransmitStatus {
     NotIdle = 3,
     NoRoute = 4,
 }
-export declare class SendDataRequest extends Message implements ICommandClassContainer {
+export declare class SendDataRequest<CCType extends CommandClass = CommandClass> extends Message implements ICommandClassContainer {
     /** Options regarding the transmission of the message */
     transmitOptions: TransmitOptions;
     /** A callback ID to map requests and responses */
     callbackId: number;
     constructor();
-    constructor(command: CommandClass, transmitOptions?: TransmitOptions, callbackId?: number);
+    constructor(command: CCType, transmitOptions?: TransmitOptions, callbackId?: number);
     /** The command this message contains */
-    command: CommandClass;
+    command: CCType;
     private _transmitStatus;
     readonly transmitStatus: TransmitStatus;
     serialize(): Buffer;

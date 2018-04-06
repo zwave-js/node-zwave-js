@@ -49,19 +49,19 @@ function isExpectedResponseToSendDataRequest(sent: SendDataRequest, received: Me
 @messageTypes(MessageType.Request, FunctionType.SendData)
 @expectedResponse(isExpectedResponseToSendDataRequest)
 @priority(MessagePriority.Normal)
-export class SendDataRequest extends Message implements ICommandClassContainer {
+export class SendDataRequest<CCType extends CommandClass = CommandClass> extends Message implements ICommandClassContainer {
 
 	// tslint:disable:unified-signatures
 	// empty constructor to parse messages
 	constructor();
 	// default constructor to send messages
 	constructor(
-		command: CommandClass,
+		command: CCType,
 		transmitOptions?: TransmitOptions,
 		callbackId?: number,
 	);
 	constructor(
-		command?: CommandClass,
+		command?: CCType,
 		/** Options regarding the transmission of the message */
 		public transmitOptions?: TransmitOptions,
 		/** A callback ID to map requests and responses */
@@ -78,7 +78,7 @@ export class SendDataRequest extends Message implements ICommandClassContainer {
 	// tslint:enable:unified-signatures
 
 	/** The command this message contains */
-	public command: CommandClass;
+	public command: CCType;
 
 	private _transmitStatus: TransmitStatus;
 	public get transmitStatus(): TransmitStatus {

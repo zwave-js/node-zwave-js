@@ -1,11 +1,11 @@
 /// <reference types="node" />
 import { Message } from "../message/Message";
 import { DeviceClass } from "./DeviceClass";
+import { INodeQuery } from "./INodeQuery";
 export declare type Baudrate = 9600 | 40000 | 100000;
-export declare class GetNodeProtocolInfoRequest extends Message {
+export declare class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
+    constructor(nodeId?: number);
     nodeId: number;
-    constructor();
-    constructor(nodeId: number);
     serialize(): Buffer;
     toJSON(): Record<string, any>;
 }

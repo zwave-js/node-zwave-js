@@ -1,18 +1,7 @@
+import { ZWaveLibraryTypes } from "../commandclass/VersionCC";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
 import { cpp2js } from "../util/strings";
-
-export enum ControllerTypes {
-	"Unknown",
-	"Static Controller",
-	"Controller",
-	"Enhanced Slave",
-	"Slave",
-	"Installer",
-	"Routing Slave",
-	"Bridge Controller",
-	"Device under Test",
-}
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerVersion)
 @expectedResponse(FunctionType.GetControllerVersion)
@@ -24,7 +13,7 @@ export class GetControllerVersionRequest extends Message {
 @messageTypes(MessageType.Response, FunctionType.GetControllerVersion)
 export class GetControllerVersionResponse extends Message {
 
-	private _controllerType: ControllerTypes;
+	private _controllerType: ZWaveLibraryTypes;
 	public get controllerType() {
 		return this._controllerType;
 	}

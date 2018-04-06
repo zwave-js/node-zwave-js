@@ -1,11 +1,26 @@
 /// <reference types="node" />
 import { Constructable } from "../message/Message";
+export interface CommandClassInfo {
+    isSupported: boolean;
+    isControlled: boolean;
+    version: number;
+}
+export interface CommandClassStatic {
+    readonly maxImplementedVersion: number;
+}
 export declare class CommandClass {
     nodeId: number;
     command: CommandClasses;
     payload: Buffer;
     constructor();
     constructor(nodeId: number, command?: CommandClasses, payload?: Buffer);
+    /** The version of the command class used */
+    version: number;
+    /**
+     * Returns the maximum implemented version of this command class.
+     * Override in the CC implementations to specify what is supported
+     */
+    static readonly maxImplementedVersion: number;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
     /**
@@ -36,6 +51,10 @@ export declare function getCommandClassStatic<T extends Constructable<CommandCla
  * Looks up the command class constructor for a given command class type and function type
  */
 export declare function getCCConstructor(cc: CommandClasses): Constructable<CommandClass>;
+/**
+ * Looks up the maximum implemented command class version
+ */
+export declare function getMaxImplementedCCVersion(cc: CommandClasses): number;
 export declare enum CommandClasses {
     "Alarm" = 113,
     "Alarm Sensor" = 156,

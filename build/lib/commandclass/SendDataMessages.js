@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
-const CommandClass_1 = require("./CommandClass");
 var TransmitOptions;
 (function (TransmitOptions) {
     TransmitOptions[TransmitOptions["NotSet"] = 0] = "NotSet";
@@ -109,7 +108,7 @@ SendDataRequest = __decorate([
     Message_1.messageTypes(Constants_1.MessageType.Request, Constants_1.FunctionType.SendData),
     Message_1.expectedResponse(isExpectedResponseToSendDataRequest),
     Message_1.priority(Constants_1.MessagePriority.Normal),
-    __metadata("design:paramtypes", [CommandClass_1.CommandClass, Number, Number])
+    __metadata("design:paramtypes", [Object, Number, Number])
 ], SendDataRequest);
 exports.SendDataRequest = SendDataRequest;
 let SendDataResponse = class SendDataResponse extends Message_1.Message {

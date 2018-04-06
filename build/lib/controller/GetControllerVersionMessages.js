@@ -9,18 +9,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
 const strings_1 = require("../util/strings");
-var ControllerTypes;
-(function (ControllerTypes) {
-    ControllerTypes[ControllerTypes["Unknown"] = 0] = "Unknown";
-    ControllerTypes[ControllerTypes["Static Controller"] = 1] = "Static Controller";
-    ControllerTypes[ControllerTypes["Controller"] = 2] = "Controller";
-    ControllerTypes[ControllerTypes["Enhanced Slave"] = 3] = "Enhanced Slave";
-    ControllerTypes[ControllerTypes["Slave"] = 4] = "Slave";
-    ControllerTypes[ControllerTypes["Installer"] = 5] = "Installer";
-    ControllerTypes[ControllerTypes["Routing Slave"] = 6] = "Routing Slave";
-    ControllerTypes[ControllerTypes["Bridge Controller"] = 7] = "Bridge Controller";
-    ControllerTypes[ControllerTypes["Device under Test"] = 8] = "Device under Test";
-})(ControllerTypes = exports.ControllerTypes || (exports.ControllerTypes = {}));
 let GetControllerVersionRequest = class GetControllerVersionRequest extends Message_1.Message {
 };
 GetControllerVersionRequest = __decorate([

@@ -1,14 +1,14 @@
 /// <reference types="node" />
 import { EventEmitter } from "events";
+import { ZWaveLibraryTypes } from "../commandclass/VersionCC";
 import { FunctionType } from "../message/Constants";
 import { ZWaveNode } from "../node/Node";
-import { ControllerTypes } from "./GetControllerVersionMessages";
 export declare class ZWaveController extends EventEmitter {
     private readonly driver;
     private _libraryVersion;
     readonly libraryVersion: string;
     private _type;
-    readonly type: ControllerTypes;
+    readonly type: ZWaveLibraryTypes;
     private _homeId;
     readonly homeId: number;
     private _ownNodeId;

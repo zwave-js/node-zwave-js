@@ -1,7 +1,8 @@
-import { CommandClass, CommandClasses } from "../commandclass/CommandClass";
+import { CommandClass, CommandClasses, CommandClassInfo, getMaxImplementedCCVersion } from "../commandclass/CommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { SendDataRequest, SendDataResponse, TransmitStatus } from "../commandclass/SendDataMessages";
+import { VersionCC, VersionCommand } from "../commandclass/VersionCC";
 import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/ApplicationUpdateRequest";
 import { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -30,11 +31,11 @@ export class ZWaveNode {
 	) {
 		// TODO restore from cache
 		this._deviceClass = deviceClass;
-		this._supportedCCs = supportedCCs;
-		this._controlledCCs = controlledCCs;
+		for (const cc of supportedCCs) this.addCC(cc, {isSupported: true});
+		for (const cc of controlledCCs) this.addCC(cc, {isControlled: true});
 	}
 
-	//#region --- properties ---
+//#region --- properties ---
 
 	private readonly logPrefix = `[Node ${padStart(this.id.toString(), 3, "0")}] `;
 
@@ -78,33 +79,46 @@ export class ZWaveNode {
 		return this._isBeaming;
 	}
 
-	private _supportedCCs: CommandClasses[];
-	public get supportedCCs(): CommandClasses[] {
-		return this._supportedCCs;
-	}
-
-	private _controlledCCs: CommandClasses[];
-	public get controlledCCs(): CommandClasses[] {
-		return this._controlledCCs;
+	private _commandClasses = new Map<CommandClasses, CommandClassInfo>();
+	public get commandClasses(): Map<CommandClasses, CommandClassInfo> {
+		return this._commandClasses;
 	}
 
 	/** This tells us which interview stage was last completed */
 	public interviewStage: InterviewStage = InterviewStage.None;
 
-	//#endregion
+//#endregion
 
 	public isControllerNode(): boolean {
 		return this.id === this.driver.controller.ownNodeId;
 	}
 
+	public addCC(cc: CommandClasses, info: Partial<CommandClassInfo>) {
+		let ccInfo = this._commandClasses.has(cc)
+			? this._commandClasses.get(cc)
+			: {
+				isSupported: false,
+				isControlled: false,
+				version: 0,
+			} as CommandClassInfo
+		;
+		ccInfo = Object.assign(ccInfo, info);
+		this._commandClasses.set(cc, ccInfo);
+	}
+
 	/** Tests if this node supports the given CommandClass */
 	public supportsCC(cc: CommandClasses): boolean {
-		return this._supportedCCs.indexOf(cc) !== -1;
+		return this._commandClasses.has(cc) && this._commandClasses.get(cc).isSupported;
 	}
 
 	/** Tests if this node controls the given CommandClass */
 	public controlsCC(cc: CommandClasses): boolean {
-		return this._controlledCCs.indexOf(cc) !== -1;
+		return this._commandClasses.has(cc) && this._commandClasses.get(cc).isControlled;
+	}
+
+	/** Checks the supported version of a given CommandClass */
+	public getCCVersion(cc: CommandClasses): number {
+		return this._commandClasses.has(cc) ? this._commandClasses.get(cc).version : 0;
 	}
 
 	//#region --- interview ---
@@ -127,8 +141,12 @@ export class ZWaveNode {
 		}
 		// TODO: WakeUp
 		// TODO: ManufacturerSpecific1
-		if (this.interviewStage === InterviewStage.Ping) {
+		if (this.interviewStage === InterviewStage.Ping /* TODO: change .Ping to .ManufacturerSpecific1 */ ) {
 			await this.getNodeInfo();
+		}
+
+		if (this.interviewStage === InterviewStage.NodeInfo /* TODO: change .NodeInfo to .Versions */ ) {
+			await this.queryCCVersions();
 		}
 
 		// for testing purposes we skip to the end
@@ -201,10 +219,37 @@ export class ZWaveNode {
 		} else if (resp instanceof ApplicationUpdateRequest) {
 			// TODO: log the received values
 			log("controller", `${this.logPrefix}  received the node info`, "debug");
-			this._supportedCCs = resp.nodeInformation.supportedCCs;
-			this._controlledCCs = resp.nodeInformation.controlledCCs;
+			for (const cc of resp.nodeInformation.supportedCCs) this.addCC(cc, {isSupported: true});
+			for (const cc of resp.nodeInformation.controlledCCs) this.addCC(cc, {isControlled: true});
 		}
 		this.interviewStage = InterviewStage.NodeInfo;
+	}
+
+	/** Step #9 of the node interview */
+	private async queryCCVersions() {
+		log("controller", `${this.logPrefix}querying CC versions`, "debug");
+		for (const [cc, info] of this._commandClasses.entries()) {
+			// only query the ones we support a version > 1 for
+			const maxImplemented = getMaxImplementedCCVersion(cc);
+			if (maxImplemented <= 1) {
+				log("controller", `${this.logPrefix}  skipping query for ${CommandClasses[cc]} (${num2hex(cc)}) because max implemented version is ${maxImplemented}`, "debug");
+				continue;
+			}
+			const versionCC = new VersionCC(this.id, VersionCommand.CommandClassGet, cc);
+			const request = new SendDataRequest(versionCC);
+			try {
+				log("controller", `${this.logPrefix}  querying the CC version for ${CommandClasses[cc]} (${num2hex(cc)})`, "debug");
+				// query the CC version
+				const response = await this.driver.sendMessage<SendDataRequest<VersionCC>>(request, MessagePriority.NodeQuery);
+				// and remember the response
+				const supportedVersion = response.command.ccVersion;
+				this.addCC(cc, {version: supportedVersion});
+				log("controller", `${this.logPrefix}  ${CommandClasses[cc]} (${num2hex(cc)}) supported in version ${supportedVersion}`, "debug");
+			} catch (e) {
+				log("controller", `${this.logPrefix}  querying the CC version failed: ${e.message}`, "debug");
+			}
+		}
+		this.interviewStage = InterviewStage.Versions;
 	}
 
 	//#endregion

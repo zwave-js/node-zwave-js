@@ -1,4 +1,4 @@
-import { CommandClass, CommandClasses } from "../commandclass/CommandClass";
+import { CommandClass, CommandClasses, CommandClassInfo } from "../commandclass/CommandClass";
 import { Driver } from "../driver/Driver";
 import { Message } from "../message/Message";
 import { DeviceClass } from "./DeviceClass";
@@ -26,17 +26,18 @@ export declare class ZWaveNode {
     readonly version: number;
     private _isBeaming;
     readonly isBeaming: boolean;
-    private _supportedCCs;
-    readonly supportedCCs: CommandClasses[];
-    private _controlledCCs;
-    readonly controlledCCs: CommandClasses[];
+    private _commandClasses;
+    readonly commandClasses: Map<CommandClasses, CommandClassInfo>;
     /** This tells us which interview stage was last completed */
     interviewStage: InterviewStage;
     isControllerNode(): boolean;
+    addCC(cc: CommandClasses, info: Partial<CommandClassInfo>): void;
     /** Tests if this node supports the given CommandClass */
     supportsCC(cc: CommandClasses): boolean;
     /** Tests if this node controls the given CommandClass */
     controlsCC(cc: CommandClasses): boolean;
+    /** Checks the supported version of a given CommandClass */
+    getCCVersion(cc: CommandClasses): number;
     interview(): Promise<void>;
     /** Step #1 of the node interview */
     private queryProtocolInfo();
@@ -44,6 +45,8 @@ export declare class ZWaveNode {
     private ping();
     /** Step #5 of the node interview */
     private getNodeInfo();
+    /** Step #9 of the node interview */
+    private queryCCVersions();
     /** Handles an ApplicationCommandRequest sent from a node */
     handleCommand(command: CommandClass): Promise<void>;
 }
