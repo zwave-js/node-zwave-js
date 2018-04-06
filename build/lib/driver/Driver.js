@@ -223,8 +223,8 @@ class Driver extends events_1.EventEmitter {
     serialport_onError(err) {
         this.emit("error", err);
     }
-    onInvalidData() {
-        this.emit("error", new ZWaveError_1.ZWaveError("The receive buffer contains invalid data, resetting...", ZWaveError_1.ZWaveErrorCodes.Driver_InvalidDataReceived));
+    onInvalidData(data) {
+        this.emit("error", new ZWaveError_1.ZWaveError(`The receive buffer contains invalid data (0x${data.toString("hex")}), resetting...`, ZWaveError_1.ZWaveErrorCodes.Driver_InvalidDataReceived));
         this.resetIO();
     }
     serialport_onData(data) {
@@ -249,7 +249,7 @@ class Driver extends events_1.EventEmitter {
                         break;
                     }
                     default: {
-                        this.onInvalidData();
+                        this.onInvalidData(this.receiveBuffer);
                         return;
                     }
                 }
@@ -273,7 +273,7 @@ class Driver extends events_1.EventEmitter {
                 if (e instanceof ZWaveError_1.ZWaveError) {
                     if (e.code === ZWaveError_1.ZWaveErrorCodes.PacketFormat_Invalid
                         || e.code === ZWaveError_1.ZWaveErrorCodes.PacketFormat_Checksum) {
-                        this.onInvalidData();
+                        this.onInvalidData(this.receiveBuffer);
                         return;
                     }
                 }

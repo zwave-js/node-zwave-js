@@ -75,12 +75,13 @@ export class VersionCC extends CommandClass {
 					ZWaveErrorCodes.CC_Invalid,
 				);
 		}
-		// define this.payload
+
 		return super.serialize();
 	}
 
 	public deserialize(data: Buffer): void {
 		super.deserialize(data);
+
 		this.versionCommand = this.payload[0];
 		switch (this.versionCommand) {
 			case VersionCommand.Report:

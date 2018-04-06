@@ -64,7 +64,7 @@ export declare class Driver extends EventEmitter {
      */
     destroy(): void;
     private serialport_onError(err);
-    private onInvalidData();
+    private onInvalidData(data);
     private serialport_onData(data);
     private handleMessage(msg);
     /**

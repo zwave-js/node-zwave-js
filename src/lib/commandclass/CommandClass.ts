@@ -1,7 +1,8 @@
+import * as fs from "fs";
 import { Constructable } from "../message/Message";
 import { log } from "../util/logger";
 import { entries } from "../util/object-polyfill";
-import { num2hex } from "../util/strings";
+import { num2hex, stringify } from "../util/strings";
 
 export interface CommandClassInfo {
 	isSupported: boolean;
@@ -335,4 +336,15 @@ export enum CommandClasses {
 	"Z/IP ND" = 0x58,
 	"Z/IP Portal" = 0x61,
 	"Z-Wave Plus Info" = 0x5E,
+}
+
+// To be sure all metadata gets loaded, import all command classes
+const definedCCs = fs
+	.readdirSync(__dirname)
+	.filter(file => /CC\.js$/.test(file))
+;
+log("protocol", `loading CCs: ${stringify(definedCCs)}`, "silly");
+for (const file of definedCCs) {
+	// tslint:disable-next-line:no-var-requires
+	require(`./${file}`);
 }

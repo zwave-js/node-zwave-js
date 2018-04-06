@@ -282,9 +282,9 @@ export class Driver extends EventEmitter {
 		this.emit("error", err);
 	}
 
-	private onInvalidData() {
+	private onInvalidData(data: Buffer) {
 		this.emit("error", new ZWaveError(
-			"The receive buffer contains invalid data, resetting...",
+			`The receive buffer contains invalid data (0x${data.toString("hex")}), resetting...`,
 			ZWaveErrorCodes.Driver_InvalidDataReceived,
 		));
 		this.resetIO();
@@ -314,7 +314,7 @@ export class Driver extends EventEmitter {
 						break;
 					}
 					default: {
-						this.onInvalidData();
+						this.onInvalidData(this.receiveBuffer);
 						return;
 					}
 				}
@@ -341,7 +341,7 @@ export class Driver extends EventEmitter {
 						e.code === ZWaveErrorCodes.PacketFormat_Invalid
 						|| e.code === ZWaveErrorCodes.PacketFormat_Checksum
 					) {
-						this.onInvalidData();
+						this.onInvalidData(this.receiveBuffer);
 						return;
 					}
 				}

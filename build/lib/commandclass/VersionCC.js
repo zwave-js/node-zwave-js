@@ -66,7 +66,6 @@ let VersionCC = class VersionCC extends CommandClass_1.CommandClass {
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot serialize a Version CC with a command other than Get or CommandClassGet", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
         }
-        // define this.payload
         return super.serialize();
     }
     deserialize(data) {

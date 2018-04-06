@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs = require("fs");
 const logger_1 = require("../util/logger");
 const object_polyfill_1 = require("../util/object-polyfill");
 const strings_1 = require("../util/strings");
@@ -315,4 +316,13 @@ var CommandClasses;
     CommandClasses[CommandClasses["Z/IP Portal"] = 97] = "Z/IP Portal";
     CommandClasses[CommandClasses["Z-Wave Plus Info"] = 94] = "Z-Wave Plus Info";
 })(CommandClasses = exports.CommandClasses || (exports.CommandClasses = {}));
+// To be sure all metadata gets loaded, import all command classes
+const definedCCs = fs
+    .readdirSync(__dirname)
+    .filter(file => /CC\.js$/.test(file));
+logger_1.log("protocol", `loading CCs: ${strings_1.stringify(definedCCs)}`, "silly");
+for (const file of definedCCs) {
+    // tslint:disable-next-line:no-var-requires
+    require(`./${file}`);
+}
 var CommandClass_1;

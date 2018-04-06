@@ -210,7 +210,7 @@ class ZWaveNode {
                 // only query the ones we support a version > 1 for
                 const maxImplemented = CommandClass_1.getImplementedVersion(cc);
                 if (maxImplemented < 1) {
-                    // log("controller", `${this.logPrefix}  skipping query for ${CommandClasses[cc]} (${num2hex(cc)}) because max implemented version is ${maxImplemented}`, "debug");
+                    logger_1.log("controller", `${this.logPrefix}  skipping query for ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)}) because max implemented version is ${maxImplemented}`, "debug");
                     continue;
                 }
                 const versionCC = new VersionCC_1.VersionCC(this.id, VersionCC_1.VersionCommand.CommandClassGet, cc);
@@ -229,6 +229,7 @@ class ZWaveNode {
         });
     }
     //#endregion
+    // TODO: Add a handler around for each CC to interpret the received data
     /** Handles an ApplicationCommandRequest sent from a node */
     handleCommand(command) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -247,6 +248,11 @@ class ZWaveNode {
                         logger_1.log("controller", `${this.logPrefix}supports CC ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)}) in version ${supportedVersion}`, "debug");
                     }
                     break;
+                }
+                case CommandClass_1.CommandClasses["Central Scene"]: {
+                    // The node reported its supported versions
+                    const csCC = command;
+                    logger_1.log("controller", `${this.logPrefix}received CentralScene command ${JSON.stringify(csCC)}`, "debug");
                 }
                 default: {
                     logger_1.log("controller", `${this.logPrefix}TODO: no handler for application command ${strings_1.stringify(command)}`, "debug");

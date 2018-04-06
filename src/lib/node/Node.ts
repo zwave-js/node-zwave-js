@@ -13,6 +13,7 @@ import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
 import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "./GetNodeProtocolInfoMessages";
 import { isNodeQuery } from "./INodeQuery";
 import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
+import { CentralSceneCC } from "../commandclass/CentralSceneCC";
 
 /** Finds the ID of the target or source node in a message, if it contains that information */
 export function getNodeId(msg: Message): number {
@@ -236,7 +237,7 @@ export class ZWaveNode {
 			// only query the ones we support a version > 1 for
 			const maxImplemented = getImplementedVersion(cc);
 			if (maxImplemented < 1) {
-				// log("controller", `${this.logPrefix}  skipping query for ${CommandClasses[cc]} (${num2hex(cc)}) because max implemented version is ${maxImplemented}`, "debug");
+				log("controller", `${this.logPrefix}  skipping query for ${CommandClasses[cc]} (${num2hex(cc)}) because max implemented version is ${maxImplemented}`, "debug");
 				continue;
 			}
 			const versionCC = new VersionCC(this.id, VersionCommand.CommandClassGet, cc);
@@ -255,6 +256,8 @@ export class ZWaveNode {
 
 	//#endregion
 
+	// TODO: Add a handler around for each CC to interpret the received data
+
 	/** Handles an ApplicationCommandRequest sent from a node */
 	public async handleCommand(command: CommandClass): Promise<void> {
 		switch (command.command) {
@@ -271,6 +274,11 @@ export class ZWaveNode {
 					log("controller", `${this.logPrefix}supports CC ${CommandClasses[cc]} (${num2hex(cc)}) in version ${supportedVersion}`, "debug");
 				}
 				break;
+			}
+			case CommandClasses["Central Scene"]: {
+				// The node reported its supported versions
+				const csCC = command as CentralSceneCC;
+				log("controller", `${this.logPrefix}received CentralScene command ${JSON.stringify(csCC)}`, "debug");
 			}
 			default: {
 				log("controller", `${this.logPrefix}TODO: no handler for application command ${stringify(command)}`, "debug");
