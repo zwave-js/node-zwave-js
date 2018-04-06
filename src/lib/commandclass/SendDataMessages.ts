@@ -3,6 +3,7 @@ import { FunctionType, MessagePriority, MessageType } from "../message/Constants
 import { Constructable, expectedResponse, Message, messageTypes, priority } from "../message/Message";
 import { log } from "../util/logger";
 import { CommandClass, CommandClasses } from "./CommandClass";
+import { ICommandClassContainer } from "./ICommandClassContainer";
 
 export enum TransmitOptions {
 	NotSet = 0,
@@ -48,7 +49,7 @@ function isExpectedResponseToSendDataRequest(sent: SendDataRequest, received: Me
 @messageTypes(MessageType.Request, FunctionType.SendData)
 @expectedResponse(isExpectedResponseToSendDataRequest)
 @priority(MessagePriority.Normal)
-export class SendDataRequest extends Message {
+export class SendDataRequest extends Message implements ICommandClassContainer {
 
 	// tslint:disable:unified-signatures
 	// empty constructor to parse messages
@@ -60,14 +61,14 @@ export class SendDataRequest extends Message {
 		callbackId?: number,
 	);
 	constructor(
-		/** The command this message contains */
-		public command?: CommandClass,
+		command?: CommandClass,
 		/** Options regarding the transmission of the message */
 		public transmitOptions?: TransmitOptions,
 		/** A callback ID to map requests and responses */
 		public callbackId?: number,
 	) {
 		super();
+		this.command = command;
 		if (command != null) {
 			// non-empty constructor -> define default values
 			if (this.transmitOptions == null) this.transmitOptions = TransmitOptions.DEFAULT;
@@ -75,6 +76,9 @@ export class SendDataRequest extends Message {
 		}
 	}
 	// tslint:enable:unified-signatures
+
+	/** The command this message contains */
+	public command: CommandClass;
 
 	private _transmitStatus: TransmitStatus;
 	public get transmitStatus(): TransmitStatus {

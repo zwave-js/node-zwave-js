@@ -1,14 +1,23 @@
 import { CommandClass, CommandClasses } from "../commandclass/CommandClass";
+import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { SendDataRequest, SendDataResponse, TransmitStatus } from "../commandclass/SendDataMessages";
+import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/ApplicationUpdateRequest";
 import { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
+import { Message } from "../message/Message";
 import { log } from "../util/logger";
 import { num2hex, padStart, stringify } from "../util/strings";
 import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
 import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "./GetNodeProtocolInfoMessages";
-import { RequestNodeInfoResponse, RequestNodeInfoRequest } from "./RequestNodeInfoMessages";
-import { ApplicationUpdateRequest } from "../controller/ApplicationUpdateRequest";
+import { isNodeQuery } from "./INodeQuery";
+import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
+
+/** Finds the ID of the target or source node in a message, if it contains that information */
+export function getNodeId(msg: Message): number {
+	if (isNodeQuery(msg)) return msg.nodeId;
+	if (isCommandClassContainer(msg)) return msg.command.nodeId;
+}
 
 export class ZWaveNode {
 
@@ -118,7 +127,7 @@ export class ZWaveNode {
 		}
 		// TODO: WakeUp
 		// TODO: ManufacturerSpecific1
-		if (this.interviewStage === InterviewStage.ManufacturerSpecific1) {
+		if (this.interviewStage === InterviewStage.Ping) {
 			await this.getNodeInfo();
 		}
 
@@ -184,7 +193,10 @@ export class ZWaveNode {
 		const resp = await this.driver.sendMessage<RequestNodeInfoResponse | ApplicationUpdateRequest>(
 			new RequestNodeInfoRequest(this.id),
 		);
-		if (resp instanceof RequestNodeInfoResponse && !resp.wasSent) {
+		if (
+			resp instanceof RequestNodeInfoResponse && !resp.wasSent
+			|| resp instanceof ApplicationUpdateRequest && resp.updateType === ApplicationUpdateTypes.NodeInfo_RequestFailed
+		) {
 			log("controller", `${this.logPrefix}  querying the node info failed`, "debug");
 		} else if (resp instanceof ApplicationUpdateRequest) {
 			// TODO: log the received values

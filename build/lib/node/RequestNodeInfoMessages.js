@@ -17,10 +17,15 @@ function isExpectedResponseToRequestNodeInfoRequest(sent, received) {
     if (received instanceof RequestNodeInfoResponse && !received.wasSent)
         return true;
     // Otherwise find the correct ApplicationUpdateRequest
-    if (received instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest
-        && received.updateType === ApplicationUpdateRequest_1.ApplicationUpdateTypes.NodeInfo_Received
-        && received.nodeId === sent.nodeId)
-        return true;
+    if (received instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest) {
+        // received node info for the correct node
+        if (received.updateType === ApplicationUpdateRequest_1.ApplicationUpdateTypes.NodeInfo_Received
+            && received.nodeId === sent.nodeId)
+            return true;
+        // requesting node info failed. We cannot check which node that belongs to
+        if (received.updateType === ApplicationUpdateRequest_1.ApplicationUpdateTypes.NodeInfo_RequestFailed)
+            return true;
+    }
 }
 let RequestNodeInfoRequest = class RequestNodeInfoRequest extends Message_1.Message {
     constructor(nodeId) {

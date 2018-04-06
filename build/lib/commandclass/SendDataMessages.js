@@ -51,17 +51,15 @@ function isExpectedResponseToSendDataRequest(sent, received) {
     return (received instanceof SendDataRequest && received.callbackId === sent.callbackId);
 }
 let SendDataRequest = class SendDataRequest extends Message_1.Message {
-    constructor(
-    /** The command this message contains */
-    command, 
+    constructor(command, 
     /** Options regarding the transmission of the message */
     transmitOptions, 
     /** A callback ID to map requests and responses */
     callbackId) {
         super();
-        this.command = command;
         this.transmitOptions = transmitOptions;
         this.callbackId = callbackId;
+        this.command = command;
         if (command != null) {
             // non-empty constructor -> define default values
             if (this.transmitOptions == null)

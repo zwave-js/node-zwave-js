@@ -139,7 +139,7 @@ class Driver extends events_1.EventEmitter {
                 // don't await them, so the beginInterview method returns
                 for (const node of this._controller.nodes.values()) {
                     // TODO: retry on failure or something...
-                    node.interview().catch(e => "node interview failed: " + e.message);
+                    node.interview().catch(e => logger_1.log("controller", "node interview failed: " + e, "error"));
                 }
             }
         });
@@ -492,22 +492,28 @@ class Driver extends events_1.EventEmitter {
      * and resumes the queue handling
      */
     resolveCurrentTransaction(resumeQueue = true) {
+        logger_1.log("io", `resolving current transaction with ${this.currentTransaction.response}`, "debug");
         this.currentTransaction.promise.resolve(this.currentTransaction.response);
         this.currentTransaction = null;
         // and see if there are messages pending
-        if (resumeQueue)
+        if (resumeQueue) {
+            logger_1.log("io", `resuming send queue`, "debug");
             setImmediate(() => this.workOffSendQueue());
+        }
     }
     /**
      * Rejects the current transaction with the given value
      * and resumes the queue handling
      */
     rejectCurrentTransaction(reason, resumeQueue = true) {
+        logger_1.log("io", `rejecting current transaction because "${reason.message}"`, "debug");
         this.currentTransaction.promise.reject(reason);
         this.currentTransaction = null;
         // and see if there are messages pending
-        if (resumeQueue)
+        if (resumeQueue) {
+            logger_1.log("io", `resuming send queue`, "debug");
             setImmediate(() => this.workOffSendQueue());
+        }
     }
     // tslint:enable:unified-signatures
     sendMessage(msg, priorityOrCheck, supportCheck) {
@@ -542,7 +548,7 @@ class Driver extends events_1.EventEmitter {
             logger_1.log("driver", `sending message ${strings_1.stringify(msg)} with priority ${Constants_1.MessagePriority[priority]} (${priority})`, "debug");
             // create the transaction and enqueue it
             const promise = defer_promise_1.createDeferredPromise();
-            const transaction = new Transaction_1.Transaction(msg, promise, priority);
+            const transaction = new Transaction_1.Transaction(this, msg, promise, priority);
             this.sendQueue.add(transaction);
             logger_1.log("io", `added message to the send queue, new length = ${this.sendQueue.length}`, "debug");
             // start sending now (maybe)
@@ -577,8 +583,11 @@ class Driver extends events_1.EventEmitter {
         }
         // get the next transaction
         const next = this.sendQueue.shift();
-        logger_1.log("io", `workOffSendQueue > sending next message... remaining queue length = ${this.sendQueue.length}`, "debug");
         this.currentTransaction = next;
+        const data = next.message.serialize();
+        logger_1.log("io", `workOffSendQueue > sending next message (${Constants_1.FunctionType[next.message.functionType]})...`, "debug");
+        logger_1.log("io", `  data = 0x${data.toString("hex")}`, "debug");
+        logger_1.log("io", `  remaining queue length = ${this.sendQueue.length}`, "debug");
         this.doSend(next.message.serialize());
         // to avoid any deadlocks we didn't think of, re-call this later
         this.sendQueueTimer = setTimeout(() => this.workOffSendQueue(), 1000);

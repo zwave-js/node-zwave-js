@@ -178,7 +178,7 @@ export class Driver extends EventEmitter {
 			// don't await them, so the beginInterview method returns
 			for (const node of this._controller.nodes.values()) {
 				// TODO: retry on failure or something...
-				node.interview().catch(e => "node interview failed: " + e.message);
+				node.interview().catch(e => log("controller", "node interview failed: " + e, "error"));
 			}
 		}
 	}
@@ -599,10 +599,14 @@ export class Driver extends EventEmitter {
 	 * and resumes the queue handling
 	 */
 	private resolveCurrentTransaction(resumeQueue: boolean = true) {
+		log("io", `resolving current transaction with ${this.currentTransaction.response}`, "debug");
 		this.currentTransaction.promise.resolve(this.currentTransaction.response);
 		this.currentTransaction = null;
 		// and see if there are messages pending
-		if (resumeQueue) setImmediate(() => this.workOffSendQueue());
+		if (resumeQueue) {
+			log("io", `resuming send queue`, "debug");
+			setImmediate(() => this.workOffSendQueue());
+		}
 	}
 
 	/**
@@ -610,10 +614,14 @@ export class Driver extends EventEmitter {
 	 * and resumes the queue handling
 	 */
 	private rejectCurrentTransaction(reason: ZWaveError, resumeQueue: boolean = true) {
+		log("io", `rejecting current transaction because "${reason.message}"`, "debug");
 		this.currentTransaction.promise.reject(reason);
 		this.currentTransaction = null;
 		// and see if there are messages pending
-		if (resumeQueue) setImmediate(() => this.workOffSendQueue());
+		if (resumeQueue) {
+			log("io", `resuming send queue`, "debug");
+			setImmediate(() => this.workOffSendQueue());
+		}
 	}
 
 	// tslint:disable:unified-signatures
@@ -691,6 +699,7 @@ export class Driver extends EventEmitter {
 		// create the transaction and enqueue it
 		const promise = createDeferredPromise<TResponse>();
 		const transaction = new Transaction(
+			this,
 			msg,
 			promise,
 			priority,
@@ -735,8 +744,11 @@ export class Driver extends EventEmitter {
 
 		// get the next transaction
 		const next = this.sendQueue.shift();
-		log("io", `workOffSendQueue > sending next message... remaining queue length = ${this.sendQueue.length}`, "debug");
 		this.currentTransaction = next;
+		const data = next.message.serialize();
+		log("io", `workOffSendQueue > sending next message (${FunctionType[next.message.functionType]})...`, "debug");
+		log("io", `  data = 0x${data.toString("hex")}`, "debug");
+		log("io", `  remaining queue length = ${this.sendQueue.length}`, "debug");
 		this.doSend(next.message.serialize());
 
 		// to avoid any deadlocks we didn't think of, re-call this later

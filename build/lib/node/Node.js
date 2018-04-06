@@ -8,15 +8,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const ICommandClassContainer_1 = require("../commandclass/ICommandClassContainer");
 const NoOperationCC_1 = require("../commandclass/NoOperationCC");
 const SendDataMessages_1 = require("../commandclass/SendDataMessages");
+const ApplicationUpdateRequest_1 = require("../controller/ApplicationUpdateRequest");
 const Constants_1 = require("../message/Constants");
 const logger_1 = require("../util/logger");
 const strings_1 = require("../util/strings");
 const DeviceClass_1 = require("./DeviceClass");
 const GetNodeProtocolInfoMessages_1 = require("./GetNodeProtocolInfoMessages");
+const INodeQuery_1 = require("./INodeQuery");
 const RequestNodeInfoMessages_1 = require("./RequestNodeInfoMessages");
-const ApplicationUpdateRequest_1 = require("../controller/ApplicationUpdateRequest");
+/** Finds the ID of the target or source node in a message, if it contains that information */
+function getNodeId(msg) {
+    if (INodeQuery_1.isNodeQuery(msg))
+        return msg.nodeId;
+    if (ICommandClassContainer_1.isCommandClassContainer(msg))
+        return msg.command.nodeId;
+}
+exports.getNodeId = getNodeId;
 class ZWaveNode {
     constructor(id, driver, deviceClass, supportedCCs = [], controlledCCs = []) {
         this.id = id;
@@ -89,7 +99,7 @@ class ZWaveNode {
             }
             // TODO: WakeUp
             // TODO: ManufacturerSpecific1
-            if (this.interviewStage === InterviewStage.ManufacturerSpecific1) {
+            if (this.interviewStage === InterviewStage.Ping) {
                 yield this.getNodeInfo();
             }
             // for testing purposes we skip to the end
@@ -152,7 +162,8 @@ class ZWaveNode {
         return __awaiter(this, void 0, void 0, function* () {
             logger_1.log("controller", `${this.logPrefix}querying node info`, "debug");
             const resp = yield this.driver.sendMessage(new RequestNodeInfoMessages_1.RequestNodeInfoRequest(this.id));
-            if (resp instanceof RequestNodeInfoMessages_1.RequestNodeInfoResponse && !resp.wasSent) {
+            if (resp instanceof RequestNodeInfoMessages_1.RequestNodeInfoResponse && !resp.wasSent
+                || resp instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest && resp.updateType === ApplicationUpdateRequest_1.ApplicationUpdateTypes.NodeInfo_RequestFailed) {
                 logger_1.log("controller", `${this.logPrefix}  querying the node info failed`, "debug");
             }
             else if (resp instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest) {

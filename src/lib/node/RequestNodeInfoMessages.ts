@@ -7,11 +7,15 @@ function isExpectedResponseToRequestNodeInfoRequest(sent: RequestNodeInfoRequest
 	// A failure to send is an expected response
 	if (received instanceof RequestNodeInfoResponse && !received.wasSent) return true;
 	// Otherwise find the correct ApplicationUpdateRequest
-	if (
-		received instanceof ApplicationUpdateRequest
-		&& received.updateType === ApplicationUpdateTypes.NodeInfo_Received
-		&& received.nodeId === sent.nodeId
-	) return true;
+	if (received instanceof ApplicationUpdateRequest) {
+		// received node info for the correct node
+		if (
+			received.updateType === ApplicationUpdateTypes.NodeInfo_Received
+			&& received.nodeId === sent.nodeId
+		) return true;
+		// requesting node info failed. We cannot check which node that belongs to
+		if (received.updateType === ApplicationUpdateTypes.NodeInfo_RequestFailed) return true;
+	}
 }
 
 @messageTypes(MessageType.Request, FunctionType.RequestNodeInfo)

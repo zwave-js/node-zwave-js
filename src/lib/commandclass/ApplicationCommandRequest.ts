@@ -1,6 +1,7 @@
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
 import { CommandClass, CommandClasses } from "./CommandClass";
+import { ICommandClassContainer } from "./ICommandClassContainer";
 
 const enum StatusFlags {
 	RoutedBusy = 1 << 0,
@@ -10,7 +11,7 @@ const enum StatusFlags {
 @messageTypes(MessageType.Request, FunctionType.ApplicationCommand)
 // This does not expect a response. The controller sends us this when a node sends a command
 @priority(MessagePriority.Normal)
-export class ApplicationCommandRequest extends Message {
+export class ApplicationCommandRequest extends Message implements ICommandClassContainer {
 
 	private _routedBusy: boolean;
 	public get routedBusy(): boolean {

@@ -1,6 +1,7 @@
 /// <reference types="node" />
 import { Message } from "../message/Message";
 import { CommandClass } from "./CommandClass";
+import { ICommandClassContainer } from "./ICommandClassContainer";
 export declare enum TransmitOptions {
     NotSet = 0,
     ACK = 1,
@@ -17,15 +18,15 @@ export declare enum TransmitStatus {
     NotIdle = 3,
     NoRoute = 4,
 }
-export declare class SendDataRequest extends Message {
-    /** The command this message contains */
-    command: CommandClass;
+export declare class SendDataRequest extends Message implements ICommandClassContainer {
     /** Options regarding the transmission of the message */
     transmitOptions: TransmitOptions;
     /** A callback ID to map requests and responses */
     callbackId: number;
     constructor();
     constructor(command: CommandClass, transmitOptions?: TransmitOptions, callbackId?: number);
+    /** The command this message contains */
+    command: CommandClass;
     private _transmitStatus;
     readonly transmitStatus: TransmitStatus;
     serialize(): Buffer;

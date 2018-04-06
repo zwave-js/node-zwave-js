@@ -1,7 +1,8 @@
 /// <reference types="node" />
 import { Message } from "../message/Message";
 import { CommandClass } from "./CommandClass";
-export declare class ApplicationCommandRequest extends Message {
+import { ICommandClassContainer } from "./ICommandClassContainer";
+export declare class ApplicationCommandRequest extends Message implements ICommandClassContainer {
     private _routedBusy;
     readonly routedBusy: boolean;
     private _isBroadcast;

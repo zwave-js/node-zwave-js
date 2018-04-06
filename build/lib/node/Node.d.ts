@@ -1,7 +1,10 @@
 import { CommandClass, CommandClasses } from "../commandclass/CommandClass";
 import { Driver } from "../driver/Driver";
+import { Message } from "../message/Message";
 import { DeviceClass } from "./DeviceClass";
 import { Baudrate } from "./GetNodeProtocolInfoMessages";
+/** Finds the ID of the target or source node in a message, if it contains that information */
+export declare function getNodeId(msg: Message): number;
 export declare class ZWaveNode {
     readonly id: number;
     private readonly driver;
