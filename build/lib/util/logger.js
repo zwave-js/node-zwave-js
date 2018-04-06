@@ -1,5 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// tslint:disable-next-line:no-var-requires
+const colors = require("colors/safe");
 const debug = require("debug");
 const defaultNamespace = "zwave";
 let customLogger;
@@ -7,6 +9,13 @@ function setCustomLogger(logger) {
     customLogger = logger;
 }
 exports.setCustomLogger = setCustomLogger;
+colors.setTheme({
+    silly: "white",
+    debug: "white",
+    error: "red",
+    warn: "yellow",
+    info: "blue",
+});
 function log(...args) {
     // we only accept strings
     if (!args || !args.length || !args.every(arg => typeof arg === "string")) {
@@ -29,7 +38,7 @@ function log(...args) {
         if (severity !== "info") {
             prefix = `[${severity.toUpperCase()}] `;
         }
-        debug(defaultNamespace + namespace)(`${prefix}${message}`);
+        debug(defaultNamespace + namespace)(`${prefix}${colors[severity](message)}`);
     }
     (customLogger || defaultLogger)(message, severity);
 }
