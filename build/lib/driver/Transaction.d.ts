@@ -13,6 +13,4 @@ export declare class Transaction implements Comparable<Transaction> {
     response: Message;
     constructor(driver: Driver, message: Message, promise: DeferredPromise<Message | void>, priority: MessagePriority);
     compareTo(other: Transaction): CompareResult;
-    /** Checks if a message is an expected response for this transaction */
-    isExpectedResponse(msg: Message): boolean;
 }

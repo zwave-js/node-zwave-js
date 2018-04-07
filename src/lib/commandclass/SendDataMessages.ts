@@ -1,9 +1,9 @@
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { Constructable, expectedResponse, Message, messageTypes, priority } from "../message/Message";
+import { Constructable, expectedResponse, Message, messageTypes, priority, ResponsePredicate, ResponseRole } from "../message/Message";
 import { log } from "../util/logger";
-import { CommandClass, CommandClasses } from "./CommandClass";
-import { ICommandClassContainer } from "./ICommandClassContainer";
+import { CommandClass, CommandClasses, getExpectedCCResponse } from "./CommandClass";
+import { ICommandClassContainer, isCommandClassContainer } from "./ICommandClassContainer";
 
 export enum TransmitOptions {
 	NotSet = 0,
@@ -35,19 +35,21 @@ function getNextCallbackId(): number {
 	return lastCallbackId;
 }
 
-// SendDataRequests need specialized handling for the responses
-// We might receive a SendDataResponse indicating that the request failed
-// or we might have to wait for a SendDataRequest giving us more info about what happened
-function isExpectedResponseToSendDataRequest(sent: SendDataRequest, received: Message): boolean {
-	// Quick check for the function type instead of using the prototype
-	if (received.functionType !== FunctionType.SendData) return false;
-
-	// A SendDataRequest has to have the correct callback ID to be expected
-	return (received instanceof SendDataRequest && received.callbackId === sent.callbackId);
+// Generic handler for all potential responses to SendDataRequests
+function testResponseForSendDataRequest(sent: SendDataRequest, received: Message): ResponseRole {
+	if (received instanceof SendDataResponse) {
+		return received.wasSent
+			? "intermediate"
+			: "fatal_controller";
+	} else if (received instanceof SendDataRequest) {
+		return received.isFailed()
+			? "fatal_node"
+			: "intermediate";
+	}
 }
 
 @messageTypes(MessageType.Request, FunctionType.SendData)
-@expectedResponse(isExpectedResponseToSendDataRequest)
+@expectedResponse(testResponseForSendDataRequest)
 @priority(MessagePriority.Normal)
 export class SendDataRequest<CCType extends CommandClass = CommandClass> extends Message implements ICommandClassContainer {
 
@@ -129,6 +131,24 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass> extends
 	public isFailed(): boolean {
 		return this._transmitStatus !== TransmitStatus.OK;
 	}
+
+	/** @inheritDoc */
+	public testResponse(msg: Message): ResponseRole {
+		const ret = super.testResponse(msg);
+		if (ret !== "final") return ret;
+		// We handle a special case here:
+		// If the contained CC expects a certain response (which will come in an ApplicationCommandRequest)
+		// we declare that as final and the original "final" response, i.e. the SendDataRequest becomes intermediate
+		const ccPredicate = getExpectedCCResponse(this.command);
+		if (ccPredicate == null) return ret; // "final"
+		if (!isCommandClassContainer(msg)) return "intermediate"; // this should not happen, but we do expect another message
+		if (typeof ccPredicate === "number") {
+			return ccPredicate === msg.command.command ? "final" : "intermediate"; // not sure if other CCs can come in the meantime
+		} else {
+			return ccPredicate(this.command, msg.command) ? "final" : "intermediate";
+		}
+	}
+
 }
 
 @messageTypes(MessageType.Response, FunctionType.SendData)

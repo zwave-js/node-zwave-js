@@ -34,15 +34,18 @@ export declare class Message {
     toJSON(): any;
     private toJSONInternal();
     protected toJSONInherited(props: Record<string, any>): Record<string, any>;
+    /** Checks if a message is an expected response for this message */
+    testResponse(msg: Message): ResponseRole;
 }
 export declare const METADATA_messageTypes: unique symbol;
 export declare const METADATA_messageTypeMap: unique symbol;
 export declare const METADATA_expectedResponse: unique symbol;
 export declare const METADATA_priority: unique symbol;
+export declare type ResponseRole = "unexpected" | "intermediate" | "final" | "fatal_controller" | "fatal_node";
 /**
  * A predicate function to test if a received message matches to the sent message
  */
-export declare type ResponsePredicate = (sentMessage: Message, receivedMessage: Message) => boolean;
+export declare type ResponsePredicate = (sentMessage: Message, receivedMessage: Message) => ResponseRole;
 /**
  * Defines the message and function type associated with a Z-Wave message
  */

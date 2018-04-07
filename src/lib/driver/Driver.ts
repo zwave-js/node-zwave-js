@@ -3,7 +3,7 @@ import * as SerialPort from "serialport";
 import { ApplicationCommandRequest } from "../commandclass/ApplicationCommandRequest";
 import { CommandClasses, getImplementedVersion } from "../commandclass/CommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import { SendDataRequest, SendDataResponse, TransmitStatus } from "../commandclass/SendDataMessages";
+import { SendDataRequest, SendDataResponse, TransmitStatus, isErrorResponse } from "../commandclass/SendDataMessages";
 import { ZWaveController } from "../controller/Controller";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "../message/Constants";
@@ -378,19 +378,57 @@ export class Driver extends EventEmitter {
 		// if we have a pending request, check if that is waiting for this message
 		if (this.currentTransaction != null) {
 
-			if (this.currentTransaction.isExpectedResponse(msg)) { // the message was final, so it resolves the transaction
-				log("io", `  received expected response to current transaction`, "debug");
-				this.currentTransaction.response = msg;
-				if (!this.currentTransaction.ackPending) {
-					log("io", `  ACK already received, resolving transaction`, "debug");
-					log("driver", `  transaction complete`, "debug");
-					this.resolveCurrentTransaction();
-				} else {
-					// wait for the ack, it might be received out of order
-					log("io", `  no ACK received yet, remembering response`, "debug");
-				}
-				// if the response was expected, don't check any more handlers
-				return;
+			switch (this.currentTransaction.message.testResponse(msg)) {
+				case "intermediate":
+					// no need to process intermediate responses, as they only tell us things are good
+					log("io", `  received intermediate response to current transaction`, "debug");
+					return;
+
+				case "fatal_controller":
+					// The message was not sent
+					log("io", `  the message for the current transaction could not be sent, dropping the transaction`, "debug");
+					if (this.currentTransaction.promise != null) {
+						const errorMsg = msg instanceof SendDataResponse
+							? `The message could not be sent (code ${msg.errorCode})`
+							: `The message could not be sent`
+							;
+						this.rejectCurrentTransaction(
+							new ZWaveError(errorMsg, ZWaveErrorCodes.Controller_MessageDropped),
+						);
+					}
+					return;
+
+				case "fatal_node":
+					// The node did not respond
+					log("io", `  The node did not respond to the current transaction, dropping it`, "debug");
+					if (this.currentTransaction.promise != null) {
+						const errorMsg = msg instanceof SendDataRequest
+							? `The node did not respond (${TransmitStatus[msg.transmitStatus]})`
+							: `The node did not respond`
+							;
+						this.rejectCurrentTransaction(
+							new ZWaveError(errorMsg, ZWaveErrorCodes.Controller_MessageDropped),
+						);
+					}
+					return;
+
+				case "final":
+					// this is the expected response!
+					log("io", `  received expected response to current transaction`, "debug");
+					this.currentTransaction.response = msg;
+					if (!this.currentTransaction.ackPending) {
+						log("io", `  ACK already received, resolving transaction`, "debug");
+						log("driver", `  transaction complete`, "debug");
+						this.resolveCurrentTransaction();
+					} else {
+						// wait for the ack, it might be received out of order
+						log("io", `  no ACK received yet, remembering response`, "debug");
+					}
+					// if the response was expected, don't check any more handlers
+					return;
+
+				default: // unexpected, nothing to do here => check registered handlers
+					break;
 			}
 		}
 

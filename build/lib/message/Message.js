@@ -135,6 +135,23 @@ class Message {
         }
         return ret;
     }
+    /** Checks if a message is an expected response for this message */
+    testResponse(msg) {
+        const expected = this.expectedResponse;
+        if (typeof expected === "number"
+            && msg.type === Constants_1.MessageType.Response) {
+            // if only a functionType was configured as expected,
+            // any message with this function type is expected,
+            // every other message is unexpected
+            return expected === msg.functionType ? "final" : "unexpected";
+        }
+        else if (typeof expected === "function") {
+            // If a predicate was configured, use it to test the message
+            return expected(this, msg);
+        }
+        // nothing was configured, this expects no response
+        return "unexpected";
+    }
 }
 exports.Message = Message;
 function computeChecksum(message) {

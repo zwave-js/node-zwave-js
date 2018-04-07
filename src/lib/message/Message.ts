@@ -185,6 +185,25 @@ export class Message {
 		return ret;
 	}
 
+	/** Checks if a message is an expected response for this message */
+	public testResponse(msg: Message): ResponseRole {
+		const expected = this.expectedResponse;
+		if (
+			typeof expected === "number"
+			&& msg.type === MessageType.Response
+		) {
+			// if only a functionType was configured as expected,
+			// any message with this function type is expected,
+			// every other message is unexpected
+			return expected === msg.functionType ? "final" : "unexpected";
+		} else if (typeof expected === "function") {
+			// If a predicate was configured, use it to test the message
+			return expected(this, msg);
+		}
+		// nothing was configured, this expects no response
+		return "unexpected";
+	}
+
 }
 
 function computeChecksum(message: Buffer): number {
@@ -211,18 +230,17 @@ function getMessageTypeMapKey(messageType: MessageType, functionType: FunctionTy
 	return JSON.stringify({ messageType, functionType });
 }
 
-// export enum ResponseExpectationFlags {
-// 	/** The response was not expected */
-// 	Unexpected = 0,
-// 	/** The response was expected but might not be the final message */
-// 	Expected = 1 << 0,
-// 	/** The response completes a transaction */
-// 	Final = 1 << 1,
-// }
+export type ResponseRole =
+	"unexpected" // a message that does not belong to this transaction
+	| "intermediate" // an intermediate response, e.g. controller ACK that is not fatal
+	| "final" // a final response (leading to a resolved transaction)
+	| "fatal_controller" // a response from the controller that leads to a rejected transaction
+	| "fatal_node" // a response or (lack thereof) from the node that leads to a rejected transaction
+	;
 /**
  * A predicate function to test if a received message matches to the sent message
  */
-export type ResponsePredicate = (sentMessage: Message, receivedMessage: Message) => boolean;
+export type ResponsePredicate = (sentMessage: Message, receivedMessage: Message) => ResponseRole;
 
 /**
  * Defines the message and function type associated with a Z-Wave message

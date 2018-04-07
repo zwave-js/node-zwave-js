@@ -122,11 +122,16 @@ export class CommandClass {
 // tslint:disable:variable-name
 export const METADATA_commandClass = Symbol("commandClass");
 export const METADATA_commandClassMap = Symbol("commandClassMap");
+export const METADATA_ccResponse = Symbol("ccResponse");
 export const METADATA_version = Symbol("version");
 // tslint:enable:variable-name
 
 // Pre-create the lookup maps for the contructors
 type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
+/**
+ * A predicate function to test if a received CC matches to the sent CC
+ */
+export type CCResponsePredicate = (sentCC: CommandClass, receivedCC: CommandClass) => boolean;
 
 /**
  * Defines the command class associated with a Z-Wave message
@@ -213,6 +218,57 @@ export function getImplementedVersionStatic<T extends Constructable<CommandClass
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_version, classConstructor);
 	log("protocol", `${classConstructor.name}: retrieving implemented version => ${ret}`, "silly");
+	return ret;
+}
+
+// tslint:disable:unified-signatures
+/**
+ * Defines the expected response associated with a Z-Wave message
+ */
+export function expectedCCResponse(cc: CommandClasses): ClassDecorator;
+export function expectedCCResponse(predicate: CCResponsePredicate): ClassDecorator;
+export function expectedCCResponse(ccOrPredicate: CommandClasses | CCResponsePredicate): ClassDecorator {
+	return (ccClass) => {
+		if (typeof ccOrPredicate === "number") {
+			const cc = ccOrPredicate;
+			log("protocol", `${ccClass.name}: defining expected CC response ${num2hex(cc)}`, "silly");
+		} else {
+			const predicate = ccOrPredicate;
+			log("protocol", `${ccClass.name}: defining expected response [Predicate${predicate.name.length > 0 ? " " + predicate.name : ""}]`, "silly");
+		}
+		// and store the metadata
+		Reflect.defineMetadata(METADATA_ccResponse, ccOrPredicate, ccClass);
+	};
+}
+// tslint:enable:unified-signatures
+
+/**
+ * Retrieves the expected response defined for a Z-Wave message class
+ */
+export function getExpectedCCResponse<T extends CommandClass>(ccClass: T): CommandClasses | CCResponsePredicate {
+	// get the class constructor
+	const constr = ccClass.constructor;
+	// retrieve the current metadata
+	const ret = Reflect.getMetadata(METADATA_ccResponse, constr);
+	if (typeof ret === "number") {
+		log("protocol", `${constr.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
+	} else if (typeof ret === "function") {
+		log("protocol", `${constr.name}: retrieving expected response => [Predicate${ret.name.length > 0 ? " " + ret.name : ""}]`, "silly");
+	}
+	return ret;
+}
+
+/**
+ * Retrieves the function type defined for a Z-Wave message class
+ */
+export function getExpectedCCResponseStatic<T extends Constructable<CommandClass>>(classConstructor: T): CommandClasses | CCResponsePredicate {
+	// retrieve the current metadata
+	const ret = Reflect.getMetadata(METADATA_ccResponse, classConstructor);
+	if (typeof ret === "number") {
+		log("protocol", `${classConstructor.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
+	} else if (typeof ret === "function") {
+		log("protocol", `${classConstructor.name}: retrieving expected response => [Predicate${ret.name.length > 0 ? " " + ret.name : ""}]`, "silly");
+	}
 	return ret;
 }
 

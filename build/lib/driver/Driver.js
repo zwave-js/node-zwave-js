@@ -302,20 +302,48 @@ class Driver extends events_1.EventEmitter {
         }
         // if we have a pending request, check if that is waiting for this message
         if (this.currentTransaction != null) {
-            if (this.currentTransaction.isExpectedResponse(msg)) { // the message was final, so it resolves the transaction
-                logger_1.log("io", `  received expected response to current transaction`, "debug");
-                this.currentTransaction.response = msg;
-                if (!this.currentTransaction.ackPending) {
-                    logger_1.log("io", `  ACK already received, resolving transaction`, "debug");
-                    logger_1.log("driver", `  transaction complete`, "debug");
-                    this.resolveCurrentTransaction();
-                }
-                else {
-                    // wait for the ack, it might be received out of order
-                    logger_1.log("io", `  no ACK received yet, remembering response`, "debug");
-                }
-                // if the response was expected, don't check any more handlers
-                return;
+            switch (this.currentTransaction.message.testResponse(msg)) {
+                case "intermediate":
+                    // no need to process intermediate responses, as they only tell us things are good
+                    logger_1.log("io", `  received intermediate response to current transaction`, "debug");
+                    return;
+                case "fatal_controller":
+                    // The message was not sent
+                    logger_1.log("io", `  the message for the current transaction could not be sent, dropping the transaction`, "debug");
+                    if (this.currentTransaction.promise != null) {
+                        const errorMsg = msg instanceof SendDataMessages_1.SendDataResponse
+                            ? `The message could not be sent (code ${msg.errorCode})`
+                            : `The message could not be sent`;
+                        this.rejectCurrentTransaction(new ZWaveError_1.ZWaveError(errorMsg, ZWaveError_1.ZWaveErrorCodes.Controller_MessageDropped));
+                    }
+                    return;
+                case "fatal_node":
+                    // The node did not respond
+                    logger_1.log("io", `  The node did not respond to the current transaction, dropping it`, "debug");
+                    if (this.currentTransaction.promise != null) {
+                        const errorMsg = msg instanceof SendDataMessages_1.SendDataRequest
+                            ? `The node did not respond (${SendDataMessages_1.TransmitStatus[msg.transmitStatus]})`
+                            : `The node did not respond`;
+                        this.rejectCurrentTransaction(new ZWaveError_1.ZWaveError(errorMsg, ZWaveError_1.ZWaveErrorCodes.Controller_MessageDropped));
+                    }
+                    return;
+                case "final":
+                    // this is the expected response!
+                    logger_1.log("io", `  received expected response to current transaction`, "debug");
+                    this.currentTransaction.response = msg;
+                    if (!this.currentTransaction.ackPending) {
+                        logger_1.log("io", `  ACK already received, resolving transaction`, "debug");
+                        logger_1.log("driver", `  transaction complete`, "debug");
+                        this.resolveCurrentTransaction();
+                    }
+                    else {
+                        // wait for the ack, it might be received out of order
+                        logger_1.log("io", `  no ACK received yet, remembering response`, "debug");
+                    }
+                    // if the response was expected, don't check any more handlers
+                    return;
+                default: // unexpected, nothing to do here => check registered handlers
+                    break;
             }
         }
         if (msg.type === Constants_1.MessageType.Request) {

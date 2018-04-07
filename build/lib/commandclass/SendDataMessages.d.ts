@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { Message } from "../message/Message";
+import { Message, ResponseRole } from "../message/Message";
 import { CommandClass } from "./CommandClass";
 import { ICommandClassContainer } from "./ICommandClassContainer";
 export declare enum TransmitOptions {
@@ -34,6 +34,8 @@ export declare class SendDataRequest<CCType extends CommandClass = CommandClass>
     toJSON(): Record<string, any>;
     /** Checks if a received SendDataRequest indicates that sending failed */
     isFailed(): boolean;
+    /** @inheritDoc */
+    testResponse(msg: Message): ResponseRole;
 }
 export declare class SendDataResponse extends Message {
     private _wasSent;

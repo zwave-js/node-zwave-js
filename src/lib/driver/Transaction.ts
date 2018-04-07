@@ -1,5 +1,5 @@
 import { MessagePriority, MessageType } from "../message/Constants";
-import { Message } from "../message/Message";
+import { Message, ResponseRole } from "../message/Message";
 import { getNodeId } from "../node/Node";
 import { Comparable, compareNumberOrString, CompareResult } from "../util/comparable";
 import { DeferredPromise } from "../util/defer-promise";
@@ -58,24 +58,6 @@ export class Transaction implements Comparable<Transaction> {
 		return compareNumberOrString(other.timestamp, this.timestamp);
 
 		// TODO: do we need to sort by the message itself?
-	}
-
-	/** Checks if a message is an expected response for this transaction */
-	public isExpectedResponse(msg: Message): boolean {
-		if (this.message != null) {
-			const expected = this.message.expectedResponse;
-			if (
-				typeof expected === "number"
-				&& msg.type === MessageType.Response
-			) {
-				// A response message with the expected function type
-				return expected === msg.functionType;
-			} else if (typeof expected === "function") {
-				// Test the predicate
-				return expected(this.message, msg);
-			}
-		}
-		return false;
 	}
 
 	// TODO: add a way to expire these

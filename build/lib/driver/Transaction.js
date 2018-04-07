@@ -48,21 +48,5 @@ class Transaction {
         return comparable_1.compareNumberOrString(other.timestamp, this.timestamp);
         // TODO: do we need to sort by the message itself?
     }
-    /** Checks if a message is an expected response for this transaction */
-    isExpectedResponse(msg) {
-        if (this.message != null) {
-            const expected = this.message.expectedResponse;
-            if (typeof expected === "number"
-                && msg.type === Constants_1.MessageType.Response) {
-                // A response message with the expected function type
-                return expected === msg.functionType;
-            }
-            else if (typeof expected === "function") {
-                // Test the predicate
-                return expected(this.message, msg);
-            }
-        }
-        return false;
-    }
 }
 exports.Transaction = Transaction;
