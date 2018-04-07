@@ -261,8 +261,8 @@ __pycache__/
 *.pyc
 
 # RFC-Dokumentation
-rfc/
-docs/
+# rfc/
+# docs/
 
 # compiled test-files
 *.test.js
