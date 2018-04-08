@@ -241,24 +241,11 @@ class ZWaveNode {
     handleCommand(command) {
         return __awaiter(this, void 0, void 0, function* () {
             switch (command.command) {
-                // case CommandClasses.Version: {
-                // 	// The node reported its supported versions
-                // 	const versionCC = command as VersionCC;
-                // 	if (versionCC.versionCommand === VersionCommand.Report) {
-                // 		// TODO: handle the node version report
-                // 	} else if (versionCC.versionCommand === VersionCommand.CommandClassReport) {
-                // 		// Remember which CC version this node supports
-                // 		const cc = versionCC.requestedCC;
-                // 		const supportedVersion = versionCC.ccVersion;
-                // 		this.addCC(cc, { version: supportedVersion });
-                // 		log("controller", `${this.logPrefix}supports CC ${CommandClasses[cc]} (${num2hex(cc)}) in version ${supportedVersion}`, "debug");
-                // 	}
-                // 	break;
-                // }
                 case CommandClass_1.CommandClasses["Central Scene"]: {
                     // The node reported its supported versions
                     const csCC = command;
                     logger_1.log("controller", `${this.logPrefix}received CentralScene command ${JSON.stringify(csCC)}`, "debug");
+                    break;
                 }
                 default: {
                     logger_1.log("controller", `${this.logPrefix}TODO: no handler for application command ${strings_1.stringify(command)}`, "debug");

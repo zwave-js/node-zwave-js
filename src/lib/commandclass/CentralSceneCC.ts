@@ -1,5 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { CommandClass, commandClass, CommandClasses, implementedVersion, expectedCCResponse } from "./CommandClass";
+import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum CentralSceneCommand {
 	SupportedGet = 0x01,

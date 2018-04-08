@@ -36,7 +36,7 @@ export class ZWaveNode {
 		for (const cc of controlledCCs) this.addCC(cc, { isControlled: true });
 	}
 
-	//#region --- properties ---
+//#region --- properties ---
 
 	private readonly logPrefix = `[Node ${padStart(this.id.toString(), 3, "0")}] `;
 
@@ -88,7 +88,7 @@ export class ZWaveNode {
 	/** This tells us which interview stage was last completed */
 	public interviewStage: InterviewStage = InterviewStage.None;
 
-	//#endregion
+//#endregion
 
 	public isControllerNode(): boolean {
 		return this.id === this.driver.controller.ownNodeId;
@@ -268,24 +268,11 @@ export class ZWaveNode {
 	/** Handles an ApplicationCommandRequest sent from a node */
 	public async handleCommand(command: CommandClass): Promise<void> {
 		switch (command.command) {
-			// case CommandClasses.Version: {
-			// 	// The node reported its supported versions
-			// 	const versionCC = command as VersionCC;
-			// 	if (versionCC.versionCommand === VersionCommand.Report) {
-			// 		// TODO: handle the node version report
-			// 	} else if (versionCC.versionCommand === VersionCommand.CommandClassReport) {
-			// 		// Remember which CC version this node supports
-			// 		const cc = versionCC.requestedCC;
-			// 		const supportedVersion = versionCC.ccVersion;
-			// 		this.addCC(cc, { version: supportedVersion });
-			// 		log("controller", `${this.logPrefix}supports CC ${CommandClasses[cc]} (${num2hex(cc)}) in version ${supportedVersion}`, "debug");
-			// 	}
-			// 	break;
-			// }
 			case CommandClasses["Central Scene"]: {
 				// The node reported its supported versions
 				const csCC = command as CentralSceneCC;
 				log("controller", `${this.logPrefix}received CentralScene command ${JSON.stringify(csCC)}`, "debug");
+				break;
 			}
 			default: {
 				log("controller", `${this.logPrefix}TODO: no handler for application command ${stringify(command)}`, "debug");
