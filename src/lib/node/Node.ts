@@ -1,3 +1,4 @@
+import { CentralSceneCC } from "../commandclass/CentralSceneCC";
 import { CommandClass, CommandClasses, CommandClassInfo, getImplementedVersion } from "../commandclass/CommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
@@ -13,7 +14,6 @@ import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
 import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "./GetNodeProtocolInfoMessages";
 import { isNodeQuery } from "./INodeQuery";
 import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
-import { CentralSceneCC } from "../commandclass/CentralSceneCC";
 
 /** Finds the ID of the target or source node in a message, if it contains that information */
 export function getNodeId(msg: Message): number {
@@ -245,8 +245,15 @@ export class ZWaveNode {
 			try {
 				log("controller", `${this.logPrefix}  querying the CC version for ${CommandClasses[cc]} (${num2hex(cc)})`, "debug");
 				// query the CC version
-				await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.NodeQuery);
-				log("controller", `${this.logPrefix}  querying the CC version successful... The response will come later`, "debug");
+				const resp = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.NodeQuery);
+				if (isCommandClassContainer(resp)) {
+					const versionResponse = resp.command as VersionCC;
+					// Remember which CC version this node supports
+					const reqCC = versionResponse.requestedCC;
+					const supportedVersion = versionResponse.ccVersion;
+					this.addCC(reqCC, { version: supportedVersion });
+					log("controller", `${this.logPrefix}  supports CC ${CommandClasses[reqCC]} (${num2hex(reqCC)}) in version ${supportedVersion}`, "debug");
+				}
 			} catch (e) {
 				log("controller", `${this.logPrefix}  querying the CC version failed: ${e.message}`, "debug");
 			}
@@ -261,20 +268,20 @@ export class ZWaveNode {
 	/** Handles an ApplicationCommandRequest sent from a node */
 	public async handleCommand(command: CommandClass): Promise<void> {
 		switch (command.command) {
-			case CommandClasses.Version: {
-				// The node reported its supported versions
-				const versionCC = command as VersionCC;
-				if (versionCC.versionCommand === VersionCommand.Report) {
-					// TODO: handle the node version report
-				} else if (versionCC.versionCommand === VersionCommand.CommandClassReport) {
-					// Remember which CC version this node supports
-					const cc = versionCC.requestedCC;
-					const supportedVersion = versionCC.ccVersion;
-					this.addCC(cc, { version: supportedVersion });
-					log("controller", `${this.logPrefix}supports CC ${CommandClasses[cc]} (${num2hex(cc)}) in version ${supportedVersion}`, "debug");
-				}
-				break;
-			}
+			// case CommandClasses.Version: {
+			// 	// The node reported its supported versions
+			// 	const versionCC = command as VersionCC;
+			// 	if (versionCC.versionCommand === VersionCommand.Report) {
+			// 		// TODO: handle the node version report
+			// 	} else if (versionCC.versionCommand === VersionCommand.CommandClassReport) {
+			// 		// Remember which CC version this node supports
+			// 		const cc = versionCC.requestedCC;
+			// 		const supportedVersion = versionCC.ccVersion;
+			// 		this.addCC(cc, { version: supportedVersion });
+			// 		log("controller", `${this.logPrefix}supports CC ${CommandClasses[cc]} (${num2hex(cc)}) in version ${supportedVersion}`, "debug");
+			// 	}
+			// 	break;
+			// }
 			case CommandClasses["Central Scene"]: {
 				// The node reported its supported versions
 				const csCC = command as CentralSceneCC;

@@ -64,15 +64,9 @@ export declare class Driver extends EventEmitter {
      */
     destroy(): void;
     private serialport_onError(err);
-    private onInvalidData(data);
+    private onInvalidData(data, message);
     private serialport_onData(data);
     private handleMessage(msg);
-    /**
-     * Checks a send data message for failure and tries to handle it
-     * @param msg The received send data message
-     * @returns true if the message was handled
-     */
-    private handleSendDataMessageWithPotentialFailure(msg);
     /**
      * Registers a handler for all kinds of request messages
      * @param fnType The function type to register the handler for

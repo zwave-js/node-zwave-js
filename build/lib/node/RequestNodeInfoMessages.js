@@ -12,19 +12,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ApplicationUpdateRequest_1 = require("../controller/ApplicationUpdateRequest");
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
-function isExpectedResponseToRequestNodeInfoRequest(sent, received) {
-    // A failure to send is an expected response
-    if (received instanceof RequestNodeInfoResponse && !received.wasSent)
-        return true;
-    // Otherwise find the correct ApplicationUpdateRequest
-    if (received instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest) {
+function testResponseForNodeInfoRequest(sent, received) {
+    if (received instanceof RequestNodeInfoResponse) {
+        return received.wasSent
+            ? "intermediate"
+            : "fatal_controller";
+    }
+    else if (received instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest) {
         // received node info for the correct node
         if (received.updateType === ApplicationUpdateRequest_1.ApplicationUpdateTypes.NodeInfo_Received
             && received.nodeId === sent.nodeId)
-            return true;
+            return "final";
         // requesting node info failed. We cannot check which node that belongs to
         if (received.updateType === ApplicationUpdateRequest_1.ApplicationUpdateTypes.NodeInfo_RequestFailed)
-            return true;
+            return "fatal_node";
     }
 }
 let RequestNodeInfoRequest = class RequestNodeInfoRequest extends Message_1.Message {
@@ -44,7 +45,7 @@ let RequestNodeInfoRequest = class RequestNodeInfoRequest extends Message_1.Mess
 };
 RequestNodeInfoRequest = __decorate([
     Message_1.messageTypes(Constants_1.MessageType.Request, Constants_1.FunctionType.RequestNodeInfo),
-    Message_1.expectedResponse(isExpectedResponseToRequestNodeInfoRequest),
+    Message_1.expectedResponse(testResponseForNodeInfoRequest),
     Message_1.priority(Constants_1.MessagePriority.NodeQuery),
     __metadata("design:paramtypes", [Number])
 ], RequestNodeInfoRequest);

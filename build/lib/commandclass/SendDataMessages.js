@@ -51,8 +51,10 @@ function testResponseForSendDataRequest(sent, received) {
     else if (received instanceof SendDataRequest) {
         return received.isFailed()
             ? "fatal_node"
-            : "intermediate";
+            : "final" // send data requests are final unless stated otherwise by a CommandClass
+        ;
     }
+    return "unexpected";
 }
 let SendDataRequest = class SendDataRequest extends Message_1.Message {
     constructor(command, 
@@ -113,22 +115,25 @@ let SendDataRequest = class SendDataRequest extends Message_1.Message {
     /** @inheritDoc */
     testResponse(msg) {
         const ret = super.testResponse(msg);
-        if (ret !== "final")
+        if (ret === "intermediate" || ret.startsWith("fatal"))
+            return ret;
+        if (ret === "unexpected" && !ICommandClassContainer_1.isCommandClassContainer(msg))
             return ret;
         // We handle a special case here:
-        // If the contained CC expects a certain response (which will come in an ApplicationCommandRequest)
+        // If the contained CC expects a certain response (which will come in an "unexpected" ApplicationCommandRequest)
         // we declare that as final and the original "final" response, i.e. the SendDataRequest becomes intermediate
         const ccPredicate = CommandClass_1.getExpectedCCResponse(this.command);
         if (ccPredicate == null)
-            return ret; // "final"
-        if (!ICommandClassContainer_1.isCommandClassContainer(msg))
-            return "intermediate"; // this should not happen, but we do expect another message
-        if (typeof ccPredicate === "number") {
-            return ccPredicate === msg.command.command ? "final" : "intermediate"; // not sure if other CCs can come in the meantime
+            return ret; // "final" | "unexpected"
+        if (ICommandClassContainer_1.isCommandClassContainer(msg)) {
+            if (typeof ccPredicate === "number") {
+                return ccPredicate === msg.command.command ? "final" : "intermediate"; // not sure if other CCs can come in the meantime
+            }
+            else {
+                return ccPredicate(this.command, msg.command) ? "final" : "intermediate";
+            }
         }
-        else {
-            return ccPredicate(this.command, msg.command) ? "final" : "intermediate";
-        }
+        return "unexpected";
     }
 };
 SendDataRequest = __decorate([

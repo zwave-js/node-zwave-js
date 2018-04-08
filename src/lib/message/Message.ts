@@ -3,7 +3,7 @@
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { log } from "../util/logger";
 import { entries } from "../util/object-polyfill";
-import { num2hex } from "../util/strings";
+import { num2hex, stringify } from "../util/strings";
 import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "./Constants";
 
 export interface Constructable<T> {
@@ -188,6 +188,7 @@ export class Message {
 	/** Checks if a message is an expected response for this message */
 	public testResponse(msg: Message): ResponseRole {
 		const expected = this.expectedResponse;
+		// log("driver", `Message: testing response`, "debug");
 		if (
 			typeof expected === "number"
 			&& msg.type === MessageType.Response
@@ -195,10 +196,13 @@ export class Message {
 			// if only a functionType was configured as expected,
 			// any message with this function type is expected,
 			// every other message is unexpected
+			// log("driver", `  received response with fT ${msg.functionType}`, "debug");
 			return expected === msg.functionType ? "final" : "unexpected";
 		} else if (typeof expected === "function") {
 			// If a predicate was configured, use it to test the message
-			return expected(this, msg);
+			const ret = expected(this, msg);
+			// log("driver", `  predicate returned ${ret}`, "debug");
+			return ret;
 		}
 		// nothing was configured, this expects no response
 		return "unexpected";

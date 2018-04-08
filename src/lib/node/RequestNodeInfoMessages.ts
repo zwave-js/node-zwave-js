@@ -1,26 +1,27 @@
 import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/ApplicationUpdateRequest";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
+import { expectedResponse, Message, messageTypes, priority, ResponseRole} from "../message/Message";
 import { log } from "../util/logger";
 import { INodeQuery } from "./INodeQuery";
 
-function isExpectedResponseToRequestNodeInfoRequest(sent: RequestNodeInfoRequest, received: Message): boolean {
-	// A failure to send is an expected response
-	if (received instanceof RequestNodeInfoResponse && !received.wasSent) return true;
-	// Otherwise find the correct ApplicationUpdateRequest
-	if (received instanceof ApplicationUpdateRequest) {
+function testResponseForNodeInfoRequest(sent: RequestNodeInfoRequest, received: Message): ResponseRole {
+	if (received instanceof RequestNodeInfoResponse) {
+		return received.wasSent
+			? "intermediate"
+			: "fatal_controller";
+	} else if (received instanceof ApplicationUpdateRequest) {
 		// received node info for the correct node
 		if (
 			received.updateType === ApplicationUpdateTypes.NodeInfo_Received
 			&& received.nodeId === sent.nodeId
-		) return true;
+		) return "final";
 		// requesting node info failed. We cannot check which node that belongs to
-		if (received.updateType === ApplicationUpdateTypes.NodeInfo_RequestFailed) return true;
+		if (received.updateType === ApplicationUpdateTypes.NodeInfo_RequestFailed) return "fatal_node";
 	}
 }
 
 @messageTypes(MessageType.Request, FunctionType.RequestNodeInfo)
-@expectedResponse(isExpectedResponseToRequestNodeInfoRequest)
+@expectedResponse(testResponseForNodeInfoRequest)
 @priority(MessagePriority.NodeQuery)
 export class RequestNodeInfoRequest extends Message implements INodeQuery {
 

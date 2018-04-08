@@ -2,6 +2,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { Constructable, expectedResponse, Message, messageTypes, priority, ResponsePredicate, ResponseRole } from "../message/Message";
 import { log } from "../util/logger";
+import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
 import { CommandClass, CommandClasses, getExpectedCCResponse } from "./CommandClass";
 import { ICommandClassContainer, isCommandClassContainer } from "./ICommandClassContainer";
 
@@ -44,8 +45,10 @@ function testResponseForSendDataRequest(sent: SendDataRequest, received: Message
 	} else if (received instanceof SendDataRequest) {
 		return received.isFailed()
 			? "fatal_node"
-			: "intermediate";
+			: "final" // send data requests are final unless stated otherwise by a CommandClass
+			;
 	}
+	return "unexpected";
 }
 
 @messageTypes(MessageType.Request, FunctionType.SendData)
@@ -135,18 +138,21 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass> extends
 	/** @inheritDoc */
 	public testResponse(msg: Message): ResponseRole {
 		const ret = super.testResponse(msg);
-		if (ret !== "final") return ret;
+		if (ret === "intermediate" || ret.startsWith("fatal")) return ret;
+		if (ret === "unexpected" && !isCommandClassContainer(msg)) return ret;
 		// We handle a special case here:
-		// If the contained CC expects a certain response (which will come in an ApplicationCommandRequest)
+		// If the contained CC expects a certain response (which will come in an "unexpected" ApplicationCommandRequest)
 		// we declare that as final and the original "final" response, i.e. the SendDataRequest becomes intermediate
 		const ccPredicate = getExpectedCCResponse(this.command);
-		if (ccPredicate == null) return ret; // "final"
-		if (!isCommandClassContainer(msg)) return "intermediate"; // this should not happen, but we do expect another message
-		if (typeof ccPredicate === "number") {
-			return ccPredicate === msg.command.command ? "final" : "intermediate"; // not sure if other CCs can come in the meantime
-		} else {
-			return ccPredicate(this.command, msg.command) ? "final" : "intermediate";
+		if (ccPredicate == null) return ret; // "final" | "unexpected"
+		if (isCommandClassContainer(msg)) {
+			if (typeof ccPredicate === "number") {
+				return ccPredicate === msg.command.command ? "final" : "intermediate"; // not sure if other CCs can come in the meantime
+			} else {
+				return ccPredicate(this.command, msg.command) ? "final" : "intermediate";
+			}
 		}
+		return "unexpected";
 	}
 
 }

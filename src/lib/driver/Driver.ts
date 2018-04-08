@@ -3,7 +3,7 @@ import * as SerialPort from "serialport";
 import { ApplicationCommandRequest } from "../commandclass/ApplicationCommandRequest";
 import { CommandClasses, getImplementedVersion } from "../commandclass/CommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import { SendDataRequest, SendDataResponse, TransmitStatus, isErrorResponse } from "../commandclass/SendDataMessages";
+import { SendDataRequest, SendDataResponse, TransmitStatus } from "../commandclass/SendDataMessages";
 import { ZWaveController } from "../controller/Controller";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "../message/Constants";
@@ -282,9 +282,9 @@ export class Driver extends EventEmitter {
 		this.emit("error", err);
 	}
 
-	private onInvalidData(data: Buffer) {
+	private onInvalidData(data: Buffer, message: string) {
 		this.emit("error", new ZWaveError(
-			`The receive buffer contains invalid data (0x${data.toString("hex")}), resetting...`,
+			message,
 			ZWaveErrorCodes.Driver_InvalidDataReceived,
 		));
 		this.resetIO();
@@ -314,7 +314,8 @@ export class Driver extends EventEmitter {
 						break;
 					}
 					default: {
-						this.onInvalidData(this.receiveBuffer);
+						const message = `The receive buffer starts with unexpected data: 0x${data.toString("hex")}`;
+						this.onInvalidData(this.receiveBuffer, message);
 						return;
 					}
 				}
@@ -341,7 +342,7 @@ export class Driver extends EventEmitter {
 						e.code === ZWaveErrorCodes.PacketFormat_Invalid
 						|| e.code === ZWaveErrorCodes.PacketFormat_Checksum
 					) {
-						this.onInvalidData(this.receiveBuffer);
+						this.onInvalidData(this.receiveBuffer, e.toString());
 						return;
 					}
 				}
@@ -365,15 +366,7 @@ export class Driver extends EventEmitter {
 
 	private handleMessage(msg: Message) {
 		// TODO: find a nice way to serialize the messages
-		log("driver", `handling response ${stringify(msg)}`, "debug");
-
-		// First do special handling for failed SendData requests
-		if (msg.functionType === FunctionType.SendData) {
-			if (this.handleSendDataMessageWithPotentialFailure(msg as SendDataRequest | SendDataResponse)) {
-				// if the message was handled in the handler method, don't continue handling it
-				return;
-			}
-		}
+		// log("driver", `handling response ${stringify(msg)}`, "debug");
 
 		// if we have a pending request, check if that is waiting for this message
 		if (this.currentTransaction != null) {
@@ -437,48 +430,6 @@ export class Driver extends EventEmitter {
 			this.handleRequest(msg);
 		} else {
 			log("driver", `  unexpected response, discarding...`, "debug");
-		}
-	}
-
-	/**
-	 * Checks a send data message for failure and tries to handle it
-	 * @param msg The received send data message
-	 * @returns true if the message was handled
-	 */
-	private handleSendDataMessageWithPotentialFailure(msg: SendDataRequest | SendDataResponse): boolean {
-		if (msg instanceof SendDataResponse) {
-			if (!msg.wasSent) {
-				// The message was not sent
-				log("io", `  a send data request could not be sent, dropping the transaction`, "debug");
-				if (
-					this.currentTransaction != null
-					&& this.currentTransaction.promise != null
-				) {
-					this.rejectCurrentTransaction(new ZWaveError(
-						`The message could not be sent (code ${msg.errorCode})`,
-						ZWaveErrorCodes.Controller_MessageDropped,
-					));
-				}
-			}
-			// a SendDataResponse should not undergo further processing
-			return true;
-		} else if (msg instanceof SendDataRequest) {
-			// no error, so we don't handle it here
-			if (!msg.isFailed()) return false;
-
-			// The message was sent but an error happened during transmission
-			// TODO: implement retransmission!
-			log("io", `  The node did not respond to a send data request, dropping the transaction`, "debug");
-			if (
-				this.currentTransaction != null
-				&& this.currentTransaction.promise != null
-			) {
-				this.rejectCurrentTransaction(new ZWaveError(
-					`The node did not respond (${TransmitStatus[msg.transmitStatus]})`,
-					ZWaveErrorCodes.Controller_MessageDropped,
-				));
-			}
-			return true;
 		}
 	}
 
@@ -839,5 +790,5 @@ export class Driver extends EventEmitter {
 
 /** Skips the first n bytes of a buffer and returns the rest */
 function skipBytes(buf: Buffer, n: number): Buffer {
-	return Buffer.from(buf.slice(n, 0));
+	return Buffer.from(buf.slice(n));
 }

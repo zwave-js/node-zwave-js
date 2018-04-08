@@ -218,8 +218,15 @@ class ZWaveNode {
                 try {
                     logger_1.log("controller", `${this.logPrefix}  querying the CC version for ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)})`, "debug");
                     // query the CC version
-                    yield this.driver.sendMessage(request, Constants_1.MessagePriority.NodeQuery);
-                    logger_1.log("controller", `${this.logPrefix}  querying the CC version successful... The response will come later`, "debug");
+                    const resp = yield this.driver.sendMessage(request, Constants_1.MessagePriority.NodeQuery);
+                    if (ICommandClassContainer_1.isCommandClassContainer(resp)) {
+                        const versionResponse = resp.command;
+                        // Remember which CC version this node supports
+                        const reqCC = versionResponse.requestedCC;
+                        const supportedVersion = versionResponse.ccVersion;
+                        this.addCC(reqCC, { version: supportedVersion });
+                        logger_1.log("controller", `${this.logPrefix}  supports CC ${CommandClass_1.CommandClasses[reqCC]} (${strings_1.num2hex(reqCC)}) in version ${supportedVersion}`, "debug");
+                    }
                 }
                 catch (e) {
                     logger_1.log("controller", `${this.logPrefix}  querying the CC version failed: ${e.message}`, "debug");
@@ -234,21 +241,20 @@ class ZWaveNode {
     handleCommand(command) {
         return __awaiter(this, void 0, void 0, function* () {
             switch (command.command) {
-                case CommandClass_1.CommandClasses.Version: {
-                    // The node reported its supported versions
-                    const versionCC = command;
-                    if (versionCC.versionCommand === VersionCC_1.VersionCommand.Report) {
-                        // TODO: handle the node version report
-                    }
-                    else if (versionCC.versionCommand === VersionCC_1.VersionCommand.CommandClassReport) {
-                        // Remember which CC version this node supports
-                        const cc = versionCC.requestedCC;
-                        const supportedVersion = versionCC.ccVersion;
-                        this.addCC(cc, { version: supportedVersion });
-                        logger_1.log("controller", `${this.logPrefix}supports CC ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)}) in version ${supportedVersion}`, "debug");
-                    }
-                    break;
-                }
+                // case CommandClasses.Version: {
+                // 	// The node reported its supported versions
+                // 	const versionCC = command as VersionCC;
+                // 	if (versionCC.versionCommand === VersionCommand.Report) {
+                // 		// TODO: handle the node version report
+                // 	} else if (versionCC.versionCommand === VersionCommand.CommandClassReport) {
+                // 		// Remember which CC version this node supports
+                // 		const cc = versionCC.requestedCC;
+                // 		const supportedVersion = versionCC.ccVersion;
+                // 		this.addCC(cc, { version: supportedVersion });
+                // 		log("controller", `${this.logPrefix}supports CC ${CommandClasses[cc]} (${num2hex(cc)}) in version ${supportedVersion}`, "debug");
+                // 	}
+                // 	break;
+                // }
                 case CommandClass_1.CommandClasses["Central Scene"]: {
                     // The node reported its supported versions
                     const csCC = command;
