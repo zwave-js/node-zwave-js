@@ -1,8 +1,8 @@
 /// <reference types="node" />
 import { EventEmitter } from "events";
 import { CommandClasses } from "../commandclass/CommandClass";
-import { SendDataRequest } from "../commandclass/SendDataMessages";
 import { ZWaveController } from "../controller/Controller";
+import { SendDataRequest } from "../controller/SendDataMessages";
 import { FunctionType, MessagePriority } from "../message/Constants";
 import { Message } from "../message/Message";
 export interface ZWaveOptions {

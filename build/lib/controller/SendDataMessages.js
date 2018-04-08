@@ -9,11 +9,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const CommandClass_1 = require("../commandclass/CommandClass");
+const ICommandClassContainer_1 = require("../commandclass/ICommandClassContainer");
 const ZWaveError_1 = require("../error/ZWaveError");
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
-const CommandClass_1 = require("./CommandClass");
-const ICommandClassContainer_1 = require("./ICommandClassContainer");
 var TransmitOptions;
 (function (TransmitOptions) {
     TransmitOptions[TransmitOptions["NotSet"] = 0] = "NotSet";

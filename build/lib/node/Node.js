@@ -11,14 +11,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const CommandClass_1 = require("../commandclass/CommandClass");
 const ICommandClassContainer_1 = require("../commandclass/ICommandClassContainer");
 const NoOperationCC_1 = require("../commandclass/NoOperationCC");
-const SendDataMessages_1 = require("../commandclass/SendDataMessages");
 const VersionCC_1 = require("../commandclass/VersionCC");
 const ApplicationUpdateRequest_1 = require("../controller/ApplicationUpdateRequest");
+const GetNodeProtocolInfoMessages_1 = require("../controller/GetNodeProtocolInfoMessages");
+const SendDataMessages_1 = require("../controller/SendDataMessages");
 const Constants_1 = require("../message/Constants");
 const logger_1 = require("../util/logger");
 const strings_1 = require("../util/strings");
 const DeviceClass_1 = require("./DeviceClass");
-const GetNodeProtocolInfoMessages_1 = require("./GetNodeProtocolInfoMessages");
 const INodeQuery_1 = require("./INodeQuery");
 const RequestNodeInfoMessages_1 = require("./RequestNodeInfoMessages");
 /** Finds the ID of the target or source node in a message, if it contains that information */

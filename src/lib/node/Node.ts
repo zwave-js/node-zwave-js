@@ -2,16 +2,16 @@ import { CentralSceneCC } from "../commandclass/CentralSceneCC";
 import { CommandClass, CommandClasses, CommandClassInfo, getImplementedVersion } from "../commandclass/CommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
-import { SendDataRequest, SendDataResponse, TransmitStatus } from "../commandclass/SendDataMessages";
 import { VersionCC, VersionCommand } from "../commandclass/VersionCC";
 import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/ApplicationUpdateRequest";
+import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "../controller/GetNodeProtocolInfoMessages";
+import { SendDataRequest, SendDataResponse, TransmitStatus } from "../controller/SendDataMessages";
 import { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { Message } from "../message/Message";
 import { log } from "../util/logger";
 import { num2hex, padStart, stringify } from "../util/strings";
 import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
-import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "./GetNodeProtocolInfoMessages";
 import { isNodeQuery } from "./INodeQuery";
 import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
 

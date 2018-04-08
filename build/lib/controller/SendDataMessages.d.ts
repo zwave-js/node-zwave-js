@@ -1,7 +1,7 @@
 /// <reference types="node" />
+import { CommandClass } from "../commandclass/CommandClass";
+import { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { Message, ResponseRole } from "../message/Message";
-import { CommandClass } from "./CommandClass";
-import { ICommandClassContainer } from "./ICommandClassContainer";
 export declare enum TransmitOptions {
     NotSet = 0,
     ACK = 1,

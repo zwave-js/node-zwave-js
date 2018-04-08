@@ -1,7 +1,7 @@
+import { CommandClass, CommandClasses } from "../commandclass/CommandClass";
+import { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
-import { CommandClass, CommandClasses } from "./CommandClass";
-import { ICommandClassContainer } from "./ICommandClassContainer";
 
 const enum StatusFlags {
 	RoutedBusy = 1 << 0,

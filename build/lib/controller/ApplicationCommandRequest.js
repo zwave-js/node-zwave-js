@@ -6,9 +6,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const CommandClass_1 = require("../commandclass/CommandClass");
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
-const CommandClass_1 = require("./CommandClass");
 let ApplicationCommandRequest = class ApplicationCommandRequest extends Message_1.Message {
     get routedBusy() {
         return this._routedBusy;

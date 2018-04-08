@@ -1,7 +1,7 @@
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
-import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
-import { INodeQuery } from "./INodeQuery";
+import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "../node/DeviceClass";
+import { INodeQuery } from "../node/INodeQuery";
 
 const enum NodeCapabilityFlags {
 	Listening = 1 << 7,

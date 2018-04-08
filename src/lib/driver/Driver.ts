@@ -1,10 +1,10 @@
 import { EventEmitter } from "events";
 import * as SerialPort from "serialport";
-import { ApplicationCommandRequest } from "../commandclass/ApplicationCommandRequest";
 import { CommandClasses, getImplementedVersion } from "../commandclass/CommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import { SendDataRequest, SendDataResponse, TransmitStatus } from "../commandclass/SendDataMessages";
+import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import { ZWaveController } from "../controller/Controller";
+import { SendDataRequest, SendDataResponse, TransmitStatus } from "../controller/SendDataMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "../message/Constants";
 import { Constructable, getDefaultPriority, Message, messageTypes } from "../message/Message";

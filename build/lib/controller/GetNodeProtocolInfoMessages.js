@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
-const DeviceClass_1 = require("./DeviceClass");
+const DeviceClass_1 = require("../node/DeviceClass");
 let GetNodeProtocolInfoRequest = class GetNodeProtocolInfoRequest extends Message_1.Message {
     constructor(nodeId) {
         super();

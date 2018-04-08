@@ -10,11 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const events_1 = require("events");
 const SerialPort = require("serialport");
-const ApplicationCommandRequest_1 = require("../commandclass/ApplicationCommandRequest");
 const CommandClass_1 = require("../commandclass/CommandClass");
 const ICommandClassContainer_1 = require("../commandclass/ICommandClassContainer");
-const SendDataMessages_1 = require("../commandclass/SendDataMessages");
+const ApplicationCommandRequest_1 = require("../controller/ApplicationCommandRequest");
 const Controller_1 = require("../controller/Controller");
+const SendDataMessages_1 = require("../controller/SendDataMessages");
 const ZWaveError_1 = require("../error/ZWaveError");
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
