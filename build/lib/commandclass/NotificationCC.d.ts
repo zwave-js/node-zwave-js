@@ -33,4 +33,5 @@ export declare class NotificationCC extends CommandClass {
     readonly supportedZWaveAlarmTypes: number[];
     serialize(): Buffer;
     deserialize(data: Buffer): void;
+    toJSON(): Record<string, any>;
 }

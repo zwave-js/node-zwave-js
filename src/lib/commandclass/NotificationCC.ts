@@ -169,4 +169,19 @@ export class NotificationCC extends CommandClass {
 		}
 	}
 
+	public toJSON() {
+		return super.toJSONInherited({
+			ccCommand: NotificationCommand[this.ccCommand],
+			alarmType: this.alarmType,
+			zWaveAlarmType: this.zWaveAlarmType,
+			zWaveAlarmStatus: this.zWaveAlarmStatus,
+			zWaveAlarmEvent: this.zWaveAlarmEvent,
+			alarmLevel: this.alarmLevel,
+			zensorNetSourceNodeId: this.zensorNetSourceNodeId,
+			eventParameters: this.eventParameters,
+			supportsV1Alarm: this.supportsV1Alarm,
+			supportedZWaveAlarmTypes: this.supportedZWaveAlarmTypes,
+		});
+	}
+
 }

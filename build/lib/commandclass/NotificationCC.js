@@ -121,6 +121,20 @@ let NotificationCC = class NotificationCC extends CommandClass_1.CommandClass {
                 throw new ZWaveError_1.ZWaveError("Cannot deserialize a Notification CC with a command other than TODO", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
         }
     }
+    toJSON() {
+        return super.toJSONInherited({
+            ccCommand: NotificationCommand[this.ccCommand],
+            alarmType: this.alarmType,
+            zWaveAlarmType: this.zWaveAlarmType,
+            zWaveAlarmStatus: this.zWaveAlarmStatus,
+            zWaveAlarmEvent: this.zWaveAlarmEvent,
+            alarmLevel: this.alarmLevel,
+            zensorNetSourceNodeId: this.zensorNetSourceNodeId,
+            eventParameters: this.eventParameters,
+            supportsV1Alarm: this.supportsV1Alarm,
+            supportedZWaveAlarmTypes: this.supportedZWaveAlarmTypes,
+        });
+    }
 };
 NotificationCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses.Notification),
