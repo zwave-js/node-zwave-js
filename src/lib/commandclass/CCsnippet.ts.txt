@@ -1,0 +1,56 @@
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+
+export enum ${1}Command {
+	${0:// All the supported commands}
+}
+
+@commandClass(CommandClasses.${1})
+@implementedVersion(${2})
+@expectedCCResponse(CommandClasses.${1})
+export class ${1}CC extends CommandClass {
+
+	// tslint:disable:unified-signatures
+	constructor(nodeId?: number);
+
+	constructor(
+		public nodeId: number,
+		public ccCommand?: ${1}Command,
+	) {
+		super(nodeId);
+	}
+	// tslint:enable:unified-signatures
+
+	public serialize(): Buffer {
+		switch (this.ccCommand) {
+			// case ${1}Command.TODO:
+			// 	// serialize payload
+			// 	break;
+			default:
+				throw new ZWaveError(
+					"Cannot serialize a ${1} CC with a command other than __TODO__",
+					ZWaveErrorCodes.CC_Invalid,
+				);
+		}
+
+		return super.serialize();
+	}
+
+	public deserialize(data: Buffer): void {
+		super.deserialize(data);
+
+		this.ccCommand = this.payload[0];
+		switch (this.ccCommand) {
+			// case ${1}Command.TODO:
+			// 	// parse payload
+			// 	break;
+
+			default:
+				throw new ZWaveError(
+					"Cannot deserialize a ${1} CC with a command other than TODO",
+					ZWaveErrorCodes.CC_Invalid,
+				);
+		}
+	}
+
+}
