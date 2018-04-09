@@ -1,5 +1,4 @@
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { readUInt24BE, writeUInt24BE } from "../util/buffers";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum WakeUpCommand {
@@ -76,7 +75,7 @@ export class WakeUpCC extends CommandClass {
 					0, 0, 0, // placeholder
 					this.controllerNodeId,
 				]);
-				writeUInt24BE(this.payload, this.wakeupInterval, 1);
+				this.payload.writeUIntBE(this.wakeupInterval, 1, 3);
 				break;
 			default:
 				throw new ZWaveError(
@@ -94,7 +93,7 @@ export class WakeUpCC extends CommandClass {
 		this.wakeupCommand = this.payload[0];
 		switch (this.wakeupCommand) {
 			case WakeUpCommand.IntervalReport:
-				this.wakeupInterval = readUInt24BE(this.payload, 1);
+				this.wakeupInterval = this.payload.readUIntBE(1, 3);
 				this.controllerNodeId = this.payload[4];
 				break;
 
@@ -103,10 +102,10 @@ export class WakeUpCC extends CommandClass {
 				break;
 
 			case WakeUpCommand.IntervalCapabilitiesReport:
-				this._minWakeUpInterval = readUInt24BE(this.payload, 1);
-				this._maxWakeUpInterval = readUInt24BE(this.payload, 4);
-				this._defaultWakeUpInterval = readUInt24BE(this.payload, 7);
-				this._wakeUpIntervalSteps = readUInt24BE(this.payload, 10);
+				this._minWakeUpInterval = this.payload.readUIntBE(1, 3);
+				this._maxWakeUpInterval = this.payload.readUIntBE(4, 3);
+				this._defaultWakeUpInterval = this.payload.readUIntBE(7, 3);
+				this._wakeUpIntervalSteps = this.payload.readUIntBE(10, 3);
 				break;
 
 			default:

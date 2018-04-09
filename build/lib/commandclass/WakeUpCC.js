@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
-const buffers_1 = require("../util/buffers");
 const CommandClass_1 = require("./CommandClass");
 var WakeUpCommand;
 (function (WakeUpCommand) {
@@ -55,7 +54,7 @@ let WakeUpCC = class WakeUpCC extends CommandClass_1.CommandClass {
                     0, 0, 0,
                     this.controllerNodeId,
                 ]);
-                buffers_1.writeUInt24BE(this.payload, this.wakeupInterval, 1);
+                this.payload.writeUIntBE(this.wakeupInterval, 1, 3);
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot serialize a WakeUp CC with a command other than IntervalSet, IntervalGet or NoMoreInformation, IntervalCapabilitiesGet", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
@@ -67,17 +66,17 @@ let WakeUpCC = class WakeUpCC extends CommandClass_1.CommandClass {
         this.wakeupCommand = this.payload[0];
         switch (this.wakeupCommand) {
             case WakeUpCommand.IntervalReport:
-                this.wakeupInterval = buffers_1.readUInt24BE(this.payload, 1);
+                this.wakeupInterval = this.payload.readUIntBE(1, 3);
                 this.controllerNodeId = this.payload[4];
                 break;
             case WakeUpCommand.WakeUpNotification:
                 // no real payload
                 break;
             case WakeUpCommand.IntervalCapabilitiesReport:
-                this._minWakeUpInterval = buffers_1.readUInt24BE(this.payload, 1);
-                this._maxWakeUpInterval = buffers_1.readUInt24BE(this.payload, 4);
-                this._defaultWakeUpInterval = buffers_1.readUInt24BE(this.payload, 7);
-                this._wakeUpIntervalSteps = buffers_1.readUInt24BE(this.payload, 10);
+                this._minWakeUpInterval = this.payload.readUIntBE(1, 3);
+                this._maxWakeUpInterval = this.payload.readUIntBE(4, 3);
+                this._defaultWakeUpInterval = this.payload.readUIntBE(7, 3);
+                this._wakeUpIntervalSteps = this.payload.readUIntBE(10, 3);
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot deserialize a WakeUp CC with a command other than IntervalReport or WakeUpNotification", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
