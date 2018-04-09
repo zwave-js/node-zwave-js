@@ -81,7 +81,6 @@ export declare function getExpectedCCResponse<T extends CommandClass>(ccClass: T
  */
 export declare function getExpectedCCResponseStatic<T extends Constructable<CommandClass>>(classConstructor: T): CommandClasses | CCResponsePredicate;
 export declare enum CommandClasses {
-    "Alarm" = 113,
     "Alarm Sensor" = 156,
     "Alarm Silence" = 157,
     "All Switch" = 39,

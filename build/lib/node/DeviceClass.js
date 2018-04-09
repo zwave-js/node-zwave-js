@@ -258,7 +258,7 @@ defineGeneric("Entry Control", null, null, new SpecificDeviceClass("Door Lock", 
     CommandClass_1.CommandClasses.Security,
     CommandClass_1.CommandClasses.Version,
 ]), new SpecificDeviceClass("Secure Lockbox", 0x0A, [
-    CommandClass_1.CommandClasses.Alarm,
+    CommandClass_1.CommandClasses.Notification,
     CommandClass_1.CommandClasses.Association,
     CommandClass_1.CommandClasses["Door Lock"],
     CommandClass_1.CommandClasses["Manufacturer Specific"],

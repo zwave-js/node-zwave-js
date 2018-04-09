@@ -246,7 +246,7 @@ exports.getExpectedCCResponseStatic = getExpectedCCResponseStatic;
 /* A dictionary of all command classes as of 2018-03-30 */
 var CommandClasses;
 (function (CommandClasses) {
-    CommandClasses[CommandClasses["Alarm"] = 113] = "Alarm";
+    // "Alarm" = 0x71, // superseded by Notification
     CommandClasses[CommandClasses["Alarm Sensor"] = 156] = "Alarm Sensor";
     CommandClasses[CommandClasses["Alarm Silence"] = 157] = "Alarm Silence";
     CommandClasses[CommandClasses["All Switch"] = 39] = "All Switch";

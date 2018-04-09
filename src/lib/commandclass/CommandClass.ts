@@ -274,7 +274,7 @@ export function getExpectedCCResponseStatic<T extends Constructable<CommandClass
 
 /* A dictionary of all command classes as of 2018-03-30 */
 export enum CommandClasses {
-	"Alarm" = 0x71,
+	// "Alarm" = 0x71, // superseded by Notification
 	"Alarm Sensor" = 0x9C,
 	"Alarm Silence" = 0x9D,
 	"All Switch" = 0x27,

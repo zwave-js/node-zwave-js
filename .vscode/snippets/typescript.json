@@ -1,4 +1,41 @@
 {
+	"Z-Wave message classes": {
+		"prefix": "zwmsg",
+		"body": [
+			"import { FunctionType, MessagePriority, MessageType } from \"../message/Constants\";",
+			"import { expectedResponse, Message, messageTypes, priority} from \"../message/Message\";",
+			"",
+			"@messageTypes(MessageType.Request, FunctionType.${1})",
+			"@expectedResponse(FunctionType.${1})",
+			"@priority(MessagePriority.${2})",
+			"export class ${1}Request extends Message {",
+			"",
+			"}",
+			"",
+			"@messageTypes(MessageType.Response, FunctionType.${1})",
+			"export class ${1}Response extends Message {",
+			"",
+			"\tpublic deserialize(data: Buffer): number {",
+			"\t\tconst ret = super.deserialize(data);",
+			"",
+			"\t\t${0:// Parse payload here}",
+			"",
+			"\t\treturn ret;",
+			"\t}",
+			"}",
+			""
+		]
+	},
+	"Z-Wave toJSON override": {
+		"prefix": "zwjson",
+		"body": [
+			"public toJSON() {",
+			"\treturn super.toJSONInherited({",
+			"\t\t${0}",
+			"\t});",
+			"}"
+		]
+	},
 	"Z-Wave Command Class implementation": {
 		"prefix": "zwcc",
 		"body": [
