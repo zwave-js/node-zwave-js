@@ -1,4 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { num2hex } from "../util/strings";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum BasicCommand {
@@ -78,7 +79,7 @@ export class BasicCC extends CommandClass {
 
 			default:
 				throw new ZWaveError(
-					"Cannot deserialize a Basic CC with a command other than Report",
+					`Cannot deserialize a Basic CC with a command other than Report. Received ${BasicCommand[this.ccCommand]} (${num2hex(this.ccCommand)})`,
 					ZWaveErrorCodes.CC_Invalid,
 				);
 		}

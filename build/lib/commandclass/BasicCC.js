@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
+const strings_1 = require("../util/strings");
 const CommandClass_1 = require("./CommandClass");
 var BasicCommand;
 (function (BasicCommand) {
@@ -61,7 +62,7 @@ let BasicCC = class BasicCC extends CommandClass_1.CommandClass {
                 this._duration = this.payload[3];
                 break;
             default:
-                throw new ZWaveError_1.ZWaveError("Cannot deserialize a Basic CC with a command other than Report", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
+                throw new ZWaveError_1.ZWaveError(`Cannot deserialize a Basic CC with a command other than Report. Received ${BasicCommand[this.ccCommand]} (${strings_1.num2hex(this.ccCommand)})`, ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
         }
     }
 };
