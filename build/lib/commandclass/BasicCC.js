@@ -12,6 +12,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const strings_1 = require("../util/strings");
 const CommandClass_1 = require("./CommandClass");
+// TODO: encode duration:
+// SET:
+// 0x00 = instantly
+// 0x01..0x7F = 1 to 127 seconds
+// 0x80..0xFE = 1 to 127 minutes
+// 0xFF = factory default
+// ---
+// REPORT:
+// 0x00 = already at the target value
+// 0x01..0x7F = 1 to 127 seconds
+// 0x80..0xFD = 1 to 126 minutes
+// 0xFE = unknown duration
+// 0xFF = reserved
 var BasicCommand;
 (function (BasicCommand) {
     BasicCommand[BasicCommand["Set"] = 1] = "Set";
