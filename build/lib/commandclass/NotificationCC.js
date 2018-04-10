@@ -22,6 +22,23 @@ var NotificationCommand;
     NotificationCommand[NotificationCommand["SupportedGet"] = 7] = "SupportedGet";
     NotificationCommand[NotificationCommand["SupportedReport"] = 8] = "SupportedReport";
 })(NotificationCommand = exports.NotificationCommand || (exports.NotificationCommand = {}));
+var ZWaveAlarmType;
+(function (ZWaveAlarmType) {
+    ZWaveAlarmType[ZWaveAlarmType["General"] = 0] = "General";
+    ZWaveAlarmType[ZWaveAlarmType["Smoke"] = 1] = "Smoke";
+    ZWaveAlarmType[ZWaveAlarmType["CarbonMonoxide"] = 2] = "CarbonMonoxide";
+    ZWaveAlarmType[ZWaveAlarmType["CarbonDioxide"] = 3] = "CarbonDioxide";
+    ZWaveAlarmType[ZWaveAlarmType["Heat"] = 4] = "Heat";
+    ZWaveAlarmType[ZWaveAlarmType["Flood"] = 5] = "Flood";
+    ZWaveAlarmType[ZWaveAlarmType["AccessControl"] = 6] = "AccessControl";
+    ZWaveAlarmType[ZWaveAlarmType["Burglar"] = 7] = "Burglar";
+    ZWaveAlarmType[ZWaveAlarmType["PowerManagement"] = 8] = "PowerManagement";
+    ZWaveAlarmType[ZWaveAlarmType["System"] = 9] = "System";
+    ZWaveAlarmType[ZWaveAlarmType["Emergency"] = 10] = "Emergency";
+    ZWaveAlarmType[ZWaveAlarmType["Clock"] = 11] = "Clock";
+    ZWaveAlarmType[ZWaveAlarmType["Appliance"] = 12] = "Appliance";
+    ZWaveAlarmType[ZWaveAlarmType["HomeHealth"] = 13] = "HomeHealth";
+})(ZWaveAlarmType = exports.ZWaveAlarmType || (exports.ZWaveAlarmType = {}));
 let NotificationCC = class NotificationCC extends CommandClass_1.CommandClass {
     constructor(nodeId, ccCommand, ...args) {
         super(nodeId);

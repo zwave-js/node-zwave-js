@@ -12,6 +12,23 @@ export enum NotificationCommand {
 	SupportedReport = 0x08,
 }
 
+export enum ZWaveAlarmType {
+	General = 0,
+	Smoke,
+	CarbonMonoxide,
+	CarbonDioxide,
+	Heat,
+	Flood,
+	AccessControl,
+	Burglar,
+	PowerManagement,
+	System,
+	Emergency,
+	Clock,
+	Appliance,
+	HomeHealth,
+}
+
 @commandClass(CommandClasses.Notification)
 @implementedVersion(2)
 @expectedCCResponse(CommandClasses.Notification)
@@ -24,12 +41,12 @@ export class NotificationCC extends CommandClass {
 		nodeId: number,
 		ccCommand: NotificationCommand.Get,
 		alarmType: number,
-		zWaveAlarmType: number,
+		zWaveAlarmType: ZWaveAlarmType,
 	);
 	constructor(
 		nodeId: number,
 		ccCommand: NotificationCommand.Set,
-		zWaveAlarmType: number,
+		zWaveAlarmType: ZWaveAlarmType,
 		zWaveAlarmStatus: number,
 	);
 	constructor(
@@ -54,8 +71,7 @@ export class NotificationCC extends CommandClass {
 	// tslint:enable:unified-signatures
 
 	public alarmType: number;
-	// TODO: there must be some enum defined for this:
-	public zWaveAlarmType: number;
+	public zWaveAlarmType: ZWaveAlarmType;
 	public zWaveAlarmStatus: number;
 
 	private _zWaveAlarmEvent: number;
@@ -83,8 +99,8 @@ export class NotificationCC extends CommandClass {
 		return this._supportsV1Alarm;
 	}
 
-	private _supportedZWaveAlarmTypes: number[];
-	public get supportedZWaveAlarmTypes(): number[] {
+	private _supportedZWaveAlarmTypes: ZWaveAlarmType[];
+	public get supportedZWaveAlarmTypes(): ZWaveAlarmType[] {
 		return this._supportedZWaveAlarmTypes;
 	}
 
