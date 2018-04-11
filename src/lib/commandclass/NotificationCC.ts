@@ -1,4 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { composeObject } from "../util/object-polyfill";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum NotificationCommand {
@@ -12,7 +13,7 @@ export enum NotificationCommand {
 	SupportedReport = 0x08,
 }
 
-export enum ZWaveAlarmType {
+export enum NotificationType {
 	General = 0,
 	Smoke,
 	CarbonMonoxide,
@@ -30,7 +31,7 @@ export enum ZWaveAlarmType {
 }
 
 @commandClass(CommandClasses.Notification)
-@implementedVersion(2)
+@implementedVersion(8)
 @expectedCCResponse(CommandClasses.Notification)
 export class NotificationCC extends CommandClass {
 	// former AlarmCC (v1..v2)
@@ -41,13 +42,14 @@ export class NotificationCC extends CommandClass {
 		nodeId: number,
 		ccCommand: NotificationCommand.Get,
 		alarmType: number,
-		zWaveAlarmType: ZWaveAlarmType,
+		notificationType: NotificationType,
+		notificationEvent?: number,
 	);
 	constructor(
 		nodeId: number,
 		ccCommand: NotificationCommand.Set,
-		zWaveAlarmType: ZWaveAlarmType,
-		zWaveAlarmStatus: number,
+		notificationType: NotificationType,
+		notificationStatus: boolean,
 	);
 	constructor(
 		nodeId: number,
@@ -62,21 +64,24 @@ export class NotificationCC extends CommandClass {
 		super(nodeId);
 		if (ccCommand === NotificationCommand.Get) {
 			this.alarmType = args[0];
-			this.zWaveAlarmType = args[1];
+			this.notificationType = args[1];
+			this._notificationEvent = args[2];
 		} else if (ccCommand === NotificationCommand.Set) {
-			this.zWaveAlarmType = args[0];
-			this.zWaveAlarmStatus = args[1];
+			this.notificationType = args[0];
+			this.notificationStatus = args[1];
 		}
 	}
 	// tslint:enable:unified-signatures
 
+	/** Proprietary V1/V2 alarm type */
 	public alarmType: number;
-	public zWaveAlarmType: ZWaveAlarmType;
-	public zWaveAlarmStatus: number;
+	/** Regulated V3+ notification type */
+	public notificationType: NotificationType;
+	public notificationStatus: boolean;
 
-	private _zWaveAlarmEvent: number;
-	public get zWaveAlarmEvent(): number {
-		return this._zWaveAlarmEvent;
+	private _notificationEvent: number;
+	public get notificationEvent(): number {
+		return this._notificationEvent;
 	}
 
 	private _alarmLevel: number;
@@ -89,8 +94,8 @@ export class NotificationCC extends CommandClass {
 		return this._zensorNetSourceNodeId;
 	}
 
-	private _eventParameters: number[];
-	public get eventParameters(): number[] {
+	private _eventParameters: Buffer;
+	public get eventParameters(): Buffer {
 		return this._eventParameters;
 	}
 
@@ -99,31 +104,45 @@ export class NotificationCC extends CommandClass {
 		return this._supportsV1Alarm;
 	}
 
-	private _supportedZWaveAlarmTypes: ZWaveAlarmType[];
-	public get supportedZWaveAlarmTypes(): ZWaveAlarmType[] {
-		return this._supportedZWaveAlarmTypes;
+	private _supportedNotificationTypes: NotificationType[];
+	public get supportedNotificationTypes(): NotificationType[] {
+		return this._supportedNotificationTypes;
+	}
+
+	private _supportedEvents = new Map<NotificationType, number[]>();
+	public get supportedEvents(): Map<NotificationType, number[]> {
+		return this._supportedEvents;
+	}
+
+	private _sequenceNumber: number;
+	public get sequenceNumber(): number {
+		return this._sequenceNumber;
 	}
 
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
-			case NotificationCommand.Get:
-				this.payload = Buffer.from([
+			case NotificationCommand.Get: {
+				const msg = [
 					this.ccCommand,
 					this.alarmType,
-				]);
+				];
 				if (this.version >= 2) {
-					this.payload = Buffer.concat([
-						this.payload,
-						Buffer.from([this.zWaveAlarmType]),
-					]);
+					msg.push(this.notificationType);
 				}
+				if (this.version >= 3) {
+					// TODO: If the Notification Type is set to 0xFF, this field MUST be set to 0x00
+					msg.push(this.notificationEvent);
+				}
+
+				this.payload = Buffer.from(msg);
 				break;
+			}
 
 			case NotificationCommand.Set:
 				this.payload = Buffer.from([
 					this.ccCommand,
-					this.zWaveAlarmType,
-					this.zWaveAlarmStatus,
+					this.notificationType,
+					this.notificationStatus ? 0xff : 0x00,
 				]);
 				break;
 
@@ -132,9 +151,16 @@ export class NotificationCC extends CommandClass {
 				// no real payload
 				break;
 
+			case NotificationCommand.EventSupportedGet:
+				this.payload = Buffer.from([
+					this.ccCommand,
+					this.notificationType,
+				]);
+				break;
+
 			default:
 				throw new ZWaveError(
-					"Cannot serialize a Notification CC with a command other than __TODO__",
+					"Cannot serialize a Notification CC with a command other than Get, Set, SupportedGet and EventSupportedGet",
 					ZWaveErrorCodes.CC_Invalid,
 				);
 		}
@@ -150,14 +176,19 @@ export class NotificationCC extends CommandClass {
 			case NotificationCommand.Report: {
 				this.alarmType = this.payload[1];
 				this._alarmLevel = this.payload[2];
-				// starting with V2
+				// V2..V3, reserved in V4+
 				this._zensorNetSourceNodeId = this.payload[3];
-				this.zWaveAlarmStatus = this.payload[4];
-				this.zWaveAlarmType = this.payload[5];
-				this._zWaveAlarmEvent = this.payload[6];
-				const numEventParams = this.payload[7];
-				if (numEventParams != null && numEventParams > 0) {
-					this._eventParameters = Array.from(this.payload.slice(8, 8 + numEventParams));
+				// V2+
+				this.notificationStatus = this.payload[4] === 0xff;
+				this.notificationType = this.payload[5];
+				this._notificationEvent = this.payload[6];
+				const containsSeqNum = !!(this.payload[7] & 0b1000_0000);
+				const numEventParams = this.payload[7] & 0b11111;
+				if (numEventParams > 0) {
+					this._eventParameters = Buffer.from(this.payload.slice(8, 8 + numEventParams));
+				}
+				if (containsSeqNum) {
+					this._sequenceNumber = this.payload[8 + numEventParams];
 				}
 				break;
 			}
@@ -166,20 +197,38 @@ export class NotificationCC extends CommandClass {
 				this._supportsV1Alarm = !!(this.payload[1] & 0b1000_0000);
 				const numBitMaskBytes = this.payload[1] & 0b0001_1111;
 				// parse the bitmask into a number array
-				const numBitMasks = numBitMaskBytes * 8 - 1;
-				const alarmTypeBitMask = this.payload.slice(2, 2 + numBitMaskBytes);
-				this._supportedZWaveAlarmTypes = [];
-				for (let type = 1; type <= numBitMasks; type++) {
+				const numTypes = numBitMaskBytes * 8 - 1;
+				const notificationBitMask = this.payload.slice(2, 2 + numBitMaskBytes);
+				this._supportedNotificationTypes = [];
+				for (let type = 1; type <= numTypes; type++) {
 					const byteNum = type >>> 3; // type / 8
 					const bitNum = type % 8;
-					if ((alarmTypeBitMask[byteNum] & (1 << bitNum)) !== 0) this._supportedZWaveAlarmTypes.push(type);
+					if ((notificationBitMask[byteNum] & (1 << bitNum)) !== 0) this._supportedNotificationTypes.push(type);
 				}
+				break;
+			}
+
+			case NotificationCommand.EventSupportedReport: {
+				this.notificationType = this.payload[1];
+				const numBitMaskBytes = this.payload[2] & 0b0001_1111;
+				// parse the bitmask into a number array
+				const numEvents = numBitMaskBytes * 8 - 1;
+				const eventsBitMask = this.payload.slice(3, 3 + numBitMaskBytes);
+				const supportedEvents = this._supportedEvents.has(this.notificationType)
+					? this._supportedEvents.get(this.notificationType)
+					: [];
+				for (let event = 1; event <= numEvents; event++) {
+					const byteNum = event >>> 3; // type / 8
+					const bitNum = event % 8;
+					if ((eventsBitMask[byteNum] & (1 << bitNum)) !== 0) supportedEvents.push(event);
+				}
+				this._supportedEvents.set(this.notificationType, supportedEvents);
 				break;
 			}
 
 			default:
 				throw new ZWaveError(
-					"Cannot deserialize a Notification CC with a command other than TODO",
+					"Cannot deserialize a Notification CC with a command other than Report, SupportedReport, EventSupportedReport",
 					ZWaveErrorCodes.CC_Invalid,
 				);
 		}
@@ -189,14 +238,17 @@ export class NotificationCC extends CommandClass {
 		return super.toJSONInherited({
 			ccCommand: NotificationCommand[this.ccCommand],
 			alarmType: this.alarmType,
-			zWaveAlarmType: this.zWaveAlarmType,
-			zWaveAlarmStatus: this.zWaveAlarmStatus,
-			zWaveAlarmEvent: this.zWaveAlarmEvent,
+			notificationType: this.notificationType,
+			notificationStatus: this.notificationStatus,
+			notificationEvent: this.notificationEvent,
 			alarmLevel: this.alarmLevel,
 			zensorNetSourceNodeId: this.zensorNetSourceNodeId,
 			eventParameters: this.eventParameters,
 			supportsV1Alarm: this.supportsV1Alarm,
-			supportedZWaveAlarmTypes: this.supportedZWaveAlarmTypes,
+			supportedNotificationTypes: this.supportedNotificationTypes,
+			supportedEvents: this.supportedEvents
+				? composeObject([...this.supportedEvents.entries()].map(([type, events]) => [NotificationType[type], events] as [string, number[]]))
+				: undefined,
 		});
 	}
 

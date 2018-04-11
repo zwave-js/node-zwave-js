@@ -9,7 +9,7 @@ export declare enum NotificationCommand {
     SupportedGet = 7,
     SupportedReport = 8,
 }
-export declare enum ZWaveAlarmType {
+export declare enum NotificationType {
     General = 0,
     Smoke = 1,
     CarbonMonoxide = 2,
@@ -29,24 +29,30 @@ export declare class NotificationCC extends CommandClass {
     nodeId: number;
     ccCommand: NotificationCommand;
     constructor(nodeId?: number);
-    constructor(nodeId: number, ccCommand: NotificationCommand.Get, alarmType: number, zWaveAlarmType: ZWaveAlarmType);
-    constructor(nodeId: number, ccCommand: NotificationCommand.Set, zWaveAlarmType: ZWaveAlarmType, zWaveAlarmStatus: number);
+    constructor(nodeId: number, ccCommand: NotificationCommand.Get, alarmType: number, notificationType: NotificationType, notificationEvent?: number);
+    constructor(nodeId: number, ccCommand: NotificationCommand.Set, notificationType: NotificationType, notificationStatus: boolean);
     constructor(nodeId: number, ccCommand: NotificationCommand.SupportedGet);
+    /** Proprietary V1/V2 alarm type */
     alarmType: number;
-    zWaveAlarmType: ZWaveAlarmType;
-    zWaveAlarmStatus: number;
-    private _zWaveAlarmEvent;
-    readonly zWaveAlarmEvent: number;
+    /** Regulated V3+ notification type */
+    notificationType: NotificationType;
+    notificationStatus: boolean;
+    private _notificationEvent;
+    readonly notificationEvent: number;
     private _alarmLevel;
     readonly alarmLevel: number;
     private _zensorNetSourceNodeId;
     readonly zensorNetSourceNodeId: number;
     private _eventParameters;
-    readonly eventParameters: number[];
+    readonly eventParameters: Buffer;
     private _supportsV1Alarm;
     readonly supportsV1Alarm: boolean;
-    private _supportedZWaveAlarmTypes;
-    readonly supportedZWaveAlarmTypes: ZWaveAlarmType[];
+    private _supportedNotificationTypes;
+    readonly supportedNotificationTypes: NotificationType[];
+    private _supportedEvents;
+    readonly supportedEvents: Map<NotificationType, number[]>;
+    private _sequenceNumber;
+    readonly sequenceNumber: number;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
     toJSON(): Record<string, any>;
