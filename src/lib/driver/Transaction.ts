@@ -27,6 +27,7 @@ export class Transaction implements Comparable<Transaction> {
 		public timestamp: number = highResTimestamp(),
 		public ackPending: boolean = true,
 		public response?: Message,
+		public retries: number = 0,
 	) {
 	}
 

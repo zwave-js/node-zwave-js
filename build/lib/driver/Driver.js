@@ -30,6 +30,11 @@ const defaultOptions = {
         byte: 150,
     },
     skipInterview: false,
+    retransmission: {
+        maxRetries: 3,
+        timeout: 250,
+        backOffFactor: 1.5,
+    },
 };
 function applyDefaultOptions(target, source) {
     target = target || {};
@@ -499,11 +504,17 @@ class Driver extends events_1.EventEmitter {
     }
     handleCAN() {
         // TODO: what to do with this CAN?
-        logger_1.log("io", "CAN received - dropping current transaction. TODO: handle retransmission", "warn");
-        if (this.currentTransaction != null
-            && this.currentTransaction.promise != null) {
-            logger_1.log("io", "  the dropped message is " + strings_1.stringify(this.currentTransaction.message), "warn");
-            this.rejectCurrentTransaction(new ZWaveError_1.ZWaveError("The message was dropped by the controller", ZWaveError_1.ZWaveErrorCodes.Controller_MessageDropped), false /* don't resume queue, that happens automatically */);
+        if (this.currentTransaction != null) {
+            if (this.currentTransaction.retries < this.options.retransmission.maxRetries) {
+                this.currentTransaction.retries++;
+                const timeout = this.options.retransmission.timeout * Math.pow(this.options.retransmission.backOffFactor, this.currentTransaction.retries - 1);
+                logger_1.log("io", `CAN received - scheduling retransmission (${this.currentTransaction.retries}/${this.options.retransmission.maxRetries}) in ${timeout} ms...`, "warn");
+                setTimeout(() => this.retransmit(), timeout);
+            }
+            else {
+                logger_1.log("io", `CAN received - maximum retransmissions for the current transaction reached, dropping it...`, "warn");
+                this.rejectCurrentTransaction(new ZWaveError_1.ZWaveError(`The message was dropped by the controller after ${this.options.retransmission.maxRetries} tries`, ZWaveError_1.ZWaveErrorCodes.Controller_MessageDropped), false /* don't resume queue, that happens automatically */);
+            }
         }
     }
     /**
@@ -526,7 +537,8 @@ class Driver extends events_1.EventEmitter {
      */
     rejectCurrentTransaction(reason, resumeQueue = true) {
         logger_1.log("io", `rejecting current transaction because "${reason.message}"`, "debug");
-        this.currentTransaction.promise.reject(reason);
+        if (this.currentTransaction.promise != null)
+            this.currentTransaction.promise.reject(reason);
         this.currentTransaction = null;
         // and see if there are messages pending
         if (resumeQueue) {
@@ -604,19 +616,29 @@ class Driver extends events_1.EventEmitter {
         const next = this.sendQueue.shift();
         this.currentTransaction = next;
         const msg = next.message;
-        logger_1.log("io", `workOffSendQueue > sending next message (${Constants_1.FunctionType[next.message.functionType]})...`, "debug");
+        logger_1.log("io", `workOffSendQueue > sending next message (${Constants_1.FunctionType[msg.functionType]})...`, "debug");
         // for messages containing a CC, i.e. a SendDataRequest, set the CC version as high as possible
         if (ICommandClassContainer_1.isCommandClassContainer(msg)) {
             const cc = msg.command.command;
             msg.command.version = this.getSafeCCVersionForNode(msg.command.nodeId, cc);
             logger_1.log("io", `  CC = ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)}) => using version ${msg.command.version}`, "debug");
         }
-        const data = next.message.serialize();
+        const data = msg.serialize();
         logger_1.log("io", `  data = 0x${data.toString("hex")}`, "debug");
         logger_1.log("io", `  remaining queue length = ${this.sendQueue.length}`, "debug");
-        this.doSend(next.message.serialize());
+        this.doSend(data);
         // to avoid any deadlocks we didn't think of, re-call this later
         this.sendQueueTimer = setTimeout(() => this.workOffSendQueue(), 1000);
+    }
+    retransmit() {
+        if (this.currentTransaction == null)
+            return;
+        const msg = this.currentTransaction.message;
+        logger_1.log("io", `retransmit > resending message (${Constants_1.FunctionType[msg.functionType]})...`, "debug");
+        // for messages containing a CC, i.e. a SendDataRequest, set the CC version as high as possible
+        const data = msg.serialize();
+        logger_1.log("io", `  data = 0x${data.toString("hex")}`, "debug");
+        this.doSend(data);
     }
     doSend(data) {
         this.serial.write(data);

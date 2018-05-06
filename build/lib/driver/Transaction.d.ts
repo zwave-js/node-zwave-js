@@ -11,6 +11,7 @@ export declare class Transaction implements Comparable<Transaction> {
     timestamp: number;
     ackPending: boolean;
     response: Message;
+    retries: number;
     constructor(driver: Driver, message: Message, promise: DeferredPromise<Message | void>, priority: MessagePriority);
     compareTo(other: Transaction): CompareResult;
 }

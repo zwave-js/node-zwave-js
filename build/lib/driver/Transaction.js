@@ -9,7 +9,7 @@ function highResTimestamp() {
     return s * 1e9 + ns;
 }
 class Transaction {
-    constructor(driver, message, promise, priority, timestamp = highResTimestamp(), ackPending = true, response) {
+    constructor(driver, message, promise, priority, timestamp = highResTimestamp(), ackPending = true, response, retries = 0) {
         this.driver = driver;
         this.message = message;
         this.promise = promise;
@@ -17,6 +17,7 @@ class Transaction {
         this.timestamp = timestamp;
         this.ackPending = ackPending;
         this.response = response;
+        this.retries = retries;
     }
     compareTo(other) {
         // first sort by priority
