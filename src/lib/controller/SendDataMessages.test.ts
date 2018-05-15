@@ -3,13 +3,13 @@
 import { expect, should } from "chai";
 should();
 
+import { CommandClass, CommandClasses } from "../commandclass/CommandClass";
+import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { FunctionType, MessageType } from "../message/Constants";
-import { getExpectedResponse, getFunctionType, getMessageType, Message } from "../message/Message";
-import { CommandClass, CommandClasses } from "./CommandClass";
-import { NoOperationCC } from "./NoOperationCC";
+import { getExpectedResponse, getFunctionType, getMessageType, Message, ResponsePredicate } from "../message/Message";
 import { SendDataRequest, SendDataResponse, TransmitOptions } from "./SendDataMessages";
 
-describe("lib/commandclass/SendDataRequest => ", () => {
+describe("lib/controller/SendDataRequest => ", () => {
 	const req = new SendDataRequest();
 
 	it("should be a Message", () => {
@@ -21,8 +21,11 @@ describe("lib/commandclass/SendDataRequest => ", () => {
 	it("and a function type SendData", () => {
 		getFunctionType(req).should.equal(FunctionType.SendData);
 	});
-	it("that expects a SendData response", () => {
-		getExpectedResponse(req).should.equal(FunctionType.SendData);
+	it("that expects a SendDataRequest or SendDataResponse in return", () => {
+		const predicate = getExpectedResponse(req) as ResponsePredicate;
+		predicate.should.be.a("function");
+
+		// TODO: Test actual response
 	});
 
 	it("should extract all properties correctly", () => {
@@ -80,7 +83,7 @@ describe("lib/commandclass/SendDataRequest => ", () => {
 
 });
 
-describe("lib/driver/SendDataResponse => ", () => {
+describe("lib/controller/SendDataResponse => ", () => {
 	const res = new SendDataResponse();
 
 	it("should be a Message", () => {

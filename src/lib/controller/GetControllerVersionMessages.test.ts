@@ -3,9 +3,10 @@
 import { expect, should } from "chai";
 should();
 
+import { ZWaveLibraryTypes } from "../commandclass/VersionCC";
 import { FunctionType, MessageType } from "../message/Constants";
 import { getExpectedResponse, getFunctionType, getMessageType, Message } from "../message/Message";
-import { ControllerTypes, GetControllerVersionRequest, GetControllerVersionResponse } from "./GetControllerVersionMessages";
+import { GetControllerVersionRequest, GetControllerVersionResponse } from "./GetControllerVersionMessages";
 
 describe("lib/driver/GetControllerVersionRequest => ", () => {
 	const req = new GetControllerVersionRequest();
@@ -48,7 +49,7 @@ describe("lib/driver/GetControllerVersionResponse => ", () => {
 
 	it("should extract the controller version and type", () => {
 		parsed.libraryVersion.should.equal("Z-Wave 4.05");
-		parsed.controllerType.should.equal(ControllerTypes["Static Controller"]);
+		parsed.controllerType.should.equal(ZWaveLibraryTypes["Static Controller"]);
 	});
 
 	it("its constructor should be retrieved for Response & GetControllerVersion", () => {
