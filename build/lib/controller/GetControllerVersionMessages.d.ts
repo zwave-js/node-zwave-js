@@ -1,6 +1,6 @@
 /// <reference types="node" />
-import { ZWaveLibraryTypes } from "../commandclass/VersionCC";
 import { Message } from "../message/Message";
+import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 export declare class GetControllerVersionRequest extends Message {
 }
 export declare class GetControllerVersionResponse extends Message {

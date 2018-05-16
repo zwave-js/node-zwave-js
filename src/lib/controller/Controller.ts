@@ -1,6 +1,5 @@
 import { EventEmitter } from "events";
 import { CommandClasses } from "../commandclass/CommandClass";
-import { ZWaveLibraryTypes } from "../commandclass/VersionCC";
 import { Driver, RequestHandler } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
@@ -19,6 +18,7 @@ import { GetSerialApiInitDataRequest, GetSerialApiInitDataResponse } from "./Get
 import { GetSUCNodeIdRequest, GetSUCNodeIdResponse } from "./GetSUCNodeIdMessages";
 import { HardResetRequest } from "./HardResetRequest";
 import { SetSerialApiTimeoutsRequest, SetSerialApiTimeoutsResponse } from "./SetSerialApiTimeoutsMessages";
+import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
 // TODO: interface the exposed events
 

@@ -1,7 +1,7 @@
-import { ZWaveLibraryTypes } from "../commandclass/VersionCC";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
 import { cpp2js } from "../util/strings";
+import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerVersion)
 @expectedResponse(FunctionType.GetControllerVersion)

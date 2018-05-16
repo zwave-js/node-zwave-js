@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const events_1 = require("events");
 const CommandClass_1 = require("../commandclass/CommandClass");
-const VersionCC_1 = require("../commandclass/VersionCC");
 const ZWaveError_1 = require("../error/ZWaveError");
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
@@ -28,6 +27,7 @@ const GetSerialApiInitDataMessages_1 = require("./GetSerialApiInitDataMessages")
 const GetSUCNodeIdMessages_1 = require("./GetSUCNodeIdMessages");
 const HardResetRequest_1 = require("./HardResetRequest");
 const SetSerialApiTimeoutsMessages_1 = require("./SetSerialApiTimeoutsMessages");
+const ZWaveLibraryTypes_1 = require("./ZWaveLibraryTypes");
 // TODO: interface the exposed events
 class ZWaveController extends events_1.EventEmitter {
     /** @internal */
@@ -106,7 +106,7 @@ class ZWaveController extends events_1.EventEmitter {
             this._libraryVersion = version.libraryVersion;
             this._type = version.controllerType;
             logger_1.log("controller", `received version info:`, "debug");
-            logger_1.log("controller", `  controller type: ${VersionCC_1.ZWaveLibraryTypes[this._type]}`, "debug");
+            logger_1.log("controller", `  controller type: ${ZWaveLibraryTypes_1.ZWaveLibraryTypes[this._type]}`, "debug");
             logger_1.log("controller", `  library version: ${this._libraryVersion}`, "debug");
             // get the home and node id of the controller
             logger_1.log("controller", `querying controller IDs...`, "debug");
@@ -161,7 +161,7 @@ class ZWaveController extends events_1.EventEmitter {
             // TODO: if configured, enable this controller as SIS if there's no SUC
             // https://github.com/OpenZWave/open-zwave/blob/a46f3f36271f88eed5aea58899a6cb118ad312a2/cpp/src/Driver.cpp#L2586
             // if it's a bridge controller, request the virtual nodes
-            if (this.type === VersionCC_1.ZWaveLibraryTypes["Bridge Controller"] && this.isFunctionSupported(Constants_1.FunctionType.FUNC_ID_ZW_GET_VIRTUAL_NODES)) {
+            if (this.type === ZWaveLibraryTypes_1.ZWaveLibraryTypes["Bridge Controller"] && this.isFunctionSupported(Constants_1.FunctionType.FUNC_ID_ZW_GET_VIRTUAL_NODES)) {
                 // TODO: send FUNC_ID_ZW_GET_VIRTUAL_NODES message
             }
             // Request information about all nodes with the GetInitData message
@@ -184,7 +184,7 @@ class ZWaveController extends events_1.EventEmitter {
             for (const nodeId of initData.nodeIds) {
                 this.nodes.set(nodeId, new Node_1.ZWaveNode(nodeId, this.driver));
             }
-            if (this.type !== VersionCC_1.ZWaveLibraryTypes["Bridge Controller"] && this.isFunctionSupported(Constants_1.FunctionType.SetSerialApiTimeouts)) {
+            if (this.type !== ZWaveLibraryTypes_1.ZWaveLibraryTypes["Bridge Controller"] && this.isFunctionSupported(Constants_1.FunctionType.SetSerialApiTimeouts)) {
                 const { ack, byte } = this.driver.options.timeouts;
                 logger_1.log("controller", `setting serial API timeouts: ack = ${ack} ms, byte = ${byte} ms`, "debug");
                 const resp = yield this.driver.sendMessage(new SetSerialApiTimeoutsMessages_1.SetSerialApiTimeoutsRequest(ack, byte));

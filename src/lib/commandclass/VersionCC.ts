@@ -1,3 +1,4 @@
+import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
@@ -6,21 +7,6 @@ export enum VersionCommand {
 	Report = 0x12,
 	CommandClassGet = 0x13,
 	CommandClassReport = 0x14,
-}
-
-export enum ZWaveLibraryTypes {
-	"Unknown",
-	"Static Controller",
-	"Controller",
-	"Enhanced Slave",
-	"Slave",
-	"Installer",
-	"Routing Slave",
-	"Bridge Controller",
-	"Device under Test",
-	"N/A",
-	"AV Remote",
-	"AV Device",
 }
 
 @commandClass(CommandClasses.Version)
