@@ -29,8 +29,6 @@ export declare class Message {
      * @returns must return the total number of bytes read
      */
     deserialize(data: Buffer): number;
-    /** Returns the slice of data which represents the message payload */
-    static getPayload(data: Buffer): Buffer;
     toJSON(): any;
     private toJSONInternal();
     protected toJSONInherited(props: Record<string, any>): Record<string, any>;

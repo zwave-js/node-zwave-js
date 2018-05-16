@@ -72,6 +72,11 @@ describe("lib/util/sorted-list => ", () => {
 		expect(list.toArray()).to.deep.equal(expected);
 	});
 
+	it("shift() should return undefined for empty lists", () => {
+		const list = new SortedList([]);
+		expect(list.shift()).to.be.undefined;
+	});
+
 	it("pop() should remove the largest item in the list and return it", () => {
 		const containedItems = [2, -1, 5, 4, 9, 8];
 		const list = new SortedList(containedItems);
@@ -79,6 +84,11 @@ describe("lib/util/sorted-list => ", () => {
 		list.pop().should.equal(9);
 		list.length.should.equal(expected.length);
 		expect(list.toArray()).to.deep.equal(expected);
+	});
+
+	it("pop() should return undefined for empty lists", () => {
+		const list = new SortedList([]);
+		expect(list.pop()).to.be.undefined;
 	});
 
 	it("adding items to an empty list should work", () => {

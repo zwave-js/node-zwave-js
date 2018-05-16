@@ -94,23 +94,6 @@ class Message {
         // return the total number of bytes in this message
         return messageLength;
     }
-    // /**
-    //  * Checks if a given Buffer contains a serialized SendDataRequest.
-    //  * It is assumed that the buffer has been checked beforehand
-    //  */
-    // public static is(type: MessageType, fn: FunctionType, data: Buffer): boolean {
-    // 	const msgType: MessageType = data[2];
-    // 	const fnType: FunctionType = data[3];
-    // 	return msgType === type && fnType === fn;
-    // }
-    /** Returns the slice of data which represents the message payload */
-    static getPayload(data) {
-        // we assume the message has been tested already for completeness
-        const remainingLength = data[1];
-        const messageLength = remainingLength + 2;
-        const payloadLength = messageLength - 5;
-        return data.slice(4, 4 + payloadLength);
-    }
     toJSON() {
         return this.toJSONInternal();
     }
