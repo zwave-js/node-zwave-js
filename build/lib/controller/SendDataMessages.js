@@ -147,20 +147,19 @@ let SendDataResponse = class SendDataResponse extends Message_1.Message {
     get wasSent() {
         return this._wasSent;
     }
-    get errorCode() {
-        return this._errorCode;
-    }
+    // private _errorCode: number;
+    // public get errorCode(): number {
+    // 	return this._errorCode;
+    // }
     deserialize(data) {
         const ret = super.deserialize(data);
         this._wasSent = this.payload[0] !== 0;
-        if (!this._wasSent)
-            this._errorCode = this.payload[0];
+        // if (!this._wasSent) this._errorCode = this.payload[0];
         return ret;
     }
     toJSON() {
         return super.toJSONInherited({
             wasSent: this.wasSent,
-            errorCode: this.errorCode,
         });
     }
 };

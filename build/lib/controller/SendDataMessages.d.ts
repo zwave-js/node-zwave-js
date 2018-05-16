@@ -40,8 +40,6 @@ export declare class SendDataRequest<CCType extends CommandClass = CommandClass>
 export declare class SendDataResponse extends Message {
     private _wasSent;
     readonly wasSent: boolean;
-    private _errorCode;
-    readonly errorCode: number;
     deserialize(data: Buffer): number;
     toJSON(): Record<string, any>;
 }

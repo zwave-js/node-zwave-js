@@ -310,9 +310,7 @@ class Driver extends events_1.EventEmitter {
                     // The message was not sent
                     logger_1.log("io", `  the message for the current transaction could not be sent, dropping the transaction`, "debug");
                     if (this.currentTransaction.promise != null) {
-                        const errorMsg = msg instanceof SendDataMessages_1.SendDataResponse
-                            ? `The message could not be sent (code ${msg.errorCode})`
-                            : `The message could not be sent`;
+                        const errorMsg = `The message could not be sent`;
                         this.rejectCurrentTransaction(new ZWaveError_1.ZWaveError(errorMsg, ZWaveError_1.ZWaveErrorCodes.Controller_MessageDropped));
                     }
                     return;
@@ -447,6 +445,7 @@ class Driver extends events_1.EventEmitter {
             return;
         }
         else if (msg instanceof SendDataMessages_1.SendDataRequest && msg.command != null) {
+            // TODO: Find out if this actually happens
             // we handle SendDataRequests differently because their handlers are organized by the command class
             const cc = msg.command.command;
             logger_1.log("driver", `handling send data request ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)}) for node ${msg.command.nodeId}`, "debug");

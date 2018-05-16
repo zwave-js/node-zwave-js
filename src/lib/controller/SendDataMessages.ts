@@ -165,16 +165,16 @@ export class SendDataResponse extends Message {
 		return this._wasSent;
 	}
 
-	private _errorCode: number;
-	public get errorCode(): number {
-		return this._errorCode;
-	}
+	// private _errorCode: number;
+	// public get errorCode(): number {
+	// 	return this._errorCode;
+	// }
 
 	public deserialize(data: Buffer): number {
 		const ret = super.deserialize(data);
 
 		this._wasSent = this.payload[0] !== 0;
-		if (!this._wasSent) this._errorCode = this.payload[0];
+		// if (!this._wasSent) this._errorCode = this.payload[0];
 
 		return ret;
 	}
@@ -182,7 +182,7 @@ export class SendDataResponse extends Message {
 	public toJSON() {
 		return super.toJSONInherited({
 			wasSent: this.wasSent,
-			errorCode: this.errorCode,
+			// errorCode: this.errorCode,
 		});
 	}
 
