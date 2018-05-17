@@ -181,9 +181,7 @@ export class Message {
 			return expected === msg.functionType ? "final" : "unexpected";
 		} else if (typeof expected === "function") {
 			// If a predicate was configured, use it to test the message
-			const ret = expected(this, msg);
-			// log("driver", `  predicate returned ${ret}`, "debug");
-			return ret;
+			return expected(this, msg);
 		}
 		// nothing was configured, this expects no response
 		return "unexpected";

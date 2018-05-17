@@ -3,10 +3,10 @@
 import { expect, should } from "chai";
 should();
 
-import { ZWaveLibraryTypes } from "../commandclass/VersionCC";
 import { FunctionType, MessageType } from "../message/Constants";
 import { getExpectedResponse, getFunctionType, getMessageType, Message } from "../message/Message";
 import { GetControllerVersionRequest, GetControllerVersionResponse } from "./GetControllerVersionMessages";
+import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
 describe("lib/driver/GetControllerVersionRequest => ", () => {
 	const req = new GetControllerVersionRequest();

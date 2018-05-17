@@ -1,11 +1,12 @@
 // tslint:disable:no-unused-expression
 
 import { expect, should } from "chai";
+import { stub } from "sinon";
 should();
 
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessageType } from "./Constants";
-import { Message } from "./Message";
+import { Message, ResponseRole } from "./Message";
 
 describe("lib/message/Message => ", () => {
 	it("should deserialize and serialize correctly", () => {
@@ -148,9 +149,41 @@ describe("lib/message/Message => ", () => {
 		expect(msg.payload).to.deep.equal(buf);
 	});
 
-	it("getConstructor should return `Message` for an unknown packet type", () => {
+	it("getConstructor() should return `Message` for an unknown packet type", () => {
 		const unknown = Buffer.from([0x01, 0x03, 0x00, 0x00, 0xfc]);
 		Message.getConstructor(unknown).should.equal(Message);
+	});
+
+	it(`when expectedResponse is a FunctionType, testResponse() should return "final" or "unexpected"`, () => {
+		const msg = new Message(MessageType.Request, undefined, FunctionType.ApplicationCommand);
+		const final = new Message(MessageType.Response, FunctionType.ApplicationCommand, undefined);
+		msg.testResponse(final).should.equal("final");
+
+		// wrong function type
+		const unexpected1 = new Message(MessageType.Response, FunctionType.SendData, undefined);
+		msg.testResponse(unexpected1).should.equal("unexpected");
+
+		// not a response
+		const unexpected2 = new Message(MessageType.Request, undefined, undefined);
+		msg.testResponse(unexpected2).should.equal("unexpected");
+	});
+
+	it(`when expectedResponse is a predicate, testResponse() should pass its return value through`, () => {
+		const predicate = stub();
+		const msg = new Message(MessageType.Request, undefined, predicate);
+		const test = new Message();
+
+		const results: ResponseRole[] = [
+			"fatal_controller", "fatal_node", "final", "intermediate", "unexpected",
+		];
+		for (const result of results) {
+			predicate.resetHistory();
+			predicate.resetBehavior();
+			predicate.returns(result);
+
+			msg.testResponse(test).should.equal(result);
+			predicate.should.have.been.calledWithExactly(msg, test);
+		}
 	});
 
 });
