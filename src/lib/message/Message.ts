@@ -142,6 +142,15 @@ export class Message {
 		return messageLength;
 	}
 
+	/** Returns the slice of data which represents the message payload */
+	public static getPayload(data: Buffer): Buffer {
+		// we assume the message has been tested already for completeness
+		const remainingLength = data[1];
+		const messageLength = remainingLength + 2;
+		const payloadLength = messageLength - 5;
+		return data.slice(4, 4 + payloadLength);
+	}
+
 	public toJSON() {
 		return this.toJSONInternal();
 	}

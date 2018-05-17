@@ -94,6 +94,14 @@ class Message {
         // return the total number of bytes in this message
         return messageLength;
     }
+    /** Returns the slice of data which represents the message payload */
+    static getPayload(data) {
+        // we assume the message has been tested already for completeness
+        const remainingLength = data[1];
+        const messageLength = remainingLength + 2;
+        const payloadLength = messageLength - 5;
+        return data.slice(4, 4 + payloadLength);
+    }
     toJSON() {
         return this.toJSONInternal();
     }
@@ -132,9 +140,7 @@ class Message {
         }
         else if (typeof expected === "function") {
             // If a predicate was configured, use it to test the message
-            const ret = expected(this, msg);
-            // log("driver", `  predicate returned ${ret}`, "debug");
-            return ret;
+            return expected(this, msg);
         }
         // nothing was configured, this expects no response
         return "unexpected";
