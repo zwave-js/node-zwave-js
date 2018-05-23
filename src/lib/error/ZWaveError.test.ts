@@ -1,5 +1,6 @@
 import { assert, expect } from "chai";
 import { ZWaveError, ZWaveErrorCodes } from "./ZWaveError";
+import { assertZWaveError } from "../../../test/util";
 // tslint:disable:no-unused-expression
 
 describe("lib/ZWaveError => ", () => {
@@ -13,12 +14,11 @@ describe("lib/ZWaveError => ", () => {
 	});
 
 	it("should contain an error code", () => {
-		expect(thisThrows).to.throw(ZWaveError);
-		try {
-			thisThrows();
-		} catch (e) {
-			expect(e.code).to.equal(ZWaveErrorCodes.PacketFormat_Invalid);
-		}
+		assertZWaveError(
+			thisThrows,
+			"Test message",
+			ZWaveErrorCodes.PacketFormat_Invalid,
+		);
 	});
 
 });

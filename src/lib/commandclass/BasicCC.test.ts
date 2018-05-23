@@ -4,6 +4,7 @@ import { expect, should } from "chai";
 import { stub } from "sinon";
 should();
 
+import { assertZWaveError } from "../../../test/util";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { BasicCC, BasicCommand } from "./BasicCC";
 import { CommandClasses } from "./CommandClass";
@@ -34,11 +35,11 @@ describe("lib/commandclass/BasicCC => ", () => {
 
 	it("serialize() should throw for other commands", () => {
 		const basicCC = new BasicCC(2, -1 /* not a command */);
-		expect(() => basicCC.serialize())
-			.to.throw("Cannot serialize")
-			.and.be.an.instanceof(ZWaveError)
-			.and.satisfy((err: ZWaveError) => err.code === ZWaveErrorCodes.CC_Invalid)
-			;
+		assertZWaveError(
+			() => basicCC.serialize(),
+			"Cannot serialize",
+			ZWaveErrorCodes.CC_Invalid,
+		);
 	});
 
 	it("the Report command (v1) should be deserialized correctly", () => {
@@ -83,11 +84,11 @@ describe("lib/commandclass/BasicCC => ", () => {
 			255, // not a valid command
 		]);
 		const basicCC = new BasicCC();
-		expect(() => basicCC.deserialize(serializedCC))
-			.to.throw("Cannot deserialize")
-			.and.be.an.instanceof(ZWaveError)
-			.and.satisfy((err: ZWaveError) => err.code === ZWaveErrorCodes.CC_Invalid)
-			;
+		assertZWaveError(
+			() => basicCC.deserialize(serializedCC),
+			"Cannot deserialize",
+			ZWaveErrorCodes.CC_Invalid,
+		);
 	});
 
 });
