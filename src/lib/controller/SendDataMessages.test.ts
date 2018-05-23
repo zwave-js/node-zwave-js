@@ -3,8 +3,11 @@
 import { expect, should } from "chai";
 should();
 
+import { assertZWaveError } from "../../../test/util";
+import { BasicCC, BasicCommand } from "../commandclass/BasicCC";
 import { CommandClass, CommandClasses } from "../commandclass/CommandClass";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
+import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessageType } from "../message/Constants";
 import { getExpectedResponse, getFunctionType, getMessageType, Message, ResponsePredicate } from "../message/Message";
 import { SendDataRequest, SendDataResponse, TransmitOptions } from "./SendDataMessages";
@@ -102,6 +105,31 @@ describe("lib/controller/SendDataRequest => ", () => {
 			}
 			lastCallbackId = next.callbackId;
 		}
+	});
+
+	it("serialize() should concatenate the serialized CC with transmit options and callback ID", () => {
+		const cc = new BasicCC(1, BasicCommand.Get);
+		const serializedCC = cc.serialize();
+
+		const msg = new SendDataRequest(cc, TransmitOptions.DEFAULT, 66);
+		msg.serialize();
+		// we don't care about the frame, only the message payload itself
+		const serializedMsg = msg.payload;
+
+		const expected = Buffer.concat([
+			serializedCC,
+			Buffer.from([TransmitOptions.DEFAULT, 66]),
+		]);
+		serializedMsg.should.deep.equal(expected);
+	});
+
+	it("serialize() should throw when there is no CC", () => {
+		const msg = new SendDataRequest(undefined);
+		assertZWaveError(
+			() => msg.serialize(),
+			"without a command",
+			ZWaveErrorCodes.PacketFormat_Invalid,
+		);
 	});
 
 });
