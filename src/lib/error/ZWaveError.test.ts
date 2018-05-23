@@ -1,6 +1,6 @@
 import { assert, expect } from "chai";
-import { ZWaveError, ZWaveErrorCodes } from "./ZWaveError";
 import { assertZWaveError } from "../../../test/util";
+import { ZWaveError, ZWaveErrorCodes } from "./ZWaveError";
 // tslint:disable:no-unused-expression
 
 describe("lib/ZWaveError => ", () => {
