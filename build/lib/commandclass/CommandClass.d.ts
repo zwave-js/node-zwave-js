@@ -14,7 +14,6 @@ export declare class CommandClass {
     payload: Buffer;
     constructor();
     constructor(nodeId: number, command?: CommandClasses, payload?: Buffer);
-    private _version;
     /** The version of the command class used */
     version: number;
     serialize(): Buffer;

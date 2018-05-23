@@ -37,14 +37,8 @@ export class CommandClass {
 	}
 	// tslint:enable:unified-signatures
 
-	private _version: number = 1;
 	/** The version of the command class used */
-	public get version(): number {
-		return this._version;
-	}
-	public set version(v: number) {
-		this._version = v;
-	}
+	public version: number;
 
 	public serialize(): Buffer {
 		const payloadLength = this.payload != null ? this.payload.length : 0;
@@ -54,16 +48,18 @@ export class CommandClass {
 		// the serialized length includes the command class itself
 		ret[1] = payloadLength + 1;
 		ret[2] = this.command;
-		if (this.payload != null) this.payload.copy(ret, 3);
+		if (payloadLength > 0 /* implies payload != null */) {
+			this.payload.copy(ret, 3);
+		}
 
 		return ret;
 	}
 
 	public deserialize(data: Buffer): void {
-		this.nodeId = data[0];
+		this.nodeId = CommandClass.getNodeId(data);
 		// the serialized length includes the command class itself
 		const dataLength = data[1] - 1;
-		this.command = data[2];
+		this.command = CommandClass.getCommandClass(data);
 		this.payload = Buffer.allocUnsafe(dataLength);
 		data.copy(this.payload, 0, 3, 3 + dataLength);
 	}
@@ -81,7 +77,7 @@ export class CommandClass {
 	 * It is assumed that the buffer only contains the serialized CC.
 	 */
 	public static getConstructor(ccData: Buffer): Constructable<CommandClass> {
-		const cc = ccData[2];
+		const cc = CommandClass.getCommandClass(ccData);
 		return getCCConstructor(cc) || CommandClass;
 	}
 
@@ -206,7 +202,9 @@ export function getImplementedVersion<T extends CommandClass>(cc: T | CommandCla
 		constrName = constr.name;
 	}
 	// retrieve the current metadata
-	const ret = constr != null ? Reflect.getMetadata(METADATA_version, constr) : 0;
+	let ret: number;
+	if (constr != null) ret = Reflect.getMetadata(METADATA_version, constr);
+	if (ret == null) ret = 0;
 	log("protocol", `${constrName}: retrieving implemented version => ${ret}`, "silly");
 	return ret;
 }
@@ -216,7 +214,7 @@ export function getImplementedVersion<T extends CommandClass>(cc: T | CommandCla
  */
 export function getImplementedVersionStatic<T extends Constructable<CommandClass>>(classConstructor: T): number {
 	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_version, classConstructor);
+	const ret = Reflect.getMetadata(METADATA_version, classConstructor) || 0;
 	log("protocol", `${classConstructor.name}: retrieving implemented version => ${ret}`, "silly");
 	return ret;
 }

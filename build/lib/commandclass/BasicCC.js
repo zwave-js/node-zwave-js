@@ -81,7 +81,8 @@ let BasicCC = class BasicCC extends CommandClass_1.CommandClass {
 };
 BasicCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses.Basic),
-    CommandClass_1.implementedVersion(2),
+    CommandClass_1.implementedVersion(2) // Update tests in CommandClass.test.ts when changing this
+    ,
     CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses.Basic),
     __metadata("design:paramtypes", [Number, Number, Number])
 ], BasicCC);

@@ -19,17 +19,8 @@ let CommandClass = CommandClass_1 = class CommandClass {
         this.nodeId = nodeId;
         this.command = command;
         this.payload = payload;
-        // tslint:enable:unified-signatures
-        this._version = 1;
         // Extract the cc from declared metadata if not provided
         this.command = command != null ? command : getCommandClass(this);
-    }
-    /** The version of the command class used */
-    get version() {
-        return this._version;
-    }
-    set version(v) {
-        this._version = v;
     }
     serialize() {
         const payloadLength = this.payload != null ? this.payload.length : 0;
@@ -38,15 +29,16 @@ let CommandClass = CommandClass_1 = class CommandClass {
         // the serialized length includes the command class itself
         ret[1] = payloadLength + 1;
         ret[2] = this.command;
-        if (this.payload != null)
+        if (payloadLength > 0 /* implies payload != null */) {
             this.payload.copy(ret, 3);
+        }
         return ret;
     }
     deserialize(data) {
-        this.nodeId = data[0];
+        this.nodeId = CommandClass_1.getNodeId(data);
         // the serialized length includes the command class itself
         const dataLength = data[1] - 1;
-        this.command = data[2];
+        this.command = CommandClass_1.getCommandClass(data);
         this.payload = Buffer.allocUnsafe(dataLength);
         data.copy(this.payload, 0, 3, 3 + dataLength);
     }
@@ -61,7 +53,7 @@ let CommandClass = CommandClass_1 = class CommandClass {
      * It is assumed that the buffer only contains the serialized CC.
      */
     static getConstructor(ccData) {
-        const cc = ccData[2];
+        const cc = CommandClass_1.getCommandClass(ccData);
         return getCCConstructor(cc) || CommandClass_1;
     }
     static from(serializedCC) {
@@ -180,7 +172,11 @@ function getImplementedVersion(cc) {
         constrName = constr.name;
     }
     // retrieve the current metadata
-    const ret = constr != null ? Reflect.getMetadata(exports.METADATA_version, constr) : 0;
+    let ret;
+    if (constr != null)
+        ret = Reflect.getMetadata(exports.METADATA_version, constr);
+    if (ret == null)
+        ret = 0;
     logger_1.log("protocol", `${constrName}: retrieving implemented version => ${ret}`, "silly");
     return ret;
 }
@@ -190,7 +186,7 @@ exports.getImplementedVersion = getImplementedVersion;
  */
 function getImplementedVersionStatic(classConstructor) {
     // retrieve the current metadata
-    const ret = Reflect.getMetadata(exports.METADATA_version, classConstructor);
+    const ret = Reflect.getMetadata(exports.METADATA_version, classConstructor) || 0;
     logger_1.log("protocol", `${classConstructor.name}: retrieving implemented version => ${ret}`, "silly");
     return ret;
 }

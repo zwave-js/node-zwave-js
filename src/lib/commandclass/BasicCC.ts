@@ -23,7 +23,7 @@ export enum BasicCommand {
 }
 
 @commandClass(CommandClasses.Basic)
-@implementedVersion(2)
+@implementedVersion(2) // Update tests in CommandClass.test.ts when changing this
 @expectedCCResponse(CommandClasses.Basic)
 export class BasicCC extends CommandClass {
 

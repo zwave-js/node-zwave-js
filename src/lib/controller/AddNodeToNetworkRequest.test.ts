@@ -7,7 +7,7 @@ should();
 import { Message } from "../message/Message";
 import { AddNodeToNetworkRequest, AddNodeType } from "./AddNodeToNetworkRequest";
 
-describe.only("lib/controller/AddNodeToNetworkRequest => ", () => {
+describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 	it("should serialize correctly", () => {
 		const msg1 = new AddNodeToNetworkRequest(
 			AddNodeType.Any,
