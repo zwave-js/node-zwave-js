@@ -8,14 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const CommandClass_1 = require("./CommandClass");
 let NoOperationCC = class NoOperationCC extends CommandClass_1.CommandClass {
-    serialize() {
-        // define this.payload
-        return super.serialize();
-    }
-    deserialize(data) {
-        super.deserialize(data);
-        // parse this.payload
-    }
 };
 NoOperationCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["No Operation"]),

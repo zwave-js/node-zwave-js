@@ -4,14 +4,14 @@ import { CommandClass, commandClass, CommandClasses, implementedVersion } from "
 @implementedVersion(1)
 export class NoOperationCC extends CommandClass {
 
-	public serialize(): Buffer {
-		// define this.payload
-		return super.serialize();
-	}
+	// public serialize(): Buffer {
+	// 	// no payload
+	// 	return super.serialize();
+	// }
 
-	public deserialize(data: Buffer): void {
-		super.deserialize(data);
-		// parse this.payload
-	}
+	// public deserialize(data: Buffer): void {
+	// 	super.deserialize(data);
+	// 	// no payload
+	// }
 
 }
