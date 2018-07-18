@@ -76,7 +76,9 @@ class SpecificDeviceClass {
 }
 SpecificDeviceClass.NOT_USED = Object.freeze(new SpecificDeviceClass("not used", 0x00));
 exports.SpecificDeviceClass = SpecificDeviceClass;
-function defineGeneric(name, mandatorySupportedCCs, mandatoryControlCCs, ...specificDeviceClasses) {
+function defineGeneric(name, mandatorySupportedCCs, mandatoryControlCCs, 
+// tslint:disable-next-line:trailing-comma
+...specificDeviceClasses) {
     if (mandatorySupportedCCs == null)
         mandatorySupportedCCs = [];
     if (mandatoryControlCCs == null)

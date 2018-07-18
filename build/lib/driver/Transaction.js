@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const comparable_1 = require("alcalzone-shared/comparable");
 const Constants_1 = require("../message/Constants");
 const Node_1 = require("../node/Node");
-const comparable_1 = require("../util/comparable");
 /** Returns a timestamp with nano-second precision */
 function highResTimestamp() {
     const [s, ns] = process.hrtime();

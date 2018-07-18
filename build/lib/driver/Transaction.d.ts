@@ -1,6 +1,6 @@
+import { Comparable, CompareResult } from "alcalzone-shared/comparable";
 import { MessagePriority } from "../message/Constants";
 import { Message } from "../message/Message";
-import { Comparable, CompareResult } from "../util/comparable";
 import { DeferredPromise } from "../util/defer-promise";
 import { Driver } from "./Driver";
 export declare class Transaction implements Comparable<Transaction> {

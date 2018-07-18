@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const strings_1 = require("alcalzone-shared/strings");
 const CommandClass_1 = require("../commandclass/CommandClass");
 const ICommandClassContainer_1 = require("../commandclass/ICommandClassContainer");
 const NoOperationCC_1 = require("../commandclass/NoOperationCC");
@@ -17,7 +18,7 @@ const GetNodeProtocolInfoMessages_1 = require("../controller/GetNodeProtocolInfo
 const SendDataMessages_1 = require("../controller/SendDataMessages");
 const Constants_1 = require("../message/Constants");
 const logger_1 = require("../util/logger");
-const strings_1 = require("../util/strings");
+const strings_2 = require("../util/strings");
 const DeviceClass_1 = require("./DeviceClass");
 const INodeQuery_1 = require("./INodeQuery");
 const RequestNodeInfoMessages_1 = require("./RequestNodeInfoMessages");
@@ -141,9 +142,9 @@ class ZWaveNode {
             this._version = resp.version;
             this._isBeaming = resp.isBeaming;
             logger_1.log("controller", `${this.logPrefix}received response for protocol info:`, "debug");
-            logger_1.log("controller", `${this.logPrefix}  basic device class:    ${DeviceClass_1.BasicDeviceClasses[this.deviceClass.basic]} (${strings_1.num2hex(this.deviceClass.basic)})`, "debug");
-            logger_1.log("controller", `${this.logPrefix}  generic device class:  ${this.deviceClass.generic.name} (${strings_1.num2hex(this.deviceClass.generic.key)})`, "debug");
-            logger_1.log("controller", `${this.logPrefix}  specific device class: ${this.deviceClass.specific.name} (${strings_1.num2hex(this.deviceClass.specific.key)})`, "debug");
+            logger_1.log("controller", `${this.logPrefix}  basic device class:    ${DeviceClass_1.BasicDeviceClasses[this.deviceClass.basic]} (${strings_2.num2hex(this.deviceClass.basic)})`, "debug");
+            logger_1.log("controller", `${this.logPrefix}  generic device class:  ${this.deviceClass.generic.name} (${strings_2.num2hex(this.deviceClass.generic.key)})`, "debug");
+            logger_1.log("controller", `${this.logPrefix}  specific device class: ${this.deviceClass.specific.name} (${strings_2.num2hex(this.deviceClass.specific.key)})`, "debug");
             logger_1.log("controller", `${this.logPrefix}  is a listening device: ${this.isListening}`, "debug");
             logger_1.log("controller", `${this.logPrefix}  is frequent listening: ${this.isFrequentListening}`, "debug");
             logger_1.log("controller", `${this.logPrefix}  is a routing device:   ${this.isRouting}`, "debug");
@@ -210,13 +211,13 @@ class ZWaveNode {
                 // only query the ones we support a version > 1 for
                 const maxImplemented = CommandClass_1.getImplementedVersion(cc);
                 if (maxImplemented < 1) {
-                    logger_1.log("controller", `${this.logPrefix}  skipping query for ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)}) because max implemented version is ${maxImplemented}`, "debug");
+                    logger_1.log("controller", `${this.logPrefix}  skipping query for ${CommandClass_1.CommandClasses[cc]} (${strings_2.num2hex(cc)}) because max implemented version is ${maxImplemented}`, "debug");
                     continue;
                 }
                 const versionCC = new VersionCC_1.VersionCC(this.id, VersionCC_1.VersionCommand.CommandClassGet, cc);
                 const request = new SendDataMessages_1.SendDataRequest(versionCC);
                 try {
-                    logger_1.log("controller", `${this.logPrefix}  querying the CC version for ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)})`, "debug");
+                    logger_1.log("controller", `${this.logPrefix}  querying the CC version for ${CommandClass_1.CommandClasses[cc]} (${strings_2.num2hex(cc)})`, "debug");
                     // query the CC version
                     const resp = yield this.driver.sendMessage(request, Constants_1.MessagePriority.NodeQuery);
                     if (ICommandClassContainer_1.isCommandClassContainer(resp)) {
@@ -225,7 +226,7 @@ class ZWaveNode {
                         const reqCC = versionResponse.requestedCC;
                         const supportedVersion = versionResponse.ccVersion;
                         this.addCC(reqCC, { version: supportedVersion });
-                        logger_1.log("controller", `${this.logPrefix}  supports CC ${CommandClass_1.CommandClasses[reqCC]} (${strings_1.num2hex(reqCC)}) in version ${supportedVersion}`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  supports CC ${CommandClass_1.CommandClasses[reqCC]} (${strings_2.num2hex(reqCC)}) in version ${supportedVersion}`, "debug");
                     }
                 }
                 catch (e) {
@@ -248,7 +249,7 @@ class ZWaveNode {
                     break;
                 }
                 default: {
-                    logger_1.log("controller", `${this.logPrefix}TODO: no handler for application command ${strings_1.stringify(command)}`, "debug");
+                    logger_1.log("controller", `${this.logPrefix}TODO: no handler for application command ${strings_2.stringify(command)}`, "debug");
                 }
             }
         });

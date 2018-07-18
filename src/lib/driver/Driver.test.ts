@@ -248,7 +248,8 @@ describe("lib/driver/Driver => ", () => {
 			({
 				driver,
 				serialport,
-				clock,
+				// tslint:disable-next-line:trailing-comma
+				clock
 			} = await createAndStartDriver());
 		});
 		afterEach(() => {

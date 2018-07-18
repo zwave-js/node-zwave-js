@@ -10,7 +10,7 @@ before(() => {
 
 import { createDeferredPromise } from "./defer-promise";
 
-describe("lib/defer-promise => createDeferredPromise() =>", () => {
+describe("util/defer-promise => createDeferredPromise() =>", () => {
 
 	const promiseRes = createDeferredPromise<boolean>();
 

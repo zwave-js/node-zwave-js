@@ -9,8 +9,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const objects_1 = require("alcalzone-shared/objects");
 const ZWaveError_1 = require("../error/ZWaveError");
-const object_polyfill_1 = require("../util/object-polyfill");
 const CommandClass_1 = require("./CommandClass");
 var NotificationCommand;
 (function (NotificationCommand) {
@@ -41,7 +41,9 @@ var NotificationType;
     NotificationType[NotificationType["HomeHealth"] = 13] = "HomeHealth";
 })(NotificationType = exports.NotificationType || (exports.NotificationType = {}));
 let NotificationCC = class NotificationCC extends CommandClass_1.CommandClass {
-    constructor(nodeId, ccCommand, ...args) {
+    constructor(nodeId, ccCommand, 
+    // tslint:disable-next-line:trailing-comma
+    ...args) {
         super(nodeId);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
@@ -192,7 +194,7 @@ let NotificationCC = class NotificationCC extends CommandClass_1.CommandClass {
             supportsV1Alarm: this.supportsV1Alarm,
             supportedNotificationTypes: this.supportedNotificationTypes,
             supportedEvents: this.supportedEvents
-                ? object_polyfill_1.composeObject([...this.supportedEvents.entries()].map(([type, events]) => [NotificationType[type], events]))
+                ? objects_1.composeObject([...this.supportedEvents.entries()].map(([type, events]) => [NotificationType[type], events]))
                 : undefined,
         });
     }

@@ -9,9 +9,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const objects_1 = require("alcalzone-shared/objects");
 const fs = require("fs");
 const logger_1 = require("../util/logger");
-const object_polyfill_1 = require("../util/object-polyfill");
 const strings_1 = require("../util/strings");
 let CommandClass = CommandClass_1 = class CommandClass {
     // implementation
@@ -78,7 +78,7 @@ let CommandClass = CommandClass_1 = class CommandClass {
     toJSONInherited(props) {
         const ret = this.toJSONInternal();
         delete ret.payload;
-        for (const [key, value] of object_polyfill_1.entries(props)) {
+        for (const [key, value] of objects_1.entries(props)) {
             if (value !== undefined)
                 ret[key] = value;
         }

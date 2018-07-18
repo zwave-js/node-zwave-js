@@ -8,6 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const objects_1 = require("alcalzone-shared/objects");
+const sorted_list_1 = require("alcalzone-shared/sorted-list");
 const events_1 = require("events");
 const SerialPort = require("serialport");
 const CommandClass_1 = require("../commandclass/CommandClass");
@@ -20,8 +22,6 @@ const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
 const defer_promise_1 = require("../util/defer-promise");
 const logger_1 = require("../util/logger");
-const object_polyfill_1 = require("../util/object-polyfill");
-const sorted_list_1 = require("../util/sorted-list");
 const strings_1 = require("../util/strings");
 const Transaction_1 = require("./Transaction");
 const defaultOptions = {
@@ -38,7 +38,7 @@ const defaultOptions = {
 };
 function applyDefaultOptions(target, source) {
     target = target || {};
-    for (const [key, value] of object_polyfill_1.entries(source)) {
+    for (const [key, value] of objects_1.entries(source)) {
         if (!(key in target)) {
             target[key] = value;
         }
