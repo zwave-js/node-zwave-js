@@ -1,3 +1,6 @@
+import { Comparable, compareNumberOrString, CompareResult } from "alcalzone-shared/comparable";
+import { entries } from "alcalzone-shared/objects";
+import { SortedList } from "alcalzone-shared/sorted-list";
 import { EventEmitter } from "events";
 import * as SerialPort from "serialport";
 import { CommandClasses, getImplementedVersion } from "../commandclass/CommandClass";
@@ -8,11 +11,8 @@ import { SendDataRequest, SendDataResponse, TransmitStatus } from "../controller
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "../message/Constants";
 import { Constructable, getDefaultPriority, Message, messageTypes } from "../message/Message";
-import { Comparable, compareNumberOrString, CompareResult } from "../util/comparable";
 import { createDeferredPromise, DeferredPromise } from "../util/defer-promise";
 import { log } from "../util/logger";
-import { entries } from "../util/object-polyfill";
-import { SortedList } from "../util/sorted-list";
 import { num2hex, stringify } from "../util/strings";
 import { Transaction } from "./Transaction";
 

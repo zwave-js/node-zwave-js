@@ -1,6 +1,7 @@
+import { padStart } from "alcalzone-shared/strings";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
-import { num2hex, padStart } from "../util/strings";
+import { num2hex } from "../util/strings";
 
 const NUM_FUNCTIONS = 256;
 const NUM_FUNCTION_BYTES = NUM_FUNCTIONS / 8;

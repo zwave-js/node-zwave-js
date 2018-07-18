@@ -1,7 +1,7 @@
+import { entries } from "alcalzone-shared/objects";
 import * as fs from "fs";
 import { Constructable } from "../message/Message";
 import { log } from "../util/logger";
-import { entries } from "../util/object-polyfill";
 import { num2hex, stringify } from "../util/strings";
 
 export interface CommandClassInfo {

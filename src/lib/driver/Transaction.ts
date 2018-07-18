@@ -1,7 +1,7 @@
+import { Comparable, compareNumberOrString, CompareResult } from "alcalzone-shared/comparable";
 import { MessagePriority, MessageType } from "../message/Constants";
 import { Message, ResponseRole } from "../message/Message";
 import { getNodeId } from "../node/Node";
-import { Comparable, compareNumberOrString, CompareResult } from "../util/comparable";
 import { DeferredPromise } from "../util/defer-promise";
 import { Driver } from "./Driver";
 

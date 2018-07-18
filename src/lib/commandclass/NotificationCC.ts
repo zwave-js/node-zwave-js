@@ -1,5 +1,5 @@
+import { composeObject } from "alcalzone-shared/objects";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { composeObject } from "../util/object-polyfill";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum NotificationCommand {
@@ -59,7 +59,8 @@ export class NotificationCC extends CommandClass {
 	constructor(
 		public nodeId: number,
 		public ccCommand?: NotificationCommand,
-		...args: any[],
+		// tslint:disable-next-line:trailing-comma
+		...args: any[]
 	) {
 		super(nodeId);
 		if (ccCommand === NotificationCommand.Get) {

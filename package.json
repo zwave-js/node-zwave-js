@@ -51,6 +51,7 @@
     "yargs": "^11.0.0"
   },
   "dependencies": {
+    "alcalzone-shared": "^1.0.1",
     "debug": "^3.1.0",
     "reflect-metadata": "^0.1.12",
     "serialport": "^6.1.1"

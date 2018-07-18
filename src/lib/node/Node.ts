@@ -1,3 +1,4 @@
+import { padStart } from "alcalzone-shared/strings";
 import { CentralSceneCC } from "../commandclass/CentralSceneCC";
 import { CommandClass, CommandClasses, CommandClassInfo, getImplementedVersion } from "../commandclass/CommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
@@ -10,7 +11,7 @@ import { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { Message } from "../message/Message";
 import { log } from "../util/logger";
-import { num2hex, padStart, stringify } from "../util/strings";
+import { num2hex, stringify } from "../util/strings";
 import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
 import { isNodeQuery } from "./INodeQuery";
 import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";

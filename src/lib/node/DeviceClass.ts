@@ -84,7 +84,8 @@ function defineGeneric(
 	name: keyof typeof GenericDeviceClasses,
 	mandatorySupportedCCs: CommandClasses[],
 	mandatoryControlCCs: CommandClasses[],
-	...specificDeviceClasses: SpecificDeviceClass[],
+	// tslint:disable-next-line:trailing-comma
+	...specificDeviceClasses: SpecificDeviceClass[]
 ) {
 	if (mandatorySupportedCCs == null) mandatorySupportedCCs = [];
 	if (mandatoryControlCCs == null) mandatoryControlCCs = [];

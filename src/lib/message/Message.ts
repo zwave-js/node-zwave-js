@@ -1,8 +1,8 @@
 /// <reference types="reflect-metadata" />
 
+import { entries } from "alcalzone-shared/objects";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { log } from "../util/logger";
-import { entries } from "../util/object-polyfill";
 import { num2hex, stringify } from "../util/strings";
 import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "./Constants";
 
