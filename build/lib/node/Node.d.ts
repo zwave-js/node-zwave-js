@@ -4,7 +4,7 @@ import { CommandClass, CommandClasses, CommandClassInfo, StateKind } from "../co
 import { Baudrate } from "../controller/GetNodeProtocolInfoMessages";
 import { Driver } from "../driver/Driver";
 import { Message } from "../message/Message";
-import { DeviceClass } from "./DeviceClass";
+import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
 import { ValueDB, ValueUpdatedArgs } from "./ValueDB";
 /** Finds the ID of the target or source node in a message, if it contains that information */
 export declare function getNodeId(msg: Message): number;
@@ -51,6 +51,7 @@ export declare class ZWaveNode extends EventEmitter {
     /** Creates an instance of the given CC linked to this node */
     createCCInstance<T extends CommandClass>(cc: CommandClasses): T;
     interview(): Promise<void>;
+    private setInterviewStage;
     /** Step #1 of the node interview */
     private queryProtocolInfo;
     /** Step #2 of the node interview */
@@ -73,6 +74,24 @@ export declare class ZWaveNode extends EventEmitter {
      * @param commandClasses The command classes to request the state for. Defaults to all
      */
     requestState(kind: StateKind, commandClasses?: CommandClasses[]): Promise<void>;
+    /** Serializes this node in order to store static data in a cache */
+    serialize(): {
+        id: number;
+        interviewStage: string;
+        deviceClass: {
+            basic: BasicDeviceClasses;
+            generic: import("./DeviceClass").GenericDeviceClasses;
+            specific: number;
+        };
+        isListening: boolean;
+        isFrequentListening: boolean;
+        isRouting: boolean;
+        maxBaudRate: Baudrate;
+        isSecure: boolean;
+        isBeaming: boolean;
+        version: number;
+        commandClasses: {};
+    };
 }
 export declare enum InterviewStage {
     None = 0,

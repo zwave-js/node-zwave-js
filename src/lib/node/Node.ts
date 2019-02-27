@@ -22,6 +22,7 @@ import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
 import { isNodeQuery } from "./INodeQuery";
 import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
 import { ValueDB, ValueUpdatedArgs } from "./ValueDB";
+import { composeObject } from "alcalzone-shared/objects";
 
 /** Finds the ID of the target or source node in a message, if it contains that information */
 export function getNodeId(msg: Message): number {
@@ -210,8 +211,23 @@ export class ZWaveNode extends EventEmitter {
 		// TODO: Save the current state
 
 		// for testing purposes we skip to the end
-		this.interviewStage = InterviewStage.Complete;
+		await this.setInterviewStage(InterviewStage.Complete);
 		log("controller", `${this.logPrefix}interview completed`, "debug");
+	}
+
+	private async setInterviewStage(completedStage: InterviewStage) {
+		this.interviewStage = completedStage;
+		// Also save to the cache after certain stages
+		switch (completedStage) {
+			case InterviewStage.ProtocolInfo:
+			case InterviewStage.ManufacturerSpecific1:
+			case InterviewStage.NodeInfo:
+			case InterviewStage.Versions:
+			case InterviewStage.Endpoints:
+			case InterviewStage.Static:
+			case InterviewStage.Complete:
+				await this.driver.saveToCache();
+		}
 	}
 
 	/** Step #1 of the node interview */
@@ -253,7 +269,7 @@ export class ZWaveNode extends EventEmitter {
 			this.createCCInstance<WakeUpCC>(CommandClasses["Wake Up"]).setAwake(true);
 		}
 
-		this.interviewStage = InterviewStage.ProtocolInfo;
+		await this.setInterviewStage(InterviewStage.ProtocolInfo);
 	}
 
 	/** Step #2 of the node interview */
@@ -279,7 +295,7 @@ export class ZWaveNode extends EventEmitter {
 		} else {
 			log("controller", `${this.logPrefix}skipping wakeup for non-sleeping device`, "debug");
 		}
-		this.interviewStage = InterviewStage.WakeUp;
+		await this.setInterviewStage(InterviewStage.WakeUp);
 	}
 
 	/** Step #3 of the node interview */
@@ -299,7 +315,7 @@ export class ZWaveNode extends EventEmitter {
 				log("controller", `${this.logPrefix}  ping failed: ${e.message}`, "debug");
 			}
 		}
-		this.interviewStage = InterviewStage.Ping;
+		await this.setInterviewStage(InterviewStage.Ping);
 	}
 
 	/** Step #5 of the node interview */
@@ -323,7 +339,7 @@ export class ZWaveNode extends EventEmitter {
 				// TODO: Save the received values
 			}
 		}
-		this.interviewStage = InterviewStage.NodeInfo;
+		await this.setInterviewStage(InterviewStage.NodeInfo);
 	}
 
 	private async queryManufacturerSpecific() {
@@ -348,7 +364,7 @@ export class ZWaveNode extends EventEmitter {
 			}
 		}
 
-		this.interviewStage = InterviewStage.ManufacturerSpecific1;
+		await this.setInterviewStage(InterviewStage.ManufacturerSpecific1);
 	}
 
 	/** Step #9 of the node interview */
@@ -379,7 +395,7 @@ export class ZWaveNode extends EventEmitter {
 				log("controller", `${this.logPrefix}  querying the CC version failed: ${e.message}`, "debug");
 			}
 		}
-		this.interviewStage = InterviewStage.Versions;
+		await this.setInterviewStage(InterviewStage.Versions);
 	}
 
 	/** Step #10 of the node interview */
@@ -405,7 +421,7 @@ export class ZWaveNode extends EventEmitter {
 			log("controller", `${this.logPrefix}skipping endpoint query because the device does not support it`, "debug");
 		}
 
-		this.interviewStage = InterviewStage.Endpoints;
+		await this.setInterviewStage(InterviewStage.Endpoints);
 	}
 
 	private async requestStaticValues() {
@@ -416,7 +432,7 @@ export class ZWaveNode extends EventEmitter {
 		} catch (e) {
 			log("controller", `${this.logPrefix}  requesting the static values failed: ${e.message}`, "debug");
 		}
-		this.interviewStage = InterviewStage.Static;
+		await this.setInterviewStage(InterviewStage.Static);
 	}
 
 	//#endregion
@@ -458,6 +474,36 @@ export class ZWaveNode extends EventEmitter {
 			.map(req => () => this.driver.sendMessage<SendDataRequest>(req, MessagePriority.NodeQuery))
 			;
 		await promiseSequence(factories);
+	}
+
+	/** Serializes this node in order to store static data in a cache */
+	public serialize() {
+		return {
+			id: this.id,
+			interviewStage: InterviewStage[this.interviewStage],
+			deviceClass: {
+				basic: this.deviceClass.basic,
+				generic: this.deviceClass.generic.key,
+				specific: this.deviceClass.specific.key,
+			},
+			isListening: this.isListening,
+			isFrequentListening: this.isFrequentListening,
+			isRouting: this.isRouting,
+			maxBaudRate: this.maxBaudRate,
+			isSecure: this.isSecure,
+			isBeaming: this.isBeaming,
+			version: this.version,
+			commandClasses: composeObject(
+				[...this.implementedCommandClasses.entries()]
+					.sort((a, b) => Math.sign(a[0] - b[0]))
+					.map(([cc, info]) => {
+						return [num2hex(cc), {
+							name: CommandClasses[cc],
+							...info,
+						}] as [string, object];
+					}),
+			),
+		};
 	}
 
 }

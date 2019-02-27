@@ -12,6 +12,8 @@ const deferred_promise_1 = require("alcalzone-shared/deferred-promise");
 const objects_1 = require("alcalzone-shared/objects");
 const sorted_list_1 = require("alcalzone-shared/sorted-list");
 const events_1 = require("events");
+const fs = require("fs-extra");
+const path = require("path");
 const SerialPort = require("serialport");
 const CommandClass_1 = require("../commandclass/CommandClass");
 const ICommandClassContainer_1 = require("../commandclass/ICommandClassContainer");
@@ -73,6 +75,7 @@ class Driver extends events_1.EventEmitter {
         this.requestHandlers = new Map();
         /** A map of handlers specifically for send data requests */
         this.sendDataRequestHandlers = new Map();
+        this.cacheDir = path.resolve(__dirname, "../../..", "cache");
         this._wasStarted = false;
         this._isOpen = false;
         this._controllerInterviewed = false;
@@ -641,6 +644,14 @@ class Driver extends events_1.EventEmitter {
     }
     doSend(data) {
         this.serial.write(data);
+    }
+    saveToCache() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const cacheFile = path.join(this.cacheDir, this.controller.homeId.toString(16) + ".json");
+            const serializedObj = this.controller.serialize();
+            yield fs.ensureDir(this.cacheDir);
+            yield fs.writeJSON(cacheFile, serializedObj, { spaces: 4 });
+        });
     }
 }
 exports.Driver = Driver;

@@ -28,6 +28,7 @@ const GetSUCNodeIdMessages_1 = require("./GetSUCNodeIdMessages");
 const HardResetRequest_1 = require("./HardResetRequest");
 const SetSerialApiTimeoutsMessages_1 = require("./SetSerialApiTimeoutsMessages");
 const ZWaveLibraryTypes_1 = require("./ZWaveLibraryTypes");
+const objects_1 = require("alcalzone-shared/objects");
 // TODO: interface the exposed events
 class ZWaveController extends events_1.EventEmitter {
     /** @internal */
@@ -336,6 +337,13 @@ class ZWaveController extends events_1.EventEmitter {
                 }
             }
         });
+    }
+    /** Serializes the controller information and all nodes to store them in a cache */
+    serialize() {
+        return {
+            nodes: objects_1.composeObject([...this.nodes.entries()]
+                .map(([id, node]) => [id.toString(), node.serialize()])),
+        };
     }
 }
 exports.ZWaveController = ZWaveController;

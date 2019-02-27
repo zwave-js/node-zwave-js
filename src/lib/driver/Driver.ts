@@ -3,6 +3,8 @@ import { createDeferredPromise, DeferredPromise } from "alcalzone-shared/deferre
 import { entries } from "alcalzone-shared/objects";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import { EventEmitter } from "events";
+import * as fs from "fs-extra";
+import * as path from "path";
 import * as SerialPort from "serialport";
 import { CommandClasses, getImplementedVersion } from "../commandclass/CommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
@@ -100,6 +102,8 @@ export class Driver extends EventEmitter {
 	private requestHandlers = new Map<FunctionType, RequestHandlerEntry[]>();
 	/** A map of handlers specifically for send data requests */
 	private sendDataRequestHandlers = new Map<CommandClasses, RequestHandlerEntry<SendDataRequest>[]>();
+
+	private cacheDir = path.resolve(__dirname, "../../..", "cache");
 
 	private _controller: ZWaveController;
 	public get controller(): ZWaveController {
@@ -810,6 +814,13 @@ export class Driver extends EventEmitter {
 
 	private doSend(data: Buffer) {
 		this.serial.write(data);
+	}
+
+	public async saveToCache() {
+		const cacheFile = path.join(this.cacheDir, this.controller.homeId.toString(16) + ".json");
+		const serializedObj = this.controller.serialize();
+		await fs.ensureDir(this.cacheDir);
+		await fs.writeJSON(cacheFile, serializedObj, {spaces: 4});
 	}
 
 }

@@ -29,6 +29,7 @@ const DeviceClass_1 = require("./DeviceClass");
 const INodeQuery_1 = require("./INodeQuery");
 const RequestNodeInfoMessages_1 = require("./RequestNodeInfoMessages");
 const ValueDB_1 = require("./ValueDB");
+const objects_1 = require("alcalzone-shared/objects");
 /** Finds the ID of the target or source node in a message, if it contains that information */
 function getNodeId(msg) {
     if (INodeQuery_1.isNodeQuery(msg))
@@ -163,8 +164,24 @@ class ZWaveNode extends events_1.EventEmitter {
             }
             // TODO: Save the current state
             // for testing purposes we skip to the end
-            this.interviewStage = InterviewStage.Complete;
+            yield this.setInterviewStage(InterviewStage.Complete);
             logger_1.log("controller", `${this.logPrefix}interview completed`, "debug");
+        });
+    }
+    setInterviewStage(completedStage) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.interviewStage = completedStage;
+            // Also save to the cache after certain stages
+            switch (completedStage) {
+                case InterviewStage.ProtocolInfo:
+                case InterviewStage.ManufacturerSpecific1:
+                case InterviewStage.NodeInfo:
+                case InterviewStage.Versions:
+                case InterviewStage.Endpoints:
+                case InterviewStage.Static:
+                case InterviewStage.Complete:
+                    yield this.driver.saveToCache();
+            }
         });
     }
     /** Step #1 of the node interview */
@@ -202,7 +219,7 @@ class ZWaveNode extends events_1.EventEmitter {
                 // Assume the node is awake, after all we're communicating with it.
                 this.createCCInstance(CommandClass_1.CommandClasses["Wake Up"]).setAwake(true);
             }
-            this.interviewStage = InterviewStage.ProtocolInfo;
+            yield this.setInterviewStage(InterviewStage.ProtocolInfo);
         });
     }
     /** Step #2 of the node interview */
@@ -231,7 +248,7 @@ class ZWaveNode extends events_1.EventEmitter {
             else {
                 logger_1.log("controller", `${this.logPrefix}skipping wakeup for non-sleeping device`, "debug");
             }
-            this.interviewStage = InterviewStage.WakeUp;
+            yield this.setInterviewStage(InterviewStage.WakeUp);
         });
     }
     /** Step #3 of the node interview */
@@ -253,7 +270,7 @@ class ZWaveNode extends events_1.EventEmitter {
                     logger_1.log("controller", `${this.logPrefix}  ping failed: ${e.message}`, "debug");
                 }
             }
-            this.interviewStage = InterviewStage.Ping;
+            yield this.setInterviewStage(InterviewStage.Ping);
         });
     }
     /** Step #5 of the node interview */
@@ -278,7 +295,7 @@ class ZWaveNode extends events_1.EventEmitter {
                     // TODO: Save the received values
                 }
             }
-            this.interviewStage = InterviewStage.NodeInfo;
+            yield this.setInterviewStage(InterviewStage.NodeInfo);
         });
     }
     queryManufacturerSpecific() {
@@ -305,7 +322,7 @@ class ZWaveNode extends events_1.EventEmitter {
                     logger_1.log("controller", `${this.logPrefix}  querying the manufacturer information failed: ${e.message}`, "debug");
                 }
             }
-            this.interviewStage = InterviewStage.ManufacturerSpecific1;
+            yield this.setInterviewStage(InterviewStage.ManufacturerSpecific1);
         });
     }
     /** Step #9 of the node interview */
@@ -338,7 +355,7 @@ class ZWaveNode extends events_1.EventEmitter {
                     logger_1.log("controller", `${this.logPrefix}  querying the CC version failed: ${e.message}`, "debug");
                 }
             }
-            this.interviewStage = InterviewStage.Versions;
+            yield this.setInterviewStage(InterviewStage.Versions);
         });
     }
     /** Step #10 of the node interview */
@@ -366,7 +383,7 @@ class ZWaveNode extends events_1.EventEmitter {
             else {
                 logger_1.log("controller", `${this.logPrefix}skipping endpoint query because the device does not support it`, "debug");
             }
-            this.interviewStage = InterviewStage.Endpoints;
+            yield this.setInterviewStage(InterviewStage.Endpoints);
         });
     }
     requestStaticValues() {
@@ -379,7 +396,7 @@ class ZWaveNode extends events_1.EventEmitter {
             catch (e) {
                 logger_1.log("controller", `${this.logPrefix}  requesting the static values failed: ${e.message}`, "debug");
             }
-            this.interviewStage = InterviewStage.Static;
+            yield this.setInterviewStage(InterviewStage.Static);
         });
     }
     //#endregion
@@ -417,6 +434,30 @@ class ZWaveNode extends events_1.EventEmitter {
                 .map(req => () => this.driver.sendMessage(req, Constants_1.MessagePriority.NodeQuery));
             yield async_1.promiseSequence(factories);
         });
+    }
+    /** Serializes this node in order to store static data in a cache */
+    serialize() {
+        return {
+            id: this.id,
+            interviewStage: InterviewStage[this.interviewStage],
+            deviceClass: {
+                basic: this.deviceClass.basic,
+                generic: this.deviceClass.generic.key,
+                specific: this.deviceClass.specific.key,
+            },
+            isListening: this.isListening,
+            isFrequentListening: this.isFrequentListening,
+            isRouting: this.isRouting,
+            maxBaudRate: this.maxBaudRate,
+            isSecure: this.isSecure,
+            isBeaming: this.isBeaming,
+            version: this.version,
+            commandClasses: objects_1.composeObject([...this.implementedCommandClasses.entries()]
+                .sort((a, b) => Math.sign(a[0] - b[0]))
+                .map(([cc, info]) => {
+                return [strings_2.num2hex(cc), Object.assign({ name: CommandClass_1.CommandClasses[cc] }, info)];
+            })),
+        };
     }
 }
 exports.ZWaveNode = ZWaveNode;

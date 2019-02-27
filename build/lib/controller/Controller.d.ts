@@ -49,4 +49,8 @@ export declare class ZWaveController extends EventEmitter {
     beginInclusion(): Promise<boolean>;
     stopInclusion(): Promise<boolean>;
     private handleAddNodeRequest;
+    /** Serializes the controller information and all nodes to store them in a cache */
+    serialize(): {
+        nodes: {};
+    };
 }

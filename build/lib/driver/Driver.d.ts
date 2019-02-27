@@ -42,6 +42,7 @@ export declare class Driver extends EventEmitter {
     private requestHandlers;
     /** A map of handlers specifically for send data requests */
     private sendDataRequestHandlers;
+    private cacheDir;
     private _controller;
     readonly controller: ZWaveController;
     constructor(port: string, 
@@ -137,4 +138,5 @@ export declare class Driver extends EventEmitter {
     private workOffSendQueue;
     private retransmit;
     private doSend;
+    saveToCache(): Promise<void>;
 }

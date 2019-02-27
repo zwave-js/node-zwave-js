@@ -19,6 +19,7 @@ import { GetSUCNodeIdRequest, GetSUCNodeIdResponse } from "./GetSUCNodeIdMessage
 import { HardResetRequest } from "./HardResetRequest";
 import { SetSerialApiTimeoutsRequest, SetSerialApiTimeoutsResponse } from "./SetSerialApiTimeoutsMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
+import { composeObject } from "alcalzone-shared/objects";
 
 // TODO: interface the exposed events
 
@@ -411,6 +412,16 @@ export class ZWaveController extends EventEmitter {
 				}
 			}
 		}
+	}
+
+	/** Serializes the controller information and all nodes to store them in a cache */
+	public serialize() {
+		return {
+			nodes: composeObject(
+				[...this.nodes.entries()]
+					.map(([id, node]) => [id.toString(), node.serialize()] as [string, object]),
+			),
+		};
 	}
 
 }

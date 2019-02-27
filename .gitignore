@@ -271,3 +271,6 @@ coverage/
 
 # npm packet files
 zwave-js-*.tgz
+
+# ZWave cache
+/cache
