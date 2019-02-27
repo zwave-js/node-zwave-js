@@ -7,11 +7,11 @@ export declare enum MultilevelSwitchCommand {
     StartLevelChange = 4,
     StopLevelChange = 5,
     SupportedGet = 6,
-    SupportedReport = 7,
+    SupportedReport = 7
 }
 export declare class MultilevelSwitchCC extends CommandClass {
     nodeId: number;
-    ccCommand: MultilevelSwitchCommand;
+    ccCommand?: MultilevelSwitchCommand;
     constructor(nodeId?: number);
     constructor(nodeId: number, ccCommand: MultilevelSwitchCommand.Get);
     constructor(nodeId: number, ccCommand: MultilevelSwitchCommand.Set, targetValue: number, duration?: number);
@@ -37,7 +37,7 @@ export declare class MultilevelSwitchCC extends CommandClass {
 export declare enum LevelChangeDirection {
     "up" = 0,
     "down" = 1,
-    "none" = 3,
+    "none" = 3
 }
 export declare enum SwitchType {
     "not supported" = 0,
@@ -47,5 +47,5 @@ export declare enum SwitchType {
     "CCW/CW" = 4,
     "Left/Right" = 5,
     "Reverse/Forward" = 6,
-    "Pull/Push" = 7,
+    "Pull/Push" = 7
 }

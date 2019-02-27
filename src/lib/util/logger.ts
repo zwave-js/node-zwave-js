@@ -31,8 +31,8 @@ export function log(...args: any[]) {
 	}
 
 	let namespace: string = "";
-	let message: string;
-	let severity: Severity;
+	let message: string = "";
+	let severity: Severity = "info";
 	if (args.length === 2) {
 		([message, severity] = args);
 	} else if (args.length === 3) {

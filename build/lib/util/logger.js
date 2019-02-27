@@ -22,8 +22,8 @@ function log(...args) {
         throw new Error("Invalid arguments passed to log()");
     }
     let namespace = "";
-    let message;
-    let severity;
+    let message = "";
+    let severity = "info";
     if (args.length === 2) {
         ([message, severity] = args);
     }

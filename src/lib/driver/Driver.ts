@@ -1,4 +1,5 @@
 import { Comparable, compareNumberOrString, CompareResult } from "alcalzone-shared/comparable";
+import { createDeferredPromise, DeferredPromise } from "alcalzone-shared/deferred-promise";
 import { entries } from "alcalzone-shared/objects";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import { EventEmitter } from "events";
@@ -11,7 +12,6 @@ import { SendDataRequest, SendDataResponse, TransmitStatus } from "../controller
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "../message/Constants";
 import { Constructable, getDefaultPriority, Message, messageTypes } from "../message/Message";
-import { createDeferredPromise, DeferredPromise } from "../util/defer-promise";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
 import { Transaction } from "./Transaction";

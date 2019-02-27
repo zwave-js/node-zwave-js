@@ -10,5 +10,5 @@ export declare enum ZWaveLibraryTypes {
     "Device under Test" = 8,
     "N/A" = 9,
     "AV Remote" = 10,
-    "AV Device" = 11,
+    "AV Device" = 11
 }

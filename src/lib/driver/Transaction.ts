@@ -1,8 +1,8 @@
 import { Comparable, compareNumberOrString, CompareResult } from "alcalzone-shared/comparable";
+import { DeferredPromise } from "alcalzone-shared/deferred-promise";
 import { MessagePriority, MessageType } from "../message/Constants";
 import { Message, ResponseRole } from "../message/Message";
 import { getNodeId } from "../node/Node";
-import { DeferredPromise } from "../util/defer-promise";
 import { Driver } from "./Driver";
 
 /** Returns a timestamp with nano-second precision */

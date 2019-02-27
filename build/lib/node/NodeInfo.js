@@ -7,14 +7,21 @@ function parseNodeInformation(nif) {
         nodeId: nif[0],
         // length is byte 1
         basic: nif[2],
-        generic: DeviceClass_1.GenericDeviceClass.get(nif[3]),
-        specific: DeviceClass_1.SpecificDeviceClass.get(nif[3], nif[4]),
+    };
+    Object.assign(ret, parseEndpointInformation(nif.slice(3)));
+    return ret;
+}
+exports.parseNodeInformation = parseNodeInformation;
+function parseEndpointInformation(eif) {
+    const ret = {
+        generic: DeviceClass_1.GenericDeviceClass.get(eif[0]),
+        specific: DeviceClass_1.SpecificDeviceClass.get(eif[0], eif[1]),
         supportedCCs: [],
         controlledCCs: [],
     };
     // split the CCs into supported/controlled
     // tslint:disable-next-line:variable-name
-    const CCs = [...nif.slice(5)];
+    const CCs = [...eif.slice(2)];
     let isAfterMark = false;
     for (const cc of CCs) {
         // CCs before the support/control mark are supported
@@ -29,4 +36,4 @@ function parseNodeInformation(nif) {
     }
     return ret;
 }
-exports.parseNodeInformation = parseNodeInformation;
+exports.parseEndpointInformation = parseEndpointInformation;

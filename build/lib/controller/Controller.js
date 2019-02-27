@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const deferred_promise_1 = require("alcalzone-shared/deferred-promise");
 const events_1 = require("events");
 const CommandClass_1 = require("../commandclass/CommandClass");
 const ZWaveError_1 = require("../error/ZWaveError");
@@ -15,7 +16,6 @@ const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
 const DeviceClass_1 = require("../node/DeviceClass");
 const Node_1 = require("../node/Node");
-const defer_promise_1 = require("../util/defer-promise");
 const logger_1 = require("../util/logger");
 const strings_1 = require("../util/strings");
 const AddNodeToNetworkRequest_1 = require("./AddNodeToNetworkRequest");
@@ -239,7 +239,7 @@ class ZWaveController extends events_1.EventEmitter {
             this._inclusionActive = true;
             logger_1.log("controller", `starting inclusion process...`, "debug");
             // create the promise we're going to return
-            this._beginInclusionPromise = defer_promise_1.createDeferredPromise();
+            this._beginInclusionPromise = deferred_promise_1.createDeferredPromise();
             // kick off the inclusion process
             yield this.driver.sendMessage(new AddNodeToNetworkRequest_1.AddNodeToNetworkRequest(AddNodeToNetworkRequest_1.AddNodeType.Any, true, true));
             yield this._beginInclusionPromise;
@@ -253,7 +253,7 @@ class ZWaveController extends events_1.EventEmitter {
             this._inclusionActive = false;
             logger_1.log("controller", `stopping inclusion process...`, "debug");
             // create the promise we're going to return
-            this._stopInclusionPromise = defer_promise_1.createDeferredPromise();
+            this._stopInclusionPromise = deferred_promise_1.createDeferredPromise();
             // kick off the inclusion process
             yield this.driver.sendMessage(new AddNodeToNetworkRequest_1.AddNodeToNetworkRequest(AddNodeToNetworkRequest_1.AddNodeType.Stop, true, true));
             yield this._stopInclusionPromise;
@@ -318,12 +318,12 @@ class ZWaveController extends events_1.EventEmitter {
                         logger_1.log("controller", `  generic device class:  ${newNode.deviceClass.generic.name} (${strings_1.num2hex(newNode.deviceClass.generic.key)})`, "debug");
                         logger_1.log("controller", `  specific device class: ${newNode.deviceClass.specific.name} (${strings_1.num2hex(newNode.deviceClass.specific.key)})`, "debug");
                         logger_1.log("controller", `  supported CCs:`, "debug");
-                        for (const [cc, info] of newNode.commandClasses.entries()) {
+                        for (const [cc, info] of newNode.implementedCommandClasses.entries()) {
                             if (info.isSupported)
                                 logger_1.log("controller", `    ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)})`, "debug");
                         }
                         logger_1.log("controller", `  controlled CCs:`, "debug");
-                        for (const [cc, info] of newNode.commandClasses.entries()) {
+                        for (const [cc, info] of newNode.implementedCommandClasses.entries()) {
                             if (info.isControlled)
                                 logger_1.log("controller", `    ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)})`, "debug");
                         }

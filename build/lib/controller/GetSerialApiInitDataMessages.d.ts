@@ -4,7 +4,7 @@ export declare const enum InitCapabilityFlags {
     Slave = 1,
     SupportsTimers = 2,
     Secondary = 4,
-    SUC = 8,
+    SUC = 8
 }
 export declare class GetSerialApiInitDataRequest extends Message {
 }

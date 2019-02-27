@@ -8,7 +8,7 @@ export declare enum AddNodeType {
     Slave = 3,
     Existing = 4,
     Stop = 5,
-    StopFailed = 6,
+    StopFailed = 6
 }
 export declare enum AddNodeStatus {
     Ready = 1,
@@ -17,15 +17,15 @@ export declare enum AddNodeStatus {
     AddingController = 4,
     ProtocolDone = 5,
     Done = 6,
-    Failed = 7,
+    Failed = 7
 }
 export declare class AddNodeToNetworkRequest extends Message {
     /** The type of node to add */
     addNodeType: AddNodeType;
     /** Whether to use high power */
-    highPower: boolean;
+    highPower?: boolean;
     /** Whether to include network wide */
-    networkWide: boolean;
+    networkWide?: boolean;
     constructor();
     constructor(addNodeType?: AddNodeType, highPower?: boolean, networkWide?: boolean);
     private _status;

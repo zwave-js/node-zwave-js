@@ -30,7 +30,7 @@ export declare type RequestHandler<T extends Message = Message> = (msg: T) => bo
 export declare class Driver extends EventEmitter {
     private port;
     /** @internal */
-    options: DeepPartial<ZWaveOptions>;
+    options?: DeepPartial<ZWaveOptions>;
     /** The serial port instance */
     private serial;
     /** A buffer of received but unprocessed data */
@@ -45,14 +45,14 @@ export declare class Driver extends EventEmitter {
     private _controller;
     readonly controller: ZWaveController;
     constructor(port: string, 
-        /** @internal */
-        options?: DeepPartial<ZWaveOptions>);
+    /** @internal */
+    options?: DeepPartial<ZWaveOptions>);
     private _wasStarted;
     private _isOpen;
     /** Start the driver */
     start(): Promise<void>;
     private _controllerInterviewed;
-    private initializeControllerAndNodes();
+    private initializeControllerAndNodes;
     /**
      * Finds the version of a given CC the given node supports. Returns 0 when the CC is not supported.
      */
@@ -63,19 +63,19 @@ export declare class Driver extends EventEmitter {
      */
     hardReset(): Promise<void>;
     /** Resets the IO layer */
-    private resetIO();
+    private resetIO;
     private _wasDestroyed;
-    private ensureReady(includingController?);
+    private ensureReady;
     private _cleanupHandler;
     /**
      * Terminates the driver instance and closes the underlying serial connection.
      * Must be called under any circumstances.
      */
     destroy(): void;
-    private serialport_onError(err);
-    private onInvalidData(data, message);
-    private serialport_onData(data);
-    private handleMessage(msg);
+    private serialport_onError;
+    private onInvalidData;
+    private serialport_onData;
+    private handleMessage;
     /**
      * Registers a handler for all kinds of request messages
      * @param fnType The function type to register the handler for
@@ -101,20 +101,20 @@ export declare class Driver extends EventEmitter {
      * @param handler The previously registered request handler callback
      */
     unregisterSendDataRequestHandler(cc: CommandClasses, handler: RequestHandler<SendDataRequest>): void;
-    private handleRequest(msg);
-    private handleACK();
-    private handleNAK();
-    private handleCAN();
+    private handleRequest;
+    private handleACK;
+    private handleNAK;
+    private handleCAN;
     /**
      * Resolves the current transaction with the given value
      * and resumes the queue handling
      */
-    private resolveCurrentTransaction(resumeQueue?);
+    private resolveCurrentTransaction;
     /**
      * Rejects the current transaction with the given value
      * and resumes the queue handling
      */
-    private rejectCurrentTransaction(reason, resumeQueue?);
+    private rejectCurrentTransaction;
     /**
      * Sends a message with default priority to the Z-Wave stick
      * @param msg The message to send
@@ -132,9 +132,9 @@ export declare class Driver extends EventEmitter {
      * Sends a low-level message like ACK, NAK or CAN immediately
      * @param message The low-level message to send
      */
-    private send(header);
+    private send;
     private sendQueueTimer;
-    private workOffSendQueue();
-    private retransmit();
-    private doSend(data);
+    private workOffSendQueue;
+    private retransmit;
+    private doSend;
 }

@@ -5,12 +5,12 @@ export declare enum VersionCommand {
     Get = 17,
     Report = 18,
     CommandClassGet = 19,
-    CommandClassReport = 20,
+    CommandClassReport = 20
 }
 export declare class VersionCC extends CommandClass {
     nodeId: number;
-    versionCommand: VersionCommand;
-    requestedCC: CommandClasses;
+    versionCommand?: VersionCommand;
+    requestedCC?: CommandClasses;
     constructor(nodeId?: number);
     constructor(nodeId: number, command: VersionCommand.Get);
     constructor(nodeId: number, command: VersionCommand.CommandClassGet, requestedCC: CommandClasses);

@@ -82,6 +82,12 @@ let WakeUpCC = class WakeUpCC extends CommandClass_1.CommandClass {
                 throw new ZWaveError_1.ZWaveError("Cannot deserialize a WakeUp CC with a command other than IntervalReport or WakeUpNotification", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
         }
     }
+    static isAwake(node) {
+        return !!super.getValue(node, CommandClass_1.getCommandClassStatic(this), "awake");
+    }
+    static setAwake(node, awake) {
+        super.setValue(node, CommandClass_1.getCommandClassStatic(this), "awake", awake);
+    }
 };
 WakeUpCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["Wake Up"]),

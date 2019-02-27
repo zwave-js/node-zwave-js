@@ -3,11 +3,11 @@ import { CommandClass } from "./CommandClass";
 export declare enum BasicCommand {
     Set = 1,
     Get = 2,
-    Report = 3,
+    Report = 3
 }
 export declare class BasicCC extends CommandClass {
     nodeId: number;
-    ccCommand: BasicCommand;
+    ccCommand?: BasicCommand;
     constructor(nodeId?: number);
     constructor(nodeId: number, ccCommand: BasicCommand.Get);
     constructor(nodeId: number, ccCommand: BasicCommand.Set, targetValue: number);

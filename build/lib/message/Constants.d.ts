@@ -7,19 +7,19 @@ export declare enum MessagePriority {
     WakeUp = 4,
     Normal = 5,
     NodeQuery = 6,
-    Poll = 7,
+    Poll = 7
 }
 export declare function isMessagePriority(val: any): val is MessagePriority;
 export declare enum MessageHeaders {
     SOF = 1,
     ACK = 6,
     NAK = 21,
-    CAN = 24,
+    CAN = 24
 }
 /** Indicates the type of a data message */
 export declare enum MessageType {
     Request = 0,
-    Response = 1,
+    Response = 1
 }
 /**
  * Complete list of function IDs for data messages.
@@ -139,5 +139,5 @@ export declare enum FunctionType {
     UNKNOWN_FUNC_UNKNOWN_0xEF = 239,
     UNKNOWN_FUNC_UNKNOWN_0xF2 = 242,
     UNKNOWN_FUNC_UNKNOWN_0xF4 = 244,
-    UNKNOWN_FUNC_UNKNOWN_0xF5 = 245,
+    UNKNOWN_FUNC_UNKNOWN_0xF5 = 245
 }

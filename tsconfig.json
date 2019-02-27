@@ -14,7 +14,9 @@
         "inlineSourceMap": false,
         "stripInternal": true,
         "target": "es2015",
-        "strictPropertyInitialization": true,
+        // This is incompatible with serialize/deserialize
+        // "strictPropertyInitialization": true,
+        // "strictNullChecks": true,
         "watch": false, // true breaks circleci
         "pretty": true
     },

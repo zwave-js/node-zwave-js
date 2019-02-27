@@ -11,8 +11,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const strings_1 = require("alcalzone-shared/strings");
 const CommandClass_1 = require("../commandclass/CommandClass");
 const ICommandClassContainer_1 = require("../commandclass/ICommandClassContainer");
+const ManufacturerSpecificCC_1 = require("../commandclass/ManufacturerSpecificCC");
 const NoOperationCC_1 = require("../commandclass/NoOperationCC");
 const VersionCC_1 = require("../commandclass/VersionCC");
+const WakeUpCC_1 = require("../commandclass/WakeUpCC");
 const ApplicationUpdateRequest_1 = require("../controller/ApplicationUpdateRequest");
 const GetNodeProtocolInfoMessages_1 = require("../controller/GetNodeProtocolInfoMessages");
 const SendDataMessages_1 = require("../controller/SendDataMessages");
@@ -22,6 +24,7 @@ const strings_2 = require("../util/strings");
 const DeviceClass_1 = require("./DeviceClass");
 const INodeQuery_1 = require("./INodeQuery");
 const RequestNodeInfoMessages_1 = require("./RequestNodeInfoMessages");
+const MultiChannelCC_1 = require("../commandclass/MultiChannelCC");
 /** Finds the ID of the target or source node in a message, if it contains that information */
 function getNodeId(msg) {
     if (INodeQuery_1.isNodeQuery(msg))
@@ -36,7 +39,8 @@ class ZWaveNode {
         this.driver = driver;
         //#region --- properties ---
         this.logPrefix = `[Node ${strings_1.padStart(this.id.toString(), 3, "0")}] `;
-        this._commandClasses = new Map();
+        this._implementedCommandClasses = new Map();
+        this._ccValues = new Map();
         /** This tells us which interview stage was last completed */
         this.interviewStage = InterviewStage.None;
         // TODO restore from cache
@@ -70,35 +74,38 @@ class ZWaveNode {
     get isBeaming() {
         return this._isBeaming;
     }
-    get commandClasses() {
-        return this._commandClasses;
+    get implementedCommandClasses() {
+        return this._implementedCommandClasses;
+    }
+    get ccValues() {
+        return this._ccValues;
     }
     //#endregion
     isControllerNode() {
         return this.id === this.driver.controller.ownNodeId;
     }
     addCC(cc, info) {
-        let ccInfo = this._commandClasses.has(cc)
-            ? this._commandClasses.get(cc)
+        let ccInfo = this._implementedCommandClasses.has(cc)
+            ? this._implementedCommandClasses.get(cc)
             : {
                 isSupported: false,
                 isControlled: false,
                 version: 0,
             };
         ccInfo = Object.assign(ccInfo, info);
-        this._commandClasses.set(cc, ccInfo);
+        this._implementedCommandClasses.set(cc, ccInfo);
     }
     /** Tests if this node supports the given CommandClass */
     supportsCC(cc) {
-        return this._commandClasses.has(cc) && this._commandClasses.get(cc).isSupported;
+        return this._implementedCommandClasses.has(cc) && this._implementedCommandClasses.get(cc).isSupported;
     }
     /** Tests if this node controls the given CommandClass */
     controlsCC(cc) {
-        return this._commandClasses.has(cc) && this._commandClasses.get(cc).isControlled;
+        return this._implementedCommandClasses.has(cc) && this._implementedCommandClasses.get(cc).isControlled;
     }
     /** Checks the supported version of a given CommandClass */
     getCCVersion(cc) {
-        return this._commandClasses.has(cc) ? this._commandClasses.get(cc).version : 0;
+        return this._implementedCommandClasses.has(cc) ? this._implementedCommandClasses.get(cc).version : 0;
     }
     //#region --- interview ---
     interview() {
@@ -110,18 +117,26 @@ class ZWaveNode {
                 logger_1.log("controller", `${this.logPrefix}new Node, doing a full interview...`, "debug");
                 yield this.queryProtocolInfo();
             }
-            // TODO: delay pinging of nodes that are not listening or sleeping
             if (this.interviewStage === InterviewStage.ProtocolInfo) {
-                // after getting the protocol info, ping the nodes
+                // Wait until we can communicate with the device
+                yield this.waitForWakeup();
+            }
+            if (this.interviewStage === InterviewStage.WakeUp) {
+                // Make sure the device answers
                 yield this.ping();
             }
-            // TODO: WakeUp
-            // TODO: ManufacturerSpecific1
-            if (this.interviewStage === InterviewStage.Ping /* TODO: change .Ping to .ManufacturerSpecific1 */) {
-                yield this.getNodeInfo();
+            if (this.interviewStage === InterviewStage.Ping) {
+                // Request Manufacturer specific data
+                yield this.queryManufacturerSpecific();
             }
-            if (this.interviewStage === InterviewStage.NodeInfo /* TODO: change .NodeInfo to .Versions */) {
+            if (this.interviewStage === InterviewStage.ManufacturerSpecific1) {
+                yield this.queryNodeInfo();
+            }
+            if (this.interviewStage === InterviewStage.NodeInfo /* TODO: change .NodeInfo to .ManufacturerSpecific2 */) {
                 yield this.queryCCVersions();
+            }
+            if (this.interviewStage === InterviewStage.Versions) {
+                yield this.queryEndpoints();
             }
             // for testing purposes we skip to the end
             this.interviewStage = InterviewStage.Complete;
@@ -153,10 +168,49 @@ class ZWaveNode {
             logger_1.log("controller", `${this.logPrefix}  is a listening device: ${this.isListening}`, "debug");
             logger_1.log("controller", `${this.logPrefix}  maximum baud rate:     ${this.maxBaudRate} kbps`, "debug");
             logger_1.log("controller", `${this.logPrefix}  version:               ${this.version}`, "debug");
+            if (!this.isListening && !this.isFrequentListening) {
+                // This is a "sleeping" device which must support the WakeUp CC.
+                // We are requesting the supported CCs later, but those commands may need to go into the
+                // wakeup queue. Thus we need to mark WakeUp as supported
+                this.addCC(CommandClass_1.CommandClasses["Wake Up"], {
+                    isSupported: true,
+                });
+                // Assume the node is awake, after all we're communicating with it.
+                WakeUpCC_1.WakeUpCC.setAwake(this, true);
+            }
             this.interviewStage = InterviewStage.ProtocolInfo;
         });
     }
     /** Step #2 of the node interview */
+    waitForWakeup() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.supportsCC(CommandClass_1.CommandClasses["Wake Up"])) {
+                if (this.isControllerNode()) {
+                    logger_1.log("controller", `${this.logPrefix}skipping wakeup for the controller`, "debug");
+                }
+                else if (this.isFrequentListening) {
+                    logger_1.log("controller", `${this.logPrefix}skipping wakeup for frequent listening device`, "debug");
+                }
+                else {
+                    logger_1.log("controller", `${this.logPrefix}waiting for device to wake up`, "debug");
+                    const wakeupCC = new WakeUpCC_1.WakeUpCC(this.id, WakeUpCC_1.WakeUpCommand.IntervalGet);
+                    const request = new SendDataMessages_1.SendDataRequest(wakeupCC);
+                    try {
+                        const response = yield this.driver.sendMessage(request, Constants_1.MessagePriority.WakeUp);
+                        logger_1.log("controller", `${this.logPrefix}  device is awake`, "debug");
+                    }
+                    catch (e) {
+                        logger_1.log("controller", `${this.logPrefix}  device wakeup failed: ${e.message}`, "debug");
+                    }
+                }
+            }
+            else {
+                logger_1.log("controller", `${this.logPrefix}skipping wakeup for non-sleeping device`, "debug");
+            }
+            this.interviewStage = InterviewStage.WakeUp;
+        });
+    }
+    /** Step #3 of the node interview */
     ping() {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.isControllerNode()) {
@@ -179,7 +233,7 @@ class ZWaveNode {
         });
     }
     /** Step #5 of the node interview */
-    getNodeInfo() {
+    queryNodeInfo() {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.isControllerNode()) {
                 logger_1.log("controller", `${this.logPrefix}not querying node info from the controller...`, "debug");
@@ -203,11 +257,33 @@ class ZWaveNode {
             this.interviewStage = InterviewStage.NodeInfo;
         });
     }
+    queryManufacturerSpecific() {
+        return __awaiter(this, void 0, void 0, function* () {
+            logger_1.log("controller", `${this.logPrefix}querying manufacturer information`, "debug");
+            const cc = new ManufacturerSpecificCC_1.ManufacturerSpecificCC(this.id, ManufacturerSpecificCC_1.ManufacturerSpecificCommand.Get);
+            const request = new SendDataMessages_1.SendDataRequest(cc);
+            try {
+                // set the priority manually, as SendData can be Application level too
+                const resp = yield this.driver.sendMessage(request, Constants_1.MessagePriority.NodeQuery);
+                if (ICommandClassContainer_1.isCommandClassContainer(resp)) {
+                    const manufacturerResponse = resp.command;
+                    logger_1.log("controller", `${this.logPrefix}received response for manufacturer information:`, "debug");
+                    logger_1.log("controller", `${this.logPrefix}  manufacturer id: ${strings_2.num2hex(manufacturerResponse.manufacturerId)}`, "debug");
+                    logger_1.log("controller", `${this.logPrefix}  product type:    ${strings_2.num2hex(manufacturerResponse.productType)}`, "debug");
+                    logger_1.log("controller", `${this.logPrefix}  product id:      ${strings_2.num2hex(manufacturerResponse.productId)}`, "debug");
+                }
+            }
+            catch (e) {
+                logger_1.log("controller", `${this.logPrefix}  querying the manufacturer information failed: ${e.message}`, "debug");
+            }
+            this.interviewStage = InterviewStage.ManufacturerSpecific1;
+        });
+    }
     /** Step #9 of the node interview */
     queryCCVersions() {
         return __awaiter(this, void 0, void 0, function* () {
             logger_1.log("controller", `${this.logPrefix}querying CC versions`, "debug");
-            for (const [cc, info] of this._commandClasses.entries()) {
+            for (const [cc, info] of this._implementedCommandClasses.entries()) {
                 // only query the ones we support a version > 1 for
                 const maxImplemented = CommandClass_1.getImplementedVersion(cc);
                 if (maxImplemented < 1) {
@@ -236,6 +312,34 @@ class ZWaveNode {
             this.interviewStage = InterviewStage.Versions;
         });
     }
+    /** Step #10 of the node interview */
+    queryEndpoints() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.supportsCC(CommandClass_1.CommandClasses["Multi Channel"])) {
+                logger_1.log("controller", `${this.logPrefix}querying device endpoints`, "debug");
+                const cc = new MultiChannelCC_1.MultiChannelCC(this.id, MultiChannelCC_1.MultiChannelCommand.EndPointGet);
+                const request = new SendDataMessages_1.SendDataRequest(cc);
+                try {
+                    // set the priority manually, as SendData can be Application level too
+                    const resp = yield this.driver.sendMessage(request, Constants_1.MessagePriority.NodeQuery);
+                    if (ICommandClassContainer_1.isCommandClassContainer(resp)) {
+                        const multiResponse = resp.command;
+                        logger_1.log("controller", `${this.logPrefix}received response for device endpoints:`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  endpoint count: ${multiResponse.endpointCount}`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  dynamic:        ${multiResponse.isDynamicEndpointCount}`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  identical caps: ${multiResponse.identicalCapabilities}`, "debug");
+                    }
+                }
+                catch (e) {
+                    logger_1.log("controller", `${this.logPrefix}  querying the device endpoints failed: ${e.message}`, "debug");
+                }
+            }
+            else {
+                logger_1.log("controller", `${this.logPrefix}skipping endpoint query because the device does not support it`, "debug");
+            }
+            this.interviewStage = InterviewStage.Endpoints;
+        });
+    }
     //#endregion
     // TODO: Add a handler around for each CC to interpret the received data
     /** Handles an ApplicationCommandRequest sent from a node */
@@ -261,19 +365,20 @@ var InterviewStage;
 (function (InterviewStage) {
     InterviewStage[InterviewStage["None"] = 0] = "None";
     InterviewStage[InterviewStage["ProtocolInfo"] = 1] = "ProtocolInfo";
-    InterviewStage[InterviewStage["Ping"] = 2] = "Ping";
-    InterviewStage[InterviewStage["WakeUp"] = 3] = "WakeUp";
+    InterviewStage[InterviewStage["WakeUp"] = 2] = "WakeUp";
+    InterviewStage[InterviewStage["Ping"] = 3] = "Ping";
     InterviewStage[InterviewStage["ManufacturerSpecific1"] = 4] = "ManufacturerSpecific1";
     InterviewStage[InterviewStage["NodeInfo"] = 5] = "NodeInfo";
     InterviewStage[InterviewStage["NodePlusInfo"] = 6] = "NodePlusInfo";
     InterviewStage[InterviewStage["SecurityReport"] = 7] = "SecurityReport";
     InterviewStage[InterviewStage["ManufacturerSpecific2"] = 8] = "ManufacturerSpecific2";
     InterviewStage[InterviewStage["Versions"] = 9] = "Versions";
-    InterviewStage[InterviewStage["Instances"] = 10] = "Instances";
+    InterviewStage[InterviewStage["Endpoints"] = 10] = "Endpoints";
     InterviewStage[InterviewStage["Static"] = 11] = "Static";
     // ===== the stuff above should never change =====
     // ===== the stuff below changes frequently, so it has to be redone on every start =====
     InterviewStage[InterviewStage["CacheLoad"] = 12] = "CacheLoad";
+    // 	SetWakeUp,			// [ ] * Configure wake up to point to the master controller
     InterviewStage[InterviewStage["Associations"] = 13] = "Associations";
     InterviewStage[InterviewStage["Neighbors"] = 14] = "Neighbors";
     InterviewStage[InterviewStage["Session"] = 15] = "Session";
@@ -281,3 +386,30 @@ var InterviewStage;
     InterviewStage[InterviewStage["Configuration"] = 17] = "Configuration";
     InterviewStage[InterviewStage["Complete"] = 18] = "Complete";
 })(InterviewStage = exports.InterviewStage || (exports.InterviewStage = {}));
+// export enum OpenHABInterviewStage {
+// 	None,					// Query process hasn't started for this node
+// 	ProtocolInfo1,			// Retrieve protocol information (IdentifyNode)
+// 	Neighbors1,				// Retrieve node neighbor list
+// 	// ===== the stuff below doesn't work for PC controllers =====
+// 	WakeUp,					// Start wake up process if a sleeping node
+// 	Ping,					// Ping device to see if alive
+// 	ProtocolInfo2,			// Retrieve protocol information again (IdentifyNode)
+// 	SecurityReport,			// Retrieve a list of Command Classes that require Security
+// 	NodeInfo,				// Retrieve info about supported, controlled command classes
+// 	ManufacturerSpecific,	// Retrieve manufacturer name and product ids if ProtocolInfo lets us
+// 	Versions,				// Retrieve version information
+// 	Instances,				// Retrieve information about multiple command class instances
+// 	OverwriteFromDB,		// Overwrite the data with manual config files
+// 	Static,					// Retrieve static information (doesn't change)
+// 	Associations,			// Retrieve information about associations
+// 	SetWakeUp,				// * Configure wake up to point to the master controller
+// 	SetAssociations,		// * Set some associations to point to us
+// 	DeleteSUCRoute,			// * For non-controller nodes delete the SUC return route if there's one
+// 	AssignSUCRoute,			// * For non-controller nodes update the SUC return route if there's one
+// 	Configuration,			// Retrieve configurable parameter information (only done on request)
+// 	Dynamic,				// Retrieve dynamic information (changes frequently)
+// 	DeleteReturnRoute,		// * delete the return route
+// 	AssignReturnRoute,		// * update the return route
+// 	Neighbors2,				// Retrieve updated neighbors
+// 	Complete,				// Query process is completed for this node
+// }

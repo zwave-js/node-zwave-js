@@ -3,13 +3,13 @@ import { CommandClass } from "./CommandClass";
 export declare enum BinarySwitchCommand {
     Set = 1,
     Get = 2,
-    Report = 3,
+    Report = 3
 }
 export declare class BinarySwitchCC extends CommandClass {
     nodeId: number;
-    ccCommand: BinarySwitchCommand;
-    targetValue: BinarySwitchState;
-    duration: number;
+    ccCommand?: BinarySwitchCommand;
+    targetValue?: BinarySwitchState;
+    duration?: number;
     constructor(nodeId?: number);
     constructor(nodeId: number, ccCommand: BinarySwitchCommand.Get);
     constructor(nodeId: number, ccCommand: BinarySwitchCommand.Set, targetValue: boolean, duration?: number);

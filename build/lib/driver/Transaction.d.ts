@@ -1,7 +1,7 @@
 import { Comparable, CompareResult } from "alcalzone-shared/comparable";
+import { DeferredPromise } from "alcalzone-shared/deferred-promise";
 import { MessagePriority } from "../message/Constants";
 import { Message } from "../message/Message";
-import { DeferredPromise } from "../util/defer-promise";
 import { Driver } from "./Driver";
 export declare class Transaction implements Comparable<Transaction> {
     private readonly driver;
@@ -10,7 +10,7 @@ export declare class Transaction implements Comparable<Transaction> {
     readonly priority: MessagePriority;
     timestamp: number;
     ackPending: boolean;
-    response: Message;
+    response?: Message;
     retries: number;
     constructor(driver: Driver, message: Message, promise: DeferredPromise<Message | void>, priority: MessagePriority);
     compareTo(other: Transaction): CompareResult;

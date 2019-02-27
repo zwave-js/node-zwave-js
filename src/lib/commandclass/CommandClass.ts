@@ -3,6 +3,8 @@ import * as fs from "fs";
 import { Constructable } from "../message/Message";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
+import { ZWaveNode } from "../node/Node";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 
 export interface CommandClassInfo {
 	isSupported: boolean;
@@ -109,6 +111,34 @@ export class CommandClass {
 			if (value !== undefined) ret[key] = value;
 		}
 		return ret;
+	}
+
+	/**
+	 * Sets a value for a given property of a given CommandClass on the node
+	 * @param node The node to set the value on
+	 * @param cc The command class the value belongs to
+	 * @param propertyName The property name the value belongs to
+	 * @param value The value to set
+	 */
+	protected static setValue(node: ZWaveNode, cc: CommandClasses, propertyName: string, value: unknown) {
+		if (!node.supportsCC(cc)) throw new ZWaveError(`Cannot set the value for the unsupported ${cc} CC!`, ZWaveErrorCodes.CC_NotSupported);
+
+		if (!node.ccValues.has(cc)) node.ccValues.set(cc, new Map<string, unknown>());
+		const ccValuesMap = node.ccValues.get(cc)!;
+		ccValuesMap.set(propertyName, value);
+	}
+
+	/**
+	 * Retrieves a value for a given property of a given CommandClass from the node
+	 * @param node The node to retrieve the value from
+	 * @param cc The command class the value belongs to
+	 * @param propertyName The property name the value belongs to
+	 */
+	protected static getValue(node: ZWaveNode, cc: CommandClasses, propertyName: string): unknown | undefined {
+		if (node.ccValues.has(cc)) {
+			const ccValuesMap = node.ccValues.get(cc)!;
+			return ccValuesMap.get(propertyName);
+		}
 	}
 
 }

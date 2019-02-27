@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { Constructable } from "../message/Message";
+import { ZWaveNode } from "../node/Node";
 export interface CommandClassInfo {
     isSupported: boolean;
     isControlled: boolean;
@@ -9,8 +10,8 @@ export interface CommandClassStatic {
     readonly maxImplementedVersion: number;
 }
 export declare class CommandClass {
-    nodeId: number;
-    command: CommandClasses;
+    nodeId?: number;
+    command?: CommandClasses;
     payload: Buffer;
     constructor();
     constructor(nodeId: number, command?: CommandClasses, payload?: Buffer);
@@ -27,8 +28,23 @@ export declare class CommandClass {
     static getConstructor(ccData: Buffer): Constructable<CommandClass>;
     static from(serializedCC: Buffer): CommandClass;
     toJSON(): any;
-    private toJSONInternal();
+    private toJSONInternal;
     protected toJSONInherited(props: Record<string, any>): Record<string, any>;
+    /**
+     * Sets a value for a given property of a given CommandClass on the node
+     * @param node The node to set the value on
+     * @param cc The command class the value belongs to
+     * @param propertyName The property name the value belongs to
+     * @param value The value to set
+     */
+    protected static setValue(node: ZWaveNode, cc: CommandClasses, propertyName: string, value: unknown): void;
+    /**
+     * Retrieves a value for a given property of a given CommandClass from the node
+     * @param node The node to retrieve the value from
+     * @param cc The command class the value belongs to
+     * @param propertyName The property name the value belongs to
+     */
+    protected static getValue(node: ZWaveNode, cc: CommandClasses, propertyName: string): unknown | undefined;
 }
 export declare const METADATA_commandClass: unique symbol;
 export declare const METADATA_commandClassMap: unique symbol;
@@ -196,5 +212,5 @@ export declare enum CommandClasses {
     "Z/IP Naming and Location" = 104,
     "Z/IP ND" = 88,
     "Z/IP Portal" = 97,
-    "Z-Wave Plus Info" = 94,
+    "Z-Wave Plus Info" = 94
 }

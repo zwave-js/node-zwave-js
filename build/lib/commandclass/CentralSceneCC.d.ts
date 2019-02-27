@@ -6,7 +6,7 @@ export declare enum CentralSceneCommand {
     Notification = 3,
     ConfigurationSet = 4,
     ConfigurationGet = 5,
-    ConfigurationReport = 6,
+    ConfigurationReport = 6
 }
 export declare enum CentralSceneKeys {
     KeyPressed = 0,
@@ -15,11 +15,11 @@ export declare enum CentralSceneKeys {
     KeyPressed2x = 3,
     KeyPressed3x = 4,
     KeyPressed4x = 5,
-    KeyPressed5x = 6,
+    KeyPressed5x = 6
 }
 export declare class CentralSceneCC extends CommandClass {
     nodeId: number;
-    centralSceneCommand: CentralSceneCommand;
+    centralSceneCommand?: CentralSceneCommand;
     constructor(nodeId?: number);
     constructor(nodeId: number, command: CentralSceneCommand.SupportedGet | CentralSceneCommand.ConfigurationGet);
     constructor(nodeId: number, command: CentralSceneCommand.ConfigurationSet, slowRefresh: boolean);

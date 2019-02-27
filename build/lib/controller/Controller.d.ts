@@ -48,5 +48,5 @@ export declare class ZWaveController extends EventEmitter {
     private _nodePendingInclusion;
     beginInclusion(): Promise<boolean>;
     stopInclusion(): Promise<boolean>;
-    private handleAddNodeRequest(msg);
+    private handleAddNodeRequest;
 }

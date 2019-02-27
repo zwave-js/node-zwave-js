@@ -7,7 +7,7 @@ export declare enum NotificationCommand {
     Report = 5,
     Set = 6,
     SupportedGet = 7,
-    SupportedReport = 8,
+    SupportedReport = 8
 }
 export declare enum NotificationType {
     General = 0,
@@ -23,11 +23,11 @@ export declare enum NotificationType {
     Emergency = 10,
     Clock = 11,
     Appliance = 12,
-    HomeHealth = 13,
+    HomeHealth = 13
 }
 export declare class NotificationCC extends CommandClass {
     nodeId: number;
-    ccCommand: NotificationCommand;
+    ccCommand?: NotificationCommand;
     constructor(nodeId?: number);
     constructor(nodeId: number, ccCommand: NotificationCommand.Get, alarmType: number, notificationType: NotificationType, notificationEvent?: number);
     constructor(nodeId: number, ccCommand: NotificationCommand.Set, notificationType: NotificationType, notificationStatus: boolean);

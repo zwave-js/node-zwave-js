@@ -14,6 +14,7 @@ export enum ZWaveErrorCodes {
 	Controller_InclusionFailed,
 
 	CC_Invalid,
+	CC_NotSupported,
 }
 
 export class ZWaveError extends Error {

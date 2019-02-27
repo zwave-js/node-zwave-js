@@ -4,12 +4,12 @@ export declare enum BinarySensorCommand {
     Get = 2,
     Report = 3,
     SupportedGet = 1,
-    SupportedReport = 4,
+    SupportedReport = 4
 }
 export declare class BinarySensorCC extends CommandClass {
     nodeId: number;
-    ccCommand: BinarySensorCommand;
-    sensorType: BinarySensorType;
+    ccCommand?: BinarySensorCommand;
+    sensorType?: BinarySensorType;
     constructor(nodeId?: number);
     constructor(nodeId: number, ccCommand: BinarySensorCommand.Get, sensorType?: BinarySensorType);
     constructor(nodeId: number, ccCommand: BinarySensorCommand.SupportedGet);
@@ -34,5 +34,5 @@ export declare enum BinarySensorType {
     Tilt = 11,
     Motion = 12,
     "Glass Break" = 13,
-    Any = 255,
+    Any = 255
 }

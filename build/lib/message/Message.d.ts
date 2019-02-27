@@ -32,7 +32,7 @@ export declare class Message {
     /** Returns the slice of data which represents the message payload */
     static getPayload(data: Buffer): Buffer;
     toJSON(): any;
-    private toJSONInternal();
+    private toJSONInternal;
     protected toJSONInherited(props: Record<string, any>): Record<string, any>;
     /** Checks if a message is an expected response for this message */
     testResponse(msg: Message): ResponseRole;

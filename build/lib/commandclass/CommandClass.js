@@ -9,10 +9,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var CommandClass_1;
 const objects_1 = require("alcalzone-shared/objects");
 const fs = require("fs");
 const logger_1 = require("../util/logger");
 const strings_1 = require("../util/strings");
+const ZWaveError_1 = require("../error/ZWaveError");
 let CommandClass = CommandClass_1 = class CommandClass {
     // implementation
     constructor(nodeId, command, payload = Buffer.from([])) {
@@ -83,6 +85,33 @@ let CommandClass = CommandClass_1 = class CommandClass {
                 ret[key] = value;
         }
         return ret;
+    }
+    /**
+     * Sets a value for a given property of a given CommandClass on the node
+     * @param node The node to set the value on
+     * @param cc The command class the value belongs to
+     * @param propertyName The property name the value belongs to
+     * @param value The value to set
+     */
+    static setValue(node, cc, propertyName, value) {
+        if (!node.supportsCC(cc))
+            throw new ZWaveError_1.ZWaveError(`Cannot set the value for the unsupported ${cc} CC!`, ZWaveError_1.ZWaveErrorCodes.CC_NotSupported);
+        if (!node.ccValues.has(cc))
+            node.ccValues.set(cc, new Map());
+        const ccValuesMap = node.ccValues.get(cc);
+        ccValuesMap.set(propertyName, value);
+    }
+    /**
+     * Retrieves a value for a given property of a given CommandClass from the node
+     * @param node The node to retrieve the value from
+     * @param cc The command class the value belongs to
+     * @param propertyName The property name the value belongs to
+     */
+    static getValue(node, cc, propertyName) {
+        if (node.ccValues.has(cc)) {
+            const ccValuesMap = node.ccValues.get(cc);
+            return ccValuesMap.get(propertyName);
+        }
     }
 };
 CommandClass = CommandClass_1 = __decorate([
@@ -370,4 +399,3 @@ for (const file of definedCCs) {
     // tslint:disable-next-line:no-var-requires
     require(`./${file}`);
 }
-var CommandClass_1;

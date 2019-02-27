@@ -3,7 +3,7 @@ export declare enum BasicDeviceClasses {
     "Controller" = 1,
     "Routing Slave" = 2,
     "Slave" = 3,
-    "Static Controller" = 4,
+    "Static Controller" = 4
 }
 export declare enum GenericDeviceClasses {
     "Appliance" = 6,
@@ -31,7 +31,7 @@ export declare enum GenericDeviceClasses {
     "Ventilation" = 22,
     "Wall Controller" = 24,
     "Window Covering" = 9,
-    "ZIP Node" = 21,
+    "ZIP Node" = 21
 }
 export declare class GenericDeviceClass {
     readonly name: string;

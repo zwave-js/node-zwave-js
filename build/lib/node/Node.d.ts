@@ -26,8 +26,10 @@ export declare class ZWaveNode {
     readonly version: number;
     private _isBeaming;
     readonly isBeaming: boolean;
-    private _commandClasses;
-    readonly commandClasses: Map<CommandClasses, CommandClassInfo>;
+    private _implementedCommandClasses;
+    readonly implementedCommandClasses: Map<CommandClasses, CommandClassInfo>;
+    private _ccValues;
+    readonly ccValues: Map<CommandClasses, Map<string, unknown>>;
     /** This tells us which interview stage was last completed */
     interviewStage: InterviewStage;
     isControllerNode(): boolean;
@@ -40,28 +42,33 @@ export declare class ZWaveNode {
     getCCVersion(cc: CommandClasses): number;
     interview(): Promise<void>;
     /** Step #1 of the node interview */
-    private queryProtocolInfo();
+    private queryProtocolInfo;
     /** Step #2 of the node interview */
-    private ping();
+    private waitForWakeup;
+    /** Step #3 of the node interview */
+    private ping;
     /** Step #5 of the node interview */
-    private getNodeInfo();
+    private queryNodeInfo;
+    private queryManufacturerSpecific;
     /** Step #9 of the node interview */
-    private queryCCVersions();
+    private queryCCVersions;
+    /** Step #10 of the node interview */
+    private queryEndpoints;
     /** Handles an ApplicationCommandRequest sent from a node */
     handleCommand(command: CommandClass): Promise<void>;
 }
 export declare enum InterviewStage {
     None = 0,
     ProtocolInfo = 1,
-    Ping = 2,
-    WakeUp = 3,
+    WakeUp = 2,
+    Ping = 3,
     ManufacturerSpecific1 = 4,
     NodeInfo = 5,
     NodePlusInfo = 6,
     SecurityReport = 7,
     ManufacturerSpecific2 = 8,
     Versions = 9,
-    Instances = 10,
+    Endpoints = 10,
     Static = 11,
     CacheLoad = 12,
     Associations = 13,
@@ -69,5 +76,5 @@ export declare enum InterviewStage {
     Session = 15,
     Dynamic = 16,
     Configuration = 17,
-    Complete = 18,
+    Complete = 18
 }

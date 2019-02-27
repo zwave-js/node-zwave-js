@@ -1,3 +1,4 @@
+import { createDeferredPromise, DeferredPromise } from "alcalzone-shared/deferred-promise";
 import { EventEmitter } from "events";
 import { CommandClasses } from "../commandclass/CommandClass";
 import { Driver, RequestHandler } from "../driver/Driver";
@@ -6,7 +7,6 @@ import { FunctionType, MessagePriority, MessageType } from "../message/Constants
 import { Message } from "../message/Message";
 import { BasicDeviceClasses, DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
-import { createDeferredPromise, DeferredPromise } from "../util/defer-promise";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
 import { AddNodeStatus, AddNodeToNetworkRequest, AddNodeType } from "./AddNodeToNetworkRequest";
@@ -394,11 +394,11 @@ export class ZWaveController extends EventEmitter {
 					log("controller", `  generic device class:  ${newNode.deviceClass.generic.name} (${num2hex(newNode.deviceClass.generic.key)})`, "debug");
 					log("controller", `  specific device class: ${newNode.deviceClass.specific.name} (${num2hex(newNode.deviceClass.specific.key)})`, "debug");
 					log("controller", `  supported CCs:`, "debug");
-					for (const [cc, info] of newNode.commandClasses.entries()) {
+					for (const [cc, info] of newNode.implementedCommandClasses.entries()) {
 						if (info.isSupported) log("controller", `    ${CommandClasses[cc]} (${num2hex(cc)})`, "debug");
 					}
 					log("controller", `  controlled CCs:`, "debug");
-					for (const [cc, info] of newNode.commandClasses.entries()) {
+					for (const [cc, info] of newNode.implementedCommandClasses.entries()) {
 						if (info.isControlled) log("controller", `    ${CommandClasses[cc]} (${num2hex(cc)})`, "debug");
 					}
 

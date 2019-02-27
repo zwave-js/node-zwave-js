@@ -1,8 +1,8 @@
 /// <reference types="node" />
 import { Message } from "../message/Message";
 export declare class SetSerialApiTimeoutsRequest extends Message {
-    ackTimeout: number;
-    byteTimeout: number;
+    ackTimeout?: number;
+    byteTimeout?: number;
     constructor();
     constructor(ackTimeout: number, byteTimeout: number);
     serialize(): Buffer;

@@ -9,20 +9,20 @@ export declare enum TransmitOptions {
     AutoRoute = 4,
     NoRoute = 16,
     Explore = 32,
-    DEFAULT = 37,
+    DEFAULT = 37
 }
 export declare enum TransmitStatus {
     OK = 0,
     NoAck = 1,
     Fail = 2,
     NotIdle = 3,
-    NoRoute = 4,
+    NoRoute = 4
 }
 export declare class SendDataRequest<CCType extends CommandClass = CommandClass> extends Message implements ICommandClassContainer {
     /** Options regarding the transmission of the message */
-    transmitOptions: TransmitOptions;
+    transmitOptions?: TransmitOptions;
     /** A callback ID to map requests and responses */
-    callbackId: number;
+    callbackId?: number;
     constructor();
     constructor(command: CCType, transmitOptions?: TransmitOptions, callbackId?: number);
     /** The command this message contains */

@@ -1,5 +1,6 @@
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ZWaveNode } from "../node/Node";
+import { CommandClass, commandClass, CommandClasses, expectedCCResponse, getCommandClassStatic, implementedVersion } from "./CommandClass";
 
 export enum WakeUpCommand {
 	IntervalSet = 0x04,
@@ -114,6 +115,14 @@ export class WakeUpCC extends CommandClass {
 					ZWaveErrorCodes.CC_Invalid,
 				);
 		}
+	}
+
+	public static isAwake(node: ZWaveNode): boolean {
+		return !!super.getValue(node, getCommandClassStatic(this), "awake");
+	}
+
+	public static setAwake(node: ZWaveNode, awake: boolean) {
+		super.setValue(node, getCommandClassStatic(this), "awake", awake);
 	}
 
 }

@@ -8,7 +8,7 @@ export declare enum ApplicationUpdateTypes {
     RoutingPending = 128,
     NewIdAssigned = 64,
     DeleteDone = 32,
-    SUC_IdChanged = 16,
+    SUC_IdChanged = 16
 }
 export declare class ApplicationUpdateRequest extends Message {
     private _updateType;

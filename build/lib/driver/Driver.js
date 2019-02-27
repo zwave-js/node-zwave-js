@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const deferred_promise_1 = require("alcalzone-shared/deferred-promise");
 const objects_1 = require("alcalzone-shared/objects");
 const sorted_list_1 = require("alcalzone-shared/sorted-list");
 const events_1 = require("events");
@@ -20,7 +21,6 @@ const SendDataMessages_1 = require("../controller/SendDataMessages");
 const ZWaveError_1 = require("../error/ZWaveError");
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
-const defer_promise_1 = require("../util/defer-promise");
 const logger_1 = require("../util/logger");
 const strings_1 = require("../util/strings");
 const Transaction_1 = require("./Transaction");
@@ -577,7 +577,7 @@ class Driver extends events_1.EventEmitter {
             }
             logger_1.log("driver", `sending message ${strings_1.stringify(msg)} with priority ${Constants_1.MessagePriority[priority]} (${priority})`, "debug");
             // create the transaction and enqueue it
-            const promise = defer_promise_1.createDeferredPromise();
+            const promise = deferred_promise_1.createDeferredPromise();
             const transaction = new Transaction_1.Transaction(this, msg, promise, priority);
             this.sendQueue.add(transaction);
             logger_1.log("io", `added message to the send queue, new length = ${this.sendQueue.length}`, "debug");
