@@ -1,4 +1,5 @@
 /// <reference types="node" />
+import { SendDataRequest } from "../controller/SendDataMessages";
 import { Constructable } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
 export interface CommandClassInfo {
@@ -8,6 +9,17 @@ export interface CommandClassInfo {
 }
 export interface CommandClassStatic {
     readonly maxImplementedVersion: number;
+}
+/**
+ * Defines which kind of CC state should be requested
+ */
+export declare enum StateKind {
+    /** Values that never change and only need to be requested once. */
+    Static = 1,
+    /** Values that change sporadically. It is enough to request them on startup. */
+    Session = 2,
+    /** Values that frequently change */
+    Dynamic = 4
 }
 export declare class CommandClass {
     nodeId?: number;
@@ -45,6 +57,8 @@ export declare class CommandClass {
      * @param propertyName The property name the value belongs to
      */
     protected static getValue(node: ZWaveNode, cc: CommandClasses, propertyName: string): unknown | undefined;
+    /** Requests static or dynamic state for a given from a node */
+    static createStateRequest(node: ZWaveNode, kind: StateKind): SendDataRequest | void;
 }
 export declare const METADATA_commandClass: unique symbol;
 export declare const METADATA_commandClassMap: unique symbol;

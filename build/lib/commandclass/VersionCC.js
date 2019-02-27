@@ -9,6 +9,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var VersionCC_1;
+const SendDataMessages_1 = require("../controller/SendDataMessages");
 const ZWaveError_1 = require("../error/ZWaveError");
 const CommandClass_1 = require("./CommandClass");
 var VersionCommand;
@@ -18,7 +20,7 @@ var VersionCommand;
     VersionCommand[VersionCommand["CommandClassGet"] = 19] = "CommandClassGet";
     VersionCommand[VersionCommand["CommandClassReport"] = 20] = "CommandClassReport";
 })(VersionCommand = exports.VersionCommand || (exports.VersionCommand = {}));
-let VersionCC = class VersionCC extends CommandClass_1.CommandClass {
+let VersionCC = VersionCC_1 = class VersionCC extends CommandClass_1.CommandClass {
     constructor(nodeId, versionCommand, requestedCC) {
         super(nodeId);
         this.nodeId = nodeId;
@@ -70,8 +72,16 @@ let VersionCC = class VersionCC extends CommandClass_1.CommandClass {
                 throw new ZWaveError_1.ZWaveError("Cannot deserialize a Version CC with a command other than Report or CommandClassReport", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
         }
     }
+    /** Requests static or dynamic state for a given from a node */
+    static createStateRequest(node, kind) {
+        // TODO: Check if we have requested that information before and store it
+        if (kind & CommandClass_1.StateKind.Static) {
+            const cc = new VersionCC_1(node.id, VersionCommand.Get);
+            return new SendDataMessages_1.SendDataRequest(cc);
+        }
+    }
 };
-VersionCC = __decorate([
+VersionCC = VersionCC_1 = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses.Version),
     CommandClass_1.implementedVersion(1),
     CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses.Version),

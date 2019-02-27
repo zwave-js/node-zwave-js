@@ -8,10 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const async_1 = require("alcalzone-shared/async");
 const strings_1 = require("alcalzone-shared/strings");
 const CommandClass_1 = require("../commandclass/CommandClass");
 const ICommandClassContainer_1 = require("../commandclass/ICommandClassContainer");
 const ManufacturerSpecificCC_1 = require("../commandclass/ManufacturerSpecificCC");
+const MultiChannelCC_1 = require("../commandclass/MultiChannelCC");
 const NoOperationCC_1 = require("../commandclass/NoOperationCC");
 const VersionCC_1 = require("../commandclass/VersionCC");
 const WakeUpCC_1 = require("../commandclass/WakeUpCC");
@@ -24,7 +26,6 @@ const strings_2 = require("../util/strings");
 const DeviceClass_1 = require("./DeviceClass");
 const INodeQuery_1 = require("./INodeQuery");
 const RequestNodeInfoMessages_1 = require("./RequestNodeInfoMessages");
-const MultiChannelCC_1 = require("../commandclass/MultiChannelCC");
 /** Finds the ID of the target or source node in a message, if it contains that information */
 function getNodeId(msg) {
     if (INodeQuery_1.isNodeQuery(msg))
@@ -132,11 +133,18 @@ class ZWaveNode {
             if (this.interviewStage === InterviewStage.ManufacturerSpecific1) {
                 yield this.queryNodeInfo();
             }
+            // TODO:
+            // NodePlusInfo,			// [ ] Retrieve ZWave+ info and update device classes
+            // SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
+            // ManufacturerSpecific2,	// [ ] Retrieve manufacturer name and product ids
             if (this.interviewStage === InterviewStage.NodeInfo /* TODO: change .NodeInfo to .ManufacturerSpecific2 */) {
                 yield this.queryCCVersions();
             }
             if (this.interviewStage === InterviewStage.Versions) {
                 yield this.queryEndpoints();
+            }
+            if (this.interviewStage === InterviewStage.Endpoints) {
+                yield this.requestStaticValues();
             }
             // for testing purposes we skip to the end
             this.interviewStage = InterviewStage.Complete;
@@ -259,22 +267,27 @@ class ZWaveNode {
     }
     queryManufacturerSpecific() {
         return __awaiter(this, void 0, void 0, function* () {
-            logger_1.log("controller", `${this.logPrefix}querying manufacturer information`, "debug");
-            const cc = new ManufacturerSpecificCC_1.ManufacturerSpecificCC(this.id, ManufacturerSpecificCC_1.ManufacturerSpecificCommand.Get);
-            const request = new SendDataMessages_1.SendDataRequest(cc);
-            try {
-                // set the priority manually, as SendData can be Application level too
-                const resp = yield this.driver.sendMessage(request, Constants_1.MessagePriority.NodeQuery);
-                if (ICommandClassContainer_1.isCommandClassContainer(resp)) {
-                    const manufacturerResponse = resp.command;
-                    logger_1.log("controller", `${this.logPrefix}received response for manufacturer information:`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  manufacturer id: ${strings_2.num2hex(manufacturerResponse.manufacturerId)}`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  product type:    ${strings_2.num2hex(manufacturerResponse.productType)}`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  product id:      ${strings_2.num2hex(manufacturerResponse.productId)}`, "debug");
-                }
+            if (this.isControllerNode()) {
+                logger_1.log("controller", `${this.logPrefix}not querying manufacturer information from the controller...`, "debug");
             }
-            catch (e) {
-                logger_1.log("controller", `${this.logPrefix}  querying the manufacturer information failed: ${e.message}`, "debug");
+            else {
+                logger_1.log("controller", `${this.logPrefix}querying manufacturer information`, "debug");
+                const cc = new ManufacturerSpecificCC_1.ManufacturerSpecificCC(this.id, ManufacturerSpecificCC_1.ManufacturerSpecificCommand.Get);
+                const request = new SendDataMessages_1.SendDataRequest(cc);
+                try {
+                    // set the priority manually, as SendData can be Application level too
+                    const resp = yield this.driver.sendMessage(request, Constants_1.MessagePriority.NodeQuery);
+                    if (ICommandClassContainer_1.isCommandClassContainer(resp)) {
+                        const manufacturerResponse = resp.command;
+                        logger_1.log("controller", `${this.logPrefix}received response for manufacturer information:`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  manufacturer id: ${strings_2.num2hex(manufacturerResponse.manufacturerId)}`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  product type:    ${strings_2.num2hex(manufacturerResponse.productType)}`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  product id:      ${strings_2.num2hex(manufacturerResponse.productId)}`, "debug");
+                    }
+                }
+                catch (e) {
+                    logger_1.log("controller", `${this.logPrefix}  querying the manufacturer information failed: ${e.message}`, "debug");
+                }
             }
             this.interviewStage = InterviewStage.ManufacturerSpecific1;
         });
@@ -340,6 +353,19 @@ class ZWaveNode {
             this.interviewStage = InterviewStage.Endpoints;
         });
     }
+    requestStaticValues() {
+        return __awaiter(this, void 0, void 0, function* () {
+            logger_1.log("controller", `${this.logPrefix}requesting static values`, "debug");
+            try {
+                yield this.requestState(CommandClass_1.StateKind.Static);
+                logger_1.log("controller", `${this.logPrefix}  static values received`, "debug");
+            }
+            catch (e) {
+                logger_1.log("controller", `${this.logPrefix}  requesting the static values failed: ${e.message}`, "debug");
+            }
+            this.interviewStage = InterviewStage.Static;
+        });
+    }
     //#endregion
     // TODO: Add a handler around for each CC to interpret the received data
     /** Handles an ApplicationCommandRequest sent from a node */
@@ -356,6 +382,24 @@ class ZWaveNode {
                     logger_1.log("controller", `${this.logPrefix}TODO: no handler for application command ${strings_2.stringify(command)}`, "debug");
                 }
             }
+        });
+    }
+    /**
+     * Requests the state for the CCs of this node
+     * @param kind The kind of state to be requested
+     * @param commandClasses The command classes to request the state for. Defaults to all
+     */
+    requestState(kind, commandClasses = [...this._implementedCommandClasses.keys()]) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // TODO: Support multiple instances
+            const requests = commandClasses
+                .map(cc => CommandClass_1.getCCConstructor(cc))
+                .filter(cc => !!cc)
+                .map(cc => cc.createStateRequest(this, kind))
+                .filter(req => !!req);
+            const factories = requests
+                .map(req => () => this.driver.sendMessage(req, Constants_1.MessagePriority.NodeQuery));
+            yield async_1.promiseSequence(factories);
         });
     }
 }

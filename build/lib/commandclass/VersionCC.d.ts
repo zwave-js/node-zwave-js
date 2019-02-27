@@ -1,6 +1,8 @@
 /// <reference types="node" />
+import { SendDataRequest } from "../controller/SendDataMessages";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
-import { CommandClass, CommandClasses } from "./CommandClass";
+import { ZWaveNode } from "../node/Node";
+import { CommandClass, CommandClasses, StateKind } from "./CommandClass";
 export declare enum VersionCommand {
     Get = 17,
     Report = 18,
@@ -24,4 +26,6 @@ export declare class VersionCC extends CommandClass {
     readonly ccVersion: number;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
+    /** Requests static or dynamic state for a given from a node */
+    static createStateRequest(node: ZWaveNode, kind: StateKind): SendDataRequest | void;
 }

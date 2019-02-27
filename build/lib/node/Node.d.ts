@@ -1,4 +1,4 @@
-import { CommandClass, CommandClasses, CommandClassInfo } from "../commandclass/CommandClass";
+import { CommandClass, CommandClasses, CommandClassInfo, StateKind } from "../commandclass/CommandClass";
 import { Baudrate } from "../controller/GetNodeProtocolInfoMessages";
 import { Driver } from "../driver/Driver";
 import { Message } from "../message/Message";
@@ -54,8 +54,15 @@ export declare class ZWaveNode {
     private queryCCVersions;
     /** Step #10 of the node interview */
     private queryEndpoints;
+    private requestStaticValues;
     /** Handles an ApplicationCommandRequest sent from a node */
     handleCommand(command: CommandClass): Promise<void>;
+    /**
+     * Requests the state for the CCs of this node
+     * @param kind The kind of state to be requested
+     * @param commandClasses The command classes to request the state for. Defaults to all
+     */
+    requestState(kind: StateKind, commandClasses?: CommandClasses[]): Promise<void>;
 }
 export declare enum InterviewStage {
     None = 0,

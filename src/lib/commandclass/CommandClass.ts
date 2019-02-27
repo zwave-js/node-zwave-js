@@ -1,10 +1,11 @@
 import { entries } from "alcalzone-shared/objects";
 import * as fs from "fs";
+import { SendDataRequest } from "../controller/SendDataMessages";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Constructable } from "../message/Message";
+import { ZWaveNode } from "../node/Node";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
-import { ZWaveNode } from "../node/Node";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 
 export interface CommandClassInfo {
 	isSupported: boolean;
@@ -14,6 +15,18 @@ export interface CommandClassInfo {
 
 export interface CommandClassStatic {
 	readonly maxImplementedVersion: number;
+}
+
+/**
+ * Defines which kind of CC state should be requested
+ */
+export enum StateKind {
+	/** Values that never change and only need to be requested once. */
+	Static = 1 << 0,
+	/** Values that change sporadically. It is enough to request them on startup. */
+	Session = 1 << 1,
+	/** Values that frequently change */
+	Dynamic = 1 << 2,
 }
 
 @implementedVersion(Number.POSITIVE_INFINITY) // per default don't impose any restrictions on the version
@@ -139,6 +152,11 @@ export class CommandClass {
 			const ccValuesMap = node.ccValues.get(cc)!;
 			return ccValuesMap.get(propertyName);
 		}
+	}
+
+	/** Requests static or dynamic state for a given from a node */
+	public static createStateRequest(node: ZWaveNode, kind: StateKind): SendDataRequest | void {
+		// This needs to be overwritten per command class. In the default implementation, don't do anything
 	}
 
 }

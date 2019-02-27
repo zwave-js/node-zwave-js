@@ -1,8 +1,10 @@
+import { promiseSequence } from "alcalzone-shared/async";
 import { padStart } from "alcalzone-shared/strings";
 import { CentralSceneCC } from "../commandclass/CentralSceneCC";
-import { CommandClass, CommandClasses, CommandClassInfo, getImplementedVersion } from "../commandclass/CommandClass";
+import { CommandClass, CommandClasses, CommandClassInfo, getImplementedVersion, StateKind, getCommandClassStatic, getCCConstructor } from "../commandclass/CommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { ManufacturerSpecificCC, ManufacturerSpecificCommand } from "../commandclass/ManufacturerSpecificCC";
+import { MultiChannelCC, MultiChannelCommand } from "../commandclass/MultiChannelCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { VersionCC, VersionCommand } from "../commandclass/VersionCC";
 import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
@@ -17,7 +19,6 @@ import { num2hex, stringify } from "../util/strings";
 import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
 import { isNodeQuery } from "./INodeQuery";
 import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
-import { MultiChannelCC, MultiChannelCommand } from "../commandclass/MultiChannelCC";
 
 /** Finds the ID of the target or source node in a message, if it contains that information */
 export function getNodeId(msg: Message): number {
@@ -164,12 +165,21 @@ export class ZWaveNode {
 			await this.queryNodeInfo();
 		}
 
+		// TODO:
+		// NodePlusInfo,			// [ ] Retrieve ZWave+ info and update device classes
+		// SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
+		// ManufacturerSpecific2,	// [ ] Retrieve manufacturer name and product ids
+
 		if (this.interviewStage === InterviewStage.NodeInfo /* TODO: change .NodeInfo to .ManufacturerSpecific2 */) {
 			await this.queryCCVersions();
 		}
 
 		if (this.interviewStage === InterviewStage.Versions) {
 			await this.queryEndpoints();
+		}
+
+		if (this.interviewStage === InterviewStage.Endpoints) {
+			await this.requestStaticValues();
 		}
 
 		// for testing purposes we skip to the end
@@ -290,21 +300,25 @@ export class ZWaveNode {
 	}
 
 	private async queryManufacturerSpecific() {
-		log("controller", `${this.logPrefix}querying manufacturer information`, "debug");
-		const cc = new ManufacturerSpecificCC(this.id, ManufacturerSpecificCommand.Get);
-		const request = new SendDataRequest(cc);
-		try {
-			// set the priority manually, as SendData can be Application level too
-			const resp = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.NodeQuery);
-			if (isCommandClassContainer(resp)) {
-				const manufacturerResponse = resp.command as ManufacturerSpecificCC;
-				log("controller", `${this.logPrefix}received response for manufacturer information:`, "debug");
-				log("controller", `${this.logPrefix}  manufacturer id: ${num2hex(manufacturerResponse.manufacturerId)}`, "debug");
-				log("controller", `${this.logPrefix}  product type:    ${num2hex(manufacturerResponse.productType)}`, "debug");
-				log("controller", `${this.logPrefix}  product id:      ${num2hex(manufacturerResponse.productId)}`, "debug");
+		if (this.isControllerNode()) {
+			log("controller", `${this.logPrefix}not querying manufacturer information from the controller...`, "debug");
+		} else {
+			log("controller", `${this.logPrefix}querying manufacturer information`, "debug");
+			const cc = new ManufacturerSpecificCC(this.id, ManufacturerSpecificCommand.Get);
+			const request = new SendDataRequest(cc);
+			try {
+				// set the priority manually, as SendData can be Application level too
+				const resp = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.NodeQuery);
+				if (isCommandClassContainer(resp)) {
+					const manufacturerResponse = resp.command as ManufacturerSpecificCC;
+					log("controller", `${this.logPrefix}received response for manufacturer information:`, "debug");
+					log("controller", `${this.logPrefix}  manufacturer id: ${num2hex(manufacturerResponse.manufacturerId)}`, "debug");
+					log("controller", `${this.logPrefix}  product type:    ${num2hex(manufacturerResponse.productType)}`, "debug");
+					log("controller", `${this.logPrefix}  product id:      ${num2hex(manufacturerResponse.productId)}`, "debug");
+				}
+			} catch (e) {
+				log("controller", `${this.logPrefix}  querying the manufacturer information failed: ${e.message}`, "debug");
 			}
-		} catch (e) {
-			log("controller", `${this.logPrefix}  querying the manufacturer information failed: ${e.message}`, "debug");
 		}
 
 		this.interviewStage = InterviewStage.ManufacturerSpecific1;
@@ -367,6 +381,17 @@ export class ZWaveNode {
 		this.interviewStage = InterviewStage.Endpoints;
 	}
 
+	private async requestStaticValues() {
+		log("controller", `${this.logPrefix}requesting static values`, "debug");
+		try {
+			await this.requestState(StateKind.Static);
+			log("controller", `${this.logPrefix}  static values received`, "debug");
+		} catch (e) {
+			log("controller", `${this.logPrefix}  requesting the static values failed: ${e.message}`, "debug");
+		}
+		this.interviewStage = InterviewStage.Static;
+	}
+
 	//#endregion
 
 	// TODO: Add a handler around for each CC to interpret the received data
@@ -386,6 +411,28 @@ export class ZWaveNode {
 		}
 	}
 
+	/**
+	 * Requests the state for the CCs of this node
+	 * @param kind The kind of state to be requested
+	 * @param commandClasses The command classes to request the state for. Defaults to all
+	 */
+	public async requestState(
+		kind: StateKind,
+		commandClasses: CommandClasses[] = [...this._implementedCommandClasses.keys()],
+	): Promise<void> {
+		// TODO: Support multiple instances
+		const requests = commandClasses
+			.map(cc => getCCConstructor(cc) as typeof CommandClass)
+			.filter(cc => !!cc)
+			.map(cc => cc.createStateRequest(this, kind))
+			.filter(req => !!req) as SendDataRequest[]
+			;
+		const factories = requests
+			.map(req => () => this.driver.sendMessage<SendDataRequest>(req, MessagePriority.NodeQuery))
+			;
+		await promiseSequence(factories);
+	}
+
 }
 
 // TODO: This order is not optimal, check how OpenHAB does it
@@ -400,8 +447,8 @@ export enum InterviewStage {
 	SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
 	ManufacturerSpecific2,	// [ ] Retrieve manufacturer name and product ids
 	Versions,				// [✓] Retrieve version information
-	Endpoints,				// [ ] Retrieve information about multiple command class endpoints
-	Static,					// [ ] Retrieve static information (doesn't change)
+	Endpoints,				// [✓] Retrieve information about multiple command class endpoints
+	Static,					// (✓) Retrieve static information we haven't received yet (doesn't change)
 
 	// ===== the stuff above should never change =====
 	// ===== the stuff below changes frequently, so it has to be redone on every start =====

@@ -12,9 +12,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var CommandClass_1;
 const objects_1 = require("alcalzone-shared/objects");
 const fs = require("fs");
+const ZWaveError_1 = require("../error/ZWaveError");
 const logger_1 = require("../util/logger");
 const strings_1 = require("../util/strings");
-const ZWaveError_1 = require("../error/ZWaveError");
+/**
+ * Defines which kind of CC state should be requested
+ */
+var StateKind;
+(function (StateKind) {
+    /** Values that never change and only need to be requested once. */
+    StateKind[StateKind["Static"] = 1] = "Static";
+    /** Values that change sporadically. It is enough to request them on startup. */
+    StateKind[StateKind["Session"] = 2] = "Session";
+    /** Values that frequently change */
+    StateKind[StateKind["Dynamic"] = 4] = "Dynamic";
+})(StateKind = exports.StateKind || (exports.StateKind = {}));
 let CommandClass = CommandClass_1 = class CommandClass {
     // implementation
     constructor(nodeId, command, payload = Buffer.from([])) {
@@ -112,6 +124,10 @@ let CommandClass = CommandClass_1 = class CommandClass {
             const ccValuesMap = node.ccValues.get(cc);
             return ccValuesMap.get(propertyName);
         }
+    }
+    /** Requests static or dynamic state for a given from a node */
+    static createStateRequest(node, kind) {
+        // This needs to be overwritten per command class. In the default implementation, don't do anything
     }
 };
 CommandClass = CommandClass_1 = __decorate([

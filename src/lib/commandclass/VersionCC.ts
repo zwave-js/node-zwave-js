@@ -1,6 +1,8 @@
+import { SendDataRequest } from "../controller/SendDataMessages";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ZWaveNode } from "../node/Node";
+import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion, StateKind } from "./CommandClass";
 
 export enum VersionCommand {
 	Get = 0x11,
@@ -87,6 +89,15 @@ export class VersionCC extends CommandClass {
 					"Cannot deserialize a Version CC with a command other than Report or CommandClassReport",
 					ZWaveErrorCodes.CC_Invalid,
 				);
+		}
+	}
+
+	/** Requests static or dynamic state for a given from a node */
+	public static createStateRequest(node: ZWaveNode, kind: StateKind): SendDataRequest | void {
+		// TODO: Check if we have requested that information before and store it
+		if (kind & StateKind.Static) {
+			const cc = new VersionCC(node.id, VersionCommand.Get);
+			return new SendDataRequest(cc);
 		}
 	}
 
