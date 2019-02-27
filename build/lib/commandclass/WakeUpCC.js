@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const CommandClass_1 = require("./CommandClass");
+const Driver_1 = require("../driver/Driver");
 var WakeUpCommand;
 (function (WakeUpCommand) {
     WakeUpCommand[WakeUpCommand["IntervalSet"] = 4] = "IntervalSet";
@@ -22,8 +23,8 @@ var WakeUpCommand;
     WakeUpCommand[WakeUpCommand["IntervalCapabilitiesReport"] = 10] = "IntervalCapabilitiesReport";
 })(WakeUpCommand = exports.WakeUpCommand || (exports.WakeUpCommand = {}));
 let WakeUpCC = class WakeUpCC extends CommandClass_1.CommandClass {
-    constructor(nodeId, wakeupCommand, wakeupInterval, controllerNodeId) {
-        super(nodeId);
+    constructor(driver, nodeId, wakeupCommand, wakeupInterval, controllerNodeId) {
+        super(driver, nodeId);
         this.nodeId = nodeId;
         this.wakeupCommand = wakeupCommand;
         this.wakeupInterval = wakeupInterval;
@@ -82,17 +83,17 @@ let WakeUpCC = class WakeUpCC extends CommandClass_1.CommandClass {
                 throw new ZWaveError_1.ZWaveError("Cannot deserialize a WakeUp CC with a command other than IntervalReport or WakeUpNotification", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
         }
     }
-    static isAwake(node) {
-        return !!node.getCCValue(CommandClass_1.getCommandClassStatic(this), undefined, "awake");
+    isAwake() {
+        return !!this.getValueDB().getValue(CommandClass_1.getCommandClass(this), undefined, "awake");
     }
-    static setAwake(node, awake) {
-        node.setCCValue(CommandClass_1.getCommandClassStatic(this), undefined, "awake", awake);
+    setAwake(awake) {
+        this.getValueDB().setValue(CommandClass_1.getCommandClass(this), undefined, "awake", awake);
     }
 };
 WakeUpCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["Wake Up"]),
     CommandClass_1.implementedVersion(2),
     CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Wake Up"]),
-    __metadata("design:paramtypes", [Number, Number, Number, Number])
+    __metadata("design:paramtypes", [Driver_1.Driver, Number, Number, Number, Number])
 ], WakeUpCC);
 exports.WakeUpCC = WakeUpCC;

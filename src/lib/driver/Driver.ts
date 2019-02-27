@@ -346,7 +346,7 @@ export class Driver extends EventEmitter {
 
 			// tslint:disable-next-line:variable-name
 			const MessageConstructor = Message.getConstructor(this.receiveBuffer);
-			const msg = new MessageConstructor();
+			const msg = new MessageConstructor(this);
 			let readBytes: number;
 			try {
 				readBytes = msg.deserialize(this.receiveBuffer);

@@ -13,6 +13,7 @@ var VersionCC_1;
 const SendDataMessages_1 = require("../controller/SendDataMessages");
 const ZWaveError_1 = require("../error/ZWaveError");
 const CommandClass_1 = require("./CommandClass");
+const Driver_1 = require("../driver/Driver");
 var VersionCommand;
 (function (VersionCommand) {
     VersionCommand[VersionCommand["Get"] = 17] = "Get";
@@ -21,8 +22,8 @@ var VersionCommand;
     VersionCommand[VersionCommand["CommandClassReport"] = 20] = "CommandClassReport";
 })(VersionCommand = exports.VersionCommand || (exports.VersionCommand = {}));
 let VersionCC = VersionCC_1 = class VersionCC extends CommandClass_1.CommandClass {
-    constructor(nodeId, versionCommand, requestedCC) {
-        super(nodeId);
+    constructor(driver, nodeId, versionCommand, requestedCC) {
+        super(driver, nodeId);
         this.nodeId = nodeId;
         this.versionCommand = versionCommand;
         this.requestedCC = requestedCC;
@@ -73,11 +74,11 @@ let VersionCC = VersionCC_1 = class VersionCC extends CommandClass_1.CommandClas
         }
     }
     /** Requests static or dynamic state for a given from a node */
-    static createStateRequest(node, kind) {
+    static createStateRequest(driver, node, kind) {
         // TODO: Check if we have requested that information before and store it
         if (kind & CommandClass_1.StateKind.Static) {
-            const cc = new VersionCC_1(node.id, VersionCommand.Get);
-            return new SendDataMessages_1.SendDataRequest(cc);
+            const cc = new VersionCC_1(driver, node.id, VersionCommand.Get);
+            return new SendDataMessages_1.SendDataRequest(driver, cc);
         }
     }
 };
@@ -85,6 +86,6 @@ VersionCC = VersionCC_1 = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses.Version),
     CommandClass_1.implementedVersion(1),
     CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses.Version),
-    __metadata("design:paramtypes", [Number, Number, Number])
+    __metadata("design:paramtypes", [Driver_1.Driver, Number, Number, Number])
 ], VersionCC);
 exports.VersionCC = VersionCC;

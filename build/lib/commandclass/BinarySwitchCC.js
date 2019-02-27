@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const CommandClass_1 = require("./CommandClass");
+const Driver_1 = require("../driver/Driver");
 var BinarySwitchCommand;
 (function (BinarySwitchCommand) {
     BinarySwitchCommand[BinarySwitchCommand["Set"] = 1] = "Set";
@@ -18,8 +19,8 @@ var BinarySwitchCommand;
     BinarySwitchCommand[BinarySwitchCommand["Report"] = 3] = "Report";
 })(BinarySwitchCommand = exports.BinarySwitchCommand || (exports.BinarySwitchCommand = {}));
 let BinarySwitchCC = class BinarySwitchCC extends CommandClass_1.CommandClass {
-    constructor(nodeId, ccCommand, targetValue, duration) {
-        super(nodeId);
+    constructor(driver, nodeId, ccCommand, targetValue, duration) {
+        super(driver, nodeId);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
         this.targetValue = targetValue;
@@ -70,7 +71,7 @@ BinarySwitchCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["Binary Switch"]),
     CommandClass_1.implementedVersion(2),
     CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Binary Switch"]),
-    __metadata("design:paramtypes", [Number, Number, Object, Number])
+    __metadata("design:paramtypes", [Driver_1.Driver, Number, Number, Object, Number])
 ], BinarySwitchCC);
 exports.BinarySwitchCC = BinarySwitchCC;
 function decodeBinarySwitchState(val) {

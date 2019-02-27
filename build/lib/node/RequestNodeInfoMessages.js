@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ApplicationUpdateRequest_1 = require("../controller/ApplicationUpdateRequest");
+const Driver_1 = require("../driver/Driver");
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
 function testResponseForNodeInfoRequest(sent, received) {
@@ -29,8 +30,8 @@ function testResponseForNodeInfoRequest(sent, received) {
     }
 }
 let RequestNodeInfoRequest = class RequestNodeInfoRequest extends Message_1.Message {
-    constructor(nodeId) {
-        super();
+    constructor(driver, nodeId) {
+        super(driver);
         this.nodeId = nodeId;
     }
     serialize() {
@@ -47,7 +48,7 @@ RequestNodeInfoRequest = __decorate([
     Message_1.messageTypes(Constants_1.MessageType.Request, Constants_1.FunctionType.RequestNodeInfo),
     Message_1.expectedResponse(testResponseForNodeInfoRequest),
     Message_1.priority(Constants_1.MessagePriority.NodeQuery),
-    __metadata("design:paramtypes", [Number])
+    __metadata("design:paramtypes", [Driver_1.Driver, Number])
 ], RequestNodeInfoRequest);
 exports.RequestNodeInfoRequest = RequestNodeInfoRequest;
 let RequestNodeInfoResponse = class RequestNodeInfoResponse extends Message_1.Message {

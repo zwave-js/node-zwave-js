@@ -1,14 +1,13 @@
 /// <reference types="reflect-metadata" />
 
 import { entries } from "alcalzone-shared/objects";
+import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
 import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "./Constants";
 
-export interface Constructable<T> {
-	new(...constructorArgs: any[]): T;
-}
+export type Constructable<T> = new(driver: Driver, ...constructorArgs: any[]) => T;
 
 /**
  * Represents a ZWave message for communication with the serial interface
@@ -17,11 +16,13 @@ export class Message {
 
 	// #1
 	constructor(
+		driver: Driver,
 		payload?: Buffer,
 	)
 
 	// #2
 	constructor(
+		driver: Driver,
 		type: MessageType,
 		funcType: FunctionType,
 		expResponse: FunctionType | ResponsePredicate,
@@ -30,6 +31,7 @@ export class Message {
 
 	// implementation
 	constructor(
+		protected driver: Driver,
 		typeOrPayload?: MessageType | Buffer,
 		funcType?: FunctionType,
 		expResponse?: FunctionType | ResponsePredicate,

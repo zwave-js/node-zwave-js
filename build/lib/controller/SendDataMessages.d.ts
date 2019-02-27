@@ -2,6 +2,7 @@
 import { CommandClass } from "../commandclass/CommandClass";
 import { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { Message, ResponseRole } from "../message/Message";
+import { Driver } from "../driver/Driver";
 export declare enum TransmitOptions {
     NotSet = 0,
     ACK = 1,
@@ -23,8 +24,8 @@ export declare class SendDataRequest<CCType extends CommandClass = CommandClass>
     transmitOptions?: TransmitOptions;
     /** A callback ID to map requests and responses */
     callbackId?: number;
-    constructor();
-    constructor(command: CCType, transmitOptions?: TransmitOptions, callbackId?: number);
+    constructor(driver: Driver);
+    constructor(driver: Driver, command: CCType, transmitOptions?: TransmitOptions, callbackId?: number);
     /** The command this message contains */
     command: CCType;
     private _transmitStatus;

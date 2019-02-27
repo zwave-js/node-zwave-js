@@ -1,5 +1,6 @@
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { Driver } from "../driver/Driver";
 
 export enum MultilevelSwitchCommand {
 	Set = 0x01,
@@ -17,9 +18,14 @@ export enum MultilevelSwitchCommand {
 export class MultilevelSwitchCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(nodeId?: number);
-	constructor(nodeId: number, ccCommand: MultilevelSwitchCommand.Get);
+	constructor(driver: Driver, nodeId?: number);
+	constructor(driver: Driver, nodeId: number, ccCommand:
+		MultilevelSwitchCommand.Get
+		| MultilevelSwitchCommand.StopLevelChange
+		| MultilevelSwitchCommand.SupportedGet,
+	);
 	constructor(
+		driver: Driver,
 		nodeId: number,
 		ccCommand: MultilevelSwitchCommand.Set,
 		targetValue: number,
@@ -27,6 +33,7 @@ export class MultilevelSwitchCC extends CommandClass {
 		duration?: number,
 	);
 	constructor(
+		driver: Driver,
 		nodeId: number,
 		ccCommand: MultilevelSwitchCommand.StartLevelChange,
 		direction: keyof typeof LevelChangeDirection,
@@ -37,15 +44,14 @@ export class MultilevelSwitchCC extends CommandClass {
 		// Version >= 3:
 		secondarySwitchDirection?: keyof typeof LevelChangeDirection,
 	);
-	constructor(nodeId: number, ccCommand: MultilevelSwitchCommand.StopLevelChange);
-	constructor(nodeId: number, ccCommand: MultilevelSwitchCommand.SupportedGet);
 
 	constructor(
+		driver: Driver,
 		public nodeId: number,
 		public ccCommand?: MultilevelSwitchCommand,
 		...args: any[]
 	) {
-		super(nodeId);
+		super(driver, nodeId);
 		if (ccCommand === MultilevelSwitchCommand.Set) {
 			[this.targetValue, this.duration] = args;
 		} else if (ccCommand === MultilevelSwitchCommand.StartLevelChange) {

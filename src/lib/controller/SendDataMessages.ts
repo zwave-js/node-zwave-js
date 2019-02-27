@@ -5,6 +5,7 @@ import { FunctionType, MessagePriority, MessageType } from "../message/Constants
 import { Constructable, expectedResponse, Message, messageTypes, priority, ResponsePredicate, ResponseRole } from "../message/Message";
 import { log } from "../util/logger";
 import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
+import { Driver } from "../driver/Driver";
 
 export enum TransmitOptions {
 	NotSet = 0,
@@ -58,21 +59,25 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass> extends
 
 	// tslint:disable:unified-signatures
 	// empty constructor to parse messages
-	constructor();
+	constructor(
+		driver: Driver,
+	);
 	// default constructor to send messages
 	constructor(
+		driver: Driver,
 		command: CCType,
 		transmitOptions?: TransmitOptions,
 		callbackId?: number,
 	);
 	constructor(
+		driver: Driver,
 		command?: CCType,
 		/** Options regarding the transmission of the message */
 		public transmitOptions?: TransmitOptions,
 		/** A callback ID to map requests and responses */
 		public callbackId?: number,
 	) {
-		super();
+		super(driver);
 		this.command = command;
 		if (command != null) {
 			// non-empty constructor -> define default values

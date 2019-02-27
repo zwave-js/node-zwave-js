@@ -3,6 +3,7 @@ import { FunctionType, MessagePriority, MessageType } from "../message/Constants
 import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
 import { BasicDeviceClasses, GenericDeviceClass, SpecificDeviceClass } from "../node/DeviceClass";
 import { parseNodeInformation } from "../node/NodeInfo";
+import { Driver } from "../driver/Driver";
 
 export enum AddNodeType {
 	Any = 1,
@@ -35,14 +36,18 @@ export class AddNodeToNetworkRequest extends Message {
 
 	// tslint:disable:unified-signatures
 	// empty constructor to parse messages
-	constructor();
+	constructor(
+		driver: Driver,
+	);
 	// default constructor to send messages
 	constructor(
+		driver: Driver,
 		addNodeType?: AddNodeType,
 		highPower?: boolean,
 		networkWide?: boolean,
 	);
 	constructor(
+		driver: Driver,
 		/** The type of node to add */
 		public addNodeType: AddNodeType = AddNodeType.Any,
 		/** Whether to use high power */
@@ -50,7 +55,7 @@ export class AddNodeToNetworkRequest extends Message {
 		/** Whether to include network wide */
 		public networkWide?: boolean,
 	) {
-		super();
+		super(driver);
 	}
 	// tslint:enable:unified-signatures
 

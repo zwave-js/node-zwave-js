@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const CommandClass_1 = require("./CommandClass");
+const Driver_1 = require("../driver/Driver");
 var BinarySensorCommand;
 (function (BinarySensorCommand) {
     BinarySensorCommand[BinarySensorCommand["Get"] = 2] = "Get";
@@ -19,8 +20,8 @@ var BinarySensorCommand;
     BinarySensorCommand[BinarySensorCommand["SupportedReport"] = 4] = "SupportedReport";
 })(BinarySensorCommand = exports.BinarySensorCommand || (exports.BinarySensorCommand = {}));
 let BinarySensorCC = class BinarySensorCC extends CommandClass_1.CommandClass {
-    constructor(nodeId, ccCommand, sensorType) {
-        super(nodeId);
+    constructor(driver, nodeId, ccCommand, sensorType) {
+        super(driver, nodeId);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
         this.sensorType = sensorType;
@@ -80,7 +81,7 @@ BinarySensorCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["Binary Sensor"]),
     CommandClass_1.implementedVersion(2),
     CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Binary Sensor"]),
-    __metadata("design:paramtypes", [Number, Number, Number])
+    __metadata("design:paramtypes", [Driver_1.Driver, Number, Number, Number])
 ], BinarySensorCC);
 exports.BinarySensorCC = BinarySensorCC;
 var BinarySensorType;

@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
 const NodeInfo_1 = require("../node/NodeInfo");
+const Driver_1 = require("../driver/Driver");
 var AddNodeType;
 (function (AddNodeType) {
     AddNodeType[AddNodeType["Any"] = 1] = "Any";
@@ -32,14 +33,14 @@ var AddNodeStatus;
     AddNodeStatus[AddNodeStatus["Failed"] = 7] = "Failed";
 })(AddNodeStatus = exports.AddNodeStatus || (exports.AddNodeStatus = {}));
 let AddNodeToNetworkRequest = class AddNodeToNetworkRequest extends Message_1.Message {
-    constructor(
+    constructor(driver, 
     /** The type of node to add */
     addNodeType = AddNodeType.Any, 
     /** Whether to use high power */
     highPower, 
     /** Whether to include network wide */
     networkWide) {
-        super();
+        super(driver);
         this.addNodeType = addNodeType;
         this.highPower = highPower;
         this.networkWide = networkWide;
@@ -98,7 +99,7 @@ AddNodeToNetworkRequest = __decorate([
     // no expected response, the controller will respond with another AddNodeToNetworkRequest
     ,
     Message_1.priority(Constants_1.MessagePriority.Controller),
-    __metadata("design:paramtypes", [Number, Boolean, Boolean])
+    __metadata("design:paramtypes", [Driver_1.Driver, Number, Boolean, Boolean])
 ], AddNodeToNetworkRequest);
 exports.AddNodeToNetworkRequest = AddNodeToNetworkRequest;
 // example inclusion:

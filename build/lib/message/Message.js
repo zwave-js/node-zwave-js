@@ -11,7 +11,8 @@ const Constants_1 = require("./Constants");
  */
 class Message {
     // implementation
-    constructor(typeOrPayload, funcType, expResponse, payload) {
+    constructor(driver, typeOrPayload, funcType, expResponse, payload) {
+        this.driver = driver;
         // decide which implementation we follow
         let type;
         if (typeof typeOrPayload === "number") { // #2

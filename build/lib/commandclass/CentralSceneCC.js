@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const CommandClass_1 = require("./CommandClass");
+const Driver_1 = require("../driver/Driver");
 var CentralSceneCommand;
 (function (CentralSceneCommand) {
     CentralSceneCommand[CentralSceneCommand["SupportedGet"] = 1] = "SupportedGet";
@@ -31,8 +32,8 @@ var CentralSceneKeys;
     CentralSceneKeys[CentralSceneKeys["KeyPressed5x"] = 6] = "KeyPressed5x";
 })(CentralSceneKeys = exports.CentralSceneKeys || (exports.CentralSceneKeys = {}));
 let CentralSceneCC = class CentralSceneCC extends CommandClass_1.CommandClass {
-    constructor(nodeId, centralSceneCommand, slowRefresh) {
-        super(nodeId);
+    constructor(driver, nodeId, centralSceneCommand, slowRefresh) {
+        super(driver, nodeId);
         this.nodeId = nodeId;
         this.centralSceneCommand = centralSceneCommand;
         this._slowRefresh = slowRefresh;
@@ -125,6 +126,6 @@ let CentralSceneCC = class CentralSceneCC extends CommandClass_1.CommandClass {
 CentralSceneCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["Central Scene"]),
     CommandClass_1.implementedVersion(3),
-    __metadata("design:paramtypes", [Number, Number, Boolean])
+    __metadata("design:paramtypes", [Driver_1.Driver, Number, Number, Boolean])
 ], CentralSceneCC);
 exports.CentralSceneCC = CentralSceneCC;

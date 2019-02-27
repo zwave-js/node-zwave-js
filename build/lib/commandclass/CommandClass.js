@@ -12,8 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var CommandClass_1;
 const objects_1 = require("alcalzone-shared/objects");
 const fs = require("fs");
+const ZWaveError_1 = require("../error/ZWaveError");
 const logger_1 = require("../util/logger");
 const strings_1 = require("../util/strings");
+const Driver_1 = require("../driver/Driver");
 /**
  * Defines which kind of CC state should be requested
  */
@@ -28,7 +30,8 @@ var StateKind;
 })(StateKind = exports.StateKind || (exports.StateKind = {}));
 let CommandClass = CommandClass_1 = class CommandClass {
     // implementation
-    constructor(nodeId, command, payload = Buffer.from([])) {
+    constructor(driver, nodeId, command, payload = Buffer.from([])) {
+        this.driver = driver;
         this.nodeId = nodeId;
         this.command = command;
         this.payload = payload;
@@ -71,10 +74,10 @@ let CommandClass = CommandClass_1 = class CommandClass {
         const cc = CommandClass_1.getCommandClass(ccData);
         return getCCConstructor(cc) || CommandClass_1;
     }
-    static from(serializedCC) {
+    static from(driver, serializedCC) {
         // tslint:disable-next-line:variable-name
         const Constructor = CommandClass_1.getConstructor(serializedCC);
-        const ret = new Constructor();
+        const ret = new Constructor(driver);
         ret.deserialize(serializedCC);
         return ret;
     }
@@ -100,23 +103,37 @@ let CommandClass = CommandClass_1 = class CommandClass {
         return ret;
     }
     /** Requests static or dynamic state for a given from a node */
-    static createStateRequest(node, kind) {
+    static createStateRequest(driver, node, kind) {
         // This needs to be overwritten per command class. In the default implementation, don't do anything
+    }
+    /** Returns the node this CC is linked to */
+    getNode() {
+        if (this.nodeId == undefined)
+            throw new ZWaveError_1.ZWaveError("Cannot retrieve the node without a Node ID", ZWaveError_1.ZWaveErrorCodes.CC_NoNodeID);
+        return this
+            .driver
+            .controller
+            .nodes.get(this.nodeId);
+    }
+    /** Returns the value DB for this CC's node */
+    getValueDB() {
+        return this.getNode().valueDB;
     }
     createVariable(name) {
         this._variables.add(name);
     }
     /** Persists all values on the given node */
-    persistValues(node, endpoint, variables = this._variables.keys()) {
+    persistValues(endpoint, variables = this._variables.keys()) {
+        const db = this.getValueDB();
         for (const variable of variables) {
-            node.setCCValue(getCommandClass(this), endpoint, variable, this[variable]);
+            db.setValue(getCommandClass(this), endpoint, variable, this[variable]);
         }
     }
 };
 CommandClass = CommandClass_1 = __decorate([
     implementedVersion(Number.POSITIVE_INFINITY) // per default don't impose any restrictions on the version
     ,
-    __metadata("design:paramtypes", [Number, Number, Buffer])
+    __metadata("design:paramtypes", [Driver_1.Driver, Number, Number, Buffer])
 ], CommandClass);
 exports.CommandClass = CommandClass;
 // =======================

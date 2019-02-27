@@ -1,3 +1,4 @@
+import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
@@ -12,15 +13,16 @@ export enum ManufacturerSpecificCommand {
 export class ManufacturerSpecificCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(nodeId?: number);
-	constructor(nodeId: number, ccCommand: ManufacturerSpecificCommand.Get);
+	constructor(driver: Driver, nodeId?: number);
+	constructor(driver: Driver, nodeId: number, ccCommand: ManufacturerSpecificCommand.Get);
 
 	constructor(
+		driver: Driver,
 		public nodeId: number,
 		public ccCommand?: ManufacturerSpecificCommand,
 		...args: any[]
 	) {
-		super(nodeId);
+		super(driver, nodeId);
 	}
 	// tslint:enable:unified-signatures
 

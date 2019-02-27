@@ -1,4 +1,5 @@
 import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/ApplicationUpdateRequest";
+import { Driver } from "../driver/Driver";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority, ResponseRole} from "../message/Message";
 import { log } from "../util/logger";
@@ -25,8 +26,11 @@ function testResponseForNodeInfoRequest(sent: RequestNodeInfoRequest, received: 
 @priority(MessagePriority.NodeQuery)
 export class RequestNodeInfoRequest extends Message implements INodeQuery {
 
-	constructor(nodeId?: number) {
-		super();
+	constructor(
+		driver: Driver,
+		nodeId?: number,
+	) {
+		super(driver);
 		this.nodeId = nodeId;
 	}
 

@@ -2,6 +2,7 @@
 import { CommandClasses } from "../commandclass/CommandClass";
 import { Message } from "../message/Message";
 import { BasicDeviceClasses, GenericDeviceClass, SpecificDeviceClass } from "../node/DeviceClass";
+import { Driver } from "../driver/Driver";
 export declare enum AddNodeType {
     Any = 1,
     Controller = 2,
@@ -26,8 +27,8 @@ export declare class AddNodeToNetworkRequest extends Message {
     highPower?: boolean;
     /** Whether to include network wide */
     networkWide?: boolean;
-    constructor();
-    constructor(addNodeType?: AddNodeType, highPower?: boolean, networkWide?: boolean);
+    constructor(driver: Driver);
+    constructor(driver: Driver, addNodeType?: AddNodeType, highPower?: boolean, networkWide?: boolean);
     private _status;
     readonly status: AddNodeStatus;
     private _statusContext;

@@ -2,6 +2,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { GenericDeviceClasses } from "../node/DeviceClass";
 import { EndpointInformation, parseEndpointInformation } from "../node/NodeInfo";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { Driver } from "../driver/Driver";
 
 export enum MultiChannelCommand {
 	EndPointGet = 0x07,
@@ -26,17 +27,18 @@ export interface EndpointCapability extends EndpointInformation {
 export class MultiChannelCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(nodeId?: number);
-	constructor(nodeId: number, ccCommand: MultiChannelCommand.EndPointGet);
-	constructor(nodeId: number, ccCommand: MultiChannelCommand.CapabilityGet, endpoint: number);
-	constructor(nodeId: number, ccCommand: MultiChannelCommand.EndPointFind, genericClass: GenericDeviceClasses, specificClass: number);
+	constructor(driver: Driver, nodeId?: number);
+	constructor(driver: Driver, nodeId: number, ccCommand: MultiChannelCommand.EndPointGet);
+	constructor(driver: Driver, nodeId: number, ccCommand: MultiChannelCommand.CapabilityGet, endpoint: number);
+	constructor(driver: Driver, nodeId: number, ccCommand: MultiChannelCommand.EndPointFind, genericClass: GenericDeviceClasses, specificClass: number);
 
 	constructor(
+		driver: Driver,
 		public nodeId: number,
 		public ccCommand?: MultiChannelCommand,
 		...args: any[]
 	) {
-		super(nodeId);
+		super(driver, nodeId);
 
 		if (ccCommand === MultiChannelCommand.CapabilityGet) {
 			[this.endpoint] = args;

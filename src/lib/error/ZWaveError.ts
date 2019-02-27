@@ -15,6 +15,7 @@ export enum ZWaveErrorCodes {
 
 	CC_Invalid,
 	CC_NotSupported,
+	CC_NoNodeID,
 }
 
 export class ZWaveError extends Error {

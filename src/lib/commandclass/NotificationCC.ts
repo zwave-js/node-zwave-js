@@ -1,6 +1,7 @@
 import { composeObject } from "alcalzone-shared/objects";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { Driver } from "../driver/Driver";
 
 export enum NotificationCommand {
 	// All the supported commands
@@ -37,8 +38,9 @@ export class NotificationCC extends CommandClass {
 	// former AlarmCC (v1..v2)
 
 	// tslint:disable:unified-signatures
-	constructor(nodeId?: number);
+	constructor(driver: Driver, nodeId?: number);
 	constructor(
+		driver: Driver,
 		nodeId: number,
 		ccCommand: NotificationCommand.Get,
 		alarmType: number,
@@ -46,23 +48,26 @@ export class NotificationCC extends CommandClass {
 		notificationEvent?: number,
 	);
 	constructor(
+		driver: Driver,
 		nodeId: number,
 		ccCommand: NotificationCommand.Set,
 		notificationType: NotificationType,
 		notificationStatus: boolean,
 	);
 	constructor(
+		driver: Driver,
 		nodeId: number,
 		ccCommand: NotificationCommand.SupportedGet,
 	);
 
 	constructor(
+		driver: Driver,
 		public nodeId: number,
 		public ccCommand?: NotificationCommand,
 		// tslint:disable-next-line:trailing-comma
 		...args: any[]
 	) {
-		super(nodeId);
+		super(driver, nodeId);
 		if (ccCommand === NotificationCommand.Get) {
 			this.alarmType = args[0];
 			this.notificationType = args[1];

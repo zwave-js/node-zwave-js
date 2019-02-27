@@ -1,8 +1,9 @@
 /// <reference types="node" />
+import { Driver } from "../driver/Driver";
 import { Message } from "../message/Message";
 import { INodeQuery } from "./INodeQuery";
 export declare class RequestNodeInfoRequest extends Message implements INodeQuery {
-    constructor(nodeId?: number);
+    constructor(driver: Driver, nodeId?: number);
     nodeId: number;
     serialize(): Buffer;
     toJSON(): Record<string, any>;

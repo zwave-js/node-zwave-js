@@ -1,4 +1,5 @@
 /// <reference types="node" />
+import { Driver } from "../driver/Driver";
 import { CommandClass } from "./CommandClass";
 export declare enum ManufacturerSpecificCommand {
     Get = 4,
@@ -7,8 +8,8 @@ export declare enum ManufacturerSpecificCommand {
 export declare class ManufacturerSpecificCC extends CommandClass {
     nodeId: number;
     ccCommand?: ManufacturerSpecificCommand;
-    constructor(nodeId?: number);
-    constructor(nodeId: number, ccCommand: ManufacturerSpecificCommand.Get);
+    constructor(driver: Driver, nodeId?: number);
+    constructor(driver: Driver, nodeId: number, ccCommand: ManufacturerSpecificCommand.Get);
     private _manufacturerId;
     readonly manufacturerId: number;
     private _productType;

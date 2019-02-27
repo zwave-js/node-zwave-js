@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const NodeInfo_1 = require("../node/NodeInfo");
 const CommandClass_1 = require("./CommandClass");
+const Driver_1 = require("../driver/Driver");
 var MultiChannelCommand;
 (function (MultiChannelCommand) {
     MultiChannelCommand[MultiChannelCommand["EndPointGet"] = 7] = "EndPointGet";
@@ -26,8 +27,8 @@ var MultiChannelCommand;
     // AggregatedMembersReport = 0x0F,
 })(MultiChannelCommand = exports.MultiChannelCommand || (exports.MultiChannelCommand = {}));
 let MultiChannelCC = class MultiChannelCC extends CommandClass_1.CommandClass {
-    constructor(nodeId, ccCommand, ...args) {
-        super(nodeId);
+    constructor(driver, nodeId, ccCommand, ...args) {
+        super(driver, nodeId);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
         this._endpointCapabilities = new Map();
@@ -110,6 +111,6 @@ MultiChannelCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["Multi Channel"]),
     CommandClass_1.implementedVersion(3),
     CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Multi Channel"]),
-    __metadata("design:paramtypes", [Number, Number, Object])
+    __metadata("design:paramtypes", [Driver_1.Driver, Number, Number, Object])
 ], MultiChannelCC);
 exports.MultiChannelCC = MultiChannelCC;

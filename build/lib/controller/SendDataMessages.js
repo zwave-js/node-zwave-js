@@ -14,6 +14,7 @@ const ICommandClassContainer_1 = require("../commandclass/ICommandClassContainer
 const ZWaveError_1 = require("../error/ZWaveError");
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
+const Driver_1 = require("../driver/Driver");
 var TransmitOptions;
 (function (TransmitOptions) {
     TransmitOptions[TransmitOptions["NotSet"] = 0] = "NotSet";
@@ -57,12 +58,12 @@ function testResponseForSendDataRequest(sent, received) {
     return "unexpected";
 }
 let SendDataRequest = class SendDataRequest extends Message_1.Message {
-    constructor(command, 
+    constructor(driver, command, 
     /** Options regarding the transmission of the message */
     transmitOptions, 
     /** A callback ID to map requests and responses */
     callbackId) {
-        super();
+        super(driver);
         this.transmitOptions = transmitOptions;
         this.callbackId = callbackId;
         this.command = command;
@@ -140,7 +141,7 @@ SendDataRequest = __decorate([
     Message_1.messageTypes(Constants_1.MessageType.Request, Constants_1.FunctionType.SendData),
     Message_1.expectedResponse(testResponseForSendDataRequest),
     Message_1.priority(Constants_1.MessagePriority.Normal),
-    __metadata("design:paramtypes", [Object, Number, Number])
+    __metadata("design:paramtypes", [Driver_1.Driver, Object, Number, Number])
 ], SendDataRequest);
 exports.SendDataRequest = SendDataRequest;
 let SendDataResponse = class SendDataResponse extends Message_1.Message {

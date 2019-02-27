@@ -11,7 +11,8 @@ export declare enum ZWaveErrorCodes {
     Controller_MessageDropped = 9,
     Controller_InclusionFailed = 10,
     CC_Invalid = 11,
-    CC_NotSupported = 12
+    CC_NotSupported = 12,
+    CC_NoNodeID = 13
 }
 export declare class ZWaveError extends Error {
     readonly message: string;

@@ -12,9 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
 const DeviceClass_1 = require("../node/DeviceClass");
+const Driver_1 = require("../driver/Driver");
 let GetNodeProtocolInfoRequest = class GetNodeProtocolInfoRequest extends Message_1.Message {
-    constructor(nodeId) {
-        super();
+    constructor(driver, nodeId) {
+        super(driver);
         this.nodeId = nodeId;
     }
     serialize() {
@@ -31,7 +32,7 @@ GetNodeProtocolInfoRequest = __decorate([
     Message_1.messageTypes(Constants_1.MessageType.Request, Constants_1.FunctionType.GetNodeProtocolInfo),
     Message_1.expectedResponse(Constants_1.FunctionType.GetNodeProtocolInfo),
     Message_1.priority(Constants_1.MessagePriority.NodeQuery),
-    __metadata("design:paramtypes", [Number])
+    __metadata("design:paramtypes", [Driver_1.Driver, Number])
 ], GetNodeProtocolInfoRequest);
 exports.GetNodeProtocolInfoRequest = GetNodeProtocolInfoRequest;
 let GetNodeProtocolInfoResponse = class GetNodeProtocolInfoResponse extends Message_1.Message {

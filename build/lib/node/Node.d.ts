@@ -1,11 +1,11 @@
 /// <reference types="node" />
+import { EventEmitter } from "events";
 import { CommandClass, CommandClasses, CommandClassInfo, StateKind } from "../commandclass/CommandClass";
 import { Baudrate } from "../controller/GetNodeProtocolInfoMessages";
 import { Driver } from "../driver/Driver";
 import { Message } from "../message/Message";
 import { DeviceClass } from "./DeviceClass";
-import { ValueUpdatedArgs } from "./ValueDB";
-import { EventEmitter } from "events";
+import { ValueDB, ValueUpdatedArgs } from "./ValueDB";
 /** Finds the ID of the target or source node in a message, if it contains that information */
 export declare function getNodeId(msg: Message): number;
 export interface ZWaveNode {
@@ -37,21 +37,7 @@ export declare class ZWaveNode extends EventEmitter {
     private _implementedCommandClasses;
     readonly implementedCommandClasses: Map<CommandClasses, CommandClassInfo>;
     private _valueDB;
-    /**
-     * Sets a value for a given property of a given CommandClass of this node
-     * @param cc The command class the value belongs to
-     * @param endpoint The optional endpoint the value belongs to
-     * @param propertyName The property name the value belongs to
-     * @param value The value to set
-     */
-    setCCValue(cc: CommandClasses, endpoint: number | undefined, propertyName: string, value: unknown): void;
-    /**
-     * Retrieves a value for a given property of a given CommandClass of this node
-     * @param cc The command class the value belongs to
-     * @param endpoint The optional endpoint the value belongs to
-     * @param propertyName The property name the value belongs to
-     */
-    getCCValue(cc: CommandClasses, endpoint: number | undefined, propertyName: string): unknown;
+    readonly valueDB: ValueDB;
     /** This tells us which interview stage was last completed */
     interviewStage: InterviewStage;
     isControllerNode(): boolean;
@@ -62,6 +48,8 @@ export declare class ZWaveNode extends EventEmitter {
     controlsCC(cc: CommandClasses): boolean;
     /** Checks the supported version of a given CommandClass */
     getCCVersion(cc: CommandClasses): number;
+    /** Creates an instance of the given CC linked to this node */
+    createCCInstance<T extends CommandClass>(cc: CommandClasses): T;
     interview(): Promise<void>;
     /** Step #1 of the node interview */
     private queryProtocolInfo;

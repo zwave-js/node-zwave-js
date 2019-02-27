@@ -270,7 +270,7 @@ class Driver extends events_1.EventEmitter {
             }
             // tslint:disable-next-line:variable-name
             const MessageConstructor = Message_1.Message.getConstructor(this.receiveBuffer);
-            const msg = new MessageConstructor();
+            const msg = new MessageConstructor(this);
             let readBytes;
             try {
                 readBytes = msg.deserialize(this.receiveBuffer);

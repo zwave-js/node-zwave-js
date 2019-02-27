@@ -23,7 +23,7 @@ describe("lib/commandclass/NoOperationCC => ", () => {
 	});
 
 	it("should deserialize correctly", () => {
-		const deserialized = CommandClass.from(serialized);
+		const deserialized = CommandClass.from(undefined, serialized);
 		deserialized.should.be.an.instanceof(NoOperationCC);
 		deserialized.nodeId.should.equal(cc.nodeId);
 	});

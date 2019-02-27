@@ -1,6 +1,7 @@
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { num2hex } from "../util/strings";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { Driver } from "../driver/Driver";
 
 // TODO: encode duration:
 // SET:
@@ -28,16 +29,20 @@ export enum BasicCommand {
 export class BasicCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(nodeId?: number);
-	constructor(nodeId: number, ccCommand: BasicCommand.Get);
-	constructor(nodeId: number, ccCommand: BasicCommand.Set, targetValue: number);
+	constructor(
+		driver: Driver,
+		nodeId?: number,
+	);
+	constructor(driver: Driver, nodeId: number, ccCommand: BasicCommand.Get);
+	constructor(driver: Driver, nodeId: number, ccCommand: BasicCommand.Set, targetValue: number);
 
 	constructor(
+		driver: Driver,
 		public nodeId: number,
 		public ccCommand?: BasicCommand,
 		targetValue?: number,
 	) {
-		super(nodeId);
+		super(driver, nodeId);
 		this._targetValue = targetValue;
 	}
 	// tslint:enable:unified-signatures

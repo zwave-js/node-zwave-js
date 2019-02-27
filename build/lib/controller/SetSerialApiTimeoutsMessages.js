@@ -9,11 +9,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Driver_1 = require("../driver/Driver");
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
 let SetSerialApiTimeoutsRequest = class SetSerialApiTimeoutsRequest extends Message_1.Message {
-    constructor(ackTimeout, byteTimeout) {
-        super();
+    constructor(driver, ackTimeout, byteTimeout) {
+        super(driver);
         this.ackTimeout = ackTimeout;
         this.byteTimeout = byteTimeout;
     }
@@ -35,7 +36,7 @@ SetSerialApiTimeoutsRequest = __decorate([
     Message_1.messageTypes(Constants_1.MessageType.Request, Constants_1.FunctionType.SetSerialApiTimeouts),
     Message_1.expectedResponse(Constants_1.FunctionType.SetSerialApiTimeouts),
     Message_1.priority(Constants_1.MessagePriority.Controller),
-    __metadata("design:paramtypes", [Number, Number])
+    __metadata("design:paramtypes", [Driver_1.Driver, Number, Number])
 ], SetSerialApiTimeoutsRequest);
 exports.SetSerialApiTimeoutsRequest = SetSerialApiTimeoutsRequest;
 let SetSerialApiTimeoutsResponse = class SetSerialApiTimeoutsResponse extends Message_1.Message {

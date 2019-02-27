@@ -1,10 +1,11 @@
 /// <reference types="node" />
+import { Driver } from "../driver/Driver";
 import { Message } from "../message/Message";
 export declare class SetSerialApiTimeoutsRequest extends Message {
     ackTimeout?: number;
     byteTimeout?: number;
-    constructor();
-    constructor(ackTimeout: number, byteTimeout: number);
+    constructor(driver: Driver);
+    constructor(driver: Driver, ackTimeout: number, byteTimeout: number);
     serialize(): Buffer;
     toJSON(): Record<string, any>;
 }

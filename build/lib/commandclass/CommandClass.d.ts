@@ -2,6 +2,7 @@
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { Constructable } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
+import { Driver } from "../driver/Driver";
 export interface CommandClassInfo {
     isSupported: boolean;
     isControlled: boolean;
@@ -22,11 +23,12 @@ export declare enum StateKind {
     Dynamic = 4
 }
 export declare class CommandClass {
+    protected driver: Driver;
     nodeId?: number;
     command?: CommandClasses;
     payload: Buffer;
-    constructor();
-    constructor(nodeId: number, command?: CommandClasses, payload?: Buffer);
+    constructor(driver: Driver);
+    constructor(driver: Driver, nodeId: number, command?: CommandClasses, payload?: Buffer);
     /** The version of the command class used */
     version: number;
     serialize(): Buffer;
@@ -38,17 +40,21 @@ export declare class CommandClass {
      * It is assumed that the buffer only contains the serialized CC.
      */
     static getConstructor(ccData: Buffer): Constructable<CommandClass>;
-    static from(serializedCC: Buffer): CommandClass;
+    static from(driver: Driver, serializedCC: Buffer): CommandClass;
     toJSON(): any;
     private toJSONInternal;
     protected toJSONInherited(props: Record<string, any>): Record<string, any>;
     /** Requests static or dynamic state for a given from a node */
-    static createStateRequest(node: ZWaveNode, kind: StateKind): SendDataRequest | void;
+    static createStateRequest(driver: Driver, node: ZWaveNode, kind: StateKind): SendDataRequest | void;
+    /** Returns the node this CC is linked to */
+    protected getNode(): ZWaveNode;
+    /** Returns the value DB for this CC's node */
+    protected getValueDB(): import("../node/ValueDB").ValueDB;
     /** Which variables should be persisted when requested */
     private _variables;
     protected createVariable(name: string): void;
     /** Persists all values on the given node */
-    persistValues(node: ZWaveNode, endpoint?: number, variables?: Iterable<string>): void;
+    persistValues(endpoint?: number, variables?: Iterable<string>): void;
 }
 export declare const METADATA_commandClass: unique symbol;
 export declare const METADATA_commandClassMap: unique symbol;

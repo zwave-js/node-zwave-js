@@ -23,7 +23,7 @@ describe.skip("lib/commandclass/ManufacturerSpecificCC => ", () => {
 	});
 
 	it("should deserialize correctly", () => {
-		const deserialized = CommandClass.from(serialized);
+		const deserialized = CommandClass.from(undefined, serialized);
 		deserialized.should.be.an.instanceof(ManufacturerSpecificCC);
 		deserialized.nodeId.should.equal(cc.nodeId);
 	});

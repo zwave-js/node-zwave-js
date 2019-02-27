@@ -33,7 +33,7 @@ let ApplicationCommandRequest = class ApplicationCommandRequest extends Message_
         // const cc = CommandClass.getCommandClass(serializedCC);
         // const nodeId = CommandClass.getNodeId(serializedCC);
         // const ccVersion = this.driver != null ? this.driver.getSupportedCCVersionForNode(nodeId, cc) : undefined;
-        this._command = CommandClass_1.CommandClass.from(this.payload.slice(1));
+        this._command = CommandClass_1.CommandClass.from(this.driver, this.payload.slice(1));
         return ret;
     }
 };

@@ -15,6 +15,7 @@ var ZWaveErrorCodes;
     ZWaveErrorCodes[ZWaveErrorCodes["Controller_InclusionFailed"] = 10] = "Controller_InclusionFailed";
     ZWaveErrorCodes[ZWaveErrorCodes["CC_Invalid"] = 11] = "CC_Invalid";
     ZWaveErrorCodes[ZWaveErrorCodes["CC_NotSupported"] = 12] = "CC_NotSupported";
+    ZWaveErrorCodes[ZWaveErrorCodes["CC_NoNodeID"] = 13] = "CC_NoNodeID";
 })(ZWaveErrorCodes = exports.ZWaveErrorCodes || (exports.ZWaveErrorCodes = {}));
 class ZWaveError extends Error {
     constructor(message, code) {

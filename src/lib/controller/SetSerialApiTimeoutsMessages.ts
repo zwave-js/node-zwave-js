@@ -1,3 +1,4 @@
+import { Driver } from "../driver/Driver";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
 
@@ -6,16 +7,20 @@ import { expectedResponse, Message, messageTypes, priority} from "../message/Mes
 @priority(MessagePriority.Controller)
 export class SetSerialApiTimeoutsRequest extends Message {
 
-	constructor()
 	constructor(
+		driver: Driver,
+	)
+	constructor(
+		driver: Driver,
 		ackTimeout: number,
 		byteTimeout: number,
 	)
 	constructor(
+		driver: Driver,
 		public ackTimeout?: number,
 		public byteTimeout?: number,
 	) {
-		super();
+		super(driver);
 	}
 
 	public serialize(): Buffer {

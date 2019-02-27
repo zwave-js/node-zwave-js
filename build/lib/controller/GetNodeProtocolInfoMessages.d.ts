@@ -2,9 +2,10 @@
 import { Message } from "../message/Message";
 import { DeviceClass } from "../node/DeviceClass";
 import { INodeQuery } from "../node/INodeQuery";
+import { Driver } from "../driver/Driver";
 export declare type Baudrate = 9600 | 40000 | 100000;
 export declare class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
-    constructor(nodeId?: number);
+    constructor(driver: Driver, nodeId?: number);
     nodeId: number;
     serialize(): Buffer;
     toJSON(): Record<string, any>;

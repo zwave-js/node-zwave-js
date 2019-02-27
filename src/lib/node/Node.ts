@@ -1,7 +1,8 @@
 import { promiseSequence } from "alcalzone-shared/async";
 import { padStart } from "alcalzone-shared/strings";
+import { EventEmitter } from "events";
 import { CentralSceneCC } from "../commandclass/CentralSceneCC";
-import { CommandClass, CommandClasses, CommandClassInfo, getImplementedVersion, StateKind, getCommandClassStatic, getCCConstructor } from "../commandclass/CommandClass";
+import { CommandClass, CommandClasses, CommandClassInfo, getCCConstructor, getCommandClassStatic, getImplementedVersion, StateKind } from "../commandclass/CommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { ManufacturerSpecificCC, ManufacturerSpecificCommand } from "../commandclass/ManufacturerSpecificCC";
 import { MultiChannelCC, MultiChannelCommand } from "../commandclass/MultiChannelCC";
@@ -12,6 +13,7 @@ import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/
 import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "../controller/GetNodeProtocolInfoMessages";
 import { SendDataRequest, SendDataResponse, TransmitStatus } from "../controller/SendDataMessages";
 import { Driver } from "../driver/Driver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { MessagePriority } from "../message/Constants";
 import { Message } from "../message/Message";
 import { log } from "../util/logger";
@@ -19,9 +21,7 @@ import { num2hex, stringify } from "../util/strings";
 import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
 import { isNodeQuery } from "./INodeQuery";
 import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { ValueDB, ValueUpdatedArgs } from "./ValueDB";
-import { EventEmitter } from "events";
 
 /** Finds the ID of the target or source node in a message, if it contains that information */
 export function getNodeId(msg: Message): number {
@@ -105,25 +105,9 @@ export class ZWaveNode extends EventEmitter {
 		return this._implementedCommandClasses;
 	}
 
-	private _valueDB: ValueDB;
-	/**
-	 * Sets a value for a given property of a given CommandClass of this node
-	 * @param cc The command class the value belongs to
-	 * @param endpoint The optional endpoint the value belongs to
-	 * @param propertyName The property name the value belongs to
-	 * @param value The value to set
-	 */
-	public setCCValue(cc: CommandClasses, endpoint: number | undefined, propertyName: string, value: unknown) {
-		this._valueDB.setValue(cc, endpoint, propertyName, value);
-	}
-	/**
-	 * Retrieves a value for a given property of a given CommandClass of this node
-	 * @param cc The command class the value belongs to
-	 * @param endpoint The optional endpoint the value belongs to
-	 * @param propertyName The property name the value belongs to
-	 */
-	public getCCValue(cc: CommandClasses, endpoint: number | undefined, propertyName: string): unknown {
-		return this._valueDB.getValue(cc, endpoint, propertyName);
+	private _valueDB = new ValueDB();
+	public get valueDB(): ValueDB {
+		return this._valueDB;
 	}
 
 	/** This tells us which interview stage was last completed */
@@ -161,6 +145,16 @@ export class ZWaveNode extends EventEmitter {
 	/** Checks the supported version of a given CommandClass */
 	public getCCVersion(cc: CommandClasses): number {
 		return this._implementedCommandClasses.has(cc) ? this._implementedCommandClasses.get(cc).version : 0;
+	}
+
+	/** Creates an instance of the given CC linked to this node */
+	public createCCInstance<T extends CommandClass>(cc: CommandClasses): T {
+		if (!this.supportsCC(cc)) {
+			throw new ZWaveError(`Cannot create an instance of the unsupported CC ${CommandClasses[cc]} (${num2hex(cc)})`, ZWaveErrorCodes.CC_NotSupported);
+		}
+		// tslint:disable-next-line: variable-name
+		const Constructor = getCCConstructor(cc);
+		return new Constructor(this.driver, this.id) as T;
 	}
 
 	//#region --- interview ---
@@ -224,7 +218,7 @@ export class ZWaveNode extends EventEmitter {
 	private async queryProtocolInfo() {
 		log("controller", `${this.logPrefix}querying protocol info`, "debug");
 		const resp = await this.driver.sendMessage<GetNodeProtocolInfoResponse>(
-			new GetNodeProtocolInfoRequest(this.id),
+			new GetNodeProtocolInfoRequest(this.driver, this.id),
 		);
 		this._deviceClass = resp.deviceClass;
 		this._isListening = resp.isListening;
@@ -256,7 +250,7 @@ export class ZWaveNode extends EventEmitter {
 				isSupported: true,
 			});
 			// Assume the node is awake, after all we're communicating with it.
-			WakeUpCC.setAwake(this, true);
+			this.createCCInstance<WakeUpCC>(CommandClasses["Wake Up"]).setAwake(true);
 		}
 
 		this.interviewStage = InterviewStage.ProtocolInfo;
@@ -272,8 +266,8 @@ export class ZWaveNode extends EventEmitter {
 			} else {
 				log("controller", `${this.logPrefix}waiting for device to wake up`, "debug");
 
-				const wakeupCC = new WakeUpCC(this.id, WakeUpCommand.IntervalGet);
-				const request = new SendDataRequest(wakeupCC);
+				const wakeupCC = new WakeUpCC(this.driver, this.id, WakeUpCommand.IntervalGet);
+				const request = new SendDataRequest(this.driver, wakeupCC);
 
 				try {
 					const response = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.WakeUp);
@@ -296,7 +290,7 @@ export class ZWaveNode extends EventEmitter {
 			log("controller", `${this.logPrefix}pinging the node...`, "debug");
 
 			try {
-				const request = new SendDataRequest(new NoOperationCC(this.id));
+				const request = new SendDataRequest(this.driver, new NoOperationCC(this.driver, this.id));
 				// set the priority manually, as SendData can be Application level too
 				const response = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.NodeQuery);
 				log("controller", `${this.logPrefix}  ping succeeded`, "debug");
@@ -315,7 +309,7 @@ export class ZWaveNode extends EventEmitter {
 		} else {
 			log("controller", `${this.logPrefix}querying node info`, "debug");
 			const resp = await this.driver.sendMessage<RequestNodeInfoResponse | ApplicationUpdateRequest>(
-				new RequestNodeInfoRequest(this.id),
+				new RequestNodeInfoRequest(this.driver, this.id),
 			);
 			if (
 				resp instanceof RequestNodeInfoResponse && !resp.wasSent
@@ -337,8 +331,8 @@ export class ZWaveNode extends EventEmitter {
 			log("controller", `${this.logPrefix}not querying manufacturer information from the controller...`, "debug");
 		} else {
 			log("controller", `${this.logPrefix}querying manufacturer information`, "debug");
-			const cc = new ManufacturerSpecificCC(this.id, ManufacturerSpecificCommand.Get);
-			const request = new SendDataRequest(cc);
+			const cc = new ManufacturerSpecificCC(this.driver, this.id, ManufacturerSpecificCommand.Get);
+			const request = new SendDataRequest(this.driver, cc);
 			try {
 				// set the priority manually, as SendData can be Application level too
 				const resp = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.NodeQuery);
@@ -367,8 +361,8 @@ export class ZWaveNode extends EventEmitter {
 				log("controller", `${this.logPrefix}  skipping query for ${CommandClasses[cc]} (${num2hex(cc)}) because max implemented version is ${maxImplemented}`, "debug");
 				continue;
 			}
-			const versionCC = new VersionCC(this.id, VersionCommand.CommandClassGet, cc);
-			const request = new SendDataRequest(versionCC);
+			const versionCC = new VersionCC(this.driver, this.id, VersionCommand.CommandClassGet, cc);
+			const request = new SendDataRequest(this.driver, versionCC);
 			try {
 				log("controller", `${this.logPrefix}  querying the CC version for ${CommandClasses[cc]} (${num2hex(cc)})`, "debug");
 				// query the CC version
@@ -392,8 +386,8 @@ export class ZWaveNode extends EventEmitter {
 	private async queryEndpoints() {
 		if (this.supportsCC(CommandClasses["Multi Channel"])) {
 			log("controller", `${this.logPrefix}querying device endpoints`, "debug");
-			const cc = new MultiChannelCC(this.id, MultiChannelCommand.EndPointGet);
-			const request = new SendDataRequest(cc);
+			const cc = new MultiChannelCC(this.driver, this.id, MultiChannelCommand.EndPointGet);
+			const request = new SendDataRequest(this.driver, cc);
 			try {
 				// set the priority manually, as SendData can be Application level too
 				const resp = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.NodeQuery);
@@ -457,7 +451,7 @@ export class ZWaveNode extends EventEmitter {
 		const requests = commandClasses
 			.map(cc => getCCConstructor(cc) as typeof CommandClass)
 			.filter(cc => !!cc)
-			.map(cc => cc.createStateRequest(this, kind))
+			.map(cc => cc.createStateRequest(this.driver, this, kind))
 			.filter(req => !!req) as SendDataRequest[]
 			;
 		const factories = requests

@@ -1,6 +1,6 @@
 /// <reference types="node" />
-import { ZWaveNode } from "../node/Node";
 import { CommandClass } from "./CommandClass";
+import { Driver } from "../driver/Driver";
 export declare enum WakeUpCommand {
     IntervalSet = 4,
     IntervalGet = 5,
@@ -15,9 +15,9 @@ export declare class WakeUpCC extends CommandClass {
     wakeupCommand?: WakeUpCommand;
     wakeupInterval?: number;
     controllerNodeId?: number;
-    constructor(nodeId?: number);
-    constructor(nodeId: number, command: WakeUpCommand.IntervalSet, interval: number, controllerNodeId: number);
-    constructor(nodeId: number, command: WakeUpCommand.IntervalGet | WakeUpCommand.NoMoreInformation | WakeUpCommand.IntervalCapabilitiesGet);
+    constructor(driver: Driver, nodeId?: number);
+    constructor(driver: Driver, nodeId: number, command: WakeUpCommand.IntervalSet, interval: number, controllerNodeId: number);
+    constructor(driver: Driver, nodeId: number, command: WakeUpCommand.IntervalGet | WakeUpCommand.NoMoreInformation | WakeUpCommand.IntervalCapabilitiesGet);
     private _minWakeUpInterval;
     readonly minWakeUpInterval: number;
     private _maxWakeUpInterval;
@@ -28,6 +28,6 @@ export declare class WakeUpCC extends CommandClass {
     readonly wakeUpIntervalSteps: number;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
-    static isAwake(node: ZWaveNode): boolean;
-    static setAwake(node: ZWaveNode, awake: boolean): void;
+    isAwake(): boolean;
+    setAwake(awake: boolean): void;
 }

@@ -2,6 +2,7 @@
 import { GenericDeviceClasses } from "../node/DeviceClass";
 import { EndpointInformation } from "../node/NodeInfo";
 import { CommandClass } from "./CommandClass";
+import { Driver } from "../driver/Driver";
 export declare enum MultiChannelCommand {
     EndPointGet = 7,
     EndPointReport = 8,
@@ -17,10 +18,10 @@ export interface EndpointCapability extends EndpointInformation {
 export declare class MultiChannelCC extends CommandClass {
     nodeId: number;
     ccCommand?: MultiChannelCommand;
-    constructor(nodeId?: number);
-    constructor(nodeId: number, ccCommand: MultiChannelCommand.EndPointGet);
-    constructor(nodeId: number, ccCommand: MultiChannelCommand.CapabilityGet, endpoint: number);
-    constructor(nodeId: number, ccCommand: MultiChannelCommand.EndPointFind, genericClass: GenericDeviceClasses, specificClass: number);
+    constructor(driver: Driver, nodeId?: number);
+    constructor(driver: Driver, nodeId: number, ccCommand: MultiChannelCommand.EndPointGet);
+    constructor(driver: Driver, nodeId: number, ccCommand: MultiChannelCommand.CapabilityGet, endpoint: number);
+    constructor(driver: Driver, nodeId: number, ccCommand: MultiChannelCommand.EndPointFind, genericClass: GenericDeviceClasses, specificClass: number);
     private _isDynamicEndpointCount;
     readonly isDynamicEndpointCount: boolean;
     private _identicalCapabilities;

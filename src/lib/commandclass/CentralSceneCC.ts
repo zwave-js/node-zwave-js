@@ -1,5 +1,6 @@
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { Driver } from "../driver/Driver";
 
 export enum CentralSceneCommand {
 	SupportedGet = 0x01,
@@ -25,16 +26,17 @@ export enum CentralSceneKeys {
 export class CentralSceneCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(nodeId?: number);
-	constructor(nodeId: number, command: CentralSceneCommand.SupportedGet | CentralSceneCommand.ConfigurationGet);
-	constructor(nodeId: number, command: CentralSceneCommand.ConfigurationSet, slowRefresh: boolean);
+	constructor(driver: Driver, nodeId?: number);
+	constructor(driver: Driver, nodeId: number, command: CentralSceneCommand.SupportedGet | CentralSceneCommand.ConfigurationGet);
+	constructor(driver: Driver, nodeId: number, command: CentralSceneCommand.ConfigurationSet, slowRefresh: boolean);
 
 	constructor(
+		driver: Driver,
 		public nodeId: number,
 		public centralSceneCommand?: CentralSceneCommand,
 		slowRefresh?: boolean,
 	) {
-		super(nodeId);
+		super(driver, nodeId);
 		this._slowRefresh = slowRefresh;
 	}
 	// tslint:enable:unified-signatures

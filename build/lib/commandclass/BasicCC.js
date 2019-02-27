@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const strings_1 = require("../util/strings");
 const CommandClass_1 = require("./CommandClass");
+const Driver_1 = require("../driver/Driver");
 // TODO: encode duration:
 // SET:
 // 0x00 = instantly
@@ -32,8 +33,8 @@ var BasicCommand;
     BasicCommand[BasicCommand["Report"] = 3] = "Report";
 })(BasicCommand = exports.BasicCommand || (exports.BasicCommand = {}));
 let BasicCC = class BasicCC extends CommandClass_1.CommandClass {
-    constructor(nodeId, ccCommand, targetValue) {
-        super(nodeId);
+    constructor(driver, nodeId, ccCommand, targetValue) {
+        super(driver, nodeId);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
         this._targetValue = targetValue;
@@ -84,6 +85,6 @@ BasicCC = __decorate([
     CommandClass_1.implementedVersion(2) // Update tests in CommandClass.test.ts when changing this
     ,
     CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses.Basic),
-    __metadata("design:paramtypes", [Number, Number, Number])
+    __metadata("design:paramtypes", [Driver_1.Driver, Number, Number, Number])
 ], BasicCC);
 exports.BasicCC = BasicCC;

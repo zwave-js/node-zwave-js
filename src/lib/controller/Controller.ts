@@ -143,7 +143,7 @@ export class ZWaveController extends EventEmitter {
 
 		// get basic controller version info
 		log("controller", `querying version info...`, "debug");
-		const version = await this.driver.sendMessage<GetControllerVersionResponse>(new GetControllerVersionRequest(), "none");
+		const version = await this.driver.sendMessage<GetControllerVersionResponse>(new GetControllerVersionRequest(this.driver), "none");
 		this._libraryVersion = version.libraryVersion;
 		this._type = version.controllerType;
 		log("controller", `received version info:`, "debug");
@@ -152,7 +152,7 @@ export class ZWaveController extends EventEmitter {
 
 		// get the home and node id of the controller
 		log("controller", `querying controller IDs...`, "debug");
-		const ids = await this.driver.sendMessage<GetControllerIdResponse>(new GetControllerIdRequest(), "none");
+		const ids = await this.driver.sendMessage<GetControllerIdResponse>(new GetControllerIdRequest(this.driver), "none");
 		this._homeId = ids.homeId;
 		this._ownNodeId = ids.ownNodeId;
 		log("controller", `received controller IDs:`, "debug");
@@ -161,7 +161,7 @@ export class ZWaveController extends EventEmitter {
 
 		// find out what the controller can do
 		log("controller", `querying controller capabilities...`, "debug");
-		const ctrlCaps = await this.driver.sendMessage<GetControllerCapabilitiesResponse>(new GetControllerCapabilitiesRequest(), "none");
+		const ctrlCaps = await this.driver.sendMessage<GetControllerCapabilitiesResponse>(new GetControllerCapabilitiesRequest(this.driver), "none");
 		this._isSecondary = ctrlCaps.isSecondary;
 		this._isUsingHomeIdFromOtherNetwork = ctrlCaps.isUsingHomeIdFromOtherNetwork;
 		this._isSISPresent = ctrlCaps.isSISPresent;
@@ -176,7 +176,7 @@ export class ZWaveController extends EventEmitter {
 
 		// find out which part of the API is supported
 		log("controller", `querying API capabilities...`, "debug");
-		const apiCaps = await this.driver.sendMessage<GetSerialApiCapabilitiesResponse>(new GetSerialApiCapabilitiesRequest(), "none");
+		const apiCaps = await this.driver.sendMessage<GetSerialApiCapabilitiesResponse>(new GetSerialApiCapabilitiesRequest(this.driver), "none");
 		this._serialApiVersion = apiCaps.serialApiVersion;
 		this._manufacturerId = apiCaps.manufacturerId;
 		this._productType = apiCaps.productType;
@@ -196,7 +196,7 @@ export class ZWaveController extends EventEmitter {
 
 		// find the SUC
 		log("controller", `finding SUC...`, "debug");
-		const suc = await this.driver.sendMessage<GetSUCNodeIdResponse>(new GetSUCNodeIdRequest(), "none");
+		const suc = await this.driver.sendMessage<GetSUCNodeIdResponse>(new GetSUCNodeIdRequest(this.driver), "none");
 		this._sucNodeId = suc.sucNodeId;
 		if (this._sucNodeId === 0) {
 			log("controller", `no SUC present`, "debug");
@@ -213,7 +213,7 @@ export class ZWaveController extends EventEmitter {
 
 		// Request information about all nodes with the GetInitData message
 		log("controller", `querying node information...`, "debug");
-		const initData = await this.driver.sendMessage<GetSerialApiInitDataResponse>(new GetSerialApiInitDataRequest());
+		const initData = await this.driver.sendMessage<GetSerialApiInitDataResponse>(new GetSerialApiInitDataRequest(this.driver));
 		// override the information we might already have
 		this._isSecondary = initData.isSecondary;
 		this._isStaticUpdateController = initData.isStaticUpdateController;
@@ -235,7 +235,7 @@ export class ZWaveController extends EventEmitter {
 		if (this.type !== ZWaveLibraryTypes["Bridge Controller"] && this.isFunctionSupported(FunctionType.SetSerialApiTimeouts)) {
 			const { ack, byte } = this.driver.options.timeouts;
 			log("controller", `setting serial API timeouts: ack = ${ack} ms, byte = ${byte} ms`, "debug");
-			const resp = await this.driver.sendMessage<SetSerialApiTimeoutsResponse>(new SetSerialApiTimeoutsRequest(ack, byte));
+			const resp = await this.driver.sendMessage<SetSerialApiTimeoutsResponse>(new SetSerialApiTimeoutsRequest(this.driver, ack, byte));
 			log("controller", `serial API timeouts overwritten. The old values were: ack = ${resp.oldAckTimeout} ms, byte = ${resp.oldByteTimeout} ms`, "debug");
 		}
 
@@ -243,6 +243,7 @@ export class ZWaveController extends EventEmitter {
 		if (this.isFunctionSupported(FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION)) {
 			log("controller", `sending application info...`, "debug");
 			const appInfoMsg = new Message(
+				this.driver,
 				MessageType.Request,
 				FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION,
 				null,
@@ -276,7 +277,7 @@ export class ZWaveController extends EventEmitter {
 			this.driver.registerRequestHandler(FunctionType.HardReset, handler, true);
 			// begin the reset process
 			try {
-				await this.driver.sendMessage(new HardResetRequest());
+				await this.driver.sendMessage(new HardResetRequest(this.driver));
 			} catch (e) {
 				// in any case unregister the handler
 				log("controller", `  hard reset failed: ${e.message}`, "debug");
@@ -302,7 +303,7 @@ export class ZWaveController extends EventEmitter {
 
 		// kick off the inclusion process
 		await this.driver.sendMessage(
-			new AddNodeToNetworkRequest(AddNodeType.Any, true, true),
+			new AddNodeToNetworkRequest(this.driver, AddNodeType.Any, true, true),
 		);
 
 		await this._beginInclusionPromise;
@@ -320,7 +321,7 @@ export class ZWaveController extends EventEmitter {
 
 		// kick off the inclusion process
 		await this.driver.sendMessage(
-			new AddNodeToNetworkRequest(AddNodeType.Stop, true, true),
+			new AddNodeToNetworkRequest(this.driver, AddNodeType.Stop, true, true),
 		);
 
 		await this._stopInclusionPromise;

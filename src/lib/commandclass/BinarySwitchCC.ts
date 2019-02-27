@@ -1,5 +1,6 @@
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { Driver } from "../driver/Driver";
 
 export enum BinarySwitchCommand {
 	Set = 0x01,
@@ -13,9 +14,17 @@ export enum BinarySwitchCommand {
 export class BinarySwitchCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(nodeId?: number);
-	constructor(nodeId: number, ccCommand: BinarySwitchCommand.Get);
 	constructor(
+		driver: Driver,
+		nodeId?: number,
+	);
+	constructor(
+		driver: Driver,
+		nodeId: number,
+		ccCommand: BinarySwitchCommand.Get,
+	);
+	constructor(
+		driver: Driver,
 		nodeId: number,
 		ccCommand: BinarySwitchCommand.Set,
 		targetValue: boolean,
@@ -23,12 +32,13 @@ export class BinarySwitchCC extends CommandClass {
 	);
 
 	constructor(
+		driver: Driver,
 		public nodeId: number,
 		public ccCommand?: BinarySwitchCommand,
 		public targetValue?: BinarySwitchState,
 		public duration?: number,
 	) {
-		super(nodeId);
+		super(driver, nodeId);
 	}
 	// tslint:enable:unified-signatures
 
@@ -94,6 +104,6 @@ export type BinarySwitchState = boolean | "unknown";
 function decodeBinarySwitchState(val: number): BinarySwitchState {
 	return val === 0 ? false :
 		val === 0xff ? true :
-		"unknown"
-	;
+			"unknown"
+		;
 }

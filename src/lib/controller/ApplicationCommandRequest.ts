@@ -44,7 +44,7 @@ export class ApplicationCommandRequest extends Message implements ICommandClassC
 		// const cc = CommandClass.getCommandClass(serializedCC);
 		// const nodeId = CommandClass.getNodeId(serializedCC);
 		// const ccVersion = this.driver != null ? this.driver.getSupportedCCVersionForNode(nodeId, cc) : undefined;
-		this._command = CommandClass.from(this.payload.slice(1));
+		this._command = CommandClass.from(this.driver, this.payload.slice(1));
 
 		return ret;
 	}

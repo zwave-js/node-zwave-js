@@ -6,6 +6,7 @@ import { Constructable } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
+import { Driver } from "../driver/Driver";
 
 export interface CommandClassInfo {
 	isSupported: boolean;
@@ -34,15 +35,19 @@ export class CommandClass {
 
 	// tslint:disable:unified-signatures
 	// empty constructor to parse messages
-	constructor();
+	constructor(
+		driver: Driver,
+	);
 	// default constructor to send messages
 	constructor(
+		driver: Driver,
 		nodeId: number,
 		command?: CommandClasses,
 		payload?: Buffer,
 	);
 	// implementation
 	constructor(
+		protected driver: Driver,
 		public nodeId?: number,
 		public command?: CommandClasses,
 		public payload: Buffer = Buffer.from([]),
@@ -96,10 +101,10 @@ export class CommandClass {
 		return getCCConstructor(cc) || CommandClass;
 	}
 
-	public static from(serializedCC: Buffer): CommandClass {
+	public static from(driver: Driver, serializedCC: Buffer): CommandClass {
 		// tslint:disable-next-line:variable-name
 		const Constructor = CommandClass.getConstructor(serializedCC);
-		const ret = new Constructor();
+		const ret = new Constructor(driver);
 		ret.deserialize(serializedCC);
 		return ret;
 	}
@@ -127,8 +132,23 @@ export class CommandClass {
 	}
 
 	/** Requests static or dynamic state for a given from a node */
-	public static createStateRequest(node: ZWaveNode, kind: StateKind): SendDataRequest | void {
+	public static createStateRequest(driver: Driver, node: ZWaveNode, kind: StateKind): SendDataRequest | void {
 		// This needs to be overwritten per command class. In the default implementation, don't do anything
+	}
+
+	/** Returns the node this CC is linked to */
+	protected getNode() {
+		if (this.nodeId == undefined) throw new ZWaveError("Cannot retrieve the node without a Node ID", ZWaveErrorCodes.CC_NoNodeID);
+		return this
+			.driver
+			.controller
+			.nodes.get(this.nodeId)
+			;
+	}
+
+	/** Returns the value DB for this CC's node */
+	protected getValueDB() {
+		return this.getNode().valueDB;
 	}
 
 	/** Which variables should be persisted when requested */
@@ -139,12 +159,12 @@ export class CommandClass {
 
 	/** Persists all values on the given node */
 	public persistValues(
-		node: ZWaveNode,
 		endpoint?: number,
 		variables: Iterable<string> = this._variables.keys(),
 	) {
+		const db = this.getValueDB();
 		for (const variable of variables) {
-			node.setCCValue(getCommandClass(this), endpoint, variable, this[variable as keyof this]);
+			db.setValue(getCommandClass(this), endpoint, variable, this[variable as keyof this]);
 		}
 	}
 

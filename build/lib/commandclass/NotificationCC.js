@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const objects_1 = require("alcalzone-shared/objects");
 const ZWaveError_1 = require("../error/ZWaveError");
 const CommandClass_1 = require("./CommandClass");
+const Driver_1 = require("../driver/Driver");
 var NotificationCommand;
 (function (NotificationCommand) {
     // All the supported commands
@@ -41,10 +42,10 @@ var NotificationType;
     NotificationType[NotificationType["HomeHealth"] = 13] = "HomeHealth";
 })(NotificationType = exports.NotificationType || (exports.NotificationType = {}));
 let NotificationCC = class NotificationCC extends CommandClass_1.CommandClass {
-    constructor(nodeId, ccCommand, 
+    constructor(driver, nodeId, ccCommand, 
     // tslint:disable-next-line:trailing-comma
     ...args) {
-        super(nodeId);
+        super(driver, nodeId);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
         this._supportedEvents = new Map();
@@ -203,6 +204,6 @@ NotificationCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses.Notification),
     CommandClass_1.implementedVersion(8),
     CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses.Notification),
-    __metadata("design:paramtypes", [Number, Number, Object])
+    __metadata("design:paramtypes", [Driver_1.Driver, Number, Number, Object])
 ], NotificationCC);
 exports.NotificationCC = NotificationCC;
