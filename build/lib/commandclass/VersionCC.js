@@ -11,9 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var VersionCC_1;
 const SendDataMessages_1 = require("../controller/SendDataMessages");
+const Driver_1 = require("../driver/Driver");
 const ZWaveError_1 = require("../error/ZWaveError");
 const CommandClass_1 = require("./CommandClass");
-const Driver_1 = require("../driver/Driver");
 var VersionCommand;
 (function (VersionCommand) {
     VersionCommand[VersionCommand["Get"] = 17] = "Get";

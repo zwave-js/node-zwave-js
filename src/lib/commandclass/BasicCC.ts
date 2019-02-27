@@ -1,7 +1,7 @@
+import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { num2hex } from "../util/strings";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
-import { Driver } from "../driver/Driver";
 
 // TODO: encode duration:
 // SET:

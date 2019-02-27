@@ -1,6 +1,6 @@
 /// <reference types="node" />
-import { CommandClass } from "./CommandClass";
 import { Driver } from "../driver/Driver";
+import { CommandClass } from "./CommandClass";
 export declare enum NotificationCommand {
     EventSupportedGet = 1,
     EventSupportedReport = 2,

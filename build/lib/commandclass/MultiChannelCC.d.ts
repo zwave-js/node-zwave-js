@@ -1,8 +1,8 @@
 /// <reference types="node" />
+import { Driver } from "../driver/Driver";
 import { GenericDeviceClasses } from "../node/DeviceClass";
 import { EndpointInformation } from "../node/NodeInfo";
 import { CommandClass } from "./CommandClass";
-import { Driver } from "../driver/Driver";
 export declare enum MultiChannelCommand {
     EndPointGet = 7,
     EndPointReport = 8,

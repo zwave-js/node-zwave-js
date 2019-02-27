@@ -1,6 +1,6 @@
 /// <reference types="node" />
-import { CommandClass } from "./CommandClass";
 import { Driver } from "../driver/Driver";
+import { CommandClass } from "./CommandClass";
 export declare enum BinarySensorCommand {
     Get = 2,
     Report = 3,

@@ -1,9 +1,9 @@
 /// <reference types="node" />
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
+import { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { CommandClass, CommandClasses, StateKind } from "./CommandClass";
-import { Driver } from "../driver/Driver";
 export declare enum VersionCommand {
     Get = 17,
     Report = 18,

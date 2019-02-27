@@ -1,8 +1,8 @@
 /// <reference types="node" />
+import { Driver } from "../driver/Driver";
 import { Message } from "../message/Message";
 import { DeviceClass } from "../node/DeviceClass";
 import { INodeQuery } from "../node/INodeQuery";
-import { Driver } from "../driver/Driver";
 export declare type Baudrate = 9600 | 40000 | 100000;
 export declare class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
     constructor(driver: Driver, nodeId?: number);

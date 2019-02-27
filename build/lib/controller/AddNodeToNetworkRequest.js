@@ -9,10 +9,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Driver_1 = require("../driver/Driver");
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
 const NodeInfo_1 = require("../node/NodeInfo");
-const Driver_1 = require("../driver/Driver");
 var AddNodeType;
 (function (AddNodeType) {
     AddNodeType[AddNodeType["Any"] = 1] = "Any";

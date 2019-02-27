@@ -9,10 +9,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Driver_1 = require("../driver/Driver");
 const ZWaveError_1 = require("../error/ZWaveError");
 const strings_1 = require("../util/strings");
 const CommandClass_1 = require("./CommandClass");
-const Driver_1 = require("../driver/Driver");
 // TODO: encode duration:
 // SET:
 // 0x00 = instantly

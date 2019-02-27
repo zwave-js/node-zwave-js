@@ -6,7 +6,7 @@ import { CommandClass, CommandClasses, getCommandClass } from "./CommandClass";
 import { NoOperationCC } from "./NoOperationCC";
 
 describe("lib/commandclass/NoOperationCC => ", () => {
-	const cc = new NoOperationCC(2);
+	const cc = new NoOperationCC(undefined, 2);
 	let serialized: Buffer;
 
 	it("should be a CommandClass", () => {

@@ -9,10 +9,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Driver_1 = require("../driver/Driver");
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
 const DeviceClass_1 = require("../node/DeviceClass");
-const Driver_1 = require("../driver/Driver");
 let GetNodeProtocolInfoRequest = class GetNodeProtocolInfoRequest extends Message_1.Message {
     constructor(driver, nodeId) {
         super(driver);

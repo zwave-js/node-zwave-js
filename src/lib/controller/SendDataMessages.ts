@@ -1,11 +1,11 @@
 import { CommandClass, CommandClasses, getExpectedCCResponse } from "../commandclass/CommandClass";
 import { ICommandClassContainer, isCommandClassContainer } from "../commandclass/ICommandClassContainer";
+import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { Constructable, expectedResponse, Message, messageTypes, priority, ResponsePredicate, ResponseRole } from "../message/Message";
 import { log } from "../util/logger";
 import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
-import { Driver } from "../driver/Driver";
 
 export enum TransmitOptions {
 	NotSet = 0,

@@ -1,8 +1,8 @@
+import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { GenericDeviceClasses } from "../node/DeviceClass";
 import { EndpointInformation, parseEndpointInformation } from "../node/NodeInfo";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
-import { Driver } from "../driver/Driver";
 
 export enum MultiChannelCommand {
 	EndPointGet = 0x07,

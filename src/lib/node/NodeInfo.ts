@@ -8,7 +8,7 @@ export interface EndpointInformation {
 	controlledCCs: CommandClasses[]; // This does not actually exist for endpoints, but the code is nicer this way
 }
 
-export interface NodeInformation extends EndpointInformation{
+export interface NodeInformation extends EndpointInformation {
 	nodeId: number;
 	basic: BasicDeviceClasses;
 }

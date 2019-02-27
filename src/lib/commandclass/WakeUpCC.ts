@@ -1,7 +1,7 @@
+import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { ZWaveNode } from "../node/Node";
-import { CommandClass, commandClass, CommandClasses, expectedCCResponse, getCommandClassStatic, implementedVersion, getCommandClass } from "./CommandClass";
-import { Driver } from "../driver/Driver";
+import { CommandClass, commandClass, CommandClasses, expectedCCResponse, getCommandClass, getCommandClassStatic, implementedVersion } from "./CommandClass";
 
 export enum WakeUpCommand {
 	IntervalSet = 0x04,

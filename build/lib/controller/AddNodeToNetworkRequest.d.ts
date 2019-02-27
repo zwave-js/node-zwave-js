@@ -1,8 +1,8 @@
 /// <reference types="node" />
 import { CommandClasses } from "../commandclass/CommandClass";
+import { Driver } from "../driver/Driver";
 import { Message } from "../message/Message";
 import { BasicDeviceClasses, GenericDeviceClass, SpecificDeviceClass } from "../node/DeviceClass";
-import { Driver } from "../driver/Driver";
 export declare enum AddNodeType {
     Any = 1,
     Controller = 2,

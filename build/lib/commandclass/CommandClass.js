@@ -12,10 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var CommandClass_1;
 const objects_1 = require("alcalzone-shared/objects");
 const fs = require("fs");
+const Driver_1 = require("../driver/Driver");
 const ZWaveError_1 = require("../error/ZWaveError");
 const logger_1 = require("../util/logger");
 const strings_1 = require("../util/strings");
-const Driver_1 = require("../driver/Driver");
 /**
  * Defines which kind of CC state should be requested
  */

@@ -9,9 +9,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Driver_1 = require("../driver/Driver");
 const ZWaveError_1 = require("../error/ZWaveError");
 const CommandClass_1 = require("./CommandClass");
-const Driver_1 = require("../driver/Driver");
 var MultilevelSwitchCommand;
 (function (MultilevelSwitchCommand) {
     MultilevelSwitchCommand[MultilevelSwitchCommand["Set"] = 1] = "Set";

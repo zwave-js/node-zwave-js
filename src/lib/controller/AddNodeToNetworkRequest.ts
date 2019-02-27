@@ -1,9 +1,9 @@
 import { CommandClasses } from "../commandclass/CommandClass";
+import { Driver } from "../driver/Driver";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
 import { BasicDeviceClasses, GenericDeviceClass, SpecificDeviceClass } from "../node/DeviceClass";
 import { parseNodeInformation } from "../node/NodeInfo";
-import { Driver } from "../driver/Driver";
 
 export enum AddNodeType {
 	Any = 1,

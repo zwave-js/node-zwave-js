@@ -1,12 +1,12 @@
 import { entries } from "alcalzone-shared/objects";
 import * as fs from "fs";
 import { SendDataRequest } from "../controller/SendDataMessages";
+import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Constructable } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
-import { Driver } from "../driver/Driver";
 
 export interface CommandClassInfo {
 	isSupported: boolean;

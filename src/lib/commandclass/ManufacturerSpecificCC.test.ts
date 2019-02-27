@@ -6,7 +6,7 @@ import { CommandClass, CommandClasses, getCommandClass } from "./CommandClass";
 import { ManufacturerSpecificCC } from "./ManufacturerSpecificCC";
 
 describe.skip("lib/commandclass/ManufacturerSpecificCC => ", () => {
-	const cc = new ManufacturerSpecificCC(2);
+	const cc = new ManufacturerSpecificCC(undefined, 2);
 	let serialized: Buffer;
 
 	it("should be a CommandClass", () => {

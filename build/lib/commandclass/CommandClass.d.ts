@@ -1,8 +1,8 @@
 /// <reference types="node" />
 import { SendDataRequest } from "../controller/SendDataMessages";
+import { Driver } from "../driver/Driver";
 import { Constructable } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
-import { Driver } from "../driver/Driver";
 export interface CommandClassInfo {
     isSupported: boolean;
     isControlled: boolean;
