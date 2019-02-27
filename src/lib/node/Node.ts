@@ -19,6 +19,9 @@ import { num2hex, stringify } from "../util/strings";
 import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
 import { isNodeQuery } from "./INodeQuery";
 import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { ValueDB, ValueUpdatedArgs } from "./ValueDB";
+import { EventEmitter } from "events";
 
 /** Finds the ID of the target or source node in a message, if it contains that information */
 export function getNodeId(msg: Message): number {
@@ -26,7 +29,14 @@ export function getNodeId(msg: Message): number {
 	if (isCommandClassContainer(msg)) return msg.command.nodeId;
 }
 
-export class ZWaveNode {
+export interface ZWaveNode {
+	on(event: "value updated", cb: (args: ValueUpdatedArgs) => void): this;
+	removeListener(event: "value updated", cb: (args: ValueUpdatedArgs) => void): this;
+
+	removeAllListeners(event?: "value updated"): this;
+}
+
+export class ZWaveNode extends EventEmitter {
 
 	constructor(
 		public readonly id: number,
@@ -35,6 +45,11 @@ export class ZWaveNode {
 		supportedCCs: CommandClasses[] = [],
 		controlledCCs: CommandClasses[] = [],
 	) {
+		super();
+
+		this._valueDB = new ValueDB();
+		this.on("value updated", (args) => this.emit("value updated", args));
+
 		// TODO restore from cache
 		this._deviceClass = deviceClass;
 		for (const cc of supportedCCs) this.addCC(cc, { isSupported: true });
@@ -90,9 +105,25 @@ export class ZWaveNode {
 		return this._implementedCommandClasses;
 	}
 
-	private _ccValues = new Map<CommandClasses, Map<string, unknown>>();
-	public get ccValues(): Map<CommandClasses, Map<string, unknown>> {
-		return this._ccValues;
+	private _valueDB: ValueDB;
+	/**
+	 * Sets a value for a given property of a given CommandClass of this node
+	 * @param cc The command class the value belongs to
+	 * @param endpoint The optional endpoint the value belongs to
+	 * @param propertyName The property name the value belongs to
+	 * @param value The value to set
+	 */
+	public setCCValue(cc: CommandClasses, endpoint: number | undefined, propertyName: string, value: unknown) {
+		this._valueDB.setValue(cc, endpoint, propertyName, value);
+	}
+	/**
+	 * Retrieves a value for a given property of a given CommandClass of this node
+	 * @param cc The command class the value belongs to
+	 * @param endpoint The optional endpoint the value belongs to
+	 * @param propertyName The property name the value belongs to
+	 */
+	public getCCValue(cc: CommandClasses, endpoint: number | undefined, propertyName: string): unknown {
+		return this._valueDB.getValue(cc, endpoint, propertyName);
 	}
 
 	/** This tells us which interview stage was last completed */
@@ -181,6 +212,8 @@ export class ZWaveNode {
 		if (this.interviewStage === InterviewStage.Endpoints) {
 			await this.requestStaticValues();
 		}
+
+		// TODO: Save the current state
 
 		// for testing purposes we skip to the end
 		this.interviewStage = InterviewStage.Complete;
@@ -290,10 +323,10 @@ export class ZWaveNode {
 			) {
 				log("controller", `${this.logPrefix}  querying the node info failed`, "debug");
 			} else if (resp instanceof ApplicationUpdateRequest) {
-				// TODO: log the received values
 				log("controller", `${this.logPrefix}  received the node info`, "debug");
 				for (const cc of resp.nodeInformation.supportedCCs) this.addCC(cc, { isSupported: true });
 				for (const cc of resp.nodeInformation.controlledCCs) this.addCC(cc, { isControlled: true });
+				// TODO: Save the received values
 			}
 		}
 		this.interviewStage = InterviewStage.NodeInfo;

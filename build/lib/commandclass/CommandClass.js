@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var CommandClass_1;
 const objects_1 = require("alcalzone-shared/objects");
 const fs = require("fs");
-const ZWaveError_1 = require("../error/ZWaveError");
 const logger_1 = require("../util/logger");
 const strings_1 = require("../util/strings");
 /**
@@ -33,6 +32,8 @@ let CommandClass = CommandClass_1 = class CommandClass {
         this.nodeId = nodeId;
         this.command = command;
         this.payload = payload;
+        /** Which variables should be persisted when requested */
+        this._variables = new Set();
         // Extract the cc from declared metadata if not provided
         this.command = command != null ? command : getCommandClass(this);
     }
@@ -98,36 +99,18 @@ let CommandClass = CommandClass_1 = class CommandClass {
         }
         return ret;
     }
-    /**
-     * Sets a value for a given property of a given CommandClass on the node
-     * @param node The node to set the value on
-     * @param cc The command class the value belongs to
-     * @param propertyName The property name the value belongs to
-     * @param value The value to set
-     */
-    static setValue(node, cc, propertyName, value) {
-        if (!node.supportsCC(cc))
-            throw new ZWaveError_1.ZWaveError(`Cannot set the value for the unsupported ${cc} CC!`, ZWaveError_1.ZWaveErrorCodes.CC_NotSupported);
-        if (!node.ccValues.has(cc))
-            node.ccValues.set(cc, new Map());
-        const ccValuesMap = node.ccValues.get(cc);
-        ccValuesMap.set(propertyName, value);
-    }
-    /**
-     * Retrieves a value for a given property of a given CommandClass from the node
-     * @param node The node to retrieve the value from
-     * @param cc The command class the value belongs to
-     * @param propertyName The property name the value belongs to
-     */
-    static getValue(node, cc, propertyName) {
-        if (node.ccValues.has(cc)) {
-            const ccValuesMap = node.ccValues.get(cc);
-            return ccValuesMap.get(propertyName);
-        }
-    }
     /** Requests static or dynamic state for a given from a node */
     static createStateRequest(node, kind) {
         // This needs to be overwritten per command class. In the default implementation, don't do anything
+    }
+    createVariable(name) {
+        this._variables.add(name);
+    }
+    /** Persists all values on the given node */
+    persistValues(node, endpoint, variables = this._variables.keys()) {
+        for (const variable of variables) {
+            node.setCCValue(getCommandClass(this), endpoint, variable, this[variable]);
+        }
     }
 };
 CommandClass = CommandClass_1 = __decorate([

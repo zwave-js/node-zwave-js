@@ -26,6 +26,8 @@ const strings_2 = require("../util/strings");
 const DeviceClass_1 = require("./DeviceClass");
 const INodeQuery_1 = require("./INodeQuery");
 const RequestNodeInfoMessages_1 = require("./RequestNodeInfoMessages");
+const ValueDB_1 = require("./ValueDB");
+const events_1 = require("events");
 /** Finds the ID of the target or source node in a message, if it contains that information */
 function getNodeId(msg) {
     if (INodeQuery_1.isNodeQuery(msg))
@@ -34,16 +36,18 @@ function getNodeId(msg) {
         return msg.command.nodeId;
 }
 exports.getNodeId = getNodeId;
-class ZWaveNode {
+class ZWaveNode extends events_1.EventEmitter {
     constructor(id, driver, deviceClass, supportedCCs = [], controlledCCs = []) {
+        super();
         this.id = id;
         this.driver = driver;
         //#region --- properties ---
         this.logPrefix = `[Node ${strings_1.padStart(this.id.toString(), 3, "0")}] `;
         this._implementedCommandClasses = new Map();
-        this._ccValues = new Map();
         /** This tells us which interview stage was last completed */
         this.interviewStage = InterviewStage.None;
+        this._valueDB = new ValueDB_1.ValueDB();
+        this.on("value updated", (args) => this.emit("value updated", args));
         // TODO restore from cache
         this._deviceClass = deviceClass;
         for (const cc of supportedCCs)
@@ -78,8 +82,24 @@ class ZWaveNode {
     get implementedCommandClasses() {
         return this._implementedCommandClasses;
     }
-    get ccValues() {
-        return this._ccValues;
+    /**
+     * Sets a value for a given property of a given CommandClass of this node
+     * @param cc The command class the value belongs to
+     * @param endpoint The optional endpoint the value belongs to
+     * @param propertyName The property name the value belongs to
+     * @param value The value to set
+     */
+    setCCValue(cc, endpoint, propertyName, value) {
+        this._valueDB.setValue(cc, endpoint, propertyName, value);
+    }
+    /**
+     * Retrieves a value for a given property of a given CommandClass of this node
+     * @param cc The command class the value belongs to
+     * @param endpoint The optional endpoint the value belongs to
+     * @param propertyName The property name the value belongs to
+     */
+    getCCValue(cc, endpoint, propertyName) {
+        return this._valueDB.getValue(cc, endpoint, propertyName);
     }
     //#endregion
     isControllerNode() {
@@ -146,6 +166,7 @@ class ZWaveNode {
             if (this.interviewStage === InterviewStage.Endpoints) {
                 yield this.requestStaticValues();
             }
+            // TODO: Save the current state
             // for testing purposes we skip to the end
             this.interviewStage = InterviewStage.Complete;
             logger_1.log("controller", `${this.logPrefix}interview completed`, "debug");
@@ -254,12 +275,12 @@ class ZWaveNode {
                     logger_1.log("controller", `${this.logPrefix}  querying the node info failed`, "debug");
                 }
                 else if (resp instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest) {
-                    // TODO: log the received values
                     logger_1.log("controller", `${this.logPrefix}  received the node info`, "debug");
                     for (const cc of resp.nodeInformation.supportedCCs)
                         this.addCC(cc, { isSupported: true });
                     for (const cc of resp.nodeInformation.controlledCCs)
                         this.addCC(cc, { isControlled: true });
+                    // TODO: Save the received values
                 }
             }
             this.interviewStage = InterviewStage.NodeInfo;

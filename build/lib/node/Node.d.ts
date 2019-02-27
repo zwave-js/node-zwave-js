@@ -1,11 +1,19 @@
+/// <reference types="node" />
 import { CommandClass, CommandClasses, CommandClassInfo, StateKind } from "../commandclass/CommandClass";
 import { Baudrate } from "../controller/GetNodeProtocolInfoMessages";
 import { Driver } from "../driver/Driver";
 import { Message } from "../message/Message";
 import { DeviceClass } from "./DeviceClass";
+import { ValueUpdatedArgs } from "./ValueDB";
+import { EventEmitter } from "events";
 /** Finds the ID of the target or source node in a message, if it contains that information */
 export declare function getNodeId(msg: Message): number;
-export declare class ZWaveNode {
+export interface ZWaveNode {
+    on(event: "value updated", cb: (args: ValueUpdatedArgs) => void): this;
+    removeListener(event: "value updated", cb: (args: ValueUpdatedArgs) => void): this;
+    removeAllListeners(event?: "value updated"): this;
+}
+export declare class ZWaveNode extends EventEmitter {
     readonly id: number;
     private readonly driver;
     constructor(id: number, driver: Driver, deviceClass?: DeviceClass, supportedCCs?: CommandClasses[], controlledCCs?: CommandClasses[]);
@@ -28,8 +36,22 @@ export declare class ZWaveNode {
     readonly isBeaming: boolean;
     private _implementedCommandClasses;
     readonly implementedCommandClasses: Map<CommandClasses, CommandClassInfo>;
-    private _ccValues;
-    readonly ccValues: Map<CommandClasses, Map<string, unknown>>;
+    private _valueDB;
+    /**
+     * Sets a value for a given property of a given CommandClass of this node
+     * @param cc The command class the value belongs to
+     * @param endpoint The optional endpoint the value belongs to
+     * @param propertyName The property name the value belongs to
+     * @param value The value to set
+     */
+    setCCValue(cc: CommandClasses, endpoint: number | undefined, propertyName: string, value: unknown): void;
+    /**
+     * Retrieves a value for a given property of a given CommandClass of this node
+     * @param cc The command class the value belongs to
+     * @param endpoint The optional endpoint the value belongs to
+     * @param propertyName The property name the value belongs to
+     */
+    getCCValue(cc: CommandClasses, endpoint: number | undefined, propertyName: string): unknown;
     /** This tells us which interview stage was last completed */
     interviewStage: InterviewStage;
     isControllerNode(): boolean;

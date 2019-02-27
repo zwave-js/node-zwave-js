@@ -126,37 +126,26 @@ export class CommandClass {
 		return ret;
 	}
 
-	/**
-	 * Sets a value for a given property of a given CommandClass on the node
-	 * @param node The node to set the value on
-	 * @param cc The command class the value belongs to
-	 * @param propertyName The property name the value belongs to
-	 * @param value The value to set
-	 */
-	protected static setValue(node: ZWaveNode, cc: CommandClasses, propertyName: string, value: unknown) {
-		if (!node.supportsCC(cc)) throw new ZWaveError(`Cannot set the value for the unsupported ${cc} CC!`, ZWaveErrorCodes.CC_NotSupported);
-
-		if (!node.ccValues.has(cc)) node.ccValues.set(cc, new Map<string, unknown>());
-		const ccValuesMap = node.ccValues.get(cc)!;
-		ccValuesMap.set(propertyName, value);
-	}
-
-	/**
-	 * Retrieves a value for a given property of a given CommandClass from the node
-	 * @param node The node to retrieve the value from
-	 * @param cc The command class the value belongs to
-	 * @param propertyName The property name the value belongs to
-	 */
-	protected static getValue(node: ZWaveNode, cc: CommandClasses, propertyName: string): unknown | undefined {
-		if (node.ccValues.has(cc)) {
-			const ccValuesMap = node.ccValues.get(cc)!;
-			return ccValuesMap.get(propertyName);
-		}
-	}
-
 	/** Requests static or dynamic state for a given from a node */
 	public static createStateRequest(node: ZWaveNode, kind: StateKind): SendDataRequest | void {
 		// This needs to be overwritten per command class. In the default implementation, don't do anything
+	}
+
+	/** Which variables should be persisted when requested */
+	private _variables = new Set<string>();
+	protected createVariable(name: string) {
+		this._variables.add(name);
+	}
+
+	/** Persists all values on the given node */
+	public persistValues(
+		node: ZWaveNode,
+		endpoint?: number,
+		variables: Iterable<string> = this._variables.keys(),
+	) {
+		for (const variable of variables) {
+			node.setCCValue(getCommandClass(this), endpoint, variable, this[variable as keyof this]);
+		}
 	}
 
 }
@@ -444,7 +433,7 @@ export enum CommandClasses {
 const definedCCs = fs
 	.readdirSync(__dirname)
 	.filter(file => /CC\.js$/.test(file))
-;
+	;
 log("protocol", `loading CCs: ${stringify(definedCCs)}`, "silly");
 for (const file of definedCCs) {
 	// tslint:disable-next-line:no-var-requires

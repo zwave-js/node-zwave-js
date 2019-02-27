@@ -118,11 +118,11 @@ export class WakeUpCC extends CommandClass {
 	}
 
 	public static isAwake(node: ZWaveNode): boolean {
-		return !!super.getValue(node, getCommandClassStatic(this), "awake");
+		return !!node.getCCValue(getCommandClassStatic(this), undefined, "awake");
 	}
 
 	public static setAwake(node: ZWaveNode, awake: boolean) {
-		super.setValue(node, getCommandClassStatic(this), "awake", awake);
+		node.setCCValue(getCommandClassStatic(this), undefined, "awake", awake);
 	}
 
 }

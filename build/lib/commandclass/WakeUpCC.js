@@ -83,10 +83,10 @@ let WakeUpCC = class WakeUpCC extends CommandClass_1.CommandClass {
         }
     }
     static isAwake(node) {
-        return !!super.getValue(node, CommandClass_1.getCommandClassStatic(this), "awake");
+        return !!node.getCCValue(CommandClass_1.getCommandClassStatic(this), undefined, "awake");
     }
     static setAwake(node, awake) {
-        super.setValue(node, CommandClass_1.getCommandClassStatic(this), "awake", awake);
+        node.setCCValue(CommandClass_1.getCommandClassStatic(this), undefined, "awake", awake);
     }
 };
 WakeUpCC = __decorate([

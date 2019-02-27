@@ -42,23 +42,13 @@ export declare class CommandClass {
     toJSON(): any;
     private toJSONInternal;
     protected toJSONInherited(props: Record<string, any>): Record<string, any>;
-    /**
-     * Sets a value for a given property of a given CommandClass on the node
-     * @param node The node to set the value on
-     * @param cc The command class the value belongs to
-     * @param propertyName The property name the value belongs to
-     * @param value The value to set
-     */
-    protected static setValue(node: ZWaveNode, cc: CommandClasses, propertyName: string, value: unknown): void;
-    /**
-     * Retrieves a value for a given property of a given CommandClass from the node
-     * @param node The node to retrieve the value from
-     * @param cc The command class the value belongs to
-     * @param propertyName The property name the value belongs to
-     */
-    protected static getValue(node: ZWaveNode, cc: CommandClasses, propertyName: string): unknown | undefined;
     /** Requests static or dynamic state for a given from a node */
     static createStateRequest(node: ZWaveNode, kind: StateKind): SendDataRequest | void;
+    /** Which variables should be persisted when requested */
+    private _variables;
+    protected createVariable(name: string): void;
+    /** Persists all values on the given node */
+    persistValues(node: ZWaveNode, endpoint?: number, variables?: Iterable<string>): void;
 }
 export declare const METADATA_commandClass: unique symbol;
 export declare const METADATA_commandClassMap: unique symbol;
