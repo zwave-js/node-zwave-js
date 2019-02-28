@@ -1,11 +1,15 @@
 import { padStart } from "alcalzone-shared/strings";
+import { BatteryCC } from "../commandclass/BatteryCC";
 import { CentralSceneCC } from "../commandclass/CentralSceneCC";
 import { CommandClass, CommandClasses, CommandClassInfo, getImplementedVersion } from "../commandclass/CommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
+import { MultiLevelSensorCC } from "../commandclass/MultiLevelSensorCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
+import { ThermostatSetpointCC } from "../commandclass/ThermostatSetpointCC";
 import { VersionCC, VersionCommand } from "../commandclass/VersionCC";
 import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/ApplicationUpdateRequest";
 import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "../controller/GetNodeProtocolInfoMessages";
+import { GetSerialApiCapabilitiesRequest, GetSerialApiCapabilitiesResponse } from "../controller/GetSerialApiCapabilitiesMessages";
 import { SendDataRequest, SendDataResponse, TransmitStatus } from "../controller/SendDataMessages";
 import { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -273,6 +277,25 @@ export class ZWaveNode {
 				// The node reported its supported versions
 				const csCC = command as CentralSceneCC;
 				log("controller", `${this.logPrefix}received CentralScene command ${JSON.stringify(csCC)}`, "debug");
+				break;
+			}
+			case CommandClasses["Battery"]: {
+				const csCC = command as BatteryCC;
+				const value = csCC.currentValue;
+				log("controller", `${this.logPrefix}received Battery command ${JSON.stringify(csCC)} --- ${value}`, "debug");
+				break;
+			}
+			case CommandClasses["Thermostat Setpoint"]: {
+				const csCC = command as ThermostatSetpointCC;
+				const value = csCC.currentValue;
+				log("controller", `${this.logPrefix}received ThermostatSetpoint command ${JSON.stringify(csCC)} --- ${value}`, "debug");
+				break;
+			}
+			case CommandClasses["Multilevel Sensor"]: {
+				const csCC = command as MultiLevelSensorCC;
+				const value = csCC.currentValue;
+				log("controller", `${this.logPrefix}received Multilevel Sensor command ${JSON.stringify(csCC)} --- ${value}`, "debug");
+				log("self", `${this.logPrefix}received Multilevel Sensor command ${JSON.stringify(csCC)} --- ${value}`, "debug");
 				break;
 			}
 			default: {

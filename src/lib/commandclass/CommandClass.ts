@@ -1,5 +1,6 @@
 import { entries } from "alcalzone-shared/objects";
 import * as fs from "fs";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Constructable } from "../message/Message";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
@@ -62,6 +63,115 @@ export class CommandClass {
 		this.command = CommandClass.getCommandClass(data);
 		this.payload = Buffer.allocUnsafe(dataLength);
 		data.copy(this.payload, 0, 3, 3 + dataLength);
+	}
+
+	private getPayloadByte(offset: number): number {
+		return this.payload[offset] & 0xFF;
+	}
+
+	private SIZE_MASK = 0x07;
+	private PRECISION_MASK = 0xe0;
+	private PRECISION_SHIFT = 0x05;
+
+	private getScaleAndPrecision(x: string): any {
+		x = parseFloat(x) + "";
+		const scale = x.indexOf(".");
+		if (scale === -1) return null;
+		return {
+			scale : scale,
+			precision : x.length - scale - 1,
+		};
+	}
+
+	private setScale(x: string, scale: number): string {
+		x = parseFloat(x) + "";
+		const array = x.split(".");
+		return (parseFloat(array[0] + "." + array[1].substring(0, scale))).toString();
+	}
+
+	public encodeValue(value: number): number[] {
+		// Remove any trailing zero's so we send the least amount of bytes possible
+		let normalizedValue = Number(value).toFixed(2);
+
+ 		// Make our scale at least 0, precision cannot be more than 7 but
+		// this is guarded by the Integer min / max values already.
+		const res = this.getScaleAndPrecision(normalizedValue);
+		if (res.scale < 0) {
+			normalizedValue = this.setScale(normalizedValue.toString(), 0);
+		}
+
+		// tslint:disable-next-line:radix
+		if (parseInt(normalizedValue) > Number.MAX_VALUE) {
+			throw new ZWaveError("ArithmeticException", ZWaveErrorCodes.ArithmeticException);
+		// tslint:disable-next-line:radix
+		} else if (parseInt(normalizedValue) < Number.MIN_VALUE) {
+			throw new ZWaveError("ArithmeticException", ZWaveErrorCodes.ArithmeticException);
+		}
+
+		// default size = 4
+		let size = 4;
+
+		// it might fit in a byte or short
+		// tslint:disable-next-line:radix
+		if (parseInt(normalizedValue) >= Number.MIN_SAFE_INTEGER && parseInt(normalizedValue) <= Number.MAX_SAFE_INTEGER) {
+			size = 1;
+		// tslint:disable-next-line:radix
+		} else if (parseInt(normalizedValue) >= Number.MIN_VALUE && parseInt(normalizedValue) <= Number.MAX_VALUE) {
+			size = 2;
+		}
+
+		const precision = res.scale;
+
+		/* byte[] result = new byte[size + 1]; */
+		const result = [];
+		result[0] = ((precision << this.PRECISION_SHIFT) | size);
+		// tslint:disable-next-line:radix
+		const unscaledValue = parseInt(normalizedValue); // ie. 22.5 = 225
+		for (let i = 0; i < size; i++) {
+ 			result[size - i] = ((unscaledValue >> (i * 8)) & 0xFF);
+		}
+		return result;
+	}
+
+	/**
+	 * Extract a decimal value from a byte array.
+	 *
+	 * @param offset the offset at which to start reading
+	 * @return the extracted decimal value
+	 */
+	public extractValue(offset: number): number {
+		const size = this.getPayloadByte(offset) & this.SIZE_MASK;
+		const precision = (this.getPayloadByte(offset) & this.PRECISION_MASK) >> this.PRECISION_SHIFT;
+
+		if ((size + offset) >= this.payload.length) {
+			throw new ZWaveError(
+				"Error extracting value - length=" + this.payload.length
+				+ ", offset=" + offset + ", size=" + size + ".",
+				ZWaveErrorCodes.CC_Invalid,
+			);
+		}
+
+		let value = 0;
+		let i: number;
+		for (i = 0; i < size; ++i) {
+			value <<= 8;
+			value |= this.getPayloadByte(offset + i + 1) & 0xFF;
+		}
+
+		// Deal with sign extension. All values are signed
+		let result;
+		if ((this.getPayloadByte(offset + 1) & 0x80) === 0x80) {
+			// MSB is signed
+			if (size === 1) {
+				value |= 0xffffff00;
+			} else if (size === 2) {
+				value |= 0xffff0000;
+			}
+		}
+		result = value;
+		const divisor = Math.pow(10, precision);
+		// return result.divide(divisor);
+		return result / divisor;
 	}
 
 	public static getNodeId(ccData: Buffer): number {

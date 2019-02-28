@@ -439,6 +439,7 @@ export class Driver extends EventEmitter {
 		if (msg.type === MessageType.Request) {
 			// This is a request we might have registered handlers for
 			this.handleRequest(msg);
+			log("controller", `HELP ME`, "debug");
 		} else {
 			log("driver", `  unexpected response, discarding...`, "debug");
 		}
@@ -545,7 +546,7 @@ export class Driver extends EventEmitter {
 			// dispatch the command to the node itself
 			const node = this.controller.nodes.get(nodeId);
 			node.handleCommand(msg.command);
-
+			this.emit("value changed", node, msg);
 			return;
 		} else if (msg instanceof SendDataRequest && msg.command != null) {
 			// TODO: Find out if this actually happens

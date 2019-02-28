@@ -1,4 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { log } from "../util/logger";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum BinarySwitchCommand {
@@ -76,6 +77,8 @@ export class BinarySwitchCC extends CommandClass {
 					this.targetValue = decodeBinarySwitchState(this.payload[2]);
 					this.duration = this.payload[3];
 				}
+				log("controller", `BinarySwitch Report: ${this.nodeId} = ${this._currentValue} = ${this.targetValue} = ${this.duration}`, "info");
+
 				break;
 			}
 

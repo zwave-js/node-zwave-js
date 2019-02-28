@@ -43,7 +43,7 @@ export class MultilevelSwitchCC extends CommandClass {
 	constructor(
 		public nodeId: number,
 		public ccCommand?: MultilevelSwitchCommand,
-		...args: any[],
+		...args: any[]
 	) {
 		super(nodeId);
 		if (ccCommand === MultilevelSwitchCommand.Set) {
