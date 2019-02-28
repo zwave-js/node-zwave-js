@@ -11,7 +11,7 @@ import { CommandClasses } from "./CommandClass";
 
 describe("lib/commandclass/BasicCC => ", () => {
 	it("the Get command should serialize correctly", () => {
-		const basicCC = new BasicCC(1, BasicCommand.Get);
+		const basicCC = new BasicCC(undefined, 1, BasicCommand.Get);
 		const expected = Buffer.from([
 			1, // node number
 			2, // remaining length
@@ -22,7 +22,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 	});
 
 	it("the Set command should serialize correctly", () => {
-		const basicCC = new BasicCC(2, BasicCommand.Set, 55);
+		const basicCC = new BasicCC(undefined, 2, BasicCommand.Set, 55);
 		const expected = Buffer.from([
 			2, // node number
 			3, // remaining length
@@ -34,7 +34,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 	});
 
 	it("serialize() should throw for other commands", () => {
-		const basicCC = new BasicCC(2, -1 /* not a command */);
+		const basicCC = new BasicCC(undefined, 2, -1 /* not a command */);
 		assertZWaveError(
 			() => basicCC.serialize(),
 			"Cannot serialize",
@@ -50,7 +50,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 			BasicCommand.Report, // CC Command
 			55, // current value
 		]);
-		const basicCC = new BasicCC();
+		const basicCC = new BasicCC(undefined);
 		basicCC.deserialize(ccData);
 
 		basicCC.currentValue.should.equal(55);
@@ -68,7 +68,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 			66, // target value
 			1, // duration
 		]);
-		const basicCC = new BasicCC();
+		const basicCC = new BasicCC(undefined);
 		basicCC.deserialize(ccData);
 
 		basicCC.currentValue.should.equal(55);
@@ -83,7 +83,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 			CommandClasses.Basic, // CC
 			255, // not a valid command
 		]);
-		const basicCC = new BasicCC();
+		const basicCC = new BasicCC(undefined);
 		assertZWaveError(
 			() => basicCC.deserialize(serializedCC),
 			"Cannot deserialize",

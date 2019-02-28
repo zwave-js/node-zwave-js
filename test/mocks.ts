@@ -94,7 +94,5 @@ export class MockRequestMessageWithoutExpectation extends Message {
 @messageTypes(MessageType.Response, MockResponseMessage_FunctionType)
 // @ts-ignore decorators are working
 export class MockResponseMessage extends Message {
-	constructor() {
-		super();
-	}
+
 }

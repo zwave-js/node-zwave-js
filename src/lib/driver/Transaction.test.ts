@@ -57,8 +57,9 @@ describe("lib/driver/Transaction => ", () => {
 		};
 
 		function createTransaction(nodeID: number) {
-			const msg = new SendDataRequest(new NoOperationCC(nodeID));
-			const ret = new Transaction(driverMock as any as Driver, msg, null, MessagePriority.NodeQuery);
+			const driver = driverMock as any as Driver;
+			const msg = new SendDataRequest(driver, new NoOperationCC(driver, nodeID));
+			const ret = new Transaction(driver, msg, null, MessagePriority.NodeQuery);
 			ret.timestamp = 0;
 			return ret;
 		}

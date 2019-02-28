@@ -19,7 +19,7 @@ describe("lib/message/Message => ", () => {
 			Buffer.from([0x01, 0x0a, 0x00, 0x13, 0x03, 0x03, 0x8e, 0x02, 0x04, 0x25, 0x40, 0x0b]),
 		];
 		for (const original of okayMessages) {
-			const parsed = new Message();
+			const parsed = new Message(undefined);
 			parsed.deserialize(original);
 			expect(parsed.serialize()).to.deep.equal(original);
 		}
@@ -28,7 +28,7 @@ describe("lib/message/Message => ", () => {
 	it("should serialize correctly when the payload is null", () => {
 		// synthetic message
 		const expected = Buffer.from([0x01, 0x03, 0x00, 0xff, 0x03]);
-		const message = new Message();
+		const message = new Message(undefined);
 		message.type = MessageType.Request;
 		message.functionType = 0xff;
 		expect(message.serialize()).to.deep.equal(expected);
@@ -49,7 +49,7 @@ describe("lib/message/Message => ", () => {
 			[Buffer.from([0x01, 0x05, 0x00, 0x47, 0x04, 0x20, 0x98]), "checksum", ZWaveErrorCodes.PacketFormat_Checksum],
 		];
 		for (const [message, msg, code] of brokenMessages) {
-			const parsed = new Message();
+			const parsed = new Message(undefined);
 			expect(() => parsed.deserialize(message))
 				.to.throw(msg)
 				.and.be.an.instanceof(ZWaveError)
@@ -108,27 +108,27 @@ describe("lib/message/Message => ", () => {
 	});
 
 	it("toJSON() should return a semi-readable JSON representation", () => {
-		const msg1 = new Message(MessageType.Request, FunctionType.GetControllerVersion, null);
+		const msg1 = new Message(undefined, MessageType.Request, FunctionType.GetControllerVersion, null);
 		const json1 = {
 			name: msg1.constructor.name,
 			type: "Request",
 			functionType: "GetControllerVersion",
 		};
-		const msg2 = new Message(MessageType.Request, FunctionType.GetControllerVersion, null, Buffer.from("aabbcc", "hex"));
+		const msg2 = new Message(undefined, MessageType.Request, FunctionType.GetControllerVersion, null, Buffer.from("aabbcc", "hex"));
 		const json2 = {
 			name: msg2.constructor.name,
 			type: "Request",
 			functionType: "GetControllerVersion",
 			payload: "aabbcc",
 		};
-		const msg3 = new Message(MessageType.Response, FunctionType.GetControllerVersion, FunctionType.GetControllerVersion);
+		const msg3 = new Message(undefined, MessageType.Response, FunctionType.GetControllerVersion, FunctionType.GetControllerVersion);
 		const json3 = {
 			name: msg3.constructor.name,
 			type: "Response",
 			functionType: "GetControllerVersion",
 			expectedResponse: "GetControllerVersion",
 		};
-		const msg4 = new Message(MessageType.Request, FunctionType.GetControllerVersion, FunctionType.GetControllerVersion, Buffer.from("aabbcc", "hex"));
+		const msg4 = new Message(undefined, MessageType.Request, FunctionType.GetControllerVersion, FunctionType.GetControllerVersion, Buffer.from("aabbcc", "hex"));
 		const json4 = {
 			name: msg4.constructor.name,
 			type: "Request",
@@ -145,7 +145,7 @@ describe("lib/message/Message => ", () => {
 
 	it("new Message(Buffer) should interpret the buffer as the payload", () => {
 		const buf = Buffer.from([1, 2, 3]);
-		const msg = new Message(buf);
+		const msg = new Message(undefined, buf);
 		expect(msg.payload).to.deep.equal(buf);
 	});
 
@@ -155,23 +155,23 @@ describe("lib/message/Message => ", () => {
 	});
 
 	it(`when expectedResponse is a FunctionType, testResponse() should return "final" or "unexpected"`, () => {
-		const msg = new Message(MessageType.Request, undefined, FunctionType.ApplicationCommand);
-		const final = new Message(MessageType.Response, FunctionType.ApplicationCommand, undefined);
+		const msg = new Message(undefined, MessageType.Request, undefined, FunctionType.ApplicationCommand);
+		const final = new Message(undefined, MessageType.Response, FunctionType.ApplicationCommand, undefined);
 		msg.testResponse(final).should.equal("final");
 
 		// wrong function type
-		const unexpected1 = new Message(MessageType.Response, FunctionType.SendData, undefined);
+		const unexpected1 = new Message(undefined, MessageType.Response, FunctionType.SendData, undefined);
 		msg.testResponse(unexpected1).should.equal("unexpected");
 
 		// not a response
-		const unexpected2 = new Message(MessageType.Request, undefined, undefined);
+		const unexpected2 = new Message(undefined, MessageType.Request, undefined, undefined);
 		msg.testResponse(unexpected2).should.equal("unexpected");
 	});
 
 	it(`when expectedResponse is a predicate, testResponse() should pass its return value through`, () => {
 		const predicate = stub();
-		const msg = new Message(MessageType.Request, undefined, predicate);
-		const test = new Message();
+		const msg = new Message(undefined, MessageType.Request, undefined, predicate);
+		const test = new Message(undefined);
 
 		const results: ResponseRole[] = [
 			"fatal_controller", "fatal_node", "final", "intermediate", "unexpected",

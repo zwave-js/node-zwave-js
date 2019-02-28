@@ -13,15 +13,15 @@ import { getExpectedResponse, getFunctionType, getMessageType, Message, Response
 import { SendDataRequest, SendDataResponse, TransmitOptions } from "./SendDataMessages";
 
 function createSendDataMessage(type: MessageType, payload?: Buffer): SendDataRequest | SendDataResponse {
-	const msg = new Message(type, FunctionType.SendData, undefined, payload);
+	const msg = new Message(undefined, type, FunctionType.SendData, undefined, payload);
 	const data = msg.serialize();
-	const ret = (type === MessageType.Request ? new SendDataRequest() : new SendDataResponse());
+	const ret = (type === MessageType.Request ? new SendDataRequest(undefined) : new SendDataResponse(undefined));
 	ret.deserialize(data);
 	return ret;
 }
 
 describe("lib/controller/SendDataRequest => ", () => {
-	const req = new SendDataRequest();
+	const req = new SendDataRequest(undefined);
 
 	it("should be a Message", () => {
 		req.should.be.an.instanceof(Message);
@@ -48,7 +48,7 @@ describe("lib/controller/SendDataRequest => ", () => {
 		const nodeSuccess = createSendDataMessage(MessageType.Request, Buffer.from([0, 0]));
 		predicate(undefined, nodeSuccess).should.equal("final", "A SendDataRequest with isFailed=false was not detected as final!");
 
-		const somethingElse = new Message(MessageType.Request, FunctionType.ApplicationCommand, undefined, undefined);
+		const somethingElse = new Message(undefined, MessageType.Request, FunctionType.ApplicationCommand, undefined, undefined);
 		predicate(undefined, somethingElse).should.equal("unexpected", "An unrelated message was not detected as unexpected!");
 	});
 
@@ -58,7 +58,7 @@ describe("lib/controller/SendDataRequest => ", () => {
 		const rawBuf = Buffer.from("010900130b0226022527ca", "hex");
 		//                         payload: ID  CC  TXcb
 		//                      cc payload: ------^^
-		const parsed = new SendDataRequest();
+		const parsed = new SendDataRequest(undefined);
 		parsed.deserialize(rawBuf);
 
 		parsed.command.should.be.an.instanceof(CommandClass);
@@ -76,14 +76,14 @@ describe("lib/controller/SendDataRequest => ", () => {
 		const raw = Buffer.from("010900130d0200002515da", "hex");
 		Message.getConstructor(raw).should.equal(SendDataRequest);
 
-		const srq = new SendDataRequest();
+		const srq = new SendDataRequest(undefined);
 		srq.deserialize(raw);
 		srq.command.should.be.an.instanceof(NoOperationCC);
 	});
 
 	const createRequest = function*() {
-		const noOp = new NoOperationCC(2);
-		while (true) yield new SendDataRequest(noOp);
+		const noOp = new NoOperationCC(undefined, 2);
+		while (true) yield new SendDataRequest(undefined, noOp);
 	}();
 
 	it("new ones should have default transmit options and a numeric callback id", () => {
@@ -108,10 +108,10 @@ describe("lib/controller/SendDataRequest => ", () => {
 	});
 
 	it("serialize() should concatenate the serialized CC with transmit options and callback ID", () => {
-		const cc = new BasicCC(1, BasicCommand.Get);
+		const cc = new BasicCC(undefined, 1, BasicCommand.Get);
 		const serializedCC = cc.serialize();
 
-		const msg = new SendDataRequest(cc, TransmitOptions.DEFAULT, 66);
+		const msg = new SendDataRequest(undefined, cc, TransmitOptions.DEFAULT, 66);
 		msg.serialize();
 		// we don't care about the frame, only the message payload itself
 		const serializedMsg = msg.payload;
@@ -135,7 +135,7 @@ describe("lib/controller/SendDataRequest => ", () => {
 });
 
 describe("lib/controller/SendDataResponse => ", () => {
-	const res = new SendDataResponse();
+	const res = new SendDataResponse(undefined);
 
 	it("should be a Message", () => {
 		res.should.be.an.instanceof(Message);

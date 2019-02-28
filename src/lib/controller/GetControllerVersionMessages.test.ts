@@ -9,7 +9,7 @@ import { GetControllerVersionRequest, GetControllerVersionResponse } from "./Get
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
 describe("lib/driver/GetControllerVersionRequest => ", () => {
-	const req = new GetControllerVersionRequest();
+	const req = new GetControllerVersionRequest(undefined);
 
 	it("should be a Message", () => {
 		req.should.be.an.instanceof(Message);
@@ -27,7 +27,7 @@ describe("lib/driver/GetControllerVersionRequest => ", () => {
 });
 
 describe("lib/driver/GetControllerVersionResponse => ", () => {
-	const res = new GetControllerVersionResponse();
+	const res = new GetControllerVersionResponse(undefined);
 
 	it("should be a Message", () => {
 		res.should.be.an.instanceof(Message);
@@ -44,7 +44,7 @@ describe("lib/driver/GetControllerVersionResponse => ", () => {
 
 	// an actual message from OZW
 	const rawBuf = Buffer.from("011001155a2d5761766520342e3035000197", "hex");
-	const parsed = new GetControllerVersionResponse();
+	const parsed = new GetControllerVersionResponse(undefined);
 	parsed.deserialize(rawBuf);
 
 	it("should extract the controller version and type", () => {

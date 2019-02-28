@@ -15,7 +15,7 @@ import { DeepPartial, Driver as OriginalDriver, ZWaveOptions } from "./Driver";
 const { Driver } = proxyquire("./Driver", {
 	serialport: MockSerialPort,
 }) as {
-		Driver: OriginalDriver & { new(port: string, options?: DeepPartial<ZWaveOptions>): OriginalDriver },
+		Driver: OriginalDriver & (new(port: string, options?: DeepPartial<ZWaveOptions>) => OriginalDriver),
 	};
 
 const PORT_ADDRESS = "/tty/FAKE";
@@ -123,7 +123,7 @@ describe("lib/driver/Driver => ", () => {
 		it("should not be possible if the driver wasn't started", async () => {
 			const driver = new Driver(PORT_ADDRESS, {skipInterview: true});
 
-			const msg = new Message();
+			const msg = new Message(driver);
 			await driver.sendMessage(msg).should.be.rejected
 				.then(err => assertZWaveError(err, ZWaveErrorCodes.Driver_NotReady))
 				;
@@ -136,7 +136,7 @@ describe("lib/driver/Driver => ", () => {
 			// start the driver, but don't open the serial port yet
 			driver.start();
 
-			const msg = new Message();
+			const msg = new Message(driver);
 			await driver.sendMessage(msg).should.be.rejected
 				.then(err => assertZWaveError(err, ZWaveErrorCodes.Driver_NotReady))
 				;
@@ -154,7 +154,7 @@ describe("lib/driver/Driver => ", () => {
 			portInstance.failOpen(new Error("NOPE"));
 			await startPromise.should.be.rejected;
 
-			const msg = new Message();
+			const msg = new Message(driver);
 			await driver.sendMessage(msg).should.be.rejected
 				.then(err => assertZWaveError(err, ZWaveErrorCodes.Driver_NotReady))
 				;
@@ -164,7 +164,7 @@ describe("lib/driver/Driver => ", () => {
 		it("sendMessage for messages without an expected response should be resolved on ACK", async () => {
 			const { driver, serialport, clock } = await createAndStartDriver();
 
-			const msg = new MockRequestMessageWithoutExpectation();
+			const msg = new MockRequestMessageWithoutExpectation(driver);
 
 			// send a message
 			const resolvedSpy = spy();
@@ -185,7 +185,7 @@ describe("lib/driver/Driver => ", () => {
 		it("sendMessage for messages with an expected response should be resolved on ACK + response", async () => {
 			const { driver, serialport, clock } = await createAndStartDriver();
 
-			const req = new MockRequestMessageWithExpectation();
+			const req = new MockRequestMessageWithExpectation(driver);
 
 			// send a message
 			const resolvedSpy = spy();
@@ -201,7 +201,7 @@ describe("lib/driver/Driver => ", () => {
 			resolvedSpy.should.not.have.been.called;
 
 			// receive the message
-			const resp = new MockResponseMessage();
+			const resp = new MockResponseMessage(driver);
 			serialport.receiveData(resp.serialize());
 			const msg = await promise;
 			expect(msg).to.be.an.instanceof(MockResponseMessage);
@@ -213,7 +213,7 @@ describe("lib/driver/Driver => ", () => {
 		it("out-of-order ACK + response should be correctly resolved", async () => {
 			const { driver, serialport, clock } = await createAndStartDriver();
 
-			const req = new MockRequestMessageWithExpectation();
+			const req = new MockRequestMessageWithExpectation(driver);
 
 			// send a message
 			const resolvedSpy = spy();
@@ -225,7 +225,7 @@ describe("lib/driver/Driver => ", () => {
 			resolvedSpy.should.not.have.been.called;
 
 			// receive the message
-			const resp = new MockResponseMessage();
+			const resp = new MockResponseMessage(driver);
 			serialport.receiveData(resp.serialize());
 			resolvedSpy.should.not.have.been.called;
 			// receive the ACK
