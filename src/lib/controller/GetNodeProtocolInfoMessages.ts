@@ -5,14 +5,13 @@ import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClas
 import { INodeQuery } from "../node/INodeQuery";
 
 const enum NodeCapabilityFlags {
-	Listening = 1 << 7,
-	Routing = 1 << 6,
+	Listening = 0b10_000_000,
+	Routing = 0b01_000_000,
 
-	// This is an educated guess. OZW only checks for the 40k flag
-	Baudrate_100k = 1 << 5,
-	Baudrate_40k = 1 << 4,
-	Baudrate_9k6 = 1 << 3,
-	BaudrateMask = Baudrate_100k | Baudrate_40k | Baudrate_9k6,
+	Baudrate_100k = 0b00_011_000,
+	Baudrate_40k = 0b00_010_000,
+	Baudrate_9k6 = 0b00_001_000,
+	BaudrateMask = 0b00_111_000,
 
 	VersionMask = 0b111,
 }
