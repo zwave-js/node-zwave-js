@@ -67,7 +67,7 @@ let GetNodeProtocolInfoResponse = class GetNodeProtocolInfoResponse extends Mess
         this._isRouting = (capabilities & 64 /* Routing */) !== 0;
         // This is an educated guess. OZW only checks for the 40k flag
         switch (capabilities & 56 /* BaudrateMask */) {
-            case 32 /* Baudrate_100k */:
+            case 24 /* Baudrate_100k */:
                 this._maxBaudRate = 100000;
                 break;
             case 16 /* Baudrate_40k */:

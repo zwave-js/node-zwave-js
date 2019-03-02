@@ -816,7 +816,26 @@ export class Driver extends EventEmitter {
 		this.serial.write(data);
 	}
 
+	private lastSaveToCache: number = 0;
+	private readonly saveToCacheInterval: number = 50;
+	private saveToCacheTimer: NodeJS.Timer;
+	/**
+	 * Saves the current configuration and collected data about the controller and all nodes to a cache file.
+	 * For performance reasons, these calls may be throttled
+	 */
 	public async saveToCache() {
+		// Ensure this method isn't being executed too often
+		if (Date.now() - this.lastSaveToCache < this.saveToCacheInterval) {
+			// Schedule a save in a couple of ms to collect changes
+			if (!this.saveToCacheTimer) {
+				this.saveToCacheTimer = setTimeout(() => this.saveToCache(), this.saveToCacheInterval);
+			}
+			return;
+		} else {
+			this.saveToCacheTimer = undefined;
+		}
+		this.lastSaveToCache = Date.now();
+
 		const cacheFile = path.join(this.cacheDir, this.controller.homeId.toString(16) + ".json");
 		const serializedObj = this.controller.serialize();
 		await fs.ensureDir(this.cacheDir);

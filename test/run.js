@@ -7,7 +7,7 @@ const { HardResetRequest } = require("../build/lib/controller/HardResetRequest")
 const { RequestNodeInfoResponse, RequestNodeInfoRequest } = require("../build/lib/node/RequestNodeInfoMessages");
 const { wait } = require("alcalzone-shared/async");
 
-const d = new Driver("COM5")
+const d = new Driver("COM3")
 	.once("driver ready", async () => {
 
 		// await d.sendMessage(new HardResetRequest());

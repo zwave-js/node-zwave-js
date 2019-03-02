@@ -81,6 +81,8 @@ class Driver extends events_1.EventEmitter {
         this._controllerInterviewed = false;
         this._wasDestroyed = false;
         this._cleanupHandler = () => this.destroy();
+        this.lastSaveToCache = 0;
+        this.saveToCacheInterval = 50;
         // merge given options with defaults
         this.options = applyDefaultOptions(this.options, defaultOptions);
         // register some cleanup handlers in case the program doesn't get closed cleanly
@@ -645,8 +647,24 @@ class Driver extends events_1.EventEmitter {
     doSend(data) {
         this.serial.write(data);
     }
+    /**
+     * Saves the current configuration and collected data about the controller and all nodes to a cache file.
+     * For performance reasons, these calls may be throttled
+     */
     saveToCache() {
         return __awaiter(this, void 0, void 0, function* () {
+            // Ensure this method isn't being executed too often
+            if (Date.now() - this.lastSaveToCache < this.saveToCacheInterval) {
+                // Schedule a save in a couple of ms to collect changes
+                if (!this.saveToCacheTimer) {
+                    this.saveToCacheTimer = setTimeout(() => this.saveToCache(), this.saveToCacheInterval);
+                }
+                return;
+            }
+            else {
+                this.saveToCacheTimer = undefined;
+            }
+            this.lastSaveToCache = Date.now();
             const cacheFile = path.join(this.cacheDir, this.controller.homeId.toString(16) + ".json");
             const serializedObj = this.controller.serialize();
             yield fs.ensureDir(this.cacheDir);

@@ -1,6 +1,6 @@
 {
-  "recommendations": [
-	"rebornix.project-snippets",
-	"eg2.tslint",
-  ]
+	"recommendations": [
+		"rebornix.project-snippets",
+		"ms-vscode.vscode-typescript-tslint-plugin",
+	]
 }
