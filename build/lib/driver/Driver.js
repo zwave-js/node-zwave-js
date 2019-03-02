@@ -150,7 +150,14 @@ class Driver extends events_1.EventEmitter {
                 // don't await them, so the beginInterview method returns
                 for (const node of this._controller.nodes.values()) {
                     // TODO: retry on failure or something...
-                    node.interview().catch(e => logger_1.log("controller", "node interview failed: " + e, "error"));
+                    node.interview().catch(e => {
+                        if (e instanceof ZWaveError_1.ZWaveError) {
+                            logger_1.log("controller", "node interview failed: " + e, "error");
+                        }
+                        else {
+                            throw e;
+                        }
+                    });
                 }
             }
         });

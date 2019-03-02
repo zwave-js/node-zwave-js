@@ -440,7 +440,7 @@ class ZWaveNode extends events_1.EventEmitter {
         return {
             id: this.id,
             interviewStage: InterviewStage[this.interviewStage],
-            deviceClass: {
+            deviceClass: this.deviceClass && {
                 basic: this.deviceClass.basic,
                 generic: this.deviceClass.generic.key,
                 specific: this.deviceClass.specific.key,

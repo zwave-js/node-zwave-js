@@ -197,7 +197,13 @@ export class Driver extends EventEmitter {
 			// don't await them, so the beginInterview method returns
 			for (const node of this._controller.nodes.values()) {
 				// TODO: retry on failure or something...
-				node.interview().catch(e => log("controller", "node interview failed: " + e, "error"));
+				node.interview().catch(e => {
+					if (e instanceof ZWaveError) {
+						log("controller", "node interview failed: " + e, "error")
+					} else {
+						throw e;
+					}
+				});
 			}
 		}
 	}
@@ -839,7 +845,7 @@ export class Driver extends EventEmitter {
 		const cacheFile = path.join(this.cacheDir, this.controller.homeId.toString(16) + ".json");
 		const serializedObj = this.controller.serialize();
 		await fs.ensureDir(this.cacheDir);
-		await fs.writeJSON(cacheFile, serializedObj, {spaces: 4});
+		await fs.writeJSON(cacheFile, serializedObj, { spaces: 4 });
 	}
 
 }
