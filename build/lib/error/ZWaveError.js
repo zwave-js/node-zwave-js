@@ -11,11 +11,12 @@ var ZWaveErrorCodes;
     ZWaveErrorCodes[ZWaveErrorCodes["Driver_InvalidDataReceived"] = 6] = "Driver_InvalidDataReceived";
     ZWaveErrorCodes[ZWaveErrorCodes["Driver_NotSupported"] = 7] = "Driver_NotSupported";
     ZWaveErrorCodes[ZWaveErrorCodes["Driver_NoPriority"] = 8] = "Driver_NoPriority";
-    ZWaveErrorCodes[ZWaveErrorCodes["Controller_MessageDropped"] = 9] = "Controller_MessageDropped";
-    ZWaveErrorCodes[ZWaveErrorCodes["Controller_InclusionFailed"] = 10] = "Controller_InclusionFailed";
-    ZWaveErrorCodes[ZWaveErrorCodes["CC_Invalid"] = 11] = "CC_Invalid";
-    ZWaveErrorCodes[ZWaveErrorCodes["CC_NotSupported"] = 12] = "CC_NotSupported";
-    ZWaveErrorCodes[ZWaveErrorCodes["CC_NoNodeID"] = 13] = "CC_NoNodeID";
+    ZWaveErrorCodes[ZWaveErrorCodes["Driver_InvalidCache"] = 9] = "Driver_InvalidCache";
+    ZWaveErrorCodes[ZWaveErrorCodes["Controller_MessageDropped"] = 10] = "Controller_MessageDropped";
+    ZWaveErrorCodes[ZWaveErrorCodes["Controller_InclusionFailed"] = 11] = "Controller_InclusionFailed";
+    ZWaveErrorCodes[ZWaveErrorCodes["CC_Invalid"] = 12] = "CC_Invalid";
+    ZWaveErrorCodes[ZWaveErrorCodes["CC_NotSupported"] = 13] = "CC_NotSupported";
+    ZWaveErrorCodes[ZWaveErrorCodes["CC_NoNodeID"] = 14] = "CC_NoNodeID";
 })(ZWaveErrorCodes = exports.ZWaveErrorCodes || (exports.ZWaveErrorCodes = {}));
 class ZWaveError extends Error {
     constructor(message, code) {

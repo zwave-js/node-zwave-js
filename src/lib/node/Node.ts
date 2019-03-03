@@ -2,8 +2,9 @@ import { promiseSequence } from "alcalzone-shared/async";
 import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
 import { EventEmitter } from "events";
+import { isObject } from "util";
 import { CentralSceneCC } from "../commandclass/CentralSceneCC";
-import { CommandClass, CommandClasses, CommandClassInfo, getCCConstructor, getCommandClassStatic, getImplementedVersion, StateKind } from "../commandclass/CommandClass";
+import { CommandClass, CommandClasses, CommandClassInfo, getCCConstructor, getImplementedVersion, StateKind } from "../commandclass/CommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { ManufacturerSpecificCC, ManufacturerSpecificCommand } from "../commandclass/ManufacturerSpecificCC";
 import { MultiChannelCC, MultiChannelCommand } from "../commandclass/MultiChannelCC";
@@ -12,15 +13,13 @@ import { VersionCC, VersionCommand } from "../commandclass/VersionCC";
 import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
 import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/ApplicationUpdateRequest";
 import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "../controller/GetNodeProtocolInfoMessages";
-import { SendDataRequest, SendDataResponse, TransmitStatus } from "../controller/SendDataMessages";
+import { SendDataRequest } from "../controller/SendDataMessages";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { MessagePriority } from "../message/Constants";
-import { Message } from "../message/Message";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
-import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
-import { isNodeQuery } from "./INodeQuery";
+import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
 import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
 import { ValueDB, ValueUpdatedArgs } from "./ValueDB";
 
@@ -280,7 +279,7 @@ export class ZWaveNode extends EventEmitter {
 				const request = new SendDataRequest(this.driver, wakeupCC);
 
 				try {
-					const response = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.WakeUp);
+					const _response = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.WakeUp);
 					log("controller", `${this.logPrefix}  device is awake`, "debug");
 				} catch (e) {
 					log("controller", `${this.logPrefix}  device wakeup failed: ${e.message}`, "debug");
@@ -364,7 +363,7 @@ export class ZWaveNode extends EventEmitter {
 	/** Step #9 of the node interview */
 	private async queryCCVersions() {
 		log("controller", `${this.logPrefix}querying CC versions`, "debug");
-		for (const [cc, info] of this._implementedCommandClasses.entries()) {
+		for (const [cc] of this._implementedCommandClasses.entries()) {
 			// only query the ones we support a version > 1 for
 			const maxImplemented = getImplementedVersion(cc);
 			if (maxImplemented < 1) {
@@ -498,6 +497,62 @@ export class ZWaveNode extends EventEmitter {
 					}),
 			),
 		};
+	}
+
+	public deserialize(obj: any) {
+
+		if (obj.interviewStage in InterviewStage) {
+			this.interviewStage = typeof obj.interviewStage === "number"
+				? obj.interviewStage
+				: InterviewStage[obj.interviewStage];
+		}
+		if (isObject(obj.deviceClass)) {
+			const { basic, generic, specific } = obj.deviceClass;
+			if (
+				typeof basic === "number"
+				&& typeof generic === "number"
+				&& typeof specific === "number"
+			) {
+				const genericDC = GenericDeviceClass.get(generic);
+				this._deviceClass = new DeviceClass(basic, genericDC, SpecificDeviceClass.get(genericDC.key, specific));
+			}
+		}
+
+		// Parse single properties
+		const tryParse = (key: keyof ZWaveNode, type: "boolean" | "number" | "string") => {
+			if (typeof obj[key] === type) this[`_${key}` as keyof this] = obj[key];
+		};
+		tryParse("isListening", "boolean");
+		tryParse("isFrequentListening", "boolean");
+		tryParse("isRouting", "boolean");
+		tryParse("maxBaudRate", "number");
+		tryParse("isSecure", "boolean");
+		tryParse("isBeaming", "boolean");
+		tryParse("version", "number");
+
+		function enforceType(val: any, type: "boolean" | "number" | "string"): any {
+			return typeof val === type ? val : undefined;
+		}
+
+		// Parse CommandClasses
+		if (isObject(obj.commandClasses)) {
+			const ccDict = obj.commandClasses;
+			for (const ccHex of Object.keys(ccDict)) {
+				// First make sure this key describes a valid CC
+				if (!/^0x\d+$/.test(ccHex)) continue;
+				// tslint:disable-next-line: radix
+				const ccNum = parseInt(ccHex);
+				if (!(ccNum in CommandClasses)) continue;
+
+				// Parse the information we have
+				const { isSupported, isControlled, version } = ccDict[ccHex];
+				this.addCC(ccNum, {
+					isSupported: enforceType(isSupported, "boolean"),
+					isControlled: enforceType(isControlled, "boolean"),
+					version: enforceType(version, "number"),
+				});
+			}
+		}
 	}
 
 }

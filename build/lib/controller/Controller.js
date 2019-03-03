@@ -29,6 +29,7 @@ const GetSUCNodeIdMessages_1 = require("./GetSUCNodeIdMessages");
 const HardResetRequest_1 = require("./HardResetRequest");
 const SetSerialApiTimeoutsMessages_1 = require("./SetSerialApiTimeoutsMessages");
 const ZWaveLibraryTypes_1 = require("./ZWaveLibraryTypes");
+const util_1 = require("util");
 // TODO: interface the exposed events
 class ZWaveController extends events_1.EventEmitter {
     /** @internal */
@@ -191,6 +192,7 @@ class ZWaveController extends events_1.EventEmitter {
                 const resp = yield this.driver.sendMessage(new SetSerialApiTimeoutsMessages_1.SetSerialApiTimeoutsRequest(this.driver, ack, byte));
                 logger_1.log("controller", `serial API timeouts overwritten. The old values were: ack = ${resp.oldAckTimeout} ms, byte = ${resp.oldByteTimeout} ms`, "debug");
             }
+            // TODO: Try to find out what this does from the new docs
             // send application info (not sure why tho)
             if (this.isFunctionSupported(Constants_1.FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION)) {
                 logger_1.log("controller", `sending application info...`, "debug");
@@ -344,6 +346,20 @@ class ZWaveController extends events_1.EventEmitter {
             nodes: objects_1.composeObject([...this.nodes.entries()]
                 .map(([id, node]) => [id.toString(), node.serialize()])),
         };
+    }
+    /** Deserializes the controller information and all nodes from the cache */
+    deserialize(serialized) {
+        if (util_1.isObject(serialized.nodes)) {
+            for (const nodeId of Object.keys(serialized.nodes)) {
+                const serializedNode = serialized.nodes[nodeId];
+                if (!serializedNode || typeof serializedNode.id !== "number" || serializedNode.id.toString() !== nodeId) {
+                    throw new ZWaveError_1.ZWaveError("The cache file is invalid", ZWaveError_1.ZWaveErrorCodes.Driver_InvalidCache);
+                }
+                if (this.nodes.has(serializedNode.id)) {
+                    this.nodes.get(serializedNode.id).deserialize(serializedNode);
+                }
+            }
+        }
     }
 }
 exports.ZWaveController = ZWaveController;

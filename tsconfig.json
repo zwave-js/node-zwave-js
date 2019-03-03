@@ -10,7 +10,7 @@
         "removeComments": false,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "sourceMap": false,
+        // "sourceMap": true,
         "inlineSourceMap": false,
         "stripInternal": true,
         "target": "es2015",

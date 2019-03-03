@@ -8,11 +8,12 @@ export declare enum ZWaveErrorCodes {
     Driver_InvalidDataReceived = 6,
     Driver_NotSupported = 7,
     Driver_NoPriority = 8,
-    Controller_MessageDropped = 9,
-    Controller_InclusionFailed = 10,
-    CC_Invalid = 11,
-    CC_NotSupported = 12,
-    CC_NoNodeID = 13
+    Driver_InvalidCache = 9,
+    Controller_MessageDropped = 10,
+    Controller_InclusionFailed = 11,
+    CC_Invalid = 12,
+    CC_NotSupported = 13,
+    CC_NoNodeID = 14
 }
 export declare class ZWaveError extends Error {
     readonly message: string;

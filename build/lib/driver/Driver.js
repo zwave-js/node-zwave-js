@@ -145,6 +145,8 @@ class Driver extends events_1.EventEmitter {
             this._controllerInterviewed = true;
             logger_1.log("driver", "driver ready", "debug");
             this.emit("driver ready");
+            // Try to restore the network information from the cache
+            yield this.restoreNetworkFromCache();
             if (!this.options.skipInterview) {
                 // Now interview all nodes
                 // don't await them, so the beginInterview method returns
@@ -240,7 +242,7 @@ class Driver extends events_1.EventEmitter {
     serialport_onError(err) {
         this.emit("error", err);
     }
-    onInvalidData(message) {
+    onInvalidData(data, message) {
         this.emit("error", new ZWaveError_1.ZWaveError(message, ZWaveError_1.ZWaveErrorCodes.Driver_InvalidDataReceived));
         this.resetIO();
     }
@@ -267,7 +269,7 @@ class Driver extends events_1.EventEmitter {
                     }
                     default: {
                         const message = `The receive buffer starts with unexpected data: 0x${data.toString("hex")}`;
-                        this.onInvalidData(message);
+                        this.onInvalidData(this.receiveBuffer, message);
                         return;
                     }
                 }
@@ -291,7 +293,7 @@ class Driver extends events_1.EventEmitter {
                 if (e instanceof ZWaveError_1.ZWaveError) {
                     if (e.code === ZWaveError_1.ZWaveErrorCodes.PacketFormat_Invalid
                         || e.code === ZWaveError_1.ZWaveErrorCodes.PacketFormat_Checksum) {
-                        this.onInvalidData(e.toString());
+                        this.onInvalidData(this.receiveBuffer, e.toString());
                         return;
                     }
                 }
@@ -679,6 +681,27 @@ class Driver extends events_1.EventEmitter {
             const serializedObj = this.controller.serialize();
             yield fs.ensureDir(this.cacheDir);
             yield fs.writeJSON(cacheFile, serializedObj, { spaces: 4 });
+        });
+    }
+    /**
+     * Restores a previously stored zwave network state from cache to speed up the startup process
+     */
+    restoreNetworkFromCache() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!this.controller.homeId)
+                return;
+            const cacheFile = path.join(this.cacheDir, this.controller.homeId.toString(16) + ".json");
+            if (!(yield fs.pathExists(cacheFile)))
+                return;
+            try {
+                logger_1.log("driver", `Cache file for homeId ${strings_1.num2hex(this.controller.homeId)} found, attempting to restore the network from cache`, "debug");
+                const cacheObj = yield fs.readJSON(cacheFile);
+                this.controller.deserialize(cacheObj);
+                logger_1.log("driver", `  Restoring the network from cache was successful!`, "error");
+            }
+            catch (e) {
+                logger_1.log("driver", `  restoring the network from cache failed: ${e}`, "error");
+            }
         });
     }
 }

@@ -191,6 +191,9 @@ export class Driver extends EventEmitter {
 		log("driver", "driver ready", "debug");
 		this.emit("driver ready");
 
+		// Try to restore the network information from the cache
+		await this.restoreNetworkFromCache();
+
 		if (!this.options.skipInterview) {
 			// Now interview all nodes
 			// don't await them, so the beginInterview method returns
@@ -848,6 +851,24 @@ export class Driver extends EventEmitter {
 		const serializedObj = this.controller.serialize();
 		await fs.ensureDir(this.cacheDir);
 		await fs.writeJSON(cacheFile, serializedObj, { spaces: 4 });
+	}
+
+	/**
+	 * Restores a previously stored zwave network state from cache to speed up the startup process
+	 */
+	public async restoreNetworkFromCache() {
+		if (!this.controller.homeId) return;
+
+		const cacheFile = path.join(this.cacheDir, this.controller.homeId.toString(16) + ".json");
+		if (!await fs.pathExists(cacheFile)) return;
+		try {
+			log("driver", `Cache file for homeId ${num2hex(this.controller.homeId)} found, attempting to restore the network from cache`, "debug");
+			const cacheObj = await fs.readJSON(cacheFile);
+			this.controller.deserialize(cacheObj);
+			log("driver", `  Restoring the network from cache was successful!`, "error");
+		} catch (e) {
+			log("driver", `  restoring the network from cache failed: ${e}`, "error");
+		}
 	}
 
 }

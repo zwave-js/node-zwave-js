@@ -12,6 +12,7 @@ const async_1 = require("alcalzone-shared/async");
 const objects_1 = require("alcalzone-shared/objects");
 const strings_1 = require("alcalzone-shared/strings");
 const events_1 = require("events");
+const util_1 = require("util");
 const CommandClass_1 = require("../commandclass/CommandClass");
 const ICommandClassContainer_1 = require("../commandclass/ICommandClassContainer");
 const ManufacturerSpecificCC_1 = require("../commandclass/ManufacturerSpecificCC");
@@ -228,7 +229,7 @@ class ZWaveNode extends events_1.EventEmitter {
                     const wakeupCC = new WakeUpCC_1.WakeUpCC(this.driver, this.id, WakeUpCC_1.WakeUpCommand.IntervalGet);
                     const request = new SendDataMessages_1.SendDataRequest(this.driver, wakeupCC);
                     try {
-                        const response = yield this.driver.sendMessage(request, Constants_1.MessagePriority.WakeUp);
+                        const _response = yield this.driver.sendMessage(request, Constants_1.MessagePriority.WakeUp);
                         logger_1.log("controller", `${this.logPrefix}  device is awake`, "debug");
                     }
                     catch (e) {
@@ -320,7 +321,7 @@ class ZWaveNode extends events_1.EventEmitter {
     queryCCVersions() {
         return __awaiter(this, void 0, void 0, function* () {
             logger_1.log("controller", `${this.logPrefix}querying CC versions`, "debug");
-            for (const [cc, info] of this._implementedCommandClasses.entries()) {
+            for (const [cc] of this._implementedCommandClasses.entries()) {
                 // only query the ones we support a version > 1 for
                 const maxImplemented = CommandClass_1.getImplementedVersion(cc);
                 if (maxImplemented < 1) {
@@ -449,6 +450,57 @@ class ZWaveNode extends events_1.EventEmitter {
                 return [strings_2.num2hex(cc), Object.assign({ name: CommandClass_1.CommandClasses[cc] }, info)];
             })),
         };
+    }
+    deserialize(obj) {
+        if (obj.interviewStage in InterviewStage) {
+            this.interviewStage = typeof obj.interviewStage === "number"
+                ? obj.interviewStage
+                : InterviewStage[obj.interviewStage];
+        }
+        if (util_1.isObject(obj.deviceClass)) {
+            const { basic, generic, specific } = obj.deviceClass;
+            if (typeof basic === "number"
+                && typeof generic === "number"
+                && typeof specific === "number") {
+                const genericDC = DeviceClass_1.GenericDeviceClass.get(generic);
+                this._deviceClass = new DeviceClass_1.DeviceClass(basic, genericDC, DeviceClass_1.SpecificDeviceClass.get(genericDC.key, specific));
+            }
+        }
+        // Parse single properties
+        const tryParse = (key, type) => {
+            if (typeof obj[key] === type)
+                this[`_${key}`] = obj[key];
+        };
+        tryParse("isListening", "boolean");
+        tryParse("isFrequentListening", "boolean");
+        tryParse("isRouting", "boolean");
+        tryParse("maxBaudRate", "number");
+        tryParse("isSecure", "boolean");
+        tryParse("isBeaming", "boolean");
+        tryParse("version", "number");
+        function enforceType(val, type) {
+            return typeof val === type ? val : undefined;
+        }
+        // Parse CommandClasses
+        if (util_1.isObject(obj.commandClasses)) {
+            const ccDict = obj.commandClasses;
+            for (const ccHex of Object.keys(ccDict)) {
+                // First make sure this key describes a valid CC
+                if (!/^0x\d+$/.test(ccHex))
+                    continue;
+                // tslint:disable-next-line: radix
+                const ccNum = parseInt(ccHex);
+                if (!(ccNum in CommandClass_1.CommandClasses))
+                    continue;
+                // Parse the information we have
+                const { isSupported, isControlled, version } = ccDict[ccHex];
+                this.addCC(ccNum, {
+                    isSupported: enforceType(isSupported, "boolean"),
+                    isControlled: enforceType(isControlled, "boolean"),
+                    version: enforceType(version, "number"),
+                });
+            }
+        }
     }
 }
 exports.ZWaveNode = ZWaveNode;

@@ -89,6 +89,7 @@ export declare class ZWaveNode extends EventEmitter {
         version: number;
         commandClasses: {};
     };
+    deserialize(obj: any): void;
 }
 export declare enum InterviewStage {
     None = 0,

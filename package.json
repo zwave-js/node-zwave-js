@@ -5,6 +5,9 @@
   "keywords": [],
   "main": "build/index.js",
   "types": "build/index.d.ts",
+  "files": [
+    "build/**/*.js"
+  ],
   "author": {
     "name": "AlCalzone",
     "email": "d.griesel@gmx.net"

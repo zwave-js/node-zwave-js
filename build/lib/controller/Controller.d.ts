@@ -53,4 +53,6 @@ export declare class ZWaveController extends EventEmitter {
     serialize(): {
         nodes: {};
     };
+    /** Deserializes the controller information and all nodes from the cache */
+    deserialize(serialized: any): void;
 }

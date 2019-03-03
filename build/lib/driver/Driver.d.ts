@@ -146,4 +146,8 @@ export declare class Driver extends EventEmitter {
      * For performance reasons, these calls may be throttled
      */
     saveNetworkToCache(): Promise<void>;
+    /**
+     * Restores a previously stored zwave network state from cache to speed up the startup process
+     */
+    restoreNetworkFromCache(): Promise<void>;
 }

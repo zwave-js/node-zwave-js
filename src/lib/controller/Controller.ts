@@ -20,6 +20,7 @@ import { GetSUCNodeIdRequest, GetSUCNodeIdResponse } from "./GetSUCNodeIdMessage
 import { HardResetRequest } from "./HardResetRequest";
 import { SetSerialApiTimeoutsRequest, SetSerialApiTimeoutsResponse } from "./SetSerialApiTimeoutsMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
+import { isObject } from "util";
 
 // TODO: interface the exposed events
 
@@ -240,6 +241,7 @@ export class ZWaveController extends EventEmitter {
 			log("controller", `serial API timeouts overwritten. The old values were: ack = ${resp.oldAckTimeout} ms, byte = ${resp.oldByteTimeout} ms`, "debug");
 		}
 
+		// TODO: Try to find out what this does from the new docs
 		// send application info (not sure why tho)
 		if (this.isFunctionSupported(FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION)) {
 			log("controller", `sending application info...`, "debug");
@@ -358,7 +360,7 @@ export class ZWaveController extends EventEmitter {
 				// in any case, stop the inclusion process so we don't accidentally add another node
 				try {
 					await this.stopInclusion();
-				} catch (e) { /* ok */}
+				} catch (e) { /* ok */ }
 				return;
 			case AddNodeStatus.AddingSlave: {
 				// this is called when a new node is added
@@ -380,7 +382,7 @@ export class ZWaveController extends EventEmitter {
 				// stop the inclusion process so we don't accidentally add another node
 				try {
 					await this.stopInclusion();
-				} catch (e) { /* ok */}
+				} catch (e) { /* ok */ }
 				return;
 			}
 			case AddNodeStatus.Done: {
@@ -422,6 +424,22 @@ export class ZWaveController extends EventEmitter {
 					.map(([id, node]) => [id.toString(), node.serialize()] as [string, object]),
 			),
 		};
+	}
+
+	/** Deserializes the controller information and all nodes from the cache */
+	public deserialize(serialized: any) {
+		if (isObject(serialized.nodes)) {
+			for (const nodeId of Object.keys(serialized.nodes)) {
+				const serializedNode = serialized.nodes[nodeId];
+				if (!serializedNode || typeof serializedNode.id !== "number" || serializedNode.id.toString() !== nodeId) {
+					throw new ZWaveError("The cache file is invalid", ZWaveErrorCodes.Driver_InvalidCache);
+				}
+
+				if (this.nodes.has(serializedNode.id)) {
+					this.nodes.get(serializedNode.id).deserialize(serializedNode);
+				}
+			}
+		}
 	}
 
 }
