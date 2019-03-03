@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var WakeUpCC_1;
 const Driver_1 = require("../driver/Driver");
 const ZWaveError_1 = require("../error/ZWaveError");
 const CommandClass_1 = require("./CommandClass");
@@ -22,7 +23,7 @@ var WakeUpCommand;
     WakeUpCommand[WakeUpCommand["IntervalCapabilitiesGet"] = 9] = "IntervalCapabilitiesGet";
     WakeUpCommand[WakeUpCommand["IntervalCapabilitiesReport"] = 10] = "IntervalCapabilitiesReport";
 })(WakeUpCommand = exports.WakeUpCommand || (exports.WakeUpCommand = {}));
-let WakeUpCC = class WakeUpCC extends CommandClass_1.CommandClass {
+let WakeUpCC = WakeUpCC_1 = class WakeUpCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId, wakeupCommand, wakeupInterval, controllerNodeId) {
         super(driver, nodeId);
         this.nodeId = nodeId;
@@ -86,11 +87,17 @@ let WakeUpCC = class WakeUpCC extends CommandClass_1.CommandClass {
     isAwake() {
         return !!this.getValueDB().getValue(CommandClass_1.getCommandClass(this), undefined, "awake");
     }
+    static isAwake(driver, node) {
+        return new WakeUpCC_1(driver, node.id).isAwake();
+    }
     setAwake(awake) {
         this.getValueDB().setValue(CommandClass_1.getCommandClass(this), undefined, "awake", awake);
     }
+    static setAwake(driver, node, awake) {
+        return new WakeUpCC_1(driver, node.id).setAwake(awake);
+    }
 };
-WakeUpCC = __decorate([
+WakeUpCC = WakeUpCC_1 = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["Wake Up"]),
     CommandClass_1.implementedVersion(2),
     CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Wake Up"]),

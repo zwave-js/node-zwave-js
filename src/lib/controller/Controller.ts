@@ -1,4 +1,5 @@
 import { createDeferredPromise, DeferredPromise } from "alcalzone-shared/deferred-promise";
+import { composeObject } from "alcalzone-shared/objects";
 import { EventEmitter } from "events";
 import { CommandClasses } from "../commandclass/CommandClass";
 import { Driver, RequestHandler } from "../driver/Driver";
@@ -8,7 +9,7 @@ import { Message } from "../message/Message";
 import { BasicDeviceClasses, DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
 import { log } from "../util/logger";
-import { num2hex, stringify } from "../util/strings";
+import { num2hex } from "../util/strings";
 import { AddNodeStatus, AddNodeToNetworkRequest, AddNodeType } from "./AddNodeToNetworkRequest";
 import { GetControllerCapabilitiesRequest, GetControllerCapabilitiesResponse } from "./GetControllerCapabilitiesMessages";
 import { GetControllerIdRequest, GetControllerIdResponse } from "./GetControllerIdMessages";
@@ -19,7 +20,6 @@ import { GetSUCNodeIdRequest, GetSUCNodeIdResponse } from "./GetSUCNodeIdMessage
 import { HardResetRequest } from "./HardResetRequest";
 import { SetSerialApiTimeoutsRequest, SetSerialApiTimeoutsResponse } from "./SetSerialApiTimeoutsMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
-import { composeObject } from "alcalzone-shared/objects";
 
 // TODO: interface the exposed events
 

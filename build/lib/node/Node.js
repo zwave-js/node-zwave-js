@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const async_1 = require("alcalzone-shared/async");
+const objects_1 = require("alcalzone-shared/objects");
 const strings_1 = require("alcalzone-shared/strings");
 const events_1 = require("events");
 const CommandClass_1 = require("../commandclass/CommandClass");
@@ -26,18 +27,8 @@ const Constants_1 = require("../message/Constants");
 const logger_1 = require("../util/logger");
 const strings_2 = require("../util/strings");
 const DeviceClass_1 = require("./DeviceClass");
-const INodeQuery_1 = require("./INodeQuery");
 const RequestNodeInfoMessages_1 = require("./RequestNodeInfoMessages");
 const ValueDB_1 = require("./ValueDB");
-const objects_1 = require("alcalzone-shared/objects");
-/** Finds the ID of the target or source node in a message, if it contains that information */
-function getNodeId(msg) {
-    if (INodeQuery_1.isNodeQuery(msg))
-        return msg.nodeId;
-    if (ICommandClassContainer_1.isCommandClassContainer(msg))
-        return msg.command.nodeId;
-}
-exports.getNodeId = getNodeId;
 class ZWaveNode extends events_1.EventEmitter {
     constructor(id, driver, deviceClass, supportedCCs = [], controlledCCs = []) {
         super();
@@ -180,7 +171,7 @@ class ZWaveNode extends events_1.EventEmitter {
                 case InterviewStage.Endpoints:
                 case InterviewStage.Static:
                 case InterviewStage.Complete:
-                    yield this.driver.saveToCache();
+                    yield this.driver.saveNetworkToCache();
             }
         });
     }

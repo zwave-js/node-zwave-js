@@ -1,13 +1,16 @@
 /// <reference types="reflect-metadata" />
 
 import { entries } from "alcalzone-shared/objects";
+import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { isNodeQuery } from "../node/INodeQuery";
+import { ZWaveNode } from "../node/Node";
 import { log } from "../util/logger";
-import { num2hex, stringify } from "../util/strings";
+import { num2hex } from "../util/strings";
 import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "./Constants";
 
-export type Constructable<T> = new(driver: Driver, ...constructorArgs: any[]) => T;
+export type Constructable<T> = new (driver: Driver, ...constructorArgs: any[]) => T;
 
 /**
  * Represents a ZWave message for communication with the serial interface
@@ -196,6 +199,20 @@ export class Message {
 		}
 		// nothing was configured, this expects no response
 		return "unexpected";
+	}
+
+	/** Finds the ID of the target or source node in a message, if it contains that information */
+	public getNodeId(): number {
+		if (isNodeQuery(this)) return this.nodeId;
+		if (isCommandClassContainer(this)) return this.command.nodeId;
+	}
+
+	/**
+	 * Returns the node this message is linked to or undefined
+	 */
+	public getNodeUnsafe(): ZWaveNode | undefined {
+		const nodeId = this.getNodeId();
+		if (nodeId != undefined) return this.driver.controller.nodes.get(nodeId);
 	}
 
 }

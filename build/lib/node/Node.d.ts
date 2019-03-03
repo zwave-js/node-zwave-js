@@ -3,11 +3,8 @@ import { EventEmitter } from "events";
 import { CommandClass, CommandClasses, CommandClassInfo, StateKind } from "../commandclass/CommandClass";
 import { Baudrate } from "../controller/GetNodeProtocolInfoMessages";
 import { Driver } from "../driver/Driver";
-import { Message } from "../message/Message";
 import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
 import { ValueDB, ValueUpdatedArgs } from "./ValueDB";
-/** Finds the ID of the target or source node in a message, if it contains that information */
-export declare function getNodeId(msg: Message): number;
 export interface ZWaveNode {
     on(event: "value updated", cb: (args: ValueUpdatedArgs) => void): this;
     removeListener(event: "value updated", cb: (args: ValueUpdatedArgs) => void): this;

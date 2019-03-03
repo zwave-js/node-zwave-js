@@ -240,7 +240,7 @@ class Driver extends events_1.EventEmitter {
     serialport_onError(err) {
         this.emit("error", err);
     }
-    onInvalidData(data, message) {
+    onInvalidData(message) {
         this.emit("error", new ZWaveError_1.ZWaveError(message, ZWaveError_1.ZWaveErrorCodes.Driver_InvalidDataReceived));
         this.resetIO();
     }
@@ -267,7 +267,7 @@ class Driver extends events_1.EventEmitter {
                     }
                     default: {
                         const message = `The receive buffer starts with unexpected data: 0x${data.toString("hex")}`;
-                        this.onInvalidData(this.receiveBuffer, message);
+                        this.onInvalidData(message);
                         return;
                     }
                 }
@@ -291,7 +291,7 @@ class Driver extends events_1.EventEmitter {
                 if (e instanceof ZWaveError_1.ZWaveError) {
                     if (e.code === ZWaveError_1.ZWaveErrorCodes.PacketFormat_Invalid
                         || e.code === ZWaveError_1.ZWaveErrorCodes.PacketFormat_Checksum) {
-                        this.onInvalidData(this.receiveBuffer, e.toString());
+                        this.onInvalidData(e.toString());
                         return;
                     }
                 }
@@ -328,6 +328,9 @@ class Driver extends events_1.EventEmitter {
                     return;
                 case "fatal_node":
                     // The node did not respond
+                    // TODO: If this is a sleeping node, it is asleep
+                    //   ==> Move all its pending messages to the WakeupQueue
+                    //   ==> Find a way to keep the current transaction without blocking the send queue
                     logger_1.log("io", `  The node did not respond to the current transaction, dropping it`, "debug");
                     if (this.currentTransaction.promise != null) {
                         const errorMsg = msg instanceof SendDataMessages_1.SendDataRequest
@@ -658,13 +661,13 @@ class Driver extends events_1.EventEmitter {
      * Saves the current configuration and collected data about the controller and all nodes to a cache file.
      * For performance reasons, these calls may be throttled
      */
-    saveToCache() {
+    saveNetworkToCache() {
         return __awaiter(this, void 0, void 0, function* () {
             // Ensure this method isn't being executed too often
             if (Date.now() - this.lastSaveToCache < this.saveToCacheInterval) {
                 // Schedule a save in a couple of ms to collect changes
                 if (!this.saveToCacheTimer) {
-                    this.saveToCacheTimer = setTimeout(() => this.saveToCache(), this.saveToCacheInterval);
+                    this.saveToCacheTimer = setTimeout(() => this.saveNetworkToCache(), this.saveToCacheInterval);
                 }
                 return;
             }

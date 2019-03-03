@@ -46,15 +46,12 @@ export declare class CommandClass {
     protected toJSONInherited(props: Record<string, any>): Record<string, any>;
     /** Requests static or dynamic state for a given from a node */
     static createStateRequest(driver: Driver, node: ZWaveNode, kind: StateKind): SendDataRequest | void;
-    /** Returns the node this CC is linked to */
-    protected getNode(): ZWaveNode;
+    /**
+     * Returns the node this CC is linked to. Throws if the node does not exist.
+     */
+    getNode(): ZWaveNode;
     /** Returns the value DB for this CC's node */
     protected getValueDB(): import("../node/ValueDB").ValueDB;
-    /** Which variables should be persisted when requested */
-    private _variables;
-    protected createVariable(name: string): void;
-    /** Persists all values on the given node */
-    persistValues(endpoint?: number, variables?: Iterable<string>): void;
 }
 export declare const METADATA_commandClass: unique symbol;
 export declare const METADATA_commandClassMap: unique symbol;

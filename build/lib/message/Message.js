@@ -2,7 +2,9 @@
 /// <reference types="reflect-metadata" />
 Object.defineProperty(exports, "__esModule", { value: true });
 const objects_1 = require("alcalzone-shared/objects");
+const ICommandClassContainer_1 = require("../commandclass/ICommandClassContainer");
 const ZWaveError_1 = require("../error/ZWaveError");
+const INodeQuery_1 = require("../node/INodeQuery");
 const logger_1 = require("../util/logger");
 const strings_1 = require("../util/strings");
 const Constants_1 = require("./Constants");
@@ -145,6 +147,21 @@ class Message {
         }
         // nothing was configured, this expects no response
         return "unexpected";
+    }
+    /** Finds the ID of the target or source node in a message, if it contains that information */
+    getNodeId() {
+        if (INodeQuery_1.isNodeQuery(this))
+            return this.nodeId;
+        if (ICommandClassContainer_1.isCommandClassContainer(this))
+            return this.command.nodeId;
+    }
+    /**
+     * Returns the node this message is linked to or undefined
+     */
+    getNodeUnsafe() {
+        const nodeId = this.getNodeId();
+        if (nodeId != undefined)
+            return this.driver.controller.nodes.get(nodeId);
     }
 }
 exports.Message = Message;

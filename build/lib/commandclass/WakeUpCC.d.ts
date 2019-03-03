@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { Driver } from "../driver/Driver";
+import { ZWaveNode } from "../node/Node";
 import { CommandClass } from "./CommandClass";
 export declare enum WakeUpCommand {
     IntervalSet = 4,
@@ -29,5 +30,7 @@ export declare class WakeUpCC extends CommandClass {
     serialize(): Buffer;
     deserialize(data: Buffer): void;
     isAwake(): boolean;
+    static isAwake(driver: Driver, node: ZWaveNode): boolean;
     setAwake(awake: boolean): void;
+    static setAwake(driver: Driver, node: ZWaveNode, awake: boolean): void;
 }

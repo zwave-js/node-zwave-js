@@ -3,10 +3,13 @@
 import { expect, should } from "chai";
 should();
 
+import { CommandClasses } from "../commandclass/CommandClass";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
+import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { MessagePriority } from "../message/Constants";
-import { Message } from "../message/Message";
+import { ZWaveNode } from "../node/Node";
+import { ValueDB } from "../node/ValueDB";
 import { Driver } from "./Driver";
 import { Transaction } from "./Transaction";
 
@@ -45,13 +48,13 @@ describe("lib/driver/Transaction => ", () => {
 			controller: {
 				nodes: new Map<number, MockNode>([
 					// 1: non-listening
-					[1, {isListening: false, isFrequentListening: false}],
+					[1, { isListening: false, isFrequentListening: false }],
 					// 2: listening, but not frequent
-					[2, {isListening: true, isFrequentListening: false}],
+					[2, { isListening: true, isFrequentListening: false }],
 					// 3: listening, and frequent
-					[3, {isListening: true, isFrequentListening: true}],
+					[3, { isListening: true, isFrequentListening: true }],
 					// 4: not listening, but frequent listening
-					[4, {isListening: false, isFrequentListening: true}],
+					[4, { isListening: false, isFrequentListening: true }],
 				]),
 			},
 		};
@@ -96,5 +99,72 @@ describe("lib/driver/Transaction => ", () => {
 		tNoNode.compareTo(t2).should.equal(0);
 		t3.compareTo(tNoNode).should.equal(0);
 		t4.compareTo(tNoNode).should.equal(0);
+	});
+
+	it("Messages in the wakeup queue should be preferred over lesser priorities only if the node is awake", () => {
+		interface MockNode {
+			id: number;
+			valueDB: ValueDB;
+			supportsCC: ZWaveNode["supportsCC"];
+		}
+
+		function supportsCC(cc: CommandClasses) {
+			return cc === CommandClasses["Wake Up"];
+		}
+
+		const driverMock = {
+			controller: {
+				nodes: new Map<number, MockNode>([
+					// 1: awake
+					[1, {id: 1, valueDB: new ValueDB(), supportsCC }],
+					// 2: not awake
+					[2, {id: 2, valueDB: new ValueDB(), supportsCC }],
+				]),
+			},
+		} as unknown as Driver;
+
+		// Mark the first node as awake
+		const wakeupCC1 = new WakeUpCC(driverMock, 1);
+		wakeupCC1.setAwake(true);
+
+		// Mark the second node as sleeping
+		const wakeupCC2 = new WakeUpCC(driverMock, 2);
+		wakeupCC2.setAwake(false);
+
+		function createTransaction(nodeID: number, priority: MessagePriority) {
+			const driver = driverMock as any as Driver;
+			const msg = new SendDataRequest(driver, new NoOperationCC(driver, nodeID));
+			const ret = new Transaction(driver, msg, null, priority);
+			ret.timestamp = 0;
+			return ret;
+		}
+
+		// Node awake, higher priority than WakeUp
+		const tAwakeHigh = createTransaction(1, MessagePriority.Controller);
+		// Node awake, WakeUp priority
+		const tAwakeWU = createTransaction(1, MessagePriority.WakeUp);
+		// Node awake, lowest priority
+		const tAwakeLow = createTransaction(1, MessagePriority.Poll);
+		// Node asleep, higher priority than WakeUp
+		const tAsleepHigh = createTransaction(2, MessagePriority.Controller);
+		// Node asleep, WakeUp priority
+		const tAsleepWU = createTransaction(2, MessagePriority.WakeUp);
+		// Node asleep, lowest priority
+		const tAsleepLow = createTransaction(2, MessagePriority.Poll);
+
+		// For alive nodes, the conventional order should apply
+		tAwakeHigh.compareTo(tAwakeWU).should.equal(-1);
+		tAwakeHigh.compareTo(tAwakeLow).should.equal(-1);
+		tAwakeWU.compareTo(tAwakeLow).should.equal(-1);
+
+		// For asleep nodes, the conventional order should apply too
+		tAsleepHigh.compareTo(tAsleepWU).should.equal(-1);
+		tAsleepHigh.compareTo(tAsleepLow).should.equal(-1);
+		tAsleepWU.compareTo(tAsleepLow).should.equal(-1);
+
+		// The wake-up priority of sleeping nodes is lower than everything else of awake nodes
+		tAsleepWU.compareTo(tAwakeHigh).should.equal(1);
+		tAsleepWU.compareTo(tAwakeWU).should.equal(1);
+		tAsleepWU.compareTo(tAwakeLow).should.equal(1);
 	});
 });

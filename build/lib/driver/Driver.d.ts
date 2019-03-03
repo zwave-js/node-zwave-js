@@ -145,5 +145,5 @@ export declare class Driver extends EventEmitter {
      * Saves the current configuration and collected data about the controller and all nodes to a cache file.
      * For performance reasons, these calls may be throttled
      */
-    saveToCache(): Promise<void>;
+    saveNetworkToCache(): Promise<void>;
 }

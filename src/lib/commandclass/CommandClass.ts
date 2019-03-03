@@ -136,14 +136,12 @@ export class CommandClass {
 		// This needs to be overwritten per command class. In the default implementation, don't do anything
 	}
 
-	/** Returns the node this CC is linked to */
-	protected getNode() {
+	/**
+	 * Returns the node this CC is linked to. Throws if the node does not exist.
+	 */
+	public getNode() {
 		if (this.nodeId == undefined) throw new ZWaveError("Cannot retrieve the node without a Node ID", ZWaveErrorCodes.CC_NoNodeID);
-		return this
-			.driver
-			.controller
-			.nodes.get(this.nodeId)
-			;
+		return this.driver.controller.nodes.get(this.nodeId);
 	}
 
 	/** Returns the value DB for this CC's node */
@@ -151,22 +149,22 @@ export class CommandClass {
 		return this.getNode().valueDB;
 	}
 
-	/** Which variables should be persisted when requested */
-	private _variables = new Set<string>();
-	protected createVariable(name: string) {
-		this._variables.add(name);
-	}
+	// /** Which variables should be persisted when requested */
+	// private _variables = new Set<string>();
+	// protected createVariable(name: string) {
+	// 	this._variables.add(name);
+	// }
 
-	/** Persists all values on the given node */
-	public persistValues(
-		endpoint?: number,
-		variables: Iterable<string> = this._variables.keys(),
-	) {
-		const db = this.getValueDB();
-		for (const variable of variables) {
-			db.setValue(getCommandClass(this), endpoint, variable, this[variable as keyof this]);
-		}
-	}
+	// /** Persists all values on the given node */
+	// public persistValues(
+	// 	endpoint?: number,
+	// 	variables: Iterable<string> = this._variables.keys(),
+	// ) {
+	// 	const db = this.getValueDB();
+	// 	for (const variable of variables) {
+	// 		db.setValue(getCommandClass(this), endpoint, variable, this[variable as keyof this]);
+	// 	}
+	// }
 
 }
 

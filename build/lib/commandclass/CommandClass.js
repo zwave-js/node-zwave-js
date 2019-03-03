@@ -35,8 +35,6 @@ let CommandClass = CommandClass_1 = class CommandClass {
         this.nodeId = nodeId;
         this.command = command;
         this.payload = payload;
-        /** Which variables should be persisted when requested */
-        this._variables = new Set();
         // Extract the cc from declared metadata if not provided
         this.command = command != null ? command : getCommandClass(this);
     }
@@ -106,28 +104,17 @@ let CommandClass = CommandClass_1 = class CommandClass {
     static createStateRequest(driver, node, kind) {
         // This needs to be overwritten per command class. In the default implementation, don't do anything
     }
-    /** Returns the node this CC is linked to */
+    /**
+     * Returns the node this CC is linked to. Throws if the node does not exist.
+     */
     getNode() {
         if (this.nodeId == undefined)
             throw new ZWaveError_1.ZWaveError("Cannot retrieve the node without a Node ID", ZWaveError_1.ZWaveErrorCodes.CC_NoNodeID);
-        return this
-            .driver
-            .controller
-            .nodes.get(this.nodeId);
+        return this.driver.controller.nodes.get(this.nodeId);
     }
     /** Returns the value DB for this CC's node */
     getValueDB() {
         return this.getNode().valueDB;
-    }
-    createVariable(name) {
-        this._variables.add(name);
-    }
-    /** Persists all values on the given node */
-    persistValues(endpoint, variables = this._variables.keys()) {
-        const db = this.getValueDB();
-        for (const variable of variables) {
-            db.setValue(getCommandClass(this), endpoint, variable, this[variable]);
-        }
     }
 };
 CommandClass = CommandClass_1 = __decorate([

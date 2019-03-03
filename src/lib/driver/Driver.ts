@@ -1,5 +1,4 @@
-import { Comparable, compareNumberOrString, CompareResult } from "alcalzone-shared/comparable";
-import { createDeferredPromise, DeferredPromise } from "alcalzone-shared/deferred-promise";
+import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { entries } from "alcalzone-shared/objects";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import { EventEmitter } from "events";
@@ -10,10 +9,10 @@ import { CommandClasses, getImplementedVersion } from "../commandclass/CommandCl
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import { ZWaveController } from "../controller/Controller";
-import { SendDataRequest, SendDataResponse, TransmitStatus } from "../controller/SendDataMessages";
+import { SendDataRequest, TransmitStatus } from "../controller/SendDataMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "../message/Constants";
-import { Constructable, getDefaultPriority, Message, messageTypes } from "../message/Message";
+import { getDefaultPriority, Message } from "../message/Message";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
 import { Transaction } from "./Transaction";
@@ -199,7 +198,7 @@ export class Driver extends EventEmitter {
 				// TODO: retry on failure or something...
 				node.interview().catch(e => {
 					if (e instanceof ZWaveError) {
-						log("controller", "node interview failed: " + e, "error")
+						log("controller", "node interview failed: " + e, "error");
 					} else {
 						throw e;
 					}
@@ -414,6 +413,9 @@ export class Driver extends EventEmitter {
 
 				case "fatal_node":
 					// The node did not respond
+					// TODO: If this is a sleeping node, it is asleep
+					//   ==> Move all its pending messages to the WakeupQueue
+					//   ==> Find a way to keep the current transaction without blocking the send queue
 					log("io", `  The node did not respond to the current transaction, dropping it`, "debug");
 					if (this.currentTransaction.promise != null) {
 						const errorMsg = msg instanceof SendDataRequest
@@ -829,12 +831,12 @@ export class Driver extends EventEmitter {
 	 * Saves the current configuration and collected data about the controller and all nodes to a cache file.
 	 * For performance reasons, these calls may be throttled
 	 */
-	public async saveToCache() {
+	public async saveNetworkToCache() {
 		// Ensure this method isn't being executed too often
 		if (Date.now() - this.lastSaveToCache < this.saveToCacheInterval) {
 			// Schedule a save in a couple of ms to collect changes
 			if (!this.saveToCacheTimer) {
-				this.saveToCacheTimer = setTimeout(() => this.saveToCache(), this.saveToCacheInterval);
+				this.saveToCacheTimer = setTimeout(() => this.saveNetworkToCache(), this.saveToCacheInterval);
 			}
 			return;
 		} else {

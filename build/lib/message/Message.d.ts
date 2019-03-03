@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { Driver } from "../driver/Driver";
+import { ZWaveNode } from "../node/Node";
 import { FunctionType, MessagePriority, MessageType } from "./Constants";
 export declare type Constructable<T> = new (driver: Driver, ...constructorArgs: any[]) => T;
 /**
@@ -36,6 +37,12 @@ export declare class Message {
     protected toJSONInherited(props: Record<string, any>): Record<string, any>;
     /** Checks if a message is an expected response for this message */
     testResponse(msg: Message): ResponseRole;
+    /** Finds the ID of the target or source node in a message, if it contains that information */
+    getNodeId(): number;
+    /**
+     * Returns the node this message is linked to or undefined
+     */
+    getNodeUnsafe(): ZWaveNode | undefined;
 }
 export declare const METADATA_messageTypes: unique symbol;
 export declare const METADATA_messageTypeMap: unique symbol;

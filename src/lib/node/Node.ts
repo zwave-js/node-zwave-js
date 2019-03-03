@@ -1,4 +1,5 @@
 import { promiseSequence } from "alcalzone-shared/async";
+import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
 import { EventEmitter } from "events";
 import { CentralSceneCC } from "../commandclass/CentralSceneCC";
@@ -22,13 +23,6 @@ import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
 import { isNodeQuery } from "./INodeQuery";
 import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
 import { ValueDB, ValueUpdatedArgs } from "./ValueDB";
-import { composeObject } from "alcalzone-shared/objects";
-
-/** Finds the ID of the target or source node in a message, if it contains that information */
-export function getNodeId(msg: Message): number {
-	if (isNodeQuery(msg)) return msg.nodeId;
-	if (isCommandClassContainer(msg)) return msg.command.nodeId;
-}
 
 export interface ZWaveNode {
 	on(event: "value updated", cb: (args: ValueUpdatedArgs) => void): this;
@@ -226,7 +220,7 @@ export class ZWaveNode extends EventEmitter {
 			case InterviewStage.Endpoints:
 			case InterviewStage.Static:
 			case InterviewStage.Complete:
-				await this.driver.saveToCache();
+				await this.driver.saveNetworkToCache();
 		}
 	}
 

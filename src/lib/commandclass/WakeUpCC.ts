@@ -22,7 +22,7 @@ export class WakeUpCC extends CommandClass {
 	constructor(
 		driver: Driver,
 		nodeId?: number,
-		);
+	);
 	constructor(
 		driver: Driver,
 		nodeId: number,
@@ -127,9 +127,14 @@ export class WakeUpCC extends CommandClass {
 	public isAwake(): boolean {
 		return !!this.getValueDB().getValue(getCommandClass(this), undefined, "awake");
 	}
+	public static isAwake(driver: Driver, node: ZWaveNode): boolean {
+		return new WakeUpCC(driver, node.id).isAwake();
+	}
 
 	public setAwake(awake: boolean) {
 		this.getValueDB().setValue(getCommandClass(this), undefined, "awake", awake);
 	}
-
+	public static setAwake(driver: Driver, node: ZWaveNode, awake: boolean) {
+		return new WakeUpCC(driver, node.id).setAwake(awake);
+	}
 }
