@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 // tslint:disable-next-line:no-var-requires
 const colors = require("colors/safe");
-const debug = require("debug");
+const debug_1 = require("debug");
 const defaultNamespace = "zwave";
 let customLogger;
 function setCustomLogger(logger) {
@@ -38,7 +38,7 @@ function log(...args) {
         if (severity !== "info") {
             prefix = `[${severity.toUpperCase()}] `;
         }
-        debug(defaultNamespace + namespace)(`${prefix}${colors[severity](message)}`);
+        debug_1.default(defaultNamespace + namespace)(`${prefix}${colors[severity](message)}`);
     }
     (customLogger || defaultLogger)(message, severity);
 }

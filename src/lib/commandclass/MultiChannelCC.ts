@@ -1,4 +1,4 @@
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { GenericDeviceClasses } from "../node/DeviceClass";
 import { EndpointInformation, parseEndpointInformation } from "../node/NodeInfo";
@@ -27,13 +27,13 @@ export interface EndpointCapability extends EndpointInformation {
 export class MultiChannelCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(driver: Driver, nodeId?: number);
-	constructor(driver: Driver, nodeId: number, ccCommand: MultiChannelCommand.EndPointGet);
-	constructor(driver: Driver, nodeId: number, ccCommand: MultiChannelCommand.CapabilityGet, endpoint: number);
-	constructor(driver: Driver, nodeId: number, ccCommand: MultiChannelCommand.EndPointFind, genericClass: GenericDeviceClasses, specificClass: number);
+	constructor(driver: IDriver, nodeId?: number);
+	constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.EndPointGet);
+	constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.CapabilityGet, endpoint: number);
+	constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.EndPointFind, genericClass: GenericDeviceClasses, specificClass: number);
 
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: MultiChannelCommand,
 		...args: any[]

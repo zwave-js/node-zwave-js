@@ -15,6 +15,7 @@ import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "../m
 import { getDefaultPriority, Message } from "../message/Message";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
+import { IDriver } from "./IDriver";
 import { Transaction } from "./Transaction";
 
 export interface ZWaveOptions {
@@ -88,7 +89,7 @@ interface RequestHandlerEntry<T extends Message = Message> {
 
 // TODO: Interface the emitted events
 
-export class Driver extends EventEmitter {
+export class Driver extends EventEmitter implements IDriver {
 
 	/** The serial port instance */
 	private serial: SerialPort;

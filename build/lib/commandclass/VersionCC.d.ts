@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import { ZWaveNode } from "../node/Node";
 import { CommandClass, CommandClasses, StateKind } from "./CommandClass";
 export declare enum VersionCommand {
@@ -14,9 +14,9 @@ export declare class VersionCC extends CommandClass {
     nodeId: number;
     versionCommand?: VersionCommand;
     requestedCC?: CommandClasses;
-    constructor(driver: Driver, nodeId?: number);
-    constructor(driver: Driver, nodeId: number, command: VersionCommand.Get);
-    constructor(driver: Driver, nodeId: number, command: VersionCommand.CommandClassGet, requestedCC: CommandClasses);
+    constructor(driver: IDriver, nodeId?: number);
+    constructor(driver: IDriver, nodeId: number, command: VersionCommand.Get);
+    constructor(driver: IDriver, nodeId: number, command: VersionCommand.CommandClassGet, requestedCC: CommandClasses);
     private _libraryType;
     readonly libraryType: ZWaveLibraryTypes;
     private _protocolVersion;
@@ -28,5 +28,5 @@ export declare class VersionCC extends CommandClass {
     serialize(): Buffer;
     deserialize(data: Buffer): void;
     /** Requests static or dynamic state for a given from a node */
-    static createStateRequest(driver: Driver, node: ZWaveNode, kind: StateKind): SendDataRequest | void;
+    static createStateRequest(driver: IDriver, node: ZWaveNode, kind: StateKind): SendDataRequest | void;
 }

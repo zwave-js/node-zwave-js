@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import { CommandClass } from "./CommandClass";
 export declare enum NotificationCommand {
     EventSupportedGet = 1,
@@ -29,10 +29,10 @@ export declare enum NotificationType {
 export declare class NotificationCC extends CommandClass {
     nodeId: number;
     ccCommand?: NotificationCommand;
-    constructor(driver: Driver, nodeId?: number);
-    constructor(driver: Driver, nodeId: number, ccCommand: NotificationCommand.Get, alarmType: number, notificationType: NotificationType, notificationEvent?: number);
-    constructor(driver: Driver, nodeId: number, ccCommand: NotificationCommand.Set, notificationType: NotificationType, notificationStatus: boolean);
-    constructor(driver: Driver, nodeId: number, ccCommand: NotificationCommand.SupportedGet);
+    constructor(driver: IDriver, nodeId?: number);
+    constructor(driver: IDriver, nodeId: number, ccCommand: NotificationCommand.Get, alarmType: number, notificationType: NotificationType, notificationEvent?: number);
+    constructor(driver: IDriver, nodeId: number, ccCommand: NotificationCommand.Set, notificationType: NotificationType, notificationStatus: boolean);
+    constructor(driver: IDriver, nodeId: number, ccCommand: NotificationCommand.SupportedGet);
     /** Proprietary V1/V2 alarm type */
     alarmType: number;
     /** Regulated V3+ notification type */

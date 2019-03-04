@@ -1,4 +1,3 @@
-import { assert, expect } from "chai";
 import { cpp2js } from "./strings";
 // tslint:disable:no-unused-expression
 
@@ -10,7 +9,7 @@ describe("lib/strings => cpp2js() => ", () => {
 			["abcdef\0", "abcdef"],
 		];
 		for (const [inp, out] of testCases) {
-			expect(cpp2js(inp)).to.equal(out);
+			expect(cpp2js(inp)).toBe(out);
 		}
 	});
 
@@ -19,7 +18,7 @@ describe("lib/strings => cpp2js() => ", () => {
 			"abc", "def", "abcdef",
 		];
 		for (const tc of testCases) {
-			expect(cpp2js(tc)).to.equal(tc);
+			expect(cpp2js(tc)).toBe(tc);
 		}
 	});
 });

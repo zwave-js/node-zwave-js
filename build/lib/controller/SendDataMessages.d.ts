@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { CommandClass } from "../commandclass/CommandClass";
 import { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import { Message, ResponseRole } from "../message/Message";
 export declare enum TransmitOptions {
     NotSet = 0,
@@ -24,8 +24,8 @@ export declare class SendDataRequest<CCType extends CommandClass = CommandClass>
     transmitOptions?: TransmitOptions;
     /** A callback ID to map requests and responses */
     callbackId?: number;
-    constructor(driver: Driver);
-    constructor(driver: Driver, command: CCType, transmitOptions?: TransmitOptions, callbackId?: number);
+    constructor(driver: IDriver);
+    constructor(driver: IDriver, command: CCType, transmitOptions?: TransmitOptions, callbackId?: number);
     /** The command this message contains */
     command: CCType;
     private _transmitStatus;

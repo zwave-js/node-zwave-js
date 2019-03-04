@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import { CommandClass } from "./CommandClass";
 export declare enum BinarySensorCommand {
     Get = 2,
@@ -11,9 +11,9 @@ export declare class BinarySensorCC extends CommandClass {
     nodeId: number;
     ccCommand?: BinarySensorCommand;
     sensorType?: BinarySensorType;
-    constructor(driver: Driver, nodeId?: number);
-    constructor(driver: Driver, nodeId: number, ccCommand: BinarySensorCommand.Get, sensorType?: BinarySensorType);
-    constructor(driver: Driver, nodeId: number, ccCommand: BinarySensorCommand.SupportedGet);
+    constructor(driver: IDriver, nodeId?: number);
+    constructor(driver: IDriver, nodeId: number, ccCommand: BinarySensorCommand.Get, sensorType?: BinarySensorType);
+    constructor(driver: IDriver, nodeId: number, ccCommand: BinarySensorCommand.SupportedGet);
     private _value;
     readonly value: boolean;
     private _supportedSensorTypes;

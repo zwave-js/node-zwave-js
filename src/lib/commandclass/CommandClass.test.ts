@@ -1,31 +1,27 @@
 // tslint:disable:no-unused-expression
 
-import { expect, should } from "chai";
-import { stub } from "sinon";
-should();
-
 import { BasicCC } from "./BasicCC";
 import { CommandClass, CommandClasses, getImplementedVersion } from "./CommandClass";
 
 describe("lib/commandclass/CommandClass => ", () => {
 	it("getImplementedVersion should return the implemented version for a CommandClass instance", () => {
 		const cc = new BasicCC(undefined);
-		getImplementedVersion(cc).should.equal(2);
+		expect(getImplementedVersion(cc)).toBe(2);
 	});
 
 	it("getImplementedVersion should return the implemented version for a numeric CommandClass key", () => {
 		const cc = CommandClasses.Basic;
-		getImplementedVersion(cc).should.equal(2);
+		expect(getImplementedVersion(cc)).toBe(2);
 	});
 
 	it("getImplementedVersion should return 0 for a non-implemented CommandClass instance", () => {
 		const cc = new CommandClass(undefined);
-		getImplementedVersion(cc).should.equal(0);
+		expect(getImplementedVersion(cc)).toBe(0);
 	});
 
 	it("getImplementedVersion should return the implemented version for a numeric CommandClass key", () => {
 		const cc = -1;
-		getImplementedVersion(cc).should.equal(0);
+		expect(getImplementedVersion(cc)).toBe(0);
 	});
 
 	it("serializing with an undefined or null payload should behave like an empty payload", () => {
@@ -37,8 +33,8 @@ describe("lib/commandclass/CommandClass => ", () => {
 		const serialized2 = cc2.serialize();
 		const serialized3 = cc3.serialize();
 
-		serialized1.should.deep.equal(serialized2);
-		serialized2.should.deep.equal(serialized3);
+		expect(serialized1).toEqual(serialized2);
+		expect(serialized2).toEqual(serialized3);
 	});
 
 });

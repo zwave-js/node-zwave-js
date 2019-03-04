@@ -1,6 +1,6 @@
 // tslint:disable-next-line:no-var-requires
 const colors = require("colors/safe");
-import * as debug from "debug";
+import debug from "debug";
 
 const defaultNamespace = "zwave";
 export type SubNamespaces = "driver" | "io" | "controller" | "protocol";

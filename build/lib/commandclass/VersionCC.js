@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var VersionCC_1;
 const SendDataMessages_1 = require("../controller/SendDataMessages");
-const Driver_1 = require("../driver/Driver");
 const ZWaveError_1 = require("../error/ZWaveError");
 const CommandClass_1 = require("./CommandClass");
 var VersionCommand;
@@ -86,6 +85,6 @@ VersionCC = VersionCC_1 = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses.Version),
     CommandClass_1.implementedVersion(1),
     CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses.Version),
-    __metadata("design:paramtypes", [Driver_1.Driver, Number, Number, Number])
+    __metadata("design:paramtypes", [Object, Number, Number, Number])
 ], VersionCC);
 exports.VersionCC = VersionCC;

@@ -11,6 +11,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const deferred_promise_1 = require("alcalzone-shared/deferred-promise");
 const objects_1 = require("alcalzone-shared/objects");
 const events_1 = require("events");
+const util_1 = require("util");
 const CommandClass_1 = require("../commandclass/CommandClass");
 const ZWaveError_1 = require("../error/ZWaveError");
 const Constants_1 = require("../message/Constants");
@@ -29,7 +30,6 @@ const GetSUCNodeIdMessages_1 = require("./GetSUCNodeIdMessages");
 const HardResetRequest_1 = require("./HardResetRequest");
 const SetSerialApiTimeoutsMessages_1 = require("./SetSerialApiTimeoutsMessages");
 const ZWaveLibraryTypes_1 = require("./ZWaveLibraryTypes");
-const util_1 = require("util");
 // TODO: interface the exposed events
 class ZWaveController extends events_1.EventEmitter {
     /** @internal */

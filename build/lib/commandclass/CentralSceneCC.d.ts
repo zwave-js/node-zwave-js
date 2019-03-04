@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import { CommandClass } from "./CommandClass";
 export declare enum CentralSceneCommand {
     SupportedGet = 1,
@@ -21,9 +21,9 @@ export declare enum CentralSceneKeys {
 export declare class CentralSceneCC extends CommandClass {
     nodeId: number;
     centralSceneCommand?: CentralSceneCommand;
-    constructor(driver: Driver, nodeId?: number);
-    constructor(driver: Driver, nodeId: number, command: CentralSceneCommand.SupportedGet | CentralSceneCommand.ConfigurationGet);
-    constructor(driver: Driver, nodeId: number, command: CentralSceneCommand.ConfigurationSet, slowRefresh: boolean);
+    constructor(driver: IDriver, nodeId?: number);
+    constructor(driver: IDriver, nodeId: number, command: CentralSceneCommand.SupportedGet | CentralSceneCommand.ConfigurationGet);
+    constructor(driver: IDriver, nodeId: number, command: CentralSceneCommand.ConfigurationSet, slowRefresh: boolean);
     private _slowRefresh;
     readonly slowRefresh: boolean;
     private _supportsSlowRefresh;

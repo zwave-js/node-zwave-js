@@ -9,7 +9,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Driver_1 = require("../driver/Driver");
 const ZWaveError_1 = require("../error/ZWaveError");
 const CommandClass_1 = require("./CommandClass");
 var MultilevelSwitchCommand;
@@ -115,7 +114,7 @@ MultilevelSwitchCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["Multilevel Switch"]),
     CommandClass_1.implementedVersion(4),
     CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Multilevel Switch"]),
-    __metadata("design:paramtypes", [Driver_1.Driver, Number, Number, Object])
+    __metadata("design:paramtypes", [Object, Number, Number, Object])
 ], MultilevelSwitchCC);
 exports.MultilevelSwitchCC = MultilevelSwitchCC;
 var LevelChangeDirection;

@@ -1,6 +1,6 @@
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { ZWaveNode } from "../node/Node";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion, StateKind } from "./CommandClass";
@@ -18,12 +18,12 @@ export enum VersionCommand {
 export class VersionCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(driver: Driver, nodeId?: number);
-	constructor(driver: Driver, nodeId: number, command: VersionCommand.Get);
-	constructor(driver: Driver, nodeId: number, command: VersionCommand.CommandClassGet, requestedCC: CommandClasses);
+	constructor(driver: IDriver, nodeId?: number);
+	constructor(driver: IDriver, nodeId: number, command: VersionCommand.Get);
+	constructor(driver: IDriver, nodeId: number, command: VersionCommand.CommandClassGet, requestedCC: CommandClasses);
 
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		public nodeId: number,
 		public versionCommand?: VersionCommand,
 		public requestedCC?: CommandClasses,
@@ -95,7 +95,7 @@ export class VersionCC extends CommandClass {
 	}
 
 	/** Requests static or dynamic state for a given from a node */
-	public static createStateRequest(driver: Driver, node: ZWaveNode, kind: StateKind): SendDataRequest | void {
+	public static createStateRequest(driver: IDriver, node: ZWaveNode, kind: StateKind): SendDataRequest | void {
 		// TODO: Check if we have requested that information before and store it
 		if (kind & StateKind.Static) {
 			const cc = new VersionCC(driver, node.id, VersionCommand.Get);

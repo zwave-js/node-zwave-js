@@ -1,7 +1,7 @@
 import { entries } from "alcalzone-shared/objects";
 import * as fs from "fs";
 import { SendDataRequest } from "../controller/SendDataMessages";
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Constructable } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
@@ -36,18 +36,18 @@ export class CommandClass {
 	// tslint:disable:unified-signatures
 	// empty constructor to parse messages
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 	);
 	// default constructor to send messages
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		nodeId: number,
 		command?: CommandClasses,
 		payload?: Buffer,
 	);
 	// implementation
 	constructor(
-		protected driver: Driver,
+		protected driver: IDriver,
 		public nodeId?: number,
 		public command?: CommandClasses,
 		public payload: Buffer = Buffer.from([]),
@@ -101,7 +101,7 @@ export class CommandClass {
 		return getCCConstructor(cc) || CommandClass;
 	}
 
-	public static from(driver: Driver, serializedCC: Buffer): CommandClass {
+	public static from(driver: IDriver, serializedCC: Buffer): CommandClass {
 		// tslint:disable-next-line:variable-name
 		const Constructor = CommandClass.getConstructor(serializedCC);
 		const ret = new Constructor(driver);
@@ -132,7 +132,7 @@ export class CommandClass {
 	}
 
 	/** Requests static or dynamic state for a given from a node */
-	public static createStateRequest(driver: Driver, node: ZWaveNode, kind: StateKind): SendDataRequest | void {
+	public static createStateRequest(driver: IDriver, node: ZWaveNode, kind: StateKind): SendDataRequest | void {
 		// This needs to be overwritten per command class. In the default implementation, don't do anything
 	}
 

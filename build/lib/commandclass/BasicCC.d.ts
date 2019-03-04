@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import { CommandClass } from "./CommandClass";
 export declare enum BasicCommand {
     Set = 1,
@@ -9,9 +9,9 @@ export declare enum BasicCommand {
 export declare class BasicCC extends CommandClass {
     nodeId: number;
     ccCommand?: BasicCommand;
-    constructor(driver: Driver, nodeId?: number);
-    constructor(driver: Driver, nodeId: number, ccCommand: BasicCommand.Get);
-    constructor(driver: Driver, nodeId: number, ccCommand: BasicCommand.Set, targetValue: number);
+    constructor(driver: IDriver, nodeId?: number);
+    constructor(driver: IDriver, nodeId: number, ccCommand: BasicCommand.Get);
+    constructor(driver: IDriver, nodeId: number, ccCommand: BasicCommand.Set, targetValue: number);
     private _currentValue;
     readonly currentValue: number;
     private _targetValue;

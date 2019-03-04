@@ -1,8 +1,5 @@
 // tslint:disable:no-unused-expression
 
-import { expect, should } from "chai";
-should();
-
 import { CommandClasses } from "../commandclass/CommandClass";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
@@ -21,21 +18,21 @@ describe("lib/driver/Transaction => ", () => {
 		const t1 = new Transaction(null, null, null, MessagePriority.Controller);
 		const t2 = new Transaction(null, null, null, MessagePriority.Controller);
 		// equal priority, earlier timestamp wins
-		t1.compareTo(t2).should.equal(-1);
-		t2.compareTo(t1).should.equal(1);
+		expect(t1.compareTo(t2)).toBe(-1);
+		expect(t2.compareTo(t1)).toBe(1);
 
 		const t3 = new Transaction(null, null, null, MessagePriority.Poll);
 		const t4 = new Transaction(null, null, null, MessagePriority.Controller);
 		// lower priority loses
-		t3.compareTo(t4).should.equal(1);
-		t4.compareTo(t3).should.equal(-1);
+		expect(t3.compareTo(t4)).toBe(1);
+		expect(t4.compareTo(t3)).toBe(-1);
 
 		// this should not happen but we still need to test it
 		const t5 = new Transaction(null, null, null, MessagePriority.Controller);
 		const t6 = new Transaction(null, null, null, MessagePriority.Controller);
 		t6.timestamp = t5.timestamp;
-		t5.compareTo(t6).should.equal(0);
-		t6.compareTo(t5).should.equal(0);
+		expect(t5.compareTo(t6)).toBe(0);
+		expect(t6.compareTo(t5)).toBe(0);
 	});
 
 	it("NodeQuery comparisons should prioritize listening nodes", () => {
@@ -75,30 +72,30 @@ describe("lib/driver/Transaction => ", () => {
 		const tNoNode = createTransaction(5);
 
 		// t2/3/4 prioritized because it's listening and t1 is not
-		t1.compareTo(t2).should.equal(1);
-		t1.compareTo(t2).should.equal(1);
-		t1.compareTo(t3).should.equal(1);
+		expect(t1.compareTo(t2)).toBe(1);
+		expect(t1.compareTo(t2)).toBe(1);
+		expect(t1.compareTo(t3)).toBe(1);
 		// sanity checks
-		t2.compareTo(t1).should.equal(-1);
-		t3.compareTo(t1).should.equal(-1);
-		t4.compareTo(t1).should.equal(-1);
+		expect(t2.compareTo(t1)).toBe(-1);
+		expect(t3.compareTo(t1)).toBe(-1);
+		expect(t4.compareTo(t1)).toBe(-1);
 		// equal priority because both are (frequent or not) listening
-		t2.compareTo(t3).should.equal(0);
-		t2.compareTo(t4).should.equal(0);
+		expect(t2.compareTo(t3)).toBe(0);
+		expect(t2.compareTo(t4)).toBe(0);
 		// sanity checks
-		t3.compareTo(t4).should.equal(0);
-		t3.compareTo(t2).should.equal(0);
-		t4.compareTo(t2).should.equal(0);
+		expect(t3.compareTo(t4)).toBe(0);
+		expect(t3.compareTo(t2)).toBe(0);
+		expect(t4.compareTo(t2)).toBe(0);
 
 		// fallbacks for undefined nodes
-		tNoId.compareTo(t1).should.equal(0);
-		tNoId.compareTo(t2).should.equal(0);
-		t3.compareTo(tNoId).should.equal(0);
-		t4.compareTo(tNoId).should.equal(0);
-		tNoNode.compareTo(t1).should.equal(0);
-		tNoNode.compareTo(t2).should.equal(0);
-		t3.compareTo(tNoNode).should.equal(0);
-		t4.compareTo(tNoNode).should.equal(0);
+		expect(tNoId.compareTo(t1)).toBe(0);
+		expect(tNoId.compareTo(t2)).toBe(0);
+		expect(t3.compareTo(tNoId)).toBe(0);
+		expect(t4.compareTo(tNoId)).toBe(0);
+		expect(tNoNode.compareTo(t1)).toBe(0);
+		expect(tNoNode.compareTo(t2)).toBe(0);
+		expect(t3.compareTo(tNoNode)).toBe(0);
+		expect(t4.compareTo(tNoNode)).toBe(0);
 	});
 
 	it("Messages in the wakeup queue should be preferred over lesser priorities only if the node is awake", () => {
@@ -153,18 +150,18 @@ describe("lib/driver/Transaction => ", () => {
 		const tAsleepLow = createTransaction(2, MessagePriority.Poll);
 
 		// For alive nodes, the conventional order should apply
-		tAwakeHigh.compareTo(tAwakeWU).should.equal(-1);
-		tAwakeHigh.compareTo(tAwakeLow).should.equal(-1);
-		tAwakeWU.compareTo(tAwakeLow).should.equal(-1);
+		expect(tAwakeHigh.compareTo(tAwakeWU)).toBe(-1);
+		expect(tAwakeHigh.compareTo(tAwakeLow)).toBe(-1);
+		expect(tAwakeWU.compareTo(tAwakeLow)).toBe(-1);
 
 		// For asleep nodes, the conventional order should apply too
-		tAsleepHigh.compareTo(tAsleepWU).should.equal(-1);
-		tAsleepHigh.compareTo(tAsleepLow).should.equal(-1);
-		tAsleepWU.compareTo(tAsleepLow).should.equal(-1);
+		expect(tAsleepHigh.compareTo(tAsleepWU)).toBe(-1);
+		expect(tAsleepHigh.compareTo(tAsleepLow)).toBe(-1);
+		expect(tAsleepWU.compareTo(tAsleepLow)).toBe(-1);
 
 		// The wake-up priority of sleeping nodes is lower than everything else of awake nodes
-		tAsleepWU.compareTo(tAwakeHigh).should.equal(1);
-		tAsleepWU.compareTo(tAwakeWU).should.equal(1);
-		tAsleepWU.compareTo(tAwakeLow).should.equal(1);
+		expect(tAsleepWU.compareTo(tAwakeHigh)).toBe(1);
+		expect(tAsleepWU.compareTo(tAwakeWU)).toBe(1);
+		expect(tAsleepWU.compareTo(tAwakeLow)).toBe(1);
 	});
 });

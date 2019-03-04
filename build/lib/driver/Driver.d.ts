@@ -5,6 +5,7 @@ import { ZWaveController } from "../controller/Controller";
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { FunctionType, MessagePriority } from "../message/Constants";
 import { Message } from "../message/Message";
+import { IDriver } from "./IDriver";
 export interface ZWaveOptions {
     timeouts: {
         /** how long to wait for an ACK */
@@ -27,7 +28,7 @@ export declare type DeepPartial<T> = {
 };
 export declare type MessageSupportCheck = "loud" | "silent" | "none";
 export declare type RequestHandler<T extends Message = Message> = (msg: T) => boolean;
-export declare class Driver extends EventEmitter {
+export declare class Driver extends EventEmitter implements IDriver {
     private port;
     /** @internal */
     options?: DeepPartial<ZWaveOptions>;

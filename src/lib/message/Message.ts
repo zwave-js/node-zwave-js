@@ -2,7 +2,7 @@
 
 import { entries } from "alcalzone-shared/objects";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { isNodeQuery } from "../node/INodeQuery";
 import { ZWaveNode } from "../node/Node";
@@ -10,7 +10,7 @@ import { log } from "../util/logger";
 import { num2hex } from "../util/strings";
 import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "./Constants";
 
-export type Constructable<T> = new (driver: Driver, ...constructorArgs: any[]) => T;
+export type Constructable<T> = new (driver: IDriver, ...constructorArgs: any[]) => T;
 
 /**
  * Represents a ZWave message for communication with the serial interface
@@ -19,13 +19,13 @@ export class Message {
 
 	// #1
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		payload?: Buffer,
 	)
 
 	// #2
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		type: MessageType,
 		funcType: FunctionType,
 		expResponse: FunctionType | ResponsePredicate,
@@ -34,7 +34,7 @@ export class Message {
 
 	// implementation
 	constructor(
-		protected driver: Driver,
+		protected driver: IDriver,
 		typeOrPayload?: MessageType | Buffer,
 		funcType?: FunctionType,
 		expResponse?: FunctionType | ResponsePredicate,

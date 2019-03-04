@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var CommandClass_1;
 const objects_1 = require("alcalzone-shared/objects");
 const fs = require("fs");
-const Driver_1 = require("../driver/Driver");
 const ZWaveError_1 = require("../error/ZWaveError");
 const logger_1 = require("../util/logger");
 const strings_1 = require("../util/strings");
@@ -120,7 +119,7 @@ let CommandClass = CommandClass_1 = class CommandClass {
 CommandClass = CommandClass_1 = __decorate([
     implementedVersion(Number.POSITIVE_INFINITY) // per default don't impose any restrictions on the version
     ,
-    __metadata("design:paramtypes", [Driver_1.Driver, Number, Number, Buffer])
+    __metadata("design:paramtypes", [Object, Number, Number, Buffer])
 ], CommandClass);
 exports.CommandClass = CommandClass;
 // =======================

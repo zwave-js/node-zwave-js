@@ -1,4 +1,4 @@
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { num2hex } from "../util/strings";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
@@ -30,14 +30,14 @@ export class BasicCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		nodeId?: number,
 	);
-	constructor(driver: Driver, nodeId: number, ccCommand: BasicCommand.Get);
-	constructor(driver: Driver, nodeId: number, ccCommand: BasicCommand.Set, targetValue: number);
+	constructor(driver: IDriver, nodeId: number, ccCommand: BasicCommand.Get);
+	constructor(driver: IDriver, nodeId: number, ccCommand: BasicCommand.Set, targetValue: number);
 
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: BasicCommand,
 		targetValue?: number,

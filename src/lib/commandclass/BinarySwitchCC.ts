@@ -1,4 +1,4 @@
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
@@ -15,16 +15,16 @@ export class BinarySwitchCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		nodeId?: number,
 	);
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		nodeId: number,
 		ccCommand: BinarySwitchCommand.Get,
 	);
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		nodeId: number,
 		ccCommand: BinarySwitchCommand.Set,
 		targetValue: boolean,
@@ -32,7 +32,7 @@ export class BinarySwitchCC extends CommandClass {
 	);
 
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: BinarySwitchCommand,
 		public targetValue?: BinarySwitchState,

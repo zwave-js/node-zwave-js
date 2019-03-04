@@ -1,8 +1,6 @@
 // tslint:disable:no-console
 // tslint:disable:no-unused-expression
 // tslint:disable:variable-name
-import { assert, expect, should, use } from "chai";
-import { SinonStub, spy, stub } from "sinon";
 
 import { EventEmitter } from "events";
 import * as SerialPort from "serialport";
@@ -43,7 +41,7 @@ export class MockSerialPort extends EventEmitter {
 	public open() {
 		this.openStub();
 	}
-	public readonly openStub: SinonStub = stub();
+	public readonly openStub: jest.Mock = jest.fn();
 	public doOpen() {
 		this.emit("open");
 	}
@@ -55,7 +53,7 @@ export class MockSerialPort extends EventEmitter {
 		this.closeStub();
 		this.emit("close");
 	}
-	public readonly closeStub: SinonStub = stub();
+	public readonly closeStub: jest.Mock = jest.fn();
 
 	public receiveData(data: Buffer) {
 		this.emit("data", data);
@@ -68,7 +66,7 @@ export class MockSerialPort extends EventEmitter {
 	public write(data: string | number[] | Buffer) {
 		this.writeStub(data);
 	}
-	public readonly writeStub: SinonStub = stub();
+	public readonly writeStub: jest.Mock = jest.fn();
 
 }
 

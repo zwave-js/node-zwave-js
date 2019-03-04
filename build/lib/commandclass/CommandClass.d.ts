@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { SendDataRequest } from "../controller/SendDataMessages";
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import { Constructable } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
 export interface CommandClassInfo {
@@ -23,12 +23,12 @@ export declare enum StateKind {
     Dynamic = 4
 }
 export declare class CommandClass {
-    protected driver: Driver;
+    protected driver: IDriver;
     nodeId?: number;
     command?: CommandClasses;
     payload: Buffer;
-    constructor(driver: Driver);
-    constructor(driver: Driver, nodeId: number, command?: CommandClasses, payload?: Buffer);
+    constructor(driver: IDriver);
+    constructor(driver: IDriver, nodeId: number, command?: CommandClasses, payload?: Buffer);
     /** The version of the command class used */
     version: number;
     serialize(): Buffer;
@@ -40,12 +40,12 @@ export declare class CommandClass {
      * It is assumed that the buffer only contains the serialized CC.
      */
     static getConstructor(ccData: Buffer): Constructable<CommandClass>;
-    static from(driver: Driver, serializedCC: Buffer): CommandClass;
+    static from(driver: IDriver, serializedCC: Buffer): CommandClass;
     toJSON(): any;
     private toJSONInternal;
     protected toJSONInherited(props: Record<string, any>): Record<string, any>;
     /** Requests static or dynamic state for a given from a node */
-    static createStateRequest(driver: Driver, node: ZWaveNode, kind: StateKind): SendDataRequest | void;
+    static createStateRequest(driver: IDriver, node: ZWaveNode, kind: StateKind): SendDataRequest | void;
     /**
      * Returns the node this CC is linked to. Throws if the node does not exist.
      */

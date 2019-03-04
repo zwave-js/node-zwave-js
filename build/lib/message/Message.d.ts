@@ -1,15 +1,15 @@
 /// <reference types="node" />
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import { ZWaveNode } from "../node/Node";
 import { FunctionType, MessagePriority, MessageType } from "./Constants";
-export declare type Constructable<T> = new (driver: Driver, ...constructorArgs: any[]) => T;
+export declare type Constructable<T> = new (driver: IDriver, ...constructorArgs: any[]) => T;
 /**
  * Represents a ZWave message for communication with the serial interface
  */
 export declare class Message {
-    protected driver: Driver;
-    constructor(driver: Driver, payload?: Buffer);
-    constructor(driver: Driver, type: MessageType, funcType: FunctionType, expResponse: FunctionType | ResponsePredicate, payload?: Buffer);
+    protected driver: IDriver;
+    constructor(driver: IDriver, payload?: Buffer);
+    constructor(driver: IDriver, type: MessageType, funcType: FunctionType, expResponse: FunctionType | ResponsePredicate, payload?: Buffer);
     type: MessageType;
     functionType: FunctionType;
     expectedResponse: FunctionType | ResponsePredicate;

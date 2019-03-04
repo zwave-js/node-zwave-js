@@ -1,9 +1,5 @@
 // tslint:disable:no-unused-expression
 
-import { expect, should } from "chai";
-import { stub } from "sinon";
-should();
-
 import { assertZWaveError } from "../../../test/util";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { BasicCC, BasicCommand } from "./BasicCC";
@@ -18,7 +14,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 			CommandClasses.Basic, // CC
 			BasicCommand.Get, // CC Command
 		]);
-		basicCC.serialize().should.deep.equal(expected);
+		expect(basicCC.serialize()).toEqual(expected);
 	});
 
 	it("the Set command should serialize correctly", () => {
@@ -30,15 +26,17 @@ describe("lib/commandclass/BasicCC => ", () => {
 			BasicCommand.Set, // CC Command
 			55, // target value
 		]);
-		basicCC.serialize().should.deep.equal(expected);
+		expect(basicCC.serialize()).toEqual(expected);
 	});
 
 	it("serialize() should throw for other commands", () => {
 		const basicCC = new BasicCC(undefined, 2, -1 /* not a command */);
+
 		assertZWaveError(
-			() => basicCC.serialize(),
-			"Cannot serialize",
-			ZWaveErrorCodes.CC_Invalid,
+			() => basicCC.serialize(), {
+				messageMatches: "Cannot serialize",
+				errorCode: ZWaveErrorCodes.CC_Invalid,
+			},
 		);
 	});
 
@@ -53,9 +51,9 @@ describe("lib/commandclass/BasicCC => ", () => {
 		const basicCC = new BasicCC(undefined);
 		basicCC.deserialize(ccData);
 
-		basicCC.currentValue.should.equal(55);
-		expect(basicCC.targetValue).to.be.undefined;
-		expect(basicCC.duration).to.be.undefined;
+		expect(basicCC.currentValue).toBe(55);
+		expect(basicCC.targetValue).toBeUndefined;
+		expect(basicCC.duration).toBeUndefined;
 	});
 
 	it("the Report command (v1) should be deserialized correctly", () => {
@@ -71,9 +69,9 @@ describe("lib/commandclass/BasicCC => ", () => {
 		const basicCC = new BasicCC(undefined);
 		basicCC.deserialize(ccData);
 
-		basicCC.currentValue.should.equal(55);
-		basicCC.targetValue.should.equal(66);
-		basicCC.duration.should.equal(1);
+		expect(basicCC.currentValue).toBe(55);
+		expect(basicCC.targetValue).toBe(66);
+		expect(basicCC.duration).toBe(1);
 	});
 
 	it("deserialize() should throw for other commands", () => {
@@ -84,10 +82,12 @@ describe("lib/commandclass/BasicCC => ", () => {
 			255, // not a valid command
 		]);
 		const basicCC = new BasicCC(undefined);
+
 		assertZWaveError(
-			() => basicCC.deserialize(serializedCC),
-			"Cannot deserialize",
-			ZWaveErrorCodes.CC_Invalid,
+			() => basicCC.deserialize(serializedCC), {
+				messageMatches: "Cannot deserialize",
+				errorCode: ZWaveErrorCodes.CC_Invalid,
+			},
 		);
 	});
 

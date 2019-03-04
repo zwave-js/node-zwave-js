@@ -1,8 +1,4 @@
-// tslint:disable:no-unused-expression
-
-import { expect, should } from "chai";
 import { isMessagePriority, MessagePriority } from "./Constants";
-should();
 
 describe("lib/message/Constants => isMessagePriority() => ", () => {
 	it("should detect numbers in the enum range as a message priority", () => {
@@ -13,7 +9,7 @@ describe("lib/message/Constants => isMessagePriority() => ", () => {
 		const minKey = Math.min(...numericKeys);
 		const maxKey = Math.max(...numericKeys);
 		for (let num = minKey - 2; num <= maxKey + 2; num++) {
-			isMessagePriority(num).should.equal(num >= minKey && num <= maxKey);
+			expect(isMessagePriority(num)).toBe(num >= minKey && num <= maxKey);
 		}
 	});
 
@@ -24,7 +20,7 @@ describe("lib/message/Constants => isMessagePriority() => ", () => {
 			true, false,
 		];
 		for (const stuff of notAPriority) {
-			isMessagePriority(stuff).should.be.false;
+			expect(isMessagePriority(stuff)).toBe(false);
 		}
 	});
 });

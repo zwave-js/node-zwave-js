@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const objects_1 = require("alcalzone-shared/objects");
-const Driver_1 = require("../driver/Driver");
 const ZWaveError_1 = require("../error/ZWaveError");
 const CommandClass_1 = require("./CommandClass");
 var NotificationCommand;
@@ -204,6 +203,6 @@ NotificationCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses.Notification),
     CommandClass_1.implementedVersion(8),
     CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses.Notification),
-    __metadata("design:paramtypes", [Driver_1.Driver, Number, Number, Object])
+    __metadata("design:paramtypes", [Object, Number, Number, Object])
 ], NotificationCC);
 exports.NotificationCC = NotificationCC;

@@ -1,5 +1,5 @@
 import { composeObject } from "alcalzone-shared/objects";
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
@@ -38,9 +38,9 @@ export class NotificationCC extends CommandClass {
 	// former AlarmCC (v1..v2)
 
 	// tslint:disable:unified-signatures
-	constructor(driver: Driver, nodeId?: number);
+	constructor(driver: IDriver, nodeId?: number);
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		nodeId: number,
 		ccCommand: NotificationCommand.Get,
 		alarmType: number,
@@ -48,20 +48,20 @@ export class NotificationCC extends CommandClass {
 		notificationEvent?: number,
 	);
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		nodeId: number,
 		ccCommand: NotificationCommand.Set,
 		notificationType: NotificationType,
 		notificationStatus: boolean,
 	);
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		nodeId: number,
 		ccCommand: NotificationCommand.SupportedGet,
 	);
 
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: NotificationCommand,
 		// tslint:disable-next-line:trailing-comma

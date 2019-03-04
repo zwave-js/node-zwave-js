@@ -1,6 +1,6 @@
 import { CommandClass, CommandClasses, getExpectedCCResponse } from "../commandclass/CommandClass";
 import { ICommandClassContainer, isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { Constructable, expectedResponse, Message, messageTypes, priority, ResponsePredicate, ResponseRole } from "../message/Message";
@@ -60,17 +60,17 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass> extends
 	// tslint:disable:unified-signatures
 	// empty constructor to parse messages
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 	);
 	// default constructor to send messages
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		command: CCType,
 		transmitOptions?: TransmitOptions,
 		callbackId?: number,
 	);
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		command?: CCType,
 		/** Options regarding the transmission of the message */
 		public transmitOptions?: TransmitOptions,

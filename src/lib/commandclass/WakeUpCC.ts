@@ -1,4 +1,4 @@
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { ZWaveNode } from "../node/Node";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, getCommandClass, getCommandClassStatic, implementedVersion } from "./CommandClass";
@@ -20,18 +20,18 @@ export class WakeUpCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		nodeId?: number,
 	);
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		nodeId: number,
 		command: WakeUpCommand.IntervalSet,
 		interval: number,
 		controllerNodeId: number,
 	);
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		nodeId: number,
 		command: WakeUpCommand.IntervalGet |
 			WakeUpCommand.NoMoreInformation |
@@ -39,7 +39,7 @@ export class WakeUpCC extends CommandClass {
 	);
 
 	constructor(
-		driver: Driver,
+		driver: IDriver,
 		public nodeId: number,
 		public wakeupCommand?: WakeUpCommand,
 		public wakeupInterval?: number,
@@ -127,14 +127,14 @@ export class WakeUpCC extends CommandClass {
 	public isAwake(): boolean {
 		return !!this.getValueDB().getValue(getCommandClass(this), undefined, "awake");
 	}
-	public static isAwake(driver: Driver, node: ZWaveNode): boolean {
+	public static isAwake(driver: IDriver, node: ZWaveNode): boolean {
 		return new WakeUpCC(driver, node.id).isAwake();
 	}
 
 	public setAwake(awake: boolean) {
 		this.getValueDB().setValue(getCommandClass(this), undefined, "awake", awake);
 	}
-	public static setAwake(driver: Driver, node: ZWaveNode, awake: boolean) {
+	public static setAwake(driver: IDriver, node: ZWaveNode, awake: boolean) {
 		return new WakeUpCC(driver, node.id).setAwake(awake);
 	}
 }

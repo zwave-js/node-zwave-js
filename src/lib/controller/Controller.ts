@@ -1,6 +1,7 @@
 import { createDeferredPromise, DeferredPromise } from "alcalzone-shared/deferred-promise";
 import { composeObject } from "alcalzone-shared/objects";
 import { EventEmitter } from "events";
+import { isObject } from "util";
 import { CommandClasses } from "../commandclass/CommandClass";
 import { Driver, RequestHandler } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -20,7 +21,6 @@ import { GetSUCNodeIdRequest, GetSUCNodeIdResponse } from "./GetSUCNodeIdMessage
 import { HardResetRequest } from "./HardResetRequest";
 import { SetSerialApiTimeoutsRequest, SetSerialApiTimeoutsResponse } from "./SetSerialApiTimeoutsMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
-import { isObject } from "util";
 
 // TODO: interface the exposed events
 
