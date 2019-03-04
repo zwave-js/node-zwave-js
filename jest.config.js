@@ -21,7 +21,11 @@ module.exports = {
 		"reflect-metadata"
 	],
 	collectCoverage: true,
+	collectCoverageFrom: [
+		"src/**/*.ts",
+		"!src/**/*.test.ts"
+	],
 	coverageReporters: [
-		"lcov", "html"
+		"lcov", "html", "text-summary"
 	]
 }
