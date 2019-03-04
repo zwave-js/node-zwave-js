@@ -19,5 +19,9 @@ module.exports = {
 	],
 	"setupFiles": [
 		"./test/jest.setup.js"
+	],
+	collectCoverage: true,
+	coverageReporters: [
+		"lcov", "html"
 	]
 }

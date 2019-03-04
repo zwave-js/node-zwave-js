@@ -1,4 +1,4 @@
 {
 	"typescript.tsdk": "node_modules\\typescript\\lib",
-	"mochaExplorer.files": "src/**/*.test.ts"
+	"jest.showCoverageOnLoad": true
 }
