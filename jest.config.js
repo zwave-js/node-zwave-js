@@ -18,7 +18,7 @@ module.exports = {
 		"jest-extended"
 	],
 	"setupFiles": [
-		"./test/jest.setup.js"
+		"reflect-metadata"
 	],
 	collectCoverage: true,
 	coverageReporters: [

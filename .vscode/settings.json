@@ -1,4 +1,8 @@
 {
 	"typescript.tsdk": "node_modules\\typescript\\lib",
-	"jest.showCoverageOnLoad": true
+	"jest.showCoverageOnLoad": true,
+	"jest.enableCodeLens": true,
+	"jest.debugMode": true,
+	"coverage-gutters.showGutterCoverage": false,
+	"coverage-gutters.showRulerCoverage": true
 }
