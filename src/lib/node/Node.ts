@@ -201,13 +201,18 @@ export class ZWaveNode extends EventEmitter {
 			await this.requestStaticValues();
 		}
 
-		// TODO: Save the current state
+		// At this point the interview of new nodes is done. Start here when re-interviewing known nodes
+		if (this.interviewStage === InterviewStage.RestartFromCache) {
+			// Make sure the device answers
+			await this.ping();
+		}
 
 		// for testing purposes we skip to the end
 		await this.setInterviewStage(InterviewStage.Complete);
 		log("controller", `${this.logPrefix}interview completed`, "debug");
 	}
 
+	/** Updates this node's interview stage and saves to cache when appropriate */
 	private async setInterviewStage(completedStage: InterviewStage) {
 		this.interviewStage = completedStage;
 		// Also save to the cache after certain stages
@@ -473,7 +478,9 @@ export class ZWaveNode extends EventEmitter {
 	public serialize() {
 		return {
 			id: this.id,
-			interviewStage: InterviewStage[this.interviewStage],
+			interviewStage: this.interviewStage >= InterviewStage.RestartFromCache
+				? InterviewStage[InterviewStage.Complete]
+				: InterviewStage[this.interviewStage],
 			deviceClass: this.deviceClass && {
 				basic: this.deviceClass.basic,
 				generic: this.deviceClass.generic.key,
@@ -500,7 +507,6 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	public deserialize(obj: any) {
-
 		if (obj.interviewStage in InterviewStage) {
 			this.interviewStage = typeof obj.interviewStage === "number"
 				? obj.interviewStage
@@ -555,6 +561,10 @@ export class ZWaveNode extends EventEmitter {
 		}
 	}
 
+	public isAsleep() {
+		return this.supportsCC(CommandClasses["Wake Up"])
+			&& !WakeUpCC.isAwake(this.driver, this);
+	}
 }
 
 // TODO: This order is not optimal, check how OpenHAB does it
@@ -573,6 +583,8 @@ export enum InterviewStage {
 	Static,					// (✓) Retrieve static information we haven't received yet (doesn't change)
 
 	// ===== the stuff above should never change =====
+	RestartFromCache,		// This marks the beginning of re-interviews on application startup.
+							// This and later stages will be serialized as "Complete" in the cache
 	// ===== the stuff below changes frequently, so it has to be redone on every start =====
 
 	CacheLoad,				// [ ] Ping a device upon restarting with cached config for the device

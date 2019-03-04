@@ -7,7 +7,7 @@ export declare class Transaction implements Comparable<Transaction> {
     private readonly driver;
     readonly message: Message;
     readonly promise: DeferredPromise<Message | void>;
-    readonly priority: MessagePriority;
+    priority: MessagePriority;
     timestamp: number;
     ackPending: boolean;
     response?: Message;

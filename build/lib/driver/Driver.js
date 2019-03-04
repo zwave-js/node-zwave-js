@@ -17,12 +17,14 @@ const path = require("path");
 const SerialPort = require("serialport");
 const CommandClass_1 = require("../commandclass/CommandClass");
 const ICommandClassContainer_1 = require("../commandclass/ICommandClassContainer");
+const WakeUpCC_1 = require("../commandclass/WakeUpCC");
 const ApplicationCommandRequest_1 = require("../controller/ApplicationCommandRequest");
 const Controller_1 = require("../controller/Controller");
 const SendDataMessages_1 = require("../controller/SendDataMessages");
 const ZWaveError_1 = require("../error/ZWaveError");
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
+const Node_1 = require("../node/Node");
 const logger_1 = require("../util/logger");
 const strings_1 = require("../util/strings");
 const Transaction_1 = require("./Transaction");
@@ -151,6 +153,9 @@ class Driver extends events_1.EventEmitter {
                 // Now interview all nodes
                 // don't await them, so the beginInterview method returns
                 for (const node of this._controller.nodes.values()) {
+                    if (node.interviewStage === Node_1.InterviewStage.Complete) {
+                        node.interviewStage = Node_1.InterviewStage.RestartFromCache;
+                    }
                     // TODO: retry on failure or something...
                     node.interview().catch(e => {
                         if (e instanceof ZWaveError_1.ZWaveError) {
@@ -330,15 +335,23 @@ class Driver extends events_1.EventEmitter {
                     return;
                 case "fatal_node":
                     // The node did not respond
-                    // TODO: If this is a sleeping node, it is asleep
-                    //   ==> Move all its pending messages to the WakeupQueue
-                    //   ==> Find a way to keep the current transaction without blocking the send queue
-                    logger_1.log("io", `  The node did not respond to the current transaction, dropping it`, "debug");
-                    if (this.currentTransaction.promise != null) {
-                        const errorMsg = msg instanceof SendDataMessages_1.SendDataRequest
-                            ? `The node did not respond (${SendDataMessages_1.TransmitStatus[msg.transmitStatus]})`
-                            : `The node did not respond`;
-                        this.rejectCurrentTransaction(new ZWaveError_1.ZWaveError(errorMsg, ZWaveError_1.ZWaveErrorCodes.Controller_MessageDropped));
+                    const node = this.currentTransaction.message.getNodeUnsafe();
+                    if (node && node.supportsCC(CommandClass_1.CommandClasses["Wake Up"])) {
+                        logger_1.log("driver", `  The node did not respond because it is asleep, moving its messages to the wakeup queue`, "debug");
+                        // The node is asleep
+                        WakeUpCC_1.WakeUpCC.setAwake(this, node, false);
+                        // Move all its pending messages to the WakeupQueue
+                        this.moveMessagesToWakeupQueue(node.id);
+                        setImmediate(() => this.workOffSendQueue());
+                    }
+                    else {
+                        logger_1.log("io", `  The node did not respond to the current transaction, dropping it`, "debug");
+                        if (this.currentTransaction.promise != null) {
+                            const errorMsg = msg instanceof SendDataMessages_1.SendDataRequest
+                                ? `The node did not respond (${SendDataMessages_1.TransmitStatus[msg.transmitStatus]})`
+                                : `The node did not respond`;
+                            this.rejectCurrentTransaction(new ZWaveError_1.ZWaveError(errorMsg, ZWaveError_1.ZWaveErrorCodes.Controller_MessageDropped));
+                        }
                     }
                     return;
                 case "final":
@@ -628,23 +641,31 @@ class Driver extends events_1.EventEmitter {
             logger_1.log("io", `workOffSendQueue > skipping because a transaction is pending`, "debug");
             return;
         }
-        // get the next transaction
-        const next = this.sendQueue.shift();
-        this.currentTransaction = next;
-        const msg = next.message;
-        logger_1.log("io", `workOffSendQueue > sending next message (${Constants_1.FunctionType[msg.functionType]})...`, "debug");
-        // for messages containing a CC, i.e. a SendDataRequest, set the CC version as high as possible
-        if (ICommandClassContainer_1.isCommandClassContainer(msg)) {
-            const cc = msg.command.command;
-            msg.command.version = this.getSafeCCVersionForNode(msg.command.nodeId, cc);
-            logger_1.log("io", `  CC = ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)}) => using version ${msg.command.version}`, "debug");
+        // Before doing anything else, check if this message is for a node that's currently asleep
+        // The automated sorting ensures there's no message for a non-sleeping node after that
+        const targetNode = this.sendQueue.peekStart().message.getNodeUnsafe();
+        if (!targetNode || !targetNode.isAsleep()) {
+            // get the next transaction
+            const next = this.sendQueue.shift();
+            this.currentTransaction = next;
+            const msg = next.message;
+            logger_1.log("io", `workOffSendQueue > sending next message (${Constants_1.FunctionType[msg.functionType]})...`, "debug");
+            // for messages containing a CC, i.e. a SendDataRequest, set the CC version as high as possible
+            if (ICommandClassContainer_1.isCommandClassContainer(msg)) {
+                const cc = msg.command.command;
+                msg.command.version = this.getSafeCCVersionForNode(msg.command.nodeId, cc);
+                logger_1.log("io", `  CC = ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)}) => using version ${msg.command.version}`, "debug");
+            }
+            const data = msg.serialize();
+            logger_1.log("io", `  data = 0x${data.toString("hex")}`, "debug");
+            logger_1.log("io", `  remaining queue length = ${this.sendQueue.length}`, "debug");
+            this.doSend(data);
+            // to avoid any deadlocks we didn't think of, re-call this later
+            this.sendQueueTimer = setTimeout(() => this.workOffSendQueue(), 1000);
         }
-        const data = msg.serialize();
-        logger_1.log("io", `  data = 0x${data.toString("hex")}`, "debug");
-        logger_1.log("io", `  remaining queue length = ${this.sendQueue.length}`, "debug");
-        this.doSend(data);
-        // to avoid any deadlocks we didn't think of, re-call this later
-        this.sendQueueTimer = setTimeout(() => this.workOffSendQueue(), 1000);
+        else {
+            logger_1.log("io", `workOffSendQueue > The remaining messages are for sleeping nodes, not sending anything!`, "debug");
+        }
     }
     retransmit() {
         if (this.currentTransaction == null)
@@ -658,6 +679,32 @@ class Driver extends events_1.EventEmitter {
     }
     doSend(data) {
         this.serial.write(data);
+    }
+    /** Moves all messages for a given node into the wakeup queue */
+    moveMessagesToWakeupQueue(nodeId) {
+        for (const transaction of this.sendQueue) {
+            const msg = transaction.message;
+            const targetNodeId = msg.getNodeId();
+            if (targetNodeId === nodeId) {
+                // Change the priority to WakeUp
+                transaction.priority = Constants_1.MessagePriority.WakeUp;
+            }
+        }
+        // Changing the priority has an effect on the order, so re-sort the send queue
+        this.sortSendQueue();
+        // Don't forget the current transaction
+        if (this.currentTransaction && this.currentTransaction.message.getNodeId() === nodeId) {
+            // Change the priority to WakeUp and re-add it to the queue
+            this.currentTransaction.priority = Constants_1.MessagePriority.WakeUp;
+            this.sendQueue.add(this.currentTransaction);
+            // "reset" the current transaction to none
+            this.currentTransaction = null;
+        }
+    }
+    sortSendQueue() {
+        const items = [...this.sendQueue];
+        this.sendQueue.clear();
+        this.sendQueue.add(...items);
     }
     /**
      * Saves the current configuration and collected data about the controller and all nodes to a cache file.

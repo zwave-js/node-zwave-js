@@ -154,12 +154,17 @@ class ZWaveNode extends events_1.EventEmitter {
             if (this.interviewStage === InterviewStage.Endpoints) {
                 yield this.requestStaticValues();
             }
-            // TODO: Save the current state
+            // At this point the interview of new nodes is done. Start here when re-interviewing known nodes
+            if (this.interviewStage === InterviewStage.RestartFromCache) {
+                // Make sure the device answers
+                yield this.ping();
+            }
             // for testing purposes we skip to the end
             yield this.setInterviewStage(InterviewStage.Complete);
             logger_1.log("controller", `${this.logPrefix}interview completed`, "debug");
         });
     }
+    /** Updates this node's interview stage and saves to cache when appropriate */
     setInterviewStage(completedStage) {
         return __awaiter(this, void 0, void 0, function* () {
             this.interviewStage = completedStage;
@@ -431,7 +436,9 @@ class ZWaveNode extends events_1.EventEmitter {
     serialize() {
         return {
             id: this.id,
-            interviewStage: InterviewStage[this.interviewStage],
+            interviewStage: this.interviewStage >= InterviewStage.RestartFromCache
+                ? InterviewStage[InterviewStage.Complete]
+                : InterviewStage[this.interviewStage],
             deviceClass: this.deviceClass && {
                 basic: this.deviceClass.basic,
                 generic: this.deviceClass.generic.key,
@@ -502,6 +509,10 @@ class ZWaveNode extends events_1.EventEmitter {
             }
         }
     }
+    isAsleep() {
+        return this.supportsCC(CommandClass_1.CommandClasses["Wake Up"])
+            && !WakeUpCC_1.WakeUpCC.isAwake(this.driver, this);
+    }
 }
 exports.ZWaveNode = ZWaveNode;
 // TODO: This order is not optimal, check how OpenHAB does it
@@ -520,15 +531,17 @@ var InterviewStage;
     InterviewStage[InterviewStage["Endpoints"] = 10] = "Endpoints";
     InterviewStage[InterviewStage["Static"] = 11] = "Static";
     // ===== the stuff above should never change =====
+    InterviewStage[InterviewStage["RestartFromCache"] = 12] = "RestartFromCache";
+    // This and later stages will be serialized as "Complete" in the cache
     // ===== the stuff below changes frequently, so it has to be redone on every start =====
-    InterviewStage[InterviewStage["CacheLoad"] = 12] = "CacheLoad";
+    InterviewStage[InterviewStage["CacheLoad"] = 13] = "CacheLoad";
     // 	SetWakeUp,			// [ ] * Configure wake up to point to the master controller
-    InterviewStage[InterviewStage["Associations"] = 13] = "Associations";
-    InterviewStage[InterviewStage["Neighbors"] = 14] = "Neighbors";
-    InterviewStage[InterviewStage["Session"] = 15] = "Session";
-    InterviewStage[InterviewStage["Dynamic"] = 16] = "Dynamic";
-    InterviewStage[InterviewStage["Configuration"] = 17] = "Configuration";
-    InterviewStage[InterviewStage["Complete"] = 18] = "Complete";
+    InterviewStage[InterviewStage["Associations"] = 14] = "Associations";
+    InterviewStage[InterviewStage["Neighbors"] = 15] = "Neighbors";
+    InterviewStage[InterviewStage["Session"] = 16] = "Session";
+    InterviewStage[InterviewStage["Dynamic"] = 17] = "Dynamic";
+    InterviewStage[InterviewStage["Configuration"] = 18] = "Configuration";
+    InterviewStage[InterviewStage["Complete"] = 19] = "Complete";
 })(InterviewStage = exports.InterviewStage || (exports.InterviewStage = {}));
 // export enum OpenHABInterviewStage {
 // 	None,					// Query process hasn't started for this node

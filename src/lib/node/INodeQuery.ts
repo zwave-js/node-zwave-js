@@ -4,6 +4,6 @@ export interface INodeQuery {
 	nodeId: number;
 }
 
-export function isNodeQuery(msg: any): msg is INodeQuery {
-	return typeof msg.nodeId === "number";
+export function isNodeQuery<T extends Message>(msg: T): msg is T & INodeQuery {
+	return typeof (msg as any).nodeId === "number";
 }

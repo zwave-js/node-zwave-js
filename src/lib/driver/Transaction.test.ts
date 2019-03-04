@@ -101,7 +101,7 @@ describe("lib/driver/Transaction => ", () => {
 	it("Messages in the wakeup queue should be preferred over lesser priorities only if the node is awake", () => {
 		interface MockNode {
 			id: number;
-			valueDB: ValueDB;
+			isAsleep(): boolean;
 			supportsCC: ZWaveNode["supportsCC"];
 		}
 
@@ -113,20 +113,12 @@ describe("lib/driver/Transaction => ", () => {
 			controller: {
 				nodes: new Map<number, MockNode>([
 					// 1: awake
-					[1, {id: 1, valueDB: new ValueDB(), supportsCC }],
+					[1, {id: 1, isAsleep() { return false; }, supportsCC }],
 					// 2: not awake
-					[2, {id: 2, valueDB: new ValueDB(), supportsCC }],
+					[2, {id: 2, isAsleep() { return true; }, supportsCC }],
 				]),
 			},
 		} as unknown as Driver;
-
-		// Mark the first node as awake
-		const wakeupCC1 = new WakeUpCC(driverMock, 1);
-		wakeupCC1.setAwake(true);
-
-		// Mark the second node as sleeping
-		const wakeupCC2 = new WakeUpCC(driverMock, 2);
-		wakeupCC2.setAwake(false);
 
 		function createTransaction(nodeID: number, priority: MessagePriority) {
 			const driver = driverMock as any as Driver;

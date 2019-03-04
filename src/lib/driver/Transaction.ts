@@ -24,7 +24,7 @@ export class Transaction implements Comparable<Transaction> {
 		private readonly driver: Driver,
 		public readonly message: Message,
 		public readonly promise: DeferredPromise<Message | void>,
-		public readonly priority: MessagePriority,
+		public priority: MessagePriority,
 		public timestamp: number = highResTimestamp(),
 		public ackPending: boolean = true,
 		public response?: Message,
@@ -42,8 +42,8 @@ export class Transaction implements Comparable<Transaction> {
 				// We don't require existence of the other node. If the other
 				// transaction is not for a node, it targets the controller which
 				// is assumed always awake
-				const thisIsAsleep = thisNode.supportsCC(CommandClasses["Wake Up"]) && !WakeUpCC.isAwake(this.driver, thisNode);
-				const otherIsAsleep = otherNode && otherNode.supportsCC(CommandClasses["Wake Up"]) && !WakeUpCC.isAwake(other.driver, otherNode);
+				const thisIsAsleep = thisNode.isAsleep();
+				const otherIsAsleep = otherNode && otherNode.isAsleep();
 				// If both nodes are asleep, the conventional order applies
 				// Asleep nodes always have the lowest priority
 				if (thisIsAsleep && !otherIsAsleep) return 1;

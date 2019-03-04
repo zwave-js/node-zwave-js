@@ -13,6 +13,7 @@ export enum ZWaveErrorCodes {
 
 	Controller_MessageDropped,
 	Controller_InclusionFailed,
+	Node_NotResponding,
 
 	CC_Invalid,
 	CC_NotSupported,

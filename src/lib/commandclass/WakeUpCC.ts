@@ -125,7 +125,10 @@ export class WakeUpCC extends CommandClass {
 	}
 
 	public isAwake(): boolean {
-		return !!this.getValueDB().getValue(getCommandClass(this), undefined, "awake");
+		const ret = this.getValueDB().getValue(getCommandClass(this), undefined, "awake");
+		// TODO: Add a way to configure this
+		const assumeAwake = true;
+		return ret == undefined ? assumeAwake : !!ret;
 	}
 	public static isAwake(driver: IDriver, node: ZWaveNode): boolean {
 		return new WakeUpCC(driver, node.id).isAwake();

@@ -84,7 +84,10 @@ let WakeUpCC = WakeUpCC_1 = class WakeUpCC extends CommandClass_1.CommandClass {
         }
     }
     isAwake() {
-        return !!this.getValueDB().getValue(CommandClass_1.getCommandClass(this), undefined, "awake");
+        const ret = this.getValueDB().getValue(CommandClass_1.getCommandClass(this), undefined, "awake");
+        // TODO: Add a way to configure this
+        const assumeAwake = true;
+        return ret == undefined ? assumeAwake : !!ret;
     }
     static isAwake(driver, node) {
         return new WakeUpCC_1(driver, node.id).isAwake();

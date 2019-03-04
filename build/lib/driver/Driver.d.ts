@@ -139,6 +139,9 @@ export declare class Driver extends EventEmitter implements IDriver {
     private workOffSendQueue;
     private retransmit;
     private doSend;
+    /** Moves all messages for a given node into the wakeup queue */
+    private moveMessagesToWakeupQueue;
+    private sortSendQueue;
     private lastSaveToCache;
     private readonly saveToCacheInterval;
     private saveToCacheTimer;

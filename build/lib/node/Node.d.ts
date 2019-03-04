@@ -48,6 +48,7 @@ export declare class ZWaveNode extends EventEmitter {
     /** Creates an instance of the given CC linked to this node */
     createCCInstance<T extends CommandClass>(cc: CommandClasses): T;
     interview(): Promise<void>;
+    /** Updates this node's interview stage and saves to cache when appropriate */
     private setInterviewStage;
     /** Step #1 of the node interview */
     private queryProtocolInfo;
@@ -90,6 +91,7 @@ export declare class ZWaveNode extends EventEmitter {
         commandClasses: {};
     };
     deserialize(obj: any): void;
+    isAsleep(): boolean;
 }
 export declare enum InterviewStage {
     None = 0,
@@ -104,11 +106,12 @@ export declare enum InterviewStage {
     Versions = 9,
     Endpoints = 10,
     Static = 11,
-    CacheLoad = 12,
-    Associations = 13,
-    Neighbors = 14,
-    Session = 15,
-    Dynamic = 16,
-    Configuration = 17,
-    Complete = 18
+    RestartFromCache = 12,
+    CacheLoad = 13,
+    Associations = 14,
+    Neighbors = 15,
+    Session = 16,
+    Dynamic = 17,
+    Configuration = 18,
+    Complete = 19
 }

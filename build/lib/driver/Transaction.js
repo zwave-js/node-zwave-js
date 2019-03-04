@@ -1,8 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const comparable_1 = require("alcalzone-shared/comparable");
-const CommandClass_1 = require("../commandclass/CommandClass");
-const WakeUpCC_1 = require("../commandclass/WakeUpCC");
 const Constants_1 = require("../message/Constants");
 /** Returns a timestamp with nano-second precision */
 function highResTimestamp() {
@@ -29,8 +27,8 @@ class Transaction {
                 // We don't require existence of the other node. If the other
                 // transaction is not for a node, it targets the controller which
                 // is assumed always awake
-                const thisIsAsleep = thisNode.supportsCC(CommandClass_1.CommandClasses["Wake Up"]) && !WakeUpCC_1.WakeUpCC.isAwake(this.driver, thisNode);
-                const otherIsAsleep = otherNode && otherNode.supportsCC(CommandClass_1.CommandClasses["Wake Up"]) && !WakeUpCC_1.WakeUpCC.isAwake(other.driver, otherNode);
+                const thisIsAsleep = thisNode.isAsleep();
+                const otherIsAsleep = otherNode && otherNode.isAsleep();
                 // If both nodes are asleep, the conventional order applies
                 // Asleep nodes always have the lowest priority
                 if (thisIsAsleep && !otherIsAsleep)
