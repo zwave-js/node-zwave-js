@@ -1,5 +1,3 @@
-// tslint:disable:no-unused-expression
-
 import { Message } from "../message/Message";
 import { AddNodeToNetworkRequest, AddNodeType } from "./AddNodeToNetworkRequest";
 

@@ -1,5 +1,3 @@
-// tslint:disable:no-unused-expression
-
 import { assertZWaveError } from "../../../test/util";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessageType } from "./Constants";
