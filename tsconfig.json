@@ -1,7 +1,8 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
-        "declaration": true,
+        "noEmit": true,
+        "declaration": false,
         "module": "commonjs",
         "moduleResolution": "node",
         "noEmitOnError": true,
@@ -10,7 +11,7 @@
         "removeComments": false,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        // "sourceMap": true,
+        "sourceMap": false,
         "inlineSourceMap": false,
         "stripInternal": true,
         "target": "es2015",
@@ -19,13 +20,12 @@
         // "strictPropertyInitialization": true,
         // "strictNullChecks": true,
         "watch": false, // true breaks circleci
-        "pretty": true,
+        "pretty": true
     },
     "include": [
         "src/**/*.ts"
     ],
     "exclude": [
-        "src/**/*.test.ts",
         "build/**",
         "node_modules/**"
     ]
