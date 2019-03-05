@@ -68,4 +68,11 @@ describe("lib/logger => ", () => {
 		}
 	});
 
+	it("throws when invalid arguments were passed", () => {
+		expect(() => log.apply(undefined)).toThrow();
+		expect(() => log.apply(undefined, [])).toThrow();
+		expect(() => log.apply(undefined, [1, 2])).toThrow();
+		expect(() => log.apply(undefined, [1, 2, 3])).toThrow();
+	});
+
 });
