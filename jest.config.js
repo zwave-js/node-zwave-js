@@ -20,7 +20,7 @@ module.exports = {
 	"setupFiles": [
 		"reflect-metadata"
 	],
-	collectCoverage: true,
+	collectCoverage: false,
 	collectCoverageFrom: [
 		"src/**/*.ts",
 		"!src/**/*.test.ts"
