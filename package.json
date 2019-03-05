@@ -29,7 +29,7 @@
     "@types/fs-extra": "^5.0.5",
     "@types/jest": "^24.0.9",
     "@types/mocha": "^5.2.6",
-    "@types/node": "^6.0.90",
+    "@types/node": "^6.14.4",
     "@types/serialport": "^7.0.1",
     "@types/yargs": "^12.0.9",
     "colors": "^1.3.3",
@@ -41,7 +41,7 @@
     "supports-color": "^6.1.0",
     "ts-jest": "^24.0.0",
     "ts-node": "^8.0.2",
-    "tslint": "^5.13.0",
+    "tslint": "^5.13.1",
     "typescript": "^3.3.3333",
     "yargs": "^13.2.1"
   },
@@ -53,10 +53,10 @@
     "serialport": "^7.1.4"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p src",
     "prebuild": "rimraf ./build",
     "prewatch": "rimraf ./build",
-    "watch": "tsc --watch",
+    "watch": "tsc -p src --watch",
     "test:ts": "jest",
     "test:watch": "jest --watch",
     "test": "npm run test:watch",
