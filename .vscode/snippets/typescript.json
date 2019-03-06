@@ -26,6 +26,35 @@
 			""
 		]
 	},
+	"Z-Wave message class test": {
+		"prefix": "zwmsgtest",
+		"body": [
+			"describe(\"lib/${1:driver}/${2:Test}${3:Request} => \", () => {",
+			"\tconst req = new ${2}${3}(undefined);",
+			"",
+			"\tit(\"should be a Message\", () => {",
+			"\t\texpect(req).toBeInstanceOf(Message);",
+			"\t});",
+			"\tit(\"with type ${3}\", () => {",
+			"\t\texpect(getMessageType(req)).toBe(MessageType.${3});",
+			"\t\texpect(getMessageTypeStatic(${2}${3})).toBe(MessageType.${3});",
+			"\t});",
+			"\tit(\"and priority ${4:Normal}\", () => {",
+			"\t\texpect(getDefaultPriority(req)).toBe(MessagePriority.${4});",
+			"\t\texpect(getDefaultPriorityStatic(${2}${3})).toBe(MessagePriority.${4});",
+			"\t});",
+			"\tit(\"and a function type ${2}\", () => {",
+			"\t\texpect(getFunctionType(req)).toBe(FunctionType.${2});",
+			"\t\texpect(getFunctionTypeStatic(${2}${3})).toBe(FunctionType.${2});",
+			"\t});",
+			"\tit(\"that expects a ${2} response\", () => {",
+			"\t\texpect(getExpectedResponse(req)).toBe(FunctionType.${2});",
+			"\t\texpect(getExpectedResponseStatic(${2}${3})).toBe(FunctionType.${2});",
+			"\t});",
+			"",
+			"});"
+		]
+	},
 	"Z-Wave toJSON override": {
 		"prefix": "zwjson",
 		"body": [

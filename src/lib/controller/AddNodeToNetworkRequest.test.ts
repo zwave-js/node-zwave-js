@@ -1,7 +1,31 @@
-import { Message } from "../message/Message";
+import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import { getDefaultPriority, getDefaultPriorityStatic, getExpectedResponse, getExpectedResponseStatic, getFunctionType, getFunctionTypeStatic, getMessageType, getMessageTypeStatic, Message } from "../message/Message";
 import { AddNodeToNetworkRequest, AddNodeType } from "./AddNodeToNetworkRequest";
 
 describe("lib/controller/AddNodeToNetworkRequest => ", () => {
+
+	const req = new AddNodeToNetworkRequest(undefined, 1);
+
+	it("should be a Message", () => {
+		expect(req).toBeInstanceOf(Message);
+	});
+	it("with type Request", () => {
+		expect(getMessageType(req)).toBe(MessageType.Request);
+		expect(getMessageTypeStatic(AddNodeToNetworkRequest)).toBe(MessageType.Request);
+	});
+	it("and priority Controller", () => {
+		expect(getDefaultPriority(req)).toBe(MessagePriority.Controller);
+		expect(getDefaultPriorityStatic(AddNodeToNetworkRequest)).toBe(MessagePriority.Controller);
+	});
+	it("and a function type AddNodeToNetwork", () => {
+		expect(getFunctionType(req)).toBe(FunctionType.AddNodeToNetwork);
+		expect(getFunctionTypeStatic(AddNodeToNetworkRequest)).toBe(FunctionType.AddNodeToNetwork);
+	});
+	it("that expects NO response", () => {
+		expect(getExpectedResponse(req)).toBeUndefined();
+		expect(getExpectedResponseStatic(AddNodeToNetworkRequest)).toBeUndefined();
+	});
+
 	it("should serialize correctly", () => {
 		const msg1 = new AddNodeToNetworkRequest(
 			undefined,
