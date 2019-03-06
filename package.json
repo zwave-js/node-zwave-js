@@ -54,8 +54,8 @@
   },
   "scripts": {
     "build": "tsc -p src",
-    "prebuild": "rimraf ./build",
-    "prewatch": "rimraf ./build",
+    "prebuild": "rimraf ./build || true",
+    "prewatch": "rimraf ./build || true",
     "watch": "tsc -p src --watch",
     "test:ts": "jest",
     "test:watch": "jest --watch",

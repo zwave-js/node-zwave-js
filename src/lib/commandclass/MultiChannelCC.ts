@@ -1,7 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { GenericDeviceClasses } from "../node/DeviceClass";
-import { EndpointInformation, parseEndpointInformation } from "../node/NodeInfo";
+import { NodeInformationFrame, parseNodeInformationFrame } from "../node/NodeInfo";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum MultiChannelCommand {
@@ -17,7 +17,7 @@ export enum MultiChannelCommand {
 	// AggregatedMembersReport = 0x0F,
 }
 
-export interface EndpointCapability extends EndpointInformation {
+export interface EndpointCapability extends NodeInformationFrame {
 	isDynamic: boolean;
 }
 
@@ -128,7 +128,7 @@ export class MultiChannelCC extends CommandClass {
 				const endpointIndex = this.payload[1] & 0b01111111;
 				const capability: EndpointCapability = {
 					isDynamic: !!(this.payload[1] & 0b10000000),
-					...parseEndpointInformation(this.payload.slice(2)),
+					...parseNodeInformationFrame(this.payload.slice(2)),
 				};
 				this._endpointCapabilities.set(endpointIndex, capability);
 			}

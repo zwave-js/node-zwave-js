@@ -3,7 +3,7 @@ import { Driver } from "../driver/Driver";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
 import { BasicDeviceClasses, GenericDeviceClass, SpecificDeviceClass } from "../node/DeviceClass";
-import { parseNodeInformation } from "../node/NodeInfo";
+import { parseNodeUpdatePayload } from "../node/NodeInfo";
 
 export enum AddNodeType {
 	Any = 1,
@@ -102,7 +102,7 @@ export class AddNodeToNetworkRequest extends Message {
 
 			case AddNodeStatus.AddingSlave: {
 				// the payload contains a node information frame
-				this._statusContext = parseNodeInformation(this.payload.slice(2));
+				this._statusContext = parseNodeUpdatePayload(this.payload.slice(2));
 				break;
 			}
 		}

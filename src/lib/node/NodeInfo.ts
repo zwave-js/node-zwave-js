@@ -1,38 +1,39 @@
 import { CommandClasses } from "../commandclass/CommandClass";
 import { BasicDeviceClasses, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
 
-export interface EndpointInformation {
+export interface NodeInformationFrame {
 	generic: GenericDeviceClass;
 	specific: SpecificDeviceClass;
 	supportedCCs: CommandClasses[];
-	controlledCCs: CommandClasses[]; // This does not actually exist for endpoints, but the code is nicer this way
+	// controlledCCs isn't actually included in a NIF, but this way we can reuse the parser code
+	controlledCCs: CommandClasses[];
 }
 
-export interface NodeInformation extends EndpointInformation {
+export interface NodeUpdatePayload extends NodeInformationFrame {
 	nodeId: number;
 	basic: BasicDeviceClasses;
 }
 
-export function parseNodeInformation(nif: Buffer): NodeInformation {
+export function parseNodeUpdatePayload(nif: Buffer): NodeUpdatePayload {
 	const ret = {
 		nodeId: nif[0],
 		// length is byte 1
 		basic: nif[2],
-	} as NodeInformation;
-	Object.assign(ret, parseEndpointInformation(nif.slice(3)));
+	} as NodeUpdatePayload;
+	Object.assign(ret, parseNodeInformationFrame(nif.slice(3)));
 	return ret;
 }
 
-export function parseEndpointInformation(eif: Buffer): EndpointInformation {
+export function parseNodeInformationFrame(nif: Buffer): NodeInformationFrame {
 	const ret = {
-		generic: GenericDeviceClass.get(eif[0]),
-		specific: SpecificDeviceClass.get(eif[0], eif[1]),
+		generic: GenericDeviceClass.get(nif[0]),
+		specific: SpecificDeviceClass.get(nif[0], nif[1]),
 		supportedCCs: [] as CommandClasses[],
 		controlledCCs: [] as CommandClasses[],
 	};
 	// split the CCs into supported/controlled
 	// tslint:disable-next-line:variable-name
-	const CCs = [...eif.slice(2)];
+	const CCs = [...nif.slice(2)];
 	let isAfterMark: boolean = false;
 	for (const cc of CCs) {
 		// CCs before the support/control mark are supported

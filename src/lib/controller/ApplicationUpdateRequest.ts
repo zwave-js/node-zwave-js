@@ -1,6 +1,6 @@
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
-import { NodeInformation, parseNodeInformation } from "../node/NodeInfo";
+import { NodeUpdatePayload, parseNodeUpdatePayload } from "../node/NodeInfo";
 
 export enum ApplicationUpdateTypes {
 	NodeInfo_Received = 0x84,
@@ -26,8 +26,8 @@ export class ApplicationUpdateRequest extends Message {
 		return this._nodeId;
 	}
 
-	private _nodeInformation: NodeInformation;
-	public get nodeInformation(): NodeInformation {
+	private _nodeInformation: NodeUpdatePayload;
+	public get nodeInformation(): NodeUpdatePayload {
 		return this._nodeInformation;
 	}
 
@@ -42,7 +42,7 @@ export class ApplicationUpdateRequest extends Message {
 		this._updateType = this.payload[0];
 		switch (this._updateType) {
 			case ApplicationUpdateTypes.NodeInfo_Received: {
-				this._nodeInformation = parseNodeInformation(this.payload.slice(1));
+				this._nodeInformation = parseNodeUpdatePayload(this.payload.slice(1));
 				this._nodeId = this._nodeInformation.nodeId;
 				break;
 			}
