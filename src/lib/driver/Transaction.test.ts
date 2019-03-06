@@ -101,7 +101,7 @@ describe("lib/driver/Transaction => ", () => {
 	it("Messages in the wakeup queue should be preferred over lesser priorities only if the node is awake", () => {
 		interface MockNode {
 			id: number;
-			isAsleep(): boolean;
+			isAwake(): boolean;
 			supportsCC: ZWaveNode["supportsCC"];
 		}
 
@@ -113,9 +113,9 @@ describe("lib/driver/Transaction => ", () => {
 			controller: {
 				nodes: new Map<number, MockNode>([
 					// 1: awake
-					[1, {id: 1, isAsleep() { return false; }, supportsCC }],
+					[1, {id: 1, isAwake() { return true; }, supportsCC }],
 					// 2: not awake
-					[2, {id: 2, isAsleep() { return true; }, supportsCC }],
+					[2, {id: 2, isAwake() { return false; }, supportsCC }],
 				]),
 			},
 		} as unknown as Driver;

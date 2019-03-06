@@ -9,6 +9,7 @@ export interface NodeInformationFrame {
 	controlledCCs: CommandClasses[];
 }
 
+// This is sometimes used interchangeably with the NIF
 export interface NodeUpdatePayload extends NodeInformationFrame {
 	nodeId: number;
 	basic: BasicDeviceClasses;

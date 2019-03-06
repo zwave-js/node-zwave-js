@@ -19,6 +19,7 @@ const CommandClass_1 = require("../commandclass/CommandClass");
 const ICommandClassContainer_1 = require("../commandclass/ICommandClassContainer");
 const WakeUpCC_1 = require("../commandclass/WakeUpCC");
 const ApplicationCommandRequest_1 = require("../controller/ApplicationCommandRequest");
+const ApplicationUpdateRequest_1 = require("../controller/ApplicationUpdateRequest");
 const Controller_1 = require("../controller/Controller");
 const SendDataMessages_1 = require("../controller/SendDataMessages");
 const ZWaveError_1 = require("../error/ZWaveError");
@@ -149,7 +150,12 @@ class Driver extends events_1.EventEmitter {
             logger_1.log("driver", "driver ready", "debug");
             this.emit("driver ready");
             // Try to restore the network information from the cache
-            yield this.restoreNetworkFromCache();
+            if (process.env.NO_CACHE !== "true")
+                yield this.restoreNetworkFromCache();
+            // Add event handlers for the nodes
+            for (const node of this._controller.nodes.values()) {
+                this.addNodeEventHandlers(node);
+            }
             if (!this.options.skipInterview) {
                 // Now interview all nodes
                 for (const node of this._controller.nodes.values()) {
@@ -170,6 +176,20 @@ class Driver extends events_1.EventEmitter {
                 }
             }
         });
+    }
+    addNodeEventHandlers(node) {
+        node
+            .on("wake up", this.node_wakeUp.bind(this))
+            .on("sleep", this.node_sleep.bind(this));
+    }
+    node_wakeUp(node) {
+        logger_1.log("driver", `${node.logPrefix}The node is now awake.`, "debug");
+        // Make sure to handle the pending messages as quickly as possible
+        this.sortSendQueue();
+        setImmediate(() => this.workOffSendQueue());
+    }
+    node_sleep(node) {
+        // TODO: Do we need this
     }
     /**
      * Finds the version of a given CC the given node supports. Returns 0 when the CC is not supported.
@@ -339,15 +359,17 @@ class Driver extends events_1.EventEmitter {
                     // The node did not respond
                     const node = this.currentTransaction.message.getNodeUnsafe();
                     if (node && node.supportsCC(CommandClass_1.CommandClasses["Wake Up"])) {
-                        logger_1.log("driver", `  The node did not respond because it is asleep, moving its messages to the wakeup queue`, "debug");
+                        logger_1.log("driver", `  ${node.logPrefix}The node did not respond because it is asleep, moving its messages to the wakeup queue`, "debug");
                         // The node is asleep
                         WakeUpCC_1.WakeUpCC.setAwake(this, node, false);
                         // Move all its pending messages to the WakeupQueue
+                        // This clears the current transaction
                         this.moveMessagesToWakeupQueue(node.id);
+                        // And continue with the next messages
                         setImmediate(() => this.workOffSendQueue());
                     }
                     else {
-                        logger_1.log("io", `  The node did not respond to the current transaction, dropping it`, "debug");
+                        logger_1.log("io", `  ${node.logPrefix}The node did not respond to the current transaction, dropping it`, "debug");
                         if (this.currentTransaction.promise != null) {
                             const errorMsg = msg instanceof SendDataMessages_1.SendDataRequest
                                 ? `The node did not respond (${SendDataMessages_1.TransmitStatus[msg.transmitStatus]})`
@@ -476,6 +498,16 @@ class Driver extends events_1.EventEmitter {
             node.handleCommand(msg.command);
             return;
         }
+        else if (msg instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest) {
+            if (msg.updateType === ApplicationUpdateRequest_1.ApplicationUpdateTypes.NodeInfo_Received) {
+                const node = msg.getNodeUnsafe();
+                if (node) {
+                    logger_1.log("driver", `Node info for node ${node.id} updated`, "debug");
+                    node.updateNodeInfo(msg.nodeInformation);
+                    return;
+                }
+            }
+        }
         else if (msg instanceof SendDataMessages_1.SendDataRequest && msg.command != null) {
             // TODO: Find out if this actually happens
             // we handle SendDataRequests differently because their handlers are organized by the command class
@@ -553,7 +585,7 @@ class Driver extends events_1.EventEmitter {
      * and resumes the queue handling
      */
     resolveCurrentTransaction(resumeQueue = true) {
-        logger_1.log("io", `resolving current transaction with ${this.currentTransaction.response}`, "debug");
+        logger_1.log("io", `resolving current transaction with ${strings_1.stringify(this.currentTransaction.response)}`, "debug");
         this.currentTransaction.promise.resolve(this.currentTransaction.response);
         this.currentTransaction = null;
         // and see if there are messages pending
@@ -647,7 +679,7 @@ class Driver extends events_1.EventEmitter {
         // Before doing anything else, check if this message is for a node that's currently asleep
         // The automated sorting ensures there's no message for a non-sleeping node after that
         const targetNode = this.sendQueue.peekStart().message.getNodeUnsafe();
-        if (!targetNode || !targetNode.isAsleep()) {
+        if (!targetNode || targetNode.isAwake()) {
             // get the next transaction
             const next = this.sendQueue.shift();
             this.currentTransaction = next;

@@ -1,20 +1,28 @@
 /// <reference types="node" />
+import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
 import { CommandClass, CommandClasses, CommandClassInfo, StateKind } from "../commandclass/CommandClass";
 import { Baudrate } from "../controller/GetNodeProtocolInfoMessages";
 import { Driver } from "../driver/Driver";
 import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
+import { NodeUpdatePayload } from "./NodeInfo";
 import { ValueDB, ValueUpdatedArgs } from "./ValueDB";
+export declare type ValueUpdatedCallback = (args: ValueUpdatedArgs) => void;
+export declare type ZWaveNodeEventCallbacks = Overwrite<{
+    [K in "wake up" | "sleep" | "interview complete"]: (node: ZWaveNode) => void;
+}, {
+    "value updated": ValueUpdatedCallback;
+}>;
+export declare type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
 export interface ZWaveNode {
-    on(event: "value updated", cb: (args: ValueUpdatedArgs) => void): this;
-    removeListener(event: "value updated", cb: (args: ValueUpdatedArgs) => void): this;
-    removeAllListeners(event?: "value updated"): this;
+    on<TEvent extends ZWaveNodeEvents>(event: TEvent, callback: ZWaveNodeEventCallbacks[TEvent]): this;
+    removeListener<TEvent extends ZWaveNodeEvents>(event: TEvent, callback: ZWaveNodeEventCallbacks[TEvent]): this;
+    removeAllListeners(event?: ZWaveNodeEvents): this;
 }
 export declare class ZWaveNode extends EventEmitter {
     readonly id: number;
     private readonly driver;
     constructor(id: number, driver: Driver, deviceClass?: DeviceClass, supportedCCs?: CommandClasses[], controlledCCs?: CommandClasses[]);
-    private readonly logPrefix;
     private _deviceClass;
     readonly deviceClass: DeviceClass;
     private _isListening;
@@ -33,6 +41,7 @@ export declare class ZWaveNode extends EventEmitter {
     readonly isBeaming: boolean;
     private _implementedCommandClasses;
     readonly implementedCommandClasses: Map<CommandClasses, CommandClassInfo>;
+    private nodeInfoReceived;
     private _valueDB;
     readonly valueDB: ValueDB;
     /** This tells us which interview stage was last completed */
@@ -90,8 +99,10 @@ export declare class ZWaveNode extends EventEmitter {
         version: number;
         commandClasses: {};
     };
+    updateNodeInfo(nodeInfo: NodeUpdatePayload): void;
     deserialize(obj: any): void;
-    isAsleep(): boolean;
+    setAwake(awake: boolean, emitEvent?: boolean): void;
+    isAwake(): boolean;
 }
 export declare enum InterviewStage {
     None = 0,

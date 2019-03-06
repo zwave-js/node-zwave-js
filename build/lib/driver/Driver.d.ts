@@ -55,6 +55,9 @@ export declare class Driver extends EventEmitter implements IDriver {
     start(): Promise<void>;
     private _controllerInterviewed;
     private initializeControllerAndNodes;
+    private addNodeEventHandlers;
+    private node_wakeUp;
+    private node_sleep;
     /**
      * Finds the version of a given CC the given node supports. Returns 0 when the CC is not supported.
      */

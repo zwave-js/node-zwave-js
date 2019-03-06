@@ -10,7 +10,8 @@
 			"name": "Launch Program",
 			"program": "${workspaceFolder}/test/run.js",
 			"env": {
-				"DEBUG": "zwave:(io|driver)"
+				"DEBUG": "zwave:(controller)",
+				"NO_CACHE": "false"
 			},
 			"outFiles": [
 				"${workspaceFolder}/**/*.js"

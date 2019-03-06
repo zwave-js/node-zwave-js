@@ -36,13 +36,15 @@ class ZWaveNode extends events_1.EventEmitter {
         this.id = id;
         this.driver = driver;
         //#region --- properties ---
+        /** @internal */
         this.logPrefix = `[Node ${strings_1.padStart(this.id.toString(), 3, "0")}] `;
         this._implementedCommandClasses = new Map();
+        this.nodeInfoReceived = false;
         this._valueDB = new ValueDB_1.ValueDB();
         /** This tells us which interview stage was last completed */
         this.interviewStage = InterviewStage.None;
         this._valueDB = new ValueDB_1.ValueDB();
-        this.on("value updated", (args) => this.emit("value updated", args));
+        this._valueDB.on("value updated", (args) => this.emit("value updated", args));
         // TODO restore from cache
         this._deviceClass = deviceClass;
         for (const cc of supportedCCs)
@@ -163,6 +165,8 @@ class ZWaveNode extends events_1.EventEmitter {
             // for testing purposes we skip to the end
             yield this.setInterviewStage(InterviewStage.Complete);
             logger_1.log("controller", `${this.logPrefix}interview completed`, "debug");
+            // TODO: Tell sleeping nodes to go to sleep
+            this.emit("interview complete", this);
         });
     }
     /** Updates this node's interview stage and saves to cache when appropriate */
@@ -215,7 +219,7 @@ class ZWaveNode extends events_1.EventEmitter {
                     isSupported: true,
                 });
                 // Assume the node is awake, after all we're communicating with it.
-                this.createCCInstance(CommandClass_1.CommandClasses["Wake Up"]).setAwake(true);
+                this.setAwake(true);
             }
             yield this.setInterviewStage(InterviewStage.ProtocolInfo);
         });
@@ -286,10 +290,7 @@ class ZWaveNode extends events_1.EventEmitter {
                 }
                 else if (resp instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest) {
                     logger_1.log("controller", `${this.logPrefix}  received the node info`, "debug");
-                    for (const cc of resp.nodeInformation.supportedCCs)
-                        this.addCC(cc, { isSupported: true });
-                    for (const cc of resp.nodeInformation.controlledCCs)
-                        this.addCC(cc, { isControlled: true });
+                    this.updateNodeInfo(resp.nodeInformation);
                     // TODO: Save the received values
                 }
             }
@@ -459,6 +460,17 @@ class ZWaveNode extends events_1.EventEmitter {
             })),
         };
     }
+    updateNodeInfo(nodeInfo) {
+        if (!this.nodeInfoReceived) {
+            for (const cc of nodeInfo.supportedCCs)
+                this.addCC(cc, { isSupported: true });
+            for (const cc of nodeInfo.controlledCCs)
+                this.addCC(cc, { isControlled: true });
+            this.nodeInfoReceived = true;
+        }
+        // As the NIF is sent on wakeup, treat this as a sign that the node is awake
+        this.setAwake(true);
+    }
     deserialize(obj) {
         if (obj.interviewStage in InterviewStage) {
             this.interviewStage = typeof obj.interviewStage === "number"
@@ -510,9 +522,19 @@ class ZWaveNode extends events_1.EventEmitter {
             }
         }
     }
-    isAsleep() {
-        return this.supportsCC(CommandClass_1.CommandClasses["Wake Up"])
-            && !WakeUpCC_1.WakeUpCC.isAwake(this.driver, this);
+    setAwake(awake, emitEvent = true) {
+        if (!this.supportsCC(CommandClass_1.CommandClasses["Wake Up"])) {
+            throw new ZWaveError_1.ZWaveError("This node does not support the Wake Up CC", ZWaveError_1.ZWaveErrorCodes.CC_NotSupported);
+        }
+        if (awake !== this.isAwake()) {
+            WakeUpCC_1.WakeUpCC.setAwake(this.driver, this, awake);
+            if (emitEvent)
+                this.emit(awake ? "wake up" : "sleep", this);
+        }
+    }
+    isAwake() {
+        const isAsleep = this.supportsCC(CommandClass_1.CommandClasses["Wake Up"]) && !WakeUpCC_1.WakeUpCC.isAwake(this.driver, this);
+        return !isAsleep;
     }
 }
 exports.ZWaveNode = ZWaveNode;

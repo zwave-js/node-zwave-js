@@ -9,6 +9,7 @@ import { CommandClasses, getImplementedVersion } from "../commandclass/CommandCl
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
+import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/ApplicationUpdateRequest";
 import { ZWaveController } from "../controller/Controller";
 import { SendDataRequest, TransmitStatus } from "../controller/SendDataMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -196,7 +197,12 @@ export class Driver extends EventEmitter implements IDriver {
 		this.emit("driver ready");
 
 		// Try to restore the network information from the cache
-		await this.restoreNetworkFromCache();
+		if (process.env.NO_CACHE !== "true") await this.restoreNetworkFromCache();
+
+		// Add event handlers for the nodes
+		for (const node of this._controller.nodes.values()) {
+			this.addNodeEventHandlers(node);
+		}
 
 		if (!this.options.skipInterview) {
 			// Now interview all nodes
@@ -216,6 +222,24 @@ export class Driver extends EventEmitter implements IDriver {
 				});
 			}
 		}
+	}
+
+	private addNodeEventHandlers(node: ZWaveNode) {
+		node
+			.on("wake up", this.node_wakeUp.bind(this))
+			.on("sleep", this.node_sleep.bind(this))
+		;
+	}
+
+	private node_wakeUp(node: ZWaveNode) {
+		log("driver", `${node.logPrefix}The node is now awake.`, "debug");
+		// Make sure to handle the pending messages as quickly as possible
+		this.sortSendQueue();
+		setImmediate(() => this.workOffSendQueue());
+	}
+
+	private node_sleep(node: ZWaveNode) {
+		// TODO: Do we need this
 	}
 
 	/**
@@ -426,14 +450,16 @@ export class Driver extends EventEmitter implements IDriver {
 					// The node did not respond
 					const node = this.currentTransaction.message.getNodeUnsafe();
 					if (node && node.supportsCC(CommandClasses["Wake Up"])) {
-						log("driver", `  The node did not respond because it is asleep, moving its messages to the wakeup queue`, "debug");
+						log("driver", `  ${node.logPrefix}The node did not respond because it is asleep, moving its messages to the wakeup queue`, "debug");
 						// The node is asleep
 						WakeUpCC.setAwake(this, node, false);
 						// Move all its pending messages to the WakeupQueue
+						// This clears the current transaction
 						this.moveMessagesToWakeupQueue(node.id);
+						// And continue with the next messages
 						setImmediate(() => this.workOffSendQueue());
 					} else {
-						log("io", `  The node did not respond to the current transaction, dropping it`, "debug");
+						log("io", `  ${node.logPrefix}The node did not respond to the current transaction, dropping it`, "debug");
 						if (this.currentTransaction.promise != null) {
 							const errorMsg = msg instanceof SendDataRequest
 								? `The node did not respond (${TransmitStatus[msg.transmitStatus]})`
@@ -577,6 +603,15 @@ export class Driver extends EventEmitter implements IDriver {
 			node.handleCommand(msg.command);
 
 			return;
+		} else if (msg instanceof ApplicationUpdateRequest) {
+			if (msg.updateType === ApplicationUpdateTypes.NodeInfo_Received) {
+				const node = msg.getNodeUnsafe();
+				if (node) {
+					log("driver", `Node info for node ${node.id} updated`, "debug");
+					node.updateNodeInfo(msg.nodeInformation);
+					return;
+				}
+			}
 		} else if (msg instanceof SendDataRequest && msg.command != null) {
 			// TODO: Find out if this actually happens
 			// we handle SendDataRequests differently because their handlers are organized by the command class
@@ -665,7 +700,7 @@ export class Driver extends EventEmitter implements IDriver {
 	 * and resumes the queue handling
 	 */
 	private resolveCurrentTransaction(resumeQueue: boolean = true) {
-		log("io", `resolving current transaction with ${this.currentTransaction.response}`, "debug");
+		log("io", `resolving current transaction with ${stringify(this.currentTransaction.response)}`, "debug");
 		this.currentTransaction.promise.resolve(this.currentTransaction.response);
 		this.currentTransaction = null;
 		// and see if there are messages pending
@@ -813,7 +848,7 @@ export class Driver extends EventEmitter implements IDriver {
 		// Before doing anything else, check if this message is for a node that's currently asleep
 		// The automated sorting ensures there's no message for a non-sleeping node after that
 		const targetNode = this.sendQueue.peekStart().message.getNodeUnsafe();
-		if (!targetNode || !targetNode.isAsleep()) {
+		if (!targetNode || targetNode.isAwake()) {
 			// get the next transaction
 			const next = this.sendQueue.shift();
 			this.currentTransaction = next;

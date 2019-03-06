@@ -1,6 +1,7 @@
 import { promiseSequence } from "alcalzone-shared/async";
 import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
+import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
 import { isObject } from "util";
 import { CentralSceneCC } from "../commandclass/CentralSceneCC";
@@ -20,14 +21,25 @@ import { MessagePriority } from "../message/Constants";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
 import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
+import { NodeUpdatePayload } from "./NodeInfo";
 import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
 import { ValueDB, ValueUpdatedArgs } from "./ValueDB";
 
-export interface ZWaveNode {
-	on(event: "value updated", cb: (args: ValueUpdatedArgs) => void): this;
-	removeListener(event: "value updated", cb: (args: ValueUpdatedArgs) => void): this;
+export type ValueUpdatedCallback = (args: ValueUpdatedArgs) => void;
 
-	removeAllListeners(event?: "value updated"): this;
+export type ZWaveNodeEventCallbacks = Overwrite<
+	{ [K in "wake up" | "sleep" | "interview complete"]: (node: ZWaveNode) => void },
+	{
+		"value updated": ValueUpdatedCallback;
+	}
+>;
+
+export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
+
+export interface ZWaveNode {
+	on<TEvent extends ZWaveNodeEvents>(event: TEvent, callback: ZWaveNodeEventCallbacks[TEvent]): this;
+	removeListener<TEvent extends ZWaveNodeEvents>(event: TEvent, callback: ZWaveNodeEventCallbacks[TEvent]): this;
+	removeAllListeners(event?: ZWaveNodeEvents): this;
 }
 
 export class ZWaveNode extends EventEmitter {
@@ -42,7 +54,7 @@ export class ZWaveNode extends EventEmitter {
 		super();
 
 		this._valueDB = new ValueDB();
-		this.on("value updated", (args) => this.emit("value updated", args));
+		this._valueDB.on("value updated", (args: ValueUpdatedArgs) => this.emit("value updated", args));
 
 		// TODO restore from cache
 		this._deviceClass = deviceClass;
@@ -52,7 +64,8 @@ export class ZWaveNode extends EventEmitter {
 
 	//#region --- properties ---
 
-	private readonly logPrefix = `[Node ${padStart(this.id.toString(), 3, "0")}] `;
+	/** @internal */
+	public readonly logPrefix = `[Node ${padStart(this.id.toString(), 3, "0")}] `;
 
 	private _deviceClass: DeviceClass;
 	public get deviceClass(): DeviceClass {
@@ -98,6 +111,8 @@ export class ZWaveNode extends EventEmitter {
 	public get implementedCommandClasses(): Map<CommandClasses, CommandClassInfo> {
 		return this._implementedCommandClasses;
 	}
+
+	private nodeInfoReceived: boolean = false;
 
 	private _valueDB = new ValueDB();
 	public get valueDB(): ValueDB {
@@ -211,6 +226,9 @@ export class ZWaveNode extends EventEmitter {
 		// for testing purposes we skip to the end
 		await this.setInterviewStage(InterviewStage.Complete);
 		log("controller", `${this.logPrefix}interview completed`, "debug");
+
+		// TODO: Tell sleeping nodes to go to sleep
+		this.emit("interview complete", this);
 	}
 
 	/** Updates this node's interview stage and saves to cache when appropriate */
@@ -265,7 +283,7 @@ export class ZWaveNode extends EventEmitter {
 				isSupported: true,
 			});
 			// Assume the node is awake, after all we're communicating with it.
-			this.createCCInstance<WakeUpCC>(CommandClasses["Wake Up"]).setAwake(true);
+			this.setAwake(true);
 		}
 
 		await this.setInterviewStage(InterviewStage.ProtocolInfo);
@@ -333,8 +351,7 @@ export class ZWaveNode extends EventEmitter {
 				log("controller", `${this.logPrefix}  querying the node info failed`, "debug");
 			} else if (resp instanceof ApplicationUpdateRequest) {
 				log("controller", `${this.logPrefix}  received the node info`, "debug");
-				for (const cc of resp.nodeInformation.supportedCCs) this.addCC(cc, { isSupported: true });
-				for (const cc of resp.nodeInformation.controlledCCs) this.addCC(cc, { isControlled: true });
+				this.updateNodeInfo(resp.nodeInformation);
 				// TODO: Save the received values
 			}
 		}
@@ -507,6 +524,17 @@ export class ZWaveNode extends EventEmitter {
 		};
 	}
 
+	public updateNodeInfo(nodeInfo: NodeUpdatePayload) {
+		if (!this.nodeInfoReceived) {
+			for (const cc of nodeInfo.supportedCCs) this.addCC(cc, { isSupported: true });
+			for (const cc of nodeInfo.controlledCCs) this.addCC(cc, { isControlled: true });
+			this.nodeInfoReceived = true;
+		}
+
+		// As the NIF is sent on wakeup, treat this as a sign that the node is awake
+		this.setAwake(true);
+	}
+
 	public deserialize(obj: any) {
 		if (obj.interviewStage in InterviewStage) {
 			this.interviewStage = typeof obj.interviewStage === "number"
@@ -562,10 +590,21 @@ export class ZWaveNode extends EventEmitter {
 		}
 	}
 
-	public isAsleep() {
-		return this.supportsCC(CommandClasses["Wake Up"])
-			&& !WakeUpCC.isAwake(this.driver, this);
+	public setAwake(awake: boolean, emitEvent: boolean = true) {
+		if (!this.supportsCC(CommandClasses["Wake Up"])) {
+			throw new ZWaveError("This node does not support the Wake Up CC", ZWaveErrorCodes.CC_NotSupported);
+		}
+		if (awake !== this.isAwake()) {
+			WakeUpCC.setAwake(this.driver, this, awake);
+			if (emitEvent) this.emit(awake ? "wake up" : "sleep", this);
+		}
 	}
+
+	public isAwake() {
+		const isAsleep = this.supportsCC(CommandClasses["Wake Up"]) && !WakeUpCC.isAwake(this.driver, this);
+		return !isAsleep;
+	}
+
 }
 
 // TODO: This order is not optimal, check how OpenHAB does it
@@ -585,7 +624,7 @@ export enum InterviewStage {
 
 	// ===== the stuff above should never change =====
 	RestartFromCache,		// This marks the beginning of re-interviews on application startup.
-							// This and later stages will be serialized as "Complete" in the cache
+	// This and later stages will be serialized as "Complete" in the cache
 	// ===== the stuff below changes frequently, so it has to be redone on every start =====
 
 	CacheLoad,				// [ ] Ping a device upon restarting with cached config for the device
