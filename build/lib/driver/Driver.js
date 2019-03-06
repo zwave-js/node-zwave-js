@@ -114,12 +114,13 @@ class Driver extends events_1.EventEmitter {
                 parity: "none",
             });
             this.serial
+                // wotan-disable-next-line async-function-assignability
                 .on("open", () => __awaiter(this, void 0, void 0, function* () {
                 logger_1.log("driver", "serial port opened", "debug");
                 this._isOpen = true;
                 this.resetIO();
                 resolve();
-                setImmediate(() => this.initializeControllerAndNodes());
+                setImmediate(() => void this.initializeControllerAndNodes());
             }))
                 .on("data", this.serialport_onData.bind(this))
                 .on("error", err => {
@@ -151,13 +152,14 @@ class Driver extends events_1.EventEmitter {
             yield this.restoreNetworkFromCache();
             if (!this.options.skipInterview) {
                 // Now interview all nodes
-                // don't await them, so the beginInterview method returns
                 for (const node of this._controller.nodes.values()) {
                     if (node.interviewStage === Node_1.InterviewStage.Complete) {
                         node.interviewStage = Node_1.InterviewStage.RestartFromCache;
                     }
                     // TODO: retry on failure or something...
-                    node.interview().catch(e => {
+                    // don't await the interview, because it may take a very long time
+                    // if a node is asleep
+                    void node.interview().catch(e => {
                         if (e instanceof ZWaveError_1.ZWaveError) {
                             logger_1.log("controller", "node interview failed: " + e, "error");
                         }
@@ -200,7 +202,7 @@ class Driver extends events_1.EventEmitter {
             this.ensureReady(true);
             yield this._controller.hardReset();
             this._controllerInterviewed = false;
-            this.initializeControllerAndNodes();
+            void this.initializeControllerAndNodes();
         });
     }
     /** Resets the IO layer */
@@ -616,6 +618,7 @@ class Driver extends events_1.EventEmitter {
             return promise;
         });
     }
+    // wotan-enable no-misused-generics
     /**
      * Sends a low-level message like ACK, NAK or CAN immediately
      * @param message The low-level message to send
@@ -716,7 +719,7 @@ class Driver extends events_1.EventEmitter {
             if (Date.now() - this.lastSaveToCache < this.saveToCacheInterval) {
                 // Schedule a save in a couple of ms to collect changes
                 if (!this.saveToCacheTimer) {
-                    this.saveToCacheTimer = setTimeout(() => this.saveNetworkToCache(), this.saveToCacheInterval);
+                    this.saveToCacheTimer = setTimeout(() => void this.saveNetworkToCache(), this.saveToCacheInterval);
                 }
                 return;
             }

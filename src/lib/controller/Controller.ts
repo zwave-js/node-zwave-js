@@ -270,6 +270,7 @@ export class ZWaveController extends EventEmitter {
 	 */
 	public hardReset(): Promise<void> {
 		log("controller", "performing hard reset...", "debug");
+		// wotan-disable-next-line async-function-assignability
 		return new Promise(async (resolve, reject) => {
 			// handle the incoming message
 			const handler: RequestHandler = (msg) => {

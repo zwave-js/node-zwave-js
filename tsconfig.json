@@ -1,6 +1,11 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
+        "plugins": [
+            {
+                "name": "@fimbul/mithotyn"
+            }
+        ],
         "noEmit": true,
         "declaration": false,
         "module": "commonjs",

@@ -142,6 +142,7 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	/** Creates an instance of the given CC linked to this node */
+	// wotan-disable no-misused-generics
 	public createCCInstance<T extends CommandClass>(cc: CommandClasses): T {
 		if (!this.supportsCC(cc)) {
 			throw new ZWaveError(`Cannot create an instance of the unsupported CC ${CommandClasses[cc]} (${num2hex(cc)})`, ZWaveErrorCodes.CC_NotSupported);

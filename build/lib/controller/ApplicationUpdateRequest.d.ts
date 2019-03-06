@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { Message } from "../message/Message";
-import { NodeInformation } from "../node/NodeInfo";
+import { NodeUpdatePayload } from "../node/NodeInfo";
 export declare enum ApplicationUpdateTypes {
     NodeInfo_Received = 132,
     NodeInfo_RequestDone = 130,
@@ -16,7 +16,7 @@ export declare class ApplicationUpdateRequest extends Message {
     private _nodeId;
     readonly nodeId: number;
     private _nodeInformation;
-    readonly nodeInformation: NodeInformation;
+    readonly nodeInformation: NodeUpdatePayload;
     serialize(): Buffer;
     deserialize(data: Buffer): number;
     toJSON(): Record<string, any>;

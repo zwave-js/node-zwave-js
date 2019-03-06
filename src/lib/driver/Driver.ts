@@ -157,13 +157,14 @@ export class Driver extends EventEmitter implements IDriver {
 				},
 			);
 			this.serial
+				// wotan-disable-next-line async-function-assignability
 				.on("open", async () => {
 					log("driver", "serial port opened", "debug");
 					this._isOpen = true;
 					this.resetIO();
 					resolve();
 
-					setImmediate(() => this.initializeControllerAndNodes());
+					setImmediate(() => void this.initializeControllerAndNodes());
 				})
 				.on("data", this.serialport_onData.bind(this))
 				.on("error", err => {
@@ -199,13 +200,14 @@ export class Driver extends EventEmitter implements IDriver {
 
 		if (!this.options.skipInterview) {
 			// Now interview all nodes
-			// don't await them, so the beginInterview method returns
 			for (const node of this._controller.nodes.values()) {
 				if (node.interviewStage === InterviewStage.Complete) {
 					node.interviewStage = InterviewStage.RestartFromCache;
 				}
 				// TODO: retry on failure or something...
-				node.interview().catch(e => {
+				// don't await the interview, because it may take a very long time
+				// if a node is asleep
+				void node.interview().catch(e => {
 					if (e instanceof ZWaveError) {
 						log("controller", "node interview failed: " + e, "error");
 					} else {
@@ -248,7 +250,7 @@ export class Driver extends EventEmitter implements IDriver {
 		await this._controller.hardReset();
 
 		this._controllerInterviewed = false;
-		this.initializeControllerAndNodes();
+		void this.initializeControllerAndNodes();
 	}
 
 	/** Resets the IO layer */
@@ -689,6 +691,7 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	// tslint:disable:unified-signatures
+	// wotan-disable no-misused-generics
 	/**
 	 * Sends a message with default priority to the Z-Wave stick
 	 * @param msg The message to send
@@ -776,6 +779,7 @@ export class Driver extends EventEmitter implements IDriver {
 
 		return promise;
 	}
+	// wotan-enable no-misused-generics
 
 	/**
 	 * Sends a low-level message like ACK, NAK or CAN immediately
@@ -888,7 +892,7 @@ export class Driver extends EventEmitter implements IDriver {
 		if (Date.now() - this.lastSaveToCache < this.saveToCacheInterval) {
 			// Schedule a save in a couple of ms to collect changes
 			if (!this.saveToCacheTimer) {
-				this.saveToCacheTimer = setTimeout(() => this.saveNetworkToCache(), this.saveToCacheInterval);
+				this.saveToCacheTimer = setTimeout(() => void this.saveNetworkToCache(), this.saveToCacheInterval);
 			}
 			return;
 		} else {

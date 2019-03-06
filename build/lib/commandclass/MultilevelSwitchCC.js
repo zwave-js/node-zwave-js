@@ -78,6 +78,7 @@ let MultilevelSwitchCC = class MultilevelSwitchCC extends CommandClass_1.Command
                     payload.push(this.secondarySwitchStepSize);
                 }
                 this.payload = Buffer.from(payload);
+                break;
             }
             case MultilevelSwitchCommand.Get:
             case MultilevelSwitchCommand.StopLevelChange:

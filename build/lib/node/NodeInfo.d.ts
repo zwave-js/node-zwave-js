@@ -1,15 +1,15 @@
 /// <reference types="node" />
 import { CommandClasses } from "../commandclass/CommandClass";
 import { BasicDeviceClasses, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
-export interface EndpointInformation {
+export interface NodeInformationFrame {
     generic: GenericDeviceClass;
     specific: SpecificDeviceClass;
     supportedCCs: CommandClasses[];
     controlledCCs: CommandClasses[];
 }
-export interface NodeInformation extends EndpointInformation {
+export interface NodeUpdatePayload extends NodeInformationFrame {
     nodeId: number;
     basic: BasicDeviceClasses;
 }
-export declare function parseNodeInformation(nif: Buffer): NodeInformation;
-export declare function parseEndpointInformation(eif: Buffer): EndpointInformation;
+export declare function parseNodeUpdatePayload(nif: Buffer): NodeUpdatePayload;
+export declare function parseNodeInformationFrame(nif: Buffer): NodeInformationFrame;

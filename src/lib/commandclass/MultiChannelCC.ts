@@ -131,6 +131,7 @@ export class MultiChannelCC extends CommandClass {
 					...parseNodeInformationFrame(this.payload.slice(2)),
 				};
 				this._endpointCapabilities.set(endpointIndex, capability);
+				break;
 			}
 
 			case MultiChannelCommand.EndPointFindReport: {
@@ -138,6 +139,7 @@ export class MultiChannelCC extends CommandClass {
 				this.genericClass = this.payload[2];
 				this.specificClass = this.payload[3];
 				this._foundEndpoints = [...this.payload.slice(4, 4 + numReports)].map(e => e & 0b01111111);
+				break;
 			}
 
 			// TODO: MultiChannelEncapsulation

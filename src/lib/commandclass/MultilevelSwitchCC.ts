@@ -122,6 +122,7 @@ export class MultilevelSwitchCC extends CommandClass {
 					payload.push(this.secondarySwitchStepSize);
 				}
 				this.payload = Buffer.from(payload);
+				break;
 			}
 
 			case MultilevelSwitchCommand.Get:

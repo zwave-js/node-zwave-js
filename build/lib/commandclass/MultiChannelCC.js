@@ -91,14 +91,16 @@ let MultiChannelCC = class MultiChannelCC extends CommandClass_1.CommandClass {
                 break;
             case MultiChannelCommand.CapabilityReport: {
                 const endpointIndex = this.payload[1] & 0b01111111;
-                const capability = Object.assign({ isDynamic: !!(this.payload[1] & 0b10000000) }, NodeInfo_1.parseEndpointInformation(this.payload.slice(2)));
+                const capability = Object.assign({ isDynamic: !!(this.payload[1] & 0b10000000) }, NodeInfo_1.parseNodeInformationFrame(this.payload.slice(2)));
                 this._endpointCapabilities.set(endpointIndex, capability);
+                break;
             }
             case MultiChannelCommand.EndPointFindReport: {
                 const numReports = this.payload[1];
                 this.genericClass = this.payload[2];
                 this.specificClass = this.payload[3];
                 this._foundEndpoints = [...this.payload.slice(4, 4 + numReports)].map(e => e & 0b01111111);
+                break;
             }
             // TODO: MultiChannelEncapsulation
             default:

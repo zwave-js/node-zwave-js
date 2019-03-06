@@ -25,6 +25,8 @@
     "node": ">=4.0.0"
   },
   "devDependencies": {
+    "@fimbul/mithotyn": "^0.18.0",
+    "@fimbul/wotan": "^0.19.0",
     "@types/debug": "4.1.2",
     "@types/fs-extra": "^5.0.5",
     "@types/jest": "^24.0.9",
@@ -63,8 +65,9 @@
     "coverage": "jest --collect-coverage",
     "coveralls": "node_modules/.bin/nyc report --reporter=text-lcov | coveralls -v",
     "show-coverage": "npm run coverage && start ./coverage/index.html",
-    "lint:ts": "tslint",
-    "lint": "npm run lint:ts \"src/**/*.ts\"",
+    "lint:ts": "tslint \"src/**/*.ts\"",
+    "lint:wotan": "wotan",
+    "lint": "npm run lint:ts && npm run lint:wotan",
     "release": "node --require ts-node/register maintenance/release.ts",
     "usbdebug": "cmd.exe /c \"test\\usbdebug.bat\""
   },

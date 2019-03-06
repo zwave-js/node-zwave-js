@@ -40,7 +40,7 @@ class ApplicationUpdateRequest extends Message_1.Message {
         this._updateType = this.payload[0];
         switch (this._updateType) {
             case ApplicationUpdateTypes.NodeInfo_Received: {
-                this._nodeInformation = NodeInfo_1.parseNodeInformation(this.payload.slice(1));
+                this._nodeInformation = NodeInfo_1.parseNodeUpdatePayload(this.payload.slice(1));
                 this._nodeId = this._nodeInformation.nodeId;
                 break;
             }

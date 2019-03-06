@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { IDriver } from "../driver/IDriver";
 import { GenericDeviceClasses } from "../node/DeviceClass";
-import { EndpointInformation } from "../node/NodeInfo";
+import { NodeInformationFrame } from "../node/NodeInfo";
 import { CommandClass } from "./CommandClass";
 export declare enum MultiChannelCommand {
     EndPointGet = 7,
@@ -12,7 +12,7 @@ export declare enum MultiChannelCommand {
     EndPointFindReport = 12,
     CommandEncapsulation = 13
 }
-export interface EndpointCapability extends EndpointInformation {
+export interface EndpointCapability extends NodeInformationFrame {
     isDynamic: boolean;
 }
 export declare class MultiChannelCC extends CommandClass {

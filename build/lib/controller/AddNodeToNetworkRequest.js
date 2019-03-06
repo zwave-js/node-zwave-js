@@ -80,7 +80,7 @@ let AddNodeToNetworkRequest = class AddNodeToNetworkRequest extends Message_1.Me
                 break;
             case AddNodeStatus.AddingSlave: {
                 // the payload contains a node information frame
-                this._statusContext = NodeInfo_1.parseNodeInformation(this.payload.slice(2));
+                this._statusContext = NodeInfo_1.parseNodeUpdatePayload(this.payload.slice(2));
                 break;
             }
         }

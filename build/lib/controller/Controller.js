@@ -214,6 +214,7 @@ class ZWaveController extends events_1.EventEmitter {
      */
     hardReset() {
         logger_1.log("controller", "performing hard reset...", "debug");
+        // wotan-disable-next-line async-function-assignability
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             // handle the incoming message
             const handler = (msg) => {
