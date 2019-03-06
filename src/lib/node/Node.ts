@@ -28,7 +28,7 @@ import { ValueDB, ValueUpdatedArgs } from "./ValueDB";
 export type ValueUpdatedCallback = (args: ValueUpdatedArgs) => void;
 
 export type ZWaveNodeEventCallbacks = Overwrite<
-	{ [K in "wake up" | "sleep" | "interview complete"]: (node: ZWaveNode) => void },
+	{ [K in "wake up" | "sleep" | "interview completed"]: (node: ZWaveNode) => void },
 	{
 		"value updated": ValueUpdatedCallback;
 	}
@@ -56,7 +56,6 @@ export class ZWaveNode extends EventEmitter {
 		this._valueDB = new ValueDB();
 		this._valueDB.on("value updated", (args: ValueUpdatedArgs) => this.emit("value updated", args));
 
-		// TODO restore from cache
 		this._deviceClass = deviceClass;
 		for (const cc of supportedCCs) this.addCC(cc, { isSupported: true });
 		for (const cc of controlledCCs) this.addCC(cc, { isControlled: true });
@@ -228,7 +227,7 @@ export class ZWaveNode extends EventEmitter {
 		log("controller", `${this.logPrefix}interview completed`, "debug");
 
 		// TODO: Tell sleeping nodes to go to sleep
-		this.emit("interview complete", this);
+		this.emit("interview completed", this);
 	}
 
 	/** Updates this node's interview stage and saves to cache when appropriate */
@@ -603,6 +602,19 @@ export class ZWaveNode extends EventEmitter {
 	public isAwake() {
 		const isAsleep = this.supportsCC(CommandClasses["Wake Up"]) && !WakeUpCC.isAwake(this.driver, this);
 		return !isAsleep;
+	}
+
+	public async sendNoMoreInformation() {
+		if (this.isAwake() && this.interviewStage === InterviewStage.Complete) {
+			log("controller", `${this.logPrefix}Sending node back to sleep`, "debug");
+			const wakeupCC = new WakeUpCC(this.driver, this.id, WakeUpCommand.NoMoreInformation);
+			const request = new SendDataRequest(this.driver, wakeupCC);
+			// TODO: Add a way to only wait for the confirming send data request
+			this.driver.sendMessage<SendDataRequest>(request, MessagePriority.WakeUp);
+			log("controller", `${this.logPrefix}  Node asleep`, "debug");
+			return true;
+		}
+		return false;
 	}
 
 }

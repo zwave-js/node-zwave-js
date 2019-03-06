@@ -58,6 +58,8 @@ export declare class Driver extends EventEmitter implements IDriver {
     private addNodeEventHandlers;
     private node_wakeUp;
     private node_sleep;
+    private node_interviewCompleted;
+    private hasPendingMessages;
     /**
      * Finds the version of a given CC the given node supports. Returns 0 when the CC is not supported.
      */

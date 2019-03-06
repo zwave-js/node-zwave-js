@@ -9,7 +9,7 @@ import { NodeUpdatePayload } from "./NodeInfo";
 import { ValueDB, ValueUpdatedArgs } from "./ValueDB";
 export declare type ValueUpdatedCallback = (args: ValueUpdatedArgs) => void;
 export declare type ZWaveNodeEventCallbacks = Overwrite<{
-    [K in "wake up" | "sleep" | "interview complete"]: (node: ZWaveNode) => void;
+    [K in "wake up" | "sleep" | "interview completed"]: (node: ZWaveNode) => void;
 }, {
     "value updated": ValueUpdatedCallback;
 }>;
@@ -103,6 +103,7 @@ export declare class ZWaveNode extends EventEmitter {
     deserialize(obj: any): void;
     setAwake(awake: boolean, emitEvent?: boolean): void;
     isAwake(): boolean;
+    sendNoMoreInformation(): Promise<boolean>;
 }
 export declare enum InterviewStage {
     None = 0,

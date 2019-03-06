@@ -180,7 +180,8 @@ class Driver extends events_1.EventEmitter {
     addNodeEventHandlers(node) {
         node
             .on("wake up", this.node_wakeUp.bind(this))
-            .on("sleep", this.node_sleep.bind(this));
+            .on("sleep", this.node_sleep.bind(this))
+            .on("interview completed", this.node_interviewCompleted.bind(this));
     }
     node_wakeUp(node) {
         logger_1.log("driver", `${node.logPrefix}The node is now awake.`, "debug");
@@ -190,6 +191,14 @@ class Driver extends events_1.EventEmitter {
     }
     node_sleep(node) {
         // TODO: Do we need this
+    }
+    node_interviewCompleted(node) {
+        if (!this.hasPendingMessages(node) && node.supportsCC(CommandClass_1.CommandClasses["Wake Up"])) {
+            node.sendNoMoreInformation();
+        }
+    }
+    hasPendingMessages(node) {
+        return !!this.sendQueue.find(t => t.message.getNodeId() === node.id);
     }
     /**
      * Finds the version of a given CC the given node supports. Returns 0 when the CC is not supported.
@@ -585,10 +594,15 @@ class Driver extends events_1.EventEmitter {
      * and resumes the queue handling
      */
     resolveCurrentTransaction(resumeQueue = true) {
+        const node = this.currentTransaction.message.getNodeUnsafe();
         logger_1.log("io", `resolving current transaction with ${strings_1.stringify(this.currentTransaction.response)}`, "debug");
         this.currentTransaction.promise.resolve(this.currentTransaction.response);
         this.currentTransaction = null;
-        // and see if there are messages pending
+        // If a sleeping node has no messages pending, send it back to sleep
+        if (node && node.supportsCC(CommandClass_1.CommandClasses["Wake Up"]) && !this.hasPendingMessages(node)) {
+            node.sendNoMoreInformation();
+        }
+        // Resume the send queue
         if (resumeQueue) {
             logger_1.log("io", `resuming send queue`, "debug");
             setImmediate(() => this.workOffSendQueue());

@@ -45,7 +45,6 @@ class ZWaveNode extends events_1.EventEmitter {
         this.interviewStage = InterviewStage.None;
         this._valueDB = new ValueDB_1.ValueDB();
         this._valueDB.on("value updated", (args) => this.emit("value updated", args));
-        // TODO restore from cache
         this._deviceClass = deviceClass;
         for (const cc of supportedCCs)
             this.addCC(cc, { isSupported: true });
@@ -166,7 +165,7 @@ class ZWaveNode extends events_1.EventEmitter {
             yield this.setInterviewStage(InterviewStage.Complete);
             logger_1.log("controller", `${this.logPrefix}interview completed`, "debug");
             // TODO: Tell sleeping nodes to go to sleep
-            this.emit("interview complete", this);
+            this.emit("interview completed", this);
         });
     }
     /** Updates this node's interview stage and saves to cache when appropriate */
@@ -535,6 +534,20 @@ class ZWaveNode extends events_1.EventEmitter {
     isAwake() {
         const isAsleep = this.supportsCC(CommandClass_1.CommandClasses["Wake Up"]) && !WakeUpCC_1.WakeUpCC.isAwake(this.driver, this);
         return !isAsleep;
+    }
+    sendNoMoreInformation() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.isAwake() && this.interviewStage === InterviewStage.Complete) {
+                logger_1.log("controller", `${this.logPrefix}Sending node back to sleep`, "debug");
+                const wakeupCC = new WakeUpCC_1.WakeUpCC(this.driver, this.id, WakeUpCC_1.WakeUpCommand.NoMoreInformation);
+                const request = new SendDataMessages_1.SendDataRequest(this.driver, wakeupCC);
+                // TODO: Add a way to only wait for the confirming send data request
+                this.driver.sendMessage(request, Constants_1.MessagePriority.WakeUp);
+                logger_1.log("controller", `${this.logPrefix}  Node asleep`, "debug");
+                return true;
+            }
+            return false;
+        });
     }
 }
 exports.ZWaveNode = ZWaveNode;

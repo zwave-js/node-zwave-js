@@ -228,6 +228,7 @@ export class Driver extends EventEmitter implements IDriver {
 		node
 			.on("wake up", this.node_wakeUp.bind(this))
 			.on("sleep", this.node_sleep.bind(this))
+			.on("interview completed", this.node_interviewCompleted.bind(this))
 		;
 	}
 
@@ -240,6 +241,16 @@ export class Driver extends EventEmitter implements IDriver {
 
 	private node_sleep(node: ZWaveNode) {
 		// TODO: Do we need this
+	}
+
+	private node_interviewCompleted(node: ZWaveNode) {
+		if (!this.hasPendingMessages(node) && node.supportsCC(CommandClasses["Wake Up"])) {
+			node.sendNoMoreInformation();
+		}
+	}
+
+	private hasPendingMessages(node: ZWaveNode) {
+		return !!this.sendQueue.find(t => t.message.getNodeId() === node.id);
 	}
 
 	/**
@@ -700,10 +711,15 @@ export class Driver extends EventEmitter implements IDriver {
 	 * and resumes the queue handling
 	 */
 	private resolveCurrentTransaction(resumeQueue: boolean = true) {
+		const node = this.currentTransaction.message.getNodeUnsafe();
 		log("io", `resolving current transaction with ${stringify(this.currentTransaction.response)}`, "debug");
 		this.currentTransaction.promise.resolve(this.currentTransaction.response);
 		this.currentTransaction = null;
-		// and see if there are messages pending
+		// If a sleeping node has no messages pending, send it back to sleep
+		if (node && node.supportsCC(CommandClasses["Wake Up"]) && !this.hasPendingMessages(node)) {
+			node.sendNoMoreInformation();
+		}
+		// Resume the send queue
 		if (resumeQueue) {
 			log("io", `resuming send queue`, "debug");
 			setImmediate(() => this.workOffSendQueue());
