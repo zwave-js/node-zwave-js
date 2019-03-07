@@ -114,6 +114,7 @@ export class ZWaveNode extends EventEmitter {
 	private nodeInfoReceived: boolean = false;
 
 	private _valueDB = new ValueDB();
+	/** @internal */
 	public get valueDB(): ValueDB {
 		return this._valueDB;
 	}
@@ -247,7 +248,7 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	/** Step #1 of the node interview */
-	private async queryProtocolInfo() {
+	protected async queryProtocolInfo() {
 		log("controller", `${this.logPrefix}querying protocol info`, "debug");
 		const resp = await this.driver.sendMessage<GetNodeProtocolInfoResponse>(
 			new GetNodeProtocolInfoRequest(this.driver, this.id),
@@ -289,7 +290,7 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	/** Step #2 of the node interview */
-	private async waitForWakeup() {
+	protected async waitForWakeup() {
 		if (this.supportsCC(CommandClasses["Wake Up"])) {
 			if (this.isControllerNode()) {
 				log("controller", `${this.logPrefix}skipping wakeup for the controller`, "debug");
@@ -315,7 +316,7 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	/** Step #3 of the node interview */
-	private async ping() {
+	protected async ping() {
 		if (this.isControllerNode()) {
 			log("controller", `${this.logPrefix}not pinging the controller...`, "debug");
 		} else {
@@ -335,7 +336,7 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	/** Step #5 of the node interview */
-	private async queryNodeInfo() {
+	protected async queryNodeInfo() {
 		if (this.isControllerNode()) {
 			log("controller", `${this.logPrefix}not querying node info from the controller...`, "debug");
 		} else {
@@ -357,7 +358,7 @@ export class ZWaveNode extends EventEmitter {
 		await this.setInterviewStage(InterviewStage.NodeInfo);
 	}
 
-	private async queryManufacturerSpecific() {
+	protected async queryManufacturerSpecific() {
 		if (this.isControllerNode()) {
 			log("controller", `${this.logPrefix}not querying manufacturer information from the controller...`, "debug");
 		} else {
@@ -383,7 +384,7 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	/** Step #9 of the node interview */
-	private async queryCCVersions() {
+	protected async queryCCVersions() {
 		log("controller", `${this.logPrefix}querying CC versions`, "debug");
 		for (const [cc] of this._implementedCommandClasses.entries()) {
 			// only query the ones we support a version > 1 for
@@ -414,7 +415,7 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	/** Step #10 of the node interview */
-	private async queryEndpoints() {
+	protected async queryEndpoints() {
 		if (this.supportsCC(CommandClasses["Multi Channel"])) {
 			log("controller", `${this.logPrefix}querying device endpoints`, "debug");
 			const cc = new MultiChannelCC(this.driver, this.id, MultiChannelCommand.EndPointGet);
@@ -439,7 +440,7 @@ export class ZWaveNode extends EventEmitter {
 		await this.setInterviewStage(InterviewStage.Endpoints);
 	}
 
-	private async requestStaticValues() {
+	protected async requestStaticValues() {
 		log("controller", `${this.logPrefix}requesting static values`, "debug");
 		try {
 			await this.requestState(StateKind.Static);
@@ -610,7 +611,7 @@ export class ZWaveNode extends EventEmitter {
 			const wakeupCC = new WakeUpCC(this.driver, this.id, WakeUpCommand.NoMoreInformation);
 			const request = new SendDataRequest(this.driver, wakeupCC);
 			// TODO: Add a way to only wait for the confirming send data request
-			this.driver.sendMessage<SendDataRequest>(request, MessagePriority.WakeUp);
+			void this.driver.sendMessage<SendDataRequest>(request, MessagePriority.WakeUp);
 			log("controller", `${this.logPrefix}  Node asleep`, "debug");
 			return true;
 		}

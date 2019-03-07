@@ -6,7 +6,7 @@ import { Baudrate } from "../controller/GetNodeProtocolInfoMessages";
 import { Driver } from "../driver/Driver";
 import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
 import { NodeUpdatePayload } from "./NodeInfo";
-import { ValueDB, ValueUpdatedArgs } from "./ValueDB";
+import { ValueUpdatedArgs } from "./ValueDB";
 export declare type ValueUpdatedCallback = (args: ValueUpdatedArgs) => void;
 export declare type ZWaveNodeEventCallbacks = Overwrite<{
     [K in "wake up" | "sleep" | "interview completed"]: (node: ZWaveNode) => void;
@@ -43,7 +43,6 @@ export declare class ZWaveNode extends EventEmitter {
     readonly implementedCommandClasses: Map<CommandClasses, CommandClassInfo>;
     private nodeInfoReceived;
     private _valueDB;
-    readonly valueDB: ValueDB;
     /** This tells us which interview stage was last completed */
     interviewStage: InterviewStage;
     isControllerNode(): boolean;
@@ -60,19 +59,19 @@ export declare class ZWaveNode extends EventEmitter {
     /** Updates this node's interview stage and saves to cache when appropriate */
     private setInterviewStage;
     /** Step #1 of the node interview */
-    private queryProtocolInfo;
+    protected queryProtocolInfo(): Promise<void>;
     /** Step #2 of the node interview */
-    private waitForWakeup;
+    protected waitForWakeup(): Promise<void>;
     /** Step #3 of the node interview */
-    private ping;
+    protected ping(): Promise<void>;
     /** Step #5 of the node interview */
-    private queryNodeInfo;
-    private queryManufacturerSpecific;
+    protected queryNodeInfo(): Promise<void>;
+    protected queryManufacturerSpecific(): Promise<void>;
     /** Step #9 of the node interview */
-    private queryCCVersions;
+    protected queryCCVersions(): Promise<void>;
     /** Step #10 of the node interview */
-    private queryEndpoints;
-    private requestStaticValues;
+    protected queryEndpoints(): Promise<void>;
+    protected requestStaticValues(): Promise<void>;
     /** Handles an ApplicationCommandRequest sent from a node */
     handleCommand(command: CommandClass): Promise<void>;
     /**

@@ -78,6 +78,7 @@ class ZWaveNode extends events_1.EventEmitter {
     get implementedCommandClasses() {
         return this._implementedCommandClasses;
     }
+    /** @internal */
     get valueDB() {
         return this._valueDB;
     }
@@ -542,7 +543,7 @@ class ZWaveNode extends events_1.EventEmitter {
                 const wakeupCC = new WakeUpCC_1.WakeUpCC(this.driver, this.id, WakeUpCC_1.WakeUpCommand.NoMoreInformation);
                 const request = new SendDataMessages_1.SendDataRequest(this.driver, wakeupCC);
                 // TODO: Add a way to only wait for the confirming send data request
-                this.driver.sendMessage(request, Constants_1.MessagePriority.WakeUp);
+                void this.driver.sendMessage(request, Constants_1.MessagePriority.WakeUp);
                 logger_1.log("controller", `${this.logPrefix}  Node asleep`, "debug");
                 return true;
             }
