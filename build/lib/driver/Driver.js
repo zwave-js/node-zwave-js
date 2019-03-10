@@ -532,7 +532,7 @@ class Driver extends events_1.EventEmitter {
         if (handlers != null && handlers.length > 0) {
             logger_1.log("driver", `  ${handlers.length} handler${handlers.length !== 1 ? "s" : ""} registered!`, "debug");
             // loop through all handlers and find the first one that returns true to indicate that it handled the message
-            for (let i = 0; i <= handlers.length; i++) {
+            for (let i = 0; i < handlers.length; i++) {
                 logger_1.log("driver", `  invoking handler #${i}`, "debug");
                 const handler = handlers[i];
                 if (handler.invoke(msg)) {
