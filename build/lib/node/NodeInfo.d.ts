@@ -5,9 +5,11 @@ export interface NodeInformationFrame {
     generic: GenericDeviceClass;
     specific: SpecificDeviceClass;
     supportedCCs: CommandClasses[];
+}
+export interface ExtendedNodeInformationFrame extends NodeInformationFrame {
     controlledCCs: CommandClasses[];
 }
-export interface NodeUpdatePayload extends NodeInformationFrame {
+export interface NodeUpdatePayload extends ExtendedNodeInformationFrame {
     nodeId: number;
     basic: BasicDeviceClasses;
 }

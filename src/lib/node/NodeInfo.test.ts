@@ -32,11 +32,6 @@ describe("lib/node/NodeInfo", () => {
 			]);
 		});
 
-		it("should report the correct CCs as controlled", () => {
-			expect(eif.controlledCCs).toContainAllValues([
-				CommandClasses["Multilevel Toggle Switch"],
-			]);
-		});
 	});
 
 	describe("parseNodeUpdatePayload()", () => {

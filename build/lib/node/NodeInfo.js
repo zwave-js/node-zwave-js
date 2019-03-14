@@ -1,18 +1,23 @@
 "use strict";
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const CommandClass_1 = require("../commandclass/CommandClass");
 const DeviceClass_1 = require("./DeviceClass");
 function parseNodeUpdatePayload(nif) {
-    const ret = {
-        nodeId: nif[0],
+    return Object.assign({ nodeId: nif[0], 
         // length is byte 1
-        basic: nif[2],
-    };
-    Object.assign(ret, parseNodeInformationFrame(nif.slice(3)));
-    return ret;
+        basic: nif[2] }, internalParseNodeInformationFrame(nif.slice(3)));
 }
 exports.parseNodeUpdatePayload = parseNodeUpdatePayload;
-function parseNodeInformationFrame(nif) {
+function internalParseNodeInformationFrame(nif) {
     const ret = {
         generic: DeviceClass_1.GenericDeviceClass.get(nif[0]),
         specific: DeviceClass_1.SpecificDeviceClass.get(nif[0], nif[1]),
@@ -34,6 +39,10 @@ function parseNodeInformationFrame(nif) {
             ? ret.controlledCCs
             : ret.supportedCCs).push(cc);
     }
+    return ret;
+}
+function parseNodeInformationFrame(nif) {
+    const _a = internalParseNodeInformationFrame(nif), { controlledCCs } = _a, ret = __rest(_a, ["controlledCCs"]);
     return ret;
 }
 exports.parseNodeInformationFrame = parseNodeInformationFrame;

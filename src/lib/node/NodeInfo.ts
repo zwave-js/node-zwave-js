@@ -5,27 +5,29 @@ export interface NodeInformationFrame {
 	generic: GenericDeviceClass;
 	specific: SpecificDeviceClass;
 	supportedCCs: CommandClasses[];
+}
+
+export interface ExtendedNodeInformationFrame extends NodeInformationFrame {
 	// controlledCCs isn't actually included in a NIF, but this way we can reuse the parser code
 	controlledCCs: CommandClasses[];
 }
 
 // This is sometimes used interchangeably with the NIF
-export interface NodeUpdatePayload extends NodeInformationFrame {
+export interface NodeUpdatePayload extends ExtendedNodeInformationFrame {
 	nodeId: number;
 	basic: BasicDeviceClasses;
 }
 
 export function parseNodeUpdatePayload(nif: Buffer): NodeUpdatePayload {
-	const ret = {
+	return {
 		nodeId: nif[0],
 		// length is byte 1
 		basic: nif[2],
-	} as NodeUpdatePayload;
-	Object.assign(ret, parseNodeInformationFrame(nif.slice(3)));
-	return ret;
+		...internalParseNodeInformationFrame(nif.slice(3)),
+	};
 }
 
-export function parseNodeInformationFrame(nif: Buffer): NodeInformationFrame {
+function internalParseNodeInformationFrame(nif: Buffer): ExtendedNodeInformationFrame {
 	const ret = {
 		generic: GenericDeviceClass.get(nif[0]),
 		specific: SpecificDeviceClass.get(nif[0], nif[1]),
@@ -48,5 +50,10 @@ export function parseNodeInformationFrame(nif: Buffer): NodeInformationFrame {
 			: ret.supportedCCs
 		).push(cc);
 	}
+	return ret;
+}
+
+export function parseNodeInformationFrame(nif: Buffer): NodeInformationFrame {
+	const {controlledCCs, ...ret} = internalParseNodeInformationFrame(nif);
 	return ret;
 }
