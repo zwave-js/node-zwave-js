@@ -1,5 +1,5 @@
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
+import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
 
 const enum ControllerCapabilityFlags {
 	Secondary = 1 << 0, // Controller is a secondary

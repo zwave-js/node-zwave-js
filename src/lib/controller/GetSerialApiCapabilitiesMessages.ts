@@ -1,4 +1,3 @@
-import { padStart } from "alcalzone-shared/strings";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
 import { num2hex } from "../util/strings";

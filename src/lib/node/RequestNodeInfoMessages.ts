@@ -1,8 +1,7 @@
 import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/ApplicationUpdateRequest";
 import { Driver } from "../driver/Driver";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, messageTypes, priority, ResponseRole} from "../message/Message";
-import { log } from "../util/logger";
+import { expectedResponse, Message, messageTypes, priority, ResponseRole } from "../message/Message";
 import { INodeQuery } from "./INodeQuery";
 
 function testResponseForNodeInfoRequest(sent: RequestNodeInfoRequest, received: Message): ResponseRole {

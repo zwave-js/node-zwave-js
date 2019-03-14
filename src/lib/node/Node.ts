@@ -325,7 +325,7 @@ export class ZWaveNode extends EventEmitter {
 			try {
 				const request = new SendDataRequest(this.driver, new NoOperationCC(this.driver, this.id));
 				// set the priority manually, as SendData can be Application level too
-				const response = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.NodeQuery);
+				await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.NodeQuery);
 				log("controller", `${this.logPrefix}  ping succeeded`, "debug");
 				// TODO: time out the ping
 			} catch (e) {

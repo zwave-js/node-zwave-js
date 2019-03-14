@@ -1,5 +1,5 @@
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
+import { FunctionType, MessageType } from "../message/Constants";
+import { Message, messageTypes } from "../message/Message";
 import { NodeUpdatePayload, parseNodeUpdatePayload } from "../node/NodeInfo";
 
 export enum ApplicationUpdateTypes {

@@ -1,7 +1,5 @@
 import { Comparable, compareNumberOrString, CompareResult } from "alcalzone-shared/comparable";
 import { DeferredPromise } from "alcalzone-shared/deferred-promise";
-import { CommandClasses } from "../commandclass/CommandClass";
-import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { MessagePriority } from "../message/Constants";
 import { Message } from "../message/Message";
 import { Driver } from "./Driver";
