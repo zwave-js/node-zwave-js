@@ -10,4 +10,4 @@ coverage/
 zwave-js-*.tgz
 
 # ZWave cache
-/cache
+#/cache

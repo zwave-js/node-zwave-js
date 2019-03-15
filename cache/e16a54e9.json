@@ -1,0 +1,141 @@
+{
+    "nodes": {
+        "1": {
+            "id": 1,
+            "interviewStage": "Complete",
+            "deviceClass": {
+                "basic": 2,
+                "generic": 2,
+                "specific": 1
+            },
+            "isListening": true,
+            "isFrequentListening": false,
+            "isRouting": false,
+            "maxBaudRate": 40000,
+            "isSecure": false,
+            "isBeaming": true,
+            "version": 4,
+            "commandClasses": {}
+        },
+        "2": {
+            "id": 2,
+            "interviewStage": "Complete",
+            "deviceClass": {
+                "basic": 4,
+                "generic": 24,
+                "specific": 1
+            },
+            "isListening": false,
+            "isFrequentListening": false,
+            "isRouting": true,
+            "maxBaudRate": 40000,
+            "isSecure": false,
+            "isBeaming": true,
+            "version": 4,
+            "commandClasses": {
+                "0x25": {
+                    "name": "Binary Switch",
+                    "isSupported": false,
+                    "isControlled": true,
+                    "version": 0
+                },
+                "0x26": {
+                    "name": "Multilevel Switch",
+                    "isSupported": false,
+                    "isControlled": true,
+                    "version": 4
+                },
+                "0x59": {
+                    "name": "Association Group Information (AGI)",
+                    "isSupported": true,
+                    "isControlled": false,
+                    "version": 0
+                },
+                "0x5a": {
+                    "name": "Device Reset Locally",
+                    "isSupported": true,
+                    "isControlled": false,
+                    "version": 0
+                },
+                "0x5b": {
+                    "name": "Central Scene",
+                    "isSupported": true,
+                    "isControlled": false,
+                    "version": 2
+                },
+                "0x5e": {
+                    "name": "Z-Wave Plus Info",
+                    "isSupported": true,
+                    "isControlled": false,
+                    "version": 0
+                },
+                "0x60": {
+                    "name": "Multi Channel",
+                    "isSupported": true,
+                    "isControlled": false,
+                    "version": 4
+                },
+                "0x70": {
+                    "name": "Configuration",
+                    "isSupported": true,
+                    "isControlled": false,
+                    "version": 0
+                },
+                "0x71": {
+                    "name": "Notification",
+                    "isSupported": true,
+                    "isControlled": false,
+                    "version": 4
+                },
+                "0x72": {
+                    "name": "Manufacturer Specific",
+                    "isSupported": true,
+                    "isControlled": false,
+                    "version": 2
+                },
+                "0x73": {
+                    "name": "Powerlevel",
+                    "isSupported": true,
+                    "isControlled": false,
+                    "version": 0
+                },
+                "0x7a": {
+                    "name": "Firmware Update Meta Data",
+                    "isSupported": true,
+                    "isControlled": false,
+                    "version": 0
+                },
+                "0x80": {
+                    "name": "Battery",
+                    "isSupported": true,
+                    "isControlled": false,
+                    "version": 0
+                },
+                "0x84": {
+                    "name": "Wake Up",
+                    "isSupported": true,
+                    "isControlled": false,
+                    "version": 2
+                },
+                "0x85": {
+                    "name": "Association",
+                    "isSupported": true,
+                    "isControlled": false,
+                    "version": 0
+                },
+                "0x86": {
+                    "name": "Version",
+                    "isSupported": true,
+                    "isControlled": false,
+                    "version": 2
+                },
+                "0x8e": {
+                    "name": "Multi Channel Association",
+                    "isSupported": true,
+                    "isControlled": false,
+                    "version": 0
+                }
+            }
+        }
+    }
+}
