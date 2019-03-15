@@ -99,15 +99,16 @@ class ZWaveNode extends events_1.EventEmitter {
     }
     /** Tests if this node supports the given CommandClass */
     supportsCC(cc) {
-        return this._implementedCommandClasses.has(cc) && this._implementedCommandClasses.get(cc).isSupported;
+        return this._implementedCommandClasses.has(cc) && !!this._implementedCommandClasses.get(cc).isSupported;
     }
     /** Tests if this node controls the given CommandClass */
     controlsCC(cc) {
-        return this._implementedCommandClasses.has(cc) && this._implementedCommandClasses.get(cc).isControlled;
+        return this._implementedCommandClasses.has(cc) && !!this._implementedCommandClasses.get(cc).isControlled;
     }
     /** Checks the supported version of a given CommandClass */
     getCCVersion(cc) {
-        return this._implementedCommandClasses.has(cc) ? this._implementedCommandClasses.get(cc).version : 0;
+        const ccInfo = this._implementedCommandClasses.get(cc);
+        return ccInfo && ccInfo.version || 0;
     }
     /** Creates an instance of the given CC linked to this node */
     // wotan-disable no-misused-generics
@@ -506,7 +507,7 @@ class ZWaveNode extends events_1.EventEmitter {
             const ccDict = obj.commandClasses;
             for (const ccHex of Object.keys(ccDict)) {
                 // First make sure this key describes a valid CC
-                if (!/^0x\d+$/.test(ccHex))
+                if (!/^0x[0-9a-fA-F]+$/.test(ccHex))
                     continue;
                 // tslint:disable-next-line: radix
                 const ccNum = parseInt(ccHex);

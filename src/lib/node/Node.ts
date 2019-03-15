@@ -135,25 +135,25 @@ export class ZWaveNode extends EventEmitter {
 				isSupported: false,
 				isControlled: false,
 				version: 0,
-			} as CommandClassInfo
-			;
+			};
 		ccInfo = Object.assign(ccInfo, info);
 		this._implementedCommandClasses.set(cc, ccInfo);
 	}
 
 	/** Tests if this node supports the given CommandClass */
 	public supportsCC(cc: CommandClasses): boolean {
-		return this._implementedCommandClasses.has(cc) && this._implementedCommandClasses.get(cc).isSupported;
+		return this._implementedCommandClasses.has(cc) && !!this._implementedCommandClasses.get(cc).isSupported;
 	}
 
 	/** Tests if this node controls the given CommandClass */
 	public controlsCC(cc: CommandClasses): boolean {
-		return this._implementedCommandClasses.has(cc) && this._implementedCommandClasses.get(cc).isControlled;
+		return this._implementedCommandClasses.has(cc) && !!this._implementedCommandClasses.get(cc).isControlled;
 	}
 
 	/** Checks the supported version of a given CommandClass */
 	public getCCVersion(cc: CommandClasses): number {
-		return this._implementedCommandClasses.has(cc) ? this._implementedCommandClasses.get(cc).version : 0;
+		const ccInfo = this._implementedCommandClasses.get(cc);
+		return ccInfo && ccInfo.version || 0;
 	}
 
 	/** Creates an instance of the given CC linked to this node */
@@ -574,7 +574,7 @@ export class ZWaveNode extends EventEmitter {
 			const ccDict = obj.commandClasses;
 			for (const ccHex of Object.keys(ccDict)) {
 				// First make sure this key describes a valid CC
-				if (!/^0x\d+$/.test(ccHex)) continue;
+				if (!/^0x[0-9a-fA-F]+$/.test(ccHex)) continue;
 				// tslint:disable-next-line: radix
 				const ccNum = parseInt(ccHex);
 				if (!(ccNum in CommandClasses)) continue;
