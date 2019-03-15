@@ -9,6 +9,7 @@ import { MultiChannelCC, MultiChannelCommand } from "../commandclass/MultiChanne
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { VersionCC, VersionCommand } from "../commandclass/VersionCC";
 import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
+import { ZWavePlusCC, ZWavePlusCommand } from "../commandclass/ZWavePlusCC";
 import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/ApplicationUpdateRequest";
 import { GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "../controller/GetNodeProtocolInfoMessages";
 import { SendDataRequest } from "../controller/SendDataMessages";
@@ -35,6 +36,9 @@ class TestNode extends ZWaveNode {
 	}
 	public async queryNodeInfo() {
 		return super.queryNodeInfo();
+	}
+	public async queryNodePlusInfo() {
+		return super.queryNodePlusInfo();
 	}
 	public async queryManufacturerSpecific() {
 		return super.queryManufacturerSpecific();
@@ -337,6 +341,42 @@ describe("lib/node/Node", () => {
 
 		});
 
+		describe(`queryNodePlusInfo()`, () => {
+			beforeAll(() => fakeDriver.sendMessage.mockImplementation(() => Promise.resolve()));
+			beforeEach(() => fakeDriver.sendMessage.mockClear());
+
+			it(`should set the interview stage to "NodePlusInfo"`, async () => {
+				await node.queryNodePlusInfo();
+				expect(node.interviewStage).toBe(InterviewStage.NodePlusInfo);
+			});
+
+			it("should not send anything if the node does not support the Multi Channel CC", async () => {
+				node.addCC(CommandClasses["Z-Wave Plus Info"], { isSupported: false, isControlled: false });
+				await node.queryNodePlusInfo();
+				expect(fakeDriver.sendMessage).not.toBeCalled();
+			});
+
+			it("should send a ZWavePlusCC.Get", async () => {
+				node.addCC(CommandClasses["Z-Wave Plus Info"], { isSupported: true });
+				await node.queryNodePlusInfo();
+
+				expect(fakeDriver.sendMessage).toBeCalled();
+
+				assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
+					cc: ZWavePlusCC,
+					nodeId: node.id,
+					ccValues: {
+						ccCommand: ZWavePlusCommand.Get,
+					},
+				});
+			});
+
+			it.todo("Test the behavior when the request failed");
+
+			it.todo("Test the behavior when the request succeeds");
+
+		});
+
 		describe(`queryManufacturerSpecific()`, () => {
 			beforeAll(() => fakeDriver.sendMessage.mockImplementation(() => Promise.resolve()));
 			beforeEach(() => fakeDriver.sendMessage.mockClear());
@@ -480,6 +520,7 @@ describe("lib/node/Node", () => {
 					waitForWakeup: InterviewStage.WakeUp,
 					ping: InterviewStage.Ping,
 					queryNodeInfo: InterviewStage.NodeInfo,
+					queryNodePlusInfo: InterviewStage.NodePlusInfo,
 					queryManufacturerSpecific: InterviewStage.ManufacturerSpecific1,
 					queryCCVersions: InterviewStage.Versions,
 					queryEndpoints: InterviewStage.Endpoints,
@@ -490,6 +531,7 @@ describe("lib/node/Node", () => {
 					waitForWakeup: node.waitForWakeup,
 					ping: node.ping,
 					queryNodeInfo: node.queryNodeInfo,
+					queryNodePlusInfo: node.queryNodePlusInfo,
 					queryManufacturerSpecific: node.queryManufacturerSpecific,
 					queryCCVersions: node.queryCCVersions,
 					queryEndpoints: node.queryEndpoints,
@@ -538,6 +580,7 @@ describe("lib/node/Node", () => {
 				await node.interview();
 
 				const expectCalled = [
+					"queryNodePlusInfo",
 					"queryCCVersions",
 					"queryEndpoints",
 					"requestStaticValues",
@@ -723,7 +766,7 @@ describe("lib/node/Node", () => {
 
 	describe("serialize() / deserialize()", () => {
 
-		const testNode1Serialized = {
+		const serializedTestNode = {
 			id: 1,
 			interviewStage: "NodeInfo",
 			deviceClass: {
@@ -756,20 +799,20 @@ describe("lib/node/Node", () => {
 
 		it("serializing a deserialized node should result in the original object", () => {
 			const node = new ZWaveNode(1, undefined);
-			node.deserialize(testNode1Serialized);
-			expect(node.serialize()).toEqual(testNode1Serialized);
+			node.deserialize(serializedTestNode);
+			expect(node.serialize()).toEqual(serializedTestNode);
 		});
 
 		it("nodes with a completed interview don't get their stage reset when resuming from cache", () => {
 			const node = new ZWaveNode(1, undefined);
-			node.deserialize(testNode1Serialized);
+			node.deserialize(serializedTestNode);
 			node.interviewStage = InterviewStage.RestartFromCache;
 			expect(node.serialize().interviewStage).toEqual(InterviewStage[InterviewStage.Complete]);
 		});
 
 		it("deserialize() should also accept numbers for the interview stage", () => {
 			const input = {
-				...testNode1Serialized,
+				...serializedTestNode,
 				interviewStage: InterviewStage.Dynamic,
 			};
 			const node = new ZWaveNode(1, undefined);
@@ -790,7 +833,7 @@ describe("lib/node/Node", () => {
 			];
 			for (const dc of brokenDeviceClasses) {
 				const input = {
-					...testNode1Serialized,
+					...serializedTestNode,
 					deviceClass: dc,
 				};
 				(node as any)._deviceClass = undefined;
@@ -812,7 +855,7 @@ describe("lib/node/Node", () => {
 			];
 			for (const [prop, val] of wrongInputs) {
 				const input = {
-					...testNode1Serialized,
+					...serializedTestNode,
 					[prop]: val,
 				};
 				(node as any)["_" + prop] = undefined;
@@ -824,7 +867,7 @@ describe("lib/node/Node", () => {
 		it("deserialize() should skip command classes that don't have a HEX key", () => {
 			const node = new ZWaveNode(1, undefined);
 			const input = {
-				...testNode1Serialized,
+				...serializedTestNode,
 				commandClasses: {
 					"Binary Switch": {
 						name: "Binary Switch",
@@ -841,7 +884,7 @@ describe("lib/node/Node", () => {
 		it("deserialize() should skip command classes that are not known to this library", () => {
 			const node = new ZWaveNode(1, undefined);
 			const input = {
-				...testNode1Serialized,
+				...serializedTestNode,
 				commandClasses: {
 					"0x001122ff": {
 						name: "Binary Switch",
@@ -858,7 +901,7 @@ describe("lib/node/Node", () => {
 		it("deserialize() should not parse any malformed CC properties", () => {
 			const node = new ZWaveNode(1, undefined);
 			const input = {
-				...testNode1Serialized,
+				...serializedTestNode,
 				commandClasses: {
 					"0x25": {
 						isSupported: 1,
@@ -879,153 +922,3 @@ describe("lib/node/Node", () => {
 		});
 	});
 });
-
-// Test cache
-// {
-//     "nodes": {
-//         "1": {
-//             "id": 1,
-//             "interviewStage": "Complete",
-//             "deviceClass": {
-//                 "basic": 2,
-//                 "generic": 2,
-//                 "specific": 1
-//             },
-//             "isListening": true,
-//             "isFrequentListening": false,
-//             "isRouting": false,
-//             "maxBaudRate": 40000,
-//             "isSecure": false,
-//             "isBeaming": true,
-//             "version": 4,
-//             "commandClasses": {
-//                 "0x25": {
-//                     "name": "Binary Switch",
-//                     "isSupported": false,
-//                     "isControlled": true,
-//                     "version": 3
-//                 },
-//             }
-//         },
-//         "2": {
-//             "id": 2,
-//             "interviewStage": "Complete",
-//             "deviceClass": {
-//                 "basic": 4,
-//                 "generic": 24,
-//                 "specific": 1
-//             },
-//             "isListening": false,
-//             "isFrequentListening": false,
-//             "isRouting": true,
-//             "maxBaudRate": 40000,
-//             "isSecure": false,
-//             "isBeaming": true,
-//             "version": 4,
-//             "commandClasses": {
-//                 "0x25": {
-//                     "name": "Binary Switch",
-//                     "isSupported": false,
-//                     "isControlled": true,
-//                     "version": 0
-//                 },
-//                 "0x26": {
-//                     "name": "Multilevel Switch",
-//                     "isSupported": false,
-//                     "isControlled": true,
-//                     "version": 4
-//                 },
-//                 "0x59": {
-//                     "name": "Association Group Information (AGI)",
-//                     "isSupported": true,
-//                     "isControlled": false,
-//                     "version": 0
-//                 },
-//                 "0x5a": {
-//                     "name": "Device Reset Locally",
-//                     "isSupported": true,
-//                     "isControlled": false,
-//                     "version": 0
-//                 },
-//                 "0x5b": {
-//                     "name": "Central Scene",
-//                     "isSupported": true,
-//                     "isControlled": false,
-//                     "version": 2
-//                 },
-//                 "0x5e": {
-//                     "name": "Z-Wave Plus Info",
-//                     "isSupported": true,
-//                     "isControlled": false,
-//                     "version": 0
-//                 },
-//                 "0x60": {
-//                     "name": "Multi Channel",
-//                     "isSupported": true,
-//                     "isControlled": false,
-//                     "version": 4
-//                 },
-//                 "0x70": {
-//                     "name": "Configuration",
-//                     "isSupported": true,
-//                     "isControlled": false,
-//                     "version": 0
-//                 },
-//                 "0x71": {
-//                     "name": "Notification",
-//                     "isSupported": true,
-//                     "isControlled": false,
-//                     "version": 4
-//                 },
-//                 "0x72": {
-//                     "name": "Manufacturer Specific",
-//                     "isSupported": true,
-//                     "isControlled": false,
-//                     "version": 2
-//                 },
-//                 "0x73": {
-//                     "name": "Powerlevel",
-//                     "isSupported": true,
-//                     "isControlled": false,
-//                     "version": 0
-//                 },
-//                 "0x7a": {
-//                     "name": "Firmware Update Meta Data",
-//                     "isSupported": true,
-//                     "isControlled": false,
-//                     "version": 0
-//                 },
-//                 "0x80": {
-//                     "name": "Battery",
-//                     "isSupported": true,
-//                     "isControlled": false,
-//                     "version": 0
-//                 },
-//                 "0x84": {
-//                     "name": "Wake Up",
-//                     "isSupported": true,
-//                     "isControlled": false,
-//                     "version": 2
-//                 },
-//                 "0x85": {
-//                     "name": "Association",
-//                     "isSupported": true,
-//                     "isControlled": false,
-//                     "version": 0
-//                 },
-//                 "0x86": {
-//                     "name": "Version",
-//                     "isSupported": true,
-//                     "isControlled": false,
-//                     "version": 2
-//                 },
-//                 "0x8e": {
-//                     "name": "Multi Channel Association",
-//                     "isSupported": true,
-//                     "isControlled": false,
-//                     "version": 0
-//                 }
-//             }
-//         }
-//     }
-// }

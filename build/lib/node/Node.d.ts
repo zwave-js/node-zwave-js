@@ -66,6 +66,8 @@ export declare class ZWaveNode extends EventEmitter {
     protected ping(): Promise<void>;
     /** Step #5 of the node interview */
     protected queryNodeInfo(): Promise<void>;
+    /** Step #6 of the node interview */
+    protected queryNodePlusInfo(): Promise<void>;
     protected queryManufacturerSpecific(): Promise<void>;
     /** Step #9 of the node interview */
     protected queryCCVersions(): Promise<void>;

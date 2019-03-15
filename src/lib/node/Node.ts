@@ -12,6 +12,7 @@ import { MultiChannelCC, MultiChannelCommand } from "../commandclass/MultiChanne
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { VersionCC, VersionCommand } from "../commandclass/VersionCC";
 import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
+import { ZWavePlusCC, ZWavePlusCommand, ZWavePlusNodeType, ZWavePlusRoleType } from "../commandclass/ZWavePlusCC";
 import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/ApplicationUpdateRequest";
 import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "../controller/GetNodeProtocolInfoMessages";
 import { SendDataRequest } from "../controller/SendDataMessages";
@@ -200,12 +201,15 @@ export class ZWaveNode extends EventEmitter {
 			await this.queryNodeInfo();
 		}
 
+		if (this.interviewStage === InterviewStage.NodeInfo) {
+			await this.queryNodePlusInfo();
+		}
+
 		// TODO:
-		// NodePlusInfo,			// [ ] Retrieve ZWave+ info and update device classes
 		// SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
 		// ManufacturerSpecific2,	// [ ] Retrieve manufacturer name and product ids
 
-		if (this.interviewStage === InterviewStage.NodeInfo /* TODO: change .NodeInfo to .ManufacturerSpecific2 */) {
+		if (this.interviewStage === InterviewStage.NodePlusInfo /* TODO: change .NodePlusInfo to .ManufacturerSpecific2 */) {
 			await this.queryCCVersions();
 		}
 
@@ -239,6 +243,7 @@ export class ZWaveNode extends EventEmitter {
 			case InterviewStage.ProtocolInfo:
 			case InterviewStage.ManufacturerSpecific1:
 			case InterviewStage.NodeInfo:
+			case InterviewStage.NodePlusInfo:
 			case InterviewStage.Versions:
 			case InterviewStage.Endpoints:
 			case InterviewStage.Static:
@@ -356,6 +361,34 @@ export class ZWaveNode extends EventEmitter {
 			}
 		}
 		await this.setInterviewStage(InterviewStage.NodeInfo);
+	}
+
+	/** Step #6 of the node interview */
+	protected async queryNodePlusInfo() {
+		if (!this.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
+			log("controller", `${this.logPrefix}skipping Z-Wave+ query because the device does not support it`, "debug");
+		} else {
+			log("controller", `${this.logPrefix}querying Z-Wave+ information`, "debug");
+			const cc = new ZWavePlusCC(this.driver, this.id, ZWavePlusCommand.Get);
+			const request = new SendDataRequest(this.driver, cc);
+			try {
+				// set the priority manually, as SendData can be Application level too
+				const resp = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.NodeQuery);
+				if (isCommandClassContainer(resp)) {
+					const zwavePlusResponse = resp.command as ZWavePlusCC;
+					log("controller", `${this.logPrefix}received response for Z-Wave+ information:`, "debug");
+					log("controller", `${this.logPrefix}  Z-Wave+ version: ${zwavePlusResponse.version}`, "debug");
+					log("controller", `${this.logPrefix}  role type:       ${ZWavePlusRoleType[zwavePlusResponse.roleType]}`, "debug");
+					log("controller", `${this.logPrefix}  node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}`, "debug");
+					log("controller", `${this.logPrefix}  installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}`, "debug");
+					log("controller", `${this.logPrefix}  user icon:       ${num2hex(zwavePlusResponse.userIcon)}`, "debug");
+				}
+			} catch (e) {
+				log("controller", `${this.logPrefix}  querying the Z-Wave+ information failed: ${e.message}`, "debug");
+			}
+		}
+
+		await this.setInterviewStage(InterviewStage.NodePlusInfo);
 	}
 
 	protected async queryManufacturerSpecific() {

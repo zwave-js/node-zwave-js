@@ -68,6 +68,7 @@
 	"Z-Wave Command Class implementation": {
 		"prefix": "zwcc",
 		"body": [
+			"import { IDriver } from \"../driver/IDriver\";",
 			"import { ZWaveError, ZWaveErrorCodes } from \"../error/ZWaveError\";",
 			"import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from \"./CommandClass\";",
 			"",
@@ -81,13 +82,17 @@
 			"export class ${1}CC extends CommandClass {",
 			"",
 			"\t// tslint:disable:unified-signatures",
-			"\tconstructor(nodeId?: number);",
+			"\tconstructor(",
+			"\t\tdriver: IDriver,",
+			"\t\tnodeId?: number,",
+			"\t);",
 			"",
 			"\tconstructor(",
+			"\t\tdriver: IDriver,",
 			"\t\tpublic nodeId: number,",
 			"\t\tpublic ccCommand?: ${1}Command,",
 			"\t) {",
-			"\t\tsuper(nodeId);",
+			"\t\tsuper(driver, nodeId);",
 			"\t}",
 			"\t// tslint:enable:unified-signatures",
 			"",
@@ -127,5 +132,14 @@
 			""
 		],
 		"description": "Z-Wave Command Class implementation"
+	},
+	"Readonly property": {
+		"prefix": "propread",
+		"body": [
+			"private _${1:value}: ${2:string};",
+			"public get ${1}(): ${2} {",
+			"\treturn this._${1};",
+			"}${0}"
+		]
 	}
 }
