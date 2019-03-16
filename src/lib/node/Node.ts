@@ -657,7 +657,11 @@ export class ZWaveNode extends EventEmitter {
 		return !isAsleep;
 	}
 
-	public async sendNoMoreInformation() {
+	private isSendingNoMoreInformation: boolean = false;
+	public async sendNoMoreInformation(): Promise<boolean> {
+		// Avoid calling this method more than once
+		if (this.isSendingNoMoreInformation) return false;
+		this.isSendingNoMoreInformation = true;
 		if (this.isAwake() && this.interviewStage === InterviewStage.Complete) {
 			log("controller", `${this.logPrefix}Sending node back to sleep`, "debug");
 			const wakeupCC = new WakeUpCC(this.driver, this.id, WakeUpCommand.NoMoreInformation);
@@ -665,8 +669,10 @@ export class ZWaveNode extends EventEmitter {
 
 			await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.WakeUp);
 			log("controller", `${this.logPrefix}  Node asleep`, "debug");
+			this.isSendingNoMoreInformation = false;
 			return true;
 		}
+		this.isSendingNoMoreInformation = false;
 		return false;
 	}
 

@@ -36,6 +36,7 @@ class ZWaveNode extends events_1.EventEmitter {
         this._valueDB = new ValueDB_1.ValueDB();
         /** This tells us which interview stage was last completed */
         this.interviewStage = InterviewStage.None;
+        this.isSendingNoMoreInformation = false;
         this._valueDB = new ValueDB_1.ValueDB();
         this._valueDB.on("value updated", (args) => this.emit("value updated", args));
         this._deviceClass = deviceClass;
@@ -549,14 +550,20 @@ class ZWaveNode extends events_1.EventEmitter {
         return !isAsleep;
     }
     async sendNoMoreInformation() {
+        // Avoid calling this method more than once
+        if (this.isSendingNoMoreInformation)
+            return false;
+        this.isSendingNoMoreInformation = true;
         if (this.isAwake() && this.interviewStage === InterviewStage.Complete) {
             logger_1.log("controller", `${this.logPrefix}Sending node back to sleep`, "debug");
             const wakeupCC = new WakeUpCC_1.WakeUpCC(this.driver, this.id, WakeUpCC_1.WakeUpCommand.NoMoreInformation);
             const request = new SendDataMessages_1.SendDataRequest(this.driver, wakeupCC);
             await this.driver.sendMessage(request, Constants_1.MessagePriority.WakeUp);
             logger_1.log("controller", `${this.logPrefix}  Node asleep`, "debug");
+            this.isSendingNoMoreInformation = false;
             return true;
         }
+        this.isSendingNoMoreInformation = false;
         return false;
     }
 }

@@ -104,6 +104,7 @@ export declare class ZWaveNode extends EventEmitter {
     deserialize(obj: any): void;
     setAwake(awake: boolean, emitEvent?: boolean): void;
     isAwake(): boolean;
+    private isSendingNoMoreInformation;
     sendNoMoreInformation(): Promise<boolean>;
 }
 export declare enum InterviewStage {
