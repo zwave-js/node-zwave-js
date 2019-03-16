@@ -16,11 +16,10 @@
 
 */
 
+import { padStart } from "alcalzone-shared/strings";
 import { execSync } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
-import * as readline from "readline";
-import { padStart } from "../src/lib/strings";
 const semver = require("semver");
 const colors = require("colors/safe");
 import { argv } from "yargs";

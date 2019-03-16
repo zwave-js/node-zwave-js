@@ -16,10 +16,10 @@
         "removeComments": false,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "sourceMap": false,
+        // "sourceMap": true,
         "inlineSourceMap": false,
         "stripInternal": true,
-        "target": "es2015",
+        "target": "es2017",
         "skipLibCheck": true,
         // This is incompatible with serialize/deserialize
         // "strictPropertyInitialization": true,

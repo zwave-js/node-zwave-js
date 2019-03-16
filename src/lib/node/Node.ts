@@ -377,7 +377,7 @@ export class ZWaveNode extends EventEmitter {
 				if (isCommandClassContainer(resp)) {
 					const zwavePlusResponse = resp.command as ZWavePlusCC;
 					log("controller", `${this.logPrefix}received response for Z-Wave+ information:`, "debug");
-					log("controller", `${this.logPrefix}  Z-Wave+ version: ${zwavePlusResponse.version}`, "debug");
+					log("controller", `${this.logPrefix}  Z-Wave+ version: ${zwavePlusResponse.zwavePlusVersion}`, "debug");
 					log("controller", `${this.logPrefix}  role type:       ${ZWavePlusRoleType[zwavePlusResponse.roleType]}`, "debug");
 					log("controller", `${this.logPrefix}  node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}`, "debug");
 					log("controller", `${this.logPrefix}  installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}`, "debug");

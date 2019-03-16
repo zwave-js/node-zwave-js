@@ -38,8 +38,8 @@ let ZWavePlusCC = class ZWavePlusCC extends CommandClass_1.CommandClass {
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
     }
-    get version() {
-        return this._version;
+    get zwavePlusVersion() {
+        return this._zwavePlusVersion;
     }
     get nodeType() {
         return this._nodeType;
@@ -68,10 +68,11 @@ let ZWavePlusCC = class ZWavePlusCC extends CommandClass_1.CommandClass {
         this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case ZWavePlusCommand.Report:
-                this._version = this.payload[1];
+                this._zwavePlusVersion = this.payload[1];
                 this._roleType = this.payload[2];
-                this._installerIcon = this.payload.readUInt16BE(3);
-                this._userIcon = this.payload.readUInt16BE(5);
+                this._nodeType = this.payload[3];
+                this._installerIcon = this.payload.readUInt16BE(4);
+                this._userIcon = this.payload.readUInt16BE(6);
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot deserialize a ZWavePlus CC with a command other than Report", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);

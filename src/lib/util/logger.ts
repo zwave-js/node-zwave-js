@@ -26,7 +26,7 @@ export function log(namespace: SubNamespaces, message: string, severity: Severit
 export function log(...args: any[]) {
 
 	// we only accept strings
-	if (!args || !args.length || !args.every(arg => typeof arg === "string")) {
+	if (!args.length || !args.every(arg => typeof arg === "string")) {
 		throw new Error("Invalid arguments passed to log()");
 	}
 

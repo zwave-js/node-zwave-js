@@ -48,9 +48,9 @@ export class ZWavePlusCC extends CommandClass {
 	}
 	// tslint:enable:unified-signatures
 
-	private _version: number;
-	public get version(): number {
-		return this._version;
+	private _zwavePlusVersion: number;
+	public get zwavePlusVersion(): number {
+		return this._zwavePlusVersion;
 	}
 
 	private _nodeType: ZWavePlusNodeType;
@@ -94,10 +94,11 @@ export class ZWavePlusCC extends CommandClass {
 		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case ZWavePlusCommand.Report:
-				this._version = this.payload[1];
+				this._zwavePlusVersion = this.payload[1];
 				this._roleType = this.payload[2];
-				this._installerIcon = this.payload.readUInt16BE(3);
-				this._userIcon = this.payload.readUInt16BE(5);
+				this._nodeType = this.payload[3];
+				this._installerIcon = this.payload.readUInt16BE(4);
+				this._userIcon = this.payload.readUInt16BE(6);
 				break;
 
 			default:
