@@ -182,7 +182,7 @@ type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
 /**
  * A predicate function to test if a received CC matches to the sent CC
  */
-export type CCResponsePredicate = (sentCC: CommandClass, receivedCC: CommandClass) => boolean;
+export type DynamicCCResponse<T extends CommandClass> = (sentCC: T) => CommandClasses | undefined;
 
 /**
  * Defines the command class associated with a Z-Wave message
@@ -279,18 +279,17 @@ export function getImplementedVersionStatic<T extends Constructable<CommandClass
  * Defines the expected response associated with a Z-Wave message
  */
 export function expectedCCResponse(cc: CommandClasses): ClassDecorator;
-export function expectedCCResponse(predicate: CCResponsePredicate): ClassDecorator;
-export function expectedCCResponse(ccOrPredicate: CommandClasses | CCResponsePredicate): ClassDecorator {
+export function expectedCCResponse(dynamic: DynamicCCResponse<CommandClass>): ClassDecorator;
+export function expectedCCResponse<T extends CommandClass>(ccOrDynamic: CommandClasses | DynamicCCResponse<T>): ClassDecorator {
 	return (ccClass) => {
-		if (typeof ccOrPredicate === "number") {
-			const cc = ccOrPredicate;
-			log("protocol", `${ccClass.name}: defining expected CC response ${num2hex(cc)}`, "silly");
+		if (typeof ccOrDynamic === "number") {
+			log("protocol", `${ccClass.name}: defining expected CC response ${num2hex(ccOrDynamic)}`, "silly");
 		} else {
-			const predicate = ccOrPredicate;
-			log("protocol", `${ccClass.name}: defining expected response [Predicate${predicate.name.length > 0 ? " " + predicate.name : ""}]`, "silly");
+			const dynamic = ccOrDynamic;
+			log("protocol", `${ccClass.name}: defining expected CC response [dynamic${dynamic.name.length > 0 ? " " + dynamic.name : ""}]`, "silly");
 		}
 		// and store the metadata
-		Reflect.defineMetadata(METADATA_ccResponse, ccOrPredicate, ccClass);
+		Reflect.defineMetadata(METADATA_ccResponse, ccOrDynamic, ccClass);
 	};
 }
 // tslint:enable:unified-signatures
@@ -298,7 +297,7 @@ export function expectedCCResponse(ccOrPredicate: CommandClasses | CCResponsePre
 /**
  * Retrieves the expected response defined for a Z-Wave message class
  */
-export function getExpectedCCResponse<T extends CommandClass>(ccClass: T): CommandClasses | CCResponsePredicate {
+export function getExpectedCCResponse<T extends CommandClass>(ccClass: T): CommandClasses | DynamicCCResponse<T> {
 	// get the class constructor
 	const constr = ccClass.constructor;
 	// retrieve the current metadata
@@ -306,7 +305,7 @@ export function getExpectedCCResponse<T extends CommandClass>(ccClass: T): Comma
 	if (typeof ret === "number") {
 		log("protocol", `${constr.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
 	} else if (typeof ret === "function") {
-		log("protocol", `${constr.name}: retrieving expected response => [Predicate${ret.name.length > 0 ? " " + ret.name : ""}]`, "silly");
+		log("protocol", `${constr.name}: retrieving expected response => [dynamic${ret.name.length > 0 ? " " + ret.name : ""}]`, "silly");
 	}
 	return ret;
 }
@@ -314,13 +313,13 @@ export function getExpectedCCResponse<T extends CommandClass>(ccClass: T): Comma
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export function getExpectedCCResponseStatic<T extends Constructable<CommandClass>>(classConstructor: T): CommandClasses | CCResponsePredicate {
+export function getExpectedCCResponseStatic<T extends Constructable<CommandClass>>(classConstructor: T): CommandClasses | DynamicCCResponse<CommandClass> {
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_ccResponse, classConstructor);
 	if (typeof ret === "number") {
 		log("protocol", `${classConstructor.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
 	} else if (typeof ret === "function") {
-		log("protocol", `${classConstructor.name}: retrieving expected response => [Predicate${ret.name.length > 0 ? " " + ret.name : ""}]`, "silly");
+		log("protocol", `${classConstructor.name}: retrieving expected response => [dynamic${ret.name.length > 0 ? " " + ret.name : ""}]`, "silly");
 	}
 	return ret;
 }

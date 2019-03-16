@@ -390,8 +390,7 @@ class ZWaveNode extends events_1.EventEmitter {
                     logger_1.log("controller", `${this.logPrefix}  controller node: ${wakeupResp.controllerNodeId}`, "debug");
                     logger_1.log("controller", `${this.logPrefix}configuring wakeup destination`, "debug");
                     const setWakeupRequest = new SendDataMessages_1.SendDataRequest(this.driver, new WakeUpCC_1.WakeUpCC(this.driver, this.id, WakeUpCC_1.WakeUpCommand.IntervalSet, wakeupResp.wakeupInterval, this.driver.controller.ownNodeId));
-                    // TODO: Add a way to declare that this CC expects no CC in response
-                    void this.driver.sendMessage(setWakeupRequest, Constants_1.MessagePriority.NodeQuery);
+                    await this.driver.sendMessage(setWakeupRequest, Constants_1.MessagePriority.NodeQuery);
                     logger_1.log("controller", `${this.logPrefix}  done!`, "debug");
                 }
                 catch (e) {
@@ -554,8 +553,7 @@ class ZWaveNode extends events_1.EventEmitter {
             logger_1.log("controller", `${this.logPrefix}Sending node back to sleep`, "debug");
             const wakeupCC = new WakeUpCC_1.WakeUpCC(this.driver, this.id, WakeUpCC_1.WakeUpCommand.NoMoreInformation);
             const request = new SendDataMessages_1.SendDataRequest(this.driver, wakeupCC);
-            // TODO: Add a way to only wait for the confirming send data request
-            void this.driver.sendMessage(request, Constants_1.MessagePriority.WakeUp);
+            await this.driver.sendMessage(request, Constants_1.MessagePriority.WakeUp);
             logger_1.log("controller", `${this.logPrefix}  Node asleep`, "debug");
             return true;
         }

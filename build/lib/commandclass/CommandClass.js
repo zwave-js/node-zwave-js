@@ -222,18 +222,17 @@ function getImplementedVersionStatic(classConstructor) {
     return ret;
 }
 exports.getImplementedVersionStatic = getImplementedVersionStatic;
-function expectedCCResponse(ccOrPredicate) {
+function expectedCCResponse(ccOrDynamic) {
     return (ccClass) => {
-        if (typeof ccOrPredicate === "number") {
-            const cc = ccOrPredicate;
-            logger_1.log("protocol", `${ccClass.name}: defining expected CC response ${strings_1.num2hex(cc)}`, "silly");
+        if (typeof ccOrDynamic === "number") {
+            logger_1.log("protocol", `${ccClass.name}: defining expected CC response ${strings_1.num2hex(ccOrDynamic)}`, "silly");
         }
         else {
-            const predicate = ccOrPredicate;
-            logger_1.log("protocol", `${ccClass.name}: defining expected response [Predicate${predicate.name.length > 0 ? " " + predicate.name : ""}]`, "silly");
+            const dynamic = ccOrDynamic;
+            logger_1.log("protocol", `${ccClass.name}: defining expected CC response [dynamic${dynamic.name.length > 0 ? " " + dynamic.name : ""}]`, "silly");
         }
         // and store the metadata
-        Reflect.defineMetadata(exports.METADATA_ccResponse, ccOrPredicate, ccClass);
+        Reflect.defineMetadata(exports.METADATA_ccResponse, ccOrDynamic, ccClass);
     };
 }
 exports.expectedCCResponse = expectedCCResponse;
@@ -250,7 +249,7 @@ function getExpectedCCResponse(ccClass) {
         logger_1.log("protocol", `${constr.name}: retrieving expected response => ${strings_1.num2hex(ret)}`, "silly");
     }
     else if (typeof ret === "function") {
-        logger_1.log("protocol", `${constr.name}: retrieving expected response => [Predicate${ret.name.length > 0 ? " " + ret.name : ""}]`, "silly");
+        logger_1.log("protocol", `${constr.name}: retrieving expected response => [dynamic${ret.name.length > 0 ? " " + ret.name : ""}]`, "silly");
     }
     return ret;
 }
@@ -265,7 +264,7 @@ function getExpectedCCResponseStatic(classConstructor) {
         logger_1.log("protocol", `${classConstructor.name}: retrieving expected response => ${strings_1.num2hex(ret)}`, "silly");
     }
     else if (typeof ret === "function") {
-        logger_1.log("protocol", `${classConstructor.name}: retrieving expected response => [Predicate${ret.name.length > 0 ? " " + ret.name : ""}]`, "silly");
+        logger_1.log("protocol", `${classConstructor.name}: retrieving expected response => [dynamic${ret.name.length > 0 ? " " + ret.name : ""}]`, "silly");
     }
     return ret;
 }

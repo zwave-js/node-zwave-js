@@ -13,9 +13,20 @@ export enum WakeUpCommand {
 	IntervalCapabilitiesReport = 0x0A,
 }
 
+function getExpectedResponseToWakeUp(sent: WakeUpCC): CommandClasses {
+	switch (sent.wakeupCommand) {
+		// These commands expect no response
+		case WakeUpCommand.IntervalSet:
+		case WakeUpCommand.NoMoreInformation:
+			return undefined;
+		// All other expect a WakeUp CC
+		default: return CommandClasses["Wake Up"];
+	}
+}
+
 @commandClass(CommandClasses["Wake Up"])
 @implementedVersion(2)
-@expectedCCResponse(CommandClasses["Wake Up"])
+@expectedCCResponse(getExpectedResponseToWakeUp)
 export class WakeUpCC extends CommandClass {
 
 	// tslint:disable:unified-signatures

@@ -22,6 +22,16 @@ var WakeUpCommand;
     WakeUpCommand[WakeUpCommand["IntervalCapabilitiesGet"] = 9] = "IntervalCapabilitiesGet";
     WakeUpCommand[WakeUpCommand["IntervalCapabilitiesReport"] = 10] = "IntervalCapabilitiesReport";
 })(WakeUpCommand = exports.WakeUpCommand || (exports.WakeUpCommand = {}));
+function getExpectedResponseToWakeUp(sent) {
+    switch (sent.wakeupCommand) {
+        // These commands expect no response
+        case WakeUpCommand.IntervalSet:
+        case WakeUpCommand.NoMoreInformation:
+            return undefined;
+        // All other expect a WakeUp CC
+        default: return CommandClass_1.CommandClasses["Wake Up"];
+    }
+}
 let WakeUpCC = WakeUpCC_1 = class WakeUpCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId, wakeupCommand, wakeupInterval, controllerNodeId) {
         super(driver, nodeId);
@@ -102,7 +112,7 @@ let WakeUpCC = WakeUpCC_1 = class WakeUpCC extends CommandClass_1.CommandClass {
 WakeUpCC = WakeUpCC_1 = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["Wake Up"]),
     CommandClass_1.implementedVersion(2),
-    CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Wake Up"]),
+    CommandClass_1.expectedCCResponse(getExpectedResponseToWakeUp),
     __metadata("design:paramtypes", [Object, Number, Number, Number, Number])
 ], WakeUpCC);
 exports.WakeUpCC = WakeUpCC;

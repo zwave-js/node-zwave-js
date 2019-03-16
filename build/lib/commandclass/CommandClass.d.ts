@@ -60,7 +60,7 @@ export declare const METADATA_version: unique symbol;
 /**
  * A predicate function to test if a received CC matches to the sent CC
  */
-export declare type CCResponsePredicate = (sentCC: CommandClass, receivedCC: CommandClass) => boolean;
+export declare type DynamicCCResponse<T extends CommandClass> = (sentCC: T) => CommandClasses | undefined;
 /**
  * Defines the command class associated with a Z-Wave message
  */
@@ -93,15 +93,15 @@ export declare function getImplementedVersionStatic<T extends Constructable<Comm
  * Defines the expected response associated with a Z-Wave message
  */
 export declare function expectedCCResponse(cc: CommandClasses): ClassDecorator;
-export declare function expectedCCResponse(predicate: CCResponsePredicate): ClassDecorator;
+export declare function expectedCCResponse(dynamic: DynamicCCResponse<CommandClass>): ClassDecorator;
 /**
  * Retrieves the expected response defined for a Z-Wave message class
  */
-export declare function getExpectedCCResponse<T extends CommandClass>(ccClass: T): CommandClasses | CCResponsePredicate;
+export declare function getExpectedCCResponse<T extends CommandClass>(ccClass: T): CommandClasses | DynamicCCResponse<T>;
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export declare function getExpectedCCResponseStatic<T extends Constructable<CommandClass>>(classConstructor: T): CommandClasses | CCResponsePredicate;
+export declare function getExpectedCCResponseStatic<T extends Constructable<CommandClass>>(classConstructor: T): CommandClasses | DynamicCCResponse<CommandClass>;
 export declare enum CommandClasses {
     "Alarm Sensor" = 156,
     "Alarm Silence" = 157,

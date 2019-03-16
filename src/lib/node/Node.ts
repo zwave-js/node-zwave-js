@@ -479,8 +479,7 @@ export class ZWaveNode extends EventEmitter {
 					const setWakeupRequest = new SendDataRequest(this.driver,
 						new WakeUpCC(this.driver, this.id, WakeUpCommand.IntervalSet, wakeupResp.wakeupInterval, this.driver.controller.ownNodeId),
 					);
-					// TODO: Add a way to declare that this CC expects no CC in response
-					void this.driver.sendMessage(setWakeupRequest, MessagePriority.NodeQuery);
+					await this.driver.sendMessage(setWakeupRequest, MessagePriority.NodeQuery);
 					log("controller", `${this.logPrefix}  done!`, "debug");
 
 				} catch (e) {
@@ -663,8 +662,8 @@ export class ZWaveNode extends EventEmitter {
 			log("controller", `${this.logPrefix}Sending node back to sleep`, "debug");
 			const wakeupCC = new WakeUpCC(this.driver, this.id, WakeUpCommand.NoMoreInformation);
 			const request = new SendDataRequest(this.driver, wakeupCC);
-			// TODO: Add a way to only wait for the confirming send data request
-			void this.driver.sendMessage<SendDataRequest>(request, MessagePriority.WakeUp);
+
+			await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.WakeUp);
 			log("controller", `${this.logPrefix}  Node asleep`, "debug");
 			return true;
 		}
