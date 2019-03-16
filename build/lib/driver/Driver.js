@@ -337,6 +337,13 @@ class Driver extends events_1.EventEmitter {
     handleMessage(msg) {
         // TODO: find a nice way to serialize the messages
         // log("driver", `handling response ${stringify(msg)}`, "debug");
+        logger_1.log("io", `handling response (${Constants_1.FunctionType[msg.functionType]}${Constants_1.MessageType[msg.type]})`, "debug");
+        if (msg instanceof SendDataMessages_1.SendDataRequest || msg instanceof SendDataMessages_1.SendDataResponse) {
+            logger_1.log("io", `  ${strings_1.stringify(msg)}`, "debug");
+        }
+        if (ICommandClassContainer_1.isCommandClassContainer(msg)) {
+            logger_1.log("io", `  ${strings_1.stringify(msg.command)}`, "debug");
+        }
         // if we have a pending request, check if that is waiting for this message
         if (this.currentTransaction != null) {
             switch (this.currentTransaction.message.testResponse(msg)) {

@@ -123,13 +123,10 @@ class ZWaveNode extends events_1.EventEmitter {
             await this.queryProtocolInfo();
         }
         if (this.interviewStage === InterviewStage.ProtocolInfo) {
-            // Wait until we can communicate with the device
-            await this.waitForWakeup();
-        }
-        if (this.interviewStage === InterviewStage.WakeUp) {
             // Make sure the device answers
             await this.ping();
         }
+        // TODO: Ping should not be a separate stage
         if (this.interviewStage === InterviewStage.Ping) {
             // Request Manufacturer specific data
             await this.queryManufacturerSpecific();
@@ -155,7 +152,12 @@ class ZWaveNode extends events_1.EventEmitter {
         // At this point the interview of new nodes is done. Start here when re-interviewing known nodes
         if (this.interviewStage === InterviewStage.RestartFromCache) {
             // Make sure the device answers
-            await this.ping();
+            await this.ping(InterviewStage.RestartFromCache);
+        }
+        if (this.interviewStage === InterviewStage.RestartFromCache
+            || this.interviewStage === InterviewStage.Static) {
+            // Configure the device so it notifies us of a wakeup
+            await this.configureWakeup();
         }
         // for testing purposes we skip to the end
         await this.setInterviewStage(InterviewStage.Complete);
@@ -215,35 +217,8 @@ class ZWaveNode extends events_1.EventEmitter {
         }
         await this.setInterviewStage(InterviewStage.ProtocolInfo);
     }
-    /** Step #2 of the node interview */
-    async waitForWakeup() {
-        if (this.supportsCC(CommandClass_1.CommandClasses["Wake Up"])) {
-            if (this.isControllerNode()) {
-                logger_1.log("controller", `${this.logPrefix}skipping wakeup for the controller`, "debug");
-            }
-            else if (this.isFrequentListening) {
-                logger_1.log("controller", `${this.logPrefix}skipping wakeup for frequent listening device`, "debug");
-            }
-            else {
-                logger_1.log("controller", `${this.logPrefix}waiting for device to wake up`, "debug");
-                const wakeupCC = new WakeUpCC_1.WakeUpCC(this.driver, this.id, WakeUpCC_1.WakeUpCommand.IntervalGet);
-                const request = new SendDataMessages_1.SendDataRequest(this.driver, wakeupCC);
-                try {
-                    const _response = await this.driver.sendMessage(request, Constants_1.MessagePriority.WakeUp);
-                    logger_1.log("controller", `${this.logPrefix}  device is awake`, "debug");
-                }
-                catch (e) {
-                    logger_1.log("controller", `${this.logPrefix}  device wakeup failed: ${e.message}`, "debug");
-                }
-            }
-        }
-        else {
-            logger_1.log("controller", `${this.logPrefix}skipping wakeup for non-sleeping device`, "debug");
-        }
-        await this.setInterviewStage(InterviewStage.WakeUp);
-    }
     /** Step #3 of the node interview */
-    async ping() {
+    async ping(targetInterviewStage = InterviewStage.Ping) {
         if (this.isControllerNode()) {
             logger_1.log("controller", `${this.logPrefix}not pinging the controller...`, "debug");
         }
@@ -260,7 +235,7 @@ class ZWaveNode extends events_1.EventEmitter {
                 logger_1.log("controller", `${this.logPrefix}  ping failed: ${e.message}`, "debug");
             }
         }
-        await this.setInterviewStage(InterviewStage.Ping);
+        await this.setInterviewStage(targetInterviewStage);
     }
     /** Step #5 of the node interview */
     async queryNodeInfo() {
@@ -391,6 +366,43 @@ class ZWaveNode extends events_1.EventEmitter {
             logger_1.log("controller", `${this.logPrefix}skipping endpoint query because the device does not support it`, "debug");
         }
         await this.setInterviewStage(InterviewStage.Endpoints);
+    }
+    /** Step #2 of the node interview */
+    async configureWakeup() {
+        if (this.supportsCC(CommandClass_1.CommandClasses["Wake Up"])) {
+            if (this.isControllerNode()) {
+                logger_1.log("controller", `${this.logPrefix}skipping wakeup configuration for the controller`, "debug");
+            }
+            else if (this.isFrequentListening) {
+                logger_1.log("controller", `${this.logPrefix}skipping wakeup configuration for frequent listening device`, "debug");
+            }
+            else {
+                try {
+                    const getWakeupRequest = new SendDataMessages_1.SendDataRequest(this.driver, new WakeUpCC_1.WakeUpCC(this.driver, this.id, WakeUpCC_1.WakeUpCommand.IntervalGet));
+                    logger_1.log("controller", `${this.logPrefix}retrieving wakeup interval from the device`, "debug");
+                    const getWakeupResp = await this.driver.sendMessage(getWakeupRequest, Constants_1.MessagePriority.NodeQuery);
+                    if (!ICommandClassContainer_1.isCommandClassContainer(getWakeupResp)) {
+                        throw new ZWaveError_1.ZWaveError("Invalid response received!", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
+                    }
+                    const wakeupResp = getWakeupResp.command;
+                    logger_1.log("controller", `${this.logPrefix}received wakeup configuration:`, "debug");
+                    logger_1.log("controller", `${this.logPrefix}  wakeup interval: ${wakeupResp.wakeupInterval} seconds`, "debug");
+                    logger_1.log("controller", `${this.logPrefix}  controller node: ${wakeupResp.controllerNodeId}`, "debug");
+                    logger_1.log("controller", `${this.logPrefix}configuring wakeup destination`, "debug");
+                    const setWakeupRequest = new SendDataMessages_1.SendDataRequest(this.driver, new WakeUpCC_1.WakeUpCC(this.driver, this.id, WakeUpCC_1.WakeUpCommand.IntervalSet, wakeupResp.wakeupInterval, this.driver.controller.ownNodeId));
+                    // TODO: Add a way to declare that this CC expects no CC in response
+                    void this.driver.sendMessage(setWakeupRequest, Constants_1.MessagePriority.NodeQuery);
+                    logger_1.log("controller", `${this.logPrefix}  done!`, "debug");
+                }
+                catch (e) {
+                    logger_1.log("controller", `${this.logPrefix}  configuring the device wakeup failed: ${e.message}`, "debug");
+                }
+            }
+        }
+        else {
+            logger_1.log("controller", `${this.logPrefix}skipping wakeup for non-sleeping device`, "debug");
+        }
+        await this.setInterviewStage(InterviewStage.WakeUp);
     }
     async requestStaticValues() {
         logger_1.log("controller", `${this.logPrefix}requesting static values`, "debug");
@@ -556,28 +568,28 @@ var InterviewStage;
 (function (InterviewStage) {
     InterviewStage[InterviewStage["None"] = 0] = "None";
     InterviewStage[InterviewStage["ProtocolInfo"] = 1] = "ProtocolInfo";
-    InterviewStage[InterviewStage["WakeUp"] = 2] = "WakeUp";
-    InterviewStage[InterviewStage["Ping"] = 3] = "Ping";
-    InterviewStage[InterviewStage["ManufacturerSpecific1"] = 4] = "ManufacturerSpecific1";
-    InterviewStage[InterviewStage["NodeInfo"] = 5] = "NodeInfo";
-    InterviewStage[InterviewStage["NodePlusInfo"] = 6] = "NodePlusInfo";
-    InterviewStage[InterviewStage["SecurityReport"] = 7] = "SecurityReport";
-    InterviewStage[InterviewStage["ManufacturerSpecific2"] = 8] = "ManufacturerSpecific2";
-    InterviewStage[InterviewStage["Versions"] = 9] = "Versions";
-    InterviewStage[InterviewStage["Endpoints"] = 10] = "Endpoints";
-    InterviewStage[InterviewStage["Static"] = 11] = "Static";
+    InterviewStage[InterviewStage["Ping"] = 2] = "Ping";
+    InterviewStage[InterviewStage["ManufacturerSpecific1"] = 3] = "ManufacturerSpecific1";
+    InterviewStage[InterviewStage["NodeInfo"] = 4] = "NodeInfo";
+    InterviewStage[InterviewStage["NodePlusInfo"] = 5] = "NodePlusInfo";
+    InterviewStage[InterviewStage["SecurityReport"] = 6] = "SecurityReport";
+    InterviewStage[InterviewStage["ManufacturerSpecific2"] = 7] = "ManufacturerSpecific2";
+    InterviewStage[InterviewStage["Versions"] = 8] = "Versions";
+    InterviewStage[InterviewStage["Endpoints"] = 9] = "Endpoints";
+    InterviewStage[InterviewStage["Static"] = 10] = "Static";
     // ===== the stuff above should never change =====
-    InterviewStage[InterviewStage["RestartFromCache"] = 12] = "RestartFromCache";
+    InterviewStage[InterviewStage["RestartFromCache"] = 11] = "RestartFromCache";
     // This and later stages will be serialized as "Complete" in the cache
+    // [✓] Ping each device upon restarting with cached config
     // ===== the stuff below changes frequently, so it has to be redone on every start =====
-    InterviewStage[InterviewStage["CacheLoad"] = 13] = "CacheLoad";
-    // 	SetWakeUp,			// [ ] * Configure wake up to point to the master controller
-    InterviewStage[InterviewStage["Associations"] = 14] = "Associations";
-    InterviewStage[InterviewStage["Neighbors"] = 15] = "Neighbors";
-    InterviewStage[InterviewStage["Session"] = 16] = "Session";
-    InterviewStage[InterviewStage["Dynamic"] = 17] = "Dynamic";
-    InterviewStage[InterviewStage["Configuration"] = 18] = "Configuration";
-    InterviewStage[InterviewStage["Complete"] = 19] = "Complete";
+    // TODO Heal network
+    InterviewStage[InterviewStage["WakeUp"] = 12] = "WakeUp";
+    InterviewStage[InterviewStage["Associations"] = 13] = "Associations";
+    InterviewStage[InterviewStage["Neighbors"] = 14] = "Neighbors";
+    InterviewStage[InterviewStage["Session"] = 15] = "Session";
+    InterviewStage[InterviewStage["Dynamic"] = 16] = "Dynamic";
+    InterviewStage[InterviewStage["Configuration"] = 17] = "Configuration";
+    InterviewStage[InterviewStage["Complete"] = 18] = "Complete";
 })(InterviewStage = exports.InterviewStage || (exports.InterviewStage = {}));
 // export enum OpenHABInterviewStage {
 // 	None,					// Query process hasn't started for this node

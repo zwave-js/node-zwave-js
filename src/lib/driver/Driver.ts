@@ -11,7 +11,7 @@ import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/ApplicationUpdateRequest";
 import { ZWaveController } from "../controller/Controller";
-import { SendDataRequest, TransmitStatus } from "../controller/SendDataMessages";
+import { SendDataRequest, TransmitStatus, SendDataResponse } from "../controller/SendDataMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";
@@ -436,6 +436,13 @@ export class Driver extends EventEmitter implements IDriver {
 	private handleMessage(msg: Message) {
 		// TODO: find a nice way to serialize the messages
 		// log("driver", `handling response ${stringify(msg)}`, "debug");
+		log("io", `handling response (${FunctionType[msg.functionType]}${MessageType[msg.type]})`, "debug");
+		if (msg instanceof SendDataRequest || msg instanceof SendDataResponse) {
+			log("io", `  ${stringify(msg)}`, "debug");
+		}
+		if (isCommandClassContainer(msg)) {
+			log("io", `  ${stringify(msg.command)}`, "debug");
+		}
 
 		// if we have a pending request, check if that is waiting for this message
 		if (this.currentTransaction != null) {
