@@ -11,7 +11,7 @@ import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/ApplicationUpdateRequest";
 import { ZWaveController } from "../controller/Controller";
-import { SendDataRequest, TransmitStatus, SendDataResponse } from "../controller/SendDataMessages";
+import { SendDataRequest, SendDataResponse, TransmitStatus } from "../controller/SendDataMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";

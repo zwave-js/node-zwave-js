@@ -38,7 +38,9 @@ class ZWaveNode extends events_1.EventEmitter {
         this.interviewStage = InterviewStage.None;
         this.isSendingNoMoreInformation = false;
         this._valueDB = new ValueDB_1.ValueDB();
-        this._valueDB.on("value updated", (args) => this.emit("value updated", args));
+        this._valueDB.on("value added", this.emit.bind(this, "value added"));
+        this._valueDB.on("value updated", this.emit.bind(this, "value updated"));
+        this._valueDB.on("value removed", this.emit.bind(this, "value removed"));
         this._deviceClass = deviceClass;
         for (const cc of supportedCCs)
             this.addCC(cc, { isSupported: true });
