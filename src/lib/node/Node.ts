@@ -514,15 +514,20 @@ export class ZWaveNode extends EventEmitter {
 	public async handleCommand(command: CommandClass): Promise<void> {
 		switch (command.command) {
 			case CommandClasses["Central Scene"]: {
-				// The node reported its supported versions
 				const csCC = command as CentralSceneCC;
 				log("controller", `${this.logPrefix}received CentralScene command ${JSON.stringify(csCC)}`, "debug");
-				break;
+				return;
 			}
-			default: {
-				log("controller", `${this.logPrefix}TODO: no handler for application command ${stringify(command)}`, "debug");
+			case CommandClasses["Wake Up"]: {
+				const wakeupCC = command as WakeUpCC;
+				if (wakeupCC.wakeupCommand === WakeUpCommand.WakeUpNotification) {
+					log("controller", `${this.logPrefix}received wake up notification`, "debug");
+					this.setAwake(true);
+					return;
+				}
 			}
 		}
+		log("controller", `${this.logPrefix}TODO: no handler for application command ${stringify(command)}`, "debug");
 	}
 
 	/**
@@ -700,8 +705,8 @@ export enum InterviewStage {
 
 	// ===== the stuff above should never change =====
 	RestartFromCache,		// This marks the beginning of re-interviews on application startup.
-	// This and later stages will be serialized as "Complete" in the cache
-	// [✓] Ping each device upon restarting with cached config
+	// 						   RestartFromCache and later stages will be serialized as "Complete" in the cache
+	// 						   [✓] Ping each device upon restarting with cached config
 	// ===== the stuff below changes frequently, so it has to be redone on every start =====
 
 	// TODO: Heal network

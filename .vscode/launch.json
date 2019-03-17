@@ -10,7 +10,7 @@
 			"name": "Launch Program",
 			"program": "${workspaceFolder}/test/run.js",
 			"env": {
-				"DEBUG": "zwave:(controller|node)",
+				"DEBUG": "zwave:(controller)",
 				"NO_CACHE": "true"
 			},
 			"outFiles": [

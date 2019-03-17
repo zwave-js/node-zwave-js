@@ -426,15 +426,20 @@ class ZWaveNode extends events_1.EventEmitter {
     async handleCommand(command) {
         switch (command.command) {
             case CommandClass_1.CommandClasses["Central Scene"]: {
-                // The node reported its supported versions
                 const csCC = command;
                 logger_1.log("controller", `${this.logPrefix}received CentralScene command ${JSON.stringify(csCC)}`, "debug");
-                break;
+                return;
             }
-            default: {
-                logger_1.log("controller", `${this.logPrefix}TODO: no handler for application command ${strings_2.stringify(command)}`, "debug");
+            case CommandClass_1.CommandClasses["Wake Up"]: {
+                const wakeupCC = command;
+                if (wakeupCC.wakeupCommand === WakeUpCC_1.WakeUpCommand.WakeUpNotification) {
+                    logger_1.log("controller", `${this.logPrefix}received wake up notification`, "debug");
+                    this.setAwake(true);
+                    return;
+                }
             }
         }
+        logger_1.log("controller", `${this.logPrefix}TODO: no handler for application command ${strings_2.stringify(command)}`, "debug");
     }
     /**
      * Requests the state for the CCs of this node
@@ -589,8 +594,8 @@ var InterviewStage;
     InterviewStage[InterviewStage["Static"] = 10] = "Static";
     // ===== the stuff above should never change =====
     InterviewStage[InterviewStage["RestartFromCache"] = 11] = "RestartFromCache";
-    // This and later stages will be serialized as "Complete" in the cache
-    // [✓] Ping each device upon restarting with cached config
+    // 						   RestartFromCache and later stages will be serialized as "Complete" in the cache
+    // 						   [✓] Ping each device upon restarting with cached config
     // ===== the stuff below changes frequently, so it has to be redone on every start =====
     // TODO: Heal network
     InterviewStage[InterviewStage["WakeUp"] = 12] = "WakeUp";
