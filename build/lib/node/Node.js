@@ -554,17 +554,17 @@ class ZWaveNode extends events_1.EventEmitter {
         if (this.isSendingNoMoreInformation)
             return false;
         this.isSendingNoMoreInformation = true;
+        let msgSent = false;
         if (this.isAwake() && this.interviewStage === InterviewStage.Complete) {
             logger_1.log("controller", `${this.logPrefix}Sending node back to sleep`, "debug");
             const wakeupCC = new WakeUpCC_1.WakeUpCC(this.driver, this.id, WakeUpCC_1.WakeUpCommand.NoMoreInformation);
             const request = new SendDataMessages_1.SendDataRequest(this.driver, wakeupCC);
             await this.driver.sendMessage(request, Constants_1.MessagePriority.WakeUp);
             logger_1.log("controller", `${this.logPrefix}  Node asleep`, "debug");
-            this.isSendingNoMoreInformation = false;
-            return true;
+            msgSent = true;
         }
         this.isSendingNoMoreInformation = false;
-        return false;
+        return msgSent;
     }
 }
 exports.ZWaveNode = ZWaveNode;
@@ -587,7 +587,7 @@ var InterviewStage;
     // This and later stages will be serialized as "Complete" in the cache
     // [✓] Ping each device upon restarting with cached config
     // ===== the stuff below changes frequently, so it has to be redone on every start =====
-    // TODO Heal network
+    // TODO: Heal network
     InterviewStage[InterviewStage["WakeUp"] = 12] = "WakeUp";
     InterviewStage[InterviewStage["Associations"] = 13] = "Associations";
     InterviewStage[InterviewStage["Neighbors"] = 14] = "Neighbors";

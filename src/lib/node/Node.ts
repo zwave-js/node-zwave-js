@@ -24,15 +24,13 @@ import { num2hex, stringify } from "../util/strings";
 import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
 import { NodeUpdatePayload } from "./NodeInfo";
 import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
-import { ValueDB, ValueUpdatedArgs } from "./ValueDB";
+import { ValueDB, ValueDBEventCallbacks, ValueUpdatedArgs } from "./ValueDB";
 
 export type ValueUpdatedCallback = (args: ValueUpdatedArgs) => void;
 
 export type ZWaveNodeEventCallbacks = Overwrite<
 	{ [K in "wake up" | "sleep" | "interview completed"]: (node: ZWaveNode) => void },
-	{
-		"value updated": ValueUpdatedCallback;
-	}
+	ValueDBEventCallbacks
 >;
 
 export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
@@ -662,6 +660,8 @@ export class ZWaveNode extends EventEmitter {
 		// Avoid calling this method more than once
 		if (this.isSendingNoMoreInformation) return false;
 		this.isSendingNoMoreInformation = true;
+
+		let msgSent = false;
 		if (this.isAwake() && this.interviewStage === InterviewStage.Complete) {
 			log("controller", `${this.logPrefix}Sending node back to sleep`, "debug");
 			const wakeupCC = new WakeUpCC(this.driver, this.id, WakeUpCommand.NoMoreInformation);
@@ -669,11 +669,12 @@ export class ZWaveNode extends EventEmitter {
 
 			await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.WakeUp);
 			log("controller", `${this.logPrefix}  Node asleep`, "debug");
-			this.isSendingNoMoreInformation = false;
-			return true;
+
+			msgSent = true;
 		}
+
 		this.isSendingNoMoreInformation = false;
-		return false;
+		return msgSent;
 	}
 
 }
@@ -698,7 +699,7 @@ export enum InterviewStage {
 	// [✓] Ping each device upon restarting with cached config
 	// ===== the stuff below changes frequently, so it has to be redone on every start =====
 
-	// TODO Heal network
+	// TODO: Heal network
 
 	WakeUp,					// [✓] Configure wake up to point to the master controller
 	Associations,			// [ ] Retrieve information about associations
@@ -706,7 +707,7 @@ export enum InterviewStage {
 	Session,				// [ ] Retrieve session information (changes infrequently)
 	Dynamic,				// [ ] Retrieve dynamic information (changes frequently)
 	Configuration,			// [ ] Retrieve configurable parameter information (only done on request)
-	Complete,				// [ ] Query process is completed for this node
+	Complete,				// [✓] Query process is completed for this node
 }
 
 // export enum OpenHABInterviewStage {

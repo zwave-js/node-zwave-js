@@ -22,15 +22,43 @@ class ValueDB extends events_1.EventEmitter {
      */
     setValue(cc, endpoint, propertyName, value) {
         const key = getValueKey(cc, endpoint, propertyName);
-        const prevValue = this._db.get(key);
-        this._db.set(key, value);
-        this.emit("value updated", {
+        const cbArg = {
             commandClass: cc,
             endpoint,
             propertyName,
-            prevValue,
             newValue: value,
-        });
+        };
+        let event;
+        if (this._db.has(key)) {
+            event = "value updated";
+            cbArg.prevValue = this._db.get(key);
+        }
+        else {
+            event = "value added";
+        }
+        this._db.set(key, value);
+        this.emit(event, cbArg);
+    }
+    /**
+     * Removes a value for a given property of a given CommandClass
+     * @param cc The command class the value belongs to
+     * @param endpoint The optional endpoint the value belongs to
+     * @param propertyName The property name the value belongs to
+     */
+    removeValue(cc, endpoint, propertyName) {
+        const key = getValueKey(cc, endpoint, propertyName);
+        if (this._db.has(key)) {
+            const prevValue = this._db.get(key);
+            this._db.delete(key);
+            this.emit("value removed", {
+                commandClass: cc,
+                endpoint,
+                propertyName,
+                prevValue,
+            });
+            return true;
+        }
+        return false;
     }
     /**
      * Retrieves a value for a given property of a given CommandClass
@@ -41,6 +69,13 @@ class ValueDB extends events_1.EventEmitter {
     getValue(cc, endpoint, propertyName) {
         const key = getValueKey(cc, endpoint, propertyName);
         return this._db.get(key);
+    }
+    /** Clears all values from the value DB */
+    clear() {
+        this._db.forEach((_val, key) => {
+            const { cc, endpoint, propertyName } = JSON.parse(key);
+            this.removeValue(cc, endpoint, propertyName);
+        });
     }
 }
 exports.ValueDB = ValueDB;

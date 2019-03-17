@@ -6,13 +6,11 @@ import { Baudrate } from "../controller/GetNodeProtocolInfoMessages";
 import { Driver } from "../driver/Driver";
 import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
 import { NodeUpdatePayload } from "./NodeInfo";
-import { ValueUpdatedArgs } from "./ValueDB";
+import { ValueDBEventCallbacks, ValueUpdatedArgs } from "./ValueDB";
 export declare type ValueUpdatedCallback = (args: ValueUpdatedArgs) => void;
 export declare type ZWaveNodeEventCallbacks = Overwrite<{
     [K in "wake up" | "sleep" | "interview completed"]: (node: ZWaveNode) => void;
-}, {
-    "value updated": ValueUpdatedCallback;
-}>;
+}, ValueDBEventCallbacks>;
 export declare type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
 export interface ZWaveNode {
     on<TEvent extends ZWaveNodeEvents>(event: TEvent, callback: ZWaveNodeEventCallbacks[TEvent]): this;
