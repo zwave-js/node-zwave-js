@@ -60,6 +60,9 @@ export class CommandClass {
 	/** The version of the command class used */
 	public version: number;
 
+	/** Which endpoint of the node this CC belongs to. 0 for the root device. */
+	public endpoint: number | undefined;
+
 	public serialize(): Buffer {
 		const payloadLength = this.payload != null ? this.payload.length : 0;
 
@@ -149,22 +152,27 @@ export class CommandClass {
 		return this.getNode().valueDB;
 	}
 
-	// /** Which variables should be persisted when requested */
-	// private _variables = new Set<string>();
-	// protected createVariable(name: string) {
-	// 	this._variables.add(name);
-	// }
+	/** Which variables should be persisted when requested */
+	private _variables = new Set<string>();
+	/** Creates a variable that will be stored */
+	public createVariable(name: keyof this) {
+		this._variables.add(name as string);
+	}
+	public createVariables(...names: (keyof this)[]) {
+		for (const name of names) {
+			this.createVariable(name);
+		}
+	}
 
-	// /** Persists all values on the given node */
-	// public persistValues(
-	// 	endpoint?: number,
-	// 	variables: Iterable<string> = this._variables.keys(),
-	// ) {
-	// 	const db = this.getValueDB();
-	// 	for (const variable of variables) {
-	// 		db.setValue(getCommandClass(this), endpoint, variable, this[variable as keyof this]);
-	// 	}
-	// }
+	/** Persists all values on the given node */
+	public persistValues(
+		variables: Iterable<keyof this> = this._variables.keys() as any,
+	) {
+		const db = this.getValueDB();
+		for (const variable of variables) {
+			db.setValue(getCommandClass(this), this.endpoint, variable as string, this[variable]);
+		}
+	}
 
 }
 
@@ -322,6 +330,31 @@ export function getExpectedCCResponseStatic<T extends Constructable<CommandClass
 		log("protocol", `${classConstructor.name}: retrieving expected response => [dynamic${ret.name.length > 0 ? " " + ret.name : ""}]`, "silly");
 	}
 	return ret;
+}
+
+/** Marks the decorated property as a value of the Command Class. This allows saving it on the node with persistValues() */
+export function ccValue(): PropertyDecorator {
+	// The internal (private) variable used by the property
+	let value: any;
+	return (target: CommandClass, property: string | symbol) => {
+		// Overwrite the original property definition
+		const update = Reflect.defineProperty(
+			target, property,
+			{
+				configurable: true,
+				enumerable: true,
+				get() { return value; },
+				set(newValue: any) {
+					// All variables that are stored should be marked to be persisted
+					target.createVariable.bind(this)(property);
+					value = newValue;
+				},
+			},
+		);
+		if (!update) {
+			throw new Error(`Cannot define ${property as string} on ${target.constructor.name} as CC value`);
+		}
+	};
 }
 
 /* A dictionary of all command classes as of 2018-03-30 */

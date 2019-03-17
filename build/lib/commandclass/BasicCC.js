@@ -36,16 +36,8 @@ let BasicCC = class BasicCC extends CommandClass_1.CommandClass {
         super(driver, nodeId);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
-        this._targetValue = targetValue;
-    }
-    get currentValue() {
-        return this._currentValue;
-    }
-    get targetValue() {
-        return this._targetValue;
-    }
-    get duration() {
-        return this._duration;
+        if (targetValue != undefined)
+            this.targetValue = targetValue;
     }
     serialize() {
         switch (this.ccCommand) {
@@ -56,7 +48,7 @@ let BasicCC = class BasicCC extends CommandClass_1.CommandClass {
             case BasicCommand.Set:
                 this.payload = Buffer.from([
                     this.ccCommand,
-                    this._targetValue,
+                    this.targetValue,
                 ]);
                 break;
             default:
@@ -69,16 +61,28 @@ let BasicCC = class BasicCC extends CommandClass_1.CommandClass {
         this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case BasicCommand.Report:
-                this._currentValue = this.payload[1];
+                this.currentValue = this.payload[1];
                 // starting in V2:
-                this._targetValue = this.payload[2];
-                this._duration = this.payload[3];
+                this.targetValue = this.payload[2];
+                this.duration = this.payload[3];
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError(`Cannot deserialize a Basic CC with a command other than Report. Received ${BasicCommand[this.ccCommand]} (${strings_1.num2hex(this.ccCommand)})`, ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
         }
     }
 };
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], BasicCC.prototype, "currentValue", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], BasicCC.prototype, "targetValue", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], BasicCC.prototype, "duration", void 0);
 BasicCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses.Basic),
     CommandClass_1.implementedVersion(2) // Update tests in CommandClass.test.ts when changing this

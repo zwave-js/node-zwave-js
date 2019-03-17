@@ -45,9 +45,6 @@ let MultilevelSwitchCC = class MultilevelSwitchCC extends CommandClass_1.Command
     get secondarySwitchType() {
         return this._secondarySwitchType;
     }
-    get currentValue() {
-        return this._currentValue;
-    }
     serialize() {
         switch (this.ccCommand) {
             case MultilevelSwitchCommand.Set: {
@@ -97,7 +94,7 @@ let MultilevelSwitchCC = class MultilevelSwitchCC extends CommandClass_1.Command
         switch (this.ccCommand) {
             case MultilevelSwitchCommand.Report:
                 [
-                    this._currentValue,
+                    this.currentValue,
                     this.targetValue,
                     this.duration,
                 ] = this.payload.slice(1);
@@ -111,6 +108,30 @@ let MultilevelSwitchCC = class MultilevelSwitchCC extends CommandClass_1.Command
         }
     }
 };
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], MultilevelSwitchCC.prototype, "targetValue", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], MultilevelSwitchCC.prototype, "duration", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], MultilevelSwitchCC.prototype, "currentValue", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Boolean)
+], MultilevelSwitchCC.prototype, "ignoreStartLevel", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], MultilevelSwitchCC.prototype, "startLevel", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], MultilevelSwitchCC.prototype, "secondarySwitchStepSize", void 0);
 MultilevelSwitchCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["Multilevel Switch"]),
     CommandClass_1.implementedVersion(4),

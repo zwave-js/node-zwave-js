@@ -24,16 +24,11 @@ export declare class ZWavePlusCC extends CommandClass {
     ccCommand?: ZWavePlusCommand;
     constructor(driver: IDriver, nodeId?: number);
     constructor(driver: IDriver, nodeId: number, command: ZWavePlusCommand.Get);
-    private _zwavePlusVersion;
-    readonly zwavePlusVersion: number;
-    private _nodeType;
-    readonly nodeType: ZWavePlusNodeType;
-    private _roleType;
-    readonly roleType: ZWavePlusRoleType;
-    private _installerIcon;
-    readonly installerIcon: number;
-    private _userIcon;
-    readonly userIcon: number;
+    zwavePlusVersion: number;
+    nodeType: ZWavePlusNodeType;
+    roleType: ZWavePlusRoleType;
+    installerIcon: number;
+    userIcon: number;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
 }

@@ -1,7 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { ZWaveNode } from "../node/Node";
-import { CommandClass, commandClass, CommandClasses, expectedCCResponse, getCommandClass, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, getCommandClass, implementedVersion } from "./CommandClass";
 
 export enum WakeUpCommand {
 	IntervalSet = 0x04,
@@ -53,32 +53,22 @@ export class WakeUpCC extends CommandClass {
 		driver: IDriver,
 		public nodeId: number,
 		public wakeupCommand?: WakeUpCommand,
-		public wakeupInterval?: number,
-		public controllerNodeId?: number,
+		wakeupInterval?: number,
+		controllerNodeId?: number,
 	) {
 		super(driver, nodeId);
+
+		if (wakeupInterval != undefined) this.wakeupInterval = wakeupInterval;
+		if (controllerNodeId != undefined) this.controllerNodeId = controllerNodeId;
 	}
 	// tslint:enable:unified-signatures
 
-	private _minWakeUpInterval: number;
-	public get minWakeUpInterval(): number {
-		return this._minWakeUpInterval;
-	}
-
-	private _maxWakeUpInterval: number;
-	public get maxWakeUpInterval(): number {
-		return this._maxWakeUpInterval;
-	}
-
-	private _defaultWakeUpInterval: number;
-	public get defaultWakeUpInterval(): number {
-		return this._defaultWakeUpInterval;
-	}
-
-	private _wakeUpIntervalSteps: number;
-	public get wakeUpIntervalSteps(): number {
-		return this._wakeUpIntervalSteps;
-	}
+	@ccValue() public wakeupInterval: number;
+	@ccValue() public controllerNodeId: number;
+	@ccValue() public minWakeUpInterval: number;
+	@ccValue() public maxWakeUpInterval: number;
+	@ccValue() public defaultWakeUpInterval: number;
+	@ccValue() public wakeUpIntervalSteps: number;
 
 	public serialize(): Buffer {
 		switch (this.wakeupCommand) {
@@ -121,10 +111,10 @@ export class WakeUpCC extends CommandClass {
 				break;
 
 			case WakeUpCommand.IntervalCapabilitiesReport:
-				this._minWakeUpInterval = this.payload.readUIntBE(1, 3);
-				this._maxWakeUpInterval = this.payload.readUIntBE(4, 3);
-				this._defaultWakeUpInterval = this.payload.readUIntBE(7, 3);
-				this._wakeUpIntervalSteps = this.payload.readUIntBE(10, 3);
+				this.minWakeUpInterval = this.payload.readUIntBE(1, 3);
+				this.maxWakeUpInterval = this.payload.readUIntBE(4, 3);
+				this.defaultWakeUpInterval = this.payload.readUIntBE(7, 3);
+				this.wakeUpIntervalSteps = this.payload.readUIntBE(10, 3);
 				break;
 
 			default:

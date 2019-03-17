@@ -31,6 +31,8 @@ export declare class CommandClass {
     constructor(driver: IDriver, nodeId: number, command?: CommandClasses, payload?: Buffer);
     /** The version of the command class used */
     version: number;
+    /** Which endpoint of the node this CC belongs to. 0 for the root device. */
+    endpoint: number | undefined;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
     static getNodeId(ccData: Buffer): number;
@@ -52,6 +54,13 @@ export declare class CommandClass {
     getNode(): ZWaveNode;
     /** Returns the value DB for this CC's node */
     protected getValueDB(): import("../node/ValueDB").ValueDB;
+    /** Which variables should be persisted when requested */
+    private _variables;
+    /** Creates a variable that will be stored */
+    createVariable(name: keyof this): void;
+    createVariables(...names: (keyof this)[]): void;
+    /** Persists all values on the given node */
+    persistValues(variables?: Iterable<keyof this>): void;
 }
 export declare const METADATA_commandClass: unique symbol;
 export declare const METADATA_commandClassMap: unique symbol;
@@ -102,6 +111,8 @@ export declare function getExpectedCCResponse<T extends CommandClass>(ccClass: T
  * Retrieves the function type defined for a Z-Wave message class
  */
 export declare function getExpectedCCResponseStatic<T extends Constructable<CommandClass>>(classConstructor: T): CommandClasses | DynamicCCResponse<CommandClass>;
+/** Marks the decorated property as a value of the Command Class. This allows saving it on the node with persistValues() */
+export declare function ccValue(): PropertyDecorator;
 export declare enum CommandClasses {
     "Alarm Sensor" = 156,
     "Alarm Silence" = 157,

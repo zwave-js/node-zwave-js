@@ -23,10 +23,8 @@ let BinarySensorCC = class BinarySensorCC extends CommandClass_1.CommandClass {
         super(driver, nodeId);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
-        this.sensorType = sensorType;
-    }
-    get value() {
-        return this._value;
+        if (sensorType != undefined)
+            this.sensorType = sensorType;
     }
     get supportedSensorTypes() {
         return this._supportedSensorTypes;
@@ -54,7 +52,7 @@ let BinarySensorCC = class BinarySensorCC extends CommandClass_1.CommandClass {
         this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case BinarySensorCommand.Report:
-                this._value = this.payload[1] === 0xFF;
+                this.value = this.payload[1] === 0xFF;
                 this.sensorType = this.payload[2];
                 break;
             case BinarySensorCommand.SupportedReport: {
@@ -76,6 +74,14 @@ let BinarySensorCC = class BinarySensorCC extends CommandClass_1.CommandClass {
         }
     }
 };
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], BinarySensorCC.prototype, "sensorType", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Boolean)
+], BinarySensorCC.prototype, "value", void 0);
 BinarySensorCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["Binary Sensor"]),
     CommandClass_1.implementedVersion(2),

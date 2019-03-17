@@ -1,6 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum BinarySwitchCommand {
 	Set = 0x01,
@@ -35,17 +35,18 @@ export class BinarySwitchCC extends CommandClass {
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: BinarySwitchCommand,
-		public targetValue?: BinarySwitchState,
-		public duration?: number,
+		targetValue?: BinarySwitchState,
+		duration?: number,
 	) {
 		super(driver, nodeId);
+		if (targetValue != undefined) this.currentValue = targetValue;
+		if (duration != undefined) this.duration = duration;
 	}
 	// tslint:enable:unified-signatures
 
-	private _currentValue: boolean | "unknown";
-	public get currentValue(): boolean | "unknown" {
-		return this._currentValue;
-	}
+	@ccValue() public currentValue: BinarySwitchState;
+	@ccValue() public targetValue: BinarySwitchState;
+	@ccValue() public duration: number;
 
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
@@ -81,7 +82,7 @@ export class BinarySwitchCC extends CommandClass {
 		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case BinarySwitchCommand.Report: {
-				this._currentValue = decodeBinarySwitchState(this.payload[1]);
+				this.currentValue = decodeBinarySwitchState(this.payload[1]);
 				if (this.payload.length >= 2) { // V2
 					this.targetValue = decodeBinarySwitchState(this.payload[2]);
 					this.duration = this.payload[3];

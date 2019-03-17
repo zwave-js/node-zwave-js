@@ -1,6 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum MultilevelSwitchCommand {
 	Set = 0x01,
@@ -66,13 +66,17 @@ export class MultilevelSwitchCC extends CommandClass {
 	}
 	// tslint:enable:unified-signatures
 
-	public targetValue: number;
-	public duration: number;
+	@ccValue() public targetValue: number;
+	@ccValue() public duration: number;
+	@ccValue() public currentValue: number;
+	@ccValue() public ignoreStartLevel: boolean;
+	@ccValue() public startLevel: number;
+	@ccValue() public secondarySwitchStepSize: number;
+
+	// TODO: Which of these are CC values?
+
 	public direction: keyof typeof LevelChangeDirection;
 	public secondarySwitchDirection: keyof typeof LevelChangeDirection;
-	public ignoreStartLevel: boolean;
-	public startLevel: number;
-	public secondarySwitchStepSize: number;
 
 	private _primarySwitchType: SwitchType;
 	public get primarySwitchType(): SwitchType {
@@ -82,11 +86,6 @@ export class MultilevelSwitchCC extends CommandClass {
 	private _secondarySwitchType: SwitchType;
 	public get secondarySwitchType(): SwitchType {
 		return this._secondarySwitchType;
-	}
-
-	private _currentValue: number;
-	public get currentValue(): number {
-		return this._currentValue;
 	}
 
 	public serialize(): Buffer {
@@ -149,7 +148,7 @@ export class MultilevelSwitchCC extends CommandClass {
 		switch (this.ccCommand) {
 			case MultilevelSwitchCommand.Report:
 				[
-					this._currentValue,
+					this.currentValue,
 					this.targetValue,
 					this.duration,
 				] = this.payload.slice(1);

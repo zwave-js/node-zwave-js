@@ -22,11 +22,10 @@ let BinarySwitchCC = class BinarySwitchCC extends CommandClass_1.CommandClass {
         super(driver, nodeId);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
-        this.targetValue = targetValue;
-        this.duration = duration;
-    }
-    get currentValue() {
-        return this._currentValue;
+        if (targetValue != undefined)
+            this.currentValue = targetValue;
+        if (duration != undefined)
+            this.duration = duration;
     }
     serialize() {
         switch (this.ccCommand) {
@@ -54,7 +53,7 @@ let BinarySwitchCC = class BinarySwitchCC extends CommandClass_1.CommandClass {
         this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case BinarySwitchCommand.Report: {
-                this._currentValue = decodeBinarySwitchState(this.payload[1]);
+                this.currentValue = decodeBinarySwitchState(this.payload[1]);
                 if (this.payload.length >= 2) { // V2
                     this.targetValue = decodeBinarySwitchState(this.payload[2]);
                     this.duration = this.payload[3];
@@ -66,6 +65,18 @@ let BinarySwitchCC = class BinarySwitchCC extends CommandClass_1.CommandClass {
         }
     }
 };
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Object)
+], BinarySwitchCC.prototype, "currentValue", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Object)
+], BinarySwitchCC.prototype, "targetValue", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], BinarySwitchCC.prototype, "duration", void 0);
 BinarySwitchCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["Binary Switch"]),
     CommandClass_1.implementedVersion(2),

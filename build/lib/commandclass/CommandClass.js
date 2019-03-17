@@ -34,6 +34,8 @@ let CommandClass = CommandClass_1 = class CommandClass {
         this.nodeId = nodeId;
         this.command = command;
         this.payload = payload;
+        /** Which variables should be persisted when requested */
+        this._variables = new Set();
         // Extract the cc from declared metadata if not provided
         this.command = command != null ? command : getCommandClass(this);
     }
@@ -114,6 +116,22 @@ let CommandClass = CommandClass_1 = class CommandClass {
     /** Returns the value DB for this CC's node */
     getValueDB() {
         return this.getNode().valueDB;
+    }
+    /** Creates a variable that will be stored */
+    createVariable(name) {
+        this._variables.add(name);
+    }
+    createVariables(...names) {
+        for (const name of names) {
+            this.createVariable(name);
+        }
+    }
+    /** Persists all values on the given node */
+    persistValues(variables = this._variables.keys()) {
+        const db = this.getValueDB();
+        for (const variable of variables) {
+            db.setValue(getCommandClass(this), this.endpoint, variable, this[variable]);
+        }
     }
 };
 CommandClass = CommandClass_1 = __decorate([
@@ -269,6 +287,28 @@ function getExpectedCCResponseStatic(classConstructor) {
     return ret;
 }
 exports.getExpectedCCResponseStatic = getExpectedCCResponseStatic;
+/** Marks the decorated property as a value of the Command Class. This allows saving it on the node with persistValues() */
+function ccValue() {
+    // The internal (private) variable used by the property
+    let value;
+    return (target, property) => {
+        // Overwrite the original property definition
+        const update = Reflect.defineProperty(target, property, {
+            configurable: true,
+            enumerable: true,
+            get() { return value; },
+            set(newValue) {
+                // All variables that are stored should be marked to be persisted
+                target.createVariable.bind(this)(property);
+                value = newValue;
+            },
+        });
+        if (!update) {
+            throw new Error(`Cannot define ${property} on ${target.constructor.name} as CC value`);
+        }
+    };
+}
+exports.ccValue = ccValue;
 /* A dictionary of all command classes as of 2018-03-30 */
 var CommandClasses;
 (function (CommandClasses) {

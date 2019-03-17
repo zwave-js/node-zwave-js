@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var VersionCC_1;
 const SendDataMessages_1 = require("../controller/SendDataMessages");
+const ZWaveLibraryTypes_1 = require("../controller/ZWaveLibraryTypes");
 const ZWaveError_1 = require("../error/ZWaveError");
 const CommandClass_1 = require("./CommandClass");
 var VersionCommand;
@@ -26,15 +27,6 @@ let VersionCC = VersionCC_1 = class VersionCC extends CommandClass_1.CommandClas
         this.nodeId = nodeId;
         this.versionCommand = versionCommand;
         this.requestedCC = requestedCC;
-    }
-    get libraryType() {
-        return this._libraryType;
-    }
-    get protocolVersion() {
-        return this._protocolVersion;
-    }
-    get applicationVersion() {
-        return this._applicationVersion;
     }
     get ccVersion() {
         return this._ccVersion;
@@ -60,9 +52,9 @@ let VersionCC = VersionCC_1 = class VersionCC extends CommandClass_1.CommandClas
         this.versionCommand = this.payload[0];
         switch (this.versionCommand) {
             case VersionCommand.Report:
-                this._libraryType = this.payload[1];
-                this._protocolVersion = `${this.payload[2]}.${this.payload[3]}`;
-                this._applicationVersion = `${this.payload[4]}.${this.payload[5]}`;
+                this.libraryType = this.payload[1];
+                this.protocolVersion = `${this.payload[2]}.${this.payload[3]}`;
+                this.applicationVersion = `${this.payload[4]}.${this.payload[5]}`;
                 break;
             case VersionCommand.CommandClassReport:
                 this.requestedCC = this.payload[1];
@@ -81,6 +73,18 @@ let VersionCC = VersionCC_1 = class VersionCC extends CommandClass_1.CommandClas
         }
     }
 };
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], VersionCC.prototype, "libraryType", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", String)
+], VersionCC.prototype, "protocolVersion", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", String)
+], VersionCC.prototype, "applicationVersion", void 0);
 VersionCC = VersionCC_1 = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses.Version),
     CommandClass_1.implementedVersion(1),

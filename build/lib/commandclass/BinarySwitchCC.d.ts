@@ -9,13 +9,12 @@ export declare enum BinarySwitchCommand {
 export declare class BinarySwitchCC extends CommandClass {
     nodeId: number;
     ccCommand?: BinarySwitchCommand;
-    targetValue?: BinarySwitchState;
-    duration?: number;
     constructor(driver: IDriver, nodeId?: number);
     constructor(driver: IDriver, nodeId: number, ccCommand: BinarySwitchCommand.Get);
     constructor(driver: IDriver, nodeId: number, ccCommand: BinarySwitchCommand.Set, targetValue: boolean, duration?: number);
-    private _currentValue;
-    readonly currentValue: boolean | "unknown";
+    currentValue: BinarySwitchState;
+    targetValue: BinarySwitchState;
+    duration: number;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
 }

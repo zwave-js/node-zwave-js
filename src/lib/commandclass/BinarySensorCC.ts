@@ -1,6 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum BinarySensorCommand {
 	Get = 0x02,
@@ -32,16 +32,15 @@ export class BinarySensorCC extends CommandClass {
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: BinarySensorCommand,
-		public sensorType?: BinarySensorType,
+		sensorType?: BinarySensorType,
 	) {
 		super(driver, nodeId);
+		if (sensorType != undefined) this.sensorType = sensorType;
 	}
 	// tslint:enable:unified-signatures
 
-	private _value: boolean;
-	public get value(): boolean {
-		return this._value;
-	}
+	@ccValue() public sensorType: BinarySensorType;
+	@ccValue() public value: boolean;
 
 	private _supportedSensorTypes: BinarySensorType[];
 	public get supportedSensorTypes(): BinarySensorType[] {
@@ -79,7 +78,7 @@ export class BinarySensorCC extends CommandClass {
 		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case BinarySensorCommand.Report:
-				this._value = this.payload[1] === 0xFF;
+				this.value = this.payload[1] === 0xFF;
 				this.sensorType = this.payload[2];
 				break;
 

@@ -85,6 +85,8 @@ export class NotificationCC extends CommandClass {
 	public notificationType: NotificationType;
 	public notificationStatus: boolean;
 
+	// TODO: Which of these are CC values?
+
 	private _notificationEvent: number;
 	public get notificationEvent(): number {
 		return this._notificationEvent;

@@ -272,6 +272,7 @@ class ZWaveNode extends events_1.EventEmitter {
                 const resp = await this.driver.sendMessage(request, Constants_1.MessagePriority.NodeQuery);
                 if (ICommandClassContainer_1.isCommandClassContainer(resp)) {
                     const zwavePlusResponse = resp.command;
+                    zwavePlusResponse.persistValues();
                     logger_1.log("controller", `${this.logPrefix}received response for Z-Wave+ information:`, "debug");
                     logger_1.log("controller", `${this.logPrefix}  Z-Wave+ version: ${zwavePlusResponse.zwavePlusVersion}`, "debug");
                     logger_1.log("controller", `${this.logPrefix}  role type:       ${ZWavePlusCC_1.ZWavePlusRoleType[zwavePlusResponse.roleType]}`, "debug");
@@ -299,6 +300,7 @@ class ZWaveNode extends events_1.EventEmitter {
                 const resp = await this.driver.sendMessage(request, Constants_1.MessagePriority.NodeQuery);
                 if (ICommandClassContainer_1.isCommandClassContainer(resp)) {
                     const manufacturerResponse = resp.command;
+                    manufacturerResponse.persistValues();
                     logger_1.log("controller", `${this.logPrefix}received response for manufacturer information:`, "debug");
                     logger_1.log("controller", `${this.logPrefix}  manufacturer id: ${strings_2.num2hex(manufacturerResponse.manufacturerId)}`, "debug");
                     logger_1.log("controller", `${this.logPrefix}  product type:    ${strings_2.num2hex(manufacturerResponse.productType)}`, "debug");
@@ -353,6 +355,7 @@ class ZWaveNode extends events_1.EventEmitter {
                 const resp = await this.driver.sendMessage(request, Constants_1.MessagePriority.NodeQuery);
                 if (ICommandClassContainer_1.isCommandClassContainer(resp)) {
                     const multiResponse = resp.command;
+                    multiResponse.persistValues();
                     logger_1.log("controller", `${this.logPrefix}received response for device endpoints:`, "debug");
                     logger_1.log("controller", `${this.logPrefix}  endpoint count: ${multiResponse.endpointCount}`, "debug");
                     logger_1.log("controller", `${this.logPrefix}  dynamic:        ${multiResponse.isDynamicEndpointCount}`, "debug");

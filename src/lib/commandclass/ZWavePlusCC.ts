@@ -1,6 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum ZWavePlusCommand {
 	Get = 0x01,
@@ -48,30 +48,11 @@ export class ZWavePlusCC extends CommandClass {
 	}
 	// tslint:enable:unified-signatures
 
-	private _zwavePlusVersion: number;
-	public get zwavePlusVersion(): number {
-		return this._zwavePlusVersion;
-	}
-
-	private _nodeType: ZWavePlusNodeType;
-	public get nodeType(): ZWavePlusNodeType {
-		return this._nodeType;
-	}
-
-	private _roleType: ZWavePlusRoleType;
-	public get roleType(): ZWavePlusRoleType {
-		return this._roleType;
-	}
-
-	private _installerIcon: number;
-	public get installerIcon(): number {
-		return this._installerIcon;
-	}
-
-	private _userIcon: number;
-	public get userIcon(): number {
-		return this._userIcon;
-	}
+	@ccValue() public zwavePlusVersion: number;
+	@ccValue() public nodeType: ZWavePlusNodeType;
+	@ccValue() public roleType: ZWavePlusRoleType;
+	@ccValue() public installerIcon: number;
+	@ccValue() public userIcon: number;
 
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
@@ -94,11 +75,11 @@ export class ZWavePlusCC extends CommandClass {
 		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case ZWavePlusCommand.Report:
-				this._zwavePlusVersion = this.payload[1];
-				this._roleType = this.payload[2];
-				this._nodeType = this.payload[3];
-				this._installerIcon = this.payload.readUInt16BE(4);
-				this._userIcon = this.payload.readUInt16BE(6);
+				this.zwavePlusVersion = this.payload[1];
+				this.roleType = this.payload[2];
+				this.nodeType = this.payload[3];
+				this.installerIcon = this.payload.readUInt16BE(4);
+				this.userIcon = this.payload.readUInt16BE(6);
 				break;
 
 			default:

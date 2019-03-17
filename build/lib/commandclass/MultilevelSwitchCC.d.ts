@@ -19,17 +19,16 @@ export declare class MultilevelSwitchCC extends CommandClass {
     constructor(driver: IDriver, nodeId: number, ccCommand: MultilevelSwitchCommand.StartLevelChange, direction: keyof typeof LevelChangeDirection, ignoreStartLevel: boolean, startLevel: number, duration?: number, secondarySwitchDirection?: keyof typeof LevelChangeDirection);
     targetValue: number;
     duration: number;
-    direction: keyof typeof LevelChangeDirection;
-    secondarySwitchDirection: keyof typeof LevelChangeDirection;
+    currentValue: number;
     ignoreStartLevel: boolean;
     startLevel: number;
     secondarySwitchStepSize: number;
+    direction: keyof typeof LevelChangeDirection;
+    secondarySwitchDirection: keyof typeof LevelChangeDirection;
     private _primarySwitchType;
     readonly primarySwitchType: SwitchType;
     private _secondarySwitchType;
     readonly secondarySwitchType: SwitchType;
-    private _currentValue;
-    readonly currentValue: number;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
 }

@@ -35,22 +35,14 @@ let CentralSceneCC = class CentralSceneCC extends CommandClass_1.CommandClass {
         super(driver, nodeId);
         this.nodeId = nodeId;
         this.centralSceneCommand = centralSceneCommand;
-        this._slowRefresh = slowRefresh;
-    }
-    get slowRefresh() {
-        return this._slowRefresh;
-    }
-    get supportsSlowRefresh() {
-        return this._supportsSlowRefresh;
+        if (slowRefresh != undefined)
+            this.slowRefresh = slowRefresh;
     }
     get sequenceNumber() {
         return this._sequenceNumber;
     }
     get keyAttribute() {
         return this._keyAttribute;
-    }
-    get sceneCount() {
-        return this._sceneCount;
     }
     supportsKeyAttribute(sceneNumber, keyAttribute) {
         const bitArrayIndex = this._keyAttributesIdenticalSupport ? 0 : sceneNumber - 1;
@@ -69,7 +61,7 @@ let CentralSceneCC = class CentralSceneCC extends CommandClass_1.CommandClass {
             case CentralSceneCommand.ConfigurationSet:
                 this.payload = Buffer.from([
                     this.centralSceneCommand,
-                    this._slowRefresh ? 128 : 0,
+                    this.slowRefresh ? 128 : 0,
                 ]);
                 break;
             default:
@@ -82,15 +74,15 @@ let CentralSceneCC = class CentralSceneCC extends CommandClass_1.CommandClass {
         this.centralSceneCommand = this.payload[0];
         switch (this.centralSceneCommand) {
             case CentralSceneCommand.ConfigurationReport: {
-                this._slowRefresh = !!(this.payload[1] & 128);
+                this.slowRefresh = !!(this.payload[1] & 128);
                 break;
             }
             case CentralSceneCommand.SupportedReport: {
-                this._sceneCount = this.payload[1];
-                this._supportsSlowRefresh = !!(this.payload[2] & 128);
+                this.sceneCount = this.payload[1];
+                this.supportsSlowRefresh = !!(this.payload[2] & 128);
                 const bitMaskBytes = this.payload[2] & 0b110;
                 this._keyAttributesIdenticalSupport = !!(this.payload[2] & 0b1);
-                const numEntries = this._keyAttributesIdenticalSupport ? 1 : this._sceneCount;
+                const numEntries = this._keyAttributesIdenticalSupport ? 1 : this.sceneCount;
                 this._supportedKeyAttributes = [];
                 for (let i = 0; i < numEntries; i++) {
                     let mask = 0;
@@ -105,7 +97,7 @@ let CentralSceneCC = class CentralSceneCC extends CommandClass_1.CommandClass {
                 this._sequenceNumber = this.payload[1];
                 this._keyAttribute = this.payload[2] & 0b111;
                 this._sceneNumber = this.payload[3];
-                this._slowRefresh = !!(this.payload[2] & 128);
+                this.slowRefresh = !!(this.payload[2] & 128);
                 break;
             }
             default:
@@ -122,6 +114,18 @@ let CentralSceneCC = class CentralSceneCC extends CommandClass_1.CommandClass {
         });
     }
 };
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Boolean)
+], CentralSceneCC.prototype, "slowRefresh", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Boolean)
+], CentralSceneCC.prototype, "supportsSlowRefresh", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], CentralSceneCC.prototype, "sceneCount", void 0);
 CentralSceneCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["Central Scene"]),
     CommandClass_1.implementedVersion(3),

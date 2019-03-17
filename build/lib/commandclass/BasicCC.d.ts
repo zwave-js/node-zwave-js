@@ -12,12 +12,9 @@ export declare class BasicCC extends CommandClass {
     constructor(driver: IDriver, nodeId?: number);
     constructor(driver: IDriver, nodeId: number, ccCommand: BasicCommand.Get);
     constructor(driver: IDriver, nodeId: number, ccCommand: BasicCommand.Set, targetValue: number);
-    private _currentValue;
-    readonly currentValue: number;
-    private _targetValue;
-    readonly targetValue: number;
-    private _duration;
-    readonly duration: number;
+    currentValue: number;
+    targetValue: number;
+    duration: number;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
 }

@@ -352,6 +352,7 @@ export class ZWaveNode extends EventEmitter {
 				const resp = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.NodeQuery);
 				if (isCommandClassContainer(resp)) {
 					const zwavePlusResponse = resp.command as ZWavePlusCC;
+					zwavePlusResponse.persistValues();
 					log("controller", `${this.logPrefix}received response for Z-Wave+ information:`, "debug");
 					log("controller", `${this.logPrefix}  Z-Wave+ version: ${zwavePlusResponse.zwavePlusVersion}`, "debug");
 					log("controller", `${this.logPrefix}  role type:       ${ZWavePlusRoleType[zwavePlusResponse.roleType]}`, "debug");
@@ -379,6 +380,7 @@ export class ZWaveNode extends EventEmitter {
 				const resp = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.NodeQuery);
 				if (isCommandClassContainer(resp)) {
 					const manufacturerResponse = resp.command as ManufacturerSpecificCC;
+					manufacturerResponse.persistValues();
 					log("controller", `${this.logPrefix}received response for manufacturer information:`, "debug");
 					log("controller", `${this.logPrefix}  manufacturer id: ${num2hex(manufacturerResponse.manufacturerId)}`, "debug");
 					log("controller", `${this.logPrefix}  product type:    ${num2hex(manufacturerResponse.productType)}`, "debug");
@@ -434,6 +436,7 @@ export class ZWaveNode extends EventEmitter {
 				const resp = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.NodeQuery);
 				if (isCommandClassContainer(resp)) {
 					const multiResponse = resp.command as MultiChannelCC;
+					multiResponse.persistValues();
 					log("controller", `${this.logPrefix}received response for device endpoints:`, "debug");
 					log("controller", `${this.logPrefix}  endpoint count: ${multiResponse.endpointCount}`, "debug");
 					log("controller", `${this.logPrefix}  dynamic:        ${multiResponse.isDynamicEndpointCount}`, "debug");

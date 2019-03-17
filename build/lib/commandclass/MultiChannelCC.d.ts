@@ -22,12 +22,9 @@ export declare class MultiChannelCC extends CommandClass {
     constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.EndPointGet);
     constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.CapabilityGet, endpoint: number);
     constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.EndPointFind, genericClass: GenericDeviceClasses, specificClass: number);
-    private _isDynamicEndpointCount;
-    readonly isDynamicEndpointCount: boolean;
-    private _identicalCapabilities;
-    readonly identicalCapabilities: boolean;
-    private _endpointCount;
-    readonly endpointCount: number;
+    isDynamicEndpointCount: boolean;
+    identicalCapabilities: boolean;
+    endpointCount: number;
     private _endpointCapabilities;
     readonly endpointCapabilities: Map<number, EndpointCapability>;
     endpoint: number;

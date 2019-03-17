@@ -41,15 +41,6 @@ let MultiChannelCC = class MultiChannelCC extends CommandClass_1.CommandClass {
             ] = args;
         }
     }
-    get isDynamicEndpointCount() {
-        return this._isDynamicEndpointCount;
-    }
-    get identicalCapabilities() {
-        return this._identicalCapabilities;
-    }
-    get endpointCount() {
-        return this._endpointCount;
-    }
     get endpointCapabilities() {
         return this._endpointCapabilities;
     }
@@ -85,9 +76,9 @@ let MultiChannelCC = class MultiChannelCC extends CommandClass_1.CommandClass {
         this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case MultiChannelCommand.EndPointReport:
-                this._isDynamicEndpointCount = !!(this.payload[1] & 0b10000000);
-                this._identicalCapabilities = !!(this.payload[1] & 0b01000000);
-                this._endpointCount = this.payload[2] & 0b01111111;
+                this.isDynamicEndpointCount = !!(this.payload[1] & 0b10000000);
+                this.identicalCapabilities = !!(this.payload[1] & 0b01000000);
+                this.endpointCount = this.payload[2] & 0b01111111;
                 break;
             case MultiChannelCommand.CapabilityReport: {
                 const endpointIndex = this.payload[1] & 0b01111111;
@@ -108,6 +99,18 @@ let MultiChannelCC = class MultiChannelCC extends CommandClass_1.CommandClass {
         }
     }
 };
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Boolean)
+], MultiChannelCC.prototype, "isDynamicEndpointCount", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Boolean)
+], MultiChannelCC.prototype, "identicalCapabilities", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], MultiChannelCC.prototype, "endpointCount", void 0);
 MultiChannelCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["Multi Channel"]),
     CommandClass_1.implementedVersion(3),
