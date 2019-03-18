@@ -6,8 +6,7 @@ import { Baudrate } from "../controller/GetNodeProtocolInfoMessages";
 import { Driver } from "../driver/Driver";
 import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
 import { NodeUpdatePayload } from "./NodeInfo";
-import { ValueDBEventCallbacks, ValueUpdatedArgs } from "./ValueDB";
-export declare type ValueUpdatedCallback = (args: ValueUpdatedArgs) => void;
+import { ValueDBEventCallbacks } from "./ValueDB";
 export declare type ZWaveNodeEventCallbacks = Overwrite<{
     [K in "wake up" | "sleep" | "interview completed"]: (node: ZWaveNode) => void;
 }, ValueDBEventCallbacks>;
