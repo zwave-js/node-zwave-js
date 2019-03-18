@@ -1,7 +1,5 @@
-// tslint:disable:no-unused-expression
-
 import { assertZWaveError } from "../../../test/util";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { BasicCC, BasicCommand } from "./BasicCC";
 import { CommandClasses } from "./CommandClass";
 
@@ -52,11 +50,11 @@ describe("lib/commandclass/BasicCC => ", () => {
 		basicCC.deserialize(ccData);
 
 		expect(basicCC.currentValue).toBe(55);
-		expect(basicCC.targetValue).toBeUndefined;
-		expect(basicCC.duration).toBeUndefined;
+		expect(basicCC.targetValue).toBeUndefined();
+		expect(basicCC.duration).toBeUndefined();
 	});
 
-	it("the Report command (v1) should be deserialized correctly", () => {
+	it("the Report command (v2) should be deserialized correctly", () => {
 		const ccData = Buffer.from([
 			2, // node number
 			5, // remaining length
