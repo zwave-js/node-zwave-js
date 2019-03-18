@@ -196,11 +196,6 @@ export class ZWaveNode extends EventEmitter {
 
 		// TODO: Ping should not be a separate stage
 		if (this.interviewStage === InterviewStage.Ping) {
-			// Request Manufacturer specific data
-			await this.queryManufacturerSpecific();
-		}
-
-		if (this.interviewStage === InterviewStage.ManufacturerSpecific1) {
 			await this.queryNodeInfo();
 		}
 
@@ -208,11 +203,16 @@ export class ZWaveNode extends EventEmitter {
 			await this.queryNodePlusInfo();
 		}
 
+		if (this.interviewStage === InterviewStage.NodePlusInfo) {
+			// Request Manufacturer specific data
+			await this.queryManufacturerSpecific();
+			// TODO: Overwrite the reported config with configuration files (like OZW does)
+		}
+
 		// TODO:
 		// SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
-		// ManufacturerSpecific2,	// [ ] Retrieve manufacturer name and product ids
 
-		if (this.interviewStage === InterviewStage.NodePlusInfo /* TODO: change .NodePlusInfo to .ManufacturerSpecific2 */) {
+		if (this.interviewStage === InterviewStage.ManufacturerSpecific /* TODO: change .ManufacturerSpecific to .SecurityReport */) {
 			await this.queryCCVersions();
 		}
 
@@ -259,7 +259,7 @@ export class ZWaveNode extends EventEmitter {
 		// Also save to the cache after certain stages
 		switch (completedStage) {
 			case InterviewStage.ProtocolInfo:
-			case InterviewStage.ManufacturerSpecific1:
+			case InterviewStage.ManufacturerSpecific:
 			case InterviewStage.NodeInfo:
 			case InterviewStage.NodePlusInfo:
 			case InterviewStage.Versions:
@@ -407,7 +407,7 @@ export class ZWaveNode extends EventEmitter {
 			}
 		}
 
-		await this.setInterviewStage(InterviewStage.ManufacturerSpecific1);
+		await this.setInterviewStage(InterviewStage.ManufacturerSpecific);
 	}
 
 	/** Step #9 of the node interview */
@@ -723,11 +723,10 @@ export enum InterviewStage {
 	None,					// [✓] Query process hasn't started for this node
 	ProtocolInfo,			// [✓] Retrieve protocol information
 	Ping,					// [✓] Ping device to see if alive and wait for sleeping nodes to wake up
-	ManufacturerSpecific1,	// [✓] Retrieve manufacturer name and product ids if ProtocolInfo lets us
-	NodeInfo,				// [✓] Retrieve info about supported, controlled command classes
+	NodeInfo,				// [✓] Retrieve info about supported and controlled command classes
 	NodePlusInfo,			// [✓] Retrieve ZWave+ info and update device classes
+	ManufacturerSpecific,	// [✓] Retrieve manufacturer name and product ids, overwrite node info with configuration data
 	SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
-	ManufacturerSpecific2,	// [ ] Retrieve manufacturer name and product ids
 	Versions,				// [✓] Retrieve version information
 	Endpoints,				// [✓] Retrieve information about multiple command class endpoints
 	Static,					// (✓) Retrieve static information we haven't received yet (doesn't change)
@@ -742,7 +741,7 @@ export enum InterviewStage {
 
 	WakeUp,					// [✓] Configure wake up to point to the master controller
 	Associations,			// [ ] Retrieve information about associations
-	Neighbors,				// [ ] Retrieve node neighbor list
+	Neighbors,				// [✓] Retrieve node neighbor list
 	Session,				// [ ] Retrieve session information (changes infrequently)
 	Dynamic,				// [ ] Retrieve dynamic information (changes frequently)
 	Configuration,			// [ ] Retrieve configurable parameter information (only done on request)

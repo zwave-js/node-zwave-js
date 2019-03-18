@@ -393,9 +393,9 @@ describe("lib/node/Node", () => {
 			beforeAll(() => fakeDriver.sendMessage.mockImplementation(() => Promise.resolve()));
 			beforeEach(() => fakeDriver.sendMessage.mockClear());
 
-			it(`should set the interview stage to "ManufacturerSpecific1"`, async () => {
+			it(`should set the interview stage to "ManufacturerSpecific"`, async () => {
 				await node.queryManufacturerSpecific();
-				expect(node.interviewStage).toBe(InterviewStage.ManufacturerSpecific1);
+				expect(node.interviewStage).toBe(InterviewStage.ManufacturerSpecific);
 			});
 
 			it("should not send anything if the node is the controller", async () => {
@@ -565,7 +565,7 @@ describe("lib/node/Node", () => {
 					ping: InterviewStage.Ping,
 					queryNodeInfo: InterviewStage.NodeInfo,
 					queryNodePlusInfo: InterviewStage.NodePlusInfo,
-					queryManufacturerSpecific: InterviewStage.ManufacturerSpecific1,
+					queryManufacturerSpecific: InterviewStage.ManufacturerSpecific,
 					queryCCVersions: InterviewStage.Versions,
 					queryEndpoints: InterviewStage.Endpoints,
 					queryNeighbors: InterviewStage.Neighbors,
@@ -628,6 +628,7 @@ describe("lib/node/Node", () => {
 
 				const expectCalled = [
 					"queryNodePlusInfo",
+					"queryManufacturerSpecific",
 					"queryCCVersions",
 					"queryEndpoints",
 					"requestStaticValues",

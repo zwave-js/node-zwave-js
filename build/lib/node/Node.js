@@ -136,19 +136,19 @@ class ZWaveNode extends events_1.EventEmitter {
         }
         // TODO: Ping should not be a separate stage
         if (this.interviewStage === InterviewStage.Ping) {
-            // Request Manufacturer specific data
-            await this.queryManufacturerSpecific();
-        }
-        if (this.interviewStage === InterviewStage.ManufacturerSpecific1) {
             await this.queryNodeInfo();
         }
         if (this.interviewStage === InterviewStage.NodeInfo) {
             await this.queryNodePlusInfo();
         }
+        if (this.interviewStage === InterviewStage.NodePlusInfo) {
+            // Request Manufacturer specific data
+            await this.queryManufacturerSpecific();
+            // TODO: Overwrite the reported config with configuration files (like OZW does)
+        }
         // TODO:
         // SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
-        // ManufacturerSpecific2,	// [ ] Retrieve manufacturer name and product ids
-        if (this.interviewStage === InterviewStage.NodePlusInfo /* TODO: change .NodePlusInfo to .ManufacturerSpecific2 */) {
+        if (this.interviewStage === InterviewStage.ManufacturerSpecific /* TODO: change .ManufacturerSpecific to .SecurityReport */) {
             await this.queryCCVersions();
         }
         if (this.interviewStage === InterviewStage.Versions) {
@@ -184,7 +184,7 @@ class ZWaveNode extends events_1.EventEmitter {
         // Also save to the cache after certain stages
         switch (completedStage) {
             case InterviewStage.ProtocolInfo:
-            case InterviewStage.ManufacturerSpecific1:
+            case InterviewStage.ManufacturerSpecific:
             case InterviewStage.NodeInfo:
             case InterviewStage.NodePlusInfo:
             case InterviewStage.Versions:
@@ -323,7 +323,7 @@ class ZWaveNode extends events_1.EventEmitter {
                 logger_1.log("controller", `${this.logPrefix}  querying the manufacturer information failed: ${e.message}`, "debug");
             }
         }
-        await this.setInterviewStage(InterviewStage.ManufacturerSpecific1);
+        await this.setInterviewStage(InterviewStage.ManufacturerSpecific);
     }
     /** Step #9 of the node interview */
     async queryCCVersions() {
@@ -607,27 +607,26 @@ var InterviewStage;
     InterviewStage[InterviewStage["None"] = 0] = "None";
     InterviewStage[InterviewStage["ProtocolInfo"] = 1] = "ProtocolInfo";
     InterviewStage[InterviewStage["Ping"] = 2] = "Ping";
-    InterviewStage[InterviewStage["ManufacturerSpecific1"] = 3] = "ManufacturerSpecific1";
-    InterviewStage[InterviewStage["NodeInfo"] = 4] = "NodeInfo";
-    InterviewStage[InterviewStage["NodePlusInfo"] = 5] = "NodePlusInfo";
+    InterviewStage[InterviewStage["NodeInfo"] = 3] = "NodeInfo";
+    InterviewStage[InterviewStage["NodePlusInfo"] = 4] = "NodePlusInfo";
+    InterviewStage[InterviewStage["ManufacturerSpecific"] = 5] = "ManufacturerSpecific";
     InterviewStage[InterviewStage["SecurityReport"] = 6] = "SecurityReport";
-    InterviewStage[InterviewStage["ManufacturerSpecific2"] = 7] = "ManufacturerSpecific2";
-    InterviewStage[InterviewStage["Versions"] = 8] = "Versions";
-    InterviewStage[InterviewStage["Endpoints"] = 9] = "Endpoints";
-    InterviewStage[InterviewStage["Static"] = 10] = "Static";
+    InterviewStage[InterviewStage["Versions"] = 7] = "Versions";
+    InterviewStage[InterviewStage["Endpoints"] = 8] = "Endpoints";
+    InterviewStage[InterviewStage["Static"] = 9] = "Static";
     // ===== the stuff above should never change =====
-    InterviewStage[InterviewStage["RestartFromCache"] = 11] = "RestartFromCache";
+    InterviewStage[InterviewStage["RestartFromCache"] = 10] = "RestartFromCache";
     // 						   RestartFromCache and later stages will be serialized as "Complete" in the cache
     // 						   [✓] Ping each device upon restarting with cached config
     // ===== the stuff below changes frequently, so it has to be redone on every start =====
     // TODO: Heal network
-    InterviewStage[InterviewStage["WakeUp"] = 12] = "WakeUp";
-    InterviewStage[InterviewStage["Associations"] = 13] = "Associations";
-    InterviewStage[InterviewStage["Neighbors"] = 14] = "Neighbors";
-    InterviewStage[InterviewStage["Session"] = 15] = "Session";
-    InterviewStage[InterviewStage["Dynamic"] = 16] = "Dynamic";
-    InterviewStage[InterviewStage["Configuration"] = 17] = "Configuration";
-    InterviewStage[InterviewStage["Complete"] = 18] = "Complete";
+    InterviewStage[InterviewStage["WakeUp"] = 11] = "WakeUp";
+    InterviewStage[InterviewStage["Associations"] = 12] = "Associations";
+    InterviewStage[InterviewStage["Neighbors"] = 13] = "Neighbors";
+    InterviewStage[InterviewStage["Session"] = 14] = "Session";
+    InterviewStage[InterviewStage["Dynamic"] = 15] = "Dynamic";
+    InterviewStage[InterviewStage["Configuration"] = 16] = "Configuration";
+    InterviewStage[InterviewStage["Complete"] = 17] = "Complete";
 })(InterviewStage = exports.InterviewStage || (exports.InterviewStage = {}));
 // export enum OpenHABInterviewStage {
 // 	None,					// Query process hasn't started for this node
