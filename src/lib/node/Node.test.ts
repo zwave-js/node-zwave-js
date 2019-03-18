@@ -12,6 +12,7 @@ import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
 import { ZWavePlusCC, ZWavePlusCommand } from "../commandclass/ZWavePlusCC";
 import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/ApplicationUpdateRequest";
 import { GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "../controller/GetNodeProtocolInfoMessages";
+import { GetRoutingInfoRequest, GetRoutingInfoResponse } from "../controller/GetRoutingInfoMessages";
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { Driver } from "../driver/Driver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
@@ -52,7 +53,9 @@ class TestNode extends ZWaveNode {
 	public async requestStaticValues() {
 		return super.requestStaticValues();
 	}
-
+	public async queryNeighbors() {
+		return super.queryNeighbors();
+	}
 }
 
 function assertCC<T extends CommandClass, TConst = Constructable<T>>(callArg: any, options: {
@@ -151,27 +154,31 @@ describe("lib/node/Node", () => {
 
 		describe(`queryProtocolInfo()`, () => {
 
-			beforeAll(() => fakeDriver.sendMessage.mockClear());
+			let expected: GetNodeProtocolInfoResponse;
 
-			const expected = {
-				isListening: true,
-				isFrequentListening: false,
-				isRouting: true,
-				maxBaudRate: 100000,
-				isSecure: false,
-				version: 3,
-				isBeaming: false,
-				deviceClass: new DeviceClass(
-					BasicDeviceClasses.Controller,
-					GenericDeviceClass.get(GenericDeviceClasses["Alarm Sensor"]),
-					SpecificDeviceClass.get(
-						GenericDeviceClasses["Alarm Sensor"],
-						0x02,
+			beforeAll(() => {
+				fakeDriver.sendMessage.mockClear();
+
+				expected = {
+					isListening: true,
+					isFrequentListening: false,
+					isRouting: true,
+					maxBaudRate: 100000,
+					isSecure: false,
+					version: 3,
+					isBeaming: false,
+					deviceClass: new DeviceClass(
+						BasicDeviceClasses.Controller,
+						GenericDeviceClass.get(GenericDeviceClasses["Alarm Sensor"]),
+						SpecificDeviceClass.get(
+							GenericDeviceClasses["Alarm Sensor"],
+							0x02,
+						),
 					),
-				),
-			} as GetNodeProtocolInfoResponse;
+				} as GetNodeProtocolInfoResponse;
 
-			fakeDriver.sendMessage.mockResolvedValue(expected);
+				fakeDriver.sendMessage.mockResolvedValue(expected);
+			});
 
 			it("should send a GetNodeProtocolInfoRequest", async () => {
 				await node.queryProtocolInfo();
@@ -517,6 +524,39 @@ describe("lib/node/Node", () => {
 
 		});
 
+		describe(`queryNeighbors()`, () => {
+
+			let expected: GetRoutingInfoResponse;
+
+			beforeAll(() => {
+				fakeDriver.sendMessage.mockClear();
+
+				expected = {
+					nodeIds: [1, 4, 5],
+				} as GetRoutingInfoResponse;
+				fakeDriver.sendMessage.mockResolvedValue(expected);
+			});
+
+			it("should send a GetRoutingInfoRequest", async () => {
+				await node.queryNeighbors();
+
+				expect(fakeDriver.sendMessage).toBeCalled();
+				const request: GetRoutingInfoRequest = fakeDriver.sendMessage.mock.calls[0][0];
+				expect(request).toBeInstanceOf(GetRoutingInfoRequest);
+				expect(request.nodeId).toBe(node.id);
+			});
+
+			it("should remember the neighbor list", async () => {
+				await node.queryNeighbors();
+				expect(node.neighbors).toContainAllValues(expected.nodeIds);
+			});
+
+			it("should set the interview stage to Neighbors", () => {
+				expect(node.interviewStage).toBe(InterviewStage.Neighbors);
+			});
+
+		});
+
 		describe("interview sequence", () => {
 			let originalMethods: Partial<Record<keyof TestNode, any>>;
 			beforeAll(() => {
@@ -528,6 +568,7 @@ describe("lib/node/Node", () => {
 					queryManufacturerSpecific: InterviewStage.ManufacturerSpecific1,
 					queryCCVersions: InterviewStage.Versions,
 					queryEndpoints: InterviewStage.Endpoints,
+					queryNeighbors: InterviewStage.Neighbors,
 					configureWakeup: InterviewStage.WakeUp,
 					requestStaticValues: InterviewStage.Static,
 				};
@@ -539,6 +580,7 @@ describe("lib/node/Node", () => {
 					queryManufacturerSpecific: node.queryManufacturerSpecific,
 					queryCCVersions: node.queryCCVersions,
 					queryEndpoints: node.queryEndpoints,
+					queryNeighbors: node.queryNeighbors,
 					configureWakeup: node.configureWakeup,
 					requestStaticValues: node.requestStaticValues,
 				};
@@ -590,6 +632,7 @@ describe("lib/node/Node", () => {
 					"queryEndpoints",
 					"requestStaticValues",
 					"configureWakeup",
+					"queryNeighbors",
 				];
 				for (const method of Object.keys(originalMethods)) {
 					if (expectCalled.indexOf(method) > -1) {

@@ -15,6 +15,7 @@ const WakeUpCC_1 = require("../commandclass/WakeUpCC");
 const ZWavePlusCC_1 = require("../commandclass/ZWavePlusCC");
 const ApplicationUpdateRequest_1 = require("../controller/ApplicationUpdateRequest");
 const GetNodeProtocolInfoMessages_1 = require("../controller/GetNodeProtocolInfoMessages");
+const GetRoutingInfoMessages_1 = require("../controller/GetRoutingInfoMessages");
 const SendDataMessages_1 = require("../controller/SendDataMessages");
 const ZWaveError_1 = require("../error/ZWaveError");
 const Constants_1 = require("../message/Constants");
@@ -73,6 +74,10 @@ class ZWaveNode extends events_1.EventEmitter {
     }
     get implementedCommandClasses() {
         return this._implementedCommandClasses;
+    }
+    /** The IDs of all direct neighbors of this node */
+    get neighbors() {
+        return this._neighbors;
     }
     /** @internal */
     get valueDB() {
@@ -161,6 +166,11 @@ class ZWaveNode extends events_1.EventEmitter {
             || this.interviewStage === InterviewStage.Static) {
             // Configure the device so it notifies us of a wakeup
             await this.configureWakeup();
+        }
+        // TODO: Associations
+        if (this.interviewStage === InterviewStage.WakeUp) { // TODO: change this to associations
+            // Request a list of this node's neighbors
+            await this.queryNeighbors();
         }
         // for testing purposes we skip to the end
         await this.setInterviewStage(InterviewStage.Complete);
@@ -419,6 +429,19 @@ class ZWaveNode extends events_1.EventEmitter {
             logger_1.log("controller", `${this.logPrefix}  requesting the static values failed: ${e.message}`, "debug");
         }
         await this.setInterviewStage(InterviewStage.Static);
+    }
+    async queryNeighbors() {
+        logger_1.log("controller", `${this.logPrefix}requesting node neighbors`, "debug");
+        try {
+            const resp = await this.driver.sendMessage(new GetRoutingInfoMessages_1.GetRoutingInfoRequest(this.driver, this.id, false, false));
+            this._neighbors = resp.nodeIds;
+            logger_1.log("controller", `${this.logPrefix}  node neighbors received:`, "debug");
+            logger_1.log("controller", `${this.logPrefix}    ${this._neighbors.join(", ")}`, "debug");
+        }
+        catch (e) {
+            logger_1.log("controller", `${this.logPrefix}  requesting the node neighbors failed: ${e.message}`, "debug");
+        }
+        await this.setInterviewStage(InterviewStage.Neighbors);
     }
     //#endregion
     // TODO: Add a handler around for each CC to interpret the received data

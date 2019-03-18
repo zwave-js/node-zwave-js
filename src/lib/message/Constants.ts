@@ -151,9 +151,8 @@ export enum FunctionType {
 
 	UNKNOWN_FUNC_UNKNOWN_0x78 = 0x78, // ??
 
-	FUNC_ID_ZW_GET_ROUTING_INFO = 0x80,	// Get a specified node's neighbor information from the controller
+	GetRoutingInfo = 0x80,	// Get a specified node's neighbor information from the controller
 
-	UNKNOWN_FUNC_GetRoutingTableLine = 0x80, // ??
 	UNKNOWN_FUNC_GetTXCounter = 0x81, // ??
 	UNKNOWN_FUNC_ResetTXCounter = 0x82, // ??
 	UNKNOWN_FUNC_StoreNodeInfo = 0x83, // ??

@@ -8,8 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
-const MAX_NODES = 232; // max number of nodes in a ZWave network
-const NUM_NODE_BYTES = MAX_NODES / 8; // corresponding number of bytes in a bit mask
+const NodeBitMask_1 = require("./NodeBitMask");
 let GetSerialApiInitDataRequest = class GetSerialApiInitDataRequest extends Message_1.Message {
 };
 GetSerialApiInitDataRequest = __decorate([
@@ -42,15 +41,10 @@ let GetSerialApiInitDataResponse = class GetSerialApiInitDataResponse extends Me
         this._initVersion = this.payload[0];
         this._initCaps = this.payload[1];
         this._nodeIds = [];
-        if (this.payload.length > 2 && this.payload[2] === NUM_NODE_BYTES) {
+        if (this.payload.length > 2 && this.payload[2] === NodeBitMask_1.NUM_NODEMASK_BYTES) {
             // the payload contains a bit mask of all existing nodes
-            const nodeBitMask = this.payload.slice(3, 3 + NUM_NODE_BYTES);
-            for (let nodeId = 1; nodeId <= MAX_NODES; nodeId++) {
-                const byteNum = (nodeId - 1) >>> 3; // id / 8
-                const bitNum = (nodeId - 1) % 8;
-                if ((nodeBitMask[byteNum] & (1 << bitNum)) !== 0)
-                    this._nodeIds.push(nodeId);
-            }
+            const nodeBitMask = this.payload.slice(3, 3 + NodeBitMask_1.NUM_NODEMASK_BYTES);
+            this._nodeIds = NodeBitMask_1.parseNodeBitMask(nodeBitMask);
         }
         return ret;
     }

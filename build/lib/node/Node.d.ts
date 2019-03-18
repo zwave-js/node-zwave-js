@@ -39,6 +39,9 @@ export declare class ZWaveNode extends EventEmitter {
     readonly isBeaming: boolean;
     private _implementedCommandClasses;
     readonly implementedCommandClasses: Map<CommandClasses, CommandClassInfo>;
+    private _neighbors;
+    /** The IDs of all direct neighbors of this node */
+    readonly neighbors: ReadonlyArray<number>;
     private nodeInfoReceived;
     private _valueDB;
     /** This tells us which interview stage was last completed */
@@ -72,6 +75,7 @@ export declare class ZWaveNode extends EventEmitter {
     /** Step #2 of the node interview */
     protected configureWakeup(): Promise<void>;
     protected requestStaticValues(): Promise<void>;
+    protected queryNeighbors(): Promise<void>;
     /** Handles an ApplicationCommandRequest sent from a node */
     handleCommand(command: CommandClass): Promise<void>;
     /**

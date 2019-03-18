@@ -15,6 +15,7 @@ import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
 import { ZWavePlusCC, ZWavePlusCommand, ZWavePlusNodeType, ZWavePlusRoleType } from "../commandclass/ZWavePlusCC";
 import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/ApplicationUpdateRequest";
 import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "../controller/GetNodeProtocolInfoMessages";
+import { GetRoutingInfoRequest, GetRoutingInfoResponse } from "../controller/GetRoutingInfoMessages";
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -110,6 +111,12 @@ export class ZWaveNode extends EventEmitter {
 	private _implementedCommandClasses = new Map<CommandClasses, CommandClassInfo>();
 	public get implementedCommandClasses(): Map<CommandClasses, CommandClassInfo> {
 		return this._implementedCommandClasses;
+	}
+
+	private _neighbors: ReadonlyArray<number>;
+	/** The IDs of all direct neighbors of this node */
+	public get neighbors(): ReadonlyArray<number> {
+		return this._neighbors;
 	}
 
 	private nodeInfoReceived: boolean = false;
@@ -229,6 +236,13 @@ export class ZWaveNode extends EventEmitter {
 		) {
 			// Configure the device so it notifies us of a wakeup
 			await this.configureWakeup();
+		}
+
+		// TODO: Associations
+
+		if (this.interviewStage === InterviewStage.WakeUp) { // TODO: change this to associations
+			// Request a list of this node's neighbors
+			await this.queryNeighbors();
 		}
 
 		// for testing purposes we skip to the end
@@ -504,6 +518,21 @@ export class ZWaveNode extends EventEmitter {
 			log("controller", `${this.logPrefix}  requesting the static values failed: ${e.message}`, "debug");
 		}
 		await this.setInterviewStage(InterviewStage.Static);
+	}
+
+	protected async queryNeighbors() {
+		log("controller", `${this.logPrefix}requesting node neighbors`, "debug");
+		try {
+			const resp = await this.driver.sendMessage<GetRoutingInfoResponse>(
+				new GetRoutingInfoRequest(this.driver, this.id, false, false),
+			);
+			this._neighbors = resp.nodeIds;
+			log("controller", `${this.logPrefix}  node neighbors received:`, "debug");
+			log("controller", `${this.logPrefix}    ${this._neighbors.join(", ")}`, "debug");
+		} catch (e) {
+			log("controller", `${this.logPrefix}  requesting the node neighbors failed: ${e.message}`, "debug");
+		}
+		await this.setInterviewStage(InterviewStage.Neighbors);
 	}
 
 	//#endregion

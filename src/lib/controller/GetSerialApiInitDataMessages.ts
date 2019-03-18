@@ -1,8 +1,6 @@
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
-
-const MAX_NODES = 232; // max number of nodes in a ZWave network
-const NUM_NODE_BYTES = MAX_NODES / 8; // corresponding number of bytes in a bit mask
+import { NUM_NODEMASK_BYTES, parseNodeBitMask } from "./NodeBitMask";
 
 export const enum InitCapabilityFlags {
 	Slave = 1 << 0, // Controller is a slave
@@ -51,14 +49,10 @@ export class GetSerialApiInitDataResponse extends Message {
 		this._initVersion = this.payload[0];
 		this._initCaps = this.payload[1];
 		this._nodeIds = [];
-		if (this.payload.length > 2 && this.payload[2] === NUM_NODE_BYTES) {
+		if (this.payload.length > 2 && this.payload[2] === NUM_NODEMASK_BYTES) {
 			// the payload contains a bit mask of all existing nodes
-			const nodeBitMask = this.payload.slice(3, 3 + NUM_NODE_BYTES);
-			for (let nodeId = 1; nodeId <= MAX_NODES; nodeId++) {
-				const byteNum = (nodeId - 1) >>> 3; // id / 8
-				const bitNum = (nodeId - 1) % 8;
-				if ((nodeBitMask[byteNum] & (1 << bitNum)) !== 0) this._nodeIds.push(nodeId);
-			}
+			const nodeBitMask = this.payload.slice(3, 3 + NUM_NODEMASK_BYTES);
+			this._nodeIds = parseNodeBitMask(nodeBitMask);
 		}
 
 		return ret;
