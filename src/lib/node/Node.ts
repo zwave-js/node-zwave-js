@@ -24,15 +24,13 @@ import { num2hex, stringify } from "../util/strings";
 import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
 import { NodeUpdatePayload } from "./NodeInfo";
 import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
-import { ValueDB, ValueUpdatedArgs } from "./ValueDB";
+import { ValueDB, ValueDBEventCallbacks, ValueUpdatedArgs } from "./ValueDB";
 
 export type ValueUpdatedCallback = (args: ValueUpdatedArgs) => void;
 
 export type ZWaveNodeEventCallbacks = Overwrite<
 	{ [K in "wake up" | "sleep" | "interview completed"]: (node: ZWaveNode) => void },
-	{
-		"value updated": ValueUpdatedCallback;
-	}
+	ValueDBEventCallbacks
 >;
 
 export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
@@ -55,7 +53,9 @@ export class ZWaveNode extends EventEmitter {
 		super();
 
 		this._valueDB = new ValueDB();
-		this._valueDB.on("value updated", (args: ValueUpdatedArgs) => this.emit("value updated", args));
+		this._valueDB.on("value added", this.emit.bind(this, "value added"));
+		this._valueDB.on("value updated", this.emit.bind(this, "value updated"));
+		this._valueDB.on("value removed", this.emit.bind(this, "value removed"));
 
 		this._deviceClass = deviceClass;
 		for (const cc of supportedCCs) this.addCC(cc, { isSupported: true });
@@ -183,15 +183,11 @@ export class ZWaveNode extends EventEmitter {
 		}
 
 		if (this.interviewStage === InterviewStage.ProtocolInfo) {
-			// Wait until we can communicate with the device
-			await this.waitForWakeup();
-		}
-
-		if (this.interviewStage === InterviewStage.WakeUp) {
 			// Make sure the device answers
 			await this.ping();
 		}
 
+		// TODO: Ping should not be a separate stage
 		if (this.interviewStage === InterviewStage.Ping) {
 			// Request Manufacturer specific data
 			await this.queryManufacturerSpecific();
@@ -224,7 +220,15 @@ export class ZWaveNode extends EventEmitter {
 		// At this point the interview of new nodes is done. Start here when re-interviewing known nodes
 		if (this.interviewStage === InterviewStage.RestartFromCache) {
 			// Make sure the device answers
-			await this.ping();
+			await this.ping(InterviewStage.RestartFromCache);
+		}
+
+		if (
+			this.interviewStage === InterviewStage.RestartFromCache
+			|| this.interviewStage === InterviewStage.Static
+		) {
+			// Configure the device so it notifies us of a wakeup
+			await this.configureWakeup();
 		}
 
 		// for testing purposes we skip to the end
@@ -294,34 +298,8 @@ export class ZWaveNode extends EventEmitter {
 		await this.setInterviewStage(InterviewStage.ProtocolInfo);
 	}
 
-	/** Step #2 of the node interview */
-	protected async waitForWakeup() {
-		if (this.supportsCC(CommandClasses["Wake Up"])) {
-			if (this.isControllerNode()) {
-				log("controller", `${this.logPrefix}skipping wakeup for the controller`, "debug");
-			} else if (this.isFrequentListening) {
-				log("controller", `${this.logPrefix}skipping wakeup for frequent listening device`, "debug");
-			} else {
-				log("controller", `${this.logPrefix}waiting for device to wake up`, "debug");
-
-				const wakeupCC = new WakeUpCC(this.driver, this.id, WakeUpCommand.IntervalGet);
-				const request = new SendDataRequest(this.driver, wakeupCC);
-
-				try {
-					const _response = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.WakeUp);
-					log("controller", `${this.logPrefix}  device is awake`, "debug");
-				} catch (e) {
-					log("controller", `${this.logPrefix}  device wakeup failed: ${e.message}`, "debug");
-				}
-			}
-		} else {
-			log("controller", `${this.logPrefix}skipping wakeup for non-sleeping device`, "debug");
-		}
-		await this.setInterviewStage(InterviewStage.WakeUp);
-	}
-
 	/** Step #3 of the node interview */
-	protected async ping() {
+	protected async ping(targetInterviewStage: InterviewStage = InterviewStage.Ping) {
 		if (this.isControllerNode()) {
 			log("controller", `${this.logPrefix}not pinging the controller...`, "debug");
 		} else {
@@ -337,7 +315,7 @@ export class ZWaveNode extends EventEmitter {
 				log("controller", `${this.logPrefix}  ping failed: ${e.message}`, "debug");
 			}
 		}
-		await this.setInterviewStage(InterviewStage.Ping);
+		await this.setInterviewStage(targetInterviewStage);
 	}
 
 	/** Step #5 of the node interview */
@@ -376,8 +354,9 @@ export class ZWaveNode extends EventEmitter {
 				const resp = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.NodeQuery);
 				if (isCommandClassContainer(resp)) {
 					const zwavePlusResponse = resp.command as ZWavePlusCC;
+					zwavePlusResponse.persistValues();
 					log("controller", `${this.logPrefix}received response for Z-Wave+ information:`, "debug");
-					log("controller", `${this.logPrefix}  Z-Wave+ version: ${zwavePlusResponse.version}`, "debug");
+					log("controller", `${this.logPrefix}  Z-Wave+ version: ${zwavePlusResponse.zwavePlusVersion}`, "debug");
 					log("controller", `${this.logPrefix}  role type:       ${ZWavePlusRoleType[zwavePlusResponse.roleType]}`, "debug");
 					log("controller", `${this.logPrefix}  node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}`, "debug");
 					log("controller", `${this.logPrefix}  installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}`, "debug");
@@ -403,6 +382,7 @@ export class ZWaveNode extends EventEmitter {
 				const resp = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.NodeQuery);
 				if (isCommandClassContainer(resp)) {
 					const manufacturerResponse = resp.command as ManufacturerSpecificCC;
+					manufacturerResponse.persistValues();
 					log("controller", `${this.logPrefix}received response for manufacturer information:`, "debug");
 					log("controller", `${this.logPrefix}  manufacturer id: ${num2hex(manufacturerResponse.manufacturerId)}`, "debug");
 					log("controller", `${this.logPrefix}  product type:    ${num2hex(manufacturerResponse.productType)}`, "debug");
@@ -458,6 +438,7 @@ export class ZWaveNode extends EventEmitter {
 				const resp = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.NodeQuery);
 				if (isCommandClassContainer(resp)) {
 					const multiResponse = resp.command as MultiChannelCC;
+					multiResponse.persistValues();
 					log("controller", `${this.logPrefix}received response for device endpoints:`, "debug");
 					log("controller", `${this.logPrefix}  endpoint count: ${multiResponse.endpointCount}`, "debug");
 					log("controller", `${this.logPrefix}  dynamic:        ${multiResponse.isDynamicEndpointCount}`, "debug");
@@ -471,6 +452,47 @@ export class ZWaveNode extends EventEmitter {
 		}
 
 		await this.setInterviewStage(InterviewStage.Endpoints);
+	}
+
+	/** Step #2 of the node interview */
+	protected async configureWakeup() {
+		if (this.supportsCC(CommandClasses["Wake Up"])) {
+			if (this.isControllerNode()) {
+				log("controller", `${this.logPrefix}skipping wakeup configuration for the controller`, "debug");
+			} else if (this.isFrequentListening) {
+				log("controller", `${this.logPrefix}skipping wakeup configuration for frequent listening device`, "debug");
+			} else {
+				try {
+					const getWakeupRequest = new SendDataRequest(this.driver,
+						new WakeUpCC(this.driver, this.id, WakeUpCommand.IntervalGet),
+					);
+
+					log("controller", `${this.logPrefix}retrieving wakeup interval from the device`, "debug");
+					const getWakeupResp = await this.driver.sendMessage<SendDataRequest>(getWakeupRequest, MessagePriority.NodeQuery);
+					if (!isCommandClassContainer(getWakeupResp)) {
+						throw new ZWaveError("Invalid response received!", ZWaveErrorCodes.CC_Invalid);
+					}
+
+					const wakeupResp = getWakeupResp.command as WakeUpCC;
+					log("controller", `${this.logPrefix}received wakeup configuration:`, "debug");
+					log("controller", `${this.logPrefix}  wakeup interval: ${wakeupResp.wakeupInterval} seconds`, "debug");
+					log("controller", `${this.logPrefix}  controller node: ${wakeupResp.controllerNodeId}`, "debug");
+
+					log("controller", `${this.logPrefix}configuring wakeup destination`, "debug");
+					const setWakeupRequest = new SendDataRequest(this.driver,
+						new WakeUpCC(this.driver, this.id, WakeUpCommand.IntervalSet, wakeupResp.wakeupInterval, this.driver.controller.ownNodeId),
+					);
+					await this.driver.sendMessage(setWakeupRequest, MessagePriority.NodeQuery);
+					log("controller", `${this.logPrefix}  done!`, "debug");
+
+				} catch (e) {
+					log("controller", `${this.logPrefix}  configuring the device wakeup failed: ${e.message}`, "debug");
+				}
+			}
+		} else {
+			log("controller", `${this.logPrefix}skipping wakeup for non-sleeping device`, "debug");
+		}
+		await this.setInterviewStage(InterviewStage.WakeUp);
 	}
 
 	protected async requestStaticValues() {
@@ -492,15 +514,20 @@ export class ZWaveNode extends EventEmitter {
 	public async handleCommand(command: CommandClass): Promise<void> {
 		switch (command.command) {
 			case CommandClasses["Central Scene"]: {
-				// The node reported its supported versions
 				const csCC = command as CentralSceneCC;
 				log("controller", `${this.logPrefix}received CentralScene command ${JSON.stringify(csCC)}`, "debug");
-				break;
+				return;
 			}
-			default: {
-				log("controller", `${this.logPrefix}TODO: no handler for application command ${stringify(command)}`, "debug");
+			case CommandClasses["Wake Up"]: {
+				const wakeupCC = command as WakeUpCC;
+				if (wakeupCC.wakeupCommand === WakeUpCommand.WakeUpNotification) {
+					log("controller", `${this.logPrefix}received wake up notification`, "debug");
+					this.setAwake(true);
+					return;
+				}
 			}
 		}
+		log("controller", `${this.logPrefix}TODO: no handler for application command ${stringify(command)}`, "debug");
 	}
 
 	/**
@@ -638,17 +665,26 @@ export class ZWaveNode extends EventEmitter {
 		return !isAsleep;
 	}
 
-	public async sendNoMoreInformation() {
+	private isSendingNoMoreInformation: boolean = false;
+	public async sendNoMoreInformation(): Promise<boolean> {
+		// Avoid calling this method more than once
+		if (this.isSendingNoMoreInformation) return false;
+		this.isSendingNoMoreInformation = true;
+
+		let msgSent = false;
 		if (this.isAwake() && this.interviewStage === InterviewStage.Complete) {
 			log("controller", `${this.logPrefix}Sending node back to sleep`, "debug");
 			const wakeupCC = new WakeUpCC(this.driver, this.id, WakeUpCommand.NoMoreInformation);
 			const request = new SendDataRequest(this.driver, wakeupCC);
-			// TODO: Add a way to only wait for the confirming send data request
-			void this.driver.sendMessage<SendDataRequest>(request, MessagePriority.WakeUp);
+
+			await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.WakeUp);
 			log("controller", `${this.logPrefix}  Node asleep`, "debug");
-			return true;
+
+			msgSent = true;
 		}
-		return false;
+
+		this.isSendingNoMoreInformation = false;
+		return msgSent;
 	}
 
 }
@@ -657,11 +693,10 @@ export class ZWaveNode extends EventEmitter {
 export enum InterviewStage {
 	None,					// [✓] Query process hasn't started for this node
 	ProtocolInfo,			// [✓] Retrieve protocol information
-	WakeUp,					// [✓] Wait for "sleeping" nodes to wake up
-	Ping,					// [✓] Ping device to see if alive
+	Ping,					// [✓] Ping device to see if alive and wait for sleeping nodes to wake up
 	ManufacturerSpecific1,	// [✓] Retrieve manufacturer name and product ids if ProtocolInfo lets us
 	NodeInfo,				// [✓] Retrieve info about supported, controlled command classes
-	NodePlusInfo,			// [ ] Retrieve ZWave+ info and update device classes
+	NodePlusInfo,			// [✓] Retrieve ZWave+ info and update device classes
 	SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
 	ManufacturerSpecific2,	// [ ] Retrieve manufacturer name and product ids
 	Versions,				// [✓] Retrieve version information
@@ -670,17 +705,19 @@ export enum InterviewStage {
 
 	// ===== the stuff above should never change =====
 	RestartFromCache,		// This marks the beginning of re-interviews on application startup.
-	// This and later stages will be serialized as "Complete" in the cache
+	// 						   RestartFromCache and later stages will be serialized as "Complete" in the cache
+	// 						   [✓] Ping each device upon restarting with cached config
 	// ===== the stuff below changes frequently, so it has to be redone on every start =====
 
-	CacheLoad,				// [ ] Ping a device upon restarting with cached config for the device
-	// 	SetWakeUp,			// [ ] * Configure wake up to point to the master controller
+	// TODO: Heal network
+
+	WakeUp,					// [✓] Configure wake up to point to the master controller
 	Associations,			// [ ] Retrieve information about associations
 	Neighbors,				// [ ] Retrieve node neighbor list
 	Session,				// [ ] Retrieve session information (changes infrequently)
 	Dynamic,				// [ ] Retrieve dynamic information (changes frequently)
 	Configuration,			// [ ] Retrieve configurable parameter information (only done on request)
-	Complete,				// [ ] Query process is completed for this node
+	Complete,				// [✓] Query process is completed for this node
 }
 
 // export enum OpenHABInterviewStage {

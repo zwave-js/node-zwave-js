@@ -1,6 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum ManufacturerSpecificCommand {
 	Get = 0x04,
@@ -26,20 +26,9 @@ export class ManufacturerSpecificCC extends CommandClass {
 	}
 	// tslint:enable:unified-signatures
 
-	private _manufacturerId: number;
-	public get manufacturerId(): number {
-		return this._manufacturerId;
-	}
-
-	private _productType: number;
-	public get productType(): number {
-		return this._productType;
-	}
-
-	private _productId: number;
-	public get productId(): number {
-		return this._productId;
-	}
+	@ccValue() public manufacturerId: number;
+	@ccValue() public productType: number;
+	@ccValue() public productId: number;
 
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
@@ -63,9 +52,9 @@ export class ManufacturerSpecificCC extends CommandClass {
 		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case ManufacturerSpecificCommand.Report:
-				this._manufacturerId = this.payload.readUInt16BE(1);
-				this._productType = this.payload.readUInt16BE(3);
-				this._productId = this.payload.readUInt16BE(5);
+				this.manufacturerId = this.payload.readUInt16BE(1);
+				this.productType = this.payload.readUInt16BE(3);
+				this.productId = this.payload.readUInt16BE(5);
 				break;
 
 			default:

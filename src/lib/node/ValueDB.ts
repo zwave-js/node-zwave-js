@@ -1,19 +1,40 @@
 import { EventEmitter } from "events";
 import { CommandClasses } from "../commandclass/CommandClass";
 
-export interface ValueUpdatedArgs {
+export interface ValueBaseArgs {
 	commandClass: CommandClasses;
 	endpoint?: number;
 	propertyName: string;
+}
+export interface ValueUpdatedArgs extends ValueBaseArgs {
 	prevValue: unknown;
 	newValue: unknown;
 }
 
-export interface ValueDB {
-	on(event: "value updated", cb: (args: ValueUpdatedArgs) => void): this;
-	removeListener(event: "value updated", cb: (args: ValueUpdatedArgs) => void): this;
+export interface ValueAddedArgs extends ValueBaseArgs {
+	newValue: unknown;
+}
 
-	removeAllListeners(event?: "value updated"): this;
+export interface ValueRemovedArgs extends ValueBaseArgs {
+	prevValue: unknown;
+}
+
+export type ValueAddedCallback = (args: ValueAddedArgs) => void;
+export type ValueUpdatedCallback = (args: ValueUpdatedArgs) => void;
+export type ValueRemovedCallback = (args: ValueRemovedArgs) => void;
+
+export interface ValueDBEventCallbacks {
+	"value added": ValueAddedCallback;
+	"value updated": ValueUpdatedCallback;
+	"value removed": ValueRemovedCallback;
+}
+
+export type ValueDBEvents = Extract<keyof ValueDBEventCallbacks, string>;
+
+export interface ValueDB {
+	on<TEvent extends ValueDBEvents>(event: TEvent, callback: ValueDBEventCallbacks[TEvent]): this;
+	removeListener<TEvent extends ValueDBEvents>(event: TEvent, callback: ValueDBEventCallbacks[TEvent]): this;
+	removeAllListeners(event?: ValueDBEvents): this;
 }
 
 function getValueKey(cc: CommandClasses, endpoint: number | undefined, propertyName: string): string {
@@ -37,15 +58,44 @@ export class ValueDB extends EventEmitter {
 	 */
 	public setValue(cc: CommandClasses, endpoint: number | undefined, propertyName: string, value: unknown) {
 		const key = getValueKey(cc, endpoint, propertyName);
-		const prevValue = this._db.get(key);
-		this._db.set(key, value);
-		this.emit("value updated", {
+		const cbArg: ValueAddedArgs | ValueUpdatedArgs = {
 			commandClass: cc,
 			endpoint,
 			propertyName,
-			prevValue,
 			newValue: value,
-		});
+		};
+		let event: string;
+		if (this._db.has(key)) {
+			event = "value updated";
+			(cbArg as ValueUpdatedArgs).prevValue = this._db.get(key);
+		} else {
+			event = "value added";
+		}
+
+		this._db.set(key, value);
+		this.emit(event, cbArg);
+	}
+
+	/**
+	 * Removes a value for a given property of a given CommandClass
+	 * @param cc The command class the value belongs to
+	 * @param endpoint The optional endpoint the value belongs to
+	 * @param propertyName The property name the value belongs to
+	 */
+	public removeValue(cc: CommandClasses, endpoint: number | undefined, propertyName: string) {
+		const key = getValueKey(cc, endpoint, propertyName);
+		if (this._db.has(key)) {
+			const prevValue = this._db.get(key);
+			this._db.delete(key);
+			this.emit("value removed", {
+				commandClass: cc,
+				endpoint,
+				propertyName,
+				prevValue,
+			});
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -57,5 +107,13 @@ export class ValueDB extends EventEmitter {
 	public getValue(cc: CommandClasses, endpoint: number | undefined, propertyName: string): unknown {
 		const key = getValueKey(cc, endpoint, propertyName);
 		return this._db.get(key);
+	}
+
+	/** Clears all values from the value DB */
+	public clear() {
+		this._db.forEach((_val, key) => {
+			const { cc, endpoint, propertyName } = JSON.parse(key);
+			this.removeValue(cc, endpoint, propertyName);
+		});
 	}
 }

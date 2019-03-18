@@ -31,6 +31,8 @@ export declare class CommandClass {
     constructor(driver: IDriver, nodeId: number, command?: CommandClasses, payload?: Buffer);
     /** The version of the command class used */
     version: number;
+    /** Which endpoint of the node this CC belongs to. 0 for the root device. */
+    endpoint: number | undefined;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
     static getNodeId(ccData: Buffer): number;
@@ -52,6 +54,13 @@ export declare class CommandClass {
     getNode(): ZWaveNode;
     /** Returns the value DB for this CC's node */
     protected getValueDB(): import("../node/ValueDB").ValueDB;
+    /** Which variables should be persisted when requested */
+    private _variables;
+    /** Creates a variable that will be stored */
+    createVariable(name: keyof this): void;
+    createVariables(...names: (keyof this)[]): void;
+    /** Persists all values on the given node */
+    persistValues(variables?: Iterable<keyof this>): void;
 }
 export declare const METADATA_commandClass: unique symbol;
 export declare const METADATA_commandClassMap: unique symbol;
@@ -60,7 +69,7 @@ export declare const METADATA_version: unique symbol;
 /**
  * A predicate function to test if a received CC matches to the sent CC
  */
-export declare type CCResponsePredicate = (sentCC: CommandClass, receivedCC: CommandClass) => boolean;
+export declare type DynamicCCResponse<T extends CommandClass> = (sentCC: T) => CommandClasses | undefined;
 /**
  * Defines the command class associated with a Z-Wave message
  */
@@ -93,15 +102,17 @@ export declare function getImplementedVersionStatic<T extends Constructable<Comm
  * Defines the expected response associated with a Z-Wave message
  */
 export declare function expectedCCResponse(cc: CommandClasses): ClassDecorator;
-export declare function expectedCCResponse(predicate: CCResponsePredicate): ClassDecorator;
+export declare function expectedCCResponse(dynamic: DynamicCCResponse<CommandClass>): ClassDecorator;
 /**
  * Retrieves the expected response defined for a Z-Wave message class
  */
-export declare function getExpectedCCResponse<T extends CommandClass>(ccClass: T): CommandClasses | CCResponsePredicate;
+export declare function getExpectedCCResponse<T extends CommandClass>(ccClass: T): CommandClasses | DynamicCCResponse<T>;
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export declare function getExpectedCCResponseStatic<T extends Constructable<CommandClass>>(classConstructor: T): CommandClasses | CCResponsePredicate;
+export declare function getExpectedCCResponseStatic<T extends Constructable<CommandClass>>(classConstructor: T): CommandClasses | DynamicCCResponse<CommandClass>;
+/** Marks the decorated property as a value of the Command Class. This allows saving it on the node with persistValues() */
+export declare function ccValue(): PropertyDecorator;
 export declare enum CommandClasses {
     "Alarm Sensor" = 156,
     "Alarm Silence" = 157,

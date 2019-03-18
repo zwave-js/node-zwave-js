@@ -14,19 +14,15 @@ export declare enum WakeUpCommand {
 export declare class WakeUpCC extends CommandClass {
     nodeId: number;
     wakeupCommand?: WakeUpCommand;
-    wakeupInterval?: number;
-    controllerNodeId?: number;
     constructor(driver: IDriver, nodeId?: number);
     constructor(driver: IDriver, nodeId: number, command: WakeUpCommand.IntervalSet, interval: number, controllerNodeId: number);
     constructor(driver: IDriver, nodeId: number, command: WakeUpCommand.IntervalGet | WakeUpCommand.NoMoreInformation | WakeUpCommand.IntervalCapabilitiesGet);
-    private _minWakeUpInterval;
-    readonly minWakeUpInterval: number;
-    private _maxWakeUpInterval;
-    readonly maxWakeUpInterval: number;
-    private _defaultWakeUpInterval;
-    readonly defaultWakeUpInterval: number;
-    private _wakeUpIntervalSteps;
-    readonly wakeUpIntervalSteps: number;
+    wakeupInterval: number;
+    controllerNodeId: number;
+    minWakeUpInterval: number;
+    maxWakeUpInterval: number;
+    defaultWakeUpInterval: number;
+    wakeUpIntervalSteps: number;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
     isAwake(): boolean;

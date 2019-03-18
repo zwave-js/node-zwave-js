@@ -146,14 +146,12 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass> extends
 		// We handle a special case here:
 		// If the contained CC expects a certain response (which will come in an "unexpected" ApplicationCommandRequest)
 		// we declare that as final and the original "final" response, i.e. the SendDataRequest becomes intermediate
-		const ccPredicate = getExpectedCCResponse(this.command);
-		if (ccPredicate == null) return ret; // "final" | "unexpected"
+		const expectedCCOrDynamic = getExpectedCCResponse(this.command);
+		const expected = typeof expectedCCOrDynamic === "function" ? expectedCCOrDynamic(this.command) : expectedCCOrDynamic;
+		if (expected == null) return ret; // "final" | "unexpected"
+
 		if (isCommandClassContainer(msg)) {
-			if (typeof ccPredicate === "number") {
-				return ccPredicate === msg.command.command ? "final" : "intermediate"; // not sure if other CCs can come in the meantime
-			} else {
-				return ccPredicate(this.command, msg.command) ? "final" : "intermediate";
-			}
+			return expected === msg.command.command ? "final" : "intermediate"; // not sure if other CCs can come in the meantime
 		}
 		return "unexpected";
 	}

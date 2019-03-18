@@ -22,25 +22,25 @@ var WakeUpCommand;
     WakeUpCommand[WakeUpCommand["IntervalCapabilitiesGet"] = 9] = "IntervalCapabilitiesGet";
     WakeUpCommand[WakeUpCommand["IntervalCapabilitiesReport"] = 10] = "IntervalCapabilitiesReport";
 })(WakeUpCommand = exports.WakeUpCommand || (exports.WakeUpCommand = {}));
+function getExpectedResponseToWakeUp(sent) {
+    switch (sent.wakeupCommand) {
+        // These commands expect no response
+        case WakeUpCommand.IntervalSet:
+        case WakeUpCommand.NoMoreInformation:
+            return undefined;
+        // All other expect a WakeUp CC
+        default: return CommandClass_1.CommandClasses["Wake Up"];
+    }
+}
 let WakeUpCC = WakeUpCC_1 = class WakeUpCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId, wakeupCommand, wakeupInterval, controllerNodeId) {
         super(driver, nodeId);
         this.nodeId = nodeId;
         this.wakeupCommand = wakeupCommand;
-        this.wakeupInterval = wakeupInterval;
-        this.controllerNodeId = controllerNodeId;
-    }
-    get minWakeUpInterval() {
-        return this._minWakeUpInterval;
-    }
-    get maxWakeUpInterval() {
-        return this._maxWakeUpInterval;
-    }
-    get defaultWakeUpInterval() {
-        return this._defaultWakeUpInterval;
-    }
-    get wakeUpIntervalSteps() {
-        return this._wakeUpIntervalSteps;
+        if (wakeupInterval != undefined)
+            this.wakeupInterval = wakeupInterval;
+        if (controllerNodeId != undefined)
+            this.controllerNodeId = controllerNodeId;
     }
     serialize() {
         switch (this.wakeupCommand) {
@@ -74,10 +74,10 @@ let WakeUpCC = WakeUpCC_1 = class WakeUpCC extends CommandClass_1.CommandClass {
                 // no real payload
                 break;
             case WakeUpCommand.IntervalCapabilitiesReport:
-                this._minWakeUpInterval = this.payload.readUIntBE(1, 3);
-                this._maxWakeUpInterval = this.payload.readUIntBE(4, 3);
-                this._defaultWakeUpInterval = this.payload.readUIntBE(7, 3);
-                this._wakeUpIntervalSteps = this.payload.readUIntBE(10, 3);
+                this.minWakeUpInterval = this.payload.readUIntBE(1, 3);
+                this.maxWakeUpInterval = this.payload.readUIntBE(4, 3);
+                this.defaultWakeUpInterval = this.payload.readUIntBE(7, 3);
+                this.wakeUpIntervalSteps = this.payload.readUIntBE(10, 3);
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot deserialize a WakeUp CC with a command other than IntervalReport or WakeUpNotification", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
@@ -99,10 +99,34 @@ let WakeUpCC = WakeUpCC_1 = class WakeUpCC extends CommandClass_1.CommandClass {
         return new WakeUpCC_1(driver, node.id).setAwake(awake);
     }
 };
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], WakeUpCC.prototype, "wakeupInterval", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], WakeUpCC.prototype, "controllerNodeId", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], WakeUpCC.prototype, "minWakeUpInterval", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], WakeUpCC.prototype, "maxWakeUpInterval", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], WakeUpCC.prototype, "defaultWakeUpInterval", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], WakeUpCC.prototype, "wakeUpIntervalSteps", void 0);
 WakeUpCC = WakeUpCC_1 = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["Wake Up"]),
     CommandClass_1.implementedVersion(2),
-    CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Wake Up"]),
+    CommandClass_1.expectedCCResponse(getExpectedResponseToWakeUp),
     __metadata("design:paramtypes", [Object, Number, Number, Number, Number])
 ], WakeUpCC);
 exports.WakeUpCC = WakeUpCC;

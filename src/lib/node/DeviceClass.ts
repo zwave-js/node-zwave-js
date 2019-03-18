@@ -84,12 +84,10 @@ function defineGeneric(
 	name: keyof typeof GenericDeviceClasses,
 	mandatorySupportedCCs: CommandClasses[],
 	mandatoryControlCCs: CommandClasses[],
-	// tslint:disable-next-line:trailing-comma
 	...specificDeviceClasses: SpecificDeviceClass[]
 ) {
 	if (mandatorySupportedCCs == null) mandatorySupportedCCs = [];
 	if (mandatoryControlCCs == null) mandatoryControlCCs = [];
-	if (specificDeviceClasses == null) specificDeviceClasses = [];
 
 	// All devices must support the BASIC command class
 	if (mandatorySupportedCCs.indexOf(CommandClasses.Basic) === -1) mandatorySupportedCCs.unshift(CommandClasses.Basic);

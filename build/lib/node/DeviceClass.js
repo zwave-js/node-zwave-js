@@ -76,15 +76,11 @@ class SpecificDeviceClass {
 }
 SpecificDeviceClass.NOT_USED = Object.freeze(new SpecificDeviceClass("not used", 0x00));
 exports.SpecificDeviceClass = SpecificDeviceClass;
-function defineGeneric(name, mandatorySupportedCCs, mandatoryControlCCs, 
-// tslint:disable-next-line:trailing-comma
-...specificDeviceClasses) {
+function defineGeneric(name, mandatorySupportedCCs, mandatoryControlCCs, ...specificDeviceClasses) {
     if (mandatorySupportedCCs == null)
         mandatorySupportedCCs = [];
     if (mandatoryControlCCs == null)
         mandatoryControlCCs = [];
-    if (specificDeviceClasses == null)
-        specificDeviceClasses = [];
     // All devices must support the BASIC command class
     if (mandatorySupportedCCs.indexOf(CommandClass_1.CommandClasses.Basic) === -1)
         mandatorySupportedCCs.unshift(CommandClass_1.CommandClasses.Basic);

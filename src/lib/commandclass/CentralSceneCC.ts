@@ -1,6 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { CommandClass, commandClass, CommandClasses, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, CommandClasses, implementedVersion } from "./CommandClass";
 
 export enum CentralSceneCommand {
 	SupportedGet = 0x01,
@@ -37,19 +37,12 @@ export class CentralSceneCC extends CommandClass {
 		slowRefresh?: boolean,
 	) {
 		super(driver, nodeId);
-		this._slowRefresh = slowRefresh;
+		if (slowRefresh != undefined) this.slowRefresh = slowRefresh;
 	}
 	// tslint:enable:unified-signatures
 
-	private _slowRefresh: boolean;
-	public get slowRefresh(): boolean {
-		return this._slowRefresh;
-	}
-
-	private _supportsSlowRefresh: boolean;
-	public get supportsSlowRefresh(): boolean {
-		return this._supportsSlowRefresh;
-	}
+	@ccValue() public slowRefresh: boolean;
+	@ccValue() public supportsSlowRefresh: boolean;
 
 	private _sequenceNumber: number;
 	public get sequenceNumber(): number {
@@ -61,10 +54,7 @@ export class CentralSceneCC extends CommandClass {
 		return this._keyAttribute;
 	}
 
-	private _sceneCount: number;
-	public get sceneCount(): number {
-		return this._sceneCount;
-	}
+	@ccValue() public sceneCount: number;
 
 	private _supportedKeyAttributes: number[];
 	private _keyAttributesIdenticalSupport: boolean;
@@ -89,7 +79,7 @@ export class CentralSceneCC extends CommandClass {
 			case CentralSceneCommand.ConfigurationSet:
 				this.payload = Buffer.from([
 					this.centralSceneCommand,
-					this._slowRefresh ? 0b1000_0000 : 0,
+					this.slowRefresh ? 0b1000_0000 : 0,
 				]);
 				break;
 
@@ -110,16 +100,16 @@ export class CentralSceneCC extends CommandClass {
 		switch (this.centralSceneCommand) {
 
 			case CentralSceneCommand.ConfigurationReport: {
-				this._slowRefresh = !!(this.payload[1] & 0b1000_0000);
+				this.slowRefresh = !!(this.payload[1] & 0b1000_0000);
 				break;
 			}
 
 			case CentralSceneCommand.SupportedReport: {
-				this._sceneCount = this.payload[1];
-				this._supportsSlowRefresh = !!(this.payload[2] & 0b1000_0000);
+				this.sceneCount = this.payload[1];
+				this.supportsSlowRefresh = !!(this.payload[2] & 0b1000_0000);
 				const bitMaskBytes = this.payload[2] & 0b110;
 				this._keyAttributesIdenticalSupport = !!(this.payload[2] & 0b1);
-				const numEntries = this._keyAttributesIdenticalSupport ? 1 : this._sceneCount;
+				const numEntries = this._keyAttributesIdenticalSupport ? 1 : this.sceneCount;
 				this._supportedKeyAttributes = [];
 				for (let i = 0; i < numEntries; i++) {
 					let mask = 0;
@@ -135,7 +125,7 @@ export class CentralSceneCC extends CommandClass {
 				this._sequenceNumber = this.payload[1];
 				this._keyAttribute = this.payload[2] & 0b111;
 				this._sceneNumber = this.payload[3];
-				this._slowRefresh = !!(this.payload[2] & 0b1000_0000);
+				this.slowRefresh = !!(this.payload[2] & 0b1000_0000);
 				break;
 			}
 

@@ -22,15 +22,6 @@ let ManufacturerSpecificCC = class ManufacturerSpecificCC extends CommandClass_1
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
     }
-    get manufacturerId() {
-        return this._manufacturerId;
-    }
-    get productType() {
-        return this._productType;
-    }
-    get productId() {
-        return this._productId;
-    }
     serialize() {
         switch (this.ccCommand) {
             case ManufacturerSpecificCommand.Get:
@@ -46,15 +37,27 @@ let ManufacturerSpecificCC = class ManufacturerSpecificCC extends CommandClass_1
         this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case ManufacturerSpecificCommand.Report:
-                this._manufacturerId = this.payload.readUInt16BE(1);
-                this._productType = this.payload.readUInt16BE(3);
-                this._productId = this.payload.readUInt16BE(5);
+                this.manufacturerId = this.payload.readUInt16BE(1);
+                this.productType = this.payload.readUInt16BE(3);
+                this.productId = this.payload.readUInt16BE(5);
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot deserialize a ManufacturerSpecific CC with a command other than Report", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
         }
     }
 };
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], ManufacturerSpecificCC.prototype, "manufacturerId", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], ManufacturerSpecificCC.prototype, "productType", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], ManufacturerSpecificCC.prototype, "productId", void 0);
 ManufacturerSpecificCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["Manufacturer Specific"]),
     CommandClass_1.implementedVersion(1),

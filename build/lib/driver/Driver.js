@@ -1,12 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const deferred_promise_1 = require("alcalzone-shared/deferred-promise");
 const objects_1 = require("alcalzone-shared/objects");
@@ -116,13 +108,13 @@ class Driver extends events_1.EventEmitter {
             });
             this.serial
                 // wotan-disable-next-line async-function-assignability
-                .on("open", () => __awaiter(this, void 0, void 0, function* () {
+                .on("open", async () => {
                 logger_1.log("driver", "serial port opened", "debug");
                 this._isOpen = true;
                 this.resetIO();
                 resolve();
                 setImmediate(() => void this.initializeControllerAndNodes());
-            }))
+            })
                 .on("data", this.serialport_onData.bind(this))
                 .on("error", err => {
                 logger_1.log("driver", "serial port errored: " + err, "error");
@@ -137,45 +129,43 @@ class Driver extends events_1.EventEmitter {
             this.serial.open();
         });
     }
-    initializeControllerAndNodes() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this._controller == null)
-                this._controller = new Controller_1.ZWaveController(this);
-            if (!this.options.skipInterview) {
-                // Interview the controller
-                yield this._controller.interview();
-            }
-            // in any case we need to emit the driver ready event here
-            this._controllerInterviewed = true;
-            logger_1.log("driver", "driver ready", "debug");
-            this.emit("driver ready");
-            // Try to restore the network information from the cache
-            if (process.env.NO_CACHE !== "true")
-                yield this.restoreNetworkFromCache();
-            // Add event handlers for the nodes
+    async initializeControllerAndNodes() {
+        if (this._controller == null)
+            this._controller = new Controller_1.ZWaveController(this);
+        if (!this.options.skipInterview) {
+            // Interview the controller
+            await this._controller.interview();
+        }
+        // in any case we need to emit the driver ready event here
+        this._controllerInterviewed = true;
+        logger_1.log("driver", "driver ready", "debug");
+        this.emit("driver ready");
+        // Try to restore the network information from the cache
+        if (process.env.NO_CACHE !== "true")
+            await this.restoreNetworkFromCache();
+        // Add event handlers for the nodes
+        for (const node of this._controller.nodes.values()) {
+            this.addNodeEventHandlers(node);
+        }
+        if (!this.options.skipInterview) {
+            // Now interview all nodes
             for (const node of this._controller.nodes.values()) {
-                this.addNodeEventHandlers(node);
-            }
-            if (!this.options.skipInterview) {
-                // Now interview all nodes
-                for (const node of this._controller.nodes.values()) {
-                    if (node.interviewStage === Node_1.InterviewStage.Complete) {
-                        node.interviewStage = Node_1.InterviewStage.RestartFromCache;
-                    }
-                    // TODO: retry on failure or something...
-                    // don't await the interview, because it may take a very long time
-                    // if a node is asleep
-                    void node.interview().catch(e => {
-                        if (e instanceof ZWaveError_1.ZWaveError) {
-                            logger_1.log("controller", "node interview failed: " + e, "error");
-                        }
-                        else {
-                            throw e;
-                        }
-                    });
+                if (node.interviewStage === Node_1.InterviewStage.Complete) {
+                    node.interviewStage = Node_1.InterviewStage.RestartFromCache;
                 }
+                // TODO: retry on failure or something...
+                // don't await the interview, because it may take a very long time
+                // if a node is asleep
+                void node.interview().catch(e => {
+                    if (e instanceof ZWaveError_1.ZWaveError) {
+                        logger_1.log("controller", "node interview failed: " + e, "error");
+                    }
+                    else {
+                        throw e;
+                    }
+                });
             }
-        });
+        }
     }
     addNodeEventHandlers(node) {
         node
@@ -226,13 +216,11 @@ class Driver extends events_1.EventEmitter {
     /**
      * Performs a hard reset on the controller. This wipes out all configuration!
      */
-    hardReset() {
-        return __awaiter(this, void 0, void 0, function* () {
-            this.ensureReady(true);
-            yield this._controller.hardReset();
-            this._controllerInterviewed = false;
-            void this.initializeControllerAndNodes();
-        });
+    async hardReset() {
+        this.ensureReady(true);
+        await this._controller.hardReset();
+        this._controllerInterviewed = false;
+        void this.initializeControllerAndNodes();
     }
     /** Resets the IO layer */
     resetIO() {
@@ -349,6 +337,13 @@ class Driver extends events_1.EventEmitter {
     handleMessage(msg) {
         // TODO: find a nice way to serialize the messages
         // log("driver", `handling response ${stringify(msg)}`, "debug");
+        logger_1.log("io", `handling response (${Constants_1.FunctionType[msg.functionType]}${Constants_1.MessageType[msg.type]})`, "debug");
+        if (msg instanceof SendDataMessages_1.SendDataRequest || msg instanceof SendDataMessages_1.SendDataResponse) {
+            logger_1.log("io", `  ${strings_1.stringify(msg)}`, "debug");
+        }
+        if (ICommandClassContainer_1.isCommandClassContainer(msg)) {
+            logger_1.log("io", `  ${strings_1.stringify(msg.command)}`, "debug");
+        }
         // if we have a pending request, check if that is waiting for this message
         if (this.currentTransaction != null) {
             switch (this.currentTransaction.message.testResponse(msg)) {
@@ -624,45 +619,43 @@ class Driver extends events_1.EventEmitter {
         }
     }
     // tslint:enable:unified-signatures
-    sendMessage(msg, priorityOrCheck, supportCheck) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // sort out the arguments
-            if (isMessageSupportCheck(priorityOrCheck)) {
-                supportCheck = priorityOrCheck;
-                priorityOrCheck = undefined;
+    async sendMessage(msg, priorityOrCheck, supportCheck) {
+        // sort out the arguments
+        if (isMessageSupportCheck(priorityOrCheck)) {
+            supportCheck = priorityOrCheck;
+            priorityOrCheck = undefined;
+        }
+        // now priorityOrCheck is either undefined or a MessagePriority
+        const priority = priorityOrCheck != null
+            ? priorityOrCheck
+            : Message_1.getDefaultPriority(msg);
+        if (supportCheck == null)
+            supportCheck = "loud";
+        this.ensureReady();
+        if (priority == null) {
+            const className = msg.constructor.name;
+            const msgTypeName = Constants_1.FunctionType[msg.functionType];
+            throw new ZWaveError_1.ZWaveError(`No default priority has been defined for ${className} (${msgTypeName}), so you have to provide one for your message`, ZWaveError_1.ZWaveErrorCodes.Driver_NoPriority);
+        }
+        if (supportCheck !== "none"
+            && this.controller != null
+            && !this.controller.isFunctionSupported(msg.functionType)) {
+            if (supportCheck === "loud") {
+                throw new ZWaveError_1.ZWaveError(`Your hardware does not support the ${Constants_1.FunctionType[msg.functionType]} function`, ZWaveError_1.ZWaveErrorCodes.Driver_NotSupported);
             }
-            // now priorityOrCheck is either undefined or a MessagePriority
-            const priority = priorityOrCheck != null
-                ? priorityOrCheck
-                : Message_1.getDefaultPriority(msg);
-            if (supportCheck == null)
-                supportCheck = "loud";
-            this.ensureReady();
-            if (priority == null) {
-                const className = msg.constructor.name;
-                const msgTypeName = Constants_1.FunctionType[msg.functionType];
-                throw new ZWaveError_1.ZWaveError(`No default priority has been defined for ${className} (${msgTypeName}), so you have to provide one for your message`, ZWaveError_1.ZWaveErrorCodes.Driver_NoPriority);
+            else {
+                return undefined;
             }
-            if (supportCheck !== "none"
-                && this.controller != null
-                && !this.controller.isFunctionSupported(msg.functionType)) {
-                if (supportCheck === "loud") {
-                    throw new ZWaveError_1.ZWaveError(`Your hardware does not support the ${Constants_1.FunctionType[msg.functionType]} function`, ZWaveError_1.ZWaveErrorCodes.Driver_NotSupported);
-                }
-                else {
-                    return undefined;
-                }
-            }
-            logger_1.log("driver", `sending message ${strings_1.stringify(msg)} with priority ${Constants_1.MessagePriority[priority]} (${priority})`, "debug");
-            // create the transaction and enqueue it
-            const promise = deferred_promise_1.createDeferredPromise();
-            const transaction = new Transaction_1.Transaction(this, msg, promise, priority);
-            this.sendQueue.add(transaction);
-            logger_1.log("io", `added message to the send queue, new length = ${this.sendQueue.length}`, "debug");
-            // start sending now (maybe)
-            setImmediate(() => this.workOffSendQueue());
-            return promise;
-        });
+        }
+        logger_1.log("driver", `sending message ${strings_1.stringify(msg)} with priority ${Constants_1.MessagePriority[priority]} (${priority})`, "debug");
+        // create the transaction and enqueue it
+        const promise = deferred_promise_1.createDeferredPromise();
+        const transaction = new Transaction_1.Transaction(this, msg, promise, priority);
+        this.sendQueue.add(transaction);
+        logger_1.log("io", `added message to the send queue, new length = ${this.sendQueue.length}`, "debug");
+        // start sending now (maybe)
+        setImmediate(() => this.workOffSendQueue());
+        return promise;
     }
     // wotan-enable no-misused-generics
     /**
@@ -759,46 +752,42 @@ class Driver extends events_1.EventEmitter {
      * Saves the current configuration and collected data about the controller and all nodes to a cache file.
      * For performance reasons, these calls may be throttled
      */
-    saveNetworkToCache() {
-        return __awaiter(this, void 0, void 0, function* () {
-            // Ensure this method isn't being executed too often
-            if (Date.now() - this.lastSaveToCache < this.saveToCacheInterval) {
-                // Schedule a save in a couple of ms to collect changes
-                if (!this.saveToCacheTimer) {
-                    this.saveToCacheTimer = setTimeout(() => void this.saveNetworkToCache(), this.saveToCacheInterval);
-                }
-                return;
+    async saveNetworkToCache() {
+        // Ensure this method isn't being executed too often
+        if (Date.now() - this.lastSaveToCache < this.saveToCacheInterval) {
+            // Schedule a save in a couple of ms to collect changes
+            if (!this.saveToCacheTimer) {
+                this.saveToCacheTimer = setTimeout(() => void this.saveNetworkToCache(), this.saveToCacheInterval);
             }
-            else {
-                this.saveToCacheTimer = undefined;
-            }
-            this.lastSaveToCache = Date.now();
-            const cacheFile = path.join(this.cacheDir, this.controller.homeId.toString(16) + ".json");
-            const serializedObj = this.controller.serialize();
-            yield fs.ensureDir(this.cacheDir);
-            yield fs.writeJSON(cacheFile, serializedObj, { spaces: 4 });
-        });
+            return;
+        }
+        else {
+            this.saveToCacheTimer = undefined;
+        }
+        this.lastSaveToCache = Date.now();
+        const cacheFile = path.join(this.cacheDir, this.controller.homeId.toString(16) + ".json");
+        const serializedObj = this.controller.serialize();
+        await fs.ensureDir(this.cacheDir);
+        await fs.writeJSON(cacheFile, serializedObj, { spaces: 4 });
     }
     /**
      * Restores a previously stored zwave network state from cache to speed up the startup process
      */
-    restoreNetworkFromCache() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!this.controller.homeId)
-                return;
-            const cacheFile = path.join(this.cacheDir, this.controller.homeId.toString(16) + ".json");
-            if (!(yield fs.pathExists(cacheFile)))
-                return;
-            try {
-                logger_1.log("driver", `Cache file for homeId ${strings_1.num2hex(this.controller.homeId)} found, attempting to restore the network from cache`, "debug");
-                const cacheObj = yield fs.readJSON(cacheFile);
-                this.controller.deserialize(cacheObj);
-                logger_1.log("driver", `  Restoring the network from cache was successful!`, "error");
-            }
-            catch (e) {
-                logger_1.log("driver", `  restoring the network from cache failed: ${e}`, "error");
-            }
-        });
+    async restoreNetworkFromCache() {
+        if (!this.controller.homeId)
+            return;
+        const cacheFile = path.join(this.cacheDir, this.controller.homeId.toString(16) + ".json");
+        if (!await fs.pathExists(cacheFile))
+            return;
+        try {
+            logger_1.log("driver", `Cache file for homeId ${strings_1.num2hex(this.controller.homeId)} found, attempting to restore the network from cache`, "debug");
+            const cacheObj = await fs.readJSON(cacheFile);
+            this.controller.deserialize(cacheObj);
+            logger_1.log("driver", `  Restoring the network from cache was successful!`, "error");
+        }
+        catch (e) {
+            logger_1.log("driver", `  restoring the network from cache failed: ${e}`, "error");
+        }
     }
 }
 exports.Driver = Driver;

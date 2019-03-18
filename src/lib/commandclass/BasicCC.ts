@@ -1,7 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { num2hex } from "../util/strings";
-import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 // TODO: encode duration:
 // SET:
@@ -43,24 +43,13 @@ export class BasicCC extends CommandClass {
 		targetValue?: number,
 	) {
 		super(driver, nodeId);
-		this._targetValue = targetValue;
+		if (targetValue != undefined) this.targetValue = targetValue;
 	}
 	// tslint:enable:unified-signatures
 
-	private _currentValue: number;
-	public get currentValue(): number {
-		return this._currentValue;
-	}
-
-	private _targetValue: number;
-	public get targetValue(): number {
-		return this._targetValue;
-	}
-
-	private _duration: number;
-	public get duration(): number {
-		return this._duration;
-	}
+	@ccValue() public currentValue: number;
+	@ccValue() public targetValue: number;
+	@ccValue() public duration: number;
 
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
@@ -71,7 +60,7 @@ export class BasicCC extends CommandClass {
 			case BasicCommand.Set:
 				this.payload = Buffer.from([
 					this.ccCommand,
-					this._targetValue,
+					this.targetValue,
 				]);
 				break;
 			default:
@@ -90,10 +79,10 @@ export class BasicCC extends CommandClass {
 		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case BasicCommand.Report:
-				this._currentValue = this.payload[1];
+				this.currentValue = this.payload[1];
 				// starting in V2:
-				this._targetValue = this.payload[2];
-				this._duration = this.payload[3];
+				this.targetValue = this.payload[2];
+				this.duration = this.payload[3];
 				break;
 
 			default:

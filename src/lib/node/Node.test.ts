@@ -28,11 +28,8 @@ class TestNode extends ZWaveNode {
 	public async queryProtocolInfo() {
 		return super.queryProtocolInfo();
 	}
-	public async waitForWakeup() {
-		return super.waitForWakeup();
-	}
-	public async ping() {
-		return super.ping();
+	public async ping(...args: any[]) {
+		return super.ping(...args);
 	}
 	public async queryNodeInfo() {
 		return super.queryNodeInfo();
@@ -48,6 +45,9 @@ class TestNode extends ZWaveNode {
 	}
 	public async queryEndpoints() {
 		return super.queryEndpoints();
+	}
+	public async configureWakeup() {
+		return super.configureWakeup();
 	}
 	public async requestStaticValues() {
 		return super.requestStaticValues();
@@ -221,14 +221,14 @@ describe("lib/node/Node", () => {
 			beforeEach(() => fakeDriver.sendMessage.mockClear());
 
 			it(`should set the interview stage to "WakeUp"`, async () => {
-				await node.waitForWakeup();
+				await node.configureWakeup();
 				expect(node.interviewStage).toBe(InterviewStage.WakeUp);
 			});
 
 			it("should not send anything if the node does not support WakeUp", async () => {
 				// Temporarily mark Wake Up as not supported
 				node.addCC(CommandClasses["Wake Up"], { isSupported: false });
-				await node.waitForWakeup();
+				await node.configureWakeup();
 				expect(fakeDriver.sendMessage).not.toBeCalled();
 				node.addCC(CommandClasses["Wake Up"], { isSupported: true });
 			});
@@ -236,7 +236,7 @@ describe("lib/node/Node", () => {
 			it("should not send anything if the node is the controller", async () => {
 				// Temporarily make this node the controller node
 				fakeDriver.controller.ownNodeId = node.id;
-				await node.waitForWakeup();
+				await node.configureWakeup();
 				expect(fakeDriver.sendMessage).not.toBeCalled();
 				fakeDriver.controller.ownNodeId = 1;
 			});
@@ -244,13 +244,13 @@ describe("lib/node/Node", () => {
 			it("should not send anything if the node is frequent listening", async () => {
 				// Temporarily make this node frequent listening
 				(node as any)._isFrequentListening = true;
-				await node.waitForWakeup();
+				await node.configureWakeup();
 				expect(fakeDriver.sendMessage).not.toBeCalled();
 				(node as any)._isFrequentListening = false;
 			});
 
 			it("should send a Wake Up CC and wait for the response", async () => {
-				await node.waitForWakeup();
+				await node.configureWakeup();
 				expect(fakeDriver.sendMessage).toBeCalled();
 				assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
 					nodeId: node.id,
@@ -263,7 +263,12 @@ describe("lib/node/Node", () => {
 			beforeAll(() => fakeDriver.sendMessage.mockImplementation(() => Promise.resolve()));
 			beforeEach(() => fakeDriver.sendMessage.mockClear());
 
-			it(`should set the interview stage to "Ping"`, async () => {
+			it(`should set the interview stage to the stage passed as an argument`, async () => {
+				await node.ping(InterviewStage.Configuration);
+				expect(node.interviewStage).toBe(InterviewStage.Configuration);
+			});
+
+			it(`should by default set the interview stage to "Ping"`, async () => {
 				await node.ping();
 				expect(node.interviewStage).toBe(InterviewStage.Ping);
 			});
@@ -517,24 +522,24 @@ describe("lib/node/Node", () => {
 			beforeAll(() => {
 				const interviewStagesAfter = {
 					queryProtocolInfo: InterviewStage.ProtocolInfo,
-					waitForWakeup: InterviewStage.WakeUp,
 					ping: InterviewStage.Ping,
 					queryNodeInfo: InterviewStage.NodeInfo,
 					queryNodePlusInfo: InterviewStage.NodePlusInfo,
 					queryManufacturerSpecific: InterviewStage.ManufacturerSpecific1,
 					queryCCVersions: InterviewStage.Versions,
 					queryEndpoints: InterviewStage.Endpoints,
+					configureWakeup: InterviewStage.WakeUp,
 					requestStaticValues: InterviewStage.Static,
 				};
 				originalMethods = {
 					queryProtocolInfo: node.queryProtocolInfo,
-					waitForWakeup: node.waitForWakeup,
 					ping: node.ping,
 					queryNodeInfo: node.queryNodeInfo,
 					queryNodePlusInfo: node.queryNodePlusInfo,
 					queryManufacturerSpecific: node.queryManufacturerSpecific,
 					queryCCVersions: node.queryCCVersions,
 					queryEndpoints: node.queryEndpoints,
+					configureWakeup: node.configureWakeup,
 					requestStaticValues: node.requestStaticValues,
 				};
 				for (const method of Object.keys(originalMethods)) {
@@ -584,6 +589,7 @@ describe("lib/node/Node", () => {
 					"queryCCVersions",
 					"queryEndpoints",
 					"requestStaticValues",
+					"configureWakeup",
 				];
 				for (const method of Object.keys(originalMethods)) {
 					if (expectCalled.indexOf(method) > -1) {

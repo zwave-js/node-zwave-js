@@ -10,12 +10,11 @@ export declare enum BinarySensorCommand {
 export declare class BinarySensorCC extends CommandClass {
     nodeId: number;
     ccCommand?: BinarySensorCommand;
-    sensorType?: BinarySensorType;
     constructor(driver: IDriver, nodeId?: number);
     constructor(driver: IDriver, nodeId: number, ccCommand: BinarySensorCommand.Get, sensorType?: BinarySensorType);
     constructor(driver: IDriver, nodeId: number, ccCommand: BinarySensorCommand.SupportedGet);
-    private _value;
-    readonly value: boolean;
+    sensorType: BinarySensorType;
+    value: boolean;
     private _supportedSensorTypes;
     readonly supportedSensorTypes: BinarySensorType[];
     serialize(): Buffer;

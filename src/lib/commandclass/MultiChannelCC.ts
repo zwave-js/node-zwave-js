@@ -2,7 +2,7 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { GenericDeviceClasses } from "../node/DeviceClass";
 import { NodeInformationFrame, parseNodeInformationFrame } from "../node/NodeInfo";
-import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum MultiChannelCommand {
 	EndPointGet = 0x07,
@@ -51,20 +51,9 @@ export class MultiChannelCC extends CommandClass {
 	}
 	// tslint:enable:unified-signatures
 
-	private _isDynamicEndpointCount: boolean;
-	public get isDynamicEndpointCount(): boolean {
-		return this._isDynamicEndpointCount;
-	}
-
-	private _identicalCapabilities: boolean;
-	public get identicalCapabilities(): boolean {
-		return this._identicalCapabilities;
-	}
-
-	private _endpointCount: number;
-	public get endpointCount(): number {
-		return this._endpointCount;
-	}
+	@ccValue() public isDynamicEndpointCount: boolean;
+	@ccValue() public identicalCapabilities: boolean;
+	@ccValue() public endpointCount: number;
 
 	private _endpointCapabilities = new Map<number, EndpointCapability>();
 	public get endpointCapabilities(): Map<number, EndpointCapability> {
@@ -119,9 +108,9 @@ export class MultiChannelCC extends CommandClass {
 		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case MultiChannelCommand.EndPointReport:
-				this._isDynamicEndpointCount = !!(this.payload[1] & 0b10000000);
-				this._identicalCapabilities = !!(this.payload[1] & 0b01000000);
-				this._endpointCount = this.payload[2] & 0b01111111;
+				this.isDynamicEndpointCount = !!(this.payload[1] & 0b10000000);
+				this.identicalCapabilities = !!(this.payload[1] & 0b01000000);
+				this.endpointCount = this.payload[2] & 0b01111111;
 				break;
 
 			case MultiChannelCommand.CapabilityReport: {

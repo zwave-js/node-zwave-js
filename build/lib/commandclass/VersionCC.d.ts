@@ -17,12 +17,9 @@ export declare class VersionCC extends CommandClass {
     constructor(driver: IDriver, nodeId?: number);
     constructor(driver: IDriver, nodeId: number, command: VersionCommand.Get);
     constructor(driver: IDriver, nodeId: number, command: VersionCommand.CommandClassGet, requestedCC: CommandClasses);
-    private _libraryType;
-    readonly libraryType: ZWaveLibraryTypes;
-    private _protocolVersion;
-    readonly protocolVersion: string;
-    private _applicationVersion;
-    readonly applicationVersion: string;
+    libraryType: ZWaveLibraryTypes;
+    protocolVersion: string;
+    applicationVersion: string;
     private _ccVersion;
     readonly ccVersion: number;
     serialize(): Buffer;

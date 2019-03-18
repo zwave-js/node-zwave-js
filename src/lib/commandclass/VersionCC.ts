@@ -3,7 +3,7 @@ import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { ZWaveNode } from "../node/Node";
-import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion, StateKind } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion, StateKind } from "./CommandClass";
 
 export enum VersionCommand {
 	Get = 0x11,
@@ -32,18 +32,10 @@ export class VersionCC extends CommandClass {
 	}
 	// tslint:enable:unified-signatures
 
-	private _libraryType: ZWaveLibraryTypes;
-	public get libraryType(): ZWaveLibraryTypes {
-		return this._libraryType;
-	}
-	private _protocolVersion: string;
-	public get protocolVersion(): string {
-		return this._protocolVersion;
-	}
-	private _applicationVersion: string;
-	public get applicationVersion(): string {
-		return this._applicationVersion;
-	}
+	@ccValue() public libraryType: ZWaveLibraryTypes;
+	@ccValue() public protocolVersion: string;
+	@ccValue() public applicationVersion: string;
+
 	private _ccVersion: number;
 	public get ccVersion(): number {
 		return this._ccVersion;
@@ -76,9 +68,9 @@ export class VersionCC extends CommandClass {
 		this.versionCommand = this.payload[0];
 		switch (this.versionCommand) {
 			case VersionCommand.Report:
-				this._libraryType = this.payload[1];
-				this._protocolVersion = `${this.payload[2]}.${this.payload[3]}`;
-				this._applicationVersion = `${this.payload[4]}.${this.payload[5]}`;
+				this.libraryType = this.payload[1];
+				this.protocolVersion = `${this.payload[2]}.${this.payload[3]}`;
+				this.applicationVersion = `${this.payload[4]}.${this.payload[5]}`;
 				break;
 
 			case VersionCommand.CommandClassReport:

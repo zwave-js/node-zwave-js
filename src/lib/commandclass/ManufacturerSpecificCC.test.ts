@@ -1,5 +1,3 @@
-// tslint:disable:no-unused-expression
-
 import { CommandClass, CommandClasses, getCommandClass } from "./CommandClass";
 import { ManufacturerSpecificCC } from "./ManufacturerSpecificCC";
 

@@ -10,12 +10,9 @@ export declare class ManufacturerSpecificCC extends CommandClass {
     ccCommand?: ManufacturerSpecificCommand;
     constructor(driver: IDriver, nodeId?: number);
     constructor(driver: IDriver, nodeId: number, ccCommand: ManufacturerSpecificCommand.Get);
-    private _manufacturerId;
-    readonly manufacturerId: number;
-    private _productType;
-    readonly productType: number;
-    private _productId;
-    readonly productId: number;
+    manufacturerId: number;
+    productType: number;
+    productId: number;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
 }

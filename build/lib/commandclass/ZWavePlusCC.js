@@ -38,21 +38,6 @@ let ZWavePlusCC = class ZWavePlusCC extends CommandClass_1.CommandClass {
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
     }
-    get version() {
-        return this._version;
-    }
-    get nodeType() {
-        return this._nodeType;
-    }
-    get roleType() {
-        return this._roleType;
-    }
-    get installerIcon() {
-        return this._installerIcon;
-    }
-    get userIcon() {
-        return this._userIcon;
-    }
     serialize() {
         switch (this.ccCommand) {
             case ZWavePlusCommand.Get:
@@ -68,16 +53,37 @@ let ZWavePlusCC = class ZWavePlusCC extends CommandClass_1.CommandClass {
         this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case ZWavePlusCommand.Report:
-                this._version = this.payload[1];
-                this._roleType = this.payload[2];
-                this._installerIcon = this.payload.readUInt16BE(3);
-                this._userIcon = this.payload.readUInt16BE(5);
+                this.zwavePlusVersion = this.payload[1];
+                this.roleType = this.payload[2];
+                this.nodeType = this.payload[3];
+                this.installerIcon = this.payload.readUInt16BE(4);
+                this.userIcon = this.payload.readUInt16BE(6);
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot deserialize a ZWavePlus CC with a command other than Report", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
         }
     }
 };
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], ZWavePlusCC.prototype, "zwavePlusVersion", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], ZWavePlusCC.prototype, "nodeType", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], ZWavePlusCC.prototype, "roleType", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], ZWavePlusCC.prototype, "installerIcon", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], ZWavePlusCC.prototype, "userIcon", void 0);
 ZWavePlusCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["Z-Wave Plus Info"]),
     CommandClass_1.implementedVersion(2),

@@ -11,13 +11,14 @@
 			"program": "${workspaceFolder}/test/run.js",
 			"env": {
 				"DEBUG": "zwave:(controller)",
-				"NO_CACHE": "false"
+				"NO_CACHE": "true"
 			},
 			"outFiles": [
 				"${workspaceFolder}/**/*.js"
 			],
 			"console": "integratedTerminal",
-			"preLaunchTask": "npm: build"
+			"sourceMaps": true,
+			// "preLaunchTask": "npm: build"
 		}
 	]
 }
