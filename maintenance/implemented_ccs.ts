@@ -7,8 +7,8 @@ import * as path from "path";
 import { CommandClasses } from "../src/lib/commandclass/CommandClass";
 import { num2hex } from "../src/lib/util/strings";
 
-const ccRegex = /^@commandClass\(CommandClasses(?:\.|\[")(.+?)(?:"\])?\)$/gm;
-const versionRegex = /^@implementedVersion\((\d+)\)$/gm;
+const ccRegex = /^@commandClass\(CommandClasses(?:\.|\[")(.+?)(?:"\])?\)$/m;
+const versionRegex = /^@implementedVersion\((\d+)\)$/m;
 
 function padEnd(str: string, len: number) {
 	return str + " ".repeat(len - str.length);
@@ -32,7 +32,7 @@ function padEnd(str: string, len: number) {
 			const ccName = ccRegex.exec(fileContent)[1];
 			const ccVersion = +versionRegex.exec(fileContent)[1];
 			allCCs.set(ccName, ccVersion);
-		} catch (e) { }
+		} catch (e) { /* ok */ }
 	}
 
 	const longestName = Math.max(...[...allCCs.keys()].map(str => str.length));
@@ -51,7 +51,7 @@ function padEnd(str: string, len: number) {
 		const color = version === latest ? c.green
 			: version > 0 ? c.yellow
 				: c.red;
-		console.log(`| ${color(padEnd(name, longestName))} | ${color(padEnd(version > 1 ? `Version ${version}` : "not implemented", col2Length))} | ${padEnd(latest.toString(), col3Length)} |`);
+		console.log(`| ${color(padEnd(name, longestName))} | ${color(padEnd(version > 0 ? `Version ${version}` : "not implemented", col2Length))} | ${padEnd(latest.toString(), col3Length)} |`);
 	}
 	console.log(HR);
 })();
