@@ -27,11 +27,6 @@ const defaultOptions = {
         byte: 150,
     },
     skipInterview: false,
-    retransmission: {
-        maxRetries: 3,
-        timeout: 250,
-        backOffFactor: 1.5,
-    },
 };
 function applyDefaultOptions(target, source) {
     target = target || {};
@@ -353,10 +348,17 @@ class Driver extends events_1.EventEmitter {
                     return;
                 case "fatal_controller":
                     // The message was not sent
-                    logger_1.log("io", `  the message for the current transaction could not be sent, dropping the transaction`, "debug");
-                    if (this.currentTransaction.promise != null) {
-                        const errorMsg = `The message could not be sent`;
-                        this.rejectCurrentTransaction(new ZWaveError_1.ZWaveError(errorMsg, ZWaveError_1.ZWaveErrorCodes.Controller_MessageDropped));
+                    if (this.mayRetryCurrentTransaction()) {
+                        // The Z-Wave specs define 500ms as the waiting period for SendData messages
+                        const timeout = this.retryCurrentTransaction(500);
+                        logger_1.log("io", `  the message for the current transaction could not be sent, scheduling attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`, "warn");
+                    }
+                    else {
+                        logger_1.log("io", `  the message for the current transaction could not be sent after ${this.currentTransaction.maxSendAttempts} attempts, dropping the transaction`, "warn");
+                        if (this.currentTransaction.promise != null) {
+                            const errorMsg = `The message could not be sent`;
+                            this.rejectCurrentTransaction(new ZWaveError_1.ZWaveError(errorMsg, ZWaveError_1.ZWaveErrorCodes.Controller_MessageDropped));
+                        }
                     }
                     return;
                 case "fatal_node":
@@ -372,8 +374,13 @@ class Driver extends events_1.EventEmitter {
                         // And continue with the next messages
                         setImmediate(() => this.workOffSendQueue());
                     }
+                    else if (this.mayRetryCurrentTransaction()) {
+                        // The Z-Wave specs define 500ms as the waiting period for SendData messages
+                        const timeout = this.retryCurrentTransaction(500);
+                        logger_1.log("io", `  ${node.logPrefix}The node did not respond to the current transaction, scheduling attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`, "warn");
+                    }
                     else {
-                        logger_1.log("io", `  ${node.logPrefix}The node did not respond to the current transaction, dropping it`, "debug");
+                        logger_1.log("io", `  ${node.logPrefix}The node did not respond to the current transaction after ${this.currentTransaction.maxSendAttempts} attempts, dropping it`, "warn");
                         if (this.currentTransaction.promise != null) {
                             const errorMsg = msg instanceof SendDataMessages_1.SendDataRequest
                                 ? `The node did not respond (${SendDataMessages_1.TransmitStatus[msg.transmitStatus]})`
@@ -570,19 +577,30 @@ class Driver extends events_1.EventEmitter {
         logger_1.log("io", "NAK received. TODO: handle it", "warn");
     }
     handleCAN() {
-        // TODO: what to do with this CAN?
         if (this.currentTransaction != null) {
-            if (this.currentTransaction.retries < this.options.retransmission.maxRetries) {
-                this.currentTransaction.retries++;
-                const timeout = this.options.retransmission.timeout * Math.pow(this.options.retransmission.backOffFactor, this.currentTransaction.retries - 1);
-                logger_1.log("io", `CAN received - scheduling retransmission (${this.currentTransaction.retries}/${this.options.retransmission.maxRetries}) in ${timeout} ms...`, "warn");
-                setTimeout(() => this.retransmit(), timeout);
+            if (this.mayRetryCurrentTransaction()) {
+                const timeout = this.retryCurrentTransaction();
+                logger_1.log("io", `CAN received - scheduling transmission attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`, "warn");
             }
             else {
-                logger_1.log("io", `CAN received - maximum retransmissions for the current transaction reached, dropping it...`, "warn");
-                this.rejectCurrentTransaction(new ZWaveError_1.ZWaveError(`The message was dropped by the controller after ${this.options.retransmission.maxRetries} tries`, ZWaveError_1.ZWaveErrorCodes.Controller_MessageDropped), false /* don't resume queue, that happens automatically */);
+                logger_1.log("io", `CAN received - maximum transmission attempts for the current transaction reached, dropping it...`, "warn");
+                this.rejectCurrentTransaction(new ZWaveError_1.ZWaveError(`The message was dropped by the controller after ${this.currentTransaction.maxSendAttempts} attempts`, ZWaveError_1.ZWaveErrorCodes.Controller_MessageDropped), false /* don't resume queue, that happens automatically */);
             }
         }
+        // else: TODO: what to do with this CAN?
+    }
+    mayRetryCurrentTransaction() {
+        return this.currentTransaction.sendAttempts < this.currentTransaction.maxSendAttempts;
+    }
+    /** Retries the current transaction and returns the calculated timeout */
+    retryCurrentTransaction(timeout) {
+        // If no timeout was given, fallback to the default timeout as defined in the Z-Wave specs
+        if (!timeout) {
+            timeout = 100 + 1000 * (this.currentTransaction.sendAttempts - 1);
+        }
+        this.currentTransaction.sendAttempts++;
+        setTimeout(() => this.retransmit(), timeout);
+        return timeout;
     }
     /**
      * Resolves the current transaction with the given value
@@ -688,9 +706,8 @@ class Driver extends events_1.EventEmitter {
         const targetNode = this.sendQueue.peekStart().message.getNodeUnsafe();
         if (!targetNode || targetNode.isAwake()) {
             // get the next transaction
-            const next = this.sendQueue.shift();
-            this.currentTransaction = next;
-            const msg = next.message;
+            this.currentTransaction = this.sendQueue.shift();
+            const msg = this.currentTransaction.message;
             logger_1.log("io", `workOffSendQueue > sending next message (${Constants_1.FunctionType[msg.functionType]})...`, "debug");
             // for messages containing a CC, i.e. a SendDataRequest, set the CC version as high as possible
             if (ICommandClassContainer_1.isCommandClassContainer(msg)) {
@@ -701,6 +718,8 @@ class Driver extends events_1.EventEmitter {
             const data = msg.serialize();
             logger_1.log("io", `  data = 0x${data.toString("hex")}`, "debug");
             logger_1.log("io", `  remaining queue length = ${this.sendQueue.length}`, "debug");
+            // Mark the transaction as being sent
+            this.currentTransaction.sendAttempts = 1;
             this.doSend(data);
             // to avoid any deadlocks we didn't think of, re-call this later
             this.sendQueueTimer = setTimeout(() => this.workOffSendQueue(), 1000);
@@ -714,7 +733,6 @@ class Driver extends events_1.EventEmitter {
             return;
         const msg = this.currentTransaction.message;
         logger_1.log("io", `retransmit > resending message (${Constants_1.FunctionType[msg.functionType]})...`, "debug");
-        // for messages containing a CC, i.e. a SendDataRequest, set the CC version as high as possible
         const data = msg.serialize();
         logger_1.log("io", `  data = 0x${data.toString("hex")}`, "debug");
         this.doSend(data);
@@ -739,6 +757,8 @@ class Driver extends events_1.EventEmitter {
             // Change the priority to WakeUp and re-add it to the queue
             this.currentTransaction.priority = Constants_1.MessagePriority.WakeUp;
             this.sendQueue.add(this.currentTransaction);
+            // Reset send attempts - we might have already used all of them
+            this.currentTransaction.sendAttempts = 0;
             // "reset" the current transaction to none
             this.currentTransaction = null;
         }

@@ -34,15 +34,6 @@ export interface ZWaveOptions {
 	 * Set this to true to skip the controller interview. Useful for testing purposes
 	 */
 	skipInterview?: boolean;
-	/** Basic settings regarding retransmission of dropped messages */
-	retransmission: {
-		/** How often to retry sending messages */
-		maxRetries: number,
-		/** The time in ms between consecutive attempts */
-		timeout: number,
-		/** How much the timeout is increased between tries */
-		backOffFactor: number,
-	};
 }
 export type DeepPartial<T> = { [P in keyof T]+?: DeepPartial<T[P]> };
 
@@ -52,11 +43,6 @@ const defaultOptions: ZWaveOptions = {
 		byte: 150,
 	},
 	skipInterview: false,
-	retransmission: {
-		maxRetries: 3,
-		timeout: 250,
-		backOffFactor: 1.5,
-	},
 };
 function applyDefaultOptions(target: Record<string, any>, source: Record<string, any>): Record<string, any> {
 	target = target || {};
@@ -229,7 +215,7 @@ export class Driver extends EventEmitter implements IDriver {
 			.on("wake up", this.node_wakeUp.bind(this))
 			.on("sleep", this.node_sleep.bind(this))
 			.on("interview completed", this.node_interviewCompleted.bind(this))
-		;
+			;
 	}
 
 	private node_wakeUp(node: ZWaveNode) {
@@ -455,12 +441,18 @@ export class Driver extends EventEmitter implements IDriver {
 
 				case "fatal_controller":
 					// The message was not sent
-					log("io", `  the message for the current transaction could not be sent, dropping the transaction`, "debug");
-					if (this.currentTransaction.promise != null) {
-						const errorMsg = `The message could not be sent`;
-						this.rejectCurrentTransaction(
-							new ZWaveError(errorMsg, ZWaveErrorCodes.Controller_MessageDropped),
-						);
+					if (this.mayRetryCurrentTransaction()) {
+						// The Z-Wave specs define 500ms as the waiting period for SendData messages
+						const timeout = this.retryCurrentTransaction(500);
+						log("io", `  the message for the current transaction could not be sent, scheduling attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`, "warn");
+					} else {
+						log("io", `  the message for the current transaction could not be sent after ${this.currentTransaction.maxSendAttempts} attempts, dropping the transaction`, "warn");
+						if (this.currentTransaction.promise != null) {
+							const errorMsg = `The message could not be sent`;
+							this.rejectCurrentTransaction(
+								new ZWaveError(errorMsg, ZWaveErrorCodes.Controller_MessageDropped),
+							);
+						}
 					}
 					return;
 
@@ -476,8 +468,12 @@ export class Driver extends EventEmitter implements IDriver {
 						this.moveMessagesToWakeupQueue(node.id);
 						// And continue with the next messages
 						setImmediate(() => this.workOffSendQueue());
+					} else if (this.mayRetryCurrentTransaction()) {
+						// The Z-Wave specs define 500ms as the waiting period for SendData messages
+						const timeout = this.retryCurrentTransaction(500);
+						log("io", `  ${node.logPrefix}The node did not respond to the current transaction, scheduling attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`, "warn");
 					} else {
-						log("io", `  ${node.logPrefix}The node did not respond to the current transaction, dropping it`, "debug");
+						log("io", `  ${node.logPrefix}The node did not respond to the current transaction after ${this.currentTransaction.maxSendAttempts} attempts, dropping it`, "warn");
 						if (this.currentTransaction.promise != null) {
 							const errorMsg = msg instanceof SendDataRequest
 								? `The node did not respond (${TransmitStatus[msg.transmitStatus]})`
@@ -695,22 +691,35 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	private handleCAN() {
-		// TODO: what to do with this CAN?
 		if (this.currentTransaction != null) {
-			if (this.currentTransaction.retries < this.options.retransmission.maxRetries) {
-				this.currentTransaction.retries++;
-				const timeout = this.options.retransmission.timeout * Math.pow(this.options.retransmission.backOffFactor, this.currentTransaction.retries - 1);
-				log("io", `CAN received - scheduling retransmission (${this.currentTransaction.retries}/${this.options.retransmission.maxRetries}) in ${timeout} ms...`, "warn");
-				setTimeout(() => this.retransmit(), timeout);
+			if (this.mayRetryCurrentTransaction()) {
+				const timeout = this.retryCurrentTransaction();
+				log("io", `CAN received - scheduling transmission attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`, "warn");
 			} else {
-				log("io", `CAN received - maximum retransmissions for the current transaction reached, dropping it...`, "warn");
+				log("io", `CAN received - maximum transmission attempts for the current transaction reached, dropping it...`, "warn");
 
 				this.rejectCurrentTransaction(new ZWaveError(
-					`The message was dropped by the controller after ${this.options.retransmission.maxRetries} tries`,
+					`The message was dropped by the controller after ${this.currentTransaction.maxSendAttempts} attempts`,
 					ZWaveErrorCodes.Controller_MessageDropped,
 				), false /* don't resume queue, that happens automatically */);
 			}
 		}
+		// else: TODO: what to do with this CAN?
+	}
+
+	private mayRetryCurrentTransaction(): boolean {
+		return this.currentTransaction.sendAttempts < this.currentTransaction.maxSendAttempts;
+	}
+
+	/** Retries the current transaction and returns the calculated timeout */
+	private retryCurrentTransaction(timeout?: number): number {
+		// If no timeout was given, fallback to the default timeout as defined in the Z-Wave specs
+		if (!timeout) {
+			timeout = 100 + 1000 * (this.currentTransaction.sendAttempts - 1);
+		}
+		this.currentTransaction.sendAttempts++;
+		setTimeout(() => this.retransmit(), timeout);
+		return timeout;
 	}
 
 	/**
@@ -873,9 +882,8 @@ export class Driver extends EventEmitter implements IDriver {
 		const targetNode = this.sendQueue.peekStart().message.getNodeUnsafe();
 		if (!targetNode || targetNode.isAwake()) {
 			// get the next transaction
-			const next = this.sendQueue.shift();
-			this.currentTransaction = next;
-			const msg = next.message;
+			this.currentTransaction = this.sendQueue.shift();
+			const msg = this.currentTransaction.message;
 			log("io", `workOffSendQueue > sending next message (${FunctionType[msg.functionType]})...`, "debug");
 			// for messages containing a CC, i.e. a SendDataRequest, set the CC version as high as possible
 			if (isCommandClassContainer(msg)) {
@@ -886,6 +894,8 @@ export class Driver extends EventEmitter implements IDriver {
 			const data = msg.serialize();
 			log("io", `  data = 0x${data.toString("hex")}`, "debug");
 			log("io", `  remaining queue length = ${this.sendQueue.length}`, "debug");
+			// Mark the transaction as being sent
+			this.currentTransaction.sendAttempts = 1;
 			this.doSend(data);
 
 			// to avoid any deadlocks we didn't think of, re-call this later
@@ -899,7 +909,6 @@ export class Driver extends EventEmitter implements IDriver {
 		if (this.currentTransaction == null) return;
 		const msg = this.currentTransaction.message;
 		log("io", `retransmit > resending message (${FunctionType[msg.functionType]})...`, "debug");
-		// for messages containing a CC, i.e. a SendDataRequest, set the CC version as high as possible
 		const data = msg.serialize();
 		log("io", `  data = 0x${data.toString("hex")}`, "debug");
 		this.doSend(data);
@@ -927,6 +936,8 @@ export class Driver extends EventEmitter implements IDriver {
 			// Change the priority to WakeUp and re-add it to the queue
 			this.currentTransaction.priority = MessagePriority.WakeUp;
 			this.sendQueue.add(this.currentTransaction);
+			// Reset send attempts - we might have already used all of them
+			this.currentTransaction.sendAttempts = 0;
 			// "reset" the current transaction to none
 			this.currentTransaction = null;
 		}

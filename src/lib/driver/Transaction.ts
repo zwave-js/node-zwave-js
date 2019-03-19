@@ -10,6 +10,9 @@ function highResTimestamp(): number {
 	return s * 1e9 + ns;
 }
 
+// The Z-Wave spec declare that maximum 3 send attempts may be performed
+export const MAX_SEND_ATTEMPTS = 3;
+
 export class Transaction implements Comparable<Transaction> {
 
 	constructor(
@@ -26,8 +29,12 @@ export class Transaction implements Comparable<Transaction> {
 		public timestamp: number = highResTimestamp(),
 		public ackPending: boolean = true,
 		public response?: Message,
-		public retries: number = 0,
+		/** The number of times the driver may try to send this message */
+		public maxSendAttempts: number = 3,
+		/** The number of times the driver has tried to send this message */
+		public sendAttempts: number = 0,
 	) {
+		if (this.maxSendAttempts > MAX_SEND_ATTEMPTS) this.maxSendAttempts = MAX_SEND_ATTEMPTS;
 	}
 
 	public compareTo(other: Transaction): CompareResult {

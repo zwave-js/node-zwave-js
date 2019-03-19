@@ -13,15 +13,6 @@ export interface ZWaveOptions {
         /** not sure */
         byte: number;
     };
-    /** Basic settings regarding retransmission of dropped messages */
-    retransmission: {
-        /** How often to retry sending messages */
-        maxRetries: number;
-        /** The time in ms between consecutive attempts */
-        timeout: number;
-        /** How much the timeout is increased between tries */
-        backOffFactor: number;
-    };
 }
 export declare type DeepPartial<T> = {
     [P in keyof T]+?: DeepPartial<T[P]>;
@@ -112,6 +103,9 @@ export declare class Driver extends EventEmitter implements IDriver {
     private handleACK;
     private handleNAK;
     private handleCAN;
+    private mayRetryCurrentTransaction;
+    /** Retries the current transaction and returns the calculated timeout */
+    private retryCurrentTransaction;
     /**
      * Resolves the current transaction with the given value
      * and resumes the queue handling
