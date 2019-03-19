@@ -28,7 +28,8 @@
         "pretty": true
     },
     "include": [
-        "src/**/*.ts"
+        "src/**/*.ts",
+        "maintenance/**/*.ts"
     ],
     "exclude": [
         "build/**",

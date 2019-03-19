@@ -4,14 +4,22 @@ require("reflect-metadata");
 import * as c from "ansi-colors";
 import * as fs from "fs-extra";
 import * as path from "path";
+import * as yargs from "yargs";
 import { CommandClasses } from "../src/lib/commandclass/CommandClass";
 import { num2hex } from "../src/lib/util/strings";
 
 const ccRegex = /^@commandClass\(CommandClasses(?:\.|\[")(.+?)(?:"\])?\)/m;
 const versionRegex = /^@implementedVersion\((\d+)\)/m;
+const ansiColorRegex = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g;
+
+const onlyIncomplete = !!yargs.argv.onlyIncomplete;
+
+function getSafeLength(str: string) {
+	return str.replace(ansiColorRegex, "").length;
+}
 
 function padEnd(str: string, len: number) {
-	return str + " ".repeat(len - str.length);
+	return str + " ".repeat(len - getSafeLength(str));
 }
 
 (async () => {
@@ -35,26 +43,54 @@ function padEnd(str: string, len: number) {
 		} catch (e) { /* ok */ }
 	}
 
-	const longestName = Math.max(...[...allCCs.keys()].map(str => str.length));
-	const col2Header = "Implemented version";
-	const col2Length = col2Header.length;
-	const col3Header = "max.";
-	const col3Length = col3Header.length;
+	const headers = ["", "Command class name", "Implemented version", "max."];
+	const rows = [];
 
-	console.log();
-	const HR = `|-${"-".repeat(longestName)}-|-${"-".repeat(col2Length)}-|-${"-".repeat(col3Length)}-|`;
-	console.log(HR);
-	console.log(`| ${padEnd("Command class name", longestName)} | ${col2Header} | ${col3Header} |`);
-	console.log(HR);
 	for (const [name, version] of allCCs.entries()) {
 		const latest = getLatestVersion(name);
-		const color = version === latest ? c.green
-			: version > 0 ? c.yellow
-				: c.red;
-		console.log(`| ${color(padEnd(name, longestName))} | ${color(padEnd(version > 0 ? `Version ${version}` : "not implemented", col2Length))} | ${padEnd(latest.toString(), col3Length)} |`);
+		const color =
+			version === latest ? c.green
+				: version > 0 ? c.yellow
+					: c.red;
+		const prefix =
+			version === latest ? "✓"
+				: version > 0 ? "✍"
+					: "✗";
+		if (version !== latest || !onlyIncomplete) {
+			rows.push([color(prefix), color(name), color(version > 0 ? `Version ${version}` : "not implemented"), latest.toString()]);
+		}
 	}
-	console.log(HR);
+	writeTable([headers, ...rows], yargs.argv.flavor === "github" ? "github" : "console");
 })();
+
+function writeTable(rows: string[][], flavor: "console" | "github") {
+	const numColumns = rows[0].length;
+	if (flavor === "console") {
+		const columnLenghts: number[] = [];
+		for (let col = 0; col < numColumns; col++) {
+			columnLenghts.push(Math.max(...rows.map(row => getSafeLength(row[col]))));
+		}
+		const HR = "|-" + columnLenghts.map(len => "-".repeat(len)).join("-|-") + "-|";
+
+		console.log(HR);
+		for (let i = 0; i < rows.length; i++) {
+			const row = "| " + rows[i].map((r, ri) => padEnd(r, columnLenghts[ri])).join(" | ") + " |";
+			console.log(row);
+			if (i === 0) console.log(HR);
+		}
+		console.log(HR);
+	} else if (flavor === "github") {
+		let HR = "|";
+		for (let i = 0; i < numColumns; i++) HR += " --- |";
+
+		for (let i = 0; i < rows.length; i++) {
+			const row = "| " + rows[i].join(" | ") + " |";
+			console.log(row);
+			if (i === 0) console.log(HR);
+		}
+
+	}
+}
 
 function getLatestVersion(ccName: string) {
 	const cc = CommandClasses[ccName as any] as any as number;
