@@ -4,23 +4,46 @@ import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveNode } from "../node/Node";
 import { CommandClass, CommandClasses, StateKind } from "./CommandClass";
+import { FeatureSupport } from "./FeatureSupport";
 export declare enum VersionCommand {
     Get = 17,
     Report = 18,
     CommandClassGet = 19,
-    CommandClassReport = 20
+    CommandClassReport = 20,
+    CapabilitiesGet = 21,
+    CapabilitiesReport = 22,
+    ZWaveSoftwareGet = 23,
+    ZWaveSoftwareReport = 24
 }
 export declare class VersionCC extends CommandClass {
     nodeId: number;
     versionCommand?: VersionCommand;
     requestedCC?: CommandClasses;
     constructor(driver: IDriver, nodeId?: number);
-    constructor(driver: IDriver, nodeId: number, command: VersionCommand.Get);
+    constructor(driver: IDriver, nodeId: number, command: VersionCommand.Get | VersionCommand.CapabilitiesGet | VersionCommand.ZWaveSoftwareGet);
     constructor(driver: IDriver, nodeId: number, command: VersionCommand.CommandClassGet, requestedCC: CommandClasses);
     libraryType: ZWaveLibraryTypes;
     protocolVersion: string;
     firmwareVersions: string[];
     hardwareVersion: number;
+    sdkVersion: string;
+    applicationFrameworkAPIVersion: string;
+    applicationFrameworkBuildNumber: number;
+    hostInterfaceVersion: string;
+    hostInterfaceBuildNumber: number;
+    zWaveProtocolVersion: string;
+    zWaveProtocolBuildNumber: number;
+    applicationVersion: string;
+    applicationBuildNumber: number;
+    /** Whether this node supports the Get command */
+    readonly supportsGet: FeatureSupport;
+    /** Whether this node supports the CommandClassGet command */
+    readonly supportsCommandClassGet: FeatureSupport;
+    /** Whether this node supports the CapabilitiesGet command */
+    readonly supportsCapabilitiesGet: FeatureSupport;
+    private _supportsZWaveSoftwareGet;
+    /** Whether this node supports the ZWaveSoftwareGet command */
+    readonly supportsZWaveSoftwareGet: FeatureSupport;
     private _ccVersion;
     readonly ccVersion: number;
     serialize(): Buffer;

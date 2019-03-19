@@ -4,23 +4,46 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { ZWaveNode } from "../node/Node";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion, StateKind } from "./CommandClass";
+import { FeatureSupport } from "./FeatureSupport";
 
 export enum VersionCommand {
 	Get = 0x11,
 	Report = 0x12,
 	CommandClassGet = 0x13,
 	CommandClassReport = 0x14,
+	CapabilitiesGet = 0x15,
+	CapabilitiesReport = 0x16,
+	ZWaveSoftwareGet = 0x17,
+	ZWaveSoftwareReport = 0x18,
+}
+
+function parseVersion(buffer: Buffer): string {
+	if (
+		buffer[0] ===  0
+		&& buffer[1] === 0
+		&& buffer[2] === 0
+	) return "unused";
+	return `${buffer[0]}.${buffer[1]}.${buffer[2]}`;
 }
 
 @commandClass(CommandClasses.Version)
-@implementedVersion(2)
+@implementedVersion(3)
 @expectedCCResponse(CommandClasses.Version)
 export class VersionCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
 	constructor(driver: IDriver, nodeId?: number);
-	constructor(driver: IDriver, nodeId: number, command: VersionCommand.Get);
-	constructor(driver: IDriver, nodeId: number, command: VersionCommand.CommandClassGet, requestedCC: CommandClasses);
+	constructor(
+		driver: IDriver, nodeId: number,
+		command: VersionCommand.Get
+			| VersionCommand.CapabilitiesGet
+			| VersionCommand.ZWaveSoftwareGet,
+		);
+	constructor(
+		driver: IDriver, nodeId: number,
+		command: VersionCommand.CommandClassGet,
+		requestedCC: CommandClasses,
+	);
 
 	constructor(
 		driver: IDriver,
@@ -36,6 +59,27 @@ export class VersionCC extends CommandClass {
 	@ccValue() public protocolVersion: string;
 	@ccValue() public firmwareVersions: string[];
 	@ccValue() public hardwareVersion: number;
+	@ccValue() public sdkVersion: string;
+	@ccValue() public applicationFrameworkAPIVersion: string;
+	@ccValue() public applicationFrameworkBuildNumber: number;
+	@ccValue() public hostInterfaceVersion: string;
+	@ccValue() public hostInterfaceBuildNumber: number;
+	@ccValue() public zWaveProtocolVersion: string;
+	@ccValue() public zWaveProtocolBuildNumber: number;
+	@ccValue() public applicationVersion: string;
+	@ccValue() public applicationBuildNumber: number;
+
+	/** Whether this node supports the Get command */
+	public get supportsGet(): FeatureSupport { return true; } // This is mandatory
+	/** Whether this node supports the CommandClassGet command */
+	public get supportsCommandClassGet(): FeatureSupport { return true; } // This is mandatory
+	/** Whether this node supports the CapabilitiesGet command */
+	public get supportsCapabilitiesGet(): FeatureSupport { return this.version >= 3; }
+	private _supportsZWaveSoftwareGet: FeatureSupport = "unknown";
+	/** Whether this node supports the ZWaveSoftwareGet command */
+	public get supportsZWaveSoftwareGet(): FeatureSupport {
+		return this._supportsZWaveSoftwareGet;
+	}
 
 	private _ccVersion: number;
 	public get ccVersion(): number {
@@ -45,6 +89,8 @@ export class VersionCC extends CommandClass {
 	public serialize(): Buffer {
 		switch (this.versionCommand) {
 			case VersionCommand.Get:
+			case VersionCommand.CapabilitiesGet:
+			case VersionCommand.ZWaveSoftwareGet:
 				this.payload = Buffer.from([this.versionCommand]);
 				break;
 			case VersionCommand.CommandClassGet:
@@ -55,7 +101,7 @@ export class VersionCC extends CommandClass {
 				break;
 			default:
 				throw new ZWaveError(
-					"Cannot serialize a Version CC with a command other than Get or CommandClassGet",
+					"Cannot serialize a Version CC with a command other than Get, CapabilitiesGet, ZWaveSoftwareGet or CommandClassGet",
 					ZWaveErrorCodes.CC_Invalid,
 				);
 		}
@@ -86,9 +132,43 @@ export class VersionCC extends CommandClass {
 				this._ccVersion = this.payload[2];
 				break;
 
+			case VersionCommand.CapabilitiesReport: {
+				const capabilities = this.payload[1];
+				this._supportsZWaveSoftwareGet = !!(capabilities & 0b100);
+				break;
+			}
+
+			case VersionCommand.ZWaveSoftwareReport:
+				this.sdkVersion = parseVersion(this.payload.slice(1));
+				this.applicationFrameworkAPIVersion = parseVersion(this.payload.slice(4));
+				if (this.applicationFrameworkAPIVersion !== "unused") {
+					this.applicationFrameworkBuildNumber = this.payload.readUInt16BE(7);
+				} else {
+					this.applicationFrameworkBuildNumber = 0;
+				}
+				this.hostInterfaceVersion = parseVersion(this.payload.slice(9));
+				if (this.hostInterfaceVersion !== "unused") {
+					this.hostInterfaceBuildNumber = this.payload.readUInt16BE(12);
+				} else {
+					this.hostInterfaceBuildNumber = 0;
+				}
+				this.zWaveProtocolVersion = parseVersion(this.payload.slice(14));
+				if (this.zWaveProtocolVersion !== "unused") {
+					this.zWaveProtocolBuildNumber = this.payload.readUInt16BE(17);
+				} else {
+					this.zWaveProtocolBuildNumber = 0;
+				}
+				this.applicationVersion = parseVersion(this.payload.slice(14));
+				if (this.applicationVersion !== "unused") {
+					this.applicationBuildNumber = this.payload.readUInt16BE(17);
+				} else {
+					this.applicationBuildNumber = 0;
+				}
+				break;
+
 			default:
 				throw new ZWaveError(
-					"Cannot deserialize a Version CC with a command other than Report or CommandClassReport",
+					"Cannot deserialize a Version CC with a command other than Report, CommandClassReport, CapabilitiesReport or ZWaveSoftwareReport",
 					ZWaveErrorCodes.CC_Invalid,
 				);
 		}

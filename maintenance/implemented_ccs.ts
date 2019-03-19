@@ -7,8 +7,8 @@ import * as path from "path";
 import { CommandClasses } from "../src/lib/commandclass/CommandClass";
 import { num2hex } from "../src/lib/util/strings";
 
-const ccRegex = /^@commandClass\(CommandClasses(?:\.|\[")(.+?)(?:"\])?\)$/m;
-const versionRegex = /^@implementedVersion\((\d+)\)$/m;
+const ccRegex = /^@commandClass\(CommandClasses(?:\.|\[")(.+?)(?:"\])?\)/m;
+const versionRegex = /^@implementedVersion\((\d+)\)/m;
 
 function padEnd(str: string, len: number) {
 	return str + " ".repeat(len - str.length);
