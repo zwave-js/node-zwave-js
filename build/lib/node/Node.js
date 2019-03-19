@@ -13,6 +13,7 @@ const NoOperationCC_1 = require("../commandclass/NoOperationCC");
 const VersionCC_1 = require("../commandclass/VersionCC");
 const WakeUpCC_1 = require("../commandclass/WakeUpCC");
 const ZWavePlusCC_1 = require("../commandclass/ZWavePlusCC");
+const Manufacturers_1 = require("../config/Manufacturers");
 const ApplicationUpdateRequest_1 = require("../controller/ApplicationUpdateRequest");
 const GetNodeProtocolInfoMessages_1 = require("../controller/GetNodeProtocolInfoMessages");
 const GetRoutingInfoMessages_1 = require("../controller/GetRoutingInfoMessages");
@@ -311,12 +312,12 @@ class ZWaveNode extends events_1.EventEmitter {
                 // set the priority manually, as SendData can be Application level too
                 const resp = await this.driver.sendMessage(request, Constants_1.MessagePriority.NodeQuery);
                 if (ICommandClassContainer_1.isCommandClassContainer(resp)) {
-                    const manufacturerResponse = resp.command;
-                    manufacturerResponse.persistValues();
+                    const mfResp = resp.command;
+                    mfResp.persistValues();
                     logger_1.log("controller", `${this.logPrefix}received response for manufacturer information:`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  manufacturer id: ${strings_2.num2hex(manufacturerResponse.manufacturerId)}`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  product type:    ${strings_2.num2hex(manufacturerResponse.productType)}`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  product id:      ${strings_2.num2hex(manufacturerResponse.productId)}`, "debug");
+                    logger_1.log("controller", `${this.logPrefix}  manufacturer: ${await Manufacturers_1.lookupManufacturer(mfResp.manufacturerId) || "unknown"} (${strings_2.num2hex(mfResp.manufacturerId)})`, "debug");
+                    logger_1.log("controller", `${this.logPrefix}  product type: ${strings_2.num2hex(mfResp.productType)}`, "debug");
+                    logger_1.log("controller", `${this.logPrefix}  product id:   ${strings_2.num2hex(mfResp.productId)}`, "debug");
                 }
             }
             catch (e) {
@@ -435,8 +436,7 @@ class ZWaveNode extends events_1.EventEmitter {
         try {
             const resp = await this.driver.sendMessage(new GetRoutingInfoMessages_1.GetRoutingInfoRequest(this.driver, this.id, false, false));
             this._neighbors = resp.nodeIds;
-            logger_1.log("controller", `${this.logPrefix}  node neighbors received:`, "debug");
-            logger_1.log("controller", `${this.logPrefix}    ${this._neighbors.join(", ")}`, "debug");
+            logger_1.log("controller", `${this.logPrefix}  node neighbors received: ${this._neighbors.join(", ")}`, "debug");
         }
         catch (e) {
             logger_1.log("controller", `${this.logPrefix}  requesting the node neighbors failed: ${e.message}`, "debug");

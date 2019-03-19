@@ -13,6 +13,7 @@ import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { VersionCC, VersionCommand } from "../commandclass/VersionCC";
 import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
 import { ZWavePlusCC, ZWavePlusCommand, ZWavePlusNodeType, ZWavePlusRoleType } from "../commandclass/ZWavePlusCC";
+import { lookupManufacturer } from "../config/Manufacturers";
 import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/ApplicationUpdateRequest";
 import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "../controller/GetNodeProtocolInfoMessages";
 import { GetRoutingInfoRequest, GetRoutingInfoResponse } from "../controller/GetRoutingInfoMessages";
@@ -25,9 +26,7 @@ import { num2hex, stringify } from "../util/strings";
 import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
 import { NodeUpdatePayload } from "./NodeInfo";
 import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
-import { ValueDB, ValueDBEventCallbacks, ValueUpdatedArgs } from "./ValueDB";
-
-export type ValueUpdatedCallback = (args: ValueUpdatedArgs) => void;
+import { ValueDB, ValueDBEventCallbacks } from "./ValueDB";
 
 export type ZWaveNodeEventCallbacks = Overwrite<
 	{ [K in "wake up" | "sleep" | "interview completed"]: (node: ZWaveNode) => void },
@@ -395,12 +394,12 @@ export class ZWaveNode extends EventEmitter {
 				// set the priority manually, as SendData can be Application level too
 				const resp = await this.driver.sendMessage<SendDataRequest>(request, MessagePriority.NodeQuery);
 				if (isCommandClassContainer(resp)) {
-					const manufacturerResponse = resp.command as ManufacturerSpecificCC;
-					manufacturerResponse.persistValues();
+					const mfResp = resp.command as ManufacturerSpecificCC;
+					mfResp.persistValues();
 					log("controller", `${this.logPrefix}received response for manufacturer information:`, "debug");
-					log("controller", `${this.logPrefix}  manufacturer id: ${num2hex(manufacturerResponse.manufacturerId)}`, "debug");
-					log("controller", `${this.logPrefix}  product type:    ${num2hex(manufacturerResponse.productType)}`, "debug");
-					log("controller", `${this.logPrefix}  product id:      ${num2hex(manufacturerResponse.productId)}`, "debug");
+					log("controller", `${this.logPrefix}  manufacturer: ${await lookupManufacturer(mfResp.manufacturerId) || "unknown"} (${num2hex(mfResp.manufacturerId)})`, "debug");
+					log("controller", `${this.logPrefix}  product type: ${num2hex(mfResp.productType)}`, "debug");
+					log("controller", `${this.logPrefix}  product id:   ${num2hex(mfResp.productId)}`, "debug");
 				}
 			} catch (e) {
 				log("controller", `${this.logPrefix}  querying the manufacturer information failed: ${e.message}`, "debug");
@@ -527,8 +526,7 @@ export class ZWaveNode extends EventEmitter {
 				new GetRoutingInfoRequest(this.driver, this.id, false, false),
 			);
 			this._neighbors = resp.nodeIds;
-			log("controller", `${this.logPrefix}  node neighbors received:`, "debug");
-			log("controller", `${this.logPrefix}    ${this._neighbors.join(", ")}`, "debug");
+			log("controller", `${this.logPrefix}  node neighbors received: ${this._neighbors.join(", ")}`, "debug");
 		} catch (e) {
 			log("controller", `${this.logPrefix}  requesting the node neighbors failed: ${e.message}`, "debug");
 		}
