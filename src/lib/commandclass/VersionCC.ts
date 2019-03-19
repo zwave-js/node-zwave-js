@@ -13,7 +13,7 @@ export enum VersionCommand {
 }
 
 @commandClass(CommandClasses.Version)
-@implementedVersion(1)
+@implementedVersion(2)
 @expectedCCResponse(CommandClasses.Version)
 export class VersionCC extends CommandClass {
 
@@ -34,7 +34,8 @@ export class VersionCC extends CommandClass {
 
 	@ccValue() public libraryType: ZWaveLibraryTypes;
 	@ccValue() public protocolVersion: string;
-	@ccValue() public applicationVersion: string;
+	@ccValue() public firmwareVersions: string[];
+	@ccValue() public hardwareVersion: number;
 
 	private _ccVersion: number;
 	public get ccVersion(): number {
@@ -70,7 +71,14 @@ export class VersionCC extends CommandClass {
 			case VersionCommand.Report:
 				this.libraryType = this.payload[1];
 				this.protocolVersion = `${this.payload[2]}.${this.payload[3]}`;
-				this.applicationVersion = `${this.payload[4]}.${this.payload[5]}`;
+				this.firmwareVersions = [`${this.payload[4]}.${this.payload[5]}`];
+				if (this.version >= 2) {
+					this.hardwareVersion = this.payload[6];
+					const additionalFirmwares = this.payload[7];
+					for (let i = 0; i < additionalFirmwares; i++) {
+						this.firmwareVersions.push(`${this.payload[8 + 2 * i]}.${this.payload[8 + 2 * i + 1]}`);
+					}
+				}
 				break;
 
 			case VersionCommand.CommandClassReport:

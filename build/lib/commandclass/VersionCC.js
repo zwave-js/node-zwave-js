@@ -54,7 +54,14 @@ let VersionCC = VersionCC_1 = class VersionCC extends CommandClass_1.CommandClas
             case VersionCommand.Report:
                 this.libraryType = this.payload[1];
                 this.protocolVersion = `${this.payload[2]}.${this.payload[3]}`;
-                this.applicationVersion = `${this.payload[4]}.${this.payload[5]}`;
+                this.firmwareVersions = [`${this.payload[4]}.${this.payload[5]}`];
+                if (this.version >= 2) {
+                    this.hardwareVersion = this.payload[6];
+                    const additionalFirmwares = this.payload[7];
+                    for (let i = 0; i < additionalFirmwares; i++) {
+                        this.firmwareVersions.push(`${this.payload[8 + 2 * i]}.${this.payload[8 + 2 * i + 1]}`);
+                    }
+                }
                 break;
             case VersionCommand.CommandClassReport:
                 this.requestedCC = this.payload[1];
@@ -83,11 +90,15 @@ __decorate([
 ], VersionCC.prototype, "protocolVersion", void 0);
 __decorate([
     CommandClass_1.ccValue(),
-    __metadata("design:type", String)
-], VersionCC.prototype, "applicationVersion", void 0);
+    __metadata("design:type", Array)
+], VersionCC.prototype, "firmwareVersions", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], VersionCC.prototype, "hardwareVersion", void 0);
 VersionCC = VersionCC_1 = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses.Version),
-    CommandClass_1.implementedVersion(1),
+    CommandClass_1.implementedVersion(2),
     CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses.Version),
     __metadata("design:paramtypes", [Object, Number, Number, Number])
 ], VersionCC);
