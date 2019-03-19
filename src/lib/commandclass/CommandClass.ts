@@ -7,6 +7,7 @@ import { Constructable } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
+import { FeatureSupport } from "./FeatureSupport";
 
 export interface CommandClassInfo {
 	isSupported: boolean;
@@ -137,6 +138,12 @@ export class CommandClass {
 	/** Requests static or dynamic state for a given from a node */
 	public static createStateRequest(driver: IDriver, node: ZWaveNode, kind: StateKind): SendDataRequest | void {
 		// This needs to be overwritten per command class. In the default implementation, don't do anything
+	}
+
+	/** Determine whether the linked node supports a specific command of this command class */
+	public supportsCommand(command: number): FeatureSupport {
+		// This needs to be overwritten per command class. In the default implementation, we don't know anything!
+		return "unknown";
 	}
 
 	/**

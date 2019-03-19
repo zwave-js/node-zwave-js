@@ -35,15 +35,8 @@ export declare class VersionCC extends CommandClass {
     zWaveProtocolBuildNumber: number;
     applicationVersion: string;
     applicationBuildNumber: number;
-    /** Whether this node supports the Get command */
-    readonly supportsGet: FeatureSupport;
-    /** Whether this node supports the CommandClassGet command */
-    readonly supportsCommandClassGet: FeatureSupport;
-    /** Whether this node supports the CapabilitiesGet command */
-    readonly supportsCapabilitiesGet: FeatureSupport;
+    supportsCommand(cmd: VersionCommand): FeatureSupport;
     private _supportsZWaveSoftwareGet;
-    /** Whether this node supports the ZWaveSoftwareGet command */
-    readonly supportsZWaveSoftwareGet: FeatureSupport;
     private _ccVersion;
     readonly ccVersion: number;
     serialize(): Buffer;

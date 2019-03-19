@@ -105,6 +105,11 @@ let CommandClass = CommandClass_1 = class CommandClass {
     static createStateRequest(driver, node, kind) {
         // This needs to be overwritten per command class. In the default implementation, don't do anything
     }
+    /** Determine whether the linked node supports a specific command of this command class */
+    supportsCommand(command) {
+        // This needs to be overwritten per command class. In the default implementation, we don't know anything!
+        return "unknown";
+    }
     /**
      * Returns the node this CC is linked to. Throws if the node does not exist.
      */

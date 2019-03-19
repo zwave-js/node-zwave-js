@@ -3,6 +3,7 @@ import { SendDataRequest } from "../controller/SendDataMessages";
 import { IDriver } from "../driver/IDriver";
 import { Constructable } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
+import { FeatureSupport } from "./FeatureSupport";
 export interface CommandClassInfo {
     isSupported: boolean;
     isControlled: boolean;
@@ -48,6 +49,8 @@ export declare class CommandClass {
     protected toJSONInherited(props: Record<string, any>): Record<string, any>;
     /** Requests static or dynamic state for a given from a node */
     static createStateRequest(driver: IDriver, node: ZWaveNode, kind: StateKind): SendDataRequest | void;
+    /** Determine whether the linked node supports a specific command of this command class */
+    supportsCommand(command: number): FeatureSupport;
     /**
      * Returns the node this CC is linked to. Throws if the node does not exist.
      */

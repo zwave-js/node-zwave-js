@@ -69,17 +69,16 @@ export class VersionCC extends CommandClass {
 	@ccValue() public applicationVersion: string;
 	@ccValue() public applicationBuildNumber: number;
 
-	/** Whether this node supports the Get command */
-	public get supportsGet(): FeatureSupport { return true; } // This is mandatory
-	/** Whether this node supports the CommandClassGet command */
-	public get supportsCommandClassGet(): FeatureSupport { return true; } // This is mandatory
-	/** Whether this node supports the CapabilitiesGet command */
-	public get supportsCapabilitiesGet(): FeatureSupport { return this.version >= 3; }
-	private _supportsZWaveSoftwareGet: FeatureSupport = "unknown";
-	/** Whether this node supports the ZWaveSoftwareGet command */
-	public get supportsZWaveSoftwareGet(): FeatureSupport {
-		return this._supportsZWaveSoftwareGet;
+	public supportsCommand(cmd: VersionCommand): FeatureSupport {
+		switch (cmd) {
+			case VersionCommand.Get: return true; // This is mandatory
+			case VersionCommand.CommandClassGet: return true; // This is mandatory
+			case VersionCommand.CapabilitiesGet: return this.version >= 3;
+			case VersionCommand.ZWaveSoftwareGet: return this._supportsZWaveSoftwareGet;
+		}
+		return super.supportsCommand(cmd);
 	}
+	private _supportsZWaveSoftwareGet: FeatureSupport = "unknown";
 
 	private _ccVersion: number;
 	public get ccVersion(): number {

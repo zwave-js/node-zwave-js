@@ -40,15 +40,14 @@ let VersionCC = VersionCC_1 = class VersionCC extends CommandClass_1.CommandClas
         this.requestedCC = requestedCC;
         this._supportsZWaveSoftwareGet = "unknown";
     }
-    /** Whether this node supports the Get command */
-    get supportsGet() { return true; } // This is mandatory
-    /** Whether this node supports the CommandClassGet command */
-    get supportsCommandClassGet() { return true; } // This is mandatory
-    /** Whether this node supports the CapabilitiesGet command */
-    get supportsCapabilitiesGet() { return this.version >= 3; }
-    /** Whether this node supports the ZWaveSoftwareGet command */
-    get supportsZWaveSoftwareGet() {
-        return this._supportsZWaveSoftwareGet;
+    supportsCommand(cmd) {
+        switch (cmd) {
+            case VersionCommand.Get: return true; // This is mandatory
+            case VersionCommand.CommandClassGet: return true; // This is mandatory
+            case VersionCommand.CapabilitiesGet: return this.version >= 3;
+            case VersionCommand.ZWaveSoftwareGet: return this._supportsZWaveSoftwareGet;
+        }
+        return super.supportsCommand(cmd);
     }
     get ccVersion() {
         return this._ccVersion;
