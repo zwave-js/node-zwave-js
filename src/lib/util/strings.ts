@@ -5,9 +5,10 @@ export function cpp2js(str: string): string {
 	return str.substr(0, nullIndex);
 }
 
-export function num2hex(val: number | undefined | null): string {
+export function num2hex(val: number | undefined | null, uppercase: boolean = false): string {
 	if (val == null) return "undefined";
 	let ret = val.toString(16);
+	if (uppercase) ret = ret.toUpperCase();
 	if (ret.length % 2 !== 0) ret = "0" + ret;
 	return "0x" + ret;
 }

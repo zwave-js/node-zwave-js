@@ -8,10 +8,12 @@ function cpp2js(str) {
     return str.substr(0, nullIndex);
 }
 exports.cpp2js = cpp2js;
-function num2hex(val) {
+function num2hex(val, uppercase = false) {
     if (val == null)
         return "undefined";
     let ret = val.toString(16);
+    if (uppercase)
+        ret = ret.toUpperCase();
     if (ret.length % 2 !== 0)
         ret = "0" + ret;
     return "0x" + ret;
