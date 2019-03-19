@@ -10,11 +10,7 @@ function highResTimestamp() {
 // The Z-Wave spec declare that maximum 3 send attempts may be performed
 exports.MAX_SEND_ATTEMPTS = 3;
 class Transaction {
-    constructor(driver, message, promise, priority, timestamp = highResTimestamp(), ackPending = true, response, 
-    /** The number of times the driver may try to send this message */
-    maxSendAttempts = 3, 
-    /** The number of times the driver has tried to send this message */
-    sendAttempts = 0) {
+    constructor(driver, message, promise, priority, timestamp = highResTimestamp(), ackPending = true, response) {
         this.driver = driver;
         this.message = message;
         this.promise = promise;
@@ -22,10 +18,20 @@ class Transaction {
         this.timestamp = timestamp;
         this.ackPending = ackPending;
         this.response = response;
-        this.maxSendAttempts = maxSendAttempts;
-        this.sendAttempts = sendAttempts;
-        if (this.maxSendAttempts > exports.MAX_SEND_ATTEMPTS)
-            this.maxSendAttempts = exports.MAX_SEND_ATTEMPTS;
+        this._maxSendAttempts = exports.MAX_SEND_ATTEMPTS;
+        /** The number of times the driver has tried to send this message */
+        this.sendAttempts = 0;
+        if (message != undefined)
+            this.maxSendAttempts = message.maxSendAttempts;
+    }
+    /** The number of times the driver may try to send this message */
+    get maxSendAttempts() {
+        return this._maxSendAttempts;
+    }
+    set maxSendAttempts(value) {
+        if (value > exports.MAX_SEND_ATTEMPTS)
+            value = exports.MAX_SEND_ATTEMPTS;
+        this._maxSendAttempts = value;
     }
     compareTo(other) {
         // delay messages for sleeping nodes

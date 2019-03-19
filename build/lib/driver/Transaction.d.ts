@@ -12,10 +12,11 @@ export declare class Transaction implements Comparable<Transaction> {
     timestamp: number;
     ackPending: boolean;
     response?: Message;
+    constructor(driver: Driver, message: Message, promise: DeferredPromise<Message | void>, priority: MessagePriority);
+    private _maxSendAttempts;
     /** The number of times the driver may try to send this message */
     maxSendAttempts: number;
     /** The number of times the driver has tried to send this message */
     sendAttempts: number;
-    constructor(driver: Driver, message: Message, promise: DeferredPromise<Message | void>, priority: MessagePriority);
     compareTo(other: Transaction): CompareResult;
 }

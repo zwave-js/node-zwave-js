@@ -29,13 +29,22 @@ export class Transaction implements Comparable<Transaction> {
 		public timestamp: number = highResTimestamp(),
 		public ackPending: boolean = true,
 		public response?: Message,
-		/** The number of times the driver may try to send this message */
-		public maxSendAttempts: number = 3,
-		/** The number of times the driver has tried to send this message */
-		public sendAttempts: number = 0,
 	) {
-		if (this.maxSendAttempts > MAX_SEND_ATTEMPTS) this.maxSendAttempts = MAX_SEND_ATTEMPTS;
+		if (message != undefined) this.maxSendAttempts = message.maxSendAttempts;
 	}
+
+	private _maxSendAttempts: number = MAX_SEND_ATTEMPTS;
+	/** The number of times the driver may try to send this message */
+	public get maxSendAttempts(): number {
+		return this._maxSendAttempts;
+	}
+	public set maxSendAttempts(value: number) {
+		if (value > MAX_SEND_ATTEMPTS) value = MAX_SEND_ATTEMPTS;
+		this._maxSendAttempts = value;
+	}
+
+	/** The number of times the driver has tried to send this message */
+	public sendAttempts: number = 0;
 
 	public compareTo(other: Transaction): CompareResult {
 

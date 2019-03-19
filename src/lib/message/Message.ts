@@ -61,6 +61,7 @@ export class Message {
 	public functionType: FunctionType;
 	public expectedResponse: FunctionType | ResponsePredicate;
 	public payload: Buffer; // TODO: Length limit 255
+	public maxSendAttempts: number;
 
 	/** Serializes this message into a Buffer */
 	public serialize(): Buffer {

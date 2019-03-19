@@ -14,6 +14,7 @@ export declare class Message {
     functionType: FunctionType;
     expectedResponse: FunctionType | ResponsePredicate;
     payload: Buffer;
+    maxSendAttempts: number;
     /** Serializes this message into a Buffer */
     serialize(): Buffer;
     /**
