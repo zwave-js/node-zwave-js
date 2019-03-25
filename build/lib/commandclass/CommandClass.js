@@ -15,6 +15,7 @@ const fs = require("fs");
 const ZWaveError_1 = require("../error/ZWaveError");
 const logger_1 = require("../util/logger");
 const strings_1 = require("../util/strings");
+const ValueTypes_1 = require("../util/ValueTypes");
 /**
  * Defines which kind of CC state should be requested
  */
@@ -105,10 +106,13 @@ let CommandClass = CommandClass_1 = class CommandClass {
     static createStateRequest(driver, node, kind) {
         // This needs to be overwritten per command class. In the default implementation, don't do anything
     }
-    /** Determine whether the linked node supports a specific command of this command class */
+    /**
+     * Determine whether the linked node supports a specific command of this command class.
+     * "unknown" means that the information has not been received yet
+     */
     supportsCommand(command) {
         // This needs to be overwritten per command class. In the default implementation, we don't know anything!
-        return "unknown";
+        return ValueTypes_1.unknownBoolean;
     }
     /**
      * Returns the node this CC is linked to. Throws if the node does not exist.

@@ -1,7 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { Maybe } from "../util/ValueTypes";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
-import { FeatureSupport } from "./FeatureSupport";
 
 export enum ManufacturerSpecificCommand {
 	Get = 0x04,
@@ -50,7 +50,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 	public deviceIdType: DeviceIdType;
 	@ccValue() public deviceId: string;
 
-	public supportsCommand(cmd: ManufacturerSpecificCommand): FeatureSupport {
+	public supportsCommand(cmd: ManufacturerSpecificCommand): Maybe<boolean> {
 		switch (cmd) {
 			case ManufacturerSpecificCommand.Get: return true; // This is mandatory
 			case ManufacturerSpecificCommand.DeviceSpecificGet: return this.version >= 2;

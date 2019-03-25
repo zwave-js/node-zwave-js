@@ -3,8 +3,8 @@ import { SendDataRequest } from "../controller/SendDataMessages";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveNode } from "../node/Node";
+import { Maybe } from "../util/ValueTypes";
 import { CommandClass, CommandClasses, StateKind } from "./CommandClass";
-import { FeatureSupport } from "./FeatureSupport";
 export declare enum VersionCommand {
     Get = 17,
     Report = 18,
@@ -35,7 +35,7 @@ export declare class VersionCC extends CommandClass {
     zWaveProtocolBuildNumber: number;
     applicationVersion: string;
     applicationBuildNumber: number;
-    supportsCommand(cmd: VersionCommand): FeatureSupport;
+    supportsCommand(cmd: VersionCommand): Maybe<boolean>;
     private _supportsZWaveSoftwareGet;
     private _ccVersion;
     readonly ccVersion: number;

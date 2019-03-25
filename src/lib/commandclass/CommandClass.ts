@@ -7,7 +7,7 @@ import { Constructable } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
-import { FeatureSupport } from "./FeatureSupport";
+import { Maybe, unknownBoolean } from "../util/ValueTypes";
 
 export interface CommandClassInfo {
 	isSupported: boolean;
@@ -140,10 +140,13 @@ export class CommandClass {
 		// This needs to be overwritten per command class. In the default implementation, don't do anything
 	}
 
-	/** Determine whether the linked node supports a specific command of this command class */
-	public supportsCommand(command: number): FeatureSupport {
+	/**
+	 * Determine whether the linked node supports a specific command of this command class.
+	 * "unknown" means that the information has not been received yet
+	 */
+	public supportsCommand(command: number): Maybe<boolean> {
 		// This needs to be overwritten per command class. In the default implementation, we don't know anything!
-		return "unknown";
+		return unknownBoolean;
 	}
 
 	/**

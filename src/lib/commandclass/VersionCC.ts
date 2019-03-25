@@ -3,8 +3,8 @@ import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { ZWaveNode } from "../node/Node";
+import { Maybe, unknownBoolean } from "../util/ValueTypes";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion, StateKind } from "./CommandClass";
-import { FeatureSupport } from "./FeatureSupport";
 
 export enum VersionCommand {
 	Get = 0x11,
@@ -69,7 +69,7 @@ export class VersionCC extends CommandClass {
 	@ccValue() public applicationVersion: string;
 	@ccValue() public applicationBuildNumber: number;
 
-	public supportsCommand(cmd: VersionCommand): FeatureSupport {
+	public supportsCommand(cmd: VersionCommand): Maybe<boolean> {
 		switch (cmd) {
 			case VersionCommand.Get: return true; // This is mandatory
 			case VersionCommand.CommandClassGet: return true; // This is mandatory
@@ -78,7 +78,7 @@ export class VersionCC extends CommandClass {
 		}
 		return super.supportsCommand(cmd);
 	}
-	private _supportsZWaveSoftwareGet: FeatureSupport = "unknown";
+	private _supportsZWaveSoftwareGet: Maybe<boolean> = unknownBoolean;
 
 	private _ccVersion: number;
 	public get ccVersion(): number {

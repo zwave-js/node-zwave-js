@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { IDriver } from "../driver/IDriver";
+import { Maybe } from "../util/ValueTypes";
 import { CommandClass } from "./CommandClass";
-import { FeatureSupport } from "./FeatureSupport";
 export declare enum ManufacturerSpecificCommand {
     Get = 4,
     Report = 5,
@@ -24,7 +24,7 @@ export declare class ManufacturerSpecificCC extends CommandClass {
     productId: number;
     deviceIdType: DeviceIdType;
     deviceId: string;
-    supportsCommand(cmd: ManufacturerSpecificCommand): FeatureSupport;
+    supportsCommand(cmd: ManufacturerSpecificCommand): Maybe<boolean>;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
 }

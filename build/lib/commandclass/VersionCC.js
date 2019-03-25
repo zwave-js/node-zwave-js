@@ -13,6 +13,7 @@ var VersionCC_1;
 const SendDataMessages_1 = require("../controller/SendDataMessages");
 const ZWaveLibraryTypes_1 = require("../controller/ZWaveLibraryTypes");
 const ZWaveError_1 = require("../error/ZWaveError");
+const ValueTypes_1 = require("../util/ValueTypes");
 const CommandClass_1 = require("./CommandClass");
 var VersionCommand;
 (function (VersionCommand) {
@@ -38,7 +39,7 @@ let VersionCC = VersionCC_1 = class VersionCC extends CommandClass_1.CommandClas
         this.nodeId = nodeId;
         this.versionCommand = versionCommand;
         this.requestedCC = requestedCC;
-        this._supportsZWaveSoftwareGet = "unknown";
+        this._supportsZWaveSoftwareGet = ValueTypes_1.unknownBoolean;
     }
     supportsCommand(cmd) {
         switch (cmd) {
