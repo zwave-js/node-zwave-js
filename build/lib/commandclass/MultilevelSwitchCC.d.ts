@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { IDriver } from "../driver/IDriver";
+import { Duration } from "../util/Duration";
 import { CommandClass } from "./CommandClass";
 export declare enum MultilevelSwitchCommand {
     Set = 1,
@@ -15,10 +16,10 @@ export declare class MultilevelSwitchCC extends CommandClass {
     ccCommand?: MultilevelSwitchCommand;
     constructor(driver: IDriver, nodeId?: number);
     constructor(driver: IDriver, nodeId: number, ccCommand: MultilevelSwitchCommand.Get | MultilevelSwitchCommand.StopLevelChange | MultilevelSwitchCommand.SupportedGet);
-    constructor(driver: IDriver, nodeId: number, ccCommand: MultilevelSwitchCommand.Set, targetValue: number, duration?: number);
-    constructor(driver: IDriver, nodeId: number, ccCommand: MultilevelSwitchCommand.StartLevelChange, direction: keyof typeof LevelChangeDirection, ignoreStartLevel: boolean, startLevel: number, duration?: number, secondarySwitchDirection?: keyof typeof LevelChangeDirection);
+    constructor(driver: IDriver, nodeId: number, ccCommand: MultilevelSwitchCommand.Set, targetValue: number, duration?: Duration);
+    constructor(driver: IDriver, nodeId: number, ccCommand: MultilevelSwitchCommand.StartLevelChange, direction: keyof typeof LevelChangeDirection, ignoreStartLevel: boolean, startLevel: number, duration?: Duration, secondarySwitchDirection?: keyof typeof LevelChangeDirection);
     targetValue: number;
-    duration: number;
+    duration: Duration;
     currentValue: number;
     ignoreStartLevel: boolean;
     startLevel: number;

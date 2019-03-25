@@ -1,21 +1,8 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { Duration } from "../util/Duration";
 import { num2hex } from "../util/strings";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
-
-// TODO: encode duration:
-// SET:
-// 0x00 = instantly
-// 0x01..0x7F = 1 to 127 seconds
-// 0x80..0xFE = 1 to 127 minutes
-// 0xFF = factory default
-// ---
-// REPORT:
-// 0x00 = already at the target value
-// 0x01..0x7F = 1 to 127 seconds
-// 0x80..0xFD = 1 to 126 minutes
-// 0xFE = unknown duration
-// 0xFF = reserved
 
 export enum BasicCommand {
 	Set = 0x01,
@@ -49,7 +36,7 @@ export class BasicCC extends CommandClass {
 
 	@ccValue() public currentValue: number;
 	@ccValue() public targetValue: number;
-	@ccValue() public duration: number;
+	@ccValue() public duration: Duration;
 
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
@@ -82,7 +69,7 @@ export class BasicCC extends CommandClass {
 				this.currentValue = this.payload[1];
 				// starting in V2:
 				this.targetValue = this.payload[2];
-				this.duration = this.payload[3];
+				this.duration = Duration.parseReport(this.payload[3]);
 				break;
 
 			default:

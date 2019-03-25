@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
+const Duration_1 = require("../util/Duration");
 const CommandClass_1 = require("./CommandClass");
 var MultilevelSwitchCommand;
 (function (MultilevelSwitchCommand) {
@@ -50,7 +51,7 @@ let MultilevelSwitchCC = class MultilevelSwitchCC extends CommandClass_1.Command
             case MultilevelSwitchCommand.Set: {
                 const payload = [this.ccCommand, this.targetValue];
                 if (this.version >= 2) {
-                    payload.push(this.duration);
+                    payload.push(this.duration.serializeSet());
                 }
                 this.payload = Buffer.from(payload);
                 break;
@@ -69,7 +70,7 @@ let MultilevelSwitchCC = class MultilevelSwitchCC extends CommandClass_1.Command
                     this.startLevel,
                 ];
                 if (this.version >= 2) {
-                    payload.push(this.duration);
+                    payload.push(this.duration.serializeSet());
                 }
                 if (this.version >= 3) {
                     payload.push(this.secondarySwitchStepSize);
@@ -92,13 +93,16 @@ let MultilevelSwitchCC = class MultilevelSwitchCC extends CommandClass_1.Command
         super.deserialize(data);
         this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
-            case MultilevelSwitchCommand.Report:
+            case MultilevelSwitchCommand.Report: {
+                let durationReport;
                 [
                     this.currentValue,
                     this.targetValue,
-                    this.duration,
+                    durationReport,
                 ] = this.payload.slice(1);
+                this.duration = Duration_1.Duration.parseReport(durationReport);
                 break;
+            }
             case MultilevelSwitchCommand.SupportedReport:
                 this._primarySwitchType = this.payload[1] & 0b11111;
                 this._secondarySwitchType = this.payload[2] & 0b11111;
@@ -114,7 +118,7 @@ __decorate([
 ], MultilevelSwitchCC.prototype, "targetValue", void 0);
 __decorate([
     CommandClass_1.ccValue(),
-    __metadata("design:type", Number)
+    __metadata("design:type", Duration_1.Duration)
 ], MultilevelSwitchCC.prototype, "duration", void 0);
 __decorate([
     CommandClass_1.ccValue(),

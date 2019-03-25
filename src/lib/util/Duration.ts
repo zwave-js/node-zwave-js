@@ -32,6 +32,7 @@ export class Duration {
 
 	/** Parses a duration as represented in Report commands */
 	public static parseReport(payload: number) {
+		if (payload == undefined) return undefined;
 		if (payload === 0xff) return undefined; // reserved value
 		if (payload === 0xfe) return new Duration(0, "unknown");
 		const isMinutes = !!(payload & 0b1000_0000);

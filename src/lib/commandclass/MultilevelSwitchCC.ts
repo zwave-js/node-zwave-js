@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { Duration } from "../util/Duration";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum MultilevelSwitchCommand {
@@ -30,7 +31,7 @@ export class MultilevelSwitchCC extends CommandClass {
 		ccCommand: MultilevelSwitchCommand.Set,
 		targetValue: number,
 		// Version >= 2:
-		duration?: number,
+		duration?: Duration,
 	);
 	constructor(
 		driver: IDriver,
@@ -40,7 +41,7 @@ export class MultilevelSwitchCC extends CommandClass {
 		ignoreStartLevel: boolean,
 		startLevel: number,
 		// Version >= 2:
-		duration?: number,
+		duration?: Duration,
 		// Version >= 3:
 		secondarySwitchDirection?: keyof typeof LevelChangeDirection,
 	);
@@ -67,7 +68,7 @@ export class MultilevelSwitchCC extends CommandClass {
 	// tslint:enable:unified-signatures
 
 	@ccValue() public targetValue: number;
-	@ccValue() public duration: number;
+	@ccValue() public duration: Duration;
 	@ccValue() public currentValue: number;
 	@ccValue() public ignoreStartLevel: boolean;
 	@ccValue() public startLevel: number;
@@ -93,7 +94,7 @@ export class MultilevelSwitchCC extends CommandClass {
 			case MultilevelSwitchCommand.Set: {
 				const payload = [this.ccCommand, this.targetValue];
 				if (this.version >= 2) {
-					payload.push(this.duration);
+					payload.push(this.duration.serializeSet());
 				}
 				this.payload = Buffer.from(payload);
 				break;
@@ -115,7 +116,7 @@ export class MultilevelSwitchCC extends CommandClass {
 					this.startLevel,
 				];
 				if (this.version >= 2) {
-					payload.push(this.duration);
+					payload.push(this.duration.serializeSet());
 				}
 				if (this.version >= 3) {
 					payload.push(this.secondarySwitchStepSize);
@@ -146,13 +147,16 @@ export class MultilevelSwitchCC extends CommandClass {
 
 		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
-			case MultilevelSwitchCommand.Report:
+			case MultilevelSwitchCommand.Report: {
+				let durationReport: number;
 				[
 					this.currentValue,
 					this.targetValue,
-					this.duration,
+					durationReport,
 				] = this.payload.slice(1);
+				this.duration = Duration.parseReport(durationReport);
 				break;
+			}
 
 			case MultilevelSwitchCommand.SupportedReport:
 				this._primarySwitchType = this.payload[1] & 0b11111;

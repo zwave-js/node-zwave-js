@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { IDriver } from "../driver/IDriver";
+import { Duration } from "../util/Duration";
 import { CommandClass } from "./CommandClass";
 export declare enum BasicCommand {
     Set = 1,
@@ -14,7 +15,7 @@ export declare class BasicCC extends CommandClass {
     constructor(driver: IDriver, nodeId: number, ccCommand: BasicCommand.Set, targetValue: number);
     currentValue: number;
     targetValue: number;
-    duration: number;
+    duration: Duration;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
 }

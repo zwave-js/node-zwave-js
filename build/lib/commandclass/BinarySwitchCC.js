@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
+const Duration_1 = require("../util/Duration");
 const CommandClass_1 = require("./CommandClass");
 var BinarySwitchCommand;
 (function (BinarySwitchCommand) {
@@ -38,7 +39,7 @@ let BinarySwitchCC = class BinarySwitchCC extends CommandClass_1.CommandClass {
                     this.targetValue ? 0xFF : 0x00,
                 ];
                 if (this.version >= 2) {
-                    payload.push(this.duration);
+                    payload.push(this.duration.serializeSet());
                 }
                 this.payload = Buffer.from([this.ccCommand]);
                 break;
@@ -53,10 +54,10 @@ let BinarySwitchCC = class BinarySwitchCC extends CommandClass_1.CommandClass {
         this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case BinarySwitchCommand.Report: {
-                this.currentValue = decodeBinarySwitchState(this.payload[1]);
+                this.currentValue = parseBinarySwitchState(this.payload[1]);
                 if (this.payload.length >= 2) { // V2
-                    this.targetValue = decodeBinarySwitchState(this.payload[2]);
-                    this.duration = this.payload[3];
+                    this.targetValue = parseBinarySwitchState(this.payload[2]);
+                    this.duration = Duration_1.Duration.parseReport(this.payload[3]);
                 }
                 break;
             }
@@ -75,16 +76,16 @@ __decorate([
 ], BinarySwitchCC.prototype, "targetValue", void 0);
 __decorate([
     CommandClass_1.ccValue(),
-    __metadata("design:type", Number)
+    __metadata("design:type", Duration_1.Duration)
 ], BinarySwitchCC.prototype, "duration", void 0);
 BinarySwitchCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["Binary Switch"]),
     CommandClass_1.implementedVersion(2),
     CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Binary Switch"]),
-    __metadata("design:paramtypes", [Object, Number, Number, Object, Number])
+    __metadata("design:paramtypes", [Object, Number, Number, Object, Duration_1.Duration])
 ], BinarySwitchCC);
 exports.BinarySwitchCC = BinarySwitchCC;
-function decodeBinarySwitchState(val) {
+function parseBinarySwitchState(val) {
     return val === 0 ? false :
         val === 0xff ? true :
             "unknown";

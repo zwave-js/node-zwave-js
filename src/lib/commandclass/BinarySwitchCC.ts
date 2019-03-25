@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { Duration } from "../util/Duration";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum BinarySwitchCommand {
@@ -28,7 +29,7 @@ export class BinarySwitchCC extends CommandClass {
 		nodeId: number,
 		ccCommand: BinarySwitchCommand.Set,
 		targetValue: boolean,
-		duration?: number,
+		duration?: Duration,
 	);
 
 	constructor(
@@ -36,7 +37,7 @@ export class BinarySwitchCC extends CommandClass {
 		public nodeId: number,
 		public ccCommand?: BinarySwitchCommand,
 		targetValue?: BinarySwitchState,
-		duration?: number,
+		duration?: Duration,
 	) {
 		super(driver, nodeId);
 		if (targetValue != undefined) this.currentValue = targetValue;
@@ -46,7 +47,7 @@ export class BinarySwitchCC extends CommandClass {
 
 	@ccValue() public currentValue: BinarySwitchState;
 	@ccValue() public targetValue: BinarySwitchState;
-	@ccValue() public duration: number;
+	@ccValue() public duration: Duration;
 
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
@@ -60,7 +61,7 @@ export class BinarySwitchCC extends CommandClass {
 					this.targetValue ? 0xFF : 0x00,
 				];
 				if (this.version >= 2) {
-					payload.push(this.duration);
+					payload.push(this.duration.serializeSet());
 				}
 				this.payload = Buffer.from([this.ccCommand]);
 				break;
@@ -82,10 +83,10 @@ export class BinarySwitchCC extends CommandClass {
 		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case BinarySwitchCommand.Report: {
-				this.currentValue = decodeBinarySwitchState(this.payload[1]);
+				this.currentValue = parseBinarySwitchState(this.payload[1]);
 				if (this.payload.length >= 2) { // V2
-					this.targetValue = decodeBinarySwitchState(this.payload[2]);
-					this.duration = this.payload[3];
+					this.targetValue = parseBinarySwitchState(this.payload[2]);
+					this.duration = Duration.parseReport(this.payload[3]);
 				}
 				break;
 			}
@@ -102,7 +103,7 @@ export class BinarySwitchCC extends CommandClass {
 
 export type BinarySwitchState = boolean | "unknown";
 
-function decodeBinarySwitchState(val: number): BinarySwitchState {
+function parseBinarySwitchState(val: number): BinarySwitchState {
 	return val === 0 ? false :
 		val === 0xff ? true :
 			"unknown"

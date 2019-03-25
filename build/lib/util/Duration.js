@@ -26,6 +26,8 @@ class Duration {
     }
     /** Parses a duration as represented in Report commands */
     static parseReport(payload) {
+        if (payload == undefined)
+            return undefined;
         if (payload === 0xff)
             return undefined; // reserved value
         if (payload === 0xfe)
