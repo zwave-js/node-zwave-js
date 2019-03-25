@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const Duration_1 = require("../util/Duration");
+const ValueTypes_1 = require("../util/ValueTypes");
 const CommandClass_1 = require("./CommandClass");
 var MultilevelSwitchCommand;
 (function (MultilevelSwitchCommand) {
@@ -94,13 +95,9 @@ let MultilevelSwitchCC = class MultilevelSwitchCC extends CommandClass_1.Command
         this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case MultilevelSwitchCommand.Report: {
-                let durationReport;
-                [
-                    this.currentValue,
-                    this.targetValue,
-                    durationReport,
-                ] = this.payload.slice(1);
-                this.duration = Duration_1.Duration.parseReport(durationReport);
+                this.currentValue = ValueTypes_1.parseMaybeNumber(this.payload[1]);
+                this.targetValue = ValueTypes_1.parseNumber(this.payload[2]);
+                this.duration = Duration_1.Duration.parseReport(this.payload[3]);
                 break;
             }
             case MultilevelSwitchCommand.SupportedReport:
@@ -122,7 +119,7 @@ __decorate([
 ], MultilevelSwitchCC.prototype, "duration", void 0);
 __decorate([
     CommandClass_1.ccValue(),
-    __metadata("design:type", Number)
+    __metadata("design:type", Object)
 ], MultilevelSwitchCC.prototype, "currentValue", void 0);
 __decorate([
     CommandClass_1.ccValue(),

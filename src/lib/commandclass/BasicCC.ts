@@ -2,6 +2,7 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Duration } from "../util/Duration";
 import { num2hex } from "../util/strings";
+import { Maybe, parseMaybeNumber, parseNumber } from "../util/ValueTypes";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum BasicCommand {
@@ -34,7 +35,7 @@ export class BasicCC extends CommandClass {
 	}
 	// tslint:enable:unified-signatures
 
-	@ccValue() public currentValue: number;
+	@ccValue() public currentValue: Maybe<number>;
 	@ccValue() public targetValue: number;
 	@ccValue() public duration: Duration;
 
@@ -66,9 +67,9 @@ export class BasicCC extends CommandClass {
 		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case BasicCommand.Report:
-				this.currentValue = this.payload[1];
+				this.currentValue = parseMaybeNumber(this.payload[1]);
 				// starting in V2:
-				this.targetValue = this.payload[2];
+				this.targetValue = parseNumber(this.payload[2]);
 				this.duration = Duration.parseReport(this.payload[3]);
 				break;
 

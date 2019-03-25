@@ -1,6 +1,7 @@
 /// <reference types="node" />
 import { IDriver } from "../driver/IDriver";
 import { Duration } from "../util/Duration";
+import { Maybe } from "../util/ValueTypes";
 import { CommandClass } from "./CommandClass";
 export declare enum BasicCommand {
     Set = 1,
@@ -13,7 +14,7 @@ export declare class BasicCC extends CommandClass {
     constructor(driver: IDriver, nodeId?: number);
     constructor(driver: IDriver, nodeId: number, ccCommand: BasicCommand.Get);
     constructor(driver: IDriver, nodeId: number, ccCommand: BasicCommand.Set, targetValue: number);
-    currentValue: number;
+    currentValue: Maybe<number>;
     targetValue: number;
     duration: Duration;
     serialize(): Buffer;

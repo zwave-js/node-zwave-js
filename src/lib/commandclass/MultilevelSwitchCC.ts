@@ -1,6 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Duration } from "../util/Duration";
+import { Maybe, parseMaybeNumber, parseNumber } from "../util/ValueTypes";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum MultilevelSwitchCommand {
@@ -69,7 +70,7 @@ export class MultilevelSwitchCC extends CommandClass {
 
 	@ccValue() public targetValue: number;
 	@ccValue() public duration: Duration;
-	@ccValue() public currentValue: number;
+	@ccValue() public currentValue: Maybe<number>;
 	@ccValue() public ignoreStartLevel: boolean;
 	@ccValue() public startLevel: number;
 	@ccValue() public secondarySwitchStepSize: number;
@@ -148,13 +149,9 @@ export class MultilevelSwitchCC extends CommandClass {
 		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case MultilevelSwitchCommand.Report: {
-				let durationReport: number;
-				[
-					this.currentValue,
-					this.targetValue,
-					durationReport,
-				] = this.payload.slice(1);
-				this.duration = Duration.parseReport(durationReport);
+				this.currentValue = parseMaybeNumber(this.payload[1]);
+				this.targetValue = parseNumber(this.payload[2]);
+				this.duration = Duration.parseReport(this.payload[3]);
 				break;
 			}
 
