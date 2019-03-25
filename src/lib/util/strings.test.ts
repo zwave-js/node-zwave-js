@@ -1,5 +1,4 @@
-import { cpp2js } from "./strings";
-// tslint:disable:no-unused-expression
+import { cpp2js, num2hex } from "./strings";
 
 describe("lib/strings => cpp2js() => ", () => {
 	it("should truncate null-terminated strings", () => {
@@ -20,5 +19,26 @@ describe("lib/strings => cpp2js() => ", () => {
 		for (const tc of testCases) {
 			expect(cpp2js(tc)).toBe(tc);
 		}
+	});
+});
+
+describe("lib/strings => num2hex()", () => {
+	it(`should return "undefined" when the input is null or undefined`, () => {
+		expect(num2hex(null)).toBe("undefined");
+		expect(num2hex(undefined)).toBe("undefined");
+	});
+
+	it("should return an even number lowercase hex digits prefixed with 0x", () => {
+		const testCases: [number, string][] = [
+			[1, "0x01"],
+			[0xfed, "0x0fed"],
+		];
+		for (const [inp, out] of testCases) {
+			expect(num2hex(inp)).toBe(out);
+		}
+	});
+
+	it("when the uppercase parameter is true, the hex digits should be uppercase", () => {
+		expect(num2hex(0xabc123, true)).toBe("0xABC123");
 	});
 });
