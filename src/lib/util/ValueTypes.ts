@@ -10,10 +10,7 @@ export const unknownBoolean = "unknown" as Maybe<boolean>;
 
 /** Parses a boolean that is encoded as a single byte and might also be "unknown" */
 export function parseMaybeBoolean(val: number): Maybe<boolean> | undefined {
-	return val === 0 ? false :
-		val === 0xff ? true :
-			val === 0xfe ? unknownBoolean :
-				undefined;
+	return val === 0xfe ? unknownBoolean : parseBoolean(val);
 }
 
 /** Parses a boolean that is encoded as a single byte */
@@ -25,10 +22,7 @@ export function parseBoolean(val: number): boolean | undefined {
 
 /** Parses a single-byte number from 0 to 100, which might also be "unknown" */
 export function parseMaybeNumber(val: number): Maybe<number> | undefined {
-	return val <= 100 ? val :
-		val === 0xff ? 100 :
-			val === 0xfe ? unknownNumber :
-				undefined;
+	return val === 0xfe ? unknownNumber : parseNumber(val);
 }
 
 /** Parses a single-byte number from 0 to 100 */
