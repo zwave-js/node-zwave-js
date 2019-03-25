@@ -21,4 +21,6 @@ export declare function parseFloatWithScale(payload: Buffer): {
 };
 /** Encodes a floating point value with a scale into a buffer */
 export declare function encodeFloatWithScale(value: number, scale: number): Buffer;
+/** Parses a bit mask into a numeric array */
+export declare function parseBitMask(mask: Buffer): number[];
 export {};

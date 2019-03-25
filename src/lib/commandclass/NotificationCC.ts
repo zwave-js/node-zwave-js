@@ -1,6 +1,7 @@
 import { composeObject } from "alcalzone-shared/objects";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { parseBitMask } from "../util/ValueTypes";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum NotificationCommand {
@@ -205,14 +206,15 @@ export class NotificationCC extends CommandClass {
 				this._supportsV1Alarm = !!(this.payload[1] & 0b1000_0000);
 				const numBitMaskBytes = this.payload[1] & 0b0001_1111;
 				// parse the bitmask into a number array
-				const numTypes = numBitMaskBytes * 8 - 1;
+				// const numTypes = numBitMaskBytes * 8 - 1;
 				const notificationBitMask = this.payload.slice(2, 2 + numBitMaskBytes);
-				this._supportedNotificationTypes = [];
-				for (let type = 1; type <= numTypes; type++) {
-					const byteNum = type >>> 3; // type / 8
-					const bitNum = type % 8;
-					if ((notificationBitMask[byteNum] & (1 << bitNum)) !== 0) this._supportedNotificationTypes.push(type);
-				}
+				this._supportedNotificationTypes = parseBitMask(notificationBitMask);
+				// this._supportedNotificationTypes = [];
+				// for (let type = 1; type <= numTypes; type++) {
+				// 	const byteNum = type >>> 3; // type / 8
+				// 	const bitNum = type % 8;
+				// 	if ((notificationBitMask[byteNum] & (1 << bitNum)) !== 0) this._supportedNotificationTypes.push(type);
+				// }
 				break;
 			}
 
@@ -220,6 +222,7 @@ export class NotificationCC extends CommandClass {
 				this.notificationType = this.payload[1];
 				const numBitMaskBytes = this.payload[2] & 0b0001_1111;
 				// parse the bitmask into a number array
+				// TODO: Can this be done with parseBitMask?
 				const numEvents = numBitMaskBytes * 8 - 1;
 				const eventsBitMask = this.payload.slice(3, 3 + numBitMaskBytes);
 				const supportedEvents = this._supportedEvents.has(this.notificationType)

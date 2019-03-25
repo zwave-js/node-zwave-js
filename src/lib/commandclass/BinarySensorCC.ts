@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { parseBitMask } from "../util/ValueTypes";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum BinarySensorCommand {
@@ -84,15 +85,16 @@ export class BinarySensorCC extends CommandClass {
 
 			case BinarySensorCommand.SupportedReport: {
 				// parse the bitmask into a number array
-				const numBitMaskBytes = this.payload.length - 1;
-				const numTypes = numBitMaskBytes * 8 - 1;
-				const sensorBitMask = this.payload.slice(1, 1 + numBitMaskBytes);
-				this._supportedSensorTypes = [];
-				for (let type = 1; type <= numTypes; type++) {
-					const byteNum = type >>> 3; // type / 8
-					const bitNum = type % 8;
-					if ((sensorBitMask[byteNum] & (1 << bitNum)) !== 0) this._supportedSensorTypes.push(type);
-				}
+				this._supportedSensorTypes = parseBitMask(this.payload.slice(1));
+				// const numBitMaskBytes = this.payload.length - 1;
+				// const numTypes = numBitMaskBytes * 8 - 1;
+				// const sensorBitMask = this.payload.slice(1, 1 + numBitMaskBytes);
+				// this._supportedSensorTypes = [];
+				// for (let type = 1; type <= numTypes; type++) {
+				// 	const byteNum = type >>> 3; // type / 8
+				// 	const bitNum = type % 8;
+				// 	if ((sensorBitMask[byteNum] & (1 << bitNum)) !== 0) this._supportedSensorTypes.push(type);
+				// }
 				break;
 			}
 

@@ -5,10 +5,7 @@ exports.unknownNumber = "unknown";
 exports.unknownBoolean = "unknown";
 /** Parses a boolean that is encoded as a single byte and might also be "unknown" */
 function parseMaybeBoolean(val) {
-    return val === 0 ? false :
-        val === 0xff ? true :
-            val === 0xfe ? exports.unknownBoolean :
-                undefined;
+    return val === 0xfe ? exports.unknownBoolean : parseBoolean(val);
 }
 exports.parseMaybeBoolean = parseMaybeBoolean;
 /** Parses a boolean that is encoded as a single byte */
@@ -20,10 +17,7 @@ function parseBoolean(val) {
 exports.parseBoolean = parseBoolean;
 /** Parses a single-byte number from 0 to 100, which might also be "unknown" */
 function parseMaybeNumber(val) {
-    return val <= 100 ? val :
-        val === 0xff ? 100 :
-            val === 0xfe ? exports.unknownNumber :
-                undefined;
+    return val === 0xfe ? exports.unknownNumber : parseNumber(val);
 }
 exports.parseMaybeNumber = parseMaybeNumber;
 /** Parses a single-byte number from 0 to 100 */
@@ -73,3 +67,16 @@ function encodeFloatWithScale(value, scale) {
     return ret;
 }
 exports.encodeFloatWithScale = encodeFloatWithScale;
+/** Parses a bit mask into a numeric array */
+function parseBitMask(mask) {
+    const numBits = mask.length * 8;
+    const ret = [];
+    for (let index = 1; index <= numBits; index++) {
+        const byteNum = (index - 1) >>> 3; // id / 8
+        const bitNum = (index - 1) % 8;
+        if ((mask[byteNum] & (1 << bitNum)) !== 0)
+            ret.push(index);
+    }
+    return ret;
+}
+exports.parseBitMask = parseBitMask;

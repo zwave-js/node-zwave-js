@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const objects_1 = require("alcalzone-shared/objects");
 const ZWaveError_1 = require("../error/ZWaveError");
+const ValueTypes_1 = require("../util/ValueTypes");
 const CommandClass_1 = require("./CommandClass");
 var NotificationCommand;
 (function (NotificationCommand) {
@@ -148,21 +149,22 @@ let NotificationCC = class NotificationCC extends CommandClass_1.CommandClass {
                 this._supportsV1Alarm = !!(this.payload[1] & 128);
                 const numBitMaskBytes = this.payload[1] & 31;
                 // parse the bitmask into a number array
-                const numTypes = numBitMaskBytes * 8 - 1;
+                // const numTypes = numBitMaskBytes * 8 - 1;
                 const notificationBitMask = this.payload.slice(2, 2 + numBitMaskBytes);
-                this._supportedNotificationTypes = [];
-                for (let type = 1; type <= numTypes; type++) {
-                    const byteNum = type >>> 3; // type / 8
-                    const bitNum = type % 8;
-                    if ((notificationBitMask[byteNum] & (1 << bitNum)) !== 0)
-                        this._supportedNotificationTypes.push(type);
-                }
+                this._supportedNotificationTypes = ValueTypes_1.parseBitMask(notificationBitMask);
+                // this._supportedNotificationTypes = [];
+                // for (let type = 1; type <= numTypes; type++) {
+                // 	const byteNum = type >>> 3; // type / 8
+                // 	const bitNum = type % 8;
+                // 	if ((notificationBitMask[byteNum] & (1 << bitNum)) !== 0) this._supportedNotificationTypes.push(type);
+                // }
                 break;
             }
             case NotificationCommand.EventSupportedReport: {
                 this.notificationType = this.payload[1];
                 const numBitMaskBytes = this.payload[2] & 31;
                 // parse the bitmask into a number array
+                // TODO: Can this be done with parseBitMask?
                 const numEvents = numBitMaskBytes * 8 - 1;
                 const eventsBitMask = this.payload.slice(3, 3 + numBitMaskBytes);
                 const supportedEvents = this._supportedEvents.has(this.notificationType)

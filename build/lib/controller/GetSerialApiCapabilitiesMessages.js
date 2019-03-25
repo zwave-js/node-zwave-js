@@ -9,6 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
 const strings_1 = require("../util/strings");
+const ValueTypes_1 = require("../util/ValueTypes");
 const NUM_FUNCTIONS = 256;
 const NUM_FUNCTION_BYTES = NUM_FUNCTIONS / 8;
 let GetSerialApiCapabilitiesRequest = class GetSerialApiCapabilitiesRequest extends Message_1.Message {
@@ -44,13 +45,13 @@ let GetSerialApiCapabilitiesResponse = class GetSerialApiCapabilitiesResponse ex
         this._productId = this.payload.readUInt16BE(6);
         // then a 256bit bitmask for the supported command classes follows
         const functionBitMask = this.payload.slice(8, 8 + NUM_FUNCTION_BYTES);
-        this._supportedFunctionTypes = [];
-        for (let functionType = 1; functionType <= NUM_FUNCTIONS; functionType++) {
-            const byteNum = (functionType - 1) >>> 3; // type / 8
-            const bitNum = (functionType - 1) % 8;
-            if ((functionBitMask[byteNum] & (1 << bitNum)) !== 0)
-                this._supportedFunctionTypes.push(functionType);
-        }
+        this._supportedFunctionTypes = ValueTypes_1.parseBitMask(functionBitMask);
+        // this._supportedFunctionTypes = [];
+        // for (let functionType = 1; functionType <= NUM_FUNCTIONS; functionType++) {
+        // 	const byteNum = (functionType - 1) >>> 3; // type / 8
+        // 	const bitNum = (functionType - 1) % 8;
+        // 	if ((functionBitMask[byteNum] & (1 << bitNum)) !== 0) this._supportedFunctionTypes.push(functionType);
+        // }
         return ret;
     }
     toJSON() {

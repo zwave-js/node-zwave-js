@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
+const ValueTypes_1 = require("../util/ValueTypes");
 const CommandClass_1 = require("./CommandClass");
 var BinarySensorCommand;
 (function (BinarySensorCommand) {
@@ -57,16 +58,16 @@ let BinarySensorCC = class BinarySensorCC extends CommandClass_1.CommandClass {
                 break;
             case BinarySensorCommand.SupportedReport: {
                 // parse the bitmask into a number array
-                const numBitMaskBytes = this.payload.length - 1;
-                const numTypes = numBitMaskBytes * 8 - 1;
-                const sensorBitMask = this.payload.slice(1, 1 + numBitMaskBytes);
-                this._supportedSensorTypes = [];
-                for (let type = 1; type <= numTypes; type++) {
-                    const byteNum = type >>> 3; // type / 8
-                    const bitNum = type % 8;
-                    if ((sensorBitMask[byteNum] & (1 << bitNum)) !== 0)
-                        this._supportedSensorTypes.push(type);
-                }
+                this._supportedSensorTypes = ValueTypes_1.parseBitMask(this.payload.slice(1));
+                // const numBitMaskBytes = this.payload.length - 1;
+                // const numTypes = numBitMaskBytes * 8 - 1;
+                // const sensorBitMask = this.payload.slice(1, 1 + numBitMaskBytes);
+                // this._supportedSensorTypes = [];
+                // for (let type = 1; type <= numTypes; type++) {
+                // 	const byteNum = type >>> 3; // type / 8
+                // 	const bitNum = type % 8;
+                // 	if ((sensorBitMask[byteNum] & (1 << bitNum)) !== 0) this._supportedSensorTypes.push(type);
+                // }
                 break;
             }
             default:
