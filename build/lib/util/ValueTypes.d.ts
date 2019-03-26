@@ -18,6 +18,7 @@ export declare function parseNumber(val: number): number | undefined;
 export declare function parseFloatWithScale(payload: Buffer): {
     value: number;
     scale: number;
+    bytesRead: number;
 };
 /** Encodes a floating point value with a scale into a buffer */
 export declare function encodeFloatWithScale(value: number, scale: number): Buffer;

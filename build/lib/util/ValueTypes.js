@@ -33,7 +33,7 @@ function parseFloatWithScale(payload) {
     const scale = (payload[0] & 24) >>> 3;
     const size = payload[0] & 0b111;
     const value = payload.readIntBE(1, size) / Math.pow(10, precision);
-    return { value, scale };
+    return { value, scale, bytesRead: 1 + size };
 }
 exports.parseFloatWithScale = parseFloatWithScale;
 function getPrecision(num) {
