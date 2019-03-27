@@ -1,9 +1,9 @@
 /// <reference types="jest-extended" />
 import { assertZWaveError } from "../../../test/util";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { encodeFloatWithScale, parseBoolean, parseFloatWithScale, parseMaybeBoolean, parseMaybeNumber, parseNumber, unknownBoolean, unknownNumber } from "./ValueTypes";
+import { encodeFloatWithScale, parseBoolean, parseFloatWithScale, parseMaybeBoolean, parseMaybeNumber, parseNumber, unknownBoolean, unknownNumber } from "./Primitive";
 
-describe("lib/util/ValueTypes", () => {
+describe("lib/values/Primitive", () => {
 
 	describe("parseBoolean()", () => {
 		it("should return false when the value is 0", () => {

@@ -7,7 +7,7 @@ import { Constructable } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
-import { Maybe, unknownBoolean } from "../util/ValueTypes";
+import { Maybe, unknownBoolean } from "../values/Primitive";
 
 export interface CommandClassInfo {
 	isSupported: boolean;

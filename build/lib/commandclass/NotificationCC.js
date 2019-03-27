@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const objects_1 = require("alcalzone-shared/objects");
 const ZWaveError_1 = require("../error/ZWaveError");
-const ValueTypes_1 = require("../util/ValueTypes");
+const Primitive_1 = require("../values/Primitive");
 const CommandClass_1 = require("./CommandClass");
 var NotificationCommand;
 (function (NotificationCommand) {
@@ -151,7 +151,7 @@ let NotificationCC = class NotificationCC extends CommandClass_1.CommandClass {
                 // parse the bitmask into a number array
                 // const numTypes = numBitMaskBytes * 8 - 1;
                 const notificationBitMask = this.payload.slice(2, 2 + numBitMaskBytes);
-                this._supportedNotificationTypes = ValueTypes_1.parseBitMask(notificationBitMask);
+                this._supportedNotificationTypes = Primitive_1.parseBitMask(notificationBitMask);
                 // this._supportedNotificationTypes = [];
                 // for (let type = 1; type <= numTypes; type++) {
                 // 	const byteNum = type >>> 3; // type / 8

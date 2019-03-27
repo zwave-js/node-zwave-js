@@ -1,4 +1,4 @@
-import { parseBitMask } from "../util/ValueTypes";
+import { parseBitMask } from "../values/Primitive";
 
 /** Max number of nodes in a ZWave network */
 export const MAX_NODES = 232;

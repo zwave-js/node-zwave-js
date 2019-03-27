@@ -1,6 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { encodeFloatWithScale, parseBitMask, parseFloatWithScale } from "../util/ValueTypes";
+import { encodeFloatWithScale, parseBitMask, parseFloatWithScale } from "../values/Primitive";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum ThermostatSetpointCommand {

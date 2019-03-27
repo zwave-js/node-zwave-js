@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
-const ValueTypes_1 = require("../util/ValueTypes");
+const Primitive_1 = require("../values/Primitive");
 const CommandClass_1 = require("./CommandClass");
 var ThermostatSetpointCommand;
 (function (ThermostatSetpointCommand) {
@@ -77,7 +77,7 @@ let ThermostatSetpointCC = class ThermostatSetpointCC extends CommandClass_1.Com
                         this.ccCommand,
                         this.setpointType & 0b1111,
                     ]),
-                    ValueTypes_1.encodeFloatWithScale(this.value, this.scale),
+                    Primitive_1.encodeFloatWithScale(this.value, this.scale),
                 ]);
                 break;
             case ThermostatSetpointCommand.SupportedGet:
@@ -94,11 +94,11 @@ let ThermostatSetpointCC = class ThermostatSetpointCC extends CommandClass_1.Com
         switch (this.ccCommand) {
             case ThermostatSetpointCommand.Report:
                 this.setpointType = this.payload[1] & 0b1111;
-                ({ value: this.value, scale: this.scale } = ValueTypes_1.parseFloatWithScale(this.payload.slice(2)));
+                ({ value: this.value, scale: this.scale } = Primitive_1.parseFloatWithScale(this.payload.slice(2)));
                 break;
             case ThermostatSetpointCommand.SupportedReport: {
                 const bitMask = this.payload.slice(1);
-                const supported = ValueTypes_1.parseBitMask(bitMask);
+                const supported = Primitive_1.parseBitMask(bitMask);
                 if (this.version >= 3) {
                     // Interpretation A
                     this.supportedSetpointTypes = supported.map(i => thermostatSetpointTypeMap[i]);
@@ -122,8 +122,8 @@ let ThermostatSetpointCC = class ThermostatSetpointCC extends CommandClass_1.Com
             case ThermostatSetpointCommand.CapabilitiesReport: {
                 this.setpointType = this.payload[1];
                 let bytesRead;
-                ({ value: this.minValue, scale: this.minValueScale, bytesRead } = ValueTypes_1.parseFloatWithScale(this.payload.slice(2)));
-                ({ value: this.maxValue, scale: this.maxValueScale } = ValueTypes_1.parseFloatWithScale(this.payload.slice(2 + bytesRead)));
+                ({ value: this.minValue, scale: this.minValueScale, bytesRead } = Primitive_1.parseFloatWithScale(this.payload.slice(2)));
+                ({ value: this.maxValue, scale: this.maxValueScale } = Primitive_1.parseFloatWithScale(this.payload.slice(2 + bytesRead)));
                 break;
             }
             default:

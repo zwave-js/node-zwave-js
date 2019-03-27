@@ -10,8 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
-const Duration_1 = require("../util/Duration");
-const ValueTypes_1 = require("../util/ValueTypes");
+const Duration_1 = require("../values/Duration");
+const Primitive_1 = require("../values/Primitive");
 const CommandClass_1 = require("./CommandClass");
 var BinarySwitchCommand;
 (function (BinarySwitchCommand) {
@@ -55,9 +55,9 @@ let BinarySwitchCC = class BinarySwitchCC extends CommandClass_1.CommandClass {
         this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case BinarySwitchCommand.Report: {
-                this.currentValue = ValueTypes_1.parseMaybeBoolean(this.payload[1]);
+                this.currentValue = Primitive_1.parseMaybeBoolean(this.payload[1]);
                 if (this.payload.length >= 2) { // V2
-                    this.targetValue = ValueTypes_1.parseBoolean(this.payload[2]);
+                    this.targetValue = Primitive_1.parseBoolean(this.payload[2]);
                     this.duration = Duration_1.Duration.parseReport(this.payload[3]);
                 }
                 break;

@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { IDriver } from "../driver/IDriver";
-import { Duration } from "../util/Duration";
-import { Maybe } from "../util/ValueTypes";
+import { Duration } from "../values/Duration";
+import { Maybe } from "../values/Primitive";
 import { CommandClass } from "./CommandClass";
 export declare enum BinarySwitchCommand {
     Set = 1,

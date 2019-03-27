@@ -1,7 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { decodeSetbackState, encodeSetbackState, SetbackSpecialState, SetbackState } from "../values/SetbackState";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
-import { decodeSetbackState, encodeSetbackState, SetbackSpecialState } from "./SetbackState";
 
 export enum ThermostatSetbackCommand {
 	Set = 0x01,
@@ -36,7 +36,7 @@ export class ThermostatSetbackCC extends CommandClass {
 		nodeId: number,
 		ccCommand: ThermostatSetbackCommand.Set,
 		setbackType: SetbackType,
-		setbackState: number | SetbackSpecialState,
+		setbackState: SetbackState,
 	);
 
 	constructor(
@@ -57,7 +57,7 @@ export class ThermostatSetbackCC extends CommandClass {
 
 	@ccValue() public setbackType: SetbackType;
 	/** The offset from the setpoint in 0.1 Kelvin or a special mode */
-	@ccValue() public setbackState: number | SetbackSpecialState;
+	@ccValue() public setbackState: SetbackState;
 
 	public serialize(): Buffer {
 		switch (this.ccCommand) {

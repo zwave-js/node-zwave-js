@@ -10,9 +10,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
-const Duration_1 = require("../util/Duration");
 const strings_1 = require("../util/strings");
-const ValueTypes_1 = require("../util/ValueTypes");
+const Duration_1 = require("../values/Duration");
+const Primitive_1 = require("../values/Primitive");
 const CommandClass_1 = require("./CommandClass");
 var BasicCommand;
 (function (BasicCommand) {
@@ -50,9 +50,9 @@ let BasicCC = class BasicCC extends CommandClass_1.CommandClass {
         this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case BasicCommand.Report:
-                this.currentValue = ValueTypes_1.parseMaybeNumber(this.payload[1]);
+                this.currentValue = Primitive_1.parseMaybeNumber(this.payload[1]);
                 // starting in V2:
-                this.targetValue = ValueTypes_1.parseNumber(this.payload[2]);
+                this.targetValue = Primitive_1.parseNumber(this.payload[2]);
                 this.duration = Duration_1.Duration.parseReport(this.payload[3]);
                 break;
             default:

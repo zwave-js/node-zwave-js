@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
-const ValueTypes_1 = require("../util/ValueTypes");
+const Primitive_1 = require("../values/Primitive");
 const CommandClass_1 = require("./CommandClass");
 var MultilevelSensorCommand;
 (function (MultilevelSensorCommand) {
@@ -73,10 +73,10 @@ let MultilevelSensorCC = class MultilevelSensorCC extends CommandClass_1.Command
         switch (this.ccCommand) {
             case MultilevelSensorCommand.Report:
                 this.sensorType = this.payload[1];
-                ({ value: this.value, scale: this.scale } = ValueTypes_1.parseFloatWithScale(this.payload.slice(2)));
+                ({ value: this.value, scale: this.scale } = Primitive_1.parseFloatWithScale(this.payload.slice(2)));
                 break;
             case MultilevelSensorCommand.SupportedSensorReport:
-                this._supportedSensorTypes = ValueTypes_1.parseBitMask(this.payload.slice(1));
+                this._supportedSensorTypes = Primitive_1.parseBitMask(this.payload.slice(1));
                 break;
             case MultilevelSensorCommand.SupportedScaleReport: {
                 const supportedScales = [];

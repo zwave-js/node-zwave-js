@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
-const ValueTypes_1 = require("../util/ValueTypes");
+const Primitive_1 = require("../values/Primitive");
 const CommandClass_1 = require("./CommandClass");
 var BinarySensorCommand;
 (function (BinarySensorCommand) {
@@ -58,7 +58,7 @@ let BinarySensorCC = class BinarySensorCC extends CommandClass_1.CommandClass {
                 break;
             case BinarySensorCommand.SupportedReport: {
                 // parse the bitmask into a number array
-                this._supportedSensorTypes = ValueTypes_1.parseBitMask(this.payload.slice(1));
+                this._supportedSensorTypes = Primitive_1.parseBitMask(this.payload.slice(1));
                 // const numBitMaskBytes = this.payload.length - 1;
                 // const numTypes = numBitMaskBytes * 8 - 1;
                 // const sensorBitMask = this.payload.slice(1, 1 + numBitMaskBytes);

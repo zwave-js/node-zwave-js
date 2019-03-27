@@ -10,8 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
+const SetbackState_1 = require("../values/SetbackState");
 const CommandClass_1 = require("./CommandClass");
-const SetbackState_1 = require("./SetbackState");
 var ThermostatSetbackCommand;
 (function (ThermostatSetbackCommand) {
     ThermostatSetbackCommand[ThermostatSetbackCommand["Set"] = 1] = "Set";

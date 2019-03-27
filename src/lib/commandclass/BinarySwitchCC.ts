@@ -1,7 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { Duration } from "../util/Duration";
-import { Maybe, parseBoolean, parseMaybeBoolean } from "../util/ValueTypes";
+import { Duration } from "../values/Duration";
+import { Maybe, parseBoolean, parseMaybeBoolean } from "../values/Primitive";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum BinarySwitchCommand {

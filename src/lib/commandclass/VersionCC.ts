@@ -3,7 +3,7 @@ import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { ZWaveNode } from "../node/Node";
-import { Maybe, unknownBoolean } from "../util/ValueTypes";
+import { Maybe, unknownBoolean } from "../values/Primitive";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion, StateKind } from "./CommandClass";
 
 export enum VersionCommand {

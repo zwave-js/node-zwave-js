@@ -1,6 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { parseBitMask, parseFloatWithScale } from "../util/ValueTypes";
+import { parseBitMask, parseFloatWithScale } from "../values/Primitive";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum MultilevelSensorCommand {

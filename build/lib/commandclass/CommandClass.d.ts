@@ -3,7 +3,7 @@ import { SendDataRequest } from "../controller/SendDataMessages";
 import { IDriver } from "../driver/IDriver";
 import { Constructable } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
-import { Maybe } from "../util/ValueTypes";
+import { Maybe } from "../values/Primitive";
 export interface CommandClassInfo {
     isSupported: boolean;
     isControlled: boolean;

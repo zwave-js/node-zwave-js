@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { IDriver } from "../driver/IDriver";
-import { Maybe } from "../util/ValueTypes";
+import { Maybe } from "../values/Primitive";
 import { CommandClass } from "./CommandClass";
 export declare enum ManufacturerSpecificCommand {
     Get = 4,

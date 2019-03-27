@@ -3,7 +3,7 @@ import { SendDataRequest } from "../controller/SendDataMessages";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveNode } from "../node/Node";
-import { Maybe } from "../util/ValueTypes";
+import { Maybe } from "../values/Primitive";
 import { CommandClass, CommandClasses, StateKind } from "./CommandClass";
 export declare enum VersionCommand {
     Get = 17,

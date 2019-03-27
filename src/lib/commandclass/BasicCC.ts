@@ -1,8 +1,8 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { Duration } from "../util/Duration";
 import { num2hex } from "../util/strings";
-import { Maybe, parseMaybeNumber, parseNumber } from "../util/ValueTypes";
+import { Duration } from "../values/Duration";
+import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum BasicCommand {

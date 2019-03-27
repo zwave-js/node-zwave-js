@@ -1,7 +1,7 @@
 import { composeObject } from "alcalzone-shared/objects";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { parseBitMask } from "../util/ValueTypes";
+import { parseBitMask } from "../values/Primitive";
 import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum NotificationCommand {

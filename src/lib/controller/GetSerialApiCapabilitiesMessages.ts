@@ -1,7 +1,7 @@
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
 import { num2hex } from "../util/strings";
-import { parseBitMask } from "../util/ValueTypes";
+import { parseBitMask } from "../values/Primitive";
 
 const NUM_FUNCTIONS = 256;
 const NUM_FUNCTION_BYTES = NUM_FUNCTIONS / 8;
