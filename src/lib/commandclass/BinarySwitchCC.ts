@@ -40,7 +40,7 @@ export class BinarySwitchCC extends CommandClass {
 		targetValue?: boolean,
 		duration?: Duration,
 	) {
-		super(driver, nodeId);
+		super(driver, nodeId, ccCommand);
 		if (targetValue != undefined) this.currentValue = targetValue;
 		if (duration != undefined) this.duration = duration;
 	}
@@ -53,18 +53,17 @@ export class BinarySwitchCC extends CommandClass {
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
 			case BinarySwitchCommand.Get:
-				this.payload = Buffer.from([this.ccCommand]);
+				// no real payload
 				break;
 
 			case BinarySwitchCommand.Set: {
 				const payload: number[] = [
-					this.ccCommand,
 					this.targetValue ? 0xFF : 0x00,
 				];
 				if (this.version >= 2) {
 					payload.push(this.duration.serializeSet());
 				}
-				this.payload = Buffer.from([this.ccCommand]);
+				this.payload = Buffer.from(payload);
 				break;
 			}
 
@@ -81,13 +80,12 @@ export class BinarySwitchCC extends CommandClass {
 	public deserialize(data: Buffer): void {
 		super.deserialize(data);
 
-		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case BinarySwitchCommand.Report: {
-				this.currentValue = parseMaybeBoolean(this.payload[1]);
+				this.currentValue = parseMaybeBoolean(this.payload[0]);
 				if (this.payload.length >= 2) { // V2
-					this.targetValue = parseBoolean(this.payload[2]);
-					this.duration = Duration.parseReport(this.payload[3]);
+					this.targetValue = parseBoolean(this.payload[1]);
+					this.duration = Duration.parseReport(this.payload[2]);
 				}
 				break;
 			}

@@ -45,7 +45,7 @@ let NotificationCC = class NotificationCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId, ccCommand, 
     // tslint:disable-next-line:trailing-comma
     ...args) {
-        super(driver, nodeId);
+        super(driver, nodeId, ccCommand);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
         this._supportedEvents = new Map();
@@ -86,36 +86,28 @@ let NotificationCC = class NotificationCC extends CommandClass_1.CommandClass {
     serialize() {
         switch (this.ccCommand) {
             case NotificationCommand.Get: {
-                const msg = [
-                    this.ccCommand,
-                    this.alarmType,
-                ];
+                const payload = [this.alarmType];
                 if (this.version >= 2) {
-                    msg.push(this.notificationType);
+                    payload.push(this.notificationType);
                 }
                 if (this.version >= 3) {
                     // TODO: If the Notification Type is set to 0xFF, this field MUST be set to 0x00
-                    msg.push(this.notificationEvent);
+                    payload.push(this.notificationEvent);
                 }
-                this.payload = Buffer.from(msg);
+                this.payload = Buffer.from(payload);
                 break;
             }
             case NotificationCommand.Set:
                 this.payload = Buffer.from([
-                    this.ccCommand,
                     this.notificationType,
                     this.notificationStatus ? 0xff : 0x00,
                 ]);
                 break;
             case NotificationCommand.SupportedGet:
-                this.payload = Buffer.from([this.ccCommand]);
                 // no real payload
                 break;
             case NotificationCommand.EventSupportedGet:
-                this.payload = Buffer.from([
-                    this.ccCommand,
-                    this.notificationType,
-                ]);
+                this.payload = Buffer.from([this.notificationType]);
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot serialize a Notification CC with a command other than Get, Set, SupportedGet and EventSupportedGet", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
@@ -124,33 +116,32 @@ let NotificationCC = class NotificationCC extends CommandClass_1.CommandClass {
     }
     deserialize(data) {
         super.deserialize(data);
-        this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case NotificationCommand.Report: {
-                this.alarmType = this.payload[1];
-                this._alarmLevel = this.payload[2];
+                this.alarmType = this.payload[0];
+                this._alarmLevel = this.payload[1];
                 // V2..V3, reserved in V4+
-                this._zensorNetSourceNodeId = this.payload[3];
+                this._zensorNetSourceNodeId = this.payload[2];
                 // V2+
-                this.notificationStatus = this.payload[4] === 0xff;
-                this.notificationType = this.payload[5];
-                this._notificationEvent = this.payload[6];
-                const containsSeqNum = !!(this.payload[7] & 128);
-                const numEventParams = this.payload[7] & 0b11111;
+                this.notificationStatus = this.payload[3] === 0xff;
+                this.notificationType = this.payload[4];
+                this._notificationEvent = this.payload[5];
+                const containsSeqNum = !!(this.payload[6] & 128);
+                const numEventParams = this.payload[6] & 0b11111;
                 if (numEventParams > 0) {
-                    this._eventParameters = Buffer.from(this.payload.slice(8, 8 + numEventParams));
+                    this._eventParameters = Buffer.from(this.payload.slice(7, 7 + numEventParams));
                 }
                 if (containsSeqNum) {
-                    this._sequenceNumber = this.payload[8 + numEventParams];
+                    this._sequenceNumber = this.payload[7 + numEventParams];
                 }
                 break;
             }
             case NotificationCommand.SupportedReport: {
-                this._supportsV1Alarm = !!(this.payload[1] & 128);
-                const numBitMaskBytes = this.payload[1] & 31;
+                this._supportsV1Alarm = !!(this.payload[0] & 128);
+                const numBitMaskBytes = this.payload[0] & 31;
                 // parse the bitmask into a number array
                 // const numTypes = numBitMaskBytes * 8 - 1;
-                const notificationBitMask = this.payload.slice(2, 2 + numBitMaskBytes);
+                const notificationBitMask = this.payload.slice(1, 1 + numBitMaskBytes);
                 this._supportedNotificationTypes = Primitive_1.parseBitMask(notificationBitMask);
                 // this._supportedNotificationTypes = [];
                 // for (let type = 1; type <= numTypes; type++) {
@@ -161,12 +152,12 @@ let NotificationCC = class NotificationCC extends CommandClass_1.CommandClass {
                 break;
             }
             case NotificationCommand.EventSupportedReport: {
-                this.notificationType = this.payload[1];
-                const numBitMaskBytes = this.payload[2] & 31;
+                this.notificationType = this.payload[0];
+                const numBitMaskBytes = this.payload[1] & 31;
                 // parse the bitmask into a number array
                 // TODO: Can this be done with parseBitMask?
                 const numEvents = numBitMaskBytes * 8 - 1;
-                const eventsBitMask = this.payload.slice(3, 3 + numBitMaskBytes);
+                const eventsBitMask = this.payload.slice(2, 2 + numBitMaskBytes);
                 const supportedEvents = this._supportedEvents.has(this.notificationType)
                     ? this._supportedEvents.get(this.notificationType)
                     : [];

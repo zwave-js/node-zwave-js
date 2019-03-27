@@ -31,10 +31,10 @@ var CentralSceneKeys;
     CentralSceneKeys[CentralSceneKeys["KeyPressed5x"] = 6] = "KeyPressed5x";
 })(CentralSceneKeys = exports.CentralSceneKeys || (exports.CentralSceneKeys = {}));
 let CentralSceneCC = class CentralSceneCC extends CommandClass_1.CommandClass {
-    constructor(driver, nodeId, centralSceneCommand, slowRefresh) {
-        super(driver, nodeId);
+    constructor(driver, nodeId, ccCommand, slowRefresh) {
+        super(driver, nodeId, ccCommand);
         this.nodeId = nodeId;
-        this.centralSceneCommand = centralSceneCommand;
+        this.ccCommand = ccCommand;
         if (slowRefresh != undefined)
             this.slowRefresh = slowRefresh;
     }
@@ -53,16 +53,13 @@ let CentralSceneCC = class CentralSceneCC extends CommandClass_1.CommandClass {
         return this._sceneNumber;
     }
     serialize() {
-        switch (this.centralSceneCommand) {
+        switch (this.ccCommand) {
             case CentralSceneCommand.SupportedGet:
             case CentralSceneCommand.ConfigurationGet:
-                this.payload = Buffer.from([this.centralSceneCommand]);
+                // no real payload
                 break;
             case CentralSceneCommand.ConfigurationSet:
-                this.payload = Buffer.from([
-                    this.centralSceneCommand,
-                    this.slowRefresh ? 128 : 0,
-                ]);
+                this.payload = Buffer.from([this.slowRefresh ? 128 : 0]);
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot serialize a Version CC with a command other than SupportedGet, ConfigurationGet and ConfigurationSet", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
@@ -71,17 +68,16 @@ let CentralSceneCC = class CentralSceneCC extends CommandClass_1.CommandClass {
     }
     deserialize(data) {
         super.deserialize(data);
-        this.centralSceneCommand = this.payload[0];
-        switch (this.centralSceneCommand) {
+        switch (this.ccCommand) {
             case CentralSceneCommand.ConfigurationReport: {
-                this.slowRefresh = !!(this.payload[1] & 128);
+                this.slowRefresh = !!(this.payload[0] & 128);
                 break;
             }
             case CentralSceneCommand.SupportedReport: {
-                this.sceneCount = this.payload[1];
-                this.supportsSlowRefresh = !!(this.payload[2] & 128);
-                const bitMaskBytes = this.payload[2] & 0b110;
-                this._keyAttributesIdenticalSupport = !!(this.payload[2] & 0b1);
+                this.sceneCount = this.payload[0];
+                this.supportsSlowRefresh = !!(this.payload[1] & 128);
+                const bitMaskBytes = this.payload[1] & 0b110;
+                this._keyAttributesIdenticalSupport = !!(this.payload[1] & 0b1);
                 const numEntries = this._keyAttributesIdenticalSupport ? 1 : this.sceneCount;
                 this._supportedKeyAttributes = [];
                 for (let i = 0; i < numEntries; i++) {
@@ -94,10 +90,10 @@ let CentralSceneCC = class CentralSceneCC extends CommandClass_1.CommandClass {
                 break;
             }
             case CentralSceneCommand.Notification: {
-                this._sequenceNumber = this.payload[1];
-                this._keyAttribute = this.payload[2] & 0b111;
-                this._sceneNumber = this.payload[3];
-                this.slowRefresh = !!(this.payload[2] & 128);
+                this._sequenceNumber = this.payload[0];
+                this._keyAttribute = this.payload[1] & 0b111;
+                this._sceneNumber = this.payload[2];
+                this.slowRefresh = !!(this.payload[1] & 128);
                 break;
             }
             default:
@@ -106,7 +102,7 @@ let CentralSceneCC = class CentralSceneCC extends CommandClass_1.CommandClass {
     }
     toJSON() {
         return super.toJSONInherited({
-            centralSceneCommand: CentralSceneCommand[this.centralSceneCommand],
+            centralSceneCommand: CentralSceneCommand[this.ccCommand],
             slowRefresh: this.slowRefresh,
             sequenceNumber: this.sequenceNumber,
             keyAttribute: CentralSceneKeys[this.keyAttribute],

@@ -549,7 +549,7 @@ export class ZWaveNode extends EventEmitter {
 			}
 			case CommandClasses["Wake Up"]: {
 				const wakeupCC = command as WakeUpCC;
-				if (wakeupCC.wakeupCommand === WakeUpCommand.WakeUpNotification) {
+				if (wakeupCC.ccCommand === WakeUpCommand.WakeUpNotification) {
 					log("controller", `${this.logPrefix}received wake up notification`, "debug");
 					this.setAwake(true);
 					return;

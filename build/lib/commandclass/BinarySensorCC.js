@@ -21,7 +21,7 @@ var BinarySensorCommand;
 })(BinarySensorCommand = exports.BinarySensorCommand || (exports.BinarySensorCommand = {}));
 let BinarySensorCC = class BinarySensorCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId, ccCommand, sensorType) {
-        super(driver, nodeId);
+        super(driver, nodeId, ccCommand);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
         if (sensorType != undefined)
@@ -33,14 +33,12 @@ let BinarySensorCC = class BinarySensorCC extends CommandClass_1.CommandClass {
     serialize() {
         switch (this.ccCommand) {
             case BinarySensorCommand.SupportedGet:
-                this.payload = Buffer.from([this.ccCommand]);
+                // no real payload
                 break;
             case BinarySensorCommand.Get: {
-                const payload = [this.ccCommand];
                 if (this.version >= 2) {
-                    payload.push(this.sensorType);
+                    this.payload = Buffer.from([this.sensorType]);
                 }
-                this.payload = Buffer.from(payload);
                 break;
             }
             default:
@@ -50,15 +48,14 @@ let BinarySensorCC = class BinarySensorCC extends CommandClass_1.CommandClass {
     }
     deserialize(data) {
         super.deserialize(data);
-        this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case BinarySensorCommand.Report:
-                this.value = this.payload[1] === 0xFF;
-                this.sensorType = this.payload[2];
+                this.value = this.payload[0] === 0xFF;
+                this.sensorType = this.payload[1];
                 break;
             case BinarySensorCommand.SupportedReport: {
                 // parse the bitmask into a number array
-                this._supportedSensorTypes = Primitive_1.parseBitMask(this.payload.slice(1));
+                this._supportedSensorTypes = Primitive_1.parseBitMask(this.payload);
                 // const numBitMaskBytes = this.payload.length - 1;
                 // const numTypes = numBitMaskBytes * 8 - 1;
                 // const sensorBitMask = this.payload.slice(1, 1 + numBitMaskBytes);

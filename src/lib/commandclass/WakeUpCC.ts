@@ -14,7 +14,7 @@ export enum WakeUpCommand {
 }
 
 function getExpectedResponseToWakeUp(sent: WakeUpCC): CommandClasses {
-	switch (sent.wakeupCommand) {
+	switch (sent.ccCommand) {
 		// These commands expect no response
 		case WakeUpCommand.IntervalSet:
 		case WakeUpCommand.NoMoreInformation:
@@ -37,14 +37,14 @@ export class WakeUpCC extends CommandClass {
 	constructor(
 		driver: IDriver,
 		nodeId: number,
-		command: WakeUpCommand.IntervalSet,
+		ccCommand: WakeUpCommand.IntervalSet,
 		interval: number,
 		controllerNodeId: number,
 	);
 	constructor(
 		driver: IDriver,
 		nodeId: number,
-		command: WakeUpCommand.IntervalGet |
+		ccCommand: WakeUpCommand.IntervalGet |
 			WakeUpCommand.NoMoreInformation |
 			WakeUpCommand.IntervalCapabilitiesGet,
 	);
@@ -52,11 +52,11 @@ export class WakeUpCC extends CommandClass {
 	constructor(
 		driver: IDriver,
 		public nodeId: number,
-		public wakeupCommand?: WakeUpCommand,
+		public ccCommand?: WakeUpCommand,
 		wakeupInterval?: number,
 		controllerNodeId?: number,
 	) {
-		super(driver, nodeId);
+		super(driver, nodeId, ccCommand);
 
 		if (wakeupInterval != undefined) this.wakeupInterval = wakeupInterval;
 		if (controllerNodeId != undefined) this.controllerNodeId = controllerNodeId;
@@ -71,20 +71,19 @@ export class WakeUpCC extends CommandClass {
 	@ccValue() public wakeUpIntervalSteps: number;
 
 	public serialize(): Buffer {
-		switch (this.wakeupCommand) {
+		switch (this.ccCommand) {
 			case WakeUpCommand.IntervalGet:
 			case WakeUpCommand.NoMoreInformation:
 			case WakeUpCommand.IntervalCapabilitiesGet:
-				this.payload = Buffer.from([this.wakeupCommand]);
+				// no real payload
 				break;
 
 			case WakeUpCommand.IntervalSet:
 				this.payload = Buffer.from([
-					this.wakeupCommand,
 					0, 0, 0, // placeholder
 					this.controllerNodeId,
 				]);
-				this.payload.writeUIntBE(this.wakeupInterval, 1, 3);
+				this.payload.writeUIntBE(this.wakeupInterval, 0, 3);
 				break;
 			default:
 				throw new ZWaveError(
@@ -99,11 +98,10 @@ export class WakeUpCC extends CommandClass {
 	public deserialize(data: Buffer): void {
 		super.deserialize(data);
 
-		this.wakeupCommand = this.payload[0];
-		switch (this.wakeupCommand) {
+		switch (this.ccCommand) {
 			case WakeUpCommand.IntervalReport:
-				this.wakeupInterval = this.payload.readUIntBE(1, 3);
-				this.controllerNodeId = this.payload[4];
+				this.wakeupInterval = this.payload.readUIntBE(0, 3);
+				this.controllerNodeId = this.payload[3];
 				break;
 
 			case WakeUpCommand.WakeUpNotification:
@@ -111,10 +109,10 @@ export class WakeUpCC extends CommandClass {
 				break;
 
 			case WakeUpCommand.IntervalCapabilitiesReport:
-				this.minWakeUpInterval = this.payload.readUIntBE(1, 3);
-				this.maxWakeUpInterval = this.payload.readUIntBE(4, 3);
-				this.defaultWakeUpInterval = this.payload.readUIntBE(7, 3);
-				this.wakeUpIntervalSteps = this.payload.readUIntBE(10, 3);
+				this.minWakeUpInterval = this.payload.readUIntBE(0, 3);
+				this.maxWakeUpInterval = this.payload.readUIntBE(3, 3);
+				this.defaultWakeUpInterval = this.payload.readUIntBE(6, 3);
+				this.wakeUpIntervalSteps = this.payload.readUIntBE(9, 3);
 				break;
 
 			default:

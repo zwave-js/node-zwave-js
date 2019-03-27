@@ -44,13 +44,16 @@ let CommandClass = CommandClass_1 = class CommandClass {
     }
     serialize() {
         const payloadLength = this.payload != null ? this.payload.length : 0;
-        const ret = Buffer.allocUnsafe(payloadLength + 3);
+        const hasCommand = this.ccCommand != undefined;
+        const ret = Buffer.allocUnsafe(payloadLength + (hasCommand ? 4 : 3));
         ret[0] = this.nodeId;
         // the serialized length includes the command class itself
-        ret[1] = payloadLength + 1;
+        ret[1] = ret.length - 2;
         ret[2] = this.ccId;
+        if (hasCommand)
+            ret[3] = this.ccCommand;
         if (payloadLength > 0 /* implies payload != null */) {
-            this.payload.copy(ret, 3);
+            this.payload.copy(ret, ret.length - payloadLength);
         }
         return ret;
     }
@@ -59,8 +62,12 @@ let CommandClass = CommandClass_1 = class CommandClass {
         // the serialized length includes the command class itself
         const dataLength = data[1] - 1;
         this.ccId = CommandClass_1.getCommandClass(data);
-        this.payload = Buffer.allocUnsafe(dataLength);
-        data.copy(this.payload, 0, 3, 3 + dataLength);
+        const rawPayload = Buffer.allocUnsafe(dataLength);
+        data.copy(rawPayload, 0, 3, 3 + dataLength);
+        if (rawPayload.length > 0) {
+            this.ccCommand = rawPayload[0];
+            this.payload = rawPayload.slice(1);
+        }
     }
     static getNodeId(ccData) {
         return ccData[0];
@@ -89,7 +96,7 @@ let CommandClass = CommandClass_1 = class CommandClass {
     toJSONInternal() {
         const ret = {
             nodeId: this.nodeId,
-            command: CommandClasses[this.ccId] || strings_1.num2hex(this.ccId),
+            ccId: CommandClasses[this.ccId] || strings_1.num2hex(this.ccId),
         };
         if (this.payload != null && this.payload.length > 0)
             ret.payload = "0x" + this.payload.toString("hex");

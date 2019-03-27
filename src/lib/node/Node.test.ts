@@ -453,7 +453,7 @@ describe("lib/node/Node", () => {
 					cc: VersionCC,
 					nodeId: node.id,
 					ccValues: {
-						versionCommand: VersionCommand.CommandClassGet,
+						ccCommand: VersionCommand.CommandClassGet,
 						requestedCC: CommandClasses.Basic,
 					},
 				});
@@ -462,7 +462,7 @@ describe("lib/node/Node", () => {
 					cc: VersionCC,
 					nodeId: node.id,
 					ccValues: {
-						versionCommand: VersionCommand.CommandClassGet,
+						ccCommand: VersionCommand.CommandClassGet,
 						// BinarySensorCC needs to be loaded and this makes the import used
 						requestedCC: getCommandClassStatic(BinarySensorCC),
 					},
@@ -473,7 +473,7 @@ describe("lib/node/Node", () => {
 				// These CCs need to be implemented or the test will fail
 				node.addCC(CommandClasses.Basic, { isSupported: true });
 				const expected = new VersionCC(fakeDriver as any, node.id);
-				expected.versionCommand = VersionCommand.CommandClassReport;
+				expected.ccCommand = VersionCommand.CommandClassReport;
 				expected.requestedCC = CommandClasses.Basic;
 				(expected as any)._ccVersion = 3;
 				const req = new SendDataRequest(fakeDriver as any);
@@ -765,7 +765,7 @@ describe("lib/node/Node", () => {
 				cc: WakeUpCC,
 				nodeId: node.id,
 				ccValues: {
-					wakeupCommand: WakeUpCommand.NoMoreInformation,
+					ccCommand: WakeUpCommand.NoMoreInformation,
 				},
 			});
 		});

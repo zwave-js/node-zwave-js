@@ -38,7 +38,7 @@ export class MultiChannelCC extends CommandClass {
 		public ccCommand?: MultiChannelCommand,
 		...args: any[]
 	) {
-		super(driver, nodeId);
+		super(driver, nodeId, ccCommand);
 
 		if (ccCommand === MultiChannelCommand.CapabilityGet) {
 			[this.endpoint] = args;
@@ -72,19 +72,15 @@ export class MultiChannelCC extends CommandClass {
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
 			case MultiChannelCommand.EndPointGet:
-				this.payload = Buffer.from([this.ccCommand]);
+				// no real payload
 				break;
 
 			case MultiChannelCommand.CapabilityGet:
-				this.payload = Buffer.from([
-					this.ccCommand,
-					this.endpoint & 0b01111111,
-				]);
+				this.payload = Buffer.from([ this.endpoint & 0b01111111 ]);
 				break;
 
 			case MultiChannelCommand.EndPointFind:
 				this.payload = Buffer.from([
-					this.ccCommand,
 					this.genericClass,
 					this.specificClass,
 				]);
@@ -105,29 +101,28 @@ export class MultiChannelCC extends CommandClass {
 	public deserialize(data: Buffer): void {
 		super.deserialize(data);
 
-		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case MultiChannelCommand.EndPointReport:
-				this.isDynamicEndpointCount = !!(this.payload[1] & 0b10000000);
-				this.identicalCapabilities = !!(this.payload[1] & 0b01000000);
-				this.endpointCount = this.payload[2] & 0b01111111;
+				this.isDynamicEndpointCount = !!(this.payload[0] & 0b10000000);
+				this.identicalCapabilities = !!(this.payload[0] & 0b01000000);
+				this.endpointCount = this.payload[1] & 0b01111111;
 				break;
 
 			case MultiChannelCommand.CapabilityReport: {
-				const endpointIndex = this.payload[1] & 0b01111111;
+				const endpointIndex = this.payload[0] & 0b01111111;
 				const capability: EndpointCapability = {
-					isDynamic: !!(this.payload[1] & 0b10000000),
-					...parseNodeInformationFrame(this.payload.slice(2)),
+					isDynamic: !!(this.payload[0] & 0b10000000),
+					...parseNodeInformationFrame(this.payload.slice(1)),
 				};
 				this._endpointCapabilities.set(endpointIndex, capability);
 				break;
 			}
 
 			case MultiChannelCommand.EndPointFindReport: {
-				const numReports = this.payload[1];
-				this.genericClass = this.payload[2];
-				this.specificClass = this.payload[3];
-				this._foundEndpoints = [...this.payload.slice(4, 4 + numReports)].map(e => e & 0b01111111);
+				const numReports = this.payload[0];
+				this.genericClass = this.payload[1];
+				this.specificClass = this.payload[2];
+				this._foundEndpoints = [...this.payload.slice(3, 3 + numReports)].map(e => e & 0b01111111);
 				break;
 			}
 

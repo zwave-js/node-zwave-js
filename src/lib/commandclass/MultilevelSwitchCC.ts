@@ -53,7 +53,7 @@ export class MultilevelSwitchCC extends CommandClass {
 		public ccCommand?: MultilevelSwitchCommand,
 		...args: any[]
 	) {
-		super(driver, nodeId);
+		super(driver, nodeId, ccCommand);
 		if (ccCommand === MultilevelSwitchCommand.Set) {
 			[this.targetValue, this.duration] = args;
 		} else if (ccCommand === MultilevelSwitchCommand.StartLevelChange) {
@@ -93,7 +93,7 @@ export class MultilevelSwitchCC extends CommandClass {
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
 			case MultilevelSwitchCommand.Set: {
-				const payload = [this.ccCommand, this.targetValue];
+				const payload = [this.targetValue];
 				if (this.version >= 2) {
 					payload.push(this.duration.serializeSet());
 				}
@@ -112,7 +112,6 @@ export class MultilevelSwitchCC extends CommandClass {
 					}
 				}
 				const payload = [
-					this.ccCommand,
 					controlByte,
 					this.startLevel,
 				];
@@ -130,7 +129,6 @@ export class MultilevelSwitchCC extends CommandClass {
 			case MultilevelSwitchCommand.StopLevelChange:
 			case MultilevelSwitchCommand.SupportedGet:
 				// no actual payload
-				this.payload = Buffer.from([this.ccCommand]);
 				break;
 
 			default:
@@ -146,18 +144,17 @@ export class MultilevelSwitchCC extends CommandClass {
 	public deserialize(data: Buffer): void {
 		super.deserialize(data);
 
-		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case MultilevelSwitchCommand.Report: {
-				this.currentValue = parseMaybeNumber(this.payload[1]);
-				this.targetValue = parseNumber(this.payload[2]);
-				this.duration = Duration.parseReport(this.payload[3]);
+				this.currentValue = parseMaybeNumber(this.payload[0]);
+				this.targetValue = parseNumber(this.payload[1]);
+				this.duration = Duration.parseReport(this.payload[2]);
 				break;
 			}
 
 			case MultilevelSwitchCommand.SupportedReport:
-				this._primarySwitchType = this.payload[1] & 0b11111;
-				this._secondarySwitchType = this.payload[2] & 0b11111;
+				this._primarySwitchType = this.payload[0] & 0b11111;
+				this._secondarySwitchType = this.payload[1] & 0b11111;
 				break;
 
 			default:

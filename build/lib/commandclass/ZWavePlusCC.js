@@ -34,14 +34,14 @@ var ZWavePlusNodeType;
 })(ZWavePlusNodeType = exports.ZWavePlusNodeType || (exports.ZWavePlusNodeType = {}));
 let ZWavePlusCC = class ZWavePlusCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId, ccCommand) {
-        super(driver, nodeId);
+        super(driver, nodeId, ccCommand);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
     }
     serialize() {
         switch (this.ccCommand) {
             case ZWavePlusCommand.Get:
-                this.payload = Buffer.from([this.ccCommand]);
+                // no real payload
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot serialize a ZWavePlus CC with a command other than Get", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
@@ -50,14 +50,13 @@ let ZWavePlusCC = class ZWavePlusCC extends CommandClass_1.CommandClass {
     }
     deserialize(data) {
         super.deserialize(data);
-        this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case ZWavePlusCommand.Report:
-                this.zwavePlusVersion = this.payload[1];
-                this.roleType = this.payload[2];
-                this.nodeType = this.payload[3];
-                this.installerIcon = this.payload.readUInt16BE(4);
-                this.userIcon = this.payload.readUInt16BE(6);
+                this.zwavePlusVersion = this.payload[0];
+                this.roleType = this.payload[1];
+                this.nodeType = this.payload[2];
+                this.installerIcon = this.payload.readUInt16BE(3);
+                this.userIcon = this.payload.readUInt16BE(5);
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot deserialize a ZWavePlus CC with a command other than Report", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);

@@ -33,10 +33,10 @@ export class CentralSceneCC extends CommandClass {
 	constructor(
 		driver: IDriver,
 		public nodeId: number,
-		public centralSceneCommand?: CentralSceneCommand,
+		public ccCommand?: CentralSceneCommand,
 		slowRefresh?: boolean,
 	) {
-		super(driver, nodeId);
+		super(driver, nodeId, ccCommand);
 		if (slowRefresh != undefined) this.slowRefresh = slowRefresh;
 	}
 	// tslint:enable:unified-signatures
@@ -70,17 +70,14 @@ export class CentralSceneCC extends CommandClass {
 	}
 
 	public serialize(): Buffer {
-		switch (this.centralSceneCommand) {
+		switch (this.ccCommand) {
 			case CentralSceneCommand.SupportedGet:
 			case CentralSceneCommand.ConfigurationGet:
-				this.payload = Buffer.from([this.centralSceneCommand]);
+				// no real payload
 				break;
 
 			case CentralSceneCommand.ConfigurationSet:
-				this.payload = Buffer.from([
-					this.centralSceneCommand,
-					this.slowRefresh ? 0b1000_0000 : 0,
-				]);
+				this.payload = Buffer.from([ this.slowRefresh ? 0b1000_0000 : 0 ]);
 				break;
 
 			default:
@@ -96,19 +93,17 @@ export class CentralSceneCC extends CommandClass {
 	public deserialize(data: Buffer): void {
 		super.deserialize(data);
 
-		this.centralSceneCommand = this.payload[0];
-		switch (this.centralSceneCommand) {
-
+		switch (this.ccCommand) {
 			case CentralSceneCommand.ConfigurationReport: {
-				this.slowRefresh = !!(this.payload[1] & 0b1000_0000);
+				this.slowRefresh = !!(this.payload[0] & 0b1000_0000);
 				break;
 			}
 
 			case CentralSceneCommand.SupportedReport: {
-				this.sceneCount = this.payload[1];
-				this.supportsSlowRefresh = !!(this.payload[2] & 0b1000_0000);
-				const bitMaskBytes = this.payload[2] & 0b110;
-				this._keyAttributesIdenticalSupport = !!(this.payload[2] & 0b1);
+				this.sceneCount = this.payload[0];
+				this.supportsSlowRefresh = !!(this.payload[1] & 0b1000_0000);
+				const bitMaskBytes = this.payload[1] & 0b110;
+				this._keyAttributesIdenticalSupport = !!(this.payload[1] & 0b1);
 				const numEntries = this._keyAttributesIdenticalSupport ? 1 : this.sceneCount;
 				this._supportedKeyAttributes = [];
 				for (let i = 0; i < numEntries; i++) {
@@ -122,10 +117,10 @@ export class CentralSceneCC extends CommandClass {
 			}
 
 			case CentralSceneCommand.Notification: {
-				this._sequenceNumber = this.payload[1];
-				this._keyAttribute = this.payload[2] & 0b111;
-				this._sceneNumber = this.payload[3];
-				this.slowRefresh = !!(this.payload[2] & 0b1000_0000);
+				this._sequenceNumber = this.payload[0];
+				this._keyAttribute = this.payload[1] & 0b111;
+				this._sceneNumber = this.payload[2];
+				this.slowRefresh = !!(this.payload[1] & 0b1000_0000);
 				break;
 			}
 
@@ -139,7 +134,7 @@ export class CentralSceneCC extends CommandClass {
 
 	public toJSON() {
 		return super.toJSONInherited({
-			centralSceneCommand: CentralSceneCommand[this.centralSceneCommand],
+			centralSceneCommand: CentralSceneCommand[this.ccCommand],
 			slowRefresh: this.slowRefresh,
 			sequenceNumber: this.sequenceNumber,
 			keyAttribute: CentralSceneKeys[this.keyAttribute],

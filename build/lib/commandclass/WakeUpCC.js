@@ -23,7 +23,7 @@ var WakeUpCommand;
     WakeUpCommand[WakeUpCommand["IntervalCapabilitiesReport"] = 10] = "IntervalCapabilitiesReport";
 })(WakeUpCommand = exports.WakeUpCommand || (exports.WakeUpCommand = {}));
 function getExpectedResponseToWakeUp(sent) {
-    switch (sent.wakeupCommand) {
+    switch (sent.ccCommand) {
         // These commands expect no response
         case WakeUpCommand.IntervalSet:
         case WakeUpCommand.NoMoreInformation:
@@ -33,29 +33,28 @@ function getExpectedResponseToWakeUp(sent) {
     }
 }
 let WakeUpCC = WakeUpCC_1 = class WakeUpCC extends CommandClass_1.CommandClass {
-    constructor(driver, nodeId, wakeupCommand, wakeupInterval, controllerNodeId) {
-        super(driver, nodeId);
+    constructor(driver, nodeId, ccCommand, wakeupInterval, controllerNodeId) {
+        super(driver, nodeId, ccCommand);
         this.nodeId = nodeId;
-        this.wakeupCommand = wakeupCommand;
+        this.ccCommand = ccCommand;
         if (wakeupInterval != undefined)
             this.wakeupInterval = wakeupInterval;
         if (controllerNodeId != undefined)
             this.controllerNodeId = controllerNodeId;
     }
     serialize() {
-        switch (this.wakeupCommand) {
+        switch (this.ccCommand) {
             case WakeUpCommand.IntervalGet:
             case WakeUpCommand.NoMoreInformation:
             case WakeUpCommand.IntervalCapabilitiesGet:
-                this.payload = Buffer.from([this.wakeupCommand]);
+                // no real payload
                 break;
             case WakeUpCommand.IntervalSet:
                 this.payload = Buffer.from([
-                    this.wakeupCommand,
                     0, 0, 0,
                     this.controllerNodeId,
                 ]);
-                this.payload.writeUIntBE(this.wakeupInterval, 1, 3);
+                this.payload.writeUIntBE(this.wakeupInterval, 0, 3);
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot serialize a WakeUp CC with a command other than IntervalSet, IntervalGet or NoMoreInformation, IntervalCapabilitiesGet", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
@@ -64,20 +63,19 @@ let WakeUpCC = WakeUpCC_1 = class WakeUpCC extends CommandClass_1.CommandClass {
     }
     deserialize(data) {
         super.deserialize(data);
-        this.wakeupCommand = this.payload[0];
-        switch (this.wakeupCommand) {
+        switch (this.ccCommand) {
             case WakeUpCommand.IntervalReport:
-                this.wakeupInterval = this.payload.readUIntBE(1, 3);
-                this.controllerNodeId = this.payload[4];
+                this.wakeupInterval = this.payload.readUIntBE(0, 3);
+                this.controllerNodeId = this.payload[3];
                 break;
             case WakeUpCommand.WakeUpNotification:
                 // no real payload
                 break;
             case WakeUpCommand.IntervalCapabilitiesReport:
-                this.minWakeUpInterval = this.payload.readUIntBE(1, 3);
-                this.maxWakeUpInterval = this.payload.readUIntBE(4, 3);
-                this.defaultWakeUpInterval = this.payload.readUIntBE(7, 3);
-                this.wakeUpIntervalSteps = this.payload.readUIntBE(10, 3);
+                this.minWakeUpInterval = this.payload.readUIntBE(0, 3);
+                this.maxWakeUpInterval = this.payload.readUIntBE(3, 3);
+                this.defaultWakeUpInterval = this.payload.readUIntBE(6, 3);
+                this.wakeUpIntervalSteps = this.payload.readUIntBE(9, 3);
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot deserialize a WakeUp CC with a command other than IntervalReport or WakeUpNotification", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);

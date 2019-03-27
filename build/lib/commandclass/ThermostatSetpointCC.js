@@ -49,7 +49,7 @@ var ThermostatSetpointScale;
 })(ThermostatSetpointScale = exports.ThermostatSetpointScale || (exports.ThermostatSetpointScale = {}));
 let ThermostatSetpointCC = class ThermostatSetpointCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId, ccCommand, setpointType, value) {
-        super(driver, nodeId);
+        super(driver, nodeId, ccCommand);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
         switch (ccCommand) {
@@ -66,22 +66,16 @@ let ThermostatSetpointCC = class ThermostatSetpointCC extends CommandClass_1.Com
         switch (this.ccCommand) {
             case ThermostatSetpointCommand.Get:
             case ThermostatSetpointCommand.CapabilitiesGet:
-                this.payload = Buffer.from([
-                    this.ccCommand,
-                    this.setpointType & 0b1111,
-                ]);
+                this.payload = Buffer.from([this.setpointType & 0b1111]);
                 break;
             case ThermostatSetpointCommand.Set:
                 this.payload = Buffer.concat([
-                    Buffer.from([
-                        this.ccCommand,
-                        this.setpointType & 0b1111,
-                    ]),
+                    Buffer.from([this.setpointType & 0b1111]),
                     Primitive_1.encodeFloatWithScale(this.value, this.scale),
                 ]);
                 break;
             case ThermostatSetpointCommand.SupportedGet:
-                this.payload = Buffer.from([this.ccCommand]);
+                // no real payload
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot serialize a ThermostatSetpoint CC with a command other than Get, Set, SupportedGet or CapabilitiesGet", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
@@ -90,14 +84,13 @@ let ThermostatSetpointCC = class ThermostatSetpointCC extends CommandClass_1.Com
     }
     deserialize(data) {
         super.deserialize(data);
-        this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case ThermostatSetpointCommand.Report:
-                this.setpointType = this.payload[1] & 0b1111;
-                ({ value: this.value, scale: this.scale } = Primitive_1.parseFloatWithScale(this.payload.slice(2)));
+                this.setpointType = this.payload[0] & 0b1111;
+                ({ value: this.value, scale: this.scale } = Primitive_1.parseFloatWithScale(this.payload.slice(1)));
                 break;
             case ThermostatSetpointCommand.SupportedReport: {
-                const bitMask = this.payload.slice(1);
+                const bitMask = this.payload;
                 const supported = Primitive_1.parseBitMask(bitMask);
                 if (this.version >= 3) {
                     // Interpretation A
@@ -120,10 +113,10 @@ let ThermostatSetpointCC = class ThermostatSetpointCC extends CommandClass_1.Com
                 // node MUST conclude that the actual Setpoint Type is not supported.
             }
             case ThermostatSetpointCommand.CapabilitiesReport: {
-                this.setpointType = this.payload[1];
+                this.setpointType = this.payload[0];
                 let bytesRead;
-                ({ value: this.minValue, scale: this.minValueScale, bytesRead } = Primitive_1.parseFloatWithScale(this.payload.slice(2)));
-                ({ value: this.maxValue, scale: this.maxValueScale } = Primitive_1.parseFloatWithScale(this.payload.slice(2 + bytesRead)));
+                ({ value: this.minValue, scale: this.minValueScale, bytesRead } = Primitive_1.parseFloatWithScale(this.payload.slice(1)));
+                ({ value: this.maxValue, scale: this.maxValueScale } = Primitive_1.parseFloatWithScale(this.payload.slice(1 + bytesRead)));
                 break;
             }
             default:

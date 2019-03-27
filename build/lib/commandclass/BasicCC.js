@@ -22,7 +22,7 @@ var BasicCommand;
 })(BasicCommand = exports.BasicCommand || (exports.BasicCommand = {}));
 let BasicCC = class BasicCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId, ccCommand, targetValue) {
-        super(driver, nodeId);
+        super(driver, nodeId, ccCommand);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
         if (targetValue != undefined)
@@ -31,14 +31,10 @@ let BasicCC = class BasicCC extends CommandClass_1.CommandClass {
     serialize() {
         switch (this.ccCommand) {
             case BasicCommand.Get:
-                this.payload = Buffer.from([this.ccCommand]);
                 // no real payload
                 break;
             case BasicCommand.Set:
-                this.payload = Buffer.from([
-                    this.ccCommand,
-                    this.targetValue,
-                ]);
+                this.payload = Buffer.from([this.targetValue]);
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot serialize a Basic CC with a command other than Get or Set", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
@@ -47,13 +43,12 @@ let BasicCC = class BasicCC extends CommandClass_1.CommandClass {
     }
     deserialize(data) {
         super.deserialize(data);
-        this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case BasicCommand.Report:
-                this.currentValue = Primitive_1.parseMaybeNumber(this.payload[1]);
+                this.currentValue = Primitive_1.parseMaybeNumber(this.payload[0]);
                 // starting in V2:
-                this.targetValue = Primitive_1.parseNumber(this.payload[2]);
-                this.duration = Duration_1.Duration.parseReport(this.payload[3]);
+                this.targetValue = Primitive_1.parseNumber(this.payload[1]);
+                this.duration = Duration_1.Duration.parseReport(this.payload[2]);
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError(`Cannot deserialize a Basic CC with a command other than Report. Received ${BasicCommand[this.ccCommand]} (${strings_1.num2hex(this.ccCommand)})`, ZWaveError_1.ZWaveErrorCodes.CC_Invalid);

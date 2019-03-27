@@ -52,7 +52,7 @@ export class MultilevelSensorCC extends CommandClass {
 		public ccCommand?: MultilevelSensorCommand,
 		...args: any[]
 	) {
-		super(driver, nodeId);
+		super(driver, nodeId, ccCommand);
 		if (this.ccCommand === MultilevelSensorCommand.GetSupportedScale) {
 			this.sensorType = args[0];
 		} else if (this.ccCommand === MultilevelSensorCommand.Get) {
@@ -81,25 +81,20 @@ export class MultilevelSensorCC extends CommandClass {
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
 			case MultilevelSensorCommand.Get:
-				const payload: number[] = [this.ccCommand];
 				if (this.version >= 5 && this.sensorType != undefined && this.scale != undefined) {
-					payload.push(
+					this.payload = Buffer.from([
 						this.sensorType,
 						(this.scale & 0b11) << 3,
-					);
+					]);
 				}
-				this.payload = Buffer.from(payload);
 				break;
 
 			case MultilevelSensorCommand.GetSupportedSensor:
-				this.payload = Buffer.from([this.ccCommand]);
+				// no real payload
 				break;
 
 			case MultilevelSensorCommand.GetSupportedScale:
-				this.payload = Buffer.from([
-					this.ccCommand,
-					this.sensorType,
-				]);
+				this.payload = Buffer.from([ this.sensorType ]);
 				break;
 
 			default:
@@ -115,25 +110,24 @@ export class MultilevelSensorCC extends CommandClass {
 	public deserialize(data: Buffer): void {
 		super.deserialize(data);
 
-		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case MultilevelSensorCommand.Report:
-				this.sensorType = this.payload[1];
-				({ value: this.value, scale: this.scale } = parseFloatWithScale(this.payload.slice(2)));
+				this.sensorType = this.payload[0];
+				({ value: this.value, scale: this.scale } = parseFloatWithScale(this.payload.slice(1)));
 				break;
 
 			case MultilevelSensorCommand.SupportedSensorReport:
-				this._supportedSensorTypes = parseBitMask(this.payload.slice(1));
+				this._supportedSensorTypes = parseBitMask(this.payload);
 				break;
 
 			case MultilevelSensorCommand.SupportedScaleReport: {
 				const supportedScales: number[] = [];
-				const bitMask = this.payload[2] && 0b1111;
+				const bitMask = this.payload[1] && 0b1111;
 				if (!!(bitMask & 0b1)) supportedScales.push(1);
 				if (!!(bitMask & 0b10)) supportedScales.push(2);
 				if (!!(bitMask & 0b100)) supportedScales.push(3);
 				if (!!(bitMask & 0b1000)) supportedScales.push(4);
-				this._supportedScales.set(this.payload[1], supportedScales);
+				this._supportedScales.set(this.payload[0], supportedScales);
 				break;
 			}
 

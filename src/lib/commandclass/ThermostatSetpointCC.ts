@@ -77,7 +77,7 @@ export class ThermostatSetpointCC extends CommandClass {
 		setpointType?: ThermostatSetpointType,
 		value?: number,
 	) {
-		super(driver, nodeId);
+		super(driver, nodeId, ccCommand);
 		switch (ccCommand) {
 			case ThermostatSetpointCommand.Set:
 				this.value = value;
@@ -104,24 +104,18 @@ export class ThermostatSetpointCC extends CommandClass {
 		switch (this.ccCommand) {
 			case ThermostatSetpointCommand.Get:
 			case ThermostatSetpointCommand.CapabilitiesGet:
-				this.payload = Buffer.from([
-					this.ccCommand,
-					this.setpointType & 0b1111,
-				]);
+				this.payload = Buffer.from([ this.setpointType & 0b1111 ]);
 				break;
 
 			case ThermostatSetpointCommand.Set:
 				this.payload = Buffer.concat([
-					Buffer.from([
-						this.ccCommand,
-						this.setpointType & 0b1111,
-					]),
+					Buffer.from([ this.setpointType & 0b1111 ]),
 					encodeFloatWithScale(this.value, this.scale),
 				]);
 				break;
 
 			case ThermostatSetpointCommand.SupportedGet:
-				this.payload = Buffer.from([this.ccCommand]);
+				// no real payload
 				break;
 
 			default:
@@ -137,15 +131,14 @@ export class ThermostatSetpointCC extends CommandClass {
 	public deserialize(data: Buffer): void {
 		super.deserialize(data);
 
-		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case ThermostatSetpointCommand.Report:
-				this.setpointType = this.payload[1] & 0b1111;
-				({ value: this.value, scale: this.scale } = parseFloatWithScale(this.payload.slice(2)));
+				this.setpointType = this.payload[0] & 0b1111;
+				({ value: this.value, scale: this.scale } = parseFloatWithScale(this.payload.slice(1)));
 				break;
 
 			case ThermostatSetpointCommand.SupportedReport: {
-				const bitMask = this.payload.slice(1);
+				const bitMask = this.payload;
 				const supported = parseBitMask(bitMask);
 				if (this.version >= 3) {
 					// Interpretation A
@@ -168,10 +161,10 @@ export class ThermostatSetpointCC extends CommandClass {
 			}
 
 			case ThermostatSetpointCommand.CapabilitiesReport: {
-				this.setpointType = this.payload[1];
+				this.setpointType = this.payload[0];
 				let bytesRead: number;
-				({ value: this.minValue, scale: this.minValueScale, bytesRead } = parseFloatWithScale(this.payload.slice(2)));
-				({ value: this.maxValue, scale: this.maxValueScale } = parseFloatWithScale(this.payload.slice(2 + bytesRead)));
+				({ value: this.minValue, scale: this.minValueScale, bytesRead } = parseFloatWithScale(this.payload.slice(1)));
+				({ value: this.maxValue, scale: this.maxValueScale } = parseFloatWithScale(this.payload.slice(1 + bytesRead)));
 				break;
 			}
 

@@ -36,7 +36,7 @@ export class ZWavePlusCC extends CommandClass {
 	constructor(
 		driver: IDriver,
 		nodeId: number,
-		command: ZWavePlusCommand.Get,
+		ccCommand: ZWavePlusCommand.Get,
 	);
 
 	constructor(
@@ -44,7 +44,7 @@ export class ZWavePlusCC extends CommandClass {
 		public nodeId: number,
 		public ccCommand?: ZWavePlusCommand,
 	) {
-		super(driver, nodeId);
+		super(driver, nodeId, ccCommand);
 	}
 	// tslint:enable:unified-signatures
 
@@ -57,7 +57,7 @@ export class ZWavePlusCC extends CommandClass {
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
 			case ZWavePlusCommand.Get:
-				this.payload = Buffer.from([this.ccCommand]);
+				// no real payload
 				break;
 			default:
 				throw new ZWaveError(
@@ -72,14 +72,13 @@ export class ZWavePlusCC extends CommandClass {
 	public deserialize(data: Buffer): void {
 		super.deserialize(data);
 
-		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case ZWavePlusCommand.Report:
-				this.zwavePlusVersion = this.payload[1];
-				this.roleType = this.payload[2];
-				this.nodeType = this.payload[3];
-				this.installerIcon = this.payload.readUInt16BE(4);
-				this.userIcon = this.payload.readUInt16BE(6);
+				this.zwavePlusVersion = this.payload[0];
+				this.roleType = this.payload[1];
+				this.nodeType = this.payload[2];
+				this.installerIcon = this.payload.readUInt16BE(3);
+				this.userIcon = this.payload.readUInt16BE(5);
 				break;
 
 			default:

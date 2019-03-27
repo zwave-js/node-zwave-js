@@ -23,7 +23,7 @@ export declare class ZWavePlusCC extends CommandClass {
     nodeId: number;
     ccCommand?: ZWavePlusCommand;
     constructor(driver: IDriver, nodeId?: number);
-    constructor(driver: IDriver, nodeId: number, command: ZWavePlusCommand.Get);
+    constructor(driver: IDriver, nodeId: number, ccCommand: ZWavePlusCommand.Get);
     zwavePlusVersion: number;
     nodeType: ZWavePlusNodeType;
     roleType: ZWavePlusRoleType;

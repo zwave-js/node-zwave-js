@@ -20,7 +20,7 @@ export declare enum CentralSceneKeys {
 }
 export declare class CentralSceneCC extends CommandClass {
     nodeId: number;
-    centralSceneCommand?: CentralSceneCommand;
+    ccCommand?: CentralSceneCommand;
     constructor(driver: IDriver, nodeId?: number);
     constructor(driver: IDriver, nodeId: number, command: CentralSceneCommand.SupportedGet | CentralSceneCommand.ConfigurationGet);
     constructor(driver: IDriver, nodeId: number, command: CentralSceneCommand.ConfigurationSet, slowRefresh: boolean);

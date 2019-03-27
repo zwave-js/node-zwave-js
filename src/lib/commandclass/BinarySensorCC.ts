@@ -35,7 +35,7 @@ export class BinarySensorCC extends CommandClass {
 		public ccCommand?: BinarySensorCommand,
 		sensorType?: BinarySensorType,
 	) {
-		super(driver, nodeId);
+		super(driver, nodeId, ccCommand);
 		if (sensorType != undefined) this.sensorType = sensorType;
 	}
 	// tslint:enable:unified-signatures
@@ -51,15 +51,13 @@ export class BinarySensorCC extends CommandClass {
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
 			case BinarySensorCommand.SupportedGet:
-				this.payload = Buffer.from([this.ccCommand]);
+				// no real payload
 				break;
 
 			case BinarySensorCommand.Get: {
-				const payload: number[] = [this.ccCommand];
 				if (this.version >= 2) {
-					payload.push(this.sensorType);
+					this.payload = Buffer.from([this.sensorType]);
 				}
-				this.payload = Buffer.from(payload);
 				break;
 			}
 
@@ -76,16 +74,15 @@ export class BinarySensorCC extends CommandClass {
 	public deserialize(data: Buffer): void {
 		super.deserialize(data);
 
-		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case BinarySensorCommand.Report:
-				this.value = this.payload[1] === 0xFF;
-				this.sensorType = this.payload[2];
+				this.value = this.payload[0] === 0xFF;
+				this.sensorType = this.payload[1];
 				break;
 
 			case BinarySensorCommand.SupportedReport: {
 				// parse the bitmask into a number array
-				this._supportedSensorTypes = parseBitMask(this.payload.slice(1));
+				this._supportedSensorTypes = parseBitMask(this.payload);
 				// const numBitMaskBytes = this.payload.length - 1;
 				// const numTypes = numBitMaskBytes * 8 - 1;
 				// const sensorBitMask = this.payload.slice(1, 1 + numBitMaskBytes);

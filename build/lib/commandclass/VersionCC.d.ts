@@ -17,11 +17,11 @@ export declare enum VersionCommand {
 }
 export declare class VersionCC extends CommandClass {
     nodeId: number;
-    versionCommand?: VersionCommand;
+    ccCommand?: VersionCommand;
     requestedCC?: CommandClasses;
     constructor(driver: IDriver, nodeId?: number);
-    constructor(driver: IDriver, nodeId: number, command: VersionCommand.Get | VersionCommand.CapabilitiesGet | VersionCommand.ZWaveSoftwareGet);
-    constructor(driver: IDriver, nodeId: number, command: VersionCommand.CommandClassGet, requestedCC: CommandClasses);
+    constructor(driver: IDriver, nodeId: number, ccCommand: VersionCommand.Get | VersionCommand.CapabilitiesGet | VersionCommand.ZWaveSoftwareGet);
+    constructor(driver: IDriver, nodeId: number, ccCommand: VersionCommand.CommandClassGet, requestedCC: CommandClasses);
     libraryType: ZWaveLibraryTypes;
     protocolVersion: string;
     firmwareVersions: string[];

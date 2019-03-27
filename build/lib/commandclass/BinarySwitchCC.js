@@ -21,7 +21,7 @@ var BinarySwitchCommand;
 })(BinarySwitchCommand = exports.BinarySwitchCommand || (exports.BinarySwitchCommand = {}));
 let BinarySwitchCC = class BinarySwitchCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId, ccCommand, targetValue, duration) {
-        super(driver, nodeId);
+        super(driver, nodeId, ccCommand);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
         if (targetValue != undefined)
@@ -32,17 +32,16 @@ let BinarySwitchCC = class BinarySwitchCC extends CommandClass_1.CommandClass {
     serialize() {
         switch (this.ccCommand) {
             case BinarySwitchCommand.Get:
-                this.payload = Buffer.from([this.ccCommand]);
+                // no real payload
                 break;
             case BinarySwitchCommand.Set: {
                 const payload = [
-                    this.ccCommand,
                     this.targetValue ? 0xFF : 0x00,
                 ];
                 if (this.version >= 2) {
                     payload.push(this.duration.serializeSet());
                 }
-                this.payload = Buffer.from([this.ccCommand]);
+                this.payload = Buffer.from(payload);
                 break;
             }
             default:
@@ -52,13 +51,12 @@ let BinarySwitchCC = class BinarySwitchCC extends CommandClass_1.CommandClass {
     }
     deserialize(data) {
         super.deserialize(data);
-        this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case BinarySwitchCommand.Report: {
-                this.currentValue = Primitive_1.parseMaybeBoolean(this.payload[1]);
+                this.currentValue = Primitive_1.parseMaybeBoolean(this.payload[0]);
                 if (this.payload.length >= 2) { // V2
-                    this.targetValue = Primitive_1.parseBoolean(this.payload[2]);
-                    this.duration = Duration_1.Duration.parseReport(this.payload[3]);
+                    this.targetValue = Primitive_1.parseBoolean(this.payload[1]);
+                    this.duration = Duration_1.Duration.parseReport(this.payload[2]);
                 }
                 break;
             }

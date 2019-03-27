@@ -24,7 +24,7 @@ var MultilevelSensorCommand;
 // TODO: Define sensor types and scales
 let MultilevelSensorCC = class MultilevelSensorCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId, ccCommand, ...args) {
-        super(driver, nodeId);
+        super(driver, nodeId, ccCommand);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
         this._supportedScales = new Map();
@@ -47,20 +47,18 @@ let MultilevelSensorCC = class MultilevelSensorCC extends CommandClass_1.Command
     serialize() {
         switch (this.ccCommand) {
             case MultilevelSensorCommand.Get:
-                const payload = [this.ccCommand];
                 if (this.version >= 5 && this.sensorType != undefined && this.scale != undefined) {
-                    payload.push(this.sensorType, (this.scale & 0b11) << 3);
+                    this.payload = Buffer.from([
+                        this.sensorType,
+                        (this.scale & 0b11) << 3,
+                    ]);
                 }
-                this.payload = Buffer.from(payload);
                 break;
             case MultilevelSensorCommand.GetSupportedSensor:
-                this.payload = Buffer.from([this.ccCommand]);
+                // no real payload
                 break;
             case MultilevelSensorCommand.GetSupportedScale:
-                this.payload = Buffer.from([
-                    this.ccCommand,
-                    this.sensorType,
-                ]);
+                this.payload = Buffer.from([this.sensorType]);
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot serialize a MultilevelSensor CC with a command other than Get, GetSupportedSensor or GetSupportedScale", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
@@ -69,18 +67,17 @@ let MultilevelSensorCC = class MultilevelSensorCC extends CommandClass_1.Command
     }
     deserialize(data) {
         super.deserialize(data);
-        this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case MultilevelSensorCommand.Report:
-                this.sensorType = this.payload[1];
-                ({ value: this.value, scale: this.scale } = Primitive_1.parseFloatWithScale(this.payload.slice(2)));
+                this.sensorType = this.payload[0];
+                ({ value: this.value, scale: this.scale } = Primitive_1.parseFloatWithScale(this.payload.slice(1)));
                 break;
             case MultilevelSensorCommand.SupportedSensorReport:
-                this._supportedSensorTypes = Primitive_1.parseBitMask(this.payload.slice(1));
+                this._supportedSensorTypes = Primitive_1.parseBitMask(this.payload);
                 break;
             case MultilevelSensorCommand.SupportedScaleReport: {
                 const supportedScales = [];
-                const bitMask = this.payload[2] && 0b1111;
+                const bitMask = this.payload[1] && 0b1111;
                 if (!!(bitMask & 0b1))
                     supportedScales.push(1);
                 if (!!(bitMask & 0b10))
@@ -89,7 +86,7 @@ let MultilevelSensorCC = class MultilevelSensorCC extends CommandClass_1.Command
                     supportedScales.push(3);
                 if (!!(bitMask & 0b1000))
                     supportedScales.push(4);
-                this._supportedScales.set(this.payload[1], supportedScales);
+                this._supportedScales.set(this.payload[0], supportedScales);
                 break;
             }
             default:

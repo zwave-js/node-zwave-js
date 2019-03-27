@@ -35,23 +35,23 @@ export class VersionCC extends CommandClass {
 	constructor(driver: IDriver, nodeId?: number);
 	constructor(
 		driver: IDriver, nodeId: number,
-		command: VersionCommand.Get
+		ccCommand: VersionCommand.Get
 			| VersionCommand.CapabilitiesGet
 			| VersionCommand.ZWaveSoftwareGet,
 		);
 	constructor(
 		driver: IDriver, nodeId: number,
-		command: VersionCommand.CommandClassGet,
+		ccCommand: VersionCommand.CommandClassGet,
 		requestedCC: CommandClasses,
 	);
 
 	constructor(
 		driver: IDriver,
 		public nodeId: number,
-		public versionCommand?: VersionCommand,
+		public ccCommand?: VersionCommand,
 		public requestedCC?: CommandClasses,
 	) {
-		super(driver, nodeId);
+		super(driver, nodeId, ccCommand);
 	}
 	// tslint:enable:unified-signatures
 
@@ -86,17 +86,14 @@ export class VersionCC extends CommandClass {
 	}
 
 	public serialize(): Buffer {
-		switch (this.versionCommand) {
+		switch (this.ccCommand) {
 			case VersionCommand.Get:
 			case VersionCommand.CapabilitiesGet:
 			case VersionCommand.ZWaveSoftwareGet:
-				this.payload = Buffer.from([this.versionCommand]);
+				// no real payload
 				break;
 			case VersionCommand.CommandClassGet:
-				this.payload = Buffer.from([
-					this.versionCommand,
-					this.requestedCC,
-				]);
+				this.payload = Buffer.from([ this.requestedCC ]);
 				break;
 			default:
 				throw new ZWaveError(
@@ -111,55 +108,54 @@ export class VersionCC extends CommandClass {
 	public deserialize(data: Buffer): void {
 		super.deserialize(data);
 
-		this.versionCommand = this.payload[0];
-		switch (this.versionCommand) {
+		switch (this.ccCommand) {
 			case VersionCommand.Report:
-				this.libraryType = this.payload[1];
-				this.protocolVersion = `${this.payload[2]}.${this.payload[3]}`;
-				this.firmwareVersions = [`${this.payload[4]}.${this.payload[5]}`];
+				this.libraryType = this.payload[0];
+				this.protocolVersion = `${this.payload[1]}.${this.payload[2]}`;
+				this.firmwareVersions = [`${this.payload[3]}.${this.payload[4]}`];
 				if (this.version >= 2) {
-					this.hardwareVersion = this.payload[6];
-					const additionalFirmwares = this.payload[7];
+					this.hardwareVersion = this.payload[5];
+					const additionalFirmwares = this.payload[6];
 					for (let i = 0; i < additionalFirmwares; i++) {
-						this.firmwareVersions.push(`${this.payload[8 + 2 * i]}.${this.payload[8 + 2 * i + 1]}`);
+						this.firmwareVersions.push(`${this.payload[7 + 2 * i]}.${this.payload[7 + 2 * i + 1]}`);
 					}
 				}
 				break;
 
 			case VersionCommand.CommandClassReport:
-				this.requestedCC = this.payload[1];
-				this._ccVersion = this.payload[2];
+				this.requestedCC = this.payload[0];
+				this._ccVersion = this.payload[1];
 				break;
 
 			case VersionCommand.CapabilitiesReport: {
-				const capabilities = this.payload[1];
+				const capabilities = this.payload[0];
 				this._supportsZWaveSoftwareGet = !!(capabilities & 0b100);
 				break;
 			}
 
 			case VersionCommand.ZWaveSoftwareReport:
-				this.sdkVersion = parseVersion(this.payload.slice(1));
-				this.applicationFrameworkAPIVersion = parseVersion(this.payload.slice(4));
+				this.sdkVersion = parseVersion(this.payload);
+				this.applicationFrameworkAPIVersion = parseVersion(this.payload.slice(3));
 				if (this.applicationFrameworkAPIVersion !== "unused") {
-					this.applicationFrameworkBuildNumber = this.payload.readUInt16BE(7);
+					this.applicationFrameworkBuildNumber = this.payload.readUInt16BE(6);
 				} else {
 					this.applicationFrameworkBuildNumber = 0;
 				}
-				this.hostInterfaceVersion = parseVersion(this.payload.slice(9));
+				this.hostInterfaceVersion = parseVersion(this.payload.slice(8));
 				if (this.hostInterfaceVersion !== "unused") {
-					this.hostInterfaceBuildNumber = this.payload.readUInt16BE(12);
+					this.hostInterfaceBuildNumber = this.payload.readUInt16BE(11);
 				} else {
 					this.hostInterfaceBuildNumber = 0;
 				}
-				this.zWaveProtocolVersion = parseVersion(this.payload.slice(14));
+				this.zWaveProtocolVersion = parseVersion(this.payload.slice(13));
 				if (this.zWaveProtocolVersion !== "unused") {
-					this.zWaveProtocolBuildNumber = this.payload.readUInt16BE(17);
+					this.zWaveProtocolBuildNumber = this.payload.readUInt16BE(16);
 				} else {
 					this.zWaveProtocolBuildNumber = 0;
 				}
-				this.applicationVersion = parseVersion(this.payload.slice(14));
+				this.applicationVersion = parseVersion(this.payload.slice(18));
 				if (this.applicationVersion !== "unused") {
-					this.applicationBuildNumber = this.payload.readUInt16BE(17);
+					this.applicationBuildNumber = this.payload.readUInt16BE(21);
 				} else {
 					this.applicationBuildNumber = 0;
 				}

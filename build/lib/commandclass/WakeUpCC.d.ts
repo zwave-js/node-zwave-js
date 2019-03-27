@@ -13,10 +13,10 @@ export declare enum WakeUpCommand {
 }
 export declare class WakeUpCC extends CommandClass {
     nodeId: number;
-    wakeupCommand?: WakeUpCommand;
+    ccCommand?: WakeUpCommand;
     constructor(driver: IDriver, nodeId?: number);
-    constructor(driver: IDriver, nodeId: number, command: WakeUpCommand.IntervalSet, interval: number, controllerNodeId: number);
-    constructor(driver: IDriver, nodeId: number, command: WakeUpCommand.IntervalGet | WakeUpCommand.NoMoreInformation | WakeUpCommand.IntervalCapabilitiesGet);
+    constructor(driver: IDriver, nodeId: number, ccCommand: WakeUpCommand.IntervalSet, interval: number, controllerNodeId: number);
+    constructor(driver: IDriver, nodeId: number, ccCommand: WakeUpCommand.IntervalGet | WakeUpCommand.NoMoreInformation | WakeUpCommand.IntervalCapabilitiesGet);
     wakeupInterval: number;
     controllerNodeId: number;
     minWakeUpInterval: number;

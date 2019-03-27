@@ -26,7 +26,7 @@ var DeviceIdType;
 })(DeviceIdType = exports.DeviceIdType || (exports.DeviceIdType = {}));
 let ManufacturerSpecificCC = class ManufacturerSpecificCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId, ccCommand, ...args) {
-        super(driver, nodeId);
+        super(driver, nodeId, ccCommand);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
         if (ccCommand === ManufacturerSpecificCommand.DeviceSpecificGet) {
@@ -43,13 +43,10 @@ let ManufacturerSpecificCC = class ManufacturerSpecificCC extends CommandClass_1
     serialize() {
         switch (this.ccCommand) {
             case ManufacturerSpecificCommand.Get:
-                this.payload = Buffer.from([this.ccCommand]);
+                // no real payload
                 break;
             case ManufacturerSpecificCommand.DeviceSpecificGet:
-                this.payload = Buffer.from([
-                    this.ccCommand,
-                    (this.deviceIdType || 0) & 0b111,
-                ]);
+                this.payload = Buffer.from([(this.deviceIdType || 0) & 0b111]);
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot serialize a ManufacturerSpecific CC with a command other than Get or DeviceSpecificGet", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
@@ -58,18 +55,17 @@ let ManufacturerSpecificCC = class ManufacturerSpecificCC extends CommandClass_1
     }
     deserialize(data) {
         super.deserialize(data);
-        this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case ManufacturerSpecificCommand.Report:
-                this.manufacturerId = this.payload.readUInt16BE(1);
-                this.productType = this.payload.readUInt16BE(3);
-                this.productId = this.payload.readUInt16BE(5);
+                this.manufacturerId = this.payload.readUInt16BE(0);
+                this.productType = this.payload.readUInt16BE(2);
+                this.productId = this.payload.readUInt16BE(4);
                 break;
             case ManufacturerSpecificCommand.DeviceSpecificReport: {
-                this.deviceIdType = this.payload[1] & 0b111;
-                const dataFormat = (this.payload[2] >>> 5);
-                const dataLength = this.payload[2] & 0b11111;
-                const deviceIdData = this.payload.slice(3, 3 + dataLength);
+                this.deviceIdType = this.payload[0] & 0b111;
+                const dataFormat = (this.payload[1] >>> 5);
+                const dataLength = this.payload[1] & 0b11111;
+                const deviceIdData = this.payload.slice(2, 2 + dataLength);
                 if (dataFormat === 0) { // utf8
                     this.deviceId = deviceIdData.toString("utf8");
                 }

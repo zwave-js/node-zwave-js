@@ -42,7 +42,7 @@ var ScheduleOverrideType;
 })(ScheduleOverrideType = exports.ScheduleOverrideType || (exports.ScheduleOverrideType = {}));
 let ClimateControlScheduleCC = class ClimateControlScheduleCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId, ccCommand, ...args) {
-        super(driver, nodeId);
+        super(driver, nodeId, ccCommand);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
         if (this.ccCommand === ClimateControlScheduleCommand.Set) {
@@ -65,7 +65,7 @@ let ClimateControlScheduleCC = class ClimateControlScheduleCC extends CommandCla
         switch (this.ccCommand) {
             case ClimateControlScheduleCommand.ChangedGet:
             case ClimateControlScheduleCommand.OverrideGet:
-                this.payload = Buffer.from([this.ccCommand]);
+                // no real payload
                 break;
             case ClimateControlScheduleCommand.Set: {
                 // Make sure we have exactly 9 entries
@@ -79,23 +79,16 @@ let ClimateControlScheduleCC = class ClimateControlScheduleCC extends CommandCla
                     });
                 }
                 this.payload = Buffer.concat([
-                    Buffer.from([
-                        this.ccCommand,
-                        this.weekday & 0b111,
-                    ]),
+                    Buffer.from([this.weekday & 0b111]),
                     ...allSwitchPoints.map(sp => Switchpoint_1.encodeSwitchpoint(sp)),
                 ]);
                 break;
             }
             case ClimateControlScheduleCommand.Get:
-                this.payload = Buffer.from([
-                    this.ccCommand,
-                    this.weekday & 0b111,
-                ]);
+                this.payload = Buffer.from([this.weekday & 0b111]);
                 break;
             case ClimateControlScheduleCommand.OverrideSet:
                 this.payload = Buffer.from([
-                    this.ccCommand,
                     this.overrideType & 0b11,
                     SetbackState_1.encodeSetbackState(this.overrideState),
                 ]);
@@ -107,23 +100,22 @@ let ClimateControlScheduleCC = class ClimateControlScheduleCC extends CommandCla
     }
     deserialize(data) {
         super.deserialize(data);
-        this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case ClimateControlScheduleCommand.Report: {
-                this.weekday = this.payload[1] & 0b111;
+                this.weekday = this.payload[0] & 0b111;
                 const allSwitchpoints = [];
                 for (let i = 0; i <= 8; i++) {
-                    allSwitchpoints.push(Switchpoint_1.decodeSwitchpoint(this.payload.slice(2 + 3 * i)));
+                    allSwitchpoints.push(Switchpoint_1.decodeSwitchpoint(this.payload.slice(1 + 3 * i)));
                 }
                 this.switchPoints = allSwitchpoints.filter(sp => sp.state !== "Unused");
                 break;
             }
             case ClimateControlScheduleCommand.ChangedReport:
-                this.changeCounter = this.payload[1];
+                this.changeCounter = this.payload[0];
                 break;
             case ClimateControlScheduleCommand.OverrideReport:
-                this.overrideType = this.payload[1] & 0b11;
-                this.overrideState = SetbackState_1.decodeSetbackState(this.payload[2]);
+                this.overrideType = this.payload[0] & 0b11;
+                this.overrideState = SetbackState_1.decodeSetbackState(this.payload[1]);
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot deserialize a ClimateControlSchedule CC with a command other than Report, ChangedReport or OverrideReport", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);

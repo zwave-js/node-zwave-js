@@ -45,7 +45,7 @@ export class ThermostatSetbackCC extends CommandClass {
 		public ccCommand?: ThermostatSetbackCommand,
 		...args: any[]
 	) {
-		super(driver, nodeId);
+		super(driver, nodeId, ccCommand);
 		if (ccCommand === ThermostatSetbackCommand.Set) {
 			[
 				this.setbackType,
@@ -62,11 +62,10 @@ export class ThermostatSetbackCC extends CommandClass {
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
 			case ThermostatSetbackCommand.Get:
-				this.payload = Buffer.from([this.ccCommand]);
+				// no real payload
 				break;
 			case ThermostatSetbackCommand.Set:
 				this.payload = Buffer.from([
-					this.ccCommand,
 					this.setbackType & 0b11,
 					encodeSetbackState(this.setbackState),
 				]);
@@ -84,11 +83,10 @@ export class ThermostatSetbackCC extends CommandClass {
 	public deserialize(data: Buffer): void {
 		super.deserialize(data);
 
-		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case ThermostatSetbackCommand.Report:
-				this.setbackType = this.payload[1] & 0b11;
-				this.setbackState = decodeSetbackState(this.payload[2]);
+				this.setbackType = this.payload[0] & 0b11;
+				this.setbackState = decodeSetbackState(this.payload[1]);
 				break;
 
 			default:

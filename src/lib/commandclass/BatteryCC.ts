@@ -29,7 +29,7 @@ export class BatteryCC extends CommandClass {
 		public nodeId: number,
 		public ccCommand?: BatteryCommand,
 	) {
-		super(driver, nodeId);
+		super(driver, nodeId, ccCommand);
 	}
 	// tslint:enable:unified-signatures
 
@@ -39,7 +39,7 @@ export class BatteryCC extends CommandClass {
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
 			case BatteryCommand.Get:
-				this.payload = Buffer.from([this.ccCommand]);
+				// no real payload
 				break;
 			default:
 				throw new ZWaveError(
@@ -54,10 +54,9 @@ export class BatteryCC extends CommandClass {
 	public deserialize(data: Buffer): void {
 		super.deserialize(data);
 
-		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case BatteryCommand.Report:
-				this.level = this.payload[1];
+				this.level = this.payload[0];
 				if (this.level === 0xFF) {
 					this.level = 0;
 					this.isLow = true;

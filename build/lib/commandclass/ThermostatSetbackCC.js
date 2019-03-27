@@ -26,7 +26,7 @@ var SetbackType;
 })(SetbackType = exports.SetbackType || (exports.SetbackType = {}));
 let ThermostatSetbackCC = class ThermostatSetbackCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId, ccCommand, ...args) {
-        super(driver, nodeId);
+        super(driver, nodeId, ccCommand);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
         if (ccCommand === ThermostatSetbackCommand.Set) {
@@ -39,11 +39,10 @@ let ThermostatSetbackCC = class ThermostatSetbackCC extends CommandClass_1.Comma
     serialize() {
         switch (this.ccCommand) {
             case ThermostatSetbackCommand.Get:
-                this.payload = Buffer.from([this.ccCommand]);
+                // no real payload
                 break;
             case ThermostatSetbackCommand.Set:
                 this.payload = Buffer.from([
-                    this.ccCommand,
                     this.setbackType & 0b11,
                     SetbackState_1.encodeSetbackState(this.setbackState),
                 ]);
@@ -55,11 +54,10 @@ let ThermostatSetbackCC = class ThermostatSetbackCC extends CommandClass_1.Comma
     }
     deserialize(data) {
         super.deserialize(data);
-        this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case ThermostatSetbackCommand.Report:
-                this.setbackType = this.payload[1] & 0b11;
-                this.setbackState = SetbackState_1.decodeSetbackState(this.payload[2]);
+                this.setbackType = this.payload[0] & 0b11;
+                this.setbackState = SetbackState_1.decodeSetbackState(this.payload[1]);
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot deserialize a ThermostatSetback CC with a command other than Report", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);

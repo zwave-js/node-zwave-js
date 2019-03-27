@@ -74,7 +74,7 @@ export class ClimateControlScheduleCC extends CommandClass {
 		public ccCommand?: ClimateControlScheduleCommand,
 		...args: any[]
 	) {
-		super(driver, nodeId);
+		super(driver, nodeId, ccCommand);
 		if (this.ccCommand === ClimateControlScheduleCommand.Set) {
 			[
 				this.weekday,
@@ -102,7 +102,7 @@ export class ClimateControlScheduleCC extends CommandClass {
 
 			case ClimateControlScheduleCommand.ChangedGet:
 			case ClimateControlScheduleCommand.OverrideGet:
-				this.payload = Buffer.from([this.ccCommand]);
+				// no real payload
 				break;
 
 			case ClimateControlScheduleCommand.Set: {
@@ -117,25 +117,18 @@ export class ClimateControlScheduleCC extends CommandClass {
 					});
 				}
 				this.payload = Buffer.concat([
-					Buffer.from([
-						this.ccCommand,
-						this.weekday & 0b111,
-					]),
+					Buffer.from([ this.weekday & 0b111 ]),
 					...allSwitchPoints.map(sp => encodeSwitchpoint(sp)),
 				]);
 				break;
 			}
 
 			case ClimateControlScheduleCommand.Get:
-				this.payload = Buffer.from([
-					this.ccCommand,
-					this.weekday & 0b111,
-				]);
+				this.payload = Buffer.from([ this.weekday & 0b111 ]);
 				break;
 
 			case ClimateControlScheduleCommand.OverrideSet:
 				this.payload = Buffer.from([
-					this.ccCommand,
 					this.overrideType & 0b11,
 					encodeSetbackState(this.overrideState),
 				]);
@@ -154,14 +147,13 @@ export class ClimateControlScheduleCC extends CommandClass {
 	public deserialize(data: Buffer): void {
 		super.deserialize(data);
 
-		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case ClimateControlScheduleCommand.Report: {
-				this.weekday = this.payload[1] & 0b111;
+				this.weekday = this.payload[0] & 0b111;
 				const allSwitchpoints: Switchpoint[] = [];
 				for (let i = 0; i <= 8; i++) {
 					allSwitchpoints.push(
-						decodeSwitchpoint(this.payload.slice(2 + 3 * i)),
+						decodeSwitchpoint(this.payload.slice(1 + 3 * i)),
 					);
 				}
 				this.switchPoints = allSwitchpoints.filter(sp => sp.state !== "Unused");
@@ -169,12 +161,12 @@ export class ClimateControlScheduleCC extends CommandClass {
 			}
 
 			case ClimateControlScheduleCommand.ChangedReport:
-				this.changeCounter = this.payload[1];
+				this.changeCounter = this.payload[0];
 				break;
 
 			case ClimateControlScheduleCommand.OverrideReport:
-				this.overrideType = this.payload[1] & 0b11;
-				this.overrideState = decodeSetbackState(this.payload[2]);
+				this.overrideType = this.payload[0] & 0b11;
+				this.overrideState = decodeSetbackState(this.payload[1]);
 				break;
 
 			default:

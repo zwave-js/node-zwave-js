@@ -30,7 +30,7 @@ export class BasicCC extends CommandClass {
 		public ccCommand?: BasicCommand,
 		targetValue?: number,
 	) {
-		super(driver, nodeId);
+		super(driver, nodeId, ccCommand);
 		if (targetValue != undefined) this.targetValue = targetValue;
 	}
 	// tslint:enable:unified-signatures
@@ -42,14 +42,10 @@ export class BasicCC extends CommandClass {
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
 			case BasicCommand.Get:
-				this.payload = Buffer.from([this.ccCommand]);
 				// no real payload
 				break;
 			case BasicCommand.Set:
-				this.payload = Buffer.from([
-					this.ccCommand,
-					this.targetValue,
-				]);
+				this.payload = Buffer.from([ this.targetValue ]);
 				break;
 			default:
 				throw new ZWaveError(
@@ -64,13 +60,12 @@ export class BasicCC extends CommandClass {
 	public deserialize(data: Buffer): void {
 		super.deserialize(data);
 
-		this.ccCommand = this.payload[0];
 		switch (this.ccCommand) {
 			case BasicCommand.Report:
-				this.currentValue = parseMaybeNumber(this.payload[1]);
+				this.currentValue = parseMaybeNumber(this.payload[0]);
 				// starting in V2:
-				this.targetValue = parseNumber(this.payload[2]);
-				this.duration = Duration.parseReport(this.payload[3]);
+				this.targetValue = parseNumber(this.payload[1]);
+				this.duration = Duration.parseReport(this.payload[2]);
 				break;
 
 			default:

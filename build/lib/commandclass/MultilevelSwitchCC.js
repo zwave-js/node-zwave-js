@@ -25,7 +25,7 @@ var MultilevelSwitchCommand;
 })(MultilevelSwitchCommand = exports.MultilevelSwitchCommand || (exports.MultilevelSwitchCommand = {}));
 let MultilevelSwitchCC = class MultilevelSwitchCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId, ccCommand, ...args) {
-        super(driver, nodeId);
+        super(driver, nodeId, ccCommand);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
         if (ccCommand === MultilevelSwitchCommand.Set) {
@@ -50,7 +50,7 @@ let MultilevelSwitchCC = class MultilevelSwitchCC extends CommandClass_1.Command
     serialize() {
         switch (this.ccCommand) {
             case MultilevelSwitchCommand.Set: {
-                const payload = [this.ccCommand, this.targetValue];
+                const payload = [this.targetValue];
                 if (this.version >= 2) {
                     payload.push(this.duration.serializeSet());
                 }
@@ -66,7 +66,6 @@ let MultilevelSwitchCC = class MultilevelSwitchCC extends CommandClass_1.Command
                     }
                 }
                 const payload = [
-                    this.ccCommand,
                     controlByte,
                     this.startLevel,
                 ];
@@ -83,7 +82,6 @@ let MultilevelSwitchCC = class MultilevelSwitchCC extends CommandClass_1.Command
             case MultilevelSwitchCommand.StopLevelChange:
             case MultilevelSwitchCommand.SupportedGet:
                 // no actual payload
-                this.payload = Buffer.from([this.ccCommand]);
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot serialize a MultilevelSwitch CC with a command other than Set, Get, StartLevelChange, StopLevelChange, SupportedGet", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
@@ -92,17 +90,16 @@ let MultilevelSwitchCC = class MultilevelSwitchCC extends CommandClass_1.Command
     }
     deserialize(data) {
         super.deserialize(data);
-        this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case MultilevelSwitchCommand.Report: {
-                this.currentValue = Primitive_1.parseMaybeNumber(this.payload[1]);
-                this.targetValue = Primitive_1.parseNumber(this.payload[2]);
-                this.duration = Duration_1.Duration.parseReport(this.payload[3]);
+                this.currentValue = Primitive_1.parseMaybeNumber(this.payload[0]);
+                this.targetValue = Primitive_1.parseNumber(this.payload[1]);
+                this.duration = Duration_1.Duration.parseReport(this.payload[2]);
                 break;
             }
             case MultilevelSwitchCommand.SupportedReport:
-                this._primarySwitchType = this.payload[1] & 0b11111;
-                this._secondarySwitchType = this.payload[2] & 0b11111;
+                this._primarySwitchType = this.payload[0] & 0b11111;
+                this._secondarySwitchType = this.payload[1] & 0b11111;
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot deserialize a MultilevelSwitch CC with a command other than Report", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);

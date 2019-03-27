@@ -18,14 +18,14 @@ var BatteryCommand;
 })(BatteryCommand = exports.BatteryCommand || (exports.BatteryCommand = {}));
 let BatteryCC = class BatteryCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId, ccCommand) {
-        super(driver, nodeId);
+        super(driver, nodeId, ccCommand);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
     }
     serialize() {
         switch (this.ccCommand) {
             case BatteryCommand.Get:
-                this.payload = Buffer.from([this.ccCommand]);
+                // no real payload
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot serialize a Battery CC with a command other than Get", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
@@ -34,10 +34,9 @@ let BatteryCC = class BatteryCC extends CommandClass_1.CommandClass {
     }
     deserialize(data) {
         super.deserialize(data);
-        this.ccCommand = this.payload[0];
         switch (this.ccCommand) {
             case BatteryCommand.Report:
-                this.level = this.payload[1];
+                this.level = this.payload[0];
                 if (this.level === 0xFF) {
                     this.level = 0;
                     this.isLow = true;
