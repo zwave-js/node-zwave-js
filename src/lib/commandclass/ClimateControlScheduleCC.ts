@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { decodeSetbackState, encodeSetbackState, SetbackState } from "../values/SetbackState";
 import { decodeSwitchpoint, encodeSwitchpoint, Switchpoint } from "../values/Switchpoint";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
@@ -24,6 +25,12 @@ export enum Weekday {
 	Sunday,
 }
 
+export enum ScheduleOverrideType {
+	None = 0x00,
+	Temporary = 0x01,
+	Permanent = 0x02,
+}
+
 @commandClass(CommandClasses["Climate Control Schedule"])
 @implementedVersion(1)
 @expectedCCResponse(CommandClasses["Climate Control Schedule"])
@@ -37,18 +44,66 @@ export class ClimateControlScheduleCC extends CommandClass {
 
 	constructor(
 		driver: IDriver,
+		nodeId: number,
+		ccCommand: ClimateControlScheduleCommand.Set,
+		weekday: Weekday,
+		switchPoints: Switchpoint[],
+	)
+	constructor(
+		driver: IDriver,
+		nodeId: number,
+		ccCommand: ClimateControlScheduleCommand.Get,
+		weekday: Weekday,
+	)
+	constructor(
+		driver: IDriver,
+		nodeId: number,
+		ccCommand: ClimateControlScheduleCommand.ChangedGet | ClimateControlScheduleCommand.OverrideGet,
+	)
+	constructor(
+		driver: IDriver,
+		nodeId: number,
+		ccCommand: ClimateControlScheduleCommand.OverrideSet,
+		overrideType: ScheduleOverrideType,
+		overrideState: SetbackState,
+	)
+
+	constructor(
+		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: ClimateControlScheduleCommand,
+		...args: any[]
 	) {
 		super(driver, nodeId);
+		if (this.ccCommand === ClimateControlScheduleCommand.Set) {
+			[
+				this.weekday,
+				this.switchPoints,
+			] = args;
+		} else if (this.ccCommand === ClimateControlScheduleCommand.Get) {
+			this.weekday = args[0];
+		} else if (this.ccCommand === ClimateControlScheduleCommand.OverrideSet) {
+			[
+				this.overrideType,
+				this.overrideState,
+			] = args;
+		}
 	}
 	// tslint:enable:unified-signatures
 
 	@ccValue() public weekday: Weekday;
 	@ccValue() public switchPoints: Switchpoint[];
+	@ccValue() public overrideType: ScheduleOverrideType;
+	@ccValue() public overrideState: SetbackState;
+	@ccValue() public changeCounter: number;
 
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
+
+			case ClimateControlScheduleCommand.ChangedGet:
+			case ClimateControlScheduleCommand.OverrideGet:
+				this.payload = Buffer.from([this.ccCommand]);
+				break;
 
 			case ClimateControlScheduleCommand.Set: {
 				// Make sure we have exactly 9 entries
@@ -78,9 +133,17 @@ export class ClimateControlScheduleCC extends CommandClass {
 				]);
 				break;
 
+			case ClimateControlScheduleCommand.OverrideSet:
+				this.payload = Buffer.from([
+					this.ccCommand,
+					this.overrideType & 0b11,
+					encodeSetbackState(this.overrideState),
+				]);
+				break;
+
 			default:
 				throw new ZWaveError(
-					"Cannot serialize a ClimateControlSchedule CC with a command other than Get or Set",
+					"Cannot serialize a ClimateControlSchedule CC with a command other than Get, Set, ChangedGet, OverrideGet or OverrideSet",
 					ZWaveErrorCodes.CC_Invalid,
 				);
 		}
@@ -105,9 +168,18 @@ export class ClimateControlScheduleCC extends CommandClass {
 				break;
 			}
 
+			case ClimateControlScheduleCommand.ChangedReport:
+				this.changeCounter = this.payload[1];
+				break;
+
+			case ClimateControlScheduleCommand.OverrideReport:
+				this.overrideType = this.payload[1] & 0b11;
+				this.overrideState = decodeSetbackState(this.payload[2]);
+				break;
+
 			default:
 				throw new ZWaveError(
-					"Cannot deserialize a ClimateControlSchedule CC with a command other than Report",
+					"Cannot deserialize a ClimateControlSchedule CC with a command other than Report, ChangedReport or OverrideReport",
 					ZWaveErrorCodes.CC_Invalid,
 				);
 		}

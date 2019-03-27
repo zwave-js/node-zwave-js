@@ -2,6 +2,7 @@
 import { IDriver } from "../driver/IDriver";
 import { Switchpoint } from "../values/Switchpoint";
 import { CommandClass } from "./CommandClass";
+import { SetbackState } from "../values/SetbackState";
 export declare enum ClimateControlScheduleCommand {
     Set = 1,
     Get = 2,
@@ -21,12 +22,24 @@ export declare enum Weekday {
     Saturday = 6,
     Sunday = 7
 }
+export declare enum ScheduleOverrideType {
+    None = 0,
+    Temporary = 1,
+    Permanent = 2
+}
 export declare class ClimateControlScheduleCC extends CommandClass {
     nodeId: number;
     ccCommand?: ClimateControlScheduleCommand;
     constructor(driver: IDriver, nodeId?: number);
+    constructor(driver: IDriver, nodeId: number, ccCommand: ClimateControlScheduleCommand.Set, weekday: Weekday, switchPoints: Switchpoint[]);
+    constructor(driver: IDriver, nodeId: number, ccCommand: ClimateControlScheduleCommand.Get, weekday: Weekday);
+    constructor(driver: IDriver, nodeId: number, ccCommand: ClimateControlScheduleCommand.ChangedGet | ClimateControlScheduleCommand.OverrideGet);
+    constructor(driver: IDriver, nodeId: number, ccCommand: ClimateControlScheduleCommand.OverrideSet, overrideType: ScheduleOverrideType, overrideState: SetbackState);
     weekday: Weekday;
     switchPoints: Switchpoint[];
+    overrideType: ScheduleOverrideType;
+    overrideState: SetbackState;
+    changeCounter: number;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
 }
