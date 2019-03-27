@@ -1,8 +1,8 @@
 /// <reference types="node" />
 import { IDriver } from "../driver/IDriver";
+import { SetbackState } from "../values/SetbackState";
 import { Switchpoint } from "../values/Switchpoint";
 import { CommandClass } from "./CommandClass";
-import { SetbackState } from "../values/SetbackState";
 export declare enum ClimateControlScheduleCommand {
     Set = 1,
     Get = 2,

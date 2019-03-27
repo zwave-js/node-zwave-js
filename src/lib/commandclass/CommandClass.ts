@@ -43,18 +43,18 @@ export class CommandClass {
 	constructor(
 		driver: IDriver,
 		nodeId: number,
-		command?: CommandClasses,
+		ccId?: CommandClasses,
 		payload?: Buffer,
 	);
 	// implementation
 	constructor(
 		protected driver: IDriver,
 		public nodeId?: number,
-		public command?: CommandClasses,
+		public ccId?: CommandClasses,
 		public payload: Buffer = Buffer.from([]),
 	) {
 		// Extract the cc from declared metadata if not provided
-		this.command = command != null ? command : getCommandClass(this);
+		this.ccId = ccId != null ? ccId : getCommandClass(this);
 	}
 	// tslint:enable:unified-signatures
 
@@ -71,7 +71,7 @@ export class CommandClass {
 		ret[0] = this.nodeId;
 		// the serialized length includes the command class itself
 		ret[1] = payloadLength + 1;
-		ret[2] = this.command;
+		ret[2] = this.ccId;
 		if (payloadLength > 0 /* implies payload != null */) {
 			this.payload.copy(ret, 3);
 		}
@@ -83,7 +83,7 @@ export class CommandClass {
 		this.nodeId = CommandClass.getNodeId(data);
 		// the serialized length includes the command class itself
 		const dataLength = data[1] - 1;
-		this.command = CommandClass.getCommandClass(data);
+		this.ccId = CommandClass.getCommandClass(data);
 		this.payload = Buffer.allocUnsafe(dataLength);
 		data.copy(this.payload, 0, 3, 3 + dataLength);
 	}
@@ -120,7 +120,7 @@ export class CommandClass {
 	private toJSONInternal() {
 		const ret: any = {
 			nodeId: this.nodeId,
-			command: CommandClasses[this.command] || num2hex(this.command),
+			command: CommandClasses[this.ccId] || num2hex(this.ccId),
 		};
 		if (this.payload != null && this.payload.length > 0) ret.payload = "0x" + this.payload.toString("hex");
 		return ret;

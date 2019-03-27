@@ -151,7 +151,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass> extends
 		if (expected == null) return ret; // "final" | "unexpected"
 
 		if (isCommandClassContainer(msg)) {
-			return expected === msg.command.command ? "final" : "intermediate"; // not sure if other CCs can come in the meantime
+			return expected === msg.command.ccId ? "final" : "intermediate"; // not sure if other CCs can come in the meantime
 		}
 		return "unexpected";
 	}

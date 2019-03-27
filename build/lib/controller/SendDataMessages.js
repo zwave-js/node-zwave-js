@@ -127,7 +127,7 @@ let SendDataRequest = class SendDataRequest extends Message_1.Message {
         if (expected == null)
             return ret; // "final" | "unexpected"
         if (ICommandClassContainer_1.isCommandClassContainer(msg)) {
-            return expected === msg.command.command ? "final" : "intermediate"; // not sure if other CCs can come in the meantime
+            return expected === msg.command.ccId ? "final" : "intermediate"; // not sure if other CCs can come in the meantime
         }
         return "unexpected";
     }

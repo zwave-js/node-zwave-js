@@ -30,15 +30,15 @@ var StateKind;
 })(StateKind = exports.StateKind || (exports.StateKind = {}));
 let CommandClass = CommandClass_1 = class CommandClass {
     // implementation
-    constructor(driver, nodeId, command, payload = Buffer.from([])) {
+    constructor(driver, nodeId, ccId, payload = Buffer.from([])) {
         this.driver = driver;
         this.nodeId = nodeId;
-        this.command = command;
+        this.ccId = ccId;
         this.payload = payload;
         /** Which variables should be persisted when requested */
         this._variables = new Set();
         // Extract the cc from declared metadata if not provided
-        this.command = command != null ? command : getCommandClass(this);
+        this.ccId = ccId != null ? ccId : getCommandClass(this);
     }
     serialize() {
         const payloadLength = this.payload != null ? this.payload.length : 0;
@@ -46,7 +46,7 @@ let CommandClass = CommandClass_1 = class CommandClass {
         ret[0] = this.nodeId;
         // the serialized length includes the command class itself
         ret[1] = payloadLength + 1;
-        ret[2] = this.command;
+        ret[2] = this.ccId;
         if (payloadLength > 0 /* implies payload != null */) {
             this.payload.copy(ret, 3);
         }
@@ -56,7 +56,7 @@ let CommandClass = CommandClass_1 = class CommandClass {
         this.nodeId = CommandClass_1.getNodeId(data);
         // the serialized length includes the command class itself
         const dataLength = data[1] - 1;
-        this.command = CommandClass_1.getCommandClass(data);
+        this.ccId = CommandClass_1.getCommandClass(data);
         this.payload = Buffer.allocUnsafe(dataLength);
         data.copy(this.payload, 0, 3, 3 + dataLength);
     }
@@ -87,7 +87,7 @@ let CommandClass = CommandClass_1 = class CommandClass {
     toJSONInternal() {
         const ret = {
             nodeId: this.nodeId,
-            command: CommandClasses[this.command] || strings_1.num2hex(this.command),
+            command: CommandClasses[this.ccId] || strings_1.num2hex(this.ccId),
         };
         if (this.payload != null && this.payload.length > 0)
             ret.payload = "0x" + this.payload.toString("hex");

@@ -10,9 +10,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
+const SetbackState_1 = require("../values/SetbackState");
 const Switchpoint_1 = require("../values/Switchpoint");
 const CommandClass_1 = require("./CommandClass");
-const SetbackState_1 = require("../values/SetbackState");
 var ClimateControlScheduleCommand;
 (function (ClimateControlScheduleCommand) {
     ClimateControlScheduleCommand[ClimateControlScheduleCommand["Set"] = 1] = "Set";

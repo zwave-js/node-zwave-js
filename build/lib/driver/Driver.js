@@ -492,9 +492,9 @@ class Driver extends events_1.EventEmitter {
         // 3. ApplicationCommandRequest with the actual response
         if (msg instanceof ApplicationCommandRequest_1.ApplicationCommandRequest) {
             // we handle ApplicationCommandRequests differently because they are handled by the nodes directly
-            const cc = msg.command.command;
+            const ccId = msg.command.ccId;
             const nodeId = msg.command.nodeId;
-            logger_1.log("driver", `handling application command request ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)}) for node ${nodeId}`, "debug");
+            logger_1.log("driver", `handling application command request ${CommandClass_1.CommandClasses[ccId]} (${strings_1.num2hex(ccId)}) for node ${nodeId}`, "debug");
             // cannot handle ApplicationCommandRequests without a controller
             if (this.controller == null) {
                 logger_1.log("driver", `  the controller is not ready yet, discarding...`, "debug");
@@ -522,9 +522,9 @@ class Driver extends events_1.EventEmitter {
         else if (msg instanceof SendDataMessages_1.SendDataRequest && msg.command != null) {
             // TODO: Find out if this actually happens
             // we handle SendDataRequests differently because their handlers are organized by the command class
-            const cc = msg.command.command;
-            logger_1.log("driver", `handling send data request ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)}) for node ${msg.command.nodeId}`, "debug");
-            handlers = this.sendDataRequestHandlers.get(cc);
+            const ccId = msg.command.ccId;
+            logger_1.log("driver", `handling send data request ${CommandClass_1.CommandClasses[ccId]} (${strings_1.num2hex(ccId)}) for node ${msg.command.nodeId}`, "debug");
+            handlers = this.sendDataRequestHandlers.get(ccId);
         }
         else {
             logger_1.log("driver", `handling request ${Constants_1.FunctionType[msg.functionType]} (${msg.functionType})`, "debug");
@@ -711,9 +711,9 @@ class Driver extends events_1.EventEmitter {
             logger_1.log("io", `workOffSendQueue > sending next message (${Constants_1.FunctionType[msg.functionType]})...`, "debug");
             // for messages containing a CC, i.e. a SendDataRequest, set the CC version as high as possible
             if (ICommandClassContainer_1.isCommandClassContainer(msg)) {
-                const cc = msg.command.command;
-                msg.command.version = this.getSafeCCVersionForNode(msg.command.nodeId, cc);
-                logger_1.log("io", `  CC = ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)}) => using version ${msg.command.version}`, "debug");
+                const ccId = msg.command.ccId;
+                msg.command.version = this.getSafeCCVersionForNode(msg.command.nodeId, ccId);
+                logger_1.log("io", `  CC = ${CommandClass_1.CommandClasses[ccId]} (${strings_1.num2hex(ccId)}) => using version ${msg.command.version}`, "debug");
             }
             const data = msg.serialize();
             logger_1.log("io", `  data = 0x${data.toString("hex")}`, "debug");

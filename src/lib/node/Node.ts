@@ -541,7 +541,7 @@ export class ZWaveNode extends EventEmitter {
 
 	/** Handles an ApplicationCommandRequest sent from a node */
 	public async handleCommand(command: CommandClass): Promise<void> {
-		switch (command.command) {
+		switch (command.ccId) {
 			case CommandClasses["Central Scene"]: {
 				const csCC = command as CentralSceneCC;
 				log("controller", `${this.logPrefix}received CentralScene command ${JSON.stringify(csCC)}`, "debug");

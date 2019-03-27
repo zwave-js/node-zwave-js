@@ -600,9 +600,9 @@ export class Driver extends EventEmitter implements IDriver {
 
 		if (msg instanceof ApplicationCommandRequest) {
 			// we handle ApplicationCommandRequests differently because they are handled by the nodes directly
-			const cc = msg.command.command;
+			const ccId = msg.command.ccId;
 			const nodeId = msg.command.nodeId;
-			log("driver", `handling application command request ${CommandClasses[cc]} (${num2hex(cc)}) for node ${nodeId}`, "debug");
+			log("driver", `handling application command request ${CommandClasses[ccId]} (${num2hex(ccId)}) for node ${nodeId}`, "debug");
 			// cannot handle ApplicationCommandRequests without a controller
 			if (this.controller == null) {
 				log("driver", `  the controller is not ready yet, discarding...`, "debug");
@@ -629,9 +629,9 @@ export class Driver extends EventEmitter implements IDriver {
 		} else if (msg instanceof SendDataRequest && msg.command != null) {
 			// TODO: Find out if this actually happens
 			// we handle SendDataRequests differently because their handlers are organized by the command class
-			const cc = msg.command.command;
-			log("driver", `handling send data request ${CommandClasses[cc]} (${num2hex(cc)}) for node ${msg.command.nodeId}`, "debug");
-			handlers = this.sendDataRequestHandlers.get(cc);
+			const ccId = msg.command.ccId;
+			log("driver", `handling send data request ${CommandClasses[ccId]} (${num2hex(ccId)}) for node ${msg.command.nodeId}`, "debug");
+			handlers = this.sendDataRequestHandlers.get(ccId);
 		} else {
 			log("driver", `handling request ${FunctionType[msg.functionType]} (${msg.functionType})`, "debug");
 			handlers = this.requestHandlers.get(msg.functionType);
@@ -887,9 +887,9 @@ export class Driver extends EventEmitter implements IDriver {
 			log("io", `workOffSendQueue > sending next message (${FunctionType[msg.functionType]})...`, "debug");
 			// for messages containing a CC, i.e. a SendDataRequest, set the CC version as high as possible
 			if (isCommandClassContainer(msg)) {
-				const cc = msg.command.command;
-				msg.command.version = this.getSafeCCVersionForNode(msg.command.nodeId, cc);
-				log("io", `  CC = ${CommandClasses[cc]} (${num2hex(cc)}) => using version ${msg.command.version}`, "debug");
+				const ccId = msg.command.ccId;
+				msg.command.version = this.getSafeCCVersionForNode(msg.command.nodeId, ccId);
+				log("io", `  CC = ${CommandClasses[ccId]} (${num2hex(ccId)}) => using version ${msg.command.version}`, "debug");
 			}
 			const data = msg.serialize();
 			log("io", `  data = 0x${data.toString("hex")}`, "debug");
