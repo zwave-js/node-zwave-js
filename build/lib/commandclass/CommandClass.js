@@ -30,15 +30,17 @@ var StateKind;
 })(StateKind = exports.StateKind || (exports.StateKind = {}));
 let CommandClass = CommandClass_1 = class CommandClass {
     // implementation
-    constructor(driver, nodeId, ccId, payload = Buffer.from([])) {
+    constructor(driver, nodeId, 
+    // public ccId?: CommandClasses,
+    ccCommand, payload = Buffer.from([])) {
         this.driver = driver;
         this.nodeId = nodeId;
-        this.ccId = ccId;
+        this.ccCommand = ccCommand;
         this.payload = payload;
         /** Which variables should be persisted when requested */
         this._variables = new Set();
         // Extract the cc from declared metadata if not provided
-        this.ccId = ccId != null ? ccId : getCommandClass(this);
+        this.ccId = /*ccId != null ? ccId :*/ getCommandClass(this);
     }
     serialize() {
         const payloadLength = this.payload != null ? this.payload.length : 0;
@@ -72,7 +74,7 @@ let CommandClass = CommandClass_1 = class CommandClass {
      */
     static getConstructor(ccData) {
         const cc = CommandClass_1.getCommandClass(ccData);
-        return getCCConstructor(cc) || CommandClass_1;
+        return getCCConstructor(cc) /* || CommandClass */;
     }
     static from(driver, serializedCC) {
         // tslint:disable-next-line:variable-name

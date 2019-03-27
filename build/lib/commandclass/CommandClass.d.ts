@@ -26,10 +26,11 @@ export declare enum StateKind {
 export declare class CommandClass {
     protected driver: IDriver;
     nodeId?: number;
-    ccId?: CommandClasses;
+    ccCommand?: number;
     payload: Buffer;
-    constructor(driver: IDriver);
-    constructor(driver: IDriver, nodeId: number, ccId?: CommandClasses, payload?: Buffer);
+    protected constructor(driver: IDriver);
+    protected constructor(driver: IDriver, nodeId: number, ccCommand?: number, payload?: Buffer);
+    ccId: CommandClasses;
     /** The version of the command class used */
     version: number;
     /** Which endpoint of the node this CC belongs to. 0 for the root device. */

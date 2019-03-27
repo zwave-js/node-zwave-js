@@ -570,7 +570,8 @@ export class ZWaveNode extends EventEmitter {
 	): Promise<void> {
 		// TODO: Support multiple instances
 		const requests = commandClasses
-			.map(cc => getCCConstructor(cc) as typeof CommandClass)
+			// This assertion is not nice, but I see no better way
+			.map(cc => getCCConstructor(cc) as unknown as typeof CommandClass)
 			.filter(cc => !!cc)
 			.map(cc => cc.createStateRequest(this.driver, this, kind))
 			.filter(req => !!req) as SendDataRequest[]

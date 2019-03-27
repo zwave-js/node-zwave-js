@@ -36,27 +36,31 @@ export class CommandClass {
 
 	// tslint:disable:unified-signatures
 	// empty constructor to parse messages
-	constructor(
+	protected constructor(
 		driver: IDriver,
 	);
 	// default constructor to send messages
-	constructor(
+	protected constructor(
 		driver: IDriver,
 		nodeId: number,
-		ccId?: CommandClasses,
+		// ccId?: CommandClasses,
+		ccCommand?: number,
 		payload?: Buffer,
 	);
 	// implementation
-	constructor(
+	protected constructor(
 		protected driver: IDriver,
 		public nodeId?: number,
-		public ccId?: CommandClasses,
+		// public ccId?: CommandClasses,
+		public ccCommand?: number,
 		public payload: Buffer = Buffer.from([]),
 	) {
 		// Extract the cc from declared metadata if not provided
-		this.ccId = ccId != null ? ccId : getCommandClass(this);
+		this.ccId = /*ccId != null ? ccId :*/ getCommandClass(this);
 	}
 	// tslint:enable:unified-signatures
+
+	public ccId: CommandClasses;
 
 	/** The version of the command class used */
 	public version: number;
@@ -102,7 +106,7 @@ export class CommandClass {
 	 */
 	public static getConstructor(ccData: Buffer): Constructable<CommandClass> {
 		const cc = CommandClass.getCommandClass(ccData);
-		return getCCConstructor(cc) || CommandClass;
+		return getCCConstructor(cc) /* || CommandClass */;
 	}
 
 	public static from(driver: IDriver, serializedCC: Buffer): CommandClass {
