@@ -38,14 +38,14 @@ describe("lib/values/Primitive", () => {
 	});
 
 	describe("parseNumber()", () => {
-		it("should return the value when it is in the range 0..100", () => {
-			for (let i = 0; i <= 100; i++) {
+		it("should return the value when it is in the range 0..99", () => {
+			for (let i = 0; i <= 99; i++) {
 				expect(parseNumber(i)).toBe(i);
 			}
 		});
 
-		it("should return 100 when the value is 0xff", () => {
-			expect(parseNumber(0xff)).toBe(100);
+		it("should return 99 when the value is 0xff", () => {
+			expect(parseNumber(0xff)).toBe(99);
 		});
 
 		it("should return undefined otherwise", () => {
@@ -54,14 +54,14 @@ describe("lib/values/Primitive", () => {
 	});
 
 	describe("parseMaybeNumber()", () => {
-		it("should return the value when it is in the range 0..100", () => {
-			for (let i = 0; i <= 100; i++) {
+		it("should return the value when it is in the range 0..99", () => {
+			for (let i = 0; i <= 99; i++) {
 				expect(parseMaybeNumber(i)).toBe(i);
 			}
 		});
 
-		it("should return 100 when the value is 0xff", () => {
-			expect(parseMaybeNumber(0xff)).toBe(100);
+		it("should return 99 when the value is 0xff", () => {
+			expect(parseMaybeNumber(0xff)).toBe(99);
 		});
 
 		it("should return unknown when the value is 0xfe", () => {
