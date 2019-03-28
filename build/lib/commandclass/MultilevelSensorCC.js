@@ -21,6 +21,7 @@ var MultilevelSensorCommand;
     MultilevelSensorCommand[MultilevelSensorCommand["Report"] = 5] = "Report";
     MultilevelSensorCommand[MultilevelSensorCommand["SupportedScaleReport"] = 6] = "SupportedScaleReport";
 })(MultilevelSensorCommand = exports.MultilevelSensorCommand || (exports.MultilevelSensorCommand = {}));
+// TODO: Define sensor types and scales
 let MultilevelSensorCC = class MultilevelSensorCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId, ccCommand, ...args) {
         super(driver, nodeId, ccCommand);

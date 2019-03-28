@@ -13,24 +13,30 @@ export enum MultiChannelCommand {
 	EndPointFind = 0x0B,
 	EndPointFindReport = 0x0C,
 	CommandEncapsulation = 0x0D,
-	// V4:
-	// AggregatedMembersGet = 0x0E,
-	// AggregatedMembersReport = 0x0F,
+	AggregatedMembersGet = 0x0E,
+	AggregatedMembersReport = 0x0F,
 }
+
+// TODO: Implement querying all endpoints
+// TODO: Implement removal reports of dynamic endpoints
 
 export interface EndpointCapability extends NodeInformationFrame {
 	isDynamic: boolean;
 }
 
 @commandClass(CommandClasses["Multi Channel"])
-@implementedVersion(3)
+@implementedVersion(4)
 @expectedCCResponse(CommandClasses["Multi Channel"])
 export class MultiChannelCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
 	constructor(driver: IDriver, nodeId?: number);
 	constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.EndPointGet);
-	constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.CapabilityGet, endpoint: number);
+	constructor(
+		driver: IDriver, nodeId: number, 
+		ccCommand: MultiChannelCommand.CapabilityGet | MultiChannelCommand.AggregatedMembersGet, 
+		endpoint: number,
+	);
 	constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.EndPointFind, genericClass: GenericDeviceClasses, specificClass: number);
 	constructor(
 		driver: IDriver, nodeId: number,
@@ -46,7 +52,10 @@ export class MultiChannelCC extends CommandClass {
 	) {
 		super(driver, nodeId, ccCommand);
 
-		if (ccCommand === MultiChannelCommand.CapabilityGet) {
+		if (
+			ccCommand === MultiChannelCommand.CapabilityGet
+			|| ccCommand === MultiChannelCommand.AggregatedMembersGet
+		) {
 			this.endpoint = args[0];
 		} else if (ccCommand === MultiChannelCommand.EndPointFind) {
 			[
@@ -61,7 +70,8 @@ export class MultiChannelCC extends CommandClass {
 
 	@ccValue() public isDynamicEndpointCount: boolean;
 	@ccValue() public identicalCapabilities: boolean;
-	@ccValue() public endpointCount: number;
+	@ccValue() public individualEndpointCount: number;
+	@ccValue() public aggregatedEndpointCount: number;
 
 	private _endpointCapabilities = new Map<number, EndpointCapability>();
 	public get endpointCapabilities(): Map<number, EndpointCapability> {
@@ -82,6 +92,11 @@ export class MultiChannelCC extends CommandClass {
 	public destination: number | number[];
 
 	public encapsulatedCC: CommandClass;
+
+	private _aggregatedEndpointMembers: number[];
+	public get aggregatedEndpointMembers(): number[] {
+		return this._aggregatedEndpointMembers;
+	}
 
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
@@ -117,6 +132,10 @@ export class MultiChannelCC extends CommandClass {
 				break;
 			}
 
+			case MultiChannelCommand.AggregatedMembersGet:
+				this.payload = Buffer.from([ this.endpoint & 0b0111_1111 ]);
+				break;
+
 			default:
 				throw new ZWaveError(
 					"Cannot serialize a MultiChannel CC with a command other than EndPointGet, CapabilityGet or CommandEncapsulation",
@@ -134,7 +153,10 @@ export class MultiChannelCC extends CommandClass {
 			case MultiChannelCommand.EndPointReport:
 				this.isDynamicEndpointCount = !!(this.payload[0] & 0b10000000);
 				this.identicalCapabilities = !!(this.payload[0] & 0b01000000);
-				this.endpointCount = this.payload[1] & 0b01111111;
+				this.individualEndpointCount = this.payload[1] & 0b01111111;
+				if (this.version >= 4) {
+					this.aggregatedEndpointCount = this.payload[2] & 0b01111111;
+				}
 				break;
 
 			case MultiChannelCommand.CapabilityReport: {
@@ -168,6 +190,14 @@ export class MultiChannelCC extends CommandClass {
 					this.driver, this,
 					this.payload.slice(2),
 				);
+				break;
+			}
+
+			case MultiChannelCommand.AggregatedMembersReport: {
+				this.endpoint = this.payload[0] & 0b0111_1111;
+				const bitMaskLength = this.payload[1];
+				const bitMask = this.payload.slice(2, 2 + bitMaskLength);
+				this._aggregatedEndpointMembers = parseBitMask(bitMask);
 				break;
 			}
 

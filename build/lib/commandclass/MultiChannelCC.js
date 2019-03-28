@@ -22,9 +22,8 @@ var MultiChannelCommand;
     MultiChannelCommand[MultiChannelCommand["EndPointFind"] = 11] = "EndPointFind";
     MultiChannelCommand[MultiChannelCommand["EndPointFindReport"] = 12] = "EndPointFindReport";
     MultiChannelCommand[MultiChannelCommand["CommandEncapsulation"] = 13] = "CommandEncapsulation";
-    // V4:
-    // AggregatedMembersGet = 0x0E,
-    // AggregatedMembersReport = 0x0F,
+    MultiChannelCommand[MultiChannelCommand["AggregatedMembersGet"] = 14] = "AggregatedMembersGet";
+    MultiChannelCommand[MultiChannelCommand["AggregatedMembersReport"] = 15] = "AggregatedMembersReport";
 })(MultiChannelCommand = exports.MultiChannelCommand || (exports.MultiChannelCommand = {}));
 let MultiChannelCC = class MultiChannelCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId, ccCommand, ...args) {
@@ -32,7 +31,8 @@ let MultiChannelCC = class MultiChannelCC extends CommandClass_1.CommandClass {
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
         this._endpointCapabilities = new Map();
-        if (ccCommand === MultiChannelCommand.CapabilityGet) {
+        if (ccCommand === MultiChannelCommand.CapabilityGet
+            || ccCommand === MultiChannelCommand.AggregatedMembersGet) {
             this.endpoint = args[0];
         }
         else if (ccCommand === MultiChannelCommand.EndPointFind) {
@@ -50,6 +50,9 @@ let MultiChannelCC = class MultiChannelCC extends CommandClass_1.CommandClass {
     }
     get foundEndpoints() {
         return this._foundEndpoints;
+    }
+    get aggregatedEndpointMembers() {
+        return this._aggregatedEndpointMembers;
     }
     serialize() {
         switch (this.ccCommand) {
@@ -80,6 +83,9 @@ let MultiChannelCC = class MultiChannelCC extends CommandClass_1.CommandClass {
                 ]);
                 break;
             }
+            case MultiChannelCommand.AggregatedMembersGet:
+                this.payload = Buffer.from([this.endpoint & 127]);
+                break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot serialize a MultiChannel CC with a command other than EndPointGet, CapabilityGet or CommandEncapsulation", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
         }
@@ -91,7 +97,10 @@ let MultiChannelCC = class MultiChannelCC extends CommandClass_1.CommandClass {
             case MultiChannelCommand.EndPointReport:
                 this.isDynamicEndpointCount = !!(this.payload[0] & 0b10000000);
                 this.identicalCapabilities = !!(this.payload[0] & 0b01000000);
-                this.endpointCount = this.payload[1] & 0b01111111;
+                this.individualEndpointCount = this.payload[1] & 0b01111111;
+                if (this.version >= 4) {
+                    this.aggregatedEndpointCount = this.payload[2] & 0b01111111;
+                }
                 break;
             case MultiChannelCommand.CapabilityReport: {
                 const endpointIndex = this.payload[0] & 0b01111111;
@@ -119,6 +128,13 @@ let MultiChannelCC = class MultiChannelCC extends CommandClass_1.CommandClass {
                 this.encapsulatedCC = CommandClass_1.CommandClass.fromEncapsulated(this.driver, this, this.payload.slice(2));
                 break;
             }
+            case MultiChannelCommand.AggregatedMembersReport: {
+                this.endpoint = this.payload[0] & 127;
+                const bitMaskLength = this.payload[1];
+                const bitMask = this.payload.slice(2, 2 + bitMaskLength);
+                this._aggregatedEndpointMembers = Primitive_1.parseBitMask(bitMask);
+                break;
+            }
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot deserialize a MultiChannel CC with a command other than EndPointReport, CapabilityReport, EndPointFindReport or CommandEncapsulation", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
         }
@@ -135,10 +151,14 @@ __decorate([
 __decorate([
     CommandClass_1.ccValue(),
     __metadata("design:type", Number)
-], MultiChannelCC.prototype, "endpointCount", void 0);
+], MultiChannelCC.prototype, "individualEndpointCount", void 0);
+__decorate([
+    CommandClass_1.ccValue(),
+    __metadata("design:type", Number)
+], MultiChannelCC.prototype, "aggregatedEndpointCount", void 0);
 MultiChannelCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses["Multi Channel"]),
-    CommandClass_1.implementedVersion(3),
+    CommandClass_1.implementedVersion(4),
     CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Multi Channel"]),
     __metadata("design:paramtypes", [Object, Number, Number, Object])
 ], MultiChannelCC);

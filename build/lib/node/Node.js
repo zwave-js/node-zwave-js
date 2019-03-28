@@ -372,9 +372,9 @@ class ZWaveNode extends events_1.EventEmitter {
                     const multiResponse = resp.command;
                     multiResponse.persistValues();
                     logger_1.log("controller", `${this.logPrefix}received response for device endpoints:`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  endpoint count: ${multiResponse.endpointCount}`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  dynamic:        ${multiResponse.isDynamicEndpointCount}`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  identical caps: ${multiResponse.identicalCapabilities}`, "debug");
+                    logger_1.log("controller", `${this.logPrefix}  endpoint count (individual): ${multiResponse.individualEndpointCount}`, "debug");
+                    logger_1.log("controller", `${this.logPrefix}  count is dynamic:            ${multiResponse.isDynamicEndpointCount}`, "debug");
+                    logger_1.log("controller", `${this.logPrefix}  identical capabilities:      ${multiResponse.identicalCapabilities}`, "debug");
                 }
             }
             catch (e) {

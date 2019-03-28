@@ -25,21 +25,11 @@ function internalParseNodeInformationFrame(nif) {
         controlledCCs: [],
     };
     // split the CCs into supported/controlled
+    // TODO: Support 16bit CCs
     // tslint:disable-next-line:variable-name
-    let offset = 2;
+    const CCs = [...nif.slice(2)];
     let isAfterMark = false;
-    while (offset < nif.length) {
-        // Read normal or extended CCs
-        const isExtended = nif[offset] >= 0xf1;
-        let cc;
-        if (isExtended) {
-            cc = nif.readUInt16BE(offset);
-            offset += 2;
-        }
-        else {
-            cc = nif[offset];
-            offset++;
-        }
+    for (const cc of CCs) {
         // CCs before the support/control mark are supported
         // CCs after the support/control mark are controlled
         if (cc === CommandClass_1.CommandClasses["Support/Control Mark"]) {

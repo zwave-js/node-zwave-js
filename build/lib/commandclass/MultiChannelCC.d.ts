@@ -10,7 +10,9 @@ export declare enum MultiChannelCommand {
     CapabilityReport = 10,
     EndPointFind = 11,
     EndPointFindReport = 12,
-    CommandEncapsulation = 13
+    CommandEncapsulation = 13,
+    AggregatedMembersGet = 14,
+    AggregatedMembersReport = 15
 }
 export interface EndpointCapability extends NodeInformationFrame {
     isDynamic: boolean;
@@ -20,12 +22,13 @@ export declare class MultiChannelCC extends CommandClass {
     ccCommand?: MultiChannelCommand;
     constructor(driver: IDriver, nodeId?: number);
     constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.EndPointGet);
-    constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.CapabilityGet, endpoint: number);
+    constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.CapabilityGet | MultiChannelCommand.AggregatedMembersGet, endpoint: number);
     constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.EndPointFind, genericClass: GenericDeviceClasses, specificClass: number);
     constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.CommandEncapsulation, encapsulatedCC: CommandClass);
     isDynamicEndpointCount: boolean;
     identicalCapabilities: boolean;
-    endpointCount: number;
+    individualEndpointCount: number;
+    aggregatedEndpointCount: number;
     private _endpointCapabilities;
     readonly endpointCapabilities: Map<number, EndpointCapability>;
     endpoint: number;
@@ -37,6 +40,8 @@ export declare class MultiChannelCC extends CommandClass {
     /** The destination end point (0-127) or an array of destination end points (1-7) */
     destination: number | number[];
     encapsulatedCC: CommandClass;
+    private _aggregatedEndpointMembers;
+    readonly aggregatedEndpointMembers: number[];
     serialize(): Buffer;
     deserialize(data: Buffer): void;
 }

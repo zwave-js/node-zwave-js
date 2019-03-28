@@ -94,4 +94,5 @@ export class Transaction implements Comparable<Transaction> {
 	}
 
 	// TODO: add a way to expire these
+	// TODO: add a way to resend these
 }

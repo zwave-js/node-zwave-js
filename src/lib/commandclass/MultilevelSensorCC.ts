@@ -12,6 +12,8 @@ export enum MultilevelSensorCommand {
 	SupportedScaleReport = 0x06,
 }
 
+// TODO: Define sensor types and scales
+
 @commandClass(CommandClasses["Multilevel Sensor"])
 @implementedVersion(11)
 @expectedCCResponse(CommandClasses["Multilevel Sensor"])
@@ -41,7 +43,7 @@ export class MultilevelSensorCC extends CommandClass {
 		nodeId: number,
 		ccCommand: MultilevelSensorCommand.Get,
 		sensorType?: MultilevelSensorTypes,
-		scale?: number,
+		scale?: number, // TODO: Define scales
 	);
 
 	constructor(

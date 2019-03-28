@@ -1,6 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { decodeSetbackState, encodeSetbackState, SetbackSpecialState, SetbackState } from "../values/SetbackState";
+import { decodeSetbackState, encodeSetbackState, SetbackState } from "../values/SetbackState";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum ThermostatSetbackCommand {

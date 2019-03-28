@@ -455,9 +455,9 @@ export class ZWaveNode extends EventEmitter {
 					const multiResponse = resp.command as MultiChannelCC;
 					multiResponse.persistValues();
 					log("controller", `${this.logPrefix}received response for device endpoints:`, "debug");
-					log("controller", `${this.logPrefix}  endpoint count: ${multiResponse.endpointCount}`, "debug");
-					log("controller", `${this.logPrefix}  dynamic:        ${multiResponse.isDynamicEndpointCount}`, "debug");
-					log("controller", `${this.logPrefix}  identical caps: ${multiResponse.identicalCapabilities}`, "debug");
+					log("controller", `${this.logPrefix}  endpoint count (individual): ${multiResponse.individualEndpointCount}`, "debug");
+					log("controller", `${this.logPrefix}  count is dynamic:            ${multiResponse.isDynamicEndpointCount}`, "debug");
+					log("controller", `${this.logPrefix}  identical capabilities:      ${multiResponse.identicalCapabilities}`, "debug");
 				}
 			} catch (e) {
 				log("controller", `${this.logPrefix}  querying the device endpoints failed: ${e.message}`, "debug");
