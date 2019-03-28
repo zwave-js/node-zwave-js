@@ -40,27 +40,32 @@ let CommandClass = CommandClass_1 = class CommandClass {
         /** Which variables should be persisted when requested */
         this._variables = new Set();
         // Extract the cc from declared metadata if not provided
-        this.ccId = /*ccId != null ? ccId :*/ getCommandClass(this);
+        this.ccId = getCommandClass(this);
     }
-    serializeRawPayload() {
-        // A CC either has a Command and potentially a real payload
-        // or it has neither (NoOp)
-        if (this.ccCommand == undefined)
+    /** Returns true if this CC is an extended CC (0xF100..0xFFFF) */
+    isExtended() {
+        return this.ccId >= 0xf100;
+    }
+    serializeWithoutHeader() {
+        // NoOp CCs have no command and no payload
+        if (this.ccId === CommandClasses["No Operation"])
             return Buffer.from([this.ccId]);
         const payloadLength = this.payload != undefined ? this.payload.length : 0;
-        const ret = Buffer.allocUnsafe(2 + payloadLength);
-        ret[0] = this.ccId;
-        ret[1] = this.ccCommand;
+        const ccIdLength = this.isExtended() ? 2 : 1;
+        const ret = Buffer.allocUnsafe(ccIdLength + 1 + payloadLength);
+        ret.writeUIntBE(this.ccId, 0, ccIdLength);
+        ret[ccIdLength] = this.ccCommand;
         if (payloadLength > 0 /* implies payload != undefined */) {
-            this.payload.copy(ret, 2);
+            this.payload.copy(ret, 1 + ccIdLength);
         }
         return ret;
     }
-    deserializeRawPayload(rawPayload) {
-        this.ccId = rawPayload[0];
-        if (rawPayload.length > 1) {
-            this.ccCommand = rawPayload[1];
-            this.payload = rawPayload.slice(2);
+    deserializeWithoutHeader(data) {
+        this.ccId = CommandClass_1.getCommandClassWithoutHeader(data);
+        const ccIdLength = this.isExtended() ? 2 : 1;
+        if (data.length > ccIdLength) {
+            this.ccCommand = data[ccIdLength];
+            this.payload = data.slice(ccIdLength + 1);
         }
         else {
             this.payload = Buffer.allocUnsafe(0);
@@ -71,33 +76,40 @@ let CommandClass = CommandClass_1 = class CommandClass {
      * as required for encapsulation
      */
     serializeForEncapsulation() {
-        return this.serializeRawPayload();
+        return this.serializeWithoutHeader();
     }
     serialize() {
-        const rawPayload = this.serializeRawPayload();
+        const data = this.serializeWithoutHeader();
         return Buffer.concat([
             Buffer.from([
                 this.nodeId,
-                rawPayload.length,
+                data.length,
             ]),
-            rawPayload,
+            data,
         ]);
     }
     deserialize(data) {
         this.nodeId = CommandClass_1.getNodeId(data);
-        const rawPayloadLength = data[1];
-        const rawPayload = data.slice(2, 2 + rawPayloadLength);
-        this.deserializeRawPayload(rawPayload);
+        const lengthWithoutHeader = data[1];
+        const dataWithoutHeader = data.slice(2, 2 + lengthWithoutHeader);
+        this.deserializeWithoutHeader(dataWithoutHeader);
     }
     deserializeFromEncapsulation(encapCC, data) {
         this.nodeId = encapCC.nodeId; // TODO: is this neccessarily true?
-        this.deserializeRawPayload(data);
+        this.deserializeWithoutHeader(data);
     }
     static getNodeId(ccData) {
         return ccData[0];
     }
+    static getCommandClassWithoutHeader(data) {
+        const isExtended = data[0] >= 0xf1;
+        if (isExtended)
+            return data.readUInt16BE(0);
+        else
+            return data[0];
+    }
     static getCommandClass(ccData) {
-        return ccData[2];
+        return this.getCommandClassWithoutHeader(ccData.slice(2));
     }
     /**
      * Retrieves the correct constructor for the CommandClass in the given Buffer.

@@ -27,8 +27,8 @@ export function parseMaybeNumber(val: number): Maybe<number> | undefined {
 
 /** Parses a single-byte number from 0 to 100 */
 export function parseNumber(val: number): number | undefined {
-	return val <= 100 ? val :
-		val === 0xff ? 100 :
+	return val <= 99 ? val :
+		val === 0xff ? 99 :
 			undefined;
 }
 

@@ -22,8 +22,8 @@ function parseMaybeNumber(val) {
 exports.parseMaybeNumber = parseMaybeNumber;
 /** Parses a single-byte number from 0 to 100 */
 function parseNumber(val) {
-    return val <= 100 ? val :
-        val === 0xff ? 100 :
+    return val <= 99 ? val :
+        val === 0xff ? 99 :
             undefined;
 }
 exports.parseNumber = parseNumber;

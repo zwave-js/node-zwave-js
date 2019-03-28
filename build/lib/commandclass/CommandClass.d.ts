@@ -35,8 +35,10 @@ export declare class CommandClass {
     version: number;
     /** Which endpoint of the node this CC belongs to. 0 for the root device. */
     endpoint: number | undefined;
-    private serializeRawPayload;
-    private deserializeRawPayload;
+    /** Returns true if this CC is an extended CC (0xF100..0xFFFF) */
+    isExtended(): boolean;
+    private serializeWithoutHeader;
+    private deserializeWithoutHeader;
     /**
      * Serializes this CommandClass without the nodeId + length header
      * as required for encapsulation
@@ -46,6 +48,7 @@ export declare class CommandClass {
     deserialize(data: Buffer): void;
     deserializeFromEncapsulation(encapCC: CommandClass, data: Buffer): void;
     static getNodeId(ccData: Buffer): number;
+    private static getCommandClassWithoutHeader;
     static getCommandClass(ccData: Buffer): CommandClasses;
     /**
      * Retrieves the correct constructor for the CommandClass in the given Buffer.
