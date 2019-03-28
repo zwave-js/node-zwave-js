@@ -87,7 +87,7 @@ let MultiChannelCC = class MultiChannelCC extends CommandClass_1.CommandClass {
                 this.payload = Buffer.from([this.endpoint & 127]);
                 break;
             default:
-                throw new ZWaveError_1.ZWaveError("Cannot serialize a MultiChannel CC with a command other than EndPointGet, CapabilityGet or CommandEncapsulation", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
+                throw new ZWaveError_1.ZWaveError("Cannot serialize a MultiChannel CC with a command other than EndPointGet, CapabilityGet, AggregatedMembersGet or CommandEncapsulation", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
         }
         return super.serialize();
     }
@@ -136,7 +136,7 @@ let MultiChannelCC = class MultiChannelCC extends CommandClass_1.CommandClass {
                 break;
             }
             default:
-                throw new ZWaveError_1.ZWaveError("Cannot deserialize a MultiChannel CC with a command other than EndPointReport, CapabilityReport, EndPointFindReport or CommandEncapsulation", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
+                throw new ZWaveError_1.ZWaveError("Cannot deserialize a MultiChannel CC with a command other than EndPointReport, CapabilityReport, EndPointFindReport, AggregatedMembersReport or CommandEncapsulation", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
         }
     }
 };

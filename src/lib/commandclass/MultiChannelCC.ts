@@ -33,8 +33,8 @@ export class MultiChannelCC extends CommandClass {
 	constructor(driver: IDriver, nodeId?: number);
 	constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.EndPointGet);
 	constructor(
-		driver: IDriver, nodeId: number, 
-		ccCommand: MultiChannelCommand.CapabilityGet | MultiChannelCommand.AggregatedMembersGet, 
+		driver: IDriver, nodeId: number,
+		ccCommand: MultiChannelCommand.CapabilityGet | MultiChannelCommand.AggregatedMembersGet,
 		endpoint: number,
 	);
 	constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.EndPointFind, genericClass: GenericDeviceClasses, specificClass: number);
@@ -138,7 +138,7 @@ export class MultiChannelCC extends CommandClass {
 
 			default:
 				throw new ZWaveError(
-					"Cannot serialize a MultiChannel CC with a command other than EndPointGet, CapabilityGet or CommandEncapsulation",
+					"Cannot serialize a MultiChannel CC with a command other than EndPointGet, CapabilityGet, AggregatedMembersGet or CommandEncapsulation",
 					ZWaveErrorCodes.CC_Invalid,
 				);
 		}
@@ -203,7 +203,7 @@ export class MultiChannelCC extends CommandClass {
 
 			default:
 				throw new ZWaveError(
-					"Cannot deserialize a MultiChannel CC with a command other than EndPointReport, CapabilityReport, EndPointFindReport or CommandEncapsulation",
+					"Cannot deserialize a MultiChannel CC with a command other than EndPointReport, CapabilityReport, EndPointFindReport, AggregatedMembersReport or CommandEncapsulation",
 					ZWaveErrorCodes.CC_Invalid,
 				);
 		}
