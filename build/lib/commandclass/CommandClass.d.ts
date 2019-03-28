@@ -35,8 +35,16 @@ export declare class CommandClass {
     version: number;
     /** Which endpoint of the node this CC belongs to. 0 for the root device. */
     endpoint: number | undefined;
+    private serializeRawPayload;
+    private deserializeRawPayload;
+    /**
+     * Serializes this CommandClass without the nodeId + length header
+     * as required for encapsulation
+     */
+    serializeForEncapsulation(): Buffer;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
+    deserializeFromEncapsulation(encapCC: CommandClass, data: Buffer): void;
     static getNodeId(ccData: Buffer): number;
     static getCommandClass(ccData: Buffer): CommandClasses;
     /**
@@ -45,6 +53,7 @@ export declare class CommandClass {
      */
     static getConstructor(ccData: Buffer): Constructable<CommandClass>;
     static from(driver: IDriver, serializedCC: Buffer): CommandClass;
+    static fromEncapsulated(driver: IDriver, encapCC: CommandClass, serializedCC: Buffer): CommandClass;
     toJSON(): any;
     private toJSONInternal;
     protected toJSONInherited(props: Record<string, any>): Record<string, any>;

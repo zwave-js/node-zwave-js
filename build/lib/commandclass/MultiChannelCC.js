@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const NodeInfo_1 = require("../node/NodeInfo");
+const Primitive_1 = require("../values/Primitive");
 const CommandClass_1 = require("./CommandClass");
 var MultiChannelCommand;
 (function (MultiChannelCommand) {
@@ -32,13 +33,16 @@ let MultiChannelCC = class MultiChannelCC extends CommandClass_1.CommandClass {
         this.ccCommand = ccCommand;
         this._endpointCapabilities = new Map();
         if (ccCommand === MultiChannelCommand.CapabilityGet) {
-            [this.endpoint] = args;
+            this.endpoint = args[0];
         }
         else if (ccCommand === MultiChannelCommand.EndPointFind) {
             [
                 this.genericClass,
                 this.specificClass,
             ] = args;
+        }
+        else if (ccCommand === MultiChannelCommand.CommandEncapsulation) {
+            this.encapsulatedCC = args[0];
         }
     }
     get endpointCapabilities() {
@@ -61,9 +65,23 @@ let MultiChannelCC = class MultiChannelCC extends CommandClass_1.CommandClass {
                     this.specificClass,
                 ]);
                 break;
-            // TODO: MultiChannelEncapsulation
+            case MultiChannelCommand.CommandEncapsulation: {
+                const destination = typeof this.destination === "number"
+                    // The destination is a single number
+                    ? this.destination & 127
+                    // The destination is a bit mask
+                    : Primitive_1.encodeBitMask(this.destination, 7)[0] | 128;
+                this.payload = Buffer.concat([
+                    Buffer.from([
+                        this.sourceEndPoint & 127,
+                        destination,
+                    ]),
+                    this.encapsulatedCC.serializeForEncapsulation(),
+                ]);
+                break;
+            }
             default:
-                throw new ZWaveError_1.ZWaveError("Cannot serialize a MultiChannel CC with a command other than EndPointGet, CapabilityGet", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
+                throw new ZWaveError_1.ZWaveError("Cannot serialize a MultiChannel CC with a command other than EndPointGet, CapabilityGet or CommandEncapsulation", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
         }
         return super.serialize();
     }
@@ -88,9 +106,21 @@ let MultiChannelCC = class MultiChannelCC extends CommandClass_1.CommandClass {
                 this._foundEndpoints = [...this.payload.slice(3, 3 + numReports)].map(e => e & 0b01111111);
                 break;
             }
-            // TODO: MultiChannelEncapsulation
+            case MultiChannelCommand.CommandEncapsulation: {
+                this.sourceEndPoint = this.payload[0] & 127;
+                const isBitMask = !!(this.payload[1] & 128);
+                const destination = this.payload[1] & 127;
+                if (isBitMask) {
+                    this.destination = Primitive_1.parseBitMask(Buffer.from([destination]));
+                }
+                else {
+                    this.destination = destination;
+                }
+                this.encapsulatedCC = CommandClass_1.CommandClass.fromEncapsulated(this.driver, this, this.payload.slice(2));
+                break;
+            }
             default:
-                throw new ZWaveError_1.ZWaveError("Cannot deserialize a MultiChannel CC with a command other than EndPointReport, CapabilityReport, EndPointFindReport", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
+                throw new ZWaveError_1.ZWaveError("Cannot deserialize a MultiChannel CC with a command other than EndPointReport, CapabilityReport, EndPointFindReport or CommandEncapsulation", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
         }
     }
 };

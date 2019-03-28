@@ -80,3 +80,17 @@ function parseBitMask(mask) {
     return ret;
 }
 exports.parseBitMask = parseBitMask;
+/** Serializes a numeric array with a given maximum into a bit mask */
+function encodeBitMask(values, maxValue) {
+    const numBytes = Math.ceil(maxValue / 8);
+    const ret = Buffer.alloc(numBytes, 0);
+    for (let val = 1; val <= maxValue; val++) {
+        if (values.indexOf(val) === -1)
+            continue;
+        const byteNum = (val - 1) >>> 3; // id / 8
+        const bitNum = (val - 1) % 8;
+        ret[byteNum] |= (1 << bitNum);
+    }
+    return ret;
+}
+exports.encodeBitMask = encodeBitMask;

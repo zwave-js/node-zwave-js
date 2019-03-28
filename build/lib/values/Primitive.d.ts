@@ -24,4 +24,6 @@ export declare function parseFloatWithScale(payload: Buffer): {
 export declare function encodeFloatWithScale(value: number, scale: number): Buffer;
 /** Parses a bit mask into a numeric array */
 export declare function parseBitMask(mask: Buffer): number[];
+/** Serializes a numeric array with a given maximum into a bit mask */
+export declare function encodeBitMask(values: number[], maxValue: number): Buffer;
 export {};

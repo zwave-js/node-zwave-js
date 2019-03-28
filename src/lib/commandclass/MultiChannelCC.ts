@@ -2,6 +2,7 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { GenericDeviceClasses } from "../node/DeviceClass";
 import { NodeInformationFrame, parseNodeInformationFrame } from "../node/NodeInfo";
+import { encodeBitMask, parseBitMask } from "../values/Primitive";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
 export enum MultiChannelCommand {
@@ -31,6 +32,11 @@ export class MultiChannelCC extends CommandClass {
 	constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.EndPointGet);
 	constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.CapabilityGet, endpoint: number);
 	constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.EndPointFind, genericClass: GenericDeviceClasses, specificClass: number);
+	constructor(
+		driver: IDriver, nodeId: number,
+		ccCommand: MultiChannelCommand.CommandEncapsulation,
+		encapsulatedCC: CommandClass,
+	);
 
 	constructor(
 		driver: IDriver,
@@ -41,12 +47,14 @@ export class MultiChannelCC extends CommandClass {
 		super(driver, nodeId, ccCommand);
 
 		if (ccCommand === MultiChannelCommand.CapabilityGet) {
-			[this.endpoint] = args;
+			this.endpoint = args[0];
 		} else if (ccCommand === MultiChannelCommand.EndPointFind) {
 			[
 				this.genericClass,
 				this.specificClass,
 			] = args;
+		} else if (ccCommand === MultiChannelCommand.CommandEncapsulation) {
+			this.encapsulatedCC = args[0];
 		}
 	}
 	// tslint:enable:unified-signatures
@@ -69,6 +77,12 @@ export class MultiChannelCC extends CommandClass {
 		return this._foundEndpoints;
 	}
 
+	public sourceEndPoint: number;
+	/** The destination end point (0-127) or an array of destination end points (1-7) */
+	public destination: number | number[];
+
+	public encapsulatedCC: CommandClass;
+
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
 			case MultiChannelCommand.EndPointGet:
@@ -76,7 +90,7 @@ export class MultiChannelCC extends CommandClass {
 				break;
 
 			case MultiChannelCommand.CapabilityGet:
-				this.payload = Buffer.from([ this.endpoint & 0b01111111 ]);
+				this.payload = Buffer.from([this.endpoint & 0b01111111]);
 				break;
 
 			case MultiChannelCommand.EndPointFind:
@@ -86,11 +100,26 @@ export class MultiChannelCC extends CommandClass {
 				]);
 				break;
 
-			// TODO: MultiChannelEncapsulation
+			case MultiChannelCommand.CommandEncapsulation: {
+				const destination = typeof this.destination === "number"
+					// The destination is a single number
+					? this.destination & 0b0111_1111
+					// The destination is a bit mask
+					: encodeBitMask(this.destination, 7)[0] | 0b1000_0000
+					;
+				this.payload = Buffer.concat([
+					Buffer.from([
+						this.sourceEndPoint & 0b0111_1111,
+						destination,
+					]),
+					this.encapsulatedCC.serializeForEncapsulation(),
+				]);
+				break;
+			}
 
 			default:
 				throw new ZWaveError(
-					"Cannot serialize a MultiChannel CC with a command other than EndPointGet, CapabilityGet",
+					"Cannot serialize a MultiChannel CC with a command other than EndPointGet, CapabilityGet or CommandEncapsulation",
 					ZWaveErrorCodes.CC_Invalid,
 				);
 		}
@@ -126,11 +155,25 @@ export class MultiChannelCC extends CommandClass {
 				break;
 			}
 
-			// TODO: MultiChannelEncapsulation
+			case MultiChannelCommand.CommandEncapsulation: {
+				this.sourceEndPoint = this.payload[0] & 0b0111_1111;
+				const isBitMask = !!(this.payload[1] & 0b1000_0000);
+				const destination = this.payload[1] & 0b0111_1111;
+				if (isBitMask) {
+					this.destination = parseBitMask(Buffer.from([destination]));
+				} else {
+					this.destination = destination;
+				}
+				this.encapsulatedCC = CommandClass.fromEncapsulated(
+					this.driver, this,
+					this.payload.slice(2),
+				);
+				break;
+			}
 
 			default:
 				throw new ZWaveError(
-					"Cannot deserialize a MultiChannel CC with a command other than EndPointReport, CapabilityReport, EndPointFindReport",
+					"Cannot deserialize a MultiChannel CC with a command other than EndPointReport, CapabilityReport, EndPointFindReport or CommandEncapsulation",
 					ZWaveErrorCodes.CC_Invalid,
 				);
 		}
