@@ -26,9 +26,20 @@ function internalParseNodeInformationFrame(nif) {
     };
     // split the CCs into supported/controlled
     // tslint:disable-next-line:variable-name
-    const CCs = [...nif.slice(2)];
+    let offset = 2;
     let isAfterMark = false;
-    for (const cc of CCs) {
+    while (offset < nif.length) {
+        // Read normal or extended CCs
+        const isExtended = nif[offset] >= 0xf1;
+        let cc;
+        if (isExtended) {
+            cc = nif.readUInt16BE(offset);
+            offset += 2;
+        }
+        else {
+            cc = nif[offset];
+            offset++;
+        }
         // CCs before the support/control mark are supported
         // CCs after the support/control mark are controlled
         if (cc === CommandClass_1.CommandClasses["Support/Control Mark"]) {
