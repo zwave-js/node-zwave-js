@@ -56,7 +56,7 @@ export class CommandClass {
 		public payload: Buffer = Buffer.from([]),
 	) {
 		// Extract the cc from declared metadata if not provided
-		this.ccId = /*ccId != null ? ccId :*/ getCommandClass(this);
+		this.ccId = getCommandClass(this);
 	}
 	// tslint:enable:unified-signatures
 
@@ -68,26 +68,32 @@ export class CommandClass {
 	/** Which endpoint of the node this CC belongs to. 0 for the root device. */
 	public endpoint: number | undefined;
 
-	private serializeRawPayload(): Buffer {
-		// A CC either has a Command and potentially a real payload
-		// or it has neither (NoOp)
-		if (this.ccCommand == undefined) return Buffer.from([this.ccId]);
+	/** Returns true if this CC is an extended CC (0xF100..0xFFFF) */
+	public isExtended(): boolean {
+		return this.ccId >= 0xf100;
+	}
+
+	private serializeWithoutHeader(): Buffer {
+		// NoOp CCs have no command and no payload
+		if (this.ccId === CommandClasses["No Operation"]) return Buffer.from([this.ccId]);
 
 		const payloadLength = this.payload != undefined ? this.payload.length : 0;
-		const ret = Buffer.allocUnsafe(2 + payloadLength);
-		ret[0] = this.ccId;
-		ret[1] = this.ccCommand;
+		const ccIdLength = this.isExtended() ? 2 : 1;
+		const ret = Buffer.allocUnsafe(ccIdLength + 1 + payloadLength);
+		ret.writeUIntBE(this.ccId, 0, ccIdLength);
+		ret[ccIdLength] = this.ccCommand;
 		if (payloadLength > 0 /* implies payload != undefined */) {
-			this.payload.copy(ret, 2);
+			this.payload.copy(ret, 1 + ccIdLength);
 		}
 		return ret;
 	}
 
-	private deserializeRawPayload(rawPayload: Buffer): void {
-		this.ccId = rawPayload[0];
-		if (rawPayload.length > 1) {
-			this.ccCommand = rawPayload[1];
-			this.payload = rawPayload.slice(2);
+	private deserializeWithoutHeader(data: Buffer): void {
+		this.ccId = CommandClass.getCommandClassWithoutHeader(data);
+		const ccIdLength = this.isExtended() ? 2 : 1;
+		if (data.length > ccIdLength) {
+			this.ccCommand = data[ccIdLength];
+			this.payload = data.slice(ccIdLength + 1);
 		} else {
 			this.payload = Buffer.allocUnsafe(0);
 		}
@@ -98,38 +104,44 @@ export class CommandClass {
 	 * as required for encapsulation
 	 */
 	public serializeForEncapsulation(): Buffer {
-		return this.serializeRawPayload();
+		return this.serializeWithoutHeader();
 	}
 
 	public serialize(): Buffer {
-		const rawPayload = this.serializeRawPayload();
+		const data = this.serializeWithoutHeader();
 		return Buffer.concat([
 			Buffer.from([
 				this.nodeId,
-				rawPayload.length,
+				data.length,
 			]),
-			rawPayload,
+			data,
 		]);
 	}
 
 	public deserialize(data: Buffer): void {
 		this.nodeId = CommandClass.getNodeId(data);
-		const rawPayloadLength = data[1];
-		const rawPayload = data.slice(2, 2 + rawPayloadLength);
-		this.deserializeRawPayload(rawPayload);
+		const lengthWithoutHeader = data[1];
+		const dataWithoutHeader = data.slice(2, 2 + lengthWithoutHeader);
+		this.deserializeWithoutHeader(dataWithoutHeader);
 	}
 
 	public deserializeFromEncapsulation(encapCC: CommandClass, data: Buffer): void {
 		this.nodeId = encapCC.nodeId; // TODO: is this neccessarily true?
-		this.deserializeRawPayload(data);
+		this.deserializeWithoutHeader(data);
 	}
 
 	public static getNodeId(ccData: Buffer): number {
 		return ccData[0];
 	}
 
+	private static getCommandClassWithoutHeader(data: Buffer): CommandClasses {
+		const isExtended = data[0] >= 0xf1;
+		if (isExtended) return data.readUInt16BE(0);
+		else return data[0];
+	}
+
 	public static getCommandClass(ccData: Buffer): CommandClasses {
-		return ccData[2];
+		return this.getCommandClassWithoutHeader(ccData.slice(2));
 	}
 
 	/**
