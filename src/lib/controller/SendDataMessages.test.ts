@@ -64,7 +64,7 @@ describe("lib/controller/SendDataRequest => ", () => {
 
 		expect(parsed.command).toBeInstanceOf(CommandClass);
 		expect(parsed.command.nodeId).toBe(11);
-		expect(parsed.command.command).toBe(CommandClasses["Multilevel Switch"]);
+		expect(parsed.command.ccCommand).toBe(CommandClasses["Multilevel Switch"]);
 		expect(parsed.command.payload).toEqual(Buffer.from([0x02]));
 
 		expect(parsed.transmitOptions).toBe(TransmitOptions.DEFAULT);

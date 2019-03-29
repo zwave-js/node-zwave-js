@@ -1,7 +1,7 @@
 /// <reference types="jest-extended" />
 import { assertZWaveError } from "../../../test/util";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { encodeFloatWithScale, parseBoolean, parseFloatWithScale, parseMaybeBoolean, parseMaybeNumber, parseNumber, unknownBoolean, unknownNumber } from "./Primitive";
+import { encodeBitMask, encodeFloatWithScale, parseBitMask, parseBoolean, parseFloatWithScale, parseMaybeBoolean, parseMaybeNumber, parseNumber, unknownBoolean, unknownNumber } from "./Primitive";
 
 describe("lib/values/Primitive", () => {
 
@@ -145,6 +145,40 @@ describe("lib/values/Primitive", () => {
 			);
 		});
 
+	});
+
+	describe("parseBitMask()", () => {
+		it("should correctly convert a bit mask into a numeric array", () => {
+			const tests = [
+				{ mask: Buffer.from([0b10111001]), expected: [1, 4, 5, 6, 8] },
+				{ mask: Buffer.from([0b11, 0b110]), expected: [1, 2, 10, 11] },
+			];
+			for (const { mask, expected } of tests) {
+				expect(parseBitMask(mask)).toIncludeAllMembers(expected);
+			}
+		});
+	});
+
+	describe("encodeBitMask()", () => {
+		it("should correctly convert a numeric array into a bit mask", () => {
+			const tests = [
+				{ values: [1, 4, 5, 6, 8], max: 8, expected: Buffer.from([0b10111001]) },
+				{ values: [1, 2, 10, 11], max: 16, expected: Buffer.from([0b11, 0b110]) },
+			];
+			for (const { values, max, expected } of tests) {
+				expect(encodeBitMask(values, max).equals(expected)).toBeTrue();
+			}
+		});
+
+		it("should respect the maxValue argument for determining the buffer length", () => {
+			const tests = [
+				{ values: [1, 4, 5, 6, 8], max: 17, expectedLength: 3 },
+				{ values: [1, 2, 10, 11], max: 3, expectedLength: 1 },
+			];
+			for (const { values, max, expectedLength } of tests) {
+				expect(encodeBitMask(values, max).length).toBe(expectedLength);
+			}
+		});
 	});
 
 });

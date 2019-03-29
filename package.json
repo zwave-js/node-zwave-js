@@ -65,7 +65,7 @@
     "test:ts": "jest --maxWorkers=1",
     "test:watch": "npm run test:ts -- --watch",
     "test": "npm run test:watch",
-    "coverage": "jest --collect-coverage",
+    "coverage": "npm run test:ts -- --collect-coverage",
     "coveralls": "node_modules/.bin/nyc report --reporter=text-lcov | coveralls -v",
     "show-coverage": "npm run coverage && start ./coverage/index.html",
     "lint:ts": "tslint \"src/**/*.ts\"",
