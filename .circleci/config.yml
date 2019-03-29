@@ -4,21 +4,26 @@
 #
 
 # Define the used images
-node4: &node4
-  working_directory: &workdir_node4 ~/node-zwave-js/node4
-  docker:
-    - image: circleci/node:4
-
 node6: &node6
   working_directory: &workdir_node6 ~/node-zwave-js/node6
   docker:
     - image: circleci/node:6
 
+node8: &node8
+  working_directory: &workdir_node8 ~/node-zwave-js/node8
+  docker:
+    - image: circleci/node:8
+
+node10: &node10
+  working_directory: &workdir_node10 ~/node-zwave-js/node10
+  docker:
+    - image: circleci/node:10
+
 # use "latest" for lint and publish
 latest: &latest
   working_directory: &workdir_latest ~/node-zwave-js/latest
   docker:
-    - image: circleci/node:8
+    - image: circleci/node:latest
 
 # some job filters
 tags_and_branches: &tags_and_branches
@@ -45,38 +50,11 @@ whitelist: &whitelist
     - package.json
     - README.md
     - tsconfig.json
+    - tsconfig.*.json
     - tslint.json
 
 version: 2
 jobs:
-# ----------------------------------------------------
-  test_node4:
-    <<: *node4
-
-    steps:
-      - checkout
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-node4-{{ checksum "package.json" }}
-
-      - run:
-          name: Install Dependencies
-          command: npm install
-      - run:
-          name: Remove unnecessary Dependencies
-          command: npm ls || true ; npm prune
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-node4-{{ checksum "package.json" }}
-
-      - run:
-          name: Run component tests
-          command: npm run test
-
 # ----------------------------------------------------
   test_node6:
     <<: *node6
@@ -90,11 +68,11 @@ jobs:
           - v1-dependencies-node6-{{ checksum "package.json" }}
 
       - run:
-          name: Install Dependencies
-          command: npm install
-      - run:
           name: Remove unnecessary Dependencies
           command: npm ls || true ; npm prune
+      - run:
+          name: Install Dependencies
+          command: npm install
 
       - save_cache:
           paths:
@@ -103,7 +81,63 @@ jobs:
 
       - run:
           name: Run component tests
-          command: npm run test
+          command: npm run test:ts
+
+# ----------------------------------------------------
+  test_node8:
+    <<: *node8
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-node8-{{ checksum "package.json" }}
+
+      - run:
+          name: Remove unnecessary Dependencies
+          command: npm ls || true ; npm prune
+      - run:
+          name: Install Dependencies
+          command: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-node8-{{ checksum "package.json" }}
+
+      - run:
+          name: Run component tests
+          command: npm run test:ts
+
+# ----------------------------------------------------
+  test_node10:
+    <<: *node10
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-node10-{{ checksum "package.json" }}
+
+      - run:
+          name: Remove unnecessary Dependencies
+          command: npm ls || true ; npm prune
+      - run:
+          name: Install Dependencies
+          command: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-node10-{{ checksum "package.json" }}
+
+      - run:
+          name: Run component tests
+          command: npm run test:ts
 
 # ----------------------------------------------------
   test_latest:
@@ -118,11 +152,11 @@ jobs:
           - v1-dependencies-latest-{{ checksum "package.json" }}
 
       - run:
-          name: Install Dependencies
-          command: npm install
-      - run:
           name: Remove unnecessary Dependencies
           command: npm ls || true ; npm prune
+      - run:
+          name: Install Dependencies
+          command: npm install
 
       - save_cache:
           paths:
@@ -136,7 +170,7 @@ jobs:
 
       - run:
           name: Run component tests
-          command: npm run test
+          command: npm run test:ts
 
       # persist the build files, so we can pick them up in the deploy job
       - persist_to_workspace:
@@ -159,7 +193,7 @@ jobs:
 
       - run:
           name: Upload it to coveralls.io
-          command: COVERALLS_SERVICE_NAME="CircleCI" COVERALLS_SERVICE_JOB_ID="$CIRCLE_BUILD_NUM" npm run coveralls
+          command: if [[ $CIRCLE_BRANCH == pull* ]]; then echo "Skipping coverage upload for PR builds"; else COVERALLS_SERVICE_NAME="CircleCI" COVERALLS_SERVICE_JOB_ID="$CIRCLE_BUILD_NUM" npm run coveralls; fi
 
 # ----------------------------------------------------
 # generates a clean build of the TypeScript sources
@@ -206,23 +240,26 @@ workflows:
 
   test-and-deploy:
     jobs:
-      - test_node4:
-          <<: *tags_and_branches
       - test_node6:
+          <<: *tags_and_branches
+      - test_node8:
+          <<: *tags_and_branches
+      - test_node10:
           <<: *tags_and_branches
       - test_latest:
           <<: *tags_and_branches
 
       - coverage:
-          requires: 
+          requires:
             - test_latest
           <<: *tags_and_branches
 
       # build only on tagged builds and if all tests succeeded
       - build:
-          requires: 
-            - test_node4
+          requires:
             - test_node6
+            - test_node8
+            - test_node10
             - test_latest
           <<: *only_tags
 
