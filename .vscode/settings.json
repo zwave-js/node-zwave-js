@@ -1,5 +1,6 @@
 {
 	"typescript.tsdk": "node_modules\\typescript\\lib",
 	"jest.showCoverageOnLoad": true,
-	"jest.enableCodeLens": true
+	"jest.enableCodeLens": true,
+	"jest.pathToJest": "npm run test:ts --"
 }

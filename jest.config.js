@@ -21,6 +21,7 @@ module.exports = {
 	"setupFiles": [
 		"reflect-metadata"
 	],
+	"extraGlobals": ["Reflect"],
 	collectCoverage: false,
 	collectCoverageFrom: [
 		"src/**/*.ts",
