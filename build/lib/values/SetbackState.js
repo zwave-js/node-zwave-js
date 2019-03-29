@@ -12,7 +12,7 @@ function encodeSetbackState(state) {
     if (typeof state === "string")
         return exports.setbackSpecialStateValues[state];
     state = math_1.clamp(state, -12.8, 12);
-    return (state * 10) & 0xff;
+    return Math.round(state * 10);
 }
 exports.encodeSetbackState = encodeSetbackState;
 /** Decodes a setback state used in a ThermostatSetbackCC */

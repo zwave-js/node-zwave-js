@@ -14,7 +14,7 @@ export type SetbackState = number | SetbackSpecialState;
 export function encodeSetbackState(state: SetbackState): number {
 	if (typeof state === "string") return setbackSpecialStateValues[state];
 	state = clamp(state, -12.8, 12);
-	return (state * 10) & 0xff;
+	return Math.round(state * 10);
 }
 
 /** Decodes a setback state used in a ThermostatSetbackCC */
