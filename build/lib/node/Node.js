@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const async_1 = require("alcalzone-shared/async");
 const objects_1 = require("alcalzone-shared/objects");
 const strings_1 = require("alcalzone-shared/strings");
+const typeguards_1 = require("alcalzone-shared/typeguards");
 const events_1 = require("events");
-const util_1 = require("util");
 const CommandClass_1 = require("../commandclass/CommandClass");
 const ICommandClassContainer_1 = require("../commandclass/ICommandClassContainer");
 const ManufacturerSpecificCC_1 = require("../commandclass/ManufacturerSpecificCC");
@@ -526,7 +526,7 @@ class ZWaveNode extends events_1.EventEmitter {
                 ? obj.interviewStage
                 : InterviewStage[obj.interviewStage];
         }
-        if (util_1.isObject(obj.deviceClass)) {
+        if (typeguards_1.isObject(obj.deviceClass)) {
             const { basic, generic, specific } = obj.deviceClass;
             if (typeof basic === "number"
                 && typeof generic === "number"
@@ -551,7 +551,7 @@ class ZWaveNode extends events_1.EventEmitter {
             return typeof val === type ? val : undefined;
         }
         // Parse CommandClasses
-        if (util_1.isObject(obj.commandClasses)) {
+        if (typeguards_1.isObject(obj.commandClasses)) {
             const ccDict = obj.commandClasses;
             for (const ccHex of Object.keys(ccDict)) {
                 // First make sure this key describes a valid CC

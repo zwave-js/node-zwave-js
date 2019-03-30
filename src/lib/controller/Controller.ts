@@ -1,7 +1,7 @@
 import { createDeferredPromise, DeferredPromise } from "alcalzone-shared/deferred-promise";
 import { composeObject } from "alcalzone-shared/objects";
+import { isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
-import { isObject } from "util";
 import { CommandClasses } from "../commandclass/CommandClass";
 import { Driver, RequestHandler } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";

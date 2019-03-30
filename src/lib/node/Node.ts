@@ -1,9 +1,9 @@
 import { promiseSequence } from "alcalzone-shared/async";
 import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
+import { isObject } from "alcalzone-shared/typeguards";
 import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
-import { isObject } from "util";
 import { CentralSceneCC } from "../commandclass/CentralSceneCC";
 import { CommandClass, CommandClasses, CommandClassInfo, getCCConstructor, getImplementedVersion, StateKind } from "../commandclass/CommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";

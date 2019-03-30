@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const deferred_promise_1 = require("alcalzone-shared/deferred-promise");
 const objects_1 = require("alcalzone-shared/objects");
+const typeguards_1 = require("alcalzone-shared/typeguards");
 const events_1 = require("events");
-const util_1 = require("util");
 const CommandClass_1 = require("../commandclass/CommandClass");
 const ZWaveError_1 = require("../error/ZWaveError");
 const Constants_1 = require("../message/Constants");
@@ -334,7 +334,7 @@ class ZWaveController extends events_1.EventEmitter {
     }
     /** Deserializes the controller information and all nodes from the cache */
     deserialize(serialized) {
-        if (util_1.isObject(serialized.nodes)) {
+        if (typeguards_1.isObject(serialized.nodes)) {
             for (const nodeId of Object.keys(serialized.nodes)) {
                 const serializedNode = serialized.nodes[nodeId];
                 if (!serializedNode || typeof serializedNode.id !== "number" || serializedNode.id.toString() !== nodeId) {
