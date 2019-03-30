@@ -240,8 +240,8 @@ workflows:
 
   test-and-deploy:
     jobs:
-      - test_node6:
-          <<: *tags_and_branches
+      # - test_node6:
+      #     <<: *tags_and_branches
       - test_node8:
           <<: *tags_and_branches
       - test_node10:
@@ -257,7 +257,7 @@ workflows:
       # build only on tagged builds and if all tests succeeded
       - build:
           requires:
-            - test_node6
+            # - test_node6
             - test_node8
             - test_node10
             - test_latest
