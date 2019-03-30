@@ -149,7 +149,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-latest-{{ checksum "package.json" }}
+          - v2-dependencies-latest-{{ checksum "package.json" }}
 
       - run:
           name: Remove unnecessary Dependencies
@@ -161,7 +161,7 @@ jobs:
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-latest-{{ checksum "package.json" }}
+          key: v2-dependencies-latest-{{ checksum "package.json" }}
 
       # on latest also lint the code
       - run:
