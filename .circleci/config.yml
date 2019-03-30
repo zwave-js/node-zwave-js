@@ -46,7 +46,10 @@ whitelist: &whitelist
     - src/*
     - test/*
     - coverage/*
+    - .fimbullinter.yaml
     - .npmignore
+    - .wotanrc.yaml
+    - jest.config.js
     - package.json
     - README.md
     - tsconfig.json
