@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
+const misc_1 = require("../util/misc");
 const Primitive_1 = require("../values/Primitive");
 const CommandClass_1 = require("./CommandClass");
 var ConfigurationCommand;
@@ -35,6 +36,9 @@ var ValueFormat;
     ValueFormat[ValueFormat["Enumerated"] = 2] = "Enumerated";
     ValueFormat[ValueFormat["BitField"] = 3] = "BitField";
 })(ValueFormat = exports.ValueFormat || (exports.ValueFormat = {}));
+// TODO: * Scan available config params (V1-V2)
+//       * or use PropertiesGet (V3+)
+// TODO: Test how the device interprets the default flag (V1-3) (reset all or only the specified)
 let ConfigurationCC = class ConfigurationCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId, ccCommand, ...args) {
         super(driver, nodeId, ccCommand);
@@ -77,7 +81,7 @@ let ConfigurationCC = class ConfigurationCC extends CommandClass_1.CommandClass 
                 .map((param, i) => [param, valuesToSet[i]])
                 .sort(([paramA], [paramB]) => paramA - paramB);
             parameters = combined.map(([param]) => param);
-            if (!isConsecutive(parameters)) {
+            if (!misc_1.isConsecutiveArray(parameters)) {
                 throw new ZWaveError_1.ZWaveError(`A ConfigurationCC.BulkSet can only be used for consecutive parameters`, ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
             }
             this.parameters = parameters;
@@ -85,7 +89,7 @@ let ConfigurationCC = class ConfigurationCC extends CommandClass_1.CommandClass 
         }
         else if (this.ccCommand === ConfigurationCommand.BulkGet) {
             this.parameters = args[0].sort();
-            if (!isConsecutive(this.parameters)) {
+            if (!misc_1.isConsecutiveArray(this.parameters)) {
                 throw new ZWaveError_1.ZWaveError(`A ConfigurationCC.BulkGet can only be used for consecutive parameters`, ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
             }
         }
@@ -294,8 +298,4 @@ function serializeValue(payload, offset, size, format, value) {
             return;
         }
     }
-}
-/** Ensures that the values array is consecutive */
-function isConsecutive(values) {
-    return values.every((v, i, arr) => i === 0 ? true : v - 1 === arr[i - 1]);
 }

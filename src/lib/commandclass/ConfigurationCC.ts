@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { isConsecutiveArray } from "../util/misc";
 import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
 
@@ -41,6 +42,10 @@ export interface ParameterInfo {
 }
 
 export type ConfigValue = number | Set<number>;
+
+// TODO: * Scan available config params (V1-V2)
+//       * or use PropertiesGet (V3+)
+// TODO: Test how the device interprets the default flag (V1-3) (reset all or only the specified)
 
 @commandClass(CommandClasses.Configuration)
 @implementedVersion(4)
@@ -126,7 +131,7 @@ export class ConfigurationCC extends CommandClass {
 				.sort(([paramA], [paramB]) => paramA - paramB)
 				;
 			parameters = combined.map(([param]) => param);
-			if (!isConsecutive(parameters)) {
+			if (!isConsecutiveArray(parameters)) {
 				throw new ZWaveError(
 					`A ConfigurationCC.BulkSet can only be used for consecutive parameters`,
 					ZWaveErrorCodes.CC_Invalid,
@@ -137,7 +142,7 @@ export class ConfigurationCC extends CommandClass {
 			this.valuesToSet = combined.map(([, value]) => value);
 		} else if (this.ccCommand === ConfigurationCommand.BulkGet) {
 			this.parameters = args[0].sort();
-			if (!isConsecutive(this.parameters)) {
+			if (!isConsecutiveArray(this.parameters)) {
 				throw new ZWaveError(
 					`A ConfigurationCC.BulkGet can only be used for consecutive parameters`,
 					ZWaveErrorCodes.CC_Invalid,
@@ -391,9 +396,4 @@ function serializeValue(payload: Buffer, offset: number, size: number, format: V
 			return;
 		}
 	}
-}
-
-/** Ensures that the values array is consecutive */
-function isConsecutive(values: number[]) {
-	return values.every((v, i, arr) => i === 0 ? true : v - 1 === arr[i - 1]);
 }
