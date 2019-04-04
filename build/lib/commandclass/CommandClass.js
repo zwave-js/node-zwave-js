@@ -155,7 +155,7 @@ let CommandClass = CommandClass_1 = class CommandClass {
         return ret;
     }
     /** Requests static or dynamic state for a given from a node */
-    static createStateRequest(driver, node, kind) {
+    static async requestState(driver, node, kind) {
         // This needs to be overwritten per command class. In the default implementation, don't do anything
     }
     /**

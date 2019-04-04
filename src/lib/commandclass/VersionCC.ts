@@ -2,6 +2,7 @@ import { SendDataRequest } from "../controller/SendDataMessages";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { MessagePriority } from "../message/Constants";
 import { ZWaveNode } from "../node/Node";
 import { Maybe, unknownBoolean } from "../values/Primitive";
 import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion, StateKind } from "./CommandClass";
@@ -170,11 +171,12 @@ export class VersionCC extends CommandClass {
 	}
 
 	/** Requests static or dynamic state for a given from a node */
-	public static createStateRequest(driver: IDriver, node: ZWaveNode, kind: StateKind): SendDataRequest | void {
+	public static async requestState(driver: IDriver, node: ZWaveNode, kind: StateKind): Promise<void> {
 		// TODO: Check if we have requested that information before and store it
 		if (kind & StateKind.Static) {
 			const cc = new VersionCC(driver, node.id, VersionCommand.Get);
-			return new SendDataRequest(driver, cc);
+			const request = new SendDataRequest(driver, cc);
+			await driver.sendMessage(request, MessagePriority.NodeQuery);
 		}
 	}
 

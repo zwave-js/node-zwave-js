@@ -1,5 +1,4 @@
 /// <reference types="node" />
-import { SendDataRequest } from "../controller/SendDataMessages";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveNode } from "../node/Node";
@@ -42,5 +41,5 @@ export declare class VersionCC extends CommandClass {
     serialize(): Buffer;
     deserialize(data: Buffer): void;
     /** Requests static or dynamic state for a given from a node */
-    static createStateRequest(driver: IDriver, node: ZWaveNode, kind: StateKind): SendDataRequest | void;
+    static requestState(driver: IDriver, node: ZWaveNode, kind: StateKind): Promise<void>;
 }

@@ -569,15 +569,11 @@ export class ZWaveNode extends EventEmitter {
 		commandClasses: CommandClasses[] = [...this._implementedCommandClasses.keys()],
 	): Promise<void> {
 		// TODO: Support multiple instances
-		const requests = commandClasses
+		const factories = commandClasses
 			// This assertion is not nice, but I see no better way
 			.map(cc => getCCConstructor(cc) as unknown as typeof CommandClass)
 			.filter(cc => !!cc)
-			.map(cc => cc.createStateRequest(this.driver, this, kind))
-			.filter(req => !!req) as SendDataRequest[]
-			;
-		const factories = requests
-			.map(req => () => this.driver.sendMessage<SendDataRequest>(req, MessagePriority.NodeQuery))
+			.map(cc => () => cc.requestState(this.driver, this, kind))
 			;
 		await promiseSequence(factories);
 	}

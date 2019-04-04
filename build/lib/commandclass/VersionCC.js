@@ -13,6 +13,7 @@ var VersionCC_1;
 const SendDataMessages_1 = require("../controller/SendDataMessages");
 const ZWaveLibraryTypes_1 = require("../controller/ZWaveLibraryTypes");
 const ZWaveError_1 = require("../error/ZWaveError");
+const Constants_1 = require("../message/Constants");
 const Primitive_1 = require("../values/Primitive");
 const CommandClass_1 = require("./CommandClass");
 var VersionCommand;
@@ -128,11 +129,12 @@ let VersionCC = VersionCC_1 = class VersionCC extends CommandClass_1.CommandClas
         }
     }
     /** Requests static or dynamic state for a given from a node */
-    static createStateRequest(driver, node, kind) {
+    static async requestState(driver, node, kind) {
         // TODO: Check if we have requested that information before and store it
         if (kind & CommandClass_1.StateKind.Static) {
             const cc = new VersionCC_1(driver, node.id, VersionCommand.Get);
-            return new SendDataMessages_1.SendDataRequest(driver, cc);
+            const request = new SendDataMessages_1.SendDataRequest(driver, cc);
+            await driver.sendMessage(request, Constants_1.MessagePriority.NodeQuery);
         }
     }
 };

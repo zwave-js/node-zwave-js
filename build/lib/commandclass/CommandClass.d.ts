@@ -1,5 +1,4 @@
 /// <reference types="node" />
-import { SendDataRequest } from "../controller/SendDataMessages";
 import { IDriver } from "../driver/IDriver";
 import { Constructable } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
@@ -61,7 +60,7 @@ export declare class CommandClass {
     private toJSONInternal;
     protected toJSONInherited(props: Record<string, any>): Record<string, any>;
     /** Requests static or dynamic state for a given from a node */
-    static createStateRequest(driver: IDriver, node: ZWaveNode, kind: StateKind): SendDataRequest | void;
+    static requestState(driver: IDriver, node: ZWaveNode, kind: StateKind): Promise<void>;
     /**
      * Determine whether the linked node supports a specific command of this command class.
      * "unknown" means that the information has not been received yet

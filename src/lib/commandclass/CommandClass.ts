@@ -192,7 +192,7 @@ export class CommandClass {
 	}
 
 	/** Requests static or dynamic state for a given from a node */
-	public static createStateRequest(driver: IDriver, node: ZWaveNode, kind: StateKind): SendDataRequest | void {
+	public static async requestState(driver: IDriver, node: ZWaveNode, kind: StateKind): Promise<void> {
 		// This needs to be overwritten per command class. In the default implementation, don't do anything
 	}
 

@@ -473,14 +473,11 @@ class ZWaveNode extends events_1.EventEmitter {
      */
     async requestState(kind, commandClasses = [...this._implementedCommandClasses.keys()]) {
         // TODO: Support multiple instances
-        const requests = commandClasses
+        const factories = commandClasses
             // This assertion is not nice, but I see no better way
             .map(cc => CommandClass_1.getCCConstructor(cc))
             .filter(cc => !!cc)
-            .map(cc => cc.createStateRequest(this.driver, this, kind))
-            .filter(req => !!req);
-        const factories = requests
-            .map(req => () => this.driver.sendMessage(req, Constants_1.MessagePriority.NodeQuery));
+            .map(cc => () => cc.requestState(this.driver, this, kind));
         await async_1.promiseSequence(factories);
     }
     /** Serializes this node in order to store static data in a cache */

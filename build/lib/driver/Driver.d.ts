@@ -21,8 +21,6 @@ export declare type MessageSupportCheck = "loud" | "silent" | "none";
 export declare type RequestHandler<T extends Message = Message> = (msg: T) => boolean;
 export declare class Driver extends EventEmitter implements IDriver {
     private port;
-    /** @internal */
-    options?: DeepPartial<ZWaveOptions>;
     /** The serial port instance */
     private serial;
     /** A buffer of received but unprocessed data */
