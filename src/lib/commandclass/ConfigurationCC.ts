@@ -132,7 +132,7 @@ export class ConfigurationCC extends CommandClass {
 		if (!this.paramInformation.has(parameter)) {
 			this.paramInformation.set(parameter, {});
 		}
-		Object.assign(this.paramInformation.get(parameter)!, info);
+		Object.assign(this.paramInformation.get(parameter), info);
 	}
 	private getParamInformation(parameter: number) {
 		return this.paramInformation.get(parameter) || {};
