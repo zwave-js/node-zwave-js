@@ -100,18 +100,49 @@ export class ConfigurationCC extends CommandClass {
 				this.valueToSet,
 			] = args;
 		} else if (this.ccCommand === ConfigurationCommand.BulkSet) {
+			let parameters: number[];
+			let valuesToSet: ConfigValue[];
 			[
-				this.parameters,
+				parameters,
 				this.defaultFlag,
 				this.valueSize,
-				this.valuesToSet,
+				valuesToSet,
 				this.handshake,
 			] = args;
-			// TODO: Sort params/values and make sure they are the same size
-			// TODO: Ensure the params are consecutive
+			if (!parameters || !valuesToSet || parameters.length < 1 || valuesToSet.length < 1) {
+				throw new ZWaveError(
+					`In a ConfigurationCC.BulkSet, parameters and valuesToSet must be non-empty arrays`,
+					ZWaveErrorCodes.CC_Invalid,
+				);
+			}
+			if (parameters.length !== valuesToSet.length) {
+				throw new ZWaveError(
+					`In a ConfigurationCC.BulkSet, parameters and valuesToSet must have the same size`,
+					ZWaveErrorCodes.CC_Invalid,
+				);
+			}
+			const combined = parameters
+				.map((param, i) => [param, valuesToSet[i]] as [number, ConfigValue])
+				.sort(([paramA], [paramB]) => paramA - paramB)
+				;
+			parameters = combined.map(([param]) => param);
+			if (!isConsecutive(parameters)) {
+				throw new ZWaveError(
+					`A ConfigurationCC.BulkSet can only be used for consecutive parameters`,
+					ZWaveErrorCodes.CC_Invalid,
+				);
+			}
+
+			this.parameters = parameters;
+			this.valuesToSet = combined.map(([, value]) => value);
 		} else if (this.ccCommand === ConfigurationCommand.BulkGet) {
-			this.parameters = args[0];
-			// TODO: Ensure the params are consecutive and sorted
+			this.parameters = args[0].sort();
+			if (!isConsecutive(this.parameters)) {
+				throw new ZWaveError(
+					`A ConfigurationCC.BulkGet can only be used for consecutive parameters`,
+					ZWaveErrorCodes.CC_Invalid,
+				);
+			}
 		}
 	}
 	// tslint:enable:unified-signatures
@@ -231,7 +262,7 @@ export class ConfigurationCC extends CommandClass {
 
 			default:
 				throw new ZWaveError(
-					"Cannot serialize a Configuration CC with a command other than Set",
+					"Cannot serialize a Configuration CC with a command other than Set, Get, BulkSet, BulkGet, NameGet, InfoGet, PropertiesGet or DefaultReset",
 					ZWaveErrorCodes.CC_Invalid,
 				);
 		}
@@ -323,7 +354,7 @@ export class ConfigurationCC extends CommandClass {
 
 			default:
 				throw new ZWaveError(
-					"Cannot deserialize a Configuration CC with a command other than TODO",
+					"Cannot deserialize a Configuration CC with a command other than Report, BulkReport, NameReport, InfoReport or PropertiesReport",
 					ZWaveErrorCodes.CC_Invalid,
 				);
 		}
@@ -360,4 +391,9 @@ function serializeValue(payload: Buffer, offset: number, size: number, format: V
 			return;
 		}
 	}
+}
+
+/** Ensures that the values array is consecutive */
+function isConsecutive(values: number[]) {
+	return values.every((v, i, arr) => i === 0 ? true : v - 1 === arr[i - 1]);
 }
