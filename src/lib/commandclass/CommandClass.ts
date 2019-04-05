@@ -1,4 +1,5 @@
 import { entries } from "alcalzone-shared/objects";
+import { isObject } from "alcalzone-shared/typeguards";
 import * as fs from "fs";
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { IDriver } from "../driver/IDriver";
@@ -7,6 +8,7 @@ import { Constructable } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
+import { CacheValue, serializeCacheValue, SerializedValue } from "../values/Cache";
 import { Maybe, unknownBoolean } from "../values/Primitive";
 
 export interface CommandClassInfo {
@@ -237,6 +239,28 @@ export class CommandClass {
 		const db = this.getValueDB();
 		for (const variable of variables) {
 			db.setValue(getCommandClass(this), this.endpoint, variable as string, this[variable]);
+		}
+	}
+
+	/** Serializes all values to be stored in the cache */
+	public serializeValuesForCache(): CacheValue[] {
+		const ccValues = this.getValueDB().getValues(getCommandClass(this));
+		return ccValues.map(({ value, ...props }) => ({ ...props, value: serializeCacheValue(value) }));
+	}
+
+	/** Deserializes values from the cache */
+	public deserializeValuesFromCache(values: CacheValue[]) {
+		const cc = getCommandClass(this);
+		for (const val of values) {
+			// Don't deserialize non-CC values
+			if (!(val.propertyName in this)) continue;
+
+			let valueToSet = val.value;
+			if (this[val.propertyName as keyof this] instanceof Map && isObject(val.value)) {
+				// convert the object back to a Map
+				valueToSet = new Map(entries(val.value));
+			}
+			this.getValueDB().setValue(cc, val.endpoint, val.propertyName, valueToSet);
 		}
 	}
 

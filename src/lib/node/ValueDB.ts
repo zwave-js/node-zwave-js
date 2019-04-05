@@ -109,6 +109,15 @@ export class ValueDB extends EventEmitter {
 		return this._db.get(key);
 	}
 
+	public getValues(forCC: CommandClasses) {
+		const ret: {endpoint: number | undefined, propertyName: string, value: unknown}[] = [];
+		this._db.forEach((value, key) => {
+			const { cc, endpoint, propertyName } = JSON.parse(key);
+			if (forCC === cc) ret.push({endpoint, propertyName, value });
+		});
+		return ret;
+	}
+
 	/** Clears all values from the value DB */
 	public clear() {
 		this._db.forEach((_val, key) => {

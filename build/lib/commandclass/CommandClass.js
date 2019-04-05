@@ -8,13 +8,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var CommandClass_1;
 const objects_1 = require("alcalzone-shared/objects");
+const typeguards_1 = require("alcalzone-shared/typeguards");
 const fs = require("fs");
 const ZWaveError_1 = require("../error/ZWaveError");
 const logger_1 = require("../util/logger");
 const strings_1 = require("../util/strings");
+const Cache_1 = require("../values/Cache");
 const Primitive_1 = require("../values/Primitive");
 /**
  * Defines which kind of CC state should be requested
@@ -192,6 +203,29 @@ let CommandClass = CommandClass_1 = class CommandClass {
         const db = this.getValueDB();
         for (const variable of variables) {
             db.setValue(getCommandClass(this), this.endpoint, variable, this[variable]);
+        }
+    }
+    /** Serializes all values to be stored in the cache */
+    serializeValuesForCache() {
+        const ccValues = this.getValueDB().getValues(getCommandClass(this));
+        return ccValues.map((_a) => {
+            var { value } = _a, props = __rest(_a, ["value"]);
+            return (Object.assign({}, props, { value: Cache_1.serializeCacheValue(value) }));
+        });
+    }
+    /** Deserializes values from the cache */
+    deserializeValuesFromCache(values) {
+        const cc = getCommandClass(this);
+        for (const val of values) {
+            // Don't deserialize non-CC values
+            if (!(val.propertyName in this))
+                continue;
+            let valueToSet = val.value;
+            if (this[val.propertyName] instanceof Map && typeguards_1.isObject(val.value)) {
+                // convert the object back to a Map
+                valueToSet = new Map(objects_1.entries(val.value));
+            }
+            this.getValueDB().setValue(cc, val.endpoint, val.propertyName, valueToSet);
         }
     }
 };

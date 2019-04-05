@@ -10,6 +10,10 @@ const { wait } = require("alcalzone-shared/async");
 const d = new Driver("COM3")
 	.once("driver ready", async () => {
 
+		// d.controller.nodes.get(2).on("value added", (args) => {
+		// 	console.log(`value added: cc=${args.commandClass}, propertyName=${args.propertyName} => value=${args.newValue}`);
+		// })
+
 		// await d.sendMessage(new HardResetRequest(d));
 		// await wait(10000);
 

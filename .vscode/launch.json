@@ -11,7 +11,7 @@
 			"program": "${workspaceFolder}/test/run.js",
 			"env": {
 				"DEBUG": "zwave:(controller)",
-				"NO_CACHE": "true"
+				// "NO_CACHE": "true"
 			},
 			"outFiles": [
 				"${workspaceFolder}/**/*.js"

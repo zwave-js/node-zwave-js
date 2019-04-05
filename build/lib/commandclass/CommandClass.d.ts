@@ -2,6 +2,7 @@
 import { IDriver } from "../driver/IDriver";
 import { Constructable } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
+import { CacheValue } from "../values/Cache";
 import { Maybe } from "../values/Primitive";
 export interface CommandClassInfo {
     isSupported: boolean;
@@ -79,6 +80,10 @@ export declare class CommandClass {
     createVariables(...names: (keyof this)[]): void;
     /** Persists all values on the given node */
     persistValues(variables?: Iterable<keyof this>): void;
+    /** Serializes all values to be stored in the cache */
+    serializeValuesForCache(): CacheValue[];
+    /** Deserializes values from the cache */
+    deserializeValuesFromCache(values: CacheValue[]): void;
 }
 export declare const METADATA_commandClass: unique symbol;
 export declare const METADATA_commandClassMap: unique symbol;

@@ -54,6 +54,11 @@ export declare class ValueDB extends EventEmitter {
      * @param propertyName The property name the value belongs to
      */
     getValue(cc: CommandClasses, endpoint: number | undefined, propertyName: string): unknown;
+    getValues(forCC: CommandClasses): {
+        endpoint: number;
+        propertyName: string;
+        value: unknown;
+    }[];
     /** Clears all values from the value DB */
     clear(): void;
 }

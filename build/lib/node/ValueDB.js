@@ -70,6 +70,15 @@ class ValueDB extends events_1.EventEmitter {
         const key = getValueKey(cc, endpoint, propertyName);
         return this._db.get(key);
     }
+    getValues(forCC) {
+        const ret = [];
+        this._db.forEach((value, key) => {
+            const { cc, endpoint, propertyName } = JSON.parse(key);
+            if (forCC === cc)
+                ret.push({ endpoint, propertyName, value });
+        });
+        return ret;
+    }
     /** Clears all values from the value DB */
     clear() {
         this._db.forEach((_val, key) => {

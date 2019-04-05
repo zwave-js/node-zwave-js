@@ -1,7 +1,7 @@
 import { promiseSequence } from "alcalzone-shared/async";
 import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
-import { isObject } from "alcalzone-shared/typeguards";
+import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
 import { CentralSceneCC } from "../commandclass/CentralSceneCC";
@@ -23,6 +23,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { MessagePriority } from "../message/Constants";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
+import { CacheValue } from "../values/Cache";
 import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
 import { NodeUpdatePayload } from "./NodeInfo";
 import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
@@ -166,12 +167,12 @@ export class ZWaveNode extends EventEmitter {
 	/** Creates an instance of the given CC linked to this node */
 	// wotan-disable no-misused-generics
 	public createCCInstance<T extends CommandClass>(cc: CommandClasses): T {
-		if (!this.supportsCC(cc)) {
+		if (!this.supportsCC(cc) && !this.controlsCC(cc)) {
 			throw new ZWaveError(`Cannot create an instance of the unsupported CC ${CommandClasses[cc]} (${num2hex(cc)})`, ZWaveErrorCodes.CC_NotSupported);
 		}
 		// tslint:disable-next-line: variable-name
 		const Constructor = getCCConstructor(cc);
-		return new Constructor(this.driver, this.id) as T;
+		if (Constructor) return new Constructor(this.driver, this.id) as T;
 	}
 
 	//#region --- interview ---
@@ -601,10 +602,18 @@ export class ZWaveNode extends EventEmitter {
 				[...this.implementedCommandClasses.entries()]
 					.sort((a, b) => Math.sign(a[0] - b[0]))
 					.map(([cc, info]) => {
-						return [num2hex(cc), {
+						// Store the normal CC info
+						const ret = {
 							name: CommandClasses[cc],
 							...info,
-						}] as [string, object];
+						} as any;
+						// If any exist, store the values aswell
+						const ccInstance = this.createCCInstance(cc);
+						if (ccInstance) {
+							const ccValues = ccInstance.serializeValuesForCache();
+							if (ccValues.length > 0) ret.values = ccValues;
+						}
+						return [num2hex(cc), ret] as [string, object];
 					}),
 			),
 		};
@@ -666,12 +675,24 @@ export class ZWaveNode extends EventEmitter {
 				if (!(ccNum in CommandClasses)) continue;
 
 				// Parse the information we have
-				const { isSupported, isControlled, version } = ccDict[ccHex];
+				const { isSupported, isControlled, version, values } = ccDict[ccHex];
 				this.addCC(ccNum, {
 					isSupported: enforceType(isSupported, "boolean"),
 					isControlled: enforceType(isControlled, "boolean"),
 					version: enforceType(version, "number"),
 				});
+				if (isArray(values) && values.length > 0) {
+					// If any exist, deserialize the values aswell
+					const ccInstance = this.createCCInstance(ccNum);
+					if (ccInstance) {
+						try {
+							ccInstance.deserializeValuesFromCache(values as CacheValue[]);
+						} catch (e) {
+							log("controller", `${this.logPrefix}error during deserialization of CC values from cache:`, "error");
+							log("controller", `${this.logPrefix}  ${e}`, "error");
+						}
+					}
+				}
 			}
 		}
 	}

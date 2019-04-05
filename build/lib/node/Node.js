@@ -115,12 +115,13 @@ class ZWaveNode extends events_1.EventEmitter {
     /** Creates an instance of the given CC linked to this node */
     // wotan-disable no-misused-generics
     createCCInstance(cc) {
-        if (!this.supportsCC(cc)) {
+        if (!this.supportsCC(cc) && !this.controlsCC(cc)) {
             throw new ZWaveError_1.ZWaveError(`Cannot create an instance of the unsupported CC ${CommandClass_1.CommandClasses[cc]} (${strings_2.num2hex(cc)})`, ZWaveError_1.ZWaveErrorCodes.CC_NotSupported);
         }
         // tslint:disable-next-line: variable-name
         const Constructor = CommandClass_1.getCCConstructor(cc);
-        return new Constructor(this.driver, this.id);
+        if (Constructor)
+            return new Constructor(this.driver, this.id);
     }
     //#region --- interview ---
     async interview() {
@@ -502,7 +503,16 @@ class ZWaveNode extends events_1.EventEmitter {
             commandClasses: objects_1.composeObject([...this.implementedCommandClasses.entries()]
                 .sort((a, b) => Math.sign(a[0] - b[0]))
                 .map(([cc, info]) => {
-                return [strings_2.num2hex(cc), Object.assign({ name: CommandClass_1.CommandClasses[cc] }, info)];
+                // Store the normal CC info
+                const ret = Object.assign({ name: CommandClass_1.CommandClasses[cc] }, info);
+                // If any exist, store the values aswell
+                const ccInstance = this.createCCInstance(cc);
+                if (ccInstance) {
+                    const ccValues = ccInstance.serializeValuesForCache();
+                    if (ccValues.length > 0)
+                        ret.values = ccValues;
+                }
+                return [strings_2.num2hex(cc), ret];
             })),
         };
     }
@@ -559,12 +569,25 @@ class ZWaveNode extends events_1.EventEmitter {
                 if (!(ccNum in CommandClass_1.CommandClasses))
                     continue;
                 // Parse the information we have
-                const { isSupported, isControlled, version } = ccDict[ccHex];
+                const { isSupported, isControlled, version, values } = ccDict[ccHex];
                 this.addCC(ccNum, {
                     isSupported: enforceType(isSupported, "boolean"),
                     isControlled: enforceType(isControlled, "boolean"),
                     version: enforceType(version, "number"),
                 });
+                if (typeguards_1.isArray(values) && values.length > 0) {
+                    // If any exist, deserialize the values aswell
+                    const ccInstance = this.createCCInstance(ccNum);
+                    if (ccInstance) {
+                        try {
+                            ccInstance.deserializeValuesFromCache(values);
+                        }
+                        catch (e) {
+                            logger_1.log("controller", `${this.logPrefix}error during deserialization of CC values from cache:`, "error");
+                            logger_1.log("controller", `${this.logPrefix}  ${e}`, "error");
+                        }
+                    }
+                }
             }
         }
     }
