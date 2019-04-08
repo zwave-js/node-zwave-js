@@ -228,6 +228,15 @@ let CommandClass = CommandClass_1 = class CommandClass {
             this.getValueDB().setValue(cc, val.endpoint, val.propertyName, valueToSet);
         }
     }
+    /** Whether this CC spans multiple messages and the last report hasn't been received */
+    expectMoreMessages() {
+        return false; // By default it doesn't
+    }
+    /** Include previously received partial responses into a final CC */
+    mergePartialCCs(partials) {
+        // This is highly CC dependent
+        // Overwrite this in derived classes, by default do nothing
+    }
 };
 CommandClass = CommandClass_1 = __decorate([
     implementedVersion(Number.POSITIVE_INFINITY) // per default don't impose any restrictions on the version

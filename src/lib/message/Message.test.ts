@@ -170,7 +170,7 @@ describe("lib/message", () => {
 			const test = new Message(undefined);
 
 			const results: ResponseRole[] = [
-				"fatal_controller", "fatal_node", "final", "intermediate", "unexpected",
+				"fatal_controller", "fatal_node", "final", "confirmation", "unexpected",
 			];
 			for (const result of results) {
 				predicate.mockReset();

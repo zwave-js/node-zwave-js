@@ -16,7 +16,7 @@ const Message_1 = require("../message/Message");
 function testResponseForNodeInfoRequest(sent, received) {
     if (received instanceof RequestNodeInfoResponse) {
         return received.wasSent
-            ? "intermediate"
+            ? "confirmation"
             : "fatal_controller";
     }
     else if (received instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest) {

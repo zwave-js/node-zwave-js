@@ -84,6 +84,10 @@ export declare class CommandClass {
     serializeValuesForCache(): CacheValue[];
     /** Deserializes values from the cache */
     deserializeValuesFromCache(values: CacheValue[]): void;
+    /** Whether this CC spans multiple messages and the last report hasn't been received */
+    expectMoreMessages(): boolean;
+    /** Include previously received partial responses into a final CC */
+    mergePartialCCs(partials: CommandClass[]): void;
 }
 export declare const METADATA_commandClass: unique symbol;
 export declare const METADATA_commandClassMap: unique symbol;

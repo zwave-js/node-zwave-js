@@ -37,8 +37,8 @@ describe("lib/controller/SendDataRequest => ", () => {
 		expect(predicate(undefined, controllerFail)).toBe("fatal_controller");
 
 		const controllerSuccess = createSendDataMessage(MessageType.Response, Buffer.from([1]));
-		// "A SendDataResponse with wasSent=true was not detected as intermediate!"
-		expect(predicate(undefined, controllerSuccess)).toBe("intermediate");
+		// "A SendDataResponse with wasSent=true was not detected as confirmation!"
+		expect(predicate(undefined, controllerSuccess)).toBe("confirmation");
 
 		const nodeFail = createSendDataMessage(MessageType.Request, Buffer.from([0, 1]));
 		// "A SendDataRequest with isFailed=true was not detected as fatal_node!"

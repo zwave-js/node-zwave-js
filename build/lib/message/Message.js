@@ -163,6 +163,11 @@ class Message {
         if (nodeId != undefined)
             return this.driver.controller.nodes.get(nodeId);
     }
+    /** Include previously received partial responses into a final message */
+    mergePartialMessages(partials) {
+        // This is highly message dependent
+        // Overwrite this in derived classes
+    }
 }
 exports.Message = Message;
 function computeChecksum(message) {

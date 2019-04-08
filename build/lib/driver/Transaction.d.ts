@@ -10,6 +10,10 @@ export declare class Transaction implements Comparable<Transaction> {
     readonly promise: DeferredPromise<Message | void>;
     priority: MessagePriority;
     timestamp: number;
+    /**
+     * The previously received partial responses of a multistep command
+     */
+    readonly partialResponses: Message[];
     ackPending: boolean;
     response?: Message;
     constructor(driver: Driver, message: Message, promise: DeferredPromise<Message | void>, priority: MessagePriority);

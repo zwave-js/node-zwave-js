@@ -7,7 +7,7 @@ import { INodeQuery } from "./INodeQuery";
 function testResponseForNodeInfoRequest(sent: RequestNodeInfoRequest, received: Message): ResponseRole {
 	if (received instanceof RequestNodeInfoResponse) {
 		return received.wasSent
-			? "intermediate"
+			? "confirmation"
 			: "fatal_controller";
 	} else if (received instanceof ApplicationUpdateRequest) {
 		// received node info for the correct node

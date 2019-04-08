@@ -264,6 +264,17 @@ export class CommandClass {
 		}
 	}
 
+	/** Whether this CC spans multiple messages and the last report hasn't been received */
+	public expectMoreMessages(): boolean {
+		return false; // By default it doesn't
+	}
+
+	/** Include previously received partial responses into a final CC */
+	public mergePartialCCs(partials: CommandClass[]) {
+		// This is highly CC dependent
+		// Overwrite this in derived classes, by default do nothing
+	}
+
 }
 
 // =======================

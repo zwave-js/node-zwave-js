@@ -39,7 +39,7 @@ function getNextCallbackId(): number {
 function testResponseForSendDataRequest(sent: SendDataRequest, received: Message): ResponseRole {
 	if (received instanceof SendDataResponse) {
 		return received.wasSent
-			? "intermediate"
+			? "confirmation"
 			: "fatal_controller";
 	} else if (received instanceof SendDataRequest) {
 		return received.isFailed()
@@ -141,19 +141,29 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass> extends
 	/** @inheritDoc */
 	public testResponse(msg: Message): ResponseRole {
 		const ret = super.testResponse(msg);
-		if (ret === "intermediate" || ret.startsWith("fatal")) return ret;
+		if (ret === "confirmation" || ret.startsWith("fatal")) return ret;
 		if (ret === "unexpected" && !isCommandClassContainer(msg)) return ret;
 		// We handle a special case here:
 		// If the contained CC expects a certain response (which will come in an "unexpected" ApplicationCommandRequest)
-		// we declare that as final and the original "final" response, i.e. the SendDataRequest becomes intermediate
+		// we declare that as final and the original "final" response, i.e. the SendDataRequest becomes a confirmation
 		const expectedCCOrDynamic = getExpectedCCResponse(this.command);
 		const expected = typeof expectedCCOrDynamic === "function" ? expectedCCOrDynamic(this.command) : expectedCCOrDynamic;
 		if (expected == null) return ret; // "final" | "unexpected"
 
 		if (isCommandClassContainer(msg)) {
-			return expected === msg.command.ccId ? "final" : "intermediate"; // not sure if other CCs can come in the meantime
+			// TODO: Is "confirmation" the correct return value here?
+			// Or is it "unexpected"?
+			if (expected === msg.command.ccId) {
+				return this.command.expectMoreMessages() ? "partial" : "final";
+			}
+			// return expected === msg.command.ccId ? "final" : "confirmation"; // not sure if other CCs can come in the meantime
 		}
 		return "unexpected";
+	}
+
+	/** Include previously received partial responses into a final message */
+	public mergePartialMessages(partials: Message[]) {
+		this.command.mergePartialCCs((partials as SendDataRequest[]).map(p => p.command));
 	}
 
 }

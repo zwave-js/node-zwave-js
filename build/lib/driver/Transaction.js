@@ -10,12 +10,17 @@ function highResTimestamp() {
 // The Z-Wave spec declare that maximum 3 send attempts may be performed
 exports.MAX_SEND_ATTEMPTS = 3;
 class Transaction {
-    constructor(driver, message, promise, priority, timestamp = highResTimestamp(), ackPending = true, response) {
+    constructor(driver, message, promise, priority, timestamp = highResTimestamp(), 
+    /**
+     * The previously received partial responses of a multistep command
+     */
+    partialResponses = [], ackPending = true, response) {
         this.driver = driver;
         this.message = message;
         this.promise = promise;
         this.priority = priority;
         this.timestamp = timestamp;
+        this.partialResponses = partialResponses;
         this.ackPending = ackPending;
         this.response = response;
         this._maxSendAttempts = exports.MAX_SEND_ATTEMPTS;

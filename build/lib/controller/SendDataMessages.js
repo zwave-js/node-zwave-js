@@ -45,7 +45,7 @@ function getNextCallbackId() {
 function testResponseForSendDataRequest(sent, received) {
     if (received instanceof SendDataResponse) {
         return received.wasSent
-            ? "intermediate"
+            ? "confirmation"
             : "fatal_controller";
     }
     else if (received instanceof SendDataRequest) {
@@ -115,21 +115,30 @@ let SendDataRequest = class SendDataRequest extends Message_1.Message {
     /** @inheritDoc */
     testResponse(msg) {
         const ret = super.testResponse(msg);
-        if (ret === "intermediate" || ret.startsWith("fatal"))
+        if (ret === "confirmation" || ret.startsWith("fatal"))
             return ret;
         if (ret === "unexpected" && !ICommandClassContainer_1.isCommandClassContainer(msg))
             return ret;
         // We handle a special case here:
         // If the contained CC expects a certain response (which will come in an "unexpected" ApplicationCommandRequest)
-        // we declare that as final and the original "final" response, i.e. the SendDataRequest becomes intermediate
+        // we declare that as final and the original "final" response, i.e. the SendDataRequest becomes a confirmation
         const expectedCCOrDynamic = CommandClass_1.getExpectedCCResponse(this.command);
         const expected = typeof expectedCCOrDynamic === "function" ? expectedCCOrDynamic(this.command) : expectedCCOrDynamic;
         if (expected == null)
             return ret; // "final" | "unexpected"
         if (ICommandClassContainer_1.isCommandClassContainer(msg)) {
-            return expected === msg.command.ccId ? "final" : "intermediate"; // not sure if other CCs can come in the meantime
+            // TODO: Is "confirmation" the correct return value here?
+            // Or is it "unexpected"?
+            if (expected === msg.command.ccId) {
+                return this.command.expectMoreMessages() ? "partial" : "final";
+            }
+            // return expected === msg.command.ccId ? "final" : "confirmation"; // not sure if other CCs can come in the meantime
         }
         return "unexpected";
+    }
+    /** Include previously received partial responses into a final message */
+    mergePartialMessages(partials) {
+        this.command.mergePartialCCs(partials.map(p => p.command));
     }
 };
 SendDataRequest = __decorate([

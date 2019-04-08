@@ -216,6 +216,12 @@ export class Message {
 		if (nodeId != undefined) return this.driver.controller.nodes.get(nodeId);
 	}
 
+	/** Include previously received partial responses into a final message */
+	public mergePartialMessages(partials: Message[]) {
+		// This is highly message dependent
+		// Overwrite this in derived classes
+	}
+
 }
 
 function computeChecksum(message: Buffer): number {
@@ -244,7 +250,8 @@ function getMessageTypeMapKey(messageType: MessageType, functionType: FunctionTy
 
 export type ResponseRole =
 	"unexpected" // a message that does not belong to this transaction
-	| "intermediate" // an intermediate response, e.g. controller ACK that is not fatal
+	| "confirmation" // a confirmation response, e.g. controller reporting that a message was sent
+	| "partial" // a partial response, that (once assembled) will become final. E.g. a multi-report CC container
 	| "final" // a final response (leading to a resolved transaction)
 	| "fatal_controller" // a response from the controller that leads to a rejected transaction
 	| "fatal_node" // a response or (lack thereof) from the node that leads to a rejected transaction

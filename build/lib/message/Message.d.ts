@@ -44,12 +44,14 @@ export declare class Message {
      * Returns the node this message is linked to or undefined
      */
     getNodeUnsafe(): ZWaveNode | undefined;
+    /** Include previously received partial responses into a final message */
+    mergePartialMessages(partials: Message[]): void;
 }
 export declare const METADATA_messageTypes: unique symbol;
 export declare const METADATA_messageTypeMap: unique symbol;
 export declare const METADATA_expectedResponse: unique symbol;
 export declare const METADATA_priority: unique symbol;
-export declare type ResponseRole = "unexpected" | "intermediate" | "final" | "fatal_controller" | "fatal_node";
+export declare type ResponseRole = "unexpected" | "confirmation" | "partial" | "final" | "fatal_controller" | "fatal_node";
 /**
  * A predicate function to test if a received message matches to the sent message
  */

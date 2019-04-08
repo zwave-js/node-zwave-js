@@ -37,6 +37,8 @@ export declare class SendDataRequest<CCType extends CommandClass = CommandClass>
     isFailed(): boolean;
     /** @inheritDoc */
     testResponse(msg: Message): ResponseRole;
+    /** Include previously received partial responses into a final message */
+    mergePartialMessages(partials: Message[]): void;
 }
 export declare class SendDataResponse extends Message {
     private _wasSent;
