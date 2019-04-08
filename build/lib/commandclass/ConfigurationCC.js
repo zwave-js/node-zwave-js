@@ -44,8 +44,9 @@ let ConfigurationCC = class ConfigurationCC extends CommandClass_1.CommandClass 
         super(driver, nodeId, ccCommand);
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
-        // TODO: Find a way to automatically update store those
+        // TODO: Find a way to automatically update and store those
         this.values = new Map();
+        // TODO: Prefill this with already-known information
         this.paramInformation = new Map();
         if (this.ccCommand === ConfigurationCommand.Get
             || this.ccCommand === ConfigurationCommand.NameGet
@@ -105,6 +106,9 @@ let ConfigurationCC = class ConfigurationCC extends CommandClass_1.CommandClass 
     }
     get reportsToFollow() {
         return this._reportsToFollow;
+    }
+    expectMoreMessages() {
+        return this._reportsToFollow != undefined && this._reportsToFollow > 0;
     }
     get nextParameter() {
         return this._nextParameter;
@@ -189,7 +193,7 @@ let ConfigurationCC = class ConfigurationCC extends CommandClass_1.CommandClass 
             case ConfigurationCommand.BulkReport: {
                 const firstParameter = this.payload.readUInt16BE(0);
                 const numParams = this.payload[2];
-                this._reportsToFollow = this.payload[3]; // TODO: Handle multiple reports
+                this._reportsToFollow = this.payload[3];
                 this.defaultFlag = !!(this.payload[4] & 128);
                 this.handshake = !!(this.payload[4] & 64);
                 this.valueSize = this.payload[4] & 0b111;
@@ -202,16 +206,18 @@ let ConfigurationCC = class ConfigurationCC extends CommandClass_1.CommandClass 
             case ConfigurationCommand.NameReport: {
                 this.parameter = this.payload.readUInt16BE(0);
                 this._reportsToFollow = this.payload[2];
+                // Concatenation happens on the final message
                 this.extendParamInformation(this.parameter, {
-                    name: (this.getParamInformation(this.parameter).name || "") + this.payload.slice(3).toString("utf8"),
+                    name: this.payload.slice(3).toString("utf8"),
                 });
                 break;
             }
             case ConfigurationCommand.InfoReport: {
                 this.parameter = this.payload.readUInt16BE(0);
                 this._reportsToFollow = this.payload[2];
+                // Concatenation happens on the final message
                 this.extendParamInformation(this.parameter, {
-                    info: (this.getParamInformation(this.parameter).info || "") + this.payload.slice(3).toString("utf8"),
+                    info: this.payload.slice(3).toString("utf8"),
                 });
                 break;
             }
@@ -254,15 +260,37 @@ let ConfigurationCC = class ConfigurationCC extends CommandClass_1.CommandClass 
                 throw new ZWaveError_1.ZWaveError("Cannot deserialize a Configuration CC with a command other than Report, BulkReport, NameReport, InfoReport or PropertiesReport", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
         }
     }
+    mergePartialCCs(partials) {
+        switch (this.ccCommand) {
+            case ConfigurationCommand.BulkReport: {
+                // Merge values
+                for (const partial of partials) {
+                    for (const [param, val] of partial.values.entries()) {
+                        if (!this.values.has(param))
+                            this.values.set(param, val);
+                    }
+                }
+                break;
+            }
+            case ConfigurationCommand.NameReport: {
+                // Concat the name
+                const name = [...partials, this]
+                    .map(report => report.getParamInformation(this.parameter).name)
+                    .reduce((prev, cur) => prev + cur, "");
+                this.extendParamInformation(this.parameter, { name });
+                break;
+            }
+            case ConfigurationCommand.InfoReport: {
+                // Concat the param description
+                const info = [...partials, this]
+                    .map(report => report.getParamInformation(this.parameter).info)
+                    .reduce((prev, cur) => prev + cur, "");
+                this.extendParamInformation(this.parameter, { info });
+                break;
+            }
+        }
+    }
 };
-__decorate([
-    CommandClass_1.ccValue(),
-    __metadata("design:type", Object)
-], ConfigurationCC.prototype, "values", void 0);
-__decorate([
-    CommandClass_1.ccValue(),
-    __metadata("design:type", Object)
-], ConfigurationCC.prototype, "paramInformation", void 0);
 ConfigurationCC = __decorate([
     CommandClass_1.commandClass(CommandClass_1.CommandClasses.Configuration),
     CommandClass_1.implementedVersion(4),

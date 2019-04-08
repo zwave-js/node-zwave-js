@@ -17,7 +17,7 @@ export enum ConfigurationCommand {
 	InfoReport = 0x0D,
 	PropertiesGet = 0x0E,
 	PropertiesReport = 0x0F,
-	DefaultReset = 0x01, // TODO: Or is this 0x10???
+	DefaultReset = 0x01,
 }
 
 export enum ValueFormat {
@@ -160,9 +160,10 @@ export class ConfigurationCC extends CommandClass {
 	public parameters: number[];
 	public valuesToSet: ConfigValue[];
 
-	// TODO: Find a way to automatically update store those
-	@ccValue() public values = new Map<number, ConfigValue>();
-	@ccValue() public paramInformation = new Map<number, ParameterInfo>();
+	// TODO: Find a way to automatically update and store those
+	public values = new Map<number, ConfigValue>();
+	// TODO: Prefill this with already-known information
+	public paramInformation = new Map<number, ParameterInfo>();
 
 	private extendParamInformation(parameter: number, info: ParameterInfo) {
 		if (!this.paramInformation.has(parameter)) {
@@ -177,6 +178,10 @@ export class ConfigurationCC extends CommandClass {
 	private _reportsToFollow: number;
 	public get reportsToFollow(): number {
 		return this._reportsToFollow;
+	}
+
+	public expectMoreMessages(): boolean {
+		return this._reportsToFollow != undefined && this._reportsToFollow > 0;
 	}
 
 	private _nextParameter: number;
@@ -288,7 +293,7 @@ export class ConfigurationCC extends CommandClass {
 			case ConfigurationCommand.BulkReport: {
 				const firstParameter = this.payload.readUInt16BE(0);
 				const numParams = this.payload[2];
-				this._reportsToFollow = this.payload[3]; // TODO: Handle multiple reports
+				this._reportsToFollow = this.payload[3];
 				this.defaultFlag = !!(this.payload[4] & 0b1000_0000);
 				this.handshake = !!(this.payload[4] & 0b0100_0000);
 				this.valueSize = this.payload[4] & 0b111;
@@ -306,8 +311,9 @@ export class ConfigurationCC extends CommandClass {
 			case ConfigurationCommand.NameReport: {
 				this.parameter = this.payload.readUInt16BE(0);
 				this._reportsToFollow = this.payload[2];
+				// Concatenation happens on the final message
 				this.extendParamInformation(this.parameter, {
-					name: (this.getParamInformation(this.parameter).name || "") + this.payload.slice(3).toString("utf8"),
+					name: this.payload.slice(3).toString("utf8"),
 				});
 				break;
 			}
@@ -315,8 +321,9 @@ export class ConfigurationCC extends CommandClass {
 			case ConfigurationCommand.InfoReport: {
 				this.parameter = this.payload.readUInt16BE(0);
 				this._reportsToFollow = this.payload[2];
+				// Concatenation happens on the final message
 				this.extendParamInformation(this.parameter, {
-					info: (this.getParamInformation(this.parameter).info || "") + this.payload.slice(3).toString("utf8"),
+					info: this.payload.slice(3).toString("utf8"),
 				});
 				break;
 			}
@@ -365,6 +372,35 @@ export class ConfigurationCC extends CommandClass {
 		}
 	}
 
+	public mergePartialCCs(partials: CommandClass[]) {
+		switch (this.ccCommand) {
+			case ConfigurationCommand.BulkReport: {
+				// Merge values
+				for (const partial of (partials as ConfigurationCC[])) {
+					for (const [param, val] of partial.values.entries()) {
+						if (!this.values.has(param)) this.values.set(param, val);
+					}
+				}
+				break;
+			}
+			case ConfigurationCommand.NameReport: {
+				// Concat the name
+				const name = [...(partials as ConfigurationCC[]), this]
+					.map(report => report.getParamInformation(this.parameter).name)
+					.reduce((prev, cur) => prev + cur, "");
+				this.extendParamInformation(this.parameter, { name });
+				break;
+			}
+			case ConfigurationCommand.InfoReport: {
+				// Concat the param description
+				const info = [...(partials as ConfigurationCC[]), this]
+					.map(report => report.getParamInformation(this.parameter).info)
+					.reduce((prev, cur) => prev + cur, "");
+				this.extendParamInformation(this.parameter, { info });
+				break;
+			}
+		}
+	}
 }
 
 /** Interprets values from the payload depending on the value format */

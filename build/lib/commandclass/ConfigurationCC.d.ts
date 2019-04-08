@@ -58,9 +58,11 @@ export declare class ConfigurationCC extends CommandClass {
     private getParamInformation;
     private _reportsToFollow;
     readonly reportsToFollow: number;
+    expectMoreMessages(): boolean;
     private _nextParameter;
     readonly nextParameter: number;
     supportsCommand(cmd: ConfigurationCommand): Maybe<boolean>;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
+    mergePartialCCs(partials: CommandClass[]): void;
 }

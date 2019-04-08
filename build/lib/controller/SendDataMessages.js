@@ -130,7 +130,7 @@ let SendDataRequest = class SendDataRequest extends Message_1.Message {
             // TODO: Is "confirmation" the correct return value here?
             // Or is it "unexpected"?
             if (expected === msg.command.ccId) {
-                return this.command.expectMoreMessages() ? "partial" : "final";
+                return msg.command.expectMoreMessages() ? "partial" : "final";
             }
             // return expected === msg.command.ccId ? "final" : "confirmation"; // not sure if other CCs can come in the meantime
         }
