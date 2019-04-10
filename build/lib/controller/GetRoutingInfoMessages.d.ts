@@ -1,6 +1,7 @@
 /// <reference types="node" />
 import { IDriver } from "../driver/IDriver";
 import { Message } from "../message/Message";
+import { JSONObject } from "../util/misc";
 export declare class GetRoutingInfoRequest extends Message {
     nodeId?: number;
     removeNonRepeaters?: boolean;
@@ -8,7 +9,7 @@ export declare class GetRoutingInfoRequest extends Message {
     constructor(driver: IDriver);
     constructor(driver: IDriver, nodeId: number, removeNonRepeaters: boolean, removeBadLinks: boolean);
     serialize(): Buffer;
-    toJSON(): Record<string, any>;
+    toJSON(): JSONObject;
 }
 export declare class GetRoutingInfoResponse extends Message {
     private _nodeIds;

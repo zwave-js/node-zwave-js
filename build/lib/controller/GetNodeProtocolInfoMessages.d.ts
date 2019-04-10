@@ -3,12 +3,13 @@ import { Driver } from "../driver/Driver";
 import { Message } from "../message/Message";
 import { DeviceClass } from "../node/DeviceClass";
 import { INodeQuery } from "../node/INodeQuery";
+import { JSONObject } from "../util/misc";
 export declare type Baudrate = 9600 | 40000 | 100000;
 export declare class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
     constructor(driver: Driver, nodeId?: number);
     nodeId: number;
     serialize(): Buffer;
-    toJSON(): Record<string, any>;
+    toJSON(): JSONObject;
 }
 export declare class GetNodeProtocolInfoResponse extends Message {
     private _isListening;
@@ -28,5 +29,5 @@ export declare class GetNodeProtocolInfoResponse extends Message {
     private _deviceClass;
     readonly deviceClass: DeviceClass;
     deserialize(data: Buffer): number;
-    toJSON(): Record<string, any>;
+    toJSON(): JSONObject;
 }

@@ -12,6 +12,21 @@ export declare enum MultilevelSwitchCommand {
     SupportedGet = 6,
     SupportedReport = 7
 }
+export declare enum LevelChangeDirection {
+    "up" = 0,
+    "down" = 1,
+    "none" = 3
+}
+export declare enum SwitchType {
+    "not supported" = 0,
+    "Off/On" = 1,
+    "Down/Up" = 2,
+    "Close/Open" = 3,
+    "CCW/CW" = 4,
+    "Left/Right" = 5,
+    "Reverse/Forward" = 6,
+    "Pull/Push" = 7
+}
 export declare class MultilevelSwitchCC extends CommandClass {
     nodeId: number;
     ccCommand?: MultilevelSwitchCommand;
@@ -33,19 +48,4 @@ export declare class MultilevelSwitchCC extends CommandClass {
     readonly secondarySwitchType: SwitchType;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
-}
-export declare enum LevelChangeDirection {
-    "up" = 0,
-    "down" = 1,
-    "none" = 3
-}
-export declare enum SwitchType {
-    "not supported" = 0,
-    "Off/On" = 1,
-    "Down/Up" = 2,
-    "Close/Open" = 3,
-    "CCW/CW" = 4,
-    "Left/Right" = 5,
-    "Reverse/Forward" = 6,
-    "Pull/Push" = 7
 }

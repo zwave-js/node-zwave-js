@@ -3,7 +3,8 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { num2hex } from "../util/strings";
 import { Duration } from "../values/Duration";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 export enum BasicCommand {
 	Set = 0x01,
@@ -17,14 +18,14 @@ export enum BasicCommand {
 export class BasicCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId?: number,
 	);
-	constructor(driver: IDriver, nodeId: number, ccCommand: BasicCommand.Get);
-	constructor(driver: IDriver, nodeId: number, ccCommand: BasicCommand.Set, targetValue: number);
+	public constructor(driver: IDriver, nodeId: number, ccCommand: BasicCommand.Get);
+	public constructor(driver: IDriver, nodeId: number, ccCommand: BasicCommand.Set, targetValue: number);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: BasicCommand,
@@ -45,7 +46,7 @@ export class BasicCC extends CommandClass {
 				// no real payload
 				break;
 			case BasicCommand.Set:
-				this.payload = Buffer.from([ this.targetValue ]);
+				this.payload = Buffer.from([this.targetValue]);
 				break;
 			default:
 				throw new ZWaveError(

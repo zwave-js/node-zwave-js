@@ -13,6 +13,7 @@ const ZWaveError_1 = require("../error/ZWaveError");
 const NodeInfo_1 = require("../node/NodeInfo");
 const Primitive_1 = require("../values/Primitive");
 const CommandClass_1 = require("./CommandClass");
+const CommandClasses_1 = require("./CommandClasses");
 var MultiChannelCommand;
 (function (MultiChannelCommand) {
     MultiChannelCommand[MultiChannelCommand["EndPointGet"] = 7] = "EndPointGet";
@@ -157,9 +158,9 @@ __decorate([
     __metadata("design:type", Number)
 ], MultiChannelCC.prototype, "aggregatedEndpointCount", void 0);
 MultiChannelCC = __decorate([
-    CommandClass_1.commandClass(CommandClass_1.CommandClasses["Multi Channel"]),
+    CommandClass_1.commandClass(CommandClasses_1.CommandClasses["Multi Channel"]),
     CommandClass_1.implementedVersion(4),
-    CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Multi Channel"]),
+    CommandClass_1.expectedCCResponse(CommandClasses_1.CommandClasses["Multi Channel"]),
     __metadata("design:paramtypes", [Object, Number, Number, Object])
 ], MultiChannelCC);
 exports.MultiChannelCC = MultiChannelCC;

@@ -5,7 +5,8 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
 import { CentralSceneCC } from "../commandclass/CentralSceneCC";
-import { CommandClass, CommandClasses, CommandClassInfo, getCCConstructor, getImplementedVersion, StateKind } from "../commandclass/CommandClass";
+import { CommandClass, CommandClassInfo, getCCConstructor, getImplementedVersion, StateKind } from "../commandclass/CommandClass";
+import { CommandClasses } from "../commandclass/CommandClasses";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { ManufacturerSpecificCC, ManufacturerSpecificCommand } from "../commandclass/ManufacturerSpecificCC";
 import { MultiChannelCC, MultiChannelCommand } from "../commandclass/MultiChannelCC";
@@ -22,6 +23,7 @@ import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { MessagePriority } from "../message/Constants";
 import { log } from "../util/logger";
+import { JSONObject } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import { CacheValue } from "../values/Cache";
 import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
@@ -42,9 +44,37 @@ export interface ZWaveNode {
 	removeAllListeners(event?: ZWaveNodeEvents): this;
 }
 
+export enum InterviewStage {
+	None,					// [✓] Query process hasn't started for this node
+	ProtocolInfo,			// [✓] Retrieve protocol information
+	Ping,					// [✓] Ping device to see if alive and wait for sleeping nodes to wake up
+	NodeInfo,				// [✓] Retrieve info about supported and controlled command classes
+	NodePlusInfo,			// [✓] Retrieve ZWave+ info and update device classes
+	ManufacturerSpecific,	// [✓] Retrieve manufacturer name and product ids, overwrite node info with configuration data
+	SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
+	Versions,				// [✓] Retrieve version information
+	Endpoints,				// [✓] Retrieve information about multiple command class endpoints
+	Static,					// (✓) Retrieve static information we haven't received yet (doesn't change)
+
+	// ===== the stuff above should never change =====
+	RestartFromCache,		// This marks the beginning of re-interviews on application startup.
+	// 						   RestartFromCache and later stages will be serialized as "Complete" in the cache
+	// 						   [✓] Ping each device upon restarting with cached config
+	// ===== the stuff below changes frequently, so it has to be redone on every start =====
+
+	// TODO: Heal network
+
+	WakeUp,					// [✓] Configure wake up to point to the master controller
+	Associations,			// [ ] Retrieve information about associations
+	Neighbors,				// [✓] Retrieve node neighbor list
+	Session,				// [ ] Retrieve session information (changes infrequently)
+	Dynamic,				// [ ] Retrieve dynamic information (changes frequently)
+	Configuration,			// [ ] Retrieve configurable parameter information (only done on request)
+	Complete,				// [✓] Query process is completed for this node
+}
 export class ZWaveNode extends EventEmitter {
 
-	constructor(
+	public constructor(
 		public readonly id: number,
 		private readonly driver: Driver,
 		deviceClass?: DeviceClass,
@@ -136,7 +166,7 @@ export class ZWaveNode extends EventEmitter {
 		return this.id === this.driver.controller.ownNodeId;
 	}
 
-	public addCC(cc: CommandClasses, info: Partial<CommandClassInfo>) {
+	public addCC(cc: CommandClasses, info: Partial<CommandClassInfo>): void {
 		let ccInfo = this._implementedCommandClasses.has(cc)
 			? this._implementedCommandClasses.get(cc)
 			: {
@@ -177,7 +207,7 @@ export class ZWaveNode extends EventEmitter {
 
 	//#region --- interview ---
 
-	public async interview() {
+	public async interview(): Promise<void> {
 		log("controller", `${this.logPrefix}beginning interview... last completed step: ${InterviewStage[this.interviewStage]}`, "debug");
 
 		// before each step check if it is necessary
@@ -254,7 +284,7 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	/** Updates this node's interview stage and saves to cache when appropriate */
-	private async setInterviewStage(completedStage: InterviewStage) {
+	private async setInterviewStage(completedStage: InterviewStage): Promise<void> {
 		this.interviewStage = completedStage;
 		// Also save to the cache after certain stages
 		switch (completedStage) {
@@ -271,7 +301,7 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	/** Step #1 of the node interview */
-	protected async queryProtocolInfo() {
+	protected async queryProtocolInfo(): Promise<void> {
 		log("controller", `${this.logPrefix}querying protocol info`, "debug");
 		const resp = await this.driver.sendMessage<GetNodeProtocolInfoResponse>(
 			new GetNodeProtocolInfoRequest(this.driver, this.id),
@@ -313,7 +343,7 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	/** Step #3 of the node interview */
-	protected async ping(targetInterviewStage: InterviewStage = InterviewStage.Ping) {
+	protected async ping(targetInterviewStage: InterviewStage = InterviewStage.Ping): Promise<void> {
 		if (this.isControllerNode()) {
 			log("controller", `${this.logPrefix}not pinging the controller...`, "debug");
 		} else {
@@ -335,7 +365,7 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	/** Step #5 of the node interview */
-	protected async queryNodeInfo() {
+	protected async queryNodeInfo(): Promise<void> {
 		if (this.isControllerNode()) {
 			log("controller", `${this.logPrefix}not querying node info from the controller...`, "debug");
 		} else {
@@ -358,7 +388,7 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	/** Step #6 of the node interview */
-	protected async queryNodePlusInfo() {
+	protected async queryNodePlusInfo(): Promise<void> {
 		if (!this.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
 			log("controller", `${this.logPrefix}skipping Z-Wave+ query because the device does not support it`, "debug");
 		} else {
@@ -386,7 +416,7 @@ export class ZWaveNode extends EventEmitter {
 		await this.setInterviewStage(InterviewStage.NodePlusInfo);
 	}
 
-	protected async queryManufacturerSpecific() {
+	protected async queryManufacturerSpecific(): Promise<void> {
 		if (this.isControllerNode()) {
 			log("controller", `${this.logPrefix}not querying manufacturer information from the controller...`, "debug");
 		} else {
@@ -413,7 +443,7 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	/** Step #9 of the node interview */
-	protected async queryCCVersions() {
+	protected async queryCCVersions(): Promise<void> {
 		log("controller", `${this.logPrefix}querying CC versions`, "debug");
 		for (const [cc] of this._implementedCommandClasses.entries()) {
 			// only query the ones we support a version > 1 for
@@ -444,7 +474,7 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	/** Step #10 of the node interview */
-	protected async queryEndpoints() {
+	protected async queryEndpoints(): Promise<void> {
 		if (this.supportsCC(CommandClasses["Multi Channel"])) {
 			log("controller", `${this.logPrefix}querying device endpoints`, "debug");
 			const cc = new MultiChannelCC(this.driver, this.id, MultiChannelCommand.EndPointGet);
@@ -471,7 +501,7 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	/** Step #2 of the node interview */
-	protected async configureWakeup() {
+	protected async configureWakeup(): Promise<void> {
 		if (this.supportsCC(CommandClasses["Wake Up"])) {
 			if (this.isControllerNode()) {
 				log("controller", `${this.logPrefix}skipping wakeup configuration for the controller`, "debug");
@@ -511,7 +541,7 @@ export class ZWaveNode extends EventEmitter {
 		await this.setInterviewStage(InterviewStage.WakeUp);
 	}
 
-	protected async requestStaticValues() {
+	protected async requestStaticValues(): Promise<void> {
 		log("controller", `${this.logPrefix}requesting static values`, "debug");
 		try {
 			await this.requestState(StateKind.Static);
@@ -522,7 +552,7 @@ export class ZWaveNode extends EventEmitter {
 		await this.setInterviewStage(InterviewStage.Static);
 	}
 
-	protected async queryNeighbors() {
+	protected async queryNeighbors(): Promise<void> {
 		log("controller", `${this.logPrefix}requesting node neighbors`, "debug");
 		try {
 			const resp = await this.driver.sendMessage<GetRoutingInfoResponse>(
@@ -580,7 +610,7 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	/** Serializes this node in order to store static data in a cache */
-	public serialize() {
+	public serialize(): JSONObject {
 		return {
 			id: this.id,
 			interviewStage: this.interviewStage >= InterviewStage.RestartFromCache
@@ -619,7 +649,7 @@ export class ZWaveNode extends EventEmitter {
 		};
 	}
 
-	public updateNodeInfo(nodeInfo: NodeUpdatePayload) {
+	public updateNodeInfo(nodeInfo: NodeUpdatePayload): void {
 		if (!this.nodeInfoReceived) {
 			for (const cc of nodeInfo.supportedCCs) this.addCC(cc, { isSupported: true });
 			for (const cc of nodeInfo.controlledCCs) this.addCC(cc, { isControlled: true });
@@ -630,7 +660,7 @@ export class ZWaveNode extends EventEmitter {
 		this.setAwake(true);
 	}
 
-	public deserialize(obj: any) {
+	public deserialize(obj: any): void {
 		if (obj.interviewStage in InterviewStage) {
 			this.interviewStage = typeof obj.interviewStage === "number"
 				? obj.interviewStage
@@ -649,7 +679,7 @@ export class ZWaveNode extends EventEmitter {
 		}
 
 		// Parse single properties
-		const tryParse = (key: keyof ZWaveNode, type: "boolean" | "number" | "string") => {
+		const tryParse = (key: keyof ZWaveNode, type: "boolean" | "number" | "string"): void => {
 			if (typeof obj[key] === type) this[`_${key}` as keyof this] = obj[key];
 		};
 		tryParse("isListening", "boolean");
@@ -697,7 +727,7 @@ export class ZWaveNode extends EventEmitter {
 		}
 	}
 
-	public setAwake(awake: boolean, emitEvent: boolean = true) {
+	public setAwake(awake: boolean, emitEvent: boolean = true): void {
 		if (!this.supportsCC(CommandClasses["Wake Up"])) {
 			throw new ZWaveError("This node does not support the Wake Up CC", ZWaveErrorCodes.CC_NotSupported);
 		}
@@ -707,7 +737,7 @@ export class ZWaveNode extends EventEmitter {
 		}
 	}
 
-	public isAwake() {
+	public isAwake(): boolean {
 		const isAsleep = this.supportsCC(CommandClasses["Wake Up"]) && !WakeUpCC.isAwake(this.driver, this);
 		return !isAsleep;
 	}
@@ -734,36 +764,6 @@ export class ZWaveNode extends EventEmitter {
 		return msgSent;
 	}
 
-}
-
-// TODO: This order is not optimal, check how OpenHAB does it
-export enum InterviewStage {
-	None,					// [✓] Query process hasn't started for this node
-	ProtocolInfo,			// [✓] Retrieve protocol information
-	Ping,					// [✓] Ping device to see if alive and wait for sleeping nodes to wake up
-	NodeInfo,				// [✓] Retrieve info about supported and controlled command classes
-	NodePlusInfo,			// [✓] Retrieve ZWave+ info and update device classes
-	ManufacturerSpecific,	// [✓] Retrieve manufacturer name and product ids, overwrite node info with configuration data
-	SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
-	Versions,				// [✓] Retrieve version information
-	Endpoints,				// [✓] Retrieve information about multiple command class endpoints
-	Static,					// (✓) Retrieve static information we haven't received yet (doesn't change)
-
-	// ===== the stuff above should never change =====
-	RestartFromCache,		// This marks the beginning of re-interviews on application startup.
-	// 						   RestartFromCache and later stages will be serialized as "Complete" in the cache
-	// 						   [✓] Ping each device upon restarting with cached config
-	// ===== the stuff below changes frequently, so it has to be redone on every start =====
-
-	// TODO: Heal network
-
-	WakeUp,					// [✓] Configure wake up to point to the master controller
-	Associations,			// [ ] Retrieve information about associations
-	Neighbors,				// [✓] Retrieve node neighbor list
-	Session,				// [ ] Retrieve session information (changes infrequently)
-	Dynamic,				// [ ] Retrieve dynamic information (changes frequently)
-	Configuration,			// [ ] Retrieve configurable parameter information (only done on request)
-	Complete,				// [✓] Query process is completed for this node
 }
 
 // export enum OpenHABInterviewStage {

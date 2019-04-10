@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// tslint:disable-next-line:no-var-requires
 const colors = require("colors/safe");
 const debug_1 = require("debug");
 const defaultNamespace = "zwave";

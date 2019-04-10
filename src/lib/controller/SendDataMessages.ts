@@ -4,6 +4,7 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority, ResponseRole } from "../message/Message";
+import { JSONObject } from "../util/misc";
 
 export enum TransmitOptions {
 	NotSet = 0,
@@ -35,21 +36,6 @@ function getNextCallbackId(): number {
 	return lastCallbackId;
 }
 
-// Generic handler for all potential responses to SendDataRequests
-function testResponseForSendDataRequest(sent: SendDataRequest, received: Message): ResponseRole {
-	if (received instanceof SendDataResponse) {
-		return received.wasSent
-			? "intermediate"
-			: "fatal_controller";
-	} else if (received instanceof SendDataRequest) {
-		return received.isFailed()
-			? "fatal_node"
-			: "final" // send data requests are final unless stated otherwise by a CommandClass
-			;
-	}
-	return "unexpected";
-}
-
 @messageTypes(MessageType.Request, FunctionType.SendData)
 @expectedResponse(testResponseForSendDataRequest)
 @priority(MessagePriority.Normal)
@@ -57,17 +43,17 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass> extends
 
 	// tslint:disable:unified-signatures
 	// empty constructor to parse messages
-	constructor(
+	public constructor(
 		driver: IDriver,
 	);
 	// default constructor to send messages
-	constructor(
+	public constructor(
 		driver: IDriver,
 		command: CCType,
 		transmitOptions?: TransmitOptions,
 		callbackId?: number,
 	);
-	constructor(
+	public constructor(
 		driver: IDriver,
 		command?: CCType,
 		/** Options regarding the transmission of the message */
@@ -124,7 +110,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass> extends
 		return ret;
 	}
 
-	public toJSON() {
+	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			transmitOptions: this.transmitOptions,
 			callbackId: this.callbackId,
@@ -180,11 +166,26 @@ export class SendDataResponse extends Message {
 		return ret;
 	}
 
-	public toJSON() {
+	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			wasSent: this.wasSent,
 			// errorCode: this.errorCode,
 		});
 	}
 
+}
+
+// Generic handler for all potential responses to SendDataRequests
+function testResponseForSendDataRequest(sent: SendDataRequest, received: Message): ResponseRole {
+	if (received instanceof SendDataResponse) {
+		return received.wasSent
+			? "intermediate"
+			: "fatal_controller";
+	} else if (received instanceof SendDataRequest) {
+		return received.isFailed()
+			? "fatal_node"
+			: "final" // send data requests are final unless stated otherwise by a CommandClass
+			;
+	}
+	return "unexpected";
 }

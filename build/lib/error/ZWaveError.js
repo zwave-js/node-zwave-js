@@ -1,4 +1,5 @@
 "use strict";
+/* eslint-disable @typescript-eslint/camelcase */
 Object.defineProperty(exports, "__esModule", { value: true });
 var ZWaveErrorCodes;
 (function (ZWaveErrorCodes) {

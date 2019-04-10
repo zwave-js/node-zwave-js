@@ -1,4 +1,5 @@
-import { CommandClass, CommandClasses, getCommandClass } from "./CommandClass";
+import { CommandClass, getCommandClass } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 import { ManufacturerSpecificCC } from "./ManufacturerSpecificCC";
 
 describe.skip("lib/commandclass/ManufacturerSpecificCC => ", () => {

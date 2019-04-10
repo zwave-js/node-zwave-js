@@ -1,7 +1,8 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Maybe } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 export enum ManufacturerSpecificCommand {
 	Get = 0x04,
@@ -22,15 +23,15 @@ export enum DeviceIdType {
 export class ManufacturerSpecificCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(driver: IDriver, nodeId?: number);
-	constructor(driver: IDriver, nodeId: number, ccCommand: ManufacturerSpecificCommand.Get);
-	constructor(
+	public constructor(driver: IDriver, nodeId?: number);
+	public constructor(driver: IDriver, nodeId: number, ccCommand: ManufacturerSpecificCommand.Get);
+	public constructor(
 		driver: IDriver, nodeId: number,
 		ccCommand: ManufacturerSpecificCommand.DeviceSpecificGet,
 		deviceIdType: DeviceIdType,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: ManufacturerSpecificCommand,
@@ -64,7 +65,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 				// no real payload
 				break;
 			case ManufacturerSpecificCommand.DeviceSpecificGet:
-				this.payload = Buffer.from([ (this.deviceIdType || 0) & 0b111 ]);
+				this.payload = Buffer.from([(this.deviceIdType || 0) & 0b111]);
 				break;
 			default:
 				throw new ZWaveError(

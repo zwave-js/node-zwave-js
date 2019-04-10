@@ -13,6 +13,7 @@ const ZWaveError_1 = require("../error/ZWaveError");
 const Duration_1 = require("../values/Duration");
 const Primitive_1 = require("../values/Primitive");
 const CommandClass_1 = require("./CommandClass");
+const CommandClasses_1 = require("./CommandClasses");
 var MultilevelSwitchCommand;
 (function (MultilevelSwitchCommand) {
     MultilevelSwitchCommand[MultilevelSwitchCommand["Set"] = 1] = "Set";
@@ -23,6 +24,23 @@ var MultilevelSwitchCommand;
     MultilevelSwitchCommand[MultilevelSwitchCommand["SupportedGet"] = 6] = "SupportedGet";
     MultilevelSwitchCommand[MultilevelSwitchCommand["SupportedReport"] = 7] = "SupportedReport";
 })(MultilevelSwitchCommand = exports.MultilevelSwitchCommand || (exports.MultilevelSwitchCommand = {}));
+var LevelChangeDirection;
+(function (LevelChangeDirection) {
+    LevelChangeDirection[LevelChangeDirection["up"] = 0] = "up";
+    LevelChangeDirection[LevelChangeDirection["down"] = 1] = "down";
+    LevelChangeDirection[LevelChangeDirection["none"] = 3] = "none";
+})(LevelChangeDirection = exports.LevelChangeDirection || (exports.LevelChangeDirection = {}));
+var SwitchType;
+(function (SwitchType) {
+    SwitchType[SwitchType["not supported"] = 0] = "not supported";
+    SwitchType[SwitchType["Off/On"] = 1] = "Off/On";
+    SwitchType[SwitchType["Down/Up"] = 2] = "Down/Up";
+    SwitchType[SwitchType["Close/Open"] = 3] = "Close/Open";
+    SwitchType[SwitchType["CCW/CW"] = 4] = "CCW/CW";
+    SwitchType[SwitchType["Left/Right"] = 5] = "Left/Right";
+    SwitchType[SwitchType["Reverse/Forward"] = 6] = "Reverse/Forward";
+    SwitchType[SwitchType["Pull/Push"] = 7] = "Pull/Push";
+})(SwitchType = exports.SwitchType || (exports.SwitchType = {}));
 let MultilevelSwitchCC = class MultilevelSwitchCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId, ccCommand, ...args) {
         super(driver, nodeId, ccCommand);
@@ -131,26 +149,9 @@ __decorate([
     __metadata("design:type", Number)
 ], MultilevelSwitchCC.prototype, "secondarySwitchStepSize", void 0);
 MultilevelSwitchCC = __decorate([
-    CommandClass_1.commandClass(CommandClass_1.CommandClasses["Multilevel Switch"]),
+    CommandClass_1.commandClass(CommandClasses_1.CommandClasses["Multilevel Switch"]),
     CommandClass_1.implementedVersion(4),
-    CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Multilevel Switch"]),
+    CommandClass_1.expectedCCResponse(CommandClasses_1.CommandClasses["Multilevel Switch"]),
     __metadata("design:paramtypes", [Object, Number, Number, Object])
 ], MultilevelSwitchCC);
 exports.MultilevelSwitchCC = MultilevelSwitchCC;
-var LevelChangeDirection;
-(function (LevelChangeDirection) {
-    LevelChangeDirection[LevelChangeDirection["up"] = 0] = "up";
-    LevelChangeDirection[LevelChangeDirection["down"] = 1] = "down";
-    LevelChangeDirection[LevelChangeDirection["none"] = 3] = "none";
-})(LevelChangeDirection = exports.LevelChangeDirection || (exports.LevelChangeDirection = {}));
-var SwitchType;
-(function (SwitchType) {
-    SwitchType[SwitchType["not supported"] = 0] = "not supported";
-    SwitchType[SwitchType["Off/On"] = 1] = "Off/On";
-    SwitchType[SwitchType["Down/Up"] = 2] = "Down/Up";
-    SwitchType[SwitchType["Close/Open"] = 3] = "Close/Open";
-    SwitchType[SwitchType["CCW/CW"] = 4] = "CCW/CW";
-    SwitchType[SwitchType["Left/Right"] = 5] = "Left/Right";
-    SwitchType[SwitchType["Reverse/Forward"] = 6] = "Reverse/Forward";
-    SwitchType[SwitchType["Pull/Push"] = 7] = "Pull/Push";
-})(SwitchType = exports.SwitchType || (exports.SwitchType = {}));

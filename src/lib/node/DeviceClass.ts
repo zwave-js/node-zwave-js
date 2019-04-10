@@ -1,4 +1,5 @@
-import { CommandClasses } from "../commandclass/CommandClass";
+import { CommandClasses } from "../commandclass/CommandClasses";
+import { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
 
 export enum BasicDeviceClasses {
@@ -40,7 +41,7 @@ export enum GenericDeviceClasses {
 const genericDeviceClassDB = new Map<GenericDeviceClasses, GenericDeviceClass>();
 
 export class GenericDeviceClass {
-	constructor(
+	public constructor(
 		public readonly name: string,
 		public readonly key: GenericDeviceClasses,
 		public readonly mandatorySupportedCCs: CommandClasses[],
@@ -62,7 +63,7 @@ export class GenericDeviceClass {
 }
 
 export class SpecificDeviceClass {
-	constructor(
+	public constructor(
 		public readonly name: string,
 		public readonly key: number,
 		public readonly mandatorySupportedCCs: CommandClasses[] = [],
@@ -85,7 +86,7 @@ function defineGeneric(
 	mandatorySupportedCCs: CommandClasses[],
 	mandatoryControlCCs: CommandClasses[],
 	...specificDeviceClasses: SpecificDeviceClass[]
-) {
+): void {
 	if (mandatorySupportedCCs == null) mandatorySupportedCCs = [];
 	if (mandatoryControlCCs == null) mandatoryControlCCs = [];
 
@@ -105,7 +106,7 @@ function defineGeneric(
 
 export class DeviceClass {
 
-	constructor(
+	public constructor(
 		public readonly basic: BasicDeviceClasses,
 		public readonly generic: GenericDeviceClass,
 		public readonly specific: SpecificDeviceClass,
@@ -142,7 +143,7 @@ export class DeviceClass {
 		return this._mandatoryControlCCs;
 	}
 
-	public toJSON() {
+	public toJSON(): JSONObject {
 		return {
 			basic: BasicDeviceClasses[this.basic],
 			generic: this.generic.name,

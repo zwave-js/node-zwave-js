@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const CommandClass_1 = require("./CommandClass");
+const CommandClasses_1 = require("./CommandClasses");
 var ManufacturerSpecificCommand;
 (function (ManufacturerSpecificCommand) {
     ManufacturerSpecificCommand[ManufacturerSpecificCommand["Get"] = 4] = "Get";
@@ -96,9 +97,9 @@ __decorate([
     __metadata("design:type", String)
 ], ManufacturerSpecificCC.prototype, "deviceId", void 0);
 ManufacturerSpecificCC = __decorate([
-    CommandClass_1.commandClass(CommandClass_1.CommandClasses["Manufacturer Specific"]),
+    CommandClass_1.commandClass(CommandClasses_1.CommandClasses["Manufacturer Specific"]),
     CommandClass_1.implementedVersion(2),
-    CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Manufacturer Specific"]),
+    CommandClass_1.expectedCCResponse(CommandClasses_1.CommandClasses["Manufacturer Specific"]),
     __metadata("design:paramtypes", [Object, Number, Number, Object])
 ], ManufacturerSpecificCC);
 exports.ManufacturerSpecificCC = ManufacturerSpecificCC;

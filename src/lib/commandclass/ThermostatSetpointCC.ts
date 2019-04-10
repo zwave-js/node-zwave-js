@@ -1,7 +1,8 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { encodeFloatWithScale, parseBitMask, parseFloatWithScale } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 export enum ThermostatSetpointCommand {
 	Set = 0x01,
@@ -44,25 +45,25 @@ export enum ThermostatSetpointScale {
 export class ThermostatSetpointCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId?: number,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: ThermostatSetpointCommand.SupportedGet,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: ThermostatSetpointCommand.Get | ThermostatSetpointCommand.CapabilitiesGet,
 		setpointType: ThermostatSetpointType,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: ThermostatSetpointCommand.Set,
@@ -70,7 +71,7 @@ export class ThermostatSetpointCC extends CommandClass {
 		value: number,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: ThermostatSetpointCommand,

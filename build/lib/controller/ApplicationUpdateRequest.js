@@ -9,6 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
 const NodeInfo_1 = require("../node/NodeInfo");
+/* eslint-disable @typescript-eslint/camelcase */
 var ApplicationUpdateTypes;
 (function (ApplicationUpdateTypes) {
     ApplicationUpdateTypes[ApplicationUpdateTypes["NodeInfo_Received"] = 132] = "NodeInfo_Received";
@@ -19,6 +20,7 @@ var ApplicationUpdateTypes;
     ApplicationUpdateTypes[ApplicationUpdateTypes["DeleteDone"] = 32] = "DeleteDone";
     ApplicationUpdateTypes[ApplicationUpdateTypes["SUC_IdChanged"] = 16] = "SUC_IdChanged";
 })(ApplicationUpdateTypes = exports.ApplicationUpdateTypes || (exports.ApplicationUpdateTypes = {}));
+/* eslint-enable @typescript-eslint/camelcase */
 let ApplicationUpdateRequest = 
 // this is only received, not sent!
 class ApplicationUpdateRequest extends Message_1.Message {

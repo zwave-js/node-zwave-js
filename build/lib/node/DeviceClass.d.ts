@@ -1,4 +1,5 @@
-import { CommandClasses } from "../commandclass/CommandClass";
+import { CommandClasses } from "../commandclass/CommandClasses";
+import { JSONObject } from "../util/misc";
 export declare enum BasicDeviceClasses {
     "Controller" = 1,
     "Routing Slave" = 2,
@@ -61,11 +62,5 @@ export declare class DeviceClass {
     readonly mandatorySupportedCCs: CommandClasses[];
     private _mandatoryControlCCs;
     readonly mandatoryControlCCs: CommandClasses[];
-    toJSON(): {
-        basic: string;
-        generic: string;
-        specific: string;
-        mandatorySupportedCCs: string[];
-        mandatoryControlCCs: string[];
-    };
+    toJSON(): JSONObject;
 }

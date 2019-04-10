@@ -4,7 +4,7 @@ import * as JSON5 from "json5";
 import * as path from "path";
 
 let manufacturers: Record<string, string>;
-async function loadManufacturers() {
+async function loadManufacturers(): Promise<void> {
 	// TODO: Extract the path resolution
 	const fileContents = await readFile(path.join(__dirname, "../../../config/manufacturers.json"), "utf8");
 	manufacturers = JSON5.parse(fileContents);

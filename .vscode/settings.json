@@ -2,5 +2,12 @@
 	"typescript.tsdk": "node_modules\\typescript\\lib",
 	"jest.showCoverageOnLoad": true,
 	"jest.enableCodeLens": true,
-	"jest.pathToJest": "npm run test:ts --"
+	"jest.pathToJest": "npm run test:ts --",
+	"eslint.enable": true,
+	"editor.formatOnSave": true,
+	"[typescript]": {
+		"editor.codeActionsOnSave": {
+			"source.organizeImports": true
+		}
+	}
 }

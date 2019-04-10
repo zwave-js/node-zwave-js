@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { EventEmitter } from "events";
-import { CommandClasses } from "../commandclass/CommandClass";
+import { CommandClasses } from "../commandclass/CommandClasses";
 import { ZWaveController } from "../controller/Controller";
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { FunctionType, MessagePriority } from "../message/Constants";
@@ -45,9 +45,9 @@ export declare class Driver extends EventEmitter implements IDriver {
     private _controllerInterviewed;
     private initializeControllerAndNodes;
     private addNodeEventHandlers;
-    private node_wakeUp;
-    private node_sleep;
-    private node_interviewCompleted;
+    private onNodeWakeUp;
+    private onNodeSleep;
+    private onNodeInterviewCompleted;
     private hasPendingMessages;
     /**
      * Finds the version of a given CC the given node supports. Returns 0 when the CC is not supported.

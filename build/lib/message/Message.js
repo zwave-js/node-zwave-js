@@ -175,7 +175,7 @@ function computeChecksum(message) {
 }
 // =======================
 // use decorators to link function types to message classes
-// tslint:disable:variable-name
+/* eslint-disable @typescript-eslint/camelcase */
 exports.METADATA_messageTypes = Symbol("messageTypes");
 exports.METADATA_messageTypeMap = Symbol("messageTypeMap");
 exports.METADATA_expectedResponse = Symbol("expectedResponse");

@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { Message } from "../message/Message";
+import { JSONObject } from "../util/misc";
 export declare const enum InitCapabilityFlags {
     Slave = 1,
     SupportsTimers = 2,
@@ -19,5 +20,5 @@ export declare class GetSerialApiInitDataResponse extends Message {
     private _nodeIds;
     readonly nodeIds: number[];
     deserialize(data: Buffer): number;
-    toJSON(): Record<string, any>;
+    toJSON(): JSONObject;
 }

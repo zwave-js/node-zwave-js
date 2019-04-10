@@ -5,7 +5,7 @@ export type DurationUnit = "seconds" | "minutes" | "unknown" | "default";
 
 export class Duration {
 
-	constructor(
+	public constructor(
 		value: number,
 		public unit: DurationUnit,
 	) {
@@ -31,7 +31,7 @@ export class Duration {
 	}
 
 	/** Parses a duration as represented in Report commands */
-	public static parseReport(payload: number) {
+	public static parseReport(payload: number): Duration {
 		if (payload == undefined) return undefined;
 		if (payload === 0xff) return undefined; // reserved value
 		if (payload === 0xfe) return new Duration(0, "unknown");

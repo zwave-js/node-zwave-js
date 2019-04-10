@@ -13,6 +13,7 @@ const objects_1 = require("alcalzone-shared/objects");
 const ZWaveError_1 = require("../error/ZWaveError");
 const Primitive_1 = require("../values/Primitive");
 const CommandClass_1 = require("./CommandClass");
+const CommandClasses_1 = require("./CommandClasses");
 var NotificationCommand;
 (function (NotificationCommand) {
     // All the supported commands
@@ -193,9 +194,9 @@ let NotificationCC = class NotificationCC extends CommandClass_1.CommandClass {
     }
 };
 NotificationCC = __decorate([
-    CommandClass_1.commandClass(CommandClass_1.CommandClasses.Notification),
+    CommandClass_1.commandClass(CommandClasses_1.CommandClasses.Notification),
     CommandClass_1.implementedVersion(8),
-    CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses.Notification),
+    CommandClass_1.expectedCCResponse(CommandClasses_1.CommandClasses.Notification),
     __metadata("design:paramtypes", [Object, Number, Number, Object])
 ], NotificationCC);
 exports.NotificationCC = NotificationCC;

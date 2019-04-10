@@ -1,6 +1,6 @@
 /// <reference types="jest-extended" />
 
-import { CommandClasses } from "../commandclass/CommandClass";
+import { CommandClasses } from "../commandclass/CommandClasses";
 import { ValueDB } from "./ValueDB";
 
 describe("lib/node/ValueDB => ", () => {
@@ -9,7 +9,7 @@ describe("lib/node/ValueDB => ", () => {
 	const onValueUpdated = jest.fn();
 	const onValueRemoved = jest.fn();
 
-	function createValueDB() {
+	function createValueDB(): void {
 		valueDB = new ValueDB()
 			.on("value added", onValueAdded)
 			.on("value updated", onValueUpdated)

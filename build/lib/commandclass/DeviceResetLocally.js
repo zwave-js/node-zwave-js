@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const CommandClass_1 = require("./CommandClass");
+const CommandClasses_1 = require("./CommandClasses");
 var DeviceResetLocallyCommand;
 (function (DeviceResetLocallyCommand) {
     DeviceResetLocallyCommand[DeviceResetLocallyCommand["Notification"] = 1] = "Notification";
@@ -22,9 +23,9 @@ let DeviceResetLocallyCC = class DeviceResetLocallyCC extends CommandClass_1.Com
     }
 };
 DeviceResetLocallyCC = __decorate([
-    CommandClass_1.commandClass(CommandClass_1.CommandClasses["Device Reset Locally"]),
+    CommandClass_1.commandClass(CommandClasses_1.CommandClasses["Device Reset Locally"]),
     CommandClass_1.implementedVersion(1),
-    CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Device Reset Locally"]),
+    CommandClass_1.expectedCCResponse(CommandClasses_1.CommandClasses["Device Reset Locally"]),
     __metadata("design:paramtypes", [Object, Number, Number])
 ], DeviceResetLocallyCC);
 exports.DeviceResetLocallyCC = DeviceResetLocallyCC;

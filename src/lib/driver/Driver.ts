@@ -5,7 +5,8 @@ import { EventEmitter } from "events";
 import * as fs from "fs-extra";
 import * as path from "path";
 import * as SerialPort from "serialport";
-import { CommandClasses, getImplementedVersion } from "../commandclass/CommandClass";
+import { getImplementedVersion } from "../commandclass/CommandClass";
+import { CommandClasses } from "../commandclass/CommandClasses";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
@@ -25,9 +26,9 @@ export interface ZWaveOptions {
 	// TODO: this probably refers to the stick waiting for a response from the node:
 	timeouts: {
 		/** how long to wait for an ACK */
-		ack: number,
+		ack: number;
 		/** not sure */
-		byte: number,
+		byte: number;
 	};
 	/**
 	 * @internal
@@ -99,7 +100,7 @@ export class Driver extends EventEmitter implements IDriver {
 		return this._controller;
 	}
 
-	constructor(
+	public constructor(
 		private port: string,
 		/** @internal */
 		public options?: DeepPartial<ZWaveOptions>,
@@ -169,7 +170,7 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	private _controllerInterviewed: boolean = false;
-	private async initializeControllerAndNodes() {
+	private async initializeControllerAndNodes(): Promise<void> {
 
 		if (this._controller == null) this._controller = new ZWaveController(this);
 		if (!this.options.skipInterview) {
@@ -210,32 +211,33 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 	}
 
-	private addNodeEventHandlers(node: ZWaveNode) {
+	private addNodeEventHandlers(node: ZWaveNode): void {
 		node
-			.on("wake up", this.node_wakeUp.bind(this))
-			.on("sleep", this.node_sleep.bind(this))
-			.on("interview completed", this.node_interviewCompleted.bind(this))
+			.on("wake up", this.onNodeWakeUp.bind(this))
+			.on("sleep", this.onNodeSleep.bind(this))
+			.on("interview completed", this.onNodeInterviewCompleted.bind(this))
 			;
 	}
 
-	private node_wakeUp(node: ZWaveNode) {
+	private onNodeWakeUp(node: ZWaveNode): void {
 		log("driver", `${node.logPrefix}The node is now awake.`, "debug");
 		// Make sure to handle the pending messages as quickly as possible
 		this.sortSendQueue();
 		setImmediate(() => this.workOffSendQueue());
 	}
 
-	private node_sleep(node: ZWaveNode) {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	private onNodeSleep(node: ZWaveNode): void {
 		// TODO: Do we need this
 	}
 
-	private node_interviewCompleted(node: ZWaveNode) {
+	private onNodeInterviewCompleted(node: ZWaveNode): void {
 		if (!this.hasPendingMessages(node) && node.supportsCC(CommandClasses["Wake Up"])) {
 			node.sendNoMoreInformation();
 		}
 	}
 
-	private hasPendingMessages(node: ZWaveNode) {
+	private hasPendingMessages(node: ZWaveNode): boolean {
 		return !!this.sendQueue.find(t => t.message.getNodeId() === node.id);
 	}
 
@@ -266,7 +268,7 @@ export class Driver extends EventEmitter implements IDriver {
 	/**
 	 * Performs a hard reset on the controller. This wipes out all configuration!
 	 */
-	public async hardReset() {
+	public async hardReset(): Promise<void> {
 		this.ensureReady(true);
 		await this._controller.hardReset();
 
@@ -275,7 +277,7 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	/** Resets the IO layer */
-	private resetIO() {
+	private resetIO(): void {
 		this.ensureReady();
 		log("driver", "resetting driver instance...", "debug");
 
@@ -320,7 +322,7 @@ export class Driver extends EventEmitter implements IDriver {
 	 * Terminates the driver instance and closes the underlying serial connection.
 	 * Must be called under any circumstances.
 	 */
-	public destroy() {
+	public destroy(): void {
 		log("driver", "destroying driver instance...", "debug");
 		this._wasDestroyed = true;
 		process.removeListener("exit", this._cleanupHandler);
@@ -333,11 +335,12 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 	}
 
-	private serialport_onError(err: Error) {
+	// eslint-disable-next-line @typescript-eslint/camelcase
+	private serialport_onError(err: Error): void {
 		this.emit("error", err);
 	}
 
-	private onInvalidData(data: Buffer, message: string) {
+	private onInvalidData(data: Buffer, message: string): void {
 		this.emit("error", new ZWaveError(
 			message,
 			ZWaveErrorCodes.Driver_InvalidDataReceived,
@@ -345,7 +348,8 @@ export class Driver extends EventEmitter implements IDriver {
 		this.resetIO();
 	}
 
-	private serialport_onData(data: Buffer) {
+	// eslint-disable-next-line @typescript-eslint/camelcase
+	private serialport_onData(data: Buffer): void {
 		log("io", `received data: 0x${data.toString("hex")}`, "debug");
 		// append the new data to our receive buffer
 		this.receiveBuffer = Buffer.concat([this.receiveBuffer, data]);
@@ -419,7 +423,7 @@ export class Driver extends EventEmitter implements IDriver {
 
 	}
 
-	private handleMessage(msg: Message) {
+	private handleMessage(msg: Message): void {
 		// TODO: find a nice way to serialize the messages
 		// log("driver", `handling response ${stringify(msg)}`, "debug");
 		log("io", `handling response (${FunctionType[msg.functionType]}${MessageType[msg.type]})`, "debug");
@@ -589,7 +593,7 @@ export class Driver extends EventEmitter implements IDriver {
 		this.sendDataRequestHandlers.set(cc, handlers);
 	}
 
-	private handleRequest(msg: Message | SendDataRequest) {
+	private handleRequest(msg: Message | SendDataRequest): void {
 		let handlers: RequestHandlerEntry[];
 
 		// TODO: find a nice way to observe the different stages of a response.
@@ -659,7 +663,7 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 	}
 
-	private handleACK() {
+	private handleACK(): void {
 		// if we have a pending request waiting for the ACK, ACK it
 		const trnsact = this.currentTransaction;
 		if (
@@ -685,12 +689,12 @@ export class Driver extends EventEmitter implements IDriver {
 		log("io", "ACK received but I don't know what it belongs to...", "debug");
 	}
 
-	private handleNAK() {
+	private handleNAK(): void {
 		// TODO: what to do with this NAK?
 		log("io", "NAK received. TODO: handle it", "warn");
 	}
 
-	private handleCAN() {
+	private handleCAN(): void {
 		if (this.currentTransaction != null) {
 			if (this.mayRetryCurrentTransaction()) {
 				const timeout = this.retryCurrentTransaction();
@@ -726,7 +730,7 @@ export class Driver extends EventEmitter implements IDriver {
 	 * Resolves the current transaction with the given value
 	 * and resumes the queue handling
 	 */
-	private resolveCurrentTransaction(resumeQueue: boolean = true) {
+	private resolveCurrentTransaction(resumeQueue: boolean = true): void {
 		const node = this.currentTransaction.message.getNodeUnsafe();
 		log("io", `resolving current transaction with ${stringify(this.currentTransaction.response)}`, "debug");
 		this.currentTransaction.promise.resolve(this.currentTransaction.response);
@@ -746,7 +750,7 @@ export class Driver extends EventEmitter implements IDriver {
 	 * Rejects the current transaction with the given value
 	 * and resumes the queue handling
 	 */
-	private rejectCurrentTransaction(reason: ZWaveError, resumeQueue: boolean = true) {
+	private rejectCurrentTransaction(reason: ZWaveError, resumeQueue: boolean = true): void {
 		log("io", `rejecting current transaction because "${reason.message}"`, "debug");
 		if (this.currentTransaction.promise != null) this.currentTransaction.promise.reject(reason);
 		this.currentTransaction = null;
@@ -860,7 +864,7 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	private sendQueueTimer: NodeJS.Timer;
-	private workOffSendQueue() {
+	private workOffSendQueue(): void {
 		if (this.sendQueueTimer != null) {
 			clearTimeout(this.sendQueueTimer);
 			delete this.sendQueueTimer;
@@ -905,7 +909,7 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 	}
 
-	private retransmit() {
+	private retransmit(): void {
 		if (this.currentTransaction == null) return;
 		const msg = this.currentTransaction.message;
 		log("io", `retransmit > resending message (${FunctionType[msg.functionType]})...`, "debug");
@@ -914,12 +918,12 @@ export class Driver extends EventEmitter implements IDriver {
 		this.doSend(data);
 	}
 
-	private doSend(data: Buffer) {
+	private doSend(data: Buffer): void {
 		this.serial.write(data);
 	}
 
 	/** Moves all messages for a given node into the wakeup queue */
-	private moveMessagesToWakeupQueue(nodeId: number) {
+	private moveMessagesToWakeupQueue(nodeId: number): void {
 		for (const transaction of this.sendQueue) {
 			const msg = transaction.message;
 			const targetNodeId = msg.getNodeId();
@@ -943,7 +947,7 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 	}
 
-	private sortSendQueue() {
+	private sortSendQueue(): void {
 		const items = [...this.sendQueue];
 		this.sendQueue.clear();
 		this.sendQueue.add(...items);
@@ -956,7 +960,7 @@ export class Driver extends EventEmitter implements IDriver {
 	 * Saves the current configuration and collected data about the controller and all nodes to a cache file.
 	 * For performance reasons, these calls may be throttled
 	 */
-	public async saveNetworkToCache() {
+	public async saveNetworkToCache(): Promise<void> {
 		// Ensure this method isn't being executed too often
 		if (Date.now() - this.lastSaveToCache < this.saveToCacheInterval) {
 			// Schedule a save in a couple of ms to collect changes
@@ -978,7 +982,7 @@ export class Driver extends EventEmitter implements IDriver {
 	/**
 	 * Restores a previously stored zwave network state from cache to speed up the startup process
 	 */
-	public async restoreNetworkFromCache() {
+	public async restoreNetworkFromCache(): Promise<void> {
 		if (!this.controller.homeId) return;
 
 		const cacheFile = path.join(this.cacheDir, this.controller.homeId.toString(16) + ".json");

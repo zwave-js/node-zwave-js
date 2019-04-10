@@ -1,6 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 export enum MultiCommandCommand {
 	CommandEncapsulation = 0x01,
@@ -14,19 +15,19 @@ export enum MultiCommandCommand {
 export class MultiCommandCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId?: number,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: MultiCommandCommand.CommandEncapsulation,
 		commands: CommandClass[],
 	)
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: MultiCommandCommand,
@@ -44,7 +45,7 @@ export class MultiCommandCC extends CommandClass {
 				buffers.push(Buffer.from([this.commands.length]));
 				for (const cmd of this.commands) {
 					const cmdBuffer = cmd.serializeForEncapsulation();
-					buffers.push(Buffer.from([ cmdBuffer.length ]));
+					buffers.push(Buffer.from([cmdBuffer.length]));
 					buffers.push(cmdBuffer);
 				}
 				this.payload = Buffer.concat(buffers);

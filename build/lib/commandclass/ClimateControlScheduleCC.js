@@ -13,6 +13,7 @@ const ZWaveError_1 = require("../error/ZWaveError");
 const SetbackState_1 = require("../values/SetbackState");
 const Switchpoint_1 = require("../values/Switchpoint");
 const CommandClass_1 = require("./CommandClass");
+const CommandClasses_1 = require("./CommandClasses");
 var ClimateControlScheduleCommand;
 (function (ClimateControlScheduleCommand) {
     ClimateControlScheduleCommand[ClimateControlScheduleCommand["Set"] = 1] = "Set";
@@ -143,9 +144,9 @@ __decorate([
     __metadata("design:type", Number)
 ], ClimateControlScheduleCC.prototype, "changeCounter", void 0);
 ClimateControlScheduleCC = __decorate([
-    CommandClass_1.commandClass(CommandClass_1.CommandClasses["Climate Control Schedule"]),
+    CommandClass_1.commandClass(CommandClasses_1.CommandClasses["Climate Control Schedule"]),
     CommandClass_1.implementedVersion(1),
-    CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Climate Control Schedule"]),
+    CommandClass_1.expectedCCResponse(CommandClasses_1.CommandClasses["Climate Control Schedule"]),
     __metadata("design:paramtypes", [Object, Number, Number, Object])
 ], ClimateControlScheduleCC);
 exports.ClimateControlScheduleCC = ClimateControlScheduleCC;
