@@ -1,7 +1,8 @@
 /// <reference types="jest-extended" />
 import { assertZWaveError } from "../../../test/util";
 import { BasicCC, BasicCommand } from "../commandclass/BasicCC";
-import { CommandClass, CommandClasses } from "../commandclass/CommandClass";
+import { CommandClass } from "../commandclass/CommandClass";
+import { CommandClasses } from "../commandclass/CommandClasses";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessageType } from "../message/Constants";
@@ -82,7 +83,7 @@ describe("lib/controller/SendDataRequest => ", () => {
 		expect(srq.command).toBeInstanceOf(NoOperationCC);
 	});
 
-	const createRequest = function*() {
+	const createRequest = function* () {
 		const noOp = new NoOperationCC(undefined, 2);
 		while (true) yield new SendDataRequest(undefined, noOp);
 	}();

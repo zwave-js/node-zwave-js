@@ -1,5 +1,6 @@
 import { SendDataRequest, TransmitOptions } from "../controller/SendDataMessages";
-import { CommandClass, CommandClasses, getCommandClass } from "./CommandClass";
+import { CommandClass, getCommandClass } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 import { ZWavePlusCC, ZWavePlusCommand } from "./ZWavePlusCC";
 
 describe("lib/commandclass/ZWavePlusCC => ", () => {

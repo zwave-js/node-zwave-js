@@ -2,7 +2,8 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { isConsecutiveArray } from "../util/misc";
 import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 export enum ConfigurationCommand {
 	Set = 0x04,
@@ -53,37 +54,37 @@ export type ConfigValue = number | Set<number>;
 export class ConfigurationCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId?: number,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: ConfigurationCommand.Get | ConfigurationCommand.NameGet | ConfigurationCommand.InfoGet | ConfigurationCommand.PropertiesGet,
 		parameter: number,
 	);
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: ConfigurationCommand.Set,
 		parameter: number, resetToDefault: boolean, valueSize?: number, value?: number,
 	);
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: ConfigurationCommand.BulkSet,
 		parameters: number[], resetToDefault: boolean, valueSize?: number, values?: number[], handshake?: boolean,
 	);
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: ConfigurationCommand.BulkGet,
 		parameters: number[],
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: ConfigurationCommand,
@@ -164,13 +165,13 @@ export class ConfigurationCC extends CommandClass {
 	@ccValue() public values = new Map<number, ConfigValue>();
 	@ccValue() public paramInformation = new Map<number, ParameterInfo>();
 
-	private extendParamInformation(parameter: number, info: ParameterInfo) {
+	private extendParamInformation(parameter: number, info: ParameterInfo): void {
 		if (!this.paramInformation.has(parameter)) {
 			this.paramInformation.set(parameter, {});
 		}
 		Object.assign(this.paramInformation.get(parameter), info);
 	}
-	private getParamInformation(parameter: number) {
+	private getParamInformation(parameter: number): ParameterInfo {
 		return this.paramInformation.get(parameter) || {};
 	}
 
@@ -368,7 +369,7 @@ export class ConfigurationCC extends CommandClass {
 }
 
 /** Interprets values from the payload depending on the value format */
-function parseValue(raw: Buffer, size: number, format: ValueFormat) {
+function parseValue(raw: Buffer, size: number, format: ValueFormat): ConfigValue {
 	switch (format) {
 		case ValueFormat.SignedInteger:
 			return raw.readIntBE(0, size);
@@ -381,7 +382,7 @@ function parseValue(raw: Buffer, size: number, format: ValueFormat) {
 }
 
 /** Serializes values into the payload according to the value format */
-function serializeValue(payload: Buffer, offset: number, size: number, format: ValueFormat, value: ConfigValue) {
+function serializeValue(payload: Buffer, offset: number, size: number, format: ValueFormat, value: ConfigValue): void {
 	switch (format) {
 		case ValueFormat.SignedInteger:
 			payload.writeIntBE(value as number, offset, size);

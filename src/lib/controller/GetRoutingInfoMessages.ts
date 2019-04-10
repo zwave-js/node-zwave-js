@@ -1,6 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
+import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
+import { JSONObject } from "../util/misc";
 import { NUM_NODEMASK_BYTES, parseNodeBitMask } from "./NodeBitMask";
 
 @messageTypes(MessageType.Request, FunctionType.GetRoutingInfo)
@@ -8,18 +9,18 @@ import { NUM_NODEMASK_BYTES, parseNodeBitMask } from "./NodeBitMask";
 @priority(MessagePriority.Controller)
 export class GetRoutingInfoRequest extends Message {
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		removeNonRepeaters: boolean,
 		removeBadLinks: boolean,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		public nodeId?: number,
 		public removeNonRepeaters?: boolean,
@@ -38,7 +39,7 @@ export class GetRoutingInfoRequest extends Message {
 		return super.serialize();
 	}
 
-	public toJSON() {
+	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			nodeId: this.nodeId,
 			removeNonRepeaters: this.removeNonRepeaters,

@@ -1,5 +1,6 @@
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
+import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
+import { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerId)
@@ -32,7 +33,7 @@ export class GetControllerIdResponse extends Message {
 		return ret;
 	}
 
-	public toJSON() {
+	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			homeId: num2hex(this.homeId),
 			ownNodeId: this.ownNodeId,

@@ -1,6 +1,5 @@
-// tslint:disable:no-unused-expression
-
-import { CommandClass, CommandClasses, getCommandClass } from "./CommandClass";
+import { CommandClass, getCommandClass } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 import { NoOperationCC } from "./NoOperationCC";
 
 describe("lib/commandclass/NoOperationCC => ", () => {

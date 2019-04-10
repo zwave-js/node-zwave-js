@@ -1,9 +1,10 @@
-import { CommandClasses } from "../commandclass/CommandClass";
+import { CommandClasses } from "../commandclass/CommandClasses";
 import { Driver } from "../driver/Driver";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { Message, messageTypes, priority } from "../message/Message";
 import { BasicDeviceClasses, GenericDeviceClass, SpecificDeviceClass } from "../node/DeviceClass";
 import { parseNodeUpdatePayload } from "../node/NodeInfo";
+import { JSONObject } from "../util/misc";
 
 export enum AddNodeType {
 	Any = 1,
@@ -36,17 +37,17 @@ export class AddNodeToNetworkRequest extends Message {
 
 	// tslint:disable:unified-signatures
 	// empty constructor to parse messages
-	constructor(
+	public constructor(
 		driver: Driver,
 	);
 	// default constructor to send messages
-	constructor(
+	public constructor(
 		driver: Driver,
 		addNodeType?: AddNodeType,
 		highPower?: boolean,
 		networkWide?: boolean,
 	);
-	constructor(
+	public constructor(
 		driver: Driver,
 		/** The type of node to add */
 		public addNodeType: AddNodeType = AddNodeType.Any,
@@ -110,7 +111,7 @@ export class AddNodeToNetworkRequest extends Message {
 		return ret;
 	}
 
-	public toJSON() {
+	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			status: AddNodeStatus[this.status],
 			statusContext: this.statusContext,

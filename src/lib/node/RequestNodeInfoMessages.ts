@@ -2,30 +2,15 @@ import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/
 import { Driver } from "../driver/Driver";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority, ResponseRole } from "../message/Message";
+import { JSONObject } from "../util/misc";
 import { INodeQuery } from "./INodeQuery";
-
-function testResponseForNodeInfoRequest(sent: RequestNodeInfoRequest, received: Message): ResponseRole {
-	if (received instanceof RequestNodeInfoResponse) {
-		return received.wasSent
-			? "intermediate"
-			: "fatal_controller";
-	} else if (received instanceof ApplicationUpdateRequest) {
-		// received node info for the correct node
-		if (
-			received.updateType === ApplicationUpdateTypes.NodeInfo_Received
-			&& received.nodeId === sent.nodeId
-		) return "final";
-		// requesting node info failed. We cannot check which node that belongs to
-		if (received.updateType === ApplicationUpdateTypes.NodeInfo_RequestFailed) return "fatal_node";
-	}
-}
 
 @messageTypes(MessageType.Request, FunctionType.RequestNodeInfo)
 @expectedResponse(testResponseForNodeInfoRequest)
 @priority(MessagePriority.NodeQuery)
 export class RequestNodeInfoRequest extends Message implements INodeQuery {
 
-	constructor(
+	public constructor(
 		driver: Driver,
 		nodeId?: number,
 	) {
@@ -40,7 +25,7 @@ export class RequestNodeInfoRequest extends Message implements INodeQuery {
 		return super.serialize();
 	}
 
-	public toJSON() {
+	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			nodeId: this.nodeId,
 		});
@@ -70,11 +55,27 @@ export class RequestNodeInfoResponse extends Message {
 		return ret;
 	}
 
-	public toJSON() {
+	public toJSON(): ReturnType<Message["toJSONInherited"]> {
 		return super.toJSONInherited({
 			wasSent: this.wasSent,
 			errorCode: this.errorCode,
 		});
 	}
 
+}
+
+function testResponseForNodeInfoRequest(sent: RequestNodeInfoRequest, received: Message): ResponseRole {
+	if (received instanceof RequestNodeInfoResponse) {
+		return received.wasSent
+			? "intermediate"
+			: "fatal_controller";
+	} else if (received instanceof ApplicationUpdateRequest) {
+		// received node info for the correct node
+		if (
+			received.updateType === ApplicationUpdateTypes.NodeInfo_Received
+			&& received.nodeId === sent.nodeId
+		) return "final";
+		// requesting node info failed. We cannot check which node that belongs to
+		if (received.updateType === ApplicationUpdateTypes.NodeInfo_RequestFailed) return "fatal_node";
+	}
 }

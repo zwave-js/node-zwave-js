@@ -1,7 +1,3 @@
-// tslint:disable:no-console
-// tslint:disable:no-unused-expression
-// tslint:disable:variable-name
-
 // load the driver with stubbed out Serialport
 import { MockRequestMessageWithExpectation, MockRequestMessageWithoutExpectation, MockResponseMessage, MockSerialPort } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";

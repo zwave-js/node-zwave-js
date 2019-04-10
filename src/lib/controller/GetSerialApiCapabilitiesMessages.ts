@@ -1,5 +1,6 @@
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
+import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
+import { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { parseBitMask } from "../values/Primitive";
 
@@ -17,22 +18,22 @@ export class GetSerialApiCapabilitiesRequest extends Message {
 export class GetSerialApiCapabilitiesResponse extends Message {
 
 	private _serialApiVersion: string;
-	public get serialApiVersion() {
+	public get serialApiVersion(): string {
 		return this._serialApiVersion;
 	}
 
 	private _manufacturerId: number;
-	public get manufacturerId() {
+	public get manufacturerId(): number {
 		return this._manufacturerId;
 	}
 
 	private _productType: number;
-	public get productType() {
+	public get productType(): number {
 		return this._productType;
 	}
 
 	private _productId: number;
-	public get productId() {
+	public get productId(): number {
 		return this._productId;
 	}
 
@@ -62,7 +63,7 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 		return ret;
 	}
 
-	public toJSON() {
+	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			serialApiVersion: this.serialApiVersion,
 			manufacturerId: this.manufacturerId,

@@ -2,7 +2,8 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Duration } from "../values/Duration";
 import { Maybe, parseBoolean, parseMaybeBoolean } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 export enum BinarySwitchCommand {
 	Set = 0x01,
@@ -16,16 +17,16 @@ export enum BinarySwitchCommand {
 export class BinarySwitchCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId?: number,
 	);
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: BinarySwitchCommand.Get,
 	);
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: BinarySwitchCommand.Set,
@@ -33,7 +34,7 @@ export class BinarySwitchCC extends CommandClass {
 		duration?: Duration,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: BinarySwitchCommand,

@@ -33,7 +33,7 @@ export function parseNumber(val: number): number | undefined {
 }
 
 /** Parses a floating point value with a scale from a buffer */
-export function parseFloatWithScale(payload: Buffer): { value: number, scale: number, bytesRead: number } {
+export function parseFloatWithScale(payload: Buffer): { value: number; scale: number; bytesRead: number } {
 	const precision = (payload[0] & 0b111_00_000) >>> 5;
 	const scale = (payload[0] & 0b000_11_000) >>> 3;
 	const size = payload[0] & 0b111;
@@ -41,7 +41,7 @@ export function parseFloatWithScale(payload: Buffer): { value: number, scale: nu
 	return { value, scale, bytesRead: 1 + size };
 }
 
-function getPrecision(num: number) {
+function getPrecision(num: number): number {
 	if (!Number.isFinite(num)) return 0;
 	let e = 1;
 	let p = 0;
@@ -50,7 +50,7 @@ function getPrecision(num: number) {
 }
 
 /** Encodes a floating point value with a scale into a buffer */
-export function encodeFloatWithScale(value: number, scale: number) {
+export function encodeFloatWithScale(value: number, scale: number): Buffer {
 	const precision = Math.min(getPrecision(value), 7);
 	value = Math.round(value * Math.pow(10, precision));
 	let size: number;

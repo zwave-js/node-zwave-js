@@ -1,5 +1,6 @@
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
+import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
+import { JSONObject } from "../util/misc";
 import { NUM_NODEMASK_BYTES, parseNodeBitMask } from "./NodeBitMask";
 
 export const enum InitCapabilityFlags {
@@ -58,7 +59,7 @@ export class GetSerialApiInitDataResponse extends Message {
 		return ret;
 	}
 
-	public toJSON() {
+	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			initVersion: this.initVersion,
 			isSlave: this.isSlave,

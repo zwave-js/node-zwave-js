@@ -2,7 +2,7 @@ import { createDeferredPromise, DeferredPromise } from "alcalzone-shared/deferre
 import { composeObject } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
-import { CommandClasses } from "../commandclass/CommandClass";
+import { CommandClasses } from "../commandclass/CommandClasses";
 import { Driver, RequestHandler } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
@@ -10,6 +10,7 @@ import { Message } from "../message/Message";
 import { BasicDeviceClasses, DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
 import { log } from "../util/logger";
+import { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { AddNodeStatus, AddNodeToNetworkRequest, AddNodeType } from "./AddNodeToNetworkRequest";
 import { GetControllerCapabilitiesRequest, GetControllerCapabilitiesResponse } from "./GetControllerCapabilitiesMessages";
@@ -22,12 +23,13 @@ import { HardResetRequest } from "./HardResetRequest";
 import { SetSerialApiTimeoutsRequest, SetSerialApiTimeoutsResponse } from "./SetSerialApiTimeoutsMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
+
 // TODO: interface the exposed events
 
 export class ZWaveController extends EventEmitter {
 
 	/** @internal */
-	constructor(
+	public constructor(
 		private readonly driver: Driver,
 	) {
 		super();
@@ -92,22 +94,22 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	private _serialApiVersion: string;
-	public get serialApiVersion() {
+	public get serialApiVersion(): string {
 		return this._serialApiVersion;
 	}
 
 	private _manufacturerId: number;
-	public get manufacturerId() {
+	public get manufacturerId(): number {
 		return this._manufacturerId;
 	}
 
 	private _productType: number;
-	public get productType() {
+	public get productType(): number {
 		return this._productType;
 	}
 
 	private _productId: number;
-	public get productId() {
+	public get productId(): number {
 		return this._productId;
 	}
 
@@ -273,7 +275,7 @@ export class ZWaveController extends EventEmitter {
 		// wotan-disable-next-line async-function-assignability
 		return new Promise(async (resolve, reject) => {
 			// handle the incoming message
-			const handler: RequestHandler = (msg) => {
+			const handler: RequestHandler = (_msg) => {
 				log("controller", `  hard reset succeeded`, "debug");
 				resolve();
 				return true;
@@ -332,7 +334,7 @@ export class ZWaveController extends EventEmitter {
 		log("controller", `the inclusion process was stopped`, "debug");
 	}
 
-	private async handleAddNodeRequest(msg: AddNodeToNetworkRequest) {
+	private async handleAddNodeRequest(msg: AddNodeToNetworkRequest): Promise<void> {
 		log("controller", `handling add node request (status = ${AddNodeStatus[msg.status]})`, "debug");
 		if (!this._inclusionActive && msg.status !== AddNodeStatus.Done) {
 			log("controller", `  inclusion is NOT active, ignoring it...`, "debug");
@@ -418,7 +420,7 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	/** Serializes the controller information and all nodes to store them in a cache */
-	public serialize() {
+	public serialize(): JSONObject {
 		return {
 			nodes: composeObject(
 				[...this.nodes.entries()]
@@ -428,7 +430,7 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	/** Deserializes the controller information and all nodes from the cache */
-	public deserialize(serialized: any) {
+	public deserialize(serialized: any): void {
 		if (isObject(serialized.nodes)) {
 			for (const nodeId of Object.keys(serialized.nodes)) {
 				const serializedNode = serialized.nodes[nodeId];

@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
-import { CommandClass, commandClass, CommandClasses, implementedVersion } from "./CommandClass";
+import { CommandClass, commandClass, implementedVersion } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 @commandClass(CommandClasses["No Operation"])
 @implementedVersion(1)

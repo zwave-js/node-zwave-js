@@ -1,8 +1,9 @@
-import { composeObject, entries } from "alcalzone-shared/objects";
+import { composeObject } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
+import { JSONObject } from "../util/misc";
 
-// export type SerializableValue = number | string | boolean | Map<string | number, any> | Record<string, any>;
-export type SerializedValue = number | string | boolean | Record<string, any>;
+// export type SerializableValue = number | string | boolean | Map<string | number, any> | JSONObject;
+export type SerializedValue = number | string | boolean | JSONObject;
 export interface CacheValue {
 	value: SerializedValue;
 	endpoint: number;

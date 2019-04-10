@@ -1,5 +1,6 @@
 import { BasicCC } from "./BasicCC";
-import { CommandClass, CommandClasses, getImplementedVersion } from "./CommandClass";
+import { getImplementedVersion } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 describe("lib/commandclass/CommandClass => ", () => {
 	it("getImplementedVersion should return the implemented version for a CommandClass instance", () => {

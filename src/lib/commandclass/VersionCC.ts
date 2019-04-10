@@ -5,7 +5,8 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { MessagePriority } from "../message/Constants";
 import { ZWaveNode } from "../node/Node";
 import { Maybe, unknownBoolean } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion, StateKind } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion, StateKind } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 export enum VersionCommand {
 	Get = 0x11,
@@ -33,20 +34,20 @@ function parseVersion(buffer: Buffer): string {
 export class VersionCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(driver: IDriver, nodeId?: number);
-	constructor(
+	public constructor(driver: IDriver, nodeId?: number);
+	public constructor(
 		driver: IDriver, nodeId: number,
 		ccCommand: VersionCommand.Get
 			| VersionCommand.CapabilitiesGet
 			| VersionCommand.ZWaveSoftwareGet,
 		);
-	constructor(
+	public constructor(
 		driver: IDriver, nodeId: number,
 		ccCommand: VersionCommand.CommandClassGet,
 		requestedCC: CommandClasses,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: VersionCommand,

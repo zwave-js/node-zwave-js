@@ -1,5 +1,4 @@
-// tslint:disable-next-line:no-var-requires
-const colors = require("colors/safe");
+import colors = require("colors/safe");
 import debug from "debug";
 
 const defaultNamespace = "zwave";
@@ -23,15 +22,15 @@ colors.setTheme({
 
 export function log(message: string, severity: Severity): void;
 export function log(namespace: SubNamespaces, message: string, severity: Severity): void;
-export function log(...args: any[]) {
+export function log(...args: any[]): void {
 
 	// we only accept strings
 	if (!args.length || !args.every(arg => typeof arg === "string")) {
 		throw new Error("Invalid arguments passed to log()");
 	}
 
-	let namespace: string = "";
-	let message: string = "";
+	let namespace = "";
+	let message = "";
 	let severity: Severity = "info";
 	if (args.length === 2) {
 		([message, severity] = args);
@@ -41,12 +40,12 @@ export function log(...args: any[]) {
 		if (typeof namespace === "string" && namespace !== "") namespace = ":" + namespace;
 	}
 
-	function defaultLogger() {
-		let prefix: string = "";
+	function defaultLogger(): void {
+		let prefix = "";
 		if (severity !== "info") {
 			prefix = `[${severity.toUpperCase()}] `;
 		}
-		debug(defaultNamespace + namespace)(`${prefix}${colors[severity](message)}`);
+		debug(defaultNamespace + namespace)(`${prefix}${(colors as any)[severity](message)}`);
 	}
 
 	(customLogger || defaultLogger)(message, severity);
