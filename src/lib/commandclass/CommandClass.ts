@@ -187,7 +187,7 @@ export class CommandClass {
 	}
 
 	protected toJSONInherited(props: JSONObject): JSONObject {
-		const ret = this.toJSONInternal() as JSONObject;
+		const ret = this.toJSONInternal();
 		delete ret.payload;
 		for (const [key, value] of entries(props)) {
 			if (value !== undefined) ret[key] = value;
