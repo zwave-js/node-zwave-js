@@ -3,7 +3,8 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { GenericDeviceClasses } from "../node/DeviceClass";
 import { NodeInformationFrame, parseNodeInformationFrame } from "../node/NodeInfo";
 import { encodeBitMask, parseBitMask } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 export enum MultiChannelCommand {
 	EndPointGet = 0x07,
@@ -30,21 +31,21 @@ export interface EndpointCapability extends NodeInformationFrame {
 export class MultiChannelCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(driver: IDriver, nodeId?: number);
-	constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.EndPointGet);
-	constructor(
+	public constructor(driver: IDriver, nodeId?: number);
+	public constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.EndPointGet);
+	public constructor(
 		driver: IDriver, nodeId: number,
 		ccCommand: MultiChannelCommand.CapabilityGet | MultiChannelCommand.AggregatedMembersGet,
 		endpoint: number,
 	);
-	constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.EndPointFind, genericClass: GenericDeviceClasses, specificClass: number);
-	constructor(
+	public constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.EndPointFind, genericClass: GenericDeviceClasses, specificClass: number);
+	public constructor(
 		driver: IDriver, nodeId: number,
 		ccCommand: MultiChannelCommand.CommandEncapsulation,
 		encapsulatedCC: CommandClass,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: MultiChannelCommand,
@@ -133,7 +134,7 @@ export class MultiChannelCC extends CommandClass {
 			}
 
 			case MultiChannelCommand.AggregatedMembersGet:
-				this.payload = Buffer.from([ this.endpoint & 0b0111_1111 ]);
+				this.payload = Buffer.from([this.endpoint & 0b0111_1111]);
 				break;
 
 			default:

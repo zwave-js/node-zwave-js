@@ -8,6 +8,7 @@ const fs = require("fs-extra");
 const path = require("path");
 const SerialPort = require("serialport");
 const CommandClass_1 = require("../commandclass/CommandClass");
+const CommandClasses_1 = require("../commandclass/CommandClasses");
 const ICommandClassContainer_1 = require("../commandclass/ICommandClassContainer");
 const WakeUpCC_1 = require("../commandclass/WakeUpCC");
 const ApplicationCommandRequest_1 = require("../controller/ApplicationCommandRequest");
@@ -164,21 +165,22 @@ class Driver extends events_1.EventEmitter {
     }
     addNodeEventHandlers(node) {
         node
-            .on("wake up", this.node_wakeUp.bind(this))
-            .on("sleep", this.node_sleep.bind(this))
-            .on("interview completed", this.node_interviewCompleted.bind(this));
+            .on("wake up", this.onNodeWakeUp.bind(this))
+            .on("sleep", this.onNodeSleep.bind(this))
+            .on("interview completed", this.onNodeInterviewCompleted.bind(this));
     }
-    node_wakeUp(node) {
+    onNodeWakeUp(node) {
         logger_1.log("driver", `${node.logPrefix}The node is now awake.`, "debug");
         // Make sure to handle the pending messages as quickly as possible
         this.sortSendQueue();
         setImmediate(() => this.workOffSendQueue());
     }
-    node_sleep(node) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onNodeSleep(node) {
         // TODO: Do we need this
     }
-    node_interviewCompleted(node) {
-        if (!this.hasPendingMessages(node) && node.supportsCC(CommandClass_1.CommandClasses["Wake Up"])) {
+    onNodeInterviewCompleted(node) {
+        if (!this.hasPendingMessages(node) && node.supportsCC(CommandClasses_1.CommandClasses["Wake Up"])) {
             node.sendNoMoreInformation();
         }
     }
@@ -258,6 +260,7 @@ class Driver extends events_1.EventEmitter {
             delete this.serial;
         }
     }
+    // eslint-disable-next-line @typescript-eslint/camelcase
     serialport_onError(err) {
         this.emit("error", err);
     }
@@ -265,6 +268,7 @@ class Driver extends events_1.EventEmitter {
         this.emit("error", new ZWaveError_1.ZWaveError(message, ZWaveError_1.ZWaveErrorCodes.Driver_InvalidDataReceived));
         this.resetIO();
     }
+    // eslint-disable-next-line @typescript-eslint/camelcase
     serialport_onData(data) {
         logger_1.log("io", `received data: 0x${data.toString("hex")}`, "debug");
         // append the new data to our receive buffer
@@ -364,7 +368,7 @@ class Driver extends events_1.EventEmitter {
                 case "fatal_node":
                     // The node did not respond
                     const node = this.currentTransaction.message.getNodeUnsafe();
-                    if (node && node.supportsCC(CommandClass_1.CommandClasses["Wake Up"])) {
+                    if (node && node.supportsCC(CommandClasses_1.CommandClasses["Wake Up"])) {
                         logger_1.log("driver", `  ${node.logPrefix}The node did not respond because it is asleep, moving its messages to the wakeup queue`, "debug");
                         // The node is asleep
                         WakeUpCC_1.WakeUpCC.setAwake(this, node, false);
@@ -471,7 +475,7 @@ class Driver extends events_1.EventEmitter {
         const handlers = this.sendDataRequestHandlers.has(cc) ? this.sendDataRequestHandlers.get(cc) : [];
         const entry = { invoke: handler, oneTime };
         handlers.push(entry);
-        logger_1.log("driver", `added${oneTime ? " one-time" : ""} send data request handler for ${CommandClass_1.CommandClasses[cc]} (${cc})... ${handlers.length} registered`, "debug");
+        logger_1.log("driver", `added${oneTime ? " one-time" : ""} send data request handler for ${CommandClasses_1.CommandClasses[cc]} (${cc})... ${handlers.length} registered`, "debug");
         this.sendDataRequestHandlers.set(cc, handlers);
     }
     /**
@@ -488,7 +492,7 @@ class Driver extends events_1.EventEmitter {
                 break;
             }
         }
-        logger_1.log("driver", `removed send data request handler for ${CommandClass_1.CommandClasses[cc]} (${cc})... ${handlers.length} left`, "debug");
+        logger_1.log("driver", `removed send data request handler for ${CommandClasses_1.CommandClasses[cc]} (${cc})... ${handlers.length} left`, "debug");
         this.sendDataRequestHandlers.set(cc, handlers);
     }
     handleRequest(msg) {
@@ -502,7 +506,7 @@ class Driver extends events_1.EventEmitter {
             // we handle ApplicationCommandRequests differently because they are handled by the nodes directly
             const ccId = msg.command.ccId;
             const nodeId = msg.command.nodeId;
-            logger_1.log("driver", `handling application command request ${CommandClass_1.CommandClasses[ccId]} (${strings_1.num2hex(ccId)}) for node ${nodeId}`, "debug");
+            logger_1.log("driver", `handling application command request ${CommandClasses_1.CommandClasses[ccId]} (${strings_1.num2hex(ccId)}) for node ${nodeId}`, "debug");
             // cannot handle ApplicationCommandRequests without a controller
             if (this.controller == null) {
                 logger_1.log("driver", `  the controller is not ready yet, discarding...`, "debug");
@@ -531,7 +535,7 @@ class Driver extends events_1.EventEmitter {
             // TODO: Find out if this actually happens
             // we handle SendDataRequests differently because their handlers are organized by the command class
             const ccId = msg.command.ccId;
-            logger_1.log("driver", `handling send data request ${CommandClass_1.CommandClasses[ccId]} (${strings_1.num2hex(ccId)}) for node ${msg.command.nodeId}`, "debug");
+            logger_1.log("driver", `handling send data request ${CommandClasses_1.CommandClasses[ccId]} (${strings_1.num2hex(ccId)}) for node ${msg.command.nodeId}`, "debug");
             handlers = this.sendDataRequestHandlers.get(ccId);
         }
         else {
@@ -620,7 +624,7 @@ class Driver extends events_1.EventEmitter {
         this.currentTransaction.promise.resolve(this.currentTransaction.response);
         this.currentTransaction = null;
         // If a sleeping node has no messages pending, send it back to sleep
-        if (node && node.supportsCC(CommandClass_1.CommandClasses["Wake Up"]) && !this.hasPendingMessages(node)) {
+        if (node && node.supportsCC(CommandClasses_1.CommandClasses["Wake Up"]) && !this.hasPendingMessages(node)) {
             node.sendNoMoreInformation();
         }
         // Resume the send queue
@@ -721,7 +725,7 @@ class Driver extends events_1.EventEmitter {
             if (ICommandClassContainer_1.isCommandClassContainer(msg)) {
                 const ccId = msg.command.ccId;
                 msg.command.version = this.getSafeCCVersionForNode(msg.command.nodeId, ccId);
-                logger_1.log("io", `  CC = ${CommandClass_1.CommandClasses[ccId]} (${strings_1.num2hex(ccId)}) => using version ${msg.command.version}`, "debug");
+                logger_1.log("io", `  CC = ${CommandClasses_1.CommandClasses[ccId]} (${strings_1.num2hex(ccId)}) => using version ${msg.command.version}`, "debug");
             }
             const data = msg.serialize();
             logger_1.log("io", `  data = 0x${data.toString("hex")}`, "debug");

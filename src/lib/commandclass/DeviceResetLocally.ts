@@ -1,6 +1,6 @@
 import { IDriver } from "../driver/IDriver";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 export enum DeviceResetLocallyCommand {
 	Notification = 0x01,
@@ -12,12 +12,12 @@ export enum DeviceResetLocallyCommand {
 export class DeviceResetLocallyCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId?: number,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: DeviceResetLocallyCommand,

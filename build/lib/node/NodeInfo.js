@@ -9,7 +9,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const CommandClass_1 = require("../commandclass/CommandClass");
+const CommandClasses_1 = require("../commandclass/CommandClasses");
 const DeviceClass_1 = require("./DeviceClass");
 function parseNodeUpdatePayload(nif) {
     return Object.assign({ nodeId: nif[0], 
@@ -32,7 +32,7 @@ function internalParseNodeInformationFrame(nif) {
     for (const cc of CCs) {
         // CCs before the support/control mark are supported
         // CCs after the support/control mark are controlled
-        if (cc === CommandClass_1.CommandClasses["Support/Control Mark"]) {
+        if (cc === CommandClasses_1.CommandClasses["Support/Control Mark"]) {
             isAfterMark = true;
             continue;
         }

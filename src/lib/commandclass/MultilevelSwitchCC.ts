@@ -2,7 +2,8 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Duration } from "../values/Duration";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 export enum MultilevelSwitchCommand {
 	Set = 0x01,
@@ -14,19 +15,36 @@ export enum MultilevelSwitchCommand {
 	SupportedReport = 0x07,
 }
 
+export enum LevelChangeDirection {
+	"up" = 0b0,
+	"down" = 0b1,
+	"none" = 0b11,
+}
+
+export enum SwitchType {
+	"not supported" = 0x00,
+	"Off/On" = 0x01,
+	"Down/Up" = 0x02,
+	"Close/Open" = 0x03,
+	"CCW/CW" = 0x04,
+	"Left/Right" = 0x05,
+	"Reverse/Forward" = 0x06,
+	"Pull/Push" = 0x07,
+}
+
 @commandClass(CommandClasses["Multilevel Switch"])
 @implementedVersion(4)
 @expectedCCResponse(CommandClasses["Multilevel Switch"])
 export class MultilevelSwitchCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(driver: IDriver, nodeId?: number);
-	constructor(driver: IDriver, nodeId: number, ccCommand:
+	public constructor(driver: IDriver, nodeId?: number);
+	public constructor(driver: IDriver, nodeId: number, ccCommand:
 		MultilevelSwitchCommand.Get
 		| MultilevelSwitchCommand.StopLevelChange
 		| MultilevelSwitchCommand.SupportedGet,
 	);
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: MultilevelSwitchCommand.Set,
@@ -34,7 +52,7 @@ export class MultilevelSwitchCC extends CommandClass {
 		// Version >= 2:
 		duration?: Duration,
 	);
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: MultilevelSwitchCommand.StartLevelChange,
@@ -47,7 +65,7 @@ export class MultilevelSwitchCC extends CommandClass {
 		secondarySwitchDirection?: keyof typeof LevelChangeDirection,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: MultilevelSwitchCommand,
@@ -165,21 +183,4 @@ export class MultilevelSwitchCC extends CommandClass {
 		}
 	}
 
-}
-
-export enum LevelChangeDirection {
-	"up" = 0b0,
-	"down" = 0b1,
-	"none" = 0b11,
-}
-
-export enum SwitchType {
-	"not supported" = 0x00,
-	"Off/On" = 0x01,
-	"Down/Up" = 0x02,
-	"Close/Open" = 0x03,
-	"CCW/CW" = 0x04,
-	"Left/Right" = 0x05,
-	"Reverse/Forward" = 0x06,
-	"Pull/Push" = 0x07,
 }

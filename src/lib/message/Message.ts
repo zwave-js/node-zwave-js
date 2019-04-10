@@ -7,6 +7,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { isNodeQuery } from "../node/INodeQuery";
 import { ZWaveNode } from "../node/Node";
 import { log } from "../util/logger";
+import { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "./Constants";
 
@@ -18,13 +19,13 @@ export type Constructable<T> = new (driver: IDriver, ...constructorArgs: any[]) 
 export class Message {
 
 	// #1
-	constructor(
+	public constructor(
 		driver: IDriver,
 		payload?: Buffer,
 	)
 
 	// #2
-	constructor(
+	public constructor(
 		driver: IDriver,
 		type: MessageType,
 		funcType: FunctionType,
@@ -33,7 +34,7 @@ export class Message {
 	)
 
 	// implementation
-	constructor(
+	public constructor(
 		protected driver: IDriver,
 		typeOrPayload?: MessageType | Buffer,
 		funcType?: FunctionType,
@@ -157,11 +158,11 @@ export class Message {
 		return data.slice(4, 4 + payloadLength);
 	}
 
-	public toJSON() {
+	public toJSON(): JSONObject {
 		return this.toJSONInternal();
 	}
 
-	private toJSONInternal() {
+	private toJSONInternal(): JSONObject {
 		const ret: any = {
 			name: this.constructor.name,
 			type: MessageType[this.type],
@@ -172,8 +173,8 @@ export class Message {
 		return ret;
 	}
 
-	protected toJSONInherited(props: Record<string, any>): Record<string, any> {
-		const ret = this.toJSONInternal() as Record<string, any>;
+	protected toJSONInherited(props: JSONObject): JSONObject {
+		const ret = this.toJSONInternal();
 		delete ret.payload;
 		for (const [key, value] of entries(props)) {
 			if (value !== undefined) ret[key] = value;
@@ -235,12 +236,12 @@ function computeChecksum(message: Buffer): number {
 
 // =======================
 // use decorators to link function types to message classes
-// tslint:disable:variable-name
+/* eslint-disable @typescript-eslint/camelcase */
 export const METADATA_messageTypes = Symbol("messageTypes");
 export const METADATA_messageTypeMap = Symbol("messageTypeMap");
 export const METADATA_expectedResponse = Symbol("expectedResponse");
 export const METADATA_priority = Symbol("priority");
-// tslint:enable:variable-name
+/* eslint-enable @typescript-eslint/camelcase */
 
 type MessageTypeMap = Map<string, Constructable<Message>>;
 

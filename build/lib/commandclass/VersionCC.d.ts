@@ -3,7 +3,8 @@ import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveNode } from "../node/Node";
 import { Maybe } from "../values/Primitive";
-import { CommandClass, CommandClasses, StateKind } from "./CommandClass";
+import { CommandClass, StateKind } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 export declare enum VersionCommand {
     Get = 17,
     Report = 18,

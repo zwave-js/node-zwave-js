@@ -4,7 +4,7 @@ const deferred_promise_1 = require("alcalzone-shared/deferred-promise");
 const objects_1 = require("alcalzone-shared/objects");
 const typeguards_1 = require("alcalzone-shared/typeguards");
 const events_1 = require("events");
-const CommandClass_1 = require("../commandclass/CommandClass");
+const CommandClasses_1 = require("../commandclass/CommandClasses");
 const ZWaveError_1 = require("../error/ZWaveError");
 const Constants_1 = require("../message/Constants");
 const Message_1 = require("../message/Message");
@@ -207,7 +207,7 @@ class ZWaveController extends events_1.EventEmitter {
         // wotan-disable-next-line async-function-assignability
         return new Promise(async (resolve, reject) => {
             // handle the incoming message
-            const handler = (msg) => {
+            const handler = (_msg) => {
                 logger_1.log("controller", `  hard reset succeeded`, "debug");
                 resolve();
                 return true;
@@ -309,12 +309,12 @@ class ZWaveController extends events_1.EventEmitter {
                     logger_1.log("controller", `  supported CCs:`, "debug");
                     for (const [cc, info] of newNode.implementedCommandClasses.entries()) {
                         if (info.isSupported)
-                            logger_1.log("controller", `    ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)})`, "debug");
+                            logger_1.log("controller", `    ${CommandClasses_1.CommandClasses[cc]} (${strings_1.num2hex(cc)})`, "debug");
                     }
                     logger_1.log("controller", `  controlled CCs:`, "debug");
                     for (const [cc, info] of newNode.implementedCommandClasses.entries()) {
                         if (info.isControlled)
-                            logger_1.log("controller", `    ${CommandClass_1.CommandClasses[cc]} (${strings_1.num2hex(cc)})`, "debug");
+                            logger_1.log("controller", `    ${CommandClasses_1.CommandClasses[cc]} (${strings_1.num2hex(cc)})`, "debug");
                     }
                     // remember the node
                     this.nodes.set(newNode.id, newNode);

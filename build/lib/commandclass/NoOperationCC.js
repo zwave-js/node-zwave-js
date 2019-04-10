@@ -10,13 +10,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const CommandClass_1 = require("./CommandClass");
+const CommandClasses_1 = require("./CommandClasses");
 let NoOperationCC = class NoOperationCC extends CommandClass_1.CommandClass {
     constructor(driver, nodeId) {
         super(driver, nodeId);
     }
 };
 NoOperationCC = __decorate([
-    CommandClass_1.commandClass(CommandClass_1.CommandClasses["No Operation"]),
+    CommandClass_1.commandClass(CommandClasses_1.CommandClasses["No Operation"]),
     CommandClass_1.implementedVersion(1),
     __metadata("design:paramtypes", [Object, Number])
 ], NoOperationCC);

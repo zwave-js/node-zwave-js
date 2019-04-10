@@ -1,7 +1,8 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { parseBitMask, parseFloatWithScale } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 export enum MultilevelSensorCommand {
 	GetSupportedSensor = 0x01,
@@ -20,25 +21,25 @@ export enum MultilevelSensorCommand {
 export class MultilevelSensorCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId?: number,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: MultilevelSensorCommand.GetSupportedSensor,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: MultilevelSensorCommand.GetSupportedScale,
 		sensorType: MultilevelSensorTypes,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: MultilevelSensorCommand.Get,
@@ -46,7 +47,7 @@ export class MultilevelSensorCC extends CommandClass {
 		scale?: number, // TODO: Define scales
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: MultilevelSensorCommand,
@@ -94,7 +95,7 @@ export class MultilevelSensorCC extends CommandClass {
 				break;
 
 			case MultilevelSensorCommand.GetSupportedScale:
-				this.payload = Buffer.from([ this.sensorType ]);
+				this.payload = Buffer.from([this.sensorType]);
 				break;
 
 			default:
@@ -229,19 +230,6 @@ interface MultilevelSensorScale {
 	label: string;
 	value: number;
 	minimumCCVersion: number;
-}
-
-/** Looks up a scale definition for a given sensor type */
-export function getScale(sensorType: MultilevelSensorTypes, scale: number): MultilevelSensorScale | undefined {
-	const dict = multilevelSensorScales[sensorType];
-	const ret = dict && dict.find(scl => scl.value === scale);
-	if (ret) return ret;
-	return {
-		unit: undefined,
-		label: "Unknown",
-		value: scale,
-		minimumCCVersion: 0,
-	};
 }
 
 const multilevelSensorScales: Record<MultilevelSensorTypes, MultilevelSensorScale[]> = {
@@ -533,3 +521,16 @@ const multilevelSensorScales: Record<MultilevelSensorTypes, MultilevelSensorScal
 		{ label: "Celcius", unit: "°C", value: 0x00, minimumCCVersion: 11 },
 	],
 };
+
+/** Looks up a scale definition for a given sensor type */
+export function getScale(sensorType: MultilevelSensorTypes, scale: number): MultilevelSensorScale | undefined {
+	const dict = multilevelSensorScales[sensorType];
+	const ret = dict && dict.find(scl => scl.value === scale);
+	if (ret) return ret;
+	return {
+		unit: undefined,
+		label: "Unknown",
+		value: scale,
+		minimumCCVersion: 0,
+	};
+}

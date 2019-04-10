@@ -1,5 +1,6 @@
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
+import { JSONObject } from "../util/misc";
 
 const enum ControllerCapabilityFlags {
 	Secondary = 1 << 0, // Controller is a secondary
@@ -45,7 +46,7 @@ export class GetControllerCapabilitiesResponse extends Message {
 		return ret;
 	}
 
-	public toJSON() {
+	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			isSecondary: this.isSecondary,
 			isUsingHomeIdFromOtherNetwork: this.isUsingHomeIdFromOtherNetwork,

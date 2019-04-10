@@ -1,21 +1,22 @@
 import { Driver } from "../driver/Driver";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, messageTypes, priority} from "../message/Message";
+import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
+import { JSONObject } from "../util/misc";
 
 @messageTypes(MessageType.Request, FunctionType.SetSerialApiTimeouts)
 @expectedResponse(FunctionType.SetSerialApiTimeouts)
 @priority(MessagePriority.Controller)
 export class SetSerialApiTimeoutsRequest extends Message {
 
-	constructor(
+	public constructor(
 		driver: Driver,
 	)
-	constructor(
+	public constructor(
 		driver: Driver,
 		ackTimeout: number,
 		byteTimeout: number,
 	)
-	constructor(
+	public constructor(
 		driver: Driver,
 		public ackTimeout?: number,
 		public byteTimeout?: number,
@@ -31,7 +32,7 @@ export class SetSerialApiTimeoutsRequest extends Message {
 		return super.serialize();
 	}
 
-	public toJSON() {
+	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			ackTimeout: this.ackTimeout,
 			byteTimeout: this.byteTimeout,
@@ -62,7 +63,7 @@ export class SetSerialApiTimeoutsResponse extends Message {
 		return ret;
 	}
 
-	public toJSON() {
+	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			oldAckTimeout: this.oldAckTimeout,
 			oldByteTimeout: this.oldByteTimeout,

@@ -14,7 +14,7 @@ export function decodeSwitchpoint(data: Buffer): Switchpoint {
 	};
 }
 
-export function encodeSwitchpoint(point: Switchpoint) {
+export function encodeSwitchpoint(point: Switchpoint): Buffer {
 	return Buffer.from([
 		point.hour & 0b000_11111,
 		point.minute & 0b00_111111,

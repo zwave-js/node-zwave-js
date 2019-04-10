@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { IDriver } from "../driver/IDriver";
+import { JSONObject } from "../util/misc";
 import { CommandClass } from "./CommandClass";
 export declare enum NotificationCommand {
     EventSupportedGet = 1,
@@ -56,5 +57,5 @@ export declare class NotificationCC extends CommandClass {
     readonly sequenceNumber: number;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
-    toJSON(): Record<string, any>;
+    toJSON(): JSONObject;
 }

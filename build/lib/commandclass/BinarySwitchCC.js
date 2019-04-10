@@ -13,6 +13,7 @@ const ZWaveError_1 = require("../error/ZWaveError");
 const Duration_1 = require("../values/Duration");
 const Primitive_1 = require("../values/Primitive");
 const CommandClass_1 = require("./CommandClass");
+const CommandClasses_1 = require("./CommandClasses");
 var BinarySwitchCommand;
 (function (BinarySwitchCommand) {
     BinarySwitchCommand[BinarySwitchCommand["Set"] = 1] = "Set";
@@ -78,9 +79,9 @@ __decorate([
     __metadata("design:type", Duration_1.Duration)
 ], BinarySwitchCC.prototype, "duration", void 0);
 BinarySwitchCC = __decorate([
-    CommandClass_1.commandClass(CommandClass_1.CommandClasses["Binary Switch"]),
+    CommandClass_1.commandClass(CommandClasses_1.CommandClasses["Binary Switch"]),
     CommandClass_1.implementedVersion(2),
-    CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Binary Switch"]),
+    CommandClass_1.expectedCCResponse(CommandClasses_1.CommandClasses["Binary Switch"]),
     __metadata("design:paramtypes", [Object, Number, Number, Boolean, Duration_1.Duration])
 ], BinarySwitchCC);
 exports.BinarySwitchCC = BinarySwitchCC;

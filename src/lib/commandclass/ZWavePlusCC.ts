@@ -1,6 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 export enum ZWavePlusCommand {
 	Get = 0x01,
@@ -29,17 +30,17 @@ export enum ZWavePlusNodeType {
 export class ZWavePlusCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId?: number,
 	);
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: ZWavePlusCommand.Get,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: ZWavePlusCommand,

@@ -1,7 +1,7 @@
 import { assertZWaveError } from "../../../test/util";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { BasicCC, BasicCommand } from "./BasicCC";
-import { CommandClasses } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 describe("lib/commandclass/BasicCC => ", () => {
 	it("the Get command should serialize correctly", () => {

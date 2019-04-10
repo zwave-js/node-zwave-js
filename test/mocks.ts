@@ -1,11 +1,8 @@
-// tslint:disable:no-console
-// tslint:disable:no-unused-expression
-// tslint:disable:variable-name
-
-import { EventEmitter } from "events";
-import * as SerialPort from "serialport";
+/* eslint-disable @typescript-eslint/camelcase */
 import { FunctionType, MessagePriority, MessageType } from "../src/lib/message/Constants";
 import { expectedResponse, Message, messageTypes, priority } from "../src/lib/message/Message";
+import * as SerialPort from "serialport";
+import { EventEmitter } from "events";
 
 const instances = new Map<string, MockSerialPort>();
 
@@ -20,7 +17,7 @@ export interface MockSerialPort {
 
 export class MockSerialPort extends EventEmitter {
 
-	constructor(
+	public constructor(
 		private readonly port: string,
 		private readonly options?: SerialPort.OpenOptions,
 		errorCallback?: SerialPort.ErrorCallback,
@@ -38,41 +35,41 @@ export class MockSerialPort extends EventEmitter {
 		return instances.get(port);
 	}
 
-	public open() {
+	public open(): void {
 		this.openStub();
 	}
 	public readonly openStub: jest.Mock = jest.fn();
-	public doOpen() {
+	public doOpen(): void {
 		this.emit("open");
 	}
-	public failOpen(err: Error) {
+	public failOpen(err: Error): void {
 		this.emit("error", err);
 	}
 
-	public close() {
+	public close(): void {
 		this.closeStub();
 		this.emit("close");
 	}
 	public readonly closeStub: jest.Mock = jest.fn();
 
-	public receiveData(data: Buffer) {
+	public receiveData(data: Buffer): void {
 		this.emit("data", data);
 	}
 
-	public raiseError(err: Error) {
+	public raiseError(err: Error): void {
 		this.emit("error", err);
 	}
 
-	public write(data: string | number[] | Buffer) {
+	public write(data: string | number[] | Buffer): void {
 		this.writeStub(data);
 	}
 	public readonly writeStub: jest.Mock = jest.fn();
 
 }
 
-export const MockRequestMessageWithExpectation_FunctionType = 0xfa as FunctionType;
-export const MockRequestMessageWithoutExpectation_FunctionType = 0xfb as FunctionType;
-export const MockResponseMessage_FunctionType = 0xff as FunctionType;
+export const MockRequestMessageWithExpectation_FunctionType = 0xfa as unknown as FunctionType;
+export const MockRequestMessageWithoutExpectation_FunctionType = 0xfb as unknown as FunctionType;
+export const MockResponseMessage_FunctionType = 0xff as unknown as FunctionType;
 
 @messageTypes(MessageType.Request, MockRequestMessageWithExpectation_FunctionType)
 @expectedResponse(MockResponseMessage_FunctionType)

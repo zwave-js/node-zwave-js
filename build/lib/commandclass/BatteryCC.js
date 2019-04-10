@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const CommandClass_1 = require("./CommandClass");
+const CommandClasses_1 = require("./CommandClasses");
 var BatteryCommand;
 (function (BatteryCommand) {
     BatteryCommand[BatteryCommand["Get"] = 2] = "Get";
@@ -59,9 +60,9 @@ __decorate([
     __metadata("design:type", Boolean)
 ], BatteryCC.prototype, "isLow", void 0);
 BatteryCC = __decorate([
-    CommandClass_1.commandClass(CommandClass_1.CommandClasses.Battery),
+    CommandClass_1.commandClass(CommandClasses_1.CommandClasses.Battery),
     CommandClass_1.implementedVersion(1),
-    CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses.Battery),
+    CommandClass_1.expectedCCResponse(CommandClasses_1.CommandClasses.Battery),
     __metadata("design:paramtypes", [Object, Number, Number])
 ], BatteryCC);
 exports.BatteryCC = BatteryCC;

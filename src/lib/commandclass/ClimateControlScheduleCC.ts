@@ -2,7 +2,8 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { decodeSetbackState, encodeSetbackState, SetbackState } from "../values/SetbackState";
 import { decodeSwitchpoint, encodeSwitchpoint, Switchpoint } from "../values/Switchpoint";
-import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 export enum ClimateControlScheduleCommand {
 	Set = 0x01,
@@ -37,30 +38,30 @@ export enum ScheduleOverrideType {
 export class ClimateControlScheduleCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId?: number,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: ClimateControlScheduleCommand.Set,
 		weekday: Weekday,
 		switchPoints: Switchpoint[],
 	)
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: ClimateControlScheduleCommand.Get,
 		weekday: Weekday,
 	)
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: ClimateControlScheduleCommand.ChangedGet | ClimateControlScheduleCommand.OverrideGet,
 	)
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: ClimateControlScheduleCommand.OverrideSet,
@@ -68,7 +69,7 @@ export class ClimateControlScheduleCC extends CommandClass {
 		overrideState: SetbackState,
 	)
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: ClimateControlScheduleCommand,
@@ -117,14 +118,14 @@ export class ClimateControlScheduleCC extends CommandClass {
 					});
 				}
 				this.payload = Buffer.concat([
-					Buffer.from([ this.weekday & 0b111 ]),
+					Buffer.from([this.weekday & 0b111]),
 					...allSwitchPoints.map(sp => encodeSwitchpoint(sp)),
 				]);
 				break;
 			}
 
 			case ClimateControlScheduleCommand.Get:
-				this.payload = Buffer.from([ this.weekday & 0b111 ]);
+				this.payload = Buffer.from([this.weekday & 0b111]);
 				break;
 
 			case ClimateControlScheduleCommand.OverrideSet:

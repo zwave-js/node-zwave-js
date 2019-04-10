@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { Message } from "../message/Message";
+import { JSONObject } from "../util/misc";
 export declare class GetControllerCapabilitiesRequest extends Message {
 }
 export declare class GetControllerCapabilitiesResponse extends Message {
@@ -10,5 +11,5 @@ export declare class GetControllerCapabilitiesResponse extends Message {
     readonly wasRealPrimary: boolean;
     readonly isStaticUpdateController: boolean;
     deserialize(data: Buffer): number;
-    toJSON(): Record<string, any>;
+    toJSON(): JSONObject;
 }

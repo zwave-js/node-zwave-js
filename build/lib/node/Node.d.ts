@@ -1,10 +1,12 @@
 /// <reference types="node" />
 import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
-import { CommandClass, CommandClasses, CommandClassInfo, StateKind } from "../commandclass/CommandClass";
+import { CommandClass, CommandClassInfo, StateKind } from "../commandclass/CommandClass";
+import { CommandClasses } from "../commandclass/CommandClasses";
 import { Baudrate } from "../controller/GetNodeProtocolInfoMessages";
 import { Driver } from "../driver/Driver";
-import { BasicDeviceClasses, DeviceClass } from "./DeviceClass";
+import { JSONObject } from "../util/misc";
+import { DeviceClass } from "./DeviceClass";
 import { NodeUpdatePayload } from "./NodeInfo";
 import { ValueDBEventCallbacks } from "./ValueDB";
 export declare type ZWaveNodeEventCallbacks = Overwrite<{
@@ -15,6 +17,26 @@ export interface ZWaveNode {
     on<TEvent extends ZWaveNodeEvents>(event: TEvent, callback: ZWaveNodeEventCallbacks[TEvent]): this;
     removeListener<TEvent extends ZWaveNodeEvents>(event: TEvent, callback: ZWaveNodeEventCallbacks[TEvent]): this;
     removeAllListeners(event?: ZWaveNodeEvents): this;
+}
+export declare enum InterviewStage {
+    None = 0,
+    ProtocolInfo = 1,
+    Ping = 2,
+    NodeInfo = 3,
+    NodePlusInfo = 4,
+    ManufacturerSpecific = 5,
+    SecurityReport = 6,
+    Versions = 7,
+    Endpoints = 8,
+    Static = 9,
+    RestartFromCache = 10,
+    WakeUp = 11,
+    Associations = 12,
+    Neighbors = 13,
+    Session = 14,
+    Dynamic = 15,
+    Configuration = 16,
+    Complete = 17
 }
 export declare class ZWaveNode extends EventEmitter {
     readonly id: number;
@@ -84,47 +106,11 @@ export declare class ZWaveNode extends EventEmitter {
      */
     requestState(kind: StateKind, commandClasses?: CommandClasses[]): Promise<void>;
     /** Serializes this node in order to store static data in a cache */
-    serialize(): {
-        id: number;
-        interviewStage: string;
-        deviceClass: {
-            basic: BasicDeviceClasses;
-            generic: import("./DeviceClass").GenericDeviceClasses;
-            specific: number;
-        };
-        isListening: boolean;
-        isFrequentListening: boolean;
-        isRouting: boolean;
-        maxBaudRate: Baudrate;
-        isSecure: boolean;
-        isBeaming: boolean;
-        version: number;
-        commandClasses: {};
-    };
+    serialize(): JSONObject;
     updateNodeInfo(nodeInfo: NodeUpdatePayload): void;
     deserialize(obj: any): void;
     setAwake(awake: boolean, emitEvent?: boolean): void;
     isAwake(): boolean;
     private isSendingNoMoreInformation;
     sendNoMoreInformation(): Promise<boolean>;
-}
-export declare enum InterviewStage {
-    None = 0,
-    ProtocolInfo = 1,
-    Ping = 2,
-    NodeInfo = 3,
-    NodePlusInfo = 4,
-    ManufacturerSpecific = 5,
-    SecurityReport = 6,
-    Versions = 7,
-    Endpoints = 8,
-    Static = 9,
-    RestartFromCache = 10,
-    WakeUp = 11,
-    Associations = 12,
-    Neighbors = 13,
-    Session = 14,
-    Dynamic = 15,
-    Configuration = 16,
-    Complete = 17
 }

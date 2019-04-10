@@ -1,8 +1,10 @@
 import { composeObject } from "alcalzone-shared/objects";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { JSONObject } from "../util/misc";
 import { parseBitMask } from "../values/Primitive";
-import { CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 export enum NotificationCommand {
 	// All the supported commands
@@ -39,8 +41,8 @@ export class NotificationCC extends CommandClass {
 	// former AlarmCC (v1..v2)
 
 	// tslint:disable:unified-signatures
-	constructor(driver: IDriver, nodeId?: number);
-	constructor(
+	public constructor(driver: IDriver, nodeId?: number);
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: NotificationCommand.Get,
@@ -48,20 +50,20 @@ export class NotificationCC extends CommandClass {
 		notificationType: NotificationType,
 		notificationEvent?: number,
 	);
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: NotificationCommand.Set,
 		notificationType: NotificationType,
 		notificationStatus: boolean,
 	);
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: NotificationCommand.SupportedGet,
 	);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: NotificationCommand,
@@ -131,7 +133,7 @@ export class NotificationCC extends CommandClass {
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
 			case NotificationCommand.Get: {
-				const payload = [ this.alarmType ];
+				const payload = [this.alarmType];
 				if (this.version >= 2) {
 					payload.push(this.notificationType);
 				}
@@ -155,7 +157,7 @@ export class NotificationCC extends CommandClass {
 				break;
 
 			case NotificationCommand.EventSupportedGet:
-				this.payload = Buffer.from([ this.notificationType ]);
+				this.payload = Buffer.from([this.notificationType]);
 				break;
 
 			default:
@@ -235,7 +237,7 @@ export class NotificationCC extends CommandClass {
 		}
 	}
 
-	public toJSON() {
+	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			ccCommand: NotificationCommand[this.ccCommand],
 			alarmType: this.alarmType,

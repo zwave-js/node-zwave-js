@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var WakeUpCC_1;
 const ZWaveError_1 = require("../error/ZWaveError");
 const CommandClass_1 = require("./CommandClass");
+const CommandClasses_1 = require("./CommandClasses");
 var WakeUpCommand;
 (function (WakeUpCommand) {
     WakeUpCommand[WakeUpCommand["IntervalSet"] = 4] = "IntervalSet";
@@ -29,7 +30,7 @@ function getExpectedResponseToWakeUp(sent) {
         case WakeUpCommand.NoMoreInformation:
             return undefined;
         // All other expect a WakeUp CC
-        default: return CommandClass_1.CommandClasses["Wake Up"];
+        default: return CommandClasses_1.CommandClasses["Wake Up"];
     }
 }
 let WakeUpCC = WakeUpCC_1 = class WakeUpCC extends CommandClass_1.CommandClass {
@@ -94,7 +95,7 @@ let WakeUpCC = WakeUpCC_1 = class WakeUpCC extends CommandClass_1.CommandClass {
         this.getValueDB().setValue(CommandClass_1.getCommandClass(this), undefined, "awake", awake);
     }
     static setAwake(driver, node, awake) {
-        return new WakeUpCC_1(driver, node.id).setAwake(awake);
+        new WakeUpCC_1(driver, node.id).setAwake(awake);
     }
 };
 __decorate([
@@ -122,7 +123,7 @@ __decorate([
     __metadata("design:type", Number)
 ], WakeUpCC.prototype, "wakeUpIntervalSteps", void 0);
 WakeUpCC = WakeUpCC_1 = __decorate([
-    CommandClass_1.commandClass(CommandClass_1.CommandClasses["Wake Up"]),
+    CommandClass_1.commandClass(CommandClasses_1.CommandClasses["Wake Up"]),
     CommandClass_1.implementedVersion(2),
     CommandClass_1.expectedCCResponse(getExpectedResponseToWakeUp),
     __metadata("design:paramtypes", [Object, Number, Number, Number, Number])

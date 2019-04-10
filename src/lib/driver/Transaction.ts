@@ -15,13 +15,13 @@ export const MAX_SEND_ATTEMPTS = 3;
 
 export class Transaction implements Comparable<Transaction> {
 
-	constructor(
+	public constructor(
 		driver: Driver,
 		message: Message,
 		promise: DeferredPromise<Message | void>,
 		priority: MessagePriority,
 	);
-	constructor(
+	public constructor(
 		private readonly driver: Driver,
 		public readonly message: Message,
 		public readonly promise: DeferredPromise<Message | void>,

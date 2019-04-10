@@ -1,6 +1,8 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { ccValue, CommandClass, commandClass, CommandClasses, implementedVersion } from "./CommandClass";
+import { JSONObject } from "../util/misc";
+import { ccValue, CommandClass, commandClass, implementedVersion } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 export enum CentralSceneCommand {
 	SupportedGet = 0x01,
@@ -26,11 +28,11 @@ export enum CentralSceneKeys {
 export class CentralSceneCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(driver: IDriver, nodeId?: number);
-	constructor(driver: IDriver, nodeId: number, command: CentralSceneCommand.SupportedGet | CentralSceneCommand.ConfigurationGet);
-	constructor(driver: IDriver, nodeId: number, command: CentralSceneCommand.ConfigurationSet, slowRefresh: boolean);
+	public constructor(driver: IDriver, nodeId?: number);
+	public constructor(driver: IDriver, nodeId: number, command: CentralSceneCommand.SupportedGet | CentralSceneCommand.ConfigurationGet);
+	public constructor(driver: IDriver, nodeId: number, command: CentralSceneCommand.ConfigurationSet, slowRefresh: boolean);
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: CentralSceneCommand,
@@ -77,7 +79,7 @@ export class CentralSceneCC extends CommandClass {
 				break;
 
 			case CentralSceneCommand.ConfigurationSet:
-				this.payload = Buffer.from([ this.slowRefresh ? 0b1000_0000 : 0 ]);
+				this.payload = Buffer.from([this.slowRefresh ? 0b1000_0000 : 0]);
 				break;
 
 			default:
@@ -132,7 +134,7 @@ export class CentralSceneCC extends CommandClass {
 		}
 	}
 
-	public toJSON() {
+	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			centralSceneCommand: CentralSceneCommand[this.ccCommand],
 			slowRefresh: this.slowRefresh,

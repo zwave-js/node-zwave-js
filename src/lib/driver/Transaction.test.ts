@@ -1,12 +1,8 @@
-// tslint:disable:no-unused-expression
-
-import { CommandClasses } from "../commandclass/CommandClass";
+import { CommandClasses } from "../commandclass/CommandClasses";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
-import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { MessagePriority } from "../message/Constants";
 import { ZWaveNode } from "../node/Node";
-import { ValueDB } from "../node/ValueDB";
 import { Driver } from "./Driver";
 import { Transaction } from "./Transaction";
 
@@ -113,9 +109,9 @@ describe("lib/driver/Transaction => ", () => {
 			controller: {
 				nodes: new Map<number, MockNode>([
 					// 1: awake
-					[1, {id: 1, isAwake() { return true; }, supportsCC }],
+					[1, { id: 1, isAwake() { return true; }, supportsCC }],
 					// 2: not awake
-					[2, {id: 2, isAwake() { return false; }, supportsCC }],
+					[2, { id: 2, isAwake() { return false; }, supportsCC }],
 				]),
 			},
 		} as unknown as Driver;

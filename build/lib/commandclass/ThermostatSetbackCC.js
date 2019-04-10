@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const SetbackState_1 = require("../values/SetbackState");
 const CommandClass_1 = require("./CommandClass");
+const CommandClasses_1 = require("./CommandClasses");
 var ThermostatSetbackCommand;
 (function (ThermostatSetbackCommand) {
     ThermostatSetbackCommand[ThermostatSetbackCommand["Set"] = 1] = "Set";
@@ -73,9 +74,9 @@ __decorate([
     __metadata("design:type", Object)
 ], ThermostatSetbackCC.prototype, "setbackState", void 0);
 ThermostatSetbackCC = __decorate([
-    CommandClass_1.commandClass(CommandClass_1.CommandClasses["Thermostat Setback"]),
+    CommandClass_1.commandClass(CommandClasses_1.CommandClasses["Thermostat Setback"]),
     CommandClass_1.implementedVersion(1),
-    CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Thermostat Setback"]),
+    CommandClass_1.expectedCCResponse(CommandClasses_1.CommandClasses["Thermostat Setback"]),
     __metadata("design:paramtypes", [Object, Number, Number, Object])
 ], ThermostatSetbackCC);
 exports.ThermostatSetbackCC = ThermostatSetbackCC;

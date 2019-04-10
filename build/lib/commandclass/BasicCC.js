@@ -14,6 +14,7 @@ const strings_1 = require("../util/strings");
 const Duration_1 = require("../values/Duration");
 const Primitive_1 = require("../values/Primitive");
 const CommandClass_1 = require("./CommandClass");
+const CommandClasses_1 = require("./CommandClasses");
 var BasicCommand;
 (function (BasicCommand) {
     BasicCommand[BasicCommand["Set"] = 1] = "Set";
@@ -68,10 +69,10 @@ __decorate([
     __metadata("design:type", Duration_1.Duration)
 ], BasicCC.prototype, "duration", void 0);
 BasicCC = __decorate([
-    CommandClass_1.commandClass(CommandClass_1.CommandClasses.Basic),
+    CommandClass_1.commandClass(CommandClasses_1.CommandClasses.Basic),
     CommandClass_1.implementedVersion(2) // Update tests in CommandClass.test.ts when changing this
     ,
-    CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses.Basic),
+    CommandClass_1.expectedCCResponse(CommandClasses_1.CommandClasses.Basic),
     __metadata("design:paramtypes", [Object, Number, Number, Number])
 ], BasicCC);
 exports.BasicCC = BasicCC;

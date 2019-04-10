@@ -1,7 +1,7 @@
 import { assertZWaveError } from "../../../test/util";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { BatteryCC, BatteryCommand } from "./BatteryCC";
-import { CommandClasses } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 describe("lib/commandclass/BatteryCC => ", () => {
 	it("the Get command should serialize correctly", () => {

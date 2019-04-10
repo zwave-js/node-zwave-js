@@ -1,4 +1,4 @@
-import { CommandClasses } from "../commandclass/CommandClass";
+import { CommandClasses } from "../commandclass/CommandClasses";
 import { BasicDeviceClasses, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
 
 export interface NodeInformationFrame {
@@ -38,7 +38,7 @@ function internalParseNodeInformationFrame(nif: Buffer): ExtendedNodeInformation
 	// TODO: Support 16bit CCs
 	// tslint:disable-next-line:variable-name
 	const CCs = [...nif.slice(2)];
-	let isAfterMark: boolean = false;
+	let isAfterMark = false;
 	for (const cc of CCs) {
 		// CCs before the support/control mark are supported
 		// CCs after the support/control mark are controlled
@@ -55,6 +55,6 @@ function internalParseNodeInformationFrame(nif: Buffer): ExtendedNodeInformation
 }
 
 export function parseNodeInformationFrame(nif: Buffer): NodeInformationFrame {
-	const {controlledCCs, ...ret} = internalParseNodeInformationFrame(nif);
+	const { controlledCCs, ...ret } = internalParseNodeInformationFrame(nif);
 	return ret;
 }

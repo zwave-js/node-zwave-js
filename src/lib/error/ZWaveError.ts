@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/camelcase */
+
 export enum ZWaveErrorCodes {
 	PacketFormat_Truncated,
 	PacketFormat_Invalid,
@@ -23,7 +25,7 @@ export enum ZWaveErrorCodes {
 }
 
 export class ZWaveError extends Error {
-	constructor(
+	public constructor(
 		public readonly message: string,
 		public readonly code: ZWaveErrorCodes,
 	) {

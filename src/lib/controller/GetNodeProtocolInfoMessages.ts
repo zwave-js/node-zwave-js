@@ -3,7 +3,9 @@ import { FunctionType, MessagePriority, MessageType } from "../message/Constants
 import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
 import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "../node/DeviceClass";
 import { INodeQuery } from "../node/INodeQuery";
+import { JSONObject } from "../util/misc";
 
+/* eslint-disable @typescript-eslint/camelcase */
 const enum NodeCapabilityFlags {
 	Listening = 0b10_000_000,
 	Routing = 0b01_000_000,
@@ -15,6 +17,7 @@ const enum NodeCapabilityFlags {
 
 	VersionMask = 0b111,
 }
+/* eslint-enable @typescript-eslint/camelcase */
 
 const enum SecurityFlags {
 	Security = 1 << 0,
@@ -34,7 +37,7 @@ export type Baudrate = 9600 | 40000 | 100000;
 @priority(MessagePriority.NodeQuery)
 export class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
 
-	constructor(
+	public constructor(
 		driver: Driver,
 		nodeId?: number,
 	) {
@@ -49,7 +52,7 @@ export class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
 		return super.serialize();
 	}
 
-	public toJSON() {
+	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			nodeId: this.nodeId,
 		});
@@ -136,7 +139,7 @@ export class GetNodeProtocolInfoResponse extends Message {
 		return ret;
 	}
 
-	public toJSON() {
+	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			isListening: this.isListening,
 			isFrequentListening: this.isFrequentListening,

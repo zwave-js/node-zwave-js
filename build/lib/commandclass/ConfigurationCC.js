@@ -13,6 +13,7 @@ const ZWaveError_1 = require("../error/ZWaveError");
 const misc_1 = require("../util/misc");
 const Primitive_1 = require("../values/Primitive");
 const CommandClass_1 = require("./CommandClass");
+const CommandClasses_1 = require("./CommandClasses");
 var ConfigurationCommand;
 (function (ConfigurationCommand) {
     ConfigurationCommand[ConfigurationCommand["Set"] = 4] = "Set";
@@ -292,9 +293,9 @@ let ConfigurationCC = class ConfigurationCC extends CommandClass_1.CommandClass 
     }
 };
 ConfigurationCC = __decorate([
-    CommandClass_1.commandClass(CommandClass_1.CommandClasses.Configuration),
+    CommandClass_1.commandClass(CommandClasses_1.CommandClasses.Configuration),
     CommandClass_1.implementedVersion(4),
-    CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses.Configuration),
+    CommandClass_1.expectedCCResponse(CommandClasses_1.CommandClasses.Configuration),
     __metadata("design:paramtypes", [Object, Number, Number, Object])
 ], ConfigurationCC);
 exports.ConfigurationCC = ConfigurationCC;

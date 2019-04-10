@@ -1,15 +1,17 @@
 import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import * as fs from "fs";
-import { SendDataRequest } from "../controller/SendDataMessages";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Constructable } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
+import { ValueDB } from "../node/ValueDB";
 import { log } from "../util/logger";
+import { JSONObject } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
-import { CacheValue, serializeCacheValue, SerializedValue } from "../values/Cache";
+import { CacheValue, serializeCacheValue } from "../values/Cache";
 import { Maybe, unknownBoolean } from "../values/Primitive";
+import { CommandClasses } from "./CommandClasses";
 
 export interface CommandClassInfo {
 	isSupported: boolean;
@@ -171,12 +173,12 @@ export class CommandClass {
 		return ret;
 	}
 
-	public toJSON() {
+	public toJSON(): JSONObject {
 		return this.toJSONInternal();
 	}
 
-	private toJSONInternal() {
-		const ret: any = {
+	private toJSONInternal(): JSONObject {
+		const ret: JSONObject = {
 			nodeId: this.nodeId,
 			ccId: CommandClasses[this.ccId] || num2hex(this.ccId),
 		};
@@ -184,8 +186,8 @@ export class CommandClass {
 		return ret;
 	}
 
-	protected toJSONInherited(props: Record<string, any>): Record<string, any> {
-		const ret = this.toJSONInternal() as Record<string, any>;
+	protected toJSONInherited(props: JSONObject): JSONObject {
+		const ret = this.toJSONInternal();
 		delete ret.payload;
 		for (const [key, value] of entries(props)) {
 			if (value !== undefined) ret[key] = value;
@@ -194,6 +196,7 @@ export class CommandClass {
 	}
 
 	/** Requests static or dynamic state for a given from a node */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public static async requestState(driver: IDriver, node: ZWaveNode, kind: StateKind): Promise<void> {
 		// This needs to be overwritten per command class. In the default implementation, don't do anything
 	}
@@ -202,6 +205,7 @@ export class CommandClass {
 	 * Determine whether the linked node supports a specific command of this command class.
 	 * "unknown" means that the information has not been received yet
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public supportsCommand(command: number): Maybe<boolean> {
 		// This needs to be overwritten per command class. In the default implementation, we don't know anything!
 		return unknownBoolean;
@@ -210,23 +214,23 @@ export class CommandClass {
 	/**
 	 * Returns the node this CC is linked to. Throws if the node does not exist.
 	 */
-	public getNode() {
+	public getNode(): ZWaveNode | undefined {
 		if (this.nodeId == undefined) throw new ZWaveError("Cannot retrieve the node without a Node ID", ZWaveErrorCodes.CC_NoNodeID);
 		return this.driver.controller.nodes.get(this.nodeId);
 	}
 
 	/** Returns the value DB for this CC's node */
-	protected getValueDB() {
+	protected getValueDB(): ValueDB {
 		return this.getNode().valueDB;
 	}
 
 	/** Which variables should be persisted when requested */
 	private _variables = new Set<string>();
 	/** Creates a variable that will be stored */
-	public createVariable(name: keyof this) {
+	public createVariable(name: keyof this): void {
 		this._variables.add(name as string);
 	}
-	public createVariables(...names: (keyof this)[]) {
+	public createVariables(...names: (keyof this)[]): void {
 		for (const name of names) {
 			this.createVariable(name);
 		}
@@ -235,7 +239,7 @@ export class CommandClass {
 	/** Persists all values on the given node */
 	public persistValues(
 		variables: Iterable<keyof this> = this._variables.keys() as any,
-	) {
+	): void {
 		const db = this.getValueDB();
 		for (const variable of variables) {
 			db.setValue(getCommandClass(this), this.endpoint, variable as string, this[variable]);
@@ -249,7 +253,7 @@ export class CommandClass {
 	}
 
 	/** Deserializes values from the cache */
-	public deserializeValuesFromCache(values: CacheValue[]) {
+	public deserializeValuesFromCache(values: CacheValue[]): void {
 		const cc = getCommandClass(this);
 		for (const val of values) {
 			// Don't deserialize non-CC values
@@ -279,12 +283,12 @@ export class CommandClass {
 
 // =======================
 // use decorators to link command class values to actual command classes
-// tslint:disable:variable-name
+/* eslint-disable @typescript-eslint/camelcase */
 export const METADATA_commandClass = Symbol("commandClass");
 export const METADATA_commandClassMap = Symbol("commandClassMap");
 export const METADATA_ccResponse = Symbol("ccResponse");
 export const METADATA_version = Symbol("version");
-// tslint:enable:variable-name
+/* eslint-enable @typescript-eslint/camelcase */
 
 // Pre-create the lookup maps for the contructors
 type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
@@ -456,128 +460,6 @@ export function ccValue(): PropertyDecorator {
 			throw new Error(`Cannot define ${property as string} on ${target.constructor.name} as CC value`);
 		}
 	};
-}
-
-/* A dictionary of all command classes as of 2018-03-30 */
-export enum CommandClasses {
-	// "Alarm" = 0x71, // superseded by Notification
-	"Alarm Sensor" = 0x9C,
-	"Alarm Silence" = 0x9D,
-	"All Switch" = 0x27,
-	"Anti-theft" = 0x5D,
-	"Application Capability" = 0x57,
-	"Application Status" = 0x22,
-	"Association" = 0x85,
-	"Association Command Configuration" = 0x9B,
-	"Association Group Information (AGI)" = 0x59,
-	"Barrier Operator" = 0x66,
-	"Basic" = 0x20,
-	"Basic Tariff Information" = 0x36,
-	"Basic Window Covering" = 0x50,
-	"Battery" = 0x80,
-	"Binary Sensor" = 0x30,
-	"Binary Switch" = 0x25,
-	"Binary Toggle Switch" = 0x28,
-	"Climate Control Schedule" = 0x46,
-	"Central Scene" = 0x5B,
-	"Clock" = 0x81,
-	"Color Switch" = 0x33,
-	"Configuration" = 0x70,
-	"Controller Replication" = 0x21,
-	"CRC-16 Encapsulation" = 0x56,
-	"Demand Control Plan Configuration" = 0x3A,
-	"Demand Control Plan Monitor" = 0x3B,
-	"Device Reset Locally" = 0x5A,
-	"Door Lock" = 0x62,
-	"Door Lock Logging" = 0x4C,
-	"Energy Production" = 0x90,
-	"Entry Control" = 0x6F,
-	"Firmware Update Meta Data" = 0x7A,
-	"Geographic Location" = 0x8C,
-	"Grouping Name" = 0x7B,
-	"Hail" = 0x82,
-	"HRV Status" = 0x37,
-	"HRV Control" = 0x39,
-	"Humidity Control Mode" = 0x6D,
-	"Humidity Control Operating State" = 0x6E,
-	"Humidity Control Setpoint" = 0x64,
-	"Inclusion Controller" = 0x74,
-	"Indicator" = 0x87,
-	"IP Association" = 0x5C,
-	"IP Configuration" = 0x9A,
-	"Irrigation" = 0x6B,
-	"Language" = 0x89,
-	"Lock" = 0x76,
-	"Mailbox" = 0x69,
-	"Manufacturer Proprietary" = 0x91,
-	"Manufacturer Specific" = 0x72,
-	"Support/Control Mark" = 0xEF,
-	"Meter" = 0x32,
-	"Meter Table Configuration" = 0x3C,
-	"Meter Table Monitor" = 0x3D,
-	"Meter Table Push Configuration" = 0x3E,
-	"Move To Position Window Covering" = 0x51,
-	"Multi Channel" = 0x60,
-	"Multi Channel Association" = 0x8E,
-	"Multi Command" = 0x8F,
-	"Multilevel Sensor" = 0x31,
-	"Multilevel Switch" = 0x26,
-	"Multilevel Toggle Switch" = 0x29,
-	"Network Management Basic Node" = 0x4D,
-	"Network Management Inclusion" = 0x34,
-	"Network Management Installation and Maintenance" = 0x67,
-	"Network Management Primary" = 0x54,
-	"Network Management Proxy" = 0x52,
-	"No Operation" = 0x00,
-	"Node Naming and Location" = 0x77,
-	"Node Provisioning" = 0x78,
-	"Notification" = 0x71,
-	"Powerlevel" = 0x73,
-	"Prepayment" = 0x3F,
-	"Prepayment Encapsulation" = 0x41,
-	"Proprietary" = 0x88,
-	"Protection" = 0x75,
-	"Pulse Meter" = 0x35,
-	"Rate Table Configuration" = 0x48,
-	"Rate Table Monitor" = 0x49,
-	"Remote Association Activation" = 0x7C,
-	"Remote Association Configuration" = 0x7D,
-	"Scene Activation" = 0x2B,
-	"Scene Actuator Configuration" = 0x2C,
-	"Scene Controller Configuration" = 0x2D,
-	"Schedule" = 0x53,
-	"Schedule Entry Lock" = 0x4E,
-	"Screen Attributes" = 0x93,
-	"Screen Meta Data" = 0x92,
-	"Security" = 0x98, // basic version of the security command class
-	"Security 2" = 0x9F,
-	"Security Mark" = 0xF100,
-	"Sensor Configuration" = 0x9E,
-	"Simple AV Control" = 0x94,
-	"Sound Switch" = 0x79,
-	"Supervision" = 0x6C,
-	"Tariff Table Configuration" = 0x4A,
-	"Tariff Table Monitor" = 0x4B,
-	"Thermostat Fan Mode" = 0x44,
-	"Thermostat Fan State" = 0x45,
-	"Thermostat Mode" = 0x40,
-	"Thermostat Operating State" = 0x42,
-	"Thermostat Setback" = 0x47,
-	"Thermostat Setpoint" = 0x43,
-	"Time" = 0x8A,
-	"Time Parameters" = 0x8B,
-	"Transport Service" = 0x55,
-	"User Code" = 0x63,
-	"Version" = 0x86,
-	"Wake Up" = 0x84,
-	"Window Covering" = 0x6A,
-	"Z/IP" = 0x23,
-	"Z/IP 6LoWPAN" = 0x4F,
-	"Z/IP Gateway" = 0x5F,
-	"Z/IP Naming and Location" = 0x68,
-	"Z/IP ND" = 0x58,
-	"Z/IP Portal" = 0x61,
-	"Z-Wave Plus Info" = 0x5E,
 }
 
 // To be sure all metadata gets loaded, import all command classes

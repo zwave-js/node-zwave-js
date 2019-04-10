@@ -1,7 +1,8 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { parseBitMask } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, CommandClasses, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
 export enum BinarySensorCommand {
 	Get = 0x02,
@@ -16,20 +17,20 @@ export enum BinarySensorCommand {
 export class BinarySensorCC extends CommandClass {
 
 	// tslint:disable:unified-signatures
-	constructor(driver: IDriver, nodeId?: number);
-	constructor(
+	public constructor(driver: IDriver, nodeId?: number);
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: BinarySensorCommand.Get,
 		sensorType?: BinarySensorType,
 	);
-	constructor(
+	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: BinarySensorCommand.SupportedGet,
 	)
 
-	constructor(
+	public constructor(
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: BinarySensorCommand,

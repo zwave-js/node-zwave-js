@@ -3,7 +3,8 @@ import { entries } from "alcalzone-shared/objects";
 import { assertZWaveError } from "../../../test/util";
 import { BasicCC } from "../commandclass/BasicCC";
 import { BinarySensorCC } from "../commandclass/BinarySensorCC";
-import { CommandClass, CommandClasses, getCommandClassStatic } from "../commandclass/CommandClass";
+import { CommandClass, getCommandClassStatic } from "../commandclass/CommandClass";
+import { CommandClasses } from "../commandclass/CommandClasses";
 import { ManufacturerSpecificCC, ManufacturerSpecificCommand } from "../commandclass/ManufacturerSpecificCC";
 import { MultiChannelCC, MultiChannelCommand } from "../commandclass/MultiChannelCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
@@ -26,43 +27,43 @@ import { ValueDB } from "./ValueDB";
 /** This is an ugly hack to be able to test the private methods without resorting to @internal */
 class TestNode extends ZWaveNode {
 
-	public async queryProtocolInfo() {
+	public async queryProtocolInfo(): Promise<void> {
 		return super.queryProtocolInfo();
 	}
-	public async ping(...args: any[]) {
+	public async ping(...args: any[]): Promise<void> {
 		return super.ping(...args);
 	}
-	public async queryNodeInfo() {
+	public async queryNodeInfo(): Promise<void> {
 		return super.queryNodeInfo();
 	}
-	public async queryNodePlusInfo() {
+	public async queryNodePlusInfo(): Promise<void> {
 		return super.queryNodePlusInfo();
 	}
-	public async queryManufacturerSpecific() {
+	public async queryManufacturerSpecific(): Promise<void> {
 		return super.queryManufacturerSpecific();
 	}
-	public async queryCCVersions() {
+	public async queryCCVersions(): Promise<void> {
 		return super.queryCCVersions();
 	}
-	public async queryEndpoints() {
+	public async queryEndpoints(): Promise<void> {
 		return super.queryEndpoints();
 	}
-	public async configureWakeup() {
+	public async configureWakeup(): Promise<void> {
 		return super.configureWakeup();
 	}
-	public async requestStaticValues() {
+	public async requestStaticValues(): Promise<void> {
 		return super.requestStaticValues();
 	}
-	public async queryNeighbors() {
+	public async queryNeighbors(): Promise<void> {
 		return super.queryNeighbors();
 	}
 }
 
 function assertCC<T extends CommandClass, TConst = Constructable<T>>(callArg: any, options: {
-	nodeId?: number,
-	cc: TConst,
-	ccValues?: Record<string, any>,
-}) {
+	nodeId?: number;
+	cc: TConst;
+	ccValues?: Record<string, any>;
+}): void {
 	const request: SendDataRequest = callArg;
 	expect(request).toBeInstanceOf(SendDataRequest);
 	if (options.nodeId) expect(request.getNodeId()).toBe(options.nodeId);
@@ -86,7 +87,7 @@ describe("lib/node/Node", () => {
 		});
 
 		it("stores the given device class", () => {
-			function makeNode(cls: DeviceClass) {
+			function makeNode(cls: DeviceClass): ZWaveNode {
 				return new ZWaveNode(1, undefined, cls);
 			}
 
@@ -107,14 +108,14 @@ describe("lib/node/Node", () => {
 			function makeNode(
 				supportedCCs: CommandClasses[] = [],
 				controlledCCs: CommandClasses[] = [],
-			) {
+			): ZWaveNode {
 				return new ZWaveNode(
 					1, undefined, undefined,
 					supportedCCs, controlledCCs,
 				);
 			}
 
-			const tests: { supported: CommandClasses[], controlled: CommandClasses[] }[] = [
+			const tests: { supported: CommandClasses[]; controlled: CommandClasses[] }[] = [
 				{ supported: [CommandClasses["Anti-theft"]], controlled: [CommandClasses.Basic] },
 			];
 			for (const { supported, controlled } of tests) {
@@ -658,7 +659,7 @@ describe("lib/node/Node", () => {
 			},
 		};
 
-		function makeNode(supportsWakeUp: boolean = false) {
+		function makeNode(supportsWakeUp: boolean = false): ZWaveNode {
 			const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
 			if (supportsWakeUp) node.addCC(CommandClasses["Wake Up"], { isSupported: true });
 			fakeDriver.controller.nodes.set(node.id, node);
@@ -731,7 +732,7 @@ describe("lib/node/Node", () => {
 			},
 		};
 
-		function makeNode(supportsWakeUp: boolean = false) {
+		function makeNode(supportsWakeUp: boolean = false): ZWaveNode {
 			const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
 			if (supportsWakeUp) node.addCC(CommandClasses["Wake Up"], { isSupported: true });
 			fakeDriver.controller.nodes.set(node.id, node);
