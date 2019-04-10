@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { IDriver } from "../driver/IDriver";
+import { JSONObject } from "../util/misc";
 import { CommandClass } from "./CommandClass";
 export declare enum CentralSceneCommand {
     SupportedGet = 1,
@@ -38,5 +39,5 @@ export declare class CentralSceneCC extends CommandClass {
     readonly sceneNumber: number;
     serialize(): Buffer;
     deserialize(data: Buffer): void;
-    toJSON(): Record<string, any>;
+    toJSON(): JSONObject;
 }

@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import { CommandClasses } from "../commandclass/CommandClass";
+import { CommandClasses } from "../commandclass/CommandClasses";
 import { BasicDeviceClasses, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
 export interface NodeInformationFrame {
     generic: GenericDeviceClass;

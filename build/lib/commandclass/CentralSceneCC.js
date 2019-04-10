@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const CommandClass_1 = require("./CommandClass");
+const CommandClasses_1 = require("./CommandClasses");
 var CentralSceneCommand;
 (function (CentralSceneCommand) {
     CentralSceneCommand[CentralSceneCommand["SupportedGet"] = 1] = "SupportedGet";
@@ -123,7 +124,7 @@ __decorate([
     __metadata("design:type", Number)
 ], CentralSceneCC.prototype, "sceneCount", void 0);
 CentralSceneCC = __decorate([
-    CommandClass_1.commandClass(CommandClass_1.CommandClasses["Central Scene"]),
+    CommandClass_1.commandClass(CommandClasses_1.CommandClasses["Central Scene"]),
     CommandClass_1.implementedVersion(3),
     __metadata("design:paramtypes", [Object, Number, Number, Boolean])
 ], CentralSceneCC);

@@ -41,21 +41,6 @@ function getNextCallbackId() {
         lastCallbackId = 10;
     return lastCallbackId;
 }
-// Generic handler for all potential responses to SendDataRequests
-function testResponseForSendDataRequest(sent, received) {
-    if (received instanceof SendDataResponse) {
-        return received.wasSent
-            ? "intermediate"
-            : "fatal_controller";
-    }
-    else if (received instanceof SendDataRequest) {
-        return received.isFailed()
-            ? "fatal_node"
-            : "final" // send data requests are final unless stated otherwise by a CommandClass
-        ;
-    }
-    return "unexpected";
-}
 let SendDataRequest = class SendDataRequest extends Message_1.Message {
     constructor(driver, command, 
     /** Options regarding the transmission of the message */
@@ -163,3 +148,18 @@ SendDataResponse = __decorate([
     Message_1.messageTypes(Constants_1.MessageType.Response, Constants_1.FunctionType.SendData)
 ], SendDataResponse);
 exports.SendDataResponse = SendDataResponse;
+// Generic handler for all potential responses to SendDataRequests
+function testResponseForSendDataRequest(sent, received) {
+    if (received instanceof SendDataResponse) {
+        return received.wasSent
+            ? "intermediate"
+            : "fatal_controller";
+    }
+    else if (received instanceof SendDataRequest) {
+        return received.isFailed()
+            ? "fatal_node"
+            : "final" // send data requests are final unless stated otherwise by a CommandClass
+        ;
+    }
+    return "unexpected";
+}

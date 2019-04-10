@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const Primitive_1 = require("../values/Primitive");
 const CommandClass_1 = require("./CommandClass");
+const CommandClasses_1 = require("./CommandClasses");
 var BinarySensorCommand;
 (function (BinarySensorCommand) {
     BinarySensorCommand[BinarySensorCommand["Get"] = 2] = "Get";
@@ -81,9 +82,9 @@ __decorate([
     __metadata("design:type", Boolean)
 ], BinarySensorCC.prototype, "value", void 0);
 BinarySensorCC = __decorate([
-    CommandClass_1.commandClass(CommandClass_1.CommandClasses["Binary Sensor"]),
+    CommandClass_1.commandClass(CommandClasses_1.CommandClasses["Binary Sensor"]),
     CommandClass_1.implementedVersion(2),
-    CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Binary Sensor"]),
+    CommandClass_1.expectedCCResponse(CommandClasses_1.CommandClasses["Binary Sensor"]),
     __metadata("design:paramtypes", [Object, Number, Number, Number])
 ], BinarySensorCC);
 exports.BinarySensorCC = BinarySensorCC;

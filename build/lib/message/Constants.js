@@ -1,4 +1,5 @@
 "use strict";
+/* eslint-disable @typescript-eslint/camelcase */
 Object.defineProperty(exports, "__esModule", { value: true });
 /** The priority of messages, sorted from high (0) to low (>0) */
 var MessagePriority;

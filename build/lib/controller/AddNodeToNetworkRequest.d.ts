@@ -1,8 +1,9 @@
 /// <reference types="node" />
-import { CommandClasses } from "../commandclass/CommandClass";
+import { CommandClasses } from "../commandclass/CommandClasses";
 import { Driver } from "../driver/Driver";
 import { Message } from "../message/Message";
 import { BasicDeviceClasses, GenericDeviceClass, SpecificDeviceClass } from "../node/DeviceClass";
+import { JSONObject } from "../util/misc";
 export declare enum AddNodeType {
     Any = 1,
     Controller = 2,
@@ -35,7 +36,7 @@ export declare class AddNodeToNetworkRequest extends Message {
     readonly statusContext: AddNodeStatusContext;
     serialize(): Buffer;
     deserialize(data: Buffer): number;
-    toJSON(): Record<string, any>;
+    toJSON(): JSONObject;
 }
 export interface AddNodeStatusContext {
     nodeId: number;

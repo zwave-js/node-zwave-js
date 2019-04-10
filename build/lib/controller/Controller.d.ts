@@ -2,6 +2,7 @@
 import { EventEmitter } from "events";
 import { FunctionType } from "../message/Constants";
 import { ZWaveNode } from "../node/Node";
+import { JSONObject } from "../util/misc";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 export declare class ZWaveController extends EventEmitter {
     private readonly driver;
@@ -50,9 +51,7 @@ export declare class ZWaveController extends EventEmitter {
     stopInclusion(): Promise<boolean>;
     private handleAddNodeRequest;
     /** Serializes the controller information and all nodes to store them in a cache */
-    serialize(): {
-        nodes: {};
-    };
+    serialize(): JSONObject;
     /** Deserializes the controller information and all nodes from the cache */
     deserialize(serialized: any): void;
 }

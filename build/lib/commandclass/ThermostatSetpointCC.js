@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const Primitive_1 = require("../values/Primitive");
 const CommandClass_1 = require("./CommandClass");
+const CommandClasses_1 = require("./CommandClasses");
 var ThermostatSetpointCommand;
 (function (ThermostatSetpointCommand) {
     ThermostatSetpointCommand[ThermostatSetpointCommand["Set"] = 1] = "Set";
@@ -153,9 +154,9 @@ __decorate([
     __metadata("design:type", Number)
 ], ThermostatSetpointCC.prototype, "setpointType", void 0);
 ThermostatSetpointCC = __decorate([
-    CommandClass_1.commandClass(CommandClass_1.CommandClasses["Thermostat Setpoint"]),
+    CommandClass_1.commandClass(CommandClasses_1.CommandClasses["Thermostat Setpoint"]),
     CommandClass_1.implementedVersion(3),
-    CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Thermostat Setpoint"]),
+    CommandClass_1.expectedCCResponse(CommandClasses_1.CommandClasses["Thermostat Setpoint"]),
     __metadata("design:paramtypes", [Object, Number, Number, Number, Number])
 ], ThermostatSetpointCC);
 exports.ThermostatSetpointCC = ThermostatSetpointCC;

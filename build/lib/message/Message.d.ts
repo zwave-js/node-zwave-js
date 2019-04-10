@@ -1,6 +1,7 @@
 /// <reference types="node" />
 import { IDriver } from "../driver/IDriver";
 import { ZWaveNode } from "../node/Node";
+import { JSONObject } from "../util/misc";
 import { FunctionType, MessagePriority, MessageType } from "./Constants";
 export declare type Constructable<T> = new (driver: IDriver, ...constructorArgs: any[]) => T;
 /**
@@ -33,9 +34,9 @@ export declare class Message {
     deserialize(data: Buffer): number;
     /** Returns the slice of data which represents the message payload */
     static getPayload(data: Buffer): Buffer;
-    toJSON(): any;
+    toJSON(): JSONObject;
     private toJSONInternal;
-    protected toJSONInherited(props: Record<string, any>): Record<string, any>;
+    protected toJSONInherited(props: JSONObject): JSONObject;
     /** Checks if a message is an expected response for this message */
     testResponse(msg: Message): ResponseRole;
     /** Finds the ID of the target or source node in a message, if it contains that information */

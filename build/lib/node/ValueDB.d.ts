@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { EventEmitter } from "events";
-import { CommandClasses } from "../commandclass/CommandClass";
+import { CommandClasses } from "../commandclass/CommandClasses";
 export interface ValueBaseArgs {
     commandClass: CommandClasses;
     endpoint?: number;
@@ -55,7 +55,7 @@ export declare class ValueDB extends EventEmitter {
      */
     getValue(cc: CommandClasses, endpoint: number | undefined, propertyName: string): unknown;
     getValues(forCC: CommandClasses): {
-        endpoint: number;
+        endpoint: number | undefined;
         propertyName: string;
         value: unknown;
     }[];

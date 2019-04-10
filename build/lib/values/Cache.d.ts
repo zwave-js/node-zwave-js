@@ -1,4 +1,5 @@
-export declare type SerializedValue = number | string | boolean | Record<string, any>;
+import { JSONObject } from "../util/misc";
+export declare type SerializedValue = number | string | boolean | JSONObject;
 export interface CacheValue {
     value: SerializedValue;
     endpoint: number;

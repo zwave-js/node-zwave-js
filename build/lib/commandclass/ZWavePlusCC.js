@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const CommandClass_1 = require("./CommandClass");
+const CommandClasses_1 = require("./CommandClasses");
 var ZWavePlusCommand;
 (function (ZWavePlusCommand) {
     ZWavePlusCommand[ZWavePlusCommand["Get"] = 1] = "Get";
@@ -84,9 +85,9 @@ __decorate([
     __metadata("design:type", Number)
 ], ZWavePlusCC.prototype, "userIcon", void 0);
 ZWavePlusCC = __decorate([
-    CommandClass_1.commandClass(CommandClass_1.CommandClasses["Z-Wave Plus Info"]),
+    CommandClass_1.commandClass(CommandClasses_1.CommandClasses["Z-Wave Plus Info"]),
     CommandClass_1.implementedVersion(2),
-    CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Z-Wave Plus Info"]),
+    CommandClass_1.expectedCCResponse(CommandClasses_1.CommandClasses["Z-Wave Plus Info"]),
     __metadata("design:paramtypes", [Object, Number, Number])
 ], ZWavePlusCC);
 exports.ZWavePlusCC = ZWavePlusCC;

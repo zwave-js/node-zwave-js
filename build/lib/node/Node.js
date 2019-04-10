@@ -6,6 +6,7 @@ const strings_1 = require("alcalzone-shared/strings");
 const typeguards_1 = require("alcalzone-shared/typeguards");
 const events_1 = require("events");
 const CommandClass_1 = require("../commandclass/CommandClass");
+const CommandClasses_1 = require("../commandclass/CommandClasses");
 const ICommandClassContainer_1 = require("../commandclass/ICommandClassContainer");
 const ManufacturerSpecificCC_1 = require("../commandclass/ManufacturerSpecificCC");
 const MultiChannelCC_1 = require("../commandclass/MultiChannelCC");
@@ -25,6 +26,32 @@ const strings_2 = require("../util/strings");
 const DeviceClass_1 = require("./DeviceClass");
 const RequestNodeInfoMessages_1 = require("./RequestNodeInfoMessages");
 const ValueDB_1 = require("./ValueDB");
+var InterviewStage;
+(function (InterviewStage) {
+    InterviewStage[InterviewStage["None"] = 0] = "None";
+    InterviewStage[InterviewStage["ProtocolInfo"] = 1] = "ProtocolInfo";
+    InterviewStage[InterviewStage["Ping"] = 2] = "Ping";
+    InterviewStage[InterviewStage["NodeInfo"] = 3] = "NodeInfo";
+    InterviewStage[InterviewStage["NodePlusInfo"] = 4] = "NodePlusInfo";
+    InterviewStage[InterviewStage["ManufacturerSpecific"] = 5] = "ManufacturerSpecific";
+    InterviewStage[InterviewStage["SecurityReport"] = 6] = "SecurityReport";
+    InterviewStage[InterviewStage["Versions"] = 7] = "Versions";
+    InterviewStage[InterviewStage["Endpoints"] = 8] = "Endpoints";
+    InterviewStage[InterviewStage["Static"] = 9] = "Static";
+    // ===== the stuff above should never change =====
+    InterviewStage[InterviewStage["RestartFromCache"] = 10] = "RestartFromCache";
+    // 						   RestartFromCache and later stages will be serialized as "Complete" in the cache
+    // 						   [✓] Ping each device upon restarting with cached config
+    // ===== the stuff below changes frequently, so it has to be redone on every start =====
+    // TODO: Heal network
+    InterviewStage[InterviewStage["WakeUp"] = 11] = "WakeUp";
+    InterviewStage[InterviewStage["Associations"] = 12] = "Associations";
+    InterviewStage[InterviewStage["Neighbors"] = 13] = "Neighbors";
+    InterviewStage[InterviewStage["Session"] = 14] = "Session";
+    InterviewStage[InterviewStage["Dynamic"] = 15] = "Dynamic";
+    InterviewStage[InterviewStage["Configuration"] = 16] = "Configuration";
+    InterviewStage[InterviewStage["Complete"] = 17] = "Complete";
+})(InterviewStage = exports.InterviewStage || (exports.InterviewStage = {}));
 class ZWaveNode extends events_1.EventEmitter {
     constructor(id, driver, deviceClass, supportedCCs = [], controlledCCs = []) {
         super();
@@ -116,7 +143,7 @@ class ZWaveNode extends events_1.EventEmitter {
     // wotan-disable no-misused-generics
     createCCInstance(cc) {
         if (!this.supportsCC(cc) && !this.controlsCC(cc)) {
-            throw new ZWaveError_1.ZWaveError(`Cannot create an instance of the unsupported CC ${CommandClass_1.CommandClasses[cc]} (${strings_2.num2hex(cc)})`, ZWaveError_1.ZWaveErrorCodes.CC_NotSupported);
+            throw new ZWaveError_1.ZWaveError(`Cannot create an instance of the unsupported CC ${CommandClasses_1.CommandClasses[cc]} (${strings_2.num2hex(cc)})`, ZWaveError_1.ZWaveErrorCodes.CC_NotSupported);
         }
         // tslint:disable-next-line: variable-name
         const Constructor = CommandClass_1.getCCConstructor(cc);
@@ -224,7 +251,7 @@ class ZWaveNode extends events_1.EventEmitter {
             // This is a "sleeping" device which must support the WakeUp CC.
             // We are requesting the supported CCs later, but those commands may need to go into the
             // wakeup queue. Thus we need to mark WakeUp as supported
-            this.addCC(CommandClass_1.CommandClasses["Wake Up"], {
+            this.addCC(CommandClasses_1.CommandClasses["Wake Up"], {
                 isSupported: true,
             });
             // Assume the node is awake, after all we're communicating with it.
@@ -276,7 +303,7 @@ class ZWaveNode extends events_1.EventEmitter {
     }
     /** Step #6 of the node interview */
     async queryNodePlusInfo() {
-        if (!this.supportsCC(CommandClass_1.CommandClasses["Z-Wave Plus Info"])) {
+        if (!this.supportsCC(CommandClasses_1.CommandClasses["Z-Wave Plus Info"])) {
             logger_1.log("controller", `${this.logPrefix}skipping Z-Wave+ query because the device does not support it`, "debug");
         }
         else {
@@ -336,13 +363,13 @@ class ZWaveNode extends events_1.EventEmitter {
             // only query the ones we support a version > 1 for
             const maxImplemented = CommandClass_1.getImplementedVersion(cc);
             if (maxImplemented < 1) {
-                logger_1.log("controller", `${this.logPrefix}  skipping query for ${CommandClass_1.CommandClasses[cc]} (${strings_2.num2hex(cc)}) because max implemented version is ${maxImplemented}`, "debug");
+                logger_1.log("controller", `${this.logPrefix}  skipping query for ${CommandClasses_1.CommandClasses[cc]} (${strings_2.num2hex(cc)}) because max implemented version is ${maxImplemented}`, "debug");
                 continue;
             }
             const versionCC = new VersionCC_1.VersionCC(this.driver, this.id, VersionCC_1.VersionCommand.CommandClassGet, cc);
             const request = new SendDataMessages_1.SendDataRequest(this.driver, versionCC);
             try {
-                logger_1.log("controller", `${this.logPrefix}  querying the CC version for ${CommandClass_1.CommandClasses[cc]} (${strings_2.num2hex(cc)})`, "debug");
+                logger_1.log("controller", `${this.logPrefix}  querying the CC version for ${CommandClasses_1.CommandClasses[cc]} (${strings_2.num2hex(cc)})`, "debug");
                 // query the CC version
                 const resp = await this.driver.sendMessage(request, Constants_1.MessagePriority.NodeQuery);
                 if (ICommandClassContainer_1.isCommandClassContainer(resp)) {
@@ -351,7 +378,7 @@ class ZWaveNode extends events_1.EventEmitter {
                     const reqCC = versionResponse.requestedCC;
                     const supportedVersion = versionResponse.ccVersion;
                     this.addCC(reqCC, { version: supportedVersion });
-                    logger_1.log("controller", `${this.logPrefix}  supports CC ${CommandClass_1.CommandClasses[reqCC]} (${strings_2.num2hex(reqCC)}) in version ${supportedVersion}`, "debug");
+                    logger_1.log("controller", `${this.logPrefix}  supports CC ${CommandClasses_1.CommandClasses[reqCC]} (${strings_2.num2hex(reqCC)}) in version ${supportedVersion}`, "debug");
                 }
             }
             catch (e) {
@@ -362,7 +389,7 @@ class ZWaveNode extends events_1.EventEmitter {
     }
     /** Step #10 of the node interview */
     async queryEndpoints() {
-        if (this.supportsCC(CommandClass_1.CommandClasses["Multi Channel"])) {
+        if (this.supportsCC(CommandClasses_1.CommandClasses["Multi Channel"])) {
             logger_1.log("controller", `${this.logPrefix}querying device endpoints`, "debug");
             const cc = new MultiChannelCC_1.MultiChannelCC(this.driver, this.id, MultiChannelCC_1.MultiChannelCommand.EndPointGet);
             const request = new SendDataMessages_1.SendDataRequest(this.driver, cc);
@@ -389,7 +416,7 @@ class ZWaveNode extends events_1.EventEmitter {
     }
     /** Step #2 of the node interview */
     async configureWakeup() {
-        if (this.supportsCC(CommandClass_1.CommandClasses["Wake Up"])) {
+        if (this.supportsCC(CommandClasses_1.CommandClasses["Wake Up"])) {
             if (this.isControllerNode()) {
                 logger_1.log("controller", `${this.logPrefix}skipping wakeup configuration for the controller`, "debug");
             }
@@ -451,12 +478,12 @@ class ZWaveNode extends events_1.EventEmitter {
     /** Handles an ApplicationCommandRequest sent from a node */
     async handleCommand(command) {
         switch (command.ccId) {
-            case CommandClass_1.CommandClasses["Central Scene"]: {
+            case CommandClasses_1.CommandClasses["Central Scene"]: {
                 const csCC = command;
                 logger_1.log("controller", `${this.logPrefix}received CentralScene command ${JSON.stringify(csCC)}`, "debug");
                 return;
             }
-            case CommandClass_1.CommandClasses["Wake Up"]: {
+            case CommandClasses_1.CommandClasses["Wake Up"]: {
                 const wakeupCC = command;
                 if (wakeupCC.ccCommand === WakeUpCC_1.WakeUpCommand.WakeUpNotification) {
                     logger_1.log("controller", `${this.logPrefix}received wake up notification`, "debug");
@@ -504,7 +531,7 @@ class ZWaveNode extends events_1.EventEmitter {
                 .sort((a, b) => Math.sign(a[0] - b[0]))
                 .map(([cc, info]) => {
                 // Store the normal CC info
-                const ret = Object.assign({ name: CommandClass_1.CommandClasses[cc] }, info);
+                const ret = Object.assign({ name: CommandClasses_1.CommandClasses[cc] }, info);
                 // If any exist, store the values aswell
                 const ccInstance = this.createCCInstance(cc);
                 if (ccInstance) {
@@ -566,7 +593,7 @@ class ZWaveNode extends events_1.EventEmitter {
                     continue;
                 // tslint:disable-next-line: radix
                 const ccNum = parseInt(ccHex);
-                if (!(ccNum in CommandClass_1.CommandClasses))
+                if (!(ccNum in CommandClasses_1.CommandClasses))
                     continue;
                 // Parse the information we have
                 const { isSupported, isControlled, version, values } = ccDict[ccHex];
@@ -592,7 +619,7 @@ class ZWaveNode extends events_1.EventEmitter {
         }
     }
     setAwake(awake, emitEvent = true) {
-        if (!this.supportsCC(CommandClass_1.CommandClasses["Wake Up"])) {
+        if (!this.supportsCC(CommandClasses_1.CommandClasses["Wake Up"])) {
             throw new ZWaveError_1.ZWaveError("This node does not support the Wake Up CC", ZWaveError_1.ZWaveErrorCodes.CC_NotSupported);
         }
         if (awake !== this.isAwake()) {
@@ -602,7 +629,7 @@ class ZWaveNode extends events_1.EventEmitter {
         }
     }
     isAwake() {
-        const isAsleep = this.supportsCC(CommandClass_1.CommandClasses["Wake Up"]) && !WakeUpCC_1.WakeUpCC.isAwake(this.driver, this);
+        const isAsleep = this.supportsCC(CommandClasses_1.CommandClasses["Wake Up"]) && !WakeUpCC_1.WakeUpCC.isAwake(this.driver, this);
         return !isAsleep;
     }
     async sendNoMoreInformation() {
@@ -624,33 +651,6 @@ class ZWaveNode extends events_1.EventEmitter {
     }
 }
 exports.ZWaveNode = ZWaveNode;
-// TODO: This order is not optimal, check how OpenHAB does it
-var InterviewStage;
-(function (InterviewStage) {
-    InterviewStage[InterviewStage["None"] = 0] = "None";
-    InterviewStage[InterviewStage["ProtocolInfo"] = 1] = "ProtocolInfo";
-    InterviewStage[InterviewStage["Ping"] = 2] = "Ping";
-    InterviewStage[InterviewStage["NodeInfo"] = 3] = "NodeInfo";
-    InterviewStage[InterviewStage["NodePlusInfo"] = 4] = "NodePlusInfo";
-    InterviewStage[InterviewStage["ManufacturerSpecific"] = 5] = "ManufacturerSpecific";
-    InterviewStage[InterviewStage["SecurityReport"] = 6] = "SecurityReport";
-    InterviewStage[InterviewStage["Versions"] = 7] = "Versions";
-    InterviewStage[InterviewStage["Endpoints"] = 8] = "Endpoints";
-    InterviewStage[InterviewStage["Static"] = 9] = "Static";
-    // ===== the stuff above should never change =====
-    InterviewStage[InterviewStage["RestartFromCache"] = 10] = "RestartFromCache";
-    // 						   RestartFromCache and later stages will be serialized as "Complete" in the cache
-    // 						   [✓] Ping each device upon restarting with cached config
-    // ===== the stuff below changes frequently, so it has to be redone on every start =====
-    // TODO: Heal network
-    InterviewStage[InterviewStage["WakeUp"] = 11] = "WakeUp";
-    InterviewStage[InterviewStage["Associations"] = 12] = "Associations";
-    InterviewStage[InterviewStage["Neighbors"] = 13] = "Neighbors";
-    InterviewStage[InterviewStage["Session"] = 14] = "Session";
-    InterviewStage[InterviewStage["Dynamic"] = 15] = "Dynamic";
-    InterviewStage[InterviewStage["Configuration"] = 16] = "Configuration";
-    InterviewStage[InterviewStage["Complete"] = 17] = "Complete";
-})(InterviewStage = exports.InterviewStage || (exports.InterviewStage = {}));
 // export enum OpenHABInterviewStage {
 // 	None,					// Query process hasn't started for this node
 // 	ProtocolInfo1,			// Retrieve protocol information (IdentifyNode)

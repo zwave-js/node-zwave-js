@@ -3,6 +3,7 @@ import { CommandClass } from "../commandclass/CommandClass";
 import { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { IDriver } from "../driver/IDriver";
 import { Message, ResponseRole } from "../message/Message";
+import { JSONObject } from "../util/misc";
 export declare enum TransmitOptions {
     NotSet = 0,
     ACK = 1,
@@ -32,7 +33,7 @@ export declare class SendDataRequest<CCType extends CommandClass = CommandClass>
     readonly transmitStatus: TransmitStatus;
     serialize(): Buffer;
     deserialize(data: Buffer): number;
-    toJSON(): Record<string, any>;
+    toJSON(): JSONObject;
     /** Checks if a received SendDataRequest indicates that sending failed */
     isFailed(): boolean;
     /** @inheritDoc */
@@ -42,5 +43,5 @@ export declare class SendDataResponse extends Message {
     private _wasSent;
     readonly wasSent: boolean;
     deserialize(data: Buffer): number;
-    toJSON(): Record<string, any>;
+    toJSON(): JSONObject;
 }

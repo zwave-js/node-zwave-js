@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ZWaveError_1 = require("../error/ZWaveError");
 const Primitive_1 = require("../values/Primitive");
 const CommandClass_1 = require("./CommandClass");
+const CommandClasses_1 = require("./CommandClasses");
 var MultilevelSensorCommand;
 (function (MultilevelSensorCommand) {
     MultilevelSensorCommand[MultilevelSensorCommand["GetSupportedSensor"] = 1] = "GetSupportedSensor";
@@ -107,9 +108,9 @@ __decorate([
     __metadata("design:type", Number)
 ], MultilevelSensorCC.prototype, "value", void 0);
 MultilevelSensorCC = __decorate([
-    CommandClass_1.commandClass(CommandClass_1.CommandClasses["Multilevel Sensor"]),
+    CommandClass_1.commandClass(CommandClasses_1.CommandClasses["Multilevel Sensor"]),
     CommandClass_1.implementedVersion(11),
-    CommandClass_1.expectedCCResponse(CommandClass_1.CommandClasses["Multilevel Sensor"]),
+    CommandClass_1.expectedCCResponse(CommandClasses_1.CommandClasses["Multilevel Sensor"]),
     __metadata("design:paramtypes", [Object, Number, Number, Object])
 ], MultilevelSensorCC);
 exports.MultilevelSensorCC = MultilevelSensorCC;
@@ -196,20 +197,6 @@ var MultilevelSensorTypes;
     MultilevelSensorTypes[MultilevelSensorTypes["Discharge Pressure"] = 79] = "Discharge Pressure";
     MultilevelSensorTypes[MultilevelSensorTypes["Defrost temperature"] = 80] = "Defrost temperature";
 })(MultilevelSensorTypes = exports.MultilevelSensorTypes || (exports.MultilevelSensorTypes = {}));
-/** Looks up a scale definition for a given sensor type */
-function getScale(sensorType, scale) {
-    const dict = multilevelSensorScales[sensorType];
-    const ret = dict && dict.find(scl => scl.value === scale);
-    if (ret)
-        return ret;
-    return {
-        unit: undefined,
-        label: "Unknown",
-        value: scale,
-        minimumCCVersion: 0,
-    };
-}
-exports.getScale = getScale;
 const multilevelSensorScales = {
     [MultilevelSensorTypes["Air temperature"]]: [
         { label: "Celcius", unit: "°C", value: 0x00, minimumCCVersion: 1 },
@@ -499,3 +486,17 @@ const multilevelSensorScales = {
         { label: "Celcius", unit: "°C", value: 0x00, minimumCCVersion: 11 },
     ],
 };
+/** Looks up a scale definition for a given sensor type */
+function getScale(sensorType, scale) {
+    const dict = multilevelSensorScales[sensorType];
+    const ret = dict && dict.find(scl => scl.value === scale);
+    if (ret)
+        return ret;
+    return {
+        unit: undefined,
+        label: "Unknown",
+        value: scale,
+        minimumCCVersion: 0,
+    };
+}
+exports.getScale = getScale;
