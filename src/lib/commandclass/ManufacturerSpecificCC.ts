@@ -27,7 +27,6 @@ export enum DeviceIdType {
 @implementedVersion(2)
 @expectedCCResponse(CommandClasses["Manufacturer Specific"])
 export class ManufacturerSpecificCC extends CommandClass {
-	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 	public constructor(
 		driver: IDriver,
@@ -52,7 +51,6 @@ export class ManufacturerSpecificCC extends CommandClass {
 			this.deviceIdType = args[0];
 		}
 	}
-	// tslint:enable:unified-signatures
 
 	@ccValue() public manufacturerId: number;
 	@ccValue() public productType: number;

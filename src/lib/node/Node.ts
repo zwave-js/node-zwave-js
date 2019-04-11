@@ -273,7 +273,6 @@ export class ZWaveNode extends EventEmitter {
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
-		// tslint:disable-next-line: variable-name
 		const Constructor = getCCConstructor(cc);
 		if (Constructor) return new Constructor(this.driver, this.id) as T;
 	}
@@ -366,7 +365,8 @@ export class ZWaveNode extends EventEmitter {
 		await this.setInterviewStage(InterviewStage.Complete);
 		log("controller", `${this.logPrefix}interview completed`, "debug");
 
-		// TODO: Tell sleeping nodes to go to sleep
+		// Tell listeners that the interview is completed
+		// The driver will send this node to sleep
 		this.emit("interview completed", this);
 	}
 
@@ -1033,7 +1033,6 @@ export class ZWaveNode extends EventEmitter {
 			for (const ccHex of Object.keys(ccDict)) {
 				// First make sure this key describes a valid CC
 				if (!/^0x[0-9a-fA-F]+$/.test(ccHex)) continue;
-				// tslint:disable-next-line: radix
 				const ccNum = parseInt(ccHex);
 				if (!(ccNum in CommandClasses)) continue;
 

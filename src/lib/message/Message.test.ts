@@ -372,7 +372,7 @@ describe("lib/message", () => {
 				"fatal_controller",
 				"fatal_node",
 				"final",
-				"intermediate",
+				"confirmation",
 				"unexpected",
 			];
 			for (const result of results) {

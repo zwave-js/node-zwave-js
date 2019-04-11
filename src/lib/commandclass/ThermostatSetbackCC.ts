@@ -30,7 +30,6 @@ export enum SetbackType {
 @implementedVersion(1)
 @expectedCCResponse(CommandClasses["Thermostat Setback"])
 export class ThermostatSetbackCC extends CommandClass {
-	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 
 	public constructor(
@@ -57,7 +56,6 @@ export class ThermostatSetbackCC extends CommandClass {
 			[this.setbackType, this.setbackState] = args;
 		}
 	}
-	// tslint:enable:unified-signatures
 
 	@ccValue() public setbackType: SetbackType;
 	/** The offset from the setpoint in 0.1 Kelvin or a special mode */

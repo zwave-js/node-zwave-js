@@ -21,7 +21,6 @@ export enum BinarySensorCommand {
 @implementedVersion(2)
 @expectedCCResponse(CommandClasses["Binary Sensor"])
 export class BinarySensorCC extends CommandClass {
-	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 	public constructor(
 		driver: IDriver,
@@ -44,7 +43,6 @@ export class BinarySensorCC extends CommandClass {
 		super(driver, nodeId, ccCommand);
 		if (sensorType != undefined) this.sensorType = sensorType;
 	}
-	// tslint:enable:unified-signatures
 
 	@ccValue() public sensorType: BinarySensorType;
 	@ccValue() public value: boolean;

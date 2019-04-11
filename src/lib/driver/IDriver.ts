@@ -6,7 +6,6 @@ import { MessageSupportCheck } from "./Driver";
 export interface IDriver {
 	controller: ZWaveController;
 
-	// tslint:disable:unified-signatures
 	// wotan-disable no-misused-generics
 	sendMessage<TResponse extends Message = Message>(
 		msg: Message,
@@ -21,8 +20,7 @@ export interface IDriver {
 		priority: MessagePriority,
 		supportCheck: MessageSupportCheck,
 	): Promise<TResponse>;
-	// tslint:enable:unified-signatures
 	// wotan-enable no-misused-generics
 
-	// TODO: Extend as needed
+	// Add more signatures as needed
 }

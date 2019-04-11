@@ -25,7 +25,6 @@ export enum MultilevelSensorCommand {
 @implementedVersion(11)
 @expectedCCResponse(CommandClasses["Multilevel Sensor"])
 export class MultilevelSensorCC extends CommandClass {
-	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 
 	public constructor(
@@ -62,7 +61,6 @@ export class MultilevelSensorCC extends CommandClass {
 			[this.sensorType, this.scale] = args;
 		}
 	}
-	// tslint:enable:unified-signatures
 
 	// TODO: Check if we need to store multiple values (one per sensor type)
 	@ccValue() public sensorType: MultilevelSensorTypes;

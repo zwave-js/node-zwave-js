@@ -31,7 +31,6 @@ export enum CentralSceneKeys {
 @commandClass(CommandClasses["Central Scene"])
 @implementedVersion(3)
 export class CentralSceneCC extends CommandClass {
-	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 	public constructor(
 		driver: IDriver,
@@ -56,7 +55,6 @@ export class CentralSceneCC extends CommandClass {
 		super(driver, nodeId, ccCommand);
 		if (slowRefresh != undefined) this.slowRefresh = slowRefresh;
 	}
-	// tslint:enable:unified-signatures
 
 	@ccValue() public slowRefresh: boolean;
 	@ccValue() public supportsSlowRefresh: boolean;

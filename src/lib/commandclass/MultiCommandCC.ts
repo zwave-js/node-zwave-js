@@ -18,7 +18,6 @@ export enum MultiCommandCommand {
 @implementedVersion(1)
 @expectedCCResponse(CommandClasses["Multi Command"])
 export class MultiCommandCC extends CommandClass {
-	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 
 	public constructor(
@@ -36,7 +35,6 @@ export class MultiCommandCC extends CommandClass {
 	) {
 		super(driver, nodeId, ccCommand);
 	}
-	// tslint:enable:unified-signatures
 
 	public serialize(): Buffer {
 		switch (this.ccCommand) {

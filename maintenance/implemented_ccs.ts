@@ -1,11 +1,9 @@
-// tslint:disable: no-console
-// tslint:disable-next-line: no-var-requires
 require("reflect-metadata");
 import * as c from "ansi-colors";
 import * as fs from "fs-extra";
 import * as path from "path";
 import * as yargs from "yargs";
-import { CommandClasses } from "../src/lib/commandclass/CommandClass";
+import { CommandClasses } from "../src/lib/commandclass/CommandClasses";
 import { num2hex } from "../src/lib/util/strings";
 
 const ccRegex = /^@commandClass\(CommandClasses(?:\.|\[")(.+?)(?:"\])?\)/m;
@@ -14,11 +12,11 @@ const ansiColorRegex = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0
 
 const onlyIncomplete = !!yargs.argv.onlyIncomplete;
 
-function getSafeLength(str: string) {
+function getSafeLength(str: string): number {
 	return str.replace(ansiColorRegex, "").length;
 }
 
-function padEnd(str: string, len: number) {
+function padEnd(str: string, len: number): string {
 	return str + " ".repeat(len - getSafeLength(str));
 }
 
@@ -26,12 +24,12 @@ function padEnd(str: string, len: number) {
 	const ccDir = path.join(__dirname, "..", "src/lib/commandclass");
 	const ccFiles = (await fs.readdir(ccDir))
 		.filter(file => !file.endsWith("test.ts"))
-		.map(file => path.join(ccDir, file))
-		;
+		.map(file => path.join(ccDir, file));
 
-	const allCCs = new Map(Object.keys(CommandClasses)
-		.filter(cc => Number.isNaN(+cc))
-		.map(name => [name, 0] as [string, number]),
+	const allCCs = new Map(
+		Object.keys(CommandClasses)
+			.filter(cc => Number.isNaN(+cc))
+			.map(name => [name, 0] as [string, number]),
 	);
 
 	for (const ccFile of ccFiles) {
@@ -40,44 +38,64 @@ function padEnd(str: string, len: number) {
 			const ccName = ccRegex.exec(fileContent)[1];
 			const ccVersion = +versionRegex.exec(fileContent)[1];
 			allCCs.set(ccName, ccVersion);
-		} catch (e) { /* ok */ }
+		} catch (e) {
+			/* ok */
+		}
 	}
 
 	const headers = ["", "Command class name", "Implemented version", "max."];
 	const rows = [];
 
 	for (const [name, version] of allCCs.entries()) {
-		const { version: latest, deprecated, obsolete } = getLatestVersion(name);
+		const { version: latest, deprecated, obsolete } = getLatestVersion(
+			name,
+		);
 		if (obsolete) continue;
 		const color =
-			version === latest ? c.green
-				: version > 0 ? c.yellow
-				: deprecated ? c.reset
+			version === latest
+				? c.green
+				: version > 0
+				? c.yellow
+				: deprecated
+				? c.reset
 				: c.red;
-		const prefix =
-			version === latest ? "✓"
-				: version > 0 ? "✍"
-					: "✗";
+		const prefix = version === latest ? "✓" : version > 0 ? "✍" : "✗";
 		const postfix = deprecated ? " " + c.reset("(deprecated)") : "";
 		if (version !== latest || !onlyIncomplete) {
-			rows.push([color(prefix), color(name + postfix), color(version > 0 ? `Version ${version}` : "not implemented"), latest.toString()]);
+			rows.push([
+				color(prefix),
+				color(name + postfix),
+				color(version > 0 ? `Version ${version}` : "not implemented"),
+				latest.toString(),
+			]);
 		}
 	}
-	writeTable([headers, ...rows], yargs.argv.flavor === "github" ? "github" : "console");
+	writeTable(
+		[headers, ...rows],
+		yargs.argv.flavor === "github" ? "github" : "console",
+	);
 })();
 
-function writeTable(rows: string[][], flavor: "console" | "github") {
+function writeTable(rows: string[][], flavor: "console" | "github"): void {
 	const numColumns = rows[0].length;
 	if (flavor === "console") {
 		const columnLenghts: number[] = [];
 		for (let col = 0; col < numColumns; col++) {
-			columnLenghts.push(Math.max(...rows.map(row => getSafeLength(row[col]))));
+			columnLenghts.push(
+				Math.max(...rows.map(row => getSafeLength(row[col]))),
+			);
 		}
-		const HR = "|-" + columnLenghts.map(len => "-".repeat(len)).join("-|-") + "-|";
+		const HR =
+			"|-" + columnLenghts.map(len => "-".repeat(len)).join("-|-") + "-|";
 
 		console.log(HR);
 		for (let i = 0; i < rows.length; i++) {
-			const row = "| " + rows[i].map((r, ri) => padEnd(r, columnLenghts[ri])).join(" | ") + " |";
+			const row =
+				"| " +
+				rows[i]
+					.map((r, ri) => padEnd(r, columnLenghts[ri]))
+					.join(" | ") +
+				" |";
 			console.log(row);
 			if (i === 0) console.log(HR);
 		}
@@ -91,21 +109,25 @@ function writeTable(rows: string[][], flavor: "console" | "github") {
 			console.log(row);
 			if (i === 0) console.log(HR);
 		}
-
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function getLatestVersion(ccName: string) {
-	const cc = CommandClasses[ccName as any] as any as number;
+	const cc = (CommandClasses[ccName as any] as any) as number;
+	// eslint-disable-next-line @typescript-eslint/no-use-before-define
 	const version = ccVersions[num2hex(cc, true)];
 	if (version == undefined) {
-		return {version: 0, obsolete: true };
+		return { version: 0, obsolete: true };
 	}
 	return version;
 }
 
 // Taken from https://www.silabs.com/documents/login/miscellaneous/SDS13781-Z-Wave-Application-Command-Class-Specification.pdf
-const ccVersions: Record<string, { version: string | number, deprecated?: boolean, obsolete?: boolean }> = {
+const ccVersions: Record<
+	string,
+	{ version: string | number; deprecated?: boolean; obsolete?: boolean }
+> = {
 	"0x9C": { version: 1, deprecated: true },
 	"0x9D": { version: 1 },
 	"0x5D": { version: 2 },

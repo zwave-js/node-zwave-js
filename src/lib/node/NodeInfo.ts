@@ -42,7 +42,6 @@ function internalParseNodeInformationFrame(
 	};
 	// split the CCs into supported/controlled
 	// TODO: Support 16bit CCs
-	// tslint:disable-next-line:variable-name
 	const CCs = [...nif.slice(2)];
 	let isAfterMark = false;
 	for (const cc of CCs) {

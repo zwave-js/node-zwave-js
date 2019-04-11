@@ -50,7 +50,6 @@ export enum ScheduleOverrideType {
 @implementedVersion(1)
 @expectedCCResponse(CommandClasses["Climate Control Schedule"])
 export class ClimateControlScheduleCC extends CommandClass {
-	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 
 	public constructor(
@@ -98,7 +97,6 @@ export class ClimateControlScheduleCC extends CommandClass {
 			[this.overrideType, this.overrideState] = args;
 		}
 	}
-	// tslint:enable:unified-signatures
 
 	@ccValue() public weekday: Weekday;
 	@ccValue() public switchPoints: Switchpoint[];

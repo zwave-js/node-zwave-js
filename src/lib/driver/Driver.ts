@@ -391,8 +391,6 @@ export class Driver extends EventEmitter implements IDriver {
 		);
 
 		while (this.receiveBuffer.length > 0) {
-			// TODO: add a way to interrupt
-
 			if (this.receiveBuffer[0] !== MessageHeaders.SOF) {
 				switch (this.receiveBuffer[0]) {
 					// single-byte messages - we have a handler for each one
@@ -431,7 +429,6 @@ export class Driver extends EventEmitter implements IDriver {
 				return;
 			}
 
-			// tslint:disable-next-line:variable-name
 			const MessageConstructor = Message.getConstructor(
 				this.receiveBuffer,
 			);
@@ -492,11 +489,11 @@ export class Driver extends EventEmitter implements IDriver {
 		// if we have a pending request, check if that is waiting for this message
 		if (this.currentTransaction != null) {
 			switch (this.currentTransaction.message.testResponse(msg)) {
-				case "intermediate":
+				case "confirmation":
 					// no need to process intermediate responses, as they only tell us things are good
 					log(
 						"io",
-						`  received intermediate response to current transaction`,
+						`  received confirmation response to current transaction`,
 						"debug",
 					);
 					return;
@@ -594,6 +591,16 @@ export class Driver extends EventEmitter implements IDriver {
 					}
 					return;
 
+				case "partial":
+					// This is a multi-step response and we just received a part of it, which is not the final one
+					log(
+						"io",
+						`  received partial response to current transaction`,
+						"debug",
+					);
+					this.currentTransaction.partialResponses.push(msg);
+					return;
+
 				case "final":
 					// this is the expected response!
 					log(
@@ -602,6 +609,11 @@ export class Driver extends EventEmitter implements IDriver {
 						"debug",
 					);
 					this.currentTransaction.response = msg;
+					if (this.currentTransaction.partialResponses.length > 0) {
+						msg.mergePartialMessages(
+							this.currentTransaction.partialResponses,
+						);
+					}
 					if (!this.currentTransaction.ackPending) {
 						log(
 							"io",
@@ -1005,7 +1017,6 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 	}
 
-	// tslint:disable:unified-signatures
 	// wotan-disable no-misused-generics
 	/**
 	 * Sends a message with default priority to the Z-Wave stick
@@ -1032,7 +1043,6 @@ export class Driver extends EventEmitter implements IDriver {
 		priority: MessagePriority,
 		supportCheck: MessageSupportCheck,
 	): Promise<TResponse>;
-	// tslint:enable:unified-signatures
 
 	public async sendMessage<TResponse extends Message = Message>(
 		msg: Message,

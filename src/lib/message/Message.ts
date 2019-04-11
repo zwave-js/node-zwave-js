@@ -222,6 +222,13 @@ export class Message {
 		if (nodeId != undefined)
 			return this.driver.controller.nodes.get(nodeId);
 	}
+
+	/** Include previously received partial responses into a final message */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	public mergePartialMessages(partials: Message[]): void {
+		// This is highly message dependent
+		// Overwrite this in derived classes
+	}
 }
 
 function computeChecksum(message: Buffer): number {
@@ -253,7 +260,8 @@ function getMessageTypeMapKey(
 
 export type ResponseRole =
 	| "unexpected" // a message that does not belong to this transaction
-	| "intermediate" // an intermediate response, e.g. controller ACK that is not fatal
+	| "confirmation" // a confirmation response, e.g. controller reporting that a message was sent
+	| "partial" // a partial response, that (once assembled) will become final. E.g. a multi-report CC container
 	| "final" // a final response (leading to a resolved transaction)
 	| "fatal_controller" // a response from the controller that leads to a rejected transaction
 	| "fatal_node"; // a response or (lack thereof) from the node that leads to a rejected transaction
@@ -388,7 +396,6 @@ export function getMessageConstructor(
 		);
 }
 
-// tslint:disable:unified-signatures
 /**
  * Defines the expected response associated with a Z-Wave message
  */
@@ -425,7 +432,6 @@ export function expectedResponse(
 		);
 	};
 }
-// tslint:enable:unified-signatures
 
 /**
  * Retrieves the expected response defined for a Z-Wave message class

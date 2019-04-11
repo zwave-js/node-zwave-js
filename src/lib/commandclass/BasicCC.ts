@@ -22,7 +22,6 @@ export enum BasicCommand {
 @implementedVersion(2) // Update tests in CommandClass.test.ts when changing this
 @expectedCCResponse(CommandClasses.Basic)
 export class BasicCC extends CommandClass {
-	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 	public constructor(
 		driver: IDriver,
@@ -45,7 +44,6 @@ export class BasicCC extends CommandClass {
 		super(driver, nodeId, ccCommand);
 		if (targetValue != undefined) this.targetValue = targetValue;
 	}
-	// tslint:enable:unified-signatures
 
 	@ccValue() public currentValue: Maybe<number>;
 	@ccValue() public targetValue: number;

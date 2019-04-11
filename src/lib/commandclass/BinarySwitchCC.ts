@@ -21,7 +21,6 @@ export enum BinarySwitchCommand {
 @implementedVersion(2)
 @expectedCCResponse(CommandClasses["Binary Switch"])
 export class BinarySwitchCC extends CommandClass {
-	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 	public constructor(
 		driver: IDriver,
@@ -47,7 +46,6 @@ export class BinarySwitchCC extends CommandClass {
 		if (targetValue != undefined) this.currentValue = targetValue;
 		if (duration != undefined) this.duration = duration;
 	}
-	// tslint:enable:unified-signatures
 
 	@ccValue() public currentValue: Maybe<boolean>;
 	@ccValue() public targetValue: boolean;

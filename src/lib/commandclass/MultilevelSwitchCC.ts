@@ -42,7 +42,6 @@ export enum SwitchType {
 @implementedVersion(4)
 @expectedCCResponse(CommandClasses["Multilevel Switch"])
 export class MultilevelSwitchCC extends CommandClass {
-	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 	public constructor(
 		driver: IDriver,
@@ -92,7 +91,6 @@ export class MultilevelSwitchCC extends CommandClass {
 			] = args;
 		}
 	}
-	// tslint:enable:unified-signatures
 
 	@ccValue() public targetValue: number;
 	@ccValue() public duration: Duration;

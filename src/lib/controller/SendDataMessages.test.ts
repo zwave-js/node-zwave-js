@@ -66,8 +66,8 @@ describe("lib/controller/SendDataRequest => ", () => {
 			MessageType.Response,
 			Buffer.from([1]),
 		);
-		// "A SendDataResponse with wasSent=true was not detected as intermediate!"
-		expect(predicate(undefined, controllerSuccess)).toBe("intermediate");
+		// "A SendDataResponse with wasSent=true was not detected as confirmation!"
+		expect(predicate(undefined, controllerSuccess)).toBe("confirmation");
 
 		const nodeFail = createSendDataMessage(
 			MessageType.Request,

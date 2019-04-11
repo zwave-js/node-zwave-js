@@ -30,6 +30,10 @@ export class Transaction implements Comparable<Transaction> {
 		public readonly promise: DeferredPromise<Message | void>,
 		public priority: MessagePriority,
 		public timestamp: number = highResTimestamp(),
+		/**
+		 * The previously received partial responses of a multistep command
+		 */
+		public readonly partialResponses: Message[] = [],
 		public ackPending: boolean = true,
 		public response?: Message,
 	) {
@@ -94,10 +98,7 @@ export class Transaction implements Comparable<Transaction> {
 
 		// for equal priority, sort by the timestamp
 		return compareNumberOrString(other.timestamp, this.timestamp);
-
-		// TODO: do we need to sort by the message itself?
 	}
 
-	// TODO: add a way to expire these
-	// TODO: add a way to resend these
+	// TODO: add a way to expire Transactions
 }

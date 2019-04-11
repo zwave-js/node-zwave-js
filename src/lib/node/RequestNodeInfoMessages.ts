@@ -75,7 +75,7 @@ function testResponseForNodeInfoRequest(
 	received: Message,
 ): ResponseRole {
 	if (received instanceof RequestNodeInfoResponse) {
-		return received.wasSent ? "intermediate" : "fatal_controller";
+		return received.wasSent ? "confirmation" : "fatal_controller";
 	} else if (received instanceof ApplicationUpdateRequest) {
 		// received node info for the correct node
 		if (

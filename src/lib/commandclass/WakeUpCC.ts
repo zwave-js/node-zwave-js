@@ -37,7 +37,6 @@ function getExpectedResponseToWakeUp(sent: WakeUpCC): CommandClasses {
 @implementedVersion(2)
 @expectedCCResponse(getExpectedResponseToWakeUp)
 export class WakeUpCC extends CommandClass {
-	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 	public constructor(
 		driver: IDriver,
@@ -68,7 +67,6 @@ export class WakeUpCC extends CommandClass {
 		if (controllerNodeId != undefined)
 			this.controllerNodeId = controllerNodeId;
 	}
-	// tslint:enable:unified-signatures
 
 	@ccValue() public wakeupInterval: number;
 	@ccValue() public controllerNodeId: number;

@@ -34,7 +34,6 @@ export enum ZWavePlusNodeType {
 @implementedVersion(2)
 @expectedCCResponse(CommandClasses["Z-Wave Plus Info"])
 export class ZWavePlusCC extends CommandClass {
-	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 	public constructor(
 		driver: IDriver,
@@ -49,7 +48,6 @@ export class ZWavePlusCC extends CommandClass {
 	) {
 		super(driver, nodeId, ccCommand);
 	}
-	// tslint:enable:unified-signatures
 
 	@ccValue() public zwavePlusVersion: number;
 	@ccValue() public nodeType: ZWavePlusNodeType;

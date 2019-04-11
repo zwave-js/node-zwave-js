@@ -38,7 +38,6 @@ export interface EndpointCapability extends NodeInformationFrame {
 @implementedVersion(4)
 @expectedCCResponse(CommandClasses["Multi Channel"])
 export class MultiChannelCC extends CommandClass {
-	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 	public constructor(
 		driver: IDriver,
@@ -86,7 +85,6 @@ export class MultiChannelCC extends CommandClass {
 			this.encapsulatedCC = args[0];
 		}
 	}
-	// tslint:enable:unified-signatures
 
 	@ccValue() public isDynamicEndpointCount: boolean;
 	@ccValue() public identicalCapabilities: boolean;

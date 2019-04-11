@@ -42,7 +42,6 @@ const enum AddNodeFlags {
 // no expected response, the controller will respond with another AddNodeToNetworkRequest
 @priority(MessagePriority.Controller)
 export class AddNodeToNetworkRequest extends Message {
-	// tslint:disable:unified-signatures
 	// empty constructor to parse messages
 	public constructor(driver: Driver);
 	// default constructor to send messages
@@ -63,7 +62,6 @@ export class AddNodeToNetworkRequest extends Message {
 	) {
 		super(driver);
 	}
-	// tslint:enable:unified-signatures
 
 	private _status: AddNodeStatus;
 	public get status(): AddNodeStatus {
