@@ -10,5 +10,10 @@
 		"editor.codeActionsOnSave": {
 			"source.organizeImports": true
 		}
+	},
+	"files.exclude": {
+		"node_modules/": true,
+		"coverage/": true,
+		".*": true
 	}
 }

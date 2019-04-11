@@ -4,6 +4,7 @@
 		"dbaeumer.vscode-eslint",
 		"Orta.vscode-jest",
 		"esbenp.prettier-vscode",
-		"EditorConfig.EditorConfig"
+		"EditorConfig.EditorConfig",
+		"eamodio.toggle-excluded-files"
 	]
 }
