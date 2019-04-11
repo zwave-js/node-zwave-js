@@ -11,3 +11,6 @@ zwave-js-*.tgz
 
 # ZWave cache
 /cache
+
+# Compiled source files
+/build
