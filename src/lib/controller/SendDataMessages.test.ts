@@ -6,13 +6,35 @@ import { CommandClasses } from "../commandclass/CommandClasses";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessageType } from "../message/Constants";
-import { getExpectedResponse, getFunctionType, getMessageType, Message, ResponsePredicate } from "../message/Message";
-import { SendDataRequest, SendDataResponse, TransmitOptions } from "./SendDataMessages";
+import {
+	getExpectedResponse,
+	getFunctionType,
+	getMessageType,
+	Message,
+	ResponsePredicate,
+} from "../message/Message";
+import {
+	SendDataRequest,
+	SendDataResponse,
+	TransmitOptions,
+} from "./SendDataMessages";
 
-function createSendDataMessage(type: MessageType, payload?: Buffer): SendDataRequest | SendDataResponse {
-	const msg = new Message(undefined, type, FunctionType.SendData, undefined, payload);
+function createSendDataMessage(
+	type: MessageType,
+	payload?: Buffer,
+): SendDataRequest | SendDataResponse {
+	const msg = new Message(
+		undefined,
+		type,
+		FunctionType.SendData,
+		undefined,
+		payload,
+	);
 	const data = msg.serialize();
-	const ret = (type === MessageType.Request ? new SendDataRequest(undefined) : new SendDataResponse(undefined));
+	const ret =
+		type === MessageType.Request
+			? new SendDataRequest(undefined)
+			: new SendDataResponse(undefined);
 	ret.deserialize(data);
 	return ret;
 }
@@ -33,23 +55,41 @@ describe("lib/controller/SendDataRequest => ", () => {
 		const predicate = getExpectedResponse(req) as ResponsePredicate;
 		expect(predicate).toBeInstanceOf(Function);
 
-		const controllerFail = createSendDataMessage(MessageType.Response, Buffer.from([0]));
+		const controllerFail = createSendDataMessage(
+			MessageType.Response,
+			Buffer.from([0]),
+		);
 		// "A SendDataResponse with wasSent=false was not detected as fatal_controller!"
 		expect(predicate(undefined, controllerFail)).toBe("fatal_controller");
 
-		const controllerSuccess = createSendDataMessage(MessageType.Response, Buffer.from([1]));
+		const controllerSuccess = createSendDataMessage(
+			MessageType.Response,
+			Buffer.from([1]),
+		);
 		// "A SendDataResponse with wasSent=true was not detected as confirmation!"
 		expect(predicate(undefined, controllerSuccess)).toBe("confirmation");
 
-		const nodeFail = createSendDataMessage(MessageType.Request, Buffer.from([0, 1]));
+		const nodeFail = createSendDataMessage(
+			MessageType.Request,
+			Buffer.from([0, 1]),
+		);
 		// "A SendDataRequest with isFailed=true was not detected as fatal_node!"
 		expect(predicate(undefined, nodeFail)).toBe("fatal_node");
 
-		const nodeSuccess = createSendDataMessage(MessageType.Request, Buffer.from([0, 0]));
+		const nodeSuccess = createSendDataMessage(
+			MessageType.Request,
+			Buffer.from([0, 0]),
+		);
 		// "A SendDataRequest with isFailed=false was not detected as final!"
 		expect(predicate(undefined, nodeSuccess)).toBe("final");
 
-		const somethingElse = new Message(undefined, MessageType.Request, FunctionType.ApplicationCommand, undefined, undefined);
+		const somethingElse = new Message(
+			undefined,
+			MessageType.Request,
+			FunctionType.ApplicationCommand,
+			undefined,
+			undefined,
+		);
 		// "An unrelated message was not detected as unexpected!"
 		expect(predicate(undefined, somethingElse)).toBe("unexpected");
 	});
@@ -65,7 +105,9 @@ describe("lib/controller/SendDataRequest => ", () => {
 
 		expect(parsed.command).toBeInstanceOf(CommandClass);
 		expect(parsed.command.nodeId).toBe(11);
-		expect(parsed.command.ccCommand).toBe(CommandClasses["Multilevel Switch"]);
+		expect(parsed.command.ccCommand).toBe(
+			CommandClasses["Multilevel Switch"],
+		);
 		expect(parsed.command.payload).toEqual(Buffer.from([0x02]));
 
 		expect(parsed.transmitOptions).toBe(TransmitOptions.DEFAULT);
@@ -83,10 +125,10 @@ describe("lib/controller/SendDataRequest => ", () => {
 		expect(srq.command).toBeInstanceOf(NoOperationCC);
 	});
 
-	const createRequest = function* () {
+	const createRequest = (function*() {
 		const noOp = new NoOperationCC(undefined, 2);
 		while (true) yield new SendDataRequest(undefined, noOp);
-	}();
+	})();
 
 	it("new ones should have default transmit options and a numeric callback id", () => {
 		const newOne = createRequest.next().value;
@@ -98,7 +140,10 @@ describe("lib/controller/SendDataRequest => ", () => {
 		let lastCallbackId: number;
 		let increment = 0;
 		for (const next of createRequest) {
-			if (++increment > 300) throw new Error("incrementing the callback ID does not work somehow");
+			if (++increment > 300)
+				throw new Error(
+					"incrementing the callback ID does not work somehow",
+				);
 			if (lastCallbackId === 0xff) {
 				expect(next.callbackId).toBe(10);
 				break;
@@ -113,7 +158,12 @@ describe("lib/controller/SendDataRequest => ", () => {
 		const cc = new BasicCC(undefined, 1, BasicCommand.Get);
 		const serializedCC = cc.serialize();
 
-		const msg = new SendDataRequest(undefined, cc, TransmitOptions.DEFAULT, 66);
+		const msg = new SendDataRequest(
+			undefined,
+			cc,
+			TransmitOptions.DEFAULT,
+			66,
+		);
 		msg.serialize();
 		// we don't care about the frame, only the message payload itself
 		const serializedMsg = msg.payload;
@@ -127,14 +177,11 @@ describe("lib/controller/SendDataRequest => ", () => {
 
 	it("serialize() should throw when there is no CC", () => {
 		const msg = new SendDataRequest(undefined);
-		assertZWaveError(
-			() => msg.serialize(), {
-				messageMatches: "without a command",
-				errorCode: ZWaveErrorCodes.PacketFormat_Invalid,
-			},
-		);
+		assertZWaveError(() => msg.serialize(), {
+			messageMatches: "without a command",
+			errorCode: ZWaveErrorCodes.PacketFormat_Invalid,
+		});
 	});
-
 });
 
 describe("lib/controller/SendDataResponse => ", () => {
@@ -152,5 +199,4 @@ describe("lib/controller/SendDataResponse => ", () => {
 	it("that expects NO response", () => {
 		expect(getExpectedResponse(res) == null).toBeTruthy();
 	});
-
 });

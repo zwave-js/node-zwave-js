@@ -1,25 +1,31 @@
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	Message,
+	messageTypes,
+	priority,
+} from "../message/Message";
 import { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerId)
 @expectedResponse(FunctionType.GetControllerId)
 @priority(MessagePriority.Controller)
-export class GetControllerIdRequest extends Message {
-
-}
+export class GetControllerIdRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetControllerId)
 export class GetControllerIdResponse extends Message {
-
 	private _homeId: number;
-	public get homeId() {
+	public get homeId(): number {
 		return this._homeId;
 	}
 
 	private _ownNodeId: number;
-	public get ownNodeId() {
+	public get ownNodeId(): number {
 		return this._ownNodeId;
 	}
 

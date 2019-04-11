@@ -27,13 +27,10 @@ describe("lib/commandclass/CommandClass => ", () => {
 		// const cc1 = new CommandClass(undefined, 1, 1, Buffer.from([]));
 		// const cc2 = new CommandClass(undefined, 1, 1, undefined);
 		// const cc3 = new CommandClass(undefined, 1, 1, null);
-
 		// const serialized1 = cc1.serialize();
 		// const serialized2 = cc2.serialize();
 		// const serialized3 = cc3.serialize();
-
 		// expect(serialized1).toEqual(serialized2);
 		// expect(serialized2).toEqual(serialized3);
 	});
-
 });

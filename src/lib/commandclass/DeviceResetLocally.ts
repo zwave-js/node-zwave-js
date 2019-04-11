@@ -1,5 +1,10 @@
 import { IDriver } from "../driver/IDriver";
-import { CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import {
+	CommandClass,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum DeviceResetLocallyCommand {
@@ -10,12 +15,8 @@ export enum DeviceResetLocallyCommand {
 @implementedVersion(1)
 @expectedCCResponse(CommandClasses["Device Reset Locally"])
 export class DeviceResetLocallyCC extends CommandClass {
-
 	// tslint:disable:unified-signatures
-	public constructor(
-		driver: IDriver,
-		nodeId?: number,
-	);
+	public constructor(driver: IDriver, nodeId?: number);
 
 	public constructor(
 		driver: IDriver,
@@ -25,5 +26,4 @@ export class DeviceResetLocallyCC extends CommandClass {
 		super(driver, nodeId, ccCommand);
 	}
 	// tslint:enable:unified-signatures
-
 }

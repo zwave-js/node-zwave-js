@@ -1,7 +1,20 @@
-import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/ApplicationUpdateRequest";
+import {
+	ApplicationUpdateRequest,
+	ApplicationUpdateTypes,
+} from "../controller/ApplicationUpdateRequest";
 import { Driver } from "../driver/Driver";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, messageTypes, priority, ResponseRole } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	Message,
+	messageTypes,
+	priority,
+	ResponseRole,
+} from "../message/Message";
 import { JSONObject } from "../util/misc";
 import { INodeQuery } from "./INodeQuery";
 
@@ -9,11 +22,7 @@ import { INodeQuery } from "./INodeQuery";
 @expectedResponse(testResponseForNodeInfoRequest)
 @priority(MessagePriority.NodeQuery)
 export class RequestNodeInfoRequest extends Message implements INodeQuery {
-
-	public constructor(
-		driver: Driver,
-		nodeId?: number,
-	) {
+	public constructor(driver: Driver, nodeId?: number) {
 		super(driver);
 		this.nodeId = nodeId;
 	}
@@ -30,12 +39,10 @@ export class RequestNodeInfoRequest extends Message implements INodeQuery {
 			nodeId: this.nodeId,
 		});
 	}
-
 }
 
 @messageTypes(MessageType.Response, FunctionType.RequestNodeInfo)
 export class RequestNodeInfoResponse extends Message {
-
 	private _wasSent: boolean;
 	public get wasSent(): boolean {
 		return this._wasSent;
@@ -61,21 +68,26 @@ export class RequestNodeInfoResponse extends Message {
 			errorCode: this.errorCode,
 		});
 	}
-
 }
 
-function testResponseForNodeInfoRequest(sent: RequestNodeInfoRequest, received: Message): ResponseRole {
+function testResponseForNodeInfoRequest(
+	sent: RequestNodeInfoRequest,
+	received: Message,
+): ResponseRole {
 	if (received instanceof RequestNodeInfoResponse) {
-		return received.wasSent
-			? "confirmation"
-			: "fatal_controller";
+		return received.wasSent ? "confirmation" : "fatal_controller";
 	} else if (received instanceof ApplicationUpdateRequest) {
 		// received node info for the correct node
 		if (
-			received.updateType === ApplicationUpdateTypes.NodeInfo_Received
-			&& received.nodeId === sent.nodeId
-		) return "final";
+			received.updateType === ApplicationUpdateTypes.NodeInfo_Received &&
+			received.nodeId === sent.nodeId
+		)
+			return "final";
 		// requesting node info failed. We cannot check which node that belongs to
-		if (received.updateType === ApplicationUpdateTypes.NodeInfo_RequestFailed) return "fatal_node";
+		if (
+			received.updateType ===
+			ApplicationUpdateTypes.NodeInfo_RequestFailed
+		)
+			return "fatal_node";
 	}
 }

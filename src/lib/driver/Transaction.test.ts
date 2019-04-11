@@ -11,21 +11,46 @@ describe("lib/driver/Transaction => ", () => {
 		// "winning" means the position of a transaction in the queue is lower
 
 		// t2 has a later timestamp by default
-		const t1 = new Transaction(null, null, null, MessagePriority.Controller);
-		const t2 = new Transaction(null, null, null, MessagePriority.Controller);
+		const t1 = new Transaction(
+			null,
+			null,
+			null,
+			MessagePriority.Controller,
+		);
+		const t2 = new Transaction(
+			null,
+			null,
+			null,
+			MessagePriority.Controller,
+		);
 		// equal priority, earlier timestamp wins
 		expect(t1.compareTo(t2)).toBe(-1);
 		expect(t2.compareTo(t1)).toBe(1);
 
 		const t3 = new Transaction(null, null, null, MessagePriority.Poll);
-		const t4 = new Transaction(null, null, null, MessagePriority.Controller);
+		const t4 = new Transaction(
+			null,
+			null,
+			null,
+			MessagePriority.Controller,
+		);
 		// lower priority loses
 		expect(t3.compareTo(t4)).toBe(1);
 		expect(t4.compareTo(t3)).toBe(-1);
 
 		// this should not happen but we still need to test it
-		const t5 = new Transaction(null, null, null, MessagePriority.Controller);
-		const t6 = new Transaction(null, null, null, MessagePriority.Controller);
+		const t5 = new Transaction(
+			null,
+			null,
+			null,
+			MessagePriority.Controller,
+		);
+		const t6 = new Transaction(
+			null,
+			null,
+			null,
+			MessagePriority.Controller,
+		);
 		t6.timestamp = t5.timestamp;
 		expect(t5.compareTo(t6)).toBe(0);
 		expect(t6.compareTo(t5)).toBe(0);
@@ -53,9 +78,17 @@ describe("lib/driver/Transaction => ", () => {
 		};
 
 		function createTransaction(nodeID: number) {
-			const driver = driverMock as any as Driver;
-			const msg = new SendDataRequest(driver, new NoOperationCC(driver, nodeID));
-			const ret = new Transaction(driver, msg, null, MessagePriority.NodeQuery);
+			const driver = (driverMock as any) as Driver;
+			const msg = new SendDataRequest(
+				driver,
+				new NoOperationCC(driver, nodeID),
+			);
+			const ret = new Transaction(
+				driver,
+				msg,
+				null,
+				MessagePriority.NodeQuery,
+			);
 			ret.timestamp = 0;
 			return ret;
 		}
@@ -105,20 +138,41 @@ describe("lib/driver/Transaction => ", () => {
 			return cc === CommandClasses["Wake Up"];
 		}
 
-		const driverMock = {
+		const driverMock = ({
 			controller: {
 				nodes: new Map<number, MockNode>([
 					// 1: awake
-					[1, { id: 1, isAwake() { return true; }, supportsCC }],
+					[
+						1,
+						{
+							id: 1,
+							isAwake() {
+								return true;
+							},
+							supportsCC,
+						},
+					],
 					// 2: not awake
-					[2, { id: 2, isAwake() { return false; }, supportsCC }],
+					[
+						2,
+						{
+							id: 2,
+							isAwake() {
+								return false;
+							},
+							supportsCC,
+						},
+					],
 				]),
 			},
-		} as unknown as Driver;
+		} as unknown) as Driver;
 
 		function createTransaction(nodeID: number, priority: MessagePriority) {
-			const driver = driverMock as any as Driver;
-			const msg = new SendDataRequest(driver, new NoOperationCC(driver, nodeID));
+			const driver = (driverMock as any) as Driver;
+			const msg = new SendDataRequest(
+				driver,
+				new NoOperationCC(driver, nodeID),
+			);
 			const ret = new Transaction(driver, msg, null, priority);
 			ret.timestamp = 0;
 			return ret;

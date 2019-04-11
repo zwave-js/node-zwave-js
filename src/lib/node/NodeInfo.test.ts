@@ -11,7 +11,7 @@ describe("lib/node/NodeInfo", () => {
 			// Supported CCs
 			CommandClasses["Multi Channel"],
 			CommandClasses["Multilevel Toggle Switch"],
-			0xEF, // ======
+			0xef, // ======
 			// Controlled CCs
 			CommandClasses["Multilevel Toggle Switch"],
 		]);
@@ -31,7 +31,6 @@ describe("lib/node/NodeInfo", () => {
 				CommandClasses["Multilevel Toggle Switch"],
 			]);
 		});
-
 	});
 
 	describe("parseNodeUpdatePayload()", () => {
@@ -44,7 +43,7 @@ describe("lib/node/NodeInfo", () => {
 			// Supported CCs
 			CommandClasses["Multi Channel"],
 			CommandClasses["Multilevel Toggle Switch"],
-			0xEF, // ======
+			0xef, // ======
 			// Controlled CCs
 			CommandClasses["Multilevel Toggle Switch"],
 		]);
@@ -79,5 +78,4 @@ describe("lib/node/NodeInfo", () => {
 			]);
 		});
 	});
-
 });

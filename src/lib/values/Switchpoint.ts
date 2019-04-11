@@ -1,4 +1,8 @@
-import { decodeSetbackState, encodeSetbackState, SetbackState } from "./SetbackState";
+import {
+	decodeSetbackState,
+	encodeSetbackState,
+	SetbackState,
+} from "./SetbackState";
 
 export interface Switchpoint {
 	hour: number;

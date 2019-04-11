@@ -1,7 +1,12 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { JSONObject } from "../util/misc";
-import { ccValue, CommandClass, commandClass, implementedVersion } from "./CommandClass";
+import {
+	ccValue,
+	CommandClass,
+	commandClass,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum CentralSceneCommand {
@@ -26,11 +31,21 @@ export enum CentralSceneKeys {
 @commandClass(CommandClasses["Central Scene"])
 @implementedVersion(3)
 export class CentralSceneCC extends CommandClass {
-
 	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
-	public constructor(driver: IDriver, nodeId: number, command: CentralSceneCommand.SupportedGet | CentralSceneCommand.ConfigurationGet);
-	public constructor(driver: IDriver, nodeId: number, command: CentralSceneCommand.ConfigurationSet, slowRefresh: boolean);
+	public constructor(
+		driver: IDriver,
+		nodeId: number,
+		command:
+			| CentralSceneCommand.SupportedGet
+			| CentralSceneCommand.ConfigurationGet,
+	);
+	public constructor(
+		driver: IDriver,
+		nodeId: number,
+		command: CentralSceneCommand.ConfigurationSet,
+		slowRefresh: boolean,
+	);
 
 	public constructor(
 		driver: IDriver,
@@ -60,8 +75,13 @@ export class CentralSceneCC extends CommandClass {
 
 	private _supportedKeyAttributes: number[];
 	private _keyAttributesIdenticalSupport: boolean;
-	public supportsKeyAttribute(sceneNumber: number, keyAttribute: CentralSceneKeys): boolean {
-		const bitArrayIndex = this._keyAttributesIdenticalSupport ? 0 : sceneNumber - 1;
+	public supportsKeyAttribute(
+		sceneNumber: number,
+		keyAttribute: CentralSceneKeys,
+	): boolean {
+		const bitArrayIndex = this._keyAttributesIdenticalSupport
+			? 0
+			: sceneNumber - 1;
 		const bitmap = this._supportedKeyAttributes[bitArrayIndex];
 		return !!(bitmap & (1 << keyAttribute));
 	}
@@ -79,7 +99,9 @@ export class CentralSceneCC extends CommandClass {
 				break;
 
 			case CentralSceneCommand.ConfigurationSet:
-				this.payload = Buffer.from([this.slowRefresh ? 0b1000_0000 : 0]);
+				this.payload = Buffer.from([
+					this.slowRefresh ? 0b1000_0000 : 0,
+				]);
 				break;
 
 			default:
@@ -106,12 +128,15 @@ export class CentralSceneCC extends CommandClass {
 				this.supportsSlowRefresh = !!(this.payload[1] & 0b1000_0000);
 				const bitMaskBytes = this.payload[1] & 0b110;
 				this._keyAttributesIdenticalSupport = !!(this.payload[1] & 0b1);
-				const numEntries = this._keyAttributesIdenticalSupport ? 1 : this.sceneCount;
+				const numEntries = this._keyAttributesIdenticalSupport
+					? 1
+					: this.sceneCount;
 				this._supportedKeyAttributes = [];
 				for (let i = 0; i < numEntries; i++) {
 					let mask = 0;
 					for (let j = 0; j < bitMaskBytes; j++) {
-						mask += this.payload[3 + bitMaskBytes * i + j] << (8 * j);
+						mask +=
+							this.payload[3 + bitMaskBytes * i + j] << (8 * j);
 					}
 					this._supportedKeyAttributes.push(mask);
 				}
@@ -143,5 +168,4 @@ export class CentralSceneCC extends CommandClass {
 			sceneNumber: this.sceneNumber,
 		});
 	}
-
 }

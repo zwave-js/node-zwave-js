@@ -1,5 +1,19 @@
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { getDefaultPriority, getDefaultPriorityStatic, getExpectedResponse, getExpectedResponseStatic, getFunctionType, getFunctionTypeStatic, getMessageType, getMessageTypeStatic, Message } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	getDefaultPriority,
+	getDefaultPriorityStatic,
+	getExpectedResponse,
+	getExpectedResponseStatic,
+	getFunctionType,
+	getFunctionTypeStatic,
+	getMessageType,
+	getMessageTypeStatic,
+	Message,
+} from "../message/Message";
 import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
 
 describe("lib/controller/ApplicationCommandRequest => ", () => {
@@ -10,19 +24,26 @@ describe("lib/controller/ApplicationCommandRequest => ", () => {
 	});
 	it("with type Request", () => {
 		expect(getMessageType(req)).toBe(MessageType.Request);
-		expect(getMessageTypeStatic(ApplicationCommandRequest)).toBe(MessageType.Request);
+		expect(getMessageTypeStatic(ApplicationCommandRequest)).toBe(
+			MessageType.Request,
+		);
 	});
 	it("and priority Normal", () => {
 		expect(getDefaultPriority(req)).toBe(MessagePriority.Normal);
-		expect(getDefaultPriorityStatic(ApplicationCommandRequest)).toBe(MessagePriority.Normal);
+		expect(getDefaultPriorityStatic(ApplicationCommandRequest)).toBe(
+			MessagePriority.Normal,
+		);
 	});
 	it("and a function type ApplicationCommand", () => {
 		expect(getFunctionType(req)).toBe(FunctionType.ApplicationCommand);
-		expect(getFunctionTypeStatic(ApplicationCommandRequest)).toBe(FunctionType.ApplicationCommand);
+		expect(getFunctionTypeStatic(ApplicationCommandRequest)).toBe(
+			FunctionType.ApplicationCommand,
+		);
 	});
 	it("that expects NO response", () => {
 		expect(getExpectedResponse(req)).toBeUndefined();
-		expect(getExpectedResponseStatic(ApplicationCommandRequest)).toBeUndefined();
+		expect(
+			getExpectedResponseStatic(ApplicationCommandRequest),
+		).toBeUndefined();
 	});
-
 });

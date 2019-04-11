@@ -1,5 +1,14 @@
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	Message,
+	messageTypes,
+	priority,
+} from "../message/Message";
 import { JSONObject } from "../util/misc";
 import { cpp2js } from "../util/strings";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
@@ -7,13 +16,10 @@ import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 @messageTypes(MessageType.Request, FunctionType.GetControllerVersion)
 @expectedResponse(FunctionType.GetControllerVersion)
 @priority(MessagePriority.Controller)
-export class GetControllerVersionRequest extends Message {
-
-}
+export class GetControllerVersionRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetControllerVersion)
 export class GetControllerVersionResponse extends Message {
-
 	private _controllerType: ZWaveLibraryTypes;
 	public get controllerType(): ZWaveLibraryTypes {
 		return this._controllerType;

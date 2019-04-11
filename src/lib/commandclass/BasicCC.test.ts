@@ -30,12 +30,10 @@ describe("lib/commandclass/BasicCC => ", () => {
 	it("serialize() should throw for other commands", () => {
 		const basicCC = new BasicCC(undefined, 2, -1 /* not a command */);
 
-		assertZWaveError(
-			() => basicCC.serialize(), {
-				messageMatches: "Cannot serialize",
-				errorCode: ZWaveErrorCodes.CC_Invalid,
-			},
-		);
+		assertZWaveError(() => basicCC.serialize(), {
+			messageMatches: "Cannot serialize",
+			errorCode: ZWaveErrorCodes.CC_Invalid,
+		});
 	});
 
 	it("the Report command (v1) should be deserialized correctly", () => {
@@ -82,12 +80,9 @@ describe("lib/commandclass/BasicCC => ", () => {
 		]);
 		const basicCC = new BasicCC(undefined);
 
-		assertZWaveError(
-			() => basicCC.deserialize(serializedCC), {
-				messageMatches: "Cannot deserialize",
-				errorCode: ZWaveErrorCodes.CC_Invalid,
-			},
-		);
+		assertZWaveError(() => basicCC.deserialize(serializedCC), {
+			messageMatches: "Cannot deserialize",
+			errorCode: ZWaveErrorCodes.CC_Invalid,
+		});
 	});
-
 });

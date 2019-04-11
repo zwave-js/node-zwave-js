@@ -1,9 +1,25 @@
-import { CommandClass, getExpectedCCResponse } from "../commandclass/CommandClass";
-import { ICommandClassContainer, isCommandClassContainer } from "../commandclass/ICommandClassContainer";
+import {
+	CommandClass,
+	getExpectedCCResponse,
+} from "../commandclass/CommandClass";
+import {
+	ICommandClassContainer,
+	isCommandClassContainer,
+} from "../commandclass/ICommandClassContainer";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, messageTypes, priority, ResponseRole } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	Message,
+	messageTypes,
+	priority,
+	ResponseRole,
+} from "../message/Message";
 import { JSONObject } from "../util/misc";
 
 export enum TransmitOptions {
@@ -39,13 +55,12 @@ function getNextCallbackId(): number {
 @messageTypes(MessageType.Request, FunctionType.SendData)
 @expectedResponse(testResponseForSendDataRequest)
 @priority(MessagePriority.Normal)
-export class SendDataRequest<CCType extends CommandClass = CommandClass> extends Message implements ICommandClassContainer {
-
+export class SendDataRequest<CCType extends CommandClass = CommandClass>
+	extends Message
+	implements ICommandClassContainer {
 	// tslint:disable:unified-signatures
 	// empty constructor to parse messages
-	public constructor(
-		driver: IDriver,
-	);
+	public constructor(driver: IDriver);
 	// default constructor to send messages
 	public constructor(
 		driver: IDriver,
@@ -65,7 +80,8 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass> extends
 		this.command = command;
 		if (command != null) {
 			// non-empty constructor -> define default values
-			if (this.transmitOptions == null) this.transmitOptions = TransmitOptions.DEFAULT;
+			if (this.transmitOptions == null)
+				this.transmitOptions = TransmitOptions.DEFAULT;
 			if (this.callbackId == null) this.callbackId = getNextCallbackId();
 		}
 	}
@@ -89,10 +105,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass> extends
 		const serializedCC = this.command.serialize();
 		this.payload = Buffer.concat([
 			serializedCC,
-			Buffer.from([
-				this.transmitOptions,
-				this.callbackId,
-			]),
+			Buffer.from([this.transmitOptions, this.callbackId]),
 		]);
 
 		return super.serialize();
@@ -133,7 +146,10 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass> extends
 		// If the contained CC expects a certain response (which will come in an "unexpected" ApplicationCommandRequest)
 		// we declare that as final and the original "final" response, i.e. the SendDataRequest becomes a confirmation
 		const expectedCCOrDynamic = getExpectedCCResponse(this.command);
-		const expected = typeof expectedCCOrDynamic === "function" ? expectedCCOrDynamic(this.command) : expectedCCOrDynamic;
+		const expected =
+			typeof expectedCCOrDynamic === "function"
+				? expectedCCOrDynamic(this.command)
+				: expectedCCOrDynamic;
 		if (expected == null) return ret; // "final" | "unexpected"
 
 		if (isCommandClassContainer(msg)) {
@@ -149,14 +165,14 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass> extends
 
 	/** Include previously received partial responses into a final message */
 	public mergePartialMessages(partials: Message[]) {
-		this.command.mergePartialCCs((partials as SendDataRequest[]).map(p => p.command));
+		this.command.mergePartialCCs(
+			(partials as SendDataRequest[]).map(p => p.command),
+		);
 	}
-
 }
 
 @messageTypes(MessageType.Response, FunctionType.SendData)
 export class SendDataResponse extends Message {
-
 	private _wasSent: boolean;
 	public get wasSent(): boolean {
 		return this._wasSent;
@@ -182,20 +198,17 @@ export class SendDataResponse extends Message {
 			// errorCode: this.errorCode,
 		});
 	}
-
 }
 
 // Generic handler for all potential responses to SendDataRequests
-function testResponseForSendDataRequest(sent: SendDataRequest, received: Message): ResponseRole {
+function testResponseForSendDataRequest(
+	sent: SendDataRequest,
+	received: Message,
+): ResponseRole {
 	if (received instanceof SendDataResponse) {
-		return received.wasSent
-			? "confirmation"
-			: "fatal_controller";
+		return received.wasSent ? "confirmation" : "fatal_controller";
 	} else if (received instanceof SendDataRequest) {
-		return received.isFailed()
-			? "fatal_node"
-			: "final" // send data requests are final unless stated otherwise by a CommandClass
-			;
+		return received.isFailed() ? "fatal_node" : "final"; // send data requests are final unless stated otherwise by a CommandClass
 	}
 	return "unexpected";
 }

@@ -4,11 +4,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 export type DurationUnit = "seconds" | "minutes" | "unknown" | "default";
 
 export class Duration {
-
-	public constructor(
-		value: number,
-		public unit: DurationUnit,
-	) {
+	public constructor(value: number, public unit: DurationUnit) {
 		switch (unit) {
 			case "minutes":
 				// Don't allow 0 minutes as a duration
@@ -43,11 +39,14 @@ export class Duration {
 	/** Serializes a duration for a Set command */
 	public serializeSet(): number {
 		if (this.unit === "default") return 0xff;
-		if (this.unit === "unknown") throw new ZWaveError("Set commands don't support unknown durations", ZWaveErrorCodes.CC_Invalid);
+		if (this.unit === "unknown")
+			throw new ZWaveError(
+				"Set commands don't support unknown durations",
+				ZWaveErrorCodes.CC_Invalid,
+			);
 		const isMinutes = this.unit === "minutes";
 		let payload = isMinutes ? 0b1000_0000 : 0;
 		payload += (this._value - (isMinutes ? 1 : 0)) & 0b0111_1111;
 		return payload;
 	}
-
 }

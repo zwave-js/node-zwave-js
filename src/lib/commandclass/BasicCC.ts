@@ -3,7 +3,13 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { num2hex } from "../util/strings";
 import { Duration } from "../values/Duration";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import {
+	ccValue,
+	CommandClass,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum BasicCommand {
@@ -16,14 +22,19 @@ export enum BasicCommand {
 @implementedVersion(2) // Update tests in CommandClass.test.ts when changing this
 @expectedCCResponse(CommandClasses.Basic)
 export class BasicCC extends CommandClass {
-
 	// tslint:disable:unified-signatures
+	public constructor(driver: IDriver, nodeId?: number);
 	public constructor(
 		driver: IDriver,
-		nodeId?: number,
+		nodeId: number,
+		ccCommand: BasicCommand.Get,
 	);
-	public constructor(driver: IDriver, nodeId: number, ccCommand: BasicCommand.Get);
-	public constructor(driver: IDriver, nodeId: number, ccCommand: BasicCommand.Set, targetValue: number);
+	public constructor(
+		driver: IDriver,
+		nodeId: number,
+		ccCommand: BasicCommand.Set,
+		targetValue: number,
+	);
 
 	public constructor(
 		driver: IDriver,
@@ -71,10 +82,11 @@ export class BasicCC extends CommandClass {
 
 			default:
 				throw new ZWaveError(
-					`Cannot deserialize a Basic CC with a command other than Report. Received ${BasicCommand[this.ccCommand]} (${num2hex(this.ccCommand)})`,
+					`Cannot deserialize a Basic CC with a command other than Report. Received ${
+						BasicCommand[this.ccCommand]
+					} (${num2hex(this.ccCommand)})`,
 					ZWaveErrorCodes.CC_Invalid,
 				);
 		}
 	}
-
 }

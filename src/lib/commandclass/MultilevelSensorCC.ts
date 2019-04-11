@@ -1,7 +1,13 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { parseBitMask, parseFloatWithScale } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import {
+	ccValue,
+	CommandClass,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum MultilevelSensorCommand {
@@ -19,12 +25,8 @@ export enum MultilevelSensorCommand {
 @implementedVersion(11)
 @expectedCCResponse(CommandClasses["Multilevel Sensor"])
 export class MultilevelSensorCC extends CommandClass {
-
 	// tslint:disable:unified-signatures
-	public constructor(
-		driver: IDriver,
-		nodeId?: number,
-	);
+	public constructor(driver: IDriver, nodeId?: number);
 
 	public constructor(
 		driver: IDriver,
@@ -57,10 +59,7 @@ export class MultilevelSensorCC extends CommandClass {
 		if (this.ccCommand === MultilevelSensorCommand.GetSupportedScale) {
 			this.sensorType = args[0];
 		} else if (this.ccCommand === MultilevelSensorCommand.Get) {
-			[
-				this.sensorType,
-				this.scale,
-			] = args;
+			[this.sensorType, this.scale] = args;
 		}
 	}
 	// tslint:enable:unified-signatures
@@ -82,7 +81,11 @@ export class MultilevelSensorCC extends CommandClass {
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
 			case MultilevelSensorCommand.Get:
-				if (this.version >= 5 && this.sensorType != undefined && this.scale != undefined) {
+				if (
+					this.version >= 5 &&
+					this.sensorType != undefined &&
+					this.scale != undefined
+				) {
 					this.payload = Buffer.from([
 						this.sensorType,
 						(this.scale & 0b11) << 3,
@@ -114,7 +117,9 @@ export class MultilevelSensorCC extends CommandClass {
 		switch (this.ccCommand) {
 			case MultilevelSensorCommand.Report:
 				this.sensorType = this.payload[0];
-				({ value: this.value, scale: this.scale } = parseFloatWithScale(this.payload.slice(1)));
+				({ value: this.value, scale: this.scale } = parseFloatWithScale(
+					this.payload.slice(1),
+				));
 				break;
 
 			case MultilevelSensorCommand.SupportedSensorReport:
@@ -139,7 +144,6 @@ export class MultilevelSensorCC extends CommandClass {
 				);
 		}
 	}
-
 }
 
 export enum MultilevelSensorTypes {
@@ -232,17 +236,35 @@ interface MultilevelSensorScale {
 	minimumCCVersion: number;
 }
 
-const multilevelSensorScales: Record<MultilevelSensorTypes, MultilevelSensorScale[]> = {
+const multilevelSensorScales: Record<
+	MultilevelSensorTypes,
+	MultilevelSensorScale[]
+> = {
 	[MultilevelSensorTypes["Air temperature"]]: [
 		{ label: "Celcius", unit: "°C", value: 0x00, minimumCCVersion: 1 },
 		{ label: "Fahrenheit", unit: "F", value: 0x01, minimumCCVersion: 1 },
 	],
 	[MultilevelSensorTypes["General purpose"]]: [
-		{ label: "Percentage value", unit: "%", value: 0x00, minimumCCVersion: 1 },
-		{ label: "Dimensionless value", unit: undefined, value: 0x01, minimumCCVersion: 1 },
+		{
+			label: "Percentage value",
+			unit: "%",
+			value: 0x00,
+			minimumCCVersion: 1,
+		},
+		{
+			label: "Dimensionless value",
+			unit: undefined,
+			value: 0x01,
+			minimumCCVersion: 1,
+		},
 	],
 	[MultilevelSensorTypes.Illuminance]: [
-		{ label: "Percentage value", unit: "%", value: 0x00, minimumCCVersion: 1 },
+		{
+			label: "Percentage value",
+			unit: "%",
+			value: 0x00,
+			minimumCCVersion: 1,
+		},
 		{ label: "Lux", unit: "Lux", value: 0x01, minimumCCVersion: 1 },
 	],
 	[MultilevelSensorTypes.Power]: [
@@ -250,8 +272,18 @@ const multilevelSensorScales: Record<MultilevelSensorTypes, MultilevelSensorScal
 		{ label: "Btu/h", unit: "Btu/h", value: 0x01, minimumCCVersion: 2 },
 	],
 	[MultilevelSensorTypes.Humidity]: [
-		{ label: "Percentage value", unit: "%", value: 0x00, minimumCCVersion: 2 },
-		{ label: "Absolute humidity", unit: "g/m³", value: 0x01, minimumCCVersion: 5 },
+		{
+			label: "Percentage value",
+			unit: "%",
+			value: 0x00,
+			minimumCCVersion: 2,
+		},
+		{
+			label: "Absolute humidity",
+			unit: "g/m³",
+			value: 0x01,
+			minimumCCVersion: 5,
+		},
 	],
 	[MultilevelSensorTypes.Velocity]: [
 		{ label: "m/s", unit: "m/s", value: 0x00, minimumCCVersion: 2 },
@@ -263,22 +295,47 @@ const multilevelSensorScales: Record<MultilevelSensorTypes, MultilevelSensorScal
 	],
 	[MultilevelSensorTypes["Atmospheric pressure"]]: [
 		{ label: "Kilopascal", unit: "kPa", value: 0x00, minimumCCVersion: 2 },
-		{ label: "Inches of Mercury", unit: "inHg", value: 0x01, minimumCCVersion: 2 },
+		{
+			label: "Inches of Mercury",
+			unit: "inHg",
+			value: 0x01,
+			minimumCCVersion: 2,
+		},
 	],
 	[MultilevelSensorTypes["Barometric pressure"]]: [
 		{ label: "Kilopascal", unit: "kPa", value: 0x00, minimumCCVersion: 2 },
-		{ label: "Inches of Mercury", unit: "inHg", value: 0x01, minimumCCVersion: 2 },
+		{
+			label: "Inches of Mercury",
+			unit: "inHg",
+			value: 0x01,
+			minimumCCVersion: 2,
+		},
 	],
 	[MultilevelSensorTypes["Solar radiation"]]: [
-		{ label: "Watt per square meter", unit: "W/m²", value: 0x00, minimumCCVersion: 2 },
+		{
+			label: "Watt per square meter",
+			unit: "W/m²",
+			value: 0x00,
+			minimumCCVersion: 2,
+		},
 	],
 	[MultilevelSensorTypes["Dew point"]]: [
 		{ label: "Celcius", unit: "°C", value: 0x00, minimumCCVersion: 1 },
 		{ label: "Fahrenheit", unit: "F", value: 0x01, minimumCCVersion: 1 },
 	],
 	[MultilevelSensorTypes["Rain rate"]]: [
-		{ label: "Millimeter/hour", unit: "mm/h", value: 0x00, minimumCCVersion: 2 },
-		{ label: "Inches per hour", unit: "in/h", value: 0x01, minimumCCVersion: 2 },
+		{
+			label: "Millimeter/hour",
+			unit: "mm/h",
+			value: 0x00,
+			minimumCCVersion: 2,
+		},
+		{
+			label: "Inches per hour",
+			unit: "in/h",
+			value: 0x01,
+			minimumCCVersion: 2,
+		},
 	],
 	[MultilevelSensorTypes["Tide level"]]: [
 		{ label: "Meter", unit: "m", value: 0x00, minimumCCVersion: 2 },
@@ -297,11 +354,26 @@ const multilevelSensorScales: Record<MultilevelSensorTypes, MultilevelSensorScal
 		{ label: "Milliampere", unit: "mA", value: 0x01, minimumCCVersion: 3 },
 	],
 	[MultilevelSensorTypes["Carbon dioxide (CO2) level"]]: [
-		{ label: "Parts/million", unit: "ppm", value: 0x00, minimumCCVersion: 3 },
+		{
+			label: "Parts/million",
+			unit: "ppm",
+			value: 0x00,
+			minimumCCVersion: 3,
+		},
 	],
 	[MultilevelSensorTypes["Air flow"]]: [
-		{ label: "Cubic meter per hour", unit: "m³/h", value: 0x00, minimumCCVersion: 3 },
-		{ label: "Cubic feet per minute", unit: "cfm", value: 0x01, minimumCCVersion: 3 },
+		{
+			label: "Cubic meter per hour",
+			unit: "m³/h",
+			value: 0x00,
+			minimumCCVersion: 3,
+		},
+		{
+			label: "Cubic feet per minute",
+			unit: "cfm",
+			value: 0x01,
+			minimumCCVersion: 3,
+		},
 	],
 	[MultilevelSensorTypes["Tank capacity"]]: [
 		{ label: "Liter", unit: "l", value: 0x00, minimumCCVersion: 3 },
@@ -314,12 +386,32 @@ const multilevelSensorScales: Record<MultilevelSensorTypes, MultilevelSensorScal
 		{ label: "Feet", unit: "ft", value: 0x02, minimumCCVersion: 3 },
 	],
 	[MultilevelSensorTypes["Angle position"]]: [
-		{ label: "Percentage value", unit: "%", value: 0x00, minimumCCVersion: 4 },
-		{ label: "Degrees relative to north pole of standing eye view", unit: "°N", value: 0x01, minimumCCVersion: 4 },
-		{ label: "Degrees relative to south pole of standing eye view", unit: "°S", value: 0x02, minimumCCVersion: 4 },
+		{
+			label: "Percentage value",
+			unit: "%",
+			value: 0x00,
+			minimumCCVersion: 4,
+		},
+		{
+			label: "Degrees relative to north pole of standing eye view",
+			unit: "°N",
+			value: 0x01,
+			minimumCCVersion: 4,
+		},
+		{
+			label: "Degrees relative to south pole of standing eye view",
+			unit: "°S",
+			value: 0x02,
+			minimumCCVersion: 4,
+		},
 	],
 	[MultilevelSensorTypes.Rotation]: [
-		{ label: "Revolutions per minute", unit: "rpm", value: 0x00, minimumCCVersion: 5 },
+		{
+			label: "Revolutions per minute",
+			unit: "rpm",
+			value: 0x00,
+			minimumCCVersion: 5,
+		},
 		{ label: "Hertz", unit: "Hz", value: 0x01, minimumCCVersion: 5 },
 	],
 	[MultilevelSensorTypes["Water temperature"]]: [
@@ -331,35 +423,85 @@ const multilevelSensorScales: Record<MultilevelSensorTypes, MultilevelSensorScal
 		{ label: "Fahrenheit", unit: "F", value: 0x01, minimumCCVersion: 5 },
 	],
 	[MultilevelSensorTypes["Seismic Intensity"]]: [
-		{ label: "Mercalli", unit: undefined, value: 0x00, minimumCCVersion: 5 },
-		{ label: "European Macroseismic", unit: undefined, value: 0x01, minimumCCVersion: 5 },
+		{
+			label: "Mercalli",
+			unit: undefined,
+			value: 0x00,
+			minimumCCVersion: 5,
+		},
+		{
+			label: "European Macroseismic",
+			unit: undefined,
+			value: 0x01,
+			minimumCCVersion: 5,
+		},
 		{ label: "Liedu", unit: undefined, value: 0x02, minimumCCVersion: 5 },
 		{ label: "Shindo", unit: undefined, value: 0x03, minimumCCVersion: 5 },
 	],
 	[MultilevelSensorTypes["Seismic magnitude"]]: [
 		{ label: "Local", unit: undefined, value: 0x00, minimumCCVersion: 5 },
 		{ label: "Moment", unit: undefined, value: 0x01, minimumCCVersion: 5 },
-		{ label: "Surface wave", unit: undefined, value: 0x02, minimumCCVersion: 5 },
-		{ label: "Body wave", unit: undefined, value: 0x03, minimumCCVersion: 5 },
+		{
+			label: "Surface wave",
+			unit: undefined,
+			value: 0x02,
+			minimumCCVersion: 5,
+		},
+		{
+			label: "Body wave",
+			unit: undefined,
+			value: 0x03,
+			minimumCCVersion: 5,
+		},
 	],
 	[MultilevelSensorTypes.Ultraviolet]: [
-		{ label: "UV index", unit: undefined, value: 0x00, minimumCCVersion: 5 },
+		{
+			label: "UV index",
+			unit: undefined,
+			value: 0x00,
+			minimumCCVersion: 5,
+		},
 	],
 	[MultilevelSensorTypes["Electrical resistivity"]]: [
 		{ label: "Ohm meter", unit: "Ωm", value: 0x00, minimumCCVersion: 5 },
 	],
 	[MultilevelSensorTypes["Electrical conductivity"]]: [
-		{ label: "Siemens per meter", unit: "S/m", value: 0x00, minimumCCVersion: 5 },
+		{
+			label: "Siemens per meter",
+			unit: "S/m",
+			value: 0x00,
+			minimumCCVersion: 5,
+		},
 	],
 	[MultilevelSensorTypes.Loudness]: [
 		{ label: "Decibel", unit: "dB", value: 0x00, minimumCCVersion: 5 },
-		{ label: "A-weighted decibels", unit: "dBA", value: 0x01, minimumCCVersion: 5 },
+		{
+			label: "A-weighted decibels",
+			unit: "dBA",
+			value: 0x01,
+			minimumCCVersion: 5,
+		},
 	],
 	[MultilevelSensorTypes.Moisture]: [
-		{ label: "Percentage value", unit: "%", value: 0x00, minimumCCVersion: 5 },
-		{ label: "Volume water content", unit: "m3/m³", value: 0x01, minimumCCVersion: 5 },
+		{
+			label: "Percentage value",
+			unit: "%",
+			value: 0x00,
+			minimumCCVersion: 5,
+		},
+		{
+			label: "Volume water content",
+			unit: "m3/m³",
+			value: 0x01,
+			minimumCCVersion: 5,
+		},
 		{ label: "Impedance", unit: "kΩ", value: 0x02, minimumCCVersion: 5 },
-		{ label: "Water activity", unit: "aw", value: 0x03, minimumCCVersion: 5 },
+		{
+			label: "Water activity",
+			unit: "aw",
+			value: 0x03,
+			minimumCCVersion: 5,
+		},
 	],
 	[MultilevelSensorTypes.Frequency]: [
 		// MUST be used until 2.147483647 GHz
@@ -375,38 +517,103 @@ const multilevelSensorScales: Record<MultilevelSensorTypes, MultilevelSensorScal
 		{ label: "Fahrenheit", unit: "F", value: 0x01, minimumCCVersion: 6 },
 	],
 	[MultilevelSensorTypes["Particulate Matter 2.5"]]: [
-		{ label: "Mole per cubic meter", unit: "mol/m³", value: 0x00, minimumCCVersion: 7 },
-		{ label: "Microgram per cubic meter", unit: "µg/m³", value: 0x01, minimumCCVersion: 7 },
+		{
+			label: "Mole per cubic meter",
+			unit: "mol/m³",
+			value: 0x00,
+			minimumCCVersion: 7,
+		},
+		{
+			label: "Microgram per cubic meter",
+			unit: "µg/m³",
+			value: 0x01,
+			minimumCCVersion: 7,
+		},
 	],
 	[MultilevelSensorTypes["Formaldehyde (CH2O) level"]]: [
-		{ label: "Mole per cubic meter", unit: "mol/m³", value: 0x00, minimumCCVersion: 7 },
+		{
+			label: "Mole per cubic meter",
+			unit: "mol/m³",
+			value: 0x00,
+			minimumCCVersion: 7,
+		},
 	],
 	[MultilevelSensorTypes["Radon concentration"]]: [
-		{ label: "Becquerel per cubic meter", unit: "bq/m³", value: 0x00, minimumCCVersion: 7 },
-		{ label: "Picocuries per liter", unit: "pCi/l", value: 0x01, minimumCCVersion: 7 },
+		{
+			label: "Becquerel per cubic meter",
+			unit: "bq/m³",
+			value: 0x00,
+			minimumCCVersion: 7,
+		},
+		{
+			label: "Picocuries per liter",
+			unit: "pCi/l",
+			value: 0x01,
+			minimumCCVersion: 7,
+		},
 	],
 	[MultilevelSensorTypes["Methane (CH4) density"]]: [
-		{ label: "Mole per cubic meter", unit: "mol/m³", value: 0x00, minimumCCVersion: 7 },
+		{
+			label: "Mole per cubic meter",
+			unit: "mol/m³",
+			value: 0x00,
+			minimumCCVersion: 7,
+		},
 	],
 	[MultilevelSensorTypes["Volatile Organic Compound level"]]: [
-		{ label: "Mole per cubic meter", unit: "mol/m³", value: 0x00, minimumCCVersion: 7 },
-		{ label: "Parts/million", unit: "ppm", value: 0x01, minimumCCVersion: 10 },
+		{
+			label: "Mole per cubic meter",
+			unit: "mol/m³",
+			value: 0x00,
+			minimumCCVersion: 7,
+		},
+		{
+			label: "Parts/million",
+			unit: "ppm",
+			value: 0x01,
+			minimumCCVersion: 10,
+		},
 	],
 	[MultilevelSensorTypes["Carbon monoxide (CO) level"]]: [
-		{ label: "Mole per cubic meter", unit: "mol/m³", value: 0x00, minimumCCVersion: 7 },
-		{ label: "Parts/million", unit: "ppm", value: 0x01, minimumCCVersion: 10 },
+		{
+			label: "Mole per cubic meter",
+			unit: "mol/m³",
+			value: 0x00,
+			minimumCCVersion: 7,
+		},
+		{
+			label: "Parts/million",
+			unit: "ppm",
+			value: 0x01,
+			minimumCCVersion: 10,
+		},
 	],
 	[MultilevelSensorTypes["Soil humidity"]]: [
-		{ label: "Percentage value", unit: "%", value: 0x00, minimumCCVersion: 7 },
+		{
+			label: "Percentage value",
+			unit: "%",
+			value: 0x00,
+			minimumCCVersion: 7,
+		},
 	],
 	[MultilevelSensorTypes["Soil reactivity"]]: [
 		{ label: "Acidity", unit: "pH", value: 0x00, minimumCCVersion: 7 },
 	],
 	[MultilevelSensorTypes["Soil salinity"]]: [
-		{ label: "Mole per cubic meter", unit: "mol/m³", value: 0x00, minimumCCVersion: 7 },
+		{
+			label: "Mole per cubic meter",
+			unit: "mol/m³",
+			value: 0x00,
+			minimumCCVersion: 7,
+		},
 	],
 	[MultilevelSensorTypes["Heart rate"]]: [
-		{ label: "Beats per minute", unit: "bpm", value: 0x00, minimumCCVersion: 7 },
+		{
+			label: "Beats per minute",
+			unit: "bpm",
+			value: 0x00,
+			minimumCCVersion: 7,
+		},
 	],
 	[MultilevelSensorTypes["Blood pressure"]]: [
 		{ label: "Systolic", unit: "mmHg", value: 0x00, minimumCCVersion: 7 },
@@ -428,22 +635,52 @@ const multilevelSensorScales: Record<MultilevelSensorTypes, MultilevelSensorScal
 		{ label: "Joule", unit: "J", value: 0x00, minimumCCVersion: 7 },
 	],
 	[MultilevelSensorTypes["Body Mass Index (BMI)"]]: [
-		{ label: "Body Mass Index", unit: undefined, value: 0x00, minimumCCVersion: 7 },
+		{
+			label: "Body Mass Index",
+			unit: undefined,
+			value: 0x00,
+			minimumCCVersion: 7,
+		},
 	],
 	[MultilevelSensorTypes["Acceleration X-axis"]]: [
-		{ label: "Meter per square second", unit: "m/s2", value: 0x00, minimumCCVersion: 8 },
+		{
+			label: "Meter per square second",
+			unit: "m/s2",
+			value: 0x00,
+			minimumCCVersion: 8,
+		},
 	],
 	[MultilevelSensorTypes["Acceleration Y-axis"]]: [
-		{ label: "Meter per square second", unit: "m/s2", value: 0x00, minimumCCVersion: 8 },
+		{
+			label: "Meter per square second",
+			unit: "m/s2",
+			value: 0x00,
+			minimumCCVersion: 8,
+		},
 	],
 	[MultilevelSensorTypes["Acceleration Z-axis"]]: [
-		{ label: "Meter per square second", unit: "m/s2", value: 0x00, minimumCCVersion: 8 },
+		{
+			label: "Meter per square second",
+			unit: "m/s2",
+			value: 0x00,
+			minimumCCVersion: 8,
+		},
 	],
 	[MultilevelSensorTypes["Smoke density"]]: [
-		{ label: "Percentage value", unit: "%", value: 0x00, minimumCCVersion: 8 },
+		{
+			label: "Percentage value",
+			unit: "%",
+			value: 0x00,
+			minimumCCVersion: 8,
+		},
 	],
 	[MultilevelSensorTypes["Water flow"]]: [
-		{ label: "Liter per hour", unit: "l/h", value: 0x00, minimumCCVersion: 9 },
+		{
+			label: "Liter per hour",
+			unit: "l/h",
+			value: 0x00,
+			minimumCCVersion: 9,
+		},
 	],
 	[MultilevelSensorTypes["Water pressure"]]: [
 		{ label: "Kilopascal", unit: "kPa", value: 0x00, minimumCCVersion: 9 },
@@ -453,14 +690,34 @@ const multilevelSensorScales: Record<MultilevelSensorTypes, MultilevelSensorScal
 		{ label: "Power Level", unit: "dBm", value: 0x01, minimumCCVersion: 9 },
 	],
 	[MultilevelSensorTypes["Particulate Matter 10"]]: [
-		{ label: "Mole per cubic meter", unit: "mol/m³", value: 0x00, minimumCCVersion: 10 },
-		{ label: "Microgram per cubic meter", unit: "µg/m³", value: 0x01, minimumCCVersion: 10 },
+		{
+			label: "Mole per cubic meter",
+			unit: "mol/m³",
+			value: 0x00,
+			minimumCCVersion: 10,
+		},
+		{
+			label: "Microgram per cubic meter",
+			unit: "µg/m³",
+			value: 0x01,
+			minimumCCVersion: 10,
+		},
 	],
 	[MultilevelSensorTypes["Respiratory rate"]]: [
-		{ label: "Breaths per minute", unit: "bpm", value: 0x00, minimumCCVersion: 10 },
+		{
+			label: "Breaths per minute",
+			unit: "bpm",
+			value: 0x00,
+			minimumCCVersion: 10,
+		},
 	],
 	[MultilevelSensorTypes["Relative Modulation level"]]: [
-		{ label: "Percentage value", unit: "%", value: 0x00, minimumCCVersion: 11 },
+		{
+			label: "Percentage value",
+			unit: "%",
+			value: 0x00,
+			minimumCCVersion: 11,
+		},
 	],
 	[MultilevelSensorTypes["Boiler water temperature"]]: [
 		{ label: "Celcius", unit: "°C", value: 0x00, minimumCCVersion: 11 },
@@ -475,7 +732,12 @@ const multilevelSensorScales: Record<MultilevelSensorTypes, MultilevelSensorScal
 		{ label: "Celcius", unit: "°C", value: 0x00, minimumCCVersion: 11 },
 	],
 	[MultilevelSensorTypes["Water Chlorine level"]]: [
-		{ label: "Milligram per liter", unit: "mg/l", value: 0x00, minimumCCVersion: 11 },
+		{
+			label: "Milligram per liter",
+			unit: "mg/l",
+			value: 0x00,
+			minimumCCVersion: 11,
+		},
 	],
 	[MultilevelSensorTypes["Water acidity"]]: [
 		{ label: "Acidity", unit: "pH", value: 0x00, minimumCCVersion: 11 },
@@ -484,7 +746,12 @@ const multilevelSensorScales: Record<MultilevelSensorTypes, MultilevelSensorScal
 		{ label: "Millivolt", unit: "mV", value: 0x00, minimumCCVersion: 11 },
 	],
 	[MultilevelSensorTypes["Heart Rate LF/HF ratio"]]: [
-		{ label: "Unitless", unit: undefined, value: 0x00, minimumCCVersion: 11 },
+		{
+			label: "Unitless",
+			unit: undefined,
+			value: 0x00,
+			minimumCCVersion: 11,
+		},
 	],
 	[MultilevelSensorTypes["Motion Direction"]]: [
 		// 0 = no motion detected, 90 = east, 180 = south, 270 = west and 360 = north
@@ -523,7 +790,10 @@ const multilevelSensorScales: Record<MultilevelSensorTypes, MultilevelSensorScal
 };
 
 /** Looks up a scale definition for a given sensor type */
-export function getScale(sensorType: MultilevelSensorTypes, scale: number): MultilevelSensorScale | undefined {
+export function getScale(
+	sensorType: MultilevelSensorTypes,
+	scale: number,
+): MultilevelSensorScale | undefined {
 	const dict = multilevelSensorScales[sensorType];
 	const ret = dict && dict.find(scl => scl.value === scale);
 	if (ret) return ret;

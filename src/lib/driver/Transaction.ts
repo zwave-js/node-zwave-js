@@ -1,4 +1,8 @@
-import { Comparable, compareNumberOrString, CompareResult } from "alcalzone-shared/comparable";
+import {
+	Comparable,
+	compareNumberOrString,
+	CompareResult,
+} from "alcalzone-shared/comparable";
 import { DeferredPromise } from "alcalzone-shared/deferred-promise";
 import { MessagePriority } from "../message/Constants";
 import { Message } from "../message/Message";
@@ -14,7 +18,6 @@ function highResTimestamp(): number {
 export const MAX_SEND_ATTEMPTS = 3;
 
 export class Transaction implements Comparable<Transaction> {
-
 	public constructor(
 		driver: Driver,
 		message: Message,
@@ -34,7 +37,8 @@ export class Transaction implements Comparable<Transaction> {
 		public ackPending: boolean = true,
 		public response?: Message,
 	) {
-		if (message != undefined) this.maxSendAttempts = message.maxSendAttempts;
+		if (message != undefined)
+			this.maxSendAttempts = message.maxSendAttempts;
 	}
 
 	private _maxSendAttempts: number = MAX_SEND_ATTEMPTS;
@@ -51,7 +55,6 @@ export class Transaction implements Comparable<Transaction> {
 	public sendAttempts: number = 0;
 
 	public compareTo(other: Transaction): CompareResult {
-
 		// delay messages for sleeping nodes
 		if (this.priority === MessagePriority.WakeUp) {
 			const thisNode = this.message.getNodeUnsafe();
@@ -77,8 +80,10 @@ export class Transaction implements Comparable<Transaction> {
 			const otherNode = other.message.getNodeUnsafe();
 			if (thisNode && otherNode) {
 				// Both nodes exist
-				const thisListening = thisNode.isListening || thisNode.isFrequentListening;
-				const otherListening = otherNode.isListening || otherNode.isFrequentListening;
+				const thisListening =
+					thisNode.isListening || thisNode.isFrequentListening;
+				const otherListening =
+					otherNode.isListening || otherNode.isFrequentListening;
 				// prioritize (-1) the one node that is listening when the other is not
 				if (thisListening && !otherListening) return -1;
 				if (!thisListening && otherListening) return 1;

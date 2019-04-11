@@ -1,4 +1,7 @@
-import { SendDataRequest, TransmitOptions } from "../controller/SendDataMessages";
+import {
+	SendDataRequest,
+	TransmitOptions,
+} from "../controller/SendDataMessages";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { ZWavePlusCC, ZWavePlusCommand } from "./ZWavePlusCC";
@@ -22,7 +25,9 @@ describe("lib/commandclass/ZWavePlusCC => ", () => {
 		cc.ccCommand = ZWavePlusCommand.Get;
 		serialized = req.serialize();
 		// A real message from OZW
-		expect(serialized).toEqual(Buffer.from("0109001309025e012524b0", "hex"));
+		expect(serialized).toEqual(
+			Buffer.from("0109001309025e012524b0", "hex"),
+		);
 	});
 
 	// it("should deserialize correctly", () => {
@@ -30,5 +35,4 @@ describe("lib/commandclass/ZWavePlusCC => ", () => {
 	// 	expect(deserialized).toBeInstanceOf(ManufacturerSpecificCC);
 	// 	expect(deserialized.nodeId).toBe(cc.nodeId);
 	// });
-
 });

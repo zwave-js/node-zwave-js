@@ -9,20 +9,24 @@ import { ZWaveNode } from "../node/Node";
 import { log } from "../util/logger";
 import { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
-import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "./Constants";
+import {
+	FunctionType,
+	MessageHeaders,
+	MessagePriority,
+	MessageType,
+} from "./Constants";
 
-export type Constructable<T> = new (driver: IDriver, ...constructorArgs: any[]) => T;
+export type Constructable<T> = new (
+	driver: IDriver,
+	...constructorArgs: any[]
+) => T;
 
 /**
  * Represents a ZWave message for communication with the serial interface
  */
 export class Message {
-
 	// #1
-	public constructor(
-		driver: IDriver,
-		payload?: Buffer,
-	)
+	public constructor(driver: IDriver, payload?: Buffer);
 
 	// #2
 	public constructor(
@@ -31,7 +35,7 @@ export class Message {
 		funcType: FunctionType,
 		expResponse: FunctionType | ResponsePredicate,
 		payload?: Buffer,
-	)
+	);
 
 	// implementation
 	public constructor(
@@ -41,19 +45,21 @@ export class Message {
 		expResponse?: FunctionType | ResponsePredicate,
 		payload?: Buffer, // TODO: Length limit 255
 	) {
-
 		// decide which implementation we follow
 		let type: MessageType;
-		if (typeof typeOrPayload === "number") { // #2
+		if (typeof typeOrPayload === "number") {
+			// #2
 			type = typeOrPayload;
-		} else if (typeOrPayload instanceof Buffer) { // #1
+		} else if (typeOrPayload instanceof Buffer) {
+			// #1
 			payload = typeOrPayload;
 		}
 
 		// These properties are filled from declared metadata if not provided
 		this.type = type != null ? type : getMessageType(this);
 		this.functionType = funcType != null ? funcType : getFunctionType(this);
-		this.expectedResponse = expResponse != null ? expResponse : getExpectedResponse(this);
+		this.expectedResponse =
+			expResponse != null ? expResponse : getExpectedResponse(this);
 		// This is taken from the constructor args
 		this.payload = payload;
 	}
@@ -166,9 +172,11 @@ export class Message {
 		const ret: any = {
 			name: this.constructor.name,
 			type: MessageType[this.type],
-			functionType: FunctionType[this.functionType] || num2hex(this.functionType),
+			functionType:
+				FunctionType[this.functionType] || num2hex(this.functionType),
 		};
-		if (this.expectedResponse != null) ret.expectedResponse = FunctionType[this.functionType];
+		if (this.expectedResponse != null)
+			ret.expectedResponse = FunctionType[this.functionType];
 		if (this.payload != null) ret.payload = this.payload.toString("hex");
 		return ret;
 	}
@@ -186,10 +194,7 @@ export class Message {
 	public testResponse(msg: Message): ResponseRole {
 		const expected = this.expectedResponse;
 		// log("driver", `Message: testing response`, "debug");
-		if (
-			typeof expected === "number"
-			&& msg.type === MessageType.Response
-		) {
+		if (typeof expected === "number" && msg.type === MessageType.Response) {
 			// if only a functionType was configured as expected,
 			// any message with this function type is expected,
 			// every other message is unexpected
@@ -214,7 +219,8 @@ export class Message {
 	 */
 	public getNodeUnsafe(): ZWaveNode | undefined {
 		const nodeId = this.getNodeId();
-		if (nodeId != undefined) return this.driver.controller.nodes.get(nodeId);
+		if (nodeId != undefined)
+			return this.driver.controller.nodes.get(nodeId);
 	}
 
 	/** Include previously received partial responses into a final message */
@@ -222,7 +228,6 @@ export class Message {
 		// This is highly message dependent
 		// Overwrite this in derived classes
 	}
-
 }
 
 function computeChecksum(message: Buffer): number {
@@ -245,35 +250,57 @@ export const METADATA_priority = Symbol("priority");
 
 type MessageTypeMap = Map<string, Constructable<Message>>;
 
-function getMessageTypeMapKey(messageType: MessageType, functionType: FunctionType): string {
+function getMessageTypeMapKey(
+	messageType: MessageType,
+	functionType: FunctionType,
+): string {
 	return JSON.stringify({ messageType, functionType });
 }
 
 export type ResponseRole =
-	"unexpected" // a message that does not belong to this transaction
+	| "unexpected" // a message that does not belong to this transaction
 	| "confirmation" // a confirmation response, e.g. controller reporting that a message was sent
 	| "partial" // a partial response, that (once assembled) will become final. E.g. a multi-report CC container
 	| "final" // a final response (leading to a resolved transaction)
 	| "fatal_controller" // a response from the controller that leads to a rejected transaction
-	| "fatal_node" // a response or (lack thereof) from the node that leads to a rejected transaction
-	;
+	| "fatal_node"; // a response or (lack thereof) from the node that leads to a rejected transaction
 /**
  * A predicate function to test if a received message matches to the sent message
  */
-export type ResponsePredicate = (sentMessage: Message, receivedMessage: Message) => ResponseRole;
+export type ResponsePredicate = (
+	sentMessage: Message,
+	receivedMessage: Message,
+) => ResponseRole;
 
 /**
  * Defines the message and function type associated with a Z-Wave message
  */
-export function messageTypes(messageType: MessageType, functionType: FunctionType): ClassDecorator {
-	return (messageClass) => {
-		log("protocol", `${messageClass.name}: defining message type ${num2hex(messageType)} and function type ${num2hex(functionType)}`, "silly");
+export function messageTypes(
+	messageType: MessageType,
+	functionType: FunctionType,
+): ClassDecorator {
+	return messageClass => {
+		log(
+			"protocol",
+			`${messageClass.name}: defining message type ${num2hex(
+				messageType,
+			)} and function type ${num2hex(functionType)}`,
+			"silly",
+		);
 		// and store the metadata
-		Reflect.defineMetadata(METADATA_messageTypes, { messageType, functionType }, messageClass);
+		Reflect.defineMetadata(
+			METADATA_messageTypes,
+			{ messageType, functionType },
+			messageClass,
+		);
 
 		// also store a map in the Message metadata for lookup.
-		const map: MessageTypeMap = Reflect.getMetadata(METADATA_messageTypeMap, Message) || new Map();
-		map.set(getMessageTypeMapKey(messageType, functionType), messageClass as any as Constructable<Message>);
+		const map: MessageTypeMap =
+			Reflect.getMetadata(METADATA_messageTypeMap, Message) || new Map();
+		map.set(
+			getMessageTypeMapKey(messageType, functionType),
+			(messageClass as any) as Constructable<Message>,
+		);
 		Reflect.defineMetadata(METADATA_messageTypeMap, map, Message);
 	};
 }
@@ -281,58 +308,91 @@ export function messageTypes(messageType: MessageType, functionType: FunctionTyp
 /**
  * Retrieves the message type defined for a Z-Wave message class
  */
-export function getMessageType<T extends Message>(messageClass: T): MessageType {
+export function getMessageType<T extends Message>(
+	messageClass: T,
+): MessageType {
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
 	const meta = Reflect.getMetadata(METADATA_messageTypes, constr);
 	const ret = meta && meta.messageType;
-	log("protocol", `${constr.name}: retrieving message type => ${num2hex(ret)}`, "silly");
+	log(
+		"protocol",
+		`${constr.name}: retrieving message type => ${num2hex(ret)}`,
+		"silly",
+	);
 	return ret;
 }
 
 /**
  * Retrieves the message type defined for a Z-Wave message class
  */
-export function getMessageTypeStatic<T extends Constructable<Message>>(classConstructor: T): MessageType {
+export function getMessageTypeStatic<T extends Constructable<Message>>(
+	classConstructor: T,
+): MessageType {
 	// retrieve the current metadata
 	const meta = Reflect.getMetadata(METADATA_messageTypes, classConstructor);
 	const ret = meta && meta.messageType;
-	log("protocol", `${classConstructor.name}: retrieving message type => ${num2hex(ret)}`, "silly");
+	log(
+		"protocol",
+		`${classConstructor.name}: retrieving message type => ${num2hex(ret)}`,
+		"silly",
+	);
 	return ret;
 }
 
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export function getFunctionType<T extends Message>(messageClass: T): FunctionType {
+export function getFunctionType<T extends Message>(
+	messageClass: T,
+): FunctionType {
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
 	const meta = Reflect.getMetadata(METADATA_messageTypes, constr);
 	const ret = meta && meta.functionType;
-	log("protocol", `${constr.name}: retrieving function type => ${num2hex(ret)}`, "silly");
+	log(
+		"protocol",
+		`${constr.name}: retrieving function type => ${num2hex(ret)}`,
+		"silly",
+	);
 	return ret;
 }
 
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export function getFunctionTypeStatic<T extends Constructable<Message>>(classConstructor: T): FunctionType {
+export function getFunctionTypeStatic<T extends Constructable<Message>>(
+	classConstructor: T,
+): FunctionType {
 	// retrieve the current metadata
 	const meta = Reflect.getMetadata(METADATA_messageTypes, classConstructor);
 	const ret = meta && meta.functionType;
-	log("protocol", `${classConstructor.name}: retrieving function type => ${num2hex(ret)}`, "silly");
+	log(
+		"protocol",
+		`${classConstructor.name}: retrieving function type => ${num2hex(ret)}`,
+		"silly",
+	);
 	return ret;
 }
 
 /**
  * Looks up the message constructor for a given message type and function type
  */
-export function getMessageConstructor(messageType: MessageType, functionType: FunctionType): Constructable<Message> {
+export function getMessageConstructor(
+	messageType: MessageType,
+	functionType: FunctionType,
+): Constructable<Message> {
 	// Retrieve the constructor map from the Message class
-	const functionTypeMap = Reflect.getMetadata(METADATA_messageTypeMap, Message) as MessageTypeMap;
-	if (functionTypeMap != null) return functionTypeMap.get(getMessageTypeMapKey(messageType, functionType));
+	const functionTypeMap = Reflect.getMetadata(
+		METADATA_messageTypeMap,
+		Message,
+	) as MessageTypeMap;
+	if (functionTypeMap != null)
+		return functionTypeMap.get(
+			getMessageTypeMapKey(messageType, functionType),
+		);
 }
 
 // tslint:disable:unified-signatures
@@ -341,17 +401,35 @@ export function getMessageConstructor(messageType: MessageType, functionType: Fu
  */
 export function expectedResponse(type: FunctionType): ClassDecorator;
 export function expectedResponse(predicate: ResponsePredicate): ClassDecorator;
-export function expectedResponse(typeOrPredicate: FunctionType | ResponsePredicate): ClassDecorator {
-	return (messageClass) => {
+export function expectedResponse(
+	typeOrPredicate: FunctionType | ResponsePredicate,
+): ClassDecorator {
+	return messageClass => {
 		if (typeof typeOrPredicate === "number") {
 			const type = typeOrPredicate;
-			log("protocol", `${messageClass.name}: defining expected response ${num2hex(type)}`, "silly");
+			log(
+				"protocol",
+				`${messageClass.name}: defining expected response ${num2hex(
+					type,
+				)}`,
+				"silly",
+			);
 		} else {
 			const predicate = typeOrPredicate;
-			log("protocol", `${messageClass.name}: defining expected response [Predicate${predicate.name.length > 0 ? " " + predicate.name : ""}]`, "silly");
+			log(
+				"protocol",
+				`${messageClass.name}: defining expected response [Predicate${
+					predicate.name.length > 0 ? " " + predicate.name : ""
+				}]`,
+				"silly",
+			);
 		}
 		// and store the metadata
-		Reflect.defineMetadata(METADATA_expectedResponse, typeOrPredicate, messageClass);
+		Reflect.defineMetadata(
+			METADATA_expectedResponse,
+			typeOrPredicate,
+			messageClass,
+		);
 	};
 }
 // tslint:enable:unified-signatures
@@ -359,15 +437,27 @@ export function expectedResponse(typeOrPredicate: FunctionType | ResponsePredica
 /**
  * Retrieves the expected response defined for a Z-Wave message class
  */
-export function getExpectedResponse<T extends Message>(messageClass: T): FunctionType | ResponsePredicate {
+export function getExpectedResponse<T extends Message>(
+	messageClass: T,
+): FunctionType | ResponsePredicate {
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_expectedResponse, constr);
 	if (typeof ret === "number") {
-		log("protocol", `${constr.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
+		log(
+			"protocol",
+			`${constr.name}: retrieving expected response => ${num2hex(ret)}`,
+			"silly",
+		);
 	} else if (typeof ret === "function") {
-		log("protocol", `${constr.name}: retrieving expected response => [Predicate${ret.name.length > 0 ? " " + ret.name : ""}]`, "silly");
+		log(
+			"protocol",
+			`${constr.name}: retrieving expected response => [Predicate${
+				ret.name.length > 0 ? " " + ret.name : ""
+			}]`,
+			"silly",
+		);
 	}
 	return ret;
 }
@@ -375,13 +465,32 @@ export function getExpectedResponse<T extends Message>(messageClass: T): Functio
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export function getExpectedResponseStatic<T extends Constructable<Message>>(classConstructor: T): FunctionType | ResponsePredicate {
+export function getExpectedResponseStatic<T extends Constructable<Message>>(
+	classConstructor: T,
+): FunctionType | ResponsePredicate {
 	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_expectedResponse, classConstructor);
+	const ret = Reflect.getMetadata(
+		METADATA_expectedResponse,
+		classConstructor,
+	);
 	if (typeof ret === "number") {
-		log("protocol", `${classConstructor.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
+		log(
+			"protocol",
+			`${
+				classConstructor.name
+			}: retrieving expected response => ${num2hex(ret)}`,
+			"silly",
+		);
 	} else if (typeof ret === "function") {
-		log("protocol", `${classConstructor.name}: retrieving expected response => [Predicate${ret.name.length > 0 ? " " + ret.name : ""}]`, "silly");
+		log(
+			"protocol",
+			`${
+				classConstructor.name
+			}: retrieving expected response => [Predicate${
+				ret.name.length > 0 ? " " + ret.name : ""
+			}]`,
+			"silly",
+		);
 	}
 	return ret;
 }
@@ -390,8 +499,14 @@ export function getExpectedResponseStatic<T extends Constructable<Message>>(clas
  * Defines the default priority associated with a Z-Wave message
  */
 export function priority(prio: MessagePriority): ClassDecorator {
-	return (messageClass) => {
-		log("protocol", `${messageClass.name}: defining default priority ${MessagePriority[prio]} (${prio})`, "silly");
+	return messageClass => {
+		log(
+			"protocol",
+			`${messageClass.name}: defining default priority ${
+				MessagePriority[prio]
+			} (${prio})`,
+			"silly",
+		);
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_priority, prio, messageClass);
 	};
@@ -400,21 +515,37 @@ export function priority(prio: MessagePriority): ClassDecorator {
 /**
  * Retrieves the default priority defined for a Z-Wave message class
  */
-export function getDefaultPriority<T extends Message>(messageClass: T): MessagePriority {
+export function getDefaultPriority<T extends Message>(
+	messageClass: T,
+): MessagePriority {
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_priority, constr);
-	log("protocol", `${constr.name}: retrieving default priority => ${MessagePriority[ret]} (${ret})`, "silly");
+	log(
+		"protocol",
+		`${constr.name}: retrieving default priority => ${
+			MessagePriority[ret]
+		} (${ret})`,
+		"silly",
+	);
 	return ret;
 }
 
 /**
  * Retrieves the default priority defined for a Z-Wave message class
  */
-export function getDefaultPriorityStatic<T extends Constructable<Message>>(classConstructor: T): MessagePriority {
+export function getDefaultPriorityStatic<T extends Constructable<Message>>(
+	classConstructor: T,
+): MessagePriority {
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_priority, classConstructor);
-	log("protocol", `${classConstructor.name}: retrieving default priority => ${MessagePriority[ret]} (${ret})`, "silly");
+	log(
+		"protocol",
+		`${classConstructor.name}: retrieving default priority => ${
+			MessagePriority[ret]
+		} (${ret})`,
+		"silly",
+	);
 	return ret;
 }

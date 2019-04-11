@@ -1,0 +1,27 @@
+# top-most EditorConfig file
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+indent_style = tab
+indent_size = 4
+
+# tab indentation by default
+[*.{js,jsx,ts,tsx}]
+indent_style = tab
+indent_size = 4
+
+# space indentation for some specific files
+[{package.json,lerna.json}]
+indent_style = space
+indent_size = 2
+
+[io-package.json]
+indent_style = space
+indent_size = 4
+
+[*.yml]
+indent_style = space
+indent_size = 4
