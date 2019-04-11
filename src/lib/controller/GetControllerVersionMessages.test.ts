@@ -1,6 +1,14 @@
 import { FunctionType, MessageType } from "../message/Constants";
-import { getExpectedResponse, getFunctionType, getMessageType, Message } from "../message/Message";
-import { GetControllerVersionRequest, GetControllerVersionResponse } from "./GetControllerVersionMessages";
+import {
+	getExpectedResponse,
+	getFunctionType,
+	getMessageType,
+	Message,
+} from "../message/Message";
+import {
+	GetControllerVersionRequest,
+	GetControllerVersionResponse,
+} from "./GetControllerVersionMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
 describe("lib/driver/GetControllerVersionRequest => ", () => {
@@ -16,9 +24,10 @@ describe("lib/driver/GetControllerVersionRequest => ", () => {
 		expect(getFunctionType(req)).toBe(FunctionType.GetControllerVersion);
 	});
 	it("that expects a GetControllerVersion response", () => {
-		expect(getExpectedResponse(req)).toBe(FunctionType.GetControllerVersion);
+		expect(getExpectedResponse(req)).toBe(
+			FunctionType.GetControllerVersion,
+		);
 	});
-
 });
 
 describe("lib/driver/GetControllerVersionResponse => ", () => {
@@ -44,7 +53,9 @@ describe("lib/driver/GetControllerVersionResponse => ", () => {
 
 	it("should extract the controller version and type", () => {
 		expect(parsed.libraryVersion).toBe("Z-Wave 4.05");
-		expect(parsed.controllerType).toBe(ZWaveLibraryTypes["Static Controller"]);
+		expect(parsed.controllerType).toBe(
+			ZWaveLibraryTypes["Static Controller"],
+		);
 	});
 
 	it("its constructor should be retrieved for Response & GetControllerVersion", () => {
@@ -52,5 +63,4 @@ describe("lib/driver/GetControllerVersionResponse => ", () => {
 		expect(constr).toBe(GetControllerVersionResponse);
 		expect(constr).not.toBe(Message);
 	});
-
 });

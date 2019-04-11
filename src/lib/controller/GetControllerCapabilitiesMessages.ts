@@ -1,5 +1,14 @@
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	Message,
+	messageTypes,
+	priority,
+} from "../message/Message";
 import { JSONObject } from "../util/misc";
 
 const enum ControllerCapabilityFlags {
@@ -13,25 +22,34 @@ const enum ControllerCapabilityFlags {
 @messageTypes(MessageType.Request, FunctionType.GetControllerCapabilities)
 @expectedResponse(FunctionType.GetControllerCapabilities)
 @priority(MessagePriority.Controller)
-export class GetControllerCapabilitiesRequest extends Message {
-
-}
+export class GetControllerCapabilitiesRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetControllerCapabilities)
 export class GetControllerCapabilitiesResponse extends Message {
-
 	private _capabilityFlags: number;
 	public get isSecondary(): boolean {
-		return (this._capabilityFlags & ControllerCapabilityFlags.Secondary) !== 0;
+		return (
+			(this._capabilityFlags & ControllerCapabilityFlags.Secondary) !== 0
+		);
 	}
 	public get isUsingHomeIdFromOtherNetwork(): boolean {
-		return (this._capabilityFlags & ControllerCapabilityFlags.OnOtherNetwork) !== 0;
+		return (
+			(this._capabilityFlags &
+				ControllerCapabilityFlags.OnOtherNetwork) !==
+			0
+		);
 	}
 	public get isSISPresent(): boolean {
-		return (this._capabilityFlags & ControllerCapabilityFlags.SISPresent) !== 0;
+		return (
+			(this._capabilityFlags & ControllerCapabilityFlags.SISPresent) !== 0
+		);
 	}
 	public get wasRealPrimary(): boolean {
-		return (this._capabilityFlags & ControllerCapabilityFlags.WasRealPrimary) !== 0;
+		return (
+			(this._capabilityFlags &
+				ControllerCapabilityFlags.WasRealPrimary) !==
+			0
+		);
 	}
 	public get isStaticUpdateController(): boolean {
 		return (this._capabilityFlags & ControllerCapabilityFlags.SUC) !== 0;
@@ -55,5 +73,4 @@ export class GetControllerCapabilitiesResponse extends Message {
 			isStaticUpdateController: this.isStaticUpdateController,
 		});
 	}
-
 }

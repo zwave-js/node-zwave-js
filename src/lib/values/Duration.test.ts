@@ -3,7 +3,6 @@ import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { Duration } from "./Duration";
 
 describe("lib/util/Duration", () => {
-
 	describe("constructor()", () => {
 		it("should remember the given value and unit", () => {
 			const tests = [
@@ -71,10 +70,9 @@ describe("lib/util/Duration", () => {
 
 		it("should throw for unknown durations", () => {
 			const duration = new Duration(0, "unknown");
-			assertZWaveError(
-				() => duration.serializeSet(),
-				{ errorCode: ZWaveErrorCodes.CC_Invalid },
-			);
+			assertZWaveError(() => duration.serializeSet(), {
+				errorCode: ZWaveErrorCodes.CC_Invalid,
+			});
 		});
 
 		it("should correctly serialize valid durations", () => {
@@ -89,7 +87,5 @@ describe("lib/util/Duration", () => {
 				expect(actual).toBe(expected);
 			}
 		});
-
 	});
-
 });

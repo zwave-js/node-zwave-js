@@ -1,5 +1,14 @@
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	Message,
+	messageTypes,
+	priority,
+} from "../message/Message";
 import { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { parseBitMask } from "../values/Primitive";
@@ -10,13 +19,10 @@ const NUM_FUNCTION_BYTES = NUM_FUNCTIONS / 8;
 @messageTypes(MessageType.Request, FunctionType.GetSerialApiCapabilities)
 @expectedResponse(FunctionType.GetSerialApiCapabilities)
 @priority(MessagePriority.Controller)
-export class GetSerialApiCapabilitiesRequest extends Message {
-
-}
+export class GetSerialApiCapabilitiesRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiCapabilities)
 export class GetSerialApiCapabilitiesResponse extends Message {
-
 	private _serialApiVersion: string;
 	public get serialApiVersion(): string {
 		return this._serialApiVersion;
@@ -69,7 +75,9 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 			manufacturerId: this.manufacturerId,
 			productType: this.productType,
 			productId: this.productId,
-			supportedFunctionTypes: this.supportedFunctionTypes.map(type => type in FunctionType ? FunctionType[type] : num2hex(type)),
+			supportedFunctionTypes: this.supportedFunctionTypes.map(type =>
+				type in FunctionType ? FunctionType[type] : num2hex(type),
+			),
 		});
 	}
 }

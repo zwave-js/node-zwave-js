@@ -20,10 +20,9 @@ import { log, setCustomLogger, Severity } from "./logger";
 
 jest.mock("debug");
 const debugSpy = jest.fn();
-(debug as any as jest.Mock).mockReturnValue(debugSpy);
+((debug as any) as jest.Mock).mockReturnValue(debugSpy);
 
 describe("lib/logger => ", () => {
-
 	beforeEach(() => jest.clearAllMocks());
 
 	it(`gets called with the correct arguments`, () => {
@@ -64,7 +63,9 @@ describe("lib/logger => ", () => {
 			debugSpy.mockClear();
 			log("message", sev);
 			expect(debugSpy).toBeCalledWith(expect.stringContaining("message"));
-			expect(debugSpy).toBeCalledWith(expect.not.stringContaining("INFO"));
+			expect(debugSpy).toBeCalledWith(
+				expect.not.stringContaining("INFO"),
+			);
 		}
 	});
 
@@ -74,5 +75,4 @@ describe("lib/logger => ", () => {
 		expect(() => log.apply(undefined, [1, 2])).toThrow();
 		expect(() => log.apply(undefined, [1, 2, 3])).toThrow();
 	});
-
 });

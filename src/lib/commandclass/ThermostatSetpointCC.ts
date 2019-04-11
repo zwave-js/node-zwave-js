@@ -1,7 +1,17 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { encodeFloatWithScale, parseBitMask, parseFloatWithScale } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import {
+	encodeFloatWithScale,
+	parseBitMask,
+	parseFloatWithScale,
+} from "../values/Primitive";
+import {
+	ccValue,
+	CommandClass,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum ThermostatSetpointCommand {
@@ -11,27 +21,38 @@ export enum ThermostatSetpointCommand {
 	SupportedGet = 0x04,
 	SupportedReport = 0x05,
 	CapabilitiesGet = 0x09,
-	CapabilitiesReport = 0x0A,
+	CapabilitiesReport = 0x0a,
 }
 
 export enum ThermostatSetpointType {
 	"N/A" = 0x00,
-	"Heating" = 0x01,				// CC v1
-	"Cooling" = 0x02,				// CC v1
-	"Furnace" = 0x07,				// CC v1
-	"Dry Air" = 0x08,				// CC v1
-	"Moist Air" = 0x09,				// CC v1
-	"Auto Changeover" = 0x0A,		// CC v1
-	"Energy Save Heating" = 0x0B,	// CC v2
-	"Energy Save Cooling" = 0x0C,	// CC v2
-	"Away Heating" = 0x0D,			// CC v2
-	"Away Cooling" = 0x0E,			// CC v3
-	"Full Power" = 0x0F,			// CC v3
+	"Heating" = 0x01, // CC v1
+	"Cooling" = 0x02, // CC v1
+	"Furnace" = 0x07, // CC v1
+	"Dry Air" = 0x08, // CC v1
+	"Moist Air" = 0x09, // CC v1
+	"Auto Changeover" = 0x0a, // CC v1
+	"Energy Save Heating" = 0x0b, // CC v2
+	"Energy Save Cooling" = 0x0c, // CC v2
+	"Away Heating" = 0x0d, // CC v2
+	"Away Cooling" = 0x0e, // CC v3
+	"Full Power" = 0x0f, // CC v3
 }
 // This array is used to map the advertised supported types (interpretation A)
 // to the actual enum values
 const thermostatSetpointTypeMap = [
-	0x00, 0x01, 0x02, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+	0x00,
+	0x01,
+	0x02,
+	0x07,
+	0x08,
+	0x09,
+	0x0a,
+	0x0b,
+	0x0c,
+	0x0d,
+	0x0e,
+	0x0f,
 ];
 
 export enum ThermostatSetpointScale {
@@ -43,12 +64,8 @@ export enum ThermostatSetpointScale {
 @implementedVersion(3)
 @expectedCCResponse(CommandClasses["Thermostat Setpoint"])
 export class ThermostatSetpointCC extends CommandClass {
-
 	// tslint:disable:unified-signatures
-	public constructor(
-		driver: IDriver,
-		nodeId?: number,
-	);
+	public constructor(driver: IDriver, nodeId?: number);
 
 	public constructor(
 		driver: IDriver,
@@ -59,7 +76,9 @@ export class ThermostatSetpointCC extends CommandClass {
 	public constructor(
 		driver: IDriver,
 		nodeId: number,
-		ccCommand: ThermostatSetpointCommand.Get | ThermostatSetpointCommand.CapabilitiesGet,
+		ccCommand:
+			| ThermostatSetpointCommand.Get
+			| ThermostatSetpointCommand.CapabilitiesGet,
 		setpointType: ThermostatSetpointType,
 	);
 
@@ -105,12 +124,12 @@ export class ThermostatSetpointCC extends CommandClass {
 		switch (this.ccCommand) {
 			case ThermostatSetpointCommand.Get:
 			case ThermostatSetpointCommand.CapabilitiesGet:
-				this.payload = Buffer.from([ this.setpointType & 0b1111 ]);
+				this.payload = Buffer.from([this.setpointType & 0b1111]);
 				break;
 
 			case ThermostatSetpointCommand.Set:
 				this.payload = Buffer.concat([
-					Buffer.from([ this.setpointType & 0b1111 ]),
+					Buffer.from([this.setpointType & 0b1111]),
 					encodeFloatWithScale(this.value, this.scale),
 				]);
 				break;
@@ -135,7 +154,9 @@ export class ThermostatSetpointCC extends CommandClass {
 		switch (this.ccCommand) {
 			case ThermostatSetpointCommand.Report:
 				this.setpointType = this.payload[0] & 0b1111;
-				({ value: this.value, scale: this.scale } = parseFloatWithScale(this.payload.slice(1)));
+				({ value: this.value, scale: this.scale } = parseFloatWithScale(
+					this.payload.slice(1),
+				));
 				break;
 
 			case ThermostatSetpointCommand.SupportedReport: {
@@ -143,7 +164,9 @@ export class ThermostatSetpointCC extends CommandClass {
 				const supported = parseBitMask(bitMask);
 				if (this.version >= 3) {
 					// Interpretation A
-					this.supportedSetpointTypes = supported.map(i => thermostatSetpointTypeMap[i]);
+					this.supportedSetpointTypes = supported.map(
+						i => thermostatSetpointTypeMap[i],
+					);
 				} else {
 					// TODO: Determine which interpretation the device complies to
 					this.supportedSetpointTypes = supported;
@@ -164,8 +187,15 @@ export class ThermostatSetpointCC extends CommandClass {
 			case ThermostatSetpointCommand.CapabilitiesReport: {
 				this.setpointType = this.payload[0];
 				let bytesRead: number;
-				({ value: this.minValue, scale: this.minValueScale, bytesRead } = parseFloatWithScale(this.payload.slice(1)));
-				({ value: this.maxValue, scale: this.maxValueScale } = parseFloatWithScale(this.payload.slice(1 + bytesRead)));
+				({
+					value: this.minValue,
+					scale: this.minValueScale,
+					bytesRead,
+				} = parseFloatWithScale(this.payload.slice(1)));
+				({
+					value: this.maxValue,
+					scale: this.maxValueScale,
+				} = parseFloatWithScale(this.payload.slice(1 + bytesRead)));
 				break;
 			}
 
@@ -176,5 +206,4 @@ export class ThermostatSetpointCC extends CommandClass {
 				);
 		}
 	}
-
 }

@@ -13,8 +13,7 @@ describe("lib/node/ValueDB => ", () => {
 		valueDB = new ValueDB()
 			.on("value added", onValueAdded)
 			.on("value updated", onValueUpdated)
-			.on("value removed", onValueRemoved)
-			;
+			.on("value removed", onValueRemoved);
 	}
 
 	beforeAll(() => createValueDB());
@@ -22,11 +21,7 @@ describe("lib/node/ValueDB => ", () => {
 	describe("setValue() (first add)", () => {
 		let cbArg: any;
 		beforeAll(() => {
-			valueDB.setValue(
-				CommandClasses["Alarm Sensor"],
-				4,
-				"foo", "bar",
-			);
+			valueDB.setValue(CommandClasses["Alarm Sensor"], 4, "foo", "bar");
 		});
 
 		afterAll(() => {
@@ -61,16 +56,8 @@ describe("lib/node/ValueDB => ", () => {
 	describe("setValue() (consecutive adds)", () => {
 		let cbArg: any;
 		beforeAll(() => {
-			valueDB.setValue(
-				CommandClasses["Wake Up"],
-				0,
-				"prop", "foo",
-			);
-			valueDB.setValue(
-				CommandClasses["Wake Up"],
-				0,
-				"prop", "bar",
-			);
+			valueDB.setValue(CommandClasses["Wake Up"], 0, "prop", "foo");
+			valueDB.setValue(CommandClasses["Wake Up"], 0, "prop", "bar");
 		});
 
 		afterAll(() => {
@@ -109,16 +96,8 @@ describe("lib/node/ValueDB => ", () => {
 	describe("removeValue()", () => {
 		let cbArg: any;
 		beforeAll(() => {
-			valueDB.setValue(
-				CommandClasses["Alarm Sensor"],
-				1,
-				"bar", "foo",
-			);
-			valueDB.removeValue(
-				CommandClasses["Alarm Sensor"],
-				1,
-				"bar",
-			);
+			valueDB.setValue(CommandClasses["Alarm Sensor"], 1, "bar", "foo");
+			valueDB.removeValue(CommandClasses["Alarm Sensor"], 1, "bar");
 		});
 
 		afterAll(() => {
@@ -170,7 +149,8 @@ describe("lib/node/ValueDB => ", () => {
 			valueDB.setValue(
 				CommandClasses["Basic Tariff Information"],
 				0,
-				"test", "value",
+				"test",
+				"value",
 			);
 			const retValFound = valueDB.removeValue(
 				CommandClasses["Basic Tariff Information"],
@@ -194,16 +174,8 @@ describe("lib/node/ValueDB => ", () => {
 		let cbArgs: any[];
 		beforeAll(() => {
 			createValueDB();
-			valueDB.setValue(
-				CommandClasses["Alarm Sensor"],
-				1,
-				"bar", "foo",
-			);
-			valueDB.setValue(
-				CommandClasses.Battery,
-				2,
-				"prop", "bar",
-			);
+			valueDB.setValue(CommandClasses["Alarm Sensor"], 1, "bar", "foo");
+			valueDB.setValue(CommandClasses.Battery, 2, "prop", "bar");
 			valueDB.clear();
 		});
 
@@ -227,29 +199,40 @@ describe("lib/node/ValueDB => ", () => {
 
 		it("After clearing, getValue should return undefined", () => {
 			let actual: unknown;
-			actual = valueDB.getValue(
-				CommandClasses["Alarm Sensor"],
-				1,
-				"bar",
-			);
+			actual = valueDB.getValue(CommandClasses["Alarm Sensor"], 1, "bar");
 			expect(actual).toBeUndefined();
 
-			actual = valueDB.setValue(
-				CommandClasses.Battery,
-				2,
-				"prop", "bar",
-			);
+			actual = valueDB.setValue(CommandClasses.Battery, 2, "prop", "bar");
 			expect(actual).toBeUndefined();
 		});
-
 	});
 
 	it("getValue() should return the value stored for the same combination of CC, endpoint and propertyName", () => {
 		const tests = [
-			{ cc: CommandClasses.Basic, endpoint: undefined, propertyName: "foo", value: "1" },
-			{ cc: CommandClasses.Basic, endpoint: 2, propertyName: "foo", value: "2" },
-			{ cc: CommandClasses.Basic, endpoint: undefined, propertyName: "FOO", value: "3" },
-			{ cc: CommandClasses.Basic, endpoint: 2, propertyName: "FOO", value: "4" },
+			{
+				cc: CommandClasses.Basic,
+				endpoint: undefined,
+				propertyName: "foo",
+				value: "1",
+			},
+			{
+				cc: CommandClasses.Basic,
+				endpoint: 2,
+				propertyName: "foo",
+				value: "2",
+			},
+			{
+				cc: CommandClasses.Basic,
+				endpoint: undefined,
+				propertyName: "FOO",
+				value: "3",
+			},
+			{
+				cc: CommandClasses.Basic,
+				endpoint: 2,
+				propertyName: "FOO",
+				value: "4",
+			},
 		];
 
 		for (const { cc, endpoint, propertyName, value } of tests) {
@@ -259,5 +242,4 @@ describe("lib/node/ValueDB => ", () => {
 			expect(valueDB.getValue(cc, endpoint, propertyName)).toBe(value);
 		}
 	});
-
 });

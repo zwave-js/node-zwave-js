@@ -1,6 +1,10 @@
 import { CommandClass } from "../commandclass/CommandClass";
 import { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
 import { Message, messageTypes, priority } from "../message/Message";
 
 const enum StatusFlags {
@@ -11,8 +15,8 @@ const enum StatusFlags {
 @messageTypes(MessageType.Request, FunctionType.ApplicationCommand)
 // This does not expect a response. The controller sends us this when a node sends a command
 @priority(MessagePriority.Normal)
-export class ApplicationCommandRequest extends Message implements ICommandClassContainer {
-
+export class ApplicationCommandRequest extends Message
+	implements ICommandClassContainer {
 	private _routedBusy: boolean;
 	public get routedBusy(): boolean {
 		return this._routedBusy;
@@ -29,7 +33,9 @@ export class ApplicationCommandRequest extends Message implements ICommandClassC
 	}
 
 	public serialize(): Buffer {
-		throw new Error("serialize() for ApplicationCommandRequest not implemented");
+		throw new Error(
+			"serialize() for ApplicationCommandRequest not implemented",
+		);
 	}
 
 	public deserialize(data: Buffer): number {

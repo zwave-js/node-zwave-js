@@ -1,7 +1,24 @@
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { getDefaultPriority, getDefaultPriorityStatic, getExpectedResponse, getExpectedResponseStatic, getFunctionType, getFunctionTypeStatic, getMessageType, getMessageTypeStatic, Message } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	getDefaultPriority,
+	getDefaultPriorityStatic,
+	getExpectedResponse,
+	getExpectedResponseStatic,
+	getFunctionType,
+	getFunctionTypeStatic,
+	getMessageType,
+	getMessageTypeStatic,
+	Message,
+} from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
-import { GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "./GetNodeProtocolInfoMessages";
+import {
+	GetNodeProtocolInfoRequest,
+	GetNodeProtocolInfoResponse,
+} from "./GetNodeProtocolInfoMessages";
 
 describe("lib/driver/GetNodeProtocolInfoRequest => ", () => {
 	const req = new GetNodeProtocolInfoRequest(undefined, 4);
@@ -11,19 +28,27 @@ describe("lib/driver/GetNodeProtocolInfoRequest => ", () => {
 	});
 	it("with type Request", () => {
 		expect(getMessageType(req)).toBe(MessageType.Request);
-		expect(getMessageTypeStatic(GetNodeProtocolInfoRequest)).toBe(MessageType.Request);
+		expect(getMessageTypeStatic(GetNodeProtocolInfoRequest)).toBe(
+			MessageType.Request,
+		);
 	});
 	it("and priority NodeQuery", () => {
 		expect(getDefaultPriority(req)).toBe(MessagePriority.NodeQuery);
-		expect(getDefaultPriorityStatic(GetNodeProtocolInfoRequest)).toBe(MessagePriority.NodeQuery);
+		expect(getDefaultPriorityStatic(GetNodeProtocolInfoRequest)).toBe(
+			MessagePriority.NodeQuery,
+		);
 	});
 	it("and a function type GetNodeProtocolInfo", () => {
 		expect(getFunctionType(req)).toBe(FunctionType.GetNodeProtocolInfo);
-		expect(getFunctionTypeStatic(GetNodeProtocolInfoRequest)).toBe(FunctionType.GetNodeProtocolInfo);
+		expect(getFunctionTypeStatic(GetNodeProtocolInfoRequest)).toBe(
+			FunctionType.GetNodeProtocolInfo,
+		);
 	});
 	it("that expects a GetNodeProtocolInfo response", () => {
 		expect(getExpectedResponse(req)).toBe(FunctionType.GetNodeProtocolInfo);
-		expect(getExpectedResponseStatic(GetNodeProtocolInfoRequest)).toBe(FunctionType.GetNodeProtocolInfo);
+		expect(getExpectedResponseStatic(GetNodeProtocolInfoRequest)).toBe(
+			FunctionType.GetNodeProtocolInfo,
+		);
 	});
 
 	it("should be detected as an INodeQuery", () => {
@@ -32,7 +57,6 @@ describe("lib/driver/GetNodeProtocolInfoRequest => ", () => {
 	it("and getNodeId() should return the correct node id", () => {
 		expect(req.getNodeId()).toBe(4);
 	});
-
 });
 
 describe("lib/driver/GetNodeProtocolInfoResponse => ", () => {
@@ -43,19 +67,27 @@ describe("lib/driver/GetNodeProtocolInfoResponse => ", () => {
 	});
 	it("with type Response", () => {
 		expect(getMessageType(res)).toBe(MessageType.Response);
-		expect(getMessageTypeStatic(GetNodeProtocolInfoResponse)).toBe(MessageType.Response);
+		expect(getMessageTypeStatic(GetNodeProtocolInfoResponse)).toBe(
+			MessageType.Response,
+		);
 	});
 	it("and no default priority", () => {
 		expect(getDefaultPriority(res)).toBeUndefined();
-		expect(getDefaultPriorityStatic(GetNodeProtocolInfoResponse)).toBeUndefined();
+		expect(
+			getDefaultPriorityStatic(GetNodeProtocolInfoResponse),
+		).toBeUndefined();
 	});
 	it("and a function type GetControllerVersion", () => {
 		expect(getFunctionType(res)).toBe(FunctionType.GetNodeProtocolInfo);
-		expect(getFunctionTypeStatic(GetNodeProtocolInfoResponse)).toBe(FunctionType.GetNodeProtocolInfo);
+		expect(getFunctionTypeStatic(GetNodeProtocolInfoResponse)).toBe(
+			FunctionType.GetNodeProtocolInfo,
+		);
 	});
 	it("that expects NO response", () => {
 		expect(getExpectedResponse(res)).toBeUndefined();
-		expect(getExpectedResponseStatic(GetNodeProtocolInfoResponse)).toBeUndefined();
+		expect(
+			getExpectedResponseStatic(GetNodeProtocolInfoResponse),
+		).toBeUndefined();
 	});
 
 	// TODO: Pick up an actual message from OZW to test this
@@ -73,5 +105,4 @@ describe("lib/driver/GetNodeProtocolInfoResponse => ", () => {
 	// 	expect(constr).toBe(GetControllerVersionResponse);
 	// 	expect(constr).not.toBe(Message);
 	// });
-
 });

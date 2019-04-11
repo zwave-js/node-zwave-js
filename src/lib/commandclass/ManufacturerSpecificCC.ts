@@ -1,7 +1,13 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Maybe } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import {
+	ccValue,
+	CommandClass,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum ManufacturerSpecificCommand {
@@ -21,12 +27,16 @@ export enum DeviceIdType {
 @implementedVersion(2)
 @expectedCCResponse(CommandClasses["Manufacturer Specific"])
 export class ManufacturerSpecificCC extends CommandClass {
-
 	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
-	public constructor(driver: IDriver, nodeId: number, ccCommand: ManufacturerSpecificCommand.Get);
 	public constructor(
-		driver: IDriver, nodeId: number,
+		driver: IDriver,
+		nodeId: number,
+		ccCommand: ManufacturerSpecificCommand.Get,
+	);
+	public constructor(
+		driver: IDriver,
+		nodeId: number,
 		ccCommand: ManufacturerSpecificCommand.DeviceSpecificGet,
 		deviceIdType: DeviceIdType,
 	);
@@ -53,8 +63,10 @@ export class ManufacturerSpecificCC extends CommandClass {
 
 	public supportsCommand(cmd: ManufacturerSpecificCommand): Maybe<boolean> {
 		switch (cmd) {
-			case ManufacturerSpecificCommand.Get: return true; // This is mandatory
-			case ManufacturerSpecificCommand.DeviceSpecificGet: return this.version >= 2;
+			case ManufacturerSpecificCommand.Get:
+				return true; // This is mandatory
+			case ManufacturerSpecificCommand.DeviceSpecificGet:
+				return this.version >= 2;
 		}
 		return super.supportsCommand(cmd);
 	}
@@ -89,10 +101,11 @@ export class ManufacturerSpecificCC extends CommandClass {
 
 			case ManufacturerSpecificCommand.DeviceSpecificReport: {
 				this.deviceIdType = this.payload[0] & 0b111;
-				const dataFormat = (this.payload[1] >>> 5);
+				const dataFormat = this.payload[1] >>> 5;
 				const dataLength = this.payload[1] & 0b11111;
 				const deviceIdData = this.payload.slice(2, 2 + dataLength);
-				if (dataFormat === 0) { // utf8
+				if (dataFormat === 0) {
+					// utf8
 					this.deviceId = deviceIdData.toString("utf8");
 				} else {
 					this.deviceId = "0x" + deviceIdData.toString("hex");

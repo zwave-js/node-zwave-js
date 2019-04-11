@@ -2,7 +2,13 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { isConsecutiveArray } from "../util/misc";
 import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import {
+	ccValue,
+	CommandClass,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum ConfigurationCommand {
@@ -12,12 +18,12 @@ export enum ConfigurationCommand {
 	BulkSet = 0x07,
 	BulkGet = 0x08,
 	BulkReport = 0x09,
-	NameGet = 0x0A,
-	NameReport = 0x0B,
-	InfoGet = 0x0C,
-	InfoReport = 0x0D,
-	PropertiesGet = 0x0E,
-	PropertiesReport = 0x0F,
+	NameGet = 0x0a,
+	NameReport = 0x0b,
+	InfoGet = 0x0c,
+	InfoReport = 0x0d,
+	PropertiesGet = 0x0e,
+	PropertiesReport = 0x0f,
 	DefaultReset = 0x01, // TODO: Or is this 0x10???
 }
 
@@ -52,30 +58,37 @@ export type ConfigValue = number | Set<number>;
 @implementedVersion(4)
 @expectedCCResponse(CommandClasses.Configuration)
 export class ConfigurationCC extends CommandClass {
-
 	// tslint:disable:unified-signatures
-	public constructor(
-		driver: IDriver,
-		nodeId?: number,
-	);
+	public constructor(driver: IDriver, nodeId?: number);
 
 	public constructor(
 		driver: IDriver,
 		nodeId: number,
-		ccCommand: ConfigurationCommand.Get | ConfigurationCommand.NameGet | ConfigurationCommand.InfoGet | ConfigurationCommand.PropertiesGet,
+		ccCommand:
+			| ConfigurationCommand.Get
+			| ConfigurationCommand.NameGet
+			| ConfigurationCommand.InfoGet
+			| ConfigurationCommand.PropertiesGet,
 		parameter: number,
 	);
 	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: ConfigurationCommand.Set,
-		parameter: number, resetToDefault: boolean, valueSize?: number, value?: number,
+		parameter: number,
+		resetToDefault: boolean,
+		valueSize?: number,
+		value?: number,
 	);
 	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: ConfigurationCommand.BulkSet,
-		parameters: number[], resetToDefault: boolean, valueSize?: number, values?: number[], handshake?: boolean,
+		parameters: number[],
+		resetToDefault: boolean,
+		valueSize?: number,
+		values?: number[],
+		handshake?: boolean,
 	);
 	public constructor(
 		driver: IDriver,
@@ -92,10 +105,10 @@ export class ConfigurationCC extends CommandClass {
 	) {
 		super(driver, nodeId, ccCommand);
 		if (
-			this.ccCommand === ConfigurationCommand.Get
-			|| this.ccCommand === ConfigurationCommand.NameGet
-			|| this.ccCommand === ConfigurationCommand.InfoGet
-			|| this.ccCommand === ConfigurationCommand.PropertiesGet
+			this.ccCommand === ConfigurationCommand.Get ||
+			this.ccCommand === ConfigurationCommand.NameGet ||
+			this.ccCommand === ConfigurationCommand.InfoGet ||
+			this.ccCommand === ConfigurationCommand.PropertiesGet
 		) {
 			this.parameter = args[0];
 		} else if (this.ccCommand === ConfigurationCommand.Set) {
@@ -115,7 +128,12 @@ export class ConfigurationCC extends CommandClass {
 				valuesToSet,
 				this.handshake,
 			] = args;
-			if (!parameters || !valuesToSet || parameters.length < 1 || valuesToSet.length < 1) {
+			if (
+				!parameters ||
+				!valuesToSet ||
+				parameters.length < 1 ||
+				valuesToSet.length < 1
+			) {
 				throw new ZWaveError(
 					`In a ConfigurationCC.BulkSet, parameters and valuesToSet must be non-empty arrays`,
 					ZWaveErrorCodes.CC_Invalid,
@@ -128,9 +146,11 @@ export class ConfigurationCC extends CommandClass {
 				);
 			}
 			const combined = parameters
-				.map((param, i) => [param, valuesToSet[i]] as [number, ConfigValue])
-				.sort(([paramA], [paramB]) => paramA - paramB)
-				;
+				.map(
+					(param, i) =>
+						[param, valuesToSet[i]] as [number, ConfigValue],
+				)
+				.sort(([paramA], [paramB]) => paramA - paramB);
 			parameters = combined.map(([param]) => param);
 			if (!isConsecutiveArray(parameters)) {
 				throw new ZWaveError(
@@ -165,7 +185,10 @@ export class ConfigurationCC extends CommandClass {
 	@ccValue() public values = new Map<number, ConfigValue>();
 	@ccValue() public paramInformation = new Map<number, ParameterInfo>();
 
-	private extendParamInformation(parameter: number, info: ParameterInfo): void {
+	private extendParamInformation(
+		parameter: number,
+		info: ParameterInfo,
+	): void {
 		if (!this.paramInformation.has(parameter)) {
 			this.paramInformation.set(parameter, {});
 		}
@@ -214,11 +237,15 @@ export class ConfigurationCC extends CommandClass {
 				const payloadLength = 2 + valueSize;
 				this.payload = Buffer.alloc(payloadLength, 0);
 				this.payload[0] = this.parameter;
-				this.payload[1] = (this.defaultFlag ? 0b1000_0000 : 0) | (valueSize & 0b111);
+				this.payload[1] =
+					(this.defaultFlag ? 0b1000_0000 : 0) | (valueSize & 0b111);
 				if (!this.defaultFlag) {
 					serializeValue(
-						this.payload, 2, valueSize,
-						this.getParamInformation(this.parameter).format || ValueFormat.SignedInteger,
+						this.payload,
+						2,
+						valueSize,
+						this.getParamInformation(this.parameter).format ||
+							ValueFormat.SignedInteger,
 						this.valueToSet,
 					);
 				}
@@ -235,15 +262,19 @@ export class ConfigurationCC extends CommandClass {
 				this.payload = Buffer.alloc(payloadLength, 0);
 				this.payload.writeUInt16BE(this.parameters[0], 0);
 				this.payload[2] = this.parameters.length;
-				this.payload[3] = (this.defaultFlag ? 0b1000_0000 : 0)
-					| (this.handshake ? 0b0100_0000 : 0)
-					| (valueSize & 0b111);
+				this.payload[3] =
+					(this.defaultFlag ? 0b1000_0000 : 0) |
+					(this.handshake ? 0b0100_0000 : 0) |
+					(valueSize & 0b111);
 				if (!this.defaultFlag) {
 					for (let i = 0; i < this.parameters.length; i++) {
 						const param = this.parameters[i];
 						serializeValue(
-							this.payload, 4 + i * valueSize, valueSize,
-							this.getParamInformation(param).format || ValueFormat.SignedInteger,
+							this.payload,
+							4 + i * valueSize,
+							valueSize,
+							this.getParamInformation(param).format ||
+								ValueFormat.SignedInteger,
 							this.valuesToSet[i],
 						);
 					}
@@ -283,7 +314,10 @@ export class ConfigurationCC extends CommandClass {
 			case ConfigurationCommand.Report:
 				this.parameter = this.payload[0];
 				this.valueSize = this.payload[1] & 0b111;
-				this.values.set(this.parameter, this.payload.readIntBE(2, this.valueSize));
+				this.values.set(
+					this.parameter,
+					this.payload.readIntBE(2, this.valueSize),
+				);
 				break;
 
 			case ConfigurationCommand.BulkReport: {
@@ -295,11 +329,15 @@ export class ConfigurationCC extends CommandClass {
 				this.valueSize = this.payload[4] & 0b111;
 				for (let i = 0; i < numParams; i++) {
 					const param = firstParameter + i;
-					this.values.set(param, parseValue(
-						this.payload.slice(5 + i * this.valueSize),
-						this.valueSize,
-						this.getParamInformation(param).format || ValueFormat.SignedInteger,
-					));
+					this.values.set(
+						param,
+						parseValue(
+							this.payload.slice(5 + i * this.valueSize),
+							this.valueSize,
+							this.getParamInformation(param).format ||
+								ValueFormat.SignedInteger,
+						),
+					);
 				}
 				break;
 			}
@@ -308,7 +346,9 @@ export class ConfigurationCC extends CommandClass {
 				this.parameter = this.payload.readUInt16BE(0);
 				this._reportsToFollow = this.payload[2];
 				this.extendParamInformation(this.parameter, {
-					name: (this.getParamInformation(this.parameter).name || "") + this.payload.slice(3).toString("utf8"),
+					name:
+						(this.getParamInformation(this.parameter).name || "") +
+						this.payload.slice(3).toString("utf8"),
 				});
 				break;
 			}
@@ -317,7 +357,9 @@ export class ConfigurationCC extends CommandClass {
 				this.parameter = this.payload.readUInt16BE(0);
 				this._reportsToFollow = this.payload[2];
 				this.extendParamInformation(this.parameter, {
-					info: (this.getParamInformation(this.parameter).info || "") + this.payload.slice(3).toString("utf8"),
+					info:
+						(this.getParamInformation(this.parameter).info || "") +
+						this.payload.slice(3).toString("utf8"),
 				});
 				break;
 			}
@@ -332,19 +374,35 @@ export class ConfigurationCC extends CommandClass {
 				if (this.valueSize > 0) {
 					if (valueFormat !== ValueFormat.BitField) {
 						this.extendParamInformation(this.parameter, {
-							minValue: parseValue(this.payload.slice(3), this.valueSize, valueFormat) as number,
+							minValue: parseValue(
+								this.payload.slice(3),
+								this.valueSize,
+								valueFormat,
+							) as number,
 						});
 					}
 					this.extendParamInformation(this.parameter, {
-						maxValue: parseValue(this.payload.slice(3 + this.valueSize), this.valueSize, valueFormat),
-						defaultValue: parseValue(this.payload.slice(3 + 2 * this.valueSize), this.valueSize, valueFormat),
+						maxValue: parseValue(
+							this.payload.slice(3 + this.valueSize),
+							this.valueSize,
+							valueFormat,
+						),
+						defaultValue: parseValue(
+							this.payload.slice(3 + 2 * this.valueSize),
+							this.valueSize,
+							valueFormat,
+						),
 					});
 				}
 				if (this.version < 4) {
 					// Read the last 2 bytes to work around nodes not omitting min/max value when their size is 0
-					this._nextParameter = this.payload.readUInt16BE(this.payload.length - 2);
+					this._nextParameter = this.payload.readUInt16BE(
+						this.payload.length - 2,
+					);
 				} else {
-					this._nextParameter = this.payload.readUInt16BE(3 + 3 * this.valueSize);
+					this._nextParameter = this.payload.readUInt16BE(
+						3 + 3 * this.valueSize,
+					);
 
 					const options1 = this.payload[2];
 					const options2 = this.payload[3 + 3 * this.valueSize + 2];
@@ -365,11 +423,14 @@ export class ConfigurationCC extends CommandClass {
 				);
 		}
 	}
-
 }
 
 /** Interprets values from the payload depending on the value format */
-function parseValue(raw: Buffer, size: number, format: ValueFormat): ConfigValue {
+function parseValue(
+	raw: Buffer,
+	size: number,
+	format: ValueFormat,
+): ConfigValue {
 	switch (format) {
 		case ValueFormat.SignedInteger:
 			return raw.readIntBE(0, size);
@@ -382,7 +443,13 @@ function parseValue(raw: Buffer, size: number, format: ValueFormat): ConfigValue
 }
 
 /** Serializes values into the payload according to the value format */
-function serializeValue(payload: Buffer, offset: number, size: number, format: ValueFormat, value: ConfigValue): void {
+function serializeValue(
+	payload: Buffer,
+	offset: number,
+	size: number,
+	format: ValueFormat,
+	value: ConfigValue,
+): void {
 	switch (format) {
 		case ValueFormat.SignedInteger:
 			payload.writeIntBE(value as number, offset, size);
@@ -392,7 +459,10 @@ function serializeValue(payload: Buffer, offset: number, size: number, format: V
 			payload.writeUIntBE(value as number, offset, size);
 			return;
 		case ValueFormat.BitField: {
-			const mask = encodeBitMask([...(value as Set<number>).values()], size * 8);
+			const mask = encodeBitMask(
+				[...(value as Set<number>).values()],
+				size * 8,
+			);
 			mask.copy(payload, offset);
 			return;
 		}

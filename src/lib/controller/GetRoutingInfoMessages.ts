@@ -1,6 +1,15 @@
 import { IDriver } from "../driver/IDriver";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	Message,
+	messageTypes,
+	priority,
+} from "../message/Message";
 import { JSONObject } from "../util/misc";
 import { NUM_NODEMASK_BYTES, parseNodeBitMask } from "./NodeBitMask";
 
@@ -8,10 +17,7 @@ import { NUM_NODEMASK_BYTES, parseNodeBitMask } from "./NodeBitMask";
 @expectedResponse(FunctionType.GetRoutingInfo)
 @priority(MessagePriority.Controller)
 export class GetRoutingInfoRequest extends Message {
-
-	public constructor(
-		driver: IDriver,
-	);
+	public constructor(driver: IDriver);
 
 	public constructor(
 		driver: IDriver,
@@ -50,7 +56,6 @@ export class GetRoutingInfoRequest extends Message {
 
 @messageTypes(MessageType.Response, FunctionType.GetRoutingInfo)
 export class GetRoutingInfoResponse extends Message {
-
 	private _nodeIds: number[];
 	public get nodeIds(): number[] {
 		return this._nodeIds;

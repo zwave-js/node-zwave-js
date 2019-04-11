@@ -2,7 +2,13 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Duration } from "../values/Duration";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import {
+	ccValue,
+	CommandClass,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum MultilevelSwitchCommand {
@@ -36,13 +42,15 @@ export enum SwitchType {
 @implementedVersion(4)
 @expectedCCResponse(CommandClasses["Multilevel Switch"])
 export class MultilevelSwitchCC extends CommandClass {
-
 	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
-	public constructor(driver: IDriver, nodeId: number, ccCommand:
-		MultilevelSwitchCommand.Get
-		| MultilevelSwitchCommand.StopLevelChange
-		| MultilevelSwitchCommand.SupportedGet,
+	public constructor(
+		driver: IDriver,
+		nodeId: number,
+		ccCommand:
+			| MultilevelSwitchCommand.Get
+			| MultilevelSwitchCommand.StopLevelChange
+			| MultilevelSwitchCommand.SupportedGet,
 	);
 	public constructor(
 		driver: IDriver,
@@ -121,18 +129,17 @@ export class MultilevelSwitchCC extends CommandClass {
 
 			case MultilevelSwitchCommand.StartLevelChange: {
 				let controlByte =
-					(LevelChangeDirection[this.direction] << 6)
-					| (this.ignoreStartLevel ? 0b0010_0000 : 0)
-					;
+					(LevelChangeDirection[this.direction] << 6) |
+					(this.ignoreStartLevel ? 0b0010_0000 : 0);
 				if (this.version >= 3) {
 					if (this.secondarySwitchDirection != null) {
-						controlByte |= LevelChangeDirection[this.secondarySwitchDirection] << 3;
+						controlByte |=
+							LevelChangeDirection[
+								this.secondarySwitchDirection
+							] << 3;
 					}
 				}
-				const payload = [
-					controlByte,
-					this.startLevel,
-				];
+				const payload = [controlByte, this.startLevel];
 				if (this.version >= 2) {
 					payload.push(this.duration.serializeSet());
 				}
@@ -182,5 +189,4 @@ export class MultilevelSwitchCC extends CommandClass {
 				);
 		}
 	}
-
 }

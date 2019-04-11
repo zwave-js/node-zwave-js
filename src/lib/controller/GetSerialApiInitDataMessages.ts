@@ -1,5 +1,14 @@
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	Message,
+	messageTypes,
+	priority,
+} from "../message/Message";
 import { JSONObject } from "../util/misc";
 import { NUM_NODEMASK_BYTES, parseNodeBitMask } from "./NodeBitMask";
 
@@ -13,13 +22,10 @@ export const enum InitCapabilityFlags {
 @messageTypes(MessageType.Request, FunctionType.GetSerialApiInitData)
 @expectedResponse(FunctionType.GetSerialApiInitData)
 @priority(MessagePriority.Controller)
-export class GetSerialApiInitDataRequest extends Message {
-
-}
+export class GetSerialApiInitDataRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiInitData)
 export class GetSerialApiInitDataResponse extends Message {
-
 	private _initVersion: number;
 	public get initVersion(): number {
 		return this._initVersion;

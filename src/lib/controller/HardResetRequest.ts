@@ -1,4 +1,8 @@
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
 import { Message, messageTypes, priority } from "../message/Message";
 
 @messageTypes(MessageType.Request, FunctionType.HardReset)

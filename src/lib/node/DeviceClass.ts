@@ -18,11 +18,11 @@ export enum GenericDeviceClasses {
 	"Meter" = 0x31,
 	"Pulse Meter" = 0x30,
 	"Network Extender" = 0x05,
-	"Non-Interoperable" = 0xFF,
-	"Repeater Slave" = 0x0F,
+	"Non-Interoperable" = 0xff,
+	"Repeater Slave" = 0x0f,
 	"Security Panel" = 0x17,
 	"Semi-Interoperable" = 0x50,
-	"Alarm Sensor" = 0xA1,
+	"Alarm Sensor" = 0xa1,
 	"Binary Sensor" = 0x20,
 	"Multilevel Sensor" = 0x21,
 	"Notification Sensor" = 0x07,
@@ -38,7 +38,10 @@ export enum GenericDeviceClasses {
 	"ZIP Node" = 0x15,
 }
 
-const genericDeviceClassDB = new Map<GenericDeviceClasses, GenericDeviceClass>();
+const genericDeviceClassDB = new Map<
+	GenericDeviceClasses,
+	GenericDeviceClass
+>();
 
 export class GenericDeviceClass {
 	public constructor(
@@ -53,12 +56,21 @@ export class GenericDeviceClass {
 		}
 	}
 
-	public readonly specificDeviceClasses = new Map<number, SpecificDeviceClass>();
+	public readonly specificDeviceClasses = new Map<
+		number,
+		SpecificDeviceClass
+	>();
 
 	public static get(key: GenericDeviceClasses): GenericDeviceClass {
 		if (genericDeviceClassDB.has(key)) return genericDeviceClassDB.get(key);
 		// Fallback if there's no known device class for this key
-		return new GenericDeviceClass(`UNKNOWN (${num2hex(key)})`, key, [], [], []);
+		return new GenericDeviceClass(
+			`UNKNOWN (${num2hex(key)})`,
+			key,
+			[],
+			[],
+			[],
+		);
 	}
 }
 
@@ -69,15 +81,26 @@ export class SpecificDeviceClass {
 		public readonly mandatorySupportedCCs: CommandClasses[] = [],
 		public readonly mandatoryControlCCs: CommandClasses[] = [],
 		public readonly basicCCForbidden: boolean = false,
-	) { }
+	) {}
 
-	public static readonly NOT_USED = Object.freeze(new SpecificDeviceClass("not used", 0x00));
+	public static readonly NOT_USED = Object.freeze(
+		new SpecificDeviceClass("not used", 0x00),
+	);
 
-	public static get(generic: GenericDeviceClasses, specific: number): SpecificDeviceClass {
-		const specificClasses = GenericDeviceClass.get(generic).specificDeviceClasses;
+	public static get(
+		generic: GenericDeviceClasses,
+		specific: number,
+	): SpecificDeviceClass {
+		const specificClasses = GenericDeviceClass.get(generic)
+			.specificDeviceClasses;
 		if (specificClasses.has(specific)) return specificClasses.get(specific);
 		// Fallback if there's no known device class for this key
-		return new SpecificDeviceClass(`UNKNOWN (${num2hex(specific)})`, specific, [], []);
+		return new SpecificDeviceClass(
+			`UNKNOWN (${num2hex(specific)})`,
+			specific,
+			[],
+			[],
+		);
 	}
 }
 
@@ -91,46 +114,64 @@ function defineGeneric(
 	if (mandatoryControlCCs == null) mandatoryControlCCs = [];
 
 	// All devices must support the BASIC command class
-	if (mandatorySupportedCCs.indexOf(CommandClasses.Basic) === -1) mandatorySupportedCCs.unshift(CommandClasses.Basic);
+	if (mandatorySupportedCCs.indexOf(CommandClasses.Basic) === -1)
+		mandatorySupportedCCs.unshift(CommandClasses.Basic);
 
 	// All devices have a non-specific version
-	if (!specificDeviceClasses.some(spec => spec.key === SpecificDeviceClass.NOT_USED.key)) {
+	if (
+		!specificDeviceClasses.some(
+			spec => spec.key === SpecificDeviceClass.NOT_USED.key,
+		)
+	) {
 		specificDeviceClasses.unshift(SpecificDeviceClass.NOT_USED);
 	}
 
 	// remember the generic device class in the DB
-	genericDeviceClassDB.set(GenericDeviceClasses[name], new GenericDeviceClass(
-		name, GenericDeviceClasses[name], mandatorySupportedCCs, mandatoryControlCCs, specificDeviceClasses,
-	));
+	genericDeviceClassDB.set(
+		GenericDeviceClasses[name],
+		new GenericDeviceClass(
+			name,
+			GenericDeviceClasses[name],
+			mandatorySupportedCCs,
+			mandatoryControlCCs,
+			specificDeviceClasses,
+		),
+	);
 }
 
 export class DeviceClass {
-
 	public constructor(
 		public readonly basic: BasicDeviceClasses,
 		public readonly generic: GenericDeviceClass,
 		public readonly specific: SpecificDeviceClass,
 	) {
-		this._mandatorySupportedCCs =
-			generic.mandatorySupportedCCs.concat(...specific.mandatorySupportedCCs)
-				.reduce((acc, cc) => {
+		this._mandatorySupportedCCs = generic.mandatorySupportedCCs
+			.concat(...specific.mandatorySupportedCCs)
+			.reduce(
+				(acc, cc) => {
 					if (acc.indexOf(cc) === -1) acc.push(cc);
 					return acc;
-				}, [] as CommandClasses[])
-			;
+				},
+				[] as CommandClasses[],
+			);
 		// remove basic CC if it's forbidden by the specific class
 		if (specific.basicCCForbidden) {
-			const basicIndex = this._mandatorySupportedCCs.indexOf(CommandClasses.Basic);
-			if (basicIndex > -1) this._mandatorySupportedCCs.splice(basicIndex, 1);
+			const basicIndex = this._mandatorySupportedCCs.indexOf(
+				CommandClasses.Basic,
+			);
+			if (basicIndex > -1)
+				this._mandatorySupportedCCs.splice(basicIndex, 1);
 		}
 
-		this._mandatoryControlCCs =
-			generic.mandatoryControlCCs.concat(...specific.mandatoryControlCCs)
-				.reduce((acc, cc) => {
+		this._mandatoryControlCCs = generic.mandatoryControlCCs
+			.concat(...specific.mandatoryControlCCs)
+			.reduce(
+				(acc, cc) => {
 					if (acc.indexOf(cc) === -1) acc.push(cc);
 					return acc;
-				}, [] as CommandClasses[])
-			;
+				},
+				[] as CommandClasses[],
+			);
 	}
 
 	private _mandatorySupportedCCs: CommandClasses[];
@@ -148,62 +189,37 @@ export class DeviceClass {
 			basic: BasicDeviceClasses[this.basic],
 			generic: this.generic.name,
 			specific: this.specific.name,
-			mandatorySupportedCCs: this._mandatorySupportedCCs.map(cc => CommandClasses[cc]),
-			mandatoryControlCCs: this._mandatoryControlCCs.map(cc => CommandClasses[cc]),
+			mandatorySupportedCCs: this._mandatorySupportedCCs.map(
+				cc => CommandClasses[cc],
+			),
+			mandatoryControlCCs: this._mandatoryControlCCs.map(
+				cc => CommandClasses[cc],
+			),
 		};
 	}
-
 }
 
 // =================================================
 // Here the definitions for all device classes begin
 
-defineGeneric("Alarm Sensor", null, null,
-	new SpecificDeviceClass("Basic Routing Alarm Sensor", 0x01,
+defineGeneric(
+	"Alarm Sensor",
+	null,
+	null,
+	new SpecificDeviceClass(
+		"Basic Routing Alarm Sensor",
+		0x01,
 		[
 			CommandClasses["Alarm Sensor"],
 			CommandClasses.Association,
 			CommandClasses["Manufacturer Specific"],
 			CommandClasses.Version,
 		],
-		[
-			CommandClasses["Alarm Sensor"],
-		],
+		[CommandClasses["Alarm Sensor"]],
 	),
-	new SpecificDeviceClass("Routing Alarm Sensor", 0x02,
-		[
-			CommandClasses["Alarm Sensor"],
-			CommandClasses.Association,
-			CommandClasses.Battery,
-			CommandClasses["Manufacturer Specific"],
-			CommandClasses.Version,
-		],
-		[
-			CommandClasses["Alarm Sensor"],
-		],
-	),
-	new SpecificDeviceClass("Basic Zensor Net Alarm Sensor", 0x03,
-		[
-			CommandClasses["Alarm Sensor"],
-			CommandClasses["Manufacturer Specific"],
-			CommandClasses.Version,
-		],
-		[
-			CommandClasses["Alarm Sensor"],
-		],
-	),
-	new SpecificDeviceClass("Zensor Net Alarm Sensor", 0x04,
-		[
-			CommandClasses["Alarm Sensor"],
-			CommandClasses.Battery,
-			CommandClasses["Manufacturer Specific"],
-			CommandClasses.Version,
-		],
-		[
-			CommandClasses["Alarm Sensor"],
-		],
-	),
-	new SpecificDeviceClass("Advanced Zensor Net Alarm Sensor", 0x05,
+	new SpecificDeviceClass(
+		"Routing Alarm Sensor",
+		0x02,
 		[
 			CommandClasses["Alarm Sensor"],
 			CommandClasses.Association,
@@ -211,55 +227,32 @@ defineGeneric("Alarm Sensor", null, null,
 			CommandClasses["Manufacturer Specific"],
 			CommandClasses.Version,
 		],
-		[
-			CommandClasses["Alarm Sensor"],
-		],
+		[CommandClasses["Alarm Sensor"]],
 	),
-	new SpecificDeviceClass("Basic Routing Smoke Sensor", 0x06,
-		[
-			CommandClasses["Alarm Sensor"],
-			CommandClasses.Association,
-			CommandClasses["Manufacturer Specific"],
-			CommandClasses.Version,
-		],
-		[
-			CommandClasses["Alarm Sensor"],
-		],
-	),
-	new SpecificDeviceClass("Routing Smoke Sensor", 0x07,
-		[
-			CommandClasses["Alarm Sensor"],
-			CommandClasses.Association,
-			CommandClasses.Battery,
-			CommandClasses["Manufacturer Specific"],
-			CommandClasses.Version,
-		],
-		[
-			CommandClasses["Alarm Sensor"],
-		],
-	),
-	new SpecificDeviceClass("Basic Zensor Net Smoke Sensor", 0x08,
+	new SpecificDeviceClass(
+		"Basic Zensor Net Alarm Sensor",
+		0x03,
 		[
 			CommandClasses["Alarm Sensor"],
 			CommandClasses["Manufacturer Specific"],
 			CommandClasses.Version,
 		],
-		[
-			CommandClasses["Alarm Sensor"],
-		],
+		[CommandClasses["Alarm Sensor"]],
 	),
-	new SpecificDeviceClass("Zensor Net Smoke Sensor", 0x09,
+	new SpecificDeviceClass(
+		"Zensor Net Alarm Sensor",
+		0x04,
 		[
 			CommandClasses["Alarm Sensor"],
 			CommandClasses.Battery,
 			CommandClasses["Manufacturer Specific"],
 			CommandClasses.Version,
 		],
-		[
-			CommandClasses["Alarm Sensor"],
-		],
+		[CommandClasses["Alarm Sensor"]],
 	),
-	new SpecificDeviceClass("Advanced Zensor Net Smoke Sensor", 0x0A,
+	new SpecificDeviceClass(
+		"Advanced Zensor Net Alarm Sensor",
+		0x05,
 		[
 			CommandClasses["Alarm Sensor"],
 			CommandClasses.Association,
@@ -267,13 +260,70 @@ defineGeneric("Alarm Sensor", null, null,
 			CommandClasses["Manufacturer Specific"],
 			CommandClasses.Version,
 		],
+		[CommandClasses["Alarm Sensor"]],
+	),
+	new SpecificDeviceClass(
+		"Basic Routing Smoke Sensor",
+		0x06,
 		[
 			CommandClasses["Alarm Sensor"],
+			CommandClasses.Association,
+			CommandClasses["Manufacturer Specific"],
+			CommandClasses.Version,
 		],
+		[CommandClasses["Alarm Sensor"]],
+	),
+	new SpecificDeviceClass(
+		"Routing Smoke Sensor",
+		0x07,
+		[
+			CommandClasses["Alarm Sensor"],
+			CommandClasses.Association,
+			CommandClasses.Battery,
+			CommandClasses["Manufacturer Specific"],
+			CommandClasses.Version,
+		],
+		[CommandClasses["Alarm Sensor"]],
+	),
+	new SpecificDeviceClass(
+		"Basic Zensor Net Smoke Sensor",
+		0x08,
+		[
+			CommandClasses["Alarm Sensor"],
+			CommandClasses["Manufacturer Specific"],
+			CommandClasses.Version,
+		],
+		[CommandClasses["Alarm Sensor"]],
+	),
+	new SpecificDeviceClass(
+		"Zensor Net Smoke Sensor",
+		0x09,
+		[
+			CommandClasses["Alarm Sensor"],
+			CommandClasses.Battery,
+			CommandClasses["Manufacturer Specific"],
+			CommandClasses.Version,
+		],
+		[CommandClasses["Alarm Sensor"]],
+	),
+	new SpecificDeviceClass(
+		"Advanced Zensor Net Smoke Sensor",
+		0x0a,
+		[
+			CommandClasses["Alarm Sensor"],
+			CommandClasses.Association,
+			CommandClasses.Battery,
+			CommandClasses["Manufacturer Specific"],
+			CommandClasses.Version,
+		],
+		[CommandClasses["Alarm Sensor"]],
 	),
 );
 
-defineGeneric("AV Control Point", null, null,
+defineGeneric(
+	"AV Control Point",
+	null,
+	null,
 	new SpecificDeviceClass("Doorbell", 0x12, [
 		CommandClasses["Binary Sensor"],
 		CommandClasses.Association,
@@ -293,11 +343,17 @@ defineGeneric("AV Control Point", null, null,
 	]),
 );
 
-defineGeneric("Binary Sensor", [CommandClasses["Binary Sensor"]], null,
+defineGeneric(
+	"Binary Sensor",
+	[CommandClasses["Binary Sensor"]],
+	null,
 	new SpecificDeviceClass("Routing Binary Sensor", 0x01), // Binary sensor is already included in the generic class
 );
 
-defineGeneric("Binary Switch", [CommandClasses["Binary Switch"]], null,
+defineGeneric(
+	"Binary Switch",
+	[CommandClasses["Binary Switch"]],
+	null,
 	new SpecificDeviceClass("Binary Power Switch", 0x01, [
 		CommandClasses["All Switch"],
 	]),
@@ -315,7 +371,10 @@ defineGeneric("Binary Switch", [CommandClasses["Binary Switch"]], null,
 	new SpecificDeviceClass("Irrigation Control", 0x07),
 );
 
-defineGeneric("Display", null, null,
+defineGeneric(
+	"Display",
+	null,
+	null,
 	new SpecificDeviceClass("Simple Display", 0x01, [
 		CommandClasses["Screen Attributes"],
 		CommandClasses["Screen Meta Data"],
@@ -324,10 +383,11 @@ defineGeneric("Display", null, null,
 	]),
 );
 
-defineGeneric("Entry Control", null, null,
-	new SpecificDeviceClass("Door Lock", 0x01, [
-		CommandClasses.Lock,
-	]),
+defineGeneric(
+	"Entry Control",
+	null,
+	null,
+	new SpecificDeviceClass("Door Lock", 0x01, [CommandClasses.Lock]),
 	new SpecificDeviceClass("Advanced Door Lock", 0x02, [
 		CommandClasses["Door Lock"],
 		CommandClasses["Manufacturer Specific"],
@@ -340,15 +400,21 @@ defineGeneric("Entry Control", null, null,
 		CommandClasses.Security,
 		CommandClasses.Version,
 	]),
-	new SpecificDeviceClass("Secure Lockbox", 0x0A, [
-		CommandClasses.Notification, // CommandClasses.Alarm,
-		CommandClasses.Association,
-		CommandClasses["Door Lock"],
-		CommandClasses["Manufacturer Specific"],
-		CommandClasses.Security,
-		CommandClasses.Version,
-	], null, true /* No BASIC CC */),
-	new SpecificDeviceClass("Secure Keypad", 0x0B, [
+	new SpecificDeviceClass(
+		"Secure Lockbox",
+		0x0a,
+		[
+			CommandClasses.Notification, // CommandClasses.Alarm,
+			CommandClasses.Association,
+			CommandClasses["Door Lock"],
+			CommandClasses["Manufacturer Specific"],
+			CommandClasses.Security,
+			CommandClasses.Version,
+		],
+		null,
+		true /* No BASIC CC */,
+	),
+	new SpecificDeviceClass("Secure Keypad", 0x0b, [
 		CommandClasses["Device Reset Locally"],
 		CommandClasses["Entry Control"],
 		CommandClasses["Manufacturer Specific"],
@@ -357,7 +423,10 @@ defineGeneric("Entry Control", null, null,
 	]),
 );
 
-defineGeneric("Meter", null, null,
+defineGeneric(
+	"Meter",
+	null,
+	null,
 	new SpecificDeviceClass("Simple Meter", 0x01, [
 		CommandClasses.Meter,
 		CommandClasses["Manufacturer Specific"],
@@ -371,11 +440,17 @@ defineGeneric("Meter", null, null,
 	]),
 );
 
-defineGeneric("Multilevel Sensor", [CommandClasses["Multilevel Sensor"]], null,
+defineGeneric(
+	"Multilevel Sensor",
+	[CommandClasses["Multilevel Sensor"]],
+	null,
 	new SpecificDeviceClass("Routing Multilevel Sensor", 0x01),
 );
 
-defineGeneric("Multilevel Switch", [CommandClasses["Multilevel Switch"]], null,
+defineGeneric(
+	"Multilevel Switch",
+	[CommandClasses["Multilevel Switch"]],
+	null,
 	new SpecificDeviceClass("Multilevel Power Switch", 0x01, [
 		CommandClasses["All Switch"],
 	]),
@@ -411,19 +486,24 @@ defineGeneric("Multilevel Switch", [CommandClasses["Multilevel Switch"]], null,
 
 defineGeneric("Pulse Meter", [CommandClasses["Pulse Meter"]], null);
 
-defineGeneric("Remote Controller", null, null,
+defineGeneric(
+	"Remote Controller",
+	null,
+	null,
 	new SpecificDeviceClass("Portable Remote Controller", 0x01),
-	new SpecificDeviceClass("Portable Scene Controller", 0x02,
+	new SpecificDeviceClass(
+		"Portable Scene Controller",
+		0x02,
 		[
 			CommandClasses.Association,
 			CommandClasses["Scene Controller Configuration"],
 			CommandClasses["Manufacturer Specific"],
 		],
-		[
-			CommandClasses["Scene Activation"],
-		],
+		[CommandClasses["Scene Activation"]],
 	),
-	new SpecificDeviceClass("Portable Installer Tool", 0x03,
+	new SpecificDeviceClass(
+		"Portable Installer Tool",
+		0x03,
 		[
 			CommandClasses["Controller Replication"],
 			CommandClasses["Multi Command"],
@@ -443,7 +523,10 @@ defineGeneric("Remote Controller", null, null,
 	),
 );
 
-defineGeneric("Remote Switch", null, null,
+defineGeneric(
+	"Remote Switch",
+	null,
+	null,
 	new SpecificDeviceClass("Binary Remote Switch", 0x01, null, [
 		CommandClasses["Binary Switch"],
 	]),
@@ -458,11 +541,15 @@ defineGeneric("Remote Switch", null, null,
 	]),
 );
 
-defineGeneric("Repeater Slave", null, null,
+defineGeneric(
+	"Repeater Slave",
+	null,
+	null,
 	new SpecificDeviceClass("Basic Repeater Slave", 0x01),
 );
 
-defineGeneric("Semi-Interoperable",
+defineGeneric(
+	"Semi-Interoperable",
 	[
 		CommandClasses["Manufacturer Specific"],
 		CommandClasses.Version,
@@ -474,19 +561,24 @@ defineGeneric("Semi-Interoperable",
 	]),
 );
 
-defineGeneric("Static Controller", null, [CommandClasses.Basic],
+defineGeneric(
+	"Static Controller",
+	null,
+	[CommandClasses.Basic],
 	new SpecificDeviceClass("PC Controller", 0x01),
-	new SpecificDeviceClass("Scene Controller", 0x02,
+	new SpecificDeviceClass(
+		"Scene Controller",
+		0x02,
 		[
 			CommandClasses.Association,
 			CommandClasses["Manufacturer Specific"],
 			CommandClasses["Scene Controller Configuration"],
 		],
-		[
-			CommandClasses["Scene Activation"],
-		],
+		[CommandClasses["Scene Activation"]],
 	),
-	new SpecificDeviceClass("Static Installer Tool", 0x03,
+	new SpecificDeviceClass(
+		"Static Installer Tool",
+		0x03,
 		[
 			CommandClasses["Controller Replication"],
 			CommandClasses["Multi Command"],
@@ -504,20 +596,22 @@ defineGeneric("Static Controller", null, [CommandClasses.Basic],
 			CommandClasses["Wake Up"],
 		],
 	),
-	new SpecificDeviceClass("Gateway", 0x07,
+	new SpecificDeviceClass(
+		"Gateway",
+		0x07,
 		[
 			CommandClasses["Manufacturer Specific"],
 			CommandClasses.Security,
 			CommandClasses.Version,
 		],
-		[
-			CommandClasses.Security,
-			CommandClasses["Multi Channel"],
-		],
+		[CommandClasses.Security, CommandClasses["Multi Channel"]],
 	),
 );
 
-defineGeneric("Thermostat", null, null,
+defineGeneric(
+	"Thermostat",
+	null,
+	null,
 	new SpecificDeviceClass("Thermostat Heating", 0x01),
 	new SpecificDeviceClass("Thermostat General", 0x02, [
 		CommandClasses["Manufacturer Specific"],
@@ -530,7 +624,9 @@ defineGeneric("Thermostat", null, null,
 		CommandClasses["Thermostat Setpoint"],
 		CommandClasses.Version,
 	]),
-	new SpecificDeviceClass("Setback Schedule Thermostat", 0x03,
+	new SpecificDeviceClass(
+		"Setback Schedule Thermostat",
+		0x03,
 		[
 			CommandClasses["Climate Control Schedule"],
 			CommandClasses["Manufacturer Specific"],
@@ -550,7 +646,9 @@ defineGeneric("Thermostat", null, null,
 		CommandClasses["Thermostat Setback"],
 		CommandClasses.Version,
 	]),
-	new SpecificDeviceClass("Setpoint Thermostat", 0x04,
+	new SpecificDeviceClass(
+		"Setpoint Thermostat",
+		0x04,
 		[
 			CommandClasses["Manufacturer Specific"],
 			CommandClasses["Multi Command"],
@@ -564,7 +662,10 @@ defineGeneric("Thermostat", null, null,
 	),
 );
 
-defineGeneric("Toggle Switch", null, null,
+defineGeneric(
+	"Toggle Switch",
+	null,
+	null,
 	new SpecificDeviceClass("Binary Toggle Switch", 0x01, [
 		CommandClasses["Binary Switch"],
 		CommandClasses["Binary Toggle Switch"],
@@ -575,7 +676,10 @@ defineGeneric("Toggle Switch", null, null,
 	]),
 );
 
-defineGeneric("Ventilation", null, null,
+defineGeneric(
+	"Ventilation",
+	null,
+	null,
 	new SpecificDeviceClass("Residential Heat Recovery Ventilation", 0x01, [
 		CommandClasses["HRV Control"],
 		CommandClasses["HRV Status"],
@@ -584,7 +688,10 @@ defineGeneric("Ventilation", null, null,
 	]),
 );
 
-defineGeneric("Window Covering", null, null,
+defineGeneric(
+	"Window Covering",
+	null,
+	null,
 	new SpecificDeviceClass("Simple Window Covering Control", 0x01, [
 		CommandClasses["Basic Window Covering"],
 	]),

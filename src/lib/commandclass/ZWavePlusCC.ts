@@ -1,6 +1,12 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import {
+	ccValue,
+	CommandClass,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum ZWavePlusCommand {
@@ -20,20 +26,16 @@ export enum ZWavePlusRoleType {
 }
 
 export enum ZWavePlusNodeType {
-	Node = 0x00,		// ZWave+ Node
-	IPGateway = 0x02,	// ZWave+ for IP Gateway
+	Node = 0x00, // ZWave+ Node
+	IPGateway = 0x02, // ZWave+ for IP Gateway
 }
 
 @commandClass(CommandClasses["Z-Wave Plus Info"])
 @implementedVersion(2)
 @expectedCCResponse(CommandClasses["Z-Wave Plus Info"])
 export class ZWavePlusCC extends CommandClass {
-
 	// tslint:disable:unified-signatures
-	public constructor(
-		driver: IDriver,
-		nodeId?: number,
-	);
+	public constructor(driver: IDriver, nodeId?: number);
 	public constructor(
 		driver: IDriver,
 		nodeId: number,
@@ -89,5 +91,4 @@ export class ZWavePlusCC extends CommandClass {
 				);
 		}
 	}
-
 }

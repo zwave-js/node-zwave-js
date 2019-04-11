@@ -1,21 +1,30 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { GenericDeviceClasses } from "../node/DeviceClass";
-import { NodeInformationFrame, parseNodeInformationFrame } from "../node/NodeInfo";
+import {
+	NodeInformationFrame,
+	parseNodeInformationFrame,
+} from "../node/NodeInfo";
 import { encodeBitMask, parseBitMask } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import {
+	ccValue,
+	CommandClass,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum MultiChannelCommand {
 	EndPointGet = 0x07,
 	EndPointReport = 0x08,
 	CapabilityGet = 0x09,
-	CapabilityReport = 0x0A,
-	EndPointFind = 0x0B,
-	EndPointFindReport = 0x0C,
-	CommandEncapsulation = 0x0D,
-	AggregatedMembersGet = 0x0E,
-	AggregatedMembersReport = 0x0F,
+	CapabilityReport = 0x0a,
+	EndPointFind = 0x0b,
+	EndPointFindReport = 0x0c,
+	CommandEncapsulation = 0x0d,
+	AggregatedMembersGet = 0x0e,
+	AggregatedMembersReport = 0x0f,
 }
 
 // TODO: Implement querying all endpoints
@@ -29,18 +38,31 @@ export interface EndpointCapability extends NodeInformationFrame {
 @implementedVersion(4)
 @expectedCCResponse(CommandClasses["Multi Channel"])
 export class MultiChannelCC extends CommandClass {
-
 	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
-	public constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.EndPointGet);
 	public constructor(
-		driver: IDriver, nodeId: number,
-		ccCommand: MultiChannelCommand.CapabilityGet | MultiChannelCommand.AggregatedMembersGet,
+		driver: IDriver,
+		nodeId: number,
+		ccCommand: MultiChannelCommand.EndPointGet,
+	);
+	public constructor(
+		driver: IDriver,
+		nodeId: number,
+		ccCommand:
+			| MultiChannelCommand.CapabilityGet
+			| MultiChannelCommand.AggregatedMembersGet,
 		endpoint: number,
 	);
-	public constructor(driver: IDriver, nodeId: number, ccCommand: MultiChannelCommand.EndPointFind, genericClass: GenericDeviceClasses, specificClass: number);
 	public constructor(
-		driver: IDriver, nodeId: number,
+		driver: IDriver,
+		nodeId: number,
+		ccCommand: MultiChannelCommand.EndPointFind,
+		genericClass: GenericDeviceClasses,
+		specificClass: number,
+	);
+	public constructor(
+		driver: IDriver,
+		nodeId: number,
 		ccCommand: MultiChannelCommand.CommandEncapsulation,
 		encapsulatedCC: CommandClass,
 	);
@@ -54,15 +76,12 @@ export class MultiChannelCC extends CommandClass {
 		super(driver, nodeId, ccCommand);
 
 		if (
-			ccCommand === MultiChannelCommand.CapabilityGet
-			|| ccCommand === MultiChannelCommand.AggregatedMembersGet
+			ccCommand === MultiChannelCommand.CapabilityGet ||
+			ccCommand === MultiChannelCommand.AggregatedMembersGet
 		) {
 			this.endpoint = args[0];
 		} else if (ccCommand === MultiChannelCommand.EndPointFind) {
-			[
-				this.genericClass,
-				this.specificClass,
-			] = args;
+			[this.genericClass, this.specificClass] = args;
 		} else if (ccCommand === MultiChannelCommand.CommandEncapsulation) {
 			this.encapsulatedCC = args[0];
 		}
@@ -117,12 +136,12 @@ export class MultiChannelCC extends CommandClass {
 				break;
 
 			case MultiChannelCommand.CommandEncapsulation: {
-				const destination = typeof this.destination === "number"
-					// The destination is a single number
-					? this.destination & 0b0111_1111
-					// The destination is a bit mask
-					: encodeBitMask(this.destination, 7)[0] | 0b1000_0000
-					;
+				const destination =
+					typeof this.destination === "number"
+						? // The destination is a single number
+						  this.destination & 0b0111_1111
+						: // The destination is a bit mask
+						  encodeBitMask(this.destination, 7)[0] | 0b1000_0000;
 				this.payload = Buffer.concat([
 					Buffer.from([
 						this.sourceEndPoint & 0b0111_1111,
@@ -174,7 +193,9 @@ export class MultiChannelCC extends CommandClass {
 				const numReports = this.payload[0];
 				this.genericClass = this.payload[1];
 				this.specificClass = this.payload[2];
-				this._foundEndpoints = [...this.payload.slice(3, 3 + numReports)].map(e => e & 0b01111111);
+				this._foundEndpoints = [
+					...this.payload.slice(3, 3 + numReports),
+				].map(e => e & 0b01111111);
 				break;
 			}
 
@@ -188,7 +209,8 @@ export class MultiChannelCC extends CommandClass {
 					this.destination = destination;
 				}
 				this.encapsulatedCC = CommandClass.fromEncapsulated(
-					this.driver, this,
+					this.driver,
+					this,
 					this.payload.slice(2),
 				);
 				break;

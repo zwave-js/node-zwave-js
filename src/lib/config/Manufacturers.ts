@@ -6,11 +6,16 @@ import * as path from "path";
 let manufacturers: Record<string, string>;
 async function loadManufacturers(): Promise<void> {
 	// TODO: Extract the path resolution
-	const fileContents = await readFile(path.join(__dirname, "../../../config/manufacturers.json"), "utf8");
+	const fileContents = await readFile(
+		path.join(__dirname, "../../../config/manufacturers.json"),
+		"utf8",
+	);
 	manufacturers = JSON5.parse(fileContents);
 }
 
-export async function lookupManufacturer(manufacturerID: number): Promise<string | undefined> {
+export async function lookupManufacturer(
+	manufacturerID: number,
+): Promise<string | undefined> {
 	if (!manufacturers) await loadManufacturers();
 	const key = "0x" + padStart(manufacturerID.toString(16), 4, "0");
 	return manufacturers[key];

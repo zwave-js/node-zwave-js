@@ -1,7 +1,21 @@
 import { Driver } from "../driver/Driver";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
-import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "../node/DeviceClass";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	Message,
+	messageTypes,
+	priority,
+} from "../message/Message";
+import {
+	BasicDeviceClasses,
+	DeviceClass,
+	GenericDeviceClass,
+	SpecificDeviceClass,
+} from "../node/DeviceClass";
 import { INodeQuery } from "../node/INodeQuery";
 import { JSONObject } from "../util/misc";
 
@@ -36,11 +50,7 @@ export type Baudrate = 9600 | 40000 | 100000;
 @expectedResponse(FunctionType.GetNodeProtocolInfo)
 @priority(MessagePriority.NodeQuery)
 export class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
-
-	public constructor(
-		driver: Driver,
-		nodeId?: number,
-	) {
+	public constructor(driver: Driver, nodeId?: number) {
 		super(driver);
 		this.nodeId = nodeId;
 	}
@@ -57,12 +67,10 @@ export class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
 			nodeId: this.nodeId,
 		});
 	}
-
 }
 
 @messageTypes(MessageType.Response, FunctionType.GetNodeProtocolInfo)
 export class GetNodeProtocolInfoResponse extends Message {
-
 	private _isListening: boolean;
 	public get isListening(): boolean {
 		return this._isListening;
@@ -107,7 +115,8 @@ export class GetNodeProtocolInfoResponse extends Message {
 		const ret = super.deserialize(data);
 
 		const capabilities = this.payload[0];
-		this._isListening = (capabilities & NodeCapabilityFlags.Listening) !== 0;
+		this._isListening =
+			(capabilities & NodeCapabilityFlags.Listening) !== 0;
 		this._isRouting = (capabilities & NodeCapabilityFlags.Routing) !== 0;
 
 		// This is an educated guess. OZW only checks for the 40k flag
@@ -127,7 +136,10 @@ export class GetNodeProtocolInfoResponse extends Message {
 
 		const security = this.payload[1];
 		this._isSecure = (security & SecurityFlags.Security) !== 0;
-		this._isFrequentListening = (security & (SecurityFlags.Sensor1000ms | SecurityFlags.Sensor250ms)) !== 0;
+		this._isFrequentListening =
+			(security &
+				(SecurityFlags.Sensor1000ms | SecurityFlags.Sensor250ms)) !==
+			0;
 		this._isBeaming = (security & SecurityFlags.BeamCapability) !== 0;
 
 		// parse the device class
@@ -151,5 +163,4 @@ export class GetNodeProtocolInfoResponse extends Message {
 			deviceClass: this.deviceClass,
 		});
 	}
-
 }

@@ -1,10 +1,20 @@
 /// <reference types="jest-extended" />
 import { assertZWaveError } from "../../../test/util";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { encodeBitMask, encodeFloatWithScale, parseBitMask, parseBoolean, parseFloatWithScale, parseMaybeBoolean, parseMaybeNumber, parseNumber, unknownBoolean, unknownNumber } from "./Primitive";
+import {
+	encodeBitMask,
+	encodeFloatWithScale,
+	parseBitMask,
+	parseBoolean,
+	parseFloatWithScale,
+	parseMaybeBoolean,
+	parseMaybeNumber,
+	parseNumber,
+	unknownBoolean,
+	unknownNumber,
+} from "./Primitive";
 
 describe("lib/values/Primitive", () => {
-
 	describe("parseBoolean()", () => {
 		it("should return false when the value is 0", () => {
 			expect(parseBoolean(0)).toBeFalse();
@@ -88,11 +98,22 @@ describe("lib/values/Primitive", () => {
 
 		it("should correctly extract the value", () => {
 			const tests = [
-				{ payload: Buffer.from([0b00100001, 15]), expected: 1.5, numDigits: 1 },
-				{ payload: Buffer.from([0b11001100, 0x81, 0x23, 0x45, 0x67]), expected: -2128.394905, numDigits: 6 },
+				{
+					payload: Buffer.from([0b00100001, 15]),
+					expected: 1.5,
+					numDigits: 1,
+				},
+				{
+					payload: Buffer.from([0b11001100, 0x81, 0x23, 0x45, 0x67]),
+					expected: -2128.394905,
+					numDigits: 6,
+				},
 			];
 			for (const { payload, expected, numDigits } of tests) {
-				expect(parseFloatWithScale(payload).value).toBeCloseTo(expected, numDigits);
+				expect(parseFloatWithScale(payload).value).toBeCloseTo(
+					expected,
+					numDigits,
+				);
 			}
 		});
 	});
@@ -100,13 +121,31 @@ describe("lib/values/Primitive", () => {
 	describe("encodeFloatWithScale()", () => {
 		it("should correctly encode the scale", () => {
 			const tests = [
-				{ scale: 0b00, value: 0, expected: Buffer.from([0b00000001, 0]) },
-				{ scale: 0b01, value: 0, expected: Buffer.from([0b00001001, 0]) },
-				{ scale: 0b10, value: 0, expected: Buffer.from([0b00010001, 0]) },
-				{ scale: 0b11, value: 0, expected: Buffer.from([0b00011001, 0]) },
+				{
+					scale: 0b00,
+					value: 0,
+					expected: Buffer.from([0b00000001, 0]),
+				},
+				{
+					scale: 0b01,
+					value: 0,
+					expected: Buffer.from([0b00001001, 0]),
+				},
+				{
+					scale: 0b10,
+					value: 0,
+					expected: Buffer.from([0b00010001, 0]),
+				},
+				{
+					scale: 0b11,
+					value: 0,
+					expected: Buffer.from([0b00011001, 0]),
+				},
 			];
 			for (const { scale, value, expected } of tests) {
-				expect(encodeFloatWithScale(value, scale).equals(expected)).toBeTrue();
+				expect(
+					encodeFloatWithScale(value, scale).equals(expected),
+				).toBeTrue();
 			}
 		});
 
@@ -120,31 +159,40 @@ describe("lib/values/Primitive", () => {
 				{ value: 32768, expected: 4 },
 			];
 			for (const { value, expected } of tests) {
-				expect(encodeFloatWithScale(value, 0).length).toBe(expected + 1);
+				expect(encodeFloatWithScale(value, 0).length).toBe(
+					expected + 1,
+				);
 			}
 		});
 
 		it("should correctly detect the necessary precision and serialize the given values", () => {
 			const tests = [
-				{ value: 1.5, scale: 0b00, expected: Buffer.from([0b00100001, 15]) },
-				{ value: -2128.394905, scale: 0b01, expected: Buffer.from([0b11001100, 0x81, 0x23, 0x45, 0x67]) },
+				{
+					value: 1.5,
+					scale: 0b00,
+					expected: Buffer.from([0b00100001, 15]),
+				},
+				{
+					value: -2128.394905,
+					scale: 0b01,
+					expected: Buffer.from([0b11001100, 0x81, 0x23, 0x45, 0x67]),
+				},
 			];
 			for (const { scale, value, expected } of tests) {
-				expect(encodeFloatWithScale(value, scale).equals(expected)).toBeTrue();
+				expect(
+					encodeFloatWithScale(value, scale).equals(expected),
+				).toBeTrue();
 			}
 		});
 
 		it("should throw when the value cannot be represented in 4 bytes", () => {
-			assertZWaveError(
-				() => encodeFloatWithScale(0xffffffff, 0),
-				{ errorCode: ZWaveErrorCodes.Arithmetic },
-			);
-			assertZWaveError(
-				() => encodeFloatWithScale(Number.NaN, 0),
-				{ errorCode: ZWaveErrorCodes.Arithmetic },
-			);
+			assertZWaveError(() => encodeFloatWithScale(0xffffffff, 0), {
+				errorCode: ZWaveErrorCodes.Arithmetic,
+			});
+			assertZWaveError(() => encodeFloatWithScale(Number.NaN, 0), {
+				errorCode: ZWaveErrorCodes.Arithmetic,
+			});
 		});
-
 	});
 
 	describe("parseBitMask()", () => {
@@ -162,8 +210,16 @@ describe("lib/values/Primitive", () => {
 	describe("encodeBitMask()", () => {
 		it("should correctly convert a numeric array into a bit mask", () => {
 			const tests = [
-				{ values: [1, 4, 5, 6, 8], max: 8, expected: Buffer.from([0b10111001]) },
-				{ values: [1, 2, 10, 11], max: 16, expected: Buffer.from([0b11, 0b110]) },
+				{
+					values: [1, 4, 5, 6, 8],
+					max: 8,
+					expected: Buffer.from([0b10111001]),
+				},
+				{
+					values: [1, 2, 10, 11],
+					max: 16,
+					expected: Buffer.from([0b11, 0b110]),
+				},
 			];
 			for (const { values, max, expected } of tests) {
 				expect(encodeBitMask(values, max).equals(expected)).toBeTrue();
@@ -180,5 +236,4 @@ describe("lib/values/Primitive", () => {
 			}
 		});
 	});
-
 });
