@@ -260,7 +260,6 @@ describe("lib/driver/Driver => ", () => {
 
 		it("should happen on invalid data in the receive buffer", () => {
 			// swallow the error
-			// tslint:disable-next-line: no-empty
 			driver.on("error", () => {});
 			// receive an invalid message
 			serialport.receiveData(Buffer.from([0x01, 0x03, 0x00, 0x00, 0x00]));

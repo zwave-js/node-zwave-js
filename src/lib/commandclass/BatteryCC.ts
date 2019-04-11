@@ -18,7 +18,6 @@ export enum BatteryCommand {
 @implementedVersion(1)
 @expectedCCResponse(CommandClasses.Battery)
 export class BatteryCC extends CommandClass {
-	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 
 	public constructor(
@@ -34,7 +33,6 @@ export class BatteryCC extends CommandClass {
 	) {
 		super(driver, nodeId, ccCommand);
 	}
-	// tslint:enable:unified-signatures
 
 	@ccValue() public level: number;
 	@ccValue() public isLow: boolean;

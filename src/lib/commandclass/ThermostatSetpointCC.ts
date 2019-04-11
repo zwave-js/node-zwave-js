@@ -64,7 +64,6 @@ export enum ThermostatSetpointScale {
 @implementedVersion(3)
 @expectedCCResponse(CommandClasses["Thermostat Setpoint"])
 export class ThermostatSetpointCC extends CommandClass {
-	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 
 	public constructor(
@@ -108,7 +107,6 @@ export class ThermostatSetpointCC extends CommandClass {
 				break;
 		}
 	}
-	// tslint:enable:unified-signatures
 
 	@ccValue() public value: number;
 	@ccValue() public scale: ThermostatSetpointScale;

@@ -224,7 +224,8 @@ export class Message {
 	}
 
 	/** Include previously received partial responses into a final message */
-	public mergePartialMessages(partials: Message[]) {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	public mergePartialMessages(partials: Message[]): void {
 		// This is highly message dependent
 		// Overwrite this in derived classes
 	}
@@ -395,7 +396,6 @@ export function getMessageConstructor(
 		);
 }
 
-// tslint:disable:unified-signatures
 /**
  * Defines the expected response associated with a Z-Wave message
  */
@@ -432,7 +432,6 @@ export function expectedResponse(
 		);
 	};
 }
-// tslint:enable:unified-signatures
 
 /**
  * Retrieves the expected response defined for a Z-Wave message class

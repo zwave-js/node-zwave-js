@@ -15,7 +15,6 @@ export enum DeviceResetLocallyCommand {
 @implementedVersion(1)
 @expectedCCResponse(CommandClasses["Device Reset Locally"])
 export class DeviceResetLocallyCC extends CommandClass {
-	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 
 	public constructor(
@@ -25,5 +24,4 @@ export class DeviceResetLocallyCC extends CommandClass {
 	) {
 		super(driver, nodeId, ccCommand);
 	}
-	// tslint:enable:unified-signatures
 }

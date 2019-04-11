@@ -57,7 +57,6 @@ export type ConfigValue = number | Set<number>;
 @implementedVersion(4)
 @expectedCCResponse(CommandClasses.Configuration)
 export class ConfigurationCC extends CommandClass {
-	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 
 	public constructor(
@@ -170,7 +169,6 @@ export class ConfigurationCC extends CommandClass {
 			}
 		}
 	}
-	// tslint:enable:unified-signatures
 
 	public defaultFlag: boolean;
 	public handshake: boolean;
@@ -426,7 +424,7 @@ export class ConfigurationCC extends CommandClass {
 		}
 	}
 
-	public mergePartialCCs(partials: CommandClass[]) {
+	public mergePartialCCs(partials: CommandClass[]): void {
 		switch (this.ccCommand) {
 			case ConfigurationCommand.BulkReport: {
 				// Merge values

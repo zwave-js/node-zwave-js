@@ -391,8 +391,6 @@ export class Driver extends EventEmitter implements IDriver {
 		);
 
 		while (this.receiveBuffer.length > 0) {
-			// TODO: add a way to interrupt
-
 			if (this.receiveBuffer[0] !== MessageHeaders.SOF) {
 				switch (this.receiveBuffer[0]) {
 					// single-byte messages - we have a handler for each one
@@ -431,7 +429,6 @@ export class Driver extends EventEmitter implements IDriver {
 				return;
 			}
 
-			// tslint:disable-next-line:variable-name
 			const MessageConstructor = Message.getConstructor(
 				this.receiveBuffer,
 			);
@@ -1020,7 +1017,6 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 	}
 
-	// tslint:disable:unified-signatures
 	// wotan-disable no-misused-generics
 	/**
 	 * Sends a message with default priority to the Z-Wave stick
@@ -1047,7 +1043,6 @@ export class Driver extends EventEmitter implements IDriver {
 		priority: MessagePriority,
 		supportCheck: MessageSupportCheck,
 	): Promise<TResponse>;
-	// tslint:enable:unified-signatures
 
 	public async sendMessage<TResponse extends Message = Message>(
 		msg: Message,

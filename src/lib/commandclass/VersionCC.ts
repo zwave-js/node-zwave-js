@@ -35,7 +35,6 @@ function parseVersion(buffer: Buffer): string {
 @implementedVersion(3)
 @expectedCCResponse(CommandClasses.Version)
 export class VersionCC extends CommandClass {
-	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 	public constructor(
 		driver: IDriver,
@@ -60,7 +59,6 @@ export class VersionCC extends CommandClass {
 	) {
 		super(driver, nodeId, ccCommand);
 	}
-	// tslint:enable:unified-signatures
 
 	@ccValue() public libraryType: ZWaveLibraryTypes;
 	@ccValue() public protocolVersion: string;

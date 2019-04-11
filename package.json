@@ -33,6 +33,7 @@
     "@types/jest": "^24.0.9",
     "@types/json5": "0.0.30",
     "@types/node": "^11.12.1",
+    "@types/semver": "^6.0.0",
     "@types/serialport": "^7.0.1",
     "@types/yargs": "^13.0.0",
     "@typescript-eslint/eslint-plugin": "^1.6.0",

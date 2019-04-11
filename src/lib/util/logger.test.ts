@@ -1,5 +1,3 @@
-// tslint:disable:no-unused-expression
-
 // import { assert, expect, should, use } from "chai";
 // import { spy, stub } from "sinon";
 // should();

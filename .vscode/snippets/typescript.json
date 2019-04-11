@@ -143,8 +143,21 @@
 	},
 	"Z-Wave CC property": {
 		"prefix": "zwccprop",
+		"body": ["@ccValue() public ${1:property}: ${2:number};${0}"]
+	},
+	"Jest test file": {
+		"prefix": "jest",
 		"body": [
-			"@ccValue() public ${1:property}: ${2:number};${0}"
+			"/// <reference types=\"jest-extended\" />",
+			"import { ${3:methodToTest} } from \"./${2}\";",
+			"",
+			"describe(\"${1:path}/${2:moduleToTest}\", () => {",
+			"\tdescribe(\"${3}()\", () => {",
+			"\t\tit(\"${4:does something}\", () => {",
+			"\t\t\t${0:// implementation}",
+			"\t\t});",
+			"\t});",
+			"});"
 		]
 	}
 }

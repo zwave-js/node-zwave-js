@@ -37,7 +37,6 @@ export enum StateKind {
 
 @implementedVersion(Number.POSITIVE_INFINITY) // per default don't impose any restrictions on the version
 export class CommandClass {
-	// tslint:disable:unified-signatures
 	// empty constructor to parse messages
 	protected constructor(driver: IDriver);
 	// default constructor to send messages
@@ -59,7 +58,6 @@ export class CommandClass {
 		// Extract the cc from declared metadata if not provided
 		this.ccId = getCommandClass(this);
 	}
-	// tslint:enable:unified-signatures
 
 	public ccId: CommandClasses;
 
@@ -154,7 +152,6 @@ export class CommandClass {
 	}
 
 	public static from(driver: IDriver, serializedCC: Buffer): CommandClass {
-		// tslint:disable-next-line:variable-name
 		const Constructor = CommandClass.getConstructor(serializedCC);
 		const ret = new Constructor(driver);
 		ret.deserialize(serializedCC);
@@ -166,7 +163,6 @@ export class CommandClass {
 		encapCC: CommandClass,
 		serializedCC: Buffer,
 	): CommandClass {
-		// tslint:disable-next-line:variable-name
 		const Constructor = CommandClass.getConstructor(serializedCC);
 		const ret = new Constructor(driver);
 		ret.deserializeFromEncapsulation(encapCC, serializedCC);
@@ -300,7 +296,8 @@ export class CommandClass {
 	}
 
 	/** Include previously received partial responses into a final CC */
-	public mergePartialCCs(partials: CommandClass[]) {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	public mergePartialCCs(partials: CommandClass[]): void {
 		// This is highly CC dependent
 		// Overwrite this in derived classes, by default do nothing
 	}
@@ -461,7 +458,6 @@ export function getImplementedVersionStatic<
 	return ret;
 }
 
-// tslint:disable:unified-signatures
 /**
  * Defines the expected response associated with a Z-Wave message
  */
@@ -495,7 +491,6 @@ export function expectedCCResponse<T extends CommandClass>(
 		Reflect.defineMetadata(METADATA_ccResponse, ccOrDynamic, ccClass);
 	};
 }
-// tslint:enable:unified-signatures
 
 /**
  * Retrieves the expected response defined for a Z-Wave message class
@@ -589,6 +584,5 @@ const definedCCs = fs
 	.filter(file => /CC\.js$/.test(file));
 log("protocol", `loading CCs: ${stringify(definedCCs)}`, "silly");
 for (const file of definedCCs) {
-	// tslint:disable-next-line:no-var-requires
 	require(`./${file}`);
 }

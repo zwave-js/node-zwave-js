@@ -1,12 +1,20 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import { FunctionType, MessagePriority, MessageType } from "../src/lib/message/Constants";
-import { expectedResponse, Message, messageTypes, priority } from "../src/lib/message/Message";
-import * as SerialPort from "serialport";
 import { EventEmitter } from "events";
+import * as SerialPort from "serialport";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../src/lib/message/Constants";
+import {
+	expectedResponse,
+	Message,
+	messageTypes,
+	priority,
+} from "../src/lib/message/Message";
 
 const instances = new Map<string, MockSerialPort>();
 
-// tslint:disable:unified-signatures
 export interface MockSerialPort {
 	// default events
 	on(event: "open", callback: () => void): this;
@@ -16,7 +24,6 @@ export interface MockSerialPort {
 }
 
 export class MockSerialPort extends EventEmitter {
-
 	public constructor(
 		private readonly port: string,
 		private readonly options?: SerialPort.OpenOptions,
@@ -64,30 +71,29 @@ export class MockSerialPort extends EventEmitter {
 		this.writeStub(data);
 	}
 	public readonly writeStub: jest.Mock = jest.fn();
-
 }
 
-export const MockRequestMessageWithExpectation_FunctionType = 0xfa as unknown as FunctionType;
-export const MockRequestMessageWithoutExpectation_FunctionType = 0xfb as unknown as FunctionType;
-export const MockResponseMessage_FunctionType = 0xff as unknown as FunctionType;
+export const MockRequestMessageWithExpectation_FunctionType = (0xfa as unknown) as FunctionType;
+export const MockRequestMessageWithoutExpectation_FunctionType = (0xfb as unknown) as FunctionType;
+export const MockResponseMessage_FunctionType = (0xff as unknown) as FunctionType;
 
-@messageTypes(MessageType.Request, MockRequestMessageWithExpectation_FunctionType)
+@messageTypes(
+	MessageType.Request,
+	MockRequestMessageWithExpectation_FunctionType,
+)
 @expectedResponse(MockResponseMessage_FunctionType)
 @priority(MessagePriority.Normal)
 // @ts-ignore decorators are working
-export class MockRequestMessageWithExpectation extends Message {
+export class MockRequestMessageWithExpectation extends Message {}
 
-}
-
-@messageTypes(MessageType.Request, MockRequestMessageWithoutExpectation_FunctionType)
+@messageTypes(
+	MessageType.Request,
+	MockRequestMessageWithoutExpectation_FunctionType,
+)
 @priority(MessagePriority.Normal)
 // @ts-ignore decorators are working
-export class MockRequestMessageWithoutExpectation extends Message {
-
-}
+export class MockRequestMessageWithoutExpectation extends Message {}
 
 @messageTypes(MessageType.Response, MockResponseMessage_FunctionType)
 // @ts-ignore decorators are working
-export class MockResponseMessage extends Message {
-
-}
+export class MockResponseMessage extends Message {}

@@ -45,7 +45,6 @@ export enum NotificationType {
 export class NotificationCC extends CommandClass {
 	// former AlarmCC (v1..v2)
 
-	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 	public constructor(
 		driver: IDriver,
@@ -72,7 +71,6 @@ export class NotificationCC extends CommandClass {
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: NotificationCommand,
-		// tslint:disable-next-line:trailing-comma
 		...args: any[]
 	) {
 		super(driver, nodeId, ccCommand);
@@ -85,7 +83,6 @@ export class NotificationCC extends CommandClass {
 			this.notificationStatus = args[1];
 		}
 	}
-	// tslint:enable:unified-signatures
 
 	/** Proprietary V1/V2 alarm type */
 	public alarmType: number;

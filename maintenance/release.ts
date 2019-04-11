@@ -1,6 +1,4 @@
-// tslint:disable:no-var-requires
-// tslint:disable:no-console
-
+/* eslint-disable @typescript-eslint/no-var-requires */
 /*
 
 	Bumps the package version and releases a new tag
@@ -20,9 +18,9 @@ import { padStart } from "alcalzone-shared/strings";
 import { execSync } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
+import { argv } from "yargs";
 const semver = require("semver");
 const colors = require("colors/safe");
-import { argv } from "yargs";
 
 const rootDir = path.resolve(__dirname, "../");
 
@@ -33,30 +31,71 @@ let readme = fs.readFileSync(readmePath, "utf8");
 // const ioPackPath = path.join(rootDir, "io-package.json");
 // const ioPack = require(ioPackPath);
 
-function fail(reason: string) {
+function fail(reason: string): never {
 	console.error("");
 	console.error(colors.red(reason));
 	console.error("");
-	process.exit(0);
+	return process.exit(0);
 }
 
 // check if there are untracked changes
-const gitStatus = execSync("git status", {cwd: rootDir, encoding: "utf8"});
+const gitStatus = execSync("git status", { cwd: rootDir, encoding: "utf8" });
 if (/have diverged/.test(gitStatus)) {
-	if (!argv.dry) fail(colors.red("Cannot continue, the local branch has diverged from the git repo!"));
-	else console.log(colors.red("This is a dry run. The full run would fail due to a diverged branch\n"));
+	if (!argv.dry)
+		fail(
+			colors.red(
+				"Cannot continue, the local branch has diverged from the git repo!",
+			),
+		);
+	else
+		console.log(
+			colors.red(
+				"This is a dry run. The full run would fail due to a diverged branch\n",
+			),
+		);
 } else if (!/working tree clean/.test(gitStatus)) {
-	if (!argv.dry) fail(colors.red("Cannot continue, the local branch has uncommited changes!"));
-	else console.log(colors.red("This is a dry run. The full run would fail due to uncommited changes\n"));
+	if (!argv.dry)
+		fail(
+			colors.red(
+				"Cannot continue, the local branch has uncommited changes!",
+			),
+		);
+	else
+		console.log(
+			colors.red(
+				"This is a dry run. The full run would fail due to uncommited changes\n",
+			),
+		);
 } else if (/Your branch is behind/.test(gitStatus)) {
-	if (!argv.dry) fail(colors.red("Cannot continue, the local branch is behind the remote changes!"));
-	else console.log(colors.red("This is a dry run. The full run would fail due to the local branch being behind\n"));
-} else if (/Your branch is up\-to\-date/.test(gitStatus) || /Your branch is ahead/.test(gitStatus)) {
+	if (!argv.dry)
+		fail(
+			colors.red(
+				"Cannot continue, the local branch is behind the remote changes!",
+			),
+		);
+	else
+		console.log(
+			colors.red(
+				"This is a dry run. The full run would fail due to the local branch being behind\n",
+			),
+		);
+} else if (
+	/Your branch is up\-to\-date/.test(gitStatus) ||
+	/Your branch is ahead/.test(gitStatus)
+) {
 	// all good
 	console.log(colors.green("git status is good - I can continue..."));
 }
 
-const releaseTypes = ["major", "premajor", "minor", "preminor", "patch", "prepatch", "prerelease"];
+const releaseTypes = [
+	"major",
+	"premajor",
+	"minor",
+	"preminor",
+	"patch",
+	"prepatch",
+	"prerelease",
+];
 
 const releaseType = argv._[0] || "patch";
 let newVersion = releaseType;
@@ -68,7 +107,11 @@ if (releaseTypes.indexOf(releaseType) > -1) {
 	} else {
 		newVersion = semver.inc(oldVersion, releaseType);
 	}
-	console.log(`bumping version ${colors.blue(oldVersion)} to ${colors.gray(releaseType)} version ${colors.green(newVersion)}\n`);
+	console.log(
+		`bumping version ${colors.blue(oldVersion)} to ${colors.gray(
+			releaseType,
+		)} version ${colors.green(newVersion)}\n`,
+	);
 } else {
 	// increment to specific version
 	newVersion = semver.clean(newVersion);
@@ -77,19 +120,29 @@ if (releaseTypes.indexOf(releaseType) > -1) {
 	} else {
 		// valid version string => check if its actually newer
 		if (!semver.gt(newVersion, pack.version)) {
-			fail(`new version ${newVersion} is NOT > than package.json version ${pack.version}`);
+			fail(
+				`new version ${newVersion} is NOT > than package.json version ${
+					pack.version
+				}`,
+			);
 		}
 		// if (!semver.gt(newVersion, ioPack.common.version)) {
 		// 	fail(`new version ${newVersion} is NOT > than io-package.json version ${ioPack.common.version}`);
 		// }
 	}
-	console.log(`bumping version ${oldVersion} to specific version ${newVersion}`);
+	console.log(
+		`bumping version ${oldVersion} to specific version ${newVersion}`,
+	);
 }
 
 if (argv.dry) {
 	console.log(colors.yellow("dry run:") + " not updating package files");
 } else {
-	console.log(`updating package.json from ${colors.blue(pack.version)} to ${colors.green(newVersion)}`);
+	console.log(
+		`updating package.json from ${colors.blue(
+			pack.version,
+		)} to ${colors.green(newVersion)}`,
+	);
 	pack.version = newVersion;
 	fs.writeFileSync(packPath, JSON.stringify(pack, null, 2));
 
@@ -97,7 +150,11 @@ if (argv.dry) {
 	const d = new Date();
 	readme = readme.replace(
 		"#### __WORK IN PROGRESS__",
-		`#### ${newVersion} (${d.getFullYear()}-${padStart("" + (d.getMonth() + 1), 2, "0")}-${padStart("" + d.getDate(), 2, "0")})`,
+		`#### ${newVersion} (${d.getFullYear()}-${padStart(
+			"" + (d.getMonth() + 1),
+			2,
+			"0",
+		)}-${padStart("" + d.getDate(), 2, "0")})`,
 	);
 	fs.writeFileSync(readmePath, readme, "utf8");
 
@@ -121,7 +178,7 @@ if (argv.dry) {
 } else {
 	for (const command of gitCommands) {
 		console.log(`executing "${colors.blue(command)}" ...`);
-		execSync(command, {cwd: rootDir});
+		execSync(command, { cwd: rootDir });
 	}
 }
 

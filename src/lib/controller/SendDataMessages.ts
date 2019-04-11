@@ -58,7 +58,6 @@ function getNextCallbackId(): number {
 export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	extends Message
 	implements ICommandClassContainer {
-	// tslint:disable:unified-signatures
 	// empty constructor to parse messages
 	public constructor(driver: IDriver);
 	// default constructor to send messages
@@ -85,7 +84,6 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			if (this.callbackId == null) this.callbackId = getNextCallbackId();
 		}
 	}
-	// tslint:enable:unified-signatures
 
 	/** The command this message contains */
 	public command: CCType;
@@ -164,7 +162,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	}
 
 	/** Include previously received partial responses into a final message */
-	public mergePartialMessages(partials: Message[]) {
+	public mergePartialMessages(partials: Message[]): void {
 		this.command.mergePartialCCs(
 			(partials as SendDataRequest[]).map(p => p.command),
 		);
