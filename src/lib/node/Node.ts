@@ -154,8 +154,8 @@ export class ZWaveNode extends EventEmitter {
 		"0",
 	)}] `;
 
-	private _deviceClass: DeviceClass;
-	public get deviceClass(): DeviceClass {
+	private _deviceClass: DeviceClass | undefined;
+	public get deviceClass(): DeviceClass | undefined {
 		return this._deviceClass;
 	}
 
@@ -244,7 +244,7 @@ export class ZWaveNode extends EventEmitter {
 	public supportsCC(cc: CommandClasses): boolean {
 		return (
 			this._implementedCommandClasses.has(cc) &&
-			!!this._implementedCommandClasses.get(cc).isSupported
+			!!this._implementedCommandClasses.get(cc)!.isSupported
 		);
 	}
 
@@ -252,7 +252,7 @@ export class ZWaveNode extends EventEmitter {
 	public controlsCC(cc: CommandClasses): boolean {
 		return (
 			this._implementedCommandClasses.has(cc) &&
-			!!this._implementedCommandClasses.get(cc).isControlled
+			!!this._implementedCommandClasses.get(cc)!.isControlled
 		);
 	}
 
@@ -264,7 +264,9 @@ export class ZWaveNode extends EventEmitter {
 
 	/** Creates an instance of the given CC linked to this node */
 	// wotan-disable no-misused-generics
-	public createCCInstance<T extends CommandClass>(cc: CommandClasses): T {
+	public createCCInstance<T extends CommandClass>(
+		cc: CommandClasses,
+	): T | undefined {
 		if (!this.supportsCC(cc) && !this.controlsCC(cc)) {
 			throw new ZWaveError(
 				`Cannot create an instance of the unsupported CC ${
@@ -407,9 +409,11 @@ export class ZWaveNode extends EventEmitter {
 		// prettier-ignore
 		{
 		log("controller", `${this.logPrefix}received response for protocol info:`, "debug");
-		log("controller", `${this.logPrefix}  basic device class:    ${BasicDeviceClasses[this.deviceClass.basic]} (${num2hex(this.deviceClass.basic)})`, "debug");
-		log("controller", `${this.logPrefix}  generic device class:  ${this.deviceClass.generic.name} (${num2hex(this.deviceClass.generic.key)})`, "debug");
-		log("controller", `${this.logPrefix}  specific device class: ${this.deviceClass.specific.name} (${num2hex(this.deviceClass.specific.key)})`, "debug");
+		if (this.deviceClass) {
+			log("controller", `${this.logPrefix}  basic device class:    ${BasicDeviceClasses[this.deviceClass.basic]} (${num2hex(this.deviceClass.basic)})`, "debug");
+			log("controller", `${this.logPrefix}  generic device class:  ${this.deviceClass.generic.name} (${num2hex(this.deviceClass.generic.key)})`, "debug");
+			log("controller", `${this.logPrefix}  specific device class: ${this.deviceClass.specific.name} (${num2hex(this.deviceClass.specific.key)})`, "debug");
+		}
 		log("controller", `${this.logPrefix}  is a listening device: ${this.isListening}`, "debug");
 		log("controller", `${this.logPrefix}  is frequent listening: ${this.isFrequentListening}`, "debug");
 		log("controller", `${this.logPrefix}  is a routing device:   ${this.isRouting}`, "debug");
@@ -921,9 +925,14 @@ export class ZWaveNode extends EventEmitter {
 		// TODO: Support multiple instances
 		const factories = commandClasses
 			// This assertion is not nice, but I see no better way
-			.map(cc => (getCCConstructor(cc) as unknown) as typeof CommandClass)
+			.map(
+				cc =>
+					(getCCConstructor(cc) as unknown) as
+						| (typeof CommandClass)
+						| undefined,
+			)
 			.filter(cc => !!cc)
-			.map(cc => () => cc.requestState(this.driver, this, kind));
+			.map(cc => () => cc!.requestState(this.driver, this, kind));
 		await promiseSequence(factories);
 	}
 

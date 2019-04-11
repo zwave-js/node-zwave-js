@@ -3,7 +3,8 @@
 	"compilerOptions": {
 		"plugins": [
 			{
-				"name": "@fimbul/mithotyn"
+				"name": "@fimbul/mithotyn",
+				"displayErrorsAsWarnings": true
 			}
 		],
 		"noEmit": true,

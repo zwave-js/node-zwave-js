@@ -22,7 +22,7 @@ import { INodeQuery } from "./INodeQuery";
 @expectedResponse(testResponseForNodeInfoRequest)
 @priority(MessagePriority.NodeQuery)
 export class RequestNodeInfoRequest extends Message implements INodeQuery {
-	public constructor(driver: Driver, nodeId?: number) {
+	public constructor(driver: Driver, nodeId: number) {
 		super(driver);
 		this.nodeId = nodeId;
 	}
@@ -43,13 +43,13 @@ export class RequestNodeInfoRequest extends Message implements INodeQuery {
 
 @messageTypes(MessageType.Response, FunctionType.RequestNodeInfo)
 export class RequestNodeInfoResponse extends Message {
-	private _wasSent: boolean;
-	public get wasSent(): boolean {
+	private _wasSent: boolean | undefined;
+	public get wasSent(): boolean | undefined {
 		return this._wasSent;
 	}
 
-	private _errorCode: number;
-	public get errorCode(): number {
+	private _errorCode: number | undefined;
+	public get errorCode(): number | undefined {
 		return this._errorCode;
 	}
 
@@ -90,4 +90,5 @@ function testResponseForNodeInfoRequest(
 		)
 			return "fatal_node";
 	}
+	return "unexpected";
 }

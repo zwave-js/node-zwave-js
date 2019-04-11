@@ -39,6 +39,7 @@ module.exports = {
 		],
 		"@typescript-eslint/no-object-literal-type-assertion": "off",
 		"@typescript-eslint/interface-name-prefix": "off",
+		"@typescript-eslint/no-non-null-assertion": "off", // This is necessary for Map.has()/get()!
 	},
 	overrides: [
 		{

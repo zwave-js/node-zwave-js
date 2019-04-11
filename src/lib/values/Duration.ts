@@ -27,7 +27,7 @@ export class Duration {
 	}
 
 	/** Parses a duration as represented in Report commands */
-	public static parseReport(payload: number): Duration {
+	public static parseReport(payload?: number): Duration | undefined {
 		if (payload == undefined) return undefined;
 		if (payload === 0xff) return undefined; // reserved value
 		if (payload === 0xfe) return new Duration(0, "unknown");
