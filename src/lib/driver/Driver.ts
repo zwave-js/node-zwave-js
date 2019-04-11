@@ -57,6 +57,7 @@ const defaultOptions: ZWaveOptions = {
 	},
 	skipInterview: false,
 };
+
 function applyDefaultOptions(
 	target: Record<string, any>,
 	source: Record<string, any>,
@@ -128,6 +129,7 @@ export class Driver extends EventEmitter implements IDriver {
 		) as ZWaveOptions;
 
 		// register some cleanup handlers in case the program doesn't get closed cleanly
+		this._cleanupHandler = this._cleanupHandler.bind(this);
 		process.on("exit", this._cleanupHandler);
 		process.on("SIGINT", this._cleanupHandler);
 		process.on("uncaughtException", this._cleanupHandler);
