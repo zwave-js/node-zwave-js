@@ -47,19 +47,13 @@ let ClimateControlScheduleCC = class ClimateControlScheduleCC extends CommandCla
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
         if (this.ccCommand === ClimateControlScheduleCommand.Set) {
-            [
-                this.weekday,
-                this.switchPoints,
-            ] = args;
+            [this.weekday, this.switchPoints] = args;
         }
         else if (this.ccCommand === ClimateControlScheduleCommand.Get) {
             this.weekday = args[0];
         }
         else if (this.ccCommand === ClimateControlScheduleCommand.OverrideSet) {
-            [
-                this.overrideType,
-                this.overrideState,
-            ] = args;
+            [this.overrideType, this.overrideState] = args;
         }
     }
     serialize() {
@@ -70,12 +64,13 @@ let ClimateControlScheduleCC = class ClimateControlScheduleCC extends CommandCla
                 break;
             case ClimateControlScheduleCommand.Set: {
                 // Make sure we have exactly 9 entries
-                const allSwitchPoints = this.switchPoints ?
-                    this.switchPoints.slice(0, 9) // maximum 9
+                const allSwitchPoints = this.switchPoints
+                    ? this.switchPoints.slice(0, 9) // maximum 9
                     : [];
                 while (allSwitchPoints.length < 9) {
                     allSwitchPoints.push({
-                        hour: 0, minute: 0,
+                        hour: 0,
+                        minute: 0,
                         state: "Unused",
                     });
                 }

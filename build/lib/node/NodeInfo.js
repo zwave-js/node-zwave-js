@@ -36,9 +36,7 @@ function internalParseNodeInformationFrame(nif) {
             isAfterMark = true;
             continue;
         }
-        (isAfterMark
-            ? ret.controlledCCs
-            : ret.supportedCCs).push(cc);
+        (isAfterMark ? ret.controlledCCs : ret.supportedCCs).push(cc);
     }
     return ret;
 }

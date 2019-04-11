@@ -62,17 +62,16 @@ RequestNodeInfoResponse = __decorate([
 exports.RequestNodeInfoResponse = RequestNodeInfoResponse;
 function testResponseForNodeInfoRequest(sent, received) {
     if (received instanceof RequestNodeInfoResponse) {
-        return received.wasSent
-            ? "intermediate"
-            : "fatal_controller";
+        return received.wasSent ? "intermediate" : "fatal_controller";
     }
     else if (received instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest) {
         // received node info for the correct node
-        if (received.updateType === ApplicationUpdateRequest_1.ApplicationUpdateTypes.NodeInfo_Received
-            && received.nodeId === sent.nodeId)
+        if (received.updateType === ApplicationUpdateRequest_1.ApplicationUpdateTypes.NodeInfo_Received &&
+            received.nodeId === sent.nodeId)
             return "final";
         // requesting node info failed. We cannot check which node that belongs to
-        if (received.updateType === ApplicationUpdateRequest_1.ApplicationUpdateTypes.NodeInfo_RequestFailed)
+        if (received.updateType ===
+            ApplicationUpdateRequest_1.ApplicationUpdateTypes.NodeInfo_RequestFailed)
             return "fatal_node";
     }
 }

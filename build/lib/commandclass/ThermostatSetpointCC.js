@@ -41,7 +41,18 @@ var ThermostatSetpointType;
 // This array is used to map the advertised supported types (interpretation A)
 // to the actual enum values
 const thermostatSetpointTypeMap = [
-    0x00, 0x01, 0x02, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
+    0x00,
+    0x01,
+    0x02,
+    0x07,
+    0x08,
+    0x09,
+    0x0a,
+    0x0b,
+    0x0c,
+    0x0d,
+    0x0e,
+    0x0f,
 ];
 var ThermostatSetpointScale;
 (function (ThermostatSetpointScale) {
@@ -116,8 +127,15 @@ let ThermostatSetpointCC = class ThermostatSetpointCC extends CommandClass_1.Com
             case ThermostatSetpointCommand.CapabilitiesReport: {
                 this.setpointType = this.payload[0];
                 let bytesRead;
-                ({ value: this.minValue, scale: this.minValueScale, bytesRead } = Primitive_1.parseFloatWithScale(this.payload.slice(1)));
-                ({ value: this.maxValue, scale: this.maxValueScale } = Primitive_1.parseFloatWithScale(this.payload.slice(1 + bytesRead)));
+                ({
+                    value: this.minValue,
+                    scale: this.minValueScale,
+                    bytesRead,
+                } = Primitive_1.parseFloatWithScale(this.payload.slice(1)));
+                ({
+                    value: this.maxValue,
+                    scale: this.maxValueScale,
+                } = Primitive_1.parseFloatWithScale(this.payload.slice(1 + bytesRead)));
                 break;
             }
             default:

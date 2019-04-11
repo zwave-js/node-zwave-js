@@ -18,16 +18,20 @@ GetControllerCapabilitiesRequest = __decorate([
 exports.GetControllerCapabilitiesRequest = GetControllerCapabilitiesRequest;
 let GetControllerCapabilitiesResponse = class GetControllerCapabilitiesResponse extends Message_1.Message {
     get isSecondary() {
-        return (this._capabilityFlags & 1 /* Secondary */) !== 0;
+        return ((this._capabilityFlags & 1 /* Secondary */) !== 0);
     }
     get isUsingHomeIdFromOtherNetwork() {
-        return (this._capabilityFlags & 2 /* OnOtherNetwork */) !== 0;
+        return ((this._capabilityFlags &
+            2 /* OnOtherNetwork */) !==
+            0);
     }
     get isSISPresent() {
-        return (this._capabilityFlags & 4 /* SISPresent */) !== 0;
+        return ((this._capabilityFlags & 4 /* SISPresent */) !== 0);
     }
     get wasRealPrimary() {
-        return (this._capabilityFlags & 8 /* WasRealPrimary */) !== 0;
+        return ((this._capabilityFlags &
+            8 /* WasRealPrimary */) !==
+            0);
     }
     get isStaticUpdateController() {
         return (this._capabilityFlags & 16 /* SUC */) !== 0;

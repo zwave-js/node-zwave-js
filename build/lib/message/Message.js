@@ -17,16 +17,19 @@ class Message {
         this.driver = driver;
         // decide which implementation we follow
         let type;
-        if (typeof typeOrPayload === "number") { // #2
+        if (typeof typeOrPayload === "number") {
+            // #2
             type = typeOrPayload;
         }
-        else if (typeOrPayload instanceof Buffer) { // #1
+        else if (typeOrPayload instanceof Buffer) {
+            // #1
             payload = typeOrPayload;
         }
         // These properties are filled from declared metadata if not provided
         this.type = type != null ? type : getMessageType(this);
         this.functionType = funcType != null ? funcType : getFunctionType(this);
-        this.expectedResponse = expResponse != null ? expResponse : getExpectedResponse(this);
+        this.expectedResponse =
+            expResponse != null ? expResponse : getExpectedResponse(this);
         // This is taken from the constructor args
         this.payload = payload;
     }
@@ -133,8 +136,7 @@ class Message {
     testResponse(msg) {
         const expected = this.expectedResponse;
         // log("driver", `Message: testing response`, "debug");
-        if (typeof expected === "number"
-            && msg.type === Constants_1.MessageType.Response) {
+        if (typeof expected === "number" && msg.type === Constants_1.MessageType.Response) {
             // if only a functionType was configured as expected,
             // any message with this function type is expected,
             // every other message is unexpected
@@ -187,7 +189,7 @@ function getMessageTypeMapKey(messageType, functionType) {
  * Defines the message and function type associated with a Z-Wave message
  */
 function messageTypes(messageType, functionType) {
-    return (messageClass) => {
+    return messageClass => {
         logger_1.log("protocol", `${messageClass.name}: defining message type ${strings_1.num2hex(messageType)} and function type ${strings_1.num2hex(functionType)}`, "silly");
         // and store the metadata
         Reflect.defineMetadata(exports.METADATA_messageTypes, { messageType, functionType }, messageClass);
@@ -257,7 +259,7 @@ function getMessageConstructor(messageType, functionType) {
 }
 exports.getMessageConstructor = getMessageConstructor;
 function expectedResponse(typeOrPredicate) {
-    return (messageClass) => {
+    return messageClass => {
         if (typeof typeOrPredicate === "number") {
             const type = typeOrPredicate;
             logger_1.log("protocol", `${messageClass.name}: defining expected response ${strings_1.num2hex(type)}`, "silly");
@@ -308,7 +310,7 @@ exports.getExpectedResponseStatic = getExpectedResponseStatic;
  * Defines the default priority associated with a Z-Wave message
  */
 function priority(prio) {
-    return (messageClass) => {
+    return messageClass => {
         logger_1.log("protocol", `${messageClass.name}: defining default priority ${Constants_1.MessagePriority[prio]} (${prio})`, "silly");
         // and store the metadata
         Reflect.defineMetadata(exports.METADATA_priority, prio, messageClass);

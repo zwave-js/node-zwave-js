@@ -92,13 +92,7 @@ let CommandClass = CommandClass_1 = class CommandClass {
     }
     serialize() {
         const data = this.serializeWithoutHeader();
-        return Buffer.concat([
-            Buffer.from([
-                this.nodeId,
-                data.length,
-            ]),
-            data,
-        ]);
+        return Buffer.concat([Buffer.from([this.nodeId, data.length]), data]);
     }
     deserialize(data) {
         this.nodeId = CommandClass_1.getNodeId(data);
@@ -167,10 +161,11 @@ let CommandClass = CommandClass_1 = class CommandClass {
         return ret;
     }
     /** Requests static or dynamic state for a given from a node */
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    /* eslint-disable @typescript-eslint/no-unused-vars */
     static async requestState(driver, node, kind) {
         // This needs to be overwritten per command class. In the default implementation, don't do anything
     }
+    /* eslint-enable @typescript-eslint/no-unused-vars */
     /**
      * Determine whether the linked node supports a specific command of this command class.
      * "unknown" means that the information has not been received yet
@@ -224,7 +219,8 @@ let CommandClass = CommandClass_1 = class CommandClass {
             if (!(val.propertyName in this))
                 continue;
             let valueToSet = val.value;
-            if (this[val.propertyName] instanceof Map && typeguards_1.isObject(val.value)) {
+            if (this[val.propertyName] instanceof Map &&
+                typeguards_1.isObject(val.value)) {
                 // convert the object back to a Map
                 valueToSet = new Map(objects_1.entries(val.value));
             }
@@ -249,12 +245,13 @@ exports.METADATA_version = Symbol("version");
  * Defines the command class associated with a Z-Wave message
  */
 function commandClass(cc) {
-    return (messageClass) => {
+    return messageClass => {
         logger_1.log("protocol", `${messageClass.name}: defining command class ${CommandClasses_1.CommandClasses[cc]} (${cc})`, "silly");
         // and store the metadata
         Reflect.defineMetadata(exports.METADATA_commandClass, cc, messageClass);
         // also store a map in the Message metadata for lookup.
-        const map = Reflect.getMetadata(exports.METADATA_commandClassMap, CommandClass) || new Map();
+        const map = Reflect.getMetadata(exports.METADATA_commandClassMap, CommandClass) ||
+            new Map();
         map.set(cc, messageClass);
         Reflect.defineMetadata(exports.METADATA_commandClassMap, map, CommandClass);
     };
@@ -296,7 +293,7 @@ exports.getCCConstructor = getCCConstructor;
  * Defines the implemented version of a Z-Wave command class
  */
 function implementedVersion(version) {
-    return (ccClass) => {
+    return ccClass => {
         logger_1.log("protocol", `${ccClass.name}: defining implemented version ${version}`, "silly");
         // and store the metadata
         Reflect.defineMetadata(exports.METADATA_version, version, ccClass);
@@ -339,7 +336,7 @@ function getImplementedVersionStatic(classConstructor) {
 }
 exports.getImplementedVersionStatic = getImplementedVersionStatic;
 function expectedCCResponse(ccOrDynamic) {
-    return (ccClass) => {
+    return ccClass => {
         if (typeof ccOrDynamic === "number") {
             logger_1.log("protocol", `${ccClass.name}: defining expected CC response ${strings_1.num2hex(ccOrDynamic)}`, "silly");
         }
@@ -394,7 +391,9 @@ function ccValue() {
         const update = Reflect.defineProperty(target, property, {
             configurable: true,
             enumerable: true,
-            get() { return value; },
+            get() {
+                return value;
+            },
             set(newValue) {
                 // All variables that are stored should be marked to be persisted
                 target.createVariable.bind(this)(property);

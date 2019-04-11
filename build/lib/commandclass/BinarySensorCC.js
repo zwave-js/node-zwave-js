@@ -51,7 +51,7 @@ let BinarySensorCC = class BinarySensorCC extends CommandClass_1.CommandClass {
         super.deserialize(data);
         switch (this.ccCommand) {
             case BinarySensorCommand.Report:
-                this.value = this.payload[0] === 0xFF;
+                this.value = this.payload[0] === 0xff;
                 this.sensorType = this.payload[1];
                 break;
             case BinarySensorCommand.SupportedReport: {

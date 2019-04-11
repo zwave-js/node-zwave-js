@@ -4,8 +4,8 @@ const math_1 = require("alcalzone-shared/math");
 const objects_1 = require("alcalzone-shared/objects");
 exports.setbackSpecialStateValues = {
     "Frost Protection": 0x79,
-    "Energy Saving": 0x7A,
-    "Unused": 0x7F,
+    "Energy Saving": 0x7a,
+    Unused: 0x7f,
 };
 /** Encodes a setback state to use in a ThermostatSetbackCC */
 function encodeSetbackState(state) {
