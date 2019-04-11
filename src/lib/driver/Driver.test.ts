@@ -269,5 +269,112 @@ describe("lib/driver/Driver => ", () => {
 				Buffer.from([MessageHeaders.NAK]),
 			);
 		});
+
+		it("should reject the current (pending) transaction", async () => {
+			// swallow the error
+			driver.on("error", () => {});
+
+			const req = new MockRequestMessageWithExpectation(driver);
+
+			// send a message
+			const errorSpy = jest.fn();
+			// And catch the thrown error
+			const promise = driver.sendMessage(req).catch(errorSpy);
+			// trigger the send queue
+			jest.runAllTimers();
+
+			// receive something that's not a message header
+			serialport.receiveData(Buffer.from([0xff]));
+
+			// This is necessary or the test will finish too early and fail
+			await promise;
+			expect(errorSpy).toBeCalledTimes(1);
+			assertZWaveError(errorSpy.mock.calls[0][0] as unknown, {
+				errorCode: ZWaveErrorCodes.Driver_Reset,
+			});
+		});
+	});
+
+	describe("when a CAN is received", () => {
+		let driver: Driver;
+		let serialport: MockSerialPort;
+
+		beforeEach(async () => {
+			({ driver, serialport } = await createAndStartDriver());
+		});
+
+		afterEach(() => {
+			driver.destroy();
+			driver.removeAllListeners();
+		});
+
+		it("should drop the current transaction if it has reached the maximum number of send attempts", async () => {
+			// swallow the error
+			driver.on("error", () => {});
+
+			const req = new MockRequestMessageWithExpectation(driver);
+			req.maxSendAttempts = 1;
+
+			// send a message
+			const errorSpy = jest.fn();
+			// And catch the thrown error
+			const promise = driver.sendMessage(req).catch(errorSpy);
+			// trigger the send queue
+			jest.runAllTimers();
+
+			// Receive a CAN to trigger the resend check
+			serialport.receiveData(Buffer.from([MessageHeaders.CAN]));
+
+			await promise;
+			expect(errorSpy).toBeCalledTimes(1);
+			assertZWaveError(errorSpy.mock.calls[0][0] as unknown, {
+				errorCode: ZWaveErrorCodes.Controller_MessageDropped,
+			});
+		});
+
+		it("should resend the current transaction otherwise", async () => {
+			// swallow the error
+			driver.on("error", () => {});
+
+			// Don't expect an answer, ACK is enough
+			const req = new MockRequestMessageWithoutExpectation(driver);
+			req.maxSendAttempts = 2;
+
+			// send a message
+			const errorSpy = jest.fn();
+			// And catch the thrown error
+			const promise = driver.sendMessage(req).catch(errorSpy);
+			// trigger the send queue
+			jest.runAllTimers();
+
+			// Receive a CAN to trigger the resend check
+			serialport.receiveData(Buffer.from([MessageHeaders.CAN]));
+
+			// trigger the send queue again
+			jest.runAllTimers();
+
+			// Confirm the transmission with an ACK
+			serialport.receiveData(Buffer.from([MessageHeaders.ACK]));
+
+			await promise;
+			// Assert we had no error
+			expect(errorSpy).not.toBeCalled();
+			// And make sure the serialport wrote the same data twice
+			expect(serialport.writeStub).toBeCalledTimes(2);
+			expect(
+				(serialport.writeStub.mock.calls[0][0] as Buffer).equals(
+					serialport.writeStub.mock.calls[1][0],
+				),
+			).toBeTrue();
+		});
+	});
+
+	it("passes errors from the serialport through", async () => {
+		const { driver, serialport } = await createAndStartDriver();
+		const errorSpy = jest.fn();
+		driver.on("error", errorSpy);
+		serialport.emit("error", new Error("foo"));
+		expect(errorSpy).toBeCalledTimes(1);
+		expect(errorSpy.mock.calls[0][0].message).toMatch("foo");
 	});
 });

@@ -4,6 +4,7 @@ import {
 	CompareResult,
 } from "alcalzone-shared/comparable";
 import { DeferredPromise } from "alcalzone-shared/deferred-promise";
+import { clamp } from "alcalzone-shared/math";
 import { MessagePriority } from "../message/Constants";
 import { Message } from "../message/Message";
 import { Driver } from "./Driver";
@@ -47,8 +48,7 @@ export class Transaction implements Comparable<Transaction> {
 		return this._maxSendAttempts;
 	}
 	public set maxSendAttempts(value: number) {
-		if (value > MAX_SEND_ATTEMPTS) value = MAX_SEND_ATTEMPTS;
-		this._maxSendAttempts = value;
+		this._maxSendAttempts = clamp(value, 1, MAX_SEND_ATTEMPTS);
 	}
 
 	/** The number of times the driver has tried to send this message */

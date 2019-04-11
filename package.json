@@ -68,6 +68,7 @@
     "prebuild": "rimraf ./build || true",
     "prewatch": "rimraf ./build || true",
     "watch": "tsc -p src --watch",
+    "test:reset": "jest --clear-cache",
     "test:ts": "jest --maxWorkers=1",
     "test:watch": "npm run test:ts -- --watch",
     "test": "npm run test:watch",

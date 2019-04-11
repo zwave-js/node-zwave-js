@@ -1,38 +1,32 @@
 {
-    "compileOnSave": true,
-    "compilerOptions": {
-        "plugins": [
-            {
-                "name": "@fimbul/mithotyn"
-            }
-        ],
-        "noEmit": true,
-        "declaration": false,
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "noEmitOnError": true,
-        "noImplicitAny": false,
-        "outDir": "build/",
-        "removeComments": false,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        // "sourceMap": true,
-        "inlineSourceMap": false,
-        "stripInternal": true,
-        "target": "es2017",
-        "skipLibCheck": true,
-        // This is incompatible with serialize/deserialize
-        // "strictPropertyInitialization": true,
-        // "strictNullChecks": true,
-        "watch": false, // true breaks circleci
-        "pretty": true
-    },
-    "include": [
-        "src/**/*.ts",
-        "maintenance/**/*.ts"
-    ],
-    "exclude": [
-        "build/**",
-        "node_modules/**"
-    ]
+	"compileOnSave": true,
+	"compilerOptions": {
+		"plugins": [
+			{
+				"name": "@fimbul/mithotyn"
+			}
+		],
+		"noEmit": true,
+		"declaration": false,
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"noEmitOnError": true,
+		"noImplicitAny": false,
+		"outDir": "build/",
+		"removeComments": false,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"sourceMap": true,
+		"inlineSourceMap": false,
+		"stripInternal": true,
+		"target": "es2017",
+		"skipLibCheck": true,
+		// This is incompatible with serialize/deserialize
+		// "strictPropertyInitialization": true,
+		// "strictNullChecks": true,
+		"watch": false, // true breaks circleci
+		"pretty": true
+	},
+	"include": ["src/**/*.ts", "maintenance/**/*.ts"],
+	"exclude": ["build/**", "node_modules/**"]
 }

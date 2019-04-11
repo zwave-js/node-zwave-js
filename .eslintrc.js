@@ -20,6 +20,7 @@ module.exports = {
 			{
 				functions: false,
 				typedefs: false,
+				classes: false,
 			},
 		],
 		"@typescript-eslint/no-unused-vars": [
