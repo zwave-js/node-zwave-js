@@ -37,12 +37,9 @@ export enum StateKind {
 
 @implementedVersion(Number.POSITIVE_INFINITY) // per default don't impose any restrictions on the version
 export class CommandClass {
-
 	// tslint:disable:unified-signatures
 	// empty constructor to parse messages
-	protected constructor(
-		driver: IDriver,
-	);
+	protected constructor(driver: IDriver);
 	// default constructor to send messages
 	protected constructor(
 		driver: IDriver,
@@ -79,9 +76,11 @@ export class CommandClass {
 
 	private serializeWithoutHeader(): Buffer {
 		// NoOp CCs have no command and no payload
-		if (this.ccId === CommandClasses["No Operation"]) return Buffer.from([this.ccId]);
+		if (this.ccId === CommandClasses["No Operation"])
+			return Buffer.from([this.ccId]);
 
-		const payloadLength = this.payload != undefined ? this.payload.length : 0;
+		const payloadLength =
+			this.payload != undefined ? this.payload.length : 0;
 		const ccIdLength = this.isExtended() ? 2 : 1;
 		const ret = Buffer.allocUnsafe(ccIdLength + 1 + payloadLength);
 		ret.writeUIntBE(this.ccId, 0, ccIdLength);
@@ -113,13 +112,7 @@ export class CommandClass {
 
 	public serialize(): Buffer {
 		const data = this.serializeWithoutHeader();
-		return Buffer.concat([
-			Buffer.from([
-				this.nodeId,
-				data.length,
-			]),
-			data,
-		]);
+		return Buffer.concat([Buffer.from([this.nodeId, data.length]), data]);
 	}
 
 	public deserialize(data: Buffer): void {
@@ -129,7 +122,10 @@ export class CommandClass {
 		this.deserializeWithoutHeader(dataWithoutHeader);
 	}
 
-	public deserializeFromEncapsulation(encapCC: CommandClass, data: Buffer): void {
+	public deserializeFromEncapsulation(
+		encapCC: CommandClass,
+		data: Buffer,
+	): void {
 		this.nodeId = encapCC.nodeId; // TODO: is this neccessarily true?
 		this.deserializeWithoutHeader(data);
 	}
@@ -165,7 +161,11 @@ export class CommandClass {
 		return ret;
 	}
 
-	public static fromEncapsulated(driver: IDriver, encapCC: CommandClass, serializedCC: Buffer): CommandClass {
+	public static fromEncapsulated(
+		driver: IDriver,
+		encapCC: CommandClass,
+		serializedCC: Buffer,
+	): CommandClass {
 		// tslint:disable-next-line:variable-name
 		const Constructor = CommandClass.getConstructor(serializedCC);
 		const ret = new Constructor(driver);
@@ -182,7 +182,8 @@ export class CommandClass {
 			nodeId: this.nodeId,
 			ccId: CommandClasses[this.ccId] || num2hex(this.ccId),
 		};
-		if (this.payload != null && this.payload.length > 0) ret.payload = "0x" + this.payload.toString("hex");
+		if (this.payload != null && this.payload.length > 0)
+			ret.payload = "0x" + this.payload.toString("hex");
 		return ret;
 	}
 
@@ -196,10 +197,15 @@ export class CommandClass {
 	}
 
 	/** Requests static or dynamic state for a given from a node */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public static async requestState(driver: IDriver, node: ZWaveNode, kind: StateKind): Promise<void> {
+	/* eslint-disable @typescript-eslint/no-unused-vars */
+	public static async requestState(
+		driver: IDriver,
+		node: ZWaveNode,
+		kind: StateKind,
+	): Promise<void> {
 		// This needs to be overwritten per command class. In the default implementation, don't do anything
 	}
+	/* eslint-enable @typescript-eslint/no-unused-vars */
 
 	/**
 	 * Determine whether the linked node supports a specific command of this command class.
@@ -215,7 +221,11 @@ export class CommandClass {
 	 * Returns the node this CC is linked to. Throws if the node does not exist.
 	 */
 	public getNode(): ZWaveNode | undefined {
-		if (this.nodeId == undefined) throw new ZWaveError("Cannot retrieve the node without a Node ID", ZWaveErrorCodes.CC_NoNodeID);
+		if (this.nodeId == undefined)
+			throw new ZWaveError(
+				"Cannot retrieve the node without a Node ID",
+				ZWaveErrorCodes.CC_NoNodeID,
+			);
 		return this.driver.controller.nodes.get(this.nodeId);
 	}
 
@@ -242,14 +252,22 @@ export class CommandClass {
 	): void {
 		const db = this.getValueDB();
 		for (const variable of variables) {
-			db.setValue(getCommandClass(this), this.endpoint, variable as string, this[variable]);
+			db.setValue(
+				getCommandClass(this),
+				this.endpoint,
+				variable as string,
+				this[variable],
+			);
 		}
 	}
 
 	/** Serializes all values to be stored in the cache */
 	public serializeValuesForCache(): CacheValue[] {
 		const ccValues = this.getValueDB().getValues(getCommandClass(this));
-		return ccValues.map(({ value, ...props }) => ({ ...props, value: serializeCacheValue(value) }));
+		return ccValues.map(({ value, ...props }) => ({
+			...props,
+			value: serializeCacheValue(value),
+		}));
 	}
 
 	/** Deserializes values from the cache */
@@ -260,14 +278,21 @@ export class CommandClass {
 			if (!(val.propertyName in this)) continue;
 
 			let valueToSet = val.value;
-			if (this[val.propertyName as keyof this] instanceof Map && isObject(val.value)) {
+			if (
+				this[val.propertyName as keyof this] instanceof Map &&
+				isObject(val.value)
+			) {
 				// convert the object back to a Map
 				valueToSet = new Map(entries(val.value));
 			}
-			this.getValueDB().setValue(cc, val.endpoint, val.propertyName, valueToSet);
+			this.getValueDB().setValue(
+				cc,
+				val.endpoint,
+				val.propertyName,
+				valueToSet,
+			);
 		}
 	}
-
 }
 
 // =======================
@@ -284,20 +309,30 @@ type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
 /**
  * A predicate function to test if a received CC matches to the sent CC
  */
-export type DynamicCCResponse<T extends CommandClass> = (sentCC: T) => CommandClasses | undefined;
+export type DynamicCCResponse<T extends CommandClass> = (
+	sentCC: T,
+) => CommandClasses | undefined;
 
 /**
  * Defines the command class associated with a Z-Wave message
  */
 export function commandClass(cc: CommandClasses): ClassDecorator {
-	return (messageClass) => {
-		log("protocol", `${messageClass.name}: defining command class ${CommandClasses[cc]} (${cc})`, "silly");
+	return messageClass => {
+		log(
+			"protocol",
+			`${messageClass.name}: defining command class ${
+				CommandClasses[cc]
+			} (${cc})`,
+			"silly",
+		);
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_commandClass, cc, messageClass);
 
 		// also store a map in the Message metadata for lookup.
-		const map: CommandClassMap = Reflect.getMetadata(METADATA_commandClassMap, CommandClass) || new Map();
-		map.set(cc, messageClass as any as Constructable<CommandClass>);
+		const map: CommandClassMap =
+			Reflect.getMetadata(METADATA_commandClassMap, CommandClass) ||
+			new Map();
+		map.set(cc, (messageClass as any) as Constructable<CommandClass>);
 		Reflect.defineMetadata(METADATA_commandClassMap, map, CommandClass);
 	};
 }
@@ -310,26 +345,47 @@ export function getCommandClass<T extends CommandClass>(cc: T): CommandClasses {
 	const constr = cc.constructor;
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_commandClass, constr);
-	log("protocol", `${constr.name}: retrieving command class => ${CommandClasses[ret]} (${ret})`, "silly");
+
+	log(
+		"protocol",
+		`${constr.name}: retrieving command class => ${
+			CommandClasses[ret]
+		} (${ret})`,
+		"silly",
+	);
 	return ret;
 }
 
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export function getCommandClassStatic<T extends Constructable<CommandClass>>(classConstructor: T): CommandClasses {
+export function getCommandClassStatic<T extends Constructable<CommandClass>>(
+	classConstructor: T,
+): CommandClasses {
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_commandClass, classConstructor);
-	log("protocol", `${classConstructor.name}: retrieving command class => ${CommandClasses[ret]} (${ret})`, "silly");
+
+	log(
+		"protocol",
+		`${classConstructor.name}: retrieving command class => ${
+			CommandClasses[ret]
+		} (${ret})`,
+		"silly",
+	);
 	return ret;
 }
 
 /**
  * Looks up the command class constructor for a given command class type and function type
  */
-export function getCCConstructor(cc: CommandClasses): Constructable<CommandClass> {
+export function getCCConstructor(
+	cc: CommandClasses,
+): Constructable<CommandClass> {
 	// Retrieve the constructor map from the CommandClass class
-	const map = Reflect.getMetadata(METADATA_commandClassMap, CommandClass) as CommandClassMap;
+	const map = Reflect.getMetadata(
+		METADATA_commandClassMap,
+		CommandClass,
+	) as CommandClassMap;
 	if (map != null) return map.get(cc);
 }
 
@@ -337,8 +393,12 @@ export function getCCConstructor(cc: CommandClasses): Constructable<CommandClass
  * Defines the implemented version of a Z-Wave command class
  */
 export function implementedVersion(version: number): ClassDecorator {
-	return (ccClass) => {
-		log("protocol", `${ccClass.name}: defining implemented version ${version}`, "silly");
+	return ccClass => {
+		log(
+			"protocol",
+			`${ccClass.name}: defining implemented version ${version}`,
+			"silly",
+		);
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_version, version, ccClass);
 	};
@@ -347,7 +407,9 @@ export function implementedVersion(version: number): ClassDecorator {
 /**
  * Retrieves the implemented version defined for a Z-Wave command class
  */
-export function getImplementedVersion<T extends CommandClass>(cc: T | CommandClasses): number {
+export function getImplementedVersion<T extends CommandClass>(
+	cc: T | CommandClasses,
+): number {
 	// get the class constructor
 	let constr: Constructable<CommandClass>;
 	let constrName: string;
@@ -362,17 +424,29 @@ export function getImplementedVersion<T extends CommandClass>(cc: T | CommandCla
 	let ret: number;
 	if (constr != null) ret = Reflect.getMetadata(METADATA_version, constr);
 	if (ret == null) ret = 0;
-	log("protocol", `${constrName}: retrieving implemented version => ${ret}`, "silly");
+
+	log(
+		"protocol",
+		`${constrName}: retrieving implemented version => ${ret}`,
+		"silly",
+	);
 	return ret;
 }
 
 /**
  * Retrieves the implemented version defined for a Z-Wave command class
  */
-export function getImplementedVersionStatic<T extends Constructable<CommandClass>>(classConstructor: T): number {
+export function getImplementedVersionStatic<
+	T extends Constructable<CommandClass>
+>(classConstructor: T): number {
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_version, classConstructor) || 0;
-	log("protocol", `${classConstructor.name}: retrieving implemented version => ${ret}`, "silly");
+
+	log(
+		"protocol",
+		`${classConstructor.name}: retrieving implemented version => ${ret}`,
+		"silly",
+	);
 	return ret;
 }
 
@@ -381,14 +455,30 @@ export function getImplementedVersionStatic<T extends Constructable<CommandClass
  * Defines the expected response associated with a Z-Wave message
  */
 export function expectedCCResponse(cc: CommandClasses): ClassDecorator;
-export function expectedCCResponse(dynamic: DynamicCCResponse<CommandClass>): ClassDecorator;
-export function expectedCCResponse<T extends CommandClass>(ccOrDynamic: CommandClasses | DynamicCCResponse<T>): ClassDecorator {
-	return (ccClass) => {
+export function expectedCCResponse(
+	dynamic: DynamicCCResponse<CommandClass>,
+): ClassDecorator;
+export function expectedCCResponse<T extends CommandClass>(
+	ccOrDynamic: CommandClasses | DynamicCCResponse<T>,
+): ClassDecorator {
+	return ccClass => {
 		if (typeof ccOrDynamic === "number") {
-			log("protocol", `${ccClass.name}: defining expected CC response ${num2hex(ccOrDynamic)}`, "silly");
+			log(
+				"protocol",
+				`${ccClass.name}: defining expected CC response ${num2hex(
+					ccOrDynamic,
+				)}`,
+				"silly",
+			);
 		} else {
 			const dynamic = ccOrDynamic;
-			log("protocol", `${ccClass.name}: defining expected CC response [dynamic${dynamic.name.length > 0 ? " " + dynamic.name : ""}]`, "silly");
+			log(
+				"protocol",
+				`${ccClass.name}: defining expected CC response [dynamic${
+					dynamic.name.length > 0 ? " " + dynamic.name : ""
+				}]`,
+				"silly",
+			);
 		}
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_ccResponse, ccOrDynamic, ccClass);
@@ -399,15 +489,27 @@ export function expectedCCResponse<T extends CommandClass>(ccOrDynamic: CommandC
 /**
  * Retrieves the expected response defined for a Z-Wave message class
  */
-export function getExpectedCCResponse<T extends CommandClass>(ccClass: T): CommandClasses | DynamicCCResponse<T> {
+export function getExpectedCCResponse<T extends CommandClass>(
+	ccClass: T,
+): CommandClasses | DynamicCCResponse<T> {
 	// get the class constructor
 	const constr = ccClass.constructor;
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_ccResponse, constr);
 	if (typeof ret === "number") {
-		log("protocol", `${constr.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
+		log(
+			"protocol",
+			`${constr.name}: retrieving expected response => ${num2hex(ret)}`,
+			"silly",
+		);
 	} else if (typeof ret === "function") {
-		log("protocol", `${constr.name}: retrieving expected response => [dynamic${ret.name.length > 0 ? " " + ret.name : ""}]`, "silly");
+		log(
+			"protocol",
+			`${constr.name}: retrieving expected response => [dynamic${
+				ret.name.length > 0 ? " " + ret.name : ""
+			}]`,
+			"silly",
+		);
 	}
 	return ret;
 }
@@ -415,13 +517,29 @@ export function getExpectedCCResponse<T extends CommandClass>(ccClass: T): Comma
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export function getExpectedCCResponseStatic<T extends Constructable<CommandClass>>(classConstructor: T): CommandClasses | DynamicCCResponse<CommandClass> {
+export function getExpectedCCResponseStatic<
+	T extends Constructable<CommandClass>
+>(classConstructor: T): CommandClasses | DynamicCCResponse<CommandClass> {
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_ccResponse, classConstructor);
 	if (typeof ret === "number") {
-		log("protocol", `${classConstructor.name}: retrieving expected response => ${num2hex(ret)}`, "silly");
+		log(
+			"protocol",
+			`${
+				classConstructor.name
+			}: retrieving expected response => ${num2hex(ret)}`,
+			"silly",
+		);
 	} else if (typeof ret === "function") {
-		log("protocol", `${classConstructor.name}: retrieving expected response => [dynamic${ret.name.length > 0 ? " " + ret.name : ""}]`, "silly");
+		log(
+			"protocol",
+			`${
+				classConstructor.name
+			}: retrieving expected response => [dynamic${
+				ret.name.length > 0 ? " " + ret.name : ""
+			}]`,
+			"silly",
+		);
 	}
 	return ret;
 }
@@ -432,21 +550,24 @@ export function ccValue(): PropertyDecorator {
 	let value: any;
 	return (target: CommandClass, property: string | symbol) => {
 		// Overwrite the original property definition
-		const update = Reflect.defineProperty(
-			target, property,
-			{
-				configurable: true,
-				enumerable: true,
-				get() { return value; },
-				set(newValue: any) {
-					// All variables that are stored should be marked to be persisted
-					target.createVariable.bind(this)(property);
-					value = newValue;
-				},
+		const update = Reflect.defineProperty(target, property, {
+			configurable: true,
+			enumerable: true,
+			get() {
+				return value;
 			},
-		);
+			set(newValue: any) {
+				// All variables that are stored should be marked to be persisted
+				target.createVariable.bind(this)(property);
+				value = newValue;
+			},
+		});
 		if (!update) {
-			throw new Error(`Cannot define ${property as string} on ${target.constructor.name} as CC value`);
+			throw new Error(
+				`Cannot define ${property as string} on ${
+					target.constructor.name
+				} as CC value`,
+			);
 		}
 	};
 }
@@ -454,8 +575,7 @@ export function ccValue(): PropertyDecorator {
 // To be sure all metadata gets loaded, import all command classes
 const definedCCs = fs
 	.readdirSync(__dirname)
-	.filter(file => /CC\.js$/.test(file))
-	;
+	.filter(file => /CC\.js$/.test(file));
 log("protocol", `loading CCs: ${stringify(definedCCs)}`, "silly");
 for (const file of definedCCs) {
 	// tslint:disable-next-line:no-var-requires

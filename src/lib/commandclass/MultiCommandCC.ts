@@ -1,6 +1,11 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import {
+	CommandClass,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum MultiCommandCommand {
@@ -13,26 +18,21 @@ export enum MultiCommandCommand {
 @implementedVersion(1)
 @expectedCCResponse(CommandClasses["Multi Command"])
 export class MultiCommandCC extends CommandClass {
-
 	// tslint:disable:unified-signatures
-	public constructor(
-		driver: IDriver,
-		nodeId?: number,
-	);
+	public constructor(driver: IDriver, nodeId?: number);
 
 	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: MultiCommandCommand.CommandEncapsulation,
 		commands: CommandClass[],
-	)
+	);
 
 	public constructor(
 		driver: IDriver,
 		public nodeId: number,
 		public ccCommand?: MultiCommandCommand,
 		public commands?: CommandClass[],
-
 	) {
 		super(driver, nodeId, ccCommand);
 	}
@@ -72,10 +72,16 @@ export class MultiCommandCC extends CommandClass {
 				let offset = 0;
 				for (let i = 0; i < numCommands; i++) {
 					const cmdLength = this.payload[offset];
-					this.commands.push(CommandClass.fromEncapsulated(
-						this.driver, this,
-						this.payload.slice(offset + 1, offset + 1 + cmdLength),
-					));
+					this.commands.push(
+						CommandClass.fromEncapsulated(
+							this.driver,
+							this,
+							this.payload.slice(
+								offset + 1,
+								offset + 1 + cmdLength,
+							),
+						),
+					);
 					offset += 1 + cmdLength;
 				}
 				break;
@@ -88,5 +94,4 @@ export class MultiCommandCC extends CommandClass {
 				);
 		}
 	}
-
 }

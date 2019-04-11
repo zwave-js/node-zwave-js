@@ -15,9 +15,7 @@ export function parseMaybeBoolean(val: number): Maybe<boolean> | undefined {
 
 /** Parses a boolean that is encoded as a single byte */
 export function parseBoolean(val: number): boolean | undefined {
-	return val === 0 ? false :
-		val === 0xff ? true :
-			undefined;
+	return val === 0 ? false : val === 0xff ? true : undefined;
 }
 
 /** Parses a single-byte number from 0 to 100, which might also be "unknown" */
@@ -27,13 +25,13 @@ export function parseMaybeNumber(val: number): Maybe<number> | undefined {
 
 /** Parses a single-byte number from 0 to 100 */
 export function parseNumber(val: number): number | undefined {
-	return val <= 99 ? val :
-		val === 0xff ? 99 :
-			undefined;
+	return val <= 99 ? val : val === 0xff ? 99 : undefined;
 }
 
 /** Parses a floating point value with a scale from a buffer */
-export function parseFloatWithScale(payload: Buffer): { value: number; scale: number; bytesRead: number } {
+export function parseFloatWithScale(
+	payload: Buffer,
+): { value: number; scale: number; bytesRead: number } {
 	const precision = (payload[0] & 0b111_00_000) >>> 5;
 	const scale = (payload[0] & 0b000_11_000) >>> 3;
 	const size = payload[0] & 0b111;
@@ -45,7 +43,10 @@ function getPrecision(num: number): number {
 	if (!Number.isFinite(num)) return 0;
 	let e = 1;
 	let p = 0;
-	while (Math.round(num * e) / e !== num) { e *= 10; p++; }
+	while (Math.round(num * e) / e !== num) {
+		e *= 10;
+		p++;
+	}
 	return p;
 }
 
@@ -64,7 +65,8 @@ export function encodeFloatWithScale(value: number, scale: number): Buffer {
 		);
 	}
 	const ret = Buffer.allocUnsafe(1 + size);
-	ret[0] = ((precision & 0b111) << 5) | ((scale & 0b11) << 3) | (size & 0b111);
+	ret[0] =
+		((precision & 0b111) << 5) | ((scale & 0b11) << 3) | (size & 0b111);
 	ret.writeIntBE(value, 1, size);
 	return ret;
 }
@@ -90,7 +92,7 @@ export function encodeBitMask(values: number[], maxValue: number): Buffer {
 		if (values.indexOf(val) === -1) continue;
 		const byteNum = (val - 1) >>> 3; // id / 8
 		const bitNum = (val - 1) % 8;
-		ret[byteNum] |= (1 << bitNum);
+		ret[byteNum] |= 1 << bitNum;
 	}
 	return ret;
 }

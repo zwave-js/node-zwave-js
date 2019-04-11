@@ -63,7 +63,8 @@ let GetNodeProtocolInfoResponse = class GetNodeProtocolInfoResponse extends Mess
     deserialize(data) {
         const ret = super.deserialize(data);
         const capabilities = this.payload[0];
-        this._isListening = (capabilities & 128 /* Listening */) !== 0;
+        this._isListening =
+            (capabilities & 128 /* Listening */) !== 0;
         this._isRouting = (capabilities & 64 /* Routing */) !== 0;
         // This is an educated guess. OZW only checks for the 40k flag
         switch (capabilities & 56 /* BaudrateMask */) {
@@ -80,7 +81,10 @@ let GetNodeProtocolInfoResponse = class GetNodeProtocolInfoResponse extends Mess
         this._version = (capabilities & 7 /* VersionMask */) + 1;
         const security = this.payload[1];
         this._isSecure = (security & 1 /* Security */) !== 0;
-        this._isFrequentListening = (security & (64 /* Sensor1000ms */ | 32 /* Sensor250ms */)) !== 0;
+        this._isFrequentListening =
+            (security &
+                (64 /* Sensor1000ms */ | 32 /* Sensor250ms */)) !==
+                0;
         this._isBeaming = (security & 16 /* BeamCapability */) !== 0;
         // parse the device class
         const basic = this.payload[3];

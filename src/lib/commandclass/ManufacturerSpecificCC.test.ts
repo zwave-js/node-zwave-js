@@ -10,7 +10,9 @@ describe.skip("lib/commandclass/ManufacturerSpecificCC => ", () => {
 		expect(cc).toBeInstanceOf(CommandClass);
 	});
 	it(`with command class "Manufacturer Specific"`, () => {
-		expect(getCommandClass(cc)).toBe(CommandClasses["Manufacturer Specific"]);
+		expect(getCommandClass(cc)).toBe(
+			CommandClasses["Manufacturer Specific"],
+		);
 	});
 
 	it("should serialize correctly", () => {
@@ -24,5 +26,4 @@ describe.skip("lib/commandclass/ManufacturerSpecificCC => ", () => {
 		expect(deserialized).toBeInstanceOf(ManufacturerSpecificCC);
 		expect(deserialized.nodeId).toBe(cc.nodeId);
 	});
-
 });

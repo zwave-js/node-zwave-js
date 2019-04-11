@@ -48,10 +48,10 @@ let ConfigurationCC = class ConfigurationCC extends CommandClass_1.CommandClass 
         // TODO: Find a way to automatically update store those
         this.values = new Map();
         this.paramInformation = new Map();
-        if (this.ccCommand === ConfigurationCommand.Get
-            || this.ccCommand === ConfigurationCommand.NameGet
-            || this.ccCommand === ConfigurationCommand.InfoGet
-            || this.ccCommand === ConfigurationCommand.PropertiesGet) {
+        if (this.ccCommand === ConfigurationCommand.Get ||
+            this.ccCommand === ConfigurationCommand.NameGet ||
+            this.ccCommand === ConfigurationCommand.InfoGet ||
+            this.ccCommand === ConfigurationCommand.PropertiesGet) {
             this.parameter = args[0];
         }
         else if (this.ccCommand === ConfigurationCommand.Set) {
@@ -72,7 +72,10 @@ let ConfigurationCC = class ConfigurationCC extends CommandClass_1.CommandClass 
                 valuesToSet,
                 this.handshake,
             ] = args;
-            if (!parameters || !valuesToSet || parameters.length < 1 || valuesToSet.length < 1) {
+            if (!parameters ||
+                !valuesToSet ||
+                parameters.length < 1 ||
+                valuesToSet.length < 1) {
                 throw new ZWaveError_1.ZWaveError(`In a ConfigurationCC.BulkSet, parameters and valuesToSet must be non-empty arrays`, ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
             }
             if (parameters.length !== valuesToSet.length) {
@@ -135,9 +138,11 @@ let ConfigurationCC = class ConfigurationCC extends CommandClass_1.CommandClass 
                 const payloadLength = 2 + valueSize;
                 this.payload = Buffer.alloc(payloadLength, 0);
                 this.payload[0] = this.parameter;
-                this.payload[1] = (this.defaultFlag ? 128 : 0) | (valueSize & 0b111);
+                this.payload[1] =
+                    (this.defaultFlag ? 128 : 0) | (valueSize & 0b111);
                 if (!this.defaultFlag) {
-                    serializeValue(this.payload, 2, valueSize, this.getParamInformation(this.parameter).format || ValueFormat.SignedInteger, this.valueToSet);
+                    serializeValue(this.payload, 2, valueSize, this.getParamInformation(this.parameter).format ||
+                        ValueFormat.SignedInteger, this.valueToSet);
                 }
                 break;
             }
@@ -150,13 +155,15 @@ let ConfigurationCC = class ConfigurationCC extends CommandClass_1.CommandClass 
                 this.payload = Buffer.alloc(payloadLength, 0);
                 this.payload.writeUInt16BE(this.parameters[0], 0);
                 this.payload[2] = this.parameters.length;
-                this.payload[3] = (this.defaultFlag ? 128 : 0)
-                    | (this.handshake ? 64 : 0)
-                    | (valueSize & 0b111);
+                this.payload[3] =
+                    (this.defaultFlag ? 128 : 0) |
+                        (this.handshake ? 64 : 0) |
+                        (valueSize & 0b111);
                 if (!this.defaultFlag) {
                     for (let i = 0; i < this.parameters.length; i++) {
                         const param = this.parameters[i];
-                        serializeValue(this.payload, 4 + i * valueSize, valueSize, this.getParamInformation(param).format || ValueFormat.SignedInteger, this.valuesToSet[i]);
+                        serializeValue(this.payload, 4 + i * valueSize, valueSize, this.getParamInformation(param).format ||
+                            ValueFormat.SignedInteger, this.valuesToSet[i]);
                     }
                 }
                 break;
@@ -196,7 +203,8 @@ let ConfigurationCC = class ConfigurationCC extends CommandClass_1.CommandClass 
                 this.valueSize = this.payload[4] & 0b111;
                 for (let i = 0; i < numParams; i++) {
                     const param = firstParameter + i;
-                    this.values.set(param, parseValue(this.payload.slice(5 + i * this.valueSize), this.valueSize, this.getParamInformation(param).format || ValueFormat.SignedInteger));
+                    this.values.set(param, parseValue(this.payload.slice(5 + i * this.valueSize), this.valueSize, this.getParamInformation(param).format ||
+                        ValueFormat.SignedInteger));
                 }
                 break;
             }
@@ -204,7 +212,8 @@ let ConfigurationCC = class ConfigurationCC extends CommandClass_1.CommandClass 
                 this.parameter = this.payload.readUInt16BE(0);
                 this._reportsToFollow = this.payload[2];
                 this.extendParamInformation(this.parameter, {
-                    name: (this.getParamInformation(this.parameter).name || "") + this.payload.slice(3).toString("utf8"),
+                    name: (this.getParamInformation(this.parameter).name || "") +
+                        this.payload.slice(3).toString("utf8"),
                 });
                 break;
             }
@@ -212,7 +221,8 @@ let ConfigurationCC = class ConfigurationCC extends CommandClass_1.CommandClass 
                 this.parameter = this.payload.readUInt16BE(0);
                 this._reportsToFollow = this.payload[2];
                 this.extendParamInformation(this.parameter, {
-                    info: (this.getParamInformation(this.parameter).info || "") + this.payload.slice(3).toString("utf8"),
+                    info: (this.getParamInformation(this.parameter).info || "") +
+                        this.payload.slice(3).toString("utf8"),
                 });
                 break;
             }

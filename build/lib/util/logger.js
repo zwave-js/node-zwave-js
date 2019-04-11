@@ -24,10 +24,10 @@ function log(...args) {
     let message = "";
     let severity = "info";
     if (args.length === 2) {
-        ([message, severity] = args);
+        [message, severity] = args;
     }
     else if (args.length === 3) {
-        ([namespace, message, severity] = args);
+        [namespace, message, severity] = args;
         // add the namespace separator to append the namespace to the default one
         if (typeof namespace === "string" && namespace !== "")
             namespace = ":" + namespace;

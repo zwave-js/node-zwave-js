@@ -1,7 +1,17 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { decodeSetbackState, encodeSetbackState, SetbackState } from "../values/SetbackState";
-import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import {
+	decodeSetbackState,
+	encodeSetbackState,
+	SetbackState,
+} from "../values/SetbackState";
+import {
+	ccValue,
+	CommandClass,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum ThermostatSetbackCommand {
@@ -20,12 +30,8 @@ export enum SetbackType {
 @implementedVersion(1)
 @expectedCCResponse(CommandClasses["Thermostat Setback"])
 export class ThermostatSetbackCC extends CommandClass {
-
 	// tslint:disable:unified-signatures
-	public constructor(
-		driver: IDriver,
-		nodeId?: number,
-	);
+	public constructor(driver: IDriver, nodeId?: number);
 
 	public constructor(
 		driver: IDriver,
@@ -48,10 +54,7 @@ export class ThermostatSetbackCC extends CommandClass {
 	) {
 		super(driver, nodeId, ccCommand);
 		if (ccCommand === ThermostatSetbackCommand.Set) {
-			[
-				this.setbackType,
-				this.setbackState,
-			] = args;
+			[this.setbackType, this.setbackState] = args;
 		}
 	}
 	// tslint:enable:unified-signatures
@@ -97,5 +100,4 @@ export class ThermostatSetbackCC extends CommandClass {
 				);
 		}
 	}
-
 }

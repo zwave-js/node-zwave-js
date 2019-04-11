@@ -13,14 +13,14 @@ export interface CacheValue {
 export function serializeCacheValue(value: unknown): SerializedValue {
 	if (value instanceof Map) {
 		return composeObject(
-			[...value.entries()]
-				.map(([k, v]) => [k, serializeCacheValue(v)]),
+			[...value.entries()].map(([k, v]) => [k, serializeCacheValue(v)]),
 		);
 	} else if (
-		typeof value === "number"
-		|| typeof value === "string"
-		|| typeof value === "boolean"
-		|| isObject(value) || isArray(value)
+		typeof value === "number" ||
+		typeof value === "string" ||
+		typeof value === "boolean" ||
+		isObject(value) ||
+		isArray(value)
 	) {
 		return value;
 	}

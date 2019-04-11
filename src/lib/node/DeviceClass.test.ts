@@ -1,14 +1,22 @@
-import { GenericDeviceClass, GenericDeviceClasses, SpecificDeviceClass } from "./DeviceClass";
+import {
+	GenericDeviceClass,
+	GenericDeviceClasses,
+	SpecificDeviceClass,
+} from "./DeviceClass";
 
 describe("lib/node/DeviceClass", () => {
 	describe("GenericDeviceClass.get()", () => {
 		it("returns a GenericDeviceClass with the correct key", () => {
-			const gdc = GenericDeviceClass.get(GenericDeviceClasses["Alarm Sensor"]);
+			const gdc = GenericDeviceClass.get(
+				GenericDeviceClasses["Alarm Sensor"],
+			);
 			expect(gdc.key).toBe(GenericDeviceClasses["Alarm Sensor"]);
 		});
 
 		it("returns a predefined GenericDeviceClass if it exists", () => {
-			const gdc = GenericDeviceClass.get(GenericDeviceClasses["Alarm Sensor"]);
+			const gdc = GenericDeviceClass.get(
+				GenericDeviceClasses["Alarm Sensor"],
+			);
 			expect(gdc.name).toBe("Alarm Sensor");
 		});
 
@@ -21,12 +29,18 @@ describe("lib/node/DeviceClass", () => {
 
 	describe("SpecificDeviceClass.get()", () => {
 		it("returns a SpecificDeviceClass with the correct key", () => {
-			const sdc = SpecificDeviceClass.get(GenericDeviceClasses["Alarm Sensor"], 0x01);
+			const sdc = SpecificDeviceClass.get(
+				GenericDeviceClasses["Alarm Sensor"],
+				0x01,
+			);
 			expect(sdc.key).toBe(0x01);
 		});
 
 		it("returns a predefined SpecificDeviceClass if it exists", () => {
-			const sdc = SpecificDeviceClass.get(GenericDeviceClasses["Alarm Sensor"], 0x01);
+			const sdc = SpecificDeviceClass.get(
+				GenericDeviceClasses["Alarm Sensor"],
+				0x01,
+			);
 			expect(sdc.name).toBe("Basic Routing Alarm Sensor");
 		});
 
@@ -35,7 +49,10 @@ describe("lib/node/DeviceClass", () => {
 			expect(sdc.name).toMatch(/UNKNOWN/);
 			expect(sdc.name).toMatch(/0x01/);
 
-			sdc = SpecificDeviceClass.get(GenericDeviceClasses["Alarm Sensor"], 0xff);
+			sdc = SpecificDeviceClass.get(
+				GenericDeviceClasses["Alarm Sensor"],
+				0xff,
+			);
 			expect(sdc.name).toMatch(/UNKNOWN/);
 			expect(sdc.name).toMatch(/0xff/);
 		});

@@ -2,7 +2,6 @@
 import { decodeSwitchpoint, encodeSwitchpoint } from "./Switchpoint";
 
 describe("lib/values/Switchpoint", () => {
-
 	describe("encodeSwitchpoint()", () => {
 		it("should correctly encode the hour part", () => {
 			const base = {
@@ -27,11 +26,9 @@ describe("lib/values/Switchpoint", () => {
 
 	describe("decodeSwitchpoint()", () => {
 		it("should work correctly", () => {
-			expect(decodeSwitchpoint(Buffer.from([15, 37, 0]))).toContainEntries(
-				[["hour", 15], ["minute", 37], ["state", 0]],
-			);
+			expect(
+				decodeSwitchpoint(Buffer.from([15, 37, 0])),
+			).toContainEntries([["hour", 15], ["minute", 37], ["state", 0]]);
 		});
-
 	});
-
 });

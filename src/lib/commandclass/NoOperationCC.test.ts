@@ -24,5 +24,4 @@ describe("lib/commandclass/NoOperationCC => ", () => {
 		expect(deserialized).toBeInstanceOf(NoOperationCC);
 		expect(deserialized.nodeId).toBe(cc.nodeId);
 	});
-
 });

@@ -38,7 +38,7 @@ let BatteryCC = class BatteryCC extends CommandClass_1.CommandClass {
         switch (this.ccCommand) {
             case BatteryCommand.Report:
                 this.level = this.payload[0];
-                if (this.level === 0xFF) {
+                if (this.level === 0xff) {
                     this.level = 0;
                     this.isLow = true;
                 }

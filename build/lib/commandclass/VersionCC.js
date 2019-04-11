@@ -29,9 +29,7 @@ var VersionCommand;
     VersionCommand[VersionCommand["ZWaveSoftwareReport"] = 24] = "ZWaveSoftwareReport";
 })(VersionCommand = exports.VersionCommand || (exports.VersionCommand = {}));
 function parseVersion(buffer) {
-    if (buffer[0] === 0
-        && buffer[1] === 0
-        && buffer[2] === 0)
+    if (buffer[0] === 0 && buffer[1] === 0 && buffer[2] === 0)
         return "unused";
     return `${buffer[0]}.${buffer[1]}.${buffer[2]}`;
 }
@@ -45,10 +43,14 @@ let VersionCC = VersionCC_1 = class VersionCC extends CommandClass_1.CommandClas
     }
     supportsCommand(cmd) {
         switch (cmd) {
-            case VersionCommand.Get: return true; // This is mandatory
-            case VersionCommand.CommandClassGet: return true; // This is mandatory
-            case VersionCommand.CapabilitiesGet: return this.version >= 3;
-            case VersionCommand.ZWaveSoftwareGet: return this._supportsZWaveSoftwareGet;
+            case VersionCommand.Get:
+                return true; // This is mandatory
+            case VersionCommand.CommandClassGet:
+                return true; // This is mandatory
+            case VersionCommand.CapabilitiesGet:
+                return this.version >= 3;
+            case VersionCommand.ZWaveSoftwareGet:
+                return this._supportsZWaveSoftwareGet;
         }
         return super.supportsCommand(cmd);
     }
@@ -76,7 +78,9 @@ let VersionCC = VersionCC_1 = class VersionCC extends CommandClass_1.CommandClas
             case VersionCommand.Report:
                 this.libraryType = this.payload[0];
                 this.protocolVersion = `${this.payload[1]}.${this.payload[2]}`;
-                this.firmwareVersions = [`${this.payload[3]}.${this.payload[4]}`];
+                this.firmwareVersions = [
+                    `${this.payload[3]}.${this.payload[4]}`,
+                ];
                 if (this.version >= 2) {
                     this.hardwareVersion = this.payload[5];
                     const additionalFirmwares = this.payload[6];

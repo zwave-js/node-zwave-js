@@ -36,8 +36,10 @@ let ManufacturerSpecificCC = class ManufacturerSpecificCC extends CommandClass_1
     }
     supportsCommand(cmd) {
         switch (cmd) {
-            case ManufacturerSpecificCommand.Get: return true; // This is mandatory
-            case ManufacturerSpecificCommand.DeviceSpecificGet: return this.version >= 2;
+            case ManufacturerSpecificCommand.Get:
+                return true; // This is mandatory
+            case ManufacturerSpecificCommand.DeviceSpecificGet:
+                return this.version >= 2;
         }
         return super.supportsCommand(cmd);
     }
@@ -64,10 +66,11 @@ let ManufacturerSpecificCC = class ManufacturerSpecificCC extends CommandClass_1
                 break;
             case ManufacturerSpecificCommand.DeviceSpecificReport: {
                 this.deviceIdType = this.payload[0] & 0b111;
-                const dataFormat = (this.payload[1] >>> 5);
+                const dataFormat = this.payload[1] >>> 5;
                 const dataLength = this.payload[1] & 0b11111;
                 const deviceIdData = this.payload.slice(2, 2 + dataLength);
-                if (dataFormat === 0) { // utf8
+                if (dataFormat === 0) {
+                    // utf8
                     this.deviceId = deviceIdData.toString("utf8");
                 }
                 else {

@@ -5,6 +5,7 @@
 	"jest.pathToJest": "npm run test:ts --",
 	"eslint.enable": true,
 	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"[typescript]": {
 		"editor.codeActionsOnSave": {
 			"source.organizeImports": true

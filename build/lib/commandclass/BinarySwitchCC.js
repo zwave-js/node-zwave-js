@@ -36,9 +36,7 @@ let BinarySwitchCC = class BinarySwitchCC extends CommandClass_1.CommandClass {
                 // no real payload
                 break;
             case BinarySwitchCommand.Set: {
-                const payload = [
-                    this.targetValue ? 0xFF : 0x00,
-                ];
+                const payload = [this.targetValue ? 0xff : 0x00];
                 if (this.version >= 2) {
                     payload.push(this.duration.serializeSet());
                 }
@@ -55,7 +53,8 @@ let BinarySwitchCC = class BinarySwitchCC extends CommandClass_1.CommandClass {
         switch (this.ccCommand) {
             case BinarySwitchCommand.Report: {
                 this.currentValue = Primitive_1.parseMaybeBoolean(this.payload[0]);
-                if (this.payload.length >= 2) { // V2
+                if (this.payload.length >= 2) {
+                    // V2
                     this.targetValue = Primitive_1.parseBoolean(this.payload[1]);
                     this.duration = Duration_1.Duration.parseReport(this.payload[2]);
                 }

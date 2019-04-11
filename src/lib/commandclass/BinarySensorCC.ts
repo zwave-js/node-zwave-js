@@ -1,7 +1,13 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { parseBitMask } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import {
+	ccValue,
+	CommandClass,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum BinarySensorCommand {
@@ -15,7 +21,6 @@ export enum BinarySensorCommand {
 @implementedVersion(2)
 @expectedCCResponse(CommandClasses["Binary Sensor"])
 export class BinarySensorCC extends CommandClass {
-
 	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 	public constructor(
@@ -28,7 +33,7 @@ export class BinarySensorCC extends CommandClass {
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: BinarySensorCommand.SupportedGet,
-	)
+	);
 
 	public constructor(
 		driver: IDriver,
@@ -77,7 +82,7 @@ export class BinarySensorCC extends CommandClass {
 
 		switch (this.ccCommand) {
 			case BinarySensorCommand.Report:
-				this.value = this.payload[0] === 0xFF;
+				this.value = this.payload[0] === 0xff;
 				this.sensorType = this.payload[1];
 				break;
 
@@ -103,7 +108,6 @@ export class BinarySensorCC extends CommandClass {
 				);
 		}
 	}
-
 }
 
 export enum BinarySensorType {
@@ -116,9 +120,9 @@ export enum BinarySensorType {
 	Freeze = 0x07,
 	Tamper = 0x08,
 	Aux = 0x09,
-	"Door/Window" = 0x0A,
-	Tilt = 0x0B,
-	Motion = 0x0C,
-	"Glass Break" = 0x0D,
-	Any = 0xFF,
+	"Door/Window" = 0x0a,
+	Tilt = 0x0b,
+	Motion = 0x0c,
+	"Glass Break" = 0x0d,
+	Any = 0xff,
 }

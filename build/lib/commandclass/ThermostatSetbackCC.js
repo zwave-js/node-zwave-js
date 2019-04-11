@@ -31,10 +31,7 @@ let ThermostatSetbackCC = class ThermostatSetbackCC extends CommandClass_1.Comma
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
         if (ccCommand === ThermostatSetbackCommand.Set) {
-            [
-                this.setbackType,
-                this.setbackState,
-            ] = args;
+            [this.setbackType, this.setbackState] = args;
         }
     }
     serialize() {

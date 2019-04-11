@@ -1,8 +1,16 @@
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { Driver } from "../driver/Driver";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
 import { Message, messageTypes, priority } from "../message/Message";
-import { BasicDeviceClasses, GenericDeviceClass, SpecificDeviceClass } from "../node/DeviceClass";
+import {
+	BasicDeviceClasses,
+	GenericDeviceClass,
+	SpecificDeviceClass,
+} from "../node/DeviceClass";
 import { parseNodeUpdatePayload } from "../node/NodeInfo";
 import { JSONObject } from "../util/misc";
 
@@ -34,12 +42,9 @@ const enum AddNodeFlags {
 // no expected response, the controller will respond with another AddNodeToNetworkRequest
 @priority(MessagePriority.Controller)
 export class AddNodeToNetworkRequest extends Message {
-
 	// tslint:disable:unified-signatures
 	// empty constructor to parse messages
-	public constructor(
-		driver: Driver,
-	);
+	public constructor(driver: Driver);
 	// default constructor to send messages
 	public constructor(
 		driver: Driver,
@@ -103,7 +108,9 @@ export class AddNodeToNetworkRequest extends Message {
 
 			case AddNodeStatus.AddingSlave: {
 				// the payload contains a node information frame
-				this._statusContext = parseNodeUpdatePayload(this.payload.slice(2));
+				this._statusContext = parseNodeUpdatePayload(
+					this.payload.slice(2),
+				);
 				break;
 			}
 		}
@@ -118,7 +125,6 @@ export class AddNodeToNetworkRequest extends Message {
 			payload: this.statusContext != null ? undefined : this.payload,
 		});
 	}
-
 }
 
 export interface AddNodeStatusContext {

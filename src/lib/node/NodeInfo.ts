@@ -1,5 +1,9 @@
 import { CommandClasses } from "../commandclass/CommandClasses";
-import { BasicDeviceClasses, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
+import {
+	BasicDeviceClasses,
+	GenericDeviceClass,
+	SpecificDeviceClass,
+} from "./DeviceClass";
 
 export interface NodeInformationFrame {
 	generic: GenericDeviceClass;
@@ -27,7 +31,9 @@ export function parseNodeUpdatePayload(nif: Buffer): NodeUpdatePayload {
 	};
 }
 
-function internalParseNodeInformationFrame(nif: Buffer): ExtendedNodeInformationFrame {
+function internalParseNodeInformationFrame(
+	nif: Buffer,
+): ExtendedNodeInformationFrame {
 	const ret = {
 		generic: GenericDeviceClass.get(nif[0]),
 		specific: SpecificDeviceClass.get(nif[0], nif[1]),
@@ -46,10 +52,7 @@ function internalParseNodeInformationFrame(nif: Buffer): ExtendedNodeInformation
 			isAfterMark = true;
 			continue;
 		}
-		(isAfterMark
-			? ret.controlledCCs
-			: ret.supportedCCs
-		).push(cc);
+		(isAfterMark ? ret.controlledCCs : ret.supportedCCs).push(cc);
 	}
 	return ret;
 }

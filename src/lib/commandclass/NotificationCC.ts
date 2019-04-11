@@ -3,7 +3,12 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { JSONObject } from "../util/misc";
 import { parseBitMask } from "../values/Primitive";
-import { CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import {
+	CommandClass,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum NotificationCommand {
@@ -186,7 +191,9 @@ export class NotificationCC extends CommandClass {
 				const containsSeqNum = !!(this.payload[6] & 0b1000_0000);
 				const numEventParams = this.payload[6] & 0b11111;
 				if (numEventParams > 0) {
-					this._eventParameters = Buffer.from(this.payload.slice(7, 7 + numEventParams));
+					this._eventParameters = Buffer.from(
+						this.payload.slice(7, 7 + numEventParams),
+					);
 				}
 				if (containsSeqNum) {
 					this._sequenceNumber = this.payload[7 + numEventParams];
@@ -199,8 +206,13 @@ export class NotificationCC extends CommandClass {
 				const numBitMaskBytes = this.payload[0] & 0b0001_1111;
 				// parse the bitmask into a number array
 				// const numTypes = numBitMaskBytes * 8 - 1;
-				const notificationBitMask = this.payload.slice(1, 1 + numBitMaskBytes);
-				this._supportedNotificationTypes = parseBitMask(notificationBitMask);
+				const notificationBitMask = this.payload.slice(
+					1,
+					1 + numBitMaskBytes,
+				);
+				this._supportedNotificationTypes = parseBitMask(
+					notificationBitMask,
+				);
 				// this._supportedNotificationTypes = [];
 				// for (let type = 1; type <= numTypes; type++) {
 				// 	const byteNum = type >>> 3; // type / 8
@@ -216,16 +228,25 @@ export class NotificationCC extends CommandClass {
 				// parse the bitmask into a number array
 				// TODO: Can this be done with parseBitMask?
 				const numEvents = numBitMaskBytes * 8 - 1;
-				const eventsBitMask = this.payload.slice(2, 2 + numBitMaskBytes);
-				const supportedEvents = this._supportedEvents.has(this.notificationType)
+				const eventsBitMask = this.payload.slice(
+					2,
+					2 + numBitMaskBytes,
+				);
+				const supportedEvents = this._supportedEvents.has(
+					this.notificationType,
+				)
 					? this._supportedEvents.get(this.notificationType)
 					: [];
 				for (let event = 1; event <= numEvents; event++) {
 					const byteNum = event >>> 3; // type / 8
 					const bitNum = event % 8;
-					if ((eventsBitMask[byteNum] & (1 << bitNum)) !== 0) supportedEvents.push(event);
+					if ((eventsBitMask[byteNum] & (1 << bitNum)) !== 0)
+						supportedEvents.push(event);
 				}
-				this._supportedEvents.set(this.notificationType, supportedEvents);
+				this._supportedEvents.set(
+					this.notificationType,
+					supportedEvents,
+				);
 				break;
 			}
 
@@ -250,9 +271,16 @@ export class NotificationCC extends CommandClass {
 			supportsV1Alarm: this.supportsV1Alarm,
 			supportedNotificationTypes: this.supportedNotificationTypes,
 			supportedEvents: this.supportedEvents
-				? composeObject([...this.supportedEvents.entries()].map(([type, events]) => [NotificationType[type], events] as [string, number[]]))
+				? composeObject(
+						[...this.supportedEvents.entries()].map(
+							([type, events]) =>
+								[NotificationType[type], events] as [
+									string,
+									number[]
+								],
+						),
+				  )
 				: undefined,
 		});
 	}
-
 }

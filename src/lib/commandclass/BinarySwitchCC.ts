@@ -2,7 +2,13 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Duration } from "../values/Duration";
 import { Maybe, parseBoolean, parseMaybeBoolean } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import {
+	ccValue,
+	CommandClass,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum BinarySwitchCommand {
@@ -15,12 +21,8 @@ export enum BinarySwitchCommand {
 @implementedVersion(2)
 @expectedCCResponse(CommandClasses["Binary Switch"])
 export class BinarySwitchCC extends CommandClass {
-
 	// tslint:disable:unified-signatures
-	public constructor(
-		driver: IDriver,
-		nodeId?: number,
-	);
+	public constructor(driver: IDriver, nodeId?: number);
 	public constructor(
 		driver: IDriver,
 		nodeId: number,
@@ -58,9 +60,7 @@ export class BinarySwitchCC extends CommandClass {
 				break;
 
 			case BinarySwitchCommand.Set: {
-				const payload: number[] = [
-					this.targetValue ? 0xFF : 0x00,
-				];
+				const payload: number[] = [this.targetValue ? 0xff : 0x00];
 				if (this.version >= 2) {
 					payload.push(this.duration.serializeSet());
 				}
@@ -84,7 +84,8 @@ export class BinarySwitchCC extends CommandClass {
 		switch (this.ccCommand) {
 			case BinarySwitchCommand.Report: {
 				this.currentValue = parseMaybeBoolean(this.payload[0]);
-				if (this.payload.length >= 2) { // V2
+				if (this.payload.length >= 2) {
+					// V2
 					this.targetValue = parseBoolean(this.payload[1]);
 					this.duration = Duration.parseReport(this.payload[2]);
 				}
@@ -98,5 +99,4 @@ export class BinarySwitchCC extends CommandClass {
 				);
 		}
 	}
-
 }

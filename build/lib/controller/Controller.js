@@ -113,7 +113,8 @@ class ZWaveController extends events_1.EventEmitter {
         logger_1.log("controller", `querying controller capabilities...`, "debug");
         const ctrlCaps = await this.driver.sendMessage(new GetControllerCapabilitiesMessages_1.GetControllerCapabilitiesRequest(this.driver), "none");
         this._isSecondary = ctrlCaps.isSecondary;
-        this._isUsingHomeIdFromOtherNetwork = ctrlCaps.isUsingHomeIdFromOtherNetwork;
+        this._isUsingHomeIdFromOtherNetwork =
+            ctrlCaps.isUsingHomeIdFromOtherNetwork;
         this._isSISPresent = ctrlCaps.isSISPresent;
         this._wasRealPrimary = ctrlCaps.wasRealPrimary;
         this._isStaticUpdateController = ctrlCaps.isStaticUpdateController;
@@ -154,7 +155,8 @@ class ZWaveController extends events_1.EventEmitter {
         // TODO: if configured, enable this controller as SIS if there's no SUC
         // https://github.com/OpenZWave/open-zwave/blob/a46f3f36271f88eed5aea58899a6cb118ad312a2/cpp/src/Driver.cpp#L2586
         // if it's a bridge controller, request the virtual nodes
-        if (this.type === ZWaveLibraryTypes_1.ZWaveLibraryTypes["Bridge Controller"] && this.isFunctionSupported(Constants_1.FunctionType.FUNC_ID_ZW_GET_VIRTUAL_NODES)) {
+        if (this.type === ZWaveLibraryTypes_1.ZWaveLibraryTypes["Bridge Controller"] &&
+            this.isFunctionSupported(Constants_1.FunctionType.FUNC_ID_ZW_GET_VIRTUAL_NODES)) {
             // TODO: send FUNC_ID_ZW_GET_VIRTUAL_NODES message
         }
         // Request information about all nodes with the GetInitData message
@@ -177,7 +179,8 @@ class ZWaveController extends events_1.EventEmitter {
         for (const nodeId of initData.nodeIds) {
             this.nodes.set(nodeId, new Node_1.ZWaveNode(nodeId, this.driver));
         }
-        if (this.type !== ZWaveLibraryTypes_1.ZWaveLibraryTypes["Bridge Controller"] && this.isFunctionSupported(Constants_1.FunctionType.SetSerialApiTimeouts)) {
+        if (this.type !== ZWaveLibraryTypes_1.ZWaveLibraryTypes["Bridge Controller"] &&
+            this.isFunctionSupported(Constants_1.FunctionType.SetSerialApiTimeouts)) {
             const { ack, byte } = this.driver.options.timeouts;
             logger_1.log("controller", `setting serial API timeouts: ack = ${ack} ms, byte = ${byte} ms`, "debug");
             const resp = await this.driver.sendMessage(new SetSerialApiTimeoutsMessages_1.SetSerialApiTimeoutsRequest(this.driver, ack, byte));
@@ -207,7 +210,7 @@ class ZWaveController extends events_1.EventEmitter {
         // wotan-disable-next-line async-function-assignability
         return new Promise(async (resolve, reject) => {
             // handle the incoming message
-            const handler = (_msg) => {
+            const handler = _msg => {
                 logger_1.log("controller", `  hard reset succeeded`, "debug");
                 resolve();
                 return true;
@@ -278,7 +281,9 @@ class ZWaveController extends events_1.EventEmitter {
                 try {
                     await this.stopInclusion();
                 }
-                catch (e) { /* ok */ }
+                catch (e) {
+                    /* ok */
+                }
                 return;
             case AddNodeToNetworkRequest_1.AddNodeStatus.AddingSlave: {
                 // this is called when a new node is added
@@ -291,7 +296,9 @@ class ZWaveController extends events_1.EventEmitter {
                 try {
                     await this.stopInclusion();
                 }
-                catch (e) { /* ok */ }
+                catch (e) {
+                    /* ok */
+                }
                 return;
             }
             case AddNodeToNetworkRequest_1.AddNodeStatus.Done: {
@@ -307,12 +314,12 @@ class ZWaveController extends events_1.EventEmitter {
                     logger_1.log("controller", `  generic device class:  ${newNode.deviceClass.generic.name} (${strings_1.num2hex(newNode.deviceClass.generic.key)})`, "debug");
                     logger_1.log("controller", `  specific device class: ${newNode.deviceClass.specific.name} (${strings_1.num2hex(newNode.deviceClass.specific.key)})`, "debug");
                     logger_1.log("controller", `  supported CCs:`, "debug");
-                    for (const [cc, info] of newNode.implementedCommandClasses.entries()) {
+                    for (const [cc, info,] of newNode.implementedCommandClasses.entries()) {
                         if (info.isSupported)
                             logger_1.log("controller", `    ${CommandClasses_1.CommandClasses[cc]} (${strings_1.num2hex(cc)})`, "debug");
                     }
                     logger_1.log("controller", `  controlled CCs:`, "debug");
-                    for (const [cc, info] of newNode.implementedCommandClasses.entries()) {
+                    for (const [cc, info,] of newNode.implementedCommandClasses.entries()) {
                         if (info.isControlled)
                             logger_1.log("controller", `    ${CommandClasses_1.CommandClasses[cc]} (${strings_1.num2hex(cc)})`, "debug");
                     }
@@ -328,8 +335,7 @@ class ZWaveController extends events_1.EventEmitter {
     /** Serializes the controller information and all nodes to store them in a cache */
     serialize() {
         return {
-            nodes: objects_1.composeObject([...this.nodes.entries()]
-                .map(([id, node]) => [id.toString(), node.serialize()])),
+            nodes: objects_1.composeObject([...this.nodes.entries()].map(([id, node]) => [id.toString(), node.serialize()])),
         };
     }
     /** Deserializes the controller information and all nodes from the cache */
@@ -337,11 +343,15 @@ class ZWaveController extends events_1.EventEmitter {
         if (typeguards_1.isObject(serialized.nodes)) {
             for (const nodeId of Object.keys(serialized.nodes)) {
                 const serializedNode = serialized.nodes[nodeId];
-                if (!serializedNode || typeof serializedNode.id !== "number" || serializedNode.id.toString() !== nodeId) {
+                if (!serializedNode ||
+                    typeof serializedNode.id !== "number" ||
+                    serializedNode.id.toString() !== nodeId) {
                     throw new ZWaveError_1.ZWaveError("The cache file is invalid", ZWaveError_1.ZWaveErrorCodes.Driver_InvalidCache);
                 }
                 if (this.nodes.has(serializedNode.id)) {
-                    this.nodes.get(serializedNode.id).deserialize(serializedNode);
+                    this.nodes
+                        .get(serializedNode.id)
+                        .deserialize(serializedNode);
                 }
             }
         }

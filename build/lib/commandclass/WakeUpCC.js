@@ -30,7 +30,8 @@ function getExpectedResponseToWakeUp(sent) {
         case WakeUpCommand.NoMoreInformation:
             return undefined;
         // All other expect a WakeUp CC
-        default: return CommandClasses_1.CommandClasses["Wake Up"];
+        default:
+            return CommandClasses_1.CommandClasses["Wake Up"];
     }
 }
 let WakeUpCC = WakeUpCC_1 = class WakeUpCC extends CommandClass_1.CommandClass {
@@ -52,7 +53,9 @@ let WakeUpCC = WakeUpCC_1 = class WakeUpCC extends CommandClass_1.CommandClass {
                 break;
             case WakeUpCommand.IntervalSet:
                 this.payload = Buffer.from([
-                    0, 0, 0,
+                    0,
+                    0,
+                    0,
                     this.controllerNodeId,
                 ]);
                 this.payload.writeUIntBE(this.wakeupInterval, 0, 3);

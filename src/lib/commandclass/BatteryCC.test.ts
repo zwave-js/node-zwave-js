@@ -18,12 +18,10 @@ describe("lib/commandclass/BatteryCC => ", () => {
 	it("serialize() should throw for other commands", () => {
 		const batteryCC = new BatteryCC(undefined, 2, -1 /* not a command */);
 
-		assertZWaveError(
-			() => batteryCC.serialize(), {
-				messageMatches: "Cannot serialize",
-				errorCode: ZWaveErrorCodes.CC_Invalid,
-			},
-		);
+		assertZWaveError(() => batteryCC.serialize(), {
+			messageMatches: "Cannot serialize",
+			errorCode: ZWaveErrorCodes.CC_Invalid,
+		});
 	});
 
 	describe("the Report command (v1) should be deserialized correctly", () => {
@@ -48,7 +46,7 @@ describe("lib/commandclass/BatteryCC => ", () => {
 				3, // remaining length
 				CommandClasses.Battery, // CC
 				BatteryCommand.Report, // CC Command
-				0xFF, // current value
+				0xff, // current value
 			]);
 			const batteryCC = new BatteryCC(undefined);
 			batteryCC.deserialize(ccData);
@@ -67,12 +65,9 @@ describe("lib/commandclass/BatteryCC => ", () => {
 		]);
 		const batteryCC = new BatteryCC(undefined);
 
-		assertZWaveError(
-			() => batteryCC.deserialize(serializedCC), {
-				messageMatches: "Cannot deserialize",
-				errorCode: ZWaveErrorCodes.CC_Invalid,
-			},
-		);
+		assertZWaveError(() => batteryCC.deserialize(serializedCC), {
+			messageMatches: "Cannot deserialize",
+			errorCode: ZWaveErrorCodes.CC_Invalid,
+		});
 	});
-
 });

@@ -1,21 +1,23 @@
 import { Driver } from "../driver/Driver";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, messageTypes, priority } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	Message,
+	messageTypes,
+	priority,
+} from "../message/Message";
 import { JSONObject } from "../util/misc";
 
 @messageTypes(MessageType.Request, FunctionType.SetSerialApiTimeouts)
 @expectedResponse(FunctionType.SetSerialApiTimeouts)
 @priority(MessagePriority.Controller)
 export class SetSerialApiTimeoutsRequest extends Message {
-
-	public constructor(
-		driver: Driver,
-	)
-	public constructor(
-		driver: Driver,
-		ackTimeout: number,
-		byteTimeout: number,
-	)
+	public constructor(driver: Driver);
+	public constructor(driver: Driver, ackTimeout: number, byteTimeout: number);
 	public constructor(
 		driver: Driver,
 		public ackTimeout?: number,
@@ -38,12 +40,10 @@ export class SetSerialApiTimeoutsRequest extends Message {
 			byteTimeout: this.byteTimeout,
 		});
 	}
-
 }
 
 @messageTypes(MessageType.Response, FunctionType.SetSerialApiTimeouts)
 export class SetSerialApiTimeoutsResponse extends Message {
-
 	private _oldAckTimeout: number;
 	public get oldAckTimeout(): number {
 		return this._oldAckTimeout;
@@ -69,5 +69,4 @@ export class SetSerialApiTimeoutsResponse extends Message {
 			oldByteTimeout: this.oldByteTimeout,
 		});
 	}
-
 }

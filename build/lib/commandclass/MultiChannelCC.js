@@ -32,15 +32,12 @@ let MultiChannelCC = class MultiChannelCC extends CommandClass_1.CommandClass {
         this.nodeId = nodeId;
         this.ccCommand = ccCommand;
         this._endpointCapabilities = new Map();
-        if (ccCommand === MultiChannelCommand.CapabilityGet
-            || ccCommand === MultiChannelCommand.AggregatedMembersGet) {
+        if (ccCommand === MultiChannelCommand.CapabilityGet ||
+            ccCommand === MultiChannelCommand.AggregatedMembersGet) {
             this.endpoint = args[0];
         }
         else if (ccCommand === MultiChannelCommand.EndPointFind) {
-            [
-                this.genericClass,
-                this.specificClass,
-            ] = args;
+            [this.genericClass, this.specificClass] = args;
         }
         else if (ccCommand === MultiChannelCommand.CommandEncapsulation) {
             this.encapsulatedCC = args[0];
@@ -71,10 +68,10 @@ let MultiChannelCC = class MultiChannelCC extends CommandClass_1.CommandClass {
                 break;
             case MultiChannelCommand.CommandEncapsulation: {
                 const destination = typeof this.destination === "number"
-                    // The destination is a single number
-                    ? this.destination & 127
-                    // The destination is a bit mask
-                    : Primitive_1.encodeBitMask(this.destination, 7)[0] | 128;
+                    ? // The destination is a single number
+                        this.destination & 127
+                    : // The destination is a bit mask
+                        Primitive_1.encodeBitMask(this.destination, 7)[0] | 128;
                 this.payload = Buffer.concat([
                     Buffer.from([
                         this.sourceEndPoint & 127,
@@ -113,7 +110,9 @@ let MultiChannelCC = class MultiChannelCC extends CommandClass_1.CommandClass {
                 const numReports = this.payload[0];
                 this.genericClass = this.payload[1];
                 this.specificClass = this.payload[2];
-                this._foundEndpoints = [...this.payload.slice(3, 3 + numReports)].map(e => e & 0b01111111);
+                this._foundEndpoints = [
+                    ...this.payload.slice(3, 3 + numReports),
+                ].map(e => e & 0b01111111);
                 break;
             }
             case MultiChannelCommand.CommandEncapsulation: {

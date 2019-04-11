@@ -18,7 +18,6 @@ export enum ApplicationUpdateTypes {
 @messageTypes(MessageType.Request, FunctionType.ApplicationUpdateRequest)
 // this is only received, not sent!
 export class ApplicationUpdateRequest extends Message {
-
 	private _updateType: ApplicationUpdateTypes;
 	public get updateType(): ApplicationUpdateTypes {
 		return this._updateType;
@@ -45,11 +44,12 @@ export class ApplicationUpdateRequest extends Message {
 		this._updateType = this.payload[0];
 		switch (this._updateType) {
 			case ApplicationUpdateTypes.NodeInfo_Received: {
-				this._nodeInformation = parseNodeUpdatePayload(this.payload.slice(1));
+				this._nodeInformation = parseNodeUpdatePayload(
+					this.payload.slice(1),
+				);
 				this._nodeId = this._nodeInformation.nodeId;
 				break;
 			}
-
 		}
 
 		return ret;
@@ -62,5 +62,4 @@ export class ApplicationUpdateRequest extends Message {
 			nodeInformation: this.nodeInformation,
 		});
 	}
-
 }

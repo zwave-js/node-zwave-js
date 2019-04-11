@@ -5,7 +5,14 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { MessagePriority } from "../message/Constants";
 import { ZWaveNode } from "../node/Node";
 import { Maybe, unknownBoolean } from "../values/Primitive";
-import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion, StateKind } from "./CommandClass";
+import {
+	ccValue,
+	CommandClass,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+	StateKind,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum VersionCommand {
@@ -20,11 +27,7 @@ export enum VersionCommand {
 }
 
 function parseVersion(buffer: Buffer): string {
-	if (
-		buffer[0] ===  0
-		&& buffer[1] === 0
-		&& buffer[2] === 0
-	) return "unused";
+	if (buffer[0] === 0 && buffer[1] === 0 && buffer[2] === 0) return "unused";
 	return `${buffer[0]}.${buffer[1]}.${buffer[2]}`;
 }
 
@@ -32,17 +35,19 @@ function parseVersion(buffer: Buffer): string {
 @implementedVersion(3)
 @expectedCCResponse(CommandClasses.Version)
 export class VersionCC extends CommandClass {
-
 	// tslint:disable:unified-signatures
 	public constructor(driver: IDriver, nodeId?: number);
 	public constructor(
-		driver: IDriver, nodeId: number,
-		ccCommand: VersionCommand.Get
+		driver: IDriver,
+		nodeId: number,
+		ccCommand:
+			| VersionCommand.Get
 			| VersionCommand.CapabilitiesGet
 			| VersionCommand.ZWaveSoftwareGet,
-		);
+	);
 	public constructor(
-		driver: IDriver, nodeId: number,
+		driver: IDriver,
+		nodeId: number,
 		ccCommand: VersionCommand.CommandClassGet,
 		requestedCC: CommandClasses,
 	);
@@ -73,10 +78,14 @@ export class VersionCC extends CommandClass {
 
 	public supportsCommand(cmd: VersionCommand): Maybe<boolean> {
 		switch (cmd) {
-			case VersionCommand.Get: return true; // This is mandatory
-			case VersionCommand.CommandClassGet: return true; // This is mandatory
-			case VersionCommand.CapabilitiesGet: return this.version >= 3;
-			case VersionCommand.ZWaveSoftwareGet: return this._supportsZWaveSoftwareGet;
+			case VersionCommand.Get:
+				return true; // This is mandatory
+			case VersionCommand.CommandClassGet:
+				return true; // This is mandatory
+			case VersionCommand.CapabilitiesGet:
+				return this.version >= 3;
+			case VersionCommand.ZWaveSoftwareGet:
+				return this._supportsZWaveSoftwareGet;
 		}
 		return super.supportsCommand(cmd);
 	}
@@ -95,7 +104,7 @@ export class VersionCC extends CommandClass {
 				// no real payload
 				break;
 			case VersionCommand.CommandClassGet:
-				this.payload = Buffer.from([ this.requestedCC ]);
+				this.payload = Buffer.from([this.requestedCC]);
 				break;
 			default:
 				throw new ZWaveError(
@@ -114,12 +123,18 @@ export class VersionCC extends CommandClass {
 			case VersionCommand.Report:
 				this.libraryType = this.payload[0];
 				this.protocolVersion = `${this.payload[1]}.${this.payload[2]}`;
-				this.firmwareVersions = [`${this.payload[3]}.${this.payload[4]}`];
+				this.firmwareVersions = [
+					`${this.payload[3]}.${this.payload[4]}`,
+				];
 				if (this.version >= 2) {
 					this.hardwareVersion = this.payload[5];
 					const additionalFirmwares = this.payload[6];
 					for (let i = 0; i < additionalFirmwares; i++) {
-						this.firmwareVersions.push(`${this.payload[7 + 2 * i]}.${this.payload[7 + 2 * i + 1]}`);
+						this.firmwareVersions.push(
+							`${this.payload[7 + 2 * i]}.${
+								this.payload[7 + 2 * i + 1]
+							}`,
+						);
 					}
 				}
 				break;
@@ -137,21 +152,31 @@ export class VersionCC extends CommandClass {
 
 			case VersionCommand.ZWaveSoftwareReport:
 				this.sdkVersion = parseVersion(this.payload);
-				this.applicationFrameworkAPIVersion = parseVersion(this.payload.slice(3));
+				this.applicationFrameworkAPIVersion = parseVersion(
+					this.payload.slice(3),
+				);
 				if (this.applicationFrameworkAPIVersion !== "unused") {
-					this.applicationFrameworkBuildNumber = this.payload.readUInt16BE(6);
+					this.applicationFrameworkBuildNumber = this.payload.readUInt16BE(
+						6,
+					);
 				} else {
 					this.applicationFrameworkBuildNumber = 0;
 				}
 				this.hostInterfaceVersion = parseVersion(this.payload.slice(8));
 				if (this.hostInterfaceVersion !== "unused") {
-					this.hostInterfaceBuildNumber = this.payload.readUInt16BE(11);
+					this.hostInterfaceBuildNumber = this.payload.readUInt16BE(
+						11,
+					);
 				} else {
 					this.hostInterfaceBuildNumber = 0;
 				}
-				this.zWaveProtocolVersion = parseVersion(this.payload.slice(13));
+				this.zWaveProtocolVersion = parseVersion(
+					this.payload.slice(13),
+				);
 				if (this.zWaveProtocolVersion !== "unused") {
-					this.zWaveProtocolBuildNumber = this.payload.readUInt16BE(16);
+					this.zWaveProtocolBuildNumber = this.payload.readUInt16BE(
+						16,
+					);
 				} else {
 					this.zWaveProtocolBuildNumber = 0;
 				}
@@ -172,7 +197,11 @@ export class VersionCC extends CommandClass {
 	}
 
 	/** Requests static or dynamic state for a given from a node */
-	public static async requestState(driver: IDriver, node: ZWaveNode, kind: StateKind): Promise<void> {
+	public static async requestState(
+		driver: IDriver,
+		node: ZWaveNode,
+		kind: StateKind,
+	): Promise<void> {
 		// TODO: Check if we have requested that information before and store it
 		if (kind & StateKind.Static) {
 			const cc = new VersionCC(driver, node.id, VersionCommand.Get);
@@ -180,5 +209,4 @@ export class VersionCC extends CommandClass {
 			await driver.sendMessage(request, MessagePriority.NodeQuery);
 		}
 	}
-
 }

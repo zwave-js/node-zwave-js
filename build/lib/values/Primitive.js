@@ -10,9 +10,7 @@ function parseMaybeBoolean(val) {
 exports.parseMaybeBoolean = parseMaybeBoolean;
 /** Parses a boolean that is encoded as a single byte */
 function parseBoolean(val) {
-    return val === 0 ? false :
-        val === 0xff ? true :
-            undefined;
+    return val === 0 ? false : val === 0xff ? true : undefined;
 }
 exports.parseBoolean = parseBoolean;
 /** Parses a single-byte number from 0 to 100, which might also be "unknown" */
@@ -22,9 +20,7 @@ function parseMaybeNumber(val) {
 exports.parseMaybeNumber = parseMaybeNumber;
 /** Parses a single-byte number from 0 to 100 */
 function parseNumber(val) {
-    return val <= 99 ? val :
-        val === 0xff ? 99 :
-            undefined;
+    return val <= 99 ? val : val === 0xff ? 99 : undefined;
 }
 exports.parseNumber = parseNumber;
 /** Parses a floating point value with a scale from a buffer */
@@ -62,7 +58,8 @@ function encodeFloatWithScale(value, scale) {
         throw new ZWaveError_1.ZWaveError(`Cannot encode the value ${value} because its too large or too small to fit into 4 bytes`, ZWaveError_1.ZWaveErrorCodes.Arithmetic);
     }
     const ret = Buffer.allocUnsafe(1 + size);
-    ret[0] = ((precision & 0b111) << 5) | ((scale & 0b11) << 3) | (size & 0b111);
+    ret[0] =
+        ((precision & 0b111) << 5) | ((scale & 0b11) << 3) | (size & 0b111);
     ret.writeIntBE(value, 1, size);
     return ret;
 }
@@ -89,7 +86,7 @@ function encodeBitMask(values, maxValue) {
             continue;
         const byteNum = (val - 1) >>> 3; // id / 8
         const bitNum = (val - 1) % 8;
-        ret[byteNum] |= (1 << bitNum);
+        ret[byteNum] |= 1 << bitNum;
     }
     return ret;
 }

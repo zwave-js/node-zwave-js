@@ -69,10 +69,7 @@ let SendDataRequest = class SendDataRequest extends Message_1.Message {
         const serializedCC = this.command.serialize();
         this.payload = Buffer.concat([
             serializedCC,
-            Buffer.from([
-                this.transmitOptions,
-                this.callbackId,
-            ]),
+            Buffer.from([this.transmitOptions, this.callbackId]),
         ]);
         return super.serialize();
     }
@@ -108,7 +105,9 @@ let SendDataRequest = class SendDataRequest extends Message_1.Message {
         // If the contained CC expects a certain response (which will come in an "unexpected" ApplicationCommandRequest)
         // we declare that as final and the original "final" response, i.e. the SendDataRequest becomes intermediate
         const expectedCCOrDynamic = CommandClass_1.getExpectedCCResponse(this.command);
-        const expected = typeof expectedCCOrDynamic === "function" ? expectedCCOrDynamic(this.command) : expectedCCOrDynamic;
+        const expected = typeof expectedCCOrDynamic === "function"
+            ? expectedCCOrDynamic(this.command)
+            : expectedCCOrDynamic;
         if (expected == null)
             return ret; // "final" | "unexpected"
         if (ICommandClassContainer_1.isCommandClassContainer(msg)) {
@@ -151,15 +150,10 @@ exports.SendDataResponse = SendDataResponse;
 // Generic handler for all potential responses to SendDataRequests
 function testResponseForSendDataRequest(sent, received) {
     if (received instanceof SendDataResponse) {
-        return received.wasSent
-            ? "intermediate"
-            : "fatal_controller";
+        return received.wasSent ? "intermediate" : "fatal_controller";
     }
     else if (received instanceof SendDataRequest) {
-        return received.isFailed()
-            ? "fatal_node"
-            : "final" // send data requests are final unless stated otherwise by a CommandClass
-        ;
+        return received.isFailed() ? "fatal_node" : "final"; // send data requests are final unless stated otherwise by a CommandClass
     }
     return "unexpected";
 }

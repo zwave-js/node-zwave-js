@@ -49,9 +49,7 @@ function applyDefaultOptions(target, source) {
     return target;
 }
 function isMessageSupportCheck(val) {
-    return val === "loud"
-        || val === "silent"
-        || val === "none";
+    return val === "loud" || val === "silent" || val === "none";
 }
 // TODO: Interface the emitted events
 class Driver extends events_1.EventEmitter {
@@ -164,8 +162,7 @@ class Driver extends events_1.EventEmitter {
         }
     }
     addNodeEventHandlers(node) {
-        node
-            .on("wake up", this.onNodeWakeUp.bind(this))
+        node.on("wake up", this.onNodeWakeUp.bind(this))
             .on("sleep", this.onNodeSleep.bind(this))
             .on("interview completed", this.onNodeInterviewCompleted.bind(this));
     }
@@ -180,7 +177,8 @@ class Driver extends events_1.EventEmitter {
         // TODO: Do we need this
     }
     onNodeInterviewCompleted(node) {
-        if (!this.hasPendingMessages(node) && node.supportsCC(CommandClasses_1.CommandClasses["Wake Up"])) {
+        if (!this.hasPendingMessages(node) &&
+            node.supportsCC(CommandClasses_1.CommandClasses["Wake Up"])) {
             node.sendNoMoreInformation();
         }
     }
@@ -205,7 +203,8 @@ class Driver extends events_1.EventEmitter {
             // For supported versions find the maximum version supported by both the
             // node and this library
             const implementedVersion = CommandClass_1.getImplementedVersion(cc);
-            if (implementedVersion !== 0 && implementedVersion !== Number.POSITIVE_INFINITY) {
+            if (implementedVersion !== 0 &&
+                implementedVersion !== Number.POSITIVE_INFINITY) {
                 return Math.min(supportedVersion, implementedVersion);
             }
         }
@@ -229,15 +228,14 @@ class Driver extends events_1.EventEmitter {
         this.receiveBuffer = Buffer.from([]);
         this.sendQueue.clear();
         // clear the currently pending request
-        if (this.currentTransaction != null && this.currentTransaction.promise != null) {
+        if (this.currentTransaction != null &&
+            this.currentTransaction.promise != null) {
             this.currentTransaction.promise.reject(new ZWaveError_1.ZWaveError("The driver was reset", ZWaveError_1.ZWaveErrorCodes.Driver_Reset));
         }
         this.currentTransaction = null;
     }
     ensureReady(includingController = false) {
-        if (!this._wasStarted
-            || !this._isOpen
-            || this._wasDestroyed) {
+        if (!this._wasStarted || !this._isOpen || this._wasDestroyed) {
             throw new ZWaveError_1.ZWaveError("The driver is not ready or has been destroyed", ZWaveError_1.ZWaveErrorCodes.Driver_NotReady);
         }
         if (includingController && !this._controllerInterviewed) {
@@ -274,7 +272,8 @@ class Driver extends events_1.EventEmitter {
         // append the new data to our receive buffer
         this.receiveBuffer = Buffer.concat([this.receiveBuffer, data]);
         logger_1.log("io", `receiveBuffer: 0x${this.receiveBuffer.toString("hex")}`, "debug");
-        while (this.receiveBuffer.length > 0) { // TODO: add a way to interrupt
+        while (this.receiveBuffer.length > 0) {
+            // TODO: add a way to interrupt
             if (this.receiveBuffer[0] !== Constants_1.MessageHeaders.SOF) {
                 switch (this.receiveBuffer[0]) {
                     // single-byte messages - we have a handler for each one
@@ -314,8 +313,8 @@ class Driver extends events_1.EventEmitter {
             }
             catch (e) {
                 if (e instanceof ZWaveError_1.ZWaveError) {
-                    if (e.code === ZWaveError_1.ZWaveErrorCodes.PacketFormat_Invalid
-                        || e.code === ZWaveError_1.ZWaveErrorCodes.PacketFormat_Checksum) {
+                    if (e.code === ZWaveError_1.ZWaveErrorCodes.PacketFormat_Invalid ||
+                        e.code === ZWaveError_1.ZWaveErrorCodes.PacketFormat_Checksum) {
                         this.onInvalidData(this.receiveBuffer, e.toString());
                         return;
                     }
@@ -408,7 +407,8 @@ class Driver extends events_1.EventEmitter {
                     }
                     // if the response was expected, don't check any more handlers
                     return;
-                default: // unexpected, nothing to do here => check registered handlers
+                default:
+                    // unexpected, nothing to do here => check registered handlers
                     break;
             }
         }
@@ -431,7 +431,9 @@ class Driver extends events_1.EventEmitter {
             throw new Error("Cannot register a generic request handler for SendData requests. " +
                 "Use `registerSendDataRequestHandler()` instead!");
         }
-        const handlers = this.requestHandlers.has(fnType) ? this.requestHandlers.get(fnType) : [];
+        const handlers = this.requestHandlers.has(fnType)
+            ? this.requestHandlers.get(fnType)
+            : [];
         const entry = { invoke: handler, oneTime };
         handlers.push(entry);
         logger_1.log("driver", `added${oneTime ? " one-time" : ""} request handler for ${Constants_1.FunctionType[fnType]} (${fnType})... ${handlers.length} registered`, "debug");
@@ -447,7 +449,9 @@ class Driver extends events_1.EventEmitter {
             throw new Error("Cannot unregister a generic request handler for SendData requests. " +
                 "Use `unregisterSendDataRequestHandler()` instead!");
         }
-        const handlers = this.requestHandlers.has(fnType) ? this.requestHandlers.get(fnType) : [];
+        const handlers = this.requestHandlers.has(fnType)
+            ? this.requestHandlers.get(fnType)
+            : [];
         for (let i = 0, entry = handlers[i]; i < handlers.length; i++) {
             // remove the handler if it was found
             if (entry.invoke === handler) {
@@ -464,7 +468,9 @@ class Driver extends events_1.EventEmitter {
      * @param handler The request handler callback
      */
     registerSendDataRequestHandler(cc, handler, oneTime = false) {
-        const handlers = this.sendDataRequestHandlers.has(cc) ? this.sendDataRequestHandlers.get(cc) : [];
+        const handlers = this.sendDataRequestHandlers.has(cc)
+            ? this.sendDataRequestHandlers.get(cc)
+            : [];
         const entry = { invoke: handler, oneTime };
         handlers.push(entry);
         logger_1.log("driver", `added${oneTime ? " one-time" : ""} send data request handler for ${CommandClasses_1.CommandClasses[cc]} (${cc})... ${handlers.length} registered`, "debug");
@@ -476,7 +482,9 @@ class Driver extends events_1.EventEmitter {
      * @param handler The previously registered request handler callback
      */
     unregisterSendDataRequestHandler(cc, handler) {
-        const handlers = this.sendDataRequestHandlers.has(cc) ? this.sendDataRequestHandlers.get(cc) : [];
+        const handlers = this.sendDataRequestHandlers.has(cc)
+            ? this.sendDataRequestHandlers.get(cc)
+            : [];
         for (let i = 0, entry = handlers[i]; i < handlers.length; i++) {
             // remove the handler if it was found
             if (entry.invoke === handler) {
@@ -559,12 +567,11 @@ class Driver extends events_1.EventEmitter {
     handleACK() {
         // if we have a pending request waiting for the ACK, ACK it
         const trnsact = this.currentTransaction;
-        if (trnsact != null &&
-            trnsact.ackPending) {
+        if (trnsact != null && trnsact.ackPending) {
             logger_1.log("io", "ACK received for current transaction", "debug");
             trnsact.ackPending = false;
-            if (trnsact.message.expectedResponse == null
-                || trnsact.response != null) {
+            if (trnsact.message.expectedResponse == null ||
+                trnsact.response != null) {
                 logger_1.log("io", "transaction finished, resolving...", "debug");
                 logger_1.log("driver", `transaction complete`, "debug");
                 // if the response has been received prior to this, resolve the request
@@ -594,7 +601,8 @@ class Driver extends events_1.EventEmitter {
         // else: TODO: what to do with this CAN?
     }
     mayRetryCurrentTransaction() {
-        return this.currentTransaction.sendAttempts < this.currentTransaction.maxSendAttempts;
+        return (this.currentTransaction.sendAttempts <
+            this.currentTransaction.maxSendAttempts);
     }
     /** Retries the current transaction and returns the calculated timeout */
     retryCurrentTransaction(timeout) {
@@ -616,7 +624,9 @@ class Driver extends events_1.EventEmitter {
         this.currentTransaction.promise.resolve(this.currentTransaction.response);
         this.currentTransaction = null;
         // If a sleeping node has no messages pending, send it back to sleep
-        if (node && node.supportsCC(CommandClasses_1.CommandClasses["Wake Up"]) && !this.hasPendingMessages(node)) {
+        if (node &&
+            node.supportsCC(CommandClasses_1.CommandClasses["Wake Up"]) &&
+            !this.hasPendingMessages(node)) {
             node.sendNoMoreInformation();
         }
         // Resume the send queue
@@ -659,9 +669,9 @@ class Driver extends events_1.EventEmitter {
             const msgTypeName = Constants_1.FunctionType[msg.functionType];
             throw new ZWaveError_1.ZWaveError(`No default priority has been defined for ${className} (${msgTypeName}), so you have to provide one for your message`, ZWaveError_1.ZWaveErrorCodes.Driver_NoPriority);
         }
-        if (supportCheck !== "none"
-            && this.controller != null
-            && !this.controller.isFunctionSupported(msg.functionType)) {
+        if (supportCheck !== "none" &&
+            this.controller != null &&
+            !this.controller.isFunctionSupported(msg.functionType)) {
             if (supportCheck === "loud") {
                 throw new ZWaveError_1.ZWaveError(`Your hardware does not support the ${Constants_1.FunctionType[msg.functionType]} function`, ZWaveError_1.ZWaveErrorCodes.Driver_NotSupported);
             }
@@ -757,7 +767,8 @@ class Driver extends events_1.EventEmitter {
         // Changing the priority has an effect on the order, so re-sort the send queue
         this.sortSendQueue();
         // Don't forget the current transaction
-        if (this.currentTransaction && this.currentTransaction.message.getNodeId() === nodeId) {
+        if (this.currentTransaction &&
+            this.currentTransaction.message.getNodeId() === nodeId) {
             // Change the priority to WakeUp and re-add it to the queue
             this.currentTransaction.priority = Constants_1.MessagePriority.WakeUp;
             this.sendQueue.add(this.currentTransaction);
@@ -801,7 +812,7 @@ class Driver extends events_1.EventEmitter {
         if (!this.controller.homeId)
             return;
         const cacheFile = path.join(this.cacheDir, this.controller.homeId.toString(16) + ".json");
-        if (!await fs.pathExists(cacheFile))
+        if (!(await fs.pathExists(cacheFile)))
             return;
         try {
             logger_1.log("driver", `Cache file for homeId ${strings_1.num2hex(this.controller.homeId)} found, attempting to restore the network from cache`, "debug");

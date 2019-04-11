@@ -26,6 +26,7 @@ const strings_2 = require("../util/strings");
 const DeviceClass_1 = require("./DeviceClass");
 const RequestNodeInfoMessages_1 = require("./RequestNodeInfoMessages");
 const ValueDB_1 = require("./ValueDB");
+// prettier-ignore
 var InterviewStage;
 (function (InterviewStage) {
     InterviewStage[InterviewStage["None"] = 0] = "None";
@@ -128,16 +129,18 @@ class ZWaveNode extends events_1.EventEmitter {
     }
     /** Tests if this node supports the given CommandClass */
     supportsCC(cc) {
-        return this._implementedCommandClasses.has(cc) && !!this._implementedCommandClasses.get(cc).isSupported;
+        return (this._implementedCommandClasses.has(cc) &&
+            !!this._implementedCommandClasses.get(cc).isSupported);
     }
     /** Tests if this node controls the given CommandClass */
     controlsCC(cc) {
-        return this._implementedCommandClasses.has(cc) && !!this._implementedCommandClasses.get(cc).isControlled;
+        return (this._implementedCommandClasses.has(cc) &&
+            !!this._implementedCommandClasses.get(cc).isControlled);
     }
     /** Checks the supported version of a given CommandClass */
     getCCVersion(cc) {
         const ccInfo = this._implementedCommandClasses.get(cc);
-        return ccInfo && ccInfo.version || 0;
+        return (ccInfo && ccInfo.version) || 0;
     }
     /** Creates an instance of the given CC linked to this node */
     // wotan-disable no-misused-generics
@@ -177,7 +180,8 @@ class ZWaveNode extends events_1.EventEmitter {
         }
         // TODO:
         // SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
-        if (this.interviewStage === InterviewStage.ManufacturerSpecific /* TODO: change .ManufacturerSpecific to .SecurityReport */) {
+        if (this.interviewStage ===
+            InterviewStage.ManufacturerSpecific /* TODO: change .ManufacturerSpecific to .SecurityReport */) {
             await this.queryCCVersions();
         }
         if (this.interviewStage === InterviewStage.Versions) {
@@ -191,13 +195,14 @@ class ZWaveNode extends events_1.EventEmitter {
             // Make sure the device answers
             await this.ping(InterviewStage.RestartFromCache);
         }
-        if (this.interviewStage === InterviewStage.RestartFromCache
-            || this.interviewStage === InterviewStage.Static) {
+        if (this.interviewStage === InterviewStage.RestartFromCache ||
+            this.interviewStage === InterviewStage.Static) {
             // Configure the device so it notifies us of a wakeup
             await this.configureWakeup();
         }
         // TODO: Associations
-        if (this.interviewStage === InterviewStage.WakeUp) { // TODO: change this to associations
+        if (this.interviewStage === InterviewStage.WakeUp) {
+            // TODO: change WakeUp to Associations
             // Request a list of this node's neighbors
             await this.queryNeighbors();
         }
@@ -235,18 +240,21 @@ class ZWaveNode extends events_1.EventEmitter {
         this._isSecure = resp.isSecure;
         this._version = resp.version;
         this._isBeaming = resp.isBeaming;
-        logger_1.log("controller", `${this.logPrefix}received response for protocol info:`, "debug");
-        logger_1.log("controller", `${this.logPrefix}  basic device class:    ${DeviceClass_1.BasicDeviceClasses[this.deviceClass.basic]} (${strings_2.num2hex(this.deviceClass.basic)})`, "debug");
-        logger_1.log("controller", `${this.logPrefix}  generic device class:  ${this.deviceClass.generic.name} (${strings_2.num2hex(this.deviceClass.generic.key)})`, "debug");
-        logger_1.log("controller", `${this.logPrefix}  specific device class: ${this.deviceClass.specific.name} (${strings_2.num2hex(this.deviceClass.specific.key)})`, "debug");
-        logger_1.log("controller", `${this.logPrefix}  is a listening device: ${this.isListening}`, "debug");
-        logger_1.log("controller", `${this.logPrefix}  is frequent listening: ${this.isFrequentListening}`, "debug");
-        logger_1.log("controller", `${this.logPrefix}  is a routing device:   ${this.isRouting}`, "debug");
-        logger_1.log("controller", `${this.logPrefix}  is a secure device:    ${this.isSecure}`, "debug");
-        logger_1.log("controller", `${this.logPrefix}  is a beaming device:   ${this.isBeaming}`, "debug");
-        logger_1.log("controller", `${this.logPrefix}  is a listening device: ${this.isListening}`, "debug");
-        logger_1.log("controller", `${this.logPrefix}  maximum baud rate:     ${this.maxBaudRate} kbps`, "debug");
-        logger_1.log("controller", `${this.logPrefix}  version:               ${this.version}`, "debug");
+        // prettier-ignore
+        {
+            logger_1.log("controller", `${this.logPrefix}received response for protocol info:`, "debug");
+            logger_1.log("controller", `${this.logPrefix}  basic device class:    ${DeviceClass_1.BasicDeviceClasses[this.deviceClass.basic]} (${strings_2.num2hex(this.deviceClass.basic)})`, "debug");
+            logger_1.log("controller", `${this.logPrefix}  generic device class:  ${this.deviceClass.generic.name} (${strings_2.num2hex(this.deviceClass.generic.key)})`, "debug");
+            logger_1.log("controller", `${this.logPrefix}  specific device class: ${this.deviceClass.specific.name} (${strings_2.num2hex(this.deviceClass.specific.key)})`, "debug");
+            logger_1.log("controller", `${this.logPrefix}  is a listening device: ${this.isListening}`, "debug");
+            logger_1.log("controller", `${this.logPrefix}  is frequent listening: ${this.isFrequentListening}`, "debug");
+            logger_1.log("controller", `${this.logPrefix}  is a routing device:   ${this.isRouting}`, "debug");
+            logger_1.log("controller", `${this.logPrefix}  is a secure device:    ${this.isSecure}`, "debug");
+            logger_1.log("controller", `${this.logPrefix}  is a beaming device:   ${this.isBeaming}`, "debug");
+            logger_1.log("controller", `${this.logPrefix}  is a listening device: ${this.isListening}`, "debug");
+            logger_1.log("controller", `${this.logPrefix}  maximum baud rate:     ${this.maxBaudRate} kbps`, "debug");
+            logger_1.log("controller", `${this.logPrefix}  version:               ${this.version}`, "debug");
+        }
         if (!this.isListening && !this.isFrequentListening) {
             // This is a "sleeping" device which must support the WakeUp CC.
             // We are requesting the supported CCs later, but those commands may need to go into the
@@ -289,8 +297,10 @@ class ZWaveNode extends events_1.EventEmitter {
         else {
             logger_1.log("controller", `${this.logPrefix}querying node info`, "debug");
             const resp = await this.driver.sendMessage(new RequestNodeInfoMessages_1.RequestNodeInfoRequest(this.driver, this.id));
-            if (resp instanceof RequestNodeInfoMessages_1.RequestNodeInfoResponse && !resp.wasSent
-                || resp instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest && resp.updateType === ApplicationUpdateRequest_1.ApplicationUpdateTypes.NodeInfo_RequestFailed) {
+            if ((resp instanceof RequestNodeInfoMessages_1.RequestNodeInfoResponse && !resp.wasSent) ||
+                (resp instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest &&
+                    resp.updateType ===
+                        ApplicationUpdateRequest_1.ApplicationUpdateTypes.NodeInfo_RequestFailed)) {
                 logger_1.log("controller", `${this.logPrefix}  querying the node info failed`, "debug");
             }
             else if (resp instanceof ApplicationUpdateRequest_1.ApplicationUpdateRequest) {
@@ -316,12 +326,15 @@ class ZWaveNode extends events_1.EventEmitter {
                 if (ICommandClassContainer_1.isCommandClassContainer(resp)) {
                     const zwavePlusResponse = resp.command;
                     zwavePlusResponse.persistValues();
-                    logger_1.log("controller", `${this.logPrefix}received response for Z-Wave+ information:`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  Z-Wave+ version: ${zwavePlusResponse.zwavePlusVersion}`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  role type:       ${ZWavePlusCC_1.ZWavePlusRoleType[zwavePlusResponse.roleType]}`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  node type:       ${ZWavePlusCC_1.ZWavePlusNodeType[zwavePlusResponse.nodeType]}`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  installer icon:  ${strings_2.num2hex(zwavePlusResponse.installerIcon)}`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  user icon:       ${strings_2.num2hex(zwavePlusResponse.userIcon)}`, "debug");
+                    // prettier-ignore
+                    {
+                        logger_1.log("controller", `${this.logPrefix}received response for Z-Wave+ information:`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  Z-Wave+ version: ${zwavePlusResponse.zwavePlusVersion}`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  role type:       ${ZWavePlusCC_1.ZWavePlusRoleType[zwavePlusResponse.roleType]}`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  node type:       ${ZWavePlusCC_1.ZWavePlusNodeType[zwavePlusResponse.nodeType]}`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  installer icon:  ${strings_2.num2hex(zwavePlusResponse.installerIcon)}`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  user icon:       ${strings_2.num2hex(zwavePlusResponse.userIcon)}`, "debug");
+                    }
                 }
             }
             catch (e) {
@@ -344,10 +357,13 @@ class ZWaveNode extends events_1.EventEmitter {
                 if (ICommandClassContainer_1.isCommandClassContainer(resp)) {
                     const mfResp = resp.command;
                     mfResp.persistValues();
-                    logger_1.log("controller", `${this.logPrefix}received response for manufacturer information:`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  manufacturer: ${await Manufacturers_1.lookupManufacturer(mfResp.manufacturerId) || "unknown"} (${strings_2.num2hex(mfResp.manufacturerId)})`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  product type: ${strings_2.num2hex(mfResp.productType)}`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  product id:   ${strings_2.num2hex(mfResp.productId)}`, "debug");
+                    // prettier-ignore
+                    {
+                        logger_1.log("controller", `${this.logPrefix}received response for manufacturer information:`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  manufacturer: ${await Manufacturers_1.lookupManufacturer(mfResp.manufacturerId) || "unknown"} (${strings_2.num2hex(mfResp.manufacturerId)})`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  product type: ${strings_2.num2hex(mfResp.productType)}`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  product id:   ${strings_2.num2hex(mfResp.productId)}`, "debug");
+                    }
                 }
             }
             catch (e) {
@@ -363,12 +379,14 @@ class ZWaveNode extends events_1.EventEmitter {
             // only query the ones we support a version > 1 for
             const maxImplemented = CommandClass_1.getImplementedVersion(cc);
             if (maxImplemented < 1) {
+                // prettier-ignore
                 logger_1.log("controller", `${this.logPrefix}  skipping query for ${CommandClasses_1.CommandClasses[cc]} (${strings_2.num2hex(cc)}) because max implemented version is ${maxImplemented}`, "debug");
                 continue;
             }
             const versionCC = new VersionCC_1.VersionCC(this.driver, this.id, VersionCC_1.VersionCommand.CommandClassGet, cc);
             const request = new SendDataMessages_1.SendDataRequest(this.driver, versionCC);
             try {
+                // prettier-ignore
                 logger_1.log("controller", `${this.logPrefix}  querying the CC version for ${CommandClasses_1.CommandClasses[cc]} (${strings_2.num2hex(cc)})`, "debug");
                 // query the CC version
                 const resp = await this.driver.sendMessage(request, Constants_1.MessagePriority.NodeQuery);
@@ -378,6 +396,7 @@ class ZWaveNode extends events_1.EventEmitter {
                     const reqCC = versionResponse.requestedCC;
                     const supportedVersion = versionResponse.ccVersion;
                     this.addCC(reqCC, { version: supportedVersion });
+                    // prettier-ignore
                     logger_1.log("controller", `${this.logPrefix}  supports CC ${CommandClasses_1.CommandClasses[reqCC]} (${strings_2.num2hex(reqCC)}) in version ${supportedVersion}`, "debug");
                 }
             }
@@ -399,10 +418,13 @@ class ZWaveNode extends events_1.EventEmitter {
                 if (ICommandClassContainer_1.isCommandClassContainer(resp)) {
                     const multiResponse = resp.command;
                     multiResponse.persistValues();
-                    logger_1.log("controller", `${this.logPrefix}received response for device endpoints:`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  endpoint count (individual): ${multiResponse.individualEndpointCount}`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  count is dynamic:            ${multiResponse.isDynamicEndpointCount}`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  identical capabilities:      ${multiResponse.identicalCapabilities}`, "debug");
+                    // prettier-ignore
+                    {
+                        logger_1.log("controller", `${this.logPrefix}received response for device endpoints:`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  endpoint count (individual): ${multiResponse.individualEndpointCount}`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  count is dynamic:            ${multiResponse.isDynamicEndpointCount}`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  identical capabilities:      ${multiResponse.identicalCapabilities}`, "debug");
+                    }
                 }
             }
             catch (e) {
@@ -432,9 +454,12 @@ class ZWaveNode extends events_1.EventEmitter {
                         throw new ZWaveError_1.ZWaveError("Invalid response received!", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
                     }
                     const wakeupResp = getWakeupResp.command;
-                    logger_1.log("controller", `${this.logPrefix}received wakeup configuration:`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  wakeup interval: ${wakeupResp.wakeupInterval} seconds`, "debug");
-                    logger_1.log("controller", `${this.logPrefix}  controller node: ${wakeupResp.controllerNodeId}`, "debug");
+                    // prettier-ignore
+                    {
+                        logger_1.log("controller", `${this.logPrefix}received wakeup configuration:`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  wakeup interval: ${wakeupResp.wakeupInterval} seconds`, "debug");
+                        logger_1.log("controller", `${this.logPrefix}  controller node: ${wakeupResp.controllerNodeId}`, "debug");
+                    }
                     logger_1.log("controller", `${this.logPrefix}configuring wakeup destination`, "debug");
                     const setWakeupRequest = new SendDataMessages_1.SendDataRequest(this.driver, new WakeUpCC_1.WakeUpCC(this.driver, this.id, WakeUpCC_1.WakeUpCommand.IntervalSet, wakeupResp.wakeupInterval, this.driver.controller.ownNodeId));
                     await this.driver.sendMessage(setWakeupRequest, Constants_1.MessagePriority.NodeQuery);
@@ -499,7 +524,9 @@ class ZWaveNode extends events_1.EventEmitter {
      * @param kind The kind of state to be requested
      * @param commandClasses The command classes to request the state for. Defaults to all
      */
-    async requestState(kind, commandClasses = [...this._implementedCommandClasses.keys()]) {
+    async requestState(kind, commandClasses = [
+        ...this._implementedCommandClasses.keys(),
+    ]) {
         // TODO: Support multiple instances
         const factories = commandClasses
             // This assertion is not nice, but I see no better way
@@ -556,15 +583,16 @@ class ZWaveNode extends events_1.EventEmitter {
     }
     deserialize(obj) {
         if (obj.interviewStage in InterviewStage) {
-            this.interviewStage = typeof obj.interviewStage === "number"
-                ? obj.interviewStage
-                : InterviewStage[obj.interviewStage];
+            this.interviewStage =
+                typeof obj.interviewStage === "number"
+                    ? obj.interviewStage
+                    : InterviewStage[obj.interviewStage];
         }
         if (typeguards_1.isObject(obj.deviceClass)) {
             const { basic, generic, specific } = obj.deviceClass;
-            if (typeof basic === "number"
-                && typeof generic === "number"
-                && typeof specific === "number") {
+            if (typeof basic === "number" &&
+                typeof generic === "number" &&
+                typeof specific === "number") {
                 const genericDC = DeviceClass_1.GenericDeviceClass.get(generic);
                 this._deviceClass = new DeviceClass_1.DeviceClass(basic, genericDC, DeviceClass_1.SpecificDeviceClass.get(genericDC.key, specific));
             }
@@ -610,6 +638,7 @@ class ZWaveNode extends events_1.EventEmitter {
                             ccInstance.deserializeValuesFromCache(values);
                         }
                         catch (e) {
+                            // prettier-ignore
                             logger_1.log("controller", `${this.logPrefix}error during deserialization of CC values from cache:`, "error");
                             logger_1.log("controller", `${this.logPrefix}  ${e}`, "error");
                         }
@@ -629,7 +658,8 @@ class ZWaveNode extends events_1.EventEmitter {
         }
     }
     isAwake() {
-        const isAsleep = this.supportsCC(CommandClasses_1.CommandClasses["Wake Up"]) && !WakeUpCC_1.WakeUpCC.isAwake(this.driver, this);
+        const isAsleep = this.supportsCC(CommandClasses_1.CommandClasses["Wake Up"]) &&
+            !WakeUpCC_1.WakeUpCC.isAwake(this.driver, this);
         return !isAsleep;
     }
     async sendNoMoreInformation() {

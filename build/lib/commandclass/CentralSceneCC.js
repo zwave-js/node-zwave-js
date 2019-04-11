@@ -46,7 +46,9 @@ let CentralSceneCC = class CentralSceneCC extends CommandClass_1.CommandClass {
         return this._keyAttribute;
     }
     supportsKeyAttribute(sceneNumber, keyAttribute) {
-        const bitArrayIndex = this._keyAttributesIdenticalSupport ? 0 : sceneNumber - 1;
+        const bitArrayIndex = this._keyAttributesIdenticalSupport
+            ? 0
+            : sceneNumber - 1;
         const bitmap = this._supportedKeyAttributes[bitArrayIndex];
         return !!(bitmap & (1 << keyAttribute));
     }
@@ -60,7 +62,9 @@ let CentralSceneCC = class CentralSceneCC extends CommandClass_1.CommandClass {
                 // no real payload
                 break;
             case CentralSceneCommand.ConfigurationSet:
-                this.payload = Buffer.from([this.slowRefresh ? 128 : 0]);
+                this.payload = Buffer.from([
+                    this.slowRefresh ? 128 : 0,
+                ]);
                 break;
             default:
                 throw new ZWaveError_1.ZWaveError("Cannot serialize a Version CC with a command other than SupportedGet, ConfigurationGet and ConfigurationSet", ZWaveError_1.ZWaveErrorCodes.CC_Invalid);
@@ -79,12 +83,15 @@ let CentralSceneCC = class CentralSceneCC extends CommandClass_1.CommandClass {
                 this.supportsSlowRefresh = !!(this.payload[1] & 128);
                 const bitMaskBytes = this.payload[1] & 0b110;
                 this._keyAttributesIdenticalSupport = !!(this.payload[1] & 0b1);
-                const numEntries = this._keyAttributesIdenticalSupport ? 1 : this.sceneCount;
+                const numEntries = this._keyAttributesIdenticalSupport
+                    ? 1
+                    : this.sceneCount;
                 this._supportedKeyAttributes = [];
                 for (let i = 0; i < numEntries; i++) {
                     let mask = 0;
                     for (let j = 0; j < bitMaskBytes; j++) {
-                        mask += this.payload[3 + bitMaskBytes * i + j] << (8 * j);
+                        mask +=
+                            this.payload[3 + bitMaskBytes * i + j] << (8 * j);
                     }
                     this._supportedKeyAttributes.push(mask);
                 }

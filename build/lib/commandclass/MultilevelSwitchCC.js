@@ -76,17 +76,15 @@ let MultilevelSwitchCC = class MultilevelSwitchCC extends CommandClass_1.Command
                 break;
             }
             case MultilevelSwitchCommand.StartLevelChange: {
-                let controlByte = (LevelChangeDirection[this.direction] << 6)
-                    | (this.ignoreStartLevel ? 32 : 0);
+                let controlByte = (LevelChangeDirection[this.direction] << 6) |
+                    (this.ignoreStartLevel ? 32 : 0);
                 if (this.version >= 3) {
                     if (this.secondarySwitchDirection != null) {
-                        controlByte |= LevelChangeDirection[this.secondarySwitchDirection] << 3;
+                        controlByte |=
+                            LevelChangeDirection[this.secondarySwitchDirection] << 3;
                     }
                 }
-                const payload = [
-                    controlByte,
-                    this.startLevel,
-                ];
+                const payload = [controlByte, this.startLevel];
                 if (this.version >= 2) {
                     payload.push(this.duration.serializeSet());
                 }

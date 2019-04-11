@@ -21,9 +21,12 @@ colors.setTheme({
 });
 
 export function log(message: string, severity: Severity): void;
-export function log(namespace: SubNamespaces, message: string, severity: Severity): void;
+export function log(
+	namespace: SubNamespaces,
+	message: string,
+	severity: Severity,
+): void;
 export function log(...args: any[]): void {
-
 	// we only accept strings
 	if (!args.length || !args.every(arg => typeof arg === "string")) {
 		throw new Error("Invalid arguments passed to log()");
@@ -33,11 +36,12 @@ export function log(...args: any[]): void {
 	let message = "";
 	let severity: Severity = "info";
 	if (args.length === 2) {
-		([message, severity] = args);
+		[message, severity] = args;
 	} else if (args.length === 3) {
-		([namespace, message, severity] = args);
+		[namespace, message, severity] = args;
 		// add the namespace separator to append the namespace to the default one
-		if (typeof namespace === "string" && namespace !== "") namespace = ":" + namespace;
+		if (typeof namespace === "string" && namespace !== "")
+			namespace = ":" + namespace;
 	}
 
 	function defaultLogger(): void {
@@ -45,7 +49,9 @@ export function log(...args: any[]): void {
 		if (severity !== "info") {
 			prefix = `[${severity.toUpperCase()}] `;
 		}
-		debug(defaultNamespace + namespace)(`${prefix}${(colors as any)[severity](message)}`);
+		debug(defaultNamespace + namespace)(
+			`${prefix}${(colors as any)[severity](message)}`,
+		);
 	}
 
 	(customLogger || defaultLogger)(message, severity);

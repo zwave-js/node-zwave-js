@@ -1,8 +1,22 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { decodeSetbackState, encodeSetbackState, SetbackState } from "../values/SetbackState";
-import { decodeSwitchpoint, encodeSwitchpoint, Switchpoint } from "../values/Switchpoint";
-import { ccValue, CommandClass, commandClass, expectedCCResponse, implementedVersion } from "./CommandClass";
+import {
+	decodeSetbackState,
+	encodeSetbackState,
+	SetbackState,
+} from "../values/SetbackState";
+import {
+	decodeSwitchpoint,
+	encodeSwitchpoint,
+	Switchpoint,
+} from "../values/Switchpoint";
+import {
+	ccValue,
+	CommandClass,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum ClimateControlScheduleCommand {
@@ -36,12 +50,8 @@ export enum ScheduleOverrideType {
 @implementedVersion(1)
 @expectedCCResponse(CommandClasses["Climate Control Schedule"])
 export class ClimateControlScheduleCC extends CommandClass {
-
 	// tslint:disable:unified-signatures
-	public constructor(
-		driver: IDriver,
-		nodeId?: number,
-	);
+	public constructor(driver: IDriver, nodeId?: number);
 
 	public constructor(
 		driver: IDriver,
@@ -49,25 +59,27 @@ export class ClimateControlScheduleCC extends CommandClass {
 		ccCommand: ClimateControlScheduleCommand.Set,
 		weekday: Weekday,
 		switchPoints: Switchpoint[],
-	)
+	);
 	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: ClimateControlScheduleCommand.Get,
 		weekday: Weekday,
-	)
+	);
 	public constructor(
 		driver: IDriver,
 		nodeId: number,
-		ccCommand: ClimateControlScheduleCommand.ChangedGet | ClimateControlScheduleCommand.OverrideGet,
-	)
+		ccCommand:
+			| ClimateControlScheduleCommand.ChangedGet
+			| ClimateControlScheduleCommand.OverrideGet,
+	);
 	public constructor(
 		driver: IDriver,
 		nodeId: number,
 		ccCommand: ClimateControlScheduleCommand.OverrideSet,
 		overrideType: ScheduleOverrideType,
 		overrideState: SetbackState,
-	)
+	);
 
 	public constructor(
 		driver: IDriver,
@@ -77,17 +89,13 @@ export class ClimateControlScheduleCC extends CommandClass {
 	) {
 		super(driver, nodeId, ccCommand);
 		if (this.ccCommand === ClimateControlScheduleCommand.Set) {
-			[
-				this.weekday,
-				this.switchPoints,
-			] = args;
+			[this.weekday, this.switchPoints] = args;
 		} else if (this.ccCommand === ClimateControlScheduleCommand.Get) {
 			this.weekday = args[0];
-		} else if (this.ccCommand === ClimateControlScheduleCommand.OverrideSet) {
-			[
-				this.overrideType,
-				this.overrideState,
-			] = args;
+		} else if (
+			this.ccCommand === ClimateControlScheduleCommand.OverrideSet
+		) {
+			[this.overrideType, this.overrideState] = args;
 		}
 	}
 	// tslint:enable:unified-signatures
@@ -100,7 +108,6 @@ export class ClimateControlScheduleCC extends CommandClass {
 
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
-
 			case ClimateControlScheduleCommand.ChangedGet:
 			case ClimateControlScheduleCommand.OverrideGet:
 				// no real payload
@@ -108,12 +115,13 @@ export class ClimateControlScheduleCC extends CommandClass {
 
 			case ClimateControlScheduleCommand.Set: {
 				// Make sure we have exactly 9 entries
-				const allSwitchPoints = this.switchPoints ?
-					this.switchPoints.slice(0, 9) // maximum 9
+				const allSwitchPoints = this.switchPoints
+					? this.switchPoints.slice(0, 9) // maximum 9
 					: [];
 				while (allSwitchPoints.length < 9) {
 					allSwitchPoints.push({
-						hour: 0, minute: 0,
+						hour: 0,
+						minute: 0,
 						state: "Unused",
 					});
 				}
@@ -157,7 +165,9 @@ export class ClimateControlScheduleCC extends CommandClass {
 						decodeSwitchpoint(this.payload.slice(1 + 3 * i)),
 					);
 				}
-				this.switchPoints = allSwitchpoints.filter(sp => sp.state !== "Unused");
+				this.switchPoints = allSwitchpoints.filter(
+					sp => sp.state !== "Unused",
+				);
 				break;
 			}
 
@@ -177,5 +187,4 @@ export class ClimateControlScheduleCC extends CommandClass {
 				);
 		}
 	}
-
 }

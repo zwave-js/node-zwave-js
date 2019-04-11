@@ -32,12 +32,22 @@ export interface ValueDBEventCallbacks {
 export type ValueDBEvents = Extract<keyof ValueDBEventCallbacks, string>;
 
 export interface ValueDB {
-	on<TEvent extends ValueDBEvents>(event: TEvent, callback: ValueDBEventCallbacks[TEvent]): this;
-	removeListener<TEvent extends ValueDBEvents>(event: TEvent, callback: ValueDBEventCallbacks[TEvent]): this;
+	on<TEvent extends ValueDBEvents>(
+		event: TEvent,
+		callback: ValueDBEventCallbacks[TEvent],
+	): this;
+	removeListener<TEvent extends ValueDBEvents>(
+		event: TEvent,
+		callback: ValueDBEventCallbacks[TEvent],
+	): this;
 	removeAllListeners(event?: ValueDBEvents): this;
 }
 
-function getValueKey(cc: CommandClasses, endpoint: number | undefined, propertyName: string): string {
+function getValueKey(
+	cc: CommandClasses,
+	endpoint: number | undefined,
+	propertyName: string,
+): string {
 	return JSON.stringify({
 		cc,
 		endpoint,
@@ -46,7 +56,6 @@ function getValueKey(cc: CommandClasses, endpoint: number | undefined, propertyN
 }
 
 export class ValueDB extends EventEmitter {
-
 	private _db = new Map<string, unknown>();
 
 	/**
@@ -56,7 +65,12 @@ export class ValueDB extends EventEmitter {
 	 * @param propertyName The property name the value belongs to
 	 * @param value The value to set
 	 */
-	public setValue(cc: CommandClasses, endpoint: number | undefined, propertyName: string, value: unknown): void {
+	public setValue(
+		cc: CommandClasses,
+		endpoint: number | undefined,
+		propertyName: string,
+		value: unknown,
+	): void {
 		const key = getValueKey(cc, endpoint, propertyName);
 		const cbArg: ValueAddedArgs | ValueUpdatedArgs = {
 			commandClass: cc,
@@ -82,7 +96,11 @@ export class ValueDB extends EventEmitter {
 	 * @param endpoint The optional endpoint the value belongs to
 	 * @param propertyName The property name the value belongs to
 	 */
-	public removeValue(cc: CommandClasses, endpoint: number | undefined, propertyName: string): boolean {
+	public removeValue(
+		cc: CommandClasses,
+		endpoint: number | undefined,
+		propertyName: string,
+	): boolean {
 		const key = getValueKey(cc, endpoint, propertyName);
 		if (this._db.has(key)) {
 			const prevValue = this._db.get(key);
@@ -104,12 +122,22 @@ export class ValueDB extends EventEmitter {
 	 * @param endpoint The optional endpoint the value belongs to
 	 * @param propertyName The property name the value belongs to
 	 */
-	public getValue(cc: CommandClasses, endpoint: number | undefined, propertyName: string): unknown {
+	public getValue(
+		cc: CommandClasses,
+		endpoint: number | undefined,
+		propertyName: string,
+	): unknown {
 		const key = getValueKey(cc, endpoint, propertyName);
 		return this._db.get(key);
 	}
 
-	public getValues(forCC: CommandClasses): { endpoint: number | undefined; propertyName: string; value: unknown }[] {
+	public getValues(
+		forCC: CommandClasses,
+	): {
+		endpoint: number | undefined;
+		propertyName: string;
+		value: unknown;
+	}[] {
 		const ret: ReturnType<ValueDB["getValues"]> = [];
 		this._db.forEach((value, key) => {
 			const { cc, endpoint, propertyName } = JSON.parse(key);

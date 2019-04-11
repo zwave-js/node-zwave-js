@@ -1,5 +1,10 @@
 // load the driver with stubbed out Serialport
-import { MockRequestMessageWithExpectation, MockRequestMessageWithoutExpectation, MockResponseMessage, MockSerialPort } from "../../../test/mocks";
+import {
+	MockRequestMessageWithExpectation,
+	MockRequestMessageWithoutExpectation,
+	MockResponseMessage,
+	MockSerialPort,
+} from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { MessageHeaders } from "../message/Constants";
@@ -29,9 +34,7 @@ async function createAndStartDriver() {
 }
 
 describe("lib/driver/Driver => ", () => {
-
 	describe("starting it => ", () => {
-
 		it("should open a new serialport", () => {
 			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
 			// start the driver
@@ -95,7 +98,9 @@ describe("lib/driver/Driver => ", () => {
 			await expect(startPromise).rejects.toThrow("NOPE");
 
 			// try to start again
-			await assertZWaveError(() => driver.start(), { errorCode: ZWaveErrorCodes.Driver_Destroyed });
+			await assertZWaveError(() => driver.start(), {
+				errorCode: ZWaveErrorCodes.Driver_Destroyed,
+			});
 
 			driver.destroy();
 		});
@@ -106,7 +111,9 @@ describe("lib/driver/Driver => ", () => {
 			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
 
 			const msg = new Message(driver);
-			await assertZWaveError(() => driver.sendMessage(msg), { errorCode: ZWaveErrorCodes.Driver_NotReady });
+			await assertZWaveError(() => driver.sendMessage(msg), {
+				errorCode: ZWaveErrorCodes.Driver_NotReady,
+			});
 
 			driver.destroy();
 		});
@@ -118,7 +125,9 @@ describe("lib/driver/Driver => ", () => {
 			driver.start();
 
 			const msg = new Message(driver);
-			await assertZWaveError(() => driver.sendMessage(msg), { errorCode: ZWaveErrorCodes.Driver_NotReady });
+			await assertZWaveError(() => driver.sendMessage(msg), {
+				errorCode: ZWaveErrorCodes.Driver_NotReady,
+			});
 
 			driver.destroy();
 		});
@@ -135,7 +144,9 @@ describe("lib/driver/Driver => ", () => {
 			await expect(startPromise).rejects.toThrow("NOPE");
 
 			const msg = new Message(driver);
-			await assertZWaveError(() => driver.sendMessage(msg), { errorCode: ZWaveErrorCodes.Driver_NotReady });
+			await assertZWaveError(() => driver.sendMessage(msg), {
+				errorCode: ZWaveErrorCodes.Driver_NotReady,
+			});
 
 			driver.destroy();
 		});
@@ -242,19 +253,22 @@ describe("lib/driver/Driver => ", () => {
 
 			// trigger the send queue
 			jest.runAllTimers();
-			expect(serialport.writeStub).toHaveBeenCalledWith(Buffer.from([MessageHeaders.NAK]));
+			expect(serialport.writeStub).toHaveBeenCalledWith(
+				Buffer.from([MessageHeaders.NAK]),
+			);
 		});
 
 		it("should happen on invalid data in the receive buffer", () => {
 			// swallow the error
 			// tslint:disable-next-line: no-empty
-			driver.on("error", () => { });
+			driver.on("error", () => {});
 			// receive an invalid message
 			serialport.receiveData(Buffer.from([0x01, 0x03, 0x00, 0x00, 0x00]));
 			// trigger the send queue
 			jest.runAllTimers();
-			expect(serialport.writeStub).toHaveBeenCalledWith(Buffer.from([MessageHeaders.NAK]));
+			expect(serialport.writeStub).toHaveBeenCalledWith(
+				Buffer.from([MessageHeaders.NAK]),
+			);
 		});
 	});
-
 });
