@@ -1,26 +1,58 @@
+import { IDriver } from "../driver/IDriver";
 import { BasicCC } from "./BasicCC";
-import { getImplementedVersion } from "./CommandClass";
+import {
+	CommandClass,
+	getImplementedVersion,
+	getImplementedVersionStatic,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
+@implementedVersion(7)
+class DummyCC extends CommandClass {
+	public constructor(driver: IDriver) {
+		super(driver);
+	}
+}
+class DummyCCSubClass extends DummyCC {
+	public constructor(driver: IDriver) {
+		super(driver);
+	}
+}
+
 describe("lib/commandclass/CommandClass => ", () => {
-	it("getImplementedVersion should return the implemented version for a CommandClass instance", () => {
-		const cc = new BasicCC(undefined);
-		expect(getImplementedVersion(cc)).toBe(2);
+	describe.skip("getImplementedVersion()", () => {
+		it("should return the implemented version for a CommandClass instance", () => {
+			const cc = new BasicCC(undefined as any);
+			expect(getImplementedVersion(cc)).toBe(2);
+		});
+
+		it("should return the implemented version for a numeric CommandClass key", () => {
+			const cc = CommandClasses.Basic;
+			expect(getImplementedVersion(cc)).toBe(2);
+		});
+
+		it.skip("should return 0 for a non-implemented CommandClass instance", () => {
+			// const cc = new CommandClass(undefined);
+			// expect(getImplementedVersion(cc)).toBe(0);
+		});
+
+		it("should return the implemented version for a numeric CommandClass key", () => {
+			const cc = -1;
+			expect(getImplementedVersion(cc)).toBe(0);
+		});
+
+		it("should work with inheritance", () => {});
 	});
 
-	it("getImplementedVersion should return the implemented version for a numeric CommandClass key", () => {
-		const cc = CommandClasses.Basic;
-		expect(getImplementedVersion(cc)).toBe(2);
-	});
+	describe("getImplementedVersionStatic()", () => {
+		it.skip("should return the implemented version for a CommandClass constructor", () => {
+			expect(getImplementedVersionStatic(BasicCC)).toBe(2);
+		});
 
-	it.skip("getImplementedVersion should return 0 for a non-implemented CommandClass instance", () => {
-		// const cc = new CommandClass(undefined);
-		// expect(getImplementedVersion(cc)).toBe(0);
-	});
-
-	it("getImplementedVersion should return the implemented version for a numeric CommandClass key", () => {
-		const cc = -1;
-		expect(getImplementedVersion(cc)).toBe(0);
+		it("should work on inherited classes", () => {
+			expect(getImplementedVersionStatic(DummyCCSubClass)).toBe(7);
+		});
 	});
 
 	it.skip("serializing with an undefined or null payload should behave like an empty payload", () => {

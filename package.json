@@ -64,10 +64,10 @@
     "serialport": "^7.1.4"
   },
   "scripts": {
-    "build": "tsc -p src",
+    "build": "tsc -p src/tsconfig.build.json",
     "prebuild": "rimraf ./build || true",
     "prewatch": "rimraf ./build || true",
-    "watch": "tsc -p src --watch",
+    "watch": "tsc -p src/tsconfig.build.json --watch",
     "test:reset": "jest --clear-cache",
     "test:ts": "jest --maxWorkers=1",
     "test:watch": "npm run test:ts -- --watch",

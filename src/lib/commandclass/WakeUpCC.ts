@@ -21,7 +21,9 @@ export enum WakeUpCommand {
 	IntervalCapabilitiesReport = 0x0a,
 }
 
-function getExpectedResponseToWakeUp(sent: WakeUpCC): CommandClasses {
+function getExpectedResponseToWakeUp(
+	sent: WakeUpCC,
+): CommandClasses | undefined {
 	switch (sent.ccCommand) {
 		// These commands expect no response
 		case WakeUpCommand.IntervalSet:

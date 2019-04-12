@@ -94,7 +94,7 @@ interface RequestHandlerEntry<T extends Message = Message> {
 
 export class Driver extends EventEmitter implements IDriver {
 	/** The serial port instance */
-	private serial: SerialPort;
+	private serial: SerialPort | undefined;
 	/** A buffer of received but unprocessed data */
 	private receiveBuffer: Buffer;
 	/** The currently pending request */
@@ -369,7 +369,7 @@ export class Driver extends EventEmitter implements IDriver {
 		// the serialport must be closed in any case
 		if (this.serial != undefined) {
 			this.serial.close();
-			delete this.serial;
+			this.serial = undefined;
 		}
 	}
 
@@ -527,15 +527,13 @@ export class Driver extends EventEmitter implements IDriver {
 							} attempts, dropping the transaction`,
 							"warn",
 						);
-						if (this.currentTransaction.promise != undefined) {
-							const errorMsg = `The message could not be sent`;
-							this.rejectCurrentTransaction(
-								new ZWaveError(
-									errorMsg,
-									ZWaveErrorCodes.Controller_MessageDropped,
-								),
-							);
-						}
+						const errorMsg = `The message could not be sent`;
+						this.rejectCurrentTransaction(
+							new ZWaveError(
+								errorMsg,
+								ZWaveErrorCodes.Controller_MessageDropped,
+							),
+						);
 					}
 					return;
 
@@ -582,20 +580,18 @@ export class Driver extends EventEmitter implements IDriver {
 							} attempts, dropping it`,
 							"warn",
 						);
-						if (this.currentTransaction.promise != undefined) {
-							const errorMsg =
-								msg instanceof SendDataRequest
-									? `The node did not respond (${
-											TransmitStatus[msg.transmitStatus]
-									  })`
-									: `The node did not respond`;
-							this.rejectCurrentTransaction(
-								new ZWaveError(
-									errorMsg,
-									ZWaveErrorCodes.Controller_MessageDropped,
-								),
-							);
-						}
+						const errorMsg =
+							msg instanceof SendDataRequest
+								? `The node did not respond (${
+										TransmitStatus[msg.transmitStatus]
+								  })`
+								: `The node did not respond`;
+						this.rejectCurrentTransaction(
+							new ZWaveError(
+								errorMsg,
+								ZWaveErrorCodes.Controller_MessageDropped,
+							),
+						);
 					}
 					return;
 
@@ -1228,7 +1224,7 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	private doSend(data: Buffer): void {
-		this.serial.write(data);
+		if (this.serial) this.serial.write(data);
 	}
 
 	/** Moves all messages for a given node into the wakeup queue */

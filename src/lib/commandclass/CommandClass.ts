@@ -236,11 +236,17 @@ export class CommandClass {
 	 * Returns the node this CC is linked to. Throws if the node does not exist.
 	 */
 	public getNode(): ZWaveNode | undefined {
-		if (this.nodeId == undefined)
+		if (this.driver.controller == undefined) {
+			throw new ZWaveError(
+				"Cannot retrieve the node when the controller is undefined",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		} else if (this.nodeId == undefined) {
 			throw new ZWaveError(
 				"Cannot retrieve the node without a Node ID",
 				ZWaveErrorCodes.CC_NoNodeID,
 			);
+		}
 		return this.driver.controller.nodes.get(this.nodeId);
 	}
 
