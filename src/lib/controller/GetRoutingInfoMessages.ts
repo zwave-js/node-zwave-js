@@ -17,20 +17,11 @@ import { NUM_NODEMASK_BYTES, parseNodeBitMask } from "./NodeBitMask";
 @expectedResponse(FunctionType.GetRoutingInfo)
 @priority(MessagePriority.Controller)
 export class GetRoutingInfoRequest extends Message {
-	public constructor(driver: IDriver);
-
 	public constructor(
 		driver: IDriver,
-		nodeId: number,
-		removeNonRepeaters: boolean,
-		removeBadLinks: boolean,
-	);
-
-	public constructor(
-		driver: IDriver,
-		public nodeId?: number,
-		public removeNonRepeaters?: boolean,
-		public removeBadLinks?: boolean,
+		public nodeId: number,
+		public removeNonRepeaters: boolean,
+		public removeBadLinks: boolean,
 	) {
 		super(driver);
 	}

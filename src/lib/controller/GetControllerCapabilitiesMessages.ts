@@ -28,31 +28,23 @@ export class GetControllerCapabilitiesRequest extends Message {}
 export class GetControllerCapabilitiesResponse extends Message {
 	private _capabilityFlags: number;
 	public get isSecondary(): boolean {
-		return (
-			(this._capabilityFlags & ControllerCapabilityFlags.Secondary) !== 0
-		);
+		return !!(this._capabilityFlags & ControllerCapabilityFlags.Secondary);
 	}
 	public get isUsingHomeIdFromOtherNetwork(): boolean {
-		return (
-			(this._capabilityFlags &
-				ControllerCapabilityFlags.OnOtherNetwork) !==
-			0
+		return !!(
+			this._capabilityFlags & ControllerCapabilityFlags.OnOtherNetwork
 		);
 	}
 	public get isSISPresent(): boolean {
-		return (
-			(this._capabilityFlags & ControllerCapabilityFlags.SISPresent) !== 0
-		);
+		return !!(this._capabilityFlags & ControllerCapabilityFlags.SISPresent);
 	}
 	public get wasRealPrimary(): boolean {
-		return (
-			(this._capabilityFlags &
-				ControllerCapabilityFlags.WasRealPrimary) !==
-			0
+		return !!(
+			this._capabilityFlags & ControllerCapabilityFlags.WasRealPrimary
 		);
 	}
 	public get isStaticUpdateController(): boolean {
-		return (this._capabilityFlags & ControllerCapabilityFlags.SUC) !== 0;
+		return !!(this._capabilityFlags & ControllerCapabilityFlags.SUC);
 	}
 
 	public deserialize(data: Buffer): number {

@@ -59,12 +59,6 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 		// then a 256bit bitmask for the supported command classes follows
 		const functionBitMask = this.payload.slice(8, 8 + NUM_FUNCTION_BYTES);
 		this._supportedFunctionTypes = parseBitMask(functionBitMask);
-		// this._supportedFunctionTypes = [];
-		// for (let functionType = 1; functionType <= NUM_FUNCTIONS; functionType++) {
-		// 	const byteNum = (functionType - 1) >>> 3; // type / 8
-		// 	const bitNum = (functionType - 1) % 8;
-		// 	if ((functionBitMask[byteNum] & (1 << bitNum)) !== 0) this._supportedFunctionTypes.push(functionType);
-		// }
 
 		return ret;
 	}

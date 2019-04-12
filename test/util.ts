@@ -11,17 +11,19 @@ export interface AssertZWaveErrorOptions {
  * @param options Additional assertions
  */
 export function assertZWaveError<T>(
-	valueOrFactory: T, options: AssertZWaveErrorOptions = {},
+	valueOrFactory: T,
+	options: AssertZWaveErrorOptions = {},
 ): T extends (() => PromiseLike<any>) ? Promise<void> : void {
-
 	const { messageMatches, errorCode } = options;
 
-	function handleError(e: any) {
+	function handleError(e: any): void {
 		expect(e).toBeInstanceOf(ZWaveError);
-		if (messageMatches != undefined) expect((e as ZWaveError).message).toMatch(messageMatches);
-		if (errorCode != undefined) expect((e as ZWaveError).code).toBe(errorCode);
+		if (messageMatches != undefined)
+			expect((e as ZWaveError).message).toMatch(messageMatches);
+		if (errorCode != undefined)
+			expect((e as ZWaveError).code).toBe(errorCode);
 	}
-	function fail() {
+	function fail(): never {
 		// We should not be here
 		throw new Error("The factory function did not throw any error!");
 	}
@@ -37,11 +39,12 @@ export function assertZWaveError<T>(
 				) as any;
 			}
 		} catch (e) {
-			return void handleError(e);
+			return void handleError(e) as any;
 		}
-		fail();
+		return fail();
 	} else {
 		// Directly assert the error object
 		handleError(valueOrFactory);
 	}
+	return undefined as any;
 }

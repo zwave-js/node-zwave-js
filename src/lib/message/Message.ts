@@ -46,7 +46,7 @@ export class Message {
 		payload?: Buffer, // TODO: Length limit 255
 	) {
 		// decide which implementation we follow
-		let type: MessageType;
+		let type: MessageType | undefined;
 		if (typeof typeOrPayload === "number") {
 			// #2
 			type = typeOrPayload;
@@ -64,24 +64,22 @@ export class Message {
 		this.payload = payload;
 	}
 
-	public type: MessageType;
-	public functionType: FunctionType;
-	public expectedResponse: FunctionType | ResponsePredicate;
+	public type: MessageType | undefined;
+	public functionType: FunctionType | undefined;
+	public expectedResponse: FunctionType | ResponsePredicate | undefined;
 	public payload: Buffer; // TODO: Length limit 255
 	public maxSendAttempts: number;
 
 	/** Serializes this message into a Buffer */
 	public serialize(): Buffer {
-		const payloadLength = this.payload != null ? this.payload.length : 0;
-
-		const ret = Buffer.allocUnsafe(payloadLength + 5);
+		const ret = Buffer.allocUnsafe(this.payload.length + 5);
 		ret[0] = MessageHeaders.SOF;
 		// length of the following data, including the checksum
-		ret[1] = payloadLength + 3;
+		ret[1] = this.payload.length + 3;
 		// write the remaining data
 		ret[2] = this.type;
 		ret[3] = this.functionType;
-		if (this.payload != null) this.payload.copy(ret, 4);
+		this.payload.copy(ret, 4);
 		// followed by the checksum
 		ret[ret.length - 1] = computeChecksum(ret);
 		return ret;
@@ -90,7 +88,7 @@ export class Message {
 	/**
 	 * Checks if there's enough data in the buffer to deserialize
 	 */
-	public static isComplete(data: Buffer): boolean {
+	public static isComplete(data?: Buffer): boolean {
 		if (!data || !data.length || data.length < 5) return false; // not yet
 
 		// check the length again, this time with the transmitted length
@@ -177,7 +175,7 @@ export class Message {
 		};
 		if (this.expectedResponse != null)
 			ret.expectedResponse = FunctionType[this.functionType];
-		if (this.payload != null) ret.payload = this.payload.toString("hex");
+		ret.payload = this.payload.toString("hex");
 		return ret;
 	}
 
@@ -209,7 +207,7 @@ export class Message {
 	}
 
 	/** Finds the ID of the target or source node in a message, if it contains that information */
-	public getNodeId(): number {
+	public getNodeId(): number | undefined {
 		if (isNodeQuery(this)) return this.nodeId;
 		if (isCommandClassContainer(this)) return this.command.nodeId;
 	}
@@ -218,6 +216,7 @@ export class Message {
 	 * Returns the node this message is linked to or undefined
 	 */
 	public getNodeUnsafe(): ZWaveNode | undefined {
+		if (!this.driver.controller) return;
 		const nodeId = this.getNodeId();
 		if (nodeId != undefined)
 			return this.driver.controller.nodes.get(nodeId);
@@ -250,6 +249,10 @@ export const METADATA_priority = Symbol("priority");
 /* eslint-enable @typescript-eslint/camelcase */
 
 type MessageTypeMap = Map<string, Constructable<Message>>;
+interface MessageTypeMapEntry {
+	messageType: MessageType;
+	functionType: FunctionType;
+}
 
 function getMessageTypeMapKey(
 	messageType: MessageType,
@@ -311,11 +314,14 @@ export function messageTypes(
  */
 export function getMessageType<T extends Message>(
 	messageClass: T,
-): MessageType {
+): MessageType | undefined {
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
-	const meta = Reflect.getMetadata(METADATA_messageTypes, constr);
+	const meta: MessageTypeMapEntry | undefined = Reflect.getMetadata(
+		METADATA_messageTypes,
+		constr,
+	);
 	const ret = meta && meta.messageType;
 	log(
 		"protocol",
@@ -330,9 +336,12 @@ export function getMessageType<T extends Message>(
  */
 export function getMessageTypeStatic<T extends Constructable<Message>>(
 	classConstructor: T,
-): MessageType {
+): MessageType | undefined {
 	// retrieve the current metadata
-	const meta = Reflect.getMetadata(METADATA_messageTypes, classConstructor);
+	const meta: MessageTypeMapEntry | undefined = Reflect.getMetadata(
+		METADATA_messageTypes,
+		classConstructor,
+	);
 	const ret = meta && meta.messageType;
 	log(
 		"protocol",
@@ -347,11 +356,14 @@ export function getMessageTypeStatic<T extends Constructable<Message>>(
  */
 export function getFunctionType<T extends Message>(
 	messageClass: T,
-): FunctionType {
+): FunctionType | undefined {
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
-	const meta = Reflect.getMetadata(METADATA_messageTypes, constr);
+	const meta: MessageTypeMapEntry | undefined = Reflect.getMetadata(
+		METADATA_messageTypes,
+		constr,
+	);
 	const ret = meta && meta.functionType;
 	log(
 		"protocol",
@@ -366,9 +378,12 @@ export function getFunctionType<T extends Message>(
  */
 export function getFunctionTypeStatic<T extends Constructable<Message>>(
 	classConstructor: T,
-): FunctionType {
+): FunctionType | undefined {
 	// retrieve the current metadata
-	const meta = Reflect.getMetadata(METADATA_messageTypes, classConstructor);
+	const meta: MessageTypeMapEntry | undefined = Reflect.getMetadata(
+		METADATA_messageTypes,
+		classConstructor,
+	);
 	const ret = meta && meta.functionType;
 	log(
 		"protocol",
@@ -384,16 +399,17 @@ export function getFunctionTypeStatic<T extends Constructable<Message>>(
 export function getMessageConstructor(
 	messageType: MessageType,
 	functionType: FunctionType,
-): Constructable<Message> {
+): Constructable<Message> | undefined {
 	// Retrieve the constructor map from the Message class
-	const functionTypeMap = Reflect.getMetadata(
+	const functionTypeMap: MessageTypeMap | undefined = Reflect.getMetadata(
 		METADATA_messageTypeMap,
 		Message,
-	) as MessageTypeMap;
-	if (functionTypeMap != null)
+	);
+	if (functionTypeMap != null) {
 		return functionTypeMap.get(
 			getMessageTypeMapKey(messageType, functionType),
 		);
+	}
 }
 
 /**
@@ -438,11 +454,14 @@ export function expectedResponse(
  */
 export function getExpectedResponse<T extends Message>(
 	messageClass: T,
-): FunctionType | ResponsePredicate {
+): FunctionType | ResponsePredicate | undefined {
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_expectedResponse, constr);
+	const ret:
+		| FunctionType
+		| ResponsePredicate
+		| undefined = Reflect.getMetadata(METADATA_expectedResponse, constr);
 	if (typeof ret === "number") {
 		log(
 			"protocol",
@@ -457,6 +476,12 @@ export function getExpectedResponse<T extends Message>(
 			}]`,
 			"silly",
 		);
+	} else {
+		log(
+			"protocol",
+			`${constr.name}: retrieving expected response => undefined`,
+			"silly",
+		);
 	}
 	return ret;
 }
@@ -466,9 +491,12 @@ export function getExpectedResponse<T extends Message>(
  */
 export function getExpectedResponseStatic<T extends Constructable<Message>>(
 	classConstructor: T,
-): FunctionType | ResponsePredicate {
+): FunctionType | ResponsePredicate | undefined {
 	// retrieve the current metadata
-	const ret = Reflect.getMetadata(
+	const ret:
+		| FunctionType
+		| ResponsePredicate
+		| undefined = Reflect.getMetadata(
 		METADATA_expectedResponse,
 		classConstructor,
 	);
@@ -488,6 +516,14 @@ export function getExpectedResponseStatic<T extends Constructable<Message>>(
 			}: retrieving expected response => [Predicate${
 				ret.name.length > 0 ? " " + ret.name : ""
 			}]`,
+			"silly",
+		);
+	} else {
+		log(
+			"protocol",
+			`${
+				classConstructor.name
+			}: retrieving expected response => undefined`,
 			"silly",
 		);
 	}
@@ -516,18 +552,29 @@ export function priority(prio: MessagePriority): ClassDecorator {
  */
 export function getDefaultPriority<T extends Message>(
 	messageClass: T,
-): MessagePriority {
+): MessagePriority | undefined {
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_priority, constr);
-	log(
-		"protocol",
-		`${constr.name}: retrieving default priority => ${
-			MessagePriority[ret]
-		} (${ret})`,
-		"silly",
+	const ret: MessagePriority | undefined = Reflect.getMetadata(
+		METADATA_priority,
+		constr,
 	);
+	if (ret) {
+		log(
+			"protocol",
+			`${constr.name}: retrieving default priority => ${
+				MessagePriority[ret]
+			} (${ret})`,
+			"silly",
+		);
+	} else {
+		log(
+			"protocol",
+			`${constr.name}: retrieving default priority => undefined`,
+			"silly",
+		);
+	}
 	return ret;
 }
 
@@ -536,15 +583,28 @@ export function getDefaultPriority<T extends Message>(
  */
 export function getDefaultPriorityStatic<T extends Constructable<Message>>(
 	classConstructor: T,
-): MessagePriority {
+): MessagePriority | undefined {
 	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_priority, classConstructor);
-	log(
-		"protocol",
-		`${classConstructor.name}: retrieving default priority => ${
-			MessagePriority[ret]
-		} (${ret})`,
-		"silly",
+	const ret: MessagePriority | undefined = Reflect.getMetadata(
+		METADATA_priority,
+		classConstructor,
 	);
+	if (ret) {
+		log(
+			"protocol",
+			`${classConstructor.name}: retrieving default priority => ${
+				MessagePriority[ret]
+			} (${ret})`,
+			"silly",
+		);
+	} else {
+		log(
+			"protocol",
+			`${
+				classConstructor.name
+			}: retrieving default priority => undefined`,
+			"silly",
+		);
+	}
 	return ret;
 }

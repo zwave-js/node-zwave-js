@@ -20,7 +20,7 @@ import {
 } from "./GetSUCNodeIdMessages";
 
 describe("lib/controller/GetSUCNodeIdRequest => ", () => {
-	const req = new GetSUCNodeIdRequest(undefined);
+	const req = new GetSUCNodeIdRequest(undefined as any);
 
 	it("should be a Message", () => {
 		expect(req).toBeInstanceOf(Message);
@@ -52,7 +52,7 @@ describe("lib/controller/GetSUCNodeIdRequest => ", () => {
 });
 
 describe("lib/controller/GetSUCNodeIdResponse => ", () => {
-	const res = new GetSUCNodeIdResponse(undefined);
+	const res = new GetSUCNodeIdResponse(undefined as any);
 
 	it("should be a Message", () => {
 		expect(res).toBeInstanceOf(Message);

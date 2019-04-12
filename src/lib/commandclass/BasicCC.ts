@@ -45,9 +45,9 @@ export class BasicCC extends CommandClass {
 		if (targetValue != undefined) this.targetValue = targetValue;
 	}
 
-	@ccValue() public currentValue: Maybe<number>;
-	@ccValue() public targetValue: number;
-	@ccValue() public duration: Duration;
+	@ccValue() public currentValue: Maybe<number> | undefined;
+	@ccValue() public targetValue: number | undefined;
+	@ccValue() public duration: Duration | undefined;
 
 	public serialize(): Buffer {
 		switch (this.ccCommand) {
@@ -78,13 +78,14 @@ export class BasicCC extends CommandClass {
 				this.duration = Duration.parseReport(this.payload[2]);
 				break;
 
-			default:
+			default: {
 				throw new ZWaveError(
 					`Cannot deserialize a Basic CC with a command other than Report. Received ${
 						BasicCommand[this.ccCommand]
 					} (${num2hex(this.ccCommand)})`,
 					ZWaveErrorCodes.CC_Invalid,
 				);
+			}
 		}
 	}
 }

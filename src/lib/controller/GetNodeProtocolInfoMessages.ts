@@ -50,12 +50,9 @@ export type Baudrate = 9600 | 40000 | 100000;
 @expectedResponse(FunctionType.GetNodeProtocolInfo)
 @priority(MessagePriority.NodeQuery)
 export class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
-	public constructor(driver: Driver, nodeId?: number) {
+	public constructor(driver: Driver, public nodeId: number) {
 		super(driver);
-		this.nodeId = nodeId;
 	}
-
-	public nodeId: number;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.nodeId]);

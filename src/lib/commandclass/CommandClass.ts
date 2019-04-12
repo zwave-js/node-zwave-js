@@ -76,6 +76,12 @@ export class CommandClass {
 		// NoOp CCs have no command and no payload
 		if (this.ccId === CommandClasses["No Operation"])
 			return Buffer.from([this.ccId]);
+		else if (this.ccCommand == undefined) {
+			throw new ZWaveError(
+				"Cannot serialize a Command Class without a command",
+				ZWaveErrorCodes.CC_Invalid,
+			);
+		}
 
 		const payloadLength = this.payload.length;
 		const ccIdLength = this.isExtended() ? 2 : 1;
@@ -92,9 +98,11 @@ export class CommandClass {
 		this.ccId = CommandClass.getCommandClassWithoutHeader(data);
 		const ccIdLength = this.isExtended() ? 2 : 1;
 		if (data.length > ccIdLength) {
+			// This is not a NoOp CC (contains command and payload)
 			this.ccCommand = data[ccIdLength];
 			this.payload = data.slice(ccIdLength + 1);
 		} else {
+			// NoOp CC (no command, no payload)
 			this.payload = Buffer.allocUnsafe(0);
 		}
 	}
@@ -108,6 +116,12 @@ export class CommandClass {
 	}
 
 	public serialize(): Buffer {
+		if (this.nodeId == undefined) {
+			throw new ZWaveError(
+				"Cannot serialize a Command Class without a target Node ID",
+				ZWaveErrorCodes.CC_Invalid,
+			);
+		}
 		const data = this.serializeWithoutHeader();
 		return Buffer.concat([Buffer.from([this.nodeId, data.length]), data]);
 	}
@@ -152,29 +166,26 @@ export class CommandClass {
 		return getCCConstructor(cc) /* || CommandClass */;
 	}
 
-	public static from(
-		driver: IDriver,
-		serializedCC: Buffer,
-	): CommandClass | undefined {
-		const Constructor = CommandClass.getConstructor(serializedCC);
-		if (Constructor) {
-			const ret = new Constructor(driver);
-			ret.deserialize(serializedCC);
-			return ret;
-		}
+	public static from(driver: IDriver, serializedCC: Buffer): CommandClass {
+		// Fall back to unspecified command class in case we receive one that is not implemented
+		const Constructor =
+			CommandClass.getConstructor(serializedCC) || CommandClass;
+		const ret = new Constructor(driver);
+		ret.deserialize(serializedCC);
+		return ret;
 	}
 
 	public static fromEncapsulated(
 		driver: IDriver,
 		encapCC: CommandClass,
 		serializedCC: Buffer,
-	): CommandClass | undefined {
-		const Constructor = CommandClass.getConstructor(serializedCC);
-		if (Constructor) {
-			const ret = new Constructor(driver);
-			ret.deserializeFromEncapsulation(encapCC, serializedCC);
-			return ret;
-		}
+	): CommandClass {
+		// Fall back to unspecified command class in case we receive one that is not implemented
+		const Constructor =
+			CommandClass.getConstructor(serializedCC) || CommandClass;
+		const ret = new Constructor(driver);
+		ret.deserializeFromEncapsulation(encapCC, serializedCC);
+		return ret;
 	}
 
 	public toJSON(): JSONObject {
@@ -186,7 +197,7 @@ export class CommandClass {
 			nodeId: this.nodeId,
 			ccId: CommandClasses[this.ccId] || num2hex(this.ccId),
 		};
-		if (this.payload != undefined && this.payload.length > 0)
+		if (this.payload.length > 0)
 			ret.payload = "0x" + this.payload.toString("hex");
 		return ret;
 	}

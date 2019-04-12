@@ -11,7 +11,7 @@ export type SerializedValue =
 	| undefined;
 export interface CacheValue {
 	value: SerializedValue;
-	endpoint: number;
+	endpoint: number | undefined;
 	propertyName: string;
 }
 

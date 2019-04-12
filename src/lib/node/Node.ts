@@ -225,7 +225,10 @@ export class ZWaveNode extends EventEmitter {
 	//#endregion
 
 	public isControllerNode(): boolean {
-		return this.id === this.driver.controller.ownNodeId;
+		return (
+			this.driver.controller != undefined &&
+			this.id === this.driver.controller.ownNodeId
+		);
 	}
 
 	public addCC(cc: CommandClasses, info: Partial<CommandClassInfo>): void {

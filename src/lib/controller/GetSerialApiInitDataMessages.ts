@@ -33,16 +33,16 @@ export class GetSerialApiInitDataResponse extends Message {
 
 	private _initCaps: number;
 	public get isSlave(): boolean {
-		return (this._initCaps & InitCapabilityFlags.Slave) !== 0;
+		return !!(this._initCaps & InitCapabilityFlags.Slave);
 	}
 	public get supportsTimers(): boolean {
-		return (this._initCaps & InitCapabilityFlags.SupportsTimers) !== 0;
+		return !!(this._initCaps & InitCapabilityFlags.SupportsTimers);
 	}
 	public get isSecondary(): boolean {
-		return (this._initCaps & InitCapabilityFlags.Secondary) !== 0;
+		return !!(this._initCaps & InitCapabilityFlags.Secondary);
 	}
 	public get isStaticUpdateController(): boolean {
-		return (this._initCaps & InitCapabilityFlags.SUC) !== 0;
+		return !!(this._initCaps & InitCapabilityFlags.SUC);
 	}
 
 	private _nodeIds: number[];

@@ -4,7 +4,7 @@ import { Message } from "../message/Message";
 import { MessageSupportCheck } from "./Driver";
 
 export interface IDriver {
-	controller: ZWaveController;
+	controller: ZWaveController | undefined;
 
 	// wotan-disable no-misused-generics
 	sendMessage<TResponse extends Message = Message>(

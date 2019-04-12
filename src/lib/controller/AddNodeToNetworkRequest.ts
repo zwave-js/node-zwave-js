@@ -68,8 +68,8 @@ export class AddNodeToNetworkRequest extends Message {
 		return this._status;
 	}
 
-	private _statusContext: AddNodeStatusContext;
-	public get statusContext(): AddNodeStatusContext {
+	private _statusContext: AddNodeStatusContext | undefined;
+	public get statusContext(): AddNodeStatusContext | undefined {
 		return this._statusContext;
 	}
 

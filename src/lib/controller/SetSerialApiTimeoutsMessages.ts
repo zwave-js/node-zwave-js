@@ -16,12 +16,10 @@ import { JSONObject } from "../util/misc";
 @expectedResponse(FunctionType.SetSerialApiTimeouts)
 @priority(MessagePriority.Controller)
 export class SetSerialApiTimeoutsRequest extends Message {
-	public constructor(driver: Driver);
-	public constructor(driver: Driver, ackTimeout: number, byteTimeout: number);
 	public constructor(
 		driver: Driver,
-		public ackTimeout?: number,
-		public byteTimeout?: number,
+		public ackTimeout: number,
+		public byteTimeout: number,
 	) {
 		super(driver);
 	}
