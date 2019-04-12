@@ -57,7 +57,7 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 			false,
 			false,
 		);
-		let payload = Message.getPayload(msg1.serialize());
+		let payload = Message.extractPayload(msg1.serialize());
 		expect(payload).toEqual(Buffer.from([0x01]));
 
 		const msg2 = new AddNodeToNetworkRequest(
@@ -66,7 +66,7 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 			true,
 			false,
 		);
-		payload = Message.getPayload(msg2.serialize());
+		payload = Message.extractPayload(msg2.serialize());
 		expect(payload).toEqual(Buffer.from([0x81]));
 
 		const msg3 = new AddNodeToNetworkRequest(
@@ -75,7 +75,7 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 			false,
 			true,
 		);
-		payload = Message.getPayload(msg3.serialize());
+		payload = Message.extractPayload(msg3.serialize());
 		expect(payload).toEqual(Buffer.from([0x41]));
 
 		const msg4 = new AddNodeToNetworkRequest(
@@ -84,7 +84,7 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 			true,
 			true,
 		);
-		payload = Message.getPayload(msg4.serialize());
+		payload = Message.extractPayload(msg4.serialize());
 		expect(payload).toEqual(Buffer.from([0xc1]));
 
 		const msg5 = new AddNodeToNetworkRequest(
@@ -93,7 +93,7 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 			true,
 			true,
 		);
-		payload = Message.getPayload(msg5.serialize());
+		payload = Message.extractPayload(msg5.serialize());
 		expect(payload).toEqual(Buffer.from([0xc5]));
 	});
 });

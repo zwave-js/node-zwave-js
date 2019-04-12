@@ -55,12 +55,14 @@ function getNextCallbackId(): number {
 @messageTypes(MessageType.Request, FunctionType.SendData)
 @expectedResponse(testResponseForSendDataRequest)
 @priority(MessagePriority.Normal)
-export class SendDataRequest<CCType extends CommandClass = CommandClass>
-	extends Message
-	implements ICommandClassContainer {
-	// empty constructor to parse messages
+export class SendDataRequestBase<
+	CCType extends CommandClass = CommandClass
+> extends Message {
+	// #1: Empty constructor
 	public constructor(driver: IDriver);
-	// default constructor to send messages
+	// #2: Deserialization of reports
+	public constructor(driver: IDriver, data: Buffer);
+	// #3: Default constructor to send messages
 	public constructor(
 		driver: IDriver,
 		command: CCType,
@@ -69,24 +71,45 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	);
 	public constructor(
 		driver: IDriver,
-		command?: CCType,
-		/** Options regarding the transmission of the message */
-		public transmitOptions?: TransmitOptions,
-		/** A callback ID to map requests and responses */
-		public callbackId?: number,
+		commandOrData?: CCType | Buffer,
+		transmitOptions?: TransmitOptions,
+		callbackId?: number,
 	) {
-		super(driver);
-		this.command = command;
-		if (command != null) {
-			// non-empty constructor -> define default values
-			if (this.transmitOptions == null)
-				this.transmitOptions = TransmitOptions.DEFAULT;
-			if (this.callbackId == null) this.callbackId = getNextCallbackId();
+		// THIS DOESN'T WORK!
+		// WE NEED TO CHANGE THE inheritance order
+
+		// Test which implementation we follow
+		if (commandOrData == undefined) {
+			// #1: Empty
+			super(driver);
+		} else if (Buffer.isBuffer(commandOrData)) {
+			// #2: Deserialization
+			super(driver, commandOrData);
+			const payload = commandOrData;
+			this.callbackId = payload[0];
+			this._transmitStatus = payload[1];
+			// not sure what bytes 2 and 3 mean
+			// the CC seems not to be included in this, but rather come in an application command later
+		} else {
+			// #2: Basic constructor
+			super(driver);
+			this.command = commandOrData;
+			this.transmitOptions =
+				transmitOptions != undefined
+					? transmitOptions
+					: TransmitOptions.DEFAULT;
+			this.callbackId =
+				callbackId != undefined ? callbackId : getNextCallbackId();
 		}
 	}
 
 	/** The command this message contains */
-	public command: CCType;
+	public command: CCType | undefined;
+
+	/** Options regarding the transmission of the message */
+	public transmitOptions: TransmitOptions;
+	/** A callback ID to map requests and responses */
+	public callbackId: number;
 
 	private _transmitStatus: TransmitStatus;
 	public get transmitStatus(): TransmitStatus {
@@ -107,18 +130,6 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		]);
 
 		return super.serialize();
-	}
-
-	// We deserialize SendData requests differently as the controller responses have a different format
-	public deserialize(data: Buffer): number {
-		const ret = super.deserialize(data);
-
-		this.callbackId = this.payload[0];
-		this._transmitStatus = this.payload[1];
-		// not sure what bytes 2 and 3 mean
-		// the CC seems not to be included in this, but rather come in an application command later
-
-		return ret;
 	}
 
 	public toJSON(): JSONObject {
@@ -168,6 +179,11 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		);
 	}
 }
+
+export class SendDataRequest extends SendDataRequestBase
+	implements ICommandClassContainer {}
+
+export class SendDataRequestTransmitReport extends SendDataRequestBase {}
 
 @messageTypes(MessageType.Response, FunctionType.SendData)
 export class SendDataResponse extends Message {
