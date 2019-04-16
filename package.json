@@ -22,7 +22,7 @@
     "url": "https://github.com/AlCalzone/node-zwave-js/issues"
   },
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=6.0.0"
   },
   "devDependencies": {
     "@fimbul/mithotyn": "^0.18.0",

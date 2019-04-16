@@ -4,10 +4,13 @@ import { num2hex } from "../util/strings";
 import { Duration } from "../values/Duration";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
 import {
+	CCCommand,
 	ccValue,
 	CommandClass,
 	commandClass,
 	expectedCCResponse,
+	getCCCommandConstructor,
+	getCCCommandStatic,
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
@@ -22,28 +25,77 @@ export enum BasicCommand {
 @implementedVersion(2) // Update tests in CommandClass.test.ts when changing this
 @expectedCCResponse(CommandClasses.Basic)
 export class BasicCC extends CommandClass {
-	public constructor(driver: IDriver, nodeId?: number);
+	public constructor(driver: IDriver, data: Buffer);
 	public constructor(
 		driver: IDriver,
 		nodeId: number,
-		ccCommand: BasicCommand.Get,
+		ccCommand: BasicCommand,
 	);
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		ccCommand: BasicCommand.Set,
-		targetValue: number,
-	);
+	// public constructor(
+	// 	driver: IDriver,
+	// 	nodeId: number,
+	// 	ccCommand: BasicCommand.Get,
+	// );
+	// public constructor(
+	// 	driver: IDriver,
+	// 	nodeId: number,
+	// 	ccCommand: BasicCommand.Set,
+	// 	targetValue: number,
+	// );
 
 	public constructor(
 		driver: IDriver,
-		public nodeId: number,
-		public ccCommand?: BasicCommand,
-		targetValue?: number,
+		nodeIdOrData: number | Buffer,
+		ccCommand?: BasicCommand,
 	) {
+		if (Buffer.isBuffer(nodeIdOrData)) {
+			// Try to find the subclass which implements the serialization
+			const ccCommand = CommandClass.getCCCommand(nodeIdOrData);
+			if (ccCommand != undefined) {
+				const commandConstructor = getCCCommandConstructor(
+					BasicCC,
+					ccCommand,
+				);
+				if (
+					commandConstructor &&
+					(new.target as any) !== commandConstructor
+				)
+					return new commandConstructor(driver, nodeIdOrData);
+			}
+
+			super(driver, nodeIdOrData);
+			// Nothing special to deserialize
+		}
+		if (Buffer.isBuffer(nodeIdOrData))
+			ccCommand = CommandClass.getCCCommand(nodeIdOrData);
+		switch (ccCommand) {
+			case BasicCommand.Get:
+				if ((new.target as any) !== BasicCCGet) return new BasicCCGet();
+		}
+		if (typeof nodeIdOrData === "number") {
+			if (
+				ccCommand === BasicCommand.Get &&
+				(new.target as any) !== BasicCCGet
+			)
+				return new BasicCCGet(driver, nodeIdOrData);
+			super(driver, nodeIdOrData, ccCommand);
+		} else {
+			const ccCommand = CommandClass.getCCCommand(nodeIdOrData);
+			if (
+				ccCommand === BasicCommand.Get &&
+				(new.target as any) !== BasicCCGet
+			)
+				return new BasicCCGet(driver, nodeIdOrData);
+			super(driver, nodeIdOrData);
+			// Nothing special to deserialize
+		}
+
 		super(driver, nodeId, ccCommand);
 		if (targetValue != undefined) this.targetValue = targetValue;
 	}
+
+	public nodeId: number;
+	public ccCommand: BasicCommand;
 
 	@ccValue() public currentValue: Maybe<number> | undefined;
 	@ccValue() public targetValue: number | undefined;
@@ -87,5 +139,47 @@ export class BasicCC extends CommandClass {
 				);
 			}
 		}
+	}
+}
+
+@CCCommand(BasicCommand.Get)
+export class BasicCCGet extends BasicCC {
+	public constructor(driver: IDriver, data: Buffer);
+	public constructor(driver: IDriver, nodeId: number);
+
+	public constructor(driver: IDriver, nodeIdOrData: number | Buffer) {
+		if (typeof nodeIdOrData === "number") {
+			super(driver, nodeIdOrData, getCCCommandStatic(new.target)!);
+		} else {
+			super(driver, nodeIdOrData);
+			// Nothing special to deserialize
+		}
+	}
+}
+
+@CCCommand(BasicCommand.Set)
+export class BasicCCSet extends BasicCC {
+	public constructor(driver: IDriver, data: Buffer);
+	public constructor(driver: IDriver, nodeId: number, targetValue: number);
+
+	public constructor(
+		driver: IDriver,
+		nodeIdOrData: number | Buffer,
+		targetValue?: number,
+	) {
+		if (typeof nodeIdOrData === "number") {
+			super(driver, nodeIdOrData, getCCCommandStatic(new.target)!);
+			this.targetValue = targetValue!;
+		} else {
+			super(driver, nodeIdOrData);
+			this.targetValue = this.payload[0];
+		}
+	}
+
+	public targetValue: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.targetValue]);
+		return super.serialize();
 	}
 }

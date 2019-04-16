@@ -17,8 +17,8 @@ import {
 } from "./Constants";
 
 export interface Constructable<T extends Message> {
-	new (driver: IDriver, data?: Buffer): T;
 	new (driver: IDriver, ...constructorArgs: any[]): T;
+	new (driver: IDriver, data?: Buffer): T;
 }
 
 /**
