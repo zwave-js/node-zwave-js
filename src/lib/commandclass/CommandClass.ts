@@ -34,73 +34,62 @@ export enum StateKind {
 	Dynamic = 1 << 2,
 }
 
-type CommandClassDeserializationOptions =
+export type CommandClassDeserializationOptions = { data: Buffer } & (
 	| {
-			encapsulated: false;
+			encapsulated?: false;
 	  }
 	| {
 			encapsulated: true;
 			encapCC: CommandClass;
-	  };
-type CommandClassConstructorOptions = {
+	  });
+
+export function gotDeserializationOptions(
+	options: any,
+): options is CommandClassDeserializationOptions {
+	return Buffer.isBuffer(options.data);
+}
+
+export interface CommandClassCreationOptions {
+	nodeId: number;
 	ccCommand?: number; // undefined = NoOp
 	payload?: Buffer;
-};
+}
+
+function gotCreationOptions(
+	options: any,
+): options is CommandClassCreationOptions {
+	return typeof options.nodeId === "number";
+}
+
+export type CommandClassOptions =
+	| CommandClassCreationOptions
+	| CommandClassDeserializationOptions;
+
 @implementedVersion(Number.POSITIVE_INFINITY) // per default don't impose any restrictions on the version
 export class CommandClass {
 	// empty constructor to parse messages
-	public constructor(
-		driver: IDriver,
-		data: Buffer,
-		options?: CommandClassDeserializationOptions,
-	);
-	// default constructor to send messages
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		options?: CommandClassConstructorOptions,
-	);
-	// implementation
-	public constructor(
-		driver: IDriver,
-		nodeIdOrData: number | Buffer,
-		options?:
-			| CommandClassDeserializationOptions
-			| CommandClassConstructorOptions,
-	) {
+	public constructor(driver: IDriver, options: CommandClassOptions) {
 		// Extract the cc from declared metadata if not provided
 		this.ccId = getCommandClass(this);
-		// For deserialized commands, try to invoke the correct subclass constructor
-		if (Buffer.isBuffer(nodeIdOrData)) {
-			// Try to find the subclass which implements the deserialization
-			const ccCommand = CommandClass.getCCCommand(nodeIdOrData);
+
+		if (gotDeserializationOptions(options)) {
+			// For deserialized commands, try to invoke the correct subclass constructor
+			const ccCommand = CommandClass.getCCCommand(options.data);
 			if (ccCommand != undefined) {
 				const CommandConstructor = getCCCommandConstructor(
 					this.ccId,
 					ccCommand,
 				);
-				if (CommandConstructor && new.target !== CommandConstructor) {
-					return new CommandConstructor(driver, nodeIdOrData);
+				if (
+					CommandConstructor &&
+					(new.target as any) !== CommandConstructor
+				) {
+					return new CommandConstructor(driver, options);
 				}
 			}
-		}
 
-		// Otherwise fall back to the default constructors
-		if (typeof nodeIdOrData === "number") {
-			options = options as CommandClassConstructorOptions | undefined;
-			this.nodeId = nodeIdOrData;
-			if (options) {
-				const { ccCommand, payload = Buffer.allocUnsafe(0) } = options;
-				this.ccCommand = ccCommand;
-				this.payload = payload;
-			}
-		} else {
-			options = options as CommandClassDeserializationOptions | undefined;
-			const data = nodeIdOrData;
-			this.nodeId = CommandClass.getNodeId(data);
-			const lengthWithoutHeader = data[1];
-			const dataWithoutHeader = data.slice(2, 2 + lengthWithoutHeader);
-			if (options && options.encapsulated) {
+			// If the constructor is correct or none was found, fall back to normal deserialization
+			if (options.encapsulated) {
 				({
 					nodeId: this.nodeId,
 					ccId: this.ccId,
@@ -108,15 +97,30 @@ export class CommandClass {
 					payload: this.payload,
 				} = this.deserializeFromEncapsulation(
 					options.encapCC,
-					dataWithoutHeader,
+					options.data,
 				));
 			} else {
+				this.nodeId = CommandClass.getNodeId(options.data);
+				const lengthWithoutHeader = options.data[1];
+				const dataWithoutHeader = options.data.slice(
+					2,
+					2 + lengthWithoutHeader,
+				);
 				({
 					ccId: this.ccId,
 					ccCommand: this.ccCommand,
 					payload: this.payload,
 				} = this.deserializeWithoutHeader(dataWithoutHeader));
 			}
+		} else if (gotCreationOptions(options)) {
+			const {
+				nodeId,
+				ccCommand = getCCCommand(this),
+				payload = Buffer.allocUnsafe(0),
+			} = options;
+			this.nodeId = nodeId;
+			this.ccCommand = ccCommand;
+			this.payload = payload;
 		}
 	}
 
@@ -194,7 +198,7 @@ export class CommandClass {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-	public deserializeFromEncapsulation(encapCC: CommandClass, data: Buffer) {
+	private deserializeFromEncapsulation(encapCC: CommandClass, data: Buffer) {
 		return {
 			nodeId: encapCC.nodeId, // TODO: is this neccessarily true?
 			...this.deserializeWithoutHeader(data),
@@ -236,7 +240,7 @@ export class CommandClass {
 		// Fall back to unspecified command class in case we receive one that is not implemented
 		const Constructor =
 			CommandClass.getConstructor(serializedCC) || CommandClass;
-		const ret = new Constructor(driver, serializedCC);
+		const ret = new Constructor(driver, { data: serializedCC });
 		return ret;
 	}
 
@@ -248,8 +252,9 @@ export class CommandClass {
 		// Fall back to unspecified command class in case we receive one that is not implemented
 		const Constructor =
 			CommandClass.getConstructor(serializedCC) || CommandClass;
-		const ret = new Constructor(driver, serializedCC, {
-			encapsulation: true,
+		const ret = new Constructor(driver, {
+			data: serializedCC,
+			encapsulated: true,
 			encapCC,
 		});
 		return ret;
@@ -409,7 +414,12 @@ export const METADATA_version = Symbol("version");
 /* eslint-enable @typescript-eslint/camelcase */
 
 export interface Constructable<T extends CommandClass> {
-	new (driver: IDriver, data?: Buffer): T;
+	new (
+		driver: IDriver,
+		options:
+			| CommandClassCreationOptions
+			| CommandClassDeserializationOptions,
+	): T;
 }
 
 type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
