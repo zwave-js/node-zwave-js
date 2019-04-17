@@ -124,6 +124,10 @@ export class CommandClass {
 			this.ccCommand = ccCommand;
 			this.payload = payload;
 		}
+		this.version = this.driver.getSafeCCVersionForNode(
+			this.nodeId,
+			this.ccId,
+		);
 	}
 
 	protected driver: IDriver;
@@ -135,12 +139,9 @@ export class CommandClass {
 	// Work around https://github.com/Microsoft/TypeScript/issues/27555
 	public payload!: Buffer;
 
-	/**
-	 * The version of the command class used
-	 * When this CC is received, version is taken from the metadata we have about the node.
-	 * When this CC is sent, version is set by the driver just before sending it.
-	 */
-	public version: number | undefined;
+	/** The version of the command class used */
+	// Work around https://github.com/Microsoft/TypeScript/issues/27555
+	public version!: number;
 
 	/** Which endpoint of the node this CC belongs to. 0 for the root device. */
 	public endpoint: number | undefined;
