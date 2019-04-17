@@ -70,6 +70,7 @@
 		"body": [
 			"import {",
 			"\tCCCommand,",
+			"\tCCCommandOptions,",
 			"\tCommandClass,",
 			"\tcommandClass,",
 			"\texpectedCCResponse,",
@@ -99,8 +100,8 @@
 	"Z-Wave CC Command": {
 		"prefix": "zwcccmd",
 		"body": [
-			"interface ${1:Basic}CC${2:Get}Options {",
-			"\tnodeId: number;",
+			"interface ${1:Basic}CC${2:Get}Options extends CCCommandOptions {",
+			"\tsomeProperty: number;",
 			"}",
 			"",
 			"@CCCommand(${1}Command.${2})",
@@ -127,6 +128,22 @@
 			"${0}"
 		],
 		"description": "Specific implementation of a single CC command"
+	},
+	"Z-Wave CC Command (Report)": {
+		"prefix": "zwccreport",
+		"body": [
+			"@CCCommand(${1:Basic}Command.${2}Report)",
+			"export class ${1}CC${2}Report extends ${1}CC {",
+			"\tpublic constructor(",
+			"\t\tdriver: IDriver,",
+			"\t\toptions: CommandClassDeserializationOptions,",
+			"\t) {",
+			"\t\tsuper(driver, options);",
+			"\t\t${0:// TODO: Deserialize}",
+			"\t}",
+			"}"
+		],
+		"description": "Specific implementation of a single CC report"
 	},
 	"Readonly property": {
 		"prefix": "propread",
