@@ -3,6 +3,7 @@ import { Duration } from "../values/Duration";
 import { Maybe, parseBoolean, parseMaybeBoolean } from "../values/Primitive";
 import {
 	CCCommand,
+	CCCommandOptions,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -26,22 +27,17 @@ export class BinarySwitchCC extends CommandClass {
 	public ccCommand: BinarySwitchCommand;
 }
 
-interface BinarySwitchCCGetOptions {
-	nodeId: number;
-}
-
 @CCCommand(BinarySwitchCommand.Get)
 export class BinarySwitchCCGet extends BinarySwitchCC {
 	public constructor(
 		driver: IDriver,
-		options: CommandClassDeserializationOptions | BinarySwitchCCGetOptions,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
 	}
 }
 
-interface BinarySwitchCCSetOptions {
-	nodeId: number;
+interface BinarySwitchCCSetOptions extends CCCommandOptions {
 	targetValue: boolean;
 	duration?: Duration;
 }

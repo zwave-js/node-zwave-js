@@ -30,7 +30,7 @@ When making changes or adding tests, make sure they run with `npm t`.
 1. For each command the Command Class implements, use the `zwcccmd` snippet to generate and implement the command structure.
 
     - The command should be named `<cc-name>CC<command-name>`, where `<command-name>` is the name of the command as defined in the `<cc-name>Commands` enumeration.
-    - The `<cc-name>CC<command-name>Options` interface and the `serialize()` override are only necessary if the command is meant to be sent.
+    - The `<cc-name>CC<command-name>Options` interface and the `serialize()` override are only necessary if the command is meant to be sent. Use `CCCommandOptions` if the command accepts no extra parameters.
     - The constructor overload using `CommandClassDeserializationOptions` and `if (gotDeserializationOptions(options))` is only necessary if the command is meant to be received.
 
 1. Add tests in `<cc-name>CC.test.ts`

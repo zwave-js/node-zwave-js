@@ -2,6 +2,7 @@ import { IDriver } from "../driver/IDriver";
 import { parseBitMask } from "../values/Primitive";
 import {
 	CCCommand,
+	CCCommandOptions,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -42,8 +43,7 @@ export class BinarySensorCC extends CommandClass {
 	public ccCommand: BinarySensorCommand;
 }
 
-interface BinarySensorCCGetOptions {
-	nodeId: number;
+interface BinarySensorCCGetOptions extends CCCommandOptions {
 	sensorType?: BinarySensorType;
 }
 
@@ -67,17 +67,11 @@ export class BinarySensorCCGet extends BinarySensorCC {
 	}
 }
 
-interface BinarySensorCCSupportedGetOptions {
-	nodeId: number;
-}
-
 @CCCommand(BinarySensorCommand.SupportedGet)
 export class BinarySensorCCSupportedGet extends BinarySensorCC {
 	public constructor(
 		driver: IDriver,
-		options:
-			| CommandClassDeserializationOptions
-			| BinarySensorCCSupportedGetOptions,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
 		// Deserialization not supported

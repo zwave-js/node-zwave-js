@@ -1,6 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import {
 	CCCommand,
+	CCCommandOptions,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -79,16 +80,9 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 	*/
 }
 
-interface CentralSceneCCSupportedGetOptions {
-	nodeId: number;
-}
-
 @CCCommand(CentralSceneCommand.SupportedGet)
 export class CentralSceneCCSupportedGet extends CentralSceneCC {
-	public constructor(
-		driver: IDriver,
-		options: CentralSceneCCSupportedGetOptions,
-	) {
+	public constructor(driver: IDriver, options: CCCommandOptions) {
 		super(driver, options);
 	}
 }
@@ -142,22 +136,14 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	}
 }
 
-interface CentralSceneCCConfigurationGetOptions {
-	nodeId: number;
-}
-
 @CCCommand(CentralSceneCommand.ConfigurationGet)
 export class CentralSceneCCConfigurationGet extends CentralSceneCC {
-	public constructor(
-		driver: IDriver,
-		options: CentralSceneCCConfigurationGetOptions,
-	) {
+	public constructor(driver: IDriver, options: CCCommandOptions) {
 		super(driver, options);
 	}
 }
 
-interface CentralSceneCCConfigurationSetOptions {
-	nodeId: number;
+interface CentralSceneCCConfigurationSetOptions extends CCCommandOptions {
 	slowRefresh: boolean;
 }
 

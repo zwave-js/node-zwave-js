@@ -3,6 +3,7 @@ import { Duration } from "../values/Duration";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
 import {
 	CCCommand,
+	CCCommandOptions,
 	ccValue,
 	CommandClass,
 	commandClass,
@@ -26,22 +27,17 @@ export class BasicCC extends CommandClass {
 	public ccCommand: BasicCommand;
 }
 
-interface BasicCCGetOptions {
-	nodeId: number;
-}
-
 @CCCommand(BasicCommand.Get)
 export class BasicCCGet extends BasicCC {
 	public constructor(
 		driver: IDriver,
-		options: CommandClassDeserializationOptions | BasicCCGetOptions,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
 	}
 }
 
-interface BasicCCSetOptions {
-	nodeId: number;
+interface BasicCCSetOptions extends CCCommandOptions {
 	targetValue: number;
 }
 

@@ -1,6 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import {
 	CCCommand,
+	CCCommandOptions,
 	ccValue,
 	CommandClass,
 	commandClass,
@@ -23,15 +24,11 @@ export class BatteryCC extends CommandClass {
 	public ccCommand: BatteryCommand;
 }
 
-interface BatteryCCGetOptions {
-	nodeId: number;
-}
-
 @CCCommand(BatteryCommand.Get)
 export class BatteryCCGet extends BatteryCC {
 	public constructor(
 		driver: IDriver,
-		options: CommandClassDeserializationOptions | BatteryCCGetOptions,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
 	}

@@ -49,8 +49,11 @@ export function gotDeserializationOptions(
 	return Buffer.isBuffer(options.data);
 }
 
-export interface CommandClassCreationOptions {
+export interface CCCommandOptions {
 	nodeId: number;
+}
+
+export interface CommandClassCreationOptions extends CCCommandOptions {
 	ccCommand?: number; // undefined = NoOp
 	payload?: Buffer;
 }
