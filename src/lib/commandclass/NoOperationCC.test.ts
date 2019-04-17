@@ -3,7 +3,7 @@ import { CommandClasses } from "./CommandClasses";
 import { NoOperationCC } from "./NoOperationCC";
 
 describe("lib/commandclass/NoOperationCC => ", () => {
-	const cc = new NoOperationCC(undefined, 2);
+	const cc = new NoOperationCC(undefined as any, { nodeId: 2 });
 	let serialized: Buffer;
 
 	it("should be a CommandClass", () => {
@@ -20,7 +20,7 @@ describe("lib/commandclass/NoOperationCC => ", () => {
 	});
 
 	it("should deserialize correctly", () => {
-		const deserialized = CommandClass.from(undefined, serialized);
+		const deserialized = CommandClass.from(undefined as any, serialized);
 		expect(deserialized).toBeInstanceOf(NoOperationCC);
 		expect(deserialized.nodeId).toBe(cc.nodeId);
 	});
