@@ -24,7 +24,7 @@ export enum BinarySwitchCommand {
 @implementedVersion(2)
 @expectedCCResponse(CommandClasses["Binary Switch"])
 export class BinarySwitchCC extends CommandClass {
-	public ccCommand: BinarySwitchCommand;
+	public ccCommand!: BinarySwitchCommand;
 }
 
 @CCCommand(BinarySwitchCommand.Get)
@@ -50,7 +50,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
-			// Deserialization not implemented
+			throw new Error("not implemented!");
 		} else {
 			this.targetValue = options.targetValue;
 			this.duration = options.duration;

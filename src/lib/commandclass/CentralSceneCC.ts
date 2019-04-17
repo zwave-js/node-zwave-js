@@ -5,6 +5,7 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
@@ -32,7 +33,7 @@ export enum CentralSceneKeys {
 @implementedVersion(3)
 // TODO: The XYZGet commands should expect an answer
 export class CentralSceneCC extends CommandClass {
-	public ccCommand: CentralSceneCommand;
+	public ccCommand!: CentralSceneCommand;
 }
 
 @CCCommand(CentralSceneCommand.Notification)
@@ -151,10 +152,16 @@ interface CentralSceneCCConfigurationSetOptions extends CCCommandOptions {
 export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 	public constructor(
 		driver: IDriver,
-		options: CentralSceneCCConfigurationSetOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| CentralSceneCCConfigurationSetOptions,
 	) {
 		super(driver, options);
-		this.slowRefresh = options.slowRefresh;
+		if (gotDeserializationOptions(options)) {
+			throw new Error("not implemented!");
+		} else {
+			this.slowRefresh = options.slowRefresh;
+		}
 	}
 
 	public slowRefresh: boolean;

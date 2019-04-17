@@ -21,7 +21,7 @@ export enum BatteryCommand {
 @implementedVersion(1)
 @expectedCCResponse(CommandClasses.Battery)
 export class BatteryCC extends CommandClass {
-	public ccCommand: BatteryCommand;
+	public ccCommand!: BatteryCommand;
 }
 
 @CCCommand(BatteryCommand.Get)

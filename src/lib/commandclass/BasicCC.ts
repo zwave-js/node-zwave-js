@@ -24,7 +24,7 @@ export enum BasicCommand {
 @implementedVersion(2) // Update tests in CommandClass.test.ts when changing this
 @expectedCCResponse(CommandClasses.Basic)
 export class BasicCC extends CommandClass {
-	public ccCommand: BasicCommand;
+	public ccCommand!: BasicCommand;
 }
 
 @CCCommand(BasicCommand.Get)

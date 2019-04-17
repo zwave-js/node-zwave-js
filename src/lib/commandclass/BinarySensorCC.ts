@@ -40,7 +40,7 @@ export enum BinarySensorType {
 @implementedVersion(2)
 @expectedCCResponse(CommandClasses["Binary Sensor"])
 export class BinarySensorCC extends CommandClass {
-	public ccCommand: BinarySensorCommand;
+	public ccCommand!: BinarySensorCommand;
 }
 
 interface BinarySensorCCGetOptions extends CCCommandOptions {

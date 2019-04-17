@@ -16,6 +16,7 @@ import {
 	commandClass,
 	CommandClassDeserializationOptions,
 	expectedCCResponse,
+	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
@@ -51,7 +52,7 @@ export enum ScheduleOverrideType {
 @implementedVersion(1)
 @expectedCCResponse(CommandClasses["Climate Control Schedule"])
 export class ClimateControlScheduleCC extends CommandClass {
-	public ccCommand: ClimateControlScheduleCommand;
+	public ccCommand!: ClimateControlScheduleCommand;
 }
 
 interface ClimateControlScheduleCCSetOptions extends CCCommandOptions {
@@ -63,11 +64,17 @@ interface ClimateControlScheduleCCSetOptions extends CCCommandOptions {
 export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 	public constructor(
 		driver: IDriver,
-		options: ClimateControlScheduleCCSetOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| ClimateControlScheduleCCSetOptions,
 	) {
 		super(driver, options);
-		this.switchPoints = options.switchPoints;
-		this.weekday = options.weekday;
+		if (gotDeserializationOptions(options)) {
+			throw new Error("not implemented!");
+		} else {
+			this.switchPoints = options.switchPoints;
+			this.weekday = options.weekday;
+		}
 	}
 
 	public switchPoints: Switchpoint[];
@@ -99,10 +106,16 @@ interface ClimateControlScheduleCCGetOptions extends CCCommandOptions {
 export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 	public constructor(
 		driver: IDriver,
-		options: ClimateControlScheduleCCGetOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| ClimateControlScheduleCCGetOptions,
 	) {
 		super(driver, options);
-		this.weekday = options.weekday;
+		if (gotDeserializationOptions(options)) {
+			throw new Error("not implemented!");
+		} else {
+			this.weekday = options.weekday;
+		}
 	}
 
 	public weekday: Weekday;
@@ -205,11 +218,17 @@ interface ClimateControlScheduleCCOverrideSetOptions extends CCCommandOptions {
 export class ClimateControlScheduleCCOverrideSet extends ClimateControlScheduleCC {
 	public constructor(
 		driver: IDriver,
-		options: ClimateControlScheduleCCOverrideSetOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| ClimateControlScheduleCCOverrideSetOptions,
 	) {
 		super(driver, options);
-		this.overrideType = options.overrideType;
-		this.overrideState = options.overrideState;
+		if (gotDeserializationOptions(options)) {
+			throw new Error("not implemented!");
+		} else {
+			this.overrideType = options.overrideType;
+			this.overrideState = options.overrideState;
+		}
 	}
 
 	public overrideType: ScheduleOverrideType;

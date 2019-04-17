@@ -15,7 +15,7 @@ export enum DeviceResetLocallyCommand {
 @implementedVersion(1)
 @expectedCCResponse(CommandClasses["Device Reset Locally"])
 export class DeviceResetLocallyCC extends CommandClass {
-	public ccCommand: DeviceResetLocallyCommand;
+	public ccCommand!: DeviceResetLocallyCommand;
 }
 
 @CCCommand(DeviceResetLocallyCommand.Notification)

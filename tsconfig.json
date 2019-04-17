@@ -23,8 +23,7 @@
 		"target": "es2017",
 		"skipLibCheck": true,
 		"strictNullChecks": true,
-		// This is incompatible with serialize/deserialize
-		// "strictPropertyInitialization": true,
+		"strictPropertyInitialization": true,
 		"watch": false, // true breaks circleci
 		"pretty": true
 	},
