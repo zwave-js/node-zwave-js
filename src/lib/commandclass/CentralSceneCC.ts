@@ -1,10 +1,9 @@
 import { IDriver } from "../driver/IDriver";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { JSONObject } from "../util/misc";
 import {
-	ccValue,
+	CCCommand,
 	CommandClass,
 	commandClass,
+	CommandClassDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
@@ -30,34 +29,23 @@ export enum CentralSceneKeys {
 
 @commandClass(CommandClasses["Central Scene"])
 @implementedVersion(3)
+// TODO: The XYZGet commands should expect an answer
 export class CentralSceneCC extends CommandClass {
-	public constructor(driver: IDriver, nodeId?: number);
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		command:
-			| CentralSceneCommand.SupportedGet
-			| CentralSceneCommand.ConfigurationGet,
-	);
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		command: CentralSceneCommand.ConfigurationSet,
-		slowRefresh: boolean,
-	);
+	public ccCommand: CentralSceneCommand;
+}
 
+@CCCommand(CentralSceneCommand.Notification)
+export class CentralSceneCCNotification extends CentralSceneCC {
 	public constructor(
 		driver: IDriver,
-		public nodeId: number,
-		public ccCommand?: CentralSceneCommand,
-		slowRefresh?: boolean,
+		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, nodeId, ccCommand);
-		if (slowRefresh != undefined) this.slowRefresh = slowRefresh;
+		super(driver, options);
+		this._sequenceNumber = this.payload[0];
+		this._keyAttribute = this.payload[1] & 0b111;
+		this._sceneNumber = this.payload[2];
+		this._slowRefresh = !!(this.payload[1] & 0b1000_0000);
 	}
-
-	@ccValue() public slowRefresh: boolean;
-	@ccValue() public supportsSlowRefresh: boolean;
 
 	private _sequenceNumber: number;
 	public get sequenceNumber(): number {
@@ -69,9 +57,78 @@ export class CentralSceneCC extends CommandClass {
 		return this._keyAttribute;
 	}
 
-	@ccValue() public sceneCount: number;
+	private _sceneNumber: number;
+	public get sceneNumber(): number {
+		return this._sceneNumber;
+	}
 
-	private _supportedKeyAttributes: number[];
+	private _slowRefresh: boolean;
+	public get slowRefresh(): boolean {
+		return this._slowRefresh;
+	}
+
+	/*
+	If the Slow Refresh field is false:
+	 - A new Key Held Down notification MUST be sent every 200ms until the key is released.
+	 - The Sequence Number field MUST be updated at each notification transmission.
+	 - If not receiving a new Key Held Down notification within 400ms, a controlling node SHOULD use an adaptive timeout approach as described in 4.17.1.
+	If the Slow Refresh field is true:
+	 - A new Key Held Down notification MUST be sent every 55 seconds until the key is released.
+	 - The Sequence Number field MUST be updated at each notification refresh.
+	 - If not receiving a new Key Held Down notification within 60 seconds after the most recent Key Held Down notification,
+	*/
+}
+
+interface CentralSceneCCSupportedGetOptions {
+	nodeId: number;
+}
+
+@CCCommand(CentralSceneCommand.SupportedGet)
+export class CentralSceneCCSupportedGet extends CentralSceneCC {
+	public constructor(
+		driver: IDriver,
+		options: CentralSceneCCSupportedGetOptions,
+	) {
+		super(driver, options);
+	}
+}
+
+@CCCommand(CentralSceneCommand.SupportedReport)
+export class CentralSceneCCSupportedReport extends CentralSceneCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+
+		this._sceneCount = this.payload[0];
+		this._supportsSlowRefresh = !!(this.payload[1] & 0b1000_0000);
+		const bitMaskBytes = this.payload[1] & 0b110;
+		this._keyAttributesIdenticalSupport = !!(this.payload[1] & 0b1);
+		const numEntries = this._keyAttributesIdenticalSupport
+			? 1
+			: this.sceneCount;
+		this._supportedKeyAttributes = [];
+		for (let i = 0; i < numEntries; i++) {
+			let mask = 0;
+			for (let j = 0; j < bitMaskBytes; j++) {
+				mask += this.payload[3 + bitMaskBytes * i + j] << (8 * j);
+			}
+			this._supportedKeyAttributes.push(mask);
+		}
+	}
+
+	private _sceneCount: number;
+	public get sceneCount(): number {
+		return this._sceneCount;
+	}
+
+	private _supportsSlowRefresh: boolean;
+	public get supportsSlowRefresh(): boolean {
+		return this._supportsSlowRefresh;
+	}
+
+	private _supportedKeyAttributes: CentralSceneKeys[];
 	private _keyAttributesIdenticalSupport: boolean;
 	public supportsKeyAttribute(
 		sceneNumber: number,
@@ -83,87 +140,57 @@ export class CentralSceneCC extends CommandClass {
 		const bitmap = this._supportedKeyAttributes[bitArrayIndex];
 		return !!(bitmap & (1 << keyAttribute));
 	}
+}
 
-	private _sceneNumber: number;
-	public get sceneNumber(): number {
-		return this._sceneNumber;
+interface CentralSceneCCConfigurationGetOptions {
+	nodeId: number;
+}
+
+@CCCommand(CentralSceneCommand.ConfigurationGet)
+export class CentralSceneCCConfigurationGet extends CentralSceneCC {
+	public constructor(
+		driver: IDriver,
+		options: CentralSceneCCConfigurationGetOptions,
+	) {
+		super(driver, options);
 	}
+}
+
+interface CentralSceneCCConfigurationSetOptions {
+	nodeId: number;
+	slowRefresh: boolean;
+}
+
+@CCCommand(CentralSceneCommand.ConfigurationSet)
+export class CentralSceneCCConfigurationSet extends CentralSceneCC {
+	public constructor(
+		driver: IDriver,
+		options: CentralSceneCCConfigurationSetOptions,
+	) {
+		super(driver, options);
+		this.slowRefresh = options.slowRefresh;
+	}
+
+	public slowRefresh: boolean;
 
 	public serialize(): Buffer {
-		switch (this.ccCommand) {
-			case CentralSceneCommand.SupportedGet:
-			case CentralSceneCommand.ConfigurationGet:
-				// no real payload
-				break;
-
-			case CentralSceneCommand.ConfigurationSet:
-				this.payload = Buffer.from([
-					this.slowRefresh ? 0b1000_0000 : 0,
-				]);
-				break;
-
-			default:
-				throw new ZWaveError(
-					"Cannot serialize a Version CC with a command other than SupportedGet, ConfigurationGet and ConfigurationSet",
-					ZWaveErrorCodes.CC_Invalid,
-				);
-		}
-
+		this.payload = Buffer.from([this.slowRefresh ? 0b1000_0000 : 0]);
 		return super.serialize();
 	}
+}
 
-	public deserialize(data: Buffer): void {
-		super.deserialize(data);
-
-		switch (this.ccCommand) {
-			case CentralSceneCommand.ConfigurationReport: {
-				this.slowRefresh = !!(this.payload[0] & 0b1000_0000);
-				break;
-			}
-
-			case CentralSceneCommand.SupportedReport: {
-				this.sceneCount = this.payload[0];
-				this.supportsSlowRefresh = !!(this.payload[1] & 0b1000_0000);
-				const bitMaskBytes = this.payload[1] & 0b110;
-				this._keyAttributesIdenticalSupport = !!(this.payload[1] & 0b1);
-				const numEntries = this._keyAttributesIdenticalSupport
-					? 1
-					: this.sceneCount;
-				this._supportedKeyAttributes = [];
-				for (let i = 0; i < numEntries; i++) {
-					let mask = 0;
-					for (let j = 0; j < bitMaskBytes; j++) {
-						mask +=
-							this.payload[3 + bitMaskBytes * i + j] << (8 * j);
-					}
-					this._supportedKeyAttributes.push(mask);
-				}
-				break;
-			}
-
-			case CentralSceneCommand.Notification: {
-				this._sequenceNumber = this.payload[0];
-				this._keyAttribute = this.payload[1] & 0b111;
-				this._sceneNumber = this.payload[2];
-				this.slowRefresh = !!(this.payload[1] & 0b1000_0000);
-				break;
-			}
-
-			default:
-				throw new ZWaveError(
-					"Cannot deserialize a Version CC with a command other than Notification",
-					ZWaveErrorCodes.CC_Invalid,
-				);
-		}
+@CCCommand(CentralSceneCommand.ConfigurationReport)
+export class CentralSceneCCConfigurationReport extends CentralSceneCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		this._slowRefresh = !!(this.payload[0] & 0b1000_0000);
 	}
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			centralSceneCommand: CentralSceneCommand[this.ccCommand],
-			slowRefresh: this.slowRefresh,
-			sequenceNumber: this.sequenceNumber,
-			keyAttribute: CentralSceneKeys[this.keyAttribute],
-			sceneNumber: this.sceneNumber,
-		});
+	private _slowRefresh: boolean;
+	public get slowRefresh(): boolean {
+		return this._slowRefresh;
 	}
 }
