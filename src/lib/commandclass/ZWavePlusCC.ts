@@ -1,9 +1,10 @@
 import { IDriver } from "../driver/IDriver";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import {
-	ccValue,
+	CCCommand,
+	CCCommandOptions,
 	CommandClass,
 	commandClass,
+	CommandClassDeserializationOptions,
 	expectedCCResponse,
 	implementedVersion,
 } from "./CommandClass";
@@ -34,59 +35,55 @@ export enum ZWavePlusNodeType {
 @implementedVersion(2)
 @expectedCCResponse(CommandClasses["Z-Wave Plus Info"])
 export class ZWavePlusCC extends CommandClass {
-	public constructor(driver: IDriver, nodeId?: number);
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		ccCommand: ZWavePlusCommand.Get,
-	);
+	public ccCommand!: ZWavePlusCommand;
+}
 
+@CCCommand(ZWavePlusCommand.Get)
+export class ZWavePlusCCGet extends ZWavePlusCC {
 	public constructor(
 		driver: IDriver,
-		public nodeId: number,
-		public ccCommand?: ZWavePlusCommand,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(driver, nodeId, ccCommand);
+		super(driver, options);
+	}
+}
+
+@CCCommand(ZWavePlusCommand.Report)
+export class ZWavePlusCCReport extends ZWavePlusCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		this._zwavePlusVersion = this.payload[0];
+		this._roleType = this.payload[1];
+		this._nodeType = this.payload[2];
+		this._installerIcon = this.payload.readUInt16BE(3);
+		this._userIcon = this.payload.readUInt16BE(5);
 	}
 
-	@ccValue() public zwavePlusVersion: number;
-	@ccValue() public nodeType: ZWavePlusNodeType;
-	@ccValue() public roleType: ZWavePlusRoleType;
-	@ccValue() public installerIcon: number;
-	@ccValue() public userIcon: number;
-
-	public serialize(): Buffer {
-		switch (this.ccCommand) {
-			case ZWavePlusCommand.Get:
-				// no real payload
-				break;
-			default:
-				throw new ZWaveError(
-					"Cannot serialize a ZWavePlus CC with a command other than Get",
-					ZWaveErrorCodes.CC_Invalid,
-				);
-		}
-
-		return super.serialize();
+	private _zwavePlusVersion: number;
+	public get zwavePlusVersion(): number {
+		return this._zwavePlusVersion;
 	}
 
-	public deserialize(data: Buffer): void {
-		super.deserialize(data);
+	private _nodeType: ZWavePlusNodeType;
+	public get nodeType(): ZWavePlusNodeType {
+		return this._nodeType;
+	}
 
-		switch (this.ccCommand) {
-			case ZWavePlusCommand.Report:
-				this.zwavePlusVersion = this.payload[0];
-				this.roleType = this.payload[1];
-				this.nodeType = this.payload[2];
-				this.installerIcon = this.payload.readUInt16BE(3);
-				this.userIcon = this.payload.readUInt16BE(5);
-				break;
+	private _roleType: ZWavePlusRoleType;
+	public get roleType(): ZWavePlusRoleType {
+		return this._roleType;
+	}
 
-			default:
-				throw new ZWaveError(
-					"Cannot deserialize a ZWavePlus CC with a command other than Report",
-					ZWaveErrorCodes.CC_Invalid,
-				);
-		}
+	private _installerIcon: number;
+	public get installerIcon(): number {
+		return this._installerIcon;
+	}
+
+	private _userIcon: number;
+	public get userIcon(): number {
+		return this._userIcon;
 	}
 }
