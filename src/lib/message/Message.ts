@@ -34,7 +34,7 @@ export class Message {
 		driver: IDriver,
 		type: MessageType,
 		funcType: FunctionType,
-		expResponse: FunctionType | ResponsePredicate,
+		expResponse?: FunctionType | ResponsePredicate,
 		data?: Buffer,
 	);
 
