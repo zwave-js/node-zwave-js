@@ -1,5 +1,6 @@
 /// <reference types="reflect-metadata" />
 
+import { assertNever } from "alcalzone-shared/helpers";
 import { entries } from "alcalzone-shared/objects";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { IDriver } from "../driver/IDriver";
@@ -46,6 +47,18 @@ export class Message {
 		payload: Buffer = Buffer.allocUnsafe(0), // TODO: Length limit 255
 	) {
 		// decide which implementation we follow
+		if (typeOrPayload == undefined) {
+			// Default constructor without any arguments
+			// Try to determine the message type
+			typeOrPayload = getMessageType(this);
+			if (typeOrPayload == undefined) {
+				throw new ZWaveError(
+					"A message must have a given or predefined message type",
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			// Now continue with #2
+		}
 		if (typeof typeOrPayload === "number") {
 			// #2: Arguments and payload given, no deserialization
 			this.type = typeOrPayload;
@@ -108,6 +121,9 @@ export class Message {
 
 			// remember how many bytes were read
 			this._bytesRead = messageLength;
+		} else {
+			// Work around https://github.com/Microsoft/TypeScript/issues/30992
+			throw assertNever(typeOrPayload);
 		}
 	}
 
@@ -115,14 +131,14 @@ export class Message {
 	public functionType: FunctionType;
 	public expectedResponse: FunctionType | ResponsePredicate | undefined;
 	public payload: Buffer; // TODO: Length limit 255
-	public maxSendAttempts: number;
+	public maxSendAttempts: number | undefined;
 
-	protected _bytesRead: number;
+	protected _bytesRead: number | undefined;
 	/**
 	 * @internal
 	 * The amount of bytes read while deserializing this message
 	 */
-	public get bytesRead(): number {
+	public get bytesRead(): number | undefined {
 		return this._bytesRead;
 	}
 

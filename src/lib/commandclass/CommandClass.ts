@@ -58,9 +58,7 @@ export interface CommandClassCreationOptions extends CCCommandOptions {
 	payload?: Buffer;
 }
 
-function gotCreationOptions(
-	options: any,
-): options is CommandClassCreationOptions {
+function gotCCCommandOptions(options: any): options is CCCommandOptions {
 	return typeof options.nodeId === "number";
 }
 
@@ -72,6 +70,7 @@ export type CommandClassOptions =
 export class CommandClass {
 	// empty constructor to parse messages
 	public constructor(driver: IDriver, options: CommandClassOptions) {
+		this.driver = driver;
 		// Extract the cc from declared metadata if not provided
 		this.ccId = getCommandClass(this);
 
@@ -115,7 +114,7 @@ export class CommandClass {
 					payload: this.payload,
 				} = this.deserializeWithoutHeader(dataWithoutHeader));
 			}
-		} else if (gotCreationOptions(options)) {
+		} else if (gotCCCommandOptions(options)) {
 			const {
 				nodeId,
 				ccCommand = getCCCommand(this),
@@ -130,12 +129,18 @@ export class CommandClass {
 	protected driver: IDriver;
 
 	public ccId: CommandClasses;
-	public nodeId: number;
+	// Work around https://github.com/Microsoft/TypeScript/issues/27555
+	public nodeId!: number;
 	public ccCommand?: number;
-	public payload: Buffer;
+	// Work around https://github.com/Microsoft/TypeScript/issues/27555
+	public payload!: Buffer;
 
-	/** The version of the command class used */
-	public version: number;
+	/**
+	 * The version of the command class used
+	 * When this CC is received, version is taken from the metadata we have about the node.
+	 * When this CC is sent, version is set by the driver just before sending it.
+	 */
+	public version: number | undefined;
 
 	/** Which endpoint of the node this CC belongs to. 0 for the root device. */
 	public endpoint: number | undefined;
@@ -315,11 +320,6 @@ export class CommandClass {
 			throw new ZWaveError(
 				"Cannot retrieve the node when the controller is undefined",
 				ZWaveErrorCodes.Driver_NotReady,
-			);
-		} else if (this.nodeId == undefined) {
-			throw new ZWaveError(
-				"Cannot retrieve the node without a Node ID",
-				ZWaveErrorCodes.CC_NoNodeID,
 			);
 		}
 		return this.driver.controller.nodes.get(this.nodeId);

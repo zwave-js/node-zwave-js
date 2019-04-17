@@ -38,7 +38,7 @@ export class Transaction implements Comparable<Transaction> {
 		public ackPending: boolean = true,
 		public response?: Message,
 	) {
-		if (message != undefined)
+		if (message.maxSendAttempts)
 			this.maxSendAttempts = message.maxSendAttempts;
 	}
 

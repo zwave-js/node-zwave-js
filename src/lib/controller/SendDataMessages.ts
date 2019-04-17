@@ -60,6 +60,7 @@ export class SendDataRequestBase extends Message {
 	public constructor(driver: IDriver, data: Buffer);
 
 	public constructor(driver: IDriver, data?: Buffer) {
+		// TODO: Move this to class Message (like in CommandClass)
 		if (
 			Buffer.isBuffer(data) &&
 			(new.target as any) !== SendDataRequestTransmitReport
@@ -70,7 +71,8 @@ export class SendDataRequestBase extends Message {
 	}
 
 	/** A callback ID to map requests and responses */
-	public callbackId: number;
+	// TODO: Get rid of the ! assertion
+	public callbackId!: number;
 }
 
 @expectedResponse(testResponseForSendDataRequest)
