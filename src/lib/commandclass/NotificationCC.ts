@@ -1,12 +1,13 @@
-import { composeObject } from "alcalzone-shared/objects";
 import { IDriver } from "../driver/IDriver";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { JSONObject } from "../util/misc";
 import { parseBitMask } from "../values/Primitive";
 import {
+	CCCommand,
+	CCCommandOptions,
 	CommandClass,
 	commandClass,
+	CommandClassDeserializationOptions,
 	expectedCCResponse,
+	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
@@ -44,56 +45,134 @@ export enum NotificationType {
 @expectedCCResponse(CommandClasses.Notification)
 export class NotificationCC extends CommandClass {
 	// former AlarmCC (v1..v2)
+	public ccCommand!: NotificationCommand;
+}
 
-	public constructor(driver: IDriver, nodeId?: number);
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		ccCommand: NotificationCommand.Get,
-		alarmType: number,
-		notificationType: NotificationType,
-		notificationEvent?: number,
-	);
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		ccCommand: NotificationCommand.Set,
-		notificationType: NotificationType,
-		notificationStatus: boolean,
-	);
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		ccCommand: NotificationCommand.SupportedGet,
-	);
+interface NotificationCCSetOptions extends CCCommandOptions {
+	notificationType: NotificationType;
+	notificationStatus: boolean;
+}
 
+@CCCommand(NotificationCommand.Set)
+export class NotificationCCSet extends NotificationCC {
 	public constructor(
 		driver: IDriver,
-		public nodeId: number,
-		public ccCommand?: NotificationCommand,
-		...args: any[]
+		options: CommandClassDeserializationOptions | NotificationCCSetOptions,
 	) {
-		super(driver, nodeId, ccCommand);
-		if (ccCommand === NotificationCommand.Get) {
-			this.alarmType = args[0];
-			this.notificationType = args[1];
-			this._notificationEvent = args[2];
-		} else if (ccCommand === NotificationCommand.Set) {
-			this.notificationType = args[0];
-			this.notificationStatus = args[1];
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new Error("not implemented");
+		} else {
+			this.notificationType = options.notificationType;
+			this.notificationStatus = options.notificationStatus;
+		}
+	}
+	public notificationType: NotificationType;
+	public notificationStatus: boolean;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			this.notificationType,
+			this.notificationStatus ? 0xff : 0x00,
+		]);
+		return super.serialize();
+	}
+}
+
+interface NotificationCCGetOptions extends CCCommandOptions {
+	alarmType?: number;
+	notificationType: NotificationType;
+	notificationEvent?: number;
+}
+
+@CCCommand(NotificationCommand.Get)
+export class NotificationCCGet extends NotificationCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | NotificationCCGetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new Error("not implemented");
+		} else {
+			this.alarmType = options.alarmType;
+			this.notificationType = options.notificationType;
+			this.notificationEvent = options.notificationEvent;
 		}
 	}
 
 	/** Proprietary V1/V2 alarm type */
-	public alarmType: number;
+	public alarmType: number | undefined;
 	/** Regulated V3+ notification type */
 	public notificationType: NotificationType;
-	public notificationStatus: boolean;
+	public notificationEvent: number | undefined;
 
-	// TODO: Which of these are CC values?
+	public serialize(): Buffer {
+		const payload: number[] = [this.alarmType || 0];
+		if (this.version >= 2) {
+			payload.push(this.notificationType);
+		}
+		if (this.version >= 3) {
+			payload.push(
+				this.notificationType === 0xff
+					? 0x00
+					: this.notificationEvent || 0,
+			);
+		}
+		this.payload = Buffer.from(payload);
+		return super.serialize();
+	}
+}
 
-	private _notificationEvent: number;
-	public get notificationEvent(): number {
+@CCCommand(NotificationCommand.Report)
+export class NotificationCCReport extends NotificationCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		this._alarmType = this.payload[0];
+		this._alarmLevel = this.payload[1];
+		// V2..V3, reserved in V4+
+		if (this.version === 2 || this.version === 3) {
+			this._zensorNetSourceNodeId = this.payload[2];
+		}
+		// V2+
+		if (this.version > 1) {
+			this._notificationStatus = this.payload[3] === 0xff;
+			this._notificationType = this.payload[4];
+			this._notificationEvent = this.payload[5];
+			const containsSeqNum = !!(this.payload[6] & 0b1000_0000);
+			const numEventParams = this.payload[6] & 0b11111;
+			if (numEventParams > 0) {
+				this._eventParameters = Buffer.from(
+					this.payload.slice(7, 7 + numEventParams),
+				);
+			}
+			if (containsSeqNum) {
+				this._sequenceNumber = this.payload[7 + numEventParams];
+			}
+		}
+	}
+
+	private _alarmType: number;
+	public get alarmType(): number {
+		return this._alarmType;
+	}
+
+	private _notificationType: NotificationType | undefined;
+	public get notificationType(): NotificationType | undefined {
+		return this._notificationType;
+	}
+	private _notificationStatus: boolean | undefined;
+	public get notificationStatus(): boolean | undefined {
+		return this._notificationStatus;
+	}
+
+	private _notificationEvent: number | undefined;
+	public get notificationEvent(): number | undefined {
 		return this._notificationEvent;
 	}
 
@@ -102,14 +181,43 @@ export class NotificationCC extends CommandClass {
 		return this._alarmLevel;
 	}
 
-	private _zensorNetSourceNodeId: number;
-	public get zensorNetSourceNodeId(): number {
+	private _zensorNetSourceNodeId: number | undefined;
+	public get zensorNetSourceNodeId(): number | undefined {
 		return this._zensorNetSourceNodeId;
 	}
 
-	private _eventParameters: Buffer;
-	public get eventParameters(): Buffer {
+	private _eventParameters: Buffer | undefined;
+	public get eventParameters(): Buffer | undefined {
 		return this._eventParameters;
+	}
+
+	private _sequenceNumber: number | undefined;
+	public get sequenceNumber(): number | undefined {
+		return this._sequenceNumber;
+	}
+}
+
+@CCCommand(NotificationCommand.SupportedGet)
+export class NotificationCCSupportedGet extends NotificationCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
+	}
+}
+
+@CCCommand(NotificationCommand.SupportedReport)
+export class NotificationCCSupportedReport extends NotificationCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		this._supportsV1Alarm = !!(this.payload[0] & 0b1000_0000);
+		const numBitMaskBytes = this.payload[0] & 0b0001_1111;
+		const notificationBitMask = this.payload.slice(1, 1 + numBitMaskBytes);
+		this._supportedNotificationTypes = parseBitMask(notificationBitMask);
 	}
 
 	private _supportsV1Alarm: boolean;
@@ -118,166 +226,65 @@ export class NotificationCC extends CommandClass {
 	}
 
 	private _supportedNotificationTypes: NotificationType[];
-	public get supportedNotificationTypes(): NotificationType[] {
+	public get supportedNotificationTypes(): readonly NotificationType[] {
 		return this._supportedNotificationTypes;
 	}
+}
 
-	private _supportedEvents = new Map<NotificationType, number[]>();
-	public get supportedEvents(): Map<NotificationType, number[]> {
-		return this._supportedEvents;
+interface NotificationCCEventSupportedGetOptions extends CCCommandOptions {
+	notificationType: NotificationType;
+}
+
+@CCCommand(NotificationCommand.EventSupportedGet)
+export class NotificationCCEventSupportedGet extends NotificationCC {
+	public constructor(
+		driver: IDriver,
+		options:
+			| CommandClassDeserializationOptions
+			| NotificationCCEventSupportedGetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new Error("not implemented");
+		} else {
+			this.notificationType = options.notificationType;
+		}
 	}
 
-	private _sequenceNumber: number;
-	public get sequenceNumber(): number {
-		return this._sequenceNumber;
-	}
+	public notificationType: NotificationType;
 
 	public serialize(): Buffer {
-		switch (this.ccCommand) {
-			case NotificationCommand.Get: {
-				const payload = [this.alarmType];
-				if (this.version >= 2) {
-					payload.push(this.notificationType);
-				}
-				if (this.version >= 3) {
-					// TODO: If the Notification Type is set to 0xFF, this field MUST be set to 0x00
-					payload.push(this.notificationEvent);
-				}
-				this.payload = Buffer.from(payload);
-				break;
-			}
-
-			case NotificationCommand.Set:
-				this.payload = Buffer.from([
-					this.notificationType,
-					this.notificationStatus ? 0xff : 0x00,
-				]);
-				break;
-
-			case NotificationCommand.SupportedGet:
-				// no real payload
-				break;
-
-			case NotificationCommand.EventSupportedGet:
-				this.payload = Buffer.from([this.notificationType]);
-				break;
-
-			default:
-				throw new ZWaveError(
-					"Cannot serialize a Notification CC with a command other than Get, Set, SupportedGet and EventSupportedGet",
-					ZWaveErrorCodes.CC_Invalid,
-				);
-		}
-
+		this.payload = Buffer.from([
+			/* TODO: serialize */
+		]);
 		return super.serialize();
 	}
+}
 
-	public deserialize(data: Buffer): void {
-		super.deserialize(data);
-
-		switch (this.ccCommand) {
-			case NotificationCommand.Report: {
-				this.alarmType = this.payload[0];
-				this._alarmLevel = this.payload[1];
-				// V2..V3, reserved in V4+
-				this._zensorNetSourceNodeId = this.payload[2];
-				// V2+
-				this.notificationStatus = this.payload[3] === 0xff;
-				this.notificationType = this.payload[4];
-				this._notificationEvent = this.payload[5];
-				const containsSeqNum = !!(this.payload[6] & 0b1000_0000);
-				const numEventParams = this.payload[6] & 0b11111;
-				if (numEventParams > 0) {
-					this._eventParameters = Buffer.from(
-						this.payload.slice(7, 7 + numEventParams),
-					);
-				}
-				if (containsSeqNum) {
-					this._sequenceNumber = this.payload[7 + numEventParams];
-				}
-				break;
-			}
-
-			case NotificationCommand.SupportedReport: {
-				this._supportsV1Alarm = !!(this.payload[0] & 0b1000_0000);
-				const numBitMaskBytes = this.payload[0] & 0b0001_1111;
-				// parse the bitmask into a number array
-				// const numTypes = numBitMaskBytes * 8 - 1;
-				const notificationBitMask = this.payload.slice(
-					1,
-					1 + numBitMaskBytes,
-				);
-				this._supportedNotificationTypes = parseBitMask(
-					notificationBitMask,
-				);
-				// this._supportedNotificationTypes = [];
-				// for (let type = 1; type <= numTypes; type++) {
-				// 	const byteNum = type >>> 3; // type / 8
-				// 	const bitNum = type % 8;
-				// 	if ((notificationBitMask[byteNum] & (1 << bitNum)) !== 0) this._supportedNotificationTypes.push(type);
-				// }
-				break;
-			}
-
-			case NotificationCommand.EventSupportedReport: {
-				this.notificationType = this.payload[0];
-				const numBitMaskBytes = this.payload[1] & 0b0001_1111;
-				// parse the bitmask into a number array
-				// TODO: Can this be done with parseBitMask?
-				const numEvents = numBitMaskBytes * 8 - 1;
-				const eventsBitMask = this.payload.slice(
-					2,
-					2 + numBitMaskBytes,
-				);
-				const supportedEvents = this._supportedEvents.has(
-					this.notificationType,
-				)
-					? this._supportedEvents.get(this.notificationType)
-					: [];
-				for (let event = 1; event <= numEvents; event++) {
-					const byteNum = event >>> 3; // type / 8
-					const bitNum = event % 8;
-					if ((eventsBitMask[byteNum] & (1 << bitNum)) !== 0)
-						supportedEvents.push(event);
-				}
-				this._supportedEvents.set(
-					this.notificationType,
-					supportedEvents,
-				);
-				break;
-			}
-
-			default:
-				throw new ZWaveError(
-					"Cannot deserialize a Notification CC with a command other than Report, SupportedReport, EventSupportedReport",
-					ZWaveErrorCodes.CC_Invalid,
-				);
-		}
+@CCCommand(NotificationCommand.EventSupportedReport)
+export class NotificationCCEventSupportedReport extends NotificationCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		this._notificationType = this.payload[0];
+		const numBitMaskBytes = this.payload[0] & 0b0001_1111;
+		const eventBitMask = this.payload.slice(1, 1 + numBitMaskBytes);
+		// In this bit mask, bit 0 is ignored and counting starts at bit 1
+		// Therefore shift the result by 1.
+		this._supportedEvents = parseBitMask(eventBitMask).map(evt => evt - 1);
 	}
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			ccCommand: NotificationCommand[this.ccCommand],
-			alarmType: this.alarmType,
-			notificationType: this.notificationType,
-			notificationStatus: this.notificationStatus,
-			notificationEvent: this.notificationEvent,
-			alarmLevel: this.alarmLevel,
-			zensorNetSourceNodeId: this.zensorNetSourceNodeId,
-			eventParameters: this.eventParameters,
-			supportsV1Alarm: this.supportsV1Alarm,
-			supportedNotificationTypes: this.supportedNotificationTypes,
-			supportedEvents: this.supportedEvents
-				? composeObject(
-						[...this.supportedEvents.entries()].map(
-							([type, events]) =>
-								[NotificationType[type], events] as [
-									string,
-									number[]
-								],
-						),
-				  )
-				: undefined,
-		});
+	private _notificationType: NotificationType;
+	public get notificationType(): NotificationType {
+		return this._notificationType;
+	}
+
+	// TODO: Define events
+	private _supportedEvents: number[];
+	public get supportedEvents(): readonly number[] {
+		return this._supportedEvents;
 	}
 }
