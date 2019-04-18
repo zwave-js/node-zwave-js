@@ -1,5 +1,5 @@
 import { IDriver } from "../driver/IDriver";
-import { Maybe, unknownBoolean } from "../values/Primitive";
+import { Maybe } from "../values/Primitive";
 import {
 	CCCommand,
 	CCCommandOptions,
@@ -36,9 +36,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 			case ManufacturerSpecificCommand.Get:
 				return true; // This is mandatory
 			case ManufacturerSpecificCommand.DeviceSpecificGet:
-				return this.version == undefined
-					? unknownBoolean
-					: this.version >= 2;
+				return this.version >= 2;
 		}
 		return super.supportsCommand(cmd);
 	}
