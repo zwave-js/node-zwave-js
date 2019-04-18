@@ -1,15 +1,17 @@
 import { IDriver } from "../driver/IDriver";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import {
 	decodeSetbackState,
 	encodeSetbackState,
 	SetbackState,
 } from "../values/SetbackState";
 import {
-	ccValue,
+	CCCommand,
+	CCCommandOptions,
 	CommandClass,
 	commandClass,
+	CommandClassDeserializationOptions,
 	expectedCCResponse,
+	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
@@ -30,72 +32,78 @@ export enum SetbackType {
 @implementedVersion(1)
 @expectedCCResponse(CommandClasses["Thermostat Setback"])
 export class ThermostatSetbackCC extends CommandClass {
-	public constructor(driver: IDriver, nodeId?: number);
+	public ccCommand!: ThermostatSetbackCommand;
+}
 
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		ccCommand: ThermostatSetbackCommand.Get,
-	);
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		ccCommand: ThermostatSetbackCommand.Set,
-		setbackType: SetbackType,
-		setbackState: SetbackState,
-	);
+interface ThermostatSetbackCCGetOptions extends CCCommandOptions {
+	someProperty: number;
+}
 
+interface ThermostatSetbackCCSetOptions extends CCCommandOptions {
+	setbackType: SetbackType;
+	setbackState: SetbackState;
+}
+
+@CCCommand(ThermostatSetbackCommand.Set)
+export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 	public constructor(
 		driver: IDriver,
-		public nodeId: number,
-		public ccCommand?: ThermostatSetbackCommand,
-		...args: any[]
+		options:
+			| CommandClassDeserializationOptions
+			| ThermostatSetbackCCSetOptions,
 	) {
-		super(driver, nodeId, ccCommand);
-		if (ccCommand === ThermostatSetbackCommand.Set) {
-			[this.setbackType, this.setbackState] = args;
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new Error("not implemented");
+		} else {
+			this.setbackType = options.setbackType;
+			this.setbackState = options.setbackState;
 		}
 	}
 
-	@ccValue() public setbackType: SetbackType;
+	public setbackType: SetbackType;
 	/** The offset from the setpoint in 0.1 Kelvin or a special mode */
-	@ccValue() public setbackState: SetbackState;
+	public setbackState: SetbackState;
 
 	public serialize(): Buffer {
-		switch (this.ccCommand) {
-			case ThermostatSetbackCommand.Get:
-				// no real payload
-				break;
-			case ThermostatSetbackCommand.Set:
-				this.payload = Buffer.from([
-					this.setbackType & 0b11,
-					encodeSetbackState(this.setbackState),
-				]);
-				break;
-			default:
-				throw new ZWaveError(
-					"Cannot serialize a ThermostatSetback CC with a command other than Set or Get",
-					ZWaveErrorCodes.CC_Invalid,
-				);
-		}
-
+		this.payload = Buffer.from([
+			this.setbackType & 0b11,
+			encodeSetbackState(this.setbackState),
+		]);
 		return super.serialize();
 	}
+}
 
-	public deserialize(data: Buffer): void {
-		super.deserialize(data);
+@CCCommand(ThermostatSetbackCommand.Get)
+export class ThermostatSetbackCCGet extends ThermostatSetbackCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
+	}
+}
 
-		switch (this.ccCommand) {
-			case ThermostatSetbackCommand.Report:
-				this.setbackType = this.payload[0] & 0b11;
-				this.setbackState = decodeSetbackState(this.payload[1]);
-				break;
+@CCCommand(ThermostatSetbackCommand.Report)
+export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		this._setbackType = this.payload[0] & 0b11;
+		this._setbackState =
+			decodeSetbackState(this.payload[1]) || this.payload[1];
+	}
 
-			default:
-				throw new ZWaveError(
-					"Cannot deserialize a ThermostatSetback CC with a command other than Report",
-					ZWaveErrorCodes.CC_Invalid,
-				);
-		}
+	private _setbackType: SetbackType;
+	public get setbackType(): SetbackType {
+		return this._setbackType;
+	}
+	private _setbackState: SetbackState;
+	/** The offset from the setpoint in 0.1 Kelvin or a special mode */
+	public get setbackState(): SetbackState {
+		return this._setbackState;
 	}
 }
