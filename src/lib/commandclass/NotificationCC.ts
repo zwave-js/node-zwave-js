@@ -255,9 +255,7 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 	public notificationType: NotificationType;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([
-			/* TODO: serialize */
-		]);
+		this.payload = Buffer.from([this.notificationType]);
 		return super.serialize();
 	}
 }
