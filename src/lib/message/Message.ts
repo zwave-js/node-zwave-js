@@ -122,7 +122,6 @@ export class Message {
 			// remember how many bytes were read
 			this._bytesRead = messageLength;
 		} else {
-			// Work around https://github.com/Microsoft/TypeScript/issues/30992
 			throw assertNever(typeOrPayload);
 		}
 	}

@@ -128,7 +128,7 @@ describe("lib/controller/SendDataRequest => ", () => {
 	// });
 
 	const createRequest = (function*() {
-		const noOp = new NoOperationCC(undefined as any, 2);
+		const noOp = new NoOperationCC({} as any, 2);
 		while (true) yield new SendDataRequest(undefined as any, noOp);
 	})();
 
@@ -157,7 +157,7 @@ describe("lib/controller/SendDataRequest => ", () => {
 	});
 
 	it("serialize() should concatenate the serialized CC with transmit options and callback ID", () => {
-		const cc = new BasicCC(undefined as any, 1, BasicCommand.Get);
+		const cc = new BasicCC({} as any, 1, BasicCommand.Get);
 		const serializedCC = cc.serialize();
 
 		const msg = new SendDataRequest(

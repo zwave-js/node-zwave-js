@@ -1,9 +1,4 @@
-import {
-	BatteryCC,
-	BatteryCCGet,
-	BatteryCCReport,
-	BatteryCommand,
-} from "./BatteryCC";
+import { BatteryCC, BatteryCCGet, BatteryCCReport, BatteryCommand } from "./BatteryCC";
 import { CommandClasses } from "./CommandClasses";
 
 describe("lib/commandclass/BatteryCC => ", () => {
@@ -27,7 +22,7 @@ describe("lib/commandclass/BatteryCC => ", () => {
 				BatteryCommand.Report, // CC Command
 				55, // current value
 			]);
-			const batteryCC = new BatteryCC(undefined as any, {
+			const batteryCC = new BatteryCC({} as any, {
 				data: ccData,
 			}) as BatteryCCReport;
 
@@ -43,7 +38,7 @@ describe("lib/commandclass/BatteryCC => ", () => {
 				BatteryCommand.Report, // CC Command
 				0xff, // current value
 			]);
-			const batteryCC = new BatteryCC(undefined as any, {
+			const batteryCC = new BatteryCC({} as any, {
 				data: ccData,
 			}) as BatteryCCReport;
 
@@ -59,7 +54,7 @@ describe("lib/commandclass/BatteryCC => ", () => {
 			CommandClasses.Battery, // CC
 			255, // not a valid command
 		]);
-		const basicCC: any = new BatteryCC(undefined as any, {
+		const basicCC: any = new BatteryCC({} as any, {
 			data: serializedCC,
 		});
 		expect(basicCC.constructor).toBe(BatteryCC);

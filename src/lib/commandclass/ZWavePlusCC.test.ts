@@ -7,7 +7,7 @@ import { CommandClasses } from "./CommandClasses";
 import { ZWavePlusCC, ZWavePlusCommand } from "./ZWavePlusCC";
 
 describe("lib/commandclass/ZWavePlusCC => ", () => {
-	const cc = new ZWavePlusCC(undefined as any, { nodeId: 9 });
+	const cc = new ZWavePlusCC({} as any, { nodeId: 9 });
 	let serialized: Buffer;
 
 	it("should be a CommandClass", () => {

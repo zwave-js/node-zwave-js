@@ -1,10 +1,4 @@
-import {
-	BasicCC,
-	BasicCCGet,
-	BasicCCReport,
-	BasicCCSet,
-	BasicCommand,
-} from "./BasicCC";
+import { BasicCC, BasicCCGet, BasicCCReport, BasicCCSet, BasicCommand } from "./BasicCC";
 import { CommandClasses } from "./CommandClasses";
 
 describe("lib/commandclass/BasicCC => ", () => {
@@ -74,7 +68,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 			CommandClasses.Basic, // CC
 			255, // not a valid command
 		]);
-		const basicCC: any = new BasicCC(undefined as any, {
+		const basicCC: any = new BasicCC({} as any, {
 			data: serializedCC,
 		});
 		expect(basicCC.constructor).toBe(BasicCC);
