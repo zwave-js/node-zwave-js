@@ -147,6 +147,21 @@
 		],
 		"description": "Specific implementation of a single CC report"
 	},
+	"ZWave CC Command (empty)": {
+		"prefix": "zwccemptycmd",
+		"body": [
+			"@CCCommand(${1:Basic}Command.${2:Get})",
+			"export class ${1}CC${2} extends ${1}CC {",
+			"\tpublic constructor(",
+			"\t\tdriver: IDriver,",
+			"\t\toptions: CommandClassDeserializationOptions | CCCommandOptions,",
+			"\t) {",
+			"\t\tsuper(driver, options);",
+			"\t}",
+			"}"
+		],
+		"description": "Specific implementation of CC command that is sent and expects no parameters"
+	},
 	"Readonly property": {
 		"prefix": "propread",
 		"body": [
