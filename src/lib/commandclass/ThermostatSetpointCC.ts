@@ -276,7 +276,7 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 	}
 
 	private _supportedSetpointTypes: ThermostatSetpointType[];
-	public get supportedSetpointTypes(): ReadonlyArray<ThermostatSetpointType> {
+	public get supportedSetpointTypes(): readonly ThermostatSetpointType[] {
 		return this._supportedSetpointTypes;
 	}
 }
