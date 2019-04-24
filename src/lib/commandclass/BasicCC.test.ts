@@ -1,9 +1,18 @@
-import { BasicCC, BasicCCGet, BasicCCReport, BasicCCSet, BasicCommand } from "./BasicCC";
+import { createEmptyMockDriver } from "../../../test/mocks";
+import {
+	BasicCC,
+	BasicCCGet,
+	BasicCCReport,
+	BasicCCSet,
+	BasicCommand,
+} from "./BasicCC";
 import { CommandClasses } from "./CommandClasses";
+
+const fakeDriver = createEmptyMockDriver();
 
 describe("lib/commandclass/BasicCC => ", () => {
 	it("the Get command should serialize correctly", () => {
-		const basicCC = new BasicCCGet(undefined as any, { nodeId: 1 });
+		const basicCC = new BasicCCGet(fakeDriver, { nodeId: 1 });
 		const expected = Buffer.from([
 			1, // node number
 			2, // remaining length
@@ -14,7 +23,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 	});
 
 	it("the Set command should serialize correctly", () => {
-		const basicCC = new BasicCCSet(undefined as any, {
+		const basicCC = new BasicCCSet(fakeDriver, {
 			nodeId: 2,
 			targetValue: 55,
 		});
@@ -36,7 +45,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 			BasicCommand.Report, // CC Command
 			55, // current value
 		]);
-		const basicCC = new BasicCCReport(undefined as any, { data: ccData });
+		const basicCC = new BasicCCReport(fakeDriver, { data: ccData });
 
 		expect(basicCC.currentValue).toBe(55);
 		expect(basicCC.targetValue).toBeUndefined();
@@ -53,7 +62,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 			66, // target value
 			1, // duration
 		]);
-		const basicCC = new BasicCCReport(undefined as any, { data: ccData });
+		const basicCC = new BasicCCReport(fakeDriver, { data: ccData });
 
 		expect(basicCC.currentValue).toBe(55);
 		expect(basicCC.targetValue).toBe(66);
@@ -68,7 +77,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 			CommandClasses.Basic, // CC
 			255, // not a valid command
 		]);
-		const basicCC: any = new BasicCC({} as any, {
+		const basicCC: any = new BasicCC(fakeDriver, {
 			data: serializedCC,
 		});
 		expect(basicCC.constructor).toBe(BasicCC);

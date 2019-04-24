@@ -1,3 +1,4 @@
+import { createEmptyMockDriver } from "../../../test/mocks";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import {
@@ -5,8 +6,10 @@ import {
 	ManufacturerSpecificCCGet,
 } from "./ManufacturerSpecificCC";
 
+const fakeDriver = createEmptyMockDriver();
+
 describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
-	const cc = new ManufacturerSpecificCCGet(undefined as any, { nodeId: 2 });
+	const cc = new ManufacturerSpecificCCGet(fakeDriver, { nodeId: 2 });
 	let serialized: Buffer;
 
 	it("should be a CommandClass", () => {
@@ -24,7 +27,7 @@ describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 	});
 
 	it("should deserialize correctly", () => {
-		const deserialized = CommandClass.from(undefined as any, serialized);
+		const deserialized = CommandClass.from(fakeDriver, serialized);
 		expect(deserialized).toBeInstanceOf(ManufacturerSpecificCC);
 		expect(deserialized.nodeId).toBe(cc.nodeId);
 	});

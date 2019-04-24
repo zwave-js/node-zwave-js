@@ -1,3 +1,4 @@
+import { createEmptyMockDriver } from "../../../test/mocks";
 import {
 	FunctionType,
 	MessagePriority,
@@ -19,8 +20,10 @@ import {
 	AddNodeType,
 } from "./AddNodeToNetworkRequest";
 
+const fakeDriver = createEmptyMockDriver();
+
 describe("lib/controller/AddNodeToNetworkRequest => ", () => {
-	const req = new AddNodeToNetworkRequest(undefined, 1);
+	const req = new AddNodeToNetworkRequest(fakeDriver, 1);
 
 	it("should be a Message", () => {
 		expect(req).toBeInstanceOf(Message);
@@ -52,7 +55,7 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 
 	it("should serialize correctly", () => {
 		const msg1 = new AddNodeToNetworkRequest(
-			undefined,
+			fakeDriver,
 			AddNodeType.Any,
 			false,
 			false,
@@ -61,7 +64,7 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 		expect(payload).toEqual(Buffer.from([0x01]));
 
 		const msg2 = new AddNodeToNetworkRequest(
-			undefined,
+			fakeDriver,
 			AddNodeType.Any,
 			true,
 			false,
@@ -70,7 +73,7 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 		expect(payload).toEqual(Buffer.from([0x81]));
 
 		const msg3 = new AddNodeToNetworkRequest(
-			undefined,
+			fakeDriver,
 			AddNodeType.Any,
 			false,
 			true,
@@ -79,7 +82,7 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 		expect(payload).toEqual(Buffer.from([0x41]));
 
 		const msg4 = new AddNodeToNetworkRequest(
-			undefined,
+			fakeDriver,
 			AddNodeType.Any,
 			true,
 			true,
@@ -88,7 +91,7 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 		expect(payload).toEqual(Buffer.from([0xc1]));
 
 		const msg5 = new AddNodeToNetworkRequest(
-			undefined,
+			fakeDriver,
 			AddNodeType.Stop,
 			true,
 			true,

@@ -1,9 +1,17 @@
-import { BatteryCC, BatteryCCGet, BatteryCCReport, BatteryCommand } from "./BatteryCC";
+import { createEmptyMockDriver } from "../../../test/mocks";
+import {
+	BatteryCC,
+	BatteryCCGet,
+	BatteryCCReport,
+	BatteryCommand,
+} from "./BatteryCC";
 import { CommandClasses } from "./CommandClasses";
+
+const fakeDriver = createEmptyMockDriver();
 
 describe("lib/commandclass/BatteryCC => ", () => {
 	it("the Get command should serialize correctly", () => {
-		const batteryCC = new BatteryCCGet(undefined as any, { nodeId: 1 });
+		const batteryCC = new BatteryCCGet(fakeDriver, { nodeId: 1 });
 		const expected = Buffer.from([
 			1, // node number
 			2, // remaining length
@@ -22,7 +30,7 @@ describe("lib/commandclass/BatteryCC => ", () => {
 				BatteryCommand.Report, // CC Command
 				55, // current value
 			]);
-			const batteryCC = new BatteryCC({} as any, {
+			const batteryCC = new BatteryCC(fakeDriver, {
 				data: ccData,
 			}) as BatteryCCReport;
 
@@ -38,7 +46,7 @@ describe("lib/commandclass/BatteryCC => ", () => {
 				BatteryCommand.Report, // CC Command
 				0xff, // current value
 			]);
-			const batteryCC = new BatteryCC({} as any, {
+			const batteryCC = new BatteryCC(fakeDriver, {
 				data: ccData,
 			}) as BatteryCCReport;
 
@@ -54,7 +62,7 @@ describe("lib/commandclass/BatteryCC => ", () => {
 			CommandClasses.Battery, // CC
 			255, // not a valid command
 		]);
-		const basicCC: any = new BatteryCC({} as any, {
+		const basicCC: any = new BatteryCC(fakeDriver, {
 			data: serializedCC,
 		});
 		expect(basicCC.constructor).toBe(BatteryCC);

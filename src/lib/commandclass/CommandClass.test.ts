@@ -1,4 +1,4 @@
-import { IDriver } from "../driver/IDriver";
+import { createEmptyMockDriver } from "../../../test/mocks";
 import { BasicCC } from "./BasicCC";
 import {
 	CommandClass,
@@ -10,20 +10,20 @@ import { CommandClasses } from "./CommandClasses";
 
 @implementedVersion(7)
 class DummyCC extends CommandClass {
-	public constructor(driver: IDriver) {
-		super(driver);
-	}
+	// public constructor(driver: IDriver) {
+	// 	super(driver);
+	// }
 }
 class DummyCCSubClass extends DummyCC {
-	public constructor(driver: IDriver) {
-		super(driver);
-	}
+	// public constructor(driver: IDriver) {
+	// 	super(driver);
+	// }
 }
 
 describe("lib/commandclass/CommandClass => ", () => {
-	describe.skip("getImplementedVersion()", () => {
+	describe("getImplementedVersion()", () => {
 		it("should return the implemented version for a CommandClass instance", () => {
-			const cc = new BasicCC({} as any);
+			const cc = new BasicCC(createEmptyMockDriver(), { nodeId: 1 });
 			expect(getImplementedVersion(cc)).toBe(2);
 		});
 
@@ -46,7 +46,7 @@ describe("lib/commandclass/CommandClass => ", () => {
 	});
 
 	describe("getImplementedVersionStatic()", () => {
-		it.skip("should return the implemented version for a CommandClass constructor", () => {
+		it("should return the implemented version for a CommandClass constructor", () => {
 			expect(getImplementedVersionStatic(BasicCC)).toBe(2);
 		});
 

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { EventEmitter } from "events";
 import * as SerialPort from "serialport";
+import { Driver } from "../src/lib/driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -38,7 +39,7 @@ export class MockSerialPort extends EventEmitter {
 		}
 	}
 
-	public static getInstance(port: string): MockSerialPort {
+	public static getInstance(port: string): MockSerialPort | undefined {
 		return instances.get(port);
 	}
 
@@ -97,3 +98,11 @@ export class MockRequestMessageWithoutExpectation extends Message {}
 @messageTypes(MessageType.Response, MockResponseMessage_FunctionType)
 // @ts-ignore decorators are working
 export class MockResponseMessage extends Message {}
+
+export function createEmptyMockDriver(): Driver {
+	return ({
+		getSafeCCVersionForNode() {
+			return 1;
+		},
+	} as unknown) as Driver;
+}

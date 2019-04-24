@@ -1,3 +1,4 @@
+import { createEmptyMockDriver } from "../../../test/mocks";
 import {
 	SendDataRequest,
 	TransmitOptions,
@@ -6,8 +7,10 @@ import { CommandClass, getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { ZWavePlusCC, ZWavePlusCommand } from "./ZWavePlusCC";
 
+const fakeDriver = createEmptyMockDriver();
+
 describe("lib/commandclass/ZWavePlusCC => ", () => {
-	const cc = new ZWavePlusCC({} as any, { nodeId: 9 });
+	const cc = new ZWavePlusCC(fakeDriver, { nodeId: 9 });
 	let serialized: Buffer;
 
 	it("should be a CommandClass", () => {
@@ -19,7 +22,7 @@ describe("lib/commandclass/ZWavePlusCC => ", () => {
 
 	it("should serialize correctly", () => {
 		const req = new SendDataRequest(
-			undefined as any,
+			fakeDriver,
 			cc,
 			TransmitOptions.DEFAULT,
 			36,

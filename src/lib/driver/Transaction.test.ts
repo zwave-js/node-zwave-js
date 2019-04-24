@@ -59,6 +59,7 @@ describe("lib/driver/Transaction => ", () => {
 					[4, { isListening: false, isFrequentListening: true }],
 				]),
 			},
+			getSafeCCVersionForNode() {},
 		};
 
 		function createTransactionForNode(nodeId: number) {
@@ -149,6 +150,7 @@ describe("lib/driver/Transaction => ", () => {
 					],
 				]),
 			},
+			getSafeCCVersionForNode() {},
 		} as unknown) as Driver;
 
 		function createTransaction(nodeId: number, priority: MessagePriority) {
