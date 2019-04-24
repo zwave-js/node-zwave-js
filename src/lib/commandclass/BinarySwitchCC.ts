@@ -1,16 +1,19 @@
 import { IDriver } from "../driver/IDriver";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Duration } from "../values/Duration";
 import { Maybe, parseBoolean, parseMaybeBoolean } from "../values/Primitive";
 import {
-	ccValue,
+	CCCommand,
+	CCCommandOptions,
 	CommandClass,
 	commandClass,
+	CommandClassDeserializationOptions,
 	expectedCCResponse,
+	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
+// All the supported commands
 export enum BinarySwitchCommand {
 	Set = 0x01,
 	Get = 0x02,
@@ -21,80 +24,68 @@ export enum BinarySwitchCommand {
 @implementedVersion(2)
 @expectedCCResponse(CommandClasses["Binary Switch"])
 export class BinarySwitchCC extends CommandClass {
-	public constructor(driver: IDriver, nodeId?: number);
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		ccCommand: BinarySwitchCommand.Get,
-	);
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		ccCommand: BinarySwitchCommand.Set,
-		targetValue: boolean,
-		duration?: Duration,
-	);
+	public ccCommand!: BinarySwitchCommand;
+}
 
+@CCCommand(BinarySwitchCommand.Get)
+export class BinarySwitchCCGet extends BinarySwitchCC {
 	public constructor(
 		driver: IDriver,
-		public nodeId: number,
-		public ccCommand?: BinarySwitchCommand,
-		targetValue?: boolean,
-		duration?: Duration,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(driver, nodeId, ccCommand);
-		if (targetValue != undefined) this.currentValue = targetValue;
-		if (duration != undefined) this.duration = duration;
+		super(driver, options);
+	}
+}
+
+interface BinarySwitchCCSetOptions extends CCCommandOptions {
+	targetValue: boolean;
+	duration?: Duration;
+}
+
+@CCCommand(BinarySwitchCommand.Set)
+export class BinarySwitchCCSet extends BinarySwitchCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | BinarySwitchCCSetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			throw new Error("not implemented!");
+		} else {
+			this.targetValue = options.targetValue;
+			this.duration = options.duration;
+		}
 	}
 
-	@ccValue() public currentValue: Maybe<boolean>;
-	@ccValue() public targetValue: boolean;
-	@ccValue() public duration: Duration;
+	public targetValue: boolean;
+	public duration: Duration | undefined;
 
 	public serialize(): Buffer {
-		switch (this.ccCommand) {
-			case BinarySwitchCommand.Get:
-				// no real payload
-				break;
-
-			case BinarySwitchCommand.Set: {
-				const payload: number[] = [this.targetValue ? 0xff : 0x00];
-				if (this.version >= 2) {
-					payload.push(this.duration.serializeSet());
-				}
-				this.payload = Buffer.from(payload);
-				break;
-			}
-
-			default:
-				throw new ZWaveError(
-					"Cannot serialize a BinarySwitch CC with a command other than Set or Get",
-					ZWaveErrorCodes.CC_Invalid,
-				);
+		const payload: number[] = [this.targetValue ? 0xff : 0x00];
+		if (this.version >= 2 && this.duration) {
+			payload.push(this.duration.serializeSet());
 		}
-
+		this.payload = Buffer.from(payload);
 		return super.serialize();
 	}
+}
 
-	public deserialize(data: Buffer): void {
-		super.deserialize(data);
-
-		switch (this.ccCommand) {
-			case BinarySwitchCommand.Report: {
-				this.currentValue = parseMaybeBoolean(this.payload[0]);
-				if (this.payload.length >= 2) {
-					// V2
-					this.targetValue = parseBoolean(this.payload[1]);
-					this.duration = Duration.parseReport(this.payload[2]);
-				}
-				break;
-			}
-
-			default:
-				throw new ZWaveError(
-					"Cannot deserialize a BinarySwitch CC with a command other than Report",
-					ZWaveErrorCodes.CC_Invalid,
-				);
+@CCCommand(BinarySwitchCommand.Report)
+export class BinarySwitchCCReport extends BinarySwitchCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		this.currentValue = parseMaybeBoolean(this.payload[0]);
+		if (this.payload.length >= 2) {
+			// V2
+			this.targetValue = parseBoolean(this.payload[1]);
+			this.duration = Duration.parseReport(this.payload[2]);
 		}
 	}
+
+	public currentValue: Maybe<boolean> | undefined;
+	public targetValue: boolean | undefined;
+	public duration: Duration | undefined;
 }

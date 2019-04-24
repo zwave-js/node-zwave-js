@@ -18,7 +18,7 @@ export class Duration {
 		this.value = value;
 	}
 
-	private _value: number;
+	private _value!: number;
 	public get value(): number {
 		return this._value;
 	}

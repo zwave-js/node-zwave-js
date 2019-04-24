@@ -1,11 +1,9 @@
-import { assertZWaveError } from "../../../test/util";
-import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { BatteryCC, BatteryCommand } from "./BatteryCC";
+import { BatteryCC, BatteryCCGet, BatteryCCReport, BatteryCommand } from "./BatteryCC";
 import { CommandClasses } from "./CommandClasses";
 
 describe("lib/commandclass/BatteryCC => ", () => {
 	it("the Get command should serialize correctly", () => {
-		const batteryCC = new BatteryCC(undefined, 1, BatteryCommand.Get);
+		const batteryCC = new BatteryCCGet(undefined as any, { nodeId: 1 });
 		const expected = Buffer.from([
 			1, // node number
 			2, // remaining length
@@ -13,15 +11,6 @@ describe("lib/commandclass/BatteryCC => ", () => {
 			BatteryCommand.Get, // CC Command
 		]);
 		expect(batteryCC.serialize()).toEqual(expected);
-	});
-
-	it("serialize() should throw for other commands", () => {
-		const batteryCC = new BatteryCC(undefined, 2, -1 /* not a command */);
-
-		assertZWaveError(() => batteryCC.serialize(), {
-			messageMatches: "Cannot serialize",
-			errorCode: ZWaveErrorCodes.CC_Invalid,
-		});
 	});
 
 	describe("the Report command (v1) should be deserialized correctly", () => {
@@ -33,8 +22,9 @@ describe("lib/commandclass/BatteryCC => ", () => {
 				BatteryCommand.Report, // CC Command
 				55, // current value
 			]);
-			const batteryCC = new BatteryCC(undefined);
-			batteryCC.deserialize(ccData);
+			const batteryCC = new BatteryCC({} as any, {
+				data: ccData,
+			}) as BatteryCCReport;
 
 			expect(batteryCC.level).toBe(55);
 			expect(batteryCC.isLow).toBeFalse();
@@ -48,26 +38,25 @@ describe("lib/commandclass/BatteryCC => ", () => {
 				BatteryCommand.Report, // CC Command
 				0xff, // current value
 			]);
-			const batteryCC = new BatteryCC(undefined);
-			batteryCC.deserialize(ccData);
+			const batteryCC = new BatteryCC({} as any, {
+				data: ccData,
+			}) as BatteryCCReport;
 
 			expect(batteryCC.level).toBe(0);
 			expect(batteryCC.isLow).toBeTrue();
 		});
 	});
 
-	it("deserialize() should throw for other commands", () => {
+	it("deserializing an unsupported command should return an unspecified version of BatteryCC", () => {
 		const serializedCC = Buffer.from([
 			2, // node number
 			2, // remaining length
 			CommandClasses.Battery, // CC
 			255, // not a valid command
 		]);
-		const batteryCC = new BatteryCC(undefined);
-
-		assertZWaveError(() => batteryCC.deserialize(serializedCC), {
-			messageMatches: "Cannot deserialize",
-			errorCode: ZWaveErrorCodes.CC_Invalid,
+		const basicCC: any = new BatteryCC({} as any, {
+			data: serializedCC,
 		});
+		expect(basicCC.constructor).toBe(BatteryCC);
 	});
 });

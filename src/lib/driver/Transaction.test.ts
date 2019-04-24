@@ -6,51 +6,35 @@ import { ZWaveNode } from "../node/Node";
 import { Driver } from "./Driver";
 import { MAX_SEND_ATTEMPTS, Transaction } from "./Transaction";
 
+function createTransactionWithPriority(priority: MessagePriority): Transaction {
+	return new Transaction(
+		undefined as any,
+		{} as any,
+		undefined as any,
+		priority,
+	);
+}
+
 describe("lib/driver/Transaction => ", () => {
 	it("should compare priority, then the timestamp", () => {
 		// "winning" means the position of a transaction in the queue is lower
 
 		// t2 has a later timestamp by default
-		const t1 = new Transaction(
-			null,
-			null,
-			null,
-			MessagePriority.Controller,
-		);
-		const t2 = new Transaction(
-			null,
-			null,
-			null,
-			MessagePriority.Controller,
-		);
+		const t1 = createTransactionWithPriority(MessagePriority.Controller);
+		const t2 = createTransactionWithPriority(MessagePriority.Controller);
 		// equal priority, earlier timestamp wins
 		expect(t1.compareTo(t2)).toBe(-1);
 		expect(t2.compareTo(t1)).toBe(1);
 
-		const t3 = new Transaction(null, null, null, MessagePriority.Poll);
-		const t4 = new Transaction(
-			null,
-			null,
-			null,
-			MessagePriority.Controller,
-		);
+		const t3 = createTransactionWithPriority(MessagePriority.Poll);
+		const t4 = createTransactionWithPriority(MessagePriority.Controller);
 		// lower priority loses
 		expect(t3.compareTo(t4)).toBe(1);
 		expect(t4.compareTo(t3)).toBe(-1);
 
 		// this should not happen but we still need to test it
-		const t5 = new Transaction(
-			null,
-			null,
-			null,
-			MessagePriority.Controller,
-		);
-		const t6 = new Transaction(
-			null,
-			null,
-			null,
-			MessagePriority.Controller,
-		);
+		const t5 = createTransactionWithPriority(MessagePriority.Controller);
+		const t6 = createTransactionWithPriority(MessagePriority.Controller);
 		t6.timestamp = t5.timestamp;
 		expect(t5.compareTo(t6)).toBe(0);
 		expect(t6.compareTo(t5)).toBe(0);
@@ -77,28 +61,28 @@ describe("lib/driver/Transaction => ", () => {
 			},
 		};
 
-		function createTransaction(nodeID: number) {
+		function createTransactionForNode(nodeId: number) {
 			const driver = (driverMock as any) as Driver;
 			const msg = new SendDataRequest(
 				driver,
-				new NoOperationCC(driver, nodeID),
+				new NoOperationCC(driver, { nodeId }),
 			);
 			const ret = new Transaction(
 				driver,
 				msg,
-				null,
+				undefined as any,
 				MessagePriority.NodeQuery,
 			);
 			ret.timestamp = 0;
 			return ret;
 		}
 
-		const t1 = createTransaction(1);
-		const t2 = createTransaction(2);
-		const t3 = createTransaction(3);
-		const t4 = createTransaction(4);
-		const tNoId = createTransaction(undefined);
-		const tNoNode = createTransaction(5);
+		const t1 = createTransactionForNode(1);
+		const t2 = createTransactionForNode(2);
+		const t3 = createTransactionForNode(3);
+		const t4 = createTransactionForNode(4);
+		const tNoId = createTransactionForNode(undefined as any);
+		const tNoNode = createTransactionForNode(5);
 
 		// t2/3/4 prioritized because it's listening and t1 is not
 		expect(t1.compareTo(t2)).toBe(1);
@@ -167,13 +151,18 @@ describe("lib/driver/Transaction => ", () => {
 			},
 		} as unknown) as Driver;
 
-		function createTransaction(nodeID: number, priority: MessagePriority) {
+		function createTransaction(nodeId: number, priority: MessagePriority) {
 			const driver = (driverMock as any) as Driver;
 			const msg = new SendDataRequest(
 				driver,
-				new NoOperationCC(driver, nodeID),
+				new NoOperationCC(driver, { nodeId }),
 			);
-			const ret = new Transaction(driver, msg, null, priority);
+			const ret = new Transaction(
+				driver,
+				msg,
+				undefined as any,
+				priority,
+			);
 			ret.timestamp = 0;
 			return ret;
 		}
@@ -211,12 +200,7 @@ describe("lib/driver/Transaction => ", () => {
 		let test: Transaction;
 
 		beforeAll(() => {
-			test = new Transaction(
-				undefined,
-				undefined,
-				undefined,
-				MessagePriority.Normal,
-			);
+			test = createTransactionWithPriority(MessagePriority.Normal);
 		});
 
 		it("should default to the maximum", () => {

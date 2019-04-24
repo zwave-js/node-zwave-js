@@ -439,10 +439,11 @@ export class Driver extends EventEmitter implements IDriver {
 			const MessageConstructor = Message.getConstructor(
 				this.receiveBuffer,
 			);
-			const msg = new MessageConstructor(this);
-			let readBytes: number;
+			let msg: Message;
+			let bytesRead: number;
 			try {
-				readBytes = msg.deserialize(this.receiveBuffer);
+				msg = new MessageConstructor(this, this.receiveBuffer);
+				bytesRead = msg.bytesRead;
 			} catch (e) {
 				if (e instanceof ZWaveError) {
 					if (
@@ -458,7 +459,7 @@ export class Driver extends EventEmitter implements IDriver {
 			}
 			// and cut the read bytes from our buffer
 			this.receiveBuffer = Buffer.from(
-				this.receiveBuffer.slice(readBytes),
+				this.receiveBuffer.slice(bytesRead),
 			);
 
 			// all good, send ACK

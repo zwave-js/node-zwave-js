@@ -205,9 +205,9 @@ export class ZWaveNode extends EventEmitter {
 		return this._implementedCommandClasses;
 	}
 
-	private _neighbors: ReadonlyArray<number>;
+	private _neighbors: readonly number[];
 	/** The IDs of all direct neighbors of this node */
-	public get neighbors(): ReadonlyArray<number> {
+	public get neighbors(): readonly number[] {
 		return this._neighbors;
 	}
 

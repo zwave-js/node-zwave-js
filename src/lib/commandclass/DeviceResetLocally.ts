@@ -1,5 +1,5 @@
-import { IDriver } from "../driver/IDriver";
 import {
+	CCCommand,
 	CommandClass,
 	commandClass,
 	expectedCCResponse,
@@ -15,13 +15,8 @@ export enum DeviceResetLocallyCommand {
 @implementedVersion(1)
 @expectedCCResponse(CommandClasses["Device Reset Locally"])
 export class DeviceResetLocallyCC extends CommandClass {
-	public constructor(driver: IDriver, nodeId?: number);
-
-	public constructor(
-		driver: IDriver,
-		public nodeId: number,
-		public ccCommand?: DeviceResetLocallyCommand,
-	) {
-		super(driver, nodeId, ccCommand);
-	}
+	public ccCommand!: DeviceResetLocallyCommand;
 }
+
+@CCCommand(DeviceResetLocallyCommand.Notification)
+export class DeviceResetLocallyCCNotification extends DeviceResetLocallyCC {}

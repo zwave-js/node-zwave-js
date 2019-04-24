@@ -1,5 +1,4 @@
 import { IDriver } from "../driver/IDriver";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { GenericDeviceClasses } from "../node/DeviceClass";
 import {
 	NodeInformationFrame,
@@ -7,10 +6,13 @@ import {
 } from "../node/NodeInfo";
 import { encodeBitMask, parseBitMask } from "../values/Primitive";
 import {
-	ccValue,
+	CCCommand,
+	CCCommandOptions,
 	CommandClass,
 	commandClass,
+	CommandClassDeserializationOptions,
 	expectedCCResponse,
+	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
@@ -38,195 +40,278 @@ export interface EndpointCapability extends NodeInformationFrame {
 @implementedVersion(4)
 @expectedCCResponse(CommandClasses["Multi Channel"])
 export class MultiChannelCC extends CommandClass {
-	public constructor(driver: IDriver, nodeId?: number);
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		ccCommand: MultiChannelCommand.EndPointGet,
-	);
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		ccCommand:
-			| MultiChannelCommand.CapabilityGet
-			| MultiChannelCommand.AggregatedMembersGet,
-		endpoint: number,
-	);
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		ccCommand: MultiChannelCommand.EndPointFind,
-		genericClass: GenericDeviceClasses,
-		specificClass: number,
-	);
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		ccCommand: MultiChannelCommand.CommandEncapsulation,
-		encapsulatedCC: CommandClass,
-	);
+	public ccCommand!: MultiChannelCommand;
+}
 
+@CCCommand(MultiChannelCommand.EndPointGet)
+export class MultiChannelCCEndPointGet extends MultiChannelCC {
 	public constructor(
 		driver: IDriver,
-		public nodeId: number,
-		public ccCommand?: MultiChannelCommand,
-		...args: any[]
+		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(driver, nodeId, ccCommand);
+		super(driver, options);
+	}
+}
 
-		if (
-			ccCommand === MultiChannelCommand.CapabilityGet ||
-			ccCommand === MultiChannelCommand.AggregatedMembersGet
-		) {
-			this.endpoint = args[0];
-		} else if (ccCommand === MultiChannelCommand.EndPointFind) {
-			[this.genericClass, this.specificClass] = args;
-		} else if (ccCommand === MultiChannelCommand.CommandEncapsulation) {
-			this.encapsulatedCC = args[0];
+@CCCommand(MultiChannelCommand.EndPointReport)
+export class MultiChannelCCEndPointReport extends MultiChannelCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+
+		this._isDynamicEndpointCount = !!(this.payload[0] & 0b10000000);
+		this._identicalCapabilities = !!(this.payload[0] & 0b01000000);
+		this._individualEndpointCount = this.payload[1] & 0b01111111;
+		if (this.version >= 4) {
+			this._aggregatedEndpointCount = this.payload[2] & 0b01111111;
 		}
 	}
 
-	@ccValue() public isDynamicEndpointCount: boolean;
-	@ccValue() public identicalCapabilities: boolean;
-	@ccValue() public individualEndpointCount: number;
-	@ccValue() public aggregatedEndpointCount: number;
+	private _isDynamicEndpointCount: boolean;
+	public get isDynamicEndpointCount(): boolean {
+		return this._isDynamicEndpointCount;
+	}
+	private _identicalCapabilities: boolean;
+	public get identicalCapabilities(): boolean {
+		return this._identicalCapabilities;
+	}
+	private _individualEndpointCount: number;
+	public get individualEndpointCount(): number {
+		return this._individualEndpointCount;
+	}
+	private _aggregatedEndpointCount: number | undefined;
+	public get aggregatedEndpointCount(): number | undefined {
+		return this._aggregatedEndpointCount;
+	}
+}
 
-	private _endpointCapabilities = new Map<number, EndpointCapability>();
-	public get endpointCapabilities(): Map<number, EndpointCapability> {
-		return this._endpointCapabilities;
+interface MultiChannelCCCapabilityGetOptions extends CCCommandOptions {
+	endpoint: number;
+}
+
+@CCCommand(MultiChannelCommand.CapabilityGet)
+export class MultiChannelCCCapabilityGet extends MultiChannelCC {
+	public constructor(
+		driver: IDriver,
+		options:
+			| CommandClassDeserializationOptions
+			| MultiChannelCCCapabilityGetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new Error("not implemented");
+		} else {
+			this._endpoint = options.endpoint;
+		}
 	}
 
-	public endpoint: number;
+	private _endpoint: number;
+	public get endpoint(): number {
+		return this._endpoint;
+	}
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.endpoint & 0b01111111]);
+		return super.serialize();
+	}
+}
+
+@CCCommand(MultiChannelCommand.CapabilityReport)
+export class MultiChannelCCCapabilityReport extends MultiChannelCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+
+		this._endpointIndex = this.payload[0] & 0b01111111;
+		this._capability = {
+			isDynamic: !!(this.payload[0] & 0b10000000),
+			...parseNodeInformationFrame(this.payload.slice(1)),
+		};
+	}
+
+	private _endpointIndex: number;
+	public get endpointIndex(): number {
+		return this._endpointIndex;
+	}
+
+	private _capability: EndpointCapability;
+	public get capability(): EndpointCapability {
+		return this._capability;
+	}
+}
+
+interface MultiChannelCCEndPointFindOptions extends CCCommandOptions {
+	genericClass: GenericDeviceClasses;
+	specificClass: number;
+}
+
+@CCCommand(MultiChannelCommand.EndPointFind)
+export class MultiChannelCCEndPointFind extends MultiChannelCC {
+	public constructor(
+		driver: IDriver,
+		options:
+			| CommandClassDeserializationOptions
+			| MultiChannelCCEndPointFindOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new Error("not implemented");
+		} else {
+			this.genericClass = options.genericClass;
+			this.specificClass = options.specificClass;
+		}
+	}
+
 	public genericClass: GenericDeviceClasses;
 	public specificClass: number;
 
-	private _foundEndpoints: number[];
-	public get foundEndpoints(): number[] {
-		return this._foundEndpoints;
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.genericClass, this.specificClass]);
+		return super.serialize();
+	}
+}
+
+@CCCommand(MultiChannelCommand.EndPointFindReport)
+export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		const numReports = this.payload[0];
+		this._genericClass = this.payload[1];
+		this._specificClass = this.payload[2];
+		this._foundEndpoints = [...this.payload.slice(3, 3 + numReports)].map(
+			e => e & 0b01111111,
+		);
 	}
 
+	private _genericClass: GenericDeviceClasses;
+	public get genericClass(): GenericDeviceClasses {
+		return this._genericClass;
+	}
+	private _specificClass: number;
+	public get specificClass(): number {
+		return this._specificClass;
+	}
+
+	private _foundEndpoints: number[];
+	public get foundEndpoints(): readonly number[] {
+		return this._foundEndpoints;
+	}
+}
+
+interface MultiChannelCCAggregatedMembersGetOptions extends CCCommandOptions {
+	endpoint: number;
+}
+
+@CCCommand(MultiChannelCommand.AggregatedMembersGet)
+export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
+	public constructor(
+		driver: IDriver,
+		options:
+			| CommandClassDeserializationOptions
+			| MultiChannelCCAggregatedMembersGetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new Error("not implemented");
+		} else {
+			this.endpoint = options.endpoint;
+		}
+	}
+
+	public endpoint: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.endpoint & 0b0111_1111]);
+		return super.serialize();
+	}
+}
+
+@CCCommand(MultiChannelCommand.AggregatedMembersReport)
+export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		this._endpoint = this.payload[0] & 0b0111_1111;
+		const bitMaskLength = this.payload[1];
+		const bitMask = this.payload.slice(2, 2 + bitMaskLength);
+		this._aggregatedEndpointMembers = parseBitMask(bitMask);
+	}
+
+	private _endpoint: number;
+	public get endpoint(): number {
+		return this._endpoint;
+	}
+
+	private _aggregatedEndpointMembers: number[];
+	public get aggregatedEndpointMembers(): readonly number[] {
+		return this._aggregatedEndpointMembers;
+	}
+}
+
+interface MultiChannelCCCommandEncapsulationOptions extends CCCommandOptions {
+	encapsulatedCC: CommandClass;
+	sourceEndPoint: number;
+	destination: number | number[];
+}
+
+@CCCommand(MultiChannelCommand.CommandEncapsulation)
+export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
+	public constructor(
+		driver: IDriver,
+		options:
+			| CommandClassDeserializationOptions
+			| MultiChannelCCCommandEncapsulationOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			this.sourceEndPoint = this.payload[0] & 0b0111_1111;
+			const isBitMask = !!(this.payload[1] & 0b1000_0000);
+			const destination = this.payload[1] & 0b0111_1111;
+			if (isBitMask) {
+				this.destination = parseBitMask(Buffer.from([destination]));
+			} else {
+				this.destination = destination;
+			}
+			this.encapsulatedCC = CommandClass.fromEncapsulated(
+				this.driver,
+				this,
+				this.payload.slice(2),
+			);
+		} else {
+			this.encapsulatedCC = options.encapsulatedCC;
+			this.sourceEndPoint = options.sourceEndPoint;
+			this.destination = options.destination;
+		}
+	}
+
+	public encapsulatedCC: CommandClass;
 	public sourceEndPoint: number;
 	/** The destination end point (0-127) or an array of destination end points (1-7) */
 	public destination: number | number[];
 
-	public encapsulatedCC: CommandClass;
-
-	private _aggregatedEndpointMembers: number[];
-	public get aggregatedEndpointMembers(): number[] {
-		return this._aggregatedEndpointMembers;
-	}
-
 	public serialize(): Buffer {
-		switch (this.ccCommand) {
-			case MultiChannelCommand.EndPointGet:
-				// no real payload
-				break;
-
-			case MultiChannelCommand.CapabilityGet:
-				this.payload = Buffer.from([this.endpoint & 0b01111111]);
-				break;
-
-			case MultiChannelCommand.EndPointFind:
-				this.payload = Buffer.from([
-					this.genericClass,
-					this.specificClass,
-				]);
-				break;
-
-			case MultiChannelCommand.CommandEncapsulation: {
-				const destination =
-					typeof this.destination === "number"
-						? // The destination is a single number
-						  this.destination & 0b0111_1111
-						: // The destination is a bit mask
-						  encodeBitMask(this.destination, 7)[0] | 0b1000_0000;
-				this.payload = Buffer.concat([
-					Buffer.from([
-						this.sourceEndPoint & 0b0111_1111,
-						destination,
-					]),
-					this.encapsulatedCC.serializeForEncapsulation(),
-				]);
-				break;
-			}
-
-			case MultiChannelCommand.AggregatedMembersGet:
-				this.payload = Buffer.from([this.endpoint & 0b0111_1111]);
-				break;
-
-			default:
-				throw new ZWaveError(
-					"Cannot serialize a MultiChannel CC with a command other than EndPointGet, CapabilityGet, AggregatedMembersGet or CommandEncapsulation",
-					ZWaveErrorCodes.CC_Invalid,
-				);
-		}
-
+		const destination =
+			typeof this.destination === "number"
+				? // The destination is a single number
+				  this.destination & 0b0111_1111
+				: // The destination is a bit mask
+				  encodeBitMask(this.destination, 7)[0] | 0b1000_0000;
+		this.payload = Buffer.concat([
+			Buffer.from([this.sourceEndPoint & 0b0111_1111, destination]),
+			this.encapsulatedCC.serializeForEncapsulation(),
+		]);
 		return super.serialize();
-	}
-
-	public deserialize(data: Buffer): void {
-		super.deserialize(data);
-
-		switch (this.ccCommand) {
-			case MultiChannelCommand.EndPointReport:
-				this.isDynamicEndpointCount = !!(this.payload[0] & 0b10000000);
-				this.identicalCapabilities = !!(this.payload[0] & 0b01000000);
-				this.individualEndpointCount = this.payload[1] & 0b01111111;
-				if (this.version >= 4) {
-					this.aggregatedEndpointCount = this.payload[2] & 0b01111111;
-				}
-				break;
-
-			case MultiChannelCommand.CapabilityReport: {
-				const endpointIndex = this.payload[0] & 0b01111111;
-				const capability: EndpointCapability = {
-					isDynamic: !!(this.payload[0] & 0b10000000),
-					...parseNodeInformationFrame(this.payload.slice(1)),
-				};
-				this._endpointCapabilities.set(endpointIndex, capability);
-				break;
-			}
-
-			case MultiChannelCommand.EndPointFindReport: {
-				const numReports = this.payload[0];
-				this.genericClass = this.payload[1];
-				this.specificClass = this.payload[2];
-				this._foundEndpoints = [
-					...this.payload.slice(3, 3 + numReports),
-				].map(e => e & 0b01111111);
-				break;
-			}
-
-			case MultiChannelCommand.CommandEncapsulation: {
-				this.sourceEndPoint = this.payload[0] & 0b0111_1111;
-				const isBitMask = !!(this.payload[1] & 0b1000_0000);
-				const destination = this.payload[1] & 0b0111_1111;
-				if (isBitMask) {
-					this.destination = parseBitMask(Buffer.from([destination]));
-				} else {
-					this.destination = destination;
-				}
-				this.encapsulatedCC = CommandClass.fromEncapsulated(
-					this.driver,
-					this,
-					this.payload.slice(2),
-				);
-				break;
-			}
-
-			case MultiChannelCommand.AggregatedMembersReport: {
-				this.endpoint = this.payload[0] & 0b0111_1111;
-				const bitMaskLength = this.payload[1];
-				const bitMask = this.payload.slice(2, 2 + bitMaskLength);
-				this._aggregatedEndpointMembers = parseBitMask(bitMask);
-				break;
-			}
-
-			default:
-				throw new ZWaveError(
-					"Cannot deserialize a MultiChannel CC with a command other than EndPointReport, CapabilityReport, EndPointFindReport, AggregatedMembersReport or CommandEncapsulation",
-					ZWaveErrorCodes.CC_Invalid,
-				);
-		}
 	}
 }

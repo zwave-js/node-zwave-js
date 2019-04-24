@@ -23,7 +23,7 @@ class DummyCCSubClass extends DummyCC {
 describe("lib/commandclass/CommandClass => ", () => {
 	describe.skip("getImplementedVersion()", () => {
 		it("should return the implemented version for a CommandClass instance", () => {
-			const cc = new BasicCC(undefined as any);
+			const cc = new BasicCC({} as any);
 			expect(getImplementedVersion(cc)).toBe(2);
 		});
 

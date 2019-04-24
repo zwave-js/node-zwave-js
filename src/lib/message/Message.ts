@@ -1,5 +1,6 @@
 /// <reference types="reflect-metadata" />
 
+import { assertNever } from "alcalzone-shared/helpers";
 import { entries } from "alcalzone-shared/objects";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { IDriver } from "../driver/IDriver";
@@ -16,25 +17,25 @@ import {
 	MessageType,
 } from "./Constants";
 
-export type Constructable<T> = new (
-	driver: IDriver,
-	...constructorArgs: any[]
-) => T;
+export interface Constructable<T extends Message> {
+	new (driver: IDriver, ...constructorArgs: any[]): T;
+	new (driver: IDriver, data?: Buffer): T;
+}
 
 /**
  * Represents a ZWave message for communication with the serial interface
  */
 export class Message {
-	// #1
-	public constructor(driver: IDriver, payload?: Buffer);
+	// #1: Basic constructor or deserialization
+	public constructor(driver: IDriver, data?: Buffer);
 
 	// #2
 	public constructor(
 		driver: IDriver,
 		type: MessageType,
 		funcType: FunctionType,
-		expResponse: FunctionType | ResponsePredicate,
-		payload?: Buffer,
+		expResponse?: FunctionType | ResponsePredicate,
+		data?: Buffer,
 	);
 
 	// implementation
@@ -43,32 +44,102 @@ export class Message {
 		typeOrPayload?: MessageType | Buffer,
 		funcType?: FunctionType,
 		expResponse?: FunctionType | ResponsePredicate,
-		payload?: Buffer, // TODO: Length limit 255
+		payload: Buffer = Buffer.allocUnsafe(0), // TODO: Length limit 255
 	) {
 		// decide which implementation we follow
-		let type: MessageType | undefined;
-		if (typeof typeOrPayload === "number") {
-			// #2
-			type = typeOrPayload;
-		} else if (typeOrPayload instanceof Buffer) {
-			// #1
-			payload = typeOrPayload;
+		if (typeOrPayload == undefined) {
+			// Default constructor without any arguments
+			// Try to determine the message type
+			typeOrPayload = getMessageType(this);
+			if (typeOrPayload == undefined) {
+				throw new ZWaveError(
+					"A message must have a given or predefined message type",
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			// Now continue with #2
 		}
+		if (typeof typeOrPayload === "number") {
+			// #2: Arguments and payload given, no deserialization
+			this.type = typeOrPayload;
 
-		// These properties are filled from declared metadata if not provided
-		this.type = type != null ? type : getMessageType(this);
-		this.functionType = funcType != null ? funcType : getFunctionType(this);
-		this.expectedResponse =
-			expResponse != null ? expResponse : getExpectedResponse(this);
-		// This is taken from the constructor args
-		this.payload = payload;
+			if (funcType == undefined) funcType = getFunctionType(this);
+			if (funcType == undefined) {
+				throw new ZWaveError(
+					"A message must have a given or predefined function type",
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			this.functionType = funcType;
+			// The expected response may be undefined
+			this.expectedResponse =
+				expResponse != null ? expResponse : getExpectedResponse(this);
+
+			this.payload = payload;
+		} else if (typeOrPayload instanceof Buffer) {
+			// #1: deserialize from payload
+			payload = typeOrPayload;
+
+			// SOF, length, type, commandId and checksum must be present
+			if (!payload.length || payload.length < 5) {
+				throw new ZWaveError(
+					"Could not deserialize the message because it was truncated",
+					ZWaveErrorCodes.PacketFormat_Truncated,
+				);
+			}
+			// the packet has to start with SOF
+			if (payload[0] !== MessageHeaders.SOF) {
+				throw new ZWaveError(
+					"Could not deserialize the message because it does not start with SOF",
+					ZWaveErrorCodes.PacketFormat_Invalid,
+				);
+			}
+			// check the length again, this time with the transmitted length
+			const remainingLength = payload[1];
+			const messageLength = remainingLength + 2;
+			if (payload.length < messageLength) {
+				throw new ZWaveError(
+					"Could not deserialize the message because it was truncated",
+					ZWaveErrorCodes.PacketFormat_Truncated,
+				);
+			}
+			// check the checksum
+			const expectedChecksum = computeChecksum(
+				payload.slice(0, messageLength),
+			);
+			if (payload[messageLength - 1] !== expectedChecksum) {
+				throw new ZWaveError(
+					"Could not deserialize the message because the checksum didn't match",
+					ZWaveErrorCodes.PacketFormat_Checksum,
+				);
+			}
+
+			this.type = payload[2];
+			this.functionType = payload[3];
+			const payloadLength = messageLength - 5;
+			this.payload = payload.slice(4, 4 + payloadLength);
+
+			// remember how many bytes were read
+			this._bytesRead = messageLength;
+		} else {
+			throw assertNever(typeOrPayload);
+		}
 	}
 
-	public type: MessageType | undefined;
-	public functionType: FunctionType | undefined;
+	public type: MessageType;
+	public functionType: FunctionType;
 	public expectedResponse: FunctionType | ResponsePredicate | undefined;
 	public payload: Buffer; // TODO: Length limit 255
-	public maxSendAttempts: number;
+	public maxSendAttempts: number | undefined;
+
+	protected _bytesRead: number | undefined;
+	/**
+	 * @internal
+	 * The amount of bytes read while deserializing this message
+	 */
+	public get bytesRead(): number | undefined {
+		return this._bytesRead;
+	}
 
 	/** Serializes this message into a Buffer */
 	public serialize(): Buffer {
@@ -107,54 +178,8 @@ export class Message {
 		return getMessageConstructor(data[2], data[3]) || Message;
 	}
 
-	/**
-	 * Deserializes a message of this type from a Buffer
-	 * @returns must return the total number of bytes read
-	 */
-	public deserialize(data: Buffer): number {
-		// SOF, length, type, commandId and checksum must be present
-		if (!data || !data.length || data.length < 5) {
-			throw new ZWaveError(
-				"Could not deserialize the message because it was truncated",
-				ZWaveErrorCodes.PacketFormat_Truncated,
-			);
-		}
-		// the packet has to start with SOF
-		if (data[0] !== MessageHeaders.SOF) {
-			throw new ZWaveError(
-				"Could not deserialize the message because it does not start with SOF",
-				ZWaveErrorCodes.PacketFormat_Invalid,
-			);
-		}
-		// check the length again, this time with the transmitted length
-		const remainingLength = data[1];
-		const messageLength = remainingLength + 2;
-		if (data.length < messageLength) {
-			throw new ZWaveError(
-				"Could not deserialize the message because it was truncated",
-				ZWaveErrorCodes.PacketFormat_Truncated,
-			);
-		}
-		// check the checksum
-		const expectedChecksum = computeChecksum(data.slice(0, messageLength));
-		if (data[messageLength - 1] !== expectedChecksum) {
-			throw new ZWaveError(
-				"Could not deserialize the message because the checksum didn't match",
-				ZWaveErrorCodes.PacketFormat_Checksum,
-			);
-		}
-
-		this.type = data[2];
-		this.functionType = data[3];
-		const payloadLength = messageLength - 5;
-		this.payload = data.slice(4, 4 + payloadLength);
-
-		// return the total number of bytes in this message
-		return messageLength;
-	}
-
 	/** Returns the slice of data which represents the message payload */
-	public static getPayload(data: Buffer): Buffer {
+	public static extractPayload(data: Buffer): Buffer {
 		// we assume the message has been tested already for completeness
 		const remainingLength = data[1];
 		const messageLength = remainingLength + 2;

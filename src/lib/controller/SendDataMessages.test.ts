@@ -1,8 +1,6 @@
 /// <reference types="jest-extended" />
 import { assertZWaveError } from "../../../test/util";
 import { BasicCC, BasicCommand } from "../commandclass/BasicCC";
-import { CommandClass } from "../commandclass/CommandClass";
-import { CommandClasses } from "../commandclass/CommandClasses";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessageType } from "../message/Constants";
@@ -15,6 +13,7 @@ import {
 } from "../message/Message";
 import {
 	SendDataRequest,
+	SendDataRequestBase,
 	SendDataResponse,
 	TransmitOptions,
 } from "./SendDataMessages";
@@ -22,25 +21,24 @@ import {
 function createSendDataMessage(
 	type: MessageType,
 	payload?: Buffer,
-): SendDataRequest | SendDataResponse {
+): SendDataRequestBase | SendDataResponse {
 	const msg = new Message(
-		undefined,
+		undefined as any,
 		type,
 		FunctionType.SendData,
-		undefined,
+		undefined as any,
 		payload,
 	);
 	const data = msg.serialize();
 	const ret =
 		type === MessageType.Request
-			? new SendDataRequest(undefined)
-			: new SendDataResponse(undefined);
-	ret.deserialize(data);
+			? new SendDataRequestBase(undefined as any, data)
+			: new SendDataResponse(undefined as any, data);
 	return ret;
 }
 
 describe("lib/controller/SendDataRequest => ", () => {
-	const req = new SendDataRequest(undefined);
+	const req = new SendDataRequest(undefined as any, undefined as any);
 
 	it("should be a Message", () => {
 		expect(req).toBeInstanceOf(Message);
@@ -60,74 +58,78 @@ describe("lib/controller/SendDataRequest => ", () => {
 			Buffer.from([0]),
 		);
 		// "A SendDataResponse with wasSent=false was not detected as fatal_controller!"
-		expect(predicate(undefined, controllerFail)).toBe("fatal_controller");
+		expect(predicate(undefined as any, controllerFail)).toBe(
+			"fatal_controller",
+		);
 
 		const controllerSuccess = createSendDataMessage(
 			MessageType.Response,
 			Buffer.from([1]),
 		);
 		// "A SendDataResponse with wasSent=true was not detected as confirmation!"
-		expect(predicate(undefined, controllerSuccess)).toBe("confirmation");
+		expect(predicate(undefined as any, controllerSuccess)).toBe(
+			"confirmation",
+		);
 
 		const nodeFail = createSendDataMessage(
 			MessageType.Request,
 			Buffer.from([0, 1]),
 		);
 		// "A SendDataRequest with isFailed=true was not detected as fatal_node!"
-		expect(predicate(undefined, nodeFail)).toBe("fatal_node");
+		expect(predicate(undefined as any, nodeFail)).toBe("fatal_node");
 
 		const nodeSuccess = createSendDataMessage(
 			MessageType.Request,
 			Buffer.from([0, 0]),
 		);
 		// "A SendDataRequest with isFailed=false was not detected as final!"
-		expect(predicate(undefined, nodeSuccess)).toBe("final");
+		expect(predicate(undefined as any, nodeSuccess)).toBe("final");
 
 		const somethingElse = new Message(
-			undefined,
+			undefined as any,
 			MessageType.Request,
 			FunctionType.ApplicationCommand,
-			undefined,
+			undefined as any,
 			undefined,
 		);
 		// "An unrelated message was not detected as unexpected!"
-		expect(predicate(undefined, somethingElse)).toBe("unexpected");
+		expect(predicate(undefined as any, somethingElse)).toBe("unexpected");
 	});
 
 	// We cannot parse these kinds of messages atm.
-	it.skip("should extract all properties correctly", () => {
-		// an actual message from OZW
-		const rawBuf = Buffer.from("010900130b0226022527ca", "hex");
-		//                         payload: ID  CC  TXcb
-		//                      cc payload: ------^^
-		const parsed = new SendDataRequest(undefined);
-		parsed.deserialize(rawBuf);
+	// it.skip("should extract all properties correctly", () => {
+	// 	// an actual message from OZW
+	// 	const rawBuf = Buffer.from("010900130b0226022527ca", "hex");
+	// 	//                         payload: ID  CC  TXcb
+	// 	//                      cc payload: ------^^
+	// 	const parsed = new SendDataRequest(undefined);
+	// 	parsed.deserialize(rawBuf);
 
-		expect(parsed.command).toBeInstanceOf(CommandClass);
-		expect(parsed.command.nodeId).toBe(11);
-		expect(parsed.command.ccCommand).toBe(
-			CommandClasses["Multilevel Switch"],
-		);
-		expect(parsed.command.payload).toEqual(Buffer.from([0x02]));
+	// 	expect(parsed.command).toBeInstanceOf(CommandClass);
+	// 	expect(parsed.command.nodeId).toBe(11);
+	// 	expect(parsed.command.ccCommand).toBe(
+	// 		CommandClasses["Multilevel Switch"],
+	// 	);
+	// 	expect(parsed.command.payload).toEqual(Buffer.from([0x02]));
 
-		expect(parsed.transmitOptions).toBe(TransmitOptions.DEFAULT);
-		expect(parsed.callbackId).toBe(0x27);
-	});
+	// 	expect(parsed.transmitOptions).toBe(TransmitOptions.DEFAULT);
+	// 	expect(parsed.callbackId).toBe(0x27);
+	// });
 
-	// This should be in the ApplicationCommandRequest tests
-	it.skip("should retrieve the correct CC constructor", () => {
-		// we use a NoOP message here as the other CCs aren't implemented yet
-		const raw = Buffer.from("010900130d0200002515da", "hex");
-		expect(Message.getConstructor(raw)).toBe(SendDataRequest);
+	// TODO: This should be in the ApplicationCommandRequest tests
+	// it.skip("should retrieve the correct CC constructor", () => {
+	// 	// we use a NoOP message here as the other CCs aren't implemented yet
+	// 	const raw = Buffer.from("010900130d0200002515da", "hex");
+	// 	expect(Message.getConstructor(raw)).toBe(SendDataRequest);
 
-		const srq = new SendDataRequest(undefined);
-		srq.deserialize(raw);
-		expect(srq.command).toBeInstanceOf(NoOperationCC);
-	});
+	// 	const srq = new SendDataRequest(undefined as any);
+	// 	srq.deserialize(raw);
+	// 	expect(srq.command).toBeInstanceOf(NoOperationCC);
+	// });
 
 	const createRequest = (function*() {
-		const noOp = new NoOperationCC(undefined, 2);
-		while (true) yield new SendDataRequest(undefined, noOp);
+		const noOp = new NoOperationCC({} as any, 2);
+		while (true) yield new SendDataRequest(undefined as any, noOp);
 	})();
 
 	it("new ones should have default transmit options and a numeric callback id", () => {
@@ -137,7 +139,7 @@ describe("lib/controller/SendDataRequest => ", () => {
 	});
 
 	it("the automatically created callback ID should be incremented and wrap from 0xff back to 10", () => {
-		let lastCallbackId: number;
+		let lastCallbackId: number | undefined;
 		let increment = 0;
 		for (const next of createRequest) {
 			if (++increment > 300)
@@ -155,11 +157,11 @@ describe("lib/controller/SendDataRequest => ", () => {
 	});
 
 	it("serialize() should concatenate the serialized CC with transmit options and callback ID", () => {
-		const cc = new BasicCC(undefined, 1, BasicCommand.Get);
+		const cc = new BasicCC({} as any, 1, BasicCommand.Get);
 		const serializedCC = cc.serialize();
 
 		const msg = new SendDataRequest(
-			undefined,
+			undefined as any,
 			cc,
 			TransmitOptions.DEFAULT,
 			66,
@@ -176,7 +178,7 @@ describe("lib/controller/SendDataRequest => ", () => {
 	});
 
 	it("serialize() should throw when there is no CC", () => {
-		const msg = new SendDataRequest(undefined);
+		const msg = new SendDataRequest(undefined as any, undefined as any);
 		assertZWaveError(() => msg.serialize(), {
 			messageMatches: "without a command",
 			errorCode: ZWaveErrorCodes.PacketFormat_Invalid,
@@ -185,7 +187,7 @@ describe("lib/controller/SendDataRequest => ", () => {
 });
 
 describe("lib/controller/SendDataResponse => ", () => {
-	const res = new SendDataResponse(undefined);
+	const res = new SendDataResponse(undefined as any, undefined as any);
 
 	it("should be a Message", () => {
 		expect(res).toBeInstanceOf(Message);

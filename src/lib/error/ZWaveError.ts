@@ -22,6 +22,7 @@ export enum ZWaveErrorCodes {
 	CC_NoNodeID,
 
 	Arithmetic,
+	Argument_Invalid,
 }
 
 export class ZWaveError extends Error {

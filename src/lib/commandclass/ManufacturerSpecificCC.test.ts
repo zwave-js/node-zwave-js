@@ -1,9 +1,12 @@
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
-import { ManufacturerSpecificCC } from "./ManufacturerSpecificCC";
+import {
+	ManufacturerSpecificCC,
+	ManufacturerSpecificCCGet,
+} from "./ManufacturerSpecificCC";
 
-describe.skip("lib/commandclass/ManufacturerSpecificCC => ", () => {
-	const cc = new ManufacturerSpecificCC(undefined, 2);
+describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
+	const cc = new ManufacturerSpecificCCGet(undefined as any, { nodeId: 2 });
 	let serialized: Buffer;
 
 	it("should be a CommandClass", () => {
@@ -16,13 +19,12 @@ describe.skip("lib/commandclass/ManufacturerSpecificCC => ", () => {
 	});
 
 	it("should serialize correctly", () => {
-		cc.nodeId = 2;
 		serialized = cc.serialize();
-		expect(serialized).toEqual(Buffer.from("020100", "hex"));
+		expect(serialized).toEqual(Buffer.from("02027204", "hex"));
 	});
 
 	it("should deserialize correctly", () => {
-		const deserialized = CommandClass.from(undefined, serialized);
+		const deserialized = CommandClass.from(undefined as any, serialized);
 		expect(deserialized).toBeInstanceOf(ManufacturerSpecificCC);
 		expect(deserialized.nodeId).toBe(cc.nodeId);
 	});
