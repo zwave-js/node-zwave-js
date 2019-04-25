@@ -1,3 +1,4 @@
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import {
 	decodeSetbackState,
 	encodeSetbackState,
@@ -7,7 +8,7 @@ import {
 export interface Switchpoint {
 	hour: number;
 	minute: number;
-	state: SetbackState;
+	state: SetbackState | undefined;
 }
 
 export function decodeSwitchpoint(data: Buffer): Switchpoint {
@@ -19,6 +20,11 @@ export function decodeSwitchpoint(data: Buffer): Switchpoint {
 }
 
 export function encodeSwitchpoint(point: Switchpoint): Buffer {
+	if (point.state == undefined)
+		throw new ZWaveError(
+			"The given Switchpoint is not valid!",
+			ZWaveErrorCodes.CC_Invalid,
+		);
 	return Buffer.from([
 		point.hour & 0b000_11111,
 		point.minute & 0b00_111111,

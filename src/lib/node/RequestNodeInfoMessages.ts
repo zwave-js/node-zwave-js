@@ -1,8 +1,8 @@
 import {
-	ApplicationUpdateRequest,
-	ApplicationUpdateTypes,
+	ApplicationUpdateRequestNodeInfoReceived,
+	ApplicationUpdateRequestNodeInfoRequestFailed,
 } from "../controller/ApplicationUpdateRequest";
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -11,6 +11,8 @@ import {
 import {
 	expectedResponse,
 	Message,
+	MessageBaseOptions,
+	MessageDeserializationOptions,
 	messageTypes,
 	priority,
 	ResponseRole,
@@ -18,13 +20,20 @@ import {
 import { JSONObject } from "../util/misc";
 import { INodeQuery } from "./INodeQuery";
 
+export interface RequestNodeInfoRequestOptions extends MessageBaseOptions {
+	nodeId: number;
+}
+
 @messageTypes(MessageType.Request, FunctionType.RequestNodeInfo)
 @expectedResponse(testResponseForNodeInfoRequest)
 @priority(MessagePriority.NodeQuery)
 export class RequestNodeInfoRequest extends Message implements INodeQuery {
-	public constructor(driver: Driver, nodeId?: number) {
-		super(driver);
-		this.nodeId = nodeId;
+	public constructor(
+		driver: IDriver,
+		options: RequestNodeInfoRequestOptions,
+	) {
+		super(driver, options);
+		this.nodeId = options.nodeId;
 	}
 
 	public nodeId: number;
@@ -43,26 +52,26 @@ export class RequestNodeInfoRequest extends Message implements INodeQuery {
 
 @messageTypes(MessageType.Response, FunctionType.RequestNodeInfo)
 export class RequestNodeInfoResponse extends Message {
+	public constructor(
+		driver: IDriver,
+		options: MessageDeserializationOptions,
+	) {
+		super(driver, options);
+		this._wasSent = this.payload[0] !== 0;
+		if (!this._wasSent) this._errorCode = this.payload[0];
+	}
+
 	private _wasSent: boolean;
 	public get wasSent(): boolean {
 		return this._wasSent;
 	}
 
-	private _errorCode: number;
-	public get errorCode(): number {
+	private _errorCode: number | undefined;
+	public get errorCode(): number | undefined {
 		return this._errorCode;
 	}
 
-	public deserialize(data: Buffer): number {
-		const ret = super.deserialize(data);
-
-		this._wasSent = this.payload[0] !== 0;
-		if (!this._wasSent) this._errorCode = this.payload[0];
-
-		return ret;
-	}
-
-	public toJSON(): ReturnType<Message["toJSONInherited"]> {
+	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			wasSent: this.wasSent,
 			errorCode: this.errorCode,
@@ -76,18 +85,14 @@ function testResponseForNodeInfoRequest(
 ): ResponseRole {
 	if (received instanceof RequestNodeInfoResponse) {
 		return received.wasSent ? "confirmation" : "fatal_controller";
-	} else if (received instanceof ApplicationUpdateRequest) {
+	} else if (received instanceof ApplicationUpdateRequestNodeInfoReceived) {
 		// received node info for the correct node
-		if (
-			received.updateType === ApplicationUpdateTypes.NodeInfo_Received &&
-			received.nodeId === sent.nodeId
-		)
-			return "final";
+		if (received.nodeId === sent.nodeId) return "final";
+	} else if (
+		received instanceof ApplicationUpdateRequestNodeInfoRequestFailed
+	) {
 		// requesting node info failed. We cannot check which node that belongs to
-		if (
-			received.updateType ===
-			ApplicationUpdateTypes.NodeInfo_RequestFailed
-		)
-			return "fatal_node";
+		return "fatal_node";
 	}
+	return "unexpected";
 }

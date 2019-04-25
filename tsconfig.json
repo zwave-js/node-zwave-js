@@ -3,7 +3,8 @@
 	"compilerOptions": {
 		"plugins": [
 			{
-				"name": "@fimbul/mithotyn"
+				"name": "@fimbul/mithotyn",
+				"displayErrorsAsWarnings": true
 			}
 		],
 		"noEmit": true,
@@ -21,9 +22,8 @@
 		"stripInternal": true,
 		"target": "es2017",
 		"skipLibCheck": true,
-		// This is incompatible with serialize/deserialize
-		// "strictPropertyInitialization": true,
-		// "strictNullChecks": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
 		"watch": false, // true breaks circleci
 		"pretty": true
 	},

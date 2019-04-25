@@ -1,3 +1,4 @@
+import { createEmptyMockDriver } from "../../../test/mocks";
 import {
 	FunctionType,
 	MessagePriority,
@@ -19,8 +20,10 @@ import {
 	GetRoutingInfoResponse,
 } from "./GetRoutingInfoMessages";
 
+const fakeDriver = createEmptyMockDriver();
+
 describe("lib/controller/GetRoutingInfoRequest => ", () => {
-	const req = new GetRoutingInfoRequest(undefined);
+	const req = new GetRoutingInfoRequest(fakeDriver, { nodeId: 1 });
 
 	it("should be a Message", () => {
 		expect(req).toBeInstanceOf(Message);
@@ -52,7 +55,7 @@ describe("lib/controller/GetRoutingInfoRequest => ", () => {
 });
 
 describe("lib/controller/GetRoutingInfoResponse => ", () => {
-	const req = new GetRoutingInfoResponse(undefined);
+	const req = new GetRoutingInfoResponse(fakeDriver, {} as any);
 
 	it("should be a Message", () => {
 		expect(req).toBeInstanceOf(Message);

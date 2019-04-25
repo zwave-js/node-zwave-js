@@ -1,3 +1,4 @@
+import { createEmptyMockDriver } from "../../../test/mocks";
 import {
 	SendDataRequest,
 	TransmitOptions,
@@ -6,8 +7,10 @@ import { CommandClass, getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { ZWavePlusCC, ZWavePlusCommand } from "./ZWavePlusCC";
 
+const fakeDriver = createEmptyMockDriver();
+
 describe("lib/commandclass/ZWavePlusCC => ", () => {
-	const cc = new ZWavePlusCC(undefined, 9);
+	const cc = new ZWavePlusCC(fakeDriver, { nodeId: 9 });
 	let serialized: Buffer;
 
 	it("should be a CommandClass", () => {
@@ -18,10 +21,11 @@ describe("lib/commandclass/ZWavePlusCC => ", () => {
 	});
 
 	it("should serialize correctly", () => {
-		const req = new SendDataRequest(undefined);
-		req.command = cc;
-		req.transmitOptions = TransmitOptions.DEFAULT;
-		req.callbackId = 36;
+		const req = new SendDataRequest(fakeDriver, {
+			command: cc,
+			transmitOptions: TransmitOptions.DEFAULT,
+			callbackId: 36,
+		});
 		cc.ccCommand = ZWavePlusCommand.Get;
 		serialized = req.serialize();
 		// A real message from OZW
@@ -29,10 +33,4 @@ describe("lib/commandclass/ZWavePlusCC => ", () => {
 			Buffer.from("0109001309025e012524b0", "hex"),
 		);
 	});
-
-	// it("should deserialize correctly", () => {
-	// 	const deserialized = CommandClass.from(undefined, serialized);
-	// 	expect(deserialized).toBeInstanceOf(ManufacturerSpecificCC);
-	// 	expect(deserialized.nodeId).toBe(cc.nodeId);
-	// });
 });

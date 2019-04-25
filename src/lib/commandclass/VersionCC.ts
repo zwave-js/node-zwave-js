@@ -1,15 +1,17 @@
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import { IDriver } from "../driver/IDriver";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { MessagePriority } from "../message/Constants";
 import { ZWaveNode } from "../node/Node";
-import { Maybe, unknownBoolean } from "../values/Primitive";
+import { Maybe } from "../values/Primitive";
 import {
-	ccValue,
+	CCCommand,
+	CCCommandOptions,
 	CommandClass,
 	commandClass,
+	CommandClassDeserializationOptions,
 	expectedCCResponse,
+	gotDeserializationOptions,
 	implementedVersion,
 	StateKind,
 } from "./CommandClass";
@@ -35,44 +37,7 @@ function parseVersion(buffer: Buffer): string {
 @implementedVersion(3)
 @expectedCCResponse(CommandClasses.Version)
 export class VersionCC extends CommandClass {
-	public constructor(driver: IDriver, nodeId?: number);
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		ccCommand:
-			| VersionCommand.Get
-			| VersionCommand.CapabilitiesGet
-			| VersionCommand.ZWaveSoftwareGet,
-	);
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		ccCommand: VersionCommand.CommandClassGet,
-		requestedCC: CommandClasses,
-	);
-
-	public constructor(
-		driver: IDriver,
-		public nodeId: number,
-		public ccCommand?: VersionCommand,
-		public requestedCC?: CommandClasses,
-	) {
-		super(driver, nodeId, ccCommand);
-	}
-
-	@ccValue() public libraryType: ZWaveLibraryTypes;
-	@ccValue() public protocolVersion: string;
-	@ccValue() public firmwareVersions: string[];
-	@ccValue() public hardwareVersion: number;
-	@ccValue() public sdkVersion: string;
-	@ccValue() public applicationFrameworkAPIVersion: string;
-	@ccValue() public applicationFrameworkBuildNumber: number;
-	@ccValue() public hostInterfaceVersion: string;
-	@ccValue() public hostInterfaceBuildNumber: number;
-	@ccValue() public zWaveProtocolVersion: string;
-	@ccValue() public zWaveProtocolBuildNumber: number;
-	@ccValue() public applicationVersion: string;
-	@ccValue() public applicationBuildNumber: number;
+	public ccCommand!: VersionCommand;
 
 	public supportsCommand(cmd: VersionCommand): Maybe<boolean> {
 		switch (cmd) {
@@ -82,117 +47,13 @@ export class VersionCC extends CommandClass {
 				return true; // This is mandatory
 			case VersionCommand.CapabilitiesGet:
 				return this.version >= 3;
-			case VersionCommand.ZWaveSoftwareGet:
-				return this._supportsZWaveSoftwareGet;
+			// case VersionCommand.ZWaveSoftwareGet:
+			// 	return this._supportsZWaveSoftwareGet;
 		}
 		return super.supportsCommand(cmd);
 	}
-	private _supportsZWaveSoftwareGet: Maybe<boolean> = unknownBoolean;
-
-	private _ccVersion: number;
-	public get ccVersion(): number {
-		return this._ccVersion;
-	}
-
-	public serialize(): Buffer {
-		switch (this.ccCommand) {
-			case VersionCommand.Get:
-			case VersionCommand.CapabilitiesGet:
-			case VersionCommand.ZWaveSoftwareGet:
-				// no real payload
-				break;
-			case VersionCommand.CommandClassGet:
-				this.payload = Buffer.from([this.requestedCC]);
-				break;
-			default:
-				throw new ZWaveError(
-					"Cannot serialize a Version CC with a command other than Get, CapabilitiesGet, ZWaveSoftwareGet or CommandClassGet",
-					ZWaveErrorCodes.CC_Invalid,
-				);
-		}
-
-		return super.serialize();
-	}
-
-	public deserialize(data: Buffer): void {
-		super.deserialize(data);
-
-		switch (this.ccCommand) {
-			case VersionCommand.Report:
-				this.libraryType = this.payload[0];
-				this.protocolVersion = `${this.payload[1]}.${this.payload[2]}`;
-				this.firmwareVersions = [
-					`${this.payload[3]}.${this.payload[4]}`,
-				];
-				if (this.version >= 2) {
-					this.hardwareVersion = this.payload[5];
-					const additionalFirmwares = this.payload[6];
-					for (let i = 0; i < additionalFirmwares; i++) {
-						this.firmwareVersions.push(
-							`${this.payload[7 + 2 * i]}.${
-								this.payload[7 + 2 * i + 1]
-							}`,
-						);
-					}
-				}
-				break;
-
-			case VersionCommand.CommandClassReport:
-				this.requestedCC = this.payload[0];
-				this._ccVersion = this.payload[1];
-				break;
-
-			case VersionCommand.CapabilitiesReport: {
-				const capabilities = this.payload[0];
-				this._supportsZWaveSoftwareGet = !!(capabilities & 0b100);
-				break;
-			}
-
-			case VersionCommand.ZWaveSoftwareReport:
-				this.sdkVersion = parseVersion(this.payload);
-				this.applicationFrameworkAPIVersion = parseVersion(
-					this.payload.slice(3),
-				);
-				if (this.applicationFrameworkAPIVersion !== "unused") {
-					this.applicationFrameworkBuildNumber = this.payload.readUInt16BE(
-						6,
-					);
-				} else {
-					this.applicationFrameworkBuildNumber = 0;
-				}
-				this.hostInterfaceVersion = parseVersion(this.payload.slice(8));
-				if (this.hostInterfaceVersion !== "unused") {
-					this.hostInterfaceBuildNumber = this.payload.readUInt16BE(
-						11,
-					);
-				} else {
-					this.hostInterfaceBuildNumber = 0;
-				}
-				this.zWaveProtocolVersion = parseVersion(
-					this.payload.slice(13),
-				);
-				if (this.zWaveProtocolVersion !== "unused") {
-					this.zWaveProtocolBuildNumber = this.payload.readUInt16BE(
-						16,
-					);
-				} else {
-					this.zWaveProtocolBuildNumber = 0;
-				}
-				this.applicationVersion = parseVersion(this.payload.slice(18));
-				if (this.applicationVersion !== "unused") {
-					this.applicationBuildNumber = this.payload.readUInt16BE(21);
-				} else {
-					this.applicationBuildNumber = 0;
-				}
-				break;
-
-			default:
-				throw new ZWaveError(
-					"Cannot deserialize a Version CC with a command other than Report, CommandClassReport, CapabilitiesReport or ZWaveSoftwareReport",
-					ZWaveErrorCodes.CC_Invalid,
-				);
-		}
-	}
+	// TODO: After splitting this into separate commands, the following does no longer work
+	// private _supportsZWaveSoftwareGet: Maybe<boolean> = unknownBoolean;
 
 	/** Requests static or dynamic state for a given from a node */
 	public static async requestState(
@@ -202,9 +63,222 @@ export class VersionCC extends CommandClass {
 	): Promise<void> {
 		// TODO: Check if we have requested that information before and store it
 		if (kind & StateKind.Static) {
-			const cc = new VersionCC(driver, node.id, VersionCommand.Get);
-			const request = new SendDataRequest(driver, cc);
+			const cc = new VersionCCGet(driver, { nodeId: node.id });
+			const request = new SendDataRequest(driver, { command: cc });
 			await driver.sendMessage(request, MessagePriority.NodeQuery);
 		}
+	}
+}
+
+@CCCommand(VersionCommand.Get)
+export class VersionCCGet extends VersionCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
+	}
+}
+
+@CCCommand(VersionCommand.Report)
+export class VersionCCReport extends VersionCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		this._libraryType = this.payload[0];
+		this._protocolVersion = `${this.payload[1]}.${this.payload[2]}`;
+		this._firmwareVersions = [`${this.payload[3]}.${this.payload[4]}`];
+		if (this.version >= 2) {
+			this._hardwareVersion = this.payload[5];
+			const additionalFirmwares = this.payload[6];
+			for (let i = 0; i < additionalFirmwares; i++) {
+				this.firmwareVersions.push(
+					`${this.payload[7 + 2 * i]}.${this.payload[7 + 2 * i + 1]}`,
+				);
+			}
+		}
+	}
+
+	private _libraryType: ZWaveLibraryTypes;
+	public get libraryType(): ZWaveLibraryTypes {
+		return this._libraryType;
+	}
+	private _protocolVersion: string;
+	public get protocolVersion(): string {
+		return this._protocolVersion;
+	}
+	private _firmwareVersions: string[];
+	public get firmwareVersions(): string[] {
+		return this._firmwareVersions;
+	}
+	private _hardwareVersion: number | undefined;
+	public get hardwareVersion(): number | undefined {
+		return this._hardwareVersion;
+	}
+}
+
+interface VersionCCCommandClassGetOptions extends CCCommandOptions {
+	requestedCC: CommandClasses;
+}
+
+@CCCommand(VersionCommand.CommandClassGet)
+export class VersionCCCommandClassGet extends VersionCC {
+	public constructor(
+		driver: IDriver,
+		options:
+			| CommandClassDeserializationOptions
+			| VersionCCCommandClassGetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new Error("not implemented");
+		} else {
+			this.requestedCC = options.requestedCC;
+		}
+	}
+
+	public requestedCC: CommandClasses;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.requestedCC]);
+		return super.serialize();
+	}
+}
+
+@CCCommand(VersionCommand.CommandClassReport)
+export class VersionCCCommandClassReport extends VersionCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		this._requestedCC = this.payload[0];
+		this._ccVersion = this.payload[1];
+	}
+
+	private _ccVersion: number;
+	public get ccVersion(): number {
+		return this._ccVersion;
+	}
+
+	private _requestedCC: CommandClasses;
+	public get requestedCC(): CommandClasses {
+		return this._requestedCC;
+	}
+}
+
+@CCCommand(VersionCommand.CapabilitiesGet)
+export class VersionCCCapabilitiesGet extends VersionCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
+	}
+}
+
+@CCCommand(VersionCommand.CapabilitiesReport)
+export class VersionCCCapabilitiesReport extends VersionCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		const capabilities = this.payload[0];
+		this._supportsZWaveSoftwareGet = !!(capabilities & 0b100);
+	}
+
+	private _supportsZWaveSoftwareGet: boolean;
+	public get supportsZWaveSoftwareGet(): boolean {
+		return this._supportsZWaveSoftwareGet;
+	}
+}
+
+@CCCommand(VersionCommand.ZWaveSoftwareGet)
+export class VersionCCZWaveSoftwareGet extends VersionCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
+	}
+}
+
+@CCCommand(VersionCommand.ZWaveSoftwareReport)
+export class VersionCCZWaveSoftwareReport extends VersionCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		this._sdkVersion = parseVersion(this.payload);
+		this._applicationFrameworkAPIVersion = parseVersion(
+			this.payload.slice(3),
+		);
+		if (this._applicationFrameworkAPIVersion !== "unused") {
+			this._applicationFrameworkBuildNumber = this.payload.readUInt16BE(
+				6,
+			);
+		} else {
+			this._applicationFrameworkBuildNumber = 0;
+		}
+		this._hostInterfaceVersion = parseVersion(this.payload.slice(8));
+		if (this._hostInterfaceVersion !== "unused") {
+			this._hostInterfaceBuildNumber = this.payload.readUInt16BE(11);
+		} else {
+			this._hostInterfaceBuildNumber = 0;
+		}
+		this._zWaveProtocolVersion = parseVersion(this.payload.slice(13));
+		if (this._zWaveProtocolVersion !== "unused") {
+			this._zWaveProtocolBuildNumber = this.payload.readUInt16BE(16);
+		} else {
+			this._zWaveProtocolBuildNumber = 0;
+		}
+		this._applicationVersion = parseVersion(this.payload.slice(18));
+		if (this._applicationVersion !== "unused") {
+			this._applicationBuildNumber = this.payload.readUInt16BE(21);
+		} else {
+			this._applicationBuildNumber = 0;
+		}
+	}
+
+	private _sdkVersion: string;
+	public get sdkVersion(): string {
+		return this._sdkVersion;
+	}
+	private _applicationFrameworkAPIVersion: string;
+	public get applicationFrameworkAPIVersion(): string {
+		return this._applicationFrameworkAPIVersion;
+	}
+	private _applicationFrameworkBuildNumber: number;
+	public get applicationFrameworkBuildNumber(): number {
+		return this._applicationFrameworkBuildNumber;
+	}
+	private _hostInterfaceVersion: string;
+	public get hostInterfaceVersion(): string {
+		return this._hostInterfaceVersion;
+	}
+	private _hostInterfaceBuildNumber: number;
+	public get hostInterfaceBuildNumber(): number {
+		return this._hostInterfaceBuildNumber;
+	}
+	private _zWaveProtocolVersion: string;
+	public get zWaveProtocolVersion(): string {
+		return this._zWaveProtocolVersion;
+	}
+	private _zWaveProtocolBuildNumber: number;
+	public get zWaveProtocolBuildNumber(): number {
+		return this._zWaveProtocolBuildNumber;
+	}
+	private _applicationVersion: string;
+	public get applicationVersion(): string {
+		return this._applicationVersion;
+	}
+	private _applicationBuildNumber: number;
+	public get applicationBuildNumber(): number {
+		return this._applicationBuildNumber;
 	}
 }

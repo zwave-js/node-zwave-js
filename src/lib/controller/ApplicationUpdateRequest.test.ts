@@ -1,3 +1,4 @@
+import { createEmptyMockDriver } from "../../../test/mocks";
 import { FunctionType, MessageType } from "../message/Constants";
 import {
 	getDefaultPriority,
@@ -12,8 +13,13 @@ import {
 } from "../message/Message";
 import { ApplicationUpdateRequest } from "./ApplicationUpdateRequest";
 
+const fakeDriver = createEmptyMockDriver();
+
 describe("lib/controller/ApplicationUpdateRequest => ", () => {
-	const req = new ApplicationUpdateRequest(undefined);
+	let req: ApplicationUpdateRequest;
+	beforeAll(() => {
+		req = new ApplicationUpdateRequest(fakeDriver, {} as any);
+	});
 
 	it("should be a Message", () => {
 		expect(req).toBeInstanceOf(Message);

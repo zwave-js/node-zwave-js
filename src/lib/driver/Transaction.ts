@@ -7,7 +7,7 @@ import { DeferredPromise } from "alcalzone-shared/deferred-promise";
 import { clamp } from "alcalzone-shared/math";
 import { MessagePriority } from "../message/Constants";
 import { Message } from "../message/Message";
-import { Driver } from "./Driver";
+import { IDriver } from "./IDriver";
 
 /** Returns a timestamp with nano-second precision */
 function highResTimestamp(): number {
@@ -20,13 +20,13 @@ export const MAX_SEND_ATTEMPTS = 3;
 
 export class Transaction implements Comparable<Transaction> {
 	public constructor(
-		driver: Driver,
+		driver: IDriver,
 		message: Message,
 		promise: DeferredPromise<Message | void>,
 		priority: MessagePriority,
 	);
 	public constructor(
-		private readonly driver: Driver,
+		private readonly driver: IDriver,
 		public readonly message: Message,
 		public readonly promise: DeferredPromise<Message | void>,
 		public priority: MessagePriority,
@@ -38,7 +38,7 @@ export class Transaction implements Comparable<Transaction> {
 		public ackPending: boolean = true,
 		public response?: Message,
 	) {
-		if (message != undefined)
+		if (message.maxSendAttempts)
 			this.maxSendAttempts = message.maxSendAttempts;
 	}
 

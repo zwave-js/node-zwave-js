@@ -7,7 +7,6 @@ import {
 	isCommandClassContainer,
 } from "../commandclass/ICommandClassContainer";
 import { IDriver } from "../driver/IDriver";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import {
 	FunctionType,
 	MessagePriority,
@@ -15,7 +14,11 @@ import {
 } from "../message/Constants";
 import {
 	expectedResponse,
+	gotDeserializationOptions,
 	Message,
+	MessageBaseOptions,
+	MessageDeserializationOptions,
+	MessageOptions,
 	messageTypes,
 	priority,
 	ResponseRole,
@@ -53,53 +56,58 @@ function getNextCallbackId(): number {
 }
 
 @messageTypes(MessageType.Request, FunctionType.SendData)
-@expectedResponse(testResponseForSendDataRequest)
 @priority(MessagePriority.Normal)
-export class SendDataRequest<CCType extends CommandClass = CommandClass>
-	extends Message
-	implements ICommandClassContainer {
-	// empty constructor to parse messages
-	public constructor(driver: IDriver);
-	// default constructor to send messages
-	public constructor(
-		driver: IDriver,
-		command: CCType,
-		transmitOptions?: TransmitOptions,
-		callbackId?: number,
-	);
-	public constructor(
-		driver: IDriver,
-		command?: CCType,
-		/** Options regarding the transmission of the message */
-		public transmitOptions?: TransmitOptions,
-		/** A callback ID to map requests and responses */
-		public callbackId?: number,
-	) {
-		super(driver);
-		this.command = command;
-		if (command != null) {
-			// non-empty constructor -> define default values
-			if (this.transmitOptions == null)
-				this.transmitOptions = TransmitOptions.DEFAULT;
-			if (this.callbackId == null) this.callbackId = getNextCallbackId();
+export class SendDataRequestBase extends Message {
+	public constructor(driver: IDriver, options: MessageOptions) {
+		if (
+			gotDeserializationOptions(options) &&
+			(new.target as any) !== SendDataRequestTransmitReport
+		) {
+			return new SendDataRequestTransmitReport(driver, options);
 		}
+		super(driver, options);
+	}
+
+	/** A callback ID to map requests and responses */
+	// TODO: Get rid of the ! assertion
+	public callbackId!: number;
+}
+
+export interface SendDataRequestOptions<
+	CCType extends CommandClass = CommandClass
+> extends MessageBaseOptions {
+	command: CCType;
+	transmitOptions?: TransmitOptions;
+	callbackId?: number;
+}
+
+@expectedResponse(testResponseForSendDataRequest)
+export class SendDataRequest<CCType extends CommandClass = CommandClass>
+	extends SendDataRequestBase
+	implements ICommandClassContainer {
+	public constructor(
+		driver: IDriver,
+		options: SendDataRequestOptions<CCType>,
+	) {
+		super(driver, options);
+
+		this.command = options.command;
+		this.transmitOptions =
+			options.transmitOptions != undefined
+				? options.transmitOptions
+				: TransmitOptions.DEFAULT;
+		this.callbackId =
+			options.callbackId != undefined
+				? options.callbackId
+				: getNextCallbackId();
 	}
 
 	/** The command this message contains */
 	public command: CCType;
-
-	private _transmitStatus: TransmitStatus;
-	public get transmitStatus(): TransmitStatus {
-		return this._transmitStatus;
-	}
+	/** Options regarding the transmission of the message */
+	public transmitOptions: TransmitOptions;
 
 	public serialize(): Buffer {
-		if (this.command == null) {
-			throw new ZWaveError(
-				"Cannot serialize a SendData message without a command",
-				ZWaveErrorCodes.PacketFormat_Invalid,
-			);
-		}
 		const serializedCC = this.command.serialize();
 		this.payload = Buffer.concat([
 			serializedCC,
@@ -109,30 +117,12 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		return super.serialize();
 	}
 
-	// We deserialize SendData requests differently as the controller responses have a different format
-	public deserialize(data: Buffer): number {
-		const ret = super.deserialize(data);
-
-		this.callbackId = this.payload[0];
-		this._transmitStatus = this.payload[1];
-		// not sure what bytes 2 and 3 mean
-		// the CC seems not to be included in this, but rather come in an application command later
-
-		return ret;
-	}
-
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			transmitOptions: this.transmitOptions,
 			callbackId: this.callbackId,
 			command: this.command,
-			transmitStatus: this.transmitStatus,
 		});
-	}
-
-	/** Checks if a received SendDataRequest indicates that sending failed */
-	public isFailed(): boolean {
-		return this._transmitStatus !== TransmitStatus.OK;
 	}
 
 	/** @inheritDoc */
@@ -169,8 +159,48 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	}
 }
 
+export class SendDataRequestTransmitReport extends SendDataRequestBase {
+	public constructor(
+		driver: IDriver,
+		options: MessageDeserializationOptions,
+	) {
+		super(driver, options);
+
+		this.callbackId = this.payload[0];
+		this._transmitStatus = this.payload[1];
+		// not sure what bytes 2 and 3 mean
+		// the CC seems not to be included in this, but rather come in an application command later
+	}
+
+	private _transmitStatus: TransmitStatus;
+	public get transmitStatus(): TransmitStatus {
+		return this._transmitStatus;
+	}
+
+	/** Checks if a received SendDataRequest indicates that sending failed */
+	public isFailed(): boolean {
+		return this._transmitStatus !== TransmitStatus.OK;
+	}
+
+	public toJSON(): JSONObject {
+		return super.toJSONInherited({
+			callbackId: this.callbackId,
+			transmitStatus: this.transmitStatus,
+		});
+	}
+}
+
 @messageTypes(MessageType.Response, FunctionType.SendData)
 export class SendDataResponse extends Message {
+	public constructor(
+		driver: IDriver,
+		options: MessageDeserializationOptions,
+	) {
+		super(driver, options);
+		this._wasSent = this.payload[0] !== 0;
+		// if (!this._wasSent) this._errorCode = this.payload[0];
+	}
+
 	private _wasSent: boolean;
 	public get wasSent(): boolean {
 		return this._wasSent;
@@ -180,15 +210,6 @@ export class SendDataResponse extends Message {
 	// public get errorCode(): number {
 	// 	return this._errorCode;
 	// }
-
-	public deserialize(data: Buffer): number {
-		const ret = super.deserialize(data);
-
-		this._wasSent = this.payload[0] !== 0;
-		// if (!this._wasSent) this._errorCode = this.payload[0];
-
-		return ret;
-	}
 
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({
@@ -205,7 +226,7 @@ function testResponseForSendDataRequest(
 ): ResponseRole {
 	if (received instanceof SendDataResponse) {
 		return received.wasSent ? "confirmation" : "fatal_controller";
-	} else if (received instanceof SendDataRequest) {
+	} else if (received instanceof SendDataRequestTransmitReport) {
 		return received.isFailed() ? "fatal_node" : "final"; // send data requests are final unless stated otherwise by a CommandClass
 	}
 	return "unexpected";

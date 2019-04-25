@@ -1,4 +1,4 @@
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -7,6 +7,8 @@ import {
 import {
 	expectedResponse,
 	Message,
+	MessageBaseOptions,
+	MessageDeserializationOptions,
 	messageTypes,
 	priority,
 } from "../message/Message";
@@ -46,13 +48,20 @@ const enum SecurityFlags {
 
 export type Baudrate = 9600 | 40000 | 100000;
 
+export interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
+	nodeId: number;
+}
+
 @messageTypes(MessageType.Request, FunctionType.GetNodeProtocolInfo)
 @expectedResponse(FunctionType.GetNodeProtocolInfo)
 @priority(MessagePriority.NodeQuery)
 export class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
-	public constructor(driver: Driver, nodeId?: number) {
-		super(driver);
-		this.nodeId = nodeId;
+	public constructor(
+		driver: IDriver,
+		options: GetNodeProtocolInfoRequestOptions,
+	) {
+		super(driver, options);
+		this.nodeId = options.nodeId;
 	}
 
 	public nodeId: number;
@@ -71,6 +80,50 @@ export class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
 
 @messageTypes(MessageType.Response, FunctionType.GetNodeProtocolInfo)
 export class GetNodeProtocolInfoResponse extends Message {
+	public constructor(
+		driver: IDriver,
+		options: MessageDeserializationOptions,
+	) {
+		super(driver, options);
+
+		const capabilities = this.payload[0];
+		this._isListening =
+			(capabilities & NodeCapabilityFlags.Listening) !== 0;
+		this._isRouting = (capabilities & NodeCapabilityFlags.Routing) !== 0;
+
+		// This is an educated guess. OZW only checks for the 40k flag
+		switch (capabilities & NodeCapabilityFlags.BaudrateMask) {
+			case NodeCapabilityFlags.Baudrate_100k:
+				this._maxBaudRate = 100000;
+				break;
+			case NodeCapabilityFlags.Baudrate_40k:
+				this._maxBaudRate = 40000;
+				break;
+			case NodeCapabilityFlags.Baudrate_9k6:
+				this._maxBaudRate = 9600;
+				break;
+			default:
+				// We don't know this baudrate yet, encode it as 0
+				this._maxBaudRate = (0 as any) as Baudrate;
+		}
+
+		this._version = (capabilities & NodeCapabilityFlags.VersionMask) + 1;
+
+		const security = this.payload[1];
+		this._isSecure = (security & SecurityFlags.Security) !== 0;
+		this._isFrequentListening =
+			(security &
+				(SecurityFlags.Sensor1000ms | SecurityFlags.Sensor250ms)) !==
+			0;
+		this._isBeaming = (security & SecurityFlags.BeamCapability) !== 0;
+
+		// parse the device class
+		const basic = this.payload[3] as BasicDeviceClasses;
+		const generic = GenericDeviceClass.get(this.payload[4]);
+		const specific = SpecificDeviceClass.get(generic.key, this.payload[5]);
+		this._deviceClass = new DeviceClass(basic, generic, specific);
+	}
+
 	private _isListening: boolean;
 	public get isListening(): boolean {
 		return this._isListening;
@@ -109,46 +162,6 @@ export class GetNodeProtocolInfoResponse extends Message {
 	private _deviceClass: DeviceClass;
 	public get deviceClass(): DeviceClass {
 		return this._deviceClass;
-	}
-
-	public deserialize(data: Buffer): number {
-		const ret = super.deserialize(data);
-
-		const capabilities = this.payload[0];
-		this._isListening =
-			(capabilities & NodeCapabilityFlags.Listening) !== 0;
-		this._isRouting = (capabilities & NodeCapabilityFlags.Routing) !== 0;
-
-		// This is an educated guess. OZW only checks for the 40k flag
-		switch (capabilities & NodeCapabilityFlags.BaudrateMask) {
-			case NodeCapabilityFlags.Baudrate_100k:
-				this._maxBaudRate = 100000;
-				break;
-			case NodeCapabilityFlags.Baudrate_40k:
-				this._maxBaudRate = 40000;
-				break;
-			case NodeCapabilityFlags.Baudrate_9k6:
-				this._maxBaudRate = 9600;
-				break;
-		}
-
-		this._version = (capabilities & NodeCapabilityFlags.VersionMask) + 1;
-
-		const security = this.payload[1];
-		this._isSecure = (security & SecurityFlags.Security) !== 0;
-		this._isFrequentListening =
-			(security &
-				(SecurityFlags.Sensor1000ms | SecurityFlags.Sensor250ms)) !==
-			0;
-		this._isBeaming = (security & SecurityFlags.BeamCapability) !== 0;
-
-		// parse the device class
-		const basic = this.payload[3] as BasicDeviceClasses;
-		const generic = GenericDeviceClass.get(this.payload[4]);
-		const specific = SpecificDeviceClass.get(generic.key, this.payload[5]);
-		this._deviceClass = new DeviceClass(basic, generic, specific);
-
-		return ret;
 	}
 
 	public toJSON(): JSONObject {

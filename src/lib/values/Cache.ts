@@ -3,10 +3,15 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { JSONObject } from "../util/misc";
 
 // export type SerializableValue = number | string | boolean | Map<string | number, any> | JSONObject;
-export type SerializedValue = number | string | boolean | JSONObject;
+export type SerializedValue =
+	| number
+	| string
+	| boolean
+	| JSONObject
+	| undefined;
 export interface CacheValue {
 	value: SerializedValue;
-	endpoint: number;
+	endpoint: number | undefined;
 	propertyName: string;
 }
 

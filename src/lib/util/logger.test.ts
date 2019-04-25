@@ -43,7 +43,7 @@ describe("lib/logger => ", () => {
 	// });
 
 	it(`uses the "debug" package by default`, () => {
-		setCustomLogger(undefined);
+		setCustomLogger(undefined as any);
 
 		log("message", "error");
 		expect(debugSpy).toHaveBeenCalledTimes(1);

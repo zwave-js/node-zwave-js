@@ -7,8 +7,8 @@ import {
 } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { MessageHeaders } from "../message/Constants";
-import { Message } from "../message/Message";
+import { MessageHeaders, MessageType } from "../message/Constants";
+import { Message, messageTypes } from "../message/Message";
 import { Driver } from "./Driver";
 
 jest.mock("serialport", () => MockSerialPort);
@@ -19,7 +19,7 @@ const PORT_ADDRESS = "/tty/FAKE";
 async function createAndStartDriver() {
 	const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
 	const startPromise = driver.start();
-	const portInstance = MockSerialPort.getInstance(PORT_ADDRESS);
+	const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 	portInstance.doOpen();
 	await startPromise;
 
@@ -33,6 +33,9 @@ async function createAndStartDriver() {
 	};
 }
 
+@messageTypes(MessageType.Request, 0xff)
+class TestMessage extends Message {}
+
 describe("lib/driver/Driver => ", () => {
 	describe("starting it => ", () => {
 		it("should open a new serialport", () => {
@@ -40,7 +43,7 @@ describe("lib/driver/Driver => ", () => {
 			// start the driver
 			driver.start();
 
-			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS);
+			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 			expect(portInstance.openStub).toBeCalledTimes(1);
 			driver.destroy();
 		});
@@ -51,7 +54,7 @@ describe("lib/driver/Driver => ", () => {
 			driver.start();
 			driver.start();
 
-			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS);
+			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 			expect(portInstance.openStub).toBeCalledTimes(1);
 			driver.destroy();
 		});
@@ -65,7 +68,7 @@ describe("lib/driver/Driver => ", () => {
 			expect(fulfilledSpy).not.toBeCalled();
 
 			// confirm opening of the serialport
-			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS);
+			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 			portInstance.doOpen();
 
 			await expect(startPromise);
@@ -79,7 +82,7 @@ describe("lib/driver/Driver => ", () => {
 			const startPromise = driver.start();
 
 			// fail opening of the serialport
-			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS);
+			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 			portInstance.failOpen(new Error("NOPE"));
 
 			await expect(startPromise).rejects.toThrow("NOPE");
@@ -93,7 +96,7 @@ describe("lib/driver/Driver => ", () => {
 			const startPromise = driver.start();
 
 			// fail opening of the serialport
-			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS);
+			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 			portInstance.failOpen(new Error("NOPE"));
 			await expect(startPromise).rejects.toThrow("NOPE");
 
@@ -110,7 +113,7 @@ describe("lib/driver/Driver => ", () => {
 		it("should not be possible if the driver wasn't started", async () => {
 			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
 
-			const msg = new Message(driver);
+			const msg = new TestMessage(driver);
 			await assertZWaveError(() => driver.sendMessage(msg), {
 				errorCode: ZWaveErrorCodes.Driver_NotReady,
 			});
@@ -124,7 +127,7 @@ describe("lib/driver/Driver => ", () => {
 			// start the driver, but don't open the serial port yet
 			driver.start();
 
-			const msg = new Message(driver);
+			const msg = new TestMessage(driver);
 			await assertZWaveError(() => driver.sendMessage(msg), {
 				errorCode: ZWaveErrorCodes.Driver_NotReady,
 			});
@@ -139,11 +142,11 @@ describe("lib/driver/Driver => ", () => {
 			const startPromise = driver.start();
 
 			// fail opening of the serialport
-			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS);
+			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 			portInstance.failOpen(new Error("NOPE"));
 			await expect(startPromise).rejects.toThrow("NOPE");
 
-			const msg = new Message(driver);
+			const msg = new TestMessage(driver);
 			await assertZWaveError(() => driver.sendMessage(msg), {
 				errorCode: ZWaveErrorCodes.Driver_NotReady,
 			});

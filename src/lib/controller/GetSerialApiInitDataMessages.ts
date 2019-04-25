@@ -1,3 +1,4 @@
+import { IDriver } from "../driver/IDriver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -6,6 +7,7 @@ import {
 import {
 	expectedResponse,
 	Message,
+	MessageDeserializationOptions,
 	messageTypes,
 	priority,
 } from "../message/Message";
@@ -26,32 +28,11 @@ export class GetSerialApiInitDataRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiInitData)
 export class GetSerialApiInitDataResponse extends Message {
-	private _initVersion: number;
-	public get initVersion(): number {
-		return this._initVersion;
-	}
-
-	private _initCaps: number;
-	public get isSlave(): boolean {
-		return (this._initCaps & InitCapabilityFlags.Slave) !== 0;
-	}
-	public get supportsTimers(): boolean {
-		return (this._initCaps & InitCapabilityFlags.SupportsTimers) !== 0;
-	}
-	public get isSecondary(): boolean {
-		return (this._initCaps & InitCapabilityFlags.Secondary) !== 0;
-	}
-	public get isStaticUpdateController(): boolean {
-		return (this._initCaps & InitCapabilityFlags.SUC) !== 0;
-	}
-
-	private _nodeIds: number[];
-	public get nodeIds(): number[] {
-		return this._nodeIds;
-	}
-
-	public deserialize(data: Buffer): number {
-		const ret = super.deserialize(data);
+	public constructor(
+		driver: IDriver,
+		options: MessageDeserializationOptions,
+	) {
+		super(driver, options);
 
 		this._initVersion = this.payload[0];
 		this._initCaps = this.payload[1];
@@ -61,8 +42,30 @@ export class GetSerialApiInitDataResponse extends Message {
 			const nodeBitMask = this.payload.slice(3, 3 + NUM_NODEMASK_BYTES);
 			this._nodeIds = parseNodeBitMask(nodeBitMask);
 		}
+	}
 
-		return ret;
+	private _initVersion: number;
+	public get initVersion(): number {
+		return this._initVersion;
+	}
+
+	private _initCaps: number;
+	public get isSlave(): boolean {
+		return !!(this._initCaps & InitCapabilityFlags.Slave);
+	}
+	public get supportsTimers(): boolean {
+		return !!(this._initCaps & InitCapabilityFlags.SupportsTimers);
+	}
+	public get isSecondary(): boolean {
+		return !!(this._initCaps & InitCapabilityFlags.Secondary);
+	}
+	public get isStaticUpdateController(): boolean {
+		return !!(this._initCaps & InitCapabilityFlags.SUC);
+	}
+
+	private _nodeIds: number[];
+	public get nodeIds(): number[] {
+		return this._nodeIds;
 	}
 
 	public toJSON(): JSONObject {

@@ -7,7 +7,7 @@ export type Severity = "info" | "warn" | "debug" | "error" | "silly";
 
 export type LoggerFunction = (message: string, severity?: Severity) => void;
 
-let customLogger: LoggerFunction;
+let customLogger: LoggerFunction | undefined;
 export function setCustomLogger(logger: LoggerFunction): void {
 	customLogger = logger;
 }
@@ -40,7 +40,7 @@ export function log(...args: any[]): void {
 	} else if (args.length === 3) {
 		[namespace, message, severity] = args;
 		// add the namespace separator to append the namespace to the default one
-		if (typeof namespace === "string" && namespace !== "")
+		if (/*typeof namespace === "string" && */ namespace !== "")
 			namespace = ":" + namespace;
 	}
 

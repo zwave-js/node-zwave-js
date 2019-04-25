@@ -1,15 +1,17 @@
 import { IDriver } from "../driver/IDriver";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import {
 	encodeFloatWithScale,
 	parseBitMask,
 	parseFloatWithScale,
 } from "../values/Primitive";
 import {
-	ccValue,
+	CCCommand,
+	CCCommandOptions,
 	CommandClass,
 	commandClass,
+	CommandClassDeserializationOptions,
 	expectedCCResponse,
+	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
@@ -64,144 +66,217 @@ export enum ThermostatSetpointScale {
 @implementedVersion(3)
 @expectedCCResponse(CommandClasses["Thermostat Setpoint"])
 export class ThermostatSetpointCC extends CommandClass {
-	public constructor(driver: IDriver, nodeId?: number);
+	public ccCommand!: ThermostatSetpointCommand;
+}
 
+interface ThermostatSetpointCCSetOptions extends CCCommandOptions {
+	setpointType: ThermostatSetpointType;
+	value: number;
+	scale: ThermostatSetpointScale;
+}
+
+@CCCommand(ThermostatSetpointCommand.Set)
+export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	public constructor(
 		driver: IDriver,
-		nodeId: number,
-		ccCommand: ThermostatSetpointCommand.SupportedGet,
-	);
-
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		ccCommand:
-			| ThermostatSetpointCommand.Get
-			| ThermostatSetpointCommand.CapabilitiesGet,
-		setpointType: ThermostatSetpointType,
-	);
-
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		ccCommand: ThermostatSetpointCommand.Set,
-		setpointType: ThermostatSetpointType,
-		value: number,
-	);
-
-	public constructor(
-		driver: IDriver,
-		public nodeId: number,
-		public ccCommand?: ThermostatSetpointCommand,
-		setpointType?: ThermostatSetpointType,
-		value?: number,
+		options:
+			| CommandClassDeserializationOptions
+			| ThermostatSetpointCCSetOptions,
 	) {
-		super(driver, nodeId, ccCommand);
-		switch (ccCommand) {
-			case ThermostatSetpointCommand.Set:
-				this.value = value;
-			// fallthrough
-			case ThermostatSetpointCommand.Get:
-			case ThermostatSetpointCommand.CapabilitiesGet:
-				this.setpointType = setpointType;
-				break;
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new Error("not implemented");
+		} else {
+			this.setpointType = options.setpointType;
+			this.value = options.value;
+			this.scale = options.scale;
 		}
 	}
 
-	@ccValue() public value: number;
-	@ccValue() public scale: ThermostatSetpointScale;
-	@ccValue() public minValue: number;
-	@ccValue() public maxValue: number;
-	@ccValue() public minValueScale: ThermostatSetpointScale;
-	@ccValue() public maxValueScale: ThermostatSetpointScale;
-	@ccValue() public setpointType: ThermostatSetpointType;
-
-	public supportedSetpointTypes: ThermostatSetpointType[];
+	public setpointType: ThermostatSetpointType;
+	public value: number;
+	public scale: ThermostatSetpointScale;
 
 	public serialize(): Buffer {
-		switch (this.ccCommand) {
-			case ThermostatSetpointCommand.Get:
-			case ThermostatSetpointCommand.CapabilitiesGet:
-				this.payload = Buffer.from([this.setpointType & 0b1111]);
-				break;
-
-			case ThermostatSetpointCommand.Set:
-				this.payload = Buffer.concat([
-					Buffer.from([this.setpointType & 0b1111]),
-					encodeFloatWithScale(this.value, this.scale),
-				]);
-				break;
-
-			case ThermostatSetpointCommand.SupportedGet:
-				// no real payload
-				break;
-
-			default:
-				throw new ZWaveError(
-					"Cannot serialize a ThermostatSetpoint CC with a command other than Get, Set, SupportedGet or CapabilitiesGet",
-					ZWaveErrorCodes.CC_Invalid,
-				);
-		}
-
+		this.payload = Buffer.concat([
+			Buffer.from([this.setpointType & 0b1111]),
+			encodeFloatWithScale(this.value, this.scale),
+		]);
 		return super.serialize();
 	}
+}
 
-	public deserialize(data: Buffer): void {
-		super.deserialize(data);
+interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
+	setpointType: ThermostatSetpointType;
+}
 
-		switch (this.ccCommand) {
-			case ThermostatSetpointCommand.Report:
-				this.setpointType = this.payload[0] & 0b1111;
-				({ value: this.value, scale: this.scale } = parseFloatWithScale(
-					this.payload.slice(1),
-				));
-				break;
-
-			case ThermostatSetpointCommand.SupportedReport: {
-				const bitMask = this.payload;
-				const supported = parseBitMask(bitMask);
-				if (this.version >= 3) {
-					// Interpretation A
-					this.supportedSetpointTypes = supported.map(
-						i => thermostatSetpointTypeMap[i],
-					);
-				} else {
-					// TODO: Determine which interpretation the device complies to
-					this.supportedSetpointTypes = supported;
-				}
-				break;
-				// TODO:
-				// Some devices skip the gaps in the ThermostatSetpointType (Interpretation A), some don't (Interpretation B)
-				// Devices with V3+ must comply with Interpretation A
-				// It is RECOMMENDED that a controlling node determines supported Setpoint Types
-				// by sending one Thermostat Setpoint Get Command at a time while incrementing
-				// the requested Setpoint Type. If the same Setpoint Type is advertised in the
-				// resulting Thermostat Setpoint Report Command, the controlling node MAY conclude
-				// that the actual Setpoint Type is supported. If the Setpoint Type 0x00 (type N/A)
-				// is advertised in the resulting Thermostat Setpoint Report Command, the controlling
-				// node MUST conclude that the actual Setpoint Type is not supported.
-			}
-
-			case ThermostatSetpointCommand.CapabilitiesReport: {
-				this.setpointType = this.payload[0];
-				let bytesRead: number;
-				({
-					value: this.minValue,
-					scale: this.minValueScale,
-					bytesRead,
-				} = parseFloatWithScale(this.payload.slice(1)));
-				({
-					value: this.maxValue,
-					scale: this.maxValueScale,
-				} = parseFloatWithScale(this.payload.slice(1 + bytesRead)));
-				break;
-			}
-
-			default:
-				throw new ZWaveError(
-					"Cannot deserialize a ThermostatSetpoint CC with a command other than Report, SupportedReport or CapabilitiesReport",
-					ZWaveErrorCodes.CC_Invalid,
-				);
+@CCCommand(ThermostatSetpointCommand.Get)
+export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
+	public constructor(
+		driver: IDriver,
+		options:
+			| CommandClassDeserializationOptions
+			| ThermostatSetpointCCGetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new Error("not implemented");
+		} else {
+			this.setpointType = options.setpointType;
 		}
+	}
+
+	public setpointType: ThermostatSetpointType;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.setpointType & 0b1111]);
+		return super.serialize();
+	}
+}
+
+@CCCommand(ThermostatSetpointCommand.Report)
+export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		this._setpointType = this.payload[0] & 0b1111;
+		({ value: this._value, scale: this._scale } = parseFloatWithScale(
+			this.payload.slice(1),
+		));
+	}
+
+	private _setpointType: ThermostatSetpointType;
+	public get setpointType(): ThermostatSetpointType {
+		return this._setpointType;
+	}
+	private _value: number;
+	public get value(): number {
+		return this._value;
+	}
+	private _scale: ThermostatSetpointScale;
+	public get scale(): ThermostatSetpointScale {
+		return this._scale;
+	}
+}
+
+interface ThermostatSetpointCCCapabilitiesGetOptions extends CCCommandOptions {
+	setpointType: ThermostatSetpointType;
+}
+
+@CCCommand(ThermostatSetpointCommand.CapabilitiesGet)
+export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
+	public constructor(
+		driver: IDriver,
+		options:
+			| CommandClassDeserializationOptions
+			| ThermostatSetpointCCCapabilitiesGetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new Error("not implemented");
+		} else {
+			this.setpointType = options.setpointType;
+		}
+	}
+
+	public setpointType: ThermostatSetpointType;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.setpointType & 0b1111]);
+		return super.serialize();
+	}
+}
+
+@CCCommand(ThermostatSetpointCommand.CapabilitiesReport)
+export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+
+		this._setpointType = this.payload[0];
+		let bytesRead: number;
+		({
+			value: this._minValue,
+			scale: this._minValueScale,
+			bytesRead,
+		} = parseFloatWithScale(this.payload.slice(1)));
+		({
+			value: this._maxValue,
+			scale: this._maxValueScale,
+		} = parseFloatWithScale(this.payload.slice(1 + bytesRead)));
+	}
+
+	private _minValue: number;
+	public get minValue(): number {
+		return this._minValue;
+	}
+	private _maxValue: number;
+	public get maxValue(): number {
+		return this._maxValue;
+	}
+	private _minValueScale: ThermostatSetpointScale;
+	public get minValueScale(): ThermostatSetpointScale {
+		return this._minValueScale;
+	}
+	private _maxValueScale: ThermostatSetpointScale;
+	public get maxValueScale(): ThermostatSetpointScale {
+		return this._maxValueScale;
+	}
+	private _setpointType: ThermostatSetpointType;
+	public get setpointType(): ThermostatSetpointType {
+		return this._setpointType;
+	}
+}
+
+@CCCommand(ThermostatSetpointCommand.SupportedGet)
+export class ThermostatSetpointCCSupportedGet extends ThermostatSetpointCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
+	}
+}
+
+@CCCommand(ThermostatSetpointCommand.SupportedReport)
+export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		const bitMask = this.payload;
+		const supported = parseBitMask(bitMask);
+		if (this.version >= 3) {
+			// Interpretation A
+			this._supportedSetpointTypes = supported.map(
+				i => thermostatSetpointTypeMap[i],
+			);
+		} else {
+			// TODO: Determine which interpretation the device complies to
+			this._supportedSetpointTypes = supported;
+		}
+		// TODO:
+		// Some devices skip the gaps in the ThermostatSetpointType (Interpretation A), some don't (Interpretation B)
+		// Devices with V3+ must comply with Interpretation A
+		// It is RECOMMENDED that a controlling node determines supported Setpoint Types
+		// by sending one Thermostat Setpoint Get Command at a time while incrementing
+		// the requested Setpoint Type. If the same Setpoint Type is advertised in the
+		// resulting Thermostat Setpoint Report Command, the controlling node MAY conclude
+		// that the actual Setpoint Type is supported. If the Setpoint Type 0x00 (type N/A)
+		// is advertised in the resulting Thermostat Setpoint Report Command, the controlling
+		// node MUST conclude that the actual Setpoint Type is not supported.
+	}
+
+	private _supportedSetpointTypes: ThermostatSetpointType[];
+	public get supportedSetpointTypes(): readonly ThermostatSetpointType[] {
+		return this._supportedSetpointTypes;
 	}
 }

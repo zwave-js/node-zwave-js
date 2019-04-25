@@ -1,3 +1,4 @@
+import { IDriver } from "../driver/IDriver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -6,6 +7,7 @@ import {
 import {
 	expectedResponse,
 	Message,
+	MessageDeserializationOptions,
 	messageTypes,
 	priority,
 } from "../message/Message";
@@ -26,42 +28,33 @@ export class GetControllerCapabilitiesRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetControllerCapabilities)
 export class GetControllerCapabilitiesResponse extends Message {
+	public constructor(
+		driver: IDriver,
+		options: MessageDeserializationOptions,
+	) {
+		super(driver, options);
+		this._capabilityFlags = this.payload[0];
+	}
+
 	private _capabilityFlags: number;
 	public get isSecondary(): boolean {
-		return (
-			(this._capabilityFlags & ControllerCapabilityFlags.Secondary) !== 0
-		);
+		return !!(this._capabilityFlags & ControllerCapabilityFlags.Secondary);
 	}
 	public get isUsingHomeIdFromOtherNetwork(): boolean {
-		return (
-			(this._capabilityFlags &
-				ControllerCapabilityFlags.OnOtherNetwork) !==
-			0
+		return !!(
+			this._capabilityFlags & ControllerCapabilityFlags.OnOtherNetwork
 		);
 	}
 	public get isSISPresent(): boolean {
-		return (
-			(this._capabilityFlags & ControllerCapabilityFlags.SISPresent) !== 0
-		);
+		return !!(this._capabilityFlags & ControllerCapabilityFlags.SISPresent);
 	}
 	public get wasRealPrimary(): boolean {
-		return (
-			(this._capabilityFlags &
-				ControllerCapabilityFlags.WasRealPrimary) !==
-			0
+		return !!(
+			this._capabilityFlags & ControllerCapabilityFlags.WasRealPrimary
 		);
 	}
 	public get isStaticUpdateController(): boolean {
-		return (this._capabilityFlags & ControllerCapabilityFlags.SUC) !== 0;
-	}
-
-	public deserialize(data: Buffer): number {
-		const ret = super.deserialize(data);
-
-		// only one byte (flags) payload
-		this._capabilityFlags = this.payload[0];
-
-		return ret;
+		return !!(this._capabilityFlags & ControllerCapabilityFlags.SUC);
 	}
 
 	public toJSON(): JSONObject {

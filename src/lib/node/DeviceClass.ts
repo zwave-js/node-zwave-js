@@ -62,7 +62,8 @@ export class GenericDeviceClass {
 	>();
 
 	public static get(key: GenericDeviceClasses): GenericDeviceClass {
-		if (genericDeviceClassDB.has(key)) return genericDeviceClassDB.get(key);
+		if (genericDeviceClassDB.has(key))
+			return genericDeviceClassDB.get(key)!;
 		// Fallback if there's no known device class for this key
 		return new GenericDeviceClass(
 			`UNKNOWN (${num2hex(key)})`,
@@ -93,7 +94,8 @@ export class SpecificDeviceClass {
 	): SpecificDeviceClass {
 		const specificClasses = GenericDeviceClass.get(generic)
 			.specificDeviceClasses;
-		if (specificClasses.has(specific)) return specificClasses.get(specific);
+		if (specificClasses.has(specific))
+			return specificClasses.get(specific)!;
 		// Fallback if there's no known device class for this key
 		return new SpecificDeviceClass(
 			`UNKNOWN (${num2hex(specific)})`,
@@ -106,12 +108,12 @@ export class SpecificDeviceClass {
 
 function defineGeneric(
 	name: keyof typeof GenericDeviceClasses,
-	mandatorySupportedCCs: CommandClasses[],
-	mandatoryControlCCs: CommandClasses[],
+	mandatorySupportedCCs: CommandClasses[] | undefined,
+	mandatoryControlCCs: CommandClasses[] | undefined,
 	...specificDeviceClasses: SpecificDeviceClass[]
 ): void {
-	if (mandatorySupportedCCs == null) mandatorySupportedCCs = [];
-	if (mandatoryControlCCs == null) mandatoryControlCCs = [];
+	if (mandatorySupportedCCs == undefined) mandatorySupportedCCs = [];
+	if (mandatoryControlCCs == undefined) mandatoryControlCCs = [];
 
 	// All devices must support the BASIC command class
 	if (mandatorySupportedCCs.indexOf(CommandClasses.Basic) === -1)
@@ -204,8 +206,8 @@ export class DeviceClass {
 
 defineGeneric(
 	"Alarm Sensor",
-	null,
-	null,
+	undefined,
+	undefined,
 	new SpecificDeviceClass(
 		"Basic Routing Alarm Sensor",
 		0x01,
@@ -322,8 +324,8 @@ defineGeneric(
 
 defineGeneric(
 	"AV Control Point",
-	null,
-	null,
+	undefined,
+	undefined,
 	new SpecificDeviceClass("Doorbell", 0x12, [
 		CommandClasses["Binary Sensor"],
 		CommandClasses.Association,
@@ -346,14 +348,14 @@ defineGeneric(
 defineGeneric(
 	"Binary Sensor",
 	[CommandClasses["Binary Sensor"]],
-	null,
+	undefined,
 	new SpecificDeviceClass("Routing Binary Sensor", 0x01), // Binary sensor is already included in the generic class
 );
 
 defineGeneric(
 	"Binary Switch",
 	[CommandClasses["Binary Switch"]],
-	null,
+	undefined,
 	new SpecificDeviceClass("Binary Power Switch", 0x01, [
 		CommandClasses["All Switch"],
 	]),
@@ -373,8 +375,8 @@ defineGeneric(
 
 defineGeneric(
 	"Display",
-	null,
-	null,
+	undefined,
+	undefined,
 	new SpecificDeviceClass("Simple Display", 0x01, [
 		CommandClasses["Screen Attributes"],
 		CommandClasses["Screen Meta Data"],
@@ -385,8 +387,8 @@ defineGeneric(
 
 defineGeneric(
 	"Entry Control",
-	null,
-	null,
+	undefined,
+	undefined,
 	new SpecificDeviceClass("Door Lock", 0x01, [CommandClasses.Lock]),
 	new SpecificDeviceClass("Advanced Door Lock", 0x02, [
 		CommandClasses["Door Lock"],
@@ -411,7 +413,7 @@ defineGeneric(
 			CommandClasses.Security,
 			CommandClasses.Version,
 		],
-		null,
+		undefined,
 		true /* No BASIC CC */,
 	),
 	new SpecificDeviceClass("Secure Keypad", 0x0b, [
@@ -425,8 +427,8 @@ defineGeneric(
 
 defineGeneric(
 	"Meter",
-	null,
-	null,
+	undefined,
+	undefined,
 	new SpecificDeviceClass("Simple Meter", 0x01, [
 		CommandClasses.Meter,
 		CommandClasses["Manufacturer Specific"],
@@ -443,14 +445,14 @@ defineGeneric(
 defineGeneric(
 	"Multilevel Sensor",
 	[CommandClasses["Multilevel Sensor"]],
-	null,
+	undefined,
 	new SpecificDeviceClass("Routing Multilevel Sensor", 0x01),
 );
 
 defineGeneric(
 	"Multilevel Switch",
 	[CommandClasses["Multilevel Switch"]],
-	null,
+	undefined,
 	new SpecificDeviceClass("Multilevel Power Switch", 0x01, [
 		CommandClasses["All Switch"],
 	]),
@@ -484,12 +486,12 @@ defineGeneric(
 	]),
 );
 
-defineGeneric("Pulse Meter", [CommandClasses["Pulse Meter"]], null);
+defineGeneric("Pulse Meter", [CommandClasses["Pulse Meter"]], undefined);
 
 defineGeneric(
 	"Remote Controller",
-	null,
-	null,
+	undefined,
+	undefined,
 	new SpecificDeviceClass("Portable Remote Controller", 0x01),
 	new SpecificDeviceClass(
 		"Portable Scene Controller",
@@ -525,26 +527,29 @@ defineGeneric(
 
 defineGeneric(
 	"Remote Switch",
-	null,
-	null,
-	new SpecificDeviceClass("Binary Remote Switch", 0x01, null, [
+	undefined,
+	undefined,
+	new SpecificDeviceClass("Binary Remote Switch", 0x01, undefined, [
 		CommandClasses["Binary Switch"],
 	]),
-	new SpecificDeviceClass("Multilevel Remote Switch", 0x02, null, [
+	new SpecificDeviceClass("Multilevel Remote Switch", 0x02, undefined, [
 		CommandClasses["Multilevel Switch"],
 	]),
-	new SpecificDeviceClass("Binary Toggle Remote Switch", 0x03, null, [
+	new SpecificDeviceClass("Binary Toggle Remote Switch", 0x03, undefined, [
 		CommandClasses["Binary Toggle Switch"],
 	]),
-	new SpecificDeviceClass("Multilevel Toggle Remote Switch", 0x04, null, [
-		CommandClasses["Multilevel Toggle Switch"],
-	]),
+	new SpecificDeviceClass(
+		"Multilevel Toggle Remote Switch",
+		0x04,
+		undefined,
+		[CommandClasses["Multilevel Toggle Switch"]],
+	),
 );
 
 defineGeneric(
 	"Repeater Slave",
-	null,
-	null,
+	undefined,
+	undefined,
 	new SpecificDeviceClass("Basic Repeater Slave", 0x01),
 );
 
@@ -555,7 +560,7 @@ defineGeneric(
 		CommandClasses.Version,
 		CommandClasses.Proprietary,
 	],
-	null,
+	undefined,
 	new SpecificDeviceClass("Energy Production", 0x01, [
 		CommandClasses["Energy Production"],
 	]),
@@ -563,7 +568,7 @@ defineGeneric(
 
 defineGeneric(
 	"Static Controller",
-	null,
+	undefined,
 	[CommandClasses.Basic],
 	new SpecificDeviceClass("PC Controller", 0x01),
 	new SpecificDeviceClass(
@@ -610,8 +615,8 @@ defineGeneric(
 
 defineGeneric(
 	"Thermostat",
-	null,
-	null,
+	undefined,
+	undefined,
 	new SpecificDeviceClass("Thermostat Heating", 0x01),
 	new SpecificDeviceClass("Thermostat General", 0x02, [
 		CommandClasses["Manufacturer Specific"],
@@ -664,8 +669,8 @@ defineGeneric(
 
 defineGeneric(
 	"Toggle Switch",
-	null,
-	null,
+	undefined,
+	undefined,
 	new SpecificDeviceClass("Binary Toggle Switch", 0x01, [
 		CommandClasses["Binary Switch"],
 		CommandClasses["Binary Toggle Switch"],
@@ -678,8 +683,8 @@ defineGeneric(
 
 defineGeneric(
 	"Ventilation",
-	null,
-	null,
+	undefined,
+	undefined,
 	new SpecificDeviceClass("Residential Heat Recovery Ventilation", 0x01, [
 		CommandClasses["HRV Control"],
 		CommandClasses["HRV Status"],
@@ -690,8 +695,8 @@ defineGeneric(
 
 defineGeneric(
 	"Window Covering",
-	null,
-	null,
+	undefined,
+	undefined,
 	new SpecificDeviceClass("Simple Window Covering Control", 0x01, [
 		CommandClasses["Basic Window Covering"],
 	]),

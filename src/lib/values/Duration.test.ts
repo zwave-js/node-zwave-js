@@ -38,8 +38,8 @@ describe("lib/util/Duration", () => {
 	describe("parseReport()", () => {
 		it("should correctly parse unknown durations", () => {
 			const duration = Duration.parseReport(0xfe);
-			expect(duration.unit).toBe("unknown");
-			expect(duration.value).toBe(0);
+			expect(duration!.unit).toBe("unknown");
+			expect(duration!.value).toBe(0);
 		});
 
 		it("should return undefined when a reserved value is passed", () => {
@@ -56,8 +56,8 @@ describe("lib/util/Duration", () => {
 			];
 			for (const { payload, unit, value } of tests) {
 				const duration = Duration.parseReport(payload);
-				expect(duration.unit).toBe(unit);
-				expect(duration.value).toBe(value);
+				expect(duration!.unit).toBe(unit);
+				expect(duration!.value).toBe(value);
 			}
 		});
 	});

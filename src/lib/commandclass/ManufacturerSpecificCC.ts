@@ -1,11 +1,13 @@
 import { IDriver } from "../driver/IDriver";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Maybe } from "../values/Primitive";
 import {
-	ccValue,
+	CCCommand,
+	CCCommandOptions,
 	CommandClass,
 	commandClass,
+	CommandClassDeserializationOptions,
 	expectedCCResponse,
+	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
@@ -27,37 +29,7 @@ export enum DeviceIdType {
 @implementedVersion(2)
 @expectedCCResponse(CommandClasses["Manufacturer Specific"])
 export class ManufacturerSpecificCC extends CommandClass {
-	public constructor(driver: IDriver, nodeId?: number);
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		ccCommand: ManufacturerSpecificCommand.Get,
-	);
-	public constructor(
-		driver: IDriver,
-		nodeId: number,
-		ccCommand: ManufacturerSpecificCommand.DeviceSpecificGet,
-		deviceIdType: DeviceIdType,
-	);
-
-	public constructor(
-		driver: IDriver,
-		public nodeId: number,
-		public ccCommand?: ManufacturerSpecificCommand,
-		...args: any[]
-	) {
-		super(driver, nodeId, ccCommand);
-		if (ccCommand === ManufacturerSpecificCommand.DeviceSpecificGet) {
-			this.deviceIdType = args[0];
-		}
-	}
-
-	@ccValue() public manufacturerId: number;
-	@ccValue() public productType: number;
-	@ccValue() public productId: number;
-
-	public deviceIdType: DeviceIdType;
-	@ccValue() public deviceId: string;
+	public ccCommand!: ManufacturerSpecificCommand;
 
 	public supportsCommand(cmd: ManufacturerSpecificCommand): Maybe<boolean> {
 		switch (cmd) {
@@ -68,54 +40,98 @@ export class ManufacturerSpecificCC extends CommandClass {
 		}
 		return super.supportsCommand(cmd);
 	}
+}
 
-	public serialize(): Buffer {
-		switch (this.ccCommand) {
-			case ManufacturerSpecificCommand.Get:
-				// no real payload
-				break;
-			case ManufacturerSpecificCommand.DeviceSpecificGet:
-				this.payload = Buffer.from([(this.deviceIdType || 0) & 0b111]);
-				break;
-			default:
-				throw new ZWaveError(
-					"Cannot serialize a ManufacturerSpecific CC with a command other than Get or DeviceSpecificGet",
-					ZWaveErrorCodes.CC_Invalid,
-				);
-		}
+@CCCommand(ManufacturerSpecificCommand.Get)
+export class ManufacturerSpecificCCGet extends ManufacturerSpecificCC {
+	public constructor(driver: IDriver, options: CCCommandOptions) {
+		super(driver, options);
+	}
+}
 
-		return super.serialize();
+@CCCommand(ManufacturerSpecificCommand.Report)
+export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		this._manufacturerId = this.payload.readUInt16BE(0);
+		this._productType = this.payload.readUInt16BE(2);
+		this._productId = this.payload.readUInt16BE(4);
 	}
 
-	public deserialize(data: Buffer): void {
-		super.deserialize(data);
+	private _manufacturerId: number;
+	public get manufacturerId(): number {
+		return this._manufacturerId;
+	}
 
-		switch (this.ccCommand) {
-			case ManufacturerSpecificCommand.Report:
-				this.manufacturerId = this.payload.readUInt16BE(0);
-				this.productType = this.payload.readUInt16BE(2);
-				this.productId = this.payload.readUInt16BE(4);
-				break;
+	private _productType: number;
+	public get productType(): number {
+		return this._productType;
+	}
 
-			case ManufacturerSpecificCommand.DeviceSpecificReport: {
-				this.deviceIdType = this.payload[0] & 0b111;
-				const dataFormat = this.payload[1] >>> 5;
-				const dataLength = this.payload[1] & 0b11111;
-				const deviceIdData = this.payload.slice(2, 2 + dataLength);
-				if (dataFormat === 0) {
-					// utf8
-					this.deviceId = deviceIdData.toString("utf8");
-				} else {
-					this.deviceId = "0x" + deviceIdData.toString("hex");
-				}
-				break;
-			}
+	private _productId: number;
+	public get productId(): number {
+		return this._productId;
+	}
+}
 
-			default:
-				throw new ZWaveError(
-					"Cannot deserialize a ManufacturerSpecific CC with a command other than Report or DeviceSpecificReport",
-					ZWaveErrorCodes.CC_Invalid,
-				);
+interface ManufacturerSpecificCCDeviceSpecificGetOptions
+	extends CCCommandOptions {
+	deviceIdType: DeviceIdType;
+}
+
+@CCCommand(ManufacturerSpecificCommand.DeviceSpecificGet)
+export class ManufacturerSpecificCCDeviceSpecificGet extends ManufacturerSpecificCC {
+	public constructor(
+		driver: IDriver,
+		options:
+			| CommandClassDeserializationOptions
+			| ManufacturerSpecificCCDeviceSpecificGetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			throw new Error("not implemented!");
+		} else {
+			this.deviceIdType = options.deviceIdType;
 		}
+	}
+
+	public deviceIdType: DeviceIdType;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([(this.deviceIdType || 0) & 0b111]);
+		return super.serialize();
+	}
+}
+
+@CCCommand(ManufacturerSpecificCommand.DeviceSpecificReport)
+export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpecificCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		this._deviceIdType = this.payload[0] & 0b111;
+		const dataFormat = this.payload[1] >>> 5;
+		const dataLength = this.payload[1] & 0b11111;
+		const deviceIdData = this.payload.slice(2, 2 + dataLength);
+		if (dataFormat === 0) {
+			// utf8
+			this._deviceId = deviceIdData.toString("utf8");
+		} else {
+			this._deviceId = "0x" + deviceIdData.toString("hex");
+		}
+	}
+
+	private _deviceIdType: DeviceIdType;
+	public get deviceIdType(): DeviceIdType {
+		return this._deviceIdType;
+	}
+
+	private _deviceId: string;
+	public get deviceId(): string {
+		return this._deviceId;
 	}
 }

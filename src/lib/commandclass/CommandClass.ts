@@ -3,7 +3,6 @@ import { isObject } from "alcalzone-shared/typeguards";
 import * as fs from "fs";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { Constructable } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
 import { ValueDB } from "../node/ValueDB";
 import { log } from "../util/logger";
@@ -35,34 +34,114 @@ export enum StateKind {
 	Dynamic = 1 << 2,
 }
 
+export type CommandClassDeserializationOptions = { data: Buffer } & (
+	| {
+			encapsulated?: false;
+	  }
+	| {
+			encapsulated: true;
+			encapCC: CommandClass;
+	  });
+
+export function gotDeserializationOptions(
+	options: any,
+): options is CommandClassDeserializationOptions {
+	return Buffer.isBuffer(options.data);
+}
+
+export interface CCCommandOptions {
+	nodeId: number;
+}
+
+export interface CommandClassCreationOptions extends CCCommandOptions {
+	ccCommand?: number; // undefined = NoOp
+	payload?: Buffer;
+}
+
+function gotCCCommandOptions(options: any): options is CCCommandOptions {
+	return typeof options.nodeId === "number";
+}
+
+export type CommandClassOptions =
+	| CommandClassCreationOptions
+	| CommandClassDeserializationOptions;
+
 @implementedVersion(Number.POSITIVE_INFINITY) // per default don't impose any restrictions on the version
 export class CommandClass {
 	// empty constructor to parse messages
-	protected constructor(driver: IDriver);
-	// default constructor to send messages
-	protected constructor(
-		driver: IDriver,
-		nodeId: number,
-		// ccId?: CommandClasses,
-		ccCommand?: number,
-		payload?: Buffer,
-	);
-	// implementation
-	protected constructor(
-		protected driver: IDriver,
-		public nodeId?: number,
-		// public ccId?: CommandClasses,
-		public ccCommand?: number,
-		public payload: Buffer = Buffer.from([]),
-	) {
+	public constructor(driver: IDriver, options: CommandClassOptions) {
+		this.driver = driver;
 		// Extract the cc from declared metadata if not provided
 		this.ccId = getCommandClass(this);
+
+		if (gotDeserializationOptions(options)) {
+			// For deserialized commands, try to invoke the correct subclass constructor
+			const ccCommand = CommandClass.getCCCommand(options.data);
+			if (ccCommand != undefined) {
+				const CommandConstructor = getCCCommandConstructor(
+					this.ccId,
+					ccCommand,
+				);
+				if (
+					CommandConstructor &&
+					(new.target as any) !== CommandConstructor
+				) {
+					return new CommandConstructor(driver, options);
+				}
+			}
+
+			// If the constructor is correct or none was found, fall back to normal deserialization
+			if (options.encapsulated) {
+				({
+					nodeId: this.nodeId,
+					ccId: this.ccId,
+					ccCommand: this.ccCommand,
+					payload: this.payload,
+				} = this.deserializeFromEncapsulation(
+					options.encapCC,
+					options.data,
+				));
+			} else {
+				this.nodeId = CommandClass.getNodeId(options.data);
+				const lengthWithoutHeader = options.data[1];
+				const dataWithoutHeader = options.data.slice(
+					2,
+					2 + lengthWithoutHeader,
+				);
+				({
+					ccId: this.ccId,
+					ccCommand: this.ccCommand,
+					payload: this.payload,
+				} = this.deserializeWithoutHeader(dataWithoutHeader));
+			}
+		} else if (gotCCCommandOptions(options)) {
+			const {
+				nodeId,
+				ccCommand = getCCCommand(this),
+				payload = Buffer.allocUnsafe(0),
+			} = options;
+			this.nodeId = nodeId;
+			this.ccCommand = ccCommand;
+			this.payload = payload;
+		}
+		this.version = this.driver.getSafeCCVersionForNode(
+			this.nodeId,
+			this.ccId,
+		);
 	}
 
+	protected driver: IDriver;
+
 	public ccId: CommandClasses;
+	// Work around https://github.com/Microsoft/TypeScript/issues/27555
+	public nodeId!: number;
+	public ccCommand?: number;
+	// Work around https://github.com/Microsoft/TypeScript/issues/27555
+	public payload!: Buffer;
 
 	/** The version of the command class used */
-	public version: number;
+	// Work around https://github.com/Microsoft/TypeScript/issues/27555
+	public version!: number;
 
 	/** Which endpoint of the node this CC belongs to. 0 for the root device. */
 	public endpoint: number | undefined;
@@ -76,9 +155,14 @@ export class CommandClass {
 		// NoOp CCs have no command and no payload
 		if (this.ccId === CommandClasses["No Operation"])
 			return Buffer.from([this.ccId]);
+		else if (this.ccCommand == undefined) {
+			throw new ZWaveError(
+				"Cannot serialize a Command Class without a command",
+				ZWaveErrorCodes.CC_Invalid,
+			);
+		}
 
-		const payloadLength =
-			this.payload != undefined ? this.payload.length : 0;
+		const payloadLength = this.payload.length;
 		const ccIdLength = this.isExtended() ? 2 : 1;
 		const ret = Buffer.allocUnsafe(ccIdLength + 1 + payloadLength);
 		ret.writeUIntBE(this.ccId, 0, ccIdLength);
@@ -89,14 +173,23 @@ export class CommandClass {
 		return ret;
 	}
 
-	private deserializeWithoutHeader(data: Buffer): void {
-		this.ccId = CommandClass.getCommandClassWithoutHeader(data);
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	private deserializeWithoutHeader(data: Buffer) {
+		const ccId = CommandClass.getCommandClassWithoutHeader(data);
 		const ccIdLength = this.isExtended() ? 2 : 1;
 		if (data.length > ccIdLength) {
-			this.ccCommand = data[ccIdLength];
-			this.payload = data.slice(ccIdLength + 1);
+			// This is not a NoOp CC (contains command and payload)
+			const ccCommand = data[ccIdLength];
+			const payload = data.slice(ccIdLength + 1);
+			return {
+				ccId,
+				ccCommand,
+				payload,
+			};
 		} else {
-			this.payload = Buffer.allocUnsafe(0);
+			// NoOp CC (no command, no payload)
+			const payload = Buffer.allocUnsafe(0);
+			return { ccId, payload };
 		}
 	}
 
@@ -113,19 +206,12 @@ export class CommandClass {
 		return Buffer.concat([Buffer.from([this.nodeId, data.length]), data]);
 	}
 
-	public deserialize(data: Buffer): void {
-		this.nodeId = CommandClass.getNodeId(data);
-		const lengthWithoutHeader = data[1];
-		const dataWithoutHeader = data.slice(2, 2 + lengthWithoutHeader);
-		this.deserializeWithoutHeader(dataWithoutHeader);
-	}
-
-	public deserializeFromEncapsulation(
-		encapCC: CommandClass,
-		data: Buffer,
-	): void {
-		this.nodeId = encapCC.nodeId; // TODO: is this neccessarily true?
-		this.deserializeWithoutHeader(data);
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	private deserializeFromEncapsulation(encapCC: CommandClass, data: Buffer) {
+		return {
+			nodeId: encapCC.nodeId, // TODO: is this neccessarily true?
+			...this.deserializeWithoutHeader(data),
+		};
 	}
 
 	public static getNodeId(ccData: Buffer): number {
@@ -142,19 +228,28 @@ export class CommandClass {
 		return this.getCommandClassWithoutHeader(ccData.slice(2));
 	}
 
+	public static getCCCommand(ccData: Buffer): number | undefined {
+		if (ccData[2] === 0) return undefined; // NoOp
+		const isExtendedCC = ccData[2] >= 0xf1;
+		return isExtendedCC ? ccData[4] : ccData[3];
+	}
+
 	/**
 	 * Retrieves the correct constructor for the CommandClass in the given Buffer.
 	 * It is assumed that the buffer only contains the serialized CC.
 	 */
-	public static getConstructor(ccData: Buffer): Constructable<CommandClass> {
+	public static getConstructor(
+		ccData: Buffer,
+	): Constructable<CommandClass> | undefined {
 		const cc = CommandClass.getCommandClass(ccData);
 		return getCCConstructor(cc) /* || CommandClass */;
 	}
 
 	public static from(driver: IDriver, serializedCC: Buffer): CommandClass {
-		const Constructor = CommandClass.getConstructor(serializedCC);
-		const ret = new Constructor(driver);
-		ret.deserialize(serializedCC);
+		// Fall back to unspecified command class in case we receive one that is not implemented
+		const Constructor =
+			CommandClass.getConstructor(serializedCC) || CommandClass;
+		const ret = new Constructor(driver, { data: serializedCC });
 		return ret;
 	}
 
@@ -163,9 +258,14 @@ export class CommandClass {
 		encapCC: CommandClass,
 		serializedCC: Buffer,
 	): CommandClass {
-		const Constructor = CommandClass.getConstructor(serializedCC);
-		const ret = new Constructor(driver);
-		ret.deserializeFromEncapsulation(encapCC, serializedCC);
+		// Fall back to unspecified command class in case we receive one that is not implemented
+		const Constructor =
+			CommandClass.getConstructor(serializedCC) || CommandClass;
+		const ret = new Constructor(driver, {
+			data: serializedCC,
+			encapsulated: true,
+			encapCC,
+		});
 		return ret;
 	}
 
@@ -178,7 +278,7 @@ export class CommandClass {
 			nodeId: this.nodeId,
 			ccId: CommandClasses[this.ccId] || num2hex(this.ccId),
 		};
-		if (this.payload != null && this.payload.length > 0)
+		if (this.payload.length > 0)
 			ret.payload = "0x" + this.payload.toString("hex");
 		return ret;
 	}
@@ -217,17 +317,20 @@ export class CommandClass {
 	 * Returns the node this CC is linked to. Throws if the node does not exist.
 	 */
 	public getNode(): ZWaveNode | undefined {
-		if (this.nodeId == undefined)
+		if (this.driver.controller == undefined) {
 			throw new ZWaveError(
-				"Cannot retrieve the node without a Node ID",
-				ZWaveErrorCodes.CC_NoNodeID,
+				"Cannot retrieve the node when the controller is undefined",
+				ZWaveErrorCodes.Driver_NotReady,
 			);
+		}
 		return this.driver.controller.nodes.get(this.nodeId);
 	}
 
 	/** Returns the value DB for this CC's node */
 	protected getValueDB(): ValueDB {
-		return this.getNode().valueDB;
+		// We want this method to throw if the node is undefined
+		// so we can use the ! here
+		return this.getNode()!.valueDB;
 	}
 
 	/** Which variables should be persisted when requested */
@@ -309,17 +412,32 @@ export class CommandClass {
 export const METADATA_commandClass = Symbol("commandClass");
 export const METADATA_commandClassMap = Symbol("commandClassMap");
 export const METADATA_ccResponse = Symbol("ccResponse");
+export const METADATA_ccCommand = Symbol("ccCommand");
+export const METADATA_ccCommandMap = Symbol("ccCommandMap");
 export const METADATA_version = Symbol("version");
 /* eslint-enable @typescript-eslint/camelcase */
 
-// Pre-create the lookup maps for the contructors
+export interface Constructable<T extends CommandClass> {
+	new (
+		driver: IDriver,
+		options:
+			| CommandClassCreationOptions
+			| CommandClassDeserializationOptions,
+	): T;
+}
+
 type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
+type CCCommandMap = Map<string, Constructable<CommandClass>>;
 /**
  * A predicate function to test if a received CC matches to the sent CC
  */
 export type DynamicCCResponse<T extends CommandClass> = (
 	sentCC: T,
 ) => CommandClasses | undefined;
+
+function getCCCommandMapKey(ccId: CommandClasses, ccCommand: number): string {
+	return JSON.stringify({ ccId, ccCommand });
+}
 
 /**
  * Defines the command class associated with a Z-Wave message
@@ -352,7 +470,16 @@ export function getCommandClass<T extends CommandClass>(cc: T): CommandClasses {
 	// get the class constructor
 	const constr = cc.constructor;
 	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_commandClass, constr);
+	const ret: CommandClasses | undefined = Reflect.getMetadata(
+		METADATA_commandClass,
+		constr,
+	);
+	if (ret == undefined) {
+		throw new ZWaveError(
+			`No command class defined for ${constr.name}!`,
+			ZWaveErrorCodes.CC_Invalid,
+		);
+	}
 
 	log(
 		"protocol",
@@ -371,7 +498,16 @@ export function getCommandClassStatic<T extends Constructable<CommandClass>>(
 	classConstructor: T,
 ): CommandClasses {
 	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_commandClass, classConstructor);
+	const ret: CommandClasses | undefined = Reflect.getMetadata(
+		METADATA_commandClass,
+		classConstructor,
+	);
+	if (ret == undefined) {
+		throw new ZWaveError(
+			`No command class defined for ${classConstructor.name}!`,
+			ZWaveErrorCodes.CC_Invalid,
+		);
+	}
 
 	log(
 		"protocol",
@@ -388,13 +524,13 @@ export function getCommandClassStatic<T extends Constructable<CommandClass>>(
  */
 export function getCCConstructor(
 	cc: CommandClasses,
-): Constructable<CommandClass> {
+): Constructable<CommandClass> | undefined {
 	// Retrieve the constructor map from the CommandClass class
-	const map = Reflect.getMetadata(
+	const map: CommandClassMap | undefined = Reflect.getMetadata(
 		METADATA_commandClassMap,
 		CommandClass,
-	) as CommandClassMap;
-	if (map != null) return map.get(cc);
+	);
+	if (map != undefined) return map.get(cc);
 }
 
 /**
@@ -419,19 +555,20 @@ export function getImplementedVersion<T extends CommandClass>(
 	cc: T | CommandClasses,
 ): number {
 	// get the class constructor
-	let constr: Constructable<CommandClass>;
+	let constr: Constructable<CommandClass> | undefined;
 	let constrName: string;
 	if (typeof cc === "number") {
 		constr = getCCConstructor(cc);
-		constrName = constr != null ? constr.name : CommandClasses[cc];
+		constrName = constr != undefined ? constr.name : CommandClasses[cc];
 	} else {
 		constr = cc.constructor as Constructable<CommandClass>;
 		constrName = constr.name;
 	}
 	// retrieve the current metadata
-	let ret: number;
-	if (constr != null) ret = Reflect.getMetadata(METADATA_version, constr);
-	if (ret == null) ret = 0;
+	let ret: number | undefined;
+	if (constr != undefined)
+		ret = Reflect.getMetadata(METADATA_version, constr);
+	if (ret == undefined) ret = 0;
 
 	log(
 		"protocol",
@@ -448,7 +585,8 @@ export function getImplementedVersionStatic<
 	T extends Constructable<CommandClass>
 >(classConstructor: T): number {
 	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_version, classConstructor) || 0;
+	const ret: number =
+		Reflect.getMetadata(METADATA_version, classConstructor) || 0;
 
 	log(
 		"protocol",
@@ -456,6 +594,93 @@ export function getImplementedVersionStatic<
 		"silly",
 	);
 	return ret;
+}
+
+/**
+ * Defines the CC command a subclass of a CC implements
+ */
+export function CCCommand(command: number): ClassDecorator {
+	return ccClass => {
+		log(
+			"protocol",
+			`${ccClass.name}: defining CC command ${command}`,
+			"silly",
+		);
+		// and store the metadata
+		Reflect.defineMetadata(METADATA_ccCommand, command, ccClass);
+
+		// also store a map in the Message metadata for lookup.
+		const ccId = getCommandClassStatic(
+			(ccClass as unknown) as typeof CommandClass,
+		);
+		const map: CCCommandMap =
+			Reflect.getMetadata(METADATA_ccCommandMap, CommandClass) ||
+			new Map();
+		map.set(
+			getCCCommandMapKey(ccId, command),
+			(ccClass as unknown) as Constructable<CommandClass>,
+		);
+		Reflect.defineMetadata(METADATA_ccCommandMap, map, CommandClass);
+	};
+}
+
+/**
+ * Retrieves the CC command a subclass of a CC implements
+ */
+export function getCCCommand<T extends CommandClass>(
+	cc: T,
+): number | undefined {
+	// get the class constructor
+	const constr = cc.constructor as Constructable<CommandClass>;
+	const constrName = constr.name;
+
+	// retrieve the current metadata
+	const ret: number | undefined = Reflect.getMetadata(
+		METADATA_ccCommand,
+		constr,
+	);
+
+	log("protocol", `${constrName}: retrieving CC command => ${ret}`, "silly");
+	return ret;
+}
+
+/**
+ * Retrieves the implemented version defined for a Z-Wave command class
+ */
+export function getCCCommandStatic<T extends Constructable<CommandClass>>(
+	classConstructor: T,
+): number | undefined {
+	// retrieve the current metadata
+	const ret: number | undefined = Reflect.getMetadata(
+		METADATA_ccCommand,
+		classConstructor,
+	);
+
+	log(
+		"protocol",
+		`${classConstructor.name}: retrieving CC command => ${ret}`,
+		"silly",
+	);
+	return ret;
+}
+
+/**
+ * Looks up the command class constructor for a given command class type and function type
+ */
+// wotan-disable-next-line no-misused-generics
+export function getCCCommandConstructor<TBase extends CommandClass>(
+	ccId: CommandClasses,
+	ccCommand: number,
+): Constructable<TBase> | undefined {
+	// Retrieve the constructor map from the CommandClass class
+	const map: CCCommandMap | undefined = Reflect.getMetadata(
+		METADATA_ccCommandMap,
+		CommandClass,
+	);
+	if (map != undefined)
+		return (map.get(getCCCommandMapKey(ccId, ccCommand)) as unknown) as
+			| Constructable<TBase>
+			| undefined;
 }
 
 /**
@@ -497,11 +722,14 @@ export function expectedCCResponse<T extends CommandClass>(
  */
 export function getExpectedCCResponse<T extends CommandClass>(
 	ccClass: T,
-): CommandClasses | DynamicCCResponse<T> {
+): CommandClasses | DynamicCCResponse<T> | undefined {
 	// get the class constructor
 	const constr = ccClass.constructor;
 	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_ccResponse, constr);
+	const ret:
+		| CommandClasses
+		| DynamicCCResponse<T>
+		| undefined = Reflect.getMetadata(METADATA_ccResponse, constr);
 	if (typeof ret === "number") {
 		log(
 			"protocol",
@@ -525,9 +753,17 @@ export function getExpectedCCResponse<T extends CommandClass>(
  */
 export function getExpectedCCResponseStatic<
 	T extends Constructable<CommandClass>
->(classConstructor: T): CommandClasses | DynamicCCResponse<CommandClass> {
+>(
+	classConstructor: T,
+): CommandClasses | DynamicCCResponse<CommandClass> | undefined {
 	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_ccResponse, classConstructor);
+	const ret:
+		| CommandClasses
+		| DynamicCCResponse<CommandClass>
+		| undefined = Reflect.getMetadata(
+		METADATA_ccResponse,
+		classConstructor,
+	);
 	if (typeof ret === "number") {
 		log(
 			"protocol",

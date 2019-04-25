@@ -16,72 +16,146 @@ import {
 	MessageType,
 } from "./Constants";
 
-export type Constructable<T> = new (
+export type Constructable<T extends Message> = new (
 	driver: IDriver,
-	...constructorArgs: any[]
+	options?: MessageOptions,
 ) => T;
+
+export interface MessageDeserializationOptions {
+	data: Buffer;
+}
+
+export function gotDeserializationOptions(
+	options: any,
+): options is MessageDeserializationOptions {
+	return options != undefined && Buffer.isBuffer(options.data);
+}
+
+export interface MessageBaseOptions {
+	__empty?: undefined; // Dirty hack, so we can inherit from this interface
+}
+
+export interface MessageCreationOptions extends MessageBaseOptions {
+	type?: MessageType;
+	functionType?: FunctionType;
+	expectedResponse?: FunctionType | ResponsePredicate;
+	payload?: Buffer;
+}
+
+export type MessageOptions =
+	| MessageCreationOptions
+	| MessageDeserializationOptions;
 
 /**
  * Represents a ZWave message for communication with the serial interface
  */
 export class Message {
-	// #1
-	public constructor(driver: IDriver, payload?: Buffer);
-
-	// #2
-	public constructor(
-		driver: IDriver,
-		type: MessageType,
-		funcType: FunctionType,
-		expResponse: FunctionType | ResponsePredicate,
-		payload?: Buffer,
-	);
-
-	// implementation
 	public constructor(
 		protected driver: IDriver,
-		typeOrPayload?: MessageType | Buffer,
-		funcType?: FunctionType,
-		expResponse?: FunctionType | ResponsePredicate,
-		payload?: Buffer, // TODO: Length limit 255
+		options: MessageOptions = {},
 	) {
 		// decide which implementation we follow
-		let type: MessageType;
-		if (typeof typeOrPayload === "number") {
-			// #2
-			type = typeOrPayload;
-		} else if (typeOrPayload instanceof Buffer) {
-			// #1
-			payload = typeOrPayload;
-		}
+		if (gotDeserializationOptions(options)) {
+			// #1: deserialize from payload
+			const payload = options.data;
 
-		// These properties are filled from declared metadata if not provided
-		this.type = type != null ? type : getMessageType(this);
-		this.functionType = funcType != null ? funcType : getFunctionType(this);
-		this.expectedResponse =
-			expResponse != null ? expResponse : getExpectedResponse(this);
-		// This is taken from the constructor args
-		this.payload = payload;
+			// SOF, length, type, commandId and checksum must be present
+			if (!payload.length || payload.length < 5) {
+				throw new ZWaveError(
+					"Could not deserialize the message because it was truncated",
+					ZWaveErrorCodes.PacketFormat_Truncated,
+				);
+			}
+			// the packet has to start with SOF
+			if (payload[0] !== MessageHeaders.SOF) {
+				throw new ZWaveError(
+					"Could not deserialize the message because it does not start with SOF",
+					ZWaveErrorCodes.PacketFormat_Invalid,
+				);
+			}
+			// check the length again, this time with the transmitted length
+			const remainingLength = payload[1];
+			const messageLength = remainingLength + 2;
+			if (payload.length < messageLength) {
+				throw new ZWaveError(
+					"Could not deserialize the message because it was truncated",
+					ZWaveErrorCodes.PacketFormat_Truncated,
+				);
+			}
+			// check the checksum
+			const expectedChecksum = computeChecksum(
+				payload.slice(0, messageLength),
+			);
+			if (payload[messageLength - 1] !== expectedChecksum) {
+				throw new ZWaveError(
+					"Could not deserialize the message because the checksum didn't match",
+					ZWaveErrorCodes.PacketFormat_Checksum,
+				);
+			}
+
+			this.type = payload[2];
+			this.functionType = payload[3];
+			const payloadLength = messageLength - 5;
+			this.payload = payload.slice(4, 4 + payloadLength);
+
+			// remember how many bytes were read
+			this._bytesRead = messageLength;
+		} else {
+			// Try to determine the message type
+			if (options.type == undefined) options.type = getMessageType(this);
+			if (options.type == undefined) {
+				throw new ZWaveError(
+					"A message must have a given or predefined message type",
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			this.type = options.type;
+
+			if (options.functionType == undefined)
+				options.functionType = getFunctionType(this);
+			if (options.functionType == undefined) {
+				throw new ZWaveError(
+					"A message must have a given or predefined function type",
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			this.functionType = options.functionType;
+
+			// The expected response may be undefined
+			this.expectedResponse =
+				options.expectedResponse != undefined
+					? options.expectedResponse
+					: getExpectedResponse(this);
+
+			this.payload = options.payload || Buffer.allocUnsafe(0);
+		}
 	}
 
 	public type: MessageType;
 	public functionType: FunctionType;
-	public expectedResponse: FunctionType | ResponsePredicate;
+	public expectedResponse: FunctionType | ResponsePredicate | undefined;
 	public payload: Buffer; // TODO: Length limit 255
-	public maxSendAttempts: number;
+	public maxSendAttempts: number | undefined;
+
+	protected _bytesRead: number = 0;
+	/**
+	 * @internal
+	 * The amount of bytes read while deserializing this message
+	 */
+	public get bytesRead(): number {
+		return this._bytesRead;
+	}
 
 	/** Serializes this message into a Buffer */
 	public serialize(): Buffer {
-		const payloadLength = this.payload != null ? this.payload.length : 0;
-
-		const ret = Buffer.allocUnsafe(payloadLength + 5);
+		const ret = Buffer.allocUnsafe(this.payload.length + 5);
 		ret[0] = MessageHeaders.SOF;
 		// length of the following data, including the checksum
-		ret[1] = payloadLength + 3;
+		ret[1] = this.payload.length + 3;
 		// write the remaining data
 		ret[2] = this.type;
 		ret[3] = this.functionType;
-		if (this.payload != null) this.payload.copy(ret, 4);
+		this.payload.copy(ret, 4);
 		// followed by the checksum
 		ret[ret.length - 1] = computeChecksum(ret);
 		return ret;
@@ -90,7 +164,7 @@ export class Message {
 	/**
 	 * Checks if there's enough data in the buffer to deserialize
 	 */
-	public static isComplete(data: Buffer): boolean {
+	public static isComplete(data?: Buffer): boolean {
 		if (!data || !data.length || data.length < 5) return false; // not yet
 
 		// check the length again, this time with the transmitted length
@@ -109,54 +183,14 @@ export class Message {
 		return getMessageConstructor(data[2], data[3]) || Message;
 	}
 
-	/**
-	 * Deserializes a message of this type from a Buffer
-	 * @returns must return the total number of bytes read
-	 */
-	public deserialize(data: Buffer): number {
-		// SOF, length, type, commandId and checksum must be present
-		if (!data || !data.length || data.length < 5) {
-			throw new ZWaveError(
-				"Could not deserialize the message because it was truncated",
-				ZWaveErrorCodes.PacketFormat_Truncated,
-			);
-		}
-		// the packet has to start with SOF
-		if (data[0] !== MessageHeaders.SOF) {
-			throw new ZWaveError(
-				"Could not deserialize the message because it does not start with SOF",
-				ZWaveErrorCodes.PacketFormat_Invalid,
-			);
-		}
-		// check the length again, this time with the transmitted length
-		const remainingLength = data[1];
-		const messageLength = remainingLength + 2;
-		if (data.length < messageLength) {
-			throw new ZWaveError(
-				"Could not deserialize the message because it was truncated",
-				ZWaveErrorCodes.PacketFormat_Truncated,
-			);
-		}
-		// check the checksum
-		const expectedChecksum = computeChecksum(data.slice(0, messageLength));
-		if (data[messageLength - 1] !== expectedChecksum) {
-			throw new ZWaveError(
-				"Could not deserialize the message because the checksum didn't match",
-				ZWaveErrorCodes.PacketFormat_Checksum,
-			);
-		}
-
-		this.type = data[2];
-		this.functionType = data[3];
-		const payloadLength = messageLength - 5;
-		this.payload = data.slice(4, 4 + payloadLength);
-
-		// return the total number of bytes in this message
-		return messageLength;
+	public static from(driver: IDriver, data: Buffer): Message {
+		const Constructor = Message.getConstructor(data);
+		const ret = new Constructor(driver, { data });
+		return ret;
 	}
 
 	/** Returns the slice of data which represents the message payload */
-	public static getPayload(data: Buffer): Buffer {
+	public static extractPayload(data: Buffer): Buffer {
 		// we assume the message has been tested already for completeness
 		const remainingLength = data[1];
 		const messageLength = remainingLength + 2;
@@ -177,7 +211,7 @@ export class Message {
 		};
 		if (this.expectedResponse != null)
 			ret.expectedResponse = FunctionType[this.functionType];
-		if (this.payload != null) ret.payload = this.payload.toString("hex");
+		ret.payload = this.payload.toString("hex");
 		return ret;
 	}
 
@@ -209,7 +243,7 @@ export class Message {
 	}
 
 	/** Finds the ID of the target or source node in a message, if it contains that information */
-	public getNodeId(): number {
+	public getNodeId(): number | undefined {
 		if (isNodeQuery(this)) return this.nodeId;
 		if (isCommandClassContainer(this)) return this.command.nodeId;
 	}
@@ -218,6 +252,7 @@ export class Message {
 	 * Returns the node this message is linked to or undefined
 	 */
 	public getNodeUnsafe(): ZWaveNode | undefined {
+		if (!this.driver.controller) return;
 		const nodeId = this.getNodeId();
 		if (nodeId != undefined)
 			return this.driver.controller.nodes.get(nodeId);
@@ -250,6 +285,10 @@ export const METADATA_priority = Symbol("priority");
 /* eslint-enable @typescript-eslint/camelcase */
 
 type MessageTypeMap = Map<string, Constructable<Message>>;
+interface MessageTypeMapEntry {
+	messageType: MessageType;
+	functionType: FunctionType;
+}
 
 function getMessageTypeMapKey(
 	messageType: MessageType,
@@ -311,11 +350,14 @@ export function messageTypes(
  */
 export function getMessageType<T extends Message>(
 	messageClass: T,
-): MessageType {
+): MessageType | undefined {
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
-	const meta = Reflect.getMetadata(METADATA_messageTypes, constr);
+	const meta: MessageTypeMapEntry | undefined = Reflect.getMetadata(
+		METADATA_messageTypes,
+		constr,
+	);
 	const ret = meta && meta.messageType;
 	log(
 		"protocol",
@@ -330,9 +372,12 @@ export function getMessageType<T extends Message>(
  */
 export function getMessageTypeStatic<T extends Constructable<Message>>(
 	classConstructor: T,
-): MessageType {
+): MessageType | undefined {
 	// retrieve the current metadata
-	const meta = Reflect.getMetadata(METADATA_messageTypes, classConstructor);
+	const meta: MessageTypeMapEntry | undefined = Reflect.getMetadata(
+		METADATA_messageTypes,
+		classConstructor,
+	);
 	const ret = meta && meta.messageType;
 	log(
 		"protocol",
@@ -347,11 +392,14 @@ export function getMessageTypeStatic<T extends Constructable<Message>>(
  */
 export function getFunctionType<T extends Message>(
 	messageClass: T,
-): FunctionType {
+): FunctionType | undefined {
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
-	const meta = Reflect.getMetadata(METADATA_messageTypes, constr);
+	const meta: MessageTypeMapEntry | undefined = Reflect.getMetadata(
+		METADATA_messageTypes,
+		constr,
+	);
 	const ret = meta && meta.functionType;
 	log(
 		"protocol",
@@ -366,9 +414,12 @@ export function getFunctionType<T extends Message>(
  */
 export function getFunctionTypeStatic<T extends Constructable<Message>>(
 	classConstructor: T,
-): FunctionType {
+): FunctionType | undefined {
 	// retrieve the current metadata
-	const meta = Reflect.getMetadata(METADATA_messageTypes, classConstructor);
+	const meta: MessageTypeMapEntry | undefined = Reflect.getMetadata(
+		METADATA_messageTypes,
+		classConstructor,
+	);
 	const ret = meta && meta.functionType;
 	log(
 		"protocol",
@@ -384,16 +435,17 @@ export function getFunctionTypeStatic<T extends Constructable<Message>>(
 export function getMessageConstructor(
 	messageType: MessageType,
 	functionType: FunctionType,
-): Constructable<Message> {
+): Constructable<Message> | undefined {
 	// Retrieve the constructor map from the Message class
-	const functionTypeMap = Reflect.getMetadata(
+	const functionTypeMap: MessageTypeMap | undefined = Reflect.getMetadata(
 		METADATA_messageTypeMap,
 		Message,
-	) as MessageTypeMap;
-	if (functionTypeMap != null)
+	);
+	if (functionTypeMap != null) {
 		return functionTypeMap.get(
 			getMessageTypeMapKey(messageType, functionType),
 		);
+	}
 }
 
 /**
@@ -438,11 +490,14 @@ export function expectedResponse(
  */
 export function getExpectedResponse<T extends Message>(
 	messageClass: T,
-): FunctionType | ResponsePredicate {
+): FunctionType | ResponsePredicate | undefined {
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_expectedResponse, constr);
+	const ret:
+		| FunctionType
+		| ResponsePredicate
+		| undefined = Reflect.getMetadata(METADATA_expectedResponse, constr);
 	if (typeof ret === "number") {
 		log(
 			"protocol",
@@ -457,6 +512,12 @@ export function getExpectedResponse<T extends Message>(
 			}]`,
 			"silly",
 		);
+	} else {
+		log(
+			"protocol",
+			`${constr.name}: retrieving expected response => undefined`,
+			"silly",
+		);
 	}
 	return ret;
 }
@@ -466,9 +527,12 @@ export function getExpectedResponse<T extends Message>(
  */
 export function getExpectedResponseStatic<T extends Constructable<Message>>(
 	classConstructor: T,
-): FunctionType | ResponsePredicate {
+): FunctionType | ResponsePredicate | undefined {
 	// retrieve the current metadata
-	const ret = Reflect.getMetadata(
+	const ret:
+		| FunctionType
+		| ResponsePredicate
+		| undefined = Reflect.getMetadata(
 		METADATA_expectedResponse,
 		classConstructor,
 	);
@@ -488,6 +552,14 @@ export function getExpectedResponseStatic<T extends Constructable<Message>>(
 			}: retrieving expected response => [Predicate${
 				ret.name.length > 0 ? " " + ret.name : ""
 			}]`,
+			"silly",
+		);
+	} else {
+		log(
+			"protocol",
+			`${
+				classConstructor.name
+			}: retrieving expected response => undefined`,
 			"silly",
 		);
 	}
@@ -516,18 +588,29 @@ export function priority(prio: MessagePriority): ClassDecorator {
  */
 export function getDefaultPriority<T extends Message>(
 	messageClass: T,
-): MessagePriority {
+): MessagePriority | undefined {
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_priority, constr);
-	log(
-		"protocol",
-		`${constr.name}: retrieving default priority => ${
-			MessagePriority[ret]
-		} (${ret})`,
-		"silly",
+	const ret: MessagePriority | undefined = Reflect.getMetadata(
+		METADATA_priority,
+		constr,
 	);
+	if (ret) {
+		log(
+			"protocol",
+			`${constr.name}: retrieving default priority => ${
+				MessagePriority[ret]
+			} (${ret})`,
+			"silly",
+		);
+	} else {
+		log(
+			"protocol",
+			`${constr.name}: retrieving default priority => undefined`,
+			"silly",
+		);
+	}
 	return ret;
 }
 
@@ -536,15 +619,28 @@ export function getDefaultPriority<T extends Message>(
  */
 export function getDefaultPriorityStatic<T extends Constructable<Message>>(
 	classConstructor: T,
-): MessagePriority {
+): MessagePriority | undefined {
 	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_priority, classConstructor);
-	log(
-		"protocol",
-		`${classConstructor.name}: retrieving default priority => ${
-			MessagePriority[ret]
-		} (${ret})`,
-		"silly",
+	const ret: MessagePriority | undefined = Reflect.getMetadata(
+		METADATA_priority,
+		classConstructor,
 	);
+	if (ret) {
+		log(
+			"protocol",
+			`${classConstructor.name}: retrieving default priority => ${
+				MessagePriority[ret]
+			} (${ret})`,
+			"silly",
+		);
+	} else {
+		log(
+			"protocol",
+			`${
+				classConstructor.name
+			}: retrieving default priority => undefined`,
+			"silly",
+		);
+	}
 	return ret;
 }
