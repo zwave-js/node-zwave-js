@@ -64,10 +64,9 @@ describe("lib/driver/Transaction => ", () => {
 
 		function createTransactionForNode(nodeId: number) {
 			const driver = (driverMock as any) as Driver;
-			const msg = new SendDataRequest(
-				driver,
-				new NoOperationCC(driver, { nodeId }),
-			);
+			const msg = new SendDataRequest(driver, {
+				command: new NoOperationCC(driver, { nodeId }),
+			});
 			const ret = new Transaction(
 				driver,
 				msg,
@@ -155,10 +154,9 @@ describe("lib/driver/Transaction => ", () => {
 
 		function createTransaction(nodeId: number, priority: MessagePriority) {
 			const driver = (driverMock as any) as Driver;
-			const msg = new SendDataRequest(
-				driver,
-				new NoOperationCC(driver, { nodeId }),
-			);
+			const msg = new SendDataRequest(driver, {
+				command: new NoOperationCC(driver, { nodeId }),
+			});
 			const ret = new Transaction(
 				driver,
 				msg,

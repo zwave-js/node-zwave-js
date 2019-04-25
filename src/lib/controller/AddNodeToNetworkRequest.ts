@@ -59,7 +59,9 @@ export interface AddNodeToNetworkRequestOptions extends MessageBaseOptions {
 export class AddNodeToNetworkRequest extends Message {
 	public constructor(
 		driver: IDriver,
-		options: MessageDeserializationOptions | AddNodeToNetworkRequestOptions,
+		options:
+			| MessageDeserializationOptions
+			| AddNodeToNetworkRequestOptions = {},
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
@@ -90,17 +92,17 @@ export class AddNodeToNetworkRequest extends Message {
 			}
 		} else {
 			this.addNodeType = options.addNodeType;
-			this.highPower = options.highPower;
-			this.networkWide = options.networkWide;
+			this.highPower = !!options.highPower;
+			this.networkWide = !!options.networkWide;
 		}
 	}
 
 	/** The type of node to add */
 	public addNodeType: AddNodeType | undefined;
 	/** Whether to use high power */
-	public highPower: boolean | undefined;
+	public highPower: boolean = false;
 	/** Whether to include network wide */
-	public networkWide: boolean | undefined;
+	public networkWide: boolean = false;
 
 	// These two properties are only set if we parse a response
 	private _status: AddNodeStatus | undefined;

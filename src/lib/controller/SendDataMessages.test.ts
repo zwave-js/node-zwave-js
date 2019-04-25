@@ -1,8 +1,7 @@
 /// <reference types="jest-extended" />
-import { assertZWaveError } from "../../../test/util";
-import { BasicCC, BasicCommand } from "../commandclass/BasicCC";
+import { createEmptyMockDriver } from "../../../test/mocks";
+import { BasicCCGet } from "../commandclass/BasicCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
-import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { FunctionType, MessageType } from "../message/Constants";
 import {
 	getExpectedResponse,
@@ -18,27 +17,27 @@ import {
 	TransmitOptions,
 } from "./SendDataMessages";
 
+const fakeDriver = createEmptyMockDriver();
+
 function createSendDataMessage(
 	type: MessageType,
 	payload?: Buffer,
 ): SendDataRequestBase | SendDataResponse {
-	const msg = new Message(
-		undefined as any,
+	const msg = new Message(fakeDriver, {
 		type,
-		FunctionType.SendData,
-		undefined as any,
+		functionType: FunctionType.SendData,
 		payload,
-	);
+	});
 	const data = msg.serialize();
 	const ret =
 		type === MessageType.Request
-			? new SendDataRequestBase(undefined as any, data)
-			: new SendDataResponse(undefined as any, data);
+			? new SendDataRequestBase(fakeDriver, { data })
+			: new SendDataResponse(fakeDriver, { data });
 	return ret;
 }
 
 describe("lib/controller/SendDataRequest => ", () => {
-	const req = new SendDataRequest(undefined as any, undefined as any);
+	const req = new SendDataRequest(fakeDriver, {} as any);
 
 	it("should be a Message", () => {
 		expect(req).toBeInstanceOf(Message);
@@ -85,13 +84,10 @@ describe("lib/controller/SendDataRequest => ", () => {
 		// "A SendDataRequest with isFailed=false was not detected as final!"
 		expect(predicate(undefined as any, nodeSuccess)).toBe("final");
 
-		const somethingElse = new Message(
-			undefined as any,
-			MessageType.Request,
-			FunctionType.ApplicationCommand,
-			undefined as any,
-			undefined,
-		);
+		const somethingElse = new Message(fakeDriver, {
+			type: MessageType.Request,
+			functionType: FunctionType.ApplicationCommand,
+		});
 		// "An unrelated message was not detected as unexpected!"
 		expect(predicate(undefined as any, somethingElse)).toBe("unexpected");
 	});
@@ -128,8 +124,8 @@ describe("lib/controller/SendDataRequest => ", () => {
 	// });
 
 	const createRequest = (function*() {
-		const noOp = new NoOperationCC({} as any, 2);
-		while (true) yield new SendDataRequest(undefined as any, noOp);
+		const noOp = new NoOperationCC(fakeDriver, { nodeId: 2 });
+		while (true) yield new SendDataRequest(fakeDriver, { command: noOp });
 	})();
 
 	it("new ones should have default transmit options and a numeric callback id", () => {
@@ -157,15 +153,13 @@ describe("lib/controller/SendDataRequest => ", () => {
 	});
 
 	it("serialize() should concatenate the serialized CC with transmit options and callback ID", () => {
-		const cc = new BasicCC({} as any, 1, BasicCommand.Get);
+		const cc = new BasicCCGet(fakeDriver, { nodeId: 1 });
 		const serializedCC = cc.serialize();
 
-		const msg = new SendDataRequest(
-			undefined as any,
-			cc,
-			TransmitOptions.DEFAULT,
-			66,
-		);
+		const msg = new SendDataRequest(fakeDriver, {
+			command: cc,
+			callbackId: 66,
+		});
 		msg.serialize();
 		// we don't care about the frame, only the message payload itself
 		const serializedMsg = msg.payload;
@@ -177,17 +171,18 @@ describe("lib/controller/SendDataRequest => ", () => {
 		expect(serializedMsg).toEqual(expected);
 	});
 
-	it("serialize() should throw when there is no CC", () => {
-		const msg = new SendDataRequest(undefined as any, undefined as any);
-		assertZWaveError(() => msg.serialize(), {
-			messageMatches: "without a command",
-			errorCode: ZWaveErrorCodes.PacketFormat_Invalid,
-		});
-	});
+	// This is avoided through strictNullChecks
+	// it("serialize() should throw when there is no CC", () => {
+	// 	const msg = new SendDataRequest(fakeDriver, {});
+	// 	assertZWaveError(() => msg.serialize(), {
+	// 		messageMatches: "without a command",
+	// 		errorCode: ZWaveErrorCodes.PacketFormat_Invalid,
+	// 	});
+	// });
 });
 
 describe("lib/controller/SendDataResponse => ", () => {
-	const res = new SendDataResponse(undefined as any, undefined as any);
+	const res = new SendDataResponse(fakeDriver, {} as any);
 
 	it("should be a Message", () => {
 		expect(res).toBeInstanceOf(Message);
@@ -199,6 +194,6 @@ describe("lib/controller/SendDataResponse => ", () => {
 		expect(getFunctionType(res)).toBe(FunctionType.SendData);
 	});
 	it("that expects NO response", () => {
-		expect(getExpectedResponse(res) == null).toBeTruthy();
+		expect(getExpectedResponse(res)).toBeUndefined();
 	});
 });

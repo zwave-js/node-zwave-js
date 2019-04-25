@@ -17,8 +17,8 @@ import { NUM_NODEMASK_BYTES, parseNodeBitMask } from "./NodeBitMask";
 
 export interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
 	nodeId: number;
-	removeNonRepeaters: boolean;
-	removeBadLinks: boolean;
+	removeNonRepeaters?: boolean;
+	removeBadLinks?: boolean;
 }
 
 @messageTypes(MessageType.Request, FunctionType.GetRoutingInfo)
@@ -28,8 +28,8 @@ export class GetRoutingInfoRequest extends Message {
 	public constructor(driver: IDriver, options: GetRoutingInfoRequestOptions) {
 		super(driver, options);
 		this.nodeId = options.nodeId;
-		this.removeNonRepeaters = options.removeNonRepeaters;
-		this.removeBadLinks = options.removeBadLinks;
+		this.removeNonRepeaters = !!options.removeNonRepeaters;
+		this.removeBadLinks = !!options.removeBadLinks;
 	}
 
 	public nodeId: number;

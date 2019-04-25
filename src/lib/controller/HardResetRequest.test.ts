@@ -1,3 +1,4 @@
+import { createEmptyMockDriver } from "../../../test/mocks";
 import {
 	FunctionType,
 	MessagePriority,
@@ -16,8 +17,10 @@ import {
 } from "../message/Message";
 import { HardResetRequest } from "./HardResetRequest";
 
+const fakeDriver = createEmptyMockDriver();
+
 describe("lib/controller/HardResetRequest => ", () => {
-	const req = new HardResetRequest(undefined);
+	const req = new HardResetRequest(fakeDriver);
 
 	it("should be a Message", () => {
 		expect(req).toBeInstanceOf(Message);

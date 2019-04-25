@@ -23,7 +23,7 @@ import {
 const fakeDriver = createEmptyMockDriver();
 
 describe("lib/controller/AddNodeToNetworkRequest => ", () => {
-	const req = new AddNodeToNetworkRequest(fakeDriver, 1);
+	const req = new AddNodeToNetworkRequest(fakeDriver);
 
 	it("should be a Message", () => {
 		expect(req).toBeInstanceOf(Message);
@@ -54,48 +54,43 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 	});
 
 	it("should serialize correctly", () => {
-		const msg1 = new AddNodeToNetworkRequest(
-			fakeDriver,
-			AddNodeType.Any,
-			false,
-			false,
-		);
+		const msg1 = new AddNodeToNetworkRequest(fakeDriver, {
+			addNodeType: AddNodeType.Any,
+			highPower: false,
+			networkWide: false,
+		});
 		let payload = Message.extractPayload(msg1.serialize());
 		expect(payload).toEqual(Buffer.from([0x01]));
 
-		const msg2 = new AddNodeToNetworkRequest(
-			fakeDriver,
-			AddNodeType.Any,
-			true,
-			false,
-		);
+		const msg2 = new AddNodeToNetworkRequest(fakeDriver, {
+			addNodeType: AddNodeType.Any,
+			highPower: true,
+			networkWide: false,
+		});
 		payload = Message.extractPayload(msg2.serialize());
 		expect(payload).toEqual(Buffer.from([0x81]));
 
-		const msg3 = new AddNodeToNetworkRequest(
-			fakeDriver,
-			AddNodeType.Any,
-			false,
-			true,
-		);
+		const msg3 = new AddNodeToNetworkRequest(fakeDriver, {
+			addNodeType: AddNodeType.Any,
+			highPower: false,
+			networkWide: true,
+		});
 		payload = Message.extractPayload(msg3.serialize());
 		expect(payload).toEqual(Buffer.from([0x41]));
 
-		const msg4 = new AddNodeToNetworkRequest(
-			fakeDriver,
-			AddNodeType.Any,
-			true,
-			true,
-		);
+		const msg4 = new AddNodeToNetworkRequest(fakeDriver, {
+			addNodeType: AddNodeType.Any,
+			highPower: true,
+			networkWide: true,
+		});
 		payload = Message.extractPayload(msg4.serialize());
 		expect(payload).toEqual(Buffer.from([0xc1]));
 
-		const msg5 = new AddNodeToNetworkRequest(
-			fakeDriver,
-			AddNodeType.Stop,
-			true,
-			true,
-		);
+		const msg5 = new AddNodeToNetworkRequest(fakeDriver, {
+			addNodeType: AddNodeType.Stop,
+			highPower: true,
+			networkWide: true,
+		});
 		payload = Message.extractPayload(msg5.serialize());
 		expect(payload).toEqual(Buffer.from([0xc5]));
 	});

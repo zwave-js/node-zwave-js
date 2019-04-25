@@ -28,7 +28,7 @@ export interface MessageDeserializationOptions {
 export function gotDeserializationOptions(
 	options: any,
 ): options is MessageDeserializationOptions {
-	return Buffer.isBuffer(options.data);
+	return options != undefined && Buffer.isBuffer(options.data);
 }
 
 export interface MessageBaseOptions {
