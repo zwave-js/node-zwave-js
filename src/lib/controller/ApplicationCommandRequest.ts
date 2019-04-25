@@ -1,11 +1,17 @@
 import { CommandClass } from "../commandclass/CommandClass";
 import { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
+import { Driver } from "../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
 } from "../message/Constants";
-import { Message, messageTypes, priority } from "../message/Message";
+import {
+	Message,
+	MessageDeserializationOptions,
+	messageTypes,
+	priority,
+} from "../message/Message";
 
 const enum StatusFlags {
 	RoutedBusy = 1 << 0,
@@ -17,6 +23,16 @@ const enum StatusFlags {
 @priority(MessagePriority.Normal)
 export class ApplicationCommandRequest extends Message
 	implements ICommandClassContainer {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+		super(driver, options);
+		// first byte is a status flag
+		const status = this.payload[0];
+		this._isBroadcast = (status & StatusFlags.Broadcast) !== 0;
+		this._routedBusy = (status & StatusFlags.RoutedBusy) !== 0;
+		// followed by a command class
+		this._command = CommandClass.from(this.driver, this.payload.slice(1));
+	}
+
 	private _routedBusy: boolean;
 	public get routedBusy(): boolean {
 		return this._routedBusy;
@@ -30,28 +46,5 @@ export class ApplicationCommandRequest extends Message
 	private _command: CommandClass;
 	public get command(): CommandClass {
 		return this._command;
-	}
-
-	public serialize(): Buffer {
-		throw new Error(
-			"serialize() for ApplicationCommandRequest not implemented",
-		);
-	}
-
-	public deserialize(data: Buffer): number {
-		const ret = super.deserialize(data);
-
-		// first byte is a status flag
-		const status = this.payload[0];
-		this._isBroadcast = (status & StatusFlags.Broadcast) !== 0;
-		this._routedBusy = (status & StatusFlags.RoutedBusy) !== 0;
-		// followed by a command class
-		// const serializedCC = this.payload.slice(1);
-		// const cc = CommandClass.getCommandClass(serializedCC);
-		// const nodeId = CommandClass.getNodeId(serializedCC);
-		// const ccVersion = this.driver != null ? this.driver.getSupportedCCVersionForNode(nodeId, cc) : undefined;
-		this._command = CommandClass.from(this.driver, this.payload.slice(1));
-
-		return ret;
 	}
 }

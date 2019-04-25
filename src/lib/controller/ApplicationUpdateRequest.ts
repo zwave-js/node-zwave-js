@@ -1,5 +1,10 @@
+import { Driver } from "../driver/Driver";
 import { FunctionType, MessageType } from "../message/Constants";
-import { Message, messageTypes } from "../message/Message";
+import {
+	Message,
+	MessageDeserializationOptions,
+	messageTypes,
+} from "../message/Message";
 import { NodeUpdatePayload, parseNodeUpdatePayload } from "../node/NodeInfo";
 import { JSONObject } from "../util/misc";
 
@@ -18,9 +23,41 @@ export enum ApplicationUpdateTypes {
 @messageTypes(MessageType.Request, FunctionType.ApplicationUpdateRequest)
 // this is only received, not sent!
 export class ApplicationUpdateRequest extends Message {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+		super(driver, options);
+		this._updateType = this.payload[0];
+
+		if (
+			this._updateType === ApplicationUpdateTypes.NodeInfo_Received &&
+			new.target !== ApplicationUpdateRequestNodeInfoReceived
+		) {
+			return new ApplicationUpdateRequestNodeInfoReceived(
+				driver,
+				options,
+			);
+		} else if (
+			this._updateType ===
+				ApplicationUpdateTypes.NodeInfo_RequestFailed &&
+			new.target !== ApplicationUpdateRequestNodeInfoRequestFailed
+		) {
+			return new ApplicationUpdateRequestNodeInfoRequestFailed(
+				driver,
+				options,
+			);
+		}
+	}
+
 	private _updateType: ApplicationUpdateTypes;
 	public get updateType(): ApplicationUpdateTypes {
 		return this._updateType;
+	}
+}
+
+export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateRequest {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+		super(driver, options);
+		this._nodeInformation = parseNodeUpdatePayload(this.payload.slice(1));
+		this._nodeId = this._nodeInformation.nodeId;
 	}
 
 	private _nodeId: number;
@@ -33,28 +70,6 @@ export class ApplicationUpdateRequest extends Message {
 		return this._nodeInformation;
 	}
 
-	public serialize(): Buffer {
-		throw new Error("not implemented");
-	}
-
-	// this is for reports from the controller
-	public deserialize(data: Buffer): number {
-		const ret = super.deserialize(data);
-
-		this._updateType = this.payload[0];
-		switch (this._updateType) {
-			case ApplicationUpdateTypes.NodeInfo_Received: {
-				this._nodeInformation = parseNodeUpdatePayload(
-					this.payload.slice(1),
-				);
-				this._nodeId = this._nodeInformation.nodeId;
-				break;
-			}
-		}
-
-		return ret;
-	}
-
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			updateType: ApplicationUpdateTypes[this.updateType],
@@ -63,3 +78,5 @@ export class ApplicationUpdateRequest extends Message {
 		});
 	}
 }
+
+export class ApplicationUpdateRequestNodeInfoRequestFailed extends ApplicationUpdateRequest {}

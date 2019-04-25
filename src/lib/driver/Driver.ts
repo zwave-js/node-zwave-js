@@ -436,13 +436,10 @@ export class Driver extends EventEmitter implements IDriver {
 				return;
 			}
 
-			const MessageConstructor = Message.getConstructor(
-				this.receiveBuffer,
-			);
 			let msg: Message;
 			let bytesRead: number;
 			try {
-				msg = new MessageConstructor(this, this.receiveBuffer);
+				msg = Message.from(this, this.receiveBuffer);
 				bytesRead = msg.bytesRead;
 			} catch (e) {
 				if (e instanceof ZWaveError) {

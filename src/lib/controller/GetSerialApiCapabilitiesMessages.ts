@@ -1,3 +1,4 @@
+import { Driver } from "../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -6,6 +7,7 @@ import {
 import {
 	expectedResponse,
 	Message,
+	MessageDeserializationOptions,
 	messageTypes,
 	priority,
 } from "../message/Message";
@@ -23,6 +25,19 @@ export class GetSerialApiCapabilitiesRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiCapabilities)
 export class GetSerialApiCapabilitiesResponse extends Message {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+		super(driver, options);
+
+		// The first 8 bytes are the api version, manufacturer id, product type and product id
+		this._serialApiVersion = `${this.payload[0]}.${this.payload[1]}`;
+		this._manufacturerId = this.payload.readUInt16BE(2);
+		this._productType = this.payload.readUInt16BE(4);
+		this._productId = this.payload.readUInt16BE(6);
+		// then a 256bit bitmask for the supported command classes follows
+		const functionBitMask = this.payload.slice(8, 8 + NUM_FUNCTION_BYTES);
+		this._supportedFunctionTypes = parseBitMask(functionBitMask);
+	}
+
 	private _serialApiVersion: string;
 	public get serialApiVersion(): string {
 		return this._serialApiVersion;
@@ -46,21 +61,6 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 	private _supportedFunctionTypes: FunctionType[];
 	public get supportedFunctionTypes(): FunctionType[] {
 		return this._supportedFunctionTypes;
-	}
-
-	public deserialize(data: Buffer): number {
-		const ret = super.deserialize(data);
-
-		// The first 8 bytes are the api version, manufacturer id, product type and product id
-		this._serialApiVersion = `${this.payload[0]}.${this.payload[1]}`;
-		this._manufacturerId = this.payload.readUInt16BE(2);
-		this._productType = this.payload.readUInt16BE(4);
-		this._productId = this.payload.readUInt16BE(6);
-		// then a 256bit bitmask for the supported command classes follows
-		const functionBitMask = this.payload.slice(8, 8 + NUM_FUNCTION_BYTES);
-		this._supportedFunctionTypes = parseBitMask(functionBitMask);
-
-		return ret;
 	}
 
 	public toJSON(): JSONObject {

@@ -1,3 +1,4 @@
+import { Driver } from "../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -6,6 +7,7 @@ import {
 import {
 	expectedResponse,
 	Message,
+	MessageDeserializationOptions,
 	messageTypes,
 	priority,
 } from "../message/Message";
@@ -20,6 +22,14 @@ export class GetControllerVersionRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetControllerVersion)
 export class GetControllerVersionResponse extends Message {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+		super(driver, options);
+
+		// The payload consists of a zero-terminated string and a uint8 for the controller type
+		this._libraryVersion = cpp2js(this.payload.toString("ascii"));
+		this._controllerType = this.payload[this.libraryVersion.length + 1];
+	}
+
 	private _controllerType: ZWaveLibraryTypes;
 	public get controllerType(): ZWaveLibraryTypes {
 		return this._controllerType;
@@ -28,16 +38,6 @@ export class GetControllerVersionResponse extends Message {
 	private _libraryVersion: string;
 	public get libraryVersion(): string {
 		return this._libraryVersion;
-	}
-
-	public deserialize(data: Buffer): number {
-		const ret = super.deserialize(data);
-
-		// The payload consists of a zero-terminated string and a uint8 for the controller type
-		this._libraryVersion = cpp2js(this.payload.toString("ascii"));
-		this._controllerType = this.payload[this.libraryVersion.length + 1];
-
-		return ret;
 	}
 
 	public toJSON(): JSONObject {

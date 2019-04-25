@@ -1,3 +1,4 @@
+import { Driver } from "../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -6,6 +7,7 @@ import {
 import {
 	expectedResponse,
 	Message,
+	MessageDeserializationOptions,
 	messageTypes,
 	priority,
 } from "../message/Message";
@@ -26,6 +28,19 @@ export class GetSerialApiInitDataRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiInitData)
 export class GetSerialApiInitDataResponse extends Message {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+		super(driver, options);
+
+		this._initVersion = this.payload[0];
+		this._initCaps = this.payload[1];
+		this._nodeIds = [];
+		if (this.payload.length > 2 && this.payload[2] === NUM_NODEMASK_BYTES) {
+			// the payload contains a bit mask of all existing nodes
+			const nodeBitMask = this.payload.slice(3, 3 + NUM_NODEMASK_BYTES);
+			this._nodeIds = parseNodeBitMask(nodeBitMask);
+		}
+	}
+
 	private _initVersion: number;
 	public get initVersion(): number {
 		return this._initVersion;
@@ -48,21 +63,6 @@ export class GetSerialApiInitDataResponse extends Message {
 	private _nodeIds: number[];
 	public get nodeIds(): number[] {
 		return this._nodeIds;
-	}
-
-	public deserialize(data: Buffer): number {
-		const ret = super.deserialize(data);
-
-		this._initVersion = this.payload[0];
-		this._initCaps = this.payload[1];
-		this._nodeIds = [];
-		if (this.payload.length > 2 && this.payload[2] === NUM_NODEMASK_BYTES) {
-			// the payload contains a bit mask of all existing nodes
-			const nodeBitMask = this.payload.slice(3, 3 + NUM_NODEMASK_BYTES);
-			this._nodeIds = parseNodeBitMask(nodeBitMask);
-		}
-
-		return ret;
 	}
 
 	public toJSON(): JSONObject {

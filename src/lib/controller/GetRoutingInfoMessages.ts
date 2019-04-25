@@ -1,3 +1,4 @@
+import { Driver } from "../driver/Driver";
 import { IDriver } from "../driver/IDriver";
 import {
 	FunctionType,
@@ -7,24 +8,34 @@ import {
 import {
 	expectedResponse,
 	Message,
+	MessageBaseOptions,
+	MessageDeserializationOptions,
 	messageTypes,
 	priority,
 } from "../message/Message";
 import { JSONObject } from "../util/misc";
 import { NUM_NODEMASK_BYTES, parseNodeBitMask } from "./NodeBitMask";
 
+export interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
+	nodeId: number;
+	removeNonRepeaters: boolean;
+	removeBadLinks: boolean;
+}
+
 @messageTypes(MessageType.Request, FunctionType.GetRoutingInfo)
 @expectedResponse(FunctionType.GetRoutingInfo)
 @priority(MessagePriority.Controller)
 export class GetRoutingInfoRequest extends Message {
-	public constructor(
-		driver: IDriver,
-		public nodeId: number,
-		public removeNonRepeaters: boolean,
-		public removeBadLinks: boolean,
-	) {
-		super(driver);
+	public constructor(driver: IDriver, options: GetRoutingInfoRequestOptions) {
+		super(driver, options);
+		this.nodeId = options.nodeId;
+		this.removeNonRepeaters = options.removeNonRepeaters;
+		this.removeBadLinks = options.removeBadLinks;
 	}
+
+	public nodeId: number;
+	public removeNonRepeaters: boolean;
+	public removeBadLinks: boolean;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
@@ -47,13 +58,8 @@ export class GetRoutingInfoRequest extends Message {
 
 @messageTypes(MessageType.Response, FunctionType.GetRoutingInfo)
 export class GetRoutingInfoResponse extends Message {
-	private _nodeIds: number[];
-	public get nodeIds(): number[] {
-		return this._nodeIds;
-	}
-
-	public deserialize(data: Buffer): number {
-		const ret = super.deserialize(data);
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+		super(driver, options);
 
 		if (this.payload.length === NUM_NODEMASK_BYTES) {
 			// the payload contains a bit mask of all neighbor nodes
@@ -61,7 +67,10 @@ export class GetRoutingInfoResponse extends Message {
 		} else {
 			this._nodeIds = [];
 		}
+	}
 
-		return ret;
+	private _nodeIds: number[];
+	public get nodeIds(): number[] {
+		return this._nodeIds;
 	}
 }

@@ -31,7 +31,11 @@ export function gotDeserializationOptions(
 	return Buffer.isBuffer(options.data);
 }
 
-export interface MessageCreationOptions {
+export interface MessageBaseOptions {
+	__empty?: undefined; // Dirty hack, so we can inherit from this interface
+}
+
+export interface MessageCreationOptions extends MessageBaseOptions {
 	type?: MessageType;
 	functionType?: FunctionType;
 	expResponse?: FunctionType | ResponsePredicate;
@@ -133,12 +137,12 @@ export class Message {
 	public payload: Buffer; // TODO: Length limit 255
 	public maxSendAttempts: number | undefined;
 
-	protected _bytesRead: number | undefined;
+	protected _bytesRead: number = 0;
 	/**
 	 * @internal
 	 * The amount of bytes read while deserializing this message
 	 */
-	public get bytesRead(): number | undefined {
+	public get bytesRead(): number {
 		return this._bytesRead;
 	}
 
@@ -177,6 +181,12 @@ export class Message {
 	 */
 	public static getConstructor(data: Buffer): Constructable<Message> {
 		return getMessageConstructor(data[2], data[3]) || Message;
+	}
+
+	public static from(driver: IDriver, data: Buffer): Message {
+		const Constructor = Message.getConstructor(data);
+		const ret = new Constructor(driver, { data });
+		return ret;
 	}
 
 	/** Returns the slice of data which represents the message payload */
