@@ -1,6 +1,20 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { getDefaultPriority, getDefaultPriorityStatic, getExpectedResponse, getExpectedResponseStatic, getFunctionType, getFunctionTypeStatic, getMessageType, getMessageTypeStatic, Message } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	getDefaultPriority,
+	getDefaultPriorityStatic,
+	getExpectedResponse,
+	getExpectedResponseStatic,
+	getFunctionType,
+	getFunctionTypeStatic,
+	getMessageType,
+	getMessageTypeStatic,
+	Message,
+} from "../message/Message";
 import { GetSerialApiInitDataRequest } from "./GetSerialApiInitDataMessages";
 
 const fakeDriver = createEmptyMockDriver();

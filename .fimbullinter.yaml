@@ -1,5 +1,5 @@
 config: .wotanrc.yaml
 exclude:
-  #- "**/*.d.ts"
-  - "**/*.test.ts"
-project: src/tsconfig.json
+    #- "**/*.d.ts"
+    - "**/*.test.ts"
+project: src/tsconfig.build.json

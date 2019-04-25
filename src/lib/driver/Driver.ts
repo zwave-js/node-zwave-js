@@ -802,10 +802,7 @@ export class Driver extends EventEmitter implements IDriver {
 					"debug",
 				);
 				return;
-			} else if (
-				nodeId == undefined ||
-				!this.controller.nodes.has(nodeId)
-			) {
+			} else if (!this.controller.nodes.has(nodeId)) {
 				log(
 					"driver",
 					`  the node is unknown or not initialized yet, discarding...`,
@@ -1158,10 +1155,10 @@ export class Driver extends EventEmitter implements IDriver {
 
 		// Before doing anything else, check if this message is for a node that's currently asleep
 		// The automated sorting ensures there's no message for a non-sleeping node after that
-		const targetNode = this.sendQueue.peekStart().message.getNodeUnsafe();
+		const targetNode = this.sendQueue.peekStart()!.message.getNodeUnsafe();
 		if (!targetNode || targetNode.isAwake()) {
 			// get the next transaction
-			this.currentTransaction = this.sendQueue.shift();
+			this.currentTransaction = this.sendQueue.shift()!;
 			const msg = this.currentTransaction.message;
 			log(
 				"io",
