@@ -1,6 +1,5 @@
 /// <reference types="reflect-metadata" />
 
-import { assertNever } from "alcalzone-shared/helpers";
 import { entries } from "alcalzone-shared/objects";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { IDriver } from "../driver/IDriver";
@@ -17,68 +16,44 @@ import {
 	MessageType,
 } from "./Constants";
 
-export interface Constructable<T extends Message> {
-	new (driver: IDriver, ...constructorArgs: any[]): T;
-	new (driver: IDriver, data?: Buffer): T;
+export type Constructable<T extends Message> = new (
+	driver: IDriver,
+	options?: MessageOptions,
+) => T;
+
+export interface MessageDeserializationOptions {
+	data: Buffer;
 }
+
+export function gotDeserializationOptions(
+	options: any,
+): options is MessageDeserializationOptions {
+	return Buffer.isBuffer(options.data);
+}
+
+export interface MessageCreationOptions {
+	type?: MessageType;
+	functionType?: FunctionType;
+	expResponse?: FunctionType | ResponsePredicate;
+	payload?: Buffer;
+}
+
+export type MessageOptions =
+	| MessageCreationOptions
+	| MessageDeserializationOptions;
 
 /**
  * Represents a ZWave message for communication with the serial interface
  */
 export class Message {
-	// #1: Basic constructor or deserialization
-	public constructor(driver: IDriver, data?: Buffer);
-
-	// #2
-	public constructor(
-		driver: IDriver,
-		type: MessageType,
-		funcType: FunctionType,
-		expResponse?: FunctionType | ResponsePredicate,
-		data?: Buffer,
-	);
-
-	// implementation
 	public constructor(
 		protected driver: IDriver,
-		typeOrPayload?: MessageType | Buffer,
-		funcType?: FunctionType,
-		expResponse?: FunctionType | ResponsePredicate,
-		payload: Buffer = Buffer.allocUnsafe(0), // TODO: Length limit 255
+		options: MessageOptions = {},
 	) {
 		// decide which implementation we follow
-		if (typeOrPayload == undefined) {
-			// Default constructor without any arguments
-			// Try to determine the message type
-			typeOrPayload = getMessageType(this);
-			if (typeOrPayload == undefined) {
-				throw new ZWaveError(
-					"A message must have a given or predefined message type",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			// Now continue with #2
-		}
-		if (typeof typeOrPayload === "number") {
-			// #2: Arguments and payload given, no deserialization
-			this.type = typeOrPayload;
-
-			if (funcType == undefined) funcType = getFunctionType(this);
-			if (funcType == undefined) {
-				throw new ZWaveError(
-					"A message must have a given or predefined function type",
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.functionType = funcType;
-			// The expected response may be undefined
-			this.expectedResponse =
-				expResponse != null ? expResponse : getExpectedResponse(this);
-
-			this.payload = payload;
-		} else if (typeOrPayload instanceof Buffer) {
+		if (gotDeserializationOptions(options)) {
 			// #1: deserialize from payload
-			payload = typeOrPayload;
+			const payload = options.data;
 
 			// SOF, length, type, commandId and checksum must be present
 			if (!payload.length || payload.length < 5) {
@@ -122,7 +97,33 @@ export class Message {
 			// remember how many bytes were read
 			this._bytesRead = messageLength;
 		} else {
-			throw assertNever(typeOrPayload);
+			// Try to determine the message type
+			if (options.type == undefined) options.type = getMessageType(this);
+			if (options.type == undefined) {
+				throw new ZWaveError(
+					"A message must have a given or predefined message type",
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			this.type = options.type;
+
+			if (options.functionType == undefined)
+				options.functionType = getFunctionType(this);
+			if (options.functionType == undefined) {
+				throw new ZWaveError(
+					"A message must have a given or predefined function type",
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			this.functionType = options.functionType;
+
+			// The expected response may be undefined
+			this.expectedResponse =
+				options.expResponse != undefined
+					? options.expResponse
+					: getExpectedResponse(this);
+
+			this.payload = options.payload || Buffer.allocUnsafe(0);
 		}
 	}
 
