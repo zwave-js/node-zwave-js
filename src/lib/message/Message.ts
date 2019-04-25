@@ -38,7 +38,7 @@ export interface MessageBaseOptions {
 export interface MessageCreationOptions extends MessageBaseOptions {
 	type?: MessageType;
 	functionType?: FunctionType;
-	expResponse?: FunctionType | ResponsePredicate;
+	expectedResponse?: FunctionType | ResponsePredicate;
 	payload?: Buffer;
 }
 
@@ -123,8 +123,8 @@ export class Message {
 
 			// The expected response may be undefined
 			this.expectedResponse =
-				options.expResponse != undefined
-					? options.expResponse
+				options.expectedResponse != undefined
+					? options.expectedResponse
 					: getExpectedResponse(this);
 
 			this.payload = options.payload || Buffer.allocUnsafe(0);
