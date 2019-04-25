@@ -2,7 +2,7 @@ import {
 	ApplicationUpdateRequestNodeInfoReceived,
 	ApplicationUpdateRequestNodeInfoRequestFailed,
 } from "../controller/ApplicationUpdateRequest";
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -28,7 +28,10 @@ export interface RequestNodeInfoRequestOptions extends MessageBaseOptions {
 @expectedResponse(testResponseForNodeInfoRequest)
 @priority(MessagePriority.NodeQuery)
 export class RequestNodeInfoRequest extends Message implements INodeQuery {
-	public constructor(driver: Driver, options: RequestNodeInfoRequestOptions) {
+	public constructor(
+		driver: IDriver,
+		options: RequestNodeInfoRequestOptions,
+	) {
 		super(driver, options);
 		this.nodeId = options.nodeId;
 	}
@@ -49,7 +52,10 @@ export class RequestNodeInfoRequest extends Message implements INodeQuery {
 
 @messageTypes(MessageType.Response, FunctionType.RequestNodeInfo)
 export class RequestNodeInfoResponse extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+	public constructor(
+		driver: IDriver,
+		options: MessageDeserializationOptions,
+	) {
 		super(driver, options);
 		this._wasSent = this.payload[0] !== 0;
 		if (!this._wasSent) this._errorCode = this.payload[0];

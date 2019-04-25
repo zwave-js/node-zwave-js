@@ -1,4 +1,4 @@
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -28,7 +28,10 @@ export class GetSerialApiInitDataRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiInitData)
 export class GetSerialApiInitDataResponse extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+	public constructor(
+		driver: IDriver,
+		options: MessageDeserializationOptions,
+	) {
 		super(driver, options);
 
 		this._initVersion = this.payload[0];

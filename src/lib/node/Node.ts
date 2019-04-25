@@ -15,26 +15,37 @@ import {
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import {
-	ManufacturerSpecificCC,
-	ManufacturerSpecificCommand,
+	ManufacturerSpecificCCGet,
+	ManufacturerSpecificCCReport,
 } from "../commandclass/ManufacturerSpecificCC";
 import {
-	MultiChannelCC,
-	MultiChannelCommand,
+	MultiChannelCCEndPointGet,
+	MultiChannelCCEndPointReport,
 } from "../commandclass/MultiChannelCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
-import { VersionCC, VersionCommand } from "../commandclass/VersionCC";
-import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
 import {
-	ZWavePlusCC,
-	ZWavePlusCommand,
+	VersionCCCommandClassGet,
+	VersionCCCommandClassReport,
+} from "../commandclass/VersionCC";
+import {
+	WakeUpCC,
+	WakeUpCCIntervalGet,
+	WakeUpCCIntervalReport,
+	WakeUpCCIntervalSet,
+	WakeUpCCNoMoreInformation,
+	WakeUpCommand,
+} from "../commandclass/WakeUpCC";
+import {
+	ZWavePlusCCGet,
+	ZWavePlusCCReport,
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 } from "../commandclass/ZWavePlusCC";
 import { lookupManufacturer } from "../config/Manufacturers";
 import {
 	ApplicationUpdateRequest,
-	ApplicationUpdateTypes,
+	ApplicationUpdateRequestNodeInfoReceived,
+	ApplicationUpdateRequestNodeInfoRequestFailed,
 } from "../controller/ApplicationUpdateRequest";
 import {
 	Baudrate,
@@ -159,38 +170,38 @@ export class ZWaveNode extends EventEmitter {
 		return this._deviceClass;
 	}
 
-	private _isListening: boolean;
-	public get isListening(): boolean {
+	private _isListening: boolean | undefined;
+	public get isListening(): boolean | undefined {
 		return this._isListening;
 	}
 
-	private _isFrequentListening: boolean;
-	public get isFrequentListening(): boolean {
+	private _isFrequentListening: boolean | undefined;
+	public get isFrequentListening(): boolean | undefined {
 		return this._isFrequentListening;
 	}
 
-	private _isRouting: boolean;
-	public get isRouting(): boolean {
+	private _isRouting: boolean | undefined;
+	public get isRouting(): boolean | undefined {
 		return this._isRouting;
 	}
 
-	private _maxBaudRate: Baudrate;
-	public get maxBaudRate(): Baudrate {
+	private _maxBaudRate: Baudrate | undefined;
+	public get maxBaudRate(): Baudrate | undefined {
 		return this._maxBaudRate;
 	}
 
-	private _isSecure: boolean;
-	public get isSecure(): boolean {
+	private _isSecure: boolean | undefined;
+	public get isSecure(): boolean | undefined {
 		return this._isSecure;
 	}
 
-	private _version: number;
-	public get version(): number {
+	private _version: number | undefined;
+	public get version(): number | undefined {
 		return this._version;
 	}
 
-	private _isBeaming: boolean;
-	public get isBeaming(): boolean {
+	private _isBeaming: boolean | undefined;
+	public get isBeaming(): boolean | undefined {
 		return this._isBeaming;
 	}
 
@@ -205,7 +216,7 @@ export class ZWaveNode extends EventEmitter {
 		return this._implementedCommandClasses;
 	}
 
-	private _neighbors: readonly number[];
+	private _neighbors: readonly number[] = [];
 	/** The IDs of all direct neighbors of this node */
 	public get neighbors(): readonly number[] {
 		return this._neighbors;
@@ -279,7 +290,8 @@ export class ZWaveNode extends EventEmitter {
 			);
 		}
 		const Constructor = getCCConstructor(cc);
-		if (Constructor) return new Constructor(this.driver, this.id) as T;
+		if (Constructor)
+			return new Constructor(this.driver, { nodeId: this.id }) as T;
 	}
 
 	//#region --- interview ---
@@ -398,7 +410,7 @@ export class ZWaveNode extends EventEmitter {
 	protected async queryProtocolInfo(): Promise<void> {
 		log("controller", `${this.logPrefix}querying protocol info`, "debug");
 		const resp = await this.driver.sendMessage<GetNodeProtocolInfoResponse>(
-			new GetNodeProtocolInfoRequest(this.driver, this.id),
+			new GetNodeProtocolInfoRequest(this.driver, { nodeId: this.id }),
 		);
 		this._deviceClass = resp.deviceClass;
 		this._isListening = resp.isListening;
@@ -455,10 +467,11 @@ export class ZWaveNode extends EventEmitter {
 			log("controller", `${this.logPrefix}pinging the node...`, "debug");
 
 			try {
-				const request = new SendDataRequest(
-					this.driver,
-					new NoOperationCC(this.driver, this.id),
-				);
+				const request = new SendDataRequest(this.driver, {
+					command: new NoOperationCC(this.driver, {
+						nodeId: this.id,
+					}),
+				});
 				// Don't retry sending ping packets
 				request.maxSendAttempts = 1;
 				// set the priority manually, as SendData can be Application level too
@@ -493,19 +506,19 @@ export class ZWaveNode extends EventEmitter {
 			log("controller", `${this.logPrefix}querying node info`, "debug");
 			const resp = await this.driver.sendMessage<
 				RequestNodeInfoResponse | ApplicationUpdateRequest
-			>(new RequestNodeInfoRequest(this.driver, this.id));
+			>(new RequestNodeInfoRequest(this.driver, { nodeId: this.id }));
 			if (
 				(resp instanceof RequestNodeInfoResponse && !resp.wasSent) ||
-				(resp instanceof ApplicationUpdateRequest &&
-					resp.updateType ===
-						ApplicationUpdateTypes.NodeInfo_RequestFailed)
+				resp instanceof ApplicationUpdateRequestNodeInfoRequestFailed
 			) {
 				log(
 					"controller",
 					`${this.logPrefix}  querying the node info failed`,
 					"debug",
 				);
-			} else if (resp instanceof ApplicationUpdateRequest) {
+			} else if (
+				resp instanceof ApplicationUpdateRequestNodeInfoReceived
+			) {
 				log(
 					"controller",
 					`${this.logPrefix}  received the node info`,
@@ -534,20 +547,19 @@ export class ZWaveNode extends EventEmitter {
 				`${this.logPrefix}querying Z-Wave+ information`,
 				"debug",
 			);
-			const cc = new ZWavePlusCC(
-				this.driver,
-				this.id,
-				ZWavePlusCommand.Get,
-			);
-			const request = new SendDataRequest(this.driver, cc);
+			const cc = new ZWavePlusCCGet(this.driver, { nodeId: this.id });
+			const request = new SendDataRequest(this.driver, { command: cc });
 			try {
 				// set the priority manually, as SendData can be Application level too
 				const resp = await this.driver.sendMessage<SendDataRequest>(
 					request,
 					MessagePriority.NodeQuery,
 				);
-				if (isCommandClassContainer(resp)) {
-					const zwavePlusResponse = resp.command as ZWavePlusCC;
+				if (
+					isCommandClassContainer(resp) &&
+					resp.command instanceof ZWavePlusCCReport
+				) {
+					const zwavePlusResponse = resp.command;
 					zwavePlusResponse.persistValues();
 					// prettier-ignore
 					{
@@ -588,20 +600,21 @@ export class ZWaveNode extends EventEmitter {
 				`${this.logPrefix}querying manufacturer information`,
 				"debug",
 			);
-			const cc = new ManufacturerSpecificCC(
-				this.driver,
-				this.id,
-				ManufacturerSpecificCommand.Get,
-			);
-			const request = new SendDataRequest(this.driver, cc);
+			const cc = new ManufacturerSpecificCCGet(this.driver, {
+				nodeId: this.id,
+			});
+			const request = new SendDataRequest(this.driver, { command: cc });
 			try {
 				// set the priority manually, as SendData can be Application level too
 				const resp = await this.driver.sendMessage<SendDataRequest>(
 					request,
 					MessagePriority.NodeQuery,
 				);
-				if (isCommandClassContainer(resp)) {
-					const mfResp = resp.command as ManufacturerSpecificCC;
+				if (
+					isCommandClassContainer(resp) &&
+					resp.command instanceof ManufacturerSpecificCCReport
+				) {
+					const mfResp = resp.command;
 					mfResp.persistValues();
 					// prettier-ignore
 					{
@@ -638,13 +651,13 @@ export class ZWaveNode extends EventEmitter {
 				log("controller", `${this.logPrefix}  skipping query for ${CommandClasses[cc]} (${num2hex(cc)}) because max implemented version is ${maxImplemented}`, "debug");
 				continue;
 			}
-			const versionCC = new VersionCC(
-				this.driver,
-				this.id,
-				VersionCommand.CommandClassGet,
-				cc,
-			);
-			const request = new SendDataRequest(this.driver, versionCC);
+			const versionCC = new VersionCCCommandClassGet(this.driver, {
+				nodeId: this.id,
+				requestedCC: cc,
+			});
+			const request = new SendDataRequest(this.driver, {
+				command: versionCC,
+			});
 			try {
 				// prettier-ignore
 				log("controller", `${this.logPrefix}  querying the CC version for ${CommandClasses[cc]} (${num2hex(cc)})`, "debug");
@@ -653,8 +666,11 @@ export class ZWaveNode extends EventEmitter {
 					request,
 					MessagePriority.NodeQuery,
 				);
-				if (isCommandClassContainer(resp)) {
-					const versionResponse = resp.command as VersionCC;
+				if (
+					isCommandClassContainer(resp) &&
+					resp.command instanceof VersionCCCommandClassReport
+				) {
+					const versionResponse = resp.command;
 					// Remember which CC version this node supports
 					const reqCC = versionResponse.requestedCC;
 					const supportedVersion = versionResponse.ccVersion;
@@ -683,20 +699,21 @@ export class ZWaveNode extends EventEmitter {
 				`${this.logPrefix}querying device endpoints`,
 				"debug",
 			);
-			const cc = new MultiChannelCC(
-				this.driver,
-				this.id,
-				MultiChannelCommand.EndPointGet,
-			);
-			const request = new SendDataRequest(this.driver, cc);
+			const cc = new MultiChannelCCEndPointGet(this.driver, {
+				nodeId: this.id,
+			});
+			const request = new SendDataRequest(this.driver, { command: cc });
 			try {
 				// set the priority manually, as SendData can be Application level too
 				const resp = await this.driver.sendMessage<SendDataRequest>(
 					request,
 					MessagePriority.NodeQuery,
 				);
-				if (isCommandClassContainer(resp)) {
-					const multiResponse = resp.command as MultiChannelCC;
+				if (
+					isCommandClassContainer(resp) &&
+					resp.command instanceof MultiChannelCCEndPointReport
+				) {
+					const multiResponse = resp.command;
 					multiResponse.persistValues();
 					// prettier-ignore
 					{
@@ -749,14 +766,11 @@ export class ZWaveNode extends EventEmitter {
 				);
 			} else {
 				try {
-					const getWakeupRequest = new SendDataRequest(
-						this.driver,
-						new WakeUpCC(
-							this.driver,
-							this.id,
-							WakeUpCommand.IntervalGet,
-						),
-					);
+					const getWakeupRequest = new SendDataRequest(this.driver, {
+						command: new WakeUpCCIntervalGet(this.driver, {
+							nodeId: this.id,
+						}),
+					});
 
 					log(
 						"controller",
@@ -768,14 +782,20 @@ export class ZWaveNode extends EventEmitter {
 					const getWakeupResp = await this.driver.sendMessage<
 						SendDataRequest
 					>(getWakeupRequest, MessagePriority.NodeQuery);
-					if (!isCommandClassContainer(getWakeupResp)) {
+					if (
+						!isCommandClassContainer(getWakeupResp) ||
+						!(
+							getWakeupResp.command instanceof
+							WakeUpCCIntervalReport
+						)
+					) {
 						throw new ZWaveError(
 							"Invalid response received!",
 							ZWaveErrorCodes.CC_Invalid,
 						);
 					}
 
-					const wakeupResp = getWakeupResp.command as WakeUpCC;
+					const wakeupResp = getWakeupResp.command;
 					// prettier-ignore
 					{
 					log("controller", `${this.logPrefix}received wakeup configuration:`, "debug");
@@ -788,16 +808,14 @@ export class ZWaveNode extends EventEmitter {
 						`${this.logPrefix}configuring wakeup destination`,
 						"debug",
 					);
-					const setWakeupRequest = new SendDataRequest(
-						this.driver,
-						new WakeUpCC(
-							this.driver,
-							this.id,
-							WakeUpCommand.IntervalSet,
-							wakeupResp.wakeupInterval,
-							this.driver.controller.ownNodeId,
-						),
-					);
+					const setWakeupRequest = new SendDataRequest(this.driver, {
+						command: new WakeUpCCIntervalSet(this.driver, {
+							nodeId: this.id,
+							wakeupInterval: wakeupResp.wakeupInterval,
+							controllerNodeId: this.driver.controller!
+								.ownNodeId!,
+						}),
+					});
 					await this.driver.sendMessage(
 						setWakeupRequest,
 						MessagePriority.NodeQuery,
@@ -852,7 +870,11 @@ export class ZWaveNode extends EventEmitter {
 		);
 		try {
 			const resp = await this.driver.sendMessage<GetRoutingInfoResponse>(
-				new GetRoutingInfoRequest(this.driver, this.id, false, false),
+				new GetRoutingInfoRequest(this.driver, {
+					nodeId: this.id,
+					removeBadLinks: false,
+					removeNonRepeaters: false,
+				}),
 			);
 			this._neighbors = resp.nodeIds;
 			log(
@@ -1113,12 +1135,12 @@ export class ZWaveNode extends EventEmitter {
 				`${this.logPrefix}Sending node back to sleep`,
 				"debug",
 			);
-			const wakeupCC = new WakeUpCC(
-				this.driver,
-				this.id,
-				WakeUpCommand.NoMoreInformation,
-			);
-			const request = new SendDataRequest(this.driver, wakeupCC);
+			const wakeupCC = new WakeUpCCNoMoreInformation(this.driver, {
+				nodeId: this.id,
+			});
+			const request = new SendDataRequest(this.driver, {
+				command: wakeupCC,
+			});
 
 			await this.driver.sendMessage<SendDataRequest>(
 				request,

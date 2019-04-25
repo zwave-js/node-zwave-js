@@ -1,4 +1,4 @@
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -21,7 +21,10 @@ export class GetControllerIdRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetControllerId)
 export class GetControllerIdResponse extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+	public constructor(
+		driver: IDriver,
+		options: MessageDeserializationOptions,
+	) {
 		super(driver, options);
 		// The payload is 4 bytes home id, followed by the controller node id
 		this._homeId = this.payload.readUInt32BE(0);

@@ -1,4 +1,4 @@
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -20,7 +20,10 @@ export class GetSUCNodeIdRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetSUCNodeId)
 export class GetSUCNodeIdResponse extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+	public constructor(
+		driver: IDriver,
+		options: MessageDeserializationOptions,
+	) {
 		super(driver, options);
 		this._sucNodeId = this.payload[0];
 	}

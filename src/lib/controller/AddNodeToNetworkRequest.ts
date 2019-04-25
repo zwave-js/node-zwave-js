@@ -1,5 +1,5 @@
 import { CommandClasses } from "../commandclass/CommandClasses";
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -58,7 +58,7 @@ export interface AddNodeToNetworkRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Controller)
 export class AddNodeToNetworkRequest extends Message {
 	public constructor(
-		driver: Driver,
+		driver: IDriver,
 		options: MessageDeserializationOptions | AddNodeToNetworkRequestOptions,
 	) {
 		super(driver, options);

@@ -12,11 +12,12 @@ import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import {
 	ApplicationUpdateRequest,
-	ApplicationUpdateTypes,
+	ApplicationUpdateRequestNodeInfoReceived,
 } from "../controller/ApplicationUpdateRequest";
 import { ZWaveController } from "../controller/Controller";
 import {
 	SendDataRequest,
+	SendDataRequestTransmitReport,
 	SendDataResponse,
 	TransmitStatus,
 } from "../controller/SendDataMessages";
@@ -96,7 +97,7 @@ export class Driver extends EventEmitter implements IDriver {
 	/** The serial port instance */
 	private serial: SerialPort | undefined;
 	/** A buffer of received but unprocessed data */
-	private receiveBuffer: Buffer;
+	private receiveBuffer: Buffer | undefined;
 	/** The currently pending request */
 	private currentTransaction: Transaction | undefined;
 	private sendQueue = new SortedList<Transaction>();
@@ -136,7 +137,7 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	/** @internal */
-	public options: DeepPartial<ZWaveOptions>;
+	public options: ZWaveOptions;
 
 	private _wasStarted: boolean = false;
 	private _isOpen: boolean = false;
@@ -390,7 +391,10 @@ export class Driver extends EventEmitter implements IDriver {
 	private serialport_onData(data: Buffer): void {
 		log("io", `received data: 0x${data.toString("hex")}`, "debug");
 		// append the new data to our receive buffer
-		this.receiveBuffer = Buffer.concat([this.receiveBuffer, data]);
+		this.receiveBuffer =
+			this.receiveBuffer != undefined
+				? Buffer.concat([this.receiveBuffer, data])
+				: data;
 		log(
 			"io",
 			`receiveBuffer: 0x${this.receiveBuffer.toString("hex")}`,
@@ -579,7 +583,7 @@ export class Driver extends EventEmitter implements IDriver {
 							"warn",
 						);
 						const errorMsg =
-							msg instanceof SendDataRequest
+							msg instanceof SendDataRequestTransmitReport
 								? `The node did not respond (${
 										TransmitStatus[msg.transmitStatus]
 								  })`
@@ -816,7 +820,7 @@ export class Driver extends EventEmitter implements IDriver {
 
 			return;
 		} else if (msg instanceof ApplicationUpdateRequest) {
-			if (msg.updateType === ApplicationUpdateTypes.NodeInfo_Received) {
+			if (msg instanceof ApplicationUpdateRequestNodeInfoReceived) {
 				const node = msg.getNodeUnsafe();
 				if (node) {
 					log(
@@ -828,7 +832,7 @@ export class Driver extends EventEmitter implements IDriver {
 					return;
 				}
 			}
-		} else if (msg instanceof SendDataRequest && msg.command != undefined) {
+		} else if (msg instanceof SendDataRequest && msg.command.ccId) {
 			// TODO: Find out if this actually happens
 			// we handle SendDataRequests differently because their handlers are organized by the command class
 			const ccId = msg.command.ccId;
@@ -1267,7 +1271,7 @@ export class Driver extends EventEmitter implements IDriver {
 	 * For performance reasons, these calls may be throttled
 	 */
 	public async saveNetworkToCache(): Promise<void> {
-		if (!this.controller) return;
+		if (!this.controller || !this.controller.homeId) return;
 		// Ensure this method isn't being executed too often
 		if (Date.now() - this.lastSaveToCache < this.saveToCacheInterval) {
 			// Schedule a save in a couple of ms to collect changes

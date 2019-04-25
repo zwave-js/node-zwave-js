@@ -1,9 +1,12 @@
+import { createEmptyMockDriver } from "../../../test/mocks";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { NoOperationCC } from "./NoOperationCC";
 
+const fakeDriver = createEmptyMockDriver();
+
 describe("lib/commandclass/NoOperationCC => ", () => {
-	const cc = new NoOperationCC({} as any, { nodeId: 2 });
+	const cc = new NoOperationCC(fakeDriver, { nodeId: 2 });
 	let serialized: Buffer;
 
 	it("should be a CommandClass", () => {
@@ -20,7 +23,7 @@ describe("lib/commandclass/NoOperationCC => ", () => {
 	});
 
 	it("should deserialize correctly", () => {
-		const deserialized = CommandClass.from(undefined as any, serialized);
+		const deserialized = CommandClass.from(fakeDriver, serialized);
 		expect(deserialized).toBeInstanceOf(NoOperationCC);
 		expect(deserialized.nodeId).toBe(cc.nodeId);
 	});

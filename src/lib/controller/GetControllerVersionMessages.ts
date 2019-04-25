@@ -1,4 +1,4 @@
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -22,7 +22,10 @@ export class GetControllerVersionRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetControllerVersion)
 export class GetControllerVersionResponse extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+	public constructor(
+		driver: IDriver,
+		options: MessageDeserializationOptions,
+	) {
 		super(driver, options);
 
 		// The payload consists of a zero-terminated string and a uint8 for the controller type

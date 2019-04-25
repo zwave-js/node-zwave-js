@@ -71,78 +71,78 @@ export class ZWaveController extends EventEmitter {
 
 	//#region --- Properties ---
 
-	private _libraryVersion: string;
-	public get libraryVersion(): string {
+	private _libraryVersion: string | undefined;
+	public get libraryVersion(): string | undefined {
 		return this._libraryVersion;
 	}
 
-	private _type: ZWaveLibraryTypes;
-	public get type(): ZWaveLibraryTypes {
+	private _type: ZWaveLibraryTypes | undefined;
+	public get type(): ZWaveLibraryTypes | undefined {
 		return this._type;
 	}
 
-	private _homeId: number;
-	public get homeId(): number {
+	private _homeId: number | undefined;
+	public get homeId(): number | undefined {
 		return this._homeId;
 	}
 
-	private _ownNodeId: number;
-	public get ownNodeId(): number {
+	private _ownNodeId: number | undefined;
+	public get ownNodeId(): number | undefined {
 		return this._ownNodeId;
 	}
 
-	private _isSecondary: boolean;
-	public get isSecondary(): boolean {
+	private _isSecondary: boolean | undefined;
+	public get isSecondary(): boolean | undefined {
 		return this._isSecondary;
 	}
 
-	private _isUsingHomeIdFromOtherNetwork: boolean;
-	public get isUsingHomeIdFromOtherNetwork(): boolean {
+	private _isUsingHomeIdFromOtherNetwork: boolean | undefined;
+	public get isUsingHomeIdFromOtherNetwork(): boolean | undefined {
 		return this._isUsingHomeIdFromOtherNetwork;
 	}
 
-	private _isSISPresent: boolean;
-	public get isSISPresent(): boolean {
+	private _isSISPresent: boolean | undefined;
+	public get isSISPresent(): boolean | undefined {
 		return this._isSISPresent;
 	}
 
-	private _wasRealPrimary: boolean;
-	public get wasRealPrimary(): boolean {
+	private _wasRealPrimary: boolean | undefined;
+	public get wasRealPrimary(): boolean | undefined {
 		return this._wasRealPrimary;
 	}
 
-	private _isStaticUpdateController: boolean;
-	public get isStaticUpdateController(): boolean {
+	private _isStaticUpdateController: boolean | undefined;
+	public get isStaticUpdateController(): boolean | undefined {
 		return this._isStaticUpdateController;
 	}
 
-	private _isSlave: boolean;
-	public get isSlave(): boolean {
+	private _isSlave: boolean | undefined;
+	public get isSlave(): boolean | undefined {
 		return this._isSlave;
 	}
 
-	private _serialApiVersion: string;
-	public get serialApiVersion(): string {
+	private _serialApiVersion: string | undefined;
+	public get serialApiVersion(): string | undefined {
 		return this._serialApiVersion;
 	}
 
-	private _manufacturerId: number;
-	public get manufacturerId(): number {
+	private _manufacturerId: number | undefined;
+	public get manufacturerId(): number | undefined {
 		return this._manufacturerId;
 	}
 
-	private _productType: number;
-	public get productType(): number {
+	private _productType: number | undefined;
+	public get productType(): number | undefined {
 		return this._productType;
 	}
 
-	private _productId: number;
-	public get productId(): number {
+	private _productId: number | undefined;
+	public get productId(): number | undefined {
 		return this._productId;
 	}
 
-	private _supportedFunctionTypes: FunctionType[];
-	public get supportedFunctionTypes(): FunctionType[] {
+	private _supportedFunctionTypes: FunctionType[] | undefined;
+	public get supportedFunctionTypes(): FunctionType[] | undefined {
 		return this._supportedFunctionTypes;
 	}
 
@@ -156,13 +156,13 @@ export class ZWaveController extends EventEmitter {
 		return this._supportedFunctionTypes.indexOf(functionType) > -1;
 	}
 
-	private _sucNodeId: number;
-	public get sucNodeId(): number {
+	private _sucNodeId: number | undefined;
+	public get sucNodeId(): number | undefined {
 		return this._sucNodeId;
 	}
 
-	private _supportsTimers: boolean;
-	public get supportsTimers(): boolean {
+	private _supportsTimers: boolean | undefined;
+	public get supportsTimers(): boolean | undefined {
 		return this._supportsTimers;
 	}
 
@@ -366,7 +366,12 @@ export class ZWaveController extends EventEmitter {
 			);
 			const resp = await this.driver.sendMessage<
 				SetSerialApiTimeoutsResponse
-			>(new SetSerialApiTimeoutsRequest(this.driver, ack, byte));
+			>(
+				new SetSerialApiTimeoutsRequest(this.driver, {
+					ackTimeout: ack,
+					byteTimeout: byte,
+				}),
+			);
 			log(
 				"controller",
 				`serial API timeouts overwritten. The old values were: ack = ${
@@ -384,18 +389,17 @@ export class ZWaveController extends EventEmitter {
 			)
 		) {
 			log("controller", `sending application info...`, "debug");
-			const appInfoMsg = new Message(
-				this.driver,
-				MessageType.Request,
-				FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION,
-				null,
-				Buffer.from([
+			const appInfoMsg = new Message(this.driver, {
+				type: MessageType.Request,
+				functionType:
+					FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION,
+				payload: Buffer.from([
 					0x01, // APPLICATION_NODEINFO_LISTENING
 					0x02, // generic static controller
 					0x01, // specific static PC controller
 					0x00, // length
 				]),
-			);
+			});
 			await this.driver.sendMessage(
 				appInfoMsg,
 				MessagePriority.Controller,
@@ -444,9 +448,9 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	private _inclusionActive: boolean = false;
-	private _beginInclusionPromise: DeferredPromise<boolean>;
-	private _stopInclusionPromise: DeferredPromise<boolean>;
-	private _nodePendingInclusion: ZWaveNode;
+	private _beginInclusionPromise: DeferredPromise<boolean> | undefined;
+	private _stopInclusionPromise: DeferredPromise<boolean> | undefined;
+	private _nodePendingInclusion: ZWaveNode | undefined;
 	public async beginInclusion(): Promise<boolean> {
 		// don't start it twice
 		if (this._inclusionActive) return false;
@@ -459,15 +463,14 @@ export class ZWaveController extends EventEmitter {
 
 		// kick off the inclusion process
 		await this.driver.sendMessage(
-			new AddNodeToNetworkRequest(
-				this.driver,
-				AddNodeType.Any,
-				true,
-				true,
-			),
+			new AddNodeToNetworkRequest(this.driver, {
+				addNodeType: AddNodeType.Any,
+				highPower: true,
+				networkWide: true,
+			}),
 		);
 
-		await this._beginInclusionPromise;
+		return this._beginInclusionPromise;
 	}
 
 	public async stopInclusion(): Promise<boolean> {
@@ -482,24 +485,27 @@ export class ZWaveController extends EventEmitter {
 
 		// kick off the inclusion process
 		await this.driver.sendMessage(
-			new AddNodeToNetworkRequest(
-				this.driver,
-				AddNodeType.Stop,
-				true,
-				true,
-			),
+			new AddNodeToNetworkRequest(this.driver, {
+				addNodeType: AddNodeType.Stop,
+				highPower: true,
+				networkWide: true,
+			}),
 		);
 
-		await this._stopInclusionPromise;
+		const result = await this._stopInclusionPromise;
 		log("controller", `the inclusion process was stopped`, "debug");
+		return result;
 	}
 
 	private async handleAddNodeRequest(
 		msg: AddNodeToNetworkRequest,
 	): Promise<void> {
+		// TODO: Make sure we work with a deserialized request here
 		log(
 			"controller",
-			`handling add node request (status = ${AddNodeStatus[msg.status]})`,
+			`handling add node request (status = ${
+				AddNodeStatus[msg.status!]
+			})`,
 			"debug",
 		);
 		if (!this._inclusionActive && msg.status !== AddNodeStatus.Done) {
@@ -551,15 +557,15 @@ export class ZWaveController extends EventEmitter {
 			case AddNodeStatus.AddingSlave: {
 				// this is called when a new node is added
 				this._nodePendingInclusion = new ZWaveNode(
-					msg.statusContext.nodeId,
+					msg.statusContext!.nodeId,
 					this.driver,
 					new DeviceClass(
-						msg.statusContext.basic,
-						msg.statusContext.generic,
-						msg.statusContext.specific,
+						msg.statusContext!.basic!,
+						msg.statusContext!.generic!,
+						msg.statusContext!.specific!,
 					),
-					msg.statusContext.supportedCCs,
-					msg.statusContext.controlledCCs,
+					msg.statusContext!.supportedCCs,
+					msg.statusContext!.controlledCCs,
 				);
 				return;
 			}
@@ -577,7 +583,7 @@ export class ZWaveController extends EventEmitter {
 				// this is called when the inclusion was completed
 				log(
 					"controller",
-					`done called for ${msg.statusContext.nodeId}`,
+					`done called for ${msg.statusContext!.nodeId}`,
 					"debug",
 				);
 				// stopping the inclusion was acknowledged by the controller
@@ -594,22 +600,22 @@ export class ZWaveController extends EventEmitter {
 					log(
 						"controller",
 						`  basic device class:    ${
-							BasicDeviceClasses[newNode.deviceClass.basic]
-						} (${num2hex(newNode.deviceClass.basic)})`,
+							BasicDeviceClasses[newNode.deviceClass!.basic]
+						} (${num2hex(newNode.deviceClass!.basic)})`,
 						"debug",
 					);
 					log(
 						"controller",
 						`  generic device class:  ${
-							newNode.deviceClass.generic.name
-						} (${num2hex(newNode.deviceClass.generic.key)})`,
+							newNode.deviceClass!.generic.name
+						} (${num2hex(newNode.deviceClass!.generic.key)})`,
 						"debug",
 					);
 					log(
 						"controller",
 						`  specific device class: ${
-							newNode.deviceClass.specific.name
-						} (${num2hex(newNode.deviceClass.specific.key)})`,
+							newNode.deviceClass!.specific.name
+						} (${num2hex(newNode.deviceClass!.specific.key)})`,
 						"debug",
 					);
 					log("controller", `  supported CCs:`, "debug");
@@ -639,7 +645,7 @@ export class ZWaveController extends EventEmitter {
 
 					// remember the node
 					this.nodes.set(newNode.id, newNode);
-					delete this._nodePendingInclusion;
+					this._nodePendingInclusion = undefined;
 					// and notify listeners
 					this.emit("node added", newNode);
 				}
@@ -677,7 +683,7 @@ export class ZWaveController extends EventEmitter {
 
 				if (this.nodes.has(serializedNode.id)) {
 					this.nodes
-						.get(serializedNode.id)
+						.get(serializedNode.id)!
 						.deserialize(serializedNode);
 				}
 			}

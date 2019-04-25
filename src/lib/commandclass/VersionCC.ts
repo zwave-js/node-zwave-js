@@ -64,7 +64,7 @@ export class VersionCC extends CommandClass {
 		// TODO: Check if we have requested that information before and store it
 		if (kind & StateKind.Static) {
 			const cc = new VersionCCGet(driver, { nodeId: node.id });
-			const request = new SendDataRequest(driver, cc);
+			const request = new SendDataRequest(driver, { command: cc });
 			await driver.sendMessage(request, MessagePriority.NodeQuery);
 		}
 	}

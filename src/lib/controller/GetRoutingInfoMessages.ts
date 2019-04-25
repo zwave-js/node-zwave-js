@@ -1,4 +1,3 @@
-import { Driver } from "../driver/Driver";
 import { IDriver } from "../driver/IDriver";
 import {
 	FunctionType,
@@ -58,7 +57,10 @@ export class GetRoutingInfoRequest extends Message {
 
 @messageTypes(MessageType.Response, FunctionType.GetRoutingInfo)
 export class GetRoutingInfoResponse extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+	public constructor(
+		driver: IDriver,
+		options: MessageDeserializationOptions,
+	) {
 		super(driver, options);
 
 		if (this.payload.length === NUM_NODEMASK_BYTES) {

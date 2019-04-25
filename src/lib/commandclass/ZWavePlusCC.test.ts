@@ -21,12 +21,11 @@ describe("lib/commandclass/ZWavePlusCC => ", () => {
 	});
 
 	it("should serialize correctly", () => {
-		const req = new SendDataRequest(
-			fakeDriver,
-			cc,
-			TransmitOptions.DEFAULT,
-			36,
-		);
+		const req = new SendDataRequest(fakeDriver, {
+			command: cc,
+			transmitOptions: TransmitOptions.DEFAULT,
+			callbackId: 36,
+		});
 		cc.ccCommand = ZWavePlusCommand.Get;
 		serialized = req.serialize();
 		// A real message from OZW

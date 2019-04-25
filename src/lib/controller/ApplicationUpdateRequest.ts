@@ -1,4 +1,4 @@
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import { FunctionType, MessageType } from "../message/Constants";
 import {
 	Message,
@@ -23,7 +23,10 @@ export enum ApplicationUpdateTypes {
 @messageTypes(MessageType.Request, FunctionType.ApplicationUpdateRequest)
 // this is only received, not sent!
 export class ApplicationUpdateRequest extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+	public constructor(
+		driver: IDriver,
+		options: MessageDeserializationOptions,
+	) {
 		super(driver, options);
 		this._updateType = this.payload[0];
 
@@ -54,7 +57,10 @@ export class ApplicationUpdateRequest extends Message {
 }
 
 export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateRequest {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+	public constructor(
+		driver: IDriver,
+		options: MessageDeserializationOptions,
+	) {
 		super(driver, options);
 		this._nodeInformation = parseNodeUpdatePayload(this.payload.slice(1));
 		this._nodeId = this._nodeInformation.nodeId;

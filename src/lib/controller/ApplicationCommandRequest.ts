@@ -1,6 +1,6 @@
 import { CommandClass } from "../commandclass/CommandClass";
 import { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -23,7 +23,10 @@ const enum StatusFlags {
 @priority(MessagePriority.Normal)
 export class ApplicationCommandRequest extends Message
 	implements ICommandClassContainer {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+	public constructor(
+		driver: IDriver,
+		options: MessageDeserializationOptions,
+	) {
 		super(driver, options);
 		// first byte is a status flag
 		const status = this.payload[0];

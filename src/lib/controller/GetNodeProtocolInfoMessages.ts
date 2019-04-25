@@ -1,4 +1,4 @@
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -20,7 +20,6 @@ import {
 } from "../node/DeviceClass";
 import { INodeQuery } from "../node/INodeQuery";
 import { JSONObject } from "../util/misc";
-import { Maybe } from "../values/Primitive";
 
 /* eslint-disable @typescript-eslint/camelcase */
 const enum NodeCapabilityFlags {
@@ -58,7 +57,7 @@ export interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.NodeQuery)
 export class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
 	public constructor(
-		driver: Driver,
+		driver: IDriver,
 		options: GetNodeProtocolInfoRequestOptions,
 	) {
 		super(driver, options);
@@ -81,7 +80,10 @@ export class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
 
 @messageTypes(MessageType.Response, FunctionType.GetNodeProtocolInfo)
 export class GetNodeProtocolInfoResponse extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+	public constructor(
+		driver: IDriver,
+		options: MessageDeserializationOptions,
+	) {
 		super(driver, options);
 
 		const capabilities = this.payload[0];
@@ -101,7 +103,8 @@ export class GetNodeProtocolInfoResponse extends Message {
 				this._maxBaudRate = 9600;
 				break;
 			default:
-				this._maxBaudRate = "unknown" as Maybe<Baudrate>;
+				// We don't know this baudrate yet, encode it as 0
+				this._maxBaudRate = (0 as any) as Baudrate;
 		}
 
 		this._version = (capabilities & NodeCapabilityFlags.VersionMask) + 1;
@@ -136,8 +139,8 @@ export class GetNodeProtocolInfoResponse extends Message {
 		return this._isRouting;
 	}
 
-	private _maxBaudRate: Maybe<Baudrate>;
-	public get maxBaudRate(): Maybe<Baudrate> {
+	private _maxBaudRate: Baudrate;
+	public get maxBaudRate(): Baudrate {
 		return this._maxBaudRate;
 	}
 

@@ -14,7 +14,6 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
-import { ParameterInfo } from "./ConfigurationCC.1";
 
 export enum ConfigurationCommand {
 	Set = 0x04,

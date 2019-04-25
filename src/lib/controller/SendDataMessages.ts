@@ -6,7 +6,7 @@ import {
 	ICommandClassContainer,
 	isCommandClassContainer,
 } from "../commandclass/ICommandClassContainer";
-import { Driver } from "../driver/Driver";
+import { IDriver } from "../driver/IDriver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -58,7 +58,7 @@ function getNextCallbackId(): number {
 @messageTypes(MessageType.Request, FunctionType.SendData)
 @priority(MessagePriority.Normal)
 export class SendDataRequestBase extends Message {
-	public constructor(driver: Driver, options: MessageOptions) {
+	public constructor(driver: IDriver, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== SendDataRequestTransmitReport
@@ -77,7 +77,7 @@ export interface SendDataRequestOptions<
 	CCType extends CommandClass = CommandClass
 > extends MessageBaseOptions {
 	command: CCType;
-	transmitOptions: TransmitOptions;
+	transmitOptions?: TransmitOptions;
 	callbackId?: number;
 }
 
@@ -86,13 +86,16 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	extends SendDataRequestBase
 	implements ICommandClassContainer {
 	public constructor(
-		driver: Driver,
+		driver: IDriver,
 		options: SendDataRequestOptions<CCType>,
 	) {
 		super(driver, options);
 
 		this.command = options.command;
-		this.transmitOptions = options.transmitOptions;
+		this.transmitOptions =
+			options.transmitOptions != undefined
+				? options.transmitOptions
+				: TransmitOptions.DEFAULT;
 		this.callbackId =
 			options.callbackId != undefined
 				? options.callbackId
@@ -102,7 +105,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	/** The command this message contains */
 	public command: CCType;
 	/** Options regarding the transmission of the message */
-	public transmitOptions: TransmitOptions = TransmitOptions.DEFAULT;
+	public transmitOptions: TransmitOptions;
 
 	public serialize(): Buffer {
 		const serializedCC = this.command.serialize();
@@ -157,7 +160,10 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 }
 
 export class SendDataRequestTransmitReport extends SendDataRequestBase {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+	public constructor(
+		driver: IDriver,
+		options: MessageDeserializationOptions,
+	) {
 		super(driver, options);
 
 		this.callbackId = this.payload[0];
@@ -186,7 +192,10 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase {
 
 @messageTypes(MessageType.Response, FunctionType.SendData)
 export class SendDataResponse extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+	public constructor(
+		driver: IDriver,
+		options: MessageDeserializationOptions,
+	) {
 		super(driver, options);
 		this._wasSent = this.payload[0] !== 0;
 		// if (!this._wasSent) this._errorCode = this.payload[0];
