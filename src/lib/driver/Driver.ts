@@ -453,6 +453,12 @@ export class Driver extends EventEmitter implements IDriver {
 					) {
 						this.onInvalidData(this.receiveBuffer, e.toString());
 						return;
+					} else if (
+						e.code ===
+						ZWaveErrorCodes.CC_DeserializationNotImplemented
+					) {
+						log("controller", e.message, "error");
+						return;
 					}
 				}
 				// pass it through;

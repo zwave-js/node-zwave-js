@@ -1,4 +1,5 @@
 import { IDriver } from "../driver/IDriver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Maybe } from "../values/Primitive";
 import {
 	CCCommand,
@@ -92,7 +93,10 @@ export class ManufacturerSpecificCCDeviceSpecificGet extends ManufacturerSpecifi
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
-			throw new Error("not implemented!");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.deviceIdType = options.deviceIdType;
 		}

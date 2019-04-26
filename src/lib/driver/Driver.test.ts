@@ -6,6 +6,8 @@ import {
 	MockSerialPort,
 } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
+import { WakeUpCCIntervalSet } from "../commandclass/WakeUpCC";
+import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { MessageHeaders, MessageType } from "../message/Constants";
 import { Message, messageTypes } from "../message/Message";
@@ -369,6 +371,39 @@ describe("lib/driver/Driver => ", () => {
 					serialport.writeStub.mock.calls[1][0],
 				),
 			).toBeTrue();
+		});
+	});
+
+	describe("receiving messages => ", () => {
+		let driver: Driver;
+		let serialport: MockSerialPort;
+
+		beforeEach(async () => {
+			({ driver, serialport } = await createAndStartDriver());
+		});
+
+		afterEach(() => {
+			driver.destroy();
+			driver.removeAllListeners();
+		});
+
+		it("should not crash if a message is received that cannot be deserialized", () => {
+			// swallow the error
+			driver.on("error", () => {});
+
+			const req = new ApplicationCommandRequest(driver, {
+				command: new WakeUpCCIntervalSet(driver, {
+					nodeId: 1,
+					controllerNodeId: 2,
+					wakeupInterval: 5,
+				}),
+			});
+
+			// Receive a CAN to trigger the resend check
+			expect(() => {
+				serialport.receiveData(req.serialize());
+				jest.runAllTimers();
+			}).not.toThrow();
 		});
 	});
 

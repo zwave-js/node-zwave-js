@@ -1,4 +1,5 @@
 import { IDriver } from "../driver/IDriver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import {
 	decodeSetbackState,
 	encodeSetbackState,
@@ -55,7 +56,10 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new Error("not implemented");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.setbackType = options.setbackType;
 			this.setbackState = options.setbackState;

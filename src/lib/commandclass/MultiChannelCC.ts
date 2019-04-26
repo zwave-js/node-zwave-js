@@ -1,4 +1,5 @@
 import { IDriver } from "../driver/IDriver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { GenericDeviceClasses } from "../node/DeviceClass";
 import {
 	NodeInformationFrame,
@@ -102,7 +103,10 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new Error("not implemented");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this._endpoint = options.endpoint;
 		}
@@ -161,7 +165,10 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new Error("not implemented");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.genericClass = options.genericClass;
 			this.specificClass = options.specificClass;
@@ -222,7 +229,10 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new Error("not implemented");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.endpoint = options.endpoint;
 		}

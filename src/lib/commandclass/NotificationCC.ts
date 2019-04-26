@@ -1,4 +1,5 @@
 import { IDriver } from "../driver/IDriver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { parseBitMask } from "../values/Primitive";
 import {
 	CCCommand,
@@ -62,7 +63,10 @@ export class NotificationCCSet extends NotificationCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new Error("not implemented");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.notificationType = options.notificationType;
 			this.notificationStatus = options.notificationStatus;
@@ -95,7 +99,10 @@ export class NotificationCCGet extends NotificationCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new Error("not implemented");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.alarmType = options.alarmType;
 			this.notificationType = options.notificationType;
@@ -246,7 +253,10 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new Error("not implemented");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.notificationType = options.notificationType;
 		}

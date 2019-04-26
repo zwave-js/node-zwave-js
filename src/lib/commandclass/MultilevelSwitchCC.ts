@@ -1,4 +1,5 @@
 import { IDriver } from "../driver/IDriver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Duration } from "../values/Duration";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
 import {
@@ -64,7 +65,10 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new Error("not implemented");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.targetValue = options.targetValue;
 			this.duration = options.duration;
@@ -146,7 +150,10 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new Error("not implemented");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.duration = options.duration;
 			this.primarySwitchStartLevel = options.primarySwitchStartLevel;

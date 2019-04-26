@@ -1,6 +1,7 @@
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import { IDriver } from "../driver/IDriver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { MessagePriority } from "../message/Constants";
 import { ZWaveNode } from "../node/Node";
 import { Maybe } from "../values/Primitive";
@@ -134,7 +135,10 @@ export class VersionCCCommandClassGet extends VersionCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new Error("not implemented");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.requestedCC = options.requestedCC;
 		}

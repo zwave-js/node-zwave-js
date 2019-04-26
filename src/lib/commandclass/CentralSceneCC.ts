@@ -1,4 +1,5 @@
 import { IDriver } from "../driver/IDriver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import {
 	CCCommand,
 	CCCommandOptions,
@@ -158,7 +159,10 @@ export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
-			throw new Error("not implemented!");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.slowRefresh = options.slowRefresh;
 		}

@@ -1,4 +1,5 @@
 import { IDriver } from "../driver/IDriver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { parseBitMask, parseFloatWithScale } from "../values/Primitive";
 import {
 	CCCommand,
@@ -44,7 +45,10 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new Error("not implemented");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.sensorType = options.sensorType;
 			this.scale = options.scale;
@@ -137,7 +141,10 @@ export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new Error("not implemented");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.sensorType = options.sensorType;
 		}

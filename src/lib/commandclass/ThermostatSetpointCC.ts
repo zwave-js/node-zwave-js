@@ -1,4 +1,5 @@
 import { IDriver } from "../driver/IDriver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import {
 	encodeFloatWithScale,
 	parseBitMask,
@@ -86,7 +87,10 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new Error("not implemented");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.setpointType = options.setpointType;
 			this.value = options.value;
@@ -122,7 +126,10 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new Error("not implemented");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.setpointType = options.setpointType;
 		}
@@ -178,7 +185,10 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new Error("not implemented");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.setpointType = options.setpointType;
 		}

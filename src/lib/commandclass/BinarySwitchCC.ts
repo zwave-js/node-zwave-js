@@ -1,4 +1,5 @@
 import { IDriver } from "../driver/IDriver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Duration } from "../values/Duration";
 import { Maybe, parseBoolean, parseMaybeBoolean } from "../values/Primitive";
 import {
@@ -50,7 +51,10 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
-			throw new Error("not implemented!");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.targetValue = options.targetValue;
 			this.duration = options.duration;

@@ -1,4 +1,5 @@
 import { IDriver } from "../driver/IDriver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import {
 	decodeSetbackState,
 	encodeSetbackState,
@@ -70,7 +71,10 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
-			throw new Error("not implemented!");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.switchPoints = options.switchPoints;
 			this.weekday = options.weekday;
@@ -112,7 +116,10 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
-			throw new Error("not implemented!");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.weekday = options.weekday;
 		}
@@ -224,7 +231,10 @@ export class ClimateControlScheduleCCOverrideSet extends ClimateControlScheduleC
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
-			throw new Error("not implemented!");
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.overrideType = options.overrideType;
 			this.overrideState = options.overrideState;
