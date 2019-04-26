@@ -1,8 +1,10 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
+import { IDriver } from "../driver/IDriver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
+import { INodeQuery } from "../node/INodeQuery";
 import { FunctionType, MessageType } from "./Constants";
-import { Message, ResponseRole } from "./Message";
+import { Message, messageTypes, ResponseRole } from "./Message";
 
 const fakeDriver = createEmptyMockDriver();
 
@@ -379,6 +381,96 @@ describe("lib/message", () => {
 				expect(msg.testResponse(test)).toBe(result);
 				expect(predicate).toHaveBeenCalledWith(msg, test);
 			}
+		});
+
+		it(`the constructor should throw when no message type is specified`, () => {
+			assertZWaveError(
+				() => new Message(fakeDriver, { functionType: 0xff }),
+				{
+					errorCode: ZWaveErrorCodes.Argument_Invalid,
+					messageMatches: /message type/i,
+				},
+			);
+
+			@messageTypes(undefined as any, 0xff)
+			class FakeMessageWithoutMessageType extends Message {}
+
+			assertZWaveError(
+				() => new FakeMessageWithoutMessageType(fakeDriver),
+				{
+					errorCode: ZWaveErrorCodes.Argument_Invalid,
+					messageMatches: /message type/i,
+				},
+			);
+		});
+
+		it(`the constructor should throw when no function type is specified`, () => {
+			assertZWaveError(
+				() => new Message(fakeDriver, { type: MessageType.Request }),
+				{
+					errorCode: ZWaveErrorCodes.Argument_Invalid,
+					messageMatches: /function type/i,
+				},
+			);
+
+			@messageTypes(MessageType.Request, undefined as any)
+			class FakeMessageWithoutFunctionType extends Message {}
+
+			assertZWaveError(
+				() => new FakeMessageWithoutFunctionType(fakeDriver),
+				{
+					errorCode: ZWaveErrorCodes.Argument_Invalid,
+					messageMatches: /function type/i,
+				},
+			);
+		});
+
+		describe("getNodeUnsafe()", () => {
+			it("returns undefined when the controller is not initialized yet", () => {
+				const fakeDriver = ({
+					getSafeCCVersionForNode() {},
+				} as any) as IDriver;
+				const msg = new Message(fakeDriver, {
+					type: MessageType.Request,
+					functionType: 0xff,
+				});
+				expect(msg.getNodeUnsafe()).toBeUndefined();
+			});
+
+			it("returns undefined when the message is no node query", () => {
+				const fakeDriver = ({
+					getSafeCCVersionForNode() {},
+					controller: { nodes: new Map() },
+				} as any) as IDriver;
+				const msg = new Message(fakeDriver, {
+					type: MessageType.Request,
+					functionType: 0xff,
+				});
+				expect(msg.getNodeUnsafe()).toBeUndefined();
+			});
+
+			it("returns the associated node otherwise", () => {
+				const fakeDriver = ({
+					getSafeCCVersionForNode() {},
+					controller: { nodes: new Map() },
+				} as any) as IDriver;
+				fakeDriver.controller!.nodes.set(1, {} as any);
+
+				const msg = new Message(fakeDriver, {
+					type: MessageType.Request,
+					functionType: 0xff,
+				});
+
+				// This node exists
+				((msg as any) as INodeQuery).nodeId = 1;
+				expect(msg.getNodeUnsafe()).toBe(
+					fakeDriver.controller!.nodes.get(1),
+				);
+
+				// This one does
+				((msg as any) as INodeQuery).nodeId = 2;
+				expect(msg.getNodeUnsafe()).toBeUndefined();
+			});
 		});
 	});
 });

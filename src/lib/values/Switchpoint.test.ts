@@ -1,4 +1,6 @@
 /// <reference types="jest-extended" />
+import { assertZWaveError } from "../../../test/util";
+import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { decodeSwitchpoint, encodeSwitchpoint } from "./Switchpoint";
 
 describe("lib/values/Switchpoint", () => {
@@ -21,6 +23,16 @@ describe("lib/values/Switchpoint", () => {
 			for (let minute = 0; minute < 60; minute++) {
 				expect(encodeSwitchpoint({ ...base, minute })[1]).toBe(minute);
 			}
+		});
+
+		it("should throw when the switchpoint state is undefined", () => {
+			assertZWaveError(
+				() =>
+					encodeSwitchpoint({ hour: 1, minute: 5, state: undefined }),
+				{
+					errorCode: ZWaveErrorCodes.CC_Invalid,
+				},
+			);
 		});
 	});
 
