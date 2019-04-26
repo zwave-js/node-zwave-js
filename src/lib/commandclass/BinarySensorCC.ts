@@ -74,7 +74,6 @@ export class BinarySensorCCSupportedGet extends BinarySensorCC {
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
-		// Deserialization not supported
 	}
 }
 

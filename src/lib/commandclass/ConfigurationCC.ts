@@ -2,7 +2,17 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { isConsecutiveArray } from "../util/misc";
 import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
-import { CCCommand, CCCommandOptions, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, getCommandClass, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	CCCommand,
+	CCCommandOptions,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	getCommandClass,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum ConfigurationCommand {
@@ -116,7 +126,10 @@ export class ConfigurationCCGet extends ConfigurationCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new ZWaveError(`${this.constructor.name}: deserialization not implemented`, ZWaveErrorCodes.CC_DeserializationNotImplemented);
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.parameter = options.parameter;
 		}
@@ -182,7 +195,10 @@ export class ConfigurationCCSet extends ConfigurationCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new ZWaveError(`${this.constructor.name}: deserialization not implemented`, ZWaveErrorCodes.CC_DeserializationNotImplemented);
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.parameter = options.parameter;
 			this.resetToDefault = options.resetToDefault;
@@ -241,7 +257,10 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new ZWaveError(`${this.constructor.name}: deserialization not implemented`, ZWaveErrorCodes.CC_DeserializationNotImplemented);
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this._parameters = options.parameters;
 			if (this._parameters.length < 1) {
@@ -330,7 +349,10 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new ZWaveError(`${this.constructor.name}: deserialization not implemented`, ZWaveErrorCodes.CC_DeserializationNotImplemented);
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this._parameters = options.parameters.sort();
 			if (!isConsecutiveArray(this.parameters)) {
@@ -421,7 +443,10 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new ZWaveError(`${this.constructor.name}: deserialization not implemented`, ZWaveErrorCodes.CC_DeserializationNotImplemented);
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.parameter = options.parameter;
 		}
@@ -484,7 +509,10 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new ZWaveError(`${this.constructor.name}: deserialization not implemented`, ZWaveErrorCodes.CC_DeserializationNotImplemented);
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.parameter = options.parameter;
 		}
@@ -547,7 +575,10 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
-			throw new ZWaveError(`${this.constructor.name}: deserialization not implemented`, ZWaveErrorCodes.CC_DeserializationNotImplemented);
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
 		} else {
 			this.parameter = options.parameter;
 		}

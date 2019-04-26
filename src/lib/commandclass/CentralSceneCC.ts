@@ -84,7 +84,10 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 
 @CCCommand(CentralSceneCommand.SupportedGet)
 export class CentralSceneCCSupportedGet extends CentralSceneCC {
-	public constructor(driver: IDriver, options: CCCommandOptions) {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
 		super(driver, options);
 	}
 }
@@ -140,7 +143,10 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 
 @CCCommand(CentralSceneCommand.ConfigurationGet)
 export class CentralSceneCCConfigurationGet extends CentralSceneCC {
-	public constructor(driver: IDriver, options: CCCommandOptions) {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
 		super(driver, options);
 	}
 }
