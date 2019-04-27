@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { JSONObject } from "../util/misc";
 import {
 	CCCommand,
 	CCCommandOptions,
@@ -80,6 +81,15 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 	 - The Sequence Number field MUST be updated at each notification refresh.
 	 - If not receiving a new Key Held Down notification within 60 seconds after the most recent Key Held Down notification,
 	*/
+
+	public toJSON(): JSONObject {
+		return super.toJSONInherited({
+			sequenceNumber: this.sequenceNumber,
+			keyAttribute: CentralSceneKeys[this.keyAttribute],
+			sceneNumber: this.sceneNumber,
+			slowRefresh: this.slowRefresh,
+		});
+	}
 }
 
 @CCCommand(CentralSceneCommand.SupportedGet)
