@@ -45,7 +45,10 @@ export class ManufacturerSpecificCC extends CommandClass {
 
 @CCCommand(ManufacturerSpecificCommand.Get)
 export class ManufacturerSpecificCCGet extends ManufacturerSpecificCC {
-	public constructor(driver: IDriver, options: CCCommandOptions) {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
 		super(driver, options);
 	}
 }

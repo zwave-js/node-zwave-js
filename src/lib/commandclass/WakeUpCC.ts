@@ -113,13 +113,6 @@ export class WakeUpCCIntervalGet extends WakeUpCC {
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
-			);
-		}
 	}
 }
 
@@ -162,13 +155,6 @@ export class WakeUpCCNoMoreInformation extends WakeUpCC {
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
-			);
-		}
 	}
 }
 
@@ -179,13 +165,6 @@ export class WakeUpCCIntervalCapabilitiesGet extends WakeUpCC {
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
-			);
-		}
 	}
 }
 
