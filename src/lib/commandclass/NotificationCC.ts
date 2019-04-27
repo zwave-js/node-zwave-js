@@ -43,7 +43,6 @@ export enum NotificationType {
 
 @commandClass(CommandClasses.Notification)
 @implementedVersion(8)
-@expectedCCResponse(CommandClasses.Notification)
 export class NotificationCC extends CommandClass {
 	// former AlarmCC (v1..v2)
 	public ccCommand!: NotificationCommand;
@@ -80,55 +79,6 @@ export class NotificationCCSet extends NotificationCC {
 			this.notificationType,
 			this.notificationStatus ? 0xff : 0x00,
 		]);
-		return super.serialize();
-	}
-}
-
-interface NotificationCCGetOptions extends CCCommandOptions {
-	alarmType?: number;
-	notificationType: NotificationType;
-	notificationEvent?: number;
-}
-
-@CCCommand(NotificationCommand.Get)
-export class NotificationCCGet extends NotificationCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions | NotificationCCGetOptions,
-	) {
-		super(driver, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
-			);
-		} else {
-			this.alarmType = options.alarmType;
-			this.notificationType = options.notificationType;
-			this.notificationEvent = options.notificationEvent;
-		}
-	}
-
-	/** Proprietary V1/V2 alarm type */
-	public alarmType: number | undefined;
-	/** Regulated V3+ notification type */
-	public notificationType: NotificationType;
-	public notificationEvent: number | undefined;
-
-	public serialize(): Buffer {
-		const payload: number[] = [this.alarmType || 0];
-		if (this.version >= 2) {
-			payload.push(this.notificationType);
-		}
-		if (this.version >= 3) {
-			payload.push(
-				this.notificationType === 0xff
-					? 0x00
-					: this.notificationEvent || 0,
-			);
-		}
-		this.payload = Buffer.from(payload);
 		return super.serialize();
 	}
 }
@@ -204,13 +154,53 @@ export class NotificationCCReport extends NotificationCC {
 	}
 }
 
-@CCCommand(NotificationCommand.SupportedGet)
-export class NotificationCCSupportedGet extends NotificationCC {
+interface NotificationCCGetOptions extends CCCommandOptions {
+	alarmType?: number;
+	notificationType: NotificationType;
+	notificationEvent?: number;
+}
+
+@CCCommand(NotificationCommand.Get)
+@expectedCCResponse(NotificationCCReport)
+export class NotificationCCGet extends NotificationCC {
 	public constructor(
 		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
+		options: CommandClassDeserializationOptions | NotificationCCGetOptions,
 	) {
 		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
+		} else {
+			this.alarmType = options.alarmType;
+			this.notificationType = options.notificationType;
+			this.notificationEvent = options.notificationEvent;
+		}
+	}
+
+	/** Proprietary V1/V2 alarm type */
+	public alarmType: number | undefined;
+	/** Regulated V3+ notification type */
+	public notificationType: NotificationType;
+	public notificationEvent: number | undefined;
+
+	public serialize(): Buffer {
+		const payload: number[] = [this.alarmType || 0];
+		if (this.version >= 2) {
+			payload.push(this.notificationType);
+		}
+		if (this.version >= 3) {
+			payload.push(
+				this.notificationType === 0xff
+					? 0x00
+					: this.notificationEvent || 0,
+			);
+		}
+		this.payload = Buffer.from(payload);
+		return super.serialize();
 	}
 }
 
@@ -238,35 +228,14 @@ export class NotificationCCSupportedReport extends NotificationCC {
 	}
 }
 
-interface NotificationCCEventSupportedGetOptions extends CCCommandOptions {
-	notificationType: NotificationType;
-}
-
-@CCCommand(NotificationCommand.EventSupportedGet)
-export class NotificationCCEventSupportedGet extends NotificationCC {
+@CCCommand(NotificationCommand.SupportedGet)
+@expectedCCResponse(NotificationCCSupportedReport)
+export class NotificationCCSupportedGet extends NotificationCC {
 	public constructor(
 		driver: IDriver,
-		options:
-			| CommandClassDeserializationOptions
-			| NotificationCCEventSupportedGetOptions,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
-			);
-		} else {
-			this.notificationType = options.notificationType;
-		}
-	}
-
-	public notificationType: NotificationType;
-
-	public serialize(): Buffer {
-		this.payload = Buffer.from([this.notificationType]);
-		return super.serialize();
 	}
 }
 
@@ -294,5 +263,38 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 	private _supportedEvents: number[];
 	public get supportedEvents(): readonly number[] {
 		return this._supportedEvents;
+	}
+}
+
+interface NotificationCCEventSupportedGetOptions extends CCCommandOptions {
+	notificationType: NotificationType;
+}
+
+@CCCommand(NotificationCommand.EventSupportedGet)
+@expectedCCResponse(NotificationCCEventSupportedReport)
+export class NotificationCCEventSupportedGet extends NotificationCC {
+	public constructor(
+		driver: IDriver,
+		options:
+			| CommandClassDeserializationOptions
+			| NotificationCCEventSupportedGetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
+		} else {
+			this.notificationType = options.notificationType;
+		}
+	}
+
+	public notificationType: NotificationType;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.notificationType]);
+		return super.serialize();
 	}
 }

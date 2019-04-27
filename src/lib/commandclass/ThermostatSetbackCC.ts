@@ -31,7 +31,6 @@ export enum SetbackType {
 
 @commandClass(CommandClasses["Thermostat Setback"])
 @implementedVersion(1)
-@expectedCCResponse(CommandClasses["Thermostat Setback"])
 export class ThermostatSetbackCC extends CommandClass {
 	public ccCommand!: ThermostatSetbackCommand;
 }
@@ -79,16 +78,6 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 	}
 }
 
-@CCCommand(ThermostatSetbackCommand.Get)
-export class ThermostatSetbackCCGet extends ThermostatSetbackCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
-
 @CCCommand(ThermostatSetbackCommand.Report)
 export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 	public constructor(
@@ -109,5 +98,16 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 	/** The offset from the setpoint in 0.1 Kelvin or a special mode */
 	public get setbackState(): SetbackState {
 		return this._setbackState;
+	}
+}
+
+@CCCommand(ThermostatSetbackCommand.Get)
+@expectedCCResponse(ThermostatSetbackCCReport)
+export class ThermostatSetbackCCGet extends ThermostatSetbackCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
 	}
 }

@@ -33,19 +33,9 @@ export enum ZWavePlusNodeType {
 
 @commandClass(CommandClasses["Z-Wave Plus Info"])
 @implementedVersion(2)
-@expectedCCResponse(CommandClasses["Z-Wave Plus Info"])
+@expectedCCResponse(ZWavePlusCC)
 export class ZWavePlusCC extends CommandClass {
 	public ccCommand!: ZWavePlusCommand;
-}
-
-@CCCommand(ZWavePlusCommand.Get)
-export class ZWavePlusCCGet extends ZWavePlusCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
 }
 
 @CCCommand(ZWavePlusCommand.Report)
@@ -85,5 +75,16 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 	private _userIcon: number;
 	public get userIcon(): number {
 		return this._userIcon;
+	}
+}
+
+@CCCommand(ZWavePlusCommand.Get)
+@expectedCCResponse(ZWavePlusCCReport)
+export class ZWavePlusCCGet extends ZWavePlusCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
 	}
 }

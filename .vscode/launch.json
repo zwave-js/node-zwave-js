@@ -10,14 +10,12 @@
 			"name": "Launch Program",
 			"program": "${workspaceFolder}/test/run.js",
 			"env": {
-				"DEBUG": "zwave:(controller)",
+				"DEBUG": "zwave:(controller)"
 				// "NO_CACHE": "true"
 			},
-			"outFiles": [
-				"${workspaceFolder}/**/*.js"
-			],
+			"outFiles": ["${workspaceFolder}/**/*.js"],
 			"console": "integratedTerminal",
-			"sourceMaps": true,
+			"sourceMaps": true
 			// "preLaunchTask": "npm: build"
 		}
 	]

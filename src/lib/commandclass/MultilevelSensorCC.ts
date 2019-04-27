@@ -24,9 +24,35 @@ export enum MultilevelSensorCommand {
 
 @commandClass(CommandClasses["Multilevel Sensor"])
 @implementedVersion(11)
-@expectedCCResponse(CommandClasses["Multilevel Sensor"])
 export class MultilevelSensorCC extends CommandClass {
 	public ccCommand!: MultilevelSensorCommand;
+}
+
+@CCCommand(MultilevelSensorCommand.Report)
+export class MultilevelSensorCCReport extends MultilevelSensorCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		this._sensorType = this.payload[0];
+		({ value: this._value, scale: this._scale } = parseFloatWithScale(
+			this.payload.slice(1),
+		));
+	}
+
+	private _sensorType: MultilevelSensorTypes;
+	public get sensorType(): MultilevelSensorTypes {
+		return this._sensorType;
+	}
+	private _scale: number;
+	public get scale(): number {
+		return this._scale;
+	}
+	private _value: number;
+	public get value(): number {
+		return this._value;
+	}
 }
 
 interface MultilevelSensorCCGetOptions extends CCCommandOptions {
@@ -35,6 +61,7 @@ interface MultilevelSensorCCGetOptions extends CCCommandOptions {
 }
 
 @CCCommand(MultilevelSensorCommand.Get)
+@expectedCCResponse(MultilevelSensorCCReport)
 export class MultilevelSensorCCGet extends MultilevelSensorCC {
 	public constructor(
 		driver: IDriver,
@@ -73,43 +100,6 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 	}
 }
 
-@CCCommand(MultilevelSensorCommand.Report)
-export class MultilevelSensorCCReport extends MultilevelSensorCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions,
-	) {
-		super(driver, options);
-		this._sensorType = this.payload[0];
-		({ value: this._value, scale: this._scale } = parseFloatWithScale(
-			this.payload.slice(1),
-		));
-	}
-
-	private _sensorType: MultilevelSensorTypes;
-	public get sensorType(): MultilevelSensorTypes {
-		return this._sensorType;
-	}
-	private _scale: number;
-	public get scale(): number {
-		return this._scale;
-	}
-	private _value: number;
-	public get value(): number {
-		return this._value;
-	}
-}
-
-@CCCommand(MultilevelSensorCommand.GetSupportedSensor)
-export class MultilevelSensorCCGetSupportedSensor extends MultilevelSensorCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
-
 @CCCommand(MultilevelSensorCommand.SupportedSensorReport)
 export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC {
 	public constructor(
@@ -126,36 +116,19 @@ export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC 
 	}
 }
 
-interface MultilevelSensorCCGetSupportedScaleOptions extends CCCommandOptions {
-	sensorType: MultilevelSensorTypes;
-}
-
-@CCCommand(MultilevelSensorCommand.GetSupportedScale)
-export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
+@CCCommand(MultilevelSensorCommand.GetSupportedSensor)
+@expectedCCResponse(MultilevelSensorCCSupportedSensorReport)
+export class MultilevelSensorCCGetSupportedSensor extends MultilevelSensorCC {
 	public constructor(
 		driver: IDriver,
-		options:
-			| CommandClassDeserializationOptions
-			| MultilevelSensorCCGetSupportedScaleOptions,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
-			);
-		} else {
-			this.sensorType = options.sensorType;
-		}
 	}
+}
 
-	public sensorType: MultilevelSensorTypes;
-
-	public serialize(): Buffer {
-		this.payload = Buffer.from([this.sensorType]);
-		return super.serialize();
-	}
+interface MultilevelSensorCCGetSupportedScaleOptions extends CCCommandOptions {
+	sensorType: MultilevelSensorTypes;
 }
 
 @CCCommand(MultilevelSensorCommand.SupportedScaleReport)
@@ -183,6 +156,35 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 	private _supportedScales: number[];
 	public get supportedScales(): readonly number[] {
 		return this._supportedScales;
+	}
+}
+
+@CCCommand(MultilevelSensorCommand.GetSupportedScale)
+@expectedCCResponse(MultilevelSensorCCSupportedScaleReport)
+export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
+	public constructor(
+		driver: IDriver,
+		options:
+			| CommandClassDeserializationOptions
+			| MultilevelSensorCCGetSupportedScaleOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
+		} else {
+			this.sensorType = options.sensorType;
+		}
+	}
+
+	public sensorType: MultilevelSensorTypes;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.sensorType]);
+		return super.serialize();
 	}
 }
 

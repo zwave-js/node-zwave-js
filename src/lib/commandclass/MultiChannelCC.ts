@@ -39,19 +39,8 @@ export interface EndpointCapability extends NodeInformationFrame {
 
 @commandClass(CommandClasses["Multi Channel"])
 @implementedVersion(4)
-@expectedCCResponse(CommandClasses["Multi Channel"])
 export class MultiChannelCC extends CommandClass {
 	public ccCommand!: MultiChannelCommand;
-}
-
-@CCCommand(MultiChannelCommand.EndPointGet)
-export class MultiChannelCCEndPointGet extends MultiChannelCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
 }
 
 @CCCommand(MultiChannelCommand.EndPointReport)
@@ -88,38 +77,14 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 	}
 }
 
-interface MultiChannelCCCapabilityGetOptions extends CCCommandOptions {
-	endpoint: number;
-}
-
-@CCCommand(MultiChannelCommand.CapabilityGet)
-export class MultiChannelCCCapabilityGet extends MultiChannelCC {
+@CCCommand(MultiChannelCommand.EndPointGet)
+@expectedCCResponse(MultiChannelCCEndPointReport)
+export class MultiChannelCCEndPointGet extends MultiChannelCC {
 	public constructor(
 		driver: IDriver,
-		options:
-			| CommandClassDeserializationOptions
-			| MultiChannelCCCapabilityGetOptions,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
-			);
-		} else {
-			this._endpoint = options.endpoint;
-		}
-	}
-
-	private _endpoint: number;
-	public get endpoint(): number {
-		return this._endpoint;
-	}
-
-	public serialize(): Buffer {
-		this.payload = Buffer.from([this.endpoint & 0b01111111]);
-		return super.serialize();
 	}
 }
 
@@ -149,18 +114,18 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 	}
 }
 
-interface MultiChannelCCEndPointFindOptions extends CCCommandOptions {
-	genericClass: GenericDeviceClasses;
-	specificClass: number;
+interface MultiChannelCCCapabilityGetOptions extends CCCommandOptions {
+	endpoint: number;
 }
 
-@CCCommand(MultiChannelCommand.EndPointFind)
-export class MultiChannelCCEndPointFind extends MultiChannelCC {
+@CCCommand(MultiChannelCommand.CapabilityGet)
+@expectedCCResponse(MultiChannelCCCapabilityReport)
+export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 	public constructor(
 		driver: IDriver,
 		options:
 			| CommandClassDeserializationOptions
-			| MultiChannelCCEndPointFindOptions,
+			| MultiChannelCCCapabilityGetOptions,
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
@@ -170,16 +135,17 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 				ZWaveErrorCodes.CC_DeserializationNotImplemented,
 			);
 		} else {
-			this.genericClass = options.genericClass;
-			this.specificClass = options.specificClass;
+			this._endpoint = options.endpoint;
 		}
 	}
 
-	public genericClass: GenericDeviceClasses;
-	public specificClass: number;
+	private _endpoint: number;
+	public get endpoint(): number {
+		return this._endpoint;
+	}
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.genericClass, this.specificClass]);
+		this.payload = Buffer.from([this.endpoint & 0b01111111]);
 		return super.serialize();
 	}
 }
@@ -214,17 +180,19 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 	}
 }
 
-interface MultiChannelCCAggregatedMembersGetOptions extends CCCommandOptions {
-	endpoint: number;
+interface MultiChannelCCEndPointFindOptions extends CCCommandOptions {
+	genericClass: GenericDeviceClasses;
+	specificClass: number;
 }
 
-@CCCommand(MultiChannelCommand.AggregatedMembersGet)
-export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
+@CCCommand(MultiChannelCommand.EndPointFind)
+@expectedCCResponse(MultiChannelCCEndPointFindReport)
+export class MultiChannelCCEndPointFind extends MultiChannelCC {
 	public constructor(
 		driver: IDriver,
 		options:
 			| CommandClassDeserializationOptions
-			| MultiChannelCCAggregatedMembersGetOptions,
+			| MultiChannelCCEndPointFindOptions,
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
@@ -234,14 +202,16 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 				ZWaveErrorCodes.CC_DeserializationNotImplemented,
 			);
 		} else {
-			this.endpoint = options.endpoint;
+			this.genericClass = options.genericClass;
+			this.specificClass = options.specificClass;
 		}
 	}
 
-	public endpoint: number;
+	public genericClass: GenericDeviceClasses;
+	public specificClass: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.endpoint & 0b0111_1111]);
+		this.payload = Buffer.from([this.genericClass, this.specificClass]);
 		return super.serialize();
 	}
 }
@@ -270,6 +240,39 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 	}
 }
 
+interface MultiChannelCCAggregatedMembersGetOptions extends CCCommandOptions {
+	endpoint: number;
+}
+
+@CCCommand(MultiChannelCommand.AggregatedMembersGet)
+@expectedCCResponse(MultiChannelCCAggregatedMembersReport)
+export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
+	public constructor(
+		driver: IDriver,
+		options:
+			| CommandClassDeserializationOptions
+			| MultiChannelCCAggregatedMembersGetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
+		} else {
+			this.endpoint = options.endpoint;
+		}
+	}
+
+	public endpoint: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.endpoint & 0b0111_1111]);
+		return super.serialize();
+	}
+}
+
 interface MultiChannelCCCommandEncapsulationOptions extends CCCommandOptions {
 	encapsulatedCC: CommandClass;
 	sourceEndPoint: number;
@@ -277,6 +280,7 @@ interface MultiChannelCCCommandEncapsulationOptions extends CCCommandOptions {
 }
 
 @CCCommand(MultiChannelCommand.CommandEncapsulation)
+// TODO: This probably expects multiple responses
 export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	public constructor(
 		driver: IDriver,

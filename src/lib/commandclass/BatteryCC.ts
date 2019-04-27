@@ -19,19 +19,8 @@ export enum BatteryCommand {
 
 @commandClass(CommandClasses.Battery)
 @implementedVersion(1)
-@expectedCCResponse(CommandClasses.Battery)
 export class BatteryCC extends CommandClass {
 	public ccCommand!: BatteryCommand;
-}
-
-@CCCommand(BatteryCommand.Get)
-export class BatteryCCGet extends BatteryCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
 }
 
 @CCCommand(BatteryCommand.Report)
@@ -52,4 +41,15 @@ export class BatteryCCReport extends BatteryCC {
 
 	@ccValue() public level: number;
 	@ccValue() public isLow: boolean;
+}
+
+@CCCommand(BatteryCommand.Get)
+@expectedCCResponse(BatteryCCReport)
+export class BatteryCCGet extends BatteryCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
+	}
 }

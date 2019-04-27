@@ -22,19 +22,8 @@ export enum BasicCommand {
 
 @commandClass(CommandClasses.Basic)
 @implementedVersion(2) // Update tests in CommandClass.test.ts when changing this
-@expectedCCResponse(CommandClasses.Basic)
 export class BasicCC extends CommandClass {
 	public ccCommand!: BasicCommand;
-}
-
-@CCCommand(BasicCommand.Get)
-export class BasicCCGet extends BasicCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
 }
 
 interface BasicCCSetOptions extends CCCommandOptions {
@@ -79,4 +68,15 @@ export class BasicCCReport extends BasicCC {
 	@ccValue() public currentValue: Maybe<number> | undefined;
 	@ccValue() public targetValue: number | undefined;
 	@ccValue() public duration: Duration | undefined;
+}
+
+@CCCommand(BasicCommand.Get)
+@expectedCCResponse(BasicCCReport)
+export class BasicCCGet extends BasicCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
+	}
 }

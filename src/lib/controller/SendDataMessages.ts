@@ -23,7 +23,7 @@ import {
 	priority,
 	ResponseRole,
 } from "../message/Message";
-import { JSONObject } from "../util/misc";
+import { JSONObject, staticExtends } from "../util/misc";
 
 export enum TransmitOptions {
 	NotSet = 0,
@@ -135,15 +135,17 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		// we declare that as final and the original "final" response, i.e. the SendDataRequest becomes a confirmation
 		const expectedCCOrDynamic = getExpectedCCResponse(this.command);
 		const expected =
-			typeof expectedCCOrDynamic === "function"
+			typeof expectedCCOrDynamic === "function" &&
+			!staticExtends(expectedCCOrDynamic, CommandClass)
 				? expectedCCOrDynamic(this.command)
 				: expectedCCOrDynamic;
-		if (expected == null) return ret; // "final" | "unexpected"
+
+		if (expected == undefined) return ret; // "final" | "unexpected"
 
 		if (isCommandClassContainer(msg)) {
 			// TODO: Is "confirmation" the correct return value here?
 			// Or is it "unexpected"?
-			if (expected === msg.command.ccId) {
+			if (msg.command instanceof expected) {
 				return msg.command.expectMoreMessages() ? "partial" : "final";
 			}
 			// return expected === msg.command.ccId ? "final" : "confirmation"; // not sure if other CCs can come in the meantime

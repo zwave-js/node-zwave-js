@@ -26,7 +26,6 @@ export enum WakeUpCommand {
 
 @commandClass(CommandClasses["Wake Up"])
 @implementedVersion(2)
-@expectedCCResponse(CommandClasses["Wake Up"])
 export class WakeUpCC extends CommandClass {
 	public ccCommand!: WakeUpCommand;
 
@@ -106,16 +105,6 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 	}
 }
 
-@CCCommand(WakeUpCommand.IntervalGet)
-export class WakeUpCCIntervalGet extends WakeUpCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
-
 @CCCommand(WakeUpCommand.IntervalReport)
 export class WakeUpCCIntervalReport extends WakeUpCC {
 	public constructor(
@@ -138,6 +127,17 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
 	}
 }
 
+@CCCommand(WakeUpCommand.IntervalGet)
+@expectedCCResponse(WakeUpCCIntervalReport)
+export class WakeUpCCIntervalGet extends WakeUpCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
+	}
+}
+
 @CCCommand(WakeUpCommand.WakeUpNotification)
 export class WakeUpCCWakeUpNotification extends WakeUpCC {
 	public constructor(
@@ -150,16 +150,6 @@ export class WakeUpCCWakeUpNotification extends WakeUpCC {
 
 @CCCommand(WakeUpCommand.NoMoreInformation)
 export class WakeUpCCNoMoreInformation extends WakeUpCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
-
-@CCCommand(WakeUpCommand.IntervalCapabilitiesGet)
-export class WakeUpCCIntervalCapabilitiesGet extends WakeUpCC {
 	public constructor(
 		driver: IDriver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
@@ -199,5 +189,16 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 	private _wakeUpIntervalSteps: number;
 	public get wakeUpIntervalSteps(): number {
 		return this._wakeUpIntervalSteps;
+	}
+}
+
+@CCCommand(WakeUpCommand.IntervalCapabilitiesGet)
+@expectedCCResponse(WakeUpCCIntervalCapabilitiesReport)
+export class WakeUpCCIntervalCapabilitiesGet extends WakeUpCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
 	}
 }

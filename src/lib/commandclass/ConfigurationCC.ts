@@ -8,6 +8,7 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	DynamicCCResponse,
 	expectedCCResponse,
 	getCommandClass,
 	gotDeserializationOptions,
@@ -60,7 +61,6 @@ export type ConfigValue = number | Set<number>;
 
 @commandClass(CommandClasses.Configuration)
 @implementedVersion(4)
-@expectedCCResponse(CommandClasses.Configuration)
 export class ConfigurationCC extends CommandClass {
 	public ccCommand!: ConfigurationCommand;
 
@@ -113,36 +113,6 @@ export class ConfigurationCC extends CommandClass {
 	}
 }
 
-interface ConfigurationCCGetOptions extends CCCommandOptions {
-	parameter: number;
-}
-
-@CCCommand(ConfigurationCommand.Get)
-export class ConfigurationCCGet extends ConfigurationCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
-	) {
-		super(driver, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
-			);
-		} else {
-			this.parameter = options.parameter;
-		}
-	}
-
-	public parameter: number;
-
-	public serialize(): Buffer {
-		this.payload = Buffer.from([this.parameter & 0xff]);
-		return super.serialize();
-	}
-}
-
 @CCCommand(ConfigurationCommand.Report)
 export class ConfigurationCCReport extends ConfigurationCC {
 	public constructor(
@@ -176,6 +146,37 @@ export class ConfigurationCCReport extends ConfigurationCC {
 	private _value: ConfigValue;
 	public get value(): ConfigValue {
 		return this._value;
+	}
+}
+
+interface ConfigurationCCGetOptions extends CCCommandOptions {
+	parameter: number;
+}
+
+@CCCommand(ConfigurationCommand.Get)
+@expectedCCResponse(ConfigurationCCReport)
+export class ConfigurationCCGet extends ConfigurationCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
+		} else {
+			this.parameter = options.parameter;
+		}
+	}
+
+	public parameter: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.parameter & 0xff]);
+		return super.serialize();
 	}
 }
 
@@ -246,7 +247,14 @@ type ConfigurationCCBulkSetOptions = CCCommandOptions & {
 				values: number[];
 		  });
 
+const getResponseForBulkSet: DynamicCCResponse = (
+	cc: ConfigurationCCBulkSet,
+) => {
+	return cc.handshake ? ConfigurationCCBulkReport : undefined;
+};
+
 @CCCommand(ConfigurationCommand.BulkSet)
+@expectedCCResponse(getResponseForBulkSet)
 export class ConfigurationCCBulkSet extends ConfigurationCC {
 	public constructor(
 		driver: IDriver,
@@ -334,49 +342,6 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 	}
 }
 
-interface ConfigurationCCBulkGetOptions extends CCCommandOptions {
-	parameters: number[];
-}
-
-@CCCommand(ConfigurationCommand.BulkGet)
-export class ConfigurationCCBulkGet extends ConfigurationCC {
-	public constructor(
-		driver: IDriver,
-		options:
-			| CommandClassDeserializationOptions
-			| ConfigurationCCBulkGetOptions,
-	) {
-		super(driver, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
-			);
-		} else {
-			this._parameters = options.parameters.sort();
-			if (!isConsecutiveArray(this.parameters)) {
-				throw new ZWaveError(
-					`A ConfigurationCC.BulkGet can only be used for consecutive parameters`,
-					ZWaveErrorCodes.CC_Invalid,
-				);
-			}
-		}
-	}
-
-	private _parameters: number[];
-	public get parameters(): number[] {
-		return this._parameters;
-	}
-
-	public serialize(): Buffer {
-		this.payload = Buffer.allocUnsafe(3);
-		this.payload.writeUInt16BE(this.parameters[0], 0);
-		this.payload[2] = this.parameters.length;
-		return super.serialize();
-	}
-}
-
 @CCCommand(ConfigurationCommand.BulkReport)
 export class ConfigurationCCBulkReport extends ConfigurationCC {
 	public constructor(
@@ -434,11 +399,18 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 	}
 }
 
-@CCCommand(ConfigurationCommand.NameGet)
-export class ConfigurationCCNameGet extends ConfigurationCC {
+interface ConfigurationCCBulkGetOptions extends CCCommandOptions {
+	parameters: number[];
+}
+
+@CCCommand(ConfigurationCommand.BulkGet)
+@expectedCCResponse(ConfigurationCCBulkReport)
+export class ConfigurationCCBulkGet extends ConfigurationCC {
 	public constructor(
 		driver: IDriver,
-		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| ConfigurationCCBulkGetOptions,
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
@@ -448,15 +420,25 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 				ZWaveErrorCodes.CC_DeserializationNotImplemented,
 			);
 		} else {
-			this.parameter = options.parameter;
+			this._parameters = options.parameters.sort();
+			if (!isConsecutiveArray(this.parameters)) {
+				throw new ZWaveError(
+					`A ConfigurationCC.BulkGet can only be used for consecutive parameters`,
+					ZWaveErrorCodes.CC_Invalid,
+				);
+			}
 		}
 	}
 
-	public parameter: number;
+	private _parameters: number[];
+	public get parameters(): number[] {
+		return this._parameters;
+	}
 
 	public serialize(): Buffer {
-		this.payload = Buffer.allocUnsafe(2);
-		this.payload.writeUInt16BE(this.parameter, 0);
+		this.payload = Buffer.allocUnsafe(3);
+		this.payload.writeUInt16BE(this.parameters[0], 0);
+		this.payload[2] = this.parameters.length;
 		return super.serialize();
 	}
 }
@@ -500,8 +482,9 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 	}
 }
 
-@CCCommand(ConfigurationCommand.InfoGet)
-export class ConfigurationCCInfoGet extends ConfigurationCC {
+@CCCommand(ConfigurationCommand.NameGet)
+@expectedCCResponse(ConfigurationCCNameReport)
+export class ConfigurationCCNameGet extends ConfigurationCC {
 	public constructor(
 		driver: IDriver,
 		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
@@ -566,8 +549,9 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 	}
 }
 
-@CCCommand(ConfigurationCommand.PropertiesGet)
-export class ConfigurationCCPropertiesGet extends ConfigurationCC {
+@CCCommand(ConfigurationCommand.InfoGet)
+@expectedCCResponse(ConfigurationCCInfoReport)
+export class ConfigurationCCInfoGet extends ConfigurationCC {
 	public constructor(
 		driver: IDriver,
 		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
@@ -694,6 +678,34 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 	private _noBulkSupport: boolean | undefined;
 	public get noBulkSupport(): boolean | undefined {
 		return this._noBulkSupport;
+	}
+}
+
+@CCCommand(ConfigurationCommand.PropertiesGet)
+@expectedCCResponse(ConfigurationCCPropertiesReport)
+export class ConfigurationCCPropertiesGet extends ConfigurationCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
+		} else {
+			this.parameter = options.parameter;
+		}
+	}
+
+	public parameter: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.allocUnsafe(2);
+		this.payload.writeUInt16BE(this.parameter, 0);
+		return super.serialize();
 	}
 }
 

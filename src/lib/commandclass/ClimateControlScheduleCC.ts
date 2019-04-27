@@ -51,7 +51,6 @@ export enum ScheduleOverrideType {
 
 @commandClass(CommandClasses["Climate Control Schedule"])
 @implementedVersion(1)
-@expectedCCResponse(CommandClasses["Climate Control Schedule"])
 export class ClimateControlScheduleCC extends CommandClass {
 	public ccCommand!: ClimateControlScheduleCommand;
 }
@@ -102,36 +101,6 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 	}
 }
 
-interface ClimateControlScheduleCCGetOptions extends CCCommandOptions {
-	weekday: Weekday;
-}
-
-@CCCommand(ClimateControlScheduleCommand.Get)
-export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
-	public constructor(
-		driver: IDriver,
-		options:
-			| CommandClassDeserializationOptions
-			| ClimateControlScheduleCCGetOptions,
-	) {
-		super(driver, options);
-		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
-			);
-		} else {
-			this.weekday = options.weekday;
-		}
-	}
-
-	public weekday: Weekday;
-	public serialize(): Buffer {
-		this.payload = Buffer.from([this.weekday & 0b111]);
-		return super.serialize();
-	}
-}
-
 @CCCommand(ClimateControlScheduleCommand.Report)
 export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 	public constructor(
@@ -163,13 +132,34 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 	}
 }
 
-@CCCommand(ClimateControlScheduleCommand.ChangedGet)
-export class ClimateControlScheduleCCChangedGet extends ClimateControlScheduleCC {
+interface ClimateControlScheduleCCGetOptions extends CCCommandOptions {
+	weekday: Weekday;
+}
+
+@CCCommand(ClimateControlScheduleCommand.Get)
+@expectedCCResponse(ClimateControlScheduleCCReport)
+export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 	public constructor(
 		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| ClimateControlScheduleCCGetOptions,
 	) {
 		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
+		} else {
+			this.weekday = options.weekday;
+		}
+	}
+
+	public weekday: Weekday;
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.weekday & 0b111]);
+		return super.serialize();
 	}
 }
 
@@ -189,8 +179,9 @@ export class ClimateControlScheduleCCChangedReport extends ClimateControlSchedul
 	}
 }
 
-@CCCommand(ClimateControlScheduleCommand.OverrideGet)
-export class ClimateControlScheduleCCOverrideGet extends ClimateControlScheduleCC {
+@CCCommand(ClimateControlScheduleCommand.ChangedGet)
+@expectedCCResponse(ClimateControlScheduleCCChangedReport)
+export class ClimateControlScheduleCCChangedGet extends ClimateControlScheduleCC {
 	public constructor(
 		driver: IDriver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
@@ -219,6 +210,17 @@ export class ClimateControlScheduleCCOverrideReport extends ClimateControlSchedu
 	private _overrideState: SetbackState;
 	public get overrideState(): SetbackState {
 		return this._overrideState;
+	}
+}
+
+@CCCommand(ClimateControlScheduleCommand.OverrideGet)
+@expectedCCResponse(ClimateControlScheduleCCOverrideReport)
+export class ClimateControlScheduleCCOverrideGet extends ClimateControlScheduleCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
 	}
 }
 

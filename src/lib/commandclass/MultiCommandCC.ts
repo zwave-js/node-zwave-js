@@ -5,7 +5,6 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
-	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
@@ -19,7 +18,6 @@ export enum MultiCommandCommand {
 
 @commandClass(CommandClasses["Multi Command"])
 @implementedVersion(1)
-@expectedCCResponse(CommandClasses["Multi Command"])
 export class MultiCommandCC extends CommandClass {
 	public ccCommand!: MultiCommandCommand;
 }
@@ -29,6 +27,7 @@ interface MultiCommandCCCommandEncapsulationOptions extends CCCommandOptions {
 }
 
 @CCCommand(MultiCommandCommand.CommandEncapsulation)
+// TODO: This probably expects multiple commands in return
 export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 	public constructor(
 		driver: IDriver,

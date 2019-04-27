@@ -23,19 +23,8 @@ export enum BinarySwitchCommand {
 
 @commandClass(CommandClasses["Binary Switch"])
 @implementedVersion(2)
-@expectedCCResponse(CommandClasses["Binary Switch"])
 export class BinarySwitchCC extends CommandClass {
 	public ccCommand!: BinarySwitchCommand;
-}
-
-@CCCommand(BinarySwitchCommand.Get)
-export class BinarySwitchCCGet extends BinarySwitchCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
 }
 
 interface BinarySwitchCCSetOptions extends CCCommandOptions {
@@ -92,4 +81,15 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 	public currentValue: Maybe<boolean> | undefined;
 	public targetValue: boolean | undefined;
 	public duration: Duration | undefined;
+}
+
+@CCCommand(BinarySwitchCommand.Get)
+@expectedCCResponse(BinarySwitchCCReport)
+export class BinarySwitchCCGet extends BinarySwitchCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
+	}
 }

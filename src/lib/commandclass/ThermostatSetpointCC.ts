@@ -65,7 +65,6 @@ export enum ThermostatSetpointScale {
 
 @commandClass(CommandClasses["Thermostat Setpoint"])
 @implementedVersion(3)
-@expectedCCResponse(CommandClasses["Thermostat Setpoint"])
 export class ThermostatSetpointCC extends CommandClass {
 	public ccCommand!: ThermostatSetpointCommand;
 }
@@ -115,34 +114,6 @@ interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
 	setpointType: ThermostatSetpointType;
 }
 
-@CCCommand(ThermostatSetpointCommand.Get)
-export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
-	public constructor(
-		driver: IDriver,
-		options:
-			| CommandClassDeserializationOptions
-			| ThermostatSetpointCCGetOptions,
-	) {
-		super(driver, options);
-		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
-			);
-		} else {
-			this.setpointType = options.setpointType;
-		}
-	}
-
-	public setpointType: ThermostatSetpointType;
-
-	public serialize(): Buffer {
-		this.payload = Buffer.from([this.setpointType & 0b1111]);
-		return super.serialize();
-	}
-}
-
 @CCCommand(ThermostatSetpointCommand.Report)
 export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	public constructor(
@@ -170,17 +141,14 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	}
 }
 
-interface ThermostatSetpointCCCapabilitiesGetOptions extends CCCommandOptions {
-	setpointType: ThermostatSetpointType;
-}
-
-@CCCommand(ThermostatSetpointCommand.CapabilitiesGet)
-export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
+@CCCommand(ThermostatSetpointCommand.Get)
+@expectedCCResponse(ThermostatSetpointCCReport)
+export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 	public constructor(
 		driver: IDriver,
 		options:
 			| CommandClassDeserializationOptions
-			| ThermostatSetpointCCCapabilitiesGetOptions,
+			| ThermostatSetpointCCGetOptions,
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
@@ -200,6 +168,10 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 		this.payload = Buffer.from([this.setpointType & 0b1111]);
 		return super.serialize();
 	}
+}
+
+interface ThermostatSetpointCCCapabilitiesGetOptions extends CCCommandOptions {
+	setpointType: ThermostatSetpointType;
 }
 
 @CCCommand(ThermostatSetpointCommand.CapabilitiesReport)
@@ -245,13 +217,32 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 	}
 }
 
-@CCCommand(ThermostatSetpointCommand.SupportedGet)
-export class ThermostatSetpointCCSupportedGet extends ThermostatSetpointCC {
+@CCCommand(ThermostatSetpointCommand.CapabilitiesGet)
+@expectedCCResponse(ThermostatSetpointCCCapabilitiesReport)
+export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 	public constructor(
 		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| ThermostatSetpointCCCapabilitiesGetOptions,
 	) {
 		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
+		} else {
+			this.setpointType = options.setpointType;
+		}
+	}
+
+	public setpointType: ThermostatSetpointType;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.setpointType & 0b1111]);
+		return super.serialize();
 	}
 }
 
@@ -288,5 +279,16 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 	private _supportedSetpointTypes: ThermostatSetpointType[];
 	public get supportedSetpointTypes(): readonly ThermostatSetpointType[] {
 		return this._supportedSetpointTypes;
+	}
+}
+
+@CCCommand(ThermostatSetpointCommand.SupportedGet)
+@expectedCCResponse(ThermostatSetpointCCSupportedReport)
+export class ThermostatSetpointCCSupportedGet extends ThermostatSetpointCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
 	}
 }

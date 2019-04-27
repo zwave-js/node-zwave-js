@@ -6,7 +6,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { ZWaveNode } from "../node/Node";
 import { ValueDB } from "../node/ValueDB";
 import { log } from "../util/logger";
-import { JSONObject } from "../util/misc";
+import { JSONObject, staticExtends } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import { CacheValue, serializeCacheValue } from "../values/Cache";
 import { Maybe, unknownBoolean } from "../values/Primitive";
@@ -431,9 +431,9 @@ type CCCommandMap = Map<string, Constructable<CommandClass>>;
 /**
  * A predicate function to test if a received CC matches to the sent CC
  */
-export type DynamicCCResponse<T extends CommandClass> = (
+export type DynamicCCResponse<T extends CommandClass = CommandClass> = (
 	sentCC: T,
-) => CommandClasses | undefined;
+) => typeof CommandClass | undefined;
 
 function getCCCommandMapKey(ccId: CommandClasses, ccCommand: number): string {
 	return JSON.stringify({ ccId, ccCommand });
@@ -686,20 +686,20 @@ export function getCCCommandConstructor<TBase extends CommandClass>(
 /**
  * Defines the expected response associated with a Z-Wave message
  */
-export function expectedCCResponse(cc: CommandClasses): ClassDecorator;
+export function expectedCCResponse(cc: typeof CommandClass): ClassDecorator;
 export function expectedCCResponse(
 	dynamic: DynamicCCResponse<CommandClass>,
 ): ClassDecorator;
 export function expectedCCResponse<T extends CommandClass>(
-	ccOrDynamic: CommandClasses | DynamicCCResponse<T>,
+	ccOrDynamic: typeof CommandClass | DynamicCCResponse<T>,
 ): ClassDecorator {
 	return ccClass => {
-		if (typeof ccOrDynamic === "number") {
+		if (staticExtends(ccOrDynamic, CommandClass)) {
 			log(
 				"protocol",
-				`${ccClass.name}: defining expected CC response ${num2hex(
-					ccOrDynamic,
-				)}`,
+				`${ccClass.name}: defining expected CC response ${
+					ccOrDynamic.name
+				}`,
 				"silly",
 			);
 		} else {
@@ -712,6 +712,7 @@ export function expectedCCResponse<T extends CommandClass>(
 				"silly",
 			);
 		}
+
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_ccResponse, ccOrDynamic, ccClass);
 	};
@@ -722,21 +723,23 @@ export function expectedCCResponse<T extends CommandClass>(
  */
 export function getExpectedCCResponse<T extends CommandClass>(
 	ccClass: T,
-): CommandClasses | DynamicCCResponse<T> | undefined {
+): typeof CommandClass | DynamicCCResponse<T> | undefined {
 	// get the class constructor
 	const constr = ccClass.constructor;
 	// retrieve the current metadata
 	const ret:
-		| CommandClasses
+		| typeof CommandClass
 		| DynamicCCResponse<T>
 		| undefined = Reflect.getMetadata(METADATA_ccResponse, constr);
-	if (typeof ret === "number") {
+	if (!ret || staticExtends(ret, CommandClass)) {
 		log(
 			"protocol",
-			`${constr.name}: retrieving expected response => ${num2hex(ret)}`,
+			`${constr.name}: retrieving expected response => ${
+				ret ? ret.constructor.name : "none"
+			}`,
 			"silly",
 		);
-	} else if (typeof ret === "function") {
+	} else {
 		log(
 			"protocol",
 			`${constr.name}: retrieving expected response => [dynamic${

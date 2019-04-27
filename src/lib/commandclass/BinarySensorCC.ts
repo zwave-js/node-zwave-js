@@ -38,7 +38,6 @@ export enum BinarySensorType {
 
 @commandClass(CommandClasses["Binary Sensor"])
 @implementedVersion(2)
-@expectedCCResponse(CommandClasses["Binary Sensor"])
 export class BinarySensorCC extends CommandClass {
 	public ccCommand!: BinarySensorCommand;
 }
@@ -47,7 +46,23 @@ interface BinarySensorCCGetOptions extends CCCommandOptions {
 	sensorType?: BinarySensorType;
 }
 
+@CCCommand(BinarySensorCommand.Report)
+export class BinarySensorCCReport extends BinarySensorCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		this.value = this.payload[0] === 0xff;
+		this.sensorType = this.payload[1];
+	}
+
+	public sensorType: BinarySensorType;
+	public value: boolean;
+}
+
 @CCCommand(BinarySensorCommand.Get)
+@expectedCCResponse(BinarySensorCCReport)
 export class BinarySensorCCGet extends BinarySensorCC {
 	public constructor(
 		driver: IDriver,
@@ -67,31 +82,6 @@ export class BinarySensorCCGet extends BinarySensorCC {
 	}
 }
 
-@CCCommand(BinarySensorCommand.SupportedGet)
-export class BinarySensorCCSupportedGet extends BinarySensorCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
-
-@CCCommand(BinarySensorCommand.Report)
-export class BinarySensorCCReport extends BinarySensorCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions,
-	) {
-		super(driver, options);
-		this.value = this.payload[0] === 0xff;
-		this.sensorType = this.payload[1];
-	}
-
-	public sensorType: BinarySensorType;
-	public value: boolean;
-}
-
 @CCCommand(BinarySensorCommand.SupportedReport)
 export class BinarySensorCCSupportedReport extends BinarySensorCC {
 	public constructor(
@@ -105,5 +95,16 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 	private _supportedSensorTypes: BinarySensorType[];
 	public get supportedSensorTypes(): BinarySensorType[] {
 		return this._supportedSensorTypes;
+	}
+}
+
+@CCCommand(BinarySensorCommand.SupportedGet)
+@expectedCCResponse(BinarySensorCCSupportedReport)
+export class BinarySensorCCSupportedGet extends BinarySensorCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
 	}
 }

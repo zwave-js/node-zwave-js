@@ -36,7 +36,6 @@ function parseVersion(buffer: Buffer): string {
 
 @commandClass(CommandClasses.Version)
 @implementedVersion(3)
-@expectedCCResponse(CommandClasses.Version)
 export class VersionCC extends CommandClass {
 	public ccCommand!: VersionCommand;
 
@@ -68,16 +67,6 @@ export class VersionCC extends CommandClass {
 			const request = new SendDataRequest(driver, { command: cc });
 			await driver.sendMessage(request, MessagePriority.NodeQuery);
 		}
-	}
-}
-
-@CCCommand(VersionCommand.Get)
-export class VersionCCGet extends VersionCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
 	}
 }
 
@@ -120,11 +109,45 @@ export class VersionCCReport extends VersionCC {
 	}
 }
 
+@CCCommand(VersionCommand.Get)
+@expectedCCResponse(VersionCCReport)
+export class VersionCCGet extends VersionCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
+	}
+}
+
+@CCCommand(VersionCommand.CommandClassReport)
+export class VersionCCCommandClassReport extends VersionCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		this._requestedCC = this.payload[0];
+		this._ccVersion = this.payload[1];
+	}
+
+	private _ccVersion: number;
+	public get ccVersion(): number {
+		return this._ccVersion;
+	}
+
+	private _requestedCC: CommandClasses;
+	public get requestedCC(): CommandClasses {
+		return this._requestedCC;
+	}
+}
+
 interface VersionCCCommandClassGetOptions extends CCCommandOptions {
 	requestedCC: CommandClasses;
 }
 
 @CCCommand(VersionCommand.CommandClassGet)
+@expectedCCResponse(VersionCCCommandClassReport)
 export class VersionCCCommandClassGet extends VersionCC {
 	public constructor(
 		driver: IDriver,
@@ -152,38 +175,6 @@ export class VersionCCCommandClassGet extends VersionCC {
 	}
 }
 
-@CCCommand(VersionCommand.CommandClassReport)
-export class VersionCCCommandClassReport extends VersionCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions,
-	) {
-		super(driver, options);
-		this._requestedCC = this.payload[0];
-		this._ccVersion = this.payload[1];
-	}
-
-	private _ccVersion: number;
-	public get ccVersion(): number {
-		return this._ccVersion;
-	}
-
-	private _requestedCC: CommandClasses;
-	public get requestedCC(): CommandClasses {
-		return this._requestedCC;
-	}
-}
-
-@CCCommand(VersionCommand.CapabilitiesGet)
-export class VersionCCCapabilitiesGet extends VersionCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
-
 @CCCommand(VersionCommand.CapabilitiesReport)
 export class VersionCCCapabilitiesReport extends VersionCC {
 	public constructor(
@@ -201,8 +192,9 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 	}
 }
 
-@CCCommand(VersionCommand.ZWaveSoftwareGet)
-export class VersionCCZWaveSoftwareGet extends VersionCC {
+@CCCommand(VersionCommand.CapabilitiesGet)
+@expectedCCResponse(VersionCCCapabilitiesReport)
+export class VersionCCCapabilitiesGet extends VersionCC {
 	public constructor(
 		driver: IDriver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
@@ -284,5 +276,16 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 	private _applicationBuildNumber: number;
 	public get applicationBuildNumber(): number {
 		return this._applicationBuildNumber;
+	}
+}
+
+@CCCommand(VersionCommand.ZWaveSoftwareGet)
+@expectedCCResponse(VersionCCZWaveSoftwareReport)
+export class VersionCCZWaveSoftwareGet extends VersionCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
 	}
 }

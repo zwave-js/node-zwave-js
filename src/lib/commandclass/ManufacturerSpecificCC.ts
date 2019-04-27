@@ -28,7 +28,6 @@ export enum DeviceIdType {
 
 @commandClass(CommandClasses["Manufacturer Specific"])
 @implementedVersion(2)
-@expectedCCResponse(CommandClasses["Manufacturer Specific"])
 export class ManufacturerSpecificCC extends CommandClass {
 	public ccCommand!: ManufacturerSpecificCommand;
 
@@ -40,16 +39,6 @@ export class ManufacturerSpecificCC extends CommandClass {
 				return this.version >= 2;
 		}
 		return super.supportsCommand(cmd);
-	}
-}
-
-@CCCommand(ManufacturerSpecificCommand.Get)
-export class ManufacturerSpecificCCGet extends ManufacturerSpecificCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
 	}
 }
 
@@ -81,35 +70,14 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 	}
 }
 
-interface ManufacturerSpecificCCDeviceSpecificGetOptions
-	extends CCCommandOptions {
-	deviceIdType: DeviceIdType;
-}
-
-@CCCommand(ManufacturerSpecificCommand.DeviceSpecificGet)
-export class ManufacturerSpecificCCDeviceSpecificGet extends ManufacturerSpecificCC {
+@CCCommand(ManufacturerSpecificCommand.Get)
+@expectedCCResponse(ManufacturerSpecificCCReport)
+export class ManufacturerSpecificCCGet extends ManufacturerSpecificCC {
 	public constructor(
 		driver: IDriver,
-		options:
-			| CommandClassDeserializationOptions
-			| ManufacturerSpecificCCDeviceSpecificGetOptions,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
-		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
-			);
-		} else {
-			this.deviceIdType = options.deviceIdType;
-		}
-	}
-
-	public deviceIdType: DeviceIdType;
-
-	public serialize(): Buffer {
-		this.payload = Buffer.from([(this.deviceIdType || 0) & 0b111]);
-		return super.serialize();
 	}
 }
 
@@ -140,5 +108,38 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
 	private _deviceId: string;
 	public get deviceId(): string {
 		return this._deviceId;
+	}
+}
+
+interface ManufacturerSpecificCCDeviceSpecificGetOptions
+	extends CCCommandOptions {
+	deviceIdType: DeviceIdType;
+}
+
+@CCCommand(ManufacturerSpecificCommand.DeviceSpecificGet)
+@expectedCCResponse(ManufacturerSpecificCCDeviceSpecificReport)
+export class ManufacturerSpecificCCDeviceSpecificGet extends ManufacturerSpecificCC {
+	public constructor(
+		driver: IDriver,
+		options:
+			| CommandClassDeserializationOptions
+			| ManufacturerSpecificCCDeviceSpecificGetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+			);
+		} else {
+			this.deviceIdType = options.deviceIdType;
+		}
+	}
+
+	public deviceIdType: DeviceIdType;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([(this.deviceIdType || 0) & 0b111]);
+		return super.serialize();
 	}
 }

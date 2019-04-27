@@ -4,3 +4,15 @@ export function isConsecutiveArray(values: number[]): boolean {
 }
 
 export type JSONObject = Record<string, any>;
+
+/** Tests if base is in the super chain of `constructor` */
+export function staticExtends<T extends new (...args: any[]) => any>(
+	constructor: any,
+	base: T,
+): constructor is T {
+	while (constructor) {
+		if (constructor === base) return true;
+		constructor = Object.getPrototypeOf(constructor);
+	}
+	return false;
+}

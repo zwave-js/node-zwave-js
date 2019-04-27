@@ -43,7 +43,6 @@ export enum SwitchType {
 
 @commandClass(CommandClasses["Multilevel Switch"])
 @implementedVersion(4)
-@expectedCCResponse(CommandClasses["Multilevel Switch"])
 export class MultilevelSwitchCC extends CommandClass {
 	public ccCommand!: MultilevelSwitchCommand;
 }
@@ -88,16 +87,6 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 	}
 }
 
-@CCCommand(MultilevelSwitchCommand.Get)
-export class MultilevelSwitchCCGet extends MultilevelSwitchCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
-
 @CCCommand(MultilevelSwitchCommand.Report)
 export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	public constructor(
@@ -125,6 +114,17 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	private _currentValue: Maybe<number>;
 	public get currentValue(): Maybe<number> {
 		return this._currentValue;
+	}
+}
+
+@CCCommand(MultilevelSwitchCommand.Get)
+@expectedCCResponse(MultilevelSwitchCCReport)
+export class MultilevelSwitchCCGet extends MultilevelSwitchCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
 	}
 }
 
@@ -205,16 +205,6 @@ export class MultilevelSwitchCCStopLevelChange extends MultilevelSwitchCC {
 	}
 }
 
-@CCCommand(MultilevelSwitchCommand.SupportedGet)
-export class MultilevelSwitchCCSupportedGet extends MultilevelSwitchCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
-
 @CCCommand(MultilevelSwitchCommand.SupportedReport)
 export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 	public constructor(
@@ -234,5 +224,16 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 	private _secondarySwitchType: SwitchType;
 	public get secondarySwitchType(): SwitchType {
 		return this._secondarySwitchType;
+	}
+}
+
+@CCCommand(MultilevelSwitchCommand.SupportedGet)
+@expectedCCResponse(MultilevelSwitchCCSupportedReport)
+export class MultilevelSwitchCCSupportedGet extends MultilevelSwitchCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
 	}
 }
