@@ -5,7 +5,10 @@ import { EventEmitter } from "events";
 import * as fs from "fs-extra";
 import * as path from "path";
 import * as SerialPort from "serialport";
-import { getImplementedVersion } from "../commandclass/CommandClass";
+import {
+	CommandClass,
+	getImplementedVersion,
+} from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
@@ -1136,6 +1139,20 @@ export class Driver extends EventEmitter implements IDriver {
 		return promise;
 	}
 	// wotan-enable no-misused-generics
+
+	// wotan-disable-next-line no-misused-generics
+	public async sendCommand<TResponse extends CommandClass = CommandClass>(
+		command: CommandClass,
+		priority?: MessagePriority,
+	): Promise<TResponse | undefined> {
+		const msg = new SendDataRequest(this, {
+			command,
+		});
+		const resp = await this.sendMessage(msg, priority);
+		if (isCommandClassContainer(resp)) {
+			return resp.command as TResponse;
+		}
+	}
 
 	/**
 	 * Sends a low-level message like ACK, NAK or CAN immediately

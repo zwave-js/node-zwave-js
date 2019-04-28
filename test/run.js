@@ -54,11 +54,8 @@ const d = new Driver("COM3").once("driver ready", async () => {
 	// console.log(JSON.stringify(resp, null, 4));
 
 	d.controller.nodes.get(2).on("interview completed", async () => {
-		await d.sendMessage(
-			new SendDataRequest(d, {
-				command: new BatteryCCGet(d, { nodeId: 2 }),
-			}),
-		);
+		const report = await d.sendCommand(new BatteryCCGet(d, { nodeId: 2 }));
+		console.log(JSON.stringify(report));
 
 		await wait(30000);
 
