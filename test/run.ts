@@ -1,32 +1,12 @@
 // @ts-check
 require("reflect-metadata");
 
-const { Driver } = require("../build/lib/driver/Driver");
-const {
-	AddNodeToNetworkRequest,
-	AddNodeType,
-} = require("../build/lib/controller/AddNodeToNetworkRequest");
-const {
-	HardResetRequest,
-} = require("../build/lib/controller/HardResetRequest");
-const {
-	RequestNodeInfoResponse,
-	RequestNodeInfoRequest,
-} = require("../build/lib/node/RequestNodeInfoMessages");
-const { wait } = require("alcalzone-shared/async");
-
-const { SendDataRequest } = require("../build/lib/controller/SendDataMessages");
-const {
-	ApplicationCommandRequest,
-} = require("../build/lib/controller/ApplicationCommandRequest");
-const {
-	BatteryCCGet,
-	BatteryCCReport,
-} = require("../build/lib/commandclass/BatteryCC");
-const { ZWaveNode } = require("../build/lib/node/Node");
+import { wait } from "alcalzone-shared/async";
+import { BatteryCCGet } from "../build/lib/commandclass/BatteryCC";
+import { Driver } from "../build/lib/driver/Driver";
 
 const d = new Driver("COM3").once("driver ready", async () => {
-	const node = d.controller.nodes.get(2);
+	const node = d.controller!.nodes.get(2)!;
 	node.on("value added", args =>
 		console.log(`value added: ${JSON.stringify(args)}`),
 	);
@@ -53,7 +33,7 @@ const d = new Driver("COM3").once("driver ready", async () => {
 	// const resp = await d.sendMessage(new AddNodeToNetworkRequest(AddNodeType.Any, true, true));
 	// console.log(JSON.stringify(resp, null, 4));
 
-	d.controller.nodes.get(2).on("interview completed", async () => {
+	node.on("interview completed", async () => {
 		const report = await d.sendCommand(new BatteryCCGet(d, { nodeId: 2 }));
 		console.log(JSON.stringify(report));
 

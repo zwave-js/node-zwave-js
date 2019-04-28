@@ -27,6 +27,6 @@
 		"watch": false, // true breaks circleci
 		"pretty": true
 	},
-	"include": ["src/**/*.ts", "maintenance/**/*.ts"],
+	"include": ["src/**/*.ts", "maintenance/**/*.ts", "test/**/*.ts"],
 	"exclude": ["build/**", "node_modules/**"]
 }

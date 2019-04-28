@@ -8,15 +8,19 @@
 			"type": "node",
 			"request": "launch",
 			"name": "Launch Program",
-			"program": "${workspaceFolder}/test/run.js",
+			"port": 9229,
+			"runtimeArgs": [
+				"--inspect-brk=9229",
+				"-r",
+				"ts-node/register",
+				"${workspaceFolder}/test/run.ts"
+			],
 			"env": {
 				"DEBUG": "zwave:(controller)",
 				"NO_CACHE": "false"
 			},
-			"outFiles": ["${workspaceFolder}/**/*.js"],
 			"console": "integratedTerminal",
 			"sourceMaps": true
-			// "preLaunchTask": "npm: build"
 		}
 	]
 }
