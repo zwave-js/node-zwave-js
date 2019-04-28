@@ -1,4 +1,5 @@
 import { IDriver } from "../driver/IDriver";
+import { JSONObject } from "../util/misc";
 import {
 	CCCommand,
 	CCCommandOptions,
@@ -30,17 +31,32 @@ export class BatteryCCReport extends BatteryCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		this.level = this.payload[0];
-		if (this.level === 0xff) {
-			this.level = 0;
-			this.isLow = true;
+		this._level = this.payload[0];
+		if (this._level === 0xff) {
+			this._level = 0;
+			this._isLow = true;
 		} else {
-			this.isLow = false;
+			this._isLow = false;
 		}
+		this.persistValues();
 	}
 
-	@ccValue() public level: number;
-	@ccValue() public isLow: boolean;
+	private _level: number;
+	@ccValue() public get level(): number {
+		return this._level;
+	}
+
+	private _isLow: boolean;
+	@ccValue() public get isLow(): boolean {
+		return this._isLow;
+	}
+
+	public toJSON(): JSONObject {
+		return super.toJSONInherited({
+			level: this.level,
+			isLow: this.isLow,
+		});
+	}
 }
 
 @CCCommand(BatteryCommand.Get)

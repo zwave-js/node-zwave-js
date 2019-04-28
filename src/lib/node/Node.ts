@@ -242,6 +242,7 @@ export class ZWaveNode extends EventEmitter {
 		);
 	}
 
+	/** Adds a CC to the list of command classes implemented by the node or updates the information */
 	public addCC(cc: CommandClasses, info: Partial<CommandClassInfo>): void {
 		let ccInfo = this._implementedCommandClasses.has(cc)
 			? this._implementedCommandClasses.get(cc)
@@ -252,6 +253,11 @@ export class ZWaveNode extends EventEmitter {
 			  };
 		ccInfo = Object.assign(ccInfo, info);
 		this._implementedCommandClasses.set(cc, ccInfo);
+	}
+
+	/** Removes a CC from the list of command classes implemented by the node */
+	public removeCC(cc: CommandClasses): void {
+		this._implementedCommandClasses.delete(cc);
 	}
 
 	/** Tests if this node supports the given CommandClass */
@@ -524,6 +530,28 @@ export class ZWaveNode extends EventEmitter {
 					`${this.logPrefix}  received the node info`,
 					"debug",
 				);
+				log("controller", `${this.logPrefix}  supported CCs:`, "debug");
+				for (const cc of resp.nodeInformation.supportedCCs) {
+					const ccName = CommandClasses[cc];
+					log(
+						"controller",
+						`${this.logPrefix}    ${ccName ? ccName : num2hex(cc)}`,
+						"debug",
+					);
+				}
+				log(
+					"controller",
+					`${this.logPrefix}  controlled CCs:`,
+					"debug",
+				);
+				for (const cc of resp.nodeInformation.controlledCCs) {
+					const ccName = CommandClasses[cc];
+					log(
+						"controller",
+						`${this.logPrefix}    ${ccName ? ccName : num2hex(cc)}`,
+						"debug",
+					);
+				}
 				this.updateNodeInfo(resp.nodeInformation);
 				// TODO: Save the received values
 			}
@@ -674,9 +702,16 @@ export class ZWaveNode extends EventEmitter {
 					// Remember which CC version this node supports
 					const reqCC = versionResponse.requestedCC;
 					const supportedVersion = versionResponse.ccVersion;
-					this.addCC(reqCC, { version: supportedVersion });
-					// prettier-ignore
-					log("controller", `${this.logPrefix}  supports CC ${CommandClasses[reqCC]} (${num2hex(reqCC)}) in version ${supportedVersion}`, "debug");
+					if (supportedVersion > 0) {
+						this.addCC(reqCC, { version: supportedVersion });
+						// prettier-ignore
+						log("controller", `${this.logPrefix}  supports CC ${CommandClasses[reqCC]} (${num2hex(reqCC)}) in version ${supportedVersion}`, "debug");
+					} else {
+						// We were lied to - the NIF said this CC is supported, now the node claims it isn't
+						this.removeCC(reqCC);
+						// prettier-ignore
+						log("controller", `${this.logPrefix}  does NOT support CC ${CommandClasses[reqCC]} (${num2hex(reqCC)})`, "debug");
+					}
 				}
 			} catch (e) {
 				log(

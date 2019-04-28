@@ -356,14 +356,22 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 	}
 
-	private _cleanupHandler = () => this.destroy();
+	private _cleanupHandler = () => void this.destroy();
 	/**
 	 * Terminates the driver instance and closes the underlying serial connection.
 	 * Must be called under any circumstances.
 	 */
-	public destroy(): void {
+	public async destroy(): Promise<void> {
 		log("driver", "destroying driver instance...", "debug");
 		this._wasDestroyed = true;
+
+		try {
+			// Attempt to save the network to cache
+			await this.saveNetworkToCacheInternal();
+		} catch (e) {
+			log("driver", e.message, "error");
+		}
+
 		process.removeListener("exit", this._cleanupHandler);
 		process.removeListener("SIGINT", this._cleanupHandler);
 		process.removeListener("uncaughtException", this._cleanupHandler);
@@ -1269,6 +1277,21 @@ export class Driver extends EventEmitter implements IDriver {
 	private lastSaveToCache: number = 0;
 	private readonly saveToCacheInterval: number = 50;
 	private saveToCacheTimer: NodeJS.Timer | undefined;
+
+	private async saveNetworkToCacheInternal(): Promise<void> {
+		if (!this.controller || !this.controller.homeId) {
+			console.log("foo");
+			return;
+		}
+		const cacheFile = path.join(
+			this.cacheDir,
+			this.controller.homeId.toString(16) + ".json",
+		);
+		const serializedObj = this.controller.serialize();
+		await fs.ensureDir(this.cacheDir);
+		await fs.writeJSON(cacheFile, serializedObj, { spaces: 4 });
+	}
+
 	/**
 	 * Saves the current configuration and collected data about the controller and all nodes to a cache file.
 	 * For performance reasons, these calls may be throttled
@@ -1289,14 +1312,7 @@ export class Driver extends EventEmitter implements IDriver {
 			this.saveToCacheTimer = undefined;
 		}
 		this.lastSaveToCache = Date.now();
-
-		const cacheFile = path.join(
-			this.cacheDir,
-			this.controller.homeId.toString(16) + ".json",
-		);
-		const serializedObj = this.controller.serialize();
-		await fs.ensureDir(this.cacheDir);
-		await fs.writeJSON(cacheFile, serializedObj, { spaces: 4 });
+		return this.saveNetworkToCacheInternal();
 	}
 
 	/**

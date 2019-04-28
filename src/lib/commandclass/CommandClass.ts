@@ -334,23 +334,32 @@ export class CommandClass {
 	}
 
 	/** Which variables should be persisted when requested */
-	private _variables = new Set<string>();
-	/** Creates a variable that will be stored */
-	public createVariable(name: keyof this): void {
-		this._variables.add(name as string);
+	private _ccValueNames = new Set<string>();
+	/** Creates a value that will be stored in the valueDB alongside with the ones marked with `@ccValue()` */
+	public createValue(name: keyof this): void {
+		this._ccValueNames.add(name as string);
 	}
-	public createVariables(...names: (keyof this)[]): void {
+	public createValues(...names: (keyof this)[]): void {
 		for (const name of names) {
-			this.createVariable(name);
+			this.createValue(name);
 		}
 	}
 
-	/** Persists all values on the given node */
-	public persistValues(
-		variables: Iterable<keyof this> = this._variables.keys() as any,
-	): void {
-		const db = this.getValueDB();
-		for (const variable of variables) {
+	/** Persists all values on the given node into the value. Returns true if the process succeeded, false otherwise */
+	public persistValues(valueNames?: (keyof this)[]): boolean {
+		if (!valueNames) {
+			valueNames = ([
+				...this._ccValueNames.keys(),
+				...getCCValueNames(this),
+			] as unknown) as (keyof this)[];
+		}
+		let db: ValueDB;
+		try {
+			db = this.getValueDB();
+		} catch (e) {
+			return false;
+		}
+		for (const variable of valueNames) {
 			db.setValue(
 				getCommandClass(this),
 				this.endpoint,
@@ -358,38 +367,56 @@ export class CommandClass {
 				this[variable],
 			);
 		}
+		return true;
 	}
 
 	/** Serializes all values to be stored in the cache */
 	public serializeValuesForCache(): CacheValue[] {
 		const ccValues = this.getValueDB().getValues(getCommandClass(this));
-		return ccValues.map(({ value, ...props }) => ({
-			...props,
-			value: serializeCacheValue(value),
-		}));
+		const staticCCValueNames = getCCValueNames(this);
+		return (
+			ccValues
+				// only serialize non-undefined values
+				.filter(({ value }) => value != undefined)
+				// only serialize registered CC values
+				.filter(
+					({ propertyName }) =>
+						propertyName in this ||
+						staticCCValueNames.includes(propertyName) ||
+						this._ccValueNames.has(propertyName),
+				)
+				.map(({ value, ...props }) => ({
+					...props,
+					value: serializeCacheValue(value),
+				}))
+		);
 	}
 
 	/** Deserializes values from the cache */
 	public deserializeValuesFromCache(values: CacheValue[]): void {
 		const cc = getCommandClass(this);
+		const ccValueNames = getCCValueNames(this);
 		for (const val of values) {
-			// Don't deserialize non-CC values
-			if (!(val.propertyName in this)) continue;
-
-			let valueToSet = val.value;
+			// Only deserialize registered CC values
 			if (
-				this[val.propertyName as keyof this] instanceof Map &&
-				isObject(val.value)
+				val.propertyName in this ||
+				ccValueNames.includes(val.propertyName)
 			) {
-				// convert the object back to a Map
-				valueToSet = new Map(entries(val.value));
+				let valueToSet = val.value;
+				if (
+					this[val.propertyName as keyof this] instanceof Map &&
+					isObject(val.value)
+				) {
+					// convert the object back to a Map
+					valueToSet = new Map(entries(val.value));
+				}
+				this.getValueDB().setValue(
+					cc,
+					val.endpoint,
+					val.propertyName,
+					valueToSet,
+				);
 			}
-			this.getValueDB().setValue(
-				cc,
-				val.endpoint,
-				val.propertyName,
-				valueToSet,
-			);
 		}
 	}
 
@@ -414,6 +441,7 @@ export const METADATA_commandClassMap = Symbol("commandClassMap");
 export const METADATA_ccResponse = Symbol("ccResponse");
 export const METADATA_ccCommand = Symbol("ccCommand");
 export const METADATA_ccCommandMap = Symbol("ccCommandMap");
+export const METADATA_ccValues = Symbol("ccValues");
 export const METADATA_version = Symbol("version");
 /* eslint-enable @typescript-eslint/camelcase */
 
@@ -789,32 +817,34 @@ export function getExpectedCCResponseStatic<
 	return ret;
 }
 
-/** Marks the decorated property as a value of the Command Class. This allows saving it on the node with persistValues() */
+/**
+ * Marks the decorated property as a value of the Command Class. This allows saving it on the node with persistValues()
+ */
 export function ccValue(): PropertyDecorator {
-	// The internal (private) variable used by the property
-	let value: any;
 	return (target: CommandClass, property: string | symbol) => {
-		// Overwrite the original property definition
-		const update = Reflect.defineProperty(target, property, {
-			configurable: true,
-			enumerable: true,
-			get() {
-				return value;
-			},
-			set(newValue: any) {
-				// All variables that are stored should be marked to be persisted
-				target.createVariable.bind(this)(property);
-				value = newValue;
-			},
-		});
-		if (!update) {
-			throw new Error(
-				`Cannot define ${property as string} on ${
-					target.constructor.name
-				} as CC value`,
-			);
-		}
+		// get the class constructor
+		const constr = target.constructor as typeof CommandClass;
+		const cc = getCommandClassStatic(constr);
+		// retrieve the current metadata
+		const metadata =
+			Reflect.getMetadata(METADATA_ccValues, CommandClass) || {};
+		if (!(cc in metadata)) metadata[cc] = new Set();
+		// And add the variable
+		const variables: Set<string> = metadata[cc];
+		variables.add(property as string);
+		// store back to the object
+		Reflect.defineMetadata(METADATA_ccValues, metadata, CommandClass);
 	};
+}
+
+export function getCCValueNames(commandClass: CommandClass): string[] {
+	// get the class constructor
+	const constr = commandClass.constructor as typeof CommandClass;
+	const cc = getCommandClassStatic(constr);
+	// retrieve the current metadata
+	const metadata = Reflect.getMetadata(METADATA_ccValues, CommandClass) || {};
+	if (!(cc in metadata)) return [];
+	return [...(metadata[cc] as Set<string>).keys()];
 }
 
 // To be sure all metadata gets loaded, import all command classes
