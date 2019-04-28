@@ -302,7 +302,8 @@ export class ZWaveNode extends EventEmitter {
 
 	//#region --- interview ---
 
-	public async interview(): Promise<void> {
+	/** Interviews this node. Returns true when it succeeded, false otherwise */
+	public async interview(): Promise<boolean> {
 		log(
 			"controller",
 			`${this.logPrefix}beginning interview... last completed step: ${
@@ -326,7 +327,7 @@ export class ZWaveNode extends EventEmitter {
 
 		if (this.interviewStage === InterviewStage.ProtocolInfo) {
 			// Make sure the device answers
-			await this.ping();
+			if (!(await this.ping())) return false;
 		}
 
 		// TODO: Ping should not be a separate stage
@@ -365,7 +366,8 @@ export class ZWaveNode extends EventEmitter {
 		// At this point the interview of new nodes is done. Start here when re-interviewing known nodes
 		if (this.interviewStage === InterviewStage.RestartFromCache) {
 			// Make sure the device answers
-			await this.ping(InterviewStage.RestartFromCache);
+			if (!(await this.ping(InterviewStage.RestartFromCache)))
+				return false;
 		}
 
 		if (
@@ -391,6 +393,7 @@ export class ZWaveNode extends EventEmitter {
 		// Tell listeners that the interview is completed
 		// The driver will send this node to sleep
 		this.emit("interview completed", this);
+		return true;
 	}
 
 	/** Updates this node's interview stage and saves to cache when appropriate */
@@ -462,7 +465,7 @@ export class ZWaveNode extends EventEmitter {
 	/** Step #3 of the node interview */
 	protected async ping(
 		targetInterviewStage: InterviewStage = InterviewStage.Ping,
-	): Promise<void> {
+	): Promise<boolean> {
 		if (this.isControllerNode()) {
 			log(
 				"controller",
@@ -493,9 +496,12 @@ export class ZWaveNode extends EventEmitter {
 					`${this.logPrefix}  ping failed: ${e.message}`,
 					"debug",
 				);
+				// TODO: The node is dead
+				return false;
 			}
 		}
 		await this.setInterviewStage(targetInterviewStage);
+		return true;
 	}
 
 	/** Step #5 of the node interview */

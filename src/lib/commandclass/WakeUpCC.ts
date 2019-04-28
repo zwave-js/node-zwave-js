@@ -36,7 +36,8 @@ export class WakeUpCC extends CommandClass {
 			"awake",
 		);
 		// TODO: Add a way to configure this
-		const assumeAwake = true;
+		// TODO: While adding nodes, they should be assumed awake
+		const assumeAwake = false;
 		return ret == undefined ? assumeAwake : !!ret;
 	}
 

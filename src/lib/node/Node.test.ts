@@ -54,7 +54,7 @@ class TestNode extends ZWaveNode {
 	public async queryProtocolInfo(): Promise<void> {
 		return super.queryProtocolInfo();
 	}
-	public async ping(...args: any[]): Promise<void> {
+	public async ping(...args: any[]): Promise<boolean> {
 		return super.ping(...args);
 	}
 	public async queryNodeInfo(): Promise<void> {
@@ -687,6 +687,9 @@ describe("lib/node/Node", () => {
 					configureWakeup: InterviewStage.WakeUp,
 					requestStaticValues: InterviewStage.Static,
 				};
+				const returnValues = {
+					ping: true,
+				};
 				originalMethods = {
 					queryProtocolInfo: node.queryProtocolInfo,
 					ping: node.ping,
@@ -705,7 +708,9 @@ describe("lib/node/Node", () => {
 						.mockName(`${method} mock`)
 						.mockImplementation(() => {
 							node.interviewStage = interviewStagesAfter[method];
-							return Promise.resolve();
+							return method in returnValues
+								? Promise.resolve(returnValues[method])
+								: Promise.resolve();
 						});
 				}
 			});
@@ -816,10 +821,10 @@ describe("lib/node/Node", () => {
 			const sleepSpy = jest.fn();
 			node.on("wake up", wakeupSpy).on("sleep", sleepSpy);
 			for (const { state, expectWakeup, expectSleep } of [
-				{ state: false, expectSleep: true, expectWakeup: false },
 				{ state: false, expectSleep: false, expectWakeup: false },
 				{ state: true, expectSleep: false, expectWakeup: true },
 				{ state: true, expectSleep: false, expectWakeup: false },
+				{ state: false, expectSleep: true, expectWakeup: false },
 			]) {
 				wakeupSpy.mockClear();
 				sleepSpy.mockClear();
