@@ -218,6 +218,9 @@ export class Driver extends EventEmitter implements IDriver {
 			for (const node of this._controller.nodes.values()) {
 				if (node.interviewStage === InterviewStage.Complete) {
 					node.interviewStage = InterviewStage.RestartFromCache;
+				} else if (node.interviewStage === InterviewStage.Ping) {
+					// In case the node gets stuck directly after pinging, retry
+					node.interviewStage = InterviewStage.ProtocolInfo;
 				}
 				// TODO: retry on failure or something...
 				// don't await the interview, because it may take a very long time
