@@ -3,6 +3,7 @@ import { parseBitMask } from "../values/Primitive";
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -42,10 +43,6 @@ export class BinarySensorCC extends CommandClass {
 	public ccCommand!: BinarySensorCommand;
 }
 
-interface BinarySensorCCGetOptions extends CCCommandOptions {
-	sensorType?: BinarySensorType;
-}
-
 @CCCommand(BinarySensorCommand.Report)
 export class BinarySensorCCReport extends BinarySensorCC {
 	public constructor(
@@ -53,12 +50,24 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		this.value = this.payload[0] === 0xff;
-		this.sensorType = this.payload[1];
+		this._value = this.payload[0] === 0xff;
+		this._sensorType = this.payload[1];
+		this.persistValues();
 	}
 
-	public sensorType: BinarySensorType;
-	public value: boolean;
+	private _sensorType: BinarySensorType;
+	public get sensorType(): BinarySensorType {
+		return this._sensorType;
+	}
+
+	private _value: boolean;
+	public get value(): boolean {
+		return this._value;
+	}
+}
+
+interface BinarySensorCCGetOptions extends CCCommandOptions {
+	sensorType?: BinarySensorType;
 }
 
 @CCCommand(BinarySensorCommand.Get)
@@ -90,10 +99,11 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 	) {
 		super(driver, options);
 		this._supportedSensorTypes = parseBitMask(this.payload);
+		this.persistValues();
 	}
 
 	private _supportedSensorTypes: BinarySensorType[];
-	public get supportedSensorTypes(): BinarySensorType[] {
+	@ccValue() public get supportedSensorTypes(): readonly BinarySensorType[] {
 		return this._supportedSensorTypes;
 	}
 }

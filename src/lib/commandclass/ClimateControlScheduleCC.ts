@@ -13,6 +13,7 @@ import {
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -119,15 +120,16 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 		this._switchPoints = allSwitchpoints.filter(
 			sp => sp.state !== "Unused",
 		);
+		this.persistValues();
 	}
 
 	private _switchPoints: Switchpoint[];
-	public get switchPoints(): Switchpoint[] {
+	@ccValue() public get switchPoints(): readonly Switchpoint[] {
 		return this._switchPoints;
 	}
 
 	private _weekday: Weekday;
-	public get weekday(): Weekday {
+	@ccValue() public get weekday(): Weekday {
 		return this._weekday;
 	}
 }
@@ -157,6 +159,7 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 	}
 
 	public weekday: Weekday;
+
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.weekday & 0b111]);
 		return super.serialize();
@@ -171,10 +174,11 @@ export class ClimateControlScheduleCCChangedReport extends ClimateControlSchedul
 	) {
 		super(driver, options);
 		this._changeCounter = this.payload[0];
+		this.persistValues();
 	}
 
 	private _changeCounter: number;
-	public get changeCounter(): number {
+	@ccValue() public get changeCounter(): number {
 		return this._changeCounter;
 	}
 }
@@ -200,15 +204,16 @@ export class ClimateControlScheduleCCOverrideReport extends ClimateControlSchedu
 		this._overrideType = this.payload[0] & 0b11;
 		this._overrideState =
 			decodeSetbackState(this.payload[1]) || this.payload[1];
+		this.persistValues();
 	}
 
 	private _overrideType: ScheduleOverrideType;
-	public get overrideType(): ScheduleOverrideType {
+	@ccValue() public get overrideType(): ScheduleOverrideType {
 		return this._overrideType;
 	}
 
 	private _overrideState: SetbackState;
-	public get overrideState(): SetbackState {
+	@ccValue() public get overrideState(): SetbackState {
 		return this._overrideState;
 	}
 }

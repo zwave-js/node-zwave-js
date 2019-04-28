@@ -5,6 +5,7 @@ import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -96,23 +97,25 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 		super(driver, options);
 		this._currentValue =
 			parseMaybeNumber(this.payload[0]) || this.payload[0];
-		// Starting with V4:
-		this._targetValue = parseNumber(this.payload[1]);
-		this._duration = Duration.parseReport(this.payload[2]);
+		if (this.version >= 4) {
+			this._targetValue = parseNumber(this.payload[1]);
+			this._duration = Duration.parseReport(this.payload[2]);
+		}
+		this.persistValues();
 	}
 
 	private _targetValue: number | undefined;
-	public get targetValue(): number | undefined {
+	@ccValue() public get targetValue(): number | undefined {
 		return this._targetValue;
 	}
 
 	private _duration: Duration | undefined;
-	public get duration(): Duration | undefined {
+	@ccValue() public get duration(): Duration | undefined {
 		return this._duration;
 	}
 
 	private _currentValue: Maybe<number>;
-	public get currentValue(): Maybe<number> {
+	@ccValue() public get currentValue(): Maybe<number> {
 		return this._currentValue;
 	}
 }
@@ -214,15 +217,16 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 		super(driver, options);
 		this._primarySwitchType = this.payload[0] & 0b11111;
 		this._secondarySwitchType = this.payload[1] & 0b11111;
+		this.persistValues();
 	}
 
 	private _primarySwitchType: SwitchType;
-	public get primarySwitchType(): SwitchType {
+	@ccValue() public get primarySwitchType(): SwitchType {
 		return this._primarySwitchType;
 	}
 
 	private _secondarySwitchType: SwitchType;
-	public get secondarySwitchType(): SwitchType {
+	@ccValue() public get secondarySwitchType(): SwitchType {
 		return this._secondarySwitchType;
 	}
 }

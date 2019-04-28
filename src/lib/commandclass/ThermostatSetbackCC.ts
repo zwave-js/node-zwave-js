@@ -8,6 +8,7 @@ import {
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -33,10 +34,6 @@ export enum SetbackType {
 @implementedVersion(1)
 export class ThermostatSetbackCC extends CommandClass {
 	public ccCommand!: ThermostatSetbackCommand;
-}
-
-interface ThermostatSetbackCCGetOptions extends CCCommandOptions {
-	someProperty: number;
 }
 
 interface ThermostatSetbackCCSetOptions extends CCCommandOptions {
@@ -88,15 +85,17 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 		this._setbackType = this.payload[0] & 0b11;
 		this._setbackState =
 			decodeSetbackState(this.payload[1]) || this.payload[1];
+		this.persistValues();
 	}
 
 	private _setbackType: SetbackType;
-	public get setbackType(): SetbackType {
+	@ccValue() public get setbackType(): SetbackType {
 		return this._setbackType;
 	}
+
 	private _setbackState: SetbackState;
 	/** The offset from the setpoint in 0.1 Kelvin or a special mode */
-	public get setbackState(): SetbackState {
+	@ccValue() public get setbackState(): SetbackState {
 		return this._setbackState;
 	}
 }

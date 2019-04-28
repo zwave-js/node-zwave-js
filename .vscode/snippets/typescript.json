@@ -58,7 +58,7 @@
 	"Z-Wave toJSON override": {
 		"prefix": "zwjson",
 		"body": [
-			"public toJSON() {",
+			"public toJSON(): JSONObject {",
 			"\treturn super.toJSONInherited({",
 			"\t\t${0}",
 			"\t});",

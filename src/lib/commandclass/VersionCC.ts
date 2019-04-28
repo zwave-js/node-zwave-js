@@ -8,6 +8,7 @@ import { Maybe } from "../values/Primitive";
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -89,22 +90,23 @@ export class VersionCCReport extends VersionCC {
 				);
 			}
 		}
+		this.persistValues();
 	}
 
 	private _libraryType: ZWaveLibraryTypes;
-	public get libraryType(): ZWaveLibraryTypes {
+	@ccValue() public get libraryType(): ZWaveLibraryTypes {
 		return this._libraryType;
 	}
 	private _protocolVersion: string;
-	public get protocolVersion(): string {
+	@ccValue() public get protocolVersion(): string {
 		return this._protocolVersion;
 	}
 	private _firmwareVersions: string[];
-	public get firmwareVersions(): string[] {
+	@ccValue() public get firmwareVersions(): string[] {
 		return this._firmwareVersions;
 	}
 	private _hardwareVersion: number | undefined;
-	public get hardwareVersion(): number | undefined {
+	@ccValue() public get hardwareVersion(): number | undefined {
 		return this._hardwareVersion;
 	}
 }
@@ -184,10 +186,11 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 		super(driver, options);
 		const capabilities = this.payload[0];
 		this._supportsZWaveSoftwareGet = !!(capabilities & 0b100);
+		this.persistValues();
 	}
 
 	private _supportsZWaveSoftwareGet: boolean;
-	public get supportsZWaveSoftwareGet(): boolean {
+	@ccValue() public get supportsZWaveSoftwareGet(): boolean {
 		return this._supportsZWaveSoftwareGet;
 	}
 }
@@ -239,42 +242,43 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 		} else {
 			this._applicationBuildNumber = 0;
 		}
+		this.persistValues();
 	}
 
 	private _sdkVersion: string;
-	public get sdkVersion(): string {
+	@ccValue() public get sdkVersion(): string {
 		return this._sdkVersion;
 	}
 	private _applicationFrameworkAPIVersion: string;
-	public get applicationFrameworkAPIVersion(): string {
+	@ccValue() public get applicationFrameworkAPIVersion(): string {
 		return this._applicationFrameworkAPIVersion;
 	}
 	private _applicationFrameworkBuildNumber: number;
-	public get applicationFrameworkBuildNumber(): number {
+	@ccValue() public get applicationFrameworkBuildNumber(): number {
 		return this._applicationFrameworkBuildNumber;
 	}
 	private _hostInterfaceVersion: string;
-	public get hostInterfaceVersion(): string {
+	@ccValue() public get hostInterfaceVersion(): string {
 		return this._hostInterfaceVersion;
 	}
 	private _hostInterfaceBuildNumber: number;
-	public get hostInterfaceBuildNumber(): number {
+	@ccValue() public get hostInterfaceBuildNumber(): number {
 		return this._hostInterfaceBuildNumber;
 	}
 	private _zWaveProtocolVersion: string;
-	public get zWaveProtocolVersion(): string {
+	@ccValue() public get zWaveProtocolVersion(): string {
 		return this._zWaveProtocolVersion;
 	}
 	private _zWaveProtocolBuildNumber: number;
-	public get zWaveProtocolBuildNumber(): number {
+	@ccValue() public get zWaveProtocolBuildNumber(): number {
 		return this._zWaveProtocolBuildNumber;
 	}
 	private _applicationVersion: string;
-	public get applicationVersion(): string {
+	@ccValue() public get applicationVersion(): string {
 		return this._applicationVersion;
 	}
 	private _applicationBuildNumber: number;
-	public get applicationBuildNumber(): number {
+	@ccValue() public get applicationBuildNumber(): number {
 		return this._applicationBuildNumber;
 	}
 }

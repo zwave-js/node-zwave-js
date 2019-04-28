@@ -4,6 +4,7 @@ import { ZWaveNode } from "../node/Node";
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -115,15 +116,16 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
 		super(driver, options);
 		this._wakeupInterval = this.payload.readUIntBE(0, 3);
 		this._controllerNodeId = this.payload[3];
+		this.persistValues();
 	}
 
 	private _wakeupInterval: number;
-	public get wakeupInterval(): number {
+	@ccValue() public get wakeupInterval(): number {
 		return this._wakeupInterval;
 	}
 
 	private _controllerNodeId: number;
-	public get controllerNodeId(): number {
+	@ccValue() public get controllerNodeId(): number {
 		return this._controllerNodeId;
 	}
 }
@@ -170,25 +172,26 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 		this._maxWakeUpInterval = this.payload.readUIntBE(3, 3);
 		this._defaultWakeUpInterval = this.payload.readUIntBE(6, 3);
 		this._wakeUpIntervalSteps = this.payload.readUIntBE(9, 3);
+		this.persistValues();
 	}
 
 	private _minWakeUpInterval: number;
-	public get minWakeUpInterval(): number {
+	@ccValue() public get minWakeUpInterval(): number {
 		return this._minWakeUpInterval;
 	}
 
 	private _maxWakeUpInterval: number;
-	public get maxWakeUpInterval(): number {
+	@ccValue() public get maxWakeUpInterval(): number {
 		return this._maxWakeUpInterval;
 	}
 
 	private _defaultWakeUpInterval: number;
-	public get defaultWakeUpInterval(): number {
+	@ccValue() public get defaultWakeUpInterval(): number {
 		return this._defaultWakeUpInterval;
 	}
 
 	private _wakeUpIntervalSteps: number;
-	public get wakeUpIntervalSteps(): number {
+	@ccValue() public get wakeUpIntervalSteps(): number {
 		return this._wakeUpIntervalSteps;
 	}
 }

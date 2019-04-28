@@ -8,6 +8,7 @@ import {
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -264,6 +265,8 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 			// TODO: Determine which interpretation the device complies to
 			this._supportedSetpointTypes = supported;
 		}
+
+		this.persistValues();
 		// TODO:
 		// Some devices skip the gaps in the ThermostatSetpointType (Interpretation A), some don't (Interpretation B)
 		// Devices with V3+ must comply with Interpretation A
@@ -277,6 +280,7 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 	}
 
 	private _supportedSetpointTypes: ThermostatSetpointType[];
+	@ccValue()
 	public get supportedSetpointTypes(): readonly ThermostatSetpointType[] {
 		return this._supportedSetpointTypes;
 	}

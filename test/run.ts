@@ -2,8 +2,8 @@
 require("reflect-metadata");
 
 import { wait } from "alcalzone-shared/async";
-import { BatteryCCGet } from "../build/lib/commandclass/BatteryCC";
-import { Driver } from "../build/lib/driver/Driver";
+import { BatteryCCGet } from "../src/lib/commandclass/BatteryCC";
+import { Driver } from "../src/lib/driver/Driver";
 
 const d = new Driver("COM3").once("driver ready", async () => {
 	const node = d.controller!.nodes.get(2)!;

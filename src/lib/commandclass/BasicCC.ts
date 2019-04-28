@@ -1,4 +1,5 @@
 import { IDriver } from "../driver/IDriver";
+import { JSONObject } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
 import {
@@ -59,15 +60,36 @@ export class BasicCCReport extends BasicCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		this.currentValue = parseMaybeNumber(this.payload[0]);
-		// starting in V2:
-		this.targetValue = parseNumber(this.payload[1]);
-		this.duration = Duration.parseReport(this.payload[2]);
+		this._currentValue = parseMaybeNumber(this.payload[0]);
+		if (this.version >= 2) {
+			this._targetValue = parseNumber(this.payload[1]);
+			this._duration = Duration.parseReport(this.payload[2]);
+		}
+		this.persistValues();
 	}
 
-	@ccValue() public currentValue: Maybe<number> | undefined;
-	@ccValue() public targetValue: number | undefined;
-	@ccValue() public duration: Duration | undefined;
+	private _currentValue: Maybe<number> | undefined;
+	@ccValue() public get currentValue(): Maybe<number> | undefined {
+		return this._currentValue;
+	}
+
+	private _targetValue: number | undefined;
+	@ccValue() public get targetValue(): number | undefined {
+		return this._targetValue;
+	}
+
+	private _duration: Duration | undefined;
+	@ccValue() public get duration(): Duration | undefined {
+		return this._duration;
+	}
+
+	public toJSON(): JSONObject {
+		return super.toJSONInherited({
+			currentValue: this.currentValue,
+			targetValue: this.targetValue,
+			duration: this.duration,
+		});
+	}
 }
 
 @CCCommand(BasicCommand.Get)

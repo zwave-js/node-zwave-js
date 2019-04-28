@@ -4,6 +4,7 @@ import { parseBitMask } from "../values/Primitive";
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -215,14 +216,16 @@ export class NotificationCCSupportedReport extends NotificationCC {
 		const numBitMaskBytes = this.payload[0] & 0b0001_1111;
 		const notificationBitMask = this.payload.slice(1, 1 + numBitMaskBytes);
 		this._supportedNotificationTypes = parseBitMask(notificationBitMask);
+		this.persistValues();
 	}
 
 	private _supportsV1Alarm: boolean;
-	public get supportsV1Alarm(): boolean {
+	@ccValue() public get supportsV1Alarm(): boolean {
 		return this._supportsV1Alarm;
 	}
 
 	private _supportedNotificationTypes: NotificationType[];
+	@ccValue()
 	public get supportedNotificationTypes(): readonly NotificationType[] {
 		return this._supportedNotificationTypes;
 	}

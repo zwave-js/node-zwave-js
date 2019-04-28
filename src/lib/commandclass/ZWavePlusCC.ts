@@ -2,6 +2,7 @@ import { IDriver } from "../driver/IDriver";
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -50,30 +51,31 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 		this._nodeType = this.payload[2];
 		this._installerIcon = this.payload.readUInt16BE(3);
 		this._userIcon = this.payload.readUInt16BE(5);
+		this.persistValues();
 	}
 
 	private _zwavePlusVersion: number;
-	public get zwavePlusVersion(): number {
+	@ccValue() public get zwavePlusVersion(): number {
 		return this._zwavePlusVersion;
 	}
 
 	private _nodeType: ZWavePlusNodeType;
-	public get nodeType(): ZWavePlusNodeType {
+	@ccValue() public get nodeType(): ZWavePlusNodeType {
 		return this._nodeType;
 	}
 
 	private _roleType: ZWavePlusRoleType;
-	public get roleType(): ZWavePlusRoleType {
+	@ccValue() public get roleType(): ZWavePlusRoleType {
 		return this._roleType;
 	}
 
 	private _installerIcon: number;
-	public get installerIcon(): number {
+	@ccValue() public get installerIcon(): number {
 		return this._installerIcon;
 	}
 
 	private _userIcon: number;
-	public get userIcon(): number {
+	@ccValue() public get userIcon(): number {
 		return this._userIcon;
 	}
 }

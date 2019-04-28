@@ -52,6 +52,7 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 		this._manufacturerId = this.payload.readUInt16BE(0);
 		this._productType = this.payload.readUInt16BE(2);
 		this._productId = this.payload.readUInt16BE(4);
+		// No need to store this in the value DB, as it is used during the node interview
 	}
 
 	private _manufacturerId: number;

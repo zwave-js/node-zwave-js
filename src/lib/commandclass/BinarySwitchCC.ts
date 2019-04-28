@@ -1,10 +1,12 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { JSONObject } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { Maybe, parseBoolean, parseMaybeBoolean } from "../values/Primitive";
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -70,17 +72,37 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		this.currentValue = parseMaybeBoolean(this.payload[0]);
-		if (this.payload.length >= 2) {
+		this._currentValue = parseMaybeBoolean(this.payload[0]);
+		if (this.version >= 2) {
 			// V2
-			this.targetValue = parseBoolean(this.payload[1]);
-			this.duration = Duration.parseReport(this.payload[2]);
+			this._targetValue = parseBoolean(this.payload[1]);
+			this._duration = Duration.parseReport(this.payload[2]);
 		}
+		this.persistValues();
 	}
 
-	public currentValue: Maybe<boolean> | undefined;
-	public targetValue: boolean | undefined;
-	public duration: Duration | undefined;
+	private _currentValue: Maybe<boolean> | undefined;
+	@ccValue() public get currentValue(): Maybe<boolean> | undefined {
+		return this._currentValue;
+	}
+
+	private _targetValue: boolean | undefined;
+	@ccValue() public get targetValue(): boolean | undefined {
+		return this._targetValue;
+	}
+
+	private _duration: Duration | undefined;
+	@ccValue() public get duration(): Duration | undefined {
+		return this._duration;
+	}
+
+	public toJSON(): JSONObject {
+		return super.toJSONInherited({
+			currentValue: this.currentValue,
+			targetValue: this.targetValue,
+			duration: this.duration,
+		});
+	}
 }
 
 @CCCommand(BinarySwitchCommand.Get)

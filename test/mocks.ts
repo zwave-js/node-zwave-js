@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { EventEmitter } from "events";
 import * as SerialPort from "serialport";
+import { getImplementedVersion } from "../src/lib/commandclass/CommandClass";
+import { CommandClasses } from "../src/lib/commandclass/CommandClasses";
 import { Driver } from "../src/lib/driver/Driver";
 import {
 	FunctionType,
@@ -101,8 +103,9 @@ export class MockResponseMessage extends Message {}
 
 export function createEmptyMockDriver(): Driver {
 	return ({
-		getSafeCCVersionForNode() {
-			return 1;
+		getSafeCCVersionForNode(nodeId: number, ccId: CommandClasses) {
+			// We have no real nodes to test against, just use the implemented version
+			return getImplementedVersion(ccId);
 		},
 	} as unknown) as Driver;
 }

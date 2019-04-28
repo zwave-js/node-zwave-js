@@ -4,6 +4,7 @@ import { parseBitMask, parseFloatWithScale } from "../values/Primitive";
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -108,9 +109,11 @@ export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC 
 	) {
 		super(driver, options);
 		this._supportedSensorTypes = parseBitMask(this.payload);
+		this.persistValues();
 	}
 
 	private _supportedSensorTypes: MultilevelSensorTypes[];
+	@ccValue()
 	public get supportedSensorTypes(): readonly MultilevelSensorTypes[] {
 		return this._supportedSensorTypes;
 	}

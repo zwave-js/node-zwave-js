@@ -4,6 +4,7 @@ import { JSONObject } from "../util/misc";
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -113,8 +114,8 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		this._sceneCount = this.payload[0];
 		this._supportsSlowRefresh = !!(this.payload[1] & 0b1000_0000);
 		const bitMaskBytes = this.payload[1] & 0b110;
-		this._keyAttributesIdenticalSupport = !!(this.payload[1] & 0b1);
-		const numEntries = this._keyAttributesIdenticalSupport
+		this._keyAttributesHaveIdenticalSupport = !!(this.payload[1] & 0b1);
+		const numEntries = this._keyAttributesHaveIdenticalSupport
 			? 1
 			: this.sceneCount;
 		this._supportedKeyAttributes = [];
@@ -125,25 +126,35 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 			}
 			this._supportedKeyAttributes.push(mask);
 		}
+		this.persistValues();
 	}
 
 	private _sceneCount: number;
-	public get sceneCount(): number {
+	@ccValue() public get sceneCount(): number {
 		return this._sceneCount;
 	}
 
 	private _supportsSlowRefresh: boolean;
-	public get supportsSlowRefresh(): boolean {
+	@ccValue() public get supportsSlowRefresh(): boolean {
 		return this._supportsSlowRefresh;
 	}
 
 	private _supportedKeyAttributes: CentralSceneKeys[];
-	private _keyAttributesIdenticalSupport: boolean;
+	@ccValue()
+	public get supportedKeyAttributes(): readonly CentralSceneKeys[] {
+		return this._supportedKeyAttributes;
+	}
+
+	private _keyAttributesHaveIdenticalSupport: boolean;
+	@ccValue() public get keyAttributesHaveIdenticalSupport(): boolean {
+		return this._keyAttributesHaveIdenticalSupport;
+	}
+
 	public supportsKeyAttribute(
 		sceneNumber: number,
 		keyAttribute: CentralSceneKeys,
 	): boolean {
-		const bitArrayIndex = this._keyAttributesIdenticalSupport
+		const bitArrayIndex = this._keyAttributesHaveIdenticalSupport
 			? 0
 			: sceneNumber - 1;
 		const bitmap = this._supportedKeyAttributes[bitArrayIndex];
@@ -200,10 +211,11 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 	) {
 		super(driver, options);
 		this._slowRefresh = !!(this.payload[0] & 0b1000_0000);
+		this.persistValues();
 	}
 
 	private _slowRefresh: boolean;
-	public get slowRefresh(): boolean {
+	@ccValue() public get slowRefresh(): boolean {
 		return this._slowRefresh;
 	}
 }

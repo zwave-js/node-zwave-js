@@ -1,5 +1,6 @@
 import { clamp } from "alcalzone-shared/math";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { JSONObject } from "../util/misc";
 
 export type DurationUnit = "seconds" | "minutes" | "unknown" | "default";
 
@@ -48,5 +49,12 @@ export class Duration {
 		let payload = isMinutes ? 0b1000_0000 : 0;
 		payload += (this._value - (isMinutes ? 1 : 0)) & 0b0111_1111;
 		return payload;
+	}
+
+	public toJSON(): JSONObject {
+		return {
+			value: this.value,
+			unit: this.unit,
+		};
 	}
 }
