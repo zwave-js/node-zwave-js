@@ -347,10 +347,12 @@ export class CommandClass {
 
 	/** Persists all values on the given node into the value. Returns true if the process succeeded, false otherwise */
 	public persistValues(valueNames?: (keyof this)[]): boolean {
+		const valueMaps = getCCValueMaps(this);
 		if (!valueNames) {
 			valueNames = ([
 				...this._ccValueNames.keys(),
 				...getCCValueNames(this),
+				...valueMaps,
 			] as unknown) as (keyof this)[];
 		}
 		let db: ValueDB;
@@ -359,15 +361,28 @@ export class CommandClass {
 		} catch (e) {
 			return false;
 		}
-		for (const variable of valueNames) {
-			// TODO: The following is true for simple values
-			// Add handling for Maps aswell
-			db.setValue(
-				getCommandClass(this),
-				this.endpoint,
-				variable as string,
-				this[variable],
-			);
+
+		const cc = getCommandClass(this);
+		for (const variable of valueNames as string[]) {
+			let valueToSet: unknown;
+			if (valueMaps.has(variable)) {
+				// This value is spread over multiple key-value properties
+				const kvp = valueMaps.get(variable);
+				if (!kvp) continue;
+
+				// Retrieve the two properties
+				const [keyProperty, valueProperty] = kvp;
+				// and store them in a map
+				valueToSet = ((db.getValue(cc, this.endpoint, variable) ||
+					new Map()) as Map<string, unknown>).set(
+					this[keyProperty],
+					this[valueProperty],
+				);
+			} else {
+				// This value belongs to a simple property
+				valueToSet = this[variable];
+			}
+			db.setValue(cc, this.endpoint, variable, valueToSet);
 		}
 		return true;
 	}
@@ -375,8 +390,8 @@ export class CommandClass {
 	/** Serializes all values to be stored in the cache */
 	public serializeValuesForCache(): CacheValue[] {
 		const ccValues = this.getValueDB().getValues(getCommandClass(this));
-		const staticCCValueNames = getCCValueNames(this);
-		// TODO: Handle maps
+		const ccValueNames = getCCValueNames(this);
+		const ccValueMaps = getCCValueMaps(this);
 		return (
 			ccValues
 				// only serialize non-undefined values
@@ -385,7 +400,8 @@ export class CommandClass {
 				.filter(
 					({ propertyName }) =>
 						propertyName in this ||
-						staticCCValueNames.includes(propertyName) ||
+						ccValueNames.includes(propertyName) ||
+						ccValueMaps.has(propertyName) ||
 						this._ccValueNames.has(propertyName),
 				)
 				.map(({ value, ...props }) => ({
@@ -399,12 +415,13 @@ export class CommandClass {
 	public deserializeValuesFromCache(values: CacheValue[]): void {
 		const cc = getCommandClass(this);
 		const ccValueNames = getCCValueNames(this);
-		// TODO: Handle map values
+		const ccValueMaps = getCCValueMaps(this);
 		for (const val of values) {
 			// Only deserialize registered CC values
 			if (
 				val.propertyName in this ||
-				ccValueNames.includes(val.propertyName)
+				ccValueNames.includes(val.propertyName) ||
+				ccValueMaps.has(val.propertyName)
 			) {
 				let valueToSet = val.value;
 				if (
