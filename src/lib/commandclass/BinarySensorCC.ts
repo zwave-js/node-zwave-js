@@ -4,6 +4,8 @@ import {
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
+	ccValueMapKey,
+	ccValueMapValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -56,11 +58,13 @@ export class BinarySensorCCReport extends BinarySensorCC {
 	}
 
 	private _sensorType: BinarySensorType;
+	@ccValueMapKey("values")
 	public get sensorType(): BinarySensorType {
 		return this._sensorType;
 	}
 
 	private _value: boolean;
+	@ccValueMapValue("values")
 	public get value(): boolean {
 		return this._value;
 	}

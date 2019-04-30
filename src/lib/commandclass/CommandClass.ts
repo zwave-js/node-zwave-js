@@ -872,6 +872,7 @@ export function getCCValueNames(commandClass: CommandClass): string[] {
 /**
  * Marks the decorated property as the key of a Command Class's key value pair,
  * which can later be saved with persistValues()
+ * @param propertyName The name of the map-like property
  */
 export function ccValueMapKey(propertyName: string): PropertyDecorator {
 	return (target: CommandClass, property: string | symbol) => {
@@ -898,6 +899,7 @@ export function ccValueMapKey(propertyName: string): PropertyDecorator {
 /**
  * Marks the decorated property as the value of a Command Class's key value pair,
  * which can later be saved with persistValues()
+ * @param propertyName The name of the map-like property
  */
 export function ccValueMapValue(propertyName: string): PropertyDecorator {
 	return (target: CommandClass, property: string | symbol) => {
