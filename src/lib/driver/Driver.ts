@@ -1299,10 +1299,7 @@ export class Driver extends EventEmitter implements IDriver {
 	private saveToCacheTimer: NodeJS.Timer | undefined;
 
 	private async saveNetworkToCacheInternal(): Promise<void> {
-		if (!this.controller || !this.controller.homeId) {
-			console.log("foo");
-			return;
-		}
+		if (!this.controller || !this.controller.homeId) return;
 		const cacheFile = path.join(
 			this.cacheDir,
 			this.controller.homeId.toString(16) + ".json",
