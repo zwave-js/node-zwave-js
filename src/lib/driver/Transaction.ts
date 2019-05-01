@@ -55,10 +55,12 @@ export class Transaction implements Comparable<Transaction> {
 	public sendAttempts: number = 0;
 
 	public compareTo(other: Transaction): CompareResult {
-		// delay messages for sleeping nodes
-		if (this.priority === MessagePriority.WakeUp) {
-			const thisNode = this.message.getNodeUnsafe();
-			const otherNode = other.message.getNodeUnsafe();
+		function compareWakeUpPriority(
+			_this: Transaction,
+			_other: Transaction,
+		): CompareResult | undefined {
+			const thisNode = _this.message.getNodeUnsafe();
+			const otherNode = _other.message.getNodeUnsafe();
 			if (thisNode) {
 				// We don't require existence of the other node. If the other
 				// transaction is not for a node, it targets the controller which
@@ -70,14 +72,23 @@ export class Transaction implements Comparable<Transaction> {
 				if (thisIsAsleep && !otherIsAsleep) return 1;
 				if (otherIsAsleep && !thisIsAsleep) return -1;
 			}
-		} else if (other.priority === MessagePriority.WakeUp) {
-			return -other.compareTo(this) as CompareResult;
 		}
 
-		// delay NodeQuery messages for non-listening nodes
-		if (this.priority === MessagePriority.NodeQuery) {
-			const thisNode = this.message.getNodeUnsafe();
-			const otherNode = other.message.getNodeUnsafe();
+		// delay messages for sleeping nodes
+		if (this.priority === MessagePriority.WakeUp) {
+			const result = compareWakeUpPriority(this, other);
+			if (result != undefined) return result;
+		} else if (other.priority === MessagePriority.WakeUp) {
+			const result = compareWakeUpPriority(other, this);
+			if (result != undefined) return -result as CompareResult;
+		}
+
+		function compareNodeQueryPriority(
+			_this: Transaction,
+			_other: Transaction,
+		): CompareResult | undefined {
+			const thisNode = _this.message.getNodeUnsafe();
+			const otherNode = _other.message.getNodeUnsafe();
 			if (thisNode && otherNode) {
 				// Both nodes exist
 				const thisListening =
@@ -88,8 +99,15 @@ export class Transaction implements Comparable<Transaction> {
 				if (thisListening && !otherListening) return -1;
 				if (!thisListening && otherListening) return 1;
 			}
+		}
+
+		// delay NodeQuery messages for non-listening nodes
+		if (this.priority === MessagePriority.NodeQuery) {
+			const result = compareNodeQueryPriority(this, other);
+			if (result != undefined) return result;
 		} else if (other.priority === MessagePriority.NodeQuery) {
-			return -other.compareTo(this) as CompareResult;
+			const result = compareNodeQueryPriority(other, this);
+			if (result != undefined) return -result as CompareResult;
 		}
 
 		// by default, sort by priority
