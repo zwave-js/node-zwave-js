@@ -1,5 +1,5 @@
-import { entries, KeyValuePair } from "alcalzone-shared/objects";
-import { isObject } from "alcalzone-shared/typeguards";
+import { entries } from "alcalzone-shared/objects";
+import { isArray, isObject } from "alcalzone-shared/typeguards";
 import * as fs from "fs";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -347,12 +347,12 @@ export class CommandClass {
 
 	/** Persists all values on the given node into the value. Returns true if the process succeeded, false otherwise */
 	public persistValues(valueNames?: (keyof this)[]): boolean {
-		const valueMaps = getCCValueMaps(this);
+		const keyValuePairNames = getCCKeyValuePairNames(this);
 		if (!valueNames) {
 			valueNames = ([
-				...this._ccValueNames.keys(),
+				...this._ccValueNames,
 				...getCCValueNames(this),
-				...valueMaps,
+				...keyValuePairNames,
 			] as unknown) as (keyof this)[];
 		}
 		let db: ValueDB;
@@ -365,22 +365,31 @@ export class CommandClass {
 		const cc = getCommandClass(this);
 		for (const variable of valueNames as string[]) {
 			let valueToSet: unknown;
-			if (valueMaps.has(variable)) {
-				// This value is spread over multiple key-value properties
-				const kvp = valueMaps.get(variable);
-				if (!kvp) continue;
+			const sourceValue = this[variable as keyof this];
+			if (keyValuePairNames.has(variable)) {
+				// This value is one or more key value pair(s) to be stored in a map
+				const targetMap = (db.getValue(cc, this.endpoint, variable) ||
+					new Map()) as Map<unknown, unknown>;
+				if (sourceValue instanceof Map) {
+					// Just copy the entries
+					for (const entry of (sourceValue as Map<
+						unknown,
+						unknown
+					>).entries()) {
+						targetMap.set(entry[0], entry[1]);
+					}
+				} else if (isArray(sourceValue)) {
+					const [key, value] = (sourceValue as any) as [
+						unknown,
+						unknown
+					];
+					targetMap.set(key, value);
+				}
 
-				// Retrieve the two properties
-				const [keyProperty, valueProperty] = kvp;
-				// and store them in a map
-				valueToSet = ((db.getValue(cc, this.endpoint, variable) ||
-					new Map()) as Map<string, unknown>).set(
-					this[keyProperty],
-					this[valueProperty],
-				);
+				valueToSet = targetMap;
 			} else {
 				// This value belongs to a simple property
-				valueToSet = this[variable];
+				valueToSet = sourceValue;
 			}
 			db.setValue(cc, this.endpoint, variable, valueToSet);
 		}
@@ -391,7 +400,7 @@ export class CommandClass {
 	public serializeValuesForCache(): CacheValue[] {
 		const ccValues = this.getValueDB().getValues(getCommandClass(this));
 		const ccValueNames = getCCValueNames(this);
-		const ccValueMaps = getCCValueMaps(this);
+		const keyValuePairNames = getCCKeyValuePairNames(this);
 		return (
 			ccValues
 				// only serialize non-undefined values
@@ -400,8 +409,8 @@ export class CommandClass {
 				.filter(
 					({ propertyName }) =>
 						propertyName in this ||
-						ccValueNames.includes(propertyName) ||
-						ccValueMaps.has(propertyName) ||
+						ccValueNames.has(propertyName) ||
+						keyValuePairNames.has(propertyName) ||
 						this._ccValueNames.has(propertyName),
 				)
 				.map(({ value, ...props }) => ({
@@ -415,13 +424,13 @@ export class CommandClass {
 	public deserializeValuesFromCache(values: CacheValue[]): void {
 		const cc = getCommandClass(this);
 		const ccValueNames = getCCValueNames(this);
-		const ccValueMaps = getCCValueMaps(this);
+		const keyValuePairNames = getCCKeyValuePairNames(this);
 		for (const val of values) {
 			// Only deserialize registered CC values
 			if (
 				val.propertyName in this ||
-				ccValueNames.includes(val.propertyName) ||
-				ccValueMaps.has(val.propertyName)
+				ccValueNames.has(val.propertyName) ||
+				keyValuePairNames.has(val.propertyName)
 			) {
 				let valueToSet = val.value;
 				if (
@@ -463,7 +472,7 @@ export const METADATA_ccResponse = Symbol("ccResponse");
 export const METADATA_ccCommand = Symbol("ccCommand");
 export const METADATA_ccCommandMap = Symbol("ccCommandMap");
 export const METADATA_ccValues = Symbol("ccValues");
-export const METADATA_ccValueMaps = Symbol("ccValueMaps");
+export const METADATA_ccKeyValuePairs = Symbol("ccKeyValuePairs");
 export const METADATA_version = Symbol("version");
 /* eslint-enable @typescript-eslint/camelcase */
 
@@ -859,89 +868,55 @@ export function ccValue(): PropertyDecorator {
 	};
 }
 
-export function getCCValueNames(commandClass: CommandClass): string[] {
+export function getCCValueNames(
+	commandClass: CommandClass,
+): ReadonlySet<string> {
 	// get the class constructor
 	const constr = commandClass.constructor as typeof CommandClass;
 	const cc = getCommandClassStatic(constr);
 	// retrieve the current metadata
 	const metadata = Reflect.getMetadata(METADATA_ccValues, CommandClass) || {};
-	if (!(cc in metadata)) return [];
-	return [...(metadata[cc] as Set<string>).keys()];
+	if (!(cc in metadata)) return new Set();
+	return metadata[cc] as Set<string>;
 }
 
 /**
  * Marks the decorated property as the key of a Command Class's key value pair,
  * which can later be saved with persistValues()
- * @param propertyName The name of the map-like property
  */
-export function ccValueMapKey(propertyName: string): PropertyDecorator {
+export function ccKeyValuePair(): PropertyDecorator {
 	return (target: CommandClass, property: string | symbol) => {
 		// get the class constructor
 		const constr = target.constructor as typeof CommandClass;
 		const cc = getCommandClassStatic(constr);
 		// retrieve the current metadata
 		const metadata =
-			Reflect.getMetadata(METADATA_ccValueMaps, CommandClass) || {};
-		if (!(cc in metadata)) metadata[cc] = new Map();
+			Reflect.getMetadata(METADATA_ccKeyValuePairs, CommandClass) || {};
+		if (!(cc in metadata)) metadata[cc] = new Set();
 		// And add the variable
-		const valueMaps: Map<string, [unknown, unknown]> = metadata[cc];
-		const kvp: [unknown, unknown] = valueMaps.get(propertyName) || [
-			undefined,
-			undefined,
-		];
-		kvp[0] = property;
-		valueMaps.set(propertyName, kvp);
+		const variables: Set<string> = metadata[cc];
+		variables.add(property as string);
 		// store back to the object
-		Reflect.defineMetadata(METADATA_ccValueMaps, metadata, CommandClass);
-	};
-}
-
-/**
- * Marks the decorated property as the value of a Command Class's key value pair,
- * which can later be saved with persistValues()
- * @param propertyName The name of the map-like property
- */
-export function ccValueMapValue(propertyName: string): PropertyDecorator {
-	return (target: CommandClass, property: string | symbol) => {
-		// get the class constructor
-		const constr = target.constructor as typeof CommandClass;
-		const cc = getCommandClassStatic(constr);
-		// retrieve the current metadata
-		const metadata =
-			Reflect.getMetadata(METADATA_ccValueMaps, CommandClass) || {};
-		if (!(cc in metadata)) metadata[cc] = new Map();
-		// And add the variable
-		const valueMaps: Map<string, [unknown, unknown]> = metadata[cc];
-		const kvp: [unknown, unknown] = valueMaps.get(propertyName) || [
-			undefined,
-			undefined,
-		];
-		kvp[1] = property;
-		valueMaps.set(propertyName, kvp);
-		// store back to the object
-		Reflect.defineMetadata(METADATA_ccValueMaps, metadata, CommandClass);
+		Reflect.defineMetadata(
+			METADATA_ccKeyValuePairs,
+			metadata,
+			CommandClass,
+		);
 	};
 }
 
 /** Returns the defined key value pairs for this command class */
-export function getCCValueMaps(
+export function getCCKeyValuePairNames(
 	commandClass: CommandClass,
-): Map<string, KeyValuePair<string>> {
+): ReadonlySet<string> {
 	// get the class constructor
 	const constr = commandClass.constructor as typeof CommandClass;
 	const cc = getCommandClassStatic(constr);
 	// retrieve the current metadata
 	const metadata =
-		Reflect.getMetadata(METADATA_ccValueMaps, CommandClass) || {};
-	if (!(cc in metadata)) return new Map();
-	const valueMaps: Map<string, [unknown, unknown]> = metadata[cc];
-	const completeEntries: any = [...valueMaps.entries()].filter(
-		([, [key, value]]) =>
-			typeof key === "string" && typeof value === "string",
-	);
-	return new Map<string, KeyValuePair<string>>(
-		completeEntries as KeyValuePair<KeyValuePair<string>>[],
-	);
+		Reflect.getMetadata(METADATA_ccKeyValuePairs, CommandClass) || {};
+	if (!(cc in metadata)) return new Set();
+	return metadata[cc] as Set<string>;
 }
 
 // To be sure all metadata gets loaded, import all command classes

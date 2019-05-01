@@ -4,6 +4,7 @@ import { Maybe } from "../values/Primitive";
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccKeyValuePair,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -89,26 +90,27 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		this._deviceIdType = this.payload[0] & 0b111;
+		const deviceIdType = this.payload[0] & 0b111;
 		const dataFormat = this.payload[1] >>> 5;
 		const dataLength = this.payload[1] & 0b11111;
 		const deviceIdData = this.payload.slice(2, 2 + dataLength);
-		if (dataFormat === 0) {
-			// utf8
-			this._deviceId = deviceIdData.toString("utf8");
-		} else {
-			this._deviceId = "0x" + deviceIdData.toString("hex");
-		}
+		const deviceId =
+			dataFormat === 0
+				? deviceIdData.toString("utf8")
+				: "0x" + deviceIdData.toString("hex");
+		this.deviceId = [deviceIdType, deviceId];
+		this.persistValues();
 	}
 
-	private _deviceIdType: DeviceIdType;
+	@ccKeyValuePair()
+	private deviceId: [DeviceIdType, string];
+
 	public get deviceIdType(): DeviceIdType {
-		return this._deviceIdType;
+		return this.deviceId[0];
 	}
 
-	private _deviceId: string;
-	public get deviceId(): string {
-		return this._deviceId;
+	public get value(): string {
+		return this.deviceId[1];
 	}
 }
 

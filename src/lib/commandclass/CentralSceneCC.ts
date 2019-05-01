@@ -52,6 +52,8 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 		this._slowRefresh = !!(this.payload[1] & 0b1000_0000);
 	}
 
+	// TODO: Is this some kind of dictionary with multiple values?
+
 	private _sequenceNumber: number;
 	public get sequenceNumber(): number {
 		return this._sequenceNumber;

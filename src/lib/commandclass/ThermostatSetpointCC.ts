@@ -8,6 +8,7 @@ import {
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccKeyValuePair,
 	ccValue,
 	CommandClass,
 	commandClass,
@@ -62,6 +63,18 @@ const thermostatSetpointTypeMap = [
 export enum ThermostatSetpointScale {
 	Celsius = 0,
 	Fahrenheit = 1,
+}
+
+export interface ThermostatSetpointValue {
+	value: number;
+	scale: ThermostatSetpointScale;
+}
+
+export interface ThermostatSetpointCapabilities {
+	minValue: number;
+	minValueScale: ThermostatSetpointScale;
+	maxValue: number;
+	maxValueScale: ThermostatSetpointScale;
 }
 
 @commandClass(CommandClasses["Thermostat Setpoint"])
@@ -122,23 +135,27 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		this._setpointType = this.payload[0] & 0b1111;
-		({ value: this._value, scale: this._scale } = parseFloatWithScale(
+		const setpointType = this.payload[0] & 0b1111;
+		const { bytesRead, ...value } = parseFloatWithScale(
 			this.payload.slice(1),
-		));
+		);
+		this.setpoints = [setpointType, value];
+		this.persistValues();
 	}
 
-	private _setpointType: ThermostatSetpointType;
+	@ccKeyValuePair()
+	private setpoints: [ThermostatSetpointType, ThermostatSetpointValue];
+
 	public get setpointType(): ThermostatSetpointType {
-		return this._setpointType;
+		return this.setpoints[0];
 	}
-	private _value: number;
+
 	public get value(): number {
-		return this._value;
+		return this.setpoints[1].value;
 	}
-	private _scale: ThermostatSetpointScale;
+
 	public get scale(): ThermostatSetpointScale {
-		return this._scale;
+		return this.setpoints[1].scale;
 	}
 }
 
@@ -171,10 +188,6 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 	}
 }
 
-interface ThermostatSetpointCCCapabilitiesGetOptions extends CCCommandOptions {
-	setpointType: ThermostatSetpointType;
-}
-
 @CCCommand(ThermostatSetpointCommand.CapabilitiesReport)
 export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC {
 	public constructor(
@@ -183,39 +196,61 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 	) {
 		super(driver, options);
 
-		this._setpointType = this.payload[0];
+		const setpointType = this.payload[0];
 		let bytesRead: number;
+		let minValue: number;
+		let maxValue: number;
+		let minValueScale: ThermostatSetpointScale;
+		let maxValueScale: ThermostatSetpointScale;
 		({
-			value: this._minValue,
-			scale: this._minValueScale,
+			value: minValue,
+			scale: minValueScale,
 			bytesRead,
 		} = parseFloatWithScale(this.payload.slice(1)));
-		({
-			value: this._maxValue,
-			scale: this._maxValueScale,
-		} = parseFloatWithScale(this.payload.slice(1 + bytesRead)));
+		({ value: maxValue, scale: maxValueScale } = parseFloatWithScale(
+			this.payload.slice(1 + bytesRead),
+		));
+		this.capabilities = [
+			setpointType,
+			{
+				minValue,
+				maxValue,
+				minValueScale,
+				maxValueScale,
+			},
+		];
+		this.persistValues();
 	}
 
-	private _minValue: number;
+	@ccKeyValuePair()
+	private capabilities: [
+		ThermostatSetpointType,
+		ThermostatSetpointCapabilities
+	];
+
 	public get minValue(): number {
-		return this._minValue;
+		return this.capabilities[1].minValue;
 	}
-	private _maxValue: number;
+
 	public get maxValue(): number {
-		return this._maxValue;
+		return this.capabilities[1].maxValue;
 	}
-	private _minValueScale: ThermostatSetpointScale;
+
 	public get minValueScale(): ThermostatSetpointScale {
-		return this._minValueScale;
+		return this.capabilities[1].minValueScale;
 	}
-	private _maxValueScale: ThermostatSetpointScale;
+
 	public get maxValueScale(): ThermostatSetpointScale {
-		return this._maxValueScale;
+		return this.capabilities[1].maxValueScale;
 	}
-	private _setpointType: ThermostatSetpointType;
+
 	public get setpointType(): ThermostatSetpointType {
-		return this._setpointType;
+		return this.capabilities[0];
 	}
+}
+
+interface ThermostatSetpointCCCapabilitiesGetOptions extends CCCommandOptions {
+	setpointType: ThermostatSetpointType;
 }
 
 @CCCommand(ThermostatSetpointCommand.CapabilitiesGet)

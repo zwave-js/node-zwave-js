@@ -4,6 +4,7 @@ import { parseBitMask } from "../values/Primitive";
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccKeyValuePair,
 	ccValue,
 	CommandClass,
 	commandClass,
@@ -114,6 +115,8 @@ export class NotificationCCReport extends NotificationCC {
 			}
 		}
 	}
+
+	// TODO: Is this a huge key value pair?
 
 	private _alarmType: number;
 	public get alarmType(): number {
@@ -249,23 +252,26 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		this._notificationType = this.payload[0];
+		const notificationType = this.payload[0];
 		const numBitMaskBytes = this.payload[0] & 0b0001_1111;
 		const eventBitMask = this.payload.slice(1, 1 + numBitMaskBytes);
 		// In this bit mask, bit 0 is ignored and counting starts at bit 1
 		// Therefore shift the result by 1.
-		this._supportedEvents = parseBitMask(eventBitMask).map(evt => evt - 1);
+		const supportedEvents = parseBitMask(eventBitMask).map(evt => evt - 1);
+		this.supportedEvents = [notificationType, supportedEvents];
+		this.persistValues();
 	}
 
-	private _notificationType: NotificationType;
+	@ccKeyValuePair()
+	private supportedEvents: [NotificationType, number[]];
+
 	public get notificationType(): NotificationType {
-		return this._notificationType;
+		return this.supportedEvents[0];
 	}
 
 	// TODO: Define events
-	private _supportedEvents: number[];
-	public get supportedEvents(): readonly number[] {
-		return this._supportedEvents;
+	public get notificationSupportedEvents(): readonly number[] {
+		return this.supportedEvents[1];
 	}
 }
 

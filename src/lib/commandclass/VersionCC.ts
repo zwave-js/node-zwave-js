@@ -131,6 +131,7 @@ export class VersionCCCommandClassReport extends VersionCC {
 		super(driver, options);
 		this._requestedCC = this.payload[0];
 		this._ccVersion = this.payload[1];
+		// No need to persist this, we're storing it manually
 	}
 
 	private _ccVersion: number;

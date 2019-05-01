@@ -3,9 +3,8 @@ import { parseBitMask } from "../values/Primitive";
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccKeyValuePair,
 	ccValue,
-	ccValueMapKey,
-	ccValueMapValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -52,21 +51,20 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		this._value = this.payload[0] === 0xff;
-		this._sensorType = this.payload[1];
+		const _value = this.payload[0] === 0xff;
+		const _sensorType = this.payload[1];
+		this.values = [_sensorType, _value];
 		this.persistValues();
 	}
 
-	private _sensorType: BinarySensorType;
-	@ccValueMapKey("values")
+	@ccKeyValuePair() private values: [BinarySensorType, boolean];
+
 	public get sensorType(): BinarySensorType {
-		return this._sensorType;
+		return this.values[0];
 	}
 
-	private _value: boolean;
-	@ccValueMapValue("values")
 	public get value(): boolean {
-		return this._value;
+		return this.values[1];
 	}
 }
 

@@ -13,6 +13,7 @@ import {
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccKeyValuePair,
 	ccValue,
 	CommandClass,
 	commandClass,
@@ -110,27 +111,30 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 	) {
 		super(driver, options);
 
-		this._weekday = this.payload[0] & 0b111;
+		const weekday = this.payload[0] & 0b111;
 		const allSwitchpoints: Switchpoint[] = [];
 		for (let i = 0; i <= 8; i++) {
 			allSwitchpoints.push(
 				decodeSwitchpoint(this.payload.slice(1 + 3 * i)),
 			);
 		}
-		this._switchPoints = allSwitchpoints.filter(
+		const switchPoints = allSwitchpoints.filter(
 			sp => sp.state !== "Unused",
 		);
+
+		this.schedule = [weekday, switchPoints];
 		this.persistValues();
 	}
 
-	private _switchPoints: Switchpoint[];
-	@ccValue() public get switchPoints(): readonly Switchpoint[] {
-		return this._switchPoints;
+	@ccKeyValuePair()
+	private schedule: [Weekday, Switchpoint[]];
+
+	public get switchPoints(): readonly Switchpoint[] {
+		return this.schedule[1];
 	}
 
-	private _weekday: Weekday;
-	@ccValue() public get weekday(): Weekday {
-		return this._weekday;
+	public get weekday(): Weekday {
+		return this.schedule[0];
 	}
 }
 

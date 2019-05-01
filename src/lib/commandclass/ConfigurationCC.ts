@@ -5,6 +5,7 @@ import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccKeyValuePair,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -53,6 +54,7 @@ export interface ParameterInfo {
 	requiresReInclusion?: boolean;
 }
 
+// A configuration value is either a single number or a bit map
 export type ConfigValue = number | Set<number>;
 
 // TODO: * Scan available config params (V1-V2)
@@ -120,32 +122,36 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		this._parameter = this.payload[0];
+		const parameter = this.payload[0];
 		this._valueSize = this.payload[1] & 0b111;
-		this._value = parseValue(
+		const value = parseValue(
 			this.payload.slice(2),
 			this._valueSize,
 			// In Config CC v1/v2, this must be SignedInteger
 			// As those nodes don't communicate any parameter information
 			// we fall back to that default value anyways
-			this.getParamInformation(this._parameter).format ||
+			this.getParamInformation(parameter).format ||
 				ValueFormat.SignedInteger,
 		);
+		this.values = [parameter, value];
+		this.persistValues();
 	}
 
-	private _parameter: number;
+	@ccKeyValuePair()
+	private values: [number, ConfigValue];
+
 	public get parameter(): number {
-		return this._parameter;
+		return this.values[0];
 	}
 
+	// TODO: Does this belong into the KVP?
 	private _valueSize: number;
 	public get valueSize(): number {
 		return this._valueSize;
 	}
 
-	private _value: ConfigValue;
 	public get value(): ConfigValue {
-		return this._value;
+		return this.values[1];
 	}
 }
 
@@ -367,6 +373,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 				),
 			);
 		}
+		this.persistValues();
 	}
 
 	private _reportsToFollow: number;
@@ -394,6 +401,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 	}
 
 	private _values: Map<number, ConfigValue> = new Map();
+	@ccKeyValuePair()
 	public get values(): ReadonlyMap<number, ConfigValue> {
 		return this._values;
 	}
@@ -450,14 +458,17 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		this._parameter = this.payload.readUInt16BE(0);
+		const parameter = this.payload.readUInt16BE(0);
 		this._reportsToFollow = this.payload[2];
-		this._name = this.payload.slice(3).toString("utf8");
+		const name = this.payload.slice(3).toString("utf8");
+		this.name = [parameter, name];
 	}
 
-	private _parameter: number;
+	@ccKeyValuePair()
+	private name: [number, string];
+
 	public get parameter(): number {
-		return this._parameter;
+		return this.name[0];
 	}
 
 	private _reportsToFollow: number;
@@ -469,16 +480,16 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		return this._reportsToFollow > 0;
 	}
 
-	private _name: string;
-	public get name(): string {
-		return this._name;
+	public get parameterName(): string {
+		return this.name[1];
 	}
 
 	public mergePartialCCs(partials: ConfigurationCCNameReport[]): void {
 		// Concat the name
-		this._name = [...partials, this]
-			.map(report => report._name)
+		this.name[1] = [...partials, this]
+			.map(report => report.parameterName)
 			.reduce((prev, cur) => prev + cur, "");
+		this.persistValues();
 	}
 }
 
@@ -517,14 +528,17 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		this._parameter = this.payload.readUInt16BE(0);
+		const parameter = this.payload.readUInt16BE(0);
 		this._reportsToFollow = this.payload[2];
-		this._info = this.payload.slice(3).toString("utf8");
+		const info = this.payload.slice(3).toString("utf8");
+		this.info = [parameter, info];
 	}
 
-	private _parameter: number;
+	@ccKeyValuePair()
+	private info: [number, string];
+
 	public get parameter(): number {
-		return this._parameter;
+		return this.info[0];
 	}
 
 	private _reportsToFollow: number;
@@ -536,16 +550,16 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		return this._reportsToFollow > 0;
 	}
 
-	private _info: string;
-	public get info(): string {
-		return this._info;
+	public get parameterInfo(): string {
+		return this.info[1];
 	}
 
 	public mergePartialCCs(partials: ConfigurationCCInfoReport[]): void {
-		// Concat the parameter info
-		this._info = [...partials, this]
-			.map(report => report._info)
+		// Concat the name
+		this.info[1] = [...partials, this]
+			.map(report => report.parameterInfo)
 			.reduce((prev, cur) => prev + cur, "");
+		this.persistValues();
 	}
 }
 
@@ -624,6 +638,8 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			this._noBulkSupport = !!(options2 & 0b10);
 		}
 	}
+
+	// TODO: This is some kind of huge KVP
 
 	private _parameter: number;
 	public get parameter(): number {

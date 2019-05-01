@@ -9,6 +9,7 @@ import { encodeBitMask, parseBitMask } from "../values/Primitive";
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccKeyValuePair,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -96,21 +97,24 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 	) {
 		super(driver, options);
 
-		this._endpointIndex = this.payload[0] & 0b01111111;
-		this._capability = {
+		const endpointIndex = this.payload[0] & 0b01111111;
+		const capability = {
 			isDynamic: !!(this.payload[0] & 0b10000000),
 			...parseNodeInformationFrame(this.payload.slice(1)),
 		};
+		this.capabilities = [endpointIndex, capability];
+		this.persistValues();
 	}
 
-	private _endpointIndex: number;
+	@ccKeyValuePair()
+	private capabilities: [number, EndpointCapability];
+
 	public get endpointIndex(): number {
-		return this._endpointIndex;
+		return this.capabilities[0];
 	}
 
-	private _capability: EndpointCapability;
 	public get capability(): EndpointCapability {
-		return this._capability;
+		return this.capabilities[1];
 	}
 }
 
@@ -223,20 +227,22 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		this._endpoint = this.payload[0] & 0b0111_1111;
+		const endpoint = this.payload[0] & 0b0111_1111;
 		const bitMaskLength = this.payload[1];
 		const bitMask = this.payload.slice(2, 2 + bitMaskLength);
-		this._aggregatedEndpointMembers = parseBitMask(bitMask);
+		const members = parseBitMask(bitMask);
+		this.aggregatedEndpointMembers = [endpoint, members];
 	}
 
-	private _endpoint: number;
+	@ccKeyValuePair()
+	private aggregatedEndpointMembers: [number, number[]];
+
 	public get endpoint(): number {
-		return this._endpoint;
+		return this.aggregatedEndpointMembers[0];
 	}
 
-	private _aggregatedEndpointMembers: number[];
-	public get aggregatedEndpointMembers(): readonly number[] {
-		return this._aggregatedEndpointMembers;
+	public get members(): readonly number[] {
+		return this.aggregatedEndpointMembers[1];
 	}
 }
 
