@@ -107,5 +107,8 @@ export function createEmptyMockDriver(): Driver {
 			// We have no real nodes to test against, just use the implemented version
 			return getImplementedVersion(ccId);
 		},
+		controller: {
+			nodes: new Map(),
+		},
 	} as unknown) as Driver;
 }

@@ -5,7 +5,7 @@ export interface ICommandClassContainer {
 }
 
 export function isCommandClassContainer<T>(
-	msg: T,
+	msg: T | undefined,
 ): msg is T & ICommandClassContainer {
-	return (msg as any).command instanceof CommandClass;
+	return msg != undefined && (msg as any).command instanceof CommandClass;
 }
