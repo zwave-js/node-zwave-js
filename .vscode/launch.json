@@ -10,13 +10,14 @@
 			"name": "Launch Program",
 			"port": 9229,
 			"runtimeArgs": [
+				"--async-stack-traces",
 				"--inspect-brk=9229",
 				"-r",
 				"ts-node/register",
 				"${workspaceFolder}/test/run.ts"
 			],
 			"env": {
-				"DEBUG": "zwave:(controller)",
+				"DEBUG": "zwave:(controller|io)",
 				"NO_CACHE": "false"
 			},
 			"console": "integratedTerminal",

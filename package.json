@@ -62,7 +62,7 @@
     "fs-extra": "^7.0.1",
     "json5": "^2.1.0",
     "reflect-metadata": "^0.1.13",
-    "serialport": "^7.1.4"
+    "serialport": "^7.1.5"
   },
   "scripts": {
     "build": "tsc -p src/tsconfig.build.json",
