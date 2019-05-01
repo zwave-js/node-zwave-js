@@ -218,17 +218,17 @@ export class Driver extends EventEmitter implements IDriver {
 
 		if (!this.options.skipInterview) {
 			// Now interview all nodes
-			for (const node of this._controller.nodes.values()) {
+			async function doNodeInterview(node: ZWaveNode): Promise<void> {
 				if (node.interviewStage === InterviewStage.Complete) {
 					node.interviewStage = InterviewStage.RestartFromCache;
 				} else if (node.interviewStage === InterviewStage.Ping) {
 					// In case the node gets stuck directly after pinging, retry
 					node.interviewStage = InterviewStage.ProtocolInfo;
 				}
-				// TODO: retry on failure or something...
-				// don't await the interview, because it may take a very long time
-				// if a node is asleep
-				void node.interview().catch(e => {
+
+				try {
+					await node.interview();
+				} catch (e) {
 					if (e instanceof ZWaveError) {
 						log(
 							"controller",
@@ -238,7 +238,20 @@ export class Driver extends EventEmitter implements IDriver {
 					} else {
 						throw e;
 					}
-				});
+				}
+			}
+			// First complete the controller interview
+			const controllerNode = this._controller.nodes.get(
+				this._controller.ownNodeId!,
+			)!;
+			await doNodeInterview(controllerNode);
+			// Then do all the nodes in parallel
+			for (const node of this._controller.nodes.values()) {
+				if (node.id === this._controller.ownNodeId) continue;
+				// TODO: retry on failure or something...
+				// don't await the interview, because it may take a very long time
+				// if a node is asleep
+				void doNodeInterview(node);
 			}
 		}
 	}
@@ -1176,6 +1189,8 @@ export class Driver extends EventEmitter implements IDriver {
 		if (this.sendQueue.length === 0) {
 			log("io", `workOffSendQueue > queue is empty`, "debug");
 			return;
+		} else {
+			this.printSendQueue();
 		}
 		// we are still waiting for the current transaction to finish
 		if (this.currentTransaction != undefined) {
@@ -1198,7 +1213,7 @@ export class Driver extends EventEmitter implements IDriver {
 				"io",
 				`workOffSendQueue > sending next message (${
 					FunctionType[msg.functionType]
-				})...`,
+				})${targetNode ? ` to node ${targetNode.id}` : ""}...`,
 				"debug",
 			);
 			// for messages containing a CC, i.e. a SendDataRequest, set the CC version as high as possible
@@ -1235,7 +1250,9 @@ export class Driver extends EventEmitter implements IDriver {
 		} else {
 			log(
 				"io",
-				`workOffSendQueue > The remaining messages are for sleeping nodes, not sending anything!`,
+				`workOffSendQueue > The remaining ${
+					this.sendQueue.length
+				} messages are for sleeping nodes, not sending anything!`,
 				"debug",
 			);
 		}
@@ -1292,6 +1309,29 @@ export class Driver extends EventEmitter implements IDriver {
 		const items = [...this.sendQueue];
 		this.sendQueue.clear();
 		this.sendQueue.add(...items);
+	}
+
+	private printSendQueue(): void {
+		log("io", "workOffSendQueue > messages in the queue:", "silly");
+		for (const trns of this.sendQueue) {
+			const node = trns.message.getNodeUnsafe();
+			const postfix =
+				node != undefined
+					? ` [Node ${node.id}, ${
+							node.isAwake() ? "awake" : "asleep"
+					  }]`
+					: "";
+			const command = isCommandClassContainer(trns.message)
+				? ` (${trns.message.command.constructor.name})`
+				: "";
+			log(
+				"io",
+				`  ${
+					FunctionType[trns.message.functionType]
+				}${command}${postfix}`,
+				"silly",
+			);
+		}
 	}
 
 	private lastSaveToCache: number = 0;

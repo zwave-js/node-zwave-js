@@ -366,6 +366,8 @@ export class CommandClass {
 		for (const variable of valueNames as string[]) {
 			let valueToSet: unknown;
 			const sourceValue = this[variable as keyof this];
+			if (sourceValue == undefined) continue;
+
 			if (keyValuePairNames.has(variable)) {
 				// This value is one or more key value pair(s) to be stored in a map
 				const targetMap = (db.getValue(cc, this.endpoint, variable) ||
@@ -922,7 +924,7 @@ export function getCCKeyValuePairNames(
 // To be sure all metadata gets loaded, import all command classes
 const definedCCs = fs
 	.readdirSync(__dirname)
-	.filter(file => /CC\.js$/.test(file));
+	.filter(file => /CC\.(js|ts)$/.test(file));
 log("protocol", `loading CCs: ${stringify(definedCCs)}`, "silly");
 for (const file of definedCCs) {
 	require(`./${file}`);

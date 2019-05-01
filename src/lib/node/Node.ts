@@ -526,7 +526,7 @@ export class ZWaveNode extends EventEmitter {
 				log(
 					"controller",
 					`${this.logPrefix}  querying the node info failed`,
-					"debug",
+					"error",
 				);
 			} else if (
 				resp instanceof ApplicationUpdateRequestNodeInfoReceived
@@ -611,8 +611,9 @@ export class ZWaveNode extends EventEmitter {
 					`${
 						this.logPrefix
 					}  querying the Z-Wave+ information failed: ${e.message}`,
-					"debug",
+					"error",
 				);
+				throw e;
 			}
 		}
 
@@ -666,8 +667,9 @@ export class ZWaveNode extends EventEmitter {
 					}  querying the manufacturer information failed: ${
 						e.message
 					}`,
-					"debug",
+					"error",
 				);
+				throw e;
 			}
 		}
 
@@ -725,8 +727,9 @@ export class ZWaveNode extends EventEmitter {
 					`${this.logPrefix}  querying the CC version failed: ${
 						e.message
 					}`,
-					"debug",
+					"error",
 				);
+				throw e;
 			}
 		}
 		await this.setInterviewStage(InterviewStage.Versions);
@@ -770,8 +773,9 @@ export class ZWaveNode extends EventEmitter {
 					`${this.logPrefix}  querying the device endpoints failed: ${
 						e.message
 					}`,
-					"debug",
+					"error",
 				);
+				throw e;
 			}
 		} else {
 			log(
@@ -868,8 +872,9 @@ export class ZWaveNode extends EventEmitter {
 						`${
 							this.logPrefix
 						}  configuring the device wakeup failed: ${e.message}`,
-						"debug",
+						"error",
 					);
+					throw e;
 				}
 			}
 		} else {
@@ -897,8 +902,9 @@ export class ZWaveNode extends EventEmitter {
 				`${this.logPrefix}  requesting the static values failed: ${
 					e.message
 				}`,
-				"debug",
+				"error",
 			);
+			throw e;
 		}
 		await this.setInterviewStage(InterviewStage.Static);
 	}
@@ -931,8 +937,9 @@ export class ZWaveNode extends EventEmitter {
 				`${this.logPrefix}  requesting the node neighbors failed: ${
 					e.message
 				}`,
-				"debug",
+				"error",
 			);
+			throw e;
 		}
 		await this.setInterviewStage(InterviewStage.Neighbors);
 	}
