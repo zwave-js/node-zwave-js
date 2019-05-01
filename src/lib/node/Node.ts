@@ -484,10 +484,9 @@ export class ZWaveNode extends EventEmitter {
 				// Don't retry sending ping packets
 				request.maxSendAttempts = 1;
 				// set the priority manually, as SendData can be Application level too
-				await this.driver.sendMessage<SendDataRequest>(
-					request,
-					MessagePriority.NodeQuery,
-				);
+				await this.driver.sendMessage<SendDataRequest>(request, {
+					priority: MessagePriority.NodeQuery,
+				});
 				log("controller", `${this.logPrefix}  ping succeeded`, "debug");
 				// TODO: time out the ping
 			} catch (e) {
@@ -496,7 +495,9 @@ export class ZWaveNode extends EventEmitter {
 					`${this.logPrefix}  ping failed: ${e.message}`,
 					"debug",
 				);
-				// TODO: The node is dead
+				// TODO: Distinguish between dead and sleeping node
+				this.setAwake(false);
+				// TODO: Move messages to wakeup queue
 				return false;
 			}
 		}
@@ -587,7 +588,7 @@ export class ZWaveNode extends EventEmitter {
 				// set the priority manually, as SendData can be Application level too
 				const resp = await this.driver.sendMessage<SendDataRequest>(
 					request,
-					MessagePriority.NodeQuery,
+					{ priority: MessagePriority.NodeQuery },
 				);
 				if (
 					isCommandClassContainer(resp) &&
@@ -643,7 +644,7 @@ export class ZWaveNode extends EventEmitter {
 				// set the priority manually, as SendData can be Application level too
 				const resp = await this.driver.sendMessage<SendDataRequest>(
 					request,
-					MessagePriority.NodeQuery,
+					{ priority: MessagePriority.NodeQuery },
 				);
 				if (
 					isCommandClassContainer(resp) &&
@@ -700,7 +701,7 @@ export class ZWaveNode extends EventEmitter {
 				// query the CC version
 				const resp = await this.driver.sendMessage<SendDataRequest>(
 					request,
-					MessagePriority.NodeQuery,
+					{ priority: MessagePriority.NodeQuery },
 				);
 				if (
 					isCommandClassContainer(resp) &&
@@ -751,7 +752,7 @@ export class ZWaveNode extends EventEmitter {
 				// set the priority manually, as SendData can be Application level too
 				const resp = await this.driver.sendMessage<SendDataRequest>(
 					request,
-					MessagePriority.NodeQuery,
+					{ priority: MessagePriority.NodeQuery },
 				);
 				if (
 					isCommandClassContainer(resp) &&
@@ -826,7 +827,9 @@ export class ZWaveNode extends EventEmitter {
 					);
 					const getWakeupResp = await this.driver.sendMessage<
 						SendDataRequest
-					>(getWakeupRequest, MessagePriority.NodeQuery);
+					>(getWakeupRequest, {
+						priority: MessagePriority.NodeQuery,
+					});
 					if (
 						!isCommandClassContainer(getWakeupResp) ||
 						!(
@@ -861,10 +864,9 @@ export class ZWaveNode extends EventEmitter {
 								.ownNodeId!,
 						}),
 					});
-					await this.driver.sendMessage(
-						setWakeupRequest,
-						MessagePriority.NodeQuery,
-					);
+					await this.driver.sendMessage(setWakeupRequest, {
+						priority: MessagePriority.NodeQuery,
+					});
 					log("controller", `${this.logPrefix}  done!`, "debug");
 				} catch (e) {
 					log(
@@ -1190,10 +1192,9 @@ export class ZWaveNode extends EventEmitter {
 				command: wakeupCC,
 			});
 
-			await this.driver.sendMessage<SendDataRequest>(
-				request,
-				MessagePriority.WakeUp,
-			);
+			await this.driver.sendMessage<SendDataRequest>(request, {
+				priority: MessagePriority.WakeUp,
+			});
 			log("controller", `${this.logPrefix}  Node asleep`, "debug");
 
 			msgSent = true;

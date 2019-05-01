@@ -66,7 +66,9 @@ export class VersionCC extends CommandClass {
 		if (kind & StateKind.Static) {
 			const cc = new VersionCCGet(driver, { nodeId: node.id });
 			const request = new SendDataRequest(driver, { command: cc });
-			await driver.sendMessage(request, MessagePriority.NodeQuery);
+			await driver.sendMessage(request, {
+				priority: MessagePriority.NodeQuery,
+			});
 		}
 	}
 }

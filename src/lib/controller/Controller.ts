@@ -177,7 +177,9 @@ export class ZWaveController extends EventEmitter {
 		log("controller", `querying version info...`, "debug");
 		const version = await this.driver.sendMessage<
 			GetControllerVersionResponse
-		>(new GetControllerVersionRequest(this.driver), "none");
+		>(new GetControllerVersionRequest(this.driver), {
+			supportCheck: false,
+		});
 		this._libraryVersion = version.libraryVersion;
 		this._type = version.controllerType;
 		log("controller", `received version info:`, "debug");
@@ -196,7 +198,7 @@ export class ZWaveController extends EventEmitter {
 		log("controller", `querying controller IDs...`, "debug");
 		const ids = await this.driver.sendMessage<GetControllerIdResponse>(
 			new GetControllerIdRequest(this.driver),
-			"none",
+			{ supportCheck: false },
 		);
 		this._homeId = ids.homeId;
 		this._ownNodeId = ids.ownNodeId;
@@ -208,7 +210,9 @@ export class ZWaveController extends EventEmitter {
 		log("controller", `querying controller capabilities...`, "debug");
 		const ctrlCaps = await this.driver.sendMessage<
 			GetControllerCapabilitiesResponse
-		>(new GetControllerCapabilitiesRequest(this.driver), "none");
+		>(new GetControllerCapabilitiesRequest(this.driver), {
+			supportCheck: false,
+		});
 		this._isSecondary = ctrlCaps.isSecondary;
 		this._isUsingHomeIdFromOtherNetwork =
 			ctrlCaps.isUsingHomeIdFromOtherNetwork;
@@ -248,7 +252,9 @@ export class ZWaveController extends EventEmitter {
 		log("controller", `querying API capabilities...`, "debug");
 		const apiCaps = await this.driver.sendMessage<
 			GetSerialApiCapabilitiesResponse
-		>(new GetSerialApiCapabilitiesRequest(this.driver), "none");
+		>(new GetSerialApiCapabilitiesRequest(this.driver), {
+			supportCheck: false,
+		});
 		this._serialApiVersion = apiCaps.serialApiVersion;
 		this._manufacturerId = apiCaps.manufacturerId;
 		this._productType = apiCaps.productType;
@@ -290,7 +296,7 @@ export class ZWaveController extends EventEmitter {
 		log("controller", `finding SUC...`, "debug");
 		const suc = await this.driver.sendMessage<GetSUCNodeIdResponse>(
 			new GetSUCNodeIdRequest(this.driver),
-			"none",
+			{ supportCheck: false },
 		);
 		this._sucNodeId = suc.sucNodeId;
 		if (this._sucNodeId === 0) {
@@ -400,11 +406,10 @@ export class ZWaveController extends EventEmitter {
 					0x00, // length
 				]),
 			});
-			await this.driver.sendMessage(
-				appInfoMsg,
-				MessagePriority.Controller,
-				"none",
-			);
+			await this.driver.sendMessage(appInfoMsg, {
+				priority: MessagePriority.Controller,
+				supportCheck: false,
+			});
 		}
 
 		log("controller", "interview completed", "debug");

@@ -24,12 +24,14 @@ export class Transaction implements Comparable<Transaction> {
 		message: Message,
 		promise: DeferredPromise<Message | void>,
 		priority: MessagePriority,
+		timeout?: number,
 	);
 	public constructor(
 		private readonly driver: IDriver,
 		public readonly message: Message,
 		public readonly promise: DeferredPromise<Message | void>,
 		public priority: MessagePriority,
+		public readonly timeout?: number,
 		public timestamp: number = highResTimestamp(),
 		/**
 		 * The previously received partial responses of a multistep command
@@ -40,6 +42,8 @@ export class Transaction implements Comparable<Transaction> {
 	) {
 		if (message.maxSendAttempts)
 			this.maxSendAttempts = message.maxSendAttempts;
+		if (typeof this.timeout === "number" && this.timeout < 1)
+			this.timeout = undefined;
 	}
 
 	private _maxSendAttempts: number = MAX_SEND_ATTEMPTS;

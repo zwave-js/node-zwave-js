@@ -11,6 +11,7 @@ import {
 } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
+import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import {
@@ -84,14 +85,23 @@ function applyDefaultOptions(
 }
 
 export type MessageSupportCheck = "loud" | "silent" | "none";
-function isMessageSupportCheck(val: any): val is MessageSupportCheck {
-	return val === "loud" || val === "silent" || val === "none";
-}
+// function isMessageSupportCheck(val: any): val is MessageSupportCheck {
+// 	return val === "loud" || val === "silent" || val === "none";
+// }
 
 export type RequestHandler<T extends Message = Message> = (msg: T) => boolean;
 interface RequestHandlerEntry<T extends Message = Message> {
 	invoke: RequestHandler<T>;
 	oneTime: boolean;
+}
+
+export interface SendMessageOptions {
+	/** The priority of the message to send. If none is given, the defined default priority of the message class will be used. */
+	priority?: MessagePriority;
+	/** If an exception should be thrown when the message to send is not supported. Setting this to false is is useful if the capabilities haven't been determined yet. Default: true */
+	supportCheck?: boolean;
+	/** Setting timeout to a positive number causes the transaction to be rejected if no response is received before the timeout elapses */
+	timeout?: number;
 }
 
 // TODO: Interface the emitted events
@@ -1059,49 +1069,16 @@ export class Driver extends EventEmitter implements IDriver {
 	/**
 	 * Sends a message with default priority to the Z-Wave stick
 	 * @param msg The message to send
-	 * @param supportCheck How to check for the support of the message to send. If the message is not supported:
-	 * * "loud" means the call will throw
-	 * * "silent" means the call will resolve with `undefined`
-	 * * "none" means the message will be sent anyways. This is useful if the capabilities haven't been determined yet.
-	 * @param priority The priority of the message to send. If none is given, the defined default priority of the message
-	 * class will be used.
 	 */
 	public async sendMessage<TResponse extends Message = Message>(
 		msg: Message,
-		priority?: MessagePriority,
-	): Promise<TResponse>;
-
-	public async sendMessage<TResponse extends Message = Message>(
-		msg: Message,
-		supportCheck?: MessageSupportCheck,
-	): Promise<TResponse>;
-
-	public async sendMessage<TResponse extends Message = Message>(
-		msg: Message,
-		priority: MessagePriority,
-		supportCheck: MessageSupportCheck,
-	): Promise<TResponse>;
-
-	public async sendMessage<TResponse extends Message = Message>(
-		msg: Message,
-		priorityOrCheck?: MessagePriority | MessageSupportCheck,
-		supportCheck?: MessageSupportCheck,
-	): Promise<TResponse | undefined> {
-		// sort out the arguments
-		if (isMessageSupportCheck(priorityOrCheck)) {
-			supportCheck = priorityOrCheck;
-			priorityOrCheck = undefined;
-		}
-		// now priorityOrCheck is either undefined or a MessagePriority
-		const priority: MessagePriority | undefined =
-			priorityOrCheck != undefined
-				? priorityOrCheck
-				: getDefaultPriority(msg);
-		if (supportCheck == undefined) supportCheck = "loud";
-
+		options: SendMessageOptions = {},
+	): Promise<TResponse> {
 		this.ensureReady();
 
-		if (priority == undefined) {
+		if (options.priority == undefined)
+			options.priority = getDefaultPriority(msg);
+		if (options.priority == undefined) {
 			const className = msg.constructor.name;
 			const msgTypeName = FunctionType[msg.functionType];
 			throw new ZWaveError(
@@ -1109,34 +1086,36 @@ export class Driver extends EventEmitter implements IDriver {
 				ZWaveErrorCodes.Driver_NoPriority,
 			);
 		}
+		if (options.supportCheck == undefined) options.supportCheck = true;
 
 		if (
-			supportCheck !== "none" &&
+			options.supportCheck &&
 			this.controller != undefined &&
 			!this.controller.isFunctionSupported(msg.functionType)
 		) {
-			if (supportCheck === "loud") {
-				throw new ZWaveError(
-					`Your hardware does not support the ${
-						FunctionType[msg.functionType]
-					} function`,
-					ZWaveErrorCodes.Driver_NotSupported,
-				);
-			} else {
-				return undefined;
-			}
+			throw new ZWaveError(
+				`Your hardware does not support the ${
+					FunctionType[msg.functionType]
+				} function`,
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
 		}
 
 		log(
 			"driver",
 			`sending message ${stringify(msg)} with priority ${
-				MessagePriority[priority]
-			} (${priority})`,
+				MessagePriority[options.priority]
+			} (${options.priority})`,
 			"debug",
 		);
 		// create the transaction and enqueue it
 		const promise = createDeferredPromise<TResponse>();
-		const transaction = new Transaction(this, msg, promise, priority);
+		const transaction = new Transaction(
+			this,
+			msg,
+			promise,
+			options.priority,
+		);
 
 		this.sendQueue.add(transaction);
 		log(
@@ -1156,12 +1135,12 @@ export class Driver extends EventEmitter implements IDriver {
 	// wotan-disable-next-line no-misused-generics
 	public async sendCommand<TResponse extends CommandClass = CommandClass>(
 		command: CommandClass,
-		priority?: MessagePriority,
+		options: SendMessageOptions = {},
 	): Promise<TResponse | undefined> {
 		const msg = new SendDataRequest(this, {
 			command,
 		});
-		const resp = await this.sendMessage(msg, priority);
+		const resp = await this.sendMessage(msg, options);
 		if (isCommandClassContainer(resp)) {
 			return resp.command as TResponse;
 		}
@@ -1241,6 +1220,19 @@ export class Driver extends EventEmitter implements IDriver {
 			// Mark the transaction as being sent
 			this.currentTransaction.sendAttempts = 1;
 			this.doSend(data);
+			// If the transaction has a timeout configured, start it
+			if (this.currentTransaction.timeout) {
+				setTimeout(
+					() =>
+						this.rejectCurrentTransaction(
+							new ZWaveError(
+								"The transaction timed out",
+								ZWaveErrorCodes.Controller_MessageTimeout,
+							),
+						),
+					this.currentTransaction.timeout,
+				);
+			}
 
 			// to avoid any deadlocks we didn't think of, re-call this later
 			this.sendQueueTimer = setTimeout(
@@ -1279,14 +1271,25 @@ export class Driver extends EventEmitter implements IDriver {
 
 	/** Moves all messages for a given node into the wakeup queue */
 	private moveMessagesToWakeupQueue(nodeId: number): void {
+		const pingsToRemove: Transaction[] = [];
 		for (const transaction of this.sendQueue) {
 			const msg = transaction.message;
 			const targetNodeId = msg.getNodeId();
 			if (targetNodeId === nodeId) {
-				// Change the priority to WakeUp
-				transaction.priority = MessagePriority.WakeUp;
+				if (
+					isCommandClassContainer(msg) &&
+					msg.command instanceof NoOperationCC
+				) {
+					pingsToRemove.push(transaction);
+				} else {
+					// Change the priority to WakeUp
+					transaction.priority = MessagePriority.WakeUp;
+				}
 			}
 		}
+		// Remove all pings that would clutter the send queue
+		this.sendQueue.remove(...pingsToRemove);
+
 		// Changing the priority has an effect on the order, so re-sort the send queue
 		this.sortSendQueue();
 

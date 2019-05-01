@@ -12,6 +12,7 @@ export enum ZWaveErrorCodes {
 	Driver_NotSupported,
 	Driver_NoPriority,
 	Driver_InvalidCache,
+	Controller_MessageTimeout,
 
 	Controller_MessageDropped,
 	Controller_InclusionFailed,
