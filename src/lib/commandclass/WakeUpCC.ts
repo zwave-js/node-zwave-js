@@ -1,6 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { ZWaveNode } from "../node/Node";
+import { NodeStatus, ZWaveNode } from "../node/Node";
 import {
 	CCCommand,
 	CCCommandOptions,
@@ -9,7 +9,6 @@ import {
 	commandClass,
 	CommandClassDeserializationOptions,
 	expectedCCResponse,
-	getCommandClass,
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
@@ -31,15 +30,15 @@ export class WakeUpCC extends CommandClass {
 	public ccCommand!: WakeUpCommand;
 
 	public isAwake(): boolean {
-		const ret = this.getValueDB().getValue(
-			getCommandClass(this),
-			undefined,
-			"awake",
-		);
-		// TODO: Add a way to configure this
-		// TODO: While adding nodes, they should be assumed awake
-		const assumeAwake = false;
-		return ret == undefined ? assumeAwake : !!ret;
+		switch (this.getNode()!.status) {
+			case NodeStatus.Asleep:
+			case NodeStatus.Dead:
+				return false;
+			case NodeStatus.Unknown:
+			// We assume all nodes to be awake - we'll find out soon enough if they are
+			case NodeStatus.Awake:
+				return true;
+		}
 	}
 
 	public static isAwake(driver: IDriver, node: ZWaveNode): boolean {
@@ -47,12 +46,7 @@ export class WakeUpCC extends CommandClass {
 	}
 
 	public setAwake(awake: boolean): void {
-		this.getValueDB().setValue(
-			getCommandClass(this),
-			undefined,
-			"awake",
-			awake,
-		);
+		this.getNode()!.status = awake ? NodeStatus.Awake : NodeStatus.Asleep;
 	}
 
 	public static setAwake(

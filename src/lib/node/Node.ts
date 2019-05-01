@@ -79,7 +79,7 @@ import { ValueDB, ValueDBEventCallbacks } from "./ValueDB";
 
 export type ZWaveNodeEventCallbacks = Overwrite<
 	{
-		[K in "wake up" | "sleep" | "interview completed"]: (
+		[K in "wake up" | "sleep" | "interview completed" | "dead" | "alive"]: (
 			node: ZWaveNode,
 		) => void
 	},
@@ -130,6 +130,12 @@ export enum InterviewStage {
 	Complete,				// [✓] Query process is completed for this node
 }
 
+export enum NodeStatus {
+	Unknown,
+	Asleep,
+	Awake,
+	Dead,
+}
 export class ZWaveNode extends EventEmitter {
 	public constructor(
 		public readonly id: number,
@@ -164,6 +170,30 @@ export class ZWaveNode extends EventEmitter {
 		3,
 		"0",
 	)}] `;
+
+	/** Which status we believe the node is in */
+
+	private _status: NodeStatus = NodeStatus.Unknown;
+	public get status(): NodeStatus {
+		return this._status;
+	}
+	public set status(value: NodeStatus) {
+		const oldStatus = this._status;
+		this._status = value;
+		if (oldStatus === this._status) return;
+
+		if (oldStatus !== NodeStatus.Unknown && oldStatus !== NodeStatus.Dead) {
+			if (this._status === NodeStatus.Asleep) {
+				this.emit("sleep", this);
+			} else if (this._status === NodeStatus.Awake) {
+				this.emit("wake up", this);
+			} else if (this._status === NodeStatus.Dead) {
+				this.emit("dead", this);
+			}
+		} else if (oldStatus === NodeStatus.Dead) {
+			this.emit("alive", this);
+		}
+	}
 
 	private _deviceClass: DeviceClass | undefined;
 	public get deviceClass(): DeviceClass | undefined {
@@ -488,16 +518,12 @@ export class ZWaveNode extends EventEmitter {
 					priority: MessagePriority.NodeQuery,
 				});
 				log("controller", `${this.logPrefix}  ping succeeded`, "debug");
-				// TODO: time out the ping
 			} catch (e) {
 				log(
 					"controller",
 					`${this.logPrefix}  ping failed: ${e.message}`,
 					"debug",
 				);
-				// TODO: Distinguish between dead and sleeping node
-				this.setAwake(false);
-				// TODO: Move messages to wakeup queue
 				return false;
 			}
 		}
@@ -1152,17 +1178,14 @@ export class ZWaveNode extends EventEmitter {
 		}
 	}
 
-	public setAwake(awake: boolean, emitEvent: boolean = true): void {
+	public setAwake(awake: boolean): void {
 		if (!this.supportsCC(CommandClasses["Wake Up"])) {
 			throw new ZWaveError(
 				"This node does not support the Wake Up CC",
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
-		if (awake !== this.isAwake()) {
-			WakeUpCC.setAwake(this.driver, this, awake);
-			if (emitEvent) this.emit(awake ? "wake up" : "sleep", this);
-		}
+		WakeUpCC.setAwake(this.driver, this, awake);
 	}
 
 	public isAwake(): boolean {

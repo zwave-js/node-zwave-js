@@ -17,8 +17,8 @@
 				"${workspaceFolder}/test/run.ts"
 			],
 			"env": {
-				"DEBUG": "zwave:(controller|io)",
-				"NO_CACHE": "false"
+				"DEBUG": "zwave:(controller)"
+				// "NO_CACHE": "true"
 			},
 			"console": "integratedTerminal",
 			"sourceMaps": true

@@ -33,7 +33,8 @@ import {
 	MessageType,
 } from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";
-import { InterviewStage, ZWaveNode } from "../node/Node";
+import { isNodeQuery } from "../node/INodeQuery";
+import { InterviewStage, NodeStatus, ZWaveNode } from "../node/Node";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
 import { IDriver } from "./IDriver";
@@ -228,40 +229,37 @@ export class Driver extends EventEmitter implements IDriver {
 
 		if (!this.options.skipInterview) {
 			// Now interview all nodes
-			async function doNodeInterview(node: ZWaveNode): Promise<void> {
-				if (node.interviewStage === InterviewStage.Complete) {
-					node.interviewStage = InterviewStage.RestartFromCache;
-				} else if (node.interviewStage === InterviewStage.Ping) {
-					// In case the node gets stuck directly after pinging, retry
-					node.interviewStage = InterviewStage.ProtocolInfo;
-				}
-
-				try {
-					await node.interview();
-				} catch (e) {
-					if (e instanceof ZWaveError) {
-						log(
-							"controller",
-							"node interview failed: " + e,
-							"error",
-						);
-					} else {
-						throw e;
-					}
-				}
-			}
 			// First complete the controller interview
 			const controllerNode = this._controller.nodes.get(
 				this._controller.ownNodeId!,
 			)!;
-			await doNodeInterview(controllerNode);
+			await this.interviewNode(controllerNode);
 			// Then do all the nodes in parallel
 			for (const node of this._controller.nodes.values()) {
 				if (node.id === this._controller.ownNodeId) continue;
 				// TODO: retry on failure or something...
 				// don't await the interview, because it may take a very long time
 				// if a node is asleep
-				void doNodeInterview(node);
+				void this.interviewNode(node);
+			}
+		}
+	}
+
+	private async interviewNode(node: ZWaveNode): Promise<void> {
+		if (node.interviewStage === InterviewStage.Complete) {
+			node.interviewStage = InterviewStage.RestartFromCache;
+		} else if (node.interviewStage === InterviewStage.Ping) {
+			// In case the node gets stuck directly after pinging, retry
+			node.interviewStage = InterviewStage.ProtocolInfo;
+		}
+
+		try {
+			await node.interview();
+		} catch (e) {
+			if (e instanceof ZWaveError) {
+				log("controller", "node interview failed: " + e, "error");
+			} else {
+				throw e;
 			}
 		}
 	}
@@ -269,6 +267,7 @@ export class Driver extends EventEmitter implements IDriver {
 	private addNodeEventHandlers(node: ZWaveNode): void {
 		node.on("wake up", this.onNodeWakeUp.bind(this))
 			.on("sleep", this.onNodeSleep.bind(this))
+			.on("alive", this.onNodeAlive.bind(this))
 			.on(
 				"interview completed",
 				this.onNodeInterviewCompleted.bind(this),
@@ -276,15 +275,27 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	private onNodeWakeUp(node: ZWaveNode): void {
-		log("driver", `${node.logPrefix}The node is now awake.`, "debug");
+		log("controller", `${node.logPrefix}The node is now awake.`, "debug");
 		// Make sure to handle the pending messages as quickly as possible
 		this.sortSendQueue();
 		setImmediate(() => this.workOffSendQueue());
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	private onNodeSleep(node: ZWaveNode): void {
-		// TODO: Do we need this
+		// TODO: Do we need this?
+		log("controller", `${node.logPrefix}The node is now asleep.`, "debug");
+	}
+
+	private onNodeAlive(node: ZWaveNode): void {
+		log("controller", `${node.logPrefix}The node is now alive.`, "debug");
+		if (node.interviewStage !== InterviewStage.Complete) {
+			log(
+				"controller",
+				`${node.logPrefix}  resuming interview...`,
+				"debug",
+			);
+			void this.interviewNode(node);
+		}
 	}
 
 	private onNodeInterviewCompleted(node: ZWaveNode): void {
@@ -616,27 +627,20 @@ export class Driver extends EventEmitter implements IDriver {
 							"warn",
 						);
 					} else {
-						log(
-							"io",
-							`  ${
-								node.logPrefix
-							}The node did not respond to the current transaction after ${
-								this.currentTransaction.maxSendAttempts
-							} attempts, dropping it`,
-							"warn",
-						);
-						const errorMsg =
-							msg instanceof SendDataRequestTransmitReport
-								? `The node did not respond (${
-										TransmitStatus[msg.transmitStatus]
-								  })`
-								: `The node did not respond`;
-						this.rejectCurrentTransaction(
-							new ZWaveError(
-								errorMsg,
-								ZWaveErrorCodes.Controller_MessageDropped,
-							),
-						);
+						let errorMsg = `The node did not respond to the current transaction after ${
+							this.currentTransaction.maxSendAttempts
+						} attempts, it is presumed dead`;
+						if (msg instanceof SendDataRequestTransmitReport) {
+							errorMsg += ` (Status ${
+								TransmitStatus[msg.transmitStatus]
+							})`;
+						}
+						log("io", `  ${node.logPrefix}${errorMsg}`, "warn");
+
+						node.status = NodeStatus.Dead;
+						this.rejectAllTransactionsForNode(node.id, errorMsg);
+						// And continue with the next messages
+						setImmediate(() => this.workOffSendQueue());
 					}
 					return;
 
@@ -819,6 +823,15 @@ export class Driver extends EventEmitter implements IDriver {
 
 	private handleRequest(msg: Message | SendDataRequest): void {
 		let handlers: RequestHandlerEntry[] | undefined;
+
+		if (isCommandClassContainer(msg)) {
+			const node = msg.getNodeUnsafe();
+			if (node && node.status === NodeStatus.Dead) {
+				// We have received a message from a dead node, bring it back to life
+				// We do not know if the node is actually awake, so mark it as unknown for now
+				node.status = NodeStatus.Unknown;
+			}
+		}
 
 		// TODO: find a nice way to observe the different stages of a response.
 		// for example a SendDataRequest with a VersionCC gets 3 responses:
@@ -1076,6 +1089,17 @@ export class Driver extends EventEmitter implements IDriver {
 	): Promise<TResponse> {
 		this.ensureReady();
 
+		// Don't send messages to dead nodes
+		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
+			const node = msg.getNodeUnsafe();
+			if (node && node.status === NodeStatus.Dead) {
+				throw new ZWaveError(
+					"The message will not be sent because the node is presumed dead",
+					ZWaveErrorCodes.Controller_MessageDropped,
+				);
+			}
+		}
+
 		if (options.priority == undefined)
 			options.priority = getDefaultPriority(msg);
 		if (options.priority == undefined) {
@@ -1115,6 +1139,7 @@ export class Driver extends EventEmitter implements IDriver {
 			msg,
 			promise,
 			options.priority,
+			options.timeout,
 		);
 
 		this.sendQueue.add(transaction);
@@ -1291,6 +1316,7 @@ export class Driver extends EventEmitter implements IDriver {
 		this.sendQueue.remove(...pingsToRemove);
 
 		// Changing the priority has an effect on the order, so re-sort the send queue
+		// This must be done anyways, as removing the items does not change the location of others
 		this.sortSendQueue();
 
 		// Don't forget the current transaction
@@ -1305,6 +1331,42 @@ export class Driver extends EventEmitter implements IDriver {
 			this.currentTransaction.sendAttempts = 0;
 			// "reset" the current transaction to none
 			this.currentTransaction = undefined;
+		}
+	}
+
+	private rejectAllTransactionsForNode(
+		nodeId: number,
+		errorMsg: string = `The node is dead`,
+	): void {
+		const transactionsToRemove: Transaction[] = [];
+
+		for (const transaction of this.sendQueue) {
+			const msg = transaction.message;
+			const targetNodeId = msg.getNodeId();
+			if (targetNodeId === nodeId) {
+				transactionsToRemove.push(transaction);
+				transaction.promise.reject(
+					new ZWaveError(
+						errorMsg,
+						ZWaveErrorCodes.Controller_MessageDropped,
+					),
+				);
+			}
+		}
+		// Remove all transactions that belong to the node
+		this.sendQueue.remove(...transactionsToRemove);
+
+		// Don't forget the current transaction
+		if (
+			this.currentTransaction &&
+			this.currentTransaction.message.getNodeId() === nodeId
+		) {
+			this.rejectCurrentTransaction(
+				new ZWaveError(
+					errorMsg,
+					ZWaveErrorCodes.Controller_MessageDropped,
+				),
+			);
 		}
 	}
 

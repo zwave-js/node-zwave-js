@@ -435,11 +435,13 @@ export class CommandClass {
 				keyValuePairNames.has(val.propertyName)
 			) {
 				let valueToSet = val.value;
+				// Properties defined as a map and properties that are built from
+				// key value pairs must be converted from an object to a map
 				if (
-					this[val.propertyName as keyof this] instanceof Map &&
+					(keyValuePairNames.has(val.propertyName) ||
+						this[val.propertyName as keyof this] instanceof Map) &&
 					isObject(val.value)
 				) {
-					// convert the object back to a Map
 					valueToSet = new Map(entries(val.value));
 				}
 				this.getValueDB().setValue(
