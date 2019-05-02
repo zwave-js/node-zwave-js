@@ -808,15 +808,6 @@ describe("lib/node/Node", () => {
 			expect(node.isAwake()).toBeTrue();
 		});
 
-		it("setAwake() should not emit any events if emitEvent is false", () => {
-			const node = makeNode(true);
-			const spy = jest.fn();
-			node.on("wake up", spy).on("sleep", spy);
-			node.setAwake(false, false);
-			node.setAwake(true, false);
-			expect(spy).not.toBeCalled();
-		});
-
 		it(`setAwake() should emit the "wake up" event when the node wakes up and "sleep" when it goes to sleep`, () => {
 			const node = makeNode(true);
 			const wakeupSpy = jest.fn();
