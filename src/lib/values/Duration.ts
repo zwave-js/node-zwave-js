@@ -51,7 +51,9 @@ export class Duration {
 		return payload;
 	}
 
-	public toJSON(): JSONObject {
+	public toJSON(): string | JSONObject {
+		if (this.unit === "default" || this.unit === "unknown")
+			return this.unit;
 		return {
 			value: this.value,
 			unit: this.unit,

@@ -88,4 +88,25 @@ describe("lib/util/Duration", () => {
 			}
 		});
 	});
+
+	describe("toJSON()", () => {
+		it(`should return a string for "unknown" and "default"`, () => {
+			expect(new Duration(1, "default").toJSON()).toBe("default");
+			expect(new Duration(1, "unknown").toJSON()).toBe("unknown");
+		});
+
+		it("should return an object with the value and unit otherwise", () => {
+			const tests = [
+				{ unit: "minutes" as const, value: 4 },
+				{ unit: "minutes" as const, value: 127 },
+				{ unit: "seconds" as const, value: 8 },
+				{ unit: "seconds" as const, value: 127 },
+			];
+			for (const test of tests) {
+				const { unit, value } = test;
+				const actual = new Duration(value, unit).toJSON();
+				expect(actual).toEqual(test);
+			}
+		});
+	});
 });
