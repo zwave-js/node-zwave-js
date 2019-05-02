@@ -67,7 +67,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this.targetValue = options.targetValue;
@@ -155,7 +155,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this.duration = options.duration;

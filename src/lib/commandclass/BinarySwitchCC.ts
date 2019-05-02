@@ -44,7 +44,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this.targetValue = options.targetValue;

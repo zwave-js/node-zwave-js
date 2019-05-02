@@ -171,7 +171,7 @@ export class ConfigurationCCGet extends ConfigurationCC {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this.parameter = options.parameter;
@@ -204,7 +204,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this.parameter = options.parameter;
@@ -273,7 +273,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this._parameters = options.parameters;
@@ -425,7 +425,7 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this._parameters = options.parameters.sort();
@@ -505,7 +505,7 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this.parameter = options.parameter;
@@ -575,7 +575,7 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this.parameter = options.parameter;
@@ -709,7 +709,7 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this.parameter = options.parameter;

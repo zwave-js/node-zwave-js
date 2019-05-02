@@ -102,7 +102,7 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this.setpointType = options.setpointType;
@@ -173,7 +173,7 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this.setpointType = options.setpointType;
@@ -267,7 +267,7 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this.setpointType = options.setpointType;

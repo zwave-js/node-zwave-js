@@ -74,7 +74,7 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this.switchPoints = options.switchPoints;
@@ -155,7 +155,7 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this.weekday = options.weekday;
@@ -250,7 +250,7 @@ export class ClimateControlScheduleCCOverrideSet extends ClimateControlScheduleC
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this.overrideType = options.overrideType;
