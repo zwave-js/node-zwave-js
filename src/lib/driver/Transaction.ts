@@ -42,8 +42,8 @@ export class Transaction implements Comparable<Transaction> {
 	) {
 		if (message.maxSendAttempts)
 			this.maxSendAttempts = message.maxSendAttempts;
-		if (typeof this.timeout === "number" && this.timeout < 1)
-			this.timeout = undefined;
+		if (typeof timeout !== "number" || timeout < 1) timeout = undefined;
+		this.timeout = timeout;
 	}
 
 	private _maxSendAttempts: number = MAX_SEND_ATTEMPTS;
