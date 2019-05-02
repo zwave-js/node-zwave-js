@@ -12,8 +12,8 @@ export enum ZWaveErrorCodes {
 	Driver_NotSupported,
 	Driver_NoPriority,
 	Driver_InvalidCache,
-	Controller_MessageTimeout,
 
+	Controller_MessageTimeout,
 	Controller_MessageDropped,
 	Controller_InclusionFailed,
 	Node_NotResponding,
@@ -21,8 +21,8 @@ export enum ZWaveErrorCodes {
 	CC_Invalid,
 	CC_NotSupported,
 	CC_NoNodeID,
-	CC_DeserializationNotImplemented,
 
+	Deserialization_NotImplemented,
 	Arithmetic,
 	Argument_Invalid,
 }

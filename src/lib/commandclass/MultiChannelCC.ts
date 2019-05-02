@@ -136,7 +136,7 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this._endpoint = options.endpoint;
@@ -203,7 +203,7 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this.genericClass = options.genericClass;
@@ -264,7 +264,7 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this.endpoint = options.endpoint;

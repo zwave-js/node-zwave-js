@@ -86,7 +86,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this.sensorType = options.sensorType;
@@ -190,7 +190,7 @@ export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this.sensorType = options.sensorType;

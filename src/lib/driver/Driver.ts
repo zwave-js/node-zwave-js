@@ -503,7 +503,7 @@ export class Driver extends EventEmitter implements IDriver {
 						return;
 					} else if (
 						e.code ===
-						ZWaveErrorCodes.CC_DeserializationNotImplemented
+						ZWaveErrorCodes.Deserialization_NotImplemented
 					) {
 						log("controller", e.message, "error");
 						return;

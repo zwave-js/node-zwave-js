@@ -78,7 +78,7 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 			// When implementing this branch, update the corresponding driver test
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.CC_DeserializationNotImplemented,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
 			this.wakeupInterval = options.wakeupInterval;
