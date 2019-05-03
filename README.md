@@ -6,6 +6,7 @@ Z-Wave driver written entirely in JavaScript/TypeScript
 
 [![Build Status](https://img.shields.io/circleci/project/github/AlCalzone/node-zwave-js.svg)](https://circleci.com/gh/AlCalzone/node-zwave-js)
 [![Coverage Status](https://img.shields.io/coveralls/github/AlCalzone/node-zwave-js.svg)](https://coveralls.io/github/AlCalzone/node-zwave-js)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/AlCalzone/node-zwave-js.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/AlCalzone/node-zwave-js/context:javascript)
 
 ===
 
