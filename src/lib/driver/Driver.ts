@@ -248,9 +248,6 @@ export class Driver extends EventEmitter implements IDriver {
 	private async interviewNode(node: ZWaveNode): Promise<void> {
 		if (node.interviewStage === InterviewStage.Complete) {
 			node.interviewStage = InterviewStage.RestartFromCache;
-		} else if (node.interviewStage === InterviewStage.Ping) {
-			// In case the node gets stuck directly after pinging, retry
-			node.interviewStage = InterviewStage.ProtocolInfo;
 		}
 
 		try {
@@ -276,6 +273,11 @@ export class Driver extends EventEmitter implements IDriver {
 
 	private onNodeWakeUp(node: ZWaveNode): void {
 		log("controller", `${node.logPrefix}The node is now awake.`, "debug");
+
+		// It *should* not be necessary to restart the node interview here.
+		// When a node that supports wakeup does not respond, pending promises
+		// are not rejected.
+
 		// Make sure to handle the pending messages as quickly as possible
 		this.sortSendQueue();
 		setImmediate(() => this.workOffSendQueue());

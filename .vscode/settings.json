@@ -12,8 +12,8 @@
 		}
 	},
 	"files.exclude": {
-		"node_modules/": true,
-		"coverage/": true,
-		".*": true
+		"node_modules/": false,
+		"coverage/": false,
+		".*": false
 	}
 }

@@ -104,7 +104,6 @@ export interface ZWaveNode {
 export enum InterviewStage {
 	None,					// [✓] Query process hasn't started for this node
 	ProtocolInfo,			// [✓] Retrieve protocol information
-	Ping,					// [✓] Ping device to see if alive and wait for sleeping nodes to wake up
 	NodeInfo,				// [✓] Retrieve info about supported and controlled command classes
 	NodePlusInfo,			// [✓] Retrieve ZWave+ info and update device classes
 	ManufacturerSpecific,	// [✓] Retrieve manufacturer name and product ids, overwrite node info with configuration data
@@ -334,15 +333,28 @@ export class ZWaveNode extends EventEmitter {
 
 	/** Interviews this node. Returns true when it succeeded, false otherwise */
 	public async interview(): Promise<boolean> {
-		log(
-			"controller",
-			`${this.logPrefix}beginning interview... last completed step: ${
-				InterviewStage[this.interviewStage]
-			}`,
-			"debug",
-		);
+		if (this.interviewStage === InterviewStage.Complete) {
+			log(
+				"controller",
+				`${
+					this.logPrefix
+				}skipping interview because it is already completed`,
+				"debug",
+			);
+			return true;
+		} else {
+			log(
+				"controller",
+				`${this.logPrefix}beginning interview... last completed step: ${
+					InterviewStage[this.interviewStage]
+				}`,
+				"debug",
+			);
+		}
 
-		// before each step check if it is necessary
+		// The interview is done in several stages. At each point, the interview process might be aborted
+		// due to a stage failing. The reached stage is saved, so we can continue it later without
+		// repeating stages unnecessarily
 
 		if (this.interviewStage === InterviewStage.None) {
 			// do a full interview starting with the protocol info
@@ -355,13 +367,15 @@ export class ZWaveNode extends EventEmitter {
 			await this.queryProtocolInfo();
 		}
 
-		if (this.interviewStage === InterviewStage.ProtocolInfo) {
+		// The following stages require communication with the node. Before continuing, we
+		// ping the node to see if it is alive and awake
+
+		if (this.interviewStage >= InterviewStage.ProtocolInfo) {
 			// Make sure the device answers
 			if (!(await this.ping())) return false;
 		}
 
-		// TODO: Ping should not be a separate stage
-		if (this.interviewStage === InterviewStage.Ping) {
+		if (this.interviewStage === InterviewStage.ProtocolInfo) {
 			await this.queryNodeInfo();
 		}
 
@@ -394,12 +408,6 @@ export class ZWaveNode extends EventEmitter {
 		}
 
 		// At this point the interview of new nodes is done. Start here when re-interviewing known nodes
-		if (this.interviewStage === InterviewStage.RestartFromCache) {
-			// Make sure the device answers
-			if (!(await this.ping(InterviewStage.RestartFromCache)))
-				return false;
-		}
-
 		if (
 			this.interviewStage === InterviewStage.RestartFromCache ||
 			this.interviewStage === InterviewStage.Static
@@ -493,9 +501,7 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	/** Step #3 of the node interview */
-	protected async ping(
-		targetInterviewStage: InterviewStage = InterviewStage.Ping,
-	): Promise<boolean> {
+	protected async ping(): Promise<boolean> {
 		if (this.isControllerNode()) {
 			log(
 				"controller",
@@ -527,7 +533,6 @@ export class ZWaveNode extends EventEmitter {
 				return false;
 			}
 		}
-		await this.setInterviewStage(targetInterviewStage);
 		return true;
 	}
 
