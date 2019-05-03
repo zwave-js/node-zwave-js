@@ -793,11 +793,9 @@ describe("lib/node/Node", () => {
 			expect(node.isAwake()).toBeTrue();
 		});
 
-		it("setAwake() should throw if the node does not support Wake Up", () => {
+		it("setAwake() should NOT throw if the node does not support Wake Up", () => {
 			const node = makeNode();
-			assertZWaveError(() => node.setAwake(true), {
-				errorCode: ZWaveErrorCodes.CC_NotSupported,
-			});
+			expect(() => node.setAwake(true)).not.toThrow();
 		});
 
 		it("isAwake() should return the status set by setAwake()", () => {
@@ -825,6 +823,72 @@ describe("lib/node/Node", () => {
 				expect(wakeupSpy).toBeCalledTimes(expectWakeup ? 1 : 0);
 				expect(sleepSpy).toBeCalledTimes(expectSleep ? 1 : 0);
 			}
+		});
+	});
+
+	describe("updateNodeInfo()", () => {
+		const fakeDriver = {
+			controller: {
+				ownNodeId: 1,
+				nodes: new Map(),
+			},
+			getSafeCCVersionForNode() {},
+		};
+
+		function makeNode(supportsWakeUp: boolean = false): ZWaveNode {
+			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+			if (supportsWakeUp)
+				node.addCC(CommandClasses["Wake Up"], { isSupported: true });
+			fakeDriver.controller.nodes.set(node.id, node);
+			return node;
+		}
+
+		const emptyNodeInfo = {
+			supportedCCs: [],
+			controlledCCs: [],
+		};
+
+		it("marks a sleeping node as awake", () => {
+			const node = makeNode(true);
+			node.setAwake(false);
+
+			node.updateNodeInfo(emptyNodeInfo as any);
+			expect(node.isAwake()).toBeTrue();
+		});
+
+		it("does not throw when called on a non-sleeping node", () => {
+			const node = makeNode(false);
+			node.updateNodeInfo(emptyNodeInfo as any);
+			expect(node.isAwake()).toBeTrue();
+		});
+
+		it("remembers all received CCs", () => {
+			const node = makeNode();
+			node.addCC(CommandClasses.Battery, {
+				isControlled: true,
+			});
+			node.addCC(CommandClasses.Configuration, {
+				isSupported: true,
+			});
+
+			node.updateNodeInfo({
+				controlledCCs: [CommandClasses.Configuration],
+				supportedCCs: [CommandClasses.Battery],
+			} as any);
+			expect(node.supportsCC(CommandClasses.Battery)).toBeTrue();
+			expect(node.controlsCC(CommandClasses.Configuration)).toBeTrue();
+		});
+
+		it("ignores the data in an NIF if it was received already", () => {
+			const node = makeNode();
+			node.updateNodeInfo(emptyNodeInfo as any);
+			node.updateNodeInfo({
+				controlledCCs: [CommandClasses.Configuration],
+				supportedCCs: [CommandClasses.Battery],
+			} as any);
+
+			expect(node.supportsCC(CommandClasses.Battery)).toBeFalse();
+			expect(node.controlsCC(CommandClasses.Configuration)).toBeFalse();
 		});
 	});
 
@@ -894,6 +958,20 @@ describe("lib/node/Node", () => {
 				version: 5,
 			});
 			expect(node.getCCVersion(CommandClasses["Anti-theft"])).toBe(5);
+		});
+	});
+
+	describe("removeCC()", () => {
+		it("should mark a CC as not supported", () => {
+			const node = new ZWaveNode(2, fakeDriver);
+			node.addCC(CommandClasses["Anti-theft"], {
+				isSupported: true,
+				version: 7,
+			});
+			expect(node.getCCVersion(CommandClasses["Anti-theft"])).toBe(7);
+
+			node.removeCC(CommandClasses["Anti-theft"]);
+			expect(node.getCCVersion(CommandClasses["Anti-theft"])).toBe(0);
 		});
 	});
 

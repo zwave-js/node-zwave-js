@@ -207,39 +207,86 @@ describe("lib/node/ValueDB => ", () => {
 		});
 	});
 
-	it("getValue() should return the value stored for the same combination of CC, endpoint and propertyName", () => {
-		const tests = [
-			{
-				cc: CommandClasses.Basic,
-				endpoint: undefined,
-				propertyName: "foo",
-				value: "1",
-			},
-			{
-				cc: CommandClasses.Basic,
-				endpoint: 2,
-				propertyName: "foo",
-				value: "2",
-			},
-			{
-				cc: CommandClasses.Basic,
-				endpoint: undefined,
-				propertyName: "FOO",
-				value: "3",
-			},
-			{
-				cc: CommandClasses.Basic,
-				endpoint: 2,
-				propertyName: "FOO",
-				value: "4",
-			},
-		];
+	describe("getValue() / getValues()", () => {
+		beforeEach(() => createValueDB());
 
-		for (const { cc, endpoint, propertyName, value } of tests) {
-			valueDB.setValue(cc, endpoint, propertyName, value);
-		}
-		for (const { cc, endpoint, propertyName, value } of tests) {
-			expect(valueDB.getValue(cc, endpoint, propertyName)).toBe(value);
-		}
+		it("getValue() should return the value stored for the same combination of CC, endpoint and propertyName", () => {
+			const tests = [
+				{
+					cc: CommandClasses.Basic,
+					endpoint: undefined,
+					propertyName: "foo",
+					value: "1",
+				},
+				{
+					cc: CommandClasses.Basic,
+					endpoint: 2,
+					propertyName: "foo",
+					value: "2",
+				},
+				{
+					cc: CommandClasses.Basic,
+					endpoint: undefined,
+					propertyName: "FOO",
+					value: "3",
+				},
+				{
+					cc: CommandClasses.Basic,
+					endpoint: 2,
+					propertyName: "FOO",
+					value: "4",
+				},
+			];
+
+			for (const { cc, endpoint, propertyName, value } of tests) {
+				valueDB.setValue(cc, endpoint, propertyName, value);
+			}
+			for (const { cc, endpoint, propertyName, value } of tests) {
+				expect(valueDB.getValue(cc, endpoint, propertyName)).toBe(
+					value,
+				);
+			}
+		});
+
+		it("getValues() should return all values stored for the given CC", () => {
+			const values = [
+				{
+					cc: CommandClasses.Basic,
+					endpoint: undefined,
+					propertyName: "foo",
+					value: "1",
+				},
+				{
+					cc: CommandClasses.Basic,
+					endpoint: 2,
+					propertyName: "foo",
+					value: "2",
+				},
+				{
+					cc: CommandClasses.Basic,
+					endpoint: undefined,
+					propertyName: "FOO",
+					value: "3",
+				},
+				{
+					cc: CommandClasses.Battery,
+					endpoint: 2,
+					propertyName: "FOO",
+					value: "4",
+				},
+			];
+			const requestedCC = CommandClasses.Basic;
+			const expected = values
+				.filter(t => t.cc === requestedCC)
+				.map(({ cc, ...rest }) => rest);
+
+			for (const { cc, endpoint, propertyName, value } of values) {
+				valueDB.setValue(cc, endpoint, propertyName, value);
+			}
+
+			const actual = valueDB.getValues(requestedCC);
+			expect(actual).toHaveLength(expected.length);
+			expect(actual).toContainAllValues(expected);
+		});
 	});
 });

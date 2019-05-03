@@ -1179,12 +1179,7 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	public setAwake(awake: boolean): void {
-		if (!this.supportsCC(CommandClasses["Wake Up"])) {
-			throw new ZWaveError(
-				"This node does not support the Wake Up CC",
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
+		if (!this.supportsCC(CommandClasses["Wake Up"])) return;
 		WakeUpCC.setAwake(this.driver, this, awake);
 	}
 
