@@ -333,13 +333,24 @@ export class ZWaveNode extends EventEmitter {
 
 	/** Interviews this node. Returns true when it succeeded, false otherwise */
 	public async interview(): Promise<boolean> {
-		log(
-			"controller",
-			`${this.logPrefix}beginning interview... last completed step: ${
-				InterviewStage[this.interviewStage]
-			}`,
-			"debug",
-		);
+		if (this.interviewStage === InterviewStage.Complete) {
+			log(
+				"controller",
+				`${
+					this.logPrefix
+				}skipping interview because it is already completed`,
+				"debug",
+			);
+			return true;
+		} else {
+			log(
+				"controller",
+				`${this.logPrefix}beginning interview... last completed step: ${
+					InterviewStage[this.interviewStage]
+				}`,
+				"debug",
+			);
+		}
 
 		// The interview is done in several stages. At each point, the interview process might be aborted
 		// due to a stage failing. The reached stage is saved, so we can continue it later without

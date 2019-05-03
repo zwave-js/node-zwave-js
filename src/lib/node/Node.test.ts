@@ -54,8 +54,8 @@ class TestNode extends ZWaveNode {
 	public async queryProtocolInfo(): Promise<void> {
 		return super.queryProtocolInfo();
 	}
-	public async ping(...args: any[]): Promise<boolean> {
-		return super.ping(...args);
+	public async ping(): Promise<boolean> {
+		return super.ping();
 	}
 	public async queryNodeInfo(): Promise<void> {
 		return super.queryNodeInfo();
@@ -342,14 +342,10 @@ describe("lib/node/Node", () => {
 			);
 			beforeEach(() => fakeDriver.sendMessage.mockClear());
 
-			it(`should set the interview stage to the stage passed as an argument`, async () => {
-				await node.ping(InterviewStage.Configuration);
-				expect(node.interviewStage).toBe(InterviewStage.Configuration);
-			});
-
-			it(`should by default set the interview stage to "Ping"`, async () => {
+			it(`should not change the current interview stage`, async () => {
+				node.interviewStage = InterviewStage.Endpoints;
 				await node.ping();
-				expect(node.interviewStage).toBe(InterviewStage.Ping);
+				expect(node.interviewStage).toBe(InterviewStage.Endpoints);
 			});
 
 			it("should not send anything if the node is the controller", async () => {
@@ -678,7 +674,6 @@ describe("lib/node/Node", () => {
 			beforeAll(() => {
 				const interviewStagesAfter = {
 					queryProtocolInfo: InterviewStage.ProtocolInfo,
-					ping: InterviewStage.Ping,
 					queryNodeInfo: InterviewStage.NodeInfo,
 					queryNodePlusInfo: InterviewStage.NodePlusInfo,
 					queryManufacturerSpecific:
@@ -709,7 +704,9 @@ describe("lib/node/Node", () => {
 						.fn()
 						.mockName(`${method} mock`)
 						.mockImplementation(() => {
-							node.interviewStage = interviewStagesAfter[method];
+							if (method in interviewStagesAfter)
+								node.interviewStage =
+									interviewStagesAfter[method];
 							return method in returnValues
 								? Promise.resolve(returnValues[method])
 								: Promise.resolve();
@@ -750,6 +747,8 @@ describe("lib/node/Node", () => {
 				await node.interview();
 
 				const expectCalled = [
+					// Ping must always be called when the interview is not complete
+					"ping",
 					"queryNodePlusInfo",
 					"queryManufacturerSpecific",
 					"queryCCVersions",
