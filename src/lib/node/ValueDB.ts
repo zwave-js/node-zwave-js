@@ -5,6 +5,7 @@ export interface ValueBaseArgs {
 	commandClass: CommandClasses;
 	endpoint?: number;
 	propertyName: string;
+	propertyKey?: number | string;
 }
 export interface ValueUpdatedArgs extends ValueBaseArgs {
 	prevValue: unknown;
@@ -47,12 +48,15 @@ function getValueKey(
 	cc: CommandClasses,
 	endpoint: number | undefined,
 	propertyName: string,
+	propertyKey?: string | number,
 ): string {
-	return JSON.stringify({
+	const jsonKey: Record<string, unknown> = {
 		cc,
 		endpoint,
 		propertyName,
-	});
+	};
+	if (propertyKey != undefined) jsonKey.propertyKey = propertyKey;
+	return JSON.stringify(jsonKey);
 }
 
 export class ValueDB extends EventEmitter {
@@ -69,24 +73,51 @@ export class ValueDB extends EventEmitter {
 		cc: CommandClasses,
 		endpoint: number | undefined,
 		propertyName: string,
+		propertyKey: string | number,
 		value: unknown,
+	): void;
+
+	public setValue(
+		cc: CommandClasses,
+		endpoint: number | undefined,
+		propertyName: string,
+		value: unknown,
+	): void;
+
+	public setValue(
+		cc: CommandClasses,
+		endpoint: number | undefined,
+		propertyName: string,
+		...args: [unknown] | [string | number, unknown]
 	): void {
-		const key = getValueKey(cc, endpoint, propertyName);
+		let propertyKey: string | number | undefined;
+		const value = args[args.length - 1];
+		let dbKey: string;
+
 		const cbArg: ValueAddedArgs | ValueUpdatedArgs = {
 			commandClass: cc,
 			endpoint,
 			propertyName,
 			newValue: value,
 		};
+
+		if (args.length === 1) {
+			dbKey = getValueKey(cc, endpoint, propertyName);
+		} else {
+			propertyKey = args[0];
+			dbKey = getValueKey(cc, endpoint, propertyName, propertyKey);
+			cbArg.propertyKey = propertyKey;
+		}
+
 		let event: string;
-		if (this._db.has(key)) {
+		if (this._db.has(dbKey)) {
 			event = "value updated";
-			(cbArg as ValueUpdatedArgs).prevValue = this._db.get(key);
+			(cbArg as ValueUpdatedArgs).prevValue = this._db.get(dbKey);
 		} else {
 			event = "value added";
 		}
 
-		this._db.set(key, value);
+		this._db.set(dbKey, value);
 		this.emit(event, cbArg);
 	}
 
@@ -100,17 +131,20 @@ export class ValueDB extends EventEmitter {
 		cc: CommandClasses,
 		endpoint: number | undefined,
 		propertyName: string,
+		propertyKey?: number | string,
 	): boolean {
-		const key = getValueKey(cc, endpoint, propertyName);
+		const key = getValueKey(cc, endpoint, propertyName, propertyKey);
 		if (this._db.has(key)) {
 			const prevValue = this._db.get(key);
 			this._db.delete(key);
-			this.emit("value removed", {
+			const cbArg: ValueRemovedArgs = {
 				commandClass: cc,
 				endpoint,
 				propertyName,
 				prevValue,
-			});
+			};
+			if (propertyKey != undefined) cbArg.propertyKey = propertyKey;
+			this.emit("value removed", cbArg);
 			return true;
 		}
 		return false;
@@ -126,8 +160,9 @@ export class ValueDB extends EventEmitter {
 		cc: CommandClasses,
 		endpoint: number | undefined,
 		propertyName: string,
+		propertyKey?: number | string,
 	): unknown {
-		const key = getValueKey(cc, endpoint, propertyName);
+		const key = getValueKey(cc, endpoint, propertyName, propertyKey);
 		return this._db.get(key);
 	}
 
@@ -136,12 +171,13 @@ export class ValueDB extends EventEmitter {
 	): {
 		endpoint: number | undefined;
 		propertyName: string;
+		propertyKey?: number | string;
 		value: unknown;
 	}[] {
 		const ret: ReturnType<ValueDB["getValues"]> = [];
 		this._db.forEach((value, key) => {
-			const { cc, endpoint, propertyName } = JSON.parse(key);
-			if (forCC === cc) ret.push({ endpoint, propertyName, value });
+			const { cc, ...rest } = JSON.parse(key);
+			if (forCC === cc) ret.push({ ...rest, value });
 		});
 		return ret;
 	}
@@ -149,8 +185,8 @@ export class ValueDB extends EventEmitter {
 	/** Clears all values from the value DB */
 	public clear(): void {
 		this._db.forEach((_val, key) => {
-			const { cc, endpoint, propertyName } = JSON.parse(key);
-			this.removeValue(cc, endpoint, propertyName);
+			const { cc, endpoint, propertyName, propertyKey } = JSON.parse(key);
+			this.removeValue(cc, endpoint, propertyName, propertyKey);
 		});
 	}
 }

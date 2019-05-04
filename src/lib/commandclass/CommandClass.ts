@@ -201,6 +201,9 @@ export class CommandClass {
 		return this.serializeWithoutHeader();
 	}
 
+	/**
+	 * Serializes this CommandClass to be embedded in a message payload
+	 */
 	public serialize(): Buffer {
 		const data = this.serializeWithoutHeader();
 		return Buffer.concat([Buffer.from([this.nodeId, data.length]), data]);
@@ -364,36 +367,47 @@ export class CommandClass {
 
 		const cc = getCommandClass(this);
 		for (const variable of valueNames as string[]) {
-			let valueToSet: unknown;
 			const sourceValue = this[variable as keyof this];
 			if (sourceValue == undefined) continue;
 
 			if (keyValuePairNames.has(variable)) {
 				// This value is one or more key value pair(s) to be stored in a map
-				const targetMap = (db.getValue(cc, this.endpoint, variable) ||
-					new Map()) as Map<unknown, unknown>;
 				if (sourceValue instanceof Map) {
 					// Just copy the entries
-					for (const entry of (sourceValue as Map<
-						unknown,
+					for (const [propertyKey, value] of (sourceValue as Map<
+						string | number,
 						unknown
 					>).entries()) {
-						targetMap.set(entry[0], entry[1]);
+						db.setValue(
+							cc,
+							this.endpoint,
+							variable,
+							propertyKey,
+							value,
+						);
 					}
 				} else if (isArray(sourceValue)) {
-					const [key, value] = (sourceValue as any) as [
-						unknown,
+					const [propertyKey, value] = (sourceValue as any) as [
+						string | number,
 						unknown
 					];
-					targetMap.set(key, value);
+					db.setValue(
+						cc,
+						this.endpoint,
+						variable,
+						propertyKey,
+						value,
+					);
+				} else {
+					throw new ZWaveError(
+						`ccKeyValuePairs can only be Maps or [key, value]-tuples`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
 				}
-
-				valueToSet = targetMap;
 			} else {
 				// This value belongs to a simple property
-				valueToSet = sourceValue;
+				db.setValue(cc, this.endpoint, variable, sourceValue);
 			}
-			db.setValue(cc, this.endpoint, variable, valueToSet);
 		}
 		return true;
 	}
@@ -435,11 +449,9 @@ export class CommandClass {
 				keyValuePairNames.has(val.propertyName)
 			) {
 				let valueToSet = val.value;
-				// Properties defined as a map and properties that are built from
-				// key value pairs must be converted from an object to a map
+				// Properties defined as a map must be converted from an object to a map
 				if (
-					(keyValuePairNames.has(val.propertyName) ||
-						this[val.propertyName as keyof this] instanceof Map) &&
+					this[val.propertyName as keyof this] instanceof Map &&
 					isObject(val.value)
 				) {
 					valueToSet = new Map(entries(val.value));
