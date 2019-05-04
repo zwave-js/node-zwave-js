@@ -93,6 +93,39 @@ describe("lib/node/ValueDB => ", () => {
 		});
 	});
 
+	describe("values with a property key", () => {
+		const cc = CommandClasses["Wake Up"];
+
+		beforeAll(() => {
+			valueDB.setValue(cc, 0, "prop", "foo", 1);
+			valueDB.setValue(cc, 0, "prop", "bar", 2);
+		});
+
+		afterAll(() => {
+			onValueAdded.mockClear();
+			onValueUpdated.mockClear();
+			onValueRemoved.mockClear();
+		});
+
+		it("getValue()/setValue() should treat different property keys as distinct values", () => {
+			expect(valueDB.getValue(cc, 0, "prop", "foo")).toBe(1);
+			expect(valueDB.getValue(cc, 0, "prop", "bar")).toBe(2);
+		});
+
+		it("the value added callback should have been called for each added value", () => {
+			expect(onValueAdded).toBeCalled();
+			const getArg = (call: number) => onValueAdded.mock.calls[call][0];
+			expect(getArg(0).propertyKey).toBe("foo");
+			expect(getArg(1).propertyKey).toBe("bar");
+		});
+
+		it("after clearing the value DB, the values should all be removed", () => {
+			valueDB.clear();
+			expect(valueDB.getValue(cc, 0, "prop", "foo")).toBeUndefined();
+			expect(valueDB.getValue(cc, 0, "prop", "bar")).toBeUndefined();
+		});
+	});
+
 	describe("removeValue()", () => {
 		let cbArg: any;
 		beforeAll(() => {
