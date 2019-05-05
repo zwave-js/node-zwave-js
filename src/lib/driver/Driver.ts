@@ -85,11 +85,6 @@ function applyDefaultOptions(
 	return target;
 }
 
-export type MessageSupportCheck = "loud" | "silent" | "none";
-// function isMessageSupportCheck(val: any): val is MessageSupportCheck {
-// 	return val === "loud" || val === "silent" || val === "none";
-// }
-
 export type RequestHandler<T extends Message = Message> = (msg: T) => boolean;
 interface RequestHandlerEntry<T extends Message = Message> {
 	invoke: RequestHandler<T>;
@@ -237,7 +232,6 @@ export class Driver extends EventEmitter implements IDriver {
 			// Then do all the nodes in parallel
 			for (const node of this._controller.nodes.values()) {
 				if (node.id === this._controller.ownNodeId) continue;
-				// TODO: retry on failure or something...
 				// don't await the interview, because it may take a very long time
 				// if a node is asleep
 				void this.interviewNode(node);
