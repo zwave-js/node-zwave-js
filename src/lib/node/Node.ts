@@ -195,10 +195,23 @@ export class ZWaveNode extends EventEmitter {
 		eventName: keyof ZWaveNodeValueEventCallbacks,
 		arg: T,
 	): void {
-		this.emit(eventName, {
-			commandClassName: getCCName(arg.commandClass),
+		// Try to retrieve the speaking CC name
+		const commandClassName = getCCName(arg.commandClass);
+		const outArg: T & { commandClassName: string } = {
+			commandClassName,
 			...arg,
-		});
+		};
+		// Try to retrieve the speaking property key
+		if (arg.propertyKey != undefined) {
+			const ccConstructor: typeof CommandClass =
+				(getCCConstructor(arg.commandClass) as any) || CommandClass;
+			const propertyKey = ccConstructor.getNameForPropertyKey(
+				arg.propertyName,
+				arg.propertyKey,
+			);
+			outArg.propertyKey = propertyKey;
+		}
+		this.emit(eventName, outArg);
 	}
 
 	//#region --- properties ---

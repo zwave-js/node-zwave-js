@@ -1188,6 +1188,11 @@ describe("lib/node/Node", () => {
 		}
 
 		beforeAll(() => createNode());
+		beforeEach(() => {
+			onValueAdded.mockClear();
+			onValueUpdated.mockClear();
+			onValueRemoved.mockClear();
+		});
 
 		it("should contain a speaking name for the CC", () => {
 			const cc = CommandClasses.Irrigation;
@@ -1207,6 +1212,19 @@ describe("lib/node/Node", () => {
 				const cbArg = method.mock.calls[0][0];
 				expect(cbArg.commandClassName).toBe(ccName);
 			}
+		});
+
+		it("should contain a speaking name for the propertyKey", () => {
+			node.valueDB.setValue(
+				CommandClasses["Multilevel Sensor"],
+				undefined,
+				"values",
+				31 /* Moisture */,
+				5,
+			);
+			expect(onValueAdded).toBeCalled();
+			const cbArg = onValueAdded.mock.calls[0][0];
+			expect(cbArg.propertyKey).toBe("Moisture");
 		});
 	});
 });

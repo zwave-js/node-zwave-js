@@ -477,6 +477,19 @@ export class CommandClass {
 		// This is highly CC dependent
 		// Overwrite this in derived classes, by default do nothing
 	}
+
+	/**
+	 * Translates a property key into a speaking name
+	 * @param propertyName The name of the property the key in question belongs to
+	 * @param propertyKey The property key for which the speaking name should be retrieved
+	 */
+	public static getNameForPropertyKey(
+		propertyName: string,
+		propertyKey: number | string,
+	): string {
+		// Overwrite this in derived classes, by default just return the property key
+		return propertyKey.toString();
+	}
 }
 
 // =======================
