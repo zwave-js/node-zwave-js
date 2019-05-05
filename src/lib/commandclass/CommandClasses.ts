@@ -1,3 +1,5 @@
+import { num2hex } from "../util/strings";
+
 /* A dictionary of all command classes as of 2018-03-30 */
 export enum CommandClasses {
 	// "Alarm" = 0x71, // superseded by Notification
@@ -118,4 +120,9 @@ export enum CommandClasses {
 	"Z/IP ND" = 0x58,
 	"Z/IP Portal" = 0x61,
 	"Z-Wave Plus Info" = 0x5e,
+}
+
+export function getCCName(cc: number): string {
+	if (cc in CommandClasses) return CommandClasses[cc];
+	return `UNKNOWN (${num2hex(cc)})`;
 }

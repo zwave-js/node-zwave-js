@@ -1173,4 +1173,40 @@ describe("lib/node/Node", () => {
 			expect(node.getCCVersion(0x27)).toBe(0);
 		});
 	});
+
+	describe("the emitted events", () => {
+		let node: ZWaveNode;
+		const onValueAdded = jest.fn();
+		const onValueUpdated = jest.fn();
+		const onValueRemoved = jest.fn();
+
+		function createNode(): void {
+			node = new ZWaveNode(1, undefined as any)
+				.on("value added", onValueAdded)
+				.on("value updated", onValueUpdated)
+				.on("value removed", onValueRemoved);
+		}
+
+		beforeAll(() => createNode());
+
+		it("should contain a speaking name for the CC", () => {
+			const cc = CommandClasses.Irrigation;
+			const ccName = CommandClasses[cc];
+			node.valueDB.setValue(cc, undefined, "fooProp", 1);
+			expect(onValueAdded).toBeCalled();
+			node.valueDB.setValue(cc, undefined, "fooProp", 3);
+			expect(onValueUpdated).toBeCalled();
+			node.valueDB.clear();
+			expect(onValueRemoved).toBeCalled();
+
+			for (const method of [
+				onValueAdded,
+				onValueUpdated,
+				onValueRemoved,
+			]) {
+				const cbArg = method.mock.calls[0][0];
+				expect(cbArg.commandClassName).toBe(ccName);
+			}
+		});
+	});
 });

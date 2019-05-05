@@ -12,7 +12,7 @@ import {
 	getImplementedVersion,
 	StateKind,
 } from "../commandclass/CommandClass";
-import { CommandClasses } from "../commandclass/CommandClasses";
+import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import {
 	ManufacturerSpecificCCGet,
@@ -75,7 +75,38 @@ import {
 	RequestNodeInfoRequest,
 	RequestNodeInfoResponse,
 } from "./RequestNodeInfoMessages";
-import { ValueDB, ValueDBEventCallbacks } from "./ValueDB";
+import {
+	ValueAddedArgs,
+	ValueBaseArgs,
+	ValueDB,
+	ValueRemovedArgs,
+	ValueUpdatedArgs,
+} from "./ValueDB";
+
+export interface ZWaveNodeValueAddedArgs extends ValueAddedArgs {
+	commandClassName: string;
+}
+export interface ZWaveNodeValueUpdatedArgs extends ValueUpdatedArgs {
+	commandClassName: string;
+}
+export interface ZWaveNodeValueRemovedArgs extends ValueRemovedArgs {
+	commandClassName: string;
+}
+export type ZWaveNodeValueAddedCallback = (
+	args: ZWaveNodeValueAddedArgs,
+) => void;
+export type ZWaveNodeValueUpdatedCallback = (
+	args: ZWaveNodeValueUpdatedArgs,
+) => void;
+export type ZWaveNodeValueRemovedCallback = (
+	args: ZWaveNodeValueRemovedArgs,
+) => void;
+
+export interface ZWaveNodeValueEventCallbacks {
+	"value added": ZWaveNodeValueAddedCallback;
+	"value updated": ZWaveNodeValueUpdatedCallback;
+	"value removed": ZWaveNodeValueRemovedCallback;
+}
 
 export type ZWaveNodeEventCallbacks = Overwrite<
 	{
@@ -83,7 +114,7 @@ export type ZWaveNodeEventCallbacks = Overwrite<
 			node: ZWaveNode,
 		) => void
 	},
-	ValueDBEventCallbacks
+	ZWaveNodeValueEventCallbacks
 >;
 
 export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
@@ -146,19 +177,28 @@ export class ZWaveNode extends EventEmitter {
 		super();
 
 		this._valueDB = new ValueDB();
-		this._valueDB.on("value added", this.emit.bind(this, "value added"));
-		this._valueDB.on(
+		for (const event of [
+			"value added",
 			"value updated",
-			this.emit.bind(this, "value updated"),
-		);
-		this._valueDB.on(
 			"value removed",
-			this.emit.bind(this, "value removed"),
-		);
+		] as const) {
+			this._valueDB.on(event, this.translateValueEvent.bind(this, event));
+		}
 
 		this._deviceClass = deviceClass;
 		for (const cc of supportedCCs) this.addCC(cc, { isSupported: true });
 		for (const cc of controlledCCs) this.addCC(cc, { isControlled: true });
+	}
+
+	/** Adds the speaking name of a command class to the raw event args of the ValueDB */
+	private translateValueEvent<T extends ValueBaseArgs>(
+		eventName: keyof ZWaveNodeValueEventCallbacks,
+		arg: T,
+	): void {
+		this.emit(eventName, {
+			commandClassName: getCCName(arg.commandClass),
+			...arg,
+		});
 	}
 
 	//#region --- properties ---

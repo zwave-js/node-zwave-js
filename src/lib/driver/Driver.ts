@@ -5,33 +5,17 @@ import { EventEmitter } from "events";
 import * as fs from "fs-extra";
 import * as path from "path";
 import * as SerialPort from "serialport";
-import {
-	CommandClass,
-	getImplementedVersion,
-} from "../commandclass/CommandClass";
+import { CommandClass, getImplementedVersion } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
-import {
-	ApplicationUpdateRequest,
-	ApplicationUpdateRequestNodeInfoReceived,
-} from "../controller/ApplicationUpdateRequest";
+import { ApplicationUpdateRequest, ApplicationUpdateRequestNodeInfoReceived } from "../controller/ApplicationUpdateRequest";
 import { ZWaveController } from "../controller/Controller";
-import {
-	SendDataRequest,
-	SendDataRequestTransmitReport,
-	SendDataResponse,
-	TransmitStatus,
-} from "../controller/SendDataMessages";
+import { SendDataRequest, SendDataRequestTransmitReport, SendDataResponse, TransmitStatus } from "../controller/SendDataMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import {
-	FunctionType,
-	MessageHeaders,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
+import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
 import { InterviewStage, NodeStatus, ZWaveNode } from "../node/Node";
@@ -84,11 +68,6 @@ function applyDefaultOptions(
 	}
 	return target;
 }
-
-export type MessageSupportCheck = "loud" | "silent" | "none";
-// function isMessageSupportCheck(val: any): val is MessageSupportCheck {
-// 	return val === "loud" || val === "silent" || val === "none";
-// }
 
 export type RequestHandler<T extends Message = Message> = (msg: T) => boolean;
 interface RequestHandlerEntry<T extends Message = Message> {
@@ -237,7 +216,6 @@ export class Driver extends EventEmitter implements IDriver {
 			// Then do all the nodes in parallel
 			for (const node of this._controller.nodes.values()) {
 				if (node.id === this._controller.ownNodeId) continue;
-				// TODO: retry on failure or something...
 				// don't await the interview, because it may take a very long time
 				// if a node is asleep
 				void this.interviewNode(node);
