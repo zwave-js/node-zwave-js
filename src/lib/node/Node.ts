@@ -205,7 +205,7 @@ export class ZWaveNode extends EventEmitter {
 		if (arg.propertyKey != undefined) {
 			const ccConstructor: typeof CommandClass =
 				(getCCConstructor(arg.commandClass) as any) || CommandClass;
-			const propertyKey = ccConstructor.getNameForPropertyKey(
+			const propertyKey = ccConstructor.translatePropertyKey(
 				arg.propertyName,
 				arg.propertyKey,
 			);

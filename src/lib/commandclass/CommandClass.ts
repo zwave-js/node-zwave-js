@@ -479,11 +479,11 @@ export class CommandClass {
 	}
 
 	/**
-	 * Translates a property key into a speaking name
+	 * Translates a property key into a speaking name for use in an external API
 	 * @param propertyName The name of the property the key in question belongs to
 	 * @param propertyKey The property key for which the speaking name should be retrieved
 	 */
-	public static getNameForPropertyKey(
+	public static translatePropertyKey(
 		propertyName: string,
 		propertyKey: number | string,
 	): string {

@@ -1187,8 +1187,8 @@ describe("lib/node/Node", () => {
 				.on("value removed", onValueRemoved);
 		}
 
-		beforeAll(() => createNode());
 		beforeEach(() => {
+			createNode();
 			onValueAdded.mockClear();
 			onValueUpdated.mockClear();
 			onValueRemoved.mockClear();
