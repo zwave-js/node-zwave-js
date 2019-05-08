@@ -42,7 +42,7 @@ export class MultilevelSensorCC extends CommandClass {
 	): string {
 		if (propertyName === "values") {
 			if (propertyKey in MultilevelSensorTypes)
-				return MultilevelSensorTypes[propertyKey];
+				return MultilevelSensorTypes[propertyKey as any];
 		}
 		return super.translatePropertyKey(propertyName, propertyKey);
 	}
