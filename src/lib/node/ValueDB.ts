@@ -37,6 +37,10 @@ export interface ValueDB {
 		event: TEvent,
 		callback: ValueDBEventCallbacks[TEvent],
 	): this;
+	once<TEvent extends ValueDBEvents>(
+		event: TEvent,
+		callback: ValueDBEventCallbacks[TEvent],
+	): this;
 	removeListener<TEvent extends ValueDBEvents>(
 		event: TEvent,
 		callback: ValueDBEventCallbacks[TEvent],

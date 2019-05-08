@@ -100,8 +100,6 @@ export interface SendMessageOptions {
 	timeout?: number;
 }
 
-// TODO: Interface the emitted events
-
 export class Driver extends EventEmitter implements IDriver {
 	/** The serial port instance */
 	private serial: SerialPort | undefined;
