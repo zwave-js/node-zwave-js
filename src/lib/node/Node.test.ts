@@ -44,7 +44,7 @@ import {
 	GenericDeviceClasses,
 	SpecificDeviceClass,
 } from "./DeviceClass";
-import { InterviewStage, ZWaveNode } from "./Node";
+import { InterviewStage, NodeStatus, ZWaveNode, ZWaveNodeEvents } from "./Node";
 import { NodeUpdatePayload } from "./NodeInfo";
 import { RequestNodeInfoRequest } from "./RequestNodeInfoMessages";
 import { ValueDB } from "./ValueDB";
@@ -1225,6 +1225,130 @@ describe("lib/node/Node", () => {
 			expect(onValueAdded).toBeCalled();
 			const cbArg = onValueAdded.mock.calls[0][0];
 			expect(cbArg.propertyKey).toBe("Moisture");
+		});
+	});
+
+	describe("changing the node status", () => {
+		interface TestOptions {
+			initialStatus: NodeStatus;
+			targetStatus: NodeStatus;
+			expectedEvent: ZWaveNodeEvents;
+			expectCall?: boolean; // default true
+		}
+
+		function performTest(options: TestOptions): void {
+			const node = new ZWaveNode(1, undefined as any);
+			node.status = options.initialStatus;
+			const spy = jest.fn();
+			node.on(options.expectedEvent, spy);
+			node.status = options.targetStatus;
+			if (options.expectCall !== false) {
+				expect(spy).toBeCalled();
+			} else {
+				expect(spy).not.toBeCalled();
+			}
+		}
+		it("from asleep to dead should raise the dead event", () => {
+			performTest({
+				initialStatus: NodeStatus.Asleep,
+				targetStatus: NodeStatus.Dead,
+				expectedEvent: "dead",
+			});
+		});
+
+		it("from asleep to awake should raise the wake up event", () => {
+			performTest({
+				initialStatus: NodeStatus.Asleep,
+				targetStatus: NodeStatus.Awake,
+				expectedEvent: "wake up",
+			});
+		});
+
+		it("from asleep to asleep should raise NO event", () => {
+			performTest({
+				initialStatus: NodeStatus.Asleep,
+				targetStatus: NodeStatus.Asleep,
+				expectedEvent: "sleep",
+				expectCall: false,
+			});
+		});
+
+		it("from awake to dead should raise the dead event", () => {
+			performTest({
+				initialStatus: NodeStatus.Awake,
+				targetStatus: NodeStatus.Dead,
+				expectedEvent: "dead",
+			});
+		});
+
+		it("from awake to asleep should raise the sleep event", () => {
+			performTest({
+				initialStatus: NodeStatus.Awake,
+				targetStatus: NodeStatus.Asleep,
+				expectedEvent: "sleep",
+			});
+		});
+
+		it("from awake to awake should raise NO event", () => {
+			performTest({
+				initialStatus: NodeStatus.Awake,
+				targetStatus: NodeStatus.Awake,
+				expectedEvent: "wake up",
+				expectCall: false,
+			});
+		});
+
+		it("from unknown to dead should NOT raise the dead event", () => {
+			performTest({
+				initialStatus: NodeStatus.Unknown,
+				targetStatus: NodeStatus.Dead,
+				expectedEvent: "dead",
+				expectCall: false,
+			});
+		});
+
+		it("from unknown to awake should NOT raise the wake up event", () => {
+			performTest({
+				initialStatus: NodeStatus.Unknown,
+				targetStatus: NodeStatus.Awake,
+				expectedEvent: "wake up",
+				expectCall: false,
+			});
+		});
+
+		it("from unknown to asleep should NOT raise the sleep event", () => {
+			performTest({
+				initialStatus: NodeStatus.Unknown,
+				targetStatus: NodeStatus.Asleep,
+				expectedEvent: "sleep",
+				expectCall: false,
+			});
+		});
+
+		it("from dead to asleep should raise the alive event AND the sleep event", () => {
+			performTest({
+				initialStatus: NodeStatus.Dead,
+				targetStatus: NodeStatus.Asleep,
+				expectedEvent: "alive",
+			});
+			performTest({
+				initialStatus: NodeStatus.Dead,
+				targetStatus: NodeStatus.Asleep,
+				expectedEvent: "sleep",
+			});
+		});
+
+		it("from dead to awake should raise the alive event AND the wake up event", () => {
+			performTest({
+				initialStatus: NodeStatus.Dead,
+				targetStatus: NodeStatus.Awake,
+				expectedEvent: "alive",
+			});
+			performTest({
+				initialStatus: NodeStatus.Dead,
+				targetStatus: NodeStatus.Awake,
+				expectedEvent: "wake up",
+			});
 		});
 	});
 });

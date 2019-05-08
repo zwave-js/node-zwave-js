@@ -238,7 +238,10 @@ export class ZWaveNode extends EventEmitter {
 		this._status = value;
 		if (oldStatus === this._status) return;
 
-		if (oldStatus !== NodeStatus.Unknown && oldStatus !== NodeStatus.Dead) {
+		if (oldStatus !== NodeStatus.Unknown) {
+			if (oldStatus === NodeStatus.Dead) {
+				this.emit("alive", this);
+			}
 			if (this._status === NodeStatus.Asleep) {
 				this.emit("sleep", this);
 			} else if (this._status === NodeStatus.Awake) {
@@ -246,8 +249,6 @@ export class ZWaveNode extends EventEmitter {
 			} else if (this._status === NodeStatus.Dead) {
 				this.emit("dead", this);
 			}
-		} else if (oldStatus === NodeStatus.Dead) {
-			this.emit("alive", this);
 		}
 	}
 
