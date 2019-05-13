@@ -37,7 +37,7 @@ import { isNodeQuery } from "../node/INodeQuery";
 import { InterviewStage, NodeStatus, ZWaveNode } from "../node/Node";
 import { log } from "../util/logger";
 import { num2hex, stringify } from "../util/strings";
-import { IDriver } from "./IDriver";
+import { DriverEventCallbacks, DriverEvents, IDriver } from "./IDriver";
 import { Transaction } from "./Transaction";
 
 export interface ZWaveOptions {
@@ -100,6 +100,27 @@ export interface SendMessageOptions {
 	timeout?: number;
 }
 
+// Strongly type the event emitter events
+export interface Driver {
+	on<TEvent extends DriverEvents>(
+		event: TEvent,
+		callback: DriverEventCallbacks[TEvent],
+	): this;
+	once<TEvent extends DriverEvents>(
+		event: TEvent,
+		callback: DriverEventCallbacks[TEvent],
+	): this;
+	removeListener<TEvent extends DriverEvents>(
+		event: TEvent,
+		callback: DriverEventCallbacks[TEvent],
+	): this;
+	off<TEvent extends DriverEvents>(
+		event: TEvent,
+		callback: DriverEventCallbacks[TEvent],
+	): this;
+	removeAllListeners(event?: DriverEvents): this;
+}
+
 export class Driver extends EventEmitter implements IDriver {
 	/** The serial port instance */
 	private serial: SerialPort | undefined;
@@ -110,11 +131,11 @@ export class Driver extends EventEmitter implements IDriver {
 	private sendQueue = new SortedList<Transaction>();
 	/** A map of handlers for all sorts of requests */
 	private requestHandlers = new Map<FunctionType, RequestHandlerEntry[]>();
-	/** A map of handlers specifically for send data requests */
-	private sendDataRequestHandlers = new Map<
-		CommandClasses,
-		RequestHandlerEntry<SendDataRequest>[]
-	>();
+	// /** A map of handlers specifically for send data requests */
+	// private sendDataRequestHandlers = new Map<
+	// 	CommandClasses,
+	// 	RequestHandlerEntry<SendDataRequest>[]
+	// >();
 
 	private cacheDir = path.resolve(__dirname, "../../..", "cache");
 
@@ -306,7 +327,11 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	/**
-	 * Finds the version of a given CC the given node supports. Returns 0 when the CC is not supported.
+	 * Retrieves the maximum version of a command class the given node supports.
+	 * Returns 0 when the CC is not supported. Also returns 0 when the node was not found.
+	 *
+	 * @param nodeId The node for which the CC version should be retrieved
+	 * @param cc The command class whose version should be retrieved
 	 */
 	public getSupportedCCVersionForNode(
 		nodeId: number,
@@ -317,6 +342,14 @@ export class Driver extends EventEmitter implements IDriver {
 		return this.controller.nodes.get(nodeId)!.getCCVersion(cc);
 	}
 
+	/**
+	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
+	 * Returns 1 if the node claims that it does not support a CC.
+	 * Throws if the CC is not implemented in this library yet.
+	 *
+	 * @param nodeId The node for which the CC version should be retrieved
+	 * @param cc The command class whose version should be retrieved
+	 */
 	public getSafeCCVersionForNode(nodeId: number, cc: CommandClasses): number {
 		const supportedVersion = this.getSupportedCCVersionForNode(nodeId, cc);
 		if (supportedVersion === 0) {
@@ -341,6 +374,9 @@ export class Driver extends EventEmitter implements IDriver {
 
 	/**
 	 * Performs a hard reset on the controller. This wipes out all configuration!
+	 *
+	 * The returned Promise resolves when the hard reset has been performed.
+	 * It does not wait for the initialization process which is started afterwards.
 	 */
 	public async hardReset(): Promise<void> {
 		this.ensureReady(true);
@@ -695,7 +731,10 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	/**
-	 * Registers a handler for all kinds of request messages
+	 * Registers a handler for messages that are not handled by the driver as part of a message exchange.
+	 * The handler function needs to return a boolean indicating if the message has been handled.
+	 * Registered handlers are called in sequence until a handler returns `true`.
+	 *
 	 * @param fnType The function type to register the handler for
 	 * @param handler The request handler callback
 	 * @param oneTime Whether the handler should be removed after its first successful invocation
@@ -705,12 +744,12 @@ export class Driver extends EventEmitter implements IDriver {
 		handler: RequestHandler,
 		oneTime: boolean = false,
 	): void {
-		if (fnType === FunctionType.SendData) {
-			throw new Error(
-				"Cannot register a generic request handler for SendData requests. " +
-					"Use `registerSendDataRequestHandler()` instead!",
-			);
-		}
+		// if (fnType === FunctionType.SendData) {
+		// 	throw new Error(
+		// 		"Cannot register a generic request handler for SendData requests. " +
+		// 			"Use `registerSendDataRequestHandler()` instead!",
+		// 	);
+		// }
 		const handlers = this.requestHandlers.has(fnType)
 			? this.requestHandlers.get(fnType)!
 			: [];
@@ -727,7 +766,7 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	/**
-	 * Unregisters a handler for all kinds of request messages
+	 * Unregisters a message handler that has been added with `registerRequestHandler`
 	 * @param fnType The function type to unregister the handler for
 	 * @param handler The previously registered request handler callback
 	 */
@@ -735,12 +774,12 @@ export class Driver extends EventEmitter implements IDriver {
 		fnType: FunctionType,
 		handler: RequestHandler,
 	): void {
-		if (fnType === FunctionType.SendData) {
-			throw new Error(
-				"Cannot unregister a generic request handler for SendData requests. " +
-					"Use `unregisterSendDataRequestHandler()` instead!",
-			);
-		}
+		// if (fnType === FunctionType.SendData) {
+		// 	throw new Error(
+		// 		"Cannot unregister a generic request handler for SendData requests. " +
+		// 			"Use `unregisterSendDataRequestHandler()` instead!",
+		// 	);
+		// }
 		const handlers = this.requestHandlers.has(fnType)
 			? this.requestHandlers.get(fnType)!
 			: [];
@@ -761,59 +800,59 @@ export class Driver extends EventEmitter implements IDriver {
 		this.requestHandlers.set(fnType, handlers);
 	}
 
-	/**
-	 * Registers a handler for SendData request messages
-	 * @param cc The command class to register the handler for
-	 * @param handler The request handler callback
-	 */
-	public registerSendDataRequestHandler(
-		cc: CommandClasses,
-		handler: RequestHandler<SendDataRequest>,
-		oneTime: boolean = false,
-	): void {
-		const handlers = this.sendDataRequestHandlers.has(cc)
-			? this.sendDataRequestHandlers.get(cc)!
-			: [];
-		const entry: RequestHandlerEntry = { invoke: handler, oneTime };
-		handlers.push(entry);
-		log(
-			"driver",
-			`added${oneTime ? " one-time" : ""} send data request handler for ${
-				CommandClasses[cc]
-			} (${cc})... ${handlers.length} registered`,
-			"debug",
-		);
-		this.sendDataRequestHandlers.set(cc, handlers);
-	}
+	// /**
+	//  * Registers a handler for SendData request messages
+	//  * @param cc The command class to register the handler for
+	//  * @param handler The request handler callback
+	//  */
+	// public registerSendDataRequestHandler(
+	// 	cc: CommandClasses,
+	// 	handler: RequestHandler<SendDataRequest>,
+	// 	oneTime: boolean = false,
+	// ): void {
+	// 	const handlers = this.sendDataRequestHandlers.has(cc)
+	// 		? this.sendDataRequestHandlers.get(cc)!
+	// 		: [];
+	// 	const entry: RequestHandlerEntry = { invoke: handler, oneTime };
+	// 	handlers.push(entry);
+	// 	log(
+	// 		"driver",
+	// 		`added${oneTime ? " one-time" : ""} send data request handler for ${
+	// 			CommandClasses[cc]
+	// 		} (${cc})... ${handlers.length} registered`,
+	// 		"debug",
+	// 	);
+	// 	this.sendDataRequestHandlers.set(cc, handlers);
+	// }
 
-	/**
-	 * Unregisters a handler for SendData request messages
-	 * @param cc The command class to unregister the handler for
-	 * @param handler The previously registered request handler callback
-	 */
-	public unregisterSendDataRequestHandler(
-		cc: CommandClasses,
-		handler: RequestHandler<SendDataRequest>,
-	): void {
-		const handlers = this.sendDataRequestHandlers.has(cc)
-			? this.sendDataRequestHandlers.get(cc)!
-			: [];
-		for (let i = 0, entry = handlers[i]; i < handlers.length; i++) {
-			// remove the handler if it was found
-			if (entry.invoke === handler) {
-				handlers.splice(i, 1);
-				break;
-			}
-		}
-		log(
-			"driver",
-			`removed send data request handler for ${
-				CommandClasses[cc]
-			} (${cc})... ${handlers.length} left`,
-			"debug",
-		);
-		this.sendDataRequestHandlers.set(cc, handlers);
-	}
+	// /**
+	//  * Unregisters a handler for SendData request messages
+	//  * @param cc The command class to unregister the handler for
+	//  * @param handler The previously registered request handler callback
+	//  */
+	// public unregisterSendDataRequestHandler(
+	// 	cc: CommandClasses,
+	// 	handler: RequestHandler<SendDataRequest>,
+	// ): void {
+	// 	const handlers = this.sendDataRequestHandlers.has(cc)
+	// 		? this.sendDataRequestHandlers.get(cc)!
+	// 		: [];
+	// 	for (let i = 0, entry = handlers[i]; i < handlers.length; i++) {
+	// 		// remove the handler if it was found
+	// 		if (entry.invoke === handler) {
+	// 			handlers.splice(i, 1);
+	// 			break;
+	// 		}
+	// 	}
+	// 	log(
+	// 		"driver",
+	// 		`removed send data request handler for ${
+	// 			CommandClasses[cc]
+	// 		} (${cc})... ${handlers.length} left`,
+	// 		"debug",
+	// 	);
+	// 	this.sendDataRequestHandlers.set(cc, handlers);
+	// }
 
 	private handleRequest(msg: Message | SendDataRequest): void {
 		let handlers: RequestHandlerEntry[] | undefined;
@@ -879,18 +918,18 @@ export class Driver extends EventEmitter implements IDriver {
 					return;
 				}
 			}
-		} else if (msg instanceof SendDataRequest && msg.command.ccId) {
-			// TODO: Find out if this actually happens
-			// we handle SendDataRequests differently because their handlers are organized by the command class
-			const ccId = msg.command.ccId;
-			log(
-				"driver",
-				`handling send data request ${CommandClasses[ccId]} (${num2hex(
-					ccId,
-				)}) for node ${msg.command.nodeId}`,
-				"debug",
-			);
-			handlers = this.sendDataRequestHandlers.get(ccId);
+			// } else if (msg instanceof SendDataRequest && msg.command.ccId) {
+			// 	// TODO: Find out if this actually happens
+			// 	// we handle SendDataRequests differently because their handlers are organized by the command class
+			// 	const ccId = msg.command.ccId;
+			// 	log(
+			// 		"driver",
+			// 		`handling send data request ${CommandClasses[ccId]} (${num2hex(
+			// 			ccId,
+			// 		)}) for node ${msg.command.nodeId}`,
+			// 		"debug",
+			// 	);
+			// 	handlers = this.sendDataRequestHandlers.get(ccId);
 		} else {
 			log(
 				"driver",
@@ -1074,8 +1113,9 @@ export class Driver extends EventEmitter implements IDriver {
 
 	// wotan-disable no-misused-generics
 	/**
-	 * Sends a message with default priority to the Z-Wave stick
+	 * Sends a message to the Z-Wave stick.
 	 * @param msg The message to send
+	 * @param options (optional) Options regarding the message transmission
 	 */
 	public async sendMessage<TResponse extends Message = Message>(
 		msg: Message,
@@ -1151,6 +1191,11 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 	// wotan-enable no-misused-generics
 
+	/**
+	 * Sends a command to a Z-Wave node.
+	 * @param command The command to send. It will be encapsulated in a SendDataRequest.
+	 * @param options (optional) Options regarding the message transmission
+	 */
 	// wotan-disable-next-line no-misused-generics
 	public async sendCommand<TResponse extends CommandClass = CommandClass>(
 		command: CommandClass,
@@ -1410,7 +1455,7 @@ export class Driver extends EventEmitter implements IDriver {
 
 	/**
 	 * Saves the current configuration and collected data about the controller and all nodes to a cache file.
-	 * For performance reasons, these calls may be throttled
+	 * For performance reasons, these calls may be throttled.
 	 */
 	public async saveNetworkToCache(): Promise<void> {
 		if (!this.controller || !this.controller.homeId) return;

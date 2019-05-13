@@ -132,6 +132,10 @@ export interface ZWaveNode {
 		event: TEvent,
 		callback: ZWaveNodeEventCallbacks[TEvent],
 	): this;
+	off<TEvent extends ZWaveNodeEvents>(
+		event: TEvent,
+		callback: ZWaveNodeEventCallbacks[TEvent],
+	): this;
 	removeAllListeners(event?: ZWaveNodeEvents): this;
 }
 

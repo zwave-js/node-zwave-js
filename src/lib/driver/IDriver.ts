@@ -3,12 +3,12 @@ import { ZWaveController } from "../controller/Controller";
 import { Message } from "../message/Message";
 import { SendMessageOptions } from "./Driver";
 
-export interface IDriverEventCallbacks {
+export interface DriverEventCallbacks {
 	"driver ready": () => void;
 	error: (err: Error) => void;
 }
 
-export type IDriverEvents = Extract<keyof IDriverEventCallbacks, string>;
+export type DriverEvents = Extract<keyof DriverEventCallbacks, string>;
 
 export interface IDriver {
 	controller: ZWaveController | undefined;
@@ -21,19 +21,23 @@ export interface IDriver {
 		options?: SendMessageOptions,
 	): Promise<TResponse>;
 
-	on<TEvent extends IDriverEvents>(
+	on<TEvent extends DriverEvents>(
 		event: TEvent,
-		callback: IDriverEventCallbacks[TEvent],
+		callback: DriverEventCallbacks[TEvent],
 	): this;
-	once<TEvent extends IDriverEvents>(
+	once<TEvent extends DriverEvents>(
 		event: TEvent,
-		callback: IDriverEventCallbacks[TEvent],
+		callback: DriverEventCallbacks[TEvent],
 	): this;
-	removeListener<TEvent extends IDriverEvents>(
+	removeListener<TEvent extends DriverEvents>(
 		event: TEvent,
-		callback: IDriverEventCallbacks[TEvent],
+		callback: DriverEventCallbacks[TEvent],
 	): this;
-	removeAllListeners(event?: IDriverEvents): this;
+	off<TEvent extends DriverEvents>(
+		event: TEvent,
+		callback: DriverEventCallbacks[TEvent],
+	): this;
+	removeAllListeners(event?: DriverEvents): this;
 
 	// Add more signatures as needed
 }
