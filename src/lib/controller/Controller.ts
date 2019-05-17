@@ -55,7 +55,33 @@ import {
 } from "./SetSerialApiTimeoutsMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
-// TODO: interface the exposed events
+// Strongly type the event emitter events
+export interface ControllerEventCallbacks {
+	"inclusion failed": () => void;
+	"node added": (node: ZWaveNode) => void;
+}
+
+export type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
+
+export interface ZWaveController {
+	on<TEvent extends ControllerEvents>(
+		event: TEvent,
+		callback: ControllerEventCallbacks[TEvent],
+	): this;
+	once<TEvent extends ControllerEvents>(
+		event: TEvent,
+		callback: ControllerEventCallbacks[TEvent],
+	): this;
+	removeListener<TEvent extends ControllerEvents>(
+		event: TEvent,
+		callback: ControllerEventCallbacks[TEvent],
+	): this;
+	off<TEvent extends ControllerEvents>(
+		event: TEvent,
+		callback: ControllerEventCallbacks[TEvent],
+	): this;
+	removeAllListeners(event?: ControllerEvents): this;
+}
 
 export class ZWaveController extends EventEmitter {
 	/** @internal */
@@ -82,11 +108,13 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	private _homeId: number | undefined;
+	/** A 32bit number identifying the current network */
 	public get homeId(): number | undefined {
 		return this._homeId;
 	}
 
 	private _ownNodeId: number | undefined;
+	/** The ID of the controller in the current network */
 	public get ownNodeId(): number | undefined {
 		return this._ownNodeId;
 	}
@@ -146,6 +174,7 @@ export class ZWaveController extends EventEmitter {
 		return this._supportedFunctionTypes;
 	}
 
+	/** Checks if a given Z-Wave function type is supported by this controller */
 	public isFunctionSupported(functionType: FunctionType): boolean {
 		if (this._supportedFunctionTypes == null) {
 			throw new ZWaveError(
@@ -166,10 +195,18 @@ export class ZWaveController extends EventEmitter {
 		return this._supportsTimers;
 	}
 
-	public readonly nodes = new Map<number, ZWaveNode>();
+	private _nodes = new Map<number, ZWaveNode>();
+	/** A dictionary of the nodes connected to this controller */
+	public get nodes(): ReadonlyMap<number, ZWaveNode> {
+		return this._nodes;
+	}
 
 	//#endregion
 
+	/**
+	 * @internal
+	 * Interviews the controller for the necessary information.
+	 */
 	public async interview(): Promise<void> {
 		log("controller", "beginning interview...", "debug");
 
@@ -357,7 +394,7 @@ export class ZWaveController extends EventEmitter {
 		);
 		// create an empty entry in the nodes map so we can initialize them afterwards
 		for (const nodeId of initData.nodeIds) {
-			this.nodes.set(nodeId, new ZWaveNode(nodeId, this.driver));
+			this._nodes.set(nodeId, new ZWaveNode(nodeId, this.driver));
 		}
 
 		if (
@@ -456,6 +493,12 @@ export class ZWaveController extends EventEmitter {
 	private _beginInclusionPromise: DeferredPromise<boolean> | undefined;
 	private _stopInclusionPromise: DeferredPromise<boolean> | undefined;
 	private _nodePendingInclusion: ZWaveNode | undefined;
+
+	/**
+	 * Starts the inclusion process of new nodes.
+	 * Resolves to true when the process was started,
+	 * and false if the inclusion was already active
+	 */
 	public async beginInclusion(): Promise<boolean> {
 		// don't start it twice
 		if (this._inclusionActive) return false;
@@ -478,6 +521,10 @@ export class ZWaveController extends EventEmitter {
 		return this._beginInclusionPromise;
 	}
 
+	/**
+	 * Stops an active inclusion process. Resolves to true when the controller leaves inclusion mode,
+	 * and false if the inclusion was not active.
+	 */
 	public async stopInclusion(): Promise<boolean> {
 		// don't stop it twice
 		if (!this._inclusionActive) return false;
@@ -649,7 +696,7 @@ export class ZWaveController extends EventEmitter {
 					}
 
 					// remember the node
-					this.nodes.set(newNode.id, newNode);
+					this._nodes.set(newNode.id, newNode);
 					this._nodePendingInclusion = undefined;
 					// and notify listeners
 					this.emit("node added", newNode);
@@ -658,7 +705,10 @@ export class ZWaveController extends EventEmitter {
 		}
 	}
 
-	/** Serializes the controller information and all nodes to store them in a cache */
+	/**
+	 * @internal
+	 * Serializes the controller information and all nodes to store them in a cache.
+	 */
 	public serialize(): JSONObject {
 		return {
 			nodes: composeObject(
@@ -670,7 +720,10 @@ export class ZWaveController extends EventEmitter {
 		};
 	}
 
-	/** Deserializes the controller information and all nodes from the cache */
+	/**
+	 * @internal
+	 * Deserializes the controller information and all nodes from the cache.
+	 */
 	public deserialize(serialized: any): void {
 		if (isObject(serialized.nodes)) {
 			for (const nodeId of Object.keys(serialized.nodes)) {

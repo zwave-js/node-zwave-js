@@ -5,33 +5,17 @@ import { EventEmitter } from "events";
 import * as fs from "fs-extra";
 import * as path from "path";
 import * as SerialPort from "serialport";
-import {
-	CommandClass,
-	getImplementedVersion,
-} from "../commandclass/CommandClass";
+import { CommandClass, getImplementedVersion } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
-import {
-	ApplicationUpdateRequest,
-	ApplicationUpdateRequestNodeInfoReceived,
-} from "../controller/ApplicationUpdateRequest";
+import { ApplicationUpdateRequest, ApplicationUpdateRequestNodeInfoReceived } from "../controller/ApplicationUpdateRequest";
 import { ZWaveController } from "../controller/Controller";
-import {
-	SendDataRequest,
-	SendDataRequestTransmitReport,
-	SendDataResponse,
-	TransmitStatus,
-} from "../controller/SendDataMessages";
+import { SendDataRequest, SendDataRequestTransmitReport, SendDataResponse, TransmitStatus } from "../controller/SendDataMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import {
-	FunctionType,
-	MessageHeaders,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
+import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
 import { InterviewStage, NodeStatus, ZWaveNode } from "../node/Node";
@@ -140,7 +124,14 @@ export class Driver extends EventEmitter implements IDriver {
 	private cacheDir = path.resolve(__dirname, "../../..", "cache");
 
 	private _controller: ZWaveController | undefined;
-	public get controller(): ZWaveController | undefined {
+	/** Encapsulates information about the Z-Wave controller and provides access to its nodes */
+	public get controller(): ZWaveController {
+		if (this._controller == undefined) {
+			throw new ZWaveError(
+				"The controller is not yet ready!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
 		return this._controller;
 	}
 
@@ -337,7 +328,7 @@ export class Driver extends EventEmitter implements IDriver {
 		nodeId: number,
 		cc: CommandClasses,
 	): number {
-		if (this.controller == undefined || !this.controller.nodes.has(nodeId))
+		if (this._controller == undefined || !this.controller.nodes.has(nodeId))
 			return 0;
 		return this.controller.nodes.get(nodeId)!.getCCVersion(cc);
 	}
@@ -884,7 +875,7 @@ export class Driver extends EventEmitter implements IDriver {
 				"debug",
 			);
 			// cannot handle ApplicationCommandRequests without a controller
-			if (this.controller == undefined) {
+			if (this._controller == undefined) {
 				log(
 					"driver",
 					`  the controller is not ready yet, discarding...`,
@@ -1148,8 +1139,8 @@ export class Driver extends EventEmitter implements IDriver {
 
 		if (
 			options.supportCheck &&
-			this.controller != undefined &&
-			!this.controller.isFunctionSupported(msg.functionType)
+			this._controller != undefined &&
+			!this._controller.isFunctionSupported(msg.functionType)
 		) {
 			throw new ZWaveError(
 				`Your hardware does not support the ${
@@ -1443,7 +1434,7 @@ export class Driver extends EventEmitter implements IDriver {
 	private saveToCacheTimer: NodeJS.Timer | undefined;
 
 	private async saveNetworkToCacheInternal(): Promise<void> {
-		if (!this.controller || !this.controller.homeId) return;
+		if (!this._controller || !this.controller.homeId) return;
 		const cacheFile = path.join(
 			this.cacheDir,
 			this.controller.homeId.toString(16) + ".json",
@@ -1458,7 +1449,7 @@ export class Driver extends EventEmitter implements IDriver {
 	 * For performance reasons, these calls may be throttled.
 	 */
 	public async saveNetworkToCache(): Promise<void> {
-		if (!this.controller || !this.controller.homeId) return;
+		if (!this._controller || !this.controller.homeId) return;
 		// Ensure this method isn't being executed too often
 		if (Date.now() - this.lastSaveToCache < this.saveToCacheInterval) {
 			// Schedule a save in a couple of ms to collect changes
@@ -1477,10 +1468,10 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	/**
-	 * Restores a previously stored zwave network state from cache to speed up the startup process
+	 * Restores a previously stored Z-Wave network state from cache to speed up the startup process
 	 */
 	public async restoreNetworkFromCache(): Promise<void> {
-		if (!this.controller || !this.controller.homeId) return;
+		if (!this._controller || !this.controller.homeId) return;
 
 		const cacheFile = path.join(
 			this.cacheDir,

@@ -5,57 +5,19 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
 import { CentralSceneCC } from "../commandclass/CentralSceneCC";
-import {
-	CommandClass,
-	CommandClassInfo,
-	getCCConstructor,
-	getImplementedVersion,
-	StateKind,
-} from "../commandclass/CommandClass";
+import { CommandClass, CommandClassInfo, getCCConstructor, getImplementedVersion, StateKind } from "../commandclass/CommandClass";
 import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import {
-	ManufacturerSpecificCCGet,
-	ManufacturerSpecificCCReport,
-} from "../commandclass/ManufacturerSpecificCC";
-import {
-	MultiChannelCCEndPointGet,
-	MultiChannelCCEndPointReport,
-} from "../commandclass/MultiChannelCC";
+import { ManufacturerSpecificCCGet, ManufacturerSpecificCCReport } from "../commandclass/ManufacturerSpecificCC";
+import { MultiChannelCCEndPointGet, MultiChannelCCEndPointReport } from "../commandclass/MultiChannelCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
-import {
-	VersionCCCommandClassGet,
-	VersionCCCommandClassReport,
-} from "../commandclass/VersionCC";
-import {
-	WakeUpCC,
-	WakeUpCCIntervalGet,
-	WakeUpCCIntervalReport,
-	WakeUpCCIntervalSet,
-	WakeUpCCNoMoreInformation,
-	WakeUpCommand,
-} from "../commandclass/WakeUpCC";
-import {
-	ZWavePlusCCGet,
-	ZWavePlusCCReport,
-	ZWavePlusNodeType,
-	ZWavePlusRoleType,
-} from "../commandclass/ZWavePlusCC";
+import { VersionCCCommandClassGet, VersionCCCommandClassReport } from "../commandclass/VersionCC";
+import { WakeUpCC, WakeUpCCIntervalGet, WakeUpCCIntervalReport, WakeUpCCIntervalSet, WakeUpCCNoMoreInformation, WakeUpCommand } from "../commandclass/WakeUpCC";
+import { ZWavePlusCCGet, ZWavePlusCCReport, ZWavePlusNodeType, ZWavePlusRoleType } from "../commandclass/ZWavePlusCC";
 import { lookupManufacturer } from "../config/Manufacturers";
-import {
-	ApplicationUpdateRequest,
-	ApplicationUpdateRequestNodeInfoReceived,
-	ApplicationUpdateRequestNodeInfoRequestFailed,
-} from "../controller/ApplicationUpdateRequest";
-import {
-	Baudrate,
-	GetNodeProtocolInfoRequest,
-	GetNodeProtocolInfoResponse,
-} from "../controller/GetNodeProtocolInfoMessages";
-import {
-	GetRoutingInfoRequest,
-	GetRoutingInfoResponse,
-} from "../controller/GetRoutingInfoMessages";
+import { ApplicationUpdateRequest, ApplicationUpdateRequestNodeInfoReceived, ApplicationUpdateRequestNodeInfoRequestFailed } from "../controller/ApplicationUpdateRequest";
+import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "../controller/GetNodeProtocolInfoMessages";
+import { GetRoutingInfoRequest, GetRoutingInfoResponse } from "../controller/GetRoutingInfoMessages";
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -64,24 +26,10 @@ import { log } from "../util/logger";
 import { JSONObject } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import { CacheValue } from "../values/Cache";
-import {
-	BasicDeviceClasses,
-	DeviceClass,
-	GenericDeviceClass,
-	SpecificDeviceClass,
-} from "./DeviceClass";
+import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
 import { NodeUpdatePayload } from "./NodeInfo";
-import {
-	RequestNodeInfoRequest,
-	RequestNodeInfoResponse,
-} from "./RequestNodeInfoMessages";
-import {
-	ValueAddedArgs,
-	ValueBaseArgs,
-	ValueDB,
-	ValueRemovedArgs,
-	ValueUpdatedArgs,
-} from "./ValueDB";
+import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
+import { ValueAddedArgs, ValueBaseArgs, ValueDB, ValueRemovedArgs, ValueUpdatedArgs } from "./ValueDB";
 
 export interface ZWaveNodeValueAddedArgs extends ValueAddedArgs {
 	commandClassName: string;
@@ -231,9 +179,11 @@ export class ZWaveNode extends EventEmitter {
 		"0",
 	)}] `;
 
-	/** Which status we believe the node is in */
-
 	private _status: NodeStatus = NodeStatus.Unknown;
+	/**
+	 * Which status the node is believed to be in. Changing this emits the corresponding events.
+	 * There should be no need to set this property from outside this library.
+	 */
 	public get status(): NodeStatus {
 		return this._status;
 	}
@@ -287,6 +237,7 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	private _version: number | undefined;
+	/** The Z-Wave protocol version this node implements */
 	public get version(): number | undefined {
 		return this._version;
 	}
@@ -300,7 +251,11 @@ export class ZWaveNode extends EventEmitter {
 		CommandClasses,
 		CommandClassInfo
 	>();
-	public get implementedCommandClasses(): Map<
+	/**
+	 * @internal
+	 * Information about the implemented Command Classes of this node.
+	 */
+	public get implementedCommandClasses(): ReadonlyMap<
 		CommandClasses,
 		CommandClassInfo
 	> {
@@ -321,19 +276,25 @@ export class ZWaveNode extends EventEmitter {
 		return this._valueDB;
 	}
 
-	/** This tells us which interview stage was last completed */
+	/**
+	 * This tells us which interview stage was last completed
+	 */
 	public interviewStage: InterviewStage = InterviewStage.None;
 
 	//#endregion
 
+	/** Utility function to check if this node is the controller */
 	public isControllerNode(): boolean {
 		return (
-			this.driver.controller != undefined &&
 			this.id === this.driver.controller.ownNodeId
 		);
 	}
 
-	/** Adds a CC to the list of command classes implemented by the node or updates the information */
+	/**
+	 * Adds a CC to the list of command classes implemented by the node or updates the information.
+	 * You shouldn't need to call this yourself.
+	 * @param info The information about the command class. This is merged with existing information.
+	 */
 	public addCC(cc: CommandClasses, info: Partial<CommandClassInfo>): void {
 		let ccInfo = this._implementedCommandClasses.has(cc)
 			? this._implementedCommandClasses.get(cc)
@@ -367,13 +328,19 @@ export class ZWaveNode extends EventEmitter {
 		);
 	}
 
-	/** Checks the supported version of a given CommandClass */
+	/**
+	 * Retrieves the version of the given CommandClass this node implements.
+	 * Returns 0 if the CC is not supported.
+	 */
 	public getCCVersion(cc: CommandClasses): number {
 		const ccInfo = this._implementedCommandClasses.get(cc);
 		return (ccInfo && ccInfo.version) || 0;
 	}
 
-	/** Creates an instance of the given CC linked to this node */
+	/**
+	 * Creates an instance of the given CC, which is linked to this node.
+	 * Throws if the CC is neither supported nor controlled by the node.
+	 */
 	// wotan-disable no-misused-generics
 	public createCCInstance<T extends CommandClass>(
 		cc: CommandClasses,
@@ -393,7 +360,10 @@ export class ZWaveNode extends EventEmitter {
 
 	//#region --- interview ---
 
-	/** Interviews this node. Returns true when it succeeded, false otherwise */
+	/**
+	 * @internal
+	 * Interviews this node. Returns true when it succeeded, false otherwise
+	 */
 	public async interview(): Promise<boolean> {
 		if (this.interviewStage === InterviewStage.Complete) {
 			log(
@@ -953,7 +923,7 @@ export class ZWaveNode extends EventEmitter {
 						command: new WakeUpCCIntervalSet(this.driver, {
 							nodeId: this.id,
 							wakeupInterval: wakeupResp.wakeupInterval,
-							controllerNodeId: this.driver.controller!
+							controllerNodeId: this.driver.controller
 								.ownNodeId!,
 						}),
 					});
@@ -1043,7 +1013,10 @@ export class ZWaveNode extends EventEmitter {
 
 	// TODO: Add a handler around for each CC to interpret the received data
 
-	/** Handles an ApplicationCommandRequest sent from a node */
+	/**
+	 * @internal
+	 * Handles an ApplicationCommandRequest received from this node
+	 */
 	public async handleCommand(command: CommandClass): Promise<void> {
 		switch (command.ccId) {
 			case CommandClasses["Central Scene"]: {
@@ -1104,7 +1077,10 @@ export class ZWaveNode extends EventEmitter {
 		await promiseSequence(factories);
 	}
 
-	/** Serializes this node in order to store static data in a cache */
+	/**
+	 * @internal
+	 * Serializes this node in order to store static data in a cache
+	 */
 	public serialize(): JSONObject {
 		return {
 			id: this.id,
@@ -1145,6 +1121,10 @@ export class ZWaveNode extends EventEmitter {
 		};
 	}
 
+	/**
+	 * @internal
+	 * Handles the receipt of a NIF / NodeUpdatePayload
+	 */
 	public updateNodeInfo(nodeInfo: NodeUpdatePayload): void {
 		if (!this.nodeInfoReceived) {
 			for (const cc of nodeInfo.supportedCCs)
@@ -1158,6 +1138,10 @@ export class ZWaveNode extends EventEmitter {
 		this.setAwake(true);
 	}
 
+	/**
+	 * @internal
+	 * Deserializes the information of this node from a cache.
+	 */
 	public deserialize(obj: any): void {
 		if (obj.interviewStage in InterviewStage) {
 			this.interviewStage =
@@ -1245,11 +1229,17 @@ export class ZWaveNode extends EventEmitter {
 		}
 	}
 
+	/**
+	 * @internal
+	 * Changes the assumed sleep state of the node
+	 * @param awake Whether the node should be assumed awake
+	 */
 	public setAwake(awake: boolean): void {
 		if (!this.supportsCC(CommandClasses["Wake Up"])) return;
 		WakeUpCC.setAwake(this.driver, this, awake);
 	}
 
+	/** Returns whether the node is currently assumed awake */
 	public isAwake(): boolean {
 		const isAsleep =
 			this.supportsCC(CommandClasses["Wake Up"]) &&
@@ -1258,6 +1248,10 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	private isSendingNoMoreInformation: boolean = false;
+	/**
+	 * @internal
+	 * Sends the node a WakeUpCCNoMoreInformation so it can go back to sleep
+	 */
 	public async sendNoMoreInformation(): Promise<boolean> {
 		// Avoid calling this method more than once
 		if (this.isSendingNoMoreInformation) return false;
