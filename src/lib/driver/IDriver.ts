@@ -1,3 +1,4 @@
+import { CommandClass } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { ZWaveController } from "../controller/Controller";
 import { Message } from "../message/Message";
@@ -20,6 +21,12 @@ export interface IDriver {
 		msg: Message,
 		options?: SendMessageOptions,
 	): Promise<TResponse>;
+
+	// wotan-disable-next-line no-misused-generics
+	sendCommand<TResponse extends CommandClass = CommandClass>(
+		command: CommandClass,
+		options?: SendMessageOptions,
+	): Promise<TResponse | undefined>;
 
 	on<TEvent extends DriverEvents>(
 		event: TEvent,

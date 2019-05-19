@@ -1,8 +1,11 @@
 import { IDriver } from "../driver/IDriver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { JSONObject } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
@@ -15,6 +18,21 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
+export class BasicCCAPI extends CCAPI {
+	public async get() {
+		const cc = new BasicCCGet(this.driver, { nodeId: this.node.id });
+		const response = await this.driver.sendCommand(cc);
+		if (response instanceof BasicCCReport) {
+			// TODO: Maybe rethink this (include target value etc.)
+			return response.currentValue;
+		}
+		throw new ZWaveError(
+			`Invalid response received to BasicCC.Get`,
+			ZWaveErrorCodes.CC_Invalid,
+		);
+	}
+}
+
 export enum BasicCommand {
 	Set = 0x01,
 	Get = 0x02,
@@ -23,6 +41,7 @@ export enum BasicCommand {
 
 @commandClass(CommandClasses.Basic)
 @implementedVersion(2) // Update tests in CommandClass.test.ts when changing this
+@API(BasicCCAPI)
 export class BasicCC extends CommandClass {
 	public ccCommand!: BasicCommand;
 }

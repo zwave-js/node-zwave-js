@@ -10,6 +10,7 @@ import { JSONObject, staticExtends } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import { CacheValue, serializeCacheValue } from "../values/Cache";
 import { Maybe, unknownBoolean } from "../values/Primitive";
+import { CCAPI } from "./API";
 import { CommandClasses } from "./CommandClasses";
 
 export interface CommandClassInfo {
@@ -503,6 +504,7 @@ export const METADATA_ccCommandMap = Symbol("ccCommandMap");
 export const METADATA_ccValues = Symbol("ccValues");
 export const METADATA_ccKeyValuePairs = Symbol("ccKeyValuePairs");
 export const METADATA_version = Symbol("version");
+export const METADATA_API = Symbol("API");
 /* eslint-enable @typescript-eslint/camelcase */
 
 export interface Constructable<T extends CommandClass> {
@@ -513,6 +515,7 @@ export interface Constructable<T extends CommandClass> {
 			| CommandClassDeserializationOptions,
 	): T;
 }
+type APIConstructor = new (driver: IDriver, node: ZWaveNode) => CCAPI;
 
 type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
 type CCCommandMap = Map<string, Constructable<CommandClass>>;
@@ -732,9 +735,6 @@ export function getCCCommand<T extends CommandClass>(
 	return ret;
 }
 
-/**
- * Retrieves the implemented version defined for a Z-Wave command class
- */
 export function getCCCommandStatic<T extends Constructable<CommandClass>>(
 	classConstructor: T,
 ): number | undefined {
@@ -946,6 +946,47 @@ export function getCCKeyValuePairNames(
 		Reflect.getMetadata(METADATA_ccKeyValuePairs, CommandClass) || {};
 	if (!(cc in metadata)) return new Set();
 	return metadata[cc] as Set<string>;
+}
+
+/**
+ * Defines the simplified API associated with a Z-Wave command class
+ */
+export function API<T extends APIConstructor>(api: T): ClassDecorator {
+	return ccClass => {
+		log("protocol", `${ccClass.name}: defining API ${api.name}`, "silly");
+		// and store the metadata
+		Reflect.defineMetadata(METADATA_API, api, ccClass);
+	};
+}
+
+/**
+ * Retrieves the implemented version defined for a Z-Wave command class
+ */
+export function getAPI<T extends CommandClass>(
+	cc: Constructable<T> | CommandClasses,
+): APIConstructor | undefined {
+	// get the class constructor
+	let constr: Constructable<CommandClass> | undefined;
+	let constrName: string;
+	if (typeof cc === "number") {
+		constr = getCCConstructor(cc);
+		constrName = constr != undefined ? constr.name : CommandClasses[cc];
+	} else {
+		constr = cc.constructor as Constructable<CommandClass>;
+		constrName = constr.name;
+	}
+	// retrieve the current metadata
+	let ret: APIConstructor | undefined;
+	if (constr != undefined) ret = Reflect.getMetadata(METADATA_API, constr);
+
+	log(
+		"protocol",
+		`${constrName}: retrieving API => ${
+			ret != undefined ? ret.name : "undefined"
+		}`,
+		"silly",
+	);
+	return ret;
 }
 
 // To be sure all metadata gets loaded, import all command classes

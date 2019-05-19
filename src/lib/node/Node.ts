@@ -4,8 +4,9 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
+import { CCAPI, CCAPIs } from "../commandclass/API";
 import { CentralSceneCC } from "../commandclass/CentralSceneCC";
-import { CommandClass, CommandClassInfo, getCCConstructor, getImplementedVersion, StateKind } from "../commandclass/CommandClass";
+import { CommandClass, CommandClassInfo, getAPI, getCCConstructor, getImplementedVersion, StateKind } from "../commandclass/CommandClass";
 import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { ManufacturerSpecificCCGet, ManufacturerSpecificCCReport } from "../commandclass/ManufacturerSpecificCC";
@@ -274,6 +275,25 @@ export class ZWaveNode extends EventEmitter {
 	/** @internal */
 	public get valueDB(): ValueDB {
 		return this._valueDB;
+	}
+
+	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();
+	private _commandClassAPIsProxy = new Proxy(this._commandClassAPIs, {
+		get: (target,ccName: string) => {
+			const ccId = CommandClasses[ccName as any] as unknown as CommandClasses | undefined;
+			if (ccId == undefined) throw new ZWaveError(`Command Class ${ccName} is not implemented!`, ZWaveErrorCodes.CC_NotSupported);
+			if (!target.has(ccId)) {
+				const ccConstructor = getCCConstructor(ccId);
+				if (ccConstructor == undefined) throw new ZWaveError(`Command Class ${ccName} is not implemented!`, ZWaveErrorCodes.CC_NotSupported);
+				const API = getAPI(ccConstructor);
+				if (API == undefined) throw new ZWaveError(`Command Class ${ccName} has no associated API!`, ZWaveErrorCodes.CC_NotSupported);
+				target.set(ccId, new API(this.driver, this));
+			}
+			return target.get(ccId);
+		}
+	})
+	public get commandClasses(): CCAPIs {
+		return this._commandClassAPIsProxy as unknown as CCAPIs;
 	}
 
 	/**
