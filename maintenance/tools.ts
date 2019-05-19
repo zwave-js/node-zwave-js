@@ -11,7 +11,7 @@ export function enumFilesRecursiveSync(
 	dir: string,
 	predicate?: (name: string, parentDir: string) => boolean,
 ): string[] {
-	const ret = [];
+	const ret: string[] = [];
 	if (typeof predicate !== "function") predicate = () => true;
 	// enumerate all files in this directory
 	const filesOrDirs = fs

@@ -35,8 +35,8 @@ function padEnd(str: string, len: number): string {
 	for (const ccFile of ccFiles) {
 		const fileContent = await fs.readFile(ccFile, "utf8");
 		try {
-			const ccName = ccRegex.exec(fileContent)[1];
-			const ccVersion = +versionRegex.exec(fileContent)[1];
+			const ccName = ccRegex.exec(fileContent)![1];
+			const ccVersion = +versionRegex.exec(fileContent)![1];
 			allCCs.set(ccName, ccVersion);
 		} catch (e) {
 			/* ok */
@@ -44,7 +44,7 @@ function padEnd(str: string, len: number): string {
 	}
 
 	const headers = ["", "Command class name", "Implemented version", "max."];
-	const rows = [];
+	const rows: string[][] = [];
 
 	for (const [name, version] of allCCs.entries()) {
 		const { version: latest, deprecated, obsolete } = getLatestVersion(

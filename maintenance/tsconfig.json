@@ -1,14 +1,13 @@
 {
-    "compileOnSave": true,
-    "compilerOptions": {
+	"extends": "../tsconfig.json",
+	"compileOnSave": true,
+	"compilerOptions": {
 		"declaration": false,
 		"noEmit": true,
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "noImplicitAny": true,
-        "target": "es2015",
-    },
-    "include": [
-        "./*.ts"
-    ]
+		"module": "commonjs",
+		"moduleResolution": "node",
+		// "noImplicitAny": true,
+		"target": "es2015"
+	},
+	"include": ["./*.ts"]
 }
