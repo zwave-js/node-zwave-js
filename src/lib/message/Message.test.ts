@@ -454,6 +454,7 @@ describe("lib/message", () => {
 					getSafeCCVersionForNode() {},
 					controller: { nodes: new Map() },
 				} as any) as IDriver;
+				// @ts-ignore We need write access
 				fakeDriver.controller!.nodes.set(1, {} as any);
 
 				const msg = new Message(fakeDriver, {
