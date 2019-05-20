@@ -360,33 +360,42 @@ export class ZWaveNode extends EventEmitter {
 					ZWaveErrorCodes.CC_NotImplemented,
 				);
 
-			// Only allow using the API when the CC is supported by the node
-			if (!this.supportsCC(ccId) && !this.controlsCC(ccId)) {
-				throw new ZWaveError(
-					`Node ${
-						this.id
-					} does not support the Command Class ${ccName}!`,
-					ZWaveErrorCodes.CC_NotSupported,
-				);
-			}
-
 			// When accessing a CC API for the first time, we need to create it
 			if (!target.has(ccId)) {
-				const API = getAPI(ccId);
-				if (API == undefined)
+				const APIConstructor = getAPI(ccId);
+				if (APIConstructor == undefined) {
 					throw new ZWaveError(
 						`Command Class ${ccName} has no associated API!`,
 						ZWaveErrorCodes.CC_NotSupported,
 					);
-				target.set(ccId, new API(this.driver, this));
+				}
+				const apiInstance = new APIConstructor(this.driver, this);
+				const api = new Proxy(apiInstance, {
+					get(target, property) {
+						// Forbid access to the API if it is not supported by the node
+						if (
+							property !== "isSupported" &&
+							!target.isSupported()
+						) {
+							throw new ZWaveError(
+								`Node ${
+									this.id
+								} does not support the Command Class ${ccName}!`,
+								ZWaveErrorCodes.CC_NotSupported,
+							);
+						}
+						return target[property as keyof CCAPI];
+					},
+				});
+				target.set(ccId, api);
 			}
 			return target.get(ccId);
 		},
 	});
 	/**
 	 * Provides access to simplified APIs that are taylored to specific CCs.
-	 * Make sure to check support of the CC before using this, because accessing
-	 * unsupported CCs will throw an error.
+	 * Make sure to check support of each API using `API.isSupported()` since
+	 * all other API calls will throw if the API is not supported
 	 */
 	public get commandClasses(): CCAPIs {
 		return (this._commandClassAPIsProxy as unknown) as CCAPIs;

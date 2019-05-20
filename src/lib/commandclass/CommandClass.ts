@@ -557,14 +557,18 @@ export function commandClass(cc: CommandClasses): ClassDecorator {
 /**
  * Retrieves the command class defined for a Z-Wave message class
  */
-export function getCommandClass<T extends CommandClass>(cc: T): CommandClasses {
+export function getCommandClass<T extends CommandClass | CCAPI>(
+	cc: T,
+): CommandClasses {
 	// get the class constructor
 	const constr = cc.constructor;
 	// retrieve the current metadata
-	const ret: CommandClasses | undefined = Reflect.getMetadata(
-		METADATA_commandClass,
-		constr,
-	);
+	const ret: CommandClasses | undefined =
+		cc instanceof CommandClass
+			? Reflect.getMetadata(METADATA_commandClass, constr)
+			: cc instanceof CCAPI
+			? Reflect.getMetadata(METADATA_API, constr)
+			: undefined;
 	if (ret == undefined) {
 		throw new ZWaveError(
 			`No command class defined for ${constr.name}!`,
