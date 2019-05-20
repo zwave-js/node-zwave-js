@@ -7,6 +7,7 @@ import { CommandClasses } from "../src/lib/commandclass/CommandClasses";
 import { num2hex } from "../src/lib/util/strings";
 
 const ccRegex = /^@commandClass\(CommandClasses(?:\.|\[")(.+?)(?:"\])?\)/m;
+const apiRegex = /^@API\(CommandClasses(?:\.|\[)(.+?)(?:\])?\)/m;
 const versionRegex = /^@implementedVersion\((\d+)\)/m;
 const ansiColorRegex = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g;
 
@@ -29,7 +30,13 @@ function padEnd(str: string, len: number): string {
 	const allCCs = new Map(
 		Object.keys(CommandClasses)
 			.filter(cc => Number.isNaN(+cc))
-			.map(name => [name, 0] as [string, number]),
+			.map(
+				name =>
+					[name, { version: 0, API: false }] as [
+						string,
+						{ version: number; API: boolean }
+					],
+			),
 	);
 
 	for (const ccFile of ccFiles) {
@@ -37,21 +44,42 @@ function padEnd(str: string, len: number): string {
 		try {
 			const ccName = ccRegex.exec(fileContent)![1];
 			const ccVersion = +versionRegex.exec(fileContent)![1];
-			allCCs.set(ccName, ccVersion);
+			const hasAPI = apiRegex.test(fileContent);
+			allCCs.set(ccName, { version: ccVersion, API: hasAPI });
 		} catch (e) {
 			/* ok */
 		}
 	}
 
-	const headers = ["", "Command class name", "Implemented version", "max."];
+	const headers = [
+		"",
+		"Command class name",
+		"Implemented version",
+		"max.",
+		"API?",
+	];
 	const rows: string[][] = [];
 
-	for (const [name, version] of allCCs.entries()) {
+	for (const [name, { version, API }] of allCCs.entries()) {
 		const { version: latest, deprecated, obsolete } = getLatestVersion(
 			name,
 		);
 		if (obsolete) continue;
-		const color =
+		const implementationStatus =
+			version === latest && API
+				? "done"
+				: version > 0
+				? "in progress"
+				: "none";
+		const overallColor =
+			implementationStatus === "done"
+				? c.green
+				: implementationStatus === "in progress"
+				? c.yellow
+				: deprecated
+				? c.reset
+				: c.red;
+		const versionColor =
 			version === latest
 				? c.green
 				: version > 0
@@ -59,14 +87,23 @@ function padEnd(str: string, len: number): string {
 				: deprecated
 				? c.reset
 				: c.red;
-		const prefix = version === latest ? "✓" : version > 0 ? "✍" : "✗";
+		const hasAPI = API ? c.green(" ✓ ") : c.red(" ✗ ");
+		const prefix =
+			implementationStatus === "done"
+				? "✓"
+				: implementationStatus === "in progress"
+				? "✍"
+				: "✗";
 		const postfix = deprecated ? " " + c.reset("(deprecated)") : "";
 		if (version !== latest || !onlyIncomplete) {
 			rows.push([
-				color(prefix),
-				color(name + postfix),
-				color(version > 0 ? `Version ${version}` : "not implemented"),
+				overallColor(prefix),
+				overallColor(name + postfix),
+				versionColor(
+					version > 0 ? `Version ${version}` : "not implemented",
+				),
 				latest.toString(),
+				hasAPI,
 			]);
 		}
 	}
