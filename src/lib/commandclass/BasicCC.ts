@@ -1,5 +1,4 @@
 import { IDriver } from "../driver/IDriver";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { JSONObject } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
@@ -22,15 +21,17 @@ import { CommandClasses } from "./CommandClasses";
 export class BasicCCAPI extends CCAPI {
 	public async get(): Promise<Maybe<number> | undefined> {
 		const cc = new BasicCCGet(this.driver, { nodeId: this.node.id });
-		const response = await this.driver.sendCommand(cc);
-		if (response instanceof BasicCCReport) {
-			// TODO: Maybe rethink this (include target value etc.)
-			return response.currentValue;
-		}
-		throw new ZWaveError(
-			`Invalid response received to BasicCC.Get`,
-			ZWaveErrorCodes.CC_Invalid,
-		);
+		const response = await this.driver.sendCommand<BasicCCReport>(cc);
+		// TODO: Maybe rethink this (include target value etc.)
+		return response!.currentValue;
+	}
+
+	public async set(targetValue: number): Promise<void> {
+		const cc = new BasicCCSet(this.driver, {
+			nodeId: this.node.id,
+			targetValue,
+		});
+		await this.driver.sendCommand(cc);
 	}
 }
 
