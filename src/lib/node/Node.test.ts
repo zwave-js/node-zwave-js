@@ -1360,4 +1360,19 @@ describe("lib/node/Node", () => {
 			});
 		});
 	});
+
+	describe("getValue()", () => {
+		it("returns the values stored in the value DB", () => {
+			const node = new ZWaveNode(1, undefined as any);
+			node.valueDB.setValue(1, 2, "3", 4);
+
+			expect(
+				node.getValue({
+					commandClass: 1,
+					endpoint: 2,
+					propertyName: "3",
+				}),
+			).toBe(4);
+		});
+	});
 });

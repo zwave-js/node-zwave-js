@@ -330,6 +330,16 @@ export class ZWaveNode extends EventEmitter {
 		return this._valueDB;
 	}
 
+	/** Returns the current value of a node's command class */
+	public getValue(key: ValueBaseArgs): unknown {
+		return this._valueDB.getValue(
+			key.commandClass,
+			key.endpoint,
+			key.propertyName,
+			key.propertyKey,
+		);
+	}
+
 	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();
 	private _commandClassAPIsProxy = new Proxy(this._commandClassAPIs, {
 		get: (target, ccName: string) => {
