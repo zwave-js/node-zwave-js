@@ -19,11 +19,15 @@ import { CommandClasses } from "./CommandClasses";
 
 @API(CommandClasses.Basic)
 export class BasicCCAPI extends CCAPI {
-	public async get(): Promise<Maybe<number> | undefined> {
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async get() {
 		const cc = new BasicCCGet(this.driver, { nodeId: this.node.id });
-		const response = await this.driver.sendCommand<BasicCCReport>(cc);
-		// TODO: Maybe rethink this (include target value etc.)
-		return response!.currentValue;
+		const response = (await this.driver.sendCommand<BasicCCReport>(cc))!;
+		return {
+			currentValue: response.currentValue,
+			targetValue: response.targetValue,
+			duration: response.duration,
+		};
 	}
 
 	public async set(targetValue: number): Promise<void> {

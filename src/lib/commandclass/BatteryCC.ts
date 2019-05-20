@@ -1,6 +1,8 @@
 import { IDriver } from "../driver/IDriver";
 import { JSONObject } from "../util/misc";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
@@ -12,7 +14,19 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
-// All the supported commands
+@API(CommandClasses.Battery)
+export class BatteryCCAPI extends CCAPI {
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async get() {
+		const cc = new BatteryCCGet(this.driver, { nodeId: this.node.id });
+		const response = (await this.driver.sendCommand<BatteryCCReport>(cc))!;
+		return {
+			level: response.level,
+			isLow: response.isLow,
+		};
+	}
+}
+
 export enum BatteryCommand {
 	Get = 0x02,
 	Report = 0x03,

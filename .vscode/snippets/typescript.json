@@ -203,6 +203,15 @@
 		"prefix": "zwccprop",
 		"body": ["@ccValue() public ${1:property}: ${2:number};${0}"]
 	},
+	"Z-Wave CC API": {
+		"prefix": "zwccapi",
+		"body": [
+			"@API(CommandClasses.${1:Basic})",
+			"export class ${1}CCAPI extends CCAPI {",
+			"\t${0:// TODO: Implementation}",
+			"}"
+		]
+	},
 	"Jest test file": {
 		"prefix": "jest",
 		"body": [
