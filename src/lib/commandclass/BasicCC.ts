@@ -18,8 +18,9 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
+@API(CommandClasses.Basic)
 export class BasicCCAPI extends CCAPI {
-	public async get() {
+	public async get(): Promise<Maybe<number> | undefined> {
 		const cc = new BasicCCGet(this.driver, { nodeId: this.node.id });
 		const response = await this.driver.sendCommand(cc);
 		if (response instanceof BasicCCReport) {
@@ -41,7 +42,6 @@ export enum BasicCommand {
 
 @commandClass(CommandClasses.Basic)
 @implementedVersion(2) // Update tests in CommandClass.test.ts when changing this
-@API(BasicCCAPI)
 export class BasicCC extends CommandClass {
 	public ccCommand!: BasicCommand;
 }

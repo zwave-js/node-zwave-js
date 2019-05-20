@@ -1,7 +1,14 @@
+/*!
+ * This script generates the interface `CCAPIs` in `src/lib/commandclass/API.ts`
+ * which is used to strongly-type the simplified API exposed via
+ * `ZWaveNode.commandClasses.xyz`
+ */
+
 import * as fs from "fs-extra";
 import * as path from "path";
 
-const apiRegex = /^@API\(([^\)]+)\)/m;
+const apiRegex = /^@API\(CommandClasses(?:\.|\[)(.+?)(?:\])?\)/m;
+const classNameRegex = /class ([^\s]+) extends CCAPI/;
 const ccDir = path.join(__dirname, "..", "src/lib/commandclass");
 const apiFile = path.join(ccDir, "API.ts");
 const startToken = "export interface CCAPIs {";
@@ -16,13 +23,15 @@ const endToken = "}";
 
 	for (const ccFile of ccFiles) {
 		const fileContent = await fs.readFile(path.join(ccDir, ccFile), "utf8");
-		const match = apiRegex.exec(fileContent);
-		if (match) {
-			const apiClass = match[1];
+		// Extract the CC name from e.g. `@API(CommandClasses["Binary Sensor"])`
+		const apiMatch = apiRegex.exec(fileContent);
+		// Extract the class name from e.g. `export class BasicCCAPI extends CCAPI`
+		const classMatch = classNameRegex.exec(fileContent);
+		if (apiMatch && classMatch) {
 			CCsWithAPI.push({
 				file: ccFile.replace(/\.ts$/, ""),
-				className: apiClass,
-				name: apiClass.replace("CCAPI", ""),
+				name: apiMatch[1],
+				className: classMatch[1],
 			});
 		}
 	}
@@ -38,7 +47,7 @@ const endToken = "}";
 		"\n" +
 		CCsWithAPI.map(
 			({ name, className, file }) =>
-				`\t${name}: typeof import("./${file}").${className};`,
+				`\t${name}: import("./${file}").${className};`,
 		).join("\n") +
 		"\n" +
 		apiFileContent.substr(endTokenStart);

@@ -6,19 +6,58 @@ import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
 import { CCAPI, CCAPIs } from "../commandclass/API";
 import { CentralSceneCC } from "../commandclass/CentralSceneCC";
-import { CommandClass, CommandClassInfo, getAPI, getCCConstructor, getImplementedVersion, StateKind } from "../commandclass/CommandClass";
+import {
+	CommandClass,
+	CommandClassInfo,
+	getAPI,
+	getCCConstructor,
+	getImplementedVersion,
+	StateKind,
+} from "../commandclass/CommandClass";
 import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import { ManufacturerSpecificCCGet, ManufacturerSpecificCCReport } from "../commandclass/ManufacturerSpecificCC";
-import { MultiChannelCCEndPointGet, MultiChannelCCEndPointReport } from "../commandclass/MultiChannelCC";
+import {
+	ManufacturerSpecificCCGet,
+	ManufacturerSpecificCCReport,
+} from "../commandclass/ManufacturerSpecificCC";
+import {
+	MultiChannelCCEndPointGet,
+	MultiChannelCCEndPointReport,
+} from "../commandclass/MultiChannelCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
-import { VersionCCCommandClassGet, VersionCCCommandClassReport } from "../commandclass/VersionCC";
-import { WakeUpCC, WakeUpCCIntervalGet, WakeUpCCIntervalReport, WakeUpCCIntervalSet, WakeUpCCNoMoreInformation, WakeUpCommand } from "../commandclass/WakeUpCC";
-import { ZWavePlusCCGet, ZWavePlusCCReport, ZWavePlusNodeType, ZWavePlusRoleType } from "../commandclass/ZWavePlusCC";
+import {
+	VersionCCCommandClassGet,
+	VersionCCCommandClassReport,
+} from "../commandclass/VersionCC";
+import {
+	WakeUpCC,
+	WakeUpCCIntervalGet,
+	WakeUpCCIntervalReport,
+	WakeUpCCIntervalSet,
+	WakeUpCCNoMoreInformation,
+	WakeUpCommand,
+} from "../commandclass/WakeUpCC";
+import {
+	ZWavePlusCCGet,
+	ZWavePlusCCReport,
+	ZWavePlusNodeType,
+	ZWavePlusRoleType,
+} from "../commandclass/ZWavePlusCC";
 import { lookupManufacturer } from "../config/Manufacturers";
-import { ApplicationUpdateRequest, ApplicationUpdateRequestNodeInfoReceived, ApplicationUpdateRequestNodeInfoRequestFailed } from "../controller/ApplicationUpdateRequest";
-import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "../controller/GetNodeProtocolInfoMessages";
-import { GetRoutingInfoRequest, GetRoutingInfoResponse } from "../controller/GetRoutingInfoMessages";
+import {
+	ApplicationUpdateRequest,
+	ApplicationUpdateRequestNodeInfoReceived,
+	ApplicationUpdateRequestNodeInfoRequestFailed,
+} from "../controller/ApplicationUpdateRequest";
+import {
+	Baudrate,
+	GetNodeProtocolInfoRequest,
+	GetNodeProtocolInfoResponse,
+} from "../controller/GetNodeProtocolInfoMessages";
+import {
+	GetRoutingInfoRequest,
+	GetRoutingInfoResponse,
+} from "../controller/GetRoutingInfoMessages";
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -27,10 +66,24 @@ import { log } from "../util/logger";
 import { JSONObject } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import { CacheValue } from "../values/Cache";
-import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
+import {
+	BasicDeviceClasses,
+	DeviceClass,
+	GenericDeviceClass,
+	SpecificDeviceClass,
+} from "./DeviceClass";
 import { NodeUpdatePayload } from "./NodeInfo";
-import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
-import { ValueAddedArgs, ValueBaseArgs, ValueDB, ValueRemovedArgs, ValueUpdatedArgs } from "./ValueDB";
+import {
+	RequestNodeInfoRequest,
+	RequestNodeInfoResponse,
+} from "./RequestNodeInfoMessages";
+import {
+	ValueAddedArgs,
+	ValueBaseArgs,
+	ValueDB,
+	ValueRemovedArgs,
+	ValueUpdatedArgs,
+} from "./ValueDB";
 
 export interface ZWaveNodeValueAddedArgs extends ValueAddedArgs {
 	commandClassName: string;
@@ -279,21 +332,29 @@ export class ZWaveNode extends EventEmitter {
 
 	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();
 	private _commandClassAPIsProxy = new Proxy(this._commandClassAPIs, {
-		get: (target,ccName: string) => {
-			const ccId = CommandClasses[ccName as any] as unknown as CommandClasses | undefined;
-			if (ccId == undefined) throw new ZWaveError(`Command Class ${ccName} is not implemented!`, ZWaveErrorCodes.CC_NotSupported);
+		get: (target, ccName: string) => {
+			const ccId = (CommandClasses[ccName as any] as unknown) as
+				| CommandClasses
+				| undefined;
+			if (ccId == undefined)
+				throw new ZWaveError(
+					`Command Class ${ccName} is not implemented!`,
+					ZWaveErrorCodes.CC_NotSupported,
+				);
 			if (!target.has(ccId)) {
-				const ccConstructor = getCCConstructor(ccId);
-				if (ccConstructor == undefined) throw new ZWaveError(`Command Class ${ccName} is not implemented!`, ZWaveErrorCodes.CC_NotSupported);
-				const API = getAPI(ccConstructor);
-				if (API == undefined) throw new ZWaveError(`Command Class ${ccName} has no associated API!`, ZWaveErrorCodes.CC_NotSupported);
+				const API = getAPI(ccId);
+				if (API == undefined)
+					throw new ZWaveError(
+						`Command Class ${ccName} has no associated API!`,
+						ZWaveErrorCodes.CC_NotSupported,
+					);
 				target.set(ccId, new API(this.driver, this));
 			}
 			return target.get(ccId);
-		}
-	})
+		},
+	});
 	public get commandClasses(): CCAPIs {
-		return this._commandClassAPIsProxy as unknown as CCAPIs;
+		return (this._commandClassAPIsProxy as unknown) as CCAPIs;
 	}
 
 	/**
@@ -305,9 +366,7 @@ export class ZWaveNode extends EventEmitter {
 
 	/** Utility function to check if this node is the controller */
 	public isControllerNode(): boolean {
-		return (
-			this.id === this.driver.controller.ownNodeId
-		);
+		return this.id === this.driver.controller.ownNodeId;
 	}
 
 	/**
@@ -943,8 +1002,7 @@ export class ZWaveNode extends EventEmitter {
 						command: new WakeUpCCIntervalSet(this.driver, {
 							nodeId: this.id,
 							wakeupInterval: wakeupResp.wakeupInterval,
-							controllerNodeId: this.driver.controller
-								.ownNodeId!,
+							controllerNodeId: this.driver.controller.ownNodeId!,
 						}),
 					});
 					await this.driver.sendMessage(setWakeupRequest, {

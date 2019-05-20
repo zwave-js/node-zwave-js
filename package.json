@@ -67,8 +67,10 @@
   "scripts": {
     "build": "tsc -p src/tsconfig.build.json",
     "generateCCAPIInterface": "ts-node maintenance/generateCCAPIInterface.ts",
-    "prebuild": "rimraf ./build && npm run generateCCAPIInterface",
-    "prewatch": "rimraf ./build && npm run generateCCAPIInterface",
+    "cleanBuildDir": "rimraf ./build",
+    "prebuild": "npm run generateCCAPIInterface",
+    "prewatch": "npm run generateCCAPIInterface",
+    "prepublishOnly": "npm run cleanBuildDir && npm run build",
     "watch": "tsc -p src/tsconfig.build.json --watch",
     "test:reset": "jest --clear-cache",
     "test:ts": "jest --maxWorkers=1",

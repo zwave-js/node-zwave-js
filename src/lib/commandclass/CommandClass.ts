@@ -951,37 +951,29 @@ export function getCCKeyValuePairNames(
 /**
  * Defines the simplified API associated with a Z-Wave command class
  */
-export function API<T extends APIConstructor>(api: T): ClassDecorator {
-	return ccClass => {
-		log("protocol", `${ccClass.name}: defining API ${api.name}`, "silly");
+export function API(cc: CommandClasses): ClassDecorator {
+	return apiClass => {
+		log(
+			"protocol",
+			`${apiClass.name}: defining as API for ${CommandClasses[cc]}`,
+			"silly",
+		);
 		// and store the metadata
-		Reflect.defineMetadata(METADATA_API, api, ccClass);
+		Reflect.defineMetadata(METADATA_API, cc, apiClass);
 	};
 }
 
 /**
  * Retrieves the implemented version defined for a Z-Wave command class
  */
-export function getAPI<T extends CommandClass>(
-	cc: Constructable<T> | CommandClasses,
-): APIConstructor | undefined {
-	// get the class constructor
-	let constr: Constructable<CommandClass> | undefined;
-	let constrName: string;
-	if (typeof cc === "number") {
-		constr = getCCConstructor(cc);
-		constrName = constr != undefined ? constr.name : CommandClasses[cc];
-	} else {
-		constr = cc.constructor as Constructable<CommandClass>;
-		constrName = constr.name;
-	}
+export function getAPI(cc: CommandClasses): APIConstructor | undefined {
 	// retrieve the current metadata
 	let ret: APIConstructor | undefined;
-	if (constr != undefined) ret = Reflect.getMetadata(METADATA_API, constr);
+	ret = Reflect.getMetadata(METADATA_API, cc);
 
 	log(
 		"protocol",
-		`${constrName}: retrieving API => ${
+		`Retrieving API for ${CommandClasses[cc]} => ${
 			ret != undefined ? ret.name : "undefined"
 		}`,
 		"silly",
