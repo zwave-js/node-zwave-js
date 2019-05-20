@@ -95,7 +95,7 @@ function padEnd(str: string, len: number): string {
 				? "✍"
 				: "✗";
 		const postfix = deprecated ? " " + c.reset("(deprecated)") : "";
-		if (version !== latest || !onlyIncomplete) {
+		if (implementationStatus !== "done" || !onlyIncomplete) {
 			rows.push([
 				overallColor(prefix),
 				overallColor(name + postfix),
