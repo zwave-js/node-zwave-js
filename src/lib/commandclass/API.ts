@@ -12,4 +12,5 @@ export abstract class CCAPI {
 // Do not edit it by hand or your changes will be lost
 export interface CCAPIs {
 	Basic: import("./BasicCC").BasicCCAPI;
+	Battery: import("./BatteryCC").BatteryCCAPI;
 }

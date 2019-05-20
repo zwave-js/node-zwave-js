@@ -333,14 +333,28 @@ export class ZWaveNode extends EventEmitter {
 	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();
 	private _commandClassAPIsProxy = new Proxy(this._commandClassAPIs, {
 		get: (target, ccName: string) => {
+			// The command classes are exposed to library users by their name, not the ID
+			// Retrive the corresponding ID because we use it internally
 			const ccId = (CommandClasses[ccName as any] as unknown) as
 				| CommandClasses
 				| undefined;
 			if (ccId == undefined)
 				throw new ZWaveError(
-					`Command Class ${ccName} is not implemented!`,
+					`Command Class ${ccName} is not implemented! If you are sure that the name is correct, consider opening an issue at https://github.com/AlCalzone/node-zwave-js`,
+					ZWaveErrorCodes.CC_NotImplemented,
+				);
+
+			// Only allow using the API when the CC is supported by the node
+			if (!this.supportsCC(ccId) && !this.controlsCC(ccId)) {
+				throw new ZWaveError(
+					`Node ${
+						this.id
+					} does not support the Command Class ${ccName}!`,
 					ZWaveErrorCodes.CC_NotSupported,
 				);
+			}
+
+			// When accessing a CC API for the first time, we need to create it
 			if (!target.has(ccId)) {
 				const API = getAPI(ccId);
 				if (API == undefined)
@@ -353,6 +367,7 @@ export class ZWaveNode extends EventEmitter {
 			return target.get(ccId);
 		},
 	});
+	/** Pro */
 	public get commandClasses(): CCAPIs {
 		return (this._commandClassAPIsProxy as unknown) as CCAPIs;
 	}

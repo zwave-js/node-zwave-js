@@ -20,6 +20,7 @@ export enum ZWaveErrorCodes {
 
 	CC_Invalid,
 	CC_NotSupported,
+	CC_NotImplemented,
 	CC_NoNodeID,
 
 	Deserialization_NotImplemented,
