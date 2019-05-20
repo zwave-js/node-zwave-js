@@ -330,14 +330,20 @@ export class ZWaveNode extends EventEmitter {
 		return this._valueDB;
 	}
 
-	/** Returns the current value of a node's command class */
-	public getValue(key: ValueBaseArgs): unknown {
-		return this._valueDB.getValue(
-			key.commandClass,
-			key.endpoint,
-			key.propertyName,
-			key.propertyKey,
-		);
+	/**
+	 * Retrieves a value for a given property of a given CommandClass
+	 * @param cc The command class the value belongs to
+	 * @param endpoint The optional endpoint the value belongs to
+	 * @param propertyName The property name the value belongs to
+	 * @param propertyKey (optional) The sub-property to access
+	 */
+	public getValue(
+		cc: CommandClasses,
+		endpoint: number | undefined,
+		propertyName: string,
+		propertyKey?: number | string,
+	): unknown {
+		return this._valueDB.getValue(cc, endpoint, propertyName, propertyKey);
 	}
 
 	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();
@@ -377,7 +383,11 @@ export class ZWaveNode extends EventEmitter {
 			return target.get(ccId);
 		},
 	});
-	/** Pro */
+	/**
+	 * Provides access to simplified APIs that are taylored to specific CCs.
+	 * Make sure to check support of the CC before using this, because accessing
+	 * unsupported CCs will throw an error.
+	 */
 	public get commandClasses(): CCAPIs {
 		return (this._commandClassAPIsProxy as unknown) as CCAPIs;
 	}

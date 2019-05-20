@@ -159,6 +159,7 @@ export class ValueDB extends EventEmitter {
 	 * @param cc The command class the value belongs to
 	 * @param endpoint The optional endpoint the value belongs to
 	 * @param propertyName The property name the value belongs to
+	 * @param propertyKey (optional) The sub-property to access
 	 */
 	public getValue(
 		cc: CommandClasses,

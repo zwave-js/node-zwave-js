@@ -1366,13 +1366,7 @@ describe("lib/node/Node", () => {
 			const node = new ZWaveNode(1, undefined as any);
 			node.valueDB.setValue(1, 2, "3", 4);
 
-			expect(
-				node.getValue({
-					commandClass: 1,
-					endpoint: 2,
-					propertyName: "3",
-				}),
-			).toBe(4);
+			expect(node.getValue(1, 2, "3")).toBe(4);
 		});
 	});
 });
