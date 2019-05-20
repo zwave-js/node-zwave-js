@@ -6,6 +6,7 @@ import { BasicCC } from "../commandclass/BasicCC";
 import { BinarySensorCC } from "../commandclass/BinarySensorCC";
 import {
 	CommandClass,
+	CommandClassInfo,
 	Constructable,
 	getCommandClassStatic,
 } from "../commandclass/CommandClass";
@@ -80,6 +81,12 @@ class TestNode extends ZWaveNode {
 	}
 	public async queryNeighbors(): Promise<void> {
 		return super.queryNeighbors();
+	}
+	public get implementedCommandClasses(): Map<
+		CommandClasses,
+		CommandClassInfo
+	> {
+		return super.implementedCommandClasses as any;
 	}
 }
 
@@ -1038,6 +1045,7 @@ describe("lib/node/Node", () => {
 
 		it("serializing a deserialized node should result in the original object", () => {
 			const node = new ZWaveNode(1, fakeDriver);
+			// @ts-ignore We need write access to the map
 			fakeDriver.controller!.nodes.set(1, node);
 			node.deserialize(serializedTestNode);
 			expect(node.serialize()).toEqual(serializedTestNode);
@@ -1045,6 +1053,7 @@ describe("lib/node/Node", () => {
 
 		it("nodes with a completed interview don't get their stage reset when resuming from cache", () => {
 			const node = new ZWaveNode(1, fakeDriver);
+			// @ts-ignore We need write access to the map
 			fakeDriver.controller!.nodes.set(1, node);
 			node.deserialize(serializedTestNode);
 			node.interviewStage = InterviewStage.RestartFromCache;
