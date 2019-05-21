@@ -12,10 +12,12 @@ export enum ZWaveErrorCodes {
 	Driver_NotSupported,
 	Driver_NoPriority,
 	Driver_InvalidCache,
+	Driver_InvalidOptions,
 
 	Controller_MessageTimeout,
 	Controller_MessageDropped,
 	Controller_InclusionFailed,
+
 	Node_NotResponding,
 
 	CC_Invalid,
@@ -26,6 +28,14 @@ export enum ZWaveErrorCodes {
 	Deserialization_NotImplemented,
 	Arithmetic,
 	Argument_Invalid,
+
+	// Here follow CC specific errors
+
+	/**
+	 * Used to report the first existing parameter number
+	 * available in a node's configuration
+	 */
+	ConfigurationCC_FirstParameterNumber = 100,
 }
 
 export class ZWaveError extends Error {

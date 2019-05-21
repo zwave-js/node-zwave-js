@@ -34,4 +34,5 @@ export class CCAPI {
 export interface CCAPIs {
 	Basic: import("./BasicCC").BasicCCAPI;
 	Battery: import("./BatteryCC").BatteryCCAPI;
+	Configuration: import("./ConfigurationCC").ConfigurationCCAPI;
 }

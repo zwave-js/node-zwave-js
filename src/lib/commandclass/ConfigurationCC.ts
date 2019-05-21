@@ -2,7 +2,9 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { isConsecutiveArray } from "../util/misc";
 import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccKeyValuePair,
@@ -51,11 +53,126 @@ export interface ParameterInfo {
 	noBulkSupport?: boolean;
 	isAdvanced?: boolean;
 	isReadonly?: boolean;
+	// Although not reported, some parameters are write-only
+	isWriteonly?: boolean;
 	requiresReInclusion?: boolean;
 }
 
 // A configuration value is either a single number or a bit map
 export type ConfigValue = number | Set<number>;
+
+export class ConfigurationCCError extends ZWaveError {
+	public constructor(
+		public readonly message: string,
+		public readonly code: ZWaveErrorCodes,
+		public readonly argument: any,
+	) {
+		super(message, code);
+
+		// We need to set the prototype explicitly
+		Object.setPrototypeOf(this, ConfigurationCCError.prototype);
+	}
+}
+
+@API(CommandClasses.Configuration)
+export class ConfigurationCCAPI extends CCAPI {
+	/**
+	 * Requests the current value of a given config parameter from the device.
+	 * This may timeout and return `undefined` if the node does not respond.
+	 * If the node replied with a different parameter number, a ConfigurationCCError is thrown with
+	 * the `argument` property set to the reported parameter number
+	 */
+	public async get(parameter: number): Promise<ConfigValue | undefined> {
+		const cc = new ConfigurationCCGet(this.driver, {
+			nodeId: this.node.id,
+			parameter,
+		});
+		try {
+			const response = (await this.driver.sendCommand<
+				ConfigurationCCReport
+			>(cc, {
+				timeout: this.driver.options.timeouts.configurationGet,
+			}))!;
+			// Nodes may respond with a different parameter, e.g. if we
+			// requested a non-existing one
+			if (response.parameter === parameter) return response.value;
+			throw new ConfigurationCCError(
+				`The first existing parameter on this node is ${
+					response.parameter
+				}`,
+				ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber,
+				response.parameter,
+			);
+		} catch (e) {
+			if (
+				e instanceof ZWaveError &&
+				e.code === ZWaveErrorCodes.Controller_MessageTimeout
+			) {
+				// A timeout has to be expected. We return undefined to
+				// signal that no value was received
+				return undefined;
+			}
+			// This error was unexpected
+			throw e;
+		}
+	}
+
+	/** Scans a V1/V2 node for the existing parameters using get/set commands */
+	private async scanParametersV1V2(): Promise<void> {
+		for (let param = 1; param <= 255; param++) {
+			// Check if the parameter is readable
+			try {
+				await this.get(param);
+			} catch (e) {
+				if (
+					e instanceof ConfigurationCCError &&
+					e.code ===
+						ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber
+				) {
+					// Continue iterating with the next param
+					param = e.argument - 1;
+					continue;
+				}
+				throw e;
+			}
+			// TODO: Check for writeable parameters
+		}
+	}
+
+	/** Scans a V3+ node for the existing parameters using PropertiesGet commands */
+	private async scanParametersV3(): Promise<void> {
+		let param = 1;
+		while (param <= 0xffff) {
+			const cc = new ConfigurationCCPropertiesGet(this.driver, {
+				nodeId: this.node.id,
+				parameter: param,
+			});
+			const response = (await this.driver.sendCommand<
+				ConfigurationCCPropertiesReport
+			>(cc))!;
+			if (response.valueSize > 0) {
+				// This parameter exists
+				// TODO: Store the received information
+			}
+			// Continue with the next parameter
+			param = Math.max(param + 1, response.nextParameter);
+		}
+	}
+
+	/**
+	 * This scans the node for the existing parameters. Found parameters will be reported
+	 * through the `value added` and `value updated` events.
+	 *
+	 * WARNING: On nodes implementing V1 and V2, this process may take up
+	 * to an hour, depending on the configured timeout.
+	 *
+	 * WARNING: On nodes implementing V2, all parameters after 255 will be ignored.
+	 */
+	public async scanParameters(): Promise<void> {
+		if (this.version <= 2) return this.scanParametersV1V2();
+		return this.scanParametersV3();
+	}
+}
 
 // TODO: * Scan available config params (V1-V2)
 //       * or use PropertiesGet (V3+)

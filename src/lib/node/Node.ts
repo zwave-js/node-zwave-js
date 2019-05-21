@@ -362,31 +362,7 @@ export class ZWaveNode extends EventEmitter {
 
 			// When accessing a CC API for the first time, we need to create it
 			if (!target.has(ccId)) {
-				const APIConstructor = getAPI(ccId);
-				if (APIConstructor == undefined) {
-					throw new ZWaveError(
-						`Command Class ${ccName} has no associated API!`,
-						ZWaveErrorCodes.CC_NotSupported,
-					);
-				}
-				const apiInstance = new APIConstructor(this.driver, this);
-				const api = new Proxy(apiInstance, {
-					get(target, property) {
-						// Forbid access to the API if it is not supported by the node
-						if (
-							property !== "isSupported" &&
-							!target.isSupported()
-						) {
-							throw new ZWaveError(
-								`Node ${
-									this.id
-								} does not support the Command Class ${ccName}!`,
-								ZWaveErrorCodes.CC_NotSupported,
-							);
-						}
-						return target[property as keyof CCAPI];
-					},
-				});
+				const api = this.createAPI(ccId);
 				target.set(ccId, api);
 			}
 			return target.get(ccId);
@@ -399,6 +375,37 @@ export class ZWaveNode extends EventEmitter {
 	 */
 	public get commandClasses(): CCAPIs {
 		return (this._commandClassAPIsProxy as unknown) as CCAPIs;
+	}
+
+	/**
+	 * @internal
+	 * Creates an API instance for a given command class. Throws if no API is defined.
+	 * @param ccId The command class to create an API instance for
+	 */
+	public createAPI(ccId: CommandClasses): CCAPI {
+		const APIConstructor = getAPI(ccId);
+		const ccName = CommandClasses[ccId];
+		if (APIConstructor == undefined) {
+			throw new ZWaveError(
+				`Command Class ${ccName} has no associated API!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
+		const apiInstance = new APIConstructor(this.driver, this);
+		return new Proxy(apiInstance, {
+			get(target, property) {
+				// Forbid access to the API if it is not supported by the node
+				if (property !== "isSupported" && !target.isSupported()) {
+					throw new ZWaveError(
+						`Node ${
+							this.id
+						} does not support the Command Class ${ccName}!`,
+						ZWaveErrorCodes.CC_NotSupported,
+					);
+				}
+				return target[property as keyof CCAPI];
+			},
+		});
 	}
 
 	/**

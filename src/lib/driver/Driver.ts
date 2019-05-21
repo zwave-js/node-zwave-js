@@ -47,6 +47,8 @@ export interface ZWaveOptions {
 		ack: number;
 		/** not sure */
 		byte: number;
+		/** How long to wait for a ConfigurationCCReport after sending a ConfigurationCCGet */
+		configurationGet: number;
 	};
 	/**
 	 * @internal
@@ -60,6 +62,8 @@ const defaultOptions: ZWaveOptions = {
 	timeouts: {
 		ack: 1000,
 		byte: 150,
+		// TODO: This should be dependent on the network's current RTT
+		configurationGet: 3000,
 	},
 	skipInterview: false,
 };
@@ -83,6 +87,27 @@ function applyDefaultOptions(
 		}
 	}
 	return target;
+}
+
+function checkOptions(options: ZWaveOptions): void {
+	if (options.timeouts.ack < 1) {
+		throw new ZWaveError(
+			`The ACK timeout must be positive!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (options.timeouts.byte < 1) {
+		throw new ZWaveError(
+			`The BYTE timeout must be positive!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (options.timeouts.configurationGet < 1) {
+		throw new ZWaveError(
+			`The configuration get timeout must be positive!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
 }
 
 export type RequestHandler<T extends Message = Message> = (msg: T) => boolean;
@@ -163,6 +188,8 @@ export class Driver extends EventEmitter implements IDriver {
 			options,
 			defaultOptions,
 		) as ZWaveOptions;
+		// And make sure they contain valid values
+		checkOptions(this.options);
 
 		// register some cleanup handlers in case the program doesn't get closed cleanly
 		this._cleanupHandler = this._cleanupHandler.bind(this);
