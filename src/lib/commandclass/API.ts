@@ -1,17 +1,31 @@
 import { ZWaveNode } from "../..";
 import { IDriver } from "../driver/IDriver";
 import { getCommandClass } from "./CommandClass";
+import { CommandClasses } from "./CommandClasses";
 
+/** The base class for all CC APIs exposed via `Node.commandClasses.<CCName>` */
 export class CCAPI {
 	public constructor(
 		protected readonly driver: IDriver,
 		protected readonly node: ZWaveNode,
-	) {}
+	) {
+		this._ccId = getCommandClass(this);
+	}
+
+	private _ccId: CommandClasses;
+
+	/**
+	 * Retrieves the version of the given CommandClass this node implements
+	 */
+	public get version(): number {
+		return this.node.getCCVersion(this._ccId);
+	}
 
 	/** Determines if this simplified API instance may be used. */
 	public isSupported(): boolean {
-		const ccId = getCommandClass(this);
-		return this.node.supportsCC(ccId) || this.node.controlsCC(ccId);
+		return (
+			this.node.supportsCC(this._ccId) || this.node.controlsCC(this._ccId)
+		);
 	}
 }
 
