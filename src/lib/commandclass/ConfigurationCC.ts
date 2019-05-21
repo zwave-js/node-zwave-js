@@ -91,7 +91,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			const response = (await this.driver.sendCommand<
 				ConfigurationCCReport
 			>(cc, {
-				timeout: this.driver.options.timeouts.configurationGet,
+				timeout: this.driver.options.timeouts.configurationGetSet,
 			}))!;
 			// Nodes may respond with a different parameter, e.g. if we
 			// requested a non-existing one
@@ -111,6 +111,39 @@ export class ConfigurationCCAPI extends CCAPI {
 				// A timeout has to be expected. We return undefined to
 				// signal that no value was received
 				return undefined;
+			}
+			// This error was unexpected
+			throw e;
+		}
+	}
+
+	/**
+	 * Sets a new value for a given config parameter of the device.
+	 * The return value indicates whether the command succeeded (`true`) or timed out (`false`).
+	 */
+	public async set(
+		parameter: number,
+		value: ConfigValue,
+		valueSize: 1 | 2 | 4,
+	): Promise<boolean> {
+		const cc = new ConfigurationCCSet(this.driver, {
+			nodeId: this.node.id,
+			parameter,
+			value,
+			valueSize,
+		});
+		try {
+			await this.driver.sendCommand(cc, {
+				timeout: this.driver.options.timeouts.configurationGetSet,
+			});
+			return true;
+		} catch (e) {
+			if (
+				e instanceof ZWaveError &&
+				e.code === ZWaveErrorCodes.Controller_MessageTimeout
+			) {
+				// A timeout has to be expected
+				return false;
 			}
 			// This error was unexpected
 			throw e;
@@ -303,12 +336,18 @@ export class ConfigurationCCGet extends ConfigurationCC {
 	}
 }
 
-interface ConfigurationCCSetOptions extends CCCommandOptions {
-	parameter: number;
-	resetToDefault: boolean;
-	valueSize?: number;
-	value?: ConfigValue;
-}
+type ConfigurationCCSetOptions = CCCommandOptions &
+	(
+		| {
+				parameter: number;
+				resetToDefault: true;
+		  }
+		| {
+				parameter: number;
+				resetToDefault?: false;
+				valueSize: number;
+				value: ConfigValue;
+		  });
 
 @CCCommand(ConfigurationCommand.Set)
 export class ConfigurationCCSet extends ConfigurationCC {
@@ -325,19 +364,22 @@ export class ConfigurationCCSet extends ConfigurationCC {
 			);
 		} else {
 			this.parameter = options.parameter;
-			this.resetToDefault = options.resetToDefault;
-			this.valueSize = options.valueSize || 0;
-			this.value = options.value;
+			this.resetToDefault = !!options.resetToDefault;
+			if (!options.resetToDefault) {
+				// TODO: Default to the stored value size
+				this.valueSize = options.valueSize;
+				this.value = options.value;
+			}
 		}
 	}
 
 	public resetToDefault: boolean;
 	public parameter: number;
-	public valueSize: number;
+	public valueSize: number | undefined;
 	public value: ConfigValue | undefined;
 
 	public serialize(): Buffer {
-		const valueSize = this.resetToDefault ? 1 : this.valueSize;
+		const valueSize = this.resetToDefault ? 1 : this.valueSize!;
 		const payloadLength = 2 + valueSize;
 		this.payload = Buffer.alloc(payloadLength, 0);
 		this.payload[0] = this.parameter;

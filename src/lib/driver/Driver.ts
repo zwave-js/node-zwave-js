@@ -47,8 +47,11 @@ export interface ZWaveOptions {
 		ack: number;
 		/** not sure */
 		byte: number;
-		/** How long to wait for a ConfigurationCCReport after sending a ConfigurationCCGet */
-		configurationGet: number;
+		/**
+		 * How long to wait for a ConfigurationCCReport after sending a ConfigurationCCGet
+		 * or an ACK after a ConfigurationCCSet.
+		 */
+		configurationGetSet: number;
 	};
 	/**
 	 * @internal
@@ -63,7 +66,7 @@ const defaultOptions: ZWaveOptions = {
 		ack: 1000,
 		byte: 150,
 		// TODO: This should be dependent on the network's current RTT
-		configurationGet: 3000,
+		configurationGetSet: 3000,
 	},
 	skipInterview: false,
 };
@@ -102,7 +105,7 @@ function checkOptions(options: ZWaveOptions): void {
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
-	if (options.timeouts.configurationGet < 1) {
+	if (options.timeouts.configurationGetSet < 1) {
 		throw new ZWaveError(
 			`The configuration get timeout must be positive!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
