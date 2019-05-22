@@ -9,22 +9,22 @@ export class CCAPI {
 		protected readonly driver: IDriver,
 		protected readonly node: ZWaveNode,
 	) {
-		this._ccId = getCommandClass(this);
+		this.ccId = getCommandClass(this);
 	}
 
-	private _ccId: CommandClasses;
+	protected readonly ccId: CommandClasses;
 
 	/**
 	 * Retrieves the version of the given CommandClass this node implements
 	 */
 	public get version(): number {
-		return this.node.getCCVersion(this._ccId);
+		return this.node.getCCVersion(this.ccId);
 	}
 
 	/** Determines if this simplified API instance may be used. */
 	public isSupported(): boolean {
 		return (
-			this.node.supportsCC(this._ccId) || this.node.controlsCC(this._ccId)
+			this.node.supportsCC(this.ccId) || this.node.controlsCC(this.ccId)
 		);
 	}
 }

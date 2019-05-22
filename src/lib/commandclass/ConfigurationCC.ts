@@ -1,6 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { isConsecutiveArray } from "../util/misc";
+import { isConsecutiveArray, stripUndefined } from "../util/misc";
 import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
@@ -43,7 +43,7 @@ export enum ValueFormat {
 }
 
 export interface ParameterInfo {
-	minValue?: number;
+	minValue?: ConfigValue;
 	maxValue?: ConfigValue;
 	defaultValue?: ConfigValue;
 	valueSize?: number; // TODO: Use this
@@ -79,8 +79,8 @@ export class ConfigurationCCAPI extends CCAPI {
 	/**
 	 * Requests the current value of a given config parameter from the device.
 	 * This may timeout and return `undefined` if the node does not respond.
-	 * If the node replied with a different parameter number, a ConfigurationCCError is thrown with
-	 * the `argument` property set to the reported parameter number
+	 * If the node replied with a different parameter number, a `ConfigurationCCError`
+	 * is thrown with the `argument` property set to the reported parameter number.
 	 */
 	public async get(parameter: number): Promise<ConfigValue | undefined> {
 		const cc = new ConfigurationCCGet(this.driver, {
@@ -175,7 +175,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	/** Scans a V3+ node for the existing parameters using PropertiesGet commands */
 	private async scanParametersV3(): Promise<void> {
 		let param = 1;
-		while (param <= 0xffff) {
+		while (param > 0 && param <= 0xffff) {
 			const cc = new ConfigurationCCPropertiesGet(this.driver, {
 				nodeId: this.node.id,
 				parameter: param,
@@ -183,12 +183,11 @@ export class ConfigurationCCAPI extends CCAPI {
 			const response = (await this.driver.sendCommand<
 				ConfigurationCCPropertiesReport
 			>(cc))!;
-			if (response.valueSize > 0) {
-				// This parameter exists
-				// TODO: Store the received information
-			}
+			// The param information is stored automatically on receipt
+
 			// Continue with the next parameter
-			param = Math.max(param + 1, response.nextParameter);
+			// 0 indicates that this was the last parameter
+			param = response.nextParameter;
 		}
 	}
 
@@ -196,8 +195,8 @@ export class ConfigurationCCAPI extends CCAPI {
 	 * This scans the node for the existing parameters. Found parameters will be reported
 	 * through the `value added` and `value updated` events.
 	 *
-	 * WARNING: On nodes implementing V1 and V2, this process may take up
-	 * to an hour, depending on the configured timeout.
+	 * WARNING: On nodes implementing V1 and V2, this process may take
+	 * **up to an hour**, depending on the configured timeout.
 	 *
 	 * WARNING: On nodes implementing V2, all parameters after 255 will be ignored.
 	 */
@@ -207,8 +206,6 @@ export class ConfigurationCCAPI extends CCAPI {
 	}
 }
 
-// TODO: * Scan available config params (V1-V2)
-//       * or use PropertiesGet (V3+)
 // TODO: Test how the device interprets the default flag (V1-3) (reset all or only the specified)
 
 @commandClass(CommandClasses.Configuration)
@@ -235,7 +232,6 @@ export class ConfigurationCC extends CommandClass {
 	}
 
 	/** Stores config parameter metadata for this CC's node */
-	// TODO: Actually use this!
 	protected extendParamInformation(
 		parameter: number,
 		info: ParameterInfo,
@@ -617,17 +613,19 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		const parameter = this.payload.readUInt16BE(0);
+		this._parameter = this.payload.readUInt16BE(0);
 		this._reportsToFollow = this.payload[2];
-		const name = this.payload.slice(3).toString("utf8");
-		this.name = [parameter, name];
+		this._name = this.payload.slice(3).toString("utf8");
 	}
 
-	@ccKeyValuePair()
-	private name: [number, string];
-
+	private _parameter: number;
 	public get parameter(): number {
-		return this.name[0];
+		return this._parameter;
+	}
+
+	private _name: string;
+	public get name(): string {
+		return this._name;
 	}
 
 	private _reportsToFollow: number;
@@ -639,16 +637,12 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		return this._reportsToFollow > 0;
 	}
 
-	public get parameterName(): string {
-		return this.name[1];
-	}
-
 	public mergePartialCCs(partials: ConfigurationCCNameReport[]): void {
 		// Concat the name
-		this.name[1] = [...partials, this]
-			.map(report => report.parameterName)
+		this._name = [...partials, this]
+			.map(report => report._name)
 			.reduce((prev, cur) => prev + cur, "");
-		this.persistValues();
+		this.extendParamInformation(this.parameter, { name: this.name });
 	}
 }
 
@@ -687,17 +681,19 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		const parameter = this.payload.readUInt16BE(0);
+		this._parameter = this.payload.readUInt16BE(0);
 		this._reportsToFollow = this.payload[2];
-		const info = this.payload.slice(3).toString("utf8");
-		this.info = [parameter, info];
+		this._info = this.payload.slice(3).toString("utf8");
 	}
 
-	@ccKeyValuePair()
-	private info: [number, string];
-
+	private _parameter: number;
 	public get parameter(): number {
-		return this.info[0];
+		return this._parameter;
+	}
+
+	private _info: string;
+	public get info(): string {
+		return this._info;
 	}
 
 	private _reportsToFollow: number;
@@ -709,16 +705,14 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		return this._reportsToFollow > 0;
 	}
 
-	public get parameterInfo(): string {
-		return this.info[1];
-	}
-
 	public mergePartialCCs(partials: ConfigurationCCInfoReport[]): void {
-		// Concat the name
-		this.info[1] = [...partials, this]
-			.map(report => report.parameterInfo)
+		// Concat the info
+		this._info = [...partials, this]
+			.map(report => report._info)
 			.reduce((prev, cur) => prev + cur, "");
-		this.persistValues();
+		this.extendParamInformation(this._parameter, {
+			info: this._info,
+		});
 	}
 }
 
@@ -796,9 +790,23 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			this._isAdvanced = !!(options2 & 0b1);
 			this._noBulkSupport = !!(options2 & 0b10);
 		}
-	}
 
-	// TODO: This is some kind of huge KVP
+		// If we actually received parameter info, store it
+		if (this._valueSize > 0) {
+			const paramInfo: ParameterInfo = stripUndefined({
+				valueFormat: this._valueFormat,
+				valueSize: this._valueSize,
+				minValue: this._minValue,
+				maxValue: this._maxValue,
+				defaultValue: this._defaultValue,
+				requiresReInclusion: this._requiresReInclusion,
+				isReadonly: this._isReadonly,
+				isAdvanced: this._isAdvanced,
+				noBulkSupport: this._noBulkSupport,
+			});
+			this.extendParamInformation(this._parameter, paramInfo);
+		}
+	}
 
 	private _parameter: number;
 	public get parameter(): number {
