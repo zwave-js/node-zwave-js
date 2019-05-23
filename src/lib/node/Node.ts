@@ -393,7 +393,7 @@ export class ZWaveNode extends EventEmitter {
 		}
 		const apiInstance = new APIConstructor(this.driver, this);
 		return new Proxy(apiInstance, {
-			get(target, property) {
+			get: (target, property) => {
 				// Forbid access to the API if it is not supported by the node
 				if (property !== "isSupported" && !target.isSupported()) {
 					throw new ZWaveError(
