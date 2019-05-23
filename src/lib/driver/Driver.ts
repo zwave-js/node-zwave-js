@@ -1323,16 +1323,15 @@ export class Driver extends EventEmitter implements IDriver {
 			this.doSend(data);
 			// If the transaction has a timeout configured, start it
 			if (this.currentTransaction.timeout) {
-				setTimeout(
-					() =>
-						this.rejectCurrentTransaction(
-							new ZWaveError(
-								"The transaction timed out",
-								ZWaveErrorCodes.Controller_MessageTimeout,
-							),
+				setTimeout(() => {
+					if (!this.currentTransaction) return;
+					this.rejectCurrentTransaction(
+						new ZWaveError(
+							"The transaction timed out",
+							ZWaveErrorCodes.Controller_MessageTimeout,
 						),
-					this.currentTransaction.timeout,
-				);
+					);
+				}, this.currentTransaction.timeout);
 			}
 
 			// to avoid any deadlocks we didn't think of, re-call this later
