@@ -927,8 +927,17 @@ describe("lib/node/Node", () => {
 		});
 
 		it("should not do anything and return false if the node interview is not complete", async () => {
-			const node = makeNode(false);
+			const node = makeNode(true);
 			node.interviewStage = InterviewStage.Endpoints;
+			expect(await node.sendNoMoreInformation()).toBeFalse();
+			expect(fakeDriver.sendMessage).not.toBeCalled();
+		});
+
+		it("should not send anything if the node should be kept awake", async () => {
+			const node = makeNode(true);
+			node.setAwake(true);
+			node.keepAwake = true;
+
 			expect(await node.sendNoMoreInformation()).toBeFalse();
 			expect(fakeDriver.sendMessage).not.toBeCalled();
 		});
