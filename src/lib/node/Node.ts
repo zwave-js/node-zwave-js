@@ -1403,6 +1403,7 @@ export class ZWaveNode extends EventEmitter {
 			await this.driver.sendMessage<SendDataRequest>(request, {
 				priority: MessagePriority.WakeUp,
 			});
+			this.setAwake(false);
 			log("controller", `${this.logPrefix}  Node asleep`, "debug");
 
 			msgSent = true;
