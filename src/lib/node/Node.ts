@@ -1365,16 +1365,21 @@ export class ZWaveNode extends EventEmitter {
 	 */
 	public setAwake(awake: boolean): void {
 		if (!this.supportsCC(CommandClasses["Wake Up"])) return;
-		WakeUpCC.setAwake(this.driver, this, awake);
+		WakeUpCC.setAwake(this, awake);
 	}
 
 	/** Returns whether the node is currently assumed awake */
 	public isAwake(): boolean {
 		const isAsleep =
 			this.supportsCC(CommandClasses["Wake Up"]) &&
-			!WakeUpCC.isAwake(this.driver, this);
+			!WakeUpCC.isAwake(this);
 		return !isAsleep;
 	}
+
+	/**
+	 * Whether the node should be kept awake when there are no pending messages.
+	 */
+	public keepAwake: boolean = false;
 
 	private isSendingNoMoreInformation: boolean = false;
 	/**
@@ -1385,6 +1390,9 @@ export class ZWaveNode extends EventEmitter {
 		// Avoid calling this method more than once
 		if (this.isSendingNoMoreInformation) return false;
 		this.isSendingNoMoreInformation = true;
+
+		// Don't send the node back to sleep if it should be kept awake
+		if (this.keepAwake) return false;
 
 		let msgSent = false;
 		if (this.isAwake() && this.interviewStage === InterviewStage.Complete) {
