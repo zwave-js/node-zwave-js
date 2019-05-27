@@ -1077,9 +1077,11 @@ export class Driver extends EventEmitter implements IDriver {
 			)}`,
 			"debug",
 		);
-		this.currentTransaction!.promise.resolve(
-			this.currentTransaction!.response,
-		);
+		const { promise, response, timeoutInstance } = this.currentTransaction!;
+		// Cancel any running timers
+		if (timeoutInstance) clearTimeout(timeoutInstance);
+		// and resolve the current transaction
+		promise.resolve(response);
 		this.currentTransaction = undefined;
 		// If a sleeping node has no messages pending, send it back to sleep
 		if (
@@ -1109,7 +1111,11 @@ export class Driver extends EventEmitter implements IDriver {
 			`rejecting current transaction because "${reason.message}"`,
 			"debug",
 		);
-		this.currentTransaction!.promise.reject(reason);
+		const { promise, timeoutInstance } = this.currentTransaction!;
+		// Cancel any running timers
+		if (timeoutInstance) clearTimeout(timeoutInstance);
+		// and reject the current transaction
+		promise.reject(reason);
 		this.currentTransaction = undefined;
 		// and see if there are messages pending
 		if (resumeQueue) {
@@ -1293,7 +1299,7 @@ export class Driver extends EventEmitter implements IDriver {
 			this.doSend(data);
 			// If the transaction has a timeout configured, start it
 			if (this.currentTransaction.timeout) {
-				setTimeout(
+				this.currentTransaction.timeoutInstance = setTimeout(
 					() =>
 						this.rejectCurrentTransaction(
 							new ZWaveError(

@@ -32,6 +32,11 @@ export class Transaction implements Comparable<Transaction> {
 		public readonly promise: DeferredPromise<Message | void>,
 		public priority: MessagePriority,
 		public readonly timeout?: number,
+		/**
+		 * @internal
+		 * The timeout which causes the promise to be rejected when it elapses
+		 */
+		public timeoutInstance?: NodeJS.Timeout,
 		public timestamp: number = highResTimestamp(),
 		/**
 		 * The previously received partial responses of a multistep command
