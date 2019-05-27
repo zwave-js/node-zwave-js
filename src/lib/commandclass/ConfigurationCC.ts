@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { log } from "../util/logger";
 import { isConsecutiveArray, stripUndefined } from "../util/misc";
 import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
@@ -53,7 +54,9 @@ export interface ParameterInfo {
 	noBulkSupport?: boolean;
 	isAdvanced?: boolean;
 	isReadonly?: boolean;
-	// Although not reported, some parameters are write-only
+	// We cannot detect write-only parameters by scanning,
+	// But some parameters are indeed write-only. We have to rely
+	// on configuration to support this
 	isWriteonly?: boolean;
 	requiresReInclusion?: boolean;
 }
@@ -152,10 +155,24 @@ export class ConfigurationCCAPI extends CCAPI {
 
 	/** Scans a V1/V2 node for the existing parameters using get/set commands */
 	private async scanParametersV1V2(): Promise<void> {
-		for (let param = 1; param <= 255; param++) {
+		log(
+			"controller",
+			`${this.node.logPrefix}Scanning available parameters...`,
+			"debug",
+		);
+		const ccInstance = this.node.createCCInstance<ConfigurationCC>(
+			getCommandClass(this),
+		)!;
+		paramLoop: for (let param = 1; param <= 255; param++) {
 			// Check if the parameter is readable
+			let originalValue: ConfigValue | undefined;
+			log(
+				"controller",
+				`${this.node.logPrefix}  trying param ${param}:`,
+				"debug",
+			);
 			try {
-				await this.get(param);
+				originalValue = await this.get(param);
 			} catch (e) {
 				if (
 					e instanceof ConfigurationCCError &&
@@ -163,12 +180,97 @@ export class ConfigurationCCAPI extends CCAPI {
 						ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber
 				) {
 					// Continue iterating with the next param
-					param = e.argument - 1;
+					if (e.argument - 1 > param) param = e.argument - 1;
 					continue;
 				}
 				throw e;
 			}
-			// TODO: Check for writeable parameters
+			if (originalValue != undefined) {
+				log(
+					"controller",
+					`${this.node.logPrefix}  Param ${param}:`,
+					"debug",
+				);
+				log(
+					"controller",
+					`${this.node.logPrefix}    readable  = true`,
+					"debug",
+				);
+				// If the node responded, check if the parameter is writable
+				// To do so, try all parameter sizes (1,2,4) with the originalValue +/- 1
+				if (typeof originalValue === "number") {
+					for (const value of [
+						originalValue - 1,
+						originalValue + 1,
+					]) {
+						for (const valueSize of [1, 2, 4] as const) {
+							if (
+								!isSafeValue(
+									value,
+									valueSize,
+									ccInstance.getParamInformation(param)
+										.format || ValueFormat.SignedInteger,
+								)
+							) {
+								// Don't try to send values that don't fit into the buffer
+								log(
+									"controller",
+									`${
+										this.node.logPrefix
+									}  originalValue = ${originalValue}, skipping valueSize = ${valueSize}`,
+									"debug",
+								);
+								continue;
+							}
+							// Write the parameter and check if it can be read
+							await this.set(param, value, valueSize);
+							let actual: ConfigValue | undefined;
+							try {
+								actual = await this.get(param);
+							} catch (e) {
+								if (
+									e instanceof ConfigurationCCError &&
+									e.code ===
+										ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber
+								) {
+									// Continue iterating with the next param
+									if (e.argument - 1 > param)
+										param = e.argument - 1;
+									continue paramLoop;
+								}
+								throw e;
+							}
+							if (actual === value) {
+								log(
+									"controller",
+									`${
+										this.node.logPrefix
+									}    writable  = true`,
+									"debug",
+								);
+								log(
+									"controller",
+									`${
+										this.node.logPrefix
+									}    valueSize = ${valueSize}`,
+									"debug",
+								);
+								// We successfully changed the value
+								ccInstance.extendParamInformation(param, {
+									isReadonly: false,
+									valueSize,
+								});
+								continue paramLoop;
+							}
+						}
+					}
+					log(
+						"controller",
+						`${this.node.logPrefix}    writable  = false`,
+						"debug",
+					);
+				}
+			}
 		}
 	}
 
@@ -231,8 +333,11 @@ export class ConfigurationCC extends CommandClass {
 		return super.supportsCommand(cmd);
 	}
 
-	/** Stores config parameter metadata for this CC's node */
-	protected extendParamInformation(
+	/**
+	 * @internal
+	 * Stores config parameter metadata for this CC's node
+	 */
+	public extendParamInformation(
 		parameter: number,
 		info: ParameterInfo,
 	): void {
@@ -249,8 +354,11 @@ export class ConfigurationCC extends CommandClass {
 		Object.assign(paramInfo.get(parameter), info);
 	}
 
-	/** Returns stored config parameter metadata for this CC's node */
-	protected getParamInformation(parameter: number): ParameterInfo {
+	/**
+	 * @internal
+	 * Returns stored config parameter metadata for this CC's node
+	 */
+	public getParamInformation(parameter: number): ParameterInfo {
 		const valueDB = this.getValueDB();
 		const paramInfo = valueDB.getValue(
 			getCommandClass(this),
@@ -900,6 +1008,31 @@ export class ConfigurationCCDefaultReset extends ConfigurationCC {
 	) {
 		super(driver, options);
 	}
+}
+
+function isSafeValue(
+	value: number,
+	size: 1 | 2 | 4,
+	format: ValueFormat,
+): boolean {
+	let min: number;
+	let max: number;
+	switch (format) {
+		case ValueFormat.SignedInteger:
+			const half = 1 << (8 * size - 1);
+			min = -half;
+			max = half - 1;
+			break;
+		case ValueFormat.UnsignedInteger:
+		case ValueFormat.Enumerated:
+			min = 0;
+			max = 1 << (8 * size);
+			break;
+		case ValueFormat.BitField:
+		default:
+			throw new Error("not implemented");
+	}
+	return value >= min && value <= max;
 }
 
 /** Interprets values from the payload depending on the value format */
