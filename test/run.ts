@@ -1,13 +1,39 @@
 import { Driver } from "../";
+import { ConfigurationCCError } from "../src/lib/commandclass/ConfigurationCC";
+import { log } from "../src/lib/util/logger";
 const driver = new Driver("COM3").once("driver ready", async () => {
-	const node = driver.controller.nodes.get(2)!;
+	const node = driver.controller.nodes.get(3)!;
 	node.once("interview completed", async () => {
-		console.log("set 1");
-		let success = await node.commandClasses.Configuration.set(1, 5, 4);
-		console.log("success: " + success);
-		console.log("set 40");
-		success = await node.commandClasses.Configuration.set(40, 5, 4);
-		console.log("success: " + success);
+		const tests = [
+			{ param: 1, value: 5, valueSize: 1 as const },
+			{ param: 40, value: 5, valueSize: 4 as const },
+		];
+		for (const { param, value, valueSize } of tests) {
+			log(
+				"controller",
+				`setting: ${param} to ${value} (${valueSize} bytes)`,
+				"warn",
+			);
+			const ack = await node.commandClasses.Configuration.set(
+				param,
+				value,
+				valueSize,
+			);
+			log("controller", `ack = ${ack}`, "warn");
+			log("controller", `reading ${param}...`, "warn");
+			try {
+				const result = await node.commandClasses.Configuration.get(
+					param,
+				);
+				log("controller", `result = ${result}`, "warn");
+			} catch (e) {
+				console.error(
+					`The first param number = ${
+						(e as ConfigurationCCError).argument
+					}`,
+				);
+			}
+		}
 	});
 });
 driver.start();
