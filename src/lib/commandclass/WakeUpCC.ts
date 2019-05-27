@@ -30,7 +30,11 @@ export class WakeUpCC extends CommandClass {
 	public ccCommand!: WakeUpCommand;
 
 	public isAwake(): boolean {
-		switch (this.getNode()!.status) {
+		return WakeUpCC.isAwake(this.getNode()!);
+	}
+
+	public static isAwake(node: ZWaveNode): boolean {
+		switch (node.status) {
 			case NodeStatus.Asleep:
 			case NodeStatus.Dead:
 				return false;
@@ -41,20 +45,12 @@ export class WakeUpCC extends CommandClass {
 		}
 	}
 
-	public static isAwake(driver: IDriver, node: ZWaveNode): boolean {
-		return new WakeUpCC(driver, { nodeId: node.id }).isAwake();
-	}
-
 	public setAwake(awake: boolean): void {
-		this.getNode()!.status = awake ? NodeStatus.Awake : NodeStatus.Asleep;
+		WakeUpCC.setAwake(this.getNode()!, awake);
 	}
 
-	public static setAwake(
-		driver: IDriver,
-		node: ZWaveNode,
-		awake: boolean,
-	): void {
-		new WakeUpCC(driver, { nodeId: node.id }).setAwake(awake);
+	public static setAwake(node: ZWaveNode, awake: boolean): void {
+		node.status = awake ? NodeStatus.Awake : NodeStatus.Asleep;
 	}
 }
 

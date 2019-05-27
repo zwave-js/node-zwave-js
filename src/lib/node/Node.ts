@@ -1358,14 +1358,14 @@ export class ZWaveNode extends EventEmitter {
 	 */
 	public setAwake(awake: boolean): void {
 		if (!this.supportsCC(CommandClasses["Wake Up"])) return;
-		WakeUpCC.setAwake(this.driver, this, awake);
+		WakeUpCC.setAwake(this, awake);
 	}
 
 	/** Returns whether the node is currently assumed awake */
 	public isAwake(): boolean {
 		const isAsleep =
 			this.supportsCC(CommandClasses["Wake Up"]) &&
-			!WakeUpCC.isAwake(this.driver, this);
+			!WakeUpCC.isAwake(this);
 		return !isAsleep;
 	}
 

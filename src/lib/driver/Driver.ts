@@ -643,7 +643,7 @@ export class Driver extends EventEmitter implements IDriver {
 							"debug",
 						);
 						// The node is asleep
-						WakeUpCC.setAwake(this, node, false);
+						WakeUpCC.setAwake(node, false);
 						// Move all its pending messages to the WakeupQueue
 						// This clears the current transaction
 						this.moveMessagesToWakeupQueue(node.id);
