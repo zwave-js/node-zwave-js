@@ -69,34 +69,6 @@ jobs:
                   command: npx commitlint-circle
 
     # ----------------------------------------------------
-    test_node6:
-        <<: *node6
-
-        steps:
-            - checkout
-
-            # Download and cache dependencies
-            - restore_cache:
-                  keys:
-                      - v1-dependencies-node6-{{ checksum "package.json" }}
-
-            - run:
-                  name: Remove unnecessary Dependencies
-                  command: npm ls || true ; npm prune
-            - run:
-                  name: Install Dependencies
-                  command: npm install
-
-            - save_cache:
-                  paths:
-                      - node_modules
-                  key: v1-dependencies-node6-{{ checksum "package.json" }}
-
-            - run:
-                  name: Run component tests
-                  command: npm run test:ts
-
-    # ----------------------------------------------------
     test_node8:
         <<: *node8
 
@@ -253,13 +225,20 @@ workflows:
 
     test-and-deploy:
         jobs:
-            # - test_node6:
-            #     <<: *tags_and_branches
+            - commitlint:
+                  <<: *tags_and_branches
+
             - test_node8:
+                  requires:
+                      - commitlint
                   <<: *tags_and_branches
             - test_node10:
+                  requires:
+                      - commitlint
                   <<: *tags_and_branches
             - test_latest:
+                  requires:
+                      - commitlint
                   <<: *tags_and_branches
 
             - coverage:
@@ -270,7 +249,6 @@ workflows:
             # build only on tagged builds and if all tests succeeded
             - build:
                   requires:
-                      # - test_node6
                       - test_node8
                       - test_node10
                       - test_latest
