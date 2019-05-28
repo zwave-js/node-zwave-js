@@ -1,8 +1,17 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { log } from "../util/logger";
-import { isConsecutiveArray, stripUndefined } from "../util/misc";
-import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
+import {
+	isConsecutiveArray,
+	stripUndefined,
+	validatePayload,
+} from "../util/misc";
+import {
+	encodeBitMask,
+	getMinIntegerSize,
+	Maybe,
+	parseBitMask,
+} from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -99,6 +108,13 @@ export class ConfigurationCCAPI extends CCAPI {
 			// Nodes may respond with a different parameter, e.g. if we
 			// requested a non-existing one
 			if (response.parameter === parameter) return response.value;
+			log(
+				"controller",
+				`Received unexpected ConfigurationReport (param = ${
+					response.parameter
+				}, value = ${response.value})`,
+				"error",
+			);
 			throw new ConfigurationCCError(
 				`The first existing parameter on this node is ${
 					response.parameter
@@ -155,6 +171,9 @@ export class ConfigurationCCAPI extends CCAPI {
 
 	/** Scans a V1/V2 node for the existing parameters using get/set commands */
 	private async scanParametersV1V2(): Promise<void> {
+		// TODO: (GH#107)
+		// This implementation is incomplete and buggy
+		// Since this scan takes a ton of time, we ignore it for now
 		log(
 			"controller",
 			`${this.node.logPrefix}Scanning available parameters...`,
@@ -163,16 +182,42 @@ export class ConfigurationCCAPI extends CCAPI {
 		const ccInstance = this.node.createCCInstance<ConfigurationCC>(
 			getCommandClass(this),
 		)!;
-		paramLoop: for (let param = 1; param <= 255; param++) {
+		for (let param = 1; param <= 255; param++) {
 			// Check if the parameter is readable
 			let originalValue: ConfigValue | undefined;
 			log(
 				"controller",
-				`${this.node.logPrefix}  trying param ${param}:`,
+				`${this.node.logPrefix}  trying param ${param}...`,
 				"debug",
 			);
 			try {
 				originalValue = await this.get(param);
+				if (originalValue != undefined) {
+					log(
+						"controller",
+						`${this.node.logPrefix}  Param ${param}:`,
+						"debug",
+					);
+					log(
+						"controller",
+						`${this.node.logPrefix}    readable  = true`,
+						"debug",
+					);
+					log(
+						"controller",
+						`${this.node.logPrefix}    valueSize = ${
+							ccInstance.getParamInformation(param).valueSize
+						}`,
+						"debug",
+					);
+					log(
+						"controller",
+						`${
+							this.node.logPrefix
+						}    value     = ${originalValue}`,
+						"debug",
+					);
+				}
 			} catch (e) {
 				if (
 					e instanceof ConfigurationCCError &&
@@ -184,92 +229,6 @@ export class ConfigurationCCAPI extends CCAPI {
 					continue;
 				}
 				throw e;
-			}
-			if (originalValue != undefined) {
-				log(
-					"controller",
-					`${this.node.logPrefix}  Param ${param}:`,
-					"debug",
-				);
-				log(
-					"controller",
-					`${this.node.logPrefix}    readable  = true`,
-					"debug",
-				);
-				// If the node responded, check if the parameter is writable
-				// To do so, try all parameter sizes (1,2,4) with the originalValue +/- 1
-				if (typeof originalValue === "number") {
-					for (const value of [
-						originalValue - 1,
-						originalValue + 1,
-					]) {
-						for (const valueSize of [1, 2, 4] as const) {
-							if (
-								!isSafeValue(
-									value,
-									valueSize,
-									ccInstance.getParamInformation(param)
-										.format || ValueFormat.SignedInteger,
-								)
-							) {
-								// Don't try to send values that don't fit into the buffer
-								log(
-									"controller",
-									`${
-										this.node.logPrefix
-									}  originalValue = ${originalValue}, skipping valueSize = ${valueSize}`,
-									"debug",
-								);
-								continue;
-							}
-							// Write the parameter and check if it can be read
-							await this.set(param, value, valueSize);
-							let actual: ConfigValue | undefined;
-							try {
-								actual = await this.get(param);
-							} catch (e) {
-								if (
-									e instanceof ConfigurationCCError &&
-									e.code ===
-										ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber
-								) {
-									// Continue iterating with the next param
-									if (e.argument - 1 > param)
-										param = e.argument - 1;
-									continue paramLoop;
-								}
-								throw e;
-							}
-							if (actual === value) {
-								log(
-									"controller",
-									`${
-										this.node.logPrefix
-									}    writable  = true`,
-									"debug",
-								);
-								log(
-									"controller",
-									`${
-										this.node.logPrefix
-									}    valueSize = ${valueSize}`,
-									"debug",
-								);
-								// We successfully changed the value
-								ccInstance.extendParamInformation(param, {
-									isReadonly: false,
-									valueSize,
-								});
-								continue paramLoop;
-							}
-						}
-					}
-					log(
-						"controller",
-						`${this.node.logPrefix}    writable  = false`,
-						"debug",
-					);
-				}
 			}
 		}
 	}
@@ -342,15 +301,32 @@ export class ConfigurationCC extends CommandClass {
 		info: ParameterInfo,
 	): void {
 		const valueDB = this.getValueDB();
-		const paramInfo = (valueDB.getValue(
+		// Create the map if it does not exist
+		if (
+			!valueDB.hasValue(
+				getCommandClass(this),
+				this.endpoint,
+				"paramInformation",
+			)
+		) {
+			valueDB.setValue(
+				getCommandClass(this),
+				this.endpoint,
+				"paramInformation",
+				new Map(),
+			);
+		}
+		// Retrieve the map
+		const paramInfo = valueDB.getValue(
 			getCommandClass(this),
 			this.endpoint,
 			"paramInformation",
-		) || new Map()) as Map<number, ParameterInfo>;
-
+		) as Map<number, ParameterInfo>;
+		// And make sure it has one entry for this parameter
 		if (!paramInfo.has(parameter)) {
 			paramInfo.set(parameter, {});
 		}
+		// Add/override the property
 		Object.assign(paramInfo.get(parameter), info);
 	}
 
@@ -378,6 +354,9 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		super(driver, options);
 		const parameter = this.payload[0];
 		this._valueSize = this.payload[1] & 0b111;
+		// Ensure we received a valid report
+		validatePayload(this._valueSize >= 1 && this._valueSize <= 4);
+
 		const value = parseValue(
 			this.payload.slice(2),
 			this._valueSize,
@@ -388,7 +367,10 @@ export class ConfigurationCCReport extends ConfigurationCC {
 				ValueFormat.SignedInteger,
 		);
 		this.values = [parameter, value];
+		// Store the key value pair in the value DB
 		this.persistValues();
+		// And remember the parameter size
+		this.extendParamInformation(parameter, { valueSize: this._valueSize });
 	}
 
 	@ccKeyValuePair()
@@ -1010,29 +992,25 @@ export class ConfigurationCCDefaultReset extends ConfigurationCC {
 	}
 }
 
-function isSafeValue(
+export function isSafeValue(
 	value: number,
 	size: 1 | 2 | 4,
 	format: ValueFormat,
 ): boolean {
-	let min: number;
-	let max: number;
+	let minSize: number | undefined;
 	switch (format) {
 		case ValueFormat.SignedInteger:
-			const half = 1 << (8 * size - 1);
-			min = -half;
-			max = half - 1;
+			minSize = getMinIntegerSize(value, true);
 			break;
 		case ValueFormat.UnsignedInteger:
 		case ValueFormat.Enumerated:
-			min = 0;
-			max = 1 << (8 * size);
+			minSize = getMinIntegerSize(value, false);
 			break;
 		case ValueFormat.BitField:
 		default:
 			throw new Error("not implemented");
 	}
-	return value >= min && value <= max;
+	return minSize != undefined && size >= minSize;
 }
 
 /** Interprets values from the payload depending on the value format */

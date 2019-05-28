@@ -4,6 +4,7 @@ const driver = new Driver("COM3").once("driver ready", async () => {
 	node.keepAwake = true;
 	node.once("interview completed", async () => {
 		await node.commandClasses.Configuration.scanParameters();
+		console.error("scan completed");
 	});
 });
 driver.start();
