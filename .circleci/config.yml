@@ -64,6 +64,7 @@ jobs:
 
         steps:
             - checkout
+            - run: npm i commitlint-circle
             - run:
                   name: Lint commits
                   command: npx commitlint-circle
