@@ -322,4 +322,45 @@ describe("lib/node/ValueDB => ", () => {
 			expect(actual).toContainAllValues(expected);
 		});
 	});
+
+	describe("hasValue()", () => {
+		beforeEach(() => createValueDB());
+
+		it("should return false if no value is stored for the same combination of CC, endpoint and propertyName", () => {
+			const tests = [
+				{
+					cc: CommandClasses.Basic,
+					endpoint: undefined,
+					propertyName: "foo",
+					value: "1",
+				},
+				{
+					cc: CommandClasses.Basic,
+					endpoint: 2,
+					propertyName: "foo",
+					value: "2",
+				},
+				{
+					cc: CommandClasses.Basic,
+					endpoint: undefined,
+					propertyName: "FOO",
+					value: "3",
+				},
+				{
+					cc: CommandClasses.Basic,
+					endpoint: 2,
+					propertyName: "FOO",
+					value: "4",
+				},
+			];
+
+			for (const { cc, endpoint, propertyName, value } of tests) {
+				expect(
+					valueDB.hasValue(cc, endpoint, propertyName),
+				).toBeFalse();
+				valueDB.setValue(cc, endpoint, propertyName, value);
+				expect(valueDB.hasValue(cc, endpoint, propertyName)).toBeTrue();
+			}
+		});
+	});
 });

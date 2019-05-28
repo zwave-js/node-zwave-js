@@ -171,6 +171,23 @@ export class ValueDB extends EventEmitter {
 		return this._db.get(key);
 	}
 
+	/**
+	 * Checks if a value for a given property of a given CommandClass exists in this ValueDB
+	 * @param cc The command class the value belongs to
+	 * @param endpoint The optional endpoint the value belongs to
+	 * @param propertyName The property name the value belongs to
+	 * @param propertyKey (optional) The sub-property to access
+	 */
+	public hasValue(
+		cc: CommandClasses,
+		endpoint: number | undefined,
+		propertyName: string,
+		propertyKey?: number | string,
+	): boolean {
+		const key = getValueKey(cc, endpoint, propertyName, propertyKey);
+		return this._db.has(key);
+	}
+
 	public getValues(
 		forCC: CommandClasses,
 	): {
