@@ -5,269 +5,279 @@
 
 # Define the used images
 node6: &node6
-  working_directory: &workdir_node6 ~/node-zwave-js/node6
-  docker:
-    - image: circleci/node:6
+    working_directory: &workdir_node6 ~/node-zwave-js/node6
+    docker:
+        - image: circleci/node:6
 
 node8: &node8
-  working_directory: &workdir_node8 ~/node-zwave-js/node8
-  docker:
-    - image: circleci/node:8
+    working_directory: &workdir_node8 ~/node-zwave-js/node8
+    docker:
+        - image: circleci/node:8
 
 node10: &node10
-  working_directory: &workdir_node10 ~/node-zwave-js/node10
-  docker:
-    - image: circleci/node:10
+    working_directory: &workdir_node10 ~/node-zwave-js/node10
+    docker:
+        - image: circleci/node:10
 
 # use "latest" for lint and publish
 latest: &latest
-  working_directory: &workdir_latest ~/node-zwave-js/latest
-  docker:
-    - image: circleci/node:latest
+    working_directory: &workdir_latest ~/node-zwave-js/latest
+    docker:
+        - image: circleci/node:latest
 
 # some job filters
 tags_and_branches: &tags_and_branches
-  filters:
-    tags:
-      only: /^v.*/
+    filters:
+        tags:
+            only: /^v.*/
 
 only_tags: &only_tags
-  filters:
-    tags:
-      only: /^v.*/
-    branches:
-      ignore: /.*/
+    filters:
+        tags:
+            only: /^v.*/
+        branches:
+            ignore: /.*/
 
 # Which files to preserve between jobs
 whitelist: &whitelist
-  paths:
-    - build/*
-    - node_modules/*
-    - src/*
-    - test/*
-    - coverage/*
-    - .fimbullinter.yaml
-    - .npmignore
-    - .wotanrc.yaml
-    - jest.config.js
-    - package.json
-    - README.md
-    - tsconfig.json
-    - tsconfig.*.json
-    - tslint.json
+    paths:
+        - build/*
+        - node_modules/*
+        - src/*
+        - test/*
+        - coverage/*
+        - .fimbullinter.yaml
+        - .npmignore
+        - .wotanrc.yaml
+        - jest.config.js
+        - package.json
+        - README.md
+        - tsconfig.json
+        - tsconfig.*.json
+        - tslint.json
 
 version: 2
 jobs:
-# ----------------------------------------------------
-  test_node6:
-    <<: *node6
+    # ----------------------------------------------------
+    commitlint:
+        <<: *latest
 
-    steps:
-      - checkout
+        steps:
+            - checkout
+            - run:
+                  name: Lint commits
+                  command: npx commitlint-circle
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-node6-{{ checksum "package.json" }}
+    # ----------------------------------------------------
+    test_node6:
+        <<: *node6
 
-      - run:
-          name: Remove unnecessary Dependencies
-          command: npm ls || true ; npm prune
-      - run:
-          name: Install Dependencies
-          command: npm install
+        steps:
+            - checkout
 
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-node6-{{ checksum "package.json" }}
+            # Download and cache dependencies
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-node6-{{ checksum "package.json" }}
 
-      - run:
-          name: Run component tests
-          command: npm run test:ts
+            - run:
+                  name: Remove unnecessary Dependencies
+                  command: npm ls || true ; npm prune
+            - run:
+                  name: Install Dependencies
+                  command: npm install
 
-# ----------------------------------------------------
-  test_node8:
-    <<: *node8
+            - save_cache:
+                  paths:
+                      - node_modules
+                  key: v1-dependencies-node6-{{ checksum "package.json" }}
 
-    steps:
-      - checkout
+            - run:
+                  name: Run component tests
+                  command: npm run test:ts
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-node8-{{ checksum "package.json" }}
+    # ----------------------------------------------------
+    test_node8:
+        <<: *node8
 
-      - run:
-          name: Remove unnecessary Dependencies
-          command: npm ls || true ; npm prune
-      - run:
-          name: Install Dependencies
-          command: npm install
+        steps:
+            - checkout
 
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-node8-{{ checksum "package.json" }}
+            # Download and cache dependencies
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-node8-{{ checksum "package.json" }}
 
-      - run:
-          name: Run component tests
-          command: npm run test:ts
+            - run:
+                  name: Remove unnecessary Dependencies
+                  command: npm ls || true ; npm prune
+            - run:
+                  name: Install Dependencies
+                  command: npm install
 
-# ----------------------------------------------------
-  test_node10:
-    <<: *node10
+            - save_cache:
+                  paths:
+                      - node_modules
+                  key: v1-dependencies-node8-{{ checksum "package.json" }}
 
-    steps:
-      - checkout
+            - run:
+                  name: Run component tests
+                  command: npm run test:ts
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-node10-{{ checksum "package.json" }}
+    # ----------------------------------------------------
+    test_node10:
+        <<: *node10
 
-      - run:
-          name: Remove unnecessary Dependencies
-          command: npm ls || true ; npm prune
-      - run:
-          name: Install Dependencies
-          command: npm install
+        steps:
+            - checkout
 
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-node10-{{ checksum "package.json" }}
+            # Download and cache dependencies
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-node10-{{ checksum "package.json" }}
 
-      - run:
-          name: Run component tests
-          command: npm run test:ts
+            - run:
+                  name: Remove unnecessary Dependencies
+                  command: npm ls || true ; npm prune
+            - run:
+                  name: Install Dependencies
+                  command: npm install
 
-# ----------------------------------------------------
-  test_latest:
-    <<: *latest
+            - save_cache:
+                  paths:
+                      - node_modules
+                  key: v1-dependencies-node10-{{ checksum "package.json" }}
 
-    steps:
-      - checkout
+            - run:
+                  name: Run component tests
+                  command: npm run test:ts
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v2-dependencies-latest-{{ checksum "package.json" }}
+    # ----------------------------------------------------
+    test_latest:
+        <<: *latest
 
-      - run:
-          name: Remove unnecessary Dependencies
-          command: npm ls || true ; npm prune
-      - run:
-          name: Install Dependencies
-          command: npm install
+        steps:
+            - checkout
 
-      - save_cache:
-          paths:
-            - node_modules
-          key: v2-dependencies-latest-{{ checksum "package.json" }}
+            # Download and cache dependencies
+            - restore_cache:
+                  keys:
+                      - v2-dependencies-latest-{{ checksum "package.json" }}
 
-      # on latest also lint the code
-      - run:
-          name: Lint TypeScript code
-          command: npm run lint
+            - run:
+                  name: Remove unnecessary Dependencies
+                  command: npm ls || true ; npm prune
+            - run:
+                  name: Install Dependencies
+                  command: npm install
 
-      - run:
-          name: Run component tests
-          command: npm run test:ts
+            - save_cache:
+                  paths:
+                      - node_modules
+                  key: v2-dependencies-latest-{{ checksum "package.json" }}
 
-      # persist the build files, so we can pick them up in the deploy job
-      - persist_to_workspace:
-          root: *workdir_latest
-          <<: *whitelist
+            # on latest also lint the code
+            - run:
+                  name: Lint TypeScript code
+                  command: npm run lint
 
-# ----------------------------------------------------
-# generates a clean build of the TypeScript sources
-# to make sure there were no leftover build files
-  coverage:
-    <<: *latest
+            - run:
+                  name: Run component tests
+                  command: npm run test:ts
 
-    steps:
-      - attach_workspace:
-          at: *workdir_latest
+            # persist the build files, so we can pick them up in the deploy job
+            - persist_to_workspace:
+                  root: *workdir_latest
+                  <<: *whitelist
 
-      - run:
-          name: Generate coverage report
-          command: npm run coverage
+    # ----------------------------------------------------
+    # generates a clean build of the TypeScript sources
+    # to make sure there were no leftover build files
+    coverage:
+        <<: *latest
 
-      - run:
-          name: Upload it to coveralls.io
-          command: if [[ $CIRCLE_BRANCH == pull* ]]; then echo "Skipping coverage upload for PR builds"; else COVERALLS_SERVICE_NAME="CircleCI" COVERALLS_SERVICE_JOB_ID="$CIRCLE_BUILD_NUM" npm run coveralls; fi
+        steps:
+            - attach_workspace:
+                  at: *workdir_latest
 
-# ----------------------------------------------------
-# generates a clean build of the TypeScript sources
-# to make sure there were no leftover build files
-  build:
-    <<: *latest
+            - run:
+                  name: Generate coverage report
+                  command: npm run coverage
 
-    steps:
-      - attach_workspace:
-          at: *workdir_latest
+            - run:
+                  name: Upload it to coveralls.io
+                  command: if [[ $CIRCLE_BRANCH == pull* ]]; then echo "Skipping coverage upload for PR builds"; else COVERALLS_SERVICE_NAME="CircleCI" COVERALLS_SERVICE_JOB_ID="$CIRCLE_BUILD_NUM" npm run coveralls; fi
 
-      - run:
-          name: Clean previous builds
-          command: npm run prebuild
+    # ----------------------------------------------------
+    # generates a clean build of the TypeScript sources
+    # to make sure there were no leftover build files
+    build:
+        <<: *latest
 
-      - run:
-          name: Build the source files
-          command: npm run build
+        steps:
+            - attach_workspace:
+                  at: *workdir_latest
 
-      - persist_to_workspace:
-          root: *workdir_latest
-          <<: *whitelist
+            - run:
+                  name: Clean previous builds
+                  command: npm run prebuild
 
-# ----------------------------------------------------
-# Deploys the final package to NPM
-  deploy:
-    <<: *latest
+            - run:
+                  name: Build the source files
+                  command: npm run build
 
-    steps:
-      - attach_workspace:
-          at: *workdir_latest
+            - persist_to_workspace:
+                  root: *workdir_latest
+                  <<: *whitelist
 
-      - run:
-          name: Login to npm
-          command: npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
-      - run:
-          name: Publish package to npm
-          command: npm publish
+    # ----------------------------------------------------
+    # Deploys the final package to NPM
+    deploy:
+        <<: *latest
+
+        steps:
+            - attach_workspace:
+                  at: *workdir_latest
+
+            - run:
+                  name: Login to npm
+                  command: npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
+            - run:
+                  name: Publish package to npm
+                  command: npm publish
 
 # ----------------------------------------------------
 # Fit it all together
 workflows:
-  version: 2
+    version: 2
 
-  test-and-deploy:
-    jobs:
-      # - test_node6:
-      #     <<: *tags_and_branches
-      - test_node8:
-          <<: *tags_and_branches
-      - test_node10:
-          <<: *tags_and_branches
-      - test_latest:
-          <<: *tags_and_branches
+    test-and-deploy:
+        jobs:
+            # - test_node6:
+            #     <<: *tags_and_branches
+            - test_node8:
+                  <<: *tags_and_branches
+            - test_node10:
+                  <<: *tags_and_branches
+            - test_latest:
+                  <<: *tags_and_branches
 
-      - coverage:
-          requires:
-            - test_latest
-          <<: *tags_and_branches
+            - coverage:
+                  requires:
+                      - test_latest
+                  <<: *tags_and_branches
 
-      # build only on tagged builds and if all tests succeeded
-      - build:
-          requires:
-            # - test_node6
-            - test_node8
-            - test_node10
-            - test_latest
-          <<: *only_tags
+            # build only on tagged builds and if all tests succeeded
+            - build:
+                  requires:
+                      # - test_node6
+                      - test_node8
+                      - test_node10
+                      - test_latest
+                  <<: *only_tags
 
-      # deploy only on tagged builds and if all tests succeeded
-      - deploy:
-          requires:
-            - build
-          <<: *only_tags
+            # deploy only on tagged builds and if all tests succeeded
+            - deploy:
+                  requires:
+                      - build
+                  <<: *only_tags
