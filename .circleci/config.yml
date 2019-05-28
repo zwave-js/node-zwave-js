@@ -64,10 +64,22 @@ jobs:
 
         steps:
             - checkout
-            - run: npm i commitlint-circle
+
+            # Download and cache dependencies
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-node8-{{ checksum "package.json" }}
+
+            - run:
+                  name: Remove unnecessary Dependencies
+                  command: npm ls || true ; npm prune
+            - run:
+                  name: Install Dependencies
+                  command: npm install
+
             - run:
                   name: Lint commits
-                  command: npx commitlint-circle
+                  command: npm run commitlint-circle
 
     # ----------------------------------------------------
     test_node8:
