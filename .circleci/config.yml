@@ -59,16 +59,6 @@ whitelist: &whitelist
 version: 2
 jobs:
     # ----------------------------------------------------
-    commitlint:
-        <<: *latest
-
-        steps:
-            - checkout
-            - run:
-                  name: Lint commits
-                  command: npx commitlint-circle
-
-    # ----------------------------------------------------
     test_node6:
         <<: *node6
 
