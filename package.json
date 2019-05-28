@@ -91,7 +91,8 @@
     "release": "ts-node maintenance/release.ts",
     "implemented_ccs": "ts-node maintenance/implemented_ccs.ts",
     "usbdebug": "cmd.exe /c \"test\\usbdebug.bat\"",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "commitlint-circle": "commitlint-circle"
   },
   "readme": "README.md",
   "husky": {
