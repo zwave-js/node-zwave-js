@@ -43,7 +43,6 @@
     "ansi-colors": "^3.2.4",
     "colors": "^1.3.3",
     "commitizen": "^3.1.1",
-    "commitlint-circle": "^1.0.0",
     "coveralls": "^3.0.3",
     "cz-conventional-changelog": "^2.1.0",
     "eslint": "^5.16.0",
@@ -55,6 +54,7 @@
     "jest-extended": "^0.11.1",
     "prettier": "^1.17.0",
     "rimraf": "^2.6.3",
+    "semantic-commitlint": "^1.3.2",
     "semver": "^6.0.0",
     "supports-color": "^6.1.0",
     "ts-jest": "^24.0.0",
@@ -91,7 +91,8 @@
     "release": "ts-node maintenance/release.ts",
     "implemented_ccs": "ts-node maintenance/implemented_ccs.ts",
     "usbdebug": "cmd.exe /c \"test\\usbdebug.bat\"",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "commitlint": "semantic-commitlint"
   },
   "readme": "README.md",
   "husky": {

@@ -64,10 +64,10 @@ jobs:
 
         steps:
             - checkout
-            - run: npm i commitlint-circle
+            - run: npm i --only=dev
             - run:
                   name: Lint commits
-                  command: npx commitlint-circle
+                  command: npm run commitlint -- --ci
 
     # ----------------------------------------------------
     test_node8:
