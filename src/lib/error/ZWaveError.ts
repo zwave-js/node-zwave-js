@@ -4,6 +4,9 @@ export enum ZWaveErrorCodes {
 	PacketFormat_Truncated,
 	PacketFormat_Invalid,
 	PacketFormat_Checksum,
+	// This differs from the above three. It means that the packet has a valid format and checksum,
+	// but the data does not match the expectations. This error does not reset the Z-Wave stack
+	PacketFormat_InvalidPayload,
 
 	Driver_Reset,
 	Driver_Destroyed,

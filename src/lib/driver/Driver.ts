@@ -66,7 +66,7 @@ const defaultOptions: ZWaveOptions = {
 		ack: 1000,
 		byte: 150,
 		// TODO: This should be dependent on the network's current RTT
-		configurationGetSet: 1000,
+		configurationGetSet: 3000,
 	},
 	skipInterview: false,
 };
@@ -555,12 +555,13 @@ export class Driver extends EventEmitter implements IDriver {
 				return;
 			}
 
-			let msg: Message;
+			let msg: Message | undefined;
 			let bytesRead: number;
 			try {
 				msg = Message.from(this, this.receiveBuffer);
 				bytesRead = msg.bytesRead;
 			} catch (e) {
+				let handled = false;
 				if (e instanceof ZWaveError) {
 					if (
 						e.code === ZWaveErrorCodes.PacketFormat_Invalid ||
@@ -574,20 +575,32 @@ export class Driver extends EventEmitter implements IDriver {
 					) {
 						log("controller", e.message, "error");
 						return;
+					} else if (
+						e.code === ZWaveErrorCodes.PacketFormat_InvalidPayload
+					) {
+						log(
+							"controller",
+							`Message with invalid data received. Dropping it...`,
+							"warn",
+						);
+						handled = true;
+						bytesRead = Message.getMessageLength(
+							this.receiveBuffer,
+						);
 					}
 				}
 				// pass it through;
-				throw e;
+				if (!handled) throw e;
 			}
 			// and cut the read bytes from our buffer
 			this.receiveBuffer = Buffer.from(
-				this.receiveBuffer.slice(bytesRead),
+				this.receiveBuffer.slice(bytesRead!),
 			);
 
 			// all good, send ACK
 			this.send(MessageHeaders.ACK);
-			// and handle the response
-			this.handleMessage(msg);
+			// and handle the response (if it could be decoded)
+			if (msg) this.handleMessage(msg);
 
 			break;
 		}
