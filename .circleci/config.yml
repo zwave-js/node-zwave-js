@@ -58,15 +58,6 @@ whitelist: &whitelist
 
 version: 2
 jobs:
-    # ----------------------------------------------------
-    commitlint:
-        <<: *latest
-
-        steps:
-            - checkout
-            - run: npx semantic-commitlint -- --ci
-
-    # ----------------------------------------------------
     test_node8:
         <<: *node8
 
@@ -155,6 +146,11 @@ jobs:
                   name: Run component tests
                   command: npm run test:ts
 
+            # and the commits
+            - run:
+                  name: Lint commit messages
+                  command: npm run commitlint -- --ci
+
             # persist the build files, so we can pick them up in the deploy job
             - persist_to_workspace:
                   root: *workdir_latest
@@ -223,20 +219,11 @@ workflows:
 
     test-and-deploy:
         jobs:
-            - commitlint:
-                  <<: *tags_and_branches
-
             - test_node8:
-                  requires:
-                      - commitlint
                   <<: *tags_and_branches
             - test_node10:
-                  requires:
-                      - commitlint
                   <<: *tags_and_branches
             - test_latest:
-                  requires:
-                      - commitlint
                   <<: *tags_and_branches
 
             - coverage:
