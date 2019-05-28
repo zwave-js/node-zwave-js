@@ -64,21 +64,7 @@ jobs:
 
         steps:
             - checkout
-            # Download and cache dependencies
-            - restore_cache:
-                  keys:
-                      - v2-dependencies-latest-{{ checksum "package.json" }}
-
-            - run:
-                  name: Remove unnecessary Dependencies
-                  command: npm ls || true ; npm prune
-            - run:
-                  name: Install Dependencies
-                  command: npm install
-
-            - run:
-                  name: Lint commits
-                  command: npm run commitlint -- --ci
+            - run: npx semantic-commitlint -- --ci
 
     # ----------------------------------------------------
     test_node8:
