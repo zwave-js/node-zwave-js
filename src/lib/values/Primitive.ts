@@ -50,15 +50,28 @@ function getPrecision(num: number): number {
 	return p;
 }
 
+export function getMinIntegerSize(
+	value: number,
+	signed: boolean,
+): 1 | 2 | 4 | undefined {
+	if (signed) {
+		if (value >= -128 && value <= 127) return 1;
+		else if (value >= -32768 && value <= 32767) return 2;
+		else if (value >= -2147483648 && value <= 2147483647) return 4;
+	} else if (value >= 0) {
+		if (value <= 0xff) return 1;
+		if (value <= 0xffff) return 2;
+		if (value <= 0xffffffff) return 4;
+	}
+	// Not a valid size
+}
+
 /** Encodes a floating point value with a scale into a buffer */
 export function encodeFloatWithScale(value: number, scale: number): Buffer {
 	const precision = Math.min(getPrecision(value), 7);
 	value = Math.round(value * Math.pow(10, precision));
-	let size: number;
-	if (value >= -128 && value <= 127) size = 1;
-	else if (value >= -32768 && value <= 32767) size = 2;
-	else if (value >= -2147483648 && value <= 2147483647) size = 4;
-	else {
+	const size: number | undefined = getMinIntegerSize(value, true);
+	if (size == undefined) {
 		throw new ZWaveError(
 			`Cannot encode the value ${value} because its too large or too small to fit into 4 bytes`,
 			ZWaveErrorCodes.Arithmetic,
