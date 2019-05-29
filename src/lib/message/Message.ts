@@ -74,8 +74,7 @@ export class Message {
 				);
 			}
 			// check the length again, this time with the transmitted length
-			const remainingLength = payload[1];
-			const messageLength = remainingLength + 2;
+			const messageLength = Message.getMessageLength(payload);
 			if (payload.length < messageLength) {
 				throw new ZWaveError(
 					"Could not deserialize the message because it was truncated",
@@ -161,15 +160,19 @@ export class Message {
 		return ret;
 	}
 
+	/** Returns the number of bytes the first message in the buffer occupies */
+	public static getMessageLength(data: Buffer): number {
+		const remainingLength = data[1];
+		return remainingLength + 2;
+	}
+
 	/**
 	 * Checks if there's enough data in the buffer to deserialize
 	 */
 	public static isComplete(data?: Buffer): boolean {
 		if (!data || !data.length || data.length < 5) return false; // not yet
 
-		// check the length again, this time with the transmitted length
-		const remainingLength = data[1];
-		const messageLength = remainingLength + 2;
+		const messageLength = Message.getMessageLength(data);
 		if (data.length < messageLength) return false; // not yet
 
 		return true; // probably, but the checksum may be wrong
@@ -191,9 +194,7 @@ export class Message {
 
 	/** Returns the slice of data which represents the message payload */
 	public static extractPayload(data: Buffer): Buffer {
-		// we assume the message has been tested already for completeness
-		const remainingLength = data[1];
-		const messageLength = remainingLength + 2;
+		const messageLength = Message.getMessageLength(data);
 		const payloadLength = messageLength - 5;
 		return data.slice(4, 4 + payloadLength);
 	}

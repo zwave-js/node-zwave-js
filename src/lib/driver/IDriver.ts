@@ -2,7 +2,7 @@ import { CommandClass } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { ZWaveController } from "../controller/Controller";
 import { Message } from "../message/Message";
-import { SendMessageOptions } from "./Driver";
+import { SendMessageOptions, ZWaveOptions } from "./Driver";
 
 export interface DriverEventCallbacks {
 	"driver ready": () => void;
@@ -13,6 +13,7 @@ export type DriverEvents = Extract<keyof DriverEventCallbacks, string>;
 
 export interface IDriver {
 	controller: ZWaveController | undefined;
+	options: ZWaveOptions;
 
 	getSafeCCVersionForNode(nodeId: number, cc: CommandClasses): number;
 

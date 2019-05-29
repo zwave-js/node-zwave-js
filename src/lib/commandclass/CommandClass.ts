@@ -340,12 +340,12 @@ export class CommandClass {
 	/** Which variables should be persisted when requested */
 	private _ccValueNames = new Set<string>();
 	/** Creates a value that will be stored in the valueDB alongside with the ones marked with `@ccValue()` */
-	public createValue(name: keyof this): void {
+	public registerValue(name: keyof this): void {
 		this._ccValueNames.add(name as string);
 	}
-	public createValues(...names: (keyof this)[]): void {
+	public registerValues(...names: (keyof this)[]): void {
 		for (const name of names) {
-			this.createValue(name);
+			this.registerValue(name);
 		}
 	}
 
@@ -447,7 +447,8 @@ export class CommandClass {
 			if (
 				val.propertyName in this ||
 				ccValueNames.has(val.propertyName) ||
-				keyValuePairNames.has(val.propertyName)
+				keyValuePairNames.has(val.propertyName) ||
+				this._ccValueNames.has(val.propertyName)
 			) {
 				let valueToSet = val.value;
 				// Properties defined as a map must be converted from an object to a map
@@ -505,6 +506,7 @@ export const METADATA_ccValues = Symbol("ccValues");
 export const METADATA_ccKeyValuePairs = Symbol("ccKeyValuePairs");
 export const METADATA_version = Symbol("version");
 export const METADATA_API = Symbol("API");
+export const METADATA_APIMap = Symbol("APIMap");
 /* eslint-enable @typescript-eslint/camelcase */
 
 export interface Constructable<T extends CommandClass> {
@@ -519,6 +521,7 @@ type APIConstructor = new (driver: IDriver, node: ZWaveNode) => CCAPI;
 
 type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
 type CCCommandMap = Map<string, Constructable<CommandClass>>;
+type APIMap = Map<CommandClasses, APIConstructor>;
 /**
  * A predicate function to test if a received CC matches to the sent CC
  */
@@ -964,6 +967,12 @@ export function API(cc: CommandClasses): ClassDecorator {
 		);
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_API, cc, apiClass);
+
+		// also store a map in the CCAPI metadata for lookup.
+		const map: APIMap =
+			Reflect.getMetadata(METADATA_APIMap, CCAPI) || new Map();
+		map.set(cc, (apiClass as any) as APIConstructor);
+		Reflect.defineMetadata(METADATA_APIMap, map, CCAPI);
 	};
 }
 
@@ -971,9 +980,9 @@ export function API(cc: CommandClasses): ClassDecorator {
  * Retrieves the implemented version defined for a Z-Wave command class
  */
 export function getAPI(cc: CommandClasses): APIConstructor | undefined {
-	// retrieve the current metadata
-	let ret: APIConstructor | undefined;
-	ret = Reflect.getMetadata(METADATA_API, cc);
+	// Retrieve the constructor map from the CCAPI class
+	const map: APIMap | undefined = Reflect.getMetadata(METADATA_APIMap, CCAPI);
+	const ret = map && map.get(cc);
 
 	log(
 		"protocol",

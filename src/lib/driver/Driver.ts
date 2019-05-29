@@ -47,6 +47,11 @@ export interface ZWaveOptions {
 		ack: number;
 		/** not sure */
 		byte: number;
+		/**
+		 * How long to wait for a ConfigurationCCReport after sending a ConfigurationCCGet
+		 * or an ACK after a ConfigurationCCSet.
+		 */
+		configurationGetSet: number;
 	};
 	/**
 	 * @internal
@@ -60,6 +65,8 @@ const defaultOptions: ZWaveOptions = {
 	timeouts: {
 		ack: 1000,
 		byte: 150,
+		// TODO: This should be dependent on the network's current RTT
+		configurationGetSet: 3000,
 	},
 	skipInterview: false,
 };
@@ -83,6 +90,27 @@ function applyDefaultOptions(
 		}
 	}
 	return target;
+}
+
+function checkOptions(options: ZWaveOptions): void {
+	if (options.timeouts.ack < 1) {
+		throw new ZWaveError(
+			`The ACK timeout must be positive!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (options.timeouts.byte < 1) {
+		throw new ZWaveError(
+			`The BYTE timeout must be positive!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (options.timeouts.configurationGetSet < 1) {
+		throw new ZWaveError(
+			`The configuration get timeout must be positive!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
 }
 
 export type RequestHandler<T extends Message = Message> = (msg: T) => boolean;
@@ -163,6 +191,8 @@ export class Driver extends EventEmitter implements IDriver {
 			options,
 			defaultOptions,
 		) as ZWaveOptions;
+		// And make sure they contain valid values
+		checkOptions(this.options);
 
 		// register some cleanup handlers in case the program doesn't get closed cleanly
 		this._cleanupHandler = this._cleanupHandler.bind(this);
@@ -525,12 +555,13 @@ export class Driver extends EventEmitter implements IDriver {
 				return;
 			}
 
-			let msg: Message;
+			let msg: Message | undefined;
 			let bytesRead: number;
 			try {
 				msg = Message.from(this, this.receiveBuffer);
 				bytesRead = msg.bytesRead;
 			} catch (e) {
+				let handled = false;
 				if (e instanceof ZWaveError) {
 					if (
 						e.code === ZWaveErrorCodes.PacketFormat_Invalid ||
@@ -544,20 +575,32 @@ export class Driver extends EventEmitter implements IDriver {
 					) {
 						log("controller", e.message, "error");
 						return;
+					} else if (
+						e.code === ZWaveErrorCodes.PacketFormat_InvalidPayload
+					) {
+						log(
+							"controller",
+							`Message with invalid data received. Dropping it...`,
+							"warn",
+						);
+						handled = true;
+						bytesRead = Message.getMessageLength(
+							this.receiveBuffer,
+						);
 					}
 				}
 				// pass it through;
-				throw e;
+				if (!handled) throw e;
 			}
 			// and cut the read bytes from our buffer
 			this.receiveBuffer = Buffer.from(
-				this.receiveBuffer.slice(bytesRead),
+				this.receiveBuffer.slice(bytesRead!),
 			);
 
 			// all good, send ACK
 			this.send(MessageHeaders.ACK);
-			// and handle the response
-			this.handleMessage(msg);
+			// and handle the response (if it could be decoded)
+			if (msg) this.handleMessage(msg);
 
 			break;
 		}
@@ -1077,9 +1120,11 @@ export class Driver extends EventEmitter implements IDriver {
 			)}`,
 			"debug",
 		);
-		this.currentTransaction!.promise.resolve(
-			this.currentTransaction!.response,
-		);
+		const { promise, response, timeoutInstance } = this.currentTransaction!;
+		// Cancel any running timers
+		if (timeoutInstance) clearTimeout(timeoutInstance);
+		// and resolve the current transaction
+		promise.resolve(response);
 		this.currentTransaction = undefined;
 		// If a sleeping node has no messages pending, send it back to sleep
 		if (
@@ -1109,7 +1154,11 @@ export class Driver extends EventEmitter implements IDriver {
 			`rejecting current transaction because "${reason.message}"`,
 			"debug",
 		);
-		this.currentTransaction!.promise.reject(reason);
+		const { promise, timeoutInstance } = this.currentTransaction!;
+		// Cancel any running timers
+		if (timeoutInstance) clearTimeout(timeoutInstance);
+		// and reject the current transaction
+		promise.reject(reason);
 		this.currentTransaction = undefined;
 		// and see if there are messages pending
 		if (resumeQueue) {
@@ -1293,16 +1342,15 @@ export class Driver extends EventEmitter implements IDriver {
 			this.doSend(data);
 			// If the transaction has a timeout configured, start it
 			if (this.currentTransaction.timeout) {
-				setTimeout(
-					() =>
-						this.rejectCurrentTransaction(
-							new ZWaveError(
-								"The transaction timed out",
-								ZWaveErrorCodes.Controller_MessageTimeout,
-							),
+				this.currentTransaction.timeoutInstance = setTimeout(() => {
+					if (!this.currentTransaction) return;
+					this.rejectCurrentTransaction(
+						new ZWaveError(
+							"The transaction timed out",
+							ZWaveErrorCodes.Controller_MessageTimeout,
 						),
-					this.currentTransaction.timeout,
-				);
+					);
+				}, this.currentTransaction.timeout);
 			}
 
 			// to avoid any deadlocks we didn't think of, re-call this later

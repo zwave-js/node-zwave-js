@@ -1,14 +1,27 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { isConsecutiveArray } from "../util/misc";
-import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
+import { log } from "../util/logger";
 import {
+	isConsecutiveArray,
+	stripUndefined,
+	validatePayload,
+} from "../util/misc";
+import {
+	encodeBitMask,
+	getMinIntegerSize,
+	Maybe,
+	parseBitMask,
+} from "../values/Primitive";
+import { CCAPI } from "./API";
+import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccKeyValuePair,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	CommandClassOptions,
 	DynamicCCResponse,
 	expectedCCResponse,
 	getCommandClass,
@@ -41,7 +54,7 @@ export enum ValueFormat {
 }
 
 export interface ParameterInfo {
-	minValue?: number;
+	minValue?: ConfigValue;
 	maxValue?: ConfigValue;
 	defaultValue?: ConfigValue;
 	valueSize?: number; // TODO: Use this
@@ -51,20 +64,270 @@ export interface ParameterInfo {
 	noBulkSupport?: boolean;
 	isAdvanced?: boolean;
 	isReadonly?: boolean;
+	// We cannot detect write-only parameters by scanning,
+	// But some parameters are indeed write-only. We have to rely
+	// on configuration to support this
+	isWriteonly?: boolean;
 	requiresReInclusion?: boolean;
 }
 
 // A configuration value is either a single number or a bit map
 export type ConfigValue = number | Set<number>;
 
-// TODO: * Scan available config params (V1-V2)
-//       * or use PropertiesGet (V3+)
+export class ConfigurationCCError extends ZWaveError {
+	public constructor(
+		public readonly message: string,
+		public readonly code: ZWaveErrorCodes,
+		public readonly argument: any,
+	) {
+		super(message, code);
+
+		// We need to set the prototype explicitly
+		Object.setPrototypeOf(this, ConfigurationCCError.prototype);
+	}
+}
+
+@API(CommandClasses.Configuration)
+export class ConfigurationCCAPI extends CCAPI {
+	/**
+	 * Requests the current value of a given config parameter from the device.
+	 * This may timeout and return `undefined` if the node does not respond.
+	 * If the node replied with a different parameter number, a `ConfigurationCCError`
+	 * is thrown with the `argument` property set to the reported parameter number.
+	 */
+	public async get(parameter: number): Promise<ConfigValue | undefined> {
+		const cc = new ConfigurationCCGet(this.driver, {
+			nodeId: this.node.id,
+			parameter,
+		});
+		try {
+			const response = (await this.driver.sendCommand<
+				ConfigurationCCReport
+			>(cc, {
+				timeout: this.driver.options.timeouts.configurationGetSet,
+			}))!;
+			// Nodes may respond with a different parameter, e.g. if we
+			// requested a non-existing one
+			if (response.parameter === parameter) return response.value;
+			log(
+				"controller",
+				`Received unexpected ConfigurationReport (param = ${
+					response.parameter
+				}, value = ${response.value})`,
+				"error",
+			);
+			throw new ConfigurationCCError(
+				`The first existing parameter on this node is ${
+					response.parameter
+				}`,
+				ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber,
+				response.parameter,
+			);
+		} catch (e) {
+			if (
+				e instanceof ZWaveError &&
+				e.code === ZWaveErrorCodes.Controller_MessageTimeout
+			) {
+				// A timeout has to be expected. We return undefined to
+				// signal that no value was received
+				return undefined;
+			}
+			// This error was unexpected
+			throw e;
+		}
+	}
+
+	/**
+	 * Sets a new value for a given config parameter of the device.
+	 * The return value indicates whether the command succeeded (`true`) or timed out (`false`).
+	 */
+	public async set(
+		parameter: number,
+		value: ConfigValue,
+		valueSize: 1 | 2 | 4,
+	): Promise<boolean> {
+		const cc = new ConfigurationCCSet(this.driver, {
+			nodeId: this.node.id,
+			parameter,
+			value,
+			valueSize,
+		});
+		try {
+			await this.driver.sendCommand(cc, {
+				timeout: this.driver.options.timeouts.configurationGetSet,
+			});
+			return true;
+		} catch (e) {
+			if (
+				e instanceof ZWaveError &&
+				e.code === ZWaveErrorCodes.Controller_MessageTimeout
+			) {
+				// A timeout has to be expected
+				return false;
+			}
+			// This error was unexpected
+			throw e;
+		}
+	}
+
+	/**
+	 * Resets a configuration parameter to its default value.
+	 * The return value indicates whether the command succeeded (`true`) or timed out (`false`).
+	 */
+	public async reset(parameter: number): Promise<boolean> {
+		const cc = new ConfigurationCCSet(this.driver, {
+			nodeId: this.node.id,
+			parameter,
+			resetToDefault: true,
+		});
+		try {
+			await this.driver.sendCommand(cc, {
+				timeout: this.driver.options.timeouts.configurationGetSet,
+			});
+			return true;
+		} catch (e) {
+			if (
+				e instanceof ZWaveError &&
+				e.code === ZWaveErrorCodes.Controller_MessageTimeout
+			) {
+				// A timeout has to be expected
+				return false;
+			}
+			// This error was unexpected
+			throw e;
+		}
+	}
+
+	/** Resets all configuration parameters to their default value */
+	public async resetAll(): Promise<void> {
+		const cc = new ConfigurationCCDefaultReset(this.driver, {
+			nodeId: this.node.id,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
+	/** Scans a V1/V2 node for the existing parameters using get/set commands */
+	private async scanParametersV1V2(): Promise<void> {
+		// TODO: Reduce the priority of the messages
+		log(
+			"controller",
+			`${this.node.logPrefix}Scanning available parameters...`,
+			"debug",
+		);
+		const ccInstance = this.node.createCCInstance<ConfigurationCC>(
+			getCommandClass(this),
+		)!;
+		for (let param = 1; param <= 255; param++) {
+			// Check if the parameter is readable
+			let originalValue: ConfigValue | undefined;
+			log(
+				"controller",
+				`${this.node.logPrefix}  trying param ${param}...`,
+				"debug",
+			);
+			try {
+				originalValue = await this.get(param);
+				if (originalValue != undefined) {
+					log(
+						"controller",
+						`${this.node.logPrefix}  Param ${param}:`,
+						"debug",
+					);
+					log(
+						"controller",
+						`${this.node.logPrefix}    readable  = true`,
+						"debug",
+					);
+					log(
+						"controller",
+						`${this.node.logPrefix}    valueSize = ${
+							ccInstance.getParamInformation(param).valueSize
+						}`,
+						"debug",
+					);
+					log(
+						"controller",
+						`${
+							this.node.logPrefix
+						}    value     = ${originalValue}`,
+						"debug",
+					);
+				}
+			} catch (e) {
+				if (
+					e instanceof ConfigurationCCError &&
+					e.code ===
+						ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber
+				) {
+					// Continue iterating with the next param
+					if (e.argument - 1 > param) param = e.argument - 1;
+					continue;
+				}
+				throw e;
+			}
+		}
+	}
+
+	/** Scans a V3+ node for the existing parameters using PropertiesGet commands */
+	private async scanParametersV3(): Promise<void> {
+		let param = 1;
+		while (param > 0 && param <= 0xffff) {
+			// Request param properties, name and info
+			// The param information is stored automatically on receipt
+			const propCC = new ConfigurationCCPropertiesGet(this.driver, {
+				nodeId: this.node.id,
+				parameter: param,
+			});
+			const propResponse = (await this.driver.sendCommand<
+				ConfigurationCCPropertiesReport
+			>(propCC))!;
+
+			const nameCC = new ConfigurationCCNameGet(this.driver, {
+				nodeId: this.node.id,
+				parameter: param,
+			});
+			await this.driver.sendCommand(nameCC);
+
+			const infoCC = new ConfigurationCCInfoGet(this.driver, {
+				nodeId: this.node.id,
+				parameter: param,
+			});
+			await this.driver.sendCommand(infoCC);
+
+			// Continue with the next parameter
+			// 0 indicates that this was the last parameter
+			param = propResponse.nextParameter;
+		}
+	}
+
+	/**
+	 * This scans the node for the existing parameters. Found parameters will be reported
+	 * through the `value added` and `value updated` events.
+	 *
+	 * WARNING: On nodes implementing V1 and V2, this process may take
+	 * **up to an hour**, depending on the configured timeout.
+	 *
+	 * WARNING: On nodes implementing V2, all parameters after 255 will be ignored.
+	 */
+	public async scanParameters(): Promise<void> {
+		if (this.version <= 2) return this.scanParametersV1V2();
+		return this.scanParametersV3();
+	}
+}
+
 // TODO: Test how the device interprets the default flag (V1-3) (reset all or only the specified)
 
 @commandClass(CommandClasses.Configuration)
 @implementedVersion(4)
 export class ConfigurationCC extends CommandClass {
 	public ccCommand!: ConfigurationCommand;
+
+	public constructor(driver: IDriver, options: CommandClassOptions) {
+		super(driver, options);
+		// In order to (de)serialize the data composed by extendParamInformation,
+		// we need to register a value
+		this.registerValue("paramInformation" as any);
+	}
 
 	public supportsCommand(cmd: ConfigurationCommand): Maybe<boolean> {
 		switch (cmd) {
@@ -80,31 +343,56 @@ export class ConfigurationCC extends CommandClass {
 			case ConfigurationCommand.InfoGet:
 			case ConfigurationCommand.PropertiesGet:
 				return this.version >= 3;
+
+			case ConfigurationCommand.DefaultReset:
+				return this.version >= 4;
 		}
 		return super.supportsCommand(cmd);
 	}
 
-	/** Stores config parameter metadata for this CC's node */
-	// TODO: Actually use this!
-	protected extendParamInformation(
+	/**
+	 * @internal
+	 * Stores config parameter metadata for this CC's node
+	 */
+	public extendParamInformation(
 		parameter: number,
 		info: ParameterInfo,
 	): void {
 		const valueDB = this.getValueDB();
-		const paramInfo = (valueDB.getValue(
+		// Create the map if it does not exist
+		if (
+			!valueDB.hasValue(
+				getCommandClass(this),
+				this.endpoint,
+				"paramInformation",
+			)
+		) {
+			valueDB.setValue(
+				getCommandClass(this),
+				this.endpoint,
+				"paramInformation",
+				new Map(),
+			);
+		}
+		// Retrieve the map
+		const paramInfo = valueDB.getValue(
 			getCommandClass(this),
 			this.endpoint,
 			"paramInformation",
-		) || new Map()) as Map<number, ParameterInfo>;
-
+		) as Map<number, ParameterInfo>;
+		// And make sure it has one entry for this parameter
 		if (!paramInfo.has(parameter)) {
 			paramInfo.set(parameter, {});
 		}
+		// Add/override the property
 		Object.assign(paramInfo.get(parameter), info);
 	}
 
-	/** Returns stored config parameter metadata for this CC's node */
-	protected getParamInformation(parameter: number): ParameterInfo {
+	/**
+	 * @internal
+	 * Returns stored config parameter metadata for this CC's node
+	 */
+	public getParamInformation(parameter: number): ParameterInfo {
 		const valueDB = this.getValueDB();
 		const paramInfo = valueDB.getValue(
 			getCommandClass(this),
@@ -124,6 +412,9 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		super(driver, options);
 		const parameter = this.payload[0];
 		this._valueSize = this.payload[1] & 0b111;
+		// Ensure we received a valid report
+		validatePayload(this._valueSize >= 1 && this._valueSize <= 4);
+
 		const value = parseValue(
 			this.payload.slice(2),
 			this._valueSize,
@@ -134,7 +425,10 @@ export class ConfigurationCCReport extends ConfigurationCC {
 				ValueFormat.SignedInteger,
 		);
 		this.values = [parameter, value];
+		// Store the key value pair in the value DB
 		this.persistValues();
+		// And remember the parameter size
+		this.extendParamInformation(parameter, { valueSize: this._valueSize });
 	}
 
 	@ccKeyValuePair()
@@ -186,12 +480,18 @@ export class ConfigurationCCGet extends ConfigurationCC {
 	}
 }
 
-interface ConfigurationCCSetOptions extends CCCommandOptions {
-	parameter: number;
-	resetToDefault: boolean;
-	valueSize?: number;
-	value?: ConfigValue;
-}
+type ConfigurationCCSetOptions = CCCommandOptions &
+	(
+		| {
+				parameter: number;
+				resetToDefault: true;
+		  }
+		| {
+				parameter: number;
+				resetToDefault?: false;
+				valueSize: number;
+				value: ConfigValue;
+		  });
 
 @CCCommand(ConfigurationCommand.Set)
 export class ConfigurationCCSet extends ConfigurationCC {
@@ -208,19 +508,22 @@ export class ConfigurationCCSet extends ConfigurationCC {
 			);
 		} else {
 			this.parameter = options.parameter;
-			this.resetToDefault = options.resetToDefault;
-			this.valueSize = options.valueSize || 0;
-			this.value = options.value;
+			this.resetToDefault = !!options.resetToDefault;
+			if (!options.resetToDefault) {
+				// TODO: Default to the stored value size
+				this.valueSize = options.valueSize;
+				this.value = options.value;
+			}
 		}
 	}
 
 	public resetToDefault: boolean;
 	public parameter: number;
-	public valueSize: number;
+	public valueSize: number | undefined;
 	public value: ConfigValue | undefined;
 
 	public serialize(): Buffer {
-		const valueSize = this.resetToDefault ? 1 : this.valueSize;
+		const valueSize = this.resetToDefault ? 1 : this.valueSize!;
 		const payloadLength = 2 + valueSize;
 		this.payload = Buffer.alloc(payloadLength, 0);
 		this.payload[0] = this.parameter;
@@ -458,17 +761,19 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		const parameter = this.payload.readUInt16BE(0);
+		this._parameter = this.payload.readUInt16BE(0);
 		this._reportsToFollow = this.payload[2];
-		const name = this.payload.slice(3).toString("utf8");
-		this.name = [parameter, name];
+		this._name = this.payload.slice(3).toString("utf8");
 	}
 
-	@ccKeyValuePair()
-	private name: [number, string];
-
+	private _parameter: number;
 	public get parameter(): number {
-		return this.name[0];
+		return this._parameter;
+	}
+
+	private _name: string;
+	public get name(): string {
+		return this._name;
 	}
 
 	private _reportsToFollow: number;
@@ -480,16 +785,12 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		return this._reportsToFollow > 0;
 	}
 
-	public get parameterName(): string {
-		return this.name[1];
-	}
-
 	public mergePartialCCs(partials: ConfigurationCCNameReport[]): void {
 		// Concat the name
-		this.name[1] = [...partials, this]
-			.map(report => report.parameterName)
+		this._name = [...partials, this]
+			.map(report => report._name)
 			.reduce((prev, cur) => prev + cur, "");
-		this.persistValues();
+		this.extendParamInformation(this.parameter, { name: this.name });
 	}
 }
 
@@ -528,17 +829,19 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		const parameter = this.payload.readUInt16BE(0);
+		this._parameter = this.payload.readUInt16BE(0);
 		this._reportsToFollow = this.payload[2];
-		const info = this.payload.slice(3).toString("utf8");
-		this.info = [parameter, info];
+		this._info = this.payload.slice(3).toString("utf8");
 	}
 
-	@ccKeyValuePair()
-	private info: [number, string];
-
+	private _parameter: number;
 	public get parameter(): number {
-		return this.info[0];
+		return this._parameter;
+	}
+
+	private _info: string;
+	public get info(): string {
+		return this._info;
 	}
 
 	private _reportsToFollow: number;
@@ -550,16 +853,14 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		return this._reportsToFollow > 0;
 	}
 
-	public get parameterInfo(): string {
-		return this.info[1];
-	}
-
 	public mergePartialCCs(partials: ConfigurationCCInfoReport[]): void {
-		// Concat the name
-		this.info[1] = [...partials, this]
-			.map(report => report.parameterInfo)
+		// Concat the info
+		this._info = [...partials, this]
+			.map(report => report._info)
 			.reduce((prev, cur) => prev + cur, "");
-		this.persistValues();
+		this.extendParamInformation(this._parameter, {
+			info: this._info,
+		});
 	}
 }
 
@@ -637,9 +938,23 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			this._isAdvanced = !!(options2 & 0b1);
 			this._noBulkSupport = !!(options2 & 0b10);
 		}
-	}
 
-	// TODO: This is some kind of huge KVP
+		// If we actually received parameter info, store it
+		if (this._valueSize > 0) {
+			const paramInfo: ParameterInfo = stripUndefined({
+				valueFormat: this._valueFormat,
+				valueSize: this._valueSize,
+				minValue: this._minValue,
+				maxValue: this._maxValue,
+				defaultValue: this._defaultValue,
+				requiresReInclusion: this._requiresReInclusion,
+				isReadonly: this._isReadonly,
+				isAdvanced: this._isAdvanced,
+				noBulkSupport: this._noBulkSupport,
+			});
+			this.extendParamInformation(this._parameter, paramInfo);
+		}
+	}
 
 	private _parameter: number;
 	public get parameter(): number {
@@ -733,6 +1048,27 @@ export class ConfigurationCCDefaultReset extends ConfigurationCC {
 	) {
 		super(driver, options);
 	}
+}
+
+export function isSafeValue(
+	value: number,
+	size: 1 | 2 | 4,
+	format: ValueFormat,
+): boolean {
+	let minSize: number | undefined;
+	switch (format) {
+		case ValueFormat.SignedInteger:
+			minSize = getMinIntegerSize(value, true);
+			break;
+		case ValueFormat.UnsignedInteger:
+		case ValueFormat.Enumerated:
+			minSize = getMinIntegerSize(value, false);
+			break;
+		case ValueFormat.BitField:
+		default:
+			throw new Error("not implemented");
+	}
+	return minSize != undefined && size >= minSize;
 }
 
 /** Interprets values from the payload depending on the value format */
