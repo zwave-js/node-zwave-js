@@ -275,18 +275,31 @@ export class ConfigurationCCAPI extends CCAPI {
 	private async scanParametersV3(): Promise<void> {
 		let param = 1;
 		while (param > 0 && param <= 0xffff) {
-			const cc = new ConfigurationCCPropertiesGet(this.driver, {
+			// Request param properties, name and info
+			// The param information is stored automatically on receipt
+			const propCC = new ConfigurationCCPropertiesGet(this.driver, {
 				nodeId: this.node.id,
 				parameter: param,
 			});
-			const response = (await this.driver.sendCommand<
+			const propResponse = (await this.driver.sendCommand<
 				ConfigurationCCPropertiesReport
-			>(cc))!;
-			// The param information is stored automatically on receipt
+			>(propCC))!;
+
+			const nameCC = new ConfigurationCCNameGet(this.driver, {
+				nodeId: this.node.id,
+				parameter: param,
+			});
+			await this.driver.sendCommand(nameCC);
+
+			const infoCC = new ConfigurationCCInfoGet(this.driver, {
+				nodeId: this.node.id,
+				parameter: param,
+			});
+			await this.driver.sendCommand(infoCC);
 
 			// Continue with the next parameter
 			// 0 indicates that this was the last parameter
-			param = response.nextParameter;
+			param = propResponse.nextParameter;
 		}
 	}
 
