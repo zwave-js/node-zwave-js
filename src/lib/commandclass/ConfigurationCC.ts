@@ -208,9 +208,6 @@ export class ConfigurationCCAPI extends CCAPI {
 
 	/** Scans a V1/V2 node for the existing parameters using get/set commands */
 	private async scanParametersV1V2(): Promise<void> {
-		// TODO: (GH#107)
-		// This implementation is incomplete and buggy
-		// Since this scan takes a ton of time, we ignore it for now
 		// TODO: Reduce the priority of the messages
 		log(
 			"controller",
