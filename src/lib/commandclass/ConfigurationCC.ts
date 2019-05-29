@@ -325,6 +325,9 @@ export class ConfigurationCC extends CommandClass {
 			case ConfigurationCommand.InfoGet:
 			case ConfigurationCommand.PropertiesGet:
 				return this.version >= 3;
+
+			case ConfigurationCommand.DefaultReset:
+				return this.version >= 4;
 		}
 		return super.supportsCommand(cmd);
 	}
