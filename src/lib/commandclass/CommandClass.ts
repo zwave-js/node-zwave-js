@@ -340,12 +340,12 @@ export class CommandClass {
 	/** Which variables should be persisted when requested */
 	private _ccValueNames = new Set<string>();
 	/** Creates a value that will be stored in the valueDB alongside with the ones marked with `@ccValue()` */
-	public createValue(name: keyof this): void {
+	public registerValue(name: keyof this): void {
 		this._ccValueNames.add(name as string);
 	}
-	public createValues(...names: (keyof this)[]): void {
+	public registerValues(...names: (keyof this)[]): void {
 		for (const name of names) {
-			this.createValue(name);
+			this.registerValue(name);
 		}
 	}
 
@@ -447,7 +447,8 @@ export class CommandClass {
 			if (
 				val.propertyName in this ||
 				ccValueNames.has(val.propertyName) ||
-				keyValuePairNames.has(val.propertyName)
+				keyValuePairNames.has(val.propertyName) ||
+				this._ccValueNames.has(val.propertyName)
 			) {
 				let valueToSet = val.value;
 				// Properties defined as a map must be converted from an object to a map

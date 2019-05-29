@@ -21,6 +21,7 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	CommandClassOptions,
 	DynamicCCResponse,
 	expectedCCResponse,
 	getCommandClass,
@@ -310,6 +311,13 @@ export class ConfigurationCCAPI extends CCAPI {
 @implementedVersion(4)
 export class ConfigurationCC extends CommandClass {
 	public ccCommand!: ConfigurationCommand;
+
+	public constructor(driver: IDriver, options: CommandClassOptions) {
+		super(driver, options);
+		// In order to (de)serialize the data composed by extendParamInformation,
+		// we need to register a value
+		this.registerValue("paramInformation" as any);
+	}
 
 	public supportsCommand(cmd: ConfigurationCommand): Maybe<boolean> {
 		switch (cmd) {
