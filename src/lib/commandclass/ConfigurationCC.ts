@@ -169,11 +169,48 @@ export class ConfigurationCCAPI extends CCAPI {
 		}
 	}
 
+	/**
+	 * Resets a configuration parameter to its default value.
+	 * The return value indicates whether the command succeeded (`true`) or timed out (`false`).
+	 */
+	public async reset(parameter: number): Promise<boolean> {
+		const cc = new ConfigurationCCSet(this.driver, {
+			nodeId: this.node.id,
+			parameter,
+			resetToDefault: true,
+		});
+		try {
+			await this.driver.sendCommand(cc, {
+				timeout: this.driver.options.timeouts.configurationGetSet,
+			});
+			return true;
+		} catch (e) {
+			if (
+				e instanceof ZWaveError &&
+				e.code === ZWaveErrorCodes.Controller_MessageTimeout
+			) {
+				// A timeout has to be expected
+				return false;
+			}
+			// This error was unexpected
+			throw e;
+		}
+	}
+
+	/** Resets all configuration parameters to their default value */
+	public async resetAll(): Promise<void> {
+		const cc = new ConfigurationCCDefaultReset(this.driver, {
+			nodeId: this.node.id,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
 	/** Scans a V1/V2 node for the existing parameters using get/set commands */
 	private async scanParametersV1V2(): Promise<void> {
 		// TODO: (GH#107)
 		// This implementation is incomplete and buggy
 		// Since this scan takes a ton of time, we ignore it for now
+		// TODO: Reduce the priority of the messages
 		log(
 			"controller",
 			`${this.node.logPrefix}Scanning available parameters...`,
