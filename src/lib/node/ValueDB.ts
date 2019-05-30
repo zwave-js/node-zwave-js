@@ -161,14 +161,14 @@ export class ValueDB extends EventEmitter {
 	 * @param propertyName The property name the value belongs to
 	 * @param propertyKey (optional) The sub-property to access
 	 */
-	public getValue(
+	public getValue<T = unknown>(
 		cc: CommandClasses,
 		endpoint: number | undefined,
 		propertyName: string,
 		propertyKey?: number | string,
-	): unknown {
+	): T | undefined {
 		const key = getValueKey(cc, endpoint, propertyName, propertyKey);
-		return this._db.get(key);
+		return this._db.get(key) as T | undefined;
 	}
 
 	/**

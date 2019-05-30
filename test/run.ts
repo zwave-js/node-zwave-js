@@ -1,10 +1,19 @@
 import { Driver } from "../";
+import { CommandClasses } from "../src/lib/commandclass/CommandClasses";
 const driver = new Driver("COM3").once("driver ready", async () => {
 	const node = driver.controller.nodes.get(3)!;
 	node.keepAwake = true;
 	node.once("interview completed", async () => {
-		await node.commandClasses.Configuration.scanParameters();
-		console.error("scan completed");
+		console.dir(
+			node.getValue(
+				CommandClasses.Configuration,
+				undefined,
+				"paramInformation",
+			),
+		);
+		// const config = node.commandClasses.Configuration;
+		// await config.scanParameters();
+		// console.log("Scan finished!");
 	});
 });
 driver.start();

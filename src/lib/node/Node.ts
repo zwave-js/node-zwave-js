@@ -15,6 +15,7 @@ import {
 	StateKind,
 } from "../commandclass/CommandClass";
 import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
+import { ConfigurationCC } from "../commandclass/ConfigurationCC";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import {
 	ManufacturerSpecificCCGet,
@@ -43,6 +44,7 @@ import {
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 } from "../commandclass/ZWavePlusCC";
+import { lookupDevice } from "../config/Devices";
 import { lookupManufacturer } from "../config/Manufacturers";
 import {
 	ApplicationUpdateRequest,
@@ -163,6 +165,7 @@ export enum InterviewStage {
 
 	WakeUp,					// [✓] Configure wake up to point to the master controller
 	Associations,			// [ ] Retrieve information about associations
+	OverwriteConfig,		// [ ] Load node configuration from a configuration file
 	Neighbors,				// [✓] Retrieve node neighbor list
 	Session,				// [ ] Retrieve session information (changes infrequently)
 	Dynamic,				// [ ] Retrieve dynamic information (changes frequently)
@@ -301,6 +304,38 @@ export class ZWaveNode extends EventEmitter {
 		return this._isBeaming;
 	}
 
+	public get manufacturerId(): number | undefined {
+		return this.getValue(
+			CommandClasses["Manufacturer Specific"],
+			undefined,
+			"manufacturerId",
+		);
+	}
+
+	public get productId(): number | undefined {
+		return this.getValue(
+			CommandClasses["Manufacturer Specific"],
+			undefined,
+			"productId",
+		);
+	}
+
+	public get productType(): number | undefined {
+		return this.getValue(
+			CommandClasses["Manufacturer Specific"],
+			undefined,
+			"productType",
+		);
+	}
+
+	public get firmwareVersion(): string | undefined {
+		return this.getValue(
+			CommandClasses.Version,
+			undefined,
+			"firmwareVersion",
+		);
+	}
+
 	private _implementedCommandClasses = new Map<
 		CommandClasses,
 		CommandClassInfo
@@ -337,12 +372,12 @@ export class ZWaveNode extends EventEmitter {
 	 * @param propertyName The property name the value belongs to
 	 * @param propertyKey (optional) The sub-property to access
 	 */
-	public getValue(
+	public getValue<T = unknown>(
 		cc: CommandClasses,
 		endpoint: number | undefined,
 		propertyName: string,
 		propertyKey?: number | string,
-	): unknown {
+	): T | undefined {
 		return this._valueDB.getValue(cc, endpoint, propertyName, propertyKey);
 	}
 
@@ -582,6 +617,11 @@ export class ZWaveNode extends EventEmitter {
 
 		if (this.interviewStage === InterviewStage.WakeUp) {
 			// TODO: change WakeUp to Associations
+			// Load a config file for this node if it exists and overwrite the reported
+			await this.overwriteConfig();
+		}
+
+		if (this.interviewStage === InterviewStage.OverwriteConfig) {
 			// Request a list of this node's neighbors
 			await this.queryNeighbors();
 		}
@@ -844,7 +884,6 @@ export class ZWaveNode extends EventEmitter {
 					resp.command instanceof ManufacturerSpecificCCReport
 				) {
 					const mfResp = resp.command;
-					mfResp.persistValues();
 					// prettier-ignore
 					{
 					log("controller", `${this.logPrefix}received response for manufacturer information:`, "debug");
@@ -1101,6 +1140,62 @@ export class ZWaveNode extends EventEmitter {
 			throw e;
 		}
 		await this.setInterviewStage(InterviewStage.Static);
+	}
+
+	protected async overwriteConfig(): Promise<void> {
+		if (!this.isControllerNode()) {
+			log(
+				"controller",
+				`${this.logPrefix}trying to load device config`,
+				"debug",
+			);
+			const config = await lookupDevice(
+				this.manufacturerId!,
+				this.productId!,
+				this.productType!,
+				this.firmwareVersion,
+			);
+			if (config) {
+				if (isObject(config.configuration)) {
+					const configCC = this.createCCInstance<ConfigurationCC>(
+						CommandClasses.Configuration,
+					)!;
+					configCC.deserializeParamInformationFromConfig(
+						config.configuration,
+					);
+				} else {
+					log(
+						"controller",
+						`${this.logPrefix}  invalid config file!`,
+						"error",
+					);
+				}
+			} else {
+				log(
+					"controller",
+					`${this.logPrefix}  no device config file found!`,
+					"debug",
+				);
+			}
+		} else {
+			log(
+				"controller",
+				`${this.logPrefix}not loading device config for the controller`,
+				"debug",
+			);
+		}
+		await this.setInterviewStage(InterviewStage.OverwriteConfig);
+		// const deviceConfig = await lookupDevice(
+		// 	// These IDs are defined because we requested them beforehand
+		// 	this._manufacturerId!,
+		// 	this._productId!,
+		// 	this._productType!,
+		// 	this.valueDB.getValue(
+		// 		CommandClasses.Version,
+		// 		undefined,
+		// 		"firmwareVersion",
+		// 	),
+		// );
 	}
 
 	protected async queryNeighbors(): Promise<void> {

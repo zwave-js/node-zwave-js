@@ -165,7 +165,7 @@ export class Driver extends EventEmitter implements IDriver {
 	// 	RequestHandlerEntry<SendDataRequest>[]
 	// >();
 
-	private cacheDir = path.resolve(__dirname, "../../..", "cache");
+	public readonly cacheDir = path.resolve(__dirname, "../../..", "cache");
 
 	private _controller: ZWaveController | undefined;
 	/** Encapsulates information about the Z-Wave controller and provides access to its nodes */

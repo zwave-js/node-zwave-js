@@ -1,11 +1,15 @@
+import { entries } from "alcalzone-shared/objects";
+import { isObject } from "alcalzone-shared/typeguards";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { log } from "../util/logger";
 import {
 	isConsecutiveArray,
+	JSONObject,
 	stripUndefined,
 	validatePayload,
 } from "../util/misc";
+import { CacheValue } from "../values/Cache";
 import {
 	encodeBitMask,
 	getMinIntegerSize,
@@ -53,22 +57,28 @@ export enum ValueFormat {
 	BitField = 0x03, // Check Boxes
 }
 
+export interface ConfigOption {
+	value: number;
+	label: string;
+}
+
 export interface ParameterInfo {
 	minValue?: ConfigValue;
 	maxValue?: ConfigValue;
 	defaultValue?: ConfigValue;
-	valueSize?: number; // TODO: Use this
+	valueSize?: number;
 	format?: ValueFormat;
 	name?: string;
 	info?: string;
 	noBulkSupport?: boolean;
 	isAdvanced?: boolean;
 	isReadonly?: boolean;
-	// We cannot detect write-only parameters by scanning,
-	// But some parameters are indeed write-only. We have to rely
-	// on configuration to support this
-	isWriteonly?: boolean;
 	requiresReInclusion?: boolean;
+	// The following information cannot be detected by scanning
+	// We have to rely on configuration to support them
+	isWriteonly?: boolean;
+	options?: ConfigOption[];
+	isFromConfig?: boolean;
 }
 
 // A configuration value is either a single number or a bit map
@@ -351,6 +361,20 @@ export class ConfigurationCC extends CommandClass {
 	}
 
 	/**
+	 * Whether this node's param information was loaded from a config file.
+	 * If this is true, we don't trust what the node reports
+	 */
+	protected get isParamInformationFromConfig(): boolean {
+		return (
+			this.getValueDB().getValue(
+				getCommandClass(this),
+				undefined,
+				"isParamInformationFromConfig",
+			) === true
+		);
+	}
+
+	/**
 	 * @internal
 	 * Stores config parameter metadata for this CC's node
 	 */
@@ -358,11 +382,15 @@ export class ConfigurationCC extends CommandClass {
 		parameter: number,
 		info: ParameterInfo,
 	): void {
+		// Don't trust reported param information if we have loaded it from a config file
+		if (this.isParamInformationFromConfig) return;
+
 		const valueDB = this.getValueDB();
 		// Create the map if it does not exist
 		if (
 			!valueDB.hasValue(
 				getCommandClass(this),
+				// TODO: Should this be on the root endpoint?
 				this.endpoint,
 				"paramInformation",
 			)
@@ -400,6 +428,38 @@ export class ConfigurationCC extends CommandClass {
 			"paramInformation",
 		) as Map<number, ParameterInfo> | undefined;
 		return (paramInfo && paramInfo.get(parameter)) || {};
+	}
+
+	public serializeValuesForCache(): CacheValue[] {
+		// Leave out the paramInformation if we have loaded it from a config file
+		let values = super.serializeValuesForCache();
+		if (this.isParamInformationFromConfig) {
+			values = values.filter(
+				v =>
+					v.propertyName !== "paramInformation" &&
+					v.propertyName !== "isParamInformationFromConfig",
+			);
+		}
+		return values;
+	}
+
+	/** Deserializes the config parameter info from a config file */
+	public deserializeParamInformationFromConfig(config: JSONObject): void {
+		if (!isObject(config.paramInformation)) return;
+
+		for (const [id, paramInfo] of entries(config.paramInformation)) {
+			// TODO: validation
+			// TODO: Infer minValue / maxValue from options if any are present
+			this.extendParamInformation(parseInt(id), paramInfo);
+		}
+
+		// Remember that we loaded the param information from a config file
+		this.getValueDB().setValue(
+			getCommandClass(this),
+			undefined,
+			"isParamInformationFromConfig",
+			true,
+		);
 	}
 }
 

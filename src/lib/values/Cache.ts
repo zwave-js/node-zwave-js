@@ -10,9 +10,10 @@ export type SerializedValue =
 	| JSONObject
 	| undefined;
 export interface CacheValue {
-	value: SerializedValue;
 	endpoint: number | undefined;
 	propertyName: string;
+	type?: "map";
+	value: SerializedValue;
 }
 
 export function serializeCacheValue(value: unknown): SerializedValue {

@@ -1,0 +1,23 @@
+// Aeotec ZW100 MultiSensor 6
+{
+	"name": "MultiSensor 6",
+	"configuration": {
+		"paramInformation": {
+			"2": {
+				"label": "Stay Awake in Battery Mode",
+				"description": "Enable/Disable waking up for 10 minutes when re-power on (battery mode) the MultiSensor.",
+				"valueSize": 1,
+				"options": [
+					{
+						"value": 0,
+						"label": "Disable"
+					},
+					{
+						"value": 1,
+						"label": "Enable"
+					}
+				]
+			}
+		}
+	}
+}

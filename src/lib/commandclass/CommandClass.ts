@@ -430,10 +430,17 @@ export class CommandClass {
 						keyValuePairNames.has(propertyName) ||
 						this._ccValueNames.has(propertyName),
 				)
-				.map(({ value, ...props }) => ({
-					...props,
-					value: serializeCacheValue(value),
-				}))
+				.map(({ value, ...props }) => {
+					// Registered properties have no type associated, so in
+					// order to deserialize Maps, we need to serialize the type too
+					if (value instanceof Map) {
+						(props as Record<string, any>).type = "map";
+					}
+					return {
+						...props,
+						value: serializeCacheValue(value),
+					};
+				})
 		);
 	}
 
@@ -452,10 +459,12 @@ export class CommandClass {
 			) {
 				let valueToSet = val.value;
 				// Properties defined as a map must be converted from an object to a map
-				if (
-					this[val.propertyName as keyof this] instanceof Map &&
-					isObject(val.value)
-				) {
+				// TODO: (GH#110) This check should not be necessary. Ideally all values are either primitives or Maps
+				const shouldBeMap =
+					this[val.propertyName as keyof this] instanceof Map ||
+					keyValuePairNames.has(val.propertyName) ||
+					val.type === "map";
+				if (shouldBeMap && isObject(val.value)) {
 					valueToSet = new Map(entries(val.value));
 				}
 				this.getValueDB().setValue(

@@ -5,6 +5,7 @@ import {
 	CCCommand,
 	CCCommandOptions,
 	ccKeyValuePair,
+	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -53,21 +54,21 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 		this._manufacturerId = this.payload.readUInt16BE(0);
 		this._productType = this.payload.readUInt16BE(2);
 		this._productId = this.payload.readUInt16BE(4);
-		// No need to store this in the value DB, as it is used during the node interview
+		this.persistValues();
 	}
 
 	private _manufacturerId: number;
-	public get manufacturerId(): number {
+	@ccValue() public get manufacturerId(): number {
 		return this._manufacturerId;
 	}
 
 	private _productType: number;
-	public get productType(): number {
+	@ccValue() public get productType(): number {
 		return this._productType;
 	}
 
 	private _productId: number;
-	public get productId(): number {
+	@ccValue() public get productId(): number {
 		return this._productId;
 	}
 }
