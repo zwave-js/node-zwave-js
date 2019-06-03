@@ -422,11 +422,9 @@ export class ConfigurationCC extends CommandClass {
 	 */
 	public getParamInformation(parameter: number): ParameterInfo {
 		const valueDB = this.getValueDB();
-		const paramInfo = valueDB.getValue(
-			getCommandClass(this),
-			this.endpoint,
-			"paramInformation",
-		) as Map<number, ParameterInfo> | undefined;
+		const paramInfo = valueDB.getValue<
+			Map<number, ParameterInfo> | undefined
+		>(getCommandClass(this), this.endpoint, "paramInformation");
 		return (paramInfo && paramInfo.get(parameter)) || {};
 	}
 

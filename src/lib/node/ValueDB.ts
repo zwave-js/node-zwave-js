@@ -161,6 +161,7 @@ export class ValueDB extends EventEmitter {
 	 * @param propertyName The property name the value belongs to
 	 * @param propertyKey (optional) The sub-property to access
 	 */
+	/* wotan-disable-next-line no-misused-generics */
 	public getValue<T = unknown>(
 		cc: CommandClasses,
 		endpoint: number | undefined,
