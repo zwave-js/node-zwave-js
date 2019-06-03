@@ -372,6 +372,7 @@ export class ZWaveNode extends EventEmitter {
 	 * @param propertyName The property name the value belongs to
 	 * @param propertyKey (optional) The sub-property to access
 	 */
+	/* wotan-disable-next-line no-misused-generics */
 	public getValue<T = unknown>(
 		cc: CommandClasses,
 		endpoint: number | undefined,
@@ -1143,16 +1144,34 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	protected async overwriteConfig(): Promise<void> {
-		if (!this.isControllerNode()) {
+		if (this.isControllerNode()) {
+			log(
+				"controller",
+				`${this.logPrefix}not loading device config for the controller`,
+				"debug",
+			);
+		} else if (
+			this.manufacturerId == undefined ||
+			this.productId == undefined ||
+			this.productType == undefined
+		) {
+			log(
+				"controller",
+				`${
+					this.logPrefix
+				}device information incomplete, cannot load config file`,
+				"error",
+			);
+		} else {
 			log(
 				"controller",
 				`${this.logPrefix}trying to load device config`,
 				"debug",
 			);
 			const config = await lookupDevice(
-				this.manufacturerId!,
-				this.productId!,
-				this.productType!,
+				this.manufacturerId,
+				this.productId,
+				this.productType,
 				this.firmwareVersion,
 			);
 			if (config) {
@@ -1177,25 +1196,8 @@ export class ZWaveNode extends EventEmitter {
 					"debug",
 				);
 			}
-		} else {
-			log(
-				"controller",
-				`${this.logPrefix}not loading device config for the controller`,
-				"debug",
-			);
 		}
 		await this.setInterviewStage(InterviewStage.OverwriteConfig);
-		// const deviceConfig = await lookupDevice(
-		// 	// These IDs are defined because we requested them beforehand
-		// 	this._manufacturerId!,
-		// 	this._productId!,
-		// 	this._productType!,
-		// 	this.valueDB.getValue(
-		// 		CommandClasses.Version,
-		// 		undefined,
-		// 		"firmwareVersion",
-		// 	),
-		// );
 	}
 
 	protected async queryNeighbors(): Promise<void> {
