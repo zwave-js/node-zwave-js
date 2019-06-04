@@ -26,7 +26,7 @@ export async function lookupDevice(
 	}
 	// Try to load the possible config files in order
 	for (const filePath of possibilities) {
-		if (!(await pathExists(filePath))) return;
+		if (!(await pathExists(filePath))) continue;
 		const fileContents = await readFile(filePath, "utf8");
 		return JSON5.parse(fileContents);
 	}
