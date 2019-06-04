@@ -6,7 +6,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { ZWaveNode } from "../node/Node";
 import { ValueDB } from "../node/ValueDB";
 import { log } from "../util/logger";
-import { JSONObject, staticExtends } from "../util/misc";
+import { JSONObject, staticExtends, stripUndefined } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import { CacheValue, serializeCacheValue } from "../values/Cache";
 import { Maybe, unknownBoolean } from "../values/Primitive";
@@ -288,12 +288,8 @@ export class CommandClass {
 	}
 
 	protected toJSONInherited(props: JSONObject): JSONObject {
-		const ret = this.toJSONInternal();
-		delete ret.payload;
-		for (const [key, value] of entries(props)) {
-			if (value !== undefined) ret[key] = value;
-		}
-		return ret;
+		const { payload, ...ret } = this.toJSONInternal();
+		return stripUndefined({ ...ret, ...props });
 	}
 
 	/** Requests static or dynamic state for a given from a node */
