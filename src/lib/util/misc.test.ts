@@ -1,5 +1,7 @@
 /// <reference types="jest-extended" />
-import { isConsecutiveArray, stripUndefined } from "./misc";
+import { assertZWaveError } from "../../../test/util";
+import { ZWaveErrorCodes } from "../error/ZWaveError";
+import { isConsecutiveArray, stripUndefined, validatePayload } from "./misc";
 
 describe("lib/util/misc", () => {
 	describe("isConsecutiveArray()", () => {
@@ -62,6 +64,26 @@ describe("lib/util/misc", () => {
 				baz: true,
 			};
 			expect(stripUndefined(obj)).toEqual(obj);
+		});
+	});
+
+	describe("validatePayload()", () => {
+		it("passes when no arguments were given", () => {
+			validatePayload();
+		});
+
+		it("passes when all arguments are truthy", () => {
+			validatePayload(1);
+			validatePayload(true, "true");
+			validatePayload({});
+		});
+
+		it("throws a ZWaveError with PacketFormat_InvalidPayload otherwise", () => {
+			for (const args of [[false], [true, 0, true]]) {
+				assertZWaveError(() => validatePayload(...args), {
+					errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
+				});
+			}
 		});
 	});
 });
