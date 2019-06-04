@@ -260,10 +260,12 @@ export class Message {
 	}
 
 	/** Include previously received partial responses into a final message */
+	/* istanbul ignore next */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public mergePartialMessages(partials: Message[]): void {
 		// This is highly message dependent
 		// Overwrite this in derived classes
+		// By default it does nothing
 	}
 }
 
