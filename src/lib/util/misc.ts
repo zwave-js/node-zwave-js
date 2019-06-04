@@ -21,8 +21,8 @@ export function staticExtends<T extends new (...args: any[]) => any>(
 }
 
 /** Returns an object that includes all non-undefined properties from the original one */
-export function stripUndefined<T extends Record<string, any>>(obj: T): T {
-	const ret = {} as T;
+export function stripUndefined<T>(obj: Record<string, T>): Record<string, T> {
+	const ret = {} as Record<string, T>;
 	for (const [key, value] of entries(obj)) {
 		if (value !== undefined) ret[key] = value;
 	}
