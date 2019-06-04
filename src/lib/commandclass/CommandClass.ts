@@ -479,6 +479,7 @@ export class CommandClass {
 	}
 
 	/** Include previously received partial responses into a final CC */
+	/* istanbul ignore next */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public mergePartialCCs(partials: CommandClass[]): void {
 		// This is highly CC dependent

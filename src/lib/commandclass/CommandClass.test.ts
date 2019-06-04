@@ -1,7 +1,10 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
+import { assertZWaveError } from "../../../test/util";
+import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { BasicCC } from "./BasicCC";
 import {
 	CommandClass,
+	commandClass,
 	getImplementedVersion,
 	getImplementedVersionStatic,
 	implementedVersion,
@@ -9,6 +12,7 @@ import {
 import { CommandClasses } from "./CommandClasses";
 
 @implementedVersion(7)
+@commandClass(0xffff as any)
 class DummyCC extends CommandClass {
 	// public constructor(driver: IDriver) {
 	// 	super(driver);
@@ -64,5 +68,31 @@ describe("lib/commandclass/CommandClass => ", () => {
 		// const serialized3 = cc3.serialize();
 		// expect(serialized1).toEqual(serialized2);
 		// expect(serialized2).toEqual(serialized3);
+	});
+
+	describe("expectMoreMessages()", () => {
+		it("returns false by default", () => {
+			const cc = new DummyCC(createEmptyMockDriver(), { nodeId: 1 });
+			expect(cc.expectMoreMessages()).toBeFalse();
+		});
+	});
+
+	describe("supportsCommand()", () => {
+		it(`returns "unknown" by default`, () => {
+			const cc = new DummyCC(createEmptyMockDriver(), { nodeId: 1 });
+			expect(cc.supportsCommand(null as any)).toBe("unknown");
+		});
+	});
+
+	describe("getNode()", () => {
+		it("throws if the controller is undefined", () => {
+			const driver = createEmptyMockDriver();
+			delete (driver as any).controller;
+			const cc = new DummyCC(driver, { nodeId: 1 });
+			assertZWaveError(() => cc.getNode(), {
+				messageMatches: "controller",
+				errorCode: ZWaveErrorCodes.Driver_NotReady,
+			});
+		});
 	});
 });
