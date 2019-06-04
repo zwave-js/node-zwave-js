@@ -4,6 +4,7 @@ import { ZWaveErrorCodes } from "../error/ZWaveError";
 import {
 	encodeBitMask,
 	encodeFloatWithScale,
+	getMinIntegerSize,
 	parseBitMask,
 	parseBoolean,
 	parseFloatWithScale,
@@ -234,6 +235,76 @@ describe("lib/values/Primitive", () => {
 			for (const { values, max, expectedLength } of tests) {
 				expect(encodeBitMask(values, max).length).toBe(expectedLength);
 			}
+		});
+	});
+
+	describe("getMinIntegerSize(signed)", () => {
+		it("should return 1 for numbers from -128 to 127", () => {
+			function test(val: number) {
+				expect(getMinIntegerSize(val, true)).toBe(1);
+			}
+			[-128, -1, 0, 1, 127].forEach(test);
+		});
+
+		it("should return 2 for numbers from -32768 to 32767", () => {
+			function test(val: number) {
+				expect(getMinIntegerSize(val, true)).toBe(2);
+			}
+			[-32768, -129, 128, 32767].forEach(test);
+		});
+
+		it("should return 4 for numbers from -2147483648 to 2147483647", () => {
+			function test(val: number) {
+				expect(getMinIntegerSize(val, true)).toBe(4);
+			}
+			[-2147483648, -32769, 32768, 2147483647].forEach(test);
+		});
+
+		it("should return undefined for larger and smaller numbers", () => {
+			function test(val: number) {
+				expect(getMinIntegerSize(val, true)).toBeUndefined();
+			}
+			[
+				Number.MIN_SAFE_INTEGER,
+				-2147483649,
+				2147483648,
+				Number.MAX_SAFE_INTEGER,
+			].forEach(test);
+		});
+	});
+
+	describe("getMinIntegerSize(unsigned)", () => {
+		it("should return 1 for numbers from 0 to 255", () => {
+			function test(val: number) {
+				expect(getMinIntegerSize(val, false)).toBe(1);
+			}
+			[0, 1, 254, 255].forEach(test);
+		});
+
+		it("should return 2 for numbers from 256 to 65535", () => {
+			function test(val: number) {
+				expect(getMinIntegerSize(val, false)).toBe(2);
+			}
+			[256, 257, 65534, 65535].forEach(test);
+		});
+
+		it("should return 4 for numbers from 65536 to 4294967295", () => {
+			function test(val: number) {
+				expect(getMinIntegerSize(val, false)).toBe(4);
+			}
+			[65536, 65537, 4294967294, 4294967295].forEach(test);
+		});
+
+		it("should return undefined for larger and smaller numbers", () => {
+			function test(val: number) {
+				expect(getMinIntegerSize(val, false)).toBeUndefined();
+			}
+			[
+				Number.MIN_SAFE_INTEGER,
+				-1,
+				4294967296,
+				Number.MAX_SAFE_INTEGER,
+			].forEach(test);
 		});
 	});
 });
