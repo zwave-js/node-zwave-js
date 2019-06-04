@@ -1,5 +1,5 @@
 /// <reference types="jest-extended" />
-import { isConsecutiveArray } from "./misc";
+import { isConsecutiveArray, stripUndefined } from "./misc";
 
 describe("lib/util/misc", () => {
 	describe("isConsecutiveArray()", () => {
@@ -29,6 +29,39 @@ describe("lib/util/misc", () => {
 			for (const test of tests) {
 				expect(isConsecutiveArray(test)).toBeFalse();
 			}
+		});
+	});
+
+	describe("stripUndefined()", () => {
+		it("keeps objects with no undefined properties as-is", () => {
+			const obj = {
+				foo: "bar",
+				bar: 1,
+				baz: true,
+			};
+			expect(stripUndefined(obj)).toEqual(obj);
+		});
+
+		it("removes undefined properties from objects", () => {
+			const obj = {
+				foo: "bar",
+				bar: undefined,
+				baz: true,
+			};
+			const expected = {
+				foo: "bar",
+				baz: true,
+			};
+			expect(stripUndefined(obj)).toEqual(expected);
+		});
+
+		it("does not touch nested properties", () => {
+			const obj = {
+				foo: "bar",
+				bar: { sub: undefined },
+				baz: true,
+			};
+			expect(stripUndefined(obj)).toEqual(obj);
 		});
 	});
 });
