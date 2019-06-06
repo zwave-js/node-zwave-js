@@ -1,12 +1,16 @@
 import { stripColor } from "ansi-colors";
 import * as Transport from "winston-transport";
+import log from "./index";
 import { serialLoggerFormat } from "./Serial";
+import { messageSymbol } from "./shared";
 import winston = require("winston");
 
 /** Log to a jest.fn() in order to perform assertions during unit tests */
 export class SpyTransport extends Transport {
 	public constructor() {
-		super();
+		super({
+			level: "silly",
+		});
 		this._spy = jest.fn();
 	}
 
@@ -21,8 +25,6 @@ export class SpyTransport extends Transport {
 	}
 }
 
-const messageSymbol = Symbol.for("message");
-
 /** Tests a printed log message */
 function assertMessage(
 	transport: SpyTransport,
@@ -34,6 +36,8 @@ function assertMessage(
 	}>,
 ) {
 	const callNumber = options.callNumber || 0;
+	expect(transport.spy.mock.calls.length).toBeGreaterThan(callNumber);
+
 	const callArg = transport.spy.mock.calls[callNumber][0];
 	let actualMessage = callArg[messageSymbol];
 
@@ -52,13 +56,16 @@ describe("lib/log/Serial", () => {
 	let serialLogger: winston.Logger;
 	let spyTransport: SpyTransport;
 
+	// Replace all defined transports with a spy transport
 	beforeAll(() => {
 		serialLogger = winston.loggers.get("serial");
-		// Replace all defined transports with a spy transport
 		spyTransport = new SpyTransport();
 		serialLogger.configure({
 			format: serialLoggerFormat,
-			transports: [spyTransport],
+			transports: [
+				// new winston.transports.Console({ level: "silly" }),
+				spyTransport,
+			],
 		});
 	});
 
@@ -66,10 +73,10 @@ describe("lib/log/Serial", () => {
 		spyTransport.spy.mockClear();
 	});
 
-	it("works", () => {
-		serialLogger.log("info", "bar");
+	it("logs the correct message for an inbound ACK", () => {
+		log.serial.ACK("inbound");
 		assertMessage(spyTransport, {
-			predicate: msg => msg.startsWith("info: bar"),
+			message: "<-  [ACK] (0x06)",
 			stripColor: true,
 		});
 	});

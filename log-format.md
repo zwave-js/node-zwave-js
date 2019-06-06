@@ -87,5 +87,5 @@ Logging depends on the loglevel (info, warn, error)
 interview process and node specific value events
 
 ```
-[Value added][batterycc] [Endpoint 1] isLow = false
+-*- [Value added][batterycc] [Endpoint 1] isLow = false
 ```

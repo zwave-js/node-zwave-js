@@ -1,4 +1,11 @@
-import * as winston from "winston";
-import "./Serial";
+import { ACK as serialACK } from "./Serial";
 
-winston.loggers.get("serial").log("info", "test");
+const logger = Object.freeze({
+	serial: {
+		ACK: serialACK,
+	},
+});
+
+export default logger;
+
+logger.serial.ACK("inbound");
