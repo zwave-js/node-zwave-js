@@ -63,7 +63,7 @@ describe("lib/log/Serial", () => {
 		serialLogger.configure({
 			format: serialLoggerFormat,
 			transports: [
-				new winston.transports.Console({ level: "silly" }),
+				// new winston.transports.Console({ level: "silly" }),
 				spyTransport,
 			],
 		});
@@ -73,50 +73,78 @@ describe("lib/log/Serial", () => {
 		spyTransport.spy.mockClear();
 	});
 
-	it("logs the correct message for an inbound ACK", () => {
-		log.serial.ACK("inbound");
-		assertMessage(spyTransport, {
-			message: "<-  [ACK] (0x06)",
-			ignoreColor: true,
+	describe("logs single-byte messages correctly", () => {
+		it("inbound ACK", () => {
+			log.serial.ACK("inbound");
+			assertMessage(spyTransport, {
+				message: "<-  [ACK] (0x06)",
+				ignoreColor: true,
+			});
+		});
+
+		it("outbound ACK", () => {
+			log.serial.ACK("outbound");
+			assertMessage(spyTransport, {
+				message: " -> [ACK] (0x06)",
+				ignoreColor: true,
+			});
+		});
+
+		it("inbound NAK", () => {
+			log.serial.NAK("inbound");
+			assertMessage(spyTransport, {
+				message: "<-  [NAK] (0x15)",
+				ignoreColor: true,
+			});
+		});
+
+		it("outbound NAK", () => {
+			log.serial.NAK("outbound");
+			assertMessage(spyTransport, {
+				message: " -> [NAK] (0x15)",
+				ignoreColor: true,
+			});
+		});
+
+		it("inbound CAN", () => {
+			log.serial.CAN("inbound");
+			assertMessage(spyTransport, {
+				message: "<-  [CAN] (0x18)",
+				ignoreColor: true,
+			});
+		});
+
+		it("outbound CAN", () => {
+			log.serial.CAN("outbound");
+			assertMessage(spyTransport, {
+				message: " -> [CAN] (0x18)",
+				ignoreColor: true,
+			});
 		});
 	});
 
-	it("logs the correct message for an outbound ACK", () => {
-		log.serial.ACK("outbound");
-		assertMessage(spyTransport, {
-			message: " -> [ACK] (0x06)",
-			ignoreColor: true,
+	describe("logs raw data correctly", () => {
+		it("short buffer, inbound", () => {
+			log.serial.data("inbound", Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]));
+			assertMessage(spyTransport, {
+				message: "<-  0x0102030405060708 (8 bytes)",
+				ignoreColor: true,
+			});
+		});
+
+		it("short buffer, outbound", () => {
+			log.serial.data("outbound", Buffer.from([0x55, 4, 3, 2, 1]));
+			assertMessage(spyTransport, {
+				message: " -> 0x5504030201 (5 bytes)",
+				ignoreColor: true,
+			});
 		});
 	});
 
-	it("logs the correct message for an inbound NAK", () => {
-		log.serial.NAK("inbound");
+	it("logs the receive buffer correctly", () => {
+		log.serial.receiveBuffer(Buffer.from([0, 8, 0x15]));
 		assertMessage(spyTransport, {
-			message: "<-  [NAK] (0x15)",
-			ignoreColor: true,
-		});
-	});
-
-	it("logs the correct message for an outbound NAK", () => {
-		log.serial.NAK("outbound");
-		assertMessage(spyTransport, {
-			message: " -> [NAK] (0x15)",
-			ignoreColor: true,
-		});
-	});
-
-	it("logs the correct message for an inbound CAN", () => {
-		log.serial.CAN("inbound");
-		assertMessage(spyTransport, {
-			message: "<-  [CAN] (0x18)",
-			ignoreColor: true,
-		});
-	});
-
-	it("logs the correct message for an outbound CAN", () => {
-		log.serial.CAN("outbound");
-		assertMessage(spyTransport, {
-			message: " -> [CAN] (0x18)",
+			message: "    Buffer := 0x000815 (3 bytes)",
 			ignoreColor: true,
 		});
 	});

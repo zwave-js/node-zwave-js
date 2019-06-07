@@ -68,3 +68,28 @@ function logMessageHeader(
 		prefix: getDirectionPrefix(direction),
 	});
 }
+
+/**
+ * Logs transmission or receipt of a data chunk
+ * @param direction The direction the data was sent
+ * @param data The data that was transmitted or received
+ */
+export function data(direction: DataDirection, data: Buffer): void {
+	logger.log({
+		level: SERIAL_LOGLEVEL,
+		message: `0x${data.toString("hex")} (${data.length} bytes)`,
+		prefix: getDirectionPrefix(direction),
+	});
+}
+
+/**
+ * Logs the current content of the receive buffer
+ * @param data The data that is currently in the receive buffer
+ */
+export function receiveBuffer(data: Buffer): void {
+	logger.log({
+		level: SERIAL_LOGLEVEL,
+		message: `Buffer := 0x${data.toString("hex")} (${data.length} bytes)`,
+		prefix: getDirectionPrefix("none"),
+	});
+}
