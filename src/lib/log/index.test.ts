@@ -31,7 +31,7 @@ function assertMessage(
 	options: Partial<{
 		message: string;
 		predicate: (msg: string) => boolean;
-		stripColor: boolean;
+		ignoreColor: boolean;
 		callNumber: number;
 	}>,
 ) {
@@ -41,7 +41,7 @@ function assertMessage(
 	const callArg = transport.spy.mock.calls[callNumber][0];
 	let actualMessage = callArg[messageSymbol];
 
-	if (options.stripColor) {
+	if (options.ignoreColor) {
 		actualMessage = stripColor(actualMessage);
 	}
 	if (typeof options.message === "string") {
@@ -63,7 +63,7 @@ describe("lib/log/Serial", () => {
 		serialLogger.configure({
 			format: serialLoggerFormat,
 			transports: [
-				// new winston.transports.Console({ level: "silly" }),
+				new winston.transports.Console({ level: "silly" }),
 				spyTransport,
 			],
 		});
@@ -77,7 +77,47 @@ describe("lib/log/Serial", () => {
 		log.serial.ACK("inbound");
 		assertMessage(spyTransport, {
 			message: "<-  [ACK] (0x06)",
-			stripColor: true,
+			ignoreColor: true,
+		});
+	});
+
+	it("logs the correct message for an outbound ACK", () => {
+		log.serial.ACK("outbound");
+		assertMessage(spyTransport, {
+			message: " -> [ACK] (0x06)",
+			ignoreColor: true,
+		});
+	});
+
+	it("logs the correct message for an inbound NAK", () => {
+		log.serial.NAK("inbound");
+		assertMessage(spyTransport, {
+			message: "<-  [NAK] (0x15)",
+			ignoreColor: true,
+		});
+	});
+
+	it("logs the correct message for an outbound NAK", () => {
+		log.serial.NAK("outbound");
+		assertMessage(spyTransport, {
+			message: " -> [NAK] (0x15)",
+			ignoreColor: true,
+		});
+	});
+
+	it("logs the correct message for an inbound CAN", () => {
+		log.serial.CAN("inbound");
+		assertMessage(spyTransport, {
+			message: "<-  [CAN] (0x18)",
+			ignoreColor: true,
+		});
+	});
+
+	it("logs the correct message for an outbound CAN", () => {
+		log.serial.CAN("outbound");
+		assertMessage(spyTransport, {
+			message: " -> [CAN] (0x18)",
+			ignoreColor: true,
 		});
 	});
 });

@@ -39,9 +39,32 @@ const logger = winston.loggers.get("serial");
  * @param direction The direction this ACK was sent
  */
 export function ACK(direction: DataDirection): void {
+	logMessageHeader(direction, MessageHeaders.ACK);
+}
+
+/**
+ * Logs transmission or receipt of an NAK frame
+ * @param direction The direction this NAK was sent
+ */
+export function NAK(direction: DataDirection): void {
+	logMessageHeader(direction, MessageHeaders.NAK);
+}
+
+/**
+ * Logs transmission or receipt of an CAN frame
+ * @param direction The direction this CAN was sent
+ */
+export function CAN(direction: DataDirection): void {
+	logMessageHeader(direction, MessageHeaders.CAN);
+}
+
+function logMessageHeader(
+	direction: DataDirection,
+	header: MessageHeaders,
+): void {
 	logger.log({
 		level: SERIAL_LOGLEVEL,
-		message: `[ACK] (${num2hex(MessageHeaders.ACK)})`,
+		message: `[${MessageHeaders[header]}] (${num2hex(header)})`,
 		prefix: getDirectionPrefix(direction),
 	});
 }
