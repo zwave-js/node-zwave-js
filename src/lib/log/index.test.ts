@@ -1,9 +1,10 @@
 import { stripColor } from "ansi-colors";
+import { pseudoRandomBytes } from "crypto";
+import * as winston from "winston";
 import * as Transport from "winston-transport";
 import log from "./index";
 import { serialLoggerFormat } from "./Serial";
 import { messageSymbol } from "./shared";
-import winston = require("winston");
 
 /** Log to a jest.fn() in order to perform assertions during unit tests */
 export class SpyTransport extends Transport {
@@ -45,7 +46,7 @@ function assertMessage(
 		actualMessage = stripColor(actualMessage);
 	}
 	if (typeof options.message === "string") {
-		expect(actualMessage).toBe(options.message);
+		expect(actualMessage).toEqual(options.message);
 	}
 	if (typeof options.predicate === "function") {
 		expect(actualMessage).toSatisfy(options.predicate);
@@ -63,7 +64,7 @@ describe("lib/log/Serial", () => {
 		serialLogger.configure({
 			format: serialLoggerFormat,
 			transports: [
-				// new winston.transports.Console({ level: "silly" }),
+				new winston.transports.Console({ level: "silly" }),
 				spyTransport,
 			],
 		});
@@ -139,13 +140,53 @@ describe("lib/log/Serial", () => {
 				ignoreColor: true,
 			});
 		});
+
+		it("wraps longer buffers into multiple lines", () => {
+			// We have room for 76 chars, that is 37 bytes
+			const expected = pseudoRandomBytes(38);
+			const hexBuffer = `0x${expected.toString("hex")}`;
+			const expectedLine1 = hexBuffer.slice(0, 76);
+			const expectedLine2 = hexBuffer.slice(76);
+			log.serial.data("inbound", expected);
+			assertMessage(spyTransport, {
+				message: `<-  (38 bytes)
+    ${expectedLine1}
+    ${expectedLine2}`,
+				ignoreColor: true,
+			});
+		});
 	});
 
-	it("logs the receive buffer correctly", () => {
-		log.serial.receiveBuffer(Buffer.from([0, 8, 0x15]));
-		assertMessage(spyTransport, {
-			message: "    Buffer := 0x000815 (3 bytes)",
-			ignoreColor: true,
+	describe("logs the receive buffer correctly", () => {
+		it("for short buffers", () => {
+			log.serial.receiveBuffer(Buffer.from([0, 8, 0x15]));
+			assertMessage(spyTransport, {
+				message: "    Buffer := 0x000815 (3 bytes)",
+				ignoreColor: true,
+			});
+		});
+
+		it("for longer buffers", () => {
+			// max length without line breaks is 80, excluding prefixes and postfixes that cross the 80 char line
+			// this means we have 32 bytes to display (0x plus 2*32 chars)
+			const expected = pseudoRandomBytes(32);
+			log.serial.receiveBuffer(expected);
+			assertMessage(spyTransport, {
+				message: `    Buffer := 0x${expected.toString(
+					"hex",
+				)} (32 bytes)`,
+				ignoreColor: true,
+			});
+		});
+
+		it("wraps longer buffers into multiple lines", () => {
+			const expected = pseudoRandomBytes(37);
+			log.serial.receiveBuffer(expected);
+			assertMessage(spyTransport, {
+				message: `    Buffer := (37 bytes)
+    0x${expected.toString("hex")}`,
+				ignoreColor: true,
+			});
 		});
 	});
 });

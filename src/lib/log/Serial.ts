@@ -1,4 +1,4 @@
-import { TransformFunction } from "logform";
+import { TransformableInfo, TransformFunction } from "logform";
 import * as winston from "winston";
 import { MessageHeaders } from "../message/Constants";
 import { num2hex } from "../util/strings";
@@ -12,9 +12,45 @@ const SERIAL_LOGLEVEL = "debug";
 // 	return `${info.timestamp} ${info.level}: ${info.message} --> ${info.label}`;
 // });
 
+function messageFitsIntoOneLine(info: TransformableInfo): boolean {
+	const totalLengthWithoutPostfix = [
+		3,
+		info.message.length,
+		(info.prefix || "").length,
+	]
+		// filter out empty parts
+		.filter(len => len > 0)
+		// simulate adding spaces between parts
+		.reduce((prev, val) => prev + (prev > 0 ? 1 : 0) + val);
+	return totalLengthWithoutPostfix <= 80;
+}
+
 const serialFormatter = {
 	transform: (info => {
-		info[messageSymbol as any] = `${info.prefix} ${info.message}`;
+		if (messageFitsIntoOneLine(info)) {
+			info[messageSymbol as any] = [
+				info.direction,
+				info.prefix,
+				info.message,
+				info.postfix,
+			]
+				.filter(item => !!item)
+				.join(" ");
+		} else {
+			const lines: string[] = [];
+			lines.push(
+				[info.direction, info.prefix, info.postfix]
+					.filter(item => !!item)
+					.join(" "),
+			);
+			let message = info.message;
+			while (message.length) {
+				const cut = Math.min(76, message.length);
+				lines.push(message.substr(0, cut));
+				message = message.substr(cut);
+			}
+			info[messageSymbol as any] = lines.join("\n    ");
+		}
 		return info;
 	}) as TransformFunction,
 };
@@ -22,8 +58,8 @@ const serialFormatter = {
 export const serialLoggerFormat = combine(
 	label({ label: SERIAL_LABEL }),
 	timestamp(),
-	colorize({ all: true }),
 	serialFormatter,
+	colorize({ all: true }),
 );
 
 if (!winston.loggers.has("serial")) {
@@ -65,7 +101,7 @@ function logMessageHeader(
 	logger.log({
 		level: SERIAL_LOGLEVEL,
 		message: `[${MessageHeaders[header]}] (${num2hex(header)})`,
-		prefix: getDirectionPrefix(direction),
+		direction: getDirectionPrefix(direction),
 	});
 }
 
@@ -77,8 +113,9 @@ function logMessageHeader(
 export function data(direction: DataDirection, data: Buffer): void {
 	logger.log({
 		level: SERIAL_LOGLEVEL,
-		message: `0x${data.toString("hex")} (${data.length} bytes)`,
-		prefix: getDirectionPrefix(direction),
+		message: `0x${data.toString("hex")}`,
+		postfix: `(${data.length} bytes)`,
+		direction: getDirectionPrefix(direction),
 	});
 }
 
@@ -89,7 +126,9 @@ export function data(direction: DataDirection, data: Buffer): void {
 export function receiveBuffer(data: Buffer): void {
 	logger.log({
 		level: SERIAL_LOGLEVEL,
-		message: `Buffer := 0x${data.toString("hex")} (${data.length} bytes)`,
-		prefix: getDirectionPrefix("none"),
+		prefix: "Buffer :=",
+		message: `0x${data.toString("hex")}`,
+		postfix: `(${data.length} bytes)`,
+		direction: getDirectionPrefix("none"),
 	});
 }
