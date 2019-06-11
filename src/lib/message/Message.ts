@@ -560,9 +560,7 @@ export function getExpectedResponseStatic<T extends Constructable<Message>>(
 	} else {
 		log(
 			"protocol",
-			`${
-				classConstructor.name
-			}: retrieving expected response => undefined`,
+			`${classConstructor.name}: retrieving expected response => undefined`,
 			"silly",
 		);
 	}
@@ -576,9 +574,7 @@ export function priority(prio: MessagePriority): ClassDecorator {
 	return messageClass => {
 		log(
 			"protocol",
-			`${messageClass.name}: defining default priority ${
-				MessagePriority[prio]
-			} (${prio})`,
+			`${messageClass.name}: defining default priority ${MessagePriority[prio]} (${prio})`,
 			"silly",
 		);
 		// and store the metadata
@@ -602,9 +598,7 @@ export function getDefaultPriority<T extends Message>(
 	if (ret) {
 		log(
 			"protocol",
-			`${constr.name}: retrieving default priority => ${
-				MessagePriority[ret]
-			} (${ret})`,
+			`${constr.name}: retrieving default priority => ${MessagePriority[ret]} (${ret})`,
 			"silly",
 		);
 	} else {
@@ -631,17 +625,13 @@ export function getDefaultPriorityStatic<T extends Constructable<Message>>(
 	if (ret) {
 		log(
 			"protocol",
-			`${classConstructor.name}: retrieving default priority => ${
-				MessagePriority[ret]
-			} (${ret})`,
+			`${classConstructor.name}: retrieving default priority => ${MessagePriority[ret]} (${ret})`,
 			"silly",
 		);
 	} else {
 		log(
 			"protocol",
-			`${
-				classConstructor.name
-			}: retrieving default priority => undefined`,
+			`${classConstructor.name}: retrieving default priority => undefined`,
 			"silly",
 		);
 	}
