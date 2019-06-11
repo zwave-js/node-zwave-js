@@ -116,7 +116,7 @@ export type ZWaveNodeEventCallbacks = Overwrite<
 	{
 		[K in "wake up" | "sleep" | "interview completed" | "dead" | "alive"]: (
 			node: ZWaveNode,
-		) => void
+		) => void;
 	},
 	ZWaveNodeValueEventCallbacks
 >;
@@ -433,9 +433,7 @@ export class ZWaveNode extends EventEmitter {
 				// Forbid access to the API if it is not supported by the node
 				if (property !== "isSupported" && !target.isSupported()) {
 					throw new ZWaveError(
-						`Node ${
-							this.id
-						} does not support the Command Class ${ccName}!`,
+						`Node ${this.id} does not support the Command Class ${ccName}!`,
 						ZWaveErrorCodes.CC_NotSupported,
 					);
 				}
@@ -534,9 +532,7 @@ export class ZWaveNode extends EventEmitter {
 		if (this.interviewStage === InterviewStage.Complete) {
 			log(
 				"controller",
-				`${
-					this.logPrefix
-				}skipping interview because it is already completed`,
+				`${this.logPrefix}skipping interview because it is already completed`,
 				"debug",
 			);
 			return true;
@@ -671,23 +667,74 @@ export class ZWaveNode extends EventEmitter {
 		this._version = resp.version;
 		this._isBeaming = resp.isBeaming;
 
-		// prettier-ignore
-		{
-		log("controller", `${this.logPrefix}received response for protocol info:`, "debug");
+		log(
+			"controller",
+			`${this.logPrefix}received response for protocol info:`,
+			"debug",
+		);
 		if (this.deviceClass) {
-			log("controller", `${this.logPrefix}  basic device class:    ${BasicDeviceClasses[this.deviceClass.basic]} (${num2hex(this.deviceClass.basic)})`, "debug");
-			log("controller", `${this.logPrefix}  generic device class:  ${this.deviceClass.generic.name} (${num2hex(this.deviceClass.generic.key)})`, "debug");
-			log("controller", `${this.logPrefix}  specific device class: ${this.deviceClass.specific.name} (${num2hex(this.deviceClass.specific.key)})`, "debug");
+			log(
+				"controller",
+				`${this.logPrefix}  basic device class:    ${
+					BasicDeviceClasses[this.deviceClass.basic]
+				} (${num2hex(this.deviceClass.basic)})`,
+				"debug",
+			);
+			log(
+				"controller",
+				`${this.logPrefix}  generic device class:  ${
+					this.deviceClass.generic.name
+				} (${num2hex(this.deviceClass.generic.key)})`,
+				"debug",
+			);
+			log(
+				"controller",
+				`${this.logPrefix}  specific device class: ${
+					this.deviceClass.specific.name
+				} (${num2hex(this.deviceClass.specific.key)})`,
+				"debug",
+			);
 		}
-		log("controller", `${this.logPrefix}  is a listening device: ${this.isListening}`, "debug");
-		log("controller", `${this.logPrefix}  is frequent listening: ${this.isFrequentListening}`, "debug");
-		log("controller", `${this.logPrefix}  is a routing device:   ${this.isRouting}`, "debug");
-		log("controller", `${this.logPrefix}  is a secure device:    ${this.isSecure}`, "debug");
-		log("controller", `${this.logPrefix}  is a beaming device:   ${this.isBeaming}`, "debug");
-		log("controller", `${this.logPrefix}  is a listening device: ${this.isListening}`, "debug");
-		log("controller", `${this.logPrefix}  maximum baud rate:     ${this.maxBaudRate} kbps`, "debug");
-		log("controller", `${this.logPrefix}  version:               ${this.version}`, "debug");
-		}
+		log(
+			"controller",
+			`${this.logPrefix}  is a listening device: ${this.isListening}`,
+			"debug",
+		);
+		log(
+			"controller",
+			`${this.logPrefix}  is frequent listening: ${this.isFrequentListening}`,
+			"debug",
+		);
+		log(
+			"controller",
+			`${this.logPrefix}  is a routing device:   ${this.isRouting}`,
+			"debug",
+		);
+		log(
+			"controller",
+			`${this.logPrefix}  is a secure device:    ${this.isSecure}`,
+			"debug",
+		);
+		log(
+			"controller",
+			`${this.logPrefix}  is a beaming device:   ${this.isBeaming}`,
+			"debug",
+		);
+		log(
+			"controller",
+			`${this.logPrefix}  is a listening device: ${this.isListening}`,
+			"debug",
+		);
+		log(
+			"controller",
+			`${this.logPrefix}  maximum baud rate:     ${this.maxBaudRate} kbps`,
+			"debug",
+		);
+		log(
+			"controller",
+			`${this.logPrefix}  version:               ${this.version}`,
+			"debug",
+		);
 
 		if (!this.isListening && !this.isFrequentListening) {
 			// This is a "sleeping" device which must support the WakeUp CC.
@@ -744,9 +791,7 @@ export class ZWaveNode extends EventEmitter {
 		if (this.isControllerNode()) {
 			log(
 				"controller",
-				`${
-					this.logPrefix
-				}not querying node info from the controller...`,
+				`${this.logPrefix}not querying node info from the controller...`,
 				"debug",
 			);
 		} else {
@@ -805,9 +850,7 @@ export class ZWaveNode extends EventEmitter {
 		if (!this.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
 			log(
 				"controller",
-				`${
-					this.logPrefix
-				}skipping Z-Wave+ query because the device does not support it`,
+				`${this.logPrefix}skipping Z-Wave+ query because the device does not support it`,
 				"debug",
 			);
 		} else {
@@ -830,22 +873,49 @@ export class ZWaveNode extends EventEmitter {
 				) {
 					const zwavePlusResponse = resp.command;
 					zwavePlusResponse.persistValues();
-					// prettier-ignore
-					{
-					log("controller", `${this.logPrefix}received response for Z-Wave+ information:`, "debug");
-					log("controller", `${this.logPrefix}  Z-Wave+ version: ${zwavePlusResponse.zwavePlusVersion}`, "debug");
-					log("controller", `${this.logPrefix}  role type:       ${ZWavePlusRoleType[zwavePlusResponse.roleType]}`, "debug");
-					log("controller", `${this.logPrefix}  node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}`, "debug");
-					log("controller", `${this.logPrefix}  installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}`, "debug");
-					log("controller", `${this.logPrefix}  user icon:       ${num2hex(zwavePlusResponse.userIcon)}`, "debug");
-					}
+					log(
+						"controller",
+						`${this.logPrefix}received response for Z-Wave+ information:`,
+						"debug",
+					);
+					log(
+						"controller",
+						`${this.logPrefix}  Z-Wave+ version: ${zwavePlusResponse.zwavePlusVersion}`,
+						"debug",
+					);
+					log(
+						"controller",
+						`${this.logPrefix}  role type:       ${
+							ZWavePlusRoleType[zwavePlusResponse.roleType]
+						}`,
+						"debug",
+					);
+					log(
+						"controller",
+						`${this.logPrefix}  node type:       ${
+							ZWavePlusNodeType[zwavePlusResponse.nodeType]
+						}`,
+						"debug",
+					);
+					log(
+						"controller",
+						`${this.logPrefix}  installer icon:  ${num2hex(
+							zwavePlusResponse.installerIcon,
+						)}`,
+						"debug",
+					);
+					log(
+						"controller",
+						`${this.logPrefix}  user icon:       ${num2hex(
+							zwavePlusResponse.userIcon,
+						)}`,
+						"debug",
+					);
 				}
 			} catch (e) {
 				log(
 					"controller",
-					`${
-						this.logPrefix
-					}  querying the Z-Wave+ information failed: ${e.message}`,
+					`${this.logPrefix}  querying the Z-Wave+ information failed: ${e.message}`,
 					"error",
 				);
 				throw e;
@@ -859,9 +929,7 @@ export class ZWaveNode extends EventEmitter {
 		if (this.isControllerNode()) {
 			log(
 				"controller",
-				`${
-					this.logPrefix
-				}not querying manufacturer information from the controller...`,
+				`${this.logPrefix}not querying manufacturer information from the controller...`,
 				"debug",
 			);
 		} else {
@@ -885,22 +953,39 @@ export class ZWaveNode extends EventEmitter {
 					resp.command instanceof ManufacturerSpecificCCReport
 				) {
 					const mfResp = resp.command;
-					// prettier-ignore
-					{
-					log("controller", `${this.logPrefix}received response for manufacturer information:`, "debug");
-					log("controller", `${this.logPrefix}  manufacturer: ${await lookupManufacturer(mfResp.manufacturerId) || "unknown"} (${num2hex(mfResp.manufacturerId)})`, "debug");
-					log("controller", `${this.logPrefix}  product type: ${num2hex(mfResp.productType)}`, "debug");
-					log("controller", `${this.logPrefix}  product id:   ${num2hex(mfResp.productId)}`, "debug");
-					}
+					log(
+						"controller",
+						`${this.logPrefix}received response for manufacturer information:`,
+						"debug",
+					);
+					log(
+						"controller",
+						`${
+							this.logPrefix
+						}  manufacturer: ${(await lookupManufacturer(
+							mfResp.manufacturerId,
+						)) || "unknown"} (${num2hex(mfResp.manufacturerId)})`,
+						"debug",
+					);
+					log(
+						"controller",
+						`${this.logPrefix}  product type: ${num2hex(
+							mfResp.productType,
+						)}`,
+						"debug",
+					);
+					log(
+						"controller",
+						`${this.logPrefix}  product id:   ${num2hex(
+							mfResp.productId,
+						)}`,
+						"debug",
+					);
 				}
 			} catch (e) {
 				log(
 					"controller",
-					`${
-						this.logPrefix
-					}  querying the manufacturer information failed: ${
-						e.message
-					}`,
+					`${this.logPrefix}  querying the manufacturer information failed: ${e.message}`,
 					"error",
 				);
 				throw e;
@@ -917,8 +1002,15 @@ export class ZWaveNode extends EventEmitter {
 			// only query the ones we support a version > 1 for
 			const maxImplemented = getImplementedVersion(cc);
 			if (maxImplemented < 1) {
-				// prettier-ignore
-				log("controller", `${this.logPrefix}  skipping query for ${CommandClasses[cc]} (${num2hex(cc)}) because max implemented version is ${maxImplemented}`, "debug");
+				log(
+					"controller",
+					`${this.logPrefix}  skipping query for ${
+						CommandClasses[cc]
+					} (${num2hex(
+						cc,
+					)}) because max implemented version is ${maxImplemented}`,
+					"debug",
+				);
 				continue;
 			}
 			const versionCC = new VersionCCCommandClassGet(this.driver, {
@@ -929,8 +1021,13 @@ export class ZWaveNode extends EventEmitter {
 				command: versionCC,
 			});
 			try {
-				// prettier-ignore
-				log("controller", `${this.logPrefix}  querying the CC version for ${CommandClasses[cc]} (${num2hex(cc)})`, "debug");
+				log(
+					"controller",
+					`${this.logPrefix}  querying the CC version for ${
+						CommandClasses[cc]
+					} (${num2hex(cc)})`,
+					"debug",
+				);
 				// query the CC version
 				const resp = await this.driver.sendMessage<SendDataRequest>(
 					request,
@@ -946,21 +1043,31 @@ export class ZWaveNode extends EventEmitter {
 					const supportedVersion = versionResponse.ccVersion;
 					if (supportedVersion > 0) {
 						this.addCC(reqCC, { version: supportedVersion });
-						// prettier-ignore
-						log("controller", `${this.logPrefix}  supports CC ${CommandClasses[reqCC]} (${num2hex(reqCC)}) in version ${supportedVersion}`, "debug");
+						log(
+							"controller",
+							`${this.logPrefix}  supports CC ${
+								CommandClasses[reqCC]
+							} (${num2hex(
+								reqCC,
+							)}) in version ${supportedVersion}`,
+							"debug",
+						);
 					} else {
 						// We were lied to - the NIF said this CC is supported, now the node claims it isn't
 						this.removeCC(reqCC);
-						// prettier-ignore
-						log("controller", `${this.logPrefix}  does NOT support CC ${CommandClasses[reqCC]} (${num2hex(reqCC)})`, "debug");
+						log(
+							"controller",
+							`${this.logPrefix}  does NOT support CC ${
+								CommandClasses[reqCC]
+							} (${num2hex(reqCC)})`,
+							"debug",
+						);
 					}
 				}
 			} catch (e) {
 				log(
 					"controller",
-					`${this.logPrefix}  querying the CC version failed: ${
-						e.message
-					}`,
+					`${this.logPrefix}  querying the CC version failed: ${e.message}`,
 					"error",
 				);
 				throw e;
@@ -993,20 +1100,31 @@ export class ZWaveNode extends EventEmitter {
 				) {
 					const multiResponse = resp.command;
 					multiResponse.persistValues();
-					// prettier-ignore
-					{
-					log("controller", `${this.logPrefix}received response for device endpoints:`, "debug");
-					log("controller", `${this.logPrefix}  endpoint count (individual): ${multiResponse.individualEndpointCount}`, "debug");
-					log("controller", `${this.logPrefix}  count is dynamic:            ${multiResponse.isDynamicEndpointCount}`, "debug");
-					log("controller", `${this.logPrefix}  identical capabilities:      ${multiResponse.identicalCapabilities}`, "debug");
-					}
+					log(
+						"controller",
+						`${this.logPrefix}received response for device endpoints:`,
+						"debug",
+					);
+					log(
+						"controller",
+						`${this.logPrefix}  endpoint count (individual): ${multiResponse.individualEndpointCount}`,
+						"debug",
+					);
+					log(
+						"controller",
+						`${this.logPrefix}  count is dynamic:            ${multiResponse.isDynamicEndpointCount}`,
+						"debug",
+					);
+					log(
+						"controller",
+						`${this.logPrefix}  identical capabilities:      ${multiResponse.identicalCapabilities}`,
+						"debug",
+					);
 				}
 			} catch (e) {
 				log(
 					"controller",
-					`${this.logPrefix}  querying the device endpoints failed: ${
-						e.message
-					}`,
+					`${this.logPrefix}  querying the device endpoints failed: ${e.message}`,
 					"error",
 				);
 				throw e;
@@ -1014,9 +1132,7 @@ export class ZWaveNode extends EventEmitter {
 		} else {
 			log(
 				"controller",
-				`${
-					this.logPrefix
-				}skipping endpoint query because the device does not support it`,
+				`${this.logPrefix}skipping endpoint query because the device does not support it`,
 				"debug",
 			);
 		}
@@ -1030,17 +1146,13 @@ export class ZWaveNode extends EventEmitter {
 			if (this.isControllerNode()) {
 				log(
 					"controller",
-					`${
-						this.logPrefix
-					}skipping wakeup configuration for the controller`,
+					`${this.logPrefix}skipping wakeup configuration for the controller`,
 					"debug",
 				);
 			} else if (this.isFrequentListening) {
 				log(
 					"controller",
-					`${
-						this.logPrefix
-					}skipping wakeup configuration for frequent listening device`,
+					`${this.logPrefix}skipping wakeup configuration for frequent listening device`,
 					"debug",
 				);
 			} else {
@@ -1053,9 +1165,7 @@ export class ZWaveNode extends EventEmitter {
 
 					log(
 						"controller",
-						`${
-							this.logPrefix
-						}retrieving wakeup interval from the device`,
+						`${this.logPrefix}retrieving wakeup interval from the device`,
 						"debug",
 					);
 					const getWakeupResp = await this.driver.sendMessage<
@@ -1077,12 +1187,21 @@ export class ZWaveNode extends EventEmitter {
 					}
 
 					const wakeupResp = getWakeupResp.command;
-					// prettier-ignore
-					{
-					log("controller", `${this.logPrefix}received wakeup configuration:`, "debug");
-					log("controller", `${this.logPrefix}  wakeup interval: ${wakeupResp.wakeupInterval} seconds`, "debug");
-					log("controller", `${this.logPrefix}  controller node: ${wakeupResp.controllerNodeId}`, "debug");
-					}
+					log(
+						"controller",
+						`${this.logPrefix}received wakeup configuration:`,
+						"debug",
+					);
+					log(
+						"controller",
+						`${this.logPrefix}  wakeup interval: ${wakeupResp.wakeupInterval} seconds`,
+						"debug",
+					);
+					log(
+						"controller",
+						`${this.logPrefix}  controller node: ${wakeupResp.controllerNodeId}`,
+						"debug",
+					);
 
 					log(
 						"controller",
@@ -1103,9 +1222,7 @@ export class ZWaveNode extends EventEmitter {
 				} catch (e) {
 					log(
 						"controller",
-						`${
-							this.logPrefix
-						}  configuring the device wakeup failed: ${e.message}`,
+						`${this.logPrefix}  configuring the device wakeup failed: ${e.message}`,
 						"error",
 					);
 					throw e;
@@ -1133,9 +1250,7 @@ export class ZWaveNode extends EventEmitter {
 		} catch (e) {
 			log(
 				"controller",
-				`${this.logPrefix}  requesting the static values failed: ${
-					e.message
-				}`,
+				`${this.logPrefix}  requesting the static values failed: ${e.message}`,
 				"error",
 			);
 			throw e;
@@ -1157,9 +1272,7 @@ export class ZWaveNode extends EventEmitter {
 		) {
 			log(
 				"controller",
-				`${
-					this.logPrefix
-				}device information incomplete, cannot load config file`,
+				`${this.logPrefix}device information incomplete, cannot load config file`,
 				"error",
 			);
 		} else {
@@ -1225,9 +1338,7 @@ export class ZWaveNode extends EventEmitter {
 		} catch (e) {
 			log(
 				"controller",
-				`${this.logPrefix}  requesting the node neighbors failed: ${
-					e.message
-				}`,
+				`${this.logPrefix}  requesting the node neighbors failed: ${e.message}`,
 				"error",
 			);
 			throw e;
@@ -1441,8 +1552,11 @@ export class ZWaveNode extends EventEmitter {
 								values as CacheValue[],
 							);
 						} catch (e) {
-							// prettier-ignore
-							log("controller", `${this.logPrefix}error during deserialization of CC values from cache:`, "error");
+							log(
+								"controller",
+								`${this.logPrefix}error during deserialization of CC values from cache:`,
+								"error",
+							);
 							log(
 								"controller",
 								`${this.logPrefix}  ${e}`,

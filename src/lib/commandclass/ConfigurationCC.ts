@@ -121,15 +121,11 @@ export class ConfigurationCCAPI extends CCAPI {
 			if (response.parameter === parameter) return response.value;
 			log(
 				"controller",
-				`Received unexpected ConfigurationReport (param = ${
-					response.parameter
-				}, value = ${response.value})`,
+				`Received unexpected ConfigurationReport (param = ${response.parameter}, value = ${response.value})`,
 				"error",
 			);
 			throw new ConfigurationCCError(
-				`The first existing parameter on this node is ${
-					response.parameter
-				}`,
+				`The first existing parameter on this node is ${response.parameter}`,
 				ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber,
 				response.parameter,
 			);
@@ -257,9 +253,7 @@ export class ConfigurationCCAPI extends CCAPI {
 					);
 					log(
 						"controller",
-						`${
-							this.node.logPrefix
-						}    value     = ${originalValue}`,
+						`${this.node.logPrefix}    value     = ${originalValue}`,
 						"debug",
 					);
 				}
