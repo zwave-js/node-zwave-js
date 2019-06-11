@@ -901,7 +901,7 @@ export function ccValue(): PropertyDecorator {
 		// retrieve the current metadata
 		const metadata =
 			Reflect.getMetadata(METADATA_ccValues, CommandClass) || {};
-		if (!(cc in metadata)) metadata[cc] = new Set();
+		if (!(cc in metadata)) metadata[cc] = new Set<string>();
 		// And add the variable
 		const variables: Set<string> = metadata[cc];
 		variables.add(property as string);
@@ -934,7 +934,7 @@ export function ccKeyValuePair(): PropertyDecorator {
 		// retrieve the current metadata
 		const metadata =
 			Reflect.getMetadata(METADATA_ccKeyValuePairs, CommandClass) || {};
-		if (!(cc in metadata)) metadata[cc] = new Set();
+		if (!(cc in metadata)) metadata[cc] = new Set<string>();
 		// And add the variable
 		const variables: Set<string> = metadata[cc];
 		variables.add(property as string);
