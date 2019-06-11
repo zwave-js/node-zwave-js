@@ -417,9 +417,7 @@ export class ZWaveController extends EventEmitter {
 			);
 			log(
 				"controller",
-				`serial API timeouts overwritten. The old values were: ack = ${
-					resp.oldAckTimeout
-				} ms, byte = ${resp.oldByteTimeout} ms`,
+				`serial API timeouts overwritten. The old values were: ack = ${resp.oldAckTimeout} ms, byte = ${resp.oldByteTimeout} ms`,
 				"debug",
 			);
 		}

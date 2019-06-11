@@ -648,19 +648,13 @@ export class Driver extends EventEmitter implements IDriver {
 						const timeout = this.retryCurrentTransaction(500);
 						log(
 							"io",
-							`  the message for the current transaction could not be sent, scheduling attempt (${
-								this.currentTransaction.sendAttempts
-							}/${
-								this.currentTransaction.maxSendAttempts
-							}) in ${timeout} ms...`,
+							`  the message for the current transaction could not be sent, scheduling attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`,
 							"warn",
 						);
 					} else {
 						log(
 							"io",
-							`  the message for the current transaction could not be sent after ${
-								this.currentTransaction.maxSendAttempts
-							} attempts, dropping the transaction`,
+							`  the message for the current transaction could not be sent after ${this.currentTransaction.maxSendAttempts} attempts, dropping the transaction`,
 							"warn",
 						);
 						const errorMsg = `The message could not be sent`;
@@ -680,9 +674,7 @@ export class Driver extends EventEmitter implements IDriver {
 					if (node.supportsCC(CommandClasses["Wake Up"])) {
 						log(
 							"driver",
-							`  ${
-								node.logPrefix
-							}The node did not respond because it is asleep, moving its messages to the wakeup queue`,
+							`  ${node.logPrefix}The node did not respond because it is asleep, moving its messages to the wakeup queue`,
 							"debug",
 						);
 						// The node is asleep
@@ -697,19 +689,11 @@ export class Driver extends EventEmitter implements IDriver {
 						const timeout = this.retryCurrentTransaction(500);
 						log(
 							"io",
-							`  ${
-								node.logPrefix
-							}The node did not respond to the current transaction, scheduling attempt (${
-								this.currentTransaction.sendAttempts
-							}/${
-								this.currentTransaction.maxSendAttempts
-							}) in ${timeout} ms...`,
+							`  ${node.logPrefix}The node did not respond to the current transaction, scheduling attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`,
 							"warn",
 						);
 					} else {
-						let errorMsg = `The node did not respond to the current transaction after ${
-							this.currentTransaction.maxSendAttempts
-						} attempts, it is presumed dead`;
+						let errorMsg = `The node did not respond to the current transaction after ${this.currentTransaction.maxSendAttempts} attempts, it is presumed dead`;
 						if (msg instanceof SendDataRequestTransmitReport) {
 							errorMsg += ` (Status ${
 								TransmitStatus[msg.transmitStatus]
@@ -842,9 +826,7 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 		log(
 			"driver",
-			`removed request handler for ${
-				FunctionType[fnType]
-			} (${fnType})... ${handlers.length} left`,
+			`removed request handler for ${FunctionType[fnType]} (${fnType})... ${handlers.length} left`,
 			"debug",
 		);
 		this.requestHandlers.set(fnType, handlers);
@@ -1061,11 +1043,7 @@ export class Driver extends EventEmitter implements IDriver {
 				const timeout = this.retryCurrentTransaction();
 				log(
 					"io",
-					`CAN received - scheduling transmission attempt (${
-						this.currentTransaction.sendAttempts
-					}/${
-						this.currentTransaction.maxSendAttempts
-					}) in ${timeout} ms...`,
+					`CAN received - scheduling transmission attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`,
 					"warn",
 				);
 			} else {
@@ -1077,9 +1055,7 @@ export class Driver extends EventEmitter implements IDriver {
 
 				this.rejectCurrentTransaction(
 					new ZWaveError(
-						`The message was dropped by the controller after ${
-							this.currentTransaction.maxSendAttempts
-						} attempts`,
+						`The message was dropped by the controller after ${this.currentTransaction.maxSendAttempts} attempts`,
 						ZWaveErrorCodes.Controller_MessageDropped,
 					),
 					false /* don't resume queue, that happens automatically */,
@@ -1235,9 +1211,7 @@ export class Driver extends EventEmitter implements IDriver {
 		this.sendQueue.add(transaction);
 		log(
 			"io",
-			`added message to the send queue, new length = ${
-				this.sendQueue.length
-			}`,
+			`added message to the send queue, new length = ${this.sendQueue.length}`,
 			"debug",
 		);
 		// start sending now (maybe)
@@ -1361,9 +1335,7 @@ export class Driver extends EventEmitter implements IDriver {
 		} else {
 			log(
 				"io",
-				`workOffSendQueue > The remaining ${
-					this.sendQueue.length
-				} messages are for sleeping nodes, not sending anything!`,
+				`workOffSendQueue > The remaining ${this.sendQueue.length} messages are for sleeping nodes, not sending anything!`,
 				"debug",
 			);
 		}

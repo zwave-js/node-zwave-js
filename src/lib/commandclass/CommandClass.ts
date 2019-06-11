@@ -386,7 +386,7 @@ export class CommandClass {
 				} else if (isArray(sourceValue)) {
 					const [propertyKey, value] = (sourceValue as any) as [
 						string | number,
-						unknown
+						unknown,
 					];
 					db.setValue(
 						cc,
@@ -546,9 +546,7 @@ export function commandClass(cc: CommandClasses): ClassDecorator {
 	return messageClass => {
 		log(
 			"protocol",
-			`${messageClass.name}: defining command class ${
-				CommandClasses[cc]
-			} (${cc})`,
+			`${messageClass.name}: defining command class ${CommandClasses[cc]} (${cc})`,
 			"silly",
 		);
 		// and store the metadata
@@ -587,9 +585,7 @@ export function getCommandClass<T extends CommandClass | CCAPI>(
 
 	log(
 		"protocol",
-		`${constr.name}: retrieving command class => ${
-			CommandClasses[ret]
-		} (${ret})`,
+		`${constr.name}: retrieving command class => ${CommandClasses[ret]} (${ret})`,
 		"silly",
 	);
 	return ret;
@@ -615,9 +611,7 @@ export function getCommandClassStatic<T extends Constructable<CommandClass>>(
 
 	log(
 		"protocol",
-		`${classConstructor.name}: retrieving command class => ${
-			CommandClasses[ret]
-		} (${ret})`,
+		`${classConstructor.name}: retrieving command class => ${CommandClasses[ret]} (${ret})`,
 		"silly",
 	);
 	return ret;
@@ -798,9 +792,7 @@ export function expectedCCResponse<T extends CommandClass>(
 		if (staticExtends(ccOrDynamic, CommandClass)) {
 			log(
 				"protocol",
-				`${ccClass.name}: defining expected CC response ${
-					ccOrDynamic.name
-				}`,
+				`${ccClass.name}: defining expected CC response ${ccOrDynamic.name}`,
 				"silly",
 			);
 		} else {

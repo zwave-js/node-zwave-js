@@ -225,7 +225,7 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 	@ccKeyValuePair()
 	private capabilities: [
 		ThermostatSetpointType,
-		ThermostatSetpointCapabilities
+		ThermostatSetpointCapabilities,
 	];
 
 	public get minValue(): number {
