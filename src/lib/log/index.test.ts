@@ -77,48 +77,54 @@ describe("lib/log/Serial =>", () => {
 	describe("logs single-byte messages correctly", () => {
 		it("inbound ACK", () => {
 			log.serial.ACK("inbound");
+			const alignRight = " ".repeat(80 - 16);
 			assertMessage(spyTransport, {
-				message: "«   [ACK] (0x06)",
+				message: `«   [ACK] ${alignRight}(0x06)`,
 				ignoreColor: true,
 			});
 		});
 
 		it("outbound ACK", () => {
 			log.serial.ACK("outbound");
+			const alignRight = " ".repeat(80 - 16);
 			assertMessage(spyTransport, {
-				message: "  » [ACK] (0x06)",
+				message: `  » [ACK] ${alignRight}(0x06)`,
 				ignoreColor: true,
 			});
 		});
 
 		it("inbound NAK", () => {
 			log.serial.NAK("inbound");
+			const alignRight = " ".repeat(80 - 16);
 			assertMessage(spyTransport, {
-				message: "«   [NAK] (0x15)",
+				message: `«   [NAK] ${alignRight}(0x15)`,
 				ignoreColor: true,
 			});
 		});
 
 		it("outbound NAK", () => {
 			log.serial.NAK("outbound");
+			const alignRight = " ".repeat(80 - 16);
 			assertMessage(spyTransport, {
-				message: "  » [NAK] (0x15)",
+				message: `  » [NAK] ${alignRight}(0x15)`,
 				ignoreColor: true,
 			});
 		});
 
 		it("inbound CAN", () => {
 			log.serial.CAN("inbound");
+			const alignRight = " ".repeat(80 - 16);
 			assertMessage(spyTransport, {
-				message: "«   [CAN] (0x18)",
+				message: `«   [CAN] ${alignRight}(0x18)`,
 				ignoreColor: true,
 			});
 		});
 
 		it("outbound CAN", () => {
 			log.serial.CAN("outbound");
+			const alignRight = " ".repeat(80 - 16);
 			assertMessage(spyTransport, {
-				message: "  » [CAN] (0x18)",
+				message: `  » [CAN] ${alignRight}(0x18)`,
 				ignoreColor: true,
 			});
 		});
@@ -127,16 +133,18 @@ describe("lib/log/Serial =>", () => {
 	describe("logs raw data correctly", () => {
 		it("short buffer, inbound", () => {
 			log.serial.data("inbound", Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]));
+			const alignRight = " ".repeat(80 - 32);
 			assertMessage(spyTransport, {
-				message: "«   0x0102030405060708 (8 bytes)",
+				message: `«   0x0102030405060708 ${alignRight}(8 bytes)`,
 				ignoreColor: true,
 			});
 		});
 
 		it("short buffer, outbound", () => {
 			log.serial.data("outbound", Buffer.from([0x55, 4, 3, 2, 1]));
+			const alignRight = " ".repeat(80 - 26);
 			assertMessage(spyTransport, {
-				message: "  » 0x5504030201 (5 bytes)",
+				message: `  » 0x5504030201 ${alignRight}(5 bytes)`,
 				ignoreColor: true,
 			});
 		});
@@ -148,8 +156,9 @@ describe("lib/log/Serial =>", () => {
 			const expectedLine1 = hexBuffer.slice(0, 76);
 			const expectedLine2 = hexBuffer.slice(76);
 			log.serial.data("inbound", expected);
+			const alignRight = " ".repeat(80 - 14);
 			assertMessage(spyTransport, {
-				message: `«   (38 bytes)
+				message: `«   ${alignRight}(38 bytes)
     ${expectedLine1}
     ${expectedLine2}`,
 				ignoreColor: true,
@@ -160,32 +169,48 @@ describe("lib/log/Serial =>", () => {
 	describe("logs the receive buffer correctly", () => {
 		it("for short buffers", () => {
 			log.serial.receiveBuffer(Buffer.from([0, 8, 0x15]));
+			const alignRight = " ".repeat(80 - 32);
 			assertMessage(spyTransport, {
-				message: " ·  Buffer := 0x000815 (3 bytes)",
+				message: ` ·  Buffer := 0x000815 ${alignRight}(3 bytes)`,
 				ignoreColor: true,
 			});
 		});
 
 		it("for longer buffers", () => {
-			// max length without line breaks is 80, excluding prefixes and postfixes that cross the 80 char line
-			// this means we have 32 bytes to display (0x plus 2*32 chars)
-			const expected = pseudoRandomBytes(32);
+			// max length without line breaks is 80, excluding prefixes and postfixes
+			// this means we have 26 bytes to display (0x plus 2*26 chars)
+			const expected = pseudoRandomBytes(26);
 			log.serial.receiveBuffer(expected);
 			assertMessage(spyTransport, {
 				message: ` ·  Buffer := 0x${expected.toString(
 					"hex",
-				)} (32 bytes)`,
+				)}  (26 bytes)`,
 				ignoreColor: true,
 			});
 		});
 
 		it("wraps longer buffers into multiple lines", () => {
-			const expected = pseudoRandomBytes(37);
+			let expected = pseudoRandomBytes(27);
+			const alignRight = " ".repeat(56);
+
 			log.serial.receiveBuffer(expected);
 			assertMessage(spyTransport, {
-				message: ` ·  Buffer := (37 bytes)
+				message: ` ·  Buffer := ${alignRight}(27 bytes)
     0x${expected.toString("hex")}`,
 				ignoreColor: true,
+			});
+
+			expected = pseudoRandomBytes(38);
+			const hexBuffer = `0x${expected.toString("hex")}`;
+			const expectedLine1 = hexBuffer.slice(0, 76);
+			const expectedLine2 = hexBuffer.slice(76);
+			log.serial.receiveBuffer(expected);
+			assertMessage(spyTransport, {
+				message: ` ·  Buffer := ${alignRight}(38 bytes)
+    ${expectedLine1}
+    ${expectedLine2}`,
+				ignoreColor: true,
+				callNumber: 1,
 			});
 		});
 	});

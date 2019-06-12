@@ -1,3 +1,4 @@
+import * as colors from "ansi-colors";
 import { TransformableInfo, TransformFunction } from "logform";
 import * as winston from "winston";
 import { MessageHeaders } from "../message/Constants";
@@ -8,27 +9,48 @@ const { combine, timestamp, label } = winston.format;
 
 const SERIAL_LABEL = "SERIAL";
 const SERIAL_LOGLEVEL = "debug";
+/** An invisible char with length >= 0 */
+// This is necessary to "print" zero spaces for the right padding
+// There's probably a nicer way
+const INVISIBLE = colors.black("\u001b[39m");
 
-// const logFormat = format.printf(info => {
-// 	return `${info.timestamp} ${info.level}: ${info.message} --> ${info.label}`;
-// });
+function calculateFirstLineLength(
+	info: TransformableInfo,
+	includeMessage: boolean = true,
+): number {
+	return (
+		[
+			3,
+			includeMessage ? info.message.length : 0,
+			(info.prefix || "").length,
+			(info.postfix || "").length,
+		]
+			// filter out empty parts
+			.filter(len => len > 0)
+			// simulate adding spaces between parts
+			.reduce((prev, val) => prev + (prev > 0 ? 1 : 0) + val)
+	);
+}
 
 function messageFitsIntoOneLine(info: TransformableInfo): boolean {
-	const totalLengthWithoutPostfix = [
-		3,
-		info.message.length,
-		(info.prefix || "").length,
-	]
-		// filter out empty parts
-		.filter(len => len > 0)
-		// simulate adding spaces between parts
-		.reduce((prev, val) => prev + (prev > 0 ? 1 : 0) + val);
-	return totalLengthWithoutPostfix <= 80;
+	const totalLength = calculateFirstLineLength(info);
+	return totalLength <= 80;
 }
 
 const serialFormatter = {
 	transform: (info => {
 		info.multiline = !messageFitsIntoOneLine(info);
+		// Align postfixes to the right
+		if (info.postfix) {
+			// Calculate how many spaces are needed to right-align the postfix
+			// Subtract 1 because the parts are joined by spaces
+			info.postfixPadding = Math.max(
+				-1, // -1 has the special meaning that we skip printing this
+				// 0 is an invisible char
+				80 - 1 - calculateFirstLineLength(info, !info.multiline),
+			);
+		}
+
 		if (info.multiline) {
 			// Break long messages into multiple lines
 			const lines: string[] = [];
@@ -46,25 +68,24 @@ const serialFormatter = {
 
 const serialPrinter = {
 	transform: (info => {
-		if (!info.multiline) {
-			info[messageSymbol as any] = [
-				info.direction,
-				info.prefix,
-				info.message,
-				info.postfix,
-			]
-				.filter(item => !!item)
-				.join(" ");
-		} else {
-			const lines: string[] = [];
-			lines.push(
-				[info.direction, info.prefix, info.postfix]
-					.filter(item => !!item)
-					.join(" "),
-			);
+		const firstLine = [
+			info.direction,
+			info.prefix,
+			info.multiline ? "" : info.message,
+			info.postfixPadding < 0
+				? undefined
+				: info.postfixPadding === 0
+				? INVISIBLE
+				: " ".repeat(info.postfixPadding),
+			info.postfix,
+		]
+			.filter(item => !!item)
+			.join(" ");
+		const lines = [firstLine];
+		if (info.multiline) {
 			lines.push(...info.message.split("\n").map(line => "    " + line));
-			info[messageSymbol as any] = lines.join("\n");
 		}
+		info[messageSymbol as any] = lines.join("\n");
 		return info;
 	}) as TransformFunction,
 };
@@ -115,7 +136,8 @@ function logMessageHeader(
 ): void {
 	logger.log({
 		level: SERIAL_LOGLEVEL,
-		message: `[${MessageHeaders[header]}] (${num2hex(header)})`,
+		message: `[${MessageHeaders[header]}]`,
+		postfix: `(${num2hex(header)})`,
 		direction: getDirectionPrefix(direction),
 	});
 }

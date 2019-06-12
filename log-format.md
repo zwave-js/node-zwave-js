@@ -1,10 +1,10 @@
 # basic format
 
 ```
-0         10        20        30        40        50        60        70        80        90     100
-0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
+0         10        20        30        40        50        80        90     100
+01234567890123456789012345678901234567890123456789012345678901234567890123456789
 
-DIR [TAG1] [TAG2] ...Log message...                                             {prio} {opts} {info}
+DIR [TAG1] [TAG2] ...Log message...                         {prio} {opts} {info}
 
 DIR :=
 	optional direction of data flow. "<- " = inbound, " ->" = outbound
@@ -34,7 +34,7 @@ Additional right-aligned tags:
 	(Multiple) transmit options
 {info} :=
 	Additional info relating the message transmission, e.g. "attempt #2", "confirmation", ...
-Tags may cross the 80 char line. Namespaces may define their own tags.
+Namespaces may define their own tags.
 ```
 
 Log messages are color-coded:
