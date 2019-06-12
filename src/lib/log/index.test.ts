@@ -53,7 +53,7 @@ function assertMessage(
 	}
 }
 
-describe("lib/log/Serial", () => {
+describe("lib/log/Serial =>", () => {
 	let serialLogger: winston.Logger;
 	let spyTransport: SpyTransport;
 
@@ -78,7 +78,7 @@ describe("lib/log/Serial", () => {
 		it("inbound ACK", () => {
 			log.serial.ACK("inbound");
 			assertMessage(spyTransport, {
-				message: "<-  [ACK] (0x06)",
+				message: "«   [ACK] (0x06)",
 				ignoreColor: true,
 			});
 		});
@@ -86,7 +86,7 @@ describe("lib/log/Serial", () => {
 		it("outbound ACK", () => {
 			log.serial.ACK("outbound");
 			assertMessage(spyTransport, {
-				message: " -> [ACK] (0x06)",
+				message: "  » [ACK] (0x06)",
 				ignoreColor: true,
 			});
 		});
@@ -94,7 +94,7 @@ describe("lib/log/Serial", () => {
 		it("inbound NAK", () => {
 			log.serial.NAK("inbound");
 			assertMessage(spyTransport, {
-				message: "<-  [NAK] (0x15)",
+				message: "«   [NAK] (0x15)",
 				ignoreColor: true,
 			});
 		});
@@ -102,7 +102,7 @@ describe("lib/log/Serial", () => {
 		it("outbound NAK", () => {
 			log.serial.NAK("outbound");
 			assertMessage(spyTransport, {
-				message: " -> [NAK] (0x15)",
+				message: "  » [NAK] (0x15)",
 				ignoreColor: true,
 			});
 		});
@@ -110,7 +110,7 @@ describe("lib/log/Serial", () => {
 		it("inbound CAN", () => {
 			log.serial.CAN("inbound");
 			assertMessage(spyTransport, {
-				message: "<-  [CAN] (0x18)",
+				message: "«   [CAN] (0x18)",
 				ignoreColor: true,
 			});
 		});
@@ -118,7 +118,7 @@ describe("lib/log/Serial", () => {
 		it("outbound CAN", () => {
 			log.serial.CAN("outbound");
 			assertMessage(spyTransport, {
-				message: " -> [CAN] (0x18)",
+				message: "  » [CAN] (0x18)",
 				ignoreColor: true,
 			});
 		});
@@ -128,7 +128,7 @@ describe("lib/log/Serial", () => {
 		it("short buffer, inbound", () => {
 			log.serial.data("inbound", Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]));
 			assertMessage(spyTransport, {
-				message: "<-  0x0102030405060708 (8 bytes)",
+				message: "«   0x0102030405060708 (8 bytes)",
 				ignoreColor: true,
 			});
 		});
@@ -136,7 +136,7 @@ describe("lib/log/Serial", () => {
 		it("short buffer, outbound", () => {
 			log.serial.data("outbound", Buffer.from([0x55, 4, 3, 2, 1]));
 			assertMessage(spyTransport, {
-				message: " -> 0x5504030201 (5 bytes)",
+				message: "  » 0x5504030201 (5 bytes)",
 				ignoreColor: true,
 			});
 		});
@@ -149,7 +149,7 @@ describe("lib/log/Serial", () => {
 			const expectedLine2 = hexBuffer.slice(76);
 			log.serial.data("inbound", expected);
 			assertMessage(spyTransport, {
-				message: `<-  (38 bytes)
+				message: `«   (38 bytes)
     ${expectedLine1}
     ${expectedLine2}`,
 				ignoreColor: true,
@@ -161,7 +161,7 @@ describe("lib/log/Serial", () => {
 		it("for short buffers", () => {
 			log.serial.receiveBuffer(Buffer.from([0, 8, 0x15]));
 			assertMessage(spyTransport, {
-				message: "    Buffer := 0x000815 (3 bytes)",
+				message: " ·  Buffer := 0x000815 (3 bytes)",
 				ignoreColor: true,
 			});
 		});
@@ -172,7 +172,7 @@ describe("lib/log/Serial", () => {
 			const expected = pseudoRandomBytes(32);
 			log.serial.receiveBuffer(expected);
 			assertMessage(spyTransport, {
-				message: `    Buffer := 0x${expected.toString(
+				message: ` ·  Buffer := 0x${expected.toString(
 					"hex",
 				)} (32 bytes)`,
 				ignoreColor: true,
@@ -183,7 +183,7 @@ describe("lib/log/Serial", () => {
 			const expected = pseudoRandomBytes(37);
 			log.serial.receiveBuffer(expected);
 			assertMessage(spyTransport, {
-				message: `    Buffer := (37 bytes)
+				message: ` ·  Buffer := (37 bytes)
     0x${expected.toString("hex")}`,
 				ignoreColor: true,
 			});

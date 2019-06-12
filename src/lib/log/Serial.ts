@@ -2,8 +2,9 @@ import { TransformableInfo, TransformFunction } from "logform";
 import * as winston from "winston";
 import { MessageHeaders } from "../message/Constants";
 import { num2hex } from "../util/strings";
+import { colorizer } from "./Colorizer";
 import { DataDirection, getDirectionPrefix, messageSymbol } from "./shared";
-const { colorize, combine, timestamp, label } = winston.format;
+const { combine, timestamp, label } = winston.format;
 
 const SERIAL_LABEL = "SERIAL";
 const SERIAL_LOGLEVEL = "debug";
@@ -27,7 +28,25 @@ function messageFitsIntoOneLine(info: TransformableInfo): boolean {
 
 const serialFormatter = {
 	transform: (info => {
-		if (messageFitsIntoOneLine(info)) {
+		info.multiline = !messageFitsIntoOneLine(info);
+		if (info.multiline) {
+			// Break long messages into multiple lines
+			const lines: string[] = [];
+			let message = info.message;
+			while (message.length) {
+				const cut = Math.min(76, message.length);
+				lines.push(message.substr(0, cut));
+				message = message.substr(cut);
+			}
+			info.message = lines.join("\n");
+		}
+		return info;
+	}) as TransformFunction,
+};
+
+const serialPrinter = {
+	transform: (info => {
+		if (!info.multiline) {
 			info[messageSymbol as any] = [
 				info.direction,
 				info.prefix,
@@ -43,13 +62,8 @@ const serialFormatter = {
 					.filter(item => !!item)
 					.join(" "),
 			);
-			let message = info.message;
-			while (message.length) {
-				const cut = Math.min(76, message.length);
-				lines.push(message.substr(0, cut));
-				message = message.substr(cut);
-			}
-			info[messageSymbol as any] = lines.join("\n    ");
+			lines.push(...info.message.split("\n").map(line => "    " + line));
+			info[messageSymbol as any] = lines.join("\n");
 		}
 		return info;
 	}) as TransformFunction,
@@ -59,7 +73,8 @@ export const serialLoggerFormat = combine(
 	label({ label: SERIAL_LABEL }),
 	timestamp(),
 	serialFormatter,
-	colorize({ all: true }),
+	colorizer(),
+	serialPrinter,
 );
 
 if (!winston.loggers.has("serial")) {
