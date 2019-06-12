@@ -9,8 +9,9 @@ export interface ColorizerOptions {
 }
 
 export const colorizer = format((info, _opts: ColorizerOptions) => {
-	const textColor: colors.StyleFunction =
-		colors[defaultColors[info.level] as string];
+	const textColor: colors.StyleFunction = (colors as any)[
+		defaultColors[info.level] as string
+	];
 	// Colorize all segments separately
 	info.message = textColor(info.message);
 	info.direction = colors.gray(info.direction);

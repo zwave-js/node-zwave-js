@@ -1,12 +1,13 @@
-import * as colors from "ansi-colors";
 import { TransformableInfo, TransformFunction } from "logform";
 import * as winston from "winston";
 import { MessageHeaders } from "../message/Constants";
 import { num2hex } from "../util/strings";
 import { colorizer } from "./Colorizer";
 import {
+	BOX_CHARS,
 	DataDirection,
 	getDirectionPrefix,
+	INVISIBLE,
 	LOG_WIDTH,
 	messageSymbol,
 } from "./shared";
@@ -14,10 +15,6 @@ const { combine, timestamp, label } = winston.format;
 
 const SERIAL_LABEL = "SERIAL";
 const SERIAL_LOGLEVEL = "debug";
-/** An invisible char with length >= 0 */
-// This is necessary to "print" zero spaces for the right padding
-// There's probably a nicer way
-const INVISIBLE = colors.black("\u001b[39m");
 
 /** Calculates the length a log message would occupy if it is not split */
 function calculateFirstLineLength(
@@ -92,8 +89,7 @@ const serialFormatter = {
 const serialPrinter = {
 	transform: (info => {
 		const messageLines = info.message.split("\n");
-		const firstLine = [
-			info.direction,
+		let firstLine = [
 			info.prefix,
 			messageLines[0],
 			info.postfixPadding < 0
@@ -105,9 +101,22 @@ const serialPrinter = {
 		]
 			.filter(item => !!item)
 			.join(" ");
+		firstLine =
+			info.direction + (info.multiline ? BOX_CHARS.top : " ") + firstLine;
 		const lines = [firstLine];
 		if (info.multiline) {
-			lines.push(...messageLines.slice(1).map(line => "    " + line));
+			lines.push(
+				...messageLines
+					.slice(1)
+					.map(
+						(line, i, arr) =>
+							"   " +
+							(i < arr.length - 1
+								? BOX_CHARS.middle
+								: BOX_CHARS.bottom) +
+							line,
+					),
+			);
 		}
 		info[messageSymbol as any] = lines.join("\n");
 		return info;

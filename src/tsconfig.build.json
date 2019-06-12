@@ -3,8 +3,7 @@
 	"compilerOptions": {
 		"noEmit": false,
 		"declaration": true,
-		"declarationMap": true,
-		"noImplicitAny": true
+		"declarationMap": true
 	},
 	"include": ["./**/*.ts"],
 	"exclude": ["./**/*.test.ts"]

@@ -4,7 +4,7 @@ import * as winston from "winston";
 import * as Transport from "winston-transport";
 import log from "./index";
 import { serialLoggerFormat } from "./Serial";
-import { messageSymbol } from "./shared";
+import { BOX_CHARS, messageSymbol } from "./shared";
 
 /** Log to a jest.fn() in order to perform assertions during unit tests */
 export class SpyTransport extends Transport {
@@ -46,6 +46,9 @@ function assertMessage(
 		actualMessage = stripColor(actualMessage);
 	}
 	if (typeof options.message === "string") {
+		if (options.ignoreColor) {
+			options.message = stripColor(options.message);
+		}
 		expect(actualMessage).toEqual(options.message);
 	}
 	if (typeof options.predicate === "function") {
@@ -157,8 +160,25 @@ describe("lib/log/Serial =>", () => {
 			const expectedLine2 = hexBuffer.slice(65);
 			log.serial.data("inbound", expected);
 			assertMessage(spyTransport, {
-				message: `«   ${expectedLine1} (38 bytes)
-    ${expectedLine2}`,
+				message: `«  ${BOX_CHARS.top}${expectedLine1} (38 bytes)
+   ${BOX_CHARS.bottom}${expectedLine2}`,
+				ignoreColor: true,
+			});
+		});
+
+		it("correctly groups very long lines", () => {
+			// We have room for 65 chars in the first line, that is 31.5 bytes
+			// and 76 chars (38 bytes) in each following line
+			const expected = pseudoRandomBytes(70);
+			const hexBuffer = `0x${expected.toString("hex")}`;
+			const expectedLine1 = hexBuffer.slice(0, 65);
+			const expectedLine2 = hexBuffer.slice(65, 65 + 76);
+			const expectedLine3 = hexBuffer.slice(65 + 76);
+			log.serial.data("inbound", expected);
+			assertMessage(spyTransport, {
+				message: `«  ${BOX_CHARS.top}${expectedLine1} (70 bytes)
+   ${BOX_CHARS.middle}${expectedLine2}
+   ${BOX_CHARS.bottom}${expectedLine3}`,
 				ignoreColor: true,
 			});
 		});
@@ -195,8 +215,8 @@ describe("lib/log/Serial =>", () => {
 
 			log.serial.receiveBuffer(expected);
 			assertMessage(spyTransport, {
-				message: ` ·  Buffer := ${expectedLine1} (27 bytes)
-    ${expectedLine2}`,
+				message: ` · ${BOX_CHARS.top}Buffer := ${expectedLine1} (27 bytes)
+   ${BOX_CHARS.bottom}${expectedLine2}`,
 				ignoreColor: true,
 			});
 
@@ -206,8 +226,8 @@ describe("lib/log/Serial =>", () => {
 			expectedLine2 = hexBuffer.slice(55);
 			log.serial.receiveBuffer(expected);
 			assertMessage(spyTransport, {
-				message: ` ·  Buffer := ${expectedLine1} (38 bytes)
-    ${expectedLine2}`,
+				message: ` · ${BOX_CHARS.top}Buffer := ${expectedLine1} (38 bytes)
+   ${BOX_CHARS.bottom}${expectedLine2}`,
 				ignoreColor: true,
 				callNumber: 1,
 			});

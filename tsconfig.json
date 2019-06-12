@@ -12,7 +12,7 @@
 		"module": "commonjs",
 		"moduleResolution": "node",
 		"noEmitOnError": true,
-		"noImplicitAny": false,
+		"noImplicitAny": true,
 		"outDir": "build/",
 		"removeComments": false,
 		"experimentalDecorators": true,
