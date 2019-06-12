@@ -150,16 +150,14 @@ describe("lib/log/Serial =>", () => {
 		});
 
 		it("wraps longer buffers into multiple lines", () => {
-			// We have room for 76 chars, that is 37 bytes
+			// We have room for 65 chars in the first line
 			const expected = pseudoRandomBytes(38);
 			const hexBuffer = `0x${expected.toString("hex")}`;
-			const expectedLine1 = hexBuffer.slice(0, 76);
-			const expectedLine2 = hexBuffer.slice(76);
+			const expectedLine1 = hexBuffer.slice(0, 65);
+			const expectedLine2 = hexBuffer.slice(65);
 			log.serial.data("inbound", expected);
-			const alignRight = " ".repeat(80 - 14);
 			assertMessage(spyTransport, {
-				message: `«   ${alignRight}(38 bytes)
-    ${expectedLine1}
+				message: `«   ${expectedLine1} (38 bytes)
     ${expectedLine2}`,
 				ignoreColor: true,
 			});
@@ -191,23 +189,24 @@ describe("lib/log/Serial =>", () => {
 
 		it("wraps longer buffers into multiple lines", () => {
 			let expected = pseudoRandomBytes(27);
-			const alignRight = " ".repeat(56);
+			let hexBuffer = `0x${expected.toString("hex")}`;
+			let expectedLine1 = hexBuffer.slice(0, 55);
+			let expectedLine2 = hexBuffer.slice(55);
 
 			log.serial.receiveBuffer(expected);
 			assertMessage(spyTransport, {
-				message: ` ·  Buffer := ${alignRight}(27 bytes)
-    0x${expected.toString("hex")}`,
+				message: ` ·  Buffer := ${expectedLine1} (27 bytes)
+    ${expectedLine2}`,
 				ignoreColor: true,
 			});
 
 			expected = pseudoRandomBytes(38);
-			const hexBuffer = `0x${expected.toString("hex")}`;
-			const expectedLine1 = hexBuffer.slice(0, 76);
-			const expectedLine2 = hexBuffer.slice(76);
+			hexBuffer = `0x${expected.toString("hex")}`;
+			expectedLine1 = hexBuffer.slice(0, 55);
+			expectedLine2 = hexBuffer.slice(55);
 			log.serial.receiveBuffer(expected);
 			assertMessage(spyTransport, {
-				message: ` ·  Buffer := ${alignRight}(38 bytes)
-    ${expectedLine1}
+				message: ` ·  Buffer := ${expectedLine1} (38 bytes)
     ${expectedLine2}`,
 				ignoreColor: true,
 				callNumber: 1,

@@ -19,14 +19,15 @@ const SERIAL_LOGLEVEL = "debug";
 // There's probably a nicer way
 const INVISIBLE = colors.black("\u001b[39m");
 
+/** Calculates the length a log message would occupy if it is not split */
 function calculateFirstLineLength(
 	info: TransformableInfo,
-	includeMessage: boolean = true,
+	firstMessageLineLength: number,
 ): number {
 	return (
 		[
 			3,
-			includeMessage ? info.message.length : 0,
+			firstMessageLineLength,
 			(info.prefix || "").length,
 			(info.postfix || "").length,
 		]
@@ -37,14 +38,21 @@ function calculateFirstLineLength(
 	);
 }
 
-function messageFitsIntoOneLine(info: TransformableInfo): boolean {
-	const totalLength = calculateFirstLineLength(info);
+function messageFitsIntoOneLine(
+	info: TransformableInfo,
+	messageLength: number,
+): boolean {
+	const totalLength = calculateFirstLineLength(info, messageLength);
 	return totalLength <= LOG_WIDTH;
 }
 
 const serialFormatter = {
 	transform: (info => {
-		info.multiline = !messageFitsIntoOneLine(info);
+		const messageLines = info.message.split("\n");
+		const firstMessageLineLength = messageLines[0].length;
+		info.multiline =
+			messageLines.length > 1 ||
+			!messageFitsIntoOneLine(info, info.message.length);
 		// Align postfixes to the right
 		if (info.postfix) {
 			// Calculate how many spaces are needed to right-align the postfix
@@ -52,18 +60,28 @@ const serialFormatter = {
 			info.postfixPadding = Math.max(
 				-1, // -1 has the special meaning that we skip printing this
 				// 0 is an invisible char
-				LOG_WIDTH - 1 - calculateFirstLineLength(info, !info.multiline),
+				LOG_WIDTH -
+					1 -
+					calculateFirstLineLength(info, firstMessageLineLength),
 			);
 		}
 
 		if (info.multiline) {
 			// Break long messages into multiple lines
 			const lines: string[] = [];
-			let message = info.message;
-			while (message.length) {
-				const cut = Math.min(LOG_WIDTH - 4, message.length);
-				lines.push(message.substr(0, cut));
-				message = message.substr(cut);
+			let isFirstLine = true;
+			for (let message of messageLines) {
+				while (message.length) {
+					const cut = Math.min(
+						message.length,
+						isFirstLine
+							? LOG_WIDTH - calculateFirstLineLength(info, 0) - 1
+							: LOG_WIDTH - 4,
+					);
+					isFirstLine = false;
+					lines.push(message.substr(0, cut));
+					message = message.substr(cut);
+				}
 			}
 			info.message = lines.join("\n");
 		}
@@ -73,10 +91,11 @@ const serialFormatter = {
 
 const serialPrinter = {
 	transform: (info => {
+		const messageLines = info.message.split("\n");
 		const firstLine = [
 			info.direction,
 			info.prefix,
-			info.multiline ? "" : info.message,
+			messageLines[0],
 			info.postfixPadding < 0
 				? undefined
 				: info.postfixPadding === 0
@@ -88,7 +107,7 @@ const serialPrinter = {
 			.join(" ");
 		const lines = [firstLine];
 		if (info.multiline) {
-			lines.push(...info.message.split("\n").map(line => "    " + line));
+			lines.push(...messageLines.slice(1).map(line => "    " + line));
 		}
 		info[messageSymbol as any] = lines.join("\n");
 		return info;
