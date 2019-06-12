@@ -1,3 +1,6 @@
+/** The width of a log line in (visible) characters */
+export const LOG_WIDTH = 80;
+
 export type DataDirection = "inbound" | "outbound" | "none";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

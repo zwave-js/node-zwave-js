@@ -4,7 +4,12 @@ import * as winston from "winston";
 import { MessageHeaders } from "../message/Constants";
 import { num2hex } from "../util/strings";
 import { colorizer } from "./Colorizer";
-import { DataDirection, getDirectionPrefix, messageSymbol } from "./shared";
+import {
+	DataDirection,
+	getDirectionPrefix,
+	LOG_WIDTH,
+	messageSymbol,
+} from "./shared";
 const { combine, timestamp, label } = winston.format;
 
 const SERIAL_LABEL = "SERIAL";
@@ -34,7 +39,7 @@ function calculateFirstLineLength(
 
 function messageFitsIntoOneLine(info: TransformableInfo): boolean {
 	const totalLength = calculateFirstLineLength(info);
-	return totalLength <= 80;
+	return totalLength <= LOG_WIDTH;
 }
 
 const serialFormatter = {
@@ -47,7 +52,7 @@ const serialFormatter = {
 			info.postfixPadding = Math.max(
 				-1, // -1 has the special meaning that we skip printing this
 				// 0 is an invisible char
-				80 - 1 - calculateFirstLineLength(info, !info.multiline),
+				LOG_WIDTH - 1 - calculateFirstLineLength(info, !info.multiline),
 			);
 		}
 
@@ -56,7 +61,7 @@ const serialFormatter = {
 			const lines: string[] = [];
 			let message = info.message;
 			while (message.length) {
-				const cut = Math.min(76, message.length);
+				const cut = Math.min(LOG_WIDTH - 4, message.length);
 				lines.push(message.substr(0, cut));
 				message = message.substr(cut);
 			}
