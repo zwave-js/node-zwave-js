@@ -1,10 +1,11 @@
 import { stripColor } from "ansi-colors";
 import { pseudoRandomBytes } from "crypto";
+import { MESSAGE } from "triple-beam";
 import * as winston from "winston";
 import * as Transport from "winston-transport";
 import log from "./index";
 import { serialLoggerFormat } from "./Serial";
-import { BOX_CHARS, messageSymbol } from "./shared";
+import { BOX_CHARS } from "./shared";
 
 /** Log to a jest.fn() in order to perform assertions during unit tests */
 export class SpyTransport extends Transport {
@@ -40,7 +41,7 @@ function assertMessage(
 	expect(transport.spy.mock.calls.length).toBeGreaterThan(callNumber);
 
 	const callArg = transport.spy.mock.calls[callNumber][0];
-	let actualMessage = callArg[messageSymbol];
+	let actualMessage = callArg[MESSAGE];
 
 	if (options.ignoreColor) {
 		actualMessage = stripColor(actualMessage);
@@ -91,7 +92,7 @@ describe("lib/log/Serial =>", () => {
 			log.serial.ACK("outbound");
 			const alignRight = " ".repeat(80 - 16);
 			assertMessage(spyTransport, {
-				message: `  » [ACK] ${alignRight}(0x06)`,
+				message: ` »  [ACK] ${alignRight}(0x06)`,
 				ignoreColor: true,
 			});
 		});
@@ -109,7 +110,7 @@ describe("lib/log/Serial =>", () => {
 			log.serial.NAK("outbound");
 			const alignRight = " ".repeat(80 - 16);
 			assertMessage(spyTransport, {
-				message: `  » [NAK] ${alignRight}(0x15)`,
+				message: ` »  [NAK] ${alignRight}(0x15)`,
 				ignoreColor: true,
 			});
 		});
@@ -127,7 +128,7 @@ describe("lib/log/Serial =>", () => {
 			log.serial.CAN("outbound");
 			const alignRight = " ".repeat(80 - 16);
 			assertMessage(spyTransport, {
-				message: `  » [CAN] ${alignRight}(0x18)`,
+				message: ` »  [CAN] ${alignRight}(0x18)`,
 				ignoreColor: true,
 			});
 		});
@@ -147,7 +148,7 @@ describe("lib/log/Serial =>", () => {
 			log.serial.data("outbound", Buffer.from([0x55, 4, 3, 2, 1]));
 			const alignRight = " ".repeat(80 - 26);
 			assertMessage(spyTransport, {
-				message: `  » 0x5504030201 ${alignRight}(5 bytes)`,
+				message: ` »  0x5504030201 ${alignRight}(5 bytes)`,
 				ignoreColor: true,
 			});
 		});
@@ -160,8 +161,8 @@ describe("lib/log/Serial =>", () => {
 			const expectedLine2 = hexBuffer.slice(65);
 			log.serial.data("inbound", expected);
 			assertMessage(spyTransport, {
-				message: `«  ${BOX_CHARS.top}${expectedLine1} (38 bytes)
-   ${BOX_CHARS.bottom}${expectedLine2}`,
+				message: `« ${BOX_CHARS.top} ${expectedLine1} (38 bytes)
+  ${BOX_CHARS.bottom} ${expectedLine2}`,
 				ignoreColor: true,
 			});
 		});
@@ -176,9 +177,9 @@ describe("lib/log/Serial =>", () => {
 			const expectedLine3 = hexBuffer.slice(65 + 76);
 			log.serial.data("inbound", expected);
 			assertMessage(spyTransport, {
-				message: `«  ${BOX_CHARS.top}${expectedLine1} (70 bytes)
-   ${BOX_CHARS.middle}${expectedLine2}
-   ${BOX_CHARS.bottom}${expectedLine3}`,
+				message: `« ${BOX_CHARS.top} ${expectedLine1} (70 bytes)
+  ${BOX_CHARS.middle} ${expectedLine2}
+  ${BOX_CHARS.bottom} ${expectedLine3}`,
 				ignoreColor: true,
 			});
 		});
@@ -189,7 +190,7 @@ describe("lib/log/Serial =>", () => {
 			log.serial.receiveBuffer(Buffer.from([0, 8, 0x15]));
 			const alignRight = " ".repeat(80 - 32);
 			assertMessage(spyTransport, {
-				message: ` ·  Buffer := 0x000815 ${alignRight}(3 bytes)`,
+				message: `·   Buffer := 0x000815 ${alignRight}(3 bytes)`,
 				ignoreColor: true,
 			});
 		});
@@ -200,7 +201,7 @@ describe("lib/log/Serial =>", () => {
 			const expected = pseudoRandomBytes(26);
 			log.serial.receiveBuffer(expected);
 			assertMessage(spyTransport, {
-				message: ` ·  Buffer := 0x${expected.toString(
+				message: `·   Buffer := 0x${expected.toString(
 					"hex",
 				)}  (26 bytes)`,
 				ignoreColor: true,
@@ -215,8 +216,8 @@ describe("lib/log/Serial =>", () => {
 
 			log.serial.receiveBuffer(expected);
 			assertMessage(spyTransport, {
-				message: ` · ${BOX_CHARS.top}Buffer := ${expectedLine1} (27 bytes)
-   ${BOX_CHARS.bottom}${expectedLine2}`,
+				message: `· ${BOX_CHARS.top} Buffer := ${expectedLine1} (27 bytes)
+  ${BOX_CHARS.bottom} ${expectedLine2}`,
 				ignoreColor: true,
 			});
 
@@ -226,8 +227,8 @@ describe("lib/log/Serial =>", () => {
 			expectedLine2 = hexBuffer.slice(55);
 			log.serial.receiveBuffer(expected);
 			assertMessage(spyTransport, {
-				message: ` · ${BOX_CHARS.top}Buffer := ${expectedLine1} (38 bytes)
-   ${BOX_CHARS.bottom}${expectedLine2}`,
+				message: `· ${BOX_CHARS.top} Buffer := ${expectedLine1} (38 bytes)
+  ${BOX_CHARS.bottom} ${expectedLine2}`,
 				ignoreColor: true,
 				callNumber: 1,
 			});
