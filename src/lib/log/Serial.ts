@@ -219,3 +219,15 @@ export function receiveBuffer(data: Buffer): void {
 		direction: getDirectionPrefix("none"),
 	});
 }
+
+/**
+ * Logs a message
+ * @param msg The message to output
+ */
+export function message(message: string): void {
+	logger.log({
+		level: SERIAL_LOGLEVEL,
+		message,
+		direction: getDirectionPrefix("none"),
+	});
+}

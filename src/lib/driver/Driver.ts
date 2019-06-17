@@ -505,6 +505,7 @@ export class Driver extends EventEmitter implements IDriver {
 
 	// eslint-disable-next-line @typescript-eslint/camelcase
 	private serialport_onData(data: Buffer): void {
+		// FIXME: Data is logged multiple times here
 		log2.serial.data("inbound", data);
 		// append the new data to our receive buffer
 		this.receiveBuffer =
@@ -533,6 +534,7 @@ export class Driver extends EventEmitter implements IDriver {
 						break;
 					}
 					default: {
+						// TODO: Log this
 						const message = `The receive buffer starts with unexpected data: 0x${data.toString(
 							"hex",
 						)}`;
@@ -606,11 +608,8 @@ export class Driver extends EventEmitter implements IDriver {
 			break;
 		}
 
-		// TODO: Add a message/method for this
-		log(
-			"io",
-			`the receive buffer is empty, waiting for the next chunk...`,
-			"debug",
+		log2.serial.message(
+			`The receive buffer is empty, waiting for the next chunk...`,
 		);
 	}
 
@@ -1049,7 +1048,6 @@ export class Driver extends EventEmitter implements IDriver {
 
 	private handleNAK(): void {
 		// TODO: what to do with this NAK?
-		log("io", "NAK received. TODO: handle it", "warn");
 	}
 
 	private handleCAN(): void {
@@ -1341,6 +1339,7 @@ export class Driver extends EventEmitter implements IDriver {
 			);
 			// Mark the transaction as being sent
 			this.currentTransaction.sendAttempts = 1;
+			log2.serial.data("outbound", data);
 			this.doSend(data);
 			// If the transaction has a timeout configured, start it
 			if (this.currentTransaction.timeout) {
@@ -1382,12 +1381,12 @@ export class Driver extends EventEmitter implements IDriver {
 			"debug",
 		);
 		const data = msg.serialize();
+		log2.serial.data("outbound", data);
 		this.doSend(data);
 	}
 
 	private doSend(data: Buffer): void {
 		if (this.serial) {
-			log2.serial.data("outbound", data);
 			this.serial.write(data);
 		}
 	}

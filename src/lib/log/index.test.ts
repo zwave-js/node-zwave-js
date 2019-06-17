@@ -43,11 +43,13 @@ function assertMessage(
 	const callArg = transport.spy.mock.calls[callNumber][0];
 	let actualMessage = callArg[MESSAGE];
 
-	if (options.ignoreColor) {
+	// By default ignore the color codes
+	const ignoreColor = options.ignoreColor !== false;
+	if (ignoreColor) {
 		actualMessage = stripColor(actualMessage);
 	}
 	if (typeof options.message === "string") {
-		if (options.ignoreColor) {
+		if (ignoreColor) {
 			options.message = stripColor(options.message);
 		}
 		expect(actualMessage).toEqual(options.message);
@@ -74,6 +76,14 @@ describe("lib/log/Serial =>", () => {
 		});
 	});
 
+	// Don't spam the console when performing the other tests not related to logging
+	afterAll(() => {
+		serialLogger.configure({
+			format: serialLoggerFormat,
+			transports: [],
+		});
+	});
+
 	beforeEach(() => {
 		spyTransport.spy.mockClear();
 	});
@@ -84,7 +94,6 @@ describe("lib/log/Serial =>", () => {
 			const alignRight = " ".repeat(80 - 16);
 			assertMessage(spyTransport, {
 				message: `«   [ACK] ${alignRight}(0x06)`,
-				ignoreColor: true,
 			});
 		});
 
@@ -93,7 +102,6 @@ describe("lib/log/Serial =>", () => {
 			const alignRight = " ".repeat(80 - 16);
 			assertMessage(spyTransport, {
 				message: ` »  [ACK] ${alignRight}(0x06)`,
-				ignoreColor: true,
 			});
 		});
 
@@ -102,7 +110,6 @@ describe("lib/log/Serial =>", () => {
 			const alignRight = " ".repeat(80 - 16);
 			assertMessage(spyTransport, {
 				message: `«   [NAK] ${alignRight}(0x15)`,
-				ignoreColor: true,
 			});
 		});
 
@@ -111,7 +118,6 @@ describe("lib/log/Serial =>", () => {
 			const alignRight = " ".repeat(80 - 16);
 			assertMessage(spyTransport, {
 				message: ` »  [NAK] ${alignRight}(0x15)`,
-				ignoreColor: true,
 			});
 		});
 
@@ -120,7 +126,6 @@ describe("lib/log/Serial =>", () => {
 			const alignRight = " ".repeat(80 - 16);
 			assertMessage(spyTransport, {
 				message: `«   [CAN] ${alignRight}(0x18)`,
-				ignoreColor: true,
 			});
 		});
 
@@ -129,7 +134,6 @@ describe("lib/log/Serial =>", () => {
 			const alignRight = " ".repeat(80 - 16);
 			assertMessage(spyTransport, {
 				message: ` »  [CAN] ${alignRight}(0x18)`,
-				ignoreColor: true,
 			});
 		});
 	});
@@ -140,7 +144,6 @@ describe("lib/log/Serial =>", () => {
 			const alignRight = " ".repeat(80 - 32);
 			assertMessage(spyTransport, {
 				message: `«   0x0102030405060708 ${alignRight}(8 bytes)`,
-				ignoreColor: true,
 			});
 		});
 
@@ -149,7 +152,6 @@ describe("lib/log/Serial =>", () => {
 			const alignRight = " ".repeat(80 - 26);
 			assertMessage(spyTransport, {
 				message: ` »  0x5504030201 ${alignRight}(5 bytes)`,
-				ignoreColor: true,
 			});
 		});
 
@@ -163,7 +165,6 @@ describe("lib/log/Serial =>", () => {
 			assertMessage(spyTransport, {
 				message: `« ${BOX_CHARS.top} ${expectedLine1} (38 bytes)
   ${BOX_CHARS.bottom} ${expectedLine2}`,
-				ignoreColor: true,
 			});
 		});
 
@@ -180,7 +181,6 @@ describe("lib/log/Serial =>", () => {
 				message: `« ${BOX_CHARS.top} ${expectedLine1} (70 bytes)
   ${BOX_CHARS.middle} ${expectedLine2}
   ${BOX_CHARS.bottom} ${expectedLine3}`,
-				ignoreColor: true,
 			});
 		});
 	});
@@ -191,7 +191,6 @@ describe("lib/log/Serial =>", () => {
 			const alignRight = " ".repeat(80 - 32);
 			assertMessage(spyTransport, {
 				message: `·   Buffer := 0x000815 ${alignRight}(3 bytes)`,
-				ignoreColor: true,
 			});
 		});
 
@@ -204,7 +203,6 @@ describe("lib/log/Serial =>", () => {
 				message: `·   Buffer := 0x${expected.toString(
 					"hex",
 				)}  (26 bytes)`,
-				ignoreColor: true,
 			});
 		});
 
@@ -218,7 +216,6 @@ describe("lib/log/Serial =>", () => {
 			assertMessage(spyTransport, {
 				message: `· ${BOX_CHARS.top} Buffer := ${expectedLine1} (27 bytes)
   ${BOX_CHARS.bottom} ${expectedLine2}`,
-				ignoreColor: true,
 			});
 
 			expected = pseudoRandomBytes(38);
@@ -229,8 +226,26 @@ describe("lib/log/Serial =>", () => {
 			assertMessage(spyTransport, {
 				message: `· ${BOX_CHARS.top} Buffer := ${expectedLine1} (38 bytes)
   ${BOX_CHARS.bottom} ${expectedLine2}`,
-				ignoreColor: true,
 				callNumber: 1,
+			});
+		});
+	});
+
+	describe("logs simple messages correctly", () => {
+		it("short ones", () => {
+			log.serial.message("Test");
+			assertMessage(spyTransport, {
+				message: `·   Test`,
+			});
+		});
+
+		it("long ones", () => {
+			log.serial.message(
+				"This is a very long message that should be broken into multiple lines maybe sometimes...",
+			);
+			assertMessage(spyTransport, {
+				message: `· ${BOX_CHARS.top} This is a very long message that should be broken into multiple lines maybe 
+  ${BOX_CHARS.bottom} sometimes...`,
 			});
 		});
 	});
