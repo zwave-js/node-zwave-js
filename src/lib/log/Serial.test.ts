@@ -16,7 +16,8 @@ describe("lib/log/Serial =>", () => {
 		serialLogger.configure({
 			format: serialLoggerFormat,
 			transports: [
-				new winston.transports.Console({ level: "silly" }),
+				// Uncomment this to debug the log outputs manually
+				// new winston.transports.Console({ level: "silly" }),
 				spyTransport,
 			],
 		});
