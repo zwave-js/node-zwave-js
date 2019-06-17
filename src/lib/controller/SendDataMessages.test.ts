@@ -1,4 +1,3 @@
-/// <reference types="jest-extended" />
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { BasicCCGet } from "../commandclass/BasicCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
