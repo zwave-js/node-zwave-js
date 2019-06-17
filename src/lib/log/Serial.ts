@@ -7,6 +7,7 @@ import {
 	getDirectionPrefix,
 	logMessageFormatter,
 	logMessagePrinter,
+	ZWaveLogger,
 } from "./shared";
 const { combine, timestamp, label } = winston.format;
 
@@ -27,7 +28,7 @@ if (!winston.loggers.has("serial")) {
 		transports: [new winston.transports.Console({ level: "silly" })],
 	});
 }
-const logger = winston.loggers.get("serial");
+const logger: ZWaveLogger = winston.loggers.get("serial");
 
 /**
  * Logs transmission or receipt of an ACK frame
@@ -60,7 +61,7 @@ function logMessageHeader(
 	logger.log({
 		level: SERIAL_LOGLEVEL,
 		message: `[${MessageHeaders[header]}]`,
-		postfix: `(${num2hex(header)})`,
+		secondaryTags: `(${num2hex(header)})`,
 		direction: getDirectionPrefix(direction),
 	});
 }
@@ -74,7 +75,7 @@ export function data(direction: DataDirection, data: Buffer): void {
 	logger.log({
 		level: SERIAL_LOGLEVEL,
 		message: `0x${data.toString("hex")}`,
-		postfix: `(${data.length} bytes)`,
+		secondaryTags: `(${data.length} bytes)`,
 		direction: getDirectionPrefix(direction),
 	});
 }
@@ -86,9 +87,9 @@ export function data(direction: DataDirection, data: Buffer): void {
 export function receiveBuffer(data: Buffer): void {
 	logger.log({
 		level: SERIAL_LOGLEVEL,
-		prefix: "Buffer :=",
+		primaryTags: "Buffer :=",
 		message: `0x${data.toString("hex")}`,
-		postfix: `(${data.length} bytes)`,
+		secondaryTags: `(${data.length} bytes)`,
 		direction: getDirectionPrefix("none"),
 	});
 }

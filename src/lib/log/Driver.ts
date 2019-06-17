@@ -7,6 +7,8 @@ import {
 	getDirectionPrefix,
 	logMessageFormatter,
 	logMessagePrinter,
+	tagify,
+	ZWaveLogger,
 } from "./shared";
 const { combine, timestamp, label } = winston.format;
 
@@ -27,7 +29,7 @@ if (!winston.loggers.has("driver")) {
 		transports: [new winston.transports.Console({ level: "silly" })],
 	});
 }
-const logger = winston.loggers.get("driver");
+const logger: ZWaveLogger = winston.loggers.get("driver");
 
 /**
  * Logs a message
@@ -43,13 +45,13 @@ export function print(message: string): void {
 
 /** Serializes a message that is transmitted or received for logging */
 export function message(direction: DataDirection, message: Message): void {
-	const prefixes: string[] = [];
-	prefixes.push(message.type === MessageType.Request ? "REQ" : "RES");
-	prefixes.push(FunctionType[message.functionType]);
+	const tags: string[] = [];
+	tags.push(message.type === MessageType.Request ? "REQ" : "RES");
+	tags.push(FunctionType[message.functionType]);
 
 	logger.log({
 		level: DRIVER_LOGLEVEL,
-		prefix: prefixes.map(pfx => `[${pfx}]`).join(" "),
+		primaryTags: tagify(tags),
 		message: "",
 		direction: getDirectionPrefix(direction),
 	});

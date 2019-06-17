@@ -1,6 +1,7 @@
 import * as colors from "ansi-colors";
 import { Format, TransformableInfo, TransformFunction } from "logform";
 import { MESSAGE } from "triple-beam";
+import { Logger } from "winston";
 
 /** An invisible char with length >= 0 */
 // This is necessary to "print" zero spaces for the right padding
@@ -29,21 +30,36 @@ export const CONTROL_CHAR_WIDTH = 4;
 /** The width of a log line in (visible) characters */
 export const LOG_WIDTH = 80;
 
+export interface ZWaveLogInfo extends TransformableInfo {
+	direction: ReturnType<typeof getDirectionPrefix>;
+	/** Primary tags are printed before the message and must fit into the first line.
+	 * They don't have to be enclosed in square brackets */
+	primaryTags?: string;
+	/** Secondary tags are right-aligned in the first line and printed in a dim color */
+	secondaryTags?: string;
+	secondaryTagPadding?: number;
+	multiline?: boolean;
+}
+
+export type ZWaveLogger = Omit<Logger, "log"> & {
+	log: (info: ZWaveLogInfo) => void;
+};
+
 /**
  * Calculates the length the first line of a log message would occupy if it is not split
  * @param info The message and information to log
  * @param firstMessageLineLength The length of the first line of the actual message text, not including pre- and postfixes.
  */
 function calculateFirstLineLength(
-	info: TransformableInfo,
+	info: ZWaveLogInfo,
 	firstMessageLineLength: number,
 ): number {
 	return (
 		[
 			CONTROL_CHAR_WIDTH - 1,
 			firstMessageLineLength,
-			(info.prefix || "").length,
-			(info.postfix || "").length,
+			(info.primaryTags || "").length,
+			(info.secondaryTags || "").length,
 		]
 			// filter out empty parts
 			.filter(len => len > 0)
@@ -59,7 +75,7 @@ function calculateFirstLineLength(
  * Can be set to 0 to exclude the message from the calculation
  */
 export function messageFitsIntoOneLine(
-	info: TransformableInfo,
+	info: ZWaveLogInfo,
 	messageLength: number,
 ): boolean {
 	const totalLength = calculateFirstLineLength(info, messageLength);
@@ -68,17 +84,17 @@ export function messageFitsIntoOneLine(
 
 /** Formats the log message and calculates the necessary paddings */
 export const logMessageFormatter: Format = {
-	transform: (info => {
+	transform: ((info: ZWaveLogInfo) => {
 		const messageLines = info.message.split("\n");
 		const firstMessageLineLength = messageLines[0].length;
 		info.multiline =
 			messageLines.length > 1 ||
 			!messageFitsIntoOneLine(info, info.message.length);
 		// Align postfixes to the right
-		if (info.postfix) {
+		if (info.secondaryTags) {
 			// Calculate how many spaces are needed to right-align the postfix
 			// Subtract 1 because the parts are joined by spaces
-			info.postfixPadding = Math.max(
+			info.secondaryTagPadding = Math.max(
 				// -1 has the special meaning that we don't print any padding,
 				// because the message takes all the available space
 				-1,
@@ -113,19 +129,22 @@ export const logMessageFormatter: Format = {
 
 /** Prints a formatted and colorized log message */
 export const logMessagePrinter: Format = {
-	transform: (info => {
+	transform: ((info: ZWaveLogInfo) => {
 		// The formatter has already split the message into multiple lines
 		const messageLines = info.message.split("\n");
+		// Also this can only happen if the user forgot to call the formatter first
+		if (info.secondaryTagPadding == undefined)
+			info.secondaryTagPadding = -1;
 		// Format the first message line
 		let firstLine = [
-			info.prefix,
+			info.primaryTags,
 			messageLines[0],
-			info.postfixPadding < 0
+			info.secondaryTagPadding < 0
 				? undefined
-				: info.postfixPadding === 0
+				: info.secondaryTagPadding === 0
 				? INVISIBLE
-				: " ".repeat(info.postfixPadding),
-			info.postfix,
+				: " ".repeat(info.secondaryTagPadding),
+			info.secondaryTags,
 		]
 			.filter(item => !!item)
 			.join(" ");
@@ -157,3 +176,8 @@ export const logMessagePrinter: Format = {
 		return info;
 	}) as TransformFunction,
 };
+
+/** Wraps an array of strings in square brackets and joins them with spaces */
+export function tagify(tags: string[]): string {
+	return tags.map(pfx => `[${pfx}]`).join(" ");
+}
