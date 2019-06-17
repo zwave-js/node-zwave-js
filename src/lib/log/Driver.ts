@@ -1,6 +1,10 @@
 import * as winston from "winston";
-import { FunctionType, MessageType } from "../message/Constants";
-import { Message } from "../message/Message";
+import { Transaction } from "../driver/Transaction";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
 import { colorizer } from "./Colorizer";
 import {
 	DataDirection,
@@ -44,14 +48,25 @@ export function print(message: string): void {
 }
 
 /** Serializes a message that is transmitted or received for logging */
-export function message(direction: DataDirection, message: Message): void {
+export function transaction(
+	direction: DataDirection,
+	transaction: Transaction,
+): void {
 	const tags: string[] = [];
+	const { message } = transaction;
 	tags.push(message.type === MessageType.Request ? "REQ" : "RES");
 	tags.push(FunctionType[message.functionType]);
+
+	// On the first attempt, we print the basic information about the transaction
+	const secondaryTags: string[] = [];
+	if (transaction.sendAttempts === 1) {
+		secondaryTags.push(`P: ${MessagePriority[transaction.priority]}`);
+	}
 
 	logger.log({
 		level: DRIVER_LOGLEVEL,
 		primaryTags: tagify(tags),
+		secondaryTags: tagify(secondaryTags),
 		message: "",
 		direction: getDirectionPrefix(direction),
 	});
