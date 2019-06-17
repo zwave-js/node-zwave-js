@@ -1,6 +1,9 @@
 import * as winston from "winston";
+import { FunctionType, MessageType } from "../message/Constants";
+import { Message } from "../message/Message";
 import { colorizer } from "./Colorizer";
 import {
+	DataDirection,
 	getDirectionPrefix,
 	logMessageFormatter,
 	logMessagePrinter,
@@ -30,10 +33,24 @@ const logger = winston.loggers.get("driver");
  * Logs a message
  * @param msg The message to output
  */
-export function message(message: string): void {
+export function print(message: string): void {
 	logger.log({
 		level: DRIVER_LOGLEVEL,
 		message,
 		direction: getDirectionPrefix("none"),
+	});
+}
+
+/** Serializes a message that is transmitted or received for logging */
+export function message(direction: DataDirection, message: Message): void {
+	const prefixes: string[] = [];
+	prefixes.push(message.type === MessageType.Request ? "REQ" : "RES");
+	prefixes.push(FunctionType[message.functionType]);
+
+	logger.log({
+		level: DRIVER_LOGLEVEL,
+		prefix: prefixes.map(pfx => `[${pfx}]`).join(" "),
+		message: "",
+		direction: getDirectionPrefix(direction),
 	});
 }

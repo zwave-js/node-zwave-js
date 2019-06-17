@@ -1,8 +1,16 @@
 import * as winston from "winston";
+import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertMessage, SpyTransport } from "../../../test/SpyTransport";
+import { FunctionType, MessageType } from "../message/Constants";
+import { Message } from "../message/Message";
 import { driverLoggerFormat } from "./Driver";
 import log from "./index";
-import { BOX_CHARS } from "./shared";
+import { BOX_CHARS, getDirectionPrefix } from "./shared";
+
+function createMessage(type: MessageType, functionType: FunctionType): Message {
+	const driver = createEmptyMockDriver();
+	return new Message(driver, { type, functionType });
+}
 
 describe("lib/log/Driver =>", () => {
 	let driverLogger: winston.Logger;
@@ -34,16 +42,56 @@ describe("lib/log/Driver =>", () => {
 		spyTransport.spy.mockClear();
 	});
 
+	describe("logs message classes correctly", () => {
+		it("contains the direction", () => {
+			log.driver.message(
+				"inbound",
+				createMessage(MessageType.Request, 0x00 as any),
+			);
+			assertMessage(spyTransport, {
+				predicate: msg => msg.startsWith(getDirectionPrefix("inbound")),
+			});
+
+			log.driver.message(
+				"outbound",
+				createMessage(MessageType.Request, 0x00 as any),
+			);
+			assertMessage(spyTransport, {
+				predicate: msg =>
+					msg.startsWith(getDirectionPrefix("outbound")),
+				callNumber: 1,
+			});
+		});
+		it("contains the message type as a tag", () => {
+			log.driver.message(
+				"inbound",
+				createMessage(MessageType.Request, 0x00 as any),
+			);
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("[REQ]"),
+			});
+
+			log.driver.message(
+				"inbound",
+				createMessage(MessageType.Response, 0x00 as any),
+			);
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("[RES]"),
+				callNumber: 1,
+			});
+		});
+	});
+
 	describe("logs simple messages correctly", () => {
 		it("short ones", () => {
-			log.driver.message("Test");
+			log.driver.print("Test");
 			assertMessage(spyTransport, {
 				message: `·   Test`,
 			});
 		});
 
 		it("long ones", () => {
-			log.driver.message(
+			log.driver.print(
 				"This is a very long message that should be broken into multiple lines maybe sometimes...",
 			);
 			assertMessage(spyTransport, {
