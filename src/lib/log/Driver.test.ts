@@ -80,6 +80,19 @@ describe("lib/log/Driver =>", () => {
 				callNumber: 1,
 			});
 		});
+
+		it("contains the function type as a tag", () => {
+			log.driver.message(
+				"inbound",
+				createMessage(
+					MessageType.Request,
+					FunctionType.GetSerialApiInitData,
+				),
+			);
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("[GetSerialApiInitData]"),
+			});
+		});
 	});
 
 	describe("logs simple messages correctly", () => {
