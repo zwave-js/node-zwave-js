@@ -2,6 +2,7 @@ import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import * as winston from "winston";
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertMessage, SpyTransport } from "../../../test/SpyTransport";
+import { Driver } from "../driver/Driver";
 import { Transaction } from "../driver/Transaction";
 import {
 	FunctionType,
@@ -13,19 +14,30 @@ import { driverLoggerFormat } from "./Driver";
 import log from "./index";
 import { BOX_CHARS, getDirectionPrefix } from "./shared";
 
-interface CreateTransactionOptions {
+interface CreateMessageOptions {
 	type: MessageType;
 	functionType: FunctionType;
+}
+
+interface CreateTransactionOptions extends CreateMessageOptions {
 	priority: MessagePriority;
 }
+
+function createMessage(
+	driver: Driver,
+	options: Partial<CreateTransactionOptions>,
+) {
+	return new Message(driver, {
+		type: options.type || MessageType.Request,
+		functionType: options.functionType || (0x00 as any),
+	});
+}
+
 function createTransaction(
 	options: Partial<CreateTransactionOptions>,
 ): Transaction {
 	const driver = createEmptyMockDriver();
-	const message = new Message(driver, {
-		type: options.type || MessageType.Request,
-		functionType: options.functionType || (0x00 as any),
-	});
+	const message = createMessage(driver, options);
 	const trns = new Transaction(
 		driver,
 		message,
@@ -68,7 +80,7 @@ describe("lib/log/Driver =>", () => {
 
 	describe("logs outbound messages of a transaction correctly", () => {
 		it("contains the direction", () => {
-			log.driver.transaction("outbound", createTransaction({}));
+			log.driver.transaction(createTransaction({}));
 			assertMessage(spyTransport, {
 				predicate: msg =>
 					msg.startsWith(getDirectionPrefix("outbound")),
@@ -76,7 +88,6 @@ describe("lib/log/Driver =>", () => {
 		});
 		it("contains the message type as a tag", () => {
 			log.driver.transaction(
-				"outbound",
 				createTransaction({ type: MessageType.Request }),
 			);
 			assertMessage(spyTransport, {
@@ -84,7 +95,6 @@ describe("lib/log/Driver =>", () => {
 			});
 
 			log.driver.transaction(
-				"outbound",
 				createTransaction({ type: MessageType.Response }),
 			);
 			assertMessage(spyTransport, {
@@ -95,7 +105,6 @@ describe("lib/log/Driver =>", () => {
 
 		it("contains the function type as a tag", () => {
 			log.driver.transaction(
-				"outbound",
 				createTransaction({
 					functionType: FunctionType.GetSerialApiInitData,
 				}),
@@ -107,7 +116,6 @@ describe("lib/log/Driver =>", () => {
 
 		it("contains the message priority on the first attempt", () => {
 			log.driver.transaction(
-				"outbound",
 				createTransaction({
 					priority: MessagePriority.MultistepController,
 				}),
@@ -122,7 +130,7 @@ describe("lib/log/Driver =>", () => {
 				priority: MessagePriority.MultistepController,
 			});
 			transaction.sendAttempts = 2;
-			log.driver.transaction("outbound", transaction);
+			log.driver.transaction(transaction);
 			assertMessage(spyTransport, {
 				predicate: msg => !msg.includes("[P: MultistepController]"),
 			});
@@ -134,9 +142,58 @@ describe("lib/log/Driver =>", () => {
 			});
 			transaction.sendAttempts = 2;
 			transaction.maxSendAttempts = 3;
-			log.driver.transaction("outbound", transaction);
+			log.driver.transaction(transaction);
 			assertMessage(spyTransport, {
 				predicate: msg => msg.includes("[attempt 2/3]"),
+			});
+		});
+	});
+
+	describe("logs responses to a transaction correctly", () => {
+		it("contains the direction", () => {
+			const msg = createMessage(createEmptyMockDriver(), {});
+			log.driver.transactionResponse(msg, null as any);
+			assertMessage(spyTransport, {
+				predicate: msg => msg.startsWith(getDirectionPrefix("inbound")),
+			});
+		});
+
+		it("contains the message type as a tag", () => {
+			let msg = createMessage(createEmptyMockDriver(), {
+				type: MessageType.Request,
+			});
+			log.driver.transactionResponse(msg, null as any);
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("[REQ]"),
+			});
+
+			msg = createMessage(createEmptyMockDriver(), {
+				type: MessageType.Response,
+			});
+			log.driver.transactionResponse(msg, null as any);
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("[RES]"),
+				callNumber: 1,
+			});
+		});
+
+		it("contains the function type as a tag", () => {
+			const msg = createMessage(createEmptyMockDriver(), {
+				functionType: FunctionType.HardReset,
+			});
+			log.driver.transactionResponse(msg, null as any);
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("[HardReset]"),
+			});
+		});
+
+		it("contains the role (regarding the transaction) of the received message as a tag", () => {
+			const msg = createMessage(createEmptyMockDriver(), {
+				functionType: FunctionType.HardReset,
+			});
+			log.driver.transactionResponse(msg, "fatal_controller");
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("[fatal_controller]"),
 			});
 		});
 	});

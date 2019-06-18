@@ -5,9 +5,9 @@ import {
 	MessagePriority,
 	MessageType,
 } from "../message/Constants";
+import { Message, ResponseRole } from "../message/Message";
 import { colorizer } from "./Colorizer";
 import {
-	DataDirection,
 	getDirectionPrefix,
 	logMessageFormatter,
 	logMessagePrinter,
@@ -47,15 +47,12 @@ export function print(message: string): void {
 	});
 }
 
-/** Serializes a message that is transmitted or received for logging */
-export function transaction(
-	direction: DataDirection,
-	transaction: Transaction,
-): void {
-	const tags: string[] = [];
+/**
+ * Serializes a message that starts a transaction, i.e. a message that is sent and may expect a response
+ */
+export function transaction(transaction: Transaction): void {
 	const { message } = transaction;
-	tags.push(message.type === MessageType.Request ? "REQ" : "RES");
-	tags.push(FunctionType[message.functionType]);
+	const primaryTags: string[] = getPrimaryTagsForMessage(message);
 
 	// On the first attempt, we print the basic information about the transaction
 	const secondaryTags: string[] = [];
@@ -70,9 +67,37 @@ export function transaction(
 
 	logger.log({
 		level: DRIVER_LOGLEVEL,
-		primaryTags: tagify(tags),
+		primaryTags: tagify(primaryTags),
 		secondaryTags: tagify(secondaryTags),
 		message: "",
-		direction: getDirectionPrefix(direction),
+		// Since we are programming a controller, the first message of a transaction is always outbound
+		// (not to confuse with the message type, which may be Request or Response)
+		direction: getDirectionPrefix("outbound"),
 	});
+}
+
+/** Logs information about a message that is received as a response to a transaction */
+export function transactionResponse(
+	message: Message,
+	role: ResponseRole,
+): void {
+	const primaryTags: string[] = getPrimaryTagsForMessage(message);
+	const secondaryTags = [role];
+
+	logger.log({
+		level: DRIVER_LOGLEVEL,
+		primaryTags: tagify(primaryTags),
+		secondaryTags: tagify(secondaryTags),
+		message: "",
+		// Since we are programming a controller, responses are always inbound
+		// (not to confuse with the message type, which may be Request or Response)
+		direction: getDirectionPrefix("inbound"),
+	});
+}
+
+function getPrimaryTagsForMessage(message: Message) {
+	return [
+		message.type === MessageType.Request ? "REQ" : "RES",
+		FunctionType[message.functionType],
+	];
 }
