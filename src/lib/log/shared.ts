@@ -31,7 +31,7 @@ export const CONTROL_CHAR_WIDTH = 4;
 export const LOG_WIDTH = 80;
 
 export interface ZWaveLogInfo extends TransformableInfo {
-	direction: ReturnType<typeof getDirectionPrefix>;
+	direction: string;
 	/** Primary tags are printed before the message and must fit into the first line.
 	 * They don't have to be enclosed in square brackets */
 	primaryTags?: string;

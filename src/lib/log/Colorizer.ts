@@ -1,5 +1,6 @@
 import * as colors from "ansi-colors";
 import { format } from "logform";
+import { ZWaveLogInfo } from "./shared";
 import winston = require("winston");
 const defaultColors = winston.config.npm.colors;
 
@@ -8,18 +9,20 @@ export interface ColorizerOptions {
 	__foo?: undefined;
 }
 
-export const colorizer = format((info, _opts: ColorizerOptions) => {
-	const textColor: colors.StyleFunction = (colors as any)[
-		defaultColors[info.level] as string
-	];
-	// Colorize all segments separately
-	info.message = textColor(info.message);
-	info.direction = colors.gray(info.direction);
-	if (info.prefix) {
-		info.prefix = textColor(info.prefix);
-	}
-	if (info.postfix) {
-		info.postfix = colors.gray(info.postfix);
-	}
-	return info;
-});
+export const colorizer = format(
+	(info: ZWaveLogInfo, _opts: ColorizerOptions) => {
+		const textColor: colors.StyleFunction = (colors as any)[
+			defaultColors[info.level] as string
+		];
+		// Colorize all segments separately
+		info.message = textColor(info.message);
+		info.direction = colors.gray(info.direction);
+		if (info.primaryTags) {
+			info.primaryTags = textColor(info.primaryTags);
+		}
+		if (info.secondaryTags) {
+			info.secondaryTags = colors.gray(info.secondaryTags);
+		}
+		return info;
+	},
+);

@@ -36,7 +36,7 @@ function createTransaction(
 	return trns;
 }
 
-describe.only("lib/log/Driver =>", () => {
+describe("lib/log/Driver =>", () => {
 	let driverLogger: winston.Logger;
 	let spyTransport: SpyTransport;
 
@@ -105,7 +105,7 @@ describe.only("lib/log/Driver =>", () => {
 			});
 		});
 
-		it("contains the message priority", () => {
+		it("contains the message priority on the first attempt", () => {
 			log.driver.transaction(
 				"outbound",
 				createTransaction({
@@ -114,6 +114,29 @@ describe.only("lib/log/Driver =>", () => {
 			);
 			assertMessage(spyTransport, {
 				predicate: msg => msg.includes("[P: MultistepController]"),
+			});
+		});
+
+		it("contains no message priority on further attempts", () => {
+			const transaction = createTransaction({
+				priority: MessagePriority.MultistepController,
+			});
+			transaction.sendAttempts = 2;
+			log.driver.transaction("outbound", transaction);
+			assertMessage(spyTransport, {
+				predicate: msg => !msg.includes("[P: MultistepController]"),
+			});
+		});
+
+		it("contains the number of send attempts after the first try", () => {
+			const transaction = createTransaction({
+				priority: MessagePriority.MultistepController,
+			});
+			transaction.sendAttempts = 2;
+			transaction.maxSendAttempts = 3;
+			log.driver.transaction("outbound", transaction);
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("[attempt 2/3]"),
 			});
 		});
 	});

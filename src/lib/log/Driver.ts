@@ -30,7 +30,7 @@ export const driverLoggerFormat = combine(
 if (!winston.loggers.has("driver")) {
 	winston.loggers.add("driver", {
 		format: driverLoggerFormat,
-		transports: [new winston.transports.Console({ level: "silly" })],
+		// transports: [new winston.transports.Console({ level: "silly" })],
 	});
 }
 const logger: ZWaveLogger = winston.loggers.get("driver");
@@ -61,6 +61,11 @@ export function transaction(
 	const secondaryTags: string[] = [];
 	if (transaction.sendAttempts === 1) {
 		secondaryTags.push(`P: ${MessagePriority[transaction.priority]}`);
+	} else {
+		// On later attempts, we print the send attempts
+		secondaryTags.push(
+			`attempt ${transaction.sendAttempts}/${transaction.maxSendAttempts}`,
+		);
 	}
 
 	logger.log({
