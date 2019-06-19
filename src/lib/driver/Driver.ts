@@ -545,7 +545,7 @@ export class Driver extends EventEmitter implements IDriver {
 			// nothing to do yet, wait for the next data
 			const msgComplete = Message.isComplete(this.receiveBuffer);
 			if (!msgComplete) {
-				log.serial.message(
+				log2.serial.message(
 					`the receive buffer contains an incomplete message, waiting for the next chunk...`,
 				);
 				return;
