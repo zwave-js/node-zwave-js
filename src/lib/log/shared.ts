@@ -2,6 +2,7 @@ import * as colors from "ansi-colors";
 import { Format, TransformableInfo, TransformFunction } from "logform";
 import { MESSAGE } from "triple-beam";
 import { Logger } from "winston";
+import winston = require("winston");
 
 /** An invisible char with length >= 0 */
 // This is necessary to "print" zero spaces for the right padding
@@ -180,4 +181,30 @@ export const logMessagePrinter: Format = {
 /** Wraps an array of strings in square brackets and joins them with spaces */
 export function tagify(tags: string[]): string {
 	return tags.map(pfx => `[${pfx}]`).join(" ");
+}
+
+/** Unsilences the console transport of a logger and returns the original value */
+export function unsilence(logger: winston.Logger): boolean {
+	const consoleTransport = logger.transports.find(
+		t => (t as any).name === "console",
+	);
+	if (consoleTransport) {
+		const ret = !!consoleTransport.silent;
+		consoleTransport.silent = false;
+		return ret;
+	}
+	return false;
+}
+
+/** Restores the console transport of a logger to its original silence state */
+export function restoreSilence(
+	logger: winston.Logger,
+	original: boolean,
+): void {
+	const consoleTransport = logger.transports.find(
+		t => (t as any).name === "console",
+	);
+	if (consoleTransport) {
+		consoleTransport.silent = original;
+	}
 }

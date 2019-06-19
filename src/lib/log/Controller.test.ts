@@ -5,35 +5,29 @@ import {
 	SpyTransport,
 } from "../../../test/SpyTransport";
 import { CommandClasses } from "../commandclass/CommandClasses";
+import { InterviewStage } from "../node/Node";
 import { ValueBaseArgs } from "../node/ValueDB";
-import { controllerLoggerFormat } from "./Controller";
 import log from "./index";
-import { BOX_CHARS } from "./shared";
+import { BOX_CHARS, restoreSilence } from "./shared";
 
 describe("lib/log/Controller =>", () => {
 	let controllerLogger: winston.Logger;
 	let spyTransport: SpyTransport;
+	let wasSilenced = true;
 
 	// Replace all defined transports with a spy transport
 	beforeAll(() => {
 		controllerLogger = winston.loggers.get("controller");
 		spyTransport = new SpyTransport();
-		controllerLogger.configure({
-			format: controllerLoggerFormat,
-			transports: [
-				// Uncomment this to debug the log outputs manually
-				new winston.transports.Console({ level: "silly" }),
-				spyTransport,
-			],
-		});
+		// Uncomment this to debug the log outputs manually
+		// wasSilenced = unsilence(controllerLogger);
+		controllerLogger.add(spyTransport);
 	});
 
 	// Don't spam the console when performing the other tests not related to logging
 	afterAll(() => {
-		controllerLogger.configure({
-			format: controllerLoggerFormat,
-			transports: [],
-		});
+		controllerLogger.remove(spyTransport);
+		restoreSilence(controllerLogger, wasSilenced);
 	});
 
 	beforeEach(() => {
@@ -174,6 +168,56 @@ describe("lib/log/Controller =>", () => {
 			assertMessage(spyTransport, {
 				predicate: msg => msg.includes("(was 5)"),
 				callNumber: 2,
+			});
+		});
+	});
+
+	describe("interviewStage()", () => {
+		it("includes a tag for the node ID", () => {
+			log.controller.interviewStage({ id: 7 } as any);
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("[Node 007]"),
+			});
+		});
+
+		it("logs the name of the interview stage", () => {
+			log.controller.interviewStage({
+				id: 1,
+				interviewStage: InterviewStage.Configuration,
+			} as any);
+			assertMessage(spyTransport, {
+				predicate: msg =>
+					msg.includes("last completed stage: Configuration"),
+			});
+		});
+
+		it("prints a custom message when the interview is complete", () => {
+			log.controller.interviewStage({
+				id: 5,
+				interviewStage: InterviewStage.Complete,
+			} as any);
+			assertMessage(spyTransport, {
+				message: "·   [Node 005] Interview completed",
+			});
+		});
+	});
+
+	describe("interviewStart()", () => {
+		it("includes a tag for the node ID", () => {
+			log.controller.interviewStart({ id: 7 } as any);
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("[Node 007]"),
+			});
+		});
+
+		it("logs the name of the last interview stage", () => {
+			log.controller.interviewStart({
+				id: 5,
+				interviewStage: InterviewStage.Configuration,
+			} as any);
+			assertMessage(spyTransport, {
+				message:
+					"·   [Node 005] Beginning interview - last completed stage: Configuration",
 			});
 		});
 	});

@@ -32,7 +32,12 @@ export const driverLoggerFormat = combine(
 if (!winston.loggers.has("driver")) {
 	winston.loggers.add("driver", {
 		format: driverLoggerFormat,
-		// transports: [new winston.transports.Console({ level: "silly" })],
+		transports: [
+			new winston.transports.Console({
+				level: "silly",
+				silent: process.env.NODE_ENV === "test",
+			}),
+		],
 	});
 }
 const logger: ZWaveLogger = winston.loggers.get("driver");

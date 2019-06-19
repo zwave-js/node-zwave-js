@@ -1,5 +1,7 @@
+import { padStart } from "alcalzone-shared/strings";
 import * as winston from "winston";
 import { CommandClasses } from "../commandclass/CommandClasses";
+import { InterviewStage, ZWaveNode } from "../node/Node";
 import {
 	ValueAddedArgs,
 	ValueBaseArgs,
@@ -30,7 +32,12 @@ export const controllerLoggerFormat = combine(
 if (!winston.loggers.has("controller")) {
 	winston.loggers.add("controller", {
 		format: controllerLoggerFormat,
-		// transports: [new winston.transports.Console({ level: "silly" })],
+		transports: [
+			new winston.transports.Console({
+				level: "silly",
+				silent: process.env.NODE_ENV === "test",
+			}),
+		],
 	});
 }
 const logger: ZWaveLogger = winston.loggers.get("controller");
@@ -96,6 +103,39 @@ export function value(
 		level: CONTROLLER_LOGLEVEL,
 		primaryTags: tagify(primaryTags),
 		secondaryTags: tagify(secondaryTags),
+		message,
+		direction: getDirectionPrefix("none"),
+	});
+}
+
+/** Returns the tag used to log node related messages */
+function getNodeTag(node: ZWaveNode): string {
+	return "Node " + padStart(node.id.toString(), 3, "0");
+}
+
+/** Logs the interview progress of a node */
+export function interviewStage(node: ZWaveNode): void {
+	logger.log({
+		level: CONTROLLER_LOGLEVEL,
+		primaryTags: tagify([getNodeTag(node)]),
+		message:
+			node.interviewStage === InterviewStage.Complete
+				? "Interview completed"
+				: `Interview progress - last completed stage: ${
+						InterviewStage[node.interviewStage]
+				  }`,
+		direction: getDirectionPrefix("none"),
+	});
+}
+
+/** Logs the interview progress of a node */
+export function interviewStart(node: ZWaveNode): void {
+	const message = `Beginning interview - last completed stage: ${
+		InterviewStage[node.interviewStage]
+	}`;
+	logger.log({
+		level: CONTROLLER_LOGLEVEL,
+		primaryTags: tagify([getNodeTag(node)]),
 		message,
 		direction: getDirectionPrefix("none"),
 	});

@@ -630,7 +630,7 @@ export class ZWaveNode extends EventEmitter {
 
 		// for testing purposes we skip to the end
 		await this.setInterviewStage(InterviewStage.Complete);
-		log("controller", `${this.logPrefix}interview completed`, "debug");
+		log2.controller.interviewStage(this);
 
 		// Tell listeners that the interview is completed
 		// The driver will send this node to sleep

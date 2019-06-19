@@ -15,9 +15,8 @@ import {
 	MessageType,
 } from "../message/Constants";
 import { Message } from "../message/Message";
-import { driverLoggerFormat } from "./Driver";
 import log from "./index";
-import { BOX_CHARS, getDirectionPrefix } from "./shared";
+import { BOX_CHARS, getDirectionPrefix, restoreSilence } from "./shared";
 
 interface CreateMessageOptions {
 	type: MessageType;
@@ -56,27 +55,21 @@ function createTransaction(
 describe("lib/log/Driver =>", () => {
 	let driverLogger: winston.Logger;
 	let spyTransport: SpyTransport;
+	let wasSilenced = true;
 
 	// Replace all defined transports with a spy transport
 	beforeAll(() => {
 		driverLogger = winston.loggers.get("driver");
 		spyTransport = new SpyTransport();
-		driverLogger.configure({
-			format: driverLoggerFormat,
-			transports: [
-				// Uncomment this to debug the log outputs manually
-				new winston.transports.Console({ level: "silly" }),
-				spyTransport,
-			],
-		});
+		// Uncomment this to debug the log outputs manually
+		// wasSilenced = unsilence(controllerLogger);
+		driverLogger.add(spyTransport);
 	});
 
 	// Don't spam the console when performing the other tests not related to logging
 	afterAll(() => {
-		driverLogger.configure({
-			format: driverLoggerFormat,
-			transports: [],
-		});
+		driverLogger.remove(spyTransport);
+		restoreSilence(driverLogger, wasSilenced);
 	});
 
 	beforeEach(() => {

@@ -2,33 +2,26 @@ import { pseudoRandomBytes } from "crypto";
 import * as winston from "winston";
 import { assertMessage, SpyTransport } from "../../../test/SpyTransport";
 import log from "./index";
-import { serialLoggerFormat } from "./Serial";
-import { BOX_CHARS } from "./shared";
+import { BOX_CHARS, restoreSilence } from "./shared";
 
 describe("lib/log/Serial =>", () => {
 	let serialLogger: winston.Logger;
 	let spyTransport: SpyTransport;
+	let wasSilenced = true;
 
 	// Replace all defined transports with a spy transport
 	beforeAll(() => {
 		serialLogger = winston.loggers.get("serial");
 		spyTransport = new SpyTransport();
-		serialLogger.configure({
-			format: serialLoggerFormat,
-			transports: [
-				// Uncomment this to debug the log outputs manually
-				// new winston.transports.Console({ level: "silly" }),
-				spyTransport,
-			],
-		});
+		// Uncomment this to debug the log outputs manually
+		// wasSilenced = unsilence(controllerLogger);
+		serialLogger.add(spyTransport);
 	});
 
 	// Don't spam the console when performing the other tests not related to logging
 	afterAll(() => {
-		serialLogger.configure({
-			format: serialLoggerFormat,
-			transports: [],
-		});
+		serialLogger.remove(spyTransport);
+		restoreSilence(serialLogger, wasSilenced);
 	});
 
 	beforeEach(() => {
