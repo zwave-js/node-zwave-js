@@ -10,6 +10,7 @@ import {
 } from "../node/ValueDB";
 import { colorizer } from "./Colorizer";
 import {
+	DataDirection,
 	getDirectionPrefix,
 	logMessageFormatter,
 	logMessagePrinter,
@@ -54,20 +55,44 @@ export function print(message: string, level?: "warn" | "error"): void {
 	});
 }
 
+export interface LogNodeOptions {
+	message: string;
+	level?: "warn" | "error";
+	direction?: DataDirection;
+}
+
 /**
  * Logs a node-related message with the correct prefix
- * @param msg The message to output
+ * @param message The message to output
+ * @param level The optional loglevel if it should be different from "info"
  */
 export function logNode(
 	node: ZWaveNode,
 	message: string,
 	level?: "warn" | "error",
+): void;
+/**
+ * Logs a node-related message with the correct prefix
+ * @param node The node to log the message for
+ * @param options The message and other options
+ */
+export function logNode(node: ZWaveNode, options: LogNodeOptions): void;
+export function logNode(
+	node: ZWaveNode,
+	messageOrOptions: string | LogNodeOptions,
+	logLevel?: "warn" | "error",
 ): void {
+	if (typeof messageOrOptions === "string") {
+		return logNode(node, { message: messageOrOptions, level: logLevel });
+	}
+
+	const { level, message, direction } = messageOrOptions;
+
 	logger.log({
 		level: level || CONTROLLER_LOGLEVEL,
 		primaryTags: tagify([getNodeTag(node)]),
 		message,
-		direction: getDirectionPrefix("none"),
+		direction: getDirectionPrefix(direction || "none"),
 	});
 }
 

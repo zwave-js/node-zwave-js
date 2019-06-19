@@ -228,6 +228,12 @@ describe("lib/log/Controller =>", () => {
 			assertMessage(spyTransport, {
 				message: `·   [Node 003] Test`,
 			});
+
+			log.controller.logNode({ id: 3 } as any, { message: "Test2" });
+			assertMessage(spyTransport, {
+				message: `·   [Node 003] Test2`,
+				callNumber: 1,
+			});
 		});
 
 		it("logs long messages correctly", () => {
@@ -239,16 +245,53 @@ describe("lib/log/Controller =>", () => {
 				message: `· ${BOX_CHARS.top} [Node 003] This is a very long message that should be broken into multiple l
   ${BOX_CHARS.bottom} ines maybe sometimes...`,
 			});
+
+			log.controller.logNode({ id: 5 } as any, {
+				message:
+					"This is a very long message that should be broken into multiple lines maybe sometimes...",
+			});
+			assertMessage(spyTransport, {
+				message: `· ${BOX_CHARS.top} [Node 005] This is a very long message that should be broken into multiple l
+  ${BOX_CHARS.bottom} ines maybe sometimes...`,
+				callNumber: 1,
+			});
 		});
 
 		it("logs with the given loglevel", () => {
 			log.controller.logNode({ id: 1 } as any, "Test", "warn");
 			assertLogInfo(spyTransport, { level: "warn" });
+
+			log.controller.logNode({ id: 1 } as any, {
+				message: "Test",
+				level: "warn",
+			});
+			assertLogInfo(spyTransport, { level: "warn", callNumber: 1 });
 		});
 
 		it("has a default loglevel of info", () => {
 			log.controller.logNode({ id: 3 } as any, "Test");
 			assertLogInfo(spyTransport, { level: "info" });
+
+			log.controller.logNode({ id: 3 } as any, { message: "Test" });
+			assertLogInfo(spyTransport, { level: "info", callNumber: 1 });
+		});
+
+		it("logs the direction prefix", () => {
+			log.controller.logNode({ id: 3 } as any, {
+				message: "Test",
+				direction: "inbound",
+			});
+			assertMessage(spyTransport, {
+				message: "«   [Node 003] Test",
+			});
+			log.controller.logNode({ id: 5 } as any, {
+				message: "Test",
+				direction: "outbound",
+			});
+			assertMessage(spyTransport, {
+				message: " »  [Node 005] Test",
+				callNumber: 1,
+			});
 		});
 	});
 
