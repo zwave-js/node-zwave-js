@@ -222,7 +222,7 @@ export class Driver extends EventEmitter implements IDriver {
 		this._wasStarted = true;
 
 		return new Promise((resolve, reject) => {
-			log("driver", `starting driver...`, "debug");
+			log2.driver.print("starting driver...");
 			this.serial = new SerialPort(this.port, {
 				autoOpen: false,
 				baudRate: 115200,
@@ -233,7 +233,7 @@ export class Driver extends EventEmitter implements IDriver {
 			this.serial
 				// wotan-disable-next-line async-function-assignability
 				.on("open", async () => {
-					log("driver", "serial port opened", "debug");
+					log2.driver.print("serial port opened");
 					this._isOpen = true;
 					this.resetIO();
 					resolve();
@@ -267,7 +267,7 @@ export class Driver extends EventEmitter implements IDriver {
 
 		// in any case we need to emit the driver ready event here
 		this._controllerInterviewed = true;
-		log("driver", "driver ready", "debug");
+		log2.driver.print("driver ready");
 		this.emit("driver ready");
 
 		// Try to restore the network information from the cache
@@ -428,7 +428,7 @@ export class Driver extends EventEmitter implements IDriver {
 	/** Resets the IO layer */
 	private resetIO(): void {
 		this.ensureReady();
-		log("driver", "resetting driver instance...", "debug");
+		log2.driver.print("resetting driver instance...");
 
 		// re-sync communication
 		this.send(MessageHeaders.NAK);
@@ -470,7 +470,7 @@ export class Driver extends EventEmitter implements IDriver {
 	 * Must be called under any circumstances.
 	 */
 	public async destroy(): Promise<void> {
-		log("driver", "destroying driver instance...", "debug");
+		log2.driver.print("destroying driver instance...");
 		this._wasDestroyed = true;
 
 		try {
@@ -615,7 +615,7 @@ export class Driver extends EventEmitter implements IDriver {
 
 	private handleMessage(msg: Message): void {
 		// TODO: find a nice way to serialize the messages
-		// log("driver", `handling response ${stringify(msg)}`, "debug");
+		// log2.driver.print(`handling response ${stringify(msg)}`);
 		// TODO: This is all driver level
 		log(
 			"io",
@@ -965,6 +965,7 @@ export class Driver extends EventEmitter implements IDriver {
 			);
 			handlers = this.requestHandlers.get(msg.functionType);
 		}
+		// TODO: Is this really necessary?
 		log("driver", `  ${stringify(msg)}`, "debug");
 
 		if (handlers != undefined && handlers.length > 0) {
@@ -977,10 +978,10 @@ export class Driver extends EventEmitter implements IDriver {
 			);
 			// loop through all handlers and find the first one that returns true to indicate that it handled the message
 			for (let i = 0; i < handlers.length; i++) {
-				log("driver", `  invoking handler #${i}`, "debug");
+				log2.driver.print(`  invoking handler #${i}`);
 				const handler = handlers[i];
 				if (handler.invoke(msg)) {
-					log("driver", `  message was handled`, "debug");
+					log("driver", `    the message was handled`, "debug");
 					if (handler.oneTime) {
 						log(
 							"driver",

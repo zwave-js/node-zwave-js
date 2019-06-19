@@ -2,7 +2,7 @@ import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { log } from "../util/logger";
+import log2 from "../log";
 import {
 	isConsecutiveArray,
 	JSONObject,
@@ -119,11 +119,11 @@ export class ConfigurationCCAPI extends CCAPI {
 			// Nodes may respond with a different parameter, e.g. if we
 			// requested a non-existing one
 			if (response.parameter === parameter) return response.value;
-			log(
-				"controller",
-				`Received unexpected ConfigurationReport (param = ${response.parameter}, value = ${response.value})`,
-				"error",
-			);
+			log2.controller.logNode(this.node, {
+				message: `Received unexpected ConfigurationReport (param = ${response.parameter}, value = ${response.value})`,
+				direction: "inbound",
+				level: "error",
+			});
 			throw new ConfigurationCCError(
 				`The first existing parameter on this node is ${response.parameter}`,
 				ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber,
@@ -215,47 +215,28 @@ export class ConfigurationCCAPI extends CCAPI {
 	/** Scans a V1/V2 node for the existing parameters using get/set commands */
 	private async scanParametersV1V2(): Promise<void> {
 		// TODO: Reduce the priority of the messages
-		log(
-			"controller",
-			`${this.node.logPrefix}Scanning available parameters...`,
-			"debug",
-		);
+		log2.controller.logNode(this.node, `Scanning available parameters...`);
 		const ccInstance = this.node.createCCInstance<ConfigurationCC>(
 			getCommandClass(this),
 		)!;
 		for (let param = 1; param <= 255; param++) {
 			// Check if the parameter is readable
 			let originalValue: ConfigValue | undefined;
-			log(
-				"controller",
-				`${this.node.logPrefix}  trying param ${param}...`,
-				"debug",
-			);
+			log2.controller.logNode(this.node, {
+				message: `  trying param ${param}...`,
+				direction: "outbound",
+			});
 			try {
 				originalValue = await this.get(param);
 				if (originalValue != undefined) {
-					log(
-						"controller",
-						`${this.node.logPrefix}  Param ${param}:`,
-						"debug",
-					);
-					log(
-						"controller",
-						`${this.node.logPrefix}    readable  = true`,
-						"debug",
-					);
-					log(
-						"controller",
-						`${this.node.logPrefix}    valueSize = ${
-							ccInstance.getParamInformation(param).valueSize
-						}`,
-						"debug",
-					);
-					log(
-						"controller",
-						`${this.node.logPrefix}    value     = ${originalValue}`,
-						"debug",
-					);
+					const logMessage = `  Param ${param}:
+    readable  = true
+    valueSize = ${ccInstance.getParamInformation(param).valueSize}
+    value     = ${originalValue}`;
+					log2.controller.logNode(this.node, {
+						message: logMessage,
+						direction: "inbound",
+					});
 				}
 			} catch (e) {
 				if (
