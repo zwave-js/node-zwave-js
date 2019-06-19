@@ -26,7 +26,8 @@
 		"strictNullChecks": true,
 		"strictPropertyInitialization": true,
 		"watch": false, // true breaks circleci
-		"pretty": true
+		"pretty": true,
+		"types": ["jest-extended"]
 	},
 	"include": ["src/**/*.ts", "maintenance/**/*.ts", "test/**/*.ts"],
 	"exclude": ["build/**", "node_modules/**"]

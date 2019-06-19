@@ -71,13 +71,13 @@
     "winston": "^3.2.1"
   },
   "scripts": {
-    "build": "tsc -p src/tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json",
     "generateCCAPIInterface": "ts-node maintenance/generateCCAPIInterface.ts",
     "cleanBuildDir": "rimraf ./build",
     "prebuild": "npm run generateCCAPIInterface",
     "prewatch": "npm run generateCCAPIInterface",
     "prepublishOnly": "npm run cleanBuildDir && npm run build",
-    "watch": "tsc -p src/tsconfig.build.json --watch",
+    "watch": "tsc -p tsconfig.build.json --watch",
     "test:reset": "jest --clear-cache",
     "test:ts": "jest --maxWorkers=1",
     "test:watch": "npm run test:ts -- --watch",
