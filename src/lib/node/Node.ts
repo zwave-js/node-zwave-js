@@ -535,20 +535,13 @@ export class ZWaveNode extends EventEmitter {
 	 */
 	public async interview(): Promise<boolean> {
 		if (this.interviewStage === InterviewStage.Complete) {
-			log(
-				"controller",
-				`${this.logPrefix}skipping interview because it is already completed`,
-				"debug",
+			log2.controller.logNode(
+				this,
+				`skipping interview because it is already completed`,
 			);
 			return true;
 		} else {
-			log(
-				"controller",
-				`${this.logPrefix}beginning interview... last completed step: ${
-					InterviewStage[this.interviewStage]
-				}`,
-				"debug",
-			);
+			log2.controller.interviewStart(this);
 		}
 
 		// The interview is done in several stages. At each point, the interview process might be aborted
@@ -557,12 +550,10 @@ export class ZWaveNode extends EventEmitter {
 
 		if (this.interviewStage === InterviewStage.None) {
 			// do a full interview starting with the protocol info
-			log(
-				"controller",
-				`${this.logPrefix}new Node, doing a full interview...`,
-				"debug",
+			log2.controller.logNode(
+				this,
+				`new node, doing a full interview...`,
 			);
-
 			await this.queryProtocolInfo();
 		}
 
@@ -655,11 +646,13 @@ export class ZWaveNode extends EventEmitter {
 			case InterviewStage.Complete:
 				await this.driver.saveNetworkToCache();
 		}
+		log2.controller.interviewStage(this);
 	}
 
 	/** Step #1 of the node interview */
 	protected async queryProtocolInfo(): Promise<void> {
-		log("controller", `${this.logPrefix}querying protocol info`, "debug");
+		// TODO: add direction
+		log2.controller.logNode(this, "querying protocol info");
 		const resp = await this.driver.sendMessage<GetNodeProtocolInfoResponse>(
 			new GetNodeProtocolInfoRequest(this.driver, { nodeId: this.id }),
 		);

@@ -187,7 +187,7 @@ describe("lib/log/Controller =>", () => {
 			} as any);
 			assertMessage(spyTransport, {
 				predicate: msg =>
-					msg.includes("last completed stage: Configuration"),
+					msg.includes("Interview stage completed: Configuration"),
 			});
 		});
 
@@ -219,6 +219,36 @@ describe("lib/log/Controller =>", () => {
 				message:
 					"·   [Node 005] Beginning interview - last completed stage: Configuration",
 			});
+		});
+	});
+
+	describe("logNode()", () => {
+		it("logs short messages correctly", () => {
+			log.controller.logNode({ id: 3 } as any, "Test");
+			assertMessage(spyTransport, {
+				message: `·   [Node 003] Test`,
+			});
+		});
+
+		it("logs long messages correctly", () => {
+			log.controller.logNode(
+				{ id: 3 } as any,
+				"This is a very long message that should be broken into multiple lines maybe sometimes...",
+			);
+			assertMessage(spyTransport, {
+				message: `· ${BOX_CHARS.top} [Node 003] This is a very long message that should be broken into multiple l
+  ${BOX_CHARS.bottom} ines maybe sometimes...`,
+			});
+		});
+
+		it("logs with the given loglevel", () => {
+			log.controller.logNode({ id: 1 } as any, "Test", "warn");
+			assertLogInfo(spyTransport, { level: "warn" });
+		});
+
+		it("has a default loglevel of info", () => {
+			log.controller.logNode({ id: 3 } as any, "Test");
+			assertLogInfo(spyTransport, { level: "info" });
 		});
 	});
 

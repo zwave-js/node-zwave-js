@@ -54,6 +54,23 @@ export function print(message: string, level?: "warn" | "error"): void {
 	});
 }
 
+/**
+ * Logs a node-related message with the correct prefix
+ * @param msg The message to output
+ */
+export function logNode(
+	node: ZWaveNode,
+	message: string,
+	level?: "warn" | "error",
+): void {
+	logger.log({
+		level: level || CONTROLLER_LOGLEVEL,
+		primaryTags: tagify([getNodeTag(node)]),
+		message,
+		direction: getDirectionPrefix("none"),
+	});
+}
+
 const valueEventPrefixes = Object.freeze({
 	added: "+",
 	updated: "~",
@@ -121,7 +138,7 @@ export function interviewStage(node: ZWaveNode): void {
 		message:
 			node.interviewStage === InterviewStage.Complete
 				? "Interview completed"
-				: `Interview progress - last completed stage: ${
+				: `Interview stage completed: ${
 						InterviewStage[node.interviewStage]
 				  }`,
 		direction: getDirectionPrefix("none"),
