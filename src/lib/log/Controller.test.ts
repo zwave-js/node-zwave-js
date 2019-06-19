@@ -17,6 +17,8 @@ describe("lib/log/Controller =>", () => {
 
 	// Replace all defined transports with a spy transport
 	beforeAll(() => {
+		// the loggers are lazy-loaded, so force loading
+		void log.controller;
 		controllerLogger = winston.loggers.get("controller");
 		spyTransport = new SpyTransport();
 		// Uncomment this to debug the log outputs manually

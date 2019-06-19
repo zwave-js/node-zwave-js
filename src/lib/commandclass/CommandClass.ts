@@ -3,6 +3,7 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import * as fs from "fs";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import log2 from "../log";
 import { ZWaveNode } from "../node/Node";
 import { ValueDB } from "../node/ValueDB";
 import { log } from "../util/logger";
@@ -544,10 +545,10 @@ function getCCCommandMapKey(ccId: CommandClasses, ccCommand: number): string {
  */
 export function commandClass(cc: CommandClasses): ClassDecorator {
 	return messageClass => {
-		log(
-			"protocol",
-			`${messageClass.name}: defining command class ${CommandClasses[cc]} (${cc})`,
-			"silly",
+		log2.reflection.define(
+			messageClass.name,
+			"CommandClass",
+			`<=> CommandClasses.${CommandClasses[cc]} (${num2hex(cc)})`,
 		);
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_commandClass, cc, messageClass);
@@ -636,10 +637,10 @@ export function getCCConstructor(
  */
 export function implementedVersion(version: number): ClassDecorator {
 	return ccClass => {
-		log(
-			"protocol",
-			`${ccClass.name}: defining implemented version ${version}`,
-			"silly",
+		log2.reflection.define(
+			ccClass.name,
+			"implemented version",
+			`version ${version}`,
 		);
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_version, version, ccClass);
@@ -699,10 +700,10 @@ export function getImplementedVersionStatic<
  */
 export function CCCommand(command: number): ClassDecorator {
 	return ccClass => {
-		log(
-			"protocol",
-			`${ccClass.name}: defining CC command ${command}`,
-			"silly",
+		log2.reflection.define(
+			ccClass.name,
+			"CC Command",
+			`${command} (${num2hex(command)})`,
 		);
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_ccCommand, command, ccClass);
@@ -790,19 +791,17 @@ export function expectedCCResponse<T extends CommandClass>(
 ): ClassDecorator {
 	return ccClass => {
 		if (staticExtends(ccOrDynamic, CommandClass)) {
-			log(
-				"protocol",
-				`${ccClass.name}: defining expected CC response ${ccOrDynamic.name}`,
-				"silly",
+			log2.reflection.define(
+				ccClass.name,
+				"expected CC response",
+				ccOrDynamic.name,
 			);
 		} else {
 			const dynamic = ccOrDynamic;
-			log(
-				"protocol",
-				`${ccClass.name}: defining expected CC response [dynamic${
-					dynamic.name.length > 0 ? " " + dynamic.name : ""
-				}]`,
-				"silly",
+			log2.reflection.define(
+				ccClass.name,
+				"expected CC response",
+				`dynamic${dynamic.name.length > 0 ? " " + dynamic.name : ""}`,
 			);
 		}
 
@@ -958,10 +957,10 @@ export function getCCKeyValuePairNames(
  */
 export function API(cc: CommandClasses): ClassDecorator {
 	return apiClass => {
-		log(
-			"protocol",
-			`${apiClass.name}: defining as API for ${CommandClasses[cc]}`,
-			"silly",
+		log2.reflection.define(
+			apiClass.name,
+			"API",
+			`<=> CommandClasses.${CommandClasses[cc]} (${num2hex(cc)})`,
 		);
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_API, cc, apiClass);

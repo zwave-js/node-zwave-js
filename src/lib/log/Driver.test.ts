@@ -59,6 +59,8 @@ describe("lib/log/Driver =>", () => {
 
 	// Replace all defined transports with a spy transport
 	beforeAll(() => {
+		// the loggers are lazy-loaded, so force loading
+		void log.driver;
 		driverLogger = winston.loggers.get("driver");
 		spyTransport = new SpyTransport();
 		// Uncomment this to debug the log outputs manually
