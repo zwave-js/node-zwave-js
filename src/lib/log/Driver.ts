@@ -97,7 +97,7 @@ export function transactionResponse(
 	});
 }
 
-function getPrimaryTagsForMessage(message: Message) {
+function getPrimaryTagsForMessage(message: Message): string[] {
 	return [
 		message.type === MessageType.Request ? "REQ" : "RES",
 		FunctionType[message.functionType],
@@ -105,7 +105,7 @@ function getPrimaryTagsForMessage(message: Message) {
 }
 
 export function sendQueue(queue: SortedList<Transaction>): void {
-	let message: string = "Send queue:";
+	let message = "Send queue:";
 	for (const trns of queue) {
 		// TODO: This formatting should be shared with the other logging methods
 		const node = trns.message.getNodeUnsafe();
