@@ -636,15 +636,11 @@ export class Driver extends EventEmitter implements IDriver {
 			switch (this.currentTransaction.message.testResponse(msg)) {
 				case "confirmation":
 					// no need to process intermediate responses, as they only tell us things are good
-					// TODO: this is driver level
-					log(
-						"io",
-						`  received confirmation response to current transaction`,
-						"debug",
-					);
+					log2.driver.transactionResponse(msg, "confirmation");
 					return;
 
 				case "fatal_controller":
+					log2.driver.transactionResponse(msg, "fatal_controller");
 					// The message was not sent
 					if (this.mayRetryCurrentTransaction()) {
 						// The Z-Wave specs define 500ms as the waiting period for SendData messages
@@ -673,6 +669,7 @@ export class Driver extends EventEmitter implements IDriver {
 					return;
 
 				case "fatal_node":
+					log2.driver.transactionResponse(msg, "fatal_node");
 					// The node did not respond
 					const node = this.currentTransaction.message.getNodeUnsafe();
 					if (!node) return; // This should never happen, but whatever
@@ -717,23 +714,13 @@ export class Driver extends EventEmitter implements IDriver {
 
 				case "partial":
 					// This is a multi-step response and we just received a part of it, which is not the final one
-					// TODO: this is driver level
-					log(
-						"io",
-						`  received partial response to current transaction`,
-						"debug",
-					);
+					log2.driver.transactionResponse(msg, "partial");
 					this.currentTransaction.partialResponses.push(msg);
 					return;
 
 				case "final":
 					// this is the expected response!
-					// TODO: this is driver level
-					log(
-						"io",
-						`  received expected response to current transaction`,
-						"debug",
-					);
+					log2.driver.transactionResponse(msg, "final");
 					this.currentTransaction.response = msg;
 					if (this.currentTransaction.partialResponses.length > 0) {
 						msg.mergePartialMessages(
@@ -741,21 +728,14 @@ export class Driver extends EventEmitter implements IDriver {
 						);
 					}
 					if (!this.currentTransaction.ackPending) {
-						// TODO: Is driver level? Do we need this at all?
-						log(
-							"io",
-							`  ACK already received, resolving transaction`,
-							"debug",
+						log2.driver.print(
+							`ACK already received, resolving transaction`,
 						);
-						log("driver", `  transaction complete`, "debug");
 						this.resolveCurrentTransaction();
 					} else {
 						// wait for the ack, it might be received out of order
-						// TODO: this is driver level
-						log(
-							"io",
-							`  no ACK received yet, remembering response`,
-							"debug",
+						log2.driver.print(
+							`no ACK received yet, remembering response`,
 						);
 					}
 					// if the response was expected, don't check any more handlers
@@ -771,6 +751,8 @@ export class Driver extends EventEmitter implements IDriver {
 			// This is a request we might have registered handlers for
 			this.handleRequest(msg);
 		} else {
+			log2.driver.transactionResponse(msg, "unexpected");
+			// TODO: Combine these 2 logs
 			log("driver", `  unexpected response, discarding...`, "debug");
 		}
 	}
@@ -1020,16 +1002,13 @@ export class Driver extends EventEmitter implements IDriver {
 		// if we have a pending request waiting for the ACK, ACK it
 		const trnsact = this.currentTransaction;
 		if (trnsact != undefined && trnsact.ackPending) {
-			// TODO: this is driver level
-			log("io", "ACK received for current transaction", "debug");
+			log2.driver.print("ACK received for current transaction");
 			trnsact.ackPending = false;
 			if (
 				trnsact.message.expectedResponse == undefined ||
 				trnsact.response != undefined
 			) {
-				// TODO: this is driver level
-				log("io", "transaction finished, resolving...", "debug");
-				log("driver", `transaction complete`, "debug");
+				log2.driver.print("transaction finished, resolving...");
 				// if the response has been received prior to this, resolve the request
 				// if no response was expected, also resolve the request
 				this.resolveCurrentTransaction(false);
@@ -1038,12 +1017,7 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 
 		// TODO: what to do with this ACK?
-		// TODO: this is driver level
-		log(
-			"io",
-			"ACK received but I don't know what it belongs to...",
-			"debug",
-		);
+		log2.driver.print("Unexpected ACK received", "warn");
 	}
 
 	private handleNAK(): void {
@@ -1128,8 +1102,7 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 		// Resume the send queue
 		if (resumeQueue) {
-			// TODO: this is driver level
-			log("io", `resuming send queue`, "debug");
+			log2.driver.print("resuming send queue");
 			setImmediate(() => this.workOffSendQueue());
 		}
 	}
@@ -1142,11 +1115,9 @@ export class Driver extends EventEmitter implements IDriver {
 		reason: ZWaveError,
 		resumeQueue: boolean = true,
 	): void {
-		// TODO: this is driver level
-		log(
-			"io",
+		log2.driver.print(
 			`rejecting current transaction because "${reason.message}"`,
-			"debug",
+			"warn",
 		);
 		const { promise, timeoutInstance } = this.currentTransaction!;
 		// Cancel any running timers
@@ -1156,8 +1127,7 @@ export class Driver extends EventEmitter implements IDriver {
 		this.currentTransaction = undefined;
 		// and see if there are messages pending
 		if (resumeQueue) {
-			// TODO: this is driver level
-			log("io", `resuming send queue`, "debug");
+			log2.driver.print("resuming send queue");
 			setImmediate(() => this.workOffSendQueue());
 		}
 	}
@@ -1210,13 +1180,6 @@ export class Driver extends EventEmitter implements IDriver {
 			);
 		}
 
-		log(
-			"driver",
-			`sending message ${stringify(msg)} with priority ${
-				MessagePriority[options.priority]
-			} (${options.priority})`,
-			"debug",
-		);
 		// create the transaction and enqueue it
 		const promise = createDeferredPromise<TResponse>();
 		const transaction = new Transaction(
@@ -1228,12 +1191,6 @@ export class Driver extends EventEmitter implements IDriver {
 		);
 
 		this.sendQueue.add(transaction);
-		// TODO: This is driver level
-		log(
-			"io",
-			`added message to the send queue, new length = ${this.sendQueue.length}`,
-			"debug",
-		);
 		// start sending now (maybe)
 		setImmediate(() => this.workOffSendQueue());
 

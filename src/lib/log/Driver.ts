@@ -41,9 +41,9 @@ const logger: ZWaveLogger = winston.loggers.get("driver");
  * Logs a message
  * @param msg The message to output
  */
-export function print(message: string): void {
+export function print(message: string, level?: "warn" | "error"): void {
 	logger.log({
-		level: DRIVER_LOGLEVEL,
+		level: level || DRIVER_LOGLEVEL,
 		message,
 		direction: getDirectionPrefix("none"),
 	});
@@ -107,6 +107,7 @@ function getPrimaryTagsForMessage(message: Message) {
 export function sendQueue(queue: SortedList<Transaction>): void {
 	let message: string = "Send queue:";
 	for (const trns of queue) {
+		// TODO: This formatting should be shared with the other logging methods
 		const node = trns.message.getNodeUnsafe();
 		const postfix =
 			node != undefined

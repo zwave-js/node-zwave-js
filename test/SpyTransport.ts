@@ -1,6 +1,7 @@
 import { stripColor } from "ansi-colors";
 import { MESSAGE } from "triple-beam";
 import * as Transport from "winston-transport";
+import { ZWaveLogInfo } from "../src/lib/log/shared";
 
 /** Log to a jest.fn() in order to perform assertions during unit tests */
 export class SpyTransport extends Transport {
@@ -47,5 +48,25 @@ export function assertMessage(
 	}
 	if (typeof options.predicate === "function") {
 		expect(actualMessage).toSatisfy(options.predicate);
+	}
+}
+
+export function assertLogInfo(
+	transport: SpyTransport,
+	options: Partial<{
+		level: string;
+		predicate: (info: ZWaveLogInfo) => boolean;
+		callNumber: number;
+	}>,
+) {
+	const callNumber = options.callNumber || 0;
+	expect(transport.spy.mock.calls.length).toBeGreaterThan(callNumber);
+	const callArg = transport.spy.mock.calls[callNumber][0];
+
+	if (typeof options.level === "string") {
+		expect(callArg.level).toEqual(options.level);
+	}
+	if (typeof options.predicate === "function") {
+		expect(callArg).toSatisfy(options.predicate);
 	}
 }

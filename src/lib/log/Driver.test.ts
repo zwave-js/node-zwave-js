@@ -2,7 +2,11 @@ import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import * as winston from "winston";
 import { createEmptyMockDriver } from "../../../test/mocks";
-import { assertMessage, SpyTransport } from "../../../test/SpyTransport";
+import {
+	assertLogInfo,
+	assertMessage,
+	SpyTransport,
+} from "../../../test/SpyTransport";
 import { Driver } from "../driver/Driver";
 import { Transaction } from "../driver/Transaction";
 import {
@@ -246,15 +250,15 @@ describe("lib/log/Driver =>", () => {
 		});
 	});
 
-	describe("print() logs simple messages correctly", () => {
-		it("short ones", () => {
+	describe("print()", () => {
+		it("logs short messages correctly", () => {
 			log.driver.print("Test");
 			assertMessage(spyTransport, {
 				message: `·   Test`,
 			});
 		});
 
-		it("long ones", () => {
+		it("logs long messages correctly", () => {
 			log.driver.print(
 				"This is a very long message that should be broken into multiple lines maybe sometimes...",
 			);
@@ -262,6 +266,16 @@ describe("lib/log/Driver =>", () => {
 				message: `· ${BOX_CHARS.top} This is a very long message that should be broken into multiple lines maybe 
   ${BOX_CHARS.bottom} sometimes...`,
 			});
+		});
+
+		it("logs with the given loglevel", () => {
+			log.driver.print("Test", "warn");
+			assertLogInfo(spyTransport, { level: "warn" });
+		});
+
+		it("has a default loglevel of verbose", () => {
+			log.driver.print("Test");
+			assertLogInfo(spyTransport, { level: "verbose" });
 		});
 	});
 });
