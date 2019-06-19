@@ -116,7 +116,6 @@ export function sendQueue(queue: SortedList<Transaction>): void {
 		const command = isCommandClassContainer(trns.message)
 			? ` (${trns.message.command.constructor.name})`
 			: "";
-		// TODO: this is driver level
 		message += `\n  ${
 			FunctionType[trns.message.functionType]
 		}${command}${postfix}`;
