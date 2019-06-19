@@ -33,6 +33,12 @@ if (!winston.loggers.has("reflection")) {
 }
 const logger: ZWaveLogger = winston.loggers.get("reflection");
 
+/**
+ * Logs the process of defining metadata for a class
+ * @param name The class to log the definition for
+ * @param type What kind of metadata is defined
+ * @param message An additional message
+ */
 export function define(name: string, type: string, message: string): void {
 	logger.log({
 		level: REFLECTION_LOGLEVEL,
@@ -40,5 +46,33 @@ export function define(name: string, type: string, message: string): void {
 		secondaryTags: tagify([type]),
 		message,
 		direction: getDirectionPrefix("outbound"),
+	});
+}
+
+/**
+ * Logs the process of looking up metadata for a class
+ * @param name The class to log the definition for
+ * @param type What kind of metadata is retrieved
+ * @param message An additional message, e.g. the resulting value
+ */
+export function lookup(name: string, type: string, message: string): void {
+	logger.log({
+		level: REFLECTION_LOGLEVEL,
+		primaryTags: tagify([name]),
+		secondaryTags: tagify([type]),
+		message,
+		direction: getDirectionPrefix("inbound"),
+	});
+}
+
+/**
+ * Logs a message
+ * @param msg The message to output
+ */
+export function print(message: string, level?: "warn" | "error"): void {
+	logger.log({
+		level: level || REFLECTION_LOGLEVEL,
+		message,
+		direction: getDirectionPrefix("none"),
 	});
 }
