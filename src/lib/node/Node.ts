@@ -63,6 +63,7 @@ import {
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import log2 from "../log";
 import { MessagePriority } from "../message/Constants";
 import { log } from "../util/logger";
 import { JSONObject } from "../util/misc";
@@ -224,6 +225,10 @@ export class ZWaveNode extends EventEmitter {
 			);
 			outArg.propertyKey = propertyKey;
 		}
+		// Log the value change
+		// I don't like the splitting and any but its the easiest solution here
+		log2.controller.value(eventName.split(" ")[1] as any, outArg as any);
+		// And pass the translated event to our listeners
 		this.emit(eventName, outArg);
 	}
 
