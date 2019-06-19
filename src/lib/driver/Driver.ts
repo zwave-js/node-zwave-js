@@ -1282,19 +1282,15 @@ export class Driver extends EventEmitter implements IDriver {
 
 		// is there something to send?
 		if (this.sendQueue.length === 0) {
-			// TODO: This is driver level
-			log("io", `workOffSendQueue > queue is empty`, "debug");
+			log2.driver.print("The send queue is empty");
 			return;
 		} else {
-			this.printSendQueue();
+			log2.driver.sendQueue(this.sendQueue);
 		}
 		// we are still waiting for the current transaction to finish
 		if (this.currentTransaction != undefined) {
-			// TODO: This is driver level
-			log(
-				"io",
+			log2.driver.print(
 				`workOffSendQueue > skipping because a transaction is pending`,
-				"debug",
 			);
 			return;
 		}
@@ -1331,12 +1327,6 @@ export class Driver extends EventEmitter implements IDriver {
 				);
 			}
 			const data = msg.serialize();
-			// TODO: this is driver level
-			log(
-				"io",
-				`  remaining queue length = ${this.sendQueue.length}`,
-				"debug",
-			);
 			// Mark the transaction as being sent
 			this.currentTransaction.sendAttempts = 1;
 			log2.serial.data("outbound", data);
@@ -1354,32 +1344,24 @@ export class Driver extends EventEmitter implements IDriver {
 				}, this.currentTransaction.timeout);
 			}
 
-			// to avoid any deadlocks we didn't think of, re-call this later
-			this.sendQueueTimer = setTimeout(
-				() => this.workOffSendQueue(),
-				1000,
-			);
+			if (this.sendQueue.length > 0) {
+				// to avoid any deadlocks we didn't think of, re-call this later
+				this.sendQueueTimer = setTimeout(
+					() => this.workOffSendQueue(),
+					1000,
+				);
+			}
 		} else {
-			// TODO: this is driver level
-			log(
-				"io",
-				`workOffSendQueue > The remaining ${this.sendQueue.length} messages are for sleeping nodes, not sending anything!`,
-				"debug",
+			log2.driver.print(
+				`The remaining ${this.sendQueue.length} messages are for sleeping nodes, not sending anything!`,
 			);
 		}
 	}
 
 	private retransmit(): void {
 		if (!this.currentTransaction) return;
+		log2.driver.transaction(this.currentTransaction);
 		const msg = this.currentTransaction.message;
-		// TODO: this is driver level
-		log(
-			"io",
-			`retransmit > resending message (${
-				FunctionType[msg.functionType]
-			})...`,
-			"debug",
-		);
 		const data = msg.serialize();
 		log2.serial.data("outbound", data);
 		this.doSend(data);
@@ -1471,31 +1453,6 @@ export class Driver extends EventEmitter implements IDriver {
 		const items = [...this.sendQueue];
 		this.sendQueue.clear();
 		this.sendQueue.add(...items);
-	}
-
-	private printSendQueue(): void {
-		// TODO: this is driver level
-		log("io", "workOffSendQueue > messages in the queue:", "silly");
-		for (const trns of this.sendQueue) {
-			const node = trns.message.getNodeUnsafe();
-			const postfix =
-				node != undefined
-					? ` [Node ${node.id}, ${
-							node.isAwake() ? "awake" : "asleep"
-					  }]`
-					: "";
-			const command = isCommandClassContainer(trns.message)
-				? ` (${trns.message.command.constructor.name})`
-				: "";
-			// TODO: this is driver level
-			log(
-				"io",
-				`  ${
-					FunctionType[trns.message.functionType]
-				}${command}${postfix}`,
-				"silly",
-			);
-		}
 	}
 
 	private lastSaveToCache: number = 0;

@@ -1,4 +1,6 @@
+import { SortedList } from "alcalzone-shared/sorted-list";
 import * as winston from "winston";
+import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { Transaction } from "../driver/Transaction";
 import {
 	FunctionType,
@@ -100,4 +102,30 @@ function getPrimaryTagsForMessage(message: Message) {
 		message.type === MessageType.Request ? "REQ" : "RES",
 		FunctionType[message.functionType],
 	];
+}
+
+export function sendQueue(queue: SortedList<Transaction>): void {
+	let message: string = "Send queue:";
+	for (const trns of queue) {
+		const node = trns.message.getNodeUnsafe();
+		const postfix =
+			node != undefined
+				? ` [Node ${node.id}, ${node.isAwake() ? "awake" : "asleep"}]`
+				: "";
+		const command = isCommandClassContainer(trns.message)
+			? ` (${trns.message.command.constructor.name})`
+			: "";
+		// TODO: this is driver level
+		message += `\n  ${
+			FunctionType[trns.message.functionType]
+		}${command}${postfix}`;
+	}
+	logger.log({
+		level: DRIVER_LOGLEVEL,
+		message,
+		secondaryTags: `(${queue.length} message${
+			queue.length === 1 ? "" : "s"
+		})`,
+		direction: getDirectionPrefix("none"),
+	});
 }

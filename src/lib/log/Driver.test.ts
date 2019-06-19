@@ -1,4 +1,5 @@
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
+import { SortedList } from "alcalzone-shared/sorted-list";
 import * as winston from "winston";
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertMessage, SpyTransport } from "../../../test/SpyTransport";
@@ -78,7 +79,7 @@ describe("lib/log/Driver =>", () => {
 		spyTransport.spy.mockClear();
 	});
 
-	describe("logs outbound messages of a transaction correctly", () => {
+	describe("transaction() (for outbound messages)", () => {
 		it("contains the direction", () => {
 			log.driver.transaction(createTransaction({}));
 			assertMessage(spyTransport, {
@@ -149,7 +150,7 @@ describe("lib/log/Driver =>", () => {
 		});
 	});
 
-	describe("logs responses to a transaction correctly", () => {
+	describe("transactionResponse() (for inbound messages)", () => {
 		it("contains the direction", () => {
 			const msg = createMessage(createEmptyMockDriver(), {});
 			log.driver.transactionResponse(msg, null as any);
@@ -198,7 +199,54 @@ describe("lib/log/Driver =>", () => {
 		});
 	});
 
-	describe("logs simple messages correctly", () => {
+	describe("sendQueue()", () => {
+		it("prints the send queue length", () => {
+			const queue = new SortedList<Transaction>();
+			log.driver.sendQueue(queue);
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("(0 messages)"),
+			});
+
+			queue.add(
+				createTransaction({ functionType: FunctionType.GetSUCNodeId }),
+			);
+			log.driver.sendQueue(queue);
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("(1 message)"),
+				callNumber: 1,
+			});
+
+			queue.add(
+				createTransaction({ functionType: FunctionType.GetSUCNodeId }),
+			);
+			log.driver.sendQueue(queue);
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("(2 messages)"),
+				callNumber: 2,
+			});
+		});
+
+		it("prints the function type for each message", () => {
+			const queue = new SortedList<Transaction>();
+			queue.add(
+				createTransaction({ functionType: FunctionType.GetSUCNodeId }),
+			);
+			queue.add(
+				createTransaction({ functionType: FunctionType.HardReset }),
+			);
+			log.driver.sendQueue(queue);
+
+			// Each line should be indented
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("  GetSUCNodeId"),
+			});
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("  HardReset"),
+			});
+		});
+	});
+
+	describe("print() logs simple messages correctly", () => {
 		it("short ones", () => {
 			log.driver.print("Test");
 			assertMessage(spyTransport, {
