@@ -1,0 +1,34 @@
+DOUBLE TAG:
+· ┌ [Node 001] [Node 001] skipping endpoint query because the device does not su
+  └ pport it
+
+SHOULD BE INDENTED:
+« ┌ [Node 001] received response for protocol info:
+  │ basic device class:    Routing Slave (0x02)
+  │ generic device class:  Static Controller (0x02)
+  │ specific device class: PC Controller (0x01)
+  │ is a listening device: true
+  │ is frequent listening: false
+  │ is a routing device:   false
+  │ is a secure device:    false
+  │ is a beaming device:   true
+  │ is a listening device: true
+  │ maximum baud rate:     40000 kbps
+  └ version: 
+
+LINES SHOULD BE PREFIXED WITH THE LOGLEVEL/NAMESPACE
+
+IT IS UNCLEAR WHAT THIS MESSAGE BELONGS TO - INDENTATION DOES NOT HELP
+· ┌   [Node 003] The node did not respond to the current transaction after 1 att
+  └ empts, it is presumed dead (Status NoAck)
+
+THIS IS PROBABLY JUST ANOTHER LOGLEVEL BUT IT SEEMS LIKE A DUPLICATE
+· ┌ rejecting current transaction because "The node did not respond to the curre
+  └ nt transaction after 1 attempts, it is presumed dead (Status NoAck)"
+
+THIS CANNOT BE EASILY INTERPRETED
+«   [WakeUpCC] => Wake Up (0x84)                                  [CommandClass]
+«   [WakeUpCC] => undefined (undefined)                             [CC Command]
+«   [WakeUpCC] => Wake Up (0x84)                                  [CommandClass]
+«   [WakeUpCC] => Wake Up (0x84)                                  [CommandClass]
+«   [WakeUpCC] => Wake Up (0x84)                                  [CommandClass]
