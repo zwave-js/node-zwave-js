@@ -34,10 +34,24 @@ describe("lib/log/Reflection =>", () => {
 	});
 
 	describe("define()", () => {
-		it("contains an outbound direction", () => {
+		it("contains no direction", () => {
 			log.reflection.define("name", "expectedResponse", "something else");
 			assertMessage(spyTransport, {
-				predicate: msg => msg.startsWith(" »  "),
+				predicate: msg => msg.startsWith("·   "),
+			});
+		});
+
+		it(`contains the word "defining"`, () => {
+			log.reflection.define("name", "expectedResponse", "something else");
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("defining"),
+			});
+		});
+
+		it("contains the type", () => {
+			log.reflection.define("name", "expectedResponse", "something else");
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("expectedResponse"),
 			});
 		});
 
@@ -45,13 +59,6 @@ describe("lib/log/Reflection =>", () => {
 			log.reflection.define("name", "expectedResponse", "something else");
 			assertMessage(spyTransport, {
 				predicate: msg => msg.includes("[name]"),
-			});
-		});
-
-		it("logs a secondary tag for the type", () => {
-			log.reflection.define("name", "expectedResponse", "something else");
-			assertMessage(spyTransport, {
-				predicate: msg => msg.endsWith("[expectedResponse]"),
 			});
 		});
 
@@ -64,10 +71,24 @@ describe("lib/log/Reflection =>", () => {
 	});
 
 	describe("lookup()", () => {
-		it("contains an inbound direction", () => {
+		it("contains no direction", () => {
 			log.reflection.lookup("name", "expectedResponse", "foo");
 			assertMessage(spyTransport, {
-				predicate: msg => msg.startsWith("«   "),
+				predicate: msg => msg.startsWith("·   "),
+			});
+		});
+
+		it(`contains the word "retrieving"`, () => {
+			log.reflection.lookup("name", "expectedResponse", "something else");
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("retrieving"),
+			});
+		});
+
+		it("contains the type", () => {
+			log.reflection.lookup("name", "expectedResponse", "something else");
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("expectedResponse"),
 			});
 		});
 
@@ -75,13 +96,6 @@ describe("lib/log/Reflection =>", () => {
 			log.reflection.lookup("name", "expectedResponse", "something else");
 			assertMessage(spyTransport, {
 				predicate: msg => msg.includes("[name]"),
-			});
-		});
-
-		it("logs a secondary tag for the type", () => {
-			log.reflection.lookup("name", "expectedResponse", "something else");
-			assertMessage(spyTransport, {
-				predicate: msg => msg.endsWith("[expectedResponse]"),
 			});
 		});
 

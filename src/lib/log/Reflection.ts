@@ -43,9 +43,8 @@ export function define(name: string, type: string, message: string): void {
 	logger.log({
 		level: REFLECTION_LOGLEVEL,
 		primaryTags: tagify([name]),
-		secondaryTags: tagify([type]),
-		message,
-		direction: getDirectionPrefix("outbound"),
+		message: `defining ${type} => ${message}`,
+		direction: getDirectionPrefix("none"),
 	});
 }
 
@@ -59,9 +58,8 @@ export function lookup(name: string, type: string, message: string): void {
 	logger.log({
 		level: REFLECTION_LOGLEVEL,
 		primaryTags: tagify([name]),
-		secondaryTags: tagify([type]),
-		message,
-		direction: getDirectionPrefix("inbound"),
+		message: `retrieving ${type} => ${message}`,
+		direction: getDirectionPrefix("none"),
 	});
 }
 

@@ -677,7 +677,7 @@ export class Driver extends EventEmitter implements IDriver {
 						// The Z-Wave specs define 500ms as the waiting period for SendData messages
 						const timeout = this.retryCurrentTransaction(500);
 						log2.driver.print(
-							`  ${node.logPrefix}The node did not respond to the current transaction, scheduling attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`,
+							`${node.logPrefix}The node did not respond to the current transaction, scheduling attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`,
 							"warn",
 						);
 					} else {
@@ -688,7 +688,7 @@ export class Driver extends EventEmitter implements IDriver {
 							})`;
 						}
 						log2.driver.print(
-							`  ${node.logPrefix}${errorMsg}`,
+							`${node.logPrefix}${errorMsg}`,
 							"warn",
 						);
 
@@ -1094,10 +1094,6 @@ ${handlers.length} left`,
 		reason: ZWaveError,
 		resumeQueue: boolean = true,
 	): void {
-		log2.driver.print(
-			`rejecting current transaction because "${reason.message}"`,
-			"warn",
-		);
 		const { promise, timeoutInstance } = this.currentTransaction!;
 		// Cancel any running timers
 		if (timeoutInstance) clearTimeout(timeoutInstance);
@@ -1272,6 +1268,8 @@ ${handlers.length} left`,
 			if (this.currentTransaction.timeout) {
 				this.currentTransaction.timeoutInstance = setTimeout(() => {
 					if (!this.currentTransaction) return;
+					// TODO: Do we need more information here?
+					log2.driver.print("The transaction timed out", "warn");
 					this.rejectCurrentTransaction(
 						new ZWaveError(
 							"The transaction timed out",

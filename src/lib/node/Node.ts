@@ -667,34 +667,30 @@ export class ZWaveNode extends EventEmitter {
 		this._version = resp.version;
 		this._isBeaming = resp.isBeaming;
 
-		const logLines: string[] = ["received response for protocol info:"];
+		let logMessage = "received response for protocol info:";
 		if (this.deviceClass) {
-			logLines.push(
-				`basic device class:    ${
-					BasicDeviceClasses[this.deviceClass.basic]
-				} (${num2hex(this.deviceClass.basic)})`,
-			);
-			logLines.push(
-				`generic device class:  ${
-					this.deviceClass.generic.name
-				} (${num2hex(this.deviceClass.generic.key)})`,
-			);
-			logLines.push(
-				`specific device class: ${
-					this.deviceClass.specific.name
-				} (${num2hex(this.deviceClass.specific.key)})`,
-			);
+			logMessage += `
+  basic device class:    ${
+		BasicDeviceClasses[this.deviceClass.basic]
+  } (${num2hex(this.deviceClass.basic)})
+  generic device class:  ${this.deviceClass.generic.name} (${num2hex(
+				this.deviceClass.generic.key,
+			)})
+  specific device class: ${this.deviceClass.specific.name} (${num2hex(
+				this.deviceClass.specific.key,
+			)})`;
 		}
-		logLines.push(`is a listening device: ${this.isListening}`);
-		logLines.push(`is frequent listening: ${this.isFrequentListening}`);
-		logLines.push(`is a routing device:   ${this.isRouting}`);
-		logLines.push(`is a secure device:    ${this.isSecure}`);
-		logLines.push(`is a beaming device:   ${this.isBeaming}`);
-		logLines.push(`is a listening device: ${this.isListening}`);
-		logLines.push(`maximum baud rate:     ${this.maxBaudRate} kbps`);
-		logLines.push(`version:               ${this.version}`);
+		logMessage += `
+  is a listening device: ${this.isListening}
+  is frequent listening: ${this.isFrequentListening}
+  is a routing device:   ${this.isRouting}
+  is a secure device:    ${this.isSecure}
+  is a beaming device:   ${this.isBeaming}
+  is a listening device: ${this.isListening}
+  maximum baud rate:     ${this.maxBaudRate} kbps
+  version:               ${this.version}`;
 		log2.controller.logNode(this, {
-			message: logLines.join("\n"),
+			message: logMessage,
 			direction: "inbound",
 		});
 
@@ -1014,7 +1010,7 @@ export class ZWaveNode extends EventEmitter {
 		} else {
 			log2.controller.logNode(
 				this,
-				`${this.logPrefix}skipping endpoint query because the device does not support it`,
+				`skipping endpoint query because the device does not support it`,
 			);
 		}
 
