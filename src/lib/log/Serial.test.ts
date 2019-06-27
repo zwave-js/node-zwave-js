@@ -2,7 +2,7 @@ import { pseudoRandomBytes } from "crypto";
 import * as winston from "winston";
 import { assertMessage, SpyTransport } from "../../../test/SpyTransport";
 import log from "./index";
-import { BOX_CHARS, restoreSilence } from "./shared";
+import { BOX_CHARS, restoreSilence, unsilence } from "./shared";
 
 describe("lib/log/Serial =>", () => {
 	let serialLogger: winston.Logger;
@@ -16,7 +16,7 @@ describe("lib/log/Serial =>", () => {
 		serialLogger = winston.loggers.get("serial");
 		spyTransport = new SpyTransport();
 		// Uncomment this to debug the log outputs manually
-		// wasSilenced = unsilence(controllerLogger);
+		wasSilenced = unsilence(serialLogger);
 		serialLogger.add(spyTransport);
 	});
 

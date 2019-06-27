@@ -5,12 +5,12 @@ import {
 	SpyTransport,
 } from "../../../test/SpyTransport";
 import log from "./index";
-import { BOX_CHARS, restoreSilence, unsilence } from "./shared";
+import { BOX_CHARS } from "./shared";
 
 describe("lib/log/Reflection =>", () => {
 	let reflectionLogger: winston.Logger;
 	let spyTransport: SpyTransport;
-	let wasSilenced = true;
+	// let wasSilenced = true;
 
 	// Replace all defined transports with a spy transport
 	beforeAll(() => {
@@ -19,14 +19,14 @@ describe("lib/log/Reflection =>", () => {
 		reflectionLogger = winston.loggers.get("reflection");
 		spyTransport = new SpyTransport();
 		// Uncomment this to debug the log outputs manually
-		wasSilenced = unsilence(reflectionLogger);
+		// wasSilenced = unsilence(reflectionLogger);
 		reflectionLogger.add(spyTransport);
 	});
 
 	// Don't spam the console when performing the other tests not related to logging
 	afterAll(() => {
 		reflectionLogger.remove(spyTransport);
-		restoreSilence(reflectionLogger, wasSilenced);
+		// restoreSilence(reflectionLogger, wasSilenced);
 	});
 
 	beforeEach(() => {

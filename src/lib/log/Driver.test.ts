@@ -1,5 +1,6 @@
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { SortedList } from "alcalzone-shared/sorted-list";
+import * as MockDate from "mockdate";
 import * as winston from "winston";
 import { createEmptyMockDriver } from "../../../test/mocks";
 import {
@@ -66,16 +67,57 @@ describe("lib/log/Driver =>", () => {
 		// Uncomment this to debug the log outputs manually
 		// wasSilenced = unsilence(controllerLogger);
 		driverLogger.add(spyTransport);
+
+		MockDate.set(new Date().setHours(0, 0, 0, 0));
 	});
 
 	// Don't spam the console when performing the other tests not related to logging
 	afterAll(() => {
 		driverLogger.remove(spyTransport);
 		restoreSilence(driverLogger, wasSilenced);
+		MockDate.reset();
 	});
 
 	beforeEach(() => {
 		spyTransport.spy.mockClear();
+	});
+
+	describe("print()", () => {
+		it("logs short messages correctly", () => {
+			log.driver.print("Test");
+			assertMessage(spyTransport, {
+				message: `·   Test`,
+			});
+		});
+
+		it("logs long messages correctly", () => {
+			log.driver.print(
+				"This is a very long message that should be broken into multiple lines maybe sometimes...",
+			);
+			assertMessage(spyTransport, {
+				message: `· ${BOX_CHARS.top} This is a very long message that should be broken into multiple lines maybe 
+  ${BOX_CHARS.bottom} sometimes...`,
+			});
+		});
+
+		it("logs with the given loglevel", () => {
+			log.driver.print("Test", "warn");
+			assertLogInfo(spyTransport, { level: "warn" });
+		});
+
+		it("has a default loglevel of verbose", () => {
+			log.driver.print("Test");
+			assertLogInfo(spyTransport, { level: "verbose" });
+		});
+
+		it("prefixes the messages with the current timestamp and channel name", () => {
+			log.driver.print("Whatever");
+			assertMessage(spyTransport, {
+				message: `00:00:00.000 DRIVER ·   Whatever`,
+				ignoreTimestamp: false,
+				ignoreChannel: false,
+			});
+		});
 	});
 
 	describe("transaction() (for outbound messages)", () => {
@@ -242,35 +284,6 @@ describe("lib/log/Driver =>", () => {
 			assertMessage(spyTransport, {
 				predicate: msg => msg.includes("  HardReset"),
 			});
-		});
-	});
-
-	describe("print()", () => {
-		it("logs short messages correctly", () => {
-			log.driver.print("Test");
-			assertMessage(spyTransport, {
-				message: `·   Test`,
-			});
-		});
-
-		it("logs long messages correctly", () => {
-			log.driver.print(
-				"This is a very long message that should be broken into multiple lines maybe sometimes...",
-			);
-			assertMessage(spyTransport, {
-				message: `· ${BOX_CHARS.top} This is a very long message that should be broken into multiple lines maybe 
-  ${BOX_CHARS.bottom} sometimes...`,
-			});
-		});
-
-		it("logs with the given loglevel", () => {
-			log.driver.print("Test", "warn");
-			assertLogInfo(spyTransport, { level: "warn" });
-		});
-
-		it("has a default loglevel of verbose", () => {
-			log.driver.print("Test");
-			assertLogInfo(spyTransport, { level: "verbose" });
 		});
 	});
 });

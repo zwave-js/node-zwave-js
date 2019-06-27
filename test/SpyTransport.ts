@@ -27,18 +27,35 @@ export function assertMessage(
 	options: Partial<{
 		message: string;
 		predicate: (msg: string) => boolean;
+		/** Default: true */
 		ignoreColor: boolean;
+		/** Default: true */
+		ignoreTimestamp: boolean;
+		/** Default: true */
+		ignoreChannel: boolean;
 		callNumber: number;
 	}>,
-) {
+): void {
 	const callNumber = options.callNumber || 0;
 	expect(transport.spy.mock.calls.length).toBeGreaterThan(callNumber);
 	const callArg = transport.spy.mock.calls[callNumber][0];
-	let actualMessage = callArg[MESSAGE];
+	let actualMessage: string = callArg[MESSAGE];
 	// By default ignore the color codes
 	const ignoreColor = options.ignoreColor !== false;
 	if (ignoreColor) {
 		actualMessage = stripColor(actualMessage);
+	}
+	// By default, strip away the timestamp and placeholder
+	if (options.ignoreTimestamp !== false) {
+		actualMessage = actualMessage
+			.replace(/^\d{2}\:\d{2}\:\d{2}\.\d{3} /gm, "")
+			.replace(/^ {13}/gm, "");
+	}
+	// by default, strip away the channel label and placeholder
+	if (options.ignoreChannel !== false) {
+		actualMessage = actualMessage
+			.replace(/(SERIAL|CNTRLR|DRIVER|RFLCTN) /gm, "")
+			.replace(/^ {7}/gm, "");
 	}
 	if (typeof options.message === "string") {
 		if (ignoreColor) {
@@ -58,7 +75,7 @@ export function assertLogInfo(
 		predicate: (info: ZWaveLogInfo) => boolean;
 		callNumber: number;
 	}>,
-) {
+): void {
 	const callNumber = options.callNumber || 0;
 	expect(transport.spy.mock.calls.length).toBeGreaterThan(callNumber);
 	const callArg = transport.spy.mock.calls[callNumber][0];

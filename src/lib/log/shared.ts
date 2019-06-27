@@ -32,6 +32,8 @@ export const CONTROL_CHAR_WIDTH = 4;
 
 /** The width of a log line in (visible) characters */
 export const LOG_WIDTH = 80;
+/** The width of the columns containing the timestamp and channel */
+export const LOG_PREFIX_WIDTH = 20;
 
 export interface ZWaveLogInfo extends TransformableInfo {
 	direction: string;
@@ -46,6 +48,8 @@ export interface ZWaveLogInfo extends TransformableInfo {
 }
 
 export const timestampFormat = "HH:mm:ss.SSS";
+const timestampPadding = " ".repeat(timestampFormat.length + 1);
+const channelPadding = " ".repeat(7); // 6 chars channel name, 1 space
 
 export type ZWaveLogger = Omit<Logger, "log"> & {
 	log: (info: ZWaveLogInfo) => void;
@@ -157,6 +161,10 @@ export const logMessagePrinter: Format = {
 		// The directional arrows and the optional grouping lines must be prepended
 		// without adding spaces
 		firstLine =
+			info.timestamp +
+			" " +
+			info.label +
+			" " +
 			info.direction +
 			(info.multiline ? BOX_CHARS.top : " ") +
 			" " +
@@ -167,6 +175,9 @@ export const logMessagePrinter: Format = {
 			lines.push(
 				...messageLines.slice(1).map(
 					(line, i, arr) =>
+						// Skip the columns for the timestamp and the channel name
+						timestampPadding +
+						channelPadding +
 						// Skip the columns for directional arrows
 						"  " +
 						// Prepend each grouped line with the correct box printing characters
@@ -187,7 +198,7 @@ export const logMessagePrinter: Format = {
 export function createLoggerFormat(channel: string): Format {
 	return combine(
 		label({ label: channel }),
-		timestamp(),
+		timestamp({ format: timestampFormat }),
 		logMessageFormatter,
 		colorizer(),
 		logMessagePrinter,
