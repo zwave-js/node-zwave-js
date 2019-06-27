@@ -1,8 +1,10 @@
 import * as colors from "ansi-colors";
 import { Format, TransformableInfo, TransformFunction } from "logform";
 import { MESSAGE } from "triple-beam";
+import * as winston from "winston";
 import { Logger } from "winston";
-import winston = require("winston");
+import { colorizer } from "./Colorizer";
+const { combine, timestamp, label } = winston.format;
 
 /** An invisible char with length >= 0 */
 // This is necessary to "print" zero spaces for the right padding
@@ -40,7 +42,10 @@ export interface ZWaveLogInfo extends TransformableInfo {
 	secondaryTags?: string;
 	secondaryTagPadding?: number;
 	multiline?: boolean;
+	timestamp?: string;
 }
+
+export const timestampFormat = "HH:mm:ss.SSS";
 
 export type ZWaveLogger = Omit<Logger, "log"> & {
 	log: (info: ZWaveLogInfo) => void;
@@ -177,6 +182,17 @@ export const logMessagePrinter: Format = {
 		return info;
 	}) as TransformFunction,
 };
+
+/** The common logger format for all channels */
+export function createLoggerFormat(channel: string): Format {
+	return combine(
+		label({ label: channel }),
+		timestamp(),
+		logMessageFormatter,
+		colorizer(),
+		logMessagePrinter,
+	);
+}
 
 /** Wraps an array of strings in square brackets and joins them with spaces */
 export function tagify(tags: string[]): string {

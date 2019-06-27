@@ -1,24 +1,15 @@
 import * as winston from "winston";
-import { colorizer } from "./Colorizer";
 import {
+	createLoggerFormat,
 	getDirectionPrefix,
-	logMessageFormatter,
-	logMessagePrinter,
 	tagify,
 	ZWaveLogger,
 } from "./shared";
-const { combine, timestamp, label } = winston.format;
 
 const REFLECTION_LABEL = "REFLECTION";
 const REFLECTION_LOGLEVEL = "silly";
 
-export const reflectionLoggerFormat = combine(
-	label({ label: REFLECTION_LABEL }),
-	timestamp(),
-	logMessageFormatter,
-	colorizer(),
-	logMessagePrinter,
-);
+export const reflectionLoggerFormat = createLoggerFormat(REFLECTION_LABEL);
 
 if (!winston.loggers.has("reflection")) {
 	winston.loggers.add("reflection", {

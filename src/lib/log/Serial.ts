@@ -1,26 +1,17 @@
 import * as winston from "winston";
 import { MessageHeaders } from "../message/Constants";
 import { num2hex } from "../util/strings";
-import { colorizer } from "./Colorizer";
 import {
+	createLoggerFormat,
 	DataDirection,
 	getDirectionPrefix,
-	logMessageFormatter,
-	logMessagePrinter,
 	ZWaveLogger,
 } from "./shared";
-const { combine, timestamp, label } = winston.format;
 
 const SERIAL_LABEL = "SERIAL";
 const SERIAL_LOGLEVEL = "debug";
 
-export const serialLoggerFormat = combine(
-	label({ label: SERIAL_LABEL }),
-	timestamp(),
-	logMessageFormatter,
-	colorizer(),
-	logMessagePrinter,
-);
+export const serialLoggerFormat = createLoggerFormat(SERIAL_LABEL);
 
 if (!winston.loggers.has("serial")) {
 	winston.loggers.add("serial", {

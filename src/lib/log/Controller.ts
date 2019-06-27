@@ -8,27 +8,18 @@ import {
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 } from "../node/ValueDB";
-import { colorizer } from "./Colorizer";
 import {
+	createLoggerFormat,
 	DataDirection,
 	getDirectionPrefix,
-	logMessageFormatter,
-	logMessagePrinter,
 	tagify,
 	ZWaveLogger,
 } from "./shared";
-const { combine, timestamp, label } = winston.format;
 
 const CONTROLLER_LABEL = "CONTROLLER";
 const CONTROLLER_LOGLEVEL = "info";
 
-export const controllerLoggerFormat = combine(
-	label({ label: CONTROLLER_LABEL }),
-	timestamp(),
-	logMessageFormatter,
-	colorizer(),
-	logMessagePrinter,
-);
+export const controllerLoggerFormat = createLoggerFormat(CONTROLLER_LABEL);
 
 if (!winston.loggers.has("controller")) {
 	winston.loggers.add("controller", {

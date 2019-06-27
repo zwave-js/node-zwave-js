@@ -8,26 +8,17 @@ import {
 	MessageType,
 } from "../message/Constants";
 import { Message, ResponseRole } from "../message/Message";
-import { colorizer } from "./Colorizer";
 import {
+	createLoggerFormat,
 	getDirectionPrefix,
-	logMessageFormatter,
-	logMessagePrinter,
 	tagify,
 	ZWaveLogger,
 } from "./shared";
-const { combine, timestamp, label } = winston.format;
 
 const DRIVER_LABEL = "DRIVER";
 const DRIVER_LOGLEVEL = "verbose";
 
-export const driverLoggerFormat = combine(
-	label({ label: DRIVER_LABEL }),
-	timestamp(),
-	logMessageFormatter,
-	colorizer(),
-	logMessagePrinter,
-);
+export const driverLoggerFormat = createLoggerFormat(DRIVER_LABEL);
 
 if (!winston.loggers.has("driver")) {
 	winston.loggers.add("driver", {
