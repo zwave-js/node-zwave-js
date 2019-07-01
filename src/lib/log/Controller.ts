@@ -16,7 +16,7 @@ import {
 	ZWaveLogger,
 } from "./shared";
 
-const CONTROLLER_LABEL = "CONTROLLER";
+const CONTROLLER_LABEL = "CNTRLR";
 const CONTROLLER_LOGLEVEL = "info";
 
 export const controllerLoggerFormat = createLoggerFormat(CONTROLLER_LABEL);

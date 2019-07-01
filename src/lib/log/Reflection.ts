@@ -6,7 +6,7 @@ import {
 	ZWaveLogger,
 } from "./shared";
 
-const REFLECTION_LABEL = "REFLECTION";
+const REFLECTION_LABEL = "RFLCTN";
 const REFLECTION_LOGLEVEL = "silly";
 
 export const reflectionLoggerFormat = createLoggerFormat(REFLECTION_LABEL);
