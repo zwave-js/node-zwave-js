@@ -307,4 +307,29 @@ describe("lib/log/Driver =>", () => {
 			});
 		});
 	});
+
+	describe("colors", () => {
+		it("primary tags are printed in inverse colors", () => {
+			const msg = createMessage(createEmptyMockDriver(), {
+				functionType: FunctionType.HardReset,
+				type: MessageType.Response,
+			});
+			log.driver.transactionResponse(msg, null as any);
+
+			const expected1 = colors.cyan(
+				colors.bgCyan("[") +
+					colors.inverse("RES") +
+					colors.bgCyan("]") +
+					" " +
+					colors.bgCyan("[") +
+					colors.inverse("HardReset") +
+					colors.bgCyan("]"),
+			);
+
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes(expected1),
+				ignoreColor: false,
+			});
+		});
+	});
 });
