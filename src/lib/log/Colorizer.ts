@@ -17,6 +17,12 @@ export const colorizer = format(
 		// Colorize all segments separately
 		info.message = textColor(info.message);
 		info.direction = colors.gray(info.direction);
+		if (info.label) {
+			info.label = colors.inverse(colors.gray(info.label));
+		}
+		if (info.timestamp) {
+			info.timestamp = colors.gray(info.timestamp);
+		}
 		if (info.primaryTags) {
 			info.primaryTags = textColor(info.primaryTags);
 		}

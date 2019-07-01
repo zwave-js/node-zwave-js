@@ -1,5 +1,6 @@
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { SortedList } from "alcalzone-shared/sorted-list";
+import * as colors from "ansi-colors";
 import * as MockDate from "mockdate";
 import * as winston from "winston";
 import { createEmptyMockDriver } from "../../../test/mocks";
@@ -17,7 +18,12 @@ import {
 } from "../message/Constants";
 import { Message } from "../message/Message";
 import log from "./index";
-import { BOX_CHARS, getDirectionPrefix, restoreSilence } from "./shared";
+import {
+	BOX_CHARS,
+	getDirectionPrefix,
+	restoreSilence,
+	unsilence,
+} from "./shared";
 
 interface CreateMessageOptions {
 	type: MessageType;
@@ -65,7 +71,7 @@ describe("lib/log/Driver =>", () => {
 		driverLogger = winston.loggers.get("driver");
 		spyTransport = new SpyTransport();
 		// Uncomment this to debug the log outputs manually
-		// wasSilenced = unsilence(controllerLogger);
+		wasSilenced = unsilence(driverLogger);
 		driverLogger.add(spyTransport);
 
 		MockDate.set(new Date().setHours(0, 0, 0, 0));
@@ -116,6 +122,26 @@ describe("lib/log/Driver =>", () => {
 				message: `00:00:00.000 DRIVER ·   Whatever`,
 				ignoreTimestamp: false,
 				ignoreChannel: false,
+			});
+		});
+
+		it("the timestamp is in a dim color", () => {
+			log.driver.print("Whatever");
+			assertMessage(spyTransport, {
+				predicate: msg => msg.startsWith(colors.gray("00:00:00.000")),
+				ignoreTimestamp: false,
+				ignoreChannel: false,
+				ignoreColor: false,
+			});
+		});
+
+		it("the channel name is in inverted primary color", () => {
+			log.driver.print("Whatever");
+			assertMessage(spyTransport, {
+				predicate: msg =>
+					msg.startsWith(colors.inverse(colors.gray("DRIVER"))),
+				ignoreChannel: false,
+				ignoreColor: false,
 			});
 		});
 	});

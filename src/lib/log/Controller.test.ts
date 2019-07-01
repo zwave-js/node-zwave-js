@@ -8,7 +8,7 @@ import { CommandClasses } from "../commandclass/CommandClasses";
 import { InterviewStage } from "../node/Node";
 import { ValueBaseArgs } from "../node/ValueDB";
 import log from "./index";
-import { BOX_CHARS, restoreSilence } from "./shared";
+import { BOX_CHARS, restoreSilence, unsilence } from "./shared";
 
 describe("lib/log/Controller =>", () => {
 	let controllerLogger: winston.Logger;
@@ -22,7 +22,7 @@ describe("lib/log/Controller =>", () => {
 		controllerLogger = winston.loggers.get("controller");
 		spyTransport = new SpyTransport();
 		// Uncomment this to debug the log outputs manually
-		// wasSilenced = unsilence(controllerLogger);
+		wasSilenced = unsilence(controllerLogger);
 		controllerLogger.add(spyTransport);
 	});
 

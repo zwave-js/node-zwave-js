@@ -1,7 +1,18 @@
-import { stripColor } from "ansi-colors";
+import { ansiRegex, stripColor } from "ansi-colors";
 import { MESSAGE } from "triple-beam";
 import * as Transport from "winston-transport";
 import { ZWaveLogInfo } from "../src/lib/log/shared";
+
+const timestampRegex = /\d{2}\:\d{2}\:\d{2}\.\d{3}/g;
+const timestampPrefixRegex = new RegExp(
+	`^(${ansiRegex.source})?${timestampRegex.source}(${ansiRegex.source})? `,
+	"gm",
+);
+const channelRegex = /(SERIAL|CNTRLR|DRIVER|RFLCTN)/g;
+const channelPrefixRegex = new RegExp(
+	`(${ansiRegex.source})?${channelRegex.source}(${ansiRegex.source})? `,
+	"gm",
+);
 
 /** Log to a jest.fn() in order to perform assertions during unit tests */
 export class SpyTransport extends Transport {
@@ -48,13 +59,13 @@ export function assertMessage(
 	// By default, strip away the timestamp and placeholder
 	if (options.ignoreTimestamp !== false) {
 		actualMessage = actualMessage
-			.replace(/^\d{2}\:\d{2}\:\d{2}\.\d{3} /gm, "")
+			.replace(timestampPrefixRegex, "")
 			.replace(/^ {13}/gm, "");
 	}
 	// by default, strip away the channel label and placeholder
 	if (options.ignoreChannel !== false) {
 		actualMessage = actualMessage
-			.replace(/(SERIAL|CNTRLR|DRIVER|RFLCTN) /gm, "")
+			.replace(channelPrefixRegex, "")
 			.replace(/^ {7}/gm, "");
 	}
 	if (typeof options.message === "string") {

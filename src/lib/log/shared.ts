@@ -45,6 +45,7 @@ export interface ZWaveLogInfo extends TransformableInfo {
 	secondaryTagPadding?: number;
 	multiline?: boolean;
 	timestamp?: string;
+	label?: string;
 }
 
 export const timestampFormat = "HH:mm:ss.SSS";
