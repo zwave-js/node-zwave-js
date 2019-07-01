@@ -547,7 +547,7 @@ export function commandClass(cc: CommandClasses): ClassDecorator {
 		log2.reflection.define(
 			messageClass.name,
 			"CommandClass",
-			`<=> CommandClasses.${CommandClasses[cc]} (${num2hex(cc)})`,
+			`CommandClasses.${CommandClasses[cc]} (${num2hex(cc)})`,
 		);
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_commandClass, cc, messageClass);
@@ -586,7 +586,7 @@ export function getCommandClass<T extends CommandClass | CCAPI>(
 	log2.reflection.lookup(
 		constr.name,
 		"CommandClass",
-		`=> ${CommandClasses[ret]} (${num2hex(ret)})`,
+		`${CommandClasses[ret]} (${num2hex(ret)})`,
 	);
 	return ret;
 }
@@ -612,7 +612,7 @@ export function getCommandClassStatic<T extends Constructable<CommandClass>>(
 	log2.reflection.lookup(
 		classConstructor.name,
 		"CommandClass",
-		`=> ${CommandClasses[ret]} (${num2hex(ret)})`,
+		`${CommandClasses[ret]} (${num2hex(ret)})`,
 	);
 	return ret;
 }
@@ -668,11 +668,7 @@ export function getImplementedVersion<T extends CommandClass>(
 		ret = Reflect.getMetadata(METADATA_version, constr);
 	if (ret == undefined) ret = 0;
 
-	log2.reflection.lookup(
-		constrName,
-		"implemented version",
-		`=> version ${ret}`,
-	);
+	log2.reflection.lookup(constrName, "implemented version", `version ${ret}`);
 	return ret;
 }
 
@@ -689,7 +685,7 @@ export function getImplementedVersionStatic<
 	log2.reflection.lookup(
 		classConstructor.name,
 		"implemented version",
-		`=> version ${ret}`,
+		`version ${ret}`,
 	);
 
 	return ret;
@@ -742,7 +738,7 @@ export function getCCCommand<T extends CommandClass>(
 	log2.reflection.lookup(
 		constrName,
 		"CC Command",
-		`=> ${ret} (${num2hex(ret)})`,
+		`${ret} (${num2hex(ret)})`,
 	);
 	return ret;
 }
@@ -759,7 +755,7 @@ export function getCCCommandStatic<T extends Constructable<CommandClass>>(
 	log2.reflection.lookup(
 		classConstructor.name,
 		"CC Command",
-		`=> ${ret} (${num2hex(ret)})`,
+		`${ret} (${num2hex(ret)})`,
 	);
 	return ret;
 }
@@ -831,13 +827,13 @@ export function getExpectedCCResponse<T extends CommandClass>(
 		log2.reflection.lookup(
 			constr.name,
 			"expected CC response",
-			`=> ${ret ? ret.constructor.name : "none"}`,
+			`${ret ? ret.constructor.name : "none"}`,
 		);
 	} else {
 		log2.reflection.lookup(
 			constr.name,
 			"expected CC response",
-			`=> dynamic${ret.name.length > 0 ? " " + ret.name : ""}`,
+			`dynamic${ret.name.length > 0 ? " " + ret.name : ""}`,
 		);
 	}
 	return ret;
@@ -863,13 +859,13 @@ export function getExpectedCCResponseStatic<
 		log2.reflection.lookup(
 			classConstructor.name,
 			"expected CC response",
-			`=> CommandClasses.${CommandClasses[ret]} ${num2hex(ret)}`,
+			`CommandClasses.${CommandClasses[ret]} ${num2hex(ret)}`,
 		);
 	} else if (typeof ret === "function") {
 		log2.reflection.lookup(
 			classConstructor.name,
 			"expected CC response",
-			`=> dynamic${ret.name.length > 0 ? " " + ret.name : ""}`,
+			`dynamic${ret.name.length > 0 ? " " + ret.name : ""}`,
 		);
 	}
 	return ret;
@@ -954,7 +950,7 @@ export function API(cc: CommandClasses): ClassDecorator {
 		log2.reflection.define(
 			apiClass.name,
 			"API",
-			`<=> CommandClasses.${CommandClasses[cc]} (${num2hex(cc)})`,
+			`CommandClasses.${CommandClasses[cc]} (${num2hex(cc)})`,
 		);
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_API, cc, apiClass);
@@ -978,7 +974,7 @@ export function getAPI(cc: CommandClasses): APIConstructor | undefined {
 	log2.reflection.lookup(
 		CommandClasses[cc],
 		"API",
-		`=> ${ret != undefined ? ret.name : "undefined"}`,
+		`${ret != undefined ? ret.name : "undefined"}`,
 	);
 	return ret;
 }

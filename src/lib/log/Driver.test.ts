@@ -130,11 +130,10 @@ describe("lib/log/Driver =>", () => {
 			});
 		});
 
-		it("the channel name is in inverted primary color", () => {
+		it("the channel name is in inverted gray color", () => {
 			log.driver.print("Whatever");
 			assertMessage(spyTransport, {
-				predicate: msg =>
-					msg.startsWith(colors.inverse(colors.gray("DRIVER"))),
+				predicate: msg => msg.startsWith(colors.gray.inverse("DRIVER")),
 				ignoreChannel: false,
 				ignoreColor: false,
 			});
@@ -300,10 +299,10 @@ describe("lib/log/Driver =>", () => {
 
 			// Each line should be indented
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("  GetSUCNodeId"),
+				predicate: msg => msg.includes("· GetSUCNodeId"),
 			});
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("  HardReset"),
+				predicate: msg => msg.includes("· HardReset"),
 			});
 		});
 	});

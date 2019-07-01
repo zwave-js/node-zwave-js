@@ -27,7 +27,7 @@ export const colorizer = format(
 		info.message = textColor(info.message);
 		info.direction = colors.gray(info.direction);
 		if (info.label) {
-			info.label = colors.inverse(colors.gray(info.label));
+			info.label = colors.gray.inverse(info.label);
 		}
 		if (info.timestamp) {
 			info.timestamp = colors.gray(info.timestamp);

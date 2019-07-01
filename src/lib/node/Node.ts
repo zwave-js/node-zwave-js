@@ -670,25 +670,25 @@ export class ZWaveNode extends EventEmitter {
 		let logMessage = "received response for protocol info:";
 		if (this.deviceClass) {
 			logMessage += `
-  basic device class:    ${
-		BasicDeviceClasses[this.deviceClass.basic]
-  } (${num2hex(this.deviceClass.basic)})
-  generic device class:  ${this.deviceClass.generic.name} (${num2hex(
+basic device class:    ${BasicDeviceClasses[this.deviceClass.basic]} (${num2hex(
+				this.deviceClass.basic,
+			)})
+generic device class:  ${this.deviceClass.generic.name} (${num2hex(
 				this.deviceClass.generic.key,
 			)})
-  specific device class: ${this.deviceClass.specific.name} (${num2hex(
+specific device class: ${this.deviceClass.specific.name} (${num2hex(
 				this.deviceClass.specific.key,
 			)})`;
 		}
 		logMessage += `
-  is a listening device: ${this.isListening}
-  is frequent listening: ${this.isFrequentListening}
-  is a routing device:   ${this.isRouting}
-  is a secure device:    ${this.isSecure}
-  is a beaming device:   ${this.isBeaming}
-  is a listening device: ${this.isListening}
-  maximum baud rate:     ${this.maxBaudRate} kbps
-  version:               ${this.version}`;
+is a listening device: ${this.isListening}
+is frequent listening: ${this.isFrequentListening}
+is a routing device:   ${this.isRouting}
+is a secure device:    ${this.isSecure}
+is a beaming device:   ${this.isBeaming}
+is a listening device: ${this.isListening}
+maximum baud rate:     ${this.maxBaudRate} kbps
+version:               ${this.version}`;
 		log2.controller.logNode(this, {
 			message: logMessage,
 			direction: "inbound",

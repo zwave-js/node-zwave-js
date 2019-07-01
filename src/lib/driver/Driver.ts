@@ -772,7 +772,7 @@ export class Driver extends EventEmitter implements IDriver {
 		log2.driver.print(
 			`added${oneTime ? " one-time" : ""} request handler for ${
 				FunctionType[fnType]
-			} (${fnType})...
+			} (${num2hex(fnType)})...
 ${handlers.length} registered`,
 		);
 		this.requestHandlers.set(fnType, handlers);
