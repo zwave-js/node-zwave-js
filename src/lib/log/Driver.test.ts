@@ -18,12 +18,7 @@ import {
 } from "../message/Constants";
 import { Message } from "../message/Message";
 import log from "./index";
-import {
-	BOX_CHARS,
-	getDirectionPrefix,
-	restoreSilence,
-	unsilence,
-} from "./shared";
+import { getDirectionPrefix, restoreSilence, unsilence } from "./shared";
 
 interface CreateMessageOptions {
 	type: MessageType;
@@ -92,7 +87,7 @@ describe("lib/log/Driver =>", () => {
 		it("logs short messages correctly", () => {
 			log.driver.print("Test");
 			assertMessage(spyTransport, {
-				message: `·   Test`,
+				message: `  Test`,
 			});
 		});
 
@@ -101,8 +96,8 @@ describe("lib/log/Driver =>", () => {
 				"This is a very long message that should be broken into multiple lines maybe sometimes...",
 			);
 			assertMessage(spyTransport, {
-				message: `· ${BOX_CHARS.top} This is a very long message that should be broken into multiple lines maybe 
-  ${BOX_CHARS.bottom} sometimes...`,
+				message: `  This is a very long message that should be broken into multiple lines maybe so
+  metimes...`,
 			});
 		});
 
@@ -119,7 +114,7 @@ describe("lib/log/Driver =>", () => {
 		it("prefixes the messages with the current timestamp and channel name", () => {
 			log.driver.print("Whatever");
 			assertMessage(spyTransport, {
-				message: `00:00:00.000 DRIVER ·   Whatever`,
+				message: `00:00:00.000 DRIVER   Whatever`,
 				ignoreTimestamp: false,
 				ignoreChannel: false,
 			});

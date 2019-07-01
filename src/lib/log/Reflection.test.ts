@@ -5,7 +5,7 @@ import {
 	SpyTransport,
 } from "../../../test/SpyTransport";
 import log from "./index";
-import { BOX_CHARS, restoreSilence, unsilence } from "./shared";
+import { restoreSilence, unsilence } from "./shared";
 
 describe("lib/log/Reflection =>", () => {
 	let reflectionLogger: winston.Logger;
@@ -37,7 +37,7 @@ describe("lib/log/Reflection =>", () => {
 		it("contains no direction", () => {
 			log.reflection.define("name", "expectedResponse", "something else");
 			assertMessage(spyTransport, {
-				predicate: msg => msg.startsWith("·   "),
+				predicate: msg => msg.startsWith("  "),
 			});
 		});
 
@@ -74,7 +74,7 @@ describe("lib/log/Reflection =>", () => {
 		it("contains no direction", () => {
 			log.reflection.lookup("name", "expectedResponse", "foo");
 			assertMessage(spyTransport, {
-				predicate: msg => msg.startsWith("·   "),
+				predicate: msg => msg.startsWith("  "),
 			});
 		});
 
@@ -111,7 +111,7 @@ describe("lib/log/Reflection =>", () => {
 		it("logs short messages correctly", () => {
 			log.reflection.print("Test");
 			assertMessage(spyTransport, {
-				message: `·   Test`,
+				message: `  Test`,
 			});
 		});
 
@@ -120,8 +120,8 @@ describe("lib/log/Reflection =>", () => {
 				"This is a very long message that should be broken into multiple lines maybe sometimes...",
 			);
 			assertMessage(spyTransport, {
-				message: `· ${BOX_CHARS.top} This is a very long message that should be broken into multiple lines maybe 
-  ${BOX_CHARS.bottom} sometimes...`,
+				message: `  This is a very long message that should be broken into multiple lines maybe so
+  metimes...`,
 			});
 		});
 

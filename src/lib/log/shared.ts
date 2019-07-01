@@ -11,12 +11,6 @@ const { combine, timestamp, label } = winston.format;
 // There's probably a nicer way
 export const INVISIBLE = colors.black("\u001b[39m");
 
-/** A list of characters to group lines */
-export const BOX_CHARS = {
-	top: colors.gray("┌"), // Top corner
-	middle: colors.gray("│"), // vertical line
-	bottom: colors.gray("└"), // bottom corner
-};
 export type DataDirection = "inbound" | "outbound" | "none";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -24,13 +18,17 @@ export function getDirectionPrefix(direction: DataDirection) {
 	return direction === "inbound"
 		? "« "
 		: direction === "outbound"
-		? " »"
-		: "· ";
+		? "» "
+		: "  ";
 }
 /** The space the directional arrows, grouping brackets and padding occupies */
-export const CONTROL_CHAR_WIDTH = 4;
+export const CONTROL_CHAR_WIDTH = 2;
+export const directionPrefixPadding = " ".repeat(CONTROL_CHAR_WIDTH);
 
-/** The width of a log line in (visible) characters */
+/**
+ * The width of a log line in (visible) characters, excluding the timestamp and
+ * label, but including the direction prefix
+ */
 export const LOG_WIDTH = 80;
 /** The width of the columns containing the timestamp and channel */
 export const LOG_PREFIX_WIDTH = 20;
@@ -167,25 +165,18 @@ export const logMessagePrinter: Format = {
 			info.label +
 			" " +
 			info.direction +
-			(info.multiline ? BOX_CHARS.top : " ") +
-			" " +
 			firstLine;
 		const lines = [firstLine];
 		if (info.multiline) {
 			// Format all message lines but the first
 			lines.push(
 				...messageLines.slice(1).map(
-					(line, i, arr) =>
+					line =>
 						// Skip the columns for the timestamp and the channel name
 						timestampPadding +
 						channelPadding +
 						// Skip the columns for directional arrows
-						"  " +
-						// Prepend each grouped line with the correct box printing characters
-						(i < arr.length - 1
-							? BOX_CHARS.middle
-							: BOX_CHARS.bottom) +
-						" " +
+						directionPrefixPadding +
 						line,
 				),
 			);

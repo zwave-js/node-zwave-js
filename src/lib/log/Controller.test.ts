@@ -8,7 +8,7 @@ import { CommandClasses } from "../commandclass/CommandClasses";
 import { InterviewStage } from "../node/Node";
 import { ValueBaseArgs } from "../node/ValueDB";
 import log from "./index";
-import { BOX_CHARS, restoreSilence, unsilence } from "./shared";
+import { restoreSilence, unsilence } from "./shared";
 
 describe("lib/log/Controller =>", () => {
 	let controllerLogger: winston.Logger;
@@ -199,7 +199,7 @@ describe("lib/log/Controller =>", () => {
 				interviewStage: InterviewStage.Complete,
 			} as any);
 			assertMessage(spyTransport, {
-				message: "·   [Node 005] Interview completed",
+				message: "  [Node 005] Interview completed",
 			});
 		});
 	});
@@ -219,7 +219,7 @@ describe("lib/log/Controller =>", () => {
 			} as any);
 			assertMessage(spyTransport, {
 				message:
-					"·   [Node 005] Beginning interview - last completed stage: Configuration",
+					"  [Node 005] Beginning interview - last completed stage: Configuration",
 			});
 		});
 	});
@@ -228,12 +228,12 @@ describe("lib/log/Controller =>", () => {
 		it("logs short messages correctly", () => {
 			log.controller.logNode({ id: 3 } as any, "Test");
 			assertMessage(spyTransport, {
-				message: `·   [Node 003] Test`,
+				message: `  [Node 003] Test`,
 			});
 
 			log.controller.logNode({ id: 3 } as any, { message: "Test2" });
 			assertMessage(spyTransport, {
-				message: `·   [Node 003] Test2`,
+				message: `  [Node 003] Test2`,
 				callNumber: 1,
 			});
 		});
@@ -244,8 +244,8 @@ describe("lib/log/Controller =>", () => {
 				"This is a very long message that should be broken into multiple lines maybe sometimes...",
 			);
 			assertMessage(spyTransport, {
-				message: `· ${BOX_CHARS.top} [Node 003] This is a very long message that should be broken into multiple l
-  ${BOX_CHARS.bottom} ines maybe sometimes...`,
+				message: `  [Node 003] This is a very long message that should be broken into multiple lin
+  es maybe sometimes...`,
 			});
 
 			log.controller.logNode({ id: 5 } as any, {
@@ -253,8 +253,8 @@ describe("lib/log/Controller =>", () => {
 					"This is a very long message that should be broken into multiple lines maybe sometimes...",
 			});
 			assertMessage(spyTransport, {
-				message: `· ${BOX_CHARS.top} [Node 005] This is a very long message that should be broken into multiple l
-  ${BOX_CHARS.bottom} ines maybe sometimes...`,
+				message: `  [Node 005] This is a very long message that should be broken into multiple lin
+  es maybe sometimes...`,
 				callNumber: 1,
 			});
 		});
@@ -284,14 +284,14 @@ describe("lib/log/Controller =>", () => {
 				direction: "inbound",
 			});
 			assertMessage(spyTransport, {
-				message: "«   [Node 003] Test",
+				message: "« [Node 003] Test",
 			});
 			log.controller.logNode({ id: 5 } as any, {
 				message: "Test",
 				direction: "outbound",
 			});
 			assertMessage(spyTransport, {
-				message: " »  [Node 005] Test",
+				message: "» [Node 005] Test",
 				callNumber: 1,
 			});
 		});
@@ -301,7 +301,7 @@ describe("lib/log/Controller =>", () => {
 		it("logs short messages correctly", () => {
 			log.controller.print("Test");
 			assertMessage(spyTransport, {
-				message: `·   Test`,
+				message: `  Test`,
 			});
 		});
 
@@ -310,8 +310,8 @@ describe("lib/log/Controller =>", () => {
 				"This is a very long message that should be broken into multiple lines maybe sometimes...",
 			);
 			assertMessage(spyTransport, {
-				message: `· ${BOX_CHARS.top} This is a very long message that should be broken into multiple lines maybe 
-  ${BOX_CHARS.bottom} sometimes...`,
+				message: `  This is a very long message that should be broken into multiple lines maybe so
+  metimes...`,
 			});
 		});
 
