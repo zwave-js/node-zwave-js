@@ -2,7 +2,7 @@ import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import log2 from "../log";
+import log from "../log";
 import {
 	isConsecutiveArray,
 	JSONObject,
@@ -119,7 +119,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			// Nodes may respond with a different parameter, e.g. if we
 			// requested a non-existing one
 			if (response.parameter === parameter) return response.value;
-			log2.controller.logNode(this.node, {
+			log.controller.logNode(this.node, {
 				message: `Received unexpected ConfigurationReport (param = ${response.parameter}, value = ${response.value})`,
 				direction: "inbound",
 				level: "error",
@@ -215,14 +215,14 @@ export class ConfigurationCCAPI extends CCAPI {
 	/** Scans a V1/V2 node for the existing parameters using get/set commands */
 	private async scanParametersV1V2(): Promise<void> {
 		// TODO: Reduce the priority of the messages
-		log2.controller.logNode(this.node, `Scanning available parameters...`);
+		log.controller.logNode(this.node, `Scanning available parameters...`);
 		const ccInstance = this.node.createCCInstance<ConfigurationCC>(
 			getCommandClass(this),
 		)!;
 		for (let param = 1; param <= 255; param++) {
 			// Check if the parameter is readable
 			let originalValue: ConfigValue | undefined;
-			log2.controller.logNode(this.node, {
+			log.controller.logNode(this.node, {
 				message: `  trying param ${param}...`,
 				direction: "outbound",
 			});
@@ -233,7 +233,7 @@ export class ConfigurationCCAPI extends CCAPI {
     readable  = true
     valueSize = ${ccInstance.getParamInformation(param).valueSize}
     value     = ${originalValue}`;
-					log2.controller.logNode(this.node, {
+					log.controller.logNode(this.node, {
 						message: logMessage,
 						direction: "inbound",
 					});

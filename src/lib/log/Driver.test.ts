@@ -18,7 +18,7 @@ import {
 } from "../message/Constants";
 import { Message } from "../message/Message";
 import log from "./index";
-import { getDirectionPrefix, restoreSilence, unsilence } from "./shared";
+import { getDirectionPrefix, restoreSilence } from "./shared";
 
 interface CreateMessageOptions {
 	type: MessageType;
@@ -66,7 +66,7 @@ describe("lib/log/Driver =>", () => {
 		driverLogger = winston.loggers.get("driver");
 		spyTransport = new SpyTransport();
 		// Uncomment this to debug the log outputs manually
-		wasSilenced = unsilence(driverLogger);
+		// wasSilenced = unsilence(driverLogger);
 		driverLogger.add(spyTransport);
 
 		MockDate.set(new Date().setHours(0, 0, 0, 0));

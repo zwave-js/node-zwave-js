@@ -3,7 +3,7 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import * as fs from "fs";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import log2 from "../log";
+import log from "../log";
 import { ZWaveNode } from "../node/Node";
 import { ValueDB } from "../node/ValueDB";
 import { JSONObject, staticExtends, stripUndefined } from "../util/misc";
@@ -544,7 +544,7 @@ function getCCCommandMapKey(ccId: CommandClasses, ccCommand: number): string {
  */
 export function commandClass(cc: CommandClasses): ClassDecorator {
 	return messageClass => {
-		log2.reflection.define(
+		log.reflection.define(
 			messageClass.name,
 			"CommandClass",
 			`CommandClasses.${CommandClasses[cc]} (${num2hex(cc)})`,
@@ -583,7 +583,7 @@ export function getCommandClass<T extends CommandClass | CCAPI>(
 		);
 	}
 
-	log2.reflection.lookup(
+	log.reflection.lookup(
 		constr.name,
 		"CommandClass",
 		`${CommandClasses[ret]} (${num2hex(ret)})`,
@@ -609,7 +609,7 @@ export function getCommandClassStatic<T extends Constructable<CommandClass>>(
 		);
 	}
 
-	log2.reflection.lookup(
+	log.reflection.lookup(
 		classConstructor.name,
 		"CommandClass",
 		`${CommandClasses[ret]} (${num2hex(ret)})`,
@@ -636,7 +636,7 @@ export function getCCConstructor(
  */
 export function implementedVersion(version: number): ClassDecorator {
 	return ccClass => {
-		log2.reflection.define(
+		log.reflection.define(
 			ccClass.name,
 			"implemented version",
 			`version ${version}`,
@@ -668,7 +668,7 @@ export function getImplementedVersion<T extends CommandClass>(
 		ret = Reflect.getMetadata(METADATA_version, constr);
 	if (ret == undefined) ret = 0;
 
-	log2.reflection.lookup(constrName, "implemented version", `version ${ret}`);
+	log.reflection.lookup(constrName, "implemented version", `version ${ret}`);
 	return ret;
 }
 
@@ -682,7 +682,7 @@ export function getImplementedVersionStatic<
 	const ret: number =
 		Reflect.getMetadata(METADATA_version, classConstructor) || 0;
 
-	log2.reflection.lookup(
+	log.reflection.lookup(
 		classConstructor.name,
 		"implemented version",
 		`version ${ret}`,
@@ -696,7 +696,7 @@ export function getImplementedVersionStatic<
  */
 export function CCCommand(command: number): ClassDecorator {
 	return ccClass => {
-		log2.reflection.define(
+		log.reflection.define(
 			ccClass.name,
 			"CC Command",
 			`${command} (${num2hex(command)})`,
@@ -735,11 +735,7 @@ export function getCCCommand<T extends CommandClass>(
 		constr,
 	);
 
-	log2.reflection.lookup(
-		constrName,
-		"CC Command",
-		`${ret} (${num2hex(ret)})`,
-	);
+	log.reflection.lookup(constrName, "CC Command", `${ret} (${num2hex(ret)})`);
 	return ret;
 }
 
@@ -752,7 +748,7 @@ export function getCCCommandStatic<T extends Constructable<CommandClass>>(
 		classConstructor,
 	);
 
-	log2.reflection.lookup(
+	log.reflection.lookup(
 		classConstructor.name,
 		"CC Command",
 		`${ret} (${num2hex(ret)})`,
@@ -791,14 +787,14 @@ export function expectedCCResponse<T extends CommandClass>(
 ): ClassDecorator {
 	return ccClass => {
 		if (staticExtends(ccOrDynamic, CommandClass)) {
-			log2.reflection.define(
+			log.reflection.define(
 				ccClass.name,
 				"expected CC response",
 				ccOrDynamic.name,
 			);
 		} else {
 			const dynamic = ccOrDynamic;
-			log2.reflection.define(
+			log.reflection.define(
 				ccClass.name,
 				"expected CC response",
 				`dynamic${dynamic.name.length > 0 ? " " + dynamic.name : ""}`,
@@ -824,13 +820,13 @@ export function getExpectedCCResponse<T extends CommandClass>(
 		| DynamicCCResponse<T>
 		| undefined = Reflect.getMetadata(METADATA_ccResponse, constr);
 	if (!ret || staticExtends(ret, CommandClass)) {
-		log2.reflection.lookup(
+		log.reflection.lookup(
 			constr.name,
 			"expected CC response",
 			`${ret ? ret.constructor.name : "none"}`,
 		);
 	} else {
-		log2.reflection.lookup(
+		log.reflection.lookup(
 			constr.name,
 			"expected CC response",
 			`dynamic${ret.name.length > 0 ? " " + ret.name : ""}`,
@@ -856,13 +852,13 @@ export function getExpectedCCResponseStatic<
 		classConstructor,
 	);
 	if (typeof ret === "number") {
-		log2.reflection.lookup(
+		log.reflection.lookup(
 			classConstructor.name,
 			"expected CC response",
 			`CommandClasses.${CommandClasses[ret]} ${num2hex(ret)}`,
 		);
 	} else if (typeof ret === "function") {
-		log2.reflection.lookup(
+		log.reflection.lookup(
 			classConstructor.name,
 			"expected CC response",
 			`dynamic${ret.name.length > 0 ? " " + ret.name : ""}`,
@@ -947,7 +943,7 @@ export function getCCKeyValuePairNames(
  */
 export function API(cc: CommandClasses): ClassDecorator {
 	return apiClass => {
-		log2.reflection.define(
+		log.reflection.define(
 			apiClass.name,
 			"API",
 			`CommandClasses.${CommandClasses[cc]} (${num2hex(cc)})`,
@@ -971,7 +967,7 @@ export function getAPI(cc: CommandClasses): APIConstructor | undefined {
 	const map: APIMap | undefined = Reflect.getMetadata(METADATA_APIMap, CCAPI);
 	const ret = map && map.get(cc);
 
-	log2.reflection.lookup(
+	log.reflection.lookup(
 		CommandClasses[cc],
 		"API",
 		`${ret != undefined ? ret.name : "undefined"}`,
@@ -983,7 +979,7 @@ export function getAPI(cc: CommandClasses): APIConstructor | undefined {
 const definedCCs = fs
 	.readdirSync(__dirname)
 	.filter(file => /CC\.(js|ts)$/.test(file));
-log2.reflection.print(`loading CCs: ${stringify(definedCCs)}`);
+log.reflection.print(`loading CCs: ${stringify(definedCCs)}`);
 for (const file of definedCCs) {
 	require(`./${file}`);
 }

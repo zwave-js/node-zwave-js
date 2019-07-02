@@ -8,6 +8,7 @@ import { EventEmitter } from "events";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { Driver, RequestHandler } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import log from "../log";
 import {
 	FunctionType,
 	MessagePriority,
@@ -16,7 +17,6 @@ import {
 import { Message } from "../message/Message";
 import { BasicDeviceClasses, DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
-import { log } from "../util/logger";
 import { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
 import {
@@ -208,10 +208,10 @@ export class ZWaveController extends EventEmitter {
 	 * Interviews the controller for the necessary information.
 	 */
 	public async interview(): Promise<void> {
-		log("controller", "beginning interview...", "debug");
+		log.controller.print("beginning interview...");
 
 		// get basic controller version info
-		log("controller", `querying version info...`, "debug");
+		log.controller.print(`querying version info...`);
 		const version = await this.driver.sendMessage<
 			GetControllerVersionResponse
 		>(new GetControllerVersionRequest(this.driver), {
@@ -219,32 +219,28 @@ export class ZWaveController extends EventEmitter {
 		});
 		this._libraryVersion = version.libraryVersion;
 		this._type = version.controllerType;
-		log("controller", `received version info:`, "debug");
-		log(
-			"controller",
-			`  controller type: ${ZWaveLibraryTypes[this._type]}`,
-			"debug",
-		);
-		log(
-			"controller",
-			`  library version: ${this._libraryVersion}`,
-			"debug",
+		log.controller.print(
+			`received version info:
+  controller type: ${ZWaveLibraryTypes[this._type]}
+  library version: ${this._libraryVersion}`,
 		);
 
 		// get the home and node id of the controller
-		log("controller", `querying controller IDs...`, "debug");
+		log.controller.print(`querying controller IDs...`);
 		const ids = await this.driver.sendMessage<GetControllerIdResponse>(
 			new GetControllerIdRequest(this.driver),
 			{ supportCheck: false },
 		);
 		this._homeId = ids.homeId;
 		this._ownNodeId = ids.ownNodeId;
-		log("controller", `received controller IDs:`, "debug");
-		log("controller", `  home ID:     ${num2hex(this._homeId)}`, "debug");
-		log("controller", `  own node ID: ${this._ownNodeId}`, "debug");
+		log.controller.print(
+			`received controller IDs:
+  home ID:     ${num2hex(this._homeId)}
+  own node ID: ${this._ownNodeId}`,
+		);
 
 		// find out what the controller can do
-		log("controller", `querying controller capabilities...`, "debug");
+		log.controller.print(`querying controller capabilities...`);
 		const ctrlCaps = await this.driver.sendMessage<
 			GetControllerCapabilitiesResponse
 		>(new GetControllerCapabilitiesRequest(this.driver), {
@@ -256,37 +252,17 @@ export class ZWaveController extends EventEmitter {
 		this._isSISPresent = ctrlCaps.isSISPresent;
 		this._wasRealPrimary = ctrlCaps.wasRealPrimary;
 		this._isStaticUpdateController = ctrlCaps.isStaticUpdateController;
-		log("controller", `received controller capabilities:`, "debug");
-		log(
-			"controller",
-			`  controller role:     ${
-				this._isSecondary ? "secondary" : "primary"
-			}`,
-			"debug",
-		);
-		log(
-			"controller",
-			`  is in other network: ${this._isUsingHomeIdFromOtherNetwork}`,
-			"debug",
-		);
-		log(
-			"controller",
-			`  is SIS present:      ${this._isSISPresent}`,
-			"debug",
-		);
-		log(
-			"controller",
-			`  was real primary:    ${this._wasRealPrimary}`,
-			"debug",
-		);
-		log(
-			"controller",
-			`  is a SUC:            ${this._isStaticUpdateController}`,
-			"debug",
+		log.controller.print(
+			`received controller capabilities:
+  controller role:     ${this._isSecondary ? "secondary" : "primary"}
+  is in other network: ${this._isUsingHomeIdFromOtherNetwork}
+  is SIS present:      ${this._isSISPresent}
+  was real primary:    ${this._wasRealPrimary}
+  is a SUC:            ${this._isStaticUpdateController}`,
 		);
 
 		// find out which part of the API is supported
-		log("controller", `querying API capabilities...`, "debug");
+		log.controller.print(`querying API capabilities...`);
 		const apiCaps = await this.driver.sendMessage<
 			GetSerialApiCapabilitiesResponse
 		>(new GetSerialApiCapabilitiesRequest(this.driver), {
@@ -297,49 +273,30 @@ export class ZWaveController extends EventEmitter {
 		this._productType = apiCaps.productType;
 		this._productId = apiCaps.productId;
 		this._supportedFunctionTypes = apiCaps.supportedFunctionTypes;
-		log("controller", `received API capabilities:`, "debug");
-		log(
-			"controller",
-			`  serial API version:  ${this._serialApiVersion}`,
-			"debug",
+		log.controller.print(
+			`received API capabilities:
+  serial API version:  ${this._serialApiVersion}
+  manufacturer ID:     ${num2hex(this._manufacturerId)}
+  product type:        ${num2hex(this._productType)}
+  product ID:          ${num2hex(this._productId)}
+  supported functions: ${this._supportedFunctionTypes
+		.map(fn => `\n    ${FunctionType[fn]} (${num2hex(fn)})`)
+		.join("")}`,
 		);
-		log(
-			"controller",
-			`  manufacturer ID:     ${num2hex(this._manufacturerId)}`,
-			"debug",
-		);
-		log(
-			"controller",
-			`  product type:        ${num2hex(this._productType)}`,
-			"debug",
-		);
-		log(
-			"controller",
-			`  product ID:          ${num2hex(this._productId)}`,
-			"debug",
-		);
-		log("controller", `  supported functions:`, "debug");
-		for (const fn of this._supportedFunctionTypes) {
-			log(
-				"controller",
-				`    ${FunctionType[fn]} (${num2hex(fn)})`,
-				"debug",
-			);
-		}
 
 		// now we can check if a function is supported
 
 		// find the SUC
-		log("controller", `finding SUC...`, "debug");
+		log.controller.print(`finding SUC...`);
 		const suc = await this.driver.sendMessage<GetSUCNodeIdResponse>(
 			new GetSUCNodeIdRequest(this.driver),
 			{ supportCheck: false },
 		);
 		this._sucNodeId = suc.sucNodeId;
 		if (this._sucNodeId === 0) {
-			log("controller", `no SUC present`, "debug");
+			log.controller.print(`no SUC present`);
 		} else {
-			log("controller", `SUC has node ID ${this.sucNodeId}`, "debug");
+			log.controller.print(`SUC has node ID ${this.sucNodeId}`);
 		}
 		// TODO: if configured, enable this controller as SIS if there's no SUC
 		// https://github.com/OpenZWave/open-zwave/blob/a46f3f36271f88eed5aea58899a6cb118ad312a2/cpp/src/Driver.cpp#L2586
@@ -353,7 +310,7 @@ export class ZWaveController extends EventEmitter {
 		}
 
 		// Request information about all nodes with the GetInitData message
-		log("controller", `querying node information...`, "debug");
+		log.controller.print(`querying node information...`);
 		const initData = await this.driver.sendMessage<
 			GetSerialApiInitDataResponse
 		>(new GetSerialApiInitDataRequest(this.driver));
@@ -364,33 +321,13 @@ export class ZWaveController extends EventEmitter {
 		this._isSlave = initData.isSlave;
 		this._supportsTimers = initData.supportsTimers;
 		// ignore the initVersion, no clue what to do with it
-		log("controller", `received node information:`, "debug");
-		log(
-			"controller",
-			`  controller role:            ${
-				this._isSecondary ? "secondary" : "primary"
-			}`,
-			"debug",
-		);
-		log(
-			"controller",
-			`  controller is a SUC:        ${this._isStaticUpdateController}`,
-			"debug",
-		);
-		log(
-			"controller",
-			`  controller is a slave:      ${this._isSlave}`,
-			"debug",
-		);
-		log(
-			"controller",
-			`  controller supports timers: ${this._supportsTimers}`,
-			"debug",
-		);
-		log(
-			"controller",
-			`  nodes in the network:       ${initData.nodeIds.join(", ")}`,
-			"debug",
+		log.controller.print(
+			`received node information:
+  controller role:            ${this._isSecondary ? "secondary" : "primary"}
+  controller is a SUC:        ${this._isStaticUpdateController}
+  controller is a slave:      ${this._isSlave}
+  controller supports timers: ${this._supportsTimers}
+  nodes in the network:       ${initData.nodeIds.join(", ")}`,
 		);
 		// create an empty entry in the nodes map so we can initialize them afterwards
 		for (const nodeId of initData.nodeIds) {
@@ -402,10 +339,8 @@ export class ZWaveController extends EventEmitter {
 			this.isFunctionSupported(FunctionType.SetSerialApiTimeouts)
 		) {
 			const { ack, byte } = this.driver.options.timeouts;
-			log(
-				"controller",
+			log.controller.print(
 				`setting serial API timeouts: ack = ${ack} ms, byte = ${byte} ms`,
-				"debug",
 			);
 			const resp = await this.driver.sendMessage<
 				SetSerialApiTimeoutsResponse
@@ -415,10 +350,8 @@ export class ZWaveController extends EventEmitter {
 					byteTimeout: byte,
 				}),
 			);
-			log(
-				"controller",
+			log.controller.print(
 				`serial API timeouts overwritten. The old values were: ack = ${resp.oldAckTimeout} ms, byte = ${resp.oldByteTimeout} ms`,
-				"debug",
 			);
 		}
 
@@ -429,7 +362,7 @@ export class ZWaveController extends EventEmitter {
 				FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION,
 			)
 		) {
-			log("controller", `sending application info...`, "debug");
+			log.controller.print(`sending application info...`);
 			const appInfoMsg = new Message(this.driver, {
 				type: MessageType.Request,
 				functionType:
@@ -447,7 +380,7 @@ export class ZWaveController extends EventEmitter {
 			});
 		}
 
-		log("controller", "interview completed", "debug");
+		log.controller.print("interview completed");
 	}
 
 	/**
@@ -456,12 +389,12 @@ export class ZWaveController extends EventEmitter {
 	 * @internal
 	 */
 	public hardReset(): Promise<void> {
-		log("controller", "performing hard reset...", "debug");
+		log.controller.print("performing hard reset...");
 		// wotan-disable-next-line async-function-assignability
 		return new Promise(async (resolve, reject) => {
 			// handle the incoming message
 			const handler: RequestHandler = _msg => {
-				log("controller", `  hard reset succeeded`, "debug");
+				log.controller.print(`  hard reset succeeded`);
 				resolve();
 				return true;
 			};
@@ -477,7 +410,10 @@ export class ZWaveController extends EventEmitter {
 				);
 			} catch (e) {
 				// in any case unregister the handler
-				log("controller", `  hard reset failed: ${e.message}`, "debug");
+				log.controller.print(
+					`  hard reset failed: ${e.message}`,
+					"error",
+				);
 				this.driver.unregisterRequestHandler(
 					FunctionType.HardReset,
 					handler,
@@ -502,7 +438,7 @@ export class ZWaveController extends EventEmitter {
 		if (this._inclusionActive) return false;
 		this._inclusionActive = true;
 
-		log("controller", `starting inclusion process...`, "debug");
+		log.controller.print(`starting inclusion process...`);
 
 		// create the promise we're going to return
 		this._beginInclusionPromise = createDeferredPromise();
@@ -528,7 +464,7 @@ export class ZWaveController extends EventEmitter {
 		if (!this._inclusionActive) return false;
 		this._inclusionActive = false;
 
-		log("controller", `stopping inclusion process...`, "debug");
+		log.controller.print(`stopping inclusion process...`);
 
 		// create the promise we're going to return
 		this._stopInclusionPromise = createDeferredPromise();
@@ -543,7 +479,7 @@ export class ZWaveController extends EventEmitter {
 		);
 
 		const result = await this._stopInclusionPromise;
-		log("controller", `the inclusion process was stopped`, "debug");
+		log.controller.print(`the inclusion process was stopped`);
 		return result;
 	}
 
@@ -551,29 +487,21 @@ export class ZWaveController extends EventEmitter {
 		msg: AddNodeToNetworkRequest,
 	): Promise<void> {
 		// TODO: Make sure we work with a deserialized request here
-		log(
-			"controller",
+		log.controller.print(
 			`handling add node request (status = ${
 				AddNodeStatus[msg.status!]
 			})`,
-			"debug",
 		);
 		if (!this._inclusionActive && msg.status !== AddNodeStatus.Done) {
-			log(
-				"controller",
-				`  inclusion is NOT active, ignoring it...`,
-				"debug",
-			);
+			log.controller.print(`  inclusion is NOT active, ignoring it...`);
 			return;
 		}
 
 		switch (msg.status) {
 			case AddNodeStatus.Ready:
 				// this is called when inclusion was started successfully
-				log(
-					"controller",
+				log.controller.print(
 					`  the controller is now ready to add nodes`,
-					"debug",
 				);
 				if (this._beginInclusionPromise != null)
 					this._beginInclusionPromise.resolve(true);
@@ -581,10 +509,9 @@ export class ZWaveController extends EventEmitter {
 			case AddNodeStatus.Failed:
 				// this is called when inclusion could not be started...
 				if (this._beginInclusionPromise != null) {
-					log(
-						"controller",
+					log.controller.print(
 						`  starting the inclusion failed`,
-						"debug",
+						"error",
 					);
 					this._beginInclusionPromise.reject(
 						new ZWaveError(
@@ -594,7 +521,7 @@ export class ZWaveController extends EventEmitter {
 					);
 				} else {
 					// ...or adding a node failed
-					log("controller", `  adding the node failed`, "debug");
+					log.controller.print(`  adding the node failed`, "error");
 					this.emit("inclusion failed");
 				}
 				// in any case, stop the inclusion process so we don't accidentally add another node
@@ -631,10 +558,8 @@ export class ZWaveController extends EventEmitter {
 			}
 			case AddNodeStatus.Done: {
 				// this is called when the inclusion was completed
-				log(
-					"controller",
+				log.controller.print(
 					`done called for ${msg.statusContext!.nodeId}`,
-					"debug",
 				);
 				// stopping the inclusion was acknowledged by the controller
 				if (this._stopInclusionPromise != null)
@@ -642,57 +567,34 @@ export class ZWaveController extends EventEmitter {
 
 				if (this._nodePendingInclusion != null) {
 					const newNode = this._nodePendingInclusion;
-					log(
-						"controller",
-						`finished adding node ${newNode.id}:`,
-						"debug",
+					const supportedCommandClasses = [
+						...newNode.implementedCommandClasses.entries(),
+					]
+						.filter(([, info]) => info.isSupported)
+						.map(([cc]) => cc);
+					const controlledCommandClasses = [
+						...newNode.implementedCommandClasses.entries(),
+					]
+						.filter(([, info]) => info.isControlled)
+						.map(([cc]) => cc);
+					log.controller.print(
+						`finished adding node ${newNode.id}:
+  basic device class:    ${
+		BasicDeviceClasses[newNode.deviceClass!.basic]
+  } (${num2hex(newNode.deviceClass!.basic)})
+  generic device class:  ${newNode.deviceClass!.generic.name} (${num2hex(
+							newNode.deviceClass!.generic.key,
+						)})
+  specific device class: ${newNode.deviceClass!.specific.name} (${num2hex(
+							newNode.deviceClass!.specific.key,
+						)})
+  supported CCs: ${supportedCommandClasses
+		.map(cc => `\n    ${CommandClasses[cc]} (${num2hex(cc)})`)
+		.join("")}
+  controlled CCs: ${controlledCommandClasses
+		.map(cc => `\n    ${CommandClasses[cc]} (${num2hex(cc)})`)
+		.join("")}`,
 					);
-					log(
-						"controller",
-						`  basic device class:    ${
-							BasicDeviceClasses[newNode.deviceClass!.basic]
-						} (${num2hex(newNode.deviceClass!.basic)})`,
-						"debug",
-					);
-					log(
-						"controller",
-						`  generic device class:  ${
-							newNode.deviceClass!.generic.name
-						} (${num2hex(newNode.deviceClass!.generic.key)})`,
-						"debug",
-					);
-					log(
-						"controller",
-						`  specific device class: ${
-							newNode.deviceClass!.specific.name
-						} (${num2hex(newNode.deviceClass!.specific.key)})`,
-						"debug",
-					);
-					log("controller", `  supported CCs:`, "debug");
-					for (const [
-						cc,
-						info,
-					] of newNode.implementedCommandClasses.entries()) {
-						if (info.isSupported)
-							log(
-								"controller",
-								`    ${CommandClasses[cc]} (${num2hex(cc)})`,
-								"debug",
-							);
-					}
-					log("controller", `  controlled CCs:`, "debug");
-					for (const [
-						cc,
-						info,
-					] of newNode.implementedCommandClasses.entries()) {
-						if (info.isControlled)
-							log(
-								"controller",
-								`    ${CommandClasses[cc]} (${num2hex(cc)})`,
-								"debug",
-							);
-					}
-
 					// remember the node
 					this._nodes.set(newNode.id, newNode);
 					this._nodePendingInclusion = undefined;

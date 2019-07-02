@@ -5,7 +5,7 @@ import {
 	SpyTransport,
 } from "../../../test/SpyTransport";
 import log from "./index";
-import { restoreSilence, unsilence } from "./shared";
+import { restoreSilence } from "./shared";
 
 describe("lib/log/Reflection =>", () => {
 	let reflectionLogger: winston.Logger;
@@ -19,7 +19,7 @@ describe("lib/log/Reflection =>", () => {
 		reflectionLogger = winston.loggers.get("reflection");
 		spyTransport = new SpyTransport();
 		// Uncomment this to debug the log outputs manually
-		wasSilenced = unsilence(reflectionLogger);
+		// wasSilenced = unsilence(reflectionLogger);
 		reflectionLogger.add(spyTransport);
 	});
 

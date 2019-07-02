@@ -63,7 +63,7 @@ import {
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import log2 from "../log";
+import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import { JSONObject } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
@@ -226,7 +226,7 @@ export class ZWaveNode extends EventEmitter {
 		}
 		// Log the value change
 		// I don't like the splitting and any but its the easiest solution here
-		log2.controller.value(eventName.split(" ")[1] as any, outArg as any);
+		log.controller.value(eventName.split(" ")[1] as any, outArg as any);
 		// And pass the translated event to our listeners
 		this.emit(eventName, outArg);
 	}
@@ -534,13 +534,13 @@ export class ZWaveNode extends EventEmitter {
 	 */
 	public async interview(): Promise<boolean> {
 		if (this.interviewStage === InterviewStage.Complete) {
-			log2.controller.logNode(
+			log.controller.logNode(
 				this,
 				`skipping interview because it is already completed`,
 			);
 			return true;
 		} else {
-			log2.controller.interviewStart(this);
+			log.controller.interviewStart(this);
 		}
 
 		// The interview is done in several stages. At each point, the interview process might be aborted
@@ -549,10 +549,7 @@ export class ZWaveNode extends EventEmitter {
 
 		if (this.interviewStage === InterviewStage.None) {
 			// do a full interview starting with the protocol info
-			log2.controller.logNode(
-				this,
-				`new node, doing a full interview...`,
-			);
+			log.controller.logNode(this, `new node, doing a full interview...`);
 			await this.queryProtocolInfo();
 		}
 
@@ -620,7 +617,7 @@ export class ZWaveNode extends EventEmitter {
 
 		// for testing purposes we skip to the end
 		await this.setInterviewStage(InterviewStage.Complete);
-		log2.controller.interviewStage(this);
+		log.controller.interviewStage(this);
 
 		// Tell listeners that the interview is completed
 		// The driver will send this node to sleep
@@ -645,13 +642,13 @@ export class ZWaveNode extends EventEmitter {
 			case InterviewStage.Complete:
 				await this.driver.saveNetworkToCache();
 		}
-		log2.controller.interviewStage(this);
+		log.controller.interviewStage(this);
 	}
 
 	/** Step #1 of the node interview */
 	protected async queryProtocolInfo(): Promise<void> {
 		// TODO: add direction
-		log2.controller.logNode(this, {
+		log.controller.logNode(this, {
 			message: "querying protocol info...",
 			direction: "outbound",
 		});
@@ -689,7 +686,7 @@ is a beaming device:   ${this.isBeaming}
 is a listening device: ${this.isListening}
 maximum baud rate:     ${this.maxBaudRate} kbps
 version:               ${this.version}`;
-		log2.controller.logNode(this, {
+		log.controller.logNode(this, {
 			message: logMessage,
 			direction: "inbound",
 		});
@@ -711,9 +708,9 @@ version:               ${this.version}`;
 	/** Step #3 of the node interview */
 	protected async ping(): Promise<boolean> {
 		if (this.isControllerNode()) {
-			log2.controller.logNode(this, "not pinging the controller");
+			log.controller.logNode(this, "not pinging the controller");
 		} else {
-			log2.controller.logNode(this, {
+			log.controller.logNode(this, {
 				message: "pinging the node...",
 				direction: "outbound",
 			});
@@ -730,12 +727,12 @@ version:               ${this.version}`;
 				await this.driver.sendMessage<SendDataRequest>(request, {
 					priority: MessagePriority.NodeQuery,
 				});
-				log2.controller.logNode(this, {
+				log.controller.logNode(this, {
 					message: "ping successful",
 					direction: "inbound",
 				});
 			} catch (e) {
-				log2.controller.logNode(this, "ping failed: " + e.message);
+				log.controller.logNode(this, "ping failed: " + e.message);
 				return false;
 			}
 		}
@@ -745,12 +742,12 @@ version:               ${this.version}`;
 	/** Step #5 of the node interview */
 	protected async queryNodeInfo(): Promise<void> {
 		if (this.isControllerNode()) {
-			log2.controller.logNode(
+			log.controller.logNode(
 				this,
 				"not querying node info from the controller",
 			);
 		} else {
-			log2.controller.logNode(this, {
+			log.controller.logNode(this, {
 				message: "querying node info...",
 				direction: "outbound",
 			});
@@ -761,7 +758,7 @@ version:               ${this.version}`;
 				(resp instanceof RequestNodeInfoResponse && !resp.wasSent) ||
 				resp instanceof ApplicationUpdateRequestNodeInfoRequestFailed
 			) {
-				log2.controller.logNode(
+				log.controller.logNode(
 					this,
 					`querying the node info failed`,
 					"error",
@@ -782,7 +779,7 @@ version:               ${this.version}`;
 					const ccName = CommandClasses[cc];
 					logLines.push(`  ${ccName ? ccName : num2hex(cc)}`);
 				}
-				log2.controller.logNode(this, {
+				log.controller.logNode(this, {
 					message: logLines.join("\n"),
 					direction: "inbound",
 				});
@@ -796,12 +793,12 @@ version:               ${this.version}`;
 	/** Step #6 of the node interview */
 	protected async queryNodePlusInfo(): Promise<void> {
 		if (!this.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
-			log2.controller.logNode(
+			log.controller.logNode(
 				this,
 				"skipping Z-Wave+ query because the device does not support it",
 			);
 		} else {
-			log2.controller.logNode(this, {
+			log.controller.logNode(this, {
 				message: "querying Z-Wave+ information...",
 				direction: "outbound",
 			});
@@ -826,13 +823,13 @@ version:               ${this.version}`;
   node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}
   installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}
   user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
-					log2.controller.logNode(this, {
+					log.controller.logNode(this, {
 						message: logMessage,
 						direction: "inbound",
 					});
 				}
 			} catch (e) {
-				log2.controller.logNode(
+				log.controller.logNode(
 					this,
 					`  querying the Z-Wave+ information failed: ${e.message}`,
 					"error",
@@ -846,12 +843,12 @@ version:               ${this.version}`;
 
 	protected async queryManufacturerSpecific(): Promise<void> {
 		if (this.isControllerNode()) {
-			log2.controller.logNode(
+			log.controller.logNode(
 				this,
 				"not querying manufacturer information from the controller...",
 			);
 		} else {
-			log2.controller.logNode(this, {
+			log.controller.logNode(this, {
 				message: "querying manufacturer information...",
 				direction: "outbound",
 			});
@@ -875,13 +872,13 @@ version:               ${this.version}`;
 		"unknown"} (${num2hex(mfResp.manufacturerId)})
   product type: ${num2hex(mfResp.productType)}
   product id:   ${num2hex(mfResp.productId)}`;
-					log2.controller.logNode(this, {
+					log.controller.logNode(this, {
 						message: logMessage,
 						direction: "inbound",
 					});
 				}
 			} catch (e) {
-				log2.controller.logNode(
+				log.controller.logNode(
 					this,
 					`  querying the manufacturer information failed: ${e.message}`,
 					"error",
@@ -895,7 +892,7 @@ version:               ${this.version}`;
 
 	/** Step #9 of the node interview */
 	protected async queryCCVersions(): Promise<void> {
-		log2.controller.logNode(this, {
+		log.controller.logNode(this, {
 			message: "querying CC versions...",
 			direction: "outbound",
 		});
@@ -903,7 +900,7 @@ version:               ${this.version}`;
 			// only query the ones we support a version > 1 for
 			const maxImplemented = getImplementedVersion(cc);
 			if (maxImplemented < 1) {
-				log2.controller.logNode(
+				log.controller.logNode(
 					this,
 					`  skipping query for ${CommandClasses[cc]} (${num2hex(
 						cc,
@@ -919,7 +916,7 @@ version:               ${this.version}`;
 				command: versionCC,
 			});
 			try {
-				log2.controller.logNode(this, {
+				log.controller.logNode(this, {
 					message: `  querying the CC version for ${
 						CommandClasses[cc]
 					} (${num2hex(cc)})...`,
@@ -952,10 +949,10 @@ version:               ${this.version}`;
 							CommandClasses[reqCC]
 						} (${num2hex(reqCC)})`;
 					}
-					log2.controller.logNode(this, logMessage);
+					log.controller.logNode(this, logMessage);
 				}
 			} catch (e) {
-				log2.controller.logNode(
+				log.controller.logNode(
 					this,
 					`  querying the CC versions failed: ${e.message}`,
 					"error",
@@ -969,7 +966,7 @@ version:               ${this.version}`;
 	/** Step #10 of the node interview */
 	protected async queryEndpoints(): Promise<void> {
 		if (this.supportsCC(CommandClasses["Multi Channel"])) {
-			log2.controller.logNode(this, {
+			log.controller.logNode(this, {
 				message: "querying device endpoints...",
 				direction: "outbound",
 			});
@@ -994,13 +991,13 @@ version:               ${this.version}`;
   endpoint count (individual): ${multiResponse.individualEndpointCount}
   count is dynamic:            ${multiResponse.isDynamicEndpointCount}
   identical capabilities:      ${multiResponse.identicalCapabilities}`;
-					log2.controller.logNode(this, {
+					log.controller.logNode(this, {
 						message: logMessage,
 						direction: "inbound",
 					});
 				}
 			} catch (e) {
-				log2.controller.logNode(
+				log.controller.logNode(
 					this,
 					`  querying the device endpoints failed: ${e.message}`,
 					"error",
@@ -1008,7 +1005,7 @@ version:               ${this.version}`;
 				throw e;
 			}
 		} else {
-			log2.controller.logNode(
+			log.controller.logNode(
 				this,
 				`skipping endpoint query because the device does not support it`,
 			);
@@ -1021,12 +1018,12 @@ version:               ${this.version}`;
 	protected async configureWakeup(): Promise<void> {
 		if (this.supportsCC(CommandClasses["Wake Up"])) {
 			if (this.isControllerNode()) {
-				log2.controller.logNode(
+				log.controller.logNode(
 					this,
 					`skipping wakeup configuration for the controller`,
 				);
 			} else if (this.isFrequentListening) {
-				log2.controller.logNode(
+				log.controller.logNode(
 					this,
 					`skipping wakeup configuration for frequent listening device`,
 				);
@@ -1037,7 +1034,7 @@ version:               ${this.version}`;
 							nodeId: this.id,
 						}),
 					});
-					log2.controller.logNode(this, {
+					log.controller.logNode(this, {
 						message:
 							"retrieving wakeup interval from the device...",
 						direction: "outbound",
@@ -1064,12 +1061,12 @@ version:               ${this.version}`;
 					const logMessage = `received wakeup configuration:
   wakeup interval: ${wakeupResp.wakeupInterval} seconds
   controller node: ${wakeupResp.controllerNodeId}`;
-					log2.controller.logNode(this, {
+					log.controller.logNode(this, {
 						message: logMessage,
 						direction: "inbound",
 					});
 
-					log2.controller.logNode(this, {
+					log.controller.logNode(this, {
 						message: "configuring wakeup destination",
 						direction: "outbound",
 					});
@@ -1083,9 +1080,9 @@ version:               ${this.version}`;
 					await this.driver.sendMessage(setWakeupRequest, {
 						priority: MessagePriority.NodeQuery,
 					});
-					log2.controller.logNode(this, "  done!");
+					log.controller.logNode(this, "  done!");
 				} catch (e) {
-					log2.controller.logNode(
+					log.controller.logNode(
 						this,
 						`  configuring the device wakeup failed: ${e.message}`,
 						"error",
@@ -1094,7 +1091,7 @@ version:               ${this.version}`;
 				}
 			}
 		} else {
-			log2.controller.logNode(
+			log.controller.logNode(
 				this,
 				`skipping wakeup for non-sleeping device`,
 			);
@@ -1103,18 +1100,18 @@ version:               ${this.version}`;
 	}
 
 	protected async requestStaticValues(): Promise<void> {
-		log2.controller.logNode(this, {
+		log.controller.logNode(this, {
 			message: "requesting static values...",
 			direction: "outbound",
 		});
 		try {
 			await this.requestState(StateKind.Static);
-			log2.controller.logNode(this, {
+			log.controller.logNode(this, {
 				message: `  static values received`,
 				direction: "inbound",
 			});
 		} catch (e) {
-			log2.controller.logNode(
+			log.controller.logNode(
 				this,
 				`  requesting the static values failed: ${e.message}`,
 				"error",
@@ -1126,7 +1123,7 @@ version:               ${this.version}`;
 
 	protected async overwriteConfig(): Promise<void> {
 		if (this.isControllerNode()) {
-			log2.controller.logNode(
+			log.controller.logNode(
 				this,
 				"not loading device config for the controller",
 			);
@@ -1135,13 +1132,13 @@ version:               ${this.version}`;
 			this.productId == undefined ||
 			this.productType == undefined
 		) {
-			log2.controller.logNode(
+			log.controller.logNode(
 				this,
 				"device information incomplete, cannot load config file",
 				"error",
 			);
 		} else {
-			log2.controller.logNode(this, "trying to load device config");
+			log.controller.logNode(this, "trying to load device config");
 			const config = await lookupDevice(
 				this.manufacturerId,
 				this.productId,
@@ -1157,21 +1154,21 @@ version:               ${this.version}`;
 						config.configuration,
 					);
 				} else {
-					log2.controller.logNode(
+					log.controller.logNode(
 						this,
 						"  invalid config file!",
 						"error",
 					);
 				}
 			} else {
-				log2.controller.logNode(this, "  no device config file found!");
+				log.controller.logNode(this, "  no device config file found!");
 			}
 		}
 		await this.setInterviewStage(InterviewStage.OverwriteConfig);
 	}
 
 	protected async queryNeighbors(): Promise<void> {
-		log2.controller.logNode(this, {
+		log.controller.logNode(this, {
 			message: "requesting node neighbors...",
 			direction: "outbound",
 		});
@@ -1184,14 +1181,14 @@ version:               ${this.version}`;
 				}),
 			);
 			this._neighbors = resp.nodeIds;
-			log2.controller.logNode(this, {
+			log.controller.logNode(this, {
 				message: `  node neighbors received: ${this._neighbors.join(
 					", ",
 				)}`,
 				direction: "inbound",
 			});
 		} catch (e) {
-			log2.controller.logNode(
+			log.controller.logNode(
 				this,
 				`  requesting the node neighbors failed: ${e.message}`,
 				"error",
@@ -1213,7 +1210,7 @@ version:               ${this.version}`;
 		switch (command.ccId) {
 			case CommandClasses["Central Scene"]: {
 				const csCC = command as CentralSceneCC;
-				log2.controller.logNode(this, {
+				log.controller.logNode(this, {
 					message: `received CentralScene command ${JSON.stringify(
 						csCC,
 					)}`,
@@ -1224,7 +1221,7 @@ version:               ${this.version}`;
 			case CommandClasses["Wake Up"]: {
 				const wakeupCC = command as WakeUpCC;
 				if (wakeupCC.ccCommand === WakeUpCommand.WakeUpNotification) {
-					log2.controller.logNode(this, {
+					log.controller.logNode(this, {
 						message: `received wakeup notification`,
 						direction: "inbound",
 					});
@@ -1233,7 +1230,7 @@ version:               ${this.version}`;
 				}
 			}
 		}
-		log2.controller.logNode(this, {
+		log.controller.logNode(this, {
 			message: `TODO: no handler for application command ${stringify(
 				command,
 			)}`,
@@ -1404,7 +1401,7 @@ version:               ${this.version}`;
 								values as CacheValue[],
 							);
 						} catch (e) {
-							log2.controller.logNode(this, {
+							log.controller.logNode(this, {
 								message: `Error during deserialization of CC values from cache:\n${e}`,
 								level: "error",
 							});
@@ -1453,7 +1450,7 @@ version:               ${this.version}`;
 
 		let msgSent = false;
 		if (this.isAwake() && this.interviewStage === InterviewStage.Complete) {
-			log2.controller.logNode(this, {
+			log.controller.logNode(this, {
 				message: "Sending node back to sleep...",
 				direction: "outbound",
 			});
@@ -1468,7 +1465,7 @@ version:               ${this.version}`;
 				priority: MessagePriority.WakeUp,
 			});
 			this.setAwake(false);
-			log2.controller.logNode(this, "  Node asleep");
+			log.controller.logNode(this, "  Node asleep");
 
 			msgSent = true;
 		}
