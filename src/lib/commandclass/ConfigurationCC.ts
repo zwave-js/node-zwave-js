@@ -462,10 +462,16 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+		// All fields must be present
+		validatePayload(this.payload.length > 2);
 		const parameter = this.payload[0];
 		this._valueSize = this.payload[1] & 0b111;
 		// Ensure we received a valid report
-		validatePayload(this._valueSize >= 1 && this._valueSize <= 4);
+		validatePayload(
+			this._valueSize >= 1,
+			this._valueSize <= 4,
+			this.payload.length >= 2 + this._valueSize,
+		);
 
 		const value = parseValue(
 			this.payload.slice(2),
@@ -710,12 +716,18 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		// Ensure we received enough bytes for the preamble
+		validatePayload(this.payload.length >= 5);
 		const firstParameter = this.payload.readUInt16BE(0);
 		const numParams = this.payload[2];
 		this._reportsToFollow = this.payload[3];
 		this._defaultValues = !!(this.payload[4] & 0b1000_0000);
 		this._isHandshakeResponse = !!(this.payload[4] & 0b0100_0000);
 		this._valueSize = this.payload[4] & 0b111;
+
+		// Ensure the payload is long enough for all reported values
+		validatePayload(this.payload.length >= 5 + numParams * this._valueSize);
 		for (let i = 0; i < numParams; i++) {
 			const param = firstParameter + i;
 			this._values.set(
@@ -813,6 +825,8 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+		// All fields must be present
+		validatePayload(this.payload.length >= 4);
 		this._parameter = this.payload.readUInt16BE(0);
 		this._reportsToFollow = this.payload[2];
 		this._name = this.payload.slice(3).toString("utf8");
@@ -881,6 +895,8 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+		// All fields must be present
+		validatePayload(this.payload.length >= 4);
 		this._parameter = this.payload.readUInt16BE(0);
 		this._reportsToFollow = this.payload[2];
 		this._info = this.payload.slice(3).toString("utf8");
@@ -951,9 +967,16 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 3);
 		this._parameter = this.payload.readUInt16BE(0);
 		this._valueFormat = (this.payload[2] & 0b111000) >>> 3;
 		this._valueSize = this.payload[2] & 0b111;
+
+		// Ensure the payload contains the two bytes for next parameter
+		const nextParameterOffset = 3 + 3 * this._valueSize;
+		validatePayload(this.payload.length >= nextParameterOffset + 2);
+
 		if (this.valueSize > 0) {
 			if (this._valueFormat !== ValueFormat.BitField) {
 				this._minValue = parseValue(
@@ -980,9 +1003,11 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			);
 		} else {
 			this._nextParameter = this.payload.readUInt16BE(
-				3 + 3 * this.valueSize,
+				nextParameterOffset,
 			);
 
+			// Ensure the payload contains a byte for the 2nd option flags
+			validatePayload(this.payload.length >= nextParameterOffset + 3);
 			const options1 = this.payload[2];
 			const options2 = this.payload[3 + 3 * this.valueSize + 2];
 			this._requiresReInclusion = !!(options1 & 0b1000_0000);
