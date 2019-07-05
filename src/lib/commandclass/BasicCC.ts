@@ -1,5 +1,5 @@
 import { IDriver } from "../driver/IDriver";
-import { JSONObject } from "../util/misc";
+import { JSONObject, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
 import { CCAPI } from "./API";
@@ -63,6 +63,7 @@ export class BasicCCSet extends BasicCC {
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
 			this.targetValue = this.payload[0];
 		} else {
 			this.targetValue = options.targetValue;
@@ -84,8 +85,12 @@ export class BasicCCReport extends BasicCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 1);
 		this._currentValue = parseMaybeNumber(this.payload[0]);
+
 		if (this.version >= 2) {
+			validatePayload(this.payload.length >= 3);
 			this._targetValue = parseNumber(this.payload[1]);
 			this._duration = Duration.parseReport(this.payload[2]);
 		}
