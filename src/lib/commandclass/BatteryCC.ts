@@ -1,5 +1,5 @@
 import { IDriver } from "../driver/IDriver";
-import { JSONObject } from "../util/misc";
+import { JSONObject, validatePayload } from "../util/misc";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -45,6 +45,8 @@ export class BatteryCCReport extends BatteryCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 1);
 		this._level = this.payload[0];
 		if (this._level === 0xff) {
 			this._level = 0;
