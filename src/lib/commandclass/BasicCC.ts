@@ -89,8 +89,7 @@ export class BasicCCReport extends BasicCC {
 		validatePayload(this.payload.length >= 1);
 		this._currentValue = parseMaybeNumber(this.payload[0]);
 
-		if (this.version >= 2) {
-			validatePayload(this.payload.length >= 3);
+		if (this.version >= 2 && this.payload.length >= 3) {
 			this._targetValue = parseNumber(this.payload[1]);
 			this._duration = Duration.parseReport(this.payload[2]);
 		}
