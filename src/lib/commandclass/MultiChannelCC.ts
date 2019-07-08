@@ -5,6 +5,7 @@ import {
 	NodeInformationFrame,
 	parseNodeInformationFrame,
 } from "../node/NodeInfo";
+import { validatePayload } from "../util/misc";
 import { encodeBitMask, parseBitMask } from "../values/Primitive";
 import {
 	CCCommand,
@@ -52,10 +53,11 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 	) {
 		super(driver, options);
 
+		validatePayload(this.payload.length >= 2);
 		this._isDynamicEndpointCount = !!(this.payload[0] & 0b10000000);
 		this._identicalCapabilities = !!(this.payload[0] & 0b01000000);
 		this._individualEndpointCount = this.payload[1] & 0b01111111;
-		if (this.version >= 4) {
+		if (this.version >= 4 && this.payload.length >= 3) {
 			this._aggregatedEndpointCount = this.payload[2] & 0b01111111;
 		}
 	}
@@ -97,6 +99,9 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 	) {
 		super(driver, options);
 
+		// Only validate the bytes we expect to see here
+		// parseNodeInformationFrame does its own validation
+		validatePayload(this.payload.length >= 1);
 		const endpointIndex = this.payload[0] & 0b01111111;
 		const capability = {
 			isDynamic: !!(this.payload[0] & 0b10000000),
@@ -161,9 +166,13 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 3);
 		const numReports = this.payload[0];
 		this._genericClass = this.payload[1];
 		this._specificClass = this.payload[2];
+
+		validatePayload(this.payload.length >= 3 + numReports);
 		this._foundEndpoints = [...this.payload.slice(3, 3 + numReports)].map(
 			e => e & 0b01111111,
 		);
@@ -227,8 +236,11 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 2);
 		const endpoint = this.payload[0] & 0b0111_1111;
 		const bitMaskLength = this.payload[1];
+		validatePayload(this.payload.length >= 2 + bitMaskLength);
 		const bitMask = this.payload.slice(2, 2 + bitMaskLength);
 		const members = parseBitMask(bitMask);
 		this.aggregatedEndpointMembers = [endpoint, members];
@@ -296,6 +308,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
 			this.sourceEndPoint = this.payload[0] & 0b0111_1111;
 			const isBitMask = !!(this.payload[1] & 0b1000_0000);
 			const destination = this.payload[1] & 0b0111_1111;
@@ -304,6 +317,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			} else {
 				this.destination = destination;
 			}
+			// No need to validate further, each CC does it for itself
 			this.encapsulatedCC = CommandClass.fromEncapsulated(
 				this.driver,
 				this,
