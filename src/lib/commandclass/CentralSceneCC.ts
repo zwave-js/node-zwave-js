@@ -1,6 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { JSONObject } from "../util/misc";
+import { JSONObject, validatePayload } from "../util/misc";
 import {
 	CCCommand,
 	CCCommandOptions,
@@ -46,6 +46,8 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 3);
 		this._sequenceNumber = this.payload[0];
 		this._keyAttribute = this.payload[1] & 0b111;
 		this._sceneNumber = this.payload[2];
@@ -113,6 +115,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	) {
 		super(driver, options);
 
+		validatePayload(this.payload.length >= 2);
 		this._sceneCount = this.payload[0];
 		this._supportsSlowRefresh = !!(this.payload[1] & 0b1000_0000);
 		const bitMaskBytes = this.payload[1] & 0b110;
@@ -121,6 +124,9 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 			? 1
 			: this.sceneCount;
 		this._supportedKeyAttributes = [];
+
+		validatePayload(this.payload.length >= 2 + bitMaskBytes * numEntries);
+		// TODO: Can this be done with parseBitMask()?
 		for (let i = 0; i < numEntries; i++) {
 			let mask = 0;
 			for (let j = 0; j < bitMaskBytes; j++) {
@@ -212,6 +218,8 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 1);
 		this._slowRefresh = !!(this.payload[0] & 0b1000_0000);
 		this.persistValues();
 	}
