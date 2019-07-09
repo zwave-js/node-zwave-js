@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { validatePayload } from "../util/misc";
 import { parseBitMask } from "../values/Primitive";
 import {
 	CCCommand,
@@ -92,25 +93,32 @@ export class NotificationCCReport extends NotificationCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 2);
 		this._alarmType = this.payload[0];
 		this._alarmLevel = this.payload[1];
 		// V2..V3, reserved in V4+
-		if (this.version === 2 || this.version === 3) {
+		if (
+			(this.version === 2 || this.version === 3) &&
+			this.payload.length >= 3
+		) {
 			this._zensorNetSourceNodeId = this.payload[2];
 		}
 		// V2+
-		if (this.version > 1) {
+		if (this.version > 1 && this.payload.length >= 7) {
 			this._notificationStatus = this.payload[3] === 0xff;
 			this._notificationType = this.payload[4];
 			this._notificationEvent = this.payload[5];
 			const containsSeqNum = !!(this.payload[6] & 0b1000_0000);
 			const numEventParams = this.payload[6] & 0b11111;
 			if (numEventParams > 0) {
+				validatePayload(this.payload.length >= 7 + numEventParams);
 				this._eventParameters = Buffer.from(
 					this.payload.slice(7, 7 + numEventParams),
 				);
 			}
 			if (containsSeqNum) {
+				validatePayload(this.payload.length >= 7 + numEventParams + 1);
 				this._sequenceNumber = this.payload[7 + numEventParams];
 			}
 		}
@@ -215,8 +223,14 @@ export class NotificationCCSupportedReport extends NotificationCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 1);
 		this._supportsV1Alarm = !!(this.payload[0] & 0b1000_0000);
 		const numBitMaskBytes = this.payload[0] & 0b0001_1111;
+		validatePayload(
+			numBitMaskBytes >= 0,
+			this.payload.length >= 1 + numBitMaskBytes,
+		);
 		const notificationBitMask = this.payload.slice(1, 1 + numBitMaskBytes);
 		this._supportedNotificationTypes = parseBitMask(notificationBitMask);
 		this.persistValues();
@@ -252,8 +266,14 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 1);
 		const notificationType = this.payload[0];
 		const numBitMaskBytes = this.payload[0] & 0b0001_1111;
+		validatePayload(
+			numBitMaskBytes > 0,
+			this.payload.length >= 1 + numBitMaskBytes,
+		);
 		const eventBitMask = this.payload.slice(1, 1 + numBitMaskBytes);
 		// In this bit mask, bit 0 is ignored and counting starts at bit 1
 		// Therefore shift the result by 1.
