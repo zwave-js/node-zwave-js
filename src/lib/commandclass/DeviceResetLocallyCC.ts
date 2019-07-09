@@ -10,6 +10,8 @@ export enum DeviceResetLocallyCommand {
 	Notification = 0x01,
 }
 
+// @noAPI: We can only receive this command
+
 @commandClass(CommandClasses["Device Reset Locally"])
 @implementedVersion(1)
 export class DeviceResetLocallyCC extends CommandClass {
