@@ -1,6 +1,8 @@
 import { IDriver } from "../driver/IDriver";
 import { validatePayload } from "../util/misc";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	CommandClass,
@@ -16,6 +18,18 @@ export enum MultiCommandCommand {
 }
 
 // TODO: Handle this command when received
+
+@API(CommandClasses["Multi Command"])
+export class MultiCommandCCAPI extends CCAPI {
+	public async send(commands: CommandClass[]): Promise<void> {
+		const cc = new MultiCommandCCCommandEncapsulation(this.driver, {
+			nodeId: this.node.id,
+			commands,
+		});
+		// TODO: Check if we need to return multiple command responses here
+		await this.driver.sendCommand(cc);
+	}
+}
 
 @commandClass(CommandClasses["Multi Command"])
 @implementedVersion(1)
