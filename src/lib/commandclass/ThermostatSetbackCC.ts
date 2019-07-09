@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { validatePayload } from "../util/misc";
 import {
 	decodeSetbackState,
 	encodeSetbackState,
@@ -82,7 +83,10 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 2);
 		this._setbackType = this.payload[0] & 0b11;
+		// If we receive an unknown setback state, return the raw value
 		this._setbackState =
 			decodeSetbackState(this.payload[1]) || this.payload[1];
 		this.persistValues();
