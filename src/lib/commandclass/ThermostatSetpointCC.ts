@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { validatePayload } from "../util/misc";
 import {
 	encodeFloatWithScale,
 	parseBitMask,
@@ -135,7 +136,10 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 1);
 		const setpointType = this.payload[0] & 0b1111;
+		// parseFloatWithScale does its own validation
 		const { bytesRead, ...value } = parseFloatWithScale(
 			this.payload.slice(1),
 		);
@@ -196,12 +200,14 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 	) {
 		super(driver, options);
 
+		validatePayload(this.payload.length >= 1);
 		const setpointType = this.payload[0];
 		let bytesRead: number;
 		let minValue: number;
 		let maxValue: number;
 		let minValueScale: ThermostatSetpointScale;
 		let maxValueScale: ThermostatSetpointScale;
+		// parseFloatWithScale does its own validation
 		({
 			value: minValue,
 			scale: minValueScale,
@@ -289,6 +295,8 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 1);
 		const bitMask = this.payload;
 		const supported = parseBitMask(bitMask);
 		if (this.version >= 3) {
