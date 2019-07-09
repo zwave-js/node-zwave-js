@@ -1,4 +1,5 @@
 import { IDriver } from "../driver/IDriver";
+import { validatePayload } from "../util/misc";
 import {
 	CCCommand,
 	CCCommandOptions,
@@ -37,11 +38,14 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
 			const numCommands = this.payload[0];
 			this.commands = [];
-			let offset = 0;
+			let offset = 1;
 			for (let i = 0; i < numCommands; i++) {
+				validatePayload(this.payload.length >= offset + 1);
 				const cmdLength = this.payload[offset];
+				validatePayload(this.payload.length >= offset + 1 + cmdLength);
 				this.commands.push(
 					CommandClass.fromEncapsulated(
 						this.driver,
