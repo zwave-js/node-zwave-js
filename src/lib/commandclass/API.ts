@@ -35,4 +35,8 @@ export interface CCAPIs {
 	Basic: import("./BasicCC").BasicCCAPI;
 	Battery: import("./BatteryCC").BatteryCCAPI;
 	Configuration: import("./ConfigurationCC").ConfigurationCCAPI;
+	"Multi Command": import("./MultiCommandCC").MultiCommandCCAPI;
+	"No Operation": import("./NoOperationCC").NoOperationCCAPI;
+	"Thermostat Setback": import("./ThermostatSetbackCC").ThermostatSetbackCCAPI;
+	"Z-Wave Plus Info": import("./ZWavePlusCC").ZWavePlusCCAPI;
 }
