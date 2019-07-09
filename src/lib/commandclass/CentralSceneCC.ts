@@ -8,6 +8,7 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
@@ -34,7 +35,6 @@ export enum CentralSceneKeys {
 
 @commandClass(CommandClasses["Central Scene"])
 @implementedVersion(3)
-// TODO: The XYZGet commands should expect an answer
 export class CentralSceneCC extends CommandClass {
 	public ccCommand!: CentralSceneCommand;
 }
@@ -94,16 +94,6 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 			sceneNumber: this.sceneNumber,
 			slowRefresh: this.slowRefresh,
 		});
-	}
-}
-
-@CCCommand(CentralSceneCommand.SupportedGet)
-export class CentralSceneCCSupportedGet extends CentralSceneCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
 	}
 }
 
@@ -170,7 +160,38 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	}
 }
 
+@CCCommand(CentralSceneCommand.SupportedGet)
+@expectedCCResponse(CentralSceneCCSupportedReport)
+export class CentralSceneCCSupportedGet extends CentralSceneCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
+	}
+}
+
+@CCCommand(CentralSceneCommand.ConfigurationReport)
+export class CentralSceneCCConfigurationReport extends CentralSceneCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+
+		validatePayload(this.payload.length >= 1);
+		this._slowRefresh = !!(this.payload[0] & 0b1000_0000);
+		this.persistValues();
+	}
+
+	private _slowRefresh: boolean;
+	@ccValue() public get slowRefresh(): boolean {
+		return this._slowRefresh;
+	}
+}
+
 @CCCommand(CentralSceneCommand.ConfigurationGet)
+@expectedCCResponse(CentralSceneCCConfigurationReport)
 export class CentralSceneCCConfigurationGet extends CentralSceneCC {
 	public constructor(
 		driver: IDriver,
@@ -208,24 +229,5 @@ export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.slowRefresh ? 0b1000_0000 : 0]);
 		return super.serialize();
-	}
-}
-
-@CCCommand(CentralSceneCommand.ConfigurationReport)
-export class CentralSceneCCConfigurationReport extends CentralSceneCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions,
-	) {
-		super(driver, options);
-
-		validatePayload(this.payload.length >= 1);
-		this._slowRefresh = !!(this.payload[0] & 0b1000_0000);
-		this.persistValues();
-	}
-
-	private _slowRefresh: boolean;
-	@ccValue() public get slowRefresh(): boolean {
-		return this._slowRefresh;
 	}
 }
