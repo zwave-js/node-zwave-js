@@ -1,6 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { NodeStatus, ZWaveNode } from "../node/Node";
+import { validatePayload } from "../util/misc";
 import {
 	CCCommand,
 	CCCommandOptions,
@@ -104,6 +105,8 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 4);
 		this._wakeupInterval = this.payload.readUIntBE(0, 3);
 		this._controllerNodeId = this.payload[3];
 		this.persistValues();
@@ -158,6 +161,8 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 12);
 		this._minWakeUpInterval = this.payload.readUIntBE(0, 3);
 		this._maxWakeUpInterval = this.payload.readUIntBE(3, 3);
 		this._defaultWakeUpInterval = this.payload.readUIntBE(6, 3);
