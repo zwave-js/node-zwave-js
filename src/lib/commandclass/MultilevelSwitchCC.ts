@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
 import {
@@ -95,9 +96,13 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 1);
+		// if the payload contains a reserved value, return the actual value
+		// instead of undefined
 		this._currentValue =
 			parseMaybeNumber(this.payload[0]) || this.payload[0];
-		if (this.version >= 4) {
+		if (this.version >= 4 && this.payload.length >= 3) {
 			this._targetValue = parseNumber(this.payload[1]);
 			this._duration = Duration.parseReport(this.payload[2]);
 		}
@@ -215,6 +220,8 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 2);
 		this._primarySwitchType = this.payload[0] & 0b11111;
 		this._secondarySwitchType = this.payload[1] & 0b11111;
 		this.persistValues();
