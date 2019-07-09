@@ -4,6 +4,7 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { MessagePriority } from "../message/Constants";
 import { ZWaveNode } from "../node/Node";
+import { validatePayload } from "../util/misc";
 import { Maybe } from "../values/Primitive";
 import {
 	CCCommand,
@@ -80,12 +81,15 @@ export class VersionCCReport extends VersionCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 5);
 		this._libraryType = this.payload[0];
 		this._protocolVersion = `${this.payload[1]}.${this.payload[2]}`;
 		this._firmwareVersions = [`${this.payload[3]}.${this.payload[4]}`];
-		if (this.version >= 2) {
+		if (this.version >= 2 && this.payload.length >= 7) {
 			this._hardwareVersion = this.payload[5];
 			const additionalFirmwares = this.payload[6];
+			validatePayload(this.payload.length >= 7 + 2 * additionalFirmwares);
 			for (let i = 0; i < additionalFirmwares; i++) {
 				this.firmwareVersions.push(
 					`${this.payload[7 + 2 * i]}.${this.payload[7 + 2 * i + 1]}`,
@@ -131,6 +135,7 @@ export class VersionCCCommandClassReport extends VersionCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+		validatePayload(this.payload.length >= 2);
 		this._requestedCC = this.payload[0];
 		this._ccVersion = this.payload[1];
 		// No need to persist this, we're storing it manually
@@ -187,6 +192,8 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 1);
 		const capabilities = this.payload[0];
 		this._supportsZWaveSoftwareGet = !!(capabilities & 0b100);
 		this.persistValues();
@@ -216,6 +223,8 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 23);
 		this._sdkVersion = parseVersion(this.payload);
 		this._applicationFrameworkAPIVersion = parseVersion(
 			this.payload.slice(3),
