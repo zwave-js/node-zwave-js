@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { validatePayload } from "../util/misc";
 import { parseBitMask, parseFloatWithScale } from "../values/Primitive";
 import {
 	CCCommand,
@@ -55,7 +56,9 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+		validatePayload(this.payload.length >= 1);
 		const sensorType = this.payload[0];
+		// parseFloatWithScale does its own validation
 		const { bytesRead, ...valueAndScale } = parseFloatWithScale(
 			this.payload.slice(1),
 		);
@@ -138,6 +141,7 @@ export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC 
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+		validatePayload(this.payload.length >= 1);
 		this._supportedSensorTypes = parseBitMask(this.payload);
 		this.persistValues();
 	}
@@ -172,6 +176,7 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 	) {
 		super(driver, options);
 
+		validatePayload(this.payload.length >= 2);
 		const sensorType = this.payload[0];
 		const supportedScales: number[] = [];
 		const bitMask = this.payload[1] && 0b1111;
