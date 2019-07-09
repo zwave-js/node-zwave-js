@@ -1,6 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { JSONObject } from "../util/misc";
+import { JSONObject, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { Maybe, parseBoolean, parseMaybeBoolean } from "../values/Primitive";
 import {
@@ -72,8 +72,11 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 1);
 		this._currentValue = parseMaybeBoolean(this.payload[0]);
-		if (this.version >= 2) {
+
+		if (this.version >= 2 && this.payload.length >= 3) {
 			// V2
 			this._targetValue = parseBoolean(this.payload[1]);
 			this._duration = Duration.parseReport(this.payload[2]);

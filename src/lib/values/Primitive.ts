@@ -1,4 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { validatePayload } from "../util/misc";
 
 type Brand<K, T> = K & { __brand: T };
 
@@ -32,9 +33,11 @@ export function parseNumber(val: number): number | undefined {
 export function parseFloatWithScale(
 	payload: Buffer,
 ): { value: number; scale: number; bytesRead: number } {
+	validatePayload(payload.length >= 1);
 	const precision = (payload[0] & 0b111_00_000) >>> 5;
 	const scale = (payload[0] & 0b000_11_000) >>> 3;
 	const size = payload[0] & 0b111;
+	validatePayload(size >= 1, size <= 4, payload.length >= 1 + size);
 	const value = payload.readIntBE(1, size) / Math.pow(10, precision);
 	return { value, scale, bytesRead: 1 + size };
 }

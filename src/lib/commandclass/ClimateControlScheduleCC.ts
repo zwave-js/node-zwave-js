@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { validatePayload } from "../util/misc";
 import {
 	decodeSetbackState,
 	encodeSetbackState,
@@ -111,6 +112,7 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 	) {
 		super(driver, options);
 
+		validatePayload(this.payload.length >= 28); // 1 + 9 * 3
 		const weekday = this.payload[0] & 0b111;
 		const allSwitchpoints: Switchpoint[] = [];
 		for (let i = 0; i <= 8; i++) {
@@ -177,6 +179,8 @@ export class ClimateControlScheduleCCChangedReport extends ClimateControlSchedul
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 1);
 		this._changeCounter = this.payload[0];
 		this.persistValues();
 	}
@@ -205,6 +209,8 @@ export class ClimateControlScheduleCCOverrideReport extends ClimateControlSchedu
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 2);
 		this._overrideType = this.payload[0] & 0b11;
 		this._overrideState =
 			decodeSetbackState(this.payload[1]) || this.payload[1];

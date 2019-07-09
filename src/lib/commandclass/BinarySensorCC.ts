@@ -1,4 +1,6 @@
 import { IDriver } from "../driver/IDriver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { validatePayload } from "../util/misc";
 import { parseBitMask } from "../values/Primitive";
 import {
 	CCCommand,
@@ -9,6 +11,7 @@ import {
 	commandClass,
 	CommandClassDeserializationOptions,
 	expectedCCResponse,
+	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
@@ -51,6 +54,8 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 2);
 		const _value = this.payload[0] === 0xff;
 		const _sensorType = this.payload[1];
 		this.values = [_sensorType, _value];
@@ -80,7 +85,14 @@ export class BinarySensorCCGet extends BinarySensorCC {
 		options: CommandClassDeserializationOptions | BinarySensorCCGetOptions,
 	) {
 		super(driver, options);
-		// Deserialization not supported
+		if (gotDeserializationOptions(options)) {
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this.sensorType = options.sensorType;
+		}
 	}
 
 	public sensorType: BinarySensorType | undefined;
@@ -100,6 +112,8 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 1);
 		this._supportedSensorTypes = parseBitMask(this.payload);
 		this.persistValues();
 	}

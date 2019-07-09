@@ -1,4 +1,5 @@
 import { CommandClasses } from "../commandclass/CommandClasses";
+import { validatePayload } from "../util/misc";
 import {
 	BasicDeviceClasses,
 	GenericDeviceClass,
@@ -34,6 +35,7 @@ export function parseNodeUpdatePayload(nif: Buffer): NodeUpdatePayload {
 function internalParseNodeInformationFrame(
 	nif: Buffer,
 ): ExtendedNodeInformationFrame {
+	validatePayload(nif.length >= 2);
 	const ret = {
 		generic: GenericDeviceClass.get(nif[0]),
 		specific: SpecificDeviceClass.get(nif[0], nif[1]),

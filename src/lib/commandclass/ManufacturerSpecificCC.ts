@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { validatePayload } from "../util/misc";
 import { Maybe } from "../values/Primitive";
 import {
 	CCCommand,
@@ -51,6 +52,8 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 6);
 		this._manufacturerId = this.payload.readUInt16BE(0);
 		this._productType = this.payload.readUInt16BE(2);
 		this._productId = this.payload.readUInt16BE(4);
@@ -91,9 +94,13 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 2);
 		const deviceIdType = this.payload[0] & 0b111;
 		const dataFormat = this.payload[1] >>> 5;
 		const dataLength = this.payload[1] & 0b11111;
+
+		validatePayload(dataLength > 0, this.payload.length >= 2 + dataLength);
 		const deviceIdData = this.payload.slice(2, 2 + dataLength);
 		const deviceId =
 			dataFormat === 0

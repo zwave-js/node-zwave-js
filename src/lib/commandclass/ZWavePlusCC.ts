@@ -1,4 +1,5 @@
 import { IDriver } from "../driver/IDriver";
+import { validatePayload } from "../util/misc";
 import {
 	CCCommand,
 	CCCommandOptions,
@@ -46,6 +47,8 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 7);
 		this._zwavePlusVersion = this.payload[0];
 		this._roleType = this.payload[1];
 		this._nodeType = this.payload[2];
