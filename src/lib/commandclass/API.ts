@@ -37,6 +37,7 @@ export interface CCAPIs {
 	"Binary Sensor": import("./BinarySensorCC").BinarySensorCCAPI;
 	"Binary Switch": import("./BinarySwitchCC").BinarySwitchCCAPI;
 	"Central Scene": import("./CentralSceneCC").CentralSceneCCAPI;
+	"Climate Control Schedule": import("./ClimateControlScheduleCC").ClimateControlScheduleCCAPI;
 	Configuration: import("./ConfigurationCC").ConfigurationCCAPI;
 	"Manufacturer Specific": import("./ManufacturerSpecificCC").ManufacturerSpecificCCAPI;
 	"Multi Command": import("./MultiCommandCC").MultiCommandCCAPI;
