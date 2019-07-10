@@ -52,7 +52,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 			targetValue,
 			duration,
 		});
-		await this.driver.sendCommand<BinarySwitchCCReport>(cc);
+		await this.driver.sendCommand(cc);
 	}
 }
 

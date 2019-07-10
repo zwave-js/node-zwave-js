@@ -73,10 +73,10 @@ export class WakeUpCCAPI extends CCAPI {
 	}
 
 	public async sendNoMoreInformation(): Promise<void> {
-		const wakeupCC = new WakeUpCCNoMoreInformation(this.driver, {
+		const cc = new WakeUpCCNoMoreInformation(this.driver, {
 			nodeId: this.node.id,
 		});
-		await this.driver.sendCommand(wakeupCC, {
+		await this.driver.sendCommand(cc, {
 			// This command must be sent as part of the wake up queue
 			priority: MessagePriority.WakeUp,
 		});
