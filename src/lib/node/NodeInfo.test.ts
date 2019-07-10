@@ -1,4 +1,3 @@
-/// <reference types="jest-extended" />
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { BasicDeviceClasses, GenericDeviceClasses } from "./DeviceClass";
 import { parseNodeInformationFrame, parseNodeUpdatePayload } from "./NodeInfo";

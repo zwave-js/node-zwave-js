@@ -1,4 +1,3 @@
-/// <reference types="jest-extended" />
 import { assertZWaveError } from "../../../test/util";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import {

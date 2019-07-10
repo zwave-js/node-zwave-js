@@ -1,4 +1,3 @@
-/// <reference types="jest-extended" />
 import { serializeCacheValue } from "./Cache";
 
 describe("lib/values/Cache", () => {

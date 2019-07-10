@@ -1,4 +1,3 @@
-/// <reference types="jest-extended" />
 import {
 	decodeSetbackState,
 	encodeSetbackState,
