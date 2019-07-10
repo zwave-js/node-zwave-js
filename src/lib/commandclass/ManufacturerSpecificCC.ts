@@ -2,7 +2,9 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
 import { Maybe } from "../values/Primitive";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccKeyValuePair,
@@ -27,6 +29,37 @@ export enum DeviceIdType {
 	FactoryDefault = 0x00,
 	SerialNumber = 0x01,
 	PseudoRandom = 0x02,
+}
+
+@API(CommandClasses["Manufacturer Specific"])
+export class ManufacturerSpecificCCAPI extends CCAPI {
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async get() {
+		const cc = new ManufacturerSpecificCCGet(this.driver, {
+			nodeId: this.node.id,
+		});
+		const response = (await this.driver.sendCommand<
+			ManufacturerSpecificCCReport
+		>(cc))!;
+		return {
+			manufacturerId: response.manufacturerId,
+			productType: response.productType,
+			productId: response.productId,
+		};
+	}
+
+	public async deviceSpecificGet(
+		deviceIdType: DeviceIdType,
+	): Promise<string> {
+		const cc = new ManufacturerSpecificCCDeviceSpecificGet(this.driver, {
+			nodeId: this.node.id,
+			deviceIdType,
+		});
+		const response = (await this.driver.sendCommand<
+			ManufacturerSpecificCCDeviceSpecificReport
+		>(cc))!;
+		return response.value;
+	}
 }
 
 @commandClass(CommandClasses["Manufacturer Specific"])

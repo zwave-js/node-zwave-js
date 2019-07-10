@@ -36,7 +36,9 @@ export interface CCAPIs {
 	Battery: import("./BatteryCC").BatteryCCAPI;
 	"Binary Sensor": import("./BinarySensorCC").BinarySensorCCAPI;
 	"Binary Switch": import("./BinarySwitchCC").BinarySwitchCCAPI;
+	"Central Scene": import("./CentralSceneCC").CentralSceneCCAPI;
 	Configuration: import("./ConfigurationCC").ConfigurationCCAPI;
+	"Manufacturer Specific": import("./ManufacturerSpecificCC").ManufacturerSpecificCCAPI;
 	"Multi Command": import("./MultiCommandCC").MultiCommandCCAPI;
 	"No Operation": import("./NoOperationCC").NoOperationCCAPI;
 	"Thermostat Setback": import("./ThermostatSetbackCC").ThermostatSetbackCCAPI;
