@@ -2,7 +2,9 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
 import { parseBitMask } from "../values/Primitive";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccKeyValuePair,
@@ -42,6 +44,66 @@ export enum NotificationType {
 	Clock,
 	Appliance,
 	HomeHealth,
+}
+
+@API(CommandClasses.Notification)
+export class NotificationCCAPI extends CCAPI {
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async get(options: NotificationCCGetSpecificOptions) {
+		const cc = new NotificationCCGet(this.driver, {
+			nodeId: this.node.id,
+			...options,
+		});
+		const response = (await this.driver.sendCommand<NotificationCCReport>(
+			cc,
+		))!;
+		return {
+			notificationStatus: response.notificationStatus,
+			notificationEvent: response.notificationEvent,
+			alarmLevel: response.alarmLevel,
+			zensorNetSourceNodeId: response.zensorNetSourceNodeId,
+			eventParameters: response.eventParameters,
+			sequenceNumber: response.sequenceNumber,
+		};
+	}
+
+	public async set(
+		notificationType: NotificationType,
+		notificationStatus: boolean,
+	): Promise<void> {
+		const cc = new NotificationCCSet(this.driver, {
+			nodeId: this.node.id,
+			notificationType,
+			notificationStatus,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async getSupported() {
+		const cc = new NotificationCCSupportedGet(this.driver, {
+			nodeId: this.node.id,
+		});
+		const response = (await this.driver.sendCommand<
+			NotificationCCSupportedReport
+		>(cc))!;
+		return {
+			supportsV1Alarm: response.supportsV1Alarm,
+			supportedNotificationTypes: response.supportedNotificationTypes,
+		};
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async getSupportedEvents(notificationType: NotificationType) {
+		const cc = new NotificationCCEventSupportedGet(this.driver, {
+			nodeId: this.node.id,
+			notificationType,
+		});
+		const response = (await this.driver.sendCommand<
+			NotificationCCEventSupportedReport
+		>(cc))!;
+		return response.notificationSupportedEvents;
+	}
 }
 
 @commandClass(CommandClasses.Notification)
@@ -166,11 +228,16 @@ export class NotificationCCReport extends NotificationCC {
 	}
 }
 
-interface NotificationCCGetOptions extends CCCommandOptions {
-	alarmType?: number;
-	notificationType: NotificationType;
-	notificationEvent?: number;
-}
+type NotificationCCGetSpecificOptions =
+	| {
+			alarmType: number;
+	  }
+	| {
+			notificationType: NotificationType;
+			notificationEvent?: number;
+	  };
+type NotificationCCGetOptions = CCCommandOptions &
+	NotificationCCGetSpecificOptions;
 
 @CCCommand(NotificationCommand.Get)
 @expectedCCResponse(NotificationCCReport)
@@ -187,29 +254,32 @@ export class NotificationCCGet extends NotificationCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			this.alarmType = options.alarmType;
-			this.notificationType = options.notificationType;
-			this.notificationEvent = options.notificationEvent;
+			if ("alarmType" in options) {
+				this.alarmType = options.alarmType;
+			} else {
+				this.notificationType = options.notificationType;
+				this.notificationEvent = options.notificationEvent;
+			}
 		}
 	}
 
 	/** Proprietary V1/V2 alarm type */
 	public alarmType: number | undefined;
 	/** Regulated V3+ notification type */
-	public notificationType: NotificationType;
+	public notificationType: NotificationType | undefined;
 	public notificationEvent: number | undefined;
 
 	public serialize(): Buffer {
 		const payload: number[] = [this.alarmType || 0];
-		if (this.version >= 2) {
+		if (this.version >= 2 && this.notificationType != undefined) {
 			payload.push(this.notificationType);
-		}
-		if (this.version >= 3) {
-			payload.push(
-				this.notificationType === 0xff
-					? 0x00
-					: this.notificationEvent || 0,
-			);
+			if (this.version >= 3) {
+				payload.push(
+					this.notificationType === 0xff
+						? 0x00
+						: this.notificationEvent || 0,
+				);
+			}
 		}
 		this.payload = Buffer.from(payload);
 		return super.serialize();

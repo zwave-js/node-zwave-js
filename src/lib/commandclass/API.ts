@@ -42,6 +42,7 @@ export interface CCAPIs {
 	"Multi Command": import("./MultiCommandCC").MultiCommandCCAPI;
 	"Multilevel Switch": import("./MultilevelSwitchCC").MultilevelSwitchCCAPI;
 	"No Operation": import("./NoOperationCC").NoOperationCCAPI;
+	Notification: import("./NotificationCC").NotificationCCAPI;
 	"Thermostat Setback": import("./ThermostatSetbackCC").ThermostatSetbackCCAPI;
 	Version: import("./VersionCC").VersionCCAPI;
 	"Wake Up": import("./WakeUpCC").WakeUpCCAPI;
