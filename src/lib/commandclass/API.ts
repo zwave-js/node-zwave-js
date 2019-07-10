@@ -34,6 +34,7 @@ export class CCAPI {
 export interface CCAPIs {
 	Basic: import("./BasicCC").BasicCCAPI;
 	Battery: import("./BatteryCC").BatteryCCAPI;
+	"Binary Sensor": import("./BinarySensorCC").BinarySensorCCAPI;
 	"Binary Switch": import("./BinarySwitchCC").BinarySwitchCCAPI;
 	Configuration: import("./ConfigurationCC").ConfigurationCCAPI;
 	"Multi Command": import("./MultiCommandCC").MultiCommandCCAPI;
