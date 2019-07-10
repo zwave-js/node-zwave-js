@@ -2,6 +2,7 @@ import * as winston from "winston";
 import { MessageHeaders } from "../message/Constants";
 import { num2hex } from "../util/strings";
 import {
+	createConsoleTransport,
 	createLoggerFormat,
 	DataDirection,
 	getDirectionPrefix,
@@ -16,12 +17,7 @@ export const serialLoggerFormat = createLoggerFormat(SERIAL_LABEL);
 if (!winston.loggers.has("serial")) {
 	winston.loggers.add("serial", {
 		format: serialLoggerFormat,
-		transports: [
-			new winston.transports.Console({
-				level: "silly",
-				silent: process.env.NODE_ENV === "test",
-			}),
-		],
+		transports: [createConsoleTransport()],
 	});
 }
 const logger: ZWaveLogger = winston.loggers.get("serial");

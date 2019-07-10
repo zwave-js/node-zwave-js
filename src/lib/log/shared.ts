@@ -3,6 +3,7 @@ import { Format, TransformableInfo, TransformFunction } from "logform";
 import { MESSAGE } from "triple-beam";
 import * as winston from "winston";
 import { Logger } from "winston";
+import * as Transport from "winston-transport";
 import { colorizer } from "./Colorizer";
 const { combine, timestamp, label } = winston.format;
 
@@ -226,4 +227,11 @@ export function restoreSilence(
 	if (consoleTransport) {
 		consoleTransport.silent = original;
 	}
+}
+
+export function createConsoleTransport(): Transport {
+	return new winston.transports.Console({
+		level: process.env.LOGLEVEL || "debug",
+		silent: process.env.NODE_ENV === "test",
+	});
 }

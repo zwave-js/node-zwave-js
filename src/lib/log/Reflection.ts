@@ -1,5 +1,6 @@
 import * as winston from "winston";
 import {
+	createConsoleTransport,
 	createLoggerFormat,
 	getDirectionPrefix,
 	tagify,
@@ -14,12 +15,7 @@ export const reflectionLoggerFormat = createLoggerFormat(REFLECTION_LABEL);
 if (!winston.loggers.has("reflection")) {
 	winston.loggers.add("reflection", {
 		format: reflectionLoggerFormat,
-		transports: [
-			new winston.transports.Console({
-				level: "silly",
-				silent: process.env.NODE_ENV === "test",
-			}),
-		],
+		transports: [createConsoleTransport()],
 	});
 }
 const logger: ZWaveLogger = winston.loggers.get("reflection");

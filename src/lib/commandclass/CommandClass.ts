@@ -547,7 +547,7 @@ export function commandClass(cc: CommandClasses): ClassDecorator {
 		log.reflection.define(
 			messageClass.name,
 			"CommandClass",
-			`CommandClasses.${CommandClasses[cc]} (${num2hex(cc)})`,
+			`${CommandClasses[cc]} (${num2hex(cc)})`,
 		);
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_commandClass, cc, messageClass);

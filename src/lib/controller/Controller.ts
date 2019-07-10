@@ -280,7 +280,7 @@ export class ZWaveController extends EventEmitter {
   product type:        ${num2hex(this._productType)}
   product ID:          ${num2hex(this._productId)}
   supported functions: ${this._supportedFunctionTypes
-		.map(fn => `\n    ${FunctionType[fn]} (${num2hex(fn)})`)
+		.map(fn => `\n  · ${FunctionType[fn]} (${num2hex(fn)})`)
 		.join("")}`,
 		);
 
@@ -380,7 +380,7 @@ export class ZWaveController extends EventEmitter {
 			});
 		}
 
-		log.controller.print("interview completed");
+		log.controller.print("Interview completed");
 	}
 
 	/**

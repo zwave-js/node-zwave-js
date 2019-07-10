@@ -35,7 +35,7 @@ import {
 import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
 import { InterviewStage, NodeStatus, ZWaveNode } from "../node/Node";
-import { num2hex, stringify } from "../util/strings";
+import { num2hex } from "../util/strings";
 import { DriverEventCallbacks, DriverEvents, IDriver } from "./IDriver";
 import { Transaction } from "./Transaction";
 
@@ -645,7 +645,7 @@ export class Driver extends EventEmitter implements IDriver {
 					if (!node) return; // This should never happen, but whatever
 					if (node.supportsCC(CommandClasses["Wake Up"])) {
 						log.driver.print(
-							`  ${node.logPrefix}The node did not respond because it is asleep, moving its messages to the wakeup queue`,
+							`${node.logPrefix}The node did not respond because it is asleep, moving its messages to the wakeup queue`,
 						);
 						// The node is asleep
 						WakeUpCC.setAwake(node, false);
@@ -1029,12 +1029,6 @@ ${handlers.length} left`,
 	 */
 	private resolveCurrentTransaction(resumeQueue: boolean = true): void {
 		const node = this.currentTransaction!.message.getNodeUnsafe();
-		// TODO: is this necessary??
-		log.driver.print(
-			`resolving current transaction with ${stringify(
-				this.currentTransaction!.response,
-			)}`,
-		);
 		const { promise, response, timeoutInstance } = this.currentTransaction!;
 		// Cancel any running timers
 		if (timeoutInstance) clearTimeout(timeoutInstance);
@@ -1216,7 +1210,7 @@ ${handlers.length} left`,
 				);
 				// TODO: This could be improved
 				log.driver.print(
-					`  CC = ${CommandClasses[ccId]} (${num2hex(
+					`CC = ${CommandClasses[ccId]} (${num2hex(
 						ccId,
 					)}) => using version ${msg.command.version}`,
 				);

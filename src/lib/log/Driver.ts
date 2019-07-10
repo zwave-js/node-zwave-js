@@ -9,6 +9,7 @@ import {
 } from "../message/Constants";
 import { Message, ResponseRole } from "../message/Message";
 import {
+	createConsoleTransport,
 	createLoggerFormat,
 	getDirectionPrefix,
 	tagify,
@@ -23,12 +24,7 @@ export const driverLoggerFormat = createLoggerFormat(DRIVER_LABEL);
 if (!winston.loggers.has("driver")) {
 	winston.loggers.add("driver", {
 		format: driverLoggerFormat,
-		transports: [
-			new winston.transports.Console({
-				level: "silly",
-				silent: process.env.NODE_ENV === "test",
-			}),
-		],
+		transports: [createConsoleTransport()],
 	});
 }
 const logger: ZWaveLogger = winston.loggers.get("driver");
