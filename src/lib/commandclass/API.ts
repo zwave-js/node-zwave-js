@@ -40,6 +40,7 @@ export interface CCAPIs {
 	Configuration: import("./ConfigurationCC").ConfigurationCCAPI;
 	"Manufacturer Specific": import("./ManufacturerSpecificCC").ManufacturerSpecificCCAPI;
 	"Multi Command": import("./MultiCommandCC").MultiCommandCCAPI;
+	"Multilevel Switch": import("./MultilevelSwitchCC").MultilevelSwitchCCAPI;
 	"No Operation": import("./NoOperationCC").NoOperationCCAPI;
 	"Thermostat Setback": import("./ThermostatSetbackCC").ThermostatSetbackCCAPI;
 	Version: import("./VersionCC").VersionCCAPI;

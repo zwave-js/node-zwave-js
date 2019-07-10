@@ -3,7 +3,9 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
@@ -41,6 +43,73 @@ export enum SwitchType {
 	"Left/Right" = 0x05,
 	"Reverse/Forward" = 0x06,
 	"Pull/Push" = 0x07,
+}
+
+@API(CommandClasses["Multilevel Switch"])
+export class MultilevelSwitchCCAPI extends CCAPI {
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async get() {
+		const cc = new MultilevelSwitchCCGet(this.driver, {
+			nodeId: this.node.id,
+		});
+		const response = (await this.driver.sendCommand<
+			MultilevelSwitchCCReport
+		>(cc))!;
+		return {
+			currentValue: response.currentValue,
+			targetValue: response.targetValue,
+			duration: response.duration,
+		};
+	}
+
+	/**
+	 * Sets the switch to a new value
+	 * @param targetValue The new target value for the switch
+	 * @param duration The optional duration to reach the target value. Available in V2+
+	 */
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async set(targetValue: number, duration?: Duration) {
+		const cc = new MultilevelSwitchCCSet(this.driver, {
+			nodeId: this.node.id,
+			targetValue,
+			duration,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
+	public async startLevelChange(
+		options: Omit<
+			MultilevelSwitchCCStartLevelChangeOptions,
+			keyof CCCommandOptions
+		>,
+	): Promise<void> {
+		const cc = new MultilevelSwitchCCStartLevelChange(this.driver, {
+			nodeId: this.node.id,
+			...options,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
+	public async stopLevelChange(): Promise<void> {
+		const cc = new MultilevelSwitchCCStopLevelChange(this.driver, {
+			nodeId: this.node.id,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async getSupported() {
+		const cc = new MultilevelSwitchCCSupportedGet(this.driver, {
+			nodeId: this.node.id,
+		});
+		const response = (await this.driver.sendCommand<
+			MultilevelSwitchCCSupportedReport
+		>(cc))!;
+		return {
+			primarySwitchType: response.primarySwitchType,
+			secondarySwitchType: response.secondarySwitchType,
+		};
+	}
 }
 
 @commandClass(CommandClasses["Multilevel Switch"])
