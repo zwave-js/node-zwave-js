@@ -1,8 +1,11 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { MessagePriority } from "../message/Constants";
 import { NodeStatus, ZWaveNode } from "../node/Node";
 import { validatePayload } from "../util/misc";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
@@ -23,6 +26,61 @@ export enum WakeUpCommand {
 	NoMoreInformation = 0x08,
 	IntervalCapabilitiesGet = 0x09,
 	IntervalCapabilitiesReport = 0x0a,
+}
+
+@API(CommandClasses["Wake Up"])
+export class WakeUpCCAPI extends CCAPI {
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async getInterval() {
+		const cc = new WakeUpCCIntervalGet(this.driver, {
+			nodeId: this.node.id,
+		});
+		const response = (await this.driver.sendCommand<WakeUpCCIntervalReport>(
+			cc,
+		))!;
+		return {
+			wakeupInterval: response.wakeupInterval,
+			controllerNodeId: response.controllerNodeId,
+		};
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async getIntervalCapabilities() {
+		const cc = new WakeUpCCIntervalCapabilitiesGet(this.driver, {
+			nodeId: this.node.id,
+		});
+		const response = (await this.driver.sendCommand<
+			WakeUpCCIntervalCapabilitiesReport
+		>(cc))!;
+		return {
+			defaultWakeUpInterval: response.defaultWakeUpInterval,
+			minWakeUpInterval: response.minWakeUpInterval,
+			maxWakeUpInterval: response.maxWakeUpInterval,
+			wakeUpIntervalSteps: response.wakeUpIntervalSteps,
+		};
+	}
+
+	public async setInterval(
+		wakeupInterval: number,
+		controllerNodeId: number,
+	): Promise<void> {
+		const cc = new WakeUpCCIntervalSet(this.driver, {
+			nodeId: this.node.id,
+			wakeupInterval,
+			controllerNodeId,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
+	public async sendNoMoreInformation(): Promise<void> {
+		const wakeupCC = new WakeUpCCNoMoreInformation(this.driver, {
+			nodeId: this.node.id,
+		});
+		await this.driver.sendCommand(wakeupCC, {
+			// This command must be sent as part of the wake up queue
+			priority: MessagePriority.WakeUp,
+		});
+	}
 }
 
 @commandClass(CommandClasses["Wake Up"])

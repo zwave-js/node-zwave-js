@@ -38,5 +38,6 @@ export interface CCAPIs {
 	"Multi Command": import("./MultiCommandCC").MultiCommandCCAPI;
 	"No Operation": import("./NoOperationCC").NoOperationCCAPI;
 	"Thermostat Setback": import("./ThermostatSetbackCC").ThermostatSetbackCCAPI;
+	"Wake Up": import("./WakeUpCC").WakeUpCCAPI;
 	"Z-Wave Plus Info": import("./ZWavePlusCC").ZWavePlusCCAPI;
 }

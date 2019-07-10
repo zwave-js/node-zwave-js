@@ -35,7 +35,6 @@ import {
 	WakeUpCCIntervalGet,
 	WakeUpCCIntervalReport,
 	WakeUpCCIntervalSet,
-	WakeUpCCNoMoreInformation,
 	WakeUpCommand,
 } from "../commandclass/WakeUpCC";
 import {
@@ -1612,16 +1611,7 @@ export class ZWaveNode extends EventEmitter {
 				`${this.logPrefix}Sending node back to sleep`,
 				"debug",
 			);
-			const wakeupCC = new WakeUpCCNoMoreInformation(this.driver, {
-				nodeId: this.id,
-			});
-			const request = new SendDataRequest(this.driver, {
-				command: wakeupCC,
-			});
-
-			await this.driver.sendMessage<SendDataRequest>(request, {
-				priority: MessagePriority.WakeUp,
-			});
+			await this.commandClasses["Wake Up"].sendNoMoreInformation();
 			this.setAwake(false);
 			log("controller", `${this.logPrefix}  Node asleep`, "debug");
 
