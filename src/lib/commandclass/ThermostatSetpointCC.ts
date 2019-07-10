@@ -6,7 +6,9 @@ import {
 	parseBitMask,
 	parseFloatWithScale,
 } from "../values/Primitive";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccKeyValuePair,
@@ -78,6 +80,67 @@ export interface ThermostatSetpointCapabilities {
 	maxValueScale: ThermostatSetpointScale;
 }
 
+@API(CommandClasses["Thermostat Setpoint"])
+export class ThermostatSetpointCCAPI extends CCAPI {
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async get(setpointType: ThermostatSetpointType) {
+		const cc = new ThermostatSetpointCCGet(this.driver, {
+			nodeId: this.node.id,
+			setpointType,
+		});
+		const response = (await this.driver.sendCommand<
+			ThermostatSetpointCCReport
+		>(cc))!;
+		return {
+			value: response.value,
+			scale: response.scale,
+		};
+	}
+
+	public async set(
+		setpointType: ThermostatSetpointType,
+		value: number,
+		scale: ThermostatSetpointScale,
+	): Promise<void> {
+		const cc = new ThermostatSetpointCCSet(this.driver, {
+			nodeId: this.node.id,
+			setpointType,
+			value,
+			scale,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async getCapabilities(setpointType: ThermostatSetpointType) {
+		const cc = new ThermostatSetpointCCCapabilitiesGet(this.driver, {
+			nodeId: this.node.id,
+			setpointType,
+		});
+		const response = (await this.driver.sendCommand<
+			ThermostatSetpointCCCapabilitiesReport
+		>(cc))!;
+		return {
+			minValue: response.minValue,
+			maxValue: response.maxValue,
+			minValueScale: response.minValueScale,
+			maxValueScale: response.maxValueScale,
+		};
+	}
+
+	public async getSupportedSetpointTypes(): Promise<
+		readonly ThermostatSetpointType[]
+	> {
+		const cc = new ThermostatSetpointCCSupportedGet(this.driver, {
+			nodeId: this.node.id,
+		});
+		const response = (await this.driver.sendCommand<
+			ThermostatSetpointCCSupportedReport
+		>(cc))!;
+		return response.supportedSetpointTypes;
+	}
+}
+
 @commandClass(CommandClasses["Thermostat Setpoint"])
 @implementedVersion(3)
 export class ThermostatSetpointCC extends CommandClass {
@@ -125,10 +188,6 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	}
 }
 
-interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
-	setpointType: ThermostatSetpointType;
-}
-
 @CCCommand(ThermostatSetpointCommand.Report)
 export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	public constructor(
@@ -161,6 +220,10 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	public get scale(): ThermostatSetpointScale {
 		return this.setpoints[1].scale;
 	}
+}
+
+interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
+	setpointType: ThermostatSetpointType;
 }
 
 @CCCommand(ThermostatSetpointCommand.Get)

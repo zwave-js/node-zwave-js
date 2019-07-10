@@ -45,6 +45,7 @@ export interface CCAPIs {
 	"No Operation": import("./NoOperationCC").NoOperationCCAPI;
 	Notification: import("./NotificationCC").NotificationCCAPI;
 	"Thermostat Setback": import("./ThermostatSetbackCC").ThermostatSetbackCCAPI;
+	"Thermostat Setpoint": import("./ThermostatSetpointCC").ThermostatSetpointCCAPI;
 	Version: import("./VersionCC").VersionCCAPI;
 	"Wake Up": import("./WakeUpCC").WakeUpCCAPI;
 	"Z-Wave Plus Info": import("./ZWavePlusCC").ZWavePlusCCAPI;
