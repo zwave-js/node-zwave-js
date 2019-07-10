@@ -1,7 +1,9 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { JSONObject, validatePayload } from "../util/misc";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
@@ -31,6 +33,45 @@ export enum CentralSceneKeys {
 	KeyPressed3x = 0x04,
 	KeyPressed4x = 0x05,
 	KeyPressed5x = 0x06,
+}
+
+@API(CommandClasses["Central Scene"])
+export class CentralSceneCCAPI extends CCAPI {
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async getSupported() {
+		const cc = new CentralSceneCCSupportedGet(this.driver, {
+			nodeId: this.node.id,
+		});
+		const response = (await this.driver.sendCommand<
+			CentralSceneCCSupportedReport
+		>(cc))!;
+		return {
+			sceneCount: response.sceneCount,
+			supportsSlowRefresh: response.supportsSlowRefresh,
+			supportsKeyAttribute: response.supportsKeyAttribute.bind(response),
+		};
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async getConfiguration() {
+		const cc = new CentralSceneCCConfigurationGet(this.driver, {
+			nodeId: this.node.id,
+		});
+		const response = (await this.driver.sendCommand<
+			CentralSceneCCConfigurationReport
+		>(cc))!;
+		return {
+			slowRefresh: response.slowRefresh,
+		};
+	}
+
+	public async setConfiguration(slowRefresh: boolean): Promise<void> {
+		const cc = new CentralSceneCCConfigurationSet(this.driver, {
+			nodeId: this.node.id,
+			slowRefresh,
+		});
+		await this.driver.sendCommand(cc);
+	}
 }
 
 @commandClass(CommandClasses["Central Scene"])
