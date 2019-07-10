@@ -1,4 +1,3 @@
-/// <reference types="jest-extended" />
 import { entries } from "alcalzone-shared/objects";
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";

@@ -11,12 +11,11 @@ const ccRegex = /^@commandClass\(CommandClasses(?:\.|\[")(.+?)(?:"\])?\)/m;
 const apiRegex = /^@API\(CommandClasses(?:\.|\[)(.+?)(?:\])?\)/m;
 const noApiRegex = /^\/\/ @noAPI/m; // This comment marks a CC that needs no API
 const versionRegex = /^@implementedVersion\((\d+)\)/m;
-const ansiColorRegex = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g;
 
 const onlyIncomplete = !!yargs.argv.onlyIncomplete;
 
 function getSafeLength(str: string): number {
-	return str.replace(ansiColorRegex, "").length;
+	return c.stripColor(str).length;
 }
 
 function padEnd(str: string, len: number): string {

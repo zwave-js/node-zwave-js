@@ -1,5 +1,3 @@
-/// <reference types="jest-extended" />
-
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { ValueDB } from "./ValueDB";
 

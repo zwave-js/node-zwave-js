@@ -12,7 +12,8 @@
 		"module": "commonjs",
 		"moduleResolution": "node",
 		"noEmitOnError": true,
-		"noImplicitAny": false,
+		"noImplicitAny": true,
+		"noImplicitThis": true,
 		"outDir": "build/",
 		"removeComments": false,
 		"experimentalDecorators": true,
@@ -26,7 +27,8 @@
 		"strictPropertyInitialization": true,
 		"strictBindCallApply": true,
 		"watch": false, // true breaks circleci
-		"pretty": true
+		"pretty": true,
+		"types": ["jest-extended"]
 	},
 	"include": ["src/**/*.ts", "maintenance/**/*.ts", "test/**/*.ts"],
 	"exclude": ["build/**", "node_modules/**"]

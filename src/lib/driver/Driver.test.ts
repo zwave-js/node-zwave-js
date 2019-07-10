@@ -1,5 +1,3 @@
-/// <reference types="jest-extended" />
-
 // load the driver with stubbed out Serialport
 import {
 	MockRequestMessageWithExpectation,

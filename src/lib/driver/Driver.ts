@@ -22,10 +22,10 @@ import { ZWaveController } from "../controller/Controller";
 import {
 	SendDataRequest,
 	SendDataRequestTransmitReport,
-	SendDataResponse,
 	TransmitStatus,
 } from "../controller/SendDataMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import log from "../log";
 import {
 	FunctionType,
 	MessageHeaders,
@@ -35,8 +35,7 @@ import {
 import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
 import { InterviewStage, NodeStatus, ZWaveNode } from "../node/Node";
-import { log } from "../util/logger";
-import { num2hex, stringify } from "../util/strings";
+import { num2hex } from "../util/strings";
 import { DriverEventCallbacks, DriverEvents, IDriver } from "./IDriver";
 import { Transaction } from "./Transaction";
 
@@ -221,7 +220,7 @@ export class Driver extends EventEmitter implements IDriver {
 		this._wasStarted = true;
 
 		return new Promise((resolve, reject) => {
-			log("driver", `starting driver...`, "debug");
+			log.driver.print("starting driver...");
 			this.serial = new SerialPort(this.port, {
 				autoOpen: false,
 				baudRate: 115200,
@@ -232,7 +231,7 @@ export class Driver extends EventEmitter implements IDriver {
 			this.serial
 				// wotan-disable-next-line async-function-assignability
 				.on("open", async () => {
-					log("driver", "serial port opened", "debug");
+					log.driver.print("serial port opened");
 					this._isOpen = true;
 					this.resetIO();
 					resolve();
@@ -243,7 +242,7 @@ export class Driver extends EventEmitter implements IDriver {
 				})
 				.on("data", this.serialport_onData.bind(this))
 				.on("error", err => {
-					log("driver", "serial port errored: " + err, "error");
+					log.driver.print("serial port errored: " + err, "error");
 					if (this._isOpen) {
 						this.serialport_onError(err);
 					} else {
@@ -266,7 +265,7 @@ export class Driver extends EventEmitter implements IDriver {
 
 		// in any case we need to emit the driver ready event here
 		this._controllerInterviewed = true;
-		log("driver", "driver ready", "debug");
+		log.driver.print("driver ready");
 		this.emit("driver ready");
 
 		// Try to restore the network information from the cache
@@ -304,7 +303,7 @@ export class Driver extends EventEmitter implements IDriver {
 			await node.interview();
 		} catch (e) {
 			if (e instanceof ZWaveError) {
-				log("controller", "node interview failed: " + e, "error");
+				log.controller.print("node interview failed: " + e, "error");
 			} else {
 				throw e;
 			}
@@ -322,7 +321,7 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	private onNodeWakeUp(node: ZWaveNode): void {
-		log("controller", `${node.logPrefix}The node is now awake.`, "debug");
+		log.controller.logNode(node, "The node is now awake.");
 
 		// It *should* not be necessary to restart the node interview here.
 		// When a node that supports wakeup does not respond, pending promises
@@ -334,18 +333,12 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	private onNodeSleep(node: ZWaveNode): void {
-		// TODO: Do we need this?
-		log("controller", `${node.logPrefix}The node is now asleep.`, "debug");
+		log.controller.logNode(node, "The node is now asleep.");
 	}
 
 	private onNodeAlive(node: ZWaveNode): void {
-		log("controller", `${node.logPrefix}The node is now alive.`, "debug");
+		log.controller.logNode(node, "The node is now alive.");
 		if (node.interviewStage !== InterviewStage.Complete) {
-			log(
-				"controller",
-				`${node.logPrefix}  resuming interview...`,
-				"debug",
-			);
 			void this.interviewNode(node);
 		}
 	}
@@ -427,7 +420,7 @@ export class Driver extends EventEmitter implements IDriver {
 	/** Resets the IO layer */
 	private resetIO(): void {
 		this.ensureReady();
-		log("driver", "resetting driver instance...", "debug");
+		log.driver.print("resetting driver instance...");
 
 		// re-sync communication
 		this.send(MessageHeaders.NAK);
@@ -469,14 +462,17 @@ export class Driver extends EventEmitter implements IDriver {
 	 * Must be called under any circumstances.
 	 */
 	public async destroy(): Promise<void> {
-		log("driver", "destroying driver instance...", "debug");
+		log.driver.print("destroying driver instance...");
 		this._wasDestroyed = true;
 
 		try {
 			// Attempt to save the network to cache
 			await this.saveNetworkToCacheInternal();
 		} catch (e) {
-			log("driver", e.message, "error");
+			log.driver.print(
+				`Saving the network to cache failed: ${e.message}`,
+				"error",
+			);
 		}
 
 		process.removeListener("exit", this._cleanupHandler);
@@ -504,35 +500,36 @@ export class Driver extends EventEmitter implements IDriver {
 
 	// eslint-disable-next-line @typescript-eslint/camelcase
 	private serialport_onData(data: Buffer): void {
-		log("io", `received data: 0x${data.toString("hex")}`, "debug");
+		// FIXME: Data is logged multiple times here
+		log.serial.data("inbound", data);
 		// append the new data to our receive buffer
 		this.receiveBuffer =
 			this.receiveBuffer != undefined
 				? Buffer.concat([this.receiveBuffer, data])
 				: data;
-		log(
-			"io",
-			`receiveBuffer: 0x${this.receiveBuffer.toString("hex")}`,
-			"debug",
-		);
+		log.serial.receiveBuffer(this.receiveBuffer);
 
 		while (this.receiveBuffer.length > 0) {
 			if (this.receiveBuffer[0] !== MessageHeaders.SOF) {
 				switch (this.receiveBuffer[0]) {
 					// single-byte messages - we have a handler for each one
 					case MessageHeaders.ACK: {
+						log.serial.ACK("inbound");
 						this.handleACK();
 						break;
 					}
 					case MessageHeaders.NAK: {
+						log.serial.NAK("inbound");
 						this.handleNAK();
 						break;
 					}
 					case MessageHeaders.CAN: {
+						log.serial.CAN("inbound");
 						this.handleCAN();
 						break;
 					}
 					default: {
+						// TODO: Log this
 						const message = `The receive buffer starts with unexpected data: 0x${data.toString(
 							"hex",
 						)}`;
@@ -547,10 +544,8 @@ export class Driver extends EventEmitter implements IDriver {
 			// nothing to do yet, wait for the next data
 			const msgComplete = Message.isComplete(this.receiveBuffer);
 			if (!msgComplete) {
-				log(
-					"io",
+				log.serial.message(
 					`the receive buffer contains an incomplete message, waiting for the next chunk...`,
-					"debug",
 				);
 				return;
 			}
@@ -573,13 +568,12 @@ export class Driver extends EventEmitter implements IDriver {
 						e.code ===
 						ZWaveErrorCodes.Deserialization_NotImplemented
 					) {
-						log("controller", e.message, "error");
+						log.driver.print(e.message, "error");
 						return;
 					} else if (
 						e.code === ZWaveErrorCodes.PacketFormat_InvalidPayload
 					) {
-						log(
-							"controller",
+						log.driver.print(
 							`Message with invalid data received. Dropping it...`,
 							"warn",
 						);
@@ -605,55 +599,32 @@ export class Driver extends EventEmitter implements IDriver {
 			break;
 		}
 
-		log(
-			"io",
-			`the receive buffer is empty, waiting for the next chunk...`,
-			"debug",
+		log.serial.message(
+			`The receive buffer is empty, waiting for the next chunk...`,
 		);
 	}
 
 	private handleMessage(msg: Message): void {
-		// TODO: find a nice way to serialize the messages
-		// log("driver", `handling response ${stringify(msg)}`, "debug");
-		log(
-			"io",
-			`handling response (${FunctionType[msg.functionType]}${
-				MessageType[msg.type]
-			})`,
-			"debug",
-		);
-		if (msg instanceof SendDataRequest || msg instanceof SendDataResponse) {
-			log("io", `  ${stringify(msg)}`, "debug");
-		}
-		if (isCommandClassContainer(msg)) {
-			log("io", `  ${stringify(msg.command)}`, "debug");
-		}
-
 		// if we have a pending request, check if that is waiting for this message
 		if (this.currentTransaction != undefined) {
 			switch (this.currentTransaction.message.testResponse(msg)) {
 				case "confirmation":
 					// no need to process intermediate responses, as they only tell us things are good
-					log(
-						"io",
-						`  received confirmation response to current transaction`,
-						"debug",
-					);
+					log.driver.transactionResponse(msg, "confirmation");
 					return;
 
 				case "fatal_controller":
+					log.driver.transactionResponse(msg, "fatal_controller");
 					// The message was not sent
 					if (this.mayRetryCurrentTransaction()) {
 						// The Z-Wave specs define 500ms as the waiting period for SendData messages
 						const timeout = this.retryCurrentTransaction(500);
-						log(
-							"io",
+						log.driver.print(
 							`  the message for the current transaction could not be sent, scheduling attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`,
 							"warn",
 						);
 					} else {
-						log(
-							"io",
+						log.driver.print(
 							`  the message for the current transaction could not be sent after ${this.currentTransaction.maxSendAttempts} attempts, dropping the transaction`,
 							"warn",
 						);
@@ -668,14 +639,13 @@ export class Driver extends EventEmitter implements IDriver {
 					return;
 
 				case "fatal_node":
+					log.driver.transactionResponse(msg, "fatal_node");
 					// The node did not respond
 					const node = this.currentTransaction.message.getNodeUnsafe();
 					if (!node) return; // This should never happen, but whatever
 					if (node.supportsCC(CommandClasses["Wake Up"])) {
-						log(
-							"driver",
-							`  ${node.logPrefix}The node did not respond because it is asleep, moving its messages to the wakeup queue`,
-							"debug",
+						log.driver.print(
+							`${node.logPrefix}The node did not respond because it is asleep, moving its messages to the wakeup queue`,
 						);
 						// The node is asleep
 						WakeUpCC.setAwake(node, false);
@@ -687,9 +657,8 @@ export class Driver extends EventEmitter implements IDriver {
 					} else if (this.mayRetryCurrentTransaction()) {
 						// The Z-Wave specs define 500ms as the waiting period for SendData messages
 						const timeout = this.retryCurrentTransaction(500);
-						log(
-							"io",
-							`  ${node.logPrefix}The node did not respond to the current transaction, scheduling attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`,
+						log.driver.print(
+							`${node.logPrefix}The node did not respond to the current transaction, scheduling attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`,
 							"warn",
 						);
 					} else {
@@ -699,7 +668,10 @@ export class Driver extends EventEmitter implements IDriver {
 								TransmitStatus[msg.transmitStatus]
 							})`;
 						}
-						log("io", `  ${node.logPrefix}${errorMsg}`, "warn");
+						log.driver.print(
+							`${node.logPrefix}${errorMsg}`,
+							"warn",
+						);
 
 						node.status = NodeStatus.Dead;
 						this.rejectAllTransactionsForNode(node.id, errorMsg);
@@ -710,21 +682,13 @@ export class Driver extends EventEmitter implements IDriver {
 
 				case "partial":
 					// This is a multi-step response and we just received a part of it, which is not the final one
-					log(
-						"io",
-						`  received partial response to current transaction`,
-						"debug",
-					);
+					log.driver.transactionResponse(msg, "partial");
 					this.currentTransaction.partialResponses.push(msg);
 					return;
 
 				case "final":
 					// this is the expected response!
-					log(
-						"io",
-						`  received expected response to current transaction`,
-						"debug",
-					);
+					log.driver.transactionResponse(msg, "final");
 					this.currentTransaction.response = msg;
 					if (this.currentTransaction.partialResponses.length > 0) {
 						msg.mergePartialMessages(
@@ -732,19 +696,14 @@ export class Driver extends EventEmitter implements IDriver {
 						);
 					}
 					if (!this.currentTransaction.ackPending) {
-						log(
-							"io",
-							`  ACK already received, resolving transaction`,
-							"debug",
+						log.driver.print(
+							`ACK already received, resolving transaction`,
 						);
-						log("driver", `  transaction complete`, "debug");
 						this.resolveCurrentTransaction();
 					} else {
 						// wait for the ack, it might be received out of order
-						log(
-							"io",
-							`  no ACK received yet, remembering response`,
-							"debug",
+						log.driver.print(
+							`no ACK received yet, remembering response`,
 						);
 					}
 					// if the response was expected, don't check any more handlers
@@ -760,7 +719,8 @@ export class Driver extends EventEmitter implements IDriver {
 			// This is a request we might have registered handlers for
 			this.handleRequest(msg);
 		} else {
-			log("driver", `  unexpected response, discarding...`, "debug");
+			log.driver.transactionResponse(msg, "unexpected");
+			log.driver.print("unexpected response, discarding...", "warn");
 		}
 	}
 
@@ -789,12 +749,11 @@ export class Driver extends EventEmitter implements IDriver {
 			: [];
 		const entry: RequestHandlerEntry = { invoke: handler, oneTime };
 		handlers.push(entry);
-		log(
-			"driver",
+		log.driver.print(
 			`added${oneTime ? " one-time" : ""} request handler for ${
 				FunctionType[fnType]
-			} (${fnType})... ${handlers.length} registered`,
-			"debug",
+			} (${num2hex(fnType)})...
+${handlers.length} registered`,
 		);
 		this.requestHandlers.set(fnType, handlers);
 	}
@@ -824,10 +783,9 @@ export class Driver extends EventEmitter implements IDriver {
 				break;
 			}
 		}
-		log(
-			"driver",
-			`removed request handler for ${FunctionType[fnType]} (${fnType})... ${handlers.length} left`,
-			"debug",
+		log.driver.print(
+			`removed request handler for ${FunctionType[fnType]} (${fnType})...
+${handlers.length} left`,
 		);
 		this.requestHandlers.set(fnType, handlers);
 	}
@@ -908,26 +866,23 @@ export class Driver extends EventEmitter implements IDriver {
 			// we handle ApplicationCommandRequests differently because they are handled by the nodes directly
 			const ccId = msg.command.ccId;
 			const nodeId = msg.command.nodeId;
-			log(
-				"driver",
+			// TODO: This deserves a better formatting
+			log.driver.print(
 				`handling application command request ${
 					CommandClasses[ccId]
 				} (${num2hex(ccId)}) for node ${nodeId}`,
-				"debug",
 			);
 			// cannot handle ApplicationCommandRequests without a controller
 			if (this._controller == undefined) {
-				log(
-					"driver",
+				log.driver.print(
 					`  the controller is not ready yet, discarding...`,
-					"debug",
+					"warn",
 				);
 				return;
 			} else if (!this.controller.nodes.has(nodeId)) {
-				log(
-					"driver",
+				log.driver.print(
 					`  the node is unknown or not initialized yet, discarding...`,
-					"debug",
+					"warn",
 				);
 				return;
 			}
@@ -941,11 +896,10 @@ export class Driver extends EventEmitter implements IDriver {
 			if (msg instanceof ApplicationUpdateRequestNodeInfoReceived) {
 				const node = msg.getNodeUnsafe();
 				if (node) {
-					log(
-						"driver",
-						`Node info for node ${node.id} updated`,
-						"debug",
-					);
+					log.controller.logNode(node, {
+						message: "Received updated node info",
+						direction: "inbound",
+					});
 					node.updateNodeInfo(msg.nodeInformation);
 					return;
 				}
@@ -963,36 +917,30 @@ export class Driver extends EventEmitter implements IDriver {
 			// 	);
 			// 	handlers = this.sendDataRequestHandlers.get(ccId);
 		} else {
-			log(
-				"driver",
+			// TODO: This deserves a nicer formatting
+			log.driver.print(
 				`handling request ${FunctionType[msg.functionType]} (${
 					msg.functionType
 				})`,
-				"debug",
 			);
 			handlers = this.requestHandlers.get(msg.functionType);
 		}
-		log("driver", `  ${stringify(msg)}`, "debug");
 
 		if (handlers != undefined && handlers.length > 0) {
-			log(
-				"driver",
+			log.driver.print(
 				`  ${handlers.length} handler${
 					handlers.length !== 1 ? "s" : ""
 				} registered!`,
-				"debug",
 			);
 			// loop through all handlers and find the first one that returns true to indicate that it handled the message
 			for (let i = 0; i < handlers.length; i++) {
-				log("driver", `  invoking handler #${i}`, "debug");
+				log.driver.print(`  invoking handler #${i}`);
 				const handler = handlers[i];
 				if (handler.invoke(msg)) {
-					log("driver", `  message was handled`, "debug");
+					log.driver.print(`    the message was handled`);
 					if (handler.oneTime) {
-						log(
-							"driver",
+						log.driver.print(
 							"  one-time handler was successfully called, removing it...",
-							"debug",
 						);
 						handlers.splice(i, 1);
 					}
@@ -1001,7 +949,7 @@ export class Driver extends EventEmitter implements IDriver {
 				}
 			}
 		} else {
-			log("driver", "  no handlers registered!", "warn");
+			log.driver.print("  no handlers registered!", "warn");
 		}
 	}
 
@@ -1009,14 +957,13 @@ export class Driver extends EventEmitter implements IDriver {
 		// if we have a pending request waiting for the ACK, ACK it
 		const trnsact = this.currentTransaction;
 		if (trnsact != undefined && trnsact.ackPending) {
-			log("io", "ACK received for current transaction", "debug");
+			log.driver.print("ACK received for current transaction");
 			trnsact.ackPending = false;
 			if (
 				trnsact.message.expectedResponse == undefined ||
 				trnsact.response != undefined
 			) {
-				log("io", "transaction finished, resolving...", "debug");
-				log("driver", `transaction complete`, "debug");
+				log.driver.print("transaction finished, resolving...");
 				// if the response has been received prior to this, resolve the request
 				// if no response was expected, also resolve the request
 				this.resolveCurrentTransaction(false);
@@ -1025,32 +972,25 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 
 		// TODO: what to do with this ACK?
-		log(
-			"io",
-			"ACK received but I don't know what it belongs to...",
-			"debug",
-		);
+		log.driver.print("Unexpected ACK received", "warn");
 	}
 
 	private handleNAK(): void {
 		// TODO: what to do with this NAK?
-		log("io", "NAK received. TODO: handle it", "warn");
 	}
 
 	private handleCAN(): void {
 		if (this.currentTransaction != undefined) {
 			if (this.mayRetryCurrentTransaction()) {
 				const timeout = this.retryCurrentTransaction();
-				log(
-					"io",
+				log.driver.print(
 					`CAN received - scheduling transmission attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`,
 					"warn",
 				);
 			} else {
-				log(
-					"io",
+				log.driver.print(
 					`CAN received - maximum transmission attempts for the current transaction reached, dropping it...`,
-					"warn",
+					"error",
 				);
 
 				this.rejectCurrentTransaction(
@@ -1089,13 +1029,6 @@ export class Driver extends EventEmitter implements IDriver {
 	 */
 	private resolveCurrentTransaction(resumeQueue: boolean = true): void {
 		const node = this.currentTransaction!.message.getNodeUnsafe();
-		log(
-			"io",
-			`resolving current transaction with ${stringify(
-				this.currentTransaction!.response,
-			)}`,
-			"debug",
-		);
 		const { promise, response, timeoutInstance } = this.currentTransaction!;
 		// Cancel any running timers
 		if (timeoutInstance) clearTimeout(timeoutInstance);
@@ -1112,7 +1045,7 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 		// Resume the send queue
 		if (resumeQueue) {
-			log("io", `resuming send queue`, "debug");
+			log.driver.print("resuming send queue");
 			setImmediate(() => this.workOffSendQueue());
 		}
 	}
@@ -1125,11 +1058,6 @@ export class Driver extends EventEmitter implements IDriver {
 		reason: ZWaveError,
 		resumeQueue: boolean = true,
 	): void {
-		log(
-			"io",
-			`rejecting current transaction because "${reason.message}"`,
-			"debug",
-		);
 		const { promise, timeoutInstance } = this.currentTransaction!;
 		// Cancel any running timers
 		if (timeoutInstance) clearTimeout(timeoutInstance);
@@ -1138,7 +1066,7 @@ export class Driver extends EventEmitter implements IDriver {
 		this.currentTransaction = undefined;
 		// and see if there are messages pending
 		if (resumeQueue) {
-			log("io", `resuming send queue`, "debug");
+			log.driver.print("resuming send queue");
 			setImmediate(() => this.workOffSendQueue());
 		}
 	}
@@ -1191,13 +1119,6 @@ export class Driver extends EventEmitter implements IDriver {
 			);
 		}
 
-		log(
-			"driver",
-			`sending message ${stringify(msg)} with priority ${
-				MessagePriority[options.priority]
-			} (${options.priority})`,
-			"debug",
-		);
 		// create the transaction and enqueue it
 		const promise = createDeferredPromise<TResponse>();
 		const transaction = new Transaction(
@@ -1209,11 +1130,6 @@ export class Driver extends EventEmitter implements IDriver {
 		);
 
 		this.sendQueue.add(transaction);
-		log(
-			"io",
-			`added message to the send queue, new length = ${this.sendQueue.length}`,
-			"debug",
-		);
 		// start sending now (maybe)
 		setImmediate(() => this.workOffSendQueue());
 
@@ -1246,7 +1162,7 @@ export class Driver extends EventEmitter implements IDriver {
 	 */
 	private send(header: MessageHeaders): void {
 		// ACK, CAN, NAK
-		log("io", `sending ${MessageHeaders[header]}`, "debug");
+		log.serial[MessageHeaders[header] as "ACK" | "NAK" | "CAN"]("outbound");
 		this.doSend(Buffer.from([header]));
 		return;
 	}
@@ -1260,17 +1176,15 @@ export class Driver extends EventEmitter implements IDriver {
 
 		// is there something to send?
 		if (this.sendQueue.length === 0) {
-			log("io", `workOffSendQueue > queue is empty`, "debug");
+			log.driver.print("The send queue is empty");
 			return;
 		} else {
-			this.printSendQueue();
+			log.driver.sendQueue(this.sendQueue);
 		}
 		// we are still waiting for the current transaction to finish
 		if (this.currentTransaction != undefined) {
-			log(
-				"io",
+			log.driver.print(
 				`workOffSendQueue > skipping because a transaction is pending`,
-				"debug",
 			);
 			return;
 		}
@@ -1282,12 +1196,10 @@ export class Driver extends EventEmitter implements IDriver {
 			// get the next transaction
 			this.currentTransaction = this.sendQueue.shift()!;
 			const msg = this.currentTransaction.message;
-			log(
-				"io",
+			log.driver.print(
 				`workOffSendQueue > sending next message (${
 					FunctionType[msg.functionType]
 				})${targetNode ? ` to node ${targetNode.id}` : ""}...`,
-				"debug",
 			);
 			// for messages containing a CC, i.e. a SendDataRequest, set the CC version as high as possible
 			if (isCommandClassContainer(msg)) {
@@ -1296,28 +1208,24 @@ export class Driver extends EventEmitter implements IDriver {
 					msg.command.nodeId,
 					ccId,
 				);
-				log(
-					"io",
-					`  CC = ${CommandClasses[ccId]} (${num2hex(
+				// TODO: This could be improved
+				log.driver.print(
+					`CC = ${CommandClasses[ccId]} (${num2hex(
 						ccId,
 					)}) => using version ${msg.command.version}`,
-					"debug",
 				);
 			}
 			const data = msg.serialize();
-			log("io", `  data = 0x${data.toString("hex")}`, "debug");
-			log(
-				"io",
-				`  remaining queue length = ${this.sendQueue.length}`,
-				"debug",
-			);
 			// Mark the transaction as being sent
 			this.currentTransaction.sendAttempts = 1;
+			log.serial.data("outbound", data);
 			this.doSend(data);
 			// If the transaction has a timeout configured, start it
 			if (this.currentTransaction.timeout) {
 				this.currentTransaction.timeoutInstance = setTimeout(() => {
 					if (!this.currentTransaction) return;
+					// TODO: Do we need more information here?
+					log.driver.print("The transaction timed out", "warn");
 					this.rejectCurrentTransaction(
 						new ZWaveError(
 							"The transaction timed out",
@@ -1327,37 +1235,33 @@ export class Driver extends EventEmitter implements IDriver {
 				}, this.currentTransaction.timeout);
 			}
 
-			// to avoid any deadlocks we didn't think of, re-call this later
-			this.sendQueueTimer = setTimeout(
-				() => this.workOffSendQueue(),
-				1000,
-			);
+			if (this.sendQueue.length > 0) {
+				// to avoid any deadlocks we didn't think of, re-call this later
+				this.sendQueueTimer = setTimeout(
+					() => this.workOffSendQueue(),
+					1000,
+				);
+			}
 		} else {
-			log(
-				"io",
-				`workOffSendQueue > The remaining ${this.sendQueue.length} messages are for sleeping nodes, not sending anything!`,
-				"debug",
+			log.driver.print(
+				`The remaining ${this.sendQueue.length} messages are for sleeping nodes, not sending anything!`,
 			);
 		}
 	}
 
 	private retransmit(): void {
 		if (!this.currentTransaction) return;
+		log.driver.transaction(this.currentTransaction);
 		const msg = this.currentTransaction.message;
-		log(
-			"io",
-			`retransmit > resending message (${
-				FunctionType[msg.functionType]
-			})...`,
-			"debug",
-		);
 		const data = msg.serialize();
-		log("io", `  data = 0x${data.toString("hex")}`, "debug");
+		log.serial.data("outbound", data);
 		this.doSend(data);
 	}
 
 	private doSend(data: Buffer): void {
-		if (this.serial) this.serial.write(data);
+		if (this.serial) {
+			this.serial.write(data);
+		}
 	}
 
 	/** Moves all messages for a given node into the wakeup queue */
@@ -1442,29 +1346,6 @@ export class Driver extends EventEmitter implements IDriver {
 		this.sendQueue.add(...items);
 	}
 
-	private printSendQueue(): void {
-		log("io", "workOffSendQueue > messages in the queue:", "silly");
-		for (const trns of this.sendQueue) {
-			const node = trns.message.getNodeUnsafe();
-			const postfix =
-				node != undefined
-					? ` [Node ${node.id}, ${
-							node.isAwake() ? "awake" : "asleep"
-					  }]`
-					: "";
-			const command = isCommandClassContainer(trns.message)
-				? ` (${trns.message.command.constructor.name})`
-				: "";
-			log(
-				"io",
-				`  ${
-					FunctionType[trns.message.functionType]
-				}${command}${postfix}`,
-				"silly",
-			);
-		}
-	}
-
 	private lastSaveToCache: number = 0;
 	private readonly saveToCacheInterval: number = 50;
 	private saveToCacheTimer: NodeJS.Timer | undefined;
@@ -1515,23 +1396,18 @@ export class Driver extends EventEmitter implements IDriver {
 		);
 		if (!(await fs.pathExists(cacheFile))) return;
 		try {
-			log(
-				"driver",
+			log.driver.print(
 				`Cache file for homeId ${num2hex(
 					this.controller.homeId,
-				)} found, attempting to restore the network from cache`,
-				"debug",
+				)} found, attempting to restore the network from cache...`,
 			);
 			const cacheObj = await fs.readJSON(cacheFile);
 			this.controller.deserialize(cacheObj);
-			log(
-				"driver",
+			log.driver.print(
 				`  Restoring the network from cache was successful!`,
-				"error",
 			);
 		} catch (e) {
-			log(
-				"driver",
+			log.driver.print(
 				`  restoring the network from cache failed: ${e}`,
 				"error",
 			);
