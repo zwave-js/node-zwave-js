@@ -1,5 +1,6 @@
 require("reflect-metadata");
 import * as c from "ansi-colors";
+import * as clipboard from "clipboardy";
 import * as fs from "fs-extra";
 import * as path from "path";
 import * as yargs from "yargs";
@@ -140,14 +141,20 @@ function writeTable(rows: string[][], flavor: "console" | "github"): void {
 		}
 		console.log(HR);
 	} /*if (flavor === "github")*/ else {
+		let output = "";
 		let HR = "|";
 		for (let i = 0; i < numColumns; i++) HR += " --- |";
 
 		for (let i = 0; i < rows.length; i++) {
 			const row = "| " + rows[i].join(" | ") + " |";
-			console.log(row);
-			if (i === 0) console.log(HR);
+			output += row + "\n";
+			if (i === 0) output += HR + "\n";
 		}
+
+		console.log(output);
+		clipboard.write(c.stripColor(output));
+
+		console.log(c.green("The table was copied to the clipboard!"));
 	}
 }
 
