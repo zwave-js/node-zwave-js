@@ -429,12 +429,19 @@ describe("lib/node/Node", () => {
 		});
 
 		describe(`queryNodePlusInfo()`, () => {
-			beforeAll(() =>
+			beforeAll(() => {
+				fakeDriver.sendMessage.mockReset();
+				fakeDriver.sendMessage.mockImplementation(() =>
+					Promise.resolve({ command: {} }),
+				);
+			});
+			beforeEach(() => fakeDriver.sendMessage.mockClear());
+			afterAll(() => {
+				fakeDriver.sendMessage.mockReset();
 				fakeDriver.sendMessage.mockImplementation(() =>
 					Promise.resolve(),
-				),
-			);
-			beforeEach(() => fakeDriver.sendMessage.mockClear());
+				);
+			});
 
 			it(`should set the interview stage to "NodePlusInfo"`, async () => {
 				await node.queryNodePlusInfo();
