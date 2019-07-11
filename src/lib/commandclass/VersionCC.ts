@@ -52,6 +52,17 @@ export class VersionCCAPI extends CCAPI {
 		};
 	}
 
+	public async getCCVersion(requestedCC: CommandClasses): Promise<number> {
+		const cc = new VersionCCCommandClassGet(this.driver, {
+			nodeId: this.node.id,
+			requestedCC,
+		});
+		const response = (await this.driver.sendCommand<
+			VersionCCCommandClassReport
+		>(cc))!;
+		return response.ccVersion;
+	}
+
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getCapabilities() {
 		const cc = new VersionCCCapabilitiesGet(this.driver, {
