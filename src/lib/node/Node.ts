@@ -22,10 +22,6 @@ import {
 	MultiChannelCCEndPointReport,
 } from "../commandclass/MultiChannelCC";
 import {
-	VersionCCCommandClassGet,
-	VersionCCCommandClassReport,
-} from "../commandclass/VersionCC";
-import {
 	WakeUpCC,
 	WakeUpCCIntervalGet,
 	WakeUpCCIntervalReport,
@@ -867,13 +863,6 @@ version:               ${this.version}`;
 				);
 				continue;
 			}
-			const versionCC = new VersionCCCommandClassGet(this.driver, {
-				nodeId: this.id,
-				requestedCC: cc,
-			});
-			const request = new SendDataRequest(this.driver, {
-				command: versionCC,
-			});
 			try {
 				log.controller.logNode(this, {
 					message: `  querying the CC version for ${
@@ -881,37 +870,25 @@ version:               ${this.version}`;
 					} (${num2hex(cc)})...`,
 					direction: "outbound",
 				});
-
 				// query the CC version
-				const resp = await this.driver.sendMessage<SendDataRequest>(
-					request,
-					{
-						priority: MessagePriority.NodeQuery,
-					},
+				const supportedVersion = await this.commandClasses.Version.getCCVersion(
+					cc,
 				);
-				if (
-					isCommandClassContainer(resp) &&
-					resp.command instanceof VersionCCCommandClassReport
-				) {
-					const versionResponse = resp.command;
-					// Remember which CC version this node supports
-					const reqCC = versionResponse.requestedCC;
-					const supportedVersion = versionResponse.ccVersion;
-					let logMessage: string;
-					if (supportedVersion > 0) {
-						this.addCC(reqCC, { version: supportedVersion });
-						logMessage = `  supports CC ${
-							CommandClasses[reqCC]
-						} (${num2hex(reqCC)}) in version ${supportedVersion}`;
-					} else {
-						// We were lied to - the NIF said this CC is supported, now the node claims it isn't
-						this.removeCC(reqCC);
-						logMessage = `  does NOT support CC ${
-							CommandClasses[reqCC]
-						} (${num2hex(reqCC)})`;
-					}
-					log.controller.logNode(this, logMessage);
+				// Remember which CC version this node supports
+				let logMessage: string;
+				if (supportedVersion > 0) {
+					this.addCC(cc, { version: supportedVersion });
+					logMessage = `  supports CC ${
+						CommandClasses[cc]
+					} (${num2hex(cc)}) in version ${supportedVersion}`;
+				} else {
+					// We were lied to - the NIF said this CC is supported, now the node claims it isn't
+					this.removeCC(cc);
+					logMessage = `  does NOT support CC ${
+						CommandClasses[cc]
+					} (${num2hex(cc)})`;
 				}
+				log.controller.logNode(this, logMessage);
 			} catch (e) {
 				log.controller.logNode(
 					this,

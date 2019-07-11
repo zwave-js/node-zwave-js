@@ -537,11 +537,17 @@ describe("lib/node/Node", () => {
 		describe(`queryCCVersions()`, () => {
 			beforeAll(() => {
 				fakeDriver.sendMessage.mockImplementation(() =>
-					Promise.resolve(),
+					Promise.resolve({ command: {} }),
 				);
 				node.implementedCommandClasses.clear();
 			});
 			beforeEach(() => fakeDriver.sendMessage.mockClear());
+			afterAll(() => {
+				fakeDriver.sendMessage.mockImplementation(() =>
+					Promise.resolve(),
+				);
+				node.implementedCommandClasses.clear();
+			});
 
 			it(`should set the interview stage to "Versions"`, async () => {
 				await node.queryCCVersions();
@@ -559,6 +565,7 @@ describe("lib/node/Node", () => {
 				node.addCC(CommandClasses["Binary Sensor"], {
 					isSupported: true,
 				});
+				node.addCC(CommandClasses.Version, { isSupported: true });
 				await node.queryCCVersions();
 
 				assertCC(fakeDriver.sendMessage.mock.calls[0][0], {

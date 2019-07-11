@@ -25,6 +25,7 @@ export class CCAPI {
 	public isSupported(): boolean {
 		return (
 			// NoOperation is always supported
+			// TODO: find out if there are other CCs always supported
 			this.ccId === CommandClasses["No Operation"] ||
 			this.node.supportsCC(this.ccId) ||
 			this.node.controlsCC(this.ccId)
