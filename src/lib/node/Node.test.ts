@@ -615,10 +615,15 @@ describe("lib/node/Node", () => {
 		describe(`queryEndpoints()`, () => {
 			beforeAll(() =>
 				fakeDriver.sendMessage.mockImplementation(() =>
-					Promise.resolve(),
+					Promise.resolve({ command: {} }),
 				),
 			);
 			beforeEach(() => fakeDriver.sendMessage.mockClear());
+			afterAll(() =>
+				fakeDriver.sendMessage.mockImplementation(() =>
+					Promise.resolve(),
+				),
+			);
 
 			it(`should set the interview stage to "Endpoints"`, async () => {
 				await node.queryEndpoints();

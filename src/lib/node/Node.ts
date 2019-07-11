@@ -18,10 +18,6 @@ import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { ConfigurationCC } from "../commandclass/ConfigurationCC";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import {
-	MultiChannelCCEndPointGet,
-	MultiChannelCCEndPointReport,
-} from "../commandclass/MultiChannelCC";
-import {
 	WakeUpCC,
 	WakeUpCCIntervalGet,
 	WakeUpCCIntervalReport,
@@ -908,34 +904,23 @@ version:               ${this.version}`;
 				message: "querying device endpoints...",
 				direction: "outbound",
 			});
-			const cc = new MultiChannelCCEndPointGet(this.driver, {
-				nodeId: this.id,
-			});
-			const request = new SendDataRequest(this.driver, { command: cc });
 			try {
-				// set the priority manually, as SendData can be Application level too
-				const resp = await this.driver.sendMessage<SendDataRequest>(
-					request,
-					{
-						priority: MessagePriority.NodeQuery,
-					},
-				);
-				if (
-					isCommandClassContainer(resp) &&
-					resp.command instanceof MultiChannelCCEndPointReport
-				) {
-					const multiResponse = resp.command;
-					multiResponse.persistValues();
+				const multiResponse = await this.commandClasses[
+					"Multi Channel"
+				].getEndpoints();
 
-					const logMessage = `received response for device endpoints:
+				let logMessage = `received response for device endpoints:
   endpoint count (individual): ${multiResponse.individualEndpointCount}
   count is dynamic:            ${multiResponse.isDynamicEndpointCount}
   identical capabilities:      ${multiResponse.identicalCapabilities}`;
-					log.controller.logNode(this, {
-						message: logMessage,
-						direction: "inbound",
-					});
+				if (multiResponse.aggregatedEndpointCount != undefined) {
+					logMessage += `
+  endpoint count (aggregated): ${multiResponse.identicalCapabilities}`;
 				}
+				log.controller.logNode(this, {
+					message: logMessage,
+					direction: "inbound",
+				});
 			} catch (e) {
 				log.controller.logNode(
 					this,
