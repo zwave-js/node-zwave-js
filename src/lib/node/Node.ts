@@ -25,7 +25,6 @@ import {
 	MultiChannelCCEndPointGet,
 	MultiChannelCCEndPointReport,
 } from "../commandclass/MultiChannelCC";
-import { NoOperationCC } from "../commandclass/NoOperationCC";
 import {
 	VersionCCCommandClassGet,
 	VersionCCCommandClassReport,
@@ -85,6 +84,7 @@ import {
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 } from "./ValueDB";
+
 export interface ZWaveNodeValueAddedArgs extends ValueAddedArgs {
 	commandClassName: string;
 }
@@ -177,6 +177,7 @@ export enum NodeStatus {
 	Awake,
 	Dead,
 }
+
 export class ZWaveNode extends EventEmitter {
 	public constructor(
 		public readonly id: number,
@@ -713,17 +714,7 @@ version:               ${this.version}`;
 			});
 
 			try {
-				const request = new SendDataRequest(this.driver, {
-					command: new NoOperationCC(this.driver, {
-						nodeId: this.id,
-					}),
-				});
-				// Don't retry sending ping packets
-				request.maxSendAttempts = 1;
-				// set the priority manually, as SendData can be Application level too
-				await this.driver.sendMessage<SendDataRequest>(request, {
-					priority: MessagePriority.NodeQuery,
-				});
+				await this.commandClasses["No Operation"].send();
 				log.controller.logNode(this, {
 					message: "ping successful",
 					direction: "inbound",
