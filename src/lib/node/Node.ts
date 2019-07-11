@@ -37,8 +37,6 @@ import {
 	WakeUpCommand,
 } from "../commandclass/WakeUpCC";
 import {
-	ZWavePlusCCGet,
-	ZWavePlusCCReport,
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 } from "../commandclass/ZWavePlusCC";
@@ -790,34 +788,21 @@ version:               ${this.version}`;
 				message: "querying Z-Wave+ information...",
 				direction: "outbound",
 			});
-			const cc = new ZWavePlusCCGet(this.driver, { nodeId: this.id });
-			const request = new SendDataRequest(this.driver, { command: cc });
 			try {
-				// set the priority manually, as SendData can be Application level too
-				const resp = await this.driver.sendMessage<SendDataRequest>(
-					request,
-					{
-						priority: MessagePriority.NodeQuery,
-					},
-				);
-				if (
-					isCommandClassContainer(resp) &&
-					resp.command instanceof ZWavePlusCCReport
-				) {
-					const zwavePlusResponse = resp.command;
-					zwavePlusResponse.persistValues();
+				const zwavePlusResponse = await this.commandClasses[
+					"Z-Wave Plus Info"
+				].get();
 
-					const logMessage = `received response for Z-Wave+ information:
+				const logMessage = `received response for Z-Wave+ information:
   Z-Wave+ version: ${zwavePlusResponse.zwavePlusVersion}
   role type:       ${ZWavePlusRoleType[zwavePlusResponse.roleType]}
   node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}
   installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}
   user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
-					log.controller.logNode(this, {
-						message: logMessage,
-						direction: "inbound",
-					});
-				}
+				log.controller.logNode(this, {
+					message: logMessage,
+					direction: "inbound",
+				});
 			} catch (e) {
 				log.controller.logNode(
 					this,
