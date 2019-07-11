@@ -91,7 +91,6 @@ export class ZWaveController extends EventEmitter {
 		// register message handlers
 		driver.registerRequestHandler(
 			FunctionType.AddNodeToNetwork,
-			// @ts-ignore TODO: This is not valid!
 			this.handleAddNodeRequest.bind(this),
 		);
 	}
@@ -486,7 +485,7 @@ export class ZWaveController extends EventEmitter {
 
 	private async handleAddNodeRequest(
 		msg: AddNodeToNetworkRequest,
-	): Promise<void> {
+	): Promise<boolean> {
 		// TODO: Make sure we work with a deserialized request here
 		log.controller.print(
 			`handling add node request (status = ${
@@ -495,7 +494,7 @@ export class ZWaveController extends EventEmitter {
 		);
 		if (!this._inclusionActive && msg.status !== AddNodeStatus.Done) {
 			log.controller.print(`  inclusion is NOT active, ignoring it...`);
-			return;
+			return true; // Don't invoke any more handlers
 		}
 
 		switch (msg.status) {
@@ -506,7 +505,7 @@ export class ZWaveController extends EventEmitter {
 				);
 				if (this._beginInclusionPromise != null)
 					this._beginInclusionPromise.resolve(true);
-				return;
+				break;
 			case AddNodeStatus.Failed:
 				// this is called when inclusion could not be started...
 				if (this._beginInclusionPromise != null) {
@@ -531,7 +530,7 @@ export class ZWaveController extends EventEmitter {
 				} catch (e) {
 					/* ok */
 				}
-				return;
+				break;
 			case AddNodeStatus.AddingSlave: {
 				// this is called when a new node is added
 				this._nodePendingInclusion = new ZWaveNode(
@@ -545,7 +544,7 @@ export class ZWaveController extends EventEmitter {
 					msg.statusContext!.supportedCCs,
 					msg.statusContext!.controlledCCs,
 				);
-				return;
+				return true; // Don't invoke any more handlers
 			}
 			case AddNodeStatus.ProtocolDone: {
 				// this is called after a new node is added
@@ -555,7 +554,7 @@ export class ZWaveController extends EventEmitter {
 				} catch (e) {
 					/* ok */
 				}
-				return;
+				break;
 			}
 			case AddNodeStatus.Done: {
 				// this is called when the inclusion was completed
@@ -602,8 +601,13 @@ export class ZWaveController extends EventEmitter {
 					// and notify listeners
 					this.emit("node added", newNode);
 				}
+				break;
 			}
+			default:
+				// not sure what to do with this message
+				return false;
 		}
+		return true; // Don't invoke any more handlers
 	}
 
 	/**

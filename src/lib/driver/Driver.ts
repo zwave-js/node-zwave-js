@@ -112,7 +112,9 @@ function checkOptions(options: ZWaveOptions): void {
 	}
 }
 
-export type RequestHandler<T extends Message = Message> = (msg: T) => boolean;
+export type RequestHandler<T extends Message = Message> = (
+	msg: T,
+) => boolean | Promise<boolean>;
 interface RequestHandlerEntry<T extends Message = Message> {
 	invoke: RequestHandler<T>;
 	oneTime: boolean;
@@ -240,6 +242,7 @@ export class Driver extends EventEmitter implements IDriver {
 						() => void this.initializeControllerAndNodes(),
 					);
 				})
+				// wotan-disable-next-line async-function-assignability
 				.on("data", this.serialport_onData.bind(this))
 				.on("error", err => {
 					log.driver.print("serial port errored: " + err, "error");
@@ -499,7 +502,7 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/camelcase
-	private serialport_onData(data: Buffer): void {
+	private async serialport_onData(data: Buffer): Promise<void> {
 		// append the new data to our receive buffer
 		this.receiveBuffer =
 			this.receiveBuffer != undefined
@@ -590,7 +593,7 @@ export class Driver extends EventEmitter implements IDriver {
 			// all good, send ACK
 			this.send(MessageHeaders.ACK);
 			// and handle the response (if it could be decoded)
-			if (msg) this.handleMessage(msg);
+			if (msg) await this.handleMessage(msg);
 
 			break;
 		}
@@ -600,7 +603,7 @@ export class Driver extends EventEmitter implements IDriver {
 		);
 	}
 
-	private handleMessage(msg: Message): void {
+	private async handleMessage(msg: Message): Promise<void> {
 		// if we have a pending request, check if that is waiting for this message
 		if (this.currentTransaction != undefined) {
 			switch (this.currentTransaction.message.testResponse(msg)) {
@@ -713,7 +716,7 @@ export class Driver extends EventEmitter implements IDriver {
 
 		if (msg.type === MessageType.Request) {
 			// This is a request we might have registered handlers for
-			this.handleRequest(msg);
+			await this.handleRequest(msg);
 		} else {
 			log.driver.transactionResponse(msg, "unexpected");
 			log.driver.print("unexpected response, discarding...", "warn");
@@ -840,7 +843,7 @@ ${handlers.length} left`,
 	// 	this.sendDataRequestHandlers.set(cc, handlers);
 	// }
 
-	private handleRequest(msg: Message | SendDataRequest): void {
+	private async handleRequest(msg: Message | SendDataRequest): Promise<void> {
 		let handlers: RequestHandlerEntry[] | undefined;
 
 		if (isCommandClassContainer(msg)) {
@@ -885,7 +888,7 @@ ${handlers.length} left`,
 
 			// dispatch the command to the node itself
 			const node = this.controller.nodes.get(nodeId)!;
-			node.handleCommand(msg.command);
+			await node.handleCommand(msg.command);
 
 			return;
 		} else if (msg instanceof ApplicationUpdateRequest) {
@@ -931,8 +934,13 @@ ${handlers.length} left`,
 			// loop through all handlers and find the first one that returns true to indicate that it handled the message
 			for (let i = 0; i < handlers.length; i++) {
 				log.driver.print(`  invoking handler #${i}`);
+				// Invoke the handler and remember its result
 				const handler = handlers[i];
-				if (handler.invoke(msg)) {
+				let handlerResult = handler.invoke(msg);
+				if (handlerResult instanceof Promise) {
+					handlerResult = await handlerResult;
+				}
+				if (handlerResult) {
 					log.driver.print(`    the message was handled`);
 					if (handler.oneTime) {
 						log.driver.print(
