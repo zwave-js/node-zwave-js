@@ -2,7 +2,9 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
 import { parseBitMask } from "../values/Primitive";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccKeyValuePair,
@@ -39,6 +41,37 @@ export enum BinarySensorType {
 	Motion = 0x0c,
 	"Glass Break" = 0x0d,
 	Any = 0xff,
+}
+
+@API(CommandClasses["Binary Sensor"])
+export class BinarySensorCCAPI extends CCAPI {
+	/**
+	 * Retrieves the current value from this sensor
+	 * @param sensorType The (optional) sensor type to retrieve the value for
+	 */
+	public async get(sensorType?: BinarySensorType): Promise<boolean> {
+		const cc = new BinarySensorCCGet(this.driver, {
+			nodeId: this.node.id,
+			sensorType,
+		});
+		const response = (await this.driver.sendCommand<BinarySensorCCReport>(
+			cc,
+		))!;
+		// We don't want to repeat the sensor type
+		return response.value;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async getSupportedSensorTypes() {
+		const cc = new BinarySensorCCSupportedGet(this.driver, {
+			nodeId: this.node.id,
+		});
+		const response = (await this.driver.sendCommand<
+			BinarySensorCCSupportedReport
+		>(cc))!;
+		// We don't want to repeat the sensor type
+		return response.supportedSensorTypes;
+	}
 }
 
 @commandClass(CommandClasses["Binary Sensor"])

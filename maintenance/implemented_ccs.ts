@@ -1,5 +1,6 @@
 require("reflect-metadata");
 import * as c from "ansi-colors";
+import * as clipboard from "clipboardy";
 import * as fs from "fs-extra";
 import * as path from "path";
 import * as yargs from "yargs";
@@ -8,6 +9,7 @@ import { num2hex } from "../src/lib/util/strings";
 
 const ccRegex = /^@commandClass\(CommandClasses(?:\.|\[")(.+?)(?:"\])?\)/m;
 const apiRegex = /^@API\(CommandClasses(?:\.|\[)(.+?)(?:\])?\)/m;
+const noApiRegex = /^\/\/ @noAPI/m; // This comment marks a CC that needs no API
 const versionRegex = /^@implementedVersion\((\d+)\)/m;
 
 const onlyIncomplete = !!yargs.argv.onlyIncomplete;
@@ -33,7 +35,7 @@ function padEnd(str: string, len: number): string {
 				name =>
 					[name, { version: 0, API: false }] as [
 						string,
-						{ version: number; API: boolean }
+						{ version: number; API: boolean },
 					],
 			),
 	);
@@ -43,7 +45,8 @@ function padEnd(str: string, len: number): string {
 		try {
 			const ccName = ccRegex.exec(fileContent)![1];
 			const ccVersion = +versionRegex.exec(fileContent)![1];
-			const hasAPI = apiRegex.test(fileContent);
+			const hasAPI =
+				apiRegex.test(fileContent) || noApiRegex.test(fileContent);
 			allCCs.set(ccName, { version: ccVersion, API: hasAPI });
 		} catch (e) {
 			/* ok */
@@ -136,15 +139,21 @@ function writeTable(rows: string[][], flavor: "console" | "github"): void {
 			if (i === 0) console.log(HR);
 		}
 		console.log(HR);
-	} else if (flavor === "github") {
+	} /*if (flavor === "github")*/ else {
+		let output = "";
 		let HR = "|";
 		for (let i = 0; i < numColumns; i++) HR += " --- |";
 
 		for (let i = 0; i < rows.length; i++) {
 			const row = "| " + rows[i].join(" | ") + " |";
-			console.log(row);
-			if (i === 0) console.log(HR);
+			output += row + "\n";
+			if (i === 0) output += HR + "\n";
 		}
+
+		console.log(output);
+		clipboard.write(c.stripColor(output));
+
+		console.log(c.green("The table was copied to the clipboard!"));
 	}
 }
 
@@ -162,7 +171,8 @@ function getLatestVersion(ccName: string) {
 // Taken from https://www.silabs.com/documents/login/miscellaneous/SDS13781-Z-Wave-Application-Command-Class-Specification.pdf
 const ccVersions: Record<
 	string,
-	{ version: string | number; deprecated?: boolean; obsolete?: boolean }
+	| { version: string | number; deprecated?: boolean; obsolete?: boolean }
+	| undefined
 > = {
 	"0x9C": { version: 1, deprecated: true },
 	"0x9D": { version: 1 },

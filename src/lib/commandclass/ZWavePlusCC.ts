@@ -1,6 +1,8 @@
 import { IDriver } from "../driver/IDriver";
 import { validatePayload } from "../util/misc";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
@@ -31,6 +33,24 @@ export enum ZWavePlusRoleType {
 export enum ZWavePlusNodeType {
 	Node = 0x00, // ZWave+ Node
 	IPGateway = 0x02, // ZWave+ for IP Gateway
+}
+
+@API(CommandClasses["Z-Wave Plus Info"])
+export class ZWavePlusCCAPI extends CCAPI {
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async get() {
+		const cc = new ZWavePlusCCGet(this.driver, { nodeId: this.node.id });
+		const response = (await this.driver.sendCommand<ZWavePlusCCReport>(
+			cc,
+		))!;
+		return {
+			zwavePlusVersion: response.zwavePlusVersion,
+			nodeType: response.nodeType,
+			roleType: response.roleType,
+			installerIcon: response.installerIcon,
+			userIcon: response.userIcon,
+		};
+	}
 }
 
 @commandClass(CommandClasses["Z-Wave Plus Info"])

@@ -91,6 +91,7 @@ export class ZWaveController extends EventEmitter {
 		// register message handlers
 		driver.registerRequestHandler(
 			FunctionType.AddNodeToNetwork,
+			// @ts-ignore TODO: This is not valid!
 			this.handleAddNodeRequest.bind(this),
 		);
 	}

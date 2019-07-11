@@ -6,7 +6,9 @@ import {
 	encodeSetbackState,
 	SetbackState,
 } from "../values/SetbackState";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
@@ -29,6 +31,35 @@ export enum SetbackType {
 	None = 0x00,
 	Temporary = 0x01,
 	Permanent = 0x02,
+}
+
+@API(CommandClasses["Thermostat Setback"])
+export class ThermostatSetbackCCAPI extends CCAPI {
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async get() {
+		const cc = new ThermostatSetbackCCGet(this.driver, {
+			nodeId: this.node.id,
+		});
+		const response = (await this.driver.sendCommand<
+			ThermostatSetbackCCReport
+		>(cc))!;
+		return {
+			setbackType: response.setbackType,
+			setbackState: response.setbackState,
+		};
+	}
+
+	public async set(
+		setbackType: SetbackType,
+		setbackState: SetbackState,
+	): Promise<void> {
+		const cc = new ThermostatSetbackCCSet(this.driver, {
+			nodeId: this.node.id,
+			setbackType,
+			setbackState,
+		});
+		await this.driver.sendCommand(cc);
+	}
 }
 
 @commandClass(CommandClasses["Thermostat Setback"])

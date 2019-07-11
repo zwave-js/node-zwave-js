@@ -7,7 +7,9 @@ import {
 } from "../node/NodeInfo";
 import { validatePayload } from "../util/misc";
 import { encodeBitMask, parseBitMask } from "../values/Primitive";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccKeyValuePair,
@@ -34,6 +36,79 @@ export enum MultiChannelCommand {
 
 // TODO: Implement querying all endpoints
 // TODO: Implement removal reports of dynamic endpoints
+
+@API(CommandClasses["Multi Channel"])
+export class MultiChannelCCAPI extends CCAPI {
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async getEndpoints() {
+		const cc = new MultiChannelCCEndPointGet(this.driver, {
+			nodeId: this.node.id,
+		});
+		const response = (await this.driver.sendCommand<
+			MultiChannelCCEndPointReport
+		>(cc))!;
+		return {
+			isDynamicEndpointCount: response.isDynamicEndpointCount,
+			identicalCapabilities: response.identicalCapabilities,
+			individualEndpointCount: response.individualEndpointCount,
+			aggregatedEndpointCount: response.aggregatedEndpointCount,
+		};
+	}
+
+	public async getEndpointCapabilities(
+		endpoint: number,
+	): Promise<EndpointCapability> {
+		const cc = new MultiChannelCCCapabilityGet(this.driver, {
+			nodeId: this.node.id,
+			endpoint,
+		});
+		const response = (await this.driver.sendCommand<
+			MultiChannelCCCapabilityReport
+		>(cc))!;
+		return response.capability;
+	}
+
+	public async findEndpoints(
+		genericClass: GenericDeviceClasses,
+		specificClass: number,
+	): Promise<readonly number[]> {
+		const cc = new MultiChannelCCEndPointFind(this.driver, {
+			nodeId: this.node.id,
+			genericClass,
+			specificClass,
+		});
+		const response = (await this.driver.sendCommand<
+			MultiChannelCCEndPointFindReport
+		>(cc))!;
+		return response.foundEndpoints;
+	}
+
+	public async getAggregatedMembers(
+		endpoint: number,
+	): Promise<readonly number[]> {
+		const cc = new MultiChannelCCAggregatedMembersGet(this.driver, {
+			nodeId: this.node.id,
+			endpoint,
+		});
+		const response = (await this.driver.sendCommand<
+			MultiChannelCCAggregatedMembersReport
+		>(cc))!;
+		return response.members;
+	}
+
+	public async sendEncapsulated(
+		options: Omit<
+			MultiChannelCCCommandEncapsulationOptions,
+			keyof CCCommandOptions
+		>,
+	): Promise<void> {
+		const cc = new MultiChannelCCCommandEncapsulation(this.driver, {
+			nodeId: this.node.id,
+			...options,
+		});
+		await this.driver.sendCommand(cc);
+	}
+}
 
 export interface EndpointCapability extends NodeInformationFrame {
 	isDynamic: boolean;
@@ -291,10 +366,12 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 	}
 }
 
+type MultiChannelCCDestination = number | (1 | 2 | 3 | 4 | 5 | 6 | 7)[];
+
 interface MultiChannelCCCommandEncapsulationOptions extends CCCommandOptions {
 	encapsulatedCC: CommandClass;
 	sourceEndPoint: number;
-	destination: number | number[];
+	destination: MultiChannelCCDestination;
 }
 
 @CCCommand(MultiChannelCommand.CommandEncapsulation)
@@ -313,7 +390,9 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			const isBitMask = !!(this.payload[1] & 0b1000_0000);
 			const destination = this.payload[1] & 0b0111_1111;
 			if (isBitMask) {
-				this.destination = parseBitMask(Buffer.from([destination]));
+				this.destination = parseBitMask(
+					Buffer.from([destination]),
+				) as any;
 			} else {
 				this.destination = destination;
 			}
@@ -333,7 +412,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	public encapsulatedCC: CommandClass;
 	public sourceEndPoint: number;
 	/** The destination end point (0-127) or an array of destination end points (1-7) */
-	public destination: number | number[];
+	public destination: MultiChannelCCDestination;
 
 	public serialize(): Buffer {
 		const destination =

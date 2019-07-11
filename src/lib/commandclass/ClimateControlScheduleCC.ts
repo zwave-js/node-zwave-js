@@ -11,7 +11,9 @@ import {
 	encodeSwitchpoint,
 	Switchpoint,
 } from "../values/Switchpoint";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccKeyValuePair,
@@ -50,6 +52,68 @@ export enum ScheduleOverrideType {
 	None = 0x00,
 	Temporary = 0x01,
 	Permanent = 0x02,
+}
+
+@API(CommandClasses["Climate Control Schedule"])
+export class ClimateControlScheduleCCAPI extends CCAPI {
+	public async set(
+		weekday: Weekday,
+		switchPoints: Switchpoint[],
+	): Promise<void> {
+		const cc = new ClimateControlScheduleCCSet(this.driver, {
+			nodeId: this.node.id,
+			weekday,
+			switchPoints,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
+	public async get(weekday: Weekday): Promise<readonly Switchpoint[]> {
+		const cc = new ClimateControlScheduleCCGet(this.driver, {
+			nodeId: this.node.id,
+			weekday,
+		});
+		const response = (await this.driver.sendCommand<
+			ClimateControlScheduleCCReport
+		>(cc))!;
+		return response.switchPoints;
+	}
+
+	public async getChangeCounter(): Promise<number> {
+		const cc = new ClimateControlScheduleCCChangedGet(this.driver, {
+			nodeId: this.node.id,
+		});
+		const response = (await this.driver.sendCommand<
+			ClimateControlScheduleCCChangedReport
+		>(cc))!;
+		return response.changeCounter;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async getOverride() {
+		const cc = new ClimateControlScheduleCCOverrideGet(this.driver, {
+			nodeId: this.node.id,
+		});
+		const response = (await this.driver.sendCommand<
+			ClimateControlScheduleCCOverrideReport
+		>(cc))!;
+		return {
+			type: response.overrideType,
+			state: response.overrideState,
+		};
+	}
+
+	public async setOverride(
+		type: ScheduleOverrideType,
+		state: SetbackState,
+	): Promise<void> {
+		const cc = new ClimateControlScheduleCCOverrideSet(this.driver, {
+			nodeId: this.node.id,
+			overrideType: type,
+			overrideState: state,
+		});
+		await this.driver.sendCommand(cc);
+	}
 }
 
 @commandClass(CommandClasses["Climate Control Schedule"])

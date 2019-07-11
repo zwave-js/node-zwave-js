@@ -2,7 +2,9 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
 import { parseBitMask, parseFloatWithScale } from "../values/Primitive";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccKeyValuePair,
@@ -30,6 +32,54 @@ export enum MultilevelSensorCommand {
 export interface MultilevelSensorValue {
 	value: number;
 	scale: MultilevelSensorScale;
+}
+
+@API(CommandClasses["Multilevel Sensor"])
+export class MultilevelSensorCCAPI extends CCAPI {
+	public async get(): Promise<number>;
+	public async get(
+		sensorType: MultilevelSensorTypes,
+		scale: number,
+	): Promise<number>;
+	public async get(
+		sensorType?: MultilevelSensorTypes,
+		scale?: number,
+	): Promise<number> {
+		const cc = new MultilevelSensorCCGet(this.driver, {
+			nodeId: this.node.id,
+			sensorType,
+			scale,
+		});
+		const response = (await this.driver.sendCommand<
+			MultilevelSensorCCReport
+		>(cc))!;
+		return response.value;
+	}
+
+	public async getSupportedSensorTypes(): Promise<
+		readonly MultilevelSensorTypes[]
+	> {
+		const cc = new MultilevelSensorCCGetSupportedSensor(this.driver, {
+			nodeId: this.node.id,
+		});
+		const response = (await this.driver.sendCommand<
+			MultilevelSensorCCSupportedSensorReport
+		>(cc))!;
+		return response.supportedSensorTypes;
+	}
+
+	public async getSupportedScales(
+		sensorType: MultilevelSensorTypes,
+	): Promise<readonly number[]> {
+		const cc = new MultilevelSensorCCGetSupportedScale(this.driver, {
+			nodeId: this.node.id,
+			sensorType,
+		});
+		const response = (await this.driver.sendCommand<
+			MultilevelSensorCCSupportedScaleReport
+		>(cc))!;
+		return response.sensorSupportedScales;
+	}
 }
 
 @commandClass(CommandClasses["Multilevel Sensor"])
@@ -89,10 +139,14 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 	}
 }
 
-interface MultilevelSensorCCGetOptions extends CCCommandOptions {
-	sensorType?: MultilevelSensorTypes;
-	scale?: number; // TODO: expose scales
+// These options are supported starting in V5
+interface MultilevelSensorCCGetSpecificOptions {
+	sensorType: MultilevelSensorTypes;
+	scale: number; // TODO: expose scales
 }
+type MultilevelSensorCCGetOptions =
+	| CCCommandOptions
+	| CCCommandOptions & MultilevelSensorCCGetSpecificOptions;
 
 @CCCommand(MultilevelSensorCommand.Get)
 @expectedCCResponse(MultilevelSensorCCReport)
@@ -111,8 +165,10 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			this.sensorType = options.sensorType;
-			this.scale = options.scale;
+			if ("sensorType" in options) {
+				this.sensorType = options.sensorType;
+				this.scale = options.scale;
+			}
 		}
 	}
 
@@ -164,10 +220,6 @@ export class MultilevelSensorCCGetSupportedSensor extends MultilevelSensorCC {
 	}
 }
 
-interface MultilevelSensorCCGetSupportedScaleOptions extends CCCommandOptions {
-	sensorType: MultilevelSensorTypes;
-}
-
 @CCCommand(MultilevelSensorCommand.SupportedScaleReport)
 export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 	public constructor(
@@ -198,6 +250,10 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 	public get sensorSupportedScales(): readonly number[] {
 		return this.supportedScales[1];
 	}
+}
+
+interface MultilevelSensorCCGetSupportedScaleOptions extends CCCommandOptions {
+	sensorType: MultilevelSensorTypes;
 }
 
 @CCCommand(MultilevelSensorCommand.GetSupportedScale)

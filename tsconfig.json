@@ -25,6 +25,7 @@
 		"skipLibCheck": true,
 		"strictNullChecks": true,
 		"strictPropertyInitialization": true,
+		"strictBindCallApply": true,
 		"watch": false, // true breaks circleci
 		"pretty": true,
 		"types": ["jest-extended"]

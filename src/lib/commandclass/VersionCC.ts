@@ -6,7 +6,9 @@ import { MessagePriority } from "../message/Constants";
 import { ZWaveNode } from "../node/Node";
 import { validatePayload } from "../util/misc";
 import { Maybe } from "../values/Primitive";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
@@ -34,6 +36,57 @@ export enum VersionCommand {
 function parseVersion(buffer: Buffer): string {
 	if (buffer[0] === 0 && buffer[1] === 0 && buffer[2] === 0) return "unused";
 	return `${buffer[0]}.${buffer[1]}.${buffer[2]}`;
+}
+
+@API(CommandClasses.Version)
+export class VersionCCAPI extends CCAPI {
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async get() {
+		const cc = new VersionCCGet(this.driver, { nodeId: this.node.id });
+		const response = (await this.driver.sendCommand<VersionCCReport>(cc))!;
+		return {
+			libraryType: response.libraryType,
+			protocolVersion: response.protocolVersion,
+			firmwareVersions: response.firmwareVersions,
+			hardwareVersion: response.hardwareVersion,
+		};
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async getCapabilities() {
+		const cc = new VersionCCCapabilitiesGet(this.driver, {
+			nodeId: this.node.id,
+		});
+		const response = (await this.driver.sendCommand<
+			VersionCCCapabilitiesReport
+		>(cc))!;
+		return {
+			supportsZWaveSoftwareGet: response.supportsZWaveSoftwareGet,
+		};
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async getZWaveSoftware() {
+		const cc = new VersionCCZWaveSoftwareGet(this.driver, {
+			nodeId: this.node.id,
+		});
+		const response = (await this.driver.sendCommand<
+			VersionCCZWaveSoftwareReport
+		>(cc))!;
+		return {
+			sdkVersion: response.sdkVersion,
+			applicationFrameworkAPIVersion:
+				response.applicationFrameworkAPIVersion,
+			applicationFrameworkBuildNumber:
+				response.applicationFrameworkBuildNumber,
+			hostInterfaceVersion: response.hostInterfaceVersion,
+			hostInterfaceBuildNumber: response.hostInterfaceBuildNumber,
+			zWaveProtocolVersion: response.zWaveProtocolVersion,
+			zWaveProtocolBuildNumber: response.zWaveProtocolBuildNumber,
+			applicationVersion: response.applicationVersion,
+			applicationBuildNumber: response.applicationBuildNumber,
+		};
+	}
 }
 
 @commandClass(CommandClasses.Version)

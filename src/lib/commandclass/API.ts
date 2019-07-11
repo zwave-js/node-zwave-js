@@ -34,5 +34,21 @@ export class CCAPI {
 export interface CCAPIs {
 	Basic: import("./BasicCC").BasicCCAPI;
 	Battery: import("./BatteryCC").BatteryCCAPI;
+	"Binary Sensor": import("./BinarySensorCC").BinarySensorCCAPI;
+	"Binary Switch": import("./BinarySwitchCC").BinarySwitchCCAPI;
+	"Central Scene": import("./CentralSceneCC").CentralSceneCCAPI;
+	"Climate Control Schedule": import("./ClimateControlScheduleCC").ClimateControlScheduleCCAPI;
 	Configuration: import("./ConfigurationCC").ConfigurationCCAPI;
+	"Manufacturer Specific": import("./ManufacturerSpecificCC").ManufacturerSpecificCCAPI;
+	"Multi Channel": import("./MultiChannelCC").MultiChannelCCAPI;
+	"Multi Command": import("./MultiCommandCC").MultiCommandCCAPI;
+	"Multilevel Sensor": import("./MultilevelSensorCC").MultilevelSensorCCAPI;
+	"Multilevel Switch": import("./MultilevelSwitchCC").MultilevelSwitchCCAPI;
+	"No Operation": import("./NoOperationCC").NoOperationCCAPI;
+	Notification: import("./NotificationCC").NotificationCCAPI;
+	"Thermostat Setback": import("./ThermostatSetbackCC").ThermostatSetbackCCAPI;
+	"Thermostat Setpoint": import("./ThermostatSetpointCC").ThermostatSetpointCCAPI;
+	Version: import("./VersionCC").VersionCCAPI;
+	"Wake Up": import("./WakeUpCC").WakeUpCCAPI;
+	"Z-Wave Plus Info": import("./ZWavePlusCC").ZWavePlusCCAPI;
 }

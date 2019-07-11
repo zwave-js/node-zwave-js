@@ -35,7 +35,6 @@ import {
 	WakeUpCCIntervalGet,
 	WakeUpCCIntervalReport,
 	WakeUpCCIntervalSet,
-	WakeUpCCNoMoreInformation,
 	WakeUpCommand,
 } from "../commandclass/WakeUpCC";
 import {
@@ -86,7 +85,6 @@ import {
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 } from "./ValueDB";
-
 export interface ZWaveNodeValueAddedArgs extends ValueAddedArgs {
 	commandClassName: string;
 }
@@ -807,7 +805,9 @@ version:               ${this.version}`;
 				// set the priority manually, as SendData can be Application level too
 				const resp = await this.driver.sendMessage<SendDataRequest>(
 					request,
-					{ priority: MessagePriority.NodeQuery },
+					{
+						priority: MessagePriority.NodeQuery,
+					},
 				);
 				if (
 					isCommandClassContainer(resp) &&
@@ -859,7 +859,9 @@ version:               ${this.version}`;
 				// set the priority manually, as SendData can be Application level too
 				const resp = await this.driver.sendMessage<SendDataRequest>(
 					request,
-					{ priority: MessagePriority.NodeQuery },
+					{
+						priority: MessagePriority.NodeQuery,
+					},
 				);
 				if (
 					isCommandClassContainer(resp) &&
@@ -925,7 +927,9 @@ version:               ${this.version}`;
 				// query the CC version
 				const resp = await this.driver.sendMessage<SendDataRequest>(
 					request,
-					{ priority: MessagePriority.NodeQuery },
+					{
+						priority: MessagePriority.NodeQuery,
+					},
 				);
 				if (
 					isCommandClassContainer(resp) &&
@@ -977,7 +981,9 @@ version:               ${this.version}`;
 				// set the priority manually, as SendData can be Application level too
 				const resp = await this.driver.sendMessage<SendDataRequest>(
 					request,
-					{ priority: MessagePriority.NodeQuery },
+					{
+						priority: MessagePriority.NodeQuery,
+					},
 				);
 				if (
 					isCommandClassContainer(resp) &&
@@ -1453,16 +1459,7 @@ version:               ${this.version}`;
 				message: "Sending node back to sleep...",
 				direction: "outbound",
 			});
-			const wakeupCC = new WakeUpCCNoMoreInformation(this.driver, {
-				nodeId: this.id,
-			});
-			const request = new SendDataRequest(this.driver, {
-				command: wakeupCC,
-			});
-
-			await this.driver.sendMessage<SendDataRequest>(request, {
-				priority: MessagePriority.WakeUp,
-			});
+			await this.commandClasses["Wake Up"].sendNoMoreInformation();
 			this.setAwake(false);
 			log.controller.logNode(this, "  Node asleep");
 

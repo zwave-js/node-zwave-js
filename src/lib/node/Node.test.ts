@@ -900,6 +900,15 @@ describe("lib/node/Node", () => {
 	describe(`sendNoMoreInformation()`, () => {
 		const fakeDriver = {
 			sendMessage: jest.fn().mockImplementation(() => Promise.resolve()),
+			sendCommand: jest
+				.fn()
+				.mockImplementation(async (command, options) => {
+					const msg = new SendDataRequest(fakeDriver, {
+						command,
+					});
+					const resp = await fakeDriver.sendMessage(msg, options);
+					return resp && resp.command;
+				}),
 			controller: {
 				ownNodeId: 1,
 				nodes: new Map(),
@@ -907,10 +916,10 @@ describe("lib/node/Node", () => {
 			getSafeCCVersionForNode() {},
 		};
 
-		function makeNode(supportsWakeUp: boolean = false): ZWaveNode {
+		function makeNode(/*supportsWakeUp: boolean = false*/): ZWaveNode {
 			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
-			if (supportsWakeUp)
-				node.addCC(CommandClasses["Wake Up"], { isSupported: true });
+			// if (supportsWakeUp)
+			node.addCC(CommandClasses["Wake Up"], { isSupported: true });
 			fakeDriver.controller.nodes.set(node.id, node);
 			return node;
 		}
@@ -918,7 +927,7 @@ describe("lib/node/Node", () => {
 		beforeEach(() => fakeDriver.sendMessage.mockClear());
 
 		it("should not do anything and return false if the node is asleep", async () => {
-			const node = makeNode(true);
+			const node = makeNode();
 			node.setAwake(false);
 
 			expect(await node.sendNoMoreInformation()).toBeFalse();
@@ -926,14 +935,14 @@ describe("lib/node/Node", () => {
 		});
 
 		it("should not do anything and return false if the node interview is not complete", async () => {
-			const node = makeNode(true);
+			const node = makeNode();
 			node.interviewStage = InterviewStage.Endpoints;
 			expect(await node.sendNoMoreInformation()).toBeFalse();
 			expect(fakeDriver.sendMessage).not.toBeCalled();
 		});
 
 		it("should not send anything if the node should be kept awake", async () => {
-			const node = makeNode(true);
+			const node = makeNode();
 			node.setAwake(true);
 			node.keepAwake = true;
 
@@ -942,7 +951,7 @@ describe("lib/node/Node", () => {
 		});
 
 		it("should send a WakeupCC.NoMoreInformation otherwise", async () => {
-			const node = makeNode(false);
+			const node = makeNode();
 			node.interviewStage = InterviewStage.Complete;
 			expect(await node.sendNoMoreInformation()).toBeTrue();
 			expect(fakeDriver.sendMessage).toBeCalled();

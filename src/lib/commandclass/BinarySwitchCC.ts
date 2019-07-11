@@ -3,7 +3,9 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { JSONObject, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { Maybe, parseBoolean, parseMaybeBoolean } from "../values/Primitive";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
@@ -21,6 +23,37 @@ export enum BinarySwitchCommand {
 	Set = 0x01,
 	Get = 0x02,
 	Report = 0x03,
+}
+
+@API(CommandClasses["Binary Switch"])
+export class BinarySwitchCCAPI extends CCAPI {
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async get() {
+		const cc = new BinarySwitchCCGet(this.driver, { nodeId: this.node.id });
+		const response = (await this.driver.sendCommand<BinarySwitchCCReport>(
+			cc,
+		))!;
+		return {
+			// interpret unknown values as false
+			currentValue: response.currentValue || false,
+			targetValue: response.targetValue,
+			duration: response.duration,
+		};
+	}
+
+	/**
+	 * Sets the switch to the given value
+	 * @param targetValue The target value to set
+	 * @param duration The duration after which the target value should be reached. Only supported in V2 and above
+	 */
+	public async set(targetValue: boolean, duration?: Duration): Promise<void> {
+		const cc = new BinarySwitchCCSet(this.driver, {
+			nodeId: this.node.id,
+			targetValue,
+			duration,
+		});
+		await this.driver.sendCommand(cc);
+	}
 }
 
 @commandClass(CommandClasses["Binary Switch"])
