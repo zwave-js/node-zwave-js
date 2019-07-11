@@ -500,14 +500,11 @@ export class Driver extends EventEmitter implements IDriver {
 
 	// eslint-disable-next-line @typescript-eslint/camelcase
 	private serialport_onData(data: Buffer): void {
-		// FIXME: Data is logged multiple times here
-		log.serial.data("inbound", data);
 		// append the new data to our receive buffer
 		this.receiveBuffer =
 			this.receiveBuffer != undefined
 				? Buffer.concat([this.receiveBuffer, data])
 				: data;
-		log.serial.receiveBuffer(this.receiveBuffer);
 
 		while (this.receiveBuffer.length > 0) {
 			if (this.receiveBuffer[0] !== MessageHeaders.SOF) {
@@ -541,14 +538,13 @@ export class Driver extends EventEmitter implements IDriver {
 				continue;
 			}
 
-			// nothing to do yet, wait for the next data
+			// Log the received chunk
+			log.serial.data("inbound", data);
+			// Log the current receive buffer
 			const msgComplete = Message.isComplete(this.receiveBuffer);
-			if (!msgComplete) {
-				log.serial.message(
-					`the receive buffer contains an incomplete message, waiting for the next chunk...`,
-				);
-				return;
-			}
+			log.serial.receiveBuffer(this.receiveBuffer, msgComplete);
+			// nothing to do yet, wait for the next data
+			if (!msgComplete) return;
 
 			let msg: Message | undefined;
 			let bytesRead: number;

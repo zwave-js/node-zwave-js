@@ -1,3 +1,4 @@
+import * as colors from "ansi-colors";
 import { pseudoRandomBytes } from "crypto";
 import * as winston from "winston";
 import { assertMessage, SpyTransport } from "../../../test/SpyTransport";
@@ -80,6 +81,24 @@ describe("lib/log/Serial =>", () => {
 		});
 	});
 
+	describe("colors single-byte messages like tags", () => {
+		for (const msg of ["ACK", "NAK", "CAN"] as const) {
+			it(msg, () => {
+				log.serial[msg]("inbound");
+
+				const expected1 = colors.blue(
+					colors.bgBlue("[") +
+						colors.inverse(msg) +
+						colors.bgBlue("]"),
+				);
+				assertMessage(spyTransport, {
+					predicate: msg => msg.includes(expected1),
+					ignoreColor: false,
+				});
+			});
+		}
+	});
+
 	describe("logs raw data correctly", () => {
 		it("short buffer, inbound", () => {
 			log.serial.data("inbound", Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]));
@@ -129,7 +148,7 @@ describe("lib/log/Serial =>", () => {
 
 	describe("logs the receive buffer correctly", () => {
 		it("for short buffers", () => {
-			log.serial.receiveBuffer(Buffer.from([0, 8, 0x15]));
+			log.serial.receiveBuffer(Buffer.from([0, 8, 0x15]), true);
 			const alignRight = " ".repeat(80 - 30);
 			assertMessage(spyTransport, {
 				message: `  Buffer := 0x000815 ${alignRight}(3 bytes)`,
@@ -140,11 +159,19 @@ describe("lib/log/Serial =>", () => {
 			// max length without line breaks is 80, excluding prefixes and postfixes
 			// this means we have 27 bytes to display (0x plus 2*27 chars)
 			const expected = pseudoRandomBytes(27);
-			log.serial.receiveBuffer(expected);
+			log.serial.receiveBuffer(expected, true);
 			assertMessage(spyTransport, {
 				message: `  Buffer := 0x${expected.toString(
 					"hex",
 				)}  (27 bytes)`,
+			});
+		});
+
+		it("tags incomplete buffers", () => {
+			log.serial.receiveBuffer(Buffer.from([0, 8, 0x15]), false);
+			const alignRight = " ".repeat(80 - 43);
+			assertMessage(spyTransport, {
+				message: `  [incomplete] Buffer := 0x000815 ${alignRight}(3 bytes)`,
 			});
 		});
 
@@ -154,7 +181,7 @@ describe("lib/log/Serial =>", () => {
 			let expectedLine1 = hexBuffer.slice(0, 57);
 			let expectedLine2 = hexBuffer.slice(57);
 
-			log.serial.receiveBuffer(expected);
+			log.serial.receiveBuffer(expected, true);
 			assertMessage(spyTransport, {
 				message: `  Buffer := ${expectedLine1} (28 bytes)
   ${expectedLine2}`,
@@ -164,7 +191,7 @@ describe("lib/log/Serial =>", () => {
 			hexBuffer = `0x${expected.toString("hex")}`;
 			expectedLine1 = hexBuffer.slice(0, 57);
 			expectedLine2 = hexBuffer.slice(57);
-			log.serial.receiveBuffer(expected);
+			log.serial.receiveBuffer(expected, true);
 			assertMessage(spyTransport, {
 				message: `  Buffer := ${expectedLine1} (38 bytes)
   ${expectedLine2}`,

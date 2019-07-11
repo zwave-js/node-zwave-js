@@ -52,7 +52,8 @@ function logMessageHeader(
 ): void {
 	logger.log({
 		level: SERIAL_LOGLEVEL,
-		message: `[${MessageHeaders[header]}]`,
+		primaryTags: `[${MessageHeaders[header]}]`,
+		message: "",
 		secondaryTags: `(${num2hex(header)})`,
 		direction: getDirectionPrefix(direction),
 	});
@@ -76,11 +77,11 @@ export function data(direction: DataDirection, data: Buffer): void {
  * Logs the current content of the receive buffer
  * @param data The data that is currently in the receive buffer
  */
-export function receiveBuffer(data: Buffer): void {
+export function receiveBuffer(data: Buffer, isComplete: boolean): void {
 	logger.log({
 		level: SERIAL_LOGLEVEL,
-		primaryTags: "Buffer :=",
-		message: `0x${data.toString("hex")}`,
+		primaryTags: isComplete ? undefined : "[incomplete]",
+		message: `Buffer := 0x${data.toString("hex")}`,
 		secondaryTags: `(${data.length} bytes)`,
 		direction: getDirectionPrefix("none"),
 	});
