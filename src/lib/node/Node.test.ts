@@ -430,14 +430,12 @@ describe("lib/node/Node", () => {
 
 		describe(`queryNodePlusInfo()`, () => {
 			beforeAll(() => {
-				fakeDriver.sendMessage.mockReset();
 				fakeDriver.sendMessage.mockImplementation(() =>
 					Promise.resolve({ command: {} }),
 				);
 			});
 			beforeEach(() => fakeDriver.sendMessage.mockClear());
 			afterAll(() => {
-				fakeDriver.sendMessage.mockReset();
 				fakeDriver.sendMessage.mockImplementation(() =>
 					Promise.resolve(),
 				);
@@ -480,12 +478,27 @@ describe("lib/node/Node", () => {
 		});
 
 		describe(`queryManufacturerSpecific()`, () => {
-			beforeAll(() =>
+			beforeAll(() => {
+				// We need to return a result so we don't get any crashes
+				fakeDriver.sendMessage.mockImplementation(() =>
+					Promise.resolve({
+						command: {
+							manufacturerId: 1,
+							productId: 1,
+							productType: 0xff,
+						},
+					}),
+				);
+				node.addCC(CommandClasses["Manufacturer Specific"], {
+					isSupported: true,
+				});
+			});
+			beforeEach(() => fakeDriver.sendMessage.mockClear());
+			afterAll(() => {
 				fakeDriver.sendMessage.mockImplementation(() =>
 					Promise.resolve(),
-				),
-			);
-			beforeEach(() => fakeDriver.sendMessage.mockClear());
+				);
+			});
 
 			it(`should set the interview stage to "ManufacturerSpecific"`, async () => {
 				await node.queryManufacturerSpecific();

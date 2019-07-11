@@ -18,10 +18,6 @@ import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { ConfigurationCC } from "../commandclass/ConfigurationCC";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import {
-	ManufacturerSpecificCCGet,
-	ManufacturerSpecificCCReport,
-} from "../commandclass/ManufacturerSpecificCC";
-import {
 	MultiChannelCCEndPointGet,
 	MultiChannelCCEndPointReport,
 } from "../commandclass/MultiChannelCC";
@@ -827,33 +823,19 @@ version:               ${this.version}`;
 				message: "querying manufacturer information...",
 				direction: "outbound",
 			});
-			const cc = new ManufacturerSpecificCCGet(this.driver, {
-				nodeId: this.id,
-			});
-			const request = new SendDataRequest(this.driver, { command: cc });
 			try {
-				// set the priority manually, as SendData can be Application level too
-				const resp = await this.driver.sendMessage<SendDataRequest>(
-					request,
-					{
-						priority: MessagePriority.NodeQuery,
-					},
-				);
-				if (
-					isCommandClassContainer(resp) &&
-					resp.command instanceof ManufacturerSpecificCCReport
-				) {
-					const mfResp = resp.command;
-					const logMessage = `received response for manufacturer information:
+				const mfResp = await this.commandClasses[
+					"Manufacturer Specific"
+				].get();
+				const logMessage = `received response for manufacturer information:
   manufacturer: ${(await lookupManufacturer(mfResp.manufacturerId)) ||
 		"unknown"} (${num2hex(mfResp.manufacturerId)})
   product type: ${num2hex(mfResp.productType)}
   product id:   ${num2hex(mfResp.productId)}`;
-					log.controller.logNode(this, {
-						message: logMessage,
-						direction: "inbound",
-					});
-				}
+				log.controller.logNode(this, {
+					message: logMessage,
+					direction: "inbound",
+				});
 			} catch (e) {
 				log.controller.logNode(
 					this,

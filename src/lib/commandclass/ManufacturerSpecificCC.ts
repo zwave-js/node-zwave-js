@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { MessagePriority } from "../message/Constants";
 import { validatePayload } from "../util/misc";
 import { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
@@ -40,7 +41,9 @@ export class ManufacturerSpecificCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ManufacturerSpecificCCReport
-		>(cc))!;
+		>(cc, {
+			priority: MessagePriority.NodeQuery,
+		}))!;
 		return {
 			manufacturerId: response.manufacturerId,
 			productType: response.productType,
