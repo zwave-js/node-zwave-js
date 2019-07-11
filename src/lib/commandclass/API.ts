@@ -40,6 +40,7 @@ export interface CCAPIs {
 	"Climate Control Schedule": import("./ClimateControlScheduleCC").ClimateControlScheduleCCAPI;
 	Configuration: import("./ConfigurationCC").ConfigurationCCAPI;
 	"Manufacturer Specific": import("./ManufacturerSpecificCC").ManufacturerSpecificCCAPI;
+	"Multi Channel": import("./MultiChannelCC").MultiChannelCCAPI;
 	"Multi Command": import("./MultiCommandCC").MultiCommandCCAPI;
 	"Multilevel Sensor": import("./MultilevelSensorCC").MultilevelSensorCCAPI;
 	"Multilevel Switch": import("./MultilevelSwitchCC").MultilevelSwitchCCAPI;
