@@ -16,30 +16,8 @@ import {
 } from "../commandclass/CommandClass";
 import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { ConfigurationCC } from "../commandclass/ConfigurationCC";
-import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
+import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
 import {
-	ManufacturerSpecificCCGet,
-	ManufacturerSpecificCCReport,
-} from "../commandclass/ManufacturerSpecificCC";
-import {
-	MultiChannelCCEndPointGet,
-	MultiChannelCCEndPointReport,
-} from "../commandclass/MultiChannelCC";
-import { NoOperationCC } from "../commandclass/NoOperationCC";
-import {
-	VersionCCCommandClassGet,
-	VersionCCCommandClassReport,
-} from "../commandclass/VersionCC";
-import {
-	WakeUpCC,
-	WakeUpCCIntervalGet,
-	WakeUpCCIntervalReport,
-	WakeUpCCIntervalSet,
-	WakeUpCommand,
-} from "../commandclass/WakeUpCC";
-import {
-	ZWavePlusCCGet,
-	ZWavePlusCCReport,
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 } from "../commandclass/ZWavePlusCC";
@@ -59,11 +37,9 @@ import {
 	GetRoutingInfoRequest,
 	GetRoutingInfoResponse,
 } from "../controller/GetRoutingInfoMessages";
-import { SendDataRequest } from "../controller/SendDataMessages";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { MessagePriority } from "../message/Constants";
 import { JSONObject } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import { CacheValue } from "../values/Cache";
@@ -85,6 +61,7 @@ import {
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 } from "./ValueDB";
+
 export interface ZWaveNodeValueAddedArgs extends ValueAddedArgs {
 	commandClassName: string;
 }
@@ -177,6 +154,7 @@ export enum NodeStatus {
 	Awake,
 	Dead,
 }
+
 export class ZWaveNode extends EventEmitter {
 	public constructor(
 		public readonly id: number,
@@ -713,17 +691,7 @@ version:               ${this.version}`;
 			});
 
 			try {
-				const request = new SendDataRequest(this.driver, {
-					command: new NoOperationCC(this.driver, {
-						nodeId: this.id,
-					}),
-				});
-				// Don't retry sending ping packets
-				request.maxSendAttempts = 1;
-				// set the priority manually, as SendData can be Application level too
-				await this.driver.sendMessage<SendDataRequest>(request, {
-					priority: MessagePriority.NodeQuery,
-				});
+				await this.commandClasses["No Operation"].send();
 				log.controller.logNode(this, {
 					message: "ping successful",
 					direction: "inbound",
@@ -799,34 +767,21 @@ version:               ${this.version}`;
 				message: "querying Z-Wave+ information...",
 				direction: "outbound",
 			});
-			const cc = new ZWavePlusCCGet(this.driver, { nodeId: this.id });
-			const request = new SendDataRequest(this.driver, { command: cc });
 			try {
-				// set the priority manually, as SendData can be Application level too
-				const resp = await this.driver.sendMessage<SendDataRequest>(
-					request,
-					{
-						priority: MessagePriority.NodeQuery,
-					},
-				);
-				if (
-					isCommandClassContainer(resp) &&
-					resp.command instanceof ZWavePlusCCReport
-				) {
-					const zwavePlusResponse = resp.command;
-					zwavePlusResponse.persistValues();
+				const zwavePlusResponse = await this.commandClasses[
+					"Z-Wave Plus Info"
+				].get();
 
-					const logMessage = `received response for Z-Wave+ information:
+				const logMessage = `received response for Z-Wave+ information:
   Z-Wave+ version: ${zwavePlusResponse.zwavePlusVersion}
   role type:       ${ZWavePlusRoleType[zwavePlusResponse.roleType]}
   node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}
   installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}
   user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
-					log.controller.logNode(this, {
-						message: logMessage,
-						direction: "inbound",
-					});
-				}
+				log.controller.logNode(this, {
+					message: logMessage,
+					direction: "inbound",
+				});
 			} catch (e) {
 				log.controller.logNode(
 					this,
@@ -851,33 +806,19 @@ version:               ${this.version}`;
 				message: "querying manufacturer information...",
 				direction: "outbound",
 			});
-			const cc = new ManufacturerSpecificCCGet(this.driver, {
-				nodeId: this.id,
-			});
-			const request = new SendDataRequest(this.driver, { command: cc });
 			try {
-				// set the priority manually, as SendData can be Application level too
-				const resp = await this.driver.sendMessage<SendDataRequest>(
-					request,
-					{
-						priority: MessagePriority.NodeQuery,
-					},
-				);
-				if (
-					isCommandClassContainer(resp) &&
-					resp.command instanceof ManufacturerSpecificCCReport
-				) {
-					const mfResp = resp.command;
-					const logMessage = `received response for manufacturer information:
+				const mfResp = await this.commandClasses[
+					"Manufacturer Specific"
+				].get();
+				const logMessage = `received response for manufacturer information:
   manufacturer: ${(await lookupManufacturer(mfResp.manufacturerId)) ||
 		"unknown"} (${num2hex(mfResp.manufacturerId)})
   product type: ${num2hex(mfResp.productType)}
   product id:   ${num2hex(mfResp.productId)}`;
-					log.controller.logNode(this, {
-						message: logMessage,
-						direction: "inbound",
-					});
-				}
+				log.controller.logNode(this, {
+					message: logMessage,
+					direction: "inbound",
+				});
 			} catch (e) {
 				log.controller.logNode(
 					this,
@@ -909,13 +850,6 @@ version:               ${this.version}`;
 				);
 				continue;
 			}
-			const versionCC = new VersionCCCommandClassGet(this.driver, {
-				nodeId: this.id,
-				requestedCC: cc,
-			});
-			const request = new SendDataRequest(this.driver, {
-				command: versionCC,
-			});
 			try {
 				log.controller.logNode(this, {
 					message: `  querying the CC version for ${
@@ -923,37 +857,25 @@ version:               ${this.version}`;
 					} (${num2hex(cc)})...`,
 					direction: "outbound",
 				});
-
 				// query the CC version
-				const resp = await this.driver.sendMessage<SendDataRequest>(
-					request,
-					{
-						priority: MessagePriority.NodeQuery,
-					},
+				const supportedVersion = await this.commandClasses.Version.getCCVersion(
+					cc,
 				);
-				if (
-					isCommandClassContainer(resp) &&
-					resp.command instanceof VersionCCCommandClassReport
-				) {
-					const versionResponse = resp.command;
-					// Remember which CC version this node supports
-					const reqCC = versionResponse.requestedCC;
-					const supportedVersion = versionResponse.ccVersion;
-					let logMessage: string;
-					if (supportedVersion > 0) {
-						this.addCC(reqCC, { version: supportedVersion });
-						logMessage = `  supports CC ${
-							CommandClasses[reqCC]
-						} (${num2hex(reqCC)}) in version ${supportedVersion}`;
-					} else {
-						// We were lied to - the NIF said this CC is supported, now the node claims it isn't
-						this.removeCC(reqCC);
-						logMessage = `  does NOT support CC ${
-							CommandClasses[reqCC]
-						} (${num2hex(reqCC)})`;
-					}
-					log.controller.logNode(this, logMessage);
+				// Remember which CC version this node supports
+				let logMessage: string;
+				if (supportedVersion > 0) {
+					this.addCC(cc, { version: supportedVersion });
+					logMessage = `  supports CC ${
+						CommandClasses[cc]
+					} (${num2hex(cc)}) in version ${supportedVersion}`;
+				} else {
+					// We were lied to - the NIF said this CC is supported, now the node claims it isn't
+					this.removeCC(cc);
+					logMessage = `  does NOT support CC ${
+						CommandClasses[cc]
+					} (${num2hex(cc)})`;
 				}
+				log.controller.logNode(this, logMessage);
 			} catch (e) {
 				log.controller.logNode(
 					this,
@@ -973,34 +895,23 @@ version:               ${this.version}`;
 				message: "querying device endpoints...",
 				direction: "outbound",
 			});
-			const cc = new MultiChannelCCEndPointGet(this.driver, {
-				nodeId: this.id,
-			});
-			const request = new SendDataRequest(this.driver, { command: cc });
 			try {
-				// set the priority manually, as SendData can be Application level too
-				const resp = await this.driver.sendMessage<SendDataRequest>(
-					request,
-					{
-						priority: MessagePriority.NodeQuery,
-					},
-				);
-				if (
-					isCommandClassContainer(resp) &&
-					resp.command instanceof MultiChannelCCEndPointReport
-				) {
-					const multiResponse = resp.command;
-					multiResponse.persistValues();
+				const multiResponse = await this.commandClasses[
+					"Multi Channel"
+				].getEndpoints();
 
-					const logMessage = `received response for device endpoints:
+				let logMessage = `received response for device endpoints:
   endpoint count (individual): ${multiResponse.individualEndpointCount}
   count is dynamic:            ${multiResponse.isDynamicEndpointCount}
   identical capabilities:      ${multiResponse.identicalCapabilities}`;
-					log.controller.logNode(this, {
-						message: logMessage,
-						direction: "inbound",
-					});
+				if (multiResponse.aggregatedEndpointCount != undefined) {
+					logMessage += `
+  endpoint count (aggregated): ${multiResponse.identicalCapabilities}`;
 				}
+				log.controller.logNode(this, {
+					message: logMessage,
+					direction: "inbound",
+				});
 			} catch (e) {
 				log.controller.logNode(
 					this,
@@ -1034,35 +945,14 @@ version:               ${this.version}`;
 				);
 			} else {
 				try {
-					const getWakeupRequest = new SendDataRequest(this.driver, {
-						command: new WakeUpCCIntervalGet(this.driver, {
-							nodeId: this.id,
-						}),
-					});
 					log.controller.logNode(this, {
 						message:
 							"retrieving wakeup interval from the device...",
 						direction: "outbound",
 					});
-					const getWakeupResp = await this.driver.sendMessage<
-						SendDataRequest
-					>(getWakeupRequest, {
-						priority: MessagePriority.NodeQuery,
-					});
-					if (
-						!isCommandClassContainer(getWakeupResp) ||
-						!(
-							getWakeupResp.command instanceof
-							WakeUpCCIntervalReport
-						)
-					) {
-						throw new ZWaveError(
-							"Invalid response received!",
-							ZWaveErrorCodes.CC_Invalid,
-						);
-					}
-
-					const wakeupResp = getWakeupResp.command;
+					const wakeupResp = await this.commandClasses[
+						"Wake Up"
+					].getInterval();
 					const logMessage = `received wakeup configuration:
   wakeup interval: ${wakeupResp.wakeupInterval} seconds
   controller node: ${wakeupResp.controllerNodeId}`;
@@ -1075,16 +965,11 @@ version:               ${this.version}`;
 						message: "configuring wakeup destination",
 						direction: "outbound",
 					});
-					const setWakeupRequest = new SendDataRequest(this.driver, {
-						command: new WakeUpCCIntervalSet(this.driver, {
-							nodeId: this.id,
-							wakeupInterval: wakeupResp.wakeupInterval,
-							controllerNodeId: this.driver.controller.ownNodeId!,
-						}),
-					});
-					await this.driver.sendMessage(setWakeupRequest, {
-						priority: MessagePriority.NodeQuery,
-					});
+
+					await this.commandClasses["Wake Up"].setInterval(
+						wakeupResp.wakeupInterval,
+						this.driver.controller.ownNodeId!,
+					);
 					log.controller.logNode(this, "  done!");
 				} catch (e) {
 					log.controller.logNode(

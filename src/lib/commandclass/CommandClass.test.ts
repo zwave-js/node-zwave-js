@@ -1,5 +1,6 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
+import { IDriver } from "../driver/IDriver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { BasicCC } from "./BasicCC";
 import {
@@ -24,10 +25,12 @@ class DummyCCSubClass extends DummyCC {
 	// }
 }
 
+const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+
 describe("lib/commandclass/CommandClass => ", () => {
 	describe("getImplementedVersion()", () => {
 		it("should return the implemented version for a CommandClass instance", () => {
-			const cc = new BasicCC(createEmptyMockDriver(), { nodeId: 1 });
+			const cc = new BasicCC(fakeDriver, { nodeId: 1 });
 			expect(getImplementedVersion(cc)).toBe(2);
 		});
 
@@ -72,21 +75,21 @@ describe("lib/commandclass/CommandClass => ", () => {
 
 	describe("expectMoreMessages()", () => {
 		it("returns false by default", () => {
-			const cc = new DummyCC(createEmptyMockDriver(), { nodeId: 1 });
+			const cc = new DummyCC(fakeDriver, { nodeId: 1 });
 			expect(cc.expectMoreMessages()).toBeFalse();
 		});
 	});
 
 	describe("supportsCommand()", () => {
 		it(`returns "unknown" by default`, () => {
-			const cc = new DummyCC(createEmptyMockDriver(), { nodeId: 1 });
+			const cc = new DummyCC(fakeDriver, { nodeId: 1 });
 			expect(cc.supportsCommand(null as any)).toBe("unknown");
 		});
 	});
 
 	describe("getNode()", () => {
 		it("throws if the controller is undefined", () => {
-			const driver = createEmptyMockDriver();
+			const driver = (createEmptyMockDriver() as unknown) as IDriver;
 			delete (driver as any).controller;
 			const cc = new DummyCC(driver, { nodeId: 1 });
 			assertZWaveError(() => cc.getNode(), {

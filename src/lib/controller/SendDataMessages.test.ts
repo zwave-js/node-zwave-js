@@ -1,6 +1,7 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { BasicCCGet } from "../commandclass/BasicCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
+import { IDriver } from "../driver/IDriver";
 import { FunctionType, MessageType } from "../message/Constants";
 import {
 	getExpectedResponse,
@@ -16,7 +17,7 @@ import {
 	TransmitOptions,
 } from "./SendDataMessages";
 
-const fakeDriver = createEmptyMockDriver();
+const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
 function createSendDataMessage(
 	type: MessageType,

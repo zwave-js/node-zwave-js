@@ -3,6 +3,7 @@ import { EventEmitter } from "events";
 import * as SerialPort from "serialport";
 import { getImplementedVersion } from "../src/lib/commandclass/CommandClass";
 import { CommandClasses } from "../src/lib/commandclass/CommandClasses";
+import { SendDataRequest } from "../src/lib/controller/SendDataMessages";
 import { Driver } from "../src/lib/driver/Driver";
 import {
 	FunctionType,
@@ -101,14 +102,31 @@ export class MockRequestMessageWithoutExpectation extends Message {}
 // @ts-ignore decorators are working
 export class MockResponseMessage extends Message {}
 
-export function createEmptyMockDriver(): Driver {
-	return ({
-		getSafeCCVersionForNode(nodeId: number, ccId: CommandClasses) {
-			// We have no real nodes to test against, just use the implemented version
-			return getImplementedVersion(ccId);
-		},
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export function createEmptyMockDriver() {
+	const ret = {
+		sendMessage: jest.fn().mockImplementation(() => Promise.resolve()),
+		sendCommand: jest.fn(),
+		saveNetworkToCache: jest
+			.fn()
+			.mockImplementation(() => Promise.resolve()),
+		getSafeCCVersionForNode: jest
+			.fn()
+			.mockImplementation((nodeId: number, ccId: CommandClasses) => {
+				// We have no real nodes to test against, just use the implemented version
+				return getImplementedVersion(ccId);
+			}),
 		controller: {
 			nodes: new Map(),
+			ownNodeId: 1,
 		},
-	} as unknown) as Driver;
+	};
+	ret.sendCommand.mockImplementation(async (command, options) => {
+		const msg = new SendDataRequest((ret as unknown) as Driver, {
+			command,
+		});
+		const resp = await ret.sendMessage(msg, options);
+		return resp && resp.command;
+	});
+	return ret;
 }

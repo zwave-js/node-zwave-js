@@ -42,6 +42,7 @@ only_tags: &only_tags
 whitelist: &whitelist
     paths:
         - build/*
+        - config/*
         - node_modules/*
         - src/*
         - test/*

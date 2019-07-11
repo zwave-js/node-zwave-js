@@ -20,6 +20,8 @@ import { Message } from "../message/Message";
 import log from "./index";
 import { getDirectionPrefix, restoreSilence } from "./shared";
 
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+
 interface CreateMessageOptions {
 	type: MessageType;
 	functionType: FunctionType;
@@ -42,10 +44,9 @@ function createMessage(
 function createTransaction(
 	options: Partial<CreateTransactionOptions>,
 ): Transaction {
-	const driver = createEmptyMockDriver();
-	const message = createMessage(driver, options);
+	const message = createMessage(fakeDriver, options);
 	const trns = new Transaction(
-		driver,
+		fakeDriver,
 		message,
 		createDeferredPromise(),
 		options.priority || MessagePriority.Controller,
@@ -213,7 +214,7 @@ describe("lib/log/Driver =>", () => {
 
 	describe("transactionResponse() (for inbound messages)", () => {
 		it("contains the direction", () => {
-			const msg = createMessage(createEmptyMockDriver(), {});
+			const msg = createMessage(fakeDriver, {});
 			log.driver.transactionResponse(msg, null as any);
 			assertMessage(spyTransport, {
 				predicate: msg => msg.startsWith(getDirectionPrefix("inbound")),
@@ -221,7 +222,7 @@ describe("lib/log/Driver =>", () => {
 		});
 
 		it("contains the message type as a tag", () => {
-			let msg = createMessage(createEmptyMockDriver(), {
+			let msg = createMessage(fakeDriver, {
 				type: MessageType.Request,
 			});
 			log.driver.transactionResponse(msg, null as any);
@@ -229,7 +230,7 @@ describe("lib/log/Driver =>", () => {
 				predicate: msg => msg.includes("[REQ]"),
 			});
 
-			msg = createMessage(createEmptyMockDriver(), {
+			msg = createMessage(fakeDriver, {
 				type: MessageType.Response,
 			});
 			log.driver.transactionResponse(msg, null as any);
@@ -240,7 +241,7 @@ describe("lib/log/Driver =>", () => {
 		});
 
 		it("contains the function type as a tag", () => {
-			const msg = createMessage(createEmptyMockDriver(), {
+			const msg = createMessage(fakeDriver, {
 				functionType: FunctionType.HardReset,
 			});
 			log.driver.transactionResponse(msg, null as any);
@@ -250,7 +251,7 @@ describe("lib/log/Driver =>", () => {
 		});
 
 		it("contains the role (regarding the transaction) of the received message as a tag", () => {
-			const msg = createMessage(createEmptyMockDriver(), {
+			const msg = createMessage(fakeDriver, {
 				functionType: FunctionType.HardReset,
 			});
 			log.driver.transactionResponse(msg, "fatal_controller");
@@ -332,7 +333,7 @@ describe("lib/log/Driver =>", () => {
 
 	describe("colors", () => {
 		it("primary tags are printed in inverse colors", () => {
-			const msg = createMessage(createEmptyMockDriver(), {
+			const msg = createMessage(fakeDriver, {
 				functionType: FunctionType.HardReset,
 				type: MessageType.Response,
 			});

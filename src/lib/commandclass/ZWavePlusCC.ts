@@ -1,4 +1,5 @@
 import { IDriver } from "../driver/IDriver";
+import { MessagePriority } from "../message/Constants";
 import { validatePayload } from "../util/misc";
 import { CCAPI } from "./API";
 import {
@@ -40,9 +41,9 @@ export class ZWavePlusCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
 		const cc = new ZWavePlusCCGet(this.driver, { nodeId: this.node.id });
-		const response = (await this.driver.sendCommand<ZWavePlusCCReport>(
-			cc,
-		))!;
+		const response = (await this.driver.sendCommand<ZWavePlusCCReport>(cc, {
+			priority: MessagePriority.NodeQuery,
+		}))!;
 		return {
 			zwavePlusVersion: response.zwavePlusVersion,
 			nodeType: response.nodeType,

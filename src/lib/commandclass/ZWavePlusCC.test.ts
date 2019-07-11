@@ -3,11 +3,12 @@ import {
 	SendDataRequest,
 	TransmitOptions,
 } from "../controller/SendDataMessages";
+import { IDriver } from "../driver/IDriver";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { ZWavePlusCC, ZWavePlusCommand } from "./ZWavePlusCC";
 
-const fakeDriver = createEmptyMockDriver();
+const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
 describe("lib/commandclass/ZWavePlusCC => ", () => {
 	const cc = new ZWavePlusCC(fakeDriver, { nodeId: 9 });

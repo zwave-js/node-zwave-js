@@ -1,4 +1,5 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
+import { IDriver } from "../driver/IDriver";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import {
@@ -6,7 +7,7 @@ import {
 	ManufacturerSpecificCCGet,
 } from "./ManufacturerSpecificCC";
 
-const fakeDriver = createEmptyMockDriver();
+const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
 describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 	const cc = new ManufacturerSpecificCCGet(fakeDriver, { nodeId: 2 });

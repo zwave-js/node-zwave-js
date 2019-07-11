@@ -1,4 +1,5 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
+import { IDriver } from "../driver/IDriver";
 import {
 	BatteryCC,
 	BatteryCCGet,
@@ -7,7 +8,7 @@ import {
 } from "./BatteryCC";
 import { CommandClasses } from "./CommandClasses";
 
-const fakeDriver = createEmptyMockDriver();
+const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
 describe("lib/commandclass/BatteryCC => ", () => {
 	it("the Get command should serialize correctly", () => {

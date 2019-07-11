@@ -1,9 +1,10 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
+import { IDriver } from "../driver/IDriver";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { NoOperationCC } from "./NoOperationCC";
 
-const fakeDriver = createEmptyMockDriver();
+const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
 describe("lib/commandclass/NoOperationCC => ", () => {
 	const cc = new NoOperationCC(fakeDriver, { nodeId: 2 });

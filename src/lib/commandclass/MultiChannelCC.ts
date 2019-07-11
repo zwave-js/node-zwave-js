@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { MessagePriority } from "../message/Constants";
 import { GenericDeviceClasses } from "../node/DeviceClass";
 import {
 	NodeInformationFrame,
@@ -46,7 +47,9 @@ export class MultiChannelCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCEndPointReport
-		>(cc))!;
+		>(cc, {
+			priority: MessagePriority.NodeQuery,
+		}))!;
 		return {
 			isDynamicEndpointCount: response.isDynamicEndpointCount,
 			identicalCapabilities: response.identicalCapabilities,
@@ -64,7 +67,9 @@ export class MultiChannelCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCCapabilityReport
-		>(cc))!;
+		>(cc, {
+			priority: MessagePriority.NodeQuery,
+		}))!;
 		return response.capability;
 	}
 
@@ -79,7 +84,9 @@ export class MultiChannelCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCEndPointFindReport
-		>(cc))!;
+		>(cc, {
+			priority: MessagePriority.NodeQuery,
+		}))!;
 		return response.foundEndpoints;
 	}
 
@@ -92,7 +99,9 @@ export class MultiChannelCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCAggregatedMembersReport
-		>(cc))!;
+		>(cc, {
+			priority: MessagePriority.NodeQuery,
+		}))!;
 		return response.members;
 	}
 
@@ -135,6 +144,7 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 		if (this.version >= 4 && this.payload.length >= 3) {
 			this._aggregatedEndpointCount = this.payload[2] & 0b01111111;
 		}
+		this.persistValues();
 	}
 
 	private _isDynamicEndpointCount: boolean;

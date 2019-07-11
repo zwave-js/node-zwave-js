@@ -110,10 +110,9 @@ function assertCC<T extends CommandClass, TConst = Constructable<T>>(
 	}
 }
 
-const fakeDriver = createEmptyMockDriver();
-
 describe("lib/node/Node", () => {
 	describe("constructor", () => {
+		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 		it("stores the given Node ID", () => {
 			expect(new ZWaveNode(1, fakeDriver).id).toBe(1);
 			expect(new ZWaveNode(3, fakeDriver).id).toBe(3);
@@ -179,20 +178,7 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("interview()", () => {
-		// TODO: Can we use an existing mock here?
-		const fakeDriver = {
-			sendMessage: jest.fn(),
-			saveNetworkToCache: jest
-				.fn()
-				.mockImplementation(() => Promise.resolve()),
-			controller: {
-				ownNodeId: 1,
-				nodes: new Map(),
-			},
-			getSafeCCVersionForNode() {
-				return 1;
-			},
-		};
+		const fakeDriver = createEmptyMockDriver();
 		const node = new TestNode(2, (fakeDriver as unknown) as Driver);
 		fakeDriver.controller.nodes.set(node.id, node);
 
@@ -443,12 +429,17 @@ describe("lib/node/Node", () => {
 		});
 
 		describe(`queryNodePlusInfo()`, () => {
-			beforeAll(() =>
+			beforeAll(() => {
+				fakeDriver.sendMessage.mockImplementation(() =>
+					Promise.resolve({ command: {} }),
+				);
+			});
+			beforeEach(() => fakeDriver.sendMessage.mockClear());
+			afterAll(() => {
 				fakeDriver.sendMessage.mockImplementation(() =>
 					Promise.resolve(),
-				),
-			);
-			beforeEach(() => fakeDriver.sendMessage.mockClear());
+				);
+			});
 
 			it(`should set the interview stage to "NodePlusInfo"`, async () => {
 				await node.queryNodePlusInfo();
@@ -487,12 +478,27 @@ describe("lib/node/Node", () => {
 		});
 
 		describe(`queryManufacturerSpecific()`, () => {
-			beforeAll(() =>
+			beforeAll(() => {
+				// We need to return a result so we don't get any crashes
+				fakeDriver.sendMessage.mockImplementation(() =>
+					Promise.resolve({
+						command: {
+							manufacturerId: 1,
+							productId: 1,
+							productType: 0xff,
+						},
+					}),
+				);
+				node.addCC(CommandClasses["Manufacturer Specific"], {
+					isSupported: true,
+				});
+			});
+			beforeEach(() => fakeDriver.sendMessage.mockClear());
+			afterAll(() => {
 				fakeDriver.sendMessage.mockImplementation(() =>
 					Promise.resolve(),
-				),
-			);
-			beforeEach(() => fakeDriver.sendMessage.mockClear());
+				);
+			});
 
 			it(`should set the interview stage to "ManufacturerSpecific"`, async () => {
 				await node.queryManufacturerSpecific();
@@ -531,11 +537,17 @@ describe("lib/node/Node", () => {
 		describe(`queryCCVersions()`, () => {
 			beforeAll(() => {
 				fakeDriver.sendMessage.mockImplementation(() =>
-					Promise.resolve(),
+					Promise.resolve({ command: {} }),
 				);
 				node.implementedCommandClasses.clear();
 			});
 			beforeEach(() => fakeDriver.sendMessage.mockClear());
+			afterAll(() => {
+				fakeDriver.sendMessage.mockImplementation(() =>
+					Promise.resolve(),
+				);
+				node.implementedCommandClasses.clear();
+			});
 
 			it(`should set the interview stage to "Versions"`, async () => {
 				await node.queryCCVersions();
@@ -553,6 +565,7 @@ describe("lib/node/Node", () => {
 				node.addCC(CommandClasses["Binary Sensor"], {
 					isSupported: true,
 				});
+				node.addCC(CommandClasses.Version, { isSupported: true });
 				await node.queryCCVersions();
 
 				assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
@@ -602,10 +615,15 @@ describe("lib/node/Node", () => {
 		describe(`queryEndpoints()`, () => {
 			beforeAll(() =>
 				fakeDriver.sendMessage.mockImplementation(() =>
-					Promise.resolve(),
+					Promise.resolve({ command: {} }),
 				),
 			);
 			beforeEach(() => fakeDriver.sendMessage.mockClear());
+			afterAll(() =>
+				fakeDriver.sendMessage.mockImplementation(() =>
+					Promise.resolve(),
+				),
+			);
 
 			it(`should set the interview stage to "Endpoints"`, async () => {
 				await node.queryEndpoints();
@@ -777,13 +795,7 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("isAwake() / setAwake()", () => {
-		const fakeDriver = {
-			controller: {
-				ownNodeId: 1,
-				nodes: new Map(),
-			},
-			getSafeCCVersionForNode() {},
-		};
+		const fakeDriver = createEmptyMockDriver();
 
 		function makeNode(supportsWakeUp: boolean = false): ZWaveNode {
 			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
@@ -832,13 +844,7 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("updateNodeInfo()", () => {
-		const fakeDriver = {
-			controller: {
-				ownNodeId: 1,
-				nodes: new Map(),
-			},
-			getSafeCCVersionForNode() {},
-		};
+		const fakeDriver = createEmptyMockDriver();
 
 		function makeNode(supportsWakeUp: boolean = false): ZWaveNode {
 			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
@@ -898,23 +904,7 @@ describe("lib/node/Node", () => {
 	});
 
 	describe(`sendNoMoreInformation()`, () => {
-		const fakeDriver = {
-			sendMessage: jest.fn().mockImplementation(() => Promise.resolve()),
-			sendCommand: jest
-				.fn()
-				.mockImplementation(async (command, options) => {
-					const msg = new SendDataRequest(fakeDriver, {
-						command,
-					});
-					const resp = await fakeDriver.sendMessage(msg, options);
-					return resp && resp.command;
-				}),
-			controller: {
-				ownNodeId: 1,
-				nodes: new Map(),
-			},
-			getSafeCCVersionForNode() {},
-		};
+		const fakeDriver = createEmptyMockDriver();
 
 		function makeNode(/*supportsWakeUp: boolean = false*/): ZWaveNode {
 			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
@@ -969,6 +959,8 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("getCCVersion()", () => {
+		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+
 		it("should return 0 if a command class is not supported", () => {
 			const node = new ZWaveNode(2, fakeDriver);
 			expect(node.getCCVersion(CommandClasses["Anti-theft"])).toBe(0);
@@ -985,6 +977,8 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("removeCC()", () => {
+		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+
 		it("should mark a CC as not supported", () => {
 			const node = new ZWaveNode(2, fakeDriver);
 			node.addCC(CommandClasses["Anti-theft"], {
@@ -999,8 +993,10 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("createCCInstance()", () => {
+		const fakeDriver = createEmptyMockDriver();
+
 		it("should throw if the CC is not supported", () => {
-			const node = new ZWaveNode(2, fakeDriver);
+			const node = new ZWaveNode(2, fakeDriver as any);
 			assertZWaveError(
 				() => node.createCCInstance(CommandClasses.Basic),
 				{
@@ -1011,13 +1007,6 @@ describe("lib/node/Node", () => {
 		});
 
 		it("should return a linked instance of the correct CC", () => {
-			const fakeDriver = {
-				controller: {
-					ownNodeId: 1,
-					nodes: new Map(),
-				},
-				getSafeCCVersionForNode() {},
-			};
 			const node = new ZWaveNode(2, fakeDriver as any);
 			fakeDriver.controller.nodes.set(node.id, node);
 			node.addCC(CommandClasses.Basic, { isSupported: true });
@@ -1029,6 +1018,8 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("serialize() / deserialize()", () => {
+		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+
 		const serializedTestNode = {
 			id: 1,
 			interviewStage: "NodeInfo",

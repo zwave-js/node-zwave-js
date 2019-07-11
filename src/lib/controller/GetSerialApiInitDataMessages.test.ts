@@ -1,4 +1,5 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
+import { IDriver } from "../driver/IDriver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -17,7 +18,7 @@ import {
 } from "../message/Message";
 import { GetSerialApiInitDataRequest } from "./GetSerialApiInitDataMessages";
 
-const fakeDriver = createEmptyMockDriver();
+const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
 describe("lib/controller/GetSerialApiInitDataRequest => ", () => {
 	const req = new GetSerialApiInitDataRequest(fakeDriver);
