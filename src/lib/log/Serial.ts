@@ -52,7 +52,8 @@ function logMessageHeader(
 ): void {
 	logger.log({
 		level: SERIAL_LOGLEVEL,
-		message: `[${MessageHeaders[header]}]`,
+		primaryTags: `[${MessageHeaders[header]}]`,
+		message: "",
 		secondaryTags: `(${num2hex(header)})`,
 		direction: getDirectionPrefix(direction),
 	});

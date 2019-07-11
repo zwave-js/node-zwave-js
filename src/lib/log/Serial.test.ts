@@ -1,3 +1,4 @@
+import * as colors from "ansi-colors";
 import { pseudoRandomBytes } from "crypto";
 import * as winston from "winston";
 import { assertMessage, SpyTransport } from "../../../test/SpyTransport";
@@ -78,6 +79,24 @@ describe("lib/log/Serial =>", () => {
 				message: `» [CAN] ${alignRight}(0x18)`,
 			});
 		});
+	});
+
+	describe("colors single-byte messages like tags", () => {
+		for (const msg of ["ACK", "NAK", "CAN"] as const) {
+			it(msg, () => {
+				log.serial[msg]("inbound");
+
+				const expected1 = colors.blue(
+					colors.bgBlue("[") +
+						colors.inverse(msg) +
+						colors.bgBlue("]"),
+				);
+				assertMessage(spyTransport, {
+					predicate: msg => msg.includes(expected1),
+					ignoreColor: false,
+				});
+			});
+		}
 	});
 
 	describe("logs raw data correctly", () => {
