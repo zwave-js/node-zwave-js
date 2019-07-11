@@ -41,6 +41,7 @@ export interface CCAPIs {
 	Configuration: import("./ConfigurationCC").ConfigurationCCAPI;
 	"Manufacturer Specific": import("./ManufacturerSpecificCC").ManufacturerSpecificCCAPI;
 	"Multi Command": import("./MultiCommandCC").MultiCommandCCAPI;
+	"Multilevel Sensor": import("./MultilevelSensorCC").MultilevelSensorCCAPI;
 	"Multilevel Switch": import("./MultilevelSwitchCC").MultilevelSwitchCCAPI;
 	"No Operation": import("./NoOperationCC").NoOperationCCAPI;
 	Notification: import("./NotificationCC").NotificationCCAPI;
