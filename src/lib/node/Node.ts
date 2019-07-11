@@ -16,14 +16,7 @@ import {
 } from "../commandclass/CommandClass";
 import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { ConfigurationCC } from "../commandclass/ConfigurationCC";
-import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import {
-	WakeUpCC,
-	WakeUpCCIntervalGet,
-	WakeUpCCIntervalReport,
-	WakeUpCCIntervalSet,
-	WakeUpCommand,
-} from "../commandclass/WakeUpCC";
+import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
 import {
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
@@ -44,11 +37,9 @@ import {
 	GetRoutingInfoRequest,
 	GetRoutingInfoResponse,
 } from "../controller/GetRoutingInfoMessages";
-import { SendDataRequest } from "../controller/SendDataMessages";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { MessagePriority } from "../message/Constants";
 import { JSONObject } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import { CacheValue } from "../values/Cache";
@@ -954,35 +945,14 @@ version:               ${this.version}`;
 				);
 			} else {
 				try {
-					const getWakeupRequest = new SendDataRequest(this.driver, {
-						command: new WakeUpCCIntervalGet(this.driver, {
-							nodeId: this.id,
-						}),
-					});
 					log.controller.logNode(this, {
 						message:
 							"retrieving wakeup interval from the device...",
 						direction: "outbound",
 					});
-					const getWakeupResp = await this.driver.sendMessage<
-						SendDataRequest
-					>(getWakeupRequest, {
-						priority: MessagePriority.NodeQuery,
-					});
-					if (
-						!isCommandClassContainer(getWakeupResp) ||
-						!(
-							getWakeupResp.command instanceof
-							WakeUpCCIntervalReport
-						)
-					) {
-						throw new ZWaveError(
-							"Invalid response received!",
-							ZWaveErrorCodes.CC_Invalid,
-						);
-					}
-
-					const wakeupResp = getWakeupResp.command;
+					const wakeupResp = await this.commandClasses[
+						"Wake Up"
+					].getInterval();
 					const logMessage = `received wakeup configuration:
   wakeup interval: ${wakeupResp.wakeupInterval} seconds
   controller node: ${wakeupResp.controllerNodeId}`;
@@ -995,16 +965,11 @@ version:               ${this.version}`;
 						message: "configuring wakeup destination",
 						direction: "outbound",
 					});
-					const setWakeupRequest = new SendDataRequest(this.driver, {
-						command: new WakeUpCCIntervalSet(this.driver, {
-							nodeId: this.id,
-							wakeupInterval: wakeupResp.wakeupInterval,
-							controllerNodeId: this.driver.controller.ownNodeId!,
-						}),
-					});
-					await this.driver.sendMessage(setWakeupRequest, {
-						priority: MessagePriority.NodeQuery,
-					});
+
+					await this.commandClasses["Wake Up"].setInterval(
+						wakeupResp.wakeupInterval,
+						this.driver.controller.ownNodeId!,
+					);
 					log.controller.logNode(this, "  done!");
 				} catch (e) {
 					log.controller.logNode(
