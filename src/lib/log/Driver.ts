@@ -101,6 +101,8 @@ export function sendQueue(queue: SortedList<Transaction>): void {
 	for (const trns of queue) {
 		// TODO: This formatting should be shared with the other logging methods
 		const node = trns.message.getNodeUnsafe();
+		const prefix =
+			trns.message.type === MessageType.Request ? "[REQ]" : "[RES]";
 		const postfix =
 			node != undefined
 				? ` [Node ${node.id}, ${node.isAwake() ? "awake" : "asleep"}]`
@@ -108,7 +110,7 @@ export function sendQueue(queue: SortedList<Transaction>): void {
 		const command = isCommandClassContainer(trns.message)
 			? ` (${trns.message.command.constructor.name})`
 			: "";
-		message += `\n· ${
+		message += `\n· ${prefix} ${
 			FunctionType[trns.message.functionType]
 		}${command}${postfix}`;
 	}

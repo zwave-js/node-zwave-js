@@ -297,12 +297,35 @@ describe("lib/log/Driver =>", () => {
 			);
 			log.driver.sendQueue(queue);
 
-			// Each line should be indented
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("· GetSUCNodeId"),
+				predicate: msg => msg.includes("GetSUCNodeId"),
 			});
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("· HardReset"),
+				predicate: msg => msg.includes("HardReset"),
+			});
+		});
+
+		it("prints the message type for each message", () => {
+			const queue = new SortedList<Transaction>();
+			queue.add(
+				createTransaction({
+					functionType: FunctionType.GetSUCNodeId,
+					type: MessageType.Request,
+				}),
+			);
+			queue.add(
+				createTransaction({
+					functionType: FunctionType.HardReset,
+					type: MessageType.Response,
+				}),
+			);
+			log.driver.sendQueue(queue);
+
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("· [REQ] GetSUCNodeId"),
+			});
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("· [RES] HardReset"),
 			});
 		});
 	});
