@@ -6,7 +6,7 @@ import { INodeQuery } from "../node/INodeQuery";
 import { FunctionType, MessageType } from "./Constants";
 import { Message, messageTypes, ResponseRole } from "./Message";
 
-const fakeDriver = createEmptyMockDriver();
+const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
 describe("lib/message", () => {
 	describe("Message", () => {

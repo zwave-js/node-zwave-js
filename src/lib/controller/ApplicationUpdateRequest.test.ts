@@ -1,4 +1,5 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
+import { IDriver } from "../driver/IDriver";
 import { FunctionType, MessageType } from "../message/Constants";
 import {
 	getDefaultPriority,
@@ -13,7 +14,7 @@ import {
 } from "../message/Message";
 import { ApplicationUpdateRequest } from "./ApplicationUpdateRequest";
 
-const fakeDriver = createEmptyMockDriver();
+const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
 describe("lib/controller/ApplicationUpdateRequest => ", () => {
 	let req: ApplicationUpdateRequest;

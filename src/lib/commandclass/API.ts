@@ -24,7 +24,10 @@ export class CCAPI {
 	/** Determines if this simplified API instance may be used. */
 	public isSupported(): boolean {
 		return (
-			this.node.supportsCC(this.ccId) || this.node.controlsCC(this.ccId)
+			// NoOperation is always supported
+			this.ccId === CommandClasses["No Operation"] ||
+			this.node.supportsCC(this.ccId) ||
+			this.node.controlsCC(this.ccId)
 		);
 	}
 }
