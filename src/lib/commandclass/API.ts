@@ -1,7 +1,10 @@
-import { ZWaveNode } from "../..";
 import { IDriver } from "../driver/IDriver";
+import { ZWaveNode } from "../node/Node";
 import { getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
+
+/** Used to identify the method on the CC API class that handles setting values on nodes directly */
+export const SET_VALUE: unique symbol = Symbol.for("CCAPI_SET_VALUE");
 
 /** The base class for all CC APIs exposed via `Node.commandClasses.<CCName>` */
 export class CCAPI {

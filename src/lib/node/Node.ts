@@ -364,6 +364,29 @@ export class ZWaveNode extends EventEmitter {
 		return this._valueDB.getValue(cc, endpoint, propertyName, propertyKey);
 	}
 
+	/**
+	 * Updates a value for a given property of a given CommandClass on the node.
+	 * This will communicate with the node!
+	 * @param cc The command class the value belongs to
+	 * @param endpoint The endpoint the value belongs to (0 for the root device)
+	 * @param propertyName The property name the value belongs to
+	 * @param propertyKey (optional) The sub-property to access
+	 */
+	public async setValue(
+		valueId: {
+			cc: CommandClasses;
+			endpoint: number;
+			propertyName: string;
+			propertyKey?: number | string;
+		},
+		value: unknown,
+	): Promise<boolean> {
+		// TODO
+		valueId;
+		value;
+		return false;
+	}
+
 	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();
 	private _commandClassAPIsProxy = new Proxy(this._commandClassAPIs, {
 		get: (target, ccName: string) => {
