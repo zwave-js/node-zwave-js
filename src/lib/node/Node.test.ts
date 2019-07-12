@@ -44,7 +44,8 @@ import {
 	GenericDeviceClasses,
 	SpecificDeviceClass,
 } from "./DeviceClass";
-import { InterviewStage, NodeStatus, ZWaveNode, ZWaveNodeEvents } from "./Node";
+import { InterviewStage, NodeStatus } from "./INode";
+import { ZWaveNode, ZWaveNodeEvents } from "./Node";
 import { NodeUpdatePayload } from "./NodeInfo";
 import { RequestNodeInfoRequest } from "./RequestNodeInfoMessages";
 import { ValueDB } from "./ValueDB";

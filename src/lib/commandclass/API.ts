@@ -1,5 +1,5 @@
-import { ZWaveNode } from "../..";
 import { IDriver } from "../driver/IDriver";
+import { IZWaveNode } from "../node/INode";
 import { getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
@@ -7,7 +7,7 @@ import { CommandClasses } from "./CommandClasses";
 export class CCAPI {
 	public constructor(
 		protected readonly driver: IDriver,
-		protected readonly node: ZWaveNode,
+		protected readonly node: IZWaveNode,
 	) {
 		this.ccId = getCommandClass(this);
 	}

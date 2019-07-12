@@ -1,7 +1,8 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { MessagePriority } from "../message/Constants";
-import { NodeStatus, ZWaveNode } from "../node/Node";
+import { NodeStatus } from "../node/INode";
+import { ZWaveNode } from "../node/Node";
 import { validatePayload } from "../util/misc";
 import { CCAPI } from "./API";
 import {

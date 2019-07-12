@@ -1,7 +1,7 @@
 import { padStart } from "alcalzone-shared/strings";
 import * as winston from "winston";
 import { CommandClasses } from "../commandclass/CommandClasses";
-import { InterviewStage, ZWaveNode } from "../node/Node";
+import { InterviewStage, IZWaveNode } from "../node/INode";
 import {
 	ValueAddedArgs,
 	ValueBaseArgs,
@@ -54,7 +54,7 @@ export interface LogNodeOptions {
  * @param level The optional loglevel if it should be different from "info"
  */
 export function logNode(
-	node: ZWaveNode,
+	node: IZWaveNode,
 	message: string,
 	level?: "warn" | "error",
 ): void;
@@ -63,9 +63,9 @@ export function logNode(
  * @param node The node to log the message for
  * @param options The message and other options
  */
-export function logNode(node: ZWaveNode, options: LogNodeOptions): void;
+export function logNode(node: IZWaveNode, options: LogNodeOptions): void;
 export function logNode(
-	node: ZWaveNode,
+	node: IZWaveNode,
 	messageOrOptions: string | LogNodeOptions,
 	logLevel?: "warn" | "error",
 ): void {
@@ -138,12 +138,12 @@ export function value(
 }
 
 /** Returns the tag used to log node related messages */
-function getNodeTag(node: ZWaveNode): string {
+function getNodeTag(node: IZWaveNode): string {
 	return "Node " + padStart(node.id.toString(), 3, "0");
 }
 
 /** Logs the interview progress of a node */
-export function interviewStage(node: ZWaveNode): void {
+export function interviewStage(node: IZWaveNode): void {
 	logger.log({
 		level: CONTROLLER_LOGLEVEL,
 		primaryTags: tagify([getNodeTag(node)]),
@@ -158,7 +158,7 @@ export function interviewStage(node: ZWaveNode): void {
 }
 
 /** Logs the interview progress of a node */
-export function interviewStart(node: ZWaveNode): void {
+export function interviewStart(node: IZWaveNode): void {
 	const message = `Beginning interview - last completed stage: ${
 		InterviewStage[node.interviewStage]
 	}`;
