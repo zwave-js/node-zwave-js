@@ -229,13 +229,8 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			this._endpoint = options.endpoint;
+			this.endpoint = options.endpoint;
 		}
-	}
-
-	private _endpoint: number;
-	public get endpoint(): number {
-		return this._endpoint;
 	}
 
 	public serialize(): Buffer {
@@ -367,8 +362,6 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 			this.endpoint = options.endpoint;
 		}
 	}
-
-	public endpoint: number;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.endpoint & 0b0111_1111]);

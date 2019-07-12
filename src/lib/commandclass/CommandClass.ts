@@ -74,6 +74,8 @@ export class CommandClass {
 		this.driver = driver;
 		// Extract the cc from declared metadata if not provided
 		this.ccId = getCommandClass(this);
+		// Default to the root endpoint - Inherited classes may override this behavior
+		this.endpoint = 0;
 
 		if (gotDeserializationOptions(options)) {
 			// For deserialized commands, try to invoke the correct subclass constructor
@@ -145,7 +147,7 @@ export class CommandClass {
 	public version!: number;
 
 	/** Which endpoint of the node this CC belongs to. 0 for the root device. */
-	public endpoint: number | undefined;
+	public endpoint: number;
 
 	/** Returns true if this CC is an extended CC (0xF100..0xFFFF) */
 	public isExtended(): boolean {

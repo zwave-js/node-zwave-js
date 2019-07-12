@@ -292,7 +292,7 @@ export class ZWaveNode extends EventEmitter {
 	public get manufacturerId(): number | undefined {
 		return this.getValue(
 			CommandClasses["Manufacturer Specific"],
-			undefined,
+			0,
 			"manufacturerId",
 		);
 	}
@@ -300,7 +300,7 @@ export class ZWaveNode extends EventEmitter {
 	public get productId(): number | undefined {
 		return this.getValue(
 			CommandClasses["Manufacturer Specific"],
-			undefined,
+			0,
 			"productId",
 		);
 	}
@@ -308,17 +308,13 @@ export class ZWaveNode extends EventEmitter {
 	public get productType(): number | undefined {
 		return this.getValue(
 			CommandClasses["Manufacturer Specific"],
-			undefined,
+			0,
 			"productType",
 		);
 	}
 
 	public get firmwareVersion(): string | undefined {
-		return this.getValue(
-			CommandClasses.Version,
-			undefined,
-			"firmwareVersion",
-		);
+		return this.getValue(CommandClasses.Version, 0, "firmwareVersion");
 	}
 
 	private _implementedCommandClasses = new Map<
@@ -351,16 +347,17 @@ export class ZWaveNode extends EventEmitter {
 	}
 
 	/**
-	 * Retrieves a value for a given property of a given CommandClass
+	 * Retrieves a stored value for a given property of a given CommandClass.
+	 * This does not request an updated value from the node!
 	 * @param cc The command class the value belongs to
-	 * @param endpoint The optional endpoint the value belongs to
+	 * @param endpoint The endpoint the value belongs to (0 for the root device)
 	 * @param propertyName The property name the value belongs to
 	 * @param propertyKey (optional) The sub-property to access
 	 */
 	/* wotan-disable-next-line no-misused-generics */
 	public getValue<T = unknown>(
 		cc: CommandClasses,
-		endpoint: number | undefined,
+		endpoint: number,
 		propertyName: string,
 		propertyKey?: number | string,
 	): T | undefined {

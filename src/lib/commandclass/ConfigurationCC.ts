@@ -343,7 +343,7 @@ export class ConfigurationCC extends CommandClass {
 		return (
 			this.getValueDB().getValue(
 				getCommandClass(this),
-				undefined,
+				0,
 				"isParamInformationFromConfig",
 			) === true
 		);
@@ -429,7 +429,7 @@ export class ConfigurationCC extends CommandClass {
 		// Remember that we loaded the param information from a config file
 		this.getValueDB().setValue(
 			getCommandClass(this),
-			undefined,
+			0,
 			"isParamInformationFromConfig",
 			true,
 		);
