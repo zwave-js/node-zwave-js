@@ -6,6 +6,12 @@
 	"configurations": [
 		{
 			"type": "node",
+			"request": "attach",
+			"name": "Attach",
+			"port": 9229
+		},
+		{
+			"type": "node",
 			"request": "launch",
 			"name": "Launch Program",
 			"port": 9229,
@@ -17,8 +23,8 @@
 				"${workspaceFolder}/test/run.ts"
 			],
 			"env": {
-				"NO_CACHE": "true",
-				"LOGLEVEL": "verbose"
+				// "NO_CACHE": "true",
+				// "LOGLEVEL": "verbose"
 			},
 			"console": "integratedTerminal",
 			"sourceMaps": true

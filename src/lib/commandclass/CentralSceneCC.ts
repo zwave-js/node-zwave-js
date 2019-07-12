@@ -78,6 +78,17 @@ export class CentralSceneCCAPI extends CCAPI {
 @implementedVersion(3)
 export class CentralSceneCC extends CommandClass {
 	public ccCommand!: CentralSceneCommand;
+
+	public static translatePropertyKey(
+		propertyName: string,
+		propertyKey: number | string,
+	): string {
+		if (/^scene\d+/.test(propertyName)) {
+			return CentralSceneKeys[propertyKey as number];
+		} else {
+			return super.translatePropertyKey(propertyName, propertyKey);
+		}
+	}
 }
 
 @CCCommand(CentralSceneCommand.Notification)
@@ -92,10 +103,15 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 		this._sequenceNumber = this.payload[0];
 		this._keyAttribute = this.payload[1] & 0b111;
 		this._sceneNumber = this.payload[2];
-		this._slowRefresh = !!(this.payload[1] & 0b1000_0000);
+		if (this._keyAttribute === CentralSceneKeys.KeyHeldDown) {
+			// A receiving node MUST ignore this field if the command is not
+			// carrying the Key Held Down key attribute.
+			this._slowRefresh = !!(this.payload[1] & 0b1000_0000);
+		}
+		// The described behavior is pretty complicated, so we cannot just store
+		// the value and call it a day. Handling of these notifications will
+		// happen in the receiving node class
 	}
-
-	// TODO: Is this some kind of dictionary with multiple values?
 
 	private _sequenceNumber: number;
 	public get sequenceNumber(): number {
@@ -112,21 +128,10 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 		return this._sceneNumber;
 	}
 
-	private _slowRefresh: boolean;
-	public get slowRefresh(): boolean {
+	private _slowRefresh: boolean | undefined;
+	public get slowRefresh(): boolean | undefined {
 		return this._slowRefresh;
 	}
-
-	/*
-	If the Slow Refresh field is false:
-	 - A new Key Held Down notification MUST be sent every 200ms until the key is released.
-	 - The Sequence Number field MUST be updated at each notification transmission.
-	 - If not receiving a new Key Held Down notification within 400ms, a controlling node SHOULD use an adaptive timeout approach as described in 4.17.1.
-	If the Slow Refresh field is true:
-	 - A new Key Held Down notification MUST be sent every 55 seconds until the key is released.
-	 - The Sequence Number field MUST be updated at each notification refresh.
-	 - If not receiving a new Key Held Down notification within 60 seconds after the most recent Key Held Down notification,
-	*/
 
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({

@@ -5,7 +5,11 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
 import { CCAPI, CCAPIs } from "../commandclass/API";
-import { CentralSceneCC } from "../commandclass/CentralSceneCC";
+import {
+	CentralSceneCC,
+	CentralSceneCCNotification,
+	CentralSceneKeys,
+} from "../commandclass/CentralSceneCC";
 import {
 	CommandClass,
 	CommandClassInfo,
@@ -16,7 +20,8 @@ import {
 } from "../commandclass/CommandClass";
 import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { ConfigurationCC } from "../commandclass/ConfigurationCC";
-import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
+import { NotificationCCReport } from "../commandclass/NotificationCC";
+import { WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
 import {
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
@@ -1097,33 +1102,137 @@ version:               ${this.version}`;
 	 * Handles an ApplicationCommandRequest received from this node
 	 */
 	public async handleCommand(command: CommandClass): Promise<void> {
-		switch (command.ccId) {
-			case CommandClasses["Central Scene"]: {
-				const csCC = command as CentralSceneCC;
-				log.controller.logNode(this, {
-					message: `received CentralScene command ${JSON.stringify(
-						csCC,
-					)}`,
-					direction: "inbound",
-				});
-				return;
-			}
-			case CommandClasses["Wake Up"]: {
-				const wakeupCC = command as WakeUpCC;
-				if (wakeupCC.ccCommand === WakeUpCommand.WakeUpNotification) {
-					log.controller.logNode(this, {
-						message: `received wakeup notification`,
-						direction: "inbound",
-					});
-					this.setAwake(true);
-					return;
-				}
-			}
+		if (command instanceof CentralSceneCCNotification) {
+			return this.handleCentralSceneNotification(command);
+		} else if (command instanceof WakeUpCCWakeUpNotification) {
+			return this.handleWakeUpNotification(command);
+		} else if (command instanceof NotificationCCReport) {
+			return this.handleNotificationReport(command);
 		}
+
 		log.controller.logNode(this, {
 			message: `TODO: no handler for application command ${stringify(
 				command,
 			)}`,
+			direction: "inbound",
+		});
+	}
+
+	/** Stores information about a currently held down key */
+	private centralSceneKeyHeldDownContext:
+		| {
+				timeout: NodeJS.Timer;
+				sceneNumber: number;
+		  }
+		| undefined;
+	private lastCentralSceneNotificationSequenceNumber: number | undefined;
+
+	/** Handles the receipt of a Central Scene notifification */
+	private async handleCentralSceneNotification(
+		command: CentralSceneCCNotification,
+	): Promise<void> {
+		// Did we already receive this command?
+		if (
+			command.sequenceNumber ===
+			this.lastCentralSceneNotificationSequenceNumber
+		) {
+			return;
+		} else {
+			this.lastCentralSceneNotificationSequenceNumber =
+				command.sequenceNumber;
+		}
+		/*
+		If the Slow Refresh field is false:
+		- A new Key Held Down notification MUST be sent every 200ms until the key is released.
+		- The Sequence Number field MUST be updated at each notification transmission.
+		- If not receiving a new Key Held Down notification within 400ms, a controlling node SHOULD use an adaptive timeout approach as described in 4.17.1:
+		A controller SHOULD apply an adaptive approach based on the reception of the Key Released Notification. 
+		Initially, the controller SHOULD time out if not receiving any Key Held Down Notification refresh after 
+		400ms and consider this to be a Key Up Notification. If, however, the controller subsequently receives a 
+		Key Released Notification, the controller SHOULD consider the sending node to be operating with the Slow 
+		Refresh capability enabled.
+
+		If the Slow Refresh field is true:
+		- A new Key Held Down notification MUST be sent every 55 seconds until the key is released.
+		- The Sequence Number field MUST be updated at each notification refresh.
+		- If not receiving a new Key Held Down notification within 60 seconds after the most recent Key Held Down 
+		notification, a receiving node MUST respond as if it received a Key Release notification.
+		*/
+
+		const setSceneValue = (sceneNumber: number, key: CentralSceneKeys) => {
+			const propName = `scene${padStart(sceneNumber.toString(), 3, "0")}`;
+			this.valueDB.setValue(
+				command.ccId,
+				command.endpoint,
+				propName,
+				CentralSceneCC.translatePropertyKey(propName, key),
+			);
+		};
+
+		const forceKeyUp = () => {
+			// force key up event
+			setSceneValue(
+				this.centralSceneKeyHeldDownContext!.sceneNumber,
+				CentralSceneKeys.KeyReleased,
+			);
+			// clear old timer
+			clearTimeout(this.centralSceneKeyHeldDownContext!.timeout);
+			// clear the key down context
+			this.centralSceneKeyHeldDownContext = undefined;
+		};
+
+		if (
+			this.centralSceneKeyHeldDownContext &&
+			this.centralSceneKeyHeldDownContext.sceneNumber !==
+				command.sceneNumber
+		) {
+			// The user pressed another button, force release
+			forceKeyUp();
+		}
+
+		if (command.keyAttribute === CentralSceneKeys.KeyHeldDown) {
+			// Set or refresh timer to force a release of the key
+			if (this.centralSceneKeyHeldDownContext) {
+				clearTimeout(this.centralSceneKeyHeldDownContext.timeout);
+			}
+			this.centralSceneKeyHeldDownContext = {
+				sceneNumber: command.sceneNumber,
+				timeout: setTimeout(
+					forceKeyUp,
+					command.slowRefresh ? 60000 : 400,
+				),
+			};
+		} else if (command.keyAttribute === CentralSceneKeys.KeyReleased) {
+			// Stop the release timer
+			if (this.centralSceneKeyHeldDownContext) {
+				clearTimeout(this.centralSceneKeyHeldDownContext.timeout);
+				this.centralSceneKeyHeldDownContext = undefined;
+			}
+		}
+
+		setSceneValue(command.sceneNumber, command.keyAttribute);
+		log.controller.logNode(this, {
+			message: `received CentralScene notification ${stringify(command)}`,
+			direction: "inbound",
+		});
+	}
+
+	/** Handles the receipt of a Wake Up notification */
+	private handleWakeUpNotification(
+		command: WakeUpCCWakeUpNotification,
+	): void {
+		log.controller.logNode(this, {
+			message: `received wakeup notification`,
+			direction: "inbound",
+		});
+		this.setAwake(true);
+	}
+
+	/** Handles the receipt of a Notification Report */
+	private handleNotificationReport(command: NotificationCCReport): void {
+		// TODO: Do we need this?
+		log.controller.logNode(this, {
+			message: `received Notification ${stringify(command)}`,
 			direction: "inbound",
 		});
 	}

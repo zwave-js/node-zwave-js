@@ -1,6 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { validatePayload } from "../util/misc";
+import { JSONObject, validatePayload } from "../util/misc";
 import { parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
@@ -225,6 +225,22 @@ export class NotificationCCReport extends NotificationCC {
 	private _sequenceNumber: number | undefined;
 	public get sequenceNumber(): number | undefined {
 		return this._sequenceNumber;
+	}
+
+	public toJSON(): JSONObject {
+		return super.toJSONInherited({
+			alarmType: this.alarmType,
+			notificationType:
+				this.notificationType != undefined
+					? NotificationType[this.notificationType]
+					: this.notificationType,
+			notificationStatus: this.notificationStatus,
+			notificationEvent: this.notificationEvent,
+			alarmLevel: this.alarmLevel,
+			zensorNetSourceNodeId: this.zensorNetSourceNodeId,
+			eventParameters: this.eventParameters,
+			sequenceNumber: this.sequenceNumber,
+		});
 	}
 }
 
