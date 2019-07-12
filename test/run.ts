@@ -1,8 +1,10 @@
 import { Driver } from "../";
 import { CommandClasses } from "../src/lib/commandclass/CommandClasses";
+
 const driver = new Driver("COM3").once("driver ready", async () => {
 	const node = driver.controller.nodes.get(3)!;
 	node.keepAwake = true;
+
 	node.once("interview completed", async () => {
 		console.dir(
 			node.getValue(
@@ -15,6 +17,17 @@ const driver = new Driver("COM3").once("driver ready", async () => {
 		// await config.scanParameters();
 		// console.log("Scan finished!");
 	});
+
+	const node2 = driver.controller.nodes.get(2)!;
+	node2.on("value added", args =>
+		console.log(`[Node ${2}] value added: ${JSON.stringify(args)}`),
+	);
+	node2.on("value updated", args =>
+		console.log(`[Node ${2}] value updated: ${JSON.stringify(args)}`),
+	);
+	node2.on("value removed", args =>
+		console.log(`[Node ${2}] value removed: ${JSON.stringify(args)}`),
+	);
 });
 driver.start();
 

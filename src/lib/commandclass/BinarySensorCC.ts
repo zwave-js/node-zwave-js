@@ -88,9 +88,12 @@ export class BinarySensorCCReport extends BinarySensorCC {
 	) {
 		super(driver, options);
 
-		validatePayload(this.payload.length >= 2);
+		validatePayload(this.payload.length >= 1);
 		const _value = this.payload[0] === 0xff;
-		const _sensorType = this.payload[1];
+		let _sensorType = BinarySensorType.Any;
+		if (this.version >= 2 && this.payload.length >= 2) {
+			_sensorType = this.payload[1];
+		}
 		this.values = [_sensorType, _value];
 		this.persistValues();
 	}
