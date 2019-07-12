@@ -1,5 +1,5 @@
 import { IDriver } from "../driver/IDriver";
-import { ZWaveNode } from "../node/Node";
+import { IZWaveNode } from "../node/INode";
 import { getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
@@ -10,7 +10,7 @@ export const SET_VALUE: unique symbol = Symbol.for("CCAPI_SET_VALUE");
 export class CCAPI {
 	public constructor(
 		protected readonly driver: IDriver,
-		protected readonly node: ZWaveNode,
+		protected readonly node: IZWaveNode,
 	) {
 		this.ccId = getCommandClass(this);
 	}

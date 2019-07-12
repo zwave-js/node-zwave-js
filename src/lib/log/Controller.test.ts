@@ -5,7 +5,7 @@ import {
 	SpyTransport,
 } from "../../../test/SpyTransport";
 import { CommandClasses } from "../commandclass/CommandClasses";
-import { InterviewStage } from "../node/Node";
+import { InterviewStage } from "../node/INode";
 import { ValueBaseArgs } from "../node/ValueDB";
 import log from "./index";
 import { restoreSilence } from "./shared";

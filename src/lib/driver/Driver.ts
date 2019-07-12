@@ -33,8 +33,9 @@ import {
 	MessageType,
 } from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";
+import { InterviewStage, IZWaveNode, NodeStatus } from "../node/INode";
 import { isNodeQuery } from "../node/INodeQuery";
-import { InterviewStage, NodeStatus, ZWaveNode } from "../node/Node";
+import { ZWaveNode } from "../node/Node";
 import { num2hex } from "../util/strings";
 import { DriverEventCallbacks, DriverEvents, IDriver } from "./IDriver";
 import { Transaction } from "./Transaction";
@@ -323,7 +324,7 @@ export class Driver extends EventEmitter implements IDriver {
 			);
 	}
 
-	private onNodeWakeUp(node: ZWaveNode): void {
+	private onNodeWakeUp(node: IZWaveNode): void {
 		log.controller.logNode(node, "The node is now awake.");
 
 		// It *should* not be necessary to restart the node interview here.
