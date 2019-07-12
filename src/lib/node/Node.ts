@@ -1159,7 +1159,10 @@ version:               ${this.version}`;
 		notification, a receiving node MUST respond as if it received a Key Release notification.
 		*/
 
-		const setSceneValue = (sceneNumber: number, key: CentralSceneKeys) => {
+		const setSceneValue = (
+			sceneNumber: number,
+			key: CentralSceneKeys,
+		): void => {
 			const propName = `scene${padStart(sceneNumber.toString(), 3, "0")}`;
 			this.valueDB.setValue(
 				command.ccId,
@@ -1169,7 +1172,7 @@ version:               ${this.version}`;
 			);
 		};
 
-		const forceKeyUp = () => {
+		const forceKeyUp = (): void => {
 			// force key up event
 			setSceneValue(
 				this.centralSceneKeyHeldDownContext!.sceneNumber,
@@ -1219,7 +1222,8 @@ version:               ${this.version}`;
 
 	/** Handles the receipt of a Wake Up notification */
 	private handleWakeUpNotification(
-		command: WakeUpCCWakeUpNotification,
+		// TODO: Do we need this parameter?
+		_command: WakeUpCCWakeUpNotification,
 	): void {
 		log.controller.logNode(this, {
 			message: `received wakeup notification`,
