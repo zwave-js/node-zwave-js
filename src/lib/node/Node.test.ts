@@ -1384,7 +1384,8 @@ describe("lib/node/Node", () => {
 		it("issues the correct xyzCCSet command", async () => {
 			// We test with a BasicCC
 			const node = new ZWaveNode(1, fakeDriver as any);
-			await node.setValue(
+			node.addCC(CommandClasses.Basic, { isSupported: true });
+			const result = await node.setValue(
 				{
 					cc: CommandClasses.Basic,
 					endpoint: 0,
@@ -1393,6 +1394,7 @@ describe("lib/node/Node", () => {
 				5,
 			);
 
+			expect(result).toBeTrue();
 			expect(fakeDriver.sendMessage).toBeCalled();
 
 			assertCC(fakeDriver.sendMessage.mock.calls[0][0], {

@@ -337,7 +337,12 @@ export class ZWaveNode extends EventEmitter implements IZWaveNode {
 	 * @param propertyKey (optional) The sub-property to access
 	 */
 	public async setValue(
-		valueId: {
+		{
+			cc,
+			endpoint,
+			propertyName,
+			propertyKey,
+		}: {
 			cc: CommandClasses;
 			endpoint: number;
 			propertyName: string;
@@ -345,10 +350,27 @@ export class ZWaveNode extends EventEmitter implements IZWaveNode {
 		},
 		value: unknown,
 	): Promise<boolean> {
-		// TODO
-		valueId;
-		value;
-		return false;
+		// Try to retrieve the corresponding CC API
+		try {
+			// Access the CC API by name
+			const api = this.commandClasses[
+				(CommandClasses[cc] as unknown) as keyof CCAPIs
+			] as CCAPI;
+			// Check if the setValue method is implemented
+			if (!api.setValue) return false;
+			// And call it
+			await api.setValue({ endpoint, propertyName, propertyKey }, value);
+			return true;
+		} catch (e) {
+			if (
+				e instanceof ZWaveError &&
+				e.code === ZWaveErrorCodes.CC_NotImplemented
+			) {
+				// This CC is not implemented
+				return false;
+			}
+			throw e;
+		}
 	}
 
 	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();

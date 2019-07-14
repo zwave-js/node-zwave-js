@@ -1,8 +1,9 @@
 import { IDriver } from "../driver/IDriver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { JSONObject, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
-import { CCAPI } from "./API";
+import { CCAPI, SetValueImplementation, SET_VALUE } from "./API";
 import {
 	API,
 	CCCommand,
@@ -19,6 +20,31 @@ import { CommandClasses } from "./CommandClasses";
 
 @API(CommandClasses.Basic)
 export class BasicCCAPI extends CCAPI {
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ endpoint, propertyName },
+		value,
+	): Promise<void> => {
+		if (propertyName !== "targetValue") {
+			throw new ZWaveError(
+				`BasicCCSet: "${propertyName}" is not a valid property`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+		if (typeof value !== "number") {
+			throw new ZWaveError(
+				`BasicCCSet: "${propertyName}" requires a number`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		const cc = new BasicCCSet(this.driver, {
+			nodeId: this.node.id,
+			[propertyName]: value,
+		});
+		cc.endpoint = endpoint;
+		await this.driver.sendCommand(cc);
+	};
+
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
 		const cc = new BasicCCGet(this.driver, { nodeId: this.node.id });

@@ -1,33 +1,50 @@
+import { wait } from "alcalzone-shared/async";
 import { Driver } from "../";
 import { CommandClasses } from "../src/lib/commandclass/CommandClasses";
 
 const driver = new Driver("COM3").once("driver ready", async () => {
-	const node = driver.controller.nodes.get(3)!;
-	node.keepAwake = true;
-
-	node.once("interview completed", async () => {
-		console.dir(
-			node.getValue(
-				CommandClasses.Configuration,
-				undefined,
-				"paramInformation",
-			),
-		);
-		// const config = node.commandClasses.Configuration;
-		// await config.scanParameters();
-		// console.log("Scan finished!");
+	const node4 = driver.controller.nodes.get(4)!;
+	node4.once("interview completed", async () => {
+		for (let i = 1; i < 6; i++) {
+			const result = await node4.setValue(
+				{
+					cc: CommandClasses.Basic,
+					endpoint: 0,
+					propertyName: "targetValue",
+				},
+				(i % 2) * 99,
+			);
+			console.log(result);
+			await wait(2000);
+		}
 	});
 
-	const node2 = driver.controller.nodes.get(2)!;
-	node2.on("value added", args =>
-		console.log(`[Node ${2}] value added: ${JSON.stringify(args)}`),
-	);
-	node2.on("value updated", args =>
-		console.log(`[Node ${2}] value updated: ${JSON.stringify(args)}`),
-	);
-	node2.on("value removed", args =>
-		console.log(`[Node ${2}] value removed: ${JSON.stringify(args)}`),
-	);
+	// const node = driver.controller.nodes.get(3)!;
+	// node.keepAwake = true;
+
+	// node.once("interview completed", async () => {
+	// 	console.dir(
+	// 		node.getValue(
+	// 			CommandClasses.Configuration,
+	// 			undefined,
+	// 			"paramInformation",
+	// 		),
+	// 	);
+	// 	// const config = node.commandClasses.Configuration;
+	// 	// await config.scanParameters();
+	// 	// console.log("Scan finished!");
+	// });
+
+	// const node2 = driver.controller.nodes.get(2)!;
+	// node2.on("value added", args =>
+	// 	console.log(`[Node ${2}] value added: ${JSON.stringify(args)}`),
+	// );
+	// node2.on("value updated", args =>
+	// 	console.log(`[Node ${2}] value updated: ${JSON.stringify(args)}`),
+	// );
+	// node2.on("value removed", args =>
+	// 	console.log(`[Node ${2}] value removed: ${JSON.stringify(args)}`),
+	// );
 });
 driver.start();
 
