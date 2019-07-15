@@ -7,7 +7,19 @@ import { ZWaveNode } from "../node/Node";
 import { validatePayload } from "../util/misc";
 import { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
-import { API, CCCommand, CCCommandOptions, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion, StateKind } from "./CommandClass";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	ccValue,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+	StateKind,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum VersionCommand {
@@ -30,7 +42,9 @@ function parseVersion(buffer: Buffer): string {
 export class VersionCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
-		const cc = new VersionCCGet(this.driver, { nodeId: this.endpoint.nodeId });
+		const cc = new VersionCCGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+		});
 		const response = (await this.driver.sendCommand<VersionCCReport>(cc))!;
 		return {
 			libraryType: response.libraryType,
