@@ -46,7 +46,7 @@ export class MultilevelSensorCCAPI extends CCAPI {
 		scale?: number,
 	): Promise<number> {
 		const cc = new MultilevelSensorCCGet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 			sensorType,
 			scale,
 		});
@@ -60,7 +60,7 @@ export class MultilevelSensorCCAPI extends CCAPI {
 		readonly MultilevelSensorTypes[]
 	> {
 		const cc = new MultilevelSensorCCGetSupportedSensor(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 		});
 		const response = (await this.driver.sendCommand<
 			MultilevelSensorCCSupportedSensorReport
@@ -72,7 +72,7 @@ export class MultilevelSensorCCAPI extends CCAPI {
 		sensorType: MultilevelSensorTypes,
 	): Promise<readonly number[]> {
 		const cc = new MultilevelSensorCCGetSupportedScale(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 			sensorType,
 		});
 		const response = (await this.driver.sendCommand<

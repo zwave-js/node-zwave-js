@@ -43,7 +43,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getEndpoints() {
 		const cc = new MultiChannelCCEndPointGet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 		});
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCEndPointReport
@@ -62,7 +62,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		endpoint: number,
 	): Promise<EndpointCapability> {
 		const cc = new MultiChannelCCCapabilityGet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 			endpoint,
 		});
 		const response = (await this.driver.sendCommand<
@@ -78,7 +78,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		specificClass: number,
 	): Promise<readonly number[]> {
 		const cc = new MultiChannelCCEndPointFind(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 			genericClass,
 			specificClass,
 		});
@@ -94,7 +94,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		endpoint: number,
 	): Promise<readonly number[]> {
 		const cc = new MultiChannelCCAggregatedMembersGet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 			endpoint,
 		});
 		const response = (await this.driver.sendCommand<
@@ -112,7 +112,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		>,
 	): Promise<void> {
 		const cc = new MultiChannelCCCommandEncapsulation(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 			...options,
 		});
 		await this.driver.sendCommand(cc);

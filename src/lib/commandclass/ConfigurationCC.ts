@@ -107,7 +107,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	 */
 	public async get(parameter: number): Promise<ConfigValue | undefined> {
 		const cc = new ConfigurationCCGet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 			parameter,
 		});
 		try {
@@ -119,7 +119,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			// Nodes may respond with a different parameter, e.g. if we
 			// requested a non-existing one
 			if (response.parameter === parameter) return response.value;
-			log.controller.logNode(this.node, {
+			log.controller.logNode(this.endpoint.nodeId, {
 				message: `Received unexpected ConfigurationReport (param = ${response.parameter}, value = ${response.value})`,
 				direction: "inbound",
 				level: "error",
@@ -153,7 +153,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		valueSize: 1 | 2 | 4,
 	): Promise<boolean> {
 		const cc = new ConfigurationCCSet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 			parameter,
 			value,
 			valueSize,
@@ -182,7 +182,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	 */
 	public async reset(parameter: number): Promise<boolean> {
 		const cc = new ConfigurationCCSet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 			parameter,
 			resetToDefault: true,
 		});
@@ -207,7 +207,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	/** Resets all configuration parameters to their default value */
 	public async resetAll(): Promise<void> {
 		const cc = new ConfigurationCCDefaultReset(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 		});
 		await this.driver.sendCommand(cc);
 	}
@@ -215,14 +215,17 @@ export class ConfigurationCCAPI extends CCAPI {
 	/** Scans a V1/V2 node for the existing parameters using get/set commands */
 	private async scanParametersV1V2(): Promise<void> {
 		// TODO: Reduce the priority of the messages
-		log.controller.logNode(this.node, `Scanning available parameters...`);
-		const ccInstance = this.node.createCCInstance<ConfigurationCC>(
+		log.controller.logNode(
+			this.endpoint.nodeId,
+			`Scanning available parameters...`,
+		);
+		const ccInstance = this.endpoint.createCCInstance<ConfigurationCC>(
 			getCommandClass(this),
 		)!;
 		for (let param = 1; param <= 255; param++) {
 			// Check if the parameter is readable
 			let originalValue: ConfigValue | undefined;
-			log.controller.logNode(this.node, {
+			log.controller.logNode(this.endpoint.nodeId, {
 				message: `  trying param ${param}...`,
 				direction: "outbound",
 			});
@@ -233,7 +236,7 @@ export class ConfigurationCCAPI extends CCAPI {
     readable  = true
     valueSize = ${ccInstance.getParamInformation(param).valueSize}
     value     = ${originalValue}`;
-					log.controller.logNode(this.node, {
+					log.controller.logNode(this.endpoint.nodeId, {
 						message: logMessage,
 						direction: "inbound",
 					});
@@ -260,7 +263,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			// Request param properties, name and info
 			// The param information is stored automatically on receipt
 			const propCC = new ConfigurationCCPropertiesGet(this.driver, {
-				nodeId: this.node.id,
+				nodeId: this.endpoint.nodeId,
 				parameter: param,
 			});
 			const propResponse = (await this.driver.sendCommand<
@@ -268,13 +271,13 @@ export class ConfigurationCCAPI extends CCAPI {
 			>(propCC))!;
 
 			const nameCC = new ConfigurationCCNameGet(this.driver, {
-				nodeId: this.node.id,
+				nodeId: this.endpoint.nodeId,
 				parameter: param,
 			});
 			await this.driver.sendCommand(nameCC);
 
 			const infoCC = new ConfigurationCCInfoGet(this.driver, {
-				nodeId: this.node.id,
+				nodeId: this.endpoint.nodeId,
 				parameter: param,
 			});
 			await this.driver.sendCommand(infoCC);

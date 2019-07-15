@@ -37,7 +37,7 @@ export class ManufacturerSpecificCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
 		const cc = new ManufacturerSpecificCCGet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 		});
 		const response = (await this.driver.sendCommand<
 			ManufacturerSpecificCCReport
@@ -55,7 +55,7 @@ export class ManufacturerSpecificCCAPI extends CCAPI {
 		deviceIdType: DeviceIdType,
 	): Promise<string> {
 		const cc = new ManufacturerSpecificCCDeviceSpecificGet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 			deviceIdType,
 		});
 		const response = (await this.driver.sendCommand<

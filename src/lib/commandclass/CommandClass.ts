@@ -4,6 +4,7 @@ import * as fs from "fs";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import { Endpoint } from "../node/Endpoint";
 import { ZWaveNode } from "../node/Node";
 import { ValueDB } from "../node/ValueDB";
 import { JSONObject, staticExtends, stripUndefined } from "../util/misc";
@@ -525,7 +526,7 @@ export interface Constructable<T extends CommandClass> {
 			| CommandClassDeserializationOptions,
 	): T;
 }
-type APIConstructor = new (driver: IDriver, node: ZWaveNode) => CCAPI;
+type APIConstructor = new (driver: IDriver, endpoint: Endpoint) => CCAPI;
 
 type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
 type CCCommandMap = Map<string, Constructable<CommandClass>>;

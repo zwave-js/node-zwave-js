@@ -25,22 +25,29 @@ import { CommandClasses } from "./CommandClasses";
 
 @API(CommandClasses.Basic)
 export class BasicCCAPI extends CCAPI {
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ propertyName },
+	protected [SET_VALUE]: SetValueImplementation = async ({
+		propertyName,
 		value,
-	): Promise<void> => {
+	}): Promise<void> => {
 		if (propertyName !== "targetValue") {
 			return throwUnsupportedProperty(this.ccId, propertyName);
 		}
 		if (typeof value !== "number") {
-			return throwWrongValueType(this.ccId, propertyName, "number");
+			return throwWrongValueType(
+				this.ccId,
+				propertyName,
+				"number",
+				typeof value,
+			);
 		}
 		await this.set(value);
 	};
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
-		const cc = new BasicCCGet(this.driver, { nodeId: this.node.id });
+		const cc = new BasicCCGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+		});
 		const response = (await this.driver.sendCommand<BasicCCReport>(cc))!;
 		return {
 			currentValue: response.currentValue,
@@ -51,7 +58,7 @@ export class BasicCCAPI extends CCAPI {
 
 	public async set(targetValue: number): Promise<void> {
 		const cc = new BasicCCSet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 			targetValue,
 		});
 		await this.driver.sendCommand(cc);

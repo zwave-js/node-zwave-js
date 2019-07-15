@@ -51,7 +51,7 @@ export class BinarySensorCCAPI extends CCAPI {
 	 */
 	public async get(sensorType?: BinarySensorType): Promise<boolean> {
 		const cc = new BinarySensorCCGet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 			sensorType,
 		});
 		const response = (await this.driver.sendCommand<BinarySensorCCReport>(
@@ -64,7 +64,7 @@ export class BinarySensorCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getSupportedSensorTypes() {
 		const cc = new BinarySensorCCSupportedGet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 		});
 		const response = (await this.driver.sendCommand<
 			BinarySensorCCSupportedReport

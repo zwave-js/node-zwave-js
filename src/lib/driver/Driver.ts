@@ -325,7 +325,7 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	private onNodeWakeUp(node: IZWaveNode): void {
-		log.controller.logNode(node, "The node is now awake.");
+		log.controller.logNode(node.id, "The node is now awake.");
 
 		// It *should* not be necessary to restart the node interview here.
 		// When a node that supports wakeup does not respond, pending promises
@@ -337,11 +337,11 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	private onNodeSleep(node: ZWaveNode): void {
-		log.controller.logNode(node, "The node is now asleep.");
+		log.controller.logNode(node.id, "The node is now asleep.");
 	}
 
 	private onNodeAlive(node: ZWaveNode): void {
-		log.controller.logNode(node, "The node is now alive.");
+		log.controller.logNode(node.id, "The node is now alive.");
 		if (node.interviewStage !== InterviewStage.Complete) {
 			void this.interviewNode(node);
 		}
@@ -896,7 +896,7 @@ ${handlers.length} left`,
 			if (msg instanceof ApplicationUpdateRequestNodeInfoReceived) {
 				const node = msg.getNodeUnsafe();
 				if (node) {
-					log.controller.logNode(node, {
+					log.controller.logNode(node.id, {
 						message: "Received updated node info",
 						direction: "inbound",
 					});

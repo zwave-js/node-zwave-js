@@ -18,7 +18,9 @@ import { CommandClasses } from "./CommandClasses";
 export class BatteryCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
-		const cc = new BatteryCCGet(this.driver, { nodeId: this.node.id });
+		const cc = new BatteryCCGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+		});
 		const response = (await this.driver.sendCommand<BatteryCCReport>(cc))!;
 		return {
 			level: response.level,

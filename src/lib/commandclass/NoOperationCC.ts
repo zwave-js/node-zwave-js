@@ -14,7 +14,7 @@ export class NoOperationCCAPI extends CCAPI {
 	public async send(): Promise<void> {
 		const request = new SendDataRequest(this.driver, {
 			command: new NoOperationCC(this.driver, {
-				nodeId: this.node.id,
+				nodeId: this.endpoint.nodeId,
 			}),
 		});
 		// Don't retry sending ping packets

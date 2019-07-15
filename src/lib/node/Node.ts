@@ -12,8 +12,6 @@ import {
 } from "../commandclass/CentralSceneCC";
 import {
 	CommandClass,
-	CommandClassInfo,
-	getAPI,
 	getCCConstructor,
 	getImplementedVersion,
 	StateKind,
@@ -45,7 +43,7 @@ import {
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { JSONObject } from "../util/misc";
+import { JSONObject, Mixin } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import { CacheValue } from "../values/Cache";
 import {
@@ -54,6 +52,7 @@ import {
 	GenericDeviceClass,
 	SpecificDeviceClass,
 } from "./DeviceClass";
+import { Endpoint } from "./Endpoint";
 import { InterviewStage, IZWaveNode, NodeStatus } from "./INode";
 import { NodeUpdatePayload } from "./NodeInfo";
 import {
@@ -122,17 +121,28 @@ export interface ZWaveNode {
 		callback: ZWaveNodeEventCallbacks[TEvent],
 	): this;
 	removeAllListeners(event?: ZWaveNodeEvents): this;
+
+	emit<TEvent extends ZWaveNodeEvents>(
+		event: TEvent,
+		...args: Parameters<ZWaveNodeEventCallbacks[TEvent]>
+	): this;
 }
 
-export class ZWaveNode extends EventEmitter implements IZWaveNode {
+/**
+ * A ZWaveNode represents a node in a Z-Wave network. It is also an instance
+ * of its root endpoint (index 0)
+ */
+@Mixin([EventEmitter])
+export class ZWaveNode extends Endpoint implements IZWaveNode {
 	public constructor(
 		public readonly id: number,
-		private readonly driver: Driver,
+		driver: Driver,
 		deviceClass?: DeviceClass,
 		supportedCCs: CommandClasses[] = [],
 		controlledCCs: CommandClasses[] = [],
 	) {
-		super();
+		// Define this node's intrinsic endpoint as the root device (0)
+		super(id, driver, 0);
 
 		this._valueDB = new ValueDB();
 		for (const event of [
@@ -173,7 +183,7 @@ export class ZWaveNode extends EventEmitter implements IZWaveNode {
 		// I don't like the splitting and any but its the easiest solution here
 		log.controller.value(eventName.split(" ")[1] as any, outArg as any);
 		// And pass the translated event to our listeners
-		this.emit(eventName, outArg);
+		this.emit(eventName, outArg as any);
 	}
 
 	//#region --- properties ---
@@ -281,21 +291,6 @@ export class ZWaveNode extends EventEmitter implements IZWaveNode {
 		return this.getValue(CommandClasses.Version, 0, "firmwareVersion");
 	}
 
-	private _implementedCommandClasses = new Map<
-		CommandClasses,
-		CommandClassInfo
-	>();
-	/**
-	 * @internal
-	 * Information about the implemented Command Classes of this node.
-	 */
-	public get implementedCommandClasses(): ReadonlyMap<
-		CommandClasses,
-		CommandClassInfo
-	> {
-		return this._implementedCommandClasses;
-	}
-
 	private _neighbors: readonly number[] = [];
 	/** The IDs of all direct neighbors of this node */
 	public get neighbors(): readonly number[] {
@@ -353,13 +348,13 @@ export class ZWaveNode extends EventEmitter implements IZWaveNode {
 		// Try to retrieve the corresponding CC API
 		try {
 			// Access the CC API by name
-			const api = this.commandClasses[
-				(CommandClasses[cc] as unknown) as keyof CCAPIs
+			const api = this.getEndpoint(endpoint).commandClasses[
+				(cc as unknown) as keyof CCAPIs
 			] as CCAPI;
 			// Check if the setValue method is implemented
 			if (!api.setValue) return false;
 			// And call it
-			await api.setValue({ endpoint, propertyName, propertyKey }, value);
+			await api.setValue({ propertyName, propertyKey, value });
 			return true;
 		} catch (e) {
 			if (
@@ -373,64 +368,26 @@ export class ZWaveNode extends EventEmitter implements IZWaveNode {
 		}
 	}
 
-	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();
-	private _commandClassAPIsProxy = new Proxy(this._commandClassAPIs, {
-		get: (target, ccName: string) => {
-			// The command classes are exposed to library users by their name, not the ID
-			// Retrive the corresponding ID because we use it internally
-			const ccId = (CommandClasses[ccName as any] as unknown) as
-				| CommandClasses
-				| undefined;
-			if (ccId == undefined)
-				throw new ZWaveError(
-					`Command Class ${ccName} is not implemented! If you are sure that the name is correct, consider opening an issue at https://github.com/AlCalzone/node-zwave-js`,
-					ZWaveErrorCodes.CC_NotImplemented,
-				);
-
-			// When accessing a CC API for the first time, we need to create it
-			if (!target.has(ccId)) {
-				const api = this.createAPI(ccId);
-				target.set(ccId, api);
-			}
-			return target.get(ccId);
-		},
-	});
-	/**
-	 * Provides access to simplified APIs that are taylored to specific CCs.
-	 * Make sure to check support of each API using `API.isSupported()` since
-	 * all other API calls will throw if the API is not supported
-	 */
-	public get commandClasses(): CCAPIs {
-		return (this._commandClassAPIsProxy as unknown) as CCAPIs;
-	}
-
-	/**
-	 * @internal
-	 * Creates an API instance for a given command class. Throws if no API is defined.
-	 * @param ccId The command class to create an API instance for
-	 */
-	public createAPI(ccId: CommandClasses): CCAPI {
-		const APIConstructor = getAPI(ccId);
-		const ccName = CommandClasses[ccId];
-		if (APIConstructor == undefined) {
+	/** Cache for this node's endpoint instances */
+	private _endpoints = new Map<number, Endpoint>();
+	/** Returns an endpoint of this node with the given index */
+	public getEndpoint(index: number): Endpoint {
+		if (index < 0)
 			throw new ZWaveError(
-				`Command Class ${ccName} has no associated API!`,
-				ZWaveErrorCodes.CC_NotSupported,
+				"The endpoint index must be positive!",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		// Zero is the root endpoint - i.e. this node
+		if (index === 0) return this;
+		// TODO: Check if the requested endpoint exists on the physical node
+		// Create an endpoint instance if it does not exist
+		if (!this._endpoints.has(index)) {
+			this._endpoints.set(
+				index,
+				new Endpoint(this.id, this.driver, index),
 			);
 		}
-		const apiInstance = new APIConstructor(this.driver, this);
-		return new Proxy(apiInstance, {
-			get: (target, property) => {
-				// Forbid access to the API if it is not supported by the node
-				if (property !== "isSupported" && !target.isSupported()) {
-					throw new ZWaveError(
-						`Node ${this.id} does not support the Command Class ${ccName}!`,
-						ZWaveErrorCodes.CC_NotSupported,
-					);
-				}
-				return target[property as keyof CCAPI];
-			},
-		});
+		return this._endpoints.get(index)!;
 	}
 
 	/**
@@ -445,74 +402,6 @@ export class ZWaveNode extends EventEmitter implements IZWaveNode {
 		return this.id === this.driver.controller.ownNodeId;
 	}
 
-	/**
-	 * Adds a CC to the list of command classes implemented by the node or updates the information.
-	 * You shouldn't need to call this yourself.
-	 * @param info The information about the command class. This is merged with existing information.
-	 */
-	public addCC(cc: CommandClasses, info: Partial<CommandClassInfo>): void {
-		let ccInfo = this._implementedCommandClasses.has(cc)
-			? this._implementedCommandClasses.get(cc)
-			: {
-					isSupported: false,
-					isControlled: false,
-					version: 0,
-			  };
-		ccInfo = Object.assign(ccInfo, info);
-		this._implementedCommandClasses.set(cc, ccInfo);
-	}
-
-	/** Removes a CC from the list of command classes implemented by the node */
-	public removeCC(cc: CommandClasses): void {
-		this._implementedCommandClasses.delete(cc);
-	}
-
-	/** Tests if this node supports the given CommandClass */
-	public supportsCC(cc: CommandClasses): boolean {
-		return (
-			this._implementedCommandClasses.has(cc) &&
-			!!this._implementedCommandClasses.get(cc)!.isSupported
-		);
-	}
-
-	/** Tests if this node controls the given CommandClass */
-	public controlsCC(cc: CommandClasses): boolean {
-		return (
-			this._implementedCommandClasses.has(cc) &&
-			!!this._implementedCommandClasses.get(cc)!.isControlled
-		);
-	}
-
-	/**
-	 * Retrieves the version of the given CommandClass this node implements.
-	 * Returns 0 if the CC is not supported.
-	 */
-	public getCCVersion(cc: CommandClasses): number {
-		const ccInfo = this._implementedCommandClasses.get(cc);
-		return (ccInfo && ccInfo.version) || 0;
-	}
-
-	/**
-	 * Creates an instance of the given CC, which is linked to this node.
-	 * Throws if the CC is neither supported nor controlled by the node.
-	 */
-	// wotan-disable no-misused-generics
-	public createCCInstance<T extends CommandClass>(
-		cc: CommandClasses,
-	): T | undefined {
-		if (!this.supportsCC(cc) && !this.controlsCC(cc)) {
-			throw new ZWaveError(
-				`Cannot create an instance of the unsupported CC ${
-					CommandClasses[cc]
-				} (${num2hex(cc)})`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
-		const Constructor = getCCConstructor(cc);
-		if (Constructor)
-			return new Constructor(this.driver, { nodeId: this.id }) as T;
-	}
-
 	//#region --- interview ---
 
 	/**
@@ -522,7 +411,7 @@ export class ZWaveNode extends EventEmitter implements IZWaveNode {
 	public async interview(): Promise<boolean> {
 		if (this.interviewStage === InterviewStage.Complete) {
 			log.controller.logNode(
-				this,
+				this.id,
 				`skipping interview because it is already completed`,
 			);
 			return true;
@@ -536,7 +425,10 @@ export class ZWaveNode extends EventEmitter implements IZWaveNode {
 
 		if (this.interviewStage === InterviewStage.None) {
 			// do a full interview starting with the protocol info
-			log.controller.logNode(this, `new node, doing a full interview...`);
+			log.controller.logNode(
+				this.id,
+				`new node, doing a full interview...`,
+			);
 			await this.queryProtocolInfo();
 		}
 
@@ -634,7 +526,7 @@ export class ZWaveNode extends EventEmitter implements IZWaveNode {
 	/** Step #1 of the node interview */
 	protected async queryProtocolInfo(): Promise<void> {
 		// TODO: add direction
-		log.controller.logNode(this, {
+		log.controller.logNode(this.id, {
 			message: "querying protocol info...",
 			direction: "outbound",
 		});
@@ -672,7 +564,7 @@ is a beaming device:   ${this.isBeaming}
 is a listening device: ${this.isListening}
 maximum baud rate:     ${this.maxBaudRate} kbps
 version:               ${this.version}`;
-		log.controller.logNode(this, {
+		log.controller.logNode(this.id, {
 			message: logMessage,
 			direction: "inbound",
 		});
@@ -694,21 +586,21 @@ version:               ${this.version}`;
 	/** Step #3 of the node interview */
 	protected async ping(): Promise<boolean> {
 		if (this.isControllerNode()) {
-			log.controller.logNode(this, "not pinging the controller");
+			log.controller.logNode(this.id, "not pinging the controller");
 		} else {
-			log.controller.logNode(this, {
+			log.controller.logNode(this.id, {
 				message: "pinging the node...",
 				direction: "outbound",
 			});
 
 			try {
 				await this.commandClasses["No Operation"].send();
-				log.controller.logNode(this, {
+				log.controller.logNode(this.id, {
 					message: "ping successful",
 					direction: "inbound",
 				});
 			} catch (e) {
-				log.controller.logNode(this, "ping failed: " + e.message);
+				log.controller.logNode(this.id, "ping failed: " + e.message);
 				return false;
 			}
 		}
@@ -719,11 +611,11 @@ version:               ${this.version}`;
 	protected async queryNodeInfo(): Promise<void> {
 		if (this.isControllerNode()) {
 			log.controller.logNode(
-				this,
+				this.id,
 				"not querying node info from the controller",
 			);
 		} else {
-			log.controller.logNode(this, {
+			log.controller.logNode(this.id, {
 				message: "querying node info...",
 				direction: "outbound",
 			});
@@ -735,7 +627,7 @@ version:               ${this.version}`;
 				resp instanceof ApplicationUpdateRequestNodeInfoRequestFailed
 			) {
 				log.controller.logNode(
-					this,
+					this.id,
 					`querying the node info failed`,
 					"error",
 				);
@@ -755,7 +647,7 @@ version:               ${this.version}`;
 					const ccName = CommandClasses[cc];
 					logLines.push(`  ${ccName ? ccName : num2hex(cc)}`);
 				}
-				log.controller.logNode(this, {
+				log.controller.logNode(this.id, {
 					message: logLines.join("\n"),
 					direction: "inbound",
 				});
@@ -770,11 +662,11 @@ version:               ${this.version}`;
 	protected async queryNodePlusInfo(): Promise<void> {
 		if (!this.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
 			log.controller.logNode(
-				this,
+				this.id,
 				"skipping Z-Wave+ query because the device does not support it",
 			);
 		} else {
-			log.controller.logNode(this, {
+			log.controller.logNode(this.id, {
 				message: "querying Z-Wave+ information...",
 				direction: "outbound",
 			});
@@ -789,13 +681,13 @@ version:               ${this.version}`;
   node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}
   installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}
   user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
-				log.controller.logNode(this, {
+				log.controller.logNode(this.id, {
 					message: logMessage,
 					direction: "inbound",
 				});
 			} catch (e) {
 				log.controller.logNode(
-					this,
+					this.id,
 					`  querying the Z-Wave+ information failed: ${e.message}`,
 					"error",
 				);
@@ -809,11 +701,11 @@ version:               ${this.version}`;
 	protected async queryManufacturerSpecific(): Promise<void> {
 		if (this.isControllerNode()) {
 			log.controller.logNode(
-				this,
+				this.id,
 				"not querying manufacturer information from the controller...",
 			);
 		} else {
-			log.controller.logNode(this, {
+			log.controller.logNode(this.id, {
 				message: "querying manufacturer information...",
 				direction: "outbound",
 			});
@@ -826,13 +718,13 @@ version:               ${this.version}`;
 		"unknown"} (${num2hex(mfResp.manufacturerId)})
   product type: ${num2hex(mfResp.productType)}
   product id:   ${num2hex(mfResp.productId)}`;
-				log.controller.logNode(this, {
+				log.controller.logNode(this.id, {
 					message: logMessage,
 					direction: "inbound",
 				});
 			} catch (e) {
 				log.controller.logNode(
-					this,
+					this.id,
 					`  querying the manufacturer information failed: ${e.message}`,
 					"error",
 				);
@@ -845,16 +737,16 @@ version:               ${this.version}`;
 
 	/** Step #9 of the node interview */
 	protected async queryCCVersions(): Promise<void> {
-		log.controller.logNode(this, {
+		log.controller.logNode(this.id, {
 			message: "querying CC versions...",
 			direction: "outbound",
 		});
-		for (const [cc] of this._implementedCommandClasses.entries()) {
+		for (const [cc] of this.implementedCommandClasses.entries()) {
 			// only query the ones we support a version > 1 for
 			const maxImplemented = getImplementedVersion(cc);
 			if (maxImplemented < 1) {
 				log.controller.logNode(
-					this,
+					this.id,
 					`  skipping query for ${CommandClasses[cc]} (${num2hex(
 						cc,
 					)}) because max implemented version is ${maxImplemented}`,
@@ -862,7 +754,7 @@ version:               ${this.version}`;
 				continue;
 			}
 			try {
-				log.controller.logNode(this, {
+				log.controller.logNode(this.id, {
 					message: `  querying the CC version for ${
 						CommandClasses[cc]
 					} (${num2hex(cc)})...`,
@@ -886,10 +778,10 @@ version:               ${this.version}`;
 						CommandClasses[cc]
 					} (${num2hex(cc)})`;
 				}
-				log.controller.logNode(this, logMessage);
+				log.controller.logNode(this.id, logMessage);
 			} catch (e) {
 				log.controller.logNode(
-					this,
+					this.id,
 					`  querying the CC versions failed: ${e.message}`,
 					"error",
 				);
@@ -902,7 +794,7 @@ version:               ${this.version}`;
 	/** Step #10 of the node interview */
 	protected async queryEndpoints(): Promise<void> {
 		if (this.supportsCC(CommandClasses["Multi Channel"])) {
-			log.controller.logNode(this, {
+			log.controller.logNode(this.id, {
 				message: "querying device endpoints...",
 				direction: "outbound",
 			});
@@ -919,13 +811,13 @@ version:               ${this.version}`;
 					logMessage += `
   endpoint count (aggregated): ${multiResponse.identicalCapabilities}`;
 				}
-				log.controller.logNode(this, {
+				log.controller.logNode(this.id, {
 					message: logMessage,
 					direction: "inbound",
 				});
 			} catch (e) {
 				log.controller.logNode(
-					this,
+					this.id,
 					`  querying the device endpoints failed: ${e.message}`,
 					"error",
 				);
@@ -933,7 +825,7 @@ version:               ${this.version}`;
 			}
 		} else {
 			log.controller.logNode(
-				this,
+				this.id,
 				`skipping endpoint query because the device does not support it`,
 			);
 		}
@@ -946,17 +838,17 @@ version:               ${this.version}`;
 		if (this.supportsCC(CommandClasses["Wake Up"])) {
 			if (this.isControllerNode()) {
 				log.controller.logNode(
-					this,
+					this.id,
 					`skipping wakeup configuration for the controller`,
 				);
 			} else if (this.isFrequentListening) {
 				log.controller.logNode(
-					this,
+					this.id,
 					`skipping wakeup configuration for frequent listening device`,
 				);
 			} else {
 				try {
-					log.controller.logNode(this, {
+					log.controller.logNode(this.id, {
 						message:
 							"retrieving wakeup interval from the device...",
 						direction: "outbound",
@@ -967,12 +859,12 @@ version:               ${this.version}`;
 					const logMessage = `received wakeup configuration:
   wakeup interval: ${wakeupResp.wakeupInterval} seconds
   controller node: ${wakeupResp.controllerNodeId}`;
-					log.controller.logNode(this, {
+					log.controller.logNode(this.id, {
 						message: logMessage,
 						direction: "inbound",
 					});
 
-					log.controller.logNode(this, {
+					log.controller.logNode(this.id, {
 						message: "configuring wakeup destination",
 						direction: "outbound",
 					});
@@ -981,10 +873,10 @@ version:               ${this.version}`;
 						wakeupResp.wakeupInterval,
 						this.driver.controller.ownNodeId!,
 					);
-					log.controller.logNode(this, "  done!");
+					log.controller.logNode(this.id, "  done!");
 				} catch (e) {
 					log.controller.logNode(
-						this,
+						this.id,
 						`  configuring the device wakeup failed: ${e.message}`,
 						"error",
 					);
@@ -993,7 +885,7 @@ version:               ${this.version}`;
 			}
 		} else {
 			log.controller.logNode(
-				this,
+				this.id,
 				`skipping wakeup for non-sleeping device`,
 			);
 		}
@@ -1001,19 +893,19 @@ version:               ${this.version}`;
 	}
 
 	protected async requestStaticValues(): Promise<void> {
-		log.controller.logNode(this, {
+		log.controller.logNode(this.id, {
 			message: "requesting static values...",
 			direction: "outbound",
 		});
 		try {
 			await this.requestState(StateKind.Static);
-			log.controller.logNode(this, {
+			log.controller.logNode(this.id, {
 				message: `  static values received`,
 				direction: "inbound",
 			});
 		} catch (e) {
 			log.controller.logNode(
-				this,
+				this.id,
 				`  requesting the static values failed: ${e.message}`,
 				"error",
 			);
@@ -1025,7 +917,7 @@ version:               ${this.version}`;
 	protected async overwriteConfig(): Promise<void> {
 		if (this.isControllerNode()) {
 			log.controller.logNode(
-				this,
+				this.id,
 				"not loading device config for the controller",
 			);
 		} else if (
@@ -1034,12 +926,12 @@ version:               ${this.version}`;
 			this.productType == undefined
 		) {
 			log.controller.logNode(
-				this,
+				this.id,
 				"device information incomplete, cannot load config file",
 				"error",
 			);
 		} else {
-			log.controller.logNode(this, "trying to load device config");
+			log.controller.logNode(this.id, "trying to load device config");
 			const config = await lookupDevice(
 				this.manufacturerId,
 				this.productId,
@@ -1056,20 +948,23 @@ version:               ${this.version}`;
 					);
 				} else {
 					log.controller.logNode(
-						this,
+						this.id,
 						"  invalid config file!",
 						"error",
 					);
 				}
 			} else {
-				log.controller.logNode(this, "  no device config file found!");
+				log.controller.logNode(
+					this.id,
+					"  no device config file found!",
+				);
 			}
 		}
 		await this.setInterviewStage(InterviewStage.OverwriteConfig);
 	}
 
 	protected async queryNeighbors(): Promise<void> {
-		log.controller.logNode(this, {
+		log.controller.logNode(this.id, {
 			message: "requesting node neighbors...",
 			direction: "outbound",
 		});
@@ -1082,7 +977,7 @@ version:               ${this.version}`;
 				}),
 			);
 			this._neighbors = resp.nodeIds;
-			log.controller.logNode(this, {
+			log.controller.logNode(this.id, {
 				message: `  node neighbors received: ${this._neighbors.join(
 					", ",
 				)}`,
@@ -1090,7 +985,7 @@ version:               ${this.version}`;
 			});
 		} catch (e) {
 			log.controller.logNode(
-				this,
+				this.id,
 				`  requesting the node neighbors failed: ${e.message}`,
 				"error",
 			);
@@ -1116,7 +1011,7 @@ version:               ${this.version}`;
 			return this.handleNotificationReport(command);
 		}
 
-		log.controller.logNode(this, {
+		log.controller.logNode(this.id, {
 			message: `TODO: no handler for application command ${stringify(
 				command,
 			)}`,
@@ -1220,7 +1115,7 @@ version:               ${this.version}`;
 		}
 
 		setSceneValue(command.sceneNumber, command.keyAttribute);
-		log.controller.logNode(this, {
+		log.controller.logNode(this.id, {
 			message: `received CentralScene notification ${stringify(command)}`,
 			direction: "inbound",
 		});
@@ -1231,7 +1126,7 @@ version:               ${this.version}`;
 		// TODO: Do we need this parameter?
 		_command: WakeUpCCWakeUpNotification,
 	): void {
-		log.controller.logNode(this, {
+		log.controller.logNode(this.id, {
 			message: `received wakeup notification`,
 			direction: "inbound",
 		});
@@ -1241,7 +1136,7 @@ version:               ${this.version}`;
 	/** Handles the receipt of a Notification Report */
 	private handleNotificationReport(command: NotificationCCReport): void {
 		// TODO: Do we need this?
-		log.controller.logNode(this, {
+		log.controller.logNode(this.id, {
 			message: `received Notification ${stringify(command)}`,
 			direction: "inbound",
 		});
@@ -1255,7 +1150,7 @@ version:               ${this.version}`;
 	public async requestState(
 		kind: StateKind,
 		commandClasses: CommandClasses[] = [
-			...this._implementedCommandClasses.keys(),
+			...this.implementedCommandClasses.keys(),
 		],
 	): Promise<void> {
 		// TODO: Support multiple instances
@@ -1362,7 +1257,7 @@ version:               ${this.version}`;
 
 		// Parse single properties
 		const tryParse = (
-			key: keyof ZWaveNode,
+			key: Extract<keyof ZWaveNode, string>,
 			type: "boolean" | "number" | "string",
 		): void => {
 			if (typeof obj[key] === type)
@@ -1410,7 +1305,7 @@ version:               ${this.version}`;
 								values as CacheValue[],
 							);
 						} catch (e) {
-							log.controller.logNode(this, {
+							log.controller.logNode(this.id, {
 								message: `Error during deserialization of CC values from cache:\n${e}`,
 								level: "error",
 							});
@@ -1459,13 +1354,13 @@ version:               ${this.version}`;
 
 		let msgSent = false;
 		if (this.isAwake() && this.interviewStage === InterviewStage.Complete) {
-			log.controller.logNode(this, {
+			log.controller.logNode(this.id, {
 				message: "Sending node back to sleep...",
 				direction: "outbound",
 			});
 			await this.commandClasses["Wake Up"].sendNoMoreInformation();
 			this.setAwake(false);
-			log.controller.logNode(this, "  Node asleep");
+			log.controller.logNode(this.id, "  Node asleep");
 
 			msgSent = true;
 		}

@@ -51,7 +51,7 @@ export class NotificationCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get(options: NotificationCCGetSpecificOptions) {
 		const cc = new NotificationCCGet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 			...options,
 		});
 		const response = (await this.driver.sendCommand<NotificationCCReport>(
@@ -72,7 +72,7 @@ export class NotificationCCAPI extends CCAPI {
 		notificationStatus: boolean,
 	): Promise<void> {
 		const cc = new NotificationCCSet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 			notificationType,
 			notificationStatus,
 		});
@@ -82,7 +82,7 @@ export class NotificationCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getSupported() {
 		const cc = new NotificationCCSupportedGet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 		});
 		const response = (await this.driver.sendCommand<
 			NotificationCCSupportedReport
@@ -96,7 +96,7 @@ export class NotificationCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getSupportedEvents(notificationType: NotificationType) {
 		const cc = new NotificationCCEventSupportedGet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
 			notificationType,
 		});
 		const response = (await this.driver.sendCommand<
