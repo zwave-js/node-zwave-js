@@ -3,7 +3,13 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
-import { CCAPI } from "./API";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -110,6 +116,19 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			secondarySwitchType: response.secondarySwitchType,
 		};
 	}
+
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ propertyName },
+		value,
+	): Promise<void> => {
+		if (propertyName !== "targetValue") {
+			return throwUnsupportedProperty(this.ccId, propertyName);
+		}
+		if (typeof value !== "number") {
+			return throwWrongValueType(this.ccId, propertyName, "number");
+		}
+		await this.set(value);
+	};
 }
 
 @commandClass(CommandClasses["Multilevel Switch"])

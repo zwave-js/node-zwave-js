@@ -1,7 +1,46 @@
 import { IDriver } from "../driver/IDriver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { IZWaveNode } from "../node/INode";
 import { getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
+
+/** Used to identify the method on the CC API class that handles setting values on nodes directly */
+export const SET_VALUE: unique symbol = Symbol.for("CCAPI_SET_VALUE");
+export type SetValueImplementation = (
+	{
+		endpoint,
+		propertyName,
+		propertyKey,
+	}: {
+		endpoint: number;
+		propertyName: string;
+		propertyKey?: number | string;
+	},
+	value: unknown,
+) => Promise<void>;
+
+// Since the setValue API is called from a point with very generic parameters,
+// we must do narrowing inside the API calls. These two methods are for convenience
+export function throwUnsupportedProperty(
+	cc: CommandClasses,
+	propertyName: string,
+): never {
+	throw new ZWaveError(
+		`${CommandClasses[cc]}: "${propertyName}" is not a supported property`,
+		ZWaveErrorCodes.Argument_Invalid,
+	);
+}
+
+export function throwWrongValueType(
+	cc: CommandClasses,
+	propertyName: string,
+	expectedType: string,
+): never {
+	throw new ZWaveError(
+		`${CommandClasses[cc]}: "${propertyName}" must be of type "${expectedType}"`,
+		ZWaveErrorCodes.Argument_Invalid,
+	);
+}
 
 /** The base class for all CC APIs exposed via `Node.commandClasses.<CCName>` */
 export class CCAPI {
@@ -13,6 +52,11 @@ export class CCAPI {
 	}
 
 	protected readonly ccId: CommandClasses;
+
+	protected [SET_VALUE]: SetValueImplementation | undefined;
+	public get setValue(): SetValueImplementation | undefined {
+		return this[SET_VALUE];
+	}
 
 	/**
 	 * Retrieves the version of the given CommandClass this node implements

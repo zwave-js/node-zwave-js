@@ -1,7 +1,7 @@
 import { entries } from "alcalzone-shared/objects";
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
-import { BasicCC } from "../commandclass/BasicCC";
+import { BasicCC, BasicCommand } from "../commandclass/BasicCC";
 import { BinarySensorCC } from "../commandclass/BinarySensorCC";
 import {
 	CommandClass,
@@ -1215,9 +1215,9 @@ describe("lib/node/Node", () => {
 		it("should contain a speaking name for the CC", () => {
 			const cc = CommandClasses.Irrigation;
 			const ccName = CommandClasses[cc];
-			node.valueDB.setValue(cc, undefined, "fooProp", 1);
+			node.valueDB.setValue(cc, 0, "fooProp", 1);
 			expect(onValueAdded).toBeCalled();
-			node.valueDB.setValue(cc, undefined, "fooProp", 3);
+			node.valueDB.setValue(cc, 0, "fooProp", 3);
 			expect(onValueUpdated).toBeCalled();
 			node.valueDB.clear();
 			expect(onValueRemoved).toBeCalled();
@@ -1235,7 +1235,7 @@ describe("lib/node/Node", () => {
 		it("should contain a speaking name for the propertyKey", () => {
 			node.valueDB.setValue(
 				CommandClasses["Multilevel Sensor"],
-				undefined,
+				0,
 				"values",
 				31 /* Moisture */,
 				5,
@@ -1376,6 +1376,34 @@ describe("lib/node/Node", () => {
 			node.valueDB.setValue(1, 2, "3", 4);
 
 			expect(node.getValue(1, 2, "3")).toBe(4);
+		});
+	});
+
+	describe("setValue()", () => {
+		const fakeDriver = createEmptyMockDriver();
+		it("issues the correct xyzCCSet command", async () => {
+			// We test with a BasicCC
+			const node = new ZWaveNode(1, fakeDriver as any);
+			node.addCC(CommandClasses.Basic, { isSupported: true });
+			const result = await node.setValue(
+				{
+					cc: CommandClasses.Basic,
+					endpoint: 0,
+					propertyName: "targetValue",
+				},
+				5,
+			);
+
+			expect(result).toBeTrue();
+			expect(fakeDriver.sendMessage).toBeCalled();
+
+			assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
+				cc: BasicCC,
+				nodeId: node.id,
+				ccValues: {
+					ccCommand: BasicCommand.Set,
+				},
+			});
 		});
 	});
 });

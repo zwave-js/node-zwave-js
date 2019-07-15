@@ -256,7 +256,7 @@ export class ZWaveNode extends EventEmitter implements IZWaveNode {
 	public get manufacturerId(): number | undefined {
 		return this.getValue(
 			CommandClasses["Manufacturer Specific"],
-			undefined,
+			0,
 			"manufacturerId",
 		);
 	}
@@ -264,7 +264,7 @@ export class ZWaveNode extends EventEmitter implements IZWaveNode {
 	public get productId(): number | undefined {
 		return this.getValue(
 			CommandClasses["Manufacturer Specific"],
-			undefined,
+			0,
 			"productId",
 		);
 	}
@@ -272,17 +272,13 @@ export class ZWaveNode extends EventEmitter implements IZWaveNode {
 	public get productType(): number | undefined {
 		return this.getValue(
 			CommandClasses["Manufacturer Specific"],
-			undefined,
+			0,
 			"productType",
 		);
 	}
 
 	public get firmwareVersion(): string | undefined {
-		return this.getValue(
-			CommandClasses.Version,
-			undefined,
-			"firmwareVersion",
-		);
+		return this.getValue(CommandClasses.Version, 0, "firmwareVersion");
 	}
 
 	private _implementedCommandClasses = new Map<
@@ -315,20 +311,66 @@ export class ZWaveNode extends EventEmitter implements IZWaveNode {
 	}
 
 	/**
-	 * Retrieves a value for a given property of a given CommandClass
+	 * Retrieves a stored value for a given property of a given CommandClass.
+	 * This does not request an updated value from the node!
 	 * @param cc The command class the value belongs to
-	 * @param endpoint The optional endpoint the value belongs to
+	 * @param endpoint The endpoint the value belongs to (0 for the root device)
 	 * @param propertyName The property name the value belongs to
 	 * @param propertyKey (optional) The sub-property to access
 	 */
 	/* wotan-disable-next-line no-misused-generics */
 	public getValue<T = unknown>(
 		cc: CommandClasses,
-		endpoint: number | undefined,
+		endpoint: number,
 		propertyName: string,
 		propertyKey?: number | string,
 	): T | undefined {
 		return this._valueDB.getValue(cc, endpoint, propertyName, propertyKey);
+	}
+
+	/**
+	 * Updates a value for a given property of a given CommandClass on the node.
+	 * This will communicate with the node!
+	 * @param cc The command class the value belongs to
+	 * @param endpoint The endpoint the value belongs to (0 for the root device)
+	 * @param propertyName The property name the value belongs to
+	 * @param propertyKey (optional) The sub-property to access
+	 */
+	public async setValue(
+		{
+			cc,
+			endpoint,
+			propertyName,
+			propertyKey,
+		}: {
+			cc: CommandClasses;
+			endpoint: number;
+			propertyName: string;
+			propertyKey?: number | string;
+		},
+		value: unknown,
+	): Promise<boolean> {
+		// Try to retrieve the corresponding CC API
+		try {
+			// Access the CC API by name
+			const api = this.commandClasses[
+				(CommandClasses[cc] as unknown) as keyof CCAPIs
+			] as CCAPI;
+			// Check if the setValue method is implemented
+			if (!api.setValue) return false;
+			// And call it
+			await api.setValue({ endpoint, propertyName, propertyKey }, value);
+			return true;
+		} catch (e) {
+			if (
+				e instanceof ZWaveError &&
+				e.code === ZWaveErrorCodes.CC_NotImplemented
+			) {
+				// This CC is not implemented
+				return false;
+			}
+			throw e;
+		}
 	}
 
 	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();

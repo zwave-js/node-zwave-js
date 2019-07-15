@@ -50,7 +50,7 @@ export interface ValueDB {
 
 function getValueKey(
 	cc: CommandClasses,
-	endpoint: number | undefined,
+	endpoint: number,
 	propertyName: string,
 	propertyKey?: string | number,
 ): string {
@@ -69,13 +69,13 @@ export class ValueDB extends EventEmitter {
 	/**
 	 * Stores a value for a given property of a given CommandClass
 	 * @param cc The command class the value belongs to
-	 * @param endpoint The optional endpoint the value belongs to
+	 * @param endpoint The endpoint the value belongs to (0 for the root device)
 	 * @param propertyName The property name the value belongs to
 	 * @param value The value to set
 	 */
 	public setValue(
 		cc: CommandClasses,
-		endpoint: number | undefined,
+		endpoint: number,
 		propertyName: string,
 		propertyKey: string | number,
 		value: unknown,
@@ -83,14 +83,14 @@ export class ValueDB extends EventEmitter {
 
 	public setValue(
 		cc: CommandClasses,
-		endpoint: number | undefined,
+		endpoint: number,
 		propertyName: string,
 		value: unknown,
 	): void;
 
 	public setValue(
 		cc: CommandClasses,
-		endpoint: number | undefined,
+		endpoint: number,
 		propertyName: string,
 		...args: [unknown] | [string | number, unknown]
 	): void {
@@ -128,12 +128,12 @@ export class ValueDB extends EventEmitter {
 	/**
 	 * Removes a value for a given property of a given CommandClass
 	 * @param cc The command class the value belongs to
-	 * @param endpoint The optional endpoint the value belongs to
+	 * @param endpoint The endpoint the value belongs to (0 for the root device)
 	 * @param propertyName The property name the value belongs to
 	 */
 	public removeValue(
 		cc: CommandClasses,
-		endpoint: number | undefined,
+		endpoint: number,
 		propertyName: string,
 		propertyKey?: number | string,
 	): boolean {
@@ -157,14 +157,14 @@ export class ValueDB extends EventEmitter {
 	/**
 	 * Retrieves a value for a given property of a given CommandClass
 	 * @param cc The command class the value belongs to
-	 * @param endpoint The optional endpoint the value belongs to
+	 * @param endpoint The endpoint the value belongs to (0 for the root device)
 	 * @param propertyName The property name the value belongs to
 	 * @param propertyKey (optional) The sub-property to access
 	 */
 	/* wotan-disable-next-line no-misused-generics */
 	public getValue<T = unknown>(
 		cc: CommandClasses,
-		endpoint: number | undefined,
+		endpoint: number,
 		propertyName: string,
 		propertyKey?: number | string,
 	): T | undefined {
@@ -175,13 +175,13 @@ export class ValueDB extends EventEmitter {
 	/**
 	 * Checks if a value for a given property of a given CommandClass exists in this ValueDB
 	 * @param cc The command class the value belongs to
-	 * @param endpoint The optional endpoint the value belongs to
+	 * @param endpoint The endpoint the value belongs to (0 for the root device)
 	 * @param propertyName The property name the value belongs to
 	 * @param propertyKey (optional) The sub-property to access
 	 */
 	public hasValue(
 		cc: CommandClasses,
-		endpoint: number | undefined,
+		endpoint: number,
 		propertyName: string,
 		propertyKey?: number | string,
 	): boolean {
@@ -192,7 +192,7 @@ export class ValueDB extends EventEmitter {
 	public getValues(
 		forCC: CommandClasses,
 	): {
-		endpoint: number | undefined;
+		endpoint: number;
 		propertyName: string;
 		propertyKey?: number | string;
 		value: unknown;

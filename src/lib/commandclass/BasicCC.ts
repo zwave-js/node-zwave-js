@@ -2,7 +2,13 @@ import { IDriver } from "../driver/IDriver";
 import { JSONObject, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
-import { CCAPI } from "./API";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -19,6 +25,19 @@ import { CommandClasses } from "./CommandClasses";
 
 @API(CommandClasses.Basic)
 export class BasicCCAPI extends CCAPI {
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ propertyName },
+		value,
+	): Promise<void> => {
+		if (propertyName !== "targetValue") {
+			return throwUnsupportedProperty(this.ccId, propertyName);
+		}
+		if (typeof value !== "number") {
+			return throwWrongValueType(this.ccId, propertyName, "number");
+		}
+		await this.set(value);
+	};
+
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
 		const cc = new BasicCCGet(this.driver, { nodeId: this.node.id });
