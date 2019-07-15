@@ -188,7 +188,7 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 		// Only validate the bytes we expect to see here
 		// parseNodeInformationFrame does its own validation
 		validatePayload(this.payload.length >= 1);
-		const endpointIndex = this.payload[0] & 0b01111111;
+		this.endpointIndex = this.payload[0] & 0b01111111;
 		const capability = {
 			isDynamic: !!(this.payload[0] & 0b10000000),
 			wasRemoved: false,
@@ -201,22 +201,12 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 			capability.generic.key ===
 				GenericDeviceClasses["Non-Interoperable"] &&
 			capability.specific.key === 0x00;
-		this.capabilities = [endpointIndex, capability];
 
-		// TODO: Check if this is wise or if it should be handled by the node instead
-		this.persistValues();
+		this.capability = capability;
 	}
 
-	@ccKeyValuePair()
-	private capabilities: [number, EndpointCapability];
-
-	public get endpointIndex(): number {
-		return this.capabilities[0];
-	}
-
-	public get capability(): EndpointCapability {
-		return this.capabilities[1];
-	}
+	public readonly endpointIndex: number;
+	public readonly capability: EndpointCapability;
 }
 
 interface MultiChannelCCCapabilityGetOptions extends CCCommandOptions {

@@ -52,7 +52,7 @@ import {
 	GenericDeviceClass,
 	SpecificDeviceClass,
 } from "./DeviceClass";
-import { Endpoint } from "./Endpoint";
+import { Endpoint, EndpointCapabilities } from "./Endpoint";
 import { InterviewStage, IZWaveNode, NodeStatus } from "./INode";
 import { NodeUpdatePayload } from "./NodeInfo";
 import {
@@ -369,8 +369,37 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		}
 	}
 
+	private _endpointCountIsDynamic: boolean | undefined;
+	public get endpointCountIsDynamic(): boolean | undefined {
+		return this._endpointCountIsDynamic;
+	}
+
+	private _endpointsHaveIdenticalCapabilities: boolean | undefined;
+	public get endpointsHaveIdenticalCapabilities(): boolean | undefined {
+		return this._endpointsHaveIdenticalCapabilities;
+	}
+
+	private _individualEndpointCount: number | undefined;
+	public get individualEndpointCount(): number | undefined {
+		return this._individualEndpointCount;
+	}
+
+	private _aggregatedEndpointCount: number | undefined;
+	public get aggregatedEndpointCount(): number | undefined {
+		return this._aggregatedEndpointCount;
+	}
+
+	private _endpointCapabilities = new Map<number, EndpointCapabilities>();
+	private getEndpointCapabilities(
+		index: number,
+	): EndpointCapabilities | undefined {
+		return this._endpointCapabilities.get(
+			this._endpointsHaveIdenticalCapabilities ? 1 : index,
+		);
+	}
+
 	/** Cache for this node's endpoint instances */
-	private _endpoints = new Map<number, Endpoint>();
+	private _endpointInstances = new Map<number, Endpoint>();
 	/** Returns an endpoint of this node with the given index */
 	public getEndpoint(index: number): Endpoint {
 		if (index < 0)
@@ -382,13 +411,18 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		if (index === 0) return this;
 		// TODO: Check if the requested endpoint exists on the physical node
 		// Create an endpoint instance if it does not exist
-		if (!this._endpoints.has(index)) {
-			this._endpoints.set(
+		if (!this._endpointInstances.has(index)) {
+			this._endpointInstances.set(
 				index,
-				new Endpoint(this.id, this.driver, index),
+				new Endpoint(
+					this.id,
+					this.driver,
+					index,
+					this.getEndpointCapabilities(index),
+				),
 			);
 		}
-		return this._endpoints.get(index)!;
+		return this._endpointInstances.get(index)!;
 	}
 
 	/**
@@ -641,12 +675,12 @@ version:               ${this.version}`;
 				];
 				for (const cc of resp.nodeInformation.supportedCCs) {
 					const ccName = CommandClasses[cc];
-					logLines.push(`  ${ccName ? ccName : num2hex(cc)}`);
+					logLines.push(`· ${ccName ? ccName : num2hex(cc)}`);
 				}
 				logLines.push("controlled CCs:");
 				for (const cc of resp.nodeInformation.controlledCCs) {
 					const ccName = CommandClasses[cc];
-					logLines.push(`  ${ccName ? ccName : num2hex(cc)}`);
+					logLines.push(`· ${ccName ? ccName : num2hex(cc)}`);
 				}
 				log.controller.logNode(this.id, {
 					message: logLines.join("\n"),
@@ -803,6 +837,15 @@ version:               ${this.version}`;
 				const multiResponse = await this.commandClasses[
 					"Multi Channel"
 				].getEndpoints();
+				// Save the received information
+				this._endpointCountIsDynamic =
+					multiResponse.isDynamicEndpointCount;
+				this._endpointsHaveIdenticalCapabilities =
+					multiResponse.identicalCapabilities;
+				this._individualEndpointCount =
+					multiResponse.individualEndpointCount;
+				this._aggregatedEndpointCount =
+					multiResponse.aggregatedEndpointCount || 0;
 
 				let logMessage = `received response for device endpoints:
   endpoint count (individual): ${multiResponse.individualEndpointCount}
@@ -849,7 +892,13 @@ version:               ${this.version}`;
 						direction: "inbound",
 					});
 
-					// TODO: Save this information
+					const capabilites: EndpointCapabilities = {
+						genericClass: caps.generic,
+						specificClass: caps.specific,
+						isDynamic: caps.isDynamic,
+						supportedCCs: caps.supportedCCs,
+					};
+					this._endpointCapabilities.set(endpointIndex, capabilites);
 				}
 			} catch (e) {
 				log.controller.logNode(
@@ -1244,6 +1293,26 @@ version:               ${this.version}`;
 						return [num2hex(cc), ret] as [string, object];
 					}),
 			),
+			endpointCountIsDynamic: this._endpointCountIsDynamic,
+			endpointsHaveIdenticalCapabilities: this
+				._endpointsHaveIdenticalCapabilities,
+			individualEndpointCount: this._individualEndpointCount,
+			aggregatedEndpointCount: this._aggregatedEndpointCount,
+			endpoints: composeObject(
+				[...this._endpointCapabilities.entries()]
+					.sort((a, b) => Math.sign(a[0] - b[0]))
+					.map(([cc, caps]) => {
+						return [
+							cc.toString(),
+							{
+								genericClass: caps.genericClass.key,
+								specificClass: caps.specificClass.key,
+								isDynamic: caps.isDynamic,
+								supportedCCs: caps.supportedCCs,
+							},
+						] as [string, object];
+					}),
+			),
 		};
 	}
 
@@ -1347,6 +1416,50 @@ version:               ${this.version}`;
 							});
 						}
 					}
+				}
+			}
+		}
+		// Parse endpoint capabilities
+		tryParse("endpointCountIsDynamic", "number");
+		tryParse("endpointsHaveIdenticalCapabilities", "boolean");
+		tryParse("individualEndpointCount", "number");
+		tryParse("aggregatedEndpointCount", "number");
+		if (isObject(obj.endpoints)) {
+			const endpointDict = obj.endpoints;
+			for (const index of Object.keys(endpointDict)) {
+				// First make sure this key describes a valid endpoint
+				const indexNum = parseInt(index);
+				if (
+					indexNum < 1 ||
+					indexNum >
+						(this.individualEndpointCount || 0) +
+							(this.aggregatedEndpointCount || 0)
+				)
+					continue;
+
+				// Parse the information we have
+				const {
+					genericClass,
+					specificClass,
+					isDynamic,
+					supportedCCs,
+				} = endpointDict[index];
+				if (
+					typeof genericClass === "number" &&
+					typeof specificClass === "number" &&
+					typeof isDynamic === "boolean" &&
+					isArray(supportedCCs) &&
+					supportedCCs.every(cc => typeof cc === "number")
+				) {
+					this._endpointCapabilities.set(indexNum, {
+						genericClass: GenericDeviceClass.get(genericClass),
+						specificClass: SpecificDeviceClass.get(
+							genericClass,
+							specificClass,
+						),
+						isDynamic,
+						supportedCCs,
+					});
 				}
 			}
 		}

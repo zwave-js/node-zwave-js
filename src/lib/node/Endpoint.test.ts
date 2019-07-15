@@ -31,7 +31,7 @@ describe("lib/node/Endpoint", () => {
 			});
 
 			// It only includes the endpoint number for non-root endpoints
-			(endpoint as any).endpointIndex = 0;
+			(endpoint as any).index = 0;
 			assertZWaveError(() => api.get(), {
 				errorCode: ZWaveErrorCodes.CC_NotSupported,
 				messageMatches: "Node 1 does not support",

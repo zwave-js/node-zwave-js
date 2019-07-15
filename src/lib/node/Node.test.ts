@@ -1037,8 +1037,8 @@ describe("lib/node/Node", () => {
 		it("returns a new endpoint with the correct endpoint index otherwise", () => {
 			const node = new ZWaveNode(2, fakeDriver as any);
 			const actual = node.getEndpoint(5);
-			expect(actual).toHaveProperty("endpointIndex", 5);
-			expect(actual).toHaveProperty("nodeId", 2);
+			expect(actual.index).toBe(5);
+			expect(actual.nodeId).toBe(2);
 		});
 
 		it("caches the created endpoint instances", () => {

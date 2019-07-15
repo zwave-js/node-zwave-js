@@ -9,6 +9,14 @@ import { CommandClasses } from "../commandclass/CommandClasses";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { num2hex } from "../util/strings";
+import { GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
+
+export interface EndpointCapabilities {
+	isDynamic: boolean;
+	genericClass: GenericDeviceClass;
+	specificClass: SpecificDeviceClass;
+	supportedCCs: CommandClasses[];
+}
 
 /**
  * Represents a physical endpoint of a Z-Wave node. This can either be the root
@@ -24,7 +32,14 @@ export class Endpoint {
 		protected readonly driver: Driver,
 		/** The index of this endpoint. 0 for the root device, 1+ otherwise */
 		public readonly index: number,
-	) {}
+		fromCapabilities?: EndpointCapabilities,
+	) {
+		if (fromCapabilities != undefined) {
+			for (const cc of fromCapabilities.supportedCCs) {
+				this.addCC(cc, { isSupported: true });
+			}
+		}
+	}
 
 	/** @internal */
 	public _implementedCommandClasses = new Map<
