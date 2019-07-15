@@ -245,7 +245,7 @@ describe("lib/node/ValueDB => ", () => {
 			const tests = [
 				{
 					cc: CommandClasses.Basic,
-					endpoint: undefined,
+					endpoint: 0,
 					propertyName: "foo",
 					value: "1",
 				},
@@ -257,7 +257,7 @@ describe("lib/node/ValueDB => ", () => {
 				},
 				{
 					cc: CommandClasses.Basic,
-					endpoint: undefined,
+					endpoint: 0,
 					propertyName: "FOO",
 					value: "3",
 				},
@@ -283,7 +283,7 @@ describe("lib/node/ValueDB => ", () => {
 			const values = [
 				{
 					cc: CommandClasses.Basic,
-					endpoint: undefined,
+					endpoint: 0,
 					propertyName: "foo",
 					value: "1",
 				},
@@ -295,7 +295,7 @@ describe("lib/node/ValueDB => ", () => {
 				},
 				{
 					cc: CommandClasses.Basic,
-					endpoint: undefined,
+					endpoint: 0,
 					propertyName: "FOO",
 					value: "3",
 				},
@@ -328,7 +328,7 @@ describe("lib/node/ValueDB => ", () => {
 			const tests = [
 				{
 					cc: CommandClasses.Basic,
-					endpoint: undefined,
+					endpoint: 0,
 					propertyName: "foo",
 					value: "1",
 				},
@@ -340,7 +340,7 @@ describe("lib/node/ValueDB => ", () => {
 				},
 				{
 					cc: CommandClasses.Basic,
-					endpoint: undefined,
+					endpoint: 0,
 					propertyName: "FOO",
 					value: "3",
 				},
