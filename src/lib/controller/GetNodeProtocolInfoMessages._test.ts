@@ -1,3 +1,5 @@
+export = undefined;
+
 // import { createEmptyMockDriver } from "../../../test/mocks";
 // import {
 // 	FunctionType,

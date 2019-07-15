@@ -359,9 +359,10 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		} catch (e) {
 			if (
 				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.CC_NotImplemented
+				(e.code === ZWaveErrorCodes.CC_NotImplemented ||
+					e.code === ZWaveErrorCodes.CC_NoAPI)
 			) {
-				// This CC is not implemented
+				// This CC or API is not implemented
 				return false;
 			}
 			throw e;

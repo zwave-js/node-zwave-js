@@ -123,14 +123,19 @@ export class Endpoint {
 		if (APIConstructor == undefined) {
 			throw new ZWaveError(
 				`Command Class ${ccName} has no associated API!`,
-				ZWaveErrorCodes.CC_NotSupported,
+				ZWaveErrorCodes.CC_NoAPI,
 			);
 		}
 		const apiInstance = new APIConstructor(this.driver, this);
 		return new Proxy(apiInstance, {
 			get: (target, property) => {
 				// Forbid access to the API if it is not supported by the node
-				if (property !== "isSupported" && !target.isSupported()) {
+				if (
+					property !== "ccId" &&
+					property !== "endpoint" &&
+					property !== "isSupported" &&
+					!target.isSupported()
+				) {
 					throw new ZWaveError(
 						`Node ${this.nodeId}${
 							this.endpointIndex === 0

@@ -1018,6 +1018,37 @@ describe("lib/node/Node", () => {
 		});
 	});
 
+	describe("getEndpoint()", () => {
+		const fakeDriver = createEmptyMockDriver();
+
+		it("throws when a negative endpoint index is requested", () => {
+			const node = new ZWaveNode(2, fakeDriver as any);
+			assertZWaveError(() => node.getEndpoint(-1), {
+				errorCode: ZWaveErrorCodes.Argument_Invalid,
+				messageMatches: "must be positive",
+			});
+		});
+
+		it("returns the node itself when endpoint 0 is requested", () => {
+			const node = new ZWaveNode(2, fakeDriver as any);
+			expect(node.getEndpoint(0)).toBe(node);
+		});
+
+		it("returns a new endpoint with the correct endpoint index otherwise", () => {
+			const node = new ZWaveNode(2, fakeDriver as any);
+			const actual = node.getEndpoint(5);
+			expect(actual).toHaveProperty("endpointIndex", 5);
+			expect(actual).toHaveProperty("nodeId", 2);
+		});
+
+		it("caches the created endpoint instances", () => {
+			const node = new ZWaveNode(2, fakeDriver as any);
+			const first = node.getEndpoint(5);
+			const second = node.getEndpoint(5);
+			expect(first).toBe(second);
+		});
+	});
+
 	describe("serialize() / deserialize()", () => {
 		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
@@ -1404,6 +1435,19 @@ describe("lib/node/Node", () => {
 					ccCommand: BasicCommand.Set,
 				},
 			});
+		});
+
+		it("returns false if the CC is not implemented", async () => {
+			const node = new ZWaveNode(1, fakeDriver as any);
+			const result = await node.setValue(
+				{
+					cc: 0xbada55, // this is guaranteed to not be implemented
+					endpoint: 0,
+					propertyName: "test",
+				},
+				1,
+			);
+			expect(result).toBeFalse();
 		});
 	});
 });
