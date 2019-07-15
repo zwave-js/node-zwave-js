@@ -23,7 +23,7 @@ export class Endpoint {
 		/** The driver instance this endpoint belongs to */
 		protected readonly driver: Driver,
 		/** The index of this endpoint. 0 for the root device, 1+ otherwise */
-		public readonly endpointIndex: number,
+		public readonly index: number,
 	) {}
 
 	/** @internal */
@@ -106,10 +106,12 @@ export class Endpoint {
 			);
 		}
 		const Constructor = getCCConstructor(cc);
-		if (Constructor)
+		if (Constructor) {
 			return new Constructor(this.driver, {
 				nodeId: this.nodeId,
+				endpoint: this.index,
 			}) as T;
+		}
 	}
 
 	/**
@@ -138,9 +140,7 @@ export class Endpoint {
 				) {
 					throw new ZWaveError(
 						`Node ${this.nodeId}${
-							this.endpointIndex === 0
-								? ""
-								: ` (endpoint ${this.endpointIndex})`
+							this.index === 0 ? "" : ` (endpoint ${this.index})`
 						} does not support the Command Class ${ccName}!`,
 						ZWaveErrorCodes.CC_NotSupported,
 					);

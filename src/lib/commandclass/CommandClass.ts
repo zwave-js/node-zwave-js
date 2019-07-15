@@ -53,6 +53,7 @@ export function gotDeserializationOptions(
 
 export interface CCCommandOptions {
 	nodeId: number;
+	endpoint?: number;
 }
 
 export interface CommandClassCreationOptions extends CCCommandOptions {
@@ -76,7 +77,7 @@ export class CommandClass {
 		// Extract the cc from declared metadata if not provided
 		this.ccId = getCommandClass(this);
 		// Default to the root endpoint - Inherited classes may override this behavior
-		this.endpoint = 0;
+		this.endpoint = ("endpoint" in options && options.endpoint) || 0;
 
 		if (gotDeserializationOptions(options)) {
 			// For deserialized commands, try to invoke the correct subclass constructor

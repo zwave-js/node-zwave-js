@@ -63,7 +63,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	): Promise<EndpointCapability> {
 		const cc = new MultiChannelCCCapabilityGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
-			endpoint,
+			requestedEndpoint: endpoint,
 		});
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCCapabilityReport
@@ -95,7 +95,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	): Promise<readonly number[]> {
 		const cc = new MultiChannelCCAggregatedMembersGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
-			endpoint,
+			requestedEndpoint: endpoint,
 		});
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCAggregatedMembersReport
@@ -220,7 +220,7 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 }
 
 interface MultiChannelCCCapabilityGetOptions extends CCCommandOptions {
-	endpoint: number;
+	requestedEndpoint: number;
 }
 
 @CCCommand(MultiChannelCommand.CapabilityGet)
@@ -240,12 +240,14 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			this.endpoint = options.endpoint;
+			this.requestedEndpoint = options.requestedEndpoint;
 		}
 	}
 
+	public requestedEndpoint: number;
+
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.endpoint & 0b01111111]);
+		this.payload = Buffer.from([this.requestedEndpoint & 0b01111111]);
 		return super.serialize();
 	}
 }
@@ -350,7 +352,7 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 }
 
 interface MultiChannelCCAggregatedMembersGetOptions extends CCCommandOptions {
-	endpoint: number;
+	requestedEndpoint: number;
 }
 
 @CCCommand(MultiChannelCommand.AggregatedMembersGet)
@@ -370,12 +372,14 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			this.endpoint = options.endpoint;
+			this.requestedEndpoint = options.requestedEndpoint;
 		}
 	}
 
+	public requestedEndpoint: number;
+
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.endpoint & 0b0111_1111]);
+		this.payload = Buffer.from([this.requestedEndpoint & 0b0111_1111]);
 		return super.serialize();
 	}
 }
