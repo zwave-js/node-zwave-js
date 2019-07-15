@@ -5,67 +5,30 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
 import { CCAPI, CCAPIs } from "../commandclass/API";
-import {
-	CentralSceneCC,
-	CentralSceneCCNotification,
-	CentralSceneKeys,
-} from "../commandclass/CentralSceneCC";
-import {
-	CommandClass,
-	getCCConstructor,
-	getImplementedVersion,
-	StateKind,
-} from "../commandclass/CommandClass";
+import { CentralSceneCC, CentralSceneCCNotification, CentralSceneKeys } from "../commandclass/CentralSceneCC";
+import { CommandClass, getCCConstructor, getImplementedVersion, StateKind } from "../commandclass/CommandClass";
 import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { ConfigurationCC } from "../commandclass/ConfigurationCC";
 import { NotificationCCReport } from "../commandclass/NotificationCC";
 import { WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
-import {
-	ZWavePlusNodeType,
-	ZWavePlusRoleType,
-} from "../commandclass/ZWavePlusCC";
+import { ZWavePlusNodeType, ZWavePlusRoleType } from "../commandclass/ZWavePlusCC";
 import { lookupDevice } from "../config/Devices";
 import { lookupManufacturer } from "../config/Manufacturers";
-import {
-	ApplicationUpdateRequest,
-	ApplicationUpdateRequestNodeInfoReceived,
-	ApplicationUpdateRequestNodeInfoRequestFailed,
-} from "../controller/ApplicationUpdateRequest";
-import {
-	Baudrate,
-	GetNodeProtocolInfoRequest,
-	GetNodeProtocolInfoResponse,
-} from "../controller/GetNodeProtocolInfoMessages";
-import {
-	GetRoutingInfoRequest,
-	GetRoutingInfoResponse,
-} from "../controller/GetRoutingInfoMessages";
+import { ApplicationUpdateRequest, ApplicationUpdateRequestNodeInfoReceived, ApplicationUpdateRequestNodeInfoRequestFailed } from "../controller/ApplicationUpdateRequest";
+import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "../controller/GetNodeProtocolInfoMessages";
+import { GetRoutingInfoRequest, GetRoutingInfoResponse } from "../controller/GetRoutingInfoMessages";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { JSONObject, Mixin } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import { CacheValue } from "../values/Cache";
-import {
-	BasicDeviceClasses,
-	DeviceClass,
-	GenericDeviceClass,
-	SpecificDeviceClass,
-} from "./DeviceClass";
+import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
 import { Endpoint, EndpointCapabilities } from "./Endpoint";
 import { InterviewStage, IZWaveNode, NodeStatus } from "./INode";
 import { NodeUpdatePayload } from "./NodeInfo";
-import {
-	RequestNodeInfoRequest,
-	RequestNodeInfoResponse,
-} from "./RequestNodeInfoMessages";
-import {
-	ValueAddedArgs,
-	ValueBaseArgs,
-	ValueDB,
-	ValueRemovedArgs,
-	ValueUpdatedArgs,
-} from "./ValueDB";
+import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
+import { ValueAddedArgs, ValueBaseArgs, ValueDB, ValueRemovedArgs, ValueUpdatedArgs } from "./ValueDB";
 
 export interface ZWaveNodeValueAddedArgs extends ValueAddedArgs {
 	commandClassName: string;
@@ -1420,7 +1383,7 @@ version:               ${this.version}`;
 			}
 		}
 		// Parse endpoint capabilities
-		tryParse("endpointCountIsDynamic", "number");
+		tryParse("endpointCountIsDynamic", "boolean");
 		tryParse("endpointsHaveIdenticalCapabilities", "boolean");
 		tryParse("individualEndpointCount", "number");
 		tryParse("aggregatedEndpointCount", "number");

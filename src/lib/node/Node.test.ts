@@ -1081,6 +1081,18 @@ describe("lib/node/Node", () => {
 					version: 4,
 				},
 			},
+			endpointCountIsDynamic: false,
+			endpointsHaveIdenticalCapabilities: true,
+			individualEndpointCount: 5,
+			aggregatedEndpointCount: 2,
+			endpoints: {
+				1: {
+					isDynamic: false,
+					genericClass: 5,
+					specificClass: 111,
+					supportedCCs: [1, 2, 3, 4],
+				},
+			},
 		};
 
 		it("serializing a deserialized node should result in the original object", () => {
