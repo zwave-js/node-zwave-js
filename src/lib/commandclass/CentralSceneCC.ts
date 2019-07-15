@@ -1,7 +1,13 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { JSONObject, validatePayload } from "../util/misc";
-import { CCAPI } from "./API";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -72,6 +78,19 @@ export class CentralSceneCCAPI extends CCAPI {
 		});
 		await this.driver.sendCommand(cc);
 	}
+
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ propertyName },
+		value,
+	): Promise<void> => {
+		if (propertyName !== "slowRefresh") {
+			return throwUnsupportedProperty(this.ccId, propertyName);
+		}
+		if (typeof value !== "boolean") {
+			return throwWrongValueType(this.ccId, propertyName, "boolean");
+		}
+		await this.setConfiguration(value);
+	};
 }
 
 @commandClass(CommandClasses["Central Scene"])

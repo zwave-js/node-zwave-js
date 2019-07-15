@@ -48,20 +48,8 @@ export enum ThermostatSetpointType {
 }
 // This array is used to map the advertised supported types (interpretation A)
 // to the actual enum values
-const thermostatSetpointTypeMap = [
-	0x00,
-	0x01,
-	0x02,
-	0x07,
-	0x08,
-	0x09,
-	0x0a,
-	0x0b,
-	0x0c,
-	0x0d,
-	0x0e,
-	0x0f,
-];
+// prettier-ignore
+const thermostatSetpointTypeMap = [0x00, 0x01, 0x02, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f];
 
 export enum ThermostatSetpointScale {
 	Celsius = 0,

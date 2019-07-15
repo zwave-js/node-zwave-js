@@ -3,7 +3,13 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { JSONObject, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { Maybe, parseBoolean, parseMaybeBoolean } from "../values/Primitive";
-import { CCAPI } from "./API";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -54,6 +60,19 @@ export class BinarySwitchCCAPI extends CCAPI {
 		});
 		await this.driver.sendCommand(cc);
 	}
+
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ propertyName },
+		value,
+	): Promise<void> => {
+		if (propertyName !== "targetValue") {
+			return throwUnsupportedProperty(this.ccId, propertyName);
+		}
+		if (typeof value !== "boolean") {
+			return throwWrongValueType(this.ccId, propertyName, "boolean");
+		}
+		await this.set(value);
+	};
 }
 
 @commandClass(CommandClasses["Binary Switch"])

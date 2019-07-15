@@ -1,9 +1,14 @@
 import { IDriver } from "../driver/IDriver";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { JSONObject, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
-import { CCAPI, SetValueImplementation, SET_VALUE } from "./API";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -21,28 +26,16 @@ import { CommandClasses } from "./CommandClasses";
 @API(CommandClasses.Basic)
 export class BasicCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
-		{ endpoint, propertyName },
+		{ propertyName },
 		value,
 	): Promise<void> => {
 		if (propertyName !== "targetValue") {
-			throw new ZWaveError(
-				`BasicCCSet: "${propertyName}" is not a valid property`,
-				ZWaveErrorCodes.Argument_Invalid,
-			);
+			return throwUnsupportedProperty(this.ccId, propertyName);
 		}
 		if (typeof value !== "number") {
-			throw new ZWaveError(
-				`BasicCCSet: "${propertyName}" requires a number`,
-				ZWaveErrorCodes.Argument_Invalid,
-			);
+			return throwWrongValueType(this.ccId, propertyName, "number");
 		}
-
-		const cc = new BasicCCSet(this.driver, {
-			nodeId: this.node.id,
-			[propertyName]: value,
-		});
-		cc.endpoint = endpoint;
-		await this.driver.sendCommand(cc);
+		await this.set(value);
 	};
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
