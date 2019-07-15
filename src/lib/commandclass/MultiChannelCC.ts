@@ -121,6 +121,7 @@ export class MultiChannelCCAPI extends CCAPI {
 
 export interface EndpointCapability extends NodeInformationFrame {
 	isDynamic: boolean;
+	wasRemoved: boolean;
 }
 
 @commandClass(CommandClasses["Multi Channel"])
@@ -190,9 +191,19 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 		const endpointIndex = this.payload[0] & 0b01111111;
 		const capability = {
 			isDynamic: !!(this.payload[0] & 0b10000000),
+			wasRemoved: false,
+			// TODO: does this include controlledCCs aswell?
 			...parseNodeInformationFrame(this.payload.slice(1)),
 		};
+		// Removal reports have very specific information
+		capability.wasRemoved =
+			capability.isDynamic &&
+			capability.generic.key ===
+				GenericDeviceClasses["Non-Interoperable"] &&
+			capability.specific.key === 0x00;
 		this.capabilities = [endpointIndex, capability];
+
+		// TODO: Check if this is wise or if it should be handled by the node instead
 		this.persistValues();
 	}
 

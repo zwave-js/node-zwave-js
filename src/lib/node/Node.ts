@@ -810,12 +810,47 @@ version:               ${this.version}`;
   identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				if (multiResponse.aggregatedEndpointCount != undefined) {
 					logMessage += `
-  endpoint count (aggregated): ${multiResponse.identicalCapabilities}`;
+  endpoint count (aggregated): ${multiResponse.aggregatedEndpointCount}`;
 				}
 				log.controller.logNode(this.id, {
 					message: logMessage,
 					direction: "inbound",
 				});
+
+				// Find out how many endpoints we need to query.
+				// If all of them have identical capabilities, 1 is enough
+				const totalEndpointCount = multiResponse.identicalCapabilities
+					? 1
+					: multiResponse.individualEndpointCount +
+					  (multiResponse.aggregatedEndpointCount || 0);
+				for (
+					let endpointIndex = 1;
+					endpointIndex <= totalEndpointCount;
+					endpointIndex++
+				) {
+					log.controller.logNode(this.id, {
+						message: `querying capabilities for endpoint #${endpointIndex}...`,
+						direction: "outbound",
+					});
+					const caps = await this.commandClasses[
+						"Multi Channel"
+					].getEndpointCapabilities(endpointIndex);
+					logMessage = `received response for endpoint capabilities (#${endpointIndex}):
+  generic device class:  ${caps.generic.name} (${num2hex(caps.generic.key)})
+  specific device class: ${caps.specific.name} (${num2hex(caps.specific.key)})
+  is dynamic end point:  ${caps.isDynamic}
+  supported CCs:`;
+					for (const cc of caps.supportedCCs) {
+						const ccName = CommandClasses[cc];
+						logMessage += `\n  · ${ccName ? ccName : num2hex(cc)}`;
+					}
+					log.controller.logNode(this.id, {
+						message: logMessage,
+						direction: "inbound",
+					});
+
+					// TODO: Save this information
+				}
 			} catch (e) {
 				log.controller.logNode(
 					this.id,
