@@ -217,7 +217,7 @@ export class CommandClass {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	private deserializeFromEncapsulation(encapCC: CommandClass, data: Buffer) {
 		return {
-			nodeId: encapCC.nodeId, // TODO: is this neccessarily true?
+			nodeId: encapCC.nodeId,
 			...this.deserializeWithoutHeader(data),
 		};
 	}

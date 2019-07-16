@@ -108,7 +108,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	public async get(parameter: number): Promise<ConfigValue | undefined> {
 		const cc = new ConfigurationCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
 			parameter,
 		});
 		try {
@@ -155,7 +155,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	): Promise<boolean> {
 		const cc = new ConfigurationCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
 			parameter,
 			value,
 			valueSize,
@@ -185,7 +185,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	public async reset(parameter: number): Promise<boolean> {
 		const cc = new ConfigurationCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
 			parameter,
 			resetToDefault: true,
 		});
@@ -211,7 +211,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	public async resetAll(): Promise<void> {
 		const cc = new ConfigurationCCDefaultReset(this.driver, {
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
+			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
 		});
 		await this.driver.sendCommand(cc);
 	}
@@ -268,7 +268,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			// The param information is stored automatically on receipt
 			const propCC = new ConfigurationCCPropertiesGet(this.driver, {
 				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
+				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
 				parameter: param,
 			});
 			const propResponse = (await this.driver.sendCommand<
@@ -277,14 +277,14 @@ export class ConfigurationCCAPI extends CCAPI {
 
 			const nameCC = new ConfigurationCCNameGet(this.driver, {
 				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
+				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
 				parameter: param,
 			});
 			await this.driver.sendCommand(nameCC);
 
 			const infoCC = new ConfigurationCCInfoGet(this.driver, {
 				nodeId: this.endpoint.nodeId,
-				endpoint: this.endpoint.index,
+				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
 				parameter: param,
 			});
 			await this.driver.sendCommand(infoCC);
@@ -372,17 +372,10 @@ export class ConfigurationCC extends CommandClass {
 
 		const valueDB = this.getValueDB();
 		// Create the map if it does not exist
-		if (
-			!valueDB.hasValue(
-				getCommandClass(this),
-				// TODO: Should this be on the root endpoint?
-				this.endpoint,
-				"paramInformation",
-			)
-		) {
+		if (!valueDB.hasValue(getCommandClass(this), 0, "paramInformation")) {
 			valueDB.setValue(
 				getCommandClass(this),
-				this.endpoint,
+				0,
 				"paramInformation",
 				new Map(),
 			);
@@ -390,7 +383,7 @@ export class ConfigurationCC extends CommandClass {
 		// Retrieve the map
 		const paramInfo = valueDB.getValue(
 			getCommandClass(this),
-			this.endpoint,
+			0,
 			"paramInformation",
 		) as Map<number, ParameterInfo>;
 		// And make sure it has one entry for this parameter
@@ -409,7 +402,7 @@ export class ConfigurationCC extends CommandClass {
 		const valueDB = this.getValueDB();
 		const paramInfo = valueDB.getValue<
 			Map<number, ParameterInfo> | undefined
-		>(getCommandClass(this), this.endpoint, "paramInformation");
+		>(getCommandClass(this), 0, "paramInformation");
 		return (paramInfo && paramInfo.get(parameter)) || {};
 	}
 

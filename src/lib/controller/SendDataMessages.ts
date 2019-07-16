@@ -38,7 +38,6 @@ export enum TransmitOptions {
 	DEFAULT = ACK | AutoRoute | Explore,
 }
 
-// TODO: what is this?
 export enum TransmitStatus {
 	OK = 0x00, // Transmission complete and ACK received
 	NoAck = 0x01, // Transmission complete, no ACK received
@@ -69,7 +68,8 @@ export class SendDataRequestBase extends Message {
 	}
 
 	/** A callback ID to map requests and responses */
-	// TODO: Get rid of the ! assertion
+	// We need the ! assertion because TypeScript doesn't know it is being set
+	// in a derived class
 	public callbackId!: number;
 }
 

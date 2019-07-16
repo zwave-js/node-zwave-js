@@ -502,10 +502,8 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		// TODO:
 		// SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
 
-		if (
-			this.interviewStage ===
-			InterviewStage.ManufacturerSpecific /* TODO: change .ManufacturerSpecific to .SecurityReport */
-		) {
+		if (this.interviewStage === InterviewStage.ManufacturerSpecific) {
+			// TODO: change .ManufacturerSpecific to .SecurityReport when that is implemented
 			await this.queryCCVersions();
 		}
 
@@ -529,8 +527,8 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		// TODO: Associations
 
 		if (this.interviewStage === InterviewStage.WakeUp) {
-			// TODO: change WakeUp to Associations
-			// Load a config file for this node if it exists and overwrite the reported
+			// TODO: change WakeUp to Associations when it is implemented
+			// Load a config file for this node if it exists and overwrite the previously reported information
 			await this.overwriteConfig();
 		}
 
@@ -570,7 +568,6 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 
 	/** Step #1 of the node interview */
 	protected async queryProtocolInfo(): Promise<void> {
-		// TODO: add direction
 		log.controller.logNode(this.id, {
 			message: "querying protocol info...",
 			direction: "outbound",
@@ -697,7 +694,6 @@ version:               ${this.version}`;
 					direction: "inbound",
 				});
 				this.updateNodeInfo(resp.nodeInformation);
-				// TODO: Save the received values
 			}
 		}
 		await this.setInterviewStage(InterviewStage.NodeInfo);
@@ -987,6 +983,24 @@ version:               ${this.version}`;
 		await this.setInterviewStage(InterviewStage.WakeUp);
 	}
 
+	/**
+	 * @internal
+	 * Handles the receipt of a NIF / NodeUpdatePayload
+	 */
+	public updateNodeInfo(nodeInfo: NodeUpdatePayload): void {
+		if (!this.nodeInfoReceived) {
+			for (const cc of nodeInfo.supportedCCs)
+				this.addCC(cc, { isSupported: true });
+			for (const cc of nodeInfo.controlledCCs)
+				this.addCC(cc, { isControlled: true });
+			this.nodeInfoReceived = true;
+			// TODO: Trigger a cache save
+		}
+
+		// As the NIF is sent on wakeup, treat this as a sign that the node is awake
+		this.setAwake(true);
+	}
+
 	protected async requestStaticValues(): Promise<void> {
 		log.controller.logNode(this.id, {
 			message: "requesting static values...",
@@ -1101,7 +1115,7 @@ version:               ${this.version}`;
 		if (command instanceof CentralSceneCCNotification) {
 			return this.handleCentralSceneNotification(command);
 		} else if (command instanceof WakeUpCCWakeUpNotification) {
-			return this.handleWakeUpNotification(command);
+			return this.handleWakeUpNotification();
 		} else if (command instanceof NotificationCCReport) {
 			return this.handleNotificationReport(command);
 		}
@@ -1217,10 +1231,7 @@ version:               ${this.version}`;
 	}
 
 	/** Handles the receipt of a Wake Up notification */
-	private handleWakeUpNotification(
-		// TODO: Do we need this parameter?
-		_command: WakeUpCCWakeUpNotification,
-	): void {
+	private handleWakeUpNotification(): void {
 		log.controller.logNode(this.id, {
 			message: `received wakeup notification`,
 			direction: "inbound",
@@ -1248,7 +1259,7 @@ version:               ${this.version}`;
 			...this.implementedCommandClasses.keys(),
 		],
 	): Promise<void> {
-		// TODO: Support multiple instances
+		// TODO: Support multiple endpoints
 		const factories = commandClasses
 			// This assertion is not nice, but I see no better way
 			.map(
@@ -1324,23 +1335,6 @@ version:               ${this.version}`;
 					}),
 			),
 		};
-	}
-
-	/**
-	 * @internal
-	 * Handles the receipt of a NIF / NodeUpdatePayload
-	 */
-	public updateNodeInfo(nodeInfo: NodeUpdatePayload): void {
-		if (!this.nodeInfoReceived) {
-			for (const cc of nodeInfo.supportedCCs)
-				this.addCC(cc, { isSupported: true });
-			for (const cc of nodeInfo.controlledCCs)
-				this.addCC(cc, { isControlled: true });
-			this.nodeInfoReceived = true;
-		}
-
-		// As the NIF is sent on wakeup, treat this as a sign that the node is awake
-		this.setAwake(true);
 	}
 
 	/**

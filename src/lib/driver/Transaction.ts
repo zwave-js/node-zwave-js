@@ -126,6 +126,4 @@ export class Transaction implements Comparable<Transaction> {
 		// for equal priority, sort by the timestamp
 		return compareNumberOrString(other.timestamp, this.timestamp);
 	}
-
-	// TODO: add a way to expire Transactions
 }

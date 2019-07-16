@@ -35,8 +35,7 @@ export enum MultiChannelCommand {
 	AggregatedMembersReport = 0x0f,
 }
 
-// TODO: Implement querying all endpoints
-// TODO: Implement removal reports of dynamic endpoints
+// TODO: Handle removal reports of dynamic endpoints
 
 @API(CommandClasses["Multi Channel"])
 export class MultiChannelCCAPI extends CCAPI {
@@ -415,7 +414,7 @@ interface MultiChannelCCCommandEncapsulationOptions extends CCCommandOptions {
 }
 
 @CCCommand(MultiChannelCommand.CommandEncapsulation)
-// TODO: This probably expects multiple responses
+// TODO: This may expect multiple commands as a response
 export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	public constructor(
 		driver: IDriver,

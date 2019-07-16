@@ -16,6 +16,7 @@ import {
 	commandClass,
 	CommandClassDeserializationOptions,
 	expectedCCResponse,
+	getCommandClass,
 	gotDeserializationOptions,
 	implementedVersion,
 	StateKind,
@@ -119,13 +120,18 @@ export class VersionCC extends CommandClass {
 				return true; // This is mandatory
 			case VersionCommand.CapabilitiesGet:
 				return this.version >= 3;
-			// case VersionCommand.ZWaveSoftwareGet:
-			// 	return this._supportsZWaveSoftwareGet;
+			case VersionCommand.ZWaveSoftwareGet: {
+				let ret = this.getValueDB().getValue<Maybe<boolean>>(
+					getCommandClass(this),
+					this.endpoint,
+					"supportsZWaveSoftwareGet",
+				);
+				if (ret == undefined) ret = "unknown" as Maybe<boolean>;
+				return ret;
+			}
 		}
 		return super.supportsCommand(cmd);
 	}
-	// TODO: After splitting this into separate commands, the following does no longer work
-	// private _supportsZWaveSoftwareGet: Maybe<boolean> = unknownBoolean;
 
 	/** Requests static or dynamic state for a given from a node */
 	public static async requestState(

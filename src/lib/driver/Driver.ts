@@ -45,7 +45,6 @@ import { DriverEventCallbacks, DriverEvents, IDriver } from "./IDriver";
 import { Transaction } from "./Transaction";
 
 export interface ZWaveOptions {
-	// TODO: this probably refers to the stick waiting for a response from the node:
 	timeouts: {
 		/** how long to wait for an ACK */
 		ack: number;
@@ -989,7 +988,6 @@ ${handlers.length} left`,
 			return;
 		}
 
-		// TODO: what to do with this ACK?
 		log.driver.print("Unexpected ACK received", "warn");
 	}
 

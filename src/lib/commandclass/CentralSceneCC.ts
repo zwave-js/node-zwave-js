@@ -1,6 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { JSONObject, validatePayload } from "../util/misc";
+import { parseBitMask } from "../values/Primitive";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -186,16 +187,14 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		const numEntries = this._keyAttributesHaveIdenticalSupport
 			? 1
 			: this.sceneCount;
-		this._supportedKeyAttributes = [];
 
 		validatePayload(this.payload.length >= 2 + bitMaskBytes * numEntries);
-		// TODO: Can this be done with parseBitMask()?
 		for (let i = 0; i < numEntries; i++) {
-			let mask = 0;
-			for (let j = 0; j < bitMaskBytes; j++) {
-				mask += this.payload[3 + bitMaskBytes * i + j] << (8 * j);
-			}
-			this._supportedKeyAttributes.push(mask);
+			const mask = this.payload.slice(
+				2 + i * bitMaskBytes,
+				2 + (i + 1) * bitMaskBytes,
+			);
+			this._supportedKeyAttributes.set(i + 1, parseBitMask(mask));
 		}
 		this.persistValues();
 	}
@@ -210,9 +209,15 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		return this._supportsSlowRefresh;
 	}
 
-	private _supportedKeyAttributes: CentralSceneKeys[];
+	private _supportedKeyAttributes = new Map<
+		number,
+		readonly CentralSceneKeys[]
+	>();
 	@ccValue()
-	public get supportedKeyAttributes(): readonly CentralSceneKeys[] {
+	public get supportedKeyAttributes(): ReadonlyMap<
+		number,
+		readonly CentralSceneKeys[]
+	> {
 		return this._supportedKeyAttributes;
 	}
 
@@ -225,11 +230,12 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		sceneNumber: number,
 		keyAttribute: CentralSceneKeys,
 	): boolean {
-		const bitArrayIndex = this._keyAttributesHaveIdenticalSupport
-			? 0
-			: sceneNumber - 1;
-		const bitmap = this._supportedKeyAttributes[bitArrayIndex];
-		return !!(bitmap & (1 << keyAttribute));
+		const mapIndex = this._keyAttributesHaveIdenticalSupport
+			? 1
+			: sceneNumber;
+		return this._supportedKeyAttributes
+			.get(mapIndex)!
+			.includes(keyAttribute);
 	}
 }
 

@@ -6,7 +6,6 @@ import { configDir } from "./utils";
 
 let manufacturers: Record<string, string> | undefined;
 async function loadManufacturers(): Promise<Record<string, string>> {
-	// TODO: Extract the path resolution
 	const fileContents = await readFile(
 		path.join(configDir, "manufacturers.json"),
 		"utf8",

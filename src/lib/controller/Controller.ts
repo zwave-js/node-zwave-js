@@ -15,7 +15,11 @@ import {
 	MessageType,
 } from "../message/Constants";
 import { Message } from "../message/Message";
-import { BasicDeviceClasses, DeviceClass } from "../node/DeviceClass";
+import {
+	BasicDeviceClasses,
+	DeviceClass,
+	GenericDeviceClasses,
+} from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
 import { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
@@ -355,8 +359,11 @@ export class ZWaveController extends EventEmitter {
 			);
 		}
 
-		// TODO: Try to find out what this does from the new docs
-		// send application info (not sure why tho)
+		// Tell the Z-Wave stick what kind of application this is
+		//   The Z-Wave Application Layer MUST use the \ref ApplicationNodeInformation
+		//   function to generate the Node Information frame and to save information about
+		//   node capabilities. All Z Wave application related fields of the Node Information
+		//   structure MUST be initialized by this function.
 		if (
 			this.isFunctionSupported(
 				FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION,
@@ -369,9 +376,9 @@ export class ZWaveController extends EventEmitter {
 					FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION,
 				payload: Buffer.from([
 					0x01, // APPLICATION_NODEINFO_LISTENING
-					0x02, // generic static controller
+					GenericDeviceClasses["Static Controller"],
 					0x01, // specific static PC controller
-					0x00, // length
+					0x00, // length of supported CC list
 				]),
 			});
 			await this.driver.sendMessage(appInfoMsg, {
@@ -486,7 +493,6 @@ export class ZWaveController extends EventEmitter {
 	private async handleAddNodeRequest(
 		msg: AddNodeToNetworkRequest,
 	): Promise<boolean> {
-		// TODO: Make sure we work with a deserialized request here
 		log.controller.print(
 			`handling add node request (status = ${
 				AddNodeStatus[msg.status!]

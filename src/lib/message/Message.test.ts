@@ -316,13 +316,6 @@ describe("lib/message", () => {
 			expect(msg4.toJSON()).toEqual(json4);
 		});
 
-		it.skip("new Message(Buffer) should interpret the buffer as the payload", () => {
-			// TODO: What was this supposed to test?
-			const data = Buffer.from([1, 2, 3]);
-			const msg = new Message(fakeDriver, { data });
-			expect(msg.payload).toEqual(data);
-		});
-
 		it("getConstructor() should return `Message` for an unknown packet type", () => {
 			const unknown = Buffer.from([0x01, 0x03, 0x00, 0x00, 0xfc]);
 			expect(Message.getConstructor(unknown)).toBe(Message);

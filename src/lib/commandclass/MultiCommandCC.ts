@@ -22,12 +22,12 @@ export enum MultiCommandCommand {
 @API(CommandClasses["Multi Command"])
 export class MultiCommandCCAPI extends CCAPI {
 	public async send(commands: CommandClass[]): Promise<void> {
+		// FIXME: This should not be on the API but rather on the driver level
 		const cc = new MultiCommandCCCommandEncapsulation(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			commands,
 		});
-		// TODO: Check if we need to return multiple command responses here
 		await this.driver.sendCommand(cc);
 	}
 }
