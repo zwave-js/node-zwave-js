@@ -43,10 +43,14 @@ function internalParseNodeInformationFrame(
 		controlledCCs: [] as CommandClasses[],
 	};
 	// split the CCs into supported/controlled
-	// TODO: Support 16bit CCs
-	const CCs = [...nif.slice(2)];
+	let offset = 2;
 	let isAfterMark = false;
-	for (const cc of CCs) {
+	while (offset < nif.length) {
+		// Read either the normal or extended ccId
+		const isExtended = nif[offset] >= 0xf1;
+		if (isExtended) validatePayload(nif.length >= offset + 2);
+		const cc = isExtended ? nif.readUInt16BE(offset) : nif[offset];
+		offset += isExtended ? 2 : 1;
 		// CCs before the support/control mark are supported
 		// CCs after the support/control mark are controlled
 		if (cc === CommandClasses["Support/Control Mark"]) {
