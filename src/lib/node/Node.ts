@@ -181,7 +181,10 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		}
 		// Log the value change
 		// I don't like the splitting and any but its the easiest solution here
-		log.controller.value(eventName.split(" ")[1] as any, outArg as any);
+		log.controller.value(eventName.split(" ")[1] as any, {
+			...(outArg as any),
+			nodeId: this.nodeId,
+		});
 		// And pass the translated event to our listeners
 		this.emit(eventName, outArg as any);
 	}

@@ -94,14 +94,26 @@ function formatValue(value: any): string {
 	return `"${value}"`;
 }
 
-export function value(change: "added", args: ValueAddedArgs): void;
-export function value(change: "updated", args: ValueUpdatedArgs): void;
-export function value(change: "removed", args: ValueRemovedArgs): void;
+export type LogValueArgs<T> = T & { nodeId: number };
+
+export function value(
+	change: "added",
+	args: LogValueArgs<ValueAddedArgs>,
+): void;
+export function value(
+	change: "updated",
+	args: LogValueArgs<ValueUpdatedArgs>,
+): void;
+export function value(
+	change: "removed",
+	args: LogValueArgs<ValueRemovedArgs>,
+): void;
 export function value(
 	change: "added" | "updated" | "removed",
-	args: ValueBaseArgs,
+	args: LogValueArgs<ValueBaseArgs>,
 ): void {
 	const primaryTags: string[] = [
+		getNodeTag(args.nodeId),
 		valueEventPrefixes[change],
 		CommandClasses[args.commandClass],
 	];
@@ -115,16 +127,20 @@ export function value(
 	}
 	switch (change) {
 		case "added":
-			message += `: ${formatValue((args as ValueAddedArgs).newValue)}`;
-			break;
-		case "updated":
 			message += `: ${formatValue(
-				(args as ValueUpdatedArgs).prevValue,
-			)} => ${formatValue((args as ValueUpdatedArgs).newValue)}`;
+				((args as unknown) as ValueAddedArgs).newValue,
+			)}`;
 			break;
+		case "updated": {
+			const _args = (args as unknown) as ValueUpdatedArgs;
+			message += `: ${formatValue(_args.prevValue)} => ${formatValue(
+				_args.newValue,
+			)}`;
+			break;
+		}
 		case "removed":
 			message += ` (was ${formatValue(
-				(args as ValueRemovedArgs).prevValue,
+				((args as unknown) as ValueRemovedArgs).prevValue,
 			)})`;
 			break;
 	}

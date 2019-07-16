@@ -6,7 +6,6 @@ import {
 } from "../../../test/SpyTransport";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { InterviewStage } from "../node/INode";
-import { ValueBaseArgs } from "../node/ValueDB";
 import log from "./index";
 import { restoreSilence } from "./shared";
 
@@ -38,7 +37,8 @@ describe("lib/log/Controller =>", () => {
 
 	describe("value()", () => {
 		it("prints a short tag for the change type", () => {
-			const baseArgs: ValueBaseArgs = {
+			const baseArgs = {
+				nodeId: 1,
 				commandClass: CommandClasses.Basic,
 				propertyName: "foo",
 			};
@@ -66,7 +66,8 @@ describe("lib/log/Controller =>", () => {
 		});
 
 		it("prints a tag including the CC name", () => {
-			const baseArgs: ValueBaseArgs = {
+			const baseArgs = {
+				nodeId: 1,
 				commandClass: CommandClasses.Basic,
 				propertyName: "foo",
 			};
@@ -77,8 +78,26 @@ describe("lib/log/Controller =>", () => {
 			});
 		});
 
+		it("prints a tag including the Node ID", () => {
+			const baseArgs = {
+				nodeId: 1,
+				commandClass: CommandClasses.Basic,
+				propertyName: "foo",
+			};
+
+			log.controller.value("added", {
+				...baseArgs,
+				nodeId: 5,
+				newValue: 1,
+			});
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("[Node 005]"),
+			});
+		});
+
 		it("prints a secondary tag including the CC endpoint", () => {
-			const baseArgs: ValueBaseArgs = {
+			const baseArgs = {
+				nodeId: 1,
 				commandClass: CommandClasses.Basic,
 				propertyName: "foo",
 			};
@@ -100,7 +119,8 @@ describe("lib/log/Controller =>", () => {
 		});
 
 		it("prints the name of the property", () => {
-			const baseArgs: ValueBaseArgs = {
+			const baseArgs = {
+				nodeId: 1,
 				commandClass: CommandClasses.Basic,
 				propertyName: "foo",
 			};
@@ -121,7 +141,8 @@ describe("lib/log/Controller =>", () => {
 		});
 
 		it("prints the name and key of map-like properties", () => {
-			const baseArgs: ValueBaseArgs = {
+			const baseArgs = {
+				nodeId: 1,
 				commandClass: CommandClasses.Basic,
 				propertyName: "bar",
 				propertyKey: "baz",
@@ -143,7 +164,8 @@ describe("lib/log/Controller =>", () => {
 		});
 
 		it("prints a the value change according to the change type", () => {
-			const baseArgs: ValueBaseArgs = {
+			const baseArgs = {
+				nodeId: 1,
 				commandClass: CommandClasses.Basic,
 				propertyName: "foo",
 			};
