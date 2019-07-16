@@ -41,8 +41,7 @@ export class Endpoint {
 		}
 	}
 
-	/** @internal */
-	public _implementedCommandClasses = new Map<
+	private _implementedCommandClasses = new Map<
 		CommandClasses,
 		CommandClassInfo
 	>();
@@ -139,7 +138,9 @@ export class Endpoint {
 		const ccName = CommandClasses[ccId];
 		if (APIConstructor == undefined) {
 			throw new ZWaveError(
-				`Command Class ${ccName} has no associated API!`,
+				`Command Class ${ccName} (${num2hex(
+					ccId,
+				)}) has no associated API!`,
 				ZWaveErrorCodes.CC_NoAPI,
 			);
 		}
@@ -168,6 +169,21 @@ export class Endpoint {
 	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();
 	private _commandClassAPIsProxy = new Proxy(this._commandClassAPIs, {
 		get: (target, ccNameOrId: string) => {
+			// Avoid ultra-weird error messages during testing
+			if (process.env.NODE_ENV === "test") {
+				if (
+					// wotan-disable-next-line
+					typeof ccNameOrId === "string" &&
+					(ccNameOrId === "$$typeof" ||
+						ccNameOrId === "constructor" ||
+						ccNameOrId.includes("@@__IMMUTABLE"))
+				) {
+					return undefined;
+				}
+				// @ts-ignore
+				if (ccNameOrId === Symbol.toStringTag) return "[object Object]";
+			}
+
 			let ccId: CommandClasses | undefined;
 			// The command classes are exposed to library users by their name or the ID
 			if (/\d+/.test(ccNameOrId)) {

@@ -6,18 +6,17 @@ const driver = new Driver("COM3").once("driver ready", async () => {
 	const node4 = driver.controller.nodes.get(4)!;
 	node4.once("interview completed", async () => {
 		for (let i = 1; i < 6; i++) {
-			const result = await node4.setValue(
-				{
-					cc: CommandClasses.Basic,
-					endpoint: 0,
-					propertyName: "targetValue",
-				},
-				(i % 2) * 99,
-			);
+			const result = await node4.setValue({
+				cc: CommandClasses.Basic,
+				endpoint: 0,
+				propertyName: "targetValue",
+				value: (i % 2) * 99,
+			});
 			console.log(result);
 			await wait(2000);
 		}
 	});
+	node4.getEndpoint();
 
 	// const node = driver.controller.nodes.get(3)!;
 	// node.keepAwake = true;

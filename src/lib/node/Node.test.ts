@@ -1036,16 +1036,25 @@ describe("lib/node/Node", () => {
 
 		it("returns a new endpoint with the correct endpoint index otherwise", () => {
 			const node = new ZWaveNode(2, fakeDriver as any);
-			const actual = node.getEndpoint(5);
+			(node as any)._individualEndpointCount = 5;
+			const actual = node.getEndpoint(5)!;
 			expect(actual.index).toBe(5);
 			expect(actual.nodeId).toBe(2);
 		});
 
 		it("caches the created endpoint instances", () => {
 			const node = new ZWaveNode(2, fakeDriver as any);
+			(node as any)._individualEndpointCount = 5;
 			const first = node.getEndpoint(5);
 			const second = node.getEndpoint(5);
+			expect(first).not.toBeUndefined();
 			expect(first).toBe(second);
+		});
+
+		it("returns undefined if a non-existent endpoint is requested", () => {
+			const node = new ZWaveNode(2, fakeDriver as any);
+			const actual = node.getEndpoint(5);
+			expect(actual).toBeUndefined();
 		});
 	});
 

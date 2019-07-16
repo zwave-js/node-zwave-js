@@ -347,9 +347,9 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		// Try to retrieve the corresponding CC API
 		try {
 			// Access the CC API by name
-			const api = (this.getEndpoint(endpoint).commandClasses as any)[
-				cc
-			] as CCAPI;
+			const endpointInstance = this.getEndpoint(endpoint);
+			if (!endpointInstance) return false;
+			const api = (endpointInstance.commandClasses as any)[cc] as CCAPI;
 			// Check if the setValue method is implemented
 			if (!api.setValue) return false;
 			// And call it
@@ -399,8 +399,10 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 
 	/** Cache for this node's endpoint instances */
 	private _endpointInstances = new Map<number, Endpoint>();
-	/** Returns an endpoint of this node with the given index */
-	public getEndpoint(index: number): Endpoint {
+	/**
+	 * Returns an endpoint of this node with the given index. 0 returns the node itself.
+	 */
+	public getEndpoint(index: number): Endpoint | undefined {
 		if (index < 0)
 			throw new ZWaveError(
 				"The endpoint index must be positive!",
@@ -408,7 +410,13 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			);
 		// Zero is the root endpoint - i.e. this node
 		if (index === 0) return this;
-		// TODO: Check if the requested endpoint exists on the physical node
+		// Check if the requested endpoint exists on the physical node
+		if (
+			index >
+			(this._individualEndpointCount || 0) +
+				(this._aggregatedEndpointCount || 0)
+		)
+			return undefined;
 		// Create an endpoint instance if it does not exist
 		if (!this._endpointInstances.has(index)) {
 			this._endpointInstances.set(
