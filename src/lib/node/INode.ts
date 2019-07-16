@@ -2,6 +2,7 @@
 
 import { CommandClass } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
+import { Endpoint } from "./Endpoint";
 
 // prettier-ignore
 export enum InterviewStage {
@@ -40,25 +41,13 @@ export enum NodeStatus {
 	Dead,
 }
 
-export interface IZWaveNode {
+export interface IZWaveNode extends Endpoint {
 	readonly id: number;
 
 	/**
 	 * This tells us which interview stage was last completed
 	 */
 	interviewStage: InterviewStage;
-
-	/**
-	 * Retrieves the version of the given CommandClass this node implements.
-	 * Returns 0 if the CC is not supported.
-	 */
-	getCCVersion(cc: CommandClasses): number;
-
-	/** Tests if this node supports the given CommandClass */
-	supportsCC(cc: CommandClasses): boolean;
-
-	/** Tests if this node controls the given CommandClass */
-	controlsCC(cc: CommandClasses): boolean;
 
 	/**
 	 * Creates an instance of the given CC, which is linked to this node.

@@ -35,7 +35,10 @@ export enum BinarySwitchCommand {
 export class BinarySwitchCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
-		const cc = new BinarySwitchCCGet(this.driver, { nodeId: this.node.id });
+		const cc = new BinarySwitchCCGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
 		const response = (await this.driver.sendCommand<BinarySwitchCCReport>(
 			cc,
 		))!;
@@ -54,22 +57,28 @@ export class BinarySwitchCCAPI extends CCAPI {
 	 */
 	public async set(targetValue: boolean, duration?: Duration): Promise<void> {
 		const cc = new BinarySwitchCCSet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			targetValue,
 			duration,
 		});
 		await this.driver.sendCommand(cc);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ propertyName },
+	protected [SET_VALUE]: SetValueImplementation = async ({
+		propertyName,
 		value,
-	): Promise<void> => {
+	}): Promise<void> => {
 		if (propertyName !== "targetValue") {
 			return throwUnsupportedProperty(this.ccId, propertyName);
 		}
 		if (typeof value !== "boolean") {
-			return throwWrongValueType(this.ccId, propertyName, "boolean");
+			return throwWrongValueType(
+				this.ccId,
+				propertyName,
+				"boolean",
+				typeof value,
+			);
 		}
 		await this.set(value);
 	};

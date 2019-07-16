@@ -38,7 +38,8 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
 		const cc = new ThermostatSetbackCCGet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<
 			ThermostatSetbackCCReport
@@ -54,7 +55,8 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 		setbackState: SetbackState,
 	): Promise<void> {
 		const cc = new ThermostatSetbackCCSet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			setbackType,
 			setbackState,
 		});

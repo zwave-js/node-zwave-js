@@ -11,6 +11,10 @@ import {
 } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
+import {
+	MultiChannelCC,
+	MultiChannelCCCommandEncapsulation,
+} from "../commandclass/MultiChannelCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
@@ -325,7 +329,7 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	private onNodeWakeUp(node: IZWaveNode): void {
-		log.controller.logNode(node, "The node is now awake.");
+		log.controller.logNode(node.id, "The node is now awake.");
 
 		// It *should* not be necessary to restart the node interview here.
 		// When a node that supports wakeup does not respond, pending promises
@@ -337,11 +341,11 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	private onNodeSleep(node: ZWaveNode): void {
-		log.controller.logNode(node, "The node is now asleep.");
+		log.controller.logNode(node.id, "The node is now asleep.");
 	}
 
 	private onNodeAlive(node: ZWaveNode): void {
-		log.controller.logNode(node, "The node is now alive.");
+		log.controller.logNode(node.id, "The node is now alive.");
 		if (node.interviewStage !== InterviewStage.Complete) {
 			void this.interviewNode(node);
 		}
@@ -605,6 +609,15 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	private async handleMessage(msg: Message): Promise<void> {
+		// Before doing anything else, unwrap encapsulated commands
+		if (
+			isCommandClassContainer(msg) &&
+			msg.command instanceof MultiChannelCCCommandEncapsulation
+		) {
+			log.driver.print("Unwrapping MultiChannel encapsulated command");
+			msg.command = MultiChannelCC.unwrap(msg.command);
+		}
+
 		// if we have a pending request, check if that is waiting for this message
 		if (this.currentTransaction != undefined) {
 			switch (this.currentTransaction.message.testResponse(msg)) {
@@ -896,7 +909,7 @@ ${handlers.length} left`,
 			if (msg instanceof ApplicationUpdateRequestNodeInfoReceived) {
 				const node = msg.getNodeUnsafe();
 				if (node) {
-					log.controller.logNode(node, {
+					log.controller.logNode(node.id, {
 						message: "Received updated node info",
 						direction: "inbound",
 					});
@@ -1122,6 +1135,14 @@ ${handlers.length} left`,
 				} function`,
 				ZWaveErrorCodes.Driver_NotSupported,
 			);
+		}
+
+		// Automatically encapsulate commands that are supposed to target a specific endpoint
+		if (
+			isCommandClassContainer(msg) &&
+			MultiChannelCC.requiresEncapsulation(msg.command)
+		) {
+			msg.command = MultiChannelCC.encapsulate(this, msg.command);
 		}
 
 		// create the transaction and enqueue it

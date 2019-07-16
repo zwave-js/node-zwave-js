@@ -1018,6 +1018,37 @@ describe("lib/node/Node", () => {
 		});
 	});
 
+	describe("getEndpoint()", () => {
+		const fakeDriver = createEmptyMockDriver();
+
+		it("throws when a negative endpoint index is requested", () => {
+			const node = new ZWaveNode(2, fakeDriver as any);
+			assertZWaveError(() => node.getEndpoint(-1), {
+				errorCode: ZWaveErrorCodes.Argument_Invalid,
+				messageMatches: "must be positive",
+			});
+		});
+
+		it("returns the node itself when endpoint 0 is requested", () => {
+			const node = new ZWaveNode(2, fakeDriver as any);
+			expect(node.getEndpoint(0)).toBe(node);
+		});
+
+		it("returns a new endpoint with the correct endpoint index otherwise", () => {
+			const node = new ZWaveNode(2, fakeDriver as any);
+			const actual = node.getEndpoint(5);
+			expect(actual.index).toBe(5);
+			expect(actual.nodeId).toBe(2);
+		});
+
+		it("caches the created endpoint instances", () => {
+			const node = new ZWaveNode(2, fakeDriver as any);
+			const first = node.getEndpoint(5);
+			const second = node.getEndpoint(5);
+			expect(first).toBe(second);
+		});
+	});
+
 	describe("serialize() / deserialize()", () => {
 		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
@@ -1048,6 +1079,18 @@ describe("lib/node/Node", () => {
 					isSupported: false,
 					isControlled: true,
 					version: 4,
+				},
+			},
+			endpointCountIsDynamic: false,
+			endpointsHaveIdenticalCapabilities: true,
+			individualEndpointCount: 5,
+			aggregatedEndpointCount: 2,
+			endpoints: {
+				1: {
+					isDynamic: false,
+					genericClass: 5,
+					specificClass: 111,
+					supportedCCs: [1, 2, 3, 4],
 				},
 			},
 		};
@@ -1385,14 +1428,12 @@ describe("lib/node/Node", () => {
 			// We test with a BasicCC
 			const node = new ZWaveNode(1, fakeDriver as any);
 			node.addCC(CommandClasses.Basic, { isSupported: true });
-			const result = await node.setValue(
-				{
-					cc: CommandClasses.Basic,
-					endpoint: 0,
-					propertyName: "targetValue",
-				},
-				5,
-			);
+			const result = await node.setValue({
+				cc: CommandClasses.Basic,
+				endpoint: 0,
+				propertyName: "targetValue",
+				value: 5,
+			});
 
 			expect(result).toBeTrue();
 			expect(fakeDriver.sendMessage).toBeCalled();
@@ -1404,6 +1445,17 @@ describe("lib/node/Node", () => {
 					ccCommand: BasicCommand.Set,
 				},
 			});
+		});
+
+		it("returns false if the CC is not implemented", async () => {
+			const node = new ZWaveNode(1, fakeDriver as any);
+			const result = await node.setValue({
+				cc: 0xbada55, // this is guaranteed to not be implemented
+				endpoint: 0,
+				propertyName: "test",
+				value: 1,
+			});
+			expect(result).toBeFalse();
 		});
 	});
 });

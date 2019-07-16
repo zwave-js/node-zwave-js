@@ -54,7 +54,7 @@ export interface LogNodeOptions {
  * @param level The optional loglevel if it should be different from "info"
  */
 export function logNode(
-	node: IZWaveNode,
+	nodeId: number,
 	message: string,
 	level?: "warn" | "error",
 ): void;
@@ -63,21 +63,21 @@ export function logNode(
  * @param node The node to log the message for
  * @param options The message and other options
  */
-export function logNode(node: IZWaveNode, options: LogNodeOptions): void;
+export function logNode(nodeId: number, options: LogNodeOptions): void;
 export function logNode(
-	node: IZWaveNode,
+	nodeId: number,
 	messageOrOptions: string | LogNodeOptions,
 	logLevel?: "warn" | "error",
 ): void {
 	if (typeof messageOrOptions === "string") {
-		return logNode(node, { message: messageOrOptions, level: logLevel });
+		return logNode(nodeId, { message: messageOrOptions, level: logLevel });
 	}
 
 	const { level, message, direction } = messageOrOptions;
 
 	logger.log({
 		level: level || CONTROLLER_LOGLEVEL,
-		primaryTags: tagify([getNodeTag(node)]),
+		primaryTags: tagify([getNodeTag(nodeId)]),
 		message,
 		direction: getDirectionPrefix(direction || "none"),
 	});
@@ -138,15 +138,15 @@ export function value(
 }
 
 /** Returns the tag used to log node related messages */
-function getNodeTag(node: IZWaveNode): string {
-	return "Node " + padStart(node.id.toString(), 3, "0");
+function getNodeTag(nodeId: number): string {
+	return "Node " + padStart(nodeId.toString(), 3, "0");
 }
 
 /** Logs the interview progress of a node */
 export function interviewStage(node: IZWaveNode): void {
 	logger.log({
 		level: CONTROLLER_LOGLEVEL,
-		primaryTags: tagify([getNodeTag(node)]),
+		primaryTags: tagify([getNodeTag(node.id)]),
 		message:
 			node.interviewStage === InterviewStage.Complete
 				? "Interview completed"
@@ -164,7 +164,7 @@ export function interviewStart(node: IZWaveNode): void {
 	}`;
 	logger.log({
 		level: CONTROLLER_LOGLEVEL,
-		primaryTags: tagify([getNodeTag(node)]),
+		primaryTags: tagify([getNodeTag(node.id)]),
 		message,
 		direction: getDirectionPrefix("none"),
 	});

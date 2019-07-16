@@ -4,6 +4,7 @@ import * as fs from "fs";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import { Endpoint } from "../node/Endpoint";
 import { ZWaveNode } from "../node/Node";
 import { ValueDB } from "../node/ValueDB";
 import { JSONObject, staticExtends, stripUndefined } from "../util/misc";
@@ -52,6 +53,7 @@ export function gotDeserializationOptions(
 
 export interface CCCommandOptions {
 	nodeId: number;
+	endpoint?: number;
 }
 
 export interface CommandClassCreationOptions extends CCCommandOptions {
@@ -75,7 +77,7 @@ export class CommandClass {
 		// Extract the cc from declared metadata if not provided
 		this.ccId = getCommandClass(this);
 		// Default to the root endpoint - Inherited classes may override this behavior
-		this.endpoint = 0;
+		this.endpoint = ("endpoint" in options && options.endpoint) || 0;
 
 		if (gotDeserializationOptions(options)) {
 			// For deserialized commands, try to invoke the correct subclass constructor
@@ -525,7 +527,7 @@ export interface Constructable<T extends CommandClass> {
 			| CommandClassDeserializationOptions,
 	): T;
 }
-type APIConstructor = new (driver: IDriver, node: ZWaveNode) => CCAPI;
+type APIConstructor = new (driver: IDriver, endpoint: Endpoint) => CCAPI;
 
 type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
 type CCCommandMap = Map<string, Constructable<CommandClass>>;

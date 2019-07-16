@@ -56,7 +56,8 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
 		const cc = new MultilevelSwitchCCGet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<
 			MultilevelSwitchCCReport
@@ -76,7 +77,8 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async set(targetValue: number, duration?: Duration) {
 		const cc = new MultilevelSwitchCCSet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			targetValue,
 			duration,
 		});
@@ -90,7 +92,8 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		>,
 	): Promise<void> {
 		const cc = new MultilevelSwitchCCStartLevelChange(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			...options,
 		});
 		await this.driver.sendCommand(cc);
@@ -98,7 +101,8 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 
 	public async stopLevelChange(): Promise<void> {
 		const cc = new MultilevelSwitchCCStopLevelChange(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		await this.driver.sendCommand(cc);
 	}
@@ -106,7 +110,8 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getSupported() {
 		const cc = new MultilevelSwitchCCSupportedGet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<
 			MultilevelSwitchCCSupportedReport
@@ -117,15 +122,20 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		};
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ propertyName },
+	protected [SET_VALUE]: SetValueImplementation = async ({
+		propertyName,
 		value,
-	): Promise<void> => {
+	}): Promise<void> => {
 		if (propertyName !== "targetValue") {
 			return throwUnsupportedProperty(this.ccId, propertyName);
 		}
 		if (typeof value !== "number") {
-			return throwWrongValueType(this.ccId, propertyName, "number");
+			return throwWrongValueType(
+				this.ccId,
+				propertyName,
+				"number",
+				typeof value,
+			);
 		}
 		await this.set(value);
 	};

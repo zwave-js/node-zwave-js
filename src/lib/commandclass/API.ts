@@ -1,23 +1,20 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { IZWaveNode } from "../node/INode";
+import { Endpoint } from "../node/Endpoint";
 import { getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 /** Used to identify the method on the CC API class that handles setting values on nodes directly */
 export const SET_VALUE: unique symbol = Symbol.for("CCAPI_SET_VALUE");
-export type SetValueImplementation = (
-	{
-		endpoint,
-		propertyName,
-		propertyKey,
-	}: {
-		endpoint: number;
-		propertyName: string;
-		propertyKey?: number | string;
-	},
-	value: unknown,
-) => Promise<void>;
+export type SetValueImplementation = ({
+	propertyName,
+	propertyKey,
+	value,
+}: {
+	propertyName: string;
+	propertyKey?: number | string;
+	value: unknown;
+}) => Promise<void>;
 
 // Since the setValue API is called from a point with very generic parameters,
 // we must do narrowing inside the API calls. These two methods are for convenience
@@ -35,9 +32,10 @@ export function throwWrongValueType(
 	cc: CommandClasses,
 	propertyName: string,
 	expectedType: string,
+	receivedType: string,
 ): never {
 	throw new ZWaveError(
-		`${CommandClasses[cc]}: "${propertyName}" must be of type "${expectedType}"`,
+		`${CommandClasses[cc]}: "${propertyName}" must be of type "${expectedType}", received "${receivedType}"`,
 		ZWaveErrorCodes.Argument_Invalid,
 	);
 }
@@ -46,7 +44,7 @@ export function throwWrongValueType(
 export class CCAPI {
 	public constructor(
 		protected readonly driver: IDriver,
-		protected readonly node: IZWaveNode,
+		protected readonly endpoint: Endpoint,
 	) {
 		this.ccId = getCommandClass(this);
 	}
@@ -62,7 +60,7 @@ export class CCAPI {
 	 * Retrieves the version of the given CommandClass this node implements
 	 */
 	public get version(): number {
-		return this.node.getCCVersion(this.ccId);
+		return this.endpoint.getCCVersion(this.ccId);
 	}
 
 	/** Determines if this simplified API instance may be used. */
@@ -71,8 +69,8 @@ export class CCAPI {
 			// NoOperation is always supported
 			// TODO: find out if there are other CCs always supported
 			this.ccId === CommandClasses["No Operation"] ||
-			this.node.supportsCC(this.ccId) ||
-			this.node.controlsCC(this.ccId)
+			this.endpoint.supportsCC(this.ccId) ||
+			this.endpoint.controlsCC(this.ccId)
 		);
 	}
 }

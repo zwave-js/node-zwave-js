@@ -43,7 +43,8 @@ export class MultiChannelCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getEndpoints() {
 		const cc = new MultiChannelCCEndPointGet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCEndPointReport
@@ -62,8 +63,9 @@ export class MultiChannelCCAPI extends CCAPI {
 		endpoint: number,
 	): Promise<EndpointCapability> {
 		const cc = new MultiChannelCCCapabilityGet(this.driver, {
-			nodeId: this.node.id,
-			endpoint,
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			requestedEndpoint: endpoint,
 		});
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCCapabilityReport
@@ -78,7 +80,8 @@ export class MultiChannelCCAPI extends CCAPI {
 		specificClass: number,
 	): Promise<readonly number[]> {
 		const cc = new MultiChannelCCEndPointFind(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			genericClass,
 			specificClass,
 		});
@@ -94,8 +97,9 @@ export class MultiChannelCCAPI extends CCAPI {
 		endpoint: number,
 	): Promise<readonly number[]> {
 		const cc = new MultiChannelCCAggregatedMembersGet(this.driver, {
-			nodeId: this.node.id,
-			endpoint,
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			requestedEndpoint: endpoint,
 		});
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCAggregatedMembersReport
@@ -112,7 +116,8 @@ export class MultiChannelCCAPI extends CCAPI {
 		>,
 	): Promise<void> {
 		const cc = new MultiChannelCCCommandEncapsulation(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			...options,
 		});
 		await this.driver.sendCommand(cc);
@@ -121,12 +126,40 @@ export class MultiChannelCCAPI extends CCAPI {
 
 export interface EndpointCapability extends NodeInformationFrame {
 	isDynamic: boolean;
+	wasRemoved: boolean;
 }
 
 @commandClass(CommandClasses["Multi Channel"])
 @implementedVersion(4)
 export class MultiChannelCC extends CommandClass {
 	public ccCommand!: MultiChannelCommand;
+
+	/** Tests if a command targets a specific endpoint and thus requires encapsulation */
+	public static requiresEncapsulation(cc: CommandClass): boolean {
+		return (
+			cc.endpoint !== 0 &&
+			!(cc instanceof MultiChannelCCCommandEncapsulation)
+		);
+	}
+
+	/** Encapsulates a command that targets a specific endpoint */
+	public static encapsulate(
+		driver: IDriver,
+		cc: CommandClass,
+	): MultiChannelCCCommandEncapsulation {
+		return new MultiChannelCCCommandEncapsulation(driver, {
+			nodeId: cc.nodeId,
+			encapsulatedCC: cc,
+			sourceEndPoint: 0, // We only have one endpoint
+			destination: cc.endpoint,
+		});
+	}
+
+	/** Unwraps a multi channel encapsulated command and remembers the source end point */
+	public static unwrap(cc: MultiChannelCCCommandEncapsulation): CommandClass {
+		cc.encapsulatedCC.endpoint = cc.sourceEndPoint;
+		return cc;
+	}
 }
 
 @CCCommand(MultiChannelCommand.EndPointReport)
@@ -187,29 +220,29 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 		// Only validate the bytes we expect to see here
 		// parseNodeInformationFrame does its own validation
 		validatePayload(this.payload.length >= 1);
-		const endpointIndex = this.payload[0] & 0b01111111;
+		this.endpointIndex = this.payload[0] & 0b01111111;
 		const capability = {
 			isDynamic: !!(this.payload[0] & 0b10000000),
+			wasRemoved: false,
+			// TODO: does this include controlledCCs aswell?
 			...parseNodeInformationFrame(this.payload.slice(1)),
 		};
-		this.capabilities = [endpointIndex, capability];
-		this.persistValues();
+		// Removal reports have very specific information
+		capability.wasRemoved =
+			capability.isDynamic &&
+			capability.generic.key ===
+				GenericDeviceClasses["Non-Interoperable"] &&
+			capability.specific.key === 0x00;
+
+		this.capability = capability;
 	}
 
-	@ccKeyValuePair()
-	private capabilities: [number, EndpointCapability];
-
-	public get endpointIndex(): number {
-		return this.capabilities[0];
-	}
-
-	public get capability(): EndpointCapability {
-		return this.capabilities[1];
-	}
+	public readonly endpointIndex: number;
+	public readonly capability: EndpointCapability;
 }
 
 interface MultiChannelCCCapabilityGetOptions extends CCCommandOptions {
-	endpoint: number;
+	requestedEndpoint: number;
 }
 
 @CCCommand(MultiChannelCommand.CapabilityGet)
@@ -229,12 +262,14 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			this.endpoint = options.endpoint;
+			this.requestedEndpoint = options.requestedEndpoint;
 		}
 	}
 
+	public requestedEndpoint: number;
+
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.endpoint & 0b01111111]);
+		this.payload = Buffer.from([this.requestedEndpoint & 0b01111111]);
 		return super.serialize();
 	}
 }
@@ -339,7 +374,7 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 }
 
 interface MultiChannelCCAggregatedMembersGetOptions extends CCCommandOptions {
-	endpoint: number;
+	requestedEndpoint: number;
 }
 
 @CCCommand(MultiChannelCommand.AggregatedMembersGet)
@@ -359,12 +394,14 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			this.endpoint = options.endpoint;
+			this.requestedEndpoint = options.requestedEndpoint;
 		}
 	}
 
+	public requestedEndpoint: number;
+
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.endpoint & 0b0111_1111]);
+		this.payload = Buffer.from([this.requestedEndpoint & 0b0111_1111]);
 		return super.serialize();
 	}
 }

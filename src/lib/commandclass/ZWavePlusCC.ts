@@ -40,7 +40,10 @@ export enum ZWavePlusNodeType {
 export class ZWavePlusCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
-		const cc = new ZWavePlusCCGet(this.driver, { nodeId: this.node.id });
+		const cc = new ZWavePlusCCGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
 		const response = (await this.driver.sendCommand<ZWavePlusCCReport>(cc, {
 			priority: MessagePriority.NodeQuery,
 		}))!;

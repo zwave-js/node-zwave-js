@@ -34,7 +34,8 @@ export class WakeUpCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getInterval() {
 		const cc = new WakeUpCCIntervalGet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<WakeUpCCIntervalReport>(
 			cc,
@@ -48,7 +49,8 @@ export class WakeUpCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getIntervalCapabilities() {
 		const cc = new WakeUpCCIntervalCapabilitiesGet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<
 			WakeUpCCIntervalCapabilitiesReport
@@ -66,7 +68,8 @@ export class WakeUpCCAPI extends CCAPI {
 		controllerNodeId: number,
 	): Promise<void> {
 		const cc = new WakeUpCCIntervalSet(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			wakeupInterval,
 			controllerNodeId,
 		});
@@ -75,7 +78,8 @@ export class WakeUpCCAPI extends CCAPI {
 
 	public async sendNoMoreInformation(): Promise<void> {
 		const cc = new WakeUpCCNoMoreInformation(this.driver, {
-			nodeId: this.node.id,
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		await this.driver.sendCommand(cc, {
 			// This command must be sent as part of the wake up queue
