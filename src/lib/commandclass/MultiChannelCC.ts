@@ -133,6 +133,33 @@ export interface EndpointCapability extends NodeInformationFrame {
 @implementedVersion(4)
 export class MultiChannelCC extends CommandClass {
 	public ccCommand!: MultiChannelCommand;
+
+	/** Tests if a command targets a specific endpoint and thus requires encapsulation */
+	public static requiresEncapsulation(cc: CommandClass): boolean {
+		return (
+			cc.endpoint !== 0 &&
+			!(cc instanceof MultiChannelCCCommandEncapsulation)
+		);
+	}
+
+	/** Encapsulates a command that targets a specific endpoint */
+	public static encapsulate(
+		driver: IDriver,
+		cc: CommandClass,
+	): MultiChannelCCCommandEncapsulation {
+		return new MultiChannelCCCommandEncapsulation(driver, {
+			nodeId: cc.nodeId,
+			encapsulatedCC: cc,
+			sourceEndPoint: 0, // We only have one endpoint
+			destination: cc.endpoint,
+		});
+	}
+
+	/** Unwraps a multi channel encapsulated command and remembers the source end point */
+	public static unwrap(cc: MultiChannelCCCommandEncapsulation): CommandClass {
+		cc.encapsulatedCC.endpoint = cc.sourceEndPoint;
+		return cc;
+	}
 }
 
 @CCCommand(MultiChannelCommand.EndPointReport)

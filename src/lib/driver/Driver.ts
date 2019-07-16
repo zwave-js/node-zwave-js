@@ -11,6 +11,10 @@ import {
 } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
+import {
+	MultiChannelCC,
+	MultiChannelCCCommandEncapsulation,
+} from "../commandclass/MultiChannelCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
@@ -605,6 +609,15 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	private async handleMessage(msg: Message): Promise<void> {
+		// Before doing anything else, unwrap encapsulated commands
+		if (
+			isCommandClassContainer(msg) &&
+			msg.command instanceof MultiChannelCCCommandEncapsulation
+		) {
+			log.driver.print("Unwrapping MultiChannel encapsulated command");
+			msg.command = MultiChannelCC.unwrap(msg.command);
+		}
+
 		// if we have a pending request, check if that is waiting for this message
 		if (this.currentTransaction != undefined) {
 			switch (this.currentTransaction.message.testResponse(msg)) {
@@ -1122,6 +1135,14 @@ ${handlers.length} left`,
 				} function`,
 				ZWaveErrorCodes.Driver_NotSupported,
 			);
+		}
+
+		// Automatically encapsulate commands that are supposed to target a specific endpoint
+		if (
+			isCommandClassContainer(msg) &&
+			MultiChannelCC.requiresEncapsulation(msg.command)
+		) {
+			msg.command = MultiChannelCC.encapsulate(this, msg.command);
 		}
 
 		// create the transaction and enqueue it
