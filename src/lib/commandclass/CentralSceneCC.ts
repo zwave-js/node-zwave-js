@@ -47,6 +47,7 @@ export class CentralSceneCCAPI extends CCAPI {
 	public async getSupported() {
 		const cc = new CentralSceneCCSupportedGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<
 			CentralSceneCCSupportedReport
@@ -62,6 +63,7 @@ export class CentralSceneCCAPI extends CCAPI {
 	public async getConfiguration() {
 		const cc = new CentralSceneCCConfigurationGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<
 			CentralSceneCCConfigurationReport
@@ -74,6 +76,7 @@ export class CentralSceneCCAPI extends CCAPI {
 	public async setConfiguration(slowRefresh: boolean): Promise<void> {
 		const cc = new CentralSceneCCConfigurationSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			slowRefresh,
 		});
 		await this.driver.sendCommand(cc);

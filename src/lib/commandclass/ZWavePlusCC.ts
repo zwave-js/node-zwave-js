@@ -42,6 +42,7 @@ export class ZWavePlusCCAPI extends CCAPI {
 	public async get() {
 		const cc = new ZWavePlusCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<ZWavePlusCCReport>(cc, {
 			priority: MessagePriority.NodeQuery,

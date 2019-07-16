@@ -52,6 +52,7 @@ export class NotificationCCAPI extends CCAPI {
 	public async get(options: NotificationCCGetSpecificOptions) {
 		const cc = new NotificationCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			...options,
 		});
 		const response = (await this.driver.sendCommand<NotificationCCReport>(
@@ -73,6 +74,7 @@ export class NotificationCCAPI extends CCAPI {
 	): Promise<void> {
 		const cc = new NotificationCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			notificationType,
 			notificationStatus,
 		});
@@ -83,6 +85,7 @@ export class NotificationCCAPI extends CCAPI {
 	public async getSupported() {
 		const cc = new NotificationCCSupportedGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<
 			NotificationCCSupportedReport
@@ -97,6 +100,7 @@ export class NotificationCCAPI extends CCAPI {
 	public async getSupportedEvents(notificationType: NotificationType) {
 		const cc = new NotificationCCEventSupportedGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			notificationType,
 		});
 		const response = (await this.driver.sendCommand<

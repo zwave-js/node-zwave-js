@@ -47,6 +47,7 @@ export class BasicCCAPI extends CCAPI {
 	public async get() {
 		const cc = new BasicCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<BasicCCReport>(cc))!;
 		return {
@@ -59,6 +60,7 @@ export class BasicCCAPI extends CCAPI {
 	public async set(targetValue: number): Promise<void> {
 		const cc = new BasicCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			targetValue,
 		});
 		await this.driver.sendCommand(cc);

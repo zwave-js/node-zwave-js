@@ -38,6 +38,7 @@ export class ManufacturerSpecificCCAPI extends CCAPI {
 	public async get() {
 		const cc = new ManufacturerSpecificCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<
 			ManufacturerSpecificCCReport
@@ -56,6 +57,7 @@ export class ManufacturerSpecificCCAPI extends CCAPI {
 	): Promise<string> {
 		const cc = new ManufacturerSpecificCCDeviceSpecificGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			deviceIdType,
 		});
 		const response = (await this.driver.sendCommand<

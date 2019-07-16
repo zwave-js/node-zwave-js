@@ -24,6 +24,7 @@ export class MultiCommandCCAPI extends CCAPI {
 	public async send(commands: CommandClass[]): Promise<void> {
 		const cc = new MultiCommandCCCommandEncapsulation(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			commands,
 		});
 		// TODO: Check if we need to return multiple command responses here

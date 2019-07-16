@@ -1428,14 +1428,12 @@ describe("lib/node/Node", () => {
 			// We test with a BasicCC
 			const node = new ZWaveNode(1, fakeDriver as any);
 			node.addCC(CommandClasses.Basic, { isSupported: true });
-			const result = await node.setValue(
-				{
-					cc: CommandClasses.Basic,
-					endpoint: 0,
-					propertyName: "targetValue",
-				},
-				5,
-			);
+			const result = await node.setValue({
+				cc: CommandClasses.Basic,
+				endpoint: 0,
+				propertyName: "targetValue",
+				value: 5,
+			});
 
 			expect(result).toBeTrue();
 			expect(fakeDriver.sendMessage).toBeCalled();
@@ -1451,14 +1449,12 @@ describe("lib/node/Node", () => {
 
 		it("returns false if the CC is not implemented", async () => {
 			const node = new ZWaveNode(1, fakeDriver as any);
-			const result = await node.setValue(
-				{
-					cc: 0xbada55, // this is guaranteed to not be implemented
-					endpoint: 0,
-					propertyName: "test",
-				},
-				1,
-			);
+			const result = await node.setValue({
+				cc: 0xbada55, // this is guaranteed to not be implemented
+				endpoint: 0,
+				propertyName: "test",
+				value: 1,
+			});
 			expect(result).toBeFalse();
 		});
 	});

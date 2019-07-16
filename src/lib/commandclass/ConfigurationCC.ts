@@ -108,6 +108,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	public async get(parameter: number): Promise<ConfigValue | undefined> {
 		const cc = new ConfigurationCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			parameter,
 		});
 		try {
@@ -154,6 +155,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	): Promise<boolean> {
 		const cc = new ConfigurationCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			parameter,
 			value,
 			valueSize,
@@ -183,6 +185,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	public async reset(parameter: number): Promise<boolean> {
 		const cc = new ConfigurationCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			parameter,
 			resetToDefault: true,
 		});
@@ -208,6 +211,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	public async resetAll(): Promise<void> {
 		const cc = new ConfigurationCCDefaultReset(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		await this.driver.sendCommand(cc);
 	}
@@ -264,6 +268,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			// The param information is stored automatically on receipt
 			const propCC = new ConfigurationCCPropertiesGet(this.driver, {
 				nodeId: this.endpoint.nodeId,
+				endpoint: this.endpoint.index,
 				parameter: param,
 			});
 			const propResponse = (await this.driver.sendCommand<
@@ -272,12 +277,14 @@ export class ConfigurationCCAPI extends CCAPI {
 
 			const nameCC = new ConfigurationCCNameGet(this.driver, {
 				nodeId: this.endpoint.nodeId,
+				endpoint: this.endpoint.index,
 				parameter: param,
 			});
 			await this.driver.sendCommand(nameCC);
 
 			const infoCC = new ConfigurationCCInfoGet(this.driver, {
 				nodeId: this.endpoint.nodeId,
+				endpoint: this.endpoint.index,
 				parameter: param,
 			});
 			await this.driver.sendCommand(infoCC);

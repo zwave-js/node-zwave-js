@@ -44,6 +44,7 @@ export class VersionCCAPI extends CCAPI {
 	public async get() {
 		const cc = new VersionCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<VersionCCReport>(cc))!;
 		return {
@@ -57,6 +58,7 @@ export class VersionCCAPI extends CCAPI {
 	public async getCCVersion(requestedCC: CommandClasses): Promise<number> {
 		const cc = new VersionCCCommandClassGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			requestedCC,
 		});
 		const response = (await this.driver.sendCommand<
@@ -69,6 +71,7 @@ export class VersionCCAPI extends CCAPI {
 	public async getCapabilities() {
 		const cc = new VersionCCCapabilitiesGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<
 			VersionCCCapabilitiesReport
@@ -82,6 +85,7 @@ export class VersionCCAPI extends CCAPI {
 	public async getZWaveSoftware() {
 		const cc = new VersionCCZWaveSoftwareGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<
 			VersionCCZWaveSoftwareReport

@@ -74,6 +74,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 	public async get(setpointType: ThermostatSetpointType) {
 		const cc = new ThermostatSetpointCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			setpointType,
 		});
 		const response = (await this.driver.sendCommand<
@@ -92,6 +93,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 	): Promise<void> {
 		const cc = new ThermostatSetpointCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			setpointType,
 			value,
 			scale,
@@ -103,6 +105,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 	public async getCapabilities(setpointType: ThermostatSetpointType) {
 		const cc = new ThermostatSetpointCCCapabilitiesGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			setpointType,
 		});
 		const response = (await this.driver.sendCommand<
@@ -121,6 +124,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 	> {
 		const cc = new ThermostatSetpointCCSupportedGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<
 			ThermostatSetpointCCSupportedReport

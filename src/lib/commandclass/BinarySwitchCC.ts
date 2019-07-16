@@ -37,6 +37,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 	public async get() {
 		const cc = new BinarySwitchCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<BinarySwitchCCReport>(
 			cc,
@@ -57,6 +58,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 	public async set(targetValue: boolean, duration?: Duration): Promise<void> {
 		const cc = new BinarySwitchCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			targetValue,
 			duration,
 		});

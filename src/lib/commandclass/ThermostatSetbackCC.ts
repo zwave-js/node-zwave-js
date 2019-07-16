@@ -39,6 +39,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 	public async get() {
 		const cc = new ThermostatSetbackCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<
 			ThermostatSetbackCCReport
@@ -55,6 +56,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 	): Promise<void> {
 		const cc = new ThermostatSetbackCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			setbackType,
 			setbackState,
 		});

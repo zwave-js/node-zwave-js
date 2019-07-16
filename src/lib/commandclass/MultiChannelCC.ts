@@ -44,6 +44,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	public async getEndpoints() {
 		const cc = new MultiChannelCCEndPointGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCEndPointReport
@@ -63,6 +64,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	): Promise<EndpointCapability> {
 		const cc = new MultiChannelCCCapabilityGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			requestedEndpoint: endpoint,
 		});
 		const response = (await this.driver.sendCommand<
@@ -79,6 +81,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	): Promise<readonly number[]> {
 		const cc = new MultiChannelCCEndPointFind(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			genericClass,
 			specificClass,
 		});
@@ -95,6 +98,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	): Promise<readonly number[]> {
 		const cc = new MultiChannelCCAggregatedMembersGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			requestedEndpoint: endpoint,
 		});
 		const response = (await this.driver.sendCommand<
@@ -113,6 +117,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	): Promise<void> {
 		const cc = new MultiChannelCCCommandEncapsulation(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			...options,
 		});
 		await this.driver.sendCommand(cc);

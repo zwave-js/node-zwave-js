@@ -57,6 +57,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	public async get() {
 		const cc = new MultilevelSwitchCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<
 			MultilevelSwitchCCReport
@@ -77,6 +78,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	public async set(targetValue: number, duration?: Duration) {
 		const cc = new MultilevelSwitchCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			targetValue,
 			duration,
 		});
@@ -91,6 +93,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	): Promise<void> {
 		const cc = new MultilevelSwitchCCStartLevelChange(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			...options,
 		});
 		await this.driver.sendCommand(cc);
@@ -99,6 +102,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	public async stopLevelChange(): Promise<void> {
 		const cc = new MultilevelSwitchCCStopLevelChange(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		await this.driver.sendCommand(cc);
 	}
@@ -107,6 +111,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	public async getSupported() {
 		const cc = new MultilevelSwitchCCSupportedGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<
 			MultilevelSwitchCCSupportedReport

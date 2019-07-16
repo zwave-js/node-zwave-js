@@ -4,7 +4,7 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
-import { CCAPI, CCAPIs } from "../commandclass/API";
+import { CCAPI } from "../commandclass/API";
 import {
 	CentralSceneCC,
 	CentralSceneCCNotification,
@@ -331,25 +331,24 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	 * @param propertyName The property name the value belongs to
 	 * @param propertyKey (optional) The sub-property to access
 	 */
-	public async setValue(
-		{
-			cc,
-			endpoint,
-			propertyName,
-			propertyKey,
-		}: {
-			cc: CommandClasses;
-			endpoint: number;
-			propertyName: string;
-			propertyKey?: number | string;
-		},
-		value: unknown,
-	): Promise<boolean> {
+	public async setValue({
+		cc,
+		endpoint,
+		propertyName,
+		propertyKey,
+		value,
+	}: {
+		cc: CommandClasses;
+		endpoint: number;
+		propertyName: string;
+		propertyKey?: number | string;
+		value: unknown;
+	}): Promise<boolean> {
 		// Try to retrieve the corresponding CC API
 		try {
 			// Access the CC API by name
-			const api = this.getEndpoint(endpoint).commandClasses[
-				(cc as unknown) as keyof CCAPIs
+			const api = (this.getEndpoint(endpoint).commandClasses as any)[
+				cc
 			] as CCAPI;
 			// Check if the setValue method is implemented
 			if (!api.setValue) return false;
