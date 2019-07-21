@@ -619,7 +619,10 @@ export class Driver extends EventEmitter implements IDriver {
 
 		// if we have a pending request, check if that is waiting for this message
 		if (this.currentTransaction != undefined) {
-			switch (this.currentTransaction.message.testResponse(msg)) {
+			const responseRole = this.currentTransaction.message.testResponse(
+				msg,
+			);
+			switch (responseRole) {
 				case "confirmation":
 					// no need to process intermediate responses, as they only tell us things are good
 					log.driver.transactionResponse(msg, "confirmation");

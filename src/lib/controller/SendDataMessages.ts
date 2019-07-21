@@ -125,6 +125,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		});
 	}
 
+	// TODO: Refactor this testResponse mess
 	/** @inheritDoc */
 	public testResponse(msg: Message): ResponseRole {
 		const ret = super.testResponse(msg);
@@ -140,7 +141,13 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 				? expectedCCOrDynamic(this.command)
 				: expectedCCOrDynamic;
 
-		if (expected == undefined) return ret; // "final" | "unexpected"
+		if (expected == undefined) {
+			// "final" | "unexpected"
+			return ret;
+		} else if (ret === "final") {
+			// A positive transmit report was received
+			return "confirmation";
+		}
 
 		if (isCommandClassContainer(msg)) {
 			// TODO: Is "confirmation" the correct return value here?
@@ -228,7 +235,10 @@ function testResponseForSendDataRequest(
 ): ResponseRole {
 	if (received instanceof SendDataResponse) {
 		return received.wasSent ? "confirmation" : "fatal_controller";
-	} else if (received instanceof SendDataRequestTransmitReport) {
+	} else if (
+		received instanceof SendDataRequestTransmitReport &&
+		received.callbackId === sent.callbackId
+	) {
 		return received.isFailed() ? "fatal_node" : "final"; // send data requests are final unless stated otherwise by a CommandClass
 	}
 	return "unexpected";
