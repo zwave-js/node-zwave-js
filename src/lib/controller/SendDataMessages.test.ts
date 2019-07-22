@@ -13,6 +13,7 @@ import {
 import {
 	SendDataRequest,
 	SendDataRequestBase,
+	SendDataRequestTransmitReport,
 	SendDataResponse,
 	TransmitOptions,
 } from "./SendDataMessages";
@@ -57,39 +58,51 @@ describe("lib/controller/SendDataRequest => ", () => {
 			Buffer.from([0]),
 		);
 		// "A SendDataResponse with wasSent=false was not detected as fatal_controller!"
-		expect(predicate(undefined as any, controllerFail)).toBe(
-			"fatal_controller",
-		);
+		expect(predicate({} as any, controllerFail)).toBe("fatal_controller");
 
 		const controllerSuccess = createSendDataMessage(
 			MessageType.Response,
 			Buffer.from([1]),
 		);
 		// "A SendDataResponse with wasSent=true was not detected as confirmation!"
-		expect(predicate(undefined as any, controllerSuccess)).toBe(
-			"confirmation",
-		);
+		expect(predicate({} as any, controllerSuccess)).toBe("confirmation");
 
 		const nodeFail = createSendDataMessage(
 			MessageType.Request,
 			Buffer.from([0, 1]),
 		);
 		// "A SendDataRequest with isFailed=true was not detected as fatal_node!"
-		expect(predicate(undefined as any, nodeFail)).toBe("fatal_node");
+		expect(
+			predicate(
+				{
+					callbackId: (nodeFail as SendDataRequestTransmitReport)
+						.callbackId,
+				} as any,
+				nodeFail,
+			),
+		).toBe("fatal_node");
 
 		const nodeSuccess = createSendDataMessage(
 			MessageType.Request,
 			Buffer.from([0, 0]),
 		);
 		// "A SendDataRequest with isFailed=false was not detected as final!"
-		expect(predicate(undefined as any, nodeSuccess)).toBe("final");
+		expect(
+			predicate(
+				{
+					callbackId: (nodeSuccess as SendDataRequestTransmitReport)
+						.callbackId,
+				} as any,
+				nodeSuccess,
+			),
+		).toBe("final");
 
 		const somethingElse = new Message(fakeDriver, {
 			type: MessageType.Request,
 			functionType: FunctionType.ApplicationCommand,
 		});
 		// "An unrelated message was not detected as unexpected!"
-		expect(predicate(undefined as any, somethingElse)).toBe("unexpected");
+		expect(predicate({} as any, somethingElse)).toBe("unexpected");
 	});
 
 	// We cannot parse these kinds of messages atm.
