@@ -1,7 +1,9 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	CommandClass,
@@ -13,6 +15,32 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
+@API(CommandClasses.Language)
+export class LanguageCCAPI extends CCAPI {
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async get() {
+		const cc = new LanguageCCGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<LanguageCCReport>(cc))!;
+		return {
+			language: response.language,
+			country: response.country,
+		};
+	}
+
+	public async set(language: string, country?: string): Promise<void> {
+		const cc = new LanguageCCSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			language,
+			country,
+		});
+		await this.driver.sendCommand(cc);
+	}
+}
+
 export enum LanguageCommand {
 	Set = 0x01,
 	Get = 0x02,
@@ -22,7 +50,7 @@ export enum LanguageCommand {
 @commandClass(CommandClasses.Language)
 @implementedVersion(1)
 export class LanguageCC extends CommandClass {
-	public ccCommand: LanguageCommand;
+	public ccCommand!: LanguageCommand;
 }
 
 interface LanguageCCSetOptions extends CCCommandOptions {
