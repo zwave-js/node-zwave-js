@@ -1,6 +1,8 @@
 import { IDriver } from "../driver/IDriver";
 import { validatePayload } from "../util/misc";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommandOptions,
 	CommandClass,
 	commandClass,
@@ -10,6 +12,22 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { FibaroCC } from "./manufacturerProprietary/Fibaro";
+
+@API(CommandClasses["Manufacturer Proprietary"])
+export class ManufacturerProprietaryCCAPI extends CCAPI {
+	public async sendData(
+		manufacturerId: number,
+		data?: Buffer,
+	): Promise<void> {
+		const cc = new ManufacturerProprietaryCC(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			manufacturerId,
+			proprietaryCommand: data || Buffer.allocUnsafe(0),
+		});
+		await this.driver.sendCommand(cc);
+	}
+}
 
 interface ManufacturerProprietaryOptions extends CCCommandOptions {
 	manufacturerId: number;
