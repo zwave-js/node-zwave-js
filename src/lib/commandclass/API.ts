@@ -85,6 +85,7 @@ export interface CCAPIs {
 	"Central Scene": import("./CentralSceneCC").CentralSceneCCAPI;
 	"Climate Control Schedule": import("./ClimateControlScheduleCC").ClimateControlScheduleCCAPI;
 	Configuration: import("./ConfigurationCC").ConfigurationCCAPI;
+	"Manufacturer Proprietary": import("./ManufacturerProprietaryCC").ManufacturerProprietaryCCAPI;
 	"Manufacturer Specific": import("./ManufacturerSpecificCC").ManufacturerSpecificCCAPI;
 	"Multi Channel": import("./MultiChannelCC").MultiChannelCCAPI;
 	"Multi Command": import("./MultiCommandCC").MultiCommandCCAPI;

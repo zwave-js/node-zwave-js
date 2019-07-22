@@ -14,9 +14,13 @@ const apiFile = path.join(ccDir, "API.ts");
 const startToken = "export interface CCAPIs {";
 const endToken = "}";
 
+process.on("unhandledRejection", r => {
+	throw r;
+});
+
 (async () => {
 	const ccFiles = (await fs.readdir(ccDir)).filter(
-		file => !file.endsWith("test.ts"),
+		file => file.endsWith(".ts") && !file.endsWith("test.ts"),
 	);
 
 	const CCsWithAPI: { name: string; className: string; file: string }[] = [];
