@@ -93,6 +93,7 @@ export interface CCAPIs {
 	"Multilevel Sensor": import("./MultilevelSensorCC").MultilevelSensorCCAPI;
 	"Multilevel Switch": import("./MultilevelSwitchCC").MultilevelSwitchCCAPI;
 	"No Operation": import("./NoOperationCC").NoOperationCCAPI;
+	"Node Naming and Location": import("./NodeNamingCC").NodeNamingAndLocationCCAPI;
 	Notification: import("./NotificationCC").NotificationCCAPI;
 	"Thermostat Setback": import("./ThermostatSetbackCC").ThermostatSetbackCCAPI;
 	"Thermostat Setpoint": import("./ThermostatSetpointCC").ThermostatSetpointCCAPI;
