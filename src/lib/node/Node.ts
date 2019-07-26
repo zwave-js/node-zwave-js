@@ -1,4 +1,3 @@
-import { promiseSequence } from "alcalzone-shared/async";
 import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
@@ -14,11 +13,12 @@ import {
 	CommandClass,
 	getCCConstructor,
 	getImplementedVersion,
-	StateKind,
 } from "../commandclass/CommandClass";
 import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { ConfigurationCC } from "../commandclass/ConfigurationCC";
+import { ManufacturerSpecificCC } from "../commandclass/ManufacturerSpecificCC";
 import { NotificationCCReport } from "../commandclass/NotificationCC";
+import { VersionCC } from "../commandclass/VersionCC";
 import { WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
 import {
 	ZWavePlusNodeType,
@@ -493,6 +493,36 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			await this.queryNodePlusInfo();
 		}
 
+		// TODO: From here...
+
+		// Correct order of CC interview:
+		// 1. Find out which device this is
+		await ManufacturerSpecificCC.interview(this.driver, this);
+		// TODO: Overwrite the reported config with configuration files (like OZW does)
+
+		// 2. Find out which versions we can use
+		await VersionCC.interview(this.driver, this);
+
+		// 3. Perform all other CCs interviews
+		const ccConstructors = [...this.implementedCommandClasses.keys()]
+			.filter(
+				cc =>
+					cc !== CommandClasses.Version &&
+					cc !== CommandClasses["Manufacturer Specific"],
+			)
+			// This assertion is not nice, but I see no better way
+			.map(
+				cc =>
+					(getCCConstructor(cc) as unknown) as
+						| (typeof CommandClass)
+						| undefined,
+			)
+			.filter(cc => !!cc) as (typeof CommandClass)[];
+		for (const cc of ccConstructors) {
+			await cc.interview(this.driver, this);
+			// TODO: Save state
+		}
+
 		if (this.interviewStage === InterviewStage.NodePlusInfo) {
 			// Request Manufacturer specific data
 			await this.queryManufacturerSpecific();
@@ -511,9 +541,12 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			await this.queryEndpoints();
 		}
 
+		// FIXME: Remove this when done with this PR
 		if (this.interviewStage === InterviewStage.Endpoints) {
 			await this.requestStaticValues();
 		}
+
+		// TODO: ...to here should all be in the CC interviews
 
 		// At this point the interview of new nodes is done. Start here when re-interviewing known nodes
 		if (
@@ -1002,24 +1035,25 @@ version:               ${this.version}`;
 	}
 
 	protected async requestStaticValues(): Promise<void> {
-		log.controller.logNode(this.id, {
-			message: "requesting static values...",
-			direction: "outbound",
-		});
-		try {
-			await this.requestState(StateKind.Static);
-			log.controller.logNode(this.id, {
-				message: `  static values received`,
-				direction: "inbound",
-			});
-		} catch (e) {
-			log.controller.logNode(
-				this.id,
-				`  requesting the static values failed: ${e.message}`,
-				"error",
-			);
-			throw e;
-		}
+		// TODO: This belongs in each CC's interview process
+		// log.controller.logNode(this.id, {
+		// 	message: "requesting static values...",
+		// 	direction: "outbound",
+		// });
+		// try {
+		// 	await this.requestState(StateKind.Static);
+		// 	log.controller.logNode(this.id, {
+		// 		message: `  static values received`,
+		// 		direction: "inbound",
+		// 	});
+		// } catch (e) {
+		// 	log.controller.logNode(
+		// 		this.id,
+		// 		`  requesting the static values failed: ${e.message}`,
+		// 		"error",
+		// 	);
+		// 	throw e;
+		// }
 		await this.setInterviewStage(InterviewStage.Static);
 	}
 
@@ -1248,30 +1282,30 @@ version:               ${this.version}`;
 		});
 	}
 
-	/**
-	 * Requests the state for the CCs of this node
-	 * @param kind The kind of state to be requested
-	 * @param commandClasses The command classes to request the state for. Defaults to all
-	 */
-	public async requestState(
-		kind: StateKind,
-		commandClasses: CommandClasses[] = [
-			...this.implementedCommandClasses.keys(),
-		],
-	): Promise<void> {
-		// TODO: Support multiple endpoints
-		const factories = commandClasses
-			// This assertion is not nice, but I see no better way
-			.map(
-				cc =>
-					(getCCConstructor(cc) as unknown) as
-						| (typeof CommandClass)
-						| undefined,
-			)
-			.filter(cc => !!cc)
-			.map(cc => () => cc!.requestState(this.driver, this, kind));
-		await promiseSequence(factories);
-	}
+	// /**
+	//  * Requests the state for the CCs of this node
+	//  * @param kind The kind of state to be requested
+	//  * @param commandClasses The command classes to request the state for. Defaults to all
+	//  */
+	// public async requestState(
+	// 	kind: StateKind,
+	// 	commandClasses: CommandClasses[] = [
+	// 		...this.implementedCommandClasses.keys(),
+	// 	],
+	// ): Promise<void> {
+	// 	// TODO: Support multiple endpoints
+	// 	const factories = commandClasses
+	// 		// This assertion is not nice, but I see no better way
+	// 		.map(
+	// 			cc =>
+	// 				(getCCConstructor(cc) as unknown) as
+	// 					| (typeof CommandClass)
+	// 					| undefined,
+	// 		)
+	// 		.filter(cc => !!cc)
+	// 		.map(cc => () => cc!.requestState(this.driver, this, kind));
+	// 	await promiseSequence(factories);
+	// }
 
 	/**
 	 * @internal

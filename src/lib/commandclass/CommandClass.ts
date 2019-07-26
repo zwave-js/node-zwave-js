@@ -24,17 +24,17 @@ export interface CommandClassStatic {
 	readonly maxImplementedVersion: number;
 }
 
-/**
- * Defines which kind of CC state should be requested
- */
-export enum StateKind {
-	/** Values that never change and only need to be requested once. */
-	Static = 1 << 0,
-	/** Values that change sporadically. It is enough to request them on startup. */
-	Session = 1 << 1,
-	/** Values that frequently change */
-	Dynamic = 1 << 2,
-}
+// /**
+//  * Defines which kind of CC state should be requested
+//  */
+// export enum StateKind {
+// 	/** Values that never change and only need to be requested once. */
+// 	Static = 1 << 0,
+// 	/** Values that change sporadically. It is enough to request them on startup. */
+// 	Session = 1 << 1,
+// 	/** Values that frequently change */
+// 	Dynamic = 1 << 2,
+// }
 
 export type CommandClassDeserializationOptions = { data: Buffer } & (
 	| {
@@ -296,12 +296,22 @@ export class CommandClass {
 		return stripUndefined({ ...ret, ...props });
 	}
 
-	/** Requests static or dynamic state for a given from a node */
 	/* eslint-disable @typescript-eslint/no-unused-vars */
+	/** Requests static or dynamic state for a given from a node */
 	public static async requestState(
 		driver: IDriver,
 		node: ZWaveNode,
-		kind: StateKind,
+		// kind: StateKind,
+	): Promise<void> {
+		// This needs to be overwritten per command class. In the default implementation, don't do anything
+	}
+	/* eslint-enable @typescript-eslint/no-unused-vars */
+
+	/* eslint-disable @typescript-eslint/no-unused-vars */
+	/** Performs the interview procedure for this CC according to SDS14223 */
+	public static async interview(
+		driver: IDriver,
+		node: ZWaveNode,
 	): Promise<void> {
 		// This needs to be overwritten per command class. In the default implementation, don't do anything
 	}
