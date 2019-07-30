@@ -1038,7 +1038,8 @@ ${handlers.length} left`,
 			timeout = 100 + 1000 * (this.currentTransaction!.sendAttempts - 1);
 		}
 		this.currentTransaction!.sendAttempts++;
-		setTimeout(() => this.retransmit(), timeout);
+		// Unref'ing long running timers allows the process to exit mid-timeout
+		setTimeout(() => this.retransmit(), timeout).unref();
 		return timeout;
 	}
 
@@ -1249,6 +1250,7 @@ ${handlers.length} left`,
 			this.doSend(data);
 			// If the transaction has a timeout configured, start it
 			if (this.currentTransaction.timeout) {
+				// Unref'ing long running timers allows the process to exit mid-timeout
 				this.currentTransaction.timeoutInstance = setTimeout(() => {
 					if (!this.currentTransaction) return;
 					// TODO: Do we need more information here?
@@ -1259,15 +1261,16 @@ ${handlers.length} left`,
 							ZWaveErrorCodes.Controller_MessageTimeout,
 						),
 					);
-				}, this.currentTransaction.timeout);
+				}, this.currentTransaction.timeout).unref();
 			}
 
 			if (this.sendQueue.length > 0) {
 				// to avoid any deadlocks we didn't think of, re-call this later
+				// Unref'ing long running timers allows the process to exit mid-timeout
 				this.sendQueueTimer = setTimeout(
 					() => this.workOffSendQueue(),
 					1000,
-				);
+				).unref();
 			}
 		} else {
 			log.driver.print(
