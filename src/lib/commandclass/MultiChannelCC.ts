@@ -1,12 +1,15 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import { GenericDeviceClasses } from "../node/DeviceClass";
+import { ZWaveNode } from "../node/Node";
 import {
 	NodeInformationFrame,
 	parseNodeInformationFrame,
 } from "../node/NodeInfo";
 import { validatePayload } from "../util/misc";
+import { num2hex } from "../util/strings";
 import { encodeBitMask, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
@@ -14,6 +17,7 @@ import {
 	CCCommand,
 	CCCommandOptions,
 	ccKeyValuePair,
+	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -51,10 +55,10 @@ export class MultiChannelCCAPI extends CCAPI {
 			priority: MessagePriority.NodeQuery,
 		}))!;
 		return {
-			isDynamicEndpointCount: response.isDynamicEndpointCount,
+			isDynamicEndpointCount: response.countIsDynamic,
 			identicalCapabilities: response.identicalCapabilities,
-			individualEndpointCount: response.individualEndpointCount,
-			aggregatedEndpointCount: response.aggregatedEndpointCount,
+			individualEndpointCount: response.individualCount,
+			aggregatedEndpointCount: response.aggregatedCount,
 		};
 	}
 
@@ -159,6 +163,93 @@ export class MultiChannelCC extends CommandClass {
 		cc.encapsulatedCC.endpoint = cc.sourceEndPoint;
 		return cc;
 	}
+
+	public static async interview(
+		driver: IDriver,
+		node: ZWaveNode,
+	): Promise<void> {
+		const API = node.commandClasses["Multi Channel"];
+
+		// Step 1: Retrieve general information about end points
+		log.controller.logNode(node.id, {
+			message: "querying device endpoint information...",
+			direction: "outbound",
+		});
+		const multiResponse = await API.getEndpoints();
+
+		let logMessage = `received response for device endpoints:
+endpoint count (individual): ${multiResponse.individualEndpointCount}
+count is dynamic:            ${multiResponse.isDynamicEndpointCount}
+identical capabilities:      ${multiResponse.identicalCapabilities}`;
+		if (multiResponse.aggregatedEndpointCount != undefined) {
+			logMessage += `\nendpoint count (aggregated): ${multiResponse.aggregatedEndpointCount}`;
+		}
+		log.controller.logNode(node.id, {
+			message: logMessage,
+			direction: "inbound",
+		});
+
+		// Step 2: Find all endpoints
+		log.controller.logNode(node.id, {
+			message: "querying all endpoints...",
+			direction: "outbound",
+		});
+		const foundEndpoints = await API.findEndpoints(0xff, 0xff);
+		log.controller.logNode(node.id, {
+			message: `received endpoints: ${foundEndpoints
+				.map(String)
+				.join(", ")}`,
+			direction: "inbound",
+		});
+
+		// Step 3: Query endpoints
+		for (const endpoint of foundEndpoints) {
+			if (
+				endpoint > multiResponse.individualEndpointCount &&
+				driver.getSafeCCVersionForNode(
+					node.id,
+					CommandClasses["Multi Channel"],
+				) >= 4
+			) {
+				// Find members of aggregated end point
+				log.controller.logNode(node.id, {
+					message: `querying members of aggregated endpoint #${endpoint}...`,
+					direction: "outbound",
+				});
+				const members = await API.getAggregatedMembers(endpoint);
+				log.controller.logNode(node.id, {
+					message: `aggregated endpoint #${endpoint} has members ${members
+						.map(String)
+						.join(", ")}`,
+					direction: "inbound",
+				});
+			}
+
+			// TODO: When security is implemented, we need to change stuff here
+			log.controller.logNode(node.id, {
+				message: `querying capabilities for endpoint #${endpoint}...`,
+				direction: "outbound",
+			});
+			const caps = await node.commandClasses[
+				"Multi Channel"
+			].getEndpointCapabilities(endpoint);
+			logMessage = `received response for endpoint capabilities (#${endpoint}):
+generic device class:  ${caps.generic.name} (${num2hex(caps.generic.key)})
+specific device class: ${caps.specific.name} (${num2hex(caps.specific.key)})
+is dynamic end point:  ${caps.isDynamic}
+supported CCs:`;
+			for (const cc of caps.supportedCCs) {
+				const ccName = CommandClasses[cc];
+				logMessage += `\n  · ${ccName ? ccName : num2hex(cc)}`;
+			}
+			log.controller.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
+
+			// TODO: Interview all command classes of this endpoint
+		}
+	}
 }
 
 @CCCommand(MultiChannelCommand.EndPointReport)
@@ -170,30 +261,30 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 		super(driver, options);
 
 		validatePayload(this.payload.length >= 2);
-		this._isDynamicEndpointCount = !!(this.payload[0] & 0b10000000);
+		this._countIsDynamic = !!(this.payload[0] & 0b10000000);
 		this._identicalCapabilities = !!(this.payload[0] & 0b01000000);
-		this._individualEndpointCount = this.payload[1] & 0b01111111;
+		this._individualCount = this.payload[1] & 0b01111111;
 		if (this.version >= 4 && this.payload.length >= 3) {
-			this._aggregatedEndpointCount = this.payload[2] & 0b01111111;
+			this._aggregatedCount = this.payload[2] & 0b01111111;
 		}
 		this.persistValues();
 	}
 
-	private _isDynamicEndpointCount: boolean;
-	public get isDynamicEndpointCount(): boolean {
-		return this._isDynamicEndpointCount;
+	private _countIsDynamic: boolean;
+	@ccValue() public get countIsDynamic(): boolean {
+		return this._countIsDynamic;
 	}
 	private _identicalCapabilities: boolean;
-	public get identicalCapabilities(): boolean {
+	@ccValue() public get identicalCapabilities(): boolean {
 		return this._identicalCapabilities;
 	}
-	private _individualEndpointCount: number;
-	public get individualEndpointCount(): number {
-		return this._individualEndpointCount;
+	private _individualCount: number;
+	@ccValue() public get individualCount(): number {
+		return this._individualCount;
 	}
-	private _aggregatedEndpointCount: number | undefined;
-	public get aggregatedEndpointCount(): number | undefined {
-		return this._aggregatedEndpointCount;
+	private _aggregatedCount: number | undefined;
+	@ccValue() public get aggregatedCount(): number | undefined {
+		return this._aggregatedCount;
 	}
 }
 
@@ -282,12 +373,12 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 		super(driver, options);
 
 		validatePayload(this.payload.length >= 3);
-		const numReports = this.payload[0];
+		this._reportsToFollow = this.payload[0];
 		this._genericClass = this.payload[1];
 		this._specificClass = this.payload[2];
 
-		validatePayload(this.payload.length >= 3 + numReports);
-		this._foundEndpoints = [...this.payload.slice(3, 3 + numReports)].map(
+		validatePayload(this.payload.length >= 4);
+		this._foundEndpoints = [...this.payload.slice(3)].map(
 			e => e & 0b01111111,
 		);
 	}
@@ -304,6 +395,22 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 	private _foundEndpoints: number[];
 	public get foundEndpoints(): readonly number[] {
 		return this._foundEndpoints;
+	}
+
+	private _reportsToFollow: number;
+	public get reportsToFollow(): number {
+		return this._reportsToFollow;
+	}
+
+	public expectMoreMessages(): boolean {
+		return this._reportsToFollow > 0;
+	}
+
+	public mergePartialCCs(partials: MultiChannelCCEndPointFindReport[]): void {
+		// Concat the list of end points
+		this._foundEndpoints = [...partials, this]
+			.map(report => report._foundEndpoints)
+			.reduce((prev, cur) => prev.concat(...cur), []);
 	}
 }
 

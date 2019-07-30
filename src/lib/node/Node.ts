@@ -9,11 +9,7 @@ import {
 	CentralSceneCCNotification,
 	CentralSceneKeys,
 } from "../commandclass/CentralSceneCC";
-import {
-	CommandClass,
-	getCCConstructor,
-	getImplementedVersion,
-} from "../commandclass/CommandClass";
+import { CommandClass, getCCConstructor } from "../commandclass/CommandClass";
 import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { ConfigurationCC } from "../commandclass/ConfigurationCC";
 import { ManufacturerSpecificCC } from "../commandclass/ManufacturerSpecificCC";
@@ -25,7 +21,6 @@ import {
 	ZWavePlusRoleType,
 } from "../commandclass/ZWavePlusCC";
 import { lookupDevice } from "../config/Devices";
-import { lookupManufacturer } from "../config/Manufacturers";
 import {
 	ApplicationUpdateRequest,
 	ApplicationUpdateRequestNodeInfoReceived,
@@ -371,33 +366,56 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		}
 	}
 
-	private _endpointCountIsDynamic: boolean | undefined;
 	public get endpointCountIsDynamic(): boolean | undefined {
-		return this._endpointCountIsDynamic;
+		return this.getValue(
+			CommandClasses["Multi Channel"],
+			0,
+			"_endpointCountIsDynamic",
+		);
 	}
 
-	private _endpointsHaveIdenticalCapabilities: boolean | undefined;
 	public get endpointsHaveIdenticalCapabilities(): boolean | undefined {
-		return this._endpointsHaveIdenticalCapabilities;
+		return this.getValue(
+			CommandClasses["Multi Channel"],
+			0,
+			"_endpointsHaveIdenticalCapabilities",
+		);
 	}
 
-	private _individualEndpointCount: number | undefined;
 	public get individualEndpointCount(): number | undefined {
-		return this._individualEndpointCount;
+		return this.getValue(
+			CommandClasses["Multi Channel"],
+			0,
+			"_individualEndpointCount",
+		);
 	}
 
-	private _aggregatedEndpointCount: number | undefined;
 	public get aggregatedEndpointCount(): number | undefined {
-		return this._aggregatedEndpointCount;
+		return this.getValue(
+			CommandClasses["Multi Channel"],
+			0,
+			"_aggregatedEndpointCount",
+		);
 	}
 
-	private _endpointCapabilities = new Map<number, EndpointCapabilities>();
+	private get endpointCapabilities():
+		| Map<number, EndpointCapabilities>
+		| undefined {
+		return this.getValue(
+			CommandClasses["Multi Channel"],
+			0,
+			"_endpointCapabilities",
+		);
+	}
+
 	private getEndpointCapabilities(
 		index: number,
 	): EndpointCapabilities | undefined {
-		return this._endpointCapabilities.get(
-			this._endpointsHaveIdenticalCapabilities ? 1 : index,
-		);
+		if (this.endpointCapabilities) {
+			return this.endpointCapabilities.get(
+				this.endpointsHaveIdenticalCapabilities ? 1 : index,
+			);
+		}
 	}
 
 	/** Cache for this node's endpoint instances */
@@ -416,8 +434,8 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		// Check if the requested endpoint exists on the physical node
 		if (
 			index >
-			(this._individualEndpointCount || 0) +
-				(this._aggregatedEndpointCount || 0)
+			(this.individualEndpointCount || 0) +
+				(this.aggregatedEndpointCount || 0)
 		)
 			return undefined;
 		// Create an endpoint instance if it does not exist
@@ -497,61 +515,72 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 
 		// Correct order of CC interview:
 		// 1. Find out which device this is
-		await ManufacturerSpecificCC.interview(this.driver, this);
-		// TODO: Overwrite the reported config with configuration files (like OZW does)
-
-		// 2. Find out which versions we can use
-		await VersionCC.interview(this.driver, this);
-
-		// 3. Perform all other CCs interviews
-		const ccConstructors = [...this.implementedCommandClasses.keys()]
-			.filter(
-				cc =>
-					cc !== CommandClasses.Version &&
-					cc !== CommandClasses["Manufacturer Specific"],
-			)
-			// This assertion is not nice, but I see no better way
-			.map(
-				cc =>
-					(getCCConstructor(cc) as unknown) as
-						| (typeof CommandClass)
-						| undefined,
-			)
-			.filter(cc => !!cc) as (typeof CommandClass)[];
-		for (const cc of ccConstructors) {
-			await cc.interview(this.driver, this);
-			// TODO: Save state
-		}
-
 		if (this.interviewStage === InterviewStage.NodePlusInfo) {
 			// Request Manufacturer specific data
-			await this.queryManufacturerSpecific();
+			if (this.supportsCC(CommandClasses["Manufacturer Specific"])) {
+				await ManufacturerSpecificCC.interview(this.driver, this);
+				// TODO: Save progress
+			}
 			// TODO: Overwrite the reported config with configuration files (like OZW does)
+
+			// 2. Find out which versions we can use
+			// This conditional is not necessary, but saves us a bunch of headaches during testing
+			if (this.supportsCC(CommandClasses.Version)) {
+				await VersionCC.interview(this.driver, this);
+				// TODO: Save progress
+			}
+
+			// 3. Perform all other CCs interviews
+			const ccConstructors = [...this.implementedCommandClasses.keys()]
+				.filter(
+					cc =>
+						cc !== CommandClasses.Version &&
+						cc !== CommandClasses["Manufacturer Specific"],
+				)
+				// This assertion is not nice, but I see no better way
+				.map(
+					cc =>
+						(getCCConstructor(cc) as unknown) as
+							| (typeof CommandClass)
+							| undefined,
+				)
+				.filter(cc => !!cc) as (typeof CommandClass)[];
+			for (const cc of ccConstructors) {
+				await cc.interview(this.driver, this);
+				// TODO: Save progress
+			}
+			await this.setInterviewStage(InterviewStage.CommandClasses);
 		}
 
-		// TODO:
-		// SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
+		// if (this.interviewStage === InterviewStage.NodePlusInfo) {
+		// 	// Request Manufacturer specific data
+		// 	await this.queryManufacturerSpecific();
+		// 	// TODO: Overwrite the reported config with configuration files (like OZW does)
+		// }
 
-		if (this.interviewStage === InterviewStage.ManufacturerSpecific) {
-			// TODO: change .ManufacturerSpecific to .SecurityReport when that is implemented
-			await this.queryCCVersions();
-		}
+		// // TODO:
+		// // SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
 
-		if (this.interviewStage === InterviewStage.Versions) {
-			await this.queryEndpoints();
-		}
+		// if (this.interviewStage === InterviewStage.ManufacturerSpecific) {
+		// 	// TODO: change .ManufacturerSpecific to .SecurityReport when that is implemented
+		// 	await this.queryCCVersions();
+		// }
 
-		// FIXME: Remove this when done with this PR
-		if (this.interviewStage === InterviewStage.Endpoints) {
-			await this.requestStaticValues();
-		}
+		// if (this.interviewStage === InterviewStage.Versions) {
+		// 	await this.queryEndpoints();
+		// }
+
+		// // FIXME: Remove this when done with this PR
+		// if (this.interviewStage === InterviewStage.Endpoints) {
+		// 	await this.requestStaticValues();
+		// }
 
 		// TODO: ...to here should all be in the CC interviews
 
 		// At this point the interview of new nodes is done. Start here when re-interviewing known nodes
 		if (
 			this.interviewStage === InterviewStage.RestartFromCache ||
-			this.interviewStage === InterviewStage.Static
+			this.interviewStage === InterviewStage.CommandClasses
 		) {
 			// Configure the device so it notifies us of a wakeup
 			await this.configureWakeup();
@@ -587,12 +616,13 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		// Also save to the cache after certain stages
 		switch (completedStage) {
 			case InterviewStage.ProtocolInfo:
-			case InterviewStage.ManufacturerSpecific:
+			// case InterviewStage.ManufacturerSpecific:
 			case InterviewStage.NodeInfo:
 			case InterviewStage.NodePlusInfo:
-			case InterviewStage.Versions:
-			case InterviewStage.Endpoints:
-			case InterviewStage.Static:
+			case InterviewStage.CommandClasses:
+			// case InterviewStage.Versions:
+			// case InterviewStage.Endpoints:
+			// case InterviewStage.Static:
 			case InterviewStage.Complete:
 				await this.driver.saveNetworkToCache();
 		}
@@ -772,190 +802,190 @@ version:               ${this.version}`;
 		await this.setInterviewStage(InterviewStage.NodePlusInfo);
 	}
 
-	protected async queryManufacturerSpecific(): Promise<void> {
-		if (this.isControllerNode()) {
-			log.controller.logNode(
-				this.id,
-				"not querying manufacturer information from the controller...",
-			);
-		} else {
-			log.controller.logNode(this.id, {
-				message: "querying manufacturer information...",
-				direction: "outbound",
-			});
-			try {
-				const mfResp = await this.commandClasses[
-					"Manufacturer Specific"
-				].get();
-				const logMessage = `received response for manufacturer information:
-  manufacturer: ${(await lookupManufacturer(mfResp.manufacturerId)) ||
-		"unknown"} (${num2hex(mfResp.manufacturerId)})
-  product type: ${num2hex(mfResp.productType)}
-  product id:   ${num2hex(mfResp.productId)}`;
-				log.controller.logNode(this.id, {
-					message: logMessage,
-					direction: "inbound",
-				});
-			} catch (e) {
-				log.controller.logNode(
-					this.id,
-					`  querying the manufacturer information failed: ${e.message}`,
-					"error",
-				);
-				throw e;
-			}
-		}
+	// 	protected async queryManufacturerSpecific(): Promise<void> {
+	// 		if (this.isControllerNode()) {
+	// 			log.controller.logNode(
+	// 				this.id,
+	// 				"not querying manufacturer information from the controller...",
+	// 			);
+	// 		} else {
+	// 			log.controller.logNode(this.id, {
+	// 				message: "querying manufacturer information...",
+	// 				direction: "outbound",
+	// 			});
+	// 			try {
+	// 				const mfResp = await this.commandClasses[
+	// 					"Manufacturer Specific"
+	// 				].get();
+	// 				const logMessage = `received response for manufacturer information:
+	//   manufacturer: ${(await lookupManufacturer(mfResp.manufacturerId)) ||
+	// 		"unknown"} (${num2hex(mfResp.manufacturerId)})
+	//   product type: ${num2hex(mfResp.productType)}
+	//   product id:   ${num2hex(mfResp.productId)}`;
+	// 				log.controller.logNode(this.id, {
+	// 					message: logMessage,
+	// 					direction: "inbound",
+	// 				});
+	// 			} catch (e) {
+	// 				log.controller.logNode(
+	// 					this.id,
+	// 					`  querying the manufacturer information failed: ${e.message}`,
+	// 					"error",
+	// 				);
+	// 				throw e;
+	// 			}
+	// 		}
 
-		await this.setInterviewStage(InterviewStage.ManufacturerSpecific);
-	}
+	// 		await this.setInterviewStage(InterviewStage.ManufacturerSpecific);
+	// 	}
 
-	/** Step #9 of the node interview */
-	protected async queryCCVersions(): Promise<void> {
-		log.controller.logNode(this.id, {
-			message: "querying CC versions...",
-			direction: "outbound",
-		});
-		for (const [cc] of this.implementedCommandClasses.entries()) {
-			// only query the ones we support a version > 1 for
-			const maxImplemented = getImplementedVersion(cc);
-			if (maxImplemented < 1) {
-				log.controller.logNode(
-					this.id,
-					`  skipping query for ${CommandClasses[cc]} (${num2hex(
-						cc,
-					)}) because max implemented version is ${maxImplemented}`,
-				);
-				continue;
-			}
-			try {
-				log.controller.logNode(this.id, {
-					message: `  querying the CC version for ${
-						CommandClasses[cc]
-					} (${num2hex(cc)})...`,
-					direction: "outbound",
-				});
-				// query the CC version
-				const supportedVersion = await this.commandClasses.Version.getCCVersion(
-					cc,
-				);
-				// Remember which CC version this node supports
-				let logMessage: string;
-				if (supportedVersion > 0) {
-					this.addCC(cc, { version: supportedVersion });
-					logMessage = `  supports CC ${
-						CommandClasses[cc]
-					} (${num2hex(cc)}) in version ${supportedVersion}`;
-				} else {
-					// We were lied to - the NIF said this CC is supported, now the node claims it isn't
-					this.removeCC(cc);
-					logMessage = `  does NOT support CC ${
-						CommandClasses[cc]
-					} (${num2hex(cc)})`;
-				}
-				log.controller.logNode(this.id, logMessage);
-			} catch (e) {
-				log.controller.logNode(
-					this.id,
-					`  querying the CC versions failed: ${e.message}`,
-					"error",
-				);
-				throw e;
-			}
-		}
-		await this.setInterviewStage(InterviewStage.Versions);
-	}
+	// /** Step #9 of the node interview */
+	// protected async queryCCVersions(): Promise<void> {
+	// 	log.controller.logNode(this.id, {
+	// 		message: "querying CC versions...",
+	// 		direction: "outbound",
+	// 	});
+	// 	for (const [cc] of this.implementedCommandClasses.entries()) {
+	// 		// only query the ones we support a version > 1 for
+	// 		const maxImplemented = getImplementedVersion(cc);
+	// 		if (maxImplemented < 1) {
+	// 			log.controller.logNode(
+	// 				this.id,
+	// 				`  skipping query for ${CommandClasses[cc]} (${num2hex(
+	// 					cc,
+	// 				)}) because max implemented version is ${maxImplemented}`,
+	// 			);
+	// 			continue;
+	// 		}
+	// 		try {
+	// 			log.controller.logNode(this.id, {
+	// 				message: `  querying the CC version for ${
+	// 					CommandClasses[cc]
+	// 				} (${num2hex(cc)})...`,
+	// 				direction: "outbound",
+	// 			});
+	// 			// query the CC version
+	// 			const supportedVersion = await this.commandClasses.Version.getCCVersion(
+	// 				cc,
+	// 			);
+	// 			// Remember which CC version this node supports
+	// 			let logMessage: string;
+	// 			if (supportedVersion > 0) {
+	// 				this.addCC(cc, { version: supportedVersion });
+	// 				logMessage = `  supports CC ${
+	// 					CommandClasses[cc]
+	// 				} (${num2hex(cc)}) in version ${supportedVersion}`;
+	// 			} else {
+	// 				// We were lied to - the NIF said this CC is supported, now the node claims it isn't
+	// 				this.removeCC(cc);
+	// 				logMessage = `  does NOT support CC ${
+	// 					CommandClasses[cc]
+	// 				} (${num2hex(cc)})`;
+	// 			}
+	// 			log.controller.logNode(this.id, logMessage);
+	// 		} catch (e) {
+	// 			log.controller.logNode(
+	// 				this.id,
+	// 				`  querying the CC versions failed: ${e.message}`,
+	// 				"error",
+	// 			);
+	// 			throw e;
+	// 		}
+	// 	}
+	// 	await this.setInterviewStage(InterviewStage.Versions);
+	// }
 
-	/** Step #10 of the node interview */
-	protected async queryEndpoints(): Promise<void> {
-		if (this.supportsCC(CommandClasses["Multi Channel"])) {
-			log.controller.logNode(this.id, {
-				message: "querying device endpoints...",
-				direction: "outbound",
-			});
-			try {
-				const multiResponse = await this.commandClasses[
-					"Multi Channel"
-				].getEndpoints();
-				// Save the received information
-				this._endpointCountIsDynamic =
-					multiResponse.isDynamicEndpointCount;
-				this._endpointsHaveIdenticalCapabilities =
-					multiResponse.identicalCapabilities;
-				this._individualEndpointCount =
-					multiResponse.individualEndpointCount;
-				this._aggregatedEndpointCount =
-					multiResponse.aggregatedEndpointCount || 0;
+	// 	/** Step #10 of the node interview */
+	// 	protected async queryEndpoints(): Promise<void> {
+	// 		if (this.supportsCC(CommandClasses["Multi Channel"])) {
+	// 			log.controller.logNode(this.id, {
+	// 				message: "querying device endpoints...",
+	// 				direction: "outbound",
+	// 			});
+	// 			try {
+	// 				const multiResponse = await this.commandClasses[
+	// 					"Multi Channel"
+	// 				].getEndpoints();
+	// 				// Save the received information
+	// 				this._endpointCountIsDynamic =
+	// 					multiResponse.isDynamicEndpointCount;
+	// 				this._endpointsHaveIdenticalCapabilities =
+	// 					multiResponse.identicalCapabilities;
+	// 				this._individualEndpointCount =
+	// 					multiResponse.individualEndpointCount;
+	// 				this._aggregatedEndpointCount =
+	// 					multiResponse.aggregatedEndpointCount || 0;
 
-				let logMessage = `received response for device endpoints:
-  endpoint count (individual): ${multiResponse.individualEndpointCount}
-  count is dynamic:            ${multiResponse.isDynamicEndpointCount}
-  identical capabilities:      ${multiResponse.identicalCapabilities}`;
-				if (multiResponse.aggregatedEndpointCount != undefined) {
-					logMessage += `
-  endpoint count (aggregated): ${multiResponse.aggregatedEndpointCount}`;
-				}
-				log.controller.logNode(this.id, {
-					message: logMessage,
-					direction: "inbound",
-				});
+	// 				let logMessage = `received response for device endpoints:
+	//   endpoint count (individual): ${multiResponse.individualEndpointCount}
+	//   count is dynamic:            ${multiResponse.isDynamicEndpointCount}
+	//   identical capabilities:      ${multiResponse.identicalCapabilities}`;
+	// 				if (multiResponse.aggregatedEndpointCount != undefined) {
+	// 					logMessage += `
+	//   endpoint count (aggregated): ${multiResponse.aggregatedEndpointCount}`;
+	// 				}
+	// 				log.controller.logNode(this.id, {
+	// 					message: logMessage,
+	// 					direction: "inbound",
+	// 				});
 
-				// Find out how many endpoints we need to query.
-				// If all of them have identical capabilities, 1 is enough
-				const totalEndpointCount = multiResponse.identicalCapabilities
-					? 1
-					: multiResponse.individualEndpointCount +
-					  (multiResponse.aggregatedEndpointCount || 0);
-				for (
-					let endpointIndex = 1;
-					endpointIndex <= totalEndpointCount;
-					endpointIndex++
-				) {
-					log.controller.logNode(this.id, {
-						message: `querying capabilities for endpoint #${endpointIndex}...`,
-						direction: "outbound",
-					});
-					const caps = await this.commandClasses[
-						"Multi Channel"
-					].getEndpointCapabilities(endpointIndex);
-					logMessage = `received response for endpoint capabilities (#${endpointIndex}):
-  generic device class:  ${caps.generic.name} (${num2hex(caps.generic.key)})
-  specific device class: ${caps.specific.name} (${num2hex(caps.specific.key)})
-  is dynamic end point:  ${caps.isDynamic}
-  supported CCs:`;
-					for (const cc of caps.supportedCCs) {
-						const ccName = CommandClasses[cc];
-						logMessage += `\n  · ${ccName ? ccName : num2hex(cc)}`;
-					}
-					log.controller.logNode(this.id, {
-						message: logMessage,
-						direction: "inbound",
-					});
+	// 				// Find out how many endpoints we need to query.
+	// 				// If all of them have identical capabilities, 1 is enough
+	// 				const totalEndpointCount = multiResponse.identicalCapabilities
+	// 					? 1
+	// 					: multiResponse.individualEndpointCount +
+	// 					  (multiResponse.aggregatedEndpointCount || 0);
+	// 				for (
+	// 					let endpointIndex = 1;
+	// 					endpointIndex <= totalEndpointCount;
+	// 					endpointIndex++
+	// 				) {
+	// 					log.controller.logNode(this.id, {
+	// 						message: `querying capabilities for endpoint #${endpointIndex}...`,
+	// 						direction: "outbound",
+	// 					});
+	// 					const caps = await this.commandClasses[
+	// 						"Multi Channel"
+	// 					].getEndpointCapabilities(endpointIndex);
+	// 					logMessage = `received response for endpoint capabilities (#${endpointIndex}):
+	//   generic device class:  ${caps.generic.name} (${num2hex(caps.generic.key)})
+	//   specific device class: ${caps.specific.name} (${num2hex(caps.specific.key)})
+	//   is dynamic end point:  ${caps.isDynamic}
+	//   supported CCs:`;
+	// 					for (const cc of caps.supportedCCs) {
+	// 						const ccName = CommandClasses[cc];
+	// 						logMessage += `\n  · ${ccName ? ccName : num2hex(cc)}`;
+	// 					}
+	// 					log.controller.logNode(this.id, {
+	// 						message: logMessage,
+	// 						direction: "inbound",
+	// 					});
 
-					const capabilites: EndpointCapabilities = {
-						genericClass: caps.generic,
-						specificClass: caps.specific,
-						isDynamic: caps.isDynamic,
-						supportedCCs: caps.supportedCCs,
-					};
-					this._endpointCapabilities.set(endpointIndex, capabilites);
-				}
-			} catch (e) {
-				log.controller.logNode(
-					this.id,
-					`  querying the device endpoints failed: ${e.message}`,
-					"error",
-				);
-				throw e;
-			}
-		} else {
-			log.controller.logNode(
-				this.id,
-				`skipping endpoint query because the device does not support it`,
-			);
-		}
+	// 					const capabilites: EndpointCapabilities = {
+	// 						genericClass: caps.generic,
+	// 						specificClass: caps.specific,
+	// 						isDynamic: caps.isDynamic,
+	// 						supportedCCs: caps.supportedCCs,
+	// 					};
+	// 					this._endpointCapabilities.set(endpointIndex, capabilites);
+	// 				}
+	// 			} catch (e) {
+	// 				log.controller.logNode(
+	// 					this.id,
+	// 					`  querying the device endpoints failed: ${e.message}`,
+	// 					"error",
+	// 				);
+	// 				throw e;
+	// 			}
+	// 		} else {
+	// 			log.controller.logNode(
+	// 				this.id,
+	// 				`skipping endpoint query because the device does not support it`,
+	// 			);
+	// 		}
 
-		await this.setInterviewStage(InterviewStage.Endpoints);
-	}
+	// 		await this.setInterviewStage(InterviewStage.Endpoints);
+	// 	}
 
 	/** Step #2 of the node interview */
 	protected async configureWakeup(): Promise<void> {
@@ -1034,28 +1064,28 @@ version:               ${this.version}`;
 		this.setAwake(true);
 	}
 
-	protected async requestStaticValues(): Promise<void> {
-		// TODO: This belongs in each CC's interview process
-		// log.controller.logNode(this.id, {
-		// 	message: "requesting static values...",
-		// 	direction: "outbound",
-		// });
-		// try {
-		// 	await this.requestState(StateKind.Static);
-		// 	log.controller.logNode(this.id, {
-		// 		message: `  static values received`,
-		// 		direction: "inbound",
-		// 	});
-		// } catch (e) {
-		// 	log.controller.logNode(
-		// 		this.id,
-		// 		`  requesting the static values failed: ${e.message}`,
-		// 		"error",
-		// 	);
-		// 	throw e;
-		// }
-		await this.setInterviewStage(InterviewStage.Static);
-	}
+	// protected async requestStaticValues(): Promise<void> {
+	// 	// TODO: This belongs in each CC's interview process
+	// 	// log.controller.logNode(this.id, {
+	// 	// 	message: "requesting static values...",
+	// 	// 	direction: "outbound",
+	// 	// });
+	// 	// try {
+	// 	// 	await this.requestState(StateKind.Static);
+	// 	// 	log.controller.logNode(this.id, {
+	// 	// 		message: `  static values received`,
+	// 	// 		direction: "inbound",
+	// 	// 	});
+	// 	// } catch (e) {
+	// 	// 	log.controller.logNode(
+	// 	// 		this.id,
+	// 	// 		`  requesting the static values failed: ${e.message}`,
+	// 	// 		"error",
+	// 	// 	);
+	// 	// 	throw e;
+	// 	// }
+	// 	await this.setInterviewStage(InterviewStage.Static);
+	// }
 
 	protected async overwriteConfig(): Promise<void> {
 		if (this.isControllerNode()) {
@@ -1348,26 +1378,28 @@ version:               ${this.version}`;
 						return [num2hex(cc), ret] as [string, object];
 					}),
 			),
-			endpointCountIsDynamic: this._endpointCountIsDynamic,
+			endpointCountIsDynamic: this.endpointCountIsDynamic,
 			endpointsHaveIdenticalCapabilities: this
-				._endpointsHaveIdenticalCapabilities,
-			individualEndpointCount: this._individualEndpointCount,
-			aggregatedEndpointCount: this._aggregatedEndpointCount,
-			endpoints: composeObject(
-				[...this._endpointCapabilities.entries()]
-					.sort((a, b) => Math.sign(a[0] - b[0]))
-					.map(([cc, caps]) => {
-						return [
-							cc.toString(),
-							{
-								genericClass: caps.genericClass.key,
-								specificClass: caps.specificClass.key,
-								isDynamic: caps.isDynamic,
-								supportedCCs: caps.supportedCCs,
-							},
-						] as [string, object];
-					}),
-			),
+				.endpointsHaveIdenticalCapabilities,
+			individualEndpointCount: this.individualEndpointCount,
+			aggregatedEndpointCount: this.aggregatedEndpointCount,
+			endpoints:
+				this.endpointCapabilities &&
+				composeObject(
+					[...this.endpointCapabilities.entries()]
+						.sort((a, b) => Math.sign(a[0] - b[0]))
+						.map(([cc, caps]) => {
+							return [
+								cc.toString(),
+								{
+									genericClass: caps.genericClass.key,
+									specificClass: caps.specificClass.key,
+									isDynamic: caps.isDynamic,
+									supportedCCs: caps.supportedCCs,
+								},
+							] as [string, object];
+						}),
+				),
 		};
 	}
 
@@ -1464,6 +1496,15 @@ version:               ${this.version}`;
 		tryParse("aggregatedEndpointCount", "number");
 		if (isObject(obj.endpoints)) {
 			const endpointDict = obj.endpoints;
+			// Make sure the endpointCapabilities Map exists
+			if (!this.endpointCapabilities) {
+				this.valueDB.setValue(
+					CommandClasses["Multi Channel"],
+					0,
+					"_endpointCapabilities",
+					new Map(),
+				);
+			}
 			for (const index of Object.keys(endpointDict)) {
 				// First make sure this key describes a valid endpoint
 				const indexNum = parseInt(index);
@@ -1472,8 +1513,9 @@ version:               ${this.version}`;
 					indexNum >
 						(this.individualEndpointCount || 0) +
 							(this.aggregatedEndpointCount || 0)
-				)
+				) {
 					continue;
+				}
 
 				// Parse the information we have
 				const {
@@ -1489,7 +1531,7 @@ version:               ${this.version}`;
 					isArray(supportedCCs) &&
 					supportedCCs.every(cc => typeof cc === "number")
 				) {
-					this._endpointCapabilities.set(indexNum, {
+					this.endpointCapabilities!.set(indexNum, {
 						genericClass: GenericDeviceClass.get(genericClass),
 						specificClass: SpecificDeviceClass.get(
 							genericClass,

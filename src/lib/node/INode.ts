@@ -10,11 +10,12 @@ export enum InterviewStage {
 	ProtocolInfo,			// [✓] Retrieve protocol information
 	NodeInfo,				// [✓] Retrieve info about supported and controlled command classes
 	NodePlusInfo,			// [✓] Retrieve ZWave+ info and update device classes
-	ManufacturerSpecific,	// [✓] Retrieve manufacturer name and product ids, overwrite node info with configuration data
-	SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
-	Versions,				// [✓] Retrieve version information
-	Endpoints,				// [✓] Retrieve information about multiple command class endpoints
-	Static,					// (✓) Retrieve static information we haven't received yet (doesn't change)
+	CommandClasses,			// [ ] Retrieve info about all command classes
+	// ManufacturerSpecific,	// [✓] Retrieve manufacturer name and product ids, overwrite node info with configuration data
+	// SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
+	// Versions,				// [✓] Retrieve version information
+	// Endpoints,				// [✓] Retrieve information about multiple command class endpoints
+	// Static,					// (✓) Retrieve static information we haven't received yet (doesn't change)
 
 	// ===== the stuff above should never change =====
 	RestartFromCache,		// This marks the beginning of re-interviews on application startup.
@@ -28,8 +29,8 @@ export enum InterviewStage {
 	Associations,			// [ ] Retrieve information about associations
 	OverwriteConfig,		// [ ] Load node configuration from a configuration file
 	Neighbors,				// [✓] Retrieve node neighbor list
-	Session,				// [ ] Retrieve session information (changes infrequently)
-	Dynamic,				// [ ] Retrieve dynamic information (changes frequently)
+	// Session,				// [ ] Retrieve session information (changes infrequently)
+	// Dynamic,				// [ ] Retrieve dynamic information (changes frequently)
 	Configuration,			// [ ] Retrieve configurable parameter information (only done on request)
 	Complete,				// [✓] Query process is completed for this node
 }

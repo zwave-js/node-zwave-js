@@ -1,7 +1,11 @@
+import { lookupManufacturer } from "../config/Manufacturers";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import log from "../log";
 import { MessagePriority } from "../message/Constants";
+import { ZWaveNode } from "../node/Node";
 import { validatePayload } from "../util/misc";
+import { num2hex } from "../util/strings";
 import { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
@@ -64,6 +68,44 @@ export class ManufacturerSpecificCCAPI extends CCAPI {
 			ManufacturerSpecificCCDeviceSpecificReport
 		>(cc))!;
 		return response.value;
+	}
+
+	public static async interview(
+		driver: IDriver,
+		node: ZWaveNode,
+	): Promise<void> {
+		if (node.isControllerNode()) {
+			log.controller.logNode(
+				node.id,
+				"not querying manufacturer information from the controller...",
+			);
+		} else {
+			log.controller.logNode(node.id, {
+				message: "querying manufacturer information...",
+				direction: "outbound",
+			});
+			try {
+				const mfResp = await node.commandClasses[
+					"Manufacturer Specific"
+				].get();
+				const logMessage = `received response for manufacturer information:
+  manufacturer: ${(await lookupManufacturer(mfResp.manufacturerId)) ||
+		"unknown"} (${num2hex(mfResp.manufacturerId)})
+  product type: ${num2hex(mfResp.productType)}
+  product id:   ${num2hex(mfResp.productId)}`;
+				log.controller.logNode(node.id, {
+					message: logMessage,
+					direction: "inbound",
+				});
+			} catch (e) {
+				log.controller.logNode(
+					node.id,
+					`  querying the manufacturer information failed: ${e.message}`,
+					"error",
+				);
+				throw e;
+			}
+		}
 	}
 }
 
