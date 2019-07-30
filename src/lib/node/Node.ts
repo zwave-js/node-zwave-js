@@ -1210,10 +1210,11 @@ version:               ${this.version}`;
 			}
 			this.centralSceneKeyHeldDownContext = {
 				sceneNumber: command.sceneNumber,
+				// Unref'ing long running timers allows the process to exit mid-timeout
 				timeout: setTimeout(
 					forceKeyUp,
 					command.slowRefresh ? 60000 : 400,
-				),
+				).unref(),
 			};
 		} else if (command.keyAttribute === CentralSceneKeys.KeyReleased) {
 			// Stop the release timer
