@@ -10,7 +10,6 @@ import {
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
-import { ZWavePlusCC, ZWavePlusCommand } from "../commandclass/ZWavePlusCC";
 import {
 	ApplicationUpdateRequest,
 	ApplicationUpdateTypes,
@@ -50,9 +49,9 @@ class TestNode extends ZWaveNode {
 	public async queryNodeInfo(): Promise<void> {
 		return super.queryNodeInfo();
 	}
-	public async queryNodePlusInfo(): Promise<void> {
-		return super.queryNodePlusInfo();
-	}
+	// public async queryNodePlusInfo(): Promise<void> {
+	// 	return super.queryNodePlusInfo();
+	// }
 	// public async queryManufacturerSpecific(): Promise<void> {
 	// 	return super.queryManufacturerSpecific();
 	// }
@@ -420,54 +419,54 @@ describe("lib/node/Node", () => {
 			});
 		});
 
-		describe(`queryNodePlusInfo()`, () => {
-			beforeAll(() => {
-				fakeDriver.sendMessage.mockImplementation(() =>
-					Promise.resolve({ command: {} }),
-				);
-			});
-			beforeEach(() => fakeDriver.sendMessage.mockClear());
-			afterAll(() => {
-				fakeDriver.sendMessage.mockImplementation(() =>
-					Promise.resolve(),
-				);
-			});
+		// describe(`queryNodePlusInfo()`, () => {
+		// 	beforeAll(() => {
+		// 		fakeDriver.sendMessage.mockImplementation(() =>
+		// 			Promise.resolve({ command: {} }),
+		// 		);
+		// 	});
+		// 	beforeEach(() => fakeDriver.sendMessage.mockClear());
+		// 	afterAll(() => {
+		// 		fakeDriver.sendMessage.mockImplementation(() =>
+		// 			Promise.resolve(),
+		// 		);
+		// 	});
 
-			it(`should set the interview stage to "NodePlusInfo"`, async () => {
-				await node.queryNodePlusInfo();
-				expect(node.interviewStage).toBe(InterviewStage.NodePlusInfo);
-			});
+		// 	it(`should set the interview stage to "NodePlusInfo"`, async () => {
+		// 		await node.queryNodePlusInfo();
+		// 		expect(node.interviewStage).toBe(InterviewStage.NodePlusInfo);
+		// 	});
 
-			it("should not send anything if the node does not support the Multi Channel CC", async () => {
-				node.addCC(CommandClasses["Z-Wave Plus Info"], {
-					isSupported: false,
-					isControlled: false,
-				});
-				await node.queryNodePlusInfo();
-				expect(fakeDriver.sendMessage).not.toBeCalled();
-			});
+		// 	it("should not send anything if the node does not support the Multi Channel CC", async () => {
+		// 		node.addCC(CommandClasses["Z-Wave Plus Info"], {
+		// 			isSupported: false,
+		// 			isControlled: false,
+		// 		});
+		// 		await node.queryNodePlusInfo();
+		// 		expect(fakeDriver.sendMessage).not.toBeCalled();
+		// 	});
 
-			it("should send a ZWavePlusCC.Get", async () => {
-				node.addCC(CommandClasses["Z-Wave Plus Info"], {
-					isSupported: true,
-				});
-				await node.queryNodePlusInfo();
+		// 	it("should send a ZWavePlusCC.Get", async () => {
+		// 		node.addCC(CommandClasses["Z-Wave Plus Info"], {
+		// 			isSupported: true,
+		// 		});
+		// 		await node.queryNodePlusInfo();
 
-				expect(fakeDriver.sendMessage).toBeCalled();
+		// 		expect(fakeDriver.sendMessage).toBeCalled();
 
-				assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
-					cc: ZWavePlusCC,
-					nodeId: node.id,
-					ccValues: {
-						ccCommand: ZWavePlusCommand.Get,
-					},
-				});
-			});
+		// 		assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
+		// 			cc: ZWavePlusCC,
+		// 			nodeId: node.id,
+		// 			ccValues: {
+		// 				ccCommand: ZWavePlusCommand.Get,
+		// 			},
+		// 		});
+		// 	});
 
-			it.todo("Test the behavior when the request failed");
+		// 	it.todo("Test the behavior when the request failed");
 
-			it.todo("Test the behavior when the request succeeds");
-		});
+		// 	it.todo("Test the behavior when the request succeeds");
+		// });
 
 		// describe(`queryManufacturerSpecific()`, () => {
 		// 	beforeAll(() => {
@@ -691,7 +690,7 @@ describe("lib/node/Node", () => {
 				const interviewStagesAfter = {
 					queryProtocolInfo: InterviewStage.ProtocolInfo,
 					queryNodeInfo: InterviewStage.NodeInfo,
-					queryNodePlusInfo: InterviewStage.NodePlusInfo,
+					// queryNodePlusInfo: InterviewStage.NodePlusInfo,
 					// queryManufacturerSpecific:
 					// 	InterviewStage.ManufacturerSpecific,
 					// queryCCVersions: InterviewStage.Versions,
@@ -707,7 +706,7 @@ describe("lib/node/Node", () => {
 					queryProtocolInfo: node.queryProtocolInfo,
 					ping: node.ping,
 					queryNodeInfo: node.queryNodeInfo,
-					queryNodePlusInfo: node.queryNodePlusInfo,
+					// queryNodePlusInfo: node.queryNodePlusInfo,
 					// queryManufacturerSpecific: node.queryManufacturerSpecific,
 					// queryCCVersions: node.queryCCVersions,
 					// queryEndpoints: node.queryEndpoints,
@@ -765,7 +764,7 @@ describe("lib/node/Node", () => {
 				const expectCalled = [
 					// Ping must always be called when the interview is not complete
 					"ping",
-					"queryNodePlusInfo",
+					// "queryNodePlusInfo",
 					// "queryManufacturerSpecific",
 					// "queryCCVersions",
 					// "queryEndpoints",

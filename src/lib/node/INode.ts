@@ -9,7 +9,7 @@ export enum InterviewStage {
 	None,					// [✓] Query process hasn't started for this node
 	ProtocolInfo,			// [✓] Retrieve protocol information
 	NodeInfo,				// [✓] Retrieve info about supported and controlled command classes
-	NodePlusInfo,			// [✓] Retrieve ZWave+ info and update device classes
+	// NodePlusInfo,			// [✓] Retrieve ZWave+ info and update device classes
 	CommandClasses,			// [ ] Retrieve info about all command classes
 	// ManufacturerSpecific,	// [✓] Retrieve manufacturer name and product ids, overwrite node info with configuration data
 	// SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security

@@ -16,10 +16,7 @@ import { ManufacturerSpecificCC } from "../commandclass/ManufacturerSpecificCC";
 import { NotificationCCReport } from "../commandclass/NotificationCC";
 import { VersionCC } from "../commandclass/VersionCC";
 import { WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
-import {
-	ZWavePlusNodeType,
-	ZWavePlusRoleType,
-} from "../commandclass/ZWavePlusCC";
+import { ZWavePlusCC } from "../commandclass/ZWavePlusCC";
 import { lookupDevice } from "../config/Devices";
 import {
 	ApplicationUpdateRequest,
@@ -423,6 +420,8 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	/**
 	 * Returns an endpoint of this node with the given index. 0 returns the node itself.
 	 */
+	public getEndpoint(index: 0): Endpoint;
+	public getEndpoint(index: number): Endpoint | undefined;
 	public getEndpoint(index: number): Endpoint | undefined {
 		if (index < 0)
 			throw new ZWaveError(
@@ -507,15 +506,15 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			await this.queryNodeInfo();
 		}
 
-		if (this.interviewStage === InterviewStage.NodeInfo) {
-			await this.queryNodePlusInfo();
-		}
+		// if (this.interviewStage === InterviewStage.NodeInfo) {
+		// 	await this.queryNodePlusInfo();
+		// }
 
 		// TODO: From here...
 
 		// Correct order of CC interview:
 		// 1. Find out which device this is
-		if (this.interviewStage === InterviewStage.NodePlusInfo) {
+		if (this.interviewStage === InterviewStage.NodeInfo) {
 			// Request Manufacturer specific data
 			if (this.supportsCC(CommandClasses["Manufacturer Specific"])) {
 				await ManufacturerSpecificCC.interview(this.driver, this);
@@ -530,6 +529,16 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 				// TODO: Save progress
 			}
 
+			// TODO: Correctly order CC interviews
+			// All CCs require Version
+			// ZW+ requires Multi Channel (if it is supported)
+			// what else?...
+			if (this.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
+				await ZWavePlusCC.interview(this.driver, this);
+				// TODO: Save progress
+			}
+
+			// TODO: Also query ALL endpoints!
 			// 3. Perform all other CCs interviews
 			const ccConstructors = [...this.implementedCommandClasses.keys()]
 				.filter(
@@ -618,7 +627,6 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			case InterviewStage.ProtocolInfo:
 			// case InterviewStage.ManufacturerSpecific:
 			case InterviewStage.NodeInfo:
-			case InterviewStage.NodePlusInfo:
 			case InterviewStage.CommandClasses:
 			// case InterviewStage.Versions:
 			// case InterviewStage.Endpoints:
@@ -762,45 +770,45 @@ version:               ${this.version}`;
 		await this.setInterviewStage(InterviewStage.NodeInfo);
 	}
 
-	/** Step #6 of the node interview */
-	protected async queryNodePlusInfo(): Promise<void> {
-		if (!this.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
-			log.controller.logNode(
-				this.id,
-				"skipping Z-Wave+ query because the device does not support it",
-			);
-		} else {
-			log.controller.logNode(this.id, {
-				message: "querying Z-Wave+ information...",
-				direction: "outbound",
-			});
-			try {
-				const zwavePlusResponse = await this.commandClasses[
-					"Z-Wave Plus Info"
-				].get();
+	// 	/** Step #6 of the node interview */
+	// 	protected async queryNodePlusInfo(): Promise<void> {
+	// 		if (!this.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
+	// 			log.controller.logNode(
+	// 				this.id,
+	// 				"skipping Z-Wave+ query because the device does not support it",
+	// 			);
+	// 		} else {
+	// 			log.controller.logNode(this.id, {
+	// 				message: "querying Z-Wave+ information...",
+	// 				direction: "outbound",
+	// 			});
+	// 			try {
+	// 				const zwavePlusResponse = await this.commandClasses[
+	// 					"Z-Wave Plus Info"
+	// 				].get();
 
-				const logMessage = `received response for Z-Wave+ information:
-  Z-Wave+ version: ${zwavePlusResponse.zwavePlusVersion}
-  role type:       ${ZWavePlusRoleType[zwavePlusResponse.roleType]}
-  node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}
-  installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}
-  user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
-				log.controller.logNode(this.id, {
-					message: logMessage,
-					direction: "inbound",
-				});
-			} catch (e) {
-				log.controller.logNode(
-					this.id,
-					`  querying the Z-Wave+ information failed: ${e.message}`,
-					"error",
-				);
-				throw e;
-			}
-		}
+	// 				const logMessage = `received response for Z-Wave+ information:
+	//   Z-Wave+ version: ${zwavePlusResponse.zwavePlusVersion}
+	//   role type:       ${ZWavePlusRoleType[zwavePlusResponse.roleType]}
+	//   node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}
+	//   installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}
+	//   user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
+	// 				log.controller.logNode(this.id, {
+	// 					message: logMessage,
+	// 					direction: "inbound",
+	// 				});
+	// 			} catch (e) {
+	// 				log.controller.logNode(
+	// 					this.id,
+	// 					`  querying the Z-Wave+ information failed: ${e.message}`,
+	// 					"error",
+	// 				);
+	// 				throw e;
+	// 			}
+	// 		}
 
-		await this.setInterviewStage(InterviewStage.NodePlusInfo);
-	}
+	// 		await this.setInterviewStage(InterviewStage.NodePlusInfo);
+	// 	}
 
 	// 	protected async queryManufacturerSpecific(): Promise<void> {
 	// 		if (this.isControllerNode()) {
