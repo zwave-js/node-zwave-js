@@ -25,8 +25,8 @@ export enum InterviewStage {
 
 	// TODO: Heal network
 
-	WakeUp,					// [✓] Configure wake up to point to the master controller
-	Associations,			// [ ] Retrieve information about associations
+	// WakeUp,					// [✓] Configure wake up to point to the master controller
+	// Associations,			// [ ] Retrieve information about associations
 	OverwriteConfig,		// [ ] Load node configuration from a configuration file
 	Neighbors,				// [✓] Retrieve node neighbor list
 	// Session,				// [ ] Retrieve session information (changes infrequently)

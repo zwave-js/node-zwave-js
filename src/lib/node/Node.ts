@@ -510,8 +510,6 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		// 	await this.queryNodePlusInfo();
 		// }
 
-		// TODO: From here...
-
 		// Correct order of CC interview:
 		// 1. Find out which device this is
 		if (this.interviewStage === InterviewStage.NodeInfo) {
@@ -555,50 +553,24 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 				)
 				.filter(cc => !!cc) as (typeof CommandClass)[];
 			for (const cc of ccConstructors) {
-				await cc.interview(this.driver, this);
-				// TODO: Save progress
+				try {
+					await cc.interview(this.driver, this);
+					// TODO: Save progress
+				} catch (e) {
+					// TODO: Log error
+				}
 			}
 			await this.setInterviewStage(InterviewStage.CommandClasses);
 		}
 
-		// if (this.interviewStage === InterviewStage.NodePlusInfo) {
-		// 	// Request Manufacturer specific data
-		// 	await this.queryManufacturerSpecific();
-		// 	// TODO: Overwrite the reported config with configuration files (like OZW does)
-		// }
-
 		// // TODO:
 		// // SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
-
-		// if (this.interviewStage === InterviewStage.ManufacturerSpecific) {
-		// 	// TODO: change .ManufacturerSpecific to .SecurityReport when that is implemented
-		// 	await this.queryCCVersions();
-		// }
-
-		// if (this.interviewStage === InterviewStage.Versions) {
-		// 	await this.queryEndpoints();
-		// }
-
-		// // FIXME: Remove this when done with this PR
-		// if (this.interviewStage === InterviewStage.Endpoints) {
-		// 	await this.requestStaticValues();
-		// }
-
-		// TODO: ...to here should all be in the CC interviews
 
 		// At this point the interview of new nodes is done. Start here when re-interviewing known nodes
 		if (
 			this.interviewStage === InterviewStage.RestartFromCache ||
 			this.interviewStage === InterviewStage.CommandClasses
 		) {
-			// Configure the device so it notifies us of a wakeup
-			await this.configureWakeup();
-		}
-
-		// TODO: Associations
-
-		if (this.interviewStage === InterviewStage.WakeUp) {
-			// TODO: change WakeUp to Associations when it is implemented
 			// Load a config file for this node if it exists and overwrite the previously reported information
 			await this.overwriteConfig();
 		}
@@ -995,64 +967,64 @@ version:               ${this.version}`;
 	// 		await this.setInterviewStage(InterviewStage.Endpoints);
 	// 	}
 
-	/** Step #2 of the node interview */
-	protected async configureWakeup(): Promise<void> {
-		if (this.supportsCC(CommandClasses["Wake Up"])) {
-			if (this.isControllerNode()) {
-				log.controller.logNode(
-					this.id,
-					`skipping wakeup configuration for the controller`,
-				);
-			} else if (this.isFrequentListening) {
-				log.controller.logNode(
-					this.id,
-					`skipping wakeup configuration for frequent listening device`,
-				);
-			} else {
-				try {
-					log.controller.logNode(this.id, {
-						message:
-							"retrieving wakeup interval from the device...",
-						direction: "outbound",
-					});
-					const wakeupResp = await this.commandClasses[
-						"Wake Up"
-					].getInterval();
-					const logMessage = `received wakeup configuration:
-  wakeup interval: ${wakeupResp.wakeupInterval} seconds
-  controller node: ${wakeupResp.controllerNodeId}`;
-					log.controller.logNode(this.id, {
-						message: logMessage,
-						direction: "inbound",
-					});
+	// 	/** Step #2 of the node interview */
+	// 	protected async configureWakeup(): Promise<void> {
+	// 		if (this.supportsCC(CommandClasses["Wake Up"])) {
+	// 			if (this.isControllerNode()) {
+	// 				log.controller.logNode(
+	// 					this.id,
+	// 					`skipping wakeup configuration for the controller`,
+	// 				);
+	// 			} else if (this.isFrequentListening) {
+	// 				log.controller.logNode(
+	// 					this.id,
+	// 					`skipping wakeup configuration for frequent listening device`,
+	// 				);
+	// 			} else {
+	// 				try {
+	// 					log.controller.logNode(this.id, {
+	// 						message:
+	// 							"retrieving wakeup interval from the device...",
+	// 						direction: "outbound",
+	// 					});
+	// 					const wakeupResp = await this.commandClasses[
+	// 						"Wake Up"
+	// 					].getInterval();
+	// 					const logMessage = `received wakeup configuration:
+	//   wakeup interval: ${wakeupResp.wakeupInterval} seconds
+	//   controller node: ${wakeupResp.controllerNodeId}`;
+	// 					log.controller.logNode(this.id, {
+	// 						message: logMessage,
+	// 						direction: "inbound",
+	// 					});
 
-					log.controller.logNode(this.id, {
-						message: "configuring wakeup destination",
-						direction: "outbound",
-					});
+	// 					log.controller.logNode(this.id, {
+	// 						message: "configuring wakeup destination",
+	// 						direction: "outbound",
+	// 					});
 
-					await this.commandClasses["Wake Up"].setInterval(
-						wakeupResp.wakeupInterval,
-						this.driver.controller.ownNodeId!,
-					);
-					log.controller.logNode(this.id, "  done!");
-				} catch (e) {
-					log.controller.logNode(
-						this.id,
-						`  configuring the device wakeup failed: ${e.message}`,
-						"error",
-					);
-					throw e;
-				}
-			}
-		} else {
-			log.controller.logNode(
-				this.id,
-				`skipping wakeup for non-sleeping device`,
-			);
-		}
-		await this.setInterviewStage(InterviewStage.WakeUp);
-	}
+	// 					await this.commandClasses["Wake Up"].setInterval(
+	// 						wakeupResp.wakeupInterval,
+	// 						this.driver.controller.ownNodeId!,
+	// 					);
+	// 					log.controller.logNode(this.id, "  done!");
+	// 				} catch (e) {
+	// 					log.controller.logNode(
+	// 						this.id,
+	// 						`  configuring the device wakeup failed: ${e.message}`,
+	// 						"error",
+	// 					);
+	// 					throw e;
+	// 				}
+	// 			}
+	// 		} else {
+	// 			log.controller.logNode(
+	// 				this.id,
+	// 				`skipping wakeup for non-sleeping device`,
+	// 			);
+	// 		}
+	// 		await this.setInterviewStage(InterviewStage.WakeUp);
+	// 	}
 
 	/**
 	 * @internal

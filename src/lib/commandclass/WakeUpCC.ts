@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import { NodeStatus } from "../node/INode";
 import { ZWaveNode } from "../node/Node";
@@ -115,6 +116,76 @@ export class WakeUpCC extends CommandClass {
 
 	public static setAwake(node: ZWaveNode, awake: boolean): void {
 		node.status = awake ? NodeStatus.Awake : NodeStatus.Asleep;
+	}
+
+	public static async interview(
+		driver: IDriver,
+		node: ZWaveNode,
+	): Promise<void> {
+		if (node.isControllerNode()) {
+			log.controller.logNode(
+				node.id,
+				`skipping wakeup configuration for the controller`,
+			);
+		} else if (node.isFrequentListening) {
+			log.controller.logNode(
+				node.id,
+				`skipping wakeup configuration for frequent listening device`,
+			);
+		} else {
+			const API = node.commandClasses["Wake Up"];
+			// Retrieve the allowed wake up intervals if possible
+			if (
+				driver.getSafeCCVersionForNode(
+					node.id,
+					CommandClasses["Wake Up"],
+				) >= 2
+			) {
+				log.controller.logNode(node.id, {
+					message:
+						"retrieving wakeup capabilities from the device...",
+					direction: "outbound",
+				});
+				const wakeupCaps = await API.getIntervalCapabilities();
+				const logMessage = `received wakeup capabilities:
+default wakeup interval: ${wakeupCaps.defaultWakeUpInterval} seconds
+minimum wakeup interval: ${wakeupCaps.minWakeUpInterval} seconds
+maximum wakeup interval: ${wakeupCaps.maxWakeUpInterval} seconds
+wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds`;
+				log.controller.logNode(node.id, {
+					message: logMessage,
+					direction: "inbound",
+				});
+			}
+
+			// SDS14223 prescribes a IntervalSet followed by a check
+			// We have no intention of changing the interval (maybe some time in the future)
+			// So for now get the current interval and just set the controller ID
+
+			log.controller.logNode(node.id, {
+				message: "retrieving wakeup interval from the device...",
+				direction: "outbound",
+			});
+			const wakeupResp = await API.getInterval();
+			const logMessage = `received wakeup configuration:
+wakeup interval: ${wakeupResp.wakeupInterval} seconds
+controller node: ${wakeupResp.controllerNodeId}`;
+			log.controller.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
+
+			log.controller.logNode(node.id, {
+				message: "configuring wakeup destination node",
+				direction: "outbound",
+			});
+
+			await API.setInterval(
+				wakeupResp.wakeupInterval,
+				driver.controller!.ownNodeId!,
+			);
+			log.controller.logNode(node.id, "wakeup destination node changed!");
+		}
 	}
 }
 

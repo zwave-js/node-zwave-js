@@ -61,9 +61,9 @@ class TestNode extends ZWaveNode {
 	// public async queryEndpoints(): Promise<void> {
 	// 	return super.queryEndpoints();
 	// }
-	public async configureWakeup(): Promise<void> {
-		return super.configureWakeup();
-	}
+	// public async configureWakeup(): Promise<void> {
+	// 	return super.configureWakeup();
+	// }
 	// public async requestStaticValues(): Promise<void> {
 	// 	return super.requestStaticValues();
 	// }
@@ -266,54 +266,54 @@ describe("lib/node/Node", () => {
 			});
 		});
 
-		describe(`waitForWakeup()`, () => {
-			beforeAll(() =>
-				fakeDriver.sendMessage.mockImplementation(() =>
-					Promise.resolve(),
-				),
-			);
-			beforeEach(() => fakeDriver.sendMessage.mockClear());
+		// describe(`waitForWakeup()`, () => {
+		// 	beforeAll(() =>
+		// 		fakeDriver.sendMessage.mockImplementation(() =>
+		// 			Promise.resolve(),
+		// 		),
+		// 	);
+		// 	beforeEach(() => fakeDriver.sendMessage.mockClear());
 
-			it.skip(`should set the interview stage to "WakeUp"`, async () => {
-				// TODO: Provide a correct response
-				await node.configureWakeup();
-				expect(node.interviewStage).toBe(InterviewStage.WakeUp);
-			});
+		// 	it.skip(`should set the interview stage to "WakeUp"`, async () => {
+		// 		// TODO: Provide a correct response
+		// 		await node.configureWakeup();
+		// 		expect(node.interviewStage).toBe(InterviewStage.WakeUp);
+		// 	});
 
-			it("should not send anything if the node does not support WakeUp", async () => {
-				// Temporarily mark Wake Up as not supported
-				node.addCC(CommandClasses["Wake Up"], { isSupported: false });
-				await node.configureWakeup();
-				expect(fakeDriver.sendMessage).not.toBeCalled();
-				node.addCC(CommandClasses["Wake Up"], { isSupported: true });
-			});
+		// 	it("should not send anything if the node does not support WakeUp", async () => {
+		// 		// Temporarily mark Wake Up as not supported
+		// 		node.addCC(CommandClasses["Wake Up"], { isSupported: false });
+		// 		await node.configureWakeup();
+		// 		expect(fakeDriver.sendMessage).not.toBeCalled();
+		// 		node.addCC(CommandClasses["Wake Up"], { isSupported: true });
+		// 	});
 
-			it("should not send anything if the node is the controller", async () => {
-				// Temporarily make this node the controller node
-				fakeDriver.controller.ownNodeId = node.id;
-				await node.configureWakeup();
-				expect(fakeDriver.sendMessage).not.toBeCalled();
-				fakeDriver.controller.ownNodeId = 1;
-			});
+		// 	it("should not send anything if the node is the controller", async () => {
+		// 		// Temporarily make this node the controller node
+		// 		fakeDriver.controller.ownNodeId = node.id;
+		// 		await node.configureWakeup();
+		// 		expect(fakeDriver.sendMessage).not.toBeCalled();
+		// 		fakeDriver.controller.ownNodeId = 1;
+		// 	});
 
-			it("should not send anything if the node is frequent listening", async () => {
-				// Temporarily make this node frequent listening
-				(node as any)._isFrequentListening = true;
-				await node.configureWakeup();
-				expect(fakeDriver.sendMessage).not.toBeCalled();
-				(node as any)._isFrequentListening = false;
-			});
+		// 	it("should not send anything if the node is frequent listening", async () => {
+		// 		// Temporarily make this node frequent listening
+		// 		(node as any)._isFrequentListening = true;
+		// 		await node.configureWakeup();
+		// 		expect(fakeDriver.sendMessage).not.toBeCalled();
+		// 		(node as any)._isFrequentListening = false;
+		// 	});
 
-			it.skip("should send a Wake Up CC and wait for the response", async () => {
-				// TODO: Provide a correct response
-				await node.configureWakeup();
-				expect(fakeDriver.sendMessage).toBeCalled();
-				assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
-					nodeId: node.id,
-					cc: WakeUpCC,
-				});
-			});
-		});
+		// 	it.skip("should send a Wake Up CC and wait for the response", async () => {
+		// 		// TODO: Provide a correct response
+		// 		await node.configureWakeup();
+		// 		expect(fakeDriver.sendMessage).toBeCalled();
+		// 		assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
+		// 			nodeId: node.id,
+		// 			cc: WakeUpCC,
+		// 		});
+		// 	});
+		// });
 
 		describe(`ping()`, () => {
 			beforeAll(() =>
@@ -696,7 +696,7 @@ describe("lib/node/Node", () => {
 					// queryCCVersions: InterviewStage.Versions,
 					// queryEndpoints: InterviewStage.Endpoints,
 					queryNeighbors: InterviewStage.Neighbors,
-					configureWakeup: InterviewStage.WakeUp,
+					// configureWakeup: InterviewStage.WakeUp,
 					// requestStaticValues: InterviewStage.Static,
 				};
 				const returnValues = {
@@ -711,7 +711,7 @@ describe("lib/node/Node", () => {
 					// queryCCVersions: node.queryCCVersions,
 					// queryEndpoints: node.queryEndpoints,
 					queryNeighbors: node.queryNeighbors,
-					configureWakeup: node.configureWakeup,
+					// configureWakeup: node.configureWakeup,
 					// requestStaticValues: node.requestStaticValues,
 				};
 				for (const method of Object.keys(originalMethods)) {
@@ -769,7 +769,7 @@ describe("lib/node/Node", () => {
 					// "queryCCVersions",
 					// "queryEndpoints",
 					// "requestStaticValues",
-					"configureWakeup",
+					// "configureWakeup",
 					"queryNeighbors",
 				];
 				for (const method of Object.keys(originalMethods)) {
