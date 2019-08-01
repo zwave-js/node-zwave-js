@@ -69,6 +69,22 @@ export class ManufacturerSpecificCCAPI extends CCAPI {
 		>(cc))!;
 		return response.value;
 	}
+}
+
+@commandClass(CommandClasses["Manufacturer Specific"])
+@implementedVersion(2)
+export class ManufacturerSpecificCC extends CommandClass {
+	public ccCommand!: ManufacturerSpecificCommand;
+
+	public supportsCommand(cmd: ManufacturerSpecificCommand): Maybe<boolean> {
+		switch (cmd) {
+			case ManufacturerSpecificCommand.Get:
+				return true; // This is mandatory
+			case ManufacturerSpecificCommand.DeviceSpecificGet:
+				return this.version >= 2;
+		}
+		return super.supportsCommand(cmd);
+	}
 
 	public static async interview(
 		driver: IDriver,
@@ -106,22 +122,6 @@ export class ManufacturerSpecificCCAPI extends CCAPI {
 				throw e;
 			}
 		}
-	}
-}
-
-@commandClass(CommandClasses["Manufacturer Specific"])
-@implementedVersion(2)
-export class ManufacturerSpecificCC extends CommandClass {
-	public ccCommand!: ManufacturerSpecificCommand;
-
-	public supportsCommand(cmd: ManufacturerSpecificCommand): Maybe<boolean> {
-		switch (cmd) {
-			case ManufacturerSpecificCommand.Get:
-				return true; // This is mandatory
-			case ManufacturerSpecificCommand.DeviceSpecificGet:
-				return this.version >= 2;
-		}
-		return super.supportsCommand(cmd);
 	}
 }
 
