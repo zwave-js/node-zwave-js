@@ -16,6 +16,7 @@ import {
 	messageTypes,
 	priority,
 } from "../src/lib/message/Message";
+import { ZWaveNode } from "../src/lib/node/Node";
 
 const instances = new Map<string, MockSerialPort>();
 
@@ -113,7 +114,17 @@ export function createEmptyMockDriver() {
 		getSafeCCVersionForNode: jest
 			.fn()
 			.mockImplementation((nodeId: number, ccId: CommandClasses) => {
-				// We have no real nodes to test against, just use the implemented version
+				if (
+					// wotan-disable-next-line no-useless-predicate
+					ret.controller &&
+					ret.controller.nodes instanceof Map &&
+					ret.controller.nodes.has(nodeId)
+				) {
+					const node: ZWaveNode = ret.controller.nodes.get(nodeId);
+					const ccVersion = node.getCCVersion(ccId);
+					if (ccVersion > 0) return ccVersion;
+				}
+				// default to the implemented version
 				return getImplementedVersion(ccId);
 			}),
 		controller: {

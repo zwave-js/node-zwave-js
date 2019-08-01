@@ -174,40 +174,31 @@ export class VersionCC extends CommandClass {
 				);
 				continue;
 			}
-			try {
-				log.controller.logNode(node.id, {
-					message: `  querying the CC version for ${
-						CommandClasses[cc]
-					} (${num2hex(cc)})...`,
-					direction: "outbound",
-				});
-				// query the CC version
-				const supportedVersion = await node.commandClasses.Version.getCCVersion(
+			log.controller.logNode(node.id, {
+				message: `  querying the CC version for ${
+					CommandClasses[cc]
+				} (${num2hex(cc)})...`,
+				direction: "outbound",
+			});
+			// query the CC version
+			const supportedVersion = await node.commandClasses.Version.getCCVersion(
+				cc,
+			);
+			// Remember which CC version this node supports
+			let logMessage: string;
+			if (supportedVersion > 0) {
+				node.addCC(cc, { version: supportedVersion });
+				logMessage = `  supports CC ${CommandClasses[cc]} (${num2hex(
 					cc,
-				);
-				// Remember which CC version this node supports
-				let logMessage: string;
-				if (supportedVersion > 0) {
-					node.addCC(cc, { version: supportedVersion });
-					logMessage = `  supports CC ${
-						CommandClasses[cc]
-					} (${num2hex(cc)}) in version ${supportedVersion}`;
-				} else {
-					// We were lied to - the NIF said this CC is supported, now the node claims it isn't
-					node.removeCC(cc);
-					logMessage = `  does NOT support CC ${
-						CommandClasses[cc]
-					} (${num2hex(cc)})`;
-				}
-				log.controller.logNode(node.id, logMessage);
-			} catch (e) {
-				log.controller.logNode(
-					node.id,
-					`  querying the CC versions failed: ${e.message}`,
-					"error",
-				);
-				throw e;
+				)}) in version ${supportedVersion}`;
+			} else {
+				// We were lied to - the NIF said this CC is supported, now the node claims it isn't
+				node.removeCC(cc);
+				logMessage = `  does NOT support CC ${
+					CommandClasses[cc]
+				} (${num2hex(cc)})`;
 			}
+			log.controller.logNode(node.id, logMessage);
 		}
 
 		// Step 3: Query VersionCC capabilities
