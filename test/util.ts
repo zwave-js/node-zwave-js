@@ -1,3 +1,9 @@
+import { entries } from "alcalzone-shared/objects";
+import {
+	CommandClass,
+	Constructable,
+} from "../src/lib/commandclass/CommandClass";
+import { SendDataRequest } from "../src/lib/controller/SendDataMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../src/lib/error/ZWaveError";
 
 export interface AssertZWaveErrorOptions {
@@ -47,4 +53,28 @@ export function assertZWaveError<T>(
 		handleError(valueOrFactory);
 	}
 	return undefined as any;
+}
+
+/** Performs assertions on a sendMessage call argument that's supposed to be a CC */
+export function assertCC<
+	TConst extends Constructable<CommandClass> = Constructable<CommandClass>
+>(
+	callArg: any,
+	options: {
+		nodeId?: number;
+		cc: TConst;
+		ccValues?: Record<string, any>;
+	},
+): void {
+	const request: SendDataRequest = callArg;
+	expect(request).toBeInstanceOf(SendDataRequest);
+	if (options.nodeId) expect(request.getNodeId()).toBe(options.nodeId);
+
+	const command = request.command;
+	expect(command).toBeInstanceOf(options.cc);
+	if (options.ccValues) {
+		for (const [prop, val] of entries(options.ccValues)) {
+			expect((command as any)[prop]).toBe(val);
+		}
+	}
 }

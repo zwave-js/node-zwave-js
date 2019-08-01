@@ -1,12 +1,7 @@
-import { entries } from "alcalzone-shared/objects";
 import { createEmptyMockDriver } from "../../../test/mocks";
-import { assertZWaveError } from "../../../test/util";
+import { assertCC, assertZWaveError } from "../../../test/util";
 import { BasicCC, BasicCommand } from "../commandclass/BasicCC";
-import {
-	CommandClass,
-	CommandClassInfo,
-	Constructable,
-} from "../commandclass/CommandClass";
+import { CommandClassInfo } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
@@ -49,9 +44,9 @@ class TestNode extends ZWaveNode {
 	public async queryNodeInfo(): Promise<void> {
 		return super.queryNodeInfo();
 	}
-	// public async queryNodePlusInfo(): Promise<void> {
-	// 	return super.queryNodePlusInfo();
-	// }
+	public async interviewCCs(): Promise<void> {
+		return super.interviewCCs();
+	}
 	// public async queryManufacturerSpecific(): Promise<void> {
 	// 	return super.queryManufacturerSpecific();
 	// }
@@ -75,27 +70,6 @@ class TestNode extends ZWaveNode {
 		CommandClassInfo
 	> {
 		return super.implementedCommandClasses as any;
-	}
-}
-
-function assertCC<T extends CommandClass, TConst = Constructable<T>>(
-	callArg: any,
-	options: {
-		nodeId?: number;
-		cc: TConst;
-		ccValues?: Record<string, any>;
-	},
-): void {
-	const request: SendDataRequest = callArg;
-	expect(request).toBeInstanceOf(SendDataRequest);
-	if (options.nodeId) expect(request.getNodeId()).toBe(options.nodeId);
-
-	const command = request.command as T;
-	expect(command).toBeInstanceOf(options.cc);
-	if (options.ccValues) {
-		for (const [prop, val] of entries(options.ccValues)) {
-			expect(command[prop]).toBe(val);
-		}
 	}
 }
 
@@ -214,8 +188,10 @@ describe("lib/node/Node", () => {
 			});
 
 			it("should remember all received information", () => {
-				for (const prop of Object.keys(expected)) {
-					expect(node[prop]).toBe(expected[prop]);
+				for (const prop of Object.keys(
+					expected,
+				) as (keyof typeof expected)[]) {
+					expect((node as any)[prop]).toBe(expected[prop]);
 				}
 			});
 
@@ -265,55 +241,6 @@ describe("lib/node/Node", () => {
 				}
 			});
 		});
-
-		// describe(`waitForWakeup()`, () => {
-		// 	beforeAll(() =>
-		// 		fakeDriver.sendMessage.mockImplementation(() =>
-		// 			Promise.resolve(),
-		// 		),
-		// 	);
-		// 	beforeEach(() => fakeDriver.sendMessage.mockClear());
-
-		// 	it.skip(`should set the interview stage to "WakeUp"`, async () => {
-		// 		// TODO: Provide a correct response
-		// 		await node.configureWakeup();
-		// 		expect(node.interviewStage).toBe(InterviewStage.WakeUp);
-		// 	});
-
-		// 	it("should not send anything if the node does not support WakeUp", async () => {
-		// 		// Temporarily mark Wake Up as not supported
-		// 		node.addCC(CommandClasses["Wake Up"], { isSupported: false });
-		// 		await node.configureWakeup();
-		// 		expect(fakeDriver.sendMessage).not.toBeCalled();
-		// 		node.addCC(CommandClasses["Wake Up"], { isSupported: true });
-		// 	});
-
-		// 	it("should not send anything if the node is the controller", async () => {
-		// 		// Temporarily make this node the controller node
-		// 		fakeDriver.controller.ownNodeId = node.id;
-		// 		await node.configureWakeup();
-		// 		expect(fakeDriver.sendMessage).not.toBeCalled();
-		// 		fakeDriver.controller.ownNodeId = 1;
-		// 	});
-
-		// 	it("should not send anything if the node is frequent listening", async () => {
-		// 		// Temporarily make this node frequent listening
-		// 		(node as any)._isFrequentListening = true;
-		// 		await node.configureWakeup();
-		// 		expect(fakeDriver.sendMessage).not.toBeCalled();
-		// 		(node as any)._isFrequentListening = false;
-		// 	});
-
-		// 	it.skip("should send a Wake Up CC and wait for the response", async () => {
-		// 		// TODO: Provide a correct response
-		// 		await node.configureWakeup();
-		// 		expect(fakeDriver.sendMessage).toBeCalled();
-		// 		assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
-		// 			nodeId: node.id,
-		// 			cc: WakeUpCC,
-		// 		});
-		// 	});
-		// });
 
 		describe(`ping()`, () => {
 			beforeAll(() =>
@@ -419,54 +346,38 @@ describe("lib/node/Node", () => {
 			});
 		});
 
-		// describe(`queryNodePlusInfo()`, () => {
-		// 	beforeAll(() => {
-		// 		fakeDriver.sendMessage.mockImplementation(() =>
-		// 			Promise.resolve({ command: {} }),
-		// 		);
-		// 	});
-		// 	beforeEach(() => fakeDriver.sendMessage.mockClear());
-		// 	afterAll(() => {
-		// 		fakeDriver.sendMessage.mockImplementation(() =>
-		// 			Promise.resolve(),
-		// 		);
-		// 	});
+		describe(`interviewCCs()`, () => {
+			beforeAll(() =>
+				fakeDriver.sendMessage.mockImplementation(() =>
+					Promise.resolve(),
+				),
+			);
+			beforeEach(() => fakeDriver.sendMessage.mockClear());
 
-		// 	it(`should set the interview stage to "NodePlusInfo"`, async () => {
-		// 		await node.queryNodePlusInfo();
-		// 		expect(node.interviewStage).toBe(InterviewStage.NodePlusInfo);
-		// 	});
+			it(`should set the interview stage to "CommandClasses"`, async () => {
+				await node.interviewCCs();
+				expect(node.interviewStage).toBe(InterviewStage.CommandClasses);
+			});
 
-		// 	it("should not send anything if the node does not support the Multi Channel CC", async () => {
-		// 		node.addCC(CommandClasses["Z-Wave Plus Info"], {
-		// 			isSupported: false,
-		// 			isControlled: false,
-		// 		});
-		// 		await node.queryNodePlusInfo();
-		// 		expect(fakeDriver.sendMessage).not.toBeCalled();
-		// 	});
+			it.todo("test that the CC interview methods are called");
 
-		// 	it("should send a ZWavePlusCC.Get", async () => {
-		// 		node.addCC(CommandClasses["Z-Wave Plus Info"], {
-		// 			isSupported: true,
-		// 		});
-		// 		await node.queryNodePlusInfo();
+			// it("should not send anything if the node is the controller", async () => {
+			// 	// Temporarily make this node the controller node
+			// 	fakeDriver.controller.ownNodeId = node.id;
+			// 	await node.queryNodeInfo();
+			// 	expect(fakeDriver.sendMessage).not.toBeCalled();
+			// 	fakeDriver.controller.ownNodeId = 1;
+			// });
 
-		// 		expect(fakeDriver.sendMessage).toBeCalled();
-
-		// 		assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
-		// 			cc: ZWavePlusCC,
-		// 			nodeId: node.id,
-		// 			ccValues: {
-		// 				ccCommand: ZWavePlusCommand.Get,
-		// 			},
-		// 		});
-		// 	});
-
-		// 	it.todo("Test the behavior when the request failed");
-
-		// 	it.todo("Test the behavior when the request succeeds");
-		// });
+			// it("should send a RequestNodeInfoRequest with the node's ID", async () => {
+			// 	await node.queryNodeInfo();
+			// 	expect(fakeDriver.sendMessage).toBeCalled();
+			// 	const request: RequestNodeInfoRequest =
+			// 		fakeDriver.sendMessage.mock.calls[0][0];
+			// 	expect(request).toBeInstanceOf(RequestNodeInfoRequest);
+			// 	expect(request.getNodeId()).toBe(node.id);
+			// });
+		});
 
 		// describe(`queryManufacturerSpecific()`, () => {
 		// 	beforeAll(() => {
@@ -687,9 +598,10 @@ describe("lib/node/Node", () => {
 		describe("interview sequence", () => {
 			let originalMethods: Partial<Record<keyof TestNode, any>>;
 			beforeAll(() => {
-				const interviewStagesAfter = {
+				const interviewStagesAfter: Record<string, InterviewStage> = {
 					queryProtocolInfo: InterviewStage.ProtocolInfo,
 					queryNodeInfo: InterviewStage.NodeInfo,
+					interviewCCs: InterviewStage.CommandClasses,
 					// queryNodePlusInfo: InterviewStage.NodePlusInfo,
 					// queryManufacturerSpecific:
 					// 	InterviewStage.ManufacturerSpecific,
@@ -699,13 +611,14 @@ describe("lib/node/Node", () => {
 					// configureWakeup: InterviewStage.WakeUp,
 					// requestStaticValues: InterviewStage.Static,
 				};
-				const returnValues = {
+				const returnValues: Partial<Record<keyof TestNode, any>> = {
 					ping: true,
 				};
 				originalMethods = {
 					queryProtocolInfo: node.queryProtocolInfo,
 					ping: node.ping,
 					queryNodeInfo: node.queryNodeInfo,
+					interviewCCs: node.interviewCCs,
 					// queryNodePlusInfo: node.queryNodePlusInfo,
 					// queryManufacturerSpecific: node.queryManufacturerSpecific,
 					// queryCCVersions: node.queryCCVersions,
@@ -714,8 +627,10 @@ describe("lib/node/Node", () => {
 					// configureWakeup: node.configureWakeup,
 					// requestStaticValues: node.requestStaticValues,
 				};
-				for (const method of Object.keys(originalMethods)) {
-					node[method] = jest
+				for (const method of Object.keys(
+					originalMethods,
+				) as (keyof TestNode)[]) {
+					(node as any)[method] = jest
 						.fn()
 						.mockName(`${method} mock`)
 						.mockImplementation(() => {
@@ -731,13 +646,15 @@ describe("lib/node/Node", () => {
 
 			beforeEach(() => {
 				for (const method of Object.keys(originalMethods)) {
-					node[method].mockClear();
+					(node as any)[method].mockClear();
 				}
 			});
 
 			afterAll(() => {
-				for (const method of Object.keys(originalMethods)) {
-					node[method] = originalMethods[method];
+				for (const method of Object.keys(
+					originalMethods,
+				) as (keyof TestNode)[]) {
+					(node as any)[method] = originalMethods[method];
 				}
 			});
 
@@ -745,7 +662,7 @@ describe("lib/node/Node", () => {
 				node.interviewStage = InterviewStage.None;
 				await node.interview();
 				for (const method of Object.keys(originalMethods)) {
-					expect(node[method]).toBeCalled();
+					expect((node as any)[method]).toBeCalled();
 				}
 			});
 
@@ -753,7 +670,7 @@ describe("lib/node/Node", () => {
 				node.interviewStage = InterviewStage.Complete;
 				await node.interview();
 				for (const method of Object.keys(originalMethods)) {
-					expect(node[method]).not.toBeCalled();
+					expect((node as any)[method]).not.toBeCalled();
 				}
 			});
 
@@ -764,6 +681,7 @@ describe("lib/node/Node", () => {
 				const expectCalled = [
 					// Ping must always be called when the interview is not complete
 					"ping",
+					"interviewCCs",
 					// "queryNodePlusInfo",
 					// "queryManufacturerSpecific",
 					// "queryCCVersions",
@@ -774,9 +692,9 @@ describe("lib/node/Node", () => {
 				];
 				for (const method of Object.keys(originalMethods)) {
 					if (expectCalled.indexOf(method) > -1) {
-						expect(node[method]).toBeCalled();
+						expect((node as any)[method]).toBeCalled();
 					} else {
-						expect(node[method]).not.toBeCalled();
+						expect((node as any)[method]).not.toBeCalled();
 					}
 				}
 			});
@@ -1183,7 +1101,7 @@ describe("lib/node/Node", () => {
 				};
 				(node as any)["_" + prop] = undefined;
 				node.deserialize(input);
-				expect(node[prop]).toBeUndefined();
+				expect((node as any)[prop]).toBeUndefined();
 			}
 		});
 
