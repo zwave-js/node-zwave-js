@@ -510,57 +510,8 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		// 	await this.queryNodePlusInfo();
 		// }
 
-		// Correct order of CC interview:
-		// 1. Find out which device this is
 		if (this.interviewStage === InterviewStage.NodeInfo) {
-			// Request Manufacturer specific data
-			if (this.supportsCC(CommandClasses["Manufacturer Specific"])) {
-				await ManufacturerSpecificCC.interview(this.driver, this);
-				// TODO: Save progress
-			}
-			// TODO: Overwrite the reported config with configuration files (like OZW does)
-
-			// 2. Find out which versions we can use
-			// This conditional is not necessary, but saves us a bunch of headaches during testing
-			if (this.supportsCC(CommandClasses.Version)) {
-				await VersionCC.interview(this.driver, this);
-				// TODO: Save progress
-			}
-
-			// TODO: Correctly order CC interviews
-			// All CCs require Version
-			// ZW+ requires Multi Channel (if it is supported)
-			// what else?...
-			if (this.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
-				await ZWavePlusCC.interview(this.driver, this);
-				// TODO: Save progress
-			}
-
-			// TODO: Also query ALL endpoints!
-			// 3. Perform all other CCs interviews
-			const ccConstructors = [...this.implementedCommandClasses.keys()]
-				.filter(
-					cc =>
-						cc !== CommandClasses.Version &&
-						cc !== CommandClasses["Manufacturer Specific"],
-				)
-				// This assertion is not nice, but I see no better way
-				.map(
-					cc =>
-						(getCCConstructor(cc) as unknown) as
-							| (typeof CommandClass)
-							| undefined,
-				)
-				.filter(cc => !!cc) as (typeof CommandClass)[];
-			for (const cc of ccConstructors) {
-				try {
-					await cc.interview(this.driver, this);
-					// TODO: Save progress
-				} catch (e) {
-					// TODO: Log error
-				}
-			}
-			await this.setInterviewStage(InterviewStage.CommandClasses);
+			await this.interviewCCs();
 		}
 
 		// // TODO:
@@ -740,6 +691,58 @@ version:               ${this.version}`;
 			}
 		}
 		await this.setInterviewStage(InterviewStage.NodeInfo);
+	}
+
+	/** Step #? of the node interview */
+	protected async interviewCCs(): Promise<void> {
+		// 1. Find out which device this is
+		if (this.supportsCC(CommandClasses["Manufacturer Specific"])) {
+			await ManufacturerSpecificCC.interview(this.driver, this);
+			// TODO: Save progress
+		}
+		// TODO: Overwrite the reported config with configuration files (like OZW does)
+
+		// 2. Find out which versions we can use
+		// This conditional is not necessary, but saves us a bunch of headaches during testing
+		if (this.supportsCC(CommandClasses.Version)) {
+			await VersionCC.interview(this.driver, this);
+			// TODO: Save progress
+		}
+
+		// TODO: Correctly order CC interviews
+		// All CCs require Version
+		// ZW+ requires Multi Channel (if it is supported)
+		// what else?...
+		if (this.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
+			await ZWavePlusCC.interview(this.driver, this);
+			// TODO: Save progress
+		}
+
+		// TODO: Also query ALL endpoints!
+		// 3. Perform all other CCs interviews
+		const ccConstructors = [...this.implementedCommandClasses.keys()]
+			.filter(
+				cc =>
+					cc !== CommandClasses.Version &&
+					cc !== CommandClasses["Manufacturer Specific"],
+			)
+			// This assertion is not nice, but I see no better way
+			.map(
+				cc =>
+					(getCCConstructor(cc) as unknown) as
+						| (typeof CommandClass)
+						| undefined,
+			)
+			.filter(cc => !!cc) as (typeof CommandClass)[];
+		for (const cc of ccConstructors) {
+			try {
+				await cc.interview(this.driver, this);
+				// TODO: Save progress
+			} catch (e) {
+				// TODO: Log error
+			}
+		}
+		await this.setInterviewStage(InterviewStage.CommandClasses);
 	}
 
 	// 	/** Step #6 of the node interview */
