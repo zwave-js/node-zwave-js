@@ -506,10 +506,6 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			await this.queryNodeInfo();
 		}
 
-		// if (this.interviewStage === InterviewStage.NodeInfo) {
-		// 	await this.queryNodePlusInfo();
-		// }
-
 		if (this.interviewStage === InterviewStage.NodeInfo) {
 			await this.interviewCCs();
 		}
@@ -548,12 +544,8 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		// Also save to the cache after certain stages
 		switch (completedStage) {
 			case InterviewStage.ProtocolInfo:
-			// case InterviewStage.ManufacturerSpecific:
 			case InterviewStage.NodeInfo:
 			case InterviewStage.CommandClasses:
-			// case InterviewStage.Versions:
-			// case InterviewStage.Endpoints:
-			// case InterviewStage.Static:
 			case InterviewStage.Complete:
 				await this.driver.saveNetworkToCache();
 		}
@@ -695,10 +687,11 @@ version:               ${this.version}`;
 
 	/** Step #? of the node interview */
 	protected async interviewCCs(): Promise<void> {
+		// TODO: Save progress after each CC interview
+
 		// 1. Find out which device this is
 		if (this.supportsCC(CommandClasses["Manufacturer Specific"])) {
 			await ManufacturerSpecificCC.interview(this.driver, this);
-			// TODO: Save progress
 		}
 		// TODO: Overwrite the reported config with configuration files (like OZW does)
 
@@ -706,7 +699,6 @@ version:               ${this.version}`;
 		// This conditional is not necessary, but saves us a bunch of headaches during testing
 		if (this.supportsCC(CommandClasses.Version)) {
 			await VersionCC.interview(this.driver, this);
-			// TODO: Save progress
 		}
 
 		// TODO: Correctly order CC interviews
@@ -715,7 +707,6 @@ version:               ${this.version}`;
 		// what else?...
 		if (this.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
 			await ZWavePlusCC.interview(this.driver, this);
-			// TODO: Save progress
 		}
 
 		// TODO: Also query ALL endpoints!
@@ -737,7 +728,6 @@ version:               ${this.version}`;
 		for (const cc of ccConstructors) {
 			try {
 				await cc.interview(this.driver, this);
-				// TODO: Save progress
 			} catch (e) {
 				// TODO: Log error
 			}
@@ -762,29 +752,6 @@ version:               ${this.version}`;
 		// As the NIF is sent on wakeup, treat this as a sign that the node is awake
 		this.setAwake(true);
 	}
-
-	// protected async requestStaticValues(): Promise<void> {
-	// 	// TODO: This belongs in each CC's interview process
-	// 	// log.controller.logNode(this.id, {
-	// 	// 	message: "requesting static values...",
-	// 	// 	direction: "outbound",
-	// 	// });
-	// 	// try {
-	// 	// 	await this.requestState(StateKind.Static);
-	// 	// 	log.controller.logNode(this.id, {
-	// 	// 		message: `  static values received`,
-	// 	// 		direction: "inbound",
-	// 	// 	});
-	// 	// } catch (e) {
-	// 	// 	log.controller.logNode(
-	// 	// 		this.id,
-	// 	// 		`  requesting the static values failed: ${e.message}`,
-	// 	// 		"error",
-	// 	// 	);
-	// 	// 	throw e;
-	// 	// }
-	// 	await this.setInterviewStage(InterviewStage.Static);
-	// }
 
 	protected async overwriteConfig(): Promise<void> {
 		if (this.isControllerNode()) {
@@ -1010,6 +977,29 @@ version:               ${this.version}`;
 			direction: "inbound",
 		});
 	}
+
+	// protected async requestStaticValues(): Promise<void> {
+	// 	// TODO: This belongs in each CC's interview process
+	// 	// log.controller.logNode(this.id, {
+	// 	// 	message: "requesting static values...",
+	// 	// 	direction: "outbound",
+	// 	// });
+	// 	// try {
+	// 	// 	await this.requestState(StateKind.Static);
+	// 	// 	log.controller.logNode(this.id, {
+	// 	// 		message: `  static values received`,
+	// 	// 		direction: "inbound",
+	// 	// 	});
+	// 	// } catch (e) {
+	// 	// 	log.controller.logNode(
+	// 	// 		this.id,
+	// 	// 		`  requesting the static values failed: ${e.message}`,
+	// 	// 		"error",
+	// 	// 	);
+	// 	// 	throw e;
+	// 	// }
+	// 	await this.setInterviewStage(InterviewStage.Static);
+	// }
 
 	// /**
 	//  * Requests the state for the CCs of this node
@@ -1297,34 +1287,3 @@ version:               ${this.version}`;
 		return msgSent;
 	}
 }
-
-// export enum OpenHABInterviewStage {
-// 	None,					// Query process hasn't started for this node
-// 	ProtocolInfo1,			// Retrieve protocol information (IdentifyNode)
-// 	Neighbors1,				// Retrieve node neighbor list
-
-// 	// ===== the stuff below doesn't work for PC controllers =====
-
-// 	WakeUp,					// Start wake up process if a sleeping node
-// 	Ping,					// Ping device to see if alive
-// 	ProtocolInfo2,			// Retrieve protocol information again (IdentifyNode)
-// 	SecurityReport,			// Retrieve a list of Command Classes that require Security
-// 	NodeInfo,				// Retrieve info about supported, controlled command classes
-// 	ManufacturerSpecific,	// Retrieve manufacturer name and product ids if ProtocolInfo lets us
-// 	Versions,				// Retrieve version information
-// 	Instances,				// Retrieve information about multiple command class instances
-// 	OverwriteFromDB,		// Overwrite the data with manual config files
-// 	Static,					// Retrieve static information (doesn't change)
-
-// 	Associations,			// Retrieve information about associations
-// 	SetWakeUp,				// * Configure wake up to point to the master controller
-// 	SetAssociations,		// * Set some associations to point to us
-// 	DeleteSUCRoute,			// * For non-controller nodes delete the SUC return route if there's one
-// 	AssignSUCRoute,			// * For non-controller nodes update the SUC return route if there's one
-// 	Configuration,			// Retrieve configurable parameter information (only done on request)
-// 	Dynamic,				// Retrieve dynamic information (changes frequently)
-// 	DeleteReturnRoute,		// * delete the return route
-// 	AssignReturnRoute,		// * update the return route
-// 	Neighbors2,				// Retrieve updated neighbors
-// 	Complete,				// Query process is completed for this node
-// }

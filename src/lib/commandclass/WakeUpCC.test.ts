@@ -19,19 +19,21 @@ describe("lib/commandclass/WakeUpCC => ", () => {
 		expect(getCommandClass(cc)).toBe(CommandClasses["Wake Up"]);
 	});
 
-	// it("should serialize correctly", () => {
-	// 	const req = new SendDataRequest(fakeDriver, {
-	// 		command: cc,
-	// 		transmitOptions: TransmitOptions.DEFAULT,
-	// 		callbackId: 36,
-	// 	});
-	// 	cc.ccCommand = ZWavePlusCommand.Get;
-	// 	serialized = req.serialize();
-	// 	// A real message from OZW
-	// 	expect(serialized).toEqual(
-	// 		Buffer.from("0109001309025e012524b0", "hex"),
-	// 	);
-	// });
+	it.todo(
+		"should serialize correctly" /*, () => {
+		const req = new SendDataRequest(fakeDriver, {
+			command: cc,
+			transmitOptions: TransmitOptions.DEFAULT,
+			callbackId: 36,
+		});
+		cc.ccCommand = ZWavePlusCommand.Get;
+		serialized = req.serialize();
+		// A real message from OZW
+		expect(serialized).toEqual(
+			Buffer.from("0109001309025e012524b0", "hex"),
+		);
+	}*/,
+	);
 
 	describe(`interview()`, () => {
 		const fakeDriver = createEmptyMockDriver();
