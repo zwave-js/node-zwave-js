@@ -183,13 +183,6 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 
 	//#region --- properties ---
 
-	/** @internal */
-	public readonly logPrefix = `[Node ${padStart(
-		this.id.toString(),
-		3,
-		"0",
-	)}] `;
-
 	private _status: NodeStatus = NodeStatus.Unknown;
 	/**
 	 * Which status the node is believed to be in. Changing this emits the corresponding events.
