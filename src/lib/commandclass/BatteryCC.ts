@@ -1,4 +1,6 @@
 import { IDriver } from "../driver/IDriver";
+import log from "../log";
+import { ZWaveNode } from "../node/Node";
 import { JSONObject, validatePayload } from "../util/misc";
 import { CCAPI } from "./API";
 import {
@@ -39,6 +41,28 @@ export enum BatteryCommand {
 @implementedVersion(1)
 export class BatteryCC extends CommandClass {
 	public ccCommand!: BatteryCommand;
+
+	public static async interview(
+		driver: IDriver,
+		node: ZWaveNode,
+	): Promise<void> {
+		log.controller.logNode(node.id, {
+			message: "querying battery information...",
+			direction: "outbound",
+		});
+
+		const batteryResponse = await node.commandClasses.Battery.get();
+
+		const logMessage = `received response for battery information:
+level: ${batteryResponse.level}${batteryResponse.isLow ? " (low)" : ""}`;
+		log.controller.logNode(node.id, {
+			message: logMessage,
+			direction: "inbound",
+		});
+
+		// Remember that the interview is complete
+		this.setInterviewComplete(node, true);
+	}
 }
 
 @CCCommand(BatteryCommand.Report)

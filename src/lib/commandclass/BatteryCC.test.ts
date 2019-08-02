@@ -1,5 +1,8 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
+import { assertCC } from "../../../test/util";
+import { Driver } from "../driver/Driver";
 import { IDriver } from "../driver/IDriver";
+import { ZWaveNode } from "../node/Node";
 import {
 	BatteryCC,
 	BatteryCCGet,
@@ -67,5 +70,39 @@ describe("lib/commandclass/BatteryCC => ", () => {
 			data: serializedCC,
 		});
 		expect(basicCC.constructor).toBe(BatteryCC);
+	});
+
+	describe(`interview()`, () => {
+		const fakeDriver = createEmptyMockDriver();
+		const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+
+		beforeAll(() => {
+			fakeDriver.sendMessage.mockImplementation(() =>
+				Promise.resolve({ command: {} }),
+			);
+			fakeDriver.controller.nodes.set(node.id, node);
+		});
+		beforeEach(() => fakeDriver.sendMessage.mockClear());
+		afterAll(() => {
+			fakeDriver.sendMessage.mockImplementation(() => Promise.resolve());
+		});
+
+		it("should send a BatteryCC.Get", async () => {
+			node.addCC(CommandClasses.Battery, {
+				isSupported: true,
+			});
+			await BatteryCC.interview((fakeDriver as unknown) as IDriver, node);
+
+			expect(fakeDriver.sendMessage).toBeCalled();
+
+			assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
+				cc: BatteryCCGet,
+				nodeId: node.id,
+			});
+		});
+
+		it.todo("Test the behavior when the request failed");
+
+		it.todo("Test the behavior when the request succeeds");
 	});
 });
