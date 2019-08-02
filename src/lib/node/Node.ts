@@ -408,6 +408,14 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		}
 	}
 
+	/** Returns the current endpoint count of this node */
+	public getEndpointCount(): number {
+		return (
+			(this.individualEndpointCount || 0) +
+			(this.aggregatedEndpointCount || 0)
+		);
+	}
+
 	/** Cache for this node's endpoint instances */
 	private _endpointInstances = new Map<number, Endpoint>();
 	/**
@@ -424,12 +432,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		// Zero is the root endpoint - i.e. this node
 		if (index === 0) return this;
 		// Check if the requested endpoint exists on the physical node
-		if (
-			index >
-			(this.individualEndpointCount || 0) +
-				(this.aggregatedEndpointCount || 0)
-		)
-			return undefined;
+		if (index > this.getEndpointCount()) return undefined;
 		// Create an endpoint instance if it does not exist
 		if (!this._endpointInstances.has(index)) {
 			this._endpointInstances.set(
@@ -443,6 +446,16 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			);
 		}
 		return this._endpointInstances.get(index)!;
+	}
+
+	/** Returns a list of all endpoints of this node, including the root endpoint (index 0) */
+	public getAllEndpoints(): Endpoint[] {
+		const ret: Endpoint[] = [this];
+		for (let i = 1; i < this.getEndpointCount(); i++) {
+			// Iterating over the endpoint count ensures that we don't get undefined
+			ret.push(this.getEndpoint(i)!);
+		}
+		return ret;
 	}
 
 	/**
@@ -698,7 +711,7 @@ version:               ${this.version}`;
 			}
 		}
 
-		// TODO: Correctly order CC interviews
+		// TODO: (GH#215) Correctly order CC interviews
 		// All CCs require Version
 		// ZW+ requires Multi Channel (if it is supported)
 		// what else?...
@@ -709,7 +722,7 @@ version:               ${this.version}`;
 			}
 		}
 
-		// TODO: Also query ALL endpoints!
+		// TODO: (GH#214) Also query ALL endpoints!
 		// 3. Perform all other CCs interviews
 		const ccConstructors = [...this.implementedCommandClasses.keys()]
 			.filter(
