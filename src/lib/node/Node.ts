@@ -687,18 +687,22 @@ version:               ${this.version}`;
 
 	/** Step #? of the node interview */
 	protected async interviewCCs(): Promise<void> {
-		// TODO: Save progress after each CC interview
-
 		// 1. Find out which device this is
 		if (this.supportsCC(CommandClasses["Manufacturer Specific"])) {
-			await ManufacturerSpecificCC.interview(this.driver, this);
+			if (!ManufacturerSpecificCC.getInterviewComplete(this)) {
+				await ManufacturerSpecificCC.interview(this.driver, this);
+				await this.driver.saveNetworkToCache();
+			}
 		}
 		// TODO: Overwrite the reported config with configuration files (like OZW does)
 
 		// 2. Find out which versions we can use
 		// This conditional is not necessary, but saves us a bunch of headaches during testing
 		if (this.supportsCC(CommandClasses.Version)) {
-			await VersionCC.interview(this.driver, this);
+			if (!VersionCC.getInterviewComplete(this)) {
+				await VersionCC.interview(this.driver, this);
+				await this.driver.saveNetworkToCache();
+			}
 		}
 
 		// TODO: Correctly order CC interviews
@@ -706,7 +710,10 @@ version:               ${this.version}`;
 		// ZW+ requires Multi Channel (if it is supported)
 		// what else?...
 		if (this.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
-			await ZWavePlusCC.interview(this.driver, this);
+			if (!ZWavePlusCC.getInterviewComplete(this)) {
+				await ZWavePlusCC.interview(this.driver, this);
+				await this.driver.saveNetworkToCache();
+			}
 		}
 
 		// TODO: Also query ALL endpoints!
@@ -715,7 +722,8 @@ version:               ${this.version}`;
 			.filter(
 				cc =>
 					cc !== CommandClasses.Version &&
-					cc !== CommandClasses["Manufacturer Specific"],
+					cc !== CommandClasses["Manufacturer Specific"] &&
+					cc !== CommandClasses["Z-Wave Plus Info"],
 			)
 			// This assertion is not nice, but I see no better way
 			.map(
@@ -727,7 +735,10 @@ version:               ${this.version}`;
 			.filter(cc => !!cc) as (typeof CommandClass)[];
 		for (const cc of ccConstructors) {
 			try {
-				await cc.interview(this.driver, this);
+				if (!cc.getInterviewComplete(this)) {
+					await cc.interview(this.driver, this);
+					await this.driver.saveNetworkToCache();
+				}
 			} catch (e) {
 				// TODO: Log error
 			}

@@ -43,6 +43,9 @@ describe("lib/commandclass/WakeUpCC => ", () => {
 			fakeDriver.sendMessage.mockImplementation(() =>
 				Promise.resolve({ command: {} }),
 			);
+			node.addCC(CommandClasses["Wake Up"], {
+				isSupported: true,
+			});
 			fakeDriver.controller.nodes.set(node.id, node);
 		});
 		beforeEach(() => fakeDriver.sendMessage.mockClear());

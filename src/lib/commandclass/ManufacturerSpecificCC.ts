@@ -100,28 +100,22 @@ export class ManufacturerSpecificCC extends CommandClass {
 				message: "querying manufacturer information...",
 				direction: "outbound",
 			});
-			try {
-				const mfResp = await node.commandClasses[
-					"Manufacturer Specific"
-				].get();
-				const logMessage = `received response for manufacturer information:
+			const mfResp = await node.commandClasses[
+				"Manufacturer Specific"
+			].get();
+			const logMessage = `received response for manufacturer information:
   manufacturer: ${(await lookupManufacturer(mfResp.manufacturerId)) ||
 		"unknown"} (${num2hex(mfResp.manufacturerId)})
   product type: ${num2hex(mfResp.productType)}
   product id:   ${num2hex(mfResp.productId)}`;
-				log.controller.logNode(node.id, {
-					message: logMessage,
-					direction: "inbound",
-				});
-			} catch (e) {
-				log.controller.logNode(
-					node.id,
-					`  querying the manufacturer information failed: ${e.message}`,
-					"error",
-				);
-				throw e;
-			}
+			log.controller.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
 		}
+
+		// Remember that the interview is complete
+		this.setInterviewComplete(node, true);
 	}
 }
 

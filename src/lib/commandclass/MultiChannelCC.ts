@@ -249,6 +249,9 @@ supported CCs:`;
 
 			// TODO: Interview all command classes of this endpoint
 		}
+
+		// Remember that the interview is complete
+		this.setInterviewComplete(node, true);
 	}
 }
 

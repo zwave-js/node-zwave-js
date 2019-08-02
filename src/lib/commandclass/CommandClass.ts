@@ -78,6 +78,8 @@ export class CommandClass {
 		this.ccId = getCommandClass(this);
 		// Default to the root endpoint - Inherited classes may override this behavior
 		this.endpoint = ("endpoint" in options && options.endpoint) || 0;
+		// We cannot use @ccValue for non-derived classes
+		this.registerValue("interviewComplete");
 
 		if (gotDeserializationOptions(options)) {
 			// For deserialized commands, try to invoke the correct subclass constructor
@@ -154,6 +156,33 @@ export class CommandClass {
 	/** Returns true if this CC is an extended CC (0xF100..0xFFFF) */
 	public isExtended(): boolean {
 		return this.ccId >= 0xf100;
+	}
+
+	/** Whether the interview for this CC was previously completed */
+	public get interviewComplete(): boolean {
+		return !!this.getValueDB().getValue<boolean>(
+			this.ccId,
+			// This information belongs to the root endpoint
+			0,
+			"interviewComplete",
+		);
+	}
+	public set interviewComplete(value: boolean) {
+		this.getValueDB().setValue(this.ccId, 0, "interviewComplete", value);
+	}
+	/** Accessor for the interviewComplete on static subclasses */
+	protected static setInterviewComplete(
+		node: ZWaveNode,
+		value: boolean,
+	): void {
+		node.createCCInstance(
+			getCommandClassStatic(this),
+		)!.interviewComplete = value;
+	}
+	/** Accessor for the interviewComplete on static subclasses */
+	public static getInterviewComplete(node: ZWaveNode): boolean {
+		return node.createCCInstance(getCommandClassStatic(this))!
+			.interviewComplete;
 	}
 
 	private serializeWithoutHeader(): Buffer {

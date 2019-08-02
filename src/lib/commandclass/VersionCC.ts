@@ -233,6 +233,9 @@ export class VersionCC extends CommandClass {
 				});
 			}
 		}
+
+		// Remember that the interview is complete
+		this.setInterviewComplete(node, true);
 	}
 }
 

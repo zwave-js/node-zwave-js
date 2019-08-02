@@ -186,6 +186,9 @@ controller node: ${wakeupResp.controllerNodeId}`;
 			);
 			log.controller.logNode(node.id, "wakeup destination node changed!");
 		}
+
+		// Remember that the interview is complete
+		this.setInterviewComplete(node, true);
 	}
 }
 

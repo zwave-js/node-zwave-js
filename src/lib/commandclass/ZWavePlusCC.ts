@@ -89,6 +89,9 @@ user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
 			message: logMessage,
 			direction: "inbound",
 		});
+
+		// Remember that the interview is complete
+		this.setInterviewComplete(node, true);
 	}
 }
 

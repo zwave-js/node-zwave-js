@@ -53,6 +53,9 @@ describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 		beforeAll(() => {
 			resetSendMessageImplementation();
 			fakeDriver.controller.nodes.set(node.id, node);
+			node.addCC(CommandClasses["Manufacturer Specific"], {
+				isSupported: true,
+			});
 		});
 		beforeEach(() => fakeDriver.sendMessage.mockClear());
 		afterAll(() => {
@@ -68,9 +71,6 @@ describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 		});
 
 		it("should send a ManufacturerSpecificCC.Get", async () => {
-			node.addCC(CommandClasses["Manufacturer Specific"], {
-				isSupported: true,
-			});
 			fakeDriver.sendMessage.mockImplementation(() =>
 				Promise.resolve({
 					command: {
