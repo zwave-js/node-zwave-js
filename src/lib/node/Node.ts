@@ -740,7 +740,10 @@ version:               ${this.version}`;
 					await this.driver.saveNetworkToCache();
 				}
 			} catch (e) {
-				// TODO: Log error
+				log.controller.print(
+					`${cc.name}: Interview failed:\n${e.message}`,
+					"error",
+				);
 			}
 		}
 		await this.setInterviewStage(InterviewStage.CommandClasses);
@@ -988,29 +991,6 @@ version:               ${this.version}`;
 			direction: "inbound",
 		});
 	}
-
-	// protected async requestStaticValues(): Promise<void> {
-	// 	// TODO: This belongs in each CC's interview process
-	// 	// log.controller.logNode(this.id, {
-	// 	// 	message: "requesting static values...",
-	// 	// 	direction: "outbound",
-	// 	// });
-	// 	// try {
-	// 	// 	await this.requestState(StateKind.Static);
-	// 	// 	log.controller.logNode(this.id, {
-	// 	// 		message: `  static values received`,
-	// 	// 		direction: "inbound",
-	// 	// 	});
-	// 	// } catch (e) {
-	// 	// 	log.controller.logNode(
-	// 	// 		this.id,
-	// 	// 		`  requesting the static values failed: ${e.message}`,
-	// 	// 		"error",
-	// 	// 	);
-	// 	// 	throw e;
-	// 	// }
-	// 	await this.setInterviewStage(InterviewStage.Static);
-	// }
 
 	// /**
 	//  * Requests the state for the CCs of this node
