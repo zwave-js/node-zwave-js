@@ -1,9 +1,12 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
+import { assertCC } from "../../../test/util";
 import {
 	SendDataRequest,
 	TransmitOptions,
 } from "../controller/SendDataMessages";
+import { Driver } from "../driver/Driver";
 import { IDriver } from "../driver/IDriver";
+import { ZWaveNode } from "../node/Node";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { ZWavePlusCC, ZWavePlusCommand } from "./ZWavePlusCC";
@@ -33,5 +36,45 @@ describe("lib/commandclass/ZWavePlusCC => ", () => {
 		expect(serialized).toEqual(
 			Buffer.from("0109001309025e012524b0", "hex"),
 		);
+	});
+
+	describe(`interview()`, () => {
+		const fakeDriver = createEmptyMockDriver();
+		const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+
+		beforeAll(() => {
+			fakeDriver.sendMessage.mockImplementation(() =>
+				Promise.resolve({ command: {} }),
+			);
+			fakeDriver.controller.nodes.set(node.id, node);
+		});
+		beforeEach(() => fakeDriver.sendMessage.mockClear());
+		afterAll(() => {
+			fakeDriver.sendMessage.mockImplementation(() => Promise.resolve());
+		});
+
+		it("should send a ZWavePlusCC.Get", async () => {
+			node.addCC(CommandClasses["Z-Wave Plus Info"], {
+				isSupported: true,
+			});
+			await ZWavePlusCC.interview(
+				(fakeDriver as unknown) as IDriver,
+				node,
+			);
+
+			expect(fakeDriver.sendMessage).toBeCalled();
+
+			assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
+				cc: ZWavePlusCC,
+				nodeId: node.id,
+				ccValues: {
+					ccCommand: ZWavePlusCommand.Get,
+				},
+			});
+		});
+
+		it.todo("Test the behavior when the request failed");
+
+		it.todo("Test the behavior when the request succeeds");
 	});
 });

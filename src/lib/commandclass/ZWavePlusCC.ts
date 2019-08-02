@@ -1,6 +1,9 @@
 import { IDriver } from "../driver/IDriver";
+import log from "../log";
 import { MessagePriority } from "../message/Constants";
+import { ZWaveNode } from "../node/Node";
 import { validatePayload } from "../util/misc";
+import { num2hex } from "../util/strings";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -62,6 +65,34 @@ export class ZWavePlusCCAPI extends CCAPI {
 @expectedCCResponse(ZWavePlusCC)
 export class ZWavePlusCC extends CommandClass {
 	public ccCommand!: ZWavePlusCommand;
+
+	public static async interview(
+		driver: IDriver,
+		node: ZWaveNode,
+	): Promise<void> {
+		log.controller.logNode(node.id, {
+			message: "querying Z-Wave+ information...",
+			direction: "outbound",
+		});
+
+		const zwavePlusResponse = await node.commandClasses[
+			"Z-Wave Plus Info"
+		].get();
+
+		const logMessage = `received response for Z-Wave+ information:
+Z-Wave+ version: ${zwavePlusResponse.zwavePlusVersion}
+role type:       ${ZWavePlusRoleType[zwavePlusResponse.roleType]}
+node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}
+installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}
+user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
+		log.controller.logNode(node.id, {
+			message: logMessage,
+			direction: "inbound",
+		});
+
+		// Remember that the interview is complete
+		this.setInterviewComplete(node, true);
+	}
 }
 
 @CCCommand(ZWavePlusCommand.Report)

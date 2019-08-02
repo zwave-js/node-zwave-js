@@ -1,4 +1,6 @@
+import { Driver, ZWaveNode } from "../..";
 import { createEmptyMockDriver } from "../../../test/mocks";
+import { assertCC } from "../../../test/util";
 import { IDriver } from "../driver/IDriver";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
@@ -31,5 +33,61 @@ describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 		const deserialized = CommandClass.from(fakeDriver, serialized);
 		expect(deserialized).toBeInstanceOf(ManufacturerSpecificCC);
 		expect(deserialized.nodeId).toBe(cc.nodeId);
+	});
+
+	describe(`interview()`, () => {
+		const fakeDriver = createEmptyMockDriver();
+		const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+		function doInterview() {
+			return ManufacturerSpecificCC.interview(
+				(fakeDriver as unknown) as IDriver,
+				node,
+			);
+		}
+		function resetSendMessageImplementation() {
+			fakeDriver.sendMessage.mockImplementation(() =>
+				Promise.resolve({ command: {} }),
+			);
+		}
+
+		beforeAll(() => {
+			resetSendMessageImplementation();
+			fakeDriver.controller.nodes.set(node.id, node);
+			node.addCC(CommandClasses["Manufacturer Specific"], {
+				isSupported: true,
+			});
+		});
+		beforeEach(() => fakeDriver.sendMessage.mockClear());
+		afterAll(() => {
+			fakeDriver.sendMessage.mockImplementation(() => Promise.resolve());
+		});
+
+		it("should not send anything if the node is the controller", async () => {
+			// Temporarily make this node the controller node
+			fakeDriver.controller.ownNodeId = node.id;
+			await doInterview();
+			expect(fakeDriver.sendMessage).not.toBeCalled();
+			fakeDriver.controller.ownNodeId = 1;
+		});
+
+		it("should send a ManufacturerSpecificCC.Get", async () => {
+			fakeDriver.sendMessage.mockImplementation(() =>
+				Promise.resolve({
+					command: {
+						manufacturerId: 0xffff,
+						productType: 0x00,
+						productId: 0x00,
+					},
+				}),
+			);
+			await doInterview();
+
+			expect(fakeDriver.sendMessage).toBeCalled();
+
+			assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
+				cc: ManufacturerSpecificCCGet,
+				nodeId: node.id,
+			});
+		});
 	});
 });

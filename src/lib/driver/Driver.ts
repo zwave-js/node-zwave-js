@@ -659,8 +659,10 @@ export class Driver extends EventEmitter implements IDriver {
 					const node = this.currentTransaction.message.getNodeUnsafe();
 					if (!node) return; // This should never happen, but whatever
 					if (node.supportsCC(CommandClasses["Wake Up"])) {
-						log.driver.print(
-							`${node.logPrefix}The node did not respond because it is asleep, moving its messages to the wakeup queue`,
+						log.controller.logNode(
+							node.id,
+							`The node did not respond because it is asleep, moving its messages to the wakeup queue`,
+							"warn",
 						);
 						// The node is asleep
 						WakeUpCC.setAwake(node, false);
@@ -672,8 +674,9 @@ export class Driver extends EventEmitter implements IDriver {
 					} else if (this.mayRetryCurrentTransaction()) {
 						// The Z-Wave specs define 500ms as the waiting period for SendData messages
 						const timeout = this.retryCurrentTransaction(500);
-						log.driver.print(
-							`${node.logPrefix}The node did not respond to the current transaction, scheduling attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`,
+						log.controller.logNode(
+							node.id,
+							`The node did not respond to the current transaction, scheduling attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`,
 							"warn",
 						);
 					} else {
@@ -683,10 +686,7 @@ export class Driver extends EventEmitter implements IDriver {
 								TransmitStatus[msg.transmitStatus]
 							})`;
 						}
-						log.driver.print(
-							`${node.logPrefix}${errorMsg}`,
-							"warn",
-						);
+						log.controller.logNode(node.id, `${errorMsg}`, "warn");
 
 						node.status = NodeStatus.Dead;
 						this.rejectAllTransactionsForNode(node.id, errorMsg);

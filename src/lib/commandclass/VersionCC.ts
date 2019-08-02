@@ -1,10 +1,10 @@
-import { SendDataRequest } from "../controller/SendDataMessages";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { MessagePriority } from "../message/Constants";
+import log from "../log";
 import { ZWaveNode } from "../node/Node";
 import { validatePayload } from "../util/misc";
+import { num2hex } from "../util/strings";
 import { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
@@ -17,9 +17,9 @@ import {
 	CommandClassDeserializationOptions,
 	expectedCCResponse,
 	getCommandClass,
+	getImplementedVersion,
 	gotDeserializationOptions,
 	implementedVersion,
-	StateKind,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
@@ -133,20 +133,109 @@ export class VersionCC extends CommandClass {
 		return super.supportsCommand(cmd);
 	}
 
-	/** Requests static or dynamic state for a given from a node */
-	public static async requestState(
+	public static async interview(
 		driver: IDriver,
 		node: ZWaveNode,
-		kind: StateKind,
 	): Promise<void> {
-		// TODO: Check if we have requested that information before and store it
-		if (kind & StateKind.Static) {
-			const cc = new VersionCCGet(driver, { nodeId: node.id });
-			const request = new SendDataRequest(driver, { command: cc });
-			await driver.sendMessage(request, {
-				priority: MessagePriority.NodeQuery,
-			});
+		// Step 1: Query node versions
+		log.controller.logNode(node.id, {
+			message: "querying node versions...",
+			direction: "outbound",
+		});
+		const versionGetResponse = await node.commandClasses.Version.get();
+		// prettier-ignore
+		let logMessage = `received response for node versions:
+  library type:      ${ZWaveLibraryTypes[versionGetResponse.libraryType]} (${num2hex(versionGetResponse.libraryType)})
+  protocol version:  ${versionGetResponse.protocolVersion}
+  firmware versions: ${versionGetResponse.firmwareVersions.join(", ")}`;
+		if (versionGetResponse.hardwareVersion != undefined) {
+			logMessage += `\n  hardware version:  ${versionGetResponse.hardwareVersion}`;
 		}
+
+		log.controller.logNode(node.id, {
+			message: logMessage,
+			direction: "inbound",
+		});
+
+		// Step 2: Query all CC versions
+		log.controller.logNode(node.id, {
+			message: "querying CC versions...",
+			direction: "outbound",
+		});
+		for (const [cc] of node.implementedCommandClasses.entries()) {
+			// only query the ones we support a version > 1 for
+			const maxImplemented = getImplementedVersion(cc);
+			if (maxImplemented <= 1) {
+				log.controller.logNode(
+					node.id,
+					`  skipping query for ${CommandClasses[cc]} (${num2hex(
+						cc,
+					)}) because max implemented version is ${maxImplemented}`,
+				);
+				continue;
+			}
+			log.controller.logNode(node.id, {
+				message: `  querying the CC version for ${
+					CommandClasses[cc]
+				} (${num2hex(cc)})...`,
+				direction: "outbound",
+			});
+			// query the CC version
+			const supportedVersion = await node.commandClasses.Version.getCCVersion(
+				cc,
+			);
+			// Remember which CC version this node supports
+			let logMessage: string;
+			if (supportedVersion > 0) {
+				node.addCC(cc, { version: supportedVersion });
+				logMessage = `  supports CC ${CommandClasses[cc]} (${num2hex(
+					cc,
+				)}) in version ${supportedVersion}`;
+			} else {
+				// We were lied to - the NIF said this CC is supported, now the node claims it isn't
+				node.removeCC(cc);
+				logMessage = `  does NOT support CC ${
+					CommandClasses[cc]
+				} (${num2hex(cc)})`;
+			}
+			log.controller.logNode(node.id, logMessage);
+		}
+
+		// Step 3: Query VersionCC capabilities
+		if (
+			driver.getSafeCCVersionForNode(node.id, CommandClasses.Version) >= 3
+		) {
+			// Step 3a: Support for SoftwareGet
+			log.controller.logNode(node.id, {
+				message: "querying if Z-Wave Software Get is supported...",
+				direction: "outbound",
+			});
+			const {
+				supportsZWaveSoftwareGet,
+			} = await node.commandClasses.Version.getCapabilities();
+			log.controller.logNode(node.id, {
+				message: `Z-Wave Software Get is${
+					supportsZWaveSoftwareGet ? "" : " not"
+				} supported`,
+				direction: "inbound",
+			});
+
+			if (supportsZWaveSoftwareGet) {
+				// Step 3b: Query Z-Wave Software versions
+				log.controller.logNode(node.id, {
+					message: "querying Z-Wave software versions...",
+					direction: "outbound",
+				});
+				await node.commandClasses.Version.getZWaveSoftware();
+				log.controller.logNode(node.id, {
+					message: "received Z-Wave software versions..",
+					direction: "inbound",
+				});
+			}
+		}
+
+		// Remember that the interview is complete
+		this.setInterviewComplete(node, true);
 	}
 }
 

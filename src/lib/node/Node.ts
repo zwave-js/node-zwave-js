@@ -1,4 +1,3 @@
-import { promiseSequence } from "alcalzone-shared/async";
 import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
@@ -10,22 +9,15 @@ import {
 	CentralSceneCCNotification,
 	CentralSceneKeys,
 } from "../commandclass/CentralSceneCC";
-import {
-	CommandClass,
-	getCCConstructor,
-	getImplementedVersion,
-	StateKind,
-} from "../commandclass/CommandClass";
+import { CommandClass, getCCConstructor } from "../commandclass/CommandClass";
 import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { ConfigurationCC } from "../commandclass/ConfigurationCC";
+import { ManufacturerSpecificCC } from "../commandclass/ManufacturerSpecificCC";
 import { NotificationCCReport } from "../commandclass/NotificationCC";
+import { VersionCC } from "../commandclass/VersionCC";
 import { WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
-import {
-	ZWavePlusNodeType,
-	ZWavePlusRoleType,
-} from "../commandclass/ZWavePlusCC";
+import { ZWavePlusCC } from "../commandclass/ZWavePlusCC";
 import { lookupDevice } from "../config/Devices";
-import { lookupManufacturer } from "../config/Manufacturers";
 import {
 	ApplicationUpdateRequest,
 	ApplicationUpdateRequestNodeInfoReceived,
@@ -190,13 +182,6 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	}
 
 	//#region --- properties ---
-
-	/** @internal */
-	public readonly logPrefix = `[Node ${padStart(
-		this.id.toString(),
-		3,
-		"0",
-	)}] `;
 
 	private _status: NodeStatus = NodeStatus.Unknown;
 	/**
@@ -371,32 +356,63 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		}
 	}
 
-	private _endpointCountIsDynamic: boolean | undefined;
 	public get endpointCountIsDynamic(): boolean | undefined {
-		return this._endpointCountIsDynamic;
+		return this.getValue(
+			CommandClasses["Multi Channel"],
+			0,
+			"_endpointCountIsDynamic",
+		);
 	}
 
-	private _endpointsHaveIdenticalCapabilities: boolean | undefined;
 	public get endpointsHaveIdenticalCapabilities(): boolean | undefined {
-		return this._endpointsHaveIdenticalCapabilities;
+		return this.getValue(
+			CommandClasses["Multi Channel"],
+			0,
+			"_endpointsHaveIdenticalCapabilities",
+		);
 	}
 
-	private _individualEndpointCount: number | undefined;
 	public get individualEndpointCount(): number | undefined {
-		return this._individualEndpointCount;
+		return this.getValue(
+			CommandClasses["Multi Channel"],
+			0,
+			"_individualEndpointCount",
+		);
 	}
 
-	private _aggregatedEndpointCount: number | undefined;
 	public get aggregatedEndpointCount(): number | undefined {
-		return this._aggregatedEndpointCount;
+		return this.getValue(
+			CommandClasses["Multi Channel"],
+			0,
+			"_aggregatedEndpointCount",
+		);
 	}
 
-	private _endpointCapabilities = new Map<number, EndpointCapabilities>();
+	private get endpointCapabilities():
+		| Map<number, EndpointCapabilities>
+		| undefined {
+		return this.getValue(
+			CommandClasses["Multi Channel"],
+			0,
+			"_endpointCapabilities",
+		);
+	}
+
 	private getEndpointCapabilities(
 		index: number,
 	): EndpointCapabilities | undefined {
-		return this._endpointCapabilities.get(
-			this._endpointsHaveIdenticalCapabilities ? 1 : index,
+		if (this.endpointCapabilities) {
+			return this.endpointCapabilities.get(
+				this.endpointsHaveIdenticalCapabilities ? 1 : index,
+			);
+		}
+	}
+
+	/** Returns the current endpoint count of this node */
+	public getEndpointCount(): number {
+		return (
+			(this.individualEndpointCount || 0) +
+			(this.aggregatedEndpointCount || 0)
 		);
 	}
 
@@ -405,6 +421,8 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	/**
 	 * Returns an endpoint of this node with the given index. 0 returns the node itself.
 	 */
+	public getEndpoint(index: 0): Endpoint;
+	public getEndpoint(index: number): Endpoint | undefined;
 	public getEndpoint(index: number): Endpoint | undefined {
 		if (index < 0)
 			throw new ZWaveError(
@@ -414,12 +432,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		// Zero is the root endpoint - i.e. this node
 		if (index === 0) return this;
 		// Check if the requested endpoint exists on the physical node
-		if (
-			index >
-			(this._individualEndpointCount || 0) +
-				(this._aggregatedEndpointCount || 0)
-		)
-			return undefined;
+		if (index > this.getEndpointCount()) return undefined;
 		// Create an endpoint instance if it does not exist
 		if (!this._endpointInstances.has(index)) {
 			this._endpointInstances.set(
@@ -433,6 +446,16 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			);
 		}
 		return this._endpointInstances.get(index)!;
+	}
+
+	/** Returns a list of all endpoints of this node, including the root endpoint (index 0) */
+	public getAllEndpoints(): Endpoint[] {
+		const ret: Endpoint[] = [this];
+		for (let i = 1; i < this.getEndpointCount(); i++) {
+			// Iterating over the endpoint count ensures that we don't get undefined
+			ret.push(this.getEndpoint(i)!);
+		}
+		return ret;
 	}
 
 	/**
@@ -490,44 +513,17 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		}
 
 		if (this.interviewStage === InterviewStage.NodeInfo) {
-			await this.queryNodePlusInfo();
+			await this.interviewCCs();
 		}
 
-		if (this.interviewStage === InterviewStage.NodePlusInfo) {
-			// Request Manufacturer specific data
-			await this.queryManufacturerSpecific();
-			// TODO: Overwrite the reported config with configuration files (like OZW does)
-		}
-
-		// TODO:
-		// SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
-
-		if (this.interviewStage === InterviewStage.ManufacturerSpecific) {
-			// TODO: change .ManufacturerSpecific to .SecurityReport when that is implemented
-			await this.queryCCVersions();
-		}
-
-		if (this.interviewStage === InterviewStage.Versions) {
-			await this.queryEndpoints();
-		}
-
-		if (this.interviewStage === InterviewStage.Endpoints) {
-			await this.requestStaticValues();
-		}
+		// // TODO:
+		// // SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
 
 		// At this point the interview of new nodes is done. Start here when re-interviewing known nodes
 		if (
 			this.interviewStage === InterviewStage.RestartFromCache ||
-			this.interviewStage === InterviewStage.Static
+			this.interviewStage === InterviewStage.CommandClasses
 		) {
-			// Configure the device so it notifies us of a wakeup
-			await this.configureWakeup();
-		}
-
-		// TODO: Associations
-
-		if (this.interviewStage === InterviewStage.WakeUp) {
-			// TODO: change WakeUp to Associations when it is implemented
 			// Load a config file for this node if it exists and overwrite the previously reported information
 			await this.overwriteConfig();
 		}
@@ -554,12 +550,8 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		// Also save to the cache after certain stages
 		switch (completedStage) {
 			case InterviewStage.ProtocolInfo:
-			case InterviewStage.ManufacturerSpecific:
 			case InterviewStage.NodeInfo:
-			case InterviewStage.NodePlusInfo:
-			case InterviewStage.Versions:
-			case InterviewStage.Endpoints:
-			case InterviewStage.Static:
+			case InterviewStage.CommandClasses:
 			case InterviewStage.Complete:
 				await this.driver.saveNetworkToCache();
 		}
@@ -699,288 +691,68 @@ version:               ${this.version}`;
 		await this.setInterviewStage(InterviewStage.NodeInfo);
 	}
 
-	/** Step #6 of the node interview */
-	protected async queryNodePlusInfo(): Promise<void> {
-		if (!this.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
-			log.controller.logNode(
-				this.id,
-				"skipping Z-Wave+ query because the device does not support it",
-			);
-		} else {
-			log.controller.logNode(this.id, {
-				message: "querying Z-Wave+ information...",
-				direction: "outbound",
-			});
-			try {
-				const zwavePlusResponse = await this.commandClasses[
-					"Z-Wave Plus Info"
-				].get();
+	/** Step #? of the node interview */
+	protected async interviewCCs(): Promise<void> {
+		// 1. Find out which device this is
+		if (this.supportsCC(CommandClasses["Manufacturer Specific"])) {
+			if (!ManufacturerSpecificCC.getInterviewComplete(this)) {
+				await ManufacturerSpecificCC.interview(this.driver, this);
+				await this.driver.saveNetworkToCache();
+			}
+		}
+		// TODO: Overwrite the reported config with configuration files (like OZW does)
 
-				const logMessage = `received response for Z-Wave+ information:
-  Z-Wave+ version: ${zwavePlusResponse.zwavePlusVersion}
-  role type:       ${ZWavePlusRoleType[zwavePlusResponse.roleType]}
-  node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}
-  installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}
-  user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
-				log.controller.logNode(this.id, {
-					message: logMessage,
-					direction: "inbound",
-				});
-			} catch (e) {
-				log.controller.logNode(
-					this.id,
-					`  querying the Z-Wave+ information failed: ${e.message}`,
-					"error",
-				);
-				throw e;
+		// 2. Find out which versions we can use
+		// This conditional is not necessary, but saves us a bunch of headaches during testing
+		if (this.supportsCC(CommandClasses.Version)) {
+			if (!VersionCC.getInterviewComplete(this)) {
+				await VersionCC.interview(this.driver, this);
+				await this.driver.saveNetworkToCache();
 			}
 		}
 
-		await this.setInterviewStage(InterviewStage.NodePlusInfo);
-	}
-
-	protected async queryManufacturerSpecific(): Promise<void> {
-		if (this.isControllerNode()) {
-			log.controller.logNode(
-				this.id,
-				"not querying manufacturer information from the controller...",
-			);
-		} else {
-			log.controller.logNode(this.id, {
-				message: "querying manufacturer information...",
-				direction: "outbound",
-			});
-			try {
-				const mfResp = await this.commandClasses[
-					"Manufacturer Specific"
-				].get();
-				const logMessage = `received response for manufacturer information:
-  manufacturer: ${(await lookupManufacturer(mfResp.manufacturerId)) ||
-		"unknown"} (${num2hex(mfResp.manufacturerId)})
-  product type: ${num2hex(mfResp.productType)}
-  product id:   ${num2hex(mfResp.productId)}`;
-				log.controller.logNode(this.id, {
-					message: logMessage,
-					direction: "inbound",
-				});
-			} catch (e) {
-				log.controller.logNode(
-					this.id,
-					`  querying the manufacturer information failed: ${e.message}`,
-					"error",
-				);
-				throw e;
+		// TODO: (GH#215) Correctly order CC interviews
+		// All CCs require Version
+		// ZW+ requires Multi Channel (if it is supported)
+		// what else?...
+		if (this.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
+			if (!ZWavePlusCC.getInterviewComplete(this)) {
+				await ZWavePlusCC.interview(this.driver, this);
+				await this.driver.saveNetworkToCache();
 			}
 		}
 
-		await this.setInterviewStage(InterviewStage.ManufacturerSpecific);
-	}
-
-	/** Step #9 of the node interview */
-	protected async queryCCVersions(): Promise<void> {
-		log.controller.logNode(this.id, {
-			message: "querying CC versions...",
-			direction: "outbound",
-		});
-		for (const [cc] of this.implementedCommandClasses.entries()) {
-			// only query the ones we support a version > 1 for
-			const maxImplemented = getImplementedVersion(cc);
-			if (maxImplemented < 1) {
-				log.controller.logNode(
-					this.id,
-					`  skipping query for ${CommandClasses[cc]} (${num2hex(
-						cc,
-					)}) because max implemented version is ${maxImplemented}`,
-				);
-				continue;
-			}
+		// TODO: (GH#214) Also query ALL endpoints!
+		// 3. Perform all other CCs interviews
+		const ccConstructors = [...this.implementedCommandClasses.keys()]
+			.filter(
+				cc =>
+					cc !== CommandClasses.Version &&
+					cc !== CommandClasses["Manufacturer Specific"] &&
+					cc !== CommandClasses["Z-Wave Plus Info"],
+			)
+			// This assertion is not nice, but I see no better way
+			.map(
+				cc =>
+					(getCCConstructor(cc) as unknown) as
+						| (typeof CommandClass)
+						| undefined,
+			)
+			.filter(cc => !!cc) as (typeof CommandClass)[];
+		for (const cc of ccConstructors) {
 			try {
-				log.controller.logNode(this.id, {
-					message: `  querying the CC version for ${
-						CommandClasses[cc]
-					} (${num2hex(cc)})...`,
-					direction: "outbound",
-				});
-				// query the CC version
-				const supportedVersion = await this.commandClasses.Version.getCCVersion(
-					cc,
-				);
-				// Remember which CC version this node supports
-				let logMessage: string;
-				if (supportedVersion > 0) {
-					this.addCC(cc, { version: supportedVersion });
-					logMessage = `  supports CC ${
-						CommandClasses[cc]
-					} (${num2hex(cc)}) in version ${supportedVersion}`;
-				} else {
-					// We were lied to - the NIF said this CC is supported, now the node claims it isn't
-					this.removeCC(cc);
-					logMessage = `  does NOT support CC ${
-						CommandClasses[cc]
-					} (${num2hex(cc)})`;
-				}
-				log.controller.logNode(this.id, logMessage);
-			} catch (e) {
-				log.controller.logNode(
-					this.id,
-					`  querying the CC versions failed: ${e.message}`,
-					"error",
-				);
-				throw e;
-			}
-		}
-		await this.setInterviewStage(InterviewStage.Versions);
-	}
-
-	/** Step #10 of the node interview */
-	protected async queryEndpoints(): Promise<void> {
-		if (this.supportsCC(CommandClasses["Multi Channel"])) {
-			log.controller.logNode(this.id, {
-				message: "querying device endpoints...",
-				direction: "outbound",
-			});
-			try {
-				const multiResponse = await this.commandClasses[
-					"Multi Channel"
-				].getEndpoints();
-				// Save the received information
-				this._endpointCountIsDynamic =
-					multiResponse.isDynamicEndpointCount;
-				this._endpointsHaveIdenticalCapabilities =
-					multiResponse.identicalCapabilities;
-				this._individualEndpointCount =
-					multiResponse.individualEndpointCount;
-				this._aggregatedEndpointCount =
-					multiResponse.aggregatedEndpointCount || 0;
-
-				let logMessage = `received response for device endpoints:
-  endpoint count (individual): ${multiResponse.individualEndpointCount}
-  count is dynamic:            ${multiResponse.isDynamicEndpointCount}
-  identical capabilities:      ${multiResponse.identicalCapabilities}`;
-				if (multiResponse.aggregatedEndpointCount != undefined) {
-					logMessage += `
-  endpoint count (aggregated): ${multiResponse.aggregatedEndpointCount}`;
-				}
-				log.controller.logNode(this.id, {
-					message: logMessage,
-					direction: "inbound",
-				});
-
-				// Find out how many endpoints we need to query.
-				// If all of them have identical capabilities, 1 is enough
-				const totalEndpointCount = multiResponse.identicalCapabilities
-					? 1
-					: multiResponse.individualEndpointCount +
-					  (multiResponse.aggregatedEndpointCount || 0);
-				for (
-					let endpointIndex = 1;
-					endpointIndex <= totalEndpointCount;
-					endpointIndex++
-				) {
-					log.controller.logNode(this.id, {
-						message: `querying capabilities for endpoint #${endpointIndex}...`,
-						direction: "outbound",
-					});
-					const caps = await this.commandClasses[
-						"Multi Channel"
-					].getEndpointCapabilities(endpointIndex);
-					logMessage = `received response for endpoint capabilities (#${endpointIndex}):
-  generic device class:  ${caps.generic.name} (${num2hex(caps.generic.key)})
-  specific device class: ${caps.specific.name} (${num2hex(caps.specific.key)})
-  is dynamic end point:  ${caps.isDynamic}
-  supported CCs:`;
-					for (const cc of caps.supportedCCs) {
-						const ccName = CommandClasses[cc];
-						logMessage += `\n  · ${ccName ? ccName : num2hex(cc)}`;
-					}
-					log.controller.logNode(this.id, {
-						message: logMessage,
-						direction: "inbound",
-					});
-
-					const capabilites: EndpointCapabilities = {
-						genericClass: caps.generic,
-						specificClass: caps.specific,
-						isDynamic: caps.isDynamic,
-						supportedCCs: caps.supportedCCs,
-					};
-					this._endpointCapabilities.set(endpointIndex, capabilites);
+				if (!cc.getInterviewComplete(this)) {
+					await cc.interview(this.driver, this);
+					await this.driver.saveNetworkToCache();
 				}
 			} catch (e) {
-				log.controller.logNode(
-					this.id,
-					`  querying the device endpoints failed: ${e.message}`,
+				log.controller.print(
+					`${cc.name}: Interview failed:\n${e.message}`,
 					"error",
 				);
-				throw e;
 			}
-		} else {
-			log.controller.logNode(
-				this.id,
-				`skipping endpoint query because the device does not support it`,
-			);
 		}
-
-		await this.setInterviewStage(InterviewStage.Endpoints);
-	}
-
-	/** Step #2 of the node interview */
-	protected async configureWakeup(): Promise<void> {
-		if (this.supportsCC(CommandClasses["Wake Up"])) {
-			if (this.isControllerNode()) {
-				log.controller.logNode(
-					this.id,
-					`skipping wakeup configuration for the controller`,
-				);
-			} else if (this.isFrequentListening) {
-				log.controller.logNode(
-					this.id,
-					`skipping wakeup configuration for frequent listening device`,
-				);
-			} else {
-				try {
-					log.controller.logNode(this.id, {
-						message:
-							"retrieving wakeup interval from the device...",
-						direction: "outbound",
-					});
-					const wakeupResp = await this.commandClasses[
-						"Wake Up"
-					].getInterval();
-					const logMessage = `received wakeup configuration:
-  wakeup interval: ${wakeupResp.wakeupInterval} seconds
-  controller node: ${wakeupResp.controllerNodeId}`;
-					log.controller.logNode(this.id, {
-						message: logMessage,
-						direction: "inbound",
-					});
-
-					log.controller.logNode(this.id, {
-						message: "configuring wakeup destination",
-						direction: "outbound",
-					});
-
-					await this.commandClasses["Wake Up"].setInterval(
-						wakeupResp.wakeupInterval,
-						this.driver.controller.ownNodeId!,
-					);
-					log.controller.logNode(this.id, "  done!");
-				} catch (e) {
-					log.controller.logNode(
-						this.id,
-						`  configuring the device wakeup failed: ${e.message}`,
-						"error",
-					);
-					throw e;
-				}
-			}
-		} else {
-			log.controller.logNode(
-				this.id,
-				`skipping wakeup for non-sleeping device`,
-			);
-		}
-		await this.setInterviewStage(InterviewStage.WakeUp);
+		await this.setInterviewStage(InterviewStage.CommandClasses);
 	}
 
 	/**
@@ -999,28 +771,6 @@ version:               ${this.version}`;
 
 		// As the NIF is sent on wakeup, treat this as a sign that the node is awake
 		this.setAwake(true);
-	}
-
-	protected async requestStaticValues(): Promise<void> {
-		log.controller.logNode(this.id, {
-			message: "requesting static values...",
-			direction: "outbound",
-		});
-		try {
-			await this.requestState(StateKind.Static);
-			log.controller.logNode(this.id, {
-				message: `  static values received`,
-				direction: "inbound",
-			});
-		} catch (e) {
-			log.controller.logNode(
-				this.id,
-				`  requesting the static values failed: ${e.message}`,
-				"error",
-			);
-			throw e;
-		}
-		await this.setInterviewStage(InterviewStage.Static);
 	}
 
 	protected async overwriteConfig(): Promise<void> {
@@ -1249,30 +999,30 @@ version:               ${this.version}`;
 		});
 	}
 
-	/**
-	 * Requests the state for the CCs of this node
-	 * @param kind The kind of state to be requested
-	 * @param commandClasses The command classes to request the state for. Defaults to all
-	 */
-	public async requestState(
-		kind: StateKind,
-		commandClasses: CommandClasses[] = [
-			...this.implementedCommandClasses.keys(),
-		],
-	): Promise<void> {
-		// TODO: Support multiple endpoints
-		const factories = commandClasses
-			// This assertion is not nice, but I see no better way
-			.map(
-				cc =>
-					(getCCConstructor(cc) as unknown) as
-						| (typeof CommandClass)
-						| undefined,
-			)
-			.filter(cc => !!cc)
-			.map(cc => () => cc!.requestState(this.driver, this, kind));
-		await promiseSequence(factories);
-	}
+	// /**
+	//  * Requests the state for the CCs of this node
+	//  * @param kind The kind of state to be requested
+	//  * @param commandClasses The command classes to request the state for. Defaults to all
+	//  */
+	// public async requestState(
+	// 	kind: StateKind,
+	// 	commandClasses: CommandClasses[] = [
+	// 		...this.implementedCommandClasses.keys(),
+	// 	],
+	// ): Promise<void> {
+	// 	// TODO: Support multiple endpoints
+	// 	const factories = commandClasses
+	// 		// This assertion is not nice, but I see no better way
+	// 		.map(
+	// 			cc =>
+	// 				(getCCConstructor(cc) as unknown) as
+	// 					| (typeof CommandClass)
+	// 					| undefined,
+	// 		)
+	// 		.filter(cc => !!cc)
+	// 		.map(cc => () => cc!.requestState(this.driver, this, kind));
+	// 	await promiseSequence(factories);
+	// }
 
 	/**
 	 * @internal
@@ -1315,26 +1065,28 @@ version:               ${this.version}`;
 						return [num2hex(cc), ret] as [string, object];
 					}),
 			),
-			endpointCountIsDynamic: this._endpointCountIsDynamic,
+			endpointCountIsDynamic: this.endpointCountIsDynamic,
 			endpointsHaveIdenticalCapabilities: this
-				._endpointsHaveIdenticalCapabilities,
-			individualEndpointCount: this._individualEndpointCount,
-			aggregatedEndpointCount: this._aggregatedEndpointCount,
-			endpoints: composeObject(
-				[...this._endpointCapabilities.entries()]
-					.sort((a, b) => Math.sign(a[0] - b[0]))
-					.map(([cc, caps]) => {
-						return [
-							cc.toString(),
-							{
-								genericClass: caps.genericClass.key,
-								specificClass: caps.specificClass.key,
-								isDynamic: caps.isDynamic,
-								supportedCCs: caps.supportedCCs,
-							},
-						] as [string, object];
-					}),
-			),
+				.endpointsHaveIdenticalCapabilities,
+			individualEndpointCount: this.individualEndpointCount,
+			aggregatedEndpointCount: this.aggregatedEndpointCount,
+			endpoints:
+				this.endpointCapabilities &&
+				composeObject(
+					[...this.endpointCapabilities.entries()]
+						.sort((a, b) => Math.sign(a[0] - b[0]))
+						.map(([cc, caps]) => {
+							return [
+								cc.toString(),
+								{
+									genericClass: caps.genericClass.key,
+									specificClass: caps.specificClass.key,
+									isDynamic: caps.isDynamic,
+									supportedCCs: caps.supportedCCs,
+								},
+							] as [string, object];
+						}),
+				),
 		};
 	}
 
@@ -1431,6 +1183,15 @@ version:               ${this.version}`;
 		tryParse("aggregatedEndpointCount", "number");
 		if (isObject(obj.endpoints)) {
 			const endpointDict = obj.endpoints;
+			// Make sure the endpointCapabilities Map exists
+			if (!this.endpointCapabilities) {
+				this.valueDB.setValue(
+					CommandClasses["Multi Channel"],
+					0,
+					"_endpointCapabilities",
+					new Map(),
+				);
+			}
 			for (const index of Object.keys(endpointDict)) {
 				// First make sure this key describes a valid endpoint
 				const indexNum = parseInt(index);
@@ -1439,8 +1200,9 @@ version:               ${this.version}`;
 					indexNum >
 						(this.individualEndpointCount || 0) +
 							(this.aggregatedEndpointCount || 0)
-				)
+				) {
 					continue;
+				}
 
 				// Parse the information we have
 				const {
@@ -1456,7 +1218,7 @@ version:               ${this.version}`;
 					isArray(supportedCCs) &&
 					supportedCCs.every(cc => typeof cc === "number")
 				) {
-					this._endpointCapabilities.set(indexNum, {
+					this.endpointCapabilities!.set(indexNum, {
 						genericClass: GenericDeviceClass.get(genericClass),
 						specificClass: SpecificDeviceClass.get(
 							genericClass,
@@ -1523,34 +1285,3 @@ version:               ${this.version}`;
 		return msgSent;
 	}
 }
-
-// export enum OpenHABInterviewStage {
-// 	None,					// Query process hasn't started for this node
-// 	ProtocolInfo1,			// Retrieve protocol information (IdentifyNode)
-// 	Neighbors1,				// Retrieve node neighbor list
-
-// 	// ===== the stuff below doesn't work for PC controllers =====
-
-// 	WakeUp,					// Start wake up process if a sleeping node
-// 	Ping,					// Ping device to see if alive
-// 	ProtocolInfo2,			// Retrieve protocol information again (IdentifyNode)
-// 	SecurityReport,			// Retrieve a list of Command Classes that require Security
-// 	NodeInfo,				// Retrieve info about supported, controlled command classes
-// 	ManufacturerSpecific,	// Retrieve manufacturer name and product ids if ProtocolInfo lets us
-// 	Versions,				// Retrieve version information
-// 	Instances,				// Retrieve information about multiple command class instances
-// 	OverwriteFromDB,		// Overwrite the data with manual config files
-// 	Static,					// Retrieve static information (doesn't change)
-
-// 	Associations,			// Retrieve information about associations
-// 	SetWakeUp,				// * Configure wake up to point to the master controller
-// 	SetAssociations,		// * Set some associations to point to us
-// 	DeleteSUCRoute,			// * For non-controller nodes delete the SUC return route if there's one
-// 	AssignSUCRoute,			// * For non-controller nodes update the SUC return route if there's one
-// 	Configuration,			// Retrieve configurable parameter information (only done on request)
-// 	Dynamic,				// Retrieve dynamic information (changes frequently)
-// 	DeleteReturnRoute,		// * delete the return route
-// 	AssignReturnRoute,		// * update the return route
-// 	Neighbors2,				// Retrieve updated neighbors
-// 	Complete,				// Query process is completed for this node
-// }

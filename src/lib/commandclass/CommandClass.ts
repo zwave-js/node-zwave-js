@@ -24,17 +24,17 @@ export interface CommandClassStatic {
 	readonly maxImplementedVersion: number;
 }
 
-/**
- * Defines which kind of CC state should be requested
- */
-export enum StateKind {
-	/** Values that never change and only need to be requested once. */
-	Static = 1 << 0,
-	/** Values that change sporadically. It is enough to request them on startup. */
-	Session = 1 << 1,
-	/** Values that frequently change */
-	Dynamic = 1 << 2,
-}
+// /**
+//  * Defines which kind of CC state should be requested
+//  */
+// export enum StateKind {
+// 	/** Values that never change and only need to be requested once. */
+// 	Static = 1 << 0,
+// 	/** Values that change sporadically. It is enough to request them on startup. */
+// 	Session = 1 << 1,
+// 	/** Values that frequently change */
+// 	Dynamic = 1 << 2,
+// }
 
 export type CommandClassDeserializationOptions = { data: Buffer } & (
 	| {
@@ -78,6 +78,8 @@ export class CommandClass {
 		this.ccId = getCommandClass(this);
 		// Default to the root endpoint - Inherited classes may override this behavior
 		this.endpoint = ("endpoint" in options && options.endpoint) || 0;
+		// We cannot use @ccValue for non-derived classes
+		this.registerValue("interviewComplete");
 
 		if (gotDeserializationOptions(options)) {
 			// For deserialized commands, try to invoke the correct subclass constructor
@@ -154,6 +156,33 @@ export class CommandClass {
 	/** Returns true if this CC is an extended CC (0xF100..0xFFFF) */
 	public isExtended(): boolean {
 		return this.ccId >= 0xf100;
+	}
+
+	/** Whether the interview for this CC was previously completed */
+	public get interviewComplete(): boolean {
+		return !!this.getValueDB().getValue<boolean>(
+			this.ccId,
+			// This information belongs to the root endpoint
+			0,
+			"interviewComplete",
+		);
+	}
+	public set interviewComplete(value: boolean) {
+		this.getValueDB().setValue(this.ccId, 0, "interviewComplete", value);
+	}
+	/** Accessor for the interviewComplete on static subclasses */
+	protected static setInterviewComplete(
+		node: ZWaveNode,
+		value: boolean,
+	): void {
+		node.createCCInstance(
+			getCommandClassStatic(this),
+		)!.interviewComplete = value;
+	}
+	/** Accessor for the interviewComplete on static subclasses */
+	public static getInterviewComplete(node: ZWaveNode): boolean {
+		return node.createCCInstance(getCommandClassStatic(this))!
+			.interviewComplete;
 	}
 
 	private serializeWithoutHeader(): Buffer {
@@ -296,12 +325,22 @@ export class CommandClass {
 		return stripUndefined({ ...ret, ...props });
 	}
 
-	/** Requests static or dynamic state for a given from a node */
 	/* eslint-disable @typescript-eslint/no-unused-vars */
+	/** Requests static or dynamic state for a given from a node */
 	public static async requestState(
 		driver: IDriver,
 		node: ZWaveNode,
-		kind: StateKind,
+		// kind: StateKind,
+	): Promise<void> {
+		// This needs to be overwritten per command class. In the default implementation, don't do anything
+	}
+	/* eslint-enable @typescript-eslint/no-unused-vars */
+
+	/* eslint-disable @typescript-eslint/no-unused-vars */
+	/** Performs the interview procedure for this CC according to SDS14223 */
+	public static async interview(
+		driver: IDriver,
+		node: ZWaveNode,
 	): Promise<void> {
 		// This needs to be overwritten per command class. In the default implementation, don't do anything
 	}

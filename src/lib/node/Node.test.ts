@@ -1,27 +1,10 @@
-import { entries } from "alcalzone-shared/objects";
 import { createEmptyMockDriver } from "../../../test/mocks";
-import { assertZWaveError } from "../../../test/util";
+import { assertCC, assertZWaveError } from "../../../test/util";
 import { BasicCC, BasicCommand } from "../commandclass/BasicCC";
-import { BinarySensorCC } from "../commandclass/BinarySensorCC";
-import {
-	CommandClass,
-	CommandClassInfo,
-	Constructable,
-	getCommandClassStatic,
-} from "../commandclass/CommandClass";
+import { CommandClassInfo } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
-import {
-	ManufacturerSpecificCC,
-	ManufacturerSpecificCommand,
-} from "../commandclass/ManufacturerSpecificCC";
-import {
-	MultiChannelCC,
-	MultiChannelCommand,
-} from "../commandclass/MultiChannelCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
-import { VersionCC, VersionCommand } from "../commandclass/VersionCC";
 import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
-import { ZWavePlusCC, ZWavePlusCommand } from "../commandclass/ZWavePlusCC";
 import {
 	ApplicationUpdateRequest,
 	ApplicationUpdateTypes,
@@ -61,24 +44,24 @@ class TestNode extends ZWaveNode {
 	public async queryNodeInfo(): Promise<void> {
 		return super.queryNodeInfo();
 	}
-	public async queryNodePlusInfo(): Promise<void> {
-		return super.queryNodePlusInfo();
+	public async interviewCCs(): Promise<void> {
+		return super.interviewCCs();
 	}
-	public async queryManufacturerSpecific(): Promise<void> {
-		return super.queryManufacturerSpecific();
-	}
-	public async queryCCVersions(): Promise<void> {
-		return super.queryCCVersions();
-	}
-	public async queryEndpoints(): Promise<void> {
-		return super.queryEndpoints();
-	}
-	public async configureWakeup(): Promise<void> {
-		return super.configureWakeup();
-	}
-	public async requestStaticValues(): Promise<void> {
-		return super.requestStaticValues();
-	}
+	// public async queryManufacturerSpecific(): Promise<void> {
+	// 	return super.queryManufacturerSpecific();
+	// }
+	// public async queryCCVersions(): Promise<void> {
+	// 	return super.queryCCVersions();
+	// }
+	// public async queryEndpoints(): Promise<void> {
+	// 	return super.queryEndpoints();
+	// }
+	// public async configureWakeup(): Promise<void> {
+	// 	return super.configureWakeup();
+	// }
+	// public async requestStaticValues(): Promise<void> {
+	// 	return super.requestStaticValues();
+	// }
 	public async queryNeighbors(): Promise<void> {
 		return super.queryNeighbors();
 	}
@@ -87,27 +70,6 @@ class TestNode extends ZWaveNode {
 		CommandClassInfo
 	> {
 		return super.implementedCommandClasses as any;
-	}
-}
-
-function assertCC<T extends CommandClass, TConst = Constructable<T>>(
-	callArg: any,
-	options: {
-		nodeId?: number;
-		cc: TConst;
-		ccValues?: Record<string, any>;
-	},
-): void {
-	const request: SendDataRequest = callArg;
-	expect(request).toBeInstanceOf(SendDataRequest);
-	if (options.nodeId) expect(request.getNodeId()).toBe(options.nodeId);
-
-	const command = request.command as T;
-	expect(command).toBeInstanceOf(options.cc);
-	if (options.ccValues) {
-		for (const [prop, val] of entries(options.ccValues)) {
-			expect(command[prop]).toBe(val);
-		}
 	}
 }
 
@@ -226,8 +188,10 @@ describe("lib/node/Node", () => {
 			});
 
 			it("should remember all received information", () => {
-				for (const prop of Object.keys(expected)) {
-					expect(node[prop]).toBe(expected[prop]);
+				for (const prop of Object.keys(
+					expected,
+				) as (keyof typeof expected)[]) {
+					expect((node as any)[prop]).toBe(expected[prop]);
 				}
 			});
 
@@ -278,55 +242,6 @@ describe("lib/node/Node", () => {
 			});
 		});
 
-		describe(`waitForWakeup()`, () => {
-			beforeAll(() =>
-				fakeDriver.sendMessage.mockImplementation(() =>
-					Promise.resolve(),
-				),
-			);
-			beforeEach(() => fakeDriver.sendMessage.mockClear());
-
-			it.skip(`should set the interview stage to "WakeUp"`, async () => {
-				// TODO: Provide a correct response
-				await node.configureWakeup();
-				expect(node.interviewStage).toBe(InterviewStage.WakeUp);
-			});
-
-			it("should not send anything if the node does not support WakeUp", async () => {
-				// Temporarily mark Wake Up as not supported
-				node.addCC(CommandClasses["Wake Up"], { isSupported: false });
-				await node.configureWakeup();
-				expect(fakeDriver.sendMessage).not.toBeCalled();
-				node.addCC(CommandClasses["Wake Up"], { isSupported: true });
-			});
-
-			it("should not send anything if the node is the controller", async () => {
-				// Temporarily make this node the controller node
-				fakeDriver.controller.ownNodeId = node.id;
-				await node.configureWakeup();
-				expect(fakeDriver.sendMessage).not.toBeCalled();
-				fakeDriver.controller.ownNodeId = 1;
-			});
-
-			it("should not send anything if the node is frequent listening", async () => {
-				// Temporarily make this node frequent listening
-				(node as any)._isFrequentListening = true;
-				await node.configureWakeup();
-				expect(fakeDriver.sendMessage).not.toBeCalled();
-				(node as any)._isFrequentListening = false;
-			});
-
-			it.skip("should send a Wake Up CC and wait for the response", async () => {
-				// TODO: Provide a correct response
-				await node.configureWakeup();
-				expect(fakeDriver.sendMessage).toBeCalled();
-				assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
-					nodeId: node.id,
-					cc: WakeUpCC,
-				});
-			});
-		});
-
 		describe(`ping()`, () => {
 			beforeAll(() =>
 				fakeDriver.sendMessage.mockImplementation(() =>
@@ -336,9 +251,11 @@ describe("lib/node/Node", () => {
 			beforeEach(() => fakeDriver.sendMessage.mockClear());
 
 			it(`should not change the current interview stage`, async () => {
-				node.interviewStage = InterviewStage.Endpoints;
+				node.interviewStage = InterviewStage.OverwriteConfig;
 				await node.ping();
-				expect(node.interviewStage).toBe(InterviewStage.Endpoints);
+				expect(node.interviewStage).toBe(
+					InterviewStage.OverwriteConfig,
+				);
 			});
 
 			it("should not send anything if the node is the controller", async () => {
@@ -429,238 +346,87 @@ describe("lib/node/Node", () => {
 			});
 		});
 
-		describe(`queryNodePlusInfo()`, () => {
-			beforeAll(() => {
-				fakeDriver.sendMessage.mockImplementation(() =>
-					Promise.resolve({ command: {} }),
-				);
-			});
-			beforeEach(() => fakeDriver.sendMessage.mockClear());
-			afterAll(() => {
-				fakeDriver.sendMessage.mockImplementation(() =>
-					Promise.resolve(),
-				);
-			});
-
-			it(`should set the interview stage to "NodePlusInfo"`, async () => {
-				await node.queryNodePlusInfo();
-				expect(node.interviewStage).toBe(InterviewStage.NodePlusInfo);
-			});
-
-			it("should not send anything if the node does not support the Multi Channel CC", async () => {
-				node.addCC(CommandClasses["Z-Wave Plus Info"], {
-					isSupported: false,
-					isControlled: false,
-				});
-				await node.queryNodePlusInfo();
-				expect(fakeDriver.sendMessage).not.toBeCalled();
-			});
-
-			it("should send a ZWavePlusCC.Get", async () => {
-				node.addCC(CommandClasses["Z-Wave Plus Info"], {
-					isSupported: true,
-				});
-				await node.queryNodePlusInfo();
-
-				expect(fakeDriver.sendMessage).toBeCalled();
-
-				assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
-					cc: ZWavePlusCC,
-					nodeId: node.id,
-					ccValues: {
-						ccCommand: ZWavePlusCommand.Get,
-					},
-				});
-			});
-
-			it.todo("Test the behavior when the request failed");
-
-			it.todo("Test the behavior when the request succeeds");
-		});
-
-		describe(`queryManufacturerSpecific()`, () => {
-			beforeAll(() => {
-				// We need to return a result so we don't get any crashes
-				fakeDriver.sendMessage.mockImplementation(() =>
-					Promise.resolve({
-						command: {
-							manufacturerId: 1,
-							productId: 1,
-							productType: 0xff,
-						},
-					}),
-				);
-				node.addCC(CommandClasses["Manufacturer Specific"], {
-					isSupported: true,
-				});
-			});
-			beforeEach(() => fakeDriver.sendMessage.mockClear());
-			afterAll(() => {
-				fakeDriver.sendMessage.mockImplementation(() =>
-					Promise.resolve(),
-				);
-			});
-
-			it(`should set the interview stage to "ManufacturerSpecific"`, async () => {
-				await node.queryManufacturerSpecific();
-				expect(node.interviewStage).toBe(
-					InterviewStage.ManufacturerSpecific,
-				);
-			});
-
-			it("should not send anything if the node is the controller", async () => {
-				// Temporarily make this node the controller node
-				fakeDriver.controller.ownNodeId = node.id;
-				await node.queryManufacturerSpecific();
-				expect(fakeDriver.sendMessage).not.toBeCalled();
-				fakeDriver.controller.ownNodeId = 1;
-			});
-
-			it("should send a ManufacturerSpecificCC.Get", async () => {
-				await node.queryManufacturerSpecific();
-
-				expect(fakeDriver.sendMessage).toBeCalled();
-
-				assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
-					cc: ManufacturerSpecificCC,
-					nodeId: node.id,
-					ccValues: {
-						ccCommand: ManufacturerSpecificCommand.Get,
-					},
-				});
-			});
-
-			it.todo("Test the behavior when the request failed");
-
-			it.todo("Test the behavior when the request succeeds");
-		});
-
-		describe(`queryCCVersions()`, () => {
-			beforeAll(() => {
-				fakeDriver.sendMessage.mockImplementation(() =>
-					Promise.resolve({ command: {} }),
-				);
-				node.implementedCommandClasses.clear();
-			});
-			beforeEach(() => fakeDriver.sendMessage.mockClear());
-			afterAll(() => {
-				fakeDriver.sendMessage.mockImplementation(() =>
-					Promise.resolve(),
-				);
-				node.implementedCommandClasses.clear();
-			});
-
-			it(`should set the interview stage to "Versions"`, async () => {
-				await node.queryCCVersions();
-				expect(node.interviewStage).toBe(InterviewStage.Versions);
-			});
-
-			it("should not send anything if the node doesn't support any CCs", async () => {
-				await node.queryCCVersions();
-				expect(fakeDriver.sendMessage).not.toBeCalled();
-			});
-
-			it("should send a VersionCC.CommandClassGet for each supported CC", async () => {
-				// These CCs need to be implemented or the test will fail
-				node.addCC(CommandClasses.Basic, { isSupported: true });
-				node.addCC(CommandClasses["Binary Sensor"], {
-					isSupported: true,
-				});
-				node.addCC(CommandClasses.Version, { isSupported: true });
-				await node.queryCCVersions();
-
-				assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
-					cc: VersionCC,
-					nodeId: node.id,
-					ccValues: {
-						ccCommand: VersionCommand.CommandClassGet,
-						requestedCC: CommandClasses.Basic,
-					},
-				});
-
-				assertCC(fakeDriver.sendMessage.mock.calls[1][0], {
-					cc: VersionCC,
-					nodeId: node.id,
-					ccValues: {
-						ccCommand: VersionCommand.CommandClassGet,
-						// BinarySensorCC needs to be loaded and this makes the import used
-						requestedCC: getCommandClassStatic(BinarySensorCC),
-					},
-				});
-			});
-
-			// TODO: Find a way to test this without the actual payload
-			it.skip("should remember the node's supported version", async () => {
-				// // These CCs need to be implemented or the test will fail
-				// node.addCC(CommandClasses.Basic, { isSupported: true });
-				// const expected = new VersionCC(fakeDriver as any, {
-				// 	nodeId: node.id,
-				// });
-				// expected.ccCommand = VersionCommand.CommandClassReport;
-				// expected.requestedCC = CommandClasses.Basic;
-				// (expected as any)._ccVersion = 3;
-				// const req = new SendDataRequest(fakeDriver as any, {
-				// 	command: expected,
-				// });
-				// fakeDriver.sendMessage.mockResolvedValue(req);
-				// await node.queryCCVersions();
-				// expect(
-				// 	node.implementedCommandClasses.get(CommandClasses.Basic)
-				// 		.version,
-				// ).toBe(expected.ccVersion);
-			});
-
-			it.todo("Test skipping non-implemented CCs");
-		});
-
-		describe(`queryEndpoints()`, () => {
+		describe(`interviewCCs()`, () => {
 			beforeAll(() =>
 				fakeDriver.sendMessage.mockImplementation(() =>
-					Promise.resolve({ command: {} }),
-				),
-			);
-			beforeEach(() => fakeDriver.sendMessage.mockClear());
-			afterAll(() =>
-				fakeDriver.sendMessage.mockImplementation(() =>
 					Promise.resolve(),
 				),
 			);
+			beforeEach(() => fakeDriver.sendMessage.mockClear());
 
-			it(`should set the interview stage to "Endpoints"`, async () => {
-				await node.queryEndpoints();
-				expect(node.interviewStage).toBe(InterviewStage.Endpoints);
+			it(`should set the interview stage to "CommandClasses"`, async () => {
+				await node.interviewCCs();
+				expect(node.interviewStage).toBe(InterviewStage.CommandClasses);
 			});
 
-			it("should not send anything if the node does not support the Multi Channel CC", async () => {
-				node.addCC(CommandClasses["Multi Channel"], {
-					isSupported: false,
-					isControlled: false,
-				});
-				await node.queryEndpoints();
-				expect(fakeDriver.sendMessage).not.toBeCalled();
-			});
+			it.todo("test that the CC interview methods are called");
 
-			it("should send a MultiChannelCC.EndPointGet", async () => {
-				node.addCC(CommandClasses["Multi Channel"], {
-					isSupported: true,
-				});
-				await node.queryEndpoints();
+			// it("should not send anything if the node is the controller", async () => {
+			// 	// Temporarily make this node the controller node
+			// 	fakeDriver.controller.ownNodeId = node.id;
+			// 	await node.queryNodeInfo();
+			// 	expect(fakeDriver.sendMessage).not.toBeCalled();
+			// 	fakeDriver.controller.ownNodeId = 1;
+			// });
 
-				expect(fakeDriver.sendMessage).toBeCalled();
-
-				assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
-					cc: MultiChannelCC,
-					nodeId: node.id,
-					ccValues: {
-						ccCommand: MultiChannelCommand.EndPointGet,
-					},
-				});
-			});
-
-			it.todo("Test the behavior when the request failed");
-
-			it.todo("Test the behavior when the request succeeds");
+			// it("should send a RequestNodeInfoRequest with the node's ID", async () => {
+			// 	await node.queryNodeInfo();
+			// 	expect(fakeDriver.sendMessage).toBeCalled();
+			// 	const request: RequestNodeInfoRequest =
+			// 		fakeDriver.sendMessage.mock.calls[0][0];
+			// 	expect(request).toBeInstanceOf(RequestNodeInfoRequest);
+			// 	expect(request.getNodeId()).toBe(node.id);
+			// });
 		});
+
+		// describe(`queryEndpoints()`, () => {
+		// 	beforeAll(() =>
+		// 		fakeDriver.sendMessage.mockImplementation(() =>
+		// 			Promise.resolve({ command: {} }),
+		// 		),
+		// 	);
+		// 	beforeEach(() => fakeDriver.sendMessage.mockClear());
+		// 	afterAll(() =>
+		// 		fakeDriver.sendMessage.mockImplementation(() =>
+		// 			Promise.resolve(),
+		// 		),
+		// 	);
+
+		// 	it(`should set the interview stage to "Endpoints"`, async () => {
+		// 		await node.queryEndpoints();
+		// 		expect(node.interviewStage).toBe(InterviewStage.Endpoints);
+		// 	});
+
+		// 	it("should not send anything if the node does not support the Multi Channel CC", async () => {
+		// 		node.addCC(CommandClasses["Multi Channel"], {
+		// 			isSupported: false,
+		// 			isControlled: false,
+		// 		});
+		// 		await node.queryEndpoints();
+		// 		expect(fakeDriver.sendMessage).not.toBeCalled();
+		// 	});
+
+		// 	it("should send a MultiChannelCC.EndPointGet", async () => {
+		// 		node.addCC(CommandClasses["Multi Channel"], {
+		// 			isSupported: true,
+		// 		});
+		// 		await node.queryEndpoints();
+
+		// 		expect(fakeDriver.sendMessage).toBeCalled();
+
+		// 		assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
+		// 			cc: MultiChannelCC,
+		// 			nodeId: node.id,
+		// 			ccValues: {
+		// 				ccCommand: MultiChannelCommand.EndPointGet,
+		// 			},
+		// 		});
+		// 	});
+
+		// 	it.todo("Test the behavior when the request failed");
+
+		// 	it.todo("Test the behavior when the request succeeds");
+		// });
 
 		describe(`queryNeighbors()`, () => {
 			let expected: GetRoutingInfoResponse;
@@ -697,35 +463,39 @@ describe("lib/node/Node", () => {
 		describe("interview sequence", () => {
 			let originalMethods: Partial<Record<keyof TestNode, any>>;
 			beforeAll(() => {
-				const interviewStagesAfter = {
+				const interviewStagesAfter: Record<string, InterviewStage> = {
 					queryProtocolInfo: InterviewStage.ProtocolInfo,
 					queryNodeInfo: InterviewStage.NodeInfo,
-					queryNodePlusInfo: InterviewStage.NodePlusInfo,
-					queryManufacturerSpecific:
-						InterviewStage.ManufacturerSpecific,
-					queryCCVersions: InterviewStage.Versions,
-					queryEndpoints: InterviewStage.Endpoints,
+					interviewCCs: InterviewStage.CommandClasses,
+					// queryNodePlusInfo: InterviewStage.NodePlusInfo,
+					// queryManufacturerSpecific:
+					// 	InterviewStage.ManufacturerSpecific,
+					// queryCCVersions: InterviewStage.Versions,
+					// queryEndpoints: InterviewStage.Endpoints,
 					queryNeighbors: InterviewStage.Neighbors,
-					configureWakeup: InterviewStage.WakeUp,
-					requestStaticValues: InterviewStage.Static,
+					// configureWakeup: InterviewStage.WakeUp,
+					// requestStaticValues: InterviewStage.Static,
 				};
-				const returnValues = {
+				const returnValues: Partial<Record<keyof TestNode, any>> = {
 					ping: true,
 				};
 				originalMethods = {
 					queryProtocolInfo: node.queryProtocolInfo,
 					ping: node.ping,
 					queryNodeInfo: node.queryNodeInfo,
-					queryNodePlusInfo: node.queryNodePlusInfo,
-					queryManufacturerSpecific: node.queryManufacturerSpecific,
-					queryCCVersions: node.queryCCVersions,
-					queryEndpoints: node.queryEndpoints,
+					interviewCCs: node.interviewCCs,
+					// queryNodePlusInfo: node.queryNodePlusInfo,
+					// queryManufacturerSpecific: node.queryManufacturerSpecific,
+					// queryCCVersions: node.queryCCVersions,
+					// queryEndpoints: node.queryEndpoints,
 					queryNeighbors: node.queryNeighbors,
-					configureWakeup: node.configureWakeup,
-					requestStaticValues: node.requestStaticValues,
+					// configureWakeup: node.configureWakeup,
+					// requestStaticValues: node.requestStaticValues,
 				};
-				for (const method of Object.keys(originalMethods)) {
-					node[method] = jest
+				for (const method of Object.keys(
+					originalMethods,
+				) as (keyof TestNode)[]) {
+					(node as any)[method] = jest
 						.fn()
 						.mockName(`${method} mock`)
 						.mockImplementation(() => {
@@ -741,13 +511,15 @@ describe("lib/node/Node", () => {
 
 			beforeEach(() => {
 				for (const method of Object.keys(originalMethods)) {
-					node[method].mockClear();
+					(node as any)[method].mockClear();
 				}
 			});
 
 			afterAll(() => {
-				for (const method of Object.keys(originalMethods)) {
-					node[method] = originalMethods[method];
+				for (const method of Object.keys(
+					originalMethods,
+				) as (keyof TestNode)[]) {
+					(node as any)[method] = originalMethods[method];
 				}
 			});
 
@@ -755,7 +527,7 @@ describe("lib/node/Node", () => {
 				node.interviewStage = InterviewStage.None;
 				await node.interview();
 				for (const method of Object.keys(originalMethods)) {
-					expect(node[method]).toBeCalled();
+					expect((node as any)[method]).toBeCalled();
 				}
 			});
 
@@ -763,7 +535,7 @@ describe("lib/node/Node", () => {
 				node.interviewStage = InterviewStage.Complete;
 				await node.interview();
 				for (const method of Object.keys(originalMethods)) {
-					expect(node[method]).not.toBeCalled();
+					expect((node as any)[method]).not.toBeCalled();
 				}
 			});
 
@@ -774,19 +546,20 @@ describe("lib/node/Node", () => {
 				const expectCalled = [
 					// Ping must always be called when the interview is not complete
 					"ping",
-					"queryNodePlusInfo",
-					"queryManufacturerSpecific",
-					"queryCCVersions",
-					"queryEndpoints",
-					"requestStaticValues",
-					"configureWakeup",
+					"interviewCCs",
+					// "queryNodePlusInfo",
+					// "queryManufacturerSpecific",
+					// "queryCCVersions",
+					// "queryEndpoints",
+					// "requestStaticValues",
+					// "configureWakeup",
 					"queryNeighbors",
 				];
 				for (const method of Object.keys(originalMethods)) {
 					if (expectCalled.indexOf(method) > -1) {
-						expect(node[method]).toBeCalled();
+						expect((node as any)[method]).toBeCalled();
 					} else {
-						expect(node[method]).not.toBeCalled();
+						expect((node as any)[method]).not.toBeCalled();
 					}
 				}
 			});
@@ -927,7 +700,7 @@ describe("lib/node/Node", () => {
 
 		it("should not do anything and return false if the node interview is not complete", async () => {
 			const node = makeNode();
-			node.interviewStage = InterviewStage.Endpoints;
+			node.interviewStage = InterviewStage.CommandClasses;
 			expect(await node.sendNoMoreInformation()).toBeFalse();
 			expect(fakeDriver.sendMessage).not.toBeCalled();
 		});
@@ -1036,7 +809,12 @@ describe("lib/node/Node", () => {
 
 		it("returns a new endpoint with the correct endpoint index otherwise", () => {
 			const node = new ZWaveNode(2, fakeDriver as any);
-			(node as any)._individualEndpointCount = 5;
+			node.valueDB.setValue(
+				CommandClasses["Multi Channel"],
+				0,
+				"_individualEndpointCount",
+				5,
+			);
 			const actual = node.getEndpoint(5)!;
 			expect(actual.index).toBe(5);
 			expect(actual.nodeId).toBe(2);
@@ -1044,7 +822,12 @@ describe("lib/node/Node", () => {
 
 		it("caches the created endpoint instances", () => {
 			const node = new ZWaveNode(2, fakeDriver as any);
-			(node as any)._individualEndpointCount = 5;
+			node.valueDB.setValue(
+				CommandClasses["Multi Channel"],
+				0,
+				"_individualEndpointCount",
+				5,
+			);
 			const first = node.getEndpoint(5);
 			const second = node.getEndpoint(5);
 			expect(first).not.toBeUndefined();
@@ -1090,18 +873,19 @@ describe("lib/node/Node", () => {
 					version: 4,
 				},
 			},
-			endpointCountIsDynamic: false,
-			endpointsHaveIdenticalCapabilities: true,
-			individualEndpointCount: 5,
-			aggregatedEndpointCount: 2,
-			endpoints: {
-				1: {
-					isDynamic: false,
-					genericClass: 5,
-					specificClass: 111,
-					supportedCCs: [1, 2, 3, 4],
-				},
-			},
+			// TODO: These should be values
+			// endpointCountIsDynamic: false,
+			// endpointsHaveIdenticalCapabilities: true,
+			// individualEndpointCount: 5,
+			// aggregatedEndpointCount: 2,
+			// endpoints: {
+			// 	1: {
+			// 		isDynamic: false,
+			// 		genericClass: 5,
+			// 		specificClass: 111,
+			// 		supportedCCs: [1, 2, 3, 4],
+			// 	},
+			// },
 		};
 
 		it("serializing a deserialized node should result in the original object", () => {
@@ -1126,11 +910,11 @@ describe("lib/node/Node", () => {
 		it("deserialize() should also accept numbers for the interview stage", () => {
 			const input = {
 				...serializedTestNode,
-				interviewStage: InterviewStage.Dynamic,
+				interviewStage: InterviewStage.Neighbors,
 			};
 			const node = new ZWaveNode(1, fakeDriver);
 			node.deserialize(input);
-			expect(node.interviewStage).toBe(InterviewStage.Dynamic);
+			expect(node.interviewStage).toBe(InterviewStage.Neighbors);
 		});
 
 		it("deserialize() should skip the deviceClass if it is malformed", () => {
@@ -1182,7 +966,7 @@ describe("lib/node/Node", () => {
 				};
 				(node as any)["_" + prop] = undefined;
 				node.deserialize(input);
-				expect(node[prop]).toBeUndefined();
+				expect((node as any)[prop]).toBeUndefined();
 			}
 		});
 
