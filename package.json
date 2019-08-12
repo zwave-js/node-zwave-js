@@ -55,7 +55,7 @@
     "jest": "^24.1.0",
     "jest-circus": "^24.7.1",
     "jest-extended": "^0.11.1",
-    "mockdate": "2.0.2",
+    "mockdate": "2.0.5",
     "prettier": "^1.17.0",
     "rimraf": "^2.6.3",
     "semver": "^6.0.0",
