@@ -119,6 +119,16 @@ export class Endpoint {
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
+		return this.internalCreateCCInstance(cc);
+	}
+
+	/**
+	 * @internal
+	 * Create an instance of the given CC without checking if it is supported
+	 */
+	protected internalCreateCCInstance<T extends CommandClass>(
+		cc: CommandClasses,
+	): T | undefined {
 		const Constructor = getCCConstructor(cc);
 		if (Constructor) {
 			return new Constructor(this.driver, {

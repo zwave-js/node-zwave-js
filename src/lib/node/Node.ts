@@ -69,12 +69,15 @@ export interface ZWaveNodeValueRemovedArgs extends ValueRemovedArgs {
 	commandClassName: string;
 }
 export type ZWaveNodeValueAddedCallback = (
+	node: ZWaveNode,
 	args: ZWaveNodeValueAddedArgs,
 ) => void;
 export type ZWaveNodeValueUpdatedCallback = (
+	node: ZWaveNode,
 	args: ZWaveNodeValueUpdatedArgs,
 ) => void;
 export type ZWaveNodeValueRemovedCallback = (
+	node: ZWaveNode,
 	args: ZWaveNodeValueRemovedArgs,
 ) => void;
 
@@ -161,10 +164,10 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			commandClassName,
 			...arg,
 		};
+		const ccConstructor: typeof CommandClass =
+			(getCCConstructor(arg.commandClass) as any) || CommandClass;
 		// Try to retrieve the speaking property key
 		if (arg.propertyKey != undefined) {
-			const ccConstructor: typeof CommandClass =
-				(getCCConstructor(arg.commandClass) as any) || CommandClass;
 			const propertyKey = ccConstructor.translatePropertyKey(
 				arg.propertyName,
 				arg.propertyKey,
@@ -172,13 +175,19 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			outArg.propertyKey = propertyKey;
 		}
 		// Log the value change
+		const ccInstance = this.internalCreateCCInstance(arg.commandClass);
+		const isInternalValue =
+			ccInstance && ccInstance.isInternalValue(arg.propertyName as any);
 		// I don't like the splitting and any but its the easiest solution here
 		log.controller.value(eventName.split(" ")[1] as any, {
 			...(outArg as any),
 			nodeId: this.nodeId,
+			internal: isInternalValue,
 		});
-		// And pass the translated event to our listeners
-		this.emit(eventName, outArg as any);
+		if (!isInternalValue) {
+			// And pass the translated event to our listeners
+			this.emit(eventName, this, outArg as any);
+		}
 	}
 
 	//#region --- properties ---
