@@ -118,6 +118,32 @@ describe("lib/log/Controller =>", () => {
 			});
 		});
 
+		it("prints a secondary tag if the value is internal", () => {
+			const baseArgs = {
+				nodeId: 1,
+				commandClass: CommandClasses.Basic,
+				propertyName: "interviewComplete",
+			};
+
+			log.controller.value("added", {
+				...baseArgs,
+				newValue: true,
+				internal: true,
+			});
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("[internal]"),
+			});
+
+			log.controller.value("added", {
+				...baseArgs,
+				newValue: true,
+			});
+			assertMessage(spyTransport, {
+				predicate: msg => !msg.includes("[internal]"),
+				callNumber: 1,
+			});
+		});
+
 		it("prints the name of the property", () => {
 			const baseArgs = {
 				nodeId: 1,

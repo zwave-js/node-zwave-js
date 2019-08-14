@@ -182,6 +182,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		log.controller.value(eventName.split(" ")[1] as any, {
 			...(outArg as any),
 			nodeId: this.nodeId,
+			internal: isInternalValue,
 		});
 		if (!isInternalValue) {
 			// And pass the translated event to our listeners

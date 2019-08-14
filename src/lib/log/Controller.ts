@@ -94,7 +94,7 @@ function formatValue(value: any): string {
 	return `"${value}"`;
 }
 
-export type LogValueArgs<T> = T & { nodeId: number };
+export type LogValueArgs<T> = T & { nodeId: number; internal?: boolean };
 
 export function value(
 	change: "added",
@@ -120,6 +120,9 @@ export function value(
 	const secondaryTags: string[] = [];
 	if (args.endpoint != undefined) {
 		secondaryTags.push(`Endpoint ${args.endpoint}`);
+	}
+	if (args.internal === true) {
+		secondaryTags.push("internal");
 	}
 	let message = args.propertyName;
 	if (args.propertyKey != undefined) {
