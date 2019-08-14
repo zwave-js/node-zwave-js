@@ -1063,7 +1063,7 @@ describe("lib/node/Node", () => {
 				onValueUpdated,
 				onValueRemoved,
 			]) {
-				const cbArg = method.mock.calls[0][0];
+				const cbArg = method.mock.calls[0][1];
 				expect(cbArg.commandClassName).toBe(ccName);
 			}
 		});
@@ -1077,8 +1077,18 @@ describe("lib/node/Node", () => {
 				5,
 			);
 			expect(onValueAdded).toBeCalled();
-			const cbArg = onValueAdded.mock.calls[0][0];
+			const cbArg = onValueAdded.mock.calls[0][1];
 			expect(cbArg.propertyKey).toBe("Moisture");
+		});
+
+		it("should not be emitted for internal values", () => {
+			node.valueDB.setValue(
+				CommandClasses.Battery,
+				0,
+				"interviewCompleted", // interviewCompleted is an internal value
+				true,
+			);
+			expect(onValueAdded).not.toBeCalled();
 		});
 	});
 

@@ -69,12 +69,15 @@ export interface ZWaveNodeValueRemovedArgs extends ValueRemovedArgs {
 	commandClassName: string;
 }
 export type ZWaveNodeValueAddedCallback = (
+	node: ZWaveNode,
 	args: ZWaveNodeValueAddedArgs,
 ) => void;
 export type ZWaveNodeValueUpdatedCallback = (
+	node: ZWaveNode,
 	args: ZWaveNodeValueUpdatedArgs,
 ) => void;
 export type ZWaveNodeValueRemovedCallback = (
+	node: ZWaveNode,
 	args: ZWaveNodeValueRemovedArgs,
 ) => void;
 
@@ -161,10 +164,10 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			commandClassName,
 			...arg,
 		};
+		const ccConstructor: typeof CommandClass =
+			(getCCConstructor(arg.commandClass) as any) || CommandClass;
 		// Try to retrieve the speaking property key
 		if (arg.propertyKey != undefined) {
-			const ccConstructor: typeof CommandClass =
-				(getCCConstructor(arg.commandClass) as any) || CommandClass;
 			const propertyKey = ccConstructor.translatePropertyKey(
 				arg.propertyName,
 				arg.propertyKey,
@@ -178,7 +181,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			nodeId: this.nodeId,
 		});
 		// And pass the translated event to our listeners
-		this.emit(eventName, outArg as any);
+		this.emit(eventName, this, outArg as any);
 	}
 
 	//#region --- properties ---
