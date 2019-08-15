@@ -327,11 +327,12 @@ export class NotificationCCSupportedReport extends NotificationCC {
 	}
 
 	private _supportsV1Alarm: boolean;
-	@ccValue() public get supportsV1Alarm(): boolean {
+	@ccValue(true) public get supportsV1Alarm(): boolean {
 		return this._supportsV1Alarm;
 	}
 
 	private _supportedNotificationTypes: NotificationType[];
+	// TODO: should this be an internal value?
 	@ccValue()
 	public get supportedNotificationTypes(): readonly NotificationType[] {
 		return this._supportedNotificationTypes;
@@ -372,7 +373,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		this.persistValues();
 	}
 
-	@ccKeyValuePair()
+	@ccKeyValuePair(true)
 	private supportedEvents: [NotificationType, number[]];
 
 	public get notificationType(): NotificationType {

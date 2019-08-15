@@ -213,6 +213,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		number,
 		readonly CentralSceneKeys[]
 	>();
+	// TODO: should this be an internal value?
 	@ccValue()
 	public get supportedKeyAttributes(): ReadonlyMap<
 		number,
@@ -222,6 +223,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	}
 
 	private _keyAttributesHaveIdenticalSupport: boolean;
+	// TODO: should this be an internal value?
 	@ccValue() public get keyAttributesHaveIdenticalSupport(): boolean {
 		return this._keyAttributesHaveIdenticalSupport;
 	}

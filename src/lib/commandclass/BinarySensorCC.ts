@@ -157,6 +157,7 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 	}
 
 	private _supportedSensorTypes: BinarySensorType[];
+	// TODO: should this be an internal value?
 	@ccValue() public get supportedSensorTypes(): readonly BinarySensorType[] {
 		return this._supportedSensorTypes;
 	}

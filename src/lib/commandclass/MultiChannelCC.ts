@@ -273,6 +273,7 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 		this.persistValues();
 	}
 
+	// TODO: should these all be internal values?
 	private _countIsDynamic: boolean;
 	@ccValue() public get countIsDynamic(): boolean {
 		return this._countIsDynamic;
@@ -470,6 +471,7 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 		this.aggregatedEndpointMembers = [endpoint, members];
 	}
 
+	// TODO: should this be an internal value?
 	@ccKeyValuePair()
 	private aggregatedEndpointMembers: [number, number[]];
 

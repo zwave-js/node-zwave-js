@@ -321,7 +321,7 @@ export class ConfigurationCC extends CommandClass {
 		super(driver, options);
 		// In order to (de)serialize the data composed by extendParamInformation,
 		// we need to register a value
-		this.registerValue("paramInformation" as any);
+		this.registerValue("paramInformation" as any, true);
 	}
 
 	public supportsCommand(cmd: ConfigurationCommand): Maybe<boolean> {
@@ -480,7 +480,6 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		return this.values[0];
 	}
 
-	// TODO: Does this belong into the KVP?
 	private _valueSize: number;
 	public get valueSize(): number {
 		return this._valueSize;
@@ -752,6 +751,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 	}
 
 	private _values: Map<number, ConfigValue> = new Map();
+	// TODO: I think this is bullshit
 	@ccKeyValuePair()
 	public get values(): ReadonlyMap<number, ConfigValue> {
 		return this._values;

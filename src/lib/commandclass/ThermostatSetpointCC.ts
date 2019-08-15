@@ -283,6 +283,7 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 		this.persistValues();
 	}
 
+	// TODO: These should go into value metadata (GH#221)
 	@ccKeyValuePair()
 	private capabilities: [
 		ThermostatSetpointType,
@@ -378,6 +379,7 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 	}
 
 	private _supportedSetpointTypes: ThermostatSetpointType[];
+	// TODO: should this be an internal value?
 	@ccValue()
 	public get supportedSetpointTypes(): readonly ThermostatSetpointType[] {
 		return this._supportedSetpointTypes;
