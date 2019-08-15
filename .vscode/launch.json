@@ -9,6 +9,7 @@
 			"request": "attach",
 			"name": "Attach",
 			"port": 9229
+			// "sourceMaps": true
 		},
 		{
 			"type": "node",

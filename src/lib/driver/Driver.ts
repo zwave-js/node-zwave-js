@@ -862,7 +862,7 @@ ${handlers.length} left`,
 	private async handleRequest(msg: Message | SendDataRequest): Promise<void> {
 		let handlers: RequestHandlerEntry[] | undefined;
 
-		if (isCommandClassContainer(msg)) {
+		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
 			const node = msg.getNodeUnsafe();
 			if (node && node.status === NodeStatus.Dead) {
 				// We have received a message from a dead node, bring it back to life
