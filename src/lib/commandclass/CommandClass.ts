@@ -24,19 +24,6 @@ export interface CommandClassStatic {
 	readonly maxImplementedVersion: number;
 }
 
-/* eslint-disable @typescript-eslint/camelcase */
-export const METADATA_commandClass = Symbol("commandClass");
-export const METADATA_commandClassMap = Symbol("commandClassMap");
-export const METADATA_ccResponse = Symbol("ccResponse");
-export const METADATA_ccCommand = Symbol("ccCommand");
-export const METADATA_ccCommandMap = Symbol("ccCommandMap");
-export const METADATA_ccValues = Symbol("ccValues");
-export const METADATA_ccKeyValuePairs = Symbol("ccKeyValuePairs");
-export const METADATA_version = Symbol("version");
-export const METADATA_API = Symbol("API");
-export const METADATA_APIMap = Symbol("APIMap");
-/* eslint-enable @typescript-eslint/camelcase */
-
 // /**
 //  * Defines which kind of CC state should be requested
 //  */
@@ -82,7 +69,6 @@ export type CommandClassOptions =
 	| CommandClassCreationOptions
 	| CommandClassDeserializationOptions;
 
-@implementedVersion(Number.POSITIVE_INFINITY) // per default don't impose any restrictions on the version
 export class CommandClass {
 	// empty constructor to parse messages
 	public constructor(driver: IDriver, options: CommandClassOptions) {
@@ -572,6 +558,19 @@ export class CommandClass {
 
 // =======================
 // use decorators to link command class values to actual command classes
+
+/* eslint-disable @typescript-eslint/camelcase */
+export const METADATA_commandClass = Symbol("commandClass");
+export const METADATA_commandClassMap = Symbol("commandClassMap");
+export const METADATA_ccResponse = Symbol("ccResponse");
+export const METADATA_ccCommand = Symbol("ccCommand");
+export const METADATA_ccCommandMap = Symbol("ccCommandMap");
+export const METADATA_ccValues = Symbol("ccValues");
+export const METADATA_ccKeyValuePairs = Symbol("ccKeyValuePairs");
+export const METADATA_version = Symbol("version");
+export const METADATA_API = Symbol("API");
+export const METADATA_APIMap = Symbol("APIMap");
+/* eslint-enable @typescript-eslint/camelcase */
 
 export interface Constructable<T extends CommandClass> {
 	new (
