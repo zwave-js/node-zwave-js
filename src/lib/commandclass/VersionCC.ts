@@ -5,6 +5,7 @@ import log from "../log";
 import { ZWaveNode } from "../node/Node";
 import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
+import { ValueMetadata } from "../values/Metadata";
 import { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
@@ -12,6 +13,7 @@ import {
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
+	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -267,19 +269,42 @@ export class VersionCCReport extends VersionCC {
 	}
 
 	private _libraryType: ZWaveLibraryTypes;
-	@ccValue() public get libraryType(): ZWaveLibraryTypes {
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnly,
+		label: "Libary type",
+	})
+	public get libraryType(): ZWaveLibraryTypes {
 		return this._libraryType;
 	}
+
 	private _protocolVersion: string;
-	@ccValue() public get protocolVersion(): string {
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnly,
+		label: "Z-Wave protocol version",
+	})
+	public get protocolVersion(): string {
 		return this._protocolVersion;
 	}
+
 	private _firmwareVersions: string[];
-	@ccValue() public get firmwareVersions(): string[] {
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnly,
+		label: "Z-Wave chip firmware versions",
+	})
+	public get firmwareVersions(): string[] {
 		return this._firmwareVersions;
 	}
+
 	private _hardwareVersion: number | undefined;
-	@ccValue() public get hardwareVersion(): number | undefined {
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnly,
+		label: "Z-Wave chip hardware version",
+	})
+	public get hardwareVersion(): number | undefined {
 		return this._hardwareVersion;
 	}
 }
