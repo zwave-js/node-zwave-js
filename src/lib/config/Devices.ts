@@ -1,7 +1,7 @@
 import { padStart } from "alcalzone-shared/strings";
 import { pathExists, readFile } from "fs-extra";
-import * as JSON5 from "json5";
-import * as path from "path";
+import JSON5 from "json5";
+import path from "path";
 import { JSONObject } from "../util/misc";
 import { configDir } from "./utils";
 

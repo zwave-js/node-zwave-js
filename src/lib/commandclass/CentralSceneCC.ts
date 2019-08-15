@@ -102,11 +102,13 @@ export class CentralSceneCCAPI extends CCAPI {
 	};
 }
 
+export interface CentralSceneCC {
+	ccCommand: CentralSceneCommand;
+}
+
 @commandClass(CommandClasses["Central Scene"])
 @implementedVersion(3)
 export class CentralSceneCC extends CommandClass {
-	public ccCommand!: CentralSceneCommand;
-
 	public static translatePropertyKey(
 		propertyName: string,
 		propertyKey: number | string,

@@ -22,7 +22,7 @@ import { INodeQuery } from "../node/INodeQuery";
 import { JSONObject } from "../util/misc";
 
 /* eslint-disable @typescript-eslint/camelcase */
-const enum NodeCapabilityFlags {
+enum NodeCapabilityFlags {
 	Listening = 0b10_000_000,
 	Routing = 0b01_000_000,
 
@@ -35,7 +35,7 @@ const enum NodeCapabilityFlags {
 }
 /* eslint-enable @typescript-eslint/camelcase */
 
-const enum SecurityFlags {
+enum SecurityFlags {
 	Security = 1 << 0,
 	Controller = 1 << 1,
 	SpecificDevice = 1 << 2, // ?

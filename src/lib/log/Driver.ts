@@ -1,5 +1,5 @@
 import { SortedList } from "alcalzone-shared/sorted-list";
-import * as winston from "winston";
+import winston from "winston";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { Transaction } from "../driver/Transaction";
 import {

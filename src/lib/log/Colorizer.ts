@@ -1,7 +1,7 @@
-import * as colors from "ansi-colors";
+import colors from "ansi-colors";
 import { format } from "logform";
+import winston from "winston";
 import { ZWaveLogInfo } from "./shared";
-import winston = require("winston");
 const defaultColors = winston.config.npm.colors;
 
 // This is a placeholder

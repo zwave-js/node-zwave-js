@@ -76,11 +76,13 @@ export class BinarySensorCCAPI extends CCAPI {
 	}
 }
 
+export interface BinarySensorCC {
+	ccCommand: BinarySensorCommand;
+}
+
 @commandClass(CommandClasses["Binary Sensor"])
 @implementedVersion(2)
-export class BinarySensorCC extends CommandClass {
-	public ccCommand!: BinarySensorCommand;
-}
+export class BinarySensorCC extends CommandClass {}
 
 @CCCommand(BinarySensorCommand.Report)
 export class BinarySensorCCReport extends BinarySensorCC {

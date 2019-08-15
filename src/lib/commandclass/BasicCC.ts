@@ -73,11 +73,13 @@ export enum BasicCommand {
 	Report = 0x03,
 }
 
+export interface BasicCC {
+	ccCommand: BasicCommand;
+}
+
 @commandClass(CommandClasses.Basic)
 @implementedVersion(2) // Update tests in CommandClass.test.ts when changing this
-export class BasicCC extends CommandClass {
-	public ccCommand!: BasicCommand;
-}
+export class BasicCC extends CommandClass {}
 
 interface BasicCCSetOptions extends CCCommandOptions {
 	targetValue: number;

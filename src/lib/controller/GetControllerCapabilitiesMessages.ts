@@ -13,7 +13,7 @@ import {
 } from "../message/Message";
 import { JSONObject } from "../util/misc";
 
-const enum ControllerCapabilityFlags {
+enum ControllerCapabilityFlags {
 	Secondary = 1 << 0, // Controller is a secondary
 	OnOtherNetwork = 1 << 1, // Controller is using a home ID from another network
 	SISPresent = 1 << 2, // There's a SUC id server (SIS) on the network

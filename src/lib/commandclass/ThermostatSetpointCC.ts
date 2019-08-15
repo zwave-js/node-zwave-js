@@ -133,11 +133,13 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 	}
 }
 
+export interface ThermostatSetpointCC {
+	ccCommand: ThermostatSetpointCommand;
+}
+
 @commandClass(CommandClasses["Thermostat Setpoint"])
 @implementedVersion(3)
-export class ThermostatSetpointCC extends CommandClass {
-	public ccCommand!: ThermostatSetpointCommand;
-}
+export class ThermostatSetpointCC extends CommandClass {}
 
 interface ThermostatSetpointCCSetOptions extends CCCommandOptions {
 	setpointType: ThermostatSetpointType;

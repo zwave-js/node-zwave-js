@@ -107,11 +107,13 @@ export class VersionCCAPI extends CCAPI {
 	}
 }
 
+export interface VersionCC {
+	ccCommand: VersionCommand;
+}
+
 @commandClass(CommandClasses.Version)
 @implementedVersion(3)
 export class VersionCC extends CommandClass {
-	public ccCommand!: VersionCommand;
-
 	public supportsCommand(cmd: VersionCommand): Maybe<boolean> {
 		switch (cmd) {
 			case VersionCommand.Get:

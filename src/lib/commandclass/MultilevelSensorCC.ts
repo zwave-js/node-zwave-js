@@ -85,11 +85,13 @@ export class MultilevelSensorCCAPI extends CCAPI {
 	}
 }
 
+export interface MultilevelSensorCC {
+	ccCommand: MultilevelSensorCommand;
+}
+
 @commandClass(CommandClasses["Multilevel Sensor"])
 @implementedVersion(11)
 export class MultilevelSensorCC extends CommandClass {
-	public ccCommand!: MultilevelSensorCommand;
-
 	public static translatePropertyKey(
 		propertyName: string,
 		propertyKey: number | string,

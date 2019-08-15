@@ -1,4 +1,4 @@
-import * as winston from "winston";
+import winston from "winston";
 import { MessageHeaders } from "../message/Constants";
 import { num2hex } from "../util/strings";
 import {

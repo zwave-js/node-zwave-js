@@ -37,11 +37,13 @@ export enum BatteryCommand {
 	Report = 0x03,
 }
 
+export interface BatteryCC {
+	ccCommand: BatteryCommand;
+}
+
 @commandClass(CommandClasses.Battery)
 @implementedVersion(1)
 export class BatteryCC extends CommandClass {
-	public ccCommand!: BatteryCommand;
-
 	public static async interview(
 		driver: IDriver,
 		node: ZWaveNode,

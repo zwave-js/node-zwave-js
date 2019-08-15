@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { EventEmitter } from "events";
-import * as SerialPort from "serialport";
+import SerialPort from "serialport";
 import { getImplementedVersion } from "../src/lib/commandclass/CommandClass";
 import { CommandClasses } from "../src/lib/commandclass/CommandClasses";
 import { SendDataRequest } from "../src/lib/controller/SendDataMessages";

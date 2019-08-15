@@ -89,11 +89,13 @@ export class WakeUpCCAPI extends CCAPI {
 	}
 }
 
+export interface WakeUpCC {
+	ccCommand: WakeUpCommand;
+}
+
 @commandClass(CommandClasses["Wake Up"])
 @implementedVersion(2)
 export class WakeUpCC extends CommandClass {
-	public ccCommand!: WakeUpCommand;
-
 	public isAwake(): boolean {
 		return WakeUpCC.isAwake(this.getNode()!);
 	}

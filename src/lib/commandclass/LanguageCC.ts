@@ -47,11 +47,13 @@ export enum LanguageCommand {
 	Report = 0x03,
 }
 
+export interface LanguageCC {
+	ccCommand: LanguageCommand;
+}
+
 @commandClass(CommandClasses.Language)
 @implementedVersion(1)
-export class LanguageCC extends CommandClass {
-	public ccCommand!: LanguageCommand;
-}
+export class LanguageCC extends CommandClass {}
 
 interface LanguageCCSetOptions extends CCCommandOptions {
 	language: string;
@@ -116,7 +118,6 @@ export class LanguageCCSet extends LanguageCC {
 }
 
 @CCCommand(LanguageCommand.Report)
-@expectedCCResponse(LanguageCCReport)
 export class LanguageCCReport extends LanguageCC {
 	public constructor(
 		driver: IDriver,

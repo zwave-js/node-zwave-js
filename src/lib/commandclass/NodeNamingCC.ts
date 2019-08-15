@@ -71,11 +71,13 @@ export enum NodeNamingAndLocationCommand {
 	LocationReport = 0x06,
 }
 
+export interface NodeNamingAndLocationCC {
+	ccCommand: NodeNamingAndLocationCommand;
+}
+
 @commandClass(CommandClasses["Node Naming and Location"])
 @implementedVersion(1)
-export class NodeNamingAndLocationCC extends CommandClass {
-	public ccCommand!: NodeNamingAndLocationCommand;
-}
+export class NodeNamingAndLocationCC extends CommandClass {}
 
 interface NodeNamingAndLocationCCNameSetOptions extends CCCommandOptions {
 	name: string;

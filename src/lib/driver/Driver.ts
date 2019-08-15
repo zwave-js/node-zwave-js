@@ -2,9 +2,9 @@ import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { entries } from "alcalzone-shared/objects";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import { EventEmitter } from "events";
-import * as fs from "fs-extra";
-import * as path from "path";
-import * as SerialPort from "serialport";
+import fs from "fs-extra";
+import path from "path";
+import SerialPort from "serialport";
 import {
 	CommandClass,
 	getImplementedVersion,

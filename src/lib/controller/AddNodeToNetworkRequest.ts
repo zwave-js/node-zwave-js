@@ -39,7 +39,7 @@ export enum AddNodeStatus {
 	Failed = 7,
 }
 
-const enum AddNodeFlags {
+enum AddNodeFlags {
 	HighPower = 0x80,
 	NetworkWide = 0x40,
 }
