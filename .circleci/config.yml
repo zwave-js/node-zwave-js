@@ -47,6 +47,7 @@ whitelist: &whitelist
         - src/*
         - test/*
         - coverage/*
+        - .babelrc
         - .fimbullinter.yaml
         - .npmignore
         - .wotanrc.yaml

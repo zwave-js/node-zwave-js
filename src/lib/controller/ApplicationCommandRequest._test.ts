@@ -1,4 +1,5 @@
-export = undefined;
+const foo = undefined;
+export default foo;
 
 // import { createEmptyMockDriver } from "../../../test/mocks";
 // import {
