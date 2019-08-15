@@ -84,6 +84,10 @@ jobs:
                   key: v1-dependencies-node6-{{ checksum "package.json" }}
 
             - run:
+                  name: Perform a type check
+                  command: npm run test:ts
+
+            - run:
                   name: Run component tests
                   command: npm run test:ts
 
@@ -112,6 +116,10 @@ jobs:
                   key: v1-dependencies-node8-{{ checksum "package.json" }}
 
             - run:
+                  name: Perform a type check
+                  command: npm run test:ts
+
+            - run:
                   name: Run component tests
                   command: npm run test:ts
 
@@ -138,6 +146,10 @@ jobs:
                   paths:
                       - node_modules
                   key: v1-dependencies-node10-{{ checksum "package.json" }}
+
+            - run:
+                  name: Perform a type check
+                  command: npm run test:ts
 
             - run:
                   name: Run component tests
@@ -171,6 +183,10 @@ jobs:
             - run:
                   name: Lint TypeScript code
                   command: npm run lint
+
+            - run:
+                  name: Perform a type check
+                  command: npm run test:ts
 
             - run:
                   name: Run component tests
