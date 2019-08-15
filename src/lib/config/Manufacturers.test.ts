@@ -1,4 +1,4 @@
-import * as fsExtra from "fs-extra";
+import fsExtra from "fs-extra";
 import { lookupManufacturer } from "./Manufacturers";
 
 jest.mock("fs-extra");

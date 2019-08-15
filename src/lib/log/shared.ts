@@ -1,9 +1,8 @@
-import * as colors from "ansi-colors";
+import colors from "ansi-colors";
 import { Format, TransformableInfo, TransformFunction } from "logform";
 import { MESSAGE } from "triple-beam";
-import * as winston from "winston";
-import { Logger } from "winston";
-import * as Transport from "winston-transport";
+import winston, { Logger } from "winston";
+import Transport from "winston-transport";
 import { colorizer } from "./Colorizer";
 const { combine, timestamp, label } = winston.format;
 

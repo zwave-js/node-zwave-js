@@ -84,11 +84,13 @@ export class BinarySwitchCCAPI extends CCAPI {
 	};
 }
 
+export interface BinarySwitchCC {
+	ccCommand: BinarySwitchCommand;
+}
+
 @commandClass(CommandClasses["Binary Switch"])
 @implementedVersion(2)
-export class BinarySwitchCC extends CommandClass {
-	public ccCommand!: BinarySwitchCommand;
-}
+export class BinarySwitchCC extends CommandClass {}
 
 interface BinarySwitchCCSetOptions extends CCCommandOptions {
 	targetValue: boolean;

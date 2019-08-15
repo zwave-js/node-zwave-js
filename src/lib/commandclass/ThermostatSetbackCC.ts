@@ -64,11 +64,13 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 	}
 }
 
+export interface ThermostatSetbackCC {
+	ccCommand: ThermostatSetbackCommand;
+}
+
 @commandClass(CommandClasses["Thermostat Setback"])
 @implementedVersion(1)
-export class ThermostatSetbackCC extends CommandClass {
-	public ccCommand!: ThermostatSetbackCommand;
-}
+export class ThermostatSetbackCC extends CommandClass {}
 
 interface ThermostatSetbackCCSetOptions extends CCCommandOptions {
 	setbackType: SetbackType;

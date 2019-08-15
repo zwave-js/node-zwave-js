@@ -312,11 +312,13 @@ export class ConfigurationCCAPI extends CCAPI {
 
 // TODO: Test how the device interprets the default flag (V1-3) (reset all or only the specified)
 
+export interface ConfigurationCC {
+	ccCommand: ConfigurationCommand;
+}
+
 @commandClass(CommandClasses.Configuration)
 @implementedVersion(4)
 export class ConfigurationCC extends CommandClass {
-	public ccCommand!: ConfigurationCommand;
-
 	public constructor(driver: IDriver, options: CommandClassOptions) {
 		super(driver, options);
 		// In order to (de)serialize the data composed by extendParamInformation,

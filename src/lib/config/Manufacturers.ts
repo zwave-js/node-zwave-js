@@ -1,7 +1,7 @@
 import { padStart } from "alcalzone-shared/strings";
 import { readFile } from "fs-extra";
-import * as JSON5 from "json5";
-import * as path from "path";
+import JSON5 from "json5";
+import path from "path";
 import { configDir } from "./utils";
 
 let manufacturers: Record<string, string> | undefined;

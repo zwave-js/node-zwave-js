@@ -1,5 +1,5 @@
-import * as fsExtra from "fs-extra";
-import * as path from "path";
+import fsExtra from "fs-extra";
+import path from "path";
 import { lookupDevice } from "./Devices";
 import { configDir } from "./utils";
 

@@ -141,11 +141,13 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	};
 }
 
+export interface MultilevelSwitchCC {
+	ccCommand: MultilevelSwitchCommand;
+}
+
 @commandClass(CommandClasses["Multilevel Switch"])
 @implementedVersion(4)
-export class MultilevelSwitchCC extends CommandClass {
-	public ccCommand!: MultilevelSwitchCommand;
-}
+export class MultilevelSwitchCC extends CommandClass {}
 
 interface MultilevelSwitchCCSetOptions extends CCCommandOptions {
 	targetValue: number;

@@ -12,11 +12,13 @@ export enum DeviceResetLocallyCommand {
 
 // @noAPI: We can only receive this command
 
+export interface DeviceResetLocallyCC {
+	ccCommand: DeviceResetLocallyCommand;
+}
+
 @commandClass(CommandClasses["Device Reset Locally"])
 @implementedVersion(1)
-export class DeviceResetLocallyCC extends CommandClass {
-	public ccCommand!: DeviceResetLocallyCommand;
-}
+export class DeviceResetLocallyCC extends CommandClass {}
 
 @CCCommand(DeviceResetLocallyCommand.Notification)
 export class DeviceResetLocallyCCNotification extends DeviceResetLocallyCC {}

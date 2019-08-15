@@ -15,7 +15,7 @@ import {
 	priority,
 } from "../message/Message";
 
-const enum StatusFlags {
+enum StatusFlags {
 	RoutedBusy = 1 << 0,
 	Broadcast = 1 << 2,
 }

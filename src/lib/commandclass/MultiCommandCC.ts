@@ -32,11 +32,13 @@ export class MultiCommandCCAPI extends CCAPI {
 	}
 }
 
+export interface MultiCommandCC {
+	ccCommand: MultiCommandCommand;
+}
+
 @commandClass(CommandClasses["Multi Command"])
 @implementedVersion(1)
-export class MultiCommandCC extends CommandClass {
-	public ccCommand!: MultiCommandCommand;
-}
+export class MultiCommandCC extends CommandClass {}
 
 interface MultiCommandCCCommandEncapsulationOptions extends CCCommandOptions {
 	commands: CommandClass[];

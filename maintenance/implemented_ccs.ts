@@ -157,17 +157,6 @@ function writeTable(rows: string[][], flavor: "console" | "github"): void {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-function getLatestVersion(ccName: string) {
-	const cc = (CommandClasses[ccName as any] as any) as number;
-	// eslint-disable-next-line @typescript-eslint/no-use-before-define
-	const version = ccVersions[num2hex(cc, true)];
-	if (version == undefined) {
-		return { version: 0, obsolete: true };
-	}
-	return version;
-}
-
 // Taken from https://www.silabs.com/documents/login/miscellaneous/SDS13781-Z-Wave-Application-Command-Class-Specification.pdf
 const ccVersions: Record<
 	string,
@@ -282,3 +271,14 @@ const ccVersions: Record<
 	"0x61": { version: 1 },
 	"0x5E": { version: 2 },
 };
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+function getLatestVersion(ccName: string) {
+	const cc = (CommandClasses[ccName as any] as any) as number;
+	// eslint-disable-next-line @typescript-eslint/no-use-before-define
+	const version = ccVersions[num2hex(cc, true)];
+	if (version == undefined) {
+		return { version: 0, obsolete: true };
+	}
+	return version;
+}

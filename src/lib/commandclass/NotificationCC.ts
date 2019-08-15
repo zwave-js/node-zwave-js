@@ -110,11 +110,14 @@ export class NotificationCCAPI extends CCAPI {
 	}
 }
 
+export interface NotificationCC {
+	ccCommand: NotificationCommand;
+}
+
 @commandClass(CommandClasses.Notification)
 @implementedVersion(8)
 export class NotificationCC extends CommandClass {
 	// former AlarmCC (v1..v2)
-	public ccCommand!: NotificationCommand;
 }
 
 interface NotificationCCSetOptions extends CCCommandOptions {

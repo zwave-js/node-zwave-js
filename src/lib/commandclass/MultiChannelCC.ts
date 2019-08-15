@@ -132,11 +132,13 @@ export interface EndpointCapability extends NodeInformationFrame {
 	wasRemoved: boolean;
 }
 
+export interface MultiChannelCC {
+	ccCommand: MultiChannelCommand;
+}
+
 @commandClass(CommandClasses["Multi Channel"])
 @implementedVersion(4)
 export class MultiChannelCC extends CommandClass {
-	public ccCommand!: MultiChannelCommand;
-
 	/** Tests if a command targets a specific endpoint and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
 		return (

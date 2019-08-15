@@ -14,7 +14,7 @@ import {
 import { JSONObject } from "../util/misc";
 import { NUM_NODEMASK_BYTES, parseNodeBitMask } from "./NodeBitMask";
 
-export const enum InitCapabilityFlags {
+export enum InitCapabilityFlags {
 	Slave = 1 << 0, // Controller is a slave
 	SupportsTimers = 1 << 1, // The controller supports timers
 	Secondary = 1 << 2, // The controller is a secondary

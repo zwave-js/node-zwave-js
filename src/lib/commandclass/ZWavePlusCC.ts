@@ -60,12 +60,13 @@ export class ZWavePlusCCAPI extends CCAPI {
 	}
 }
 
+export interface ZWavePlusCC {
+	ccCommand: ZWavePlusCommand;
+}
+
 @commandClass(CommandClasses["Z-Wave Plus Info"])
 @implementedVersion(2)
-@expectedCCResponse(ZWavePlusCC)
 export class ZWavePlusCC extends CommandClass {
-	public ccCommand!: ZWavePlusCommand;
-
 	public static async interview(
 		driver: IDriver,
 		node: ZWaveNode,

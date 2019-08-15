@@ -71,11 +71,13 @@ export class ManufacturerSpecificCCAPI extends CCAPI {
 	}
 }
 
+export interface ManufacturerSpecificCC {
+	ccCommand: ManufacturerSpecificCommand;
+}
+
 @commandClass(CommandClasses["Manufacturer Specific"])
 @implementedVersion(2)
 export class ManufacturerSpecificCC extends CommandClass {
-	public ccCommand!: ManufacturerSpecificCommand;
-
 	public supportsCommand(cmd: ManufacturerSpecificCommand): Maybe<boolean> {
 		switch (cmd) {
 			case ManufacturerSpecificCommand.Get:

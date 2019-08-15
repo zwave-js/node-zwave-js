@@ -1,8 +1,8 @@
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { SortedList } from "alcalzone-shared/sorted-list";
-import * as colors from "ansi-colors";
-import * as MockDate from "mockdate";
-import * as winston from "winston";
+import colors from "ansi-colors";
+import MockDate from "mockdate";
+import winston from "winston";
 import { createEmptyMockDriver } from "../../../test/mocks";
 import {
 	assertLogInfo,

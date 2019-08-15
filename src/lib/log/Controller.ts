@@ -1,5 +1,5 @@
 import { padStart } from "alcalzone-shared/strings";
-import * as winston from "winston";
+import winston from "winston";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { InterviewStage, IZWaveNode } from "../node/INode";
 import {
