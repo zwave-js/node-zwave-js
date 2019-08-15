@@ -10,6 +10,7 @@ import { ValueDB } from "../node/ValueDB";
 import { JSONObject, staticExtends, stripUndefined } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import { CacheValue, serializeCacheValue } from "../values/Cache";
+import { ValueMetadata } from "../values/Metadata";
 import { Maybe, unknownBoolean } from "../values/Primitive";
 import { CCAPI } from "./API";
 import { CommandClasses } from "./CommandClasses";
@@ -567,6 +568,7 @@ export const METADATA_ccCommand = Symbol("ccCommand");
 export const METADATA_ccCommandMap = Symbol("ccCommandMap");
 export const METADATA_ccValues = Symbol("ccValues");
 export const METADATA_ccKeyValuePairs = Symbol("ccKeyValuePairs");
+export const METADATA_ccValueMeta = Symbol("ccValueMeta");
 export const METADATA_version = Symbol("version");
 export const METADATA_API = Symbol("API");
 export const METADATA_APIMap = Symbol("APIMap");
@@ -997,6 +999,44 @@ export function getCCKeyValuePairDefinitions(
 	return metadata[cc] as Map<string, boolean>;
 }
 
+/**
+ * Defines additional metadata for the given CC value
+ */
+export function ccValueMeta(meta: ValueMetadata): PropertyDecorator {
+	return (target: CommandClass, property: string | symbol) => {
+		// get the class constructor
+		const constr = target.constructor as typeof CommandClass;
+		const cc = getCommandClassStatic(constr);
+		// retrieve the current metadata
+		const metadata =
+			Reflect.getMetadata(METADATA_ccValueMeta, CommandClass) || {};
+		if (!(cc in metadata)) metadata[cc] = new Map<string, ValueMetadata>();
+		// And add the variable
+		const variables: Map<string, ValueMetadata> = metadata[cc];
+		variables.set(property as string, meta);
+		// store back to the object
+		Reflect.defineMetadata(METADATA_ccValueMeta, metadata, CommandClass);
+	};
+}
+
+/**
+ * Retrieves defined metadata for the given CC value. If none is found, the default settings are returned.
+ */
+export function getCCValueMeta<T extends CommandClass>(
+	commandClass: T,
+	property: Extract<keyof T, string>,
+): ValueMetadata {
+	// get the class constructor
+	const constr = commandClass.constructor as typeof CommandClass;
+	const cc = getCommandClassStatic(constr);
+	// retrieve the current metadata
+	const metadata =
+		Reflect.getMetadata(METADATA_ccValueMeta, CommandClass) || {};
+	if (!(cc in metadata)) return ValueMetadata.default;
+	const map = metadata[cc] as Map<string, ValueMetadata>;
+	if (map.has(property)) return map.get(property)!;
+	return ValueMetadata.default;
+}
 /**
  * Defines the simplified API associated with a Z-Wave command class
  */
