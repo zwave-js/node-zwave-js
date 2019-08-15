@@ -193,6 +193,10 @@ export class Endpoint {
 				// @ts-ignore
 				if (ccNameOrId === Symbol.toStringTag) return "[object Object]";
 			}
+			// Allow access to the iterator symbol
+			if ((ccNameOrId as any) === Symbol.iterator) {
+				return this.commandClasses_Iterator.bind(this);
+			}
 
 			let ccId: CommandClasses | undefined;
 			// The command classes are exposed to library users by their name or the ID
@@ -221,6 +225,15 @@ export class Endpoint {
 			return target.get(ccId);
 		},
 	});
+
+	private commandClasses_Iterator(): Iterator<CCAPI> {
+		const me = this;
+		return (function*() {
+			for (const cc of me.implementedCommandClasses.keys()) {
+				yield (me.commandClasses as any)[cc];
+			}
+		})();
+	}
 
 	/**
 	 * Provides access to simplified APIs that are taylored to specific CCs.
