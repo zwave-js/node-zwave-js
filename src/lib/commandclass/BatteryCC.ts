@@ -2,12 +2,14 @@ import { IDriver } from "../driver/IDriver";
 import log from "../log";
 import { ZWaveNode } from "../node/Node";
 import { JSONObject, validatePayload } from "../util/misc";
+import { ValueMetadata } from "../values/Metadata";
 import { CCAPI } from "./API";
 import {
 	API,
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
+	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -87,12 +89,23 @@ export class BatteryCCReport extends BatteryCC {
 	}
 
 	private _level: number;
-	@ccValue() public get level(): number {
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyUInt8,
+		max: 100,
+		label: "Battery level",
+	})
+	public get level(): number {
 		return this._level;
 	}
 
 	private _isLow: boolean;
-	@ccValue() public get isLow(): boolean {
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnly,
+		label: "Level is low",
+	})
+	public get isLow(): boolean {
 		return this._isLow;
 	}
 
