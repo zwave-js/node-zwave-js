@@ -1022,13 +1022,10 @@ export function ccValueMetadata(meta: ValueMetadata): PropertyDecorator {
 /**
  * Retrieves defined metadata for the given CC value. If none is found, the default settings are returned.
  */
-export function getCCValueMetadata<T extends CommandClass>(
-	commandClass: T,
-	property: Extract<keyof T, string>,
+export function getCCValueMetadata(
+	cc: CommandClasses,
+	property: string,
 ): ValueMetadata {
-	// get the class constructor
-	const constr = commandClass.constructor as typeof CommandClass;
-	const cc = getCommandClassStatic(constr);
 	// retrieve the current metadata
 	const metadata =
 		Reflect.getMetadata(METADATA_ccValueMeta, CommandClass) || {};
@@ -1037,6 +1034,7 @@ export function getCCValueMetadata<T extends CommandClass>(
 	if (map.has(property)) return map.get(property)!;
 	return ValueMetadata.default;
 }
+
 /**
  * Defines the simplified API associated with a Z-Wave command class
  */

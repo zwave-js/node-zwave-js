@@ -1263,4 +1263,26 @@ describe("lib/node/Node", () => {
 			expect(result).toBeFalse();
 		});
 	});
+
+	describe("getValueMetadata()", () => {
+		it("returns the defined metadata for the given value", () => {
+			const node = new ZWaveNode(1, undefined as any);
+
+			// We test this with the BasicCC
+			// currentValue is readonly, 0-99
+			const currentValueMeta = node.getValueMetadata(
+				CommandClasses.Basic,
+				0,
+				"currentValue",
+			);
+			expect(currentValueMeta).toMatchObject({
+				readable: true,
+				writeable: false,
+				min: 0,
+				max: 99,
+			});
+		});
+
+		it.todo("test dynamic metadata");
+	});
 });

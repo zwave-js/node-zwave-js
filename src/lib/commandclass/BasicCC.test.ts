@@ -85,18 +85,12 @@ describe("lib/commandclass/BasicCC => ", () => {
 		expect(basicCC.constructor).toBe(BasicCC);
 	});
 
-	it("the CC values for the Report command should have the correct metadata", () => {
-		const ccData = Buffer.from([
-			2, // node number
-			3, // remaining length
-			CommandClasses.Basic, // CC
-			BasicCommand.Report, // CC Command
-			55, // current value
-		]);
-		const basicCC = new BasicCCReport(fakeDriver, { data: ccData });
-
+	it("the CC values should have the correct metadata", () => {
 		// Readonly, 0-99
-		const currentValueMeta = getCCValueMetadata(basicCC, "currentValue");
+		const currentValueMeta = getCCValueMetadata(
+			CommandClasses.Basic,
+			"currentValue",
+		);
 		expect(currentValueMeta).toMatchObject({
 			readable: true,
 			writeable: false,
@@ -105,7 +99,10 @@ describe("lib/commandclass/BasicCC => ", () => {
 		});
 
 		// Writeable, 0-99
-		const targetValueMeta = getCCValueMetadata(basicCC, "targetValue");
+		const targetValueMeta = getCCValueMetadata(
+			CommandClasses.Basic,
+			"targetValue",
+		);
 		expect(targetValueMeta).toMatchObject({
 			readable: true,
 			writeable: true,

@@ -9,7 +9,11 @@ import {
 	CentralSceneCCNotification,
 	CentralSceneKeys,
 } from "../commandclass/CentralSceneCC";
-import { CommandClass, getCCConstructor } from "../commandclass/CommandClass";
+import {
+	CommandClass,
+	getCCConstructor,
+	getCCValueMetadata,
+} from "../commandclass/CommandClass";
 import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { ConfigurationCC } from "../commandclass/ConfigurationCC";
 import { ManufacturerSpecificCC } from "../commandclass/ManufacturerSpecificCC";
@@ -38,6 +42,7 @@ import log from "../log";
 import { JSONObject, Mixin } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import { CacheValue } from "../values/Cache";
+import { ValueMetadata } from "../values/Metadata";
 import {
 	BasicDeviceClasses,
 	DeviceClass,
@@ -305,6 +310,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	/**
 	 * Retrieves a stored value for a given property of a given CommandClass.
 	 * This does not request an updated value from the node!
+	 *
 	 * @param cc The command class the value belongs to
 	 * @param endpoint The endpoint the value belongs to (0 for the root device)
 	 * @param propertyName The property name the value belongs to
@@ -318,6 +324,26 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		propertyKey?: number | string,
 	): T | undefined {
 		return this._valueDB.getValue(cc, endpoint, propertyName, propertyKey);
+	}
+
+	/**
+	 * Retrieves metadata for a given property of a given CommandClass.
+	 * This can be used to enhance the user interface of an application
+	 *
+	 * @param cc The command class the value belongs to
+	 * @param endpoint The endpoint the value belongs to (0 for the root device)
+	 * @param propertyName The property name the value belongs to
+	 * @param propertyKey (optional) The sub-property to access
+	 */
+	public getValueMetadata(
+		cc: CommandClasses,
+		endpoint: number,
+		propertyName: string,
+		propertyKey?: number | string,
+	): ValueMetadata {
+		// TODO: for dynamic metadata, the endpoint is relevant
+		// TODO: for key-value paris, the property key is relevant
+		return getCCValueMetadata(cc, propertyName);
 	}
 
 	/**
