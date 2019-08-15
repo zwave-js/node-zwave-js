@@ -6,7 +6,7 @@ export interface ValueMetadataBase {
 	/** A description of the value */
 	description?: string;
 	/** A human-readable name for the property */
-	readableName?: string;
+	label?: string;
 }
 
 export type ValueMetadataAny = ValueMetadataBase & { _foo?: undefined };

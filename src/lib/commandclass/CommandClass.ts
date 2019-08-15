@@ -1002,7 +1002,7 @@ export function getCCKeyValuePairDefinitions(
 /**
  * Defines additional metadata for the given CC value
  */
-export function ccValueMeta(meta: ValueMetadata): PropertyDecorator {
+export function ccValueMetadata(meta: ValueMetadata): PropertyDecorator {
 	return (target: CommandClass, property: string | symbol) => {
 		// get the class constructor
 		const constr = target.constructor as typeof CommandClass;
@@ -1022,7 +1022,7 @@ export function ccValueMeta(meta: ValueMetadata): PropertyDecorator {
 /**
  * Retrieves defined metadata for the given CC value. If none is found, the default settings are returned.
  */
-export function getCCValueMeta<T extends CommandClass>(
+export function getCCValueMetadata<T extends CommandClass>(
 	commandClass: T,
 	property: Extract<keyof T, string>,
 ): ValueMetadata {
