@@ -387,19 +387,16 @@ export class CommandClass {
 		this._ccValues.set(name as string, internal);
 	}
 
-	public isInternalValue(valueName: keyof this): boolean {
+	/** Determines if the given value is an internal value */
+	public isInternalValue(propertyName: keyof this): boolean {
 		// A value is internal if any of the possible definitions say so (true)
 		return (
-			this._ccValues.get(valueName as string) === true ||
-			getCCValueDefinitions(this).get(valueName as string) === true ||
-			getCCKeyValuePairDefinitions(this).get(valueName as string) === true
+			this._ccValues.get(propertyName as string) === true ||
+			getCCValueDefinitions(this).get(propertyName as string) === true ||
+			getCCKeyValuePairDefinitions(this).get(propertyName as string) ===
+				true
 		);
 	}
-	// public registerValues(...names: (keyof this)[]): void {
-	// 	for (const name of names) {
-	// 		this.registerValue(name);
-	// 	}
-	// }
 
 	/** Persists all values on the given node into the value. Returns true if the process succeeded, false otherwise */
 	public persistValues(valueNames?: (keyof this)[]): boolean {

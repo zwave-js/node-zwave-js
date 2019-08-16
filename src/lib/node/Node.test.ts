@@ -20,6 +20,7 @@ import {
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { Driver } from "../driver/Driver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
+import { ValueMetadata } from "../values/Metadata";
 import {
 	BasicDeviceClasses,
 	DeviceClass,
@@ -1283,6 +1284,26 @@ describe("lib/node/Node", () => {
 			});
 		});
 
-		it.todo("test dynamic metadata");
+		it("dynamic metadata is prioritized", () => {
+			const node = new ZWaveNode(1, undefined as any);
+
+			// Update the dynamic metadata
+			node.valueDB.setMetadata(
+				CommandClasses.Basic,
+				0,
+				"currentValue",
+				ValueMetadata.WriteOnlyInt32,
+			);
+
+			const currentValueMeta = node.getValueMetadata(
+				CommandClasses.Basic,
+				0,
+				"currentValue",
+			);
+
+			expect(currentValueMeta).toMatchObject(
+				ValueMetadata.WriteOnlyInt32,
+			);
+		});
 	});
 });

@@ -1,4 +1,5 @@
 import { CommandClasses } from "../commandclass/CommandClasses";
+import { ValueMetadata } from "../values/Metadata";
 import { ValueDB } from "./ValueDB";
 
 describe("lib/node/ValueDB => ", () => {
@@ -359,6 +360,24 @@ describe("lib/node/ValueDB => ", () => {
 				valueDB.setValue(cc, endpoint, propertyName, value);
 				expect(valueDB.hasValue(cc, endpoint, propertyName)).toBeTrue();
 			}
+		});
+	});
+
+	describe("Metadata", () => {
+		beforeEach(() => createValueDB());
+
+		it("is assigned to a specific combination of endpoint, property name (and property key)", () => {
+			valueDB.setMetadata(1, 2, "3", ValueMetadata.default);
+			expect(valueDB.hasMetadata(1, 2, "3")).toBeTrue();
+			expect(valueDB.hasMetadata(1, 2, "3", 4)).toBeFalse();
+			expect(valueDB.getMetadata(1, 2, "3")).toBe(ValueMetadata.default);
+			expect(valueDB.getMetadata(1, 2, "3", 4)).toBeUndefined();
+		});
+
+		it("is cleared together with the values", () => {
+			valueDB.setMetadata(1, 2, "3", ValueMetadata.default);
+			valueDB.clear();
+			expect(valueDB.hasMetadata(1, 2, "3")).toBeFalse();
 		});
 	});
 });

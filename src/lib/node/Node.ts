@@ -337,12 +337,20 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	 */
 	public getValueMetadata(
 		cc: CommandClasses,
-		_endpoint: number,
+		endpoint: number,
 		propertyName: string,
-		_propertyKey?: number | string,
+		propertyKey?: number | string,
 	): ValueMetadata {
-		// TODO: for dynamic metadata, the endpoint is relevant
-		// TODO: for key-value paris, the property key is relevant
+		if (
+			this._valueDB.hasMetadata(cc, endpoint, propertyName, propertyKey)
+		) {
+			return this._valueDB.getMetadata(
+				cc,
+				endpoint,
+				propertyName,
+				propertyKey,
+			)!;
+		}
 		return getCCValueMetadata(cc, propertyName);
 	}
 
