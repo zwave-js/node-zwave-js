@@ -17,12 +17,12 @@ export interface CacheValue {
 	value: SerializedValue;
 }
 
-export type CacheMetadata = {
+export interface CacheMetadata {
 	endpoint: number;
 	propertyName: string;
 	propertyKey?: string | number;
 	metadata: ValueMetadata;
-};
+}
 
 export function serializeCacheValue(value: unknown): SerializedValue {
 	if (value instanceof Map) {
