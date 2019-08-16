@@ -908,6 +908,76 @@ describe("lib/node/Node", () => {
 			);
 		});
 
+		it("the serialized command classes should include values and metadata", () => {
+			const node = new ZWaveNode(1, fakeDriver, undefined, [
+				CommandClasses.Basic,
+			]);
+			// @ts-ignore We need write access to the map
+			fakeDriver.controller!.nodes.set(1, node);
+
+			node.valueDB.setValue(CommandClasses.Basic, 0, "targetValue", 10);
+			node.valueDB.setMetadata(
+				CommandClasses.Basic,
+				0,
+				"targetValue",
+				ValueMetadata.WriteOnlyInt16,
+			);
+
+			const serialized = node.serialize();
+			// Test that all values are serialized
+			expect(
+				serialized.commandClasses["0x20"].values,
+			).toIncludeAllMembers([
+				{ endpoint: 0, propertyName: "targetValue", value: 10 },
+			]);
+			// Test that all metadata is serialized
+			expect(
+				serialized.commandClasses["0x20"].metadata,
+			).toIncludeAllMembers([
+				{
+					endpoint: 0,
+					propertyName: "targetValue",
+					metadata: ValueMetadata.WriteOnlyInt16,
+				},
+			]);
+		});
+
+		it("deserialize() should correctly read values and metadata", () => {
+			const input = { ...serializedTestNode };
+			(input.commandClasses as any)["0x20"] = {
+				name: "Basic",
+				isSupported: false,
+				isControlled: true,
+				version: 1,
+				values: [
+					{ endpoint: 1, propertyName: "targetValue", value: 12 },
+				],
+				metadata: [
+					{
+						endpoint: 2,
+						propertyName: "targetValue",
+						metadata: ValueMetadata.ReadOnlyInt32,
+					},
+				],
+			};
+
+			const node = new ZWaveNode(1, fakeDriver);
+			// @ts-ignore We need write access to the map
+			fakeDriver.controller!.nodes.set(1, node);
+			node.deserialize(input);
+
+			expect(
+				node.valueDB.getValue(CommandClasses.Basic, 1, "targetValue"),
+			).toBe(12);
+			expect(
+				node.valueDB.getMetadata(
+					CommandClasses.Basic,
+					2,
+					"targetValue",
+				),
+			).toBe(ValueMetadata.ReadOnlyInt32);
+		});
+
 		it("deserialize() should also accept numbers for the interview stage", () => {
 			const input = {
 				...serializedTestNode,

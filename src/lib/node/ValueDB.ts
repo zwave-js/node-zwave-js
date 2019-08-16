@@ -308,4 +308,20 @@ export class ValueDB extends EventEmitter {
 		const key = getValueKey(cc, endpoint, propertyName, propertyKey);
 		return this._metadata.get(key);
 	}
+
+	public getAllMetadata(
+		forCC: CommandClasses,
+	): {
+		endpoint: number;
+		propertyName: string;
+		propertyKey?: number | string;
+		metadata: ValueMetadata;
+	}[] {
+		const ret: ReturnType<ValueDB["getAllMetadata"]> = [];
+		this._metadata.forEach((meta, key) => {
+			const { cc, ...rest } = JSON.parse(key);
+			if (forCC === cc) ret.push({ ...rest, metadata: meta });
+		});
+		return ret;
+	}
 }

@@ -379,5 +379,22 @@ describe("lib/node/ValueDB => ", () => {
 			valueDB.clear();
 			expect(valueDB.hasMetadata(1, 2, "3")).toBeFalse();
 		});
+
+		describe("getAllMetadata()", () => {
+			it("returns all metadata for a given CC", () => {
+				expect(valueDB.getAllMetadata(1)).toHaveLength(0);
+
+				valueDB.setMetadata(1, 2, "3", ValueMetadata.default);
+				expect(valueDB.getAllMetadata(1)).toHaveLength(1);
+
+				valueDB.setMetadata(5, 2, "3", ValueMetadata.default);
+				expect(valueDB.getAllMetadata(1)).toHaveLength(1);
+				expect(valueDB.getAllMetadata(5)).toHaveLength(1);
+
+				valueDB.setMetadata(5, 2, "5", ValueMetadata.default);
+				expect(valueDB.getAllMetadata(1)).toHaveLength(1);
+				expect(valueDB.getAllMetadata(5)).toHaveLength(2);
+			});
+		});
 	});
 });

@@ -9,7 +9,11 @@ import { ZWaveNode } from "../node/Node";
 import { ValueDB } from "../node/ValueDB";
 import { JSONObject, staticExtends, stripUndefined } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
-import { CacheValue, serializeCacheValue } from "../values/Cache";
+import {
+	CacheMetadata,
+	CacheValue,
+	serializeCacheValue,
+} from "../values/Cache";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, unknownBoolean } from "../values/Primitive";
 import { CCAPI } from "./API";
@@ -494,6 +498,26 @@ export class CommandClass {
 		);
 	}
 
+	/** Serializes metadata to be stored in the cache */
+	public serializeMetadataForCache(): CacheMetadata[] {
+		const allMetadata = this.getValueDB().getAllMetadata(
+			getCommandClass(this),
+		);
+		const ccValueDefinitions = getCCValueDefinitions(this);
+		const keyValuePairs = getCCKeyValuePairDefinitions(this);
+		return (
+			allMetadata
+				// only serialize metadata with a corresponding existing or registered value
+				.filter(
+					({ propertyName }) =>
+						propertyName in this ||
+						ccValueDefinitions.has(propertyName) ||
+						keyValuePairs.has(propertyName) ||
+						this._ccValues.has(propertyName),
+				)
+		);
+	}
+
 	/** Deserializes values from the cache */
 	public deserializeValuesFromCache(values: CacheValue[]): void {
 		const cc = getCommandClass(this);
@@ -522,6 +546,39 @@ export class CommandClass {
 					val.endpoint,
 					val.propertyName,
 					valueToSet,
+				);
+			}
+		}
+	}
+
+	/** Deserializes value metadata from the cache */
+	public deserializeMetadataFromCache(allMetadata: CacheMetadata[]): void {
+		const cc = getCommandClass(this);
+		const ccValues = getCCValueDefinitions(this);
+		const keyValuePairs = getCCKeyValuePairDefinitions(this);
+		for (const meta of allMetadata) {
+			// Only deserialize registered CC values
+			if (
+				meta.propertyName in this ||
+				ccValues.has(meta.propertyName) ||
+				keyValuePairs.has(meta.propertyName) ||
+				this._ccValues.has(meta.propertyName)
+			) {
+				const metadataToSet = meta.metadata;
+				// // Properties defined as a map must be converted from an object to a map
+				// // TODO: (GH#110) This check should not be necessary. Ideally all values are either primitives or Maps
+				// const shouldBeMap =
+				// 	this[meta.propertyName as keyof this] instanceof Map ||
+				// 	keyValuePairs.has(meta.propertyName) ||
+				// 	meta.type === "map";
+				// if (shouldBeMap && isObject(meta.value)) {
+				// 	metadataToSet = new Map(entries(meta.value));
+				// }
+				this.getValueDB().setMetadata(
+					cc,
+					meta.endpoint,
+					meta.propertyName,
+					metadataToSet,
 				);
 			}
 		}
