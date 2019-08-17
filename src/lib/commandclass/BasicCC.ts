@@ -27,10 +27,10 @@ import { CommandClasses } from "./CommandClasses";
 
 @API(CommandClasses.Basic)
 export class BasicCCAPI extends CCAPI {
-	protected [SET_VALUE]: SetValueImplementation = async ({
-		propertyName,
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ propertyName },
 		value,
-	}): Promise<void> => {
+	): Promise<void> => {
 		if (propertyName !== "targetValue") {
 			return throwUnsupportedProperty(this.ccId, propertyName);
 		}

@@ -83,10 +83,10 @@ export class CentralSceneCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async ({
-		propertyName,
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ propertyName },
 		value,
-	}): Promise<void> => {
+	): Promise<void> => {
 		if (propertyName !== "slowRefresh") {
 			return throwUnsupportedProperty(this.ccId, propertyName);
 		}

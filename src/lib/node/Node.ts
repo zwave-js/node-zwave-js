@@ -377,34 +377,26 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	/**
 	 * Updates a value for a given property of a given CommandClass on the node.
 	 * This will communicate with the node!
-	 * @param cc The command class the value belongs to
-	 * @param endpoint The endpoint the value belongs to (0 for the root device)
-	 * @param propertyName The property name the value belongs to
-	 * @param propertyKey (optional) The sub-property to access
 	 */
-	public async setValue({
-		cc,
-		endpoint,
-		propertyName,
-		propertyKey,
-		value,
-	}: {
-		cc: CommandClasses;
-		endpoint: number;
-		propertyName: string;
-		propertyKey?: number | string;
-		value: unknown;
-	}): Promise<boolean> {
+	public async setValue(valueId: ValueID, value: unknown): Promise<boolean> {
 		// Try to retrieve the corresponding CC API
 		try {
 			// Access the CC API by name
-			const endpointInstance = this.getEndpoint(endpoint);
+			const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
 			if (!endpointInstance) return false;
-			const api = (endpointInstance.commandClasses as any)[cc] as CCAPI;
+			const api = (endpointInstance.commandClasses as any)[
+				valueId.commandClass
+			] as CCAPI;
 			// Check if the setValue method is implemented
 			if (!api.setValue) return false;
 			// And call it
-			await api.setValue({ propertyName, propertyKey, value });
+			await api.setValue(
+				{
+					propertyName: valueId.propertyName,
+					propertyKey: valueId.propertyKey,
+				},
+				value,
+			);
 			return true;
 		} catch (e) {
 			if (
