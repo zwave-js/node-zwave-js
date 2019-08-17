@@ -7,12 +7,14 @@ describe("lib/node/ValueDB => ", () => {
 	const onValueAdded = jest.fn();
 	const onValueUpdated = jest.fn();
 	const onValueRemoved = jest.fn();
+	const onMetadataUpdated = jest.fn();
 
 	function createValueDB(): void {
 		valueDB = new ValueDB()
 			.on("value added", onValueAdded)
 			.on("value updated", onValueUpdated)
-			.on("value removed", onValueRemoved);
+			.on("value removed", onValueRemoved)
+			.on("metadata updated", onMetadataUpdated);
 	}
 
 	beforeAll(() => createValueDB());
@@ -394,6 +396,39 @@ describe("lib/node/ValueDB => ", () => {
 				valueDB.setMetadata(5, 2, "5", ValueMetadata.default);
 				expect(valueDB.getAllMetadata(1)).toHaveLength(1);
 				expect(valueDB.getAllMetadata(5)).toHaveLength(2);
+			});
+		});
+
+		describe("updating dynamic metadata", () => {
+			let cbArg: any;
+			beforeAll(() => {
+				valueDB.setMetadata(1, 2, "3", ValueMetadata.default);
+			});
+
+			afterAll(() => {
+				onMetadataUpdated.mockClear();
+			});
+
+			it(`should emit the "metadata updated" event`, () => {
+				expect(onMetadataUpdated).toBeCalled();
+				cbArg = onMetadataUpdated.mock.calls[0][0];
+			});
+
+			it("The callback arg should contain the CC", () => {
+				expect(cbArg).toBeObject();
+				expect(cbArg.commandClass).toBe(1);
+			});
+
+			it("The callback arg should contain the endpoint", () => {
+				expect(cbArg.endpoint).toBe(2);
+			});
+
+			it("The callback arg should contain the property name", () => {
+				expect(cbArg.propertyName).toBe("3");
+			});
+
+			it("The callback arg should contain the new metadata", () => {
+				expect(cbArg.metadata).toBe(ValueMetadata.default);
 			});
 		});
 	});

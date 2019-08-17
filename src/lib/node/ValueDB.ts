@@ -21,14 +21,20 @@ export interface ValueRemovedArgs extends ValueBaseArgs {
 	prevValue: unknown;
 }
 
+export interface MetadataUpdatedArgs extends ValueBaseArgs {
+	metadata: ValueMetadata | undefined;
+}
+
 export type ValueAddedCallback = (args: ValueAddedArgs) => void;
 export type ValueUpdatedCallback = (args: ValueUpdatedArgs) => void;
 export type ValueRemovedCallback = (args: ValueRemovedArgs) => void;
+export type MetadataUpdatedCallback = (args: MetadataUpdatedArgs) => void;
 
 export interface ValueDBEventCallbacks {
 	"value added": ValueAddedCallback;
 	"value updated": ValueUpdatedCallback;
 	"value removed": ValueRemovedCallback;
+	"metadata updated": MetadataUpdatedCallback;
 }
 
 export type ValueDBEvents = Extract<keyof ValueDBEventCallbacks, string>;
@@ -273,6 +279,15 @@ export class ValueDB extends EventEmitter {
 		} else {
 			this._metadata.delete(dbKey);
 		}
+
+		const cbArg: MetadataUpdatedArgs = {
+			commandClass: cc,
+			endpoint,
+			propertyName,
+			propertyKey,
+			metadata,
+		};
+		this.emit("metadata updated", cbArg);
 	}
 
 	/**

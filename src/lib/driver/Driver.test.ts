@@ -1,10 +1,5 @@
 // load the driver with stubbed out Serialport
-import {
-	MockRequestMessageWithExpectation,
-	MockRequestMessageWithoutExpectation,
-	MockResponseMessage,
-	MockSerialPort,
-} from "../../../test/mocks";
+import { MockRequestMessageWithExpectation, MockRequestMessageWithoutExpectation, MockResponseMessage, MockSerialPort } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
 import { WakeUpCCIntervalSet } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
@@ -395,7 +390,7 @@ describe("lib/driver/Driver => ", () => {
 				command: new WakeUpCCIntervalSet(driver, {
 					nodeId: 1,
 					controllerNodeId: 2,
-					wakeupInterval: 5,
+					wakeUpInterval: 5,
 				}),
 			});
 

@@ -9,7 +9,10 @@ export interface ValueMetadataBase {
 	label?: string;
 }
 
-export type ValueMetadataAny = ValueMetadataBase & { _foo?: undefined };
+export interface ValueMetadataAny extends ValueMetadataBase {
+	/** The default value */
+	default?: unknown;
+}
 
 export interface ValueMetadataNumeric extends ValueMetadataBase {
 	/** The minimum value that can be assigned to a CC value (optional) */
@@ -18,6 +21,8 @@ export interface ValueMetadataNumeric extends ValueMetadataBase {
 	max?: number;
 	/** When only certain values between min and max are allowed, this determines the step size */
 	steps?: number;
+	/** The default value */
+	default?: number;
 }
 
 export type ValueMetadata = ValueMetadataAny | ValueMetadataNumeric;
@@ -25,19 +30,19 @@ export type ValueMetadata = ValueMetadataAny | ValueMetadataNumeric;
 // TODO: lists of allowed values, etc...
 
 /** The default value for metadata: readable and writeable */
-const _default: ValueMetadata = {
+const _default: ValueMetadataBase = {
 	readable: true,
 	writeable: true,
 };
 
 /** The default value for readonly metadata */
-const ReadOnly: ValueMetadata = {
+const ReadOnly: ValueMetadataBase = {
 	readable: true,
 	writeable: false,
 };
 
 /** The default value for writeonly metadata */
-const WriteOnly: ValueMetadata = {
+const WriteOnly: ValueMetadataBase = {
 	readable: false,
 	writeable: true,
 };
@@ -77,6 +82,25 @@ const ReadOnlyUInt16: ValueMetadataNumeric = {
 /** Unsigned 16-bit integer (writeonly) */
 const WriteOnlyUInt16: ValueMetadataNumeric = {
 	...UInt16,
+	...WriteOnly,
+};
+
+/** Unsigned 24-bit integer */
+const UInt24: ValueMetadataNumeric = {
+	..._default,
+	min: 0,
+	max: 0xffffffff,
+};
+
+/** Unsigned 24-bit integer (readonly) */
+const ReadOnlyUInt24: ValueMetadataNumeric = {
+	...UInt24,
+	...ReadOnly,
+};
+
+/** Unsigned 24-bit integer (writeonly) */
+const WriteOnlyUInt24: ValueMetadataNumeric = {
+	...UInt24,
 	...WriteOnly,
 };
 
@@ -137,6 +161,25 @@ const WriteOnlyInt16: ValueMetadataNumeric = {
 	...WriteOnly,
 };
 
+/** Signed 24-bit integer */
+const Int24: ValueMetadataNumeric = {
+	..._default,
+	min: -0x800000,
+	max: 0x7fffff,
+};
+
+/** Signed 24-bit integer (readonly) */
+const ReadOnlyInt24: ValueMetadataNumeric = {
+	...Int24,
+	...ReadOnly,
+};
+
+/** Signed 24-bit integer (writeonly) */
+const WriteOnlyInt24: ValueMetadataNumeric = {
+	...Int24,
+	...WriteOnly,
+};
+
 /** Signed 32-bit integer */
 const Int32: ValueMetadataNumeric = {
 	..._default,
@@ -189,36 +232,48 @@ export const ValueMetadata = {
 	UInt8: Object.freeze(UInt8),
 	/** Unsigned 16-bit integer */
 	UInt16: Object.freeze(UInt16),
+	/** Unsigned 24-bit integer */
+	UInt24: Object.freeze(UInt24),
 	/** Unsigned 32-bit integer */
 	UInt32: Object.freeze(UInt32),
 	/** Signed 8-bit integer */
 	Int8: Object.freeze(Int8),
 	/** Signed 16-bit integer */
 	Int16: Object.freeze(Int16),
+	/** Signed 24-bit integer */
+	Int24: Object.freeze(Int24),
 	/** Signed 32-bit integer */
 	Int32: Object.freeze(Int32),
 	/** Unsigned 8-bit integer (readonly) */
 	ReadOnlyUInt8: Object.freeze(ReadOnlyUInt8),
 	/** Unsigned 16-bit integer (readonly) */
 	ReadOnlyUInt16: Object.freeze(ReadOnlyUInt16),
+	/** Unsigned 24-bit integer (readonly) */
+	ReadOnlyUInt24: Object.freeze(ReadOnlyUInt24),
 	/** Unsigned 32-bit integer (readonly) */
 	ReadOnlyUInt32: Object.freeze(ReadOnlyUInt32),
 	/** Signed 8-bit integer (readonly) */
 	ReadOnlyInt8: Object.freeze(ReadOnlyInt8),
 	/** Signed 16-bit integer (readonly) */
 	ReadOnlyInt16: Object.freeze(ReadOnlyInt16),
+	/** Signed 24-bit integer (readonly) */
+	ReadOnlyInt24: Object.freeze(ReadOnlyInt24),
 	/** Signed 32-bit integer (readonly) */
 	ReadOnlyInt32: Object.freeze(ReadOnlyInt32),
 	/** Unsigned 8-bit integer (writeonly) */
 	WriteOnlyUInt8: Object.freeze(WriteOnlyUInt8),
 	/** Unsigned 16-bit integer (writeonly) */
 	WriteOnlyUInt16: Object.freeze(WriteOnlyUInt16),
+	/** Unsigned 24-bit integer (writeonly) */
+	WriteOnlyUInt24: Object.freeze(WriteOnlyUInt24),
 	/** Unsigned 32-bit integer (writeonly) */
 	WriteOnlyUInt32: Object.freeze(WriteOnlyUInt32),
 	/** Signed 8-bit integer (writeonly) */
 	WriteOnlyInt8: Object.freeze(WriteOnlyInt8),
 	/** Signed 16-bit integer (writeonly) */
 	WriteOnlyInt16: Object.freeze(WriteOnlyInt16),
+	/** Signed 24-bit integer (writeonly) */
+	WriteOnlyInt24: Object.freeze(WriteOnlyInt24),
 	/** Signed 32-bit integer (writeonly) */
 	WriteOnlyInt32: Object.freeze(WriteOnlyInt32),
 
