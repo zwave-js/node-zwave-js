@@ -445,12 +445,12 @@ describe("lib/node/ValueDB => ", () => {
 				endpoint: 2,
 				propertyName: "3",
 			};
-			valueDB.setMetadata(valueId, ValueMetadata.default);
+			valueDB.setMetadata(valueId, ValueMetadata.Any);
 			expect(valueDB.hasMetadata(valueId)).toBeTrue();
 			expect(
 				valueDB.hasMetadata({ ...valueId, propertyKey: 4 }),
 			).toBeFalse();
-			expect(valueDB.getMetadata(valueId)).toBe(ValueMetadata.default);
+			expect(valueDB.getMetadata(valueId)).toBe(ValueMetadata.Any);
 			expect(
 				valueDB.getMetadata({ ...valueId, propertyKey: 4 }),
 			).toBeUndefined();
@@ -462,7 +462,7 @@ describe("lib/node/ValueDB => ", () => {
 				endpoint: 2,
 				propertyName: "3",
 			};
-			valueDB.setMetadata(valueId, ValueMetadata.default);
+			valueDB.setMetadata(valueId, ValueMetadata.Any);
 			valueDB.clear();
 			expect(valueDB.hasMetadata(valueId)).toBeFalse();
 		});
@@ -477,7 +477,7 @@ describe("lib/node/ValueDB => ", () => {
 						endpoint: 2,
 						propertyName: "3",
 					},
-					ValueMetadata.default,
+					ValueMetadata.Any,
 				);
 				expect(valueDB.getAllMetadata(1)).toHaveLength(1);
 
@@ -487,7 +487,7 @@ describe("lib/node/ValueDB => ", () => {
 						endpoint: 2,
 						propertyName: "3",
 					},
-					ValueMetadata.default,
+					ValueMetadata.Any,
 				);
 				expect(valueDB.getAllMetadata(1)).toHaveLength(1);
 				expect(valueDB.getAllMetadata(5)).toHaveLength(1);
@@ -498,7 +498,7 @@ describe("lib/node/ValueDB => ", () => {
 						endpoint: 2,
 						propertyName: "5",
 					},
-					ValueMetadata.default,
+					ValueMetadata.Any,
 				);
 				expect(valueDB.getAllMetadata(1)).toHaveLength(1);
 				expect(valueDB.getAllMetadata(5)).toHaveLength(2);
@@ -514,7 +514,7 @@ describe("lib/node/ValueDB => ", () => {
 						endpoint: 2,
 						propertyName: "3",
 					},
-					ValueMetadata.default,
+					ValueMetadata.Any,
 				);
 			});
 
@@ -541,7 +541,7 @@ describe("lib/node/ValueDB => ", () => {
 			});
 
 			it("The callback arg should contain the new metadata", () => {
-				expect(cbArg.metadata).toBe(ValueMetadata.default);
+				expect(cbArg.metadata).toBe(ValueMetadata.Any);
 			});
 		});
 	});

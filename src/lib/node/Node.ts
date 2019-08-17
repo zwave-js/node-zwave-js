@@ -562,6 +562,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			await this.queryNodeInfo();
 		}
 
+		// TODO: Part of this should be done after the cache restart
 		if (this.interviewStage === InterviewStage.NodeInfo) {
 			await this.interviewCCs();
 		}

@@ -1,4 +1,15 @@
+export type ValueType =
+	| "number"
+	| "boolean"
+	| "string"
+	| "number[]"
+	| "boolean[]"
+	| "string[]"
+	| "any";
+
 export interface ValueMetadataBase {
+	/** The type of the value */
+	type: ValueType;
 	/** Whether the value can be read. By default all values are assumed readable */
 	readable: boolean;
 	/** Whether the value can be written. By default all values are assumed readable */
@@ -15,6 +26,7 @@ export interface ValueMetadataAny extends ValueMetadataBase {
 }
 
 export interface ValueMetadataNumeric extends ValueMetadataBase {
+	type: "number";
 	/** The minimum value that can be assigned to a CC value (optional) */
 	min?: number;
 	/** The maximum value that can be assigned to a CC value (optional) */
@@ -25,31 +37,73 @@ export interface ValueMetadataNumeric extends ValueMetadataBase {
 	default?: number;
 }
 
-export type ValueMetadata = ValueMetadataAny | ValueMetadataNumeric;
+export interface ValueMetadataBoolean extends ValueMetadataBase {
+	type: "boolean";
+	/** The default value */
+	default?: number;
+}
+
+export type ValueMetadata =
+	| ValueMetadataAny
+	| ValueMetadataNumeric
+	| ValueMetadataBoolean;
 
 // TODO: lists of allowed values, etc...
 
-/** The default value for metadata: readable and writeable */
+// Mixins for value metadata
 const _default: ValueMetadataBase = {
+	type: "any",
 	readable: true,
 	writeable: true,
+};
+
+const _readonly = {
+	writeable: false,
+};
+
+const _writeonly = {
+	readable: false,
+};
+
+/** The default value for metadata: readable and writeable */
+const Any: ValueMetadataAny = {
+	..._default,
 };
 
 /** The default value for readonly metadata */
 const ReadOnly: ValueMetadataBase = {
-	readable: true,
-	writeable: false,
+	..._default,
+	..._readonly,
 };
 
 /** The default value for writeonly metadata */
 const WriteOnly: ValueMetadataBase = {
-	readable: false,
-	writeable: true,
+	..._default,
+	..._writeonly,
+};
+
+/** A boolean value */
+const Boolean: ValueMetadataBoolean = {
+	..._default,
+	type: "boolean",
+};
+
+/** A boolean value (readonly) */
+const ReadOnlyBoolean: ValueMetadataBoolean = {
+	...Boolean,
+	..._readonly,
+};
+
+/** A boolean value (writeonly) */
+const WriteOnlyBoolean: ValueMetadataBoolean = {
+	...Boolean,
+	..._writeonly,
 };
 
 /** Unsigned 8-bit integer */
 const UInt8: ValueMetadataNumeric = {
 	..._default,
+	type: "number",
 	min: 0,
 	max: 0xff,
 };
@@ -57,18 +111,19 @@ const UInt8: ValueMetadataNumeric = {
 /** Unsigned 8-bit integer (readonly) */
 const ReadOnlyUInt8: ValueMetadataNumeric = {
 	...UInt8,
-	...ReadOnly,
+	..._readonly,
 };
 
 /** Unsigned 8-bit integer (writeonly) */
 const WriteOnlyUInt8: ValueMetadataNumeric = {
 	...UInt8,
-	...WriteOnly,
+	..._writeonly,
 };
 
 /** Unsigned 16-bit integer */
 const UInt16: ValueMetadataNumeric = {
 	..._default,
+	type: "number",
 	min: 0,
 	max: 0xffff,
 };
@@ -76,18 +131,19 @@ const UInt16: ValueMetadataNumeric = {
 /** Unsigned 16-bit integer (readonly) */
 const ReadOnlyUInt16: ValueMetadataNumeric = {
 	...UInt16,
-	...ReadOnly,
+	..._readonly,
 };
 
 /** Unsigned 16-bit integer (writeonly) */
 const WriteOnlyUInt16: ValueMetadataNumeric = {
 	...UInt16,
-	...WriteOnly,
+	..._writeonly,
 };
 
 /** Unsigned 24-bit integer */
 const UInt24: ValueMetadataNumeric = {
 	..._default,
+	type: "number",
 	min: 0,
 	max: 0xffffffff,
 };
@@ -95,18 +151,19 @@ const UInt24: ValueMetadataNumeric = {
 /** Unsigned 24-bit integer (readonly) */
 const ReadOnlyUInt24: ValueMetadataNumeric = {
 	...UInt24,
-	...ReadOnly,
+	..._readonly,
 };
 
 /** Unsigned 24-bit integer (writeonly) */
 const WriteOnlyUInt24: ValueMetadataNumeric = {
 	...UInt24,
-	...WriteOnly,
+	..._writeonly,
 };
 
 /** Unsigned 32-bit integer */
 const UInt32: ValueMetadataNumeric = {
 	..._default,
+	type: "number",
 	min: 0,
 	max: 0xffffffff,
 };
@@ -114,18 +171,19 @@ const UInt32: ValueMetadataNumeric = {
 /** Unsigned 32-bit integer (readonly) */
 const ReadOnlyUInt32: ValueMetadataNumeric = {
 	...UInt32,
-	...ReadOnly,
+	..._readonly,
 };
 
 /** Unsigned 32-bit integer (writeonly) */
 const WriteOnlyUInt32: ValueMetadataNumeric = {
 	...UInt32,
-	...WriteOnly,
+	..._writeonly,
 };
 
 /** Signed 8-bit integer */
 const Int8: ValueMetadataNumeric = {
 	..._default,
+	type: "number",
 	min: -0x80,
 	max: 0x7f,
 };
@@ -133,18 +191,19 @@ const Int8: ValueMetadataNumeric = {
 /** Signed 8-bit integer (readonly) */
 const ReadOnlyInt8: ValueMetadataNumeric = {
 	...Int8,
-	...ReadOnly,
+	..._readonly,
 };
 
 /** Signed 8-bit integer (writeonly) */
 const WriteOnlyInt8: ValueMetadataNumeric = {
 	...Int8,
-	...WriteOnly,
+	..._writeonly,
 };
 
 /** Signed 16-bit integer */
 const Int16: ValueMetadataNumeric = {
 	..._default,
+	type: "number",
 	min: -0x8000,
 	max: 0x7fff,
 };
@@ -152,18 +211,19 @@ const Int16: ValueMetadataNumeric = {
 /** Signed 16-bit integer (readonly) */
 const ReadOnlyInt16: ValueMetadataNumeric = {
 	...Int16,
-	...ReadOnly,
+	..._readonly,
 };
 
 /** Signed 16-bit integer (writeonly) */
 const WriteOnlyInt16: ValueMetadataNumeric = {
 	...Int16,
-	...WriteOnly,
+	..._writeonly,
 };
 
 /** Signed 24-bit integer */
 const Int24: ValueMetadataNumeric = {
 	..._default,
+	type: "number",
 	min: -0x800000,
 	max: 0x7fffff,
 };
@@ -171,18 +231,19 @@ const Int24: ValueMetadataNumeric = {
 /** Signed 24-bit integer (readonly) */
 const ReadOnlyInt24: ValueMetadataNumeric = {
 	...Int24,
-	...ReadOnly,
+	..._readonly,
 };
 
 /** Signed 24-bit integer (writeonly) */
 const WriteOnlyInt24: ValueMetadataNumeric = {
 	...Int24,
-	...WriteOnly,
+	..._writeonly,
 };
 
 /** Signed 32-bit integer */
 const Int32: ValueMetadataNumeric = {
 	..._default,
+	type: "number",
 	min: -0x80000000,
 	max: 0x7fffffff,
 };
@@ -190,13 +251,13 @@ const Int32: ValueMetadataNumeric = {
 /** Signed 32-bit integer (readonly) */
 const ReadOnlyInt32: ValueMetadataNumeric = {
 	...Int32,
-	...ReadOnly,
+	..._readonly,
 };
 
 /** Signed 32-bit integer (writeonly) */
 const WriteOnlyInt32: ValueMetadataNumeric = {
 	...Int32,
-	...WriteOnly,
+	..._writeonly,
 };
 
 // Some predefined CC-specific metadata
@@ -204,6 +265,7 @@ const WriteOnlyInt32: ValueMetadataNumeric = {
 /** The level of a Switch */
 const Level: ValueMetadataNumeric = {
 	..._default,
+	type: "number",
 	min: 0,
 	max: 99,
 };
@@ -211,23 +273,24 @@ const Level: ValueMetadataNumeric = {
 /** The level of a Switch (readonly) */
 const ReadOnlyLevel: ValueMetadataNumeric = {
 	...Level,
-	...ReadOnly,
+	..._readonly,
 };
 
 /** The level of a Switch (writeonly) */
 const WriteOnlyLevel: ValueMetadataNumeric = {
 	...Level,
-	...WriteOnly,
+	..._writeonly,
 };
 
 /** A collection of predefined CC value metadata */
 export const ValueMetadata = {
 	/** The default value for metadata: readable and writeable */
-	default: Object.freeze(_default),
+	Any: Object.freeze(Any),
 	/** The default value for readonly metadata */
 	ReadOnly: Object.freeze(ReadOnly),
 	/** The default value for writeonly metadata */
 	WriteOnly: Object.freeze(WriteOnly),
+
 	/** Unsigned 8-bit integer */
 	UInt8: Object.freeze(UInt8),
 	/** Unsigned 16-bit integer */
@@ -244,6 +307,7 @@ export const ValueMetadata = {
 	Int24: Object.freeze(Int24),
 	/** Signed 32-bit integer */
 	Int32: Object.freeze(Int32),
+
 	/** Unsigned 8-bit integer (readonly) */
 	ReadOnlyUInt8: Object.freeze(ReadOnlyUInt8),
 	/** Unsigned 16-bit integer (readonly) */
@@ -260,6 +324,7 @@ export const ValueMetadata = {
 	ReadOnlyInt24: Object.freeze(ReadOnlyInt24),
 	/** Signed 32-bit integer (readonly) */
 	ReadOnlyInt32: Object.freeze(ReadOnlyInt32),
+
 	/** Unsigned 8-bit integer (writeonly) */
 	WriteOnlyUInt8: Object.freeze(WriteOnlyUInt8),
 	/** Unsigned 16-bit integer (writeonly) */
@@ -283,4 +348,11 @@ export const ValueMetadata = {
 	ReadOnlyLevel: Object.freeze(ReadOnlyLevel),
 	/** The level of a Switch (0-99, writeonly) */
 	WriteOnlyLevel: Object.freeze(WriteOnlyLevel),
+
+	/** A boolean value */
+	Boolean: Object.freeze(Boolean),
+	/** A boolean value (readonly) */
+	ReadOnlyBoolean: Object.freeze(ReadOnlyBoolean),
+	/** A boolean value (writeonly) */
+	WriteOnlyBoolean: Object.freeze(WriteOnlyBoolean),
 };
