@@ -395,7 +395,7 @@ describe("lib/driver/Driver => ", () => {
 				command: new WakeUpCCIntervalSet(driver, {
 					nodeId: 1,
 					controllerNodeId: 2,
-					wakeupInterval: 5,
+					wakeUpInterval: 5,
 				}),
 			});
 

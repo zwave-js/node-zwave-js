@@ -1336,6 +1336,14 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("getValueMetadata()", () => {
+		const fakeDriver = createEmptyMockDriver();
+		let node: ZWaveNode;
+
+		beforeEach(() => {
+			node = new ZWaveNode(1, (fakeDriver as unknown) as Driver);
+			fakeDriver.controller!.nodes.set(1, node);
+		});
+
 		it("returns the defined metadata for the given value", () => {
 			const node = new ZWaveNode(1, undefined as any);
 
@@ -1354,9 +1362,26 @@ describe("lib/node/Node", () => {
 			});
 		});
 
-		it("dynamic metadata is prioritized", () => {
-			const node = new ZWaveNode(1, undefined as any);
+		it("dynamic metadata is merged with static metadata", () => {
+			// Create dynamic metadata
+			node.valueDB.setMetadata(
+				CommandClasses.Basic,
+				0,
+				"currentValue",
+				ValueMetadata.WriteOnlyInt32,
+			);
 
+			const currentValueMeta = node.getValueMetadata(
+				CommandClasses.Basic,
+				0,
+				"currentValue",
+			);
+
+			// The label should be preserved from the static metadata
+			expect(currentValueMeta).toMatchObject({ label: "Current value" });
+		});
+
+		it("dynamic metadata is prioritized", () => {
 			// Update the dynamic metadata
 			node.valueDB.setMetadata(
 				CommandClasses.Basic,
@@ -1371,6 +1396,7 @@ describe("lib/node/Node", () => {
 				"currentValue",
 			);
 
+			// But the dynamic metadata properties are preferred over statically defined ones
 			expect(currentValueMeta).toMatchObject(
 				ValueMetadata.WriteOnlyInt32,
 			);

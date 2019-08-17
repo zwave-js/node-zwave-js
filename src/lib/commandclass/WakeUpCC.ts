@@ -5,12 +5,14 @@ import { MessagePriority } from "../message/Constants";
 import { NodeStatus } from "../node/INode";
 import { ZWaveNode } from "../node/Node";
 import { validatePayload } from "../util/misc";
+import { ValueMetadata } from "../values/Metadata";
 import { CCAPI } from "./API";
 import {
 	API,
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
+	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -42,7 +44,7 @@ export class WakeUpCCAPI extends CCAPI {
 			cc,
 		))!;
 		return {
-			wakeupInterval: response.wakeupInterval,
+			wakeUpInterval: response.wakeUpInterval,
 			controllerNodeId: response.controllerNodeId,
 		};
 	}
@@ -65,13 +67,13 @@ export class WakeUpCCAPI extends CCAPI {
 	}
 
 	public async setInterval(
-		wakeupInterval: number,
+		wakeUpInterval: number,
 		controllerNodeId: number,
 	): Promise<void> {
 		const cc = new WakeUpCCIntervalSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			wakeupInterval,
+			wakeUpInterval,
 			controllerNodeId,
 		});
 		await this.driver.sendCommand(cc);
@@ -170,7 +172,7 @@ wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds`;
 			});
 			const wakeupResp = await API.getInterval();
 			const logMessage = `received wakeup configuration:
-wakeup interval: ${wakeupResp.wakeupInterval} seconds
+wakeup interval: ${wakeupResp.wakeUpInterval} seconds
 controller node: ${wakeupResp.controllerNodeId}`;
 			log.controller.logNode(node.id, {
 				message: logMessage,
@@ -183,7 +185,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 			});
 
 			await API.setInterval(
-				wakeupResp.wakeupInterval,
+				wakeupResp.wakeUpInterval,
 				driver.controller!.ownNodeId!,
 			);
 			log.controller.logNode(node.id, "wakeup destination node changed!");
@@ -195,7 +197,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 }
 
 interface WakeUpCCIntervalSetOptions extends CCCommandOptions {
-	wakeupInterval: number;
+	wakeUpInterval: number;
 	controllerNodeId: number;
 }
 
@@ -217,12 +219,12 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			this.wakeupInterval = options.wakeupInterval;
+			this.wakeUpInterval = options.wakeUpInterval;
 			this.controllerNodeId = options.controllerNodeId;
 		}
 	}
 
-	public wakeupInterval: number;
+	public wakeUpInterval: number;
 	public controllerNodeId: number;
 
 	public serialize(): Buffer {
@@ -232,7 +234,7 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 			0, // placeholder
 			this.controllerNodeId,
 		]);
-		this.payload.writeUIntBE(this.wakeupInterval, 0, 3);
+		this.payload.writeUIntBE(this.wakeUpInterval, 0, 3);
 		return super.serialize();
 	}
 }
@@ -246,18 +248,28 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
 		super(driver, options);
 
 		validatePayload(this.payload.length >= 4);
-		this._wakeupInterval = this.payload.readUIntBE(0, 3);
+		this._wakeUpInterval = this.payload.readUIntBE(0, 3);
 		this._controllerNodeId = this.payload[3];
 		this.persistValues();
 	}
 
-	private _wakeupInterval: number;
-	@ccValue() public get wakeupInterval(): number {
-		return this._wakeupInterval;
+	private _wakeUpInterval: number;
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.UInt24,
+		label: "Wake Up interval",
+	})
+	public get wakeUpInterval(): number {
+		return this._wakeUpInterval;
 	}
 
 	private _controllerNodeId: number;
-	@ccValue() public get controllerNodeId(): number {
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnly,
+		label: "Node ID of the controller",
+	})
+	public get controllerNodeId(): number {
 		return this._controllerNodeId;
 	}
 }
@@ -306,26 +318,39 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 		this._maxWakeUpInterval = this.payload.readUIntBE(3, 3);
 		this._defaultWakeUpInterval = this.payload.readUIntBE(6, 3);
 		this._wakeUpIntervalSteps = this.payload.readUIntBE(9, 3);
-		this.persistValues();
+
+		// Store the received information as metadata for the wake up interval
+		this.getValueDB().setMetadata(
+			this.ccId,
+			this.endpoint,
+			"wakeUpInterval",
+			{
+				...ValueMetadata.WriteOnlyUInt24,
+				min: this._minWakeUpInterval,
+				max: this._maxWakeUpInterval,
+				steps: this._wakeUpIntervalSteps,
+				default: this._defaultWakeUpInterval,
+			},
+		);
 	}
 
 	private _minWakeUpInterval: number;
-	@ccValue() public get minWakeUpInterval(): number {
+	public get minWakeUpInterval(): number {
 		return this._minWakeUpInterval;
 	}
 
 	private _maxWakeUpInterval: number;
-	@ccValue() public get maxWakeUpInterval(): number {
+	public get maxWakeUpInterval(): number {
 		return this._maxWakeUpInterval;
 	}
 
 	private _defaultWakeUpInterval: number;
-	@ccValue() public get defaultWakeUpInterval(): number {
+	public get defaultWakeUpInterval(): number {
 		return this._defaultWakeUpInterval;
 	}
 
 	private _wakeUpIntervalSteps: number;
-	@ccValue() public get wakeUpIntervalSteps(): number {
+	public get wakeUpIntervalSteps(): number {
 		return this._wakeUpIntervalSteps;
 	}
 }

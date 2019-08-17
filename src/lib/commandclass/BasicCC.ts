@@ -132,7 +132,7 @@ export class BasicCCReport extends BasicCC {
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyLevel,
-		label: "Current Value",
+		label: "Current value",
 	})
 	public get currentValue(): Maybe<number> | undefined {
 		return this._currentValue;
@@ -142,7 +142,7 @@ export class BasicCCReport extends BasicCC {
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.Level,
-		label: "Target Value",
+		label: "Target value",
 	})
 	public get targetValue(): number | undefined {
 		return this._targetValue;
@@ -152,7 +152,7 @@ export class BasicCCReport extends BasicCC {
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnly,
-		label: "Remaining Duration",
+		label: "Remaining duration",
 	})
 	public get duration(): Duration | undefined {
 		return this._duration;

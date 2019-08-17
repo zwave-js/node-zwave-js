@@ -57,6 +57,7 @@ import {
 	RequestNodeInfoResponse,
 } from "./RequestNodeInfoMessages";
 import {
+	MetadataUpdatedArgs,
 	ValueAddedArgs,
 	ValueBaseArgs,
 	ValueDB,
@@ -73,6 +74,9 @@ export interface ZWaveNodeValueUpdatedArgs extends ValueUpdatedArgs {
 export interface ZWaveNodeValueRemovedArgs extends ValueRemovedArgs {
 	commandClassName: string;
 }
+export interface ZWaveNodeMetadataUpdatedArgs extends MetadataUpdatedArgs {
+	commandClassName: string;
+}
 export type ZWaveNodeValueAddedCallback = (
 	node: ZWaveNode,
 	args: ZWaveNodeValueAddedArgs,
@@ -85,11 +89,16 @@ export type ZWaveNodeValueRemovedCallback = (
 	node: ZWaveNode,
 	args: ZWaveNodeValueRemovedArgs,
 ) => void;
+export type ZWaveNodeMetadataUpdatedCallback = (
+	node: ZWaveNode,
+	args: ZWaveNodeMetadataUpdatedArgs,
+) => void;
 
 export interface ZWaveNodeValueEventCallbacks {
 	"value added": ZWaveNodeValueAddedCallback;
 	"value updated": ZWaveNodeValueUpdatedCallback;
 	"value removed": ZWaveNodeValueRemovedCallback;
+	"metadata updated": ZWaveNodeMetadataUpdatedCallback;
 }
 
 export type ZWaveNodeEventCallbacks = Overwrite<
@@ -149,6 +158,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			"value added",
 			"value updated",
 			"value removed",
+			"metadata updated",
 		] as const) {
 			this._valueDB.on(event, this.translateValueEvent.bind(this, event));
 		}
@@ -178,6 +188,15 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 				arg.propertyKey,
 			);
 			outArg.propertyKey = propertyKey;
+		}
+		// If this is a metadata event, make sure we return the merged metadata
+		if ("metadata" in outArg) {
+			((outArg as unknown) as MetadataUpdatedArgs).metadata = this.getValueMetadata(
+				arg.commandClass,
+				arg.endpoint || 0,
+				arg.propertyName,
+				arg.propertyKey,
+			);
 		}
 		// Log the value change
 		const ccInstance = this.internalCreateCCInstance(arg.commandClass);
@@ -341,17 +360,17 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		propertyName: string,
 		propertyKey?: number | string,
 	): ValueMetadata {
-		if (
-			this._valueDB.hasMetadata(cc, endpoint, propertyName, propertyKey)
-		) {
-			return this._valueDB.getMetadata(
+		return {
+			// Merge static metadata
+			...getCCValueMetadata(cc, propertyName),
+			// with potentially existing dynamic metadata
+			...this._valueDB.getMetadata(
 				cc,
 				endpoint,
 				propertyName,
 				propertyKey,
-			)!;
-		}
-		return getCCValueMetadata(cc, propertyName);
+			),
+		};
 	}
 
 	/**
