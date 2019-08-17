@@ -1,5 +1,10 @@
 // load the driver with stubbed out Serialport
-import { MockRequestMessageWithExpectation, MockRequestMessageWithoutExpectation, MockResponseMessage, MockSerialPort } from "../../../test/mocks";
+import {
+	MockRequestMessageWithExpectation,
+	MockRequestMessageWithoutExpectation,
+	MockResponseMessage,
+	MockSerialPort,
+} from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
 import { WakeUpCCIntervalSet } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
