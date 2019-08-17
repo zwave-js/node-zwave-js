@@ -598,8 +598,6 @@ export class Driver extends EventEmitter implements IDriver {
 			this.send(MessageHeaders.ACK);
 			// and handle the response (if it could be decoded)
 			if (msg) await this.handleMessage(msg);
-
-			break;
 		}
 
 		log.serial.message(

@@ -405,6 +405,31 @@ describe("lib/driver/Driver => ", () => {
 				jest.runAllTimers();
 			}).not.toThrow();
 		});
+
+		it("should correctly handle multiple messages in the receive buffer", async () => {
+			// This buffer contains a SendData transmit report and a ManufacturerSpecific report
+			const data = Buffer.from(
+				"010700130f000002e6010e000400020872050086000200828e",
+				"hex",
+			);
+
+			// swallow the error
+			driver.on("error", () => {});
+			await (driver as any).serialport_onData(data).catch(() => {});
+
+			// Ensure the driver ACKed two messages
+			expect(serialport.writeStub).toBeCalledTimes(2);
+			expect(
+				(serialport.writeStub.mock.calls[0][0] as Buffer).equals(
+					Buffer.from([MessageHeaders.ACK]),
+				),
+			).toBeTrue();
+			expect(
+				(serialport.writeStub.mock.calls[1][0] as Buffer).equals(
+					Buffer.from([MessageHeaders.ACK]),
+				),
+			).toBeTrue();
+		});
 	});
 
 	it("passes errors from the serialport through", async () => {
