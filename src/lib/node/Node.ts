@@ -9,7 +9,11 @@ import {
 	CentralSceneCCNotification,
 	CentralSceneKeys,
 } from "../commandclass/CentralSceneCC";
-import { CommandClass, getCCConstructor } from "../commandclass/CommandClass";
+import {
+	CommandClass,
+	getCCConstructor,
+	getCCValueMetadata,
+} from "../commandclass/CommandClass";
 import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { ConfigurationCC } from "../commandclass/ConfigurationCC";
 import { ManufacturerSpecificCC } from "../commandclass/ManufacturerSpecificCC";
@@ -37,7 +41,8 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { JSONObject, Mixin } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
-import { CacheValue } from "../values/Cache";
+import { CacheMetadata, CacheValue } from "../values/Cache";
+import { ValueMetadata } from "../values/Metadata";
 import {
 	BasicDeviceClasses,
 	DeviceClass,
@@ -305,6 +310,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	/**
 	 * Retrieves a stored value for a given property of a given CommandClass.
 	 * This does not request an updated value from the node!
+	 *
 	 * @param cc The command class the value belongs to
 	 * @param endpoint The endpoint the value belongs to (0 for the root device)
 	 * @param propertyName The property name the value belongs to
@@ -318,6 +324,34 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		propertyKey?: number | string,
 	): T | undefined {
 		return this._valueDB.getValue(cc, endpoint, propertyName, propertyKey);
+	}
+
+	/**
+	 * Retrieves metadata for a given property of a given CommandClass.
+	 * This can be used to enhance the user interface of an application
+	 *
+	 * @param cc The command class the value belongs to
+	 * @param endpoint The endpoint the value belongs to (0 for the root device)
+	 * @param propertyName The property name the value belongs to
+	 * @param propertyKey (optional) The sub-property to access
+	 */
+	public getValueMetadata(
+		cc: CommandClasses,
+		endpoint: number,
+		propertyName: string,
+		propertyKey?: number | string,
+	): ValueMetadata {
+		if (
+			this._valueDB.hasMetadata(cc, endpoint, propertyName, propertyKey)
+		) {
+			return this._valueDB.getMetadata(
+				cc,
+				endpoint,
+				propertyName,
+				propertyKey,
+			)!;
+		}
+		return getCCValueMetadata(cc, propertyName);
 	}
 
 	/**
@@ -1065,11 +1099,16 @@ version:               ${this.version}`;
 							name: CommandClasses[cc],
 							...info,
 						} as any;
-						// If any exist, store the values aswell
+						// If the CC is implemented and has values or value metadata,
+						// store them
 						const ccInstance = this.createCCInstance(cc);
 						if (ccInstance) {
+							// Store values if there ara any
 							const ccValues = ccInstance.serializeValuesForCache();
 							if (ccValues.length > 0) ret.values = ccValues;
+							const ccMetadata = ccInstance.serializeMetadataForCache();
+							if (ccMetadata.length > 0)
+								ret.metadata = ccMetadata;
 						}
 						return [num2hex(cc), ret] as [string, object];
 					}),
@@ -1159,9 +1198,13 @@ version:               ${this.version}`;
 				if (!(ccNum in CommandClasses)) continue;
 
 				// Parse the information we have
-				const { isSupported, isControlled, version, values } = ccDict[
-					ccHex
-				];
+				const {
+					isSupported,
+					isControlled,
+					version,
+					values,
+					metadata,
+				} = ccDict[ccHex];
 				this.addCC(ccNum, {
 					isSupported: enforceType(isSupported, "boolean"),
 					isControlled: enforceType(isControlled, "boolean"),
@@ -1178,6 +1221,22 @@ version:               ${this.version}`;
 						} catch (e) {
 							log.controller.logNode(this.id, {
 								message: `Error during deserialization of CC values from cache:\n${e}`,
+								level: "error",
+							});
+						}
+					}
+				}
+				if (isArray(metadata) && metadata.length > 0) {
+					// If any exist, deserialize the values aswell
+					const ccInstance = this.createCCInstance(ccNum);
+					if (ccInstance) {
+						try {
+							ccInstance.deserializeMetadataFromCache(
+								metadata as CacheMetadata[],
+							);
+						} catch (e) {
+							log.controller.logNode(this.id, {
+								message: `Error during deserialization of CC value metadata from cache:\n${e}`,
 								level: "error",
 							});
 						}

@@ -7,6 +7,7 @@ import {
 	BasicCCSet,
 	BasicCommand,
 } from "./BasicCC";
+import { getCCValueMetadata } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
@@ -82,5 +83,31 @@ describe("lib/commandclass/BasicCC => ", () => {
 			data: serializedCC,
 		});
 		expect(basicCC.constructor).toBe(BasicCC);
+	});
+
+	it("the CC values should have the correct metadata", () => {
+		// Readonly, 0-99
+		const currentValueMeta = getCCValueMetadata(
+			CommandClasses.Basic,
+			"currentValue",
+		);
+		expect(currentValueMeta).toMatchObject({
+			readable: true,
+			writeable: false,
+			min: 0,
+			max: 99,
+		});
+
+		// Writeable, 0-99
+		const targetValueMeta = getCCValueMetadata(
+			CommandClasses.Basic,
+			"targetValue",
+		);
+		expect(targetValueMeta).toMatchObject({
+			readable: true,
+			writeable: true,
+			min: 0,
+			max: 99,
+		});
 	});
 });

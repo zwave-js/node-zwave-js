@@ -1,10 +1,14 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
 import { BasicCCAPI } from "../commandclass/BasicCC";
+import { BatteryCCAPI } from "../commandclass/BatteryCC";
 import { CommandClasses } from "../commandclass/CommandClasses";
+import { VersionCCAPI } from "../commandclass/VersionCC";
+import { WakeUpCCAPI } from "../commandclass/WakeUpCC";
 import { Driver } from "../driver/Driver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { Endpoint } from "./Endpoint";
+import { ZWaveNode } from "./Node";
 
 describe("lib/node/Endpoint", () => {
 	describe("createAPI", () => {
@@ -43,10 +47,33 @@ describe("lib/node/Endpoint", () => {
 		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 		it("throws when trying to access a non-implemented CC", () => {
 			const endpoint = new Endpoint(1, fakeDriver, 1);
-			assertZWaveError(() => endpoint.commandClasses["FOOBAR"], {
+			assertZWaveError(() => (endpoint.commandClasses as any)["FOOBAR"], {
 				errorCode: ZWaveErrorCodes.CC_NotImplemented,
 				messageMatches: "FOOBAR is not implemented",
 			});
+		});
+
+		it("returns all supported CCs when being enumerated", () => {
+			// No supported CCs, empty array
+			let node = new ZWaveNode(2, fakeDriver, undefined, []);
+			let actual = [...node.commandClasses];
+			expect(actual).toEqual([]);
+
+			// Supported and controlled CCs
+			node = new ZWaveNode(
+				2,
+				fakeDriver,
+				undefined,
+				[CommandClasses.Battery, CommandClasses.Version],
+				[CommandClasses["Wake Up"]],
+			);
+			actual = [...node.commandClasses];
+			expect(actual).toHaveLength(3);
+			expect(actual.map(api => api.constructor)).toIncludeAllMembers([
+				BatteryCCAPI,
+				VersionCCAPI,
+				WakeUpCCAPI,
+			]);
 		});
 	});
 

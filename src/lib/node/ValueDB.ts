@@ -1,5 +1,6 @@
 import { EventEmitter } from "events";
 import { CommandClasses } from "../commandclass/CommandClasses";
+import { ValueMetadata } from "../values/Metadata";
 
 export interface ValueBaseArgs {
 	commandClass: CommandClasses;
@@ -65,6 +66,7 @@ function getValueKey(
 
 export class ValueDB extends EventEmitter {
 	private _db = new Map<string, unknown>();
+	private _metadata = new Map<string, ValueMetadata>();
 
 	/**
 	 * Stores a value for a given property of a given CommandClass
@@ -211,5 +213,115 @@ export class ValueDB extends EventEmitter {
 			const { cc, endpoint, propertyName, propertyKey } = JSON.parse(key);
 			this.removeValue(cc, endpoint, propertyName, propertyKey);
 		});
+		this._metadata.forEach((_meta, key) => {
+			const { cc, endpoint, propertyName, propertyKey } = JSON.parse(key);
+			this.setMetadata(
+				cc,
+				endpoint,
+				propertyName,
+				propertyKey,
+				undefined,
+			);
+		});
+	}
+
+	/**
+	 * Stores metadata for a CC value
+	 * @param cc The command class the value belongs to
+	 * @param endpoint The endpoint the value belongs to (0 for the root device)
+	 * @param propertyName The property name the value belongs to
+	 * @param value The value to set
+	 */
+	public setMetadata(
+		cc: CommandClasses,
+		endpoint: number,
+		propertyName: string,
+		propertyKey: string | number,
+		metadata: ValueMetadata | undefined,
+	): void;
+
+	public setMetadata(
+		cc: CommandClasses,
+		endpoint: number,
+		propertyName: string,
+		metadata: ValueMetadata | undefined,
+	): void;
+
+	public setMetadata(
+		cc: CommandClasses,
+		endpoint: number,
+		propertyName: string,
+		...args:
+			| [ValueMetadata | undefined]
+			| [string | number, ValueMetadata | undefined]
+	): void {
+		let propertyKey: string | number | undefined;
+		const metadata = (args[args.length - 1] as unknown) as
+			| ValueMetadata
+			| undefined;
+		let dbKey: string;
+
+		if (args.length === 1) {
+			dbKey = getValueKey(cc, endpoint, propertyName);
+		} else {
+			propertyKey = args[0];
+			dbKey = getValueKey(cc, endpoint, propertyName, propertyKey);
+		}
+
+		if (metadata) {
+			this._metadata.set(dbKey, metadata);
+		} else {
+			this._metadata.delete(dbKey);
+		}
+	}
+
+	/**
+	 * Checks if metadata for a given value exists in this ValueDB
+	 * @param cc The command class the value belongs to
+	 * @param endpoint The endpoint the value belongs to (0 for the root device)
+	 * @param propertyName The property name the value belongs to
+	 * @param propertyKey (optional) The sub-property to access
+	 */
+	public hasMetadata(
+		cc: CommandClasses,
+		endpoint: number,
+		propertyName: string,
+		propertyKey?: number | string,
+	): boolean {
+		const key = getValueKey(cc, endpoint, propertyName, propertyKey);
+		return this._metadata.has(key);
+	}
+
+	/**
+	 * Retrieves metadata for a given value
+	 * @param cc The command class the value belongs to
+	 * @param endpoint The endpoint the value belongs to (0 for the root device)
+	 * @param propertyName The property name the value belongs to
+	 * @param propertyKey (optional) The sub-property to access
+	 */
+	public getMetadata(
+		cc: CommandClasses,
+		endpoint: number,
+		propertyName: string,
+		propertyKey?: number | string,
+	): ValueMetadata | undefined {
+		const key = getValueKey(cc, endpoint, propertyName, propertyKey);
+		return this._metadata.get(key);
+	}
+
+	public getAllMetadata(
+		forCC: CommandClasses,
+	): {
+		endpoint: number;
+		propertyName: string;
+		propertyKey?: number | string;
+		metadata: ValueMetadata;
+	}[] {
+		const ret: ReturnType<ValueDB["getAllMetadata"]> = [];
+		this._metadata.forEach((meta, key) => {
+			const { cc, ...rest } = JSON.parse(key);
+			if (forCC === cc) ret.push({ ...rest, metadata: meta });
+		});
+		return ret;
 	}
 }

@@ -9,7 +9,12 @@ import { ZWaveNode } from "../node/Node";
 import { ValueDB } from "../node/ValueDB";
 import { JSONObject, staticExtends, stripUndefined } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
-import { CacheValue, serializeCacheValue } from "../values/Cache";
+import {
+	CacheMetadata,
+	CacheValue,
+	serializeCacheValue,
+} from "../values/Cache";
+import { ValueMetadata } from "../values/Metadata";
 import { Maybe, unknownBoolean } from "../values/Primitive";
 import { CCAPI } from "./API";
 import { CommandClasses } from "./CommandClasses";
@@ -23,19 +28,6 @@ export interface CommandClassInfo {
 export interface CommandClassStatic {
 	readonly maxImplementedVersion: number;
 }
-
-/* eslint-disable @typescript-eslint/camelcase */
-export const METADATA_commandClass = Symbol("commandClass");
-export const METADATA_commandClassMap = Symbol("commandClassMap");
-export const METADATA_ccResponse = Symbol("ccResponse");
-export const METADATA_ccCommand = Symbol("ccCommand");
-export const METADATA_ccCommandMap = Symbol("ccCommandMap");
-export const METADATA_ccValues = Symbol("ccValues");
-export const METADATA_ccKeyValuePairs = Symbol("ccKeyValuePairs");
-export const METADATA_version = Symbol("version");
-export const METADATA_API = Symbol("API");
-export const METADATA_APIMap = Symbol("APIMap");
-/* eslint-enable @typescript-eslint/camelcase */
 
 // /**
 //  * Defines which kind of CC state should be requested
@@ -82,7 +74,6 @@ export type CommandClassOptions =
 	| CommandClassCreationOptions
 	| CommandClassDeserializationOptions;
 
-@implementedVersion(Number.POSITIVE_INFINITY) // per default don't impose any restrictions on the version
 export class CommandClass {
 	// empty constructor to parse messages
 	public constructor(driver: IDriver, options: CommandClassOptions) {
@@ -400,19 +391,16 @@ export class CommandClass {
 		this._ccValues.set(name as string, internal);
 	}
 
-	public isInternalValue(valueName: keyof this): boolean {
+	/** Determines if the given value is an internal value */
+	public isInternalValue(propertyName: keyof this): boolean {
 		// A value is internal if any of the possible definitions say so (true)
 		return (
-			this._ccValues.get(valueName as string) === true ||
-			getCCValueDefinitions(this).get(valueName as string) === true ||
-			getCCKeyValuePairDefinitions(this).get(valueName as string) === true
+			this._ccValues.get(propertyName as string) === true ||
+			getCCValueDefinitions(this).get(propertyName as string) === true ||
+			getCCKeyValuePairDefinitions(this).get(propertyName as string) ===
+				true
 		);
 	}
-	// public registerValues(...names: (keyof this)[]): void {
-	// 	for (const name of names) {
-	// 		this.registerValue(name);
-	// 	}
-	// }
 
 	/** Persists all values on the given node into the value. Returns true if the process succeeded, false otherwise */
 	public persistValues(valueNames?: (keyof this)[]): boolean {
@@ -510,6 +498,26 @@ export class CommandClass {
 		);
 	}
 
+	/** Serializes metadata to be stored in the cache */
+	public serializeMetadataForCache(): CacheMetadata[] {
+		const allMetadata = this.getValueDB().getAllMetadata(
+			getCommandClass(this),
+		);
+		const ccValueDefinitions = getCCValueDefinitions(this);
+		const keyValuePairs = getCCKeyValuePairDefinitions(this);
+		return (
+			allMetadata
+				// only serialize metadata with a corresponding existing or registered value
+				.filter(
+					({ propertyName }) =>
+						propertyName in this ||
+						ccValueDefinitions.has(propertyName) ||
+						keyValuePairs.has(propertyName) ||
+						this._ccValues.has(propertyName),
+				)
+		);
+	}
+
 	/** Deserializes values from the cache */
 	public deserializeValuesFromCache(values: CacheValue[]): void {
 		const cc = getCommandClass(this);
@@ -538,6 +546,39 @@ export class CommandClass {
 					val.endpoint,
 					val.propertyName,
 					valueToSet,
+				);
+			}
+		}
+	}
+
+	/** Deserializes value metadata from the cache */
+	public deserializeMetadataFromCache(allMetadata: CacheMetadata[]): void {
+		const cc = getCommandClass(this);
+		const ccValues = getCCValueDefinitions(this);
+		const keyValuePairs = getCCKeyValuePairDefinitions(this);
+		for (const meta of allMetadata) {
+			// Only deserialize registered CC values
+			if (
+				meta.propertyName in this ||
+				ccValues.has(meta.propertyName) ||
+				keyValuePairs.has(meta.propertyName) ||
+				this._ccValues.has(meta.propertyName)
+			) {
+				const metadataToSet = meta.metadata;
+				// // Properties defined as a map must be converted from an object to a map
+				// // TODO: (GH#110) This check should not be necessary. Ideally all values are either primitives or Maps
+				// const shouldBeMap =
+				// 	this[meta.propertyName as keyof this] instanceof Map ||
+				// 	keyValuePairs.has(meta.propertyName) ||
+				// 	meta.type === "map";
+				// if (shouldBeMap && isObject(meta.value)) {
+				// 	metadataToSet = new Map(entries(meta.value));
+				// }
+				this.getValueDB().setMetadata(
+					cc,
+					meta.endpoint,
+					meta.propertyName,
+					metadataToSet,
 				);
 			}
 		}
@@ -572,6 +613,20 @@ export class CommandClass {
 
 // =======================
 // use decorators to link command class values to actual command classes
+
+/* eslint-disable @typescript-eslint/camelcase */
+export const METADATA_commandClass = Symbol("commandClass");
+export const METADATA_commandClassMap = Symbol("commandClassMap");
+export const METADATA_ccResponse = Symbol("ccResponse");
+export const METADATA_ccCommand = Symbol("ccCommand");
+export const METADATA_ccCommandMap = Symbol("ccCommandMap");
+export const METADATA_ccValues = Symbol("ccValues");
+export const METADATA_ccKeyValuePairs = Symbol("ccKeyValuePairs");
+export const METADATA_ccValueMeta = Symbol("ccValueMeta");
+export const METADATA_version = Symbol("version");
+export const METADATA_API = Symbol("API");
+export const METADATA_APIMap = Symbol("APIMap");
+/* eslint-enable @typescript-eslint/camelcase */
 
 export interface Constructable<T extends CommandClass> {
 	new (
@@ -996,6 +1051,42 @@ export function getCCKeyValuePairDefinitions(
 		Reflect.getMetadata(METADATA_ccKeyValuePairs, CommandClass) || {};
 	if (!(cc in metadata)) return new Map();
 	return metadata[cc] as Map<string, boolean>;
+}
+
+/**
+ * Defines additional metadata for the given CC value
+ */
+export function ccValueMetadata(meta: ValueMetadata): PropertyDecorator {
+	return (target: CommandClass, property: string | symbol) => {
+		// get the class constructor
+		const constr = target.constructor as typeof CommandClass;
+		const cc = getCommandClassStatic(constr);
+		// retrieve the current metadata
+		const metadata =
+			Reflect.getMetadata(METADATA_ccValueMeta, CommandClass) || {};
+		if (!(cc in metadata)) metadata[cc] = new Map<string, ValueMetadata>();
+		// And add the variable
+		const variables: Map<string, ValueMetadata> = metadata[cc];
+		variables.set(property as string, meta);
+		// store back to the object
+		Reflect.defineMetadata(METADATA_ccValueMeta, metadata, CommandClass);
+	};
+}
+
+/**
+ * Retrieves defined metadata for the given CC value. If none is found, the default settings are returned.
+ */
+export function getCCValueMetadata(
+	cc: CommandClasses,
+	property: string,
+): ValueMetadata {
+	// retrieve the current metadata
+	const metadata =
+		Reflect.getMetadata(METADATA_ccValueMeta, CommandClass) || {};
+	if (!(cc in metadata)) return ValueMetadata.default;
+	const map = metadata[cc] as Map<string, ValueMetadata>;
+	if (map.has(property)) return map.get(property)!;
+	return ValueMetadata.default;
 }
 
 /**
