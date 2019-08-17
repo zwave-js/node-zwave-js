@@ -356,6 +356,12 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 					ret.push(
 						...ccInstance
 							.getDefinedPropertyNames()
+							.filter(
+								propertyName =>
+									!ccInstance.isInternalValue(
+										propertyName as any,
+									),
+							)
 							.map(propertyName => ({
 								commandClass: cc,
 								endpoint: endpoint.index,
