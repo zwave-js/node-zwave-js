@@ -164,15 +164,19 @@ export class CommandClass {
 
 	/** Whether the interview for this CC was previously completed */
 	public get interviewComplete(): boolean {
-		return !!this.getValueDB().getValue<boolean>(
-			this.ccId,
-			// This information belongs to the root endpoint
-			0,
-			"interviewComplete",
-		);
+		return !!this.getValueDB().getValue<boolean>({
+			commandClass: this.ccId,
+			propertyName: "interviewComplete",
+		});
 	}
 	public set interviewComplete(value: boolean) {
-		this.getValueDB().setValue(this.ccId, 0, "interviewComplete", value);
+		this.getValueDB().setValue(
+			{
+				commandClass: this.ccId,
+				propertyName: "interviewComplete",
+			},
+			value,
+		);
 	}
 	/** Accessor for the interviewComplete on static subclasses */
 	protected static setInterviewComplete(
@@ -391,6 +395,15 @@ export class CommandClass {
 		this._ccValues.set(name as string, internal);
 	}
 
+	/** Returns a list of all value names that are defined on this CommandClass */
+	public getDefinedPropertyNames(): string[] {
+		return [
+			...this._ccValues.keys(),
+			...getCCValueDefinitions(this).keys(),
+			...getCCKeyValuePairDefinitions(this).keys(),
+		];
+	}
+
 	/** Determines if the given value is an internal value */
 	public isInternalValue(propertyName: keyof this): boolean {
 		// A value is internal if any of the possible definitions say so (true)
@@ -434,10 +447,12 @@ export class CommandClass {
 						unknown
 					>).entries()) {
 						db.setValue(
-							cc,
-							this.endpoint,
-							variable,
-							propertyKey,
+							{
+								commandClass: cc,
+								endpoint: this.endpoint,
+								propertyName: variable,
+								propertyKey,
+							},
 							value,
 						);
 					}
@@ -447,10 +462,12 @@ export class CommandClass {
 						unknown,
 					];
 					db.setValue(
-						cc,
-						this.endpoint,
-						variable,
-						propertyKey,
+						{
+							commandClass: cc,
+							endpoint: this.endpoint,
+							propertyName: variable,
+							propertyKey,
+						},
 						value,
 					);
 				} else {
@@ -461,7 +478,14 @@ export class CommandClass {
 				}
 			} else {
 				// This value belongs to a simple property
-				db.setValue(cc, this.endpoint, variable, sourceValue);
+				db.setValue(
+					{
+						commandClass: cc,
+						endpoint: this.endpoint,
+						propertyName: variable,
+					},
+					sourceValue,
+				);
 			}
 		}
 		return true;
@@ -484,7 +508,7 @@ export class CommandClass {
 						keyValuePairs.has(propertyName) ||
 						this._ccValues.has(propertyName),
 				)
-				.map(({ value, ...props }) => {
+				.map(({ value, commandClass, ...props }) => {
 					// Registered properties have no type associated, so in
 					// order to deserialize Maps, we need to serialize the type too
 					if (value instanceof Map) {
@@ -515,6 +539,7 @@ export class CommandClass {
 						keyValuePairs.has(propertyName) ||
 						this._ccValues.has(propertyName),
 				)
+				.map(({ commandClass, ...props }) => props)
 		);
 	}
 
@@ -542,9 +567,11 @@ export class CommandClass {
 					valueToSet = new Map(entries(val.value));
 				}
 				this.getValueDB().setValue(
-					cc,
-					val.endpoint,
-					val.propertyName,
+					{
+						commandClass: cc,
+						endpoint: val.endpoint,
+						propertyName: val.propertyName,
+					},
 					valueToSet,
 				);
 			}
@@ -575,9 +602,11 @@ export class CommandClass {
 				// 	metadataToSet = new Map(entries(meta.value));
 				// }
 				this.getValueDB().setMetadata(
-					cc,
-					meta.endpoint,
-					meta.propertyName,
+					{
+						commandClass: cc,
+						endpoint: meta.endpoint,
+						propertyName: meta.propertyName,
+					},
 					metadataToSet,
 				);
 			}

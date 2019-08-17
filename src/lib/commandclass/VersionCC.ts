@@ -125,11 +125,11 @@ export class VersionCC extends CommandClass {
 			case VersionCommand.CapabilitiesGet:
 				return this.version >= 3;
 			case VersionCommand.ZWaveSoftwareGet: {
-				let ret = this.getValueDB().getValue<Maybe<boolean>>(
-					getCommandClass(this),
-					this.endpoint,
-					"supportsZWaveSoftwareGet",
-				);
+				let ret = this.getValueDB().getValue<Maybe<boolean>>({
+					commandClass: getCommandClass(this),
+					endpoint: this.endpoint,
+					propertyName: "supportsZWaveSoftwareGet",
+				});
 				if (ret == undefined) ret = "unknown" as Maybe<boolean>;
 				return ret;
 			}

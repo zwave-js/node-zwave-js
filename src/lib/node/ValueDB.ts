@@ -2,26 +2,27 @@ import { EventEmitter } from "events";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { ValueMetadata } from "../values/Metadata";
 
-export interface ValueBaseArgs {
+/** Uniquely identifies to which CC, endpoint and property a value belongs to */
+export interface ValueID {
 	commandClass: CommandClasses;
 	endpoint?: number;
 	propertyName: string;
 	propertyKey?: number | string;
 }
-export interface ValueUpdatedArgs extends ValueBaseArgs {
+export interface ValueUpdatedArgs extends ValueID {
 	prevValue: unknown;
 	newValue: unknown;
 }
 
-export interface ValueAddedArgs extends ValueBaseArgs {
+export interface ValueAddedArgs extends ValueID {
 	newValue: unknown;
 }
 
-export interface ValueRemovedArgs extends ValueBaseArgs {
+export interface ValueRemovedArgs extends ValueID {
 	prevValue: unknown;
 }
 
-export interface MetadataUpdatedArgs extends ValueBaseArgs {
+export interface MetadataUpdatedArgs extends ValueID {
 	metadata: ValueMetadata | undefined;
 }
 
@@ -55,15 +56,15 @@ export interface ValueDB {
 	removeAllListeners(event?: ValueDBEvents): this;
 }
 
-function getValueKey(
-	cc: CommandClasses,
-	endpoint: number,
-	propertyName: string,
-	propertyKey?: string | number,
-): string {
+function valueIdToString({
+	commandClass,
+	endpoint,
+	propertyName,
+	propertyKey,
+}: ValueID): string {
 	const jsonKey: Record<string, unknown> = {
-		cc,
-		endpoint,
+		commandClass,
+		endpoint: endpoint || 0,
 		propertyName,
 	};
 	if (propertyKey != undefined) jsonKey.propertyKey = propertyKey;
@@ -75,51 +76,14 @@ export class ValueDB extends EventEmitter {
 	private _metadata = new Map<string, ValueMetadata>();
 
 	/**
-	 * Stores a value for a given property of a given CommandClass
-	 * @param cc The command class the value belongs to
-	 * @param endpoint The endpoint the value belongs to (0 for the root device)
-	 * @param propertyName The property name the value belongs to
-	 * @param value The value to set
+	 * Stores a value for a given value id
 	 */
-	public setValue(
-		cc: CommandClasses,
-		endpoint: number,
-		propertyName: string,
-		propertyKey: string | number,
-		value: unknown,
-	): void;
-
-	public setValue(
-		cc: CommandClasses,
-		endpoint: number,
-		propertyName: string,
-		value: unknown,
-	): void;
-
-	public setValue(
-		cc: CommandClasses,
-		endpoint: number,
-		propertyName: string,
-		...args: [unknown] | [string | number, unknown]
-	): void {
-		let propertyKey: string | number | undefined;
-		const value = args[args.length - 1];
-		let dbKey: string;
-
+	public setValue(valueId: ValueID, value: unknown): void {
 		const cbArg: ValueAddedArgs | ValueUpdatedArgs = {
-			commandClass: cc,
-			endpoint,
-			propertyName,
+			...valueId,
 			newValue: value,
 		};
-
-		if (args.length === 1) {
-			dbKey = getValueKey(cc, endpoint, propertyName);
-		} else {
-			propertyKey = args[0];
-			dbKey = getValueKey(cc, endpoint, propertyName, propertyKey);
-			cbArg.propertyKey = propertyKey;
-		}
+		const dbKey: string = valueIdToString(valueId);
 
 		let event: string;
 		if (this._db.has(dbKey)) {
@@ -134,28 +98,17 @@ export class ValueDB extends EventEmitter {
 	}
 
 	/**
-	 * Removes a value for a given property of a given CommandClass
-	 * @param cc The command class the value belongs to
-	 * @param endpoint The endpoint the value belongs to (0 for the root device)
-	 * @param propertyName The property name the value belongs to
+	 * Removes a value for a given value id
 	 */
-	public removeValue(
-		cc: CommandClasses,
-		endpoint: number,
-		propertyName: string,
-		propertyKey?: number | string,
-	): boolean {
-		const key = getValueKey(cc, endpoint, propertyName, propertyKey);
-		if (this._db.has(key)) {
-			const prevValue = this._db.get(key);
-			this._db.delete(key);
+	public removeValue(valueId: ValueID): boolean {
+		const dbKey: string = valueIdToString(valueId);
+		if (this._db.has(dbKey)) {
+			const prevValue = this._db.get(dbKey);
+			this._db.delete(dbKey);
 			const cbArg: ValueRemovedArgs = {
-				commandClass: cc,
-				endpoint,
-				propertyName,
+				...valueId,
 				prevValue,
 			};
-			if (propertyKey != undefined) cbArg.propertyKey = propertyKey;
 			this.emit("value removed", cbArg);
 			return true;
 		}
@@ -163,52 +116,28 @@ export class ValueDB extends EventEmitter {
 	}
 
 	/**
-	 * Retrieves a value for a given property of a given CommandClass
-	 * @param cc The command class the value belongs to
-	 * @param endpoint The endpoint the value belongs to (0 for the root device)
-	 * @param propertyName The property name the value belongs to
-	 * @param propertyKey (optional) The sub-property to access
+	 * Retrieves a value for a given value id
 	 */
 	/* wotan-disable-next-line no-misused-generics */
-	public getValue<T = unknown>(
-		cc: CommandClasses,
-		endpoint: number,
-		propertyName: string,
-		propertyKey?: number | string,
-	): T | undefined {
-		const key = getValueKey(cc, endpoint, propertyName, propertyKey);
+	public getValue<T = unknown>(valueId: ValueID): T | undefined {
+		const key = valueIdToString(valueId);
 		return this._db.get(key) as T | undefined;
 	}
 
 	/**
-	 * Checks if a value for a given property of a given CommandClass exists in this ValueDB
-	 * @param cc The command class the value belongs to
-	 * @param endpoint The endpoint the value belongs to (0 for the root device)
-	 * @param propertyName The property name the value belongs to
-	 * @param propertyKey (optional) The sub-property to access
+	 * Checks if a value for a given value id exists in this ValueDB
 	 */
-	public hasValue(
-		cc: CommandClasses,
-		endpoint: number,
-		propertyName: string,
-		propertyKey?: number | string,
-	): boolean {
-		const key = getValueKey(cc, endpoint, propertyName, propertyKey);
+	public hasValue(valueId: ValueID): boolean {
+		const key = valueIdToString(valueId);
 		return this._db.has(key);
 	}
 
-	public getValues(
-		forCC: CommandClasses,
-	): {
-		endpoint: number;
-		propertyName: string;
-		propertyKey?: number | string;
-		value: unknown;
-	}[] {
+	/** Returns all values that are stored for a given CC */
+	public getValues(forCC: CommandClasses): (ValueID & { value: unknown })[] {
 		const ret: ReturnType<ValueDB["getValues"]> = [];
 		this._db.forEach((value, key) => {
-			const { cc, ...rest } = JSON.parse(key);
-			if (forCC === cc) ret.push({ ...rest, value });
+			const valueId: ValueID = JSON.parse(key);
+			if (forCC === valueId.commandClass) ret.push({ ...valueId, value });
 		});
 		return ret;
 	}
@@ -216,64 +145,23 @@ export class ValueDB extends EventEmitter {
 	/** Clears all values from the value DB */
 	public clear(): void {
 		this._db.forEach((_val, key) => {
-			const { cc, endpoint, propertyName, propertyKey } = JSON.parse(key);
-			this.removeValue(cc, endpoint, propertyName, propertyKey);
+			const valueId: ValueID = JSON.parse(key);
+			this.removeValue(valueId);
 		});
 		this._metadata.forEach((_meta, key) => {
-			const { cc, endpoint, propertyName, propertyKey } = JSON.parse(key);
-			this.setMetadata(
-				cc,
-				endpoint,
-				propertyName,
-				propertyKey,
-				undefined,
-			);
+			const valueId = JSON.parse(key);
+			this.setMetadata(valueId, undefined);
 		});
 	}
 
 	/**
-	 * Stores metadata for a CC value
-	 * @param cc The command class the value belongs to
-	 * @param endpoint The endpoint the value belongs to (0 for the root device)
-	 * @param propertyName The property name the value belongs to
-	 * @param value The value to set
+	 * Stores metadata for a given value id
 	 */
 	public setMetadata(
-		cc: CommandClasses,
-		endpoint: number,
-		propertyName: string,
-		propertyKey: string | number,
+		valueId: ValueID,
 		metadata: ValueMetadata | undefined,
-	): void;
-
-	public setMetadata(
-		cc: CommandClasses,
-		endpoint: number,
-		propertyName: string,
-		metadata: ValueMetadata | undefined,
-	): void;
-
-	public setMetadata(
-		cc: CommandClasses,
-		endpoint: number,
-		propertyName: string,
-		...args:
-			| [ValueMetadata | undefined]
-			| [string | number, ValueMetadata | undefined]
 	): void {
-		let propertyKey: string | number | undefined;
-		const metadata = (args[args.length - 1] as unknown) as
-			| ValueMetadata
-			| undefined;
-		let dbKey: string;
-
-		if (args.length === 1) {
-			dbKey = getValueKey(cc, endpoint, propertyName);
-		} else {
-			propertyKey = args[0];
-			dbKey = getValueKey(cc, endpoint, propertyName, propertyKey);
-		}
-
+		const dbKey: string = valueIdToString(valueId);
 		if (metadata) {
 			this._metadata.set(dbKey, metadata);
 		} else {
@@ -281,61 +169,39 @@ export class ValueDB extends EventEmitter {
 		}
 
 		const cbArg: MetadataUpdatedArgs = {
-			commandClass: cc,
-			endpoint,
-			propertyName,
-			propertyKey,
+			...valueId,
 			metadata,
 		};
 		this.emit("metadata updated", cbArg);
 	}
 
 	/**
-	 * Checks if metadata for a given value exists in this ValueDB
-	 * @param cc The command class the value belongs to
-	 * @param endpoint The endpoint the value belongs to (0 for the root device)
-	 * @param propertyName The property name the value belongs to
-	 * @param propertyKey (optional) The sub-property to access
+	 * Checks if metadata for a given value id exists in this ValueDB
 	 */
-	public hasMetadata(
-		cc: CommandClasses,
-		endpoint: number,
-		propertyName: string,
-		propertyKey?: number | string,
-	): boolean {
-		const key = getValueKey(cc, endpoint, propertyName, propertyKey);
+	public hasMetadata(valueId: ValueID): boolean {
+		const key = valueIdToString(valueId);
 		return this._metadata.has(key);
 	}
 
 	/**
-	 * Retrieves metadata for a given value
-	 * @param cc The command class the value belongs to
-	 * @param endpoint The endpoint the value belongs to (0 for the root device)
-	 * @param propertyName The property name the value belongs to
-	 * @param propertyKey (optional) The sub-property to access
+	 * Retrieves metadata for a given value id
 	 */
-	public getMetadata(
-		cc: CommandClasses,
-		endpoint: number,
-		propertyName: string,
-		propertyKey?: number | string,
-	): ValueMetadata | undefined {
-		const key = getValueKey(cc, endpoint, propertyName, propertyKey);
+	public getMetadata(valueId: ValueID): ValueMetadata | undefined {
+		const key = valueIdToString(valueId);
 		return this._metadata.get(key);
 	}
 
+	/** Returns all metadata that is stored for a given CC */
 	public getAllMetadata(
 		forCC: CommandClasses,
-	): {
-		endpoint: number;
-		propertyName: string;
-		propertyKey?: number | string;
+	): (ValueID & {
 		metadata: ValueMetadata;
-	}[] {
+	})[] {
 		const ret: ReturnType<ValueDB["getAllMetadata"]> = [];
 		this._metadata.forEach((meta, key) => {
-			const { cc, ...rest } = JSON.parse(key);
-			if (forCC === cc) ret.push({ ...rest, metadata: meta });
+			const valueId: ValueID = JSON.parse(key);
+			if (forCC === valueId.commandClass)
+				ret.push({ ...valueId, metadata: meta });
 		});
 		return ret;
 	}

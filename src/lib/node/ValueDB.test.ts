@@ -1,6 +1,6 @@
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { ValueMetadata } from "../values/Metadata";
-import { ValueDB } from "./ValueDB";
+import { ValueDB, ValueID } from "./ValueDB";
 
 describe("lib/node/ValueDB => ", () => {
 	let valueDB: ValueDB;
@@ -22,7 +22,14 @@ describe("lib/node/ValueDB => ", () => {
 	describe("setValue() (first add)", () => {
 		let cbArg: any;
 		beforeAll(() => {
-			valueDB.setValue(CommandClasses["Alarm Sensor"], 4, "foo", "bar");
+			valueDB.setValue(
+				{
+					commandClass: CommandClasses["Alarm Sensor"],
+					endpoint: 4,
+					propertyName: "foo",
+				},
+				"bar",
+			);
 		});
 
 		afterAll(() => {
@@ -57,8 +64,13 @@ describe("lib/node/ValueDB => ", () => {
 	describe("setValue() (consecutive adds)", () => {
 		let cbArg: any;
 		beforeAll(() => {
-			valueDB.setValue(CommandClasses["Wake Up"], 0, "prop", "foo");
-			valueDB.setValue(CommandClasses["Wake Up"], 0, "prop", "bar");
+			const valueId = {
+				commandClass: CommandClasses["Wake Up"],
+				endpoint: 0,
+				propertyName: "prop",
+			};
+			valueDB.setValue(valueId, "foo");
+			valueDB.setValue(valueId, "bar");
 		});
 
 		afterAll(() => {
@@ -98,8 +110,24 @@ describe("lib/node/ValueDB => ", () => {
 		const cc = CommandClasses["Wake Up"];
 
 		beforeAll(() => {
-			valueDB.setValue(cc, 0, "prop", "foo", 1);
-			valueDB.setValue(cc, 0, "prop", "bar", 2);
+			valueDB.setValue(
+				{
+					commandClass: cc,
+					endpoint: 0,
+					propertyName: "prop",
+					propertyKey: "foo",
+				},
+				1,
+			);
+			valueDB.setValue(
+				{
+					commandClass: cc,
+					endpoint: 0,
+					propertyName: "prop",
+					propertyKey: "bar",
+				},
+				2,
+			);
 		});
 
 		afterAll(() => {
@@ -109,8 +137,22 @@ describe("lib/node/ValueDB => ", () => {
 		});
 
 		it("getValue()/setValue() should treat different property keys as distinct values", () => {
-			expect(valueDB.getValue(cc, 0, "prop", "foo")).toBe(1);
-			expect(valueDB.getValue(cc, 0, "prop", "bar")).toBe(2);
+			expect(
+				valueDB.getValue({
+					commandClass: cc,
+					endpoint: 0,
+					propertyName: "prop",
+					propertyKey: "foo",
+				}),
+			).toBe(1);
+			expect(
+				valueDB.getValue({
+					commandClass: cc,
+					endpoint: 0,
+					propertyName: "prop",
+					propertyKey: "bar",
+				}),
+			).toBe(2);
 		});
 
 		it("the value added callback should have been called for each added value", () => {
@@ -122,16 +164,41 @@ describe("lib/node/ValueDB => ", () => {
 
 		it("after clearing the value DB, the values should all be removed", () => {
 			valueDB.clear();
-			expect(valueDB.getValue(cc, 0, "prop", "foo")).toBeUndefined();
-			expect(valueDB.getValue(cc, 0, "prop", "bar")).toBeUndefined();
+			expect(
+				valueDB.getValue({
+					commandClass: cc,
+					endpoint: 0,
+					propertyName: "prop",
+					propertyKey: "foo",
+				}),
+			).toBeUndefined();
+			expect(
+				valueDB.getValue({
+					commandClass: cc,
+					endpoint: 0,
+					propertyName: "prop",
+					propertyKey: "bar",
+				}),
+			).toBeUndefined();
 		});
 	});
 
 	describe("removeValue()", () => {
 		let cbArg: any;
 		beforeAll(() => {
-			valueDB.setValue(CommandClasses["Alarm Sensor"], 1, "bar", "foo");
-			valueDB.removeValue(CommandClasses["Alarm Sensor"], 1, "bar");
+			valueDB.setValue(
+				{
+					commandClass: CommandClasses["Alarm Sensor"],
+					endpoint: 1,
+					propertyName: "bar",
+				},
+				"foo",
+			);
+			valueDB.removeValue({
+				commandClass: CommandClasses["Alarm Sensor"],
+				endpoint: 1,
+				propertyName: "bar",
+			});
 		});
 
 		afterAll(() => {
@@ -206,10 +273,20 @@ describe("lib/node/ValueDB => ", () => {
 
 	describe("clear()", () => {
 		let cbArgs: any[];
+		const valueId1 = {
+			commandClass: CommandClasses["Alarm Sensor"],
+			endpoint: 1,
+			propertyName: "bar",
+		};
+		const valueId2 = {
+			commandClass: CommandClasses.Battery,
+			endpoint: 2,
+			propertyName: "prop",
+		};
 		beforeAll(() => {
 			createValueDB();
-			valueDB.setValue(CommandClasses["Alarm Sensor"], 1, "bar", "foo");
-			valueDB.setValue(CommandClasses.Battery, 2, "prop", "bar");
+			valueDB.setValue(valueId1, "foo");
+			valueDB.setValue(valueId2, "bar");
 			valueDB.clear();
 		});
 
@@ -233,10 +310,10 @@ describe("lib/node/ValueDB => ", () => {
 
 		it("After clearing, getValue should return undefined", () => {
 			let actual: unknown;
-			actual = valueDB.getValue(CommandClasses["Alarm Sensor"], 1, "bar");
+			actual = valueDB.getValue(valueId1);
 			expect(actual).toBeUndefined();
 
-			actual = valueDB.setValue(CommandClasses.Battery, 2, "prop", "bar");
+			actual = valueDB.setValue(valueId2, "bar");
 			expect(actual).toBeUndefined();
 		});
 	});
@@ -247,75 +324,71 @@ describe("lib/node/ValueDB => ", () => {
 		it("getValue() should return the value stored for the same combination of CC, endpoint and propertyName", () => {
 			const tests = [
 				{
-					cc: CommandClasses.Basic,
+					commandClass: CommandClasses.Basic,
 					endpoint: 0,
 					propertyName: "foo",
 					value: "1",
 				},
 				{
-					cc: CommandClasses.Basic,
+					commandClass: CommandClasses.Basic,
 					endpoint: 2,
 					propertyName: "foo",
 					value: "2",
 				},
 				{
-					cc: CommandClasses.Basic,
+					commandClass: CommandClasses.Basic,
 					endpoint: 0,
 					propertyName: "FOO",
 					value: "3",
 				},
 				{
-					cc: CommandClasses.Basic,
+					commandClass: CommandClasses.Basic,
 					endpoint: 2,
 					propertyName: "FOO",
 					value: "4",
 				},
 			];
 
-			for (const { cc, endpoint, propertyName, value } of tests) {
-				valueDB.setValue(cc, endpoint, propertyName, value);
+			for (const { value, ...valueId } of tests) {
+				valueDB.setValue(valueId, value);
 			}
-			for (const { cc, endpoint, propertyName, value } of tests) {
-				expect(valueDB.getValue(cc, endpoint, propertyName)).toBe(
-					value,
-				);
+			for (const { value, ...valueId } of tests) {
+				expect(valueDB.getValue(valueId)).toBe(value);
 			}
 		});
 
 		it("getValues() should return all values stored for the given CC", () => {
 			const values = [
 				{
-					cc: CommandClasses.Basic,
+					commandClass: CommandClasses.Basic,
 					endpoint: 0,
 					propertyName: "foo",
 					value: "1",
 				},
 				{
-					cc: CommandClasses.Basic,
+					commandClass: CommandClasses.Basic,
 					endpoint: 2,
 					propertyName: "foo",
 					value: "2",
 				},
 				{
-					cc: CommandClasses.Basic,
+					commandClass: CommandClasses.Basic,
 					endpoint: 0,
 					propertyName: "FOO",
 					value: "3",
 				},
 				{
-					cc: CommandClasses.Battery,
+					commandClass: CommandClasses.Battery,
 					endpoint: 2,
 					propertyName: "FOO",
 					value: "4",
 				},
 			];
 			const requestedCC = CommandClasses.Basic;
-			const expected = values
-				.filter(t => t.cc === requestedCC)
-				.map(({ cc, ...rest }) => rest);
+			const expected = values.filter(t => t.commandClass === requestedCC);
 
-			for (const { cc, endpoint, propertyName, value } of values) {
-				valueDB.setValue(cc, endpoint, propertyName, value);
+			for (const { value, ...valueId } of values) {
+				valueDB.setValue(valueId, value);
 			}
 
 			const actual = valueDB.getValues(requestedCC);
@@ -330,37 +403,35 @@ describe("lib/node/ValueDB => ", () => {
 		it("should return false if no value is stored for the same combination of CC, endpoint and propertyName", () => {
 			const tests = [
 				{
-					cc: CommandClasses.Basic,
+					commandClass: CommandClasses.Basic,
 					endpoint: 0,
 					propertyName: "foo",
 					value: "1",
 				},
 				{
-					cc: CommandClasses.Basic,
+					commandClass: CommandClasses.Basic,
 					endpoint: 2,
 					propertyName: "foo",
 					value: "2",
 				},
 				{
-					cc: CommandClasses.Basic,
+					commandClass: CommandClasses.Basic,
 					endpoint: 0,
 					propertyName: "FOO",
 					value: "3",
 				},
 				{
-					cc: CommandClasses.Basic,
+					commandClass: CommandClasses.Basic,
 					endpoint: 2,
 					propertyName: "FOO",
 					value: "4",
 				},
 			];
 
-			for (const { cc, endpoint, propertyName, value } of tests) {
-				expect(
-					valueDB.hasValue(cc, endpoint, propertyName),
-				).toBeFalse();
-				valueDB.setValue(cc, endpoint, propertyName, value);
-				expect(valueDB.hasValue(cc, endpoint, propertyName)).toBeTrue();
+			for (const { value, ...valueId } of tests) {
+				expect(valueDB.hasValue(valueId)).toBeFalse();
+				valueDB.setValue(valueId, value);
+				expect(valueDB.hasValue(valueId)).toBeTrue();
 			}
 		});
 	});
@@ -369,31 +440,66 @@ describe("lib/node/ValueDB => ", () => {
 		beforeEach(() => createValueDB());
 
 		it("is assigned to a specific combination of endpoint, property name (and property key)", () => {
-			valueDB.setMetadata(1, 2, "3", ValueMetadata.default);
-			expect(valueDB.hasMetadata(1, 2, "3")).toBeTrue();
-			expect(valueDB.hasMetadata(1, 2, "3", 4)).toBeFalse();
-			expect(valueDB.getMetadata(1, 2, "3")).toBe(ValueMetadata.default);
-			expect(valueDB.getMetadata(1, 2, "3", 4)).toBeUndefined();
+			const valueId: ValueID = {
+				commandClass: 1,
+				endpoint: 2,
+				propertyName: "3",
+			};
+			valueDB.setMetadata(valueId, ValueMetadata.default);
+			expect(valueDB.hasMetadata(valueId)).toBeTrue();
+			expect(
+				valueDB.hasMetadata({ ...valueId, propertyKey: 4 }),
+			).toBeFalse();
+			expect(valueDB.getMetadata(valueId)).toBe(ValueMetadata.default);
+			expect(
+				valueDB.getMetadata({ ...valueId, propertyKey: 4 }),
+			).toBeUndefined();
 		});
 
 		it("is cleared together with the values", () => {
-			valueDB.setMetadata(1, 2, "3", ValueMetadata.default);
+			const valueId: ValueID = {
+				commandClass: 1,
+				endpoint: 2,
+				propertyName: "3",
+			};
+			valueDB.setMetadata(valueId, ValueMetadata.default);
 			valueDB.clear();
-			expect(valueDB.hasMetadata(1, 2, "3")).toBeFalse();
+			expect(valueDB.hasMetadata(valueId)).toBeFalse();
 		});
 
 		describe("getAllMetadata()", () => {
 			it("returns all metadata for a given CC", () => {
 				expect(valueDB.getAllMetadata(1)).toHaveLength(0);
 
-				valueDB.setMetadata(1, 2, "3", ValueMetadata.default);
+				valueDB.setMetadata(
+					{
+						commandClass: 1,
+						endpoint: 2,
+						propertyName: "3",
+					},
+					ValueMetadata.default,
+				);
 				expect(valueDB.getAllMetadata(1)).toHaveLength(1);
 
-				valueDB.setMetadata(5, 2, "3", ValueMetadata.default);
+				valueDB.setMetadata(
+					{
+						commandClass: 5,
+						endpoint: 2,
+						propertyName: "3",
+					},
+					ValueMetadata.default,
+				);
 				expect(valueDB.getAllMetadata(1)).toHaveLength(1);
 				expect(valueDB.getAllMetadata(5)).toHaveLength(1);
 
-				valueDB.setMetadata(5, 2, "5", ValueMetadata.default);
+				valueDB.setMetadata(
+					{
+						commandClass: 5,
+						endpoint: 2,
+						propertyName: "5",
+					},
+					ValueMetadata.default,
+				);
 				expect(valueDB.getAllMetadata(1)).toHaveLength(1);
 				expect(valueDB.getAllMetadata(5)).toHaveLength(2);
 			});
@@ -402,7 +508,14 @@ describe("lib/node/ValueDB => ", () => {
 		describe("updating dynamic metadata", () => {
 			let cbArg: any;
 			beforeAll(() => {
-				valueDB.setMetadata(1, 2, "3", ValueMetadata.default);
+				valueDB.setMetadata(
+					{
+						commandClass: 1,
+						endpoint: 2,
+						propertyName: "3",
+					},
+					ValueMetadata.default,
+				);
 			});
 
 			afterAll(() => {

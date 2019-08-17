@@ -4,7 +4,7 @@ import { CommandClasses } from "../commandclass/CommandClasses";
 import { InterviewStage, IZWaveNode } from "../node/INode";
 import {
 	ValueAddedArgs,
-	ValueBaseArgs,
+	ValueID,
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 } from "../node/ValueDB";
@@ -110,7 +110,7 @@ export function value(
 ): void;
 export function value(
 	change: "added" | "updated" | "removed",
-	args: LogValueArgs<ValueBaseArgs>,
+	args: LogValueArgs<ValueID>,
 ): void {
 	const primaryTags: string[] = [
 		getNodeTag(args.nodeId),

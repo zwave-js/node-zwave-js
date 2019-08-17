@@ -11,14 +11,14 @@ export type SerializedValue =
 	| JSONObject
 	| undefined;
 export interface CacheValue {
-	endpoint: number;
+	endpoint?: number;
 	propertyName: string;
 	type?: "map";
 	value: SerializedValue;
 }
 
 export interface CacheMetadata {
-	endpoint: number;
+	endpoint?: number;
 	propertyName: string;
 	propertyKey?: string | number;
 	metadata: ValueMetadata;

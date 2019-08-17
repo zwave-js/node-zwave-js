@@ -321,9 +321,11 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 
 		// Store the received information as metadata for the wake up interval
 		this.getValueDB().setMetadata(
-			this.ccId,
-			this.endpoint,
-			"wakeUpInterval",
+			{
+				commandClass: this.ccId,
+				endpoint: this.endpoint,
+				propertyName: "wakeUpInterval",
+			},
 			{
 				...ValueMetadata.WriteOnlyUInt24,
 				min: this._minWakeUpInterval,

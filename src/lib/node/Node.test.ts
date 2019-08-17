@@ -32,7 +32,7 @@ import { InterviewStage, NodeStatus } from "./INode";
 import { ZWaveNode, ZWaveNodeEvents } from "./Node";
 import { NodeUpdatePayload } from "./NodeInfo";
 import { RequestNodeInfoRequest } from "./RequestNodeInfoMessages";
-import { ValueDB } from "./ValueDB";
+import { ValueDB, ValueID } from "./ValueDB";
 
 /** This is an ugly hack to be able to test the private methods without resorting to @internal */
 class TestNode extends ZWaveNode {
@@ -811,9 +811,10 @@ describe("lib/node/Node", () => {
 		it("returns a new endpoint with the correct endpoint index otherwise", () => {
 			const node = new ZWaveNode(2, fakeDriver as any);
 			node.valueDB.setValue(
-				CommandClasses["Multi Channel"],
-				0,
-				"_individualEndpointCount",
+				{
+					commandClass: CommandClasses["Multi Channel"],
+					propertyName: "_individualEndpointCount",
+				},
 				5,
 			);
 			const actual = node.getEndpoint(5)!;
@@ -824,9 +825,10 @@ describe("lib/node/Node", () => {
 		it("caches the created endpoint instances", () => {
 			const node = new ZWaveNode(2, fakeDriver as any);
 			node.valueDB.setValue(
-				CommandClasses["Multi Channel"],
-				0,
-				"_individualEndpointCount",
+				{
+					commandClass: CommandClasses["Multi Channel"],
+					propertyName: "_individualEndpointCount",
+				},
 				5,
 			);
 			const first = node.getEndpoint(5);
@@ -915,13 +917,13 @@ describe("lib/node/Node", () => {
 			// @ts-ignore We need write access to the map
 			fakeDriver.controller!.nodes.set(1, node);
 
-			node.valueDB.setValue(CommandClasses.Basic, 0, "targetValue", 10);
-			node.valueDB.setMetadata(
-				CommandClasses.Basic,
-				0,
-				"targetValue",
-				ValueMetadata.WriteOnlyInt16,
-			);
+			const valueId = {
+				commandClass: CommandClasses.Basic,
+				propertyName: "targetValue",
+			};
+
+			node.valueDB.setValue(valueId, 10);
+			node.valueDB.setMetadata(valueId, ValueMetadata.WriteOnlyInt16);
 
 			const serialized = node.serialize();
 			// Test that all values are serialized
@@ -944,18 +946,25 @@ describe("lib/node/Node", () => {
 
 		it("deserialize() should correctly read values and metadata", () => {
 			const input = { ...serializedTestNode };
+
+			const valueId1 = {
+				endpoint: 1,
+				propertyName: "targetValue",
+			};
+			const valueId2 = {
+				endpoint: 2,
+				propertyName: "targetValue",
+			};
+
 			(input.commandClasses as any)["0x20"] = {
 				name: "Basic",
 				isSupported: false,
 				isControlled: true,
 				version: 1,
-				values: [
-					{ endpoint: 1, propertyName: "targetValue", value: 12 },
-				],
+				values: [{ ...valueId1, value: 12 }],
 				metadata: [
 					{
-						endpoint: 2,
-						propertyName: "targetValue",
+						...valueId2,
 						metadata: ValueMetadata.ReadOnlyInt32,
 					},
 				],
@@ -967,14 +976,16 @@ describe("lib/node/Node", () => {
 			node.deserialize(input);
 
 			expect(
-				node.valueDB.getValue(CommandClasses.Basic, 1, "targetValue"),
+				node.valueDB.getValue({
+					...valueId1,
+					commandClass: CommandClasses.Basic,
+				}),
 			).toBe(12);
 			expect(
-				node.valueDB.getMetadata(
-					CommandClasses.Basic,
-					2,
-					"targetValue",
-				),
+				node.valueDB.getMetadata({
+					...valueId2,
+					commandClass: CommandClasses.Basic,
+				}),
 			).toBe(ValueMetadata.ReadOnlyInt32);
 		});
 
@@ -1124,9 +1135,13 @@ describe("lib/node/Node", () => {
 		it("should contain a speaking name for the CC", () => {
 			const cc = CommandClasses.Irrigation;
 			const ccName = CommandClasses[cc];
-			node.valueDB.setValue(cc, 0, "fooProp", 1);
+			const valueId: ValueID = {
+				commandClass: cc,
+				propertyName: "fooProp",
+			};
+			node.valueDB.setValue(valueId, 1);
 			expect(onValueAdded).toBeCalled();
-			node.valueDB.setValue(cc, 0, "fooProp", 3);
+			node.valueDB.setValue(valueId, 3);
 			expect(onValueUpdated).toBeCalled();
 			node.valueDB.clear();
 			expect(onValueRemoved).toBeCalled();
@@ -1143,10 +1158,11 @@ describe("lib/node/Node", () => {
 
 		it("should contain a speaking name for the propertyKey", () => {
 			node.valueDB.setValue(
-				CommandClasses["Multilevel Sensor"],
-				0,
-				"values",
-				31 /* Moisture */,
+				{
+					commandClass: CommandClasses["Multilevel Sensor"],
+					propertyName: "values",
+					propertyKey: 31 /* Moisture */,
+				},
 				5,
 			);
 			expect(onValueAdded).toBeCalled();
@@ -1156,9 +1172,10 @@ describe("lib/node/Node", () => {
 
 		it("should not be emitted for internal values", () => {
 			node.valueDB.setValue(
-				CommandClasses.Battery,
-				0,
-				"interviewComplete", // interviewCompleted is an internal value
+				{
+					commandClass: CommandClasses.Battery,
+					propertyName: "interviewComplete", // interviewCompleted is an internal value
+				},
 				true,
 			);
 			expect(onValueAdded).not.toBeCalled();
@@ -1292,9 +1309,15 @@ describe("lib/node/Node", () => {
 	describe("getValue()", () => {
 		it("returns the values stored in the value DB", () => {
 			const node = new ZWaveNode(1, undefined as any);
-			node.valueDB.setValue(1, 2, "3", 4);
+			const valueId: ValueID = {
+				commandClass: 1,
+				endpoint: 2,
+				propertyName: "3",
+			};
 
-			expect(node.getValue(1, 2, "3")).toBe(4);
+			node.valueDB.setValue(valueId, 4);
+
+			expect(node.getValue(valueId)).toBe(4);
 		});
 	});
 
@@ -1338,6 +1361,10 @@ describe("lib/node/Node", () => {
 	describe("getValueMetadata()", () => {
 		const fakeDriver = createEmptyMockDriver();
 		let node: ZWaveNode;
+		const valueId: ValueID = {
+			commandClass: CommandClasses.Basic,
+			propertyName: "currentValue",
+		};
 
 		beforeEach(() => {
 			node = new ZWaveNode(1, (fakeDriver as unknown) as Driver);
@@ -1345,15 +1372,9 @@ describe("lib/node/Node", () => {
 		});
 
 		it("returns the defined metadata for the given value", () => {
-			const node = new ZWaveNode(1, undefined as any);
-
 			// We test this with the BasicCC
 			// currentValue is readonly, 0-99
-			const currentValueMeta = node.getValueMetadata(
-				CommandClasses.Basic,
-				0,
-				"currentValue",
-			);
+			const currentValueMeta = node.getValueMetadata(valueId);
 			expect(currentValueMeta).toMatchObject({
 				readable: true,
 				writeable: false,
@@ -1364,18 +1385,9 @@ describe("lib/node/Node", () => {
 
 		it("dynamic metadata is merged with static metadata", () => {
 			// Create dynamic metadata
-			node.valueDB.setMetadata(
-				CommandClasses.Basic,
-				0,
-				"currentValue",
-				ValueMetadata.WriteOnlyInt32,
-			);
+			node.valueDB.setMetadata(valueId, ValueMetadata.WriteOnlyInt32);
 
-			const currentValueMeta = node.getValueMetadata(
-				CommandClasses.Basic,
-				0,
-				"currentValue",
-			);
+			const currentValueMeta = node.getValueMetadata(valueId);
 
 			// The label should be preserved from the static metadata
 			expect(currentValueMeta).toMatchObject({ label: "Current value" });
@@ -1383,18 +1395,9 @@ describe("lib/node/Node", () => {
 
 		it("dynamic metadata is prioritized", () => {
 			// Update the dynamic metadata
-			node.valueDB.setMetadata(
-				CommandClasses.Basic,
-				0,
-				"currentValue",
-				ValueMetadata.WriteOnlyInt32,
-			);
+			node.valueDB.setMetadata(valueId, ValueMetadata.WriteOnlyInt32);
 
-			const currentValueMeta = node.getValueMetadata(
-				CommandClasses.Basic,
-				0,
-				"currentValue",
-			);
+			const currentValueMeta = node.getValueMetadata(valueId);
 
 			// But the dynamic metadata properties are preferred over statically defined ones
 			expect(currentValueMeta).toMatchObject(

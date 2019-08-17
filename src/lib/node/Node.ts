@@ -59,8 +59,8 @@ import {
 import {
 	MetadataUpdatedArgs,
 	ValueAddedArgs,
-	ValueBaseArgs,
 	ValueDB,
+	ValueID,
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 } from "./ValueDB";
@@ -169,7 +169,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	}
 
 	/** Adds the speaking name of a command class to the raw event args of the ValueDB */
-	private translateValueEvent<T extends ValueBaseArgs>(
+	private translateValueEvent<T extends ValueID>(
 		eventName: keyof ZWaveNodeValueEventCallbacks,
 		arg: T,
 	): void {
@@ -192,10 +192,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		// If this is a metadata event, make sure we return the merged metadata
 		if ("metadata" in outArg) {
 			((outArg as unknown) as MetadataUpdatedArgs).metadata = this.getValueMetadata(
-				arg.commandClass,
-				arg.endpoint || 0,
-				arg.propertyName,
-				arg.propertyKey,
+				arg,
 			);
 		}
 		// Log the value change
@@ -285,31 +282,31 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	}
 
 	public get manufacturerId(): number | undefined {
-		return this.getValue(
-			CommandClasses["Manufacturer Specific"],
-			0,
-			"manufacturerId",
-		);
+		return this.getValue({
+			commandClass: CommandClasses["Manufacturer Specific"],
+			propertyName: "manufacturerId",
+		});
 	}
 
 	public get productId(): number | undefined {
-		return this.getValue(
-			CommandClasses["Manufacturer Specific"],
-			0,
-			"productId",
-		);
+		return this.getValue({
+			commandClass: CommandClasses["Manufacturer Specific"],
+			propertyName: "productId",
+		});
 	}
 
 	public get productType(): number | undefined {
-		return this.getValue(
-			CommandClasses["Manufacturer Specific"],
-			0,
-			"productType",
-		);
+		return this.getValue({
+			commandClass: CommandClasses["Manufacturer Specific"],
+			propertyName: "productType",
+		});
 	}
 
 	public get firmwareVersion(): string | undefined {
-		return this.getValue(CommandClasses.Version, 0, "firmwareVersion");
+		return this.getValue({
+			commandClass: CommandClasses.Version,
+			propertyName: "firmwareVersion",
+		});
 	}
 
 	private _neighbors: readonly number[] = [];
@@ -327,50 +324,48 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	}
 
 	/**
-	 * Retrieves a stored value for a given property of a given CommandClass.
+	 * Retrieves a stored value for a given value id.
 	 * This does not request an updated value from the node!
-	 *
-	 * @param cc The command class the value belongs to
-	 * @param endpoint The endpoint the value belongs to (0 for the root device)
-	 * @param propertyName The property name the value belongs to
-	 * @param propertyKey (optional) The sub-property to access
 	 */
 	/* wotan-disable-next-line no-misused-generics */
-	public getValue<T = unknown>(
-		cc: CommandClasses,
-		endpoint: number,
-		propertyName: string,
-		propertyKey?: number | string,
-	): T | undefined {
-		return this._valueDB.getValue(cc, endpoint, propertyName, propertyKey);
+	public getValue<T = unknown>(valueId: ValueID): T | undefined {
+		return this._valueDB.getValue(valueId);
 	}
 
 	/**
-	 * Retrieves metadata for a given property of a given CommandClass.
+	 * Retrieves metadata for a given value id.
 	 * This can be used to enhance the user interface of an application
-	 *
-	 * @param cc The command class the value belongs to
-	 * @param endpoint The endpoint the value belongs to (0 for the root device)
-	 * @param propertyName The property name the value belongs to
-	 * @param propertyKey (optional) The sub-property to access
 	 */
-	public getValueMetadata(
-		cc: CommandClasses,
-		endpoint: number,
-		propertyName: string,
-		propertyKey?: number | string,
-	): ValueMetadata {
+	public getValueMetadata(valueId: ValueID): ValueMetadata {
+		const { commandClass, propertyName } = valueId;
 		return {
 			// Merge static metadata
-			...getCCValueMetadata(cc, propertyName),
+			...getCCValueMetadata(commandClass, propertyName),
 			// with potentially existing dynamic metadata
-			...this._valueDB.getMetadata(
-				cc,
-				endpoint,
-				propertyName,
-				propertyKey,
-			),
+			...this._valueDB.getMetadata(valueId),
 		};
+	}
+
+	/** Returns a list of all value names that are defined on all endpoints of this node */
+	public getDefinedValueIDs(): ValueID[] {
+		const ret: ValueID[] = [];
+		for (const endpoint of this.getAllEndpoints()) {
+			for (const cc of endpoint.implementedCommandClasses.keys()) {
+				const ccInstance = this.createCCInstance(cc);
+				if (ccInstance) {
+					ret.push(
+						...ccInstance
+							.getDefinedPropertyNames()
+							.map(propertyName => ({
+								commandClass: cc,
+								endpoint: endpoint.index,
+								propertyName,
+							})),
+					);
+				}
+			}
+		}
+		return ret;
 	}
 
 	/**
@@ -419,45 +414,40 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	}
 
 	public get endpointCountIsDynamic(): boolean | undefined {
-		return this.getValue(
-			CommandClasses["Multi Channel"],
-			0,
-			"_endpointCountIsDynamic",
-		);
+		return this.getValue({
+			commandClass: CommandClasses["Multi Channel"],
+			propertyName: "_endpointCountIsDynamic",
+		});
 	}
 
 	public get endpointsHaveIdenticalCapabilities(): boolean | undefined {
-		return this.getValue(
-			CommandClasses["Multi Channel"],
-			0,
-			"_endpointsHaveIdenticalCapabilities",
-		);
+		return this.getValue({
+			commandClass: CommandClasses["Multi Channel"],
+			propertyName: "_endpointsHaveIdenticalCapabilities",
+		});
 	}
 
 	public get individualEndpointCount(): number | undefined {
-		return this.getValue(
-			CommandClasses["Multi Channel"],
-			0,
-			"_individualEndpointCount",
-		);
+		return this.getValue({
+			commandClass: CommandClasses["Multi Channel"],
+			propertyName: "_individualEndpointCount",
+		});
 	}
 
 	public get aggregatedEndpointCount(): number | undefined {
-		return this.getValue(
-			CommandClasses["Multi Channel"],
-			0,
-			"_aggregatedEndpointCount",
-		);
+		return this.getValue({
+			commandClass: CommandClasses["Multi Channel"],
+			propertyName: "_aggregatedEndpointCount",
+		});
 	}
 
 	private get endpointCapabilities():
 		| Map<number, EndpointCapabilities>
 		| undefined {
-		return this.getValue(
-			CommandClasses["Multi Channel"],
-			0,
-			"_endpointCapabilities",
-		);
+		return this.getValue({
+			commandClass: CommandClasses["Multi Channel"],
+			propertyName: "_endpointCapabilities",
+		});
 	}
 
 	private getEndpointCapabilities(
@@ -985,12 +975,18 @@ version:               ${this.version}`;
 			sceneNumber: number,
 			key: CentralSceneKeys,
 		): void => {
-			const propName = `scene${padStart(sceneNumber.toString(), 3, "0")}`;
+			const propertyName = `scene${padStart(
+				sceneNumber.toString(),
+				3,
+				"0",
+			)}`;
 			this.valueDB.setValue(
-				command.ccId,
-				command.endpoint,
-				propName,
-				CentralSceneCC.translatePropertyKey(propName, key),
+				{
+					commandClass: command.ccId,
+					endpoint: command.endpoint,
+					propertyName,
+				},
+				CentralSceneCC.translatePropertyKey(propertyName, key),
 			);
 		};
 
@@ -1273,9 +1269,11 @@ version:               ${this.version}`;
 			// Make sure the endpointCapabilities Map exists
 			if (!this.endpointCapabilities) {
 				this.valueDB.setValue(
-					CommandClasses["Multi Channel"],
-					0,
-					"_endpointCapabilities",
+					{
+						commandClass: CommandClasses["Multi Channel"],
+						endpoint: 0,
+						propertyName: "_endpointCapabilities",
+					},
 					new Map(),
 				);
 			}

@@ -353,11 +353,10 @@ export class ConfigurationCC extends CommandClass {
 	 */
 	protected get isParamInformationFromConfig(): boolean {
 		return (
-			this.getValueDB().getValue(
-				getCommandClass(this),
-				0,
-				"isParamInformationFromConfig",
-			) === true
+			this.getValueDB().getValue({
+				commandClass: getCommandClass(this),
+				propertyName: "isParamInformationFromConfig",
+			}) === true
 		);
 	}
 
@@ -373,21 +372,18 @@ export class ConfigurationCC extends CommandClass {
 		if (this.isParamInformationFromConfig) return;
 
 		const valueDB = this.getValueDB();
+		const paramInformationValueID = {
+			commandClass: getCommandClass(this),
+			propertyName: "paramInformation",
+		};
 		// Create the map if it does not exist
-		if (!valueDB.hasValue(getCommandClass(this), 0, "paramInformation")) {
-			valueDB.setValue(
-				getCommandClass(this),
-				0,
-				"paramInformation",
-				new Map(),
-			);
+		if (!valueDB.hasValue(paramInformationValueID)) {
+			valueDB.setValue(paramInformationValueID, new Map());
 		}
 		// Retrieve the map
-		const paramInfo = valueDB.getValue(
-			getCommandClass(this),
-			0,
-			"paramInformation",
-		) as Map<number, ParameterInfo>;
+		const paramInfo = valueDB.getValue<Map<number, ParameterInfo>>(
+			paramInformationValueID,
+		)!;
 		// And make sure it has one entry for this parameter
 		if (!paramInfo.has(parameter)) {
 			paramInfo.set(parameter, {});
@@ -404,7 +400,10 @@ export class ConfigurationCC extends CommandClass {
 		const valueDB = this.getValueDB();
 		const paramInfo = valueDB.getValue<
 			Map<number, ParameterInfo> | undefined
-		>(getCommandClass(this), 0, "paramInformation");
+		>({
+			commandClass: getCommandClass(this),
+			propertyName: "paramInformation",
+		});
 		return (paramInfo && paramInfo.get(parameter)) || {};
 	}
 
@@ -433,9 +432,10 @@ export class ConfigurationCC extends CommandClass {
 
 		// Remember that we loaded the param information from a config file
 		this.getValueDB().setValue(
-			getCommandClass(this),
-			0,
-			"isParamInformationFromConfig",
+			{
+				commandClass: getCommandClass(this),
+				propertyName: "isParamInformationFromConfig",
+			},
 			true,
 		);
 	}
