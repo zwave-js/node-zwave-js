@@ -10,6 +10,7 @@ import { num2hex } from "../src/lib/util/strings";
 const ccRegex = /^@commandClass\(CommandClasses(?:\.|\[")(.+?)(?:"\])?\)/m;
 const apiRegex = /^@API\(CommandClasses(?:\.|\[)(.+?)(?:\])?\)/m;
 const noApiRegex = /^\/\/ @noAPI/m; // This comment marks a CC that needs no API
+const setValueApiRegex = /^\tprotected \[SET_VALUE\]/m;
 const versionRegex = /^@implementedVersion\((\d+)\)/m;
 
 const onlyIncomplete = !!yargs.argv.onlyIncomplete;
@@ -33,9 +34,9 @@ function padEnd(str: string, len: number): string {
 			.filter(cc => Number.isNaN(+cc))
 			.map(
 				name =>
-					[name, { version: 0, API: false }] as [
+					[name, { version: 0, API: false, setValue: false }] as [
 						string,
-						{ version: number; API: boolean },
+						{ version: number; API: boolean; setValue: boolean },
 					],
 			),
 	);
@@ -47,7 +48,14 @@ function padEnd(str: string, len: number): string {
 			const ccVersion = +versionRegex.exec(fileContent)![1];
 			const hasAPI =
 				apiRegex.test(fileContent) || noApiRegex.test(fileContent);
-			allCCs.set(ccName, { version: ccVersion, API: hasAPI });
+			const setValue =
+				(hasAPI && setValueApiRegex.test(fileContent)) ||
+				noApiRegex.test(fileContent);
+			allCCs.set(ccName, {
+				version: ccVersion,
+				API: hasAPI,
+				setValue,
+			});
 		} catch (e) {
 			/* ok */
 		}
@@ -59,16 +67,17 @@ function padEnd(str: string, len: number): string {
 		"Implemented version",
 		"max.",
 		"API?",
+		"setValue?",
 	];
 	const rows: string[][] = [];
 
-	for (const [name, { version, API }] of allCCs.entries()) {
+	for (const [name, { version, API, setValue }] of allCCs.entries()) {
 		const { version: latest, deprecated, obsolete } = getLatestVersion(
 			name,
 		);
 		if (obsolete) continue;
 		const implementationStatus =
-			version === latest && API
+			version === latest && API && setValue
 				? "done"
 				: version > 0
 				? "in progress"
@@ -90,6 +99,7 @@ function padEnd(str: string, len: number): string {
 				? c.reset
 				: c.red;
 		const hasAPI = API ? c.green(" ✓ ") : c.red(" ✗ ");
+		const hasSetValue = setValue ? c.green(" ✓ ") : c.red(" ✗ ");
 		const prefix =
 			implementationStatus === "done"
 				? "✓"
@@ -106,6 +116,7 @@ function padEnd(str: string, len: number): string {
 				),
 				latest.toString(),
 				hasAPI,
+				hasSetValue,
 			]);
 		}
 	}
