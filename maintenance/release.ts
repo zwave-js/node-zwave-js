@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+// tslint:disable:no-var-requires
+// tslint:disable:no-console
+
 /*
 
 	Bumps the package version and releases a new tag
@@ -9,8 +12,8 @@
 	or
 	npm run release -- <version> [--dry]
 
-	PLACEHOLDER for next version in readme:
-	#### __WORK IN PROGRESS__
+	PLACEHOLDER for next version in changelog:
+	## __WORK IN PROGRESS__
 
 */
 
@@ -24,13 +27,6 @@ const colors = require("colors/safe");
 
 const rootDir = path.resolve(__dirname, "../");
 
-const packPath = path.join(rootDir, "package.json");
-const pack = require(packPath);
-const readmePath = path.join(rootDir, "README.md");
-let readme = fs.readFileSync(readmePath, "utf8");
-// const ioPackPath = path.join(rootDir, "io-package.json");
-// const ioPack = require(ioPackPath);
-
 function fail(reason: string): never {
 	console.error("");
 	console.error(colors.red(reason));
@@ -38,11 +34,40 @@ function fail(reason: string): never {
 	return process.exit(0);
 }
 
+const packPath = path.join(rootDir, "package.json");
+const pack = require(packPath);
+const changelogPath = path.join(rootDir, "CHANGELOG.md");
+let changelog = fs.readFileSync(changelogPath, "utf8");
+const CHANGELOG_PLACEHOLDER = "## __WORK IN PROGRESS__";
+
+// check if the changelog contains exactly 1 occurence of the changelog placeholder
+switch (
+	(changelog.match(new RegExp("^" + CHANGELOG_PLACEHOLDER + "$", "gm")) || [])
+		.length
+) {
+	case 0:
+		throw fail(
+			colors.red(
+				"Cannot continue, the changelog placeholder is missing from CHANGELOG.md!\n" +
+					"Please add the following line to your changelog:\n" +
+					CHANGELOG_PLACEHOLDER,
+			),
+		);
+	case 1:
+		break; // all good
+	default:
+		throw fail(
+			colors.red(
+				"Cannot continue, there is more than one changelog placeholder in CHANGELOG.md!",
+			),
+		);
+}
+
 // check if there are untracked changes
 const gitStatus = execSync("git status", { cwd: rootDir, encoding: "utf8" });
 if (/have diverged/.test(gitStatus)) {
 	if (!argv.dry)
-		fail(
+		throw fail(
 			colors.red(
 				"Cannot continue, the local branch has diverged from the git repo!",
 			),
@@ -55,7 +80,7 @@ if (/have diverged/.test(gitStatus)) {
 		);
 } else if (!/working tree clean/.test(gitStatus)) {
 	if (!argv.dry)
-		fail(
+		throw fail(
 			colors.red(
 				"Cannot continue, the local branch has uncommited changes!",
 			),
@@ -68,7 +93,7 @@ if (/have diverged/.test(gitStatus)) {
 		);
 } else if (/Your branch is behind/.test(gitStatus)) {
 	if (!argv.dry)
-		fail(
+		throw fail(
 			colors.red(
 				"Cannot continue, the local branch is behind the remote changes!",
 			),
@@ -116,14 +141,12 @@ if (releaseTypes.indexOf(releaseType) > -1) {
 	// increment to specific version
 	newVersion = semver.clean(newVersion);
 	if (newVersion == null) {
-		fail(`invalid version string "${newVersion}"`);
+		throw fail(`invalid version string "${newVersion}"`);
 	} else {
 		// valid version string => check if its actually newer
 		if (!semver.gt(newVersion, pack.version)) {
-			fail(
-				`new version ${newVersion} is NOT > than package.json version ${
-					pack.version
-				}`,
+			throw fail(
+				`new version ${newVersion} is NOT > than package.json version ${pack.version}`,
 			);
 		}
 		// if (!semver.gt(newVersion, ioPack.common.version)) {
@@ -146,17 +169,17 @@ if (argv.dry) {
 	pack.version = newVersion;
 	fs.writeFileSync(packPath, JSON.stringify(pack, null, 2));
 
-	console.log(`updating changelog in README.md`);
+	console.log(`updating CHANGELOG.md`);
 	const d = new Date();
-	readme = readme.replace(
-		"#### __WORK IN PROGRESS__",
-		`#### ${newVersion} (${d.getFullYear()}-${padStart(
+	changelog = changelog.replace(
+		CHANGELOG_PLACEHOLDER,
+		`## ${newVersion} (${d.getFullYear()}-${padStart(
 			"" + (d.getMonth() + 1),
 			2,
 			"0",
 		)}-${padStart("" + d.getDate(), 2, "0")})`,
 	);
-	fs.writeFileSync(readmePath, readme, "utf8");
+	fs.writeFileSync(changelogPath, changelog, "utf8");
 
 	// console.log(`updating io-package.json from ${colors.blue(ioPack.common.version)} to ${colors.green(newVersion)}`);
 	// ioPack.common.version = newVersion;
@@ -164,6 +187,7 @@ if (argv.dry) {
 }
 
 const gitCommands = [
+	`npm install`,
 	`git add -A`,
 	`git commit -m "release v${newVersion} [skip ci]"`,
 	`git push`,
@@ -186,4 +210,4 @@ console.log("");
 console.log(colors.green("done!"));
 console.log("");
 
-process.exit(0);
+throw process.exit(0);
