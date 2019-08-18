@@ -15,16 +15,6 @@ function createTransactionWithPriority(priority: MessagePriority): Transaction {
 	);
 }
 
-function createTransactionWithTimeout(timeout?: number): Transaction {
-	return new Transaction(
-		undefined as any,
-		{} as any,
-		undefined as any,
-		undefined as any,
-		timeout,
-	);
-}
-
 describe("lib/driver/Transaction => ", () => {
 	it("should compare priority, then the timestamp", () => {
 		// "winning" means the position of a transaction in the queue is lower
