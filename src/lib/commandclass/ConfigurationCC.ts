@@ -19,7 +19,12 @@ import {
 	Maybe,
 	parseBitMask,
 } from "../values/Primitive";
-import { CCAPI } from "./API";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -88,6 +93,14 @@ function getPropertyNameForParameter(parameter: number): string {
 	return `param${paddedParameterNumber}`;
 }
 
+const parameterRegex = /^param(\d+)$/;
+function getParameterFromPropertyName(
+	propertyName: string,
+): number | undefined {
+	const match = parameterRegex.exec(propertyName);
+	if (match) return parseInt(match[1]);
+}
+
 // A configuration value is either a single number or a bit map
 export type ConfigValue = number | Set<number>;
 
@@ -106,6 +119,33 @@ export class ConfigurationCCError extends ZWaveError {
 
 @API(CommandClasses.Configuration)
 export class ConfigurationCCAPI extends CCAPI {
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ propertyName },
+		value,
+	): Promise<void> => {
+		const param = getParameterFromPropertyName(propertyName);
+		if (!param) {
+			return throwUnsupportedProperty(this.ccId, propertyName);
+		}
+		const ccInstance = this.endpoint.createCCInstance<ConfigurationCC>(
+			this.ccId,
+		)!;
+		const valueSize = ccInstance.getParamInformation(param).valueSize;
+
+		// if (typeof value !== "number") {
+		// 	return throwWrongValueType(
+		// 		this.ccId,
+		// 		propertyName,
+		// 		"number",
+		// 		typeof value,
+		// 	);
+		// }
+		await this.set(param, value as any, (valueSize || 1) as any);
+
+		// Refresh the current value and ignore potential timeouts
+		void this.get(param).catch(() => {});
+	};
+
 	/**
 	 * Requests the current value of a given config parameter from the device.
 	 * This may timeout and return `undefined` if the node does not respond.
