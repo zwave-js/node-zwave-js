@@ -85,6 +85,9 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			duration,
 		});
 		await this.driver.sendCommand(cc);
+
+		// Refresh the current value
+		await this.get();
 	}
 
 	public async startLevelChange(

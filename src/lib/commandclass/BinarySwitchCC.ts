@@ -67,6 +67,9 @@ export class BinarySwitchCCAPI extends CCAPI {
 			duration,
 		});
 		await this.driver.sendCommand(cc);
+
+		// Refresh the current value
+		await this.get();
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (

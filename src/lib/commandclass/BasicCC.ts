@@ -43,6 +43,9 @@ export class BasicCCAPI extends CCAPI {
 			);
 		}
 		await this.set(value);
+
+		// Refresh the current value
+		await this.get();
 	};
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -66,6 +69,9 @@ export class BasicCCAPI extends CCAPI {
 			targetValue,
 		});
 		await this.driver.sendCommand(cc);
+
+		// Refresh the current value
+		await this.get();
 	}
 }
 
