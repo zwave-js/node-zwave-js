@@ -50,11 +50,8 @@ export interface ZWaveOptions {
 		ack: number;
 		/** not sure */
 		byte: number;
-		/**
-		 * How long to wait for a ConfigurationCCReport after sending a ConfigurationCCGet
-		 * or an ACK after a ConfigurationCCSet.
-		 */
-		configurationGetSet: number;
+		/** How much time a node gets to process a request */
+		report: number;
 	};
 	/**
 	 * @internal
@@ -68,8 +65,7 @@ const defaultOptions: ZWaveOptions = {
 	timeouts: {
 		ack: 1000,
 		byte: 150,
-		// TODO: This should be dependent on the network's current RTT
-		configurationGetSet: 1000,
+		report: 1000, // SDS11846: ReportTime timeout SHOULD be set to CommandTime + 1 second
 	},
 	skipInterview: false,
 };
@@ -108,9 +104,9 @@ function checkOptions(options: ZWaveOptions): void {
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
-	if (options.timeouts.configurationGetSet < 1) {
+	if (options.timeouts.report < 1) {
 		throw new ZWaveError(
-			`The configuration get timeout must be positive!`,
+			`The Report timeout must be positive!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -129,8 +125,6 @@ export interface SendMessageOptions {
 	priority?: MessagePriority;
 	/** If an exception should be thrown when the message to send is not supported. Setting this to false is is useful if the capabilities haven't been determined yet. Default: true */
 	supportCheck?: boolean;
-	/** Setting timeout to a positive number causes the transaction to be rejected if no response is received before the timeout elapses */
-	timeout?: number;
 }
 
 // Strongly type the event emitter events
@@ -975,8 +969,11 @@ ${handlers.length} left`,
 		// if we have a pending request waiting for the ACK, ACK it
 		const trnsact = this.currentTransaction;
 		if (trnsact != undefined && trnsact.ackPending) {
-			log.driver.print("ACK received for current transaction");
 			trnsact.ackPending = false;
+			const msRTT = trnsact.rtt / 1e6;
+			log.driver.print(
+				`ACK received for current transaction - RTT = ${msRTT} ms`,
+			);
 			if (
 				trnsact.message.expectedResponse == undefined ||
 				trnsact.response != undefined
@@ -985,6 +982,21 @@ ${handlers.length} left`,
 				// if the response has been received prior to this, resolve the request
 				// if no response was expected, also resolve the request
 				this.resolveCurrentTransaction(false);
+			} else {
+				// We are still waiting for a response. Start the report timeout (as per SDS11846)
+				trnsact.timeoutInstance = setTimeout(() => {
+					if (!this.currentTransaction) return;
+					// TODO: Do we need more information here?
+					log.driver.print("The transaction timed out", "warn");
+					this.rejectCurrentTransaction(
+						new ZWaveError(
+							"The transaction timed out",
+							ZWaveErrorCodes.Controller_MessageTimeout,
+						),
+					);
+				}, msRTT + this.options.timeouts.report)
+					// Unref'ing long running timers allows the process to exit mid-timeout
+					.unref();
 			}
 			return;
 		}
@@ -1152,7 +1164,6 @@ ${handlers.length} left`,
 			msg,
 			promise,
 			options.priority,
-			options.timeout,
 		);
 
 		this.sendQueue.add(transaction);
@@ -1241,26 +1252,11 @@ ${handlers.length} left`,
 					)}) => using version ${msg.command.version}`,
 				);
 			}
+			// Actually send the message
+			this.currentTransaction.markAsSent();
 			const data = msg.serialize();
-			// Mark the transaction as being sent
-			this.currentTransaction.sendAttempts = 1;
 			log.serial.data("outbound", data);
 			this.doSend(data);
-			// If the transaction has a timeout configured, start it
-			if (this.currentTransaction.timeout) {
-				// Unref'ing long running timers allows the process to exit mid-timeout
-				this.currentTransaction.timeoutInstance = setTimeout(() => {
-					if (!this.currentTransaction) return;
-					// TODO: Do we need more information here?
-					log.driver.print("The transaction timed out", "warn");
-					this.rejectCurrentTransaction(
-						new ZWaveError(
-							"The transaction timed out",
-							ZWaveErrorCodes.Controller_MessageTimeout,
-						),
-					);
-				}, this.currentTransaction.timeout).unref();
-			}
 
 			if (this.sendQueue.length > 0) {
 				// to avoid any deadlocks we didn't think of, re-call this later

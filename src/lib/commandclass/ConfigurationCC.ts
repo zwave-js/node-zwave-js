@@ -121,9 +121,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		try {
 			const response = (await this.driver.sendCommand<
 				ConfigurationCCReport
-			>(cc, {
-				timeout: this.driver.options.timeouts.configurationGetSet,
-			}))!;
+			>(cc))!;
 			// Nodes may respond with a different parameter, e.g. if we
 			// requested a non-existing one
 			if (response.parameter === parameter) return response.value;
@@ -168,9 +166,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			valueSize,
 		});
 		try {
-			await this.driver.sendCommand(cc, {
-				timeout: this.driver.options.timeouts.configurationGetSet,
-			});
+			await this.driver.sendCommand(cc);
 			return true;
 		} catch (e) {
 			if (
@@ -197,9 +193,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			resetToDefault: true,
 		});
 		try {
-			await this.driver.sendCommand(cc, {
-				timeout: this.driver.options.timeouts.configurationGetSet,
-			});
+			await this.driver.sendCommand(cc);
 			return true;
 		} catch (e) {
 			if (
