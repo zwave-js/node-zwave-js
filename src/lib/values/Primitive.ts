@@ -53,20 +53,47 @@ function getPrecision(num: number): number {
 	return p;
 }
 
+export const IntegerLimits = Object.freeze({
+	UInt8: Object.freeze({ min: 0, max: 0xff }),
+	UInt16: Object.freeze({ min: 0, max: 0xffff }),
+	UInt24: Object.freeze({ min: 0, max: 0xffffff }),
+	UInt32: Object.freeze({ min: 0, max: 0xffffffff }),
+	Int8: Object.freeze({ min: -0x80, max: 0x7f }),
+	Int16: Object.freeze({ min: -0x8000, max: 0x7fff }),
+	Int24: Object.freeze({ min: -0x800000, max: 0x7fffff }),
+	Int32: Object.freeze({ min: -0x80000000, max: 0x7fffffff }),
+});
+
 export function getMinIntegerSize(
 	value: number,
 	signed: boolean,
 ): 1 | 2 | 4 | undefined {
 	if (signed) {
-		if (value >= -128 && value <= 127) return 1;
-		else if (value >= -32768 && value <= 32767) return 2;
-		else if (value >= -2147483648 && value <= 2147483647) return 4;
+		if (value >= IntegerLimits.Int8.min && value <= IntegerLimits.Int8.max)
+			return 1;
+		else if (
+			value >= IntegerLimits.Int16.min &&
+			value <= IntegerLimits.Int16.max
+		)
+			return 2;
+		else if (
+			value >= IntegerLimits.Int32.min &&
+			value <= IntegerLimits.Int32.max
+		)
+			return 4;
 	} else if (value >= 0) {
-		if (value <= 0xff) return 1;
-		if (value <= 0xffff) return 2;
-		if (value <= 0xffffffff) return 4;
+		if (value <= IntegerLimits.UInt8.max) return 1;
+		if (value <= IntegerLimits.UInt16.max) return 2;
+		if (value <= IntegerLimits.UInt32.max) return 4;
 	}
 	// Not a valid size
+}
+
+export function getIntegerLimits(
+	size: 1 | 2 | 4,
+	signed: boolean,
+): { min: number; max: number } {
+	return (IntegerLimits as any)[`${signed ? "U" : ""}Int${size + 8}`];
 }
 
 /** Encodes a floating point value with a scale into a buffer */

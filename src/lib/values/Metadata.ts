@@ -1,3 +1,5 @@
+import { IntegerLimits } from "./Primitive";
+
 export type ValueType =
 	| "number"
 	| "boolean"
@@ -12,7 +14,7 @@ export interface ValueMetadataBase {
 	type: ValueType;
 	/** Whether the value can be read. By default all values are assumed readable */
 	readable: boolean;
-	/** Whether the value can be written. By default all values are assumed readable */
+	/** Whether the value can be written. By default all values are assumed writeable */
 	writeable: boolean;
 	/** A description of the value */
 	description?: string;
@@ -22,7 +24,7 @@ export interface ValueMetadataBase {
 
 export interface ValueMetadataAny extends ValueMetadataBase {
 	/** The default value */
-	default?: unknown;
+	default?: any;
 }
 
 export interface ValueMetadataNumeric extends ValueMetadataBase {
@@ -104,8 +106,7 @@ const WriteOnlyBoolean: ValueMetadataBoolean = {
 const UInt8: ValueMetadataNumeric = {
 	..._default,
 	type: "number",
-	min: 0,
-	max: 0xff,
+	...IntegerLimits.UInt8,
 };
 
 /** Unsigned 8-bit integer (readonly) */
@@ -124,8 +125,7 @@ const WriteOnlyUInt8: ValueMetadataNumeric = {
 const UInt16: ValueMetadataNumeric = {
 	..._default,
 	type: "number",
-	min: 0,
-	max: 0xffff,
+	...IntegerLimits.UInt16,
 };
 
 /** Unsigned 16-bit integer (readonly) */
@@ -144,8 +144,7 @@ const WriteOnlyUInt16: ValueMetadataNumeric = {
 const UInt24: ValueMetadataNumeric = {
 	..._default,
 	type: "number",
-	min: 0,
-	max: 0xffffffff,
+	...IntegerLimits.UInt24,
 };
 
 /** Unsigned 24-bit integer (readonly) */
@@ -164,8 +163,7 @@ const WriteOnlyUInt24: ValueMetadataNumeric = {
 const UInt32: ValueMetadataNumeric = {
 	..._default,
 	type: "number",
-	min: 0,
-	max: 0xffffffff,
+	...IntegerLimits.UInt32,
 };
 
 /** Unsigned 32-bit integer (readonly) */
@@ -184,8 +182,7 @@ const WriteOnlyUInt32: ValueMetadataNumeric = {
 const Int8: ValueMetadataNumeric = {
 	..._default,
 	type: "number",
-	min: -0x80,
-	max: 0x7f,
+	...IntegerLimits.Int8,
 };
 
 /** Signed 8-bit integer (readonly) */
@@ -204,8 +201,7 @@ const WriteOnlyInt8: ValueMetadataNumeric = {
 const Int16: ValueMetadataNumeric = {
 	..._default,
 	type: "number",
-	min: -0x8000,
-	max: 0x7fff,
+	...IntegerLimits.Int16,
 };
 
 /** Signed 16-bit integer (readonly) */
@@ -224,8 +220,7 @@ const WriteOnlyInt16: ValueMetadataNumeric = {
 const Int24: ValueMetadataNumeric = {
 	..._default,
 	type: "number",
-	min: -0x800000,
-	max: 0x7fffff,
+	...IntegerLimits.Int24,
 };
 
 /** Signed 24-bit integer (readonly) */
@@ -244,8 +239,7 @@ const WriteOnlyInt24: ValueMetadataNumeric = {
 const Int32: ValueMetadataNumeric = {
 	..._default,
 	type: "number",
-	min: -0x80000000,
-	max: 0x7fffffff,
+	...IntegerLimits.Int32,
 };
 
 /** Signed 32-bit integer (readonly) */

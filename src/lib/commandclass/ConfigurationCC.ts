@@ -1,4 +1,5 @@
 import { entries } from "alcalzone-shared/objects";
+import { padStart } from "alcalzone-shared/strings";
 import { isObject } from "alcalzone-shared/typeguards";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -9,9 +10,11 @@ import {
 	stripUndefined,
 	validatePayload,
 } from "../util/misc";
-import { CacheValue } from "../values/Cache";
+import { CacheMetadata, CacheValue } from "../values/Cache";
+import { ValueMetadata, ValueMetadataBase } from "../values/Metadata";
 import {
 	encodeBitMask,
+	getIntegerLimits,
 	getMinIntegerSize,
 	Maybe,
 	parseBitMask,
@@ -21,11 +24,9 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	ccKeyValuePair,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
-	CommandClassOptions,
 	DynamicCCResponse,
 	expectedCCResponse,
 	getCommandClass,
@@ -62,23 +63,29 @@ export interface ConfigOption {
 	label: string;
 }
 
-export interface ParameterInfo {
-	minValue?: ConfigValue;
-	maxValue?: ConfigValue;
-	defaultValue?: ConfigValue;
+export interface ConfigurationMetadata extends ValueMetadataBase {
+	min?: ConfigValue;
+	max?: ConfigValue;
+	default?: ConfigValue;
 	valueSize?: number;
 	format?: ValueFormat;
 	name?: string;
 	info?: string;
 	noBulkSupport?: boolean;
 	isAdvanced?: boolean;
-	isReadonly?: boolean;
+	// isReadonly?: boolean; ==> writeable
 	requiresReInclusion?: boolean;
 	// The following information cannot be detected by scanning
 	// We have to rely on configuration to support them
-	isWriteonly?: boolean;
+	// isWriteonly?: boolean; ==> readable
 	options?: ConfigOption[];
 	isFromConfig?: boolean;
+}
+
+/** Returns the property name that belongs to a parameter */
+function getPropertyNameForParameter(parameter: number): string {
+	const paddedParameterNumber = padStart(parameter.toString(), 3, "0");
+	return `param${paddedParameterNumber}`;
 }
 
 // A configuration value is either a single number or a bit map
@@ -319,13 +326,6 @@ export interface ConfigurationCC {
 @commandClass(CommandClasses.Configuration)
 @implementedVersion(4)
 export class ConfigurationCC extends CommandClass {
-	public constructor(driver: IDriver, options: CommandClassOptions) {
-		super(driver, options);
-		// In order to (de)serialize the data composed by extendParamInformation,
-		// we need to register a value
-		this.registerValue("paramInformation" as any, true);
-	}
-
 	public supportsCommand(cmd: ConfigurationCommand): Maybe<boolean> {
 		switch (cmd) {
 			case ConfigurationCommand.Get:
@@ -366,7 +366,7 @@ export class ConfigurationCC extends CommandClass {
 	 */
 	public extendParamInformation(
 		parameter: number,
-		info: ParameterInfo,
+		info: Partial<ConfigurationMetadata>,
 	): void {
 		// Don't trust reported param information if we have loaded it from a config file
 		if (this.isParamInformationFromConfig) return;
@@ -374,50 +374,49 @@ export class ConfigurationCC extends CommandClass {
 		const valueDB = this.getValueDB();
 		const paramInformationValueID = {
 			commandClass: getCommandClass(this),
-			propertyName: "paramInformation",
+			propertyName: getPropertyNameForParameter(parameter),
 		};
-		// Create the map if it does not exist
-		if (!valueDB.hasValue(paramInformationValueID)) {
-			valueDB.setValue(paramInformationValueID, new Map());
-		}
-		// Retrieve the map
-		const paramInfo = valueDB.getValue<Map<number, ParameterInfo>>(
-			paramInformationValueID,
-		)!;
-		// And make sure it has one entry for this parameter
-		if (!paramInfo.has(parameter)) {
-			paramInfo.set(parameter, {});
-		}
-		// Add/override the property
-		Object.assign(paramInfo.get(parameter), info);
+		// Retrieve the base metadata
+		const metadata = this.getParamInformation(parameter);
+		// Override it with new data
+		Object.assign(metadata, info);
+		// And store it back
+		valueDB.setMetadata(paramInformationValueID, metadata);
 	}
 
 	/**
 	 * @internal
 	 * Returns stored config parameter metadata for this CC's node
 	 */
-	public getParamInformation(parameter: number): ParameterInfo {
+	public getParamInformation(parameter: number): ConfigurationMetadata {
 		const valueDB = this.getValueDB();
-		const paramInfo = valueDB.getValue<
-			Map<number, ParameterInfo> | undefined
-		>({
+		const paramInformationValueID = {
 			commandClass: getCommandClass(this),
-			propertyName: "paramInformation",
-		});
-		return (paramInfo && paramInfo.get(parameter)) || {};
+			propertyName: getPropertyNameForParameter(parameter),
+		};
+		return (
+			valueDB.getMetadata(paramInformationValueID) || {
+				...ValueMetadata.Any,
+			}
+		);
 	}
 
 	public serializeValuesForCache(): CacheValue[] {
 		// Leave out the paramInformation if we have loaded it from a config file
 		let values = super.serializeValuesForCache();
-		if (this.isParamInformationFromConfig) {
-			values = values.filter(
-				v =>
-					v.propertyName !== "paramInformation" &&
-					v.propertyName !== "isParamInformationFromConfig",
-			);
-		}
+		values = values.filter(
+			v => v.propertyName !== "isParamInformationFromConfig",
+		);
 		return values;
+	}
+
+	public serializeMetadataForCache(): CacheMetadata[] {
+		// Leave out the param metadata if we have loaded it from a config file
+		let metadata = super.serializeMetadataForCache();
+		if (this.isParamInformationFromConfig) {
+			metadata = metadata.filter(m => !/param\d+/.test(m.propertyName));
+		}
+		return metadata;
 	}
 
 	/** Deserializes the config parameter info from a config file */
@@ -450,7 +449,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		super(driver, options);
 		// All fields must be present
 		validatePayload(this.payload.length > 2);
-		const parameter = this.payload[0];
+		this._parameter = this.payload[0];
 		this._valueSize = this.payload[1] & 0b111;
 		// Ensure we received a valid report
 		validatePayload(
@@ -459,36 +458,61 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			this.payload.length >= 2 + this._valueSize,
 		);
 
-		const value = parseValue(
+		const oldParamInformation = this.getParamInformation(this._parameter);
+		this._value = parseValue(
 			this.payload.slice(2),
 			this._valueSize,
 			// In Config CC v1/v2, this must be SignedInteger
 			// As those nodes don't communicate any parameter information
 			// we fall back to that default value anyways
-			this.getParamInformation(parameter).format ||
-				ValueFormat.SignedInteger,
+			oldParamInformation.format || ValueFormat.SignedInteger,
 		);
-		this.values = [parameter, value];
-		// Store the key value pair in the value DB
-		this.persistValues();
-		// And remember the parameter size
-		this.extendParamInformation(parameter, { valueSize: this._valueSize });
+		// Store the parameter size and value
+		this.extendParamInformation(this._parameter, {
+			valueSize: this._valueSize,
+			type:
+				oldParamInformation.format === ValueFormat.BitField
+					? "number[]"
+					: "number",
+		});
+		if (
+			this.version < 3 &&
+			!this.isParamInformationFromConfig &&
+			oldParamInformation.min == undefined &&
+			oldParamInformation.max == undefined
+		) {
+			const isSigned =
+				oldParamInformation.format == undefined ||
+				oldParamInformation.format === ValueFormat.SignedInteger;
+			this.extendParamInformation(
+				this._parameter,
+				getIntegerLimits(this._valueSize as any, isSigned),
+			);
+		}
+		// And store the value itself
+		const propertyName = getPropertyNameForParameter(this._parameter);
+		this.getValueDB().setValue(
+			{
+				commandClass: this.ccId,
+				propertyName,
+			},
+			this._value,
+		);
 	}
 
-	@ccKeyValuePair()
-	private values: [number, ConfigValue];
-
+	private _parameter: number;
 	public get parameter(): number {
-		return this.values[0];
+		return this._parameter;
+	}
+
+	private _value: ConfigValue;
+	public get value(): ConfigValue {
+		return this._value;
 	}
 
 	private _valueSize: number;
 	public get valueSize(): number {
 		return this._valueSize;
-	}
-
-	public get value(): ConfigValue {
-		return this.values[1];
 	}
 }
 
@@ -725,7 +749,17 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 				),
 			);
 		}
-		this.persistValues();
+		// Store every received parameter
+		for (const [parameter, value] of this._values.entries()) {
+			const propertyName = getPropertyNameForParameter(parameter);
+			this.getValueDB().setValue(
+				{
+					commandClass: this.ccId,
+					propertyName,
+				},
+				value,
+			);
+		}
 	}
 
 	private _reportsToFollow: number;
@@ -753,8 +787,6 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 	}
 
 	private _values: Map<number, ConfigValue> = new Map();
-	// TODO: I think this is bullshit
-	@ccKeyValuePair()
 	public get values(): ReadonlyMap<number, ConfigValue> {
 		return this._values;
 	}
@@ -1004,14 +1036,20 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 
 		// If we actually received parameter info, store it
 		if (this._valueSize > 0) {
-			const paramInfo: ParameterInfo = stripUndefined({
+			const valueType =
+				this._valueFormat === ValueFormat.SignedInteger ||
+				this._valueFormat === ValueFormat.UnsignedInteger
+					? "number"
+					: "number[]";
+			const paramInfo: Partial<ConfigurationMetadata> = stripUndefined({
+				type: valueType,
 				valueFormat: this._valueFormat,
 				valueSize: this._valueSize,
 				minValue: this._minValue,
 				maxValue: this._maxValue,
 				defaultValue: this._defaultValue,
 				requiresReInclusion: this._requiresReInclusion,
-				isReadonly: this._isReadonly,
+				writeable: !this._isReadonly,
 				isAdvanced: this._isAdvanced,
 				noBulkSupport: this._noBulkSupport,
 			});
