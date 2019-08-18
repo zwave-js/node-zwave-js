@@ -15,16 +15,6 @@ function createTransactionWithPriority(priority: MessagePriority): Transaction {
 	);
 }
 
-function createTransactionWithTimeout(timeout?: number): Transaction {
-	return new Transaction(
-		undefined as any,
-		{} as any,
-		undefined as any,
-		undefined as any,
-		timeout,
-	);
-}
-
 describe("lib/driver/Transaction => ", () => {
 	it("should compare priority, then the timestamp", () => {
 		// "winning" means the position of a transaction in the queue is lower
@@ -45,7 +35,7 @@ describe("lib/driver/Transaction => ", () => {
 		// this should not happen but we still need to test it
 		const t5 = createTransactionWithPriority(MessagePriority.Controller);
 		const t6 = createTransactionWithPriority(MessagePriority.Controller);
-		t6.timestamp = t5.timestamp;
+		t6.creationTimestamp = t5.creationTimestamp;
 		expect(t5.compareTo(t6)).toBe(0);
 		expect(t6.compareTo(t5)).toBe(0);
 	});
@@ -86,7 +76,7 @@ describe("lib/driver/Transaction => ", () => {
 				undefined as any,
 				priority,
 			);
-			ret.timestamp = 0;
+			ret.creationTimestamp = 0;
 			return ret;
 		}
 
@@ -200,7 +190,7 @@ describe("lib/driver/Transaction => ", () => {
 				undefined as any,
 				priority,
 			);
-			ret.timestamp = 0;
+			ret.creationTimestamp = 0;
 			return ret;
 		}
 
@@ -264,32 +254,6 @@ describe("lib/driver/Transaction => ", () => {
 		it("may not be less than 1", () => {
 			test.maxSendAttempts = -1;
 			expect(test.maxSendAttempts).toBe(1);
-		});
-	});
-
-	describe("the timeout parameter", () => {
-		it("should be reset to undefined when receiving 0 or a negative number", () => {
-			for (const timeout of [0, undefined, -1, 0.999]) {
-				expect(
-					createTransactionWithTimeout(timeout).timeout,
-				).toBeUndefined();
-			}
-		});
-
-		it("should be reset to undefined when receiving a non-number", () => {
-			for (const timeout of [true, "", {}]) {
-				expect(
-					createTransactionWithTimeout(timeout as any).timeout,
-				).toBeUndefined();
-			}
-		});
-
-		it("is kept untouched when it is a positive number", () => {
-			for (const timeout of [1, 2, 1337]) {
-				expect(createTransactionWithTimeout(timeout).timeout).toBe(
-					timeout,
-				);
-			}
 		});
 	});
 });

@@ -19,37 +19,51 @@ function highResTimestamp(): number {
 export const MAX_SEND_ATTEMPTS = 3;
 
 export class Transaction implements Comparable<Transaction> {
-	public constructor(
-		driver: IDriver,
-		message: Message,
-		promise: DeferredPromise<Message | void>,
-		priority: MessagePriority,
-		timeout?: number,
-	);
+	// public constructor(
+	// 	driver: IDriver,
+	// 	message: Message,
+	// 	promise: DeferredPromise<Message | void>,
+	// 	priority: MessagePriority,
+	// 	timeout?: number,
+	// );
 	public constructor(
 		private readonly driver: IDriver,
 		public readonly message: Message,
 		public readonly promise: DeferredPromise<Message | void>,
 		public priority: MessagePriority,
-		public readonly timeout?: number,
-		/**
-		 * @internal
-		 * The timeout which causes the promise to be rejected when it elapses
-		 */
-		public timeoutInstance?: NodeJS.Timeout,
-		public timestamp: number = highResTimestamp(),
-		/**
-		 * The previously received partial responses of a multistep command
-		 */
-		public readonly partialResponses: Message[] = [],
-		public ackPending: boolean = true,
-		public response?: Message,
 	) {
 		if (message.maxSendAttempts)
 			this.maxSendAttempts = message.maxSendAttempts;
-		if (typeof timeout !== "number" || timeout < 1) timeout = undefined;
-		this.timeout = timeout;
 	}
+
+	/** The timestamp at which the transaction was created */
+	public creationTimestamp: number = highResTimestamp();
+	/** The timestamp at which the message was sent */
+	public txTimestamp?: number;
+	/** The round-trip time from transmission of the message to receipt of the ACK */
+	public rtt: number = Number.POSITIVE_INFINITY;
+	/**
+	 * @internal
+	 * The timeout which causes the promise to be rejected when it elapses
+	 */
+	public timeoutInstance?: NodeJS.Timeout;
+
+	/**
+	 * The previously received partial responses of a multistep command
+	 */
+	public readonly partialResponses: Message[] = [];
+
+	private _ackPending: boolean = true;
+	/** Whether we're still waiting for an ACK. Setting this to false computes the transaction's RTT */
+	public get ackPending(): boolean {
+		return this._ackPending;
+	}
+	public set ackPending(v: boolean) {
+		this._ackPending = v;
+		if (!v) this.rtt = highResTimestamp() - this.txTimestamp!;
+	}
+
+	public response?: Message;
 
 	private _maxSendAttempts: number = MAX_SEND_ATTEMPTS;
 	/** The number of times the driver may try to send this message */
@@ -62,6 +76,11 @@ export class Transaction implements Comparable<Transaction> {
 
 	/** The number of times the driver has tried to send this message */
 	public sendAttempts: number = 0;
+
+	public markAsSent(): void {
+		this.sendAttempts = 1;
+		this.txTimestamp = highResTimestamp();
+	}
 
 	public compareTo(other: Transaction): CompareResult {
 		function compareWakeUpPriority(
@@ -124,6 +143,9 @@ export class Transaction implements Comparable<Transaction> {
 		else if (this.priority > other.priority) return 1;
 
 		// for equal priority, sort by the timestamp
-		return compareNumberOrString(other.timestamp, this.timestamp);
+		return compareNumberOrString(
+			other.creationTimestamp,
+			this.creationTimestamp,
+		);
 	}
 }
