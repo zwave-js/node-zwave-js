@@ -189,7 +189,7 @@ if (argv.dry) {
 const gitCommands = [
 	`npm install`,
 	`git add -A`,
-	`git commit -m "release v${newVersion} [skip ci]"`,
+	`git commit -m "chore: release v${newVersion} [skip ci]"`,
 	`git push`,
 	`git tag v${newVersion}`,
 	`git push origin --tags`,
