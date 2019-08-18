@@ -4,12 +4,14 @@ import { MessagePriority } from "../message/Constants";
 import { ZWaveNode } from "../node/Node";
 import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
+import { ValueMetadata } from "../values/Metadata";
 import { CCAPI } from "./API";
 import {
 	API,
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
+	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -114,27 +116,56 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 	}
 
 	private _zwavePlusVersion: number;
-	@ccValue() public get zwavePlusVersion(): number {
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnly,
+		label: "Version of the Z-Wave+ framework",
+	})
+	public get zwavePlusVersion(): number {
 		return this._zwavePlusVersion;
 	}
 
 	private _nodeType: ZWavePlusNodeType;
-	@ccValue() public get nodeType(): ZWavePlusNodeType {
+	@ccValue()
+	@ccValueMetadata({
+		// TODO: This should be a value list
+		...ValueMetadata.ReadOnly,
+		label: "Z-Wave+ node type",
+	})
+	public get nodeType(): ZWavePlusNodeType {
 		return this._nodeType;
 	}
 
 	private _roleType: ZWavePlusRoleType;
-	@ccValue() public get roleType(): ZWavePlusRoleType {
+	@ccValue()
+	@ccValueMetadata({
+		// TODO: This should be a value list
+		...ValueMetadata.ReadOnly,
+		label: "Z-Wave+ role type",
+	})
+	public get roleType(): ZWavePlusRoleType {
 		return this._roleType;
 	}
 
 	private _installerIcon: number;
-	@ccValue() public get installerIcon(): number {
+	@ccValue()
+	@ccValueMetadata({
+		// TODO: This should be a value list
+		...ValueMetadata.ReadOnly,
+		label: "Z-Wave+ Icon (for management)",
+	})
+	public get installerIcon(): number {
 		return this._installerIcon;
 	}
 
 	private _userIcon: number;
-	@ccValue() public get userIcon(): number {
+	@ccValue()
+	@ccValueMetadata({
+		// TODO: This should be a value list
+		...ValueMetadata.ReadOnly,
+		label: "Z-Wave+ Icon (for end users)",
+	})
+	public get userIcon(): number {
 		return this._userIcon;
 	}
 }

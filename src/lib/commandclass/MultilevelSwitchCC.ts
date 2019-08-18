@@ -2,6 +2,7 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
+import { ValueMetadata } from "../values/Metadata";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
 import {
 	CCAPI,
@@ -15,6 +16,7 @@ import {
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
+	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -122,10 +124,10 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		};
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async ({
-		propertyName,
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ propertyName },
 		value,
-	}): Promise<void> => {
+	): Promise<void> => {
 		if (propertyName !== "targetValue") {
 			return throwUnsupportedProperty(this.ccId, propertyName);
 		}
@@ -210,17 +212,32 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	}
 
 	private _targetValue: number | undefined;
-	@ccValue() public get targetValue(): number | undefined {
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.Level,
+		label: "Target value",
+	})
+	public get targetValue(): number | undefined {
 		return this._targetValue;
 	}
 
 	private _duration: Duration | undefined;
-	@ccValue() public get duration(): Duration | undefined {
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnly,
+		label: "Remaining duration until target value",
+	})
+	public get duration(): Duration | undefined {
 		return this._duration;
 	}
 
 	private _currentValue: Maybe<number>;
-	@ccValue() public get currentValue(): Maybe<number> {
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyLevel,
+		label: "Current value",
+	})
+	public get currentValue(): Maybe<number> {
 		return this._currentValue;
 	}
 }

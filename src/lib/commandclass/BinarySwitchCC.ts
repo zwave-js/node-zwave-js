@@ -1,7 +1,10 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import log from "../log";
+import { ZWaveNode } from "../node/Node";
 import { JSONObject, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
+import { ValueMetadata } from "../values/Metadata";
 import { Maybe, parseBoolean, parseMaybeBoolean } from "../values/Primitive";
 import {
 	CCAPI,
@@ -15,6 +18,7 @@ import {
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
+	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -65,10 +69,10 @@ export class BinarySwitchCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async ({
-		propertyName,
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ propertyName },
 		value,
-	}): Promise<void> => {
+	): Promise<void> => {
 		if (propertyName !== "targetValue") {
 			return throwUnsupportedProperty(this.ccId, propertyName);
 		}
@@ -90,7 +94,36 @@ export interface BinarySwitchCC {
 
 @commandClass(CommandClasses["Binary Switch"])
 @implementedVersion(2)
-export class BinarySwitchCC extends CommandClass {}
+export class BinarySwitchCC extends CommandClass {
+	public static async interview(
+		driver: IDriver,
+		node: ZWaveNode,
+	): Promise<void> {
+		log.controller.logNode(node.id, {
+			message: "querying Binary Switch state...",
+			direction: "outbound",
+		});
+
+		const zwavePlusResponse = await node.commandClasses[
+			"Binary Switch"
+		].get();
+
+		let logMessage = `received Binary Switch state:
+current value:      ${zwavePlusResponse.currentValue}`;
+		if (zwavePlusResponse.targetValue != undefined) {
+			logMessage += `
+target value:       ${zwavePlusResponse.targetValue}
+remaining duration: ${zwavePlusResponse.duration}`;
+		}
+		log.controller.logNode(node.id, {
+			message: logMessage,
+			direction: "inbound",
+		});
+
+		// Remember that the interview is complete
+		this.setInterviewComplete(node, true);
+	}
+}
 
 interface BinarySwitchCCSetOptions extends CCCommandOptions {
 	targetValue: boolean;
@@ -148,17 +181,32 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 	}
 
 	private _currentValue: Maybe<boolean> | undefined;
-	@ccValue() public get currentValue(): Maybe<boolean> | undefined {
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyBoolean,
+		label: "Current value",
+	})
+	public get currentValue(): Maybe<boolean> | undefined {
 		return this._currentValue;
 	}
 
 	private _targetValue: boolean | undefined;
-	@ccValue() public get targetValue(): boolean | undefined {
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.Boolean,
+		label: "Target value",
+	})
+	public get targetValue(): boolean | undefined {
 		return this._targetValue;
 	}
 
 	private _duration: Duration | undefined;
-	@ccValue() public get duration(): Duration | undefined {
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnly,
+		label: "Remaining duration until target value",
+	})
+	public get duration(): Duration | undefined {
 		return this._duration;
 	}
 

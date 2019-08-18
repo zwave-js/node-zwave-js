@@ -1,20 +1,16 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Endpoint } from "../node/Endpoint";
+import { ValueID } from "../node/ValueDB";
 import { getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 /** Used to identify the method on the CC API class that handles setting values on nodes directly */
 export const SET_VALUE: unique symbol = Symbol.for("CCAPI_SET_VALUE");
-export type SetValueImplementation = ({
-	propertyName,
-	propertyKey,
-	value,
-}: {
-	propertyName: string;
-	propertyKey?: number | string;
-	value: unknown;
-}) => Promise<void>;
+export type SetValueImplementation = (
+	property: Pick<ValueID, "propertyName" | "propertyKey">,
+	value: unknown,
+) => Promise<void>;
 
 // Since the setValue API is called from a point with very generic parameters,
 // we must do narrowing inside the API calls. These two methods are for convenience

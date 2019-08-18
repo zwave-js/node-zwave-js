@@ -6,6 +6,7 @@ import { MessagePriority } from "../message/Constants";
 import { ZWaveNode } from "../node/Node";
 import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
+import { ValueMetadata } from "../values/Metadata";
 import { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
@@ -14,6 +15,7 @@ import {
 	CCCommandOptions,
 	ccKeyValuePair,
 	ccValue,
+	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -137,17 +139,32 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 	}
 
 	private _manufacturerId: number;
-	@ccValue() public get manufacturerId(): number {
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyUInt16,
+		label: "Manufacturer ID",
+	})
+	public get manufacturerId(): number {
 		return this._manufacturerId;
 	}
 
 	private _productType: number;
-	@ccValue() public get productType(): number {
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyUInt16,
+		label: "Product type",
+	})
+	public get productType(): number {
 		return this._productType;
 	}
 
 	private _productId: number;
-	@ccValue() public get productId(): number {
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyUInt16,
+		label: "Product ID",
+	})
+	public get productId(): number {
 		return this._productId;
 	}
 }

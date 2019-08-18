@@ -1,6 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { JSONObject, validatePayload } from "../util/misc";
+import { ValueMetadata } from "../values/Metadata";
 import { parseBitMask } from "../values/Primitive";
 import {
 	CCAPI,
@@ -14,6 +15,7 @@ import {
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
+	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -83,10 +85,10 @@ export class CentralSceneCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc);
 	}
 
-	protected [SET_VALUE]: SetValueImplementation = async ({
-		propertyName,
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ propertyName },
 		value,
-	}): Promise<void> => {
+	): Promise<void> => {
 		if (propertyName !== "slowRefresh") {
 			return throwUnsupportedProperty(this.ccId, propertyName);
 		}
@@ -201,13 +203,18 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		this.persistValues();
 	}
 
+	// TODO: Use all these values to define the sceneXYZ values and metadata
+
 	private _sceneCount: number;
-	@ccValue() public get sceneCount(): number {
+	@ccValue(true)
+	public get sceneCount(): number {
 		return this._sceneCount;
 	}
 
+	// TODO: Only offer `slowRefresh` if this is true
 	private _supportsSlowRefresh: boolean;
-	@ccValue() public get supportsSlowRefresh(): boolean {
+	@ccValue(true)
+	public get supportsSlowRefresh(): boolean {
 		return this._supportsSlowRefresh;
 	}
 
@@ -215,8 +222,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		number,
 		readonly CentralSceneKeys[]
 	>();
-	// TODO: should this be an internal value?
-	@ccValue()
+	@ccValue(true)
 	public get supportedKeyAttributes(): ReadonlyMap<
 		number,
 		readonly CentralSceneKeys[]
@@ -225,8 +231,8 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	}
 
 	private _keyAttributesHaveIdenticalSupport: boolean;
-	// TODO: should this be an internal value?
-	@ccValue() public get keyAttributesHaveIdenticalSupport(): boolean {
+	@ccValue(true)
+	public get keyAttributesHaveIdenticalSupport(): boolean {
 		return this._keyAttributesHaveIdenticalSupport;
 	}
 
@@ -268,7 +274,15 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 	}
 
 	private _slowRefresh: boolean;
-	@ccValue() public get slowRefresh(): boolean {
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.Boolean,
+		label: "Send held down notifications at a slow rate",
+		description:
+			"When this is true, KeyHeldDown notifications are sent every 55s. " +
+			"When this is false, the notifications are sent every 200ms.",
+	})
+	public get slowRefresh(): boolean {
 		return this._slowRefresh;
 	}
 }

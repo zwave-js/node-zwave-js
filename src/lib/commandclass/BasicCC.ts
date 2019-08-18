@@ -27,10 +27,10 @@ import { CommandClasses } from "./CommandClasses";
 
 @API(CommandClasses.Basic)
 export class BasicCCAPI extends CCAPI {
-	protected [SET_VALUE]: SetValueImplementation = async ({
-		propertyName,
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ propertyName },
 		value,
-	}): Promise<void> => {
+	): Promise<void> => {
 		if (propertyName !== "targetValue") {
 			return throwUnsupportedProperty(this.ccId, propertyName);
 		}
@@ -152,7 +152,7 @@ export class BasicCCReport extends BasicCC {
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnly,
-		label: "Remaining duration",
+		label: "Remaining duration until target value",
 	})
 	public get duration(): Duration | undefined {
 		return this._duration;

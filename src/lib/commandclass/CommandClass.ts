@@ -1112,10 +1112,10 @@ export function getCCValueMetadata(
 	// retrieve the current metadata
 	const metadata =
 		Reflect.getMetadata(METADATA_ccValueMeta, CommandClass) || {};
-	if (!(cc in metadata)) return ValueMetadata.default;
+	if (!(cc in metadata)) return ValueMetadata.Any;
 	const map = metadata[cc] as Map<string, ValueMetadata>;
 	if (map.has(property)) return map.get(property)!;
-	return ValueMetadata.default;
+	return ValueMetadata.Any;
 }
 
 /**

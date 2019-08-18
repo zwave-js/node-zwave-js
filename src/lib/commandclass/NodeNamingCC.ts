@@ -1,10 +1,13 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { ValueMetadata } from "../values/Metadata";
 import { CCAPI } from "./API";
 import {
 	API,
 	CCCommand,
 	CCCommandOptions,
+	ccValue,
+	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -144,6 +147,11 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 	}
 
 	private _name: string;
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.Any,
+		label: "Node name",
+	})
 	public get name(): string {
 		return this._name;
 	}
@@ -225,6 +233,11 @@ export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocation
 	}
 
 	private _location: string;
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.Any,
+		label: "Node location",
+	})
 	public get location(): string {
 		return this._location;
 	}
