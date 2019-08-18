@@ -616,8 +616,44 @@ export class Driver extends EventEmitter implements IDriver {
 			);
 			switch (responseRole) {
 				case "confirmation":
-					// no need to process intermediate responses, as they only tell us things are good
 					log.driver.transactionResponse(msg, "confirmation");
+					// When a node has received the message, it confirms the receipt with a SendDataRequest
+					if (
+						msg.type === MessageType.Request &&
+						!this.currentTransaction.timeoutInstance
+					) {
+						// As per SDS11846, start a timeout for the response
+						this.currentTransaction.computeRTT();
+						const msRTT = this.currentTransaction.rtt / 1e6;
+
+						log.driver.print(
+							`ACK received from node for current transaction. RTT = ${msRTT.toFixed(
+								2,
+							)} ms`,
+						);
+
+						this.currentTransaction.timeoutInstance = setTimeout(
+							() => {
+								if (!this.currentTransaction) return;
+								// TODO: Do we need more information here?
+								log.driver.print(
+									"The transaction timed out",
+									"warn",
+								);
+								this.rejectCurrentTransaction(
+									new ZWaveError(
+										"The transaction timed out",
+										ZWaveErrorCodes.Controller_MessageTimeout,
+									),
+								);
+							},
+							// The timeout SHOULD be RTT + 1s
+							msRTT + this.options.timeouts.report,
+						)
+							// Unref'ing long running timers allows the process to exit mid-timeout
+							.unref();
+					}
+					// no need to further process intermediate responses, as they only tell us things are good
 					return;
 
 				case "fatal_controller":
@@ -970,9 +1006,8 @@ ${handlers.length} left`,
 		const trnsact = this.currentTransaction;
 		if (trnsact != undefined && trnsact.ackPending) {
 			trnsact.ackPending = false;
-			const msRTT = trnsact.rtt / 1e6;
 			log.driver.print(
-				`ACK received for current transaction - RTT = ${msRTT} ms`,
+				`ACK received from controller for current transaction`,
 			);
 			if (
 				trnsact.message.expectedResponse == undefined ||
@@ -982,21 +1017,6 @@ ${handlers.length} left`,
 				// if the response has been received prior to this, resolve the request
 				// if no response was expected, also resolve the request
 				this.resolveCurrentTransaction(false);
-			} else {
-				// We are still waiting for a response. Start the report timeout (as per SDS11846)
-				trnsact.timeoutInstance = setTimeout(() => {
-					if (!this.currentTransaction) return;
-					// TODO: Do we need more information here?
-					log.driver.print("The transaction timed out", "warn");
-					this.rejectCurrentTransaction(
-						new ZWaveError(
-							"The transaction timed out",
-							ZWaveErrorCodes.Controller_MessageTimeout,
-						),
-					);
-				}, msRTT + this.options.timeouts.report)
-					// Unref'ing long running timers allows the process to exit mid-timeout
-					.unref();
 			}
 			return;
 		}

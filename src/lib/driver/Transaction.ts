@@ -42,6 +42,9 @@ export class Transaction implements Comparable<Transaction> {
 	public txTimestamp?: number;
 	/** The round-trip time from transmission of the message to receipt of the ACK */
 	public rtt: number = Number.POSITIVE_INFINITY;
+	public computeRTT(): void {
+		this.rtt = highResTimestamp() - this.txTimestamp!;
+	}
 	/**
 	 * @internal
 	 * The timeout which causes the promise to be rejected when it elapses
@@ -53,15 +56,8 @@ export class Transaction implements Comparable<Transaction> {
 	 */
 	public readonly partialResponses: Message[] = [];
 
-	private _ackPending: boolean = true;
-	/** Whether we're still waiting for an ACK. Setting this to false computes the transaction's RTT */
-	public get ackPending(): boolean {
-		return this._ackPending;
-	}
-	public set ackPending(v: boolean) {
-		this._ackPending = v;
-		if (!v) this.rtt = highResTimestamp() - this.txTimestamp!;
-	}
+	/** Whether we're still waiting for an ACK from the controller */
+	public ackPending: boolean = true;
 
 	public response?: Message;
 
