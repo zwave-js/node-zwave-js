@@ -183,7 +183,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 	private _currentValue: Maybe<boolean> | undefined;
 	@ccValue()
 	@ccValueMetadata({
-		...ValueMetadata.ReadOnly,
+		...ValueMetadata.ReadOnlyBoolean,
 		label: "Current value",
 	})
 	public get currentValue(): Maybe<boolean> | undefined {
@@ -193,7 +193,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 	private _targetValue: boolean | undefined;
 	@ccValue()
 	@ccValueMetadata({
-		...ValueMetadata.Any,
+		...ValueMetadata.Boolean,
 		label: "Target value",
 	})
 	public get targetValue(): boolean | undefined {
@@ -204,7 +204,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnly,
-		label: "Remaining duration",
+		label: "Remaining duration until target value",
 	})
 	public get duration(): Duration | undefined {
 		return this._duration;

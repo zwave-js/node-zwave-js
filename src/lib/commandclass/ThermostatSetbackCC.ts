@@ -1,6 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
+import { ValueMetadata } from "../values/Metadata";
 import {
 	decodeSetbackState,
 	encodeSetbackState,
@@ -12,6 +13,7 @@ import {
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
+	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -128,13 +130,26 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 	}
 
 	private _setbackType: SetbackType;
-	@ccValue() public get setbackType(): SetbackType {
+	@ccValue()
+	@ccValueMetadata({
+		// TODO: This should be a value list
+		...ValueMetadata.Any,
+		label: "Setback type",
+	})
+	public get setbackType(): SetbackType {
 		return this._setbackType;
 	}
 
 	private _setbackState: SetbackState;
 	/** The offset from the setpoint in 0.1 Kelvin or a special mode */
-	@ccValue() public get setbackState(): SetbackState {
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.Int8,
+		min: -12.8,
+		max: 12,
+		label: "Setback state",
+	})
+	public get setbackState(): SetbackState {
 		return this._setbackState;
 	}
 }

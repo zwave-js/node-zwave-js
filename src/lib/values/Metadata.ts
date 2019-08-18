@@ -264,9 +264,7 @@ const WriteOnlyInt32: ValueMetadataNumeric = {
 
 /** The level of a Switch */
 const Level: ValueMetadataNumeric = {
-	..._default,
-	type: "number",
-	min: 0,
+	...UInt8,
 	max: 99,
 };
 

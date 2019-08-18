@@ -974,19 +974,21 @@ version:               ${this.version}`;
 			sceneNumber: number,
 			key: CentralSceneKeys,
 		): void => {
-			const propertyName = `scene${padStart(
-				sceneNumber.toString(),
-				3,
-				"0",
-			)}`;
+			const paddedSceneNumber = padStart(sceneNumber.toString(), 3, "0");
+			const propertyName = `scene${paddedSceneNumber}`;
+			const valueId = {
+				commandClass: command.ccId,
+				endpoint: command.endpoint,
+				propertyName,
+			};
 			this.valueDB.setValue(
-				{
-					commandClass: command.ccId,
-					endpoint: command.endpoint,
-					propertyName,
-				},
+				valueId,
 				CentralSceneCC.translatePropertyKey(propertyName, key),
 			);
+			this.valueDB.setMetadata(valueId, {
+				...ValueMetadata.ReadOnly,
+				label: `Scene ${paddedSceneNumber}`,
+			});
 		};
 
 		const forceKeyUp = (): void => {

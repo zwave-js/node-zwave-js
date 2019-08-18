@@ -1,11 +1,14 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
+import { ValueMetadata } from "../values/Metadata";
 import { CCAPI } from "./API";
 import {
 	API,
 	CCCommand,
 	CCCommandOptions,
+	ccValue,
+	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -133,7 +136,16 @@ export class LanguageCCReport extends LanguageCC {
 		// }
 	}
 
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnly,
+	})
 	public readonly language: string;
+
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnly,
+	})
 	public readonly country: string | undefined;
 }
 

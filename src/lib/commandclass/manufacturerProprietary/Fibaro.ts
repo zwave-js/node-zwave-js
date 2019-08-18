@@ -111,10 +111,28 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 		this.fibaroCCCommand = FibaroVenetianBlindCCCommand.Report;
 
 		// payload[0] contains a 3
-		this.position = this.payload[1];
-		this.tilt = this.payload[2];
+		this._position = this.payload[1];
+		this._tilt = this.payload[2];
 	}
 
-	public position: number;
-	public tilt: number;
+	private _position: number;
+	// FIXME: This is not a CC, so we cannot use @ccValue
+	// @ccValue()
+	// @ccValueMetadata({
+	// 	...ValueMetadata.Level,
+	// 	label: "Venetion Blinds position",
+	// })
+	public get position(): number {
+		return this._position;
+	}
+
+	private _tilt: number;
+	// @ccValue()
+	// @ccValueMetadata({
+	// 	...ValueMetadata.Level,
+	// 	label: "Venetion Blinds tilt",
+	// })
+	public get tilt(): number {
+		return this._tilt;
+	}
 }
