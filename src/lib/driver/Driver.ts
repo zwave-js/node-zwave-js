@@ -69,7 +69,7 @@ const defaultOptions: ZWaveOptions = {
 		ack: 1000,
 		byte: 150,
 		// TODO: This should be dependent on the network's current RTT
-		configurationGetSet: 3000,
+		configurationGetSet: 1000,
 	},
 	skipInterview: false,
 };
