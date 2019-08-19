@@ -86,7 +86,7 @@ jobs:
 
             - run:
                   name: Perform a type check
-                  command: npm run test:ts
+                  command: npm run check
 
             - run:
                   name: Run component tests
