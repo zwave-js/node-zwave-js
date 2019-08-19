@@ -43,10 +43,11 @@ whitelist: &whitelist
     paths:
         - build/*
         - config/*
+        - coverage/*
+        - maintenance/*
         - node_modules/*
         - src/*
         - test/*
-        - coverage/*
         - .babelrc
         - .fimbullinter.yaml
         - .npmignore
