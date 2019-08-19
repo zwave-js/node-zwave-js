@@ -1327,6 +1327,13 @@ describe("lib/node/Node", () => {
 			// We test with a BasicCC
 			const node = new ZWaveNode(1, fakeDriver as any);
 			node.addCC(CommandClasses.Basic, { isSupported: true });
+
+			// Since setValue also issues a get, we need to mock a response
+			fakeDriver.sendMessage
+				.mockResolvedValueOnce(undefined)
+				// For some reason this is called twice?!
+				.mockResolvedValue({ command: {} });
+
 			const result = await node.setValue(
 				{
 					commandClass: CommandClasses.Basic,
@@ -1349,11 +1356,13 @@ describe("lib/node/Node", () => {
 
 		it("returns false if the CC is not implemented", async () => {
 			const node = new ZWaveNode(1, fakeDriver as any);
-			const result = await node.setValue({
-				cc: 0xbada55, // this is guaranteed to not be implemented
-				propertyName: "test",
-				value: 1,
-			});
+			const result = await node.setValue(
+				{
+					commandClass: 0xbada55, // this is guaranteed to not be implemented
+					propertyName: "test",
+				},
+				1,
+			);
 			expect(result).toBeFalse();
 		});
 	});
