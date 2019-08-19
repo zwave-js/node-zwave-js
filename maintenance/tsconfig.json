@@ -8,7 +8,7 @@
 		"moduleResolution": "node",
 		// "noImplicitAny": true,
 		"target": "es2015",
-		"types": ["node"]
+		"rootDir": "../"
 	},
-	"include": ["./*.ts"]
+	"include": ["*.ts"]
 }

@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-// tslint:disable:no-var-requires
-// tslint:disable:no-console
-
 /*
 
 	Bumps the package version and releases a new tag
@@ -17,6 +13,9 @@
 
 */
 
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+/// <reference types="node" />
 import { padStart } from "alcalzone-shared/strings";
 import { execSync } from "child_process";
 import * as fs from "fs";

@@ -1,5 +1,4 @@
 # Changelog
 
-## **WORK IN PROGRESS**
-
--   (AlCalzone) First working release
+## __WORK IN PROGRESS__
+* (AlCalzone) First working release
