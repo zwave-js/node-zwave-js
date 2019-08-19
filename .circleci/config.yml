@@ -249,11 +249,11 @@ jobs:
                   at: *workdir_latest
 
             - run:
-                  name: Login to npm
-                  command: npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
-            - run:
                   name: Publish package to npm
-                  command: npm publish
+                  command: |
+                      npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
+                      npm whoami
+                      npm publish
 
 # ----------------------------------------------------
 # Fit it all together
