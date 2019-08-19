@@ -222,6 +222,107 @@ describe("lib/log/Controller =>", () => {
 		});
 	});
 
+	describe("metadata()", () => {
+		it("prints a tag including the CC name", () => {
+			const baseArgs = {
+				nodeId: 1,
+				commandClass: CommandClasses.Basic,
+				propertyName: "foo",
+			};
+
+			log.controller.metadataUpdated(baseArgs);
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("[Basic]"),
+			});
+		});
+
+		it("prints a tag including the Node ID", () => {
+			const baseArgs = {
+				nodeId: 1,
+				commandClass: CommandClasses.Basic,
+				propertyName: "foo",
+			};
+
+			log.controller.metadataUpdated({
+				...baseArgs,
+				nodeId: 5,
+			});
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("[Node 005]"),
+			});
+		});
+
+		it("prints a secondary tag including the CC endpoint", () => {
+			const baseArgs = {
+				nodeId: 1,
+				commandClass: CommandClasses.Basic,
+				propertyName: "foo",
+			};
+
+			log.controller.metadataUpdated(baseArgs);
+			assertMessage(spyTransport, {
+				predicate: msg => !msg.includes("[Endpoint"),
+			});
+
+			log.controller.metadataUpdated({
+				...baseArgs,
+				endpoint: 5,
+			});
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("[Endpoint 5]"),
+				callNumber: 1,
+			});
+		});
+
+		it("prints a secondary tag if the value is internal", () => {
+			const baseArgs = {
+				nodeId: 1,
+				commandClass: CommandClasses.Basic,
+				propertyName: "interviewComplete",
+			};
+
+			log.controller.metadataUpdated({
+				...baseArgs,
+				internal: true,
+			});
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("[internal]"),
+			});
+
+			log.controller.metadataUpdated(baseArgs);
+			assertMessage(spyTransport, {
+				predicate: msg => !msg.includes("[internal]"),
+				callNumber: 1,
+			});
+		});
+
+		it("prints the name of the property", () => {
+			const baseArgs = {
+				nodeId: 1,
+				commandClass: CommandClasses.Basic,
+				propertyName: "foo",
+			};
+
+			log.controller.metadataUpdated(baseArgs);
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes("foo"),
+			});
+		});
+
+		it("prints the change type", () => {
+			const baseArgs = {
+				nodeId: 1,
+				commandClass: CommandClasses.Basic,
+				propertyName: "foo",
+			};
+
+			log.controller.metadataUpdated(baseArgs);
+			assertMessage(spyTransport, {
+				predicate: msg => msg.endsWith(": metadata updated"),
+			});
+		});
+	});
+
 	describe("interviewStage()", () => {
 		it("includes a tag for the node ID", () => {
 			log.controller.interviewStage({ id: 7 } as any);

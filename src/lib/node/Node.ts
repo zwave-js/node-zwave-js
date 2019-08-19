@@ -200,11 +200,17 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		const isInternalValue =
 			ccInstance && ccInstance.isInternalValue(arg.propertyName as any);
 		// I don't like the splitting and any but its the easiest solution here
-		log.controller.value(eventName.split(" ")[1] as any, {
-			...(outArg as any),
+		const [changeTarget, changeType] = eventName.split(" ");
+		const logArgument = {
+			...outArg,
 			nodeId: this.nodeId,
 			internal: isInternalValue,
-		});
+		};
+		if (changeTarget === "value") {
+			log.controller.value(changeType as any, logArgument as any);
+		} else if (changeTarget === "metadata") {
+			log.controller.metadataUpdated(logArgument);
+		}
 		if (!isInternalValue) {
 			// And pass the translated event to our listeners
 			this.emit(eventName, this, outArg as any);
