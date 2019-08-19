@@ -16,7 +16,7 @@ import {
 	MessageType,
 } from "./Constants";
 
-export type Constructable<T extends Message> = new (
+type Constructable<T extends Message> = new (
 	driver: IDriver,
 	options?: MessageOptions,
 ) => T;
@@ -35,7 +35,7 @@ export interface MessageBaseOptions {
 	__empty?: undefined; // Dirty hack, so we can inherit from this interface
 }
 
-export interface MessageCreationOptions extends MessageBaseOptions {
+interface MessageCreationOptions extends MessageBaseOptions {
 	type?: MessageType;
 	functionType?: FunctionType;
 	expectedResponse?: FunctionType | ResponsePredicate;
@@ -281,10 +281,10 @@ function computeChecksum(message: Buffer): number {
 // =======================
 // use decorators to link function types to message classes
 /* eslint-disable @typescript-eslint/camelcase */
-export const METADATA_messageTypes = Symbol("messageTypes");
-export const METADATA_messageTypeMap = Symbol("messageTypeMap");
-export const METADATA_expectedResponse = Symbol("expectedResponse");
-export const METADATA_priority = Symbol("priority");
+const METADATA_messageTypes = Symbol("messageTypes");
+const METADATA_messageTypeMap = Symbol("messageTypeMap");
+const METADATA_expectedResponse = Symbol("expectedResponse");
+const METADATA_priority = Symbol("priority");
 /* eslint-enable @typescript-eslint/camelcase */
 
 type MessageTypeMap = Map<string, Constructable<Message>>;
@@ -419,7 +419,7 @@ export function getFunctionTypeStatic<T extends Constructable<Message>>(
 /**
  * Looks up the message constructor for a given message type and function type
  */
-export function getMessageConstructor(
+function getMessageConstructor(
 	messageType: MessageType,
 	functionType: FunctionType,
 ): Constructable<Message> | undefined {

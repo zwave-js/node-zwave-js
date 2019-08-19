@@ -78,9 +78,9 @@ export class MockSerialPort extends EventEmitter {
 	public readonly writeStub: jest.Mock = jest.fn();
 }
 
-export const MockRequestMessageWithExpectation_FunctionType = (0xfa as unknown) as FunctionType;
-export const MockRequestMessageWithoutExpectation_FunctionType = (0xfb as unknown) as FunctionType;
-export const MockResponseMessage_FunctionType = (0xff as unknown) as FunctionType;
+const MockRequestMessageWithExpectation_FunctionType = (0xfa as unknown) as FunctionType;
+const MockRequestMessageWithoutExpectation_FunctionType = (0xfb as unknown) as FunctionType;
+const MockResponseMessage_FunctionType = (0xff as unknown) as FunctionType;
 
 @messageTypes(
 	MessageType.Request,

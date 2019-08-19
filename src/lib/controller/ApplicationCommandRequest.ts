@@ -20,7 +20,7 @@ enum StatusFlags {
 	Broadcast = 1 << 2,
 }
 
-export interface ApplicationCommandRequestOptions extends MessageBaseOptions {
+interface ApplicationCommandRequestOptions extends MessageBaseOptions {
 	isBroadcast?: boolean;
 	routedBusy?: boolean;
 	command: CommandClass;

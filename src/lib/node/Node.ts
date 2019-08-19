@@ -94,14 +94,14 @@ export type ZWaveNodeMetadataUpdatedCallback = (
 	args: ZWaveNodeMetadataUpdatedArgs,
 ) => void;
 
-export interface ZWaveNodeValueEventCallbacks {
+interface ZWaveNodeValueEventCallbacks {
 	"value added": ZWaveNodeValueAddedCallback;
 	"value updated": ZWaveNodeValueUpdatedCallback;
 	"value removed": ZWaveNodeValueRemovedCallback;
 	"metadata updated": ZWaveNodeMetadataUpdatedCallback;
 }
 
-export type ZWaveNodeEventCallbacks = Overwrite<
+type ZWaveNodeEventCallbacks = Overwrite<
 	{
 		[K in "wake up" | "sleep" | "interview completed" | "dead" | "alive"]: (
 			node: ZWaveNode,
@@ -110,7 +110,7 @@ export type ZWaveNodeEventCallbacks = Overwrite<
 	ZWaveNodeValueEventCallbacks
 >;
 
-export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
+type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
 
 export interface ZWaveNode {
 	on<TEvent extends ZWaveNodeEvents>(

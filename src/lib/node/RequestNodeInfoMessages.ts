@@ -20,7 +20,7 @@ import {
 import { JSONObject } from "../util/misc";
 import { INodeQuery } from "./INodeQuery";
 
-export interface RequestNodeInfoRequestOptions extends MessageBaseOptions {
+interface RequestNodeInfoRequestOptions extends MessageBaseOptions {
 	nodeId: number;
 }
 

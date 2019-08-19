@@ -3,7 +3,7 @@ import { validatePayload } from "../util/misc";
 
 type Brand<K, T> = K & { __brand: T };
 
-export type BrandedUnknown<T> = Brand<"unknown", T>;
+type BrandedUnknown<T> = Brand<"unknown", T>;
 export type Maybe<T> = T | BrandedUnknown<T>;
 
 export const unknownNumber = "unknown" as Maybe<number>;

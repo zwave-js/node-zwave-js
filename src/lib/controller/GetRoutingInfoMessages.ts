@@ -15,7 +15,7 @@ import {
 import { JSONObject } from "../util/misc";
 import { NUM_NODEMASK_BYTES, parseNodeBitMask } from "./NodeBitMask";
 
-export interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
+interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
 	nodeId: number;
 	removeNonRepeaters?: boolean;
 	removeBadLinks?: boolean;

@@ -14,7 +14,7 @@ import {
 } from "../message/Message";
 import { JSONObject } from "../util/misc";
 
-export interface SetSerialApiTimeoutsRequestOptions extends MessageBaseOptions {
+interface SetSerialApiTimeoutsRequestOptions extends MessageBaseOptions {
 	ackTimeout: number;
 	byteTimeout: number;
 }

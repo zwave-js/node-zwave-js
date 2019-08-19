@@ -5,7 +5,7 @@ import { ZWaveLogInfo } from "./shared";
 const defaultColors = winston.config.npm.colors;
 
 // This is a placeholder
-export interface ColorizerOptions {
+interface ColorizerOptions {
 	__foo?: undefined;
 }
 

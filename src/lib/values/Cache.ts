@@ -4,12 +4,8 @@ import { JSONObject } from "../util/misc";
 import { ValueMetadata } from "./Metadata";
 
 // export type SerializableValue = number | string | boolean | Map<string | number, any> | JSONObject;
-export type SerializedValue =
-	| number
-	| string
-	| boolean
-	| JSONObject
-	| undefined;
+type SerializedValue = number | string | boolean | JSONObject | undefined;
+
 export interface CacheValue {
 	endpoint?: number;
 	propertyName: string;
