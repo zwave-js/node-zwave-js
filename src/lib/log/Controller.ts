@@ -156,6 +156,32 @@ export function value(
 	});
 }
 
+export function metadataUpdated(args: LogValueArgs<ValueID>): void {
+	const primaryTags: string[] = [
+		getNodeTag(args.nodeId),
+		CommandClasses[args.commandClass],
+	];
+	const secondaryTags: string[] = [];
+	if (args.endpoint != undefined) {
+		secondaryTags.push(`Endpoint ${args.endpoint}`);
+	}
+	if (args.internal === true) {
+		secondaryTags.push("internal");
+	}
+	let message = args.propertyName;
+	if (args.propertyKey != undefined) {
+		message += `[${args.propertyKey}]`;
+	}
+	message += ": metadata updated";
+	logger.log({
+		level: CONTROLLER_LOGLEVEL,
+		primaryTags: tagify(primaryTags),
+		secondaryTags: tagify(secondaryTags),
+		message,
+		direction: getDirectionPrefix("none"),
+	});
+}
+
 /** Returns the tag used to log node related messages */
 function getNodeTag(nodeId: number): string {
 	return "Node " + padStart(nodeId.toString(), 3, "0");
