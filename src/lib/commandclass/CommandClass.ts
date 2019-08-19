@@ -25,7 +25,7 @@ export interface CommandClassInfo {
 	version: number;
 }
 
-export interface CommandClassStatic {
+interface CommandClassStatic {
 	readonly maxImplementedVersion: number;
 }
 
@@ -61,7 +61,7 @@ export interface CCCommandOptions {
 	endpoint?: number;
 }
 
-export interface CommandClassCreationOptions extends CCCommandOptions {
+interface CommandClassCreationOptions extends CCCommandOptions {
 	ccCommand?: number; // undefined = NoOp
 	payload?: Buffer;
 }
@@ -70,7 +70,7 @@ function gotCCCommandOptions(options: any): options is CCCommandOptions {
 	return typeof options.nodeId === "number";
 }
 
-export type CommandClassOptions =
+type CommandClassOptions =
 	| CommandClassCreationOptions
 	| CommandClassDeserializationOptions;
 
@@ -646,17 +646,17 @@ export class CommandClass {
 // use decorators to link command class values to actual command classes
 
 /* eslint-disable @typescript-eslint/camelcase */
-export const METADATA_commandClass = Symbol("commandClass");
-export const METADATA_commandClassMap = Symbol("commandClassMap");
-export const METADATA_ccResponse = Symbol("ccResponse");
-export const METADATA_ccCommand = Symbol("ccCommand");
-export const METADATA_ccCommandMap = Symbol("ccCommandMap");
-export const METADATA_ccValues = Symbol("ccValues");
-export const METADATA_ccKeyValuePairs = Symbol("ccKeyValuePairs");
-export const METADATA_ccValueMeta = Symbol("ccValueMeta");
-export const METADATA_version = Symbol("version");
-export const METADATA_API = Symbol("API");
-export const METADATA_APIMap = Symbol("APIMap");
+const METADATA_commandClass = Symbol("commandClass");
+const METADATA_commandClassMap = Symbol("commandClassMap");
+const METADATA_ccResponse = Symbol("ccResponse");
+const METADATA_ccCommand = Symbol("ccCommand");
+const METADATA_ccCommandMap = Symbol("ccCommandMap");
+const METADATA_ccValues = Symbol("ccValues");
+const METADATA_ccKeyValuePairs = Symbol("ccKeyValuePairs");
+const METADATA_ccValueMeta = Symbol("ccValueMeta");
+const METADATA_version = Symbol("version");
+const METADATA_API = Symbol("API");
+const METADATA_APIMap = Symbol("APIMap");
 /* eslint-enable @typescript-eslint/camelcase */
 
 export interface Constructable<T extends CommandClass> {
@@ -738,7 +738,7 @@ export function getCommandClass<T extends CommandClass | CCAPI>(
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export function getCommandClassStatic<T extends Constructable<CommandClass>>(
+function getCommandClassStatic<T extends Constructable<CommandClass>>(
 	classConstructor: T,
 ): CommandClasses {
 	// retrieve the current metadata
@@ -866,9 +866,7 @@ export function CCCommand(command: number): ClassDecorator {
 /**
  * Retrieves the CC command a subclass of a CC implements
  */
-export function getCCCommand<T extends CommandClass>(
-	cc: T,
-): number | undefined {
+function getCCCommand<T extends CommandClass>(cc: T): number | undefined {
 	// get the class constructor
 	const constr = cc.constructor as Constructable<CommandClass>;
 	const constrName = constr.name;
@@ -883,28 +881,11 @@ export function getCCCommand<T extends CommandClass>(
 	return ret;
 }
 
-export function getCCCommandStatic<T extends Constructable<CommandClass>>(
-	classConstructor: T,
-): number | undefined {
-	// retrieve the current metadata
-	const ret: number | undefined = Reflect.getMetadata(
-		METADATA_ccCommand,
-		classConstructor,
-	);
-
-	log.reflection.lookup(
-		classConstructor.name,
-		"CC Command",
-		`${ret} (${num2hex(ret)})`,
-	);
-	return ret;
-}
-
 /**
  * Looks up the command class constructor for a given command class type and function type
  */
 // wotan-disable-next-line no-misused-generics
-export function getCCCommandConstructor<TBase extends CommandClass>(
+function getCCCommandConstructor<TBase extends CommandClass>(
 	ccId: CommandClasses,
 	ccCommand: number,
 ): Constructable<TBase> | undefined {
@@ -980,38 +961,6 @@ export function getExpectedCCResponse<T extends CommandClass>(
 }
 
 /**
- * Retrieves the function type defined for a Z-Wave message class
- */
-export function getExpectedCCResponseStatic<
-	T extends Constructable<CommandClass>
->(
-	classConstructor: T,
-): CommandClasses | DynamicCCResponse<CommandClass> | undefined {
-	// retrieve the current metadata
-	const ret:
-		| CommandClasses
-		| DynamicCCResponse<CommandClass>
-		| undefined = Reflect.getMetadata(
-		METADATA_ccResponse,
-		classConstructor,
-	);
-	if (typeof ret === "number") {
-		log.reflection.lookup(
-			classConstructor.name,
-			"expected CC response",
-			`CommandClasses.${CommandClasses[ret]} ${num2hex(ret)}`,
-		);
-	} else if (typeof ret === "function") {
-		log.reflection.lookup(
-			classConstructor.name,
-			"expected CC response",
-			`dynamic${ret.name.length > 0 ? " " + ret.name : ""}`,
-		);
-	}
-	return ret;
-}
-
-/**
  * Marks the decorated property as a value of the Command Class. This allows saving it on the node with persistValues()
  * @param internal Whether the value should be exposed to library users
  */
@@ -1032,7 +981,7 @@ export function ccValue(internal: boolean = false): PropertyDecorator {
 	};
 }
 
-export function getCCValueDefinitions(
+function getCCValueDefinitions(
 	commandClass: CommandClass,
 ): ReadonlyMap<string, boolean> {
 	// get the class constructor
@@ -1071,7 +1020,7 @@ export function ccKeyValuePair(internal: boolean = false): PropertyDecorator {
 }
 
 /** Returns the defined key value pairs for this command class */
-export function getCCKeyValuePairDefinitions(
+function getCCKeyValuePairDefinitions(
 	commandClass: CommandClass,
 ): ReadonlyMap<string, boolean> {
 	// get the class constructor

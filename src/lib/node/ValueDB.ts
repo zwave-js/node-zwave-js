@@ -26,19 +26,19 @@ export interface MetadataUpdatedArgs extends ValueID {
 	metadata: ValueMetadata | undefined;
 }
 
-export type ValueAddedCallback = (args: ValueAddedArgs) => void;
-export type ValueUpdatedCallback = (args: ValueUpdatedArgs) => void;
-export type ValueRemovedCallback = (args: ValueRemovedArgs) => void;
-export type MetadataUpdatedCallback = (args: MetadataUpdatedArgs) => void;
+type ValueAddedCallback = (args: ValueAddedArgs) => void;
+type ValueUpdatedCallback = (args: ValueUpdatedArgs) => void;
+type ValueRemovedCallback = (args: ValueRemovedArgs) => void;
+type MetadataUpdatedCallback = (args: MetadataUpdatedArgs) => void;
 
-export interface ValueDBEventCallbacks {
+interface ValueDBEventCallbacks {
 	"value added": ValueAddedCallback;
 	"value updated": ValueUpdatedCallback;
 	"value removed": ValueRemovedCallback;
 	"metadata updated": MetadataUpdatedCallback;
 }
 
-export type ValueDBEvents = Extract<keyof ValueDBEventCallbacks, string>;
+type ValueDBEvents = Extract<keyof ValueDBEventCallbacks, string>;
 
 export interface ValueDB {
 	on<TEvent extends ValueDBEvents>(

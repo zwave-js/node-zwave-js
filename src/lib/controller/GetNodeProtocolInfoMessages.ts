@@ -48,7 +48,7 @@ enum SecurityFlags {
 
 export type Baudrate = 9600 | 40000 | 100000;
 
-export interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
+interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
 	nodeId: number;
 }
 

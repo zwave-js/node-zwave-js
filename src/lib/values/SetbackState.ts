@@ -5,6 +5,7 @@ export type SetbackSpecialState =
 	| "Frost Protection"
 	| "Energy Saving"
 	| "Unused";
+
 export const setbackSpecialStateValues: Record<SetbackSpecialState, number> = {
 	"Frost Protection": 0x79,
 	"Energy Saving": 0x7a,

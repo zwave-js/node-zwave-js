@@ -12,7 +12,7 @@ export interface NodeInformationFrame {
 	supportedCCs: CommandClasses[];
 }
 
-export interface ExtendedNodeInformationFrame extends NodeInformationFrame {
+interface ExtendedNodeInformationFrame extends NodeInformationFrame {
 	// controlledCCs isn't actually included in a NIF, but this way we can reuse the parser code
 	controlledCCs: CommandClasses[];
 }

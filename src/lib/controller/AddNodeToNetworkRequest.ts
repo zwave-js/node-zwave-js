@@ -44,7 +44,7 @@ enum AddNodeFlags {
 	NetworkWide = 0x40,
 }
 
-export interface AddNodeToNetworkRequestOptions extends MessageBaseOptions {
+interface AddNodeToNetworkRequestOptions extends MessageBaseOptions {
 	addNodeType?: AddNodeType;
 	highPower?: boolean;
 	networkWide?: boolean;
@@ -134,7 +134,7 @@ export class AddNodeToNetworkRequest extends Message {
 	// }
 }
 
-export interface AddNodeStatusContext {
+interface AddNodeStatusContext {
 	nodeId: number;
 	basic?: BasicDeviceClasses;
 	generic?: GenericDeviceClass;

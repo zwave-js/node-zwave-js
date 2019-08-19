@@ -60,12 +60,12 @@ import {
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
 // Strongly type the event emitter events
-export interface ControllerEventCallbacks {
+interface ControllerEventCallbacks {
 	"inclusion failed": () => void;
 	"node added": (node: ZWaveNode) => void;
 }
 
-export type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
+type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
 
 export interface ZWaveController {
 	on<TEvent extends ControllerEvents>(

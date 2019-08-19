@@ -73,9 +73,8 @@ export class SendDataRequestBase extends Message {
 	public callbackId!: number;
 }
 
-export interface SendDataRequestOptions<
-	CCType extends CommandClass = CommandClass
-> extends MessageBaseOptions {
+interface SendDataRequestOptions<CCType extends CommandClass = CommandClass>
+	extends MessageBaseOptions {
 	command: CCType;
 	transmitOptions?: TransmitOptions;
 	callbackId?: number;

@@ -6,7 +6,7 @@ import {
 import { SendDataRequest } from "../src/lib/controller/SendDataMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../src/lib/error/ZWaveError";
 
-export interface AssertZWaveErrorOptions {
+interface AssertZWaveErrorOptions {
 	messageMatches?: string | RegExp;
 	errorCode?: ZWaveErrorCodes;
 }

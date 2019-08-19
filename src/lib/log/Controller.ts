@@ -42,7 +42,7 @@ export function print(message: string, level?: "warn" | "error"): void {
 	});
 }
 
-export interface LogNodeOptions {
+interface LogNodeOptions {
 	message: string;
 	level?: "warn" | "error";
 	direction?: DataDirection;

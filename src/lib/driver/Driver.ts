@@ -40,6 +40,7 @@ import { getDefaultPriority, Message } from "../message/Message";
 import { InterviewStage, IZWaveNode, NodeStatus } from "../node/INode";
 import { isNodeQuery } from "../node/INodeQuery";
 import { ZWaveNode } from "../node/Node";
+import { DeepPartial } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { DriverEventCallbacks, DriverEvents, IDriver } from "./IDriver";
 import { Transaction } from "./Transaction";
@@ -59,7 +60,6 @@ export interface ZWaveOptions {
 	 */
 	skipInterview?: boolean;
 }
-export type DeepPartial<T> = { [P in keyof T]+?: DeepPartial<T[P]> };
 
 const defaultOptions: ZWaveOptions = {
 	timeouts: {

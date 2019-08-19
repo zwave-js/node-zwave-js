@@ -56,3 +56,5 @@ export function Mixin(baseCtors: Function[]) {
 		});
 	};
 }
+
+export type DeepPartial<T> = { [P in keyof T]+?: DeepPartial<T[P]> };
