@@ -1,7 +1,7 @@
 # Changelog
 <!--
 	Placeholder for next release:
-	## __WORK IN PROGRESS__
+	## 1.0.1 (2019-08-20)
 -->
 
 ## __WORK IN PROGRESS__
