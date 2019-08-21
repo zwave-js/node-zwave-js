@@ -174,7 +174,7 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	private _supportedFunctionTypes: FunctionType[] | undefined;
-	public get supportedFunctionTypes(): FunctionType[] | undefined {
+	public get supportedFunctionTypes(): readonly FunctionType[] | undefined {
 		return this._supportedFunctionTypes;
 	}
 
