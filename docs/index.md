@@ -221,11 +221,10 @@ Once the `"driver ready"` event was emitted, this property provides access to th
 
 The `Driver` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The following events are implemented:
 
-<!-- prettier-ignore -->
-| Event | Description |
-|---|---|
-| `"error"` | Is emitted when the underlying serial port emits an error or invalid data is received. You  **need** to add a listener for this event, otherwise unhandled `"error"` events will crash your application! |
-| `"driver ready"` | Is emitted after the controller interview is completed but before the node interview is started. |
+| Event            | Description                                                                                                                                                                                             |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"error"`        | Is emitted when the underlying serial port emits an error or invalid data is received. You **need** to add a listener for this event, otherwise unhandled `"error"` events will crash your application! |
+| `"driver ready"` | Is emitted after the controller interview is completed but before the node interview is started.                                                                                                        |
 
 ## `Controller` class
 
