@@ -20,9 +20,11 @@ It is recommended to either use TypeScript when consuming the library or work in
 2.  Load the module.  
     **IMPORTANT:** The main entry point of this library is the very first thing you need to load. It installs a polyfill that is required for this library to work.
 
-        <!--prettier-ignore-->
-
-    `ts import { Driver } from "zwave-js"; // main entry point ⤴`
+    <!--prettier-ignore-->
+    ```ts
+    import { Driver } from "zwave-js";
+    //    main entry point ⤴
+    ```
 
 3.  Create and start a driver instance
 
@@ -84,12 +86,13 @@ async start(): Promise<void>
 This starts the driver and opens the underlying serial port and performs an interview of the controller and all nodes.
 
 The following table gives you an overview of what happens during the startup process. Note that the promise resolves before the interview process is completed:
-| Step | What happens behind the scenes | Library response |
-|:----:|-------------------------------------------------------------------------|---------------------------------------------------------|
-| 1 | Serial port is opened | `start()` Promise resolves |
-| 2 | Controller interview is performed | `"driver ready"` event is emitted |
-| 3 | Every node is interviewed in the background (This may take a long time) | `"interview completed"` event is emitted for every node |
-| 4 | - | `"interview completed"` event is emitted for the driver |
+
+| Step | What happens behind the scenes                                          | Library response                                        |
+| :--: | ----------------------------------------------------------------------- | ------------------------------------------------------- |
+|  1   | Serial port is opened                                                   | `start()` Promise resolves                              |
+|  2   | Controller interview is performed                                       | `"driver ready"` event is emitted                       |
+|  3   | Every node is interviewed in the background (This may take a long time) | `"interview completed"` event is emitted for every node |
+|  4   | -                                                                       | `"interview completed"` event is emitted for the driver |
 
 ### `getSupportedCCVersionForNode` method
 
