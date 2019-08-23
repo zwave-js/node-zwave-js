@@ -10,7 +10,7 @@ Z-Wave driver written entirely in JavaScript/TypeScript
 
 -   [License](LICENSE)
 -   [Changelog](CHANGELOG.md)
--   [Documentation](https://alcalzone.github.io/node-zwave-js/)
+-   [Documentation](https://github.com/AlCalzone/node-zwave-js/wiki)
 
 ## Roadmap
 
