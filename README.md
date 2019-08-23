@@ -10,7 +10,21 @@ Z-Wave driver written entirely in JavaScript/TypeScript
 
 -   [License](LICENSE)
 -   [Changelog](CHANGELOG.md)
+-   [Documentation](https://alcalzone.github.io/node-zwave-js/)
 
+## Roadmap
+
+This library is still under heavy development. Thus several features are incomplete or planned:
+
+-   [ ] Implementation status of Command Classes see https://github.com/AlCalzone/node-zwave-js/issues/6
+-   [ ] MultiInstance / MultiChannel support:
+    -   [x] Basic support for multiple endpoints
+    -   [ ] Interview of single endpoints
+-   [ ] Security (S0 / S2)
+-   [ ] Device database for configuration values (CC version \< 3)
+
+<!--
+TODO: Move all this to the documentation
 ## Development
 
 This project requires a lot of boilerplate code. To help creating it, we use the project snippets extension for VSCode.
@@ -48,3 +62,4 @@ You can check which command classes are missing in https://github.com/AlCalzone/
 1. Build the project with `npm run build` or uncomment the build step in `.vscode/launch.json`
 1. Edit `test/run.js` as necessary
 1. Press <kbd>F5</kbd>
+-->
