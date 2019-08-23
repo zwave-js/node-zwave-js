@@ -327,6 +327,246 @@ Returns the ID of the controller in the current network.
 * readonly supportsTimers: boolean
 -->
 
+## `ZWaveNode` class
+
+A Z-Wave node is a single device in a Z-Wave network. In the scope of this library, the `ZWaveNode` class provides means to control nodes and retrieve their information.
+
+**Note:**
+All methods except `interview` (which you should not use yourself) are only safe to use **after** the node has been interviewed.  
+Most properties are only defined **after** the node has been interviewed. The exceptions are:
+
+-   `id`
+-   `status`
+-   `interviewStage`
+-   `keepAwake`
+
+Since a node also represents the root endpoint of a device (see [`getEndpoint`](#getEndpoint-method) for a detailed explanation), the `ZWaveNode` class inherits from the [`Endpoint` class](#Endpoint-class). As a result, it also supports all methods and properties of that class.
+
+### `getValue` method
+
+```ts
+getValue<T?>(valueId: ValueID): T | undefined
+```
+
+Retrieves a stored value from this node's value database. This method takes a single argument specifying which value to retrieve. See the [`ValueID` interface](#ValueID-interface) for a detailed description of this argument's type.
+If the type of the value is known in advance, you may pass an optional type argument to the method.
+
+The method either returns the stored value if it was found, and `undefined` otherwise.
+
+**Note:** This does **not** communicate with the node to refresh the value.
+
+### `getValueMetadata` method
+
+```ts
+getValueMetadata(valueId: ValueID): ValueMetadata
+```
+
+Every value in Z-Wave has associated metadata that defines the range of allowed values etc. You can retrieve this metadata using `getValueMetadata`. Like `getValue` this takes a single argument of the type `ValueMetadata`.
+
+This method is guaranteed to return at least some very basic metadata, even if the value was not found.
+
+### `getDefinedValueIDs` method
+
+```ts
+getDefinedValueIDs(): ValueID[]
+```
+
+When building a user interface for a Z-Wave application, you might need to know all possible values in advance. This method returns an array of all ValueIDs that are available for this node.
+
+### `setValue` method
+
+```ts
+async setValue(valueId: ValueID, value: unknown): Promise<boolean>
+```
+
+Updates a value on the node. This method takes two arguments:
+
+-   `valueId: ValueID` - specifies which value to update
+-   `value: unknown` - The new value to set
+
+This method automatically figures out which commands to send to the node, so you don't have to use the specific commands yourself. The returned promise resolves to `true` after the value was successfully updated on the node. It resolves to `false` if any of the following conditions are met:
+
+<!-- TODO: Document API and setValue API -->
+
+-   The `setValue` API is not implemented in the required Command Class
+-   The required Command Class is not implemented in this library yet
+-   The API for the required Command Class is not implemented in this library yet
+
+<!-- TODO: Check what happens if the CC is not supported by the node -->
+
+### `getEndpoint` method
+
+```ts
+getEndpoint(index: 0): Endpoint;
+getEndpoint(index: number): Endpoint | undefined;
+```
+
+In Z-Wave, a single node may provide different functionality under different end points, for example single sockets of a switchable plug strip. This method allows you to access a specific end point of the current node. It takes a single argument denoting the endpoint's index and returns the corresponding endpoint instance if one exists at that index. Calling `getEndpoint` with the index `0` always returns the node itself, which is the "root" endpoint of the device.
+
+### `getAllEndpoints` method
+
+```ts
+getAllEndpoints(): Endpoint[]
+```
+
+This method returns an array of all endpoints on this node. At each index `i` the returned array contains the endpoint instance that would be returned by `getEndpoint(i)`.
+
+### `isControllerNode` method
+
+```ts
+isControllerNode(): boolean
+```
+
+This is a little utility function to check if this node is the controller.
+
+### `isAwake` method
+
+```ts
+isAwake(): boolean
+```
+
+Returns whether the node is currently assumed awake.
+
+### `id` property
+
+```ts
+readonly id: number
+```
+
+Returns the ID this node has been assigned by the controller. This is a number between 1 and 232.
+
+### `status` property
+
+```ts
+readonly status: NodeStatus;
+```
+
+This property tracks the status a node in the network currently has (or is believed to have). Consumers of this library should treat the status as readonly. Valid values are defined in the `NodeStatus` enumeration:
+
+-   `NodeStatus.Unknown (0)` - this is the default status of a node. A node is assigned this status before it is being interviewed and after it "returns" from the dead.
+-   `NodeStatus.Asleep (1)` - Nodes that support the `WakeUp` CC and failed to respond to a message are assumed asleep.
+-   `NodeStatus.Awake (2)` - Sleeping nodes that recently sent a wake up notification are marked awake until they are sent back to sleep or fail to respond to a message.
+-   `NodeStatus.Dead (3)` - Nodes that **don't** support the `WakeUp` CC are marked dead when they fail to respond. Examples are plugs that have been pulled out of their socket. Whenever a message is received from a presumably dead node, they are marked as unknown.
+
+Changes of a node's status are broadcasted using the corresponding events - see below.
+
+### `interviewStatus` property
+
+```ts
+readonly interviewStage: InterviewStage
+```
+
+This property tracks the current status of the node interview. It contains a value representing the last completed step of the interview. You shouldn't need to use this in your application.
+
+### `deviceClass` property
+
+```ts
+readonly deviceClass: DeviceClass
+```
+
+This property returns the node's [DeviceClass](#DeviceClass-class), which provides further information about the kind of device this node is.
+
+### `isListening` property
+
+```ts
+readonly isListening: boolean
+```
+
+Whether this node is a listening node.
+
+### `isFrequentListening` property
+
+```ts
+readonly isFrequentListening: boolean
+```
+
+Whether this node is a frequent listening node.
+
+### `isRouting` property
+
+```ts
+readonly isRouting: boolean
+```
+
+Whether this node is a routing node.
+
+### `maxBaudRate` property
+
+```ts
+readonly maxBaudRate: number
+```
+
+The baud rate used to communicate with this node. Possible values are `9.6k`, `40k` and `100k`.
+
+### `isSecure` property
+
+```ts
+readonly isSecure: boolean
+```
+
+Whether this node is communicating securely with the controller.
+
+**Note:** Secure communication is not yet supported by this library.
+
+### `isBeaming` property
+
+```ts
+readonly isBeaming: boolean
+```
+
+Whether this node is a beaming node.
+
+### `version` property
+
+```ts
+readonly version: number
+```
+
+The Z-Wave protocol version this node implements.
+
+### `firmwareVersion` property
+
+```ts
+readonly firmwareVersion: string
+```
+
+The version of this node's firmware.
+
+### `manufacturerId`, `productId` and `productType` properties
+
+```ts
+readonly manufacturerId: number
+readonly productId: number
+readonly productType: number
+```
+
+These three properties together identify the actual device this node is.
+
+```ts
+readonly firmwareVersion: string
+```
+
+The version of this node's firmware.
+
+### `neighbors` property
+
+```ts
+readonly neighbors: number[]
+```
+
+The IDs of all nodes this node is connected to or is communicating through.
+
+### `keepAwake` property
+
+```ts
+keepAwake: boolean;
+```
+
+In order to save energy, battery powered devices should go back to sleep after they no longer need to communicate with the controller. This library honors this requirement by sending nodes back to sleep as soon as there are no more pending messages.
+When configuring devices or during longer message exchanges, this behavior may be annoying. You can set the `keepAwake` property of a node to `true` to avoid sending the node back to sleep immediately.
+
+## `DeviceClass` class
+
 ## `SendMessageOptions` interface
 
 The `SendMessageOptions` interface describes the options of the `Driver.sendMessage` and `Driver.sendCommand` methods:
