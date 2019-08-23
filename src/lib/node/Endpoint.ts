@@ -47,7 +47,7 @@ export class Endpoint {
 	>();
 	/**
 	 * @internal
-	 * Information about the implemented Command Classes of this node.
+	 * Information about the implemented Command Classes of this endpoint.
 	 */
 	public get implementedCommandClasses(): ReadonlyMap<
 		CommandClasses,
@@ -57,7 +57,7 @@ export class Endpoint {
 	}
 
 	/**
-	 * Adds a CC to the list of command classes implemented by the node or updates the information.
+	 * Adds a CC to the list of command classes implemented by the endpoint or updates the information.
 	 * You shouldn't need to call this yourself.
 	 * @param info The information about the command class. This is merged with existing information.
 	 */
@@ -73,12 +73,12 @@ export class Endpoint {
 		this._implementedCommandClasses.set(cc, ccInfo);
 	}
 
-	/** Removes a CC from the list of command classes implemented by the node */
+	/** Removes a CC from the list of command classes implemented by the endpoint */
 	public removeCC(cc: CommandClasses): void {
 		this._implementedCommandClasses.delete(cc);
 	}
 
-	/** Tests if this node supports the given CommandClass */
+	/** Tests if this endpoint supports the given CommandClass */
 	public supportsCC(cc: CommandClasses): boolean {
 		return (
 			this._implementedCommandClasses.has(cc) &&
@@ -86,7 +86,7 @@ export class Endpoint {
 		);
 	}
 
-	/** Tests if this node controls the given CommandClass */
+	/** Tests if this endpoint controls the given CommandClass */
 	public controlsCC(cc: CommandClasses): boolean {
 		return (
 			this._implementedCommandClasses.has(cc) &&
@@ -95,7 +95,7 @@ export class Endpoint {
 	}
 
 	/**
-	 * Retrieves the version of the given CommandClass this node implements.
+	 * Retrieves the version of the given CommandClass this endpoint implements.
 	 * Returns 0 if the CC is not supported.
 	 */
 	public getCCVersion(cc: CommandClasses): number {

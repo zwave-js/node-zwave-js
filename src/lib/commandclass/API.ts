@@ -53,7 +53,7 @@ export class CCAPI {
 	}
 
 	/**
-	 * Retrieves the version of the given CommandClass this node implements
+	 * Retrieves the version of the given CommandClass this endpoint implements
 	 */
 	public get version(): number {
 		return this.endpoint.getCCVersion(this.ccId);
