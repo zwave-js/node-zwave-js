@@ -1,5 +1,4 @@
-import { entries } from "alcalzone-shared/objects";
-import { isArray, isObject } from "alcalzone-shared/typeguards";
+import { isArray } from "alcalzone-shared/typeguards";
 import fs from "fs";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -495,26 +494,11 @@ export class CommandClass {
 	/** Serializes all values to be stored in the cache */
 	public serializeValuesForCache(): CacheValue[] {
 		const ccValues = this.getValueDB().getValues(getCommandClass(this));
-		// const ccValueDefinitions = getCCValueDefinitions(this);
-		// const keyValuePairs = getCCKeyValuePairDefinitions(this);
 		return (
 			ccValues
 				// only serialize non-undefined values
 				.filter(({ value }) => value != undefined)
-				// // only serialize registered CC values
-				// .filter(
-				// 	({ propertyName }) =>
-				// 		propertyName in this ||
-				// 		ccValueDefinitions.has(propertyName) ||
-				// 		keyValuePairs.has(propertyName) ||
-				// 		this._ccValues.has(propertyName),
-				// )
 				.map(({ value, commandClass, ...props }) => {
-					// Registered properties have no type associated, so in
-					// order to deserialize Maps, we need to serialize the type too
-					if (value instanceof Map) {
-						(props as Record<string, any>).type = "map";
-					}
 					return {
 						...props,
 						value: serializeCacheValue(value),
@@ -528,18 +512,8 @@ export class CommandClass {
 		const allMetadata = this.getValueDB().getAllMetadata(
 			getCommandClass(this),
 		);
-		// const ccValueDefinitions = getCCValueDefinitions(this);
-		// const keyValuePairs = getCCKeyValuePairDefinitions(this);
 		return (
 			allMetadata
-				// // only serialize metadata with a corresponding existing or registered value
-				// .filter(
-				// 	({ propertyName }) =>
-				// 		propertyName in this ||
-				// 		ccValueDefinitions.has(propertyName) ||
-				// 		keyValuePairs.has(propertyName) ||
-				// 		this._ccValues.has(propertyName),
-				// )
 				// Strip out the command class
 				.map(({ commandClass, ...props }) => props)
 		);
@@ -549,32 +523,15 @@ export class CommandClass {
 	public deserializeValuesFromCache(values: CacheValue[]): void {
 		const cc = getCommandClass(this);
 		// const ccValues = getCCValueDefinitions(this);
-		const keyValuePairs = getCCKeyValuePairDefinitions(this);
 		for (const val of values) {
-			// // Only deserialize registered CC values
-			// if (
-			// 	val.propertyName in this ||
-			// 	ccValues.has(val.propertyName) ||
-			// 	keyValuePairs.has(val.propertyName) ||
-			// 	this._registeredCCValues.has(val.propertyName)
-			// ) {
-			let valueToSet = val.value;
-			// Properties defined as a map must be converted from an object to a map
-			// TODO: (GH#110) This check should not be necessary. Ideally all values are either primitives or Maps
-			const shouldBeMap =
-				this[val.propertyName as keyof this] instanceof Map ||
-				keyValuePairs.has(val.propertyName) ||
-				val.type === "map";
-			if (shouldBeMap && isObject(val.value)) {
-				valueToSet = new Map(entries(val.value));
-			}
 			this.getValueDB().setValue(
 				{
 					commandClass: cc,
 					endpoint: val.endpoint,
 					propertyName: val.propertyName,
+					propertyKey: val.propertyKey,
 				},
-				valueToSet,
+				val.value,
 			);
 			// }
 		}
@@ -583,36 +540,17 @@ export class CommandClass {
 	/** Deserializes value metadata from the cache */
 	public deserializeMetadataFromCache(allMetadata: CacheMetadata[]): void {
 		const cc = getCommandClass(this);
-		// const ccValues = getCCValueDefinitions(this);
-		// const keyValuePairs = getCCKeyValuePairDefinitions(this);
 		for (const meta of allMetadata) {
-			// // Only deserialize registered CC values
-			// if (
-			// 	meta.propertyName in this ||
-			// 	ccValues.has(meta.propertyName) ||
-			// 	keyValuePairs.has(meta.propertyName) ||
-			// 	this._registeredCCValues.has(meta.propertyName)
-			// ) {
-			const metadataToSet = meta.metadata;
-			// // Properties defined as a map must be converted from an object to a map
-			// // TODO: (GH#110) This check should not be necessary. Ideally all values are either primitives or Maps
-			// const shouldBeMap =
-			// 	this[meta.propertyName as keyof this] instanceof Map ||
-			// 	keyValuePairs.has(meta.propertyName) ||
-			// 	meta.type === "map";
-			// if (shouldBeMap && isObject(meta.value)) {
-			// 	metadataToSet = new Map(entries(meta.value));
-			// }
 			this.getValueDB().setMetadata(
 				{
 					commandClass: cc,
 					endpoint: meta.endpoint,
 					propertyName: meta.propertyName,
+					propertyKey: meta.propertyKey,
 				},
-				metadataToSet,
+				meta.metadata,
 			);
 		}
-		// }
 	}
 
 	/** Whether this CC spans multiple messages and the last report hasn't been received */
