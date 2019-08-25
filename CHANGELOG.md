@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 1.1.0 (2019-08-25)
 * (AlCalzone) Improve support for notification CC: named variables and events
 
 ## 1.0.1 (2019-08-20)
