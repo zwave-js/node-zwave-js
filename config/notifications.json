@@ -1,0 +1,137 @@
+{
+	"0x01": {
+		"name": "Smoke Alarm",
+		"variables": [
+			{
+				"name": "Sensor status",
+				"states": {
+					"0x01": {
+						"label": "Smoke detected (location provided)",
+						"description": "The event parameters contain a location report",
+						"version": 2
+					},
+					"0x02": {
+						"label": "Smoke detected",
+						"version": 2
+					}
+				}
+			},
+			{
+				"name": "Alarm status",
+				"states": {
+					"0x03": {
+						"label": "Smoke alarm test",
+						"version": 3
+					},
+					"0x06": {
+						"label": "Alarm silenced",
+						"description": "This event may be issued by an alarm device to advertise that the alarm has been silenced by a local user event.",
+						"version": 8
+					}
+				}
+			},
+			{
+				"name": "Maintenance status",
+				"states": {
+					"0x04": {
+						"label": "Replacement required",
+						"description": "This event may be issued by an alarm device to advertise that its physical components are no more reliable, e.g. because of clogged filters.",
+						"version": 5
+					},
+					"0x05": {
+						"label": "Replacement required, End-of-life",
+						"description": "This event may be issued by an alarm device to advertise that the device has reached the end of its designed lifetime. The device should no longer be used.",
+						"version": 8
+					}
+				}
+			},
+			{
+				"name": "Periodic inspection status",
+				"states": {
+					"0x07": {
+						"label": "Maintenance required, planned periodic inspection",
+						"description": "This event may be issued by an alarm device to advertise that the device has reached the end of a designed maintenance interval. The device is should be serviced in order to stay reliable.",
+						"version": 8
+					}
+				}
+			},
+			{
+				"name": "Dust in device status",
+				"states": {
+					"0x08": {
+						"label": "Maintenance required, dust in device",
+						"description": "This event may be issued by an alarm device to advertise that the device has detected dust in its sensor. The device is not reliable until it has been serviced.",
+						"version": 8
+					}
+				}
+			}
+		]
+	},
+	"0x07": {
+		"name": "Home Security",
+		"variables": [
+			{
+				"name": "Sensor status",
+				"states": {
+					"0x01": {
+						"label": "Intrusion (location provided)",
+						"description": "The event parameters contain a location report",
+						"version": 2
+					},
+					"0x02": {
+						"label": "Intrusion",
+						"version": 2
+					}
+				}
+			},
+			{
+				"name": "Cover status",
+				"states": {
+					"0x03": {
+						"label": "Tampering, product cover removed",
+						"description": "This event may be issued by an alarm device to advertise that the device has detected dust in its sensor. The device is not reliable until it has been serviced.",
+						"version": 2
+					}
+				}
+			},
+			{
+				"name": "Motion sensor status",
+				"states": {
+					"0x07": {
+						"label": "Motion detection (location provided)",
+						"description": "The event parameters contain a location report",
+						"version": 2
+					},
+					"0x08": {
+						"label": "Motion detection",
+						"version": 4
+					}
+				}
+			}
+		],
+		"events": {
+			"0x04": {
+				"label": "Tampering, invalid code",
+				"version": 2
+			},
+			"0x05": {
+				"label": "Glass breakage (location provided)",
+				"description": "The event parameters contain a location report",
+				"version": 2
+			},
+			"0x06": {
+				"label": "Glass breakage",
+				"version": 2
+			},
+			"0x09": {
+				"label": "Tampering, product moved",
+				"version": 6
+			},
+			"0x0A": {
+				"label": "Impact detected",
+				"description": "This event indicates that the node has detected an excessive amount of pressure or that an impact has occurred on the product itself.",
+				"version": 8
+			}
+		}
+	}
+}
