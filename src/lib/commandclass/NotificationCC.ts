@@ -1,13 +1,18 @@
+import { lookupNotification } from "../config/Notifications";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import log from "../log";
+import { ZWaveNode } from "../node/Node";
+import { ValueID } from "../node/ValueDB";
 import { JSONObject, validatePayload } from "../util/misc";
+import { num2hex } from "../util/strings";
+import { ValueMetadata } from "../values/Metadata";
 import { parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	ccKeyValuePair,
 	ccValue,
 	CommandClass,
 	commandClass,
@@ -106,8 +111,59 @@ export class NotificationCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			NotificationCCEventSupportedReport
 		>(cc))!;
-		return response.notificationSupportedEvents;
+		return response.supportedEvents;
 	}
+}
+
+async function defineMetadataForNotificationEvents(
+	endpoint: number,
+	type: NotificationType,
+	events: readonly number[],
+): Promise<ReadonlyMap<string, ValueMetadata>> {
+	const ret = new Map<string, ValueMetadata>();
+	const notificationConfig = await lookupNotification(type);
+	if (!notificationConfig) {
+		// This is an unknown notification
+		const propertyName = `UNKNOWN_${num2hex(type)}`;
+		const valueId = {
+			commandClass: CommandClasses.Notification,
+			endpoint,
+			propertyName,
+		};
+		ret.set(JSON.stringify(valueId), {
+			...ValueMetadata.ReadOnlyUInt8,
+			label: `Unknown notification (${num2hex(type)})`,
+		});
+		return ret;
+	}
+
+	const propertyName = notificationConfig.name;
+	for (const value of events) {
+		// Find out which property we need to update
+		const valueConfig = notificationConfig.lookupValue(value);
+		if (valueConfig && valueConfig.type === "state") {
+			const valueId = {
+				commandClass: CommandClasses.Notification,
+				endpoint,
+				propertyName,
+				propertyKey: valueConfig.variableName,
+			};
+
+			const dictKey = JSON.stringify(valueId);
+			const metadata: ValueMetadata = ret.get(dictKey) || {
+				...ValueMetadata.ReadOnlyUInt8,
+				label: valueConfig.variableName,
+				// @ts-ignore
+				states: {
+					0: "idle",
+				},
+			};
+			// @ts-ignore
+			metadata.states[value] = valueConfig.label;
+			ret.set(dictKey, metadata);
+		}
+	}
+	return ret;
 }
 
 export interface NotificationCC {
@@ -118,6 +174,92 @@ export interface NotificationCC {
 @implementedVersion(8)
 export class NotificationCC extends CommandClass {
 	// former AlarmCC (v1..v2)
+
+	public static async interview(
+		driver: IDriver,
+		node: ZWaveNode,
+	): Promise<void> {
+		// TODO: Require the association and AGI interview to be done first (GH#198)
+
+		const ccVersion = driver.getSafeCCVersionForNode(
+			node.id,
+			CommandClasses.Notification,
+		);
+		const ccAPI = node.commandClasses.Notification;
+
+		if (ccVersion >= 2) {
+			log.controller.logNode(node.id, {
+				message: "querying supported notification types...",
+				direction: "outbound",
+			});
+
+			const { supportedNotificationTypes } = await ccAPI.getSupported();
+			const supportedNotificationNames = (await Promise.all(
+				supportedNotificationTypes.map(async n => {
+					const ret = await lookupNotification(n);
+					return [n, ret] as const;
+				}),
+			)).map(([type, ntfcn]) =>
+				ntfcn ? ntfcn.name : `UNKNOWN (${num2hex(type)})`,
+			);
+
+			const logMessage =
+				"received supported notification types:" +
+				supportedNotificationNames.map(name => "\n* " + name);
+			log.controller.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
+
+			if (ccVersion >= 3) {
+				// Query each notification for its supported events
+				for (let i = 0; i < supportedNotificationTypes.length; i++) {
+					const type = supportedNotificationTypes[i];
+					const name = supportedNotificationNames[i];
+
+					log.controller.logNode(node.id, {
+						message: `querying supported notification events for ${name}...`,
+						direction: "outbound",
+					});
+					const supportedEvents = await ccAPI.getSupportedEvents(
+						type,
+					);
+					log.controller.logNode(node.id, {
+						message: `received supported notification events for ${name}: ${supportedEvents
+							.map(String)
+							.join(", ")}`,
+						direction: "inbound",
+					});
+
+					// For each event, predefine the value metadata
+					const metadataMap = await defineMetadataForNotificationEvents(
+						node.index,
+						type,
+						supportedEvents,
+					);
+					for (const [key, metadata] of metadataMap.entries()) {
+						const valueId: ValueID = JSON.parse(key);
+						node.valueDB.setMetadata(valueId, metadata);
+					}
+				}
+			}
+
+			// Query each notification for its current status
+			for (let i = 0; i < supportedNotificationTypes.length; i++) {
+				const type = supportedNotificationTypes[i];
+				const name = supportedNotificationNames[i];
+
+				log.controller.logNode(node.id, {
+					message: `querying notification status for ${name}...`,
+					direction: "outbound",
+				});
+				await ccAPI.get({ notificationType: type });
+			}
+		}
+
+		// Remember that the interview is complete
+		this.setInterviewComplete(node, true);
+	}
 }
 
 interface NotificationCCSetOptions extends CCCommandOptions {
@@ -321,11 +463,15 @@ export class NotificationCCSupportedReport extends NotificationCC {
 		this._supportsV1Alarm = !!(this.payload[0] & 0b1000_0000);
 		const numBitMaskBytes = this.payload[0] & 0b0001_1111;
 		validatePayload(
-			numBitMaskBytes >= 0,
+			numBitMaskBytes > 0,
 			this.payload.length >= 1 + numBitMaskBytes,
 		);
 		const notificationBitMask = this.payload.slice(1, 1 + numBitMaskBytes);
-		this._supportedNotificationTypes = parseBitMask(notificationBitMask);
+		// In this bit mask, bit 0 is ignored and counting starts at bit 1
+		// Therefore shift the result by 1.
+		this._supportedNotificationTypes = parseBitMask(
+			notificationBitMask,
+		).map(evt => evt - 1);
 		this.persistValues();
 	}
 
@@ -335,8 +481,7 @@ export class NotificationCCSupportedReport extends NotificationCC {
 	}
 
 	private _supportedNotificationTypes: NotificationType[];
-	// TODO: should this be an internal value?
-	@ccValue()
+	@ccValue(true)
 	public get supportedNotificationTypes(): readonly NotificationType[] {
 		return this._supportedNotificationTypes;
 	}
@@ -362,30 +507,32 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		super(driver, options);
 
 		validatePayload(this.payload.length >= 1);
-		const notificationType = this.payload[0];
-		const numBitMaskBytes = this.payload[0] & 0b0001_1111;
-		validatePayload(
-			numBitMaskBytes > 0,
-			this.payload.length >= 1 + numBitMaskBytes,
-		);
-		const eventBitMask = this.payload.slice(1, 1 + numBitMaskBytes);
+		this._notificationType = this.payload[0];
+		const numBitMaskBytes = this.payload[1] & 0b0001_1111;
+		if (numBitMaskBytes === 0) {
+			// Notification type is not supported
+			this._supportedEvents = [];
+			return;
+		}
+
+		validatePayload(this.payload.length >= 2 + numBitMaskBytes);
+		const eventBitMask = this.payload.slice(2, 2 + numBitMaskBytes);
 		// In this bit mask, bit 0 is ignored and counting starts at bit 1
 		// Therefore shift the result by 1.
-		const supportedEvents = parseBitMask(eventBitMask).map(evt => evt - 1);
-		this.supportedEvents = [notificationType, supportedEvents];
-		this.persistValues();
+		this._supportedEvents = parseBitMask(eventBitMask).map(evt => evt - 1);
+
+		// We store the supported events in the form of value metadata
+		// This happens during the node interview
 	}
 
-	@ccKeyValuePair(true)
-	private supportedEvents: [NotificationType, number[]];
-
+	private _notificationType: NotificationType;
 	public get notificationType(): NotificationType {
-		return this.supportedEvents[0];
+		return this._notificationType;
 	}
 
-	// TODO: Define events
-	public get notificationSupportedEvents(): readonly number[] {
-		return this.supportedEvents[1];
+	private _supportedEvents: number[];
+	public get supportedEvents(): readonly number[] {
+		return this._supportedEvents;
 	}
 }
 

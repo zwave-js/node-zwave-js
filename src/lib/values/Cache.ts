@@ -9,7 +9,7 @@ type SerializedValue = number | string | boolean | JSONObject | undefined;
 export interface CacheValue {
 	endpoint?: number;
 	propertyName: string;
-	type?: "map";
+	propertyKey?: string | number;
 	value: SerializedValue;
 }
 
