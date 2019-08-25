@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 1.1.1 (2019-08-25)
 * (AlCalzone) Drop messages with non-implemented CCs instead of crashing
 * (AlCalzone) Fix parsing of MultiChannelCC encapsulated CCs
 * (AlCalzone) Fix unwrapping of MultiChannelCCs inside ApplicationCommandRequests
