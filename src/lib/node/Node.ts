@@ -62,6 +62,7 @@ import {
 	ValueAddedArgs,
 	ValueDB,
 	ValueID,
+	valueIdToString,
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 } from "./ValueDB";
@@ -1063,6 +1064,33 @@ version:               ${this.version}`;
 		this.setAwake(true);
 	}
 
+	/**
+	 * Allows automatically resetting notification values to idle if the node does not do it itself
+	 */
+	private notificationIdleTimeouts = new Map<string, NodeJS.Timeout>();
+	/** Schedules a notification value to be reset */
+	private scheduleNotificationIdleReset(
+		valueId: ValueID,
+		handler: () => void,
+	): void {
+		this.clearNotificationIdleReset(valueId);
+		const key = valueIdToString(valueId);
+		this.notificationIdleTimeouts.set(
+			key,
+			// Unref'ing long running timeouts allows to quit the application before the timeout elapses
+			setTimeout(handler, 5 * 3600 * 1000 /* 5 minutes */).unref(),
+		);
+	}
+
+	/** Removes a scheduled notification reset */
+	private clearNotificationIdleReset(valueId: ValueID): void {
+		const key = valueIdToString(valueId);
+		if (this.notificationIdleTimeouts.has(key)) {
+			clearTimeout(this.notificationIdleTimeouts.get(key)!);
+			this.notificationIdleTimeouts.delete(key);
+		}
+	}
+
 	/** Handles the receipt of a Notification Report */
 	private async handleNotificationReport(
 		command: NotificationCCReport,
@@ -1106,6 +1134,8 @@ version:               ${this.version}`;
 					propertyName,
 					propertyKey,
 				};
+				// Since the node has reset the notification itself, we don't need the idle reset
+				this.clearNotificationIdleReset(valueId);
 				this.valueDB.setValue(valueId, 0 /* idle */);
 			};
 
@@ -1161,6 +1191,18 @@ version:               ${this.version}`;
 				propertyKey,
 			};
 			this.valueDB.setValue(valueId, value);
+			// Nodes before V8 don't necessarily reset the notification to idle
+			// Set a fallback timer in case the node does not reset it.
+			if (
+				this.driver.getSafeCCVersionForNode(
+					this.id,
+					CommandClasses.Notification,
+				) <= 7
+			) {
+				this.scheduleNotificationIdleReset(valueId, () =>
+					setStateIdle(value),
+				);
+			}
 		} else {
 			// This is an unknown notification
 			const propertyName = `UNKNOWN_${num2hex(command.notificationType)}`;
@@ -1170,6 +1212,18 @@ version:               ${this.version}`;
 				propertyName,
 			};
 			this.valueDB.setValue(valueId, command.notificationEvent);
+			// Nodes before V8 don't necessarily reset the notification to idle
+			// Set a fallback timer in case the node does not reset it.
+			if (
+				this.driver.getSafeCCVersionForNode(
+					this.id,
+					CommandClasses.Notification,
+				) <= 7
+			) {
+				this.scheduleNotificationIdleReset(valueId, () =>
+					this.valueDB.setValue(valueId, 0 /* idle */),
+				);
+			}
 		}
 	}
 
