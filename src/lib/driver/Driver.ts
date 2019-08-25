@@ -555,29 +555,37 @@ export class Driver extends EventEmitter implements IDriver {
 			} catch (e) {
 				let handled = false;
 				if (e instanceof ZWaveError) {
-					if (
-						e.code === ZWaveErrorCodes.PacketFormat_Invalid ||
-						e.code === ZWaveErrorCodes.PacketFormat_Checksum
-					) {
-						this.onInvalidData(this.receiveBuffer, e.toString());
-						return;
-					} else if (
-						e.code ===
-						ZWaveErrorCodes.Deserialization_NotImplemented
-					) {
-						log.driver.print(e.message, "error");
-						return;
-					} else if (
-						e.code === ZWaveErrorCodes.PacketFormat_InvalidPayload
-					) {
-						log.driver.print(
-							`Message with invalid data received. Dropping it...`,
-							"warn",
-						);
-						handled = true;
-						bytesRead = Message.getMessageLength(
-							this.receiveBuffer,
-						);
+					switch (e.code) {
+						case ZWaveErrorCodes.PacketFormat_Invalid:
+						case ZWaveErrorCodes.PacketFormat_Checksum:
+							this.onInvalidData(
+								this.receiveBuffer,
+								e.toString(),
+							);
+							return;
+
+						case ZWaveErrorCodes.Deserialization_NotImplemented:
+						case ZWaveErrorCodes.CC_NotImplemented:
+							log.driver.print(
+								`Dropping message because it could not be deserialized: ${e.message}`,
+								"warn",
+							);
+							handled = true;
+							bytesRead = Message.getMessageLength(
+								this.receiveBuffer,
+							);
+							break;
+
+						case ZWaveErrorCodes.PacketFormat_InvalidPayload:
+							log.driver.print(
+								`Message with invalid data received. Dropping it...`,
+								"warn",
+							);
+							handled = true;
+							bytesRead = Message.getMessageLength(
+								this.receiveBuffer,
+							);
+							break;
 					}
 				}
 				// pass it through;

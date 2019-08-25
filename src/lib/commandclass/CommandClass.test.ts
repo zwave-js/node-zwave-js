@@ -28,6 +28,39 @@ class DummyCCSubClass extends DummyCC {
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
 describe("lib/commandclass/CommandClass => ", () => {
+	describe("from()", () => {
+		it("throws CC_NotImplemented when receiving a non-implemented CC", () => {
+			// TODO: This is a meter CC. Change it when that CC is implemented
+			assertZWaveError(
+				() =>
+					CommandClass.from(
+						fakeDriver,
+						Buffer.from("0b0a32022144000000a30000", "hex"),
+					),
+				{
+					errorCode: ZWaveErrorCodes.CC_NotImplemented,
+				},
+			);
+		});
+	});
+
+	describe("fromEncapsulated()", () => {
+		it("throws CC_NotImplemented when receiving a non-implemented CC", () => {
+			// TODO: This is a meter CC. Change it when that CC is implemented
+			assertZWaveError(
+				() =>
+					CommandClass.fromEncapsulated(
+						fakeDriver,
+						undefined as any,
+						Buffer.from("0b0a32022144000000a30000", "hex"),
+					),
+				{
+					errorCode: ZWaveErrorCodes.CC_NotImplemented,
+				},
+			);
+		});
+	});
+
 	describe("getImplementedVersion()", () => {
 		it("should return the implemented version for a CommandClass instance", () => {
 			const cc = new BasicCC(fakeDriver, { nodeId: 1 });

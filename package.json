@@ -6,7 +6,9 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "files": [
-    "build/**/*.js"
+    "build/**/*.js",
+    "build/**/*.d.ts",
+    "config/"
   ],
   "author": {
     "name": "AlCalzone",

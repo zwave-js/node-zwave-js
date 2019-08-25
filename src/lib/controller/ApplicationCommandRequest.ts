@@ -44,14 +44,14 @@ export class ApplicationCommandRequest extends Message
 			this._isBroadcast = (status & StatusFlags.Broadcast) !== 0;
 			this._routedBusy = (status & StatusFlags.RoutedBusy) !== 0;
 			// followed by a command class
-			this._command = CommandClass.from(
+			this.command = CommandClass.from(
 				this.driver,
 				this.payload.slice(1),
 			);
 		} else {
 			this._isBroadcast = !!options.isBroadcast;
 			this._routedBusy = !!options.routedBusy;
-			this._command = options.command;
+			this.command = options.command;
 		}
 	}
 
@@ -65,10 +65,8 @@ export class ApplicationCommandRequest extends Message
 		return this._isBroadcast;
 	}
 
-	private _command: CommandClass;
-	public get command(): CommandClass {
-		return this._command;
-	}
+	// This needs to be writable or unwrapping MultiChannelCCs crashes
+	public command: CommandClass;
 
 	public serialize(): Buffer {
 		const statusByte =
@@ -77,7 +75,7 @@ export class ApplicationCommandRequest extends Message
 
 		this.payload = Buffer.concat([
 			Buffer.from([statusByte]),
-			this._command.serialize(),
+			this.command.serialize(),
 		]);
 
 		return super.serialize();

@@ -16,7 +16,7 @@ import {
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, unknownBoolean } from "../values/Primitive";
 import { CCAPI } from "./API";
-import { CommandClasses } from "./CommandClasses";
+import { CommandClasses, getCCName } from "./CommandClasses";
 
 export interface CommandClassInfo {
 	isSupported: boolean;
@@ -280,19 +280,30 @@ export class CommandClass {
 
 	/**
 	 * Retrieves the correct constructor for the CommandClass in the given Buffer.
-	 * It is assumed that the buffer only contains the serialized CC.
+	 * It is assumed that the buffer only contains the serialized CC. This throws if the CC is not implemented.
 	 */
 	public static getConstructor(
 		ccData: Buffer,
-	): Constructable<CommandClass> | undefined {
-		const cc = CommandClass.getCommandClass(ccData);
-		return getCCConstructor(cc) /* || CommandClass */;
+		encapsulated: boolean = false,
+	): Constructable<CommandClass> {
+		// Encapsulated CCs don't have the two header bytes
+		const cc = encapsulated
+			? CommandClass.getCommandClassWithoutHeader(ccData)
+			: CommandClass.getCommandClass(ccData);
+		const ret = getCCConstructor(cc);
+		if (!ret) {
+			const ccName = getCCName(cc);
+			throw new ZWaveError(
+				`The command class ${ccName} is not implemented`,
+				ZWaveErrorCodes.CC_NotImplemented,
+			);
+		}
+		return ret;
 	}
 
 	public static from(driver: IDriver, serializedCC: Buffer): CommandClass {
 		// Fall back to unspecified command class in case we receive one that is not implemented
-		const Constructor =
-			CommandClass.getConstructor(serializedCC) || CommandClass;
+		const Constructor = CommandClass.getConstructor(serializedCC);
 		const ret = new Constructor(driver, { data: serializedCC });
 		return ret;
 	}
@@ -303,8 +314,7 @@ export class CommandClass {
 		serializedCC: Buffer,
 	): CommandClass {
 		// Fall back to unspecified command class in case we receive one that is not implemented
-		const Constructor =
-			CommandClass.getConstructor(serializedCC) || CommandClass;
+		const Constructor = CommandClass.getConstructor(serializedCC, true);
 		const ret = new Constructor(driver, {
 			data: serializedCC,
 			encapsulated: true,
