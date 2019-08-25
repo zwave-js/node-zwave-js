@@ -56,7 +56,7 @@ export interface ValueDB {
 	removeAllListeners(event?: ValueDBEvents): this;
 }
 
-function valueIdToString({
+export function valueIdToString({
 	commandClass,
 	endpoint,
 	propertyName,
