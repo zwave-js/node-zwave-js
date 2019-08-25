@@ -22,6 +22,7 @@ import { VersionCC } from "../commandclass/VersionCC";
 import { WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
 import { ZWavePlusCC } from "../commandclass/ZWavePlusCC";
 import { lookupDevice } from "../config/Devices";
+import { lookupNotification } from "../config/Notifications";
 import {
 	ApplicationUpdateRequest,
 	ApplicationUpdateRequestNodeInfoReceived,
@@ -94,11 +95,18 @@ export type ZWaveNodeMetadataUpdatedCallback = (
 	args: ZWaveNodeMetadataUpdatedArgs,
 ) => void;
 
+export type ZWaveNotificationCallback = (
+	node: ZWaveNode,
+	notificationLabel: string,
+	parameters?: Buffer,
+) => void;
+
 interface ZWaveNodeValueEventCallbacks {
 	"value added": ZWaveNodeValueAddedCallback;
 	"value updated": ZWaveNodeValueUpdatedCallback;
 	"value removed": ZWaveNodeValueRemovedCallback;
 	"metadata updated": ZWaveNodeMetadataUpdatedCallback;
+	notification: ZWaveNotificationCallback;
 }
 
 type ZWaveNodeEventCallbacks = Overwrite<
@@ -1056,12 +1064,113 @@ version:               ${this.version}`;
 	}
 
 	/** Handles the receipt of a Notification Report */
-	private handleNotificationReport(command: NotificationCCReport): void {
-		// TODO: Do we need this?
-		log.controller.logNode(this.id, {
-			message: `received Notification ${stringify(command)}`,
-			direction: "inbound",
-		});
+	private async handleNotificationReport(
+		command: NotificationCCReport,
+	): Promise<void> {
+		if (command.notificationType == undefined) {
+			log.controller.logNode(this.id, {
+				message: `received unsupported notification ${stringify(
+					command,
+				)}`,
+				direction: "inbound",
+			});
+			return;
+		}
+
+		// Look up the received notification in the config
+		const notificationConfig = await lookupNotification(
+			command.notificationType,
+		);
+
+		if (notificationConfig) {
+			// This is a known notification (status or event)
+			const propertyName = notificationConfig.name;
+
+			/** Returns a single notification state to idle */
+			const setStateIdle = (prevValue: number): void => {
+				const valueConfig = notificationConfig.lookupValue(prevValue);
+				let propertyKey: string;
+				if (!valueConfig) {
+					// This is an unknown value, collect it in an unknown bucket
+					propertyKey = "unknown";
+				} else if (valueConfig.type === "state") {
+					propertyKey = valueConfig.variableName;
+				} else {
+					// valueConfig.type === "event"
+					// This shouldn't happen
+					return;
+				}
+				const valueId = {
+					commandClass: command.ccId,
+					endpoint: command.endpoint,
+					propertyName,
+					propertyKey,
+				};
+				this.valueDB.setValue(valueId, 0 /* idle */);
+			};
+
+			const value = command.notificationEvent!;
+			if (value === 0) {
+				// Generic idle notification, this contains a value to be reset
+				if (
+					Buffer.isBuffer(command.eventParameters) &&
+					command.eventParameters.length
+				) {
+					// The target value is the first byte of the event parameters
+					setStateIdle(command.eventParameters[0]);
+				} else {
+					// Reset all values to idle
+					const nonIdleValues = this.valueDB
+						.getValues(CommandClasses.Notification)
+						.filter(
+							v =>
+								(v.endpoint || 0) === command.endpoint &&
+								v.propertyName === propertyName &&
+								typeof v.value === "number" &&
+								v.value !== 0,
+						);
+					for (const v of nonIdleValues) {
+						setStateIdle(v.value as number);
+					}
+				}
+				return;
+			}
+
+			let propertyKey: string;
+			// Find out which property we need to update
+			const valueConfig = notificationConfig.lookupValue(value);
+			if (!valueConfig) {
+				// This is an unknown value, collect it in an unknown bucket
+				propertyKey = "unknown";
+			} else if (valueConfig.type === "state") {
+				propertyKey = valueConfig.variableName;
+			} else {
+				this.emit(
+					"notification",
+					this,
+					valueConfig.label,
+					command.eventParameters,
+				);
+				return;
+			}
+			// Now that we've gathered all we need to know, update the value in our DB
+			const valueId = {
+				commandClass: command.ccId,
+				endpoint: command.endpoint,
+				propertyName,
+				propertyKey,
+			};
+			this.valueDB.setValue(valueId, value);
+		} else {
+			// This is an unknown notification
+			const propertyName = `UNKNOWN_${num2hex(command.notificationType)}`;
+			const valueId = {
+				commandClass: command.ccId,
+				endpoint: command.endpoint,
+				propertyName,
+			};
+			this.valueDB.setValue(valueId, command.notificationEvent);
+		}
 	}
 
 	// /**
