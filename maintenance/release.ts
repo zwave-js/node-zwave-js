@@ -38,12 +38,13 @@ const pack = require(packPath);
 const changelogPath = path.join(rootDir, "CHANGELOG.md");
 let changelog = fs.readFileSync(changelogPath, "utf8");
 const CHANGELOG_PLACEHOLDER = "## __WORK IN PROGRESS__";
+const CHANGELOG_PLACEHOLDER_REGEX = new RegExp(
+	"^" + CHANGELOG_PLACEHOLDER + "$",
+	"gm",
+);
 
 // check if the changelog contains exactly 1 occurence of the changelog placeholder
-switch (
-	(changelog.match(new RegExp("^" + CHANGELOG_PLACEHOLDER + "$", "gm")) || [])
-		.length
-) {
+switch ((changelog.match(CHANGELOG_PLACEHOLDER_REGEX) || []).length) {
 	case 0:
 		throw fail(
 			colors.red(
@@ -171,7 +172,7 @@ if (argv.dry) {
 	console.log(`updating CHANGELOG.md`);
 	const d = new Date();
 	changelog = changelog.replace(
-		CHANGELOG_PLACEHOLDER,
+		CHANGELOG_PLACEHOLDER_REGEX,
 		`## ${newVersion} (${d.getFullYear()}-${padStart(
 			"" + (d.getMonth() + 1),
 			2,
