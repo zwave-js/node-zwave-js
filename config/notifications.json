@@ -301,6 +301,129 @@
 			}
 		}
 	},
+	"0x05": {
+		"name": "Water Alarm",
+		"variables": [
+			{
+				"name": "Sensor status",
+				"states": {
+					"0x01": {
+						"label": "Water leak detected (location provided)",
+						"description": "The event parameters contain a location report",
+						"version": 2
+					},
+					"0x02": {
+						"label": "Water leak detected",
+						"version": 2
+					}
+				}
+			},
+			{
+				"name": "Maintenance status",
+				"states": {
+					"0x05": {
+						"label": "Replace water filter",
+						"version": 4
+					}
+				}
+			},
+			{
+				"name": "Water flow alarm status",
+				"states": {
+					"0x06": {
+						"label": "Water flow alarm",
+						"params": {
+							"type": "enum",
+							"values": {
+								"0x01": "No data",
+								"0x02": "Below low threshold",
+								"0x03": "Above high threshold",
+								"0x04": "Max"
+							}
+						},
+						"version": 7
+					}
+				}
+			},
+			{
+				"name": "Water pressure alarm status",
+				"states": {
+					"0x07": {
+						"label": "Water pressure alarm",
+						"params": {
+							"type": "enum",
+							"values": {
+								"0x01": "No data",
+								"0x02": "Below low threshold",
+								"0x03": "Above high threshold",
+								"0x04": "Max"
+							}
+						},
+						"version": 7
+					}
+				}
+			},
+			{
+				"name": "Water temperature alarm status",
+				"states": {
+					"0x08": {
+						"label": "Water temperature alarm",
+						"params": {
+							"type": "enum",
+							"values": {
+								"0x01": "No data",
+								"0x02": "Below low threshold",
+								"0x03": "Above high threshold"
+							}
+						},
+						"version": 8
+					}
+				}
+			},
+			{
+				"name": "Water level alarm status",
+				"states": {
+					"0x09": {
+						"label": "Water level alarm",
+						"params": {
+							"type": "enum",
+							"values": {
+								"0x01": "No data",
+								"0x02": "Below low threshold",
+								"0x03": "Above high threshold"
+							}
+						},
+						"version": 8
+					}
+				}
+			},
+			{
+				"name": "Pump status",
+				"states": {
+					"0x0a": {
+						"label": "Sump pump active",
+						"version": 8
+					},
+					"0x0b": {
+						"label": "Sump pump failure",
+						"description": "This state may be used to indicate that the pump does not function as expected or is disconnected",
+						"version": 8
+					}
+				}
+			}
+		],
+		"events": {
+			"0x03": {
+				"label": "Water level dropped (location provided)",
+				"description": "The event parameters contain a location report",
+				"version": 2
+			},
+			"0x04": {
+				"label": "Water level dropped",
+				"version": 2
+			}
+		}
+	},
 	"0x07": {
 		"name": "Home Security",
 		"variables": [
