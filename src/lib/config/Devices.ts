@@ -2,6 +2,7 @@ import { padStart } from "alcalzone-shared/strings";
 import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
+import log from "../log";
 import { JSONObject } from "../util/misc";
 import { configDir } from "./utils";
 
@@ -27,7 +28,14 @@ export async function lookupDevice(
 	// Try to load the possible config files in order
 	for (const filePath of possibilities) {
 		if (!(await pathExists(filePath))) continue;
-		const fileContents = await readFile(filePath, "utf8");
-		return JSON5.parse(fileContents);
+		try {
+			const fileContents = await readFile(filePath, "utf8");
+			return JSON5.parse(fileContents);
+		} catch (e) {
+			log.driver.print(
+				`Error loading device config ${filePath}`,
+				"error",
+			);
+		}
 	}
 }

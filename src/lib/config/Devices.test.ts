@@ -65,5 +65,15 @@ describe("lib/config/Devices", () => {
 			expect(result).toBeDefined();
 			expect(result!.name).toBe("MultiSensor 6");
 		});
+
+		it("does not throw if the JSON file is invalid", async () => {
+			// The first attempt at reading the file should succeed
+			pathExistsMock.mockResolvedValue(true);
+			// Return an invalid JSON file
+			readFileMock.mockResolvedValue(`{"name": }`);
+
+			// return undefined instead of throwing
+			await expect(lookupDevice(1, 2, 3, "1.5")).resolves.toBeUndefined();
+		});
 	});
 });
