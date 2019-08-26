@@ -127,7 +127,7 @@ export interface ThermostatModeCC {
 }
 
 @commandClass(CommandClasses["Thermostat Mode"])
-@implementedVersion(1)
+@implementedVersion(3)
 export class ThermostatModeCC extends CommandClass {}
 
 type ThermostatModeCCSetOptions = CCCommandOptions &
