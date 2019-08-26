@@ -6,7 +6,7 @@ import { ZWaveNode } from "../node/Node";
 import { ValueID } from "../node/ValueDB";
 import { JSONObject, validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
-import { ValueMetadata } from "../values/Metadata";
+import { ValueMetadata, ValueMetadataNumeric } from "../values/Metadata";
 import { parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
@@ -120,7 +120,7 @@ async function defineMetadataForNotificationEvents(
 	type: NotificationType,
 	events: readonly number[],
 ): Promise<ReadonlyMap<string, ValueMetadata>> {
-	const ret = new Map<string, ValueMetadata>();
+	const ret = new Map<string, ValueMetadataNumeric>();
 	const notificationConfig = await lookupNotification(type);
 	if (!notificationConfig) {
 		// This is an unknown notification
@@ -150,16 +150,14 @@ async function defineMetadataForNotificationEvents(
 			};
 
 			const dictKey = JSON.stringify(valueId);
-			const metadata: ValueMetadata = ret.get(dictKey) || {
+			const metadata: ValueMetadataNumeric = ret.get(dictKey) || {
 				...ValueMetadata.ReadOnlyUInt8,
 				label: valueConfig.variableName,
-				// @ts-ignore
 				states: {
 					0: "idle",
 				},
 			};
-			// @ts-ignore
-			metadata.states[value] = valueConfig.label;
+			metadata.states![value] = valueConfig.label;
 			ret.set(dictKey, metadata);
 		}
 	}

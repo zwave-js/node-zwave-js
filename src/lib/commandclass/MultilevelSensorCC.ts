@@ -1,6 +1,8 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
+import { ValueMetadata } from "../values/Metadata";
 import { parseBitMask, parseFloatWithScale } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
@@ -112,35 +114,38 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 	) {
 		super(driver, options);
 		validatePayload(this.payload.length >= 1);
-		const sensorType = this.payload[0];
+		this._type = this.payload[0];
 		// parseFloatWithScale does its own validation
-		const { bytesRead, ...valueAndScale } = parseFloatWithScale(
-			this.payload.slice(1),
-		);
-		const { value, scale } = valueAndScale;
-		this.values = [
-			sensorType,
-			{
-				value,
-				scale: getScale(sensorType, scale),
-			},
-		];
-		this.persistValues();
+		const { value, scale } = parseFloatWithScale(this.payload.slice(1));
+		this._value = value;
+		this._scale = getScale(this._type, scale);
+
+		const valueId: ValueID = {
+			commandClass: this.ccId,
+			endpoint: this.endpoint,
+			propertyName: MultilevelSensorTypes[this._type],
+		};
+		this.getValueDB().setMetadata(valueId, {
+			...ValueMetadata.ReadOnly,
+			type: "number",
+			unit: this._scale.unit,
+		});
+		this.getValueDB().setValue(valueId, value);
 	}
 
-	@ccKeyValuePair()
-	private values: [MultilevelSensorTypes, MultilevelSensorValue];
-
-	public get sensorType(): MultilevelSensorTypes {
-		return this.values[0];
+	private _type: MultilevelSensorTypes;
+	public get type(): MultilevelSensorTypes {
+		return this._type;
 	}
 
+	private _scale: MultilevelSensorScale;
 	public get scale(): MultilevelSensorScale {
-		return this.values[1].scale;
+		return this._scale;
 	}
 
+	private _value: number;
 	public get value(): number {
-		return this.values[1].value;
+		return this._value;
 	}
 }
 
@@ -208,7 +213,8 @@ export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC 
 	}
 
 	private _supportedSensorTypes: MultilevelSensorTypes[];
-	@ccValue()
+	// TODO: Use this during interview to precreate values
+	@ccValue(true)
 	public get supportedSensorTypes(): readonly MultilevelSensorTypes[] {
 		return this._supportedSensorTypes;
 	}
@@ -245,7 +251,7 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 		this.persistValues();
 	}
 
-	@ccKeyValuePair()
+	@ccKeyValuePair(true)
 	private supportedScales: [MultilevelSensorTypes, number[]];
 
 	public get sensorType(): MultilevelSensorTypes {

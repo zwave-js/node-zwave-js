@@ -37,6 +37,10 @@ export interface ValueMetadataNumeric extends ValueMetadataBase {
 	steps?: number;
 	/** The default value */
 	default?: number;
+	/** Speaking names for numeric values */
+	states?: Record<number, string>;
+	/** An optional unit for numeric values */
+	unit?: string;
 }
 
 export interface ValueMetadataBoolean extends ValueMetadataBase {
