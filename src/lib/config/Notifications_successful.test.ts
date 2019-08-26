@@ -1,8 +1,8 @@
 import fsExtra from "fs-extra";
-import { lookupNotification, Notification } from "./Notifications";
 
 jest.mock("fs-extra");
 const readFileMock = fsExtra.readFile as jest.Mock;
+const pathExistsMock = fsExtra.pathExists as jest.Mock;
 
 const dummyNotifications = {
 	"0x0a": {
@@ -32,22 +32,36 @@ const dummyNotifications = {
 	},
 };
 
+// I don't get why these tests don't play nice with the unsuccessful ones
+// But since I see no other way, they are now in their own file
+
 describe("lib/config/Notifications", () => {
 	describe("lookupNotification()", () => {
-		beforeEach(() => {
-			readFileMock.mockClear();
-		});
+		let lookupNotification: typeof import("./Notifications").lookupNotification;
 
 		beforeAll(() => {
+			pathExistsMock.mockResolvedValue(true);
 			readFileMock.mockResolvedValue(JSON.stringify(dummyNotifications));
+
+			jest.isolateModules(() => {
+				lookupNotification = require("./Notifications")
+					.lookupNotification;
+			});
+		});
+
+		beforeEach(() => {
+			readFileMock.mockClear();
+			pathExistsMock.mockClear();
 		});
 
 		it("caches the file contents", async () => {
 			await lookupNotification(0);
 			expect(fsExtra.readFile).toBeCalledTimes(1);
+			expect(fsExtra.pathExists).toBeCalledTimes(1);
 
 			await lookupNotification(1);
 			expect(fsExtra.readFile).toBeCalledTimes(1);
+			expect(fsExtra.pathExists).toBeCalledTimes(1);
 		});
 
 		it("returns the notification definition if it is defined", async () => {
@@ -60,11 +74,24 @@ describe("lib/config/Notifications", () => {
 	});
 
 	describe("lookupValue()", () => {
-		let notification: Notification;
+		let notification: import("./Notifications").Notification;
+		let lookupNotification: typeof import("./Notifications").lookupNotification;
 
-		beforeAll(async () => {
+		beforeAll(() => {
+			pathExistsMock.mockClear();
+			readFileMock.mockClear();
+			pathExistsMock.mockResolvedValue(true);
 			readFileMock.mockResolvedValue(JSON.stringify(dummyNotifications));
+
+			jest.isolateModules(() => {
+				lookupNotification = require("./Notifications")
+					.lookupNotification;
+			});
+		});
+
+		beforeEach(async () => {
 			notification = (await lookupNotification(0x0a))!;
+			expect(notification).not.toBeUndefined();
 		});
 
 		it("returns undefined if nothing was defined with the given value", async () => {

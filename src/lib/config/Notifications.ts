@@ -1,9 +1,10 @@
 import { entries } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { readFile } from "fs-extra";
+import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import log from "../log";
 import { JSONObject } from "../util/misc";
 import { configDir } from "./utils";
 
@@ -26,36 +27,71 @@ export type NotificationValueDefinition = (
 };
 
 const hexKeyRegex = /^0x[a-zA-Z0-9]+$/;
+const configPath = path.join(configDir, "notifications.json");
 
-let notifications: ReadonlyMap<number, Notification> | undefined;
 async function loadNotifications(): Promise<ReadonlyMap<number, Notification>> {
-	const fileContents = await readFile(
-		path.join(configDir, "notifications.json"),
-		"utf8",
-	);
-	const definition = JSON5.parse(fileContents);
-	if (!isObject(definition)) throw throwInvalidConfig();
-
-	const ret = new Map();
-	for (const [id, ntfcnDefinition] of entries(definition)) {
-		if (!hexKeyRegex.test(id)) throw throwInvalidConfig();
-		const idNum = parseInt(id.slice(2), 16);
-		ret.set(idNum, new Notification(idNum, ntfcnDefinition));
+	if (!(await pathExists(configPath))) {
+		throw new ZWaveError(
+			"The config file does not exist!",
+			ZWaveErrorCodes.Config_Invalid,
+		);
 	}
-	return ret;
+
+	try {
+		const fileContents = await readFile(configPath, "utf8");
+		const definition = JSON5.parse(fileContents);
+		if (!isObject(definition)) throw throwInvalidConfig();
+
+		const ret = new Map();
+		for (const [id, ntfcnDefinition] of entries(definition)) {
+			if (!hexKeyRegex.test(id)) throw throwInvalidConfig();
+			const idNum = parseInt(id.slice(2), 16);
+			ret.set(idNum, new Notification(idNum, ntfcnDefinition));
+		}
+		return ret;
+	} catch (e) {
+		if (e instanceof ZWaveError) {
+			throw e;
+		} else {
+			throw new ZWaveError(
+				"The config file is malformed!",
+				ZWaveErrorCodes.Config_Invalid,
+			);
+		}
+	}
 }
 
+let notifications: ReadonlyMap<number, Notification> | undefined;
 export async function lookupNotification(
 	notificationType: number,
 ): Promise<Notification | undefined> {
-	if (!notifications) notifications = await loadNotifications();
+	if (!notifications) {
+		try {
+			notifications = await loadNotifications();
+		} catch (e) {
+			// If the config file is missing or invalid, don't try to find it again
+			if (
+				e instanceof ZWaveError &&
+				e.code === ZWaveErrorCodes.Config_Invalid
+			) {
+				log.driver.print(
+					`Could not load notification config: ${e.message}`,
+					"error",
+				);
+				notifications = new Map();
+			} else {
+				// This is an unexpected error
+				throw e;
+			}
+		}
+	}
 	return notifications.get(notificationType);
 }
 
 function throwInvalidConfig(): never {
 	throw new ZWaveError(
-		"The notifications configuration is invalid!",
-		ZWaveErrorCodes.Argument_Invalid,
+		"The config file is malformed!",
+		ZWaveErrorCodes.Config_Invalid,
 	);
 }
 

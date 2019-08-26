@@ -33,6 +33,8 @@ export enum ZWaveErrorCodes {
 	Arithmetic,
 	Argument_Invalid,
 
+	Config_Invalid,
+
 	// Here follow CC specific errors
 
 	/**
