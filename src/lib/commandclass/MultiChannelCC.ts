@@ -275,21 +275,27 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 		this.persistValues();
 	}
 
-	// TODO: should these all be internal values?
 	private _countIsDynamic: boolean;
-	@ccValue() public get countIsDynamic(): boolean {
+	@ccValue(true)
+	public get countIsDynamic(): boolean {
 		return this._countIsDynamic;
 	}
+
 	private _identicalCapabilities: boolean;
-	@ccValue() public get identicalCapabilities(): boolean {
+	@ccValue(true)
+	public get identicalCapabilities(): boolean {
 		return this._identicalCapabilities;
 	}
+
 	private _individualCount: number;
-	@ccValue() public get individualCount(): number {
+	@ccValue(true)
+	public get individualCount(): number {
 		return this._individualCount;
 	}
+
 	private _aggregatedCount: number | undefined;
-	@ccValue() public get aggregatedCount(): number | undefined {
+	@ccValue(true)
+	public get aggregatedCount(): number | undefined {
 		return this._aggregatedCount;
 	}
 }
@@ -473,8 +479,7 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 		this.aggregatedEndpointMembers = [endpoint, members];
 	}
 
-	// TODO: should this be an internal value?
-	@ccKeyValuePair()
+	@ccKeyValuePair(true)
 	private aggregatedEndpointMembers: [number, number[]];
 
 	public get endpoint(): number {
