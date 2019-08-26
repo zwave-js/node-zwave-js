@@ -21,7 +21,6 @@ interface NotificationEventDefinition {
 export type NotificationValueDefinition = (
 	| NotificationStateDefinition
 	| NotificationEventDefinition) & {
-	version: number;
 	description?: string;
 	label: string;
 };
@@ -142,7 +141,6 @@ export class Notification {
 				value,
 				label: state.label,
 				description: state.description,
-				version: state.version,
 				variableName: variable.name,
 			};
 		}
@@ -174,12 +172,10 @@ export class NotificationState {
 		this.id = id;
 		this.label = definition.label;
 		this.description = definition.description;
-		this.version = definition.version;
 	}
 	public readonly id: number;
 	public readonly label: string;
 	public readonly description?: string;
-	public readonly version: number;
 }
 
 export class NotificationEvent {
@@ -187,10 +183,8 @@ export class NotificationEvent {
 		this.id = id;
 		this.label = definition.label;
 		this.description = definition.description;
-		this.version = definition.version;
 	}
 	public readonly id: number;
 	public readonly label: string;
 	public readonly description?: string;
-	public readonly version: number;
 }

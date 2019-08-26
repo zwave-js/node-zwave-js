@@ -9,12 +9,10 @@
 				"states": {
 					"0x01": {
 						"label": "Smoke detected (location provided)",
-						"description": "The event parameters contain a location report",
-						"version": 2
+						"description": "The event parameters contain a location report"
 					},
 					"0x02": {
-						"label": "Smoke detected",
-						"version": 2
+						"label": "Smoke detected"
 					}
 				}
 			},
@@ -22,13 +20,11 @@
 				"name": "Alarm status",
 				"states": {
 					"0x03": {
-						"label": "Smoke alarm test",
-						"version": 3
+						"label": "Smoke alarm test"
 					},
 					"0x06": {
 						"label": "Alarm silenced",
-						"description": "This event may be issued by an alarm device to advertise that the alarm has been silenced by a local user event.",
-						"version": 8
+						"description": "This event may be issued by an alarm device to advertise that the alarm has been silenced by a local user event."
 					}
 				}
 			},
@@ -37,13 +33,11 @@
 				"states": {
 					"0x04": {
 						"label": "Replacement required",
-						"description": "This event may be issued by an alarm device to advertise that its physical components are no more reliable, e.g. because of clogged filters.",
-						"version": 5
+						"description": "This event may be issued by an alarm device to advertise that its physical components are no more reliable, e.g. because of clogged filters."
 					},
 					"0x05": {
 						"label": "Replacement required, End-of-life",
-						"description": "This event may be issued by an alarm device to advertise that the device has reached the end of its designed lifetime. The device should no longer be used.",
-						"version": 8
+						"description": "This event may be issued by an alarm device to advertise that the device has reached the end of its designed lifetime. The device should no longer be used."
 					}
 				}
 			},
@@ -52,8 +46,7 @@
 				"states": {
 					"0x07": {
 						"label": "Maintenance required, planned periodic inspection",
-						"description": "This event may be issued by an alarm device to advertise that the device has reached the end of a designed maintenance interval. The device is should be serviced in order to stay reliable.",
-						"version": 8
+						"description": "This event may be issued by an alarm device to advertise that the device has reached the end of a designed maintenance interval. The device is should be serviced in order to stay reliable."
 					}
 				}
 			},
@@ -62,8 +55,7 @@
 				"states": {
 					"0x08": {
 						"label": "Maintenance required, dust in device",
-						"description": "This event may be issued by an alarm device to advertise that the device has detected dust in its sensor. The device is not reliable until it has been serviced.",
-						"version": 8
+						"description": "This event may be issued by an alarm device to advertise that the device has detected dust in its sensor. The device is not reliable until it has been serviced."
 					}
 				}
 			}
@@ -77,12 +69,10 @@
 				"states": {
 					"0x01": {
 						"label": "Carbon monoxide detected (location provided)",
-						"description": "The event parameters contain a location report",
-						"version": 2
+						"description": "The event parameters contain a location report"
 					},
 					"0x02": {
-						"label": "Carbon monoxide detected",
-						"version": 2
+						"label": "Carbon monoxide detected"
 					}
 				}
 			},
@@ -100,8 +90,7 @@
 								"0x02": "Test failed"
 							}
 						},
-						"description": "The Carbon monoxide Test event may be issued by an alarm device to advertise that the test mode of the device has been activated. The activation may be manual or via signaling.\nA receiving application SHOULD NOT activate any alarms in response to this event.",
-						"version": 5
+						"description": "The Carbon monoxide Test event may be issued by an alarm device to advertise that the test mode of the device has been activated. The activation may be manual or via signaling.\nA receiving application SHOULD NOT activate any alarms in response to this event."
 					}
 				}
 			},
@@ -110,13 +99,11 @@
 				"states": {
 					"0x04": {
 						"label": "Replacement required",
-						"description": "This event may be issued by an alarm device to advertise that its physical components are no more reliable, e.g. because of clogged filters.",
-						"version": 5
+						"description": "This event may be issued by an alarm device to advertise that its physical components are no more reliable, e.g. because of clogged filters."
 					},
 					"0x05": {
 						"label": "Replacement required, End-of-life",
-						"description": "This event may be issued by an alarm device to advertise that the device has reached the end of its designed lifetime. The device should no longer be used.",
-						"version": 8
+						"description": "This event may be issued by an alarm device to advertise that the device has reached the end of its designed lifetime. The device should no longer be used."
 					}
 				}
 			},
@@ -124,8 +111,7 @@
 				"name": "Alarm status",
 				"states": {
 					"0x06": {
-						"label": "Alarm silenced",
-						"version": 8
+						"label": "Alarm silenced"
 					}
 				}
 			},
@@ -133,8 +119,7 @@
 				"name": "Periodic inspection status",
 				"states": {
 					"0x07": {
-						"label": "Maintenance required, planned periodic inspection",
-						"version": 8
+						"label": "Maintenance required, planned periodic inspection"
 					}
 				}
 			}
@@ -148,12 +133,10 @@
 				"states": {
 					"0x01": {
 						"label": "Carbon dioxide detected (location provided)",
-						"description": "The event parameters contain a location report",
-						"version": 2
+						"description": "The event parameters contain a location report"
 					},
 					"0x02": {
-						"label": "Carbon dioxide detected",
-						"version": 2
+						"label": "Carbon dioxide detected"
 					}
 				}
 			},
@@ -168,8 +151,7 @@
 								"0x01": "Test OK",
 								"0x02": "Test failed"
 							}
-						},
-						"version": 5
+						}
 					}
 				}
 			},
@@ -178,13 +160,11 @@
 				"states": {
 					"0x04": {
 						"label": "Replacement required",
-						"description": "This event may be issued by an alarm device to advertise that its physical components are no more reliable, e.g. because of clogged filters.",
-						"version": 5
+						"description": "This event may be issued by an alarm device to advertise that its physical components are no more reliable, e.g. because of clogged filters."
 					},
 					"0x05": {
 						"label": "Replacement required, End-of-life",
-						"description": "This event may be issued by an alarm device to advertise that the device has reached the end of its designed lifetime. The device should no longer be used.",
-						"version": 8
+						"description": "This event may be issued by an alarm device to advertise that the device has reached the end of its designed lifetime. The device should no longer be used."
 					}
 				}
 			},
@@ -192,8 +172,7 @@
 				"name": "Alarm status",
 				"states": {
 					"0x06": {
-						"label": "Alarm silenced",
-						"version": 8
+						"label": "Alarm silenced"
 					}
 				}
 			},
@@ -201,8 +180,7 @@
 				"name": "Periodic inspection status",
 				"states": {
 					"0x07": {
-						"label": "Maintenance required, planned periodic inspection",
-						"version": 8
+						"label": "Maintenance required, planned periodic inspection"
 					}
 				}
 			}
@@ -216,21 +194,17 @@
 				"states": {
 					"0x01": {
 						"label": "Overheat detected (location provided)",
-						"description": "The event parameters contain a location report",
-						"version": 2
+						"description": "The event parameters contain a location report"
 					},
 					"0x02": {
-						"label": "Overheat detected",
-						"version": 2
+						"label": "Overheat detected"
 					},
 					"0x05": {
 						"label": "Underheat detected (location provided)",
-						"description": "The event parameters contain a location report",
-						"version": 2
+						"description": "The event parameters contain a location report"
 					},
 					"0x06": {
-						"label": "Underheat detected",
-						"version": 2
+						"label": "Underheat detected"
 					}
 				}
 			},
@@ -239,13 +213,11 @@
 				"states": {
 					"0x07": {
 						"label": "Heat alarm test",
-						"description": "This event may be issued by an alarm device to advertise that the local test function has been activated.",
-						"version": 8
+						"description": "This event may be issued by an alarm device to advertise that the local test function has been activated."
 					},
 					"0x09": {
 						"label": "Alarm silenced",
-						"description": "This event may be issued by an alarm device to advertise that the alarm has been silenced by a local user event.",
-						"version": 8
+						"description": "This event may be issued by an alarm device to advertise that the alarm has been silenced by a local user event."
 					}
 				}
 			},
@@ -254,8 +226,7 @@
 				"states": {
 					"0x08": {
 						"label": "Replacement required, End-of-life",
-						"description": "This event may be issued by an alarm device to advertise that the device has reached the end of its designed lifetime. The device should no longer be used.",
-						"version": 8
+						"description": "This event may be issued by an alarm device to advertise that the device has reached the end of its designed lifetime. The device should no longer be used."
 					}
 				}
 			},
@@ -264,8 +235,7 @@
 				"states": {
 					"0x0B": {
 						"label": "Maintenance required, planned periodic inspection",
-						"description": "This event may be issued by an alarm device to advertise that the device has reached the end of a designed maintenance interval. The device is should be serviced in order to stay reliable.",
-						"version": 8
+						"description": "This event may be issued by an alarm device to advertise that the device has reached the end of a designed maintenance interval. The device is should be serviced in order to stay reliable."
 					}
 				}
 			},
@@ -274,8 +244,7 @@
 				"states": {
 					"0x0A": {
 						"label": "Maintenance required, dust in device",
-						"description": "This event may be issued by an alarm device to advertise that the device has detected dust in its sensor. The device is not reliable until it has been serviced.",
-						"version": 8
+						"description": "This event may be issued by an alarm device to advertise that the device has detected dust in its sensor. The device is not reliable until it has been serviced."
 					}
 				}
 			}
@@ -283,21 +252,17 @@
 		"events": {
 			"0x03": {
 				"label": "Rapid temperature rise (location provided)",
-				"description": "The event parameters contain a location report",
-				"version": 2
+				"description": "The event parameters contain a location report"
 			},
 			"0x04": {
-				"label": "Rapid temperature rise",
-				"version": 2
+				"label": "Rapid temperature rise"
 			},
 			"0x0C": {
 				"label": "Rapid temperature fall (location provided)",
-				"description": "The event parameters contain a location report",
-				"version": 8
+				"description": "The event parameters contain a location report"
 			},
 			"0x0D": {
-				"label": "Rapid temperature fall",
-				"version": 8
+				"label": "Rapid temperature fall"
 			}
 		}
 	},
@@ -309,12 +274,10 @@
 				"states": {
 					"0x01": {
 						"label": "Water leak detected (location provided)",
-						"description": "The event parameters contain a location report",
-						"version": 2
+						"description": "The event parameters contain a location report"
 					},
 					"0x02": {
-						"label": "Water leak detected",
-						"version": 2
+						"label": "Water leak detected"
 					}
 				}
 			},
@@ -322,8 +285,7 @@
 				"name": "Maintenance status",
 				"states": {
 					"0x05": {
-						"label": "Replace water filter",
-						"version": 4
+						"label": "Replace water filter"
 					}
 				}
 			},
@@ -340,8 +302,7 @@
 								"0x03": "Above high threshold",
 								"0x04": "Max"
 							}
-						},
-						"version": 7
+						}
 					}
 				}
 			},
@@ -358,8 +319,7 @@
 								"0x03": "Above high threshold",
 								"0x04": "Max"
 							}
-						},
-						"version": 7
+						}
 					}
 				}
 			},
@@ -375,8 +335,7 @@
 								"0x02": "Below low threshold",
 								"0x03": "Above high threshold"
 							}
-						},
-						"version": 8
+						}
 					}
 				}
 			},
@@ -392,8 +351,7 @@
 								"0x02": "Below low threshold",
 								"0x03": "Above high threshold"
 							}
-						},
-						"version": 8
+						}
 					}
 				}
 			},
@@ -401,13 +359,11 @@
 				"name": "Pump status",
 				"states": {
 					"0x0a": {
-						"label": "Sump pump active",
-						"version": 8
+						"label": "Sump pump active"
 					},
 					"0x0b": {
 						"label": "Sump pump failure",
-						"description": "This state may be used to indicate that the pump does not function as expected or is disconnected",
-						"version": 8
+						"description": "This state may be used to indicate that the pump does not function as expected or is disconnected"
 					}
 				}
 			}
@@ -415,12 +371,227 @@
 		"events": {
 			"0x03": {
 				"label": "Water level dropped (location provided)",
-				"description": "The event parameters contain a location report",
-				"version": 2
+				"description": "The event parameters contain a location report"
 			},
 			"0x04": {
-				"label": "Water level dropped",
-				"version": 2
+				"label": "Water level dropped"
+			}
+		}
+	},
+	"0x06": {
+		"name": "Access Control",
+		"variables": [
+			{
+				"name": "Lock state",
+				"states": {
+					"0x0b": {
+						"label": "Lock jammed"
+					}
+				}
+			},
+			{
+				"name": "Keypad state",
+				"states": {
+					"0x10": {
+						"label": "Keypad temporary disabled"
+					},
+					"0x11": {
+						"label": "Keypad busy"
+					}
+				}
+			},
+			{
+				"name": "Door state",
+				// TODO: States marked with "idle: false" may not have an idle state
+				"idle": false,
+				"states": {
+					"0x16": {
+						"label": "Window/door is open"
+					},
+					"0x17": {
+						"label": "Window/door is closed"
+					}
+				}
+			},
+			{
+				"name": "Door handle state",
+				"idle": false,
+				"states": {
+					"0x18": {
+						"label": "Window/door handle is open"
+					},
+					"0x19": {
+						"label": "Window/door handle is closed"
+					}
+				}
+			},
+			{
+				"name": "Barrier performing initialization process status",
+				"idle": false,
+				"states": {
+					"0x40": {
+						"label": "Barrier performing initialization process",
+						"params": {
+							"type": "enum",
+							"values": {
+								"0x00": "Process completed",
+								"0xff": "Performing process"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Barrier UL disabling status",
+				"states": {
+					"0x45": {
+						"label": "Barrier unattended operation has been disabled per UL requirements"
+					}
+				}
+			},
+			{
+				"name": "Barrier vacation mode status",
+				"idle": false,
+				"states": {
+					"0x47": {
+						"label": "Barrier vacation mode",
+						"params": {
+							"type": "enum",
+							"values": {
+								"0x00": "Mode disabled",
+								"0xff": "Mode enabled"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Barrier safety beam obstacle status",
+				"idle": false,
+				"states": {
+					"0x48": {
+						"label": "Barrier safety beam obstacle",
+						"params": {
+							"type": "enum",
+							"values": {
+								"0x00": "No obstruction",
+								"0xff": "Obstruction"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Barrier sensor status",
+				"states": {
+					"0x49": {
+						"label": "Barrier sensor not detected / supervisory error"
+						// TODO: Param contains sensor ID
+					}
+				}
+			},
+			{
+				"name": "Barrier battery status",
+				"states": {
+					"0x4a": {
+						"label": "Barrier sensor low battery warning"
+						// TODO: Param contains sensor ID
+					}
+				}
+			},
+			{
+				"name": "Barrier short-circuit status",
+				"states": {
+					"0x4b": {
+						"label": "Barrier detected short in wall station wires"
+					}
+				}
+			},
+			{
+				"name": "Barrier control status",
+				"states": {
+					"0x4c": {
+						"label": "Barrier associated with non Z-Wave remote control"
+					}
+				}
+			}
+		],
+		"events": {
+			"0x01": {
+				"label": "Manual lock operation"
+			},
+			"0x02": {
+				"label": "Manual unlock operation"
+			},
+			"0x03": {
+				"label": "RF lock operation"
+			},
+			"0x04": {
+				"label": "RF unlock operation"
+			},
+			"0x05": {
+				"label": "Keypad lock operation"
+				// TODO: parameters contain User Code Report
+			},
+			"0x06": {
+				"label": "Keypad unlock operation"
+				// TODO: parameters contain User Code Report
+			},
+			"0x07": {
+				"label": "Manual not fully locked operation"
+			},
+			"0x08": {
+				"label": "RF not fully locked operation"
+			},
+			"0x09": {
+				"label": "Auto lock locked operation"
+			},
+			"0x0A": {
+				"label": "Auto lock not fully locked operation"
+			},
+			"0x0C": {
+				"label": "All user codes deleted"
+			},
+			"0x0D": {
+				"label": "Single user code deleted"
+			},
+			"0x0E": {
+				"label": "New user code added"
+			},
+			"0x0F": {
+				"label": "New user code not added due to duplicate code"
+			},
+			"0x12": {
+				"label": "New program code entered: unique code for lock configuration"
+			},
+			"0x13": {
+				"label": "Manually enter user access code exceeds code limit"
+			},
+			"0x14": {
+				"label": "Unlock by RF with invalid user code"
+			},
+			"0x15": {
+				"label": "Locked by RF with invalid user code"
+			},
+			"0x20": {
+				"label": "Messaging User Code entered via keypad"
+				// TODO: Event parameter 2 bytes: User Code User Identifier (User Code Command Class, version 2)
+			},
+			"0x41": {
+				"label": "Barrier operation (open/close) force has been exceeded"
+			},
+			"0x42": {
+				"label": "Barrier motor has exceeded manufacturer's operational time limit"
+				// TODO: Event parameters contain encoded duration
+			},
+			"0x43": {
+				"label": "Barrier operation has exceeded physical mechanical limits"
+			},
+			"0x44": {
+				"label": "Barrier unable to perform requested operation due to UL requirements"
+			},
+			"0x46": {
+				"label": "Barrier failed to perform requested operation, device malfunction"
 			}
 		}
 	},
@@ -432,12 +603,10 @@
 				"states": {
 					"0x01": {
 						"label": "Intrusion (location provided)",
-						"description": "The event parameters contain a location report",
-						"version": 2
+						"description": "The event parameters contain a location report"
 					},
 					"0x02": {
-						"label": "Intrusion",
-						"version": 2
+						"label": "Intrusion"
 					}
 				}
 			},
@@ -446,8 +615,7 @@
 				"states": {
 					"0x03": {
 						"label": "Tampering, product cover removed",
-						"description": "This event may be issued by an alarm device to advertise that the device has detected dust in its sensor. The device is not reliable until it has been serviced.",
-						"version": 2
+						"description": "This event may be issued by an alarm device to advertise that the device has detected dust in its sensor. The device is not reliable until it has been serviced."
 					}
 				}
 			},
@@ -456,38 +624,31 @@
 				"states": {
 					"0x07": {
 						"label": "Motion detection (location provided)",
-						"description": "The event parameters contain a location report",
-						"version": 2
+						"description": "The event parameters contain a location report"
 					},
 					"0x08": {
-						"label": "Motion detection",
-						"version": 4
+						"label": "Motion detection"
 					}
 				}
 			}
 		],
 		"events": {
 			"0x04": {
-				"label": "Tampering, invalid code",
-				"version": 2
+				"label": "Tampering, invalid code"
 			},
 			"0x05": {
 				"label": "Glass breakage (location provided)",
-				"description": "The event parameters contain a location report",
-				"version": 2
+				"description": "The event parameters contain a location report"
 			},
 			"0x06": {
-				"label": "Glass breakage",
-				"version": 2
+				"label": "Glass breakage"
 			},
 			"0x09": {
-				"label": "Tampering, product moved",
-				"version": 6
+				"label": "Tampering, product moved"
 			},
 			"0x0A": {
 				"label": "Impact detected",
-				"description": "This event indicates that the node has detected an excessive amount of pressure or that an impact has occurred on the product itself.",
-				"version": 8
+				"description": "This event indicates that the node has detected an excessive amount of pressure or that an impact has occurred on the product itself."
 			}
 		}
 	}
