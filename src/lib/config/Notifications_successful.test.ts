@@ -106,7 +106,6 @@ describe("lib/config/Notifications", () => {
 				value: 1,
 				label: "Status 1",
 				description: "Some generic description",
-				version: 2,
 			});
 		});
 	});

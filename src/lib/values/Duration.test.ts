@@ -42,6 +42,11 @@ describe("lib/util/Duration", () => {
 			expect(duration!.value).toBe(0);
 		});
 
+		it("should return undefined when undefined is passed", () => {
+			const duration = Duration.parseReport(undefined);
+			expect(duration).toBeUndefined();
+		});
+
 		it("should return undefined when a reserved value is passed", () => {
 			const duration = Duration.parseReport(0xff);
 			expect(duration).toBeUndefined();
