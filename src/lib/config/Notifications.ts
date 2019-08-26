@@ -12,6 +12,7 @@ interface NotificationStateDefinition {
 	type: "state";
 	variableName: string;
 	value: number;
+	idle: boolean;
 }
 
 interface NotificationEventDefinition {
@@ -139,6 +140,7 @@ export class Notification {
 			return {
 				type: "state",
 				value,
+				idle: variable.idle,
 				label: state.label,
 				description: state.description,
 				variableName: variable.name,
@@ -150,6 +152,9 @@ export class Notification {
 export class NotificationVariable {
 	public constructor(definition: JSONObject) {
 		this.name = definition.name;
+		// By default all notification variables may return to idle
+		// Otherwise it must be specified explicitly using `idle: false`
+		this.idle = definition.idle !== false;
 		if (!isObject(definition.states)) throw throwInvalidConfig();
 		const states = new Map<number, NotificationState>();
 		for (const [stateId, stateDefinition] of entries(definition.states)) {
@@ -164,6 +169,8 @@ export class NotificationVariable {
 	}
 
 	public readonly name: string;
+	/** Whether the variable may be reset to idle */
+	public readonly idle: boolean;
 	public readonly states: ReadonlyMap<number, NotificationState>;
 }
 
