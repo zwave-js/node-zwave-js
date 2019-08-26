@@ -188,11 +188,15 @@ jobs:
 
             - run:
                   name: Perform a type check
-                  command: npm run test:ts
+                  command: npm run check
 
             - run:
                   name: Run component tests
                   command: npm run test:ts
+
+            - run:
+                  name: Lint config files
+                  command: npm run lint:config
 
             # persist the build files, so we can pick them up in the deploy job
             - persist_to_workspace:

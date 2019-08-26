@@ -100,6 +100,7 @@
     "show-coverage": "npm run coverage && start ./coverage/index.html",
     "lint:ts": "eslint --ext .ts src",
     "lint:wotan": "wotan",
+    "lint:config": "ts-node maintenance/lintConfigFiles.ts",
     "lint": "npm run lint:ts && npm run lint:wotan",
     "release": "ts-node maintenance/release.ts",
     "implemented_ccs": "ts-node maintenance/implemented_ccs.ts",
