@@ -1117,17 +1117,12 @@ version:               ${this.version}`;
 			/** Returns a single notification state to idle */
 			const setStateIdle = (prevValue: number): void => {
 				const valueConfig = notificationConfig.lookupValue(prevValue);
-				let propertyKey: string;
-				if (!valueConfig) {
-					// This is an unknown value, collect it in an unknown bucket
-					propertyKey = "unknown";
-				} else if (valueConfig.type === "state") {
-					propertyKey = valueConfig.variableName;
-				} else {
-					// valueConfig.type === "event"
-					// This shouldn't happen
-					return;
-				}
+				// Only known variables may be reset to idle
+				if (!valueConfig || valueConfig.type !== "state") return;
+				// Some properties may not be reset to idle
+				if (!valueConfig.idle) return;
+
+				const propertyKey = valueConfig.variableName;
 				const valueId = {
 					commandClass: command.ccId,
 					endpoint: command.endpoint,
@@ -1169,11 +1164,15 @@ version:               ${this.version}`;
 			let propertyKey: string;
 			// Find out which property we need to update
 			const valueConfig = notificationConfig.lookupValue(value);
+			let allowIdleReset: boolean;
 			if (!valueConfig) {
 				// This is an unknown value, collect it in an unknown bucket
 				propertyKey = "unknown";
+				// We don't know what this notification refers to, so we don't force a reset
+				allowIdleReset = false;
 			} else if (valueConfig.type === "state") {
 				propertyKey = valueConfig.variableName;
+				allowIdleReset = valueConfig.idle;
 			} else {
 				this.emit(
 					"notification",
@@ -1194,6 +1193,7 @@ version:               ${this.version}`;
 			// Nodes before V8 don't necessarily reset the notification to idle
 			// Set a fallback timer in case the node does not reset it.
 			if (
+				allowIdleReset &&
 				this.driver.getSafeCCVersionForNode(
 					this.id,
 					CommandClasses.Notification,
@@ -1212,18 +1212,7 @@ version:               ${this.version}`;
 				propertyName,
 			};
 			this.valueDB.setValue(valueId, command.notificationEvent);
-			// Nodes before V8 don't necessarily reset the notification to idle
-			// Set a fallback timer in case the node does not reset it.
-			if (
-				this.driver.getSafeCCVersionForNode(
-					this.id,
-					CommandClasses.Notification,
-				) <= 7
-			) {
-				this.scheduleNotificationIdleReset(valueId, () =>
-					this.valueDB.setValue(valueId, 0 /* idle */),
-				);
-			}
+			// We don't know what this notification refers to, so we don't force a reset
 		}
 	}
 
