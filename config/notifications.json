@@ -1,3 +1,5 @@
+// Z-Wave notification types and values
+// based on SDS13713, version 2019-01-01
 {
 	"0x01": {
 		"name": "Smoke Alarm",
@@ -61,6 +63,77 @@
 					"0x08": {
 						"label": "Maintenance required, dust in device",
 						"description": "This event may be issued by an alarm device to advertise that the device has detected dust in its sensor. The device is not reliable until it has been serviced.",
+						"version": 8
+					}
+				}
+			}
+		]
+	},
+	"0x02": {
+		"name": "CO Alarm",
+		"variables": [
+			{
+				"name": "Sensor status",
+				"states": {
+					"0x01": {
+						"label": "Carbon monoxide detected (location provided)",
+						"description": "The event parameters contain a location report",
+						"version": 2
+					},
+					"0x02": {
+						"label": "Carbon monoxide detected",
+						"version": 2
+					}
+				}
+			},
+			{
+				"name": "Test status",
+				"states": {
+					"0x03": {
+						"label": "Carbon monoxide test",
+						// TODO: The event parameter buffer has different meanings. Implement parsing!
+						"params": {
+							// TODO: type "enum" replaces the actual value
+							"type": "enum",
+							"values": {
+								"0x01": "Test OK",
+								"0x02": "Test failed"
+							}
+						},
+						"description": "The Carbon monoxide Test event may be issued by an alarm device to advertise that the test mode of the device has been activated. The activation may be manual or via signaling.\nA receiving application SHOULD NOT activate any alarms in response to this event.",
+						"version": 5
+					}
+				}
+			},
+			{
+				"name": "Maintenance status",
+				"states": {
+					"0x04": {
+						"label": "Replacement required",
+						"description": "This event may be issued by an alarm device to advertise that its physical components are no more reliable, e.g. because of clogged filters.",
+						"version": 5
+					},
+					"0x05": {
+						"label": "Replacement required, End-of-life",
+						"description": "This event may be issued by an alarm device to advertise that the device has reached the end of its designed lifetime. The device should no longer be used.",
+						"version": 8
+					}
+				}
+			},
+			{
+				"name": "Alarm status",
+				"states": {
+					"0x06": {
+						"label": "Alarm silenced",
+						"version": 8
+					}
+				}
+			},
+			{
+				"name": "Periodic inspection status",
+				"states": {
+					"0x07": {
+						"label": "Maintenance required, planned periodic inspection",
 						"version": 8
 					}
 				}

@@ -8,7 +8,7 @@ import path from "path";
 import { Notification } from "../src/lib/config/Notifications";
 import { configDir } from "../src/lib/config/utils";
 
-const hexKeyRegex = /^0x[a-zA-Z0-9]+$/;
+const hexKeyRegex = /^0x[a-fA-F0-9]+$/;
 
 // TODO: Can we deduplicate this code?
 async function lintNotifications(): Promise<void> {
@@ -18,7 +18,13 @@ async function lintNotifications(): Promise<void> {
 	}
 
 	const fileContents = await readFile(configPath, "utf8");
-	const definition = JSON5.parse(fileContents);
+	let definition: any;
+	try {
+		definition = JSON5.parse(fileContents);
+	} catch (e) {
+		throw new Error(`The notification config file is invalid: ${e}`);
+	}
+
 	if (!isObject(definition)) {
 		throw new Error("The notification config file must contain an object");
 	}
@@ -42,7 +48,12 @@ async function lintManufacturers(): Promise<void> {
 	}
 
 	const fileContents = await readFile(configPath, "utf8");
-	const definition = JSON5.parse(fileContents);
+	let definition: any;
+	try {
+		definition = JSON5.parse(fileContents);
+	} catch (e) {
+		throw new Error(`The manufacturer config file is invalid: ${e}`);
+	}
 	if (!isObject(definition)) {
 		throw new Error("The manufacturer config file must contain an object");
 	}
@@ -66,7 +77,7 @@ Promise.resolve()
 		return process.exit(0);
 	})
 	.catch(e => {
-		console.error(red("ERROR: " + e.message));
+		console.error(red(e.message));
 		console.error();
 		return process.exit(1);
 	});

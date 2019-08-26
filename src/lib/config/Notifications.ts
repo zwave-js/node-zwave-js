@@ -26,7 +26,7 @@ export type NotificationValueDefinition = (
 	label: string;
 };
 
-const hexKeyRegex = /^0x[a-zA-Z0-9]+$/;
+const hexKeyRegex = /^0x[a-fA-F0-9]+$/;
 const configPath = path.join(configDir, "notifications.json");
 
 async function loadNotifications(): Promise<ReadonlyMap<number, Notification>> {

@@ -1,4 +1,5 @@
-// All assigned manufacturer IDs as of 2019-03-18
+// Z-Wave manufacturer IDs
+// based on SDS13425, version 2019-03-18
 {
 	"0x0000": "Z-Wave",
 	"0x0001": "ACT - Advanced Control Technologies",
