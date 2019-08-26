@@ -208,6 +208,99 @@
 			}
 		]
 	},
+	"0x04": {
+		"name": "Heat Alarm",
+		"variables": [
+			{
+				"name": "Heat sensor status",
+				"states": {
+					"0x01": {
+						"label": "Overheat detected (location provided)",
+						"description": "The event parameters contain a location report",
+						"version": 2
+					},
+					"0x02": {
+						"label": "Overheat detected",
+						"version": 2
+					},
+					"0x05": {
+						"label": "Underheat detected (location provided)",
+						"description": "The event parameters contain a location report",
+						"version": 2
+					},
+					"0x06": {
+						"label": "Underheat detected",
+						"version": 2
+					}
+				}
+			},
+			{
+				"name": "Alarm status",
+				"states": {
+					"0x07": {
+						"label": "Heat alarm test",
+						"description": "This event may be issued by an alarm device to advertise that the local test function has been activated.",
+						"version": 8
+					},
+					"0x09": {
+						"label": "Alarm silenced",
+						"description": "This event may be issued by an alarm device to advertise that the alarm has been silenced by a local user event.",
+						"version": 8
+					}
+				}
+			},
+			{
+				"name": "Maintenance status",
+				"states": {
+					"0x08": {
+						"label": "Replacement required, End-of-life",
+						"description": "This event may be issued by an alarm device to advertise that the device has reached the end of its designed lifetime. The device should no longer be used.",
+						"version": 8
+					}
+				}
+			},
+			{
+				"name": "Periodic inspection status",
+				"states": {
+					"0x0B": {
+						"label": "Maintenance required, planned periodic inspection",
+						"description": "This event may be issued by an alarm device to advertise that the device has reached the end of a designed maintenance interval. The device is should be serviced in order to stay reliable.",
+						"version": 8
+					}
+				}
+			},
+			{
+				"name": "Dust in device status",
+				"states": {
+					"0x0A": {
+						"label": "Maintenance required, dust in device",
+						"description": "This event may be issued by an alarm device to advertise that the device has detected dust in its sensor. The device is not reliable until it has been serviced.",
+						"version": 8
+					}
+				}
+			}
+		],
+		"events": {
+			"0x03": {
+				"label": "Rapid temperature rise (location provided)",
+				"description": "The event parameters contain a location report",
+				"version": 2
+			},
+			"0x04": {
+				"label": "Rapid temperature rise",
+				"version": 2
+			},
+			"0x0C": {
+				"label": "Rapid temperature fall (location provided)",
+				"description": "The event parameters contain a location report",
+				"version": 8
+			},
+			"0x0D": {
+				"label": "Rapid temperature fall",
+				"version": 8
+			}
+		}
+	},
 	"0x07": {
 		"name": "Home Security",
 		"variables": [
