@@ -1,6 +1,9 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { validatePayload } from "../util/misc";
+import log from "../log";
+import { ValueID } from "../node/ValueDB";
+import { getEnumMemberName, validatePayload } from "../util/misc";
+import { enumValuesToMetadataStates, ValueMetadata } from "../values/Metadata";
 import { parseBitMask } from "../values/Primitive";
 import {
 	CCAPI,
@@ -14,6 +17,7 @@ import {
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
+	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -128,7 +132,46 @@ export interface ThermostatModeCC {
 
 @commandClass(CommandClasses["Thermostat Mode"])
 @implementedVersion(3)
-export class ThermostatModeCC extends CommandClass {}
+export class ThermostatModeCC extends CommandClass {
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
+
+		const api = node.commandClasses["Thermostat Mode"];
+		// First query the possible modes to set the metadata
+		log.controller.logNode(node.id, {
+			message: "querying supported thermostat modes...",
+			direction: "outbound",
+		});
+
+		const supportedModes = await api.getSupportedModes();
+
+		const logMessage =
+			`received supported thermostat modes:` +
+			supportedModes.map(
+				mode => "\n* " + getEnumMemberName(ThermostatMode, mode),
+			);
+		log.controller.logNode(node.id, {
+			message: logMessage,
+			direction: "inbound",
+		});
+
+		// Now query the actual status
+		log.controller.logNode(node.id, {
+			message: "querying current thermostat mode...",
+			direction: "outbound",
+		});
+		const currentStatus = await api.get();
+		log.controller.logNode(node.id, {
+			message:
+				"received current thermostat mode: " +
+				getEnumMemberName(ThermostatMode, currentStatus.mode),
+			direction: "inbound",
+		});
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+}
 
 type ThermostatModeCCSetOptions = CCCommandOptions &
 	(
@@ -170,6 +213,7 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 
 	public serialize(): Buffer {
 		const manufacturerData =
+			this.version >= 3 &&
 			this.mode === ThermostatMode["Manufacturer specific"] &&
 			this.manufacturerData
 				? this.manufacturerData
@@ -195,18 +239,29 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 
 		validatePayload(this.payload.length >= 1);
 		this._mode = this.payload[0] & 0b11111;
-		const manufacturerDataLength = this.payload[0] >>> 5;
-		if (manufacturerDataLength) {
-			this._manufacturerData = this.payload.slice(
-				1,
-				1 + manufacturerDataLength,
-			);
+
+		if (this.version >= 3) {
+			const manufacturerDataLength = this.payload[0] >>> 5;
+
+			validatePayload(this.payload.length >= 1 + manufacturerDataLength);
+			if (manufacturerDataLength) {
+				this._manufacturerData = this.payload.slice(
+					1,
+					1 + manufacturerDataLength,
+				);
+			}
 		}
 		this.persistValues();
 	}
 
 	private _mode: ThermostatMode;
 	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.UInt8,
+		min: 0,
+		max: 31,
+		label: "Thermostat mode",
+	})
 	public get mode(): ThermostatMode {
 		return this._mode;
 	}
@@ -231,6 +286,21 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 		super(driver, options);
 		// This bitmap starts at 0, so shift all values by 1
 		this._supportedModes = parseBitMask(this.payload).map(mode => mode - 1);
+
+		// Use this information to create the metadata for the mode property
+		const valueId: ValueID = {
+			commandClass: this.ccId,
+			endpoint: this.endpoint,
+			propertyName: "mode",
+		};
+		// Only update the dynamic part
+		this.getValueDB().setMetadata(valueId, ({
+			states: enumValuesToMetadataStates(
+				ThermostatMode,
+				this._supportedModes,
+			),
+		} as unknown) as ValueMetadata);
+
 		this.persistValues();
 	}
 
