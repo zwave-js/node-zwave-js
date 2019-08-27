@@ -1,37 +1,26 @@
 import { Driver } from "../";
+// import { ThermostatMode } from "../src/lib/commandclass/ThermostatModeCC";
 
 const driver = new Driver("COM3").once("driver ready", async () => {
-	// const node4 = driver.controller.nodes.get(4)!;
-	// node4.once("interview completed", async () => {
-	// 	for (let i = 1; i < 6; i++) {
-	// 		const result = await node4.setValue({
-	// 			cc: CommandClasses.Basic,
-	// 			endpoint: 0,
-	// 			propertyName: "targetValue",
-	// 			value: (i % 2) * 99,
-	// 		});
-	// 		console.log(result);
-	// 		await wait(2000);
-	// 	}
+	// const node = driver.controller.nodes.get(6)!;
+	// node.once("interview completed", async () => {
+	// 	await node.commandClasses["Thermostat Mode"].set(0x0);
 	// });
-
-	const node = driver.controller.nodes.get(4)!;
-	node.keepAwake = true;
-
-	node.once("interview completed", async () => {
-		// console.dir(
-		// 	node.getValue(
-		// 		CommandClasses.Configuration,
-		// 		undefined,
-		// 		"paramInformation",
-		// 	),
-		// );
-		const config = node.commandClasses.Configuration;
-		await config.scanParameters();
-		console.log("Scan finished!");
-		await driver.saveNetworkToCache();
-	});
-
+	// const node = driver.controller.nodes.get(4)!;
+	// node.keepAwake = true;
+	// node.once("interview completed", async () => {
+	// 	// console.dir(
+	// 	// 	node.getValue(
+	// 	// 		CommandClasses.Configuration,
+	// 	// 		undefined,
+	// 	// 		"paramInformation",
+	// 	// 	),
+	// 	// );
+	// 	const config = node.commandClasses.Configuration;
+	// 	await config.scanParameters();
+	// 	console.log("Scan finished!");
+	// 	await driver.saveNetworkToCache();
+	// });
 	// const node2 = driver.controller.nodes.get(2)!;
 	// node2.on("value added", args =>
 	// 	console.log(`[Node ${2}] value added: ${JSON.stringify(args)}`),
@@ -42,6 +31,9 @@ const driver = new Driver("COM3").once("driver ready", async () => {
 	// node2.on("value removed", args =>
 	// 	console.log(`[Node ${2}] value removed: ${JSON.stringify(args)}`),
 	// );
+	// await driver.controller.beginInclusion();
+	// await wait(60000);
+	// await driver.controller.stopInclusion();
 });
 driver.start();
 
