@@ -177,20 +177,6 @@ export class CommandClass {
 			value,
 		);
 	}
-	/** Accessor for the interviewComplete on static subclasses */
-	protected static setInterviewComplete(
-		node: ZWaveNode,
-		value: boolean,
-	): void {
-		node.createCCInstance(
-			getCommandClassStatic(this),
-		)!.interviewComplete = value;
-	}
-	/** Accessor for the interviewComplete on static subclasses */
-	public static getInterviewComplete(node: ZWaveNode): boolean {
-		return node.createCCInstance(getCommandClassStatic(this))!
-			.interviewComplete;
-	}
 
 	private serializeWithoutHeader(): Buffer {
 		// NoOp CCs have no command and no payload
@@ -353,15 +339,9 @@ export class CommandClass {
 	}
 	/* eslint-enable @typescript-eslint/no-unused-vars */
 
-	/* eslint-disable @typescript-eslint/no-unused-vars */
+	// This needs to be overwritten per command class. In the default implementation, don't do anything
 	/** Performs the interview procedure for this CC according to SDS14223 */
-	public static async interview(
-		driver: IDriver,
-		node: ZWaveNode,
-	): Promise<void> {
-		// This needs to be overwritten per command class. In the default implementation, don't do anything
-	}
-	/* eslint-enable @typescript-eslint/no-unused-vars */
+	public async interview(): Promise<void> {}
 
 	/**
 	 * Determine whether the linked node supports a specific command of this command class.
@@ -388,9 +368,14 @@ export class CommandClass {
 
 	/** Returns the value DB for this CC's node */
 	protected getValueDB(): ValueDB {
-		// We want this method to throw if the node is undefined
-		// so we can use the ! here
-		return this.getNode()!.valueDB;
+		const node = this.getNode();
+		if (node == undefined) {
+			throw new ZWaveError(
+				"The node for this CC does not exist or the driver is not ready yet",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return node.valueDB;
 	}
 
 	/** Which variables should be persisted when requested */

@@ -576,6 +576,17 @@ export class Driver extends EventEmitter implements IDriver {
 							);
 							break;
 
+						case ZWaveErrorCodes.Driver_NotReady:
+							log.driver.print(
+								`Dropping message because the driver is not ready to handle it yet.`,
+								"warn",
+							);
+							handled = true;
+							bytesRead = Message.getMessageLength(
+								this.receiveBuffer,
+							);
+							break;
+
 						case ZWaveErrorCodes.PacketFormat_InvalidPayload:
 							log.driver.print(
 								`Message with invalid data received. Dropping it...`,

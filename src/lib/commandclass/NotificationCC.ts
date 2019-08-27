@@ -2,7 +2,6 @@ import { lookupNotification } from "../config/Notifications";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ZWaveNode } from "../node/Node";
 import { ValueID } from "../node/ValueDB";
 import { JSONObject, validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
@@ -173,19 +172,13 @@ export interface NotificationCC {
 export class NotificationCC extends CommandClass {
 	// former AlarmCC (v1..v2)
 
-	public static async interview(
-		driver: IDriver,
-		node: ZWaveNode,
-	): Promise<void> {
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
 		// TODO: Require the association and AGI interview to be done first (GH#198)
 
-		const ccVersion = driver.getSafeCCVersionForNode(
-			node.id,
-			CommandClasses.Notification,
-		);
 		const ccAPI = node.commandClasses.Notification;
 
-		if (ccVersion >= 2) {
+		if (this.version >= 2) {
 			log.controller.logNode(node.id, {
 				message: "querying supported notification types...",
 				direction: "outbound",
@@ -209,7 +202,7 @@ export class NotificationCC extends CommandClass {
 				direction: "inbound",
 			});
 
-			if (ccVersion >= 3) {
+			if (this.version >= 3) {
 				// Query each notification for its supported events
 				for (let i = 0; i < supportedNotificationTypes.length; i++) {
 					const type = supportedNotificationTypes[i];
@@ -256,7 +249,7 @@ export class NotificationCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(node, true);
+		this.interviewComplete = true;
 	}
 }
 

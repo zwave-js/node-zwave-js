@@ -16,11 +16,8 @@ import {
 } from "../commandclass/CommandClass";
 import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { ConfigurationCC } from "../commandclass/ConfigurationCC";
-import { ManufacturerSpecificCC } from "../commandclass/ManufacturerSpecificCC";
 import { NotificationCCReport } from "../commandclass/NotificationCC";
-import { VersionCC } from "../commandclass/VersionCC";
 import { WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
-import { ZWavePlusCC } from "../commandclass/ZWavePlusCC";
 import { lookupDevice } from "../config/Devices";
 import { lookupNotification } from "../config/Notifications";
 import {
@@ -761,8 +758,11 @@ version:               ${this.version}`;
 	protected async interviewCCs(): Promise<void> {
 		// 1. Find out which device this is
 		if (this.supportsCC(CommandClasses["Manufacturer Specific"])) {
-			if (!ManufacturerSpecificCC.getInterviewComplete(this)) {
-				await ManufacturerSpecificCC.interview(this.driver, this);
+			const cc = this.createCCInstance(
+				CommandClasses["Manufacturer Specific"],
+			)!;
+			if (!cc.interviewComplete) {
+				await cc.interview();
 				await this.driver.saveNetworkToCache();
 			}
 		}
@@ -771,8 +771,9 @@ version:               ${this.version}`;
 		// 2. Find out which versions we can use
 		// This conditional is not necessary, but saves us a bunch of headaches during testing
 		if (this.supportsCC(CommandClasses.Version)) {
-			if (!VersionCC.getInterviewComplete(this)) {
-				await VersionCC.interview(this.driver, this);
+			const cc = this.createCCInstance(CommandClasses.Version)!;
+			if (!cc.interviewComplete) {
+				await cc.interview();
 				await this.driver.saveNetworkToCache();
 			}
 		}
@@ -782,38 +783,35 @@ version:               ${this.version}`;
 		// ZW+ requires Multi Channel (if it is supported)
 		// what else?...
 		if (this.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
-			if (!ZWavePlusCC.getInterviewComplete(this)) {
-				await ZWavePlusCC.interview(this.driver, this);
+			const cc = this.createCCInstance(
+				CommandClasses["Z-Wave Plus Info"],
+			)!;
+			if (!cc.interviewComplete) {
+				await cc.interview();
 				await this.driver.saveNetworkToCache();
 			}
 		}
 
 		// TODO: (GH#214) Also query ALL endpoints!
 		// 3. Perform all other CCs interviews
-		const ccConstructors = [...this.implementedCommandClasses.keys()]
+		const ccInstances = [...this.implementedCommandClasses.keys()]
 			.filter(
 				cc =>
 					cc !== CommandClasses.Version &&
 					cc !== CommandClasses["Manufacturer Specific"] &&
 					cc !== CommandClasses["Z-Wave Plus Info"],
 			)
-			// This assertion is not nice, but I see no better way
-			.map(
-				cc =>
-					(getCCConstructor(cc) as unknown) as
-						| (typeof CommandClass)
-						| undefined,
-			)
-			.filter(cc => !!cc) as (typeof CommandClass)[];
-		for (const cc of ccConstructors) {
+			.map(cc => this.createCCInstance(cc))
+			.filter(instance => !!instance) as CommandClass[];
+		for (const cc of ccInstances) {
 			try {
-				if (!cc.getInterviewComplete(this)) {
-					await cc.interview(this.driver, this);
+				if (!cc.interviewComplete) {
+					await cc.interview();
 					await this.driver.saveNetworkToCache();
 				}
 			} catch (e) {
 				log.controller.print(
-					`${cc.name}: Interview failed:\n${e.message}`,
+					`${cc.constructor.name}: Interview failed:\n${e.message}`,
 					"error",
 				);
 			}

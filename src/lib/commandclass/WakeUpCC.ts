@@ -122,10 +122,8 @@ export class WakeUpCC extends CommandClass {
 		node.status = awake ? NodeStatus.Awake : NodeStatus.Asleep;
 	}
 
-	public static async interview(
-		driver: IDriver,
-		node: ZWaveNode,
-	): Promise<void> {
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
 		if (node.isControllerNode()) {
 			log.controller.logNode(
 				node.id,
@@ -139,12 +137,7 @@ export class WakeUpCC extends CommandClass {
 		} else {
 			const API = node.commandClasses["Wake Up"];
 			// Retrieve the allowed wake up intervals if possible
-			if (
-				driver.getSafeCCVersionForNode(
-					node.id,
-					CommandClasses["Wake Up"],
-				) >= 2
-			) {
+			if (this.version >= 2) {
 				log.controller.logNode(node.id, {
 					message:
 						"retrieving wakeup capabilities from the device...",
@@ -186,13 +179,13 @@ controller node: ${wakeupResp.controllerNodeId}`;
 
 			await API.setInterval(
 				wakeupResp.wakeUpInterval,
-				driver.controller!.ownNodeId!,
+				this.driver.controller!.ownNodeId!,
 			);
 			log.controller.logNode(node.id, "wakeup destination node changed!");
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(node, true);
+		this.interviewComplete = true;
 	}
 }
 

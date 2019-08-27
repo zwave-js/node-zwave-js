@@ -3,7 +3,6 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { ZWaveNode } from "../node/Node";
 import { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
@@ -90,10 +89,8 @@ export class ManufacturerSpecificCC extends CommandClass {
 		return super.supportsCommand(cmd);
 	}
 
-	public static async interview(
-		driver: IDriver,
-		node: ZWaveNode,
-	): Promise<void> {
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
 		if (node.isControllerNode()) {
 			log.controller.logNode(
 				node.id,
@@ -119,7 +116,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(node, true);
+		this.interviewComplete = true;
 	}
 }
 

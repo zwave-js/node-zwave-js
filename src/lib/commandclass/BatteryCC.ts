@@ -1,6 +1,5 @@
 import { IDriver } from "../driver/IDriver";
 import log from "../log";
-import { ZWaveNode } from "../node/Node";
 import { JSONObject, validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
 import { CCAPI } from "./API";
@@ -46,10 +45,8 @@ export interface BatteryCC {
 @commandClass(CommandClasses.Battery)
 @implementedVersion(1)
 export class BatteryCC extends CommandClass {
-	public static async interview(
-		driver: IDriver,
-		node: ZWaveNode,
-	): Promise<void> {
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
 		log.controller.logNode(node.id, {
 			message: "querying battery information...",
 			direction: "outbound",
@@ -65,7 +62,7 @@ level: ${batteryResponse.level}${batteryResponse.isLow ? " (low)" : ""}`;
 		});
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(node, true);
+		this.interviewComplete = true;
 	}
 }
 

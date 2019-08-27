@@ -3,7 +3,6 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import { GenericDeviceClasses } from "../node/DeviceClass";
-import { ZWaveNode } from "../node/Node";
 import {
 	NodeInformationFrame,
 	parseNodeInformationFrame,
@@ -166,10 +165,8 @@ export class MultiChannelCC extends CommandClass {
 		return cc;
 	}
 
-	public static async interview(
-		driver: IDriver,
-		node: ZWaveNode,
-	): Promise<void> {
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
 		const API = node.commandClasses["Multi Channel"];
 
 		// Step 1: Retrieve general information about end points
@@ -208,10 +205,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 		for (const endpoint of foundEndpoints) {
 			if (
 				endpoint > multiResponse.individualEndpointCount &&
-				driver.getSafeCCVersionForNode(
-					node.id,
-					CommandClasses["Multi Channel"],
-				) >= 4
+				this.version >= 4
 			) {
 				// Find members of aggregated end point
 				log.controller.logNode(node.id, {
@@ -253,7 +247,7 @@ supported CCs:`;
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(node, true);
+		this.interviewComplete = true;
 	}
 }
 

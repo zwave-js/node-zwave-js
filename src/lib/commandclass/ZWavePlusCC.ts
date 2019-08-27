@@ -1,7 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { ZWaveNode } from "../node/Node";
 import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { ValueMetadata } from "../values/Metadata";
@@ -69,10 +68,8 @@ export interface ZWavePlusCC {
 @commandClass(CommandClasses["Z-Wave Plus Info"])
 @implementedVersion(2)
 export class ZWavePlusCC extends CommandClass {
-	public static async interview(
-		driver: IDriver,
-		node: ZWaveNode,
-	): Promise<void> {
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
 		log.controller.logNode(node.id, {
 			message: "querying Z-Wave+ information...",
 			direction: "outbound",
@@ -94,7 +91,7 @@ user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
 		});
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(node, true);
+		this.interviewComplete = true;
 	}
 }
 

@@ -2,7 +2,6 @@ import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ZWaveNode } from "../node/Node";
 import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { ValueMetadata } from "../values/Metadata";
@@ -137,10 +136,8 @@ export class VersionCC extends CommandClass {
 		return super.supportsCommand(cmd);
 	}
 
-	public static async interview(
-		driver: IDriver,
-		node: ZWaveNode,
-	): Promise<void> {
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
 		// Step 1: Query node versions
 		log.controller.logNode(node.id, {
 			message: "querying node versions...",
@@ -207,7 +204,11 @@ export class VersionCC extends CommandClass {
 
 		// Step 3: Query VersionCC capabilities
 		if (
-			driver.getSafeCCVersionForNode(node.id, CommandClasses.Version) >= 3
+			// The CC was created before the versions were determined, so `this.version` contains a wrong value
+			this.driver.getSafeCCVersionForNode(
+				node.id,
+				CommandClasses.Version,
+			) >= 3
 		) {
 			// Step 3a: Support for SoftwareGet
 			log.controller.logNode(node.id, {
@@ -239,7 +240,7 @@ export class VersionCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(node, true);
+		this.interviewComplete = true;
 	}
 }
 

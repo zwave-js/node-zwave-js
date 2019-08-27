@@ -1,7 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ZWaveNode } from "../node/Node";
 import { JSONObject, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { ValueMetadata } from "../values/Metadata";
@@ -98,10 +97,8 @@ export interface BinarySwitchCC {
 @commandClass(CommandClasses["Binary Switch"])
 @implementedVersion(2)
 export class BinarySwitchCC extends CommandClass {
-	public static async interview(
-		driver: IDriver,
-		node: ZWaveNode,
-	): Promise<void> {
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
 		log.controller.logNode(node.id, {
 			message: "querying Binary Switch state...",
 			direction: "outbound",
@@ -124,7 +121,7 @@ remaining duration: ${zwavePlusResponse.duration}`;
 		});
 
 		// Remember that the interview is complete
-		this.setInterviewComplete(node, true);
+		this.interviewComplete = true;
 	}
 }
 
