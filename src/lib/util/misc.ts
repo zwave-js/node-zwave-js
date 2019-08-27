@@ -1,5 +1,6 @@
 import { entries } from "alcalzone-shared/objects";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { num2hex } from "./strings";
 
 /** Ensures that the values array is consecutive */
 export function isConsecutiveArray(values: number[]): boolean {
@@ -58,3 +59,7 @@ export function Mixin(baseCtors: Function[]) {
 }
 
 export type DeepPartial<T> = { [P in keyof T]+?: DeepPartial<T[P]> };
+
+export function getEnumMemberName(enumeration: unknown, value: number): string {
+	return (enumeration as any)[value] || `unknown (${num2hex(value)})`;
+}

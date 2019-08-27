@@ -1,4 +1,17 @@
+import { getEnumMemberName } from "../util/misc";
 import { IntegerLimits } from "./Primitive";
+
+/** Takes an enumeration and an array of values of this enumeration and returns a states record to be used as metadata */
+export function enumValuesToMetadataStates(
+	enumeration: unknown,
+	values: number[],
+): Record<number, string> {
+	const ret: Record<number, string> = {};
+	for (const value of values) {
+		ret[value] = getEnumMemberName(enumeration, value);
+	}
+	return ret;
+}
 
 export type ValueType =
 	| "number"
