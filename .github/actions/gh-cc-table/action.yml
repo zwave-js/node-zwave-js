@@ -7,4 +7,4 @@ author: 'AlCalzone'
 #     default: 'world'
 runs:
   using: 'node12'
-  main: '.github/actions/gh-cc-table/main.js'
+  main: 'main.js'
