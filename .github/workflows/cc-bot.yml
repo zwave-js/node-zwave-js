@@ -1,13 +1,13 @@
 name: CC tracking bot
 
 # Only run this when CC files are changed
-on:
-  push:
-    branches:
-      - '*'
-    paths:
-      - 'src/lib/commandclass/**/*.ts'
-      - '.github/actions/gh-cc-table/*'
+on: [push]
+  # push:
+  #   branches:
+  #     - '*'
+  #   paths:
+  #     - 'src/lib/commandclass/**/*.ts'
+  #     - '.github/actions/gh-cc-table/*'
 
 jobs:
   gh-cc-table:
