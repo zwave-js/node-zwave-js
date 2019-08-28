@@ -84,6 +84,7 @@ jobs:
     - name: Create a clean build
       run: npm run build
     - name: Publish package to npm
-      run: npm publish
-      env:
-        NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+      run: |
+        npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+        npm whoami
+        npm publish
