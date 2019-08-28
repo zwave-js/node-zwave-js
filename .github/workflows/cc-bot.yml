@@ -1,0 +1,33 @@
+name: Update CC implementation status
+
+# Only run this when CC files are changed in the master branch
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/lib/commandclass/**/*.ts'
+      - '.github/actions/gh-cc-table/*'
+
+jobs:
+  gh-cc-table:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install dependencies
+      run: npm ci
+    - name: Update CC table
+      uses: ./.github/actions/gh-cc-table
+      with:
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        CI: true

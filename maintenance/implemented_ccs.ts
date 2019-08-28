@@ -162,7 +162,7 @@ function writeTable(rows: string[][], flavor: "console" | "github"): void {
 		}
 
 		console.log(output);
-		clipboard.write(c.stripColor(output));
+		if (!process.env.CI) clipboard.write(c.stripColor(output));
 
 		console.log(c.green("The table was copied to the clipboard!"));
 	}
