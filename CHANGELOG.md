@@ -4,9 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
-## 1.2.0-beta.2 (2019-08-28)
+## __WORK IN PROGRESS__
 * (AlCalzone) fix CC interview not being done completely
 * (AlCalzone) Implement ThermostatModeCC (V3)
+* (AlCalzone) Implement ThermostatOperatingStateCC (V1)
 * (AlCalzone) Make a bunch of CC values internal
 * (AlCalzone) allow preventing notification variables from going idle
 * (AlCalzone) Add more notification configurations:
