@@ -93,7 +93,6 @@
     "cleanBuildDir": "rimraf ./build",
     "prebuild": "npm run generateCCAPIInterface",
     "prewatch": "npm run generateCCAPIInterface",
-    "prepublishOnly": "npm run cleanBuildDir && npm run build",
     "test:reset": "jest --clear-cache",
     "test:ts": "jest --runInBand",
     "test:watch": "npm run test:ts -- --watch",
