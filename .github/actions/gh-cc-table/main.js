@@ -1,5 +1,7 @@
+const c = require("ansi-colors");
+const exec = require('@actions/exec');
+
 (async function main() {
-	const exec = require('@actions/exec');
 
 	let ccTable = '';
 
@@ -13,7 +15,9 @@
 	await exec.exec('npm', ['run', 'gh-cc-table'], options);
 
 	ccTable = ccTable.split("\n").filter(line => line.startsWith("| ")).join("\n");
-	console.error();
+	ccTable = c.stripColor(ccTable);
+
+	console.error()
 	console.error("FILTERED:");
 	console.error(ccTable);
 })();

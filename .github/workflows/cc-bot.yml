@@ -1,4 +1,4 @@
-name: CC tracking bot
+name: Update CC implementation status
 
 # Only run this when CC files are changed
 on: [push]
