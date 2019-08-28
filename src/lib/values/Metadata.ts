@@ -2,11 +2,16 @@ import { getEnumMemberName } from "../util/misc";
 import { IntegerLimits } from "./Primitive";
 
 /** Takes an enumeration and an array of values of this enumeration and returns a states record to be used as metadata */
-export function enumValuesToMetadataStates(
-	enumeration: unknown,
-	values: number[],
+export function enumValuesToMetadataStates<T extends Record<string, any>>(
+	enumeration: T,
+	values?: number[],
 ): Record<number, string> {
 	const ret: Record<number, string> = {};
+	if (values == undefined) {
+		values = Object.keys(enumeration)
+			.map(parseInt)
+			.filter(val => !Number.isNaN(val));
+	}
 	for (const value of values) {
 		ret[value] = getEnumMemberName(enumeration, value);
 	}
