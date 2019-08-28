@@ -27,3 +27,5 @@ jobs:
       run: npm ci
     - name: Update CC table
       uses: ./.github/actions/gh-cc-table
+      env:
+        CI: true
