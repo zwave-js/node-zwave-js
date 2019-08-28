@@ -1,10 +1,10 @@
 name: 'CC-Table'
 description: 'Keep CC implementation status in #6 up to date'
 author: 'AlCalzone'
-# inputs:
-#   myInput:
-#     description: 'Input to use'
-#     default: 'world'
+inputs:
+  githubToken:
+    description: 'The github token to use for authentication'
+    required: true
 runs:
   using: 'node12'
   main: 'main.js'

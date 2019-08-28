@@ -27,5 +27,7 @@ jobs:
       run: npm ci
     - name: Update CC table
       uses: ./.github/actions/gh-cc-table
+        with:
+          githubToken: ${{secrets.GITHUB_TOKEN}}
       env:
         CI: true
