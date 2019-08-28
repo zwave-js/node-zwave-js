@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 1.2.0-beta.3 (2019-08-28)
 * (AlCalzone) fix CC interview not being done completely
 * (AlCalzone) Implement ThermostatModeCC (V3)
 * (AlCalzone) Implement ThermostatOperatingStateCC (V1)
