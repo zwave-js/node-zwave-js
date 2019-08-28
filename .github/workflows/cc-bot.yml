@@ -28,6 +28,6 @@ jobs:
     - name: Update CC table
       uses: ./.github/actions/gh-cc-table
       with:
-        githubToken: ${{secrets.GITHUB_TOKEN}}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
       env:
         CI: true
