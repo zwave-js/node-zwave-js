@@ -37,6 +37,7 @@
 // }
 
 export interface ThermostatOperatingStateCC {
+	__foo: undefined;
 	// ccCommand: ThermostatOperatingStateCommand;
 }
 
