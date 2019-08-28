@@ -25,6 +25,11 @@ const context = github.context;
 		.join("\n");
 	ccTable = c.stripColor(ccTable);
 
+	const { data: { body: oldBody } } = await octokit.issues.get({
+		...context.repo,
+		issue_number: 6,
+	});
+
 	const newBody = `
 The following command classes are not implemented or incomplete:
 
@@ -36,9 +41,14 @@ npm run gh-cc-table
 \`\`\`
 `;
 
-	await octokit.issues.update({
-		...context.repo,
-		issue_number: 6,
-		body: newBody,
-	});
+	if (oldBody !== newBody) {
+		await octokit.issues.update({
+			...context.repo,
+			issue_number: 6,
+			body: newBody,
+		});
+		console.error(c.green("The implementation table was updated!"));
+	} else {
+		console.error(c.yellow("No changes to the implementation table!"));
+	}
 })();
