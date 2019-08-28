@@ -43,11 +43,10 @@ describe("lib/commandclass/VersionCC => ", () => {
 	describe(`interview()`, () => {
 		const fakeDriver = createEmptyMockDriver();
 		const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+		let cc: VersionCC;
+
 		function doInterview() {
-			return VersionCC.interview(
-				(fakeDriver as unknown) as IDriver,
-				node,
-			);
+			return cc.interview();
 		}
 
 		function mockVersionGet() {
@@ -80,6 +79,7 @@ describe("lib/commandclass/VersionCC => ", () => {
 			fakeDriver.controller.nodes.set(node.id, node);
 			// CC Version must be supported for this test
 			node.addCC(CommandClasses.Version, { isSupported: true });
+			cc = node.createCCInstance<VersionCC>(CommandClasses.Version)!;
 		});
 		beforeEach(() => fakeDriver.sendMessage.mockClear());
 		afterAll(() => {

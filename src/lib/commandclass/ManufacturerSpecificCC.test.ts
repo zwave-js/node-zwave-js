@@ -38,11 +38,10 @@ describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 	describe(`interview()`, () => {
 		const fakeDriver = createEmptyMockDriver();
 		const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+		let cc: ManufacturerSpecificCC;
+
 		function doInterview() {
-			return ManufacturerSpecificCC.interview(
-				(fakeDriver as unknown) as IDriver,
-				node,
-			);
+			return cc.interview();
 		}
 		function resetSendMessageImplementation() {
 			fakeDriver.sendMessage.mockImplementation(() =>
@@ -56,6 +55,9 @@ describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 			node.addCC(CommandClasses["Manufacturer Specific"], {
 				isSupported: true,
 			});
+			cc = node.createCCInstance<ManufacturerSpecificCC>(
+				CommandClasses["Manufacturer Specific"],
+			)!;
 		});
 		beforeEach(() => fakeDriver.sendMessage.mockClear());
 		afterAll(() => {

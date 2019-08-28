@@ -57,10 +57,10 @@ describe("lib/commandclass/ZWavePlusCC => ", () => {
 			node.addCC(CommandClasses["Z-Wave Plus Info"], {
 				isSupported: true,
 			});
-			await ZWavePlusCC.interview(
-				(fakeDriver as unknown) as IDriver,
-				node,
-			);
+			const cc = node.createCCInstance(
+				CommandClasses["Z-Wave Plus Info"],
+			)!;
+			await cc.interview();
 
 			expect(fakeDriver.sendMessage).toBeCalled();
 

@@ -38,6 +38,7 @@ describe("lib/commandclass/WakeUpCC => ", () => {
 	describe(`interview()`, () => {
 		const fakeDriver = createEmptyMockDriver();
 		const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+		let cc: WakeUpCC;
 
 		beforeAll(() => {
 			fakeDriver.sendMessage.mockImplementation(() =>
@@ -47,6 +48,7 @@ describe("lib/commandclass/WakeUpCC => ", () => {
 				isSupported: true,
 			});
 			fakeDriver.controller.nodes.set(node.id, node);
+			cc = node.createCCInstance<WakeUpCC>(CommandClasses["Wake Up"])!;
 		});
 		beforeEach(() => fakeDriver.sendMessage.mockClear());
 		afterAll(() => {
@@ -56,7 +58,7 @@ describe("lib/commandclass/WakeUpCC => ", () => {
 		it("should not send anything if the node is the controller", async () => {
 			// Temporarily make this node the controller node
 			fakeDriver.controller.ownNodeId = node.id;
-			await WakeUpCC.interview((fakeDriver as unknown) as IDriver, node);
+			await cc.interview();
 			expect(fakeDriver.sendMessage).not.toBeCalled();
 			fakeDriver.controller.ownNodeId = 1;
 		});
@@ -64,14 +66,14 @@ describe("lib/commandclass/WakeUpCC => ", () => {
 		it("should not send anything if the node is frequent listening", async () => {
 			// Temporarily make this node frequent listening
 			(node as any)._isFrequentListening = true;
-			await WakeUpCC.interview((fakeDriver as unknown) as IDriver, node);
+			await cc.interview();
 			expect(fakeDriver.sendMessage).not.toBeCalled();
 			(node as any)._isFrequentListening = false;
 		});
 
 		it.skip("if the node is V2+, it should send a WakeUpCCIntervalCapabilitiesGet", async () => {
 			// TODO: Provide a correct response
-			await WakeUpCC.interview((fakeDriver as unknown) as IDriver, node);
+			await cc.interview();
 			expect(fakeDriver.sendMessage).toBeCalled();
 			assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
 				nodeId: node.id,

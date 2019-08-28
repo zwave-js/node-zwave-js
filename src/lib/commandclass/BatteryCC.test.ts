@@ -91,7 +91,8 @@ describe("lib/commandclass/BatteryCC => ", () => {
 			node.addCC(CommandClasses.Battery, {
 				isSupported: true,
 			});
-			await BatteryCC.interview((fakeDriver as unknown) as IDriver, node);
+			const cc = node.createCCInstance(CommandClasses.Battery)!;
+			await cc.interview();
 
 			expect(fakeDriver.sendMessage).toBeCalled();
 
