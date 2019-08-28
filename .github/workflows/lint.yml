@@ -1,6 +1,10 @@
 name: Lint files
 
-on: [push, pull_request]
+# Only run this on branch pushs
+on:
+  push:
+    branches:
+      - '*'
 
 jobs:
   check-and-lint:
@@ -11,6 +15,11 @@ jobs:
         node-version: [12.x]
 
     steps:
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
+
     - uses: actions/checkout@v1
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
