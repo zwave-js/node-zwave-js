@@ -4,6 +4,16 @@ import { Driver } from "../";
 const driver = new Driver("COM3").once("driver ready", async () => {
 	// const node = driver.controller.nodes.get(6)!;
 	// node.once("interview completed", async () => {
+	// 	console.error();
+	// 	console.error("GOGOGO");
+	// 	console.error();
+	// 	await wait(5000);
+	// 	// heat
+	// 	await node.commandClasses["Thermostat Setpoint"].set(0x01, 29, 0);
+	// 	await node.commandClasses["Thermostat Mode"].set(0x1);
+	// 	await wait(5000);
+	// 	await node.commandClasses["Thermostat Setpoint"].set(0x01, 22, 0);
+	// 	await wait(2000);
 	// 	await node.commandClasses["Thermostat Mode"].set(0x0);
 	// });
 	// const node = driver.controller.nodes.get(4)!;

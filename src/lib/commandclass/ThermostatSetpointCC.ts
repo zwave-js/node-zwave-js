@@ -32,6 +32,7 @@ export enum ThermostatSetpointCommand {
 	CapabilitiesReport = 0x0a,
 }
 
+// TODO: Can we merge this with ThermostatMode?
 export enum ThermostatSetpointType {
 	"N/A" = 0x00,
 	"Heating" = 0x01, // CC v1

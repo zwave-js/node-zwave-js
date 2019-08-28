@@ -95,6 +95,7 @@ export interface CCAPIs {
 	"Node Naming and Location": import("./NodeNamingCC").NodeNamingAndLocationCCAPI;
 	Notification: import("./NotificationCC").NotificationCCAPI;
 	"Thermostat Mode": import("./ThermostatModeCC").ThermostatModeCCAPI;
+	"Thermostat Operating State": import("./ThermostatOperatingStateCC").ThermostatOperatingStateCCAPI;
 	"Thermostat Setback": import("./ThermostatSetbackCC").ThermostatSetbackCCAPI;
 	"Thermostat Setpoint": import("./ThermostatSetpointCC").ThermostatSetpointCCAPI;
 	Version: import("./VersionCC").VersionCCAPI;
