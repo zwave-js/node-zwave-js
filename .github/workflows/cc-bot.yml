@@ -1,13 +1,13 @@
 name: Update CC implementation status
 
-# Only run this when CC files are changed
-on: [push]
-  # push:
-  #   branches:
-  #     - '*'
-  #   paths:
-  #     - 'src/lib/commandclass/**/*.ts'
-  #     - '.github/actions/gh-cc-table/*'
+# Only run this when CC files are changed in the master branch
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/lib/commandclass/**/*.ts'
+      - '.github/actions/gh-cc-table/*'
 
 jobs:
   gh-cc-table:
