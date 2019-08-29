@@ -824,5 +824,23 @@
 				"label": "Contact medical service"
 			}
 		}
+	},
+	"0x0B": {
+		"name": "Clock",
+		"events": {
+			"0x01": {
+				"label": "Wake up alert"
+			},
+			"0x02": {
+				"label": "Timer ended"
+			},
+			"0x03": {
+				"label": "Time remaining"
+				// TODO: The event parameter contains 3 bytes
+				// Byte 1 - 0x00..0xFF: 0..255 hours
+				// Byte 2 - 0x00..0xFF: 0..255 minutes
+				// Byte 3 - 0x00..0xFF: 0..255 seconds
+			}
+		}
 	}
 }
