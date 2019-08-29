@@ -650,5 +650,197 @@
 				"description": "This event indicates that the node has detected an excessive amount of pressure or that an impact has occurred on the product itself."
 			}
 		}
+	},
+	"0x08": {
+		"name": "Power Management",
+		"variables": [
+			{
+				"name": "Power status",
+				"states": {
+					"0x01": {
+						"label": "Power has been applied"
+					}
+				}
+			},
+			{
+				"name": "Mains status",
+				"idle": false,
+				"states": {
+					"0x02": {
+						"label": "AC mains disconnected"
+					},
+					"0x03": {
+						"label": "AC mains re-connected"
+					}
+				}
+			},
+			{
+				"name": "Over-current status",
+				"states": {
+					"0x06": {
+						"label": "Over-current detected"
+					}
+				}
+			},
+			{
+				"name": "Over-voltage status",
+				"states": {
+					"0x07": {
+						"label": "Over-voltage detected"
+					}
+				}
+			},
+			{
+				"name": "Over-load status",
+				"states": {
+					"0x08": {
+						"label": "Over-load detected"
+					}
+				}
+			},
+			{
+				"name": "Load error status",
+				"states": {
+					"0x09": {
+						"label": "Load error"
+					}
+				}
+			},
+			{
+				"name": "Battery maintenance status",
+				"states": {
+					"0x0A": {
+						"label": "Replace battery soon"
+					},
+					"0x0B": {
+						"label": "Replace battery now"
+					},
+					"0x11": {
+						"label": "Battery fluid is low"
+					}
+				}
+			},
+			{
+				"name": "Battery load status",
+				"states": {
+					"0x0c": {
+						"label": "Battery is charging"
+					}
+				}
+			},
+			{
+				"name": "Battery level status",
+				"states": {
+					"0x0D": {
+						"label": "Battery is fully charged"
+					},
+					"0x0E": {
+						"label": "Charge battery soon"
+					},
+					"0x0F": {
+						"label": "Charge battery now"
+					}
+				}
+			},
+			{
+				"name": "Backup battery level status",
+				"states": {
+					"0x10": {
+						"label": "Back-up battery is low"
+					}
+				}
+			}
+		],
+		"events": {
+			"0x04": {
+				"label": "Surge detected"
+			},
+			"0x05": {
+				"label": "Voltage drop/drift"
+			}
+		}
+	},
+	"0x09": {
+		"name": "System",
+		"variables": [
+			{
+				"name": "Hardware status",
+				"states": {
+					"0x01": {
+						"label": "System hardware failure"
+					},
+					"0x03": {
+						"label": "System hardware failure (with failure code)",
+						"description": "The event parameters contain a manufacturer proprietary failure code"
+					}
+				}
+			},
+			{
+				"name": "Software status",
+				"states": {
+					"0x02": {
+						"label": "System software failure"
+					},
+					"0x04": {
+						"label": "System software failure (with failure code)",
+						"description": "The event parameters contain a manufacturer proprietary failure code"
+					}
+				}
+			},
+			{
+				"name": "Cover status",
+				"states": {
+					"0x06": {
+						"label": "Tampering, product cover removed"
+					}
+				}
+			},
+			{
+				"name": "Emergency shutoff status",
+				"states": {
+					"0x07": {
+						"label": "Emergency shutoff"
+					}
+				}
+			}
+		],
+		"events": {
+			"0x05": {
+				"label": "Heartbeat",
+				"description": "The Heartbeat event may be issued by a device to advertise that the device is still alive or to notify its presence."
+			}
+		}
+	},
+	"0x0A": {
+		"name": "System",
+		"events": {
+			"0x01": {
+				"label": "Contact police"
+			},
+			"0x02": {
+				"label": "Contact fire service"
+			},
+			"0x03": {
+				"label": "Contact medical service"
+			}
+		}
+	},
+	"0x0B": {
+		"name": "Clock",
+		"events": {
+			"0x01": {
+				"label": "Wake up alert"
+			},
+			"0x02": {
+				"label": "Timer ended"
+			},
+			"0x03": {
+				"label": "Time remaining"
+				// TODO: The event parameter contains 3 bytes
+				// Byte 1 - 0x00..0xFF: 0..255 hours
+				// Byte 2 - 0x00..0xFF: 0..255 minutes
+				// Byte 3 - 0x00..0xFF: 0..255 seconds
+			}
+		}
 	}
 }
