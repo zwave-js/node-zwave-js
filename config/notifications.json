@@ -650,5 +650,114 @@
 				"description": "This event indicates that the node has detected an excessive amount of pressure or that an impact has occurred on the product itself."
 			}
 		}
+	},
+	"0x08": {
+		"name": "Power Management",
+		"variables": [
+			{
+				"name": "Power status",
+				"states": {
+					"0x01": {
+						"label": "Power has been applied"
+					}
+				}
+			},
+			{
+				"name": "Mains status",
+				"idle": false,
+				"states": {
+					"0x02": {
+						"label": "AC mains disconnected"
+					},
+					"0x03": {
+						"label": "AC mains re-connected"
+					}
+				}
+			},
+			{
+				"name": "Over-current status",
+				"states": {
+					"0x06": {
+						"label": "Over-current detected"
+					}
+				}
+			},
+			{
+				"name": "Over-voltage status",
+				"states": {
+					"0x07": {
+						"label": "Over-voltage detected"
+					}
+				}
+			},
+			{
+				"name": "Over-load status",
+				"states": {
+					"0x08": {
+						"label": "Over-load detected"
+					}
+				}
+			},
+			{
+				"name": "Load error status",
+				"states": {
+					"0x09": {
+						"label": "Load error"
+					}
+				}
+			},
+			{
+				"name": "Battery maintenance status",
+				"states": {
+					"0x0A": {
+						"label": "Replace battery soon"
+					},
+					"0x0B": {
+						"label": "Replace battery now"
+					},
+					"0x11": {
+						"label": "Battery fluid is low"
+					}
+				}
+			},
+			{
+				"name": "Battery load status",
+				"states": {
+					"0x0c": {
+						"label": "Battery is charging"
+					}
+				}
+			},
+			{
+				"name": "Battery level status",
+				"states": {
+					"0x0D": {
+						"label": "Battery is fully charged"
+					},
+					"0x0E": {
+						"label": "Charge battery soon"
+					},
+					"0x0F": {
+						"label": "Charge battery now"
+					}
+				}
+			},
+			{
+				"name": "Backup battery level status",
+				"states": {
+					"0x10": {
+						"label": "Back-up battery is low"
+					}
+				}
+			}
+		],
+		"events": {
+			"0x04": {
+				"label": "Surge detected"
+			},
+			"0x05": {
+				"label": "Voltage drop/drift"
+			}
+		}
 	}
 }
