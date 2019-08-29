@@ -45,8 +45,19 @@ export enum AssociationCommand {
 	Remove = 0x04,
 	SupportedGroupingsGet = 0x05,
 	SupportedGroupingsReport = 0x06,
-	SpecificGroupGet = 0x0b,
-	SpecificGroupReport = 0x0c,
+	// TODO: These two commands are V2. I have no clue how this is supposed to function:
+	// SpecificGroupGet = 0x0b,
+	// SpecificGroupReport = 0x0c,
+
+	// Here's what the docs have to say:
+	// This functionality allows a supporting multi-button device to detect a key press and subsequently advertise
+	// the identity of the key. The following sequence of events takes place:
+	// * The user activates a special identification sequence and pushes the button to be identified
+	// * The device issues a Node Information frame (NIF)
+	// * The NIF allows the portable controller to determine the NodeID of the multi-button device
+	// * The portable controller issues an Association Specific Group Get Command to the multi-button device
+	// * The multi-button device returns an Association Specific Group Report Command that advertises the
+	//   association group that represents the most recently detected button
 }
 
 @API(CommandClasses.Association)
@@ -103,17 +114,14 @@ export class AssociationCCAPI extends CCAPI {
 
 	/**
 	 * Removes nodes from an association group
-	 * @param nodeIds The nodes to remove. If none are specified, ALL nodes will be removed.
 	 */
 	public async removeNodeIds(
-		groupId: number,
-		nodeIds?: number[],
+		options: AssociationCCRemoveOptions,
 	): Promise<void> {
 		const cc = new AssociationCCRemove(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			groupId,
-			nodeIds,
+			...options,
 		});
 		await this.driver.sendCommand(cc);
 	}
@@ -124,7 +132,7 @@ export interface AssociationCC {
 }
 
 @commandClass(CommandClasses.Association)
-@implementedVersion(1)
+@implementedVersion(2)
 export class AssociationCC extends CommandClass {
 	public async interview(): Promise<void> {
 		const node = this.getNode()!;
@@ -217,8 +225,10 @@ export class AssociationCCSet extends AssociationCC {
 	}
 }
 
-interface AssociationCCRemoveOptions extends CCCommandOptions {
-	groupId: number;
+interface AssociationCCRemoveOptions {
+	/** The group from which to remove the nodes. If none is specified, the nodes will be removed from all nodes. */
+	groupId?: number;
+	/** The nodes to remove. If none are specified, ALL nodes will be removed. */
 	nodeIds?: number[];
 }
 
@@ -228,7 +238,7 @@ export class AssociationCCRemove extends AssociationCC {
 		driver: IDriver,
 		options:
 			| CommandClassDeserializationOptions
-			| AssociationCCRemoveOptions,
+			| (AssociationCCRemoveOptions & CCCommandOptions),
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
@@ -238,12 +248,21 @@ export class AssociationCCRemove extends AssociationCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			if (options.groupId < 1) {
+			// Validate options
+			if (!options.groupId) {
+				if (this.version === 1) {
+					throw new ZWaveError(
+						`Node ${this.nodeId} only supports AssociationCC V1 which requires the group Id to be set`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+			} else {
 				throw new ZWaveError(
 					"The group id must be positive!",
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
+
 			if (
 				options.nodeIds &&
 				!options.nodeIds.every(n => n > 0 && n < MAX_NODES)
@@ -258,11 +277,14 @@ export class AssociationCCRemove extends AssociationCC {
 		}
 	}
 
-	public groupId: number;
+	public groupId?: number;
 	public nodeIds?: number[];
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.groupId, ...(this.nodeIds || [])]);
+		this.payload = Buffer.from([
+			this.groupId || 0,
+			...(this.nodeIds || []),
+		]);
 		return super.serialize();
 	}
 }
