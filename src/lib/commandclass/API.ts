@@ -77,6 +77,7 @@ export interface CCAPIs {
 	[Symbol.iterator](): Iterator<CCAPI>;
 
 	// AUTO GENERATION BELOW
+	Association: import("./AssociationCC").AssociationCCAPI;
 	Basic: import("./BasicCC").BasicCCAPI;
 	Battery: import("./BatteryCC").BatteryCCAPI;
 	"Binary Sensor": import("./BinarySensorCC").BinarySensorCCAPI;
