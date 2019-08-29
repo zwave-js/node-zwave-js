@@ -810,5 +810,19 @@
 				"description": "The Heartbeat event may be issued by a device to advertise that the device is still alive or to notify its presence."
 			}
 		}
+	},
+	"0x0A": {
+		"name": "System",
+		"events": {
+			"0x01": {
+				"label": "Contact police"
+			},
+			"0x02": {
+				"label": "Contact fire service"
+			},
+			"0x03": {
+				"label": "Contact medical service"
+			}
+		}
 	}
 }
