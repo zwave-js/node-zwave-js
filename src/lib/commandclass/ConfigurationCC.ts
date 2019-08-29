@@ -576,7 +576,7 @@ export class ConfigurationCCGet extends ConfigurationCC {
 	public parameter: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.parameter & 0xff]);
+		this.payload = Buffer.from([this.parameter]);
 		return super.serialize();
 	}
 }
