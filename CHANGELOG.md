@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 1.2.1 (2019-08-29)
 * (AlCalzone) Implement AssociationCC (V2)
 * (AlCalzone) fix CC interview not being done completely
 * (AlCalzone) Implement ThermostatModeCC (V3)
