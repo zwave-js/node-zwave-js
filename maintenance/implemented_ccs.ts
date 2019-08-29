@@ -11,6 +11,7 @@ const ccRegex = /^@commandClass\(CommandClasses(?:\.|\[")(.+?)(?:"\])?\)/m;
 const apiRegex = /^@API\(CommandClasses(?:\.|\[)(.+?)(?:\])?\)/m;
 const noApiRegex = /^\/\/ @noAPI/m; // This comment marks a CC that needs no API
 const setValueApiRegex = /^\tprotected \[SET_VALUE\]/m;
+const noSetValueApiRegex = /^\/\/ @noSetValueAPI/m; // This comment marks a CC that needs no setValue API
 const versionRegex = /^@implementedVersion\((\d+)\)/m;
 
 const onlyIncomplete = !!yargs.argv.onlyIncomplete;
@@ -50,7 +51,8 @@ function padEnd(str: string, len: number): string {
 				apiRegex.test(fileContent) || noApiRegex.test(fileContent);
 			const setValue =
 				(hasAPI && setValueApiRegex.test(fileContent)) ||
-				noApiRegex.test(fileContent);
+				noApiRegex.test(fileContent) ||
+				noSetValueApiRegex.test(fileContent);
 			allCCs.set(ccName, {
 				version: ccVersion,
 				API: hasAPI,

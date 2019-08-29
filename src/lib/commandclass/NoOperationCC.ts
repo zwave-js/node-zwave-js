@@ -9,6 +9,8 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
+// @noSetValueAPI This CC has no set-type commands
+
 @API(CommandClasses["No Operation"])
 export class NoOperationCCAPI extends CCAPI {
 	public async send(): Promise<void> {

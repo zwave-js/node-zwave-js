@@ -40,6 +40,8 @@ function parseVersion(buffer: Buffer): string {
 	return `${buffer[0]}.${buffer[1]}.${buffer[2]}`;
 }
 
+// @noSetValueAPI This CC is read-only
+
 @API(CommandClasses.Version)
 export class VersionCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type

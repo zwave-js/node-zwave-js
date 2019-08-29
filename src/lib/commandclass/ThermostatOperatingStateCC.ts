@@ -42,6 +42,8 @@ export enum ThermostatOperatingState {
 	"3rd Stage Aux Heat" = 0x0b,
 }
 
+// @noSetValueAPI This CC is read-only
+
 @API(CommandClasses["Thermostat Operating State"])
 export class ThermostatOperatingStateCCAPI extends CCAPI {
 	public async get(): Promise<ThermostatOperatingState> {

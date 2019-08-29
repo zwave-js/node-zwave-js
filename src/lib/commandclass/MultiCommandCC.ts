@@ -19,6 +19,8 @@ export enum MultiCommandCommand {
 
 // TODO: Handle this command when received
 
+// @noSetValueAPI This CC has no set-type commands
+
 @API(CommandClasses["Multi Command"])
 export class MultiCommandCCAPI extends CCAPI {
 	public async send(commands: CommandClass[]): Promise<void> {

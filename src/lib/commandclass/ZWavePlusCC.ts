@@ -40,6 +40,8 @@ export enum ZWavePlusNodeType {
 	IPGateway = 0x02, // ZWave+ for IP Gateway
 }
 
+// @noSetValueAPI This CC is read-only
+
 @API(CommandClasses["Z-Wave Plus Info"])
 export class ZWavePlusCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type

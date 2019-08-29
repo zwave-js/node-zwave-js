@@ -17,6 +17,8 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
+// @noSetValueAPI This CC is read-only
+
 @API(CommandClasses.Battery)
 export class BatteryCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type

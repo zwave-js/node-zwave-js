@@ -36,6 +36,8 @@ export interface MultilevelSensorValue {
 	scale: MultilevelSensorScale;
 }
 
+// @noSetValueAPI This CC is read-only
+
 @API(CommandClasses["Multilevel Sensor"])
 export class MultilevelSensorCCAPI extends CCAPI {
 	public async get(): Promise<number>;

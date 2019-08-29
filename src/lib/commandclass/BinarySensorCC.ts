@@ -43,6 +43,8 @@ export enum BinarySensorType {
 	Any = 0xff,
 }
 
+// @noSetValueAPI This CC is read-only
+
 @API(CommandClasses["Binary Sensor"])
 export class BinarySensorCCAPI extends CCAPI {
 	/**

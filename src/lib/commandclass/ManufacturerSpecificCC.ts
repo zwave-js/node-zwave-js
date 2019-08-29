@@ -37,6 +37,8 @@ export enum DeviceIdType {
 	PseudoRandom = 0x02,
 }
 
+// @noSetValueAPI This CC is read-only
+
 @API(CommandClasses["Manufacturer Specific"])
 export class ManufacturerSpecificCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
