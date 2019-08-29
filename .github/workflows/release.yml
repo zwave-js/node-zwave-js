@@ -6,8 +6,8 @@ name: Test and Release
 # Only run this on tagged versions
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - refs/tags/*
 
 jobs:
   # Performs quick checks before the expensive test runs
