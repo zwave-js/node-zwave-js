@@ -189,10 +189,9 @@ if (argv.dry) {
 const gitCommands = [
 	`npm install`,
 	`git add -A`,
-	`git commit -m "chore: release v${newVersion} [skip ci]"`,
-	`git push`,
+	`git commit -m "chore: release v${newVersion}"`,
 	`git tag v${newVersion}`,
-	`git push origin --tags`,
+	`git push --follow-tags`,
 ];
 if (argv.dry) {
 	console.log(colors.yellow("dry run:") + " I would execute this:");
