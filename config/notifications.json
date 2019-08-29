@@ -759,5 +759,56 @@
 				"label": "Voltage drop/drift"
 			}
 		}
+	},
+	"0x09": {
+		"name": "System",
+		"variables": [
+			{
+				"name": "Hardware status",
+				"states": {
+					"0x01": {
+						"label": "System hardware failure"
+					},
+					"0x03": {
+						"label": "System hardware failure (with failure code)",
+						"description": "The event parameters contain a manufacturer proprietary failure code"
+					}
+				}
+			},
+			{
+				"name": "Software status",
+				"states": {
+					"0x02": {
+						"label": "System software failure"
+					},
+					"0x04": {
+						"label": "System software failure (with failure code)",
+						"description": "The event parameters contain a manufacturer proprietary failure code"
+					}
+				}
+			},
+			{
+				"name": "Cover status",
+				"states": {
+					"0x06": {
+						"label": "Tampering, product cover removed"
+					}
+				}
+			},
+			{
+				"name": "Emergency shutoff status",
+				"states": {
+					"0x07": {
+						"label": "Emergency shutoff"
+					}
+				}
+			}
+		],
+		"events": {
+			"0x05": {
+				"label": "Heartbeat",
+				"description": "The Heartbeat event may be issued by a device to advertise that the device is still alive or to notify its presence."
+			}
+		}
 	}
 }
