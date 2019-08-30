@@ -1,3 +1,4 @@
+// import { wait } from "alcalzone-shared/async";
 import { Driver } from "../";
 // import { ThermostatMode } from "../src/lib/commandclass/ThermostatModeCC";
 

@@ -17,10 +17,8 @@ function getBgColorName(color: string): string {
 
 export const colorizer = format(
 	(info: ZWaveLogInfo, _opts: ColorizerOptions) => {
-		const textColor: colors.StyleFunction = (colors as any)[
-			defaultColors[info.level] as string
-		];
-		const bgColor: colors.StyleFunction = (colors as any)[
+		const textColor = (colors as any)[defaultColors[info.level] as string];
+		const bgColor = (colors as any)[
 			getBgColorName(defaultColors[info.level] as string)
 		];
 		// Colorize all segments separately
