@@ -886,7 +886,8 @@ version:               ${this.version}`;
 		await this.setInterviewStage(InterviewStage.OverwriteConfig);
 	}
 
-	protected async queryNeighbors(): Promise<void> {
+	/** @internal */
+	public async queryNeighborsInternal(): Promise<void> {
 		log.controller.logNode(this.id, {
 			message: "requesting node neighbors...",
 			direction: "outbound",
@@ -914,6 +915,10 @@ version:               ${this.version}`;
 			);
 			throw e;
 		}
+	}
+
+	protected async queryNeighbors(): Promise<void> {
+		await this.queryNeighborsInternal();
 		await this.setInterviewStage(InterviewStage.Neighbors);
 	}
 

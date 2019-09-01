@@ -54,6 +54,11 @@ import {
 } from "./GetSUCNodeIdMessages";
 import { HardResetRequest } from "./HardResetRequest";
 import {
+	NodeNeighborUpdateStatus,
+	RequestNodeNeighborUpdateReport,
+	RequestNodeNeighborUpdateRequest,
+} from "./RequestNodeNeighborUpdate";
+import {
 	SetSerialApiTimeoutsRequest,
 	SetSerialApiTimeoutsResponse,
 } from "./SetSerialApiTimeoutsMessages";
@@ -488,6 +493,63 @@ export class ZWaveController extends EventEmitter {
 		const result = await this._stopInclusionPromise;
 		log.controller.print(`the inclusion process was stopped`);
 		return result;
+	}
+
+	/**
+	 * Requests ALL slave nodes to update their neighbor lists
+	 */
+	public async healNetwork(): Promise<void> {
+		for (const nodeId of this._nodes.keys()) {
+			if (nodeId !== this._ownNodeId) {
+				try {
+					await this.healNode(nodeId);
+				} catch (e) {
+					// we don't care for now
+				}
+			}
+		}
+	}
+
+	/**
+	 * Requests a node to update its neighbor list.
+	 */
+	public async healNode(nodeId: number): Promise<boolean> {
+		log.controller.logNode(nodeId, {
+			message: "refreshing neighbor list...",
+			direction: "outbound",
+		});
+		try {
+			const resp = await this.driver.sendMessage<
+				RequestNodeNeighborUpdateReport
+			>(
+				new RequestNodeNeighborUpdateRequest(this.driver, {
+					nodeId,
+				}),
+			);
+			if (resp.updateStatus === NodeNeighborUpdateStatus.UpdateDone) {
+				log.controller.logNode(nodeId, {
+					message: "neighbor list refreshed...",
+					direction: "inbound",
+				});
+				await this.nodes.get(nodeId)!.queryNeighborsInternal();
+				return true;
+			} else {
+				// UpdateFailed
+				log.controller.logNode(nodeId, {
+					message: "refreshing neighbor list failed...",
+					direction: "inbound",
+					level: "warn",
+				});
+				return false;
+			}
+		} catch (e) {
+			log.controller.logNode(
+				nodeId,
+				`refreshing neighbor list failed: ${e.message}`,
+				"error",
+			);
+			throw e;
+		}
 	}
 
 	private async handleAddNodeRequest(

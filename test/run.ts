@@ -3,9 +3,10 @@ import { Driver } from "../";
 // import { ThermostatMode } from "../src/lib/commandclass/ThermostatModeCC";
 
 const driver = new Driver("COM3").once("driver ready", async () => {
-	// const node = driver.controller.nodes.get(6)!;
+	// const node = driver.controller.nodes.get(4)!;
 	// node.once("interview completed", async () => {
-	// 	console.error();
+	// await driver.controller.healNetwork();
+	// console.error();
 	// 	console.error("GOGOGO");
 	// 	console.error();
 	// 	await wait(5000);
