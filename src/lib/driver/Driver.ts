@@ -200,6 +200,12 @@ export class Driver extends EventEmitter implements IDriver {
 		process.on("uncaughtException", this._cleanupHandler);
 	}
 
+	/** Enumerates all existing serial ports */
+	public static async enumerateSerialPorts(): Promise<string[]> {
+		const ports = await SerialPort.list();
+		return ports.map(port => port.comName);
+	}
+
 	/** @internal */
 	public options: ZWaveOptions;
 
