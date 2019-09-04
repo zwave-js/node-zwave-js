@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 1.3.0 (2019-09-04)
 * (AlCalzone) Add more notification configurations:
     * Power Management (`0x08`)
     * System (`0x09`)
