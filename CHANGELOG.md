@@ -4,6 +4,16 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+* (AlCalzone) Add more notification configurations:
+    * Power Management (`0x08`)
+    * System (`0x09`)
+    * Emergency Alarm (`0x0A`)
+    * Clock (`0x0B`)
+* (AlCalzone) Implement node and network heal
+* (AlCalzone) Add method to enumerate serial ports
+* (AlCalzone) Mark readonly CCs
+
 ## 1.2.1 (2019-08-29)
 * (AlCalzone) Implement AssociationCC (V2)
 * (AlCalzone) fix CC interview not being done completely
