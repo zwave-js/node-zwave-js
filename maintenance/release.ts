@@ -191,7 +191,8 @@ const gitCommands = [
 	`git add -A`,
 	`git commit -m "chore: release v${newVersion}"`,
 	`git tag v${newVersion}`,
-	`git push --follow-tags`,
+	`git push`,
+	`git push --tags`,
 ];
 if (argv.dry) {
 	console.log(colors.yellow("dry run:") + " I would execute this:");
