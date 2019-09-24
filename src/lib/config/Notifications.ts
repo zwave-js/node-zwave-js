@@ -40,11 +40,11 @@ async function loadNotifications(): Promise<ReadonlyMap<number, Notification>> {
 	try {
 		const fileContents = await readFile(configPath, "utf8");
 		const definition = JSON5.parse(fileContents);
-		if (!isObject(definition)) throw throwInvalidConfig();
+		if (!isObject(definition)) throwInvalidConfig();
 
 		const ret = new Map();
 		for (const [id, ntfcnDefinition] of entries(definition)) {
-			if (!hexKeyRegex.test(id)) throw throwInvalidConfig();
+			if (!hexKeyRegex.test(id)) throwInvalidConfig();
 			const idNum = parseInt(id.slice(2), 16);
 			ret.set(idNum, new Notification(idNum, ntfcnDefinition));
 		}
@@ -107,7 +107,7 @@ export class Notification {
 			for (const [eventId, eventDefinition] of entries(
 				definition.events,
 			)) {
-				if (!hexKeyRegex.test(eventId)) throw throwInvalidConfig();
+				if (!hexKeyRegex.test(eventId)) throwInvalidConfig();
 				const eventIdNum = parseInt(eventId.slice(2), 16);
 				events.set(
 					eventIdNum,
@@ -155,10 +155,10 @@ export class NotificationVariable {
 		// By default all notification variables may return to idle
 		// Otherwise it must be specified explicitly using `idle: false`
 		this.idle = definition.idle !== false;
-		if (!isObject(definition.states)) throw throwInvalidConfig();
+		if (!isObject(definition.states)) throwInvalidConfig();
 		const states = new Map<number, NotificationState>();
 		for (const [stateId, stateDefinition] of entries(definition.states)) {
-			if (!hexKeyRegex.test(stateId)) throw throwInvalidConfig();
+			if (!hexKeyRegex.test(stateId)) throwInvalidConfig();
 			const stateIdNum = parseInt(stateId.slice(2), 16);
 			states.set(
 				stateIdNum,

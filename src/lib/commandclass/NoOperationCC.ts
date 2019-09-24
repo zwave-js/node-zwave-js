@@ -29,8 +29,10 @@ export class NoOperationCCAPI extends CCAPI {
 	}
 }
 
+export interface NoOperationCC {
+	ccCommand: undefined;
+}
+
 @commandClass(CommandClasses["No Operation"])
 @implementedVersion(1)
-export class NoOperationCC extends CommandClass {
-	public ccCommand: undefined;
-}
+export class NoOperationCC extends CommandClass {}

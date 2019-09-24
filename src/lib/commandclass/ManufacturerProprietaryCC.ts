@@ -34,6 +34,10 @@ interface ManufacturerProprietaryOptions extends CCCommandOptions {
 	proprietaryCommand: Buffer | ProprietaryCommand;
 }
 
+export interface ManufacturerProprietaryCC {
+	ccCommand: undefined;
+}
+
 @commandClass(CommandClasses["Manufacturer Proprietary"])
 @implementedVersion(1)
 // TODO: Add a way to specify the expected response
@@ -72,7 +76,6 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		}
 	}
 
-	public ccCommand: undefined;
 	public manufacturerId: number;
 	public proprietaryCommand: Buffer | ProprietaryCommand;
 

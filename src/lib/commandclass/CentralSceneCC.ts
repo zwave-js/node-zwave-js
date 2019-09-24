@@ -90,10 +90,10 @@ export class CentralSceneCCAPI extends CCAPI {
 		value,
 	): Promise<void> => {
 		if (propertyName !== "slowRefresh") {
-			return throwUnsupportedProperty(this.ccId, propertyName);
+			throwUnsupportedProperty(this.ccId, propertyName);
 		}
 		if (typeof value !== "boolean") {
-			return throwWrongValueType(
+			throwWrongValueType(
 				this.ccId,
 				propertyName,
 				"boolean",

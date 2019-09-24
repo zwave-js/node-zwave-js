@@ -125,7 +125,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	): Promise<void> => {
 		const param = getParameterFromPropertyName(propertyName);
 		if (!param) {
-			return throwUnsupportedProperty(this.ccId, propertyName);
+			throwUnsupportedProperty(this.ccId, propertyName);
 		}
 		const ccInstance = this.endpoint.createCCInstance<ConfigurationCC>(
 			this.ccId,
@@ -133,7 +133,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		const valueSize = ccInstance.getParamInformation(param).valueSize;
 
 		// if (typeof value !== "number") {
-		// 	return throwWrongValueType(
+		// 	throwWrongValueType(
 		// 		this.ccId,
 		// 		propertyName,
 		// 		"number",

@@ -47,7 +47,7 @@ export function assertZWaveError<T>(
 		} catch (e) {
 			return void handleError(e) as any;
 		}
-		return fail();
+		fail();
 	} else {
 		// Directly assert the error object
 		handleError(valueOrFactory);

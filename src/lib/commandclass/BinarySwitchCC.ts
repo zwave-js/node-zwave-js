@@ -76,10 +76,10 @@ export class BinarySwitchCCAPI extends CCAPI {
 		value,
 	): Promise<void> => {
 		if (propertyName !== "targetValue") {
-			return throwUnsupportedProperty(this.ccId, propertyName);
+			throwUnsupportedProperty(this.ccId, propertyName);
 		}
 		if (typeof value !== "boolean") {
-			return throwWrongValueType(
+			throwWrongValueType(
 				this.ccId,
 				propertyName,
 				"boolean",

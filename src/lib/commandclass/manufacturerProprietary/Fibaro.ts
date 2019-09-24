@@ -38,6 +38,10 @@ export enum FibaroVenetianBlindCCCommand {
 	Report = 0x03,
 }
 
+export interface FibaroVenetianBlindCC {
+	ccCommand: FibaroVenetianBlindCCCommand;
+}
+
 export class FibaroVenetianBlindCC extends FibaroCC {
 	public constructor(dataOrOptions?: Buffer | {}) {
 		super(dataOrOptions);
@@ -52,8 +56,6 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 			}
 		}
 	}
-
-	public fibaroCCCommand!: FibaroVenetianBlindCCCommand;
 }
 
 export type FibaroVenetianBlindCCSetOptions =

@@ -20,8 +20,8 @@ import { padStart } from "alcalzone-shared/strings";
 import { execSync } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
+import * as semver from "semver";
 import { argv } from "yargs";
-const semver = require("semver");
 const colors = require("colors/safe");
 
 const rootDir = path.resolve(__dirname, "../");
@@ -56,7 +56,7 @@ switch ((changelog.match(CHANGELOG_PLACEHOLDER_REGEX) || []).length) {
 	case 1:
 		break; // all good
 	default:
-		throw fail(
+		fail(
 			colors.red(
 				"Cannot continue, there is more than one changelog placeholder in CHANGELOG.md!",
 			),
@@ -66,21 +66,22 @@ switch ((changelog.match(CHANGELOG_PLACEHOLDER_REGEX) || []).length) {
 // check if there are untracked changes
 const gitStatus = execSync("git status", { cwd: rootDir, encoding: "utf8" });
 if (/have diverged/.test(gitStatus)) {
-	if (!argv.dry)
-		throw fail(
+	if (!argv.dry) {
+		fail(
 			colors.red(
 				"Cannot continue, the local branch has diverged from the git repo!",
 			),
 		);
-	else
+	} else {
 		console.log(
 			colors.red(
 				"This is a dry run. The full run would fail due to a diverged branch\n",
 			),
 		);
+	}
 } else if (!/working tree clean/.test(gitStatus)) {
 	if (!argv.dry)
-		throw fail(
+		fail(
 			colors.red(
 				"Cannot continue, the local branch has uncommited changes!",
 			),
@@ -92,18 +93,19 @@ if (/have diverged/.test(gitStatus)) {
 			),
 		);
 } else if (/Your branch is behind/.test(gitStatus)) {
-	if (!argv.dry)
-		throw fail(
+	if (!argv.dry) {
+		fail(
 			colors.red(
 				"Cannot continue, the local branch is behind the remote changes!",
 			),
 		);
-	else
+	} else {
 		console.log(
 			colors.red(
 				"This is a dry run. The full run would fail due to the local branch being behind\n",
 			),
 		);
+	}
 } else if (
 	/Your branch is up\-to\-date/.test(gitStatus) ||
 	/Your branch is ahead/.test(gitStatus)
@@ -123,14 +125,14 @@ const releaseTypes = [
 ];
 
 const releaseType = argv._[0] || "patch";
-let newVersion = releaseType;
+let newVersion: string | null = releaseType;
 const oldVersion = pack.version as string;
 if (releaseTypes.indexOf(releaseType) > -1) {
 	if (releaseType.startsWith("pre") && argv._.length >= 2) {
 		// increment to pre-release with an additional prerelease string
-		newVersion = semver.inc(oldVersion, releaseType, argv._[1]);
+		newVersion = semver.inc(oldVersion, releaseType as any, argv._[1]);
 	} else {
-		newVersion = semver.inc(oldVersion, releaseType);
+		newVersion = semver.inc(oldVersion, releaseType as any);
 	}
 	console.log(
 		`bumping version ${colors.blue(oldVersion)} to ${colors.gray(
@@ -141,11 +143,11 @@ if (releaseTypes.indexOf(releaseType) > -1) {
 	// increment to specific version
 	newVersion = semver.clean(newVersion);
 	if (newVersion == null) {
-		throw fail(`invalid version string "${newVersion}"`);
+		fail(`invalid version string "${newVersion}"`);
 	} else {
 		// valid version string => check if its actually newer
 		if (!semver.gt(newVersion, pack.version)) {
-			throw fail(
+			fail(
 				`new version ${newVersion} is NOT > than package.json version ${pack.version}`,
 			);
 		}
@@ -210,4 +212,4 @@ console.log("");
 console.log(colors.green("done!"));
 console.log("");
 
-throw process.exit(0);
+process.exit(0);

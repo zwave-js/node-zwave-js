@@ -62,10 +62,10 @@ export class ThermostatModeCCAPI extends CCAPI {
 		value,
 	): Promise<void> => {
 		if (propertyName !== "mode") {
-			return throwUnsupportedProperty(this.ccId, propertyName);
+			throwUnsupportedProperty(this.ccId, propertyName);
 		}
 		if (typeof value !== "number") {
-			return throwWrongValueType(
+			throwWrongValueType(
 				this.ccId,
 				propertyName,
 				"number",
