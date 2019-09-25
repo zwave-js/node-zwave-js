@@ -4,6 +4,9 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+* (AlCalzone) Mark `options` in `IDriver` internal
+
 ## 1.3.0 (2019-09-04)
 * (AlCalzone) Add more notification configurations:
     * Power Management (`0x08`)
