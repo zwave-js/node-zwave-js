@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 1.3.1 (2019-09-25)
 * (AlCalzone) Mark `options` in `IDriver` internal
 
 ## 1.3.0 (2019-09-04)
