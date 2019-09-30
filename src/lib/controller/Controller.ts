@@ -54,6 +54,11 @@ import {
 } from "./GetSUCNodeIdMessages";
 import { HardResetRequest } from "./HardResetRequest";
 import {
+	RemoveNodeFromNetworkRequest,
+	RemoveNodeStatus,
+	RemoveNodeType,
+} from "./RemoveNodeFromNetworkRequest";
+import {
 	NodeNeighborUpdateStatus,
 	RequestNodeNeighborUpdateReport,
 	RequestNodeNeighborUpdateRequest,
@@ -67,7 +72,9 @@ import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 // Strongly type the event emitter events
 interface ControllerEventCallbacks {
 	"inclusion failed": () => void;
+	"exclusion failed": () => void;
 	"node added": (node: ZWaveNode) => void;
+	"node removed": (node: ZWaveNode) => void;
 }
 
 type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
@@ -101,6 +108,10 @@ export class ZWaveController extends EventEmitter {
 		driver.registerRequestHandler(
 			FunctionType.AddNodeToNetwork,
 			this.handleAddNodeRequest.bind(this),
+		);
+		driver.registerRequestHandler(
+			FunctionType.RemoveNodeFromNetwork,
+			this.handleRemoveNodeRequest.bind(this),
 		);
 	}
 
@@ -369,21 +380,42 @@ export class ZWaveController extends EventEmitter {
 		//   function to generate the Node Information frame and to save information about
 		//   node capabilities. All Z Wave application related fields of the Node Information
 		//   structure MUST be initialized by this function.
+
+		// TODO: Afterwards, a hard reset is required, so we need to move this into another method
 		if (
 			this.isFunctionSupported(
 				FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION,
 			)
 		) {
 			log.controller.print(`sending application info...`);
+
+			// TODO: Generate this list dynamically
+			// A list of all CCs the controller will respond to
+			const supportedCCs = [CommandClasses.Time];
+			// Turn the CCs into buffers and concat them
+			const supportedCCBuffer = Buffer.concat(
+				supportedCCs.map(cc =>
+					cc >= 0xf1
+						? // extended CC
+						  Buffer.from([cc >>> 8, cc & 0xff])
+						: // normal CC
+						  Buffer.from([cc]),
+				),
+			);
+
 			const appInfoMsg = new Message(this.driver, {
 				type: MessageType.Request,
 				functionType:
 					FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION,
-				payload: Buffer.from([
-					0x01, // APPLICATION_NODEINFO_LISTENING
-					GenericDeviceClasses["Static Controller"],
-					0x01, // specific static PC controller
-					0x00, // length of supported CC list
+				payload: Buffer.concat([
+					Buffer.from([
+						0x01, // APPLICATION_NODEINFO_LISTENING
+						GenericDeviceClasses["Static Controller"],
+						0x01, // specific static PC controller
+						supportedCCBuffer.length, // length of supported CC list
+					]),
+					// List of supported CCs
+					supportedCCBuffer,
 				]),
 			});
 			await this.driver.sendMessage(appInfoMsg, {
@@ -435,10 +467,13 @@ export class ZWaveController extends EventEmitter {
 		});
 	}
 
+	private _exclusionActive: boolean = false;
 	private _inclusionActive: boolean = false;
+	private _nodePendingInclusion: ZWaveNode | undefined;
+	private _nodePendingExclusion: ZWaveNode | undefined;
+	// The following variables are to be used for inclusion AND exclusion
 	private _beginInclusionPromise: DeferredPromise<boolean> | undefined;
 	private _stopInclusionPromise: DeferredPromise<boolean> | undefined;
-	private _nodePendingInclusion: ZWaveNode | undefined;
 
 	/**
 	 * Starts the inclusion process of new nodes.
@@ -447,7 +482,7 @@ export class ZWaveController extends EventEmitter {
 	 */
 	public async beginInclusion(): Promise<boolean> {
 		// don't start it twice
-		if (this._inclusionActive) return false;
+		if (this._inclusionActive || this._exclusionActive) return false;
 		this._inclusionActive = true;
 
 		log.controller.print(`starting inclusion process...`);
@@ -492,6 +527,61 @@ export class ZWaveController extends EventEmitter {
 
 		const result = await this._stopInclusionPromise;
 		log.controller.print(`the inclusion process was stopped`);
+		return result;
+	}
+
+	/**
+	 * Starts the exclusion process of new nodes.
+	 * Resolves to true when the process was started,
+	 * and false if an inclusion or exclusion process was already active
+	 */
+	public async beginExclusion(): Promise<boolean> {
+		// don't start it twice
+		if (this._inclusionActive || this._exclusionActive) return false;
+		this._exclusionActive = true;
+
+		log.controller.print(`starting exclusion process...`);
+
+		// create the promise we're going to return
+		this._beginInclusionPromise = createDeferredPromise();
+
+		// kick off the inclusion process
+		await this.driver.sendMessage(
+			new RemoveNodeFromNetworkRequest(this.driver, {
+				removeNodeType: RemoveNodeType.Any,
+				highPower: true,
+				networkWide: true,
+			}),
+		);
+
+		return this._beginInclusionPromise;
+	}
+
+	/**
+	 * Stops an active exclusion process. Resolves to true when the controller leaves exclusion mode,
+	 * and false if the inclusion was not active.
+	 */
+	public async stopExclusion(): Promise<boolean> {
+		// don't stop it twice
+		if (!this._exclusionActive) return false;
+		this._exclusionActive = false;
+
+		log.controller.print(`stopping exclusion process...`);
+
+		// create the promise we're going to return
+		this._stopInclusionPromise = createDeferredPromise();
+
+		// kick off the inclusion process
+		await this.driver.sendMessage(
+			new RemoveNodeFromNetworkRequest(this.driver, {
+				removeNodeType: RemoveNodeType.Stop,
+				highPower: true,
+				networkWide: true,
+			}),
+		);
+
+		const result = await this._stopInclusionPromise;
+		log.controller.print(`the exclusion process was stopped`);
 		return result;
 	}
 
@@ -668,6 +758,97 @@ export class ZWaveController extends EventEmitter {
 					this._nodePendingInclusion = undefined;
 					// and notify listeners
 					this.emit("node added", newNode);
+				}
+				break;
+			}
+			default:
+				// not sure what to do with this message
+				return false;
+		}
+		return true; // Don't invoke any more handlers
+	}
+
+	private async handleRemoveNodeRequest(
+		msg: RemoveNodeFromNetworkRequest,
+	): Promise<boolean> {
+		log.controller.print(
+			`handling remove node request (status = ${
+				RemoveNodeStatus[msg.status!]
+			})`,
+		);
+		if (!this._exclusionActive && msg.status !== RemoveNodeStatus.Done) {
+			log.controller.print(`  exclusion is NOT active, ignoring it...`);
+			return true; // Don't invoke any more handlers
+		}
+
+		switch (msg.status) {
+			case RemoveNodeStatus.Ready:
+				// this is called when inclusion was started successfully
+				log.controller.print(
+					`  the controller is now ready to remove nodes`,
+				);
+				if (this._beginInclusionPromise != null)
+					this._beginInclusionPromise.resolve(true);
+				break;
+
+			case RemoveNodeStatus.Failed:
+				// this is called when inclusion could not be started...
+				if (this._beginInclusionPromise != null) {
+					log.controller.print(
+						`  starting the exclusion failed`,
+						"error",
+					);
+					this._beginInclusionPromise.reject(
+						new ZWaveError(
+							"The exclusion could not be started.",
+							ZWaveErrorCodes.Controller_ExclusionFailed,
+						),
+					);
+				} else {
+					// ...or removing a node failed
+					log.controller.print(`  removing the node failed`, "error");
+					this.emit("exclusion failed");
+				}
+				// in any case, stop the exclusion process so we don't accidentally remove another node
+				try {
+					await this.stopExclusion();
+				} catch (e) {
+					/* ok */
+				}
+				break;
+
+			case RemoveNodeStatus.RemovingSlave:
+			case RemoveNodeStatus.RemovingController: {
+				// this is called when a node is removed
+				this._nodePendingExclusion = this.nodes.get(
+					msg.statusContext!.nodeId,
+				);
+				return true; // Don't invoke any more handlers
+			}
+
+			case RemoveNodeStatus.Done: {
+				// this is called when the exclusion was completed
+				// stop the exclusion process so we don't accidentally remove another node
+				try {
+					await this.stopExclusion();
+				} catch (e) {
+					/* ok */
+				}
+
+				// stopping the inclusion was acknowledged by the controller
+				if (this._stopInclusionPromise != null)
+					this._stopInclusionPromise.resolve();
+
+				if (this._nodePendingExclusion != null) {
+					log.controller.print(
+						`Node ${this._nodePendingExclusion.id} was removed`,
+					);
+
+					// notify listeners
+					this.emit("node removed", this._nodePendingExclusion);
+					// and forget the node
+					this._nodes.delete(this._nodePendingExclusion.id);
+					this._nodePendingInclusion = undefined;
 				}
 				break;
 			}

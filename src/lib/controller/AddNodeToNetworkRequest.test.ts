@@ -61,7 +61,7 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 			networkWide: false,
 		});
 		let payload = Message.extractPayload(msg1.serialize());
-		expect(payload).toEqual(Buffer.from([0x01]));
+		expect(payload).toEqual(Buffer.from([0x01, 0x99]));
 
 		const msg2 = new AddNodeToNetworkRequest(fakeDriver, {
 			addNodeType: AddNodeType.Any,
@@ -69,7 +69,7 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 			networkWide: false,
 		});
 		payload = Message.extractPayload(msg2.serialize());
-		expect(payload).toEqual(Buffer.from([0x81]));
+		expect(payload).toEqual(Buffer.from([0x81, 0x99]));
 
 		const msg3 = new AddNodeToNetworkRequest(fakeDriver, {
 			addNodeType: AddNodeType.Any,
@@ -77,7 +77,7 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 			networkWide: true,
 		});
 		payload = Message.extractPayload(msg3.serialize());
-		expect(payload).toEqual(Buffer.from([0x41]));
+		expect(payload).toEqual(Buffer.from([0x41, 0x99]));
 
 		const msg4 = new AddNodeToNetworkRequest(fakeDriver, {
 			addNodeType: AddNodeType.Any,
@@ -85,7 +85,7 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 			networkWide: true,
 		});
 		payload = Message.extractPayload(msg4.serialize());
-		expect(payload).toEqual(Buffer.from([0xc1]));
+		expect(payload).toEqual(Buffer.from([0xc1, 0x99]));
 
 		const msg5 = new AddNodeToNetworkRequest(fakeDriver, {
 			addNodeType: AddNodeType.Stop,
@@ -93,6 +93,6 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 			networkWide: true,
 		});
 		payload = Message.extractPayload(msg5.serialize());
-		expect(payload).toEqual(Buffer.from([0xc5]));
+		expect(payload).toEqual(Buffer.from([0xc5, 0x99]));
 	});
 });
