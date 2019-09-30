@@ -3,8 +3,16 @@ import { Driver } from "../";
 // import { ThermostatMode } from "../src/lib/commandclass/ThermostatModeCC";
 
 const driver = new Driver("COM3").once("driver ready", async () => {
-	// const node = driver.controller.nodes.get(4)!;
+	// await driver.controller.beginInclusion();
+	// await wait(60000);
+	// await driver.controller.stopInclusion();
+	// const node = driver.controller.nodes.get(13)!;
 	// node.once("interview completed", async () => {
+	// 	await driver.controller.beginExclusion();
+	// 	await wait(60000);
+	// 	await driver.controller.stopExclusion();
+	// 	await driver.saveNetworkToCache();
+	// });
 	// await driver.controller.healNetwork();
 	// console.error();
 	// 	console.error("GOGOGO");
@@ -43,9 +51,6 @@ const driver = new Driver("COM3").once("driver ready", async () => {
 	// node2.on("value removed", args =>
 	// 	console.log(`[Node ${2}] value removed: ${JSON.stringify(args)}`),
 	// );
-	// await driver.controller.beginInclusion();
-	// await wait(60000);
-	// await driver.controller.stopInclusion();
 });
 driver.start();
 

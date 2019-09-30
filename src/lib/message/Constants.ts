@@ -118,8 +118,8 @@ export enum FunctionType {
 	ApplicationUpdateRequest = 0x49, // Get a list of supported (and controller) command classes
 
 	AddNodeToNetwork = 0x4a, // Control the addnode (or addcontroller) process...start, stop, etc.
+	RemoveNodeFromNetwork = 0x4b, // Control the removenode (or removecontroller) process...start, stop, etc.
 
-	FUNC_ID_ZW_REMOVE_NODE_FROM_NETWORK = 0x4b, // Control the removenode (or removecontroller) process...start, stop, etc.
 	FUNC_ID_ZW_CREATE_NEW_PRIMARY = 0x4c, // Control the createnewprimary process...start, stop, etc.
 	FUNC_ID_ZW_CONTROLLER_CHANGE = 0x4d, // Control the transferprimary process...start, stop, etc.
 	FUNC_ID_ZW_SET_LEARN_MODE = 0x50, // Put a controller into learn mode for replication/ receipt of configuration info

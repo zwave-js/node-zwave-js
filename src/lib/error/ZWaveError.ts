@@ -20,6 +20,7 @@ export enum ZWaveErrorCodes {
 	Controller_MessageTimeout,
 	Controller_MessageDropped,
 	Controller_InclusionFailed,
+	Controller_ExclusionFailed,
 
 	Node_NotResponding,
 
