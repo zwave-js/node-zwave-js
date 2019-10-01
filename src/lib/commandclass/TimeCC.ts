@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import log from "../log";
 import { DSTInfo, getDefaultDSTInfo, getDSTInfo } from "../util/date";
 import { validatePayload } from "../util/misc";
 import { CCAPI } from "./API";
@@ -98,6 +99,10 @@ export class TimeCC extends CommandClass {
 		const api = node.commandClasses.Time;
 
 		if (api.version >= 2) {
+			log.controller.logNode(node.id, {
+				message: "setting timezone information...",
+				direction: "outbound",
+			});
 			// Set the correct timezone on this node
 			const timezone = getDSTInfo() || getDefaultDSTInfo();
 			await api.setTimezone(timezone);

@@ -451,6 +451,7 @@ export class ZWaveController extends EventEmitter {
 			try {
 				await this.driver.sendMessage(
 					new HardResetRequest(this.driver),
+					{ supportCheck: false },
 				);
 			} catch (e) {
 				// in any case unregister the handler

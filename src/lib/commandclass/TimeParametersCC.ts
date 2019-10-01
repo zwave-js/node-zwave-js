@@ -1,4 +1,6 @@
 import { IDriver } from "../driver/IDriver";
+import log from "../log";
+import { Endpoint } from "../node/Endpoint";
 import { validatePayload } from "../util/misc";
 import { CCAPI } from "./API";
 import {
@@ -21,6 +23,70 @@ export enum TimeParametersCommand {
 	Report = 0x03,
 }
 
+/**
+ * Determines if the node expects local time instead of UTC.
+ */
+function shouldUseLocalTime(endpoint: Endpoint): boolean {
+	// GH#311 Some nodes have no way to determine the time zone offset,
+	// so they need to interpret the set time as local time instead of UTC.
+	//
+	// This is the case when they both
+	// 1. DON'T control TimeCC V1, so they cannot request the local time
+	// 2. DON'T support TimeCC V2, so the controller cannot specify the timezone offset
+	// Incidentally, this is also true when they don't support TimeCC at all
+	const ccVersion = endpoint.getCCVersion(CommandClasses.Time);
+	if (ccVersion >= 1 && endpoint.controlsCC(CommandClasses.Time))
+		return false;
+	if (ccVersion >= 2 && endpoint.supportsCC(CommandClasses.Time))
+		return false;
+
+	return true;
+}
+
+interface DateSegments {
+	year: number;
+	month: number;
+	day: number;
+	hour: number;
+	minute: number;
+	second: number;
+}
+
+function timeSegmentsToDate(segments: DateSegments, local: boolean): Date {
+	if (local) {
+		return new Date(
+			segments.year,
+			segments.month - 1,
+			segments.day,
+			segments.hour,
+			segments.minute,
+			segments.second,
+		);
+	} else {
+		return new Date(
+			Date.UTC(
+				segments.year,
+				segments.month - 1,
+				segments.day,
+				segments.hour,
+				segments.minute,
+				segments.second,
+			),
+		);
+	}
+}
+
+function dateToTimeSegments(date: Date, local: boolean): DateSegments {
+	return {
+		year: (date as any)[`get${local ? "" : "UTC"}FullYear`](),
+		month: (date as any)[`get${local ? "" : "UTC"}Month`]() + 1,
+		day: (date as any)[`get${local ? "" : "UTC"}Date`](),
+		hour: (date as any)[`get${local ? "" : "UTC"}Hours`](),
+		minute: (date as any)[`get${local ? "" : "UTC"}Minutes`](),
+		second: (date as any)[`get${local ? "" : "UTC"}Seconds`](),
+	};
+}
+
 @API(CommandClasses["Time Parameters"])
 export class TimeParametersCCAPI extends CCAPI {
 	public async get(): Promise<Date> {
@@ -31,28 +97,15 @@ export class TimeParametersCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<TimeParametersCCReport>(
 			cc,
 		))!;
-		return new Date(
-			Date.UTC(
-				response.year,
-				response.month - 1,
-				response.day,
-				response.hour,
-				response.minute,
-				response.second,
-			),
-		);
+
+		return timeSegmentsToDate(response, shouldUseLocalTime(this.endpoint));
 	}
 
 	public async set(date: Date): Promise<void> {
 		const cc = new TimeParametersCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			year: date.getUTCFullYear(),
-			month: date.getUTCMonth() + 1,
-			day: date.getUTCDate(),
-			hour: date.getUTCHours(),
-			minute: date.getUTCMinutes(),
-			second: date.getUTCSeconds(),
+			...dateToTimeSegments(date, shouldUseLocalTime(this.endpoint)),
 		});
 		await this.driver.sendCommand(cc);
 	}
@@ -70,6 +123,10 @@ export class TimeParametersCC extends CommandClass {
 		const api = node.commandClasses["Time Parameters"];
 
 		// Set the node to the current time
+		log.controller.logNode(node.id, {
+			message: "setting current time...",
+			direction: "outbound",
+		});
 		await api.set(new Date());
 
 		// Remember that the interview is complete

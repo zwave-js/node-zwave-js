@@ -1,17 +1,47 @@
-// import { wait } from "alcalzone-shared/async";
 import { Driver } from "../";
-// import { ThermostatMode } from "../src/lib/commandclass/ThermostatModeCC";
+// import { ThermostatMode } from "../build/lib/commandclass/ThermostatModeCC";
 
 const driver = new Driver("COM3").once("driver ready", async () => {
+	// console.log(`sending application info...`);
+	// // TODO: Generate this list dynamically
+	// // A list of all CCs the controller will respond to
+	// const supportedCCs = [CommandClasses.Time];
+	// // Turn the CCs into buffers and concat them
+	// const supportedCCBuffer = Buffer.concat(
+	// 	supportedCCs.map(cc =>
+	// 		cc >= 0xf1
+	// 			? // extended CC
+	// 			  Buffer.from([cc >>> 8, cc & 0xff])
+	// 			: // normal CC
+	// 			  Buffer.from([cc]),
+	// 	),
+	// );
+	// const appInfoMsg = new Message(driver, {
+	// 	type: MessageType.Request,
+	// 	functionType: FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION,
+	// 	payload: Buffer.concat([
+	// 		Buffer.from([
+	// 			0x01, // APPLICATION_NODEINFO_LISTENING
+	// 			GenericDeviceClasses["Static Controller"],
+	// 			0x01, // specific static PC controller
+	// 			supportedCCBuffer.length, // length of supported CC list
+	// 		]),
+	// 		// List of supported CCs
+	// 		supportedCCBuffer,
+	// 	]),
+	// });
+	// await driver.sendMessage(appInfoMsg, {
+	// 	priority: 0, //MessagePriority.Controller,
+	// 	supportCheck: false,
+	// });
+	// await driver.hardReset();
 	// await driver.controller.beginInclusion();
 	// await wait(60000);
 	// await driver.controller.stopInclusion();
-	// const node = driver.controller.nodes.get(13)!;
+	// const node = driver.controller.nodes.get(2)!;
 	// node.once("interview completed", async () => {
-	// 	await driver.controller.beginExclusion();
-	// 	await wait(60000);
-	// 	await driver.controller.stopExclusion();
-	// 	await driver.saveNetworkToCache();
+	// 	const date = await node.commandClasses["Time Parameters"].get();
+	// 	console.dir(date);
 	// });
 	// await driver.controller.healNetwork();
 	// console.error();
