@@ -32,7 +32,7 @@ export function gotDeserializationOptions(
 }
 
 export interface MessageBaseOptions {
-	__empty?: undefined; // Dirty hack, so we can inherit from this interface
+	callbackId?: number;
 }
 
 interface MessageCreationOptions extends MessageBaseOptions {
@@ -126,6 +126,8 @@ export class Message {
 					? options.expectedResponse
 					: getExpectedResponse(this);
 
+			this._callbackId = options.callbackId;
+
 			this.payload = options.payload || Buffer.allocUnsafe(0);
 		}
 	}
@@ -135,6 +137,18 @@ export class Message {
 	public expectedResponse: FunctionType | ResponsePredicate | undefined;
 	public payload: Buffer; // TODO: Length limit 255
 	public maxSendAttempts: number | undefined;
+
+	private _callbackId: number | undefined;
+	/** Used to map requests to responses. Accessing this property will generate a new callback ID if this message had none. */
+	public get callbackId(): number {
+		if (this._callbackId == undefined) {
+			this._callbackId = this.driver.getNextCallbackId();
+		}
+		return this._callbackId;
+	}
+	public set callbackId(v: number) {
+		this._callbackId = v;
+	}
 
 	protected _bytesRead: number = 0;
 	/**

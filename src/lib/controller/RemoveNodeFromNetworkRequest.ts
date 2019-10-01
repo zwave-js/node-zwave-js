@@ -114,10 +114,7 @@ export class RemoveNodeFromNetworkRequest extends Message {
 		if (this.highPower) data |= RemoveNodeFlags.HighPower;
 		if (this.networkWide) data |= RemoveNodeFlags.NetworkWide;
 
-		this.payload = Buffer.from([
-			data,
-			0x99, // CallbackID - TODO: Do this like SendMessage
-		]);
+		this.payload = Buffer.from([data, this.callbackId]);
 
 		return super.serialize();
 	}

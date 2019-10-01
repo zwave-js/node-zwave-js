@@ -41,7 +41,7 @@ export class GetRoutingInfoRequest extends Message {
 			this.nodeId,
 			this.removeNonRepeaters ? 1 : 0,
 			this.removeBadLinks ? 1 : 0,
-			0, // funcId - OZW sets this to 3, the docs say it must be 0
+			0, // callbackId - this must be 0 as per the docs
 		]);
 		return super.serialize();
 	}
