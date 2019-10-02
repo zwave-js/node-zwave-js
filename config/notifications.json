@@ -842,5 +842,369 @@
 				// Byte 3 - 0x00..0xFF: 0..255 seconds
 			}
 		}
+	},
+	"0x0C": {
+		"name": "Appliance",
+		"variables": [
+			{
+				"name": "Program status",
+				"states": {
+					"0x01": {
+						"label": "Program started"
+					},
+					"0x02": {
+						"label": "Program in progress"
+					},
+					"0x03": {
+						"label": "Program completed"
+					}
+				}
+			},
+			{
+				"name": "Maintenance status",
+				"states": {
+					"0x04": {
+						"label": "Replace main filter"
+					}
+				}
+			},
+			{
+				"name": "Appliance status",
+				"states": {
+					"0x06": {
+						"label": "Supplying water"
+					},
+					"0x08": {
+						"label": "Boiling"
+					},
+					"0x0A": {
+						"label": "Washing"
+					},
+					"0x0C": {
+						"label": "Rinsing"
+					},
+					"0x0E": {
+						"label": "Draining"
+					},
+					"0x10": {
+						"label": "Spinning"
+					},
+					"0x12": {
+						"label": "Drying"
+					}
+				}
+			},
+			{
+				"name": "Target temperature failure status",
+				"states": {
+					"0x05": "Failure to set target temperature"
+				}
+			},
+			{
+				"name": "Water supply failure status",
+				"states": {
+					"0x07": "Water supply failure"
+				}
+			},
+			{
+				"name": "Boiling failure status",
+				"states": {
+					"0x09": "Boiling failure"
+				}
+			},
+			{
+				"name": "Washing failure status",
+				"states": {
+					"0x0B": "Washing failure"
+				}
+			},
+			{
+				"name": "Rinsing failure status",
+				"states": {
+					"0x0D": "Rinsing failure"
+				}
+			},
+			{
+				"name": "Draining failure status",
+				"states": {
+					"0x0F": "Draining failure"
+				}
+			},
+			{
+				"name": "Spinning failure status",
+				"states": {
+					"0x11": "Spinning failure"
+				}
+			},
+			{
+				"name": "Drying failure status",
+				"states": {
+					"0x13": "Drying failure"
+				}
+			},
+			{
+				"name": "Fan failure status",
+				"states": {
+					"0x14": "Fan failure"
+				}
+			},
+			{
+				"name": "Compressor failure status",
+				"states": {
+					"0x15": "Compressor failure"
+				}
+			}
+		]
+	},
+	"0x0D": {
+		"name": "Home Health",
+		"variables": [
+			{
+				"name": "Position status",
+				"states": {
+					"0x01": {
+						"label": "Leaving bed"
+					},
+					"0x02": {
+						"label": "Sitting on bed"
+					},
+					"0x03": {
+						"label": "Lying on bed"
+					},
+					"0x05": {
+						"label": "Sitting on bed edge"
+					}
+				}
+			},
+			{
+				"name": "VOC level status",
+				"states": {
+					"0x06": {
+						"label": "Volatile Organic Compound level",
+						"idle": false,
+						"params": {
+							// TODO: type "enum" replaces the actual value
+							"type": "enum",
+							"values": {
+								"0x01": "Clean",
+								"0x02": "Slightly polluted",
+								"0x03": "Moderately polluted",
+								"0x04": "Highly polluted"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Sleep apnea status",
+				"states": {
+					"0x07": {
+						"label": "Sleep apnea detected",
+						"params": {
+							// TODO: type "enum" replaces the actual value
+							"type": "enum",
+							"values": {
+								"0x01": "Low breath",
+								"0x02": "No breath at all"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Sleep stage status",
+				"states": {
+					"0x08": {
+						"label": "Sleep stage 0 detected (Dreaming/REM)"
+					},
+					"0x09": {
+						"label": "Sleep stage 1 detected (Light sleep, non-REM 1)"
+					},
+					"0x0A": {
+						"label": "Sleep stage 2 detected (Medium sleep, non-REM 2)"
+					},
+					"0x0B": {
+						"label": "Sleep stage 3 detected (Deep sleep, non-REM 3)"
+					}
+				}
+			}
+		],
+		"events": {
+			"0x04": {
+				"label": "Posture changed"
+			}
+		}
+	},
+	"0x0E": {
+		"name": "Siren",
+		"variables": [
+			{
+				"name": "Siren status",
+				"states": {
+					"0x01": {
+						"label": "Siren active"
+					}
+				}
+			}
+		]
+	},
+	"0x0F": {
+		"name": "Water Valve",
+		"variables": [
+			{
+				"name": "Valve operation status",
+				"idle": false,
+				"states": {
+					"0x01": {
+						"label": "Valve operation",
+						"params": {
+							// TODO: type "enum" replaces the actual value
+							"type": "enum",
+							"values": {
+								"0x00": "Off / Closed",
+								"0x01": "On / Open"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Master valve operation status",
+				"idle": false,
+				"states": {
+					"0x02": {
+						"label": "Master valve operation",
+						"params": {
+							// TODO: type "enum" replaces the actual value
+							"type": "enum",
+							"values": {
+								"0x00": "Off / Closed",
+								"0x01": "On / Open"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Valve short circuit status",
+				"states": {
+					"0x03": {
+						"label": "Valve short circuit"
+					}
+				}
+			},
+			{
+				"name": "Master valve short circuit status",
+				"states": {
+					"0x04": {
+						"label": "Master valve short circuit"
+					}
+				}
+			},
+			{
+				"name": "Valve current alarm status",
+				"states": {
+					"0x05": {
+						"label": "Valve current alarm",
+						"params": {
+							// TODO: type "enum" replaces the actual value
+							"type": "enum",
+							"values": {
+								"0x01": "No data",
+								"0x02": "Below low threshold",
+								"0x03": "Above high threshold",
+								"0x04": "Max"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Master valve current alarm status",
+				"states": {
+					"0x06": {
+						"label": "Master valve current alarm",
+						"params": {
+							// TODO: type "enum" replaces the actual value
+							"type": "enum",
+							"values": {
+								"0x01": "No data",
+								"0x02": "Below low threshold",
+								"0x03": "Above high threshold",
+								"0x04": "Max"
+							}
+						}
+					}
+				}
+			}
+		]
+	},
+	"0x10": {
+		"name": "Weather Alarm",
+		"variables": [
+			{
+				"name": "Rain alarm status",
+				"states": {
+					"0x01": {
+						"label": "Rain alarm"
+					}
+				}
+			},
+			{
+				"name": "Moisture alarm status",
+				"states": {
+					"0x02": {
+						"label": "Moisture alarm"
+					}
+				}
+			},
+			{
+				"name": "Freeze alarm status",
+				"states": {
+					"0x03": {
+						"label": "Freeze alarm"
+					}
+				}
+			}
+		]
+	},
+	"0x11": {
+		"name": "Irrigation",
+		"variables": [
+			{
+				"name": "Schedule (id) status",
+				"states": {
+					"0x01": {
+						"label": "Schedule started"
+						// TODO: Event parameter (1 byte) contains the schedule ID
+					},
+					"0x02": {
+						"label": "Schedule Finished"
+						// TODO: Event parameter (1 byte) contains the schedule ID
+					}
+				}
+			},
+			{
+				"name": "Valve (id) run status",
+				"states": {
+					"0x03": {
+						"label": "Valve table run started"
+						// TODO: Event parameter (1 byte) contains the Valve table ID
+					},
+					"0x04": {
+						"label": "Valve table run Finished"
+						// TODO: Event parameter (1 byte) contains the Valve table ID
+					}
+				}
+			},
+			{
+				"name": "Device configuration status",
+				"states": {
+					"0x05": {
+						"label": "Device is not configured"
+					}
+				}
+			}
+		]
 	}
 }
