@@ -63,7 +63,7 @@ export interface ThermostatOperatingStateCC {
 }
 
 @commandClass(CommandClasses["Thermostat Operating State"])
-@implementedVersion(1)
+@implementedVersion(2)
 export class ThermostatOperatingStateCC extends CommandClass {
 	public async interview(): Promise<void> {
 		const node = this.getNode()!;
