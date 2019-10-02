@@ -103,6 +103,8 @@ export class MockRequestMessageWithoutExpectation extends Message {}
 // @ts-ignore decorators are working
 export class MockResponseMessage extends Message {}
 
+export const mockDriverDummyCallbackId = 0xfe;
+
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function createEmptyMockDriver() {
 	const ret = {
@@ -127,6 +129,9 @@ export function createEmptyMockDriver() {
 				// default to the implemented version
 				return getImplementedVersion(ccId);
 			}),
+		getNextCallbackId: jest
+			.fn()
+			.mockImplementation(() => mockDriverDummyCallbackId),
 		controller: {
 			nodes: new Map(),
 			ownNodeId: 1,

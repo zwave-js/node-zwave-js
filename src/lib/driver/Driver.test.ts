@@ -432,6 +432,38 @@ describe("lib/driver/Driver => ", () => {
 		});
 	});
 
+	describe("getNextCallbackId() => ", () => {
+		let driver: Driver;
+
+		beforeEach(async () => {
+			({ driver } = await createAndStartDriver());
+		});
+
+		afterEach(() => {
+			driver.destroy();
+			driver.removeAllListeners();
+		});
+
+		it("the automatically created callback ID should be incremented and wrap from 0xff back to 10", () => {
+			let lastCallbackId: number | undefined;
+			for (let i = 0; i <= 300; i++) {
+				if (i === 300) {
+					throw new Error(
+						"incrementing the callback ID does not work somehow",
+					);
+				}
+				const nextCallbackId = driver.getNextCallbackId();
+				if (lastCallbackId === 0xff) {
+					expect(nextCallbackId).toBe(1);
+					break;
+				} else if (lastCallbackId != null) {
+					expect(nextCallbackId).toBe(lastCallbackId + 1);
+				}
+				lastCallbackId = nextCallbackId;
+			}
+		});
+	});
+
 	it("passes errors from the serialport through", async () => {
 		const { driver, serialport } = await createAndStartDriver();
 		const errorSpy = jest.fn();

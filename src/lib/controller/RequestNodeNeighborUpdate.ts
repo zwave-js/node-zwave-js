@@ -56,11 +56,6 @@ export class RequestNodeNeighborUpdateRequestBase extends Message {
 		}
 		super(driver, options);
 	}
-
-	/** A callback ID to map requests and responses */
-	// We need the ! assertion because TypeScript doesn't know it is being set
-	// in a derived class
-	public callbackId!: number;
 }
 
 @expectedResponse(testResponseForNodeNeighborUpdateRequest)
@@ -71,14 +66,12 @@ export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateR
 	) {
 		super(driver, options);
 		this.nodeId = options.nodeId;
-		this.callbackId = 1; // funcId - TODO: Do this like callbackId in senddata?
 	}
 
 	public nodeId: number;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.nodeId, this.callbackId]);
-
 		return super.serialize();
 	}
 }

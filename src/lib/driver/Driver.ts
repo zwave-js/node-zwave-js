@@ -1146,6 +1146,17 @@ ${handlers.length} left`,
 		}
 	}
 
+	private lastCallbackId = 0xff;
+	/**
+	 * Returns the next callback ID. Callback IDs are used to correllate requests
+	 * to the controller/nodes with its response
+	 */
+	public getNextCallbackId(): number {
+		this.lastCallbackId = (this.lastCallbackId + 1) & 0xff;
+		if (this.lastCallbackId < 1) this.lastCallbackId = 1;
+		return this.lastCallbackId;
+	}
+
 	// wotan-disable no-misused-generics
 	/**
 	 * Sends a message to the Z-Wave stick.

@@ -147,24 +147,6 @@ describe("lib/controller/SendDataRequest => ", () => {
 		expect(newOne.callbackId).toBeNumber();
 	});
 
-	it("the automatically created callback ID should be incremented and wrap from 0xff back to 10", () => {
-		let lastCallbackId: number | undefined;
-		let increment = 0;
-		for (const next of createRequest) {
-			if (++increment > 300)
-				throw new Error(
-					"incrementing the callback ID does not work somehow",
-				);
-			if (lastCallbackId === 0xff) {
-				expect(next.callbackId).toBe(10);
-				break;
-			} else if (lastCallbackId != null) {
-				expect(next.callbackId).toBe(lastCallbackId + 1);
-			}
-			lastCallbackId = next.callbackId;
-		}
-	});
-
 	it("serialize() should concatenate the serialized CC with transmit options and callback ID", () => {
 		const cc = new BasicCCGet(fakeDriver, { nodeId: 1 });
 		const serializedCC = cc.serialize();

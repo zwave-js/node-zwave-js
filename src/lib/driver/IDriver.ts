@@ -48,5 +48,7 @@ export interface IDriver {
 	): this;
 	removeAllListeners(event?: DriverEvents): this;
 
+	getNextCallbackId(): number;
+
 	// Add more signatures as needed
 }

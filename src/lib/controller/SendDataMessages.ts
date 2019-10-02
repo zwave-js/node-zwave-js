@@ -46,14 +46,6 @@ export enum TransmitStatus {
 	NoRoute = 0x04, // Tranmission complete, no return route
 }
 
-let lastCallbackId = 0xff;
-function getNextCallbackId(): number {
-	lastCallbackId = (lastCallbackId + 1) & 0xff;
-	// callback IDs below 10 are reserved for nonce messages
-	if (lastCallbackId < 10) lastCallbackId = 10;
-	return lastCallbackId;
-}
-
 @messageTypes(MessageType.Request, FunctionType.SendData)
 @priority(MessagePriority.Normal)
 export class SendDataRequestBase extends Message {
@@ -66,18 +58,12 @@ export class SendDataRequestBase extends Message {
 		}
 		super(driver, options);
 	}
-
-	/** A callback ID to map requests and responses */
-	// We need the ! assertion because TypeScript doesn't know it is being set
-	// in a derived class
-	public callbackId!: number;
 }
 
 interface SendDataRequestOptions<CCType extends CommandClass = CommandClass>
 	extends MessageBaseOptions {
 	command: CCType;
 	transmitOptions?: TransmitOptions;
-	callbackId?: number;
 }
 
 @expectedResponse(testResponseForSendDataRequest)
@@ -95,10 +81,6 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			options.transmitOptions != undefined
 				? options.transmitOptions
 				: TransmitOptions.DEFAULT;
-		this.callbackId =
-			options.callbackId != undefined
-				? options.callbackId
-				: getNextCallbackId();
 	}
 
 	/** The command this message contains */

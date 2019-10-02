@@ -1,4 +1,7 @@
-import { createEmptyMockDriver } from "../../../test/mocks";
+import {
+	createEmptyMockDriver,
+	mockDriverDummyCallbackId,
+} from "../../../test/mocks";
 import { IDriver } from "../driver/IDriver";
 import {
 	FunctionType,
@@ -61,7 +64,7 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 			networkWide: false,
 		});
 		let payload = Message.extractPayload(msg1.serialize());
-		expect(payload).toEqual(Buffer.from([0x01, 0x99]));
+		expect(payload).toEqual(Buffer.from([0x01, mockDriverDummyCallbackId]));
 
 		const msg2 = new AddNodeToNetworkRequest(fakeDriver, {
 			addNodeType: AddNodeType.Any,
@@ -69,7 +72,7 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 			networkWide: false,
 		});
 		payload = Message.extractPayload(msg2.serialize());
-		expect(payload).toEqual(Buffer.from([0x81, 0x99]));
+		expect(payload).toEqual(Buffer.from([0x81, mockDriverDummyCallbackId]));
 
 		const msg3 = new AddNodeToNetworkRequest(fakeDriver, {
 			addNodeType: AddNodeType.Any,
@@ -77,7 +80,7 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 			networkWide: true,
 		});
 		payload = Message.extractPayload(msg3.serialize());
-		expect(payload).toEqual(Buffer.from([0x41, 0x99]));
+		expect(payload).toEqual(Buffer.from([0x41, mockDriverDummyCallbackId]));
 
 		const msg4 = new AddNodeToNetworkRequest(fakeDriver, {
 			addNodeType: AddNodeType.Any,
@@ -85,7 +88,7 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 			networkWide: true,
 		});
 		payload = Message.extractPayload(msg4.serialize());
-		expect(payload).toEqual(Buffer.from([0xc1, 0x99]));
+		expect(payload).toEqual(Buffer.from([0xc1, mockDriverDummyCallbackId]));
 
 		const msg5 = new AddNodeToNetworkRequest(fakeDriver, {
 			addNodeType: AddNodeType.Stop,
@@ -93,6 +96,6 @@ describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 			networkWide: true,
 		});
 		payload = Message.extractPayload(msg5.serialize());
-		expect(payload).toEqual(Buffer.from([0xc5, 0x99]));
+		expect(payload).toEqual(Buffer.from([0xc5, mockDriverDummyCallbackId]));
 	});
 });
