@@ -1167,5 +1167,44 @@
 				}
 			}
 		]
+	},
+	"0x11": {
+		"name": "Irrigation",
+		"variables": [
+			{
+				"name": "Schedule (id) status",
+				"states": {
+					"0x01": {
+						"label": "Schedule started"
+						// TODO: Event parameter (1 byte) contains the schedule ID
+					},
+					"0x02": {
+						"label": "Schedule Finished"
+						// TODO: Event parameter (1 byte) contains the schedule ID
+					}
+				}
+			},
+			{
+				"name": "Valve (id) run status",
+				"states": {
+					"0x03": {
+						"label": "Valve table run started"
+						// TODO: Event parameter (1 byte) contains the Valve table ID
+					},
+					"0x04": {
+						"label": "Valve table run Finished"
+						// TODO: Event parameter (1 byte) contains the Valve table ID
+					}
+				}
+			},
+			{
+				"name": "Device configuration status",
+				"states": {
+					"0x05": {
+						"label": "Device is not configured"
+					}
+				}
+			}
+		]
 	}
 }
