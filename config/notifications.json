@@ -1138,5 +1138,34 @@
 				}
 			}
 		]
+	},
+	"0x10": {
+		"name": "Weather Alarm",
+		"variables": [
+			{
+				"name": "Rain alarm status",
+				"states": {
+					"0x01": {
+						"label": "Rain alarm"
+					}
+				}
+			},
+			{
+				"name": "Moisture alarm status",
+				"states": {
+					"0x02": {
+						"label": "Moisture alarm"
+					}
+				}
+			},
+			{
+				"name": "Freeze alarm status",
+				"states": {
+					"0x03": {
+						"label": "Freeze alarm"
+					}
+				}
+			}
+		]
 	}
 }
