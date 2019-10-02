@@ -842,5 +842,118 @@
 				// Byte 3 - 0x00..0xFF: 0..255 seconds
 			}
 		}
+	},
+	"0x0C": {
+		"name": "Appliance",
+		"variables": [
+			{
+				"name": "Program status",
+				"states": {
+					"0x01": {
+						"label": "Program started"
+					},
+					"0x02": {
+						"label": "Program in progress"
+					},
+					"0x03": {
+						"label": "Program completed"
+					}
+				}
+			},
+			{
+				"name": "Maintenance status",
+				"states": {
+					"0x04": {
+						"label": "Replace main filter"
+					}
+				}
+			},
+			{
+				"name": "Appliance status",
+				"states": {
+					"0x06": {
+						"label": "Supplying water"
+					},
+					"0x08": {
+						"label": "Boiling"
+					},
+					"0x0A": {
+						"label": "Washing"
+					},
+					"0x0C": {
+						"label": "Rinsing"
+					},
+					"0x0E": {
+						"label": "Draining"
+					},
+					"0x10": {
+						"label": "Spinning"
+					},
+					"0x12": {
+						"label": "Drying"
+					}
+				}
+			},
+			{
+				"name": "Target temperature failure status",
+				"states": {
+					"0x05": "Failure to set target temperature"
+				}
+			},
+			{
+				"name": "Water supply failure status",
+				"states": {
+					"0x07": "Water supply failure"
+				}
+			},
+			{
+				"name": "Boiling failure status",
+				"states": {
+					"0x09": "Boiling failure"
+				}
+			},
+			{
+				"name": "Washing failure status",
+				"states": {
+					"0x0B": "Washing failure"
+				}
+			},
+			{
+				"name": "Rinsing failure status",
+				"states": {
+					"0x0D": "Rinsing failure"
+				}
+			},
+			{
+				"name": "Draining failure status",
+				"states": {
+					"0x0F": "Draining failure"
+				}
+			},
+			{
+				"name": "Spinning failure status",
+				"states": {
+					"0x11": "Spinning failure"
+				}
+			},
+			{
+				"name": "Drying failure status",
+				"states": {
+					"0x13": "Drying failure"
+				}
+			},
+			{
+				"name": "Fan failure status",
+				"states": {
+					"0x14": "Fan failure"
+				}
+			},
+			{
+				"name": "Compressor failure status",
+				"states": {
+					"0x15": "Compressor failure"
+				}
+			}
+		]
 	}
 }
