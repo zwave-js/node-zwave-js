@@ -955,5 +955,97 @@
 				}
 			}
 		]
+	},
+	"0x0D": {
+		"name": "Home Health",
+		"variables": [
+			{
+				"name": "Position status",
+				"states": {
+					"0x01": {
+						"label": "Leaving bed"
+					},
+					"0x02": {
+						"label": "Sitting on bed"
+					},
+					"0x03": {
+						"label": "Lying on bed"
+					},
+					"0x05": {
+						"label": "Sitting on bed edge"
+					}
+				}
+			},
+			{
+				"name": "VOC level status",
+				"states": {
+					"0x06": {
+						"label": "Volatile Organic Compound level",
+						"idle": false,
+						"params": {
+							// TODO: type "enum" replaces the actual value
+							"type": "enum",
+							"values": {
+								"0x01": "Clean",
+								"0x02": "Slightly polluted",
+								"0x03": "Moderately polluted",
+								"0x04": "Highly polluted"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Sleep apnea status",
+				"states": {
+					"0x07": {
+						"label": "Sleep apnea detected",
+						"params": {
+							// TODO: type "enum" replaces the actual value
+							"type": "enum",
+							"values": {
+								"0x01": "Low breath",
+								"0x02": "No breath at all"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Sleep stage status",
+				"states": {
+					"0x08": {
+						"label": "Sleep stage 0 detected (Dreaming/REM)"
+					},
+					"0x09": {
+						"label": "Sleep stage 1 detected (Light sleep, non-REM 1)"
+					},
+					"0x0A": {
+						"label": "Sleep stage 2 detected (Medium sleep, non-REM 2)"
+					},
+					"0x0B": {
+						"label": "Sleep stage 3 detected (Deep sleep, non-REM 3)"
+					}
+				}
+			}
+		],
+		"events": {
+			"0x04": {
+				"label": "Posture changed"
+			}
+		}
+	},
+	"0x0E": {
+		"name": "Siren",
+		"variables": [
+			{
+				"name": "Siren status",
+				"states": {
+					"0x01": {
+						"label": "Siren active"
+					}
+				}
+			}
+		]
 	}
 }
