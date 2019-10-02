@@ -11,4 +11,10 @@ import { Message, messageTypes, priority } from "../message/Message";
 export class HardResetRequest extends Message {
 	// the response "request" contains one payload byte
 	// it was 0xc1 in our case (0b1100_0001), but we don't know what it means
+	// ^-- TODO: Is that the callbackId?
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.callbackId]);
+		return super.serialize();
+	}
 }
