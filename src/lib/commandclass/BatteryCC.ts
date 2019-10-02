@@ -1,12 +1,13 @@
 import { IDriver } from "../driver/IDriver";
 import log from "../log";
+import { ValueID } from "../node/ValueDB";
 import { JSONObject, validatePayload } from "../util/misc";
-import { ValueMetadata } from "../values/Metadata";
+import { enumValuesToMetadataStates, ValueMetadata } from "../values/Metadata";
+import { parseFloatWithScale } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
 	CCCommand,
-	CCCommandOptions,
 	ccValue,
 	ccValueMetadata,
 	CommandClass,
@@ -18,6 +19,18 @@ import {
 import { CommandClasses } from "./CommandClasses";
 
 // @noSetValueAPI This CC is read-only
+
+export enum BatteryChargingStatus {
+	Discharging = 0x00,
+	Charging = 0x01,
+	Maintaining = 0x02,
+}
+
+export enum BatteryReplacementStatus {
+	None = 0x00,
+	Soon = 0x01,
+	Now = 0x02,
+}
 
 @API(CommandClasses.Battery)
 export class BatteryCCAPI extends CCAPI {
@@ -38,6 +51,8 @@ export class BatteryCCAPI extends CCAPI {
 export enum BatteryCommand {
 	Get = 0x02,
 	Report = 0x03,
+	HealthGet = 0x04,
+	HealthReport = 0x05,
 }
 
 export interface BatteryCC {
@@ -45,7 +60,7 @@ export interface BatteryCC {
 }
 
 @commandClass(CommandClasses.Battery)
-@implementedVersion(1)
+@implementedVersion(2)
 export class BatteryCC extends CommandClass {
 	public async interview(): Promise<void> {
 		const node = this.getNode()!;
@@ -84,6 +99,22 @@ export class BatteryCCReport extends BatteryCC {
 		} else {
 			this._isLow = false;
 		}
+
+		if (this.payload.length >= 3) {
+			// Starting with V2
+			this._chargingStatus = this.payload[1] >>> 6;
+			this._rechargeable = !!(this.payload[1] & 0b0010_0000);
+			this._backup = !!(this.payload[1] & 0b0001_0000);
+			this._overheating = !!(this.payload[1] & 0b1000);
+			this._lowFluid = !!(this.payload[1] & 0b0100);
+			this._rechargeOrReplace = !!(this.payload[1] & 0b10)
+				? BatteryReplacementStatus.Now
+				: !!(this.payload[1] & 0b1)
+				? BatteryReplacementStatus.Soon
+				: BatteryReplacementStatus.None;
+			this._disconnected = !!(this.payload[2] & 0b1);
+		}
+
 		this.persistValues();
 	}
 
@@ -108,6 +139,78 @@ export class BatteryCCReport extends BatteryCC {
 		return this._isLow;
 	}
 
+	private _chargingStatus: BatteryChargingStatus | undefined;
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyUInt8,
+		label: "Charging status",
+		states: enumValuesToMetadataStates(BatteryChargingStatus),
+	})
+	public get chargingStatus(): BatteryChargingStatus | undefined {
+		return this._chargingStatus;
+	}
+
+	private _rechargeable: boolean | undefined;
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyBoolean,
+		label: "Rechargeable",
+	})
+	public get rechargeable(): boolean | undefined {
+		return this._rechargeable;
+	}
+
+	private _backup: boolean | undefined;
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyBoolean,
+		label: "Used as backup",
+	})
+	public get backup(): boolean | undefined {
+		return this._backup;
+	}
+
+	private _overheating: boolean | undefined;
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyBoolean,
+		label: "Overheating",
+	})
+	public get overheating(): boolean | undefined {
+		return this._overheating;
+	}
+
+	private _lowFluid: boolean | undefined;
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyBoolean,
+		label: "Fluid is low",
+	})
+	public get lowFluid(): boolean | undefined {
+		return this._lowFluid;
+	}
+
+	private _rechargeOrReplace: BatteryReplacementStatus | undefined;
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyUInt8,
+		label: "Recharge or replace",
+		states: enumValuesToMetadataStates(BatteryReplacementStatus),
+	})
+	public get rechargeOrReplace(): BatteryReplacementStatus | undefined {
+		return this._rechargeOrReplace;
+	}
+
+	private _disconnected: boolean | undefined;
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyBoolean,
+		label: "Battery is disconnected",
+	})
+	public get disconnected(): boolean | undefined {
+		return this._disconnected;
+	}
+
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			level: this.level,
@@ -118,11 +221,55 @@ export class BatteryCCReport extends BatteryCC {
 
 @CCCommand(BatteryCommand.Get)
 @expectedCCResponse(BatteryCCReport)
-export class BatteryCCGet extends BatteryCC {
+export class BatteryCCGet extends BatteryCC {}
+
+@CCCommand(BatteryCommand.HealthReport)
+export class BatteryCCHealthReport extends BatteryCC {
 	public constructor(
 		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
+		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
+
+		validatePayload(this.payload.length >= 2);
+		this._maximumCapacity = this.payload[0];
+		const { value: temperature, scale } = parseFloatWithScale(
+			this.payload.slice(1),
+		);
+		this._temperature = temperature;
+
+		const valueId: ValueID = {
+			commandClass: this.ccId,
+			endpoint: this.endpoint,
+			propertyName: "temperature",
+		};
+		this.getValueDB().setMetadata(valueId, {
+			...ValueMetadata.ReadOnly,
+			label: "Temperature",
+			// @ts-ignore
+			unit: scale === 0x00 ? "°C" : undefined,
+		});
+	}
+
+	private _maximumCapacity: number;
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyUInt8,
+		max: 100,
+		unit: "%",
+		label: "Maximum capacity",
+	})
+	public get level(): number {
+		return this._maximumCapacity;
+	}
+
+	private _temperature: number;
+	@ccValue()
+	public get temperature(): number {
+		return this._temperature;
 	}
 }
+
+@CCCommand(BatteryCommand.HealthGet)
+@expectedCCResponse(BatteryCCHealthReport)
+export class BatteryCCHealthGet extends BatteryCC {}
