@@ -6,7 +6,13 @@ import { NodeStatus } from "../node/INode";
 import { ZWaveNode } from "../node/Node";
 import { validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
-import { CCAPI } from "./API";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -34,6 +40,27 @@ export enum WakeUpCommand {
 
 @API(CommandClasses["Wake Up"])
 export class WakeUpCCAPI extends CCAPI {
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ propertyName },
+		value,
+	): Promise<void> => {
+		if (propertyName !== "wakeUpInterval") {
+			throwUnsupportedProperty(this.ccId, propertyName);
+		}
+		if (typeof value !== "number") {
+			throwWrongValueType(
+				this.ccId,
+				propertyName,
+				"number",
+				typeof value,
+			);
+		}
+		// TODO: Use optional chaining when possible
+		await this.setInterval(value, this.driver.controller!.ownNodeId || 1);
+		// Refresh the current value
+		await this.getInterval();
+	};
+
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getInterval() {
 		const cc = new WakeUpCCIntervalGet(this.driver, {
