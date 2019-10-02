@@ -1047,5 +1047,96 @@
 				}
 			}
 		]
+	},
+	"0x0F": {
+		"name": "Water Valve",
+		"variables": [
+			{
+				"name": "Valve operation status",
+				"idle": false,
+				"states": {
+					"0x01": {
+						"label": "Valve operation",
+						"params": {
+							// TODO: type "enum" replaces the actual value
+							"type": "enum",
+							"values": {
+								"0x00": "Off / Closed",
+								"0x01": "On / Open"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Master valve operation status",
+				"idle": false,
+				"states": {
+					"0x02": {
+						"label": "Master valve operation",
+						"params": {
+							// TODO: type "enum" replaces the actual value
+							"type": "enum",
+							"values": {
+								"0x00": "Off / Closed",
+								"0x01": "On / Open"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Valve short circuit status",
+				"states": {
+					"0x03": {
+						"label": "Valve short circuit"
+					}
+				}
+			},
+			{
+				"name": "Master valve short circuit status",
+				"states": {
+					"0x04": {
+						"label": "Master valve short circuit"
+					}
+				}
+			},
+			{
+				"name": "Valve current alarm status",
+				"states": {
+					"0x05": {
+						"label": "Valve current alarm",
+						"params": {
+							// TODO: type "enum" replaces the actual value
+							"type": "enum",
+							"values": {
+								"0x01": "No data",
+								"0x02": "Below low threshold",
+								"0x03": "Above high threshold",
+								"0x04": "Max"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Master valve current alarm status",
+				"states": {
+					"0x06": {
+						"label": "Master valve current alarm",
+						"params": {
+							// TODO: type "enum" replaces the actual value
+							"type": "enum",
+							"values": {
+								"0x01": "No data",
+								"0x02": "Below low threshold",
+								"0x03": "Above high threshold",
+								"0x04": "Max"
+							}
+						}
+					}
+				}
+			}
+		]
 	}
 }
