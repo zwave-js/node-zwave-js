@@ -391,6 +391,9 @@ export class CommandClass {
 
 	/** Returns a list of all value names that are defined on this CommandClass */
 	public getDefinedPropertyNames(): string[] {
+		// In order to avoid cluttering applications with heaps of unsupported properties,
+		// we filter out those that are only available in future versions of this CC
+		// or have no version constraint
 		const keyValuePairDefinitions = getCCKeyValuePairDefinitions(this);
 		const keyValuePairs = [...keyValuePairDefinitions].filter(
 			([, options]) =>
@@ -432,6 +435,10 @@ export class CommandClass {
 
 	/** Persists all values on the given node into the value. Returns true if the process succeeded, false otherwise */
 	public persistValues(valueNames?: (keyof this)[]): boolean {
+		// In order to avoid cluttering applications with heaps of unsupported properties,
+		// we filter out those that are only available in future versions of this CC
+		// or have no version constraint
+		// TODO: This logic is duplicated in getDefinedPropertyNames()
 		const keyValuePairDefinitions = getCCKeyValuePairDefinitions(this);
 		const keyValuePairs = [...keyValuePairDefinitions].filter(
 			([, options]) =>
@@ -925,7 +932,14 @@ export function getExpectedCCResponse<T extends CommandClass>(
 }
 
 export interface CCValueOptions {
+	/**
+	 * Whether the decorated CC value is internal. Internal values are not
+	 * exposed to the user.
+	 */
 	internal?: boolean;
+	/**
+	 * The minimum CC version required for this value to exist.
+	 */
 	minVersion?: number;
 }
 
