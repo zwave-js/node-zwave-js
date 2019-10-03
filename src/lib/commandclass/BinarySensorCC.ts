@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import log from "../log";
 import { validatePayload } from "../util/misc";
 import { parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
@@ -84,7 +85,32 @@ export interface BinarySensorCC {
 
 @commandClass(CommandClasses["Binary Sensor"])
 @implementedVersion(2)
-export class BinarySensorCC extends CommandClass {}
+export class BinarySensorCC extends CommandClass {
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const api = node.commandClasses.Basic;
+
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		log.controller.logNode(node.id, {
+			message: "querying current value...",
+			direction: "outbound",
+		});
+		const { currentValue } = await api.get();
+		log.controller.logNode(node.id, {
+			message: `received current value: ${currentValue}`,
+			direction: "inbound",
+		});
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+}
 
 @CCCommand(BinarySensorCommand.Report)
 export class BinarySensorCCReport extends BinarySensorCC {

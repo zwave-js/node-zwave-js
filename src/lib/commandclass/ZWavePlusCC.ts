@@ -70,27 +70,37 @@ export interface ZWavePlusCC {
 @commandClass(CommandClasses["Z-Wave Plus Info"])
 @implementedVersion(2)
 export class ZWavePlusCC extends CommandClass {
-	public async interview(): Promise<void> {
+	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
+		const api = node.commandClasses["Z-Wave Plus Info"];
+
 		log.controller.logNode(node.id, {
-			message: "querying Z-Wave+ information...",
-			direction: "outbound",
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
 		});
 
-		const zwavePlusResponse = await node.commandClasses[
-			"Z-Wave Plus Info"
-		].get();
+		if (complete) {
+			// This information does not change
+			log.controller.logNode(node.id, {
+				message: "querying Z-Wave+ information...",
+				direction: "outbound",
+			});
 
-		const logMessage = `received response for Z-Wave+ information:
+			const zwavePlusResponse = await api.get();
+
+			const logMessage = `received response for Z-Wave+ information:
 Z-Wave+ version: ${zwavePlusResponse.zwavePlusVersion}
 role type:       ${ZWavePlusRoleType[zwavePlusResponse.roleType]}
 node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}
 installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}
 user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
-		log.controller.logNode(node.id, {
-			message: logMessage,
-			direction: "inbound",
-		});
+			log.controller.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
+		}
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;

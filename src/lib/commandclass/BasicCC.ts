@@ -100,13 +100,23 @@ export class BasicCC extends CommandClass {
 			direction: "none",
 		});
 
+		// always query the current state
 		log.controller.logNode(node.id, {
-			message: "querying current value...",
+			message: "querying Basic CC state...",
 			direction: "outbound",
 		});
-		const { currentValue } = await api.get();
+
+		const basicResponse = await api.get();
+
+		let logMessage = `received Basic CC state:
+current value:      ${basicResponse.currentValue}`;
+		if (basicResponse.targetValue != undefined) {
+			logMessage += `
+target value:       ${basicResponse.targetValue}
+remaining duration: ${basicResponse.duration}`;
+		}
 		log.controller.logNode(node.id, {
-			message: `received current value: ${currentValue}`,
+			message: logMessage,
 			direction: "inbound",
 		});
 

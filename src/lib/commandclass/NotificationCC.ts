@@ -172,70 +172,99 @@ export interface NotificationCC {
 export class NotificationCC extends CommandClass {
 	// former AlarmCC (v1..v2)
 
-	public async interview(): Promise<void> {
+	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
+		const api = node.commandClasses.Notification;
+
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
 		// TODO: Require the association and AGI interview to be done first (GH#198)
 
-		const ccAPI = node.commandClasses.Notification;
-
 		if (this.version >= 2) {
-			log.controller.logNode(node.id, {
-				message: "querying supported notification types...",
-				direction: "outbound",
-			});
+			let supportedNotificationTypes: readonly NotificationType[];
+			let supportedNotificationNames: string[];
 
-			const { supportedNotificationTypes } = await ccAPI.getSupported();
-			const supportedNotificationNames = (await Promise.all(
-				supportedNotificationTypes.map(async n => {
-					const ret = await lookupNotification(n);
-					return [n, ret] as const;
-				}),
-			)).map(([type, ntfcn]) =>
-				ntfcn ? ntfcn.name : `UNKNOWN (${num2hex(type)})`,
-			);
-
-			const logMessage =
-				"received supported notification types:" +
-				supportedNotificationNames.map(name => "\n* " + name);
-			log.controller.logNode(node.id, {
-				message: logMessage,
-				direction: "inbound",
-			});
-
-			if (this.version >= 3) {
-				// Query each notification for its supported events
-				for (let i = 0; i < supportedNotificationTypes.length; i++) {
-					const type = supportedNotificationTypes[i];
-					const name = supportedNotificationNames[i];
-
-					log.controller.logNode(node.id, {
-						message: `querying supported notification events for ${name}...`,
-						direction: "outbound",
-					});
-					const supportedEvents = await ccAPI.getSupportedEvents(
-						type,
-					);
-					log.controller.logNode(node.id, {
-						message: `received supported notification events for ${name}: ${supportedEvents
-							.map(String)
-							.join(", ")}`,
-						direction: "inbound",
-					});
-
-					// For each event, predefine the value metadata
-					const metadataMap = await defineMetadataForNotificationEvents(
-						node.index,
-						type,
-						supportedEvents,
-					);
-					for (const [key, metadata] of metadataMap.entries()) {
-						const valueId: ValueID = JSON.parse(key);
-						node.valueDB.setMetadata(valueId, metadata);
-					}
-				}
+			async function lookupNotificationNames(): Promise<string[]> {
+				return (await Promise.all(
+					supportedNotificationTypes.map(async n => {
+						const ret = await lookupNotification(n);
+						return [n, ret] as const;
+					}),
+				)).map(([type, ntfcn]) =>
+					ntfcn ? ntfcn.name : `UNKNOWN (${num2hex(type)})`,
+				);
 			}
 
-			// Query each notification for its current status
+			if (complete) {
+				log.controller.logNode(node.id, {
+					message: "querying supported notification types...",
+					direction: "outbound",
+				});
+
+				({ supportedNotificationTypes } = await api.getSupported());
+				supportedNotificationNames = await lookupNotificationNames();
+
+				const logMessage =
+					"received supported notification types:" +
+					supportedNotificationNames.map(name => "\n* " + name);
+				log.controller.logNode(node.id, {
+					message: logMessage,
+					direction: "inbound",
+				});
+
+				if (this.version >= 3) {
+					// Query each notification for its supported events
+					for (
+						let i = 0;
+						i < supportedNotificationTypes.length;
+						i++
+					) {
+						const type = supportedNotificationTypes[i];
+						const name = supportedNotificationNames[i];
+
+						log.controller.logNode(node.id, {
+							message: `querying supported notification events for ${name}...`,
+							direction: "outbound",
+						});
+						const supportedEvents = await api.getSupportedEvents(
+							type,
+						);
+						log.controller.logNode(node.id, {
+							message: `received supported notification events for ${name}: ${supportedEvents
+								.map(String)
+								.join(", ")}`,
+							direction: "inbound",
+						});
+
+						// For each event, predefine the value metadata
+						const metadataMap = await defineMetadataForNotificationEvents(
+							node.index,
+							type,
+							supportedEvents,
+						);
+						for (const [key, metadata] of metadataMap.entries()) {
+							const valueId: ValueID = JSON.parse(key);
+							node.valueDB.setMetadata(valueId, metadata);
+						}
+					}
+				}
+			} else {
+				// Load supported notification types from cache
+				supportedNotificationTypes = this.getValueDB().getValue<
+					readonly NotificationType[]
+				>({
+					commandClass: this.ccId,
+					propertyName: "supportedNotificationTypes",
+				})!;
+				supportedNotificationNames = await lookupNotificationNames();
+			}
+
+			// Always query each notification for its current status
 			for (let i = 0; i < supportedNotificationTypes.length; i++) {
 				const type = supportedNotificationTypes[i];
 				const name = supportedNotificationNames[i];
@@ -244,7 +273,7 @@ export class NotificationCC extends CommandClass {
 					message: `querying notification status for ${name}...`,
 					direction: "outbound",
 				});
-				await ccAPI.get({ notificationType: type });
+				await api.get({ notificationType: type });
 			}
 		}
 

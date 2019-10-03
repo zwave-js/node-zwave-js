@@ -118,11 +118,18 @@ export interface TimeParametersCC {
 @commandClass(CommandClasses["Time Parameters"])
 @implementedVersion(1)
 export class TimeParametersCC extends CommandClass {
-	public async interview(): Promise<void> {
+	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = node.commandClasses["Time Parameters"];
 
-		// Set the node to the current time
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		// Always keep the node's time in sync
 		log.controller.logNode(node.id, {
 			message: "setting current time...",
 			direction: "outbound",
