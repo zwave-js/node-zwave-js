@@ -44,6 +44,28 @@ export class BatteryCCAPI extends CCAPI {
 		return {
 			level: response.level,
 			isLow: response.isLow,
+			chargingStatus: response.chargingStatus,
+			rechargeable: response.rechargeable,
+			backup: response.backup,
+			overheating: response.overheating,
+			lowFluid: response.lowFluid,
+			rechargeOrReplace: response.rechargeOrReplace,
+			disconnected: response.disconnected,
+		};
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async getHealth() {
+		const cc = new BatteryCCHealthGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<BatteryCCHealthReport>(
+			cc,
+		))!;
+		return {
+			maximumCapacity: response.maximumCapacity,
+			temperature: response.temperature,
 		};
 	}
 }
@@ -215,6 +237,13 @@ export class BatteryCCReport extends BatteryCC {
 		return super.toJSONInherited({
 			level: this.level,
 			isLow: this.isLow,
+			chargingStatus: this.chargingStatus,
+			rechargeable: this.rechargeable,
+			backup: this.backup,
+			overheating: this.overheating,
+			lowFluid: this.lowFluid,
+			rechargeOrReplace: this.rechargeOrReplace,
+			disconnected: this.disconnected,
 		});
 	}
 }
