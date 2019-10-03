@@ -336,8 +336,12 @@ export class CommandClass {
 	/* eslint-enable @typescript-eslint/no-unused-vars */
 
 	// This needs to be overwritten per command class. In the default implementation, don't do anything
-	/** Performs the interview procedure for this CC according to SDS14223 */
-	public async interview(): Promise<void> {}
+	/**
+	 * Performs the interview procedure for this CC according to SDS14223
+	 * @param complete Whether a complete interview should be performed or only the necessary steps on startup
+	 */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	public async interview(complete: boolean = true): Promise<void> {}
 
 	/**
 	 * Determine whether the linked node supports a specific command of this command class.
