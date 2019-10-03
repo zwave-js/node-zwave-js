@@ -1,5 +1,4 @@
 // import { ThermostatMode } from "../build/lib/commandclass/ThermostatModeCC";
-// import { wait } from "alcalzone-shared/async";
 import { Driver } from "../";
 
 const driver = new Driver("COM3").once("driver ready", async () => {
@@ -37,7 +36,7 @@ const driver = new Driver("COM3").once("driver ready", async () => {
 	// });
 	// await driver.hardReset();
 	// await driver.controller.beginInclusion();
-	// await wait(60000);
+	// await require("alcalzone-shared/async").wait(60000);
 	// await driver.controller.stopInclusion();
 	// const node = driver.controller.nodes.get(2)!;
 	// node.once("interview completed", async () => {
