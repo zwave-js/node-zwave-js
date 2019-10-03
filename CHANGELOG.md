@@ -4,6 +4,11 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+* (AlCalzone) Hide more CC values of newer CC versions
+* (AlCalzone) Fix translation of enum values to state metadata so it is able to handle strings starting with a number
+* (AlCalzone) Interview new nodes immediately after inclusion
+
 ## 1.4.0 (2019-10-03)
 * (AlCalzone) Partially re-interview CCs after restart from cache
 * (AlCalzone) Add interview procedure for BasicCC
