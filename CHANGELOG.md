@@ -4,8 +4,28 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+* (AlCalzone) Add the option to specify a minimum version for ccValues   
+* (AlCalzone) Implement BatteryCC V2
+* (AlCalzone) ThermostatOperatingStateCC: bump CC version
+* (AlCalzone) Add setValue API to WakeUp CC
+* (AlCalzone) Add more notification configurations:
+    * Appliance (`0x0C`)
+    * Home Health (`0x0D`)
+    * Siren (`0x0E`)
+    * Water Valve (`0x0F`)
+    * Weather Alarm (`0x10`)
+    * Irrigation (`0x11`)
+* (AlCalzone) Prepare for TS 3.7
+* (AlCalzone) Add missing callbackId to HardResetRequest
+* (AlCalzone) Create callback ids centrally on the driver instance
+* (AlCalzone) Implement TimeCC v2 and TimeParametersCC v1
+* (AlCalzone) TimeParametersCC: use local time if the node has no means to determine timezone
+* (AlCalzone) Add support for excluding nodes from the network
+* (AlCalzone) Update dependencies
+
 ## 1.3.1 (2019-09-25)
-* (AlCalzone) Mark `options` in `IDriver` internal
+* (AlCalzone) Mark `options` in `IDriver` as internal
 
 ## 1.3.0 (2019-09-04)
 * (AlCalzone) Add more notification configurations:
