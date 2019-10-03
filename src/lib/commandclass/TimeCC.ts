@@ -94,10 +94,18 @@ export interface TimeCC {
 @commandClass(CommandClasses.Time)
 @implementedVersion(2)
 export class TimeCC extends CommandClass {
-	public async interview(): Promise<void> {
+	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = node.commandClasses.Time;
 
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		// Always keep the slave's time in sync
 		if (api.version >= 2) {
 			log.controller.logNode(node.id, {
 				message: "setting timezone information...",

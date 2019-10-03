@@ -336,8 +336,12 @@ export class CommandClass {
 	/* eslint-enable @typescript-eslint/no-unused-vars */
 
 	// This needs to be overwritten per command class. In the default implementation, don't do anything
-	/** Performs the interview procedure for this CC according to SDS14223 */
-	public async interview(): Promise<void> {}
+	/**
+	 * Performs the interview procedure for this CC according to SDS14223
+	 * @param complete Whether a complete interview should be performed or only the necessary steps on startup
+	 */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	public async interview(complete: boolean = true): Promise<void> {}
 
 	/**
 	 * Determine whether the linked node supports a specific command of this command class.
@@ -391,12 +395,12 @@ export class CommandClass {
 		const keyValuePairs = [...keyValuePairDefinitions].filter(
 			([, options]) =>
 				options.minVersion == undefined ||
-				options.minVersion >= this.version,
+				options.minVersion <= this.version,
 		);
 		const ccValueDefinitions = [...getCCValueDefinitions(this)].filter(
 			([, options]) =>
 				options.minVersion == undefined ||
-				options.minVersion >= this.version,
+				options.minVersion <= this.version,
 		);
 		return [
 			...this._registeredCCValues.keys(),
@@ -432,12 +436,12 @@ export class CommandClass {
 		const keyValuePairs = [...keyValuePairDefinitions].filter(
 			([, options]) =>
 				options.minVersion == undefined ||
-				options.minVersion >= this.version,
+				options.minVersion <= this.version,
 		);
 		const ccValueDefinitions = [...getCCValueDefinitions(this)].filter(
 			([, options]) =>
 				options.minVersion == undefined ||
-				options.minVersion >= this.version,
+				options.minVersion <= this.version,
 		);
 		// If not specified otherwise, persist all registered values in the value db
 		// But filter out those that don't match the minimum version

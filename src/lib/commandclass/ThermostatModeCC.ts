@@ -133,29 +133,38 @@ export interface ThermostatModeCC {
 @commandClass(CommandClasses["Thermostat Mode"])
 @implementedVersion(3)
 export class ThermostatModeCC extends CommandClass {
-	public async interview(): Promise<void> {
+	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-
 		const api = node.commandClasses["Thermostat Mode"];
-		// First query the possible modes to set the metadata
+
 		log.controller.logNode(node.id, {
-			message: "querying supported thermostat modes...",
-			direction: "outbound",
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
 		});
 
-		const supportedModes = await api.getSupportedModes();
+		if (complete) {
+			// First query the possible modes to set the metadata
+			log.controller.logNode(node.id, {
+				message: "querying supported thermostat modes...",
+				direction: "outbound",
+			});
 
-		const logMessage =
-			`received supported thermostat modes:` +
-			supportedModes.map(
-				mode => "\n* " + getEnumMemberName(ThermostatMode, mode),
-			);
-		log.controller.logNode(node.id, {
-			message: logMessage,
-			direction: "inbound",
-		});
+			const supportedModes = await api.getSupportedModes();
 
-		// Now query the actual status
+			const logMessage =
+				`received supported thermostat modes:` +
+				supportedModes.map(
+					mode => "\n* " + getEnumMemberName(ThermostatMode, mode),
+				);
+			log.controller.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
+		}
+
+		// Always query the actual status
 		log.controller.logNode(node.id, {
 			message: "querying current thermostat mode...",
 			direction: "outbound",

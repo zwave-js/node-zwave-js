@@ -574,19 +574,19 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			await this.queryNodeInfo();
 		}
 
-		// TODO: Part of this should be done after the cache restart
-		if (this.interviewStage === InterviewStage.NodeInfo) {
-			await this.interviewCCs();
-		}
-
 		// // TODO:
 		// // SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
 
-		// At this point the interview of new nodes is done. Start here when re-interviewing known nodes
+		// At this point the basic interview of new nodes is done. Start here when re-interviewing known nodes
+		// to get updated information about command classes
 		if (
 			this.interviewStage === InterviewStage.RestartFromCache ||
-			this.interviewStage === InterviewStage.CommandClasses
+			this.interviewStage === InterviewStage.NodeInfo
 		) {
+			await this.interviewCCs();
+		}
+
+		if (this.interviewStage === InterviewStage.CommandClasses) {
 			// Load a config file for this node if it exists and overwrite the previously reported information
 			await this.overwriteConfig();
 		}
@@ -761,10 +761,8 @@ version:               ${this.version}`;
 			const cc = this.createCCInstance(
 				CommandClasses["Manufacturer Specific"],
 			)!;
-			if (!cc.interviewComplete) {
-				await cc.interview();
-				await this.driver.saveNetworkToCache();
-			}
+			await cc.interview(!cc.interviewComplete);
+			await this.driver.saveNetworkToCache();
 		}
 		// TODO: Overwrite the reported config with configuration files (like OZW does)
 
@@ -772,10 +770,8 @@ version:               ${this.version}`;
 		// This conditional is not necessary, but saves us a bunch of headaches during testing
 		if (this.supportsCC(CommandClasses.Version)) {
 			const cc = this.createCCInstance(CommandClasses.Version)!;
-			if (!cc.interviewComplete) {
-				await cc.interview();
-				await this.driver.saveNetworkToCache();
-			}
+			await cc.interview(!cc.interviewComplete);
+			await this.driver.saveNetworkToCache();
 		}
 
 		// TODO: (GH#215) Correctly order CC interviews
@@ -786,10 +782,8 @@ version:               ${this.version}`;
 			const cc = this.createCCInstance(
 				CommandClasses["Z-Wave Plus Info"],
 			)!;
-			if (!cc.interviewComplete) {
-				await cc.interview();
-				await this.driver.saveNetworkToCache();
-			}
+			await cc.interview(!cc.interviewComplete);
+			await this.driver.saveNetworkToCache();
 		}
 
 		// TODO: (GH#214) Also query ALL endpoints!
@@ -805,10 +799,8 @@ version:               ${this.version}`;
 			.filter(instance => !!instance) as CommandClass[];
 		for (const cc of ccInstances) {
 			try {
-				if (!cc.interviewComplete) {
-					await cc.interview();
-					await this.driver.saveNetworkToCache();
-				}
+				await cc.interview(!cc.interviewComplete);
+				await this.driver.saveNetworkToCache();
 			} catch (e) {
 				log.controller.print(
 					`${cc.constructor.name}: Interview failed:\n${e.message}`,

@@ -91,30 +91,40 @@ export class ManufacturerSpecificCC extends CommandClass {
 		return super.supportsCommand(cmd);
 	}
 
-	public async interview(): Promise<void> {
+	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		if (node.isControllerNode()) {
-			log.controller.logNode(
-				node.id,
-				"not querying manufacturer information from the controller...",
-			);
-		} else {
-			log.controller.logNode(node.id, {
-				message: "querying manufacturer information...",
-				direction: "outbound",
-			});
-			const mfResp = await node.commandClasses[
-				"Manufacturer Specific"
-			].get();
-			const logMessage = `received response for manufacturer information:
+		const api = node.commandClasses["Manufacturer Specific"];
+
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		// manufacturer information is static
+		if (complete) {
+			if (node.isControllerNode()) {
+				log.controller.logNode(
+					node.id,
+					"not querying manufacturer information from the controller...",
+				);
+			} else {
+				log.controller.logNode(node.id, {
+					message: "querying manufacturer information...",
+					direction: "outbound",
+				});
+				const mfResp = await api.get();
+				const logMessage = `received response for manufacturer information:
   manufacturer: ${(await lookupManufacturer(mfResp.manufacturerId)) ||
 		"unknown"} (${num2hex(mfResp.manufacturerId)})
   product type: ${num2hex(mfResp.productType)}
   product id:   ${num2hex(mfResp.productId)}`;
-			log.controller.logNode(node.id, {
-				message: logMessage,
-				direction: "inbound",
-			});
+				log.controller.logNode(node.id, {
+					message: logMessage,
+					direction: "inbound",
+				});
+			}
 		}
 
 		// Remember that the interview is complete

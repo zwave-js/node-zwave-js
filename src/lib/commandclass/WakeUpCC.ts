@@ -149,8 +149,17 @@ export class WakeUpCC extends CommandClass {
 		node.status = awake ? NodeStatus.Awake : NodeStatus.Asleep;
 	}
 
-	public async interview(): Promise<void> {
+	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
+		const api = node.commandClasses["Wake Up"];
+
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
 		if (node.isControllerNode()) {
 			log.controller.logNode(
 				node.id,
@@ -162,24 +171,26 @@ export class WakeUpCC extends CommandClass {
 				`skipping wakeup configuration for frequent listening device`,
 			);
 		} else {
-			const API = node.commandClasses["Wake Up"];
 			// Retrieve the allowed wake up intervals if possible
-			if (this.version >= 2) {
-				log.controller.logNode(node.id, {
-					message:
-						"retrieving wakeup capabilities from the device...",
-					direction: "outbound",
-				});
-				const wakeupCaps = await API.getIntervalCapabilities();
-				const logMessage = `received wakeup capabilities:
+			if (complete) {
+				// This information does not change
+				if (this.version >= 2) {
+					log.controller.logNode(node.id, {
+						message:
+							"retrieving wakeup capabilities from the device...",
+						direction: "outbound",
+					});
+					const wakeupCaps = await api.getIntervalCapabilities();
+					const logMessage = `received wakeup capabilities:
 default wakeup interval: ${wakeupCaps.defaultWakeUpInterval} seconds
 minimum wakeup interval: ${wakeupCaps.minWakeUpInterval} seconds
 maximum wakeup interval: ${wakeupCaps.maxWakeUpInterval} seconds
 wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds`;
-				log.controller.logNode(node.id, {
-					message: logMessage,
-					direction: "inbound",
-				});
+					log.controller.logNode(node.id, {
+						message: logMessage,
+						direction: "inbound",
+					});
+				}
 			}
 
 			// SDS14223 prescribes a IntervalSet followed by a check
@@ -190,7 +201,7 @@ wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds`;
 				message: "retrieving wakeup interval from the device...",
 				direction: "outbound",
 			});
-			const wakeupResp = await API.getInterval();
+			const wakeupResp = await api.getInterval();
 			const logMessage = `received wakeup configuration:
 wakeup interval: ${wakeupResp.wakeUpInterval} seconds
 controller node: ${wakeupResp.controllerNodeId}`;
@@ -199,16 +210,19 @@ controller node: ${wakeupResp.controllerNodeId}`;
 				direction: "inbound",
 			});
 
-			log.controller.logNode(node.id, {
-				message: "configuring wakeup destination node",
-				direction: "outbound",
-			});
-
-			await API.setInterval(
-				wakeupResp.wakeUpInterval,
-				this.driver.controller!.ownNodeId!,
-			);
-			log.controller.logNode(node.id, "wakeup destination node changed!");
+			const ownNodeId = this.driver.controller!.ownNodeId!;
+			// Only change the destination if necessary
+			if (wakeupResp.controllerNodeId !== ownNodeId) {
+				log.controller.logNode(node.id, {
+					message: "configuring wakeup destination node",
+					direction: "outbound",
+				});
+				await api.setInterval(wakeupResp.wakeUpInterval, ownNodeId);
+				log.controller.logNode(
+					node.id,
+					"wakeup destination node changed!",
+				);
+			}
 		}
 
 		// Remember that the interview is complete

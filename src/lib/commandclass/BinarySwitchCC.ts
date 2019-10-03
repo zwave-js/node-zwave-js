@@ -97,23 +97,31 @@ export interface BinarySwitchCC {
 @commandClass(CommandClasses["Binary Switch"])
 @implementedVersion(2)
 export class BinarySwitchCC extends CommandClass {
-	public async interview(): Promise<void> {
+	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
+		const api = node.commandClasses["Binary Switch"];
+
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		// always query the current state
 		log.controller.logNode(node.id, {
 			message: "querying Binary Switch state...",
 			direction: "outbound",
 		});
 
-		const zwavePlusResponse = await node.commandClasses[
-			"Binary Switch"
-		].get();
+		const binarySwitchResponse = await api.get();
 
 		let logMessage = `received Binary Switch state:
-current value:      ${zwavePlusResponse.currentValue}`;
-		if (zwavePlusResponse.targetValue != undefined) {
+current value:      ${binarySwitchResponse.currentValue}`;
+		if (binarySwitchResponse.targetValue != undefined) {
 			logMessage += `
-target value:       ${zwavePlusResponse.targetValue}
-remaining duration: ${zwavePlusResponse.duration}`;
+target value:       ${binarySwitchResponse.targetValue}
+remaining duration: ${binarySwitchResponse.duration}`;
 		}
 		log.controller.logNode(node.id, {
 			message: logMessage,

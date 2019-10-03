@@ -27,7 +27,7 @@ export enum BatteryChargingStatus {
 }
 
 export enum BatteryReplacementStatus {
-	None = 0x00,
+	No = 0x00,
 	Soon = 0x01,
 	Now = 0x02,
 }
@@ -84,21 +84,65 @@ export interface BatteryCC {
 @commandClass(CommandClasses.Battery)
 @implementedVersion(2)
 export class BatteryCC extends CommandClass {
-	public async interview(): Promise<void> {
+	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
+		const api = node.commandClasses.Battery;
+
 		log.controller.logNode(node.id, {
-			message: "querying battery information...",
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		// always query the status
+		log.controller.logNode(node.id, {
+			message: "querying battery status...",
 			direction: "outbound",
 		});
 
-		const batteryResponse = await node.commandClasses.Battery.get();
+		const batteryStatus = await api.get();
 
-		const logMessage = `received response for battery information:
-level: ${batteryResponse.level}${batteryResponse.isLow ? " (low)" : ""}`;
+		let logMessage = `received response for battery information:
+level:                           ${batteryStatus.level}${
+			batteryStatus.isLow ? " (low)" : ""
+		}`;
+		if (this.version >= 2) {
+			logMessage += `
+status:                          ${
+				BatteryChargingStatus[batteryStatus.chargingStatus!]
+			}
+rechargeable:                    ${batteryStatus.rechargeable}
+is backup:                       ${batteryStatus.backup}
+is overheating:                  ${batteryStatus.overheating}
+fluid is low:                    ${batteryStatus.lowFluid}
+needs to be replaced or charged: ${
+				BatteryReplacementStatus[batteryStatus.rechargeOrReplace!]
+			}
+is disconnected:                 ${batteryStatus.disconnected}`;
+		}
 		log.controller.logNode(node.id, {
 			message: logMessage,
 			direction: "inbound",
 		});
+
+		if (this.version >= 2) {
+			// always query the health
+			log.controller.logNode(node.id, {
+				message: "querying battery health...",
+				direction: "outbound",
+			});
+
+			const batteryHealth = await api.getHealth();
+
+			const logMessage = `received response for battery health:
+max. capacity: ${batteryHealth.maximumCapacity} %
+temperature:   ${batteryHealth.temperature} °C`;
+			log.controller.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
+		}
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
@@ -133,7 +177,7 @@ export class BatteryCCReport extends BatteryCC {
 				? BatteryReplacementStatus.Now
 				: !!(this.payload[1] & 0b1)
 				? BatteryReplacementStatus.Soon
-				: BatteryReplacementStatus.None;
+				: BatteryReplacementStatus.No;
 			this._disconnected = !!(this.payload[2] & 0b1);
 		}
 
