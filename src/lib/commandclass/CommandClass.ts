@@ -24,10 +24,6 @@ export interface CommandClassInfo {
 	version: number;
 }
 
-interface CommandClassStatic {
-	readonly maxImplementedVersion: number;
-}
-
 // /**
 //  * Defines which kind of CC state should be requested
 //  */
@@ -391,34 +387,65 @@ export class CommandClass {
 
 	/** Returns a list of all value names that are defined on this CommandClass */
 	public getDefinedPropertyNames(): string[] {
+		const keyValuePairDefinitions = getCCKeyValuePairDefinitions(this);
+		const keyValuePairs = [...keyValuePairDefinitions].filter(
+			([, options]) =>
+				options.minVersion == undefined ||
+				options.minVersion >= this.version,
+		);
+		const ccValueDefinitions = [...getCCValueDefinitions(this)].filter(
+			([, options]) =>
+				options.minVersion == undefined ||
+				options.minVersion >= this.version,
+		);
 		return [
 			...this._registeredCCValues.keys(),
-			...getCCValueDefinitions(this).keys(),
-			...getCCKeyValuePairDefinitions(this).keys(),
+			...ccValueDefinitions.map(([key]) => key),
+			...keyValuePairs.map(([key]) => key),
 		];
 	}
 
 	/** Determines if the given value is an internal value */
 	public isInternalValue(propertyName: keyof this): boolean {
 		// A value is internal if any of the possible definitions say so (true)
-		return (
-			this._registeredCCValues.get(propertyName as string) === true ||
-			getCCValueDefinitions(this).get(propertyName as string) === true ||
-			getCCKeyValuePairDefinitions(this).get(propertyName as string) ===
-				true
+		if (this._registeredCCValues.get(propertyName as string) === true)
+			return true;
+		const ccValueDefinition = getCCValueDefinitions(this).get(
+			propertyName as string,
 		);
+		if (ccValueDefinition && ccValueDefinition.internal === true)
+			return true;
+		const ccKeyValuePairDefinition = getCCKeyValuePairDefinitions(this).get(
+			propertyName as string,
+		);
+		if (
+			ccKeyValuePairDefinition &&
+			ccKeyValuePairDefinition.internal === true
+		)
+			return true;
+		return false;
 	}
 
 	/** Persists all values on the given node into the value. Returns true if the process succeeded, false otherwise */
 	public persistValues(valueNames?: (keyof this)[]): boolean {
-		const keyValuePairs = getCCKeyValuePairDefinitions(this);
-		const ccValueDefinitions = getCCValueDefinitions(this);
+		const keyValuePairDefinitions = getCCKeyValuePairDefinitions(this);
+		const keyValuePairs = [...keyValuePairDefinitions].filter(
+			([, options]) =>
+				options.minVersion == undefined ||
+				options.minVersion >= this.version,
+		);
+		const ccValueDefinitions = [...getCCValueDefinitions(this)].filter(
+			([, options]) =>
+				options.minVersion == undefined ||
+				options.minVersion >= this.version,
+		);
 		// If not specified otherwise, persist all registered values in the value db
+		// But filter out those that don't match the minimum version
 		if (!valueNames) {
 			valueNames = ([
 				...this._registeredCCValues.keys(),
-				...ccValueDefinitions.keys(),
-				...keyValuePairs.keys(),
+				...ccValueDefinitions.map(([key]) => key),
+				...keyValuePairs.map(([key]) => key),
 			] as unknown) as (keyof this)[];
 		}
 		let db: ValueDB;
@@ -433,7 +460,7 @@ export class CommandClass {
 			const sourceValue = this[variable as keyof this];
 			if (sourceValue == undefined) continue;
 
-			if (keyValuePairs.has(variable)) {
+			if (keyValuePairDefinitions.has(variable)) {
 				// This value is one or more key value pair(s) to be stored in a map
 				if (sourceValue instanceof Map) {
 					// Just copy the entries
@@ -893,22 +920,31 @@ export function getExpectedCCResponse<T extends CommandClass>(
 	return ret;
 }
 
+export interface CCValueOptions {
+	internal?: boolean;
+	minVersion?: number;
+}
+
 /**
  * Marks the decorated property as a value of the Command Class. This allows saving it on the node with persistValues()
  * @param internal Whether the value should be exposed to library users
  */
-export function ccValue(internal: boolean = false): PropertyDecorator {
+export function ccValue(options?: CCValueOptions): PropertyDecorator {
 	return (target: CommandClass, property: string | symbol) => {
+		// Set default arguments
+		if (!options) options = {};
+		if (options.internal == undefined) options.internal = false;
+		if (options.minVersion == undefined) options.minVersion = 1;
 		// get the class constructor
 		const constr = target.constructor as typeof CommandClass;
 		const cc = getCommandClassStatic(constr);
 		// retrieve the current metadata
 		const metadata =
 			Reflect.getMetadata(METADATA_ccValues, CommandClass) || {};
-		if (!(cc in metadata)) metadata[cc] = new Map<string, boolean>();
+		if (!(cc in metadata)) metadata[cc] = new Map<string, CCValueOptions>();
 		// And add the variable
-		const variables: Map<string, boolean> = metadata[cc];
-		variables.set(property as string, internal);
+		const variables: Map<string, CCValueOptions> = metadata[cc];
+		variables.set(property as string, options);
 		// store back to the object
 		Reflect.defineMetadata(METADATA_ccValues, metadata, CommandClass);
 	};
@@ -916,14 +952,14 @@ export function ccValue(internal: boolean = false): PropertyDecorator {
 
 function getCCValueDefinitions(
 	commandClass: CommandClass,
-): ReadonlyMap<string, boolean> {
+): ReadonlyMap<string, CCValueOptions> {
 	// get the class constructor
 	const constr = commandClass.constructor as typeof CommandClass;
 	const cc = getCommandClassStatic(constr);
 	// retrieve the current metadata
 	const metadata = Reflect.getMetadata(METADATA_ccValues, CommandClass) || {};
 	if (!(cc in metadata)) return new Map();
-	return metadata[cc] as Map<string, boolean>;
+	return metadata[cc] as Map<string, CCValueOptions>;
 }
 
 /**
@@ -931,18 +967,22 @@ function getCCValueDefinitions(
  * which can later be saved with persistValues()
  * @param internal Whether the key value pair should be exposed to library users
  */
-export function ccKeyValuePair(internal: boolean = false): PropertyDecorator {
+export function ccKeyValuePair(options?: CCValueOptions): PropertyDecorator {
 	return (target: CommandClass, property: string | symbol) => {
+		// Set default arguments
+		if (!options) options = {};
+		if (options.internal == undefined) options.internal = false;
+		if (options.minVersion == undefined) options.minVersion = 1;
 		// get the class constructor
 		const constr = target.constructor as typeof CommandClass;
 		const cc = getCommandClassStatic(constr);
 		// retrieve the current metadata
 		const metadata =
 			Reflect.getMetadata(METADATA_ccKeyValuePairs, CommandClass) || {};
-		if (!(cc in metadata)) metadata[cc] = new Map<string, boolean>();
+		if (!(cc in metadata)) metadata[cc] = new Map<string, CCValueOptions>();
 		// And add the variable
-		const variables: Map<string, boolean> = metadata[cc];
-		variables.set(property as string, internal);
+		const variables: Map<string, CCValueOptions> = metadata[cc];
+		variables.set(property as string, options);
 		// store back to the object
 		Reflect.defineMetadata(
 			METADATA_ccKeyValuePairs,
@@ -955,7 +995,7 @@ export function ccKeyValuePair(internal: boolean = false): PropertyDecorator {
 /** Returns the defined key value pairs for this command class */
 function getCCKeyValuePairDefinitions(
 	commandClass: CommandClass,
-): ReadonlyMap<string, boolean> {
+): ReadonlyMap<string, CCValueOptions> {
 	// get the class constructor
 	const constr = commandClass.constructor as typeof CommandClass;
 	const cc = getCommandClassStatic(constr);
@@ -963,7 +1003,7 @@ function getCCKeyValuePairDefinitions(
 	const metadata =
 		Reflect.getMetadata(METADATA_ccKeyValuePairs, CommandClass) || {};
 	if (!(cc in metadata)) return new Map();
-	return metadata[cc] as Map<string, boolean>;
+	return metadata[cc] as Map<string, CCValueOptions>;
 }
 
 /**

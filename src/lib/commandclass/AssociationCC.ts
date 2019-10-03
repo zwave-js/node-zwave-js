@@ -310,13 +310,13 @@ export class AssociationCCReport extends AssociationCC {
 	}
 
 	private _maxNodes: number;
-	@ccValue(true)
+	@ccValue({ internal: true })
 	public get maxNodes(): number {
 		return this._maxNodes;
 	}
 
 	private _nodeIds: number[];
-	@ccValue(true)
+	@ccValue({ internal: true })
 	public get nodeIds(): readonly number[] {
 		return this._nodeIds;
 	}
@@ -400,7 +400,7 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 	}
 
 	private _groupCount: number;
-	@ccValue(true)
+	@ccValue({ internal: true })
 	public get groupCount(): number {
 		return this._groupCount;
 	}

@@ -305,7 +305,7 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 	}
 
 	private _supportedModes: ThermostatMode[];
-	@ccValue(true)
+	@ccValue({ internal: true })
 	public get supportedModes(): readonly ThermostatMode[] {
 		return this._supportedModes;
 	}

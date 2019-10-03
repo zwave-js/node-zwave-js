@@ -350,13 +350,13 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 	// TODO: Use these to create the correct values/buttons
 
 	private _primarySwitchType: SwitchType;
-	@ccValue(true)
+	@ccValue({ internal: true })
 	public get primarySwitchType(): SwitchType {
 		return this._primarySwitchType;
 	}
 
 	private _secondarySwitchType: SwitchType;
-	@ccValue(true)
+	@ccValue({ internal: true })
 	public get secondarySwitchType(): SwitchType {
 		return this._secondarySwitchType;
 	}

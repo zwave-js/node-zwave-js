@@ -1,5 +1,6 @@
-import { Driver } from "../";
 // import { ThermostatMode } from "../build/lib/commandclass/ThermostatModeCC";
+// import { wait } from "alcalzone-shared/async";
+import { Driver } from "../";
 
 const driver = new Driver("COM3").once("driver ready", async () => {
 	// console.log(`sending application info...`);

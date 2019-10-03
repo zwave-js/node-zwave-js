@@ -216,7 +216,7 @@ export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC 
 
 	private _supportedSensorTypes: MultilevelSensorTypes[];
 	// TODO: Use this during interview to precreate values
-	@ccValue(true)
+	@ccValue({ internal: true })
 	public get supportedSensorTypes(): readonly MultilevelSensorTypes[] {
 		return this._supportedSensorTypes;
 	}
@@ -253,7 +253,7 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 		this.persistValues();
 	}
 
-	@ccKeyValuePair(true)
+	@ccKeyValuePair({ internal: true })
 	private supportedScales: [MultilevelSensorTypes, number[]];
 
 	public get sensorType(): MultilevelSensorTypes {

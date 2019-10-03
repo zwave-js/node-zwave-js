@@ -140,7 +140,7 @@ export class BatteryCCReport extends BatteryCC {
 	}
 
 	private _chargingStatus: BatteryChargingStatus | undefined;
-	@ccValue()
+	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyUInt8,
 		label: "Charging status",
@@ -151,7 +151,7 @@ export class BatteryCCReport extends BatteryCC {
 	}
 
 	private _rechargeable: boolean | undefined;
-	@ccValue()
+	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyBoolean,
 		label: "Rechargeable",
@@ -161,7 +161,7 @@ export class BatteryCCReport extends BatteryCC {
 	}
 
 	private _backup: boolean | undefined;
-	@ccValue()
+	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyBoolean,
 		label: "Used as backup",
@@ -171,7 +171,7 @@ export class BatteryCCReport extends BatteryCC {
 	}
 
 	private _overheating: boolean | undefined;
-	@ccValue()
+	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyBoolean,
 		label: "Overheating",
@@ -181,7 +181,7 @@ export class BatteryCCReport extends BatteryCC {
 	}
 
 	private _lowFluid: boolean | undefined;
-	@ccValue()
+	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyBoolean,
 		label: "Fluid is low",
@@ -191,7 +191,7 @@ export class BatteryCCReport extends BatteryCC {
 	}
 
 	private _rechargeOrReplace: BatteryReplacementStatus | undefined;
-	@ccValue()
+	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyUInt8,
 		label: "Recharge or replace",
@@ -202,7 +202,7 @@ export class BatteryCCReport extends BatteryCC {
 	}
 
 	private _disconnected: boolean | undefined;
-	@ccValue()
+	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyBoolean,
 		label: "Battery is disconnected",
@@ -252,19 +252,23 @@ export class BatteryCCHealthReport extends BatteryCC {
 	}
 
 	private _maximumCapacity: number;
-	@ccValue()
+	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyUInt8,
 		max: 100,
 		unit: "%",
 		label: "Maximum capacity",
 	})
-	public get level(): number {
+	public get maximumCapacity(): number {
 		return this._maximumCapacity;
 	}
 
 	private _temperature: number;
-	@ccValue()
+	@ccValue({ minVersion: 2 })
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyUInt8,
+		label: "Temperature",
+	})
 	public get temperature(): number {
 		return this._temperature;
 	}

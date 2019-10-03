@@ -467,12 +467,12 @@ export class NotificationCCSupportedReport extends NotificationCC {
 	}
 
 	private _supportsV1Alarm: boolean;
-	@ccValue(true) public get supportsV1Alarm(): boolean {
+	@ccValue({ internal: true }) public get supportsV1Alarm(): boolean {
 		return this._supportsV1Alarm;
 	}
 
 	private _supportedNotificationTypes: NotificationType[];
-	@ccValue(true)
+	@ccValue({ internal: true })
 	public get supportedNotificationTypes(): readonly NotificationType[] {
 		return this._supportedNotificationTypes;
 	}

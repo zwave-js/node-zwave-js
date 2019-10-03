@@ -206,14 +206,14 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	// TODO: Use all these values to define the sceneXYZ values and metadata
 
 	private _sceneCount: number;
-	@ccValue(true)
+	@ccValue({ internal: true })
 	public get sceneCount(): number {
 		return this._sceneCount;
 	}
 
 	// TODO: Only offer `slowRefresh` if this is true
 	private _supportsSlowRefresh: boolean;
-	@ccValue(true)
+	@ccValue({ internal: true })
 	public get supportsSlowRefresh(): boolean {
 		return this._supportsSlowRefresh;
 	}
@@ -222,7 +222,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		number,
 		readonly CentralSceneKeys[]
 	>();
-	@ccValue(true)
+	@ccValue({ internal: true })
 	public get supportedKeyAttributes(): ReadonlyMap<
 		number,
 		readonly CentralSceneKeys[]
@@ -231,7 +231,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	}
 
 	private _keyAttributesHaveIdenticalSupport: boolean;
-	@ccValue(true)
+	@ccValue({ internal: true })
 	public get keyAttributesHaveIdenticalSupport(): boolean {
 		return this._keyAttributesHaveIdenticalSupport;
 	}

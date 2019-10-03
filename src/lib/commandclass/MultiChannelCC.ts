@@ -270,25 +270,25 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 	}
 
 	private _countIsDynamic: boolean;
-	@ccValue(true)
+	@ccValue({ internal: true })
 	public get countIsDynamic(): boolean {
 		return this._countIsDynamic;
 	}
 
 	private _identicalCapabilities: boolean;
-	@ccValue(true)
+	@ccValue({ internal: true })
 	public get identicalCapabilities(): boolean {
 		return this._identicalCapabilities;
 	}
 
 	private _individualCount: number;
-	@ccValue(true)
+	@ccValue({ internal: true })
 	public get individualCount(): number {
 		return this._individualCount;
 	}
 
 	private _aggregatedCount: number | undefined;
-	@ccValue(true)
+	@ccValue({ internal: true })
 	public get aggregatedCount(): number | undefined {
 		return this._aggregatedCount;
 	}
@@ -473,7 +473,7 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 		this.aggregatedEndpointMembers = [endpoint, members];
 	}
 
-	@ccKeyValuePair(true)
+	@ccKeyValuePair({ internal: true })
 	private aggregatedEndpointMembers: [number, number[]];
 
 	public get endpoint(): number {
