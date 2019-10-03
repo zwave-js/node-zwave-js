@@ -312,7 +312,7 @@ export class VersionCCReport extends VersionCC {
 	}
 
 	private _hardwareVersion: number | undefined;
-	@ccValue()
+	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnly,
 		label: "Z-Wave chip hardware version",
@@ -405,7 +405,11 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 	}
 
 	private _supportsZWaveSoftwareGet: boolean;
-	@ccValue() public get supportsZWaveSoftwareGet(): boolean {
+	@ccValue({
+		minVersion: 3,
+		internal: true,
+	})
+	public get supportsZWaveSoftwareGet(): boolean {
 		return this._supportsZWaveSoftwareGet;
 	}
 }
@@ -463,39 +467,48 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 	}
 
 	private _sdkVersion: string;
-	@ccValue() public get sdkVersion(): string {
+	@ccValue({ minVersion: 3 })
+	public get sdkVersion(): string {
 		return this._sdkVersion;
 	}
 	private _applicationFrameworkAPIVersion: string;
-	@ccValue() public get applicationFrameworkAPIVersion(): string {
+	@ccValue({ minVersion: 3 })
+	public get applicationFrameworkAPIVersion(): string {
 		return this._applicationFrameworkAPIVersion;
 	}
 	private _applicationFrameworkBuildNumber: number;
-	@ccValue() public get applicationFrameworkBuildNumber(): number {
+	@ccValue({ minVersion: 3 })
+	public get applicationFrameworkBuildNumber(): number {
 		return this._applicationFrameworkBuildNumber;
 	}
 	private _hostInterfaceVersion: string;
-	@ccValue() public get hostInterfaceVersion(): string {
+	@ccValue({ minVersion: 3 })
+	public get hostInterfaceVersion(): string {
 		return this._hostInterfaceVersion;
 	}
 	private _hostInterfaceBuildNumber: number;
-	@ccValue() public get hostInterfaceBuildNumber(): number {
+	@ccValue({ minVersion: 3 })
+	public get hostInterfaceBuildNumber(): number {
 		return this._hostInterfaceBuildNumber;
 	}
 	private _zWaveProtocolVersion: string;
-	@ccValue() public get zWaveProtocolVersion(): string {
+	@ccValue({ minVersion: 3 })
+	public get zWaveProtocolVersion(): string {
 		return this._zWaveProtocolVersion;
 	}
 	private _zWaveProtocolBuildNumber: number;
-	@ccValue() public get zWaveProtocolBuildNumber(): number {
+	@ccValue({ minVersion: 3 })
+	public get zWaveProtocolBuildNumber(): number {
 		return this._zWaveProtocolBuildNumber;
 	}
 	private _applicationVersion: string;
-	@ccValue() public get applicationVersion(): string {
+	@ccValue({ minVersion: 3 })
+	public get applicationVersion(): string {
 		return this._applicationVersion;
 	}
 	private _applicationBuildNumber: number;
-	@ccValue() public get applicationBuildNumber(): number {
+	@ccValue({ minVersion: 3 })
+	public get applicationBuildNumber(): number {
 		return this._applicationBuildNumber;
 	}
 }
