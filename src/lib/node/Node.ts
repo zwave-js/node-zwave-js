@@ -574,19 +574,19 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			await this.queryNodeInfo();
 		}
 
-		// TODO: Part of this should be done after the cache restart
-		if (this.interviewStage === InterviewStage.NodeInfo) {
-			await this.interviewCCs();
-		}
-
 		// // TODO:
 		// // SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
 
-		// At this point the interview of new nodes is done. Start here when re-interviewing known nodes
+		// At this point the basic interview of new nodes is done. Start here when re-interviewing known nodes
+		// to get updated information about command classes
 		if (
 			this.interviewStage === InterviewStage.RestartFromCache ||
-			this.interviewStage === InterviewStage.CommandClasses
+			this.interviewStage === InterviewStage.NodeInfo
 		) {
+			await this.interviewCCs();
+		}
+
+		if (this.interviewStage === InterviewStage.CommandClasses) {
 			// Load a config file for this node if it exists and overwrite the previously reported information
 			await this.overwriteConfig();
 		}
