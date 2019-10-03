@@ -263,8 +263,11 @@ export class Driver extends EventEmitter implements IDriver {
 
 	private _controllerInterviewed: boolean = false;
 	private async initializeControllerAndNodes(): Promise<void> {
-		if (this._controller == undefined)
+		if (this._controller == undefined) {
 			this._controller = new ZWaveController(this);
+			this._controller.on("node added", this.onNodeAdded.bind(this));
+			// TODO: Add handler for removing nodes
+		}
 		if (!this.options.skipInterview) {
 			// Interview the controller
 			await this._controller.interview();
@@ -356,6 +359,17 @@ export class Driver extends EventEmitter implements IDriver {
 			node.supportsCC(CommandClasses["Wake Up"])
 		) {
 			node.sendNoMoreInformation();
+		}
+	}
+
+	/** This is called when a new node has been added to the network */
+	private onNodeAdded(node: ZWaveNode): void {
+		this.addNodeEventHandlers(node);
+		if (!this.options.skipInterview) {
+			// Interview the node
+			// don't await the interview, because it may take a very long time
+			// if a node is asleep
+			void this.interviewNode(node);
 		}
 	}
 

@@ -1,6 +1,8 @@
 import { getEnumMemberName } from "../util/misc";
 import { IntegerLimits } from "./Primitive";
 
+const isIntegerRegex = /^\d+$/;
+
 /** Takes an enumeration and an array of values of this enumeration and returns a states record to be used as metadata */
 export function enumValuesToMetadataStates<T extends Record<string, any>>(
 	enumeration: T,
@@ -9,8 +11,8 @@ export function enumValuesToMetadataStates<T extends Record<string, any>>(
 	const ret: Record<number, string> = {};
 	if (values == undefined) {
 		values = Object.keys(enumeration)
-			.map(parseInt)
-			.filter(val => !Number.isNaN(val));
+			.filter(val => isIntegerRegex.test(val))
+			.map(val => parseInt(val, 10));
 	}
 	for (const value of values) {
 		ret[value] = getEnumMemberName(enumeration, value);
