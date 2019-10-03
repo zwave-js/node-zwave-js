@@ -5,8 +5,10 @@
 -->
 
 ## __WORK IN PROGRESS__
-* (AlCalzone) Add the option to specify a minimum version for ccValues   
-* (AlCalzone) Implement BatteryCC V2
+* (AlCalzone) Partially re-interview CCs after restart from cache
+* (AlCalzone) Add interview procedure for BasicCC
+* (AlCalzone) Add the option to specify a minimum version for ccValues
+* (AlCalzone) Implement BatteryCC V2 (including API)
 * (AlCalzone) ThermostatOperatingStateCC: bump CC version
 * (AlCalzone) Add setValue API to WakeUp CC
 * (AlCalzone) Add more notification configurations:
