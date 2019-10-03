@@ -134,20 +134,37 @@ export interface AssociationCC {
 @commandClass(CommandClasses.Association)
 @implementedVersion(2)
 export class AssociationCC extends CommandClass {
-	public async interview(): Promise<void> {
+	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = node.commandClasses.Association;
 
-		// First find out how many groups are supported
 		log.controller.logNode(node.id, {
-			message: "querying number of association groups...",
-			direction: "outbound",
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
 		});
-		const groupCount = await api.getGroupCount();
-		log.controller.logNode(node.id, {
-			message: `supports ${groupCount} association groups`,
-			direction: "inbound",
-		});
+
+		let groupCount: number;
+		if (complete) {
+			// First find out how many groups are supported
+			log.controller.logNode(node.id, {
+				message: "querying number of association groups...",
+				direction: "outbound",
+			});
+			groupCount = await api.getGroupCount();
+			log.controller.logNode(node.id, {
+				message: `supports ${groupCount} association groups`,
+				direction: "inbound",
+			});
+		} else {
+			// Partial interview, read the information from cache
+			groupCount =
+				this.getValueDB().getValue({
+					commandClass: this.ccId,
+					propertyName: "groupCount",
+				}) || 0;
+		}
 
 		// Then query each association group
 		for (let groupId = 1; groupId <= groupCount; groupId++) {
@@ -167,12 +184,18 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 
 		// If the target node supports Z-Wave+ info that means the lifeline MUST be group #1
 		if (node.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
-			log.controller.logNode(node.id, {
-				message:
-					"supports Z-Wave+, assigning ourselves to the Lifeline group...",
-				direction: "outbound",
-			});
-			await api.addNodeIds(1, this.driver.controller!.ownNodeId!);
+			// Check if we are already in the lifeline group
+			const lifelineNodeIds: number[] =
+				this.getValueDB().getValue(getNodeIdsValueId(1)) || [];
+			const ownNodeId = this.driver.controller!.ownNodeId!;
+			if (!lifelineNodeIds.includes(ownNodeId)) {
+				log.controller.logNode(node.id, {
+					message:
+						"supports Z-Wave+, assigning ourselves to the Lifeline group...",
+					direction: "outbound",
+				});
+				await api.addNodeIds(1, ownNodeId);
+			}
 		}
 
 		// Remember that the interview is complete
