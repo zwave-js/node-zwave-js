@@ -1,4 +1,5 @@
 import { IDriver } from "../driver/IDriver";
+import log from "../log";
 import { JSONObject, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { ValueMetadata } from "../values/Metadata";
@@ -87,7 +88,32 @@ export interface BasicCC {
 
 @commandClass(CommandClasses.Basic)
 @implementedVersion(2) // Update tests in CommandClass.test.ts when changing this
-export class BasicCC extends CommandClass {}
+export class BasicCC extends CommandClass {
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const api = node.commandClasses.Basic;
+
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		log.controller.logNode(node.id, {
+			message: "querying current value...",
+			direction: "outbound",
+		});
+		const { currentValue } = await api.get();
+		log.controller.logNode(node.id, {
+			message: `received current value: ${currentValue}`,
+			direction: "inbound",
+		});
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+}
 
 interface BasicCCSetOptions extends CCCommandOptions {
 	targetValue: number;
