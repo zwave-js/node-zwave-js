@@ -395,12 +395,12 @@ export class CommandClass {
 		const keyValuePairs = [...keyValuePairDefinitions].filter(
 			([, options]) =>
 				options.minVersion == undefined ||
-				options.minVersion >= this.version,
+				options.minVersion <= this.version,
 		);
 		const ccValueDefinitions = [...getCCValueDefinitions(this)].filter(
 			([, options]) =>
 				options.minVersion == undefined ||
-				options.minVersion >= this.version,
+				options.minVersion <= this.version,
 		);
 		return [
 			...this._registeredCCValues.keys(),
@@ -436,12 +436,12 @@ export class CommandClass {
 		const keyValuePairs = [...keyValuePairDefinitions].filter(
 			([, options]) =>
 				options.minVersion == undefined ||
-				options.minVersion >= this.version,
+				options.minVersion <= this.version,
 		);
 		const ccValueDefinitions = [...getCCValueDefinitions(this)].filter(
 			([, options]) =>
 				options.minVersion == undefined ||
-				options.minVersion >= this.version,
+				options.minVersion <= this.version,
 		);
 		// If not specified otherwise, persist all registered values in the value db
 		// But filter out those that don't match the minimum version
