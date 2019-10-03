@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 1.4.0 (2019-10-03)
 * (AlCalzone) Partially re-interview CCs after restart from cache
 * (AlCalzone) Add interview procedure for BasicCC
 * (AlCalzone) Add the option to specify a minimum version for ccValues
