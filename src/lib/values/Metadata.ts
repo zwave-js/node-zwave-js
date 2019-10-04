@@ -3,17 +3,22 @@ import { IntegerLimits } from "./Primitive";
 
 const isIntegerRegex = /^\d+$/;
 
+/** Returns an array with the values of a numeric enum */
+export function getNumericEnumValues<T extends Record<string, any>>(
+	enumeration: T,
+): readonly number[] {
+	return Object.keys(enumeration)
+		.filter(val => isIntegerRegex.test(val))
+		.map(val => parseInt(val, 10));
+}
+
 /** Takes an enumeration and an array of values of this enumeration and returns a states record to be used as metadata */
 export function enumValuesToMetadataStates<T extends Record<string, any>>(
 	enumeration: T,
-	values?: number[],
+	values?: readonly number[],
 ): Record<number, string> {
 	const ret: Record<number, string> = {};
-	if (values == undefined) {
-		values = Object.keys(enumeration)
-			.filter(val => isIntegerRegex.test(val))
-			.map(val => parseInt(val, 10));
-	}
+	if (values == undefined) values = getNumericEnumValues(enumeration);
 	for (const value of values) {
 		ret[value] = getEnumMemberName(enumeration, value);
 	}
@@ -123,6 +128,24 @@ const ReadOnlyBoolean: ValueMetadataBoolean = {
 /** A boolean value (writeonly) */
 const WriteOnlyBoolean: ValueMetadataBoolean = {
 	...Boolean,
+	..._writeonly,
+};
+
+/** Any number */
+const Number: ValueMetadataNumeric = {
+	..._default,
+	type: "number",
+};
+
+/** Unsigned 8-bit integer (readonly) */
+const ReadOnlyNumber: ValueMetadataNumeric = {
+	...Number,
+	..._readonly,
+};
+
+/** Unsigned 8-bit integer (writeonly) */
+const WriteOnlyNumber: ValueMetadataNumeric = {
+	...Number,
 	..._writeonly,
 };
 
@@ -306,6 +329,13 @@ export const ValueMetadata = {
 	ReadOnly: Object.freeze(ReadOnly),
 	/** The default value for writeonly metadata */
 	WriteOnly: Object.freeze(WriteOnly),
+
+	/** A numeric value */
+	Number: Object.freeze(Number),
+	/** A numeric value (readonly) */
+	ReadOnlyNumber: Object.freeze(ReadOnlyNumber),
+	/** A numeric value (writeonly) */
+	WriteOnlyNumber: Object.freeze(WriteOnlyNumber),
 
 	/** Unsigned 8-bit integer */
 	UInt8: Object.freeze(UInt8),

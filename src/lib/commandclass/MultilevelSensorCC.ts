@@ -128,8 +128,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 			propertyName: MultilevelSensorTypes[this._type],
 		};
 		this.getValueDB().setMetadata(valueId, {
-			...ValueMetadata.ReadOnly,
-			type: "number",
+			...ValueMetadata.ReadOnlyNumber,
 			unit: this._scale.unit,
 		});
 		this.getValueDB().setValue(valueId, value);

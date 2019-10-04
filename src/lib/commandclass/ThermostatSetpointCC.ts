@@ -1,6 +1,9 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { validatePayload } from "../util/misc";
+import log from "../log";
+import { ValueID } from "../node/ValueDB";
+import { getEnumMemberName, validatePayload } from "../util/misc";
+import { getNumericEnumValues, ValueMetadata } from "../values/Metadata";
 import {
 	encodeFloatWithScale,
 	parseBitMask,
@@ -11,7 +14,6 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	ccKeyValuePair,
 	ccValue,
 	CommandClass,
 	commandClass,
@@ -57,6 +59,16 @@ export enum ThermostatSetpointScale {
 	Fahrenheit = 1,
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+function getSetpointUnit(scale: ThermostatSetpointScale) {
+	return scale === ThermostatSetpointScale.Celsius
+		? "°C"
+		: // wotan-disable-next-line no-useless-predicate
+		scale === ThermostatSetpointScale.Fahrenheit
+		? "°F"
+		: "";
+}
+
 export interface ThermostatSetpointValue {
 	value: number;
 	scale: ThermostatSetpointScale;
@@ -81,10 +93,14 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			ThermostatSetpointCCReport
 		>(cc))!;
-		return {
-			value: response.value,
-			scale: response.scale,
-		};
+		return response.type === 0
+			? // not supported
+			  undefined
+			: // supported
+			  {
+					value: response.value,
+					scale: response.scale,
+			  };
 	}
 
 	public async set(
@@ -120,6 +136,11 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		};
 	}
 
+	/**
+	 * Requests the supported setpoint types from the node. Due to inconsistencies it is NOT recommended
+	 * to use this method on nodes with CC versions 1 and 2. Instead rely on the information determined
+	 * during node interview.
+	 */
 	public async getSupportedSetpointTypes(): Promise<
 		readonly ThermostatSetpointType[]
 	> {
@@ -140,7 +161,155 @@ export interface ThermostatSetpointCC {
 
 @commandClass(CommandClasses["Thermostat Setpoint"])
 @implementedVersion(3)
-export class ThermostatSetpointCC extends CommandClass {}
+export class ThermostatSetpointCC extends CommandClass {
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const api = node.commandClasses["Thermostat Setpoint"];
+
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		if (this.version <= 2) {
+			const supportedSetpointTypes: ThermostatSetpointType[] = [];
+			let queriedSetpointTypes: readonly ThermostatSetpointType[] = [];
+			const supportedSetpointTypesValueId: ValueID = {
+				commandClass: this.ccId,
+				endpoint: this.endpoint,
+				propertyName: "supportedSetpointTypes",
+			};
+
+			if (complete) {
+				queriedSetpointTypes = getNumericEnumValues(
+					ThermostatSetpointType,
+				);
+			} else {
+				queriedSetpointTypes =
+					this.getValueDB().getValue(supportedSetpointTypesValueId) ||
+					[];
+			}
+			// Scan all setpoint types to find out which are actually supported
+			for (const type of queriedSetpointTypes) {
+				const setpointName = getEnumMemberName(
+					ThermostatSetpointType,
+					type,
+				);
+				// Every time, query the current value
+				log.controller.logNode(node.id, {
+					message: `querying current value of setpoint ${setpointName}...`,
+					direction: "outbound",
+				});
+				const setpoint = await api.get(type);
+				let logMessage: string;
+				if (setpoint) {
+					supportedSetpointTypes.push(type);
+					logMessage = `received current value of setpoint ${setpointName}: ${
+						setpoint.value
+					} ${getSetpointUnit(setpoint.scale)}`;
+				} else {
+					logMessage = `Setpoint ${setpointName} is not supported`;
+				}
+				log.controller.logNode(node.id, {
+					message: logMessage,
+					direction: "inbound",
+				});
+			}
+
+			// After a complete interview, we need to remember which setpoint types are supported
+			if (complete) {
+				this.getValueDB().setValue(
+					supportedSetpointTypesValueId,
+					supportedSetpointTypes,
+				);
+			}
+		} else {
+			// Versions >= 3 adhere to bitmap interpretation A, so we can rely on getSupportedSetpointTypes
+
+			// If we haven't yet, query the supported setpoint types
+			let setpointTypes: ThermostatSetpointType[];
+			if (complete) {
+				log.controller.logNode(node.id, {
+					message: "retrieving supported setpoint types...",
+					direction: "outbound",
+				});
+				setpointTypes = [...(await api.getSupportedSetpointTypes())];
+				const logMessage =
+					"received supported setpoint types:\n" +
+					setpointTypes
+						.map(type =>
+							getEnumMemberName(ThermostatSetpointType, type),
+						)
+						.map(name => `* ${name}`)
+						.join("\n");
+				log.controller.logNode(node.id, {
+					message: logMessage,
+					direction: "inbound",
+				});
+			} else {
+				setpointTypes =
+					this.getValueDB().getValue({
+						commandClass: this.ccId,
+						propertyName: "supportedSetpointTypes",
+						endpoint: this.endpoint,
+					}) || [];
+			}
+
+			for (const type of setpointTypes) {
+				const setpointName = getEnumMemberName(
+					ThermostatSetpointType,
+					type,
+				);
+				// If we haven't yet, find out the capabilities of this setpoint
+				if (complete) {
+					log.controller.logNode(node.id, {
+						message: `retrieving capabilities for setpoint ${setpointName}...`,
+						direction: "outbound",
+					});
+					const setpointCaps = await api.getCapabilities(type);
+					const minValueUnit = getSetpointUnit(
+						setpointCaps.minValueScale,
+					);
+					const maxValueUnit = getSetpointUnit(
+						setpointCaps.maxValueScale,
+					);
+					const logMessage = `received capabilities for setpoint ${setpointName}:
+minimum value: ${setpointCaps.minValue} ${minValueUnit}
+maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
+					log.controller.logNode(node.id, {
+						message: logMessage,
+						direction: "inbound",
+					});
+				}
+				// Every time, query the current value
+				log.controller.logNode(node.id, {
+					message: `querying current value of setpoint ${setpointName}...`,
+					direction: "outbound",
+				});
+				const setpoint = await api.get(type);
+				let logMessage: string;
+				if (setpoint) {
+					logMessage = `received current value of setpoint ${setpointName}: ${
+						setpoint.value
+					} ${getSetpointUnit(setpoint.scale)}`;
+				} else {
+					// This shouldn't happen since we used getSupported
+					// But better be sure we don't crash
+					logMessage = `Setpoint ${setpointName} is not supported`;
+				}
+				log.controller.logNode(node.id, {
+					message: logMessage,
+					direction: "inbound",
+				});
+			}
+		}
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+}
 
 interface ThermostatSetpointCCSetOptions extends CCCommandOptions {
 	setpointType: ThermostatSetpointType;
@@ -192,28 +361,47 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		super(driver, options);
 
 		validatePayload(this.payload.length >= 1);
-		const setpointType = this.payload[0] & 0b1111;
+		this._type = this.payload[0] & 0b1111;
+		if (this._type === 0) {
+			// Not supported
+			this._value = 0;
+			this._scale = 0;
+			return;
+		}
+
 		// parseFloatWithScale does its own validation
-		const { bytesRead, ...value } = parseFloatWithScale(
-			this.payload.slice(1),
-		);
-		this.setpoints = [setpointType, value];
-		this.persistValues();
+		const { value, scale } = parseFloatWithScale(this.payload.slice(1));
+		this._value = value;
+		this._scale = scale;
+
+		const valueId: ValueID = {
+			commandClass: this.ccId,
+			endpoint: this.endpoint,
+			propertyName: "setpoint",
+			propertyKey: this._type,
+		};
+		if (!this.getValueDB().hasMetadata(valueId)) {
+			this.getValueDB().setMetadata(valueId, {
+				...ValueMetadata.Number,
+				unit: getSetpointUnit(this._scale),
+			});
+		}
+		this.getValueDB().setValue(valueId, value);
 	}
 
-	@ccKeyValuePair()
-	private setpoints: [ThermostatSetpointType, ThermostatSetpointValue];
-
-	public get setpointType(): ThermostatSetpointType {
-		return this.setpoints[0];
+	private _type: ThermostatSetpointType;
+	public get type(): ThermostatSetpointType {
+		return this._type;
 	}
 
-	public get value(): number {
-		return this.setpoints[1].value;
-	}
-
+	private _scale: ThermostatSetpointScale;
 	public get scale(): ThermostatSetpointScale {
-		return this.setpoints[1].scale;
+		return this._scale;
+	}
+
+	private _value: number;
+	public get value(): number {
+		return this._value;
 	}
 }
 
@@ -259,58 +447,61 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 		super(driver, options);
 
 		validatePayload(this.payload.length >= 1);
-		const setpointType = this.payload[0];
+		this._type = this.payload[0];
 		let bytesRead: number;
-		let minValue: number;
-		let maxValue: number;
-		let minValueScale: ThermostatSetpointScale;
-		let maxValueScale: ThermostatSetpointScale;
 		// parseFloatWithScale does its own validation
 		({
-			value: minValue,
-			scale: minValueScale,
+			value: this._minValue,
+			scale: this._minValueScale,
 			bytesRead,
 		} = parseFloatWithScale(this.payload.slice(1)));
-		({ value: maxValue, scale: maxValueScale } = parseFloatWithScale(
-			this.payload.slice(1 + bytesRead),
-		));
-		this.capabilities = [
-			setpointType,
-			{
-				minValue,
-				maxValue,
-				minValueScale,
-				maxValueScale,
-			},
-		];
+		({
+			value: this._maxValue,
+			scale: this._maxValueScale,
+		} = parseFloatWithScale(this.payload.slice(1 + bytesRead)));
+
+		// Predefine the metadata
+		const valueId: ValueID = {
+			commandClass: this.ccId,
+			endpoint: this.endpoint,
+			propertyName: "setpoint",
+			propertyKey: this._type,
+		};
+		this.getValueDB().setMetadata(valueId, {
+			...ValueMetadata.Number,
+			min: this._minValue,
+			max: this._maxValue,
+			unit:
+				getSetpointUnit(this._minValueScale) ||
+				getSetpointUnit(this._maxValueScale),
+		});
+
 		this.persistValues();
 	}
 
-	// TODO: These should go into value metadata (GH#221)
-	@ccKeyValuePair()
-	private capabilities: [
-		ThermostatSetpointType,
-		ThermostatSetpointCapabilities,
-	];
+	private _type: ThermostatSetpointType;
+	public get type(): ThermostatSetpointType {
+		return this._type;
+	}
 
+	private _minValue: number;
 	public get minValue(): number {
-		return this.capabilities[1].minValue;
+		return this._minValue;
 	}
 
+	private _maxValue: number;
 	public get maxValue(): number {
-		return this.capabilities[1].maxValue;
+		return this._maxValue;
 	}
 
+	private _minValueScale: ThermostatSetpointScale;
 	public get minValueScale(): ThermostatSetpointScale {
-		return this.capabilities[1].minValueScale;
+		return this._minValueScale;
 	}
 
+	private _maxValueScale: ThermostatSetpointScale;
 	public get maxValueScale(): ThermostatSetpointScale {
-		return this.capabilities[1].maxValueScale;
-	}
-
-	public get setpointType(): ThermostatSetpointType {
-		return this.capabilities[0];
+		return this._maxValueScale;
 	}
 }
 
@@ -382,8 +573,7 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 	}
 
 	private _supportedSetpointTypes: ThermostatSetpointType[];
-	// TODO: should this be an internal value?
-	@ccValue()
+	@ccValue({ internal: true })
 	public get supportedSetpointTypes(): readonly ThermostatSetpointType[] {
 		return this._supportedSetpointTypes;
 	}
@@ -391,6 +581,10 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 
 @CCCommand(ThermostatSetpointCommand.SupportedGet)
 @expectedCCResponse(ThermostatSetpointCCSupportedReport)
+/**
+ * Issues a SupportedGet command to the node. Due to inconsistencies in interpretation,
+ * this command should not be used for nodes with CC versions 1 or 2
+ */
 export class ThermostatSetpointCCSupportedGet extends ThermostatSetpointCC {
 	public constructor(
 		driver: IDriver,
