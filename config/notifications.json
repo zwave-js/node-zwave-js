@@ -1206,5 +1206,50 @@
 				}
 			}
 		]
+	},
+	"0x12": {
+		"name": "Gas alarm",
+		"variables": [
+			{
+				"name": "Combustible gas status",
+				"states": {
+					"0x01": {
+						"label": "Combustible gas detected (location provided)",
+						"description": "The event parameters contain a location report"
+					},
+					"0x02": {
+						"label": "Combustible gas detected"
+					}
+				}
+			},
+			{
+				"name": "Toxic gas status",
+				"states": {
+					"0x03": {
+						"label": "Toxic gas detected (location provided)",
+						"description": "The event parameters contain a location report"
+					},
+					"0x04": {
+						"label": "Toxic gas detected"
+					}
+				}
+			},
+			{
+				"name": "Alarm status",
+				"states": {
+					"0x05": {
+						"label": "Gas alarm test"
+					}
+				}
+			},
+			{
+				"name": "Maintenance status",
+				"states": {
+					"0x06": {
+						"label": "Replacement required"
+					}
+				}
+			}
+		]
 	}
 }
