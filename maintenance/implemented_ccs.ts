@@ -272,7 +272,7 @@ const ccVersions: Record<
 	"0x47": { version: 1 },
 	"0x43": { version: 3 },
 	"0x8A": { version: 2 },
-	"0x8B": { version: 2 },
+	"0x8B": { version: 1 },
 	"0x55": { version: 2 },
 	"0x63": { version: 2 },
 	"0x86": { version: 3 },
