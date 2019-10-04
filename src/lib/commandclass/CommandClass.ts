@@ -343,6 +343,18 @@ export class CommandClass {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	public async interview(complete: boolean = true): Promise<void> {}
 
+	/** Determines which CC interviews must be performed before this CC can be interviewed */
+	public determineRequiredCCInterviews(): readonly CommandClasses[] {
+		// By default, all CCs require the VersionCC interview
+
+		// There are two exceptions to this rule:
+		// * ManufacturerSpecific must be interviewed first
+		// * VersionCC itself must be done after that
+		// These exceptions are defined in the overrides of this method of each corresponding CC
+
+		return [CommandClasses.Version];
+	}
+
 	/**
 	 * Determine whether the linked node supports a specific command of this command class.
 	 * "unknown" means that the information has not been received yet

@@ -138,6 +138,11 @@ export class VersionCC extends CommandClass {
 		return super.supportsCommand(cmd);
 	}
 
+	public determineRequiredCCInterviews(): readonly CommandClasses[] {
+		// VersionCC must be the 2nd CC after ManufacturerSpecificCC
+		return [CommandClasses["Manufacturer Specific"]];
+	}
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = node.commandClasses.Version;
