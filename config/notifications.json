@@ -1309,5 +1309,22 @@
 				"label": "Light color transition detected"
 			}
 		}
+	},
+	"0x16": {
+		"name": "Home monitoring",
+		"variables": [
+			{
+				"name": "Home occupancy status",
+				"states": {
+					"0x01": {
+						"label": "Home occupied (location provided)",
+						"description": "The event parameters contain a location report"
+					},
+					"0x02": {
+						"label": "Home occupied"
+					}
+				}
+			}
+		]
 	}
 }
