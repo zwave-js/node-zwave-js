@@ -1251,5 +1251,45 @@
 				}
 			}
 		]
+	},
+	"0x13": {
+		"name": "Pest Control",
+		"variables": [
+			{
+				"name": "Trap status",
+				"states": {
+					"0x01": {
+						"label": "Trap armed (location provided)",
+						"description": "The event parameters contain a location report"
+					},
+					"0x02": {
+						"label": "Trap armed"
+					},
+					"0x03": {
+						"label": "Trap re-arm required (location provided)",
+						"description": "The event parameters contain a location report"
+					},
+					"0x04": {
+						"label": "Trap re-arm required"
+					}
+				}
+			}
+		],
+		"events": {
+			"0x05": {
+				"label": "Pest detected (location provided)",
+				"description": "The event parameters contain a location report"
+			},
+			"0x06": {
+				"label": "Pest detected"
+			},
+			"0x07": {
+				"label": "Pest exterminated (location provided)",
+				"description": "The event parameters contain a location report"
+			},
+			"0x08": {
+				"label": "Pest exterminated"
+			}
+		}
 	}
 }
