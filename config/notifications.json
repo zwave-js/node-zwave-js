@@ -1291,5 +1291,23 @@
 				"label": "Pest exterminated"
 			}
 		}
+	},
+	"0x14": {
+		"name": "Light sensor",
+		"variables": [
+			{
+				"name": "Light detection status",
+				"states": {
+					"0x01": {
+						"label": "Light detected"
+					}
+				}
+			}
+		],
+		"events": {
+			"0x02": {
+				"label": "Light color transition detected"
+			}
+		}
 	}
 }
