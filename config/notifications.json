@@ -1310,6 +1310,167 @@
 			}
 		}
 	},
+	"0x15": {
+		"name": "Water Quality Monitoring",
+		"variables": [
+			{
+				"name": "Chlorine alarm status",
+				"states": {
+					"0x01": {
+						"label": "Chlorine alarm",
+						"params": {
+							"type": "enum",
+							"values": {
+								"0x01": "Below low threshold",
+								"0x02": "Above high threshold"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Acidity (pH) status",
+				"states": {
+					"0x02": {
+						"label": "Acidity (pH) alarm",
+						"params": {
+							"type": "enum",
+							"values": {
+								"0x01": "Below low threshold",
+								"0x02": "Above high threshold",
+								"0x03": "Decreasing pH",
+								"0x04": "Increasing pH"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Water Oxidation alarm status",
+				"states": {
+					"0x03": {
+						"label": "Water Oxidation alarm",
+						"params": {
+							"type": "enum",
+							"values": {
+								"0x01": "Below low threshold",
+								"0x02": "Above high threshold"
+							}
+						}
+					}
+				}
+			},
+			{
+				"name": "Chlorine Sensor status",
+				"states": {
+					"0x04": {
+						"label": "Chlorine empty"
+					}
+				}
+			},
+			{
+				"name": "Acidity (pH) Sensor status",
+				"states": {
+					"0x05": {
+						"label": "Acidity (pH) empty"
+					}
+				}
+			},
+			{
+				"name": "Waterflow measuring station sensor",
+				"states": {
+					"0x06": {
+						"label": "Waterflow measuring station shortage detected"
+					}
+				}
+			},
+			{
+				"name": "Waterflow clear water sensor",
+				"states": {
+					"0x07": {
+						"label": "Waterflow clear water shortage detected"
+					}
+				}
+			},
+			{
+				"name": "Disinfection system status",
+				"states": {
+					"0x08": {
+						"label": "Disinfection system error detected"
+						// TODO:
+						// Event Parameter 1 byte bitmask=
+						// - bits 0..3: represent System 1..4 disorder detected
+						// - bits 4..7: represent System 1..4 salt shortage
+					}
+				}
+			},
+			{
+				"name": "Filter cleaning status",
+				"states": {
+					"0x09": {
+						"label": "Filter cleaning ongoing"
+						// TODO: Event Parameter (1 byte) contains the # of the filter
+					}
+				}
+			},
+			{
+				"name": "Heating status",
+				"states": {
+					"0x0A": {
+						"label": "Heating operation ongoing"
+					}
+				}
+			},
+			{
+				"name": "Filter pump status",
+				"states": {
+					"0x0B": {
+						"label": "Filter pump operation ongoing"
+					}
+				}
+			},
+			{
+				"name": "Freshwater flow status",
+				"states": {
+					"0x0C": {
+						"label": "Freshwater operation ongoing"
+					}
+				}
+			},
+			{
+				"name": "Dry protection status",
+				"states": {
+					"0x0D": {
+						"label": "Dry protection operation active"
+					}
+				}
+			},
+			{
+				// This is defined as an event in the specs, but only makes sense as a status
+				"name": "Water tank status",
+				"idle": false,
+				"states": {
+					"0x0E": {
+						"label": "Water tank is empty"
+					},
+					"0x0F": {
+						"label": "Water tank level is unknown"
+					},
+					"0x10": {
+						"label": "Water tank is full"
+					}
+				}
+			},
+			{
+				"name": "Collective disorder status",
+				"states": {
+					"0x11": {
+						"label": "Collective disorder"
+					}
+				}
+			}
+		]
+	},
 	"0x16": {
 		"name": "Home monitoring",
 		"variables": [
