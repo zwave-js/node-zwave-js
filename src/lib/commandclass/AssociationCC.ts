@@ -134,6 +134,14 @@ export interface AssociationCC {
 @commandClass(CommandClasses.Association)
 @implementedVersion(2)
 export class AssociationCC extends CommandClass {
+	public determineRequiredCCInterviews(): readonly CommandClasses[] {
+		// AssociationCC must be interviewed after Z-Wave+ if that is supported
+		return [
+			...super.determineRequiredCCInterviews(),
+			CommandClasses["Z-Wave Plus Info"],
+		];
+	}
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = node.commandClasses.Association;

@@ -37,6 +37,7 @@ import {
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import { GraphNode, topologicalSort } from "../util/graph";
 import { JSONObject, Mixin } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import { CacheMetadata, CacheValue } from "../values/Cache";
@@ -754,60 +755,59 @@ version:               ${this.version}`;
 		await this.setInterviewStage(InterviewStage.NodeInfo);
 	}
 
-	/** Step #? of the node interview */
-	protected async interviewCCs(): Promise<void> {
-		// 1. Find out which device this is
-		if (this.supportsCC(CommandClasses["Manufacturer Specific"])) {
-			const cc = this.createCCInstance(
-				CommandClasses["Manufacturer Specific"],
-			)!;
-			await cc.interview(!cc.interviewComplete);
-			await this.driver.saveNetworkToCache();
-		}
-		// TODO: Overwrite the reported config with configuration files (like OZW does)
-
-		// 2. Find out which versions we can use
-		// This conditional is not necessary, but saves us a bunch of headaches during testing
-		if (this.supportsCC(CommandClasses.Version)) {
-			const cc = this.createCCInstance(CommandClasses.Version)!;
-			await cc.interview(!cc.interviewComplete);
-			await this.driver.saveNetworkToCache();
-		}
-
-		// TODO: (GH#215) Correctly order CC interviews
-		// All CCs require Version
-		// ZW+ requires Multi Channel (if it is supported)
-		// what else?...
-		if (this.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
-			const cc = this.createCCInstance(
-				CommandClasses["Z-Wave Plus Info"],
-			)!;
-			await cc.interview(!cc.interviewComplete);
-			await this.driver.saveNetworkToCache();
-		}
-
-		// TODO: (GH#214) Also query ALL endpoints!
-		// 3. Perform all other CCs interviews
-		const ccInstances = [...this.implementedCommandClasses.keys()]
-			.filter(
-				cc =>
-					cc !== CommandClasses.Version &&
-					cc !== CommandClasses["Manufacturer Specific"] &&
-					cc !== CommandClasses["Z-Wave Plus Info"],
-			)
+	/** Builds the dependency graph used to automatically determine the order of CC interviews */
+	private buildCCInterviewGraph(): GraphNode<CommandClass>[] {
+		const supportedCCInstances = [...this.implementedCommandClasses.keys()]
 			.map(cc => this.createCCInstance(cc))
 			.filter(instance => !!instance) as CommandClass[];
-		for (const cc of ccInstances) {
+		// Create GraphNodes from all supported CCs
+		const ret = supportedCCInstances.map(
+			instance => new GraphNode(instance),
+		);
+		// Create the dependencies
+		for (const node of ret) {
+			for (const requiredCCId of node.value.determineRequiredCCInterviews()) {
+				const requiredCC = ret.find(
+					instance => instance.value.ccId === requiredCCId,
+				);
+				if (requiredCC) node.edges.add(requiredCC);
+			}
+		}
+		return ret;
+	}
+
+	/** Step #? of the node interview */
+	protected async interviewCCs(): Promise<void> {
+		// We determine the correct interview order by topologically sorting a dependency graph
+		const interviewGraph = this.buildCCInterviewGraph();
+		let interviewOrder: CommandClass[];
+		try {
+			interviewOrder = topologicalSort(interviewGraph);
+		} catch (e) {
+			// This interview cannot be done
+			throw new ZWaveError(
+				"The CC interview cannot be completed because there are circular dependencies between CCs!",
+				ZWaveErrorCodes.CC_Invalid,
+			);
+		}
+
+		// Now that we know the correct order, do the interview in sequence
+		for (const cc of interviewOrder) {
 			try {
 				await cc.interview(!cc.interviewComplete);
 				await this.driver.saveNetworkToCache();
 			} catch (e) {
+				// TODO: Should this cancel the entire interview procedure?
 				log.controller.print(
 					`${cc.constructor.name}: Interview failed:\n${e.message}`,
 					"error",
 				);
 			}
 		}
+
+		// TODO: Overwrite the reported config with configuration files (like OZW does)
+		// TODO: (GH#214) Also query ALL endpoints!
+
 		await this.setInterviewStage(InterviewStage.CommandClasses);
 	}
 

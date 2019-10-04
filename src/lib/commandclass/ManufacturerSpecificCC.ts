@@ -91,6 +91,11 @@ export class ManufacturerSpecificCC extends CommandClass {
 		return super.supportsCommand(cmd);
 	}
 
+	public determineRequiredCCInterviews(): readonly CommandClasses[] {
+		// The Manufacturer Specific CC MUST be interviewed first
+		return [];
+	}
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = node.commandClasses["Manufacturer Specific"];
