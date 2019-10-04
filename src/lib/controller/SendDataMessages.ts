@@ -216,10 +216,7 @@ function testResponseForSendDataRequest(
 ): ResponseRole {
 	if (received instanceof SendDataResponse) {
 		return received.wasSent ? "confirmation" : "fatal_controller";
-	} else if (
-		received instanceof SendDataRequestTransmitReport &&
-		received.callbackId === sent.callbackId
-	) {
+	} else if (received instanceof SendDataRequestTransmitReport) {
 		return received.isFailed() ? "fatal_node" : "final"; // send data requests are final unless stated otherwise by a CommandClass
 	}
 	return "unexpected";

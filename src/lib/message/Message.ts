@@ -150,6 +150,10 @@ export class Message {
 		this._callbackId = v;
 	}
 
+	public hasCallbackId(): boolean {
+		return this._callbackId != undefined;
+	}
+
 	protected _bytesRead: number = 0;
 	/**
 	 * @internal
@@ -241,6 +245,13 @@ export class Message {
 
 	/** Checks if a message is an expected response for this message */
 	public testResponse(msg: Message): ResponseRole {
+		// If the sent message included a callback id, enforce that the response contains the same
+		if (
+			this.hasCallbackId() &&
+			(!msg.hasCallbackId() || this._callbackId !== msg._callbackId)
+		) {
+			return "unexpected";
+		}
 		const expected = this.expectedResponse;
 		// log("driver", `Message: testing response`, "debug");
 		if (typeof expected === "number" && msg.type === MessageType.Response) {

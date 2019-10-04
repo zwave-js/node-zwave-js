@@ -376,6 +376,44 @@ describe("lib/message", () => {
 			}
 		});
 
+		it(`when the message has a callbackId, testResponse() should return "unexpected" for responses that don't match it`, () => {
+			const msg = new Message(fakeDriver, {
+				type: MessageType.Request,
+				functionType: 0xff,
+				expectedResponse: FunctionType.GetSUCNodeId,
+				callbackId: 5,
+			});
+			const final = new Message(fakeDriver, {
+				type: MessageType.Response,
+				functionType: FunctionType.GetSUCNodeId,
+				callbackId: 5,
+			});
+			expect(msg.testResponse(final)).toBe("final");
+
+			// wrong callback id
+			const unexpected1 = new Message(fakeDriver, {
+				type: MessageType.Response,
+				functionType: FunctionType.GetSUCNodeId,
+				callbackId: 4,
+			});
+			expect(msg.testResponse(unexpected1)).toBe("unexpected");
+
+			// missing callback id
+			const unexpected2 = new Message(fakeDriver, {
+				type: MessageType.Response,
+				functionType: FunctionType.GetSUCNodeId,
+			});
+			expect(msg.testResponse(unexpected2)).toBe("unexpected");
+
+			// sanity check: the function type should still be checked
+			const unexpected3 = new Message(fakeDriver, {
+				type: MessageType.Response,
+				functionType: FunctionType.RequestNodeInfo, // does not match
+				callbackId: 5, // matches
+			});
+			expect(msg.testResponse(unexpected3)).toBe("unexpected");
+		});
+
 		it(`the constructor should throw when no message type is specified`, () => {
 			assertZWaveError(
 				() => new Message(fakeDriver, { functionType: 0xff }),

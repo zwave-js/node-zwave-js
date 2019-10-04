@@ -75,6 +75,7 @@ describe("lib/controller/SendDataRequest => ", () => {
 		expect(
 			predicate(
 				{
+					hasCallbackId: () => true,
 					callbackId: (nodeFail as SendDataRequestTransmitReport)
 						.callbackId,
 				} as any,
@@ -90,6 +91,7 @@ describe("lib/controller/SendDataRequest => ", () => {
 		expect(
 			predicate(
 				{
+					hasCallbackId: () => true,
 					callbackId: (nodeSuccess as SendDataRequestTransmitReport)
 						.callbackId,
 				} as any,

@@ -32,14 +32,10 @@ function testResponseForNodeNeighborUpdateRequest(
 	sent: RequestNodeNeighborUpdateRequest,
 	received: Message,
 ): ResponseRole {
-	if (
-		received instanceof RequestNodeNeighborUpdateReport &&
-		received.callbackId === sent.callbackId
-	) {
-		if (received.updateStatus === NodeNeighborUpdateStatus.UpdateStarted) {
-			return "confirmation";
-		}
-		return "final";
+	if (received instanceof RequestNodeNeighborUpdateReport) {
+		return received.updateStatus === NodeNeighborUpdateStatus.UpdateStarted
+			? "confirmation"
+			: "final";
 	}
 	return "unexpected";
 }
