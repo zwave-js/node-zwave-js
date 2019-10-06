@@ -1167,7 +1167,7 @@ describe("lib/node/Node", () => {
 			);
 			expect(onValueAdded).toBeCalled();
 			const cbArg = onValueAdded.mock.calls[0][1];
-			expect(cbArg.propertyKey).toBe("Moisture");
+			expect(cbArg.propertyKeyName).toBe("Moisture");
 		});
 
 		it("should not be emitted for internal values", () => {
