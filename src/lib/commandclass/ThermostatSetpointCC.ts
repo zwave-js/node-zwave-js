@@ -9,7 +9,13 @@ import {
 	parseBitMask,
 	parseFloatWithScale,
 } from "../values/Primitive";
-import { CCAPI } from "./API";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -83,6 +89,37 @@ export interface ThermostatSetpointCapabilities {
 
 @API(CommandClasses["Thermostat Setpoint"])
 export class ThermostatSetpointCCAPI extends CCAPI {
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ propertyName, propertyKey },
+		value,
+	): Promise<void> => {
+		if (propertyName !== "setpoint") {
+			throwUnsupportedProperty(this.ccId, propertyName);
+		}
+		if (typeof propertyKey !== "number") {
+			throw new ZWaveError(
+				`${
+					CommandClasses[this.ccId]
+				}: "${propertyName}" must be further specified by a numeric property key`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+		if (typeof value !== "number") {
+			throwWrongValueType(
+				this.ccId,
+				propertyName,
+				"number",
+				typeof value,
+			);
+		}
+
+		// TODO: GH#323 retrieve the actual scale the thermostat is using
+		await this.set(propertyKey, value, 0);
+
+		// Refresh the current value
+		await this.get(propertyKey);
+	};
+
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get(setpointType: ThermostatSetpointType) {
 		const cc = new ThermostatSetpointCCGet(this.driver, {
@@ -162,6 +199,20 @@ export interface ThermostatSetpointCC {
 @commandClass(CommandClasses["Thermostat Setpoint"])
 @implementedVersion(3)
 export class ThermostatSetpointCC extends CommandClass {
+	public static translatePropertyKey(
+		propertyName: string,
+		propertyKey: number | string,
+	): string {
+		if (propertyName === "setpoint") {
+			return getEnumMemberName(
+				ThermostatSetpointType,
+				propertyKey as any,
+			);
+		} else {
+			return super.translatePropertyKey(propertyName, propertyKey);
+		}
+	}
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = node.commandClasses["Thermostat Setpoint"];
@@ -538,6 +589,8 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 	}
 }
 
+// 020443058202
+
 @CCCommand(ThermostatSetpointCommand.SupportedReport)
 export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 	public constructor(
@@ -548,7 +601,8 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 
 		validatePayload(this.payload.length >= 1);
 		const bitMask = this.payload;
-		const supported = parseBitMask(bitMask);
+		// This bit map starts counting at 0, so shift everything by 1
+		const supported = parseBitMask(bitMask).map(i => i - 1);
 		if (this.version >= 3) {
 			// Interpretation A
 			this._supportedSetpointTypes = supported.map(
