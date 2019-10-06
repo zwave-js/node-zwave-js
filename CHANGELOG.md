@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 1.5.0 (2019-10-06)
 * (AlCalzone) Add the remaining notification configurations:
     * Gas Alarm (`0x12`)
     * Pest Control (`0x13`)
