@@ -65,18 +65,17 @@ import {
 	ValueUpdatedArgs,
 } from "./ValueDB";
 
-export interface ZWaveNodeValueAddedArgs extends ValueAddedArgs {
+export interface TranslatedValueID extends ValueID {
 	commandClassName: string;
+	propertyKeyName?: string;
 }
-export interface ZWaveNodeValueUpdatedArgs extends ValueUpdatedArgs {
-	commandClassName: string;
-}
-export interface ZWaveNodeValueRemovedArgs extends ValueRemovedArgs {
-	commandClassName: string;
-}
-export interface ZWaveNodeMetadataUpdatedArgs extends MetadataUpdatedArgs {
-	commandClassName: string;
-}
+
+export type ZWaveNodeValueAddedArgs = ValueAddedArgs & TranslatedValueID;
+export type ZWaveNodeValueUpdatedArgs = ValueUpdatedArgs & TranslatedValueID;
+export type ZWaveNodeValueRemovedArgs = ValueRemovedArgs & TranslatedValueID;
+export type ZWaveNodeMetadataUpdatedArgs = MetadataUpdatedArgs &
+	TranslatedValueID;
+
 export type ZWaveNodeValueAddedCallback = (
 	node: ZWaveNode,
 	args: ZWaveNodeValueAddedArgs,
@@ -175,27 +174,35 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		for (const cc of controlledCCs) this.addCC(cc, { isControlled: true });
 	}
 
+	private translateValueID<T extends ValueID>(
+		valueId: T,
+	): T & TranslatedValueID {
+		// Try to retrieve the speaking CC name
+		const commandClassName = getCCName(valueId.commandClass);
+		const ret: T & TranslatedValueID = {
+			commandClassName,
+			...valueId,
+		};
+		const ccConstructor: typeof CommandClass =
+			(getCCConstructor(valueId.commandClass) as any) || CommandClass;
+		// Try to retrieve the speaking property key
+		if (valueId.propertyKey != undefined) {
+			const propertyKey = ccConstructor.translatePropertyKey(
+				valueId.propertyName,
+				valueId.propertyKey,
+			);
+			ret.propertyKeyName = propertyKey;
+		}
+		return ret;
+	}
+
 	/** Adds the speaking name of a command class to the raw event args of the ValueDB */
 	private translateValueEvent<T extends ValueID>(
 		eventName: keyof ZWaveNodeValueEventCallbacks,
 		arg: T,
 	): void {
 		// Try to retrieve the speaking CC name
-		const commandClassName = getCCName(arg.commandClass);
-		const outArg: T & { commandClassName: string } = {
-			commandClassName,
-			...arg,
-		};
-		const ccConstructor: typeof CommandClass =
-			(getCCConstructor(arg.commandClass) as any) || CommandClass;
-		// Try to retrieve the speaking property key
-		if (arg.propertyKey != undefined) {
-			const propertyKey = ccConstructor.translatePropertyKey(
-				arg.propertyName,
-				arg.propertyKey,
-			);
-			outArg.propertyKey = propertyKey;
-		}
+		const outArg = this.translateValueID(arg);
 		// If this is a metadata event, make sure we return the merged metadata
 		if ("metadata" in outArg) {
 			((outArg as unknown) as MetadataUpdatedArgs).metadata = this.getValueMetadata(
@@ -360,26 +367,16 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	}
 
 	/** Returns a list of all value names that are defined on all endpoints of this node */
-	public getDefinedValueIDs(): ValueID[] {
-		const ret: ValueID[] = [];
+	public getDefinedValueIDs(): TranslatedValueID[] {
+		const ret: TranslatedValueID[] = [];
 		for (const endpoint of this.getAllEndpoints()) {
 			for (const cc of endpoint.implementedCommandClasses.keys()) {
 				const ccInstance = this.createCCInstance(cc);
 				if (ccInstance) {
 					ret.push(
 						...ccInstance
-							.getDefinedPropertyNames()
-							.filter(
-								propertyName =>
-									!ccInstance.isInternalValue(
-										propertyName as any,
-									),
-							)
-							.map(propertyName => ({
-								commandClass: cc,
-								endpoint: endpoint.index,
-								propertyName,
-							})),
+							.getDefinedValueIDs()
+							.map(this.translateValueID),
 					);
 				}
 			}
@@ -756,19 +753,18 @@ version:               ${this.version}`;
 	}
 
 	/** Builds the dependency graph used to automatically determine the order of CC interviews */
-	private buildCCInterviewGraph(): GraphNode<CommandClass>[] {
-		const supportedCCInstances = [...this.implementedCommandClasses.keys()]
-			.map(cc => this.createCCInstance(cc))
-			.filter(instance => !!instance) as CommandClass[];
-		// Create GraphNodes from all supported CCs
-		const ret = supportedCCInstances.map(
-			instance => new GraphNode(instance),
+	private buildCCInterviewGraph(): GraphNode<CommandClasses>[] {
+		const supportedCCs = [...this.implementedCommandClasses.keys()].filter(
+			cc => !!this.createCCInstance(cc),
 		);
+		// Create GraphNodes from all supported CCs
+		const ret = supportedCCs.map(cc => new GraphNode(cc));
 		// Create the dependencies
 		for (const node of ret) {
-			for (const requiredCCId of node.value.determineRequiredCCInterviews()) {
+			const instance = this.createCCInstance(node.value)!;
+			for (const requiredCCId of instance.determineRequiredCCInterviews()) {
 				const requiredCC = ret.find(
-					instance => instance.value.ccId === requiredCCId,
+					instance => instance.value === requiredCCId,
 				);
 				if (requiredCC) node.edges.add(requiredCC);
 			}
@@ -780,7 +776,7 @@ version:               ${this.version}`;
 	protected async interviewCCs(): Promise<void> {
 		// We determine the correct interview order by topologically sorting a dependency graph
 		const interviewGraph = this.buildCCInterviewGraph();
-		let interviewOrder: CommandClass[];
+		let interviewOrder: CommandClasses[];
 		try {
 			interviewOrder = topologicalSort(interviewGraph);
 		} catch (e) {
@@ -794,7 +790,8 @@ version:               ${this.version}`;
 		// Now that we know the correct order, do the interview in sequence
 		for (const cc of interviewOrder) {
 			try {
-				await cc.interview(!cc.interviewComplete);
+				const instance = this.createCCInstance(cc)!;
+				await instance.interview(!instance.interviewComplete);
 				await this.driver.saveNetworkToCache();
 			} catch (e) {
 				// TODO: Should this cancel the entire interview procedure?
