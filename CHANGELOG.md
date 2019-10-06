@@ -5,9 +5,20 @@
 -->
 
 ## __WORK IN PROGRESS__
+* (AlCalzone) Add the remaining notification configurations:
+    * Gas Alarm (`0x12`)
+    * Pest Control (`0x13`)
+    * Light Sensor (`0x14`)
+    * Water Quality Monitoring (`0x15`)
+    * Home monitoring (`0x16`)
+* (AlCalzone) Check all received request messages for a matching callback id
+* (AlCalzone) Add interview procedure for ThermostatSetpointCC
+* (AlCalzone) Add setValue API for ThermostatSetpointCC
 * (AlCalzone) Hide more CC values of newer CC versions
 * (AlCalzone) Fix translation of enum values to state metadata so it is able to handle strings starting with a number
 * (AlCalzone) Interview new nodes immediately after inclusion
+* (AlCalzone) Automatically determine the correct CC interview sequence
+* (AlCalzone) `getDefinedValueIDs` now returns statically defined, dynamically registered and created value IDs
 
 ## 1.4.0 (2019-10-03)
 * (AlCalzone) Partially re-interview CCs after restart from cache
