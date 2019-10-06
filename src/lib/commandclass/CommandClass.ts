@@ -5,7 +5,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { Endpoint } from "../node/Endpoint";
 import { ZWaveNode } from "../node/Node";
-import { ValueDB } from "../node/ValueDB";
+import { ValueDB, ValueID, valueIdToString } from "../node/ValueDB";
 import { JSONObject, staticExtends, stripUndefined } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import {
@@ -401,27 +401,67 @@ export class CommandClass {
 		this._registeredCCValues.set(name as string, internal);
 	}
 
-	/** Returns a list of all value names that are defined on this CommandClass */
-	public getDefinedPropertyNames(): string[] {
-		// In order to avoid cluttering applications with heaps of unsupported properties,
-		// we filter out those that are only available in future versions of this CC
-		// or have no version constraint
-		const keyValuePairDefinitions = getCCKeyValuePairDefinitions(this);
-		const keyValuePairs = [...keyValuePairDefinitions].filter(
-			([, options]) =>
-				options.minVersion == undefined ||
-				options.minVersion <= this.version,
+	/** Returns a list of all value names that are defined for this CommandClass */
+	public getDefinedValueIDs(): ValueID[] {
+		// In order to compare value ids, we need them to be strings
+		const ret = new Map<string, ValueID>();
+
+		const addValueId = (
+			propertyName: string,
+			propertyKey?: string | number,
+		) => {
+			const valueId: ValueID = {
+				commandClass: this.ccId,
+				endpoint: this.endpoint,
+				propertyName,
+				propertyKey,
+			};
+			const dbKey = valueIdToString(valueId);
+			if (!ret.has(dbKey)) ret.set(dbKey, valueId);
+		};
+
+		// Return all manually registered CC values that are not internal
+		const registeredCCValueNames = [...this._registeredCCValues]
+			.filter(([, isInternal]) => !isInternal)
+			.map(([key]) => key);
+		registeredCCValueNames.forEach(propertyName =>
+			addValueId(propertyName),
 		);
-		const ccValueDefinitions = [...getCCValueDefinitions(this)].filter(
-			([, options]) =>
-				options.minVersion == undefined ||
-				options.minVersion <= this.version,
+
+		// Return all defined non-internal CC values that are available in the current version of this CC
+		const valueDefinitions = getCCValueDefinitions(this);
+		const definedCCValueNames = [...valueDefinitions]
+			.filter(
+				([, options]) =>
+					options.internal !== true &&
+					(options.minVersion == undefined ||
+						options.minVersion <= this.version),
+			)
+			.map(([key]) => key);
+		definedCCValueNames.forEach(propertyName => addValueId(propertyName));
+
+		// Also return all existing value ids that are not internal
+		const existingValueIds = this.getValueDB()
+			.getValues(this.ccId)
+			.filter(valueId => valueId.endpoint === this.endpoint)
+			// allow the value id if it is NOT registered or it is registered as non-internal
+			.filter(
+				valueId =>
+					!this._registeredCCValues.has(valueId.propertyName) ||
+					this._registeredCCValues.get(valueId.propertyName)! ===
+						false,
+			)
+			// allow the value id if it is NOT defined or it is defined as non-internal
+			.filter(
+				valueId =>
+					!valueDefinitions.has(valueId.propertyName) ||
+					valueDefinitions.get(valueId.propertyName)! === false,
+			);
+		existingValueIds.forEach(({ propertyName, propertyKey }) =>
+			addValueId(propertyName, propertyKey),
 		);
-		return [
-			...this._registeredCCValues.keys(),
-			...ccValueDefinitions.map(([key]) => key),
-			...keyValuePairs.map(([key]) => key),
-		];
+
+		return [...ret.values()];
 	}
 
 	/** Determines if the given value is an internal value */
@@ -450,7 +490,6 @@ export class CommandClass {
 		// In order to avoid cluttering applications with heaps of unsupported properties,
 		// we filter out those that are only available in future versions of this CC
 		// or have no version constraint
-		// TODO: This logic is duplicated in getDefinedPropertyNames()
 		const keyValuePairDefinitions = getCCKeyValuePairDefinitions(this);
 		const keyValuePairs = [...keyValuePairDefinitions].filter(
 			([, options]) =>
