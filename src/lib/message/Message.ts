@@ -245,9 +245,10 @@ export class Message {
 
 	/** Checks if a message is an expected response for this message */
 	public testResponse(msg: Message): ResponseRole {
-		// If the sent message included a callback id, enforce that the response contains the same
+		// If a received request included a callback id, enforce that the response contains the same
 		if (
 			this.hasCallbackId() &&
+			msg.type === MessageType.Request &&
 			(!msg.hasCallbackId() || this._callbackId !== msg._callbackId)
 		) {
 			return "unexpected";

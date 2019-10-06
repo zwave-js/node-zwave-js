@@ -376,15 +376,18 @@ describe("lib/message", () => {
 			}
 		});
 
-		it(`when the message has a callbackId, testResponse() should return "unexpected" for responses that don't match it`, () => {
+		it(`when the message has a callbackId, testResponse() should return "unexpected" for requests that don't match it`, () => {
 			const msg = new Message(fakeDriver, {
 				type: MessageType.Request,
 				functionType: 0xff,
-				expectedResponse: FunctionType.GetSUCNodeId,
+				expectedResponse: (sent, received) =>
+					received.functionType === FunctionType.GetSUCNodeId
+						? "final"
+						: "unexpected",
 				callbackId: 5,
 			});
 			const final = new Message(fakeDriver, {
-				type: MessageType.Response,
+				type: MessageType.Request,
 				functionType: FunctionType.GetSUCNodeId,
 				callbackId: 5,
 			});
@@ -392,7 +395,7 @@ describe("lib/message", () => {
 
 			// wrong callback id
 			const unexpected1 = new Message(fakeDriver, {
-				type: MessageType.Response,
+				type: MessageType.Request,
 				functionType: FunctionType.GetSUCNodeId,
 				callbackId: 4,
 			});
@@ -400,14 +403,14 @@ describe("lib/message", () => {
 
 			// missing callback id
 			const unexpected2 = new Message(fakeDriver, {
-				type: MessageType.Response,
+				type: MessageType.Request,
 				functionType: FunctionType.GetSUCNodeId,
 			});
 			expect(msg.testResponse(unexpected2)).toBe("unexpected");
 
 			// sanity check: the function type should still be checked
 			const unexpected3 = new Message(fakeDriver, {
-				type: MessageType.Response,
+				type: MessageType.Request,
 				functionType: FunctionType.RequestNodeInfo, // does not match
 				callbackId: 5, // matches
 			});
