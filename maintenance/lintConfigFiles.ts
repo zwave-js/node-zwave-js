@@ -58,7 +58,7 @@ async function lintManufacturers(): Promise<void> {
 		throw new Error("The manufacturer config file must contain an object");
 	}
 
-	for (const [id, manuDefinition] of entries(definition)) {
+	for (const [id] of entries(definition)) {
 		if (!hexKeyRegex.test(id)) {
 			throw new Error(
 				`The manufacturer config file is invalid: found non-hex object key ${id}`,
