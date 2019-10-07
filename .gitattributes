@@ -1,2 +1,2 @@
 # Help GitHub understand that this is not a C(++)-repo
-specs/* linguist-vendored
+specs/** linguist-vendored
