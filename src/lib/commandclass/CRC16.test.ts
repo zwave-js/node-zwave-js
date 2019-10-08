@@ -2,7 +2,7 @@ import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { BasicCCSet } from "./BasicCC";
+import { BasicCCGet, BasicCCSet } from "./BasicCC";
 import { CommandClass } from "./CommandClass";
 import { CRC16CC, CRC16CCCommandEncapsulation } from "./CRC16";
 
@@ -10,6 +10,16 @@ const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
 describe("lib/commandclass/CRC16 => ", () => {
 	describe("CommandEncapsulation (V1)", () => {
+		it("should match the specs", () => {
+			// SDS13783 contains the following sample encapsulated command:
+			const basicCCGet = new BasicCCGet(fakeDriver, { nodeId: 1 });
+			const crc16 = CRC16CC.encapsulate(fakeDriver, basicCCGet);
+			// Use serializeForEncapsulation to exclude the nodeId and payload length
+			const serialized = crc16.serializeForEncapsulation();
+			const expected = Buffer.from("560120024d26", "hex");
+			expect(serialized).toEqual(expected);
+		});
+
 		it("serialization and deserialization should be compatible", () => {
 			const basicCCSet = new BasicCCSet(fakeDriver, {
 				nodeId: 3,
