@@ -58,32 +58,32 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
 
-			const encapsulatedCC = this.payload.slice(0, -2);
+			const ccBuffer = this.payload.slice(0, -2);
 
 			// Verify the CRC
 			let expectedCRC = CRC16_CCITT(this.headerBuffer);
-			expectedCRC = CRC16_CCITT(encapsulatedCC, expectedCRC);
+			expectedCRC = CRC16_CCITT(ccBuffer, expectedCRC);
 			const actualCRC = this.payload.readUInt16BE(
 				this.payload.length - 2,
 			);
 			validatePayload(expectedCRC === actualCRC);
 
-			this.command = CommandClass.fromEncapsulated(
+			this.encapsulatedCC = CommandClass.fromEncapsulated(
 				this.driver,
 				this,
-				encapsulatedCC,
+				ccBuffer,
 			);
 		} else {
-			this.command = options.encapsulatedCC;
+			this.encapsulatedCC = options.encapsulatedCC;
 		}
 	}
 
-	public command: CommandClass;
+	public encapsulatedCC: CommandClass;
 	private readonly headerBuffer = Buffer.from([this.ccId, this.ccCommand]);
 
 	public serialize(): Buffer {
 		// The CC header is included in the CRC computation
-		const commandBuffer = this.command.serializeForEncapsulation();
+		const commandBuffer = this.encapsulatedCC.serializeForEncapsulation();
 		// Reserve 2 bytes for the CRC
 		this.payload = Buffer.concat([commandBuffer, Buffer.allocUnsafe(2)]);
 
