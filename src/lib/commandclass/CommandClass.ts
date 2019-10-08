@@ -82,7 +82,9 @@ export class CommandClass {
 
 		if (gotDeserializationOptions(options)) {
 			// For deserialized commands, try to invoke the correct subclass constructor
-			const ccCommand = CommandClass.getCCCommand(options.data);
+			const ccCommand = options.encapsulated
+				? CommandClass.getCCCommandWithoutHeader(options.data)
+				: CommandClass.getCCCommand(options.data);
 			if (ccCommand != undefined) {
 				const CommandConstructor = getCCCommandConstructor(
 					this.ccId,
@@ -174,28 +176,6 @@ export class CommandClass {
 		);
 	}
 
-	private serializeWithoutHeader(): Buffer {
-		// NoOp CCs have no command and no payload
-		if (this.ccId === CommandClasses["No Operation"])
-			return Buffer.from([this.ccId]);
-		else if (this.ccCommand == undefined) {
-			throw new ZWaveError(
-				"Cannot serialize a Command Class without a command",
-				ZWaveErrorCodes.CC_Invalid,
-			);
-		}
-
-		const payloadLength = this.payload.length;
-		const ccIdLength = this.isExtended() ? 2 : 1;
-		const ret = Buffer.allocUnsafe(ccIdLength + 1 + payloadLength);
-		ret.writeUIntBE(this.ccId, 0, ccIdLength);
-		ret[ccIdLength] = this.ccCommand;
-		if (payloadLength > 0 /* implies payload != undefined */) {
-			this.payload.copy(ret, 1 + ccIdLength);
-		}
-		return ret;
-	}
-
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	private deserializeWithoutHeader(data: Buffer) {
 		const ccId = CommandClass.getCommandClassWithoutHeader(data);
@@ -221,15 +201,43 @@ export class CommandClass {
 	 * as required for encapsulation
 	 */
 	public serializeForEncapsulation(): Buffer {
-		return this.serializeWithoutHeader();
+		// We need to invoke the subclassed serialize implementations or
+		// this.payload will not be filled.
+		// TODO: Refactor this so we don't append two bytes and strip them out immediately afterwards
+		return this.serialize().slice(2);
+	}
+
+	private getHeader(dataLength: number): Buffer {
+		return Buffer.from([this.nodeId, dataLength]);
+	}
+
+	private prependHeader(data: Buffer): Buffer {
+		return Buffer.concat([this.getHeader(data.length), data]);
 	}
 
 	/**
 	 * Serializes this CommandClass to be embedded in a message payload
 	 */
 	public serialize(): Buffer {
-		const data = this.serializeWithoutHeader();
-		return Buffer.concat([Buffer.from([this.nodeId, data.length]), data]);
+		// NoOp CCs have no command and no payload
+		if (this.ccId === CommandClasses["No Operation"])
+			return this.prependHeader(Buffer.from([this.ccId]));
+		else if (this.ccCommand == undefined) {
+			throw new ZWaveError(
+				"Cannot serialize a Command Class without a command",
+				ZWaveErrorCodes.CC_Invalid,
+			);
+		}
+
+		const payloadLength = this.payload.length;
+		const ccIdLength = this.isExtended() ? 2 : 1;
+		const data = Buffer.allocUnsafe(ccIdLength + 1 + payloadLength);
+		data.writeUIntBE(this.ccId, 0, ccIdLength);
+		data[ccIdLength] = this.ccCommand;
+		if (payloadLength > 0 /* implies payload != undefined */) {
+			this.payload.copy(data, 1 + ccIdLength);
+		}
+		return this.prependHeader(data);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -254,10 +262,14 @@ export class CommandClass {
 		return this.getCommandClassWithoutHeader(ccData.slice(2));
 	}
 
+	public static getCCCommandWithoutHeader(data: Buffer): number | undefined {
+		if (data[0] === 0) return undefined; // NoOp
+		const isExtendedCC = data[0] >= 0xf1;
+		return isExtendedCC ? data[2] : data[1];
+	}
+
 	public static getCCCommand(ccData: Buffer): number | undefined {
-		if (ccData[2] === 0) return undefined; // NoOp
-		const isExtendedCC = ccData[2] >= 0xf1;
-		return isExtendedCC ? ccData[4] : ccData[3];
+		return this.getCCCommandWithoutHeader(ccData.slice(2));
 	}
 
 	/**

@@ -2,7 +2,7 @@ import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { BasicCC } from "./BasicCC";
+import { BasicCC, BasicCCSet, BasicCommand } from "./BasicCC";
 import {
 	CommandClass,
 	commandClass,
@@ -58,6 +58,23 @@ describe("lib/commandclass/CommandClass => ", () => {
 					errorCode: ZWaveErrorCodes.CC_NotImplemented,
 				},
 			);
+		});
+	});
+
+	describe("serializeForEncapsulation()", () => {
+		it("works correctly", () => {
+			// Test with a BasicCC Set
+			const cc = new BasicCCSet(fakeDriver, {
+				nodeId: 2,
+				targetValue: 55,
+			});
+			const serialized = cc.serializeForEncapsulation();
+			const expected = Buffer.from([
+				CommandClasses.Basic,
+				BasicCommand.Set,
+				cc.targetValue,
+			]);
+			expect(serialized).toEqual(expected);
 		});
 	});
 
