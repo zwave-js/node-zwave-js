@@ -2,7 +2,13 @@ import { IDriver } from "../driver/IDriver";
 import log from "../log";
 import { Endpoint } from "../node/Endpoint";
 import { validatePayload } from "../util/misc";
-import { CCAPI } from "./API";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -52,7 +58,7 @@ interface DateSegments {
 	second: number;
 }
 
-function timeSegmentsToDate(segments: DateSegments, local: boolean): Date {
+function segmentsToDate(segments: DateSegments, local: boolean): Date {
 	if (local) {
 		return new Date(
 			segments.year,
@@ -76,7 +82,7 @@ function timeSegmentsToDate(segments: DateSegments, local: boolean): Date {
 	}
 }
 
-function dateToTimeSegments(date: Date, local: boolean): DateSegments {
+function dateToSegments(date: Date, local: boolean): DateSegments {
 	return {
 		year: (date as any)[`get${local ? "" : "UTC"}FullYear`](),
 		month: (date as any)[`get${local ? "" : "UTC"}Month`]() + 1,
@@ -89,6 +95,22 @@ function dateToTimeSegments(date: Date, local: boolean): DateSegments {
 
 @API(CommandClasses["Time Parameters"])
 export class TimeParametersCCAPI extends CCAPI {
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ propertyName },
+		value,
+	): Promise<void> => {
+		if (propertyName !== "dateAndTime") {
+			throwUnsupportedProperty(this.ccId, propertyName);
+		}
+		if (!(value instanceof Date)) {
+			throwWrongValueType(this.ccId, propertyName, "date", typeof value);
+		}
+		await this.set(value);
+
+		// Refresh the current value
+		await this.get();
+	};
+
 	public async get(): Promise<Date> {
 		const cc = new TimeParametersCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
@@ -97,15 +119,14 @@ export class TimeParametersCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<TimeParametersCCReport>(
 			cc,
 		))!;
-
-		return timeSegmentsToDate(response, shouldUseLocalTime(this.endpoint));
+		return response.dateAndTime;
 	}
 
-	public async set(date: Date): Promise<void> {
+	public async set(dateAndTime: Date): Promise<void> {
 		const cc = new TimeParametersCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			...dateToTimeSegments(date, shouldUseLocalTime(this.endpoint)),
+			dateAndTime,
 		});
 		await this.driver.sendCommand(cc);
 	}
@@ -149,20 +170,21 @@ export class TimeParametersCCReport extends TimeParametersCC {
 	) {
 		super(driver, options);
 		validatePayload(this.payload.length >= 7);
-		this.year = this.payload.readUInt16BE(0);
-		this.month = this.payload[2];
-		this.day = this.payload[3];
-		this.hour = this.payload[4];
-		this.minute = this.payload[5];
-		this.second = this.payload[6];
+		const dateSegments = {
+			year: this.payload.readUInt16BE(0),
+			month: this.payload[2],
+			day: this.payload[3],
+			hour: this.payload[4],
+			minute: this.payload[5],
+			second: this.payload[6],
+		};
+		this.dateAndTime = segmentsToDate(
+			dateSegments,
+			shouldUseLocalTime(this.getNode()!.getEndpoint(this.endpoint)!),
+		);
 	}
 
-	public readonly year: number;
-	public readonly month: number;
-	public readonly day: number;
-	public readonly hour: number;
-	public readonly minute: number;
-	public readonly second: number;
+	public readonly dateAndTime: Date;
 }
 
 @CCCommand(TimeParametersCommand.Get)
@@ -170,12 +192,7 @@ export class TimeParametersCCReport extends TimeParametersCC {
 export class TimeParametersCCGet extends TimeParametersCC {}
 
 interface TimeParametersCCSetOptions extends CCCommandOptions {
-	year: number;
-	month: number;
-	day: number;
-	hour: number;
-	minute: number;
-	second: number;
+	dateAndTime: Date;
 }
 
 @CCCommand(TimeParametersCommand.Set)
@@ -189,42 +206,42 @@ export class TimeParametersCCSet extends TimeParametersCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 7);
-			this.year = this.payload.readUInt16BE(0);
-			this.month = this.payload[2];
-			this.day = this.payload[3];
-			this.hour = this.payload[4];
-			this.minute = this.payload[5];
-			this.second = this.payload[6];
+			const dateSegments = {
+				year: this.payload.readUInt16BE(0),
+				month: this.payload[2],
+				day: this.payload[3],
+				hour: this.payload[4],
+				minute: this.payload[5],
+				second: this.payload[6],
+			};
+			this.dateAndTime = segmentsToDate(
+				dateSegments,
+				shouldUseLocalTime(this.getNode()!.getEndpoint(this.endpoint)!),
+			);
 		} else {
 			// TODO: enforce limits
-			this.year = options.year;
-			this.month = options.month;
-			this.day = options.day;
-			this.hour = options.hour;
-			this.minute = options.minute;
-			this.second = options.second;
+			this.dateAndTime = options.dateAndTime;
 		}
 	}
 
-	public year: number;
-	public month: number;
-	public day: number;
-	public hour: number;
-	public minute: number;
-	public second: number;
+	public dateAndTime: Date;
 
 	public serialize(): Buffer {
+		const dateSegments = dateToSegments(
+			this.dateAndTime,
+			shouldUseLocalTime(this.getNode()!.getEndpoint(this.endpoint)!),
+		);
 		this.payload = Buffer.from([
 			// 2 bytes placeholder for year
 			0,
 			0,
-			this.month,
-			this.day,
-			this.hour,
-			this.minute,
-			this.second,
+			dateSegments.month,
+			dateSegments.day,
+			dateSegments.hour,
+			dateSegments.minute,
+			dateSegments.second,
 		]);
-		this.payload.writeUInt16BE(this.year, 0);
+		this.payload.writeUInt16BE(dateSegments.year, 0);
 		return super.serialize();
 	}
 }
