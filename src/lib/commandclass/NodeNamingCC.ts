@@ -1,7 +1,13 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { ValueMetadata } from "../values/Metadata";
-import { CCAPI } from "./API";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -23,6 +29,35 @@ function isASCII(str: string): boolean {
 
 @API(CommandClasses["Node Naming and Location"])
 export class NodeNamingAndLocationCCAPI extends CCAPI {
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ propertyName },
+		value,
+	): Promise<void> => {
+		if (propertyName !== "name" && propertyName !== "location") {
+			throwUnsupportedProperty(this.ccId, propertyName);
+		}
+		if (typeof value !== "string") {
+			throwWrongValueType(
+				this.ccId,
+				propertyName,
+				"string",
+				typeof value,
+			);
+		}
+
+		switch (propertyName) {
+			case "name":
+				await this.setName(value);
+				// Refresh the current value
+				await this.getName();
+				break;
+			case "location":
+				await this.setLocation(value);
+				// Refresh the current value
+				await this.getLocation();
+		}
+	};
+
 	public async getName(): Promise<string> {
 		const cc = new NodeNamingAndLocationCCNameGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
