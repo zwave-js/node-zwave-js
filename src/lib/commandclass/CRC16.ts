@@ -1,7 +1,9 @@
 import { IDriver } from "../driver/IDriver";
 import { CRC16_CCITT } from "../util/crc";
 import { validatePayload } from "../util/misc";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	CommandClass,
@@ -13,6 +15,18 @@ import {
 import { CommandClasses } from "./CommandClasses";
 
 // @noSetValueAPI
+
+@API(CommandClasses["CRC-16 Encapsulation"])
+export class CRC16CCAPI extends CCAPI {
+	public async sendEncapsulated(encapsulatedCC: CommandClass): Promise<void> {
+		const cc = new CRC16CCCommandEncapsulation(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			encapsulatedCC,
+		});
+		await this.driver.sendCommand(cc);
+	}
+}
 
 // All the supported commands
 export enum CRC16Command {
