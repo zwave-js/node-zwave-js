@@ -60,6 +60,8 @@ export enum AssociationCommand {
 	//   association group that represents the most recently detected button
 }
 
+// @noSetValueAPI
+
 @API(CommandClasses.Association)
 export class AssociationCCAPI extends CCAPI {
 	/**

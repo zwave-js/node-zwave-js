@@ -40,6 +40,8 @@ export enum MultiChannelCommand {
 
 // TODO: Handle removal reports of dynamic endpoints
 
+// @noSetValueAPI
+
 @API(CommandClasses["Multi Channel"])
 export class MultiChannelCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type

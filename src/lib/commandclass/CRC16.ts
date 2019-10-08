@@ -12,6 +12,8 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
+// @noSetValueAPI
+
 // All the supported commands
 export enum CRC16Command {
 	CommandEncapsulation = 0x01,
