@@ -134,7 +134,7 @@ export interface AssociationCC {
 }
 
 @commandClass(CommandClasses.Association)
-@implementedVersion(2)
+@implementedVersion(3)
 export class AssociationCC extends CommandClass {
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
 		// AssociationCC must be interviewed after Z-Wave+ if that is supported
