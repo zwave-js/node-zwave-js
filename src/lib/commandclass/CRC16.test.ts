@@ -1,0 +1,50 @@
+import { createEmptyMockDriver } from "../../../test/mocks";
+import { assertZWaveError } from "../../../test/util";
+import { IDriver } from "../driver/IDriver";
+import { ZWaveErrorCodes } from "../error/ZWaveError";
+import { BasicCCSet } from "./BasicCC";
+import { CommandClass } from "./CommandClass";
+import { CRC16CC, CRC16CCCommandEncapsulation } from "./CRC16";
+
+const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+
+describe("lib/commandclass/CRC16 => ", () => {
+	describe("CommandEncapsulation (V1)", () => {
+		it("serialization and deserialization should be compatible", () => {
+			const basicCCSet = new BasicCCSet(fakeDriver, {
+				nodeId: 3,
+				targetValue: 89,
+			});
+			const crc16 = CRC16CC.encapsulate(fakeDriver, basicCCSet);
+			expect(crc16.nodeId).toBe(basicCCSet.nodeId);
+			expect(crc16.encapsulatedCC).toBe(basicCCSet);
+			const serialized = crc16.serialize();
+
+			const deserialized = CommandClass.from(fakeDriver, serialized);
+			expect(deserialized.nodeId).toBe(basicCCSet.nodeId);
+			const deserializedPayload = (deserialized as CRC16CCCommandEncapsulation)
+				.encapsulatedCC as BasicCCSet;
+			expect(deserializedPayload).toBeInstanceOf(BasicCCSet);
+			expect(deserializedPayload.nodeId).toBe(basicCCSet.nodeId);
+			expect(deserializedPayload.targetValue).toBe(
+				basicCCSet.targetValue,
+			);
+		});
+
+		it("deserializing a CC with a wrong checksum should throw", () => {
+			const basicCCSet = new BasicCCSet(fakeDriver, {
+				nodeId: 3,
+				targetValue: 89,
+			});
+			const crc16 = CRC16CC.encapsulate(fakeDriver, basicCCSet);
+			expect(crc16.nodeId).toBe(basicCCSet.nodeId);
+			expect(crc16.encapsulatedCC).toBe(basicCCSet);
+			const serialized = crc16.serialize();
+			serialized[serialized.length - 1] ^= 0xff;
+
+			assertZWaveError(() => CommandClass.from(fakeDriver, serialized), {
+				errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
+			});
+		});
+	});
+});
