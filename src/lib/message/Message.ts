@@ -25,6 +25,9 @@ export interface MessageDeserializationOptions {
 	data: Buffer;
 }
 
+/**
+ * Tests whether the given message constructor options contain a buffer for deserialization
+ */
 export function gotDeserializationOptions(
 	options: any,
 ): options is MessageDeserializationOptions {
@@ -47,7 +50,7 @@ export type MessageOptions =
 	| MessageDeserializationOptions;
 
 /**
- * Represents a ZWave message for communication with the serial interface
+ * Represents a Z-Wave message for communication with the serial interface
  */
 export class Message {
 	public constructor(
@@ -139,7 +142,12 @@ export class Message {
 	public maxSendAttempts: number | undefined;
 
 	private _callbackId: number | undefined;
-	/** Used to map requests to responses. Accessing this property will generate a new callback ID if this message had none. */
+	/**
+	 * Used to map requests to responses.
+	 *
+	 * WARNING: Accessing this property will generate a new callback ID if this message had none.
+	 * If you want to compare the callback ID, use `hasCallbackId()` beforehand to check if the callback ID is already defined.
+	 */
 	public get callbackId(): number {
 		if (this._callbackId == undefined) {
 			this._callbackId = this.driver.getNextCallbackId();
@@ -150,6 +158,9 @@ export class Message {
 		this._callbackId = v;
 	}
 
+	/**
+	 * Tests whether this message's callback ID is defined
+	 */
 	public hasCallbackId(): boolean {
 		return this._callbackId != undefined;
 	}
@@ -204,6 +215,7 @@ export class Message {
 		return getMessageConstructor(data[2], data[3]) || Message;
 	}
 
+	/** Creates an instance of the message that is serialized in the given buffer */
 	public static from(driver: IDriver, data: Buffer): Message {
 		const Constructor = Message.getConstructor(data);
 		const ret = new Constructor(driver, { data });
@@ -217,6 +229,7 @@ export class Message {
 		return data.slice(4, 4 + payloadLength);
 	}
 
+	/** Generates the JSON representation of this Message */
 	public toJSON(): JSONObject {
 		return this.toJSONInternal();
 	}
@@ -295,6 +308,7 @@ export class Message {
 	}
 }
 
+/** Computes the checksum for a serialized message as defined in the Z-Wave specs */
 function computeChecksum(message: Buffer): number {
 	let ret = 0xff;
 	// exclude SOF and checksum byte from the computation

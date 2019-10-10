@@ -63,3 +63,8 @@ export type DeepPartial<T> = { [P in keyof T]+?: DeepPartial<T[P]> };
 export function getEnumMemberName(enumeration: unknown, value: number): string {
 	return (enumeration as any)[value] || `unknown (${num2hex(value)})`;
 }
+
+/** Skips the first n bytes of a buffer and returns the rest */
+export function skipBytes(buf: Buffer, n: number): Buffer {
+	return Buffer.from(buf.slice(n));
+}

@@ -62,6 +62,10 @@ async function loadNotifications(): Promise<ReadonlyMap<number, Notification>> {
 }
 
 let notifications: ReadonlyMap<number, Notification> | undefined;
+
+/**
+ * Looks up the notification configuration for a given notification type
+ */
 export async function lookupNotification(
 	notificationType: number,
 ): Promise<Notification | undefined> {

@@ -226,6 +226,9 @@ export class Endpoint {
 		},
 	});
 
+	/**
+	 * Used to iterate over the commandClasses API without throwing errors by accessing unsupported CCs
+	 */
 	private readonly commandClassesIterator: () => Iterator<CCAPI> = function*(
 		this: Endpoint,
 	) {

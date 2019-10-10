@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
+/**
+ * Used to identify errors from this library without relying on the error message
+ */
 export enum ZWaveErrorCodes {
 	PacketFormat_Truncated,
 	PacketFormat_Invalid,
@@ -45,6 +48,9 @@ export enum ZWaveErrorCodes {
 	ConfigurationCC_FirstParameterNumber = 100,
 }
 
+/**
+ * Errors thrown in this libary are of this type. The `code` property identifies what went wrong.
+ */
 export class ZWaveError extends Error {
 	public constructor(
 		public readonly message: string,

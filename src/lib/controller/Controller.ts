@@ -643,6 +643,10 @@ export class ZWaveController extends EventEmitter {
 		}
 	}
 
+	/**
+	 * Is called when an AddNode request is received from the controller.
+	 * Handles and controls the inclusion process.
+	 */
 	private async handleAddNodeRequest(
 		msg: AddNodeToNetworkRequest,
 	): Promise<boolean> {
@@ -769,6 +773,10 @@ export class ZWaveController extends EventEmitter {
 		return true; // Don't invoke any more handlers
 	}
 
+	/**
+	 * Is called when a RemoveNode request is received from the controller.
+	 * Handles and controls the exclusion process.
+	 */
 	private async handleRemoveNodeRequest(
 		msg: RemoveNodeFromNetworkRequest,
 	): Promise<boolean> {

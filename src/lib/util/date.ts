@@ -77,3 +77,9 @@ export function getDSTInfo(): DSTInfo | undefined {
 		};
 	}
 }
+
+/** Returns a timestamp with nano-second precision */
+export function highResTimestamp(): number {
+	const [s, ns] = process.hrtime();
+	return s * 1e9 + ns;
+}
