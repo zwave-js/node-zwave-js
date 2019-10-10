@@ -28,6 +28,9 @@ export enum TimeCommand {
 	TimeOffsetReport = 0x07,
 }
 
+// @noSetValueAPI
+// Only the timezone information can be set and that accepts a non-primitive value
+
 @API(CommandClasses.Time)
 export class TimeCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type

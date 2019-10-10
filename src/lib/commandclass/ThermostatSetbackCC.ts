@@ -35,6 +35,9 @@ export enum SetbackType {
 	Permanent = 0x02,
 }
 
+// @noSetValueAPI
+// The setback state consist of two values that must be set together
+
 @API(CommandClasses["Thermostat Setback"])
 export class ThermostatSetbackCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
