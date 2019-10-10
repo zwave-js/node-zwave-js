@@ -71,6 +71,9 @@ export function valueIdToString({
 	return JSON.stringify(jsonKey);
 }
 
+/**
+ * The value store for a single node
+ */
 export class ValueDB extends EventEmitter {
 	private _db = new Map<string, unknown>();
 	private _metadata = new Map<string, ValueMetadata>();

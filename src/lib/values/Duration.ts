@@ -4,6 +4,7 @@ import { JSONObject } from "../util/misc";
 
 export type DurationUnit = "seconds" | "minutes" | "unknown" | "default";
 
+/** Represents a duration that is used by some command classes */
 export class Duration {
 	public constructor(value: number, public unit: DurationUnit) {
 		switch (unit) {

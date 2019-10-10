@@ -45,9 +45,13 @@ export class CCAPI {
 		this.ccId = getCommandClass(this);
 	}
 
+	/** The identifier of the Command Class this API is for */
 	protected readonly ccId: CommandClasses;
 
 	protected [SET_VALUE]: SetValueImplementation | undefined;
+	/**
+	 * Can be used on supported CC APIs to set a CC value by property name (and optionally the property key)
+	 */
 	public get setValue(): SetValueImplementation | undefined {
 		return this[SET_VALUE];
 	}
@@ -65,6 +69,7 @@ export class CCAPI {
 			// NoOperation is always supported
 			// TODO: find out if there are other CCs always supported
 			this.ccId === CommandClasses["No Operation"] ||
+			// TODO: Should there be API methods for CCs that are NOT controlled?
 			this.endpoint.supportsCC(this.ccId) ||
 			this.endpoint.controlsCC(this.ccId)
 		);

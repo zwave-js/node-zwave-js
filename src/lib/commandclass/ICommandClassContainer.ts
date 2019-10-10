@@ -4,6 +4,9 @@ export interface ICommandClassContainer {
 	command: CommandClass;
 }
 
+/**
+ * Tests if the given message contains a CC
+ */
 export function isCommandClassContainer<T>(
 	msg: T | undefined,
 ): msg is T & ICommandClassContainer {

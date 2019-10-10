@@ -96,6 +96,7 @@ function formatValue(value: any): string {
 
 export type LogValueArgs<T> = T & { nodeId: number; internal?: boolean };
 
+/** Prints a log message for an added, updated or removed value */
 export function value(
 	change: "added",
 	args: LogValueArgs<ValueAddedArgs>,
@@ -156,6 +157,7 @@ export function value(
 	});
 }
 
+/** Prints a log message for updated metadata of a value id */
 export function metadataUpdated(args: LogValueArgs<ValueID>): void {
 	const primaryTags: string[] = [
 		getNodeTag(args.nodeId),

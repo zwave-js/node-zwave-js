@@ -174,6 +174,9 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		for (const cc of controlledCCs) this.addCC(cc, { isControlled: true });
 	}
 
+	/**
+	 * Enhances a value id so it can be consumed better by applications
+	 */
 	private translateValueID<T extends ValueID>(
 		valueId: T,
 	): T & TranslatedValueID {
@@ -196,7 +199,9 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		return ret;
 	}
 
-	/** Adds the speaking name of a command class to the raw event args of the ValueDB */
+	/**
+	 * Enhances the raw event args of the ValueDB so it can be consumed better by applications
+	 */
 	private translateValueEvent<T extends ValueID>(
 		eventName: keyof ZWaveNodeValueEventCallbacks,
 		arg: T,
@@ -338,7 +343,10 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	private nodeInfoReceived: boolean = false;
 
 	private _valueDB = new ValueDB();
-	/** @internal */
+	/**
+	 * Provides access to this node's values
+	 * @internal
+	 */
 	public get valueDB(): ValueDB {
 		return this._valueDB;
 	}
@@ -678,7 +686,7 @@ version:               ${this.version}`;
 		await this.setInterviewStage(InterviewStage.ProtocolInfo);
 	}
 
-	/** Step #3 of the node interview */
+	/** Node interview: pings the node to see if it responds */
 	protected async ping(): Promise<boolean> {
 		if (this.isControllerNode()) {
 			log.controller.logNode(this.id, "not pinging the controller");
@@ -826,6 +834,7 @@ version:               ${this.version}`;
 		this.setAwake(true);
 	}
 
+	/** Overwrites the reported configuration with information from a config file */
 	protected async overwriteConfig(): Promise<void> {
 		if (this.isControllerNode()) {
 			log.controller.logNode(
@@ -906,6 +915,7 @@ version:               ${this.version}`;
 		}
 	}
 
+	/** Queries a node for its neighbor nodes during the node interview */
 	protected async queryNeighbors(): Promise<void> {
 		await this.queryNeighborsInternal();
 		await this.setInterviewStage(InterviewStage.Neighbors);

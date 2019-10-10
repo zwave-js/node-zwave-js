@@ -96,6 +96,7 @@ function getPrimaryTagsForMessage(message: Message): string[] {
 	];
 }
 
+/** Logs whats currently in the driver's send queue */
 export function sendQueue(queue: SortedList<Transaction>): void {
 	let message = "Send queue:";
 	for (const trns of queue) {

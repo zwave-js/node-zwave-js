@@ -53,6 +53,7 @@ function getPrecision(num: number): number {
 	return p;
 }
 
+/** The minimum and maximum values that can be stored in each numeric value type */
 export const IntegerLimits = Object.freeze({
 	UInt8: Object.freeze({ min: 0, max: 0xff }),
 	UInt16: Object.freeze({ min: 0, max: 0xffff }),

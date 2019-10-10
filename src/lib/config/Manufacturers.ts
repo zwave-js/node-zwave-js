@@ -27,6 +27,10 @@ async function loadManufacturers(): Promise<Record<string, string>> {
 	}
 }
 
+/**
+ * Looks up the name of the manufacturer with the given ID in the configuration DB
+ * @param manufacturerId The manufacturer id to look up
+ */
 export async function lookupManufacturer(
 	manufacturerId: number,
 ): Promise<string | undefined> {

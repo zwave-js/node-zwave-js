@@ -6,6 +6,13 @@ import log from "../log";
 import { JSONObject } from "../util/misc";
 import { configDir } from "./utils";
 
+/**
+ * Looks up the definition of a given device in the configuration DB
+ * @param manufacturerId The manufacturer id of the device
+ * @param productId The product id of the device
+ * @param productType The product type of the device
+ * @param firmwareVersion If known, configuration for a specific firmware version can be loaded
+ */
 export async function lookupDevice(
 	manufacturerId: number,
 	productId: number,

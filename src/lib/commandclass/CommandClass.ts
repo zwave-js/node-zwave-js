@@ -140,6 +140,7 @@ export class CommandClass {
 
 	protected driver: IDriver;
 
+	/** This CC's identifier */
 	public ccId: CommandClasses;
 	// Work around https://github.com/Microsoft/TypeScript/issues/27555
 	public nodeId!: number;
@@ -176,6 +177,9 @@ export class CommandClass {
 		);
 	}
 
+	/**
+	 * Deserializes a CC from a buffer that does not start with the CC header (node id + serialized length)
+	 */
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	private deserializeWithoutHeader(data: Buffer) {
 		const ccId = CommandClass.getCommandClassWithoutHeader(data);
@@ -207,16 +211,19 @@ export class CommandClass {
 		return this.serialize().slice(2);
 	}
 
+	/** Creates the CC header (node id + serialized length) */
 	private getHeader(dataLength: number): Buffer {
 		return Buffer.from([this.nodeId, dataLength]);
 	}
 
+	/** Prepends the CC header (node id + serialized length) to a buffer */
 	private prependHeader(data: Buffer): Buffer {
 		return Buffer.concat([this.getHeader(data.length), data]);
 	}
 
 	/**
-	 * Serializes this CommandClass to be embedded in a message payload
+	 * Serializes this CommandClass to be embedded in a message payload.
+	 * The result of this operation will include the header bytes
 	 */
 	public serialize(): Buffer {
 		// NoOp CCs have no command and no payload
@@ -248,26 +255,31 @@ export class CommandClass {
 		};
 	}
 
+	/** Extracts the node id from a serialized CC */
 	public static getNodeId(ccData: Buffer): number {
 		return ccData[0];
 	}
 
+	/** Extracts the CC id from a buffer that does NOT contain the header bytes */
 	private static getCommandClassWithoutHeader(data: Buffer): CommandClasses {
 		const isExtended = data[0] >= 0xf1;
 		if (isExtended) return data.readUInt16BE(0);
 		else return data[0];
 	}
 
+	/** Extracts the CC id from a buffer that DOES contain the header bytes */
 	public static getCommandClass(ccData: Buffer): CommandClasses {
 		return this.getCommandClassWithoutHeader(ccData.slice(2));
 	}
 
+	/** Extracts the CC command from a buffer that does NOT contain the header bytes */
 	public static getCCCommandWithoutHeader(data: Buffer): number | undefined {
 		if (data[0] === 0) return undefined; // NoOp
 		const isExtendedCC = data[0] >= 0xf1;
 		return isExtendedCC ? data[2] : data[1];
 	}
 
+	/** Extracts the CC command from a buffer that DOES contain the header bytes */
 	public static getCCCommand(ccData: Buffer): number | undefined {
 		return this.getCCCommandWithoutHeader(ccData.slice(2));
 	}
@@ -295,6 +307,7 @@ export class CommandClass {
 		return ret;
 	}
 
+	/** Creates an instance of the CC that is serialized in the given buffer */
 	public static from(driver: IDriver, serializedCC: Buffer): CommandClass {
 		// Fall back to unspecified command class in case we receive one that is not implemented
 		const Constructor = CommandClass.getConstructor(serializedCC);
@@ -302,6 +315,10 @@ export class CommandClass {
 		return ret;
 	}
 
+	/**
+	 * Creates an instance of the CC that is serialized in the given buffer.
+	 * The buffer must be the payload of an encapsulation CC, so it must not contain the header bytes.
+	 */
 	public static fromEncapsulated(
 		driver: IDriver,
 		encapCC: CommandClass,
@@ -317,6 +334,7 @@ export class CommandClass {
 		return ret;
 	}
 
+	/** Generates the JSON representation of this CC */
 	public toJSON(): JSONObject {
 		return this.toJSONInternal();
 	}
@@ -338,6 +356,7 @@ export class CommandClass {
 
 	/* eslint-disable @typescript-eslint/no-unused-vars */
 	/** Requests static or dynamic state for a given from a node */
+	// TODO: Merge this with the interview procedure
 	public static async requestState(
 		driver: IDriver,
 		node: ZWaveNode,
@@ -421,7 +440,7 @@ export class CommandClass {
 		const addValueId = (
 			propertyName: string,
 			propertyKey?: string | number,
-		) => {
+		): void => {
 			const valueId: ValueID = {
 				commandClass: this.ccId,
 				endpoint: this.endpoint,
@@ -1031,6 +1050,9 @@ export function ccValue(options?: CCValueOptions): PropertyDecorator {
 	};
 }
 
+/**
+ * Returns all CC values and their definitions that have been defined with @ccValue()
+ */
 function getCCValueDefinitions(
 	commandClass: CommandClass,
 ): ReadonlyMap<string, CCValueOptions> {
@@ -1073,7 +1095,9 @@ export function ccKeyValuePair(options?: CCValueOptions): PropertyDecorator {
 	};
 }
 
-/** Returns the defined key value pairs for this command class */
+/**
+ * Returns all CC key value pairs and their definitions that have been defined with @ccKeyValuePair()
+ */
 function getCCKeyValuePairDefinitions(
 	commandClass: CommandClass,
 ): ReadonlyMap<string, CCValueOptions> {

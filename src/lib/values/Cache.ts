@@ -20,6 +20,7 @@ export interface CacheMetadata {
 	metadata: ValueMetadata;
 }
 
+/** Serializes a value so it can be stored in a JSON object (and later on disk) */
 export function serializeCacheValue(value: unknown): SerializedValue {
 	if (value instanceof Map) {
 		return composeObject(

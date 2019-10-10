@@ -40,7 +40,7 @@ import { getDefaultPriority, Message } from "../message/Message";
 import { InterviewStage, IZWaveNode, NodeStatus } from "../node/INode";
 import { isNodeQuery } from "../node/INodeQuery";
 import { ZWaveNode } from "../node/Node";
-import { DeepPartial } from "../util/misc";
+import { DeepPartial, skipBytes } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { DriverEventCallbacks, DriverEvents, IDriver } from "./IDriver";
 import { Transaction } from "./Transaction";
@@ -65,11 +65,14 @@ const defaultOptions: ZWaveOptions = {
 	timeouts: {
 		ack: 1000,
 		byte: 150,
-		report: 1000, // SDS11846: ReportTime timeout SHOULD be set to CommandTime + 1 second
+		report: 1000, // TODO: SDS11846 - ReportTime timeout SHOULD be set to CommandTime + 1 second
 	},
 	skipInterview: false,
 };
 
+/**
+ * Merges the user-defined options with the default options
+ */
 function applyDefaultOptions(
 	target: Record<string, any> | undefined,
 	source: Record<string, any>,
@@ -91,6 +94,7 @@ function applyDefaultOptions(
 	return target;
 }
 
+/** Ensures that the options are valid */
 function checkOptions(options: ZWaveOptions): void {
 	if (options.timeouts.ack < 1) {
 		throw new ZWaveError(
@@ -112,6 +116,10 @@ function checkOptions(options: ZWaveOptions): void {
 	}
 }
 
+/**
+ * Function signature for a message handler. The return type signals if the
+ * message was handled (`true`) or further handlers should be called (`false`)
+ */
 export type RequestHandler<T extends Message = Message> = (
 	msg: T,
 ) => boolean | Promise<boolean>;
@@ -148,6 +156,12 @@ export interface Driver {
 	removeAllListeners(event?: DriverEvents): this;
 }
 
+/**
+ * The driver is the core of this library. It controls the serial interface,
+ * handles transmission and receipt of messages and manages the network cache.
+ * Any action you want to perform on the Z-Wave network must go through a driver
+ * instance or its associated nodes.
+ */
 export class Driver extends EventEmitter implements IDriver {
 	/** The serial port instance */
 	private serial: SerialPort | undefined;
@@ -262,6 +276,10 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	private _controllerInterviewed: boolean = false;
+	/**
+	 * Initializes the variables for controller and nodes,
+	 * adds event handlers and starts the interview process.
+	 */
 	private async initializeControllerAndNodes(): Promise<void> {
 		if (this._controller == undefined) {
 			this._controller = new ZWaveController(this);
@@ -304,6 +322,10 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 	}
 
+	/**
+	 * Starts or resumes the interview of a Z-Wave node. It is advised to NOT
+	 * await this method as it can take a very long time (minutes to hours)!
+	 */
 	private async interviewNode(node: ZWaveNode): Promise<void> {
 		if (node.interviewStage === InterviewStage.Complete) {
 			node.interviewStage = InterviewStage.RestartFromCache;
@@ -320,6 +342,7 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 	}
 
+	/** Adds the necessary event handlers for a node instance */
 	private addNodeEventHandlers(node: ZWaveNode): void {
 		node.on("wake up", this.onNodeWakeUp.bind(this))
 			.on("sleep", this.onNodeSleep.bind(this))
@@ -330,6 +353,7 @@ export class Driver extends EventEmitter implements IDriver {
 			);
 	}
 
+	/** Is called when a node wakes up */
 	private onNodeWakeUp(node: IZWaveNode): void {
 		log.controller.logNode(node.id, "The node is now awake.");
 
@@ -342,10 +366,12 @@ export class Driver extends EventEmitter implements IDriver {
 		setImmediate(() => this.workOffSendQueue());
 	}
 
+	/** Is called when a node goes to sleep */
 	private onNodeSleep(node: ZWaveNode): void {
 		log.controller.logNode(node.id, "The node is now asleep.");
 	}
 
+	/** Is called when a previously dead node starts communicating again */
 	private onNodeAlive(node: ZWaveNode): void {
 		log.controller.logNode(node.id, "The node is now alive.");
 		if (node.interviewStage !== InterviewStage.Complete) {
@@ -353,6 +379,7 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 	}
 
+	/** Is called when a node interview is completed */
 	private onNodeInterviewCompleted(node: ZWaveNode): void {
 		if (
 			!this.hasPendingMessages(node) &&
@@ -373,6 +400,7 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 	}
 
+	/** Checks if there are any pending messages for the given node */
 	private hasPendingMessages(node: ZWaveNode): boolean {
 		return !!this.sendQueue.find(t => t.message.getNodeId() === node.id);
 	}
@@ -462,6 +490,10 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	private _wasDestroyed: boolean = false;
+	/**
+	 * Ensures that the driver is ready to communicate (serial port open and not destroyed).
+	 * If desired, also checks that the controller interview has been completed.
+	 */
 	private ensureReady(includingController: boolean = false): void {
 		if (!this._wasStarted || !this._isOpen || this._wasDestroyed) {
 			throw new ZWaveError(
@@ -511,14 +543,22 @@ export class Driver extends EventEmitter implements IDriver {
 		this.emit("error", err);
 	}
 
+	/**
+	 * Is called when the serial port has received invalid data
+	 */
 	private onInvalidData(data: Buffer, message: string): void {
 		this.emit(
 			"error",
 			new ZWaveError(message, ZWaveErrorCodes.Driver_InvalidDataReceived),
 		);
+		// Invalid data means we can no longer parse whats in the receive buffer and need to
+		// reset the serial port
 		this.resetIO();
 	}
 
+	/**
+	 * Is called when the serial port has received any data
+	 */
 	// eslint-disable-next-line @typescript-eslint/camelcase
 	private async serialport_onData(data: Buffer): Promise<void> {
 		// append the new data to our receive buffer
@@ -638,6 +678,10 @@ export class Driver extends EventEmitter implements IDriver {
 		);
 	}
 
+	/**
+	 * Is called when a complete message was decoded from the receive buffer
+	 * @param msg The decoded message
+	 */
 	private async handleMessage(msg: Message): Promise<void> {
 		// Before doing anything else, unwrap encapsulated commands
 		if (
@@ -926,6 +970,9 @@ ${handlers.length} left`,
 	// 	this.sendDataRequestHandlers.set(cc, handlers);
 	// }
 
+	/**
+	 * Is called when a Request-type message was received
+	 */
 	private async handleRequest(msg: Message | SendDataRequest): Promise<void> {
 		let handlers: RequestHandlerEntry[] | undefined;
 
@@ -1040,6 +1087,7 @@ ${handlers.length} left`,
 		}
 	}
 
+	/** Is called when the controller ACKs a message */
 	private handleACK(): void {
 		// if we have a pending request waiting for the ACK, ACK it
 		const trnsact = this.currentTransaction;
@@ -1067,6 +1115,7 @@ ${handlers.length} left`,
 		// TODO: what to do with this NAK?
 	}
 
+	/** Is called when the controller drops a message because it is busy */
 	private handleCAN(): void {
 		if (this.currentTransaction != undefined) {
 			if (this.mayRetryCurrentTransaction()) {
@@ -1093,6 +1142,7 @@ ${handlers.length} left`,
 		// else: TODO: what to do with this CAN?
 	}
 
+	/** Checks if the current transaction may still be retried */
 	private mayRetryCurrentTransaction(): boolean {
 		return (
 			this.currentTransaction!.sendAttempts <
@@ -1343,6 +1393,7 @@ ${handlers.length} left`,
 		}
 	}
 
+	/** Retransmits the current transaction (if there is any) */
 	private retransmit(): void {
 		if (!this.currentTransaction) return;
 		log.driver.transaction(this.currentTransaction);
@@ -1352,6 +1403,7 @@ ${handlers.length} left`,
 		this.doSend(data);
 	}
 
+	/** Sends a raw datagram to the serialport (if that is open) */
 	private doSend(data: Buffer): void {
 		if (this.serial) {
 			this.serial.write(data);
@@ -1398,6 +1450,7 @@ ${handlers.length} left`,
 		}
 	}
 
+	/** Rejects all pending transactions for a node and removes them from the send queue */
 	private rejectAllTransactionsForNode(
 		nodeId: number,
 		errorMsg: string = `The node is dead`,
@@ -1434,9 +1487,11 @@ ${handlers.length} left`,
 		}
 	}
 
+	/** Re-sorts the send queue */
 	private sortSendQueue(): void {
 		const items = [...this.sendQueue];
 		this.sendQueue.clear();
+		// Since the send queue is a sorted list, sorting is done on insert/add
 		this.sendQueue.add(...items);
 	}
 
@@ -1444,6 +1499,10 @@ ${handlers.length} left`,
 	private readonly saveToCacheInterval: number = 50;
 	private saveToCacheTimer: NodeJS.Timer | undefined;
 
+	/**
+	 * Does the work for saveNetworkToCache. This is not throttled, so any call
+	 * to this method WILL save the network.
+	 */
 	private async saveNetworkToCacheInternal(): Promise<void> {
 		if (!this._controller || !this.controller.homeId) return;
 		const cacheFile = path.join(
@@ -1507,9 +1566,4 @@ ${handlers.length} left`,
 			);
 		}
 	}
-}
-
-/** Skips the first n bytes of a buffer and returns the rest */
-function skipBytes(buf: Buffer, n: number): Buffer {
-	return Buffer.from(buf.slice(n));
 }
