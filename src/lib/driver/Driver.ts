@@ -10,6 +10,7 @@ import {
 	getImplementedVersion,
 } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
+import { CRC16CC, CRC16CCCommandEncapsulation } from "../commandclass/CRC16";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import {
 	MultiChannelCC,
@@ -684,12 +685,36 @@ export class Driver extends EventEmitter implements IDriver {
 	 */
 	private async handleMessage(msg: Message): Promise<void> {
 		// Before doing anything else, unwrap encapsulated commands
-		if (
-			isCommandClassContainer(msg) &&
-			msg.command instanceof MultiChannelCCCommandEncapsulation
-		) {
-			log.driver.print("Unwrapping MultiChannel encapsulated command");
-			msg.command = MultiChannelCC.unwrap(msg.command);
+		if (isCommandClassContainer(msg)) {
+			// SDS13783-11B defines the encapsulation order, we unwrap in the opposite order
+
+			// TODO: Remember the command encapsulation order in case we need to respond
+
+			// 5. Any one of the following combinations:
+			//   a. Security (S0 or S2) followed by transport service
+			//   b. Transport Service
+			//   c. Security (S0 or S2)
+			//   d. CRC16
+			// b and d are mutually exclusive, security is not
+			if (msg.command instanceof CRC16CCCommandEncapsulation) {
+				log.driver.print("Unwrapping CRC-16 encapsulated command");
+				msg.command = CRC16CC.unwrap(msg.command);
+			}
+			// else if (... TransportService)
+
+			// if (... Security)
+
+			// 4. Multi Channel
+			if (msg.command instanceof MultiChannelCCCommandEncapsulation) {
+				log.driver.print(
+					"Unwrapping MultiChannel encapsulated command",
+				);
+				msg.command = MultiChannelCC.unwrap(msg.command);
+			}
+
+			// 3. Supervision
+			// 2. Multi Command
+			// 1. Encapsulated Command Class (payload), e.g. Basic Set
 		}
 
 		// if we have a pending request, check if that is waiting for this message
