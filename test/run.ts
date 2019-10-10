@@ -1,7 +1,7 @@
 // import { ThermostatMode } from "../build/lib/commandclass/ThermostatModeCC";
 import { Driver } from "../";
 
-const driver = new Driver("COM3").once("driver ready", async () => {
+const driver = new Driver("COM5").once("driver ready", async () => {
 	// console.log(`sending application info...`);
 	// // TODO: Generate this list dynamically
 	// // A list of all CCs the controller will respond to

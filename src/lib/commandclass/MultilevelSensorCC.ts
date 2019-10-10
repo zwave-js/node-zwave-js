@@ -1,7 +1,8 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import log from "../log";
 import { ValueID } from "../node/ValueDB";
-import { validatePayload } from "../util/misc";
+import { getEnumMemberName, validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
 import { parseBitMask, parseFloatWithScale } from "../values/Primitive";
 import { CCAPI } from "./API";
@@ -40,15 +41,15 @@ export interface MultilevelSensorValue {
 
 @API(CommandClasses["Multilevel Sensor"])
 export class MultilevelSensorCCAPI extends CCAPI {
-	public async get(): Promise<number>;
+	public async get(): Promise<
+		MultilevelSensorValue & { type: MultilevelSensorTypes }
+	>;
 	public async get(
 		sensorType: MultilevelSensorTypes,
 		scale: number,
 	): Promise<number>;
-	public async get(
-		sensorType?: MultilevelSensorTypes,
-		scale?: number,
-	): Promise<number> {
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async get(sensorType?: MultilevelSensorTypes, scale?: number) {
 		const cc = new MultilevelSensorCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -58,7 +59,18 @@ export class MultilevelSensorCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			MultilevelSensorCCReport
 		>(cc))!;
-		return response.value;
+
+		if (sensorType === undefined) {
+			// Overload #1: return the full response
+			return {
+				type: response.type,
+				value: response.value,
+				scale: response.scale,
+			};
+		} else {
+			// Overload #2: return only the value
+			return response.value;
+		}
 	}
 
 	public async getSupportedSensorTypes(): Promise<
@@ -96,6 +108,119 @@ export interface MultilevelSensorCC {
 @commandClass(CommandClasses["Multilevel Sensor"])
 @implementedVersion(11)
 export class MultilevelSensorCC extends CommandClass {
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const api = node.commandClasses["Multilevel Sensor"];
+
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		if (this.version <= 4) {
+			// Sensors up to V4 only support a single value
+			// This is to be requested every time
+
+			log.controller.logNode(node.id, {
+				message: "querying current sensor reading...",
+				direction: "outbound",
+			});
+			const mlsResponse = await api.get();
+			const logMessage = `received current sensor reading:
+sensor type: ${getEnumMemberName(MultilevelSensorTypes, mlsResponse.type)}
+value:       ${mlsResponse.value} ${mlsResponse.scale.unit || ""}`;
+			log.controller.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
+		} else {
+			// V5+
+
+			// If we haven't yet, query the supported sensor types
+			let sensorTypes: readonly MultilevelSensorTypes[];
+			if (complete) {
+				log.controller.logNode(node.id, {
+					message: "retrieving supported sensor types...",
+					direction: "outbound",
+				});
+				sensorTypes = await api.getSupportedSensorTypes();
+				const logMessage =
+					"received supported sensor types:\n" +
+					sensorTypes
+						.map(type =>
+							getEnumMemberName(MultilevelSensorTypes, type),
+						)
+						.map(name => `* ${name}`)
+						.join("\n");
+				log.controller.logNode(node.id, {
+					message: logMessage,
+					direction: "inbound",
+				});
+			} else {
+				sensorTypes =
+					this.getValueDB().getValue({
+						commandClass: this.ccId,
+						propertyName: "supportedSensorTypes",
+						endpoint: this.endpoint,
+					}) || [];
+			}
+
+			for (const type of sensorTypes) {
+				// If we haven't yet, query the supported scales for each sensor
+				let sensorScales: readonly number[];
+				if (complete) {
+					log.controller.logNode(node.id, {
+						message: `querying supported scales for ${getEnumMemberName(
+							MultilevelSensorTypes,
+							type,
+						)} sensor`,
+						direction: "outbound",
+					});
+					sensorScales = await api.getSupportedScales(type);
+					const logMessage =
+						"received supported scales:\n" +
+						sensorScales
+							.map(scale => getScale(type, scale).label)
+							.map(name => `* ${name}`)
+							.join("\n");
+					log.controller.logNode(node.id, {
+						message: logMessage,
+						direction: "inbound",
+					});
+				} else {
+					sensorScales =
+						this.getValueDB().getValue({
+							commandClass: this.ccId,
+							endpoint: this.endpoint,
+							propertyName: "supportedScales",
+							propertyKey: type,
+						}) || [];
+				}
+
+				// Always query the current sensor reading
+				log.controller.logNode(node.id, {
+					message: "querying current sensor reading...",
+					direction: "outbound",
+				});
+				// TODO: Add some way to select the scale. For now use the first available one
+				const value = await api.get(type, sensorScales[0]);
+				const logMessage = `received current sensor reading: ${value} ${getScale(
+					type,
+					sensorScales[0],
+				).unit || ""}`;
+				log.controller.logNode(node.id, {
+					message: logMessage,
+					direction: "inbound",
+				});
+			}
+		}
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
 	public static translatePropertyKey(
 		propertyName: string,
 		propertyKey: number | string,
@@ -242,12 +367,10 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 
 		validatePayload(this.payload.length >= 2);
 		const sensorType = this.payload[0];
-		const supportedScales: number[] = [];
-		const bitMask = this.payload[1] && 0b1111;
-		if (!!(bitMask & 0b1)) supportedScales.push(1);
-		if (!!(bitMask & 0b10)) supportedScales.push(2);
-		if (!!(bitMask & 0b100)) supportedScales.push(3);
-		if (!!(bitMask & 0b1000)) supportedScales.push(4);
+		// The supported scales in our definition start at 0, so shift the result by 1
+		const supportedScales = parseBitMask(
+			Buffer.from([this.payload[1] & 0b1111]),
+		).map(i => i - 1);
 		this.supportedScales = [sensorType, supportedScales];
 		this.persistValues();
 	}
