@@ -471,6 +471,8 @@ export class CommandClass {
 			.map(([key]) => key);
 		definedCCValueNames.forEach(propertyName => addValueId(propertyName));
 
+		const kvpDefinitions = getCCKeyValuePairDefinitions(this);
+
 		// Also return all existing value ids that are not internal
 		const existingValueIds = this.getValueDB()
 			.getValues(this.ccId)
@@ -487,6 +489,11 @@ export class CommandClass {
 				valueId =>
 					!valueDefinitions.has(valueId.propertyName) ||
 					valueDefinitions.get(valueId.propertyName)! === false,
+			)
+			.filter(
+				valueId =>
+					!kvpDefinitions.has(valueId.propertyName) ||
+					kvpDefinitions.get(valueId.propertyName)! === false,
 			);
 		existingValueIds.forEach(({ propertyName, propertyKey }) =>
 			addValueId(propertyName, propertyKey),

@@ -97,7 +97,7 @@
     "prebuild": "npm run generateCCAPIInterface",
     "prewatch": "npm run generateCCAPIInterface",
     "test:reset": "jest --clear-cache",
-    "test:ts": "jest --runInBand",
+    "test:ts": "jest",
     "test:watch": "npm run test:ts -- --watch",
     "test": "npm run test:watch",
     "coverage": "npm run test:ts -- --collect-coverage",
