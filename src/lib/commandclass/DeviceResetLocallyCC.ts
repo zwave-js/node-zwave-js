@@ -11,6 +11,7 @@ export enum DeviceResetLocallyCommand {
 }
 
 // @noAPI: We can only receive this command
+// @noInterview: We can only receive this command
 
 export interface DeviceResetLocallyCC {
 	ccCommand: DeviceResetLocallyCommand;

@@ -10,6 +10,7 @@ import {
 import { CommandClasses } from "./CommandClasses";
 
 // @noSetValueAPI This CC has no set-type commands
+// @noInterview There's nothing to interview here
 
 @API(CommandClasses["No Operation"])
 export class NoOperationCCAPI extends CCAPI {

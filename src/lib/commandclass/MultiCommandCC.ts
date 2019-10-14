@@ -20,6 +20,7 @@ export enum MultiCommandCommand {
 // TODO: Handle this command when received
 
 // @noSetValueAPI This CC has no set-type commands
+// @noInterview This CC only has a single encapsulation command
 
 @API(CommandClasses["Multi Command"])
 export class MultiCommandCCAPI extends CCAPI {
