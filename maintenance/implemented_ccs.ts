@@ -8,11 +8,13 @@ import { CommandClasses } from "../src/lib/commandclass/CommandClasses";
 import { num2hex } from "../src/lib/util/strings";
 
 const ccRegex = /^@commandClass\(CommandClasses(?:\.|\[")(.+?)(?:"\])?\)/m;
+const versionRegex = /^@implementedVersion\((\d+)\)/m;
 const apiRegex = /^@API\(CommandClasses(?:\.|\[)(.+?)(?:\])?\)/m;
 const noApiRegex = /^\/\/ @noAPI/m; // This comment marks a CC that needs no API
 const setValueApiRegex = /^\tprotected \[SET_VALUE\]/m;
 const noSetValueApiRegex = /^\/\/ @noSetValueAPI/m; // This comment marks a CC that needs no setValue API
-const versionRegex = /^@implementedVersion\((\d+)\)/m;
+const interviewRegex = /^\tpublic async interview/m;
+const noInterviewRegex = /^\/\/ @noInterview/m; // This comment marks a CC that needs no interview procedure
 
 const onlyIncomplete = !!yargs.argv.onlyIncomplete;
 
@@ -24,22 +26,26 @@ function padEnd(str: string, len: number): string {
 	return str + " ".repeat(len - getSafeLength(str));
 }
 
+interface CCInfo {
+	version: number;
+	API: boolean;
+	setValue: boolean;
+	interview: boolean;
+}
+
 (async () => {
 	const ccDir = path.join(__dirname, "..", "src/lib/commandclass");
 	const ccFiles = (await fs.readdir(ccDir))
 		.filter(file => file.endsWith(".ts") && !file.endsWith("test.ts"))
 		.map(file => path.join(ccDir, file));
 
-	const allCCs = new Map(
+	const allCCs = new Map<string, CCInfo>(
 		Object.keys(CommandClasses)
 			.filter(cc => Number.isNaN(+cc))
-			.map(
-				name =>
-					[name, { version: 0, API: false, setValue: false }] as [
-						string,
-						{ version: number; API: boolean; setValue: boolean },
-					],
-			),
+			.map(name => [
+				name,
+				{ version: 0, API: false, setValue: false, interview: false },
+			]),
 	);
 
 	for (const ccFile of ccFiles) {
@@ -53,10 +59,14 @@ function padEnd(str: string, len: number): string {
 				(hasAPI && setValueApiRegex.test(fileContent)) ||
 				noApiRegex.test(fileContent) ||
 				noSetValueApiRegex.test(fileContent);
+			const interview =
+				interviewRegex.test(fileContent) ||
+				noInterviewRegex.test(fileContent);
 			allCCs.set(ccName, {
 				version: ccVersion,
 				API: hasAPI,
 				setValue,
+				interview,
 			});
 		} catch (e) {
 			/* ok */
@@ -68,18 +78,22 @@ function padEnd(str: string, len: number): string {
 		"Command class name",
 		"Implemented version",
 		"max.",
+		"interview?",
 		"API?",
 		"setValue?",
 	];
 	const rows: string[][] = [];
 
-	for (const [name, { version, API, setValue }] of allCCs.entries()) {
+	for (const [
+		name,
+		{ version, interview, API, setValue },
+	] of allCCs.entries()) {
 		const { version: latest, deprecated, obsolete } = getLatestVersion(
 			name,
 		);
 		if (obsolete) continue;
 		const implementationStatus =
-			version === latest && API && setValue
+			version === latest && interview && API && setValue
 				? "done"
 				: version > 0
 				? "in progress"
@@ -100,6 +114,7 @@ function padEnd(str: string, len: number): string {
 				: deprecated
 				? c.reset
 				: c.red;
+		const hasInterview = interview ? c.green(" ✓ ") : c.red(" ✗ ");
 		const hasAPI = API ? c.green(" ✓ ") : c.red(" ✗ ");
 		const hasSetValue = setValue ? c.green(" ✓ ") : c.red(" ✗ ");
 		const prefix =
@@ -117,6 +132,7 @@ function padEnd(str: string, len: number): string {
 					version > 0 ? `Version ${version}` : "not implemented",
 				),
 				latest.toString(),
+				hasInterview,
 				hasAPI,
 				hasSetValue,
 			]);
