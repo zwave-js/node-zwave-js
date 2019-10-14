@@ -75,10 +75,9 @@ interface CCInfo {
 
 	const headers = [
 		"",
-		"Command class name",
-		"Implemented version",
-		"max.",
-		"interview?",
+		"CC name",
+		"Version",
+		"Interview?",
 		"API?",
 		"setValue?",
 	];
@@ -114,6 +113,9 @@ interface CCInfo {
 				: deprecated
 				? c.reset
 				: c.red;
+		const implementedVersion = versionColor(
+			version > 0 ? version.toString() : "-",
+		);
 		const hasInterview = interview ? c.green(" ✓ ") : c.red(" ✗ ");
 		const hasAPI = API ? c.green(" ✓ ") : c.red(" ✗ ");
 		const hasSetValue = setValue ? c.green(" ✓ ") : c.red(" ✗ ");
@@ -128,10 +130,7 @@ interface CCInfo {
 			rows.push([
 				overallColor(prefix),
 				overallColor(name + postfix),
-				versionColor(
-					version > 0 ? `Version ${version}` : "not implemented",
-				),
-				latest.toString(),
+				`${implementedVersion} (${latest})`,
 				hasInterview,
 				hasAPI,
 				hasSetValue,
