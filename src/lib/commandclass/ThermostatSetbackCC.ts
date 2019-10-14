@@ -1,6 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { validatePayload } from "../util/misc";
+import log from "../log";
+import { getEnumMemberName, validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
 import {
 	decodeSetbackState,
@@ -75,7 +76,36 @@ export interface ThermostatSetbackCC {
 
 @commandClass(CommandClasses["Thermostat Setback"])
 @implementedVersion(1)
-export class ThermostatSetbackCC extends CommandClass {}
+export class ThermostatSetbackCC extends CommandClass {
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const api = node.commandClasses["Thermostat Setback"];
+
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		// Always query the thermostat state
+		log.controller.logNode(node.id, {
+			message: "querying the current thermostat state...",
+			direction: "outbound",
+		});
+		const setbackResp = await api.get();
+		const logMessage = `received current state:
+setback type:  ${getEnumMemberName(SetbackType, setbackResp.setbackType)}
+setback state: ${setbackResp.setbackState}`;
+		log.controller.logNode(node.id, {
+			message: logMessage,
+			direction: "inbound",
+		});
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+}
 
 interface ThermostatSetbackCCSetOptions extends CCCommandOptions {
 	setbackType: SetbackType;
