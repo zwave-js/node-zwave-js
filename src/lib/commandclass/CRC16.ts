@@ -15,6 +15,7 @@ import {
 import { CommandClasses } from "./CommandClasses";
 
 // @noSetValueAPI
+// @noInterview This CC only has a single encapsulation command
 
 @API(CommandClasses["CRC-16 Encapsulation"])
 export class CRC16CCAPI extends CCAPI {
