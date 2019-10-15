@@ -1,3 +1,4 @@
+import { parseCCId } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { validatePayload } from "../util/misc";
 import {
@@ -47,10 +48,8 @@ function internalParseNodeInformationFrame(
 	let isAfterMark = false;
 	while (offset < nif.length) {
 		// Read either the normal or extended ccId
-		const isExtended = nif[offset] >= 0xf1;
-		if (isExtended) validatePayload(nif.length >= offset + 2);
-		const cc = isExtended ? nif.readUInt16BE(offset) : nif[offset];
-		offset += isExtended ? 2 : 1;
+		const { ccId: cc, bytesRead } = parseCCId(nif, offset);
+		offset += bytesRead;
 		// CCs before the support/control mark are supported
 		// CCs after the support/control mark are controlled
 		if (cc === CommandClasses["Support/Control Mark"]) {

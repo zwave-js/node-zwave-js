@@ -6,7 +6,12 @@ import log from "../log";
 import { Endpoint } from "../node/Endpoint";
 import { ZWaveNode } from "../node/Node";
 import { ValueDB, ValueID, valueIdToString } from "../node/ValueDB";
-import { JSONObject, staticExtends, stripUndefined } from "../util/misc";
+import {
+	JSONObject,
+	staticExtends,
+	stripUndefined,
+	validatePayload,
+} from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import {
 	CacheMetadata,
@@ -262,9 +267,7 @@ export class CommandClass {
 
 	/** Extracts the CC id from a buffer that does NOT contain the header bytes */
 	private static getCommandClassWithoutHeader(data: Buffer): CommandClasses {
-		const isExtended = data[0] >= 0xf1;
-		if (isExtended) return data.readUInt16BE(0);
-		else return data[0];
+		return parseCCId(data).ccId;
 	}
 
 	/** Extracts the CC id from a buffer that DOES contain the header bytes */
@@ -1197,16 +1200,11 @@ export function parseCCId(
 	offset: number = 0,
 ): { ccId: CommandClasses; bytesRead: number } {
 	const isExtended = payload[offset] >= 0xf1;
+	validatePayload(payload.length >= offset + (isExtended ? 2 : 1));
 	if (isExtended) {
-		return {
-			ccId: payload.readUInt16BE(offset),
-			bytesRead: 2,
-		};
+		return { ccId: payload.readUInt16BE(offset), bytesRead: 2 };
 	} else {
-		return {
-			ccId: payload[offset],
-			bytesRead: 1,
-		};
+		return { ccId: payload.readUInt8(offset), bytesRead: 1 };
 	}
 }
 
