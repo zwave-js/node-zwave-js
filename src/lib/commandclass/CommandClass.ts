@@ -1191,6 +1191,25 @@ export function getAPI(cc: CommandClasses): APIConstructor | undefined {
 	return ret;
 }
 
+/** Reads a CC id from the given buffer, returning the parsed CC id and the number of bytes read */
+export function parseCCId(
+	payload: Buffer,
+	offset: number = 0,
+): { ccId: CommandClasses; bytesRead: number } {
+	const isExtended = payload[offset] >= 0xf1;
+	if (isExtended) {
+		return {
+			ccId: payload.readUInt16BE(offset),
+			bytesRead: 2,
+		};
+	} else {
+		return {
+			ccId: payload[offset],
+			bytesRead: 1,
+		};
+	}
+}
+
 // To be sure all metadata gets loaded, import all command classes
 const definedCCs = fs
 	.readdirSync(__dirname)
