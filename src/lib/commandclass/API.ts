@@ -83,6 +83,7 @@ export interface CCAPIs {
 
 	// AUTO GENERATION BELOW
 	Association: import("./AssociationCC").AssociationCCAPI;
+	"Association Group Information": import("./AssociationGroupInfoCC").AssociationGroupInfoCCAPI;
 	Basic: import("./BasicCC").BasicCCAPI;
 	Battery: import("./BatteryCC").BatteryCCAPI;
 	"Binary Sensor": import("./BinarySensorCC").BinarySensorCCAPI;

@@ -1,7 +1,10 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { validatePayload } from "../util/misc";
+import log from "../log";
+import { getEnumMemberName, validatePayload } from "../util/misc";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	CommandClass,
@@ -24,13 +27,320 @@ export enum AssociationGroupInfoCommand {
 	CommandListReport = 0x06,
 }
 
+// TODO: Check if this should be in a config file instead
+export enum AssociationGroupInfoProfile {
+	"General: N/A" = 0x00_00,
+	"General: Lifeline" = 0x00_01,
+
+	"Control: Key 01" = 0x20_01,
+	"Control: Key 02",
+	"Control: Key 03",
+	"Control: Key 04",
+	"Control: Key 05",
+	"Control: Key 06",
+	"Control: Key 07",
+	"Control: Key 08",
+	"Control: Key 09",
+	"Control: Key 10",
+	"Control: Key 11",
+	"Control: Key 12",
+	"Control: Key 13",
+	"Control: Key 14",
+	"Control: Key 15",
+	"Control: Key 16",
+	"Control: Key 17",
+	"Control: Key 18",
+	"Control: Key 19",
+	"Control: Key 20",
+	"Control: Key 21",
+	"Control: Key 22",
+	"Control: Key 23",
+	"Control: Key 24",
+	"Control: Key 25",
+	"Control: Key 26",
+	"Control: Key 27",
+	"Control: Key 28",
+	"Control: Key 29",
+	"Control: Key 30",
+	"Control: Key 31",
+	"Control: Key 32",
+
+	"Sensor: Air temperature" = 0x31_01,
+	"Sensor: General purpose",
+	"Sensor: Illuminance",
+	"Sensor: Power",
+	"Sensor: Humidity",
+	"Sensor: Velocity",
+	"Sensor: Direction",
+	"Sensor: Atmospheric pressure",
+	"Sensor: Barometric pressure",
+	"Sensor: Solar radiation",
+	"Sensor: Dew point",
+	"Sensor: Rain rate",
+	"Sensor: Tide level",
+	"Sensor: Weight",
+	"Sensor: Voltage",
+	"Sensor: Current",
+	"Sensor: Carbon dioxide (CO2) level",
+	"Sensor: Air flow",
+	"Sensor: Tank capacity",
+	"Sensor: Distance",
+	"Sensor: Angle position",
+	"Sensor: Rotation",
+	"Sensor: Water temperature",
+	"Sensor: Soil temperature",
+	"Sensor: Seismic Intensity",
+	"Sensor: Seismic magnitude",
+	"Sensor: Ultraviolet",
+	"Sensor: Electrical resistivity",
+	"Sensor: Electrical conductivity",
+	"Sensor: Loudness",
+	"Sensor: Moisture",
+	"Sensor: Frequency",
+	"Sensor: Time",
+	"Sensor: Target temperature",
+	"Sensor: Particulate Matter 2.5",
+	"Sensor: Formaldehyde (CH2O) level",
+	"Sensor: Radon concentration",
+	"Sensor: Methane (CH4) density",
+	"Sensor: Volatile Organic Compound level",
+	"Sensor: Carbon monoxide (CO) level",
+	"Sensor: Soil humidity",
+	"Sensor: Soil reactivity",
+	"Sensor: Soil salinity",
+	"Sensor: Heart rate",
+	"Sensor: Blood pressure",
+	"Sensor: Muscle mass",
+	"Sensor: Fat mass",
+	"Sensor: Bone mass",
+	"Sensor: Total body water (TBW)",
+	"Sensor: Basis metabolic rate (BMR)",
+	"Sensor: Body Mass Index (BMI)",
+	"Sensor: Acceleration X-axis",
+	"Sensor: Acceleration Y-axis",
+	"Sensor: Acceleration Z-axis",
+	"Sensor: Smoke density",
+	"Sensor: Water flow",
+	"Sensor: Water pressure",
+	"Sensor: RF signal strength",
+	"Sensor: Particulate Matter 10",
+	"Sensor: Respiratory rate",
+	"Sensor: Relative Modulation level",
+	"Sensor: Boiler water temperature",
+	"Sensor: Domestic Hot Water (DHW) temperature",
+	"Sensor: Outside temperature",
+	"Sensor: Exhaust temperature",
+	"Sensor: Water Chlorine level",
+	"Sensor: Water acidity",
+	"Sensor: Water Oxidation reduction potential",
+	"Sensor: Heart Rate LF/HF ratio",
+	"Sensor: Motion Direction",
+	"Sensor: Applied force on the sensor",
+	"Sensor: Return Air temperature",
+	"Sensor: Supply Air temperature",
+	"Sensor: Condenser Coil temperature",
+	"Sensor: Evaporator Coil temperature",
+	"Sensor: Liquid Line temperature",
+	"Sensor: Discharge Line temperature",
+	"Sensor: Suction Pressure",
+	"Sensor: Discharge Pressure",
+	"Sensor: Defrost temperature",
+
+	"Notification: Smoke Alarm" = 0x71_01,
+	"Notification: CO Alarm",
+	"Notification: CO2 Alarm",
+	"Notification: Heat Alarm",
+	"Notification: Water Alarm",
+	"Notification: Access Control",
+	"Notification: Home Security",
+	"Notification: Power Management",
+	"Notification: System",
+	"Notification: Emergency Alarm",
+	"Notification: Clock",
+	"Notification: Appliance",
+	"Notification: Home Health",
+	"Notification: Siren",
+	"Notification: Water Valve",
+	"Notification: Weather Alarm",
+	"Notification: Irrigation",
+	"Notification: Gas alarm",
+	"Notification: Pest Control",
+	"Notification: Light sensor",
+	"Notification: Water Quality Monitoring",
+	"Notification: Home monitoring",
+
+	"Meter: Electric" = 0x32_01,
+	"Meter: Gas",
+	"Meter: Water",
+	"Meter: Heating",
+	"Meter: Cooling",
+
+	"Irrigation: Channel 01" = 0x6b_01,
+	"Irrigation: Channel 02",
+	"Irrigation: Channel 03",
+	"Irrigation: Channel 04",
+	"Irrigation: Channel 05",
+	"Irrigation: Channel 06",
+	"Irrigation: Channel 07",
+	"Irrigation: Channel 08",
+	"Irrigation: Channel 09",
+	"Irrigation: Channel 10",
+	"Irrigation: Channel 11",
+	"Irrigation: Channel 12",
+	"Irrigation: Channel 13",
+	"Irrigation: Channel 14",
+	"Irrigation: Channel 15",
+	"Irrigation: Channel 16",
+	"Irrigation: Channel 17",
+	"Irrigation: Channel 18",
+	"Irrigation: Channel 19",
+	"Irrigation: Channel 20",
+	"Irrigation: Channel 21",
+	"Irrigation: Channel 22",
+	"Irrigation: Channel 23",
+	"Irrigation: Channel 24",
+	"Irrigation: Channel 25",
+	"Irrigation: Channel 26",
+	"Irrigation: Channel 27",
+	"Irrigation: Channel 28",
+	"Irrigation: Channel 29",
+	"Irrigation: Channel 30",
+	"Irrigation: Channel 31",
+	"Irrigation: Channel 32",
+}
+
+@API(CommandClasses["Association Group Information"])
+export class AssociationGroupInfoCCAPI extends CCAPI {
+	public async getGroupName(groupId: number): Promise<string> {
+		const cc = new AssociationGroupInfoCCNameGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			groupId,
+		});
+		const response = (await this.driver.sendCommand<
+			AssociationGroupInfoCCNameReport
+		>(cc))!;
+		return response.name;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async getGroupInfo(groupId: number, refreshCache: boolean = false) {
+		const cc = new AssociationGroupInfoCCInfoGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			groupId,
+			refreshCache,
+		});
+		const response = (await this.driver.sendCommand<
+			AssociationGroupInfoCCInfoReport
+		>(cc))!;
+		// SDS13782: If List Mode is set to 0, the Group Count field MUST be set to 1.
+		const { groupId: _, ...info } = response.groups[0];
+		return {
+			hasDynamicInfo: response.hasDynamicInfo,
+			...info,
+		};
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async getCommands(
+		groupId: number,
+		allowCache: boolean = true,
+	): Promise<AssociationGroupInfoCCCommandListReport["commands"]> {
+		const cc = new AssociationGroupInfoCCCommandListGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			groupId,
+			allowCache,
+		});
+		const response = (await this.driver.sendCommand<
+			AssociationGroupInfoCCCommandListReport
+		>(cc))!;
+		return response.commands;
+	}
+}
+
 export interface AssociationGroupInfoCC {
 	ccCommand: AssociationGroupInfoCommand;
 }
 
 @commandClass(CommandClasses["Association Group Information"])
-@implementedVersion(1)
-export class AssociationGroupInfoCC extends CommandClass {}
+@implementedVersion(3)
+export class AssociationGroupInfoCC extends CommandClass {
+	public determineRequiredCCInterviews(): readonly CommandClasses[] {
+		// AssociationCC must be interviewed after Z-Wave+ if that is supported
+		return [
+			...super.determineRequiredCCInterviews(),
+			CommandClasses.Association,
+			// TODO: ^ OR v
+			CommandClasses["Multi Channel Association"],
+		];
+	}
+
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const api = node.commandClasses["Association Group Information"];
+
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		const associationGroupCount =
+			this.getValueDB().getValue<number>({
+				commandClass: CommandClasses.Association,
+				// endpoint?
+				propertyName: "groupCount",
+			}) || 0;
+
+		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
+			if (complete) {
+				// First get the group's name
+				log.controller.logNode(node.id, {
+					message: `Association group #${groupId}: Querying name...`,
+					direction: "outbound",
+				});
+				const name = await api.getGroupName(groupId);
+				let logMessage = `Association group #${groupId} has name "${name}"`;
+				log.controller.logNode(node.id, {
+					message: logMessage,
+					direction: "inbound",
+				});
+
+				// Then its information
+				log.controller.logNode(node.id, {
+					message: `Association group #${groupId}: Querying info...`,
+					direction: "outbound",
+				});
+				const info = await api.getGroupInfo(groupId);
+				logMessage = `Received info for association group #${groupId}:
+info is dynamic: ${info.hasDynamicInfo}
+profile:         ${getEnumMemberName(
+					AssociationGroupInfoProfile,
+					info.profile,
+				)}`;
+				log.controller.logNode(node.id, {
+					message: logMessage,
+					direction: "inbound",
+				});
+
+				// At last its command list
+				// Then its information
+				log.controller.logNode(node.id, {
+					message: `Association group #${groupId}: Querying command list...`,
+					direction: "outbound",
+				});
+				await api.getCommands(groupId);
+				// Not sure how to log this
+			}
+		}
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+}
 
 @CCCommand(AssociationGroupInfoCommand.NameReport)
 export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
@@ -44,6 +354,7 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 		const nameLength = this.payload[1];
 		validatePayload(this.payload.length >= 2 + nameLength);
 		this.name = this.payload.slice(2, 2 + nameLength).toString("utf8");
+		// TODO: Persist this info
 	}
 
 	public readonly groupId: number;
@@ -108,6 +419,7 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 		for (let i = 0; i < groupCount; i++) {
 			const offset = 1 + i * groupCount;
 			const groupBytes = this.payload.slice(offset, offset + 7);
+			// TODO: Persist this info
 			_groups.push({
 				groupId: groupBytes[0],
 				mode: 0, //groupBytes[1],
@@ -167,7 +479,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 			(isListMode ? 0b0100_0000 : 0);
 		this.payload = Buffer.from([
 			optionByte,
-			(isListMode && this.groupId) || 0,
+			isListMode ? 0 : this.groupId!,
 		]);
 		return super.serialize();
 	}
