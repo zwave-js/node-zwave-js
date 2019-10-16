@@ -1,15 +1,19 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { CCAPI } from "./API";
+import { getGroupCountValueId } from "./AssociationCC";
 import {
 	API,
 	CCCommand,
 	CCCommandOptions,
+	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	CommandClassOptions,
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
@@ -209,6 +213,24 @@ export enum AssociationGroupInfoProfile {
 	"Irrigation: Channel 32",
 }
 
+/** Returns the ValueID used to store the name of an association group */
+function getGroupNameValueID(groupId: number): ValueID {
+	return {
+		commandClass: CommandClasses.Association,
+		propertyName: "name",
+		propertyKey: groupId,
+	};
+}
+
+/** Returns the ValueID used to store info for an association group */
+function getGroupInfoValueID(groupId: number): ValueID {
+	return {
+		commandClass: CommandClasses.Association,
+		propertyName: "info",
+		propertyKey: groupId,
+	};
+}
+
 @API(CommandClasses["Association Group Information"])
 export class AssociationGroupInfoCCAPI extends CCAPI {
 	public async getGroupName(groupId: number): Promise<string> {
@@ -267,6 +289,12 @@ export interface AssociationGroupInfoCC {
 @commandClass(CommandClasses["Association Group Information"])
 @implementedVersion(3)
 export class AssociationGroupInfoCC extends CommandClass {
+	public constructor(driver: IDriver, options: CommandClassOptions) {
+		super(driver, options);
+		this.registerValue(getGroupNameValueID(0).propertyName as any, true);
+		this.registerValue(getGroupInfoValueID(0).propertyName as any, true);
+	}
+
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
 		// AssociationCC must be interviewed after Z-Wave+ if that is supported
 		return [
@@ -289,11 +317,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 		});
 
 		const associationGroupCount =
-			this.getValueDB().getValue<number>({
-				commandClass: CommandClasses.Association,
-				// endpoint?
-				propertyName: "groupCount",
-			}) || 0;
+			this.getValueDB().getValue<number>(getGroupCountValueId()) || 0;
 
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			if (complete) {
@@ -303,19 +327,31 @@ export class AssociationGroupInfoCC extends CommandClass {
 					direction: "outbound",
 				});
 				const name = await api.getGroupName(groupId);
-				let logMessage = `Association group #${groupId} has name "${name}"`;
+				const logMessage = `Association group #${groupId} has name "${name}"`;
 				log.controller.logNode(node.id, {
 					message: logMessage,
 					direction: "inbound",
 				});
+			}
 
+			// Even if this is a partial interview, we need to refresh information
+			// for nodes with dynamic associations
+			let hasDynamicInfo: boolean | undefined;
+			if (!complete) {
+				hasDynamicInfo = this.getValueDB().getValue({
+					commandClass: this.ccId,
+					propertyName: "hasDynamicInfo",
+				});
+			}
+
+			if (complete || hasDynamicInfo) {
 				// Then its information
 				log.controller.logNode(node.id, {
 					message: `Association group #${groupId}: Querying info...`,
 					direction: "outbound",
 				});
-				const info = await api.getGroupInfo(groupId);
-				logMessage = `Received info for association group #${groupId}:
+				const info = await api.getGroupInfo(groupId, !!hasDynamicInfo);
+				const logMessage = `Received info for association group #${groupId}:
 info is dynamic: ${info.hasDynamicInfo}
 profile:         ${getEnumMemberName(
 					AssociationGroupInfoProfile,
@@ -325,9 +361,9 @@ profile:         ${getEnumMemberName(
 					message: logMessage,
 					direction: "inbound",
 				});
+			}
 
-				// At last its command list
-				// Then its information
+			if (complete) {
 				log.controller.logNode(node.id, {
 					message: `Association group #${groupId}: Querying command list...`,
 					direction: "outbound",
@@ -354,7 +390,9 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 		const nameLength = this.payload[1];
 		validatePayload(this.payload.length >= 2 + nameLength);
 		this.name = this.payload.slice(2, 2 + nameLength).toString("utf8");
-		// TODO: Persist this info
+
+		const valueId = getGroupNameValueID(this.groupId);
+		this.getValueDB().setValue(valueId, this.name);
 	}
 
 	public readonly groupId: number;
@@ -418,20 +456,30 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 		const _groups: AssociationGroupInfo[] = [];
 		for (let i = 0; i < groupCount; i++) {
 			const offset = 1 + i * groupCount;
+			// Parse the payload
 			const groupBytes = this.payload.slice(offset, offset + 7);
-			// TODO: Persist this info
-			_groups.push({
-				groupId: groupBytes[0],
-				mode: 0, //groupBytes[1],
-				profile: groupBytes.readUInt16BE(2),
-				eventCode: 0, // groupBytes.readUInt16BE(5),
+			const groupId = groupBytes[0];
+			const mode = 0; //groupBytes[1];
+			const profile = groupBytes.readUInt16BE(2);
+			const eventCode = 0; // groupBytes.readUInt16BE(5);
+			_groups.push({ groupId, mode, profile, eventCode });
+
+			// And persist the information in the value DB
+			const valueId = getGroupInfoValueID(groupId);
+			this.getValueDB().setValue(valueId, {
+				mode,
+				profile,
+				eventCode,
 			});
 		}
 		this.groups = _groups;
 	}
 
 	public readonly isListMode: boolean;
+
+	@ccValue({ internal: true })
 	public readonly hasDynamicInfo: boolean;
+
 	public readonly groups: readonly AssociationGroupInfo[];
 }
 

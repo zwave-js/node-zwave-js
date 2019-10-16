@@ -70,7 +70,7 @@ function gotCCCommandOptions(options: any): options is CCCommandOptions {
 	return typeof options.nodeId === "number";
 }
 
-type CommandClassOptions =
+export type CommandClassOptions =
 	| CommandClassCreationOptions
 	| CommandClassDeserializationOptions;
 
