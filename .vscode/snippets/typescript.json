@@ -217,7 +217,7 @@
 			"}"
 		]
 	},
-	"Z-Wave CC Interview procedure": {
+	"Z-Wave CC interview procedure": {
 		"prefix": "zwccinterview",
 		"body": [
 			"public async interview(complete: boolean = true): Promise<void> {",
@@ -245,6 +245,17 @@
 			"",
 			"\t// Remember that the interview is complete",
 			"\tthis.interviewComplete = true;",
+			"}"
+		]
+	},
+	"Z-Wave CC interview requirements": {
+		"prefix": "zwccintreq",
+		"body": [
+			"public determineRequiredCCInterviews(): readonly CommandClasses[] {",
+			"\treturn [",
+			"\t\t...super.determineRequiredCCInterviews(),",
+			"\t\tCommandClasses.${0:Basic},",
+			"\t];",
 			"}"
 		]
 	},
