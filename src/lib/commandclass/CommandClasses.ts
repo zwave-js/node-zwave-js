@@ -1,6 +1,7 @@
 import { num2hex } from "../util/strings";
 
 /* A dictionary of all command classes as of 2018-03-30 */
+/* A dictionary of all command classes as of 2018-03-30 */
 export enum CommandClasses {
 	// "Alarm" = 0x71, // superseded by Notification
 	"Alarm Sensor" = 0x9c,
@@ -11,7 +12,7 @@ export enum CommandClasses {
 	"Application Status" = 0x22,
 	"Association" = 0x85,
 	"Association Command Configuration" = 0x9b,
-	"Association Group Information (AGI)" = 0x59,
+	"Association Group Information" = 0x59,
 	"Barrier Operator" = 0x66,
 	"Basic" = 0x20,
 	"Basic Tariff Information" = 0x36,

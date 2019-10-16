@@ -20,7 +20,7 @@ import {
 import { CommandClasses } from "./CommandClasses";
 
 /** Returns the ValueID used to store the maximum number of nodes of an association group */
-function getMaxNodesValueId(groupId: number): ValueID {
+export function getMaxNodesValueId(groupId: number): ValueID {
 	return {
 		commandClass: CommandClasses.Association,
 		propertyName: "maxNodes",
@@ -29,11 +29,20 @@ function getMaxNodesValueId(groupId: number): ValueID {
 }
 
 /** Returns the ValueID used to store the node IDs of an association group */
-function getNodeIdsValueId(groupId: number): ValueID {
+export function getNodeIdsValueId(groupId: number): ValueID {
 	return {
 		commandClass: CommandClasses.Association,
 		propertyName: "nodeIds",
 		propertyKey: groupId,
+	};
+}
+
+/** Returns the ValueID used to store the group count of an association group */
+export function getGroupCountValueId(): ValueID {
+	return {
+		commandClass: CommandClasses.Association,
+		// TODO: endpoint?
+		propertyName: "groupCount",
 	};
 }
 
@@ -170,10 +179,7 @@ export class AssociationCC extends CommandClass {
 		} else {
 			// Partial interview, read the information from cache
 			groupCount =
-				this.getValueDB().getValue({
-					commandClass: this.ccId,
-					propertyName: "groupCount",
-				}) || 0;
+				this.getValueDB().getValue(getGroupCountValueId()) || 0;
 		}
 
 		// Then query each association group
