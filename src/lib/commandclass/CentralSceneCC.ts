@@ -111,6 +111,16 @@ export interface CentralSceneCC {
 @commandClass(CommandClasses["Central Scene"])
 @implementedVersion(3)
 export class CentralSceneCC extends CommandClass {
+	public determineRequiredCCInterviews(): readonly CommandClasses[] {
+		return [
+			...super.determineRequiredCCInterviews(),
+			CommandClasses.Association,
+			// TODO: ^ OR v
+			CommandClasses["Multi Channel Association"],
+			CommandClasses["Association Group Information"],
+		];
+	}
+
 	public static translatePropertyKey(
 		propertyName: string,
 		propertyKey: number | string,
