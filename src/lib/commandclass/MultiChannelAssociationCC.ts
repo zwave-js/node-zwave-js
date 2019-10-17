@@ -1,6 +1,7 @@
 import { MAX_NODES } from "../controller/NodeBitMask";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import log from "../log";
 import { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { encodeBitMask, parseBitMask } from "../values/Primitive";
@@ -179,29 +180,28 @@ export class MultiChannelAssociationCCAPI extends CCAPI {
 		return {
 			maxNodes: response.maxNodes,
 			nodeIds: response.nodeIds,
+			endpoints: response.endpoints,
 		};
 	}
 
 	/**
-	 * Adds new nodes to an association group
+	 * Adds new nodes or endpoints to an association group
 	 */
-	public async addNodeIds(
-		groupId: number,
-		...nodeIds: number[]
+	public async addDestinations(
+		options: MultiChannelAssociationCCSetOptions,
 	): Promise<void> {
 		const cc = new MultiChannelAssociationCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			groupId,
-			nodeIds,
+			...options,
 		});
 		await this.driver.sendCommand(cc);
 	}
 
 	/**
-	 * Removes nodes from an association group
+	 * Removes nodes or endpoints from an association group
 	 */
-	public async removeNodeIds(
+	public async removeDestinations(
 		options: MultiChannelAssociationCCRemoveOptions,
 	): Promise<void> {
 		const cc = new MultiChannelAssociationCCRemove(this.driver, {
@@ -211,8 +211,6 @@ export class MultiChannelAssociationCCAPI extends CCAPI {
 		});
 		await this.driver.sendCommand(cc);
 	}
-
-	// TODO: Add API methods to manipulate endpoint addresses
 }
 
 export interface MultiChannelAssociationCC {
@@ -227,76 +225,103 @@ export class MultiChannelAssociationCC extends CommandClass {
 		return [
 			...super.determineRequiredCCInterviews(),
 			CommandClasses["Z-Wave Plus Info"],
+			// AssociationCC will short-circuit if this CC is supported
+			CommandClasses.Association,
 		];
 	}
 
-	// 	public async interview(complete: boolean = true): Promise<void> {
-	// 		const node = this.getNode()!;
-	// 		const api = node.commandClasses.MultiChannelAssociation;
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const api = node.commandClasses["Multi Channel Association"];
 
-	// 		log.controller.logNode(node.id, {
-	// 			message: `${this.constructor.name}: doing a ${
-	// 				complete ? "complete" : "partial"
-	// 			} interview...`,
-	// 			direction: "none",
-	// 		});
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
 
-	// 		let groupCount: number;
-	// 		if (complete) {
-	// 			// First find out how many groups are supported
-	// 			log.controller.logNode(node.id, {
-	// 				message: "querying number of association groups...",
-	// 				direction: "outbound",
-	// 			});
-	// 			groupCount = await api.getGroupCount();
-	// 			log.controller.logNode(node.id, {
-	// 				message: `supports ${groupCount} association groups`,
-	// 				direction: "inbound",
-	// 			});
-	// 		} else {
-	// 			// Partial interview, read the information from cache
-	// 			groupCount =
-	// 				this.getValueDB().getValue(getGroupCountValueId()) || 0;
-	// 		}
+		let groupCount: number;
+		if (complete) {
+			// First find out how many groups are supported
+			log.controller.logNode(node.id, {
+				message: "querying number of association groups...",
+				direction: "outbound",
+			});
+			groupCount = await api.getGroupCount();
+			log.controller.logNode(node.id, {
+				message: `supports ${groupCount} association groups`,
+				direction: "inbound",
+			});
+		} else {
+			// Partial interview, read the information from cache
+			groupCount =
+				this.getValueDB().getValue(getGroupCountValueId()) || 0;
+		}
 
-	// 		// Then query each association group
-	// 		for (let groupId = 1; groupId <= groupCount; groupId++) {
-	// 			log.controller.logNode(node.id, {
-	// 				message: `querying association group #${groupId}...`,
-	// 				direction: "outbound",
-	// 			});
-	// 			const group = await api.getGroup(groupId);
-	// 			const logMessage = `received information for association group #${groupId}:
-	// maximum # of nodes: ${group.maxNodes}
-	// currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
-	// 			log.controller.logNode(node.id, {
-	// 				message: logMessage,
-	// 				direction: "inbound",
-	// 			});
-	// 		}
+		// Then query each association group
+		for (let groupId = 1; groupId <= groupCount; groupId++) {
+			log.controller.logNode(node.id, {
+				message: `querying association group #${groupId}...`,
+				direction: "outbound",
+			});
+			const group = await api.getGroup(groupId);
+			const logMessage = `received information for association group #${groupId}:
+maximum # of nodes:           ${group.maxNodes}
+currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}
+currently assigned endpoints: ${group.endpoints.map(({ nodeId, endpoint }) => {
+				if (typeof endpoint === "number") {
+					return `${nodeId}:${endpoint}`;
+				} else {
+					return `${nodeId}:[${endpoint.map(String).join(", ")}]`;
+				}
+			})}`;
+			log.controller.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
+		}
 
-	// 		// If the target node supports Z-Wave+ info that means the lifeline MUST be group #1
-	// 		if (node.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
-	// 			// Check if we are already in the lifeline group
-	// 			const lifelineNodeIds: number[] =
-	// 				this.getValueDB().getValue(getNodeIdsValueId(1)) || [];
-	// 			const ownNodeId = this.driver.controller!.ownNodeId!;
-	// 			if (!lifelineNodeIds.includes(ownNodeId)) {
-	// 				log.controller.logNode(node.id, {
-	// 					message:
-	// 						"supports Z-Wave+, assigning ourselves to the Lifeline group...",
-	// 					direction: "outbound",
-	// 				});
-	// 				await api.addNodeIds(1, ownNodeId);
-	// 			}
-	// 		}
+		// If the target node supports Z-Wave+ info that means the lifeline MUST be group #1
+		if (node.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
+			// Check if we are already in the lifeline group
+			const lifelineNodeIds: number[] =
+				this.getValueDB().getValue(getNodeIdsValueId(1)) || [];
+			const lifelineDestinations: EndpointAddress[] =
+				this.getValueDB().getValue(getEndpointsValueId(1)) || [];
+			const ownNodeId = this.driver.controller!.ownNodeId!;
+			if (
+				!lifelineNodeIds.includes(ownNodeId) &&
+				!lifelineDestinations.some(
+					addr => addr.nodeId === ownNodeId && addr.endpoint === 0,
+				)
+			) {
+				log.controller.logNode(node.id, {
+					message:
+						"supports Z-Wave+, assigning ourselves to the Lifeline group...",
+					direction: "outbound",
+				});
+				if (this.version >= 3) {
+					// Starting with V3, the endpoint address must be used
+					await api.addDestinations({
+						groupId: 1,
+						endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
+					});
+				} else {
+					await api.addDestinations({
+						groupId: 1,
+						nodeIds: [ownNodeId],
+					});
+				}
+			}
+		}
 
-	// 		// Remember that the interview is complete
-	// 		this.interviewComplete = true;
-	// 	}
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
 }
 
-type MultiChannelAssociationCCSetOptions = (CCCommandOptions & {
+type MultiChannelAssociationCCSetOptions = ({
 	groupId: number;
 }) &
 	(
@@ -310,7 +335,7 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 		driver: IDriver,
 		options:
 			| CommandClassDeserializationOptions
-			| MultiChannelAssociationCCSetOptions,
+			| (MultiChannelAssociationCCSetOptions & CCCommandOptions),
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
