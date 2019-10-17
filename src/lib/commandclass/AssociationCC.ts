@@ -157,6 +157,16 @@ export class AssociationCC extends CommandClass {
 		const node = this.getNode()!;
 		const api = node.commandClasses.Association;
 
+		// Skip Association CC in favor of Multi Channel Association if possible
+		if (node.commandClasses["Multi Channel Association"].isSupported()) {
+			log.controller.logNode(node.id, {
+				message: `${this.constructor.name}: skipping interview because Multi Channel Association is supported...`,
+				direction: "none",
+			});
+			this.interviewComplete = true;
+			return;
+		}
+
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"

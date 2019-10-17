@@ -300,7 +300,6 @@ export class AssociationGroupInfoCC extends CommandClass {
 		return [
 			...super.determineRequiredCCInterviews(),
 			CommandClasses.Association,
-			// TODO: ^ OR v
 			CommandClasses["Multi Channel Association"],
 		];
 	}
