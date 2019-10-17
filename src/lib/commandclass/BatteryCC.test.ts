@@ -7,7 +7,9 @@ import {
 	BatteryCC,
 	BatteryCCGet,
 	BatteryCCReport,
+	BatteryChargingStatus,
 	BatteryCommand,
+	BatteryReplacementStatus,
 } from "./BatteryCC";
 import { CommandClasses } from "./CommandClasses";
 
@@ -56,6 +58,67 @@ describe("lib/commandclass/BatteryCC => ", () => {
 
 			expect(batteryCC.level).toBe(0);
 			expect(batteryCC.isLow).toBeTrue();
+		});
+	});
+
+	describe("the Report command (v2) should be deserialized correctly", () => {
+		it("all flags set", () => {
+			const ccData = Buffer.from([
+				2, // node number
+				5, // remaining length
+				CommandClasses.Battery, // CC
+				BatteryCommand.Report, // CC Command
+				55, // current value
+				0b00_1111_00,
+				1, // disconnected
+			]);
+			const batteryCC = new BatteryCC(fakeDriver, {
+				data: ccData,
+			}) as BatteryCCReport;
+
+			expect(batteryCC.rechargeable).toBeTrue();
+			expect(batteryCC.backup).toBeTrue();
+			expect(batteryCC.overheating).toBeTrue();
+			expect(batteryCC.lowFluid).toBeTrue();
+			expect(batteryCC.disconnected).toBeTrue();
+		});
+
+		it("charging status", () => {
+			const ccData = Buffer.from([
+				2, // node number
+				5, // remaining length
+				CommandClasses.Battery, // CC
+				BatteryCommand.Report, // CC Command
+				55,
+				0b10_000000, // Maintaining
+				0,
+			]);
+			const batteryCC = new BatteryCC(fakeDriver, {
+				data: ccData,
+			}) as BatteryCCReport;
+
+			expect(batteryCC.chargingStatus).toBe(
+				BatteryChargingStatus.Maintaining,
+			);
+		});
+
+		it("charging status", () => {
+			const ccData = Buffer.from([
+				2, // node number
+				5, // remaining length
+				CommandClasses.Battery, // CC
+				BatteryCommand.Report, // CC Command
+				55,
+				0b11, // Maintaining
+				0,
+			]);
+			const batteryCC = new BatteryCC(fakeDriver, {
+				data: ccData,
+			}) as BatteryCCReport;
+
+			expect(batteryCC.rechargeOrReplace).toBe(
+				BatteryReplacementStatus.Now,
+			);
 		});
 	});
 
