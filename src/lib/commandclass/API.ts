@@ -95,6 +95,7 @@ export interface CCAPIs {
 	Language: import("./LanguageCC").LanguageCCAPI;
 	"Manufacturer Proprietary": import("./ManufacturerProprietaryCC").ManufacturerProprietaryCCAPI;
 	"Manufacturer Specific": import("./ManufacturerSpecificCC").ManufacturerSpecificCCAPI;
+	"Multi Channel Association": import("./MultiChannelAssociationCC").MultiChannelAssociationCCAPI;
 	"Multi Channel": import("./MultiChannelCC").MultiChannelCCAPI;
 	"Multi Command": import("./MultiCommandCC").MultiCommandCCAPI;
 	"Multilevel Sensor": import("./MultilevelSensorCC").MultilevelSensorCCAPI;
