@@ -130,7 +130,8 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		this.persistValues();
 	}
 
-	@ccKeyValuePair() private values: [BinarySensorType, boolean];
+	@ccKeyValuePair()
+	private values: [BinarySensorType, boolean];
 
 	public get sensorType(): BinarySensorType {
 		return this.values[0];
