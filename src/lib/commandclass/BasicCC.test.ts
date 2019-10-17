@@ -12,15 +12,26 @@ import { CommandClasses } from "./CommandClasses";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
+function buildCCBuffer(nodeId: number, payload: Buffer): Buffer {
+	return Buffer.concat([
+		Buffer.from([
+			nodeId, // node number
+			payload.length + 1, // remaining length
+			CommandClasses.Basic, // CC
+		]),
+		payload,
+	]);
+}
+
 describe("lib/commandclass/BasicCC => ", () => {
 	it("the Get command should serialize correctly", () => {
 		const basicCC = new BasicCCGet(fakeDriver, { nodeId: 1 });
-		const expected = Buffer.from([
-			1, // node number
-			2, // remaining length
-			CommandClasses.Basic, // CC
-			BasicCommand.Get, // CC Command
-		]);
+		const expected = buildCCBuffer(
+			1,
+			Buffer.from([
+				BasicCommand.Get, // CC Command
+			]),
+		);
 		expect(basicCC.serialize()).toEqual(expected);
 	});
 
@@ -29,24 +40,24 @@ describe("lib/commandclass/BasicCC => ", () => {
 			nodeId: 2,
 			targetValue: 55,
 		});
-		const expected = Buffer.from([
-			2, // node number
-			3, // remaining length
-			CommandClasses.Basic, // CC
-			BasicCommand.Set, // CC Command
-			55, // target value
-		]);
+		const expected = buildCCBuffer(
+			2,
+			Buffer.from([
+				BasicCommand.Set, // CC Command
+				55, // target value
+			]),
+		);
 		expect(basicCC.serialize()).toEqual(expected);
 	});
 
 	it("the Report command (v1) should be deserialized correctly", () => {
-		const ccData = Buffer.from([
-			2, // node number
-			3, // remaining length
-			CommandClasses.Basic, // CC
-			BasicCommand.Report, // CC Command
-			55, // current value
-		]);
+		const ccData = buildCCBuffer(
+			1,
+			Buffer.from([
+				BasicCommand.Report, // CC Command
+				55, // current value
+			]),
+		);
 		const basicCC = new BasicCCReport(fakeDriver, { data: ccData });
 
 		expect(basicCC.currentValue).toBe(55);
@@ -55,15 +66,15 @@ describe("lib/commandclass/BasicCC => ", () => {
 	});
 
 	it("the Report command (v2) should be deserialized correctly", () => {
-		const ccData = Buffer.from([
-			2, // node number
-			5, // remaining length
-			CommandClasses.Basic, // CC
-			BasicCommand.Report, // CC Command
-			55, // current value
-			66, // target value
-			1, // duration
-		]);
+		const ccData = buildCCBuffer(
+			1,
+			Buffer.from([
+				BasicCommand.Report, // CC Command
+				55, // current value
+				66, // target value
+				1, // duration
+			]),
+		);
 		const basicCC = new BasicCCReport(fakeDriver, { data: ccData });
 
 		expect(basicCC.currentValue).toBe(55);
@@ -73,12 +84,10 @@ describe("lib/commandclass/BasicCC => ", () => {
 	});
 
 	it("deserializing an unsupported command should return an unspecified version of BasicCC", () => {
-		const serializedCC = Buffer.from([
-			2, // node number
-			2, // remaining length
-			CommandClasses.Basic, // CC
-			255, // not a valid command
-		]);
+		const serializedCC = buildCCBuffer(
+			1,
+			Buffer.from([255]), // not a valid command
+		);
 		const basicCC: any = new BasicCC(fakeDriver, {
 			data: serializedCC,
 		});
