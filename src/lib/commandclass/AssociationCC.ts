@@ -153,6 +153,14 @@ export class AssociationCC extends CommandClass {
 		];
 	}
 
+	/**
+	 * Returns the number of association groups reported by the node.
+	 * This only works AFTER the interview process
+	 */
+	public getGroupCountCached(): number {
+		return this.getValueDB().getValue(getGroupCountValueId()) || 0;
+	}
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = node.commandClasses.Association;
@@ -188,8 +196,7 @@ export class AssociationCC extends CommandClass {
 			});
 		} else {
 			// Partial interview, read the information from cache
-			groupCount =
-				this.getValueDB().getValue(getGroupCountValueId()) || 0;
+			groupCount = this.getGroupCountCached();
 		}
 
 		// Then query each association group

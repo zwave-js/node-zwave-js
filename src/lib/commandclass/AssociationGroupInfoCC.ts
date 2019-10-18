@@ -4,11 +4,12 @@ import log from "../log";
 import { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { CCAPI } from "./API";
-import { getGroupCountValueId } from "./AssociationCC";
+import { AssociationCC } from "./AssociationCC";
 import {
 	API,
 	CCCommand,
 	CCCommandOptions,
+	ccKeyValuePair,
 	ccValue,
 	CommandClass,
 	commandClass,
@@ -20,6 +21,7 @@ import {
 	parseCCId,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
+import { MultiChannelAssociationCC } from "./MultiChannelAssociationCC";
 
 // All the supported commands
 export enum AssociationGroupInfoCommand {
@@ -216,7 +218,7 @@ export enum AssociationGroupInfoProfile {
 /** Returns the ValueID used to store the name of an association group */
 function getGroupNameValueID(groupId: number): ValueID {
 	return {
-		commandClass: CommandClasses.Association,
+		commandClass: CommandClasses["Association Group Information"],
 		propertyName: "name",
 		propertyKey: groupId,
 	};
@@ -225,8 +227,17 @@ function getGroupNameValueID(groupId: number): ValueID {
 /** Returns the ValueID used to store info for an association group */
 function getGroupInfoValueID(groupId: number): ValueID {
 	return {
-		commandClass: CommandClasses.Association,
+		commandClass: CommandClasses["Association Group Information"],
 		propertyName: "info",
+		propertyKey: groupId,
+	};
+}
+
+/** Returns the ValueID used to store info for an association group */
+function getIssuedCommandsValueID(groupId: number): ValueID {
+	return {
+		commandClass: CommandClasses["Association Group Information"],
+		propertyName: "issuedCommands",
 		propertyKey: groupId,
 	};
 }
@@ -304,6 +315,60 @@ export class AssociationGroupInfoCC extends CommandClass {
 		];
 	}
 
+	/** Returns the dictionary of all commands issued by the given association group */
+	public getIssuedCommandsCached(
+		groupId: number,
+	): ReadonlyMap<CommandClasses, readonly number[]> | undefined {
+		return this.getValueDB().getValue(getIssuedCommandsValueID(groupId));
+	}
+
+	public findGroupsForIssuedCommand(
+		ccId: CommandClasses,
+		command: number,
+	): number[] {
+		const ret: number[] = [];
+		const associationGroupCount = this.getAssociationGroupCountCached();
+		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
+			// Scan the issued commands of all groups if there's a match
+			const issuedCommands = this.getIssuedCommandsCached(groupId);
+			if (!issuedCommands) continue;
+			if (
+				issuedCommands.has(ccId) &&
+				issuedCommands.get(ccId)!.includes(command)
+			) {
+				ret.push(groupId);
+				continue;
+			}
+		}
+		return ret;
+	}
+
+	private getAssociationGroupCountCached(): number {
+		const node = this.getNode()!;
+		// TODO: Refactor this when TS3.7 is supported by Prettier ==> ?. and ??
+		// The association group count is either determined by the
+		// Association CC or the Multi Channel Association CC
+
+		// First query the Multi Channel Association CC
+		return (
+			(node.commandClasses["Multi Channel Association"].isSupported() &&
+				node
+					.createCCInstance<MultiChannelAssociationCC>(
+						CommandClasses["Multi Channel Association"],
+					)!
+					.getGroupCountCached()) ||
+			// Then the Association CC
+			(node.commandClasses.Association.isSupported() &&
+				node
+					.createCCInstance<AssociationCC>(
+						CommandClasses.Association,
+					)!
+					.getGroupCountCached()) ||
+			// And fall back to 0
+			0
+		);
+	}
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = node.commandClasses["Association Group Information"];
@@ -315,8 +380,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 			direction: "none",
 		});
 
-		const associationGroupCount =
-			this.getValueDB().getValue<number>(getGroupCountValueId()) || 0;
+		const associationGroupCount = this.getAssociationGroupCountCached();
 
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			if (complete) {
@@ -540,26 +604,34 @@ export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInf
 	) {
 		super(driver, options);
 		validatePayload(this.payload.length >= 2);
-		this.groupId = this.payload[0];
+		const groupId = this.payload[0];
 		const listLength = this.payload[1];
 		validatePayload(this.payload.length >= 2 + listLength);
 		const listBytes = this.payload.slice(2, 2 + listLength);
 		// Parse all CC ids and commands
 		let offset = 0;
+		const commands = new Map<CommandClasses, number[]>();
 		while (offset < listLength) {
 			const { ccId, bytesRead } = parseCCId(listBytes, offset);
 			const command = listBytes[offset + bytesRead];
-			if (!this._commands.has(ccId)) this._commands.set(ccId, []);
-			this._commands.get(ccId)!.push(command);
+			if (!commands.has(ccId)) commands.set(ccId, []);
+			commands.get(ccId)!.push(command);
 			offset += bytesRead + 1;
 		}
+
+		this.issuedCommands = [groupId, commands];
+		this.persistValues();
 	}
 
-	public readonly groupId: number;
+	@ccKeyValuePair({ internal: true })
+	private issuedCommands: [number, this["commands"]];
 
-	private _commands = new Map<CommandClasses, number[]>();
+	public get groupId(): number {
+		return this.issuedCommands[0];
+	}
+
 	public get commands(): ReadonlyMap<CommandClasses, readonly number[]> {
-		return this._commands;
+		return this.issuedCommands[1];
 	}
 }
 

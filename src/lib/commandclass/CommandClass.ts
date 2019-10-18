@@ -400,7 +400,7 @@ export class CommandClass {
 	}
 
 	/**
-	 * Returns the node this CC is linked to. Throws if the node does not exist.
+	 * Returns the node this CC is linked to. Throws if the controller is not yet ready.
 	 */
 	public getNode(): ZWaveNode | undefined {
 		if (this.driver.controller == undefined) {
