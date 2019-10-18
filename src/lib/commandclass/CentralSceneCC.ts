@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import log from "../log";
 import { JSONObject, validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
 import { parseBitMask } from "../values/Primitive";
@@ -10,6 +11,7 @@ import {
 	throwUnsupportedProperty,
 	throwWrongValueType,
 } from "./API";
+import { AssociationGroupInfoCC } from "./AssociationGroupInfoCC";
 import {
 	API,
 	CCCommand,
@@ -118,6 +120,73 @@ export class CentralSceneCC extends CommandClass {
 			CommandClasses["Multi Channel Association"],
 			CommandClasses["Association Group Information"],
 		];
+	}
+
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const api = node.commandClasses["Central Scene"];
+
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		if (complete) {
+			// I'm not sure if the specs require supporting nodes to also
+			// support AGI and (Multi Channel) associations, but we assumet that
+			// for now.
+
+			// If one Association group issues CentralScene notifications,
+			// we need to associate ourselves with that channel
+			const groupsIssueingNotifications = node
+				.createCCInstance<AssociationGroupInfoCC>(
+					CommandClasses["Association Group Information"],
+				)!
+				.findGroupsForIssuedCommand(
+					this.ccId,
+					CentralSceneCommand.Notification,
+				);
+			if (groupsIssueingNotifications.length > 0) {
+				// We always grab the first group - usually it should be the lifeline
+				const groupId = groupsIssueingNotifications[0];
+				log.controller.logNode(node.id, {
+					message:
+						"Configuring associations to receive Central Scene notifications...",
+					direction: "outbound",
+				});
+				await node.commandClasses.Association.addNodeIds(
+					groupId,
+					this.driver.controller!.ownNodeId!,
+				);
+
+				log.controller.logNode(node.id, {
+					message: "Querying supported scenes...",
+					direction: "outbound",
+				});
+				const ccSupported = await api.getSupported();
+				const logMessage = `received supported scenes:
+# of scenes:           ${ccSupported.sceneCount}
+supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
+				log.controller.logNode(node.id, {
+					message: logMessage,
+					direction: "inbound",
+				});
+
+				// The slow refresh capability should be enabled whenever possible
+				if (this.version >= 3 && ccSupported.supportsSlowRefresh) {
+					log.controller.logNode(node.id, {
+						message: "Enabling slow refresh capability...",
+						direction: "outbound",
+					});
+					await api.setConfiguration(true);
+				}
+			}
+		}
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
 	}
 
 	public static translatePropertyKey(
