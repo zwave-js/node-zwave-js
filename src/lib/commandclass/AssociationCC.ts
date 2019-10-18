@@ -305,7 +305,7 @@ export class AssociationCCRemove extends AssociationCC {
 						ZWaveErrorCodes.Argument_Invalid,
 					);
 				}
-			} else {
+			} else if (options.groupId < 0) {
 				throw new ZWaveError(
 					"The group id must be positive!",
 					ZWaveErrorCodes.Argument_Invalid,
