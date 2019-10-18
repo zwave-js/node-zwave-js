@@ -18,6 +18,7 @@ import {
 
 const DRIVER_LABEL = "DRIVER";
 const DRIVER_LOGLEVEL = "verbose";
+const SENDQUEUE_LOGLEVEL = "silly";
 
 export const driverLoggerFormat = createLoggerFormat(DRIVER_LABEL);
 
@@ -33,7 +34,10 @@ const logger: ZWaveLogger = winston.loggers.get("driver");
  * Logs a message
  * @param msg The message to output
  */
-export function print(message: string, level?: "warn" | "error"): void {
+export function print(
+	message: string,
+	level?: "debug" | "verbose" | "warn" | "error",
+): void {
 	logger.log({
 		level: level || DRIVER_LOGLEVEL,
 		message,
@@ -116,7 +120,7 @@ export function sendQueue(queue: SortedList<Transaction>): void {
 		}${command}${postfix}`;
 	}
 	logger.log({
-		level: DRIVER_LOGLEVEL,
+		level: SENDQUEUE_LOGLEVEL,
 		message,
 		secondaryTags: `(${queue.length} message${
 			queue.length === 1 ? "" : "s"

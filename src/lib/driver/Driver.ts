@@ -849,12 +849,14 @@ export class Driver extends EventEmitter implements IDriver {
 					if (!this.currentTransaction.ackPending) {
 						log.driver.print(
 							`ACK already received, resolving transaction`,
+							"debug",
 						);
 						this.resolveCurrentTransaction();
 					} else {
 						// wait for the ack, it might be received out of order
 						log.driver.print(
 							`no ACK received yet, remembering response`,
+							"debug",
 						);
 					}
 					// if the response was expected, don't check any more handlers
@@ -1209,7 +1211,7 @@ ${handlers.length} left`,
 		}
 		// Resume the send queue
 		if (resumeQueue) {
-			log.driver.print("resuming send queue");
+			log.driver.print("resuming send queue", "debug");
 			setImmediate(() => this.workOffSendQueue());
 		}
 	}
@@ -1358,7 +1360,7 @@ ${handlers.length} left`,
 
 		// is there something to send?
 		if (this.sendQueue.length === 0) {
-			log.driver.print("The send queue is empty");
+			log.driver.print("The send queue is empty", "debug");
 			return;
 		} else {
 			log.driver.sendQueue(this.sendQueue);
@@ -1367,6 +1369,7 @@ ${handlers.length} left`,
 		if (this.currentTransaction != undefined) {
 			log.driver.print(
 				`workOffSendQueue > skipping because a transaction is pending`,
+				"debug",
 			);
 			return;
 		}
@@ -1382,6 +1385,7 @@ ${handlers.length} left`,
 				`workOffSendQueue > sending next message (${
 					FunctionType[msg.functionType]
 				})${targetNode ? ` to node ${targetNode.id}` : ""}...`,
+				"debug",
 			);
 			// for messages containing a CC, i.e. a SendDataRequest, set the CC version as high as possible
 			if (isCommandClassContainer(msg)) {
@@ -1395,6 +1399,7 @@ ${handlers.length} left`,
 					`CC = ${CommandClasses[ccId]} (${num2hex(
 						ccId,
 					)}) => using version ${msg.command.version}`,
+					"debug",
 				);
 			}
 			// Actually send the message
@@ -1414,6 +1419,7 @@ ${handlers.length} left`,
 		} else {
 			log.driver.print(
 				`The remaining ${this.sendQueue.length} messages are for sleeping nodes, not sending anything!`,
+				"debug",
 			);
 		}
 	}

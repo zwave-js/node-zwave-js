@@ -19,6 +19,7 @@ import {
 
 const CONTROLLER_LABEL = "CNTRLR";
 const CONTROLLER_LOGLEVEL = "info";
+const VALUE_LOGLEVEL = "debug";
 
 export const controllerLoggerFormat = createLoggerFormat(CONTROLLER_LABEL);
 
@@ -149,7 +150,7 @@ export function value(
 			break;
 	}
 	logger.log({
-		level: CONTROLLER_LOGLEVEL,
+		level: VALUE_LOGLEVEL,
 		primaryTags: tagify(primaryTags),
 		secondaryTags: tagify(secondaryTags),
 		message,
@@ -176,7 +177,7 @@ export function metadataUpdated(args: LogValueArgs<ValueID>): void {
 	}
 	message += ": metadata updated";
 	logger.log({
-		level: CONTROLLER_LOGLEVEL,
+		level: VALUE_LOGLEVEL,
 		primaryTags: tagify(primaryTags),
 		secondaryTags: tagify(secondaryTags),
 		message,
