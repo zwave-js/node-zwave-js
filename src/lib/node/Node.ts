@@ -798,7 +798,21 @@ version:               ${this.version}`;
 		// Now that we know the correct order, do the interview in sequence
 		for (const cc of interviewOrder) {
 			try {
-				const instance = this.createCCInstance(cc)!;
+				let instance: CommandClass;
+				try {
+					instance = this.createCCInstance(cc)!;
+				} catch (e) {
+					if (
+						e instanceof ZWaveError &&
+						e.code === ZWaveErrorCodes.CC_NotSupported
+					) {
+						// The CC is no longer supported. This can happen if the node tells us
+						// something different in the Version interview than it did in its NIF
+						continue;
+					}
+					// we want to pass all other errors through
+					throw e;
+				}
 				await instance.interview(!instance.interviewComplete);
 				await this.driver.saveNetworkToCache();
 			} catch (e) {
