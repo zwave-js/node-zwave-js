@@ -4,88 +4,109 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+* Implement Multi Channel Association CC and prefer it to Association CC if possible
+* Implement AssociationGroupInfoCC
+* Add support for CRC-16 CC
+* Bump Association CC to V3, which adds no new commands
+* Add setValue API to TimeParametersCC and use JS date objects
+* Add set value API to NodeNamingAndLocationCC
+* Add interview for Multilevel Sensor CC, fix scale parsing
+* Add interview for Thermostat Setback CC
+* Add interview for Central Scene CC
+* Filter out internal key value pairs in `getDefinedValueIDs`
+* Add tests (and the necessary snippets) for CC serialization and deserialization routines and fix the found errors:
+    * Central Scene: fix calculation of scene bitmask size
+    * Association Group Information: fix offset during parsing of InfoReport
+    * (Multi Channel) Association: fix broken check for negative group IDs
+    * Handle encapsulation (de)serialization correctly
+* Help GitHub understand that this is not a C(++)-repo
+* Add interview implemention to tracking issue
+* Update dependencies
+
+
 ## 1.5.0 (2019-10-06)
-* (AlCalzone) Add the remaining notification configurations:
+* Add the remaining notification configurations:
     * Gas Alarm (`0x12`)
     * Pest Control (`0x13`)
     * Light Sensor (`0x14`)
     * Water Quality Monitoring (`0x15`)
     * Home monitoring (`0x16`)
-* (AlCalzone) Check all received request messages for a matching callback id
-* (AlCalzone) Add interview procedure for ThermostatSetpointCC
-* (AlCalzone) Add setValue API for ThermostatSetpointCC
-* (AlCalzone) Hide more CC values of newer CC versions
-* (AlCalzone) Fix translation of enum values to state metadata so it is able to handle strings starting with a number
-* (AlCalzone) Interview new nodes immediately after inclusion
-* (AlCalzone) Automatically determine the correct CC interview sequence
-* (AlCalzone) `getDefinedValueIDs` now returns statically defined, dynamically registered and created value IDs
+* Check all received request messages for a matching callback id
+* Add interview procedure for ThermostatSetpointCC
+* Add setValue API for ThermostatSetpointCC
+* Hide more CC values of newer CC versions
+* Fix translation of enum values to state metadata so it is able to handle strings starting with a number
+* Interview new nodes immediately after inclusion
+* Automatically determine the correct CC interview sequence
+* `getDefinedValueIDs` now returns statically defined, dynamically registered and created value IDs
 
 ## 1.4.0 (2019-10-03)
-* (AlCalzone) Partially re-interview CCs after restart from cache
-* (AlCalzone) Add interview procedure for BasicCC
-* (AlCalzone) Add the option to specify a minimum version for ccValues
-* (AlCalzone) Implement BatteryCC V2 (including API)
-* (AlCalzone) ThermostatOperatingStateCC: bump CC version
-* (AlCalzone) Add setValue API to WakeUp CC
-* (AlCalzone) Add more notification configurations:
+* Partially re-interview CCs after restart from cache
+* Add interview procedure for BasicCC
+* Add the option to specify a minimum version for ccValues
+* Implement BatteryCC V2 (including API)
+* ThermostatOperatingStateCC: bump CC version
+* Add setValue API to WakeUp CC
+* Add more notification configurations:
     * Appliance (`0x0C`)
     * Home Health (`0x0D`)
     * Siren (`0x0E`)
     * Water Valve (`0x0F`)
     * Weather Alarm (`0x10`)
     * Irrigation (`0x11`)
-* (AlCalzone) Prepare for TS 3.7
-* (AlCalzone) Add missing callbackId to HardResetRequest
-* (AlCalzone) Create callback ids centrally on the driver instance
-* (AlCalzone) Implement TimeCC v2 and TimeParametersCC v1
-* (AlCalzone) TimeParametersCC: use local time if the node has no means to determine timezone
-* (AlCalzone) Add support for excluding nodes from the network
-* (AlCalzone) Update dependencies
+* Prepare for TS 3.7
+* Add missing callbackId to HardResetRequest
+* Create callback ids centrally on the driver instance
+* Implement TimeCC v2 and TimeParametersCC v1
+* TimeParametersCC: use local time if the node has no means to determine timezone
+* Add support for excluding nodes from the network
+* Update dependencies
 
 ## 1.3.1 (2019-09-25)
-* (AlCalzone) Mark `options` in `IDriver` as internal
+* Mark `options` in `IDriver` as internal
 
 ## 1.3.0 (2019-09-04)
-* (AlCalzone) Add more notification configurations:
+* Add more notification configurations:
     * Power Management (`0x08`)
     * System (`0x09`)
     * Emergency Alarm (`0x0A`)
     * Clock (`0x0B`)
-* (AlCalzone) Implement node and network heal
-* (AlCalzone) Add method to enumerate serial ports
-* (AlCalzone) Mark readonly CCs
+* Implement node and network heal
+* Add method to enumerate serial ports
+* Mark readonly CCs
 
 ## 1.2.1 (2019-08-29)
-* (AlCalzone) Implement AssociationCC (V2)
-* (AlCalzone) fix CC interview not being done completely
-* (AlCalzone) Implement ThermostatModeCC (V3)
-* (AlCalzone) Implement ThermostatOperatingStateCC (V1)
-* (AlCalzone) Make a bunch of CC values internal
-* (AlCalzone) allow preventing notification variables from going idle
-* (AlCalzone) Add more notification configurations:
+* Implement AssociationCC (V2)
+* fix CC interview not being done completely
+* Implement ThermostatModeCC (V3)
+* Implement ThermostatOperatingStateCC (V1)
+* Make a bunch of CC values internal
+* allow preventing notification variables from going idle
+* Add more notification configurations:
     * Access Control (`0x06`)
     * Water Alarm (`0x05`)
     * Heat Alarm (`0x04`)
     * CO2 Alarm (`0x03`)
     * CO Alarm (`0x02`)
-* (AlCalzone) add a lint step for config files
-* (AlCalzone) handle errors in config files more gracefully
+* add a lint step for config files
+* handle errors in config files more gracefully
 * dependency updates
 
 ## 1.1.1 (2019-08-25)
-* (AlCalzone) Drop messages with non-implemented CCs instead of crashing
-* (AlCalzone) Fix parsing of MultiChannelCC encapsulated CCs
-* (AlCalzone) Fix unwrapping of MultiChannelCCs inside ApplicationCommandRequests
-* (AlCalzone) Include `config` dir and TypeScript definitions in package
-* (AlCalzone) Move `ansi-colors` from dev to production dependencies
+* Drop messages with non-implemented CCs instead of crashing
+* Fix parsing of MultiChannelCC encapsulated CCs
+* Fix unwrapping of MultiChannelCCs inside ApplicationCommandRequests
+* Include `config` dir and TypeScript definitions in package
+* Move `ansi-colors` from dev to production dependencies
 
 ## 1.1.0 (2019-08-25)
-* (AlCalzone) Improve support for notification CC: named variables and events
+* Improve support for notification CC: named variables and events
 
 ## 1.0.1 (2019-08-20)
-* (AlCalzone) Fix log message for metadata updates
-* (AlCalzone) Remove unused dependencies, exports and methods
-* (AlCalzone) Fix broken setValue API test
+* Fix log message for metadata updates
+* Remove unused dependencies, exports and methods
+* Fix broken setValue API test
 
 ## 1.0.0 (2019-08-19)
-* (AlCalzone) First working release
+* First working release
