@@ -115,7 +115,6 @@ export class CentralSceneCC extends CommandClass {
 		return [
 			...super.determineRequiredCCInterviews(),
 			CommandClasses.Association,
-			// TODO: ^ OR v
 			CommandClasses["Multi Channel Association"],
 			CommandClasses["Association Group Information"],
 		];
