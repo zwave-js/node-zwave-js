@@ -454,7 +454,7 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 		validatePayload(this.payload.length >= 1 + groupCount * 7);
 		const _groups: AssociationGroupInfo[] = [];
 		for (let i = 0; i < groupCount; i++) {
-			const offset = 1 + i * groupCount;
+			const offset = 1 + i * 7;
 			// Parse the payload
 			const groupBytes = this.payload.slice(offset, offset + 7);
 			const groupId = groupBytes[0];
