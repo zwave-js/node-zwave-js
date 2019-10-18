@@ -16,6 +16,7 @@ import { num2hex, stringify } from "../util/strings";
 import {
 	CacheMetadata,
 	CacheValue,
+	deserializeCacheValue,
 	serializeCacheValue,
 } from "../values/Cache";
 import { ValueMetadata } from "../values/Metadata";
@@ -656,7 +657,7 @@ export class CommandClass {
 					propertyName: val.propertyName,
 					propertyKey: val.propertyKey,
 				},
-				val.value,
+				deserializeCacheValue(val.value),
 			);
 			// }
 		}
