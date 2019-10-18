@@ -195,7 +195,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		validatePayload(this.payload.length >= 2);
 		this._sceneCount = this.payload[0];
 		this._supportsSlowRefresh = !!(this.payload[1] & 0b1000_0000);
-		const bitMaskBytes = this.payload[1] & 0b110;
+		const bitMaskBytes = (this.payload[1] & 0b110) >>> 1;
 		this._keyAttributesHaveIdenticalSupport = !!(this.payload[1] & 0b1);
 		const numEntries = this._keyAttributesHaveIdenticalSupport
 			? 1
