@@ -1,13 +1,12 @@
 import { composeObject } from "alcalzone-shared/objects";
-import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
 import { CCAPI } from "../commandclass/API";
 import {
-	CentralSceneCC,
 	CentralSceneCCNotification,
 	CentralSceneKeys,
+	getSceneValueId,
 } from "../commandclass/CentralSceneCC";
 import {
 	CommandClass,
@@ -1005,21 +1004,8 @@ version:               ${this.version}`;
 			sceneNumber: number,
 			key: CentralSceneKeys,
 		): void => {
-			const paddedSceneNumber = padStart(sceneNumber.toString(), 3, "0");
-			const propertyName = `scene${paddedSceneNumber}`;
-			const valueId = {
-				commandClass: command.ccId,
-				endpoint: command.endpoint,
-				propertyName,
-			};
-			this.valueDB.setValue(
-				valueId,
-				CentralSceneCC.translatePropertyKey(propertyName, key),
-			);
-			this.valueDB.setMetadata(valueId, {
-				...ValueMetadata.ReadOnly,
-				label: `Scene ${paddedSceneNumber}`,
-			});
+			const valueId = getSceneValueId(sceneNumber);
+			this.valueDB.setValue(valueId, key);
 		};
 
 		const forceKeyUp = (): void => {

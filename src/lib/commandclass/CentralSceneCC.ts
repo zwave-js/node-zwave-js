@@ -1,8 +1,10 @@
+import { padStart } from "alcalzone-shared/strings";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import { ValueID } from "../node/ValueDB";
 import { JSONObject, validatePayload } from "../util/misc";
-import { ValueMetadata } from "../values/Metadata";
+import { enumValuesToMetadataStates, ValueMetadata } from "../values/Metadata";
 import { parseBitMask } from "../values/Primitive";
 import {
 	CCAPI,
@@ -26,6 +28,15 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
+
+/** Returns the ValueID used to store the maximum number of nodes of an association group */
+export function getSceneValueId(sceneNumber: number): ValueID {
+	return {
+		commandClass: CommandClasses["Central Scene"],
+		propertyName: "scene",
+		propertyKey: padStart(sceneNumber.toString(), 3, "0"),
+	};
+}
 
 export enum CentralSceneCommand {
 	SupportedGet = 0x01,
@@ -60,7 +71,7 @@ export class CentralSceneCCAPI extends CCAPI {
 		return {
 			sceneCount: response.sceneCount,
 			supportsSlowRefresh: response.supportsSlowRefresh,
-			supportsKeyAttribute: response.supportsKeyAttribute.bind(response),
+			supportedKeyAttributes: response.supportedKeyAttributes,
 		};
 	}
 
@@ -189,16 +200,16 @@ supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
 		this.interviewComplete = true;
 	}
 
-	public static translatePropertyKey(
-		propertyName: string,
-		propertyKey: number | string,
-	): string {
-		if (/^scene\d+/.test(propertyName)) {
-			return CentralSceneKeys[propertyKey as number];
-		} else {
-			return super.translatePropertyKey(propertyName, propertyKey);
-		}
-	}
+	// public static translatePropertyKey(
+	// 	propertyName: string,
+	// 	propertyKey: number | string,
+	// ): string {
+	// 	if (/^scene\d+/.test(propertyName)) {
+	// 		return CentralSceneKeys[propertyKey as number];
+	// 	} else {
+	// 		return super.translatePropertyKey(propertyName, propertyKey);
+	// 	}
+	// }
 }
 
 @CCCommand(CentralSceneCommand.Notification)
@@ -265,10 +276,8 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		this._sceneCount = this.payload[0];
 		this._supportsSlowRefresh = !!(this.payload[1] & 0b1000_0000);
 		const bitMaskBytes = (this.payload[1] & 0b110) >>> 1;
-		this._keyAttributesHaveIdenticalSupport = !!(this.payload[1] & 0b1);
-		const numEntries = this._keyAttributesHaveIdenticalSupport
-			? 1
-			: this.sceneCount;
+		const identicalKeyAttributes = !!(this.payload[1] & 0b1);
+		const numEntries = identicalKeyAttributes ? 1 : this.sceneCount;
 
 		validatePayload(this.payload.length >= 2 + bitMaskBytes * numEntries);
 		for (let i = 0; i < numEntries; i++) {
@@ -276,12 +285,36 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 				2 + i * bitMaskBytes,
 				2 + (i + 1) * bitMaskBytes,
 			);
-			this._supportedKeyAttributes.set(i + 1, parseBitMask(mask));
+			this._supportedKeyAttributes.set(
+				i + 1,
+				parseBitMask(mask, CentralSceneKeys.KeyPressed),
+			);
 		}
+		if (identicalKeyAttributes) {
+			// The key attributes are only transmitted for scene 1, copy them to the others
+			for (let i = 2; i <= this._sceneCount; i++) {
+				this._supportedKeyAttributes.set(
+					i,
+					this._supportedKeyAttributes.get(1)!,
+				);
+			}
+		}
+
+		// Create metadata for all scenes
+		for (let i = 1; i <= this._sceneCount; i++) {
+			const valueId = getSceneValueId(i);
+			this.getValueDB().setMetadata(valueId, {
+				...ValueMetadata.ReadOnlyUInt8,
+				label: `Scene ${padStart(i.toString(), 3, "0")}`,
+				states: enumValuesToMetadataStates(
+					CentralSceneKeys,
+					this._supportedKeyAttributes.get(i),
+				),
+			});
+		}
+
 		this.persistValues();
 	}
-
-	// TODO: Use all these values to define the sceneXYZ values and metadata
 
 	private _sceneCount: number;
 	@ccValue({ internal: true })
@@ -308,23 +341,23 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		return this._supportedKeyAttributes;
 	}
 
-	private _keyAttributesHaveIdenticalSupport: boolean;
-	@ccValue({ internal: true })
-	public get keyAttributesHaveIdenticalSupport(): boolean {
-		return this._keyAttributesHaveIdenticalSupport;
-	}
+	// private _keyAttributesHaveIdenticalSupport: boolean;
+	// @ccValue({ internal: true })
+	// public get keyAttributesHaveIdenticalSupport(): boolean {
+	// 	return this._keyAttributesHaveIdenticalSupport;
+	// }
 
-	public supportsKeyAttribute(
-		sceneNumber: number,
-		keyAttribute: CentralSceneKeys,
-	): boolean {
-		const mapIndex = this._keyAttributesHaveIdenticalSupport
-			? 1
-			: sceneNumber;
-		return this._supportedKeyAttributes
-			.get(mapIndex)!
-			.includes(keyAttribute);
-	}
+	// public supportsKeyAttribute(
+	// 	sceneNumber: number,
+	// 	keyAttribute: CentralSceneKeys,
+	// ): boolean {
+	// 	const mapIndex = this._keyAttributesHaveIdenticalSupport
+	// 		? 1
+	// 		: sceneNumber;
+	// 	return this._supportedKeyAttributes
+	// 		.get(mapIndex)!
+	// 		.includes(keyAttribute);
+	// }
 }
 
 @CCCommand(CentralSceneCommand.SupportedGet)
