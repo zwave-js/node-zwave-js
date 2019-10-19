@@ -116,14 +116,15 @@ export function encodeFloatWithScale(value: number, scale: number): Buffer {
 }
 
 /** Parses a bit mask into a numeric array */
-export function parseBitMask(mask: Buffer): number[] {
+export function parseBitMask(mask: Buffer, startValue: number = 1): number[] {
 	const numBits = mask.length * 8;
 
 	const ret: number[] = [];
 	for (let index = 1; index <= numBits; index++) {
 		const byteNum = (index - 1) >>> 3; // id / 8
 		const bitNum = (index - 1) % 8;
-		if ((mask[byteNum] & (1 << bitNum)) !== 0) ret.push(index);
+		if ((mask[byteNum] & (1 << bitNum)) !== 0)
+			ret.push(index + startValue - 1);
 	}
 	return ret;
 }

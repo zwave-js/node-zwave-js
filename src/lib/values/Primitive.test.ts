@@ -205,6 +205,36 @@ describe("lib/values/Primitive", () => {
 				expect(parseBitMask(mask)).toIncludeAllMembers(expected);
 			}
 		});
+
+		it("should take the 2nd parameter into account when calculating the resulting values", () => {
+			const tests = [
+				{
+					mask: Buffer.from([0b10111001]),
+					startValue: 0,
+					expected: [0, 3, 4, 5, 7],
+				},
+				{
+					mask: Buffer.from([0b10111001]),
+					startValue: 1,
+					expected: [1, 4, 5, 6, 8],
+				},
+				{
+					mask: Buffer.from([0b10111001]),
+					startValue: 2,
+					expected: [2, 5, 6, 7, 9],
+				},
+				{
+					mask: Buffer.from([0b11, 0b110]),
+					startValue: 3,
+					expected: [3, 4, 12, 13],
+				},
+			];
+			for (const { mask, startValue, expected } of tests) {
+				expect(parseBitMask(mask, startValue)).toIncludeAllMembers(
+					expected,
+				);
+			}
+		});
 	});
 
 	describe("encodeBitMask()", () => {
