@@ -367,10 +367,10 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 
 		validatePayload(this.payload.length >= 2);
 		const sensorType = this.payload[0];
-		// The supported scales in our definition start at 0, so shift the result by 1
 		const supportedScales = parseBitMask(
 			Buffer.from([this.payload[1] & 0b1111]),
-		).map(i => i - 1);
+			0,
+		);
 		this.supportedScales = [sensorType, supportedScales];
 		this.persistValues();
 	}

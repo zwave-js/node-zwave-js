@@ -496,11 +496,11 @@ export class NotificationCCSupportedReport extends NotificationCC {
 			this.payload.length >= 1 + numBitMaskBytes,
 		);
 		const notificationBitMask = this.payload.slice(1, 1 + numBitMaskBytes);
-		// In this bit mask, bit 0 is ignored and counting starts at bit 1
-		// Therefore shift the result by 1.
 		this._supportedNotificationTypes = parseBitMask(
 			notificationBitMask,
-		).map(evt => evt - 1);
+			// bit 0 is ignored, but counting still starts at 1, so the first bit must have the value 0
+			0,
+		);
 		this.persistValues();
 	}
 
@@ -548,7 +548,11 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		const eventBitMask = this.payload.slice(2, 2 + numBitMaskBytes);
 		// In this bit mask, bit 0 is ignored and counting starts at bit 1
 		// Therefore shift the result by 1.
-		this._supportedEvents = parseBitMask(eventBitMask).map(evt => evt - 1);
+		this._supportedEvents = parseBitMask(
+			eventBitMask,
+			// bit 0 is ignored, but counting still starts at 1, so the first bit must have the value 0
+			0,
+		);
 
 		// We store the supported events in the form of value metadata
 		// This happens during the node interview

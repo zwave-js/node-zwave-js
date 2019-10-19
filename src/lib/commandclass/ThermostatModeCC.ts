@@ -293,8 +293,7 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		// This bitmap starts at 0, so shift all values by 1
-		this._supportedModes = parseBitMask(this.payload).map(mode => mode - 1);
+		this._supportedModes = parseBitMask(this.payload, ThermostatMode.Off);
 
 		// Use this information to create the metadata for the mode property
 		const valueId: ValueID = {

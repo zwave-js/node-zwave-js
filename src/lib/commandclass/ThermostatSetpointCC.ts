@@ -601,8 +601,7 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 
 		validatePayload(this.payload.length >= 1);
 		const bitMask = this.payload;
-		// This bit map starts counting at 0, so shift everything by 1
-		const supported = parseBitMask(bitMask).map(i => i - 1);
+		const supported = parseBitMask(bitMask, ThermostatSetpointType["N/A"]);
 		if (this.version >= 3) {
 			// Interpretation A
 			this._supportedSetpointTypes = supported.map(
