@@ -1,5 +1,6 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { IDriver } from "../driver/IDriver";
+import { ZWaveNode } from "../node/Node";
 import {
 	CentralSceneCC,
 	CentralSceneCCConfigurationGet,
@@ -14,6 +15,8 @@ import {
 import { CommandClasses } from "./CommandClasses";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const node1 = new ZWaveNode(1, fakeDriver as any);
+(fakeDriver.controller!.nodes as any).set(1, node1);
 
 function buildCCBuffer(nodeId: number, payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -117,10 +120,10 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 
 		expect(cc.sceneCount).toBe(2);
 		expect(cc.supportsSlowRefresh).toBeTrue();
-		expect(cc.keyAttributesHaveIdenticalSupport).toBeFalse();
 		expect(cc.supportedKeyAttributes.size).toBe(2);
-		expect(cc.supportedKeyAttributes.get(1)).toEqual([1, 9, 10]);
-		expect(cc.supportedKeyAttributes.get(2)).toEqual([1, 3, 5]);
+		// Key attributes start counting at 0
+		expect(cc.supportedKeyAttributes.get(1)).toEqual([0, 8, 9]);
+		expect(cc.supportedKeyAttributes.get(2)).toEqual([0, 2, 4]);
 	});
 
 	it("the Notification command should be deserialized correctly", () => {
