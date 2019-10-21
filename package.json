@@ -73,7 +73,7 @@
     "semver": "^6.0.0",
     "supports-color": "^7.0.0",
     "ts-node": "^8.0.2",
-    "typescript": "3.7.0-dev.20191013",
+    "typescript": "3.7.0-dev.20191018",
     "yargs": "^14.0.0"
   },
   "dependencies": {
