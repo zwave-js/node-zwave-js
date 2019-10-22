@@ -72,6 +72,11 @@ export class CentralSceneCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getSupported() {
+		this.assertSupportsCommand(
+			CentralSceneCommand,
+			CentralSceneCommand.SupportedGet,
+		);
+
 		const cc = new CentralSceneCCSupportedGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -88,6 +93,11 @@ export class CentralSceneCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getConfiguration() {
+		this.assertSupportsCommand(
+			CentralSceneCommand,
+			CentralSceneCommand.ConfigurationGet,
+		);
+
 		const cc = new CentralSceneCCConfigurationGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -101,6 +111,11 @@ export class CentralSceneCCAPI extends CCAPI {
 	}
 
 	public async setConfiguration(slowRefresh: boolean): Promise<void> {
+		this.assertSupportsCommand(
+			CentralSceneCommand,
+			CentralSceneCommand.ConfigurationSet,
+		);
+
 		const cc = new CentralSceneCCConfigurationSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
