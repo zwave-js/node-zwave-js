@@ -115,7 +115,7 @@ type ZWaveNodeEventCallbacks = Overwrite<
 	ZWaveNodeValueEventCallbacks
 >;
 
-type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
+export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
 
 export interface ZWaveNode {
 	on<TEvent extends ZWaveNodeEvents>(
@@ -214,7 +214,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			);
 		}
 		// Log the value change
-		const ccInstance = this.internalCreateCCInstance(arg.commandClass);
+		const ccInstance = this.createCCInstanceInternal(arg.commandClass);
 		const isInternalValue =
 			ccInstance && ccInstance.isInternalValue(arg.propertyName as any);
 		// I don't like the splitting and any but its the easiest solution here
@@ -874,9 +874,7 @@ version:               ${this.version}`;
 			);
 			if (config) {
 				if (isObject(config.configuration)) {
-					const configCC = this.createCCInstance<ConfigurationCC>(
-						CommandClasses.Configuration,
-					)!;
+					const configCC = this.createCCInstance(ConfigurationCC)!;
 					configCC.deserializeParamInformationFromConfig(
 						config.configuration,
 					);

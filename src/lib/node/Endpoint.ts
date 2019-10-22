@@ -2,8 +2,10 @@ import { CCAPI, CCAPIs } from "../commandclass/API";
 import {
 	CommandClass,
 	CommandClassInfo,
+	Constructable,
 	getAPI,
 	getCCConstructor,
+	getCommandClassStatic,
 } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { Driver } from "../driver/Driver";
@@ -104,32 +106,68 @@ export class Endpoint {
 	}
 
 	/**
-	 * Creates an instance of the given CC, which is linked to this endpoint.
+	 * Creates an instance of the given CC and links it to this endpoint.
 	 * Throws if the CC is neither supported nor controlled by the endpoint.
 	 */
 	// wotan-disable no-misused-generics
 	public createCCInstance<T extends CommandClass>(
-		cc: CommandClasses,
+		ccId: CommandClasses,
+	): T | undefined;
+	public createCCInstance<T extends CommandClass>(
+		cc: Constructable<T>,
+	): T | undefined;
+	public createCCInstance<T extends CommandClass>(
+		cc: CommandClasses | Constructable<T>,
 	): T | undefined {
-		if (!this.supportsCC(cc) && !this.controlsCC(cc)) {
+		const ccId = typeof cc === "number" ? cc : getCommandClassStatic(cc);
+		if (!this.supportsCC(ccId) && !this.controlsCC(ccId)) {
 			throw new ZWaveError(
 				`Cannot create an instance of the unsupported CC ${
-					CommandClasses[cc]
-				} (${num2hex(cc)})`,
+					CommandClasses[ccId]
+				} (${num2hex(ccId)})`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
-		return this.internalCreateCCInstance(cc);
+		// @ts-ignore https://github.com/microsoft/TypeScript/issues/34632
+		return this.createCCInstanceInternal(cc);
+	}
+
+	/**
+	 * Creates an instance of the given CC and links it to this endpoint.
+	 * Returns undefined if the CC is neither supported nor controlled by the endpoint.
+	 */
+	// wotan-disable no-misused-generics
+	public createCCInstanceUnsafe<T extends CommandClass>(
+		ccId: CommandClasses,
+	): T | undefined;
+	public createCCInstanceUnsafe<T extends CommandClass>(
+		cc: Constructable<T>,
+	): T | undefined;
+	public createCCInstanceUnsafe<T extends CommandClass>(
+		cc: CommandClasses | Constructable<T>,
+	): T | undefined {
+		const ccId = typeof cc === "number" ? cc : getCommandClassStatic(cc);
+		if (this.supportsCC(ccId) || this.controlsCC(ccId)) {
+			// @ts-ignore https://github.com/microsoft/TypeScript/issues/34632
+			return this.createCCInstanceInternal(cc);
+		}
 	}
 
 	/**
 	 * @internal
-	 * Create an instance of the given CC without checking if it is supported
+	 * Create an instance of the given CC without checking whether it is supported.
+	 * Applications should not use this directly.
 	 */
-	protected internalCreateCCInstance<T extends CommandClass>(
-		cc: CommandClasses,
+	public createCCInstanceInternal<T extends CommandClass>(
+		ccId: CommandClasses,
+	): T | undefined;
+	public createCCInstanceInternal<T extends CommandClass>(
+		cc: Constructable<T>,
+	): T | undefined;
+	public createCCInstanceInternal<T extends CommandClass>(
+		cc: CommandClasses | Constructable<T>,
 	): T | undefined {
-		const Constructor = getCCConstructor(cc);
+		const Constructor = typeof cc === "number" ? getCCConstructor(cc) : cc;
 		if (Constructor) {
 			return new Constructor(this.driver, {
 				nodeId: this.nodeId,
