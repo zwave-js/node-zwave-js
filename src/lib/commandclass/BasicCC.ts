@@ -65,6 +65,8 @@ export class BasicCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
+		this.assertSupportsCommand(BasicCommand, BasicCommand.Get);
+
 		const cc = new BasicCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -78,6 +80,8 @@ export class BasicCCAPI extends CCAPI {
 	}
 
 	public async set(targetValue: number): Promise<void> {
+		this.assertSupportsCommand(BasicCommand, BasicCommand.Set);
+
 		const cc = new BasicCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
