@@ -53,6 +53,11 @@ export class ManufacturerSpecificCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
+		this.assertSupportsCommand(
+			ManufacturerSpecificCommand,
+			ManufacturerSpecificCommand.Get,
+		);
+
 		const cc = new ManufacturerSpecificCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -72,6 +77,11 @@ export class ManufacturerSpecificCCAPI extends CCAPI {
 	public async deviceSpecificGet(
 		deviceIdType: DeviceIdType,
 	): Promise<string> {
+		this.assertSupportsCommand(
+			ManufacturerSpecificCommand,
+			ManufacturerSpecificCommand.DeviceSpecificGet,
+		);
+
 		const cc = new ManufacturerSpecificCCDeviceSpecificGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
