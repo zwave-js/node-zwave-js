@@ -26,8 +26,22 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
+export enum BasicCommand {
+	Set = 0x01,
+	Get = 0x02,
+	Report = 0x03,
+}
+
 @API(CommandClasses.Basic)
 export class BasicCCAPI extends CCAPI {
+	public supportsCommand(cmd: BasicCommand): Maybe<boolean> {
+		switch (cmd) {
+			case BasicCommand.Get:
+			case BasicCommand.Set:
+				return true; // This is mandatory
+		}
+		return super.supportsCommand(cmd);
+	}
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ propertyName },
 		value,
@@ -74,12 +88,6 @@ export class BasicCCAPI extends CCAPI {
 		// Refresh the current value
 		await this.get();
 	}
-}
-
-export enum BasicCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
 }
 
 export interface BasicCC {

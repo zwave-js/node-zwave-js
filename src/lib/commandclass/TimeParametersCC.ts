@@ -2,6 +2,7 @@ import { IDriver } from "../driver/IDriver";
 import log from "../log";
 import { Endpoint } from "../node/Endpoint";
 import { validatePayload } from "../util/misc";
+import { Maybe } from "../values/Primitive";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -95,6 +96,15 @@ function dateToSegments(date: Date, local: boolean): DateSegments {
 
 @API(CommandClasses["Time Parameters"])
 export class TimeParametersCCAPI extends CCAPI {
+	public supportsCommand(cmd: TimeParametersCommand): Maybe<boolean> {
+		switch (cmd) {
+			case TimeParametersCommand.Get:
+			case TimeParametersCommand.Set:
+				return true; // This is mandatory
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ propertyName },
 		value,

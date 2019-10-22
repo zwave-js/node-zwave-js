@@ -4,6 +4,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
+import { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -73,6 +74,20 @@ export enum AssociationCommand {
 
 @API(CommandClasses.Association)
 export class AssociationCCAPI extends CCAPI {
+	public supportsCommand(cmd: AssociationCommand): Maybe<boolean> {
+		switch (cmd) {
+			case AssociationCommand.Get:
+			case AssociationCommand.Set:
+			case AssociationCommand.Remove:
+			case AssociationCommand.SupportedGroupingsGet:
+				return true; // This is mandatory
+			// Not implemented:
+			// case AssociationCommand.SpecificGroupGet:
+			// return this.version >= 2;
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	/**
 	 * Returns the number of association groups a node supports.
 	 * Association groups are consecutive, starting at 1.

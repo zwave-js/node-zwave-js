@@ -217,6 +217,22 @@
 			"}"
 		]
 	},
+	"Z-Wave CC supportsCommand": {
+		"prefix": "zwccsupp",
+		"body": [
+			"public supportsCommand(cmd: ${1:Basic}Command): Maybe<boolean> {",
+			"\tswitch (cmd) {",
+			"\t\tcase ${1}Command.Get:",
+			"\t\t\treturn true; // This is mandatory",
+			"\t\tcase ${1}Command.Set:",
+			"\t\t\treturn this.version >= 2;",
+			"\t}",
+			"\treturn super.supportsCommand(cmd);",
+			"}",
+			""
+		],
+		"description": "Implementation of CCAPI.supportsCommand"
+	},
 	"Z-Wave CC interview procedure": {
 		"prefix": "zwccinterview",
 		"body": [

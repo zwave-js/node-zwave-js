@@ -47,7 +47,6 @@ export class VersionCCAPI extends CCAPI {
 	public supportsCommand(cmd: VersionCommand): Maybe<boolean> {
 		switch (cmd) {
 			case VersionCommand.Get:
-				return true; // This is mandatory
 			case VersionCommand.CommandClassGet:
 				return true; // This is mandatory
 			case VersionCommand.CapabilitiesGet:

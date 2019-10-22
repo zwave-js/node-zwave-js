@@ -4,6 +4,7 @@ import { MessagePriority } from "../message/Constants";
 import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { ValueMetadata } from "../values/Metadata";
+import { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -44,6 +45,14 @@ export enum ZWavePlusNodeType {
 
 @API(CommandClasses["Z-Wave Plus Info"])
 export class ZWavePlusCCAPI extends CCAPI {
+	public supportsCommand(cmd: ZWavePlusCommand): Maybe<boolean> {
+		switch (cmd) {
+			case ZWavePlusCommand.Get:
+				return true; // This is mandatory
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
 		const cc = new ZWavePlusCCGet(this.driver, {
