@@ -58,6 +58,11 @@ export class ThermostatOperatingStateCCAPI extends CCAPI {
 	}
 
 	public async get(): Promise<ThermostatOperatingState> {
+		this.assertSupportsCommand(
+			ThermostatOperatingStateCommand,
+			ThermostatOperatingStateCommand.Get,
+		);
+
 		const cc = new ThermostatOperatingStateCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
