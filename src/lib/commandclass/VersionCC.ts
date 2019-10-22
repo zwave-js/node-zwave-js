@@ -5,7 +5,7 @@ import log from "../log";
 import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { ValueMetadata } from "../values/Metadata";
-import { Maybe } from "../values/Primitive";
+import { Maybe, unknownBoolean } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -44,6 +44,27 @@ function parseVersion(buffer: Buffer): string {
 
 @API(CommandClasses.Version)
 export class VersionCCAPI extends CCAPI {
+	public supportsCommand(cmd: VersionCommand): Maybe<boolean> {
+		switch (cmd) {
+			case VersionCommand.Get:
+			case VersionCommand.CommandClassGet:
+				return true; // This is mandatory
+			case VersionCommand.CapabilitiesGet:
+				return this.version >= 3;
+			case VersionCommand.ZWaveSoftwareGet: {
+				const node = this.endpoint.getNodeUnsafe()!;
+				let ret = node.getValue<Maybe<boolean>>({
+					commandClass: getCommandClass(this),
+					endpoint: this.endpoint.index,
+					propertyName: "supportsZWaveSoftwareGet",
+				});
+				if (ret == undefined) ret = unknownBoolean;
+				return ret;
+			}
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
 		const cc = new VersionCCGet(this.driver, {
@@ -117,27 +138,6 @@ export interface VersionCC {
 @commandClass(CommandClasses.Version)
 @implementedVersion(3)
 export class VersionCC extends CommandClass {
-	public supportsCommand(cmd: VersionCommand): Maybe<boolean> {
-		switch (cmd) {
-			case VersionCommand.Get:
-				return true; // This is mandatory
-			case VersionCommand.CommandClassGet:
-				return true; // This is mandatory
-			case VersionCommand.CapabilitiesGet:
-				return this.version >= 3;
-			case VersionCommand.ZWaveSoftwareGet: {
-				let ret = this.getValueDB().getValue<Maybe<boolean>>({
-					commandClass: getCommandClass(this),
-					endpoint: this.endpoint,
-					propertyName: "supportsZWaveSoftwareGet",
-				});
-				if (ret == undefined) ret = "unknown" as Maybe<boolean>;
-				return ret;
-			}
-		}
-		return super.supportsCommand(cmd);
-	}
-
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
 		// VersionCC must be the 2nd CC after ManufacturerSpecificCC
 		return [CommandClasses["Manufacturer Specific"]];

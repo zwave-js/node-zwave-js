@@ -12,6 +12,7 @@ import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { num2hex } from "../util/strings";
 import { GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
+import { ZWaveNode } from "./Node";
 
 export interface EndpointCapabilities {
 	isDynamic: boolean;
@@ -282,5 +283,12 @@ export class Endpoint {
 	 */
 	public get commandClasses(): CCAPIs {
 		return (this._commandClassAPIsProxy as unknown) as CCAPIs;
+	}
+
+	/**
+	 * Returns the node this message is linked to (or undefined if the node doesn't exist)
+	 */
+	public getNodeUnsafe(): ZWaveNode | undefined {
+		return this.driver.controller.nodes.get(this.nodeId);
 	}
 }

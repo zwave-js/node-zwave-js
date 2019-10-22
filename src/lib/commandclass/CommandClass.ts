@@ -20,7 +20,6 @@ import {
 	serializeCacheValue,
 } from "../values/Cache";
 import { ValueMetadata } from "../values/Metadata";
-import { Maybe, unknownBoolean } from "../values/Primitive";
 import { CCAPI } from "./API";
 import { CommandClasses, getCCName } from "./CommandClasses";
 
@@ -391,25 +390,9 @@ export class CommandClass {
 	}
 
 	/**
-	 * Determine whether the linked node supports a specific command of this command class.
-	 * "unknown" means that the information has not been received yet
-	 */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public supportsCommand(command: number): Maybe<boolean> {
-		// This needs to be overwritten per command class. In the default implementation, we don't know anything!
-		return unknownBoolean;
-	}
-
-	/**
 	 * Returns the node this CC is linked to. Throws if the controller is not yet ready.
 	 */
 	public getNode(): ZWaveNode | undefined {
-		if (this.driver.controller == undefined) {
-			throw new ZWaveError(
-				"Cannot retrieve the node when the controller is undefined",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
 		return this.driver.controller.nodes.get(this.nodeId);
 	}
 

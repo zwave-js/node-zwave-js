@@ -120,6 +120,27 @@ export class ConfigurationCCError extends ZWaveError {
 
 @API(CommandClasses.Configuration)
 export class ConfigurationCCAPI extends CCAPI {
+	public supportsCommand(cmd: ConfigurationCommand): Maybe<boolean> {
+		switch (cmd) {
+			case ConfigurationCommand.Get:
+			case ConfigurationCommand.Set:
+				return true; // This is mandatory
+
+			case ConfigurationCommand.BulkGet:
+			case ConfigurationCommand.BulkSet:
+				return this.version >= 2;
+
+			case ConfigurationCommand.NameGet:
+			case ConfigurationCommand.InfoGet:
+			case ConfigurationCommand.PropertiesGet:
+				return this.version >= 3;
+
+			case ConfigurationCommand.DefaultReset:
+				return this.version >= 4;
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ propertyName },
 		value,
@@ -179,7 +200,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Controller_MessageTimeout
 			) {
-				// A timeout has to be expected. We return undefined to
+				// A timeout has to be expefcted. We return undefined to
 				// signal that no value was received
 				return undefined;
 			}
@@ -439,26 +460,6 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
-	}
-	public supportsCommand(cmd: ConfigurationCommand): Maybe<boolean> {
-		switch (cmd) {
-			case ConfigurationCommand.Get:
-			case ConfigurationCommand.Set:
-				return true; // This is mandatory
-
-			case ConfigurationCommand.BulkGet:
-			case ConfigurationCommand.BulkSet:
-				return this.version >= 2;
-
-			case ConfigurationCommand.NameGet:
-			case ConfigurationCommand.InfoGet:
-			case ConfigurationCommand.PropertiesGet:
-				return this.version >= 3;
-
-			case ConfigurationCommand.DefaultReset:
-				return this.version >= 4;
-		}
-		return super.supportsCommand(cmd);
 	}
 
 	/**

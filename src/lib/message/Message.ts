@@ -292,7 +292,6 @@ export class Message {
 	 * Returns the node this message is linked to or undefined
 	 */
 	public getNodeUnsafe(): ZWaveNode | undefined {
-		if (!this.driver.controller) return;
 		const nodeId = this.getNodeId();
 		if (nodeId != undefined)
 			return this.driver.controller.nodes.get(nodeId);

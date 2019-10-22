@@ -9,7 +9,7 @@ import {
 } from "../node/NodeInfo";
 import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
-import { encodeBitMask, parseBitMask } from "../values/Primitive";
+import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -44,6 +44,20 @@ export enum MultiChannelCommand {
 
 @API(CommandClasses["Multi Channel"])
 export class MultiChannelCCAPI extends CCAPI {
+	public supportsCommand(cmd: MultiChannelCommand): Maybe<boolean> {
+		switch (cmd) {
+			// We don't know what's supported in V2
+			case MultiChannelCommand.EndPointGet:
+			case MultiChannelCommand.CapabilityGet:
+			case MultiChannelCommand.EndPointFind:
+			case MultiChannelCommand.CommandEncapsulation:
+				return this.version >= 3;
+			case MultiChannelCommand.AggregatedMembersGet:
+				return this.version >= 4;
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getEndpoints() {
 		const cc = new MultiChannelCCEndPointGet(this.driver, {

@@ -1,6 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { ValueMetadata } from "../values/Metadata";
+import { Maybe } from "../values/Primitive";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -27,8 +28,27 @@ function isASCII(str: string): boolean {
 	return /^[\x00-\x7F]*$/.test(str);
 }
 
+// All the supported commands
+export enum NodeNamingAndLocationCommand {
+	NameSet = 0x01,
+	NameGet = 0x02,
+	NameReport = 0x03,
+	LocationSet = 0x04,
+	LocationGet = 0x05,
+	LocationReport = 0x06,
+}
+
 @API(CommandClasses["Node Naming and Location"])
 export class NodeNamingAndLocationCCAPI extends CCAPI {
+	public supportsCommand(cmd: NodeNamingAndLocationCommand): Maybe<boolean> {
+		switch (cmd) {
+			case NodeNamingAndLocationCommand.NameGet:
+			case NodeNamingAndLocationCommand.LocationGet:
+				return true; // This is mandatory
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ propertyName },
 		value,
@@ -97,16 +117,6 @@ export class NodeNamingAndLocationCCAPI extends CCAPI {
 		});
 		await this.driver.sendCommand(cc);
 	}
-}
-
-// All the supported commands
-export enum NodeNamingAndLocationCommand {
-	NameSet = 0x01,
-	NameGet = 0x02,
-	NameReport = 0x03,
-	LocationSet = 0x04,
-	LocationGet = 0x05,
-	LocationReport = 0x06,
 }
 
 export interface NodeNamingAndLocationCC {

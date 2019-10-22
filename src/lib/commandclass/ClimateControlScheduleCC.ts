@@ -1,6 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
+import { Maybe } from "../values/Primitive";
 import {
 	decodeSetbackState,
 	encodeSetbackState,
@@ -56,6 +57,18 @@ export enum ScheduleOverrideType {
 
 @API(CommandClasses["Climate Control Schedule"])
 export class ClimateControlScheduleCCAPI extends CCAPI {
+	public supportsCommand(cmd: ClimateControlScheduleCommand): Maybe<boolean> {
+		switch (cmd) {
+			case ClimateControlScheduleCommand.Set:
+			case ClimateControlScheduleCommand.Get:
+			case ClimateControlScheduleCommand.ChangedGet:
+			case ClimateControlScheduleCommand.OverrideSet:
+			case ClimateControlScheduleCommand.OverrideGet:
+				return true; // This is mandatory
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	public async set(
 		weekday: Weekday,
 		switchPoints: Switchpoint[],

@@ -3,7 +3,7 @@ import log from "../log";
 import { ValueID } from "../node/ValueDB";
 import { JSONObject, validatePayload } from "../util/misc";
 import { enumValuesToMetadataStates, ValueMetadata } from "../values/Metadata";
-import { parseFloatWithScale } from "../values/Primitive";
+import { Maybe, parseFloatWithScale } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -32,8 +32,24 @@ export enum BatteryReplacementStatus {
 	Now = 0x02,
 }
 
+export enum BatteryCommand {
+	Get = 0x02,
+	Report = 0x03,
+	HealthGet = 0x04,
+	HealthReport = 0x05,
+}
+
 @API(CommandClasses.Battery)
 export class BatteryCCAPI extends CCAPI {
+	public supportsCommand(cmd: BatteryCommand): Maybe<boolean> {
+		switch (cmd) {
+			case BatteryCommand.Get:
+				return true; // This is mandatory
+			case BatteryCommand.HealthGet:
+				return this.version >= 2;
+		}
+		return super.supportsCommand(cmd);
+	}
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
 		const cc = new BatteryCCGet(this.driver, {
@@ -68,13 +84,6 @@ export class BatteryCCAPI extends CCAPI {
 			temperature: response.temperature,
 		};
 	}
-}
-
-export enum BatteryCommand {
-	Get = 0x02,
-	Report = 0x03,
-	HealthGet = 0x04,
-	HealthReport = 0x05,
 }
 
 export interface BatteryCC {

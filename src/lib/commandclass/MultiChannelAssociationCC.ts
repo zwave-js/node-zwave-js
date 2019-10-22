@@ -4,7 +4,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
-import { encodeBitMask, parseBitMask } from "../values/Primitive";
+import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -146,6 +146,19 @@ export enum MultiChannelAssociationCommand {
 
 @API(CommandClasses["Multi Channel Association"])
 export class MultiChannelAssociationCCAPI extends CCAPI {
+	public supportsCommand(
+		cmd: MultiChannelAssociationCommand,
+	): Maybe<boolean> {
+		switch (cmd) {
+			case MultiChannelAssociationCommand.Get:
+			case MultiChannelAssociationCommand.Set:
+			case MultiChannelAssociationCommand.Remove:
+			case MultiChannelAssociationCommand.SupportedGroupingsGet:
+				return true; // This is mandatory
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	/**
 	 * Returns the number of association groups a node supports.
 	 * Association groups are consecutive, starting at 1.
@@ -297,7 +310,7 @@ currently assigned endpoints: ${group.endpoints.map(({ nodeId, endpoint }) => {
 				this.getValueDB().getValue(getNodeIdsValueId(1)) || [];
 			const lifelineDestinations: EndpointAddress[] =
 				this.getValueDB().getValue(getEndpointsValueId(1)) || [];
-			const ownNodeId = this.driver.controller!.ownNodeId!;
+			const ownNodeId = this.driver.controller.ownNodeId!;
 			if (
 				!lifelineNodeIds.includes(ownNodeId) &&
 				!lifelineDestinations.some(

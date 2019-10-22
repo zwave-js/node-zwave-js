@@ -6,7 +6,7 @@ import { ValueID } from "../node/ValueDB";
 import { JSONObject, validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { ValueMetadata, ValueMetadataNumeric } from "../values/Metadata";
-import { parseBitMask } from "../values/Primitive";
+import { Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -52,6 +52,18 @@ export enum NotificationType {
 
 @API(CommandClasses.Notification)
 export class NotificationCCAPI extends CCAPI {
+	public supportsCommand(cmd: NotificationCommand): Maybe<boolean> {
+		switch (cmd) {
+			// We don't know whats supported in V1/V2
+			case NotificationCommand.Get:
+			case NotificationCommand.Set:
+			case NotificationCommand.SupportedGet:
+			case NotificationCommand.EventSupportedGet:
+				return this.version >= 3;
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get(options: NotificationCCGetSpecificOptions) {
 		const cc = new NotificationCCGet(this.driver, {

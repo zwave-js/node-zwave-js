@@ -6,6 +6,7 @@ import { getEnumMemberName, validatePayload } from "../util/misc";
 import { getNumericEnumValues, ValueMetadata } from "../values/Metadata";
 import {
 	encodeFloatWithScale,
+	Maybe,
 	parseBitMask,
 	parseFloatWithScale,
 } from "../values/Primitive";
@@ -89,6 +90,18 @@ export interface ThermostatSetpointCapabilities {
 
 @API(CommandClasses["Thermostat Setpoint"])
 export class ThermostatSetpointCCAPI extends CCAPI {
+	public supportsCommand(cmd: ThermostatSetpointCommand): Maybe<boolean> {
+		switch (cmd) {
+			case ThermostatSetpointCommand.Get:
+			case ThermostatSetpointCommand.Set:
+			case ThermostatSetpointCommand.SupportedGet:
+				return true; // This is mandatory
+			case ThermostatSetpointCommand.CapabilitiesGet:
+				return this.version >= 3;
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ propertyName, propertyKey },
 		value,

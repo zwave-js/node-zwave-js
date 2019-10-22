@@ -3,6 +3,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { DSTInfo, getDefaultDSTInfo, getDSTInfo } from "../util/date";
 import { validatePayload } from "../util/misc";
+import { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -33,6 +34,18 @@ export enum TimeCommand {
 
 @API(CommandClasses.Time)
 export class TimeCCAPI extends CCAPI {
+	public supportsCommand(cmd: TimeCommand): Maybe<boolean> {
+		switch (cmd) {
+			case TimeCommand.TimeGet:
+			case TimeCommand.DateGet:
+				return true; // This is mandatory
+			case TimeCommand.TimeOffsetGet:
+			case TimeCommand.TimeOffsetSet:
+				return this.version >= 2;
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getTime() {
 		const cc = new TimeCCTimeGet(this.driver, {

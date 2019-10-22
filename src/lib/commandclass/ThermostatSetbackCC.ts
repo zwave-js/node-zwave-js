@@ -3,6 +3,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
+import { Maybe } from "../values/Primitive";
 import {
 	decodeSetbackState,
 	encodeSetbackState,
@@ -41,6 +42,15 @@ export enum SetbackType {
 
 @API(CommandClasses["Thermostat Setback"])
 export class ThermostatSetbackCCAPI extends CCAPI {
+	public supportsCommand(cmd: ThermostatSetbackCommand): Maybe<boolean> {
+		switch (cmd) {
+			case ThermostatSetbackCommand.Get:
+			case ThermostatSetbackCommand.Set:
+				return true; // This is mandatory
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
 		const cc = new ThermostatSetbackCCGet(this.driver, {

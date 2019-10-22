@@ -2,7 +2,7 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { validatePayload } from "../util/misc";
-import { parseBitMask } from "../values/Primitive";
+import { Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -48,6 +48,16 @@ export enum BinarySensorType {
 
 @API(CommandClasses["Binary Sensor"])
 export class BinarySensorCCAPI extends CCAPI {
+	public supportsCommand(cmd: BinarySensorCommand): Maybe<boolean> {
+		switch (cmd) {
+			case BinarySensorCommand.Get:
+				return true; // This is mandatory
+			case BinarySensorCommand.SupportedGet:
+				return this.version >= 2;
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	/**
 	 * Retrieves the current value from this sensor
 	 * @param sensorType The (optional) sensor type to retrieve the value for

@@ -6,6 +6,7 @@ import { NodeStatus } from "../node/INode";
 import { ZWaveNode } from "../node/Node";
 import { validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
+import { Maybe } from "../values/Primitive";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -40,6 +41,18 @@ export enum WakeUpCommand {
 
 @API(CommandClasses["Wake Up"])
 export class WakeUpCCAPI extends CCAPI {
+	public supportsCommand(cmd: WakeUpCommand): Maybe<boolean> {
+		switch (cmd) {
+			case WakeUpCommand.IntervalSet:
+			case WakeUpCommand.IntervalGet:
+			case WakeUpCommand.NoMoreInformation:
+				return true; // This is mandatory
+			case WakeUpCommand.IntervalCapabilitiesGet:
+				return this.version >= 2;
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ propertyName },
 		value,
@@ -56,7 +69,7 @@ export class WakeUpCCAPI extends CCAPI {
 			);
 		}
 		// TODO: Use optional chaining when possible
-		await this.setInterval(value, this.driver.controller!.ownNodeId || 1);
+		await this.setInterval(value, this.driver.controller.ownNodeId || 1);
 		// Refresh the current value
 		await this.getInterval();
 	};
@@ -210,7 +223,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 				direction: "inbound",
 			});
 
-			const ownNodeId = this.driver.controller!.ownNodeId!;
+			const ownNodeId = this.driver.controller.ownNodeId!;
 			// Only change the destination if necessary
 			if (wakeupResp.controllerNodeId !== ownNodeId) {
 				log.controller.logNode(node.id, {

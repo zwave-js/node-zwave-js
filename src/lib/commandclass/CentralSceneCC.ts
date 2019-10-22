@@ -5,7 +5,7 @@ import log from "../log";
 import { ValueID } from "../node/ValueDB";
 import { JSONObject, validatePayload } from "../util/misc";
 import { enumValuesToMetadataStates, ValueMetadata } from "../values/Metadata";
-import { parseBitMask } from "../values/Primitive";
+import { Maybe, parseBitMask } from "../values/Primitive";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -59,6 +59,17 @@ export enum CentralSceneKeys {
 
 @API(CommandClasses["Central Scene"])
 export class CentralSceneCCAPI extends CCAPI {
+	public supportsCommand(cmd: CentralSceneCommand): Maybe<boolean> {
+		switch (cmd) {
+			case CentralSceneCommand.SupportedGet:
+				return true; // this is mandatory
+			case CentralSceneCommand.ConfigurationGet:
+			case CentralSceneCommand.ConfigurationSet:
+				return this.version >= 3;
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getSupported() {
 		const cc = new CentralSceneCCSupportedGet(this.driver, {
@@ -167,7 +178,7 @@ export class CentralSceneCC extends CommandClass {
 				});
 				await node.commandClasses.Association.addNodeIds(
 					groupId,
-					this.driver.controller!.ownNodeId!,
+					this.driver.controller.ownNodeId!,
 				);
 
 				log.controller.logNode(node.id, {

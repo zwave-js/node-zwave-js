@@ -3,6 +3,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
+import { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import { AssociationCC } from "./AssociationCC";
 import {
@@ -246,6 +247,15 @@ function getIssuedCommandsValueID(groupId: number): ValueID {
 
 @API(CommandClasses["Association Group Information"])
 export class AssociationGroupInfoCCAPI extends CCAPI {
+	public supportsCommand(cmd: AssociationGroupInfoCommand): Maybe<boolean> {
+		switch (cmd) {
+			case AssociationGroupInfoCommand.NameGet:
+			case AssociationGroupInfoCommand.InfoGet:
+			case AssociationGroupInfoCommand.CommandListGet:
+				return true; // This is mandatory
+		}
+		return super.supportsCommand(cmd);
+	}
 	public async getGroupName(groupId: number): Promise<string> {
 		const cc = new AssociationGroupInfoCCNameGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
