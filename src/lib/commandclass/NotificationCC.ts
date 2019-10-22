@@ -66,6 +66,11 @@ export class NotificationCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get(options: NotificationCCGetSpecificOptions) {
+		this.assertSupportsCommand(
+			NotificationCommand,
+			NotificationCommand.Get,
+		);
+
 		const cc = new NotificationCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -88,6 +93,11 @@ export class NotificationCCAPI extends CCAPI {
 		notificationType: NotificationType,
 		notificationStatus: boolean,
 	): Promise<void> {
+		this.assertSupportsCommand(
+			NotificationCommand,
+			NotificationCommand.Set,
+		);
+
 		const cc = new NotificationCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -99,6 +109,11 @@ export class NotificationCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getSupported() {
+		this.assertSupportsCommand(
+			NotificationCommand,
+			NotificationCommand.SupportedGet,
+		);
+
 		const cc = new NotificationCCSupportedGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -114,6 +129,11 @@ export class NotificationCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getSupportedEvents(notificationType: NotificationType) {
+		this.assertSupportsCommand(
+			NotificationCommand,
+			NotificationCommand.EventSupportedGet,
+		);
+
 		const cc = new NotificationCCEventSupportedGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
