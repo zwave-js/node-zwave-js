@@ -79,6 +79,11 @@ export class NodeNamingAndLocationCCAPI extends CCAPI {
 	};
 
 	public async getName(): Promise<string> {
+		this.assertSupportsCommand(
+			NodeNamingAndLocationCommand,
+			NodeNamingAndLocationCommand.NameGet,
+		);
+
 		const cc = new NodeNamingAndLocationCCNameGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -90,6 +95,11 @@ export class NodeNamingAndLocationCCAPI extends CCAPI {
 	}
 
 	public async setName(name: string): Promise<void> {
+		this.assertSupportsCommand(
+			NodeNamingAndLocationCommand,
+			NodeNamingAndLocationCommand.NameSet,
+		);
+
 		const cc = new NodeNamingAndLocationCCNameSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -99,6 +109,11 @@ export class NodeNamingAndLocationCCAPI extends CCAPI {
 	}
 
 	public async getLocation(): Promise<string> {
+		this.assertSupportsCommand(
+			NodeNamingAndLocationCommand,
+			NodeNamingAndLocationCommand.LocationGet,
+		);
+
 		const cc = new NodeNamingAndLocationCCLocationGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -110,6 +125,11 @@ export class NodeNamingAndLocationCCAPI extends CCAPI {
 	}
 
 	public async setLocation(location: string): Promise<void> {
+		this.assertSupportsCommand(
+			NodeNamingAndLocationCommand,
+			NodeNamingAndLocationCommand.LocationSet,
+		);
+
 		const cc = new NodeNamingAndLocationCCLocationSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
