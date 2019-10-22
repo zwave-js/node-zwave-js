@@ -46,7 +46,7 @@ describe("lib/commandclass/VersionCC => ", () => {
 		let cc: VersionCC;
 
 		function doInterview() {
-			return cc.interview();
+			return cc.interview(true);
 		}
 
 		function mockVersionGet() {
@@ -154,6 +154,15 @@ describe("lib/commandclass/VersionCC => ", () => {
 				Promise.resolve({
 					command: { supportsZWaveSoftwareGet: true },
 				}),
+			);
+			// for ZWaveSoftwareGet to have a value in the ValueDB
+			node.valueDB.setValue(
+				{
+					commandClass: CommandClasses.Version,
+					endpoint: 0,
+					propertyName: "supportsZWaveSoftwareGet",
+				},
+				true,
 			);
 
 			await doInterview();

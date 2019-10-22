@@ -50,7 +50,14 @@ export class VersionCCAPI extends CCAPI {
 			case VersionCommand.CommandClassGet:
 				return true; // This is mandatory
 			case VersionCommand.CapabilitiesGet:
-				return this.version >= 3;
+				// The API might have been created before the versions were determined,
+				// so `this.version` may contains a wrong value
+				return (
+					this.driver.getSafeCCVersionForNode(
+						this.endpoint.nodeId,
+						this.ccId,
+					) >= 3
+				);
 			case VersionCommand.ZWaveSoftwareGet: {
 				const node = this.endpoint.getNodeUnsafe()!;
 				let ret = node.getValue<Maybe<boolean>>({
