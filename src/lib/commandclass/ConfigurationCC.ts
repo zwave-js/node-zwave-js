@@ -5,6 +5,7 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import {
+	getEnumMemberName,
 	isConsecutiveArray,
 	JSONObject,
 	stripUndefined,
@@ -222,6 +223,8 @@ export class ConfigurationCCAPI extends CCAPI {
 	/**
 	 * Resets a configuration parameter to its default value.
 	 * The return value indicates whether the command succeeded (`true`) or timed out (`false`).
+	 *
+	 * WARNING: This will throw on legacy devices (ConfigurationCC v3 and below)
 	 */
 	public async reset(parameter: number): Promise<boolean> {
 		const cc = new ConfigurationCCSet(this.driver, {
@@ -255,8 +258,75 @@ export class ConfigurationCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc);
 	}
 
-	/** Scans a V1/V2 node for the existing parameters using get/set commands */
-	private async scanParametersV1V2(): Promise<void> {
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async getProperties(parameter: number) {
+		const cc = new ConfigurationCCPropertiesGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+			parameter,
+		});
+		const response = (await this.driver.sendCommand<
+			ConfigurationCCPropertiesReport
+		>(cc))!;
+		return {
+			valueSize: response.valueSize,
+			valueFormat: response.valueFormat,
+			minValue: response.minValue,
+			maxValue: response.maxValue,
+			defaultValue: response.defaultValue,
+			nextParameter: response.nextParameter,
+			altersCapabilities: response.altersCapabilities,
+			isReadonly: response.isReadonly,
+			isAdvanced: response.isAdvanced,
+			noBulkSupport: response.noBulkSupport,
+		};
+	}
+
+	/** Requests the name of a configuration parameter from the node */
+	public async getName(parameter: number): Promise<string> {
+		const cc = new ConfigurationCCNameGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+			parameter,
+		});
+		const response = (await this.driver.sendCommand<
+			ConfigurationCCNameReport
+		>(cc))!;
+		return response.name;
+	}
+
+	/** Requests usage info for a configuration parameter from the node */
+	public async getInfo(parameter: number): Promise<string> {
+		const cc = new ConfigurationCCInfoGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+			parameter,
+		});
+		const response = (await this.driver.sendCommand<
+			ConfigurationCCInfoReport
+		>(cc))!;
+		return response.info;
+	}
+
+	/**
+	 * This scans the node for the existing parameters. Found parameters will be reported
+	 * through the `value added` and `value updated` events.
+	 *
+	 * WARNING: This method throws for newer devices.
+	 *
+	 * WARNING: On nodes implementing V1 and V2, this process may take
+	 * **up to an hour**, depending on the configured timeout.
+	 *
+	 * WARNING: On nodes implementing V2, all parameters after 255 will be ignored.
+	 */
+	public async scanParametersLegacy(): Promise<void> {
+		if (this.version >= 3) {
+			throw new ZWaveError(
+				"Use ConfigurationCC.interview instead of scanning parameters for versions 3 and above.",
+				ZWaveErrorCodes.ConfigurationCC_NoLegacyScanOnNewDevices,
+			);
+		}
+
 		// TODO: Reduce the priority of the messages
 		log.controller.logNode(
 			this.endpoint.nodeId,
@@ -296,58 +366,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			}
 		}
 	}
-
-	/** Scans a V3+ node for the existing parameters using PropertiesGet commands */
-	private async scanParametersV3(): Promise<void> {
-		let param = 1;
-		while (param > 0 && param <= 0xffff) {
-			// Request param properties, name and info
-			// The param information is stored automatically on receipt
-			const propCC = new ConfigurationCCPropertiesGet(this.driver, {
-				nodeId: this.endpoint.nodeId,
-				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
-				parameter: param,
-			});
-			const propResponse = (await this.driver.sendCommand<
-				ConfigurationCCPropertiesReport
-			>(propCC))!;
-
-			const nameCC = new ConfigurationCCNameGet(this.driver, {
-				nodeId: this.endpoint.nodeId,
-				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
-				parameter: param,
-			});
-			await this.driver.sendCommand(nameCC);
-
-			const infoCC = new ConfigurationCCInfoGet(this.driver, {
-				nodeId: this.endpoint.nodeId,
-				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
-				parameter: param,
-			});
-			await this.driver.sendCommand(infoCC);
-
-			// Continue with the next parameter
-			// 0 indicates that this was the last parameter
-			param = propResponse.nextParameter;
-		}
-	}
-
-	/**
-	 * This scans the node for the existing parameters. Found parameters will be reported
-	 * through the `value added` and `value updated` events.
-	 *
-	 * WARNING: On nodes implementing V1 and V2, this process may take
-	 * **up to an hour**, depending on the configured timeout.
-	 *
-	 * WARNING: On nodes implementing V2, all parameters after 255 will be ignored.
-	 */
-	public async scanParameters(): Promise<void> {
-		if (this.version <= 2) return this.scanParametersV1V2();
-		return this.scanParametersV3();
-	}
 }
-
-// TODO: Test how the device interprets the default flag (V1-3) (reset all or only the specified)
 
 export interface ConfigurationCC {
 	ccCommand: ConfigurationCommand;
@@ -356,6 +375,71 @@ export interface ConfigurationCC {
 @commandClass(CommandClasses.Configuration)
 @implementedVersion(4)
 export class ConfigurationCC extends CommandClass {
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		if (this.version < 3) {
+			log.controller.logNode(node.id, {
+				message: `${this.constructor.name}: skipping interview because CC version is less than 3`,
+				direction: "none",
+			});
+		} else {
+			const api = node.commandClasses.Configuration;
+
+			log.controller.logNode(node.id, {
+				message: `${this.constructor.name}: doing a ${
+					complete ? "complete" : "partial"
+				} interview...`,
+				direction: "none",
+			});
+
+			// Always keep the node's time in sync
+			log.controller.logNode(node.id, {
+				message: "finding first configuration parameter...",
+				direction: "outbound",
+			});
+			let { nextParameter: param } = await api.getProperties(0);
+
+			while (param > 0) {
+				log.controller.logNode(node.id, {
+					message: `querying parameter #${param} information...`,
+					direction: "outbound",
+				});
+				const name = await api.getName(param);
+				// This is probably long, should we log it?
+				await api.getInfo(param);
+				const {
+					nextParameter,
+					...properties
+				} = await api.getProperties(param);
+
+				let logMessage: string;
+				if (properties.valueSize === 0) {
+					logMessage = `Parameter #${param} is unsupported. Next parameter: ${nextParameter}`;
+				} else {
+					logMessage = `received information for parameter #${param}:
+parameter name:      ${name}
+value format:        ${getEnumMemberName(ValueFormat, properties.valueFormat)}
+value size:          ${properties.valueSize} bytes
+min value:           ${properties.minValue}
+max value:           ${properties.maxValue}
+default value:       ${properties.defaultValue}
+is read-only:        ${!!properties.isReadonly}
+is advanced (UI):    ${!!properties.isAdvanced}
+has bulk support:    ${!properties.noBulkSupport}
+alters capabilities: ${!!properties.altersCapabilities}`;
+				}
+				log.controller.logNode(node.id, {
+					message: logMessage,
+					direction: "inbound",
+				});
+
+				param = nextParameter;
+			}
+		}
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
 	public supportsCommand(cmd: ConfigurationCommand): Maybe<boolean> {
 		switch (cmd) {
 			case ConfigurationCommand.Get:
@@ -605,6 +689,15 @@ export class ConfigurationCCSet extends ConfigurationCC {
 			);
 		} else {
 			this.parameter = options.parameter;
+			// According to SDS14223 this flag SHOULD NOT be set
+			// Because we don't want to test the behavior, we enforce that it MUST not be set
+			// on legacy nodes
+			if (options.resetToDefault && this.version <= 3) {
+				throw new ZWaveError(
+					`The resetToDefault flag MUST not be used on nodes implementing ConfigurationCC V3 or less!`,
+					ZWaveErrorCodes.ConfigurationCC_NoResetToDefaultOnLegacyDevices,
+				);
+			}
 			this.resetToDefault = !!options.resetToDefault;
 			if (!options.resetToDefault) {
 				// TODO: Default to the stored value size
@@ -1058,7 +1151,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			validatePayload(this.payload.length >= nextParameterOffset + 3);
 			const options1 = this.payload[2];
 			const options2 = this.payload[3 + 3 * this.valueSize + 2];
-			this._requiresReInclusion = !!(options1 & 0b1000_0000);
+			this._altersCapabilities = !!(options1 & 0b1000_0000);
 			this._isReadonly = !!(options1 & 0b0100_0000);
 			this._isAdvanced = !!(options2 & 0b1);
 			this._noBulkSupport = !!(options2 & 0b10);
@@ -1078,7 +1171,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 				minValue: this._minValue,
 				maxValue: this._maxValue,
 				defaultValue: this._defaultValue,
-				requiresReInclusion: this._requiresReInclusion,
+				requiresReInclusion: this._altersCapabilities,
 				writeable: !this._isReadonly,
 				isAdvanced: this._isAdvanced,
 				noBulkSupport: this._noBulkSupport,
@@ -1122,9 +1215,9 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		return this._nextParameter;
 	}
 
-	private _requiresReInclusion: boolean | undefined;
-	public get requiresReInclusion(): boolean | undefined {
-		return this._requiresReInclusion;
+	private _altersCapabilities: boolean | undefined;
+	public get altersCapabilities(): boolean | undefined {
+		return this._altersCapabilities;
 	}
 
 	private _isReadonly: boolean | undefined;

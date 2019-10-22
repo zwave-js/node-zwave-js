@@ -46,6 +46,14 @@ export enum ZWaveErrorCodes {
 	 * available in a node's configuration
 	 */
 	ConfigurationCC_FirstParameterNumber = 100,
+	/**
+	 * Used to report that a V3+ node should not have its parameters scanned with get/set commands
+	 */
+	ConfigurationCC_NoLegacyScanOnNewDevices,
+	/**
+	 * Used to report that a node using V3 or less MUST not use the resetToDefault flag
+	 */
+	ConfigurationCC_NoResetToDefaultOnLegacyDevices,
 }
 
 /**
