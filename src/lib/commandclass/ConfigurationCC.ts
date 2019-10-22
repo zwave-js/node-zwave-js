@@ -173,6 +173,11 @@ export class ConfigurationCCAPI extends CCAPI {
 	 * is thrown with the `argument` property set to the reported parameter number.
 	 */
 	public async get(parameter: number): Promise<ConfigValue | undefined> {
+		this.assertSupportsCommand(
+			ConfigurationCommand,
+			ConfigurationCommand.Get,
+		);
+
 		const cc = new ConfigurationCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
@@ -218,6 +223,11 @@ export class ConfigurationCCAPI extends CCAPI {
 		value: ConfigValue,
 		valueSize: 1 | 2 | 4,
 	): Promise<boolean> {
+		this.assertSupportsCommand(
+			ConfigurationCommand,
+			ConfigurationCommand.Set,
+		);
+
 		const cc = new ConfigurationCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
@@ -248,6 +258,11 @@ export class ConfigurationCCAPI extends CCAPI {
 	 * WARNING: This will throw on legacy devices (ConfigurationCC v3 and below)
 	 */
 	public async reset(parameter: number): Promise<boolean> {
+		this.assertSupportsCommand(
+			ConfigurationCommand,
+			ConfigurationCommand.Set,
+		);
+
 		const cc = new ConfigurationCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
@@ -272,6 +287,11 @@ export class ConfigurationCCAPI extends CCAPI {
 
 	/** Resets all configuration parameters to their default value */
 	public async resetAll(): Promise<void> {
+		this.assertSupportsCommand(
+			ConfigurationCommand,
+			ConfigurationCommand.DefaultReset,
+		);
+
 		const cc = new ConfigurationCCDefaultReset(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
