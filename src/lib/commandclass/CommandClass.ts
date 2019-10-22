@@ -802,7 +802,7 @@ export function getCommandClass<T extends CommandClass | CCAPI>(
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-function getCommandClassStatic<T extends Constructable<CommandClass>>(
+export function getCommandClassStatic<T extends Constructable<CommandClass>>(
 	classConstructor: T,
 ): CommandClasses {
 	// retrieve the current metadata

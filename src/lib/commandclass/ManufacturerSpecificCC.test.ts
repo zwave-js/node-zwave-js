@@ -55,9 +55,7 @@ describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 			node.addCC(CommandClasses["Manufacturer Specific"], {
 				isSupported: true,
 			});
-			cc = node.createCCInstance<ManufacturerSpecificCC>(
-				CommandClasses["Manufacturer Specific"],
-			)!;
+			cc = node.createCCInstance(ManufacturerSpecificCC)!;
 		});
 		beforeEach(() => fakeDriver.sendMessage.mockClear());
 		afterAll(() => {

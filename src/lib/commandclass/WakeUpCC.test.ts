@@ -48,7 +48,7 @@ describe("lib/commandclass/WakeUpCC => ", () => {
 				isSupported: true,
 			});
 			fakeDriver.controller.nodes.set(node.id, node);
-			cc = node.createCCInstance<WakeUpCC>(CommandClasses["Wake Up"])!;
+			cc = node.createCCInstance(WakeUpCC)!;
 		});
 		beforeEach(() => fakeDriver.sendMessage.mockClear());
 		afterAll(() => {

@@ -353,17 +353,11 @@ export class AssociationGroupInfoCC extends CommandClass {
 		return (
 			(node.commandClasses["Multi Channel Association"].isSupported() &&
 				node
-					.createCCInstance<MultiChannelAssociationCC>(
-						CommandClasses["Multi Channel Association"],
-					)!
+					.createCCInstance(MultiChannelAssociationCC)!
 					.getGroupCountCached()) ||
 			// Then the Association CC
 			(node.commandClasses.Association.isSupported() &&
-				node
-					.createCCInstance<AssociationCC>(
-						CommandClasses.Association,
-					)!
-					.getGroupCountCached()) ||
+				node.createCCInstance(AssociationCC)!.getGroupCountCached()) ||
 			// And fall back to 0
 			0
 		);

@@ -1,6 +1,6 @@
 // This file is used to break some circular dependencies
 
-import { CommandClass } from "../commandclass/CommandClass";
+import { CommandClass, Constructable } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { Endpoint } from "./Endpoint";
 
@@ -46,6 +46,23 @@ export interface IZWaveNode extends Endpoint {
 	 * Creates an instance of the given CC, which is linked to this node.
 	 * Throws if the CC is neither supported nor controlled by the node.
 	 */
-	// wotan-disable no-misused-generics
-	createCCInstance<T extends CommandClass>(cc: CommandClasses): T | undefined;
+	// wotan-disable-next-line no-misused-generics
+	createCCInstance<T extends CommandClass>(
+		ccId: CommandClasses,
+	): T | undefined;
+	createCCInstance<T extends CommandClass>(
+		cc: Constructable<T>,
+	): T | undefined;
+
+	/**
+	 * Creates an instance of the given CC, which is linked to this node.
+	 * Returns undefined if the CC is neither supported nor controlled by the node.
+	 */
+	// wotan-disable-next-line no-misused-generics
+	createCCInstanceUnsafe<T extends CommandClass>(
+		ccId: CommandClasses,
+	): T | undefined;
+	createCCInstanceUnsafe<T extends CommandClass>(
+		cc: Constructable<T>,
+	): T | undefined;
 }
