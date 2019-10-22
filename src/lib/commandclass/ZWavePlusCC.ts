@@ -55,6 +55,8 @@ export class ZWavePlusCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
+		this.assertSupportsCommand(ZWavePlusCommand, ZWavePlusCommand.Get);
+
 		const cc = new ZWavePlusCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
