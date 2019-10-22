@@ -2,6 +2,7 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Endpoint } from "../node/Endpoint";
 import { ValueID } from "../node/ValueDB";
+import { getEnumMemberName } from "../util/misc";
 import { Maybe, unknownBoolean } from "../values/Primitive";
 import { getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
@@ -84,6 +85,23 @@ export class CCAPI {
 	public supportsCommand(command: number): Maybe<boolean> {
 		// This needs to be overwritten per command class. In the default implementation, we don't know anything!
 		return unknownBoolean;
+	}
+
+	protected assertSupportsCommand(
+		commandEnum: unknown,
+		command: number,
+	): void {
+		if (this.supportsCommand(command) !== true) {
+			throw new ZWaveError(
+				`Node #${
+					this.endpoint.nodeId
+				} does not support the command ${getEnumMemberName(
+					commandEnum,
+					command,
+				)}!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
 	}
 }
 

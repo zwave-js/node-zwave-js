@@ -234,6 +234,17 @@
 		],
 		"description": "Implementation of CCAPI.supportsCommand"
 	},
+	"Z-Wave CC API assert command supported": {
+		"prefix": "zwccassert",
+		"body": [
+			"this.assertSupportsCommand(",
+			"\t${1:Basic}Command,",
+			"\t${1}Command.${2:Get},",
+			");",
+			""
+		],
+		"description": "Implementation of CCAPI.supportsCommand"
+	},
 	"Z-Wave CC interview procedure": {
 		"prefix": "zwccinterview",
 		"body": [
