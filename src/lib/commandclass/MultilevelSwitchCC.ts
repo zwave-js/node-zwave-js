@@ -70,6 +70,11 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
+		this.assertSupportsCommand(
+			MultilevelSwitchCommand,
+			MultilevelSwitchCommand.Get,
+		);
+
 		const cc = new MultilevelSwitchCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -91,6 +96,11 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	 */
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async set(targetValue: number, duration?: Duration) {
+		this.assertSupportsCommand(
+			MultilevelSwitchCommand,
+			MultilevelSwitchCommand.Set,
+		);
+
 		const cc = new MultilevelSwitchCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -109,6 +119,11 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			keyof CCCommandOptions
 		>,
 	): Promise<void> {
+		this.assertSupportsCommand(
+			MultilevelSwitchCommand,
+			MultilevelSwitchCommand.StartLevelChange,
+		);
+
 		const cc = new MultilevelSwitchCCStartLevelChange(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -118,6 +133,11 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	}
 
 	public async stopLevelChange(): Promise<void> {
+		this.assertSupportsCommand(
+			MultilevelSwitchCommand,
+			MultilevelSwitchCommand.StopLevelChange,
+		);
+
 		const cc = new MultilevelSwitchCCStopLevelChange(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -127,6 +147,11 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getSupported() {
+		this.assertSupportsCommand(
+			MultilevelSwitchCommand,
+			MultilevelSwitchCommand.SupportedGet,
+		);
+
 		const cc = new MultilevelSwitchCCSupportedGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
