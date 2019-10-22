@@ -56,7 +56,7 @@ export class WakeUpCCAPI extends CCAPI {
 			);
 		}
 		// TODO: Use optional chaining when possible
-		await this.setInterval(value, this.driver.controller!.ownNodeId || 1);
+		await this.setInterval(value, this.driver.controller.ownNodeId || 1);
 		// Refresh the current value
 		await this.getInterval();
 	};
@@ -210,7 +210,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 				direction: "inbound",
 			});
 
-			const ownNodeId = this.driver.controller!.ownNodeId!;
+			const ownNodeId = this.driver.controller.ownNodeId!;
 			// Only change the destination if necessary
 			if (wakeupResp.controllerNodeId !== ownNodeId) {
 				log.controller.logNode(node.id, {

@@ -297,7 +297,7 @@ currently assigned endpoints: ${group.endpoints.map(({ nodeId, endpoint }) => {
 				this.getValueDB().getValue(getNodeIdsValueId(1)) || [];
 			const lifelineDestinations: EndpointAddress[] =
 				this.getValueDB().getValue(getEndpointsValueId(1)) || [];
-			const ownNodeId = this.driver.controller!.ownNodeId!;
+			const ownNodeId = this.driver.controller.ownNodeId!;
 			if (
 				!lifelineNodeIds.includes(ownNodeId) &&
 				!lifelineDestinations.some(

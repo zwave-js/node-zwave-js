@@ -2,6 +2,7 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { Endpoint } from "../node/Endpoint";
 import { ValueID } from "../node/ValueDB";
+import { Maybe, unknownBoolean } from "../values/Primitive";
 import { getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
@@ -73,6 +74,16 @@ export class CCAPI {
 			this.endpoint.supportsCC(this.ccId) ||
 			this.endpoint.controlsCC(this.ccId)
 		);
+	}
+
+	/**
+	 * Determine whether the linked node supports a specific command of this command class.
+	 * "unknown" means that the information has not been received yet
+	 */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	public supportsCommand(command: number): Maybe<boolean> {
+		// This needs to be overwritten per command class. In the default implementation, we don't know anything!
+		return unknownBoolean;
 	}
 }
 

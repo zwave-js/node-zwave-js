@@ -12,7 +12,7 @@ export interface DriverEventCallbacks {
 export type DriverEvents = Extract<keyof DriverEventCallbacks, string>;
 
 export interface IDriver {
-	controller: ZWaveController | undefined;
+	controller: ZWaveController;
 	/** @internal */
 	options: ZWaveOptions;
 

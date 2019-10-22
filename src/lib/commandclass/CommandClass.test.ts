@@ -14,16 +14,8 @@ import { CommandClasses } from "./CommandClasses";
 
 @implementedVersion(7)
 @commandClass(0xffff as any)
-class DummyCC extends CommandClass {
-	// public constructor(driver: IDriver) {
-	// 	super(driver);
-	// }
-}
-class DummyCCSubClass extends DummyCC {
-	// public constructor(driver: IDriver) {
-	// 	super(driver);
-	// }
-}
+class DummyCC extends CommandClass {}
+class DummyCCSubClass extends DummyCC {}
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
@@ -127,13 +119,6 @@ describe("lib/commandclass/CommandClass => ", () => {
 		it("returns false by default", () => {
 			const cc = new DummyCC(fakeDriver, { nodeId: 1 });
 			expect(cc.expectMoreMessages()).toBeFalse();
-		});
-	});
-
-	describe("supportsCommand()", () => {
-		it(`returns "unknown" by default`, () => {
-			const cc = new DummyCC(fakeDriver, { nodeId: 1 });
-			expect(cc.supportsCommand(null as any)).toBe("unknown");
 		});
 	});
 

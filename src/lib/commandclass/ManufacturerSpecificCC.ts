@@ -41,6 +41,16 @@ export enum DeviceIdType {
 
 @API(CommandClasses["Manufacturer Specific"])
 export class ManufacturerSpecificCCAPI extends CCAPI {
+	public supportsCommand(cmd: ManufacturerSpecificCommand): Maybe<boolean> {
+		switch (cmd) {
+			case ManufacturerSpecificCommand.Get:
+				return true; // This is mandatory
+			case ManufacturerSpecificCommand.DeviceSpecificGet:
+				return this.version >= 2;
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
 		const cc = new ManufacturerSpecificCCGet(this.driver, {
@@ -81,16 +91,6 @@ export interface ManufacturerSpecificCC {
 @commandClass(CommandClasses["Manufacturer Specific"])
 @implementedVersion(2)
 export class ManufacturerSpecificCC extends CommandClass {
-	public supportsCommand(cmd: ManufacturerSpecificCommand): Maybe<boolean> {
-		switch (cmd) {
-			case ManufacturerSpecificCommand.Get:
-				return true; // This is mandatory
-			case ManufacturerSpecificCommand.DeviceSpecificGet:
-				return this.version >= 2;
-		}
-		return super.supportsCommand(cmd);
-	}
-
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
 		// The Manufacturer Specific CC MUST be interviewed first
 		return [];

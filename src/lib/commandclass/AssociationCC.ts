@@ -220,7 +220,7 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 			// Check if we are already in the lifeline group
 			const lifelineNodeIds: number[] =
 				this.getValueDB().getValue(getNodeIdsValueId(1)) || [];
-			const ownNodeId = this.driver.controller!.ownNodeId!;
+			const ownNodeId = this.driver.controller.ownNodeId!;
 			if (!lifelineNodeIds.includes(ownNodeId)) {
 				log.controller.logNode(node.id, {
 					message:

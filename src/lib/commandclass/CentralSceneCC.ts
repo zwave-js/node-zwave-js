@@ -167,7 +167,7 @@ export class CentralSceneCC extends CommandClass {
 				});
 				await node.commandClasses.Association.addNodeIds(
 					groupId,
-					this.driver.controller!.ownNodeId!,
+					this.driver.controller.ownNodeId!,
 				);
 
 				log.controller.logNode(node.id, {
