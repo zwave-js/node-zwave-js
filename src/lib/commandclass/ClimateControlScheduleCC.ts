@@ -73,6 +73,11 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		weekday: Weekday,
 		switchPoints: Switchpoint[],
 	): Promise<void> {
+		this.assertSupportsCommand(
+			ClimateControlScheduleCommand,
+			ClimateControlScheduleCommand.Set,
+		);
+
 		const cc = new ClimateControlScheduleCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -83,6 +88,11 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 	}
 
 	public async get(weekday: Weekday): Promise<readonly Switchpoint[]> {
+		this.assertSupportsCommand(
+			ClimateControlScheduleCommand,
+			ClimateControlScheduleCommand.Get,
+		);
+
 		const cc = new ClimateControlScheduleCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -95,6 +105,11 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 	}
 
 	public async getChangeCounter(): Promise<number> {
+		this.assertSupportsCommand(
+			ClimateControlScheduleCommand,
+			ClimateControlScheduleCommand.ChangedGet,
+		);
+
 		const cc = new ClimateControlScheduleCCChangedGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -107,6 +122,11 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getOverride() {
+		this.assertSupportsCommand(
+			ClimateControlScheduleCommand,
+			ClimateControlScheduleCommand.OverrideGet,
+		);
+
 		const cc = new ClimateControlScheduleCCOverrideGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -124,6 +144,11 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		type: ScheduleOverrideType,
 		state: SetbackState,
 	): Promise<void> {
+		this.assertSupportsCommand(
+			ClimateControlScheduleCommand,
+			ClimateControlScheduleCommand.OverrideSet,
+		);
+
 		const cc = new ClimateControlScheduleCCOverrideSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,

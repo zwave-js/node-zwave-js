@@ -256,7 +256,13 @@ export class AssociationGroupInfoCCAPI extends CCAPI {
 		}
 		return super.supportsCommand(cmd);
 	}
+
 	public async getGroupName(groupId: number): Promise<string> {
+		this.assertSupportsCommand(
+			AssociationGroupInfoCommand,
+			AssociationGroupInfoCommand.NameGet,
+		);
+
 		const cc = new AssociationGroupInfoCCNameGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -270,6 +276,11 @@ export class AssociationGroupInfoCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getGroupInfo(groupId: number, refreshCache: boolean = false) {
+		this.assertSupportsCommand(
+			AssociationGroupInfoCommand,
+			AssociationGroupInfoCommand.InfoGet,
+		);
+
 		const cc = new AssociationGroupInfoCCInfoGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -292,6 +303,11 @@ export class AssociationGroupInfoCCAPI extends CCAPI {
 		groupId: number,
 		allowCache: boolean = true,
 	): Promise<AssociationGroupInfoCCCommandListReport["commands"]> {
+		this.assertSupportsCommand(
+			AssociationGroupInfoCommand,
+			AssociationGroupInfoCommand.CommandListGet,
+		);
+
 		const cc = new AssociationGroupInfoCCCommandListGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,

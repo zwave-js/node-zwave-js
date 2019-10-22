@@ -76,6 +76,8 @@ export class WakeUpCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getInterval() {
+		this.assertSupportsCommand(WakeUpCommand, WakeUpCommand.IntervalGet);
+
 		const cc = new WakeUpCCIntervalGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -91,6 +93,11 @@ export class WakeUpCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getIntervalCapabilities() {
+		this.assertSupportsCommand(
+			WakeUpCommand,
+			WakeUpCommand.IntervalCapabilitiesGet,
+		);
+
 		const cc = new WakeUpCCIntervalCapabilitiesGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -110,6 +117,8 @@ export class WakeUpCCAPI extends CCAPI {
 		wakeUpInterval: number,
 		controllerNodeId: number,
 	): Promise<void> {
+		this.assertSupportsCommand(WakeUpCommand, WakeUpCommand.IntervalSet);
+
 		const cc = new WakeUpCCIntervalSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -120,6 +129,11 @@ export class WakeUpCCAPI extends CCAPI {
 	}
 
 	public async sendNoMoreInformation(): Promise<void> {
+		this.assertSupportsCommand(
+			WakeUpCommand,
+			WakeUpCommand.NoMoreInformation,
+		);
+
 		const cc = new WakeUpCCNoMoreInformation(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,

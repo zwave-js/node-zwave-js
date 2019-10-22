@@ -50,7 +50,14 @@ export class VersionCCAPI extends CCAPI {
 			case VersionCommand.CommandClassGet:
 				return true; // This is mandatory
 			case VersionCommand.CapabilitiesGet:
-				return this.version >= 3;
+				// The API might have been created before the versions were determined,
+				// so `this.version` may contains a wrong value
+				return (
+					this.driver.getSafeCCVersionForNode(
+						this.endpoint.nodeId,
+						this.ccId,
+					) >= 3
+				);
 			case VersionCommand.ZWaveSoftwareGet: {
 				const node = this.endpoint.getNodeUnsafe()!;
 				let ret = node.getValue<Maybe<boolean>>({
@@ -67,6 +74,8 @@ export class VersionCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
+		this.assertSupportsCommand(VersionCommand, VersionCommand.Get);
+
 		const cc = new VersionCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -81,6 +90,11 @@ export class VersionCCAPI extends CCAPI {
 	}
 
 	public async getCCVersion(requestedCC: CommandClasses): Promise<number> {
+		this.assertSupportsCommand(
+			VersionCommand,
+			VersionCommand.CommandClassGet,
+		);
+
 		const cc = new VersionCCCommandClassGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -94,6 +108,11 @@ export class VersionCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getCapabilities() {
+		this.assertSupportsCommand(
+			VersionCommand,
+			VersionCommand.CapabilitiesGet,
+		);
+
 		const cc = new VersionCCCapabilitiesGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -108,6 +127,11 @@ export class VersionCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getZWaveSoftware() {
+		this.assertSupportsCommand(
+			VersionCommand,
+			VersionCommand.ZWaveSoftwareGet,
+		);
+
 		const cc = new VersionCCZWaveSoftwareGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,

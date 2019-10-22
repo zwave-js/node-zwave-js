@@ -61,6 +61,11 @@ export class MultilevelSensorCCAPI extends CCAPI {
 	): Promise<number>;
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get(sensorType?: MultilevelSensorTypes, scale?: number) {
+		this.assertSupportsCommand(
+			MultilevelSensorCommand,
+			MultilevelSensorCommand.Get,
+		);
+
 		const cc = new MultilevelSensorCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -87,6 +92,11 @@ export class MultilevelSensorCCAPI extends CCAPI {
 	public async getSupportedSensorTypes(): Promise<
 		readonly MultilevelSensorTypes[]
 	> {
+		this.assertSupportsCommand(
+			MultilevelSensorCommand,
+			MultilevelSensorCommand.GetSupportedSensor,
+		);
+
 		const cc = new MultilevelSensorCCGetSupportedSensor(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -100,6 +110,11 @@ export class MultilevelSensorCCAPI extends CCAPI {
 	public async getSupportedScales(
 		sensorType: MultilevelSensorTypes,
 	): Promise<readonly number[]> {
+		this.assertSupportsCommand(
+			MultilevelSensorCommand,
+			MultilevelSensorCommand.GetSupportedScale,
+		);
+
 		const cc = new MultilevelSensorCCGetSupportedScale(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,

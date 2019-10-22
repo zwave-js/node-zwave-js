@@ -164,6 +164,11 @@ export class MultiChannelAssociationCCAPI extends CCAPI {
 	 * Association groups are consecutive, starting at 1.
 	 */
 	public async getGroupCount(): Promise<number> {
+		this.assertSupportsCommand(
+			MultiChannelAssociationCommand,
+			MultiChannelAssociationCommand.SupportedGroupingsGet,
+		);
+
 		const cc = new MultiChannelAssociationCCSupportedGroupingsGet(
 			this.driver,
 			{
@@ -182,6 +187,11 @@ export class MultiChannelAssociationCCAPI extends CCAPI {
 	 */
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getGroup(groupId: number) {
+		this.assertSupportsCommand(
+			MultiChannelAssociationCommand,
+			MultiChannelAssociationCommand.Get,
+		);
+
 		const cc = new MultiChannelAssociationCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -203,6 +213,11 @@ export class MultiChannelAssociationCCAPI extends CCAPI {
 	public async addDestinations(
 		options: MultiChannelAssociationCCSetOptions,
 	): Promise<void> {
+		this.assertSupportsCommand(
+			MultiChannelAssociationCommand,
+			MultiChannelAssociationCommand.Set,
+		);
+
 		const cc = new MultiChannelAssociationCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -217,6 +232,11 @@ export class MultiChannelAssociationCCAPI extends CCAPI {
 	public async removeDestinations(
 		options: MultiChannelAssociationCCRemoveOptions,
 	): Promise<void> {
+		this.assertSupportsCommand(
+			MultiChannelAssociationCommand,
+			MultiChannelAssociationCommand.Remove,
+		);
+
 		const cc = new MultiChannelAssociationCCRemove(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,

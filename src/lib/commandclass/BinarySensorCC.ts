@@ -63,6 +63,11 @@ export class BinarySensorCCAPI extends CCAPI {
 	 * @param sensorType The (optional) sensor type to retrieve the value for
 	 */
 	public async get(sensorType?: BinarySensorType): Promise<boolean> {
+		this.assertSupportsCommand(
+			BinarySensorCommand,
+			BinarySensorCommand.Get,
+		);
+
 		const cc = new BinarySensorCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -77,6 +82,11 @@ export class BinarySensorCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getSupportedSensorTypes() {
+		this.assertSupportsCommand(
+			BinarySensorCommand,
+			BinarySensorCommand.SupportedGet,
+		);
+
 		const cc = new BinarySensorCCSupportedGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,

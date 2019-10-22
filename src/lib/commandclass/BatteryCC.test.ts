@@ -144,6 +144,10 @@ describe("lib/commandclass/BatteryCC => ", () => {
 				Promise.resolve({ command: {} }),
 			);
 			fakeDriver.controller.nodes.set(node.id, node);
+			node.addCC(CommandClasses.Battery, {
+				version: 2,
+				isSupported: true,
+			});
 		});
 		beforeEach(() => fakeDriver.sendMessage.mockClear());
 		afterAll(() => {

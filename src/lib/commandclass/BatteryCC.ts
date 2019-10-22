@@ -50,8 +50,11 @@ export class BatteryCCAPI extends CCAPI {
 		}
 		return super.supportsCommand(cmd);
 	}
+
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
+		this.assertSupportsCommand(BatteryCommand, BatteryCommand.Get);
+
 		const cc = new BatteryCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -72,6 +75,8 @@ export class BatteryCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getHealth() {
+		this.assertSupportsCommand(BatteryCommand, BatteryCommand.HealthGet);
+
 		const cc = new BatteryCCHealthGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,

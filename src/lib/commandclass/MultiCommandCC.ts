@@ -34,6 +34,11 @@ export class MultiCommandCCAPI extends CCAPI {
 	}
 
 	public async send(commands: CommandClass[]): Promise<void> {
+		this.assertSupportsCommand(
+			MultiCommandCommand,
+			MultiCommandCommand.CommandEncapsulation,
+		);
+
 		// FIXME: This should not be on the API but rather on the driver level
 		const cc = new MultiCommandCCCommandEncapsulation(this.driver, {
 			nodeId: this.endpoint.nodeId,

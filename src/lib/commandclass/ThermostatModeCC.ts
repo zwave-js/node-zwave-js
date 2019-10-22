@@ -90,6 +90,11 @@ export class ThermostatModeCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
+		this.assertSupportsCommand(
+			ThermostatModeCommand,
+			ThermostatModeCommand.Get,
+		);
+
 		const cc = new ThermostatModeCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -115,6 +120,11 @@ export class ThermostatModeCCAPI extends CCAPI {
 	): Promise<void>;
 
 	public async set(mode: any, manufacturerData?: any): Promise<void> {
+		this.assertSupportsCommand(
+			ThermostatModeCommand,
+			ThermostatModeCommand.Set,
+		);
+
 		const cc = new ThermostatModeCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -125,6 +135,11 @@ export class ThermostatModeCCAPI extends CCAPI {
 	}
 
 	public async getSupportedModes(): Promise<readonly ThermostatMode[]> {
+		this.assertSupportsCommand(
+			ThermostatModeCommand,
+			ThermostatModeCommand.SupportedGet,
+		);
+
 		const cc = new ThermostatModeCCSupportedGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,

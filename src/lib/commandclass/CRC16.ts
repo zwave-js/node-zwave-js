@@ -34,6 +34,11 @@ export class CRC16CCAPI extends CCAPI {
 	}
 
 	public async sendEncapsulated(encapsulatedCC: CommandClass): Promise<void> {
+		this.assertSupportsCommand(
+			CRC16Command,
+			CRC16Command.CommandEncapsulation,
+		);
+
 		const cc = new CRC16CCCommandEncapsulation(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,

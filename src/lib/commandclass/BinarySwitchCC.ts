@@ -47,6 +47,11 @@ export class BinarySwitchCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
+		this.assertSupportsCommand(
+			BinarySwitchCommand,
+			BinarySwitchCommand.Get,
+		);
+
 		const cc = new BinarySwitchCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -68,6 +73,11 @@ export class BinarySwitchCCAPI extends CCAPI {
 	 * @param duration The duration after which the target value should be reached. Only supported in V2 and above
 	 */
 	public async set(targetValue: boolean, duration?: Duration): Promise<void> {
+		this.assertSupportsCommand(
+			BinarySwitchCommand,
+			BinarySwitchCommand.Set,
+		);
+
 		const cc = new BinarySwitchCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
