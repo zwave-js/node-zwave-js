@@ -121,16 +121,4 @@ describe("lib/commandclass/CommandClass => ", () => {
 			expect(cc.expectMoreMessages()).toBeFalse();
 		});
 	});
-
-	describe("getNode()", () => {
-		it("throws if the controller is undefined", () => {
-			const driver = (createEmptyMockDriver() as unknown) as IDriver;
-			delete (driver as any).controller;
-			const cc = new DummyCC(driver, { nodeId: 1 });
-			assertZWaveError(() => cc.getNode(), {
-				messageMatches: "controller",
-				errorCode: ZWaveErrorCodes.Driver_NotReady,
-			});
-		});
-	});
 });
