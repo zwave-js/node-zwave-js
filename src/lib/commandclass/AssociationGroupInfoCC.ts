@@ -23,6 +23,8 @@ import {
 import { CommandClasses } from "./CommandClasses";
 import { MultiChannelAssociationCC } from "./MultiChannelAssociationCC";
 
+// @noSetValueAPI This CC only has get-type commands
+
 // All the supported commands
 export enum AssociationGroupInfoCommand {
 	NameGet = 0x01,
