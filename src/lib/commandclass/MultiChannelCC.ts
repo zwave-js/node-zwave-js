@@ -60,6 +60,11 @@ export class MultiChannelCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getEndpoints() {
+		this.assertSupportsCommand(
+			MultiChannelCommand,
+			MultiChannelCommand.EndPointGet,
+		);
+
 		const cc = new MultiChannelCCEndPointGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -80,6 +85,11 @@ export class MultiChannelCCAPI extends CCAPI {
 	public async getEndpointCapabilities(
 		endpoint: number,
 	): Promise<EndpointCapability> {
+		this.assertSupportsCommand(
+			MultiChannelCommand,
+			MultiChannelCommand.CapabilityGet,
+		);
+
 		const cc = new MultiChannelCCCapabilityGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -97,6 +107,11 @@ export class MultiChannelCCAPI extends CCAPI {
 		genericClass: GenericDeviceClasses,
 		specificClass: number,
 	): Promise<readonly number[]> {
+		this.assertSupportsCommand(
+			MultiChannelCommand,
+			MultiChannelCommand.EndPointFind,
+		);
+
 		const cc = new MultiChannelCCEndPointFind(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -114,6 +129,11 @@ export class MultiChannelCCAPI extends CCAPI {
 	public async getAggregatedMembers(
 		endpoint: number,
 	): Promise<readonly number[]> {
+		this.assertSupportsCommand(
+			MultiChannelCommand,
+			MultiChannelCommand.AggregatedMembersGet,
+		);
+
 		const cc = new MultiChannelCCAggregatedMembersGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -133,6 +153,11 @@ export class MultiChannelCCAPI extends CCAPI {
 			keyof CCCommandOptions
 		>,
 	): Promise<void> {
+		this.assertSupportsCommand(
+			MultiChannelCommand,
+			MultiChannelCommand.CommandEncapsulation,
+		);
+
 		const cc = new MultiChannelCCCommandEncapsulation(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
