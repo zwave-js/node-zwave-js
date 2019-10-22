@@ -135,6 +135,11 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get(setpointType: ThermostatSetpointType) {
+		this.assertSupportsCommand(
+			ThermostatSetpointCommand,
+			ThermostatSetpointCommand.Get,
+		);
+
 		const cc = new ThermostatSetpointCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -158,6 +163,11 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		value: number,
 		scale: ThermostatSetpointScale,
 	): Promise<void> {
+		this.assertSupportsCommand(
+			ThermostatSetpointCommand,
+			ThermostatSetpointCommand.Set,
+		);
+
 		const cc = new ThermostatSetpointCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -170,6 +180,11 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getCapabilities(setpointType: ThermostatSetpointType) {
+		this.assertSupportsCommand(
+			ThermostatSetpointCommand,
+			ThermostatSetpointCommand.CapabilitiesGet,
+		);
+
 		const cc = new ThermostatSetpointCCCapabilitiesGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -194,6 +209,11 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 	public async getSupportedSetpointTypes(): Promise<
 		readonly ThermostatSetpointType[]
 	> {
+		this.assertSupportsCommand(
+			ThermostatSetpointCommand,
+			ThermostatSetpointCommand.SupportedGet,
+		);
+
 		const cc = new ThermostatSetpointCCSupportedGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
