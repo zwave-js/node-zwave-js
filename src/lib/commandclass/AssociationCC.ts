@@ -93,6 +93,11 @@ export class AssociationCCAPI extends CCAPI {
 	 * Association groups are consecutive, starting at 1.
 	 */
 	public async getGroupCount(): Promise<number> {
+		this.assertSupportsCommand(
+			AssociationCommand,
+			AssociationCommand.SupportedGroupingsGet,
+		);
+
 		const cc = new AssociationCCSupportedGroupingsGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -108,6 +113,8 @@ export class AssociationCCAPI extends CCAPI {
 	 */
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getGroup(groupId: number) {
+		this.assertSupportsCommand(AssociationCommand, AssociationCommand.Get);
+
 		const cc = new AssociationCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -129,6 +136,8 @@ export class AssociationCCAPI extends CCAPI {
 		groupId: number,
 		...nodeIds: number[]
 	): Promise<void> {
+		this.assertSupportsCommand(AssociationCommand, AssociationCommand.Set);
+
 		const cc = new AssociationCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -144,6 +153,11 @@ export class AssociationCCAPI extends CCAPI {
 	public async removeNodeIds(
 		options: AssociationCCRemoveOptions,
 	): Promise<void> {
+		this.assertSupportsCommand(
+			AssociationCommand,
+			AssociationCommand.Remove,
+		);
+
 		const cc = new AssociationCCRemove(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
