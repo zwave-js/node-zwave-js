@@ -48,6 +48,8 @@ export class TimeCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getTime() {
+		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeGet);
+
 		const cc = new TimeCCTimeGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -62,6 +64,8 @@ export class TimeCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async getDate() {
+		this.assertSupportsCommand(TimeCommand, TimeCommand.DateGet);
+
 		const cc = new TimeCCDateGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -75,6 +79,8 @@ export class TimeCCAPI extends CCAPI {
 	}
 
 	public async setTimezone(timezone: DSTInfo): Promise<void> {
+		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeOffsetSet);
+
 		const cc = new TimeCCTimeOffsetSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -87,6 +93,8 @@ export class TimeCCAPI extends CCAPI {
 	}
 
 	public async getTimezone(): Promise<DSTInfo> {
+		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeOffsetGet);
+
 		const cc = new TimeCCTimeOffsetGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
