@@ -38,6 +38,8 @@ export class LanguageCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
+		this.assertSupportsCommand(LanguageCommand, LanguageCommand.Get);
+
 		const cc = new LanguageCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -50,6 +52,8 @@ export class LanguageCCAPI extends CCAPI {
 	}
 
 	public async set(language: string, country?: string): Promise<void> {
+		this.assertSupportsCommand(LanguageCommand, LanguageCommand.Set);
+
 		const cc = new LanguageCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
