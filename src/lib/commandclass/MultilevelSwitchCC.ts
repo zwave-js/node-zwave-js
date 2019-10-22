@@ -55,6 +55,19 @@ export enum SwitchType {
 
 @API(CommandClasses["Multilevel Switch"])
 export class MultilevelSwitchCCAPI extends CCAPI {
+	public supportsCommand(cmd: MultilevelSwitchCommand): Maybe<boolean> {
+		switch (cmd) {
+			case MultilevelSwitchCommand.Get:
+			case MultilevelSwitchCommand.Set:
+			case MultilevelSwitchCommand.StartLevelChange:
+			case MultilevelSwitchCommand.StopLevelChange:
+				return true; // This is mandatory
+			case MultilevelSwitchCommand.SupportedGet:
+				return this.version >= 3;
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
 		const cc = new MultilevelSwitchCCGet(this.driver, {

@@ -2,6 +2,7 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
+import { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -18,8 +19,23 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
+export enum LanguageCommand {
+	Set = 0x01,
+	Get = 0x02,
+	Report = 0x03,
+}
+
 @API(CommandClasses.Language)
 export class LanguageCCAPI extends CCAPI {
+	public supportsCommand(cmd: LanguageCommand): Maybe<boolean> {
+		switch (cmd) {
+			case LanguageCommand.Get:
+			case LanguageCommand.Set:
+				return true; // This is mandatory
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
 		const cc = new LanguageCCGet(this.driver, {
@@ -42,12 +58,6 @@ export class LanguageCCAPI extends CCAPI {
 		});
 		await this.driver.sendCommand(cc);
 	}
-}
-
-export enum LanguageCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
 }
 
 export interface LanguageCC {

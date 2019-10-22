@@ -4,7 +4,7 @@ import log from "../log";
 import { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
-import { parseBitMask, parseFloatWithScale } from "../values/Primitive";
+import { Maybe, parseBitMask, parseFloatWithScale } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -41,6 +41,17 @@ export interface MultilevelSensorValue {
 
 @API(CommandClasses["Multilevel Sensor"])
 export class MultilevelSensorCCAPI extends CCAPI {
+	public supportsCommand(cmd: MultilevelSensorCommand): Maybe<boolean> {
+		switch (cmd) {
+			case MultilevelSensorCommand.Get:
+				return true; // This is mandatory
+			case MultilevelSensorCommand.GetSupportedSensor:
+			case MultilevelSensorCommand.GetSupportedScale:
+				return this.version >= 5;
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	public async get(): Promise<
 		MultilevelSensorValue & { type: MultilevelSensorTypes }
 	>;

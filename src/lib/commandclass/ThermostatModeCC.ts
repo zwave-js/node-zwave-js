@@ -4,7 +4,7 @@ import log from "../log";
 import { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { enumValuesToMetadataStates, ValueMetadata } from "../values/Metadata";
-import { parseBitMask } from "../values/Primitive";
+import { Maybe, parseBitMask } from "../values/Primitive";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -57,6 +57,16 @@ export enum ThermostatMode {
 
 @API(CommandClasses["Thermostat Mode"])
 export class ThermostatModeCCAPI extends CCAPI {
+	public supportsCommand(cmd: ThermostatModeCommand): Maybe<boolean> {
+		switch (cmd) {
+			case ThermostatModeCommand.Get:
+			case ThermostatModeCommand.Set:
+			case ThermostatModeCommand.SupportedGet:
+				return true; // This is mandatory
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ propertyName },
 		value,

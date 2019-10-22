@@ -36,6 +36,15 @@ export enum BinarySwitchCommand {
 
 @API(CommandClasses["Binary Switch"])
 export class BinarySwitchCCAPI extends CCAPI {
+	public supportsCommand(cmd: BinarySwitchCommand): Maybe<boolean> {
+		switch (cmd) {
+			case BinarySwitchCommand.Get:
+			case BinarySwitchCommand.Set:
+				return true; // This is mandatory
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async get() {
 		const cc = new BinarySwitchCCGet(this.driver, {

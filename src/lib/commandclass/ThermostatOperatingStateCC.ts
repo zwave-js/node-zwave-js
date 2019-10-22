@@ -2,6 +2,7 @@ import { IDriver } from "../driver/IDriver";
 import log from "../log";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { enumValuesToMetadataStates, ValueMetadata } from "../values/Metadata";
+import { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -46,6 +47,16 @@ export enum ThermostatOperatingState {
 
 @API(CommandClasses["Thermostat Operating State"])
 export class ThermostatOperatingStateCCAPI extends CCAPI {
+	public supportsCommand(
+		cmd: ThermostatOperatingStateCommand,
+	): Maybe<boolean> {
+		switch (cmd) {
+			case ThermostatOperatingStateCommand.Get:
+				return true; // This is mandatory
+		}
+		return super.supportsCommand(cmd);
+	}
+
 	public async get(): Promise<ThermostatOperatingState> {
 		const cc = new ThermostatOperatingStateCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
