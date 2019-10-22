@@ -79,7 +79,7 @@ describe("lib/commandclass/VersionCC => ", () => {
 			fakeDriver.controller.nodes.set(node.id, node);
 			// CC Version must be supported for this test
 			node.addCC(CommandClasses.Version, { isSupported: true });
-			cc = node.createCCInstance<VersionCC>(CommandClasses.Version)!;
+			cc = node.createCCInstance(VersionCC)!;
 		});
 		beforeEach(() => fakeDriver.sendMessage.mockClear());
 		afterAll(() => {

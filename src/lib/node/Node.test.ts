@@ -786,7 +786,7 @@ describe("lib/node/Node", () => {
 			fakeDriver.controller.nodes.set(node.id, node);
 			node.addCC(CommandClasses.Basic, { isSupported: true });
 
-			const cc = node.createCCInstance<BasicCC>(CommandClasses.Basic)!;
+			const cc = node.createCCInstance(BasicCC)!;
 			expect(cc).toBeInstanceOf(BasicCC);
 			expect(cc.getNode()).toBe(node);
 		});

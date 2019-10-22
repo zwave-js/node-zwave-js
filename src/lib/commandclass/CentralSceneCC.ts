@@ -152,9 +152,7 @@ export class CentralSceneCC extends CommandClass {
 			// If one Association group issues CentralScene notifications,
 			// we need to associate ourselves with that channel
 			const groupsIssueingNotifications = node
-				.createCCInstance<AssociationGroupInfoCC>(
-					CommandClasses["Association Group Information"],
-				)!
+				.createCCInstance(AssociationGroupInfoCC)!
 				.findGroupsForIssuedCommand(
 					this.ccId,
 					CentralSceneCommand.Notification,

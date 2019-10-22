@@ -127,9 +127,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		if (!param) {
 			throwUnsupportedProperty(this.ccId, propertyName);
 		}
-		const ccInstance = this.endpoint.createCCInstance<ConfigurationCC>(
-			this.ccId,
-		)!;
+		const ccInstance = this.endpoint.createCCInstance(ConfigurationCC)!;
 		const valueSize = ccInstance.getParamInformation(param).valueSize;
 
 		// if (typeof value !== "number") {
@@ -264,9 +262,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			this.endpoint.nodeId,
 			`Scanning available parameters...`,
 		);
-		const ccInstance = this.endpoint.createCCInstance<ConfigurationCC>(
-			getCommandClass(this),
-		)!;
+		const ccInstance = this.endpoint.createCCInstance(ConfigurationCC)!;
 		for (let param = 1; param <= 255; param++) {
 			// Check if the parameter is readable
 			let originalValue: ConfigValue | undefined;
