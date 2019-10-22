@@ -1,5 +1,6 @@
 import { IDriver } from "../driver/IDriver";
 import { validatePayload } from "../util/misc";
+import { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -24,6 +25,14 @@ export enum MultiCommandCommand {
 
 @API(CommandClasses["Multi Command"])
 export class MultiCommandCCAPI extends CCAPI {
+	public supportsCommand(_cmd: MultiCommandCommand): Maybe<boolean> {
+		// switch (cmd) {
+		// 	case MultiCommandCommand.CommandEncapsulation:
+		return true; // This is mandatory
+		// }
+		// return super.supportsCommand(cmd);
+	}
+
 	public async send(commands: CommandClass[]): Promise<void> {
 		// FIXME: This should not be on the API but rather on the driver level
 		const cc = new MultiCommandCCCommandEncapsulation(this.driver, {

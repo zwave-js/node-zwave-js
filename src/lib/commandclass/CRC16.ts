@@ -1,6 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { CRC16_CCITT } from "../util/crc";
 import { validatePayload } from "../util/misc";
+import { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -17,8 +18,21 @@ import { CommandClasses } from "./CommandClasses";
 // @noSetValueAPI
 // @noInterview This CC only has a single encapsulation command
 
+// All the supported commands
+export enum CRC16Command {
+	CommandEncapsulation = 0x01,
+}
+
 @API(CommandClasses["CRC-16 Encapsulation"])
 export class CRC16CCAPI extends CCAPI {
+	public supportsCommand(_cmd: CRC16Command): Maybe<boolean> {
+		// switch (cmd) {
+		// 	case CRC16Command.CommandEncapsulation:
+		return true; // This is mandatory
+		// }
+		// return super.supportsCommand(cmd);
+	}
+
 	public async sendEncapsulated(encapsulatedCC: CommandClass): Promise<void> {
 		const cc = new CRC16CCCommandEncapsulation(this.driver, {
 			nodeId: this.endpoint.nodeId,
@@ -27,11 +41,6 @@ export class CRC16CCAPI extends CCAPI {
 		});
 		await this.driver.sendCommand(cc);
 	}
-}
-
-// All the supported commands
-export enum CRC16Command {
-	CommandEncapsulation = 0x01,
 }
 
 export interface CRC16CC {
