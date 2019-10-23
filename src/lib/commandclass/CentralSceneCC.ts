@@ -38,6 +38,10 @@ export function getSceneValueId(sceneNumber: number): ValueID {
 	};
 }
 
+function getSceneLabel(sceneNumber: number): string {
+	return `Scene ${padStart(sceneNumber.toString(), 3, "0")}`;
+}
+
 export enum CentralSceneCommand {
 	SupportedGet = 0x01,
 	SupportedReport = 0x02,
@@ -256,6 +260,16 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 		// The described behavior is pretty complicated, so we cannot just store
 		// the value and call it a day. Handling of these notifications will
 		// happen in the receiving node class
+
+		// In case the interview is not yet completed, we still create some basic metadata
+		const valueId = getSceneValueId(this._sceneNumber);
+		const valueDB = this.getValueDB();
+		if (!valueDB.hasMetadata(valueId)) {
+			this.getValueDB().setMetadata(valueId, {
+				...ValueMetadata.ReadOnlyUInt8,
+				label: getSceneLabel(this._sceneNumber),
+			});
+		}
 	}
 
 	private _sequenceNumber: number;
@@ -329,7 +343,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 			const valueId = getSceneValueId(i);
 			this.getValueDB().setMetadata(valueId, {
 				...ValueMetadata.ReadOnlyUInt8,
-				label: `Scene ${padStart(i.toString(), 3, "0")}`,
+				label: getSceneLabel(i),
 				states: enumValuesToMetadataStates(
 					CentralSceneKeys,
 					this._supportedKeyAttributes.get(i),
