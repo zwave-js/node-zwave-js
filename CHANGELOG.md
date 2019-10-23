@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 1.6.0 (2019-10-23)
 * Implement Multi Channel Association CC and prefer it to Association CC if possible
 * Implement AssociationGroupInfoCC
 * Add support for CRC-16 CC
