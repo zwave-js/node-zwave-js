@@ -136,7 +136,7 @@ export interface MultilevelSensorCC {
 export class MultilevelSensorCC extends CommandClass {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = node.commandClasses["Multilevel Sensor"];
+		const api = this.getEndpoint()!.commandClasses["Multilevel Sensor"];
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
@@ -189,7 +189,7 @@ value:       ${mlsResponse.value} ${mlsResponse.scale.unit || ""}`;
 					this.getValueDB().getValue({
 						commandClass: this.ccId,
 						propertyName: "supportedSensorTypes",
-						endpoint: this.endpoint,
+						endpoint: this.endpointIndex,
 					}) || [];
 			}
 
@@ -219,7 +219,7 @@ value:       ${mlsResponse.value} ${mlsResponse.scale.unit || ""}`;
 					sensorScales =
 						this.getValueDB().getValue({
 							commandClass: this.ccId,
-							endpoint: this.endpoint,
+							endpoint: this.endpointIndex,
 							propertyName: "supportedScales",
 							propertyKey: type,
 						}) || [];
@@ -275,7 +275,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 
 		const valueId: ValueID = {
 			commandClass: this.ccId,
-			endpoint: this.endpoint,
+			endpoint: this.endpointIndex,
 			propertyName: MultilevelSensorTypes[this._type],
 		};
 		this.getValueDB().setMetadata(valueId, {

@@ -248,7 +248,7 @@ export class ThermostatSetpointCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = node.commandClasses["Thermostat Setpoint"];
+		const api = this.getEndpoint()!.commandClasses["Thermostat Setpoint"];
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
@@ -262,7 +262,7 @@ export class ThermostatSetpointCC extends CommandClass {
 			let queriedSetpointTypes: readonly ThermostatSetpointType[] = [];
 			const supportedSetpointTypesValueId: ValueID = {
 				commandClass: this.ccId,
-				endpoint: this.endpoint,
+				endpoint: this.endpointIndex,
 				propertyName: "supportedSetpointTypes",
 			};
 
@@ -337,7 +337,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					this.getValueDB().getValue({
 						commandClass: this.ccId,
 						propertyName: "supportedSetpointTypes",
-						endpoint: this.endpoint,
+						endpoint: this.endpointIndex,
 					}) || [];
 			}
 
@@ -460,7 +460,7 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 
 		const valueId: ValueID = {
 			commandClass: this.ccId,
-			endpoint: this.endpoint,
+			endpoint: this.endpointIndex,
 			propertyName: "setpoint",
 			propertyKey: this._type,
 		};
@@ -547,7 +547,7 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 		// Predefine the metadata
 		const valueId: ValueID = {
 			commandClass: this.ccId,
-			endpoint: this.endpoint,
+			endpoint: this.endpointIndex,
 			propertyName: "setpoint",
 			propertyKey: this._type,
 		};

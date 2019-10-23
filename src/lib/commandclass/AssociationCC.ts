@@ -182,6 +182,11 @@ export class AssociationCC extends CommandClass {
 		];
 	}
 
+	public skipEndpointInterview(): boolean {
+		// The associations are managed on the root device
+		return true;
+	}
+
 	/**
 	 * Returns the number of association groups reported by the node.
 	 * This only works AFTER the interview process
@@ -192,10 +197,13 @@ export class AssociationCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = node.commandClasses.Association;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Association;
 
 		// Skip Association CC in favor of Multi Channel Association if possible
-		if (node.commandClasses["Multi Channel Association"].isSupported()) {
+		if (
+			endpoint.commandClasses["Multi Channel Association"].isSupported()
+		) {
 			log.controller.logNode(node.id, {
 				message: `${this.constructor.name}: skipping interview because Multi Channel Association is supported...`,
 				direction: "none",

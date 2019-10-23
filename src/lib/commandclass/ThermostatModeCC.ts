@@ -160,7 +160,7 @@ export interface ThermostatModeCC {
 export class ThermostatModeCC extends CommandClass {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = node.commandClasses["Thermostat Mode"];
+		const api = this.getEndpoint()!.commandClasses["Thermostat Mode"];
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
@@ -323,7 +323,7 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 		// Use this information to create the metadata for the mode property
 		const valueId: ValueID = {
 			commandClass: this.ccId,
-			endpoint: this.endpoint,
+			endpoint: this.endpointIndex,
 			propertyName: "mode",
 		};
 		// Only update the dynamic part

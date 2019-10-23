@@ -120,7 +120,7 @@ export interface TimeCC {
 export class TimeCC extends CommandClass {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = node.commandClasses.Time;
+		const api = this.getEndpoint()!.commandClasses.Time;
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${

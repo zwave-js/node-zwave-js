@@ -10,6 +10,7 @@ import {
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { GraphNode } from "../util/graph";
 import { num2hex } from "../util/strings";
 import { GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
 import { ZWaveNode } from "./Node";
@@ -35,10 +36,10 @@ export class Endpoint {
 		protected readonly driver: Driver,
 		/** The index of this endpoint. 0 for the root device, 1+ otherwise */
 		public readonly index: number,
-		fromCapabilities?: EndpointCapabilities,
+		supportedCCs?: CommandClasses[],
 	) {
-		if (fromCapabilities != undefined) {
-			for (const cc of fromCapabilities.supportedCCs) {
+		if (supportedCCs != undefined) {
+			for (const cc of supportedCCs) {
 				this.addCC(cc, { isSupported: true });
 			}
 		}
@@ -175,6 +176,35 @@ export class Endpoint {
 				endpoint: this.index,
 			}) as T;
 		}
+	}
+
+	/** Builds the dependency graph used to automatically determine the order of CC interviews */
+	public buildCCInterviewGraph(): GraphNode<CommandClasses>[] {
+		let supportedCCInstances = [...this.implementedCommandClasses.keys()]
+			.map(cc => this.createCCInstance(cc))
+			.filter(instance => !!instance) as CommandClass[];
+		// For endpoint interviews, we skip some CCs
+		if (this.index > 0) {
+			supportedCCInstances = supportedCCInstances.filter(
+				instance => !instance.skipEndpointInterview(),
+			);
+		}
+		const supportedCCs = supportedCCInstances.map(
+			instance => instance.ccId,
+		);
+		// Create GraphNodes from all supported CCs
+		const ret = supportedCCs.map(cc => new GraphNode(cc));
+		// Create the dependencies
+		for (const node of ret) {
+			const instance = this.createCCInstance(node.value)!;
+			for (const requiredCCId of instance.determineRequiredCCInterviews()) {
+				const requiredCC = ret.find(
+					instance => instance.value === requiredCCId,
+				);
+				if (requiredCC) node.edges.add(requiredCC);
+			}
+		}
+		return ret;
 	}
 
 	/**

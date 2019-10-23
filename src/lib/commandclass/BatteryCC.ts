@@ -100,7 +100,7 @@ export interface BatteryCC {
 export class BatteryCC extends CommandClass {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = node.commandClasses.Battery;
+		const api = this.getEndpoint()!.commandClasses.Battery;
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
@@ -327,7 +327,7 @@ export class BatteryCCHealthReport extends BatteryCC {
 
 		const valueId: ValueID = {
 			commandClass: this.ccId,
-			endpoint: this.endpoint,
+			endpoint: this.endpointIndex,
 			propertyName: "temperature",
 		};
 		this.getValueDB().setMetadata(valueId, {

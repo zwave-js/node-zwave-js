@@ -7,6 +7,7 @@ import {
 	NodeInformationFrame,
 	parseNodeInformationFrame,
 } from "../node/NodeInfo";
+import { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
@@ -41,6 +42,14 @@ export enum MultiChannelCommand {
 // TODO: Handle removal reports of dynamic endpoints
 
 // @noSetValueAPI
+
+export function getEndpointCCsValueId(endpointIndex: number): ValueID {
+	return {
+		commandClass: CommandClasses["Multi Channel"],
+		endpoint: endpointIndex,
+		propertyName: "commandClasses",
+	};
+}
 
 @API(CommandClasses["Multi Channel"])
 export class MultiChannelCCAPI extends CCAPI {
@@ -182,7 +191,7 @@ export class MultiChannelCC extends CommandClass {
 	/** Tests if a command targets a specific endpoint and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
 		return (
-			cc.endpoint !== 0 &&
+			cc.endpointIndex !== 0 &&
 			!(cc instanceof MultiChannelCCCommandEncapsulation)
 		);
 	}
@@ -196,26 +205,28 @@ export class MultiChannelCC extends CommandClass {
 			nodeId: cc.nodeId,
 			encapsulatedCC: cc,
 			sourceEndPoint: 0, // We only have one endpoint
-			destination: cc.endpoint,
+			destination: cc.endpointIndex,
 		});
 	}
 
 	/** Unwraps a multi channel encapsulated command and remembers the source end point */
 	public static unwrap(cc: MultiChannelCCCommandEncapsulation): CommandClass {
-		cc.encapsulatedCC.endpoint = cc.sourceEndPoint;
+		cc.encapsulatedCC.endpointIndex = cc.sourceEndPoint;
 		return cc;
 	}
 
 	public async interview(): Promise<void> {
 		const node = this.getNode()!;
-		const API = node.commandClasses["Multi Channel"];
+		const api = node.getEndpoint(this.endpointIndex)!.commandClasses[
+			"Multi Channel"
+		];
 
 		// Step 1: Retrieve general information about end points
 		log.controller.logNode(node.id, {
 			message: "querying device endpoint information...",
 			direction: "outbound",
 		});
-		const multiResponse = await API.getEndpoints();
+		const multiResponse = await api.getEndpoints();
 
 		let logMessage = `received response for device endpoints:
 endpoint count (individual): ${multiResponse.individualEndpointCount}
@@ -234,7 +245,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			message: "querying all endpoints...",
 			direction: "outbound",
 		});
-		const foundEndpoints = await API.findEndpoints(0xff, 0xff);
+		const foundEndpoints = await api.findEndpoints(0xff, 0xff);
 		log.controller.logNode(node.id, {
 			message: `received endpoints: ${foundEndpoints
 				.map(String)
@@ -253,7 +264,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 					message: `querying members of aggregated endpoint #${endpoint}...`,
 					direction: "outbound",
 				});
-				const members = await API.getAggregatedMembers(endpoint);
+				const members = await api.getAggregatedMembers(endpoint);
 				log.controller.logNode(node.id, {
 					message: `aggregated endpoint #${endpoint} has members ${members
 						.map(String)
@@ -267,9 +278,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				message: `querying capabilities for endpoint #${endpoint}...`,
 				direction: "outbound",
 			});
-			const caps = await node.commandClasses[
-				"Multi Channel"
-			].getEndpointCapabilities(endpoint);
+			const caps = await api.getEndpointCapabilities(endpoint);
 			logMessage = `received response for endpoint capabilities (#${endpoint}):
 generic device class:  ${caps.generic.name} (${num2hex(caps.generic.key)})
 specific device class: ${caps.specific.name} (${num2hex(caps.specific.key)})
@@ -283,8 +292,6 @@ supported CCs:`;
 				message: logMessage,
 				direction: "inbound",
 			});
-
-			// TODO: Interview all command classes of this endpoint
 		}
 
 		// Remember that the interview is complete
@@ -372,6 +379,17 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 			capability.specific.key === 0x00;
 
 		this.capability = capability;
+
+		// Remember the supported CCs
+		const ccsValueId = getEndpointCCsValueId(this.endpointIndex);
+		if (capability.wasRemoved) {
+			this.getValueDB().removeValue(ccsValueId);
+		} else {
+			this.getValueDB().setValue(
+				ccsValueId,
+				this.capability.supportedCCs,
+			);
+		}
 	}
 
 	public readonly endpointIndex: number;
@@ -517,7 +535,7 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 	@ccKeyValuePair({ internal: true })
 	private aggregatedEndpointMembers: [number, number[]];
 
-	public get endpoint(): number {
+	public get endpointIndex(): number {
 		return this.aggregatedEndpointMembers[0];
 	}
 
@@ -594,6 +612,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 				this.driver,
 				this,
 				this.payload.slice(2),
+				this.sourceEndPoint,
 			);
 		} else {
 			this.encapsulatedCC = options.encapsulatedCC;

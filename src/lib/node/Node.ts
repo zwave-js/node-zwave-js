@@ -15,6 +15,7 @@ import {
 } from "../commandclass/CommandClass";
 import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { ConfigurationCC } from "../commandclass/ConfigurationCC";
+import { getEndpointCCsValueId } from "../commandclass/MultiChannelCC";
 import { NotificationCCReport } from "../commandclass/NotificationCC";
 import { WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
 import { lookupDevice } from "../config/Devices";
@@ -36,8 +37,8 @@ import {
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { GraphNode, topologicalSort } from "../util/graph";
-import { JSONObject, Mixin } from "../util/misc";
+import { topologicalSort } from "../util/graph";
+import { getEnumMemberName, JSONObject, Mixin } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import { CacheMetadata, CacheValue } from "../values/Cache";
 import { ValueMetadata } from "../values/Metadata";
@@ -47,7 +48,7 @@ import {
 	GenericDeviceClass,
 	SpecificDeviceClass,
 } from "./DeviceClass";
-import { Endpoint, EndpointCapabilities } from "./Endpoint";
+import { Endpoint } from "./Endpoint";
 import { InterviewStage, IZWaveNode, NodeStatus } from "./INode";
 import { NodeUpdatePayload } from "./NodeInfo";
 import {
@@ -431,48 +432,37 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	public get endpointCountIsDynamic(): boolean | undefined {
 		return this.getValue({
 			commandClass: CommandClasses["Multi Channel"],
-			propertyName: "_endpointCountIsDynamic",
+			propertyName: "countIsDynamic",
 		});
 	}
 
 	public get endpointsHaveIdenticalCapabilities(): boolean | undefined {
 		return this.getValue({
 			commandClass: CommandClasses["Multi Channel"],
-			propertyName: "_endpointsHaveIdenticalCapabilities",
+			propertyName: "identicalCapabilities",
 		});
 	}
 
 	public get individualEndpointCount(): number | undefined {
 		return this.getValue({
 			commandClass: CommandClasses["Multi Channel"],
-			propertyName: "_individualEndpointCount",
+			propertyName: "individualCount",
 		});
 	}
 
 	public get aggregatedEndpointCount(): number | undefined {
 		return this.getValue({
 			commandClass: CommandClasses["Multi Channel"],
-			propertyName: "_aggregatedEndpointCount",
+			propertyName: "aggregatedCount",
 		});
 	}
 
-	private get endpointCapabilities():
-		| Map<number, EndpointCapabilities>
-		| undefined {
-		return this.getValue({
-			commandClass: CommandClasses["Multi Channel"],
-			propertyName: "_endpointCapabilities",
-		});
-	}
-
-	private getEndpointCapabilities(
-		index: number,
-	): EndpointCapabilities | undefined {
-		if (this.endpointCapabilities) {
-			return this.endpointCapabilities.get(
+	private getEndpointCCs(index: number): CommandClasses[] | undefined {
+		return this.getValue(
+			getEndpointCCsValueId(
 				this.endpointsHaveIdenticalCapabilities ? 1 : index,
-			);
-		}
+			),
+		);
 	}
 
 	/** Returns the current endpoint count of this node */
@@ -508,7 +498,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 					this.id,
 					this.driver,
 					index,
-					this.getEndpointCapabilities(index),
+					this.getEndpointCCs(index),
 				),
 			);
 		}
@@ -759,30 +749,10 @@ version:               ${this.version}`;
 		await this.setInterviewStage(InterviewStage.NodeInfo);
 	}
 
-	/** Builds the dependency graph used to automatically determine the order of CC interviews */
-	private buildCCInterviewGraph(): GraphNode<CommandClasses>[] {
-		const supportedCCs = [...this.implementedCommandClasses.keys()].filter(
-			cc => !!this.createCCInstance(cc),
-		);
-		// Create GraphNodes from all supported CCs
-		const ret = supportedCCs.map(cc => new GraphNode(cc));
-		// Create the dependencies
-		for (const node of ret) {
-			const instance = this.createCCInstance(node.value)!;
-			for (const requiredCCId of instance.determineRequiredCCInterviews()) {
-				const requiredCC = ret.find(
-					instance => instance.value === requiredCCId,
-				);
-				if (requiredCC) node.edges.add(requiredCC);
-			}
-		}
-		return ret;
-	}
-
 	/** Step #? of the node interview */
 	protected async interviewCCs(): Promise<void> {
 		// We determine the correct interview order by topologically sorting a dependency graph
-		const interviewGraph = this.buildCCInterviewGraph();
+		let interviewGraph = this.buildCCInterviewGraph();
 		let interviewOrder: CommandClasses[];
 		try {
 			interviewOrder = topologicalSort(interviewGraph);
@@ -817,14 +787,69 @@ version:               ${this.version}`;
 			} catch (e) {
 				// TODO: Should this cancel the entire interview procedure?
 				log.controller.print(
-					`${cc.constructor.name}: Interview failed:\n${e.message}`,
+					`${getEnumMemberName(
+						CommandClasses,
+						cc,
+					)}: Interview failed:\n${e.message}`,
 					"error",
 				);
 			}
 		}
 
+		// Now query ALL endpoints
+		for (
+			let endpointIndex = 1;
+			endpointIndex <= this.getEndpointCount();
+			endpointIndex++
+		) {
+			const endpoint = this.getEndpoint(endpointIndex);
+			if (!endpoint) continue;
+
+			interviewGraph = endpoint.buildCCInterviewGraph();
+			try {
+				interviewOrder = topologicalSort(interviewGraph);
+			} catch (e) {
+				// This interview cannot be done
+				throw new ZWaveError(
+					"The CC interview cannot be completed because there are circular dependencies between CCs!",
+					ZWaveErrorCodes.CC_Invalid,
+				);
+			}
+
+			// Now that we know the correct order, do the interview in sequence
+			for (const cc of interviewOrder) {
+				try {
+					let instance: CommandClass;
+					try {
+						instance = endpoint.createCCInstance(cc)!;
+					} catch (e) {
+						if (
+							e instanceof ZWaveError &&
+							e.code === ZWaveErrorCodes.CC_NotSupported
+						) {
+							// The CC is no longer supported. This can happen if the node tells us
+							// something different in the Version interview than it did in its NIF
+							continue;
+						}
+						// we want to pass all other errors through
+						throw e;
+					}
+					await instance.interview(!instance.interviewComplete);
+					await this.driver.saveNetworkToCache();
+				} catch (e) {
+					// TODO: Should this cancel the entire interview procedure?
+					log.controller.print(
+						`${getEnumMemberName(
+							CommandClasses,
+							cc,
+						)}: Interview failed:\n${e.message}`,
+						"error",
+					);
+				}
+			}
+		}
+
 		// TODO: Overwrite the reported config with configuration files (like OZW does)
-		// TODO: (GH#214) Also query ALL endpoints!
 
 		await this.setInterviewStage(InterviewStage.CommandClasses);
 	}
@@ -1125,7 +1150,7 @@ version:               ${this.version}`;
 				const propertyKey = valueConfig.variableName;
 				const valueId = {
 					commandClass: command.ccId,
-					endpoint: command.endpoint,
+					endpoint: command.endpointIndex,
 					propertyName,
 					propertyKey,
 				};
@@ -1149,7 +1174,7 @@ version:               ${this.version}`;
 						.getValues(CommandClasses.Notification)
 						.filter(
 							v =>
-								(v.endpoint || 0) === command.endpoint &&
+								(v.endpoint || 0) === command.endpointIndex &&
 								v.propertyName === propertyName &&
 								typeof v.value === "number" &&
 								v.value !== 0,
@@ -1185,7 +1210,7 @@ version:               ${this.version}`;
 			// Now that we've gathered all we need to know, update the value in our DB
 			const valueId = {
 				commandClass: command.ccId,
-				endpoint: command.endpoint,
+				endpoint: command.endpointIndex,
 				propertyName,
 				propertyKey,
 			};
@@ -1208,7 +1233,7 @@ version:               ${this.version}`;
 			const propertyName = `UNKNOWN_${num2hex(command.notificationType)}`;
 			const valueId = {
 				commandClass: command.ccId,
-				endpoint: command.endpoint,
+				endpoint: command.endpointIndex,
 				propertyName,
 			};
 			this.valueDB.setValue(valueId, command.notificationEvent);
@@ -1287,28 +1312,28 @@ version:               ${this.version}`;
 						return [num2hex(cc), ret] as [string, object];
 					}),
 			),
-			endpointCountIsDynamic: this.endpointCountIsDynamic,
-			endpointsHaveIdenticalCapabilities: this
-				.endpointsHaveIdenticalCapabilities,
-			individualEndpointCount: this.individualEndpointCount,
-			aggregatedEndpointCount: this.aggregatedEndpointCount,
-			endpoints:
-				this.endpointCapabilities &&
-				composeObject(
-					[...this.endpointCapabilities.entries()]
-						.sort((a, b) => Math.sign(a[0] - b[0]))
-						.map(([cc, caps]) => {
-							return [
-								cc.toString(),
-								{
-									genericClass: caps.genericClass.key,
-									specificClass: caps.specificClass.key,
-									isDynamic: caps.isDynamic,
-									supportedCCs: caps.supportedCCs,
-								},
-							] as [string, object];
-						}),
-				),
+			// endpointCountIsDynamic: this.endpointCountIsDynamic,
+			// endpointsHaveIdenticalCapabilities: this
+			// 	.endpointsHaveIdenticalCapabilities,
+			// individualEndpointCount: this.individualEndpointCount,
+			// aggregatedEndpointCount: this.aggregatedEndpointCount,
+			// endpoints:
+			// 	this.endpointCommandClasses &&
+			// 	composeObject(
+			// 		[...this.endpointCommandClasses.entries()]
+			// 			.sort((a, b) => Math.sign(a[0] - b[0]))
+			// 			.map(([cc, caps]) => {
+			// 				return [
+			// 					cc.toString(),
+			// 					{
+			// 						genericClass: caps.genericClass.key,
+			// 						specificClass: caps.specificClass.key,
+			// 						isDynamic: caps.isDynamic,
+			// 						supportedCCs: caps.supportedCCs,
+			// 					},
+			// 				] as [string, object];
+			// 			}),
+			// 	),
 		};
 	}
 
@@ -1418,62 +1443,62 @@ version:               ${this.version}`;
 				}
 			}
 		}
-		// Parse endpoint capabilities
-		tryParse("endpointCountIsDynamic", "boolean");
-		tryParse("endpointsHaveIdenticalCapabilities", "boolean");
-		tryParse("individualEndpointCount", "number");
-		tryParse("aggregatedEndpointCount", "number");
-		if (isObject(obj.endpoints)) {
-			const endpointDict = obj.endpoints;
-			// Make sure the endpointCapabilities Map exists
-			if (!this.endpointCapabilities) {
-				this.valueDB.setValue(
-					{
-						commandClass: CommandClasses["Multi Channel"],
-						endpoint: 0,
-						propertyName: "_endpointCapabilities",
-					},
-					new Map(),
-				);
-			}
-			for (const index of Object.keys(endpointDict)) {
-				// First make sure this key describes a valid endpoint
-				const indexNum = parseInt(index);
-				if (
-					indexNum < 1 ||
-					indexNum >
-						(this.individualEndpointCount || 0) +
-							(this.aggregatedEndpointCount || 0)
-				) {
-					continue;
-				}
+		// // Parse endpoint capabilities
+		// tryParse("endpointCountIsDynamic", "boolean");
+		// tryParse("endpointsHaveIdenticalCapabilities", "boolean");
+		// tryParse("individualEndpointCount", "number");
+		// tryParse("aggregatedEndpointCount", "number");
+		// if (isObject(obj.endpoints)) {
+		// 	const endpointDict = obj.endpoints;
+		// 	// Make sure the endpointCapabilities Map exists
+		// 	if (!this.endpointCommandClasses) {
+		// 		this.valueDB.setValue(
+		// 			{
+		// 				commandClass: CommandClasses["Multi Channel"],
+		// 				endpoint: 0,
+		// 				propertyName: "_endpointCapabilities",
+		// 			},
+		// 			new Map(),
+		// 		);
+		// 	}
+		// 	for (const index of Object.keys(endpointDict)) {
+		// 		// First make sure this key describes a valid endpoint
+		// 		const indexNum = parseInt(index);
+		// 		if (
+		// 			indexNum < 1 ||
+		// 			indexNum >
+		// 				(this.individualEndpointCount || 0) +
+		// 					(this.aggregatedEndpointCount || 0)
+		// 		) {
+		// 			continue;
+		// 		}
 
-				// Parse the information we have
-				const {
-					genericClass,
-					specificClass,
-					isDynamic,
-					supportedCCs,
-				} = endpointDict[index];
-				if (
-					typeof genericClass === "number" &&
-					typeof specificClass === "number" &&
-					typeof isDynamic === "boolean" &&
-					isArray(supportedCCs) &&
-					supportedCCs.every(cc => typeof cc === "number")
-				) {
-					this.endpointCapabilities!.set(indexNum, {
-						genericClass: GenericDeviceClass.get(genericClass),
-						specificClass: SpecificDeviceClass.get(
-							genericClass,
-							specificClass,
-						),
-						isDynamic,
-						supportedCCs,
-					});
-				}
-			}
-		}
+		// 		// Parse the information we have
+		// 		const {
+		// 			genericClass,
+		// 			specificClass,
+		// 			isDynamic,
+		// 			supportedCCs,
+		// 		} = endpointDict[index];
+		// 		if (
+		// 			typeof genericClass === "number" &&
+		// 			typeof specificClass === "number" &&
+		// 			typeof isDynamic === "boolean" &&
+		// 			isArray(supportedCCs) &&
+		// 			supportedCCs.every(cc => typeof cc === "number")
+		// 		) {
+		// 			this.endpointCommandClasses!.set(indexNum, {
+		// 				genericClass: GenericDeviceClass.get(genericClass),
+		// 				specificClass: SpecificDeviceClass.get(
+		// 					genericClass,
+		// 					specificClass,
+		// 				),
+		// 				isDynamic,
+		// 				supportedCCs,
+		// 			});
+		// 		}
+		// 	}
+		// }
 	}
 
 	/**

@@ -83,7 +83,9 @@ export interface ThermostatOperatingStateCC {
 export class ThermostatOperatingStateCC extends CommandClass {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = node.commandClasses["Thermostat Operating State"];
+		const api = this.getEndpoint()!.commandClasses[
+			"Thermostat Operating State"
+		];
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${

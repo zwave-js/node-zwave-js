@@ -169,7 +169,7 @@ export class VersionCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = node.commandClasses.Version;
+		const api = this.getEndpoint()!.commandClasses.Version;
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${

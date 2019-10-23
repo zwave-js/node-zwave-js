@@ -99,7 +99,7 @@ export interface ThermostatSetbackCC {
 export class ThermostatSetbackCC extends CommandClass {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = node.commandClasses["Thermostat Setback"];
+		const api = this.getEndpoint()!.commandClasses["Thermostat Setback"];
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
