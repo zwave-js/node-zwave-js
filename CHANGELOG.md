@@ -22,6 +22,12 @@
     * Handle encapsulation (de)serialization correctly
 * Help GitHub understand that this is not a C(++)-repo
 * Add interview implemention to tracking issue
+* Moved `supportsCommand` from `CommandClass` to `CCAPI`
+* CC API methods now check that the underlying command is supported by the node
+* Improved handling of bit masks
+* Implement interview for ConfigurationCC, include spec changes
+* Don't interview CCs the VersionCC reports as unsupported
+* Cleanup loglevels for some log outputs
 * Update dependencies
 
 
