@@ -64,9 +64,6 @@ export class ZWavePlusCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<ZWavePlusCCReport>(cc, {
 			priority: MessagePriority.NodeQuery,
 		}))!;
-		if (!(response instanceof ZWavePlusCCReport)) {
-			debugger;
-		}
 		return {
 			zwavePlusVersion: response.zwavePlusVersion,
 			nodeType: response.nodeType,
