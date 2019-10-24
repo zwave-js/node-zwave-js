@@ -11,6 +11,14 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
+import {
+	MultiChannelCC,
+	MultiChannelCCCommandEncapsulation,
+} from "./MultiChannelCC";
+import {
+	MultiCommandCC,
+	MultiCommandCCCommandEncapsulation,
+} from "./MultiCommandCC";
 
 @implementedVersion(7)
 @commandClass(0xffff as any)
@@ -50,6 +58,70 @@ describe("lib/commandclass/CommandClass => ", () => {
 					errorCode: ZWaveErrorCodes.CC_NotImplemented,
 				},
 			);
+		});
+
+		it("correctly copies the source endpoint from the encapsulating CC", () => {
+			const payload = new BasicCCSet(fakeDriver, {
+				nodeId: 4,
+				targetValue: 5,
+			});
+			payload.endpointIndex = 5;
+			const encap = MultiChannelCC.encapsulate(fakeDriver, payload);
+			const serialized = encap.serialize();
+			const deserialized = CommandClass.from(
+				fakeDriver,
+				serialized,
+			) as MultiChannelCCCommandEncapsulation;
+			const deserializedPayload = MultiChannelCC.unwrap(
+				deserialized,
+			) as BasicCCSet;
+			expect(deserializedPayload.endpointIndex).toBe(
+				payload.endpointIndex,
+			);
+		});
+
+		it("correctly copies the source endpoint from the encapsulating CC", () => {
+			let cc: CommandClass = new BasicCCSet(fakeDriver, {
+				nodeId: 4,
+				targetValue: 5,
+			});
+			cc.endpointIndex = 5;
+			cc = MultiChannelCC.encapsulate(fakeDriver, cc);
+			const serialized = cc.serialize();
+			// ---------------
+			let deserialized: CommandClass = CommandClass.from(
+				fakeDriver,
+				serialized,
+			);
+			deserialized = MultiChannelCC.unwrap(
+				deserialized as MultiChannelCCCommandEncapsulation,
+			);
+			expect(deserialized.endpointIndex).toBe(cc.endpointIndex);
+		});
+
+		it("correctly copies the source endpoint from the encapsulating CC (multiple layers)", () => {
+			let cc: CommandClass = new BasicCCSet(fakeDriver, {
+				nodeId: 4,
+				targetValue: 5,
+			});
+			cc.endpointIndex = 5;
+			// TODO: Add this method
+			cc = MultiCommandCC.encapsulate(fakeDriver, [cc]);
+			cc = MultiChannelCC.encapsulate(fakeDriver, cc);
+			const serialized = cc.serialize();
+			// ---------------
+			let deserialized: CommandClass = CommandClass.from(
+				fakeDriver,
+				serialized,
+			);
+			deserialized = MultiChannelCC.unwrap(
+				deserialized as MultiChannelCCCommandEncapsulation,
+			);
+			// TODO: Add this method
+			deserialized = MultiCommandCC.unwrap(
+				deserialized as MultiCommandCCCommandEncapsulation,
+			);
+			expect(deserialized.endpointIndex).toBe(cc.endpointIndex);
 		});
 	});
 
