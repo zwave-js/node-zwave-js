@@ -59,7 +59,6 @@ export function gotDeserializationOptions(
 
 export interface CCCommandOptions {
 	nodeId: number;
-	endpoint?: number;
 }
 
 interface CommandClassCreationOptions extends CCCommandOptions {
@@ -115,6 +114,10 @@ export class CommandClass {
 					options.encapCC,
 					options.data,
 				));
+				// Propagate the endpoint index from the encapsulating CC
+				if (!this.endpointIndex && options.encapCC.endpointIndex) {
+					this.endpointIndex = options.encapCC.endpointIndex;
+				}
 			} else {
 				this.nodeId = CommandClass.getNodeId(options.data);
 				const lengthWithoutHeader = options.data[1];
@@ -338,7 +341,6 @@ export class CommandClass {
 		driver: IDriver,
 		encapCC: CommandClass,
 		serializedCC: Buffer,
-		sourceEndpoint?: number,
 	): CommandClass {
 		// Fall back to unspecified command class in case we receive one that is not implemented
 		const Constructor = CommandClass.getConstructor(serializedCC, true);
@@ -346,7 +348,6 @@ export class CommandClass {
 			data: serializedCC,
 			encapsulated: true,
 			encapCC,
-			endpoint: sourceEndpoint,
 		});
 		return ret;
 	}

@@ -61,32 +61,12 @@ describe("lib/commandclass/CommandClass => ", () => {
 		});
 
 		it("correctly copies the source endpoint from the encapsulating CC", () => {
-			const payload = new BasicCCSet(fakeDriver, {
-				nodeId: 4,
-				targetValue: 5,
-			});
-			payload.endpointIndex = 5;
-			const encap = MultiChannelCC.encapsulate(fakeDriver, payload);
-			const serialized = encap.serialize();
-			const deserialized = CommandClass.from(
-				fakeDriver,
-				serialized,
-			) as MultiChannelCCCommandEncapsulation;
-			const deserializedPayload = MultiChannelCC.unwrap(
-				deserialized,
-			) as BasicCCSet;
-			expect(deserializedPayload.endpointIndex).toBe(
-				payload.endpointIndex,
-			);
-		});
-
-		it("correctly copies the source endpoint from the encapsulating CC", () => {
 			let cc: CommandClass = new BasicCCSet(fakeDriver, {
 				nodeId: 4,
 				targetValue: 5,
 			});
-			cc.endpointIndex = 5;
 			cc = MultiChannelCC.encapsulate(fakeDriver, cc);
+			(cc as MultiChannelCCCommandEncapsulation).endpointIndex = 5;
 			const serialized = cc.serialize();
 			// ---------------
 			let deserialized: CommandClass = CommandClass.from(
@@ -96,7 +76,9 @@ describe("lib/commandclass/CommandClass => ", () => {
 			deserialized = MultiChannelCC.unwrap(
 				deserialized as MultiChannelCCCommandEncapsulation,
 			);
-			expect(deserialized.endpointIndex).toBe(cc.endpointIndex);
+			expect(deserialized.endpointIndex).toBe(
+				(cc as MultiChannelCCCommandEncapsulation).endpointIndex,
+			);
 		});
 
 		it("correctly copies the source endpoint from the encapsulating CC (multiple layers)", () => {
@@ -120,7 +102,7 @@ describe("lib/commandclass/CommandClass => ", () => {
 			// TODO: Add this method
 			deserialized = MultiCommandCC.unwrap(
 				deserialized as MultiCommandCCCommandEncapsulation,
-			);
+			)[0];
 			expect(deserialized.endpointIndex).toBe(cc.endpointIndex);
 		});
 	});
