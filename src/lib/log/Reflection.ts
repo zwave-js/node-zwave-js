@@ -3,6 +3,7 @@ import {
 	createConsoleTransport,
 	createLoggerFormat,
 	getDirectionPrefix,
+	isLoglevelVisible,
 	tagify,
 	ZWaveLogger,
 } from "./shared";
@@ -19,6 +20,7 @@ if (!winston.loggers.has("reflection")) {
 	});
 }
 const logger: ZWaveLogger = winston.loggers.get("reflection");
+const isVisible = isLoglevelVisible(REFLECTION_LOGLEVEL);
 
 /**
  * Logs the process of defining metadata for a class
@@ -27,6 +29,8 @@ const logger: ZWaveLogger = winston.loggers.get("reflection");
  * @param message An additional message
  */
 export function define(name: string, type: string, message: string): void {
+	if (!isVisible) return;
+
 	logger.log({
 		level: REFLECTION_LOGLEVEL,
 		primaryTags: tagify([name]),
@@ -42,6 +46,8 @@ export function define(name: string, type: string, message: string): void {
  * @param message An additional message, e.g. the resulting value
  */
 export function lookup(name: string, type: string, message: string): void {
+	if (!isVisible) return;
+
 	logger.log({
 		level: REFLECTION_LOGLEVEL,
 		primaryTags: tagify([name]),
@@ -55,8 +61,11 @@ export function lookup(name: string, type: string, message: string): void {
  * @param msg The message to output
  */
 export function print(message: string, level?: "warn" | "error"): void {
+	const actualLevel = level || REFLECTION_LOGLEVEL;
+	if (!isLoglevelVisible(actualLevel)) return;
+
 	logger.log({
-		level: level || REFLECTION_LOGLEVEL,
+		level: actualLevel,
 		message,
 		direction: getDirectionPrefix("none"),
 	});
