@@ -103,6 +103,12 @@ export class Endpoint {
 	 * Returns 0 if the CC is not supported.
 	 */
 	public getCCVersion(cc: CommandClasses): number {
+		// A controlling node interviewing a Multi Channel End Point MUST request the End Point’s
+		// Command Class version from the Root Device if the End Point does not advertise support
+		// for the Version Command Class.
+		if (this.index > 0 && !this.supportsCC(CommandClasses.Version)) {
+			return this.getNodeUnsafe()!.getCCVersion(cc);
+		}
 		const ccInfo = this._implementedCommandClasses.get(cc);
 		return (ccInfo && ccInfo.version) || 0;
 	}
@@ -316,7 +322,7 @@ export class Endpoint {
 	}
 
 	/**
-	 * Returns the node this message is linked to (or undefined if the node doesn't exist)
+	 * Returns the node this endpoint belongs to (or undefined if the node doesn't exist)
 	 */
 	public getNodeUnsafe(): ZWaveNode | undefined {
 		return this.driver.controller.nodes.get(this.nodeId);
