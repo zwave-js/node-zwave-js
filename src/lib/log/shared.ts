@@ -241,10 +241,13 @@ export function createConsoleTransport(): Transport {
 }
 
 const loglevelVisibleCache = new Map<string, boolean>();
+const isTTY = process.stdout.isTTY;
+const isUnitTest = process.env.NODE_ENV === "test";
 /** Tests whether a log using the given loglevel will be logged */
 export function isLoglevelVisible(loglevel: string): boolean {
-	// If we are not connected to a TTY, we won't see anything
-	if (!process.stdout.isTTY) return false;
+	// If we are not connected to a TTY (or unit testing), we won't see anything
+	if (isUnitTest) return true;
+	if (!isTTY) return false;
 
 	if (!loglevelVisibleCache.has(loglevel)) {
 		loglevelVisibleCache.set(
