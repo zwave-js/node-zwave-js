@@ -647,14 +647,18 @@ export class Driver extends EventEmitter implements IDriver {
 							break;
 
 						case ZWaveErrorCodes.PacketFormat_InvalidPayload:
-							log.driver.print(
-								`Message with invalid data received. Dropping it...`,
-								"warn",
-							);
-							handled = true;
 							bytesRead = Message.getMessageLength(
 								this.receiveBuffer,
 							);
+							const invalidData = this.receiveBuffer.slice(
+								bytesRead,
+							);
+							log.driver.print(
+								`Message with invalid data received. Dropping it:
+0x${invalidData.toString("hex")}`,
+								"warn",
+							);
+							handled = true;
 							break;
 					}
 				}
