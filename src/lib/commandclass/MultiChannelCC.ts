@@ -21,6 +21,7 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	CommandClassOptions,
 	DynamicCCResponse,
 	expectedCCResponse,
 	gotDeserializationOptions,
@@ -188,6 +189,11 @@ export interface MultiChannelCC {
 @commandClass(CommandClasses["Multi Channel"])
 @implementedVersion(4)
 export class MultiChannelCC extends CommandClass {
+	public constructor(driver: IDriver, options: CommandClassOptions) {
+		super(driver, options);
+		this.registerValue(getEndpointCCsValueId(0).propertyName as any, true);
+	}
+
 	/** Tests if a command targets a specific endpoint and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
 		return (
