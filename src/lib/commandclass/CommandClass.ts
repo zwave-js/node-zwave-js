@@ -142,8 +142,8 @@ export class CommandClass {
 			this.payload = payload;
 		}
 		this.version = this.driver.getSafeCCVersionForNode(
-			this.nodeId,
 			this.ccId,
+			this.nodeId,
 		);
 	}
 

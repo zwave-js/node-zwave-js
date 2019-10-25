@@ -1220,8 +1220,8 @@ version:               ${this.version}`;
 			if (
 				allowIdleReset &&
 				this.driver.getSafeCCVersionForNode(
-					this.id,
 					CommandClasses.Notification,
+					this.id,
 				) <= 7
 			) {
 				this.scheduleNotificationIdleReset(valueId, () =>

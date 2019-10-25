@@ -408,16 +408,20 @@ export class Driver extends EventEmitter implements IDriver {
 	 * Retrieves the maximum version of a command class the given node supports.
 	 * Returns 0 when the CC is not supported. Also returns 0 when the node was not found.
 	 *
-	 * @param nodeId The node for which the CC version should be retrieved
 	 * @param cc The command class whose version should be retrieved
+	 * @param nodeId The node for which the CC version should be retrieved
 	 */
-	public getSupportedCCVersionForNode(
-		nodeId: number,
+	public getSupportedCCVersionForEndpoint(
 		cc: CommandClasses,
+		nodeId: number,
+		endpointIndex: number = 0,
 	): number {
 		if (this._controller == undefined || !this.controller.nodes.has(nodeId))
 			return 0;
-		return this.controller.nodes.get(nodeId)!.getCCVersion(cc);
+		return this.controller.nodes
+			.get(nodeId)!
+			.getEndpoint(endpointIndex)!
+			.getCCVersion(cc);
 	}
 
 	/**
@@ -425,11 +429,20 @@ export class Driver extends EventEmitter implements IDriver {
 	 * Returns 1 if the node claims that it does not support a CC.
 	 * Throws if the CC is not implemented in this library yet.
 	 *
-	 * @param nodeId The node for which the CC version should be retrieved
 	 * @param cc The command class whose version should be retrieved
+	 * @param nodeId The node for which the CC version should be retrieved
+	 * @param endpointIndex The endpoint for which the CC version should be retrieved
 	 */
-	public getSafeCCVersionForNode(nodeId: number, cc: CommandClasses): number {
-		const supportedVersion = this.getSupportedCCVersionForNode(nodeId, cc);
+	public getSafeCCVersionForNode(
+		cc: CommandClasses,
+		nodeId: number,
+		endpointIndex: number = 0,
+	): number {
+		const supportedVersion = this.getSupportedCCVersionForEndpoint(
+			cc,
+			nodeId,
+			endpointIndex,
+		);
 		if (supportedVersion === 0) {
 			// For unsupported CCs use version 1, no matter what
 			return 1;
@@ -1405,9 +1418,10 @@ ${handlers.length} left`,
 			// for messages containing a CC, i.e. a SendDataRequest, set the CC version as high as possible
 			if (isCommandClassContainer(msg)) {
 				const ccId = msg.command.ccId;
+				// TODO: If the message is for an endpoint, determine the safe version for that endpoint
 				msg.command.version = this.getSafeCCVersionForNode(
-					msg.command.nodeId,
 					ccId,
+					msg.command.nodeId,
 				);
 				// TODO: This could be improved
 				log.driver.print(

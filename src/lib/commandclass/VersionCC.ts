@@ -54,8 +54,9 @@ export class VersionCCAPI extends CCAPI {
 				// so `this.version` may contains a wrong value
 				return (
 					this.driver.getSafeCCVersionForNode(
-						this.endpoint.nodeId,
 						this.ccId,
+						this.endpoint.nodeId,
+						this.endpoint.index,
 					) >= 3
 				);
 			case VersionCommand.ZWaveSoftwareGet: {
@@ -246,8 +247,9 @@ export class VersionCC extends CommandClass {
 			if (
 				// The CC was created before the versions were determined, so `this.version` contains a wrong value
 				this.driver.getSafeCCVersionForNode(
-					node.id,
 					CommandClasses.Version,
+					node.id,
+					this.endpointIndex,
 				) >= 3
 			) {
 				// Step 3a: Support for SoftwareGet
