@@ -1,10 +1,15 @@
 import colors from "ansi-colors";
 import { Format, TransformableInfo, TransformFunction } from "logform";
-import { MESSAGE } from "triple-beam";
+import { configs, MESSAGE } from "triple-beam";
 import winston, { Logger } from "winston";
 import Transport from "winston-transport";
 import { colorizer } from "./Colorizer";
 const { combine, timestamp, label } = winston.format;
+
+const loglevels = configs.npm.levels;
+const transportLoglevel =
+	process.env.LOGLEVEL! in loglevels ? process.env.LOGLEVEL! : "debug";
+const transportLoglevelNumeric = loglevels[transportLoglevel];
 
 /** An invisible char with length >= 0 */
 // This is necessary to "print" zero spaces for the right padding
@@ -230,7 +235,26 @@ export function restoreSilence(
 
 export function createConsoleTransport(): Transport {
 	return new winston.transports.Console({
-		level: process.env.LOGLEVEL || "debug",
+		level: transportLoglevel,
 		silent: process.env.NODE_ENV === "test",
 	});
+}
+
+const loglevelVisibleCache = new Map<string, boolean>();
+const isTTY = process.stdout.isTTY;
+const isUnitTest = process.env.NODE_ENV === "test";
+/** Tests whether a log using the given loglevel will be logged */
+export function isLoglevelVisible(loglevel: string): boolean {
+	// If we are not connected to a TTY (or unit testing), we won't see anything
+	if (isUnitTest) return true;
+	if (!isTTY) return false;
+
+	if (!loglevelVisibleCache.has(loglevel)) {
+		loglevelVisibleCache.set(
+			loglevel,
+			loglevel in loglevels &&
+				loglevels[loglevel] <= transportLoglevelNumeric,
+		);
+	}
+	return loglevelVisibleCache.get(loglevel)!;
 }

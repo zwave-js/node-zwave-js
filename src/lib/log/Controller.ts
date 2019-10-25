@@ -13,6 +13,7 @@ import {
 	createLoggerFormat,
 	DataDirection,
 	getDirectionPrefix,
+	isLoglevelVisible,
 	tagify,
 	ZWaveLogger,
 } from "./shared";
@@ -30,14 +31,19 @@ if (!winston.loggers.has("controller")) {
 	});
 }
 const logger: ZWaveLogger = winston.loggers.get("controller");
+const isValueLogVisible = isLoglevelVisible(VALUE_LOGLEVEL);
+const isControllerLogVisible = isLoglevelVisible(CONTROLLER_LOGLEVEL);
 
 /**
  * Logs a message
  * @param msg The message to output
  */
 export function print(message: string, level?: "warn" | "error"): void {
+	const actualLevel = level || CONTROLLER_LOGLEVEL;
+	if (!isLoglevelVisible(actualLevel)) return;
+
 	logger.log({
-		level: level || CONTROLLER_LOGLEVEL,
+		level: actualLevel,
 		message,
 		direction: getDirectionPrefix("none"),
 	});
@@ -75,9 +81,11 @@ export function logNode(
 	}
 
 	const { level, message, direction } = messageOrOptions;
+	const actualLevel = level || CONTROLLER_LOGLEVEL;
+	if (!isLoglevelVisible(actualLevel)) return;
 
 	logger.log({
-		level: level || CONTROLLER_LOGLEVEL,
+		level: actualLevel,
 		primaryTags: tagify([getNodeTag(nodeId)]),
 		message,
 		direction: getDirectionPrefix(direction || "none"),
@@ -114,6 +122,8 @@ export function value(
 	change: "added" | "updated" | "removed",
 	args: LogValueArgs<ValueID>,
 ): void {
+	if (!isValueLogVisible) return;
+
 	const primaryTags: string[] = [
 		getNodeTag(args.nodeId),
 		valueEventPrefixes[change],
@@ -160,6 +170,8 @@ export function value(
 
 /** Prints a log message for updated metadata of a value id */
 export function metadataUpdated(args: LogValueArgs<ValueID>): void {
+	if (!isValueLogVisible) return;
+
 	const primaryTags: string[] = [
 		getNodeTag(args.nodeId),
 		CommandClasses[args.commandClass],
@@ -192,6 +204,8 @@ function getNodeTag(nodeId: number): string {
 
 /** Logs the interview progress of a node */
 export function interviewStage(node: IZWaveNode): void {
+	if (!isControllerLogVisible) return;
+
 	logger.log({
 		level: CONTROLLER_LOGLEVEL,
 		primaryTags: tagify([getNodeTag(node.id)]),
@@ -207,6 +221,8 @@ export function interviewStage(node: IZWaveNode): void {
 
 /** Logs the interview progress of a node */
 export function interviewStart(node: IZWaveNode): void {
+	if (!isControllerLogVisible) return;
+
 	const message = `Beginning interview - last completed stage: ${
 		InterviewStage[node.interviewStage]
 	}`;
