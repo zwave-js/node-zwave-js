@@ -2,6 +2,7 @@ import {
 	CommandClass,
 	getExpectedCCResponse,
 } from "../commandclass/CommandClass";
+import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
 import {
 	ICommandClassContainer,
 	isCommandClassContainer,
@@ -113,14 +114,23 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		const ret = super.testResponse(msg);
 		if (ret === "confirmation" || ret.startsWith("fatal")) return ret;
 		if (ret === "unexpected" && !isCommandClassContainer(msg)) return ret;
+
 		// We handle a special case here:
 		// If the contained CC expects a certain response (which will come in an "unexpected" ApplicationCommandRequest)
 		// we declare that as final and the original "final" response, i.e. the SendDataRequest becomes a confirmation
-		const expectedCCOrDynamic = getExpectedCCResponse(this.command);
+
+		// To test the response, we unwrap ourselves until we reach the inner (payload) CC
+		let command: CommandClass = this.command;
+		while (isEncapsulatingCommandClass(command)) {
+			command = command.constructor.unwrap(command);
+		}
+		// The CC in msg is already unwrapped by the driver
+
+		const expectedCCOrDynamic = getExpectedCCResponse(command);
 		const expected =
 			typeof expectedCCOrDynamic === "function" &&
 			!staticExtends(expectedCCOrDynamic, CommandClass)
-				? expectedCCOrDynamic(this.command)
+				? expectedCCOrDynamic(command)
 				: expectedCCOrDynamic;
 
 		if (expected == undefined) {
@@ -134,6 +144,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		if (isCommandClassContainer(msg)) {
 			// TODO: Is "confirmation" the correct return value here?
 			// Or is it "unexpected"?
+
 			if (msg.command instanceof expected) {
 				return msg.command.expectMoreMessages() ? "partial" : "final";
 			}
