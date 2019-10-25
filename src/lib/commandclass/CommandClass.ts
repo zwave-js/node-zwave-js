@@ -43,10 +43,10 @@ export interface CommandClassInfo {
 
 export type CommandClassDeserializationOptions = { data: Buffer } & (
 	| {
-			encapsulated?: false;
+			fromEncapsulation?: false;
 	  }
 	| {
-			encapsulated: true;
+			fromEncapsulation: true;
 			encapCC: CommandClass;
 			endpoint?: number;
 	  });
@@ -87,7 +87,7 @@ export class CommandClass {
 
 		if (gotDeserializationOptions(options)) {
 			// For deserialized commands, try to invoke the correct subclass constructor
-			const ccCommand = options.encapsulated
+			const ccCommand = options.fromEncapsulation
 				? CommandClass.getCCCommandWithoutHeader(options.data)
 				: CommandClass.getCCCommand(options.data);
 			if (ccCommand != undefined) {
@@ -104,7 +104,7 @@ export class CommandClass {
 			}
 
 			// If the constructor is correct or none was found, fall back to normal deserialization
-			if (options.encapsulated) {
+			if (options.fromEncapsulation) {
 				({
 					nodeId: this.nodeId,
 					ccId: this.ccId,
@@ -346,7 +346,7 @@ export class CommandClass {
 		const Constructor = CommandClass.getConstructor(serializedCC, true);
 		const ret = new Constructor(driver, {
 			data: serializedCC,
-			encapsulated: true,
+			fromEncapsulation: true,
 			encapCC,
 		});
 		return ret;

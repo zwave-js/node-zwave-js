@@ -1,14 +1,17 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { IDriver } from "../driver/IDriver";
 import { BasicCCSet } from "./BasicCC";
-import { CommandClass } from "./CommandClass";
+import { CommandClass, getExpectedCCResponse } from "./CommandClass";
 import { isEncapsulatingCommandClass } from "./EncapsulatingCommandClass";
-import { MultiChannelCC } from "./MultiChannelCC";
+import {
+	MultiChannelCC,
+	MultiChannelCCCommandEncapsulation,
+} from "./MultiChannelCC";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
 describe("lib/commandclass/MultiChannelCC", () => {
-	describe("MultiChannelCC()", () => {
+	describe("class MultiChannelCC", () => {
 		it("is an encapsulating CommandClass", () => {
 			let cc: CommandClass = new BasicCCSet(fakeDriver, {
 				nodeId: 1,
@@ -16,6 +19,38 @@ describe("lib/commandclass/MultiChannelCC", () => {
 			});
 			cc = MultiChannelCC.encapsulate(fakeDriver, cc);
 			expect(isEncapsulatingCommandClass(cc)).toBeTrue();
+		});
+	});
+
+	describe("class MultiChannelCCCommandEncapsulation", () => {
+		it("expects itself in return if it was addressed to a single endpoint", () => {
+			let cc: CommandClass = new BasicCCSet(fakeDriver, {
+				nodeId: 1,
+				targetValue: 50,
+			});
+			cc = new MultiChannelCCCommandEncapsulation(fakeDriver, {
+				nodeId: 1,
+				encapsulated: cc,
+				destination: 5,
+			});
+			let actual: any = getExpectedCCResponse(cc);
+			if (typeof actual === "function") actual = actual(cc);
+			expect(actual).toBe(MultiChannelCCCommandEncapsulation);
+		});
+
+		it("expects no response if it was addressed to multiple endpoints", () => {
+			let cc: CommandClass = new BasicCCSet(fakeDriver, {
+				nodeId: 1,
+				targetValue: 50,
+			});
+			cc = new MultiChannelCCCommandEncapsulation(fakeDriver, {
+				nodeId: 1,
+				encapsulated: cc,
+				destination: [1, 2, 3, 4],
+			});
+			let actual: any = getExpectedCCResponse(cc);
+			if (typeof actual === "function") actual = actual(cc);
+			expect(actual).toBeUndefined();
 		});
 	});
 });

@@ -107,6 +107,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	}
 
 	// TODO: Refactor this testResponse mess
+	// TODO: Include the stack of encapsulations to find out which CC is expected
 	/** @inheritDoc */
 	public testResponse(msg: Message): ResponseRole {
 		const ret = super.testResponse(msg);

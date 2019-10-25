@@ -6,6 +6,8 @@ import { BasicCC, BasicCCSet, BasicCommand } from "./BasicCC";
 import {
 	CommandClass,
 	commandClass,
+	expectedCCResponse,
+	getExpectedCCResponse,
 	getImplementedVersion,
 	getImplementedVersionStatic,
 	implementedVersion,
@@ -23,7 +25,13 @@ import {
 @implementedVersion(7)
 @commandClass(0xffff as any)
 class DummyCC extends CommandClass {}
-class DummyCCSubClass extends DummyCC {}
+class DummyCCSubClass1 extends DummyCC {
+	private x: any;
+}
+@expectedCCResponse(DummyCCSubClass1)
+class DummyCCSubClass2 extends DummyCC {
+	private y: any;
+}
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
@@ -154,7 +162,7 @@ describe("lib/commandclass/CommandClass => ", () => {
 		});
 
 		it("should work on inherited classes", () => {
-			expect(getImplementedVersionStatic(DummyCCSubClass)).toBe(7);
+			expect(getImplementedVersionStatic(DummyCCSubClass1)).toBe(7);
 		});
 	});
 
@@ -173,6 +181,14 @@ describe("lib/commandclass/CommandClass => ", () => {
 		it("returns false by default", () => {
 			const cc = new DummyCC(fakeDriver, { nodeId: 1 });
 			expect(cc.expectMoreMessages()).toBeFalse();
+		});
+	});
+
+	describe("getExpectedCCResponse()", () => {
+		it("returns the expected CC response like it was defined", () => {
+			const cc = new DummyCCSubClass2(fakeDriver, { nodeId: 1 });
+			const actual = getExpectedCCResponse(cc);
+			expect(actual).toBe(DummyCCSubClass1);
 		});
 	});
 });
