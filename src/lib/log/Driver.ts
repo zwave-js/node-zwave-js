@@ -12,6 +12,7 @@ import {
 	createConsoleTransport,
 	createLoggerFormat,
 	getDirectionPrefix,
+	isLoglevelVisible,
 	tagify,
 	ZWaveLogger,
 } from "./shared";
@@ -29,6 +30,8 @@ if (!winston.loggers.has("driver")) {
 	});
 }
 const logger: ZWaveLogger = winston.loggers.get("driver");
+const isDriverLogVisible = isLoglevelVisible(DRIVER_LOGLEVEL);
+const isSendQueueLogVisible = isLoglevelVisible(SENDQUEUE_LOGLEVEL);
 
 /**
  * Logs a message
@@ -38,8 +41,11 @@ export function print(
 	message: string,
 	level?: "debug" | "verbose" | "warn" | "error",
 ): void {
+	const actualLevel = level || DRIVER_LOGLEVEL;
+	if (!isLoglevelVisible(actualLevel)) return;
+
 	logger.log({
-		level: level || DRIVER_LOGLEVEL,
+		level: actualLevel,
 		message,
 		direction: getDirectionPrefix("none"),
 	});
@@ -49,6 +55,8 @@ export function print(
  * Serializes a message that starts a transaction, i.e. a message that is sent and may expect a response
  */
 export function transaction(transaction: Transaction): void {
+	if (!isDriverLogVisible) return;
+
 	const { message } = transaction;
 	const primaryTags: string[] = getPrimaryTagsForMessage(message);
 
@@ -79,6 +87,8 @@ export function transactionResponse(
 	message: Message,
 	role: ResponseRole,
 ): void {
+	if (!isDriverLogVisible) return;
+
 	const primaryTags: string[] = getPrimaryTagsForMessage(message);
 	const secondaryTags = [role];
 
@@ -102,6 +112,8 @@ function getPrimaryTagsForMessage(message: Message): string[] {
 
 /** Logs whats currently in the driver's send queue */
 export function sendQueue(queue: SortedList<Transaction>): void {
+	if (!isSendQueueLogVisible) return;
+
 	let message = "Send queue:";
 	for (const trns of queue) {
 		// TODO: This formatting should be shared with the other logging methods

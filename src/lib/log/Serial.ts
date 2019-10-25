@@ -6,6 +6,7 @@ import {
 	createLoggerFormat,
 	DataDirection,
 	getDirectionPrefix,
+	isLoglevelVisible,
 	ZWaveLogger,
 } from "./shared";
 
@@ -21,13 +22,14 @@ if (!winston.loggers.has("serial")) {
 	});
 }
 const logger: ZWaveLogger = winston.loggers.get("serial");
+const isVisible = isLoglevelVisible(SERIAL_LOGLEVEL);
 
 /**
  * Logs transmission or receipt of an ACK frame
  * @param direction The direction this ACK was sent
  */
 export function ACK(direction: DataDirection): void {
-	logMessageHeader(direction, MessageHeaders.ACK);
+	if (isVisible) logMessageHeader(direction, MessageHeaders.ACK);
 }
 
 /**
@@ -35,7 +37,7 @@ export function ACK(direction: DataDirection): void {
  * @param direction The direction this NAK was sent
  */
 export function NAK(direction: DataDirection): void {
-	logMessageHeader(direction, MessageHeaders.NAK);
+	if (isVisible) logMessageHeader(direction, MessageHeaders.NAK);
 }
 
 /**
@@ -43,7 +45,7 @@ export function NAK(direction: DataDirection): void {
  * @param direction The direction this CAN was sent
  */
 export function CAN(direction: DataDirection): void {
-	logMessageHeader(direction, MessageHeaders.CAN);
+	if (isVisible) logMessageHeader(direction, MessageHeaders.CAN);
 }
 
 function logMessageHeader(
@@ -65,12 +67,14 @@ function logMessageHeader(
  * @param data The data that was transmitted or received
  */
 export function data(direction: DataDirection, data: Buffer): void {
-	logger.log({
-		level: SERIAL_LOGLEVEL,
-		message: `0x${data.toString("hex")}`,
-		secondaryTags: `(${data.length} bytes)`,
-		direction: getDirectionPrefix(direction),
-	});
+	if (isVisible) {
+		logger.log({
+			level: SERIAL_LOGLEVEL,
+			message: `0x${data.toString("hex")}`,
+			secondaryTags: `(${data.length} bytes)`,
+			direction: getDirectionPrefix(direction),
+		});
+	}
 }
 
 /**
@@ -78,13 +82,15 @@ export function data(direction: DataDirection, data: Buffer): void {
  * @param data The data that is currently in the receive buffer
  */
 export function receiveBuffer(data: Buffer, isComplete: boolean): void {
-	logger.log({
-		level: SERIAL_LOGLEVEL,
-		primaryTags: isComplete ? undefined : "[incomplete]",
-		message: `Buffer := 0x${data.toString("hex")}`,
-		secondaryTags: `(${data.length} bytes)`,
-		direction: getDirectionPrefix("none"),
-	});
+	if (isVisible) {
+		logger.log({
+			level: SERIAL_LOGLEVEL,
+			primaryTags: isComplete ? undefined : "[incomplete]",
+			message: `Buffer := 0x${data.toString("hex")}`,
+			secondaryTags: `(${data.length} bytes)`,
+			direction: getDirectionPrefix("none"),
+		});
+	}
 }
 
 /**
@@ -92,9 +98,11 @@ export function receiveBuffer(data: Buffer, isComplete: boolean): void {
  * @param msg The message to output
  */
 export function message(message: string): void {
-	logger.log({
-		level: SERIAL_LOGLEVEL,
-		message,
-		direction: getDirectionPrefix("none"),
-	});
+	if (isVisible) {
+		logger.log({
+			level: SERIAL_LOGLEVEL,
+			message,
+			direction: getDirectionPrefix("none"),
+		});
+	}
 }
