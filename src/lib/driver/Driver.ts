@@ -1,6 +1,7 @@
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { entries } from "alcalzone-shared/objects";
 import { SortedList } from "alcalzone-shared/sorted-list";
+import { isArray } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
 import fs from "fs-extra";
 import path from "path";
@@ -10,12 +11,9 @@ import {
 	getImplementedVersion,
 } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
-import { CRC16CC, CRC16CCCommandEncapsulation } from "../commandclass/CRC16";
+import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import {
-	MultiChannelCC,
-	MultiChannelCCCommandEncapsulation,
-} from "../commandclass/MultiChannelCC";
+import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
@@ -410,16 +408,20 @@ export class Driver extends EventEmitter implements IDriver {
 	 * Retrieves the maximum version of a command class the given node supports.
 	 * Returns 0 when the CC is not supported. Also returns 0 when the node was not found.
 	 *
-	 * @param nodeId The node for which the CC version should be retrieved
 	 * @param cc The command class whose version should be retrieved
+	 * @param nodeId The node for which the CC version should be retrieved
 	 */
-	public getSupportedCCVersionForNode(
-		nodeId: number,
+	public getSupportedCCVersionForEndpoint(
 		cc: CommandClasses,
+		nodeId: number,
+		endpointIndex: number = 0,
 	): number {
 		if (this._controller == undefined || !this.controller.nodes.has(nodeId))
 			return 0;
-		return this.controller.nodes.get(nodeId)!.getCCVersion(cc);
+		return this.controller.nodes
+			.get(nodeId)!
+			.getEndpoint(endpointIndex)!
+			.getCCVersion(cc);
 	}
 
 	/**
@@ -427,11 +429,20 @@ export class Driver extends EventEmitter implements IDriver {
 	 * Returns 1 if the node claims that it does not support a CC.
 	 * Throws if the CC is not implemented in this library yet.
 	 *
-	 * @param nodeId The node for which the CC version should be retrieved
 	 * @param cc The command class whose version should be retrieved
+	 * @param nodeId The node for which the CC version should be retrieved
+	 * @param endpointIndex The endpoint for which the CC version should be retrieved
 	 */
-	public getSafeCCVersionForNode(nodeId: number, cc: CommandClasses): number {
-		const supportedVersion = this.getSupportedCCVersionForNode(nodeId, cc);
+	public getSafeCCVersionForNode(
+		cc: CommandClasses,
+		nodeId: number,
+		endpointIndex: number = 0,
+	): number {
+		const supportedVersion = this.getSupportedCCVersionForEndpoint(
+			cc,
+			nodeId,
+			endpointIndex,
+		);
 		if (supportedVersion === 0) {
 			// For unsupported CCs use version 1, no matter what
 			return 1;
@@ -649,14 +660,18 @@ export class Driver extends EventEmitter implements IDriver {
 							break;
 
 						case ZWaveErrorCodes.PacketFormat_InvalidPayload:
-							log.driver.print(
-								`Message with invalid data received. Dropping it...`,
-								"warn",
-							);
-							handled = true;
 							bytesRead = Message.getMessageLength(
 								this.receiveBuffer,
 							);
+							const invalidData = this.receiveBuffer.slice(
+								bytesRead,
+							);
+							log.driver.print(
+								`Message with invalid data received. Dropping it:
+0x${invalidData.toString("hex")}`,
+								"warn",
+							);
+							handled = true;
 							break;
 					}
 				}
@@ -690,31 +705,44 @@ export class Driver extends EventEmitter implements IDriver {
 
 			// TODO: Remember the command encapsulation order in case we need to respond
 
-			// 5. Any one of the following combinations:
-			//   a. Security (S0 or S2) followed by transport service
-			//   b. Transport Service
-			//   c. Security (S0 or S2)
-			//   d. CRC16
-			// b and d are mutually exclusive, security is not
-			if (msg.command instanceof CRC16CCCommandEncapsulation) {
-				log.driver.print("Unwrapping CRC-16 encapsulated command");
-				msg.command = CRC16CC.unwrap(msg.command);
-			}
-			// else if (... TransportService)
-
-			// if (... Security)
-
-			// 4. Multi Channel
-			if (msg.command instanceof MultiChannelCCCommandEncapsulation) {
-				log.driver.print(
-					"Unwrapping MultiChannel encapsulated command",
-				);
-				msg.command = MultiChannelCC.unwrap(msg.command);
+			// Unwrap encapsulating CCs until we get to the core
+			while (isEncapsulatingCommandClass(msg.command)) {
+				const unwrapped = msg.command.constructor.unwrap(msg.command);
+				if (isArray(unwrapped)) {
+					log.driver.print(
+						`Received a command that contains multiple CommandClasses. This is not supported yet! Discarding the message...`,
+						"warn",
+					);
+					return;
+				}
+				msg.command = unwrapped;
 			}
 
-			// 3. Supervision
-			// 2. Multi Command
-			// 1. Encapsulated Command Class (payload), e.g. Basic Set
+			// // 5. Any one of the following combinations:
+			// //   a. Security (S0 or S2) followed by transport service
+			// //   b. Transport Service
+			// //   c. Security (S0 or S2)
+			// //   d. CRC16
+			// // b and d are mutually exclusive, security is not
+			// if (msg.command instanceof CRC16CCCommandEncapsulation) {
+			// 	log.driver.print("Unwrapping CRC-16 encapsulated command");
+			// 	msg.command = CRC16CC.unwrap(msg.command);
+			// }
+			// // else if (... TransportService)
+
+			// // if (... Security)
+
+			// // 4. Multi Channel
+			// if (msg.command instanceof MultiChannelCCCommandEncapsulation) {
+			// 	log.driver.print(
+			// 		"Unwrapping MultiChannel encapsulated command",
+			// 	);
+			// 	msg.command = MultiChannelCC.unwrap(msg.command);
+			// }
+
+			// // 3. Supervision
+			// // 2. Multi Command
+			// // 1. Encapsulated Command Class (payload), e.g. Basic Set
 		}
 
 		// if we have a pending request, check if that is waiting for this message
@@ -1390,9 +1418,10 @@ ${handlers.length} left`,
 			// for messages containing a CC, i.e. a SendDataRequest, set the CC version as high as possible
 			if (isCommandClassContainer(msg)) {
 				const ccId = msg.command.ccId;
+				// TODO: If the message is for an endpoint, determine the safe version for that endpoint
 				msg.command.version = this.getSafeCCVersionForNode(
-					msg.command.nodeId,
 					ccId,
+					msg.command.nodeId,
 				);
 				// TODO: This could be improved
 				log.driver.print(

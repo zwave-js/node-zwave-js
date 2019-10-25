@@ -16,7 +16,11 @@ export interface IDriver {
 	/** @internal */
 	options: ZWaveOptions;
 
-	getSafeCCVersionForNode(nodeId: number, cc: CommandClasses): number;
+	getSafeCCVersionForNode(
+		cc: CommandClasses,
+		nodeId: number,
+		endpointIndex?: number,
+	): number;
 
 	// wotan-disable-next-line no-misused-generics
 	sendMessage<TResponse extends Message = Message>(

@@ -108,7 +108,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = node.commandClasses["Manufacturer Specific"];
+		const api = this.getEndpoint()!.commandClasses["Manufacturer Specific"];
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
@@ -226,7 +226,7 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
 
 		const valueId: ValueID = {
 			commandClass: this.ccId,
-			endpoint: this.endpoint,
+			endpoint: this.endpointIndex,
 			propertyName: "deviceId",
 			propertyKey: DeviceIdType[this._type],
 		};

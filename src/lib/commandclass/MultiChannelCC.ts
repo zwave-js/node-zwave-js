@@ -7,6 +7,7 @@ import {
 	NodeInformationFrame,
 	parseNodeInformationFrame,
 } from "../node/NodeInfo";
+import { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
@@ -20,6 +21,8 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	CommandClassOptions,
+	DynamicCCResponse,
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
@@ -41,6 +44,14 @@ export enum MultiChannelCommand {
 // TODO: Handle removal reports of dynamic endpoints
 
 // @noSetValueAPI
+
+export function getEndpointCCsValueId(endpointIndex: number): ValueID {
+	return {
+		commandClass: CommandClasses["Multi Channel"],
+		endpoint: endpointIndex,
+		propertyName: "commandClasses",
+	};
+}
 
 @API(CommandClasses["Multi Channel"])
 export class MultiChannelCCAPI extends CCAPI {
@@ -160,7 +171,6 @@ export class MultiChannelCCAPI extends CCAPI {
 
 		const cc = new MultiChannelCCCommandEncapsulation(this.driver, {
 			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
 			...options,
 		});
 		await this.driver.sendCommand(cc);
@@ -179,10 +189,15 @@ export interface MultiChannelCC {
 @commandClass(CommandClasses["Multi Channel"])
 @implementedVersion(4)
 export class MultiChannelCC extends CommandClass {
+	public constructor(driver: IDriver, options: CommandClassOptions) {
+		super(driver, options);
+		this.registerValue(getEndpointCCsValueId(0).propertyName as any, true);
+	}
+
 	/** Tests if a command targets a specific endpoint and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
 		return (
-			cc.endpoint !== 0 &&
+			cc.endpointIndex !== 0 &&
 			!(cc instanceof MultiChannelCCCommandEncapsulation)
 		);
 	}
@@ -194,28 +209,28 @@ export class MultiChannelCC extends CommandClass {
 	): MultiChannelCCCommandEncapsulation {
 		return new MultiChannelCCCommandEncapsulation(driver, {
 			nodeId: cc.nodeId,
-			encapsulatedCC: cc,
-			sourceEndPoint: 0, // We only have one endpoint
-			destination: cc.endpoint,
+			encapsulated: cc,
+			destination: cc.endpointIndex,
 		});
 	}
 
-	/** Unwraps a multi channel encapsulated command and remembers the source end point */
+	/** Unwraps a multi channel encapsulated command */
 	public static unwrap(cc: MultiChannelCCCommandEncapsulation): CommandClass {
-		cc.encapsulatedCC.endpoint = cc.sourceEndPoint;
-		return cc;
+		return cc.encapsulated;
 	}
 
 	public async interview(): Promise<void> {
 		const node = this.getNode()!;
-		const API = node.commandClasses["Multi Channel"];
+		const api = node.getEndpoint(this.endpointIndex)!.commandClasses[
+			"Multi Channel"
+		];
 
 		// Step 1: Retrieve general information about end points
 		log.controller.logNode(node.id, {
 			message: "querying device endpoint information...",
 			direction: "outbound",
 		});
-		const multiResponse = await API.getEndpoints();
+		const multiResponse = await api.getEndpoints();
 
 		let logMessage = `received response for device endpoints:
 endpoint count (individual): ${multiResponse.individualEndpointCount}
@@ -234,7 +249,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			message: "querying all endpoints...",
 			direction: "outbound",
 		});
-		const foundEndpoints = await API.findEndpoints(0xff, 0xff);
+		const foundEndpoints = await api.findEndpoints(0xff, 0xff);
 		log.controller.logNode(node.id, {
 			message: `received endpoints: ${foundEndpoints
 				.map(String)
@@ -253,7 +268,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 					message: `querying members of aggregated endpoint #${endpoint}...`,
 					direction: "outbound",
 				});
-				const members = await API.getAggregatedMembers(endpoint);
+				const members = await api.getAggregatedMembers(endpoint);
 				log.controller.logNode(node.id, {
 					message: `aggregated endpoint #${endpoint} has members ${members
 						.map(String)
@@ -267,9 +282,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				message: `querying capabilities for endpoint #${endpoint}...`,
 				direction: "outbound",
 			});
-			const caps = await node.commandClasses[
-				"Multi Channel"
-			].getEndpointCapabilities(endpoint);
+			const caps = await api.getEndpointCapabilities(endpoint);
 			logMessage = `received response for endpoint capabilities (#${endpoint}):
 generic device class:  ${caps.generic.name} (${num2hex(caps.generic.key)})
 specific device class: ${caps.specific.name} (${num2hex(caps.specific.key)})
@@ -283,8 +296,6 @@ supported CCs:`;
 				message: logMessage,
 				direction: "inbound",
 			});
-
-			// TODO: Interview all command classes of this endpoint
 		}
 
 		// Remember that the interview is complete
@@ -372,6 +383,17 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 			capability.specific.key === 0x00;
 
 		this.capability = capability;
+
+		// Remember the supported CCs
+		const ccsValueId = getEndpointCCsValueId(this.endpointIndex);
+		if (capability.wasRemoved) {
+			this.getValueDB().removeValue(ccsValueId);
+		} else {
+			this.getValueDB().setValue(
+				ccsValueId,
+				this.capability.supportedCCs,
+			);
+		}
 	}
 
 	public readonly endpointIndex: number;
@@ -517,7 +539,7 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 	@ccKeyValuePair({ internal: true })
 	private aggregatedEndpointMembers: [number, number[]];
 
-	public get endpoint(): number {
+	public get endpointIndex(): number {
 		return this.aggregatedEndpointMembers[0];
 	}
 
@@ -562,13 +584,25 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 type MultiChannelCCDestination = number | (1 | 2 | 3 | 4 | 5 | 6 | 7)[];
 
 interface MultiChannelCCCommandEncapsulationOptions extends CCCommandOptions {
-	encapsulatedCC: CommandClass;
-	sourceEndPoint: number;
+	encapsulated: CommandClass;
 	destination: MultiChannelCCDestination;
 }
 
+const getResponseForCommandEncapsulation: DynamicCCResponse = (
+	sent: MultiChannelCCCommandEncapsulation,
+) => {
+	// SDS13783: A receiving node MAY respond to a Multi Channel encapsulated command if the Destination
+	// End Point field specifies a single End Point. In that case, the response MUST be Multi Channel
+	// encapsulated.
+	// A receiving node MUST NOT respond to a Multi Channel encapsulated command if the
+	// Destination End Point field specifies multiple End Points via bit mask addressing.
+	return typeof sent.destination === "number"
+		? MultiChannelCCCommandEncapsulation
+		: undefined;
+};
+
 @CCCommand(MultiChannelCommand.CommandEncapsulation)
-// TODO: This may expect multiple commands as a response
+@expectedCCResponse(getResponseForCommandEncapsulation)
 export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	public constructor(
 		driver: IDriver,
@@ -579,7 +613,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
-			this.sourceEndPoint = this.payload[0] & 0b0111_1111;
+			this.endpointIndex = this.payload[0] & 0b0111_1111;
 			const isBitMask = !!(this.payload[1] & 0b1000_0000);
 			const destination = this.payload[1] & 0b0111_1111;
 			if (isBitMask) {
@@ -590,20 +624,18 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 				this.destination = destination;
 			}
 			// No need to validate further, each CC does it for itself
-			this.encapsulatedCC = CommandClass.fromEncapsulated(
+			this.encapsulated = CommandClass.fromEncapsulated(
 				this.driver,
 				this,
 				this.payload.slice(2),
 			);
 		} else {
-			this.encapsulatedCC = options.encapsulatedCC;
-			this.sourceEndPoint = options.sourceEndPoint;
+			this.encapsulated = options.encapsulated;
 			this.destination = options.destination;
 		}
 	}
 
-	public encapsulatedCC: CommandClass;
-	public sourceEndPoint: number;
+	public encapsulated: CommandClass;
 	/** The destination end point (0-127) or an array of destination end points (1-7) */
 	public destination: MultiChannelCCDestination;
 
@@ -615,8 +647,8 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 				: // The destination is a bit mask
 				  encodeBitMask(this.destination, 7)[0] | 0b1000_0000;
 		this.payload = Buffer.concat([
-			Buffer.from([this.sourceEndPoint & 0b0111_1111, destination]),
-			this.encapsulatedCC.serializeForEncapsulation(),
+			Buffer.from([this.endpointIndex & 0b0111_1111, destination]),
+			this.encapsulated.serializeForEncapsulation(),
 		]);
 		return super.serialize();
 	}

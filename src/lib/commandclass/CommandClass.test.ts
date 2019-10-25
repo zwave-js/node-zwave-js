@@ -6,16 +6,32 @@ import { BasicCC, BasicCCSet, BasicCommand } from "./BasicCC";
 import {
 	CommandClass,
 	commandClass,
+	expectedCCResponse,
+	getExpectedCCResponse,
 	getImplementedVersion,
 	getImplementedVersionStatic,
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
+import {
+	MultiChannelCC,
+	MultiChannelCCCommandEncapsulation,
+} from "./MultiChannelCC";
+import {
+	MultiCommandCC,
+	MultiCommandCCCommandEncapsulation,
+} from "./MultiCommandCC";
 
 @implementedVersion(7)
 @commandClass(0xffff as any)
 class DummyCC extends CommandClass {}
-class DummyCCSubClass extends DummyCC {}
+class DummyCCSubClass1 extends DummyCC {
+	private x: any;
+}
+@expectedCCResponse(DummyCCSubClass1)
+class DummyCCSubClass2 extends DummyCC {
+	private y: any;
+}
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
@@ -50,6 +66,52 @@ describe("lib/commandclass/CommandClass => ", () => {
 					errorCode: ZWaveErrorCodes.CC_NotImplemented,
 				},
 			);
+		});
+
+		it("correctly copies the source endpoint from the encapsulating CC", () => {
+			let cc: CommandClass = new BasicCCSet(fakeDriver, {
+				nodeId: 4,
+				targetValue: 5,
+			});
+			cc = MultiChannelCC.encapsulate(fakeDriver, cc);
+			(cc as MultiChannelCCCommandEncapsulation).endpointIndex = 5;
+			const serialized = cc.serialize();
+			// ---------------
+			let deserialized: CommandClass = CommandClass.from(
+				fakeDriver,
+				serialized,
+			);
+			deserialized = MultiChannelCC.unwrap(
+				deserialized as MultiChannelCCCommandEncapsulation,
+			);
+			expect(deserialized.endpointIndex).toBe(
+				(cc as MultiChannelCCCommandEncapsulation).endpointIndex,
+			);
+		});
+
+		it("correctly copies the source endpoint from the encapsulating CC (multiple layers)", () => {
+			let cc: CommandClass = new BasicCCSet(fakeDriver, {
+				nodeId: 4,
+				targetValue: 5,
+			});
+			cc.endpointIndex = 5;
+			// TODO: Add this method
+			cc = MultiCommandCC.encapsulate(fakeDriver, [cc]);
+			cc = MultiChannelCC.encapsulate(fakeDriver, cc);
+			const serialized = cc.serialize();
+			// ---------------
+			let deserialized: CommandClass = CommandClass.from(
+				fakeDriver,
+				serialized,
+			);
+			deserialized = MultiChannelCC.unwrap(
+				deserialized as MultiChannelCCCommandEncapsulation,
+			);
+			// TODO: Add this method
+			deserialized = MultiCommandCC.unwrap(
+				deserialized as MultiCommandCCCommandEncapsulation,
+			)[0];
+			expect(deserialized.endpointIndex).toBe(cc.endpointIndex);
 		});
 	});
 
@@ -100,7 +162,7 @@ describe("lib/commandclass/CommandClass => ", () => {
 		});
 
 		it("should work on inherited classes", () => {
-			expect(getImplementedVersionStatic(DummyCCSubClass)).toBe(7);
+			expect(getImplementedVersionStatic(DummyCCSubClass1)).toBe(7);
 		});
 	});
 
@@ -119,6 +181,14 @@ describe("lib/commandclass/CommandClass => ", () => {
 		it("returns false by default", () => {
 			const cc = new DummyCC(fakeDriver, { nodeId: 1 });
 			expect(cc.expectMoreMessages()).toBeFalse();
+		});
+	});
+
+	describe("getExpectedCCResponse()", () => {
+		it("returns the expected CC response like it was defined", () => {
+			const cc = new DummyCCSubClass2(fakeDriver, { nodeId: 1 });
+			const actual = getExpectedCCResponse(cc);
+			expect(actual).toBe(DummyCCSubClass1);
 		});
 	});
 });

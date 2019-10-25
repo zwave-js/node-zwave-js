@@ -343,6 +343,11 @@ export class AssociationGroupInfoCC extends CommandClass {
 		];
 	}
 
+	public skipEndpointInterview(): boolean {
+		// The associations are managed on the root device
+		return true;
+	}
+
 	/** Returns the dictionary of all commands issued by the given association group */
 	public getIssuedCommandsCached(
 		groupId: number,
@@ -372,20 +377,24 @@ export class AssociationGroupInfoCC extends CommandClass {
 	}
 
 	private getAssociationGroupCountCached(): number {
-		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
 		// TODO: Refactor this when TS3.7 is supported by Prettier ==> ?. and ??
 		// The association group count is either determined by the
 		// Association CC or the Multi Channel Association CC
 
 		// First query the Multi Channel Association CC
 		return (
-			(node.commandClasses["Multi Channel Association"].isSupported() &&
-				node
+			(endpoint.commandClasses[
+				"Multi Channel Association"
+			].isSupported() &&
+				endpoint
 					.createCCInstance(MultiChannelAssociationCC)!
 					.getGroupCountCached()) ||
 			// Then the Association CC
-			(node.commandClasses.Association.isSupported() &&
-				node.createCCInstance(AssociationCC)!.getGroupCountCached()) ||
+			(endpoint.commandClasses.Association.isSupported() &&
+				endpoint
+					.createCCInstance(AssociationCC)!
+					.getGroupCountCached()) ||
 			// And fall back to 0
 			0
 		);
@@ -393,7 +402,8 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = node.commandClasses["Association Group Information"];
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Association Group Information"];
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${

@@ -813,7 +813,7 @@ describe("lib/node/Node", () => {
 			node.valueDB.setValue(
 				{
 					commandClass: CommandClasses["Multi Channel"],
-					propertyName: "_individualEndpointCount",
+					propertyName: "individualCount",
 				},
 				5,
 			);
@@ -827,7 +827,7 @@ describe("lib/node/Node", () => {
 			node.valueDB.setValue(
 				{
 					commandClass: CommandClasses["Multi Channel"],
-					propertyName: "_individualEndpointCount",
+					propertyName: "individualCount",
 				},
 				5,
 			);

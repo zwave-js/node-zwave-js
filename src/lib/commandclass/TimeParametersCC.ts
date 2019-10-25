@@ -161,7 +161,7 @@ export interface TimeParametersCC {
 export class TimeParametersCC extends CommandClass {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = node.commandClasses["Time Parameters"];
+		const api = this.getEndpoint()!.commandClasses["Time Parameters"];
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
@@ -200,7 +200,9 @@ export class TimeParametersCCReport extends TimeParametersCC {
 		};
 		this.dateAndTime = segmentsToDate(
 			dateSegments,
-			shouldUseLocalTime(this.getNode()!.getEndpoint(this.endpoint)!),
+			shouldUseLocalTime(
+				this.getNode()!.getEndpoint(this.endpointIndex)!,
+			),
 		);
 	}
 
@@ -236,7 +238,9 @@ export class TimeParametersCCSet extends TimeParametersCC {
 			};
 			this.dateAndTime = segmentsToDate(
 				dateSegments,
-				shouldUseLocalTime(this.getNode()!.getEndpoint(this.endpoint)!),
+				shouldUseLocalTime(
+					this.getNode()!.getEndpoint(this.endpointIndex)!,
+				),
 			);
 		} else {
 			// TODO: enforce limits
@@ -249,7 +253,9 @@ export class TimeParametersCCSet extends TimeParametersCC {
 	public serialize(): Buffer {
 		const dateSegments = dateToSegments(
 			this.dateAndTime,
-			shouldUseLocalTime(this.getNode()!.getEndpoint(this.endpoint)!),
+			shouldUseLocalTime(
+				this.getNode()!.getEndpoint(this.endpointIndex)!,
+			),
 		);
 		this.payload = Buffer.from([
 			// 2 bytes placeholder for year

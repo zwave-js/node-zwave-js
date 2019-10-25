@@ -118,7 +118,7 @@ export interface BinarySwitchCC {
 export class BinarySwitchCC extends CommandClass {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = node.commandClasses["Binary Switch"];
+		const api = this.getEndpoint()!.commandClasses["Binary Switch"];
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${

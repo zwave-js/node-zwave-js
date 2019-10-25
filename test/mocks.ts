@@ -115,20 +115,30 @@ export function createEmptyMockDriver() {
 			.mockImplementation(() => Promise.resolve()),
 		getSafeCCVersionForNode: jest
 			.fn()
-			.mockImplementation((nodeId: number, ccId: CommandClasses) => {
-				if (
-					// wotan-disable-next-line no-useless-predicate
-					ret.controller &&
-					ret.controller.nodes instanceof Map &&
-					ret.controller.nodes.has(nodeId)
-				) {
-					const node: ZWaveNode = ret.controller.nodes.get(nodeId);
-					const ccVersion = node.getCCVersion(ccId);
-					if (ccVersion > 0) return ccVersion;
-				}
-				// default to the implemented version
-				return getImplementedVersion(ccId);
-			}),
+			.mockImplementation(
+				(
+					ccId: CommandClasses,
+					nodeId: number,
+					endpointIndex: number = 0,
+				) => {
+					if (
+						// wotan-disable-next-line no-useless-predicate
+						ret.controller &&
+						ret.controller.nodes instanceof Map &&
+						ret.controller.nodes.has(nodeId)
+					) {
+						const node: ZWaveNode = ret.controller.nodes.get(
+							nodeId,
+						);
+						const ccVersion = node
+							.getEndpoint(endpointIndex)!
+							.getCCVersion(ccId);
+						if (ccVersion > 0) return ccVersion;
+					}
+					// default to the implemented version
+					return getImplementedVersion(ccId);
+				},
+			),
 		getNextCallbackId: jest
 			.fn()
 			.mockImplementation(() => mockDriverDummyCallbackId),

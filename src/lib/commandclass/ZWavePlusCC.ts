@@ -83,7 +83,7 @@ export interface ZWavePlusCC {
 export class ZWavePlusCC extends CommandClass {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = node.commandClasses["Z-Wave Plus Info"];
+		const api = this.getEndpoint()!.commandClasses["Z-Wave Plus Info"];
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${

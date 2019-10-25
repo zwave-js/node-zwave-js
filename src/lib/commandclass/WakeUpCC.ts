@@ -178,7 +178,7 @@ export class WakeUpCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = node.commandClasses["Wake Up"];
+		const api = this.getEndpoint()!.commandClasses["Wake Up"];
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
@@ -384,7 +384,7 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 		this.getValueDB().setMetadata(
 			{
 				commandClass: this.ccId,
-				endpoint: this.endpoint,
+				endpoint: this.endpointIndex,
 				propertyName: "wakeUpInterval",
 			},
 			{

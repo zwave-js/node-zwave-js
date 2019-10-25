@@ -215,7 +215,7 @@ export class NotificationCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = node.commandClasses.Notification;
+		const api = this.getEndpoint()!.commandClasses.Notification;
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${

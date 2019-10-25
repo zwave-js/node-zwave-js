@@ -43,11 +43,12 @@ export interface CommandClassInfo {
 
 export type CommandClassDeserializationOptions = { data: Buffer } & (
 	| {
-			encapsulated?: false;
+			fromEncapsulation?: false;
 	  }
 	| {
-			encapsulated: true;
+			fromEncapsulation: true;
 			encapCC: CommandClass;
+			endpoint?: number;
 	  });
 
 export function gotDeserializationOptions(
@@ -58,7 +59,6 @@ export function gotDeserializationOptions(
 
 export interface CCCommandOptions {
 	nodeId: number;
-	endpoint?: number;
 }
 
 interface CommandClassCreationOptions extends CCCommandOptions {
@@ -81,13 +81,13 @@ export class CommandClass {
 		// Extract the cc from declared metadata if not provided
 		this.ccId = getCommandClass(this);
 		// Default to the root endpoint - Inherited classes may override this behavior
-		this.endpoint = ("endpoint" in options && options.endpoint) || 0;
+		this.endpointIndex = ("endpoint" in options && options.endpoint) || 0;
 		// We cannot use @ccValue for non-derived classes, so register interviewComplete as an internal value here
 		this.registerValue("interviewComplete", true);
 
 		if (gotDeserializationOptions(options)) {
 			// For deserialized commands, try to invoke the correct subclass constructor
-			const ccCommand = options.encapsulated
+			const ccCommand = options.fromEncapsulation
 				? CommandClass.getCCCommandWithoutHeader(options.data)
 				: CommandClass.getCCCommand(options.data);
 			if (ccCommand != undefined) {
@@ -104,7 +104,7 @@ export class CommandClass {
 			}
 
 			// If the constructor is correct or none was found, fall back to normal deserialization
-			if (options.encapsulated) {
+			if (options.fromEncapsulation) {
 				({
 					nodeId: this.nodeId,
 					ccId: this.ccId,
@@ -114,6 +114,10 @@ export class CommandClass {
 					options.encapCC,
 					options.data,
 				));
+				// Propagate the endpoint index from the encapsulating CC
+				if (!this.endpointIndex && options.encapCC.endpointIndex) {
+					this.endpointIndex = options.encapCC.endpointIndex;
+				}
 			} else {
 				this.nodeId = CommandClass.getNodeId(options.data);
 				const lengthWithoutHeader = options.data[1];
@@ -138,8 +142,8 @@ export class CommandClass {
 			this.payload = payload;
 		}
 		this.version = this.driver.getSafeCCVersionForNode(
-			this.nodeId,
 			this.ccId,
+			this.nodeId,
 		);
 	}
 
@@ -158,7 +162,7 @@ export class CommandClass {
 	public version!: number;
 
 	/** Which endpoint of the node this CC belongs to. 0 for the root device. */
-	public endpoint: number;
+	public endpointIndex: number;
 
 	/** Returns true if this CC is an extended CC (0xF100..0xFFFF) */
 	public isExtended(): boolean {
@@ -169,6 +173,7 @@ export class CommandClass {
 	public get interviewComplete(): boolean {
 		return !!this.getValueDB().getValue<boolean>({
 			commandClass: this.ccId,
+			endpoint: this.endpointIndex,
 			propertyName: "interviewComplete",
 		});
 	}
@@ -176,10 +181,20 @@ export class CommandClass {
 		this.getValueDB().setValue(
 			{
 				commandClass: this.ccId,
+				endpoint: this.endpointIndex,
 				propertyName: "interviewComplete",
 			},
 			value,
 		);
+	}
+
+	/** Can be used by endpoints to test if the root device was already interviewed */
+	public get rootDeviceInterviewComplete(): boolean {
+		return !!this.getValueDB().getValue<boolean>({
+			commandClass: this.ccId,
+			endpoint: 0,
+			propertyName: "interviewComplete",
+		});
 	}
 
 	/**
@@ -331,7 +346,7 @@ export class CommandClass {
 		const Constructor = CommandClass.getConstructor(serializedCC, true);
 		const ret = new Constructor(driver, {
 			data: serializedCC,
-			encapsulated: true,
+			fromEncapsulation: true,
 			encapCC,
 		});
 		return ret;
@@ -390,10 +405,23 @@ export class CommandClass {
 	}
 
 	/**
+	 * Whether the endpoint interview may be skipped by a CC.
+	 */
+	public skipEndpointInterview(): boolean {
+		// By default no interview may be skipped
+		return false;
+	}
+
+	/**
 	 * Returns the node this CC is linked to. Throws if the controller is not yet ready.
 	 */
 	public getNode(): ZWaveNode | undefined {
 		return this.driver.controller.nodes.get(this.nodeId);
+	}
+
+	public getEndpoint(): Endpoint | undefined {
+		const node = this.getNode()!;
+		return node.getEndpoint(this.endpointIndex);
 	}
 
 	/** Returns the value DB for this CC's node */
@@ -430,7 +458,7 @@ export class CommandClass {
 		): void => {
 			const valueId: ValueID = {
 				commandClass: this.ccId,
-				endpoint: this.endpoint,
+				endpoint: this.endpointIndex,
 				propertyName,
 				propertyKey,
 			};
@@ -463,7 +491,7 @@ export class CommandClass {
 		// Also return all existing value ids that are not internal
 		const existingValueIds = this.getValueDB()
 			.getValues(this.ccId)
-			.filter(valueId => valueId.endpoint === this.endpoint)
+			.filter(valueId => valueId.endpoint === this.endpointIndex)
 			// allow the value id if it is NOT registered or it is registered as non-internal
 			.filter(
 				valueId =>
@@ -558,7 +586,7 @@ export class CommandClass {
 						db.setValue(
 							{
 								commandClass: cc,
-								endpoint: this.endpoint,
+								endpoint: this.endpointIndex,
 								propertyName: variable,
 								propertyKey,
 							},
@@ -573,7 +601,7 @@ export class CommandClass {
 					db.setValue(
 						{
 							commandClass: cc,
-							endpoint: this.endpoint,
+							endpoint: this.endpointIndex,
 							propertyName: variable,
 							propertyKey,
 						},
@@ -590,7 +618,7 @@ export class CommandClass {
 				db.setValue(
 					{
 						commandClass: cc,
-						endpoint: this.endpoint,
+						endpoint: this.endpointIndex,
 						propertyName: variable,
 					},
 					sourceValue,

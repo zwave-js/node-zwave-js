@@ -263,6 +263,11 @@ export class MultiChannelAssociationCC extends CommandClass {
 		];
 	}
 
+	public skipEndpointInterview(): boolean {
+		// The associations are managed on the root device
+		return true;
+	}
+
 	/**
 	 * Returns the number of association groups reported by the node.
 	 * This only works AFTER the interview process
@@ -273,7 +278,9 @@ export class MultiChannelAssociationCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = node.commandClasses["Multi Channel Association"];
+		const api = this.getEndpoint()!.commandClasses[
+			"Multi Channel Association"
+		];
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${

@@ -163,9 +163,15 @@ export class CentralSceneCC extends CommandClass {
 		];
 	}
 
+	public skipEndpointInterview(): boolean {
+		// Central scene notifications are issued by the root device
+		return true;
+	}
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = node.commandClasses["Central Scene"];
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Central Scene"];
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
@@ -195,7 +201,7 @@ export class CentralSceneCC extends CommandClass {
 						"Configuring associations to receive Central Scene notifications...",
 					direction: "outbound",
 				});
-				await node.commandClasses.Association.addNodeIds(
+				await endpoint.commandClasses.Association.addNodeIds(
 					groupId,
 					this.driver.controller.ownNodeId!,
 				);

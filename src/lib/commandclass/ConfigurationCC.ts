@@ -424,7 +424,7 @@ export class ConfigurationCC extends CommandClass {
 				direction: "none",
 			});
 		} else {
-			const api = node.commandClasses.Configuration;
+			const api = this.getEndpoint()!.commandClasses.Configuration;
 
 			log.controller.logNode(node.id, {
 				message: `${this.constructor.name}: doing a ${
