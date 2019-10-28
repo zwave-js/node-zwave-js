@@ -40,7 +40,7 @@ export enum MultilevelSwitchCommand {
 export enum LevelChangeDirection {
 	"up" = 0b0,
 	"down" = 0b1,
-	"none" = 0b11,
+	// "none" = 0b11,
 }
 
 export enum SwitchType {
@@ -115,10 +115,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	}
 
 	public async startLevelChange(
-		options: Omit<
-			MultilevelSwitchCCStartLevelChangeOptions,
-			keyof CCCommandOptions
-		>,
+		options: MultilevelSwitchCCStartLevelChangeOptions,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
@@ -159,7 +156,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			MultilevelSwitchCCSupportedReport
 		>(cc))!;
-		return response.primarySwitchType;
+		return response.switchType;
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
@@ -202,7 +199,7 @@ export class MultilevelSwitchCC extends CommandClass {
 		if (complete && this.version >= 3) {
 			// Find out which kind of switch this is
 			log.controller.logNode(node.id, {
-				message: "requesting primary switch type...",
+				message: "requesting switch type...",
 				direction: "outbound",
 			});
 			const switchType = await api.getSupported();
@@ -328,15 +325,19 @@ export class MultilevelSwitchCCGet extends MultilevelSwitchCC {
 	}
 }
 
-interface MultilevelSwitchCCStartLevelChangeOptions extends CCCommandOptions {
-	primarySwitchDirection: keyof typeof LevelChangeDirection;
-	ignoreStartLevel: boolean;
-	primarySwitchStartLevel: number;
-	// Version >= 2:
-	duration?: Duration;
-	// This does not include the Version 3+ secondary switch type
-	// According to SDS13781, it has been DEPRECATED
-}
+type MultilevelSwitchCCStartLevelChangeOptions = {
+	direction: keyof typeof LevelChangeDirection;
+} & (
+	| {
+			ignoreStartLevel: true;
+	  }
+	| {
+			ignoreStartLevel: false;
+			startLevel: number;
+	  }) & {
+		// Version >= 2:
+		duration?: Duration;
+	};
 
 @CCCommand(MultilevelSwitchCommand.StartLevelChange)
 export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
@@ -344,7 +345,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 		driver: IDriver,
 		options:
 			| CommandClassDeserializationOptions
-			| MultilevelSwitchCCStartLevelChangeOptions,
+			| CCCommandOptions & MultilevelSwitchCCStartLevelChangeOptions,
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
@@ -355,22 +356,22 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 			);
 		} else {
 			this.duration = options.duration;
-			this.primarySwitchStartLevel = options.primarySwitchStartLevel;
 			this.ignoreStartLevel = options.ignoreStartLevel;
-			this.primarySwitchDirection = options.primarySwitchDirection;
+			this.startLevel = options.ignoreStartLevel ? 0 : options.startLevel;
+			this.direction = options.direction;
 		}
 	}
 
 	public duration: Duration | undefined;
-	public primarySwitchStartLevel: number;
+	public startLevel: number;
 	public ignoreStartLevel: boolean;
-	public primarySwitchDirection: keyof typeof LevelChangeDirection;
+	public direction: keyof typeof LevelChangeDirection;
 
 	public serialize(): Buffer {
 		const controlByte =
-			(LevelChangeDirection[this.primarySwitchDirection] << 6) |
+			(LevelChangeDirection[this.direction] << 6) |
 			(this.ignoreStartLevel ? 0b0010_0000 : 0);
-		const payload = [controlByte, this.primarySwitchStartLevel];
+		const payload = [controlByte, this.startLevel];
 		if (this.version >= 2 && this.duration) {
 			payload.push(this.duration.serializeSet());
 		}
@@ -398,16 +399,17 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 		super(driver, options);
 
 		validatePayload(this.payload.length >= 2);
-		this._primarySwitchType = this.payload[0] & 0b11111;
+		this._switchType = this.payload[0] & 0b11111;
 		this.persistValues();
 	}
 
 	// TODO: Use these to create the correct values/buttons
 
-	private _primarySwitchType: SwitchType;
+	// This is the primary switch type. We're not supporting secondary switch types
+	private _switchType: SwitchType;
 	@ccValue({ internal: true })
-	public get primarySwitchType(): SwitchType {
-		return this._primarySwitchType;
+	public get switchType(): SwitchType {
+		return this._switchType;
 	}
 }
 
