@@ -1,6 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { validatePayload } from "../util/misc";
+import log from "../log";
+import { getEnumMemberName, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
@@ -186,7 +187,44 @@ export interface MultilevelSwitchCC {
 
 @commandClass(CommandClasses["Multilevel Switch"])
 @implementedVersion(4)
-export class MultilevelSwitchCC extends CommandClass {}
+export class MultilevelSwitchCC extends CommandClass {
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const api = this.getEndpoint()!.commandClasses["Multilevel Switch"];
+
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		if (complete && this.version >= 3) {
+			// Find out which kind of switch this is
+			log.controller.logNode(node.id, {
+				message: "requesting primary switch type...",
+				direction: "outbound",
+			});
+			const switchType = await api.getSupported();
+			log.controller.logNode(node.id, {
+				message: `has switch type ${getEnumMemberName(
+					SwitchType,
+					switchType,
+				)}`,
+				direction: "inbound",
+			});
+		}
+
+		log.controller.logNode(node.id, {
+			message: "requesting current switch state...",
+			direction: "outbound",
+		});
+		await api.get();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+}
 
 interface MultilevelSwitchCCSetOptions extends CCCommandOptions {
 	targetValue: number;
