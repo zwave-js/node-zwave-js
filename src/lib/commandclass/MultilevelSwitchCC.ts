@@ -145,8 +145,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-	public async getSupported() {
+	public async getSupported(): Promise<SwitchType> {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
 			MultilevelSwitchCommand.SupportedGet,
@@ -159,10 +158,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			MultilevelSwitchCCSupportedReport
 		>(cc))!;
-		return {
-			primarySwitchType: response.primarySwitchType,
-			secondarySwitchType: response.secondarySwitchType,
-		};
+		return response.primarySwitchType;
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
@@ -300,9 +296,8 @@ interface MultilevelSwitchCCStartLevelChangeOptions extends CCCommandOptions {
 	primarySwitchStartLevel: number;
 	// Version >= 2:
 	duration?: Duration;
-	// Version >= 3:
-	secondarySwitchDirection?: keyof typeof LevelChangeDirection;
-	secondarySwitchStepSize?: number;
+	// This does not include the Version 3+ secondary switch type
+	// According to SDS13781, it has been DEPRECATED
 }
 
 @CCCommand(MultilevelSwitchCommand.StartLevelChange)
@@ -325,8 +320,6 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 			this.primarySwitchStartLevel = options.primarySwitchStartLevel;
 			this.ignoreStartLevel = options.ignoreStartLevel;
 			this.primarySwitchDirection = options.primarySwitchDirection;
-			this.secondarySwitchDirection = options.secondarySwitchDirection;
-			this.secondarySwitchStepSize = options.secondarySwitchStepSize;
 		}
 	}
 
@@ -334,27 +327,14 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 	public primarySwitchStartLevel: number;
 	public ignoreStartLevel: boolean;
 	public primarySwitchDirection: keyof typeof LevelChangeDirection;
-	public secondarySwitchDirection:
-		| keyof typeof LevelChangeDirection
-		| undefined;
-	public secondarySwitchStepSize: number | undefined;
 
 	public serialize(): Buffer {
-		let controlByte =
+		const controlByte =
 			(LevelChangeDirection[this.primarySwitchDirection] << 6) |
 			(this.ignoreStartLevel ? 0b0010_0000 : 0);
-		if (this.version >= 3) {
-			if (this.secondarySwitchDirection != null) {
-				controlByte |=
-					LevelChangeDirection[this.secondarySwitchDirection] << 3;
-			}
-		}
 		const payload = [controlByte, this.primarySwitchStartLevel];
 		if (this.version >= 2 && this.duration) {
 			payload.push(this.duration.serializeSet());
-		}
-		if (this.version >= 3 && this.secondarySwitchDirection != undefined) {
-			payload.push(this.secondarySwitchStepSize || 0);
 		}
 		this.payload = Buffer.from(payload);
 		return super.serialize();
@@ -381,7 +361,6 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 
 		validatePayload(this.payload.length >= 2);
 		this._primarySwitchType = this.payload[0] & 0b11111;
-		this._secondarySwitchType = this.payload[1] & 0b11111;
 		this.persistValues();
 	}
 
@@ -391,12 +370,6 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 	@ccValue({ internal: true })
 	public get primarySwitchType(): SwitchType {
 		return this._primarySwitchType;
-	}
-
-	private _secondarySwitchType: SwitchType;
-	@ccValue({ internal: true })
-	public get secondarySwitchType(): SwitchType {
-		return this._secondarySwitchType;
 	}
 }
 
