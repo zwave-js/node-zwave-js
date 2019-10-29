@@ -71,7 +71,7 @@ export class CCAPI {
 			// NoOperation is always supported
 			// TODO: find out if there are other CCs always supported
 			this.ccId === CommandClasses["No Operation"] ||
-			// TODO: Should there be API methods for CCs that are NOT controlled?
+			// TODO: Should there be API methods for CCs that are ONLY controlled?
 			this.endpoint.supportsCC(this.ccId) ||
 			this.endpoint.controlsCC(this.ccId)
 		);
@@ -93,8 +93,10 @@ export class CCAPI {
 	): void {
 		if (this.supportsCommand(command) !== true) {
 			throw new ZWaveError(
-				`Node #${
-					this.endpoint.nodeId
+				`Node #${this.endpoint.nodeId}${
+					this.endpoint.index > 0
+						? ` (Endpoint ${this.endpoint.index})`
+						: ""
 				} does not support the command ${getEnumMemberName(
 					commandEnum,
 					command,

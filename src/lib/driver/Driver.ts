@@ -39,7 +39,7 @@ import { getDefaultPriority, Message } from "../message/Message";
 import { InterviewStage, IZWaveNode, NodeStatus } from "../node/INode";
 import { isNodeQuery } from "../node/INodeQuery";
 import { ZWaveNode } from "../node/Node";
-import { DeepPartial, skipBytes } from "../util/misc";
+import { DeepPartial, getEnumMemberName, skipBytes } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { DriverEventCallbacks, DriverEvents, IDriver } from "./IDriver";
 import { Transaction } from "./Transaction";
@@ -418,10 +418,18 @@ export class Driver extends EventEmitter implements IDriver {
 	): number {
 		if (this._controller == undefined || !this.controller.nodes.has(nodeId))
 			return 0;
-		return this.controller.nodes
+		const endpoint = this.controller.nodes
 			.get(nodeId)!
-			.getEndpoint(endpointIndex)!
-			.getCCVersion(cc);
+			.getEndpoint(endpointIndex);
+		if (!endpoint) {
+			throw new Error(
+				`getSupportedCCVersionForEndpoint failed. cc = ${getEnumMemberName(
+					CommandClasses,
+					cc,
+				)} nodeId = ${nodeId}, endpointIndex = ${endpointIndex}`,
+			);
+		}
+		return endpoint.getCCVersion(cc);
 	}
 
 	/**

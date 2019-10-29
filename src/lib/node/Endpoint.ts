@@ -187,6 +187,9 @@ export class Endpoint {
 	/** Builds the dependency graph used to automatically determine the order of CC interviews */
 	public buildCCInterviewGraph(): GraphNode<CommandClasses>[] {
 		let supportedCCInstances = [...this.implementedCommandClasses.keys()]
+			// Don't interview CCs the node or endpoint only controls
+			.filter(cc => this.supportsCC(cc))
+			// Filter out CCs we don't implement
 			.map(cc => this.createCCInstance(cc))
 			.filter(instance => !!instance) as CommandClass[];
 		// For endpoint interviews, we skip some CCs

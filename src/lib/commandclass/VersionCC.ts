@@ -170,7 +170,8 @@ export class VersionCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses.Version;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Version;
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
@@ -206,7 +207,7 @@ export class VersionCC extends CommandClass {
 				message: "querying CC versions...",
 				direction: "outbound",
 			});
-			for (const [cc] of node.implementedCommandClasses.entries()) {
+			for (const [cc] of endpoint.implementedCommandClasses.entries()) {
 				// only query the ones we support a version > 1 for
 				const maxImplemented = getImplementedVersion(cc);
 				if (maxImplemented <= 1) {
@@ -226,16 +227,16 @@ export class VersionCC extends CommandClass {
 				});
 				// query the CC version
 				const supportedVersion = await api.getCCVersion(cc);
-				// Remember which CC version this node supports
+				// Remember which CC version this endpoint supports
 				let logMessage: string;
 				if (supportedVersion > 0) {
-					node.addCC(cc, { version: supportedVersion });
+					endpoint.addCC(cc, { version: supportedVersion });
 					logMessage = `  supports CC ${
 						CommandClasses[cc]
 					} (${num2hex(cc)}) in version ${supportedVersion}`;
 				} else {
 					// We were lied to - the NIF said this CC is supported, now the node claims it isn't
-					node.removeCC(cc);
+					endpoint.removeCC(cc);
 					logMessage = `  does NOT support CC ${
 						CommandClasses[cc]
 					} (${num2hex(cc)})`;

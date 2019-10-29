@@ -48,7 +48,6 @@ export type CommandClassDeserializationOptions = { data: Buffer } & (
 	| {
 			fromEncapsulation: true;
 			encapCC: CommandClass;
-			endpoint?: number;
 	  });
 
 export function gotDeserializationOptions(
@@ -59,6 +58,7 @@ export function gotDeserializationOptions(
 
 export interface CCCommandOptions {
 	nodeId: number;
+	endpoint?: number;
 }
 
 interface CommandClassCreationOptions extends CCCommandOptions {
@@ -144,6 +144,7 @@ export class CommandClass {
 		this.version = this.driver.getSafeCCVersionForNode(
 			this.ccId,
 			this.nodeId,
+			this.endpointIndex,
 		);
 	}
 
