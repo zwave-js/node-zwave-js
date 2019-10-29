@@ -93,8 +93,10 @@ export class CCAPI {
 	): void {
 		if (this.supportsCommand(command) !== true) {
 			throw new ZWaveError(
-				`Node #${
-					this.endpoint.nodeId
+				`Node #${this.endpoint.nodeId}${
+					this.endpoint.index > 0
+						? ` (Endpoint ${this.endpoint.index})`
+						: ""
 				} does not support the command ${getEnumMemberName(
 					commandEnum,
 					command,
