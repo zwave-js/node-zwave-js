@@ -429,7 +429,7 @@ export class Driver extends EventEmitter implements IDriver {
 				)} nodeId = ${nodeId}, endpointIndex = ${endpointIndex}`,
 			);
 		}
-		return endpoint!.getCCVersion(cc);
+		return endpoint.getCCVersion(cc);
 	}
 
 	/**
