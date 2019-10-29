@@ -491,15 +491,19 @@ const multilevelSensorScales: Partial<
 	],
 	[MultilevelSensorTypes["Boiler water temperature"]]: [
 		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
 	],
 	[MultilevelSensorTypes["Domestic Hot Water (DHW) temperature"]]: [
 		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
 	],
 	[MultilevelSensorTypes["Outside temperature"]]: [
 		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
 	],
 	[MultilevelSensorTypes["Exhaust temperature"]]: [
 		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
 	],
 	[MultilevelSensorTypes["Water Chlorine level"]]: [
 		{
@@ -532,30 +536,66 @@ const multilevelSensorScales: Partial<
 	],
 	[MultilevelSensorTypes["Return Air temperature"]]: [
 		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
 	],
 	[MultilevelSensorTypes["Supply Air temperature"]]: [
 		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
 	],
 	[MultilevelSensorTypes["Condenser Coil temperature"]]: [
 		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
 	],
 	[MultilevelSensorTypes["Evaporator Coil temperature"]]: [
 		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
 	],
 	[MultilevelSensorTypes["Liquid Line temperature"]]: [
 		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
 	],
 	[MultilevelSensorTypes["Discharge Line temperature"]]: [
 		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
 	],
 	[MultilevelSensorTypes["Suction Pressure"]]: [
 		{ label: "Kilopascal", unit: "kPa", key: 0x00, minimumCCVersion: 11 },
+		{
+			label: "Pound per square inch",
+			unit: "psi",
+			key: 0x01,
+			minimumCCVersion: 11,
+		},
 	],
 	[MultilevelSensorTypes["Discharge Pressure"]]: [
 		{ label: "Kilopascal", unit: "kPa", key: 0x00, minimumCCVersion: 11 },
+		{
+			label: "Pound per square inch",
+			unit: "psi",
+			key: 0x01,
+			minimumCCVersion: 11,
+		},
 	],
 	[MultilevelSensorTypes["Defrost temperature"]]: [
 		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
+	],
+	[MultilevelSensorTypes.Ozone]: [
+		{ label: "Density", unit: "µg/m³", key: 0x00, minimumCCVersion: 11 },
+	],
+	[MultilevelSensorTypes["Sulfur dioxide"]]: [
+		{ label: "Density", unit: "µg/m³", key: 0x00, minimumCCVersion: 11 },
+	],
+	[MultilevelSensorTypes["Nitrogen dioxide"]]: [
+		{ label: "Density", unit: "µg/m³", key: 0x00, minimumCCVersion: 11 },
+	],
+	[MultilevelSensorTypes.Ammonia]: [
+		{ label: "Density", unit: "µg/m³", key: 0x00, minimumCCVersion: 11 },
+	],
+	[MultilevelSensorTypes.Lead]: [
+		{ label: "Density", unit: "µg/m³", key: 0x00, minimumCCVersion: 11 },
+	],
+	[MultilevelSensorTypes["Particulate Matter 1"]]: [
+		{ label: "Density", unit: "µg/m³", key: 0x00, minimumCCVersion: 11 },
 	],
 };
 

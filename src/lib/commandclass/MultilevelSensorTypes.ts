@@ -79,4 +79,10 @@ export enum MultilevelSensorTypes {
 	"Suction Pressure",
 	"Discharge Pressure",
 	"Defrost temperature",
+	"Ozone",
+	"Sulfur dioxide",
+	"Nitrogen dioxide",
+	"Ammonia",
+	"Lead",
+	"Particulate Matter 1",
 }
