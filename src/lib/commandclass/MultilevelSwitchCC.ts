@@ -53,6 +53,17 @@ export enum SwitchType {
 	"Reverse/Forward" = 0x06,
 	"Pull/Push" = 0x07,
 }
+/**
+ * Translates a switch type into two actions that may be performed. Unknown types default to Off/On
+ */
+function switchTypeToActions(switchType: string): [string, string] {
+	if (!switchType.includes("/")) switchType = SwitchType[0x01]; // Off/On
+	return switchType.split("/", 2) as any;
+}
+const switchTypePropertyNames = Object.keys(SwitchType)
+	.filter(key => key.indexOf("/") > -1)
+	.map(key => switchTypeToActions(key))
+	.reduce<string[]>((acc, cur) => acc.concat(...cur), []);
 
 @API(CommandClasses["Multilevel Switch"])
 export class MultilevelSwitchCCAPI extends CCAPI {
@@ -163,18 +174,45 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		{ propertyName },
 		value,
 	): Promise<void> => {
-		if (propertyName !== "targetValue") {
+		if (propertyName === "targetValue") {
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					propertyName,
+					"number",
+					typeof value,
+				);
+			}
+			await this.set(value);
+		} else if (switchTypePropertyNames.includes(propertyName)) {
+			// Since the switch only supports one of the switch types, we would
+			// need to check if the correct one is used. But since the names are
+			// purely cosmetic, we just accept all of them
+			if (typeof value !== "boolean") {
+				throwWrongValueType(
+					this.ccId,
+					propertyName,
+					"number",
+					typeof value,
+				);
+			}
+			if (value) {
+				// The property names are organized so that positive motions are
+				// at odd indices and negative motions at even indices
+				const direction =
+					switchTypePropertyNames.indexOf(propertyName) % 2 === 0
+						? "down"
+						: "up";
+				await this.startLevelChange({
+					direction,
+					ignoreStartLevel: true,
+				});
+			} else {
+				await this.stopLevelChange();
+			}
+		} else {
 			throwUnsupportedProperty(this.ccId, propertyName);
 		}
-		if (typeof value !== "number") {
-			throwWrongValueType(
-				this.ccId,
-				propertyName,
-				"number",
-				typeof value,
-			);
-		}
-		await this.set(value);
 	};
 }
 
@@ -401,9 +439,33 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 		validatePayload(this.payload.length >= 2);
 		this._switchType = this.payload[0] & 0b11111;
 		this.persistValues();
-	}
 
-	// TODO: Use these to create the correct values/buttons
+		// Create metadata for the control values
+		const switchTypeName = getEnumMemberName(SwitchType, this._switchType);
+		const [up, down] = switchTypeToActions(switchTypeName);
+		this.getValueDB().setMetadata(
+			{
+				commandClass: this.ccId,
+				endpoint: this.endpointIndex,
+				propertyName: up,
+			},
+			{
+				...ValueMetadata.Boolean,
+				label: `Perform a level change (${up})`,
+			},
+		);
+		this.getValueDB().setMetadata(
+			{
+				commandClass: this.ccId,
+				endpoint: this.endpointIndex,
+				propertyName: down,
+			},
+			{
+				...ValueMetadata.Boolean,
+				label: `Perform a level change (${down})`,
+			},
+		);
+	}
 
 	// This is the primary switch type. We're not supporting secondary switch types
 	private _switchType: SwitchType;
