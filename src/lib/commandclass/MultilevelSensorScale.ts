@@ -112,7 +112,7 @@ const multilevelSensorScales: Partial<
 		{ label: "Ampere", unit: "A", key: 0x00 },
 		{ label: "Milliampere", unit: "mA", key: 0x01 },
 	],
-	[MultilevelSensorTypes["Carbon dioxide (CO2) level"]]: [
+	[MultilevelSensorTypes["Carbon dioxide (CO₂) level"]]: [
 		{
 			label: "Parts/million",
 			unit: "ppm",
@@ -268,7 +268,7 @@ const multilevelSensorScales: Partial<
 			key: 0x01,
 		},
 	],
-	[MultilevelSensorTypes["Formaldehyde (CH2O) level"]]: [
+	[MultilevelSensorTypes["Formaldehyde (CH₂O) level"]]: [
 		{
 			label: "Mole per cubic meter",
 			unit: "mol/m³",
@@ -287,7 +287,7 @@ const multilevelSensorScales: Partial<
 			key: 0x01,
 		},
 	],
-	[MultilevelSensorTypes["Methane (CH4) density"]]: [
+	[MultilevelSensorTypes["Methane (CH₄) density"]]: [
 		{
 			label: "Mole per cubic meter",
 			unit: "mol/m³",
