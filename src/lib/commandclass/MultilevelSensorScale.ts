@@ -4,28 +4,25 @@ export interface MultilevelSensorScale {
 	unit: string | undefined;
 	label: string;
 	key: number;
-	minimumCCVersion: number;
 }
 
 const multilevelSensorScales: Partial<
 	Record<MultilevelSensorTypes, MultilevelSensorScale[]>
 > = {
 	[MultilevelSensorTypes["Air temperature"]]: [
-		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 1 },
-		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 1 },
+		{ label: "Celcius", unit: "°C", key: 0x00 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01 },
 	],
 	[MultilevelSensorTypes["General purpose"]]: [
 		{
 			label: "Percentage value",
 			unit: "%",
 			key: 0x00,
-			minimumCCVersion: 1,
 		},
 		{
 			label: "Dimensionless value",
 			unit: undefined,
 			key: 0x01,
-			minimumCCVersion: 1,
 		},
 	],
 	[MultilevelSensorTypes.Illuminance]: [
@@ -33,52 +30,47 @@ const multilevelSensorScales: Partial<
 			label: "Percentage value",
 			unit: "%",
 			key: 0x00,
-			minimumCCVersion: 1,
 		},
-		{ label: "Lux", unit: "Lux", key: 0x01, minimumCCVersion: 1 },
+		{ label: "Lux", unit: "Lux", key: 0x01 },
 	],
 	[MultilevelSensorTypes.Power]: [
-		{ label: "Watt", unit: "W", key: 0x00, minimumCCVersion: 2 },
-		{ label: "Btu/h", unit: "Btu/h", key: 0x01, minimumCCVersion: 2 },
+		{ label: "Watt", unit: "W", key: 0x00 },
+		{ label: "Btu/h", unit: "Btu/h", key: 0x01 },
 	],
 	[MultilevelSensorTypes.Humidity]: [
 		{
 			label: "Percentage value",
 			unit: "%",
 			key: 0x00,
-			minimumCCVersion: 2,
 		},
 		{
 			label: "Absolute humidity",
 			unit: "g/m³",
 			key: 0x01,
-			minimumCCVersion: 5,
 		},
 	],
 	[MultilevelSensorTypes.Velocity]: [
-		{ label: "m/s", unit: "m/s", key: 0x00, minimumCCVersion: 2 },
-		{ label: "Mph", unit: "Mph", key: 0x01, minimumCCVersion: 2 },
+		{ label: "m/s", unit: "m/s", key: 0x00 },
+		{ label: "Mph", unit: "Mph", key: 0x01 },
 	],
 	[MultilevelSensorTypes.Direction]: [
 		// 0 = no wind, 90 = east, 180 = south, 270 = west  and 360 = north
-		{ label: "Degrees", unit: "°", key: 0x00, minimumCCVersion: 2 },
+		{ label: "Degrees", unit: "°", key: 0x00 },
 	],
 	[MultilevelSensorTypes["Atmospheric pressure"]]: [
-		{ label: "Kilopascal", unit: "kPa", key: 0x00, minimumCCVersion: 2 },
+		{ label: "Kilopascal", unit: "kPa", key: 0x00 },
 		{
 			label: "Inches of Mercury",
 			unit: "inHg",
 			key: 0x01,
-			minimumCCVersion: 2,
 		},
 	],
 	[MultilevelSensorTypes["Barometric pressure"]]: [
-		{ label: "Kilopascal", unit: "kPa", key: 0x00, minimumCCVersion: 2 },
+		{ label: "Kilopascal", unit: "kPa", key: 0x00 },
 		{
 			label: "Inches of Mercury",
 			unit: "inHg",
 			key: 0x01,
-			minimumCCVersion: 2,
 		},
 	],
 	[MultilevelSensorTypes["Solar radiation"]]: [
@@ -86,49 +78,45 @@ const multilevelSensorScales: Partial<
 			label: "Watt per square meter",
 			unit: "W/m²",
 			key: 0x00,
-			minimumCCVersion: 2,
 		},
 	],
 	[MultilevelSensorTypes["Dew point"]]: [
-		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 1 },
-		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 1 },
+		{ label: "Celcius", unit: "°C", key: 0x00 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01 },
 	],
 	[MultilevelSensorTypes["Rain rate"]]: [
 		{
 			label: "Millimeter/hour",
 			unit: "mm/h",
 			key: 0x00,
-			minimumCCVersion: 2,
 		},
 		{
 			label: "Inches per hour",
 			unit: "in/h",
 			key: 0x01,
-			minimumCCVersion: 2,
 		},
 	],
 	[MultilevelSensorTypes["Tide level"]]: [
-		{ label: "Meter", unit: "m", key: 0x00, minimumCCVersion: 2 },
-		{ label: "Feet", unit: "ft", key: 0x01, minimumCCVersion: 2 },
+		{ label: "Meter", unit: "m", key: 0x00 },
+		{ label: "Feet", unit: "ft", key: 0x01 },
 	],
 	[MultilevelSensorTypes.Weight]: [
-		{ label: "Kilogram", unit: "kg", key: 0x00, minimumCCVersion: 3 },
-		{ label: "Pounds", unit: "lb", key: 0x01, minimumCCVersion: 3 },
+		{ label: "Kilogram", unit: "kg", key: 0x00 },
+		{ label: "Pounds", unit: "lb", key: 0x01 },
 	],
 	[MultilevelSensorTypes.Voltage]: [
-		{ label: "Volt", unit: "V", key: 0x00, minimumCCVersion: 3 },
-		{ label: "Millivolt", unit: "mV", key: 0x01, minimumCCVersion: 3 },
+		{ label: "Volt", unit: "V", key: 0x00 },
+		{ label: "Millivolt", unit: "mV", key: 0x01 },
 	],
 	[MultilevelSensorTypes.Current]: [
-		{ label: "Ampere", unit: "A", key: 0x00, minimumCCVersion: 3 },
-		{ label: "Milliampere", unit: "mA", key: 0x01, minimumCCVersion: 3 },
+		{ label: "Ampere", unit: "A", key: 0x00 },
+		{ label: "Milliampere", unit: "mA", key: 0x01 },
 	],
 	[MultilevelSensorTypes["Carbon dioxide (CO2) level"]]: [
 		{
 			label: "Parts/million",
 			unit: "ppm",
 			key: 0x00,
-			minimumCCVersion: 3,
 		},
 	],
 	[MultilevelSensorTypes["Air flow"]]: [
@@ -136,43 +124,38 @@ const multilevelSensorScales: Partial<
 			label: "Cubic meter per hour",
 			unit: "m³/h",
 			key: 0x00,
-			minimumCCVersion: 3,
 		},
 		{
 			label: "Cubic feet per minute",
 			unit: "cfm",
 			key: 0x01,
-			minimumCCVersion: 3,
 		},
 	],
 	[MultilevelSensorTypes["Tank capacity"]]: [
-		{ label: "Liter", unit: "l", key: 0x00, minimumCCVersion: 3 },
-		{ label: "Cubic meter", unit: "m³", key: 0x01, minimumCCVersion: 3 },
-		{ label: "Gallons", unit: "gallon", key: 0x02, minimumCCVersion: 3 },
+		{ label: "Liter", unit: "l", key: 0x00 },
+		{ label: "Cubic meter", unit: "m³", key: 0x01 },
+		{ label: "Gallons", unit: "gallon", key: 0x02 },
 	],
 	[MultilevelSensorTypes.Distance]: [
-		{ label: "Meter", unit: "m", key: 0x00, minimumCCVersion: 3 },
-		{ label: "Centimeter", unit: "cm", key: 0x01, minimumCCVersion: 3 },
-		{ label: "Feet", unit: "ft", key: 0x02, minimumCCVersion: 3 },
+		{ label: "Meter", unit: "m", key: 0x00 },
+		{ label: "Centimeter", unit: "cm", key: 0x01 },
+		{ label: "Feet", unit: "ft", key: 0x02 },
 	],
 	[MultilevelSensorTypes["Angle position"]]: [
 		{
 			label: "Percentage value",
 			unit: "%",
 			key: 0x00,
-			minimumCCVersion: 4,
 		},
 		{
 			label: "Degrees relative to north pole of standing eye view",
 			unit: "°N",
 			key: 0x01,
-			minimumCCVersion: 4,
 		},
 		{
 			label: "Degrees relative to south pole of standing eye view",
 			unit: "°S",
 			key: 0x02,
-			minimumCCVersion: 4,
 		},
 	],
 	[MultilevelSensorTypes.Rotation]: [
@@ -180,48 +163,43 @@ const multilevelSensorScales: Partial<
 			label: "Revolutions per minute",
 			unit: "rpm",
 			key: 0x00,
-			minimumCCVersion: 5,
 		},
-		{ label: "Hertz", unit: "Hz", key: 0x01, minimumCCVersion: 5 },
+		{ label: "Hertz", unit: "Hz", key: 0x01 },
 	],
 	[MultilevelSensorTypes["Water temperature"]]: [
-		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 5 },
-		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 5 },
+		{ label: "Celcius", unit: "°C", key: 0x00 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01 },
 	],
 	[MultilevelSensorTypes["Soil temperature"]]: [
-		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 5 },
-		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 5 },
+		{ label: "Celcius", unit: "°C", key: 0x00 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01 },
 	],
 	[MultilevelSensorTypes["Seismic Intensity"]]: [
 		{
 			label: "Mercalli",
 			unit: undefined,
 			key: 0x00,
-			minimumCCVersion: 5,
 		},
 		{
 			label: "European Macroseismic",
 			unit: undefined,
 			key: 0x01,
-			minimumCCVersion: 5,
 		},
-		{ label: "Liedu", unit: undefined, key: 0x02, minimumCCVersion: 5 },
-		{ label: "Shindo", unit: undefined, key: 0x03, minimumCCVersion: 5 },
+		{ label: "Liedu", unit: undefined, key: 0x02 },
+		{ label: "Shindo", unit: undefined, key: 0x03 },
 	],
 	[MultilevelSensorTypes["Seismic magnitude"]]: [
-		{ label: "Local", unit: undefined, key: 0x00, minimumCCVersion: 5 },
-		{ label: "Moment", unit: undefined, key: 0x01, minimumCCVersion: 5 },
+		{ label: "Local", unit: undefined, key: 0x00 },
+		{ label: "Moment", unit: undefined, key: 0x01 },
 		{
 			label: "Surface wave",
 			unit: undefined,
 			key: 0x02,
-			minimumCCVersion: 5,
 		},
 		{
 			label: "Body wave",
 			unit: undefined,
 			key: 0x03,
-			minimumCCVersion: 5,
 		},
 	],
 	[MultilevelSensorTypes.Ultraviolet]: [
@@ -229,27 +207,24 @@ const multilevelSensorScales: Partial<
 			label: "UV index",
 			unit: undefined,
 			key: 0x00,
-			minimumCCVersion: 5,
 		},
 	],
 	[MultilevelSensorTypes["Electrical resistivity"]]: [
-		{ label: "Ohm meter", unit: "Ωm", key: 0x00, minimumCCVersion: 5 },
+		{ label: "Ohm meter", unit: "Ωm", key: 0x00 },
 	],
 	[MultilevelSensorTypes["Electrical conductivity"]]: [
 		{
 			label: "Siemens per meter",
 			unit: "S/m",
 			key: 0x00,
-			minimumCCVersion: 5,
 		},
 	],
 	[MultilevelSensorTypes.Loudness]: [
-		{ label: "Decibel", unit: "dB", key: 0x00, minimumCCVersion: 5 },
+		{ label: "Decibel", unit: "dB", key: 0x00 },
 		{
 			label: "A-weighted decibels",
 			unit: "dBA",
 			key: 0x01,
-			minimumCCVersion: 5,
 		},
 	],
 	[MultilevelSensorTypes.Moisture]: [
@@ -257,47 +232,40 @@ const multilevelSensorScales: Partial<
 			label: "Percentage value",
 			unit: "%",
 			key: 0x00,
-			minimumCCVersion: 5,
 		},
 		{
 			label: "Volume water content",
 			unit: "m³/m³",
 			key: 0x01,
-			minimumCCVersion: 5,
 		},
-		{ label: "Impedance", unit: "kΩ", key: 0x02, minimumCCVersion: 5 },
+		{ label: "Impedance", unit: "kΩ", key: 0x02 },
 		{
 			label: "Water activity",
 			unit: "aw",
 			key: 0x03,
-			minimumCCVersion: 5,
 		},
 	],
 	[MultilevelSensorTypes.Frequency]: [
 		// MUST be used until 2.147483647 GHz
-		{ label: "Hertz", unit: "Hz", key: 0x00, minimumCCVersion: 6 },
+		{ label: "Hertz", unit: "Hz", key: 0x00 },
 		// MUST be used after 2.147483647 GHz
-		{ label: "Kilohertz", unit: "kHz", key: 0x01, minimumCCVersion: 6 },
+		{ label: "Kilohertz", unit: "kHz", key: 0x01 },
 	],
-	[MultilevelSensorTypes.Time]: [
-		{ label: "Second", unit: "s", key: 0x00, minimumCCVersion: 6 },
-	],
+	[MultilevelSensorTypes.Time]: [{ label: "Second", unit: "s", key: 0x00 }],
 	[MultilevelSensorTypes["Target temperature"]]: [
-		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 6 },
-		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 6 },
+		{ label: "Celcius", unit: "°C", key: 0x00 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01 },
 	],
 	[MultilevelSensorTypes["Particulate Matter 2.5"]]: [
 		{
 			label: "Mole per cubic meter",
 			unit: "mol/m³",
 			key: 0x00,
-			minimumCCVersion: 7,
 		},
 		{
 			label: "Microgram per cubic meter",
 			unit: "µg/m³",
 			key: 0x01,
-			minimumCCVersion: 7,
 		},
 	],
 	[MultilevelSensorTypes["Formaldehyde (CH2O) level"]]: [
@@ -305,7 +273,6 @@ const multilevelSensorScales: Partial<
 			label: "Mole per cubic meter",
 			unit: "mol/m³",
 			key: 0x00,
-			minimumCCVersion: 7,
 		},
 	],
 	[MultilevelSensorTypes["Radon concentration"]]: [
@@ -313,13 +280,11 @@ const multilevelSensorScales: Partial<
 			label: "Becquerel per cubic meter",
 			unit: "bq/m³",
 			key: 0x00,
-			minimumCCVersion: 7,
 		},
 		{
 			label: "Picocuries per liter",
 			unit: "pCi/l",
 			key: 0x01,
-			minimumCCVersion: 7,
 		},
 	],
 	[MultilevelSensorTypes["Methane (CH4) density"]]: [
@@ -327,7 +292,6 @@ const multilevelSensorScales: Partial<
 			label: "Mole per cubic meter",
 			unit: "mol/m³",
 			key: 0x00,
-			minimumCCVersion: 7,
 		},
 	],
 	[MultilevelSensorTypes["Volatile Organic Compound level"]]: [
@@ -335,13 +299,11 @@ const multilevelSensorScales: Partial<
 			label: "Mole per cubic meter",
 			unit: "mol/m³",
 			key: 0x00,
-			minimumCCVersion: 7,
 		},
 		{
 			label: "Parts/million",
 			unit: "ppm",
 			key: 0x01,
-			minimumCCVersion: 10,
 		},
 	],
 	[MultilevelSensorTypes["Carbon monoxide (CO) level"]]: [
@@ -349,13 +311,11 @@ const multilevelSensorScales: Partial<
 			label: "Mole per cubic meter",
 			unit: "mol/m³",
 			key: 0x00,
-			minimumCCVersion: 7,
 		},
 		{
 			label: "Parts/million",
 			unit: "ppm",
 			key: 0x01,
-			minimumCCVersion: 10,
 		},
 	],
 	[MultilevelSensorTypes["Soil humidity"]]: [
@@ -363,18 +323,16 @@ const multilevelSensorScales: Partial<
 			label: "Percentage value",
 			unit: "%",
 			key: 0x00,
-			minimumCCVersion: 7,
 		},
 	],
 	[MultilevelSensorTypes["Soil reactivity"]]: [
-		{ label: "Acidity", unit: "pH", key: 0x00, minimumCCVersion: 7 },
+		{ label: "Acidity", unit: "pH", key: 0x00 },
 	],
 	[MultilevelSensorTypes["Soil salinity"]]: [
 		{
 			label: "Mole per cubic meter",
 			unit: "mol/m³",
 			key: 0x00,
-			minimumCCVersion: 7,
 		},
 	],
 	[MultilevelSensorTypes["Heart rate"]]: [
@@ -382,34 +340,32 @@ const multilevelSensorScales: Partial<
 			label: "Beats per minute",
 			unit: "bpm",
 			key: 0x00,
-			minimumCCVersion: 7,
 		},
 	],
 	[MultilevelSensorTypes["Blood pressure"]]: [
-		{ label: "Systolic", unit: "mmHg", key: 0x00, minimumCCVersion: 7 },
-		{ label: "Diastolic", unit: "mmHg", key: 0x01, minimumCCVersion: 7 },
+		{ label: "Systolic", unit: "mmHg", key: 0x00 },
+		{ label: "Diastolic", unit: "mmHg", key: 0x01 },
 	],
 	[MultilevelSensorTypes["Muscle mass"]]: [
-		{ label: "Kilogram", unit: "kg", key: 0x00, minimumCCVersion: 7 },
+		{ label: "Kilogram", unit: "kg", key: 0x00 },
 	],
 	[MultilevelSensorTypes["Fat mass"]]: [
-		{ label: "Kilogram", unit: "kg", key: 0x00, minimumCCVersion: 7 },
+		{ label: "Kilogram", unit: "kg", key: 0x00 },
 	],
 	[MultilevelSensorTypes["Bone mass"]]: [
-		{ label: "Kilogram", unit: "kg", key: 0x00, minimumCCVersion: 7 },
+		{ label: "Kilogram", unit: "kg", key: 0x00 },
 	],
 	[MultilevelSensorTypes["Total body water (TBW)"]]: [
-		{ label: "Kilogram", unit: "kg", key: 0x00, minimumCCVersion: 7 },
+		{ label: "Kilogram", unit: "kg", key: 0x00 },
 	],
 	[MultilevelSensorTypes["Basis metabolic rate (BMR)"]]: [
-		{ label: "Joule", unit: "J", key: 0x00, minimumCCVersion: 7 },
+		{ label: "Joule", unit: "J", key: 0x00 },
 	],
 	[MultilevelSensorTypes["Body Mass Index (BMI)"]]: [
 		{
 			label: "Body Mass Index",
 			unit: undefined,
 			key: 0x00,
-			minimumCCVersion: 7,
 		},
 	],
 	[MultilevelSensorTypes["Acceleration X-axis"]]: [
@@ -417,7 +373,6 @@ const multilevelSensorScales: Partial<
 			label: "Meter per square second",
 			unit: "m/s2",
 			key: 0x00,
-			minimumCCVersion: 8,
 		},
 	],
 	[MultilevelSensorTypes["Acceleration Y-axis"]]: [
@@ -425,7 +380,6 @@ const multilevelSensorScales: Partial<
 			label: "Meter per square second",
 			unit: "m/s2",
 			key: 0x00,
-			minimumCCVersion: 8,
 		},
 	],
 	[MultilevelSensorTypes["Acceleration Z-axis"]]: [
@@ -433,7 +387,6 @@ const multilevelSensorScales: Partial<
 			label: "Meter per square second",
 			unit: "m/s2",
 			key: 0x00,
-			minimumCCVersion: 8,
 		},
 	],
 	[MultilevelSensorTypes["Smoke density"]]: [
@@ -441,7 +394,6 @@ const multilevelSensorScales: Partial<
 			label: "Percentage value",
 			unit: "%",
 			key: 0x00,
-			minimumCCVersion: 8,
 		},
 	],
 	[MultilevelSensorTypes["Water flow"]]: [
@@ -449,28 +401,25 @@ const multilevelSensorScales: Partial<
 			label: "Liter per hour",
 			unit: "l/h",
 			key: 0x00,
-			minimumCCVersion: 9,
 		},
 	],
 	[MultilevelSensorTypes["Water pressure"]]: [
-		{ label: "Kilopascal", unit: "kPa", key: 0x00, minimumCCVersion: 9 },
+		{ label: "Kilopascal", unit: "kPa", key: 0x00 },
 	],
 	[MultilevelSensorTypes["RF signal strength"]]: [
-		{ label: "RSSI", unit: "%", key: 0x00, minimumCCVersion: 9 },
-		{ label: "Power Level", unit: "dBm", key: 0x01, minimumCCVersion: 9 },
+		{ label: "RSSI", unit: "%", key: 0x00 },
+		{ label: "Power Level", unit: "dBm", key: 0x01 },
 	],
 	[MultilevelSensorTypes["Particulate Matter 10"]]: [
 		{
 			label: "Mole per cubic meter",
 			unit: "mol/m³",
 			key: 0x00,
-			minimumCCVersion: 10,
 		},
 		{
 			label: "Microgram per cubic meter",
 			unit: "µg/m³",
 			key: 0x01,
-			minimumCCVersion: 10,
 		},
 	],
 	[MultilevelSensorTypes["Respiratory rate"]]: [
@@ -478,7 +427,6 @@ const multilevelSensorScales: Partial<
 			label: "Breaths per minute",
 			unit: "bpm",
 			key: 0x00,
-			minimumCCVersion: 10,
 		},
 	],
 	[MultilevelSensorTypes["Relative Modulation level"]]: [
@@ -486,116 +434,111 @@ const multilevelSensorScales: Partial<
 			label: "Percentage value",
 			unit: "%",
 			key: 0x00,
-			minimumCCVersion: 11,
 		},
 	],
 	[MultilevelSensorTypes["Boiler water temperature"]]: [
-		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
-		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
+		{ label: "Celcius", unit: "°C", key: 0x00 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01 },
 	],
 	[MultilevelSensorTypes["Domestic Hot Water (DHW) temperature"]]: [
-		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
-		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
+		{ label: "Celcius", unit: "°C", key: 0x00 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01 },
 	],
 	[MultilevelSensorTypes["Outside temperature"]]: [
-		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
-		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
+		{ label: "Celcius", unit: "°C", key: 0x00 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01 },
 	],
 	[MultilevelSensorTypes["Exhaust temperature"]]: [
-		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
-		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
+		{ label: "Celcius", unit: "°C", key: 0x00 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01 },
 	],
 	[MultilevelSensorTypes["Water Chlorine level"]]: [
 		{
 			label: "Milligram per liter",
 			unit: "mg/l",
 			key: 0x00,
-			minimumCCVersion: 11,
 		},
 	],
 	[MultilevelSensorTypes["Water acidity"]]: [
-		{ label: "Acidity", unit: "pH", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Acidity", unit: "pH", key: 0x00 },
 	],
 	[MultilevelSensorTypes["Water Oxidation reduction potential"]]: [
-		{ label: "Millivolt", unit: "mV", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Millivolt", unit: "mV", key: 0x00 },
 	],
 	[MultilevelSensorTypes["Heart Rate LF/HF ratio"]]: [
 		{
 			label: "Unitless",
 			unit: undefined,
 			key: 0x00,
-			minimumCCVersion: 11,
 		},
 	],
 	[MultilevelSensorTypes["Motion Direction"]]: [
 		// 0 = no motion detected, 90 = east, 180 = south, 270 = west and 360 = north
-		{ label: "Degrees", unit: "°", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Degrees", unit: "°", key: 0x00 },
 	],
 	[MultilevelSensorTypes["Applied force on the sensor"]]: [
-		{ label: "Newton", unit: "N", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Newton", unit: "N", key: 0x00 },
 	],
 	[MultilevelSensorTypes["Return Air temperature"]]: [
-		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
-		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
+		{ label: "Celcius", unit: "°C", key: 0x00 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01 },
 	],
 	[MultilevelSensorTypes["Supply Air temperature"]]: [
-		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
-		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
+		{ label: "Celcius", unit: "°C", key: 0x00 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01 },
 	],
 	[MultilevelSensorTypes["Condenser Coil temperature"]]: [
-		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
-		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
+		{ label: "Celcius", unit: "°C", key: 0x00 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01 },
 	],
 	[MultilevelSensorTypes["Evaporator Coil temperature"]]: [
-		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
-		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
+		{ label: "Celcius", unit: "°C", key: 0x00 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01 },
 	],
 	[MultilevelSensorTypes["Liquid Line temperature"]]: [
-		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
-		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
+		{ label: "Celcius", unit: "°C", key: 0x00 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01 },
 	],
 	[MultilevelSensorTypes["Discharge Line temperature"]]: [
-		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
-		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 11 },
+		{ label: "Celcius", unit: "°C", key: 0x00 },
+		{ label: "Fahrenheit", unit: "F", key: 0x01 },
 	],
 	[MultilevelSensorTypes["Suction Pressure"]]: [
-		{ label: "Kilopascal", unit: "kPa", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Kilopascal", unit: "kPa", key: 0x00 },
 		{
 			label: "Pound per square inch",
 			unit: "psi",
 			key: 0x01,
-			minimumCCVersion: 11,
 		},
 	],
 	[MultilevelSensorTypes["Discharge Pressure"]]: [
-		{ label: "Kilopascal", unit: "kPa", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Kilopascal", unit: "kPa", key: 0x00 },
 		{
 			label: "Pound per square inch",
 			unit: "psi",
 			key: 0x01,
-			minimumCCVersion: 11,
 		},
 	],
 	[MultilevelSensorTypes["Defrost temperature"]]: [
-		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Celcius", unit: "°C", key: 0x00 },
 	],
 	[MultilevelSensorTypes.Ozone]: [
-		{ label: "Density", unit: "µg/m³", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Density", unit: "µg/m³", key: 0x00 },
 	],
 	[MultilevelSensorTypes["Sulfur dioxide"]]: [
-		{ label: "Density", unit: "µg/m³", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Density", unit: "µg/m³", key: 0x00 },
 	],
 	[MultilevelSensorTypes["Nitrogen dioxide"]]: [
-		{ label: "Density", unit: "µg/m³", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Density", unit: "µg/m³", key: 0x00 },
 	],
 	[MultilevelSensorTypes.Ammonia]: [
-		{ label: "Density", unit: "µg/m³", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Density", unit: "µg/m³", key: 0x00 },
 	],
 	[MultilevelSensorTypes.Lead]: [
-		{ label: "Density", unit: "µg/m³", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Density", unit: "µg/m³", key: 0x00 },
 	],
 	[MultilevelSensorTypes["Particulate Matter 1"]]: [
-		{ label: "Density", unit: "µg/m³", key: 0x00, minimumCCVersion: 11 },
+		{ label: "Density", unit: "µg/m³", key: 0x00 },
 	],
 };
 
@@ -611,6 +554,5 @@ export function getScale(
 		unit: undefined,
 		label: "Unknown",
 		key: scale,
-		minimumCCVersion: 0,
 	};
 }
