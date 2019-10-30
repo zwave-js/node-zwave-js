@@ -1,5 +1,7 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
+import { Driver } from "../driver/Driver";
 import { IDriver } from "../driver/IDriver";
+import { ZWaveNode } from "../node/Node";
 import {
 	BasicCC,
 	BasicCCGet,
@@ -7,8 +9,9 @@ import {
 	BasicCCSet,
 	BasicCommand,
 } from "./BasicCC";
-import { getCCValueMetadata } from "./CommandClass";
+import { CommandClass, getCCValueMetadata } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
+import { MultiChannelCommand } from "./MultiChannelCC";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
@@ -117,6 +120,57 @@ describe("lib/commandclass/BasicCC => ", () => {
 			writeable: true,
 			min: 0,
 			max: 99,
+		});
+	});
+
+	describe("getDefinedValueIDs()", () => {
+		// Repro for GH#377
+		it("should always include a value id for the target value", () => {
+			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+			(fakeDriver as any).controller.nodes.set(node.id, node);
+			// We have 2 endpoints
+			node.valueDB.setValue(
+				{
+					commandClass: CommandClasses["Multi Channel"],
+					propertyName: "individualCount",
+				},
+				2,
+			);
+			const endpointIndex = 1;
+			// But we only support V1, so no report of the target value
+			node.getEndpoint(endpointIndex)!.addCC(CommandClasses.Basic, {
+				isSupported: true,
+				version: 1,
+			});
+
+			// create something we can parse
+			const serializedCC = Buffer.from([
+				node.id, // node number
+				7, // remaining length
+				CommandClasses["Multi Channel"], // CC
+				MultiChannelCommand.CommandEncapsulation,
+				endpointIndex, // source EP
+				0, // target EP
+				CommandClasses.Basic,
+				BasicCommand.Report,
+				55, // current value
+			]);
+			// Deserialize it
+			CommandClass.from(fakeDriver, serializedCC);
+
+			// And verify that the valueIDs contain the targetValue property for endpoint 1
+			const ccInstance = new BasicCC(fakeDriver, {
+				nodeId: node.id,
+				endpoint: endpointIndex,
+			});
+
+			const valueIDs = ccInstance.getDefinedValueIDs();
+			console.error(JSON.stringify(valueIDs));
+			expect(valueIDs).toContainValue({
+				commandClass: CommandClasses.Basic,
+				endpoint: endpointIndex,
+				propertyName: "targetValue",
+			});
 		});
 	});
 });
