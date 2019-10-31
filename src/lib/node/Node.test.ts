@@ -1159,15 +1159,15 @@ describe("lib/node/Node", () => {
 		it("should contain a speaking name for the propertyKey", () => {
 			node.valueDB.setValue(
 				{
-					commandClass: CommandClasses["Multilevel Sensor"],
-					propertyName: "values",
-					propertyKey: 31 /* Moisture */,
+					commandClass: CommandClasses["Thermostat Setpoint"],
+					propertyName: "setpoint",
+					propertyKey: 1 /* Heating */,
 				},
 				5,
 			);
 			expect(onValueAdded).toBeCalled();
 			const cbArg = onValueAdded.mock.calls[0][1];
-			expect(cbArg.propertyKeyName).toBe("Moisture");
+			expect(cbArg.propertyKeyName).toBe("Heating");
 		});
 
 		it("should not be emitted for internal values", () => {

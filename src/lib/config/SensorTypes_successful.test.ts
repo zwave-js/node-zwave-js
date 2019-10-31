@@ -1,4 +1,9 @@
 import fsExtra from "fs-extra";
+import {
+	loadSensorTypes,
+	lookupSensorScale,
+	lookupSensorType,
+} from "./SensorTypes";
 
 jest.mock("fs-extra");
 const readFileMock = fsExtra.readFile as jest.Mock;
@@ -25,39 +30,50 @@ const dummySensorTypes = {
 // But since I see no other way, they are now in their own file
 
 describe("lib/config/SensorTypes", () => {
+	beforeAll(async () => {
+		pathExistsMock.mockResolvedValue(true);
+		readFileMock.mockResolvedValue(JSON.stringify(dummySensorTypes));
+		await loadSensorTypes();
+	});
+
 	describe("lookupSensorType()", () => {
-		let lookupSensorType: typeof import("./SensorTypes").lookupSensorType;
-
-		beforeAll(() => {
-			pathExistsMock.mockResolvedValue(true);
-			readFileMock.mockResolvedValue(JSON.stringify(dummySensorTypes));
-
-			jest.isolateModules(() => {
-				lookupSensorType = require("./SensorTypes").lookupSensorType;
-			});
-		});
-
 		beforeEach(() => {
 			readFileMock.mockClear();
 			pathExistsMock.mockClear();
 		});
 
-		it("caches the file contents", async () => {
-			await lookupSensorType(0);
-			expect(fsExtra.readFile).toBeCalledTimes(1);
-			expect(fsExtra.pathExists).toBeCalledTimes(1);
-
-			await lookupSensorType(1);
-			expect(fsExtra.readFile).toBeCalledTimes(1);
-			expect(fsExtra.pathExists).toBeCalledTimes(1);
-		});
-
 		it("returns the sensor type definition if it is defined", async () => {
-			const test1 = await lookupSensorType(0x0a);
+			const test1 = lookupSensorType(0x0a);
 			expect(test1).not.toBeUndefined();
 			expect(test1!.label).toBe("Dummy temperature");
 
-			await expect(lookupSensorType(0xff)).resolves.toBeUndefined();
+			expect(lookupSensorType(0xff)).toBeUndefined();
+		});
+	});
+
+	describe("lookupSensorScale()", () => {
+		it("returns the sensor scale definition if it is defined", async () => {
+			const test1 = lookupSensorScale(0x0a, 0x00);
+			expect(test1).toMatchObject(
+				dummySensorTypes["0x0a"].scales["0x00"],
+			);
+			const test2 = lookupSensorScale(0x0a, 0x01);
+			expect(test2).toMatchObject(
+				dummySensorTypes["0x0a"].scales["0x01"],
+			);
+		});
+
+		it("returns a falllback scale definition if the requested one is not defined", async () => {
+			// existing type, missing scale
+			const test1 = lookupSensorScale(0x0a, 0xff);
+			expect(test1).toMatchObject({
+				label: "Unknown",
+			});
+			// missing type
+			const test2 = lookupSensorScale(0xff, 0xff);
+			expect(test2).toMatchObject({
+				label: "Unknown",
+			});
 		});
 	});
 });

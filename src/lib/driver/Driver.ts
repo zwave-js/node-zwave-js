@@ -16,6 +16,7 @@ import { isCommandClassContainer } from "../commandclass/ICommandClassContainer"
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
+import { loadSensorTypes } from "../config/SensorTypes";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import {
 	ApplicationUpdateRequest,
@@ -225,7 +226,7 @@ export class Driver extends EventEmitter implements IDriver {
 	private _wasStarted: boolean = false;
 	private _isOpen: boolean = false;
 	/** Start the driver */
-	public start(): Promise<void> {
+	public async start(): Promise<void> {
 		// avoid starting twice
 		if (this._wasDestroyed) {
 			return Promise.reject(
@@ -238,40 +239,45 @@ export class Driver extends EventEmitter implements IDriver {
 		if (this._wasStarted) return Promise.resolve();
 		this._wasStarted = true;
 
-		return new Promise((resolve, reject) => {
-			log.driver.print("starting driver...");
-			this.serial = new SerialPort(this.port, {
-				autoOpen: false,
-				baudRate: 115200,
-				dataBits: 8,
-				stopBits: 1,
-				parity: "none",
-			});
-			this.serial
-				// wotan-disable-next-line async-function-assignability
-				.on("open", async () => {
-					log.driver.print("serial port opened");
-					this._isOpen = true;
-					this.resetIO();
-					resolve();
+		// Load the necessary configuration
+		log.driver.print("loading configuration...");
+		await loadSensorTypes();
 
-					setImmediate(
-						() => void this.initializeControllerAndNodes(),
-					);
-				})
-				// wotan-disable-next-line async-function-assignability
-				.on("data", this.serialport_onData.bind(this))
-				.on("error", err => {
-					log.driver.print("serial port errored: " + err, "error");
-					if (this._isOpen) {
-						this.serialport_onError(err);
-					} else {
-						reject(err);
-						this.destroy();
-					}
-				});
-			this.serial.open();
+		const openPromise = createDeferredPromise();
+
+		// Open the serial port
+		log.driver.print("starting driver...");
+		this.serial = new SerialPort(this.port, {
+			autoOpen: false,
+			baudRate: 115200,
+			dataBits: 8,
+			stopBits: 1,
+			parity: "none",
 		});
+		this.serial
+			// wotan-disable-next-line async-function-assignability
+			.on("open", async () => {
+				log.driver.print("serial port opened");
+				this._isOpen = true;
+				this.resetIO();
+				openPromise.resolve();
+
+				setImmediate(() => void this.initializeControllerAndNodes());
+			})
+			// wotan-disable-next-line async-function-assignability
+			.on("data", this.serialport_onData.bind(this))
+			.on("error", err => {
+				log.driver.print("serial port errored: " + err, "error");
+				if (this._isOpen) {
+					this.serialport_onError(err);
+				} else {
+					openPromise.reject(err);
+					this.destroy();
+				}
+			});
+		this.serial.open();
+
+		return openPromise;
 	}
 
 	private _controllerInterviewed: boolean = false;
