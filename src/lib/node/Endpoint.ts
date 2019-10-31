@@ -117,13 +117,6 @@ export class Endpoint {
 	 * Creates an instance of the given CC and links it to this endpoint.
 	 * Throws if the CC is neither supported nor controlled by the endpoint.
 	 */
-	// wotan-disable no-misused-generics
-	public createCCInstance<T extends CommandClass>(
-		ccId: CommandClasses,
-	): T | undefined;
-	public createCCInstance<T extends CommandClass>(
-		cc: Constructable<T>,
-	): T | undefined;
 	public createCCInstance<T extends CommandClass>(
 		cc: CommandClasses | Constructable<T>,
 	): T | undefined {
@@ -136,7 +129,6 @@ export class Endpoint {
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
-		// @ts-ignore https://github.com/microsoft/TypeScript/issues/34632
 		return this.createCCInstanceInternal(cc);
 	}
 
@@ -144,19 +136,11 @@ export class Endpoint {
 	 * Creates an instance of the given CC and links it to this endpoint.
 	 * Returns undefined if the CC is neither supported nor controlled by the endpoint.
 	 */
-	// wotan-disable no-misused-generics
-	public createCCInstanceUnsafe<T extends CommandClass>(
-		ccId: CommandClasses,
-	): T | undefined;
-	public createCCInstanceUnsafe<T extends CommandClass>(
-		cc: Constructable<T>,
-	): T | undefined;
 	public createCCInstanceUnsafe<T extends CommandClass>(
 		cc: CommandClasses | Constructable<T>,
 	): T | undefined {
 		const ccId = typeof cc === "number" ? cc : getCommandClassStatic(cc);
 		if (this.supportsCC(ccId) || this.controlsCC(ccId)) {
-			// @ts-ignore https://github.com/microsoft/TypeScript/issues/34632
 			return this.createCCInstanceInternal(cc);
 		}
 	}
@@ -166,12 +150,6 @@ export class Endpoint {
 	 * Create an instance of the given CC without checking whether it is supported.
 	 * Applications should not use this directly.
 	 */
-	public createCCInstanceInternal<T extends CommandClass>(
-		ccId: CommandClasses,
-	): T | undefined;
-	public createCCInstanceInternal<T extends CommandClass>(
-		cc: Constructable<T>,
-	): T | undefined;
 	public createCCInstanceInternal<T extends CommandClass>(
 		cc: CommandClasses | Constructable<T>,
 	): T | undefined {
