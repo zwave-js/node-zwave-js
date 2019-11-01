@@ -1,6 +1,7 @@
 import { Driver, ZWaveNode } from "../..";
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertCC } from "../../../test/util";
+import { loadManufacturers } from "../config/Manufacturers";
 import { IDriver } from "../driver/IDriver";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
@@ -49,7 +50,8 @@ describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 			);
 		}
 
-		beforeAll(() => {
+		beforeAll(async () => {
+			await loadManufacturers();
 			resetSendMessageImplementation();
 			fakeDriver.controller.nodes.set(node.id, node);
 			node.addCC(CommandClasses["Manufacturer Specific"], {
