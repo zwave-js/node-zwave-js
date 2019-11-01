@@ -308,7 +308,7 @@ interface MultilevelSensorCCGetSpecificOptions {
 }
 type MultilevelSensorCCGetOptions =
 	| CCCommandOptions
-	| CCCommandOptions & MultilevelSensorCCGetSpecificOptions;
+	| (CCCommandOptions & MultilevelSensorCCGetSpecificOptions);
 
 @CCCommand(MultilevelSensorCommand.Get)
 @expectedCCResponse(MultilevelSensorCCReport)

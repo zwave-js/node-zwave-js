@@ -7,9 +7,10 @@ export interface MultilevelSensorScale {
 	minimumCCVersion: number;
 }
 
-const multilevelSensorScales: Partial<
-	Record<MultilevelSensorTypes, MultilevelSensorScale[]>
-> = {
+const multilevelSensorScales: Partial<Record<
+	MultilevelSensorTypes,
+	MultilevelSensorScale[]
+>> = {
 	[MultilevelSensorTypes["Air temperature"]]: [
 		{ label: "Celcius", unit: "°C", key: 0x00, minimumCCVersion: 1 },
 		{ label: "Fahrenheit", unit: "F", key: 0x01, minimumCCVersion: 1 },

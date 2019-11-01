@@ -378,23 +378,18 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	private getAssociationGroupCountCached(): number {
 		const endpoint = this.getEndpoint()!;
-		// TODO: Refactor this when TS3.7 is supported by Prettier ==> ?. and ??
 		// The association group count is either determined by the
 		// Association CC or the Multi Channel Association CC
 
 		// First query the Multi Channel Association CC
 		return (
-			(endpoint.commandClasses[
-				"Multi Channel Association"
-			].isSupported() &&
-				endpoint
-					.createCCInstance(MultiChannelAssociationCC)!
-					.getGroupCountCached()) ||
+			endpoint
+				.createCCInstanceUnsafe(MultiChannelAssociationCC)
+				?.getGroupCountCached() ||
 			// Then the Association CC
-			(endpoint.commandClasses.Association.isSupported() &&
-				endpoint
-					.createCCInstance(AssociationCC)!
-					.getGroupCountCached()) ||
+			endpoint
+				.createCCInstanceUnsafe(AssociationCC)
+				?.getGroupCountCached() ||
 			// And fall back to 0
 			0
 		);
@@ -586,7 +581,8 @@ type AssociationGroupInfoCCInfoGetOptions = CCCommandOptions & {
 		  }
 		| {
 				groupId: number;
-		  });
+		  }
+	);
 
 @CCCommand(AssociationGroupInfoCommand.InfoGet)
 @expectedCCResponse(AssociationGroupInfoCCInfoReport)

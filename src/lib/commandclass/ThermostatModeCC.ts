@@ -218,7 +218,8 @@ type ThermostatModeCCSetOptions = CCCommandOptions &
 		| {
 				mode: typeof ThermostatMode["Manufacturer specific"];
 				manufacturerData: Buffer;
-		  });
+		  }
+	);
 
 @CCCommand(ThermostatModeCommand.Set)
 export class ThermostatModeCCSet extends ThermostatModeCC {

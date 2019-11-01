@@ -110,7 +110,7 @@ export class Endpoint {
 			return this.getNodeUnsafe()!.getCCVersion(cc);
 		}
 		const ccInfo = this._implementedCommandClasses.get(cc);
-		return (ccInfo && ccInfo.version) || 0;
+		return ccInfo?.version ?? 0;
 	}
 
 	/**

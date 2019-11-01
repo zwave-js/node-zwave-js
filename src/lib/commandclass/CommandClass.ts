@@ -48,7 +48,8 @@ export type CommandClassDeserializationOptions = { data: Buffer } & (
 	| {
 			fromEncapsulation: true;
 			encapCC: CommandClass;
-	  });
+	  }
+);
 
 export function gotDeserializationOptions(
 	options: any,
@@ -373,17 +374,17 @@ export class CommandClass {
 		return stripUndefined({ ...ret, ...props });
 	}
 
-	/* eslint-disable @typescript-eslint/no-unused-vars */
-	/** Requests static or dynamic state for a given from a node */
-	// TODO: Merge this with the interview procedure
-	public static async requestState(
-		driver: IDriver,
-		node: ZWaveNode,
-		// kind: StateKind,
-	): Promise<void> {
-		// This needs to be overwritten per command class. In the default implementation, don't do anything
-	}
-	/* eslint-enable @typescript-eslint/no-unused-vars */
+	// /* eslint-disable @typescript-eslint/no-unused-vars */
+	// /** Requests static or dynamic state for a given from a node */
+	// // TODO: Merge this with the interview procedure
+	// public static async requestState(
+	// 	driver: IDriver,
+	// 	node: ZWaveNode,
+	// 	// kind: StateKind,
+	// ): Promise<void> {
+	// 	// This needs to be overwritten per command class. In the default implementation, don't do anything
+	// }
+	// /* eslint-enable @typescript-eslint/no-unused-vars */
 
 	// This needs to be overwritten per command class. In the default implementation, don't do anything
 	/**
@@ -391,7 +392,9 @@ export class CommandClass {
 	 * @param complete Whether a complete interview should be performed or only the necessary steps on startup
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public async interview(complete: boolean = true): Promise<void> {}
+	public async interview(complete: boolean = true): Promise<void> {
+		// Empty on purpose
+	}
 
 	/** Determines which CC interviews must be performed before this CC can be interviewed */
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
@@ -526,16 +529,11 @@ export class CommandClass {
 		const ccValueDefinition = getCCValueDefinitions(this).get(
 			propertyName as string,
 		);
-		if (ccValueDefinition && ccValueDefinition.internal === true)
-			return true;
+		if (ccValueDefinition?.internal === true) return true;
 		const ccKeyValuePairDefinition = getCCKeyValuePairDefinitions(this).get(
 			propertyName as string,
 		);
-		if (
-			ccKeyValuePairDefinition &&
-			ccKeyValuePairDefinition.internal === true
-		)
-			return true;
+		if (ccKeyValuePairDefinition?.internal === true) return true;
 		return false;
 	}
 
@@ -1197,12 +1195,12 @@ export function API(cc: CommandClasses): ClassDecorator {
 export function getAPI(cc: CommandClasses): APIConstructor | undefined {
 	// Retrieve the constructor map from the CCAPI class
 	const map: APIMap | undefined = Reflect.getMetadata(METADATA_APIMap, CCAPI);
-	const ret = map && map.get(cc);
+	const ret = map?.get(cc);
 
 	log.reflection.lookup(
 		CommandClasses[cc],
 		"API",
-		`${ret != undefined ? ret.name : "undefined"}`,
+		`${ret?.name ?? "undefined"}`,
 	);
 	return ret;
 }

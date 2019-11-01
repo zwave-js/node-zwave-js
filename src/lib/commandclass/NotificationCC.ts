@@ -172,7 +172,7 @@ async function defineMetadataForNotificationEvents(
 	for (const value of events) {
 		// Find out which property we need to update
 		const valueConfig = notificationConfig.lookupValue(value);
-		if (valueConfig && valueConfig.type === "state") {
+		if (valueConfig?.type === "state") {
 			const valueId = {
 				commandClass: CommandClasses.Notification,
 				endpoint,

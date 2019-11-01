@@ -529,7 +529,10 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 	}
 
-	private _cleanupHandler = () => void this.destroy();
+	private _cleanupHandler = (): void => {
+		this.destroy();
+	};
+
 	/**
 	 * Terminates the driver instance and closes the underlying serial connection.
 	 * Must be called under any circumstances.
@@ -1041,7 +1044,7 @@ ${handlers.length} left`,
 
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
 			const node = msg.getNodeUnsafe();
-			if (node && node.status === NodeStatus.Dead) {
+			if (node?.status === NodeStatus.Dead) {
 				// We have received a message from a dead node, bring it back to life
 				// We do not know if the node is actually awake, so mark it as unknown for now
 				node.status = NodeStatus.Unknown;
@@ -1239,8 +1242,7 @@ ${handlers.length} left`,
 		this.currentTransaction = undefined;
 		// If a sleeping node has no messages pending, send it back to sleep
 		if (
-			node &&
-			node.supportsCC(CommandClasses["Wake Up"]) &&
+			node?.supportsCC(CommandClasses["Wake Up"]) &&
 			!this.hasPendingMessages(node)
 		) {
 			node.sendNoMoreInformation();
@@ -1299,7 +1301,7 @@ ${handlers.length} left`,
 		// Don't send messages to dead nodes
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
 			const node = msg.getNodeUnsafe();
-			if (node && node.status === NodeStatus.Dead) {
+			if (node?.status === NodeStatus.Dead) {
 				throw new ZWaveError(
 					"The message will not be sent because the node is presumed dead",
 					ZWaveErrorCodes.Controller_MessageDropped,
@@ -1504,10 +1506,7 @@ ${handlers.length} left`,
 		this.sortSendQueue();
 
 		// Don't forget the current transaction
-		if (
-			this.currentTransaction &&
-			this.currentTransaction.message.getNodeId() === nodeId
-		) {
+		if (this.currentTransaction?.message.getNodeId() === nodeId) {
 			// Change the priority to WakeUp and re-add it to the queue
 			this.currentTransaction.priority = MessagePriority.WakeUp;
 			this.sendQueue.add(this.currentTransaction);
@@ -1542,10 +1541,7 @@ ${handlers.length} left`,
 		this.sendQueue.remove(...transactionsToRemove);
 
 		// Don't forget the current transaction
-		if (
-			this.currentTransaction &&
-			this.currentTransaction.message.getNodeId() === nodeId
-		) {
+		if (this.currentTransaction?.message.getNodeId() === nodeId) {
 			this.rejectCurrentTransaction(
 				new ZWaveError(
 					errorMsg,

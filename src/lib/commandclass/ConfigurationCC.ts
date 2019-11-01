@@ -693,7 +693,8 @@ type ConfigurationCCSetOptions = CCCommandOptions &
 				resetToDefault?: false;
 				valueSize: number;
 				value: ConfigValue;
-		  });
+		  }
+	);
 
 @CCCommand(ConfigurationCommand.Set)
 export class ConfigurationCCSet extends ConfigurationCC {
@@ -765,7 +766,8 @@ type ConfigurationCCBulkSetOptions = CCCommandOptions & {
 				resetToDefault?: false;
 				valueSize: number;
 				values: number[];
-		  });
+		  }
+	);
 
 const getResponseForBulkSet: DynamicCCResponse = (
 	cc: ConfigurationCCBulkSet,

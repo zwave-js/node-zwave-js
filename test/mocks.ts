@@ -123,8 +123,7 @@ export function createEmptyMockDriver() {
 				) => {
 					if (
 						// wotan-disable-next-line no-useless-predicate
-						ret.controller &&
-						ret.controller.nodes instanceof Map &&
+						ret.controller?.nodes instanceof Map &&
 						ret.controller.nodes.has(nodeId)
 					) {
 						const node: ZWaveNode = ret.controller.nodes.get(
@@ -152,7 +151,7 @@ export function createEmptyMockDriver() {
 			command,
 		});
 		const resp = await ret.sendMessage(msg, options);
-		return resp && resp.command;
+		return resp?.command;
 	});
 	return ret;
 }

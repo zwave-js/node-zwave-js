@@ -372,7 +372,8 @@ type MultilevelSwitchCCStartLevelChangeOptions = {
 	| {
 			ignoreStartLevel: false;
 			startLevel: number;
-	  }) & {
+	  }
+) & {
 		// Version >= 2:
 		duration?: Duration;
 	};
@@ -383,7 +384,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 		driver: IDriver,
 		options:
 			| CommandClassDeserializationOptions
-			| CCCommandOptions & MultilevelSwitchCCStartLevelChangeOptions,
+			| (CCCommandOptions & MultilevelSwitchCCStartLevelChangeOptions),
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {

@@ -27,7 +27,10 @@ describe("lib/strings => num2hex()", () => {
 	});
 
 	it("should return an even number lowercase hex digits prefixed with 0x", () => {
-		const testCases: [number, string][] = [[1, "0x01"], [0xfed, "0x0fed"]];
+		const testCases: [number, string][] = [
+			[1, "0x01"],
+			[0xfed, "0x0fed"],
+		];
 		for (const [inp, out] of testCases) {
 			expect(num2hex(inp)).toBe(out);
 		}
