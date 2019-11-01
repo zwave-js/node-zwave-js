@@ -86,7 +86,7 @@
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.26",
     "reflect-metadata": "^0.1.13",
-    "serialport": "^7.1.5",
+    "serialport": "^8.0.5",
     "winston": "^3.2.1"
   },
   "scripts": {
