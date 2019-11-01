@@ -1,8 +1,8 @@
+import { Scale } from "../config/Scales";
 import {
 	getSensorTypeName,
 	lookupSensorScale,
 	lookupSensorType,
-	SensorScale,
 } from "../config/SensorTypes";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -38,7 +38,7 @@ export enum MultilevelSensorCommand {
 
 export interface MultilevelSensorValue {
 	value: number;
-	scale: SensorScale;
+	scale: Scale;
 }
 
 // @noSetValueAPI This CC is read-only
@@ -288,8 +288,8 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		return this._type;
 	}
 
-	private _scale: SensorScale;
-	public get scale(): SensorScale {
+	private _scale: Scale;
+	public get scale(): Scale {
 		return this._scale;
 	}
 

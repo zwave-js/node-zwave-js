@@ -39,10 +39,13 @@ export async function lookupDevice(
 			const fileContents = await readFile(filePath, "utf8");
 			return JSON5.parse(fileContents);
 		} catch (e) {
-			log.driver.print(
-				`Error loading device config ${filePath}`,
-				"error",
-			);
+			if (process.env.NODE_ENV !== "test") {
+				// FIXME: This call breaks when using jest.isolateModule()
+				log.driver.print(
+					`Error loading device config ${filePath}`,
+					"error",
+				);
+			}
 		}
 	}
 }

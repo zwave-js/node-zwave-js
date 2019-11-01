@@ -15,12 +15,12 @@ const dummySensorTypes = {
 		label: "Dummy temperature",
 		scales: {
 			"0x00": {
-				label: "Celcius",
+				label: "Celsius",
 				unit: "°C",
 			},
 			"0x01": {
 				label: "Fahrenheit",
-				unit: "F",
+				unit: "°F",
 				description: "don't use this!",
 			},
 		},
@@ -34,12 +34,12 @@ const dummySensorTypes = {
 const dummyScales = {
 	temperature: {
 		"0x00": {
-			label: "Celcius",
+			label: "Celsius",
 			unit: "°C",
 		},
 		"0x01": {
 			label: "Fahrenheit",
-			unit: "F",
+			unit: "°F",
 		},
 	},
 };

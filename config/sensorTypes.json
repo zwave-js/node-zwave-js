@@ -117,14 +117,7 @@
 	"0x0b": {
 		"label": "Dew point",
 		"scales": {
-			"0x00": {
-				"label": "Celcius",
-				"unit": "°C"
-			},
-			"0x01": {
-				"label": "Fahrenheit",
-				"unit": "F"
-			}
+			"scales": "$SCALES:temperature"
 		}
 	},
 	"0x0c": {
