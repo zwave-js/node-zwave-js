@@ -35,7 +35,10 @@ describe("lib/values/Cache", () => {
 		});
 
 		it("converts Maps into objects", () => {
-			const input = new Map<any, any>([["foo", "bar"], [0, 1]]);
+			const input = new Map<any, any>([
+				["foo", "bar"],
+				[0, 1],
+			]);
 			const expected = { foo: "bar", 0: 1, $$type$$: "map" };
 			expect(serializeCacheValue(input)).toEqual(expected);
 		});
@@ -76,7 +79,10 @@ describe("lib/values/Cache", () => {
 
 		it("Restores Maps", () => {
 			const input = { foo: "bar", 0: 1, $$type$$: "map" };
-			const expected = new Map<any, any>([["foo", "bar"], [0, 1]]);
+			const expected = new Map<any, any>([
+				["foo", "bar"],
+				[0, 1],
+			]);
 			expect(deserializeCacheValue(input)).toEqual(expected);
 		});
 	});

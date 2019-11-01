@@ -39,7 +39,11 @@ describe("lib/values/Switchpoint", () => {
 		it("should work correctly", () => {
 			expect(
 				decodeSwitchpoint(Buffer.from([15, 37, 0])),
-			).toContainEntries([["hour", 15], ["minute", 37], ["state", 0]]);
+			).toContainEntries([
+				["hour", 15],
+				["minute", 37],
+				["state", 0],
+			]);
 		});
 	});
 });

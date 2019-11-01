@@ -21,7 +21,8 @@ interface NotificationEventDefinition {
 
 export type NotificationValueDefinition = (
 	| NotificationStateDefinition
-	| NotificationEventDefinition) & {
+	| NotificationEventDefinition
+) & {
 	description?: string;
 	label: string;
 };

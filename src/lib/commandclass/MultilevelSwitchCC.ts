@@ -1,6 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { validatePayload } from "../util/misc";
+import log from "../log";
+import { getEnumMemberName, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
@@ -39,7 +40,7 @@ export enum MultilevelSwitchCommand {
 export enum LevelChangeDirection {
 	"up" = 0b0,
 	"down" = 0b1,
-	"none" = 0b11,
+	// "none" = 0b11,
 }
 
 export enum SwitchType {
@@ -52,6 +53,17 @@ export enum SwitchType {
 	"Reverse/Forward" = 0x06,
 	"Pull/Push" = 0x07,
 }
+/**
+ * Translates a switch type into two actions that may be performed. Unknown types default to Off/On
+ */
+function switchTypeToActions(switchType: string): [string, string] {
+	if (!switchType.includes("/")) switchType = SwitchType[0x01]; // Off/On
+	return switchType.split("/", 2) as any;
+}
+const switchTypePropertyNames = Object.keys(SwitchType)
+	.filter(key => key.indexOf("/") > -1)
+	.map(key => switchTypeToActions(key))
+	.reduce<string[]>((acc, cur) => acc.concat(...cur), []);
 
 @API(CommandClasses["Multilevel Switch"])
 export class MultilevelSwitchCCAPI extends CCAPI {
@@ -114,10 +126,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	}
 
 	public async startLevelChange(
-		options: Omit<
-			MultilevelSwitchCCStartLevelChangeOptions,
-			keyof CCCommandOptions
-		>,
+		options: MultilevelSwitchCCStartLevelChangeOptions,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
@@ -145,8 +154,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-	public async getSupported() {
+	public async getSupported(): Promise<SwitchType> {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
 			MultilevelSwitchCommand.SupportedGet,
@@ -159,28 +167,52 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			MultilevelSwitchCCSupportedReport
 		>(cc))!;
-		return {
-			primarySwitchType: response.primarySwitchType,
-			secondarySwitchType: response.secondarySwitchType,
-		};
+		return response.switchType;
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ propertyName },
 		value,
 	): Promise<void> => {
-		if (propertyName !== "targetValue") {
+		if (propertyName === "targetValue") {
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					propertyName,
+					"number",
+					typeof value,
+				);
+			}
+			await this.set(value);
+		} else if (switchTypePropertyNames.includes(propertyName)) {
+			// Since the switch only supports one of the switch types, we would
+			// need to check if the correct one is used. But since the names are
+			// purely cosmetic, we just accept all of them
+			if (typeof value !== "boolean") {
+				throwWrongValueType(
+					this.ccId,
+					propertyName,
+					"number",
+					typeof value,
+				);
+			}
+			if (value) {
+				// The property names are organized so that positive motions are
+				// at odd indices and negative motions at even indices
+				const direction =
+					switchTypePropertyNames.indexOf(propertyName) % 2 === 0
+						? "down"
+						: "up";
+				await this.startLevelChange({
+					direction,
+					ignoreStartLevel: true,
+				});
+			} else {
+				await this.stopLevelChange();
+			}
+		} else {
 			throwUnsupportedProperty(this.ccId, propertyName);
 		}
-		if (typeof value !== "number") {
-			throwWrongValueType(
-				this.ccId,
-				propertyName,
-				"number",
-				typeof value,
-			);
-		}
-		await this.set(value);
 	};
 }
 
@@ -190,7 +222,44 @@ export interface MultilevelSwitchCC {
 
 @commandClass(CommandClasses["Multilevel Switch"])
 @implementedVersion(4)
-export class MultilevelSwitchCC extends CommandClass {}
+export class MultilevelSwitchCC extends CommandClass {
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const api = this.getEndpoint()!.commandClasses["Multilevel Switch"];
+
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		if (complete && this.version >= 3) {
+			// Find out which kind of switch this is
+			log.controller.logNode(node.id, {
+				message: "requesting switch type...",
+				direction: "outbound",
+			});
+			const switchType = await api.getSupported();
+			log.controller.logNode(node.id, {
+				message: `has switch type ${getEnumMemberName(
+					SwitchType,
+					switchType,
+				)}`,
+				direction: "inbound",
+			});
+		}
+
+		log.controller.logNode(node.id, {
+			message: "requesting current switch state...",
+			direction: "outbound",
+		});
+		await api.get();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+}
 
 interface MultilevelSwitchCCSetOptions extends CCCommandOptions {
 	targetValue: number;
@@ -294,16 +363,20 @@ export class MultilevelSwitchCCGet extends MultilevelSwitchCC {
 	}
 }
 
-interface MultilevelSwitchCCStartLevelChangeOptions extends CCCommandOptions {
-	primarySwitchDirection: keyof typeof LevelChangeDirection;
-	ignoreStartLevel: boolean;
-	primarySwitchStartLevel: number;
-	// Version >= 2:
-	duration?: Duration;
-	// Version >= 3:
-	secondarySwitchDirection?: keyof typeof LevelChangeDirection;
-	secondarySwitchStepSize?: number;
-}
+type MultilevelSwitchCCStartLevelChangeOptions = {
+	direction: keyof typeof LevelChangeDirection;
+} & (
+	| {
+			ignoreStartLevel: true;
+	  }
+	| {
+			ignoreStartLevel: false;
+			startLevel: number;
+	  }
+) & {
+		// Version >= 2:
+		duration?: Duration;
+	};
 
 @CCCommand(MultilevelSwitchCommand.StartLevelChange)
 export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
@@ -311,7 +384,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 		driver: IDriver,
 		options:
 			| CommandClassDeserializationOptions
-			| MultilevelSwitchCCStartLevelChangeOptions,
+			| (CCCommandOptions & MultilevelSwitchCCStartLevelChangeOptions),
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
@@ -322,39 +395,24 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 			);
 		} else {
 			this.duration = options.duration;
-			this.primarySwitchStartLevel = options.primarySwitchStartLevel;
 			this.ignoreStartLevel = options.ignoreStartLevel;
-			this.primarySwitchDirection = options.primarySwitchDirection;
-			this.secondarySwitchDirection = options.secondarySwitchDirection;
-			this.secondarySwitchStepSize = options.secondarySwitchStepSize;
+			this.startLevel = options.ignoreStartLevel ? 0 : options.startLevel;
+			this.direction = options.direction;
 		}
 	}
 
 	public duration: Duration | undefined;
-	public primarySwitchStartLevel: number;
+	public startLevel: number;
 	public ignoreStartLevel: boolean;
-	public primarySwitchDirection: keyof typeof LevelChangeDirection;
-	public secondarySwitchDirection:
-		| keyof typeof LevelChangeDirection
-		| undefined;
-	public secondarySwitchStepSize: number | undefined;
+	public direction: keyof typeof LevelChangeDirection;
 
 	public serialize(): Buffer {
-		let controlByte =
-			(LevelChangeDirection[this.primarySwitchDirection] << 6) |
+		const controlByte =
+			(LevelChangeDirection[this.direction] << 6) |
 			(this.ignoreStartLevel ? 0b0010_0000 : 0);
-		if (this.version >= 3) {
-			if (this.secondarySwitchDirection != null) {
-				controlByte |=
-					LevelChangeDirection[this.secondarySwitchDirection] << 3;
-			}
-		}
-		const payload = [controlByte, this.primarySwitchStartLevel];
+		const payload = [controlByte, this.startLevel];
 		if (this.version >= 2 && this.duration) {
 			payload.push(this.duration.serializeSet());
-		}
-		if (this.version >= 3 && this.secondarySwitchDirection != undefined) {
-			payload.push(this.secondarySwitchStepSize || 0);
 		}
 		this.payload = Buffer.from(payload);
 		return super.serialize();
@@ -380,23 +438,41 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 		super(driver, options);
 
 		validatePayload(this.payload.length >= 2);
-		this._primarySwitchType = this.payload[0] & 0b11111;
-		this._secondarySwitchType = this.payload[1] & 0b11111;
+		this._switchType = this.payload[0] & 0b11111;
 		this.persistValues();
+
+		// Create metadata for the control values
+		const switchTypeName = getEnumMemberName(SwitchType, this._switchType);
+		const [up, down] = switchTypeToActions(switchTypeName);
+		this.getValueDB().setMetadata(
+			{
+				commandClass: this.ccId,
+				endpoint: this.endpointIndex,
+				propertyName: up,
+			},
+			{
+				...ValueMetadata.Boolean,
+				label: `Perform a level change (${up})`,
+			},
+		);
+		this.getValueDB().setMetadata(
+			{
+				commandClass: this.ccId,
+				endpoint: this.endpointIndex,
+				propertyName: down,
+			},
+			{
+				...ValueMetadata.Boolean,
+				label: `Perform a level change (${down})`,
+			},
+		);
 	}
 
-	// TODO: Use these to create the correct values/buttons
-
-	private _primarySwitchType: SwitchType;
+	// This is the primary switch type. We're not supporting secondary switch types
+	private _switchType: SwitchType;
 	@ccValue({ internal: true })
-	public get primarySwitchType(): SwitchType {
-		return this._primarySwitchType;
-	}
-
-	private _secondarySwitchType: SwitchType;
-	@ccValue({ internal: true })
-	public get secondarySwitchType(): SwitchType {
-		return this._secondarySwitchType;
+	public get switchType(): SwitchType {
+		return this._switchType;
 	}
 }
 

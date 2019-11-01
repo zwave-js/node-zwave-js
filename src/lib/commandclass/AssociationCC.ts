@@ -356,10 +356,7 @@ export class AssociationCCRemove extends AssociationCC {
 				);
 			}
 
-			if (
-				options.nodeIds &&
-				!options.nodeIds.every(n => n > 0 && n < MAX_NODES)
-			) {
+			if (options.nodeIds?.some(n => n < 1 || n > MAX_NODES)) {
 				throw new ZWaveError(
 					`All node IDs must be between 1 and ${MAX_NODES}!`,
 					ZWaveErrorCodes.Argument_Invalid,

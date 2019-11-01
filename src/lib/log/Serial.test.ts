@@ -8,7 +8,7 @@ import { restoreSilence } from "./shared";
 describe("lib/log/Serial =>", () => {
 	let serialLogger: winston.Logger;
 	let spyTransport: SpyTransport;
-	let wasSilenced = true;
+	const wasSilenced = true;
 
 	// Replace all defined transports with a spy transport
 	beforeAll(() => {

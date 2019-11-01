@@ -4,6 +4,14 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+* Support interviewing multi channel endpoints
+* Improve performance by not formatting logs that won't be visible
+* `Multi Channel CC`: Mark `commandClasses` property as internal
+* Upgrade to TypeScript 3.7 RC
+* Remove secondary switch functionality from `Multilevel Switch CC`
+* Implement interview procedure for `Multilevel Switch CC`
+
 ## 1.6.0 (2019-10-23)
 * Implement Multi Channel Association CC and prefer it to Association CC if possible
 * Implement AssociationGroupInfoCC

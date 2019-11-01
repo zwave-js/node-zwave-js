@@ -400,7 +400,7 @@ export function getMessageType<T extends Message>(
 		METADATA_messageTypes,
 		constr,
 	);
-	const ret = meta && meta.messageType;
+	const ret = meta?.messageType;
 	log.reflection.lookup(constr.name, "message type", num2hex(ret));
 	return ret;
 }
@@ -416,7 +416,7 @@ export function getMessageTypeStatic<T extends Constructable<Message>>(
 		METADATA_messageTypes,
 		classConstructor,
 	);
-	const ret = meta && meta.messageType;
+	const ret = meta?.messageType;
 	log.reflection.lookup(classConstructor.name, "message type", num2hex(ret));
 	return ret;
 }
@@ -434,7 +434,7 @@ export function getFunctionType<T extends Message>(
 		METADATA_messageTypes,
 		constr,
 	);
-	const ret = meta && meta.functionType;
+	const ret = meta?.functionType;
 	log.reflection.lookup(constr.name, "function type", num2hex(ret));
 	return ret;
 }
@@ -450,7 +450,7 @@ export function getFunctionTypeStatic<T extends Constructable<Message>>(
 		METADATA_messageTypes,
 		classConstructor,
 	);
-	const ret = meta && meta.functionType;
+	const ret = meta?.functionType;
 	log.reflection.lookup(classConstructor.name, "function type", num2hex(ret));
 	return ret;
 }

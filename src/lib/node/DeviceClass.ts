@@ -149,13 +149,10 @@ export class DeviceClass {
 	) {
 		this._mandatorySupportedCCs = generic.mandatorySupportedCCs
 			.concat(...specific.mandatorySupportedCCs)
-			.reduce(
-				(acc, cc) => {
-					if (acc.indexOf(cc) === -1) acc.push(cc);
-					return acc;
-				},
-				[] as CommandClasses[],
-			);
+			.reduce((acc, cc) => {
+				if (acc.indexOf(cc) === -1) acc.push(cc);
+				return acc;
+			}, [] as CommandClasses[]);
 		// remove basic CC if it's forbidden by the specific class
 		if (specific.basicCCForbidden) {
 			const basicIndex = this._mandatorySupportedCCs.indexOf(
@@ -167,13 +164,10 @@ export class DeviceClass {
 
 		this._mandatoryControlCCs = generic.mandatoryControlCCs
 			.concat(...specific.mandatoryControlCCs)
-			.reduce(
-				(acc, cc) => {
-					if (acc.indexOf(cc) === -1) acc.push(cc);
-					return acc;
-				},
-				[] as CommandClasses[],
-			);
+			.reduce((acc, cc) => {
+				if (acc.indexOf(cc) === -1) acc.push(cc);
+				return acc;
+			}, [] as CommandClasses[]);
 	}
 
 	private _mandatorySupportedCCs: CommandClasses[];
