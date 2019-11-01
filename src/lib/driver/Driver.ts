@@ -16,6 +16,7 @@ import { isCommandClassContainer } from "../commandclass/ICommandClassContainer"
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
+import { loadSensorTypes } from "../config/SensorTypes";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import {
 	ApplicationUpdateRequest,
@@ -225,7 +226,7 @@ export class Driver extends EventEmitter implements IDriver {
 	private _wasStarted: boolean = false;
 	private _isOpen: boolean = false;
 	/** Start the driver */
-	public start(): Promise<void> {
+	public async start(): Promise<void> {
 		// avoid starting twice
 		if (this._wasDestroyed) {
 			return Promise.reject(
@@ -238,7 +239,9 @@ export class Driver extends EventEmitter implements IDriver {
 		if (this._wasStarted) return Promise.resolve();
 		this._wasStarted = true;
 
-		return new Promise((resolve, reject) => {
+		// wotan-disable-next-line async-function-assignability
+		return new Promise(async (resolve, reject) => {
+			// Open the serial port
 			log.driver.print("starting driver...");
 			this.serial = new SerialPort(this.port, {
 				autoOpen: false,
@@ -271,6 +274,12 @@ export class Driver extends EventEmitter implements IDriver {
 					}
 				});
 			this.serial.open();
+
+			// Load the necessary configuration
+			// TODO: Tests expect the above code to be synchronous
+			// Can we refactor this so config is loaded first?
+			log.driver.print("loading configuration...");
+			await loadSensorTypes();
 		});
 	}
 

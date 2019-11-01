@@ -1,8 +1,14 @@
+import {
+	getSensorTypeName,
+	lookupSensorScale,
+	lookupSensorType,
+	SensorScale,
+} from "../config/SensorTypes";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { ValueID } from "../node/ValueDB";
-import { getEnumMemberName, validatePayload } from "../util/misc";
+import { validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, parseBitMask, parseFloatWithScale } from "../values/Primitive";
 import { CCAPI } from "./API";
@@ -20,8 +26,6 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
-import { getScale, MultilevelSensorScale } from "./MultilevelSensorScale";
-import { MultilevelSensorTypes } from "./MultilevelSensorTypes";
 
 export enum MultilevelSensorCommand {
 	GetSupportedSensor = 0x01,
@@ -34,7 +38,7 @@ export enum MultilevelSensorCommand {
 
 export interface MultilevelSensorValue {
 	value: number;
-	scale: MultilevelSensorScale;
+	scale: SensorScale;
 }
 
 // @noSetValueAPI This CC is read-only
@@ -52,15 +56,10 @@ export class MultilevelSensorCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	public async get(): Promise<
-		MultilevelSensorValue & { type: MultilevelSensorTypes }
-	>;
-	public async get(
-		sensorType: MultilevelSensorTypes,
-		scale: number,
-	): Promise<number>;
+	public async get(): Promise<MultilevelSensorValue & { type: number }>;
+	public async get(sensorType: number, scale: number): Promise<number>;
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-	public async get(sensorType?: MultilevelSensorTypes, scale?: number) {
+	public async get(sensorType?: number, scale?: number) {
 		this.assertSupportsCommand(
 			MultilevelSensorCommand,
 			MultilevelSensorCommand.Get,
@@ -89,9 +88,7 @@ export class MultilevelSensorCCAPI extends CCAPI {
 		}
 	}
 
-	public async getSupportedSensorTypes(): Promise<
-		readonly MultilevelSensorTypes[]
-	> {
+	public async getSupportedSensorTypes(): Promise<readonly number[]> {
 		this.assertSupportsCommand(
 			MultilevelSensorCommand,
 			MultilevelSensorCommand.GetSupportedSensor,
@@ -108,7 +105,7 @@ export class MultilevelSensorCCAPI extends CCAPI {
 	}
 
 	public async getSupportedScales(
-		sensorType: MultilevelSensorTypes,
+		sensorType: number,
 	): Promise<readonly number[]> {
 		this.assertSupportsCommand(
 			MultilevelSensorCommand,
@@ -154,9 +151,13 @@ export class MultilevelSensorCC extends CommandClass {
 				direction: "outbound",
 			});
 			const mlsResponse = await api.get();
+			const sensorScale = lookupSensorScale(
+				mlsResponse.type,
+				mlsResponse.scale.key,
+			);
 			const logMessage = `received current sensor reading:
-sensor type: ${getEnumMemberName(MultilevelSensorTypes, mlsResponse.type)}
-value:       ${mlsResponse.value} ${mlsResponse.scale.unit || ""}`;
+sensor type: ${getSensorTypeName(mlsResponse.type)}
+value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 			log.controller.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
@@ -165,7 +166,7 @@ value:       ${mlsResponse.value} ${mlsResponse.scale.unit || ""}`;
 			// V5+
 
 			// If we haven't yet, query the supported sensor types
-			let sensorTypes: readonly MultilevelSensorTypes[];
+			let sensorTypes: readonly number[];
 			if (complete) {
 				log.controller.logNode(node.id, {
 					message: "retrieving supported sensor types...",
@@ -175,9 +176,7 @@ value:       ${mlsResponse.value} ${mlsResponse.scale.unit || ""}`;
 				const logMessage =
 					"received supported sensor types:\n" +
 					sensorTypes
-						.map(type =>
-							getEnumMemberName(MultilevelSensorTypes, type),
-						)
+						.map(getSensorTypeName)
 						.map(name => `* ${name}`)
 						.join("\n");
 				log.controller.logNode(node.id, {
@@ -198,8 +197,7 @@ value:       ${mlsResponse.value} ${mlsResponse.scale.unit || ""}`;
 				let sensorScales: readonly number[];
 				if (complete) {
 					log.controller.logNode(node.id, {
-						message: `querying supported scales for ${getEnumMemberName(
-							MultilevelSensorTypes,
+						message: `querying supported scales for ${getSensorTypeName(
 							type,
 						)} sensor`,
 						direction: "outbound",
@@ -208,7 +206,7 @@ value:       ${mlsResponse.value} ${mlsResponse.scale.unit || ""}`;
 					const logMessage =
 						"received supported scales:\n" +
 						sensorScales
-							.map(scale => getScale(type, scale).label)
+							.map(s => lookupSensorScale(type, s).label)
 							.map(name => `* ${name}`)
 							.join("\n");
 					log.controller.logNode(node.id, {
@@ -232,10 +230,9 @@ value:       ${mlsResponse.value} ${mlsResponse.scale.unit || ""}`;
 				});
 				// TODO: Add some way to select the scale. For now use the first available one
 				const value = await api.get(type, sensorScales[0]);
-				const logMessage = `received current sensor reading: ${value} ${getScale(
-					type,
-					sensorScales[0],
-				).unit || ""}`;
+				const scale = lookupSensorScale(type, sensorScales[0]);
+				const logMessage = `received current sensor reading: ${value} ${scale.unit ||
+					""}`;
 				log.controller.logNode(node.id, {
 					message: logMessage,
 					direction: "inbound",
@@ -251,9 +248,10 @@ value:       ${mlsResponse.value} ${mlsResponse.scale.unit || ""}`;
 		propertyName: string,
 		propertyKey: number | string,
 	): string {
-		if (propertyName === "values") {
-			if (propertyKey in MultilevelSensorTypes)
-				return MultilevelSensorTypes[propertyKey as any];
+		// TODO: check this
+		if (propertyName === "values" && typeof propertyKey === "number") {
+			const type = lookupSensorType(propertyKey);
+			if (type) return type.label;
 		}
 		return super.translatePropertyKey(propertyName, propertyKey);
 	}
@@ -271,12 +269,12 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		// parseFloatWithScale does its own validation
 		const { value, scale } = parseFloatWithScale(this.payload.slice(1));
 		this._value = value;
-		this._scale = getScale(this._type, scale);
+		this._scale = lookupSensorScale(this._type, scale);
 
 		const valueId: ValueID = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
-			propertyName: MultilevelSensorTypes[this._type],
+			propertyName: getSensorTypeName(this._type),
 		};
 		this.getValueDB().setMetadata(valueId, {
 			...ValueMetadata.ReadOnlyNumber,
@@ -285,13 +283,13 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		this.getValueDB().setValue(valueId, value);
 	}
 
-	private _type: MultilevelSensorTypes;
-	public get type(): MultilevelSensorTypes {
+	private _type: number;
+	public get type(): number {
 		return this._type;
 	}
 
-	private _scale: MultilevelSensorScale;
-	public get scale(): MultilevelSensorScale {
+	private _scale: SensorScale;
+	public get scale(): SensorScale {
 		return this._scale;
 	}
 
@@ -303,8 +301,8 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 
 // These options are supported starting in V5
 interface MultilevelSensorCCGetSpecificOptions {
-	sensorType: MultilevelSensorTypes;
-	scale: number; // TODO: expose scales
+	sensorType: number;
+	scale: number;
 }
 type MultilevelSensorCCGetOptions =
 	| CCCommandOptions
@@ -334,7 +332,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 		}
 	}
 
-	public sensorType: MultilevelSensorTypes | undefined;
+	public sensorType: number | undefined;
 	public scale: number | undefined;
 
 	public serialize(): Buffer {
@@ -364,10 +362,10 @@ export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC 
 		this.persistValues();
 	}
 
-	private _supportedSensorTypes: MultilevelSensorTypes[];
+	private _supportedSensorTypes: number[];
 	// TODO: Use this during interview to precreate values
 	@ccValue({ internal: true })
-	public get supportedSensorTypes(): readonly MultilevelSensorTypes[] {
+	public get supportedSensorTypes(): readonly number[] {
 		return this._supportedSensorTypes;
 	}
 }
@@ -402,9 +400,9 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 	}
 
 	@ccKeyValuePair({ internal: true })
-	private supportedScales: [MultilevelSensorTypes, number[]];
+	private supportedScales: [number, number[]];
 
-	public get sensorType(): MultilevelSensorTypes {
+	public get sensorType(): number {
 		return this.supportedScales[0];
 	}
 
@@ -414,7 +412,7 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 }
 
 interface MultilevelSensorCCGetSupportedScaleOptions extends CCCommandOptions {
-	sensorType: MultilevelSensorTypes;
+	sensorType: number;
 }
 
 @CCCommand(MultilevelSensorCommand.GetSupportedScale)
@@ -438,7 +436,7 @@ export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 		}
 	}
 
-	public sensorType: MultilevelSensorTypes;
+	public sensorType: number;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.sensorType]);
