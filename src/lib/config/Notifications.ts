@@ -6,6 +6,7 @@ import path from "path";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { JSONObject } from "../util/misc";
+import { num2hex } from "../util/strings";
 import { configDir, hexKeyRegex, throwInvalidConfig } from "./utils";
 
 interface NotificationStateDefinition {
@@ -40,11 +41,21 @@ async function loadNotifications(): Promise<ReadonlyMap<number, Notification>> {
 	try {
 		const fileContents = await readFile(configPath, "utf8");
 		const definition = JSON5.parse(fileContents);
-		if (!isObject(definition)) throwInvalidConfig();
+		if (!isObject(definition)) {
+			throwInvalidConfig(
+				"notifications",
+				"the database is not an object",
+			);
+		}
 
 		const ret = new Map();
 		for (const [id, ntfcnDefinition] of entries(definition)) {
-			if (!hexKeyRegex.test(id)) throwInvalidConfig();
+			if (!hexKeyRegex.test(id)) {
+				throwInvalidConfig(
+					"notifications",
+					`found non-hex key "${id}" at the root`,
+				);
+			}
 			const idNum = parseInt(id.slice(2), 16);
 			ret.set(idNum, new Notification(idNum, ntfcnDefinition));
 		}
@@ -104,7 +115,14 @@ export class Notification {
 			for (const [eventId, eventDefinition] of entries(
 				definition.events,
 			)) {
-				if (!hexKeyRegex.test(eventId)) throwInvalidConfig();
+				if (!hexKeyRegex.test(eventId)) {
+					throwInvalidConfig(
+						"notifications",
+						`found non-hex key "${eventId}" in notification ${num2hex(
+							id,
+						)}`,
+					);
+				}
 				const eventIdNum = parseInt(eventId.slice(2), 16);
 				events.set(
 					eventIdNum,
@@ -152,10 +170,20 @@ export class NotificationVariable {
 		// By default all notification variables may return to idle
 		// Otherwise it must be specified explicitly using `idle: false`
 		this.idle = definition.idle !== false;
-		if (!isObject(definition.states)) throwInvalidConfig();
+		if (!isObject(definition.states)) {
+			throwInvalidConfig(
+				"notifications",
+				`the variable definition for ${this.name} is not an object`,
+			);
+		}
 		const states = new Map<number, NotificationState>();
 		for (const [stateId, stateDefinition] of entries(definition.states)) {
-			if (!hexKeyRegex.test(stateId)) throwInvalidConfig();
+			if (!hexKeyRegex.test(stateId)) {
+				throwInvalidConfig(
+					"notifications",
+					`found non-hex key "${stateId}" in notification variable ${this.name}`,
+				);
+			}
 			const stateIdNum = parseInt(stateId.slice(2), 16);
 			states.set(
 				stateIdNum,

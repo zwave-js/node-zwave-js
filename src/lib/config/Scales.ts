@@ -15,7 +15,7 @@ export async function loadNamedScales(): Promise<void> {
 	try {
 		if (!(await pathExists(configPath))) {
 			throw new ZWaveError(
-				"The config file does not exist!",
+				"The named scales config file does not exist!",
 				ZWaveErrorCodes.Config_Invalid,
 			);
 		}
@@ -23,13 +23,14 @@ export async function loadNamedScales(): Promise<void> {
 		try {
 			const fileContents = await readFile(configPath, "utf8");
 			const definition = JSON5.parse(fileContents);
-			if (!isObject(definition)) throwInvalidConfig();
+			if (!isObject(definition)) throwInvalidConfig("named scales");
 
 			const ret = new Map();
 			for (const [name, scales] of entries(definition)) {
 				const named = new Map<number, Scale>();
 				for (const [key, scaleDefinition] of entries(scales)) {
-					if (!hexKeyRegex.test(key)) throwInvalidConfig();
+					if (!hexKeyRegex.test(key))
+						throwInvalidConfig("named scales");
 					const keyNum = parseInt(key.slice(2), 16);
 					named.set(keyNum, new Scale(keyNum, scaleDefinition));
 				}
@@ -40,10 +41,7 @@ export async function loadNamedScales(): Promise<void> {
 			if (e instanceof ZWaveError) {
 				throw e;
 			} else {
-				throw new ZWaveError(
-					"The config file is malformed!",
-					ZWaveErrorCodes.Config_Invalid,
-				);
+				throwInvalidConfig("named scales");
 			}
 		}
 	} catch (e) {
@@ -80,20 +78,21 @@ export class Scale {
 	public constructor(key: number, definition: JSONObject) {
 		this.key = key;
 
-		if (typeof definition.label !== "string") throwInvalidConfig();
+		if (typeof definition.label !== "string")
+			throwInvalidConfig("named scales");
 		this.label = definition.label;
 		if (
 			definition.unit != undefined &&
 			typeof definition.unit !== "string"
 		) {
-			throwInvalidConfig();
+			throwInvalidConfig("named scales");
 		}
 		this.unit = definition.unit;
 		if (
 			definition.description != undefined &&
 			typeof definition.description !== "string"
 		) {
-			throwInvalidConfig();
+			throwInvalidConfig("named scales");
 		}
 		this.description = definition.description;
 	}

@@ -116,9 +116,7 @@
 	},
 	"0x0b": {
 		"label": "Dew point",
-		"scales": {
-			"scales": "$SCALES:temperature"
-		}
+		"scales": "$SCALES:temperature"
 	},
 	"0x0c": {
 		"label": "Rain rate",

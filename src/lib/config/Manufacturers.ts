@@ -4,7 +4,7 @@ import JSON5 from "json5";
 import path from "path";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { configDir } from "./utils";
+import { configDir, throwInvalidConfig } from "./utils";
 
 const configPath = path.join(configDir, "manufacturers.json");
 
@@ -20,10 +20,7 @@ async function loadManufacturers(): Promise<Record<string, string>> {
 		const fileContents = await readFile(configPath, "utf8");
 		return JSON5.parse(fileContents);
 	} catch (e) {
-		throw new ZWaveError(
-			"The config file is malformed!",
-			ZWaveErrorCodes.Config_Invalid,
-		);
+		throwInvalidConfig("manufacturers");
 	}
 }
 

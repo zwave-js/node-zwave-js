@@ -6,7 +6,7 @@ import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
 import { Notification } from "../src/lib/config/Notifications";
-import { loadNamedScales } from "../src/lib/config/Scales";
+import { loadNamedScales, Scale } from "../src/lib/config/Scales";
 import { SensorType } from "../src/lib/config/SensorTypes";
 import { configDir } from "../src/lib/config/utils";
 
@@ -106,7 +106,7 @@ async function lintNamedScales(): Promise<void> {
 				);
 			}
 			const idNum = parseInt(id.slice(2), 16);
-			const _testParse = new SensorType(idNum, snsrDefinition);
+			const _testParse = new Scale(idNum, snsrDefinition);
 		}
 	}
 }
@@ -156,6 +156,7 @@ Promise.resolve()
 	})
 	.catch(e => {
 		console.error(red(e.message));
+		if (e.stack) console.error(red(e.stack));
 		console.error();
 		return process.exit(1);
 	});
