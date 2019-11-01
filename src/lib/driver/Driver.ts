@@ -218,7 +218,9 @@ export class Driver extends EventEmitter implements IDriver {
 	/** Enumerates all existing serial ports */
 	public static async enumerateSerialPorts(): Promise<string[]> {
 		const ports = await SerialPort.list();
-		return ports.map(port => port.comName);
+		return ports.map(port =>
+			"path" in port ? (port as any).path : port.comName,
+		);
 	}
 
 	/** @internal */
