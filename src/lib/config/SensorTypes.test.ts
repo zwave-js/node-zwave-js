@@ -44,23 +44,57 @@ const dummyScales = {
 	},
 };
 
-// I don't get why these tests don't play nice with the unsuccessful ones
-// But since I see no other way, they are now in their own file
-
 describe("lib/config/SensorTypes", () => {
-	beforeAll(async () => {
-		pathExistsMock.mockResolvedValue(true);
-		readFileMock.mockImplementation((path: string) => {
-			if (path.endsWith("sensorTypes.json"))
-				return Promise.resolve(JSON.stringify(dummySensorTypes));
-			if (path.endsWith("scales.json"))
-				return Promise.resolve(JSON.stringify(dummyScales));
+	describe("lookupSensorType (with missing file)", () => {
+		beforeAll(async () => {
+			pathExistsMock.mockClear();
+			readFileMock.mockClear();
+			pathExistsMock.mockResolvedValue(false);
+			readFileMock.mockRejectedValue(new Error("File does not exist"));
+			await loadSensorTypes();
 		});
-		await loadNamedScales();
-		await loadSensorTypes();
+		it("does not throw", async () => {
+			expect(() => lookupSensorType(0)).not.toThrow();
+		});
+
+		it("returns undefined", async () => {
+			expect(lookupSensorType(0x0e)).toBeUndefined();
+			expect(lookupSensorType(0xff)).toBeUndefined();
+		});
+	});
+
+	describe("lookupSensorType (with invalid file)", () => {
+		beforeAll(async () => {
+			pathExistsMock.mockClear();
+			readFileMock.mockClear();
+			pathExistsMock.mockResolvedValue(true);
+			readFileMock.mockResolvedValue(`{"0x01": `);
+			await loadSensorTypes();
+		});
+
+		it("does not throw", async () => {
+			expect(() => lookupSensorType(0x0e)).not.toThrow();
+		});
+
+		it("returns undefined", async () => {
+			expect(lookupSensorType(0x0e)).toBeUndefined();
+		});
 	});
 
 	describe("lookupSensorType()", () => {
+		beforeAll(async () => {
+			pathExistsMock.mockResolvedValue(true);
+			readFileMock.mockImplementation((path: string) => {
+				if (path.endsWith("sensorTypes.json"))
+					return Promise.resolve(JSON.stringify(dummySensorTypes));
+				if (path.endsWith("scales.json"))
+					return Promise.resolve(JSON.stringify(dummyScales));
+			});
+
+			await loadNamedScales();
+			await loadSensorTypes();
+		});
+
 		beforeEach(() => {
 			readFileMock.mockClear();
 			pathExistsMock.mockClear();
@@ -76,6 +110,24 @@ describe("lib/config/SensorTypes", () => {
 	});
 
 	describe("lookupSensorScale()", () => {
+		beforeAll(async () => {
+			pathExistsMock.mockResolvedValue(true);
+			readFileMock.mockImplementation((path: string) => {
+				if (path.endsWith("sensorTypes.json"))
+					return Promise.resolve(JSON.stringify(dummySensorTypes));
+				if (path.endsWith("scales.json"))
+					return Promise.resolve(JSON.stringify(dummyScales));
+			});
+
+			await loadNamedScales();
+			await loadSensorTypes();
+		});
+
+		beforeEach(() => {
+			readFileMock.mockClear();
+			pathExistsMock.mockClear();
+		});
+
 		it("returns the sensor scale definition if it is defined", async () => {
 			const test1 = lookupSensorScale(0x0a, 0x00);
 			expect(test1).toMatchObject(

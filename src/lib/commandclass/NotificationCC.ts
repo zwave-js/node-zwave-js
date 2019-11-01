@@ -146,13 +146,13 @@ export class NotificationCCAPI extends CCAPI {
 	}
 }
 
-async function defineMetadataForNotificationEvents(
+function defineMetadataForNotificationEvents(
 	endpoint: number,
 	type: NotificationType,
 	events: readonly number[],
-): Promise<ReadonlyMap<string, ValueMetadata>> {
+): ReadonlyMap<string, ValueMetadata> {
 	const ret = new Map<string, ValueMetadataNumeric>();
-	const notificationConfig = await lookupNotification(type);
+	const notificationConfig = lookupNotification(type);
 	if (!notificationConfig) {
 		// This is an unknown notification
 		const propertyName = `UNKNOWN_${num2hex(type)}`;
@@ -230,15 +230,15 @@ export class NotificationCC extends CommandClass {
 			let supportedNotificationTypes: readonly NotificationType[];
 			let supportedNotificationNames: string[];
 
-			async function lookupNotificationNames(): Promise<string[]> {
-				return (await Promise.all(
-					supportedNotificationTypes.map(async n => {
-						const ret = await lookupNotification(n);
+			function lookupNotificationNames(): string[] {
+				return supportedNotificationTypes
+					.map(n => {
+						const ret = lookupNotification(n);
 						return [n, ret] as const;
-					}),
-				)).map(([type, ntfcn]) =>
-					ntfcn ? ntfcn.name : `UNKNOWN (${num2hex(type)})`,
-				);
+					})
+					.map(([type, ntfcn]) =>
+						ntfcn ? ntfcn.name : `UNKNOWN (${num2hex(type)})`,
+					);
 			}
 
 			if (complete) {
@@ -248,7 +248,7 @@ export class NotificationCC extends CommandClass {
 				});
 
 				({ supportedNotificationTypes } = await api.getSupported());
-				supportedNotificationNames = await lookupNotificationNames();
+				supportedNotificationNames = lookupNotificationNames();
 
 				const logMessage =
 					"received supported notification types:" +
@@ -283,7 +283,7 @@ export class NotificationCC extends CommandClass {
 						});
 
 						// For each event, predefine the value metadata
-						const metadataMap = await defineMetadataForNotificationEvents(
+						const metadataMap = defineMetadataForNotificationEvents(
 							node.index,
 							type,
 							supportedEvents,
@@ -302,7 +302,7 @@ export class NotificationCC extends CommandClass {
 					commandClass: this.ccId,
 					propertyName: "supportedNotificationTypes",
 				})!;
-				supportedNotificationNames = await lookupNotificationNames();
+				supportedNotificationNames = lookupNotificationNames();
 			}
 
 			// Always query each notification for its current status

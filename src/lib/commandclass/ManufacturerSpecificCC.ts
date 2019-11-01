@@ -131,7 +131,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 				});
 				const mfResp = await api.get();
 				const logMessage = `received response for manufacturer information:
-  manufacturer: ${(await lookupManufacturer(mfResp.manufacturerId)) ||
+  manufacturer: ${lookupManufacturer(mfResp.manufacturerId) ||
 		"unknown"} (${num2hex(mfResp.manufacturerId)})
   product type: ${num2hex(mfResp.productType)}
   product id:   ${num2hex(mfResp.productId)}`;
