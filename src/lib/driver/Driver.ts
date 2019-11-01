@@ -225,8 +225,10 @@ export class Driver extends EventEmitter implements IDriver {
 
 	private _wasStarted: boolean = false;
 	private _isOpen: boolean = false;
+
 	/** Start the driver */
-	public async start(): Promise<void> {
+	// wotan-disable async-function-assignability
+	public start(): Promise<void> {
 		// avoid starting twice
 		if (this._wasDestroyed) {
 			return Promise.reject(
@@ -239,49 +241,50 @@ export class Driver extends EventEmitter implements IDriver {
 		if (this._wasStarted) return Promise.resolve();
 		this._wasStarted = true;
 
-		// wotan-disable-next-line async-function-assignability
-		return new Promise(async (resolve, reject) => {
-			// Open the serial port
-			log.driver.print("starting driver...");
-			this.serial = new SerialPort(this.port, {
-				autoOpen: false,
-				baudRate: 115200,
-				dataBits: 8,
-				stopBits: 1,
-				parity: "none",
-			});
-			this.serial
-				// wotan-disable-next-line async-function-assignability
-				.on("open", async () => {
-					log.driver.print("serial port opened");
-					this._isOpen = true;
-					this.resetIO();
-					resolve();
+		const spOpenPromise = createDeferredPromise();
 
-					setImmediate(
-						() => void this.initializeControllerAndNodes(),
-					);
-				})
-				// wotan-disable-next-line async-function-assignability
-				.on("data", this.serialport_onData.bind(this))
-				.on("error", err => {
-					log.driver.print("serial port errored: " + err, "error");
-					if (this._isOpen) {
-						this.serialport_onError(err);
-					} else {
-						reject(err);
-						this.destroy();
-					}
-				});
-			this.serial.open();
-
-			// Load the necessary configuration
-			// TODO: Tests expect the above code to be synchronous
-			// Can we refactor this so config is loaded first?
-			log.driver.print("loading configuration...");
-			await loadSensorTypes();
+		// Open the serial port
+		log.driver.print("starting driver...");
+		this.serial = new SerialPort(this.port, {
+			autoOpen: false,
+			baudRate: 115200,
+			dataBits: 8,
+			stopBits: 1,
+			parity: "none",
 		});
+		this.serial
+			.on("open", async () => {
+				log.driver.print("serial port opened");
+				this._isOpen = true;
+				this.resetIO();
+				spOpenPromise.resolve();
+
+				setImmediate(async () => {
+					// Load the necessary configuration
+					log.driver.print("loading configuration...");
+					await loadSensorTypes();
+
+					log.driver.print("beginning interview...");
+					await this.initializeControllerAndNodes();
+				});
+			})
+			.on("data", this.serialport_onData.bind(this))
+			.on("error", err => {
+				log.driver.print("serial port errored: " + err, "error");
+				if (this._isOpen) {
+					this.serialport_onError(err);
+				} else {
+					spOpenPromise.reject(err);
+					this.destroy();
+				}
+			});
+		this.serial.open();
+
+		// IMPORTANT: Test code expects this to be created and returned synchronously
+		// Everything async must happen in the setImmediate callback
+		return spOpenPromise;
 	}
+	// wotan-enable async-function-assignability
 
 	private _controllerInterviewed: boolean = false;
 	/**
