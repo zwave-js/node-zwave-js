@@ -11,6 +11,10 @@
 * Upgrade to TypeScript 3.7 RC
 * Remove secondary switch functionality from `Multilevel Switch CC`
 * Implement interview procedure for `Multilevel Switch CC`
+<!-- TODO: Changelog from base branch -->
+* Extract named scales to their own configuration file
+* Also use scale configuration for `Thermostat Setpoint CC`
+* Improve error output for `lint:config` script
 
 ## 1.6.0 (2019-10-23)
 * Implement Multi Channel Association CC and prefer it to Association CC if possible
