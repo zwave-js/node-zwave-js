@@ -29,78 +29,74 @@ export type NotificationValueDefinition = (
 };
 
 const configPath = path.join(configDir, "notifications.json");
+let notifications: ReadonlyMap<number, Notification> | undefined;
 
-async function loadNotifications(): Promise<ReadonlyMap<number, Notification>> {
-	if (!(await pathExists(configPath))) {
-		throw new ZWaveError(
-			"The config file does not exist!",
-			ZWaveErrorCodes.Config_Invalid,
-		);
-	}
-
+export async function loadNotifications(): Promise<void> {
 	try {
-		const fileContents = await readFile(configPath, "utf8");
-		const definition = JSON5.parse(fileContents);
-		if (!isObject(definition)) {
-			throwInvalidConfig(
-				"notifications",
-				"the database is not an object",
-			);
-		}
-
-		const ret = new Map();
-		for (const [id, ntfcnDefinition] of entries(definition)) {
-			if (!hexKeyRegex.test(id)) {
-				throwInvalidConfig(
-					"notifications",
-					`found non-hex key "${id}" at the root`,
-				);
-			}
-			const idNum = parseInt(id.slice(2), 16);
-			ret.set(idNum, new Notification(idNum, ntfcnDefinition));
-		}
-		return ret;
-	} catch (e) {
-		if (e instanceof ZWaveError) {
-			throw e;
-		} else {
+		if (!(await pathExists(configPath))) {
 			throw new ZWaveError(
-				"The config file is malformed!",
+				"The config file does not exist!",
 				ZWaveErrorCodes.Config_Invalid,
 			);
+		}
+
+		try {
+			const fileContents = await readFile(configPath, "utf8");
+			const definition = JSON5.parse(fileContents);
+			if (!isObject(definition)) {
+				throwInvalidConfig(
+					"notifications",
+					"the database is not an object",
+				);
+			}
+
+			const ret = new Map();
+			for (const [id, ntfcnDefinition] of entries(definition)) {
+				if (!hexKeyRegex.test(id)) {
+					throwInvalidConfig(
+						"notifications",
+						`found non-hex key "${id}" at the root`,
+					);
+				}
+				const idNum = parseInt(id.slice(2), 16);
+				ret.set(idNum, new Notification(idNum, ntfcnDefinition));
+			}
+			notifications = ret;
+		} catch (e) {
+			if (e instanceof ZWaveError) {
+				throw e;
+			} else {
+				throwInvalidConfig("notifications");
+			}
+		}
+	} catch (e) {
+		// If the config file is missing or invalid, don't try to find it again
+		if (
+			e instanceof ZWaveError &&
+			e.code === ZWaveErrorCodes.Config_Invalid
+		) {
+			if (process.env.NODE_ENV !== "test") {
+				// FIXME: This call breaks when using jest.isolateModule()
+				log.driver.print(
+					`Could not notifications config: ${e.message}`,
+					"error",
+				);
+			}
+			notifications = new Map();
+		} else {
+			// This is an unexpected error
+			throw e;
 		}
 	}
 }
 
-let notifications: ReadonlyMap<number, Notification> | undefined;
-
 /**
  * Looks up the notification configuration for a given notification type
  */
-export async function lookupNotification(
+export function lookupNotification(
 	notificationType: number,
-): Promise<Notification | undefined> {
-	if (!notifications) {
-		try {
-			notifications = await loadNotifications();
-		} catch (e) {
-			// If the config file is missing or invalid, don't try to find it again
-			if (
-				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Config_Invalid
-			) {
-				log.driver.print(
-					`Could not load notification config: ${e.message}`,
-					"error",
-				);
-				notifications = new Map();
-			} else {
-				// This is an unexpected error
-				throw e;
-			}
-		}
-	}
-	return notifications.get(notificationType);
+): Notification | undefined {
+	return notifications!.get(notificationType);
 }
 
 export class Notification {

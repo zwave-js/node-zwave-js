@@ -1117,9 +1117,7 @@ version:               ${this.version}`;
 	}
 
 	/** Handles the receipt of a Notification Report */
-	private async handleNotificationReport(
-		command: NotificationCCReport,
-	): Promise<void> {
+	private handleNotificationReport(command: NotificationCCReport): void {
 		if (command.notificationType == undefined) {
 			log.controller.logNode(this.id, {
 				message: `received unsupported notification ${stringify(
@@ -1131,9 +1129,7 @@ version:               ${this.version}`;
 		}
 
 		// Look up the received notification in the config
-		const notificationConfig = await lookupNotification(
-			command.notificationType,
-		);
+		const notificationConfig = lookupNotification(command.notificationType);
 
 		if (notificationConfig) {
 			// This is a known notification (status or event)
