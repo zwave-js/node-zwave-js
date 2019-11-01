@@ -7,6 +7,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
+import { lookupNamedScales, Scale } from "./Scales";
 import { configDir } from "./utils";
 
 const hexKeyRegex = /^0x[a-fA-F0-9]+$/;
@@ -81,14 +82,11 @@ export function lookupSensorType(sensorType: number): SensorType | undefined {
 }
 
 /** Looks up a scale definition for a given sensor type */
-export function lookupSensorScale(
-	sensorType: number,
-	scale: number,
-): SensorScale {
+export function lookupSensorScale(sensorType: number, scale: number): Scale {
 	const sensor = lookupSensorType(sensorType);
 	const ret = sensor && sensor.scales.get(scale);
 	if (ret) return ret;
-	return new SensorScale(scale, {
+	return new Scale(scale, {
 		unit: undefined,
 		label: "Unknown",
 	});
@@ -100,54 +98,51 @@ export function getSensorTypeName(sensorType: number): string {
 	return `UNKNOWN (${num2hex(sensorType)})`;
 }
 
+const namedScalesMarker = "$SCALES:";
+
 export class SensorType {
 	public constructor(key: number, definition: JSONObject) {
 		this.key = key;
 		if (typeof definition.label !== "string") throwInvalidConfig();
 		this.label = definition.label;
 
-		const scales = new Map<number, SensorScale>();
-		if (!isObject(definition.scales)) throwInvalidConfig();
-		for (const [scaleKey, scaleDefinition] of entries(definition.scales)) {
-			if (!hexKeyRegex.test(scaleKey)) throwInvalidConfig();
-			const scaleKeyNum = parseInt(scaleKey.slice(2), 16);
-			scales.set(
-				scaleKeyNum,
-				new SensorScale(scaleKeyNum, scaleDefinition),
+		if (
+			typeof definition.scales === "string" &&
+			definition.scales.startsWith(namedScalesMarker)
+		) {
+			// This is referencing a named scale
+			const scaleName = definition.scales.substr(
+				namedScalesMarker.length,
 			);
+			const scales = lookupNamedScales(scaleName);
+			if (!scales) {
+				throw new ZWaveError(
+					`Sensor type ${num2hex(
+						key,
+					)} is referencing non-existing named scale "${scaleName}"!`,
+					ZWaveErrorCodes.Config_Invalid,
+				);
+			}
+			this.scales = scales;
+		} else {
+			// This is an inline scale definition
+			const scales = new Map<number, Scale>();
+			if (!isObject(definition.scales)) throwInvalidConfig();
+			for (const [scaleKey, scaleDefinition] of entries(
+				definition.scales,
+			)) {
+				if (!hexKeyRegex.test(scaleKey)) throwInvalidConfig();
+				const scaleKeyNum = parseInt(scaleKey.slice(2), 16);
+				scales.set(
+					scaleKeyNum,
+					new Scale(scaleKeyNum, scaleDefinition),
+				);
+			}
+			this.scales = scales;
 		}
-		this.scales = scales;
 	}
 
 	public readonly key: number;
 	public readonly label: string;
-	public readonly scales: ReadonlyMap<number, SensorScale>;
-}
-
-export class SensorScale {
-	public constructor(key: number, definition: JSONObject) {
-		this.key = key;
-
-		if (typeof definition.label !== "string") throwInvalidConfig();
-		this.label = definition.label;
-		if (
-			definition.unit != undefined &&
-			typeof definition.unit !== "string"
-		) {
-			throwInvalidConfig();
-		}
-		this.unit = definition.unit;
-		if (
-			definition.description != undefined &&
-			typeof definition.description !== "string"
-		) {
-			throwInvalidConfig();
-		}
-		this.description = definition.description;
-	}
-
-	public readonly key: number;
-	public readonly unit: string | undefined;
-	public readonly label: string;
-	public readonly description: string | undefined;
+	public readonly scales: ReadonlyMap<number, Scale>;
 }

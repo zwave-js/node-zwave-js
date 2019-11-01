@@ -6,7 +6,7 @@ import path from "path";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { JSONObject } from "../util/misc";
-import { configDir } from "./utils";
+import { configDir, hexKeyRegex, throwInvalidConfig } from "./utils";
 
 interface NotificationStateDefinition {
 	type: "state";
@@ -27,7 +27,6 @@ export type NotificationValueDefinition = (
 	label: string;
 };
 
-const hexKeyRegex = /^0x[a-fA-F0-9]+$/;
 const configPath = path.join(configDir, "notifications.json");
 
 async function loadNotifications(): Promise<ReadonlyMap<number, Notification>> {
@@ -91,13 +90,6 @@ export async function lookupNotification(
 		}
 	}
 	return notifications.get(notificationType);
-}
-
-function throwInvalidConfig(): never {
-	throw new ZWaveError(
-		"The config file is malformed!",
-		ZWaveErrorCodes.Config_Invalid,
-	);
 }
 
 export class Notification {
