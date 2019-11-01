@@ -17,6 +17,7 @@
 * Extract named scales to their own configuration file
 * Also use scale configuration for `Thermostat Setpoint CC`
 * Improve error output for `lint:config` script
+* Upgrade `serialport` to version 8
 
 ## 1.6.0 (2019-10-23)
 * Implement Multi Channel Association CC and prefer it to Association CC if possible
