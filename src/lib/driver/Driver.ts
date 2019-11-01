@@ -239,45 +239,48 @@ export class Driver extends EventEmitter implements IDriver {
 		if (this._wasStarted) return Promise.resolve();
 		this._wasStarted = true;
 
-		// Load the necessary configuration
-		log.driver.print("loading configuration...");
-		await loadSensorTypes();
-
-		const openPromise = createDeferredPromise();
-
-		// Open the serial port
-		log.driver.print("starting driver...");
-		this.serial = new SerialPort(this.port, {
-			autoOpen: false,
-			baudRate: 115200,
-			dataBits: 8,
-			stopBits: 1,
-			parity: "none",
-		});
-		this.serial
-			// wotan-disable-next-line async-function-assignability
-			.on("open", async () => {
-				log.driver.print("serial port opened");
-				this._isOpen = true;
-				this.resetIO();
-				openPromise.resolve();
-
-				setImmediate(() => void this.initializeControllerAndNodes());
-			})
-			// wotan-disable-next-line async-function-assignability
-			.on("data", this.serialport_onData.bind(this))
-			.on("error", err => {
-				log.driver.print("serial port errored: " + err, "error");
-				if (this._isOpen) {
-					this.serialport_onError(err);
-				} else {
-					openPromise.reject(err);
-					this.destroy();
-				}
+		// wotan-disable-next-line async-function-assignability
+		return new Promise(async (resolve, reject) => {
+			// Open the serial port
+			log.driver.print("starting driver...");
+			this.serial = new SerialPort(this.port, {
+				autoOpen: false,
+				baudRate: 115200,
+				dataBits: 8,
+				stopBits: 1,
+				parity: "none",
 			});
-		this.serial.open();
+			this.serial
+				// wotan-disable-next-line async-function-assignability
+				.on("open", async () => {
+					log.driver.print("serial port opened");
+					this._isOpen = true;
+					this.resetIO();
+					resolve();
 
-		return openPromise;
+					setImmediate(
+						() => void this.initializeControllerAndNodes(),
+					);
+				})
+				// wotan-disable-next-line async-function-assignability
+				.on("data", this.serialport_onData.bind(this))
+				.on("error", err => {
+					log.driver.print("serial port errored: " + err, "error");
+					if (this._isOpen) {
+						this.serialport_onError(err);
+					} else {
+						reject(err);
+						this.destroy();
+					}
+				});
+			this.serial.open();
+
+			// Load the necessary configuration
+			// TODO: Tests expect the above code to be synchronous
+			// Can we refactor this so config is loaded first?
+			log.driver.print("loading configuration...");
+			await loadSensorTypes();
+		});
 	}
 
 	private _controllerInterviewed: boolean = false;
