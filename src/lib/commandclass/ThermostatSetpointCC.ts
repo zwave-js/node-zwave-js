@@ -1,4 +1,4 @@
-import { lookupNamedScales } from "../config/Scales";
+import { lookupNamedScale, Scale } from "../config/Scales";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
@@ -62,18 +62,12 @@ export enum ThermostatSetpointType {
 // prettier-ignore
 const thermostatSetpointTypeMap = [0x00, 0x01, 0x02, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f];
 
-let thermostatSetpointScales: ReturnType<typeof lookupNamedScales>;
+const thermostatSetpointScaleName = "temperature";
+function getScale(scale: number): Scale {
+	return lookupNamedScale(thermostatSetpointScaleName, scale);
+}
 function getSetpointUnit(scale: number): string {
-	if (!thermostatSetpointScales) {
-		thermostatSetpointScales = lookupNamedScales("temperature");
-		if (!thermostatSetpointScales) {
-			throw new ZWaveError(
-				`Could not find the named scale "temperature"!`,
-				ZWaveErrorCodes.Config_Invalid,
-			);
-		}
-	}
-	return thermostatSetpointScales.get(scale)?.unit ?? "";
+	return getScale(scale).unit ?? "";
 }
 
 export interface ThermostatSetpointValue {
@@ -292,7 +286,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					supportedSetpointTypes.push(type);
 					logMessage = `received current value of setpoint ${setpointName}: ${
 						setpoint.value
-					} ${getSetpointUnit(setpoint.scale)}`;
+					} ${setpoint.scale.unit ?? ""}`;
 				} else {
 					logMessage = `Setpoint ${setpointName} is not supported`;
 				}
@@ -377,7 +371,7 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 				if (setpoint) {
 					logMessage = `received current value of setpoint ${setpointName}: ${
 						setpoint.value
-					} ${getSetpointUnit(setpoint.scale)}`;
+					} ${setpoint.scale.unit ?? ""}`;
 				} else {
 					// This shouldn't happen since we used getSupported
 					// But better be sure we don't crash
@@ -449,14 +443,14 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		if (this._type === 0) {
 			// Not supported
 			this._value = 0;
-			this._scale = 0;
+			this._scale = getScale(0);
 			return;
 		}
 
 		// parseFloatWithScale does its own validation
 		const { value, scale } = parseFloatWithScale(this.payload.slice(1));
 		this._value = value;
-		this._scale = scale;
+		this._scale = getScale(scale);
 
 		const valueId: ValueID = {
 			commandClass: this.ccId,
@@ -467,7 +461,7 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		if (!this.getValueDB().hasMetadata(valueId)) {
 			this.getValueDB().setMetadata(valueId, {
 				...ValueMetadata.Number,
-				unit: getSetpointUnit(this._scale),
+				unit: this._scale.unit,
 			});
 		}
 		this.getValueDB().setValue(valueId, value);
@@ -478,8 +472,8 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		return this._type;
 	}
 
-	private _scale: number;
-	public get scale(): number {
+	private _scale: Scale;
+	public get scale(): Scale {
 		return this._scale;
 	}
 

@@ -66,12 +66,25 @@ export async function loadNamedScales(): Promise<void> {
 }
 
 /**
- * Looks up the configuration for a given sensor type
+ * Looks up all scales defined under a given name
  */
-export function lookupNamedScales(
+export function lookupNamedScaleGroup(
 	name: string,
 ): ReadonlyMap<number, Scale> | undefined {
 	return namedScales!.get(name);
+}
+
+export function getDefaultScale(scale: number): Scale {
+	return new Scale(scale, {
+		unit: undefined,
+		label: "Unknown",
+	});
+}
+
+/** Looks up a scale definition for a given sensor type */
+export function lookupNamedScale(name: string, scale: number): Scale {
+	const group = lookupNamedScaleGroup(name);
+	return group?.get(scale) ?? getDefaultScale(scale);
 }
 
 export class Scale {

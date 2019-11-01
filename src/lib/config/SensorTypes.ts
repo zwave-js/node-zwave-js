@@ -7,7 +7,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
-import { lookupNamedScales, Scale } from "./Scales";
+import { getDefaultScale, lookupNamedScaleGroup, Scale } from "./Scales";
 import { configDir, hexKeyRegex, throwInvalidConfig } from "./utils";
 
 const configPath = path.join(configDir, "sensorTypes.json");
@@ -83,12 +83,7 @@ export function lookupSensorType(sensorType: number): SensorType | undefined {
 /** Looks up a scale definition for a given sensor type */
 export function lookupSensorScale(sensorType: number, scale: number): Scale {
 	const sensor = lookupSensorType(sensorType);
-	const ret = sensor && sensor.scales.get(scale);
-	if (ret) return ret;
-	return new Scale(scale, {
-		unit: undefined,
-		label: "Unknown",
-	});
+	return sensor?.scales.get(scale) ?? getDefaultScale(scale);
 }
 
 export function getSensorTypeName(sensorType: number): string {
@@ -117,7 +112,7 @@ export class SensorType {
 			const scaleName = definition.scales.substr(
 				namedScalesMarker.length,
 			);
-			const scales = lookupNamedScales(scaleName);
+			const scales = lookupNamedScaleGroup(scaleName);
 			if (!scales) {
 				throw new ZWaveError(
 					`Sensor type ${num2hex(
