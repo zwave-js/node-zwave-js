@@ -6,6 +6,7 @@ import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
 import { Notification } from "../src/lib/config/Notifications";
+import { loadNamedScales, Scale } from "../src/lib/config/Scales";
 import { SensorType } from "../src/lib/config/SensorTypes";
 import { configDir } from "../src/lib/config/utils";
 
@@ -69,6 +70,47 @@ async function lintManufacturers(): Promise<void> {
 	}
 }
 
+async function lintNamedScales(): Promise<void> {
+	const configPath = path.join(configDir, "scales.json");
+	if (!(await pathExists(configPath))) {
+		throw new Error("The named scales config file does not exist!");
+	}
+
+	const fileContents = await readFile(configPath, "utf8");
+	let definition: any;
+	try {
+		definition = JSON5.parse(fileContents);
+	} catch (e) {
+		throw new Error(`The named scales config file is invalid: ${e}`);
+	}
+
+	if (!isObject(definition)) {
+		throw new Error("The named scales config file must contain an object");
+	}
+
+	if (!("temperature" in definition)) {
+		throw new Error(`Named scale "temperature" is missing!`);
+	}
+
+	for (const [name, group] of entries(definition)) {
+		if (!/[\w\d]+/.test(name)) {
+			throw new Error(
+				`The named scales config file is invalid: Name ${name} contains other characters than letters and numbers`,
+			);
+		}
+		// TODO: Validate that all contents are semantically correct
+		for (const [id, snsrDefinition] of entries(group)) {
+			if (!hexKeyRegex.test(id)) {
+				throw new Error(
+					`The notification config file is invalid: found non-hex object key ${id}`,
+				);
+			}
+			const idNum = parseInt(id.slice(2), 16);
+			const _testParse = new Scale(idNum, snsrDefinition);
+		}
+	}
+}
+
 async function lintSensorTypes(): Promise<void> {
 	const configPath = path.join(configDir, "sensorTypes.json");
 	if (!(await pathExists(configPath))) {
@@ -87,6 +129,9 @@ async function lintSensorTypes(): Promise<void> {
 		throw new Error("The sensor types config file must contain an object");
 	}
 
+	// The named scales must be loaded here so the parsing can work
+	await loadNamedScales();
+
 	for (const [id, snsrDefinition] of entries(definition)) {
 		if (!hexKeyRegex.test(id)) {
 			throw new Error(
@@ -101,15 +146,17 @@ async function lintSensorTypes(): Promise<void> {
 
 Promise.resolve()
 	.then(lintManufacturers)
-	.then(lintNotifications)
-	.then(lintSensorTypes)
 	// TODO: lint device files
+	.then(lintNotifications)
+	.then(lintNamedScales)
+	.then(lintSensorTypes)
 	.then(() => {
 		console.error(green("The config files are valid!"));
 		return process.exit(0);
 	})
 	.catch(e => {
 		console.error(red(e.message));
+		if (e.stack) console.error(red(e.stack));
 		console.error();
 		return process.exit(1);
 	});

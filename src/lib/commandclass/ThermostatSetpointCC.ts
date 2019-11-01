@@ -1,3 +1,4 @@
+import { lookupNamedScale, Scale } from "../config/Scales";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
@@ -61,31 +62,24 @@ export enum ThermostatSetpointType {
 // prettier-ignore
 const thermostatSetpointTypeMap = [0x00, 0x01, 0x02, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f];
 
-export enum ThermostatSetpointScale {
-	Celsius = 0,
-	Fahrenheit = 1,
+const thermostatSetpointScaleName = "temperature";
+function getScale(scale: number): Scale {
+	return lookupNamedScale(thermostatSetpointScaleName, scale);
 }
-
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-function getSetpointUnit(scale: ThermostatSetpointScale) {
-	return scale === ThermostatSetpointScale.Celsius
-		? "°C"
-		: // wotan-disable-next-line no-useless-predicate
-		scale === ThermostatSetpointScale.Fahrenheit
-		? "°F"
-		: "";
+function getSetpointUnit(scale: number): string {
+	return getScale(scale).unit ?? "";
 }
 
 export interface ThermostatSetpointValue {
 	value: number;
-	scale: ThermostatSetpointScale;
+	scale: number;
 }
 
 export interface ThermostatSetpointCapabilities {
 	minValue: number;
-	minValueScale: ThermostatSetpointScale;
+	minValueScale: number;
 	maxValue: number;
-	maxValueScale: ThermostatSetpointScale;
+	maxValueScale: number;
 }
 
 @API(CommandClasses["Thermostat Setpoint"])
@@ -161,7 +155,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 	public async set(
 		setpointType: ThermostatSetpointType,
 		value: number,
-		scale: ThermostatSetpointScale,
+		scale: number,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			ThermostatSetpointCommand,
@@ -292,7 +286,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					supportedSetpointTypes.push(type);
 					logMessage = `received current value of setpoint ${setpointName}: ${
 						setpoint.value
-					} ${getSetpointUnit(setpoint.scale)}`;
+					} ${setpoint.scale.unit ?? ""}`;
 				} else {
 					logMessage = `Setpoint ${setpointName} is not supported`;
 				}
@@ -377,7 +371,7 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 				if (setpoint) {
 					logMessage = `received current value of setpoint ${setpointName}: ${
 						setpoint.value
-					} ${getSetpointUnit(setpoint.scale)}`;
+					} ${setpoint.scale.unit ?? ""}`;
 				} else {
 					// This shouldn't happen since we used getSupported
 					// But better be sure we don't crash
@@ -398,7 +392,7 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 interface ThermostatSetpointCCSetOptions extends CCCommandOptions {
 	setpointType: ThermostatSetpointType;
 	value: number;
-	scale: ThermostatSetpointScale;
+	scale: number;
 }
 
 @CCCommand(ThermostatSetpointCommand.Set)
@@ -425,7 +419,7 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 
 	public setpointType: ThermostatSetpointType;
 	public value: number;
-	public scale: ThermostatSetpointScale;
+	public scale: number;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.concat([
@@ -449,14 +443,14 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		if (this._type === 0) {
 			// Not supported
 			this._value = 0;
-			this._scale = 0;
+			this._scale = getScale(0);
 			return;
 		}
 
 		// parseFloatWithScale does its own validation
 		const { value, scale } = parseFloatWithScale(this.payload.slice(1));
 		this._value = value;
-		this._scale = scale;
+		this._scale = getScale(scale);
 
 		const valueId: ValueID = {
 			commandClass: this.ccId,
@@ -467,7 +461,7 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		if (!this.getValueDB().hasMetadata(valueId)) {
 			this.getValueDB().setMetadata(valueId, {
 				...ValueMetadata.Number,
-				unit: getSetpointUnit(this._scale),
+				unit: this._scale.unit,
 			});
 		}
 		this.getValueDB().setValue(valueId, value);
@@ -478,8 +472,8 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		return this._type;
 	}
 
-	private _scale: ThermostatSetpointScale;
-	public get scale(): ThermostatSetpointScale {
+	private _scale: Scale;
+	public get scale(): Scale {
 		return this._scale;
 	}
 
@@ -578,13 +572,13 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 		return this._maxValue;
 	}
 
-	private _minValueScale: ThermostatSetpointScale;
-	public get minValueScale(): ThermostatSetpointScale {
+	private _minValueScale: number;
+	public get minValueScale(): number {
 		return this._minValueScale;
 	}
 
-	private _maxValueScale: ThermostatSetpointScale;
-	public get maxValueScale(): ThermostatSetpointScale {
+	private _maxValueScale: number;
+	public get maxValueScale(): number {
 		return this._maxValueScale;
 	}
 }
@@ -621,8 +615,6 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 		return super.serialize();
 	}
 }
-
-// 020443058202
 
 @CCCommand(ThermostatSetpointCommand.SupportedReport)
 export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {

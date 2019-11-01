@@ -1,4 +1,5 @@
 import fsExtra from "fs-extra";
+import { loadNamedScales } from "./Scales";
 import {
 	loadSensorTypes,
 	lookupSensorScale,
@@ -14,14 +15,31 @@ const dummySensorTypes = {
 		label: "Dummy temperature",
 		scales: {
 			"0x00": {
-				label: "Celcius",
+				label: "Celsius",
 				unit: "°C",
 			},
 			"0x01": {
 				label: "Fahrenheit",
-				unit: "F",
+				unit: "°F",
 				description: "don't use this!",
 			},
+		},
+	},
+	"0x0b": {
+		label: "Another temperature",
+		scales: "$SCALES:temperature",
+	},
+};
+
+const dummyScales = {
+	temperature: {
+		"0x00": {
+			label: "Celsius",
+			unit: "°C",
+		},
+		"0x01": {
+			label: "Fahrenheit",
+			unit: "°F",
 		},
 	},
 };
@@ -32,7 +50,13 @@ const dummySensorTypes = {
 describe("lib/config/SensorTypes", () => {
 	beforeAll(async () => {
 		pathExistsMock.mockResolvedValue(true);
-		readFileMock.mockResolvedValue(JSON.stringify(dummySensorTypes));
+		readFileMock.mockImplementation((path: string) => {
+			if (path.endsWith("sensorTypes.json"))
+				return Promise.resolve(JSON.stringify(dummySensorTypes));
+			if (path.endsWith("scales.json"))
+				return Promise.resolve(JSON.stringify(dummyScales));
+		});
+		await loadNamedScales();
 		await loadSensorTypes();
 	});
 
@@ -74,6 +98,13 @@ describe("lib/config/SensorTypes", () => {
 			expect(test2).toMatchObject({
 				label: "Unknown",
 			});
+		});
+
+		it("includes named scales in its lookup", async () => {
+			const test1 = lookupSensorScale(0x0b, 0x00);
+			expect(test1).toMatchObject(dummyScales.temperature["0x00"]);
+			const test2 = lookupSensorScale(0x0b, 0x01);
+			expect(test2).toMatchObject(dummyScales.temperature["0x01"]);
 		});
 	});
 });

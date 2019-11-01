@@ -14,6 +14,9 @@
 * Upgrade Prettier and ESLint to make use of the new TS 3.7 syntax
 * Update Multilevel Sensor definitions to latest specs and rename some sensor types
 * Move sensor type and scale definitions to JSON config files
+* Extract named scales to their own configuration file
+* Also use scale configuration for `Thermostat Setpoint CC`
+* Improve error output for `lint:config` script
 
 ## 1.6.0 (2019-10-23)
 * Implement Multi Channel Association CC and prefer it to Association CC if possible

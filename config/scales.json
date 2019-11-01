@@ -1,0 +1,13 @@
+// This file contains scale definitions that are used in multiple places
+{
+	"temperature": {
+		"0x00": {
+			"label": "Celsius",
+			"unit": "°C"
+		},
+		"0x01": {
+			"label": "Fahrenheit",
+			"unit": "°F"
+		}
+	}
+}

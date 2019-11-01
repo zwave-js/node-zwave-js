@@ -3,16 +3,7 @@
 {
 	"0x01": {
 		"label": "Air temperature",
-		"scales": {
-			"0x00": {
-				"label": "Celcius",
-				"unit": "°C"
-			},
-			"0x01": {
-				"label": "Fahrenheit",
-				"unit": "F"
-			}
-		}
+		"scales": "$SCALES:temperature"
 	},
 	"0x02": {
 		"label": "General purpose",
@@ -125,16 +116,7 @@
 	},
 	"0x0b": {
 		"label": "Dew point",
-		"scales": {
-			"0x00": {
-				"label": "Celcius",
-				"unit": "°C"
-			},
-			"0x01": {
-				"label": "Fahrenheit",
-				"unit": "F"
-			}
-		}
+		"scales": "$SCALES:temperature"
 	},
 	"0x0c": {
 		"label": "Rain rate",
@@ -289,29 +271,11 @@
 	},
 	"0x17": {
 		"label": "Water temperature",
-		"scales": {
-			"0x00": {
-				"label": "Celcius",
-				"unit": "°C"
-			},
-			"0x01": {
-				"label": "Fahrenheit",
-				"unit": "F"
-			}
-		}
+		"scales": "$SCALES:temperature"
 	},
 	"0x18": {
 		"label": "Soil temperature",
-		"scales": {
-			"0x00": {
-				"label": "Celcius",
-				"unit": "°C"
-			},
-			"0x01": {
-				"label": "Fahrenheit",
-				"unit": "F"
-			}
-		}
+		"scales": "$SCALES:temperature"
 	},
 	"0x19": {
 		"label": "Seismic Intensity",
@@ -433,16 +397,7 @@
 	},
 	"0x22": {
 		"label": "Target temperature",
-		"scales": {
-			"0x00": {
-				"label": "Celcius",
-				"unit": "°C"
-			},
-			"0x01": {
-				"label": "Fahrenheit",
-				"unit": "F"
-			}
-		}
+		"scales": "$SCALES:temperature"
 	},
 	"0x23": {
 		"label": "Particulate Matter 2.5",
@@ -716,55 +671,19 @@
 	},
 	"0x3e": {
 		"label": "Boiler water temperature",
-		"scales": {
-			"0x00": {
-				"label": "Celcius",
-				"unit": "°C"
-			},
-			"0x01": {
-				"label": "Fahrenheit",
-				"unit": "F"
-			}
-		}
+		"scales": "$SCALES:temperature"
 	},
 	"0x3f": {
 		"label": "Domestic Hot Water (DHW) temperature",
-		"scales": {
-			"0x00": {
-				"label": "Celcius",
-				"unit": "°C"
-			},
-			"0x01": {
-				"label": "Fahrenheit",
-				"unit": "F"
-			}
-		}
+		"scales": "$SCALES:temperature"
 	},
 	"0x40": {
 		"label": "Outside temperature",
-		"scales": {
-			"0x00": {
-				"label": "Celcius",
-				"unit": "°C"
-			},
-			"0x01": {
-				"label": "Fahrenheit",
-				"unit": "F"
-			}
-		}
+		"scales": "$SCALES:temperature"
 	},
 	"0x41": {
 		"label": "Exhaust temperature",
-		"scales": {
-			"0x00": {
-				"label": "Celcius",
-				"unit": "°C"
-			},
-			"0x01": {
-				"label": "Fahrenheit",
-				"unit": "F"
-			}
-		}
+		"scales": "$SCALES:temperature"
 	},
 	"0x42": {
 		"label": "Water Chlorine level",
@@ -822,81 +741,27 @@
 	},
 	"0x48": {
 		"label": "Return Air temperature",
-		"scales": {
-			"0x00": {
-				"label": "Celcius",
-				"unit": "°C"
-			},
-			"0x01": {
-				"label": "Fahrenheit",
-				"unit": "F"
-			}
-		}
+		"scales": "$SCALES:temperature"
 	},
 	"0x49": {
 		"label": "Supply Air temperature",
-		"scales": {
-			"0x00": {
-				"label": "Celcius",
-				"unit": "°C"
-			},
-			"0x01": {
-				"label": "Fahrenheit",
-				"unit": "F"
-			}
-		}
+		"scales": "$SCALES:temperature"
 	},
 	"0x4a": {
 		"label": "Condenser Coil temperature",
-		"scales": {
-			"0x00": {
-				"label": "Celcius",
-				"unit": "°C"
-			},
-			"0x01": {
-				"label": "Fahrenheit",
-				"unit": "F"
-			}
-		}
+		"scales": "$SCALES:temperature"
 	},
 	"0x4b": {
 		"label": "Evaporator Coil temperature",
-		"scales": {
-			"0x00": {
-				"label": "Celcius",
-				"unit": "°C"
-			},
-			"0x01": {
-				"label": "Fahrenheit",
-				"unit": "F"
-			}
-		}
+		"scales": "$SCALES:temperature"
 	},
 	"0x4c": {
 		"label": "Liquid Line temperature",
-		"scales": {
-			"0x00": {
-				"label": "Celcius",
-				"unit": "°C"
-			},
-			"0x01": {
-				"label": "Fahrenheit",
-				"unit": "F"
-			}
-		}
+		"scales": "$SCALES:temperature"
 	},
 	"0x4d": {
 		"label": "Discharge Line temperature",
-		"scales": {
-			"0x00": {
-				"label": "Celcius",
-				"unit": "°C"
-			},
-			"0x01": {
-				"label": "Fahrenheit",
-				"unit": "F"
-			}
-		}
+		"scales": "$SCALES:temperature"
 	},
 	"0x4e": {
 		"label": "Suction Pressure",
@@ -926,12 +791,7 @@
 	},
 	"0x50": {
 		"label": "Defrost temperature",
-		"scales": {
-			"0x00": {
-				"label": "Celcius",
-				"unit": "°C"
-			}
-		}
+		"scales": "$SCALES:temperature"
 	},
 	"0x51": {
 		"label": "Ozone",
