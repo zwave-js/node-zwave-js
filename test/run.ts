@@ -1,6 +1,7 @@
 // import { ThermostatMode } from "../build/lib/commandclass/ThermostatModeCC";
 import { Driver } from "../";
 
+// @ts-ignore
 const driver = new Driver("COM5").once("driver ready", async () => {
 	// console.log(`sending application info...`);
 	// // TODO: Generate this list dynamically
@@ -35,9 +36,15 @@ const driver = new Driver("COM5").once("driver ready", async () => {
 	// 	supportCheck: false,
 	// });
 	// await driver.hardReset();
+	// console.error();
+	// console.error("INCLUSION");
+	// console.error();
 	// await driver.controller.beginInclusion();
 	// await require("alcalzone-shared/async").wait(60000);
 	// await driver.controller.stopInclusion();
+	// await driver.controller.beginExclusion();
+	// await require("alcalzone-shared/async").wait(60000);
+	// await driver.controller.stopExclusion();
 	// const node = driver.controller.nodes.get(2)!;
 	// node.once("interview completed", async () => {
 	// 	const date = await node.commandClasses["Time Parameters"].get();
