@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 1.7.0 (2019-11-03)
 * Support interviewing multi channel endpoints
 * Improve performance by not formatting logs that won't be visible
 * `Multi Channel CC`: Mark `commandClasses` property as internal
