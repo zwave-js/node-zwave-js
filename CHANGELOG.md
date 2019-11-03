@@ -18,6 +18,7 @@
 * Also use scale configuration for `Thermostat Setpoint CC`
 * Improve error output for `lint:config` script
 * Upgrade `serialport` to version 8
+* Create CC instances for all endpoints in `getDefinedValueIDs`
 
 ## 1.6.0 (2019-10-23)
 * Implement Multi Channel Association CC and prefer it to Association CC if possible
