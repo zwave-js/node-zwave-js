@@ -379,7 +379,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		const ret: TranslatedValueID[] = [];
 		for (const endpoint of this.getAllEndpoints()) {
 			for (const cc of endpoint.implementedCommandClasses.keys()) {
-				const ccInstance = this.createCCInstanceUnsafe(cc);
+				const ccInstance = endpoint.createCCInstanceUnsafe(cc);
 				if (ccInstance) {
 					ret.push(
 						...ccInstance
@@ -508,7 +508,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	/** Returns a list of all endpoints of this node, including the root endpoint (index 0) */
 	public getAllEndpoints(): Endpoint[] {
 		const ret: Endpoint[] = [this];
-		for (let i = 1; i < this.getEndpointCount(); i++) {
+		for (let i = 1; i <= this.getEndpointCount(); i++) {
 			// Iterating over the endpoint count ensures that we don't get undefined
 			ret.push(this.getEndpoint(i)!);
 		}
