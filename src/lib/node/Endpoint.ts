@@ -103,14 +103,19 @@ export class Endpoint {
 	 * Returns 0 if the CC is not supported.
 	 */
 	public getCCVersion(cc: CommandClasses): number {
+		const ccInfo = this._implementedCommandClasses.get(cc);
+		const ret = (ccInfo && ccInfo.version) || 0;
 		// A controlling node interviewing a Multi Channel End Point MUST request the End Point’s
 		// Command Class version from the Root Device if the End Point does not advertise support
 		// for the Version Command Class.
-		if (this.index > 0 && !this.supportsCC(CommandClasses.Version)) {
+		if (
+			ret === 0 &&
+			this.index > 0 &&
+			!this.supportsCC(CommandClasses.Version)
+		) {
 			return this.getNodeUnsafe()!.getCCVersion(cc);
 		}
-		const ccInfo = this._implementedCommandClasses.get(cc);
-		return ccInfo?.version ?? 0;
+		return ret;
 	}
 
 	/**

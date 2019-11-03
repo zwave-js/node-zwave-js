@@ -1,5 +1,7 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
+import { Driver } from "../driver/Driver";
 import { IDriver } from "../driver/IDriver";
+import { ZWaveNode } from "../node/Node";
 import {
 	BasicCC,
 	BasicCCGet,
@@ -117,6 +119,40 @@ describe("lib/commandclass/BasicCC => ", () => {
 			writeable: true,
 			min: 0,
 			max: 99,
+		});
+	});
+
+	describe("getDefinedValueIDs()", () => {
+		it("should include the target value for all endpoints and the node itself", () => {
+			// Repro for GH#377
+			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+			(fakeDriver as any).controller.nodes.set(node.id, node);
+			// We have 2 endpoints
+			node.valueDB.setValue(
+				{
+					commandClass: CommandClasses["Multi Channel"],
+					propertyName: "individualCount",
+				},
+				2,
+			);
+			// And we only support V1, so no report of the target value
+			for (let ep = 0; ep <= 2; ep++) {
+				node.getEndpoint(ep)!.addCC(CommandClasses.Basic, {
+					isSupported: true,
+					version: 1,
+				});
+			}
+
+			const valueIDs = node
+				.getDefinedValueIDs()
+				.filter(
+					({ commandClass, propertyName }) =>
+						commandClass === CommandClasses.Basic &&
+						propertyName === "targetValue",
+				);
+			const endpoints = valueIDs.map(({ endpoint }) => endpoint);
+
+			expect(endpoints).toEqual([0, 1, 2]);
 		});
 	});
 });
