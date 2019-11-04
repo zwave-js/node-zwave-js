@@ -111,13 +111,11 @@ export class TimeCCAPI extends CCAPI {
 	}
 }
 
-export interface TimeCC {
-	ccCommand: TimeCommand;
-}
-
 @commandClass(CommandClasses.Time)
 @implementedVersion(2)
 export class TimeCC extends CommandClass {
+	declare ccCommand: TimeCommand;
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = this.getEndpoint()!.commandClasses.Time;

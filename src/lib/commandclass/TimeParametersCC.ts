@@ -152,13 +152,11 @@ export class TimeParametersCCAPI extends CCAPI {
 	}
 }
 
-export interface TimeParametersCC {
-	ccCommand: TimeParametersCommand;
-}
-
 @commandClass(CommandClasses["Time Parameters"])
 @implementedVersion(1)
 export class TimeParametersCC extends CommandClass {
+	declare ccCommand: TimeParametersCommand;
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = this.getEndpoint()!.commandClasses["Time Parameters"];

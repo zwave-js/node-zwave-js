@@ -49,13 +49,11 @@ export class MultiCommandCCAPI extends CCAPI {
 	}
 }
 
-export interface MultiCommandCC {
-	ccCommand: MultiCommandCommand;
-}
-
 @commandClass(CommandClasses["Multi Command"])
 @implementedVersion(1)
 export class MultiCommandCC extends CommandClass {
+	declare ccCommand: MultiCommandCommand;
+
 	/** Tests if a command targets a specific endpoint and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
 		return (

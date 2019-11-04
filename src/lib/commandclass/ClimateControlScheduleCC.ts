@@ -2,30 +2,10 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
 import { Maybe } from "../values/Primitive";
-import {
-	decodeSetbackState,
-	encodeSetbackState,
-	SetbackState,
-} from "../values/SetbackState";
-import {
-	decodeSwitchpoint,
-	encodeSwitchpoint,
-	Switchpoint,
-} from "../values/Switchpoint";
+import { decodeSetbackState, encodeSetbackState, SetbackState } from "../values/SetbackState";
+import { decodeSwitchpoint, encodeSwitchpoint, Switchpoint } from "../values/Switchpoint";
 import { CCAPI } from "./API";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	ccKeyValuePair,
-	ccValue,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	expectedCCResponse,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import { API, CCCommand, CCCommandOptions, ccKeyValuePair, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum ClimateControlScheduleCommand {
@@ -159,13 +139,11 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 	}
 }
 
-export interface ClimateControlScheduleCC {
-	ccCommand: ClimateControlScheduleCommand;
-}
-
 @commandClass(CommandClasses["Climate Control Schedule"])
 @implementedVersion(1)
-export class ClimateControlScheduleCC extends CommandClass {}
+export class ClimateControlScheduleCC extends CommandClass {
+	declare ccCommand: ClimateControlScheduleCommand;
+}
 
 interface ClimateControlScheduleCCSetOptions extends CCCommandOptions {
 	weekday: Weekday;

@@ -151,13 +151,11 @@ export class ThermostatModeCCAPI extends CCAPI {
 	}
 }
 
-export interface ThermostatModeCC {
-	ccCommand: ThermostatModeCommand;
-}
-
 @commandClass(CommandClasses["Thermostat Mode"])
 @implementedVersion(3)
 export class ThermostatModeCC extends CommandClass {
+	declare ccCommand: ThermostatModeCommand;
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = this.getEndpoint()!.commandClasses["Thermostat Mode"];

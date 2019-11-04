@@ -195,13 +195,11 @@ function defineMetadataForNotificationEvents(
 	return ret;
 }
 
-export interface NotificationCC {
-	ccCommand: NotificationCommand;
-}
-
 @commandClass(CommandClasses.Notification)
 @implementedVersion(8)
 export class NotificationCC extends CommandClass {
+	declare ccCommand: NotificationCommand;
+
 	// former AlarmCC (v1..v2)
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {

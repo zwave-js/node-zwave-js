@@ -3,16 +3,7 @@ import { CRC16_CCITT } from "../util/crc";
 import { validatePayload } from "../util/misc";
 import { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import { API, CCCommand, CCCommandOptions, CommandClass, commandClass, CommandClassDeserializationOptions, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 // @noSetValueAPI
@@ -48,13 +39,11 @@ export class CRC16CCAPI extends CCAPI {
 	}
 }
 
-export interface CRC16CC {
-	ccCommand: CRC16Command;
-}
-
 @commandClass(CommandClasses["CRC-16 Encapsulation"])
 @implementedVersion(1)
 export class CRC16CC extends CommandClass {
+	declare ccCommand: CRC16Command;
+
 	/** Encapsulates a command in a CRC-16 CC */
 	public static encapsulate(
 		driver: IDriver,

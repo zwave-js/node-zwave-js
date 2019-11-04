@@ -7,21 +7,7 @@ import { num2hex } from "../util/strings";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, unknownBoolean } from "../values/Primitive";
 import { CCAPI } from "./API";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	ccValue,
-	ccValueMetadata,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	expectedCCResponse,
-	getCommandClass,
-	getImplementedVersion,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import { API, CCCommand, CCCommandOptions, ccValue, ccValueMetadata, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, getCommandClass, getImplementedVersion, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum VersionCommand {
@@ -156,13 +142,11 @@ export class VersionCCAPI extends CCAPI {
 	}
 }
 
-export interface VersionCC {
-	ccCommand: VersionCommand;
-}
-
 @commandClass(CommandClasses.Version)
 @implementedVersion(3)
 export class VersionCC extends CommandClass {
+	declare ccCommand: VersionCommand;
+
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
 		// VersionCC must be the 2nd CC after ManufacturerSpecificCC
 		return [CommandClasses["Manufacturer Specific"]];

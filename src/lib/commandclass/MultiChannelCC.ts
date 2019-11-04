@@ -182,13 +182,11 @@ export interface EndpointCapability extends NodeInformationFrame {
 	wasRemoved: boolean;
 }
 
-export interface MultiChannelCC {
-	ccCommand: MultiChannelCommand;
-}
-
 @commandClass(CommandClasses["Multi Channel"])
 @implementedVersion(4)
 export class MultiChannelCC extends CommandClass {
+	declare ccCommand: MultiChannelCommand;
+
 	public constructor(driver: IDriver, options: CommandClassOptions) {
 		super(driver, options);
 		this.registerValue(getEndpointCCsValueId(0).propertyName as any, true);

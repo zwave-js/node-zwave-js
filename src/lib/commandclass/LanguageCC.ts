@@ -64,13 +64,11 @@ export class LanguageCCAPI extends CCAPI {
 	}
 }
 
-export interface LanguageCC {
-	ccCommand: LanguageCommand;
-}
-
 @commandClass(CommandClasses.Language)
 @implementedVersion(1)
-export class LanguageCC extends CommandClass {}
+export class LanguageCC extends CommandClass {
+	declare ccCommand: LanguageCommand;
+}
 
 interface LanguageCCSetOptions extends CCCommandOptions {
 	language: string;

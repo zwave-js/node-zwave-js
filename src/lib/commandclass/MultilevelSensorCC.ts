@@ -124,13 +124,11 @@ export class MultilevelSensorCCAPI extends CCAPI {
 	}
 }
 
-export interface MultilevelSensorCC {
-	ccCommand: MultilevelSensorCommand;
-}
-
 @commandClass(CommandClasses["Multilevel Sensor"])
 @implementedVersion(11)
 export class MultilevelSensorCC extends CommandClass {
+	declare ccCommand: MultilevelSensorCommand;
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = this.getEndpoint()!.commandClasses["Multilevel Sensor"];

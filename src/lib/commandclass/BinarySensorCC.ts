@@ -4,19 +4,7 @@ import log from "../log";
 import { validatePayload } from "../util/misc";
 import { Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	ccKeyValuePair,
-	ccValue,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	expectedCCResponse,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import { API, CCCommand, CCCommandOptions, ccKeyValuePair, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 // All the supported commands
@@ -99,13 +87,11 @@ export class BinarySensorCCAPI extends CCAPI {
 	}
 }
 
-export interface BinarySensorCC {
-	ccCommand: BinarySensorCommand;
-}
-
 @commandClass(CommandClasses["Binary Sensor"])
 @implementedVersion(2)
 export class BinarySensorCC extends CommandClass {
+	declare ccCommand: BinarySensorCommand;
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = this.getEndpoint()!.commandClasses.Basic;

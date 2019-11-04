@@ -6,18 +6,7 @@ import { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	ccValue,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	expectedCCResponse,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import { API, CCCommand, CCCommandOptions, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 /** Returns the ValueID used to store the maximum number of nodes of an association group */
@@ -167,13 +156,11 @@ export class AssociationCCAPI extends CCAPI {
 	}
 }
 
-export interface AssociationCC {
-	ccCommand: AssociationCommand;
-}
-
 @commandClass(CommandClasses.Association)
 @implementedVersion(3)
 export class AssociationCC extends CommandClass {
+	declare ccCommand: AssociationCommand;
+
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
 		// AssociationCC must be interviewed after Z-Wave+ if that is supported
 		return [

@@ -1,15 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { validatePayload } from "../util/misc";
 import { CCAPI } from "./API";
-import {
-	API,
-	CCCommandOptions,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import { API, CCCommandOptions, CommandClass, commandClass, CommandClassDeserializationOptions, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { FibaroCC } from "./manufacturerProprietary/Fibaro";
 
@@ -34,14 +26,12 @@ interface ManufacturerProprietaryOptions extends CCCommandOptions {
 	proprietaryCommand: Buffer | ProprietaryCommand;
 }
 
-export interface ManufacturerProprietaryCC {
-	ccCommand: undefined;
-}
-
 @commandClass(CommandClasses["Manufacturer Proprietary"])
 @implementedVersion(1)
 // TODO: Add a way to specify the expected response
 export class ManufacturerProprietaryCC extends CommandClass {
+	declare ccCommand: undefined;
+
 	public constructor(
 		driver: IDriver,
 		options:
