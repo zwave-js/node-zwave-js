@@ -2,6 +2,7 @@ import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
+import { ZWaveNode } from "../node/Node";
 import { BasicCC, BasicCCSet, BasicCommand } from "./BasicCC";
 import {
 	CommandClass,
@@ -189,6 +190,37 @@ describe("lib/commandclass/CommandClass => ", () => {
 			const cc = new DummyCCSubClass2(fakeDriver, { nodeId: 1 });
 			const actual = getExpectedCCResponse(cc);
 			expect(actual).toBe(DummyCCSubClass1);
+		});
+	});
+
+	describe("persistValues()", () => {
+		let node2: ZWaveNode;
+
+		beforeAll(() => {
+			node2 = new ZWaveNode(2, fakeDriver as any);
+			(fakeDriver.controller.nodes as any).set(2, node2);
+		});
+
+		it(`should not update "interviewComplete" in the value DB`, () => {
+			// Repro for #383
+			const cc = new BasicCCSet(fakeDriver, {
+				nodeId: 2,
+				targetValue: 55,
+			});
+			cc.interviewComplete = true;
+
+			const mockSetValue = jest.fn();
+			node2.valueDB.setValue = mockSetValue;
+			cc.persistValues();
+
+			const propertyNames = mockSetValue.mock.calls
+				.map(([arg0]) => arg0)
+				.map(({ propertyName }) => propertyName);
+			expect(propertyNames).not.toContainValue("interviewComplete");
+		});
+
+		afterAll(() => {
+			(fakeDriver.controller.nodes as any).delete(2);
 		});
 	});
 });

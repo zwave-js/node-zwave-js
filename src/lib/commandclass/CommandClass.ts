@@ -571,6 +571,9 @@ export class CommandClass {
 
 		const cc = getCommandClass(this);
 		for (const variable of valueNames as string[]) {
+			// interviewComplete automatically updates the value DB, so no need to persist again
+			if (variable === "interviewComplete") continue;
+			// Only persist non-undefined values
 			const sourceValue = this[variable as keyof this];
 			if (sourceValue == undefined) continue;
 
