@@ -8,8 +8,6 @@ import {
 } from "../src/lib/config/Scales";
 import { loadSensorTypesInternal } from "../src/lib/config/SensorTypes";
 
-const hexKeyRegex = /^0x[a-fA-F0-9]+$/;
-
 async function lintNotifications(): Promise<void> {
 	await loadNotificationsInternal();
 	// TODO: Validate that all contents are semantically correct
