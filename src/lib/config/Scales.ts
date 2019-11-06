@@ -12,7 +12,9 @@ import { configDir, hexKeyRegex, throwInvalidConfig } from "./utils";
 const configPath = path.join(configDir, "scales.json");
 let namedScales: ReadonlyMap<string, ReadonlyMap<number, Scale>> | undefined;
 
-export async function loadNamedScalesInternal(): Promise<void> {
+export async function loadNamedScalesInternal(): Promise<
+	Exclude<typeof namedScales, undefined>
+> {
 	if (!(await pathExists(configPath))) {
 		throw new ZWaveError(
 			"The named scales config file does not exist!",
@@ -23,19 +25,36 @@ export async function loadNamedScalesInternal(): Promise<void> {
 	try {
 		const fileContents = await readFile(configPath, "utf8");
 		const definition = JSON5.parse(fileContents);
-		if (!isObject(definition)) throwInvalidConfig("named scales");
+		if (!isObject(definition)) {
+			throwInvalidConfig(
+				"named scales",
+				`the dictionary is not an object`,
+			);
+		}
 
 		const ret = new Map();
 		for (const [name, scales] of entries(definition)) {
+			if (!/[\w\d]+/.test(name)) {
+				throwInvalidConfig(
+					"named scales",
+					`Name ${name} contains other characters than letters and numbers`,
+				);
+			}
 			const named = new Map<number, Scale>();
 			for (const [key, scaleDefinition] of entries(scales)) {
-				if (!hexKeyRegex.test(key)) throwInvalidConfig("named scales");
+				if (!hexKeyRegex.test(key)) {
+					throwInvalidConfig(
+						"named scales",
+						`found non-hex key "${key}" in the definition for "${name}"`,
+					);
+				}
 				const keyNum = parseInt(key.slice(2), 16);
 				named.set(keyNum, new Scale(keyNum, scaleDefinition));
 			}
 			ret.set(name, named);
 		}
 		namedScales = ret;
+		return ret;
 	} catch (e) {
 		if (e instanceof ZWaveError) {
 			throw e;
