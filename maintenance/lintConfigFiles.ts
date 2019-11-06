@@ -5,6 +5,7 @@ import { green, red } from "ansi-colors";
 import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
+import { loadManufacturersInternal } from "../src/lib/config/Manufacturers";
 import { loadNotificationsInternal } from "../src/lib/config/Notifications";
 import { loadNamedScales, Scale } from "../src/lib/config/Scales";
 import { SensorType } from "../src/lib/config/SensorTypes";
@@ -18,30 +19,8 @@ async function lintNotifications(): Promise<void> {
 }
 
 async function lintManufacturers(): Promise<void> {
-	const configPath = path.join(configDir, "manufacturers.json");
-	if (!(await pathExists(configPath))) {
-		throw new Error("The manufacturer config file does not exist!");
-	}
-
-	const fileContents = await readFile(configPath, "utf8");
-	let definition: any;
-	try {
-		definition = JSON5.parse(fileContents);
-	} catch (e) {
-		throw new Error(`The manufacturer config file is invalid: ${e}`);
-	}
-	if (!isObject(definition)) {
-		throw new Error("The manufacturer config file must contain an object");
-	}
-
-	for (const [id] of entries(definition)) {
-		if (!hexKeyRegex.test(id)) {
-			throw new Error(
-				`The manufacturer config file is invalid: found non-hex object key ${id}`,
-			);
-		}
-		// TODO: Validate that the file is semantically correct
-	}
+	await loadManufacturersInternal();
+	// TODO: Validate that the file is semantically correct
 }
 
 async function lintNamedScales(): Promise<void> {
