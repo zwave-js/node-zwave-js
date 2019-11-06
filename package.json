@@ -24,7 +24,7 @@
     "url": "https://github.com/AlCalzone/node-zwave-js/issues"
   },
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=8.0.0"
   },
   "devDependencies": {
     "@actions/core": "^1.0.0",
