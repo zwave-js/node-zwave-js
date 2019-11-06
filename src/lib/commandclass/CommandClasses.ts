@@ -127,3 +127,20 @@ export function getCCName(cc: number): string {
 	if (cc in CommandClasses) return CommandClasses[cc];
 	return `UNKNOWN (${num2hex(cc)})`;
 }
+
+/**
+ * Defines which CCs are considered Actuator CCs
+ */
+// Is defined in SDS13781
+export const actuatorCCs: readonly CommandClasses[] = [
+	CommandClasses["Barrier Operator"],
+	CommandClasses["Binary Switch"],
+	CommandClasses["Color Switch"],
+	CommandClasses["Door Lock"],
+	CommandClasses["Multilevel Switch"],
+	CommandClasses["Simple AV Control"],
+	CommandClasses["Sound Switch"],
+	CommandClasses["Thermostat Setpoint"],
+	CommandClasses["Thermostat Mode"],
+	CommandClasses["Window Covering"],
+];

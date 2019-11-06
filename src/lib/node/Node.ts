@@ -849,6 +849,11 @@ version:               ${this.version}`;
 			}
 		}
 
+		// If a node or endpoint supports any actuator CC, don't offer the Basic CC
+		for (const endpoint of this.getAllEndpoints()) {
+			endpoint.hideBasicCCInFavorOfActuatorCCs();
+		}
+
 		// TODO: Overwrite the reported config with configuration files (like OZW does)
 
 		await this.setInterviewStage(InterviewStage.CommandClasses);

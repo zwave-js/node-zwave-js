@@ -7,7 +7,7 @@ import {
 	getCCConstructor,
 	getCommandClassStatic,
 } from "../commandclass/CommandClass";
-import { CommandClasses } from "../commandclass/CommandClasses";
+import { actuatorCCs, CommandClasses } from "../commandclass/CommandClasses";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { GraphNode } from "../util/graph";
@@ -96,6 +96,17 @@ export class Endpoint {
 			this._implementedCommandClasses.has(cc) &&
 			!!this._implementedCommandClasses.get(cc)!.isControlled
 		);
+	}
+
+	/** Removes the BasicCC from the supported CCs if any other actuator CCs are supported */
+	public hideBasicCCInFavorOfActuatorCCs(): void {
+		// This behavior is defined in SDS14223
+		if (
+			this.supportsCC(CommandClasses.Basic) &&
+			actuatorCCs.some(cc => this.supportsCC(cc))
+		) {
+			this.removeCC(CommandClasses.Basic);
+		}
 	}
 
 	/**
