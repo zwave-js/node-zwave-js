@@ -8,7 +8,7 @@ import path from "path";
 import { loadManufacturersInternal } from "../src/lib/config/Manufacturers";
 import { loadNotificationsInternal } from "../src/lib/config/Notifications";
 import { loadNamedScales, Scale } from "../src/lib/config/Scales";
-import { SensorType } from "../src/lib/config/SensorTypes";
+import { loadSensorTypesInternal } from "../src/lib/config/SensorTypes";
 import { configDir } from "../src/lib/config/utils";
 
 const hexKeyRegex = /^0x[a-fA-F0-9]+$/;
@@ -65,36 +65,11 @@ async function lintNamedScales(): Promise<void> {
 }
 
 async function lintSensorTypes(): Promise<void> {
-	const configPath = path.join(configDir, "sensorTypes.json");
-	if (!(await pathExists(configPath))) {
-		throw new Error("The sensor types config file does not exist!");
-	}
-
-	const fileContents = await readFile(configPath, "utf8");
-	let definition: any;
-	try {
-		definition = JSON5.parse(fileContents);
-	} catch (e) {
-		throw new Error(`The sensor types config file is invalid: ${e}`);
-	}
-
-	if (!isObject(definition)) {
-		throw new Error("The sensor types config file must contain an object");
-	}
-
 	// The named scales must be loaded here so the parsing can work
 	await loadNamedScales();
 
-	for (const [id, snsrDefinition] of entries(definition)) {
-		if (!hexKeyRegex.test(id)) {
-			throw new Error(
-				`The sensor types config file is invalid: found non-hex object key ${id}`,
-			);
-		}
-		const idNum = parseInt(id.slice(2), 16);
-		// TODO: Validate that all contents are semantically correct
-		const _testParse = new SensorType(idNum, snsrDefinition);
-	}
+	await loadSensorTypesInternal();
+	// TODO: Validate that all contents are semantically correct
 }
 
 Promise.resolve()

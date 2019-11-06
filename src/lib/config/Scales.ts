@@ -6,44 +6,48 @@ import path from "path";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { JSONObject } from "../util/misc";
+import { num2hex } from "../util/strings";
 import { configDir, hexKeyRegex, throwInvalidConfig } from "./utils";
 
 const configPath = path.join(configDir, "scales.json");
 let namedScales: ReadonlyMap<string, ReadonlyMap<number, Scale>> | undefined;
 
+export async function loadNamedScalesInternal(): Promise<void> {
+	if (!(await pathExists(configPath))) {
+		throw new ZWaveError(
+			"The named scales config file does not exist!",
+			ZWaveErrorCodes.Config_Invalid,
+		);
+	}
+
+	try {
+		const fileContents = await readFile(configPath, "utf8");
+		const definition = JSON5.parse(fileContents);
+		if (!isObject(definition)) throwInvalidConfig("named scales");
+
+		const ret = new Map();
+		for (const [name, scales] of entries(definition)) {
+			const named = new Map<number, Scale>();
+			for (const [key, scaleDefinition] of entries(scales)) {
+				if (!hexKeyRegex.test(key)) throwInvalidConfig("named scales");
+				const keyNum = parseInt(key.slice(2), 16);
+				named.set(keyNum, new Scale(keyNum, scaleDefinition));
+			}
+			ret.set(name, named);
+		}
+		namedScales = ret;
+	} catch (e) {
+		if (e instanceof ZWaveError) {
+			throw e;
+		} else {
+			throwInvalidConfig("named scales");
+		}
+	}
+}
+
 export async function loadNamedScales(): Promise<void> {
 	try {
-		if (!(await pathExists(configPath))) {
-			throw new ZWaveError(
-				"The named scales config file does not exist!",
-				ZWaveErrorCodes.Config_Invalid,
-			);
-		}
-
-		try {
-			const fileContents = await readFile(configPath, "utf8");
-			const definition = JSON5.parse(fileContents);
-			if (!isObject(definition)) throwInvalidConfig("named scales");
-
-			const ret = new Map();
-			for (const [name, scales] of entries(definition)) {
-				const named = new Map<number, Scale>();
-				for (const [key, scaleDefinition] of entries(scales)) {
-					if (!hexKeyRegex.test(key))
-						throwInvalidConfig("named scales");
-					const keyNum = parseInt(key.slice(2), 16);
-					named.set(keyNum, new Scale(keyNum, scaleDefinition));
-				}
-				ret.set(name, named);
-			}
-			namedScales = ret;
-		} catch (e) {
-			if (e instanceof ZWaveError) {
-				throw e;
-			} else {
-				throwInvalidConfig("named scales");
-			}
-		}
+		await loadNamedScalesInternal();
 	} catch (e) {
 		// If the config file is missing or invalid, don't try to find it again
 		if (
@@ -91,21 +95,31 @@ export class Scale {
 	public constructor(key: number, definition: JSONObject) {
 		this.key = key;
 
-		if (typeof definition.label !== "string")
-			throwInvalidConfig("named scales");
+		if (typeof definition.label !== "string") {
+			throwInvalidConfig(
+				"named scales",
+				`The label for scale ${num2hex(key)} is not a string!`,
+			);
+		}
 		this.label = definition.label;
 		if (
 			definition.unit != undefined &&
 			typeof definition.unit !== "string"
 		) {
-			throwInvalidConfig("named scales");
+			throwInvalidConfig(
+				"named scales",
+				`The unit for scale ${num2hex(key)} is not a string!`,
+			);
 		}
 		this.unit = definition.unit;
 		if (
 			definition.description != undefined &&
 			typeof definition.description !== "string"
 		) {
-			throwInvalidConfig("named scales");
+			throwInvalidConfig(
+				"named scales",
+				`The description for scale ${num2hex(key)} is not a string!`,
+			);
 		}
 		this.description = definition.description;
 	}
