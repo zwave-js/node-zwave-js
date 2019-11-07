@@ -31,44 +31,48 @@ export type NotificationValueDefinition = (
 const configPath = path.join(configDir, "notifications.json");
 let notifications: ReadonlyMap<number, Notification> | undefined;
 
-export async function loadNotifications(): Promise<void> {
+export async function loadNotificationsInternal(): Promise<void> {
+	if (!(await pathExists(configPath))) {
+		throw new ZWaveError(
+			"The config file does not exist!",
+			ZWaveErrorCodes.Config_Invalid,
+		);
+	}
+
 	try {
-		if (!(await pathExists(configPath))) {
-			throw new ZWaveError(
-				"The config file does not exist!",
-				ZWaveErrorCodes.Config_Invalid,
+		const fileContents = await readFile(configPath, "utf8");
+		const definition = JSON5.parse(fileContents);
+		if (!isObject(definition)) {
+			throwInvalidConfig(
+				"notifications",
+				"the database is not an object",
 			);
 		}
 
-		try {
-			const fileContents = await readFile(configPath, "utf8");
-			const definition = JSON5.parse(fileContents);
-			if (!isObject(definition)) {
+		const ret = new Map();
+		for (const [id, ntfcnDefinition] of entries(definition)) {
+			if (!hexKeyRegex.test(id)) {
 				throwInvalidConfig(
 					"notifications",
-					"the database is not an object",
+					`found non-hex key "${id}" at the root`,
 				);
 			}
-
-			const ret = new Map();
-			for (const [id, ntfcnDefinition] of entries(definition)) {
-				if (!hexKeyRegex.test(id)) {
-					throwInvalidConfig(
-						"notifications",
-						`found non-hex key "${id}" at the root`,
-					);
-				}
-				const idNum = parseInt(id.slice(2), 16);
-				ret.set(idNum, new Notification(idNum, ntfcnDefinition));
-			}
-			notifications = ret;
-		} catch (e) {
-			if (e instanceof ZWaveError) {
-				throw e;
-			} else {
-				throwInvalidConfig("notifications");
-			}
+			const idNum = parseInt(id.slice(2), 16);
+			ret.set(idNum, new Notification(idNum, ntfcnDefinition));
 		}
+		notifications = ret;
+	} catch (e) {
+		if (e instanceof ZWaveError) {
+			throw e;
+		} else {
+			throwInvalidConfig("notifications");
+		}
+	}
+}
+
+export async function loadNotifications(): Promise<void> {
+	try {
+		await loadNotificationsInternal();
 	} catch (e) {
 		// If the config file is missing or invalid, don't try to find it again
 		if (
@@ -198,9 +202,29 @@ export class NotificationVariable {
 export class NotificationState {
 	public constructor(id: number, definition: JSONObject) {
 		this.id = id;
+		if (typeof definition.label !== "string") {
+			throwInvalidConfig(
+				"notifications",
+				`The label of notification state ${num2hex(
+					id,
+				)} has a non-string label`,
+			);
+		}
 		this.label = definition.label;
+		if (
+			definition.description != undefined &&
+			typeof definition.description !== "string"
+		) {
+			throwInvalidConfig(
+				"notifications",
+				`The label of notification state ${num2hex(
+					id,
+				)} has a non-string description`,
+			);
+		}
 		this.description = definition.description;
 	}
+
 	public readonly id: number;
 	public readonly label: string;
 	public readonly description?: string;

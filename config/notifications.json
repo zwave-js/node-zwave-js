@@ -897,61 +897,81 @@
 			{
 				"name": "Target temperature failure status",
 				"states": {
-					"0x05": "Failure to set target temperature"
+					"0x05": {
+						"label": "Failure to set target temperature"
+					}
 				}
 			},
 			{
 				"name": "Water supply failure status",
 				"states": {
-					"0x07": "Water supply failure"
+					"0x07": {
+						"label": "Water supply failure"
+					}
 				}
 			},
 			{
 				"name": "Boiling failure status",
 				"states": {
-					"0x09": "Boiling failure"
+					"0x09": {
+						"label": "Boiling failure"
+					}
 				}
 			},
 			{
 				"name": "Washing failure status",
 				"states": {
-					"0x0B": "Washing failure"
+					"0x0B": {
+						"label": "Washing failure"
+					}
 				}
 			},
 			{
 				"name": "Rinsing failure status",
 				"states": {
-					"0x0D": "Rinsing failure"
+					"0x0D": {
+						"label": "Rinsing failure"
+					}
 				}
 			},
 			{
 				"name": "Draining failure status",
 				"states": {
-					"0x0F": "Draining failure"
+					"0x0F": {
+						"label": "Draining failure"
+					}
 				}
 			},
 			{
 				"name": "Spinning failure status",
 				"states": {
-					"0x11": "Spinning failure"
+					"0x11": {
+						"label": "Spinning failure"
+					}
 				}
 			},
 			{
 				"name": "Drying failure status",
 				"states": {
-					"0x13": "Drying failure"
+					"0x13": {
+						"label": "Drying failure"
+					}
 				}
 			},
 			{
 				"name": "Fan failure status",
 				"states": {
-					"0x14": "Fan failure"
+					"0x14": {
+						"label": "Fan failure"
+					}
 				}
 			},
 			{
 				"name": "Compressor failure status",
 				"states": {
-					"0x15": "Compressor failure"
+					"0x15": {
+						"label": "Compressor failure"
+					}
 				}
 			}
 		]

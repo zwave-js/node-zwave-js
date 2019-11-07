@@ -8,41 +8,55 @@ import log from "../log";
 import { configDir, hexKeyRegex, throwInvalidConfig } from "./utils";
 
 const configPath = path.join(configDir, "manufacturers.json");
-
 let manufacturers: ReadonlyMap<number, string> | undefined;
-export async function loadManufacturers(): Promise<void> {
+
+export async function loadManufacturersInternal(): Promise<void> {
+	if (!(await pathExists(configPath))) {
+		throw new ZWaveError(
+			"The manufacturer config file does not exist!",
+			ZWaveErrorCodes.Config_Invalid,
+		);
+	}
 	try {
-		if (!(await pathExists(configPath))) {
-			throw new ZWaveError(
-				"The manufacturer config file does not exist!",
-				ZWaveErrorCodes.Config_Invalid,
+		const fileContents = await readFile(configPath, "utf8");
+		const definition = JSON5.parse(fileContents);
+		if (!isObject(definition)) {
+			throwInvalidConfig(
+				"manufacturers",
+				`the database is not an object!`,
 			);
 		}
-		try {
-			const fileContents = await readFile(configPath, "utf8");
-			const definition = JSON5.parse(fileContents);
-			if (!isObject(definition)) {
+
+		const ret = new Map();
+		for (const [id, name] of entries(definition)) {
+			if (!hexKeyRegex.test(id)) {
 				throwInvalidConfig(
 					"manufacturers",
-					`the database is not an object!`,
+					`found non-hex key ${id} at the root level`,
 				);
 			}
-
-			const ret = new Map();
-			for (const [id, name] of entries(definition)) {
-				if (!hexKeyRegex.test(id)) {
-					throwInvalidConfig(
-						"manufacturers",
-						`found non-hex key ${id} at the root level`,
-					);
-				}
-				const idNum = parseInt(id.slice(2), 16);
-				ret.set(idNum, name);
+			if (typeof name !== "string") {
+				throwInvalidConfig(
+					"manufacturers",
+					`Key ${id} has a non-string manufacturer name`,
+				);
 			}
-			manufacturers = ret;
-		} catch (e) {
+			const idNum = parseInt(id.slice(2), 16);
+			ret.set(idNum, name);
+		}
+		manufacturers = ret;
+	} catch (e) {
+		if (e instanceof ZWaveError) {
+			throw e;
+		} else {
 			throwInvalidConfig("manufacturers");
 		}
+	}
+}
+
+export async function loadManufacturers(): Promise<void> {
+	try {
+		await loadManufacturersInternal();
 	} catch (e) {
 		// If the config file is missing or invalid, don't try to find it again
 		if (

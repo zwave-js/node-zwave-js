@@ -11,47 +11,50 @@ import { getDefaultScale, lookupNamedScaleGroup, Scale } from "./Scales";
 import { configDir, hexKeyRegex, throwInvalidConfig } from "./utils";
 
 const configPath = path.join(configDir, "sensorTypes.json");
-
 let sensorTypes: ReadonlyMap<number, SensorType> | undefined;
 
-export async function loadSensorTypes(): Promise<void> {
+export async function loadSensorTypesInternal(): Promise<void> {
+	if (!(await pathExists(configPath))) {
+		throw new ZWaveError(
+			"The sensor types config file does not exist!",
+			ZWaveErrorCodes.Config_Invalid,
+		);
+	}
+
 	try {
-		if (!(await pathExists(configPath))) {
-			throw new ZWaveError(
-				"The sensor types config file does not exist!",
-				ZWaveErrorCodes.Config_Invalid,
+		const fileContents = await readFile(configPath, "utf8");
+		const definition = JSON5.parse(fileContents);
+		if (!isObject(definition)) {
+			throwInvalidConfig(
+				"sensor types",
+				`the dictionary is not an object`,
 			);
 		}
 
-		try {
-			const fileContents = await readFile(configPath, "utf8");
-			const definition = JSON5.parse(fileContents);
-			if (!isObject(definition)) {
+		const ret = new Map();
+		for (const [key, sensorDefinition] of entries(definition)) {
+			if (!hexKeyRegex.test(key)) {
 				throwInvalidConfig(
 					"sensor types",
-					`the dictionary is not an object`,
+					`found non-hex key "${key}" at the root`,
 				);
 			}
-
-			const ret = new Map();
-			for (const [key, sensorDefinition] of entries(definition)) {
-				if (!hexKeyRegex.test(key)) {
-					throwInvalidConfig(
-						"sensor types",
-						`found non-hex key "${key}" at the root`,
-					);
-				}
-				const keyNum = parseInt(key.slice(2), 16);
-				ret.set(keyNum, new SensorType(keyNum, sensorDefinition));
-			}
-			sensorTypes = ret;
-		} catch (e) {
-			if (e instanceof ZWaveError) {
-				throw e;
-			} else {
-				throwInvalidConfig("sensor types");
-			}
+			const keyNum = parseInt(key.slice(2), 16);
+			ret.set(keyNum, new SensorType(keyNum, sensorDefinition));
 		}
+		sensorTypes = ret;
+	} catch (e) {
+		if (e instanceof ZWaveError) {
+			throw e;
+		} else {
+			throwInvalidConfig("sensor types");
+		}
+	}
+}
+
+export async function loadSensorTypes(): Promise<void> {
+	try {
+		await loadSensorTypesInternal();
 	} catch (e) {
 		// If the config file is missing or invalid, don't try to find it again
 		if (
