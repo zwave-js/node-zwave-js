@@ -66,13 +66,11 @@ export class Endpoint {
 	 * @param info The information about the command class. This is merged with existing information.
 	 */
 	public addCC(cc: CommandClasses, info: Partial<CommandClassInfo>): void {
-		let ccInfo = this._implementedCommandClasses.has(cc)
-			? this._implementedCommandClasses.get(cc)
-			: {
-					isSupported: false,
-					isControlled: false,
-					version: 0,
-			  };
+		let ccInfo = this._implementedCommandClasses.get(cc) ?? {
+			isSupported: false,
+			isControlled: false,
+			version: 0,
+		};
 		ccInfo = Object.assign(ccInfo, info);
 		this._implementedCommandClasses.set(cc, ccInfo);
 	}
@@ -84,18 +82,12 @@ export class Endpoint {
 
 	/** Tests if this endpoint supports the given CommandClass */
 	public supportsCC(cc: CommandClasses): boolean {
-		return (
-			this._implementedCommandClasses.has(cc) &&
-			!!this._implementedCommandClasses.get(cc)!.isSupported
-		);
+		return !!this._implementedCommandClasses.get(cc)?.isSupported;
 	}
 
 	/** Tests if this endpoint controls the given CommandClass */
 	public controlsCC(cc: CommandClasses): boolean {
-		return (
-			this._implementedCommandClasses.has(cc) &&
-			!!this._implementedCommandClasses.get(cc)!.isControlled
-		);
+		return !!this._implementedCommandClasses.get(cc)?.isControlled;
 	}
 
 	/** Removes the BasicCC from the supported CCs if any other actuator CCs are supported */
@@ -105,7 +97,8 @@ export class Endpoint {
 			this.supportsCC(CommandClasses.Basic) &&
 			actuatorCCs.some(cc => this.supportsCC(cc))
 		) {
-			this.removeCC(CommandClasses.Basic);
+			// We still want to know if BasicCC is controlled, so only mark it as not supported
+			this.addCC(CommandClasses.Basic, { isSupported: false });
 		}
 	}
 
@@ -115,7 +108,7 @@ export class Endpoint {
 	 */
 	public getCCVersion(cc: CommandClasses): number {
 		const ccInfo = this._implementedCommandClasses.get(cc);
-		const ret = (ccInfo && ccInfo.version) || 0;
+		const ret = ccInfo?.version ?? 0;
 		// A controlling node interviewing a Multi Channel End Point MUST request the End Point’s
 		// Command Class version from the Root Device if the End Point does not advertise support
 		// for the Version Command Class.
