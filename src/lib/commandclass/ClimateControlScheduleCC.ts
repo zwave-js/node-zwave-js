@@ -159,13 +159,11 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 	}
 }
 
-export interface ClimateControlScheduleCC {
-	ccCommand: ClimateControlScheduleCommand;
-}
-
 @commandClass(CommandClasses["Climate Control Schedule"])
 @implementedVersion(1)
-export class ClimateControlScheduleCC extends CommandClass {}
+export class ClimateControlScheduleCC extends CommandClass {
+	declare ccCommand: ClimateControlScheduleCommand;
+}
 
 interface ClimateControlScheduleCCSetOptions extends CCCommandOptions {
 	weekday: Weekday;

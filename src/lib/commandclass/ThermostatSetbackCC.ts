@@ -90,13 +90,11 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 	}
 }
 
-export interface ThermostatSetbackCC {
-	ccCommand: ThermostatSetbackCommand;
-}
-
 @commandClass(CommandClasses["Thermostat Setback"])
 @implementedVersion(1)
 export class ThermostatSetbackCC extends CommandClass {
+	declare ccCommand: ThermostatSetbackCommand;
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = this.getEndpoint()!.commandClasses["Thermostat Setback"];

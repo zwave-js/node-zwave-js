@@ -321,13 +321,11 @@ export class AssociationGroupInfoCCAPI extends CCAPI {
 	}
 }
 
-export interface AssociationGroupInfoCC {
-	ccCommand: AssociationGroupInfoCommand;
-}
-
 @commandClass(CommandClasses["Association Group Information"])
 @implementedVersion(3)
 export class AssociationGroupInfoCC extends CommandClass {
+	declare ccCommand: AssociationGroupInfoCommand;
+
 	public constructor(driver: IDriver, options: CommandClassOptions) {
 		super(driver, options);
 		this.registerValue(getGroupNameValueID(0).propertyName as any, true);

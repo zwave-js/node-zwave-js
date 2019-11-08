@@ -74,13 +74,11 @@ export class ZWavePlusCCAPI extends CCAPI {
 	}
 }
 
-export interface ZWavePlusCC {
-	ccCommand: ZWavePlusCommand;
-}
-
 @commandClass(CommandClasses["Z-Wave Plus Info"])
 @implementedVersion(2)
 export class ZWavePlusCC extends CommandClass {
+	declare ccCommand: ZWavePlusCommand;
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = this.getEndpoint()!.commandClasses["Z-Wave Plus Info"];

@@ -139,13 +139,11 @@ export class NodeNamingAndLocationCCAPI extends CCAPI {
 	}
 }
 
-export interface NodeNamingAndLocationCC {
-	ccCommand: NodeNamingAndLocationCommand;
-}
-
 @commandClass(CommandClasses["Node Naming and Location"])
 @implementedVersion(1)
-export class NodeNamingAndLocationCC extends CommandClass {}
+export class NodeNamingAndLocationCC extends CommandClass {
+	declare ccCommand: NodeNamingAndLocationCommand;
+}
 
 interface NodeNamingAndLocationCCNameSetOptions extends CCCommandOptions {
 	name: string;

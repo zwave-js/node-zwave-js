@@ -91,13 +91,11 @@ export class BatteryCCAPI extends CCAPI {
 	}
 }
 
-export interface BatteryCC {
-	ccCommand: BatteryCommand;
-}
-
 @commandClass(CommandClasses.Battery)
 @implementedVersion(2)
 export class BatteryCC extends CommandClass {
+	declare ccCommand: BatteryCommand;
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = this.getEndpoint()!.commandClasses.Battery;

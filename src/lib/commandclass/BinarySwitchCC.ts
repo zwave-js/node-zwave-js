@@ -109,13 +109,11 @@ export class BinarySwitchCCAPI extends CCAPI {
 	};
 }
 
-export interface BinarySwitchCC {
-	ccCommand: BinarySwitchCommand;
-}
-
 @commandClass(CommandClasses["Binary Switch"])
 @implementedVersion(2)
 export class BinarySwitchCC extends CommandClass {
+	declare ccCommand: BinarySwitchCommand;
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = this.getEndpoint()!.commandClasses["Binary Switch"];

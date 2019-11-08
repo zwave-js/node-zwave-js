@@ -156,13 +156,11 @@ export class VersionCCAPI extends CCAPI {
 	}
 }
 
-export interface VersionCC {
-	ccCommand: VersionCommand;
-}
-
 @commandClass(CommandClasses.Version)
 @implementedVersion(3)
 export class VersionCC extends CommandClass {
+	declare ccCommand: VersionCommand;
+
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
 		// VersionCC must be the 2nd CC after ManufacturerSpecificCC
 		return [CommandClasses["Manufacturer Specific"]];

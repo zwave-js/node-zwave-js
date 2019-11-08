@@ -219,13 +219,11 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 	}
 }
 
-export interface ThermostatSetpointCC {
-	ccCommand: ThermostatSetpointCommand;
-}
-
 @commandClass(CommandClasses["Thermostat Setpoint"])
 @implementedVersion(3)
 export class ThermostatSetpointCC extends CommandClass {
+	declare ccCommand: ThermostatSetpointCommand;
+
 	public static translatePropertyKey(
 		propertyName: string,
 		propertyKey: number | string,

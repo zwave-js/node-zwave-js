@@ -94,13 +94,11 @@ export class ManufacturerSpecificCCAPI extends CCAPI {
 	}
 }
 
-export interface ManufacturerSpecificCC {
-	ccCommand: ManufacturerSpecificCommand;
-}
-
 @commandClass(CommandClasses["Manufacturer Specific"])
 @implementedVersion(2)
 export class ManufacturerSpecificCC extends CommandClass {
+	declare ccCommand: ManufacturerSpecificCommand;
+
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
 		// The Manufacturer Specific CC MUST be interviewed first
 		return [];

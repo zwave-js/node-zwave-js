@@ -245,13 +245,11 @@ export class MultiChannelAssociationCCAPI extends CCAPI {
 	}
 }
 
-export interface MultiChannelAssociationCC {
-	ccCommand: MultiChannelAssociationCommand;
-}
-
 @commandClass(CommandClasses["Multi Channel Association"])
 @implementedVersion(4)
 export class MultiChannelAssociationCC extends CommandClass {
+	declare ccCommand: MultiChannelAssociationCommand;
+
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
 		// MultiChannelAssociationCC must be interviewed after Z-Wave+ if that is supported
 		return [

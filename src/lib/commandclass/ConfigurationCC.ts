@@ -409,13 +409,11 @@ export class ConfigurationCCAPI extends CCAPI {
 	}
 }
 
-export interface ConfigurationCC {
-	ccCommand: ConfigurationCommand;
-}
-
 @commandClass(CommandClasses.Configuration)
 @implementedVersion(4)
 export class ConfigurationCC extends CommandClass {
+	declare ccCommand: ConfigurationCommand;
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		if (this.version < 3) {

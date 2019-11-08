@@ -74,13 +74,11 @@ export class ThermostatOperatingStateCCAPI extends CCAPI {
 	}
 }
 
-export interface ThermostatOperatingStateCC {
-	ccCommand: ThermostatOperatingStateCommand;
-}
-
 @commandClass(CommandClasses["Thermostat Operating State"])
 @implementedVersion(2)
 export class ThermostatOperatingStateCC extends CommandClass {
+	declare ccCommand: ThermostatOperatingStateCommand;
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = this.getEndpoint()!.commandClasses[

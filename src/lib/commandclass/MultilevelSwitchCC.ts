@@ -216,13 +216,11 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	};
 }
 
-export interface MultilevelSwitchCC {
-	ccCommand: MultilevelSwitchCommand;
-}
-
 @commandClass(CommandClasses["Multilevel Switch"])
 @implementedVersion(4)
 export class MultilevelSwitchCC extends CommandClass {
+	declare ccCommand: MultilevelSwitchCommand;
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = this.getEndpoint()!.commandClasses["Multilevel Switch"];

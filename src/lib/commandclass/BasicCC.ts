@@ -94,13 +94,11 @@ export class BasicCCAPI extends CCAPI {
 	}
 }
 
-export interface BasicCC {
-	ccCommand: BasicCommand;
-}
-
 @commandClass(CommandClasses.Basic)
 @implementedVersion(2) // Update tests in CommandClass.test.ts when changing this
 export class BasicCC extends CommandClass {
+	declare ccCommand: BasicCommand;
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const api = this.getEndpoint()!.commandClasses.Basic;
