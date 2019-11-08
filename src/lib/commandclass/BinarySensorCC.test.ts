@@ -1,5 +1,7 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
+import { Driver } from "../driver/Driver";
 import { IDriver } from "../driver/IDriver";
+import { ZWaveNode } from "../node/Node";
 import {
 	BinarySensorCC,
 	BinarySensorCCGet,
@@ -10,8 +12,6 @@ import {
 	BinarySensorType,
 } from "./BinarySensorCC";
 import { CommandClasses } from "./CommandClasses";
-
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
 function buildCCBuffer(nodeId: number, payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -25,6 +25,14 @@ function buildCCBuffer(nodeId: number, payload: Buffer): Buffer {
 }
 
 describe("lib/commandclass/BinarySensorCC => ", () => {
+	const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+	let node1: ZWaveNode;
+
+	beforeAll(() => {
+		node1 = new ZWaveNode(1, (fakeDriver as any) as Driver);
+		(fakeDriver.controller.nodes as Map<any, any>).set(node1.id, node1);
+	});
+
 	it("the Get command (v1) should serialize correctly", () => {
 		const cc = new BinarySensorCCGet(fakeDriver, { nodeId: 1 });
 		const expected = buildCCBuffer(
@@ -73,7 +81,7 @@ describe("lib/commandclass/BinarySensorCC => ", () => {
 		const cc = new BinarySensorCCReport(fakeDriver, { data: ccData });
 
 		expect(cc.value).toBe(false);
-		expect(cc.sensorType).toBe(BinarySensorType.CO2);
+		expect(cc.type).toBe(BinarySensorType.CO2);
 	});
 
 	it("the SupportedGet command should serialize correctly", () => {

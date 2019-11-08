@@ -1,14 +1,15 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { validatePayload } from "../util/misc";
+import { ValueID } from "../node/ValueDB";
+import { getEnumMemberName, validatePayload } from "../util/misc";
+import { ValueMetadata } from "../values/Metadata";
 import { Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	ccKeyValuePair,
 	ccValue,
 	CommandClass,
 	commandClass,
@@ -42,6 +43,14 @@ export enum BinarySensorType {
 	Motion = 0x0c,
 	"Glass Break" = 0x0d,
 	Any = 0xff,
+}
+
+export function getSupportedSensorTypesValueId(endpointIndex: number): ValueID {
+	return {
+		commandClass: CommandClasses["Binary Sensor"],
+		endpoint: endpointIndex,
+		propertyName: "supportedSensorTypes",
+	};
 }
 
 // @noSetValueAPI This CC is read-only
@@ -106,7 +115,7 @@ export class BinarySensorCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses.Basic;
+		const api = this.getEndpoint()!.commandClasses["Binary Sensor"];
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
@@ -115,15 +124,52 @@ export class BinarySensorCC extends CommandClass {
 			direction: "none",
 		});
 
-		log.controller.logNode(node.id, {
-			message: "querying current value...",
-			direction: "outbound",
-		});
-		const { currentValue } = await api.get();
-		log.controller.logNode(node.id, {
-			message: `received current value: ${currentValue}`,
-			direction: "inbound",
-		});
+		// Find out which sensor types this sensor supports
+		let supportedSensorTypes: readonly BinarySensorType[] | undefined;
+		if (complete && this.version >= 2) {
+			log.controller.logNode(node.id, {
+				message: "querying supported sensor types...",
+				direction: "outbound",
+			});
+			supportedSensorTypes = await api.getSupportedSensorTypes();
+			const logMessage = `received supported sensor types: ${supportedSensorTypes
+				.map(type => getEnumMemberName(BinarySensorType, type))
+				.map(name => "\n* " + name)}`;
+			log.controller.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
+		} else {
+			supportedSensorTypes = this.getValueDB().getValue(
+				getSupportedSensorTypesValueId(this.endpointIndex),
+			);
+		}
+
+		// Always query (all of) the sensor's current value(s)
+		if (this.version === 1) {
+			log.controller.logNode(node.id, {
+				message: "querying current value...",
+				direction: "outbound",
+			});
+			const currentValue = await api.get();
+			log.controller.logNode(node.id, {
+				message: `received current value: ${currentValue}`,
+				direction: "inbound",
+			});
+		} else if (supportedSensorTypes) {
+			for (const type of supportedSensorTypes) {
+				const sensorName = getEnumMemberName(BinarySensorType, type);
+				log.controller.logNode(node.id, {
+					message: `querying current value for ${sensorName}...`,
+					direction: "outbound",
+				});
+				const currentValue = await api.get(type);
+				log.controller.logNode(node.id, {
+					message: `received current value for ${sensorName}: ${currentValue}`,
+					direction: "inbound",
+				});
+			}
+		}
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
@@ -139,24 +185,32 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		super(driver, options);
 
 		validatePayload(this.payload.length >= 1);
-		const _value = this.payload[0] === 0xff;
-		let _sensorType = BinarySensorType.Any;
+		this._value = this.payload[0] === 0xff;
+		this._type = BinarySensorType.Any;
 		if (this.version >= 2 && this.payload.length >= 2) {
-			_sensorType = this.payload[1];
+			this._type = this.payload[1];
 		}
-		this.values = [_sensorType, _value];
-		this.persistValues();
+
+		const valueId: ValueID = {
+			commandClass: this.ccId,
+			endpoint: this.endpointIndex,
+			propertyName: getEnumMemberName(BinarySensorType, this._type),
+		};
+
+		this.getValueDB().setMetadata(valueId, {
+			...ValueMetadata.ReadOnlyBoolean,
+		});
+		this.getValueDB().setValue(valueId, this._value);
 	}
 
-	@ccKeyValuePair()
-	private values: [BinarySensorType, boolean];
-
-	public get sensorType(): BinarySensorType {
-		return this.values[0];
+	private _type: BinarySensorType;
+	public get type(): BinarySensorType {
+		return this._type;
 	}
 
+	private _value: boolean;
 	public get value(): boolean {
-		return this.values[1];
+		return this._value;
 	}
 }
 
@@ -206,8 +260,8 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 	}
 
 	private _supportedSensorTypes: BinarySensorType[];
-	// TODO: should this be an internal value?
-	@ccValue() public get supportedSensorTypes(): readonly BinarySensorType[] {
+	@ccValue({ internal: true })
+	public get supportedSensorTypes(): readonly BinarySensorType[] {
 		return this._supportedSensorTypes;
 	}
 }
