@@ -298,7 +298,7 @@ export class Endpoint {
 		this: Endpoint,
 	) {
 		for (const cc of this.implementedCommandClasses.keys()) {
-			yield (this.commandClasses as any)[cc];
+			if (this.supportsCC(cc)) yield (this.commandClasses as any)[cc];
 		}
 	}.bind(this);
 
