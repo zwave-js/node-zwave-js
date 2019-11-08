@@ -1361,23 +1361,8 @@ ${handlers.length} left`,
 				})${targetNode ? ` to node ${targetNode.id}` : ""}...`,
 				"debug",
 			);
-			// for messages containing a CC, i.e. a SendDataRequest, set the CC version as high as possible
-			if (isCommandClassContainer(msg)) {
-				const ccId = msg.command.ccId;
-				// TODO: If the message is for an endpoint, determine the safe version for that endpoint
-				msg.command.version = this.getSafeCCVersionForNode(
-					ccId,
-					msg.command.nodeId,
-				);
-				// TODO: This could be improved
-				log.driver.print(
-					`CC = ${CommandClasses[ccId]} (${num2hex(
-						ccId,
-					)}) => using version ${msg.command.version}`,
-					"debug",
-				);
-			}
-			// Actually send the message
+
+			// And send it
 			this.currentTransaction.markAsSent();
 			const data = msg.serialize();
 			log.serial.data("outbound", data);

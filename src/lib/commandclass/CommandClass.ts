@@ -142,6 +142,7 @@ export class CommandClass {
 			this.ccCommand = ccCommand;
 			this.payload = payload;
 		}
+		// Set the CC version as high as possible
 		this.version = this.driver.getSafeCCVersionForNode(
 			this.ccId,
 			this.nodeId,
