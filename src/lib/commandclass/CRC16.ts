@@ -10,6 +10,7 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	DynamicCCResponse,
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
@@ -77,8 +78,12 @@ interface CRC16CCCommandEncapsulationOptions extends CCCommandOptions {
 	encapsulatedCC: CommandClass;
 }
 
+// This indirection is necessary to expect the same message in response
+const getResponseForCommandEncapsulation: DynamicCCResponse = () =>
+	CRC16CCCommandEncapsulation;
+
 @CCCommand(CRC16Command.CommandEncapsulation)
-@expectedCCResponse(CRC16CCCommandEncapsulation)
+@expectedCCResponse(getResponseForCommandEncapsulation)
 export class CRC16CCCommandEncapsulation extends CRC16CC {
 	public constructor(
 		driver: IDriver,
