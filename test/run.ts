@@ -4,7 +4,6 @@ import { Driver } from "../";
 // @ts-ignore
 const driver = new Driver("COM5").once("driver ready", async () => {
 	// console.log(`sending application info...`);
-	// // TODO: Generate this list dynamically
 	// // A list of all CCs the controller will respond to
 	// const supportedCCs = [CommandClasses.Time];
 	// // Turn the CCs into buffers and concat them

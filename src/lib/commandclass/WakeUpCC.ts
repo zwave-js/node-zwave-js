@@ -68,8 +68,7 @@ export class WakeUpCCAPI extends CCAPI {
 				typeof value,
 			);
 		}
-		// TODO: Use optional chaining when possible
-		await this.setInterval(value, this.driver.controller.ownNodeId || 1);
+		await this.setInterval(value, this.driver.controller.ownNodeId ?? 1);
 		// Refresh the current value
 		await this.getInterval();
 	};

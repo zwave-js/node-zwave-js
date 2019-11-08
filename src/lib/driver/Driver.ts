@@ -68,7 +68,7 @@ const defaultOptions: ZWaveOptions = {
 	timeouts: {
 		ack: 1000,
 		byte: 150,
-		report: 1000, // TODO: SDS11846 - ReportTime timeout SHOULD be set to CommandTime + 1 second
+		report: 1000,
 	},
 	skipInterview: false,
 };
@@ -175,11 +175,6 @@ export class Driver extends EventEmitter implements IDriver {
 	private sendQueue = new SortedList<Transaction>();
 	/** A map of handlers for all sorts of requests */
 	private requestHandlers = new Map<FunctionType, RequestHandlerEntry[]>();
-	// /** A map of handlers specifically for send data requests */
-	// private sendDataRequestHandlers = new Map<
-	// 	CommandClasses,
-	// 	RequestHandlerEntry<SendDataRequest>[]
-	// >();
 
 	public readonly cacheDir = path.resolve(__dirname, "../../..", "cache");
 
@@ -802,7 +797,6 @@ export class Driver extends EventEmitter implements IDriver {
 						this.currentTransaction.timeoutInstance = setTimeout(
 							() => {
 								if (!this.currentTransaction) return;
-								// TODO: Do we need more information here?
 								log.driver.print(
 									"The transaction timed out",
 									"warn",
@@ -950,12 +944,6 @@ export class Driver extends EventEmitter implements IDriver {
 		handler: RequestHandler,
 		oneTime: boolean = false,
 	): void {
-		// if (fnType === FunctionType.SendData) {
-		// 	throw new Error(
-		// 		"Cannot register a generic request handler for SendData requests. " +
-		// 			"Use `registerSendDataRequestHandler()` instead!",
-		// 	);
-		// }
 		const handlers = this.requestHandlers.has(fnType)
 			? this.requestHandlers.get(fnType)!
 			: [];
@@ -979,12 +967,6 @@ ${handlers.length} registered`,
 		fnType: FunctionType,
 		handler: RequestHandler,
 	): void {
-		// if (fnType === FunctionType.SendData) {
-		// 	throw new Error(
-		// 		"Cannot unregister a generic request handler for SendData requests. " +
-		// 			"Use `unregisterSendDataRequestHandler()` instead!",
-		// 	);
-		// }
 		const handlers = this.requestHandlers.has(fnType)
 			? this.requestHandlers.get(fnType)!
 			: [];
@@ -1001,60 +983,6 @@ ${handlers.length} left`,
 		);
 		this.requestHandlers.set(fnType, handlers);
 	}
-
-	// /**
-	//  * Registers a handler for SendData request messages
-	//  * @param cc The command class to register the handler for
-	//  * @param handler The request handler callback
-	//  */
-	// public registerSendDataRequestHandler(
-	// 	cc: CommandClasses,
-	// 	handler: RequestHandler<SendDataRequest>,
-	// 	oneTime: boolean = false,
-	// ): void {
-	// 	const handlers = this.sendDataRequestHandlers.has(cc)
-	// 		? this.sendDataRequestHandlers.get(cc)!
-	// 		: [];
-	// 	const entry: RequestHandlerEntry = { invoke: handler, oneTime };
-	// 	handlers.push(entry);
-	// 	log(
-	// 		"driver",
-	// 		`added${oneTime ? " one-time" : ""} send data request handler for ${
-	// 			CommandClasses[cc]
-	// 		} (${cc})... ${handlers.length} registered`,
-	// 		"debug",
-	// 	);
-	// 	this.sendDataRequestHandlers.set(cc, handlers);
-	// }
-
-	// /**
-	//  * Unregisters a handler for SendData request messages
-	//  * @param cc The command class to unregister the handler for
-	//  * @param handler The previously registered request handler callback
-	//  */
-	// public unregisterSendDataRequestHandler(
-	// 	cc: CommandClasses,
-	// 	handler: RequestHandler<SendDataRequest>,
-	// ): void {
-	// 	const handlers = this.sendDataRequestHandlers.has(cc)
-	// 		? this.sendDataRequestHandlers.get(cc)!
-	// 		: [];
-	// 	for (let i = 0, entry = handlers[i]; i < handlers.length; i++) {
-	// 		// remove the handler if it was found
-	// 		if (entry.invoke === handler) {
-	// 			handlers.splice(i, 1);
-	// 			break;
-	// 		}
-	// 	}
-	// 	log(
-	// 		"driver",
-	// 		`removed send data request handler for ${
-	// 			CommandClasses[cc]
-	// 		} (${cc})... ${handlers.length} left`,
-	// 		"debug",
-	// 	);
-	// 	this.sendDataRequestHandlers.set(cc, handlers);
-	// }
 
 	/**
 	 * Is called when a Request-type message was received
@@ -1119,18 +1047,6 @@ ${handlers.length} left`,
 					return;
 				}
 			}
-			// } else if (msg instanceof SendDataRequest && msg.command.ccId) {
-			// 	// TODO: Find out if this actually happens
-			// 	// we handle SendDataRequests differently because their handlers are organized by the command class
-			// 	const ccId = msg.command.ccId;
-			// 	log(
-			// 		"driver",
-			// 		`handling send data request ${CommandClasses[ccId]} (${num2hex(
-			// 			ccId,
-			// 		)}) for node ${msg.command.nodeId}`,
-			// 		"debug",
-			// 	);
-			// 	handlers = this.sendDataRequestHandlers.get(ccId);
 		} else {
 			// TODO: This deserves a nicer formatting
 			log.driver.print(

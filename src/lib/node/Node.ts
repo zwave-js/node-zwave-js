@@ -870,7 +870,6 @@ version:               ${this.version}`;
 			for (const cc of nodeInfo.controlledCCs)
 				this.addCC(cc, { isControlled: true });
 			this.nodeInfoReceived = true;
-			// TODO: Trigger a cache save
 		}
 
 		// As the NIF is sent on wakeup, treat this as a sign that the node is awake
@@ -1241,31 +1240,6 @@ version:               ${this.version}`;
 			// We don't know what this notification refers to, so we don't force a reset
 		}
 	}
-
-	// /**
-	//  * Requests the state for the CCs of this node
-	//  * @param kind The kind of state to be requested
-	//  * @param commandClasses The command classes to request the state for. Defaults to all
-	//  */
-	// public async requestState(
-	// 	kind: StateKind,
-	// 	commandClasses: CommandClasses[] = [
-	// 		...this.implementedCommandClasses.keys(),
-	// 	],
-	// ): Promise<void> {
-	// 	// TODO: Support multiple endpoints
-	// 	const factories = commandClasses
-	// 		// This assertion is not nice, but I see no better way
-	// 		.map(
-	// 			cc =>
-	// 				(getCCConstructor(cc) as unknown) as
-	// 					| (typeof CommandClass)
-	// 					| undefined,
-	// 		)
-	// 		.filter(cc => !!cc)
-	// 		.map(cc => () => cc!.requestState(this.driver, this, kind));
-	// 	await promiseSequence(factories);
-	// }
 
 	/**
 	 * @internal

@@ -10,6 +10,7 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
@@ -77,7 +78,7 @@ interface CRC16CCCommandEncapsulationOptions extends CCCommandOptions {
 }
 
 @CCCommand(CRC16Command.CommandEncapsulation)
-// TODO: Infer the expected response from the encapsulated CC
+@expectedCCResponse(CRC16CCCommandEncapsulation)
 export class CRC16CCCommandEncapsulation extends CRC16CC {
 	public constructor(
 		driver: IDriver,
