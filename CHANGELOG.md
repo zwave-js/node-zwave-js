@@ -4,6 +4,16 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Changes for users
+* The `value updated` event is no longer emitted for `interviewComplete` every time a command is received
+* `Basic CC` is no longer reported as supported when other actuator CCs are supported
+
+### Changes under the hood
+* Deduplicated some code in the config lint script
+* Upgrade to TypeScript 3.7
+* The `ccCommand` properties' types are now specified using `declare` class fields instead of interface merging
+
 ## 1.7.0 (2019-11-03)
 * Support interviewing multi channel endpoints
 * Improve performance by not formatting logs that won't be visible
