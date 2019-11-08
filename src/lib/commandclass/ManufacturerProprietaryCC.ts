@@ -1,7 +1,15 @@
 import { IDriver } from "../driver/IDriver";
 import { validatePayload } from "../util/misc";
 import { CCAPI } from "./API";
-import { API, CCCommandOptions, CommandClass, commandClass, CommandClassDeserializationOptions, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	API,
+	CCCommandOptions,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { FibaroCC } from "./manufacturerProprietary/Fibaro";
 

@@ -2,10 +2,30 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
 import { Maybe } from "../values/Primitive";
-import { decodeSetbackState, encodeSetbackState, SetbackState } from "../values/SetbackState";
-import { decodeSwitchpoint, encodeSwitchpoint, Switchpoint } from "../values/Switchpoint";
+import {
+	decodeSetbackState,
+	encodeSetbackState,
+	SetbackState,
+} from "../values/SetbackState";
+import {
+	decodeSwitchpoint,
+	encodeSwitchpoint,
+	Switchpoint,
+} from "../values/Switchpoint";
 import { CCAPI } from "./API";
-import { API, CCCommand, CCCommandOptions, ccKeyValuePair, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	ccKeyValuePair,
+	ccValue,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum ClimateControlScheduleCommand {
