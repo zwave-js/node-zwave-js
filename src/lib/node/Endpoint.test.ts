@@ -4,7 +4,6 @@ import { BasicCCAPI } from "../commandclass/BasicCC";
 import { BatteryCCAPI } from "../commandclass/BatteryCC";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { VersionCCAPI } from "../commandclass/VersionCC";
-import { WakeUpCCAPI } from "../commandclass/WakeUpCC";
 import { Driver } from "../driver/Driver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { Endpoint } from "./Endpoint";
@@ -68,11 +67,11 @@ describe("lib/node/Endpoint", () => {
 				[CommandClasses["Wake Up"]],
 			);
 			actual = [...node.commandClasses];
-			expect(actual).toHaveLength(3);
+			expect(actual).toHaveLength(2);
 			expect(actual.map(api => api.constructor)).toIncludeAllMembers([
 				BatteryCCAPI,
 				VersionCCAPI,
-				WakeUpCCAPI,
+				// WakeUpCCAPI is not supported (only controlled), so no API!
 			]);
 		});
 	});
