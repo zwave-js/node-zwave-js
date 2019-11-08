@@ -42,7 +42,6 @@ export function getNodeIdsValueId(groupId: number): ValueID {
 export function getGroupCountValueId(): ValueID {
 	return {
 		commandClass: CommandClasses.Association,
-		// TODO: endpoint?
 		propertyName: "groupCount",
 	};
 }

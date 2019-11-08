@@ -236,6 +236,13 @@ export class TimeParametersCCSet extends TimeParametersCC {
 				minute: this.payload[5],
 				second: this.payload[6],
 			};
+			validatePayload(
+				dateSegments.month >= 1 && dateSegments.month <= 12,
+				dateSegments.day >= 1 && dateSegments.day <= 31,
+				dateSegments.hour >= 0 && dateSegments.hour <= 23,
+				dateSegments.minute >= 0 && dateSegments.minute <= 59,
+				dateSegments.second >= 0 && dateSegments.second <= 59,
+			);
 			this.dateAndTime = segmentsToDate(
 				dateSegments,
 				shouldUseLocalTime(

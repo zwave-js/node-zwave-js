@@ -51,7 +51,6 @@ export function getEndpointsValueId(groupId: number): ValueID {
 export function getGroupCountValueId(): ValueID {
 	return {
 		commandClass: CommandClasses["Multi Channel Association"],
-		// TODO: endpoint?
 		propertyName: "groupCount",
 	};
 }

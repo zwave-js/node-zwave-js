@@ -224,8 +224,6 @@ export class NotificationCC extends CommandClass {
 			direction: "none",
 		});
 
-		// TODO: Require the association and AGI interview to be done first (GH#198)
-
 		if (this.version >= 2) {
 			let supportedNotificationTypes: readonly NotificationType[];
 			let supportedNotificationNames: string[];

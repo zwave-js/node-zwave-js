@@ -160,10 +160,12 @@ export class TimeCCTimeReport extends TimeCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
-			// TODO: Verify ranges
-			this.hour = this.payload[0] & 0b11111; // Range 0..23
-			this.minute = this.payload[1]; // Range 0..59
-			this.second = this.payload[2]; // Range 0..59
+			this.hour = this.payload[0] & 0b11111;
+			validatePayload(this.hour >= 0, this.hour <= 23);
+			this.minute = this.payload[1];
+			validatePayload(this.minute >= 0, this.minute <= 59);
+			this.second = this.payload[2];
+			validatePayload(this.second >= 0, this.second <= 59);
 		} else {
 			this.hour = options.hour;
 			this.minute = options.minute;
