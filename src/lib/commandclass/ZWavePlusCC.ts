@@ -1,6 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
+import { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { ValueMetadata } from "../values/Metadata";
@@ -39,6 +40,14 @@ export enum ZWavePlusRoleType {
 export enum ZWavePlusNodeType {
 	Node = 0x00, // ZWave+ Node
 	IPGateway = 0x02, // ZWave+ for IP Gateway
+}
+
+export function getZWavePlusVersionValueId(endpoint: number = 0): ValueID {
+	return {
+		commandClass: CommandClasses["Z-Wave Plus Info"],
+		endpoint,
+		propertyName: "zwavePlusVersion",
+	};
 }
 
 // @noSetValueAPI This CC is read-only

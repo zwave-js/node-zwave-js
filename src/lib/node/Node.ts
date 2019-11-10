@@ -13,6 +13,7 @@ import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { getEndpointCCsValueId } from "../commandclass/MultiChannelCC";
 import { NotificationCCReport } from "../commandclass/NotificationCC";
 import { WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
+import { getZWavePlusVersionValueId } from "../commandclass/ZWavePlusCC";
 import { DeviceConfig, lookupDevice } from "../config/Devices";
 import { lookupNotification } from "../config/Notifications";
 import {
@@ -924,7 +925,39 @@ version:               ${this.version}`;
 		}
 
 		// As the NIF is sent on wakeup, treat this as a sign that the node is awake
-		this.setAwake(true);
+		if (!this.isAwake()) {
+			this.setAwake(true);
+		} else if (
+			this.interviewStage === InterviewStage.Complete &&
+			!this.valueDB.getValue(getZWavePlusVersionValueId())
+		) {
+			// (GH#398) If Z-Wave+ is not supported, we assume that the controller does not receive updates from the node
+			this.refreshValues();
+		}
+	}
+
+	/**
+	 * Refreshes all non-static values from this node.
+	 * WARNING: It is not recommended to await this method!
+	 */
+	private async refreshValues(): Promise<void> {
+		for (const endpoint of this.getAllEndpoints()) {
+			for (const cc of endpoint.getSupportedCCInstances()) {
+				// Don't do a complete interview, only dynamic values
+				try {
+					await cc.interview(false);
+				} catch (e) {
+					log.controller.logNode(
+						this.id,
+						`failed to refresh values for ${getEnumMemberName(
+							CommandClasses,
+							cc.ccId,
+						)}, endpoint ${endpoint.index}: ${e.message}`,
+						"error",
+					);
+				}
+			}
+		}
 	}
 
 	/** Overwrites the reported configuration with information from a config file */
@@ -1429,7 +1462,10 @@ version:               ${this.version}`;
 	 */
 	public setAwake(awake: boolean): void {
 		if (!this.supportsCC(CommandClasses["Wake Up"])) return;
-		WakeUpCC.setAwake(this, awake);
+		if (awake !== this.isAwake()) {
+			WakeUpCC.setAwake(this, awake);
+			if (awake) this.refreshValues();
+		}
 	}
 
 	/** Returns whether the node is currently assumed awake */

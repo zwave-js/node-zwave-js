@@ -171,8 +171,8 @@ export class Endpoint {
 		}
 	}
 
-	/** Builds the dependency graph used to automatically determine the order of CC interviews */
-	public buildCCInterviewGraph(): GraphNode<CommandClasses>[] {
+	/** Returns instances for all CCs this endpoint supports, that should be interviewed, and that are implemented in this library */
+	public getSupportedCCInstances(): readonly CommandClass[] {
 		let supportedCCInstances = [...this.implementedCommandClasses.keys()]
 			// Don't interview CCs the node or endpoint only controls
 			.filter(cc => this.supportsCC(cc))
@@ -185,7 +185,12 @@ export class Endpoint {
 				instance => !instance.skipEndpointInterview(),
 			);
 		}
-		const supportedCCs = supportedCCInstances.map(
+		return supportedCCInstances;
+	}
+
+	/** Builds the dependency graph used to automatically determine the order of CC interviews */
+	public buildCCInterviewGraph(): GraphNode<CommandClasses>[] {
+		const supportedCCs = this.getSupportedCCInstances().map(
 			instance => instance.ccId,
 		);
 		// Create GraphNodes from all supported CCs
