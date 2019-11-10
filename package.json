@@ -69,7 +69,7 @@
     "jest-circus": "^24.9.0",
     "jest-extended": "^0.11.2",
     "mockdate": "2.0.5",
-    "prettier": "github:prettier/prettier",
+    "prettier": "^1.19.1",
     "rimraf": "^3.0.0",
     "semver": "^6.3.0",
     "supports-color": "^7.1.0",

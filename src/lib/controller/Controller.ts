@@ -238,9 +238,10 @@ export class ZWaveController extends EventEmitter {
 
 		// get the home and node id of the controller
 		log.controller.print(`querying controller IDs...`);
-		const ids = await this.driver.sendMessage<
-			GetControllerIdResponse
-		>(new GetControllerIdRequest(this.driver), { supportCheck: false });
+		const ids = await this.driver.sendMessage<GetControllerIdResponse>(
+			new GetControllerIdRequest(this.driver),
+			{ supportCheck: false },
+		);
 		this._homeId = ids.homeId;
 		this._ownNodeId = ids.ownNodeId;
 		log.controller.print(
@@ -298,9 +299,10 @@ export class ZWaveController extends EventEmitter {
 
 		// find the SUC
 		log.controller.print(`finding SUC...`);
-		const suc = await this.driver.sendMessage<
-			GetSUCNodeIdResponse
-		>(new GetSUCNodeIdRequest(this.driver), { supportCheck: false });
+		const suc = await this.driver.sendMessage<GetSUCNodeIdResponse>(
+			new GetSUCNodeIdRequest(this.driver),
+			{ supportCheck: false },
+		);
 		this._sucNodeId = suc.sucNodeId;
 		if (this._sucNodeId === 0) {
 			log.controller.print(`no SUC present`);
