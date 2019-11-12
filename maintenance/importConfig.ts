@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 /*!
  * This script is used to import the Z-Wave device database from
  * https://www.cd-jackson.com/zwave_device_database/zwave-database-json.gz.tar
@@ -9,11 +10,14 @@ process.on("unhandledRejection", r => {
 	throw r;
 });
 
+import { padStart } from "alcalzone-shared/strings";
+import { AssertionError, ok } from "assert";
 import axios from "axios";
 import * as fs from "fs-extra";
 import * as path from "path";
 
 const importDir = path.join(__dirname, "..", "config/import");
+const processedDir = path.join(__dirname, "..", "config/processed");
 
 const urlIDs =
 	"https://www.cd-jackson.com/index.php/zwave/zwave-device-database/database-summary";
@@ -62,33 +66,65 @@ async function downloadDB(): Promise<void> {
 	console.log("done!");
 }
 
+const manufacturerIdRegexes = [
+	/\<manufacturer\>(?:0x)?([0-9a-fA-F]{1,4})\</, // OZW Export
+	/Device identifiers: (?:0x)?([0-9a-fA-F]{1,4}):/, // OH Export
+	/\\"manufacturer_id\\": \\"(?:0x)?([0-9a-fA-F]{1,4})\\"/, // JSON Export
+];
+
+function findManufacturerId(input: string): string | undefined {
+	for (const re of manufacturerIdRegexes) {
+		const match = input.match(re);
+		if (match) return "0x" + padStart(match[1], 4, "0").toLowerCase();
+	}
+}
+
+function assertValid(json: any) {
+	const {
+		state,
+		description,
+		label,
+		type_id,
+		versionminDisplay,
+		versionmaxDisplay,
+	} = json;
+	ok(typeof state === "string" || typeof state === "number");
+	ok(typeof description === "string");
+	ok(typeof label === "string");
+	ok(typeof type_id === "string");
+	ok(typeof versionminDisplay === "string");
+	ok(typeof versionmaxDisplay === "string");
+}
+
 async function parseConfigFile(filename: string): Promise<string> {
-	const content = JSON.parse(await fs.readFile(filename, "utf8"));
+	const content = await fs.readFile(filename, "utf8");
+	const json = JSON.parse(content);
+	assertValid(json);
+
 	const ret = {
-		_approved: content.state === "1",
-		...(content.errors?.length ? { _errors: content.errors } : undefined),
-		...(content.warnings?.length
-			? { _warnings: content.warnings }
-			: undefined),
-		name: content.description,
-		label: content.label,
-		devices: content.type_id
+		_approved: json.state === "1" || json.state === 1,
+		...(json.errors?.length ? { _errors: json.errors } : undefined),
+		...(json.warnings?.length ? { _warnings: json.warnings } : undefined),
+		manufacturerId: findManufacturerId(content),
+		name: json.description,
+		label: json.label,
+		devices: json.type_id
 			.split(",")
 			.filter(Boolean)
 			.map((ref: string) => {
 				const [productType, productId] = ref
 					.trim()
 					.split(":")
-					.map(str => "0x" + str);
+					.map(str => "0x" + padStart(str, 4, "0").toLowerCase());
 				return { productType, productId };
 			}),
 		firmwareVersion: {
-			min: content.versionminDisplay,
-			max: content.versionmaxDisplay,
+			min: json.versionminDisplay,
+			max: json.versionmaxDisplay,
 		},
 	};
 	// Add comment explaining which devices this file contains
-	return `// ${content.manufacturer} ${content.description} (${content.label})
+	return `// ${json.manufacturer} ${json.description} (${json.label})
 ${JSON.stringify(ret, undefined, 4)}`;
 }
 
@@ -96,7 +132,24 @@ async function importConfigFiles(): Promise<void> {
 	const configFiles = (await fs.readdir(importDir)).filter(
 		file => file.endsWith(".json") && !file.startsWith("_"),
 	);
-	console.error(await parseConfigFile(path.join(importDir, configFiles[0])));
+	for (const file of configFiles) {
+		const inPath = path.join(importDir, file);
+		let parsed: string;
+		try {
+			parsed = await parseConfigFile(inPath);
+			if (!parsed.includes("manufacturerId")) {
+				console.error(`${file} has no manufacturer ID!`);
+			}
+		} catch (e) {
+			if (e instanceof AssertionError) {
+				console.error(`${file} is not valid, ignoring!`);
+				continue;
+			}
+			throw e;
+		}
+		const outPath = path.join(processedDir, file);
+		await fs.writeFile(outPath, parsed, "utf8");
+	}
 }
 
 (async () => {
