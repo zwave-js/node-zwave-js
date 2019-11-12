@@ -57,6 +57,7 @@
     "@types/yargs": "^13.0.3",
     "@typescript-eslint/eslint-plugin": "^2.6.1",
     "@typescript-eslint/parser": "^2.6.1",
+    "axios": "^0.19.0",
     "clipboardy": "^2.1.0",
     "commitizen": "^4.0.3",
     "coveralls": "^3.0.7",
@@ -112,7 +113,8 @@
     "implemented_ccs": "ts-node maintenance/implemented_ccs.ts",
     "gh-cc-table": "npm run implemented_ccs -- --flavor=github --only-incomplete",
     "usbdebug": "cmd.exe /c \"test\\usbdebug.bat\"",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "config": "ts-node maintenance/importConfig.ts"
   },
   "readme": "README.md",
   "husky": {
