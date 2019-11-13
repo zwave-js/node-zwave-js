@@ -20,6 +20,7 @@ import * as fs from "fs-extra";
 import * as JSON5 from "json5";
 import * as path from "path";
 import * as qs from "querystring";
+import { DeviceConfigIndexEntry } from "../src/lib/config/Devices";
 import { num2hex } from "../src/lib/util/strings";
 
 // Where the files are located
@@ -287,17 +288,6 @@ async function parseConfigFile(filename: string): Promise<Record<string, any>> {
 		}
 	}
 	return ret;
-}
-
-interface DeviceConfigIndexEntry {
-	manufacturerId: string;
-	productType: string;
-	productId: string;
-	firmwareVersion: {
-		min: string;
-		max: string;
-	};
-	filename: string;
 }
 
 /** Translates all downloaded config files */

@@ -897,8 +897,8 @@ version:               ${this.version}`;
 			log.controller.logNode(this.id, "trying to load device config");
 			const config = await lookupDevice(
 				this.manufacturerId,
-				this.productId,
 				this.productType,
+				this.productId,
 				this.firmwareVersion,
 			);
 			if (config) {
