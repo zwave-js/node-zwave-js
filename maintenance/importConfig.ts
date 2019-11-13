@@ -21,6 +21,7 @@ import * as JSON5 from "json5";
 import * as path from "path";
 import * as qs from "querystring";
 
+// Where the files are located
 const importDir = path.join(__dirname, "..", "config/import");
 const processedDir = path.join(__dirname, "..", "config/processed");
 const importedManufacturersPath = path.join(importDir, "manufacturers.json");
@@ -32,6 +33,17 @@ const ownManufacturersReversed = composeObject(
 	entries(ownManufacturers).map(([id, name]) => [name, id]),
 );
 
+// Regular expressions to parse html pages
+const manufacturerIdRegexes = [
+	/\<manufacturer\>(?:0x)?([0-9a-fA-F]{1,4})\</, // OZW Export
+	/Device identifiers: (?:0x)?([0-9a-fA-F]{1,4}):/, // OH Export
+	/\\"manufacturer_id\\": \\"(?:0x)?([0-9a-fA-F]{1,4})\\"/, // JSON Export
+];
+const databaseIdRegex = /id=\[((?:\d+,?\s?)+)\]/;
+const manufacturerTableStartRegex = /\<table[^\>]+id="manufacturerList"/;
+const manufacturerTableRowsRegex = /\<tr[^\>]+\>(?:\s+\<td\>((?:.|\s)+?)\<\/td\>)(?:\s+\<td\>((?:.|\s)+?)\<\/td\>)/g;
+
+// Where all the information can be found
 const urlManufacturers =
 	"https://www.cd-jackson.com/index.php/zwave/zwave-device-database/zwave-manufacturer-list/manufacturers";
 const urlIDs =
@@ -49,13 +61,14 @@ function matchAll(regex: RegExp, string: string) {
 	return ret;
 }
 
+/** Retrieves the list of database IDs */
 async function fetchIDs(): Promise<string[]> {
 	const sources: string = (await axios({ url: urlIDs })).data;
 	const head = sources.substring(
 		sources.indexOf("<head>") + 6,
 		sources.indexOf("</head>"),
 	);
-	const idsString = head.match(/id=\[((?:\d+,?\s?)+)\]/)![1];
+	const idsString = head.match(databaseIdRegex)![1];
 	const ids = idsString
 		.split(",")
 		.map(str => str.trim())
@@ -63,12 +76,14 @@ async function fetchIDs(): Promise<string[]> {
 	return ids;
 }
 
+/** Retrieves the definition for a specific device */
 async function fetchDevice(id: string): Promise<string> {
 	const source = (await axios({ url: urlDevice(id) })).data;
 	return JSON.stringify(source, null, "\t");
 }
 
-async function downloadDB(): Promise<void> {
+/** Downloads all device information */
+async function downloadDevices(): Promise<void> {
 	process.stdout.write("Fetching database IDs...");
 	const IDs = await fetchIDs();
 	// Delete the last line
@@ -91,8 +106,7 @@ async function downloadDB(): Promise<void> {
 	console.log("done!");
 }
 
-const manufacturerTableRegex = /\<tr[^\>]+\>(?:\s+\<td\>((?:.|\s)+?)\<\/td\>)(?:\s+\<td\>((?:.|\s)+?)\<\/td\>)/g;
-
+/** Downloads all manufacturer information */
 async function downloadManufacturers(): Promise<void> {
 	process.stdout.write("Fetching manufacturers...");
 
@@ -112,8 +126,7 @@ async function downloadManufacturers(): Promise<void> {
 		url: urlManufacturers,
 	};
 	const sources: string = (await axios(options)).data;
-	const startRegex = /\<table[^\>]+id="manufacturerList"/;
-	const start = startRegex.exec(sources)?.index ?? -1;
+	const start = manufacturerTableStartRegex.exec(sources)?.index ?? -1;
 	const end = sources.indexOf(`</table>`, start);
 	if (start === -1 || end === -1) {
 		console.error("Could not find manufacturers table");
@@ -128,7 +141,7 @@ async function downloadManufacturers(): Promise<void> {
 	// Delete the last line
 	process.stdout.write("\r\x1b[K");
 
-	const matches = matchAll(manufacturerTableRegex, body);
+	const matches = matchAll(manufacturerTableRowsRegex, body);
 	const manufacturers = composeObject(
 		matches.map(([name, id]) => [
 			name
@@ -150,12 +163,7 @@ async function downloadManufacturers(): Promise<void> {
 	console.log("done!");
 }
 
-const manufacturerIdRegexes = [
-	/\<manufacturer\>(?:0x)?([0-9a-fA-F]{1,4})\</, // OZW Export
-	/Device identifiers: (?:0x)?([0-9a-fA-F]{1,4}):/, // OH Export
-	/\\"manufacturer_id\\": \\"(?:0x)?([0-9a-fA-F]{1,4})\\"/, // JSON Export
-];
-
+/** Looks up a manufacturer ID by name */
 function findManufacturerId(
 	input: string,
 	inputAsJson: any,
@@ -174,6 +182,7 @@ function findManufacturerId(
 	}
 }
 
+/** Ensures an input file is valid */
 function assertValid(json: any) {
 	ok(typeof json.state === "string" || typeof json.state === "number");
 	ok(typeof json.manufacturer === "string");
@@ -184,6 +193,7 @@ function assertValid(json: any) {
 	ok(typeof json.versionmaxDisplay === "string");
 }
 
+/** Parses a downloaded config file into something we understand */
 async function parseConfigFile(filename: string): Promise<string> {
 	const content = await fs.readFile(filename, "utf8");
 	const json = JSON.parse(content);
@@ -226,10 +236,12 @@ async function parseConfigFile(filename: string): Promise<string> {
 		}
 	}
 	// Add comment explaining which devices this file contains
-	return `// ${json.manufacturer} ${json.description} (${json.label})
+	return `// ${json.manufacturer} ${json.label}
+// ${json.description}
 ${JSON.stringify(ret, undefined, 4)}`;
 }
 
+/** Translates all downloaded config files */
 async function importConfigFiles(): Promise<void> {
 	const configFiles = (await fs.readdir(importDir)).filter(
 		file =>
@@ -262,7 +274,7 @@ async function importConfigFiles(): Promise<void> {
 		await downloadManufacturers();
 	} else if (process.argv.includes("download")) {
 		await downloadManufacturers();
-		await downloadDB();
+		await downloadDevices();
 	} else if (process.argv.includes("import")) {
 		await importConfigFiles();
 	}
