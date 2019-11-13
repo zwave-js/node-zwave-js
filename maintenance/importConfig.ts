@@ -133,8 +133,8 @@ async function downloadManufacturers(): Promise<void> {
 		matches.map(([name, id]) => [
 			name
 				.replace("</a>", "")
-				.replace(/&amp;/g, "&")
 				.replace(/&quot;/g, `"`)
+				.replace(/&amp;/g, "&")
 				.trim(),
 			`0x${padStart(id.trim(), 4, "0").toLowerCase()}`,
 		]),
@@ -175,20 +175,13 @@ function findManufacturerId(
 }
 
 function assertValid(json: any) {
-	const {
-		state,
-		description,
-		label,
-		type_id,
-		versionminDisplay,
-		versionmaxDisplay,
-	} = json;
-	ok(typeof state === "string" || typeof state === "number");
-	ok(typeof description === "string");
-	ok(typeof label === "string");
-	ok(typeof type_id === "string");
-	ok(typeof versionminDisplay === "string");
-	ok(typeof versionmaxDisplay === "string");
+	ok(typeof json.state === "string" || typeof json.state === "number");
+	ok(typeof json.manufacturer === "string");
+	ok(typeof json.description === "string");
+	ok(typeof json.label === "string");
+	ok(typeof json.type_id === "string");
+	ok(typeof json.versionminDisplay === "string");
+	ok(typeof json.versionmaxDisplay === "string");
 }
 
 async function parseConfigFile(filename: string): Promise<string> {
@@ -196,10 +189,11 @@ async function parseConfigFile(filename: string): Promise<string> {
 	const json = JSON.parse(content);
 	assertValid(json);
 
-	const ret = {
+	const ret: Record<string, any> = {
 		_approved: json.state === "1" || json.state === 1,
 		...(json.errors?.length ? { _errors: json.errors } : undefined),
 		...(json.warnings?.length ? { _warnings: json.warnings } : undefined),
+		manufacturer: json.manufacturer,
 		manufacturerId: findManufacturerId(content, json),
 		label: json.label,
 		description: json.description,
@@ -218,6 +212,19 @@ async function parseConfigFile(filename: string): Promise<string> {
 			max: json.versionmaxDisplay,
 		},
 	};
+	if (json.associations?.length) {
+		ret.associations = {};
+		for (const assoc of json.associations) {
+			ret.associations[assoc.group_id] = {
+				label: assoc.label,
+				...(assoc.description
+					? { description: assoc.description }
+					: undefined),
+				maxNodes: parseInt(assoc.max),
+				isLifeline: assoc.controller === "1",
+			};
+		}
+	}
 	// Add comment explaining which devices this file contains
 	return `// ${json.manufacturer} ${json.description} (${json.label})
 ${JSON.stringify(ret, undefined, 4)}`;
