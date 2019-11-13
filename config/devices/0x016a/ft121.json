@@ -1,0 +1,359 @@
+// Fantem FT121
+// LED RGBWW Strip
+{
+    "_approved": true,
+    "manufacturer": "Fantem",
+    "manufacturerId": "0x016a",
+    "label": "FT121",
+    "description": "LED RGBWW Strip",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0079"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "20": {
+            "label": "LED Strip state at Power ON",
+            "description": "LED Strip state at Power ON",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Last State (default)",
+                    "value": 0
+                },
+                {
+                    "label": "Remove Me",
+                    "value": 0
+                },
+                {
+                    "label": "Always On",
+                    "value": 1
+                },
+                {
+                    "label": "Always Off",
+                    "value": 2
+                }
+            ]
+        },
+        "32": {
+            "label": "Enable/Disable Report on color change.",
+            "description": "Enable/Disable Report on color change.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable (default)",
+                    "value": 0
+                },
+                {
+                    "label": "Hail CC",
+                    "value": 1
+                }
+            ]
+        },
+        "34": {
+            "label": "Brightness Level Control",
+            "description": "Brightness Level Control",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable (default)",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "35": {
+            "label": "Display mode of Cold/warm white",
+            "description": "Display mode of Cold/warm white",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Arbitrary combination (default)",
+                    "value": 0
+                },
+                {
+                    "label": "Complementary combination",
+                    "value": 1
+                }
+            ]
+        },
+        "40": {
+            "label": "Colorful mode configuration",
+            "description": "Colorful mode configuration",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 5,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Default",
+                    "value": 0
+                },
+                {
+                    "label": "Rainbow mode",
+                    "value": 1
+                },
+                {
+                    "label": "Multi color mode",
+                    "value": 2
+                },
+                {
+                    "label": "Fade out and fade in (Red)",
+                    "value": 3
+                },
+                {
+                    "label": "Fade out and fade in (Green)",
+                    "value": 4
+                },
+                {
+                    "label": "Fade out and fade in (Blue)",
+                    "value": 5
+                }
+            ]
+        },
+        "80": {
+            "label": "Notification (Group 1) when state changes",
+            "description": "Notification (Group 1) when state changes",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Nothing",
+                    "value": 0
+                },
+                {
+                    "label": "Hail CC (default)",
+                    "value": 1
+                },
+                {
+                    "label": "Basic CC report",
+                    "value": 2
+                }
+            ]
+        },
+        "112": {
+            "label": "Dimmer mode",
+            "description": "Dimmer mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Parabolic curve",
+                    "value": 0
+                },
+                {
+                    "label": "Index curve",
+                    "value": 1
+                },
+                {
+                    "label": "(Parabolic * Index)/2",
+                    "value": 2
+                },
+                {
+                    "label": "Linear",
+                    "value": 3
+                }
+            ]
+        },
+        "252": {
+            "label": "Configuration lock",
+            "description": "Configuration lock",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Configuration allowed (default)",
+                    "value": 0
+                },
+                {
+                    "label": "Configuration locked",
+                    "value": 1
+                }
+            ]
+        },
+        "255": {
+            "label": "Reset to defaults",
+            "description": "Reset to defaults",
+            "valueSize": 0,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "37[0x1f]": {
+            "label": "Colour Change Speed Level",
+            "description": "Colour Change Speed Level",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 31,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "37[0xe0]": {
+            "label": "Time Base of Colour Change Speed",
+            "description": "Time Base of Colour Change Speed",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Time base is 1s.",
+                    "value": 0
+                },
+                {
+                    "label": "Time base is 10ms.",
+                    "value": 1
+                },
+                {
+                    "label": "Time base is 100ms.",
+                    "value": 2
+                }
+            ]
+        },
+        "37[0xff00]": {
+            "label": "Cycle Count",
+            "description": "Cycle Count",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "37[0xff0000]": {
+            "label": "Brightness",
+            "description": "Brightness",
+            "valueSize": 4,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "37[0x07000000]": {
+            "label": "Colour Display Cycle",
+            "description": "Colour Display Cycle",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 15,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Inactive",
+                    "value": 0
+                },
+                {
+                    "label": "Rainbow Mode",
+                    "value": 1
+                },
+                {
+                    "label": "Multi Colour Mode",
+                    "value": 2
+                },
+                {
+                    "label": "Random Mode",
+                    "value": 3
+                },
+                {
+                    "label": "Single Colour Mode.",
+                    "value": 4
+                }
+            ]
+        },
+        "37[0x38000000]": {
+            "label": "Colour Change Speed Option",
+            "description": "Colour Change Speed Option",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 15,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "37[0x40000000]": {
+            "label": "Colour Transition Style",
+            "description": "Colour Transition Style",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Smooth Colour Transition",
+                    "value": 0
+                },
+                {
+                    "label": "Fade Out Fade In Transition",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

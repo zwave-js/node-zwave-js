@@ -1,0 +1,53 @@
+// Philio Technology Corp PSE02
+// Siren
+{
+    "_approved": true,
+    "manufacturer": "Philio Technology Corp",
+    "manufacturerId": "0x013c",
+    "label": "PSE02",
+    "description": "Siren",
+    "devices": [
+        {
+            "productType": "0x0004",
+            "productId": "0x000a"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "7": {
+            "label": "Costumer  Function",
+            "description": "NotificationReport/BinaryReport",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "29": {
+            "label": "Disable Alarm",
+            "description": "Disable the alarm  function.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "31[0x0c]": {
+            "label": "Alarm Duration",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 6,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

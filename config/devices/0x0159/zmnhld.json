@@ -1,0 +1,832 @@
+// Goap ZMNHLD
+// Flush PWM Thermostat
+{
+    "_approved": true,
+    "manufacturer": "Goap",
+    "manufacturerId": "0x0159",
+    "label": "ZMNHLD",
+    "description": "Flush PWM Thermostat",
+    "devices": [
+        {
+            "productType": "0x0005",
+            "productId": "0x0053"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "reserved for communication with the main controller",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "basic on/off (output)",
+            "description": "Triggered at change of the output",
+            "maxNodes": 16,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Sensor_multilevel_get",
+            "maxNodes": 16,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "basic on/off (temp limit)",
+            "description": "triggered by Too high temperature limit",
+            "maxNodes": 16,
+            "isLifeline": false
+        },
+        "5": {
+            "label": "Thermostat setpoint get",
+            "maxNodes": 16,
+            "isLifeline": false
+        },
+        "6": {
+            "label": "basic on/off (window)",
+            "description": "triggered by change of I1",
+            "maxNodes": 16,
+            "isLifeline": false
+        },
+        "7": {
+            "label": "basic on/off (condense sensor)",
+            "description": "triggered by change of I2",
+            "maxNodes": 16,
+            "isLifeline": false
+        },
+        "8": {
+            "label": "basic on/off (flood sensor)",
+            "description": "triggered by change of I3",
+            "maxNodes": 16,
+            "isLifeline": false
+        },
+        "9": {
+            "label": "sensor multilevel report",
+            "description": "Triggered at change of temperature",
+            "maxNodes": 16,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Input I1 switch type",
+            "description": "Input I1 switch type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "mono-stable switch type",
+                    "value": 0
+                },
+                {
+                    "label": "bi-stable switch type",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Input I2 switch type",
+            "description": "Input I2 switch type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "mono-stable switch type",
+                    "value": 0
+                },
+                {
+                    "label": "bi-stable switch type",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Input I3 switch type",
+            "description": "Input I3 switch type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "mono-stable switch type (push button)",
+                    "value": 0
+                },
+                {
+                    "label": "bi-stable switch type",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Input 1 contact type",
+            "description": "Input 1 contact type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "normally open",
+                    "value": 0
+                },
+                {
+                    "label": "normally closed",
+                    "value": 1
+                }
+            ]
+        },
+        "5": {
+            "label": "Input 2 contact type",
+            "description": "Input 2 contact type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "normally open",
+                    "value": 0
+                },
+                {
+                    "label": "normally closed",
+                    "value": 1
+                }
+            ]
+        },
+        "6": {
+            "label": "Input 3 contact type",
+            "description": "Input 3 contact type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "normally open",
+                    "value": 0
+                },
+                {
+                    "label": "normally closed",
+                    "value": 1
+                }
+            ]
+        },
+        "10": {
+            "label": "Activate / deactivate ALL ON/ALL OFF",
+            "description": "Activate / deactivate ALL ON/ALL OFF",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "ALL ON is not active / ALL OFF is not active",
+                    "value": 0
+                },
+                {
+                    "label": "ALL ON is not active / ALL OFF is active",
+                    "value": 1
+                },
+                {
+                    "label": "ALL ON is active / ALL OFF is not active",
+                    "value": 2
+                },
+                {
+                    "label": "ALL ON is active / ALL OFF is active",
+                    "value": 255
+                }
+            ]
+        },
+        "11": {
+            "label": "I1 Functionality selection",
+            "description": "I1 Functionality selection",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 32767,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Input I1 changes between Off and Heat/Cool",
+                    "value": 1
+                },
+                {
+                    "label": "Input I1 influences the heating/cooling valves",
+                    "value": 2
+                },
+                {
+                    "label": "No influence on the Heat/Cool process",
+                    "value": 32767
+                }
+            ]
+        },
+        "12": {
+            "label": "I2 Functionality selection",
+            "description": "I2 Functionality selection",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32767,
+            "defaultValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Input I2 influences the cooling value",
+                    "value": 2000
+                },
+                {
+                    "label": "Input I2 doesnt influence on the Heat/Cool process",
+                    "value": 32767
+                }
+            ]
+        },
+        "13": {
+            "label": "I3 Functionality selection",
+            "description": "I3 Functionality selection",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32767,
+            "defaultValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "input I3 changes the mode of the thermostat",
+                    "value": 1
+                },
+                {
+                    "label": "input I3 influences on heating/cooling valves",
+                    "value": 2
+                },
+                {
+                    "label": "Does not influence on the heat/cool process",
+                    "value": 32767
+                }
+            ]
+        },
+        "40": {
+            "label": "Power reporting in Watts on power change",
+            "description": "Power reporting in Watts on power change",
+            "unit": "%",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "Power consumption reporting disabled",
+                    "value": 0
+                }
+            ]
+        },
+        "42": {
+            "label": "Power reporting in Watts by time interval",
+            "description": "Power reporting in Watts by time interval",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32767,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "45": {
+            "label": "Antifreeze",
+            "description": "Antifreeze",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 1127,
+            "defaultValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "50": {
+            "label": "PWM maximum value",
+            "description": "PWM maximum value",
+            "unit": "%",
+            "valueSize": 1,
+            "minValue": 2,
+            "maxValue": 100,
+            "defaultValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "51": {
+            "label": "PWM minimum value",
+            "description": "PWM minimum value",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "52": {
+            "label": "PWM cycle duration",
+            "description": "PWM cycle duration",
+            "unit": "seconds",
+            "valueSize": 1,
+            "minValue": 5,
+            "maxValue": 127,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "53": {
+            "label": "PID value inside deadband",
+            "description": "PID value inside deadband",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "54": {
+            "label": "PID deadband",
+            "description": "PID deadband",
+            "unit": "°C",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "55": {
+            "label": "Integral sampling time",
+            "description": "Integral sampling time",
+            "unit": "seconds",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "56": {
+            "label": "P parameter",
+            "description": "P parameter",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 1000,
+            "defaultValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "57": {
+            "label": "I parameter",
+            "description": "I parameter",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 1000,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "58": {
+            "label": "D parameter",
+            "description": "D parameter",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 1000,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "59": {
+            "label": "Thermostat mode",
+            "description": "Thermostat mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Heat mode",
+                    "value": 0
+                },
+                {
+                    "label": "Cool mode",
+                    "value": 1
+                }
+            ]
+        },
+        "60": {
+            "label": "Too low temperature limit",
+            "description": "Too low temperature limit",
+            "unit": "°C",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 1150,
+            "defaultValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "61": {
+            "label": "Too high temperature limit",
+            "description": "Too high temperature limit",
+            "unit": "°C",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 1000,
+            "defaultValue": 700,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "63": {
+            "label": "Output Switch selection",
+            "description": "Output Switch selection",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "When system is turned off the output is 0V(NC).",
+                    "value": 0
+                },
+                {
+                    "label": "System OFF the output is 230V or 24V(NO).",
+                    "value": 1
+                }
+            ]
+        },
+        "70": {
+            "label": "Input I1 status on delay",
+            "description": "Input I1 status on delay",
+            "unit": "seconds",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "71": {
+            "label": "Input I1 status off delay",
+            "description": "Input I1 status off delay",
+            "unit": "seconds",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "72": {
+            "label": "Input I2 status on delay",
+            "description": "Input I2 status on delay",
+            "unit": "seconds",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "73": {
+            "label": "Input I2 status off delay",
+            "description": "Input I2 status off delay",
+            "unit": "seconds",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "74": {
+            "label": "Input 3 status ON delay",
+            "description": "Input 3 status ON delay",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "75": {
+            "label": "Input I3 status off delay",
+            "description": "Input I3 status off delay",
+            "unit": "seconds",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "76": {
+            "label": "Reporting on time interval",
+            "description": "Reporting on time interval",
+            "unit": "minutes",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 30,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "77": {
+            "label": "Group 10 - delay before sending Basic Set ON",
+            "description": "Group 10 - delay before sending Basic Set ON",
+            "unit": "seconds",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32767,
+            "defaultValue": 180,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "78": {
+            "label": "Scale Selection",
+            "description": "Scale Selection",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "degrees Celsius",
+                    "value": 0
+                },
+                {
+                    "label": "degrees Fahrenheit",
+                    "value": 1
+                }
+            ]
+        },
+        "100": {
+            "label": "Enable/Disable I1 or select Type and Event",
+            "description": "Enable/Disable I1 or select Type and Event",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 9,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Home security, motion detection",
+                    "value": 1
+                },
+                {
+                    "label": "CO - Carbon monoxid detected",
+                    "value": 2
+                },
+                {
+                    "label": "CO2 - Carbon dioxid detected",
+                    "value": 3
+                },
+                {
+                    "label": "Water alarm",
+                    "value": 4
+                },
+                {
+                    "label": "Heat alarm",
+                    "value": 5
+                },
+                {
+                    "label": "Smoke alarm",
+                    "value": 6
+                },
+                {
+                    "label": "Sensor binary",
+                    "value": 9
+                }
+            ]
+        },
+        "101": {
+            "label": "Enable/Disable Endpoint I2 or select type",
+            "description": "Enable/Disable Endpoint I2 or select type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 9,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Home security, motion detection",
+                    "value": 1
+                },
+                {
+                    "label": "CO - Carbon monoxid detected",
+                    "value": 2
+                },
+                {
+                    "label": "CO2 - Carbon dioxid detected",
+                    "value": 3
+                },
+                {
+                    "label": "Water alarm",
+                    "value": 4
+                },
+                {
+                    "label": "Heat alarm",
+                    "value": 5
+                },
+                {
+                    "label": "Smoke alarm",
+                    "value": 6
+                },
+                {
+                    "label": "Sensor binary",
+                    "value": 9
+                }
+            ]
+        },
+        "102": {
+            "label": "Enable/Disable Endpoint I3 or select type",
+            "description": "Enable/Disable Endpoint I3 or select type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 9,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Home security, motion detection",
+                    "value": 1
+                },
+                {
+                    "label": "CO - Carbon monoxid detected",
+                    "value": 2
+                },
+                {
+                    "label": "CO2 - Carbon dioxid detected",
+                    "value": 3
+                },
+                {
+                    "label": "Water alarm",
+                    "value": 4
+                },
+                {
+                    "label": "Heat alarm",
+                    "value": 5
+                },
+                {
+                    "label": "Smoke alarm",
+                    "value": 6
+                },
+                {
+                    "label": "Sensor binary",
+                    "value": 9
+                }
+            ]
+        },
+        "110": {
+            "label": "Temperature sensor offset settings",
+            "description": "Temperature sensor offset settings",
+            "unit": "°C",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32536,
+            "defaultValue": 32536,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "120": {
+            "label": "Digital temperature sensor reporting",
+            "description": "Digital temperature sensor reporting",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "121": {
+            "label": "Digital temperature sensor / setpoint selector",
+            "description": "Digital temperature sensor / setpoint selector",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 10,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "internal sensor is mounted",
+                    "value": 0
+                },
+                {
+                    "label": "temperature is grabbed by sensor with assoc 3",
+                    "value": 1
+                },
+                {
+                    "label": "temperature is grabbed from ext battery sensor",
+                    "value": 2
+                },
+                {
+                    "label": "setpoint is grabbed by sensor with assoc 5",
+                    "value": 4
+                },
+                {
+                    "label": "setpoint is grabbed from ext battery sensor",
+                    "value": 8
+                },
+                {
+                    "label": "temperature & setpoint from ext batt sensor",
+                    "value": 10
+                }
+            ]
+        },
+        "122": {
+            "label": "Node Id of external battery powered sensor",
+            "description": "Node Id of external battery powered sensor",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 254,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

@@ -1,0 +1,142 @@
+// AEON Labs DSB29
+// Door/Window sensor Gen2
+{
+    "_approved": true,
+    "manufacturer": "AEON Labs",
+    "manufacturerId": "0x0086",
+    "label": "DSB29",
+    "description": "Door/Window sensor Gen2",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x0004"
+        },
+        {
+            "productType": "0x0002",
+            "productId": "0x001d"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Group 1",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Send Sensor binary report on open/close events",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "On for opened, Off for closed",
+                    "value": 0
+                },
+                {
+                    "label": "Off for opened, On for closed",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Enable wake up 10 minutes when power on",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Send Basic Set on open/close event",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "On for opened, Off for closed",
+                    "value": 0
+                },
+                {
+                    "label": "Off for opened, On for closed",
+                    "value": 1
+                }
+            ]
+        },
+        "121[0xff]": {
+            "label": "command class to use for open/close",
+            "description": "parameter 4 (LSB)",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 17,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "not set",
+                    "value": 0
+                },
+                {
+                    "label": "BATTERY report",
+                    "value": 1
+                },
+                {
+                    "label": "SENSOR BINARY report",
+                    "value": 16
+                },
+                {
+                    "label": "SENSOR BINARY and BATTERY report",
+                    "value": 17
+                }
+            ]
+        },
+        "121[0xff00]": {
+            "label": "command class to use for open/close",
+            "description": "see overview (parameter 3)",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "not set",
+                    "value": 0
+                },
+                {
+                    "label": "BASIC report",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

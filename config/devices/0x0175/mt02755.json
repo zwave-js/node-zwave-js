@@ -1,0 +1,184 @@
+// Devolo MT02755
+// Humidity Sensor
+{
+    "_approved": true,
+    "manufacturer": "Devolo",
+    "manufacturerId": "0x0175",
+    "label": "MT02755",
+    "description": "Humidity Sensor",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x0020"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Receiving Report Message",
+            "maxNodes": 8,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "10": {
+            "label": "Auto Report Battery Time",
+            "description": "The interval time for auto report the battery level.",
+            "unit": "Ticks",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 12,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "13": {
+            "label": "Auto Report Temperature Time",
+            "description": "The interval time for auto report the temperature.",
+            "unit": "Ticks",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 12,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "14": {
+            "label": "Auto Report Humidity Time",
+            "description": "The interval time for auto report the humidity",
+            "unit": "Ticks",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 12,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "20": {
+            "label": "Auto Report Tick Interval",
+            "description": "The interval time for auto report each tick",
+            "unit": "Minutes",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 30,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "21": {
+            "label": "Temperature Differential Report",
+            "description": "The temperature differential to report",
+            "unit": "Fahrenheit",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "23": {
+            "label": "Humidity Differential Report",
+            "description": "The humidity differential to report.",
+            "unit": "Percent",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 60,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "5[0x08]": {
+            "label": "Operation Mode",
+            "description": "Setting the temperature scale",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 8,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Fahrenheit",
+                    "value": 0
+                },
+                {
+                    "label": "Celsius",
+                    "value": 8
+                }
+            ]
+        },
+        "6[0x20]": {
+            "label": "Multi Sensor Function Switch",
+            "description": "Disable the humidity report after event triggered",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 32,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Enable",
+                    "value": 0
+                },
+                {
+                    "label": "Disable",
+                    "value": 32
+                }
+            ]
+        },
+        "7[0x10]": {
+            "label": "Customer Function",
+            "description": "Notification Type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 16,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Using Notification Report",
+                    "value": 0
+                },
+                {
+                    "label": "Using Sensor Binary Report",
+                    "value": 16
+                }
+            ]
+        },
+        "7[0x20]": {
+            "label": "Customer Function",
+            "description": "Disable Multi CC in auto report",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 32,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Enable",
+                    "value": 0
+                },
+                {
+                    "label": "Disable",
+                    "value": 32
+                }
+            ]
+        }
+    }
+}

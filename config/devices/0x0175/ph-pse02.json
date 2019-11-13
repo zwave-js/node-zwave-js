@@ -1,0 +1,62 @@
+// Devolo ph-pse02
+// Multisound indoor siren
+{
+    "_approved": true,
+    "manufacturer": "Devolo",
+    "manufacturerId": "0x0175",
+    "label": "ph-pse02",
+    "description": "Multisound indoor siren",
+    "devices": [
+        {
+            "productType": "0x0004",
+            "productId": "0x000a"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Report Message",
+            "description": "Report Message, e.g. tamper alarm",
+            "maxNodes": 8,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "7": {
+            "label": "Costumer  Function",
+            "description": "NotificationReport/BinaryReport",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "29": {
+            "label": "Disable Alarm",
+            "description": "Disable the alarm  function.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "31[0x0c]": {
+            "label": "Alarm Duration",
+            "description": "Play alarm sound duration.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 6,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

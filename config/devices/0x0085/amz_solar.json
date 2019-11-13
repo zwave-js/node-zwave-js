@@ -1,0 +1,109 @@
+// Fakro AMZ Solar
+// Solar Awning
+{
+    "_approved": true,
+    "manufacturer": "Fakro",
+    "manufacturerId": "0x0085",
+    "label": "AMZ Solar",
+    "description": "Solar Awning",
+    "devices": [
+        {
+            "productType": "0x0005",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic Repeat",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Multilevel Repeat",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "Basic Control",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Operation Mode",
+            "description": "Operation Mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2": {
+            "label": "Season",
+            "description": "Season",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "3": {
+            "label": "Time",
+            "description": "Time",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 30,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "Sensitivity",
+            "description": "Sensitivity",
+            "valueSize": 1,
+            "minValue": 3,
+            "maxValue": 100,
+            "defaultValue": 60,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "12": {
+            "label": "Calibration",
+            "description": "Calibration",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "13": {
+            "label": "Positioning",
+            "description": "Positioning",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

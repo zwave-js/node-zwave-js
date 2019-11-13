@@ -1,0 +1,311 @@
+// Logic Group LHC5020
+// DIN-rail module with 10 digital ouputs and 4 digital inputs
+{
+    "_approved": true,
+    "_warnings": [
+        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
+    ],
+    "manufacturer": "Logic Group",
+    "manufacturerId": "0x0234",
+    "label": "LHC5020",
+    "description": "DIN-rail module with 10 digital ouputs and 4 digital inputs",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x010d"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "Group 1",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Group 2",
+            "description": "Group 2",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Group 3",
+            "description": "Group 3",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "Group 4",
+            "description": "Group 4",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "5": {
+            "label": "Group 5",
+            "description": "Group 5",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "6": {
+            "label": "Group 6",
+            "description": "Group 6",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "7": {
+            "label": "Group 7",
+            "description": "Group 7",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "8": {
+            "label": "Group 8",
+            "description": "Group 8",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "9": {
+            "label": "Group 9",
+            "description": "Group 9",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "10": {
+            "label": "Group 10",
+            "description": "Group 10",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "11": {
+            "label": "Group 11",
+            "description": "Group 11",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "12": {
+            "label": "Group 12",
+            "description": "Group 12",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "13": {
+            "label": "Group 13",
+            "description": "Group 13",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "14": {
+            "label": "Group 14",
+            "description": "Group 14",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Diode control",
+            "description": "Diode control",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Turned off",
+                    "value": 0
+                },
+                {
+                    "label": "Turned on",
+                    "value": 1
+                },
+                {
+                    "label": "Blinking 1 sec. interval",
+                    "value": 2
+                },
+                {
+                    "label": "Blinking 0.5 sec. interval",
+                    "value": 3
+                }
+            ]
+        },
+        "2": {
+            "label": "Turn on/off voltage on input terminal 1",
+            "description": "Turn on/off voltage on input terminal 1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "On",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Turn on/off voltage on input terminal 2",
+            "description": "Turn on/off voltage on input terminal 2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "On",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Turn on/off voltage on input terminal 3",
+            "description": "Turn on/off voltage on input terminal 3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "On",
+                    "value": 1
+                }
+            ]
+        },
+        "5": {
+            "label": "Turn on/off voltage on input terminal 4",
+            "description": "Turn on/off voltage on input terminal 4",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "On",
+                    "value": 1
+                }
+            ]
+        },
+        "6": {
+            "label": "Prel. filter time on input terminals",
+            "description": "Preliminary filter time on input terminals",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "7": {
+            "label": "Threshold for triggering input",
+            "description": "Threshold for triggering input",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 20,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "8": {
+            "label": "Threshold time for triggering input",
+            "description": "Threshold time for triggering input",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "9": {
+            "label": "Function for input terminal 1",
+            "description": "Function for input terminal 1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "10": {
+            "label": "Function for input terminal 2",
+            "description": "Function for input terminal 2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "11": {
+            "label": "Function for input terminal 3",
+            "description": "Function for input terminal 3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "12": {
+            "label": "Function for input terminal 4",
+            "description": "Function for input terminal 4",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "13": {
+            "label": "Central Scene notification",
+            "description": "Central Scene notification",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

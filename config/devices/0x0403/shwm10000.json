@@ -1,0 +1,50 @@
+// ABUS Security-Center GmbH & Co. KG  SHWM10000
+// Flood Sensor
+{
+    "_approved": true,
+    "manufacturer": "ABUS Security-Center GmbH & Co. KG ",
+    "manufacturerId": "0x0403",
+    "label": "SHWM10000",
+    "description": "Flood Sensor",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Group 2",
+            "description": "Root-Device-Group (Binary Sensor)",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Group 3",
+            "description": "Root device group",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "Group 4",
+            "description": "Root device group (notification)",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "5": {
+            "label": "Group 5",
+            "description": "Root device group (notification)",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    }
+}

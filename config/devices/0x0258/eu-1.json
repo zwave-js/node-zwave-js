@@ -1,0 +1,98 @@
+// Shenzhen Neo Electronics Co., Ltd EU-1
+// Light Switch 1 Channel
+{
+    "_approved": true,
+    "manufacturer": "Shenzhen Neo Electronics Co., Ltd",
+    "manufacturerId": "0x0258",
+    "label": "EU-1",
+    "description": "Light Switch 1 Channel",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x108c"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "GROUP 1 is lifeline service that assigned to Light Switch status. It enables Light Switch to send reports to Z-Wave Gateway whenever some button is touched. This Group Support: SWITCH_BINARY_REPORT, DEVICE_RESET_LOCALLY_NOTIFICATION",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Group 2",
+            "description": "GROUP 2 allows Sending Binary Switch Report to associated devices in this group. This group is mapped to Endpoint 0. This Group Support: SWITCH_BINARY_REPORT",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Relay On/Off Status Saved Enable",
+            "description": "Restore switch status on power restore.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Do not save the On/Off status",
+                    "value": 0
+                },
+                {
+                    "label": "Save and restore the relay On/Off status",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Back light Enable",
+            "description": "Enable back light when Light Switch is powered on.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable back light LED",
+                    "value": 0
+                },
+                {
+                    "label": "Enable back light LED",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Relay On/Off Indicate",
+            "description": "Switch on LED indicator.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Do not change LED state when on",
+                    "value": 0
+                },
+                {
+                    "label": "Pink LED state when on",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

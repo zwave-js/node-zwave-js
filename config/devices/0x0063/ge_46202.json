@@ -1,0 +1,61 @@
+// Jasco Products GE 46202
+// GE Enbrighten Z-Wave Plus Smart Switch
+{
+    "_approved": true,
+    "manufacturer": "Jasco Products",
+    "manufacturerId": "0x0063",
+    "label": "GE 46202",
+    "description": "GE Enbrighten Z-Wave Plus Smart Switch",
+    "devices": [
+        {
+            "productType": "0x4952",
+            "productId": "0x3137"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Group 2",
+            "description": "Basic Set single click",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Basic Set double click",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "4": {
+            "label": "Invert Switch",
+            "description": "Invert Switch",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Normal Switch Install",
+                    "value": 0
+                },
+                {
+                    "label": "Inverted Switch Install",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

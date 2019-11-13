@@ -1,0 +1,62 @@
+// Jasco Products 28177
+// GE Z-Wave Plus Wireless Smart Lighting Control Appliance Module
+{
+    "_approved": true,
+    "manufacturer": "Jasco Products",
+    "manufacturerId": "0x0063",
+    "label": "28177",
+    "description": "GE Z-Wave Plus Wireless Smart Lighting Control Appliance Module",
+    "devices": [
+        {
+            "productType": "0x5052",
+            "productId": "0x3132"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Single press",
+            "description": "Group 2 supports Basic Set and is controlled with the local load",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Double press",
+            "description": "Group 3 supports Basic Set and is controlled by double pressing the On or Off button",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "3": {
+            "label": "Night Light",
+            "description": "Defines the behavior of the blue LED.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "LED on when switch is OFF",
+                    "value": 1
+                },
+                {
+                    "label": "LED Light Always ON",
+                    "value": 2
+                }
+            ]
+        }
+    }
+}

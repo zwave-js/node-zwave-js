@@ -1,0 +1,69 @@
+// Popp & Co 012501
+// Electric Strike Lock Control
+{
+    "_approved": true,
+    "manufacturer": "Popp & Co",
+    "manufacturerId": "0x0154",
+    "label": "012501",
+    "description": "Electric Strike Lock Control",
+    "devices": [
+        {
+            "productType": "0x0005",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "1.4",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "Device status",
+            "maxNodes": 10,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "External Input",
+            "description": "Action on External Dry Input",
+            "maxNodes": 10,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "0": {
+            "label": "Auto-Close",
+            "description": "Automated Close after Opening",
+            "unit": "seconds",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "1": {
+            "label": "Off-Command",
+            "description": "Value of Off-Command",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "2": {
+            "label": "On-Command",
+            "description": "Value of On-Command",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

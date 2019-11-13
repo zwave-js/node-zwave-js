@@ -1,0 +1,81 @@
+// D-Link DCH-Z510
+// Siren
+{
+    "_approved": true,
+    "manufacturer": "D-Link",
+    "manufacturerId": "0x0108",
+    "label": "DCH-Z510",
+    "description": "Siren",
+    "devices": [
+        {
+            "productType": "0x0004",
+            "productId": "0x000a"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Report Messages",
+            "description": "The group 1 is for receiving the report message, like tamper event. This is the device's Lifeline group. The group supports 8 nodes maximum.",
+            "maxNodes": 8,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "29": {
+            "label": "Disable Alarm",
+            "unit": "disable_alarm",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Enable Alarm",
+                    "value": 0
+                },
+                {
+                    "label": "Disable Alarm",
+                    "value": 1
+                }
+            ]
+        },
+        "31": {
+            "label": "Alarm Duration",
+            "description": "Play alarm sound duration, 1 tick is 30 seconds. 0 means never auto stop.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "7[0x10]": {
+            "label": "Customer Function",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Using Notification Report",
+                    "value": 0
+                },
+                {
+                    "label": "Using Sensor Binary Report",
+                    "value": 16
+                }
+            ]
+        }
+    }
+}

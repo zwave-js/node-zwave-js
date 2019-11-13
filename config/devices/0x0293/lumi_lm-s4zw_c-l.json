@@ -1,0 +1,80 @@
+// Hogar Controls Lumi LM-S4ZW (C-L)
+// Z-Wave Switch with 2 on/off light switches and 2 up/down blinds switches
+{
+    "_approved": true,
+    "_warnings": [
+        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!",
+        "Endpoint 1 contains both switch and dimmer channels. It probably should only include dimmer!",
+        "Endpoint 2 contains both switch and dimmer channels. It probably should only include dimmer!",
+        "Endpoint 3 contains both switch and dimmer channels. It probably should only include dimmer!"
+    ],
+    "manufacturer": "Hogar Controls",
+    "manufacturerId": "0x0293",
+    "label": "Lumi LM-S4ZW (C-L)",
+    "description": "Z-Wave Switch with 2 on/off light switches and 2 up/down blinds switches",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0024"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "HGT-01 Basic Set",
+            "description": "Basic Set",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "HGT-01 Switch Binary Set",
+            "description": "Switch Binary Set",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "HGT-02 Basic Set",
+            "description": "Basic Set",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "5": {
+            "label": "HGT-02 Switch Binary Set",
+            "description": "Switch Binary Set",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "6": {
+            "label": "HGT-03 Basic Set",
+            "description": "Basic Set",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "7": {
+            "label": "HGT-03 Switch Binary Set",
+            "description": "Switch Binary Set",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "8": {
+            "label": "HGT-04 Basic Set",
+            "description": "Basic Set",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "9": {
+            "label": "HGT-04 Switch Binary Set",
+            "description": "Switch Binary Set",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    }
+}

@@ -1,0 +1,327 @@
+// ACT - Advanced Control Technologies ZDW103
+// Wall Mounted 3-Way Dimmer Receiver
+{
+    "_approved": true,
+    "manufacturer": "ACT - Advanced Control Technologies",
+    "manufacturerId": "0x0001",
+    "label": "ZDW103",
+    "description": "Wall Mounted 3-Way Dimmer Receiver",
+    "devices": [
+        {
+            "productType": "0x4457",
+            "productId": "0x3033"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Group 1",
+            "description": "Tap once",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "2": {
+            "label": "Group 2",
+            "description": "Tap twice",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Group 3",
+            "description": "Tap three time",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "Group 4",
+            "description": "Group to update transmitter or controler",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Set Ignore Start Level Bit For Dim",
+            "description": "Defines the behavior when transmitting dim commands",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Use transmisison start level",
+                    "value": 0
+                },
+                {
+                    "label": "Ignore transmisison start level",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Suspend Group 4",
+            "description": "Disable transmission of command to Group 4",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Enable transmission to Group 4",
+                    "value": 0
+                },
+                {
+                    "label": "Disable transmission to Group 4",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Night Light",
+            "description": "Defines the behavior of the blue LED.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "LED on when switch is ON",
+                    "value": 0
+                },
+                {
+                    "label": "LED on when switch is OFF",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Invert Switch",
+            "description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "5": {
+            "label": "Ignore Start-Level (Receiving)",
+            "description": "This dimmer will start dimming from its current level.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "6": {
+            "label": "Don’t Send Level Command After Dim",
+            "description": "Change behavior of dim level information update",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Send level command",
+                    "value": 0
+                },
+                {
+                    "label": "Don’t send level command",
+                    "value": 1
+                }
+            ]
+        },
+        "7": {
+            "label": "On/Off Command Dim Step",
+            "description": "Indicates how many levels the dimmer will change for each dimming step.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "8": {
+            "label": "On/Off Command Dim Rate",
+            "description": "Sets the rate at which the dimmer changes the light level.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "9": {
+            "label": "Local Control Dim Step",
+            "description": "Indicates how many levels the dimmer will change for each dimming step.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "10": {
+            "label": "Local Control Dim Rate",
+            "description": "Sets the dim rate",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "11": {
+            "label": "ALL ON/ALL OFF Dim Step",
+            "description": "Indicates how many levels the dimmer will change for each dimming step.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "12": {
+            "label": "ALL ON/ALL OFF Dim Rate",
+            "description": "Sets the dim rate for the all on/off command",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "13": {
+            "label": "Disable Group 4 During a Dim Command",
+            "description": "Change behavior of command to Group 4 during Dim Command",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Enable transmission to Group 4",
+                    "value": 0
+                },
+                {
+                    "label": "Disable transmission to Group 4",
+                    "value": 1
+                }
+            ]
+        },
+        "14": {
+            "label": "Enable Shade Control Group 2",
+            "description": "Enable Shade Control Group 2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "15": {
+            "label": "Enable Shade Control Group 3",
+            "description": "Enable Shade Control Group 3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "19": {
+            "label": "LED Transmission Indication",
+            "description": "Change behavior of LED during transmission to group 1-4",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No flicker",
+                    "value": 0
+                },
+                {
+                    "label": "Flicker during all transmission",
+                    "value": 1
+                },
+                {
+                    "label": "Flicker first second of transmission",
+                    "value": 2
+                }
+            ]
+        }
+    }
+}

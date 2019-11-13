@@ -1,0 +1,238 @@
+// Horstmann Controls Limited SSP302
+// Switch Meter Plugin
+{
+    "_approved": true,
+    "manufacturer": "Horstmann Controls Limited",
+    "manufacturerId": "0x0059",
+    "label": "SSP302",
+    "description": "Switch Meter Plugin",
+    "devices": [
+        {
+            "productType": "0x0011",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 4,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Power",
+            "maxNodes": 4,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Electrical Parameter",
+            "maxNodes": 4,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "Relay Status",
+            "maxNodes": 4,
+            "isLifeline": false
+        },
+        "5": {
+            "label": "Time",
+            "maxNodes": 1,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Switch Status",
+            "description": "Switch Status delta based configuration",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2": {
+            "label": "Voltage delta",
+            "description": "Voltage delta based configuration",
+            "unit": "V",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 60,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "3": {
+            "label": "Current delta",
+            "description": "Current delta based configuration",
+            "unit": "A",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 15,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "Power Factor",
+            "description": "Power Factor delta based configuration",
+            "unit": "%",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "5": {
+            "label": "Active Power",
+            "description": "Active Power delta based configuration",
+            "unit": "W",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 4000,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "6": {
+            "label": "Active Energy",
+            "description": "Active Energy delta based configuration",
+            "unit": "Wh",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "7": {
+            "label": "Apparent Energy",
+            "description": "Apparent Energy delta based configuration",
+            "unit": "VAh",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "8": {
+            "label": "Switch Status time",
+            "description": "Switch Status time interval based",
+            "unit": "sec",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65520,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "9": {
+            "label": "Voltage time",
+            "description": "Voltage time interval based",
+            "unit": "sec",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65520,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "10": {
+            "label": "Current time",
+            "description": "Current time interval based",
+            "unit": "sec",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65520,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "11": {
+            "label": "Power Factor time",
+            "description": "Power Factor time interval based",
+            "unit": "sec",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65520,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "12": {
+            "label": "Active Power time",
+            "description": "Active Power time interval based",
+            "unit": "sec",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65520,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "13": {
+            "label": "Active Energy time",
+            "description": "Active Energy time interval based",
+            "unit": "sec",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65520,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "14": {
+            "label": "Apparent Energy time",
+            "description": "Apparent Energy time interval based",
+            "unit": "sec",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65520,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "15": {
+            "label": "Relay and LED configuration",
+            "description": "Relay and LED configuration",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "16": {
+            "label": "Sleep Current Config",
+            "description": "Sleep Current Config",
+            "unit": "A",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

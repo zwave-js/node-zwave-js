@@ -1,0 +1,175 @@
+// Cloud Media A803N
+// Motion Sensor
+{
+    "_approved": true,
+    "manufacturer": "Cloud Media",
+    "manufacturerId": "0x0200",
+    "label": "A803N",
+    "description": "Motion Sensor",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Group 1",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Group 2",
+            "maxNodes": 4,
+            "isLifeline": true
+        },
+        "3": {
+            "label": "Group 3",
+            "maxNodes": 4,
+            "isLifeline": true
+        },
+        "4": {
+            "label": "Group 4",
+            "maxNodes": 4,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Param 1",
+            "description": "Param 1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 12,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2": {
+            "label": "Param 2",
+            "description": "Param 2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "3": {
+            "label": "Param 3",
+            "description": "Param 3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "Param 4",
+            "description": "Param 4",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 15,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "5": {
+            "label": "Param 5",
+            "description": "Param 5",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "6": {
+            "label": "Param 6",
+            "description": "Param 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "7": {
+            "label": "Param 7",
+            "description": "Param 7",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "8": {
+            "label": "Param 8",
+            "description": "Param 8",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "9": {
+            "label": "Param 9",
+            "description": "Param 9",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "10": {
+            "label": "Param 10",
+            "description": "Param 10",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "11": {
+            "label": "Param 11",
+            "description": "Param 11",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "12": {
+            "label": "Param 12",
+            "description": "Param 12",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

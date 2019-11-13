@@ -1,0 +1,223 @@
+// AEON Labs ZW078
+// Heavy Duty Switch
+{
+    "_approved": true,
+    "manufacturer": "AEON Labs",
+    "manufacturerId": "0x0086",
+    "label": "ZW078",
+    "description": "Heavy Duty Switch",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x004e"
+        },
+        {
+            "productType": "0x0103",
+            "productId": "0x004e"
+        },
+        {
+            "productType": "0x0203",
+            "productId": "0x004e"
+        },
+        {
+            "productType": "0x1a03",
+            "productId": "0x004e"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Group 1",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Group 2",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "3": {
+            "label": "Current Overload Protection",
+            "description": "Load will be closed when current more that 39.5A and time more 5 seconds",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Deactivate",
+                    "value": 0
+                },
+                {
+                    "label": "Activate",
+                    "value": 1
+                }
+            ]
+        },
+        "20": {
+            "label": "Output Load Status",
+            "description": "Configure the output load status after re‐power on.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Last Status",
+                    "value": 0
+                },
+                {
+                    "label": "Always ON",
+                    "value": 1
+                },
+                {
+                    "label": "Always OFF",
+                    "value": 2
+                }
+            ]
+        },
+        "80": {
+            "label": "Notification on Status Change",
+            "description": "Send to group 1 on load change",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Deactivate",
+                    "value": 0
+                },
+                {
+                    "label": "Hail CC Sent",
+                    "value": 1
+                },
+                {
+                    "label": "Basic CC Report Sent",
+                    "value": 2
+                }
+            ]
+        },
+        "90": {
+            "label": "Send report on value change",
+            "description": "Toggle automated report sending on change",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Deavtivate",
+                    "value": 0
+                },
+                {
+                    "label": "Activate",
+                    "value": 1
+                }
+            ]
+        },
+        "91": {
+            "label": "Minimum Change to send Report (Watt)",
+            "description": "The value represents the minimum change in Wattage for a Report to be sent.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 25,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "92": {
+            "label": "Minimum Change to send Report (%)",
+            "description": "Percent change in wattage to send report",
+            "unit": "%",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "101": {
+            "label": "reports to send automatically",
+            "description": "See overview",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "102": {
+            "label": "which reports to send to group 2",
+            "description": "see overview",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 8,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "103": {
+            "label": "which reports to send to group 3",
+            "description": "see overview",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "111": {
+            "label": "Interval to send out reports of group 1",
+            "valueSize": 4,
+            "minValue": 1,
+            "maxValue": 2678400,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "112": {
+            "label": "Interval to send out reports of group 2",
+            "valueSize": 4,
+            "minValue": 1,
+            "maxValue": 2678400,
+            "defaultValue": 600,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "113": {
+            "label": "Interval to send out reports of group 3",
+            "valueSize": 4,
+            "minValue": 1,
+            "maxValue": 2678400,
+            "defaultValue": 600,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

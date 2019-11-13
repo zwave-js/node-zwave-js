@@ -1,0 +1,128 @@
+// Zooz ZSE30
+// Water Sensor
+{
+    "_approved": true,
+    "manufacturer": "Zooz",
+    "manufacturerId": "0x027a",
+    "label": "ZSE30",
+    "description": "Water Sensor",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0000"
+        },
+        {
+            "productType": "0x0003",
+            "productId": "0x0085"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Control Command",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Notification Report",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "Sensor Binary Report",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Total Alarm Duration",
+            "description": "Total duration of audio and visual alarm when water is detected.",
+            "unit": "Minutes",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 120,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2": {
+            "label": "Audio Alarm: Beep Interval",
+            "description": "Interval length between beeps",
+            "unit": "Minutes",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "3": {
+            "label": "Audio Alarm: First Beep Duration",
+            "description": "Duration of First Beep",
+            "unit": "Seconds",
+            "valueSize": 1,
+            "minValue": 10,
+            "maxValue": 255,
+            "defaultValue": 60,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "Audio Alarm: Beep Duration",
+            "description": "Beep Duration after first Beep",
+            "unit": "seconds",
+            "valueSize": 1,
+            "minValue": 5,
+            "maxValue": 255,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "5": {
+            "label": "Enable/Disable Audio Alarm",
+            "description": "Visual alarm will NOT be disabled",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "6": {
+            "label": "Enable/Disable Water Detection",
+            "description": "Enable/Disable Water Detection",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "7": {
+            "label": "Trigger Action",
+            "description": "Send command to associated device.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

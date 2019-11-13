@@ -1,0 +1,91 @@
+// Wintop WTRFID
+// Mini Keypad RFID
+{
+    "_approved": true,
+    "manufacturer": "Wintop",
+    "manufacturerId": "0x0097",
+    "label": "WTRFID",
+    "description": "Mini Keypad RFID",
+    "devices": [
+        {
+            "productType": "0x6131",
+            "productId": "0x4101"
+        },
+        {
+            "productType": "0x6131",
+            "productId": "0x4501"
+        },
+        {
+            "productType": "0x6131",
+            "productId": "0x5501"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Group1",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Set to Default",
+            "description": "Set all configuration values to default values (factory settings).",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2": {
+            "label": "Audible feedback config",
+            "description": "To configure the time the beep is automatically turned off in seconds.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 15,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "3": {
+            "label": "Feedback timeout",
+            "description": "Feedback timeout",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "Feedback beeps per Second",
+            "description": "To configure the number of beeps per second. Every beep is fixed about 10ms.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "5": {
+            "label": "Mode",
+            "description": "Configure the operating mode",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

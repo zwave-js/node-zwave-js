@@ -1,0 +1,76 @@
+// Everspring AN158
+// Switch Meter Plugin
+{
+    "_approved": true,
+    "manufacturer": "Everspring",
+    "manufacturerId": "0x0060",
+    "label": "AN158",
+    "description": "Switch Meter Plugin",
+    "devices": [
+        {
+            "productType": "0x0004",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Reports",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Control",
+            "maxNodes": 4,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "True Period",
+            "description": "Time of switching status to send status message",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 254,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2": {
+            "label": "Send Out Basic Command",
+            "description": "Enable or Disable the status message function",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Meter Report Period",
+            "description": "Autoreporting meter value interval",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 3240,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

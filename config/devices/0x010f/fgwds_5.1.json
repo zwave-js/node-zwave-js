@@ -1,0 +1,485 @@
+// Fibargroup FGWDS
+// WALLI SWITCH FIBARO SINGLE SWITCH
+{
+    "_approved": true,
+    "_warnings": [
+        "No channels have been assigned even though there are user configurable command classes."
+    ],
+    "manufacturer": "Fibargroup",
+    "manufacturerId": "0x010f",
+    "label": "FGWDS",
+    "description": "WALLI SWITCH FIBARO SINGLE SWITCH",
+    "devices": [
+        {
+            "productType": "0x1a01",
+            "productId": "0x1000"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "5.1",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "“Lifeline” reports the device status",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "1st channel On/Off",
+            "description": "(uses Basic command class).",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "1st channel dimmer",
+            "description": "(uses Switch Multilevel command class).",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "2nd channel On/Off",
+            "description": "(uses Basic command class).",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "5": {
+            "label": "2nd channel dimmer",
+            "description": "(uses Switch Multilevel command class).",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Remember device state",
+            "description": "Remember device state",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2": {
+            "label": "First channel – overload safety switch",
+            "description": "First channel – overload safety switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "3": {
+            "label": "Second channel – overload safety switch",
+            "description": "Second channel – overload safety switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 36200,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "10": {
+            "label": "LED frame – power limit",
+            "description": "LED frame – power limit",
+            "valueSize": 4,
+            "minValue": 500,
+            "maxValue": 36800,
+            "defaultValue": 36800,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "11": {
+            "label": "LED frame – colour when ON",
+            "description": "LED frame – colour when ON",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 9,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "12": {
+            "label": "LED frame – colour when OFF",
+            "description": "LED frame – colour when OFF",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "13": {
+            "label": "LED frame – brightness",
+            "description": "LED frame – brightness",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 102,
+            "defaultValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "20": {
+            "label": "Buttons operation",
+            "description": "Buttons operation",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "24": {
+            "label": "Buttons orientation",
+            "description": "Buttons orientation",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "25": {
+            "label": "Outputs orientation",
+            "description": "Outputs orientation",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "30": {
+            "label": "Alarm configuration - 1st slot",
+            "description": "Alarm configuration - 1st slot",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "31": {
+            "label": "Alarm configuration - 2nd slot",
+            "description": "Alarm configuration - 2nd slot",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "32": {
+            "label": "Alarm configuration - 3rd slot",
+            "description": "Alarm configuration - 3rd slot",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "33": {
+            "label": "Alarm configuration - 4th slot",
+            "description": "Alarm configuration - 4th slot",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "34": {
+            "label": "Alarm configuration - 5th slot",
+            "description": "Alarm configuration - 5th slot",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "35": {
+            "label": "Alarm configuration – duration",
+            "description": "Alarm configuration – duration",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32400,
+            "defaultValue": 32400,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "40": {
+            "label": "First button – scenes sent",
+            "description": "First button – scenes sent",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 8,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "41": {
+            "label": "Second button – scenes sent",
+            "description": "Second button – scenes sent",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 8,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "60": {
+            "label": "Power reports – include self-consumption",
+            "description": "Power reports – include self-consumption",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "61": {
+            "label": "Power reports for first channel – on change",
+            "description": "Power reports for first channel – on change",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 500,
+            "defaultValue": 500,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "62": {
+            "label": "Power reports for first channel – periodic",
+            "description": "Power reports for first channel – periodic",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32400,
+            "defaultValue": 32400,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "63": {
+            "label": "Power reports for second channel – on change",
+            "description": "Power reports for second channel – on change",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 500,
+            "defaultValue": 500,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "64": {
+            "label": "Power reports for second channel – periodic",
+            "description": "Power reports for second channel – periodic",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32400,
+            "defaultValue": 32400,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "65": {
+            "label": "Energy reports for first channel – on change",
+            "description": "Energy reports for first channel – on change",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 500,
+            "defaultValue": 500,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "66": {
+            "label": "Energy reports for first channel – periodic",
+            "description": "Energy reports for first channel – periodic",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32400,
+            "defaultValue": 32400,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "67": {
+            "label": "Energy reports for second channel – on change",
+            "description": "Energy reports for second channel – on change",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 500,
+            "defaultValue": 500,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "68": {
+            "label": "Energy reports for second channel – periodic",
+            "description": "Energy reports for second channel – periodic",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32400,
+            "defaultValue": 32400,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "150": {
+            "label": "First channel – operating mode",
+            "description": "First channel – operating mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "151": {
+            "label": "Second channel – operating mode",
+            "description": "Second channel – operating mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "152": {
+            "label": "chan1reactdelayedoff",
+            "description": "First channel - reaction to switch for delayed OFF / pulse modes",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "153": {
+            "label": "chan2reactdelayedoff",
+            "description": "Second channel - reaction to switch for delayed OFF / pulse modes",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "154": {
+            "label": "chan1timedelayedoff",
+            "description": "First channel - time parameter for delayed OFF / pulse modes",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "defaultValue": 32000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "155": {
+            "label": "chan2timedelayedoff",
+            "description": "Second channel - time parameter for delayed OFF / pulse modes",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "defaultValue": 32000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "156": {
+            "label": "chan1onsent23assgp",
+            "description": "First channel – Switch ON value sent to 2nd and 3rd association groups",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "157": {
+            "label": "chan1offsent23assgp",
+            "description": "First channel – Switch OFF value sent to 2nd and 3rd association groups",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "158": {
+            "label": "chan1doclicsent23assgp",
+            "description": "First channel – Double Click value sent to 2nd and 3rd association groups",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "159": {
+            "label": "chan2onsent45assgp",
+            "description": "Second channel – Switch ON value sent to 4th and 5th association groups",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "160": {
+            "label": "chan2offsent45assgp",
+            "description": "Second channel – Switch OFF value sent to 4th and 5th association groups",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "161": {
+            "label": "chan2doclicsent23assgp",
+            "description": "Second channel – Double Click value sent to 4th and 5th association groups",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

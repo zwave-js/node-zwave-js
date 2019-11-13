@@ -1,0 +1,339 @@
+// Radio Thermostat Company of America (RTC) CT200
+// Vivint Element Thermostat w/ other sensors
+{
+    "_approved": true,
+    "manufacturer": "Radio Thermostat Company of America (RTC)",
+    "manufacturerId": "0x0098",
+    "label": "CT200",
+    "description": "Vivint Element Thermostat w/ other sensors",
+    "devices": [
+        {
+            "productType": "0xc801",
+            "productId": "0x001d"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 2,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Temperature Reporting Threshold (8-bit)",
+            "description": "This value determines the reporting threshold",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "0.5 degrees F",
+                    "value": 2
+                },
+                {
+                    "label": "1.0 degrees F",
+                    "value": 3
+                },
+                {
+                    "label": "1.5 degrees F",
+                    "value": 4
+                }
+            ]
+        },
+        "2": {
+            "label": "HVAC Settings",
+            "description": "Retrieves the HVAC Settings",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "3": {
+            "label": "Utility Lock",
+            "description": "Enable or Disable the Utility Lock",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "C-Wire/Battery Status",
+            "description": "Query power which source is in use",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Powered by C-Wire",
+                    "value": 1
+                },
+                {
+                    "label": "Powered by battery",
+                    "value": 2
+                }
+            ]
+        },
+        "5": {
+            "label": "Humidity Reporting Threshold",
+            "description": "This value determines the reporting threshold",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "6": {
+            "label": "Auxiliary/Emergency",
+            "description": "Auxiliary / Emergency Heat Pump Mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "7": {
+            "label": "Thermostat Swing Temp",
+            "description": "Temperature spread between the on and off temperatures",
+            "unit": "degrees Fahrenheit",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 8,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "0.5 degrees Fahrenheit",
+                    "value": 1
+                },
+                {
+                    "label": "1.0 degrees Fahrenheit",
+                    "value": 2
+                },
+                {
+                    "label": "1.5 degrees Fahrenheit",
+                    "value": 3
+                },
+                {
+                    "label": "2.0 degrees Fahrenheit",
+                    "value": 4
+                },
+                {
+                    "label": "2.5 degrees Fahrenheit",
+                    "value": 5
+                },
+                {
+                    "label": "3.0 degrees Fahrenheit",
+                    "value": 6
+                },
+                {
+                    "label": "3.5 degrees Fahrenheit",
+                    "value": 7
+                },
+                {
+                    "label": "4.0 degrees Fahrenheit",
+                    "value": 8
+                }
+            ]
+        },
+        "8": {
+            "label": "Thermostat Diff Temp",
+            "description": "How far off from target temp before turning on unit",
+            "valueSize": 1,
+            "minValue": 4,
+            "maxValue": 12,
+            "defaultValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "2.0 degrees Fahrenheit",
+                    "value": 4
+                },
+                {
+                    "label": "3.0 degrees Fahrenheit",
+                    "value": 6
+                },
+                {
+                    "label": "4.0 degrees Fahrenheit",
+                    "value": 8
+                },
+                {
+                    "label": "5.0 degrees Fahrenheit",
+                    "value": 10
+                },
+                {
+                    "label": "6.0 degrees Fahrenheit",
+                    "value": 12
+                }
+            ]
+        },
+        "9": {
+            "label": "Thermostat Recovery Mode",
+            "description": "Bring a space back to a normal occupied temp",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 2,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Fast Recovery Mode",
+                    "value": 1
+                },
+                {
+                    "label": "Economy Recovery Mode",
+                    "value": 2
+                }
+            ]
+        },
+        "11": {
+            "label": "Simple UI Mode",
+            "description": "Toggle Simple UI Mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "12": {
+            "label": "Multicast",
+            "description": "Toggle Multicast Mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "13": {
+            "label": "Main Display Selection",
+            "description": "Control which info is displayed in the main display area",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Show Temperature",
+                    "value": 1
+                },
+                {
+                    "label": "Show (unknown)",
+                    "value": 2
+                }
+            ]
+        },
+        "14": {
+            "label": "Save Energy Mode Type",
+            "description": "Save Energy Mode behavior",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "15": {
+            "label": "Fan Timer",
+            "description": "Activate Fan w/ auto shutoff timer",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 60,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "17": {
+            "label": "Temperature Calibration",
+            "description": "Temperature Calibration / Offset",
+            "valueSize": 1,
+            "minValue": -6,
+            "maxValue": 6,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "18": {
+            "label": "Display Units",
+            "description": "Celsius or Fahrenheit",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Fahrenheit",
+                    "value": 0
+                },
+                {
+                    "label": "Celcius",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,54 @@
+// Wenzhou MTLC Electric Appliances Co.,Ltd. ZWN-BPC-PLUS
+// PIR Sensor
+{
+    "_approved": true,
+    "manufacturer": "Wenzhou MTLC Electric Appliances Co.,Ltd.",
+    "manufacturerId": "0x011a",
+    "label": "ZWN-BPC-PLUS",
+    "description": "PIR Sensor",
+    "devices": [
+        {
+            "productType": "0x0601",
+            "productId": "0x0901"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "5.10",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic Report",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Notification Report",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "Basic Set",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Motion timeout",
+            "description": "Multiplier to wakeup timer interval",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 7,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

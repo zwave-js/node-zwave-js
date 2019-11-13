@@ -1,0 +1,284 @@
+// Fakro VMZ Solar z-wave plus
+// Awning Blind z-wave plus version
+{
+    "_approved": true,
+    "_warnings": [
+        "Overview information is not set",
+        "Inclusion information is not set",
+        "Exclusion information is not set"
+    ],
+    "manufacturer": "Fakro",
+    "manufacturerId": "0x0085",
+    "label": "VMZ Solar z-wave plus",
+    "description": "Awning Blind z-wave plus version",
+    "devices": [
+        {
+            "productType": "0x0006",
+            "productId": "0x0112"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "BasicRepeat",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "MultilevelRepeat",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "BasicControl",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "operating mode",
+            "description": "operating mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "manual",
+                    "value": 0
+                },
+                {
+                    "label": "semiauto",
+                    "value": 1
+                },
+                {
+                    "label": "auto",
+                    "value": 2
+                }
+            ]
+        },
+        "2": {
+            "label": "winter mode",
+            "description": "Summer/Winter mode",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "summer mode only",
+                    "value": 1
+                },
+                {
+                    "label": "winter mode",
+                    "value": 2
+                }
+            ]
+        },
+        "3": {
+            "label": "Delay time",
+            "description": "delay to auto shade",
+            "unit": "min",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 30,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "Level of sensitivity for day",
+            "description": "Level of insolation to open/close the shades",
+            "unit": "mA",
+            "valueSize": 1,
+            "minValue": 3,
+            "maxValue": 100,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "5": {
+            "label": "Temperature",
+            "description": "Temperature",
+            "unit": "C",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "6": {
+            "label": "STM active",
+            "description": "STM AutoShade active",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "no",
+                    "value": 0
+                },
+                {
+                    "label": "yes",
+                    "value": 1
+                }
+            ]
+        },
+        "13": {
+            "label": "Restore last position",
+            "description": "Restore last position",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "go down",
+                    "value": 1
+                },
+                {
+                    "label": "restore last position",
+                    "value": 2
+                }
+            ]
+        },
+        "17": {
+            "label": "Insolation level",
+            "description": "Current on autoshade solar panel",
+            "unit": "mA",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "21": {
+            "label": "Motor current",
+            "description": "Motor current",
+            "unit": "mA",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "77": {
+            "label": "CLOSE current",
+            "description": "CLOSE current",
+            "unit": "mA",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "78": {
+            "label": "OPEN current",
+            "description": "OPEN current",
+            "unit": "mA",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "79": {
+            "label": "CLOSE overload current",
+            "description": "CLOSE overload current",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "80": {
+            "label": "OPEN overload current",
+            "description": "OPEN overload current",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "99": {
+            "label": "Restore default config values",
+            "description": "Restore default config values",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 2,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "restore default config values",
+                    "value": 1
+                },
+                {
+                    "label": "user values",
+                    "value": 2
+                }
+            ]
+        },
+        "100": {
+            "label": "Autoexclude",
+            "description": "Autoexclude",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "off",
+                    "value": 1
+                },
+                {
+                    "label": "on",
+                    "value": 2
+                }
+            ]
+        }
+    }
+}

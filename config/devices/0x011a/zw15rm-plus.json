@@ -1,0 +1,62 @@
+// Wenzhou MTLC Electric Appliances Co.,Ltd. ZW15RM-PLUS
+// In-Wall Smart Meter Duplex Receptacle (15A)
+{
+    "_approved": true,
+    "manufacturer": "Wenzhou MTLC Electric Appliances Co.,Ltd.",
+    "manufacturerId": "0x011a",
+    "label": "ZW15RM-PLUS",
+    "description": "In-Wall Smart Meter Duplex Receptacle (15A)",
+    "devices": [
+        {
+            "productType": "0x0111",
+            "productId": "0x0105"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "Send device reset local notification",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "StatusReport",
+            "description": "Send basic report",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "PowerReport",
+            "description": "Send meter power report",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "ON/OFF",
+            "description": "Synchronization of outlet power and LED indicator",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Power on, LED off",
+                    "value": 0
+                },
+                {
+                    "label": "Power on, LED on",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

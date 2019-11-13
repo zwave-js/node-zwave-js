@@ -1,0 +1,43 @@
+// ABUS Security-Center GmbH & Co. KG  SHRM10000
+// Smoke detector
+{
+    "_approved": true,
+    "manufacturer": "ABUS Security-Center GmbH & Co. KG ",
+    "manufacturerId": "0x0147",
+    "label": "SHRM10000",
+    "description": "Smoke detector",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x0003"
+        },
+        {
+            "productType": "0x0400",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "Battery, Notification, Reset locally Notification, Binary report",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Root device Group (binary sensor)",
+            "description": "Binary smoke sensor via lifeline and on status Chance of smoke detection",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Root device Group (notification)",
+            "description": "smoke status as notification report and on status change of smoke detection",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    }
+}

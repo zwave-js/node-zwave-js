@@ -1,0 +1,50 @@
+// ABUS Security-Center GmbH & Co. KG  SHMK10000
+// Magnetic Contact
+{
+    "_approved": true,
+    "manufacturer": "ABUS Security-Center GmbH & Co. KG ",
+    "manufacturerId": "0x0403",
+    "label": "SHMK10000",
+    "description": "Magnetic Contact",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x0000"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Binary Sensor (Door)",
+            "description": "Binary Sensor Command Class",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Binary Sensor (Tamper)",
+            "description": "Binary Sensor Command",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "Notification 1",
+            "description": "Notification report open door or close status via Lifeline",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "5": {
+            "label": "Notification 2",
+            "description": "Binary Sensor reports the removed status of door sensor",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    }
+}

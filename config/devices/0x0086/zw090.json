@@ -1,0 +1,126 @@
+// AEON Labs ZW090
+// Z‐Stick Gen5 USB Controller
+{
+    "_approved": true,
+    "_warnings": [
+        "No channels have been assigned even though there are user configurable command classes."
+    ],
+    "manufacturer": "AEON Labs",
+    "manufacturerId": "0x0086",
+    "label": "ZW090",
+    "description": "Z‐Stick Gen5 USB Controller",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x005a"
+        },
+        {
+            "productType": "0x0101",
+            "productId": "0x005a"
+        },
+        {
+            "productType": "0x0201",
+            "productId": "0x005a"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "Z-Wave Plus Lifeline",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "81": {
+            "label": "Enable/disable the LED indicator",
+            "description": "This parameter is used to enable/disable the LED indicator.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "220": {
+            "label": "RF power level",
+            "description": "RF power level",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 10,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "242": {
+            "label": "Security network enabled",
+            "description": "Security network enabled",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "disable",
+                    "value": 0
+                },
+                {
+                    "label": "enable",
+                    "value": 1
+                }
+            ]
+        },
+        "243": {
+            "label": "Security Network Key",
+            "description": "Security Network Key",
+            "unit": "key",
+            "valueSize": 16,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "252": {
+            "label": "Lock Configuration",
+            "description": "Configuration lock.  1=enable, 0=disable",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "disable",
+                    "value": 0
+                },
+                {
+                    "label": "enable",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

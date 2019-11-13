@@ -1,0 +1,368 @@
+// AEON Labs ZW062
+// Aeon Labs Garage Door Controller  Gen5
+{
+    "_approved": true,
+    "manufacturer": "AEON Labs",
+    "manufacturerId": "0x0086",
+    "label": "ZW062",
+    "description": "Aeon Labs Garage Door Controller  Gen5",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x003e"
+        },
+        {
+            "productType": "0x0103",
+            "productId": "0x003e"
+        },
+        {
+            "productType": "0x0203",
+            "productId": "0x003e"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Group 1",
+            "description": "Position status changed",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Group 2",
+            "description": "Forward the Basic Set",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "32": {
+            "label": "Startup ringtone",
+            "description": "Configure the default startup ringtone",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 100,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "34": {
+            "label": "Sensor Calibration",
+            "description": "Perform Sensor Calibration",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Calibration not active",
+                    "value": 0
+                },
+                {
+                    "label": "Begin calibration",
+                    "value": 1
+                }
+            ]
+        },
+        "35": {
+            "label": "Calibration timout",
+            "description": "Set the timeout of all calibration steps for the Sensor.",
+            "unit": "seconds",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 60,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "36": {
+            "label": "Number of alarm musics",
+            "description": "Get the number of alarm musics",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 100,
+            "defaultValue": 1,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "39": {
+            "label": "Unknown state alarm mode",
+            "description": "Configuration alarm mode when the garage door is in \"unknown\" state",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "40": {
+            "label": "Closed alarm mode",
+            "description": "Configure the alarm mode when the garage door is in closed position.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "41": {
+            "label": "Tamper switch configuration",
+            "description": "Configuration report for the tamper switch State",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "42": {
+            "label": "Battery state",
+            "description": "Configuration report for the battery state of Sensor",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 16,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "43": {
+            "label": "Play or Pause ringtone",
+            "description": "Start playing or Stop playing the ringtone",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false
+        },
+        "44": {
+            "label": "Ringtone test volume",
+            "description": "Set volume for test of ringtone",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 10,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false
+        },
+        "45": {
+            "label": "Temperature",
+            "description": "Get the environment temperature",
+            "unit": "degrees C",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 500,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "47": {
+            "label": "Button definition",
+            "description": "Define the function of Button- or Button+.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Mode 0",
+                    "value": 0
+                },
+                {
+                    "label": "Mode 1",
+                    "value": 1
+                }
+            ]
+        },
+        "80": {
+            "label": "Door state change report type",
+            "description": "Configure the door state change report type",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 2,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Send hail CC",
+                    "value": 1
+                },
+                {
+                    "label": "Send barrier operator report CC",
+                    "value": 2
+                }
+            ]
+        },
+        "241": {
+            "label": "Pair the Sensor",
+            "description": "Pair the Sensor with Garage Door Controller",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1431655681,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Stop sensor pairing",
+                    "value": 0
+                },
+                {
+                    "label": "Start sensor pairing",
+                    "value": 1431655681
+                }
+            ]
+        },
+        "252": {
+            "label": "Lock Configuration",
+            "description": "Enable/disable configuration",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Configuration enabled",
+                    "value": 0
+                },
+                {
+                    "label": "Configuration disabled (locked)",
+                    "value": 1
+                }
+            ]
+        },
+        "37[0xff]": {
+            "label": "Disable opening alarm",
+            "description": "Disable opening alarm",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable alarm prompt",
+                    "value": 0
+                },
+                {
+                    "label": "Enable alarm prompt",
+                    "value": 1
+                }
+            ]
+        },
+        "37[0xff00]": {
+            "label": "Opening alarm volume",
+            "description": "Opening alarm volume",
+            "valueSize": 4,
+            "minValue": 1,
+            "maxValue": 10,
+            "defaultValue": 8,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "37[0xff0000]": {
+            "label": "Opening alarm choice",
+            "description": "Alarm mode when the garage door is opening",
+            "valueSize": 4,
+            "minValue": 1,
+            "maxValue": 4,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "37[0x0f000000]": {
+            "label": "Opening alarm LED mode",
+            "description": "Opening alarm LED mode",
+            "valueSize": 4,
+            "minValue": 1,
+            "maxValue": 10,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "38[0xff]": {
+            "label": "Disable closing alarm",
+            "description": "Disable closing alarm",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable alarm prompt",
+                    "value": 0
+                },
+                {
+                    "label": "Enable alarm prompt",
+                    "value": 1
+                }
+            ]
+        },
+        "38[0xff00]": {
+            "label": "Closing alarm volume",
+            "description": "Closing alarm volume",
+            "valueSize": 4,
+            "minValue": 1,
+            "maxValue": 10,
+            "defaultValue": 8,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "38[0xff0000]": {
+            "label": "Closing alarm choice",
+            "description": "Alarm mode when the garage door is closing",
+            "valueSize": 4,
+            "minValue": 1,
+            "maxValue": 4,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "38[0x0f000000]": {
+            "label": "Closing alarm LED mode",
+            "description": "Closing alarm LED mode",
+            "valueSize": 4,
+            "minValue": 1,
+            "maxValue": 10,
+            "defaultValue": 6,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

@@ -1,0 +1,739 @@
+// Fibargroup FGWDEU
+// Fibaro Walli Dimmer
+{
+    "_approved": true,
+    "manufacturer": "Fibargroup",
+    "manufacturerId": "0x010f",
+    "label": "FGWDEU",
+    "description": "Fibaro Walli Dimmer",
+    "devices": [
+        {
+            "productType": "0x010f",
+            "productId": "0x1c01"
+        },
+        {
+            "productType": "0x1c01",
+            "productId": "0x1000"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "2nd association group",
+            "description": "“On/Off” is used to turn the associated devices on/off reflecting button operation (uses Basic command class).",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "3rd association group",
+            "description": "\"Dimmer” is used to change level of associated devices reflecting button operation (uses Switch Multilevel command class).",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "0": {
+            "label": "ON/OFF mode",
+            "description": "ON/OFF mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "1": {
+            "label": "Remember device state",
+            "description": "Determines how the device will react in the event of power supply failure",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "remains switched off after restoring power",
+                    "value": 0
+                },
+                {
+                    "label": "restores remembered state after restoring power",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Overload safety switch",
+            "description": "Turn off the controlled device in case of exceeding the defined power",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 5000,
+            "defaultValue": 3500,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "10": {
+            "label": "LED frame – power limit",
+            "description": "Determines maximum active power.",
+            "valueSize": 4,
+            "minValue": 100,
+            "maxValue": 5000,
+            "defaultValue": 3500,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "11": {
+            "label": "LED frame – colour when ON",
+            "description": "This parameter defines the LED colour when the device is ON.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 9,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "LED diabled",
+                    "value": 0
+                },
+                {
+                    "label": "White",
+                    "value": 1
+                },
+                {
+                    "label": "Red",
+                    "value": 2
+                },
+                {
+                    "label": "Green",
+                    "value": 3
+                },
+                {
+                    "label": "Blue",
+                    "value": 4
+                },
+                {
+                    "label": "Yellow",
+                    "value": 5
+                },
+                {
+                    "label": "Cyan",
+                    "value": 6
+                },
+                {
+                    "label": "Magenta",
+                    "value": 7
+                },
+                {
+                    "label": "changes smoothly",
+                    "value": 8
+                },
+                {
+                    "label": "changes in steps",
+                    "value": 9
+                }
+            ]
+        },
+        "12": {
+            "label": "LED frame – colour when OFF",
+            "description": "This parameter defines the LED colour when the device is OFF.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "disabled",
+                    "value": 0
+                },
+                {
+                    "label": "White",
+                    "value": 1
+                },
+                {
+                    "label": "Red",
+                    "value": 2
+                },
+                {
+                    "label": "Green",
+                    "value": 3
+                },
+                {
+                    "label": "Blue",
+                    "value": 4
+                },
+                {
+                    "label": "Yellow",
+                    "value": 5
+                },
+                {
+                    "label": "Cyan",
+                    "value": 6
+                },
+                {
+                    "label": "Magenta",
+                    "value": 7
+                }
+            ]
+        },
+        "13": {
+            "label": "LED frame – brightness",
+            "description": "This parameter allows to adjust the LED frame brightness.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 102,
+            "defaultValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "24": {
+            "label": "Buttons orientation",
+            "description": "This parameter allows reversing the operation of the buttons.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "default (1st button brightens, 2nd button dims)",
+                    "value": 0
+                },
+                {
+                    "label": "reversed (1st button dims, 2nd button brightens)",
+                    "value": 1
+                }
+            ]
+        },
+        "35": {
+            "label": "Alarm configuration – duration",
+            "description": "defines duration of alarm sequence",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32400,
+            "defaultValue": 600,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "40": {
+            "label": "First button – scenes sent",
+            "description": "determines which actions result in sending scene IDs",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 15,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "no scenes",
+                    "value": 0
+                },
+                {
+                    "label": "Key pressed once",
+                    "value": 1
+                },
+                {
+                    "label": "Key pressed twice",
+                    "value": 2
+                },
+                {
+                    "label": "Key pressed 3 times",
+                    "value": 4
+                },
+                {
+                    "label": "Key held down and released",
+                    "value": 8
+                }
+            ]
+        },
+        "41": {
+            "label": "Second button – scenes sent",
+            "description": "determines which actions result in sending scene IDs",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 15,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "60": {
+            "label": "Power reports – include self-consumption",
+            "description": "determines whether the power measurements should include  self-consumption",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "61": {
+            "label": "Power reports – on change",
+            "description": "defines minimal change to be reported",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 500,
+            "defaultValue": 15,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "62": {
+            "label": "Power reports – periodic",
+            "description": "defines reporting interval for measured power",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32400,
+            "defaultValue": 3600,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false
+        },
+        "65": {
+            "label": "Energy reports – on change",
+            "description": "defines minimal change to be reported",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 500,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "66": {
+            "label": "Energy reports – periodic",
+            "description": "defines reporting interval for measured energy",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32400,
+            "defaultValue": 3600,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "150": {
+            "label": "Minimum brightness level",
+            "description": "Minimum brightness level - initialised at calibration",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 98,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "151": {
+            "label": "Maximum brightness level",
+            "description": "Maximum brightness level - initalised at calibration",
+            "valueSize": 1,
+            "minValue": 2,
+            "maxValue": 99,
+            "defaultValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "152": {
+            "label": "Incandescence level of compact fluorescent lamps",
+            "description": "Incandescence level of dimmable compact fluorescent lamps",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "153": {
+            "label": "Incandescence time of compact fluorescent lamps",
+            "description": "Incandescence time of dimmable compact fluorescent lamps",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "154": {
+            "label": "Automatic control – dimming step size",
+            "description": "defines the percentage value of dimming step",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "155": {
+            "label": "Automatic control – time of dimming step",
+            "description": "Automatic control – time of dimming step",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "156": {
+            "label": "Manual control – dimming step size",
+            "description": "Manual control – dimming step size",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "157": {
+            "label": "Manual control – time of dimming step",
+            "description": "Manual control – time of dimming step",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "158": {
+            "label": "Auto-off functionality",
+            "description": "Auto-off functionality",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32767,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "159": {
+            "label": "Force auto-calibration",
+            "description": "Force auto-calibration",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "160": {
+            "label": "Auto-calibration status (read-only)",
+            "description": "Auto-calibration status (read-only parameter)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "161": {
+            "label": "Burnt out bulb detection",
+            "description": "Burnt out bulb detection",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "162": {
+            "label": "Delay of a burnt out bulb and overload detection",
+            "description": "Time delay of a burnt out bulb and overload detection",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "163": {
+            "label": "1st button ON value sent to association groups",
+            "description": "First button – Switch ON value sent to 2nd and 3rd association groups",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "164": {
+            "label": "2nd button OFF value sent to association groups",
+            "description": "Second button – Switch OFF value sent to 2nd and 3rd association groups",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "165": {
+            "label": "Double click – set level",
+            "description": "Double click – set level",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "170": {
+            "label": "Load control mode",
+            "description": "Load control mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "forced leading edge",
+                    "value": 0
+                },
+                {
+                    "label": "forced trailing edge",
+                    "value": 1
+                },
+                {
+                    "label": "control mode selected automatically",
+                    "value": 2
+                }
+            ]
+        },
+        "171": {
+            "label": "Load control mode recognized",
+            "description": "Load control mode recognized during auto-calibration",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "173": {
+            "label": "Dimmability of the load (read only)",
+            "description": "Dimmability of the load (read only)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "174": {
+            "label": "Soft-start functionality",
+            "description": "Soft-start functionality",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "no soft-start",
+                    "value": 0
+                },
+                {
+                    "label": "short soft-start (0.1s)",
+                    "value": 1
+                },
+                {
+                    "label": "long soft-start (0.5s)",
+                    "value": 2
+                }
+            ]
+        },
+        "175": {
+            "label": "Auto-calibration after power on",
+            "description": "Auto-calibration after power on",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "no auto-calibration after power on",
+                    "value": 0
+                },
+                {
+                    "label": "Auto-calibration after each power on",
+                    "value": 1
+                },
+                {
+                    "label": "Auto-calibration after each LOAD ERROR",
+                    "value": 2
+                },
+                {
+                    "label": "Auto-calibratie after each power on or LOAD ERROR",
+                    "value": 4
+                }
+            ]
+        },
+        "176": {
+            "label": "Behaviour after OVERCURRENT or SURGE",
+            "description": "Behaviour after OVERCURRENT or SURGE",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "permanently disabled",
+                    "value": 0
+                },
+                {
+                    "label": "three attempts to turn on the load",
+                    "value": 1
+                }
+            ]
+        },
+        "177": {
+            "label": "Brightness level correction flickering",
+            "description": "Brightness level correction for flickering loads",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "178": {
+            "label": "Method of calculating the active power",
+            "description": "Method of calculating the active power",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "standard algorithm",
+                    "value": 0
+                },
+                {
+                    "label": "approximation / calibration data",
+                    "value": 1
+                },
+                {
+                    "label": "approximation / control angle",
+                    "value": 2
+                }
+            ]
+        },
+        "179": {
+            "label": "Approximated power at max brightness",
+            "description": "Approximated power at the maximum brightness level",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 500,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "30[0x0f]": {
+            "label": "Alarm configuration - 1st slot",
+            "description": "determines to which alarm frames and how the device should react",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "31[0x0f]": {
+            "label": "Alarm configuration - 2nd slot",
+            "description": "determines to which alarm frames and how the device should react",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "32[0x0f]": {
+            "label": "Alarm configuration - 3rd slot",
+            "description": "determines to which alarm frames and how the device should react",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "33[0x0f]": {
+            "label": "Alarm configuration - 4th slot",
+            "description": "determines to which alarm frames and how the device should react",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "34[0x0f]": {
+            "label": "Alarm configuration - 5th slot",
+            "description": "determines to which alarm frames and how the device should react",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

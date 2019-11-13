@@ -1,0 +1,372 @@
+// Radio Thermostat Company of America (RTC) CT110
+// Thermostat
+{
+    "_approved": true,
+    "manufacturer": "Radio Thermostat Company of America (RTC)",
+    "manufacturerId": "0x0098",
+    "label": "CT110",
+    "description": "Thermostat",
+    "devices": [
+        {
+            "productType": "0x6e01",
+            "productId": "0x0100"
+        },
+        {
+            "productType": "0x6e02",
+            "productId": "0x0101"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 2,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Temperature Reporting Threshold",
+            "description": "Temperature Reporting Threshold",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "3": {
+            "label": "Utility Lock",
+            "description": "Utility Lock",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 255
+                }
+            ]
+        },
+        "4": {
+            "label": "C-Wire/Battery",
+            "description": "C-Wire/Battery",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "C-Wire",
+                    "value": 1
+                },
+                {
+                    "label": "Battery",
+                    "value": 2
+                }
+            ]
+        },
+        "5": {
+            "label": "Humidity Reporting Threshold",
+            "description": "Humidity Reporting Threshold",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "3% RH",
+                    "value": 1
+                },
+                {
+                    "label": "5% RH",
+                    "value": 2
+                },
+                {
+                    "label": "10% RH",
+                    "value": 3
+                }
+            ]
+        },
+        "6": {
+            "label": "Auxiliary/Emergency Mode",
+            "description": "Auxiliary/Emergency Mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "7": {
+            "label": "Thermostat Swing Temperature",
+            "description": "Thermostat Swing Temperature",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 8,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "0.5ºF",
+                    "value": 1
+                },
+                {
+                    "label": "1.0ºF",
+                    "value": 2
+                },
+                {
+                    "label": "1.5ºF",
+                    "value": 3
+                },
+                {
+                    "label": "2.0ºF",
+                    "value": 4
+                },
+                {
+                    "label": "2.5ºF",
+                    "value": 5
+                },
+                {
+                    "label": "3.0ºF",
+                    "value": 6
+                },
+                {
+                    "label": "3.5ºF",
+                    "value": 7
+                },
+                {
+                    "label": "4.0ºF",
+                    "value": 8
+                }
+            ]
+        },
+        "9": {
+            "label": "Thermostat Recovery Mode",
+            "description": "Thermostat Recovery Mode",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 2,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Fast",
+                    "value": 1
+                },
+                {
+                    "label": "Economy",
+                    "value": 2
+                }
+            ]
+        },
+        "11": {
+            "label": "Simple UI Mode",
+            "description": "Simple UI Mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Normal Mode",
+                    "value": 0
+                },
+                {
+                    "label": "Simple Mode",
+                    "value": 1
+                }
+            ]
+        },
+        "12": {
+            "label": "Multicast",
+            "description": "Multicast",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "13": {
+            "label": "Main Display Settings",
+            "description": "Main Display Settings",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Temperature",
+                    "value": 1
+                },
+                {
+                    "label": "Humidity",
+                    "value": 2
+                }
+            ]
+        },
+        "14": {
+            "label": "Save Energy Mode Type",
+            "description": "Save Energy Mode Type",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2[0xff]": {
+            "label": "HVAC Type",
+            "description": "HVAC Type",
+            "valueSize": 4,
+            "minValue": 1,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Normal",
+                    "value": 1
+                },
+                {
+                    "label": "Heat Pump",
+                    "value": 2
+                }
+            ]
+        },
+        "2[0x0f00]": {
+            "label": "# of Auxiliary Stages",
+            "description": "# of Auxiliary Stages",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 64,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2[0xf000]": {
+            "label": "Fuel Type",
+            "description": "Fuel Type",
+            "valueSize": 4,
+            "minValue": 1,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Gas",
+                    "value": 1
+                },
+                {
+                    "label": "Electric",
+                    "value": 2
+                }
+            ]
+        },
+        "2[0xff0000]": {
+            "label": "# of Heat Pump Stages.",
+            "description": "# of Heat Pump Stages.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 128,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2[0x0f000000]": {
+            "label": "# of Cool Stages.",
+            "description": "# of Cool Stages.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 64,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "10[0xffff]": {
+            "label": "Temperature Reporting Filter (lower bound)",
+            "description": "Temperature Reporting Filter (lower bound)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 124,
+            "defaultValue": 124,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "10[0x0fff0000]": {
+            "label": "Temperature Reporting Filter  (upper bound)",
+            "description": "Temperature Reporting Filter  (upper bound)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 124,
+            "defaultValue": 124,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

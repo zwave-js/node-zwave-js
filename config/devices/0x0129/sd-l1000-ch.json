@@ -1,0 +1,113 @@
+// ASSA ABLOY SD-L1000-CH
+// Yale Conexis L1
+{
+    "_approved": true,
+    "manufacturer": "ASSA ABLOY",
+    "manufacturerId": "0x0129",
+    "label": "SD-L1000-CH",
+    "description": "Yale Conexis L1",
+    "devices": [
+        {
+            "productType": "0x0066",
+            "productId": "0x0000"
+        },
+        {
+            "productType": "0x6600",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "Z-Wave Plus Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Volume",
+            "description": "Beep volume",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 3,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Silent",
+                    "value": 1
+                },
+                {
+                    "label": "Low",
+                    "value": 2
+                },
+                {
+                    "label": "High",
+                    "value": 3
+                }
+            ]
+        },
+        "2": {
+            "label": "Auto Re-lock",
+            "description": "The lock will re-lock automatically if untouched for the timeout",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "On",
+                    "value": 255
+                }
+            ]
+        },
+        "3": {
+            "label": "Re-lock time",
+            "description": "The amount of time which the lock will wait before re-locking",
+            "unit": "seconds",
+            "valueSize": 1,
+            "minValue": 7,
+            "maxValue": 60,
+            "defaultValue": 30,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "Wrong tag limit",
+            "description": "Number of wrong tags that can be tried before stand-down",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 20,
+            "defaultValue": 20,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "7": {
+            "label": "Wrong tag timeout",
+            "description": "Time after the wrong tag limit being exceeded before re-trying",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 250,
+            "defaultValue": 250,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

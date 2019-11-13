@@ -1,0 +1,26 @@
+// Leak Intelligence, LLC LGZW
+// Water Valve Control
+{
+    "_approved": true,
+    "manufacturer": "Leak Intelligence, LLC",
+    "manufacturerId": "0x0173",
+    "label": "LGZW",
+    "description": "Water Valve Control",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 4,
+            "isLifeline": true
+        }
+    }
+}

@@ -1,0 +1,564 @@
+// Zipato PSP02
+// Door/temp/illumination/motion sensor
+{
+    "_approved": true,
+    "manufacturer": "Zipato",
+    "manufacturerId": "0x0131",
+    "label": "PSP02",
+    "description": "Door/temp/illumination/motion sensor",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x000c"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Reports target.",
+            "description": "group to send reports to",
+            "maxNodes": 8,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic Set target",
+            "description": "group to send Basic Set light commands to",
+            "maxNodes": 8,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Basic Set Level",
+            "description": "Basic command to turn on the light",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "On",
+                    "value": 255
+                }
+            ]
+        },
+        "3": {
+            "label": "PIR Sensitivity",
+            "description": "setting",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 80,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "4": {
+            "label": "Light Threshold",
+            "description": "setting",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "20": {
+            "label": "tick duration",
+            "description": "auto-reports tick duration",
+            "unit": "s",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 30,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "5[0x02]": {
+            "label": "Operation mode",
+            "description": "set test mode if DIP switch in customer mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Normal mode",
+                    "value": 0
+                },
+                {
+                    "label": "test mode",
+                    "value": 2
+                }
+            ]
+        },
+        "5[0x04]": {
+            "label": "disable the door/window function",
+            "description": "Disable/Enable the function",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "enable the door/window function",
+                    "value": 0
+                },
+                {
+                    "label": "disable the door/window function",
+                    "value": 1
+                }
+            ]
+        },
+        "5[0x08]": {
+            "label": "temperature unit",
+            "description": "set the temperature unit",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 8,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Fahrenheit",
+                    "value": 0
+                },
+                {
+                    "label": "Celsius",
+                    "value": 8
+                }
+            ]
+        },
+        "5[0x10]": {
+            "label": "Disable illumination reports",
+            "description": "toggle illumination reports",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 16,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "enable",
+                    "value": 0
+                },
+                {
+                    "label": "disable",
+                    "value": 16
+                }
+            ]
+        },
+        "5[0x20]": {
+            "label": "Disable temperature reports",
+            "description": "Disable/enable temperature reports",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 32,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "enable",
+                    "value": 0
+                },
+                {
+                    "label": "disable",
+                    "value": 32
+                }
+            ]
+        },
+        "5[0x80]": {
+            "label": "back key release action",
+            "description": "Disable/enable the back key release into test mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 128,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "enable",
+                    "value": 0
+                },
+                {
+                    "label": "disable",
+                    "value": 128
+                }
+            ]
+        },
+        "6[0x01]": {
+            "label": "magnetic integration for lighting control",
+            "description": "switch control",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "enable",
+                    "value": 0
+                },
+                {
+                    "label": "disable",
+                    "value": 1
+                }
+            ]
+        },
+        "6[0x02]": {
+            "label": "PIR integration to control lighting",
+            "description": "PIR integration",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "enable",
+                    "value": 0
+                },
+                {
+                    "label": "disable",
+                    "value": 2
+                }
+            ]
+        },
+        "6[0x04]": {
+            "label": "magetic/pir integration",
+            "description": "control lighting in association group 2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "enable",
+                    "value": 0
+                },
+                {
+                    "label": "disable",
+                    "value": 4
+                }
+            ]
+        },
+        "6[0x08]": {
+            "label": "device and lighting in same room",
+            "description": "device and lighting in same room",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 8,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "same room",
+                    "value": 0
+                },
+                {
+                    "label": "different rooms",
+                    "value": 8
+                }
+            ]
+        },
+        "6[0x10]": {
+            "label": "disable delay to turn off the light",
+            "description": "disable/enable delay",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 16,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "enable",
+                    "value": 0
+                },
+                {
+                    "label": "disable",
+                    "value": 16
+                }
+            ]
+        },
+        "6[0x20]": {
+            "label": "light off control",
+            "description": "disable/enable auto turn off the light",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 32,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "enable",
+                    "value": 0
+                },
+                {
+                    "label": "disable",
+                    "value": 32
+                }
+            ]
+        },
+        "7[0x02]": {
+            "label": "motion off report",
+            "description": "enable motion OFF report",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "disable",
+                    "value": 0
+                },
+                {
+                    "label": "enable",
+                    "value": 2
+                }
+            ]
+        },
+        "7[0x04]": {
+            "label": "PIR super-sensitivity",
+            "description": "enable PIR super-sensitivity",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "disable",
+                    "value": 0
+                },
+                {
+                    "label": "enable",
+                    "value": 4
+                }
+            ]
+        },
+        "7[0x08]": {
+            "label": "BASIC OFF report",
+            "description": "Disable/enable report after door closed",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 8,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "enable",
+                    "value": 0
+                },
+                {
+                    "label": "disable",
+                    "value": 8
+                }
+            ]
+        },
+        "7[0x10]": {
+            "label": "door closed report type",
+            "description": "notification or sensor binary report",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 16,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "notification report",
+                    "value": 0
+                },
+                {
+                    "label": "sensor binary report",
+                    "value": 16
+                }
+            ]
+        },
+        "7[0x20]": {
+            "label": "multi CC in auto report",
+            "description": "disable/enable multi CC in report",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 32,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "enable",
+                    "value": 0
+                },
+                {
+                    "label": "disable",
+                    "value": 32
+                }
+            ]
+        },
+        "7[0x40]": {
+            "label": "Battery state reports",
+            "description": "disable/enable battery state reports",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 64,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "enable",
+                    "value": 0
+                },
+                {
+                    "label": "disable",
+                    "value": 64
+                }
+            ]
+        },
+        "8[0x7f]": {
+            "label": "PIR motion re-trigger min interval",
+            "description": "PIR motion re-trigger min interval",
+            "unit": "8s ticks",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "9[0x7f]": {
+            "label": "Light on time hysteresis",
+            "description": "time to keep the light on without motion",
+            "unit": "8s ticks",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "10[0x7f]": {
+            "label": "battery level auto-report interval",
+            "description": "battery level auto-report interval",
+            "unit": "ticks",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 12,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "11[0x7f]": {
+            "label": "door state report interval",
+            "description": "door state report interval",
+            "unit": "ticks",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 12,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "12[0x7f]": {
+            "label": "illumination auto report interval",
+            "description": "illumination auto report interval",
+            "unit": "ticks",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 12,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "13[0x7f]": {
+            "label": "temperature report interval",
+            "description": "temperature report interval",
+            "unit": "ticks",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 12,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "21[0x7f]": {
+            "label": "temperature differential to report",
+            "description": "temperature differential to report",
+            "unit": "Fahrenheit",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "22[0x3f]": {
+            "label": "min illumination differential",
+            "description": "min illumination differential to report",
+            "unit": "percent",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 63,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

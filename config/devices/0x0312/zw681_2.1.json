@@ -1,0 +1,31 @@
+// NIE Technology ZW681
+// Smart Plug with Energy Meter
+{
+    "_approved": true,
+    "manufacturer": "NIE Technology",
+    "manufacturerId": "0x0312",
+    "label": "ZW681",
+    "description": "Smart Plug with Energy Meter",
+    "devices": [
+        {
+            "productType": "0xc001",
+            "productId": "0xc002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "2.1",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "BASIC SET",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    }
+}

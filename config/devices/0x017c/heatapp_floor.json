@@ -1,0 +1,58 @@
+// EbV heatapp! floor
+// heatapp! floor is a controller for thermal actuators in underfloor heating installations and is part of the heatapp! system, providing individual circ
+{
+    "_approved": true,
+    "manufacturer": "EbV",
+    "manufacturerId": "0x017c",
+    "label": "heatapp! floor",
+    "description": "heatapp! floor is a controller for thermal actuators in underfloor heating installations and is part of the heatapp! system, providing individual circ",
+    "devices": [
+        {
+            "productType": "0x0006",
+            "productId": "0x0003"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Missing Radio Link time",
+            "description": "Missing Radio Link time",
+            "unit": "minutes",
+            "valueSize": 1,
+            "minValue": 10,
+            "maxValue": 240,
+            "defaultValue": 30,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2": {
+            "label": "Relay type",
+            "description": "0 normal open, 1 normal close, 2 switching",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Normal open",
+                    "value": 0
+                },
+                {
+                    "label": "Normal close",
+                    "value": 1
+                },
+                {
+                    "label": "Switching",
+                    "value": 2
+                }
+            ]
+        }
+    }
+}

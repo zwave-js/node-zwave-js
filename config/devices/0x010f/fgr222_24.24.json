@@ -1,0 +1,410 @@
+// Fibargroup FGR222
+// Roller Shutter 2
+{
+    "_approved": true,
+    "manufacturer": "Fibargroup",
+    "manufacturerId": "0x010f",
+    "label": "FGR222",
+    "description": "Roller Shutter 2",
+    "devices": [
+        {
+            "productType": "0x0301",
+            "productId": "0x1001"
+        },
+        {
+            "productType": "0x0302",
+            "productId": "0x1000"
+        },
+        {
+            "productType": "0x0302",
+            "productId": "0x3000"
+        },
+        {
+            "productType": "0x0302",
+            "productId": "0x4000"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "24.24",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Momentary click",
+            "maxNodes": 16,
+            "isLifeline": false
+        },
+        "2": {
+            "label": "Momentary hold",
+            "maxNodes": 16,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Controller Updates",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "3": {
+            "label": "Reports type",
+            "description": "value should be set to 1 if the module operates in Venetian Blind mode.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Blind position using Z-Wave Command",
+                    "value": 0
+                },
+                {
+                    "label": "Blind position via Fibar Command",
+                    "value": 1
+                }
+            ]
+        },
+        "10": {
+            "label": "Roller Shutter operating modes",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Roller Blind Mode, without positioning",
+                    "value": 0
+                },
+                {
+                    "label": "Roller Blind Mode, with positioning",
+                    "value": 1
+                },
+                {
+                    "label": "Venetian Blind Mode, with positioning",
+                    "value": 2
+                },
+                {
+                    "label": "Gate Mode, without positioning",
+                    "value": 3
+                },
+                {
+                    "label": "Gate Mode, with positioning",
+                    "value": 4
+                }
+            ]
+        },
+        "12": {
+            "label": "Turning time/ delay time",
+            "description": "depending on mode, turning time or delay time",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 150,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "13": {
+            "label": "Lamellas positioning mode",
+            "description": "Parameter influences the lamellas positioning in venetian blind mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "only in case of the main controller operation",
+                    "value": 0
+                },
+                {
+                    "label": "default - controller+switchlimit",
+                    "value": 1
+                },
+                {
+                    "label": "like 1 + STOP control frame",
+                    "value": 2
+                }
+            ]
+        },
+        "14": {
+            "label": "Switch type",
+            "description": "either Toggle switches or a single, momentary switch.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Momentary switches",
+                    "value": 0
+                },
+                {
+                    "label": "Toggle switches",
+                    "value": 1
+                },
+                {
+                    "label": "Single, momentary switch.",
+                    "value": 2
+                }
+            ]
+        },
+        "17": {
+            "label": "Delay time after S2",
+            "description": "delay till auto turned off or auto gate close",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "18": {
+            "label": "Motor operation detection",
+            "description": "Power threshold to be interpreted as reaching a limit switch.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "22": {
+            "label": "Motor operation time",
+            "description": "Time period for the motor to continue operation.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "29": {
+            "label": "Forced Roller Shutter calibration",
+            "description": "set to 1 will enter calibration mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Deactivated",
+                    "value": 0
+                },
+                {
+                    "label": "Start calibration process",
+                    "value": 1
+                }
+            ]
+        },
+        "30": {
+            "label": "Response to General Alarm",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No response to alarm frames",
+                    "value": 0
+                },
+                {
+                    "label": "Open Blind",
+                    "value": 1
+                },
+                {
+                    "label": "Close Blind",
+                    "value": 2
+                }
+            ]
+        },
+        "31": {
+            "label": "Response to Water Flood Alarm",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No response to alarm frames",
+                    "value": 0
+                },
+                {
+                    "label": "Open Blind",
+                    "value": 1
+                },
+                {
+                    "label": "Close Blind",
+                    "value": 2
+                }
+            ]
+        },
+        "32": {
+            "label": "Response to Smoke, CO, CO2 Alarm",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No response to alarm frames",
+                    "value": 0
+                },
+                {
+                    "label": "Open Blind",
+                    "value": 1
+                },
+                {
+                    "label": "Close Blind",
+                    "value": 2
+                }
+            ]
+        },
+        "33": {
+            "label": "Response to Temperature Alarm",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No response to alarm frames",
+                    "value": 0
+                },
+                {
+                    "label": "Open Blind",
+                    "value": 1
+                },
+                {
+                    "label": "Close Blind",
+                    "value": 2
+                }
+            ]
+        },
+        "35": {
+            "label": "Managing lamellas in response to alarm",
+            "description": "0 no change, 1 extreme position",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Do not change lamellas position",
+                    "value": 0
+                },
+                {
+                    "label": "Set lamellas to their extreme position",
+                    "value": 1
+                }
+            ]
+        },
+        "40": {
+            "label": "Power reports",
+            "description": "change that needs to occur  to trigger the power report",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "42": {
+            "label": "Periodic power or energy reports",
+            "description": "Time to the next report. Value of 0 means the reports are turned off.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65534,
+            "defaultValue": 3600,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "43": {
+            "label": "Energy reports",
+            "description": "Energy threshold to trigger report",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 254,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "44": {
+            "label": "Self-measurement",
+            "description": "if power and energy reports are to sent to the main controller",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Activated",
+                    "value": 1
+                }
+            ]
+        },
+        "50": {
+            "label": "Scenes/ Associations activation",
+            "description": "whether scenes or associations are activated by the switch keys",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Associations Active",
+                    "value": 0
+                },
+                {
+                    "label": "Scenes Active",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

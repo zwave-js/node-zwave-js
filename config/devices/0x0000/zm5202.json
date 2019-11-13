@@ -1,0 +1,86 @@
+// Sigma Designs (Former Zensys) ZM5202
+// endpoints for dimming and on/off
+{
+    "_approved": false,
+    "_errors": [
+        "Parameter 1 has label duplicated with another parameter.",
+        "Parameter 2 has label duplicated with another parameter."
+    ],
+    "manufacturer": "Sigma Designs (Former Zensys)",
+    "manufacturerId": "0x0000",
+    "label": "ZM5202",
+    "description": "endpoints for dimming and on/off",
+    "devices": [
+        {
+            "productType": "0x0000",
+            "productId": "0x0003"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "on/off",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "off",
+                    "value": 0
+                },
+                {
+                    "label": "on",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "on/off",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "3": {
+            "label": "dimming",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "off",
+                    "value": 0
+                },
+                {
+                    "label": "dimming",
+                    "value": 0
+                },
+                {
+                    "label": "on",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

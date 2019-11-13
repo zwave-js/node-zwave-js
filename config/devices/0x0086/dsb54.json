@@ -1,0 +1,148 @@
+// AEON Labs DSB54
+// Recessed Door/Window Sensor
+{
+    "_approved": true,
+    "manufacturer": "AEON Labs",
+    "manufacturerId": "0x0086",
+    "label": "DSB54",
+    "description": "Recessed Door/Window Sensor",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x0036"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "State Updates",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Battery Warnings",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Send Sensor binary report on open/close events",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "On for opened, Off for closed",
+                    "value": 0
+                },
+                {
+                    "label": "Off for opened, On for closed",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Send Basic Set on open/close event",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "On for opened, Off for closed",
+                    "value": 0
+                },
+                {
+                    "label": "Off for opened, On for closed",
+                    "value": 1
+                }
+            ]
+        },
+        "101": {
+            "label": "Low battery voltage check",
+            "description": "Enable battery check",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "111": {
+            "label": "Low battery voltage check time",
+            "description": "Minimum battery low check Interval time is 4 minutes (240 seconds)",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 112,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "121": {
+            "label": "Flag values for triggered magnet switch",
+            "description": "Flag values for which reports to send when the magnet switch is triggered",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 256,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "252": {
+            "label": "Permit other configurations",
+            "description": "Lock or Unlock other configuration set function",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Unlock",
+                    "value": 0
+                },
+                {
+                    "label": "Lock",
+                    "value": 1
+                }
+            ]
+        },
+        "255": {
+            "label": "Reset to default",
+            "description": "Reset to the default configuration",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false
+        }
+    }
+}

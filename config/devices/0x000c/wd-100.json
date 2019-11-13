@@ -1,0 +1,75 @@
+// Dragon Tech Industrial, Ltd. WD-100
+// Wall Dimmer Switch
+{
+    "_approved": true,
+    "manufacturer": "Dragon Tech Industrial, Ltd.",
+    "manufacturerId": "0x000c",
+    "label": "WD-100",
+    "description": "Wall Dimmer Switch",
+    "devices": [
+        {
+            "productType": "0x4447",
+            "productId": "0x3034"
+        },
+        {
+            "productType": "0x4744",
+            "productId": "0x3032"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Group 1",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "4": {
+            "label": "Orientation",
+            "description": "Controls the on/off orientation of the rocker switch",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Normal",
+                    "value": 0
+                },
+                {
+                    "label": "Inverted",
+                    "value": 1
+                }
+            ]
+        },
+        "9": {
+            "label": "Dim Level Increment",
+            "description": "Indicates the number of levels (1-99) to change dimming each step",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "10": {
+            "label": "Step Duration",
+            "description": "The number of tens of milliseconds (1-255) to delay on each dimming step.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

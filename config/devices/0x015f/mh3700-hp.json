@@ -1,0 +1,28 @@
+// McoHome Technology Co., Ltd MH3700-HP
+// Programmable Thermostat
+{
+    "_approved": false,
+    "_errors": [
+        "Overview information is not set",
+        "Inclusion information is not set",
+        "Exclusion information is not set",
+        "No endpoints are configured",
+        "`Type:Id` (0000:0000) is duplicated with another device with overlapping versions. (331, 332, 333, 337)",
+        "Device category is not set.",
+        "At least one manufacturers product image must be uploaded"
+    ],
+    "manufacturer": "McoHome Technology Co., Ltd",
+    "manufacturerId": "0x015f",
+    "label": "MH3700-HP",
+    "description": "Programmable Thermostat",
+    "devices": [
+        {
+            "productType": "0x0000",
+            "productId": "0x0000"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

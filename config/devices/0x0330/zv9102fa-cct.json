@@ -1,0 +1,116 @@
+// Sunricher ZV9102FA-CCT
+// Z-wave CCT LED controller
+{
+    "_approved": true,
+    "manufacturer": "Sunricher",
+    "manufacturerId": "0x0330",
+    "label": "ZV9102FA-CCT",
+    "description": "Z-wave CCT LED controller",
+    "devices": [
+        {
+            "productType": "0x0200",
+            "productId": "0xd002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Save state on power failure",
+            "description": "Shut off load (default), turn on load or restore saved state after power failure",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "3": {
+            "label": "Enable/disable BASIC report",
+            "description": "Enable/disable sending of BASIC reports",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "Colour channels",
+            "description": "Set number of channels of LED load - single colour, CCT or RGBW",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "5": {
+            "label": "Stage mode",
+            "description": "Set stage mode for lighting changes",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "6": {
+            "label": "Stage mode speed",
+            "description": "Set speed of changes in stage mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "7": {
+            "label": "Stage mode execution time",
+            "description": "Set execution time for stage mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "8": {
+            "label": "Stage mode hue",
+            "description": "Set stage mode hue 0-255",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "9": {
+            "label": "Set external switch function",
+            "description": "Enable / disable external switch for inclusion / exclusion",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

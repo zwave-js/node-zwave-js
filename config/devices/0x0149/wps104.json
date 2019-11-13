@@ -1,0 +1,608 @@
+// wiDom WPS104
+// Energy Driven Switch
+{
+    "_approved": true,
+    "manufacturer": "wiDom",
+    "manufacturerId": "0x0149",
+    "label": "WPS104",
+    "description": "Energy Driven Switch",
+    "devices": [
+        {
+            "productType": "0x1214",
+            "productId": "0x0304"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 8,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Up Power Level Group",
+            "maxNodes": 8,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Down Power Level Group",
+            "maxNodes": 8,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Device Status",
+            "description": "How to control the relay",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "TOGGLE:ON/OFF",
+                    "value": 1
+                },
+                {
+                    "label": "ON",
+                    "value": 2
+                },
+                {
+                    "label": "OFF",
+                    "value": 3
+                },
+                {
+                    "label": "IGNORE",
+                    "value": 4
+                }
+            ]
+        },
+        "20": {
+            "label": "Device status upon receipt of a Basic Set command",
+            "description": "Device status upon receipt of a Basic Set command",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "AS_RECEIVED",
+                    "value": 1
+                },
+                {
+                    "label": "IGNORE_IF_ON",
+                    "value": 2
+                },
+                {
+                    "label": "IGNORE_IF_OFF",
+                    "value": 3
+                },
+                {
+                    "label": "IGNORE",
+                    "value": 4
+                }
+            ]
+        },
+        "30": {
+            "label": "Overcurrent Level",
+            "description": "Sets the overcurrent level",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 4500,
+            "defaultValue": 4500,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "31": {
+            "label": "Overcurrent Time",
+            "description": "Sets the time to recognize an overcurrent event.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 10800,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "32": {
+            "label": "Next State",
+            "description": "Defines the next state if an overcurrent event occurr",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "IGNORE",
+                    "value": 0
+                },
+                {
+                    "label": "ON",
+                    "value": 1
+                },
+                {
+                    "label": "OFF",
+                    "value": 2
+                },
+                {
+                    "label": "TOGGLE",
+                    "value": 3
+                }
+            ]
+        },
+        "33": {
+            "label": "Meter Reset",
+            "description": "Provides total operating time from last meter reset",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Reset Meter and time",
+                    "value": 0
+                },
+                {
+                    "label": "Greater than 0 – IGNORE",
+                    "value": 1
+                }
+            ]
+        },
+        "34": {
+            "label": "Energy flow",
+            "description": "Determines whether if energy consumed or energy produced.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "CONSUMED",
+                    "value": 1
+                },
+                {
+                    "label": "PRODUCED",
+                    "value": 2
+                }
+            ]
+        },
+        "35": {
+            "label": "UP Power Level",
+            "description": "Sets the level of instantaneous power in Watts",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 11250,
+            "defaultValue": 11250,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "36": {
+            "label": "UP Power Time",
+            "description": "Sets the time in seconds",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 10800,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "37": {
+            "label": "UP Power State",
+            "description": "Defines the next status case of a UP Power event",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "IGNORE",
+                    "value": 0
+                },
+                {
+                    "label": "ON",
+                    "value": 1
+                },
+                {
+                    "label": "OFF",
+                    "value": 2
+                },
+                {
+                    "label": "TOGGLE",
+                    "value": 3
+                }
+            ]
+        },
+        "38": {
+            "label": "UP Power Associated",
+            "description": "Defines the status of Group 2 devices",
+            "valueSize": 1,
+            "minValue": -1,
+            "maxValue": 99,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "39": {
+            "label": "DOWN Power Level",
+            "description": "Sets the level of instantaneous power in Watts",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 11250,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "40": {
+            "label": "DOWN Power Time",
+            "description": "Sets the time in seconds",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 10800,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "41": {
+            "label": "DOWN Power State",
+            "description": "Defines the next state case of a DOWN Power event",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "IGNORE",
+                    "value": 0
+                },
+                {
+                    "label": "ON",
+                    "value": 1
+                },
+                {
+                    "label": "OFF",
+                    "value": 2
+                },
+                {
+                    "label": "TOGGLE",
+                    "value": 3
+                }
+            ]
+        },
+        "42": {
+            "label": "DOWN Power Associated",
+            "description": "Defines the status of Group 3 devices",
+            "valueSize": 1,
+            "minValue": -1,
+            "maxValue": 99,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "43": {
+            "label": "Energy Level",
+            "description": "Sets the energy level in KWh",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2000000,
+            "defaultValue": 2000000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "44": {
+            "label": "Energy Limit State",
+            "description": "Defines the next state in case of Energy Limit event",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "IGNORE",
+                    "value": 0
+                },
+                {
+                    "label": "ON",
+                    "value": 1
+                },
+                {
+                    "label": "OFF",
+                    "value": 2
+                },
+                {
+                    "label": "TOGGLE",
+                    "value": 3
+                }
+            ]
+        },
+        "45": {
+            "label": "Variation Instantaneous Power",
+            "description": "Defines the percentage variation of instantaneous power",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 100,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "46": {
+            "label": "Report Time Frequency",
+            "description": "Defines the time in minutes",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 100,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "47": {
+            "label": "Variation Total Energy",
+            "description": "Defines the increase energy  to generate a report",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "IGNORE: No report provided.",
+                    "value": 0
+                },
+                {
+                    "label": "No report provided.",
+                    "value": 1
+                },
+                {
+                    "label": "Report at 1 hundredth of KWh.",
+                    "value": 2
+                },
+                {
+                    "label": "Report at 1 tenth of KWh",
+                    "value": 3
+                },
+                {
+                    "label": "Report at 1 KWh",
+                    "value": 4
+                }
+            ]
+        },
+        "48": {
+            "label": "Nominal Voltage",
+            "description": "Defines the nominal voltage value in tenths of volts",
+            "valueSize": 2,
+            "minValue": 1100,
+            "maxValue": 2500,
+            "defaultValue": 2300,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "49": {
+            "label": "Fall In Maximum Voltage",
+            "description": "Defines, the nominal value for max voltage fall permitted",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 100,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "50": {
+            "label": "Electric parameters",
+            "description": "Defines which parameters will be subjected to notification",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 62,
+            "defaultValue": 30,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "51": {
+            "label": "Voltage RMS value",
+            "description": "Reading of this parameter returns the value of voltage RMS",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "52": {
+            "label": "Current RMS value",
+            "description": "Returns the value of current RMS expressed in hundredths of Amperes.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "53": {
+            "label": "Power Factor",
+            "description": "Returns the value of power factor as a percentage",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "54": {
+            "label": "Total energy consumed",
+            "description": "Returns the value of total energy consumed expressed in Wh (thousandths of KWh).",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 4294967295,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "55": {
+            "label": "Total energy produced",
+            "description": "Returns the value of total energy consumed expressed in Wh (thousandths of KWh).",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 4294967295,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "60": {
+            "label": "Start-up status",
+            "description": "Defines the status of the device following a restart.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "ON: Device on",
+                    "value": 1
+                },
+                {
+                    "label": "OFF: Device off",
+                    "value": 2
+                },
+                {
+                    "label": "PREVIOUS STATUS: Status prior to restart",
+                    "value": 3
+                }
+            ]
+        },
+        "61": {
+            "label": "Configuration reset",
+            "description": "Defines which parameters should be reset to default values.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "FACTORY RESET",
+                    "value": 0
+                },
+                {
+                    "label": "ASSOCIATIONS RESET",
+                    "value": 1
+                },
+                {
+                    "label": "CONFIGURATIONS RESET",
+                    "value": 2
+                },
+                {
+                    "label": "IGNORE: No action is performed.",
+                    "value": 4
+                }
+            ]
+        },
+        "62": {
+            "label": "Type of external switch",
+            "description": "Defines the type of external switch connected to the device.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "IGNORE",
+                    "value": 0
+                },
+                {
+                    "label": "BUTTON",
+                    "value": 1
+                },
+                {
+                    "label": "SWITCH",
+                    "value": 2
+                },
+                {
+                    "label": "AUTOMATIC RECOGNITION",
+                    "value": 4
+                }
+            ]
+        },
+        "63": {
+            "label": "Load Control",
+            "description": "Defines the load control mode",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 4,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "DIRECT CONTROL",
+                    "value": 1
+                },
+                {
+                    "label": "CONTROL_BY_NORMALLY_OPEN_CONTACTOR",
+                    "value": 2
+                },
+                {
+                    "label": "CONTROL_BY_NORMALLY_CLOSED_CONTACTOR",
+                    "value": 3
+                },
+                {
+                    "label": "AS_AN_EXTERNAL_INDICATOR:",
+                    "value": 4
+                }
+            ]
+        }
+    }
+}

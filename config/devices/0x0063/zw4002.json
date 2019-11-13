@@ -1,0 +1,87 @@
+// Jasco Products ZW4002
+// In-Wall Smart Fan Control
+{
+    "_approved": true,
+    "manufacturer": "Jasco Products",
+    "manufacturerId": "0x0063",
+    "label": "ZW4002",
+    "description": "In-Wall Smart Fan Control",
+    "devices": [
+        {
+            "productType": "0x4944",
+            "productId": "0x3131"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "Z-Wave Plus Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Controlled with local load",
+            "description": "Supports Basic Set and is controlled with the local load",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "3": {
+            "label": "Double Tap",
+            "description": "Supports Basic Set and is controlled by double pressing the On or Off button",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "3": {
+            "label": "Night Light",
+            "description": "Defines the behavior of the blue LED",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "LED on when switch is OFF",
+                    "value": 0
+                },
+                {
+                    "label": "LED on when switch is ON",
+                    "value": 1
+                },
+                {
+                    "label": "LED always off",
+                    "value": 2
+                }
+            ]
+        },
+        "4": {
+            "label": "Invert Switch",
+            "description": "Invert the ON/OFF Switch State",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

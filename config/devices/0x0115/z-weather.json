@@ -1,0 +1,80 @@
+// Z-Wave.Me Z-Weather
+// Z-Wave weather interface
+{
+    "_approved": true,
+    "_errors": [
+        "Device category is not set.",
+        "At least one manufacturers product image must be uploaded",
+        "At least one device manual must be uploaded as PDF"
+    ],
+    "_warnings": [
+        "Overview information is not set",
+        "Inclusion information is not set",
+        "Exclusion information is not set",
+        "Wakeup information is not set",
+        "Association 1 appears to be a Lifeline group - please use the label \"Lifeline\"."
+    ],
+    "manufacturer": "Z-Wave.Me",
+    "manufacturerId": "0x0115",
+    "label": "Z-Weather",
+    "description": "Z-Wave weather interface",
+    "devices": [
+        {
+            "productType": "0x0100",
+            "productId": "0x0400"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Life Line",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Wind Speed",
+            "description": "Wind speed is higher than 6 m/s (22 Km/h)",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "End of Dawn",
+            "description": "At the end of the dawn if it becomes bright",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "End of Dusk",
+            "description": "At the end of the dusk if it becomes bright",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Wind Speed Action Threshold",
+            "description": "Available Parameters: 0  - Off 1 - 30 in milliseconds Default = 6 m/s",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 30,
+            "defaultValue": 6,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2": {
+            "label": "Twilight Action Threshold",
+            "description": "Set from 0 - 100 % Default = 37% (street lighting)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 37,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

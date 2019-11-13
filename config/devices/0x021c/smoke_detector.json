@@ -1,0 +1,39 @@
+// Shenzhen iSurpass Technology Co. ,Ltd Smoke Detector
+// Carbon monoxide detector, smoke detector
+{
+    "_approved": true,
+    "manufacturer": "Shenzhen iSurpass Technology Co. ,Ltd",
+    "manufacturerId": "0x021c",
+    "label": "Smoke Detector",
+    "description": "Carbon monoxide detector, smoke detector",
+    "devices": [
+        {
+            "productType": "0x8002",
+            "productId": "0x1000"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "Battery, Notification, Reset locally Notification, Binary report",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Root device Group (binary sensor)",
+            "description": "Binary smoke sensor via lifeline and on status Chance of smoke detection",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "3": {
+            "label": "Root device Group (notification)",
+            "description": "smoke status as notification report and on status change of smoke detection",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

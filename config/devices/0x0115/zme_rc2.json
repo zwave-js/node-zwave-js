@@ -1,0 +1,516 @@
+// Z-Wave.Me ZME_RC2
+// Z-Wave Remote Control+
+{
+    "_approved": true,
+    "manufacturer": "Z-Wave.Me",
+    "manufacturerId": "0x0115",
+    "label": "ZME_RC2",
+    "description": "Z-Wave Remote Control+",
+    "devices": [
+        {
+            "productType": "0x1000",
+            "productId": "0x0300"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "Send to controller battery level and WakeUp Notification",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "The buttons of group No1",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "The buttons of group No2",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "The buttons of group No3",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "5": {
+            "label": "The buttons of group No4",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "6": {
+            "label": "The buttons of group No5",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "7": {
+            "label": "The buttons of group No6",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "8": {
+            "label": "The buttons of group No7",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "9": {
+            "label": "The buttons of scene No1",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "10": {
+            "label": "The buttons of scene No2",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "11": {
+            "label": "The buttons of scene No3",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "12": {
+            "label": "The buttons of All On/Off",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "10": {
+            "label": "Command to Control Group No1 (Assoc. Group 2)",
+            "description": "Defines the command sent to group 1 when the button is pressed (Assoc. Group 2)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim",
+                    "value": 1
+                },
+                {
+                    "label": "Switch On/Off only (send Basic Set)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch All",
+                    "value": 3
+                },
+                {
+                    "label": "Send Scenes",
+                    "value": 4
+                },
+                {
+                    "label": "Send Preconfigured Scenes",
+                    "value": 5
+                }
+            ]
+        },
+        "11": {
+            "label": "Command to Control Group No2 (association group 3)",
+            "description": "Command to Control Group No2 (association group 3)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim",
+                    "value": 1
+                },
+                {
+                    "label": "Switch On/Off only (send Basic Set)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch All",
+                    "value": 3
+                },
+                {
+                    "label": "Send Scenes",
+                    "value": 4
+                },
+                {
+                    "label": "Send Preconfigured Scenes",
+                    "value": 5
+                }
+            ]
+        },
+        "12": {
+            "label": "Command to Control Group No3 (association group 4)",
+            "description": "Command to Control Group No3 (association group 4)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim",
+                    "value": 1
+                },
+                {
+                    "label": "Switch On/Off only (send Basic Set)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch All",
+                    "value": 3
+                },
+                {
+                    "label": "Send Scenes",
+                    "value": 4
+                },
+                {
+                    "label": "Send Preconfigured Scenes",
+                    "value": 5
+                }
+            ]
+        },
+        "13": {
+            "label": "Command to Control Group No4 (association group 5)",
+            "description": "Command to Control Group No4 (association group 5)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim",
+                    "value": 1
+                },
+                {
+                    "label": "Switch On/Off only (send Basic Set)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch All",
+                    "value": 3
+                },
+                {
+                    "label": "Send Scenes",
+                    "value": 4
+                },
+                {
+                    "label": "Send Preconfigured Scenes",
+                    "value": 5
+                }
+            ]
+        },
+        "14": {
+            "label": "Command to Control Group No5 (association group 6)",
+            "description": "Command to Control Group No5 (association group 6)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim",
+                    "value": 1
+                },
+                {
+                    "label": "Switch On/Off only (send Basic Set)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch All",
+                    "value": 3
+                },
+                {
+                    "label": "Send Scenes",
+                    "value": 4
+                },
+                {
+                    "label": "Send Preconfigured Scenes",
+                    "value": 5
+                }
+            ]
+        },
+        "15": {
+            "label": "Command to Control Group No6 (association group 7)",
+            "description": "Command to Control Group No6 (association group 7)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim",
+                    "value": 1
+                },
+                {
+                    "label": "Switch On/Off only (send Basic Set)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch All",
+                    "value": 3
+                },
+                {
+                    "label": "Send Scenes",
+                    "value": 4
+                },
+                {
+                    "label": "Send Preconfigured Scenes",
+                    "value": 5
+                }
+            ]
+        },
+        "16": {
+            "label": "Command to Control Group No7 (association group 8)",
+            "description": "Command to Control Group No7 (association group 8)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim",
+                    "value": 1
+                },
+                {
+                    "label": "Switch On/Off only (send Basic Set)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch All",
+                    "value": 3
+                },
+                {
+                    "label": "Send Scenes",
+                    "value": 4
+                },
+                {
+                    "label": "Send Preconfigured Scenes",
+                    "value": 5
+                }
+            ]
+        },
+        "17": {
+            "label": "Command to Control Scene No1 (association group 9)",
+            "description": "Command to Control Scene No1 (association group 9)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim",
+                    "value": 1
+                },
+                {
+                    "label": "Switch On/Off only (send Basic Set)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch All",
+                    "value": 3
+                },
+                {
+                    "label": "Send Scenes",
+                    "value": 4
+                },
+                {
+                    "label": "Send Preconfigured Scenes",
+                    "value": 5
+                }
+            ]
+        },
+        "18": {
+            "label": "Command to Control Scene No2",
+            "description": "Command to Control Scene No2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim",
+                    "value": 1
+                },
+                {
+                    "label": "Switch On/Off only (send Basic Set)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch All",
+                    "value": 3
+                },
+                {
+                    "label": "Send Scenes",
+                    "value": 4
+                },
+                {
+                    "label": "Send Preconfigured Scenes",
+                    "value": 5
+                }
+            ]
+        },
+        "19": {
+            "label": "Command to Control Scene No3",
+            "description": "Command to Control Scene No3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim",
+                    "value": 1
+                },
+                {
+                    "label": "Switch On/Off only (send Basic Set)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch All",
+                    "value": 3
+                },
+                {
+                    "label": "Send Scenes",
+                    "value": 4
+                },
+                {
+                    "label": "Send Preconfigured Scenes",
+                    "value": 5
+                }
+            ]
+        },
+        "20": {
+            "label": "Command to Control group All On/Off",
+            "description": "Command to Control group All On/Off",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim",
+                    "value": 1
+                },
+                {
+                    "label": "Switch On/Off only (send Basic Set)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch All",
+                    "value": 3
+                },
+                {
+                    "label": "Send Scenes",
+                    "value": 4
+                },
+                {
+                    "label": "Send Preconfigured Scenes",
+                    "value": 5
+                }
+            ]
+        },
+        "21": {
+            "label": "Send the following Switch All commands",
+            "description": "Send the following Switch All commands",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Switch off only",
+                    "value": 1
+                },
+                {
+                    "label": "Switch on only",
+                    "value": 2
+                },
+                {
+                    "label": "Switch all on and off",
+                    "value": 255
+                }
+            ]
+        }
+    }
+}

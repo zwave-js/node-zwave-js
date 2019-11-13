@@ -1,0 +1,118 @@
+// Popp & Co POPE700168
+// POPP Rain-Sensor
+{
+    "_approved": true,
+    "manufacturer": "Popp & Co",
+    "manufacturerId": "0x0154",
+    "label": "POPE700168",
+    "description": "POPP Rain-Sensor",
+    "devices": [
+        {
+            "productType": "0x0004",
+            "productId": "0x0011"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Switching Command when Rain (> 0 mm/h)",
+            "description": "Switching Command when Rain (> 0 mm/h). Basic Set Comand is sent.",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Heavy Rain detected. Basic Set Comand is sent.",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Rain Counter",
+            "description": "total count of rain",
+            "unit": "mm",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2": {
+            "label": "Rain Start Command",
+            "description": "Send rain start command to group 2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "3": {
+            "label": "Rain Stop Command",
+            "description": "Send rain stop to group 2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "Meter Multiplier",
+            "description": "Adapt the display",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 1000,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "5": {
+            "label": "Heavy Rain",
+            "description": "Threshold defines heavy rain condition",
+            "unit": "mm per hour",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "6": {
+            "label": "Heavy Rain Start Command",
+            "description": "Send heavy rain start to group 3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "7": {
+            "label": "Heavy Rain Stop Command",
+            "description": "Send heavy rain stop to group 3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

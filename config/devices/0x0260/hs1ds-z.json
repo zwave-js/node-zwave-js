@@ -1,0 +1,46 @@
+// Heiman Technology Co. Ltd HS1DS-Z
+// Smart Door Sensor
+{
+    "_approved": true,
+    "manufacturer": "Heiman Technology Co. Ltd",
+    "manufacturerId": "0x0260",
+    "label": "HS1DS-Z",
+    "description": "Smart Door Sensor",
+    "devices": [
+        {
+            "productType": "0x0168",
+            "productId": "0x0168"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Binary Door status change",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Binary Tamper",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "Notification Door status change",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "5": {
+            "label": "Notification Tamper",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    }
+}

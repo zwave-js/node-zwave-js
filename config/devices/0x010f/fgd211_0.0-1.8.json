@@ -1,0 +1,374 @@
+// Fibargroup FGD211
+// Universal Dimmer 500W
+{
+    "_approved": true,
+    "manufacturer": "Fibargroup",
+    "manufacturerId": "0x010f",
+    "label": "FGD211",
+    "description": "Universal Dimmer 500W",
+    "devices": [
+        {
+            "productType": "0x0100",
+            "productId": "0x0104"
+        },
+        {
+            "productType": "0x0100",
+            "productId": "0x0106"
+        },
+        {
+            "productType": "0x0100",
+            "productId": "0x0107"
+        },
+        {
+            "productType": "0x0100",
+            "productId": "0x0109"
+        },
+        {
+            "productType": "0x0100",
+            "productId": "0x100a"
+        },
+        {
+            "productType": "0x0100",
+            "productId": "0x300a"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "1.8"
+    },
+    "associations": {
+        "1": {
+            "label": "Switch 1",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "2": {
+            "label": "Switch 2",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Controller Updates",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Enable/Disable ALL ON/OFF",
+            "description": "Activate/Deactive ALL ON/OFF",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "ALL ON active / ALL OFF active",
+                    "value": -1
+                },
+                {
+                    "label": "ALL ON disabled / ALL OFF disabled",
+                    "value": 0
+                },
+                {
+                    "label": "ALL ON disabled / ALL OFF active",
+                    "value": 1
+                },
+                {
+                    "label": "ALL ON active / ALL OFF disabled",
+                    "value": 2
+                }
+            ]
+        },
+        "6": {
+            "label": "Separation of association sending (key 1)",
+            "description": "Activate/Deactivate association sending for group 1 - Also see param #16",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Map status to all devices in group 1",
+                    "value": 0
+                },
+                {
+                    "label": "Map OFF status to all devices in group 1",
+                    "value": 1
+                },
+                {
+                    "label": "Map OFF status to all devices in group 1",
+                    "value": 2
+                }
+            ]
+        },
+        "7": {
+            "label": "Control key #2 behaviour",
+            "description": "Key no. 2 is not represented by any physical device",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Device status is not checked",
+                    "value": 0
+                },
+                {
+                    "label": "Device status is checked",
+                    "value": 1
+                }
+            ]
+        },
+        "8": {
+            "label": "Dimming step at automatic control",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "9": {
+            "label": "Time of MANUALLY moving between values",
+            "description": "Options for changing parameter 1-255 (10ms - 2,5s)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "10": {
+            "label": "Time of AUTOMATIC moving between values",
+            "description": "Time of autom. moving the dimmer between min/max",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "11": {
+            "label": "Dimming step at manual control",
+            "description": "Options for changing parameter 1-99",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "12": {
+            "label": "Maximum dimmer level control",
+            "description": "Options for changing parameter 2-99",
+            "valueSize": 1,
+            "minValue": 2,
+            "maxValue": 99,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "13": {
+            "label": "Minimum dimmer level control",
+            "description": "Options for changing parameter 1-98",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "14": {
+            "label": "Inputs Button/Switch configuration",
+            "description": "Binary inputs type configuration",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Mono-stable input (button)",
+                    "value": 0
+                },
+                {
+                    "label": "Bi-stable input (switch)",
+                    "value": 1
+                }
+            ]
+        },
+        "15": {
+            "label": "Parm 15",
+            "description": "Double-click set lighting at 100%",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable double click",
+                    "value": 0
+                },
+                {
+                    "label": "Enable double click",
+                    "value": 1
+                }
+            ]
+        },
+        "16": {
+            "label": "Saving state before power failure",
+            "description": "Saving state before power failure",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "State NOT saved at power failure",
+                    "value": 0
+                },
+                {
+                    "label": "State saved at power failure",
+                    "value": 1
+                }
+            ]
+        },
+        "17": {
+            "label": "3-way switch",
+            "description": "Function of 3-way switch",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "18": {
+            "label": "Synchronizing light level for associated devices",
+            "description": "The dimmer communicate the level to the associated devices. (default value 0)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "19": {
+            "label": "Change [On-Off] bi-stable keys",
+            "description": "Allow user to change [On-Off] bi-stable keys",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Device changes status on key status change",
+                    "value": 0
+                },
+                {
+                    "label": "Device status depends on key status",
+                    "value": 1
+                }
+            ]
+        },
+        "20": {
+            "label": "Control impulse length",
+            "description": "Change of control impulse length.",
+            "valueSize": 1,
+            "minValue": 100,
+            "maxValue": 170,
+            "defaultValue": 110,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "30": {
+            "label": "Relay 1: Response to General Alarm",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "DEACTIVATION - no response to alarm frames",
+                    "value": 0
+                },
+                {
+                    "label": "Alarm relay ON",
+                    "value": 1
+                },
+                {
+                    "label": "Alarm relay OFF",
+                    "value": 2
+                },
+                {
+                    "label": "ALARM FLASHING",
+                    "value": 3
+                }
+            ]
+        },
+        "39": {
+            "label": "ALARM FLASHING alarm time",
+            "description": "Amount of time (ms) the device keeps on flashing after receipt of Alarm Frame",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 600,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

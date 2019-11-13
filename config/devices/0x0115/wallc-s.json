@@ -1,0 +1,367 @@
+// Z-Wave.Me WALLC-S
+// Wall Controller
+{
+    "_approved": true,
+    "manufacturer": "Z-Wave.Me",
+    "manufacturerId": "0x0115",
+    "label": "WALLC-S",
+    "description": "Wall Controller",
+    "devices": [
+        {
+            "productType": "0x0100",
+            "productId": "0x0101"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 10,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Group A",
+            "maxNodes": 10,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Group B",
+            "maxNodes": 10,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "Group C",
+            "maxNodes": 10,
+            "isLifeline": false
+        },
+        "5": {
+            "label": "Group D",
+            "maxNodes": 10,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Button 1 and 3 pair mode",
+            "description": "Button 1 and 3 pair mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Separately",
+                    "value": 0
+                },
+                {
+                    "label": "In pair without double clicks",
+                    "value": 1
+                },
+                {
+                    "label": "In pair with double clicks",
+                    "value": 2
+                }
+            ]
+        },
+        "2": {
+            "label": "Button 2 and 4 pair mode",
+            "description": "Button 2 and 4 pair mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Separately",
+                    "value": 0
+                },
+                {
+                    "label": "In pair without double clicks",
+                    "value": 1
+                },
+                {
+                    "label": "In pair with double clicks",
+                    "value": 2
+                }
+            ]
+        },
+        "11": {
+            "label": "Action on group A",
+            "description": "Action on group A",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim",
+                    "value": 1
+                },
+                {
+                    "label": "Switch On/Off only (send Basic Set)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch all",
+                    "value": 3
+                },
+                {
+                    "label": "Send Scenes",
+                    "value": 4
+                },
+                {
+                    "label": "Send Preconfigured Scenes",
+                    "value": 5
+                },
+                {
+                    "label": "Control Door Lock",
+                    "value": 7
+                },
+                {
+                    "label": "Central Scene to Gateway",
+                    "value": 8
+                }
+            ]
+        },
+        "12": {
+            "label": "Action on group B",
+            "description": "Action on group B",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim",
+                    "value": 1
+                },
+                {
+                    "label": "Switch On/Off only (send Basic Set)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch all",
+                    "value": 3
+                },
+                {
+                    "label": "Send Scenes",
+                    "value": 4
+                },
+                {
+                    "label": "Send Preconfigured Scenes",
+                    "value": 5
+                },
+                {
+                    "label": "Control Door Lock",
+                    "value": 7
+                },
+                {
+                    "label": "Central Scene to Gateway",
+                    "value": 8
+                }
+            ]
+        },
+        "13": {
+            "label": "Action on group C",
+            "description": "Action on group C",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim",
+                    "value": 1
+                },
+                {
+                    "label": "Switch On/Off only (send Basic Set)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch all",
+                    "value": 3
+                },
+                {
+                    "label": "Send Scenes",
+                    "value": 4
+                },
+                {
+                    "label": "Send Preconfigured Scenes",
+                    "value": 5
+                },
+                {
+                    "label": "Control Door Lock",
+                    "value": 7
+                },
+                {
+                    "label": "Central Scene to Gateway",
+                    "value": 8
+                }
+            ]
+        },
+        "14": {
+            "label": "Action on group D",
+            "description": "Action on group D",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim",
+                    "value": 1
+                },
+                {
+                    "label": "Switch On/Off only (send Basic Set)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch all",
+                    "value": 3
+                },
+                {
+                    "label": "Send Scenes",
+                    "value": 4
+                },
+                {
+                    "label": "Send Preconfigured Scenes",
+                    "value": 5
+                },
+                {
+                    "label": "Control Door Lock",
+                    "value": 7
+                },
+                {
+                    "label": "Central Scene to Gateway",
+                    "value": 8
+                }
+            ]
+        },
+        "21": {
+            "label": "Send the following Switch All commands",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "NO (Normal Open)",
+                    "value": 1
+                },
+                {
+                    "label": "NC (Normal Close)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch all on and off",
+                    "value": 255
+                }
+            ]
+        },
+        "22": {
+            "label": "Invert buttons",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "25": {
+            "label": "Blocks wakeup even when wakeup interval is set",
+            "description": "Blocks wakeup even when wakeup interval is set",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Wakeup is blocked",
+                    "value": 0
+                },
+                {
+                    "label": "Wakeup is possible",
+                    "value": 1
+                }
+            ]
+        },
+        "30": {
+            "label": "Send unsolicited Battery Report on Wake Up",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "To same node as wake up notification",
+                    "value": 1
+                },
+                {
+                    "label": "Broadcast to neighbours",
+                    "value": 2
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,47 @@
+// Ring DW-SS
+// Door/Window Contact
+{
+    "_approved": true,
+    "manufacturer": "Ring",
+    "manufacturerId": "0x0346",
+    "label": "DW-SS",
+    "description": "Door/Window Contact",
+    "devices": [
+        {
+            "productType": "0x0201",
+            "productId": "0x0201"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "Controller Updates",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic Report",
+            "description": "Basic report of either 0x00 for CLOSED or 0xFF for OPEN",
+            "maxNodes": 1,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Wait time",
+            "description": "Time between sending unsolicited battery reports",
+            "unit": "sec",
+            "valueSize": 2,
+            "minValue": 255,
+            "maxValue": 4200,
+            "defaultValue": 4200,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

@@ -1,0 +1,145 @@
+// Linear Corp WD500Z5-1
+// An in-wall lighting dimmer
+{
+    "_approved": true,
+    "manufacturer": "Linear Corp",
+    "manufacturerId": "0x014f",
+    "label": "WD500Z5-1",
+    "description": "An in-wall lighting dimmer",
+    "devices": [
+        {
+            "productType": "0x5744",
+            "productId": "0x3530"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic ON/OFF",
+            "description": "Basic ON/OFF commands",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Multilevel Switch",
+            "description": "Multilevel Switch commands",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "3": {
+            "label": "Night Light",
+            "description": "Control the LED on the device.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "Invert Switch",
+            "description": "Invert the operation of the paddle.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "5": {
+            "label": "Ignore Start Level in Dim Command",
+            "description": "The Start Level sent in a Dim command can be ignored or not.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "7": {
+            "label": "Dim Remote On/Off Step",
+            "description": "Dim Remote On/Off Step (default=3, 3 steps)",
+            "unit": "Step(s)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "8": {
+            "label": "Dim Remote On/Off Timer",
+            "description": "Dim Remote On/Off Timer (default = 10, 10 ms)",
+            "unit": "ms",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "9": {
+            "label": "Dim Local On/Off Step",
+            "description": "Dim Local On/Off Step (default = 10, 10 steps)",
+            "unit": "Step(s)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "10": {
+            "label": "Dim Local On/Off Timer",
+            "description": "Dim Local On/Off Timer (default = 10, 10 ms)",
+            "unit": "ms",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "11": {
+            "label": "Dim ALL On/Off Step",
+            "description": "Dim ALL On/Off Step (default = 10, 10 steps)",
+            "unit": "Step(s)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "12": {
+            "label": "Dim ALL On/Off Timer",
+            "description": "Dim ALL On/Off Timer (default = 3, 3 ms)",
+            "unit": "ms",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

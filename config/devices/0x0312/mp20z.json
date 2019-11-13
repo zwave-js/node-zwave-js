@@ -1,0 +1,26 @@
+// NIE Technology MP20Z
+// Zwave Plug 2 channel plugin outlet
+{
+    "_approved": true,
+    "manufacturer": "NIE Technology",
+    "manufacturerId": "0x0312",
+    "label": "MP20Z",
+    "description": "Zwave Plug 2 channel plugin outlet",
+    "devices": [
+        {
+            "productType": "0xff00",
+            "productId": "0xff05"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

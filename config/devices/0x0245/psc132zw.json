@@ -1,0 +1,56 @@
+// permundo GmbH PSC132ZW
+// Metering Relay Switch, 16A
+{
+    "_approved": true,
+    "manufacturer": "permundo GmbH",
+    "manufacturerId": "0x0245",
+    "label": "PSC132ZW",
+    "description": "Metering Relay Switch, 16A",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Output",
+            "description": "Output State and Power Meter",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Input",
+            "description": "Reports S1 Input State",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "31[0x01]": {
+            "label": "Local Control Off",
+            "description": "Separates pushbutton and S1 input from relay",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "LocalControlOn",
+                    "value": 0
+                },
+                {
+                    "label": "LocalControlOff",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

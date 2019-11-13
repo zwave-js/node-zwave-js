@@ -1,0 +1,106 @@
+// AEON Labs Nano Shutter Controller
+// ZW141
+{
+    "_approved": true,
+    "_warnings": [
+        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
+    ],
+    "manufacturer": "AEON Labs",
+    "manufacturerId": "0x0086",
+    "label": "Nano Shutter Controller",
+    "description": "ZW141",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x008d"
+        },
+        {
+            "productType": "0x0103",
+            "productId": "0x008d"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Group 2",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "35": {
+            "label": "Moving time left to right",
+            "description": "Set the moving time from up (left) to down (right) for curtain.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 30,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "80": {
+            "label": "Report sent to nodes in association group 1",
+            "description": "Report sent to associated nodes in association group 1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "85": {
+            "label": "Operation mode of external switch",
+            "description": "Operation mode of external switch",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "120": {
+            "label": "External switch mode of S1",
+            "description": "External switch mode of S1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "121": {
+            "label": "External switch mode of S2",
+            "description": "External switch mode of S2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "252": {
+            "label": "Enable/disable config parameters to be locked",
+            "description": "Enable/disable the configuration parameters to be locked",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

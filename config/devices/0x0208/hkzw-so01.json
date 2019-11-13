@@ -1,0 +1,148 @@
+// Hank HKZW-SO01
+// Smart Plug with two USB ports
+{
+    "_approved": true,
+    "_warnings": [
+        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
+    ],
+    "manufacturer": "Hank",
+    "manufacturerId": "0x0208",
+    "label": "HKZW-SO01",
+    "description": "Smart Plug with two USB ports",
+    "devices": [
+        {
+            "productType": "0x0101",
+            "productId": "0x0005"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Basic Report",
+            "description": "Sends Basic Report at On/Off event",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "20": {
+            "label": "Overload Protection",
+            "description": "If current exceeds 16.5A over 5 seconds, relay will turn off.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "21": {
+            "label": "Device Status after Power Failure",
+            "description": "Define how the plug reacts after power failure",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "24": {
+            "label": "Notifcation on Load Change",
+            "description": "Smart Plug can send notifications to association device load state changes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "27": {
+            "label": "Indicator Modes",
+            "description": "LED in the device will indicate the state of load",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "151": {
+            "label": "Threshold of power report",
+            "description": "Power Threshold at which to send meter report",
+            "unit": "Watts",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "152": {
+            "label": "Percentage Threshold of Power Report",
+            "description": "Percentage Threshold at which to send meter report",
+            "unit": "%",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "171": {
+            "label": "Power Report Frequency",
+            "description": "The interval of sending power report to association device (Group Lifeline).",
+            "unit": "Seconds",
+            "valueSize": 4,
+            "minValue": 5,
+            "maxValue": 2678400,
+            "defaultValue": 30,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "172": {
+            "label": "Energy Report Frequency",
+            "description": "The interval of sending energy report to association device (Group Lifeline).",
+            "unit": "Seconds",
+            "valueSize": 4,
+            "minValue": 5,
+            "maxValue": 2678400,
+            "defaultValue": 300,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "173": {
+            "label": "Voltage Report Frequency",
+            "description": "The interval of sending voltage report to association device (Group Lifeline)",
+            "unit": "Seconds",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2678400,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "174": {
+            "label": "Electricity Report Frequency",
+            "description": "Interval for sending electricity report.",
+            "unit": "Seconds",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2678400,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

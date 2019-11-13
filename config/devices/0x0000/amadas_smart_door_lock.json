@@ -1,0 +1,32 @@
+// Sigma Designs (Former Zensys) AMADAS Smart Door Lock
+// Door lock keypad
+{
+    "_approved": false,
+    "_errors": [
+        "`thingid` is > 15 characters - is this really necessary - it should just be the model number.",
+        "Overview information is not set",
+        "Inclusion information is not set",
+        "Exclusion information is not set",
+        "Device category is not set.",
+        "At least one manufacturers product image must be uploaded",
+        "At least one device manual must be uploaded as PDF",
+        "Error in device id definition '7FFFFFFF:7FFFFFFF' [val]"
+    ],
+    "_warnings": [
+        "No channels have been assigned even though there are user configurable command classes."
+    ],
+    "manufacturer": "Sigma Designs (Former Zensys)",
+    "manufacturerId": "0x0000",
+    "label": "AMADAS Smart Door Lock",
+    "description": "Door lock keypad",
+    "devices": [
+        {
+            "productType": "0x7fffffff",
+            "productId": "0x7fffffff"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

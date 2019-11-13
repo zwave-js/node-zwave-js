@@ -1,0 +1,37 @@
+// Fireangle ZST-630
+// Thermoptek Smoke Alarm/Smoke Detector
+{
+    "_approved": true,
+    "manufacturer": "Fireangle",
+    "manufacturerId": "0x026f",
+    "label": "ZST-630",
+    "description": "Thermoptek Smoke Alarm/Smoke Detector",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "Z-Wave Plus Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic Report",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Notification Report",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    }
+}

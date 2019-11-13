@@ -1,0 +1,46 @@
+// Vision Security ZT1101
+// 4 Button Key Fob
+{
+    "_approved": true,
+    "manufacturer": "Vision Security",
+    "manufacturerId": "0x013c",
+    "label": "ZT1101",
+    "description": "4 Button Key Fob",
+    "devices": [
+        {
+            "productType": "0x1002",
+            "productId": "0x0202"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Scene Activation Set(Button 1)",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Scene Activation Set(Button 2)",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "Scene Activation Set(Button 3)",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "5": {
+            "label": "Scene Activation Set(Button 4)",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    }
+}

@@ -1,0 +1,26 @@
+// Danfoss HRVCCM
+// Air CCM
+{
+    "_approved": true,
+    "_warnings": [
+        "No channels have been assigned even though there are user configurable command classes."
+    ],
+    "manufacturer": "Danfoss",
+    "manufacturerId": "0x0002",
+    "label": "HRVCCM",
+    "description": "Air CCM",
+    "devices": [
+        {
+            "productType": "0x8007",
+            "productId": "0x0200"
+        },
+        {
+            "productType": "0x8007",
+            "productId": "0x0202"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

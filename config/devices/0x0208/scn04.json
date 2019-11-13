@@ -1,0 +1,102 @@
+// Hank SCN04
+// Four-key Scene Controller
+{
+    "_approved": true,
+    "manufacturer": "Hank",
+    "manufacturerId": "0x0208",
+    "label": "SCN04",
+    "description": "Four-key Scene Controller",
+    "devices": [
+        {
+            "productType": "0x0200",
+            "productId": "0x000b"
+        },
+        {
+            "productType": "0x0201",
+            "productId": "0x000b"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Central notification",
+            "description": "Scene commands and battery reports",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic commands button 1",
+            "description": "Send basic commands for button 1",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Multilevel button 1",
+            "description": "Send multilevel commands for button 1",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "Basic commands button 2",
+            "description": "Send basic commands for button 2",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "5": {
+            "label": "Multilevel button 2",
+            "description": "Send multilevel commands for button 2",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "6": {
+            "label": "Basic commands button 3",
+            "description": "Send basic commands for button 3",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "7": {
+            "label": "Multilevel button 3",
+            "description": "Send multilevel commands for button 3",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "8": {
+            "label": "Basic commands button 4",
+            "description": "Send basic commands for button 4",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "9": {
+            "label": "Multilevel button 4",
+            "description": "Send multilevel commands for button 4",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "254": {
+            "label": "Enable configuration",
+            "description": "Lock/unlock  all  configuration  parameters.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Unlock",
+                    "value": 0
+                },
+                {
+                    "label": "Lock",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

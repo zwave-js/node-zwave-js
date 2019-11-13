@@ -1,0 +1,203 @@
+// ASSA ABLOY YRD216
+// Yale Real Living Assure Lock Push Button Deadbolt
+{
+    "_approved": true,
+    "manufacturer": "ASSA ABLOY",
+    "manufacturerId": "0x0129",
+    "label": "YRD216",
+    "description": "Yale Real Living Assure Lock Push Button Deadbolt",
+    "devices": [
+        {
+            "productType": "0x8004",
+            "productId": "0x0600"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Association group",
+            "description": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Silent mode",
+            "description": "Silent mode on/off",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 3,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Loud",
+                    "value": 1
+                },
+                {
+                    "label": "Quiet",
+                    "value": 2
+                },
+                {
+                    "label": "Off",
+                    "value": 3
+                }
+            ]
+        },
+        "2": {
+            "label": "Auto Relock",
+            "description": "Auto Relock on/off",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Auto relock off",
+                    "value": 0
+                },
+                {
+                    "label": "Auto relock on",
+                    "value": 255
+                }
+            ]
+        },
+        "3": {
+            "label": "Auto Relock Time",
+            "description": "Auto Relock Time",
+            "valueSize": 1,
+            "minValue": 10,
+            "maxValue": 180,
+            "defaultValue": 30,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "Wrong code Entry Limit",
+            "description": "Wrong code Entry Limit",
+            "valueSize": 1,
+            "minValue": 3,
+            "maxValue": 10,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "5": {
+            "label": "Language",
+            "description": "Language",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 3,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "English",
+                    "value": 1
+                },
+                {
+                    "label": "Spanish",
+                    "value": 2
+                },
+                {
+                    "label": "French",
+                    "value": 3
+                }
+            ]
+        },
+        "7": {
+            "label": "Shut down time",
+            "description": "Shut down time after wrong code entries",
+            "valueSize": 1,
+            "minValue": 10,
+            "maxValue": 180,
+            "defaultValue": 60,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "8": {
+            "label": "Operating mode",
+            "description": "Operating mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Normal",
+                    "value": 0
+                },
+                {
+                    "label": "Vacation",
+                    "value": 1
+                },
+                {
+                    "label": "Privacy",
+                    "value": 2
+                }
+            ]
+        },
+        "11": {
+            "label": "One touch locking",
+            "description": "One touch locking",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "12": {
+            "label": "Privacy button",
+            "description": "Privacy button",
+            "unit": "1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "13": {
+            "label": "Lock status LED",
+            "description": "Lock status LED",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "15": {
+            "label": "Reset to factory default",
+            "description": "Reset to factory default",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

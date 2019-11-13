@@ -1,0 +1,92 @@
+// AEON Labs ZW088
+// 4 button keyfob - Gen 5
+{
+    "_approved": true,
+    "manufacturer": "AEON Labs",
+    "manufacturerId": "0x0086",
+    "label": "ZW088",
+    "description": "4 button keyfob - Gen 5",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0058"
+        },
+        {
+            "productType": "0x0101",
+            "productId": "0x0058"
+        },
+        {
+            "productType": "0x0201",
+            "productId": "0x0058"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "1.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Scene 1",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Scene 2",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "3": {
+            "label": "Scene 3",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "4": {
+            "label": "Scene 4",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "5": {
+            "label": "Scene 5",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "6": {
+            "label": "Scene 6",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "7": {
+            "label": "Scene 7",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "8": {
+            "label": "Scene 8",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "250": {
+            "label": "Use Mode setting",
+            "description": "Defines the Use Mode setting of the fob",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Group Mode",
+                    "value": 0
+                },
+                {
+                    "label": "Scene Mode",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

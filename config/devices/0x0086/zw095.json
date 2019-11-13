@@ -1,0 +1,289 @@
+// AEON Labs ZW095
+// Home Energy Meter - Gen 5
+{
+    "_approved": true,
+    "manufacturer": "AEON Labs",
+    "manufacturerId": "0x0086",
+    "label": "ZW095",
+    "description": "Home Energy Meter - Gen 5",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x005f"
+        },
+        {
+            "productType": "0x0102",
+            "productId": "0x005f"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Energy detection mode",
+            "description": "This parameter is used to configure the energy detection mode.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Energy absolute value",
+                    "value": 0
+                },
+                {
+                    "label": "Algebraic sum energy",
+                    "value": 1
+                },
+                {
+                    "label": "Consuming electricity",
+                    "value": 2
+                },
+                {
+                    "label": "Generating electricity",
+                    "value": 3
+                }
+            ]
+        },
+        "3": {
+            "label": "Selective Reporting",
+            "description": "Enable selective reporting.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 16,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "Current Threshold - Whole HEM",
+            "description": "Threshold change in wattage (Whole HEM).",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 60000,
+            "defaultValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "5": {
+            "label": "Current Threshold - Clamp 1",
+            "description": "Threshold change in wattage (Clamp 1).",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 60000,
+            "defaultValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "6": {
+            "label": "Current Threshold - Clamp 2",
+            "description": "Threshold change in wattage (Clamp 2).",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 60000,
+            "defaultValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "7": {
+            "label": "Current Threshold - Clamp 3",
+            "description": "Threshold change in wattage (Clamp 3).",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 60000,
+            "defaultValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "8": {
+            "label": "Percent Change - Whole HEM",
+            "description": "Percentage change in wattage (Whole HEM).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "9": {
+            "label": "Percent Change - Clamp 1",
+            "description": "Percentage change in wattage (Clamp 1).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "10": {
+            "label": "Percent Change - Clamp 2",
+            "description": "Percentage change in wattage (Clamp 2).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "11": {
+            "label": "Percent Change - Clamp 3",
+            "description": "Percentage change in wattage (Clamp3)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "13": {
+            "label": "Enable /Disable CRC-16 Encapsulation",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "101": {
+            "label": "Report Group 1",
+            "description": "Which reports need to send in Report group 1",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2147483647,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "102": {
+            "label": "Report Group 2",
+            "description": "Which reports need to send in Report group 2",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2147483647,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "103": {
+            "label": "Report Group 3",
+            "description": "Which reports need to send in Report group 3",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2147483647,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "111": {
+            "label": "Interval to send out reports of group 1",
+            "valueSize": 4,
+            "minValue": 1,
+            "maxValue": 2147483647,
+            "defaultValue": 60,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "112": {
+            "label": "Interval to send out reports of group 2",
+            "valueSize": 4,
+            "minValue": 1,
+            "maxValue": 2147483647,
+            "defaultValue": 120,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "113": {
+            "label": "Interval to send out reports of group 3",
+            "valueSize": 4,
+            "minValue": 1,
+            "maxValue": 2147483647,
+            "defaultValue": 120,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "252": {
+            "label": "Lock Configuration",
+            "description": "Enable/Disable Lock Configuration",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "All configuration parameters are configurable.",
+                    "value": 0
+                },
+                {
+                    "label": "All conf parame are not configurable (Locked).",
+                    "value": 1
+                }
+            ]
+        },
+        "255": {
+            "label": "Reset to Default Factory Setting",
+            "description": "Reset all settings to factory defaults",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Do nothing",
+                    "value": 0
+                },
+                {
+                    "label": "Reset to Factory Defaults",
+                    "value": 1
+                },
+                {
+                    "label": "Reset product to def factory setting and exclude",
+                    "value": 1431655765
+                }
+            ]
+        }
+    }
+}

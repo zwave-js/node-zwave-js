@@ -1,0 +1,62 @@
+// Jasco Products 46203
+// GE Enbrighten Z-Wave Plus Smart Dimmer
+{
+    "_approved": true,
+    "manufacturer": "Jasco Products",
+    "manufacturerId": "0x0063",
+    "label": "46203",
+    "description": "GE Enbrighten Z-Wave Plus Smart Dimmer",
+    "devices": [
+        {
+            "productType": "0x4944",
+            "productId": "0x3235"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "Z-Wave Plus Lifeline, Multilevel Switch Report",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic Set Local Load",
+            "description": "Support Basic Set and is controlled with the local load",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Basic Set Double Press",
+            "description": "Supports Basic Set and is controlled by double pressing the On or Off button",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "3": {
+            "label": "LED Status",
+            "description": "LED Status",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "Invert",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

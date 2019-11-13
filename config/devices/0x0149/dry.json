@@ -1,0 +1,203 @@
+// wiDom DRY
+// Widom Smart Dry contact
+{
+    "_approved": true,
+    "manufacturer": "wiDom",
+    "manufacturerId": "0x0149",
+    "label": "DRY",
+    "description": "Widom Smart Dry contact",
+    "devices": [
+        {
+            "productType": "0x1214",
+            "productId": "0x0900"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 8,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "1 Click",
+            "maxNodes": 8,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "2 Clicks",
+            "maxNodes": 8,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "3 Clicks",
+            "maxNodes": 8,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Numbers of clicks to control the load",
+            "description": "Defines which sequences of clicks control the load",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "defaultValue": 7,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "Value used for devices belonging to Group 2",
+            "description": "Value sent when the external switch receives 1 Click",
+            "valueSize": 1,
+            "minValue": -1,
+            "maxValue": 100,
+            "defaultValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "5": {
+            "label": "Value used for devices belonging to Group 3",
+            "description": "Value sent wen the external switch receives 2 Clicks",
+            "valueSize": 1,
+            "minValue": -1,
+            "maxValue": 100,
+            "defaultValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "6": {
+            "label": "Value used for devices belonging to Group 4",
+            "description": "Value sent when external switch receives 3 Clicks",
+            "valueSize": 1,
+            "minValue": -1,
+            "maxValue": 100,
+            "defaultValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "10": {
+            "label": "Timer to switch OFF the Relay",
+            "description": "Defines the time after which the relay is switched OFF",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "11": {
+            "label": "Timer to switch ON the Relay",
+            "description": "Defines the time after which the relay is switched ON",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "15": {
+            "label": "Timer scale",
+            "description": "Defines the time unit used for parameters No.10 and No.11.",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false
+        },
+        "20": {
+            "label": "One Click Scene Activation Set",
+            "description": "Defines the Scene Activation Set value sent to the Lifeline group with 1 Click",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "21": {
+            "label": "Two Clicks Scene Activation Set",
+            "description": "Defines the Scene Activation Set value sent to the Lifeline group with 2 Clicks",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "22": {
+            "label": "Three Clicks Scene Activation Set",
+            "description": "Defines the Scene Activation Set value sent to the Lifeline group with 3 Clicks",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "60": {
+            "label": "Start-up Status",
+            "description": "Defines the status of the device following a restart",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 3,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "ON",
+                    "value": 1
+                },
+                {
+                    "label": "OFF",
+                    "value": 2
+                },
+                {
+                    "label": "PREVIOUS STATUS",
+                    "value": 3
+                }
+            ]
+        },
+        "62": {
+            "label": "Type of external switch",
+            "description": "Defines the type of external switch connected to the device",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "IGNORE",
+                    "value": 0
+                },
+                {
+                    "label": "BUTTON",
+                    "value": 1
+                },
+                {
+                    "label": "SWITCH",
+                    "value": 2
+                }
+            ]
+        }
+    }
+}

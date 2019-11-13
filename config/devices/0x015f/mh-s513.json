@@ -1,0 +1,103 @@
+// McoHome Technology Co., Ltd MH-S513
+// Touch Panel Switch 3-Way
+{
+    "_approved": true,
+    "manufacturer": "McoHome Technology Co., Ltd",
+    "manufacturerId": "0x015f",
+    "label": "MH-S513",
+    "description": "Touch Panel Switch 3-Way",
+    "devices": [
+        {
+            "productType": "0x5131",
+            "productId": "0x5103"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "Associate with gateway",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Associate with Key 1",
+            "description": "Associate with Key 1",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "5": {
+            "label": "Associate with Key 2 if any",
+            "description": "Associate with Key 2 if any",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "8": {
+            "label": "Associate with Key 3 if any",
+            "description": "Associate with Key 3 if any",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Switch state saved or not when power failure",
+            "description": "Switch state saved or not when power failure",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "3": {
+            "label": "ALL ON/ALL OFF",
+            "description": "ALL ON/ALL OFF",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "LED Backlit brightness level",
+            "description": "LED Backlit brightness level",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 10,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "5": {
+            "label": "Key Mode",
+            "description": "Key Mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "6": {
+            "label": "Key On duration",
+            "description": "Key On duration",
+            "unit": "seconds",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

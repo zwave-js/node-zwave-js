@@ -1,0 +1,106 @@
+// Horstmann Controls Limited SRT321
+// Battery Powered Wall Thermostat
+{
+    "_approved": true,
+    "manufacturer": "Horstmann Controls Limited",
+    "manufacturerId": "0x0059",
+    "label": "SRT321",
+    "description": "Battery Powered Wall Thermostat",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0005"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Thermostat Mode Control",
+            "maxNodes": 4,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Switch Control",
+            "maxNodes": 4,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "Battery Info",
+            "maxNodes": 4,
+            "isLifeline": false
+        },
+        "5": {
+            "label": "Thermostat Set Point",
+            "maxNodes": 4,
+            "isLifeline": false
+        },
+        "6": {
+            "label": "Air Temperature",
+            "maxNodes": 4,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Enable Temperature Sensor",
+            "description": "Controls the use of the temperature sensor on the device",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 255
+                }
+            ]
+        },
+        "2": {
+            "label": "Temperature Scale",
+            "description": "Controls the temperature sensor scale",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Celsius",
+                    "value": 0
+                },
+                {
+                    "label": "Fahrenheit",
+                    "value": 255
+                }
+            ]
+        },
+        "3": {
+            "label": "Delta T",
+            "description": "Defines the temperature steps of the heating control. Steps are 0.1 K",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

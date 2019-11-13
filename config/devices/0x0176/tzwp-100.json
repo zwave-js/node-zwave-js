@@ -1,0 +1,84 @@
+// Telldus Technologies AB TZWP-100
+// Wall Plug Switch
+{
+    "_approved": true,
+    "manufacturer": "Telldus Technologies AB",
+    "manufacturerId": "0x0176",
+    "label": "TZWP-100",
+    "description": "Wall Plug Switch",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0001"
+        },
+        {
+            "productType": "0x0003",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Control other devices",
+            "maxNodes": 10,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Countdown timer",
+            "description": "Automatic turning off in minutes, 0 to disable",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 254,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2": {
+            "label": "Device status after power failure",
+            "description": "Define how the plug will react after the power supply is back on",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Always off",
+                    "value": 0
+                },
+                {
+                    "label": "Remember status",
+                    "value": 1
+                },
+                {
+                    "label": "Always on",
+                    "value": 2
+                }
+            ]
+        },
+        "3": {
+            "label": "LED indicator",
+            "description": "Set the intensity of the LED indicator",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

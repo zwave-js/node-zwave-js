@@ -1,0 +1,353 @@
+// wiDom WDS
+// Universal Double Switch
+{
+    "_approved": true,
+    "manufacturer": "wiDom",
+    "manufacturerId": "0x0149",
+    "label": "WDS",
+    "description": "Universal Double Switch",
+    "devices": [
+        {
+            "productType": "0x1214",
+            "productId": "0x0504"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 8,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "On/Off control (Switch 1)",
+            "maxNodes": 8,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Dimming control (Switch 1)",
+            "maxNodes": 8,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "On/Off control (Switch 2)",
+            "maxNodes": 8,
+            "isLifeline": false
+        },
+        "5": {
+            "label": "Dimming control (Switch 2)",
+            "maxNodes": 8,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Status upon receipt of 1 click",
+            "description": "Defines the status of the output O1/O2 after 1 Click",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "IN_OUT",
+                    "value": 0
+                },
+                {
+                    "label": "TOGGLE",
+                    "value": 1
+                },
+                {
+                    "label": "ON",
+                    "value": 2
+                },
+                {
+                    "label": "OFF",
+                    "value": 3
+                },
+                {
+                    "label": "IGNORE",
+                    "value": 4
+                }
+            ]
+        },
+        "2": {
+            "label": "Status upon receipt of 2 clicks",
+            "description": "Defines the status of the output O1/O2 after 2 Clicks",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 4,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "TOGGLE",
+                    "value": 1
+                },
+                {
+                    "label": "ON",
+                    "value": 2
+                },
+                {
+                    "label": "OFF",
+                    "value": 3
+                },
+                {
+                    "label": "IGNORE",
+                    "value": 4
+                }
+            ]
+        },
+        "3": {
+            "label": "Type of outputs",
+            "description": "Defines how the outputs are controlled",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 39,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "Number of clicks that control the device",
+            "description": "Defines the Clicks on the Switches that control associated devices",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 2,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Controlled by 1 Click",
+                    "value": 1
+                },
+                {
+                    "label": "Controlled by 2 Clicks",
+                    "value": 2
+                }
+            ]
+        },
+        "5": {
+            "label": "Level used to control association group 2 and 3",
+            "description": "Defines how to control the devices associated to group 2 and 3.",
+            "valueSize": 1,
+            "minValue": -1,
+            "maxValue": 106,
+            "defaultValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "6": {
+            "label": "Level used to control association group 4 and 5.",
+            "description": "Defines how to control the devices associated to group 4 and 5.",
+            "valueSize": 1,
+            "minValue": -1,
+            "maxValue": 106,
+            "defaultValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "10": {
+            "label": "Timer to switch OFF the Channel 1",
+            "description": "Defines the time after which the Channel 1 is switched OFF",
+            "unit": "seconds",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "11": {
+            "label": "Timer to switch OFF the Channel 2",
+            "description": "Defines the time after which the Channel 2 is switched OFF",
+            "unit": "seconds",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "12": {
+            "label": "Timer to switch ON the Channel 1",
+            "description": "Defines the time after which the Channel 1 is switched ON",
+            "unit": "seconds",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "13": {
+            "label": "Timer to switch ON the Channel 2",
+            "description": "Defines the time after which the Channel 2 is switched ON",
+            "unit": "seconds",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "20": {
+            "label": "Status after Multi-Channel Basic Set command",
+            "description": "Defines how Basic Set commands controlling outputs",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 4,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "As Received",
+                    "value": 1
+                },
+                {
+                    "label": "Ignore if ON",
+                    "value": 2
+                },
+                {
+                    "label": "Ignore if OFF",
+                    "value": 3
+                },
+                {
+                    "label": "IGNORE",
+                    "value": 4
+                }
+            ]
+        },
+        "21": {
+            "label": "Outputs status upon receipt of a Basic Set command",
+            "description": "Define which channels are controlled by Basic Set command",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 3,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "CHANNEL 1",
+                    "value": 1
+                },
+                {
+                    "label": "BOTH CHANNELS",
+                    "value": 3
+                }
+            ]
+        },
+        "60": {
+            "label": "Start-up status",
+            "description": "Defines the status of the device following a restart.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "OFF_OFF",
+                    "value": 0
+                },
+                {
+                    "label": "ON_OFF",
+                    "value": 1
+                },
+                {
+                    "label": "OFF_ON",
+                    "value": 2
+                },
+                {
+                    "label": "ON_ON",
+                    "value": 3
+                },
+                {
+                    "label": "PREVIOUS STATUS",
+                    "value": 4
+                }
+            ]
+        },
+        "61": {
+            "label": "Configuration reset",
+            "description": "Defines which parameters should be reset to default values",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "FACTORY RESET",
+                    "value": 0
+                },
+                {
+                    "label": "ASSOCIATIONS RESET",
+                    "value": 1
+                },
+                {
+                    "label": "CONFIGURATIONS RESET",
+                    "value": 2
+                },
+                {
+                    "label": "RESTART DEVICE",
+                    "value": 3
+                },
+                {
+                    "label": "IGNORE",
+                    "value": 4
+                }
+            ]
+        },
+        "62": {
+            "label": "Type of external switch",
+            "description": "Defines the type of external switch connected to the device",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "IGNORE",
+                    "value": 0
+                },
+                {
+                    "label": "BUTTON",
+                    "value": 1
+                },
+                {
+                    "label": "SWITCH",
+                    "value": 2
+                }
+            ]
+        }
+    }
+}

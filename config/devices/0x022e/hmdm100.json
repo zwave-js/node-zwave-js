@@ -1,0 +1,81 @@
+// Samsung SDS hmdm100
+// Doorlock Control Module for Samsung Locks
+{
+    "_approved": true,
+    "manufacturer": "Samsung SDS",
+    "manufacturerId": "0x022e",
+    "label": "hmdm100",
+    "description": "Doorlock Control Module for Samsung Locks",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Group1",
+            "maxNodes": 5,
+            "isLifeline": false
+        },
+        "2": {
+            "label": "Group2",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Security Function",
+            "description": "0=Disable 1=Enable 2=SystemDisable 3=SystemEnable 4=RequestForEnable 5=Fail",
+            "unit": "1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 5,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2": {
+            "label": "Privacy Mode",
+            "description": "0=Disable 1=Enable",
+            "unit": "1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "3": {
+            "label": "Registered User ID",
+            "description": "The number of registered user codes.2",
+            "unit": "1",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 130,
+            "defaultValue": 1,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "10": {
+            "label": "Platform",
+            "description": "0=Common 1=Samsung SDS",
+            "unit": "1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

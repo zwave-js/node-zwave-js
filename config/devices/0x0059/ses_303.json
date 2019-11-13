@@ -1,0 +1,76 @@
+// Horstmann Controls Limited SES 303
+// Temperature and humidity sensor
+{
+    "_approved": true,
+    "manufacturer": "Horstmann Controls Limited",
+    "manufacturerId": "0x0059",
+    "label": "SES 303",
+    "description": "Temperature and humidity sensor",
+    "devices": [
+        {
+            "productType": "0x000d",
+            "productId": "0x0003"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Delta Temp",
+            "description": "Precision of measured temperature (delta)",
+            "unit": "Celcius degrees",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2": {
+            "label": "Temp Reporting Interval",
+            "description": "Reporting interval in minutes",
+            "unit": "Mins",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "3": {
+            "label": "Delta Humidity",
+            "description": "Precision of measured humidity (delta)",
+            "unit": "RH %",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "Humidity Reporting Interval",
+            "description": "Reporting interval in minutes",
+            "unit": "Mins",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

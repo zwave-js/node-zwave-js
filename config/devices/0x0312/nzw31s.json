@@ -1,0 +1,82 @@
+// NIE Technology NZW31S
+// In-Wall Dimming Switch /w Scenes + Repeater
+{
+    "_approved": true,
+    "manufacturer": "NIE Technology",
+    "manufacturerId": "0x0312",
+    "label": "NZW31S",
+    "description": "In-Wall Dimming Switch /w Scenes + Repeater",
+    "devices": [
+        {
+            "productType": "0x1f00",
+            "productId": "0x1f00"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Dimmer Step Configuration",
+            "description": "Dimmer Speed Setting (On/Off)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2": {
+            "label": "Dimmer Minimum Configuration",
+            "description": "Lowest dim setting before turning off",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "Switch Orientation",
+            "description": "Invert On/Off from Top/Bottom",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Up=ON, Down=OFF",
+                    "value": 0
+                },
+                {
+                    "label": "Up=OFF, Down=ON",
+                    "value": 1
+                }
+            ]
+        },
+        "5": {
+            "label": "Countdown Timer",
+            "description": "Shutoff Timer",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32768,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

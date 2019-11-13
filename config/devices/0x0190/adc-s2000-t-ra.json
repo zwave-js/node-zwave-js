@@ -1,0 +1,133 @@
+// Building 36 Technologies ADC-S2000-T-RA
+// Temperature Sensor
+{
+    "_approved": true,
+    "manufacturer": "Building 36 Technologies",
+    "manufacturerId": "0x0190",
+    "label": "ADC-S2000-T-RA",
+    "description": "Temperature Sensor",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Sensor Multilevel Temperature Report.",
+            "maxNodes": 5,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Wake Up Period",
+            "description": "Seconds to stay awake following button press",
+            "unit": "Seconds",
+            "valueSize": 2,
+            "minValue": 10,
+            "maxValue": 32768,
+            "defaultValue": 32768,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2": {
+            "label": "Low Battery Level",
+            "description": "Battery level",
+            "valueSize": 2,
+            "minValue": 1000,
+            "maxValue": 2500,
+            "defaultValue": 2500,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "3": {
+            "label": "Temperature Reporting Threshold",
+            "description": "Tenths of a degree Fahrenheit. A value of 10 would be 1.0F.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "4": {
+            "label": "Configuration Bitmask",
+            "description": "Configuration Bitmask",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Will not send temperature reports",
+                    "value": 0
+                },
+                {
+                    "label": "Send reports when the temperature changes.",
+                    "value": 2
+                }
+            ]
+        },
+        "5": {
+            "label": "Battery Reporting Interval",
+            "description": "Battery Reporting Interval",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "7": {
+            "label": "Temperature Reporting Interval",
+            "description": "Temperature Reporting Interval",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "8": {
+            "label": "Temperature Calibration Offset",
+            "description": "Temperature Calibration Offset",
+            "valueSize": 2,
+            "minValue": -100,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "9": {
+            "label": "Mandatory Temperature Reporting Interval",
+            "description": "Mandatory Temperature Reporting Interval",
+            "unit": "seconds",
+            "valueSize": 2,
+            "minValue": 60,
+            "maxValue": 64800,
+            "defaultValue": 64800,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

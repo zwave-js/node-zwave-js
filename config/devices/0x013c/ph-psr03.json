@@ -1,0 +1,101 @@
+// Philio Technology Corp PH-PSR03
+// Z-WAVE Remote
+{
+    "_approved": true,
+    "manufacturer": "Philio Technology Corp",
+    "manufacturerId": "0x013c",
+    "label": "PH-PSR03",
+    "description": "Z-WAVE Remote",
+    "devices": [
+        {
+            "productType": "0x0008",
+            "productId": "0x001d"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 4,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Lighting Group 1",
+            "maxNodes": 4,
+            "isLifeline": false
+        },
+        "3": {
+            "label": "Lighting Group 2",
+            "maxNodes": 4,
+            "isLifeline": false
+        },
+        "4": {
+            "label": "Lighting Group 3",
+            "maxNodes": 4,
+            "isLifeline": false
+        },
+        "5": {
+            "label": "Lighting Group 4",
+            "maxNodes": 4,
+            "isLifeline": false
+        },
+        "6": {
+            "label": "Lighting Group 5",
+            "maxNodes": 4,
+            "isLifeline": false
+        },
+        "7": {
+            "label": "Lighting Group 6",
+            "maxNodes": 4,
+            "isLifeline": false
+        },
+        "8": {
+            "label": "Lighting Group 7",
+            "maxNodes": 4,
+            "isLifeline": false
+        },
+        "9": {
+            "label": "Lighting Group 8",
+            "maxNodes": 4,
+            "isLifeline": false
+        }
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Basic Set Level",
+            "description": "Basic Set Level",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "7": {
+            "label": "Customer Function",
+            "description": "Customer Function",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "10": {
+            "label": "Auto Report Battery Time",
+            "description": "Auto Report Battery Time",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 12,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

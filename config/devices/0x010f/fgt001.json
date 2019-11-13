@@ -1,0 +1,63 @@
+// Fibargroup FGT001
+// Thermostatic Valve
+{
+    "_approved": true,
+    "manufacturer": "Fibargroup",
+    "manufacturerId": "0x010f",
+    "label": "FGT001",
+    "description": "Thermostatic Valve",
+    "devices": [
+        {
+            "productType": "0x1301",
+            "productId": "0x1000"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Override Schedule duration",
+            "description": "Duration of Override Schedule after turning knob",
+            "unit": "minutes",
+            "valueSize": 4,
+            "minValue": 10,
+            "maxValue": 10000,
+            "defaultValue": 240,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2": {
+            "label": "Additional functions",
+            "description": "This parameter allows to enable different additional functions of the device.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 31,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "3": {
+            "label": "Additional functions status (READ-ONLY)",
+            "description": "This parameter allows to check statuses of different additional functions.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}

@@ -1,0 +1,84 @@
+// Shenzhen Saykey Technology SK-3007-05
+// Curtain Motor Control external module
+{
+    "_approved": true,
+    "manufacturer": "Shenzhen Saykey Technology",
+    "manufacturerId": "0x032c",
+    "label": "SK-3007-05",
+    "description": "Curtain Motor Control external module",
+    "devices": [
+        {
+            "productType": "0x3007",
+            "productId": "0x0005"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "Z-Wave Plus Lifeline, is assigned to send motor lifeline status to associated devices, including send the multilevel report frame while window cover position, send device local reset frame while set factory default manually etc.",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "4": {
+            "label": "Current Motor Position",
+            "description": "Current Motor Position",
+            "valueSize": 1,
+            "minValue": -127,
+            "maxValue": 99,
+            "defaultValue": -127,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "6": {
+            "label": "Set motor direction",
+            "description": "Toggle motor direction between reverse and default",
+            "valueSize": 1,
+            "minValue": -128,
+            "maxValue": 127,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false
+        },
+        "7": {
+            "label": "Clear motor lead tail endpoint setting",
+            "description": "Clear motor lead tail endpoint setting",
+            "valueSize": 1,
+            "minValue": -128,
+            "maxValue": 127,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false
+        },
+        "8": {
+            "label": "Enable manual pull function",
+            "description": "Enable manual pull function",
+            "valueSize": 1,
+            "minValue": -128,
+            "maxValue": 127,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false
+        },
+        "9": {
+            "label": "Disable manual pull function",
+            "description": "Disable manual pull function",
+            "valueSize": 1,
+            "minValue": -128,
+            "maxValue": 127,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false
+        }
+    }
+}

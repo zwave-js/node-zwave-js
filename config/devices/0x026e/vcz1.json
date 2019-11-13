@@ -1,0 +1,26 @@
+// Graber VCZ1
+// Two Button Remote
+{
+    "_approved": true,
+    "manufacturer": "Graber",
+    "manufacturerId": "0x026e",
+    "label": "VCZ1",
+    "description": "Two Button Remote",
+    "devices": [
+        {
+            "productType": "0x5643",
+            "productId": "0x5a31"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "2": {
+            "label": "Slaves",
+            "maxNodes": 12,
+            "isLifeline": true
+        }
+    }
+}

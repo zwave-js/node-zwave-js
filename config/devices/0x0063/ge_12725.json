@@ -1,0 +1,154 @@
+// Jasco Products GE 12725
+// In-Wall Dimmer
+{
+    "_approved": true,
+    "manufacturer": "Jasco Products",
+    "manufacturerId": "0x0063",
+    "label": "GE 12725",
+    "description": "In-Wall Dimmer",
+    "devices": [
+        {
+            "productType": "0x4944",
+            "productId": "0x3032"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "3": {
+            "label": "Night Light",
+            "description": "Night Light",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "LED on when switch is OFF",
+                    "value": 0
+                },
+                {
+                    "label": "LED on when switch is ON",
+                    "value": 1
+                },
+                {
+                    "label": "LED always off",
+                    "value": 2
+                }
+            ]
+        },
+        "4": {
+            "label": "Invert Switch",
+            "description": "Invert Switch",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "5": {
+            "label": "Ignore Start-Level (Receiving)",
+            "description": "This dimmer will start dimming from its current level.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "7": {
+            "label": "On/Off Command Dim Step",
+            "description": "On/Off Command Dim Step",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "8": {
+            "label": "On/Off Command Dim Rate",
+            "description": "On/Off Command Dim Rate",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "9": {
+            "label": "Local Control Dim Step",
+            "description": "Local Control Dim Step",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "10": {
+            "label": "Local Control Dim Rate",
+            "description": "Local Control Dim Rate",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "11": {
+            "label": "ALL ON/ALL OFF Dim Step",
+            "description": "ALL ON/ALL OFF Dim Step",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "12": {
+            "label": "ALL ON/ALL OFF Dim Rate",
+            "description": "ALL ON/ALL OFF Dim Rate",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        }
+    }
+}
