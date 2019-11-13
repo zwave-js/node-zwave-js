@@ -289,6 +289,17 @@ async function parseConfigFile(filename: string): Promise<Record<string, any>> {
 	return ret;
 }
 
+interface DeviceConfigIndexEntry {
+	manufacturerId: string;
+	productType: string;
+	productId: string;
+	firmwareVersion: {
+		min: string;
+		max: string;
+	};
+	filename: string;
+}
+
 /** Translates all downloaded config files */
 async function importConfigFiles(): Promise<void> {
 	const configFiles = (await fs.readdir(importDir)).filter(
@@ -297,6 +308,7 @@ async function importConfigFiles(): Promise<void> {
 			!file.startsWith("_") &&
 			file !== "manufacturers.json",
 	);
+	const index: DeviceConfigIndexEntry[] = [];
 	for (const file of configFiles) {
 		const inPath = path.join(importDir, file);
 		let parsed: Record<string, any>;
@@ -333,15 +345,35 @@ async function importConfigFiles(): Promise<void> {
 			}
 		}
 		outFilename += ".json";
-		// Write the file
 		await fs.ensureDir(path.dirname(outFilename));
+
 		// Add a comment explaining which device this is
 		// prettier-ignore
 		const output = `// ${parsed.manufacturer} ${parsed.label}${parsed.description ? (`
 // ${parsed.description}`) : ""}
 ${JSON.stringify(parsed, undefined, 4)}`;
 		await fs.writeFile(outFilename, output, "utf8");
+
+		// Add the file to the index
+		index.push(
+			...parsed.devices.map((dev: any) => ({
+				manufacturerId: parsed.manufacturerId,
+				...dev,
+				firmwareVersion: parsed.firmwareVersion,
+				filename: path
+					.relative(processedDir, outFilename)
+					.replace(/\\/g, "/"),
+			})),
+		);
 	}
+
+	// Write the index
+	await fs.writeFile(
+		path.join(processedDir, "index.json"),
+		`// This file is auto-generated using "npm run config import"
+${JSON.stringify(index, undefined, 4)}`,
+		"utf8",
+	);
 }
 
 (async () => {
