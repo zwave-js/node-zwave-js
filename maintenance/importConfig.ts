@@ -20,10 +20,11 @@ import * as fs from "fs-extra";
 import * as JSON5 from "json5";
 import * as path from "path";
 import * as qs from "querystring";
+import { num2hex } from "../src/lib/util/strings";
 
 // Where the files are located
 const importDir = path.join(__dirname, "..", "config/import");
-const processedDir = path.join(__dirname, "..", "config/processed");
+const processedDir = path.join(__dirname, "..", "config/devices");
 const importedManufacturersPath = path.join(importDir, "manufacturers.json");
 const ownManufacturersPath = path.join(importDir, "../manufacturers.json");
 const ownManufacturers = JSON5.parse(
@@ -193,8 +194,23 @@ function assertValid(json: any) {
 	ok(typeof json.versionmaxDisplay === "string");
 }
 
+/** Removes unnecessary whitespace from imported text */
+function sanitizeText(text: string): string {
+	return text.trim().replace(/[\t\r\n]+/g, " ");
+}
+
+/** Converts a device label to a valid filename */
+function labelToFilename(label: string): string {
+	return label
+		.trim()
+		.replace(/[^a-zA-Z0-9\-_]+/g, "_")
+		.replace(/^_/, "")
+		.replace(/_$/, "")
+		.toLowerCase();
+}
+
 /** Parses a downloaded config file into something we understand */
-async function parseConfigFile(filename: string): Promise<string> {
+async function parseConfigFile(filename: string): Promise<Record<string, any>> {
 	const content = await fs.readFile(filename, "utf8");
 	const json = JSON.parse(content);
 	assertValid(json);
@@ -205,8 +221,8 @@ async function parseConfigFile(filename: string): Promise<string> {
 		...(json.warnings?.length ? { _warnings: json.warnings } : undefined),
 		manufacturer: json.manufacturer,
 		manufacturerId: findManufacturerId(content, json),
-		label: json.label,
-		description: json.description,
+		label: sanitizeText(json.label),
+		description: sanitizeText(json.description),
 		devices: json.type_id
 			.split(",")
 			.filter(Boolean)
@@ -225,20 +241,52 @@ async function parseConfigFile(filename: string): Promise<string> {
 	if (json.associations?.length) {
 		ret.associations = {};
 		for (const assoc of json.associations) {
+			const sanitizedDescription = sanitizeText(assoc.description);
 			ret.associations[assoc.group_id] = {
-				label: assoc.label,
-				...(assoc.description
-					? { description: assoc.description }
+				label: sanitizeText(assoc.label),
+				...(sanitizedDescription
+					? { description: sanitizedDescription }
 					: undefined),
 				maxNodes: parseInt(assoc.max),
 				isLifeline: assoc.controller === "1",
 			};
 		}
 	}
-	// Add comment explaining which devices this file contains
-	return `// ${json.manufacturer} ${json.label}
-// ${json.description}
-${JSON.stringify(ret, undefined, 4)}`;
+	if (json.parameters?.length) {
+		ret.paramInformation = {};
+		for (const param of json.parameters) {
+			let key: string = param.param_id;
+			if (param.bitmask !== "0") {
+				const bitmask = parseInt(param.bitmask);
+				key += `[${num2hex(bitmask)}]`;
+			}
+			const sanitizedDescription = sanitizeText(param.description);
+			const sanitizedUnits = sanitizeText(param.units);
+			ret.paramInformation[key] = {
+				label: sanitizeText(param.label),
+				...(sanitizedDescription
+					? { description: sanitizedDescription }
+					: undefined),
+				...(sanitizedUnits ? { unit: sanitizedUnits } : undefined),
+				valueSize: parseInt(param.size, 10),
+				minValue: parseInt(param.value_min, 10),
+				maxValue: parseInt(param.value_max, 10),
+				defaultValue: parseInt(param.value_default, 10),
+				readOnly: param.read_only === "1",
+				writeOnly: param.write_only === "1",
+				allowManualEntry: param.limit_options === "1",
+			};
+			if (param.options?.length) {
+				ret.paramInformation[key].options = param.options.map(
+					(opt: any) => ({
+						label: sanitizeText(opt.label),
+						value: parseInt(opt.value, 10),
+					}),
+				);
+			}
+		}
+	}
+	return ret;
 }
 
 /** Translates all downloaded config files */
@@ -251,11 +299,15 @@ async function importConfigFiles(): Promise<void> {
 	);
 	for (const file of configFiles) {
 		const inPath = path.join(importDir, file);
-		let parsed: string;
+		let parsed: Record<string, any>;
 		try {
 			parsed = await parseConfigFile(inPath);
-			if (!parsed.includes("manufacturerId")) {
+			if (!parsed.manufacturerId) {
 				console.error(`${file} has no manufacturer ID!`);
+			}
+			if (!parsed.label) {
+				console.error(`${file} has no label, ignoring it!`);
+				continue;
 			}
 		} catch (e) {
 			if (e instanceof AssertionError) {
@@ -264,8 +316,31 @@ async function importConfigFiles(): Promise<void> {
 			}
 			throw e;
 		}
-		const outPath = path.join(processedDir, file);
-		await fs.writeFile(outPath, parsed, "utf8");
+		// Config files are named like
+		// config/devices/<manufacturerId>/label[_fwmin[-fwmax]].json
+		let outFilename = path.join(
+			processedDir,
+			parsed.manufacturerId,
+			labelToFilename(parsed.label),
+		);
+		if (
+			parsed.firmwareVersion.min !== "0.0" ||
+			parsed.firmwareVersion.max !== "255.255"
+		) {
+			outFilename += `_${parsed.firmwareVersion.min}`;
+			if (parsed.firmwareVersion.max !== "255.255") {
+				outFilename += `-${parsed.firmwareVersion.max}`;
+			}
+		}
+		outFilename += ".json";
+		// Write the file
+		await fs.ensureDir(path.dirname(outFilename));
+		// Add a comment explaining which device this is
+		// prettier-ignore
+		const output = `// ${parsed.manufacturer} ${parsed.label}${parsed.description ? (`
+// ${parsed.description}`) : ""}
+${JSON.stringify(parsed, undefined, 4)}`;
+		await fs.writeFile(outFilename, output, "utf8");
 	}
 }
 
