@@ -10,6 +10,7 @@ import { configDir, hexKeyRegex, throwInvalidConfig } from "./utils";
 const configPath = path.join(configDir, "manufacturers.json");
 let manufacturers: ReadonlyMap<number, string> | undefined;
 
+/** @internal */
 export async function loadManufacturersInternal(): Promise<void> {
 	if (!(await pathExists(configPath))) {
 		throw new ZWaveError(

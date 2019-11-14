@@ -13,6 +13,7 @@ import { configDir, hexKeyRegex, throwInvalidConfig } from "./utils";
 const configPath = path.join(configDir, "sensorTypes.json");
 let sensorTypes: ReadonlyMap<number, SensorType> | undefined;
 
+/** @internal */
 export async function loadSensorTypesInternal(): Promise<void> {
 	if (!(await pathExists(configPath))) {
 		throw new ZWaveError(

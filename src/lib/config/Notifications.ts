@@ -31,6 +31,7 @@ export type NotificationValueDefinition = (
 const configPath = path.join(configDir, "notifications.json");
 let notifications: ReadonlyMap<number, Notification> | undefined;
 
+/** @internal */
 export async function loadNotificationsInternal(): Promise<void> {
 	if (!(await pathExists(configPath))) {
 		throw new ZWaveError(

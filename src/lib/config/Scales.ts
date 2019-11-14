@@ -12,6 +12,7 @@ import { configDir, hexKeyRegex, throwInvalidConfig } from "./utils";
 const configPath = path.join(configDir, "scales.json");
 let namedScales: ReadonlyMap<string, ReadonlyMap<number, Scale>> | undefined;
 
+/** @internal */
 export async function loadNamedScalesInternal(): Promise<
 	Exclude<typeof namedScales, undefined>
 > {
