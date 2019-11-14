@@ -34,9 +34,24 @@ async function lintDevices(): Promise<void> {
 	for (const file of uniqueFiles) {
 		const filePath = path.join(configDir, "devices", file);
 		const fileContents = await readFile(filePath, "utf8");
-		const _test = new DeviceConfig(file, fileContents);
+		// Try parsing the file
+		const config = new DeviceConfig(file, fileContents);
+
+		// Validate that the file is semantically correct
+
+		// TODO: Think about this - multiple lifeline associations?
+		// // There must only be one association which acts as the lifeline
+		// if (config.associations?.size) {
+		// 	const numLifelines = [...config.associations.values()].filter(
+		// 		assoc => assoc.isLifeline,
+		// 	).length;
+		// 	if (numLifelines > 1) {
+		// 		throw new Error(
+		// 			`${file}: there must be only one lifeline association!`,
+		// 		);
+		// 	}
+		// }
 	}
-	// TODO: Validate that the file is semantically correct
 }
 
 async function lintNamedScales(): Promise<void> {
