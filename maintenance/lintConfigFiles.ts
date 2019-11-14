@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { green, red } from "ansi-colors";
+import { readFile } from "fs-extra";
+import * as path from "path";
+import {
+	DeviceConfig,
+	loadDeviceIndexInternal,
+} from "../src/lib/config/Devices";
 import { loadManufacturersInternal } from "../src/lib/config/Manufacturers";
 import { loadNotificationsInternal } from "../src/lib/config/Notifications";
 import {
@@ -7,6 +13,7 @@ import {
 	loadNamedScalesInternal,
 } from "../src/lib/config/Scales";
 import { loadSensorTypesInternal } from "../src/lib/config/SensorTypes";
+import { configDir } from "../src/lib/config/utils";
 
 async function lintNotifications(): Promise<void> {
 	await loadNotificationsInternal();
@@ -15,6 +22,20 @@ async function lintNotifications(): Promise<void> {
 
 async function lintManufacturers(): Promise<void> {
 	await loadManufacturersInternal();
+	// TODO: Validate that the file is semantically correct
+}
+
+async function lintDevices(): Promise<void> {
+	const index = await loadDeviceIndexInternal();
+	// Device config files are lazy-loaded, so we need to parse them all
+	const uniqueFiles = index
+		.map(e => e.filename)
+		.filter((filename, index, self) => self.indexOf(filename) === index);
+	for (const file of uniqueFiles) {
+		const filePath = path.join(configDir, "devices", file);
+		const fileContents = await readFile(filePath, "utf8");
+		const _test = new DeviceConfig(file, fileContents);
+	}
 	// TODO: Validate that the file is semantically correct
 }
 
@@ -36,7 +57,7 @@ async function lintSensorTypes(): Promise<void> {
 
 Promise.resolve()
 	.then(lintManufacturers)
-	// TODO: lint device files
+	.then(lintDevices)
 	.then(lintNotifications)
 	.then(lintNamedScales)
 	.then(lintSensorTypes)

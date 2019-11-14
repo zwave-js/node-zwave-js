@@ -1,4 +1,6 @@
+import { entries } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
+import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
@@ -6,23 +8,26 @@ import * as semver from "semver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { JSONObject } from "../util/misc";
-import { configDir, throwInvalidConfig } from "./utils";
+import { configDir, hexKeyRegex, throwInvalidConfig } from "./utils";
+
+export interface FirmwareVersionRange {
+	min: string;
+	max: string;
+}
 
 export interface DeviceConfigIndexEntry {
 	manufacturerId: string;
 	productType: string;
 	productId: string;
-	firmwareVersion: {
-		min: string;
-		max: string;
-	};
+	firmwareVersion: FirmwareVersionRange;
 	filename: string;
 }
 
 const indexPath = path.join(configDir, "devices/index.json");
 let index: readonly DeviceConfigIndexEntry[];
 
-export async function loadDeviceIndexInternal(): Promise<void> {
+/** @internal */
+export async function loadDeviceIndexInternal(): Promise<typeof index> {
 	if (!(await pathExists(indexPath))) {
 		throw new ZWaveError(
 			"The device config index does not exist!",
@@ -32,6 +37,7 @@ export async function loadDeviceIndexInternal(): Promise<void> {
 	try {
 		const fileContents = await readFile(indexPath, "utf8");
 		index = JSON5.parse(fileContents);
+		return index;
 	} catch (e) {
 		if (e instanceof ZWaveError) {
 			throw e;
@@ -69,6 +75,7 @@ function formatId(id: number): string {
 	return "0x" + padStart(id.toString(16), 4, "0");
 }
 
+/** Pads a firmware version string, so it can be compared with semver */
 function padVersion(version: string): string {
 	return version + ".0";
 }
@@ -76,8 +83,8 @@ function padVersion(version: string): string {
 /**
  * Looks up the definition of a given device in the configuration DB
  * @param manufacturerId The manufacturer id of the device
- * @param productId The product id of the device
  * @param productType The product type of the device
+ * @param productId The product id of the device
  * @param firmwareVersion If known, configuration for a specific firmware version can be loaded
  */
 export async function lookupDevice(
@@ -109,7 +116,7 @@ export async function lookupDevice(
 
 		try {
 			const fileContents = await readFile(filePath, "utf8");
-			return JSON5.parse(fileContents);
+			return new DeviceConfig(indexEntry.filename, fileContents);
 		} catch (e) {
 			if (process.env.NODE_ENV !== "test") {
 				// FIXME: This call breaks when using jest.isolateModule()
@@ -120,4 +127,157 @@ export async function lookupDevice(
 			}
 		}
 	}
+}
+
+function isHexKey(val: any): val is string {
+	return typeof val === "string" && hexKeyRegex.test(val);
+}
+
+const firmwareVersionRegex = /^\d{1,3}\.\d{1,3}$/;
+function isFirmwareVersion(val: any): val is string {
+	return (
+		typeof val === "string" &&
+		firmwareVersionRegex.test(val) &&
+		val
+			.split(".")
+			.map(str => parseInt(str, 10))
+			.every(num => num >= 0 && num <= 255)
+	);
+}
+
+export class DeviceConfig {
+	public constructor(filename: string, fileContents: string) {
+		const definition = JSON5.parse(fileContents);
+		if (!isHexKey(definition.manufacturerId)) {
+			throwInvalidConfig(
+				`device`,
+				`${filename}: manufacturer id is not a hexadecimal number`,
+			);
+		}
+		this.manufacturerId = parseInt(definition.manufacturerId, 16);
+
+		for (const prop of ["manufacturer", "label", "description"] as const) {
+			if (typeof definition[prop] !== "string") {
+				throwInvalidConfig(
+					`device`,
+					`${filename}: ${prop} is not a string`,
+				);
+			}
+			this[prop] = definition[prop];
+		}
+
+		if (
+			!isArray(definition.devices) ||
+			!(definition.devices as any[]).every(
+				dev =>
+					isObject(dev) &&
+					isHexKey((dev as any).productType) &&
+					isHexKey((dev as any).productId),
+			)
+		) {
+			throwInvalidConfig(`device`, `${filename}: devices is malformed`);
+		}
+		this.devices = (definition.devices as any[]).map(
+			({ productType, productId }) => ({ productType, productId }),
+		);
+
+		if (
+			!isObject(definition.firmwareVersion) ||
+			!isFirmwareVersion(definition.firmwareVersion.min) ||
+			!isFirmwareVersion(definition.firmwareVersion.max)
+		) {
+			throwInvalidConfig(
+				`device`,
+				`${filename}: firmwareVersion is malformed or invalid`,
+			);
+		}
+		const { min, max } = definition.firmwareVersion;
+		this.firmwareVersion = { min, max };
+
+		if (definition.associations != undefined) {
+			const associations = new Map<number, AssociationConfig>();
+			if (!isObject(definition.associations)) {
+				throwInvalidConfig(
+					`device`,
+					`${filename}: associations is not an object`,
+				);
+			}
+			for (const [key, assocDefinition] of entries(
+				definition.associations,
+			)) {
+				if (!/[1-9][0-9]*/.test(key))
+					throwInvalidConfig(
+						`device`,
+						`${filename}: found non-numeric group id "${key}" in associations`,
+					);
+				const keyNum = parseInt(key, 10);
+				associations.set(
+					keyNum,
+					new AssociationConfig(filename, keyNum, assocDefinition),
+				);
+			}
+			this.associations = associations;
+		}
+	}
+
+	public readonly manufacturer!: string;
+	public readonly manufacturerId: number;
+	public readonly label!: string;
+	public readonly description!: string;
+	public readonly devices: readonly {
+		productType: string;
+		productId: string;
+	}[];
+	public readonly firmwareVersion: FirmwareVersionRange;
+	public readonly associations?: ReadonlyMap<number, AssociationConfig>;
+}
+
+export class AssociationConfig {
+	public constructor(
+		filename: string,
+		groupId: number,
+		definition: JSONObject,
+	) {
+		this.groupId = groupId;
+		if (typeof definition.label !== "string") {
+			throwInvalidConfig(
+				"devices",
+				`${filename}: Association ${groupId} has a non-string label`,
+			);
+		}
+		this.label = definition.label;
+
+		if (
+			definition.description != undefined &&
+			typeof definition.description !== "string"
+		) {
+			throwInvalidConfig(
+				"devices",
+				`${filename}: Association ${groupId} has a non-string description`,
+			);
+		}
+		this.description = definition.description;
+
+		if (typeof definition.maxNodes !== "number") {
+			throwInvalidConfig(
+				"devices",
+				`${filename}: maxNodes for association ${groupId} is not a number`,
+			);
+		}
+		this.maxNodes = definition.maxNodes;
+
+		if (typeof definition.isLifeline !== "boolean") {
+			throwInvalidConfig(
+				"devices",
+				`${filename}: isLifeline for association ${groupId} is not a boolean`,
+			);
+		}
+		this.isLifeline = definition.isLifeline;
+	}
+
+	public readonly groupId: number;
+	public readonly label: string;
+	public readonly description?: string;
+	public readonly maxNodes: number;
+	public readonly isLifeline: boolean;
 }
