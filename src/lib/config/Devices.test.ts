@@ -162,13 +162,22 @@ describe("lib/config/Devices", () => {
 			pathExistsMock.mockResolvedValue(true);
 			// Return a dummy file that must be parsed as JSON5
 			readFileMock.mockResolvedValue(
-				`// Some file with a comment
+				`// This is a minimal valid device config
 {
-    "manufacturer": "Test manufacturer",
-    "manufacturerId": "0x0abc",
-    "label": "Some label",
-    "description": "some description",
-    // don't care about the rest
+	"manufacturer": "Test manufacturer",
+	"manufacturerId": "0x0abc",
+	"label": "LABEL",
+	"description": "desc rip tion",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }`,
 			);
 
