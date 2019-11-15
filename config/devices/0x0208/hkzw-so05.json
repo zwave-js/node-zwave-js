@@ -127,7 +127,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "152": {
             "label": "Power Report Percentage Threshold",
@@ -139,7 +139,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "171": {
             "label": "Power Report Frequence",
@@ -151,7 +151,7 @@
             "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "172": {
             "label": "Energy Report Frequence",
@@ -163,7 +163,7 @@
             "defaultValue": 300,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "173": {
             "label": "Voltage Report Frequency",
@@ -175,7 +175,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "174": {
             "label": "Electricity Report Frequency",
@@ -187,7 +187,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

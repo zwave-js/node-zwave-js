@@ -55,7 +55,7 @@
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "3": {
             "label": "Number of Cool Stages",
@@ -66,7 +66,7 @@
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "4": {
             "label": "Heat Fuel Type",
@@ -98,7 +98,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "6": {
             "label": "Overshoot",
@@ -109,7 +109,7 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "7": {
             "label": "Swing",
@@ -120,7 +120,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "8": {
             "label": "Heat Staging Delay",
@@ -131,7 +131,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "9": {
             "label": "Cool Staging Delay",
@@ -142,7 +142,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10": {
             "label": "Balance Setpoint",
@@ -153,7 +153,7 @@
             "defaultValue": 350,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "11": {
             "label": "Recovery Settings",
@@ -185,7 +185,7 @@
             "defaultValue": 20,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "13": {
             "label": "Fan Circulation Duty Cycle",
@@ -196,7 +196,7 @@
             "defaultValue": 25,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "14": {
             "label": "Fan Purge Time",
@@ -207,7 +207,7 @@
             "defaultValue": 60,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "15": {
             "label": "Maximum Heat Setpoint",
@@ -218,7 +218,7 @@
             "defaultValue": 950,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "16": {
             "label": "Minimum Heat Setpoint",
@@ -229,7 +229,7 @@
             "defaultValue": 350,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "17": {
             "label": "Maximum Cool Setpoint",
@@ -240,7 +240,7 @@
             "defaultValue": 950,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "18": {
             "label": "Minimum Cool Setpoint",
@@ -251,7 +251,7 @@
             "defaultValue": 500,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "19": {
             "label": "Thermostat Lock",
@@ -283,7 +283,7 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "21": {
             "label": "Demand Response Period",
@@ -294,7 +294,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "22": {
             "label": "Demand Response Duty Cycle",
@@ -305,7 +305,7 @@
             "defaultValue": 25,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "23": {
             "label": "Temperature Display Units",
@@ -428,7 +428,7 @@
             "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "28": {
             "label": "Battery Alert Threshold Very Low",
@@ -439,7 +439,7 @@
             "defaultValue": 15,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "30": {
             "label": "Remote Temperature Enable",
@@ -471,7 +471,7 @@
             "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "32": {
             "label": "Cool Differential",
@@ -482,7 +482,7 @@
             "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "33": {
             "label": "Temperature Reporting Threshold",
@@ -493,7 +493,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "34": {
             "label": "O/B Select",

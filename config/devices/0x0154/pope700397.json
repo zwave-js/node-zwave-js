@@ -60,7 +60,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "3": {
             "label": "Switching behavior",
@@ -192,7 +192,7 @@
             "defaultValue": 100,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "24": {
             "label": "Current Reporting Threshold",
@@ -203,7 +203,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "25": {
             "label": "Power Reporting Threshold",
@@ -214,7 +214,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "26": {
             "label": "Soft Circuit Breaker Threshold",
@@ -225,7 +225,7 @@
             "defaultValue": 3600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "27": {
             "label": "Soft Circuit Breaker Recovery Time",
@@ -236,7 +236,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "28": {
             "label": "Soft Circuit Breaker Delay Time",
@@ -247,7 +247,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

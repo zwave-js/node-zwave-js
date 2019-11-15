@@ -37,7 +37,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "2": {
             "label": "Basic Set ON Level",
@@ -48,7 +48,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "5": {
             "label": "Disable the Flood function",
@@ -80,7 +80,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10": {
             "label": "Auto Report Battery Time",
@@ -91,7 +91,7 @@
             "defaultValue": 12,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "15": {
             "label": "Auto Report Flood Time",
@@ -102,7 +102,7 @@
             "defaultValue": 12,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "20": {
             "label": "Auto Report Tick Interval",
@@ -113,7 +113,7 @@
             "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

@@ -45,7 +45,7 @@
             "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "2": {
             "label": "BASIC_SET Level",

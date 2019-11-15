@@ -65,7 +65,7 @@
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "5": {
             "label": "Default ringtone",
@@ -76,7 +76,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "6": {
             "label": "Ringtone to play",
@@ -145,7 +145,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10": {
             "label": "Define button- and button+ action",
@@ -276,7 +276,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "255": {
             "label": "Reset",
@@ -287,7 +287,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

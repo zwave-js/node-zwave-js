@@ -191,7 +191,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "8": {
             "label": "value sent to 2nd Association Group on Off event",
@@ -202,7 +202,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "9": {
             "label": "Time Delay of On command frame",
@@ -213,7 +213,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10": {
             "label": "Time Delay of Off command frame",
@@ -235,7 +235,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "12": {
             "label": "Reporting Tamper Alarm Cancellation",

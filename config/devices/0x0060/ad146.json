@@ -37,7 +37,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "2": {
             "label": "Report time delay group 1",
@@ -48,7 +48,7 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "3": {
             "label": "Remember last status",

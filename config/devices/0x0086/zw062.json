@@ -47,7 +47,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "34": {
             "label": "Sensor Calibration",
@@ -80,7 +80,7 @@
             "defaultValue": 60,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "36": {
             "label": "Number of alarm musics",
@@ -91,7 +91,7 @@
             "defaultValue": 1,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "39": {
             "label": "Unknown state alarm mode",
@@ -102,7 +102,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "40": {
             "label": "Closed alarm mode",
@@ -113,7 +113,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "41": {
             "label": "Tamper switch configuration",
@@ -124,7 +124,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "42": {
             "label": "Battery state",
@@ -135,7 +135,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "43": {
             "label": "Play or Pause ringtone",
@@ -146,7 +146,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "44": {
             "label": "Ringtone test volume",
@@ -157,7 +157,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "45": {
             "label": "Temperature",
@@ -169,7 +169,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "47": {
             "label": "Button definition",
@@ -285,7 +285,7 @@
             "defaultValue": 8,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "37[0xff0000]": {
             "label": "Opening alarm choice",
@@ -296,7 +296,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "37[0x0f000000]": {
             "label": "Opening alarm LED mode",
@@ -307,7 +307,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "38[0xff]": {
             "label": "Disable closing alarm",
@@ -339,7 +339,7 @@
             "defaultValue": 8,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "38[0xff0000]": {
             "label": "Closing alarm choice",
@@ -350,7 +350,7 @@
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "38[0x0f000000]": {
             "label": "Closing alarm LED mode",
@@ -361,7 +361,7 @@
             "defaultValue": 6,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

@@ -38,7 +38,7 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "33": {
             "label": "first four most significant bytes of the SKU",
@@ -49,7 +49,7 @@
             "defaultValue": 32,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "34": {
             "label": "four least significant bytes of the SKU.",
@@ -60,7 +60,7 @@
             "defaultValue": 32,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "35": {
             "label": "Lock Type",
@@ -71,7 +71,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "40": {
             "label": "Factory Reset",

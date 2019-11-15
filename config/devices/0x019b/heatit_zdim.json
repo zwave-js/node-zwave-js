@@ -47,7 +47,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "2": {
             "label": "Minimum Dim level",
@@ -58,7 +58,7 @@
             "defaultValue": 20,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "3": {
             "label": "Maximum Dim level",
@@ -70,7 +70,7 @@
             "defaultValue": 85,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "4": {
             "label": "Total steps",
@@ -81,7 +81,7 @@
             "defaultValue": 15,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "5": {
             "label": "Double press function",
@@ -137,7 +137,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "8": {
             "label": "Dimming Duration",
@@ -148,7 +148,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "9": {
             "label": "Meter Report Interval",
@@ -159,7 +159,7 @@
             "defaultValue": 60,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10": {
             "label": "Power restore level",
@@ -171,7 +171,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

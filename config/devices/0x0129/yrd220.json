@@ -97,7 +97,7 @@
             "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "4": {
             "label": "Wrong Code Entry Limit",
@@ -108,7 +108,7 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "5": {
             "label": "Language",
@@ -145,7 +145,7 @@
             "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "8": {
             "label": "Operating Mode",

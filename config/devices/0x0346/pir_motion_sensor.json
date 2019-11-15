@@ -40,7 +40,7 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "3": {
             "label": "Pet Immunity",

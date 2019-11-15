@@ -153,7 +153,7 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "8": {
             "label": "dim timer parameter",
@@ -164,7 +164,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "9": {
             "label": "Local control dim step",
@@ -175,7 +175,7 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10": {
             "label": "Local control dim timer",
@@ -186,7 +186,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "11": {
             "label": "ALL ON/ ALL OFF dim step",
@@ -197,7 +197,7 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "12": {
             "label": "ALL ON/ ALL OFF dim timer",
@@ -208,7 +208,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "13": {
             "label": "Disable group 4 during a dim command",
@@ -328,7 +328,7 @@
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "21": {
             "label": "Poll first node in group 1",

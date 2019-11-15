@@ -35,7 +35,7 @@
             "defaultValue": 240,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "2": {
             "label": "Additional functions",
@@ -46,7 +46,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "3": {
             "label": "Additional functions status (READ-ONLY)",
@@ -57,7 +57,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

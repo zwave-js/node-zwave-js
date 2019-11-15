@@ -37,7 +37,7 @@
             "defaultValue": 4,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "3": {
             "label": "Utility Lock",
@@ -269,7 +269,7 @@
             "defaultValue": 255,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "2[0xff]": {
             "label": "HVAC Type",
@@ -301,7 +301,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "2[0xf000]": {
             "label": "Fuel Type",
@@ -333,7 +333,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "2[0x0f000000]": {
             "label": "# of Cool Stages.",
@@ -344,7 +344,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10[0xffff]": {
             "label": "Temperature Reporting Filter (lower bound)",
@@ -355,7 +355,7 @@
             "defaultValue": 124,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10[0x0fff0000]": {
             "label": "Temperature Reporting Filter  (upper bound)",
@@ -366,7 +366,7 @@
             "defaultValue": 124,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

@@ -43,7 +43,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "2": {
             "label": "Beep",
@@ -54,7 +54,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "3": {
             "label": "LED Backlit Brightness Level",
@@ -65,7 +65,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "4": {
             "label": "ALL ON/ALL OFF",
@@ -76,7 +76,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "5": {
             "label": "Minimum brightness level",
@@ -87,7 +87,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "6": {
             "label": "Maximum brightness level",
@@ -98,7 +98,7 @@
             "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "7": {
             "label": "Single dimming step time(Manual)",
@@ -109,7 +109,7 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "8": {
             "label": "Single dimming step size(Manual)",
@@ -120,7 +120,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "9": {
             "label": "Single dimming step time (Auto)",
@@ -131,7 +131,7 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10": {
             "label": "Single dimming step size (Auto)",
@@ -142,7 +142,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "11": {
             "label": "Timer function (Auto-off)",
@@ -153,7 +153,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "13": {
             "label": "One click of S1",
@@ -164,7 +164,7 @@
             "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "14": {
             "label": "Double click of S1",
@@ -175,7 +175,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "15": {
             "label": "Switch1 to Association Group 2 & 3",
@@ -186,7 +186,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "16": {
             "label": "Switch1 to Association Group 2",
@@ -197,7 +197,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "19": {
             "label": "Scene ID sent to AG1 when one click of S1",
@@ -208,7 +208,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "20": {
             "label": "Scene ID sent to AG1 when double click of S1",
@@ -219,7 +219,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "21": {
             "label": "Scene ID sent to AG1 when hold S1",
@@ -230,7 +230,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "255": {
             "label": "Factory setting",
@@ -241,7 +241,7 @@
             "defaultValue": 85,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

@@ -63,7 +63,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "80": {
             "label": "Notification on Status Change",
@@ -120,7 +120,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "92": {
             "label": "Minimum Change to send Report (%)",
@@ -131,7 +131,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "101": {
             "label": "Reports to send to Group 1",
@@ -142,7 +142,7 @@
             "defaultValue": 4,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "102": {
             "label": "Reports to send to Group 2",
@@ -153,7 +153,7 @@
             "defaultValue": 4,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "103": {
             "label": "Reports to send to Group 3",
@@ -164,7 +164,7 @@
             "defaultValue": 4,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "111": {
             "label": "Interval to send out reports of group 1",
@@ -176,7 +176,7 @@
             "defaultValue": 720,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "112": {
             "label": "Interval to send out reports of group 2",
@@ -188,7 +188,7 @@
             "defaultValue": 720,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "113": {
             "label": "Interval to send out reports of group 3",
@@ -200,7 +200,7 @@
             "defaultValue": 720,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

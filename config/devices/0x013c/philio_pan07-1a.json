@@ -41,7 +41,7 @@
             "defaultValue": 720,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "2": {
             "label": "KWH Meter Report",
@@ -52,7 +52,7 @@
             "defaultValue": 6,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "3": {
             "label": "Selected Relay",
@@ -113,7 +113,7 @@
             "defaultValue": 600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "6": {
             "label": "Threshold of KWH for Load Caution",
@@ -125,7 +125,7 @@
             "defaultValue": 10000,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "7": {
             "label": "Relay control mode",

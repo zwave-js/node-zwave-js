@@ -62,7 +62,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "2": {
             "label": "IN2 Alarm Cancellation Delay",
@@ -73,7 +73,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "3": {
             "label": "Type of input no. 1",
@@ -224,7 +224,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "8": {
             "label": "Forced Level of Dimming group 2",
@@ -235,7 +235,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "9": {
             "label": "Deactivate transmission of frame canceling alarm",
@@ -271,7 +271,7 @@
             "defaultValue": 20,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "11": {
             "label": "Interval betw. forcing to send report for temp.",
@@ -282,7 +282,7 @@
             "defaultValue": 200,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "12": {
             "label": "Insensitiveness to temperature changes.",
@@ -293,7 +293,7 @@
             "defaultValue": 8,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "13": {
             "label": "Transmitting alarm/control frame broadcast mode",

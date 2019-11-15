@@ -54,7 +54,7 @@
             "defaultValue": 240,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "4": {
             "label": "Motion sensor",
@@ -104,7 +104,7 @@
             "defaultValue": 720,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "112": {
             "label": "Interval to send out reports of group 2",
@@ -114,7 +114,7 @@
             "defaultValue": 720,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "113": {
             "label": "Interval to send out reports of group 3",
@@ -124,7 +124,7 @@
             "defaultValue": 720,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "255": {
             "label": "Reset to the default",
@@ -156,7 +156,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "102[0xff]": {
             "label": "Which reports to send to group 2",
@@ -167,7 +167,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "103[0xff]": {
             "label": "Which reports to send to group 3",
@@ -178,7 +178,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

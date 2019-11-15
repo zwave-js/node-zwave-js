@@ -145,7 +145,7 @@
             "defaultValue": 150,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "13": {
             "label": "Lamellas positioning mode",
@@ -206,7 +206,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "18": {
             "label": "Motor operation detection",
@@ -217,7 +217,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "22": {
             "label": "Motor operation time",
@@ -228,7 +228,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "29": {
             "label": "Forced Roller Shutter calibration",
@@ -377,7 +377,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "42": {
             "label": "Periodic power or energy reports",
@@ -388,7 +388,7 @@
             "defaultValue": 3600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "43": {
             "label": "Energy reports",
@@ -399,7 +399,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "44": {
             "label": "Self-measurement",

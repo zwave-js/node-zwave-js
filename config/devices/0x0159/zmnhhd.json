@@ -311,7 +311,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "74": {
             "label": "Alarm/Notification time interval",

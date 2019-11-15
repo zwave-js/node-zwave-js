@@ -149,7 +149,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "6": {
             "label": "Floor maximum temperature (FHi)",
@@ -161,7 +161,7 @@
             "defaultValue": 400,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "7": {
             "label": "Air (A2) minimum temperature limit (ALo)",
@@ -173,7 +173,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "8": {
             "label": "Air (A2) maximum temperature limit (AHi)",
@@ -185,7 +185,7 @@
             "defaultValue": 400,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "9": {
             "label": "Heating mode setpoint (CO)",
@@ -197,7 +197,7 @@
             "defaultValue": 210,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10": {
             "label": "Energy saving mode setpoint (ECO)",
@@ -209,7 +209,7 @@
             "defaultValue": 180,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "11": {
             "label": "Cooling setpoint (COOL)",
@@ -221,7 +221,7 @@
             "defaultValue": 210,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "12": {
             "label": "Floor sensor calibration",
@@ -233,7 +233,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "13": {
             "label": "External sensor calibration",
@@ -245,7 +245,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "14": {
             "label": "Temperature display",
@@ -278,7 +278,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "16": {
             "label": "Button brightness - active state",
@@ -290,7 +290,7 @@
             "defaultValue": 100,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "17": {
             "label": "Display brightness - dimmed state",
@@ -302,7 +302,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "18": {
             "label": "Display brightness - active state",
@@ -314,7 +314,7 @@
             "defaultValue": 100,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "19": {
             "label": "Temperature report interval",
@@ -338,7 +338,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "21": {
             "label": "Meter report interval",
@@ -362,7 +362,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

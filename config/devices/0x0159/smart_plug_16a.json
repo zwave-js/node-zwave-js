@@ -164,7 +164,7 @@
             "defaultValue": 20,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "41": {
             "label": "Treshold time for power reporting",
@@ -176,7 +176,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

@@ -250,7 +250,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "43": {
             "label": "Hysteresis heating On",
@@ -305,7 +305,7 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "46": {
             "label": "Hysteresis Cooling Off",
@@ -343,7 +343,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "60": {
             "label": "Too low temperature limit",
@@ -355,7 +355,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "61": {
             "label": "Too high temperature limit",
@@ -367,7 +367,7 @@
             "defaultValue": 700,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "64": {
             "label": "Output Switch selection Q1",
@@ -421,7 +421,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "71": {
             "label": "Input I1 status off delay",
@@ -433,7 +433,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "72": {
             "label": "Input I2 status on delay",
@@ -445,7 +445,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "73": {
             "label": "Input I2 status off delay",
@@ -457,7 +457,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "76": {
             "label": "group 2, 10 - reporting on time interval",
@@ -469,7 +469,7 @@
             "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "77": {
             "label": "group 10 delay before sending Basic Set ON",
@@ -481,7 +481,7 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "78": {
             "label": "Scale Selection",
@@ -604,7 +604,7 @@
             "defaultValue": 32536,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "120": {
             "label": "Digital temperature sensor reporting",
@@ -615,7 +615,7 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "121": {
             "label": "Digital temperature sensor / setpoint selector",
@@ -663,7 +663,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

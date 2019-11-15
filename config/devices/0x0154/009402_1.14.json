@@ -41,7 +41,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "2": {
             "label": "Siren alarm tone length",
@@ -52,7 +52,7 @@
             "defaultValue": 8,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "3": {
             "label": "Value of On-Command",
@@ -62,7 +62,7 @@
             "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "4": {
             "label": "Value of Off-Command",
@@ -72,7 +72,7 @@
             "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10": {
             "label": "Auto Report Battery Time",
@@ -83,7 +83,7 @@
             "defaultValue": 127,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

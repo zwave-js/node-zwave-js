@@ -70,7 +70,7 @@
             "defaultValue": 1300,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "4": {
             "label": "Threshold of KWh for Load Caution",
@@ -81,7 +81,7 @@
             "defaultValue": 10000,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "5": {
             "label": "Restore switch state mode",

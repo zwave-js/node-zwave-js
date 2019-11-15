@@ -82,7 +82,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "42": {
             "label": "Reporting in Watts by time interval for Q1 or Q2",
@@ -93,7 +93,7 @@
             "defaultValue": 300,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "71": {
             "label": "Operating modes",
@@ -125,7 +125,7 @@
             "defaultValue": 150,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "73": {
             "label": "Slats position",
@@ -161,7 +161,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "76": {
             "label": "Motor operation detection",
@@ -172,7 +172,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "78": {
             "label": "Forced Shutter calibration",
@@ -183,7 +183,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "80": {
             "label": "Reporting to controller",
@@ -215,7 +215,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "90": {
             "label": "Relay delay time",
@@ -226,7 +226,7 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

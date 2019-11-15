@@ -242,7 +242,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "21": {
             "label": "Send the following Switch All commands",

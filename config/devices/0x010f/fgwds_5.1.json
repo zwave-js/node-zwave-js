@@ -57,7 +57,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "2": {
             "label": "First channel – overload safety switch",
@@ -68,7 +68,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "3": {
             "label": "Second channel – overload safety switch",
@@ -79,7 +79,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10": {
             "label": "LED frame – power limit",
@@ -90,7 +90,7 @@
             "defaultValue": 36800,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "11": {
             "label": "LED frame – colour when ON",
@@ -101,7 +101,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "12": {
             "label": "LED frame – colour when OFF",
@@ -112,7 +112,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "13": {
             "label": "LED frame – brightness",
@@ -123,7 +123,7 @@
             "defaultValue": 100,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "20": {
             "label": "Buttons operation",
@@ -134,7 +134,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "24": {
             "label": "Buttons orientation",
@@ -145,7 +145,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "25": {
             "label": "Outputs orientation",
@@ -156,7 +156,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "30": {
             "label": "Alarm configuration - 1st slot",
@@ -167,7 +167,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "31": {
             "label": "Alarm configuration - 2nd slot",
@@ -178,7 +178,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "32": {
             "label": "Alarm configuration - 3rd slot",
@@ -189,7 +189,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "33": {
             "label": "Alarm configuration - 4th slot",
@@ -200,7 +200,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "34": {
             "label": "Alarm configuration - 5th slot",
@@ -211,7 +211,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "35": {
             "label": "Alarm configuration – duration",
@@ -222,7 +222,7 @@
             "defaultValue": 32400,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "40": {
             "label": "First button – scenes sent",
@@ -233,7 +233,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "41": {
             "label": "Second button – scenes sent",
@@ -244,7 +244,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "60": {
             "label": "Power reports – include self-consumption",
@@ -255,7 +255,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "61": {
             "label": "Power reports for first channel – on change",
@@ -266,7 +266,7 @@
             "defaultValue": 500,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "62": {
             "label": "Power reports for first channel – periodic",
@@ -277,7 +277,7 @@
             "defaultValue": 32400,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "63": {
             "label": "Power reports for second channel – on change",
@@ -288,7 +288,7 @@
             "defaultValue": 500,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "64": {
             "label": "Power reports for second channel – periodic",
@@ -299,7 +299,7 @@
             "defaultValue": 32400,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "65": {
             "label": "Energy reports for first channel – on change",
@@ -310,7 +310,7 @@
             "defaultValue": 500,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "66": {
             "label": "Energy reports for first channel – periodic",
@@ -321,7 +321,7 @@
             "defaultValue": 32400,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "67": {
             "label": "Energy reports for second channel – on change",
@@ -332,7 +332,7 @@
             "defaultValue": 500,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "68": {
             "label": "Energy reports for second channel – periodic",
@@ -343,7 +343,7 @@
             "defaultValue": 32400,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "150": {
             "label": "First channel – operating mode",
@@ -354,7 +354,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "151": {
             "label": "Second channel – operating mode",
@@ -365,7 +365,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "152": {
             "label": "chan1reactdelayedoff",
@@ -376,7 +376,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "153": {
             "label": "chan2reactdelayedoff",
@@ -387,7 +387,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "154": {
             "label": "chan1timedelayedoff",
@@ -398,7 +398,7 @@
             "defaultValue": 32000,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "155": {
             "label": "chan2timedelayedoff",
@@ -409,7 +409,7 @@
             "defaultValue": 32000,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "156": {
             "label": "chan1onsent23assgp",
@@ -420,7 +420,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "157": {
             "label": "chan1offsent23assgp",
@@ -431,7 +431,7 @@
             "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "158": {
             "label": "chan1doclicsent23assgp",
@@ -442,7 +442,7 @@
             "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "159": {
             "label": "chan2onsent45assgp",
@@ -453,7 +453,7 @@
             "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "160": {
             "label": "chan2offsent45assgp",
@@ -464,7 +464,7 @@
             "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "161": {
             "label": "chan2doclicsent23assgp",
@@ -475,7 +475,7 @@
             "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

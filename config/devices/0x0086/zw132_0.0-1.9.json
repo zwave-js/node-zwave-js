@@ -252,7 +252,7 @@
             "defaultValue": 25,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "92": {
             "label": "Set the threshold percent power",
@@ -263,7 +263,7 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "100": {
             "label": "Set parameter 101-103 to default value",
@@ -274,7 +274,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "101": {
             "label": "Set group 1 reports",
@@ -468,7 +468,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "111": {
             "label": "Set the interval of automatic report for Report G1",
@@ -479,7 +479,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "112": {
             "label": "Set the interval of automatic report for Report G2",
@@ -490,7 +490,7 @@
             "defaultValue": 600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "113": {
             "label": "Set the interval of automatic report for Report G3",
@@ -501,7 +501,7 @@
             "defaultValue": 600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "120": {
             "label": "Configure the external switch mode for S1",

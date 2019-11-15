@@ -96,7 +96,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "20": {
             "label": "Output status after re-power",
@@ -250,7 +250,7 @@
             "defaultValue": 8327680,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "90": {
             "label": "Enables/disables parameter 91 and 92",
@@ -282,7 +282,7 @@
             "defaultValue": 25,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "92": {
             "label": "Set the threshold value of percent power",
@@ -293,7 +293,7 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "100": {
             "label": "Set parameter 101-103 to default value",
@@ -304,7 +304,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "101": {
             "label": "Set group 1 reports",
@@ -402,7 +402,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "111": {
             "label": "Interval for automatic report group 1.",
@@ -413,7 +413,7 @@
             "defaultValue": 600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "112": {
             "label": "Interval for automatic report group 2",
@@ -424,7 +424,7 @@
             "defaultValue": 600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "113": {
             "label": "Interval for automatic group 3 report",
@@ -435,7 +435,7 @@
             "defaultValue": 600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "120": {
             "label": "External switch mode for S1",

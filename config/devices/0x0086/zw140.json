@@ -195,7 +195,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "86": {
             "label": "Set appointment 1",
@@ -206,7 +206,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "87": {
             "label": "Set appointment 2",
@@ -217,7 +217,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "120": {
             "label": "Configure the external switch mode for S1",

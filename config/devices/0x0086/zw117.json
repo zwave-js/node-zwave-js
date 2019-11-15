@@ -136,7 +136,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "255[0xff]": {
             "label": "Reset to factory default",

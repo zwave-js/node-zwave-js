@@ -66,7 +66,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "5": {
             "label": "Safety OFF Period",
@@ -78,7 +78,7 @@
             "defaultValue": 600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "6": {
             "label": "Safety ON Period",
@@ -90,7 +90,7 @@
             "defaultValue": 300,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10": {
             "label": "Dimming speed",
@@ -102,7 +102,7 @@
             "defaultValue": 300,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "11": {
             "label": "Dimmer mode",
@@ -113,7 +113,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "12": {
             "label": "Maximum Level",
@@ -124,7 +124,7 @@
             "defaultValue": 90,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "13": {
             "label": "Minimum Level",
@@ -135,7 +135,7 @@
             "defaultValue": 15,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "14": {
             "label": "Button mode",
@@ -146,7 +146,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "15": {
             "label": "Light Zone Control Mode",
@@ -157,7 +157,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "17": {
             "label": "Back Unit Role",
@@ -168,7 +168,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "18": {
             "label": "Back Unit Light Zone",
@@ -179,7 +179,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "32": {
             "label": "Thermostat Set Point Max",
@@ -191,7 +191,7 @@
             "defaultValue": 270,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "34": {
             "label": "Thermostat Set Point Min",
@@ -202,7 +202,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "36": {
             "label": "Thermostat Control Resend Interval",
@@ -214,7 +214,7 @@
             "defaultValue": 3600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "37": {
             "label": "Thermostat Minimum On/Off Interval",
@@ -226,7 +226,7 @@
             "defaultValue": 300,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "38": {
             "label": "Thermostat Floor Temp Max",
@@ -238,7 +238,7 @@
             "defaultValue": 270,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "40": {
             "label": "Temperature Sensor Select",
@@ -249,7 +249,7 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "44": {
             "label": "Cold Start Minimum Level",
@@ -260,7 +260,7 @@
             "defaultValue": 20,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "64": {
             "label": "Temperature Report Inteval",
@@ -272,7 +272,7 @@
             "defaultValue": 600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "66": {
             "label": "Temperature Report Threshold",
@@ -284,7 +284,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "67": {
             "label": "Thermostat On∕Off Interval Override Threshold",
@@ -295,7 +295,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "80": {
             "label": "Button LED Mode",
@@ -306,7 +306,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "240": {
             "label": "Floor Sensor Temperature Offset",
@@ -318,7 +318,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "241": {
             "label": "Room Sensor Temperature Offset",
@@ -330,7 +330,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

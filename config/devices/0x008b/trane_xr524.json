@@ -131,7 +131,7 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "11": {
             "label": "Minimum Run Time",
@@ -142,7 +142,7 @@
             "defaultValue": 6,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "12": {
             "label": "Heating Delta Stage 1 ON",
@@ -153,7 +153,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "13": {
             "label": "Heating Delta Stage 1 OFF",
@@ -164,7 +164,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "14": {
             "label": "Heating Delta Stage 2 ON",
@@ -175,7 +175,7 @@
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "15": {
             "label": "Heating Delta Stage 2 OFF",
@@ -186,7 +186,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "16": {
             "label": "Heating Delta Stage 3 ON",
@@ -197,7 +197,7 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "17": {
             "label": "Heating Delta Stage 3 OFF",
@@ -208,7 +208,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "18": {
             "label": "Cooling Delta Stage 1 ON",
@@ -219,7 +219,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "19": {
             "label": "Cooling Delta Stage 1 OFF",
@@ -230,7 +230,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "20": {
             "label": "Cooling Delta Stage 2 ON",
@@ -241,7 +241,7 @@
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "21": {
             "label": "Cooling Delta Stage 2 OFF",
@@ -252,7 +252,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "24": {
             "label": "H/C Delta",
@@ -264,7 +264,7 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "25": {
             "label": "SetBack Mode",
@@ -301,7 +301,7 @@
             "defaultValue": 65,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "30": {
             "label": "ESM Setpoint--Cooling",
@@ -313,7 +313,7 @@
             "defaultValue": 80,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "75": {
             "label": "Fan ON Time",
@@ -325,7 +325,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "76": {
             "label": "Fan OFF Time",
@@ -337,7 +337,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "77": {
             "label": "2nd Stage Heat Enable",
@@ -433,7 +433,7 @@
             "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "141": {
             "label": "Screen Timeout",
@@ -444,7 +444,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "143": {
             "label": "Sensor (Internal) Offset",
@@ -455,7 +455,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "148": {
             "label": "Screen Contrast",
@@ -466,7 +466,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "185": {
             "label": "Schedule Enable",
@@ -477,7 +477,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "228": {
             "label": "Schedule Sun-1",
@@ -488,7 +488,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "229": {
             "label": "Schedule Sun-2",
@@ -499,7 +499,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "230": {
             "label": "Schedule Sun-3",
@@ -510,7 +510,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "231": {
             "label": "Schedule Sun-4",
@@ -521,7 +521,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "232": {
             "label": "Schedule Mon-1",
@@ -532,7 +532,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "233": {
             "label": "Schedule Mon-2",
@@ -543,7 +543,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "234": {
             "label": "Schedule Mon-3",
@@ -554,7 +554,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "235": {
             "label": "Schedule Mon-4",
@@ -565,7 +565,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "236": {
             "label": "Schedule Tue-1",
@@ -576,7 +576,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "237": {
             "label": "Schedule Tue-2",
@@ -587,7 +587,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "238": {
             "label": "Schedule Tue-3",
@@ -598,7 +598,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "239": {
             "label": "Schedule Tue-4",
@@ -609,7 +609,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "240": {
             "label": "Schedule Wed-1",
@@ -620,7 +620,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "241": {
             "label": "Schedule Wed-2",
@@ -631,7 +631,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "242": {
             "label": "Schedule Wed-3",
@@ -642,7 +642,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "243": {
             "label": "Schedule Wed-4",
@@ -653,7 +653,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "244": {
             "label": "Schedule Thu-1",
@@ -664,7 +664,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "246": {
             "label": "Schedule Thu-3",
@@ -675,7 +675,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "247": {
             "label": "Schedule Thu-4",
@@ -686,7 +686,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "248": {
             "label": "Schedule Fri-1",
@@ -697,7 +697,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "249": {
             "label": "Schedule Fri-2",
@@ -708,7 +708,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "250": {
             "label": "Schedule Fri-3",
@@ -719,7 +719,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "251": {
             "label": "Schedule Fri-4",
@@ -730,7 +730,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "252": {
             "label": "Schedule Sat-1",
@@ -741,7 +741,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "253": {
             "label": "Schedule Sat-2",
@@ -752,7 +752,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "254": {
             "label": "Schedule Sat-3",
@@ -763,7 +763,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "255": {
             "label": "Schedule Sat-4",
@@ -774,7 +774,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

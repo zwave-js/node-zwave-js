@@ -58,7 +58,7 @@
             "defaultValue": 400,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "3": {
             "label": "Analog electricity port mode",
@@ -94,7 +94,7 @@
             "defaultValue": 400,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "255": {
             "label": "Restart device",

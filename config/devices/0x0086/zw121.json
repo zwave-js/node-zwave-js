@@ -114,7 +114,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "37[0xff0000]": {
             "label": "Brightness",
@@ -125,7 +125,7 @@
             "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "37[0x07000000]": {
             "label": "Color Display Cycle",
@@ -215,7 +215,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "39[0xff00]": {
             "label": "Multi Color, Single Color, or Random Mode - Byte 3",
@@ -226,7 +226,7 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "39[0xff0000]": {
             "label": "Multi Color, Single Color, or Random Mode - Byte 2",
@@ -237,7 +237,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "39[0x7f000000]": {
             "label": "Multi Color, Single Color, or Random Mode - Byte 1",
@@ -248,7 +248,7 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

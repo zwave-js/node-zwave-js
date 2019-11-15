@@ -34,7 +34,7 @@
             "defaultValue": 720,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "2": {
             "label": "KWH Meter Report period",
@@ -46,7 +46,7 @@
             "defaultValue": 6,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "3": {
             "label": "Treshold of watt for load caution",
@@ -58,7 +58,7 @@
             "defaultValue": 1100,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "4": {
             "label": "Treshold of KWH for load caution",
@@ -70,7 +70,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

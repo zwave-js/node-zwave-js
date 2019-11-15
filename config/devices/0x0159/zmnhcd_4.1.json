@@ -78,7 +78,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "42": {
             "label": "Power reporting in Watts by time interval",
@@ -90,7 +90,7 @@
             "defaultValue": 300,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "71": {
             "label": "Operating modes",
@@ -123,7 +123,7 @@
             "defaultValue": 150,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "73": {
             "label": "Slats position",
@@ -155,7 +155,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "76": {
             "label": "Motor operation detection",
@@ -166,7 +166,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "78": {
             "label": "Forced Shutter calibration",
@@ -219,7 +219,7 @@
             "defaultValue": 8,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "86": {
             "label": "Power consumption at limit switch delay time",
@@ -230,7 +230,7 @@
             "defaultValue": 8,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "90": {
             "label": "Relay delay time",
@@ -242,7 +242,7 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "110": {
             "label": "Temperature sensor offset settings",
@@ -253,7 +253,7 @@
             "defaultValue": 32536,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "120": {
             "label": "Digital temperature sensor reporting",
@@ -264,7 +264,7 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

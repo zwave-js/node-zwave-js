@@ -86,7 +86,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10": {
             "label": "Alarm time for buzzer",
@@ -97,7 +97,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "39": {
             "label": "Low Battery Threshold",
@@ -141,7 +141,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "50": {
             "label": "Set the lower limit value (underheat)",
@@ -152,7 +152,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "57": {
             "label": "Recover limit value",
@@ -163,7 +163,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "64": {
             "label": "Default Temperature Unit",
@@ -195,7 +195,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "86": {
             "label": "Enable/Disable the buzzer",
@@ -321,7 +321,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "136": {
             "label": "Sensor probe status",
@@ -332,7 +332,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "201": {
             "label": "Temperature calibration",
@@ -343,7 +343,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "252": {
             "label": "Lock configuration",
@@ -396,7 +396,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10[0xff00]": {
             "label": "Time of buzzer keeping ON state",
@@ -407,7 +407,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10[0x7fff0000]": {
             "label": "Time of buzzer keeping OFF state",
@@ -418,7 +418,7 @@
             "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "49[0xff00]": {
             "label": "Temperature Unit",
@@ -450,7 +450,7 @@
             "defaultValue": 4,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "50[0xff00]": {
             "label": "Temperature underheat unit",
@@ -482,7 +482,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "57[0x0f]": {
             "label": "Temperature recover unit",
@@ -514,7 +514,7 @@
             "defaultValue": 20,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "101[0x65]": {
             "label": "Lifeline Report Type",
@@ -575,7 +575,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

@@ -185,7 +185,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"12": {
 			"label": "Set point set by I3",
@@ -196,7 +196,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"30": {
 			"label": "Saving the state after a power failure",
@@ -228,7 +228,7 @@
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"42": {
 			"label": "Power reporting in Watts by time interval for Q1",
@@ -239,7 +239,7 @@
 			"defaultValue": 300,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"43": {
 			"label": "Hysteresis On",
@@ -250,7 +250,7 @@
 			"defaultValue": 132,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"44": {
 			"label": "Hysteresis Off",
@@ -261,7 +261,7 @@
 			"defaultValue": 5,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"45": {
 			"label": "Antifreeze",
@@ -272,7 +272,7 @@
 			"defaultValue": 5,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"60": {
 			"label": "Too low temperature limit",
@@ -283,7 +283,7 @@
 			"defaultValue": 50,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"61": {
 			"label": "Too high temperature limit",
@@ -294,7 +294,7 @@
 			"defaultValue": 700,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"63": {
 			"label": "Switch selection",
@@ -305,7 +305,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		}
 	}
 }

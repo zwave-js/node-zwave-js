@@ -32,11 +32,20 @@ async function lintDevices(): Promise<void> {
 		.map(e => e.filename)
 		.filter((filename, index, self) => self.indexOf(filename) === index)
 		.sort();
+
+	const errors: { filename: string; error: any }[] = [];
+
 	for (const file of uniqueFiles) {
 		const filePath = path.join(configDir, "devices", file);
 		const fileContents = await readFile(filePath, "utf8");
 		// Try parsing the file
-		const config = new DeviceConfig(file, fileContents);
+		let config: DeviceConfig;
+		try {
+			config = new DeviceConfig(file, fileContents);
+		} catch (e) {
+			errors.push({ filename: file, error: e });
+			continue;
+		}
 
 		// Validate that the file is semantically correct
 
@@ -62,6 +71,31 @@ async function lintDevices(): Promise<void> {
 				console.warn();
 			}
 		}
+
+		if (config.paramInformation?.size) {
+			for (const [key, value] of config.paramInformation.entries()) {
+				if (!value.allowManualEntry && !value.options?.length) {
+					errors.push({
+						filename: file,
+						error: new Error(
+							`Parameter #${key} must allow manual entry if there are no options defined!`,
+						),
+					});
+				}
+			}
+		}
+	}
+
+	if (errors.length) {
+		for (const { filename, error } of errors) {
+			const lines = (error.message as string)
+				.split("\n")
+				.filter(line => !line.endsWith(filename + ":"));
+			console.error(`config/devices/${filename}:`);
+			console.error(red(lines.join("\n")));
+			console.error();
+		}
+		process.exit(1);
 	}
 }
 

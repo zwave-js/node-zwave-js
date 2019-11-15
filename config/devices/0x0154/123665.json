@@ -44,7 +44,7 @@
             "defaultValue": 6,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "3": {
             "label": "Threshold of Watt for Load caution",
@@ -55,7 +55,7 @@
             "defaultValue": 3000,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "4": {
             "label": "Threshold of KWh for Load caution",
@@ -66,7 +66,7 @@
             "defaultValue": 10000,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "5": {
             "label": "Ignore start level after pwr outage",

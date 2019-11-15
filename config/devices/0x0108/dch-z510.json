@@ -55,7 +55,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "7[0x10]": {
             "label": "Customer Function",

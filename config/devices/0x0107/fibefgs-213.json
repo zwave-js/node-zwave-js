@@ -137,7 +137,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "13": {
             "label": "1st ch. pulse time for flashing mode",
@@ -148,7 +148,7 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "20": {
             "label": "Switch type",
@@ -341,7 +341,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "32": {
             "label": "S1 OFF val sent to 2nd and 3rd groups",
@@ -352,7 +352,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "33": {
             "label": "S1 DblClick val sent to 2nd and 3rd groups",
@@ -363,7 +363,7 @@
             "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "35": {
             "label": "S2 assocs. sent to 4th and 5th group",
@@ -407,7 +407,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "37": {
             "label": "S2 switch OFF sent to 4th and 5th groups",
@@ -418,7 +418,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "38": {
             "label": "S2 double click sent to 4th and 5th ass. grps.",
@@ -429,7 +429,7 @@
             "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "40": {
             "label": "Reaction to General Alarm",
@@ -556,7 +556,7 @@
             "defaultValue": 600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "50": {
             "label": "Active power reports",
@@ -567,7 +567,7 @@
             "defaultValue": 20,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "51": {
             "label": "Minimal time between power report",
@@ -578,7 +578,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "53": {
             "label": "Energy reports",
@@ -589,7 +589,7 @@
             "defaultValue": 100,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "58": {
             "label": "Periodic power reports",
@@ -600,7 +600,7 @@
             "defaultValue": 3600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "59": {
             "label": "Periodic energy reports",
@@ -611,7 +611,7 @@
             "defaultValue": 3600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "60": {
             "label": "Measuring energy consumed by the device itself",

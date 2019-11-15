@@ -217,7 +217,7 @@
             "defaultValue": 8327680,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "120": {
             "label": "External switch mode for S1",

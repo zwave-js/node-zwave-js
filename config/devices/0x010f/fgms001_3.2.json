@@ -84,7 +84,7 @@
             "defaultValue": 15,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "2": {
             "label": "Motion detection - blind time",
@@ -95,7 +95,7 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "3": {
             "label": "Motion detection - pulse counter",
@@ -165,7 +165,7 @@
             "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "8": {
             "label": "Motion detection - operating mode",
@@ -202,7 +202,7 @@
             "defaultValue": 200,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "12": {
             "label": "BASIC command class configuration",
@@ -238,7 +238,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "16": {
             "label": "BASIC OFF command frame value",
@@ -249,7 +249,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "18": {
             "label": "Associations in Z-Wave network Security Mode",
@@ -260,7 +260,7 @@
             "defaultValue": 15,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "20": {
             "label": "Tamper - sensitivity",
@@ -271,7 +271,7 @@
             "defaultValue": 20,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "22": {
             "label": "Tamper - alarm cancellation delay",
@@ -283,7 +283,7 @@
             "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "24": {
             "label": "Tamper - operating modes",
@@ -383,7 +383,7 @@
             "defaultValue": 200,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "42": {
             "label": "Illuminance report - interval",
@@ -395,7 +395,7 @@
             "defaultValue": 3600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "60": {
             "label": "Temperature report - threshold",
@@ -406,7 +406,7 @@
             "defaultValue": 20,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "62": {
             "label": "Temperature measuring - interval",
@@ -418,7 +418,7 @@
             "defaultValue": 900,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "64": {
             "label": "Temperature report - interval",
@@ -430,7 +430,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "66": {
             "label": "Temperature offset",
@@ -442,7 +442,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "80": {
             "label": "LED - signalling mode",
@@ -575,7 +575,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "82": {
             "label": "LED - illuminance for low indicator brightness",
@@ -587,7 +587,7 @@
             "defaultValue": 100,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "83": {
             "label": "LED - illuminance for high indicator brightness",
@@ -599,7 +599,7 @@
             "defaultValue": 1000,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "86": {
             "label": "LED - temperature for blue colour",
@@ -611,7 +611,7 @@
             "defaultValue": 18,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "87": {
             "label": "LED - temperature for red colour",
@@ -622,7 +622,7 @@
             "defaultValue": 28,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "89": {
             "label": "LED - tamper alarm",

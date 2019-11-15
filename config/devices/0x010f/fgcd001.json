@@ -187,7 +187,7 @@
             "defaultValue": 63,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10": {
             "label": "Commands sent to 2nd association group (CO Alarm)",
@@ -248,7 +248,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "13": {
             "label": "Commands sent to 4th association group (CO Level)",
@@ -259,7 +259,7 @@
             "defaultValue": 3,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "14": {
             "label": "CO level for sending BASIC ON to 4th assoc group",
@@ -270,7 +270,7 @@
             "defaultValue": 40,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "15": {
             "label": "Time required for BASIC ON cmd to 4th assoc group",
@@ -281,7 +281,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "16": {
             "label": "Value of BASIC ON cmd sent to 4th assoc group",
@@ -292,7 +292,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "17": {
             "label": "CO Level for sending BASIC OFF to 4th assoc group",
@@ -303,7 +303,7 @@
             "defaultValue": 25,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "19": {
             "label": "Value of BASIC OFF cmd sent to 4th assoc group",
@@ -314,7 +314,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "20": {
             "label": "Temperature reporting time interval",
@@ -325,7 +325,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "21": {
             "label": "Temperature reporting hysteresis",
@@ -336,7 +336,7 @@
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "22": {
             "label": "Threshold of exceeding the temperature",
@@ -347,7 +347,7 @@
             "defaultValue": 55,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "23": {
             "label": "CO meter activation",
@@ -358,7 +358,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "25": {
             "label": "CO level reporting hysteresis",
@@ -369,7 +369,7 @@
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "26": {
             "label": "Threshold of CO meter activation",
@@ -380,7 +380,7 @@
             "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

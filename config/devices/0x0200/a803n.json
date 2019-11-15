@@ -45,7 +45,7 @@
 			"defaultValue": 12,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"2": {
 			"label": "Param 2",
@@ -56,7 +56,7 @@
 			"defaultValue": 3,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"3": {
 			"label": "Param 3",
@@ -67,7 +67,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"4": {
 			"label": "Param 4",
@@ -78,7 +78,7 @@
 			"defaultValue": 15,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"5": {
 			"label": "Param 5",
@@ -89,7 +89,7 @@
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"6": {
 			"label": "Param 6",
@@ -100,7 +100,7 @@
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"7": {
 			"label": "Param 7",
@@ -111,7 +111,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"8": {
 			"label": "Param 8",
@@ -122,7 +122,7 @@
 			"defaultValue": 255,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"9": {
 			"label": "Param 9",
@@ -133,7 +133,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"10": {
 			"label": "Param 10",
@@ -144,7 +144,7 @@
 			"defaultValue": 50,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"11": {
 			"label": "Param 11",
@@ -155,7 +155,7 @@
 			"defaultValue": 100,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"12": {
 			"label": "Param 12",
@@ -166,7 +166,7 @@
 			"defaultValue": 3,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		}
 	}
 }

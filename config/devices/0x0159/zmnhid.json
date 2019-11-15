@@ -206,7 +206,7 @@
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"12": {
 			"label": "Parameter   no.   12",
@@ -217,7 +217,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"13": {
 			"label": "Parameter   no.   13",
@@ -228,7 +228,7 @@
 			"defaultValue": 32767,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"40": {
 			"label": "Parameter   no.   40",
@@ -239,7 +239,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"42": {
 			"label": "Parameter   no.   42",
@@ -250,7 +250,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"43": {
 			"label": "Parameter   no.   43",
@@ -261,7 +261,7 @@
 			"defaultValue": 1005,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"44": {
 			"label": "Parameter   no.   44",
@@ -272,7 +272,7 @@
 			"defaultValue": 5,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"45": {
 			"label": "Parameter   no.   45",
@@ -283,7 +283,7 @@
 			"defaultValue": 50,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"59": {
 			"label": "Parameter   no.   59",
@@ -315,7 +315,7 @@
 			"defaultValue": 50,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"61": {
 			"label": "Parameter   no.   61",
@@ -326,7 +326,7 @@
 			"defaultValue": 700,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"63": {
 			"label": "Parameter   no.   63",
@@ -359,7 +359,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"71": {
 			"label": "Input 1 status off delay",
@@ -371,7 +371,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"72": {
 			"label": "Input 2 status on delay",
@@ -383,7 +383,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"73": {
 			"label": "Input 2 status off delay",
@@ -395,7 +395,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"74": {
 			"label": "Input 3 status on delay",
@@ -407,7 +407,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"75": {
 			"label": "Input 3 status off delay",
@@ -419,7 +419,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"100": {
 			"label": "Parameter  no.  100",
@@ -430,7 +430,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"101": {
 			"label": "Parameter  no.  101",
@@ -441,7 +441,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"102": {
 			"label": "Parameter  no.  102",
@@ -452,7 +452,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"110": {
 			"label": "Parameter no. 110",
@@ -463,7 +463,7 @@
 			"defaultValue": 32536,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"120": {
 			"label": "Parameter   no.   120",
@@ -474,7 +474,7 @@
 			"defaultValue": 5,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"121": {
 			"label": "Parameter   no.   121",
@@ -485,7 +485,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"122": {
 			"label": "Parameter   no.   122",
@@ -496,7 +496,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		}
 	}
 }

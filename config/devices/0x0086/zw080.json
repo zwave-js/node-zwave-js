@@ -37,7 +37,7 @@
             "defaultValue": 25,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "200": {
             "label": "Partner ID",
@@ -47,7 +47,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "252": {
             "label": "Enable/disable Configuration Updates",

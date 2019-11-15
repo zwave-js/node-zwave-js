@@ -71,7 +71,7 @@
             "defaultValue": 20,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "101": {
             "label": "Low battery voltage check",
@@ -104,7 +104,7 @@
             "defaultValue": 86640,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "121": {
             "label": "Reporting mode on open/close event",
@@ -163,7 +163,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

@@ -83,7 +83,7 @@
             "defaultValue": 63,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "35": {
             "label": "Response to alarms",
@@ -123,7 +123,7 @@
             "defaultValue": 600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "40": {
             "label": "Immediate power report",
@@ -134,7 +134,7 @@
             "defaultValue": 80,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "42": {
             "label": "Standard power load report",
@@ -145,7 +145,7 @@
             "defaultValue": 15,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "43": {
             "label": "Power reporting frequency",
@@ -156,7 +156,7 @@
             "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "45": {
             "label": "Reporting Changes in energy consumed",
@@ -167,7 +167,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "47": {
             "label": "Maximum Time Period between reports",
@@ -178,7 +178,7 @@
             "defaultValue": 3600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "49": {
             "label": "Metering energy consumed by the Wall Plug itself.",
@@ -210,7 +210,7 @@
             "defaultValue": 300,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "51": {
             "label": "UP value",
@@ -221,7 +221,7 @@
             "defaultValue": 500,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "52": {
             "label": "Action in case defined power values exceeded",
@@ -273,7 +273,7 @@
             "defaultValue": 25000,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "61": {
             "label": "LED color when device is on",
@@ -436,7 +436,7 @@
             "defaultValue": 65535,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

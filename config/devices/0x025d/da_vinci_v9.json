@@ -1894,7 +1894,7 @@
             "defaultValue": 7,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "47": {
             "label": "Device Led off intensity",
@@ -1905,7 +1905,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "48": {
             "label": "Device Toggle or Pulse the output",
@@ -1916,7 +1916,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "49": {
             "label": "Device Background LEDs Timeout",
@@ -1927,7 +1927,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "50": {
             "label": "Device touch sensitivity",
@@ -1938,7 +1938,7 @@
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "51": {
             "label": "Save and Reset",

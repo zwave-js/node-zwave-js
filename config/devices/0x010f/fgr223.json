@@ -113,7 +113,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "41": {
             "label": "S2 Switch Scenes sent",
@@ -124,7 +124,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "60": {
             "label": "Measuring power consumed by the device itself",
@@ -156,7 +156,7 @@
             "defaultValue": 15,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "62": {
             "label": "Power reports - periodic",
@@ -167,7 +167,7 @@
             "defaultValue": 3600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "65": {
             "label": "Energy reports - on change",
@@ -178,7 +178,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "66": {
             "label": "Energy reports - periodic",
@@ -189,7 +189,7 @@
             "defaultValue": 3600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "150": {
             "label": "Force calibration",
@@ -264,7 +264,7 @@
             "defaultValue": 150,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "153": {
             "label": "Set slats back to previous position",
@@ -301,7 +301,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "155": {
             "label": "Motor operation detection",
@@ -312,7 +312,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "156": {
             "label": "Time of up movement",
@@ -323,7 +323,7 @@
             "defaultValue": 6000,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "157": {
             "label": "Time of down movement",
@@ -334,7 +334,7 @@
             "defaultValue": 6000,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "30[0xff]": {
             "label": "Action for Blinds",
@@ -370,7 +370,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "30[0xff0000]": {
             "label": "Notification Status for Blinds",
@@ -381,7 +381,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "30[0x7f000000]": {
             "label": "Notification Type for Blinds",
@@ -392,7 +392,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "31[0xff]": {
             "label": "Action for Water",
@@ -428,7 +428,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "31[0xff0000]": {
             "label": "Notification Status for Water",
@@ -439,7 +439,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "31[0x7f000000]": {
             "label": "Notification Type for Water",
@@ -450,7 +450,7 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "32[0xff]": {
             "label": "Action for Smoke",
@@ -486,7 +486,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "32[0xff0000]": {
             "label": "Notification Status for Smoke",
@@ -497,7 +497,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "32[0x7f000000]": {
             "label": "Notification Type for Smoke",
@@ -508,7 +508,7 @@
             "defaultValue": 1,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "33[0xff]": {
             "label": "Action for CO",
@@ -544,7 +544,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "33[0xff0000]": {
             "label": "Notification Status for CO",
@@ -555,7 +555,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "33[0x7f000000]": {
             "label": "Notification Type for CO",
@@ -566,7 +566,7 @@
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "34[0xff]": {
             "label": "Action for Heat",
@@ -602,7 +602,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "34[0xff0000]": {
             "label": "Notification Status for Heat",
@@ -613,7 +613,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "34[0x7f000000]": {
             "label": "Notification Status for Heat",
@@ -624,7 +624,7 @@
             "defaultValue": 4,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

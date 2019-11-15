@@ -81,7 +81,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "4": {
             "label": "Set color that LED Bulb blinks in (Blink Mode)",
@@ -91,7 +91,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "16": {
             "label": "Ramp rate when dimming using Multilevel Switch",
@@ -102,7 +102,7 @@
             "defaultValue": 20,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "80": {
             "label": "Enable notifications",
@@ -134,7 +134,7 @@
             "defaultValue": 2700,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "82": {
             "label": "Adjust color component of Cold White",
@@ -145,7 +145,7 @@
             "defaultValue": 6500,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

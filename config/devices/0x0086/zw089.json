@@ -107,7 +107,7 @@
             "defaultValue": 86640,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "252": {
             "label": "Permit other configurations",
@@ -139,7 +139,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "121[0xff]": {
             "label": "Configuration Value 4(LSB) SENSOR BINARY",

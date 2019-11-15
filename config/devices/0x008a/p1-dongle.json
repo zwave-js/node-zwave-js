@@ -33,7 +33,7 @@
             "defaultValue": 1152,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

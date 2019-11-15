@@ -33,7 +33,7 @@
             "defaultValue": 13,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "80": {
             "label": "Send Notifications",

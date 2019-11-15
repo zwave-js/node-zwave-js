@@ -886,7 +886,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "14[0x01]": {
             "label": "Multilevel Switch for button #2",
@@ -952,7 +952,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "15[0x01]": {
             "label": "Multilevel Switch for button #3",
@@ -1018,7 +1018,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "16[0xff00]": {
             "label": "Multilevel Switch for button #4",
@@ -1063,7 +1063,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "17[0x01]": {
             "label": "Multilevel Switch for button #5",
@@ -1129,7 +1129,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "18[0x01]": {
             "label": "Multilevel Switch for button #6",
@@ -1195,7 +1195,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

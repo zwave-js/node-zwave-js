@@ -518,7 +518,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "1[0xff0000]": {
             "label": "Tone Play Mode for Endpoint 1 (Browse)",
@@ -1379,7 +1379,7 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "16[0xff00]": {
             "label": "Time On for Light Effect #1",
@@ -1390,7 +1390,7 @@
             "defaultValue": 20,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "16[0x7f0000]": {
             "label": "Dim Off duration for Light Effect #1",
@@ -1401,7 +1401,7 @@
             "defaultValue": 25,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "16[0x7f000000]": {
             "label": "Dim On Duration for Light Effect #1",
@@ -1412,7 +1412,7 @@
             "defaultValue": 75,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "17[0xff]": {
             "label": "Light Off Duration for Light Effect #2",
@@ -1423,7 +1423,7 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "17[0xff00]": {
             "label": "Light On duration for Light Effect #2",
@@ -1434,7 +1434,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "17[0x7f0000]": {
             "label": "Dim Off duration for Light Effect #2",
@@ -1445,7 +1445,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "17[0x7f000000]": {
             "label": "Dim On duration for Light Effect #2",
@@ -1456,7 +1456,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "18[0xff]": {
             "label": "Light Off duration for Light Effect #3",
@@ -1467,7 +1467,7 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "18[0xff00]": {
             "label": "Light On duration for Light Effect #3",
@@ -1478,7 +1478,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "18[0x7f0000]": {
             "label": "Dim Off duration for Light Effect #3",
@@ -1489,7 +1489,7 @@
             "defaultValue": 33,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "18[0x7f000000]": {
             "label": "Dim On duration for Light Effect #3",
@@ -1500,7 +1500,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "19[0xff]": {
             "label": "Light Off duration for Light Effect #4",
@@ -1511,7 +1511,7 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "19[0xff00]": {
             "label": "Light On duration for Light Effect #4",
@@ -1522,7 +1522,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "19[0x7f0000]": {
             "label": "Dim Off duration for Light Effect #4",
@@ -1533,7 +1533,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "19[0x7f000000]": {
             "label": "Dim On duration for Light Effect #4",
@@ -1544,7 +1544,7 @@
             "defaultValue": 33,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "20[0xff]": {
             "label": "Light Off duration for Light Effect #5",
@@ -1555,7 +1555,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "20[0xff00]": {
             "label": "Light On duration for Light Effect #5",
@@ -1566,7 +1566,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "20[0x7f0000]": {
             "label": "Dim Off duration for Light Effect #5",
@@ -1577,7 +1577,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "20[0x7f000000]": {
             "label": "Dim On duration for Light Effect #5",
@@ -1588,7 +1588,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "21[0xff]": {
             "label": "Light Off duration for Light Effect #6",
@@ -1599,7 +1599,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "21[0xff00]": {
             "label": "Light On duration for Light Effect #6",
@@ -1610,7 +1610,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "21[0x7f0000]": {
             "label": "Dim Off duration for Light Effect #6",
@@ -1621,7 +1621,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "21[0x7f000000]": {
             "label": "Dim On duration for Light Effect #6",
@@ -1632,7 +1632,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "22[0xff]": {
             "label": "Light Off duration for Light Effect #7",
@@ -1643,7 +1643,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "22[0xff00]": {
             "label": "Light On duration for Light Effect #7",
@@ -1654,7 +1654,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "22[0x7f0000]": {
             "label": "Dim Off duration for Light Effect #7",
@@ -1665,7 +1665,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "22[0x7f000000]": {
             "label": "Dim On duration for Light Effect #7",
@@ -1676,7 +1676,7 @@
             "defaultValue": 33,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "52[0xffff]": {
             "label": "Button #1 Software Version",

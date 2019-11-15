@@ -37,7 +37,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "2": {
             "label": "Mode timeout",
@@ -48,7 +48,7 @@
             "defaultValue": 900,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "3": {
             "label": "Switch off time",
@@ -59,7 +59,7 @@
             "defaultValue": 2700,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "4": {
             "label": "sensitivity",
@@ -70,7 +70,7 @@
             "defaultValue": 80,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "5": {
             "label": "The mode",
@@ -106,7 +106,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "7": {
             "label": "Light table 100 %",
@@ -117,7 +117,7 @@
             "defaultValue": 17,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "8": {
             "label": "Light table 90 %",
@@ -128,7 +128,7 @@
             "defaultValue": 38,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "9": {
             "label": "Light table 80 %",
@@ -139,7 +139,7 @@
             "defaultValue": 85,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10": {
             "label": "Light table 70 %",
@@ -150,7 +150,7 @@
             "defaultValue": 186,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "11": {
             "label": "Light table 60 %",
@@ -161,7 +161,7 @@
             "defaultValue": 407,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "12": {
             "label": "Light table 50 %",
@@ -172,7 +172,7 @@
             "defaultValue": 891,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "13": {
             "label": "Light table 40 %",
@@ -183,7 +183,7 @@
             "defaultValue": 1949,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "14": {
             "label": "Light table 30 %",
@@ -194,7 +194,7 @@
             "defaultValue": 4265,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "15": {
             "label": "Light table 20 %",
@@ -205,7 +205,7 @@
             "defaultValue": 9332,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "16": {
             "label": "Light table 10 %",
@@ -216,7 +216,7 @@
             "defaultValue": 20417,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

@@ -54,7 +54,7 @@
 			"defaultValue": 180,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"2": {
 			"label": "Light",
@@ -65,7 +65,7 @@
 			"defaultValue": 2000,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"3": {
 			"label": "Dim",
@@ -76,7 +76,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"4": {
 			"label": "Range",
@@ -87,7 +87,7 @@
 			"defaultValue": 500,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"5": {
 			"label": "Sensity",
@@ -98,7 +98,7 @@
 			"defaultValue": 100,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"6": {
 			"label": "Brighntes Meas Interval",
@@ -109,7 +109,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"8": {
 			"label": "Global_Light",
@@ -120,7 +120,7 @@
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"9": {
 			"label": "Slave_Mode",
@@ -131,7 +131,7 @@
 			"defaultValue": 2,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"10": {
 			"label": "Off_Behaviour",
@@ -142,7 +142,7 @@
 			"defaultValue": 10,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"11": {
 			"label": "On_Behaviour",
@@ -153,7 +153,7 @@
 			"defaultValue": 255,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"12": {
 			"label": "On_Time_Over",
@@ -164,7 +164,7 @@
 			"defaultValue": 204,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"13": {
 			"label": "On_Off_Behaviour",
@@ -175,7 +175,7 @@
 			"defaultValue": 204,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"14": {
 			"label": "Off_On_Behaviour",
@@ -186,7 +186,7 @@
 			"defaultValue": 204,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"15": {
 			"label": "Sequence_Time",
@@ -197,7 +197,7 @@
 			"defaultValue": 10,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"16": {
 			"label": "Motion_Disable",
@@ -208,7 +208,7 @@
 			"defaultValue": 209,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		}
 	}
 }

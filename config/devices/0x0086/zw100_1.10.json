@@ -62,7 +62,7 @@
             "defaultValue": 240,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "4": {
             "label": "Motion sensor sensitivity",
@@ -131,7 +131,7 @@
             "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "9": {
             "label": "Report the current power mode",
@@ -142,7 +142,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "39": {
             "label": "Low Battery Report",
@@ -154,7 +154,7 @@
             "defaultValue": 20,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "40": {
             "label": "Selective Reporting",
@@ -187,7 +187,7 @@
             "defaultValue": 20,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "42": {
             "label": "Humidity Threshold",
@@ -199,7 +199,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "43": {
             "label": "Luminance Threshold",
@@ -210,7 +210,7 @@
             "defaultValue": 100,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "44": {
             "label": "Battery Threshold",
@@ -221,7 +221,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "45": {
             "label": "Ultraviolet Threshold",
@@ -232,7 +232,7 @@
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "46": {
             "label": "Send Alarm Report if low temperature",
@@ -275,7 +275,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "50": {
             "label": "Lower limit value of temperature sensor",
@@ -286,7 +286,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "51": {
             "label": "Upper limit value of humidity sensor",
@@ -298,7 +298,7 @@
             "defaultValue": 60,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "52": {
             "label": "Lower limit value of humidity sensor",
@@ -310,7 +310,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "53": {
             "label": "Upper limit value of Lighting sensor",
@@ -322,7 +322,7 @@
             "defaultValue": 1000,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "54": {
             "label": "Lower limit value of Lighting sensor",
@@ -334,7 +334,7 @@
             "defaultValue": 100,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "55": {
             "label": "Upper limit value of ultraviolet sensor",
@@ -345,7 +345,7 @@
             "defaultValue": 8,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "56": {
             "label": "Lower limit value of ultraviolet sensor",
@@ -356,7 +356,7 @@
             "defaultValue": 4,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "57": {
             "label": "Recover limit value of temperature sensor",
@@ -367,7 +367,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "58": {
             "label": "Recover limit value of humidity sensor",
@@ -379,7 +379,7 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "59": {
             "label": "Recover limit value of Lighting sensor.",
@@ -391,7 +391,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "60": {
             "label": "Recover limit value of Ultraviolet sensor",
@@ -402,7 +402,7 @@
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "61": {
             "label": "Out-of-limit state of the Sensors",
@@ -413,7 +413,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "64": {
             "label": "Default unit of the automatic temperature report",
@@ -424,7 +424,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "81": {
             "label": "LED function",
@@ -460,7 +460,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "101": {
             "label": "Group 1 Periodic Reports",
@@ -471,7 +471,7 @@
             "defaultValue": 241,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "102": {
             "label": "Group 2 Periodic Reports",
@@ -482,7 +482,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "103": {
             "label": "Group 3 Periodic Reports",
@@ -493,7 +493,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "110": {
             "label": "Set parameters 111-113 to default.",
@@ -504,7 +504,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "111": {
             "label": "Group 1 Report Interval",
@@ -515,7 +515,7 @@
             "defaultValue": 3600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "112": {
             "label": "Group 2 Report Interval",
@@ -526,7 +526,7 @@
             "defaultValue": 3600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "113": {
             "label": "Group 3 Report Interval",
@@ -537,7 +537,7 @@
             "defaultValue": 3600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "201": {
             "label": "Temperature Calibration",
@@ -548,7 +548,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "202": {
             "label": "Humidity Sensor Calibration",
@@ -559,7 +559,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "203": {
             "label": "Luminance Sensor Calibration",
@@ -570,7 +570,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "204": {
             "label": "Ultraviolet Sensor Calibration",
@@ -581,7 +581,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "252": {
             "label": "Disable/Enable Configuration Lock",
@@ -727,7 +727,7 @@
             "defaultValue": 280,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "50[0xff00]": {
             "label": "Unit for lower limit value of temp sensor",
@@ -759,7 +759,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "201[0xff]": {
             "label": "Temperature Calibration Unit",
@@ -790,7 +790,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

@@ -45,7 +45,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "2": {
             "label": "Alarm acoustic and visual signals",
@@ -106,7 +106,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10": {
             "label": "Interval between temperature  readings",
@@ -117,7 +117,7 @@
             "defaultValue": 300,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "12": {
             "label": "Insensitiveness to temperature changes.",
@@ -127,7 +127,7 @@
             "defaultValue": 20,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "13": {
             "label": "Frame broadcast mode",
@@ -167,7 +167,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "80": {
             "label": "Z-Wave range test interval",
@@ -178,7 +178,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "81": {
             "label": "Temperature alarm threshold",
@@ -189,7 +189,7 @@
             "defaultValue": 54,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "82": {
             "label": "Smoke Sensor sensitivity",
@@ -250,7 +250,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "85": {
             "label": "Temperature alarm",
@@ -261,7 +261,7 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "86": {
             "label": "Lack of the Z-Wave range alarm",
@@ -272,7 +272,7 @@
             "defaultValue": 360,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "87": {
             "label": "Low battery alarm",
@@ -283,7 +283,7 @@
             "defaultValue": 360,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "88": {
             "label": "Temperature measurement compensation for report",

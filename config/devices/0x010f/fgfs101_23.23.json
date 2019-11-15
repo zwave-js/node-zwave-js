@@ -49,7 +49,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "2": {
             "label": "Flooding Signals",
@@ -110,7 +110,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "9": {
             "label": "Alarm cancelling or turning a device off",
@@ -142,7 +142,7 @@
             "defaultValue": 300,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "12": {
             "label": "Insensitiveness to temperature changes.",
@@ -153,7 +153,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "13": {
             "label": "Alarm BROADCAST",
@@ -193,7 +193,7 @@
             "defaultValue": 1500,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "51": {
             "label": "High temperature alarm threshold",
@@ -204,7 +204,7 @@
             "defaultValue": 3500,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "61": {
             "label": "Low temperature alarm indicator colour",
@@ -215,7 +215,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "62": {
             "label": "High temperature alarm indicator colour",
@@ -226,7 +226,7 @@
             "defaultValue": 16711680,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "63": {
             "label": "Managing a LED indicator under standard operation",
@@ -262,7 +262,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "74": {
             "label": "Alarm frame sent to 2nd Group activation",
@@ -302,7 +302,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "76": {
             "label": "Visual and audible alarms retransmit",
@@ -313,7 +313,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "77": {
             "label": "Flood sensor functionality turned off",

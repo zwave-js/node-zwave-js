@@ -213,7 +213,7 @@ associations is not an object`,
 			for (const [key, assocDefinition] of entries(
 				definition.associations,
 			)) {
-				if (!/[1-9][0-9]*/.test(key))
+				if (!/^[1-9][0-9]*$/.test(key))
 					throwInvalidConfig(
 						`device`,
 						`config/devices/${filename}:
@@ -227,6 +227,42 @@ found non-numeric group id "${key}" in associations`,
 			}
 			this.associations = associations;
 		}
+
+		if (definition.paramInformation != undefined) {
+			const paramInformation = new Map<number, ParamInformation>();
+			if (!isObject(definition.paramInformation)) {
+				throwInvalidConfig(
+					`device`,
+					`config/devices/${filename}:
+paramInformation is not an object`,
+				);
+			}
+			for (const [key, paramDefinition] of entries(
+				definition.paramInformation,
+			)) {
+				const match = key.match(/^(\d+)(?:\[0x([0-9a-fA-F]+)\])?$/);
+				if (!match) {
+					throwInvalidConfig(
+						`device`,
+						`config/devices/${filename}:
+found invalid param number "${key}" in paramInformation`,
+					);
+				}
+				const keyNum = parseInt(match[1], 10);
+				const bitMask =
+					match[2] != undefined ? parseInt(match[2], 16) : undefined;
+				paramInformation.set(
+					keyNum,
+					new ParamInformation(
+						filename,
+						keyNum,
+						bitMask,
+						paramDefinition,
+					),
+				);
+			}
+			this.paramInformation = paramInformation;
+		}
 	}
 
 	public readonly manufacturer!: string;
@@ -239,6 +275,7 @@ found non-numeric group id "${key}" in associations`,
 	}[];
 	public readonly firmwareVersion: FirmwareVersionRange;
 	public readonly associations?: ReadonlyMap<number, AssociationConfig>;
+	public readonly paramInformation?: ReadonlyMap<number, ParamInformation>;
 }
 
 export class AssociationConfig {
@@ -300,4 +337,129 @@ isLifeline in association ${groupId} must be either true or left out`,
 	 * While Z-Wave+ defines a single lifeline, older devices may have multiple lifeline associations.
 	 */
 	public readonly isLifeline: boolean;
+}
+
+export class ParamInformation {
+	public constructor(
+		filename: string,
+		parameterNumber: number,
+		valueBitMask: number | undefined,
+		definition: JSONObject,
+	) {
+		this.parameterNumber = parameterNumber;
+		this.valueBitMask = valueBitMask;
+
+		if (typeof definition.label !== "string") {
+			throwInvalidConfig(
+				"devices",
+				`config/devices/${filename}:
+Parameter #${parameterNumber} has a non-string label`,
+			);
+		}
+		this.label = definition.label;
+
+		if (
+			typeof definition.valueSize !== "number" ||
+			definition.valueSize <= 0
+		) {
+			throwInvalidConfig(
+				"devices",
+				`config/devices/${filename}:
+Parameter #${parameterNumber} has an invalid value size`,
+			);
+		}
+		this.valueSize = definition.valueSize;
+
+		if (typeof definition.minValue !== "number") {
+			throwInvalidConfig(
+				"devices",
+				`config/devices/${filename}:
+Parameter #${parameterNumber} has a non-numeric minValue`,
+			);
+		}
+		this.minValue = definition.minValue;
+
+		if (typeof definition.maxValue !== "number") {
+			throwInvalidConfig(
+				"devices",
+				`config/devices/${filename}:
+Parameter #${parameterNumber} has a non-numeric maxValue`,
+			);
+		}
+		this.maxValue = definition.maxValue;
+
+		if (typeof definition.defaultValue !== "number") {
+			throwInvalidConfig(
+				"devices",
+				`config/devices/${filename}:
+Parameter #${parameterNumber} has a non-numeric defaultValue`,
+			);
+		}
+		this.defaultValue = definition.defaultValue;
+
+		if (typeof definition.readOnly !== "boolean") {
+			throwInvalidConfig(
+				"devices",
+				`config/devices/${filename}:
+Parameter #${parameterNumber}: readOnly must be a boolean!`,
+			);
+		}
+		this.readOnly = definition.readOnly;
+
+		if (typeof definition.writeOnly !== "boolean") {
+			throwInvalidConfig(
+				"devices",
+				`config/devices/${filename}:
+Parameter #${parameterNumber}: writeOnly must be a boolean!`,
+			);
+		}
+		this.writeOnly = definition.writeOnly;
+
+		if (typeof definition.allowManualEntry !== "boolean") {
+			throwInvalidConfig(
+				"devices",
+				`config/devices/${filename}:
+Parameter #${parameterNumber}: allowManualEntry must be a boolean!`,
+			);
+		}
+		this.allowManualEntry = definition.allowManualEntry;
+
+		if (
+			isArray(definition.options) &&
+			!definition.options.every(
+				opt =>
+					isObject(opt) &&
+					typeof (opt as any).label === "string" &&
+					typeof (opt as any).value === "number",
+			)
+		) {
+			throwInvalidConfig(
+				"devices",
+				`config/devices/${filename}:
+Parameter #${parameterNumber}: options is malformed!`,
+			);
+		}
+		this.options =
+			definition.options?.map(
+				({ label, value }: { label: string; value: any }) => ({
+					label,
+					value,
+				}),
+			) ?? [];
+	}
+
+	public readonly parameterNumber: number;
+	public readonly valueBitMask?: number;
+	public readonly label: string;
+	public readonly valueSize: number;
+	public readonly minValue: number;
+	public readonly maxValue: number;
+	public readonly defaultValue: number;
+	public readonly readOnly: boolean;
+	public readonly writeOnly: boolean;
+	public readonly allowManualEntry: boolean;
+	public readonly options: readonly {
+		label: string;
+		value: number;
+	}[];
 }

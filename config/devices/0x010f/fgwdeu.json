@@ -48,7 +48,7 @@
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "1": {
             "label": "Remember device state",
@@ -80,7 +80,7 @@
             "defaultValue": 3500,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10": {
             "label": "LED frame – power limit",
@@ -91,7 +91,7 @@
             "defaultValue": 3500,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "11": {
             "label": "LED frame – colour when ON",
@@ -200,7 +200,7 @@
             "defaultValue": 100,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "24": {
             "label": "Buttons orientation",
@@ -232,7 +232,7 @@
             "defaultValue": 600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "40": {
             "label": "First button – scenes sent",
@@ -276,7 +276,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "60": {
             "label": "Power reports – include self-consumption",
@@ -287,7 +287,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "61": {
             "label": "Power reports – on change",
@@ -298,7 +298,7 @@
             "defaultValue": 15,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "62": {
             "label": "Power reports – periodic",
@@ -309,7 +309,7 @@
             "defaultValue": 3600,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "65": {
             "label": "Energy reports – on change",
@@ -320,7 +320,7 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "66": {
             "label": "Energy reports – periodic",
@@ -331,7 +331,7 @@
             "defaultValue": 3600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "150": {
             "label": "Minimum brightness level",
@@ -342,7 +342,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "151": {
             "label": "Maximum brightness level",
@@ -353,7 +353,7 @@
             "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "152": {
             "label": "Incandescence level of compact fluorescent lamps",
@@ -364,7 +364,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "153": {
             "label": "Incandescence time of compact fluorescent lamps",
@@ -375,7 +375,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "154": {
             "label": "Automatic control – dimming step size",
@@ -386,7 +386,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "155": {
             "label": "Automatic control – time of dimming step",
@@ -397,7 +397,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "156": {
             "label": "Manual control – dimming step size",
@@ -408,7 +408,7 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "157": {
             "label": "Manual control – time of dimming step",
@@ -419,7 +419,7 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "158": {
             "label": "Auto-off functionality",
@@ -430,7 +430,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "159": {
             "label": "Force auto-calibration",
@@ -441,7 +441,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "160": {
             "label": "Auto-calibration status (read-only)",
@@ -452,7 +452,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "161": {
             "label": "Burnt out bulb detection",
@@ -463,7 +463,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "162": {
             "label": "Delay of a burnt out bulb and overload detection",
@@ -474,7 +474,7 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "163": {
             "label": "1st button ON value sent to association groups",
@@ -485,7 +485,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "164": {
             "label": "2nd button OFF value sent to association groups",
@@ -496,7 +496,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "165": {
             "label": "Double click – set level",
@@ -507,7 +507,7 @@
             "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "170": {
             "label": "Load control mode",
@@ -543,7 +543,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "173": {
             "label": "Dimmability of the load (read only)",
@@ -554,7 +554,7 @@
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "174": {
             "label": "Soft-start functionality",
@@ -640,7 +640,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "178": {
             "label": "Method of calculating the active power",
@@ -676,7 +676,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "30[0x0f]": {
             "label": "Alarm configuration - 1st slot",
@@ -687,7 +687,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "31[0x0f]": {
             "label": "Alarm configuration - 2nd slot",
@@ -698,7 +698,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "32[0x0f]": {
             "label": "Alarm configuration - 3rd slot",
@@ -709,7 +709,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "33[0x0f]": {
             "label": "Alarm configuration - 4th slot",
@@ -720,7 +720,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "34[0x0f]": {
             "label": "Alarm configuration - 5th slot",
@@ -731,7 +731,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

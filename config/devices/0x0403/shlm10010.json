@@ -1,39 +1,26 @@
 // ABUS Security-Center GmbH & Co. KG  SHLM10010
 // ABUS Security Center Bulb
 {
-    "_approved": true,
-    "manufacturer": "ABUS Security-Center GmbH & Co. KG ",
-    "manufacturerId": "0x0403",
-    "label": "SHLM10010",
-    "description": "ABUS Security Center Bulb",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Temperature of NTC",
-            "description": "This parameter can only be read and not set.",
-            "valueSize": 0,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": false
-        }
-    }
+	"_approved": true,
+	"manufacturer": "ABUS Security-Center GmbH & Co. KG ",
+	"manufacturerId": "0x0403",
+	"label": "SHLM10010",
+	"description": "ABUS Security Center Bulb",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	}
 }

@@ -50,7 +50,7 @@
 			"defaultValue": 180,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"2": {
 			"label": "Light threshold [lx]",
@@ -61,7 +61,7 @@
 			"defaultValue": 2000,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"4": {
 			"label": "Motion Radar Range [cm]",
@@ -73,7 +73,7 @@
 			"defaultValue": 500,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"5": {
 			"label": "Motion Radar Sensitivity [%]",
@@ -84,7 +84,7 @@
 			"defaultValue": 100,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"6": {
 			"label": "Brightness measuring interval [min]",
@@ -106,7 +106,7 @@
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"9": {
 			"label": "Disable local control",
@@ -117,7 +117,7 @@
 			"defaultValue": 2,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"10": {
 			"label": "Off behaviour (timeout)",
@@ -156,7 +156,7 @@
 			"defaultValue": 204,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"13": {
 			"label": "Sequence On-Off behaviour (timeout)",
@@ -167,7 +167,7 @@
 			"defaultValue": 204,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"14": {
 			"label": "Sequence Off-On behaviour (timeout)",
@@ -178,7 +178,7 @@
 			"defaultValue": 204,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"15": {
 			"label": "Sequence timing",
@@ -189,7 +189,7 @@
 			"defaultValue": 10,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"16": {
 			"label": "Motion Off behaviour (timeout)",

@@ -125,7 +125,7 @@
             "defaultValue": 184549375,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "65": {
             "label": "WallSwipe LED Up gesture action",
@@ -136,7 +136,7 @@
             "defaultValue": 855638015,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "66": {
             "label": "WallSwipe LED Down gesture action",
@@ -147,7 +147,7 @@
             "defaultValue": 855638015,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "67": {
             "label": "WallSwipe LED Left gesture action",
@@ -158,7 +158,7 @@
             "defaultValue": 855638015,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "68": {
             "label": "WallSwipe LED Right gesture action",
@@ -169,7 +169,7 @@
             "defaultValue": 855638015,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "69": {
             "label": "WallSwipe Night light",
@@ -180,7 +180,7 @@
             "defaultValue": 184483840,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "71": {
             "label": "WallSwipe sensitivity",
@@ -191,7 +191,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "80": {
             "label": "Group 1 notification",
@@ -302,7 +302,7 @@
             "defaultValue": 301991936,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "85": {
             "label": "Set appointment 1",
@@ -396,7 +396,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "102": {
             "label": "Set group 2 reports",
@@ -724,7 +724,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "248": {
             "label": "Function of S1/S2",
@@ -735,7 +735,7 @@
             "defaultValue": 131,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "249": {
             "label": "Set the recognition way of load",

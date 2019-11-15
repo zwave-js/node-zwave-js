@@ -99,7 +99,7 @@
             "defaultValue": 112,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "121": {
             "label": "Flag values for triggered magnet switch",
@@ -110,7 +110,7 @@
             "defaultValue": 256,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "252": {
             "label": "Permit other configurations",
@@ -142,7 +142,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

@@ -156,7 +156,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "84": {
             "label": "Color in energy mode",
@@ -166,7 +166,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "90": {
             "label": "Enable items 91 and 92",
@@ -199,7 +199,7 @@
             "defaultValue": 25,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "92": {
             "label": "Wattage Percent Change",
@@ -211,7 +211,7 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "100": {
             "label": "Set 101‐103 to default.",
@@ -376,7 +376,7 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "112": {
             "label": "Time interval for sending to group 2",
@@ -388,7 +388,7 @@
             "defaultValue": 600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "113": {
             "label": "Time interval for sending to group 3",
@@ -431,7 +431,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "83[0xff]": {
             "label": "Blue night light color value",
@@ -442,7 +442,7 @@
             "defaultValue": 221,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "83[0xff00]": {
             "label": "Green night light color value",
@@ -453,7 +453,7 @@
             "defaultValue": 160,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "83[0xff0000]": {
             "label": "Red night light color value",
@@ -464,7 +464,7 @@
             "defaultValue": 221,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "84[0xff]": {
             "label": "Green brightness in energy mode (%)",
@@ -476,7 +476,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "84[0xff00]": {
             "label": "Yellow brightness in energy mode (%)",
@@ -488,7 +488,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "84[0xff0000]": {
             "label": "Red brightness in energy mode (%)",
@@ -500,7 +500,7 @@
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

@@ -368,7 +368,7 @@
 			"defaultValue": 50,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"8": {
 			"label": "Percentage of light in the LED #2 when On",
@@ -379,7 +379,7 @@
 			"defaultValue": 50,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"9": {
 			"label": "Percentage of light in the LED #3 when On",
@@ -390,7 +390,7 @@
 			"defaultValue": 50,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"10": {
 			"label": "Percentage of light in the LED #4 when On",
@@ -401,7 +401,7 @@
 			"defaultValue": 50,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"11": {
 			"label": "Percentage of light in the LED #1 when Off",
@@ -412,7 +412,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"12": {
 			"label": "Percentage of light in the LED #2 when Off",
@@ -423,7 +423,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"13": {
 			"label": "Percentage of light in the LED #3 when Off",
@@ -434,7 +434,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"14": {
 			"label": "Percentage of light in the LED #4 when Off",
@@ -445,7 +445,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"15": {
 			"label": "Relay mode",
@@ -672,7 +672,7 @@
 			"defaultValue": 50,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"29": {
 			"label": "Threshold time for keypress detection of button 1",
@@ -683,7 +683,7 @@
 			"defaultValue": 30,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"30": {
 			"label": "Threshold time for keypress detection of button 2",
@@ -694,7 +694,7 @@
 			"defaultValue": 30,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"31": {
 			"label": "Threshold time for keypress detection of button 3",
@@ -705,7 +705,7 @@
 			"defaultValue": 30,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"32": {
 			"label": "Threshold time for keypress detection of button 4",
@@ -716,7 +716,7 @@
 			"defaultValue": 30,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"33": {
 			"label": "Non-secure commands for AG in logical device 1",
@@ -727,7 +727,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"34": {
 			"label": "Non-secure commands for AG in logical device 2",
@@ -738,7 +738,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"35": {
 			"label": "Non-secure commands for AG in logical device 3",
@@ -749,7 +749,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"36": {
 			"label": "Non-secure commands for AG in logical device 4",
@@ -760,7 +760,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"19[0x01]": {
 			"label": "Multilevel Switch (button #1) Disabled/Enabled",
@@ -792,7 +792,7 @@
 			"defaultValue": 255,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"19[0xff0000]": {
 			"label": "Lower switch value - (button #1)",
@@ -803,7 +803,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"20[0x01]": {
 			"label": "Multilevel Switch (button #2) Disabled/Enabled",
@@ -835,7 +835,7 @@
 			"defaultValue": 255,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"20[0xff0000]": {
 			"label": "Lower switch value - (button #2)",
@@ -846,7 +846,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"21[0x01]": {
 			"label": "Multilevel Switch (button #3) Disabled/Enabled",
@@ -878,7 +878,7 @@
 			"defaultValue": 255,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"21[0xff0000]": {
 			"label": "Lower switch value - (button #3)",
@@ -889,7 +889,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"22[0x01]": {
 			"label": "Multilevel Switch (button #4) Disabled/Enabled",
@@ -921,7 +921,7 @@
 			"defaultValue": 255,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"22[0xff0000]": {
 			"label": "Lower switch value - (button #4)",
@@ -932,7 +932,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		}
 	}
 }

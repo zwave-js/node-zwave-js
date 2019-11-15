@@ -130,7 +130,7 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "12": {
             "label": "Behavior of LED in Repose",

@@ -54,7 +54,7 @@
             "defaultValue": 127,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

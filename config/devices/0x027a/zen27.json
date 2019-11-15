@@ -109,7 +109,7 @@
 			"defaultValue": 60,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"5": {
 			"label": "Auto Turn-On Timer",
@@ -142,7 +142,7 @@
 			"defaultValue": 30,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"8": {
 			"label": "On Off Status After Power Failure",
@@ -178,7 +178,7 @@
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"10": {
 			"label": "Minimum Brightness",
@@ -189,7 +189,7 @@
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"11": {
 			"label": "Maximum Brightness",
@@ -200,7 +200,7 @@
 			"defaultValue": 99,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"12": {
 			"label": "Double Tap Function",

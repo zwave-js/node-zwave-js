@@ -183,7 +183,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": true,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		}
 	}
 }

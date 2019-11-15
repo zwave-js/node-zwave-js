@@ -33,7 +33,7 @@
             "defaultValue": 5000,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "2": {
             "label": "Relay 1 Delay length (ms)",
@@ -44,7 +44,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "3": {
             "label": "Relay 2 Pulse length (ms)",
@@ -55,7 +55,7 @@
             "defaultValue": 5000,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "4": {
             "label": "Relay 2 Delay length (ms)",
@@ -66,7 +66,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "5": {
             "label": "Relay 3 Pulse length (ms)",
@@ -77,7 +77,7 @@
             "defaultValue": 5000,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "6": {
             "label": "Relay 3 Delay length (ms)",
@@ -88,7 +88,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "7": {
             "label": "Disable battery alarm",
@@ -120,7 +120,7 @@
             "defaultValue": 3600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "9": {
             "label": "Battery Milli Volt Level Threshold Maximum",
@@ -131,7 +131,7 @@
             "defaultValue": 12100,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "10": {
             "label": "Battery Milli Volt Level Threshold Minimum",
@@ -142,7 +142,7 @@
             "defaultValue": 11600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "11": {
             "label": "Ble temporary allow – timer - seconds",
@@ -153,7 +153,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "12": {
             "label": "BLE Always allowed",

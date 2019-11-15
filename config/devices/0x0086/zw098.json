@@ -184,7 +184,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "37[0xff00]": {
             "label": "Colour Change Speed",
@@ -195,7 +195,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "37[0xff0000]": {
             "label": "Cycle count",
@@ -206,7 +206,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "37[0x7f000000]": {
             "label": "Color transitions (Value 1 MSB) see Overview",
@@ -278,7 +278,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "38[0xff00]": {
             "label": "Color index configuration for multi mode (3,4)",
@@ -289,7 +289,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "38[0xff0000]": {
             "label": "Color index configuration for multi mode (5.6)",
@@ -300,7 +300,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         },
         "38[0x7f000000]": {
             "label": "Color index configuration for multi mode (7,8)",
@@ -311,7 +311,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+            "allowManualEntry": true
         }
     }
 }

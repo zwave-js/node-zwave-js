@@ -45,7 +45,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"3": {
 			"label": "Current Overload Protection",
@@ -169,7 +169,7 @@
 			"defaultValue": 25,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"92": {
 			"label": "Minimum Change to send Report (%)",
@@ -180,7 +180,7 @@
 			"defaultValue": 5,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"100": {
 			"label": "Set 101‐103 to default",
@@ -212,7 +212,7 @@
 			"defaultValue": 4,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"102": {
 			"label": "Report type to send to Group 2",
@@ -223,7 +223,7 @@
 			"defaultValue": 8,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"103": {
 			"label": "Report type to send to Group 3",
@@ -234,7 +234,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"111": {
 			"label": "Interval to send out reports to Group 1",
@@ -245,7 +245,7 @@
 			"defaultValue": 720,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"112": {
 			"label": "Interval to send out reports of group 2",
@@ -256,7 +256,7 @@
 			"defaultValue": 720,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"113": {
 			"label": "Interval to send out reports of group 3",
@@ -267,7 +267,7 @@
 			"defaultValue": 65535,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"252": {
 			"label": "Enable/disable Configuration Lock",
