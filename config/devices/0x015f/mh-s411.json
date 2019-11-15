@@ -28,8 +28,7 @@
     "associations": {
         "1": {
             "label": "Switching of associated devices",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "2": {
             "label": "Status Reports",

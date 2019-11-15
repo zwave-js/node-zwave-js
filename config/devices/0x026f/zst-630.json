@@ -25,13 +25,11 @@
         },
         "2": {
             "label": "Basic Report",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Notification Report",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     }
 }

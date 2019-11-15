@@ -26,8 +26,7 @@
         "2": {
             "label": "Group 2",
             "description": "GROUP 2 allows Sending Binary Switch Report to associated devices in this group. This group is mapped to Endpoint 0. This Group Support: SWITCH_BINARY_REPORT",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

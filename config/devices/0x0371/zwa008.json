@@ -33,20 +33,17 @@
         "2": {
             "label": "Group 2",
             "description": "Control devices when magnet or external dry contacts trips",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Group 3",
             "description": "Sends alarm message when magnet controlled or external dry sensor trips.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "Group 4",
             "description": "Sends alarm messages when tamper is tripped",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

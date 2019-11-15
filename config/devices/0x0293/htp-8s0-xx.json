@@ -25,50 +25,42 @@
         "2": {
             "label": "HGT-01 Basic Set",
             "description": "Basic Set",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "HGT-01 Switch Binary Set",
             "description": "Switch Binary Set",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "HGT-02 Basic Set",
             "description": "Basic Set",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "5": {
             "label": "HGT-02 Switch Binary Set",
             "description": "Switch Binary Set",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "6": {
             "label": "HGT-03 Basic Set",
             "description": "Basic Set",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "7": {
             "label": "HGT-03 Switch Binary Set",
             "description": "Switch Binary Set",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "8": {
             "label": "HGT-04 Basic Set",
             "description": "Basic Set",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "9": {
             "label": "HGT-04 Switch Binary Set",
             "description": "Switch Binary Set",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     }
 }

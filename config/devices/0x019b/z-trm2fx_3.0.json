@@ -25,18 +25,15 @@
         },
         "2": {
             "label": "External temperature",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Floor temperature",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "Internal relay status",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

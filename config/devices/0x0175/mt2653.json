@@ -26,26 +26,22 @@
         "2": {
             "label": "Group 2",
             "description": "Controlled by button 1 or single clicks of buttons 1 and 3",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "3": {
             "label": "Group 3",
             "description": "Controlled by button 3 or double clicks of buttons 1 and 3",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "4": {
             "label": "Group 4",
             "description": "Controlled by button 2 or single clicks of buttons 2 and 4",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "5": {
             "label": "Group 5",
             "description": "Controlled by button 4 or double clicks of buttons 2 and 4",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         }
     },
     "paramInformation": {

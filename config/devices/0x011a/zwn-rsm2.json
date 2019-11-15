@@ -32,13 +32,11 @@
         },
         "2": {
             "label": "Switch Binary Report EP1",
-            "maxNodes": 3,
-            "isLifeline": false
+            "maxNodes": 3
         },
         "3": {
             "label": "Switch Binary Report EP2",
-            "maxNodes": 3,
-            "isLifeline": false
+            "maxNodes": 3
         }
     },
     "paramInformation": {

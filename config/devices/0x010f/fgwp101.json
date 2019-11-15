@@ -19,13 +19,11 @@
     "associations": {
         "1": {
             "label": "Group 1 (on/off controlled devices)",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "2": {
             "label": "Group 2 (measured load controlled devices)",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "3": {
             "label": "Controller Updates",

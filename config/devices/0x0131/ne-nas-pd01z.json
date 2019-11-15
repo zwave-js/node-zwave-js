@@ -26,20 +26,17 @@
         "2": {
             "label": "Group 2",
             "description": "BASIC_SET control command group",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         },
         "3": {
             "label": "Group 3",
             "description": "NOTIFICATION_REPORT_V4",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         },
         "4": {
             "label": "Group 4",
             "description": "Sensor Binary Report",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         }
     },
     "paramInformation": {

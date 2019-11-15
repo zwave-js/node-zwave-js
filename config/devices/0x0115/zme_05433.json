@@ -20,13 +20,11 @@
         "1": {
             "label": "Association group 1",
             "description": "Single press and hold of up/down buttons (max. nodes in group: 14)",
-            "maxNodes": 14,
-            "isLifeline": false
+            "maxNodes": 14
         },
         "2": {
             "label": "Association group 2",
-            "maxNodes": 14,
-            "isLifeline": false
+            "maxNodes": 14
         },
         "3": {
             "label": "Association group 3",

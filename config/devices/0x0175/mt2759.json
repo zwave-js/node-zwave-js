@@ -26,50 +26,42 @@
         "2": {
             "label": "Basic On/Off I1",
             "description": "basic on/off (triggered at change of the output Q state and reflecting its state) up to 16 nodes.",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "3": {
             "label": "Basic On/Off I2",
             "description": "basic on/off (triggered at change of the input I2 state and reflecting its state) up to 16 nodes.",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "4": {
             "label": "Reporting I2",
             "description": "Notification report (triggered at change of the input I2 state and reflecting its state) up to 16 nodes.",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "5": {
             "label": "Binary Sensor Report I2",
             "description": "Binary sensor (triggered at change of the input I2 state and reflecting its state) up to 16 nodes.",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "6": {
             "label": "Basic On/Off I3",
             "description": "basic on/off (triggered at change of the input I3 state an d reflecting its state) up to 16 nodes.",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "7": {
             "label": "Reporting I3",
             "description": "notification report (triggered at change of the input I3 state and reflecting its state) up to 16 nodes.",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "8": {
             "label": "Binary Sensor Report I3",
             "description": "binary sensor report (triggered at change of the input I3 state and reflecting its state) up to 16 nodes.",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "9": {
             "label": "Multi-Level Sensor Reporting",
             "description": "multilevel sensor report (triggered at change of temperature sensor) up to 16 nodes.",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         }
     },
     "paramInformation": {

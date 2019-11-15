@@ -34,8 +34,7 @@
         "2": {
             "label": "Group 2",
             "description": "Forward the Basic Set",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

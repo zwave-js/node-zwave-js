@@ -23,13 +23,11 @@
     "associations": {
         "1": {
             "label": "Binary input Group",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "2": {
             "label": "Alarm Group",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

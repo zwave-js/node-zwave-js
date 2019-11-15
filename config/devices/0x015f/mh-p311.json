@@ -26,13 +26,11 @@
         "2": {
             "label": "Basic Set Command",
             "description": "Basic Set Command",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Multi-level Set Command",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

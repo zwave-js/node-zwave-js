@@ -26,38 +26,32 @@
 		"2": {
 			"label": "On/Off control",
 			"description": "On/Off control",
-			"maxNodes": 16,
-			"isLifeline": true
+			"maxNodes": 16
 		},
 		"3": {
 			"label": "Notification Report",
 			"description": "Notification Report",
-			"maxNodes": 16,
-			"isLifeline": true
+			"maxNodes": 16
 		},
 		"4": {
 			"label": "Ambient light",
 			"description": "Ambient light",
-			"maxNodes": 6,
-			"isLifeline": true
+			"maxNodes": 16
 		},
 		"5": {
 			"label": "Button on/off",
 			"description": "Button on/off",
-			"maxNodes": 16,
-			"isLifeline": true
+			"maxNodes": 16
 		},
 		"6": {
 			"label": "Button scene",
 			"description": "Button scene",
-			"maxNodes": 16,
-			"isLifeline": true
+			"maxNodes": 16
 		},
 		"7": {
 			"label": "Button dim",
 			"description": "Button dim",
-			"maxNodes": 16,
-			"isLifeline": true
+			"maxNodes": 16
 		}
 	},
 	"paramInformation": {

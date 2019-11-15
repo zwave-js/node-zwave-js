@@ -24,23 +24,19 @@
         },
         "2": {
             "label": "Binary Door status change",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Binary Tamper",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "Notification Door status change",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "5": {
             "label": "Notification Tamper",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     }
 }

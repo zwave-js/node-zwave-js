@@ -38,20 +38,17 @@
         "2": {
             "label": "On/Off",
             "description": "assigned to clicking the button and is used to turn on/off associated devices",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Dimmer",
             "description": "is assigned to holding the button and is used to change level of associated devices",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "Alarm",
             "description": "assigned to clicking and/or holding the button (triggers are defined in parameter 30) and is used to send alarm frames to associated devices",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

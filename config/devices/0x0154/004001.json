@@ -24,13 +24,11 @@
         },
         "2": {
             "label": "Alarm Reports",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         },
         "3": {
             "label": "Switching Command when Alarm",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         }
     },
     "paramInformation": {

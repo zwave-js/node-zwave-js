@@ -20,20 +20,17 @@
         "1": {
             "label": "basic on/off",
             "description": "triggered at change of the output Q state and reflecting its state",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "2": {
             "label": "basic on/off -  input I2",
             "description": "(triggered at change of the input I2 state and reflecting its state)",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "3": {
             "label": "basic on/off -  input I3",
             "description": "ttriggered at change of the input I3 state and reflecting its state)",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "4": {
             "label": "Controller Updates",

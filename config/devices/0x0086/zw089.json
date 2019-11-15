@@ -32,8 +32,7 @@
         },
         "2": {
             "label": "Battery Warnings",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

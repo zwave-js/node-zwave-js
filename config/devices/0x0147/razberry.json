@@ -30,8 +30,7 @@
         "1": {
             "label": "associations",
             "description": "Associations for RaZberry",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         }
     }
 }

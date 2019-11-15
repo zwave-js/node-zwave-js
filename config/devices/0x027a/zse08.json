@@ -26,20 +26,17 @@
         "2": {
             "label": "Control",
             "description": "Control a device based on the sensor's value",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Notification",
             "description": "Notification Report for the status of the sensor",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "Binary Report",
             "description": "Sensor Binary Report for the status of the sensor",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

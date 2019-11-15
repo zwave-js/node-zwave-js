@@ -37,8 +37,7 @@
         "4": {
             "label": "Wireless",
             "description": "Switch state controls group",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

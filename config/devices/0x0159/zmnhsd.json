@@ -27,23 +27,19 @@
         },
         "2": {
             "label": "I1 basic on/off",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "3": {
             "label": "I1 start/stop level change",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "4": {
             "label": "Multilevel set",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "5": {
             "label": "Multilevel sensor report",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         }
     },
     "paramInformation": {

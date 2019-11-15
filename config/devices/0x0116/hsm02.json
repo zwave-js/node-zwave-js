@@ -24,8 +24,7 @@
         },
         "2": {
             "label": "Target nodes who receive BASIC_SET command",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

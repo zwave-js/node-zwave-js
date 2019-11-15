@@ -27,13 +27,11 @@
     "associations": {
         "1": {
             "label": "Input IN1",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "2": {
             "label": "TMP Button",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Condition",

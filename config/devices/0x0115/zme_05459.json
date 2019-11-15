@@ -19,13 +19,11 @@
     "associations": {
         "1": {
             "label": "Single press and hold of up/down buttons",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         },
         "2": {
             "label": "Double press and press-hold of up/down buttons",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         },
         "3": {
             "label": "Send Reports on blind state change",

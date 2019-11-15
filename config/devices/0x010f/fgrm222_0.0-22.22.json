@@ -27,14 +27,12 @@
     "associations": {
         "1": {
             "label": "Momentary click",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "2": {
             "label": "Momentary hold",
             "description": "Only applies to momentary switches",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "3": {
             "label": "Controller Updates",

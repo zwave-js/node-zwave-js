@@ -30,14 +30,12 @@
         "2": {
             "label": "On/Off Control",
             "description": "Sends basic set command to associated devices.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Dimming Control",
             "description": "Sends switch multilevel set, multilevel start level change and multilevel stop level change to associated devices.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

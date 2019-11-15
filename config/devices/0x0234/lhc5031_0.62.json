@@ -26,23 +26,19 @@
         "2": {
             "label": "Group 2",
             "description": "Analogue inputs",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Group 3",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "Group 4",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "5": {
             "label": "Group 5",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

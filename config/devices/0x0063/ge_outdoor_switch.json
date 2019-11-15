@@ -26,14 +26,12 @@
         "2": {
             "label": "Group 2",
             "description": "Association Group 2 supports Basic Set and is controlled by pressing the On or Off button with the local load",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Group 3",
             "description": "Association Group 3 supports Basic Set and is controlled by double pressing the On or Off button",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     }
 }

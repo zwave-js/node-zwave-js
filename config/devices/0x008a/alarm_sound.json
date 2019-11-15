@@ -20,8 +20,7 @@
         "1": {
             "label": "Association group 1",
             "description": "Changes the LED on the device",
-            "maxNodes": 1,
-            "isLifeline": false
+            "maxNodes": 1
         },
         "2": {
             "label": "Association group 2",

@@ -19,13 +19,11 @@
     "associations": {
         "1": {
             "label": "Basic on/off Q1",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         },
         "2": {
             "label": "Basic on/off Q2",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         },
         "3": {
             "label": "Default Reporting Group",

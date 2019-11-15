@@ -24,23 +24,19 @@
         },
         "2": {
             "label": "Thermostat Operating State reports",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         },
         "3": {
             "label": "Low Battery Warnings",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         },
         "4": {
             "label": "Thermostat Set Point Reports",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         },
         "5": {
             "label": "Multilevel Sensor Reports",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         }
     },
     "paramInformation": {

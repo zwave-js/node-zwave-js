@@ -23,18 +23,15 @@
         },
         "2": {
             "label": "Group 2",
-            "maxNodes": 1,
-            "isLifeline": false
+            "maxNodes": 1
         },
         "3": {
             "label": "Group 3",
-            "maxNodes": 1,
-            "isLifeline": false
+            "maxNodes": 1
         },
         "4": {
             "label": "Group 4",
-            "maxNodes": 1,
-            "isLifeline": false
+            "maxNodes": 1
         }
     }
 }

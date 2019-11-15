@@ -1,50 +1,46 @@
 // Sigma Designs (Former Zensys) K8
 // Z-Wave Battery Wall Controller
 {
-    "_approved": true,
-    "manufacturer": "Sigma Designs (Former Zensys)",
-    "manufacturerId": "0x0000",
-    "label": "K8",
-    "description": "Z-Wave Battery Wall Controller",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0003"
-        },
-        {
-            "productType": "0x0003",
-            "productId": "0xa305"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Button pair 1",
-            "maxNodes": 20,
-            "isLifeline": false
-        },
-        "3": {
-            "label": "Button pair 2",
-            "maxNodes": 20,
-            "isLifeline": false
-        },
-        "4": {
-            "label": "Button pair 3",
-            "maxNodes": 20,
-            "isLifeline": false
-        },
-        "5": {
-            "label": "Button pair 4",
-            "maxNodes": 20,
-            "isLifeline": false
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Sigma Designs (Former Zensys)",
+	"manufacturerId": "0x0000",
+	"label": "K8",
+	"description": "Z-Wave Battery Wall Controller",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0003"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0xa305"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Button pair 1",
+			"maxNodes": 20
+		},
+		"3": {
+			"label": "Button pair 2",
+			"maxNodes": 20
+		},
+		"4": {
+			"label": "Button pair 3",
+			"maxNodes": 20
+		},
+		"5": {
+			"label": "Button pair 4",
+			"maxNodes": 20
+		}
+	}
 }

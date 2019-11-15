@@ -26,8 +26,7 @@
         "2": {
             "label": "Power",
             "description": "Power",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

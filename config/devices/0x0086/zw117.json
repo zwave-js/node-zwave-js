@@ -34,8 +34,7 @@
         "2": {
             "label": "Group 2",
             "description": "Retransmit",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

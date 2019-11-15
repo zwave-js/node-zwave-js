@@ -30,14 +30,12 @@
         "2": {
             "label": "Group 1",
             "description": "Supports Basic Set and is controlled by pressing On/Off button",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Group 2",
             "description": "Supports Basic Set and is controlled by pressing On/Off button",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

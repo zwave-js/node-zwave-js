@@ -39,8 +39,7 @@
     "associations": {
         "1": {
             "label": "Binary input Set Group",
-            "maxNodes": 2,
-            "isLifeline": false
+            "maxNodes": 2
         },
         "2": {
             "label": "MultiLevel Sensor report",
@@ -54,13 +53,11 @@
         },
         "4": {
             "label": "Binary Sensor report",
-            "maxNodes": 2,
-            "isLifeline": false
+            "maxNodes": 2
         },
         "5": {
             "label": "Pulse Meter Sensor report",
-            "maxNodes": 2,
-            "isLifeline": false
+            "maxNodes": 2
         }
     },
     "paramInformation": {

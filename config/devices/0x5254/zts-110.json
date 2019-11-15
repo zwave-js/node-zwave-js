@@ -23,13 +23,11 @@
     "associations": {
         "1": {
             "label": "Heat Pump",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         },
         "2": {
             "label": "Compressor",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         },
         "3": {
             "label": "Controller Update",

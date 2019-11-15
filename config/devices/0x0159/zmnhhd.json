@@ -26,20 +26,17 @@
         "2": {
             "label": "Basic OnOff",
             "description": "Basic OnOff",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "3": {
             "label": "StartStop level change",
             "description": "StartStop level change",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "4": {
             "label": "Multilevel set",
             "description": "Multilevel set",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         }
     },
     "paramInformation": {

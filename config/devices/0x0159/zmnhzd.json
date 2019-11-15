@@ -26,14 +26,12 @@
         "2": {
             "label": "Basic on/off - wind",
             "description": "triggered when the wind gust of the wind gauge exceed the configuration parameter 1 value",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "3": {
             "label": "Basic on/off - rain",
             "description": "triggered when the rain rate exceed the configuration parameter 2 value",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         }
     },
     "paramInformation": {

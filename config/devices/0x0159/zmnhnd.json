@@ -26,32 +26,27 @@
         "2": {
             "label": "Basic ON/OFF",
             "description": "Basic ON/OFF",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "3": {
             "label": "Basic ON/OFF (I2)",
             "description": "Basic ON/OFF (I2)",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "4": {
             "label": "Binary Sensor Report",
             "description": "Binary Sensor Report",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "5": {
             "label": "Notification Report",
             "description": "Notification Report",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "6": {
             "label": "Multilevel Sensor Report",
             "description": "Multilevel Sensor Report",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         }
     },
     "paramInformation": {

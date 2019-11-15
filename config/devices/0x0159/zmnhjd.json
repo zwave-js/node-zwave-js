@@ -29,26 +29,22 @@
         "2": {
             "label": "Multilevel",
             "description": "Triggered at changes of state/value of the Flush pilot wire",
-            "maxNodes": 99,
-            "isLifeline": false
+            "maxNodes": 99
         },
         "3": {
             "label": "Basic on/off",
             "description": "Triggered at change of the input I1 state and reflecting its state",
-            "maxNodes": 99,
-            "isLifeline": false
+            "maxNodes": 99
         },
         "4": {
             "label": "Basic on/off - input I2",
             "description": "Triggered at change of the input I2 state and reflecting its state",
-            "maxNodes": 99,
-            "isLifeline": false
+            "maxNodes": 99
         },
         "5": {
             "label": "Basic on/off -  input I3",
             "description": "Triggered at change of the input I3 state and reflecting its state",
-            "maxNodes": 99,
-            "isLifeline": false
+            "maxNodes": 99
         }
     },
     "paramInformation": {

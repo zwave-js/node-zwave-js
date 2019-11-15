@@ -28,23 +28,19 @@
         },
         "2": {
             "label": "On/Off control",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         },
         "3": {
             "label": "Internal temperature sensor",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         },
         "4": {
             "label": "External temperature sensor",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         },
         "5": {
             "label": "Floor temperature sensor",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         }
     },
     "paramInformation": {

@@ -26,8 +26,7 @@
         "2": {
             "label": "External Input",
             "description": "Action on External Dry Input",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         }
     },
     "paramInformation": {

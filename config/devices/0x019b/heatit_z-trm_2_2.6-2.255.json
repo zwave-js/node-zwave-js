@@ -24,23 +24,19 @@
         },
         "2": {
             "label": "Thermostat Binary Switch Set",
-            "maxNodes": 7,
-            "isLifeline": false
+            "maxNodes": 7
         },
         "3": {
             "label": "Thermostat Internal Multilevel Sensor Reports",
-            "maxNodes": 7,
-            "isLifeline": false
+            "maxNodes": 7
         },
         "4": {
             "label": "Thermostat External Multilevel Sensor Reports",
-            "maxNodes": 7,
-            "isLifeline": false
+            "maxNodes": 7
         },
         "5": {
             "label": "Thermostat Floor Multilevel Sensor Reports",
-            "maxNodes": 7,
-            "isLifeline": false
+            "maxNodes": 7
         }
     },
     "paramInformation": {

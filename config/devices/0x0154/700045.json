@@ -24,13 +24,11 @@
         },
         "2": {
             "label": "Door Lock Control",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "3": {
             "label": "Ring Button Control",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         }
     },
     "paramInformation": {

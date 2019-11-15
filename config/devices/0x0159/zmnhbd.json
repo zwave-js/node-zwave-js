@@ -24,38 +24,31 @@
         },
         "2": {
             "label": "Q1 basic on/off",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "3": {
             "label": "Q1 switch binary",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "4": {
             "label": "Q1 power meter",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "5": {
             "label": "Q2 basic on/off",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "6": {
             "label": "Q2 switch binary",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "7": {
             "label": "Q2 power meter",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "8": {
             "label": "Multilevel sensor",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         }
     },
     "paramInformation": {

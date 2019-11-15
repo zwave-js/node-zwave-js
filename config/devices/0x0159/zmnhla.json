@@ -19,28 +19,23 @@
     "associations": {
         "1": {
             "label": "On/Off Triggered by Q State",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "2": {
             "label": "On/Off Triggered by I2",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "3": {
             "label": "On/Off Triggered by I3",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "4": {
             "label": "On/Off Triggerd by High Temp",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "5": {
             "label": "On/Off Trigger by Low Temp",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "6": {
             "label": "Controller Updates",

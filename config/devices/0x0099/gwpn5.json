@@ -19,13 +19,11 @@
     "associations": {
         "1": {
             "label": "Wheel position change",
-            "maxNodes": 1,
-            "isLifeline": false
+            "maxNodes": 1
         },
         "2": {
             "label": "Current leakage on relay",
-            "maxNodes": 1,
-            "isLifeline": false
+            "maxNodes": 1
         },
         "3": {
             "label": "Power level change",

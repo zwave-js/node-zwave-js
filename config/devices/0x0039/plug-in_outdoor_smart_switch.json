@@ -25,14 +25,12 @@
         "2": {
             "label": "Local Load",
             "description": "Supports Basic Set and is controlled with the local load.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Double Press on/off",
             "description": "Supports Basic Set and is controlled by double pressing on/off button.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     }
 }

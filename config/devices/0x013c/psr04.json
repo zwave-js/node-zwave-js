@@ -26,8 +26,7 @@
         "2": {
             "label": "Light control",
             "description": "For light control. The device will send Basic Set command to this group.",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         }
     },
     "paramInformation": {

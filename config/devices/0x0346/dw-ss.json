@@ -26,8 +26,7 @@
         "2": {
             "label": "Basic Report",
             "description": "Basic report of either 0x00 for CLOSED or 0xFF for OPEN",
-            "maxNodes": 1,
-            "isLifeline": false
+            "maxNodes": 1
         }
     },
     "paramInformation": {

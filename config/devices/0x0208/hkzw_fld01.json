@@ -30,8 +30,7 @@
         "2": {
             "label": "Send Command",
             "description": "Group 2 is assigned to send BASIC SET command",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

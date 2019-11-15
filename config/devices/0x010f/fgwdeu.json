@@ -30,14 +30,12 @@
         "2": {
             "label": "2nd association group",
             "description": "“On/Off” is used to turn the associated devices on/off reflecting button operation (uses Basic command class).",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "3rd association group",
             "description": "\"Dimmer” is used to change level of associated devices reflecting button operation (uses Switch Multilevel command class).",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

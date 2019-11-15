@@ -26,32 +26,27 @@
         "2": {
             "label": "Follow State",
             "description": "Send status if local button is used to associated devices.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Follow Comp State",
             "description": "Send status if local button is used to associated devices.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "Metering High Threshold",
             "description": "Send ON/OFF command to associated devices if threshold reached",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "5": {
             "label": "Metering Low Threshold",
             "description": "Send ON/OFF command to associated devices if threshold reached",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "6": {
             "label": "Metering - Report",
             "description": "Report metering to devices in this group.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

@@ -26,8 +26,7 @@
         "2": {
             "label": "Control other devices",
             "description": "Control other devices on single click of the button. BASIC command (on/off) is sent according to switching state of the load.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

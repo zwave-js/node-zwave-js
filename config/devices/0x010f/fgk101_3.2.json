@@ -32,23 +32,19 @@
         },
         "2": {
             "label": "Control",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Alarm",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "Sensor ZW3",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "5": {
             "label": "Tamper ZW3",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

@@ -42,26 +42,22 @@
         "2": {
             "label": "On/Off (S1)",
             "description": "On/Off (S1) is assigned to switch connected to the S1 terminal (uses Basic command class)",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Dimmer (S1)",
             "description": "“Dimmer (S1)” is assigned to switch connected to the S1 terminal (uses Switch Multilevel command class)",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "On/Off (S2)",
             "description": "On/Off (S2) is assigned to switch connected to the S2 terminal (uses Basic command class)",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "5": {
             "label": "Dimmer (S2)",
             "description": "Dimmer (S2) is assigned to switch connected to the S2 terminal (uses Switch Multilevel command class)",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

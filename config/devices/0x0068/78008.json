@@ -26,8 +26,7 @@
         "2": {
             "label": "Sensor",
             "description": "ON/OFF status (Basic_set command)",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

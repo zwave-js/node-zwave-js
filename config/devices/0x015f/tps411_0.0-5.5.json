@@ -23,8 +23,7 @@
     "associations": {
         "1": {
             "label": "Switch Button Group 1",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "2": {
             "label": "All Status Reports",

@@ -28,8 +28,7 @@
         },
         "2": {
             "label": "On/Off control",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         }
     },
     "paramInformation": {

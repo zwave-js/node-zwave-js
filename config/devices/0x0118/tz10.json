@@ -19,8 +19,7 @@
     "associations": {
         "2": {
             "label": "State control",
-            "maxNodes": 2,
-            "isLifeline": false
+            "maxNodes": 2
         }
     },
     "paramInformation": {

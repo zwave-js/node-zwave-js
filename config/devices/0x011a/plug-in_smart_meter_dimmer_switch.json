@@ -29,14 +29,12 @@
         "2": {
             "label": "StatusReport",
             "description": "Send basic report",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "PowerReport",
             "description": "PowerReport: Send meter power report",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

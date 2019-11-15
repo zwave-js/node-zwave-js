@@ -24,8 +24,7 @@
         },
         "2": {
             "label": "Control",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         }
     },
     "paramInformation": {

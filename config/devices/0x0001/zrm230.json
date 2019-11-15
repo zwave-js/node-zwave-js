@@ -19,18 +19,15 @@
     "associations": {
         "1": {
             "label": "Left paddle (relais)",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "2": {
             "label": "Right paddle",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Right double click paddle",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "Controller updates",

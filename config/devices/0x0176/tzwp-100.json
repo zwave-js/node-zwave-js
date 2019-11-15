@@ -28,8 +28,7 @@
         },
         "2": {
             "label": "Control other devices",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         }
     },
     "paramInformation": {

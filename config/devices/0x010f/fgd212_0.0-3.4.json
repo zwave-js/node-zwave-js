@@ -36,23 +36,19 @@
         },
         "2": {
             "label": "Send BASIC SET command class frame S1",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "3": {
             "label": "Sends MULTILEVEL SWITCH command class frame S1",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "4": {
             "label": "Sends BASIC SET command class S2",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "5": {
             "label": "Sends MULTILEVEL SWITCH command class frame S2",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         }
     },
     "paramInformation": {

@@ -25,58 +25,47 @@
         },
         "2": {
             "label": "The buttons of group No1",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "The buttons of group No2",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "The buttons of group No3",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "5": {
             "label": "The buttons of group No4",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "6": {
             "label": "The buttons of group No5",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "7": {
             "label": "The buttons of group No6",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "8": {
             "label": "The buttons of group No7",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "9": {
             "label": "The buttons of scene No1",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "10": {
             "label": "The buttons of scene No2",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "11": {
             "label": "The buttons of scene No3",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "12": {
             "label": "The buttons of All On/Off",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

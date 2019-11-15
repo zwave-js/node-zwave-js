@@ -30,14 +30,12 @@
         "2": {
             "label": "Root device Group (binary sensor)",
             "description": "Binary smoke sensor via lifeline and on status Chance of smoke detection",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Root device Group (notification)",
             "description": "smoke status as notification report and on status change of smoke detection",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     }
 }

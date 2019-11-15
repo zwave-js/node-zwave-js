@@ -24,13 +24,11 @@
         },
         "2": {
             "label": "Up Power Level Group",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         },
         "3": {
             "label": "Down Power Level Group",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         }
     },
     "paramInformation": {

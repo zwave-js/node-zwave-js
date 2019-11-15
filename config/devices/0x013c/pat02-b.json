@@ -24,8 +24,7 @@
         },
         "2": {
             "label": "Light Control",
-            "maxNodes": 7,
-            "isLifeline": false
+            "maxNodes": 7
         }
     },
     "paramInformation": {

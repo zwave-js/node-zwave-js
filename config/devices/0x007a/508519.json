@@ -19,8 +19,7 @@
     "associations": {
         "1": {
             "label": "Other device to be switched?",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     }
 }

@@ -31,8 +31,7 @@
         "1": {
             "label": "Lifeline",
             "description": "Z-Wave Plus Lifeline",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

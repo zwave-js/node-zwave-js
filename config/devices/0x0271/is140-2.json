@@ -30,20 +30,17 @@
 		"2": {
 			"label": "Control: Key01",
 			"description": "On/Off control",
-			"maxNodes": 16,
-			"isLifeline": false
+			"maxNodes": 16
 		},
 		"3": {
 			"label": "Notification: Motion",
 			"description": "Motion Begin/End",
-			"maxNodes": 16,
-			"isLifeline": false
+			"maxNodes": 16
 		},
 		"4": {
 			"label": "Sensor: Luminescence",
 			"description": "Ambient light",
-			"maxNodes": 15,
-			"isLifeline": false
+			"maxNodes": 15
 		}
 	},
 	"paramInformation": {

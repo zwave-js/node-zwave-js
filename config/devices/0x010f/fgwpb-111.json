@@ -25,13 +25,11 @@
         },
         "2": {
             "label": "OnOffButton",
-            "maxNodes": 50,
-            "isLifeline": false
+            "maxNodes": 50
         },
         "3": {
             "label": "OnOffPlugPower",
-            "maxNodes": 50,
-            "isLifeline": false
+            "maxNodes": 50
         }
     },
     "paramInformation": {

@@ -19,8 +19,7 @@
     "associations": {
         "1": {
             "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "2": {
             "label": "Water is detected",

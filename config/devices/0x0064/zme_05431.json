@@ -29,14 +29,12 @@
         "2": {
             "label": "Single press",
             "description": "Single press and hold of up/down buttons",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Double press",
             "description": "Double press and hold of up/down buttons",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

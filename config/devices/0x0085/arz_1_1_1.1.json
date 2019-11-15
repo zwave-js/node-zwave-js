@@ -29,14 +29,12 @@
         "2": {
             "label": "Basic Repeat",
             "description": "Group used to transfer the received basic commands to the devices included in this group.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Multilevel Repeat",
             "description": "Group used to transfer the received multilevel commands to the devices included in this group.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

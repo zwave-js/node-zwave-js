@@ -26,14 +26,12 @@
         "2": {
             "label": "Group 2",
             "description": "Basic Set, controlled with the local load",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Group 3",
             "description": "Basic Set, controlled by double pressing the On or Off button",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

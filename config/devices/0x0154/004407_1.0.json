@@ -24,8 +24,7 @@
         },
         "2": {
             "label": "Switching Command when Alarm",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         }
     },
     "paramInformation": {

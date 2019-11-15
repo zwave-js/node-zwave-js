@@ -26,26 +26,22 @@
         "2": {
             "label": "Switch 1",
             "description": "Switch 1 On/Off",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "3": {
             "label": "Dimmer 1",
             "description": "Dimmer for Switch 1",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "4": {
             "label": "Switch 2",
             "description": "Switch 2 On/Off",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "5": {
             "label": "Dimmer 2",
             "description": "Dimmer for Switch 2",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         }
     },
     "paramInformation": {

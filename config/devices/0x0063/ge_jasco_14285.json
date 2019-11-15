@@ -28,14 +28,12 @@
         },
         "2": {
             "label": "Basic Set, controlled by local load",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Basic Set,",
             "description": "controlled by pressing the On or Off button",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

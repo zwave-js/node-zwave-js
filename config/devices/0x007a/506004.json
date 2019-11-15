@@ -28,23 +28,19 @@
     "associations": {
         "1": {
             "label": "Red Cables",
-            "maxNodes": 12,
-            "isLifeline": false
+            "maxNodes": 12
         },
         "2": {
             "label": "Green Cables",
-            "maxNodes": 12,
-            "isLifeline": false
+            "maxNodes": 12
         },
         "3": {
             "label": "Brown Cables",
-            "maxNodes": 12,
-            "isLifeline": false
+            "maxNodes": 12
         },
         "4": {
             "label": "Blue Cables",
-            "maxNodes": 12,
-            "isLifeline": false
+            "maxNodes": 12
         }
     },
     "paramInformation": {

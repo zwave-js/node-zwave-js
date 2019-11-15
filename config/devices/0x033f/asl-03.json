@@ -34,8 +34,7 @@
         "2": {
             "label": "Report 2",
             "description": "Door lock operation status",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     }
 }

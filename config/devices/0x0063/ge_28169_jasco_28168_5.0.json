@@ -30,14 +30,12 @@
         "2": {
             "label": "Single Press Button",
             "description": "Sends message directly to configured node on single press of button.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Double Press button",
             "description": "Sends message directly to configured node on double press of button.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

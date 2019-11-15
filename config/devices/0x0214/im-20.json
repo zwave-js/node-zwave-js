@@ -30,8 +30,7 @@
         "2": {
             "label": "Group 2",
             "description": "Sending control commands to associated devices",
-            "maxNodes": 2,
-            "isLifeline": false
+            "maxNodes": 2
         }
     },
     "paramInformation": {

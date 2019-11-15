@@ -23,18 +23,15 @@
     "associations": {
         "1": {
             "label": "K1",
-            "maxNodes": 1,
-            "isLifeline": false
+            "maxNodes": 1
         },
         "2": {
             "label": "K2",
-            "maxNodes": 1,
-            "isLifeline": false
+            "maxNodes": 1
         },
         "3": {
             "label": "K3",
-            "maxNodes": 1,
-            "isLifeline": false
+            "maxNodes": 1
         }
     }
 }

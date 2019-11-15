@@ -24,23 +24,19 @@
         },
         "2": {
             "label": "Over Current",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         },
         "3": {
             "label": "Over Voltage",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         },
         "4": {
             "label": "Control 1 Click",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         },
         "5": {
             "label": "Control 2 Clicks",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         }
     },
     "paramInformation": {

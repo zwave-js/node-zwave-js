@@ -55,13 +55,11 @@
     "associations": {
         "1": {
             "label": "Switch 1",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "2": {
             "label": "Switch 2",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "3": {
             "label": "Controller Updates",

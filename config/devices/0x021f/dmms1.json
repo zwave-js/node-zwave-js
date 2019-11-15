@@ -31,14 +31,12 @@
         "3": {
             "label": "Notification Reports",
             "description": "NOTIFICATION_REPORT_V4",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "SENSOR BINARY",
             "description": "SENSOR_BINARY_REPORT_V2",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

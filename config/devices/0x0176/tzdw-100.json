@@ -26,14 +26,12 @@
         "2": {
             "label": "Group 2",
             "description": "Sensor open and closed",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "3": {
             "label": "Group 3",
             "description": "Sensor Open Only",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         }
     },
     "paramInformation": {

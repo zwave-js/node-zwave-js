@@ -30,8 +30,7 @@
         "2": {
             "label": "Send Reports on blind state change",
             "description": "Send Reports on blind state change",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         }
     },
     "paramInformation": {

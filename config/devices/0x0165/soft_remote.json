@@ -24,33 +24,27 @@
         },
         "2": {
             "label": "Button 1 - Mono - Controlled nodes",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         },
         "3": {
             "label": "Button 2 - Mono - Controlled nodes",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         },
         "4": {
             "label": "Button 3 - Mono - Controlled nodes",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         },
         "5": {
             "label": "Button 4 - Mono - Controlled nodes",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         },
         "6": {
             "label": "Button 1 and 3 - Duo - Controlled nodes",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         },
         "7": {
             "label": "Button 2 and 4 - Duo - Controlled nodes",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         }
     },
     "paramInformation": {

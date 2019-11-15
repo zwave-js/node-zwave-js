@@ -26,8 +26,7 @@
         "2": {
             "label": "Basic Report",
             "description": "Basic Report",
-            "maxNodes": 1,
-            "isLifeline": false
+            "maxNodes": 1
         }
     },
     "paramInformation": {

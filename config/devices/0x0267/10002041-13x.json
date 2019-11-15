@@ -26,8 +26,7 @@
         "2": {
             "label": "Group 2",
             "description": "Group 2 (Control) -> Name “ctrl\"",
-            "maxNodes": 20,
-            "isLifeline": false
+            "maxNodes": 20
         }
     },
     "paramInformation": {

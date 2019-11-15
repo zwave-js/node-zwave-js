@@ -34,74 +34,62 @@
         "2": {
             "label": "Square - On/Off",
             "description": "“Square - On/Off” is assigned to clicking the □ button and is used to turn on/off associated devices.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Square - Multilevel",
             "description": "“Square - Multilevel” is assigned to clicking and holding the □ button and is used to turn on/off and change level of associated devices.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "Circle - On/Off",
             "description": "“Circle - On/Off” is assigned to clicking the ○ button and is used to turn on/off associated devices.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "5": {
             "label": "Circle - Multilevel",
             "description": "“Circle - Multilevel” is assigned to clicking and holding the ○ button and is used to turn on/off and change level of associated devices.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "6": {
             "label": "Cross - On/Off",
             "description": "“Cross - On/Off” is assigned to clicking the x button and is used to turn on/off associated devices.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "7": {
             "label": "Cross - Multilevel",
             "description": "“Cross - Multilevel” is assigned to clicking and holding the x button and is used to turn on/off and change level of associated devices.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "8": {
             "label": "Triangle - On/Off",
             "description": "“Triangle - On/Off” is assigned to clicking the Δ button and is used to turn on/off associated devices.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "9": {
             "label": "Triangle - Multilevel",
             "description": "“Triangle - Multilevel” is assigned to clicking and holding the Δ button and is used to turn on/off and change level of associated devices.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "10": {
             "label": "Minus - On/Off",
             "description": "“Minus - On/Off” is assigned to clicking the - button and is used to turn on/off associated devices.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "11": {
             "label": "Minus - Multilevel",
             "description": "“Minus - Multilevel” is assigned to clicking and holding the - button and is used to turn on/off and change level of associated devices.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "12": {
             "label": "Plus - On/Off",
             "description": "“Plus - On/Off” is assigned to clicking the + button and is used to turn on/off associated devices.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "13": {
             "label": "Plus - Multilevel",
             "description": "“Plus - Multilevel” is assigned to clicking and holding the + button and is used to turn on/off and change level of associated devices.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

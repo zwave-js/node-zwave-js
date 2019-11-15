@@ -28,13 +28,11 @@
         },
         "2": {
             "label": "On/Off (Button)",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "3": {
             "label": "On/Off (Power)",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         }
     },
     "paramInformation": {

@@ -24,23 +24,19 @@
         },
         "2": {
             "label": "On/Off control (Switch 1)",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         },
         "3": {
             "label": "Dimming control (Switch 1)",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         },
         "4": {
             "label": "On/Off control (Switch 2)",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         },
         "5": {
             "label": "Dimming control (Switch 2)",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         }
     },
     "paramInformation": {

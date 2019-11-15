@@ -37,20 +37,17 @@
         "2": {
             "label": "Wind Speed",
             "description": "Wind speed is higher than 6 m/s (22 Km/h)",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "End of Dawn",
             "description": "At the end of the dawn if it becomes bright",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "End of Dusk",
             "description": "At the end of the dusk if it becomes bright",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

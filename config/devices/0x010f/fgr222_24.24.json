@@ -31,13 +31,11 @@
     "associations": {
         "1": {
             "label": "Momentary click",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "2": {
             "label": "Momentary hold",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "3": {
             "label": "Controller Updates",

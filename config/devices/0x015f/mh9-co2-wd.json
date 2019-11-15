@@ -24,8 +24,7 @@
         "1": {
             "label": "Notification",
             "description": "sends report ever 30s when CO2 value above threshold",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "2": {
             "label": "Gateway report",

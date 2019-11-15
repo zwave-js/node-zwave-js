@@ -24,13 +24,11 @@
         },
         "2": {
             "label": "Root Device group (Binary Sensor)",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Root Device group (Notification)",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     }
 }

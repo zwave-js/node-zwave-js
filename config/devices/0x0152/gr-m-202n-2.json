@@ -27,8 +27,7 @@
     "associations": {
         "1": {
             "label": "Group 1",
-            "maxNodes": 1,
-            "isLifeline": false
+            "maxNodes": 1
         },
         "2": {
             "label": "Controller Updates",

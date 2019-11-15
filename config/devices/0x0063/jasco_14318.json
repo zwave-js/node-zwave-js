@@ -25,14 +25,12 @@
         "2": {
             "label": "ontrolled with the local load.",
             "description": "Supports Basic Set",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "ontrolled by double pressing the On or Off button.",
             "description": "Supports Basic Set",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

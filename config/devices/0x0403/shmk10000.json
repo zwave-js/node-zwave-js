@@ -25,26 +25,22 @@
         "2": {
             "label": "Binary Sensor (Door)",
             "description": "Binary Sensor Command Class",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Binary Sensor (Tamper)",
             "description": "Binary Sensor Command",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "Notification 1",
             "description": "Notification report open door or close status via Lifeline",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "5": {
             "label": "Notification 2",
             "description": "Binary Sensor reports the removed status of door sensor",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     }
 }

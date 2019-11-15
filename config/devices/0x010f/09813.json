@@ -23,8 +23,7 @@
     "associations": {
         "2": {
             "label": "Battery capacity low",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     }
 }

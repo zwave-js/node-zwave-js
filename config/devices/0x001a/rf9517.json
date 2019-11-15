@@ -24,8 +24,7 @@
         },
         "127": {
             "label": "Group 255",
-            "maxNodes": 1,
-            "isLifeline": false
+            "maxNodes": 1
         }
     },
     "paramInformation": {

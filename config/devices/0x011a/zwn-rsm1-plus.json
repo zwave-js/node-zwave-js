@@ -26,8 +26,7 @@
         "2": {
             "label": "StatusReport_ EP",
             "description": "Switch Binary Report",
-            "maxNodes": 3,
-            "isLifeline": false
+            "maxNodes": 3
         }
     },
     "paramInformation": {

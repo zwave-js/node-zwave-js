@@ -20,8 +20,7 @@
         "1": {
             "label": "Group 1",
             "description": "Unsolicited notifications about thermostat mode and setpoint temperature changes",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         }
     },
     "paramInformation": {

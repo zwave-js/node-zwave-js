@@ -151,7 +151,8 @@ export class DeviceConfig {
 		if (!isHexKey(definition.manufacturerId)) {
 			throwInvalidConfig(
 				`device`,
-				`${filename}: manufacturer id is not a hexadecimal number`,
+				`config/devices/${filename}:
+manufacturer id is not a hexadecimal number`,
 			);
 		}
 		this.manufacturerId = parseInt(definition.manufacturerId, 16);
@@ -160,7 +161,8 @@ export class DeviceConfig {
 			if (typeof definition[prop] !== "string") {
 				throwInvalidConfig(
 					`device`,
-					`${filename}: ${prop} is not a string`,
+					`config/devices/${filename}:
+${prop} is not a string`,
 				);
 			}
 			this[prop] = definition[prop];
@@ -175,7 +177,11 @@ export class DeviceConfig {
 					isHexKey((dev as any).productId),
 			)
 		) {
-			throwInvalidConfig(`device`, `${filename}: devices is malformed`);
+			throwInvalidConfig(
+				`device`,
+				`config/devices/${filename}:
+devices is malformed`,
+			);
 		}
 		this.devices = (definition.devices as any[]).map(
 			({ productType, productId }) => ({ productType, productId }),
@@ -188,7 +194,8 @@ export class DeviceConfig {
 		) {
 			throwInvalidConfig(
 				`device`,
-				`${filename}: firmwareVersion is malformed or invalid`,
+				`config/devices/${filename}:
+firmwareVersion is malformed or invalid`,
 			);
 		}
 		const { min, max } = definition.firmwareVersion;
@@ -199,7 +206,8 @@ export class DeviceConfig {
 			if (!isObject(definition.associations)) {
 				throwInvalidConfig(
 					`device`,
-					`${filename}: associations is not an object`,
+					`config/devices/${filename}:
+associations is not an object`,
 				);
 			}
 			for (const [key, assocDefinition] of entries(
@@ -208,7 +216,8 @@ export class DeviceConfig {
 				if (!/[1-9][0-9]*/.test(key))
 					throwInvalidConfig(
 						`device`,
-						`${filename}: found non-numeric group id "${key}" in associations`,
+						`config/devices/${filename}:
+found non-numeric group id "${key}" in associations`,
 					);
 				const keyNum = parseInt(key, 10);
 				associations.set(
@@ -242,7 +251,8 @@ export class AssociationConfig {
 		if (typeof definition.label !== "string") {
 			throwInvalidConfig(
 				"devices",
-				`${filename}: Association ${groupId} has a non-string label`,
+				`config/devices/${filename}:
+Association ${groupId} has a non-string label`,
 			);
 		}
 		this.label = definition.label;
@@ -253,7 +263,8 @@ export class AssociationConfig {
 		) {
 			throwInvalidConfig(
 				"devices",
-				`${filename}: Association ${groupId} has a non-string description`,
+				`config/devices/${filename}:
+Association ${groupId} has a non-string description`,
 			);
 		}
 		this.description = definition.description;
@@ -261,23 +272,32 @@ export class AssociationConfig {
 		if (typeof definition.maxNodes !== "number") {
 			throwInvalidConfig(
 				"devices",
-				`${filename}: maxNodes for association ${groupId} is not a number`,
+				`config/devices/${filename}:
+maxNodes for association ${groupId} is not a number`,
 			);
 		}
 		this.maxNodes = definition.maxNodes;
 
-		if (typeof definition.isLifeline !== "boolean") {
+		if (
+			definition.isLifeline != undefined &&
+			definition.isLifeline !== true
+		) {
 			throwInvalidConfig(
 				"devices",
-				`${filename}: isLifeline for association ${groupId} is not a boolean`,
+				`config/devices/${filename}:
+isLifeline in association ${groupId} must be either true or left out`,
 			);
 		}
-		this.isLifeline = definition.isLifeline;
+		this.isLifeline = !!definition.isLifeline;
 	}
 
 	public readonly groupId: number;
 	public readonly label: string;
 	public readonly description?: string;
 	public readonly maxNodes: number;
+	/**
+	 * Whether this association group is used to report updates to the controller.
+	 * While Z-Wave+ defines a single lifeline, older devices may have multiple lifeline associations.
+	 */
 	public readonly isLifeline: boolean;
 }

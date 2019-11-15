@@ -26,20 +26,17 @@
         "2": {
             "label": "Control: Key01",
             "description": "On/Off control (Never ever add controller, only third-party devices!)",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "3": {
             "label": "Motion Begin/End (PIR/radar/iHF)",
             "description": "Notification: Motion",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "4": {
             "label": "Ambient light",
             "description": "Sensor: Luminescence",
-            "maxNodes": 15,
-            "isLifeline": false
+            "maxNodes": 15
         }
     },
     "paramInformation": {

@@ -24,8 +24,7 @@
         },
         "2": {
             "label": "Sensor Multilevel Temperature Report.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

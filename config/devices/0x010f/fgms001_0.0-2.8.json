@@ -47,13 +47,11 @@
     "associations": {
         "1": {
             "label": "Device Status",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "2": {
             "label": "Tamper Alarm",
-            "maxNodes": 16,
-            "isLifeline": false
+            "maxNodes": 16
         },
         "3": {
             "label": "Controller Updates",

@@ -34,20 +34,17 @@
         "2": {
             "label": "Forward the Basic Set",
             "description": "Switch All, Scene Activation Set to associated nodes in Group 2 when the Dual Nano Switch receives the Basic Set, Switch All, Scene Activation Set commands from main controller. (E.g. Send/forward Basic Set to control the other nodes in association Group",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Send Basic Set",
             "description": "(configured by parameter 0x51 ) to the associated nodes in Group 3 when the external switch S1 is operated. Note: The Switch Mode of external switch S1 should be identified successfully, which means that the value of Configuration parameter 0x78 should be",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "Send Basic Set",
             "description": "Send Basic Set (configured by parameter 0x52) to the associated nodes in Group 4 when the external switch S2 is operated. Note: The Switch Mode of external switch S2 should be identified successfully, which means that the value of Configuration parameter",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

@@ -26,8 +26,7 @@
         "2": {
             "label": "Companion Sync",
             "description": "Any device added to group 2 will be controlled. This allows other WX200 devices to used as companion switches. LEDS will be kept in sync.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

@@ -1,71 +1,70 @@
 // Everspring HSM02
 // Door/Window Contact
 {
-    "_approved": true,
-    "manufacturer": "Everspring",
-    "manufacturerId": "0x0060",
-    "label": "HSM02",
-    "description": "Door/Window Contact",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0002"
-        },
-        {
-            "productType": "0x0202",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Target for reports",
-            "description": "Support ALARM_REPORT, SENSOR_BINARY_SUPPORT",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Target nodes who receive BASIC_SET command",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Basic Set Level",
-            "description": "Value to be sent with a BASIC SET command",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false
-        },
-        "2": {
-            "label": "Configuring the OFF Delay",
-            "description": "OFF Delay in seconds",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false
-        },
-        "3": {
-            "label": "Staying Awake (for testing)",
-            "description": "Staying Awake (for testing)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Everspring",
+	"manufacturerId": "0x0060",
+	"label": "HSM02",
+	"description": "Door/Window Contact",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0002"
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Target for reports",
+			"description": "Support ALARM_REPORT, SENSOR_BINARY_SUPPORT",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Target nodes who receive BASIC_SET command",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Basic Set Level",
+			"description": "Value to be sent with a BASIC SET command",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"2": {
+			"label": "Configuring the OFF Delay",
+			"description": "OFF Delay in seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"3": {
+			"label": "Staying Awake (for testing)",
+			"description": "Staying Awake (for testing)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		}
+	}
 }

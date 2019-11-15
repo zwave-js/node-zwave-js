@@ -20,8 +20,7 @@
         "1": {
             "label": "Basic Set",
             "description": "Basic Set sent with set command (configuration parameter 7)",
-            "maxNodes": 3,
-            "isLifeline": false
+            "maxNodes": 3
         },
         "2": {
             "label": "Device Status",

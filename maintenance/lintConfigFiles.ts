@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { green, red } from "ansi-colors";
+import { green, red, underline, yellow } from "ansi-colors";
 import { readFile } from "fs-extra";
 import * as path from "path";
 import {
@@ -30,7 +30,8 @@ async function lintDevices(): Promise<void> {
 	// Device config files are lazy-loaded, so we need to parse them all
 	const uniqueFiles = index
 		.map(e => e.filename)
-		.filter((filename, index, self) => self.indexOf(filename) === index);
+		.filter((filename, index, self) => self.indexOf(filename) === index)
+		.sort();
 	for (const file of uniqueFiles) {
 		const filePath = path.join(configDir, "devices", file);
 		const fileContents = await readFile(filePath, "utf8");
@@ -39,18 +40,28 @@ async function lintDevices(): Promise<void> {
 
 		// Validate that the file is semantically correct
 
-		// TODO: Think about this - multiple lifeline associations?
-		// // There must only be one association which acts as the lifeline
-		// if (config.associations?.size) {
-		// 	const numLifelines = [...config.associations.values()].filter(
-		// 		assoc => assoc.isLifeline,
-		// 	).length;
-		// 	if (numLifelines > 1) {
-		// 		throw new Error(
-		// 			`${file}: there must be only one lifeline association!`,
-		// 		);
-		// 	}
-		// }
+		// Validate associations
+		if (config.associations?.size) {
+			// Real lifeline associations (as per the Z-Wave+ specs) only have a single node
+			// If there is a 2nd lifeline with more nodes, that is most likely wrong
+			const lifelines = [...config.associations.values()].filter(
+				assoc => assoc.isLifeline,
+			);
+			if (
+				lifelines.length > 1 &&
+				lifelines.find(l => l.maxNodes === 1) &&
+				lifelines.find(l => l.maxNodes > 1)
+			) {
+				console.warn(underline(`config/devices/${file}:`));
+				console.warn(
+					yellow(
+						`[WARN] A lifeline with 1 node plus another one with more nodes found!`,
+					),
+				);
+				console.warn(yellow(`This is likely an error!`));
+				console.warn();
+			}
+		}
 	}
 }
 
@@ -77,7 +88,8 @@ Promise.resolve()
 	.then(lintNamedScales)
 	.then(lintSensorTypes)
 	.then(() => {
-		console.error(green("The config files are valid!"));
+		console.log();
+		console.log(green("The config files are valid!"));
 		return process.exit(0);
 	})
 	.catch(e => {

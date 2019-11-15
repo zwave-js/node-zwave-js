@@ -26,14 +26,12 @@
         "2": {
             "label": "Group 2",
             "description": "Group 2 can hold five members, and the Siren sends a single command to this Association Group, the Binary Switch Report, whenever the Siren is turned on or off",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Group 3",
             "description": "Group 2 can hold five members, and the Siren sends a single command to this Association Group, a Notification Report, whenever the Siren is turned on or off",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

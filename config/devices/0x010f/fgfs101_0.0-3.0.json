@@ -27,13 +27,11 @@
     "associations": {
         "1": {
             "label": "Flood Alarm",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "2": {
             "label": "Tilt & Tamper Sensors",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Device Status",

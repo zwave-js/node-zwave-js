@@ -30,14 +30,12 @@
         "2": {
             "label": "On/Off (Button)",
             "description": "On or off when relay status is changed using the button.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "On/Off (Plug power)",
             "description": "Switched On/Off based on the current load of plugged device.",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

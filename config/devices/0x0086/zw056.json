@@ -52,8 +52,7 @@
         },
         "2": {
             "label": "Forward basic set",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

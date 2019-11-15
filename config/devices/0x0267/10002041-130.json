@@ -20,8 +20,7 @@
         "1": {
             "label": "Lifeline",
             "description": "Group 1 (Lifeline)",
-            "maxNodes": 3,
-            "isLifeline": false
+            "maxNodes": 3
         },
         "2": {
             "label": "ctrl",

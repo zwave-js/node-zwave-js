@@ -22,33 +22,27 @@
     "associations": {
         "1": {
             "label": "Group 1",
-            "maxNodes": 2,
-            "isLifeline": false
+            "maxNodes": 2
         },
         "2": {
             "label": "Group 2",
-            "maxNodes": 2,
-            "isLifeline": false
+            "maxNodes": 2
         },
         "3": {
             "label": "Group 3",
-            "maxNodes": 3,
-            "isLifeline": false
+            "maxNodes": 3
         },
         "4": {
             "label": "Group 4",
-            "maxNodes": 3,
-            "isLifeline": false
+            "maxNodes": 3
         },
         "5": {
             "label": "Group 5",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         },
         "6": {
             "label": "Group 6",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         }
     }
 }

@@ -24,8 +24,7 @@
         },
         "2": {
             "label": "Dimming",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         }
     },
     "paramInformation": {

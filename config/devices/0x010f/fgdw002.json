@@ -38,14 +38,12 @@
         "2": {
             "label": "On/Off",
             "description": "is assigned to the device status - Hall effect sensor (sends Basic Set command frames)",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Tamper",
             "description": "is assigned to the TMP switch (sends alarm command frames)",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

@@ -25,14 +25,12 @@
         "2": {
             "label": "controlled with the local load",
             "description": "controlled with the local load",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "controlled by double pressing the On or Off button",
             "description": "controlled by double pressing the On or Off button",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

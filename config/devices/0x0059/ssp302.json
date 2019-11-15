@@ -24,23 +24,19 @@
         },
         "2": {
             "label": "Power",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         },
         "3": {
             "label": "Electrical Parameter",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         },
         "4": {
             "label": "Relay Status",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         },
         "5": {
             "label": "Time",
-            "maxNodes": 1,
-            "isLifeline": false
+            "maxNodes": 1
         }
     },
     "paramInformation": {

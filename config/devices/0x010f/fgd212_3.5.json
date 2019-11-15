@@ -41,26 +41,22 @@
         "2": {
             "label": "Group 2",
             "description": "Sends BASIC SET command class",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "3": {
             "label": "Group 3",
             "description": "Sends BASIC SET command class",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "4": {
             "label": "Group 4",
             "description": "Sends BASIC SET command class",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "5": {
             "label": "Group 5",
             "description": "Sends BASIC SET command class",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         }
     },
     "paramInformation": {

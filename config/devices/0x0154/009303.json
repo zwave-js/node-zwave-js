@@ -24,23 +24,19 @@
         },
         "2": {
             "label": "Control Group A",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "3": {
             "label": "Control Group B",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "4": {
             "label": "Control Group C",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         },
         "5": {
             "label": "Control Group D",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         }
     },
     "paramInformation": {

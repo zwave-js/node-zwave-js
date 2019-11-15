@@ -26,8 +26,7 @@
         "2": {
             "label": "On/Off control",
             "description": "On/Off control",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         }
     },
     "paramInformation": {

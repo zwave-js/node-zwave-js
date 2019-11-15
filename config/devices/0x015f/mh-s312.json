@@ -36,13 +36,11 @@
         },
         "2": {
             "label": "Switch Button Group 1",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "5": {
             "label": "Switch Button Group 2",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

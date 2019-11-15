@@ -27,63 +27,51 @@
         },
         "2": {
             "label": "Input 1 Basic Set On / Off",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Input 1 Switch Binary Set On / Off",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "Input 1 Multilevel Switch Set",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "5": {
             "label": "Input 2 Basic Set On / Off",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "6": {
             "label": "Input 2 Switch Binary Set On / Off",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "7": {
             "label": "Input 2 Multilevel Switch Set",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "8": {
             "label": "Input 3 Basic Set On / Off",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "9": {
             "label": "Input 3 Switch Binary Set On / Off",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "10": {
             "label": "Input 3 Multilevel Switch Set",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "11": {
             "label": "Input 4 Basic Set On / Off",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "12": {
             "label": "Input 4 Switch Binary Set On / Off",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "13": {
             "label": "Input 4 Multilevel Switch Set",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

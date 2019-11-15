@@ -22,18 +22,15 @@
     "associations": {
         "1": {
             "label": "multilevel",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         },
         "2": {
             "label": "basic on/off triggered by the input I2 state",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         },
         "3": {
             "label": "basic on/off triggered by the input I3 state",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         },
         "4": {
             "label": "Controller updates",

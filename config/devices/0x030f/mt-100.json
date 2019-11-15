@@ -26,20 +26,17 @@
         "2": {
             "label": "GROUP 2",
             "description": "allows for sending control commands to associated devices",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         },
         "3": {
             "label": "GROUP 3",
             "description": "allows for Send Notification to associated devices",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         },
         "4": {
             "label": "GROUP 4",
             "description": "allows for Send Sensor Binary Report to associated devices",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         }
     },
     "paramInformation": {

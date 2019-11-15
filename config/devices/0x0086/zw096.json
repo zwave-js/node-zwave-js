@@ -38,8 +38,7 @@
         "2": {
             "label": "Group 2",
             "description": "forwarding basic set (retransmit)",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

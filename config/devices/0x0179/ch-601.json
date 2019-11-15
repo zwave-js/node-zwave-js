@@ -19,13 +19,11 @@
     "associations": {
         "1": {
             "label": "Device Status",
-            "maxNodes": 3,
-            "isLifeline": false
+            "maxNodes": 3
         },
         "2": {
             "label": "Status of valve movement",
-            "maxNodes": 10,
-            "isLifeline": false
+            "maxNodes": 10
         }
     },
     "paramInformation": {

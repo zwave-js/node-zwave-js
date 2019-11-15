@@ -26,20 +26,17 @@
         "2": {
             "label": "Associate with Key 1",
             "description": "Associate with Key 1",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "5": {
             "label": "Associate with Key 2 if any",
             "description": "Associate with Key 2 if any",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "8": {
             "label": "Associate with Key 3 if any",
             "description": "Associate with Key 3 if any",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

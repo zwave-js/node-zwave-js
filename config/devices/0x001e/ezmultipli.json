@@ -26,8 +26,7 @@
         "2": {
             "label": "Basic",
             "description": "This group is used to directly turn lights on or off when motion is detected.",
-            "maxNodes": 4,
-            "isLifeline": false
+            "maxNodes": 4
         }
     },
     "paramInformation": {

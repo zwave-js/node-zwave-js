@@ -26,20 +26,17 @@
         "2": {
             "label": "Control devices",
             "description": "Control devices when magnet or external dry contacts trips",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "send alarm message",
             "description": "sends our alarm message when magnet controlled or external dry sensor trips",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "send tamper alarm",
             "description": "sends alarm messages when tamper is tripped",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

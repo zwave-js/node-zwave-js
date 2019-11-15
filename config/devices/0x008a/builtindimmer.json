@@ -20,8 +20,7 @@
         "1": {
             "label": "Group 1",
             "description": "All nodes in this group will receive a BASIC_SET frame",
-            "maxNodes": 8,
-            "isLifeline": false
+            "maxNodes": 8
         },
         "2": {
             "label": "Group 2",
@@ -30,8 +29,7 @@
         },
         "3": {
             "label": "Group 3",
-            "maxNodes": 1,
-            "isLifeline": false
+            "maxNodes": 1
         }
     },
     "paramInformation": {

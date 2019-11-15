@@ -23,113 +23,91 @@
         },
         "2": {
             "label": "EP1_SWITCH_BINARY_SET",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "EP1_SWITCH_BINARY_REPORT",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "EP1_SWITCH_MULTILEVEL_SET",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "5": {
             "label": "EP1_SWITCH_MULTILEVEL_REPORT",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "6": {
             "label": "EP2_SWITCH_BINARY_SET",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "7": {
             "label": "EP2_SWITCH_BINARY_REPORT",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "8": {
             "label": "EP2_SWITCH_MULTILEVEL_SET",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "9": {
             "label": "EP2_SWITCH_MULTILEVEL_REPORT",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "10": {
             "label": "EP3_SWITCH_BINARY_SET",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "11": {
             "label": "EP3_SWITCH_BINARY_REPORT",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "12": {
             "label": "EP3_SWITCH_MULTILEVEL_SET",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "13": {
             "label": "EP3_SWITCH_MULTILEVEL_REPORT",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "14": {
             "label": "EP4_SWITCH_BINARY_SET",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "15": {
             "label": "EP4_SWITCH_BINARY_REPORT",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "16": {
             "label": "EP4_SWITCH_MULTILEVEL_SET",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "17": {
             "label": "EP4_SWITCH_MULTILEVEL_REPORT",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "18": {
             "label": "EP5_SWITCH_BINARY_SET",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "19": {
             "label": "EP5_SWITCH_BINARY_REPORT",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "20": {
             "label": "EP5_SWITCH_MULTILEVEL_SET",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "21": {
             "label": "EP5_SWITCH_MULTILEVEL_REPORT",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "22": {
             "label": "EP6_SWITCH_BINARY_SET",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "23": {
             "label": "EP6_SWITCH_BINARY_REPORT",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "24": {
             "label": "EP6_SWITCH_MULTILEVEL_SET",
@@ -138,68 +116,55 @@
         },
         "25": {
             "label": "EP6_SWITCH_MULTILEVEL_REPORT",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "26": {
             "label": "EP7_ SWITCH_BINARY_SET",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "27": {
             "label": "EP7_SWITCH_BINARY_REPORT",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "28": {
             "label": "EP7_ SWITCH_MULTILEVEL_SET",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "29": {
             "label": "EP7_ SWITCH_MULTILEVEL_REPORT",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "30": {
             "label": "EP8_SWITCH_BINARY_SET",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "31": {
             "label": "EP8_ SWITCH_BINARY_REPORT",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "32": {
             "label": "EP8_ SWITCH_MULTILEVEL_SET",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "33": {
             "label": "EP8_ SWITCH_MULTILEVEL_REPORT",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "34": {
             "label": "EP9_ SWITCH_BINARY_SET",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "35": {
             "label": "EP9_SWITCH_BINARY_REPORT",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "36": {
             "label": "EP9_ SWITCH_MULTILEVEL_SET",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "37": {
             "label": "EP9_ SWITCH_MULTILEVEL_REPORT",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

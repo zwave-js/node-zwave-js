@@ -1,316 +1,311 @@
 // Goap ZMNHIA
 // Flush on/off thermostat
 {
-    "_approved": true,
-    "manufacturer": "Goap",
-    "manufacturerId": "0x0159",
-    "label": "ZMNHIA",
-    "description": "Flush on/off thermostat",
-    "devices": [
-        {
-            "productType": "0x0005",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Basic on/off Q1",
-            "maxNodes": 16,
-            "isLifeline": false
-        },
-        "2": {
-            "label": "Basic on/off I2",
-            "maxNodes": 16,
-            "isLifeline": false
-        },
-        "3": {
-            "label": "Basic on/off I3",
-            "maxNodes": 16,
-            "isLifeline": false
-        },
-        "4": {
-            "label": "High Temperature",
-            "maxNodes": 16,
-            "isLifeline": false
-        },
-        "5": {
-            "label": "Low Temperature",
-            "maxNodes": 16,
-            "isLifeline": true
-        },
-        "6": {
-            "label": "Default Reporting Group",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Input 1 switch type",
-            "description": "Input 1 switch type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "mono-stable switch type (push button)",
-                    "value": 0
-                },
-                {
-                    "label": "bi-stable switch type",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Input 2 switch type",
-            "description": "Input 2 switch type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "mono-stable switch type (push button)",
-                    "value": 0
-                },
-                {
-                    "label": "bi-stable switch type",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Input 3 switch type",
-            "description": "Input 3 switch type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "mono-stable switch type (push button)",
-                    "value": 0
-                },
-                {
-                    "label": "bi-stable switch type",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Input 2 contact type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "NO (normally open) input type",
-                    "value": 0
-                },
-                {
-                    "label": "NC (normally close) input type",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "Input 3 contact type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "NO (normally open) input type",
-                    "value": 0
-                },
-                {
-                    "label": "NC (normally close) input type",
-                    "value": 1
-                }
-            ]
-        },
-        "10": {
-            "label": "Activate / deactivate functions ALL ON/ALL OFF",
-            "description": "Module responds to commands ALL ON / ALL OFF",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "ALL ON is not active ALL OFF is not active",
-                    "value": 0
-                },
-                {
-                    "label": "ALL ON is not active ALL OFF active",
-                    "value": 1
-                },
-                {
-                    "label": "ALL ON active ALL OFF is not active",
-                    "value": 2
-                },
-                {
-                    "label": "ALL ON active, ALL OFF active",
-                    "value": 255
-                }
-            ]
-        },
-        "11": {
-            "label": "Set point set by I2",
-            "description": "Set point set by I2",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false
-        },
-        "12": {
-            "label": "Set point set by I3",
-            "description": "Set point set by I3",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false
-        },
-        "30": {
-            "label": "Saving the state after a power failure",
-            "description": "Saving the state after a power failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Module saves its state",
-                    "value": 0
-                },
-                {
-                    "label": "Module does not save state",
-                    "value": 1
-                }
-            ]
-        },
-        "40": {
-            "label": "Power reporting in Watts on power change for Q1",
-            "description": "Power reporting in Watts on power change",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false
-        },
-        "42": {
-            "label": "Power reporting in Watts by time interval for Q1",
-            "description": "Power reporting in Watts by time interval",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false
-        },
-        "43": {
-            "label": "Hysteresis On",
-            "description": "Hysteresis On",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 132,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false
-        },
-        "44": {
-            "label": "Hysteresis Off",
-            "description": "Hysteresis Off",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false
-        },
-        "45": {
-            "label": "Antifreeze",
-            "description": "Antifreeze function Temperature",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false
-        },
-        "60": {
-            "label": "Too low temperature limit",
-            "description": "Too low temperature limit",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 50,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false
-        },
-        "61": {
-            "label": "Too high temperature limit",
-            "description": "Too high temperature limit",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 700,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false
-        },
-        "63": {
-            "label": "Switch selection",
-            "description": "Connected device type can be (NO) or (NC)",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Goap",
+	"manufacturerId": "0x0159",
+	"label": "ZMNHIA",
+	"description": "Flush on/off thermostat",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Basic on/off Q1",
+			"maxNodes": 16
+		},
+		"2": {
+			"label": "Basic on/off I2",
+			"maxNodes": 16
+		},
+		"3": {
+			"label": "Basic on/off I3",
+			"maxNodes": 16
+		},
+		"4": {
+			"label": "High Temperature",
+			"maxNodes": 16
+		},
+		"5": {
+			"label": "Low Temperature",
+			"maxNodes": 16
+		},
+		"6": {
+			"label": "Default Reporting Group",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Input 1 switch type",
+			"description": "Input 1 switch type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "mono-stable switch type (push button)",
+					"value": 0
+				},
+				{
+					"label": "bi-stable switch type",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Input 2 switch type",
+			"description": "Input 2 switch type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "mono-stable switch type (push button)",
+					"value": 0
+				},
+				{
+					"label": "bi-stable switch type",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Input 3 switch type",
+			"description": "Input 3 switch type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "mono-stable switch type (push button)",
+					"value": 0
+				},
+				{
+					"label": "bi-stable switch type",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Input 2 contact type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO (normally open) input type",
+					"value": 0
+				},
+				{
+					"label": "NC (normally close) input type",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Input 3 contact type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO (normally open) input type",
+					"value": 0
+				},
+				{
+					"label": "NC (normally close) input type",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "Activate / deactivate functions ALL ON/ALL OFF",
+			"description": "Module responds to commands ALL ON / ALL OFF",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "ALL ON is not active ALL OFF is not active",
+					"value": 0
+				},
+				{
+					"label": "ALL ON is not active ALL OFF active",
+					"value": 1
+				},
+				{
+					"label": "ALL ON active ALL OFF is not active",
+					"value": 2
+				},
+				{
+					"label": "ALL ON active, ALL OFF active",
+					"value": 255
+				}
+			]
+		},
+		"11": {
+			"label": "Set point set by I2",
+			"description": "Set point set by I2",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"12": {
+			"label": "Set point set by I3",
+			"description": "Set point set by I3",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"30": {
+			"label": "Saving the state after a power failure",
+			"description": "Saving the state after a power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Module saves its state",
+					"value": 0
+				},
+				{
+					"label": "Module does not save state",
+					"value": 1
+				}
+			]
+		},
+		"40": {
+			"label": "Power reporting in Watts on power change for Q1",
+			"description": "Power reporting in Watts on power change",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"42": {
+			"label": "Power reporting in Watts by time interval for Q1",
+			"description": "Power reporting in Watts by time interval",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"43": {
+			"label": "Hysteresis On",
+			"description": "Hysteresis On",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 132,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"44": {
+			"label": "Hysteresis Off",
+			"description": "Hysteresis Off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"45": {
+			"label": "Antifreeze",
+			"description": "Antifreeze function Temperature",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"60": {
+			"label": "Too low temperature limit",
+			"description": "Too low temperature limit",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"61": {
+			"label": "Too high temperature limit",
+			"description": "Too high temperature limit",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 700,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"63": {
+			"label": "Switch selection",
+			"description": "Connected device type can be (NO) or (NC)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+		}
+	}
 }

@@ -30,20 +30,17 @@
         "2": {
             "label": "Basic Repeat",
             "description": "Basic commands",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "3": {
             "label": "Multilevel Repeat",
             "description": "Transfer the received multilevel commands",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         },
         "4": {
             "label": "Basic Rain",
             "description": "Transfer the received commands from actuator & rain detector to the devices",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {

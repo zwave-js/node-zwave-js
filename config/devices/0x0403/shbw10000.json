@@ -24,8 +24,7 @@
         },
         "2": {
             "label": "Send Basic Set when PIR trigger",
-            "maxNodes": 5,
-            "isLifeline": false
+            "maxNodes": 5
         }
     },
     "paramInformation": {
