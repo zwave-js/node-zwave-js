@@ -7,7 +7,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
-import { configDir, hexKeyRegex, throwInvalidConfig } from "./utils";
+import { configDir, hexKeyRegexNDigits, throwInvalidConfig } from "./utils";
 
 interface NotificationStateDefinition {
 	type: "state";
@@ -52,7 +52,7 @@ export async function loadNotificationsInternal(): Promise<void> {
 
 		const ret = new Map();
 		for (const [id, ntfcnDefinition] of entries(definition)) {
-			if (!hexKeyRegex.test(id)) {
+			if (!hexKeyRegexNDigits.test(id)) {
 				throwInvalidConfig(
 					"notifications",
 					`found non-hex key "${id}" at the root`,
@@ -116,7 +116,7 @@ export class Notification {
 			for (const [eventId, eventDefinition] of entries(
 				definition.events,
 			)) {
-				if (!hexKeyRegex.test(eventId)) {
+				if (!hexKeyRegexNDigits.test(eventId)) {
 					throwInvalidConfig(
 						"notifications",
 						`found non-hex key "${eventId}" in notification ${num2hex(
@@ -179,7 +179,7 @@ export class NotificationVariable {
 		}
 		const states = new Map<number, NotificationState>();
 		for (const [stateId, stateDefinition] of entries(definition.states)) {
-			if (!hexKeyRegex.test(stateId)) {
+			if (!hexKeyRegexNDigits.test(stateId)) {
 				throwInvalidConfig(
 					"notifications",
 					`found non-hex key "${stateId}" in notification variable ${this.name}`,

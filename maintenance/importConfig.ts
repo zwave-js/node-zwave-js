@@ -14,13 +14,17 @@ process.on("unhandledRejection", r => {
 
 import { composeObject, entries } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
+import { red } from "ansi-colors";
 import { AssertionError, ok } from "assert";
 import axios from "axios";
 import * as fs from "fs-extra";
 import * as JSON5 from "json5";
 import * as path from "path";
 import * as qs from "querystring";
-import { DeviceConfigIndexEntry } from "../src/lib/config/Devices";
+import {
+	DeviceConfig,
+	DeviceConfigIndexEntry,
+} from "../src/lib/config/Devices";
 import { num2hex } from "../src/lib/util/strings";
 
 // Where the files are located
@@ -298,7 +302,7 @@ async function importConfigFiles(): Promise<void> {
 			!file.startsWith("_") &&
 			file !== "manufacturers.json",
 	);
-	const index: DeviceConfigIndexEntry[] = [];
+
 	for (const file of configFiles) {
 		const inPath = path.join(importDir, file);
 		let parsed: Record<string, any>;
@@ -343,24 +347,74 @@ async function importConfigFiles(): Promise<void> {
 // ${parsed.description}`) : ""}
 ${JSON.stringify(parsed, undefined, 4)}`;
 		await fs.writeFile(outFilename, output, "utf8");
+	}
+}
 
-		// Add the file to the index
-		index.push(
-			...parsed.devices.map((dev: any) => ({
-				manufacturerId: parsed.manufacturerId,
-				...dev,
-				firmwareVersion: parsed.firmwareVersion,
-				filename: path
-					.relative(processedDir, outFilename)
-					.replace(/\\/g, "/"),
-			})),
-		);
+async function enumFilesRecursive(
+	rootDir: string,
+	predicate?: (filename: string) => boolean,
+) {
+	const ret: string[] = [];
+	try {
+		const filesAndDirs = await fs.readdir(rootDir);
+		for (const f of filesAndDirs) {
+			const fullPath = path.join(rootDir, f);
+
+			if (fs.statSync(fullPath).isDirectory()) {
+				ret.push(...(await enumFilesRecursive(fullPath, predicate)));
+			} else if (predicate?.(fullPath)) {
+				ret.push(fullPath);
+			}
+		}
+	} catch (err) {
+		console.error(`Cannot read directory: "${rootDir}": ${err}`);
+	}
+
+	return ret;
+}
+
+/** Generates an index for all device config files */
+async function generateDeviceIndex(): Promise<void> {
+	const configFiles = await enumFilesRecursive(
+		processedDir,
+		file => file.endsWith(".json") && !file.endsWith("index.json"),
+	);
+
+	const index: DeviceConfigIndexEntry[] = [];
+
+	for (const file of configFiles) {
+		const relativePath = path
+			.relative(processedDir, file)
+			.replace(/\\/g, "/");
+		const fileContents = await fs.readFile(file, "utf8");
+		// Try parsing the file
+		try {
+			const config = new DeviceConfig(file, fileContents);
+			// Add the file to the index
+			index.push(
+				...config.devices.map((dev: any) => ({
+					manufacturerId: `0x${padStart(
+						config.manufacturerId.toString(16),
+						4,
+						"0",
+					).toLowerCase()}`,
+					...dev,
+					firmwareVersion: config.firmwareVersion,
+					filename: relativePath,
+				})),
+			);
+		} catch (e) {
+			console.error(`config/devices/${relativePath}:`);
+			console.error(
+				red(`[ERROR] invalid device config file: ${e.message}`),
+			);
+		}
 	}
 
 	// Write the index
 	await fs.writeFile(
 		path.join(processedDir, "index.json"),
-		`// This file is auto-generated using "npm run config import"
+		`// This file is auto-generated using "npm run config index"
 ${JSON.stringify(index, undefined, 4)}`,
 		"utf8",
 	);
@@ -374,5 +428,8 @@ ${JSON.stringify(index, undefined, 4)}`,
 		await downloadDevices();
 	} else if (process.argv.includes("import")) {
 		await importConfigFiles();
+		await generateDeviceIndex();
+	} else if (process.argv.includes("index")) {
+		await generateDeviceIndex();
 	}
 })();

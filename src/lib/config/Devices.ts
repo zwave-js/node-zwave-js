@@ -8,7 +8,7 @@ import * as semver from "semver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { JSONObject } from "../util/misc";
-import { configDir, hexKeyRegex, throwInvalidConfig } from "./utils";
+import { configDir, hexKeyRegex4Digits, throwInvalidConfig } from "./utils";
 
 export interface FirmwareVersionRange {
 	min: string;
@@ -129,8 +129,8 @@ export async function lookupDevice(
 	}
 }
 
-function isHexKey(val: any): val is string {
-	return typeof val === "string" && hexKeyRegex.test(val);
+function isHexKeyWith4Digits(val: any): val is string {
+	return typeof val === "string" && hexKeyRegex4Digits.test(val);
 }
 
 const firmwareVersionRegex = /^\d{1,3}\.\d{1,3}$/;
@@ -148,11 +148,11 @@ function isFirmwareVersion(val: any): val is string {
 export class DeviceConfig {
 	public constructor(filename: string, fileContents: string) {
 		const definition = JSON5.parse(fileContents);
-		if (!isHexKey(definition.manufacturerId)) {
+		if (!isHexKeyWith4Digits(definition.manufacturerId)) {
 			throwInvalidConfig(
 				`device`,
 				`config/devices/${filename}:
-manufacturer id is not a hexadecimal number`,
+manufacturer id must be a hexadecimal number with 4 digits`,
 			);
 		}
 		this.manufacturerId = parseInt(definition.manufacturerId, 16);
@@ -173,14 +173,14 @@ ${prop} is not a string`,
 			!(definition.devices as any[]).every(
 				dev =>
 					isObject(dev) &&
-					isHexKey((dev as any).productType) &&
-					isHexKey((dev as any).productId),
+					isHexKeyWith4Digits((dev as any).productType) &&
+					isHexKeyWith4Digits((dev as any).productId),
 			)
 		) {
 			throwInvalidConfig(
 				`device`,
 				`config/devices/${filename}:
-devices is malformed`,
+devices is malformed (not an object or type/id that is not a 4-digit hex key)`,
 			);
 		}
 		this.devices = (definition.devices as any[]).map(

@@ -5,7 +5,7 @@ import JSON5 from "json5";
 import path from "path";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { configDir, hexKeyRegex, throwInvalidConfig } from "./utils";
+import { configDir, hexKeyRegex4Digits, throwInvalidConfig } from "./utils";
 
 const configPath = path.join(configDir, "manufacturers.json");
 let manufacturers: ReadonlyMap<number, string> | undefined;
@@ -30,7 +30,7 @@ export async function loadManufacturersInternal(): Promise<void> {
 
 		const ret = new Map();
 		for (const [id, name] of entries(definition)) {
-			if (!hexKeyRegex.test(id)) {
+			if (!hexKeyRegex4Digits.test(id)) {
 				throwInvalidConfig(
 					"manufacturers",
 					`found non-hex key ${id} at the root level`,

@@ -8,7 +8,7 @@ import log from "../log";
 import { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { getDefaultScale, lookupNamedScaleGroup, Scale } from "./Scales";
-import { configDir, hexKeyRegex, throwInvalidConfig } from "./utils";
+import { configDir, hexKeyRegexNDigits, throwInvalidConfig } from "./utils";
 
 const configPath = path.join(configDir, "sensorTypes.json");
 let sensorTypes: ReadonlyMap<number, SensorType> | undefined;
@@ -34,7 +34,7 @@ export async function loadSensorTypesInternal(): Promise<void> {
 
 		const ret = new Map();
 		for (const [key, sensorDefinition] of entries(definition)) {
-			if (!hexKeyRegex.test(key)) {
+			if (!hexKeyRegexNDigits.test(key)) {
 				throwInvalidConfig(
 					"sensor types",
 					`found non-hex key "${key}" at the root`,
@@ -137,7 +137,7 @@ export class SensorType {
 			for (const [scaleKey, scaleDefinition] of entries(
 				definition.scales,
 			)) {
-				if (!hexKeyRegex.test(scaleKey))
+				if (!hexKeyRegexNDigits.test(scaleKey))
 					throwInvalidConfig(
 						"sensor types",
 						`found non-hex key "${scaleKey}" in sensor type ${num2hex(
