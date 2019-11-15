@@ -17,9 +17,6 @@ Z-Wave driver written entirely in JavaScript/TypeScript
 This library is still under heavy development. Thus several features are incomplete or planned:
 
 -   [ ] Implementation status of Command Classes see https://github.com/AlCalzone/node-zwave-js/issues/6
--   [ ] MultiInstance / MultiChannel support:
-    -   [x] Basic support for multiple endpoints
-    -   [ ] Interview of single endpoints
 -   [ ] Security (S0 / S2)
 -   [ ] Device database for configuration values (CC version \< 3)
 
