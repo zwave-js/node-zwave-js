@@ -101,7 +101,14 @@ export async function loadNotifications(): Promise<void> {
 export function lookupNotification(
 	notificationType: number,
 ): Notification | undefined {
-	return notifications!.get(notificationType);
+	if (!notifications) {
+		throw new ZWaveError(
+			"The config has not been loaded yet!",
+			ZWaveErrorCodes.Driver_NotReady,
+		);
+	}
+
+	return notifications.get(notificationType);
 }
 
 export class Notification {

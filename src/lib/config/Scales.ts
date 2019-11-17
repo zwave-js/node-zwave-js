@@ -95,7 +95,14 @@ export async function loadNamedScales(): Promise<void> {
 export function lookupNamedScaleGroup(
 	name: string,
 ): ReadonlyMap<number, Scale> | undefined {
-	return namedScales!.get(name);
+	if (!namedScales) {
+		throw new ZWaveError(
+			"The config has not been loaded yet!",
+			ZWaveErrorCodes.Driver_NotReady,
+		);
+	}
+
+	return namedScales.get(name);
 }
 
 export function getDefaultScale(scale: number): Scale {

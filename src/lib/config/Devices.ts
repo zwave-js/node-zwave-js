@@ -24,7 +24,7 @@ export interface DeviceConfigIndexEntry {
 }
 
 const indexPath = path.join(configDir, "devices/index.json");
-let index: readonly DeviceConfigIndexEntry[];
+let index: readonly DeviceConfigIndexEntry[] | undefined;
 
 /** @internal */
 export async function loadDeviceIndexInternal(): Promise<typeof index> {
@@ -93,6 +93,13 @@ export async function lookupDevice(
 	productId: number,
 	firmwareVersion?: string,
 ): Promise<DeviceConfig | undefined> {
+	if (!index) {
+		throw new ZWaveError(
+			"The config has not been loaded yet!",
+			ZWaveErrorCodes.Driver_NotReady,
+		);
+	}
+
 	// Look up the device in the index
 	const indexEntry = index.find(
 		entry =>

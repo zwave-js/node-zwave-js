@@ -84,5 +84,12 @@ export async function loadManufacturers(): Promise<void> {
  * @param manufacturerId The manufacturer id to look up
  */
 export function lookupManufacturer(manufacturerId: number): string | undefined {
-	return manufacturers!.get(manufacturerId);
+	if (!manufacturers) {
+		throw new ZWaveError(
+			"The config has not been loaded yet!",
+			ZWaveErrorCodes.Driver_NotReady,
+		);
+	}
+
+	return manufacturers.get(manufacturerId);
 }

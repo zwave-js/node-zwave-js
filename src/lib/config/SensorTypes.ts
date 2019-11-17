@@ -81,7 +81,14 @@ export async function loadSensorTypes(): Promise<void> {
  * Looks up the configuration for a given sensor type
  */
 export function lookupSensorType(sensorType: number): SensorType | undefined {
-	return sensorTypes!.get(sensorType);
+	if (!sensorTypes) {
+		throw new ZWaveError(
+			"The config has not been loaded yet!",
+			ZWaveErrorCodes.Driver_NotReady,
+		);
+	}
+
+	return sensorTypes.get(sensorType);
 }
 
 /** Looks up a scale definition for a given sensor type */
