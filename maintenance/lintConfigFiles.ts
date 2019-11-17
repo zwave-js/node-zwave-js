@@ -26,7 +26,7 @@ async function lintManufacturers(): Promise<void> {
 }
 
 async function lintDevices(): Promise<void> {
-	const index = await loadDeviceIndexInternal();
+	const index = (await loadDeviceIndexInternal())!;
 	// Device config files are lazy-loaded, so we need to parse them all
 	const uniqueFiles = index
 		.map(e => e.filename)
