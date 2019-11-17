@@ -20,10 +20,5 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "2": {
-            "label": "Battery capacity low",
-            "maxNodes": 5
-        }
-    }
+    "supportsZWavePlus": true
 }

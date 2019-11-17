@@ -20,24 +20,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Sends associated devices central scene notification command and battery report command.",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "On/Off Control",
-            "description": "Sends basic set command to associated devices.",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Dimming Control",
-            "description": "Sends switch multilevel set, multilevel start level change and multilevel stop level change to associated devices.",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "42": {
             "label": "Duration",

@@ -20,14 +20,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Basic Report",
-            "description": "Sends Basic Report at On/Off event",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "20": {
             "label": "Overload Protection",

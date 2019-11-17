@@ -16,18 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "motion detection and battery level",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "BASIC SET",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "12": {
             "label": "PIR sensor sensitivity",

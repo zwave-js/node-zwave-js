@@ -16,23 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Group 2",
-            "description": "Sends on/off commands to associated devices when switch is pressed (BASIC_SET)",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Group 3",
-            "description": "Sends dim/brighten commands to associated devices when switch is pressed (SWITCH_MULTILEVEL_SET)",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Dimming Step",

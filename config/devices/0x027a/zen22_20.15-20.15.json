@@ -19,13 +19,7 @@
         "min": "20.15",
         "max": "20.15"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Paddle Control",

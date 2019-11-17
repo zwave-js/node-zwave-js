@@ -16,14 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "One device controls an other device",
-            "maxNodes": 2,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "3": {
             "label": "Beeper",

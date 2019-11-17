@@ -16,38 +16,7 @@
         "min": "1.0",
         "max": "1.0"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Temperature High Trigger",
-            "description": "Temperature High Trigger",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "3": {
-            "label": "Temperature Low Trigger",
-            "description": "Temperature Low Trigger",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "4": {
-            "label": "Humidity High Trigger",
-            "description": "Humidity High Trigger",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "5": {
-            "label": "Humidity Low Trigger",
-            "description": "Humidity Low Trigger",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Min. Temp. change",

@@ -20,17 +20,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "All Status Reports",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Switch Button Group 1",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "2": {
             "label": "Switch state saved or not when power failure",

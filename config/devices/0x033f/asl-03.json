@@ -24,17 +24,5 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "battery status, door lock operation status, and device reset locally",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Report 2",
-            "description": "Door lock operation status",
-            "maxNodes": 5
-        }
-    }
+    "supportsZWavePlus": true
 }

@@ -16,34 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Reserved for communication with main controller",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Status on/off",
-            "description": "Send control command BASIC_SET 0x00/0xFF",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Load dependent",
-            "description": "sending control commands BASIC_SET 0x00/0xFF depending on current load",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Secure Status On/Off",
-            "description": "Send control command BASIC_SET 0x00/0xFF",
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "Secure Load dependent",
-            "description": "sending control commands BASIC_SET 0x00/0xFF depending on current load",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "10": {
             "label": "Activate / deactivate functions ALL ON / ALL OFF",

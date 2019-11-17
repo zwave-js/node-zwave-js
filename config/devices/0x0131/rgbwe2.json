@@ -16,6 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Internal bulb temperature",

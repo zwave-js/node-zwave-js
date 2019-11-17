@@ -16,19 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Reports target.",
-            "description": "group to send reports to",
-            "maxNodes": 8,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Basic Set target",
-            "description": "group to send Basic Set light commands to",
-            "maxNodes": 8
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "2": {
             "label": "Basic Set Level",

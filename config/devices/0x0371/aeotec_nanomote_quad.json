@@ -20,54 +20,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Central scene notification",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Button 1 basic",
-            "description": "On/off control via button 1",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Button 1 multilevel",
-            "description": "Dim control via button 1",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Button 2 basic",
-            "description": "On/off control via button 2",
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "Button 2 multilevel",
-            "description": "Dim control via button 2",
-            "maxNodes": 5
-        },
-        "6": {
-            "label": "Button 3 basic",
-            "description": "On/off control via button 3",
-            "maxNodes": 5
-        },
-        "7": {
-            "label": "Button 3 multilevel",
-            "description": "Dim control via button 3",
-            "maxNodes": 5
-        },
-        "8": {
-            "label": "Button 4 basic",
-            "description": "On/off control via button 4",
-            "maxNodes": 5
-        },
-        "9": {
-            "label": "Button 4 multilevel",
-            "description": "Dim control via button 4",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "32": {
             "label": "Level for low battery",

@@ -16,29 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "BASIC",
-            "description": "BASIC_SET Trigger associated devices",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "3": {
-            "label": "Notification Reports",
-            "description": "NOTIFICATION_REPORT_V4",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "SENSOR BINARY",
-            "description": "SENSOR_BINARY_REPORT_V2",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Motion Sensitivity",

@@ -16,52 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "reserved for communication with the main controller",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "basic on/off (output)",
-            "description": "Triggered at change of the output",
-            "maxNodes": 16
-        },
-        "3": {
-            "label": "Sensor_multilevel_get",
-            "maxNodes": 16
-        },
-        "4": {
-            "label": "basic on/off (temp limit)",
-            "description": "triggered by Too high temperature limit",
-            "maxNodes": 16
-        },
-        "5": {
-            "label": "Thermostat setpoint get",
-            "maxNodes": 16
-        },
-        "6": {
-            "label": "basic on/off (window)",
-            "description": "triggered by change of I1",
-            "maxNodes": 16
-        },
-        "7": {
-            "label": "basic on/off (condense sensor)",
-            "description": "triggered by change of I2",
-            "maxNodes": 16
-        },
-        "8": {
-            "label": "basic on/off (flood sensor)",
-            "description": "triggered by change of I3",
-            "maxNodes": 16
-        },
-        "9": {
-            "label": "sensor multilevel report",
-            "description": "Triggered at change of temperature",
-            "maxNodes": 16
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Input I1 switch type",

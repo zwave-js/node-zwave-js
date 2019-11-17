@@ -27,77 +27,7 @@
         "min": "0.0",
         "max": "1.12"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Send Basic Report (On/Off) when button #1 is used.",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Sends Basic Set (On/Off) when button #1 is used.",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Binary Switch Set btn #1",
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "Binary Toggle Sw Set btn #1",
-            "maxNodes": 5
-        },
-        "7": {
-            "label": "Basic Report btn #2",
-            "maxNodes": 5
-        },
-        "8": {
-            "label": "Basic Set btn #2",
-            "maxNodes": 5
-        },
-        "9": {
-            "label": "Binary Switch Set btn #2",
-            "maxNodes": 5
-        },
-        "10": {
-            "label": "Binary Toggle Switch Set btn #2",
-            "maxNodes": 5
-        },
-        "12": {
-            "label": "Send Basic Report (On/Off) when button #3 is used.",
-            "maxNodes": 5
-        },
-        "13": {
-            "label": "Sends Basic Set (On/Off) when button #3 is used.",
-            "maxNodes": 5
-        },
-        "14": {
-            "label": "Binary Switch Setbtn #3",
-            "maxNodes": 5
-        },
-        "15": {
-            "label": "Binary Toggle Switch Set btn #3",
-            "maxNodes": 5
-        },
-        "17": {
-            "label": "Send Basic Report (On/Off) when button #4 is used.",
-            "maxNodes": 5
-        },
-        "18": {
-            "label": "Sends Basic Set (On/Off) when button #4 is used.",
-            "maxNodes": 5
-        },
-        "19": {
-            "label": "Binary Switch Set btn #4",
-            "maxNodes": 5
-        },
-        "20": {
-            "label": "Binary Toggle Switch Set btn #4",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Upper paddle buttons mode",

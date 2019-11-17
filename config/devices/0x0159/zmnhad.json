@@ -16,46 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Lifeline group (reserved for communication with the main controller)",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Basic on/off (triggered input Q state)",
-            "maxNodes": 16
-        },
-        "3": {
-            "label": "Basic on/off (triggered input I2 state)",
-            "maxNodes": 16
-        },
-        "4": {
-            "label": "Notification report (triggered  input I2 state)",
-            "maxNodes": 16
-        },
-        "5": {
-            "label": "Binary Sensor (triggered  input I2 state)",
-            "maxNodes": 16
-        },
-        "6": {
-            "label": "Basic on/off (triggered input I3 state)",
-            "maxNodes": 16
-        },
-        "7": {
-            "label": "Notification report (triggered input I3 state)",
-            "maxNodes": 16
-        },
-        "8": {
-            "label": "Binary Sensor report (triggered  input I3 state)",
-            "maxNodes": 16
-        },
-        "9": {
-            "label": "Multilevel Sensor report (triggered temperature)",
-            "maxNodes": 16
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Input 1 switch type",

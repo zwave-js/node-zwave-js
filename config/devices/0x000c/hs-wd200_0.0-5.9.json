@@ -16,14 +16,7 @@
         "min": "0.0",
         "max": "5.9"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Lifeline association only supports the \"manual reset\" event.",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "3": {
             "label": "Bottom LED Operation",

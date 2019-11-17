@@ -16,34 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "description": "Group 1 (Lifeline Group)",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Group 2",
-            "description": "Group 2",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Group 3",
-            "description": "Group 3",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Group 4",
-            "description": "Group 4",
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "Group 5",
-            "description": "Group 5",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Enable/Disable LED Indicator",

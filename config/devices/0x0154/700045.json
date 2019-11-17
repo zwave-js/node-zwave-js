@@ -16,21 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 10,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Door Lock Control",
-            "maxNodes": 10
-        },
-        "3": {
-            "label": "Ring Button Control",
-            "maxNodes": 10
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Automatic Secure Timeout",

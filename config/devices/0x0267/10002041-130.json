@@ -16,19 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Group 1 (Lifeline)",
-            "maxNodes": 3
-        },
-        "2": {
-            "label": "ctrl",
-            "description": "Group 2 (Control)",
-            "maxNodes": 20,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Association LED",

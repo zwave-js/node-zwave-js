@@ -243,20 +243,40 @@ async function parseConfigFile(filename: string): Promise<Record<string, any>> {
 			max: json.versionmaxDisplay,
 		},
 	};
-	if (json.associations?.length) {
-		ret.associations = {};
-		for (const assoc of json.associations) {
-			const sanitizedDescription = sanitizeText(assoc.description);
-			ret.associations[assoc.group_id] = {
-				label: sanitizeText(assoc.label),
-				...(sanitizedDescription
-					? { description: sanitizedDescription }
-					: undefined),
-				maxNodes: parseInt(assoc.max),
-				isLifeline: assoc.controller === "1",
-			};
+
+	// If Z-Wave+ is supported, we don't need the association information to determine the lifeline
+	try {
+		const supportsZWavePlus = !!json.endpoints
+			?.find((ep: any) => ep.number === "0")
+			?.commandClasses?.find(
+				(cc: any) => cc.commandclass.class_ref === "94",
+			);
+		if (!supportsZWavePlus) {
+			if (json.associations?.length) {
+				ret.associations = {};
+				for (const assoc of json.associations) {
+					const sanitizedDescription = sanitizeText(
+						assoc.description,
+					);
+					ret.associations[assoc.group_id] = {
+						label: sanitizeText(assoc.label),
+						...(sanitizedDescription
+							? { description: sanitizedDescription }
+							: undefined),
+						maxNodes: parseInt(assoc.max),
+						// isLifeline must be either true or left out
+						isLifeline: assoc.controller === "1" ? true : undefined,
+					};
+				}
+			}
+		} else {
+			ret.supportsZWavePlus = true;
 		}
+	} catch (e) {
+		console.error(filename);
+		process.exit(1);
 	}
+
 	if (json.parameters?.length) {
 		ret.paramInformation = {};
 		for (const param of json.parameters) {
@@ -389,7 +409,7 @@ async function generateDeviceIndex(): Promise<void> {
 		const fileContents = await fs.readFile(file, "utf8");
 		// Try parsing the file
 		try {
-			const config = new DeviceConfig(file, fileContents);
+			const config = new DeviceConfig(relativePath, fileContents);
 			// Add the file to the index
 			index.push(
 				...config.devices.map((dev: any) => ({

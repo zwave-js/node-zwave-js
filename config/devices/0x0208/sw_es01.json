@@ -27,11 +27,5 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+    "supportsZWavePlus": true
 }

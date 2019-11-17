@@ -16,19 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Used to connect Z-Wave gateway",
-            "maxNodes": 10,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Basic Set command",
-            "description": "It sends Basic Set command with value 0 (Off state) when thermostat goes to IDLE mode and sends 255 (ON state) when the thermostat goes to HEATING mode.",
-            "maxNodes": 10
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Degree Mode",

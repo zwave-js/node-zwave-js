@@ -20,29 +20,7 @@
         "min": "0.0",
         "max": "3.1"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Smoke Alarm",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Tamper Alarm TYPE =BURGLAR, EVENT",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Fire Alarm",
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "Tamper Alarm TYPE =GENERAL",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Smoke Sensor sensitivity",

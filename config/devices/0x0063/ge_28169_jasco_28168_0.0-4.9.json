@@ -20,14 +20,7 @@
         "min": "0.0",
         "max": "4.9"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Z-Wave Plus Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "3": {
             "label": "LED Light",

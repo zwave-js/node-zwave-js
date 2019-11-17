@@ -16,14 +16,7 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"associations": {
-		"1": {
-			"label": "Lifeline",
-			"description": "Sends Device Reset notifications, and Central Scene notifications.",
-			"maxNodes": 5,
-			"isLifeline": true
-		}
-	},
+	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
 			"label": "Operating pushbutton(s) for dimmer",

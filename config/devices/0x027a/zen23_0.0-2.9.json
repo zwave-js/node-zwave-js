@@ -20,13 +20,7 @@
         "min": "0.0",
         "max": "2.9"
     },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Toggle Control",

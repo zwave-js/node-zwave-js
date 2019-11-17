@@ -16,39 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Lifeline group for the entire module. Sends Basic Report On / Off when the relay is turned on or off. Sends Meter Report with energy data for the load connected to the relay output.",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Sensor Multilevel Report Input 1",
-            "description": "Sends Sensor Multilevel Report for input 1. Nodes in this group will receive information of the current temperature measured by the NTC connected to input 1.",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Sensor Multilevel Report for Input 2",
-            "description": "Sends Sensor Multilevel Report for input 2. Nodes in this group will receive information of the current temperature measured by the NTC connected to input 2.",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Basic Report On / Off",
-            "description": "Nodes in this group receives Basic Report On / Off when the flood sensor detects a flood. Normally used for visualization in the Controller.",
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "Basic Set On / Off",
-            "description": "Nodes in this group receives Basic Set On / Off when the flood sensor detects a flood.",
-            "maxNodes": 5
-        },
-        "6": {
-            "label": "Notification Report",
-            "description": "Nodes in this group receives Notification Report when the flood sensor detects a flood. The notification events reported are: ”Water leak detected ”0x02 and ”ldle” 0x00.",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Status LED.",

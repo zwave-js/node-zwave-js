@@ -32,33 +32,7 @@
         "min": "3.5",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Group 2",
-            "description": "Sends BASIC SET command class",
-            "maxNodes": 10
-        },
-        "3": {
-            "label": "Group 3",
-            "description": "Sends BASIC SET command class",
-            "maxNodes": 10
-        },
-        "4": {
-            "label": "Group 4",
-            "description": "Sends BASIC SET command class",
-            "maxNodes": 10
-        },
-        "5": {
-            "label": "Group 5",
-            "description": "Sends BASIC SET command class",
-            "maxNodes": 10
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Minimum brightness level",

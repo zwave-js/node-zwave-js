@@ -16,22 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Switching Command when Rain (> 0 mm/h)",
-            "description": "Switching Command when Rain (> 0 mm/h). Basic Set Comand is sent.",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Heavy Rain detected. Basic Set Comand is sent.",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Rain Counter",

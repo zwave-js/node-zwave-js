@@ -20,21 +20,7 @@
         "min": "3.2",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "On/Off (Button)",
-            "maxNodes": 10
-        },
-        "3": {
-            "label": "On/Off (Power)",
-            "maxNodes": 10
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "“Always On” mode",

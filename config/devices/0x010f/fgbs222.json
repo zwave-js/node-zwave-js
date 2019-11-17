@@ -24,24 +24,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "reports the device status and allows for assigning single device only (main controller by default).",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "On/Off (IN1)",
-            "description": "is assigned to IN1 input terminal (uses Basic command class).",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "On/Off (IN2)",
-            "description": "is assigned to IN2 input terminal (uses Basic command class).",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "20": {
             "label": "Input 1 - operating mode",

@@ -16,19 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Sends low-battery, tamper, open/close, and sensor binary reports",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Basic Set",
-            "description": "Sends ON/OFF commands to other devices based on state",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Basic Sets for Association Group 2",

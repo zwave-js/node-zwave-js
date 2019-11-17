@@ -16,23 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Group 1",
-            "description": "Basic Set controlled with local load",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Group 2",
-            "description": "Basic Set controlled by double pressing button",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "3": {
             "label": "LED Light Control",

@@ -16,29 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Is assigned to the device status - OPEN/CLOSED. It enables the sensor to send reports and readings to Z-Wave Controller or Z-Wave Gateway whenever the sensor is triggered.",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Group 2",
-            "description": "Sending Control Command to associated devices. This association group is configured through the advanced parameters no. 2, 3, 5 and 8",
-            "maxNodes": 4
-        },
-        "3": {
-            "label": "Group 3",
-            "description": "Send Notification to associated devices.",
-            "maxNodes": 4
-        },
-        "4": {
-            "label": "Group 4",
-            "description": "Send Notification to associated devices.",
-            "maxNodes": 4
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Sensitivity Level Setting",

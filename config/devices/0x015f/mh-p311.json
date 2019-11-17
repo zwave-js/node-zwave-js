@@ -16,23 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "1st AG: reports device’s dimming state. It supports only one Node ID. A controller/gateway SHOULD be associated to this AG.",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Basic Set Command",
-            "description": "Basic Set Command",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Multi-level Set Command",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "State Saved?",

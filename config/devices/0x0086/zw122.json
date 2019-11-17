@@ -24,25 +24,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Sensor Status",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Sensor 1 Alarm",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Sensor 2 Alarm",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "2": {
             "label": "Enable/Disable Power On Wake Period",

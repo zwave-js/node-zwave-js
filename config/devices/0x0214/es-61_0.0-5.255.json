@@ -20,18 +20,7 @@
         "min": "0.0",
         "max": "5.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Send \"notification_Report\" to the device in Life line group",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Basic Set Command",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Basic Set",

@@ -16,34 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Status",
-            "maxNodes": 10,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Switch 1",
-            "description": "Switch 1 On/Off",
-            "maxNodes": 10
-        },
-        "3": {
-            "label": "Dimmer 1",
-            "description": "Dimmer for Switch 1",
-            "maxNodes": 10
-        },
-        "4": {
-            "label": "Switch 2",
-            "description": "Switch 2 On/Off",
-            "maxNodes": 10
-        },
-        "5": {
-            "label": "Dimmer 2",
-            "description": "Dimmer for Switch 2",
-            "maxNodes": 10
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "9": {
             "label": "Restore state after power failure",

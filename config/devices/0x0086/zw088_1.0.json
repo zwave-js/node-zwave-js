@@ -24,44 +24,7 @@
         "min": "1.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Scene 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Scene 2",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "3": {
-            "label": "Scene 3",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "4": {
-            "label": "Scene 4",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "5": {
-            "label": "Scene 5",
-            "maxNodes": 5
-        },
-        "6": {
-            "label": "Scene 6",
-            "maxNodes": 5
-        },
-        "7": {
-            "label": "Scene 7",
-            "maxNodes": 5
-        },
-        "8": {
-            "label": "Scene 8",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "250": {
             "label": "Use Mode setting",

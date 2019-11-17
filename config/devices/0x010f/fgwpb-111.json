@@ -16,22 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "reports the device status and allows for assigning single device only",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "OnOffButton",
-            "maxNodes": 50
-        },
-        "3": {
-            "label": "OnOffPlugPower",
-            "maxNodes": 50
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "2": {
             "label": "PowerFailure",

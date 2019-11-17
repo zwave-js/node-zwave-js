@@ -16,29 +16,7 @@
         "min": "4.1",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Controller Updates",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "On/Off Triggered by I2",
-            "maxNodes": 16
-        },
-        "3": {
-            "label": "On/Off Triggered by I3",
-            "maxNodes": 16
-        },
-        "4": {
-            "label": "Multi-level Triggerd by Shutter Position",
-            "maxNodes": 16
-        },
-        "5": {
-            "label": "Multilevel Trigger by Slat Position",
-            "maxNodes": 16
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "10": {
             "label": "ALL ON/ALL OFF",

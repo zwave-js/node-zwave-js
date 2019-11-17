@@ -20,29 +20,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 10,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Control Group A",
-            "maxNodes": 10
-        },
-        "3": {
-            "label": "Control Group B",
-            "maxNodes": 10
-        },
-        "4": {
-            "label": "Control Group C",
-            "maxNodes": 10
-        },
-        "5": {
-            "label": "Control Group D",
-            "maxNodes": 10
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Button 1 and 3 pair mode",

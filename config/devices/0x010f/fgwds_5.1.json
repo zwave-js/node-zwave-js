@@ -19,34 +19,7 @@
         "min": "5.1",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "“Lifeline” reports the device status",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "1st channel On/Off",
-            "description": "(uses Basic command class).",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "1st channel dimmer",
-            "description": "(uses Switch Multilevel command class).",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "2nd channel On/Off",
-            "description": "(uses Basic command class).",
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "2nd channel dimmer",
-            "description": "(uses Switch Multilevel command class).",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Remember device state",

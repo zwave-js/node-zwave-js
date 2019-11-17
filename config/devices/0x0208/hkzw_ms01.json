@@ -16,20 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Reports the motion detection and battery",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Basic Set",
-            "description": "assigned to send Basic Set Command",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "12": {
             "label": "Motion Sensor`s Sensitivity",

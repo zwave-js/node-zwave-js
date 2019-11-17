@@ -20,33 +20,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Group 2",
-            "description": "Launch 1",
-            "maxNodes": 12
-        },
-        "3": {
-            "label": "Group 3",
-            "description": "Launch 2",
-            "maxNodes": 12
-        },
-        "4": {
-            "label": "Group 4",
-            "description": "Launch 3",
-            "maxNodes": 12
-        },
-        "5": {
-            "label": "Group 5",
-            "description": "Launch 4",
-            "maxNodes": 12
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "3": {
             "label": "Scene_type",

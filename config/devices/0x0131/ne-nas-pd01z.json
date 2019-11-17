@@ -16,29 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "description": "lifeline service",
-            "maxNodes": 4,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Group 2",
-            "description": "BASIC_SET control command group",
-            "maxNodes": 4
-        },
-        "3": {
-            "label": "Group 3",
-            "description": "NOTIFICATION_REPORT_V4",
-            "maxNodes": 4
-        },
-        "4": {
-            "label": "Group 4",
-            "description": "Sensor Binary Report",
-            "maxNodes": 4
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Sensitivity level",

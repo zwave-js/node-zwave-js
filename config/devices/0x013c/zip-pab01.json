@@ -16,26 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "CT1 and CT2",
-            "description": "Sum of CT1 and CT2",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "CT1",
-            "description": "Data from CT1",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "3": {
-            "label": "CT2",
-            "description": "Data from CT2",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Power meter report period",

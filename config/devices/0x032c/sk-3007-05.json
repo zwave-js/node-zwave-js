@@ -16,14 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Z-Wave Plus Lifeline, is assigned to send motor lifeline status to associated devices, including send the multilevel report frame while window cover position, send device local reset frame while set factory default manually etc.",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "4": {
             "label": "Current Motor Position",

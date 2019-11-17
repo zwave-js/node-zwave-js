@@ -16,19 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Output",
-            "description": "Output State and Power Meter",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Input",
-            "description": "Reports S1 Input State",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "31[0x01]": {
             "label": "Local Control Off",

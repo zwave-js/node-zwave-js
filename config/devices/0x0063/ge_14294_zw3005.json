@@ -16,26 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Multilevel Switch Report",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Basic Group",
-            "description": "Support Basic Set and is controlled with the local load",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "3": {
-            "label": "Scene Group",
-            "description": "This group gets notifications of double taps via basic set",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "3": {
             "label": "Night Light",

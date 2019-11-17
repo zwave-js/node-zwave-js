@@ -16,19 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Launch 1",
-            "description": "Controlled Device Association",
-            "maxNodes": 12
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "3[0x01]": {
             "label": "Scene Command Type",

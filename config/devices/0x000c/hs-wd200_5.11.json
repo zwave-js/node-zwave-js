@@ -16,19 +16,7 @@
         "min": "5.11",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Lifeline association only supports the \"manual reset\" event.",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Companion Sync",
-            "description": "Any device added to group 2 will be controlled. This allows other WX200 devices to used as companion switches. LEDS will be kept in sync.",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "3": {
             "label": "Bottom LED Operation",

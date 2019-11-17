@@ -24,19 +24,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Notification group for strip state changes",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Retransmit",
-            "description": "Retransmit commands to associated nodes",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "80": {
             "label": "Notifications for Association Group 1",

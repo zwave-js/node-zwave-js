@@ -16,19 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Target for automatic reports",
-            "description": "Binary Switch Report, Notification Report, Device Reset Locally Notification, Meter Report",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Basic Set",
-            "description": "Basic Set, Control:key1, On/Off control (Button1)",
-            "maxNodes": 4
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Command value",

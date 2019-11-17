@@ -19,24 +19,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Send reports on switch state change",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Single press",
-            "description": "Single press and hold of up/down buttons",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Double press",
-            "description": "Double press and hold of up/down buttons",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Set LED indication mode",

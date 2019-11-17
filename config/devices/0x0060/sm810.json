@@ -16,17 +16,5 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Notification Report, Device Reset Locally Notification",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Basic Set",
-            "description": "Basic Set",
-            "maxNodes": 4
-        }
-    }
+    "supportsZWavePlus": true
 }

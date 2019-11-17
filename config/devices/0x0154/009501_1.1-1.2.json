@@ -23,18 +23,7 @@
         "min": "1.1",
         "max": "1.2"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 10,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Local Valve Operation",
-            "maxNodes": 10,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "0": {
             "label": "LED Status",

@@ -16,25 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Wind Speed",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "End of Dawn",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "End of Dusk",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Wind Speed Action Threshold",

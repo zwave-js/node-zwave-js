@@ -16,14 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Reports",
-            "description": "Grouping 1 includes, SWITCH_BINARY_REPORT, METER_REPORT, ALARM_REPORT.",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Watt Meter Report Period",

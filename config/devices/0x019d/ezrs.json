@@ -23,24 +23,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "I ASSOCIATION GROUP",
-            "description": "Allows to send information about failures, errors and alarms directly to the controller (max. 5 devices).",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "II ASSOCIATION GROUP",
-            "description": "Allows to send direct steering commands between SLAVE devices without participation of PRIMARY controller (max. 5 devices).",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "III ASSOCIATION GROUP",
-            "description": "Allows to send direct steering commands (BASIC_SET with value 0xFF) to other devices if error is detected (max. 5 devices).",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "12": {
             "label": "Motor state mode",

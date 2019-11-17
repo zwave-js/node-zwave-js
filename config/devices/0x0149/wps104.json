@@ -16,21 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 8,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Up Power Level Group",
-            "maxNodes": 8
-        },
-        "3": {
-            "label": "Down Power Level Group",
-            "maxNodes": 8
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Device Status",

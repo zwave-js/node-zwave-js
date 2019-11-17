@@ -19,23 +19,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 8,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Dimming level",
-            "maxNodes": 8,
-            "isLifeline": true
-        },
-        "3": {
-            "label": "State of Device ON/OFF",
-            "maxNodes": 8,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Connected Load",

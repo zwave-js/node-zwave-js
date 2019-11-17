@@ -16,14 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "description": "Where to send ALARM_REPORT and DEVICE_RESET_LOCALLY_NOTIFICATION",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Mode of  Switch Off  function",

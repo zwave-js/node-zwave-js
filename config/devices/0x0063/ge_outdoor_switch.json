@@ -16,22 +16,5 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Association Group 1 supports Lifeline, Binary Switch Report",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Group 2",
-            "description": "Association Group 2 supports Basic Set and is controlled by pressing the On or Off button with the local load",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Group 3",
-            "description": "Association Group 3 supports Basic Set and is controlled by double pressing the On or Off button",
-            "maxNodes": 5
-        }
-    }
+    "supportsZWavePlus": true
 }

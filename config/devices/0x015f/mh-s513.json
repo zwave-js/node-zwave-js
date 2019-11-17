@@ -16,29 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Associate with gateway",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Associate with Key 1",
-            "description": "Associate with Key 1",
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "Associate with Key 2 if any",
-            "description": "Associate with Key 2 if any",
-            "maxNodes": 5
-        },
-        "8": {
-            "label": "Associate with Key 3 if any",
-            "description": "Associate with Key 3 if any",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "2": {
             "label": "Switch state saved or not when power failure",

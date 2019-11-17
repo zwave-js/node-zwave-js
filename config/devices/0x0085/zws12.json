@@ -20,24 +20,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Position reporting",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Basic Repeat",
-            "description": "Basic commands",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Multilevel Repeat",
-            "description": "Transfer the received multilevel commands",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "7": {
             "label": "Motor speed 1",

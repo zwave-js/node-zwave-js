@@ -16,24 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Z-Wave Plus Lifeline, Multilevel Switch Report",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Basic Set Local Load",
-            "description": "Support Basic Set and is controlled with the local load",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Basic Set Double Press",
-            "description": "Supports Basic Set and is controlled by double pressing the On or Off button",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "3": {
             "label": "LED Light",

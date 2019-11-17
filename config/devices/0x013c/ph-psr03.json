@@ -16,45 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 4,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Lighting Group 1",
-            "maxNodes": 4
-        },
-        "3": {
-            "label": "Lighting Group 2",
-            "maxNodes": 4
-        },
-        "4": {
-            "label": "Lighting Group 3",
-            "maxNodes": 4
-        },
-        "5": {
-            "label": "Lighting Group 4",
-            "maxNodes": 4
-        },
-        "6": {
-            "label": "Lighting Group 5",
-            "maxNodes": 4
-        },
-        "7": {
-            "label": "Lighting Group 6",
-            "maxNodes": 4
-        },
-        "8": {
-            "label": "Lighting Group 7",
-            "maxNodes": 4
-        },
-        "9": {
-            "label": "Lighting Group 8",
-            "maxNodes": 4
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "2": {
             "label": "Basic Set Level",

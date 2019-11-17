@@ -20,13 +20,7 @@
         "min": "1.2",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Report",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Watt Meter Report Period",

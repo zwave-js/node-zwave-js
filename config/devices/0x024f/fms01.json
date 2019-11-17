@@ -24,37 +24,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Light Zone 1",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Light Zone 2",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Light Zone 3",
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "Light Zone 4",
-            "maxNodes": 5
-        },
-        "6": {
-            "label": "Thermostat Control",
-            "maxNodes": 5
-        },
-        "7": {
-            "label": "Thermostat Relay Control",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "4": {
             "label": "Safety Activate Delay",

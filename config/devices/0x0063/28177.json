@@ -16,24 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Single press",
-            "description": "Group 2 supports Basic Set and is controlled with the local load",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Double press",
-            "description": "Group 3 supports Basic Set and is controlled by double pressing the On or Off button",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "3": {
             "label": "Night Light",

@@ -16,29 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "GROUP 1",
-            "description": "lifeline service that assigned to Motion detector status",
-            "maxNodes": 4,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "GROUP 2",
-            "description": "allows for sending control commands to associated devices",
-            "maxNodes": 4
-        },
-        "3": {
-            "label": "GROUP 3",
-            "description": "allows for Send Notification to associated devices",
-            "maxNodes": 4
-        },
-        "4": {
-            "label": "GROUP 4",
-            "description": "allows for Send Sensor Binary Report to associated devices",
-            "maxNodes": 4
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Sensitivity Level Setting",

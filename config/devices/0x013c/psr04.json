@@ -16,19 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Controller updates",
-            "description": "For receiving the report message, like the battery level.",
-            "maxNodes": 8,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Light control",
-            "description": "For light control. The device will send Basic Set command to this group.",
-            "maxNodes": 8
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Basic Set OFF level",

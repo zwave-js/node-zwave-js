@@ -16,19 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Notification",
-            "description": "sends report ever 30s when CO2 value above threshold",
-            "maxNodes": 5
-        },
-        "2": {
-            "label": "Gateway report",
-            "description": "CO2, Temperature and Humidity is reported when changed",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Notification Threshold",

@@ -19,39 +19,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Reserved for communication with the main controller",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "basic on/off",
-            "description": "triggered at change of the input I1 state and reflecting its state",
-            "maxNodes": 16
-        },
-        "3": {
-            "label": "start level change/stop level change",
-            "description": "triggered at change of the input I1 state and reflecting its state) up to 16 nodes. Working only when the Parameter no. 1 is set to mono stable switch type.",
-            "maxNodes": 16
-        },
-        "4": {
-            "label": "multilevel set",
-            "description": "triggered at changes of state/value of the Flush Dimmer 0-10V",
-            "maxNodes": 16
-        },
-        "5": {
-            "label": "multilevel sensor report -  analogue sensor",
-            "description": "triggered at change of analogue sensor",
-            "maxNodes": 16
-        },
-        "6": {
-            "label": "multilevel sensor report - temperature sensor",
-            "description": "triggered at change of temperature sensor",
-            "maxNodes": 16
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Input 1 Switch Type",

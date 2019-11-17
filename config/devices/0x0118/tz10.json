@@ -16,12 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "2": {
-            "label": "State control",
-            "maxNodes": 2
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "4": {
             "label": "Memory function",

@@ -16,19 +16,7 @@
         "min": "1.4",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Device status",
-            "maxNodes": 10,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "External Input",
-            "description": "Action on External Dry Input",
-            "maxNodes": 10
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "0": {
             "label": "Auto-Close",

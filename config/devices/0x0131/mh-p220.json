@@ -16,29 +16,7 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"associations": {
-		"1": {
-			"label": "Reports device’s dimming state",
-			"description": "reports device’s dimming state. It supports only one Node ID. A controller / gateway SHOULD be associated to this AG.",
-			"maxNodes": 1,
-			"isLifeline": true
-		},
-		"2": {
-			"label": "S1 Basic Set Command",
-			"description": "to control the associated devices synchonously. When S1’s state changes, it will send “Basic Set Command” to these devices.",
-			"maxNodes": 5
-		},
-		"3": {
-			"label": "S1 Multi-level Set Command",
-			"description": "to control the associated devices synchronously. When S1’s state changes, it will send “Multi-level Set Command” to these devices.",
-			"maxNodes": 5
-		},
-		"4": {
-			"label": "S2 Basic Set Command",
-			"description": "to control the associated devices synchronously. When S2’s state changes, it will send “Basic Set Command” to these devices.",
-			"maxNodes": 5
-		}
-	},
+	"supportsZWavePlus": true,
 	"paramInformation": {
 		"0": {
 			"label": "Switch All Mode",

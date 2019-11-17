@@ -16,30 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "On/Off Dimmer 1",
-            "description": "Use the Left Switch to control a group",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "3": {
-            "label": "On/Off dimmer 2",
-            "description": "Control Group using right switch",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "4": {
-            "label": "Wireless",
-            "description": "Switch state controls group",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Night light",

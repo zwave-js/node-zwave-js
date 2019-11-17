@@ -16,14 +16,7 @@
         "min": "2.4",
         "max": "2.5"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Association - one device controls an other device",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Siren Tamper Mode",

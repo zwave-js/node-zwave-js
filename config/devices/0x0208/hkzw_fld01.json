@@ -20,19 +20,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Report",
-            "description": "report the flooding detection,shock detection and the battert level",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Send Command",
-            "description": "Group 2 is assigned to send BASIC SET command",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "14": {
             "label": "Enable/Disable Basic Set Command",

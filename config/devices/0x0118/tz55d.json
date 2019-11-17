@@ -23,29 +23,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Group 1 Control",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "On/Off Dimmer 1",
-            "description": "Group 2 Control",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "On/off dimmer 2",
-            "description": "Group 3 Control",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Wireless",
-            "description": "Group 4 Control",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Night Light",

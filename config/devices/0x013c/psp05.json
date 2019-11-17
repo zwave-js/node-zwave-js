@@ -16,19 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "The group 1 is for receiving the report message",
-            "maxNodes": 8,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Basic Set",
-            "description": "The group 2 is for light control",
-            "maxNodes": 8
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "2": {
             "label": "Basic Set Level",

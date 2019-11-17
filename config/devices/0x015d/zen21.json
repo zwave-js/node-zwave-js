@@ -16,12 +16,5 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Status",
-            "description": "This device will send SWITCH BINARY REPORT to Group 1 when operated manually.",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+    "supportsZWavePlus": true
 }

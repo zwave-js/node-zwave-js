@@ -16,21 +16,7 @@
         "min": "1.14",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 4,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Alarm Reports",
-            "maxNodes": 4
-        },
-        "3": {
-            "label": "Switching Command when Alarm",
-            "maxNodes": 4
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Siren alarm sequence interval",

@@ -20,44 +20,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "“Lifeline” reports the device status and allows for assigning single device only (main controller by default).",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "CO Alarm Status",
-            "description": "Devices in this group will be switched on/off when CO Alarm status changes.",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "CO Alarm",
-            "description": "Devices in this group will receive notification when CO Alarm status changes.",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "CO Level",
-            "description": "Devices in this group will be switched on/off after exceeding the level of CO concentration specified in parameter 14.",
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "Tamper Alarm",
-            "description": "Sends tamper alarm and cancellation frames to the associated devices.",
-            "maxNodes": 5
-        },
-        "6": {
-            "label": "CO Alarm BC",
-            "description": "Devices in this group will receive sensor alarm frames when CO Alarm status changes.",
-            "maxNodes": 5
-        },
-        "7": {
-            "label": "Tamper Alarm BC",
-            "description": "Sends tamper alarm and alarm cancellation frames to the associated devices.",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "2": {
             "label": "Z-Wave notifications",

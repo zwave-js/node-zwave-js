@@ -16,17 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Reports",
-            "maxNodes": 7,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Light Control",
-            "maxNodes": 7
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "5": {
             "label": "Operation Mode",

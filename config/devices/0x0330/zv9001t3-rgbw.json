@@ -16,27 +16,5 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Association group for commands to Z-Wave network controller",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Launch 1",
-            "description": "Association group for nodes in zone 1",
-            "maxNodes": 12
-        },
-        "3": {
-            "label": "Launch 2",
-            "description": "Association group for nodes in zone 2",
-            "maxNodes": 12
-        },
-        "4": {
-            "label": "Launch 3",
-            "description": "Association group for nodes in zone 3",
-            "maxNodes": 12
-        }
-    }
+    "supportsZWavePlus": true
 }

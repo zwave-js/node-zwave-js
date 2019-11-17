@@ -20,54 +20,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Central notification",
-            "description": "Scene commands and battery reports",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Basic commands button 1",
-            "description": "Send basic commands for button 1",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Multilevel button 1",
-            "description": "Send multilevel commands for button 1",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Basic commands button 2",
-            "description": "Send basic commands for button 2",
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "Multilevel button 2",
-            "description": "Send multilevel commands for button 2",
-            "maxNodes": 5
-        },
-        "6": {
-            "label": "Basic commands button 3",
-            "description": "Send basic commands for button 3",
-            "maxNodes": 5
-        },
-        "7": {
-            "label": "Multilevel button 3",
-            "description": "Send multilevel commands for button 3",
-            "maxNodes": 5
-        },
-        "8": {
-            "label": "Basic commands button 4",
-            "description": "Send basic commands for button 4",
-            "maxNodes": 5
-        },
-        "9": {
-            "label": "Multilevel button 4",
-            "description": "Send multilevel commands for button 4",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "254": {
             "label": "Enable configuration",

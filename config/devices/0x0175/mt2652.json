@@ -16,34 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Z-Wave Plus Lifeline",
-            "maxNodes": 10,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Control Group A",
-            "description": "Control Group A, controlled by button 1 or single clicks of buttons 1 and 3",
-            "maxNodes": 10
-        },
-        "3": {
-            "label": "Control Group B",
-            "description": "Control Group B, controlled by button 2 or single clicks of buttons 2 and 4",
-            "maxNodes": 10
-        },
-        "4": {
-            "label": "Control Group C",
-            "description": "Control Group C, controlled by button 3 or double clicks of buttons 1 and 3",
-            "maxNodes": 10
-        },
-        "5": {
-            "label": "Control Group D",
-            "description": "Control Group D, controlled by button 4 or double clicks of buttons 2 and 4",
-            "maxNodes": 10
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Button 1 and 3 pair mode",

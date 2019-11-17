@@ -20,17 +20,7 @@
         "min": "0.0",
         "max": "1.7"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 8,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "On/Off control",
-            "maxNodes": 8
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Operation mode",

@@ -24,21 +24,7 @@
         "min": "1.8",
         "max": "1.9"
     },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Group 2",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Group 3",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "2": {
             "label": "Stay Awake in Battery Mode",

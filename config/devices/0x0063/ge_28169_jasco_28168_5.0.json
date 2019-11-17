@@ -20,24 +20,7 @@
         "min": "5.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Supports Lifeline, Binary Switch Report",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Single Press Button",
-            "description": "Sends message directly to configured node on single press of button.",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Double Press button",
-            "description": "Sends message directly to configured node on double press of button.",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "3": {
             "label": "LED Light",

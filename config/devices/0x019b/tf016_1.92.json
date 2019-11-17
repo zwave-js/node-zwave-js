@@ -20,29 +20,7 @@
         "min": "1.92",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 8,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "On/Off control",
-            "maxNodes": 8
-        },
-        "3": {
-            "label": "Internal temperature sensor",
-            "maxNodes": 8
-        },
-        "4": {
-            "label": "External temperature sensor",
-            "maxNodes": 8
-        },
-        "5": {
-            "label": "Floor temperature sensor",
-            "maxNodes": 8
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Operation mode",

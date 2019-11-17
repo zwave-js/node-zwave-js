@@ -32,29 +32,7 @@
         "min": "3.2",
         "max": "23.0"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Reports the device status and allows for assigning single device only (main controller by default)",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Flood Control",
-            "description": "Devices in this group will be switched on or off when flood status changes (done via BASIC SET command frames)",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Flood Alarm",
-            "description": "Assigned to the device status – devices in this group will receive notification about flood detection or cancellation. Useful for devices that can trigger alarms.",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Tamper Alarm",
-            "description": "Assigned to the TMP button and tilt sensor – devices in this group will receive a notification when the sensor is moved or the cover is taken off (which normally holds the button). Useful for devices that can trigger alarms. Functionality can be altered b",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Alarm cancellation delay",

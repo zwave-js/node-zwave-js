@@ -16,29 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 8,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Over Current",
-            "maxNodes": 8
-        },
-        "3": {
-            "label": "Over Voltage",
-            "maxNodes": 8
-        },
-        "4": {
-            "label": "Control 1 Click",
-            "maxNodes": 8
-        },
-        "5": {
-            "label": "Control 2 Clicks",
-            "maxNodes": 8
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Local load control",
