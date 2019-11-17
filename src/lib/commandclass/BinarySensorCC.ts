@@ -49,7 +49,7 @@ export function getSupportedSensorTypesValueId(endpointIndex: number): ValueID {
 	return {
 		commandClass: CommandClasses["Binary Sensor"],
 		endpoint: endpointIndex,
-		propertyName: "supportedSensorTypes",
+		property: "supportedSensorTypes",
 	};
 }
 
@@ -194,7 +194,7 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		const valueId: ValueID = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
-			propertyName: getEnumMemberName(BinarySensorType, this._type),
+			property: getEnumMemberName(BinarySensorType, this._type),
 		};
 
 		this.getValueDB().setMetadata(valueId, {

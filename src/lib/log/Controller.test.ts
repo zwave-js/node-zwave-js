@@ -40,7 +40,7 @@ describe("lib/log/Controller =>", () => {
 			const baseArgs = {
 				nodeId: 1,
 				commandClass: CommandClasses.Basic,
-				propertyName: "foo",
+				property: "foo",
 			};
 
 			log.controller.value("added", { ...baseArgs, newValue: 1 });
@@ -69,7 +69,7 @@ describe("lib/log/Controller =>", () => {
 			const baseArgs = {
 				nodeId: 1,
 				commandClass: CommandClasses.Basic,
-				propertyName: "foo",
+				property: "foo",
 			};
 
 			log.controller.value("added", { ...baseArgs, newValue: 1 });
@@ -82,7 +82,7 @@ describe("lib/log/Controller =>", () => {
 			const baseArgs = {
 				nodeId: 1,
 				commandClass: CommandClasses.Basic,
-				propertyName: "foo",
+				property: "foo",
 			};
 
 			log.controller.value("added", {
@@ -99,7 +99,7 @@ describe("lib/log/Controller =>", () => {
 			const baseArgs = {
 				nodeId: 1,
 				commandClass: CommandClasses.Basic,
-				propertyName: "foo",
+				property: "foo",
 			};
 
 			log.controller.value("added", { ...baseArgs, newValue: 1 });
@@ -122,7 +122,7 @@ describe("lib/log/Controller =>", () => {
 			const baseArgs = {
 				nodeId: 1,
 				commandClass: CommandClasses.Basic,
-				propertyName: "interviewComplete",
+				property: "interviewComplete",
 			};
 
 			log.controller.value("added", {
@@ -148,7 +148,7 @@ describe("lib/log/Controller =>", () => {
 			const baseArgs = {
 				nodeId: 1,
 				commandClass: CommandClasses.Basic,
-				propertyName: "foo",
+				property: "foo",
 			};
 
 			log.controller.value("added", { ...baseArgs, newValue: 1 });
@@ -170,7 +170,7 @@ describe("lib/log/Controller =>", () => {
 			const baseArgs = {
 				nodeId: 1,
 				commandClass: CommandClasses.Basic,
-				propertyName: "bar",
+				property: "bar",
 				propertyKey: "baz",
 			};
 
@@ -193,7 +193,7 @@ describe("lib/log/Controller =>", () => {
 			const baseArgs = {
 				nodeId: 1,
 				commandClass: CommandClasses.Basic,
-				propertyName: "foo",
+				property: "foo",
 			};
 
 			log.controller.value("added", { ...baseArgs, newValue: 1 });
@@ -227,7 +227,7 @@ describe("lib/log/Controller =>", () => {
 			const baseArgs = {
 				nodeId: 1,
 				commandClass: CommandClasses.Basic,
-				propertyName: "foo",
+				property: "foo",
 			};
 
 			log.controller.metadataUpdated(baseArgs);
@@ -240,7 +240,7 @@ describe("lib/log/Controller =>", () => {
 			const baseArgs = {
 				nodeId: 1,
 				commandClass: CommandClasses.Basic,
-				propertyName: "foo",
+				property: "foo",
 			};
 
 			log.controller.metadataUpdated({
@@ -256,7 +256,7 @@ describe("lib/log/Controller =>", () => {
 			const baseArgs = {
 				nodeId: 1,
 				commandClass: CommandClasses.Basic,
-				propertyName: "foo",
+				property: "foo",
 			};
 
 			log.controller.metadataUpdated(baseArgs);
@@ -278,7 +278,7 @@ describe("lib/log/Controller =>", () => {
 			const baseArgs = {
 				nodeId: 1,
 				commandClass: CommandClasses.Basic,
-				propertyName: "interviewComplete",
+				property: "interviewComplete",
 			};
 
 			log.controller.metadataUpdated({
@@ -300,7 +300,7 @@ describe("lib/log/Controller =>", () => {
 			const baseArgs = {
 				nodeId: 1,
 				commandClass: CommandClasses.Basic,
-				propertyName: "foo",
+				property: "foo",
 			};
 
 			log.controller.metadataUpdated(baseArgs);
@@ -313,7 +313,7 @@ describe("lib/log/Controller =>", () => {
 			const baseArgs = {
 				nodeId: 1,
 				commandClass: CommandClasses.Basic,
-				propertyName: "foo",
+				property: "foo",
 			};
 
 			log.controller.metadataUpdated(baseArgs);

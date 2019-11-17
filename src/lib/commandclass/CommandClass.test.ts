@@ -213,10 +213,10 @@ describe("lib/commandclass/CommandClass => ", () => {
 			node2.valueDB.setValue = mockSetValue;
 			cc.persistValues();
 
-			const propertyNames = mockSetValue.mock.calls
+			const properties = mockSetValue.mock.calls
 				.map(([arg0]) => arg0)
-				.map(({ propertyName }) => propertyName);
-			expect(propertyNames).not.toContainValue("interviewComplete");
+				.map(({ property }) => property);
+			expect(properties).not.toContainValue("interviewComplete");
 		});
 
 		afterAll(() => {

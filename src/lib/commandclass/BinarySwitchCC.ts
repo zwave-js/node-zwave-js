@@ -91,19 +91,14 @@ export class BinarySwitchCCAPI extends CCAPI {
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
-		{ propertyName },
+		{ property },
 		value,
 	): Promise<void> => {
-		if (propertyName !== "targetValue") {
-			throwUnsupportedProperty(this.ccId, propertyName);
+		if (property !== "targetValue") {
+			throwUnsupportedProperty(this.ccId, property);
 		}
 		if (typeof value !== "boolean") {
-			throwWrongValueType(
-				this.ccId,
-				propertyName,
-				"boolean",
-				typeof value,
-			);
+			throwWrongValueType(this.ccId, property, "boolean", typeof value);
 		}
 		await this.set(value);
 	};

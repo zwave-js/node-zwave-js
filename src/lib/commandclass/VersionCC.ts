@@ -64,7 +64,7 @@ export class VersionCCAPI extends CCAPI {
 				let ret = node.getValue<Maybe<boolean>>({
 					commandClass: getCommandClass(this),
 					endpoint: this.endpoint.index,
-					propertyName: "supportsZWaveSoftwareGet",
+					property: "supportsZWaveSoftwareGet",
 				});
 				if (ret == undefined) ret = unknownBoolean;
 				return ret;

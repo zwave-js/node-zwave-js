@@ -68,19 +68,14 @@ export class ThermostatModeCCAPI extends CCAPI {
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
-		{ propertyName },
+		{ property },
 		value,
 	): Promise<void> => {
-		if (propertyName !== "mode") {
-			throwUnsupportedProperty(this.ccId, propertyName);
+		if (property !== "mode") {
+			throwUnsupportedProperty(this.ccId, property);
 		}
 		if (typeof value !== "number") {
-			throwWrongValueType(
-				this.ccId,
-				propertyName,
-				"number",
-				typeof value,
-			);
+			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 		await this.set(value);
 
@@ -323,7 +318,7 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 		const valueId: ValueID = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
-			propertyName: "mode",
+			property: "mode",
 		};
 		// Only update the dynamic part
 		this.getValueDB().setMetadata(valueId, ({

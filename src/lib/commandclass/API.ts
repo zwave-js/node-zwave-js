@@ -10,7 +10,7 @@ import { CommandClasses } from "./CommandClasses";
 /** Used to identify the method on the CC API class that handles setting values on nodes directly */
 export const SET_VALUE: unique symbol = Symbol.for("CCAPI_SET_VALUE");
 export type SetValueImplementation = (
-	property: Pick<ValueID, "propertyName" | "propertyKey">,
+	property: Pick<ValueID, "property" | "propertyKey">,
 	value: unknown,
 ) => Promise<void>;
 
@@ -18,22 +18,22 @@ export type SetValueImplementation = (
 // we must do narrowing inside the API calls. These two methods are for convenience
 export function throwUnsupportedProperty(
 	cc: CommandClasses,
-	propertyName: string,
+	property: string,
 ): never {
 	throw new ZWaveError(
-		`${CommandClasses[cc]}: "${propertyName}" is not a supported property`,
+		`${CommandClasses[cc]}: "${property}" is not a supported property`,
 		ZWaveErrorCodes.Argument_Invalid,
 	);
 }
 
 export function throwWrongValueType(
 	cc: CommandClasses,
-	propertyName: string,
+	property: string,
 	expectedType: string,
 	receivedType: string,
 ): never {
 	throw new ZWaveError(
-		`${CommandClasses[cc]}: "${propertyName}" must be of type "${expectedType}", received "${receivedType}"`,
+		`${CommandClasses[cc]}: "${property}" must be of type "${expectedType}", received "${receivedType}"`,
 		ZWaveErrorCodes.Argument_Invalid,
 	);
 }

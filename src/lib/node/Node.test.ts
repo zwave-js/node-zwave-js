@@ -813,7 +813,7 @@ describe("lib/node/Node", () => {
 			node.valueDB.setValue(
 				{
 					commandClass: CommandClasses["Multi Channel"],
-					propertyName: "individualCount",
+					property: "individualCount",
 				},
 				5,
 			);
@@ -827,7 +827,7 @@ describe("lib/node/Node", () => {
 			node.valueDB.setValue(
 				{
 					commandClass: CommandClasses["Multi Channel"],
-					propertyName: "individualCount",
+					property: "individualCount",
 				},
 				5,
 			);
@@ -917,9 +917,9 @@ describe("lib/node/Node", () => {
 			// @ts-ignore We need write access to the map
 			fakeDriver.controller!.nodes.set(1, node);
 
-			const valueId = {
+			const valueId: ValueID = {
 				commandClass: CommandClasses.Basic,
-				propertyName: "targetValue",
+				property: "targetValue",
 			};
 
 			node.valueDB.setValue(valueId, 10);
@@ -930,7 +930,7 @@ describe("lib/node/Node", () => {
 			expect(
 				serialized.commandClasses["0x20"].values,
 			).toIncludeAllMembers([
-				{ endpoint: 0, propertyName: "targetValue", value: 10 },
+				{ endpoint: 0, property: "targetValue", value: 10 },
 			]);
 			// Test that all metadata is serialized
 			expect(
@@ -938,7 +938,7 @@ describe("lib/node/Node", () => {
 			).toIncludeAllMembers([
 				{
 					endpoint: 0,
-					propertyName: "targetValue",
+					property: "targetValue",
 					metadata: ValueMetadata.WriteOnlyInt16,
 				},
 			]);
@@ -949,11 +949,11 @@ describe("lib/node/Node", () => {
 
 			const valueId1 = {
 				endpoint: 1,
-				propertyName: "targetValue",
+				property: "targetValue",
 			};
 			const valueId2 = {
 				endpoint: 2,
-				propertyName: "targetValue",
+				property: "targetValue",
 			};
 
 			(input.commandClasses as any)["0x20"] = {
@@ -1137,7 +1137,7 @@ describe("lib/node/Node", () => {
 			const ccName = CommandClasses[cc];
 			const valueId: ValueID = {
 				commandClass: cc,
-				propertyName: "fooProp",
+				property: "fooProp",
 			};
 			node.valueDB.setValue(valueId, 1);
 			expect(onValueAdded).toBeCalled();
@@ -1160,7 +1160,7 @@ describe("lib/node/Node", () => {
 			node.valueDB.setValue(
 				{
 					commandClass: CommandClasses["Thermostat Setpoint"],
-					propertyName: "setpoint",
+					property: "setpoint",
 					propertyKey: 1 /* Heating */,
 				},
 				5,
@@ -1174,7 +1174,7 @@ describe("lib/node/Node", () => {
 			node.valueDB.setValue(
 				{
 					commandClass: CommandClasses.Battery,
-					propertyName: "interviewComplete", // interviewCompleted is an internal value
+					property: "interviewComplete", // interviewCompleted is an internal value
 				},
 				true,
 			);
@@ -1312,7 +1312,7 @@ describe("lib/node/Node", () => {
 			const valueId: ValueID = {
 				commandClass: 1,
 				endpoint: 2,
-				propertyName: "3",
+				property: "3",
 			};
 
 			node.valueDB.setValue(valueId, 4);
@@ -1337,7 +1337,7 @@ describe("lib/node/Node", () => {
 			const result = await node.setValue(
 				{
 					commandClass: CommandClasses.Basic,
-					propertyName: "targetValue",
+					property: "targetValue",
 				},
 				5,
 			);
@@ -1359,7 +1359,7 @@ describe("lib/node/Node", () => {
 			const result = await node.setValue(
 				{
 					commandClass: 0xbada55, // this is guaranteed to not be implemented
-					propertyName: "test",
+					property: "test",
 				},
 				1,
 			);
@@ -1372,7 +1372,7 @@ describe("lib/node/Node", () => {
 		let node: ZWaveNode;
 		const valueId: ValueID = {
 			commandClass: CommandClasses.Basic,
-			propertyName: "currentValue",
+			property: "currentValue",
 		};
 
 		beforeEach(() => {

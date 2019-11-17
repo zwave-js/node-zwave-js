@@ -97,27 +97,22 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
-		{ propertyName, propertyKey },
+		{ property, propertyKey },
 		value,
 	): Promise<void> => {
-		if (propertyName !== "setpoint") {
-			throwUnsupportedProperty(this.ccId, propertyName);
+		if (property !== "setpoint") {
+			throwUnsupportedProperty(this.ccId, property);
 		}
 		if (typeof propertyKey !== "number") {
 			throw new ZWaveError(
 				`${
 					CommandClasses[this.ccId]
-				}: "${propertyName}" must be further specified by a numeric property key`,
+				}: "${property}" must be further specified by a numeric property key`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
 		if (typeof value !== "number") {
-			throwWrongValueType(
-				this.ccId,
-				propertyName,
-				"number",
-				typeof value,
-			);
+			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 
 		// TODO: GH#323 retrieve the actual scale the thermostat is using
@@ -225,16 +220,16 @@ export class ThermostatSetpointCC extends CommandClass {
 	declare ccCommand: ThermostatSetpointCommand;
 
 	public static translatePropertyKey(
-		propertyName: string,
+		property: string,
 		propertyKey: number | string,
 	): string {
-		if (propertyName === "setpoint") {
+		if (property === "setpoint") {
 			return getEnumMemberName(
 				ThermostatSetpointType,
 				propertyKey as any,
 			);
 		} else {
-			return super.translatePropertyKey(propertyName, propertyKey);
+			return super.translatePropertyKey(property, propertyKey);
 		}
 	}
 
@@ -255,7 +250,7 @@ export class ThermostatSetpointCC extends CommandClass {
 			const supportedSetpointTypesValueId: ValueID = {
 				commandClass: this.ccId,
 				endpoint: this.endpointIndex,
-				propertyName: "supportedSetpointTypes",
+				property: "supportedSetpointTypes",
 			};
 
 			if (complete) {
@@ -328,7 +323,7 @@ export class ThermostatSetpointCC extends CommandClass {
 				setpointTypes =
 					this.getValueDB().getValue({
 						commandClass: this.ccId,
-						propertyName: "supportedSetpointTypes",
+						property: "supportedSetpointTypes",
 						endpoint: this.endpointIndex,
 					}) || [];
 			}
@@ -453,7 +448,7 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		const valueId: ValueID = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
-			propertyName: "setpoint",
+			property: "setpoint",
 			propertyKey: this._type,
 		};
 		if (!this.getValueDB().hasMetadata(valueId)) {
@@ -540,7 +535,7 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 		const valueId: ValueID = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
-			propertyName: "setpoint",
+			property: "setpoint",
 			propertyKey: this._type,
 		};
 		this.getValueDB().setMetadata(valueId, {

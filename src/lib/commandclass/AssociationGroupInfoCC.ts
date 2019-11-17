@@ -222,7 +222,7 @@ export enum AssociationGroupInfoProfile {
 function getGroupNameValueID(groupId: number): ValueID {
 	return {
 		commandClass: CommandClasses["Association Group Information"],
-		propertyName: "name",
+		property: "name",
 		propertyKey: groupId,
 	};
 }
@@ -231,7 +231,7 @@ function getGroupNameValueID(groupId: number): ValueID {
 function getGroupInfoValueID(groupId: number): ValueID {
 	return {
 		commandClass: CommandClasses["Association Group Information"],
-		propertyName: "info",
+		property: "info",
 		propertyKey: groupId,
 	};
 }
@@ -240,7 +240,7 @@ function getGroupInfoValueID(groupId: number): ValueID {
 function getIssuedCommandsValueID(groupId: number): ValueID {
 	return {
 		commandClass: CommandClasses["Association Group Information"],
-		propertyName: "issuedCommands",
+		property: "issuedCommands",
 		propertyKey: groupId,
 	};
 }
@@ -328,8 +328,8 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	public constructor(driver: IDriver, options: CommandClassOptions) {
 		super(driver, options);
-		this.registerValue(getGroupNameValueID(0).propertyName as any, true);
-		this.registerValue(getGroupInfoValueID(0).propertyName as any, true);
+		this.registerValue(getGroupNameValueID(0).property as any, true);
+		this.registerValue(getGroupInfoValueID(0).property as any, true);
 	}
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
@@ -428,7 +428,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 			if (!complete) {
 				hasDynamicInfo = this.getValueDB().getValue({
 					commandClass: this.ccId,
-					propertyName: "hasDynamicInfo",
+					property: "hasDynamicInfo",
 				});
 			}
 

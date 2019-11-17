@@ -49,7 +49,7 @@ export function getEndpointCCsValueId(endpointIndex: number): ValueID {
 	return {
 		commandClass: CommandClasses["Multi Channel"],
 		endpoint: endpointIndex,
-		propertyName: "commandClasses",
+		property: "commandClasses",
 	};
 }
 
@@ -189,7 +189,7 @@ export class MultiChannelCC extends CommandClass {
 
 	public constructor(driver: IDriver, options: CommandClassOptions) {
 		super(driver, options);
-		this.registerValue(getEndpointCCsValueId(0).propertyName as any, true);
+		this.registerValue(getEndpointCCsValueId(0).property as any, true);
 	}
 
 	/** Tests if a command targets a specific endpoint and thus requires encapsulation */

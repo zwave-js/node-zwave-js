@@ -3,37 +3,17 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
 import { CCAPI } from "../commandclass/API";
-import {
-	CentralSceneCCNotification,
-	CentralSceneKeys,
-	getSceneValueId,
-} from "../commandclass/CentralSceneCC";
-import {
-	CommandClass,
-	getCCConstructor,
-	getCCValueMetadata,
-} from "../commandclass/CommandClass";
+import { CentralSceneCCNotification, CentralSceneKeys, getSceneValueId } from "../commandclass/CentralSceneCC";
+import { CommandClass, getCCConstructor, getCCValueMetadata } from "../commandclass/CommandClass";
 import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
-import { ConfigurationCC } from "../commandclass/ConfigurationCC";
 import { getEndpointCCsValueId } from "../commandclass/MultiChannelCC";
 import { NotificationCCReport } from "../commandclass/NotificationCC";
 import { WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
-import { lookupDevice } from "../config/Devices";
+import { DeviceConfig, lookupDevice } from "../config/Devices";
 import { lookupNotification } from "../config/Notifications";
-import {
-	ApplicationUpdateRequest,
-	ApplicationUpdateRequestNodeInfoReceived,
-	ApplicationUpdateRequestNodeInfoRequestFailed,
-} from "../controller/ApplicationUpdateRequest";
-import {
-	Baudrate,
-	GetNodeProtocolInfoRequest,
-	GetNodeProtocolInfoResponse,
-} from "../controller/GetNodeProtocolInfoMessages";
-import {
-	GetRoutingInfoRequest,
-	GetRoutingInfoResponse,
-} from "../controller/GetRoutingInfoMessages";
+import { ApplicationUpdateRequest, ApplicationUpdateRequestNodeInfoReceived, ApplicationUpdateRequestNodeInfoRequestFailed } from "../controller/ApplicationUpdateRequest";
+import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "../controller/GetNodeProtocolInfoMessages";
+import { GetRoutingInfoRequest, GetRoutingInfoResponse } from "../controller/GetRoutingInfoMessages";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
@@ -42,28 +22,12 @@ import { getEnumMemberName, JSONObject, Mixin } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import { CacheMetadata, CacheValue } from "../values/Cache";
 import { ValueMetadata } from "../values/Metadata";
-import {
-	BasicDeviceClasses,
-	DeviceClass,
-	GenericDeviceClass,
-	SpecificDeviceClass,
-} from "./DeviceClass";
+import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
 import { InterviewStage, IZWaveNode, NodeStatus } from "./INode";
 import { NodeUpdatePayload } from "./NodeInfo";
-import {
-	RequestNodeInfoRequest,
-	RequestNodeInfoResponse,
-} from "./RequestNodeInfoMessages";
-import {
-	MetadataUpdatedArgs,
-	ValueAddedArgs,
-	ValueDB,
-	ValueID,
-	valueIdToString,
-	ValueRemovedArgs,
-	ValueUpdatedArgs,
-} from "./ValueDB";
+import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
+import { MetadataUpdatedArgs, ValueAddedArgs, ValueDB, ValueID, valueIdToString, ValueRemovedArgs, ValueUpdatedArgs } from "./ValueDB";
 
 export interface TranslatedValueID extends ValueID {
 	commandClassName: string;
@@ -191,7 +155,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		// Try to retrieve the speaking property key
 		if (valueId.propertyKey != undefined) {
 			const propertyKey = ccConstructor.translatePropertyKey(
-				valueId.propertyName,
+				valueId.property,
 				valueId.propertyKey,
 			);
 			ret.propertyKeyName = propertyKey;
@@ -217,7 +181,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		// Log the value change
 		const ccInstance = this.createCCInstanceInternal(arg.commandClass);
 		const isInternalValue =
-			ccInstance && ccInstance.isInternalValue(arg.propertyName as any);
+			ccInstance && ccInstance.isInternalValue(arg.property as any);
 		// I don't like the splitting and any but its the easiest solution here
 		const [changeTarget, changeType] = eventName.split(" ");
 		const logArgument = {
@@ -235,8 +199,6 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			this.emit(eventName, this, outArg as any);
 		}
 	}
-
-	//#region --- properties ---
 
 	private _status: NodeStatus = NodeStatus.Unknown;
 	/**
@@ -309,29 +271,41 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	public get manufacturerId(): number | undefined {
 		return this.getValue({
 			commandClass: CommandClasses["Manufacturer Specific"],
-			propertyName: "manufacturerId",
+			property: "manufacturerId",
 		});
 	}
 
 	public get productId(): number | undefined {
 		return this.getValue({
 			commandClass: CommandClasses["Manufacturer Specific"],
-			propertyName: "productId",
+			property: "productId",
 		});
 	}
 
 	public get productType(): number | undefined {
 		return this.getValue({
 			commandClass: CommandClasses["Manufacturer Specific"],
-			propertyName: "productType",
+			property: "productType",
 		});
 	}
 
 	public get firmwareVersion(): string | undefined {
 		return this.getValue({
 			commandClass: CommandClasses.Version,
-			propertyName: "firmwareVersion",
+			property: "firmwareVersion",
 		});
+	}
+
+	private _deviceConfig: DeviceConfig | undefined;
+	/**
+	 * Contains additional information about this node, loaded from a config file
+	 */
+	public get deviceConfig(): DeviceConfig | undefined {
+		return this._deviceConfig;
+	}
+
+	public get label(): string | undefined {
+		return this._deviceConfig?.label;
 	}
 
 	private _neighbors: readonly number[] = [];
@@ -365,10 +339,10 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	 * This can be used to enhance the user interface of an application
 	 */
 	public getValueMetadata(valueId: ValueID): ValueMetadata {
-		const { commandClass, propertyName } = valueId;
+		const { commandClass, property } = valueId;
 		return {
 			// Merge static metadata
-			...getCCValueMetadata(commandClass, propertyName),
+			...getCCValueMetadata(commandClass, property),
 			// with potentially existing dynamic metadata
 			...this._valueDB.getMetadata(valueId),
 		};
@@ -410,7 +384,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			// And call it
 			await api.setValue(
 				{
-					propertyName: valueId.propertyName,
+					property: valueId.property,
 					propertyKey: valueId.propertyKey,
 				},
 				value,
@@ -432,28 +406,28 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	public get endpointCountIsDynamic(): boolean | undefined {
 		return this.getValue({
 			commandClass: CommandClasses["Multi Channel"],
-			propertyName: "countIsDynamic",
+			property: "countIsDynamic",
 		});
 	}
 
 	public get endpointsHaveIdenticalCapabilities(): boolean | undefined {
 		return this.getValue({
 			commandClass: CommandClasses["Multi Channel"],
-			propertyName: "identicalCapabilities",
+			property: "identicalCapabilities",
 		});
 	}
 
 	public get individualEndpointCount(): number | undefined {
 		return this.getValue({
 			commandClass: CommandClasses["Multi Channel"],
-			propertyName: "individualCount",
+			property: "individualCount",
 		});
 	}
 
 	public get aggregatedEndpointCount(): number | undefined {
 		return this.getValue({
 			commandClass: CommandClasses["Multi Channel"],
-			propertyName: "aggregatedCount",
+			property: "aggregatedCount",
 		});
 	}
 
@@ -520,14 +494,10 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	 */
 	public interviewStage: InterviewStage = InterviewStage.None;
 
-	//#endregion
-
 	/** Utility function to check if this node is the controller */
 	public isControllerNode(): boolean {
 		return this.id === this.driver.controller.ownNodeId;
 	}
-
-	//#region --- interview ---
 
 	/**
 	 * @internal
@@ -749,6 +719,37 @@ version:               ${this.version}`;
 		await this.setInterviewStage(InterviewStage.NodeInfo);
 	}
 
+	/**
+	 * Loads the device configuration for this node from a config file
+	 */
+	protected async loadDeviceConfig(): Promise<void> {
+		// But the configuration definitions might change
+		if (
+			!this.isControllerNode() &&
+			this.manufacturerId != undefined &&
+			this.productType != undefined &&
+			this.productId != undefined
+		) {
+			// Try to load the config file
+			log.controller.logNode(this.id, "trying to load device config");
+			this._deviceConfig = await lookupDevice(
+				this.manufacturerId,
+				this.productType,
+				this.productId,
+				this.firmwareVersion,
+			);
+			if (this._deviceConfig) {
+				log.controller.logNode(this.id, "device config loaded");
+			} else {
+				log.controller.logNode(
+					this.id,
+					"no device config loaded",
+					"warn",
+				);
+			}
+		}
+	}
+
 	/** Step #? of the node interview */
 	protected async interviewCCs(): Promise<void> {
 		// We determine the correct interview order by topologically sorting a dependency graph
@@ -783,6 +784,10 @@ version:               ${this.version}`;
 					throw e;
 				}
 				await instance.interview(!instance.interviewComplete);
+				if (cc === CommandClasses.Version) {
+					// After the version CC interview, we have enough info to load the correct device config file
+					await this.loadDeviceConfig();
+				}
 				await this.driver.saveNetworkToCache();
 			} catch (e) {
 				// TODO: Should this cancel the entire interview procedure?
@@ -878,48 +883,8 @@ version:               ${this.version}`;
 
 	/** Overwrites the reported configuration with information from a config file */
 	protected async overwriteConfig(): Promise<void> {
-		if (this.isControllerNode()) {
-			log.controller.logNode(
-				this.id,
-				"not loading device config for the controller",
-			);
-		} else if (
-			this.manufacturerId == undefined ||
-			this.productId == undefined ||
-			this.productType == undefined
-		) {
-			log.controller.logNode(
-				this.id,
-				"device information incomplete, cannot load config file",
-				"error",
-			);
-		} else {
-			log.controller.logNode(this.id, "trying to load device config");
-			const config = await lookupDevice(
-				this.manufacturerId,
-				this.productType,
-				this.productId,
-				this.firmwareVersion,
-			);
-			if (config) {
-				if (isObject(config.configuration)) {
-					const configCC = this.createCCInstance(ConfigurationCC)!;
-					configCC.deserializeParamInformationFromConfig(
-						config.configuration,
-					);
-				} else {
-					log.controller.logNode(
-						this.id,
-						"  invalid config file!",
-						"error",
-					);
-				}
-			} else {
-				log.controller.logNode(
-					this.id,
-					"  no device config file found!",
-				);
-			}
+		if (this.deviceConfig) {
+			// TODO: Override stuff
 		}
 		await this.setInterviewStage(InterviewStage.OverwriteConfig);
 	}
@@ -960,8 +925,6 @@ version:               ${this.version}`;
 		await this.queryNeighborsInternal();
 		await this.setInterviewStage(InterviewStage.Neighbors);
 	}
-
-	//#endregion
 
 	// TODO: Add a handler around for each CC to interpret the received data
 
@@ -1137,7 +1100,7 @@ version:               ${this.version}`;
 
 		if (notificationConfig) {
 			// This is a known notification (status or event)
-			const propertyName = notificationConfig.name;
+			const property = notificationConfig.name;
 
 			/** Returns a single notification state to idle */
 			const setStateIdle = (prevValue: number): void => {
@@ -1148,10 +1111,10 @@ version:               ${this.version}`;
 				if (!valueConfig.idle) return;
 
 				const propertyKey = valueConfig.variableName;
-				const valueId = {
+				const valueId: ValueID = {
 					commandClass: command.ccId,
 					endpoint: command.endpointIndex,
-					propertyName,
+					property,
 					propertyKey,
 				};
 				// Since the node has reset the notification itself, we don't need the idle reset
@@ -1175,7 +1138,7 @@ version:               ${this.version}`;
 						.filter(
 							v =>
 								(v.endpoint || 0) === command.endpointIndex &&
-								v.propertyName === propertyName &&
+								v.property === property &&
 								typeof v.value === "number" &&
 								v.value !== 0,
 						);
@@ -1208,10 +1171,10 @@ version:               ${this.version}`;
 				return;
 			}
 			// Now that we've gathered all we need to know, update the value in our DB
-			const valueId = {
+			const valueId: ValueID = {
 				commandClass: command.ccId,
 				endpoint: command.endpointIndex,
-				propertyName,
+				property,
 				propertyKey,
 			};
 			this.valueDB.setValue(valueId, value);
@@ -1230,11 +1193,11 @@ version:               ${this.version}`;
 			}
 		} else {
 			// This is an unknown notification
-			const propertyName = `UNKNOWN_${num2hex(command.notificationType)}`;
-			const valueId = {
+			const property = `UNKNOWN_${num2hex(command.notificationType)}`;
+			const valueId: ValueID = {
 				commandClass: command.ccId,
 				endpoint: command.endpointIndex,
-				propertyName,
+				property,
 			};
 			this.valueDB.setValue(valueId, command.notificationEvent);
 			// We don't know what this notification refers to, so we don't force a reset
@@ -1287,28 +1250,6 @@ version:               ${this.version}`;
 						return [num2hex(cc), ret] as [string, object];
 					}),
 			),
-			// endpointCountIsDynamic: this.endpointCountIsDynamic,
-			// endpointsHaveIdenticalCapabilities: this
-			// 	.endpointsHaveIdenticalCapabilities,
-			// individualEndpointCount: this.individualEndpointCount,
-			// aggregatedEndpointCount: this.aggregatedEndpointCount,
-			// endpoints:
-			// 	this.endpointCommandClasses &&
-			// 	composeObject(
-			// 		[...this.endpointCommandClasses.entries()]
-			// 			.sort((a, b) => Math.sign(a[0] - b[0]))
-			// 			.map(([cc, caps]) => {
-			// 				return [
-			// 					cc.toString(),
-			// 					{
-			// 						genericClass: caps.genericClass.key,
-			// 						specificClass: caps.specificClass.key,
-			// 						isDynamic: caps.isDynamic,
-			// 						supportedCCs: caps.supportedCCs,
-			// 					},
-			// 				] as [string, object];
-			// 			}),
-			// 	),
 		};
 	}
 
@@ -1388,6 +1329,13 @@ version:               ${this.version}`;
 					// If any exist, deserialize the values aswell
 					const ccInstance = this.createCCInstance(ccNum);
 					if (ccInstance) {
+						// In v2.0.0, propertyName was changed to property. The network caches might still reference the old property names
+						for (const v of values) {
+							if ("propertyName" in v) {
+								v.property = v.propertyName;
+								delete v.propertyName;
+							}
+						}
 						try {
 							ccInstance.deserializeValuesFromCache(
 								values as CacheValue[],
@@ -1404,6 +1352,13 @@ version:               ${this.version}`;
 					// If any exist, deserialize the values aswell
 					const ccInstance = this.createCCInstance(ccNum);
 					if (ccInstance) {
+						// In v2.0.0, propertyName was changed to property. The network caches might still reference the old property names
+						for (const m of metadata) {
+							if ("propertyName" in m) {
+								m.property = m.propertyName;
+								delete m.propertyName;
+							}
+						}
 						try {
 							ccInstance.deserializeMetadataFromCache(
 								metadata as CacheMetadata[],
@@ -1418,62 +1373,6 @@ version:               ${this.version}`;
 				}
 			}
 		}
-		// // Parse endpoint capabilities
-		// tryParse("endpointCountIsDynamic", "boolean");
-		// tryParse("endpointsHaveIdenticalCapabilities", "boolean");
-		// tryParse("individualEndpointCount", "number");
-		// tryParse("aggregatedEndpointCount", "number");
-		// if (isObject(obj.endpoints)) {
-		// 	const endpointDict = obj.endpoints;
-		// 	// Make sure the endpointCapabilities Map exists
-		// 	if (!this.endpointCommandClasses) {
-		// 		this.valueDB.setValue(
-		// 			{
-		// 				commandClass: CommandClasses["Multi Channel"],
-		// 				endpoint: 0,
-		// 				propertyName: "_endpointCapabilities",
-		// 			},
-		// 			new Map(),
-		// 		);
-		// 	}
-		// 	for (const index of Object.keys(endpointDict)) {
-		// 		// First make sure this key describes a valid endpoint
-		// 		const indexNum = parseInt(index);
-		// 		if (
-		// 			indexNum < 1 ||
-		// 			indexNum >
-		// 				(this.individualEndpointCount || 0) +
-		// 					(this.aggregatedEndpointCount || 0)
-		// 		) {
-		// 			continue;
-		// 		}
-
-		// 		// Parse the information we have
-		// 		const {
-		// 			genericClass,
-		// 			specificClass,
-		// 			isDynamic,
-		// 			supportedCCs,
-		// 		} = endpointDict[index];
-		// 		if (
-		// 			typeof genericClass === "number" &&
-		// 			typeof specificClass === "number" &&
-		// 			typeof isDynamic === "boolean" &&
-		// 			isArray(supportedCCs) &&
-		// 			supportedCCs.every(cc => typeof cc === "number")
-		// 		) {
-		// 			this.endpointCommandClasses!.set(indexNum, {
-		// 				genericClass: GenericDeviceClass.get(genericClass),
-		// 				specificClass: SpecificDeviceClass.get(
-		// 					genericClass,
-		// 					specificClass,
-		// 				),
-		// 				isDynamic,
-		// 				supportedCCs,
-		// 			});
-		// 		}
-		// 	}
-		// }
 	}
 
 	/**

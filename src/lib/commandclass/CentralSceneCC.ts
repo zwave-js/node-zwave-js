@@ -33,7 +33,7 @@ import { CommandClasses } from "./CommandClasses";
 export function getSceneValueId(sceneNumber: number): ValueID {
 	return {
 		commandClass: CommandClasses["Central Scene"],
-		propertyName: "scene",
+		property: "scene",
 		propertyKey: padStart(sceneNumber.toString(), 3, "0"),
 	};
 }
@@ -129,19 +129,14 @@ export class CentralSceneCCAPI extends CCAPI {
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
-		{ propertyName },
+		{ property },
 		value,
 	): Promise<void> => {
-		if (propertyName !== "slowRefresh") {
-			throwUnsupportedProperty(this.ccId, propertyName);
+		if (property !== "slowRefresh") {
+			throwUnsupportedProperty(this.ccId, property);
 		}
 		if (typeof value !== "boolean") {
-			throwWrongValueType(
-				this.ccId,
-				propertyName,
-				"boolean",
-				typeof value,
-			);
+			throwWrongValueType(this.ccId, property, "boolean", typeof value);
 		}
 		await this.setConfiguration(value);
 	};
@@ -231,17 +226,6 @@ supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
-
-	// public static translatePropertyKey(
-	// 	propertyName: string,
-	// 	propertyKey: number | string,
-	// ): string {
-	// 	if (/^scene\d+/.test(propertyName)) {
-	// 		return CentralSceneKeys[propertyKey as number];
-	// 	} else {
-	// 		return super.translatePropertyKey(propertyName, propertyKey);
-	// 	}
-	// }
 }
 
 @CCCommand(CentralSceneCommand.Notification)

@@ -29,18 +29,6 @@ export interface CommandClassInfo {
 	version: number;
 }
 
-// /**
-//  * Defines which kind of CC state should be requested
-//  */
-// export enum StateKind {
-// 	/** Values that never change and only need to be requested once. */
-// 	Static = 1 << 0,
-// 	/** Values that change sporadically. It is enough to request them on startup. */
-// 	Session = 1 << 1,
-// 	/** Values that frequently change */
-// 	Dynamic = 1 << 2,
-// }
-
 export type CommandClassDeserializationOptions = { data: Buffer } & (
 	| {
 			fromEncapsulation?: false;
@@ -177,7 +165,7 @@ export class CommandClass {
 		return !!this.getValueDB().getValue<boolean>({
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
-			propertyName: "interviewComplete",
+			property: "interviewComplete",
 		});
 	}
 	public set interviewComplete(value: boolean) {
@@ -185,7 +173,7 @@ export class CommandClass {
 			{
 				commandClass: this.ccId,
 				endpoint: this.endpointIndex,
-				propertyName: "interviewComplete",
+				property: "interviewComplete",
 			},
 			value,
 		);
@@ -196,7 +184,7 @@ export class CommandClass {
 		return !!this.getValueDB().getValue<boolean>({
 			commandClass: this.ccId,
 			endpoint: 0,
-			propertyName: "interviewComplete",
+			property: "interviewComplete",
 		});
 	}
 
@@ -375,18 +363,6 @@ export class CommandClass {
 		return stripUndefined({ ...ret, ...props });
 	}
 
-	// /* eslint-disable @typescript-eslint/no-unused-vars */
-	// /** Requests static or dynamic state for a given from a node */
-	// // TODO: Merge this with the interview procedure
-	// public static async requestState(
-	// 	driver: IDriver,
-	// 	node: ZWaveNode,
-	// 	// kind: StateKind,
-	// ): Promise<void> {
-	// 	// This needs to be overwritten per command class. In the default implementation, don't do anything
-	// }
-	// /* eslint-enable @typescript-eslint/no-unused-vars */
-
 	// This needs to be overwritten per command class. In the default implementation, don't do anything
 	/**
 	 * Performs the interview procedure for this CC according to SDS14223
@@ -458,13 +434,13 @@ export class CommandClass {
 		const ret = new Map<string, ValueID>();
 
 		const addValueId = (
-			propertyName: string,
+			property: string,
 			propertyKey?: string | number,
 		): void => {
 			const valueId: ValueID = {
 				commandClass: this.ccId,
 				endpoint: this.endpointIndex,
-				propertyName,
+				property,
 				propertyKey,
 			};
 			const dbKey = valueIdToString(valueId);
@@ -475,9 +451,7 @@ export class CommandClass {
 		const registeredCCValueNames = [...this._registeredCCValues]
 			.filter(([, isInternal]) => !isInternal)
 			.map(([key]) => key);
-		registeredCCValueNames.forEach(propertyName =>
-			addValueId(propertyName),
-		);
+		registeredCCValueNames.forEach(property => addValueId(property));
 
 		// Return all defined non-internal CC values that are available in the current version of this CC
 		const valueDefinitions = getCCValueDefinitions(this);
@@ -489,7 +463,7 @@ export class CommandClass {
 						options.minVersion <= this.version),
 			)
 			.map(([key]) => key);
-		definedCCValueNames.forEach(propertyName => addValueId(propertyName));
+		definedCCValueNames.forEach(property => addValueId(property));
 
 		const kvpDefinitions = getCCKeyValuePairDefinitions(this);
 
@@ -500,39 +474,38 @@ export class CommandClass {
 			// allow the value id if it is NOT registered or it is registered as non-internal
 			.filter(
 				valueId =>
-					!this._registeredCCValues.has(valueId.propertyName) ||
-					this._registeredCCValues.get(valueId.propertyName)! ===
-						false,
+					!this._registeredCCValues.has(valueId.property) ||
+					this._registeredCCValues.get(valueId.property)! === false,
 			)
 			// allow the value id if it is NOT defined or it is defined as non-internal
 			.filter(
 				valueId =>
-					!valueDefinitions.has(valueId.propertyName) ||
-					valueDefinitions.get(valueId.propertyName)! === false,
+					!valueDefinitions.has(valueId.property) ||
+					valueDefinitions.get(valueId.property)! === false,
 			)
 			.filter(
 				valueId =>
-					!kvpDefinitions.has(valueId.propertyName) ||
-					kvpDefinitions.get(valueId.propertyName)! === false,
+					!kvpDefinitions.has(valueId.property) ||
+					kvpDefinitions.get(valueId.property)! === false,
 			);
-		existingValueIds.forEach(({ propertyName, propertyKey }) =>
-			addValueId(propertyName, propertyKey),
+		existingValueIds.forEach(({ property, propertyKey }) =>
+			addValueId(property, propertyKey),
 		);
 
 		return [...ret.values()];
 	}
 
 	/** Determines if the given value is an internal value */
-	public isInternalValue(propertyName: keyof this): boolean {
+	public isInternalValue(property: keyof this): boolean {
 		// A value is internal if any of the possible definitions say so (true)
-		if (this._registeredCCValues.get(propertyName as string) === true)
+		if (this._registeredCCValues.get(property as string) === true)
 			return true;
 		const ccValueDefinition = getCCValueDefinitions(this).get(
-			propertyName as string,
+			property as string,
 		);
 		if (ccValueDefinition?.internal === true) return true;
 		const ccKeyValuePairDefinition = getCCKeyValuePairDefinitions(this).get(
-			propertyName as string,
+			property as string,
 		);
 		if (ccKeyValuePairDefinition?.internal === true) return true;
 		return false;
@@ -590,7 +563,7 @@ export class CommandClass {
 							{
 								commandClass: cc,
 								endpoint: this.endpointIndex,
-								propertyName: variable,
+								property: variable,
 								propertyKey,
 							},
 							value,
@@ -605,7 +578,7 @@ export class CommandClass {
 						{
 							commandClass: cc,
 							endpoint: this.endpointIndex,
-							propertyName: variable,
+							property: variable,
 							propertyKey,
 						},
 						value,
@@ -622,7 +595,7 @@ export class CommandClass {
 					{
 						commandClass: cc,
 						endpoint: this.endpointIndex,
-						propertyName: variable,
+						property: variable,
 					},
 					sourceValue,
 				);
@@ -668,7 +641,7 @@ export class CommandClass {
 				{
 					commandClass: cc,
 					endpoint: val.endpoint,
-					propertyName: val.propertyName,
+					property: val.property,
 					propertyKey: val.propertyKey,
 				},
 				deserializeCacheValue(val.value),
@@ -685,7 +658,7 @@ export class CommandClass {
 				{
 					commandClass: cc,
 					endpoint: meta.endpoint,
-					propertyName: meta.propertyName,
+					property: meta.property,
 					propertyKey: meta.propertyKey,
 				},
 				meta.metadata,
@@ -707,12 +680,21 @@ export class CommandClass {
 	}
 
 	/**
+	 * Translates a property identifier into a speaking name for use in an external API
+	 * @param property The property identifier that should be translated
+	 */
+	public static translateProperty(property: string | number): string {
+		// Overwrite this in derived classes, by default just return the property key
+		return property.toString();
+	}
+
+	/**
 	 * Translates a property key into a speaking name for use in an external API
-	 * @param propertyName The name of the property the key in question belongs to
+	 * @param property The property the key in question belongs to
 	 * @param propertyKey The property key for which the speaking name should be retrieved
 	 */
 	public static translatePropertyKey(
-		propertyName: string,
+		property: string,
 		propertyKey: number | string,
 	): string {
 		// Overwrite this in derived classes, by default just return the property key

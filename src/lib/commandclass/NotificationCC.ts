@@ -155,11 +155,11 @@ function defineMetadataForNotificationEvents(
 	const notificationConfig = lookupNotification(type);
 	if (!notificationConfig) {
 		// This is an unknown notification
-		const propertyName = `UNKNOWN_${num2hex(type)}`;
-		const valueId = {
+		const property = `UNKNOWN_${num2hex(type)}`;
+		const valueId: ValueID = {
 			commandClass: CommandClasses.Notification,
 			endpoint,
-			propertyName,
+			property,
 		};
 		ret.set(JSON.stringify(valueId), {
 			...ValueMetadata.ReadOnlyUInt8,
@@ -168,15 +168,15 @@ function defineMetadataForNotificationEvents(
 		return ret;
 	}
 
-	const propertyName = notificationConfig.name;
+	const property = notificationConfig.name;
 	for (const value of events) {
 		// Find out which property we need to update
 		const valueConfig = notificationConfig.lookupValue(value);
 		if (valueConfig?.type === "state") {
-			const valueId = {
+			const valueId: ValueID = {
 				commandClass: CommandClasses.Notification,
 				endpoint,
-				propertyName,
+				property,
 				propertyKey: valueConfig.variableName,
 			};
 
@@ -296,7 +296,7 @@ export class NotificationCC extends CommandClass {
 					readonly NotificationType[]
 				>({
 					commandClass: this.ccId,
-					propertyName: "supportedNotificationTypes",
+					property: "supportedNotificationTypes",
 				})!;
 				supportedNotificationNames = lookupNotificationNames();
 			}

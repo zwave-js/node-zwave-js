@@ -50,22 +50,17 @@ export class NodeNamingAndLocationCCAPI extends CCAPI {
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
-		{ propertyName },
+		{ property },
 		value,
 	): Promise<void> => {
-		if (propertyName !== "name" && propertyName !== "location") {
-			throwUnsupportedProperty(this.ccId, propertyName);
+		if (property !== "name" && property !== "location") {
+			throwUnsupportedProperty(this.ccId, property);
 		}
 		if (typeof value !== "string") {
-			throwWrongValueType(
-				this.ccId,
-				propertyName,
-				"string",
-				typeof value,
-			);
+			throwWrongValueType(this.ccId, property, "string", typeof value);
 		}
 
-		switch (propertyName) {
+		switch (property) {
 			case "name":
 				await this.setName(value);
 				// Refresh the current value

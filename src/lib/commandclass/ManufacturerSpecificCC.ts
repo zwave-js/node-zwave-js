@@ -225,7 +225,7 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
 		const valueId: ValueID = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
-			propertyName: "deviceId",
+			property: "deviceId",
 			propertyKey: DeviceIdType[this._type],
 		};
 		this.getValueDB().setMetadata(valueId, {
