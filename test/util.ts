@@ -19,7 +19,7 @@ interface AssertZWaveErrorOptions {
 export function assertZWaveError<T>(
 	valueOrFactory: T,
 	options: AssertZWaveErrorOptions = {},
-): T extends (() => PromiseLike<any>) ? Promise<void> : void {
+): T extends () => PromiseLike<any> ? Promise<void> : void {
 	const { messageMatches, errorCode } = options;
 
 	function handleError(e: any): void {
