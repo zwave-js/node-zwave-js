@@ -24,6 +24,7 @@ import {
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
+	throwUnsupportedPropertyKey,
 } from "./API";
 import {
 	API,
@@ -83,20 +84,6 @@ export interface ConfigurationMetadata extends ValueMetadataBase {
 	isFromConfig?: boolean;
 }
 
-/** Returns the property name that belongs to a parameter */
-function getPropertyNameForParameter(parameter: number): string {
-	const paddedParameterNumber = padStart(parameter.toString(), 3, "0");
-	return `param${paddedParameterNumber}`;
-}
-
-const parameterRegex = /^param(\d+)$/;
-function getParameterFromPropertyName(
-	propertyName: string,
-): number | undefined {
-	const match = parameterRegex.exec(propertyName);
-	if (match) return parseInt(match[1]);
-}
-
 // A configuration value is either a single number or a bit map
 export type ConfigValue = number | Set<number>;
 
@@ -137,15 +124,19 @@ export class ConfigurationCCAPI extends CCAPI {
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
+		{ property, propertyKey },
 		value,
 	): Promise<void> => {
-		const param = getParameterFromPropertyName(property);
-		if (!param) {
+		// Config parameters are addressed with numeric properties/keys
+		if (typeof property !== "number") {
 			throwUnsupportedProperty(this.ccId, property);
 		}
+		if (propertyKey != undefined && typeof propertyKey !== "number") {
+			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+		}
+
 		const ccInstance = this.endpoint.createCCInstance(ConfigurationCC)!;
-		const valueSize = ccInstance.getParamInformation(param).valueSize;
+		const valueSize = ccInstance.getParamInformation(property).valueSize;
 
 		// if (typeof value !== "number") {
 		// 	throwWrongValueType(
@@ -155,10 +146,10 @@ export class ConfigurationCCAPI extends CCAPI {
 		// 		typeof value,
 		// 	);
 		// }
-		await this.set(param, value as any, (valueSize || 1) as any);
+		await this.set(property, value as any, (valueSize || 1) as any);
 
 		// Refresh the current value and ignore potential timeouts
-		void this.get(param).catch(() => {});
+		void this.get(property).catch(() => {});
 	};
 
 	/**
@@ -513,7 +504,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		const valueDB = this.getValueDB();
 		const paramInformationValueID: ValueID = {
 			commandClass: getCommandClass(this),
-			property: getPropertyNameForParameter(parameter),
+			property: parameter,
 			propertyKey: valueBitMask,
 		};
 		// Retrieve the base metadata
@@ -532,10 +523,10 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		const valueDB = this.getValueDB();
 		const paramInformationValueID: ValueID = {
 			commandClass: getCommandClass(this),
-			property: getPropertyNameForParameter(parameter),
+			property: parameter,
 		};
 		return (
-			valueDB.getMetadata(paramInformationValueID) || {
+			valueDB.getMetadata(paramInformationValueID) ?? {
 				...ValueMetadata.Any,
 			}
 		);
@@ -554,7 +545,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		// Leave out the param metadata if we have loaded it from a config file
 		let metadata = super.serializeMetadataForCache();
 		if (this.isParamInformationFromConfig) {
-			metadata = metadata.filter(m => !/param\d+/.test(m.property));
+			metadata = metadata.filter(m => typeof m.property === "number");
 		}
 		return metadata;
 	}
@@ -588,6 +579,24 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 			},
 			true,
 		);
+	}
+
+	// public static translatePropertyKey(
+	// property: string | number,
+	// propertyKey: string | number,
+	// ): string {
+	// 	if (property === "values" && typeof propertyKey === "number") {
+	// 		const type = lookupSensorType(propertyKey);
+	// 		if (type) return type.label;
+	// 	}
+	// 	return super.translatePropertyKey(property, propertyKey);
+	// }
+
+	public static translateProperty(property: string | number): string {
+		if (typeof property === "number") {
+			return `param${padStart(property.toString(), 3, "0")}`;
+		}
+		return super.translateProperty(property);
 	}
 }
 
@@ -641,11 +650,10 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			);
 		}
 		// And store the value itself
-		const property = getPropertyNameForParameter(this._parameter);
 		this.getValueDB().setValue(
 			{
 				commandClass: this.ccId,
-				property,
+				property: this._parameter,
 			},
 			this._value,
 		);
@@ -913,11 +921,10 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 		}
 		// Store every received parameter
 		for (const [parameter, value] of this._values.entries()) {
-			const property = getPropertyNameForParameter(parameter);
 			this.getValueDB().setValue(
 				{
 					commandClass: this.ccId,
-					property,
+					property: parameter,
 				},
 				value,
 			);

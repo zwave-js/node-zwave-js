@@ -243,8 +243,8 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 	}
 
 	public static translatePropertyKey(
-		property: string,
-		propertyKey: number | string,
+		property: string | number,
+		propertyKey: string | number,
 	): string {
 		// TODO: check this
 		if (property === "values" && typeof propertyKey === "number") {

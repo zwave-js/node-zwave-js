@@ -3,17 +3,36 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
 import { CCAPI } from "../commandclass/API";
-import { CentralSceneCCNotification, CentralSceneKeys, getSceneValueId } from "../commandclass/CentralSceneCC";
-import { CommandClass, getCCConstructor, getCCValueMetadata } from "../commandclass/CommandClass";
+import {
+	CentralSceneCCNotification,
+	CentralSceneKeys,
+	getSceneValueId,
+} from "../commandclass/CentralSceneCC";
+import {
+	CommandClass,
+	getCCConstructor,
+	getCCValueMetadata,
+} from "../commandclass/CommandClass";
 import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { getEndpointCCsValueId } from "../commandclass/MultiChannelCC";
 import { NotificationCCReport } from "../commandclass/NotificationCC";
 import { WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
 import { DeviceConfig, lookupDevice } from "../config/Devices";
 import { lookupNotification } from "../config/Notifications";
-import { ApplicationUpdateRequest, ApplicationUpdateRequestNodeInfoReceived, ApplicationUpdateRequestNodeInfoRequestFailed } from "../controller/ApplicationUpdateRequest";
-import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "../controller/GetNodeProtocolInfoMessages";
-import { GetRoutingInfoRequest, GetRoutingInfoResponse } from "../controller/GetRoutingInfoMessages";
+import {
+	ApplicationUpdateRequest,
+	ApplicationUpdateRequestNodeInfoReceived,
+	ApplicationUpdateRequestNodeInfoRequestFailed,
+} from "../controller/ApplicationUpdateRequest";
+import {
+	Baudrate,
+	GetNodeProtocolInfoRequest,
+	GetNodeProtocolInfoResponse,
+} from "../controller/GetNodeProtocolInfoMessages";
+import {
+	GetRoutingInfoRequest,
+	GetRoutingInfoResponse,
+} from "../controller/GetRoutingInfoMessages";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
@@ -22,15 +41,32 @@ import { getEnumMemberName, JSONObject, Mixin } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import { CacheMetadata, CacheValue } from "../values/Cache";
 import { ValueMetadata } from "../values/Metadata";
-import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
+import {
+	BasicDeviceClasses,
+	DeviceClass,
+	GenericDeviceClass,
+	SpecificDeviceClass,
+} from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
 import { InterviewStage, IZWaveNode, NodeStatus } from "./INode";
 import { NodeUpdatePayload } from "./NodeInfo";
-import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
-import { MetadataUpdatedArgs, ValueAddedArgs, ValueDB, ValueID, valueIdToString, ValueRemovedArgs, ValueUpdatedArgs } from "./ValueDB";
+import {
+	RequestNodeInfoRequest,
+	RequestNodeInfoResponse,
+} from "./RequestNodeInfoMessages";
+import {
+	MetadataUpdatedArgs,
+	ValueAddedArgs,
+	ValueDB,
+	ValueID,
+	valueIdToString,
+	ValueRemovedArgs,
+	ValueUpdatedArgs,
+} from "./ValueDB";
 
 export interface TranslatedValueID extends ValueID {
 	commandClassName: string;
+	propertyName?: string;
 	propertyKeyName?: string;
 }
 
@@ -151,7 +187,9 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			...valueId,
 		};
 		const ccConstructor: typeof CommandClass =
-			(getCCConstructor(valueId.commandClass) as any) || CommandClass;
+			(getCCConstructor(valueId.commandClass) as any) ?? CommandClass;
+		// Retrieve the speaking property name
+		ret.propertyName = ccConstructor.translateProperty(valueId.property);
 		// Try to retrieve the speaking property key
 		if (valueId.propertyKey != undefined) {
 			const propertyKey = ccConstructor.translatePropertyKey(

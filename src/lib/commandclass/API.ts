@@ -15,13 +15,24 @@ export type SetValueImplementation = (
 ) => Promise<void>;
 
 // Since the setValue API is called from a point with very generic parameters,
-// we must do narrowing inside the API calls. These two methods are for convenience
+// we must do narrowing inside the API calls. These three methods are for convenience
 export function throwUnsupportedProperty(
 	cc: CommandClasses,
 	property: string | number,
 ): never {
 	throw new ZWaveError(
 		`${CommandClasses[cc]}: "${property}" is not a supported property`,
+		ZWaveErrorCodes.Argument_Invalid,
+	);
+}
+
+export function throwUnsupportedPropertyKey(
+	cc: CommandClasses,
+	property: string | number,
+	propertyKey: string | number,
+): never {
+	throw new ZWaveError(
+		`${CommandClasses[cc]}: "${propertyKey}" is not a supported property key for property "${property}"`,
 		ZWaveErrorCodes.Argument_Invalid,
 	);
 }

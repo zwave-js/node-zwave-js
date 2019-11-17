@@ -220,8 +220,8 @@ export class ThermostatSetpointCC extends CommandClass {
 	declare ccCommand: ThermostatSetpointCommand;
 
 	public static translatePropertyKey(
-		property: string,
-		propertyKey: number | string,
+		property: string | number,
+		propertyKey: string | number,
 	): string {
 		if (property === "setpoint") {
 			return getEnumMemberName(

@@ -467,9 +467,11 @@ export class CommandClass {
 
 		const kvpDefinitions = getCCKeyValuePairDefinitions(this);
 
-		// Also return all existing value ids that are not internal
-		const existingValueIds = this.getValueDB()
-			.getValues(this.ccId)
+		// Also return all existing value ids that are not internal (values AND metadata without values!)
+		const existingValueIds = [
+			...this.getValueDB().getValues(this.ccId),
+			...this.getValueDB().getAllMetadata(this.ccId),
+		]
 			.filter(valueId => valueId.endpoint === this.endpointIndex)
 			// allow the value id if it is NOT registered or it is registered as non-internal
 			.filter(

@@ -9,6 +9,9 @@
 * The `value updated` event is no longer emitted for `interviewComplete` every time a command is received
 * `Basic CC` is no longer reported as supported when other actuator CCs are supported
 
+### Breaking changes
+* Added a new member to `ValueID`: `property` (`number | string`) replaces `propertyName` as the property identifier. `propertyName` is now in line with `commandClassName` and `propertyKeyName` and contains a speaking representation of the property
+
 ### Changes under the hood
 * Deduplicated some code in the config lint script
 * Upgrade to TypeScript 3.7
