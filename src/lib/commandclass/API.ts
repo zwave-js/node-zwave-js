@@ -18,7 +18,7 @@ export type SetValueImplementation = (
 // we must do narrowing inside the API calls. These two methods are for convenience
 export function throwUnsupportedProperty(
 	cc: CommandClasses,
-	property: string,
+	property: string | number,
 ): never {
 	throw new ZWaveError(
 		`${CommandClasses[cc]}: "${property}" is not a supported property`,
@@ -28,7 +28,7 @@ export function throwUnsupportedProperty(
 
 export function throwWrongValueType(
 	cc: CommandClasses,
-	property: string,
+	property: string | number,
 	expectedType: string,
 	receivedType: string,
 ): never {

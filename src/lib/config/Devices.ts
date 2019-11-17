@@ -92,7 +92,7 @@ export async function lookupDevice(
 	productType: number,
 	productId: number,
 	firmwareVersion?: string,
-): Promise<JSONObject | undefined> {
+): Promise<DeviceConfig | undefined> {
 	// Look up the device in the index
 	const indexEntry = index.find(
 		entry =>
@@ -359,6 +359,18 @@ Parameter #${parameterNumber} has a non-string label`,
 		this.label = definition.label;
 
 		if (
+			definition.description != undefined &&
+			typeof definition.label !== "string"
+		) {
+			throwInvalidConfig(
+				"devices",
+				`config/devices/${filename}:
+Parameter #${parameterNumber} has a non-string description`,
+			);
+		}
+		this.description = definition.description;
+
+		if (
 			typeof definition.valueSize !== "number" ||
 			definition.valueSize <= 0
 		) {
@@ -451,6 +463,7 @@ Parameter #${parameterNumber}: options is malformed!`,
 	public readonly parameterNumber: number;
 	public readonly valueBitMask?: number;
 	public readonly label: string;
+	public readonly description?: string;
 	public readonly valueSize: number;
 	public readonly minValue: number;
 	public readonly maxValue: number;
@@ -458,8 +471,10 @@ Parameter #${parameterNumber}: options is malformed!`,
 	public readonly readOnly: boolean;
 	public readonly writeOnly: boolean;
 	public readonly allowManualEntry: boolean;
-	public readonly options: readonly {
-		label: string;
-		value: number;
-	}[];
+	public readonly options: readonly ConfigOption[];
+}
+
+export interface ConfigOption {
+	value: number;
+	label: string;
 }

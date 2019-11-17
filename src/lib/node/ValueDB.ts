@@ -6,8 +6,8 @@ import { ValueMetadata } from "../values/Metadata";
 export interface ValueID {
 	commandClass: CommandClasses;
 	endpoint?: number;
-	property: string;
-	propertyKey?: number | string;
+	property: string | number;
+	propertyKey?: string | number;
 }
 export interface ValueUpdatedArgs extends ValueID {
 	prevValue: unknown;

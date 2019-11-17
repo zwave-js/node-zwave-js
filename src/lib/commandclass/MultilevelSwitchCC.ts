@@ -184,7 +184,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 				);
 			}
 			await this.set(value);
-		} else if (switchTypeProperties.includes(property)) {
+		} else if (switchTypeProperties.includes(property as string)) {
 			// Since the switch only supports one of the switch types, we would
 			// need to check if the correct one is used. But since the names are
 			// purely cosmetic, we just accept all of them
@@ -200,7 +200,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 				// The property names are organized so that positive motions are
 				// at odd indices and negative motions at even indices
 				const direction =
-					switchTypeProperties.indexOf(property) % 2 === 0
+					switchTypeProperties.indexOf(property as string) % 2 === 0
 						? "down"
 						: "up";
 				await this.startLevelChange({

@@ -418,7 +418,7 @@ export class CommandClass {
 	}
 
 	/** Which variables should be persisted when requested */
-	private _registeredCCValues = new Map<string, boolean>();
+	private _registeredCCValues = new Map<string | number, boolean>();
 	/**
 	 * Creates a value that will be stored in the valueDB alongside with the ones marked with `@ccValue()`
 	 * @param name The name of the value
@@ -434,7 +434,7 @@ export class CommandClass {
 		const ret = new Map<string, ValueID>();
 
 		const addValueId = (
-			property: string,
+			property: string | number,
 			propertyKey?: string | number,
 		): void => {
 			const valueId: ValueID = {
@@ -694,8 +694,8 @@ export class CommandClass {
 	 * @param propertyKey The property key for which the speaking name should be retrieved
 	 */
 	public static translatePropertyKey(
-		property: string,
-		propertyKey: number | string,
+		property: string | number,
+		propertyKey: string | number,
 	): string {
 		// Overwrite this in derived classes, by default just return the property key
 		return propertyKey.toString();
@@ -1037,7 +1037,7 @@ export interface CCValueOptions {
  * @param internal Whether the value should be exposed to library users
  */
 export function ccValue(options?: CCValueOptions): PropertyDecorator {
-	return (target: CommandClass, property: string | symbol) => {
+	return (target: CommandClass, property: string | number | symbol) => {
 		// Set default arguments
 		if (!options) options = {};
 		if (options.internal == undefined) options.internal = false;
@@ -1048,10 +1048,10 @@ export function ccValue(options?: CCValueOptions): PropertyDecorator {
 		// retrieve the current metadata
 		const metadata =
 			Reflect.getMetadata(METADATA_ccValues, CommandClass) || {};
-		if (!(cc in metadata)) metadata[cc] = new Map<string, CCValueOptions>();
+		if (!(cc in metadata)) metadata[cc] = new Map();
 		// And add the variable
-		const variables: Map<string, CCValueOptions> = metadata[cc];
-		variables.set(property as string, options);
+		const variables: Map<string | number, CCValueOptions> = metadata[cc];
+		variables.set(property as string | number, options);
 		// store back to the object
 		Reflect.defineMetadata(METADATA_ccValues, metadata, CommandClass);
 	};
@@ -1062,14 +1062,14 @@ export function ccValue(options?: CCValueOptions): PropertyDecorator {
  */
 function getCCValueDefinitions(
 	commandClass: CommandClass,
-): ReadonlyMap<string, CCValueOptions> {
+): ReadonlyMap<string | number, CCValueOptions> {
 	// get the class constructor
 	const constr = commandClass.constructor as typeof CommandClass;
 	const cc = getCommandClassStatic(constr);
 	// retrieve the current metadata
-	const metadata = Reflect.getMetadata(METADATA_ccValues, CommandClass) || {};
+	const metadata = Reflect.getMetadata(METADATA_ccValues, CommandClass) ?? {};
 	if (!(cc in metadata)) return new Map();
-	return metadata[cc] as Map<string, CCValueOptions>;
+	return metadata[cc] as Map<string | number, CCValueOptions>;
 }
 
 /**
@@ -1078,7 +1078,7 @@ function getCCValueDefinitions(
  * @param internal Whether the key value pair should be exposed to library users
  */
 export function ccKeyValuePair(options?: CCValueOptions): PropertyDecorator {
-	return (target: CommandClass, property: string | symbol) => {
+	return (target: CommandClass, property: string | number | symbol) => {
 		// Set default arguments
 		if (!options) options = {};
 		if (options.internal == undefined) options.internal = false;
@@ -1089,10 +1089,10 @@ export function ccKeyValuePair(options?: CCValueOptions): PropertyDecorator {
 		// retrieve the current metadata
 		const metadata =
 			Reflect.getMetadata(METADATA_ccKeyValuePairs, CommandClass) || {};
-		if (!(cc in metadata)) metadata[cc] = new Map<string, CCValueOptions>();
+		if (!(cc in metadata)) metadata[cc] = new Map();
 		// And add the variable
-		const variables: Map<string, CCValueOptions> = metadata[cc];
-		variables.set(property as string, options);
+		const variables: Map<string | number, CCValueOptions> = metadata[cc];
+		variables.set(property as string | number, options);
 		// store back to the object
 		Reflect.defineMetadata(
 			METADATA_ccKeyValuePairs,
@@ -1107,7 +1107,7 @@ export function ccKeyValuePair(options?: CCValueOptions): PropertyDecorator {
  */
 function getCCKeyValuePairDefinitions(
 	commandClass: CommandClass,
-): ReadonlyMap<string, CCValueOptions> {
+): ReadonlyMap<string | number, CCValueOptions> {
 	// get the class constructor
 	const constr = commandClass.constructor as typeof CommandClass;
 	const cc = getCommandClassStatic(constr);
@@ -1115,24 +1115,24 @@ function getCCKeyValuePairDefinitions(
 	const metadata =
 		Reflect.getMetadata(METADATA_ccKeyValuePairs, CommandClass) || {};
 	if (!(cc in metadata)) return new Map();
-	return metadata[cc] as Map<string, CCValueOptions>;
+	return metadata[cc] as Map<string | number, CCValueOptions>;
 }
 
 /**
  * Defines additional metadata for the given CC value
  */
 export function ccValueMetadata(meta: ValueMetadata): PropertyDecorator {
-	return (target: CommandClass, property: string | symbol) => {
+	return (target: CommandClass, property: string | number | symbol) => {
 		// get the class constructor
 		const constr = target.constructor as typeof CommandClass;
 		const cc = getCommandClassStatic(constr);
 		// retrieve the current metadata
 		const metadata =
 			Reflect.getMetadata(METADATA_ccValueMeta, CommandClass) || {};
-		if (!(cc in metadata)) metadata[cc] = new Map<string, ValueMetadata>();
+		if (!(cc in metadata)) metadata[cc] = new Map();
 		// And add the variable
-		const variables: Map<string, ValueMetadata> = metadata[cc];
-		variables.set(property as string, meta);
+		const variables: Map<string | number, ValueMetadata> = metadata[cc];
+		variables.set(property as string | number, meta);
 		// store back to the object
 		Reflect.defineMetadata(METADATA_ccValueMeta, metadata, CommandClass);
 	};
@@ -1143,13 +1143,13 @@ export function ccValueMetadata(meta: ValueMetadata): PropertyDecorator {
  */
 export function getCCValueMetadata(
 	cc: CommandClasses,
-	property: string,
+	property: string | number,
 ): ValueMetadata {
 	// retrieve the current metadata
 	const metadata =
 		Reflect.getMetadata(METADATA_ccValueMeta, CommandClass) || {};
 	if (!(cc in metadata)) return ValueMetadata.Any;
-	const map = metadata[cc] as Map<string, ValueMetadata>;
+	const map = metadata[cc] as Map<string | number, ValueMetadata>;
 	if (map.has(property)) return map.get(property)!;
 	return ValueMetadata.Any;
 }
