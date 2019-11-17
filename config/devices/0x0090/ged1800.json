@@ -1,0 +1,135 @@
+// Black & Decker GED1800
+// SmartCode 10 Touchpad Electronic Deadbolt
+{
+    "_approved": false,
+    "_errors": [
+        "Overview information is not set",
+        "Command Class \"ASSOCIATION_GROUP_INFO\" in endpoint 0 is duplicated!"
+    ],
+    "_warnings": [
+        "No channels have been assigned even though there are user configurable command classes."
+    ],
+    "manufacturer": "Black & Decker",
+    "manufacturerId": "0x0090",
+    "label": "GED1800",
+    "description": "SmartCode 10 Touchpad Electronic Deadbolt",
+    "devices": [
+        {
+            "productType": "0x0006",
+            "productId": "0x0440"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "supportsZWavePlus": true,
+    "paramInformation": {
+        "31": {
+            "label": "Buzzer",
+            "description": "Internal Buzzer",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "OFF",
+                    "value": 0
+                },
+                {
+                    "label": "ON",
+                    "value": 1
+                }
+            ]
+        },
+        "33": {
+            "label": "SKU (1st half)",
+            "description": "First 4 byes of SKU",
+            "valueSize": 4,
+            "minValue": 32,
+            "maxValue": 126,
+            "defaultValue": 32,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "34": {
+            "label": "SKU (2nd half)",
+            "description": "Last 4 bytes of SKU",
+            "valueSize": 4,
+            "minValue": 32,
+            "maxValue": 126,
+            "defaultValue": 32,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "40": {
+            "label": "Factory Default",
+            "description": "Reset to factory default settings",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Don't Reset",
+                    "value": 0
+                },
+                {
+                    "label": "Reset to Factory Defaults",
+                    "value": 1
+                }
+            ]
+        },
+        "31[0x01000000]": {
+            "label": "Auto Lock",
+            "description": "Automatically re-locks door 30 seconds after unlocking.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "OFF",
+                    "value": 0
+                },
+                {
+                    "label": "ON",
+                    "value": 1
+                }
+            ]
+        },
+        "31[0x10000000]": {
+            "label": "Status LED",
+            "description": "Door lock status LED blinks every 6 seconds",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "OFF",
+                    "value": 0
+                },
+                {
+                    "label": "ON",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

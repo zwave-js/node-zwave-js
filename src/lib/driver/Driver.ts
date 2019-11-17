@@ -16,6 +16,7 @@ import { isCommandClassContainer } from "../commandclass/ICommandClassContainer"
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
+import { loadDeviceIndex } from "../config/Devices";
 import { loadManufacturers } from "../config/Manufacturers";
 import { loadNotifications } from "../config/Notifications";
 import { loadNamedScales } from "../config/Scales";
@@ -263,6 +264,7 @@ export class Driver extends EventEmitter implements IDriver {
 					// Load the necessary configuration
 					log.driver.print("loading configuration...");
 					await loadManufacturers();
+					await loadDeviceIndex();
 					await loadNotifications();
 					await loadNamedScales();
 					await loadSensorTypes();

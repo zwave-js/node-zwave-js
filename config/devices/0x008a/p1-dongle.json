@@ -1,0 +1,33 @@
+// BeNext P1-dongle
+// P1-dongle
+{
+    "_approved": true,
+    "manufacturer": "BeNext",
+    "manufacturerId": "0x008a",
+    "label": "P1-dongle",
+    "description": "P1-dongle",
+    "devices": [
+        {
+            "productType": "0x002f",
+            "productId": "0x0100"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "supportsZWavePlus": true,
+    "paramInformation": {
+        "4": {
+            "label": "Baud Rate",
+            "description": "Baud rate: the rate the device sends data between the smart meter and z-wave",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 40000,
+            "defaultValue": 1152,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

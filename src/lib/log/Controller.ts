@@ -136,7 +136,7 @@ export function value(
 	if (args.internal === true) {
 		secondaryTags.push("internal");
 	}
-	let message = args.propertyName;
+	let message = args.property.toString();
 	if (args.propertyKey != undefined) {
 		message += `[${args.propertyKey}]`;
 	}
@@ -183,7 +183,7 @@ export function metadataUpdated(args: LogValueArgs<ValueID>): void {
 	if (args.internal === true) {
 		secondaryTags.push("internal");
 	}
-	let message = args.propertyName;
+	let message = args.property.toString();
 	if (args.propertyKey != undefined) {
 		message += `[${args.propertyKey}]`;
 	}

@@ -1,0 +1,310 @@
+// FortrezZ LLC MIMO2+
+// Dual Digital or Analog Voltage input and Dual Contact Relay
+{
+    "_approved": true,
+    "manufacturer": "FortrezZ LLC",
+    "manufacturerId": "0x0084",
+    "label": "MIMO2+",
+    "description": "Dual Digital or Analog Voltage input and Dual Contact Relay",
+    "devices": [
+        {
+            "productType": "0x0463",
+            "productId": "0x0207"
+        },
+        {
+            "productType": "0x0463",
+            "productId": "0x0208"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "supportsZWavePlus": true,
+    "paramInformation": {
+        "4": {
+            "label": "Sensor 1 Lower Threshold High",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 4095,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "5": {
+            "label": "Sensor 1 Lower Threshold Low",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 4095,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "6": {
+            "label": "Sensor 1 Upper Threshold High",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 4095,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "7": {
+            "label": "Sensor 1 Upper Threshold Low",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 4095,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "10": {
+            "label": "Sensor 2 Lower Threshold High",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 4095,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "11": {
+            "label": "Sensor 2 Lower Threshold Low",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 4095,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "12": {
+            "label": "Sensor 2 Upper Threshold High",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 4095,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "13": {
+            "label": "Sensor 2 Upper Threshold Low",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 4095,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "1[0x1f]": {
+            "label": "Relay 1 Trigger Interval",
+            "description": "Momentary trigger time in 100ms intervals, 10=1s, 0=disable",
+            "unit": "100 ms",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 31,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "1[0xe0]": {
+            "label": "Relay 1 Trigger Configuration",
+            "description": "Relay 1 Trigger on Sensor Input",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 224,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Trigger on Sensor 1",
+                    "value": 32
+                },
+                {
+                    "label": "Trigger on Sensor 2",
+                    "value": 64
+                },
+                {
+                    "label": "Trigger on Sensor 1 or Sensor 2",
+                    "value": 96
+                },
+                {
+                    "label": "Trigger on Sensor 1 and Sensor 2",
+                    "value": 128
+                },
+                {
+                    "label": "Trigger on Sensor 1 and/or Sensor 2",
+                    "value": 224
+                }
+            ]
+        },
+        "2[0x1f]": {
+            "label": "Relay 2 Trigger Interval",
+            "description": "Momentary trigger time in 100ms intervals, 10=1s, 0=disable",
+            "unit": "1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 31,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "2[0xe0]": {
+            "label": "Relay 2 Trigger Configuration",
+            "description": "Relay 2 Trigger on Sensor Input",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 224,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Trigger on Sensor 1",
+                    "value": 32
+                },
+                {
+                    "label": "Trigger on Sensor 2",
+                    "value": 64
+                },
+                {
+                    "label": "Trigger on Sensor 1 or Sensor 2",
+                    "value": 96
+                },
+                {
+                    "label": "Trigger on Sensor 1 and Sensor 2",
+                    "value": 128
+                },
+                {
+                    "label": "Trigger on Sensor 1 and/or Sensor 2",
+                    "value": 224
+                }
+            ]
+        },
+        "3[0x3f]": {
+            "label": "Sensor 1 Report Interval",
+            "description": "Report sensor state every (30s resolution, 0=none, 1=30s, 10=5m, 63=31.5m)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 63,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "3[0x40]": {
+            "label": "Sensor 1 Report Mode",
+            "description": "Report state periodically or on change",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Periodically",
+                    "value": 0
+                },
+                {
+                    "label": "On Change",
+                    "value": 1
+                }
+            ]
+        },
+        "3[0x80]": {
+            "label": "Sensor 1 Trigger Mode",
+            "description": "Trigger Inside or Outside Low/High Thresholds",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Outside",
+                    "value": 0
+                },
+                {
+                    "label": "Inside",
+                    "value": 1
+                }
+            ]
+        },
+        "9[0x3f]": {
+            "label": "Sensor 2 Report Interval",
+            "description": "Report sensor state every (30s resolution, 0=none, 1=30s, 10=5m, 63=31.5m)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 63,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "9[0x40]": {
+            "label": "Sensor 2 Report Mode",
+            "description": "Report state periodically or on change",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Periodically",
+                    "value": 0
+                },
+                {
+                    "label": "On Change",
+                    "value": 1
+                }
+            ]
+        },
+        "9[0x80]": {
+            "label": "Sensor 2 Trigger Mode",
+            "description": "Trigger Inside or Outside Low/High Thresholds",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Outside",
+                    "value": 0
+                },
+                {
+                    "label": "Inside",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

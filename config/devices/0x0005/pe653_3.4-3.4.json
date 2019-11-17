@@ -1,0 +1,69 @@
+// Intermatic PE653
+// Pool Control
+{
+    "_approved": true,
+    "manufacturer": "Intermatic",
+    "manufacturerId": "0x0005",
+    "label": "PE653",
+    "description": "Pool Control",
+    "devices": [
+        {
+            "productType": "0x5045",
+            "productId": "0x0653"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "3.4",
+        "max": "3.4"
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Fireman Timeout",
+            "description": "Minutes that pump will continue to run after heater shutoff",
+            "unit": "Minutes",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "22": {
+            "label": "Pool - Spa Mode",
+            "description": "Controller Mode",
+            "unit": "Decimal",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "1[0xff]": {
+            "label": "Booster/Cleaner Pump Operation Mode",
+            "description": "Which circuit the booster/cleaner pump resides on",
+            "unit": "Decimal",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 6,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "1[0xff00]": {
+            "label": "Pump Type Operation Mode",
+            "description": "Which type of pump is being used",
+            "unit": "Decimal",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 7,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

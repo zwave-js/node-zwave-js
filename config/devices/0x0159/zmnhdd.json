@@ -1,0 +1,512 @@
+// Goap ZMNHDD
+// Flush Dimmer Plus
+{
+    "_approved": true,
+    "_warnings": [
+        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!",
+        "Endpoint 1 contains both switch and dimmer channels. It probably should only include dimmer!"
+    ],
+    "manufacturer": "Goap",
+    "manufacturerId": "0x0159",
+    "label": "ZMNHDD",
+    "description": "Flush Dimmer Plus",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0051"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Controller Updates",
+            "description": "Lifeline group",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "I1 basic on/off",
+            "description": "Triggered at change of the input I1 state and reflecting its state",
+            "maxNodes": 16
+        },
+        "3": {
+            "label": "I1 start/stop level change",
+            "description": "Triggered at change of the input I1 state and reflecting its state",
+            "maxNodes": 16
+        },
+        "4": {
+            "label": "Multilevel",
+            "description": "Triggered at changes of state/value of the Flush Dimmer",
+            "maxNodes": 16
+        },
+        "5": {
+            "label": "I2 basic on/off",
+            "description": "Triggered at change of the input I2 state and reflecting its state",
+            "maxNodes": 16
+        },
+        "6": {
+            "label": "I2 notification report",
+            "description": "Triggered at change of the input I2 state and reflecting its state",
+            "maxNodes": 16
+        },
+        "7": {
+            "label": "I2 binary sensor",
+            "description": "Triggered at change of the input I2 state and reflecting its state",
+            "maxNodes": 16
+        },
+        "8": {
+            "label": "I3 basic on/off",
+            "description": "Triggered at change of the input I3 state and reflecting its state",
+            "maxNodes": 16
+        },
+        "9": {
+            "label": "I3 notification report",
+            "description": "Triggered at change of the input I3 state and reflecting its state",
+            "maxNodes": 16
+        },
+        "10": {
+            "label": "I3 binary sensor",
+            "description": "Triggered at change of the input I3 state and reflecting its state",
+            "maxNodes": 16
+        },
+        "11": {
+            "label": "Multilevel sensor",
+            "description": "Triggered at change of temperature sensor",
+            "maxNodes": 16
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Input 1 switch type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Mono-stable switch type (push button)",
+                    "value": 0
+                },
+                {
+                    "label": "Bi-stable switch type",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Input 2 switch type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Mono-stable switch type (push button)",
+                    "value": 0
+                },
+                {
+                    "label": "Bi-stable switch type",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Input 2 contact type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "NO (normally open) input type",
+                    "value": 0
+                },
+                {
+                    "label": "NC (normally closed) input type",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Input 3 contact type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "NO (normally open) input type",
+                    "value": 0
+                },
+                {
+                    "label": "NC (normally closed) input type",
+                    "value": 1
+                }
+            ]
+        },
+        "10": {
+            "label": "Activate / deactivate functions ALL ON / ALL OFF",
+            "description": "Flush dimmer module responds to commands ALL ON / ALL OFF",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "ALL ON is not active, ALL OFF is not active",
+                    "value": 0
+                },
+                {
+                    "label": "ALL ON is not active, ALL OFF active",
+                    "value": 1
+                },
+                {
+                    "label": "ALL ON active, ALL OFF is not active",
+                    "value": 2
+                },
+                {
+                    "label": "ALL ON active, ALL OFF active",
+                    "value": 255
+                }
+            ]
+        },
+        "11": {
+            "label": "Automatic turning off output after set time",
+            "description": "Auto OFF enabled with defined time, step is 1 second.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32536,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "12": {
+            "label": "Automatic turning on output after set time",
+            "description": "Auto ON enabled with defined time, step is 1 second.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32536,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "20": {
+            "label": "Enable / Disable 3-way switch",
+            "description": "Dimming is done by push button or switch connected to I1.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "single push button (connected to I1)",
+                    "value": 0
+                },
+                {
+                    "label": "3-way switch (connected to I1 and I2)",
+                    "value": 1
+                },
+                {
+                    "label": "Additional switch connected to I2",
+                    "value": 2
+                }
+            ]
+        },
+        "21": {
+            "label": "Enable / Disable Double click function",
+            "description": "A fast double click on the push button will set dimming power at maximum.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "double click disabled",
+                    "value": 0
+                },
+                {
+                    "label": "double click enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "30": {
+            "label": "Saving the state after a power failure",
+            "description": "Saving the state after a power failure",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Save state enabled",
+                    "value": 0
+                },
+                {
+                    "label": "Save state disabled",
+                    "value": 1
+                }
+            ]
+        },
+        "40": {
+            "label": "Power reporting in watts on power change",
+            "description": "Set value is percentage, set value from 0 - 100 = 0% - 100%.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "42": {
+            "label": "Power reporting in Watts by time interval",
+            "description": "Set value means time interval (0 – 32767) in seconds.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32767,
+            "defaultValue": 300,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "60": {
+            "label": "Minimum dimming value",
+            "description": "Minimum dimming value is set by entered value.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 98,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "61": {
+            "label": "Maximum dimming value",
+            "description": "Maximum dimming value is set by entered value.",
+            "valueSize": 1,
+            "minValue": 2,
+            "maxValue": 99,
+            "defaultValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "65": {
+            "label": "Dimming time (soft on/off)",
+            "description": "Set value means time of moving the Dimmer between min. and max. dimming values",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "66": {
+            "label": "Dimming time when key pressed",
+            "description": "Time of moving the Dimmer between min. and max dimming values",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "67": {
+            "label": "Ignore start level",
+            "description": "This parameter is used with association group 3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "respect start level",
+                    "value": 0
+                },
+                {
+                    "label": "ignore start level",
+                    "value": 1
+                }
+            ]
+        },
+        "68": {
+            "label": "Dimming duration",
+            "description": "This parameter is used with association group 3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "100": {
+            "label": "Enable / Disable Endpoints I2",
+            "description": "Enabling I2 means that Endpoint (I2) will be present on UI.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Home Security",
+                    "value": 1
+                },
+                {
+                    "label": "Carbon Monoxide",
+                    "value": 2
+                },
+                {
+                    "label": "Carbon Dioxide",
+                    "value": 3
+                },
+                {
+                    "label": "Water Alarm",
+                    "value": 4
+                },
+                {
+                    "label": "Heat Alarm",
+                    "value": 5
+                },
+                {
+                    "label": "Smoke Alarm",
+                    "value": 6
+                },
+                {
+                    "label": "Sensor binary",
+                    "value": 9
+                }
+            ]
+        },
+        "101": {
+            "label": "Enable / Disable Endpoints I3",
+            "description": "Enabling I3 means that Endpoint (I3) will be present on UI.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Home Security",
+                    "value": 1
+                },
+                {
+                    "label": "Carbon Monoxide",
+                    "value": 2
+                },
+                {
+                    "label": "Carbon Dioxide",
+                    "value": 3
+                },
+                {
+                    "label": "Water Alarm",
+                    "value": 4
+                },
+                {
+                    "label": "Heat Alarm",
+                    "value": 5
+                },
+                {
+                    "label": "Smoke Alarm",
+                    "value": 6
+                },
+                {
+                    "label": "Sensor binary",
+                    "value": 9
+                }
+            ]
+        },
+        "110": {
+            "label": "Temperature sensor offset settings",
+            "description": "Offset to actual measured value",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 32536,
+            "defaultValue": 32536,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "120": {
+            "label": "Digital temperature sensor reporting",
+            "description": "Module reports measured temperature on defined temperature change",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "250": {
+            "label": "Unsecure / Secure Inclusion",
+            "description": "Unsecure / Secure Inclusion",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Unsecure Inclusion",
+                    "value": 0
+                },
+                {
+                    "label": "Secure Inclusion",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

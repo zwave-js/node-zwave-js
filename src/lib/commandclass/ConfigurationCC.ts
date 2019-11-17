@@ -1,13 +1,13 @@
-import { entries } from "alcalzone-shared/objects";
+import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
-import { isObject } from "alcalzone-shared/typeguards";
+import { ParamInformation } from "../config/Devices";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import { ValueID } from "../node/ValueDB";
 import {
 	getEnumMemberName,
 	isConsecutiveArray,
-	JSONObject,
 	stripUndefined,
 	validatePayload,
 } from "../util/misc";
@@ -25,6 +25,7 @@ import {
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
+	throwUnsupportedPropertyKey,
 } from "./API";
 import {
 	API,
@@ -33,6 +34,7 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	CommandClassOptions,
 	DynamicCCResponse,
 	expectedCCResponse,
 	getCommandClass,
@@ -64,12 +66,8 @@ export enum ValueFormat {
 	BitField = 0x03, // Check Boxes
 }
 
-export interface ConfigOption {
-	value: number;
-	label: string;
-}
-
 export interface ConfigurationMetadata extends ValueMetadataBase {
+	// readable and writeable are inherited from ValueMetadataBase
 	min?: ConfigValue;
 	max?: ConfigValue;
 	default?: ConfigValue;
@@ -79,27 +77,13 @@ export interface ConfigurationMetadata extends ValueMetadataBase {
 	info?: string;
 	noBulkSupport?: boolean;
 	isAdvanced?: boolean;
-	// isReadonly?: boolean; ==> writeable
 	requiresReInclusion?: boolean;
-	// The following information cannot be detected by scanning
+	// The following information cannot be detected by scanning.
 	// We have to rely on configuration to support them
-	// isWriteonly?: boolean; ==> readable
-	options?: ConfigOption[];
+	// options?: readonly ConfigOption[];
+	states?: Record<string, number>;
+	allowManualEntry?: boolean;
 	isFromConfig?: boolean;
-}
-
-/** Returns the property name that belongs to a parameter */
-function getPropertyNameForParameter(parameter: number): string {
-	const paddedParameterNumber = padStart(parameter.toString(), 3, "0");
-	return `param${paddedParameterNumber}`;
-}
-
-const parameterRegex = /^param(\d+)$/;
-function getParameterFromPropertyName(
-	propertyName: string,
-): number | undefined {
-	const match = parameterRegex.exec(propertyName);
-	if (match) return parseInt(match[1]);
 }
 
 // A configuration value is either a single number or a bit map
@@ -142,15 +126,19 @@ export class ConfigurationCCAPI extends CCAPI {
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
-		{ propertyName },
+		{ property, propertyKey },
 		value,
 	): Promise<void> => {
-		const param = getParameterFromPropertyName(propertyName);
-		if (!param) {
-			throwUnsupportedProperty(this.ccId, propertyName);
+		// Config parameters are addressed with numeric properties/keys
+		if (typeof property !== "number") {
+			throwUnsupportedProperty(this.ccId, property);
 		}
+		if (propertyKey != undefined && typeof propertyKey !== "number") {
+			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+		}
+
 		const ccInstance = this.endpoint.createCCInstance(ConfigurationCC)!;
-		const valueSize = ccInstance.getParamInformation(param).valueSize;
+		const valueSize = ccInstance.getParamInformation(property).valueSize;
 
 		// if (typeof value !== "number") {
 		// 	throwWrongValueType(
@@ -160,10 +148,10 @@ export class ConfigurationCCAPI extends CCAPI {
 		// 		typeof value,
 		// 	);
 		// }
-		await this.set(param, value as any, (valueSize || 1) as any);
+		await this.set(property, value as any, (valueSize || 1) as any);
 
 		// Refresh the current value and ignore potential timeouts
-		void this.get(param).catch(() => {});
+		void this.get(property).catch(() => {});
 	};
 
 	/**
@@ -414,16 +402,48 @@ export class ConfigurationCCAPI extends CCAPI {
 export class ConfigurationCC extends CommandClass {
 	declare ccCommand: ConfigurationCommand;
 
+	public constructor(driver: IDriver, options: CommandClassOptions) {
+		super(driver, options);
+		this.registerValue("isParamInformationFromConfig" as any, true);
+	}
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		if (this.version < 3) {
+
+		const config = node.deviceConfig?.paramInformation;
+		if (config) {
 			log.controller.logNode(node.id, {
-				message: `${this.constructor.name}: skipping interview because CC version is less than 3`,
+				message: `${this.constructor.name}: Loading configuration parameters from device config`,
 				direction: "none",
 			});
-		} else {
-			const api = this.getEndpoint()!.commandClasses.Configuration;
+			this.deserializeParamInformationFromConfig(config);
+		}
 
+		const api = this.getEndpoint()!.commandClasses.Configuration;
+
+		if (this.version < 3) {
+			const paramInfo = node.deviceConfig?.paramInformation;
+			if (paramInfo?.size) {
+				// Query all values
+				for (const param of paramInfo.keys()) {
+					// No need to query writeonly params
+					if (paramInfo.get(param)!.writeOnly) continue;
+
+					// Query the current value
+					log.controller.logNode(node.id, {
+						message: `querying parameter #${param} value...`,
+						direction: "outbound",
+					});
+					await api.get(param);
+				}
+			} else {
+				log.controller.logNode(node.id, {
+					message: `${this.constructor.name}: skipping interview because CC version is < 3 and there is no config file`,
+					direction: "none",
+				});
+			}
+		} else {
+			// Version >= 3
 			log.controller.logNode(node.id, {
 				message: `${this.constructor.name}: doing a ${
 					complete ? "complete" : "partial"
@@ -431,7 +451,6 @@ export class ConfigurationCC extends CommandClass {
 				direction: "none",
 			});
 
-			// Always keep the node's time in sync
 			log.controller.logNode(node.id, {
 				message: "finding first configuration parameter...",
 				direction: "outbound",
@@ -443,9 +462,12 @@ export class ConfigurationCC extends CommandClass {
 					message: `querying parameter #${param} information...`,
 					direction: "outbound",
 				});
+				// Query name and info
 				const name = await api.getName(param);
 				// This is probably long, should we log it?
 				await api.getInfo(param);
+
+				// Query properties and the next param
 				const {
 					nextParameter,
 					...properties
@@ -472,6 +494,13 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 					direction: "inbound",
 				});
 
+				// Query the current value
+				log.controller.logNode(node.id, {
+					message: `querying parameter #${param} value...`,
+					direction: "outbound",
+				});
+				await api.get(param);
+
 				param = nextParameter;
 			}
 		}
@@ -488,7 +517,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		return (
 			this.getValueDB().getValue({
 				commandClass: getCommandClass(this),
-				propertyName: "isParamInformationFromConfig",
+				property: "isParamInformationFromConfig",
 			}) === true
 		);
 	}
@@ -500,14 +529,16 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	public extendParamInformation(
 		parameter: number,
 		info: Partial<ConfigurationMetadata>,
+		valueBitMask?: number,
 	): void {
-		// Don't trust reported param information if we have loaded it from a config file
+		// Don't trust param information that a node reports if we have already loaded it from a config file
 		if (this.isParamInformationFromConfig) return;
 
 		const valueDB = this.getValueDB();
-		const paramInformationValueID = {
+		const paramInformationValueID: ValueID = {
 			commandClass: getCommandClass(this),
-			propertyName: getPropertyNameForParameter(parameter),
+			property: parameter,
+			propertyKey: valueBitMask,
 		};
 		// Retrieve the base metadata
 		const metadata = this.getParamInformation(parameter);
@@ -523,12 +554,12 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 */
 	public getParamInformation(parameter: number): ConfigurationMetadata {
 		const valueDB = this.getValueDB();
-		const paramInformationValueID = {
+		const paramInformationValueID: ValueID = {
 			commandClass: getCommandClass(this),
-			propertyName: getPropertyNameForParameter(parameter),
+			property: parameter,
 		};
 		return (
-			valueDB.getMetadata(paramInformationValueID) || {
+			valueDB.getMetadata(paramInformationValueID) ?? {
 				...ValueMetadata.Any,
 			}
 		);
@@ -538,7 +569,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		// Leave out the paramInformation if we have loaded it from a config file
 		let values = super.serializeValuesForCache();
 		values = values.filter(
-			v => v.propertyName !== "isParamInformationFromConfig",
+			v => v.property !== "isParamInformationFromConfig",
 		);
 		return values;
 	}
@@ -547,29 +578,69 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		// Leave out the param metadata if we have loaded it from a config file
 		let metadata = super.serializeMetadataForCache();
 		if (this.isParamInformationFromConfig) {
-			metadata = metadata.filter(m => !/param\d+/.test(m.propertyName));
+			metadata = metadata.filter(m => typeof m.property === "number");
 		}
 		return metadata;
 	}
 
 	/** Deserializes the config parameter info from a config file */
-	public deserializeParamInformationFromConfig(config: JSONObject): void {
-		if (!isObject(config.paramInformation)) return;
-
-		for (const [id, paramInfo] of entries(config.paramInformation)) {
-			// TODO: validation
-			// TODO: Infer minValue / maxValue from options if any are present
-			this.extendParamInformation(parseInt(id), paramInfo);
+	public deserializeParamInformationFromConfig(
+		config: ReadonlyMap<number, ParamInformation>,
+	): void {
+		// TODO: Clear existing param info
+		for (const [id, paramInfo] of config.entries()) {
+			// We need to make the config information compatible with the
+			// format that ConfigurationCC reports
+			this.extendParamInformation(id, {
+				// TODO: Make this smarter!
+				type: "number",
+				min: paramInfo.minValue,
+				max: paramInfo.maxValue,
+				default: paramInfo.defaultValue,
+				readable: !paramInfo.writeOnly,
+				writeable: !paramInfo.readOnly,
+				allowManualEntry: paramInfo.allowManualEntry,
+				states:
+					!paramInfo.allowManualEntry && paramInfo.options.length > 0
+						? composeObject(
+								paramInfo.options.map(({ label, value }) => [
+									value.toString(),
+									label,
+								]),
+						  )
+						: undefined,
+				label: paramInfo.label,
+				description: paramInfo.description,
+				isFromConfig: true,
+			});
 		}
 
 		// Remember that we loaded the param information from a config file
 		this.getValueDB().setValue(
 			{
 				commandClass: getCommandClass(this),
-				propertyName: "isParamInformationFromConfig",
+				property: "isParamInformationFromConfig",
 			},
 			true,
 		);
+	}
+
+	// public static translatePropertyKey(
+	// property: string | number,
+	// propertyKey: string | number,
+	// ): string {
+	// 	if (property === "values" && typeof propertyKey === "number") {
+	// 		const type = lookupSensorType(propertyKey);
+	// 		if (type) return type.label;
+	// 	}
+	// 	return super.translatePropertyKey(property, propertyKey);
+	// }
+
+	public static translateProperty(property: string | number): string {
+		if (typeof property === "number") {
+			return `param${padStart(property.toString(), 3, "0")}`;
+		}
+		return super.translateProperty(property);
 	}
 }
 
@@ -623,11 +694,10 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			);
 		}
 		// And store the value itself
-		const propertyName = getPropertyNameForParameter(this._parameter);
 		this.getValueDB().setValue(
 			{
 				commandClass: this.ccId,
-				propertyName,
+				property: this._parameter,
 			},
 			this._value,
 		);
@@ -895,11 +965,10 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 		}
 		// Store every received parameter
 		for (const [parameter, value] of this._values.entries()) {
-			const propertyName = getPropertyNameForParameter(parameter);
 			this.getValueDB().setValue(
 				{
 					commandClass: this.ccId,
-					propertyName,
+					property: parameter,
 				},
 				value,
 			);

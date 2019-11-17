@@ -1,0 +1,39 @@
+// Merten 507900
+// Wall Dimmer Module - Flush Mounted
+{
+    "_approved": true,
+    "manufacturer": "Merten",
+    "manufacturerId": "0x007a",
+    "label": "507900",
+    "description": "Wall Dimmer Module - Flush Mounted",
+    "devices": [
+        {
+            "productType": "0x4003",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Group 1",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "196": {
+            "label": "Dimmer speed",
+            "description": "Set dimming speed. fast=0 ... 240=slow.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 240,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

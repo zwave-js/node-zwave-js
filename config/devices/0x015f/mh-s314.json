@@ -1,0 +1,124 @@
+// McoHome Technology Co., Ltd MH-S314
+// Four Way Switch
+{
+    "_approved": true,
+    "manufacturer": "McoHome Technology Co., Ltd",
+    "manufacturerId": "0x015f",
+    "label": "MH-S314",
+    "description": "Four Way Switch",
+    "devices": [
+        {
+            "productType": "0x3102",
+            "productId": "0x0204"
+        },
+        {
+            "productType": "0x3141",
+            "productId": "0x1302"
+        },
+        {
+            "productType": "0x3141",
+            "productId": "0x5102"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "All Status Reports",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Switch Button Group 1",
+            "maxNodes": 5
+        },
+        "5": {
+            "label": "Switch Button Group 2",
+            "maxNodes": 5
+        },
+        "8": {
+            "label": "Switch Button Group 3",
+            "maxNodes": 5
+        },
+        "11": {
+            "label": "Switch Button Group 4",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Switch state saved or not when power failure",
+            "description": "Switch state saved or not when power failure",
+            "unit": "1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "3": {
+            "label": "ALL ON/ALL OFF",
+            "description": "ALL ON/ALL OFF",
+            "unit": "1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "4": {
+            "label": "LED Backlit brightness level",
+            "description": "0 LED disabled 1-10 Min level-Max level >10 same level as 10",
+            "unit": "1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 10,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "5": {
+            "label": "Key Mode",
+            "description": "Key Mode (0-4)",
+            "unit": "1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "6": {
+            "label": "Key On duration",
+            "description": "0 infinite 1~65535 unit \"sec\" 0x00",
+            "unit": "1",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "255": {
+            "label": "Factory setting",
+            "description": "85 restore factory setting",
+            "unit": "1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true
+        }
+    }
+}

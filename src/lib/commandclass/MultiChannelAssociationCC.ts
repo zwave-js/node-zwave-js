@@ -24,7 +24,7 @@ import { CommandClasses } from "./CommandClasses";
 export function getMaxNodesValueId(groupId: number): ValueID {
 	return {
 		commandClass: CommandClasses["Multi Channel Association"],
-		propertyName: "maxNodes",
+		property: "maxNodes",
 		propertyKey: groupId,
 	};
 }
@@ -33,7 +33,7 @@ export function getMaxNodesValueId(groupId: number): ValueID {
 export function getNodeIdsValueId(groupId: number): ValueID {
 	return {
 		commandClass: CommandClasses["Multi Channel Association"],
-		propertyName: "nodeIds",
+		property: "nodeIds",
 		propertyKey: groupId,
 	};
 }
@@ -42,7 +42,7 @@ export function getNodeIdsValueId(groupId: number): ValueID {
 export function getEndpointsValueId(groupId: number): ValueID {
 	return {
 		commandClass: CommandClasses["Multi Channel Association"],
-		propertyName: "endpoints",
+		property: "endpoints",
 		propertyKey: groupId,
 	};
 }
@@ -51,7 +51,7 @@ export function getEndpointsValueId(groupId: number): ValueID {
 export function getGroupCountValueId(): ValueID {
 	return {
 		commandClass: CommandClasses["Multi Channel Association"],
-		propertyName: "groupCount",
+		property: "groupCount",
 	};
 }
 

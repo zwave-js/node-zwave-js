@@ -1,0 +1,418 @@
+// Zipato MH-P220
+// MINI ENERGY DIMMER
+{
+	"_approved": true,
+	"manufacturer": "Zipato",
+	"manufacturerId": "0x0131",
+	"label": "MH-P220",
+	"description": "MINI ENERGY DIMMER",
+	"devices": [
+		{
+			"productType": "0x220a",
+			"productId": "0x1352"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"0": {
+			"label": "Switch All Mode",
+			"description": "Set the mode for the switch when receiving SWITCH ALL commands.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Exclude from All On and All Off groups",
+					"value": 0
+				},
+				{
+					"label": "Include in All On group",
+					"value": 1
+				},
+				{
+					"label": "Include in All Off group",
+					"value": 2
+				},
+				{
+					"label": "Include in All On and All Off groups",
+					"value": 255
+				}
+			]
+		},
+		"1": {
+			"label": "Dimmer state after power down",
+			"description": "Dimmer state saved or not when power is down",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "not saved",
+					"value": 0
+				},
+				{
+					"label": "saved",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "External type switch",
+			"description": "Momentary buttons/2-state Switches/S1 dim up, S2 dim down",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Button",
+					"value": 0
+				},
+				{
+					"label": "Toggle",
+					"value": 1
+				},
+				{
+					"label": "S1 dim up, S2 dim down",
+					"value": 2
+				}
+			]
+		},
+		"3": {
+			"label": "2-state switches",
+			"description": "toggle Dimmer without or with specified on/off position",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "without specified on/off position",
+					"value": 0
+				},
+				{
+					"label": "with specified on/off position",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "ALL ON / ALL OFF",
+			"description": "forbid/allow  ALL ON/ALL OFF",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "forbid ALL ON, forbid ALL OFF",
+					"value": 0
+				},
+				{
+					"label": "forbid ALL ON, allow ALL OFF",
+					"value": 0
+				},
+				{
+					"label": "allow ALL ON, forbid ALL OFF",
+					"value": 2
+				},
+				{
+					"label": "allow ALL ON, allow ALL OFF",
+					"value": 255
+				}
+			]
+		},
+		"5": {
+			"label": "Minimum brightness level",
+			"description": "percentage brightness level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 98,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Maximum brightness level",
+			"description": "2~99 percentage brightness level",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 99,
+			"defaultValue": 63,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Single dimming step time(Manual)",
+			"description": "Max 2.55s, in 10ms steps",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 26,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Single dimming step size (Manual)",
+			"description": "1~99 percentage value (modification isn’t recommended)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Single dimming step time (Auto)",
+			"description": "Max 2.55s, in 10ms steps",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 26,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Single dimming step size (Auto)",
+			"description": "1~99 percentage value (modification isn’t recommended)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Timer function (Auto-off)",
+			"description": "0x00 function disabled 0x0001~0x00FF 1s~255s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "One click of S1",
+			"description": "1~99 percentage value switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Double click of S1",
+			"description": "max brightness level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "function disabled",
+					"value": 0
+				},
+				{
+					"label": "reach max brightness level",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "Operation report Switch1 to Assoc Group 2 & 3",
+			"description": "Dimming level report only valid when holding external button",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "report all",
+					"value": 0
+				},
+				{
+					"label": "only report Basic Set ON",
+					"value": 1
+				},
+				{
+					"label": "only report Basic Set OFF",
+					"value": 2
+				}
+			]
+		},
+		"16": {
+			"label": "Operation report Switch1 to Association Group 2",
+			"description": "Operation report from Switch1 to Association Group 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				}
+			]
+		},
+		"17": {
+			"label": "Switch 2 function",
+			"description": "Enable S2 switch, enable Scene Activation and send Basic Set",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable S2 switch",
+					"value": 0
+				},
+				{
+					"label": "enable Scene Activation, and send Basic Set ON/OFF",
+					"value": 1
+				},
+				{
+					"label": "Scene Activation only",
+					"value": 2
+				},
+				{
+					"label": "send Basic ON/ OFF only",
+					"value": 3
+				},
+				{
+					"label": "disable S2 Function",
+					"value": 255
+				}
+			]
+		},
+		"18": {
+			"label": "Operation report Switch2 to Association Group 4",
+			"description": "Operation report from Switch2 to Association Group 4",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "send Basic ON or Basic OFF",
+					"value": 0
+				},
+				{
+					"label": "only send Basic ON",
+					"value": 1
+				},
+				{
+					"label": "only send Basic OFF",
+					"value": 2
+				},
+				{
+					"label": "no report to AG 4",
+					"value": 255
+				}
+			]
+		},
+		"19": {
+			"label": "Scene ID sent to AG1 when one click of S2",
+			"description": "0 Scene Activation disabled 1~255 send Activation CC to AG1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "Scene ID sent to AG1 when double click of S2",
+			"description": "0 Scene Activation disabled 1~255 send Activation CC",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "Scene ID sent to AG1 when hold S2",
+			"description": "0 Scene Activation disabled 1~255 send Activation CC",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"255": {
+			"label": "Factory setting",
+			"description": "0x55 restore factory setting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 85,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Default",
+					"value": 0
+				},
+				{
+					"label": "restore factory setting",
+					"value": 85
+				}
+			]
+		}
+	}
+}

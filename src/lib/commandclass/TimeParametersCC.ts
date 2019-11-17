@@ -106,14 +106,14 @@ export class TimeParametersCCAPI extends CCAPI {
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
-		{ propertyName },
+		{ property },
 		value,
 	): Promise<void> => {
-		if (propertyName !== "dateAndTime") {
-			throwUnsupportedProperty(this.ccId, propertyName);
+		if (property !== "dateAndTime") {
+			throwUnsupportedProperty(this.ccId, property);
 		}
 		if (!(value instanceof Date)) {
-			throwWrongValueType(this.ccId, propertyName, "date", typeof value);
+			throwWrongValueType(this.ccId, property, "date", typeof value);
 		}
 		await this.set(value);
 

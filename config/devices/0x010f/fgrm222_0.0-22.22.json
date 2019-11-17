@@ -1,0 +1,447 @@
+// Fibargroup FGRM222
+// Roller Shutter
+{
+    "_approved": true,
+    "manufacturer": "Fibargroup",
+    "manufacturerId": "0x010f",
+    "label": "FGRM222",
+    "description": "Roller Shutter",
+    "devices": [
+        {
+            "productType": "0x0301",
+            "productId": "0x1001"
+        },
+        {
+            "productType": "0x0301",
+            "productId": "0x3001"
+        },
+        {
+            "productType": "0x0302",
+            "productId": "0x1000"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "22.22"
+    },
+    "associations": {
+        "1": {
+            "label": "Momentary click",
+            "maxNodes": 16
+        },
+        "2": {
+            "label": "Momentary hold",
+            "description": "Only applies to momentary switches",
+            "maxNodes": 16
+        },
+        "3": {
+            "label": "Controller Updates",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Local protection",
+            "description": "Enables/disables local protection",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No protection.",
+                    "value": 0
+                },
+                {
+                    "label": "Local protection active",
+                    "value": 2
+                }
+            ]
+        },
+        "2": {
+            "label": "Radio protection",
+            "description": "Enables/disables RF protection",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No protection.",
+                    "value": 0
+                },
+                {
+                    "label": "RF Protection active.",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Reports type",
+            "description": "Enable Venetian Blind mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Blind position reports sent using Z-Wave Commands",
+                    "value": 0
+                },
+                {
+                    "label": "Blind position reports sent using Fibaro Commands.",
+                    "value": 1
+                }
+            ]
+        },
+        "10": {
+            "label": "Roller Shutter operating modes",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Roller Blind Mode, without positioning",
+                    "value": 0
+                },
+                {
+                    "label": "Roller Blind Mode, with positioning",
+                    "value": 1
+                },
+                {
+                    "label": "Venetian Blind Mode, with positioning",
+                    "value": 2
+                },
+                {
+                    "label": "Gate Mode, without positioning",
+                    "value": 3
+                },
+                {
+                    "label": "Gate Mode, with positioning",
+                    "value": 4
+                }
+            ]
+        },
+        "12": {
+            "label": "Turning time/delay time",
+            "description": "Time of full turn of the lamellas.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 150,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "13": {
+            "label": "Lamellas positioning mode",
+            "description": "Lamellas positioning in venetian blind mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Only in case of the main controller operation",
+                    "value": 0
+                },
+                {
+                    "label": "Controller, switch or limit switch operation",
+                    "value": 1
+                },
+                {
+                    "label": "Controller, switch, limit sw operation/STOP frame",
+                    "value": 2
+                }
+            ]
+        },
+        "14": {
+            "label": "Switch type",
+            "description": "Parameter settings for Roller and Venetian Blind Mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Momentary switches",
+                    "value": 0
+                },
+                {
+                    "label": "Toggle switches",
+                    "value": 1
+                },
+                {
+                    "label": "Single, momentary switch.",
+                    "value": 2
+                }
+            ]
+        },
+        "17": {
+            "label": "Delay time after S2",
+            "description": "Relays turn off time after reaching a limit switch.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "18": {
+            "label": "Motor operation detection",
+            "description": "Power threshold to be interpreted as reaching a limit switch.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "22": {
+            "label": "Motor operation time",
+            "description": "Time period for the motor to continue operation.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "29": {
+            "label": "Forced Roller Shutter calibration",
+            "description": "Roller Shutter enters the calibration mode.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Deactivated",
+                    "value": 0
+                },
+                {
+                    "label": "Start calibration process",
+                    "value": 1
+                }
+            ]
+        },
+        "30": {
+            "label": "Response to General Alarm",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No response to alarm frames",
+                    "value": 0
+                },
+                {
+                    "label": "Open Blind",
+                    "value": 1
+                },
+                {
+                    "label": "Close Blind",
+                    "value": 2
+                }
+            ]
+        },
+        "31": {
+            "label": "Response to Water Flood Alarm",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No response to alarm frames",
+                    "value": 0
+                },
+                {
+                    "label": "Open Blind",
+                    "value": 1
+                },
+                {
+                    "label": "Close Blind",
+                    "value": 2
+                }
+            ]
+        },
+        "32": {
+            "label": "Response to Smoke, CO, CO2 Alarm",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No response to alarm frames",
+                    "value": 0
+                },
+                {
+                    "label": "Open Blind",
+                    "value": 1
+                },
+                {
+                    "label": "Close Blind",
+                    "value": 2
+                }
+            ]
+        },
+        "33": {
+            "label": "Response to Temperature Alarm",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No response to alarm frames",
+                    "value": 0
+                },
+                {
+                    "label": "Open Blind",
+                    "value": 1
+                },
+                {
+                    "label": "Close Blind",
+                    "value": 2
+                }
+            ]
+        },
+        "35": {
+            "label": "Managing lamellas in response to alarm",
+            "description": "Lamellas reaction upon alarm detection.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Do not change lamellas position",
+                    "value": 0
+                },
+                {
+                    "label": "Set lamellas to their extreme position",
+                    "value": 1
+                }
+            ]
+        },
+        "40": {
+            "label": "Power reports",
+            "description": "Power level change resulting in new power value report",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "42": {
+            "label": "Periodic power or energy reports",
+            "description": "Time to the next report. Value of 0 means the reports are turned off.",
+            "valueSize": 2,
+            "minValue": -32767,
+            "maxValue": 32767,
+            "defaultValue": 3600,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "43": {
+            "label": "Energy reports",
+            "description": "Energy level change resulting in new energy value report",
+            "valueSize": 1,
+            "minValue": -126,
+            "maxValue": 127,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "44": {
+            "label": "Self-measurement",
+            "description": "Enables/disables power and energy report used by itself",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Activated",
+                    "value": 1
+                }
+            ]
+        },
+        "50": {
+            "label": "Scenes/Associations activation",
+            "description": "Determine whether scenes or associations are activated",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Associations Active",
+                    "value": 0
+                },
+                {
+                    "label": "Scenes Active",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

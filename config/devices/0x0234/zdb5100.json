@@ -1,0 +1,805 @@
+// Logic Group ZDB5100
+// MATRIX Switch with Dimmer and Backlight
+{
+	"_approved": true,
+	"manufacturer": "Logic Group",
+	"manufacturerId": "0x0234",
+	"label": "ZDB5100",
+	"description": "MATRIX Switch with Dimmer and Backlight",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0121"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Operating pushbutton(s) for dimmer",
+			"description": "This parameter specifies which pushbutton(s) that controls the built-in dimmer.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Duration of dimming",
+			"description": "Specifies the duration of a full regulation of the light from 0% to 100%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Duration of on/off.",
+			"description": "This parameter specifies the duration when turning the light on or off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Dimmer mode.",
+			"description": "The dimmer can work in different modes.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No dimming, only on/off (0%/100%).",
+					"value": 0
+				},
+				{
+					"label": "Trailing edge dimming. (Default)",
+					"value": 1
+				},
+				{
+					"label": "Leading edge dimming.",
+					"value": 2
+				}
+			]
+		},
+		"5": {
+			"label": "Dimmer minimum level.",
+			"description": "This parameter specifies the actual level of the dimmer output when set to 0%.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Dimmer maximum level.",
+			"description": "This parameter specifies the actual level of the dimmer output when set to 99%",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Central Scene notifications",
+			"description": "This parameter can be used for disabling Central Scene notifications.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Notifications are disabled.",
+					"value": 0
+				},
+				{
+					"label": "Notifications are enabled. (Default)",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Double-activation functionality",
+			"description": "Specifies the reaction when double-activating the pushbuttons",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Double-activation disabled.",
+					"value": 0
+				},
+				{
+					"label": "Double-activation sets light to 100%. (Default)",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "Enhanced LED control",
+			"description": "Enabling the enhanced LED control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enhanced LED control is disabled. (Default)",
+					"value": 0
+				},
+				{
+					"label": "Enhanced LED control is enabled.",
+					"value": 1
+				}
+			]
+		},
+		"11": {
+			"label": "Pushbutton debounce timer",
+			"description": "Pushbutton input debounce time in 0.01 seconds resolution.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Pushbutton press threshold time",
+			"description": "Time that a button must be activated before it is detected as pressed",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Pushbutton held threshold time.",
+			"description": "Time that a button must be activated before it is accepted as “held-down\".",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "Pushbutton 1 LED indication",
+			"description": "This parameter specifies how the LED indication is controlled.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 7,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Internal LED control is disabled, only external.",
+					"value": 0
+				},
+				{
+					"label": "LED follows the switch status.",
+					"value": 1
+				},
+				{
+					"label": "LED follows the switch inverse status",
+					"value": 2
+				},
+				{
+					"label": "Same as 1",
+					"value": 3
+				},
+				{
+					"label": "Same as 2",
+					"value": 4
+				},
+				{
+					"label": "Follow internal dimmer",
+					"value": 5
+				},
+				{
+					"label": "Follow internal dimmer inverse",
+					"value": 6
+				},
+				{
+					"label": "On for 5 sec",
+					"value": 7
+				}
+			]
+		},
+		"21": {
+			"label": "Colour commands for pushbutton 1 LED indication",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Direct control",
+					"value": 0
+				},
+				{
+					"label": "Color for OFF state",
+					"value": 1
+				},
+				{
+					"label": "Color for ON state",
+					"value": 2
+				}
+			]
+		},
+		"22": {
+			"label": "ON indication RGB-saturation for pushbutton 1",
+			"description": "ON indication RGB-saturation for pushbutton 1",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 32512,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23": {
+			"label": "OFF indication RGB-saturation for pushbutton 1",
+			"description": "OFF indication RGB-saturation for pushbutton 1",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24": {
+			"label": "Pushbutton 2 functionality",
+			"description": "Pushbutton 2 functionality",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Standard toggle-function",
+					"value": 0
+				},
+				{
+					"label": "Automatic turn off after the time has expired",
+					"value": 1
+				},
+				{
+					"label": "Automatic turn on after the time has expired",
+					"value": 2
+				},
+				{
+					"label": "Always turn off or dim down",
+					"value": 3
+				},
+				{
+					"label": "Always turn on or dim up",
+					"value": 4
+				}
+			]
+		},
+		"25": {
+			"label": "Timer value for pushbutton 2",
+			"description": "Timer value for pushbutton 2",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 43200,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"26": {
+			"label": "Multi-Level Switch Set values for pushbutton 2.",
+			"description": "Multi-Level Switch Set values for pushbutton 2.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"27": {
+			"label": "Binary Switch Set support for pushbutton 2",
+			"description": "Binary Switch Set support for pushbutton 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "control pushbutton indicator LEDs",
+					"value": 0
+				},
+				{
+					"label": "Controls LED's and state",
+					"value": 1
+				},
+				{
+					"label": "As  activated the pushbutton",
+					"value": 2
+				}
+			]
+		},
+		"28": {
+			"label": "Pushbutton 2 LED indication.",
+			"description": "Pushbutton 2 LED indication.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 7,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED control is disabled",
+					"value": 0
+				},
+				{
+					"label": "The LED indication follows the switch status.",
+					"value": 1
+				},
+				{
+					"label": "follows the switch status , inverse",
+					"value": 2
+				},
+				{
+					"label": "Same as 1",
+					"value": 3
+				},
+				{
+					"label": "Same as 2",
+					"value": 4
+				},
+				{
+					"label": "Follow internal dimmer",
+					"value": 5
+				},
+				{
+					"label": "Follow internal dimmer inverse",
+					"value": 6
+				},
+				{
+					"label": "ON for 5 seconds when the pushbutton is activated",
+					"value": 7
+				}
+			]
+		},
+		"29": {
+			"label": "Colour commands for pushbutton 2 LED indication.",
+			"description": "Colour commands for pushbutton 2 LED indication.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Direct control",
+					"value": 0
+				},
+				{
+					"label": "Colour for OFF indication",
+					"value": 1
+				},
+				{
+					"label": "Colour for ON indication",
+					"value": 2
+				}
+			]
+		},
+		"30": {
+			"label": "ON indication RGB-saturation for pushbutton 2",
+			"description": "ON indication RGB-saturation for pushbutton 2",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 32512,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31": {
+			"label": "OFF indication RGB-saturation for pushbutton 2.",
+			"description": "OFF indication RGB-saturation for pushbutton 2.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 791621376,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"32": {
+			"label": "Pushbutton 3 functionality",
+			"description": "Pushbutton 3 functionality",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Standard toggle-function",
+					"value": 0
+				},
+				{
+					"label": "Automatic turn off after the time has expired",
+					"value": 1
+				},
+				{
+					"label": "Automatic turn on after the time has expired",
+					"value": 2
+				},
+				{
+					"label": "Always turn off or dim down",
+					"value": 3
+				},
+				{
+					"label": "Always turn on or dim up",
+					"value": 4
+				}
+			]
+		},
+		"33": {
+			"label": "Timer value for pushbutton 3",
+			"description": "Timer value for pushbutton 3",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 43200,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"34": {
+			"label": "Multi-Level Switch Set values for pushbutton 3",
+			"description": "Multi-Level Switch Set values for pushbutton 3",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 33488896,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"35": {
+			"label": "Binary Switch Set support for pushbutton 3",
+			"description": "Binary Switch Set support for pushbutton 3",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "controls the pushbutton indicator LED",
+					"value": 0
+				},
+				{
+					"label": "controls the internal switch status",
+					"value": 1
+				},
+				{
+					"label": "As if user had activated the pushbutton",
+					"value": 2
+				}
+			]
+		},
+		"36": {
+			"label": "Pushbutton 3 LED indication",
+			"description": "Pushbutton 3 LED indication",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 7,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Internal LED control is disabled",
+					"value": 0
+				},
+				{
+					"label": "follows the switch status",
+					"value": 1
+				},
+				{
+					"label": "follows the switch status , inverse",
+					"value": 2
+				},
+				{
+					"label": "Same as 1",
+					"value": 3
+				},
+				{
+					"label": "Same as 2",
+					"value": 4
+				},
+				{
+					"label": "Follow internal dimmer",
+					"value": 5
+				},
+				{
+					"label": "Follow internal dimmer inverse",
+					"value": 6
+				},
+				{
+					"label": "ON for 5 seconds when the pushbutton is activated",
+					"value": 7
+				}
+			]
+		},
+		"37": {
+			"label": "Colour commands for pushbutton 3 LED indication.",
+			"description": "Colour commands for pushbutton 3 LED indication.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Direct control",
+					"value": 0
+				},
+				{
+					"label": "Color for OFF state",
+					"value": 1
+				},
+				{
+					"label": "Color for ON state",
+					"value": 2
+				}
+			]
+		},
+		"38": {
+			"label": "ON indication RGB-saturation for pushbutton 3",
+			"description": "ON indication RGB-saturation for pushbutton 3",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 32512,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"39": {
+			"label": "OFF indication RGB-saturation for pushbutton 3",
+			"description": "OFF indication RGB-saturation for pushbutton 3",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 791621376,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40": {
+			"label": "Pushbutton 4 functionality.",
+			"description": "Pushbutton 4 functionality.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Toggle-function",
+					"value": 0
+				},
+				{
+					"label": "Automatic turn off after the time has expired",
+					"value": 1
+				},
+				{
+					"label": "Automatic turn on after the time has expired",
+					"value": 2
+				},
+				{
+					"label": "Always turn off or dim down",
+					"value": 3
+				},
+				{
+					"label": "Always turn on or dim up",
+					"value": 4
+				}
+			]
+		},
+		"41": {
+			"label": "Timer value for pushbutton 4",
+			"description": "Timer value for pushbutton 4",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 43200,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"42": {
+			"label": "Multi-Level Switch Set values for pushbutton 4.",
+			"description": "Multi-Level Switch Set values for pushbutton 4.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 33488896,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"43": {
+			"label": "Binary Switch Set support for pushbutton 4.",
+			"description": "Binary Switch Set support for pushbutton 4.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Pushbutton LED indication",
+					"value": 0
+				},
+				{
+					"label": "controls the internal switch status",
+					"value": 1
+				},
+				{
+					"label": "As  activated the pushbutton",
+					"value": 2
+				}
+			]
+		},
+		"44": {
+			"label": "Pushbutton 4 LED indication",
+			"description": "Pushbutton 4 LED indication",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 7,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED control is disabled",
+					"value": 0
+				},
+				{
+					"label": "follows the switch status",
+					"value": 1
+				},
+				{
+					"label": "follows the switch status , inverse",
+					"value": 2
+				},
+				{
+					"label": "Same as 1",
+					"value": 3
+				},
+				{
+					"label": "Same as 2",
+					"value": 4
+				},
+				{
+					"label": "Follow internal dimmer",
+					"value": 5
+				},
+				{
+					"label": "Follow internal dimmer inverse",
+					"value": 6
+				},
+				{
+					"label": "ON for 5 seconds when the pushbutton is activated",
+					"value": 7
+				}
+			]
+		},
+		"45": {
+			"label": "Colour commands for pushbutton 4 LED indication",
+			"description": "Colour commands for pushbutton 4 LED indication",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Direct control",
+					"value": 0
+				},
+				{
+					"label": "Color for OFF state",
+					"value": 1
+				},
+				{
+					"label": "Color for ON state",
+					"value": 2
+				}
+			]
+		},
+		"46": {
+			"label": "ON indication RGB-saturation for pushbutton 4.",
+			"description": "ON indication RGB-saturation for pushbutton 4.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 32512,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"47": {
+			"label": "OFF indication RGB-saturation for pushbutton 4.",
+			"description": "OFF indication RGB-saturation for pushbutton 4.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 791621376,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

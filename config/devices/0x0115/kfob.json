@@ -1,0 +1,369 @@
+// Z-Wave.Me KFOB
+// 4 button keyfob
+{
+    "_approved": true,
+    "manufacturer": "Z-Wave.Me",
+    "manufacturerId": "0x0115",
+    "label": "KFOB",
+    "description": "4 button keyfob",
+    "devices": [
+        {
+            "productType": "0x0100",
+            "productId": "0x0001"
+        },
+        {
+            "productType": "0x0100",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 10,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Group A",
+            "description": "Controlled by button 1 or single clicks of buttons 1 and 3",
+            "maxNodes": 10
+        },
+        "3": {
+            "label": "Group B",
+            "description": "Ccontrolled by button 2 or single clicks of buttons 2 and 4",
+            "maxNodes": 10
+        },
+        "4": {
+            "label": "Group C",
+            "description": "Controlled by button 3 or single clicks of buttons 1 and 3",
+            "maxNodes": 10
+        },
+        "5": {
+            "label": "Group D",
+            "description": "Controlled by button 4 or double clicks of buttons 2 and 4",
+            "maxNodes": 10
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Button 1 and 3 pair mode",
+            "description": "Button 1 and 3 pair mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Separately",
+                    "value": 0
+                },
+                {
+                    "label": "In pair without double clicks",
+                    "value": 1
+                },
+                {
+                    "label": "In pair with double clicks",
+                    "value": 2
+                }
+            ]
+        },
+        "2": {
+            "label": "Button 2 and 4 pair mode",
+            "description": "Button 2 and 4 pair mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Separately",
+                    "value": 0
+                },
+                {
+                    "label": "In pair without double clicks",
+                    "value": 1
+                },
+                {
+                    "label": "In pair with double clicks",
+                    "value": 2
+                }
+            ]
+        },
+        "11": {
+            "label": "Action on group A",
+            "description": "Action on group A",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim",
+                    "value": 1
+                },
+                {
+                    "label": "Switch On/Off only (send Basic Set)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch all",
+                    "value": 3
+                },
+                {
+                    "label": "Send Scenes",
+                    "value": 4
+                },
+                {
+                    "label": "Send Preconfigured Scenes",
+                    "value": 5
+                },
+                {
+                    "label": "Control devices in proximity",
+                    "value": 6
+                }
+            ]
+        },
+        "12": {
+            "label": "Action on group B",
+            "description": "Action on group B",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim",
+                    "value": 1
+                },
+                {
+                    "label": "Switch On/Off only (send Basic Set)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch all",
+                    "value": 3
+                },
+                {
+                    "label": "Send Scenes",
+                    "value": 4
+                },
+                {
+                    "label": "Send Preconfigured Scenes",
+                    "value": 5
+                },
+                {
+                    "label": "Control devices in proximity",
+                    "value": 6
+                }
+            ]
+        },
+        "13": {
+            "label": "Action on group C",
+            "description": "Action on group C",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim",
+                    "value": 1
+                },
+                {
+                    "label": "Switch On/Off only (send Basic Set)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch all",
+                    "value": 3
+                },
+                {
+                    "label": "Send Scenes",
+                    "value": 4
+                },
+                {
+                    "label": "Send Preconfigured Scenes",
+                    "value": 5
+                },
+                {
+                    "label": "Control devices in proximity",
+                    "value": 6
+                }
+            ]
+        },
+        "14": {
+            "label": "Action on group D",
+            "description": "Action on group D",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim",
+                    "value": 1
+                },
+                {
+                    "label": "Switch On/Off only (send Basic Set)",
+                    "value": 2
+                },
+                {
+                    "label": "Switch all",
+                    "value": 3
+                },
+                {
+                    "label": "Send Scenes",
+                    "value": 4
+                },
+                {
+                    "label": "Send Preconfigured Scenes",
+                    "value": 5
+                },
+                {
+                    "label": "Control devices in proximity",
+                    "value": 6
+                }
+            ]
+        },
+        "20": {
+            "label": "Typical click timeout",
+            "description": "Typical time used to differenciate click, hold and double clicks in 10ms units",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "21": {
+            "label": "Send the following Switch All commands",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Switch all on and off",
+                    "value": -1
+                },
+                {
+                    "label": "NO (Normal Open)",
+                    "value": 1
+                },
+                {
+                    "label": "NC (Normal Close)",
+                    "value": 2
+                }
+            ]
+        },
+        "22": {
+            "label": "Invert buttons",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "24": {
+            "label": "LED confirmation mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No confirmations",
+                    "value": 0
+                },
+                {
+                    "label": "Confirm button press",
+                    "value": 1
+                },
+                {
+                    "label": "Confirm button press and delivery",
+                    "value": 2
+                }
+            ]
+        },
+        "30": {
+            "label": "Send unsolicited Battery Report on Wake Up",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "To same node as wake up notification",
+                    "value": 1
+                },
+                {
+                    "label": "Broadcast to neighbours",
+                    "value": 2
+                }
+            ]
+        }
+    }
+}

@@ -106,8 +106,6 @@ export class ZWaveController extends EventEmitter {
 		);
 	}
 
-	//#region --- Properties ---
-
 	private _libraryVersion: string | undefined;
 	public get libraryVersion(): string | undefined {
 		return this._libraryVersion;
@@ -211,8 +209,6 @@ export class ZWaveController extends EventEmitter {
 	public get nodes(): ReadonlyMap<number, ZWaveNode> {
 		return this._nodes;
 	}
-
-	//#endregion
 
 	/**
 	 * @internal

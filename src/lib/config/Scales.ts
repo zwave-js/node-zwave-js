@@ -7,11 +7,12 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
-import { configDir, hexKeyRegex, throwInvalidConfig } from "./utils";
+import { configDir, hexKeyRegexNDigits, throwInvalidConfig } from "./utils";
 
 const configPath = path.join(configDir, "scales.json");
 let namedScales: ReadonlyMap<string, ReadonlyMap<number, Scale>> | undefined;
 
+/** @internal */
 export async function loadNamedScalesInternal(): Promise<
 	Exclude<typeof namedScales, undefined>
 > {
@@ -42,7 +43,7 @@ export async function loadNamedScalesInternal(): Promise<
 			}
 			const named = new Map<number, Scale>();
 			for (const [key, scaleDefinition] of entries(scales)) {
-				if (!hexKeyRegex.test(key)) {
+				if (!hexKeyRegexNDigits.test(key)) {
 					throwInvalidConfig(
 						"named scales",
 						`found non-hex key "${key}" in the definition for "${name}"`,
@@ -94,7 +95,14 @@ export async function loadNamedScales(): Promise<void> {
 export function lookupNamedScaleGroup(
 	name: string,
 ): ReadonlyMap<number, Scale> | undefined {
-	return namedScales!.get(name);
+	if (!namedScales) {
+		throw new ZWaveError(
+			"The config has not been loaded yet!",
+			ZWaveErrorCodes.Driver_NotReady,
+		);
+	}
+
+	return namedScales.get(name);
 }
 
 export function getDefaultScale(scale: number): Scale {

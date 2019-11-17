@@ -1,0 +1,189 @@
+// Goap ZMNHAA
+// Flush 1 relay
+{
+    "_approved": true,
+    "manufacturer": "Goap",
+    "manufacturerId": "0x0159",
+    "label": "ZMNHAA",
+    "description": "Flush 1 relay",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "basic on/off",
+            "description": "triggered at change of the output Q state and reflecting its state",
+            "maxNodes": 16
+        },
+        "2": {
+            "label": "basic on/off -  input I2",
+            "description": "(triggered at change of the input I2 state and reflecting its state)",
+            "maxNodes": 16
+        },
+        "3": {
+            "label": "basic on/off -  input I3",
+            "description": "ttriggered at change of the input I3 state and reflecting its state)",
+            "maxNodes": 16
+        },
+        "4": {
+            "label": "Controller Updates",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Input 1 switch type",
+            "description": "Input 1 switch type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "mono-stable switch type (push button)",
+                    "value": 0
+                },
+                {
+                    "label": "bi-stable switch type",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Input 2 contact type",
+            "description": "Input 2 contact type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "NO (normaly open) input type",
+                    "value": 0
+                },
+                {
+                    "label": "NC (normaly close) input type",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Input 3 contact type",
+            "description": "Input 3 contact type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "NO (normaly open) input type",
+                    "value": 0
+                },
+                {
+                    "label": "NC (normaly close) input type",
+                    "value": 1
+                }
+            ]
+        },
+        "10": {
+            "label": "Activate / deactivate functions ALL ON/ALL OFF",
+            "description": "ctivate / deactivate functions ALL ON/ALL OFF",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "ALL ON is not active ALL OFF is not active",
+                    "value": 0
+                },
+                {
+                    "label": "ALL ON is not active ALL OFF active",
+                    "value": 1
+                },
+                {
+                    "label": "ALL ON active ALL OFF is not active",
+                    "value": 2
+                },
+                {
+                    "label": "ALL ON active, ALL OFF active",
+                    "value": 255
+                }
+            ]
+        },
+        "11": {
+            "label": "Automatic turning off relay after set time",
+            "description": "Automatic turning off relay after set time",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "30": {
+            "label": "Relay state after a power failure",
+            "description": "Relay state after a power failure",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Last saved state",
+                    "value": 0
+                },
+                {
+                    "label": "Power OFF",
+                    "value": 1
+                }
+            ]
+        },
+        "40": {
+            "label": "Power reporting in Watts on percentage change",
+            "description": "Power reporting in Watts on percentage change",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "42": {
+            "label": "Power reporting in Watts on power change",
+            "description": "Power reporting in Watts on power change",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 300,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

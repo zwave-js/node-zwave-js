@@ -54,19 +54,14 @@ export class WakeUpCCAPI extends CCAPI {
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
-		{ propertyName },
+		{ property },
 		value,
 	): Promise<void> => {
-		if (propertyName !== "wakeUpInterval") {
-			throwUnsupportedProperty(this.ccId, propertyName);
+		if (property !== "wakeUpInterval") {
+			throwUnsupportedProperty(this.ccId, property);
 		}
 		if (typeof value !== "number") {
-			throwWrongValueType(
-				this.ccId,
-				propertyName,
-				"number",
-				typeof value,
-			);
+			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 		await this.setInterval(value, this.driver.controller.ownNodeId ?? 1);
 		// Refresh the current value
@@ -382,7 +377,7 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 			{
 				commandClass: this.ccId,
 				endpoint: this.endpointIndex,
-				propertyName: "wakeUpInterval",
+				property: "wakeUpInterval",
 			},
 			{
 				...ValueMetadata.WriteOnlyUInt24,

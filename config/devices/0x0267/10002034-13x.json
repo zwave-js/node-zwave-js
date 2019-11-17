@@ -1,0 +1,151 @@
+// SimonTech S.L.U 10002034-13X
+// Switch IO: On/Off Power Switch
+{
+    "_approved": true,
+    "manufacturer": "SimonTech S.L.U",
+    "manufacturerId": "0x0267",
+    "label": "10002034-13X",
+    "description": "Switch IO: On/Off Power Switch",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0000"
+        },
+        {
+            "productType": "0x0001",
+            "productId": "0x00da"
+        },
+        {
+            "productType": "0x0001",
+            "productId": "0x0107"
+        },
+        {
+            "productType": "0x0001",
+            "productId": "0x0477"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "supportsZWavePlus": true,
+    "paramInformation": {
+        "1": {
+            "label": "Association LED",
+            "description": "Association LED",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Turns the main LED OFF",
+                    "value": 0
+                },
+                {
+                    "label": "Turns the main LED ON",
+                    "value": 255
+                }
+            ]
+        },
+        "10": {
+            "label": "Delay ON",
+            "description": "Delay from activation request until load activation",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 254,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "11": {
+            "label": "Activation Time",
+            "description": "Time that load performs activated after complete an activation process.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 254,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "12": {
+            "label": "Behavior of LED in Reponse",
+            "description": "Configuration of Main LED as identification at 20%.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "LED OFF",
+                    "value": 0
+                },
+                {
+                    "label": "LED ON at 20% of maximum level",
+                    "value": 255
+                }
+            ]
+        },
+        "13": {
+            "label": "Lock Input",
+            "description": "Locks the pushbutton and wired input actions.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Unlock the direct control of load",
+                    "value": 0
+                },
+                {
+                    "label": "Lock the direct control of load",
+                    "value": 255
+                }
+            ]
+        },
+        "15": {
+            "label": "Reset Default",
+            "description": "Parameters, Groups, and Z-Wave status are restored to default.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 39015,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Normal operating mode",
+                    "value": 0
+                },
+                {
+                    "label": "Reset to Factory Defaults",
+                    "value": 39015
+                }
+            ]
+        },
+        "16": {
+            "label": "Delay OFF",
+            "description": "Delay from deactivation request until load deactivation.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 254,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

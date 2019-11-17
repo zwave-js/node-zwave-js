@@ -185,7 +185,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 				sensorTypes =
 					this.getValueDB().getValue({
 						commandClass: this.ccId,
-						propertyName: "supportedSensorTypes",
+						property: "supportedSensorTypes",
 						endpoint: this.endpointIndex,
 					}) || [];
 			}
@@ -216,7 +216,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 						this.getValueDB().getValue({
 							commandClass: this.ccId,
 							endpoint: this.endpointIndex,
-							propertyName: "supportedScales",
+							property: "supportedScales",
 							propertyKey: type,
 						}) || [];
 				}
@@ -243,15 +243,15 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 	}
 
 	public static translatePropertyKey(
-		propertyName: string,
-		propertyKey: number | string,
+		property: string | number,
+		propertyKey: string | number,
 	): string {
 		// TODO: check this
-		if (propertyName === "values" && typeof propertyKey === "number") {
+		if (property === "values" && typeof propertyKey === "number") {
 			const type = lookupSensorType(propertyKey);
 			if (type) return type.label;
 		}
-		return super.translatePropertyKey(propertyName, propertyKey);
+		return super.translatePropertyKey(property, propertyKey);
 	}
 }
 
@@ -272,7 +272,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		const valueId: ValueID = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
-			propertyName: getSensorTypeName(this._type),
+			property: getSensorTypeName(this._type),
 		};
 		this.getValueDB().setMetadata(valueId, {
 			...ValueMetadata.ReadOnlyNumber,

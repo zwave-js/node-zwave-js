@@ -131,7 +131,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 			node.valueDB.setValue(
 				{
 					commandClass: CommandClasses["Multi Channel"],
-					propertyName: "individualCount",
+					property: "individualCount",
 				},
 				2,
 			);
@@ -146,9 +146,9 @@ describe("lib/commandclass/BasicCC => ", () => {
 			const valueIDs = node
 				.getDefinedValueIDs()
 				.filter(
-					({ commandClass, propertyName }) =>
+					({ commandClass, property }) =>
 						commandClass === CommandClasses.Basic &&
-						propertyName === "targetValue",
+						property === "targetValue",
 				);
 			const endpoints = valueIDs.map(({ endpoint }) => endpoint);
 

@@ -1,0 +1,100 @@
+// Sigma Designs (Former Zensys) PowerStrip
+// 9 endpoints
+{
+	"_approved": false,
+	"_errors": [
+		"Parameter 0 only has overview defined. A description should be provided as a single line of text with additional information put in the overview field.",
+		"Parameter 0 has inconsistent size and maximum value.",
+		"Parameter 2 has label duplicated with another parameter.",
+		"Parameter 3 has label duplicated with another parameter.",
+		"Device has configuration parameters defined, but does not support the CONFIGURATION command class.",
+		"Device has association groups defined, but does not support the ASSOCIATION command class."
+	],
+	"manufacturer": "Sigma Designs (Former Zensys)",
+	"manufacturerId": "0x0000",
+	"label": "PowerStrip",
+	"description": "9 endpoints",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "1.0",
+		"max": "4.1"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"0": {
+			"label": "switch binary",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "off",
+					"value": 0
+				},
+				{
+					"label": "set",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "dimming",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "off",
+					"value": 0
+				},
+				{
+					"label": "on",
+					"value": 100
+				}
+			]
+		},
+		"3": {
+			"label": "dimming",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "off",
+					"value": 0
+				},
+				{
+					"label": "50-50",
+					"value": 50
+				},
+				{
+					"label": "on",
+					"value": 100
+				}
+			]
+		}
+	}
+}

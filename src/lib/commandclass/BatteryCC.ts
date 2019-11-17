@@ -326,12 +326,11 @@ export class BatteryCCHealthReport extends BatteryCC {
 		const valueId: ValueID = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
-			propertyName: "temperature",
+			property: "temperature",
 		};
 		this.getValueDB().setMetadata(valueId, {
-			...ValueMetadata.ReadOnly,
+			...ValueMetadata.ReadOnlyNumber,
 			label: "Temperature",
-			// @ts-ignore
 			unit: scale === 0x00 ? "°C" : undefined,
 		});
 	}

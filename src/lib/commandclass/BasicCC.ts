@@ -43,19 +43,14 @@ export class BasicCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 	protected [SET_VALUE]: SetValueImplementation = async (
-		{ propertyName },
+		{ property },
 		value,
 	): Promise<void> => {
-		if (propertyName !== "targetValue") {
-			throwUnsupportedProperty(this.ccId, propertyName);
+		if (property !== "targetValue") {
+			throwUnsupportedProperty(this.ccId, property);
 		}
 		if (typeof value !== "number") {
-			throwWrongValueType(
-				this.ccId,
-				propertyName,
-				"number",
-				typeof value,
-			);
+			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 		await this.set(value);
 

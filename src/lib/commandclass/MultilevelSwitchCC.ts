@@ -60,7 +60,7 @@ function switchTypeToActions(switchType: string): [string, string] {
 	if (!switchType.includes("/")) switchType = SwitchType[0x01]; // Off/On
 	return switchType.split("/", 2) as any;
 }
-const switchTypePropertyNames = Object.keys(SwitchType)
+const switchTypeProperties = Object.keys(SwitchType)
 	.filter(key => key.indexOf("/") > -1)
 	.map(key => switchTypeToActions(key))
 	.reduce<string[]>((acc, cur) => acc.concat(...cur), []);
@@ -171,27 +171,27 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
-		{ propertyName },
+		{ property },
 		value,
 	): Promise<void> => {
-		if (propertyName === "targetValue") {
+		if (property === "targetValue") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
 					this.ccId,
-					propertyName,
+					property,
 					"number",
 					typeof value,
 				);
 			}
 			await this.set(value);
-		} else if (switchTypePropertyNames.includes(propertyName)) {
+		} else if (switchTypeProperties.includes(property as string)) {
 			// Since the switch only supports one of the switch types, we would
 			// need to check if the correct one is used. But since the names are
 			// purely cosmetic, we just accept all of them
 			if (typeof value !== "boolean") {
 				throwWrongValueType(
 					this.ccId,
-					propertyName,
+					property,
 					"number",
 					typeof value,
 				);
@@ -200,7 +200,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 				// The property names are organized so that positive motions are
 				// at odd indices and negative motions at even indices
 				const direction =
-					switchTypePropertyNames.indexOf(propertyName) % 2 === 0
+					switchTypeProperties.indexOf(property as string) % 2 === 0
 						? "down"
 						: "up";
 				await this.startLevelChange({
@@ -211,7 +211,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 				await this.stopLevelChange();
 			}
 		} else {
-			throwUnsupportedProperty(this.ccId, propertyName);
+			throwUnsupportedProperty(this.ccId, property);
 		}
 	};
 }
@@ -446,7 +446,7 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 			{
 				commandClass: this.ccId,
 				endpoint: this.endpointIndex,
-				propertyName: up,
+				property: up,
 			},
 			{
 				...ValueMetadata.Boolean,
@@ -457,7 +457,7 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 			{
 				commandClass: this.ccId,
 				endpoint: this.endpointIndex,
-				propertyName: down,
+				property: down,
 			},
 			{
 				...ValueMetadata.Boolean,

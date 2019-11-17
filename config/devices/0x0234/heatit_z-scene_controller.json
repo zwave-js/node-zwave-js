@@ -1,0 +1,1015 @@
+// Logic Group Heatit Z-Scene Controller
+// Push button 6-gang
+{
+    "_approved": false,
+    "_warnings": [
+        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!",
+        "Endpoint 1 contains both switch and dimmer channels. It probably should only include dimmer!",
+        "Endpoint 2 contains both switch and dimmer channels. It probably should only include dimmer!",
+        "Endpoint 3 contains both switch and dimmer channels. It probably should only include dimmer!",
+        "Endpoint 4 contains both switch and dimmer channels. It probably should only include dimmer!",
+        "Endpoint 5 contains both switch and dimmer channels. It probably should only include dimmer!",
+        "Endpoint 6 contains both switch and dimmer channels. It probably should only include dimmer!"
+    ],
+    "manufacturer": "Logic Group",
+    "manufacturerId": "0x0234",
+    "label": "Heatit Z-Scene Controller",
+    "description": "Push button 6-gang",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x010c"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "supportsZWavePlus": true,
+    "paramInformation": {
+        "1": {
+            "label": "Upper paddle buttons mode",
+            "description": "Configuration of Pair Mode for the upper two buttons (button #1 and #2)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Separate mode (toggle mode). (Default)",
+                    "value": 0
+                },
+                {
+                    "label": "Left side ON/UP, right side OFF/DOWN",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Middle paddle buttons mode",
+            "description": "Configuration of Pair Mode for the middle two buttons (button #3 and #4)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Separate mode (toggle mode). (Default)",
+                    "value": 0
+                },
+                {
+                    "label": "Left side ON/UP, right side OFF/DOWN",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Lower paddle buttons mode",
+            "description": "Configuration of Pair Mode for the lower two buttons (button #5 and #6)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Separate mode (toggle mode). (Default)",
+                    "value": 0
+                },
+                {
+                    "label": "Left side ON/UP, right side OFF/DOWN",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "LED #1 mode.",
+            "description": "Configuration of the internal operation of LED #1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "LED indication is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Status of the corresponding button",
+                    "value": 1
+                },
+                {
+                    "label": "Status of the corresponding button, inverted",
+                    "value": 2
+                },
+                {
+                    "label": "Status of corresponding paddle (pair mode)",
+                    "value": 3
+                },
+                {
+                    "label": "Status of corresponding paddle (pair mode) inv",
+                    "value": 4
+                },
+                {
+                    "label": "Status of the built-in relay",
+                    "value": 5
+                },
+                {
+                    "label": "Status of the built-in relay, inverted",
+                    "value": 6
+                },
+                {
+                    "label": "LED activated on button press",
+                    "value": 7
+                }
+            ]
+        },
+        "5": {
+            "label": "LED #2 mode",
+            "description": "Configuration of the internal operation of LED #2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "LED indication is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Status of the corresponding button",
+                    "value": 1
+                },
+                {
+                    "label": "Status of the corresponding button, inverted",
+                    "value": 2
+                },
+                {
+                    "label": "Status of corresponding paddle (pair mode)",
+                    "value": 3
+                },
+                {
+                    "label": "Status of corresponding paddle (pair mode) inv",
+                    "value": 4
+                },
+                {
+                    "label": "Status of the built-in relay",
+                    "value": 5
+                },
+                {
+                    "label": "Status of the built-in relay, inverted",
+                    "value": 6
+                },
+                {
+                    "label": "LED activated on button press",
+                    "value": 7
+                }
+            ]
+        },
+        "6": {
+            "label": "LED #3 mode",
+            "description": "Configuration of the internal operation of LED #3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "LED indication is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Status of the corresponding button",
+                    "value": 1
+                },
+                {
+                    "label": "Status of the corresponding button, inverted",
+                    "value": 2
+                },
+                {
+                    "label": "Status of corresponding paddle (pair mode)",
+                    "value": 3
+                },
+                {
+                    "label": "Status of corresponding paddle (pair mode) inv",
+                    "value": 4
+                },
+                {
+                    "label": "Status of the built-in relay",
+                    "value": 5
+                },
+                {
+                    "label": "Status of the built-in relay, inverted",
+                    "value": 6
+                },
+                {
+                    "label": "LED activated on button press",
+                    "value": 7
+                }
+            ]
+        },
+        "7": {
+            "label": "LED #4 mode",
+            "description": "Configuration of the internal operation of LED #4",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "LED indication is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Status of the corresponding button",
+                    "value": 1
+                },
+                {
+                    "label": "Status of the corresponding button, inverted",
+                    "value": 2
+                },
+                {
+                    "label": "Status of corresponding paddle (pair mode)",
+                    "value": 3
+                },
+                {
+                    "label": "Status of corresponding paddle (pair mode) inv",
+                    "value": 4
+                },
+                {
+                    "label": "Status of the built-in relay",
+                    "value": 5
+                },
+                {
+                    "label": "Status of the built-in relay, inverted",
+                    "value": 6
+                },
+                {
+                    "label": "LED activated on button press",
+                    "value": 7
+                }
+            ]
+        },
+        "8": {
+            "label": "LED #5 mode",
+            "description": "Configuration of the internal operation of LED #5",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "LED indication is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Status of the corresponding button",
+                    "value": 1
+                },
+                {
+                    "label": "Status of the corresponding button, inverted",
+                    "value": 2
+                },
+                {
+                    "label": "Status of corresponding paddle (pair mode)",
+                    "value": 3
+                },
+                {
+                    "label": "Status of corresponding paddle (pair mode) inv",
+                    "value": 4
+                },
+                {
+                    "label": "Status of the built-in relay",
+                    "value": 5
+                },
+                {
+                    "label": "Status of the built-in relay, inverted",
+                    "value": 6
+                },
+                {
+                    "label": "LED activated on button press",
+                    "value": 7
+                }
+            ]
+        },
+        "9": {
+            "label": "LED #6 mode",
+            "description": "Configuration of the internal operation of LED #6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "LED indication is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Status of the corresponding button",
+                    "value": 1
+                },
+                {
+                    "label": "Status of the corresponding button, inverted",
+                    "value": 2
+                },
+                {
+                    "label": "Status of corresponding paddle (pair mode)",
+                    "value": 3
+                },
+                {
+                    "label": "Status of corresponding paddle (pair mode) inv",
+                    "value": 4
+                },
+                {
+                    "label": "Status of the built-in relay",
+                    "value": 5
+                },
+                {
+                    "label": "Status of the built-in relay, inverted",
+                    "value": 6
+                },
+                {
+                    "label": "LED activated on button press",
+                    "value": 7
+                }
+            ]
+        },
+        "10": {
+            "label": "Relay mode",
+            "description": "This parameter configures the built-in relay",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Relay is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Controlled by button 1",
+                    "value": 1
+                },
+                {
+                    "label": "Controlled by button 2",
+                    "value": 2
+                },
+                {
+                    "label": "Controlled by button 3",
+                    "value": 3
+                },
+                {
+                    "label": "Controlled by button 4",
+                    "value": 4
+                },
+                {
+                    "label": "Controlled by button 5",
+                    "value": 5
+                },
+                {
+                    "label": "Controlled by button 6",
+                    "value": 6
+                },
+                {
+                    "label": "Controlled by button 1, 1 sec",
+                    "value": 7
+                }
+            ]
+        },
+        "11": {
+            "label": "Disable Central Scene notification",
+            "description": "Disables or enables the sending of Central Scene notifications",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Enabled",
+                    "value": 0
+                },
+                {
+                    "label": "Disabled",
+                    "value": 1
+                }
+            ]
+        },
+        "12": {
+            "label": "Disable House Cleaning Mode",
+            "description": "Disable House Cleaning Mode, double press = 100% light",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "House Cleaning Mode is enabled (Default)",
+                    "value": 0
+                },
+                {
+                    "label": "House Cleaning Mode is disabled",
+                    "value": 1
+                }
+            ]
+        },
+        "16": {
+            "label": "Multilevel Switch for button #4",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "19": {
+            "label": "Association groups for button 1",
+            "description": "Association groups for button 1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Not switched",
+                    "value": 0
+                },
+                {
+                    "label": "Switched",
+                    "value": 1
+                }
+            ]
+        },
+        "20": {
+            "label": "Association groups for button 2",
+            "description": "Association groups for button 2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Not switched",
+                    "value": 0
+                },
+                {
+                    "label": "Switched",
+                    "value": 1
+                }
+            ]
+        },
+        "21": {
+            "label": "Association groups for button 3",
+            "description": "Association groups for button 3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Not switched",
+                    "value": 0
+                },
+                {
+                    "label": "Switched",
+                    "value": 1
+                }
+            ]
+        },
+        "22": {
+            "label": "Association groups for button 4",
+            "description": "Association groups for button 4",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Not switched",
+                    "value": 0
+                },
+                {
+                    "label": "Switched",
+                    "value": 1
+                }
+            ]
+        },
+        "23": {
+            "label": "Association groups for button 5",
+            "description": "Association groups for button 5",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Not switched",
+                    "value": 0
+                },
+                {
+                    "label": "Switched",
+                    "value": 1
+                }
+            ]
+        },
+        "24": {
+            "label": "Association groups for button 6",
+            "description": "Association groups for button 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Not switched",
+                    "value": 0
+                },
+                {
+                    "label": "Switched",
+                    "value": 1
+                }
+            ]
+        },
+        "25": {
+            "label": "Backlight control",
+            "description": "Configuration of backlight control.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "By indicator command class",
+                    "value": 0
+                },
+                {
+                    "label": "5 sec when button pressed",
+                    "value": 1
+                }
+            ]
+        },
+        "26": {
+            "label": "Basic Set for endpoint 0",
+            "description": "Enable or disable that Basic Set commands to the root device",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Forwarded to endpoint 1",
+                    "value": 0
+                },
+                {
+                    "label": "Controls backlight",
+                    "value": 1
+                }
+            ]
+        },
+        "13[0x01]": {
+            "label": "Multilevel Switch  for button #1",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "13[0xff00]": {
+            "label": "Multilevel Switch for button #1",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "ON",
+                    "value": 255
+                }
+            ]
+        },
+        "13[0xff0000]": {
+            "label": "Lower switch value",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "OFF",
+                    "value": 0
+                }
+            ]
+        },
+        "13[0x01000000]": {
+            "label": "Multilevel Switch for button #1",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "14[0x01]": {
+            "label": "Multilevel Switch for button #2",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "14[0xff00]": {
+            "label": "Multilevel Switch for button #2",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "ON",
+                    "value": 255
+                }
+            ]
+        },
+        "14[0xff0000]": {
+            "label": "Multilevel Switch for button #2",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "OFF",
+                    "value": 0
+                }
+            ]
+        },
+        "14[0x01000000]": {
+            "label": "Multilevel Switch for button #2",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "15[0x01]": {
+            "label": "Multilevel Switch for button #3",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "15[0xff00]": {
+            "label": "Multilevel Switch for button #3",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "ON",
+                    "value": 255
+                }
+            ]
+        },
+        "15[0xff0000]": {
+            "label": "Multilevel Switch for button #3",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "OFF",
+                    "value": 0
+                }
+            ]
+        },
+        "15[0x01000000]": {
+            "label": "Multilevel Switch for button #3",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "16[0xff00]": {
+            "label": "Multilevel Switch for button #4",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "ON",
+                    "value": 255
+                }
+            ]
+        },
+        "16[0xff0000]": {
+            "label": "Multilevel Switch for button #4",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "OFF",
+                    "value": 0
+                }
+            ]
+        },
+        "16[0x01000000]": {
+            "label": "Multilevel Switch for button #4",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "17[0x01]": {
+            "label": "Multilevel Switch for button #5",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "17[0xff00]": {
+            "label": "Multilevel Switch for button #5",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "ON",
+                    "value": 255
+                }
+            ]
+        },
+        "17[0xff0000]": {
+            "label": "Multilevel Switch for button #5",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "OFF",
+                    "value": 0
+                }
+            ]
+        },
+        "17[0x01000000]": {
+            "label": "Multilevel Switch for button #5",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "18[0x01]": {
+            "label": "Multilevel Switch for button #6",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "18[0xff00]": {
+            "label": "Multilevel Switch for button #6",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "ON",
+                    "value": 255
+                }
+            ]
+        },
+        "18[0xff0000]": {
+            "label": "Multilevel Switch for button #6",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "OFF",
+                    "value": 0
+                }
+            ]
+        },
+        "18[0x01000000]": {
+            "label": "Multilevel Switch for button #6",
+            "description": "Configuration of the Multilevel Switch",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

@@ -1,0 +1,49 @@
+// Reitz-Group.de swiidplug
+// SwiidPlug
+{
+    "_approved": true,
+    "manufacturer": "Reitz-Group.de",
+    "manufacturerId": "0x0166",
+    "label": "swiidplug",
+    "description": "SwiidPlug",
+    "devices": [
+        {
+            "productType": "0x2007",
+            "productId": "0x0706"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Group 1",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Switch All",
+            "description": "Switch All",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 255
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,614 @@
+// Fibargroup FGR223
+// Roller Shutter 3
+{
+    "_approved": true,
+    "manufacturer": "Fibargroup",
+    "manufacturerId": "0x010f",
+    "label": "FGR223",
+    "description": "Roller Shutter 3",
+    "devices": [
+        {
+            "productType": "0x0303",
+            "productId": "0x1000"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "supportsZWavePlus": true,
+    "paramInformation": {
+        "20": {
+            "label": "Switch type",
+            "description": "Switch type",
+            "unit": "byte",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "momentary switches",
+                    "value": 0
+                },
+                {
+                    "label": "toggle switches",
+                    "value": 1
+                },
+                {
+                    "label": "single",
+                    "value": 2
+                }
+            ]
+        },
+        "24": {
+            "label": "Inputs orientation",
+            "description": "Inputs orientation",
+            "unit": "byte",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "default",
+                    "value": 0
+                },
+                {
+                    "label": "reversed",
+                    "value": 1
+                }
+            ]
+        },
+        "25": {
+            "label": "Outputs orientation",
+            "description": "Outputs orientation",
+            "unit": "byte",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "default",
+                    "value": 0
+                },
+                {
+                    "label": "reversed",
+                    "value": 1
+                }
+            ]
+        },
+        "40": {
+            "label": "S1 Switch Scenes sent",
+            "description": "Parameter values may be combined",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 15,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "41": {
+            "label": "S2 Switch Scenes sent",
+            "description": "Parameter values may be combined",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 15,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "60": {
+            "label": "Measuring power consumed by the device itself",
+            "description": "Measuring power consumed by the device itself",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Function inactive",
+                    "value": 0
+                },
+                {
+                    "label": "Function active",
+                    "value": 1
+                }
+            ]
+        },
+        "61": {
+            "label": "Power reports - on change",
+            "description": "Power reports - on change",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 500,
+            "defaultValue": 15,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "62": {
+            "label": "Power reports - periodic",
+            "description": "Power reports - periodic",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32400,
+            "defaultValue": 3600,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "65": {
+            "label": "Energy reports - on change",
+            "description": "Energy reports - on change",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 500,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "66": {
+            "label": "Energy reports - periodic",
+            "description": "Energy reports - periodic",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32400,
+            "defaultValue": 3600,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "150": {
+            "label": "Force calibration",
+            "description": "Force calibration",
+            "unit": "byte",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "device is not calibrated",
+                    "value": 0
+                },
+                {
+                    "label": "device is calibrated",
+                    "value": 1
+                },
+                {
+                    "label": "force device calibration",
+                    "value": 2
+                }
+            ]
+        },
+        "151": {
+            "label": "Operating mode",
+            "description": "Operating mode",
+            "unit": "byte",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 6,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "roller blind",
+                    "value": 1
+                },
+                {
+                    "label": "Venetian blind",
+                    "value": 2
+                },
+                {
+                    "label": "gate w/o positioning",
+                    "value": 3
+                },
+                {
+                    "label": "gate with positioning",
+                    "value": 4
+                },
+                {
+                    "label": "roller blind with built-in driver",
+                    "value": 5
+                },
+                {
+                    "label": "roller blind with built-in driver (impulse)",
+                    "value": 6
+                }
+            ]
+        },
+        "152": {
+            "label": "Venetian blind - time of full turn of the slats",
+            "description": "Venetian blind - time of full turn of the slats",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 90000,
+            "defaultValue": 150,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "153": {
+            "label": "Set slats back to previous position",
+            "description": "Set slats back to previous position",
+            "unit": "byte",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "slats return #1",
+                    "value": 0
+                },
+                {
+                    "label": "slats return #2",
+                    "value": 1
+                },
+                {
+                    "label": "slats return #3",
+                    "value": 2
+                }
+            ]
+        },
+        "154": {
+            "label": "Delay motor stop",
+            "description": "Delay motor stop after reaching end switch",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 600,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "155": {
+            "label": "Motor operation detection",
+            "description": "Motor operation detection",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "156": {
+            "label": "Time of up movement",
+            "description": "Time of up movement",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 90000,
+            "defaultValue": 6000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "157": {
+            "label": "Time of down movement",
+            "description": "Time of down movement",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 90000,
+            "defaultValue": 6000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "30[0xff]": {
+            "label": "Action for Blinds",
+            "description": "Action for Blinds",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No action",
+                    "value": 0
+                },
+                {
+                    "label": "Open blinds",
+                    "value": 1
+                },
+                {
+                    "label": "Close blinds",
+                    "value": 2
+                }
+            ]
+        },
+        "30[0xff00]": {
+            "label": "Event/State Parameters - Blinda",
+            "description": "Event/State Parameters for blinds",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "30[0xff0000]": {
+            "label": "Notification Status for Blinds",
+            "description": "Notification Status for Blinds",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "30[0x7f000000]": {
+            "label": "Notification Type for Blinds",
+            "description": "Notification Type for Blinds",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "31[0xff]": {
+            "label": "Action for Water",
+            "description": "Action for Water",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No action",
+                    "value": 0
+                },
+                {
+                    "label": "Open blinds",
+                    "value": 1
+                },
+                {
+                    "label": "Close blinds",
+                    "value": 2
+                }
+            ]
+        },
+        "31[0xff00]": {
+            "label": "Event/State Parameters for Water",
+            "description": "Event/State Parameters for Water",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "31[0xff0000]": {
+            "label": "Notification Status for Water",
+            "description": "Notification Status for Water",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "31[0x7f000000]": {
+            "label": "Notification Type for Water",
+            "description": "Notification Type for Water",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "32[0xff]": {
+            "label": "Action for Smoke",
+            "description": "Action for Smoke",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No action",
+                    "value": 0
+                },
+                {
+                    "label": "Open blinds",
+                    "value": 1
+                },
+                {
+                    "label": "Close blinds",
+                    "value": 2
+                }
+            ]
+        },
+        "32[0xff00]": {
+            "label": "Event/State Parameters for Smoke",
+            "description": "Event/State Parameters for Smoke",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "32[0xff0000]": {
+            "label": "Notification Status for Smoke",
+            "description": "Notification Status for Smoke",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "32[0x7f000000]": {
+            "label": "Notification Type for Smoke",
+            "description": "Notification Type for Smoke",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "33[0xff]": {
+            "label": "Action for CO",
+            "description": "Action for CO",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No action",
+                    "value": 0
+                },
+                {
+                    "label": "Open blinds",
+                    "value": 1
+                },
+                {
+                    "label": "Close blinds",
+                    "value": 2
+                }
+            ]
+        },
+        "33[0xff00]": {
+            "label": "Event/State Parameters for CO",
+            "description": "Event/State Parameters for CO",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "33[0xff0000]": {
+            "label": "Notification Status for CO",
+            "description": "Notification Status for CO",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "33[0x7f000000]": {
+            "label": "Notification Type for CO",
+            "description": "Notification Type for CO",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true
+        },
+        "34[0xff]": {
+            "label": "Action for Heat",
+            "description": "Action for Heat",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No action",
+                    "value": 0
+                },
+                {
+                    "label": "Open blinds",
+                    "value": 1
+                },
+                {
+                    "label": "Close blinds",
+                    "value": 2
+                }
+            ]
+        },
+        "34[0xff00]": {
+            "label": "Event/State Parameters for Heat",
+            "description": "Event/State Parameters for Heat",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "34[0xff0000]": {
+            "label": "Notification Status for Heat",
+            "description": "Notification Status for Heat",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "34[0x7f000000]": {
+            "label": "Notification Status for Heat",
+            "description": "Notification Status for Heat",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

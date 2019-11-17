@@ -24,7 +24,7 @@ import { CommandClasses } from "./CommandClasses";
 export function getMaxNodesValueId(groupId: number): ValueID {
 	return {
 		commandClass: CommandClasses.Association,
-		propertyName: "maxNodes",
+		property: "maxNodes",
 		propertyKey: groupId,
 	};
 }
@@ -33,7 +33,7 @@ export function getMaxNodesValueId(groupId: number): ValueID {
 export function getNodeIdsValueId(groupId: number): ValueID {
 	return {
 		commandClass: CommandClasses.Association,
-		propertyName: "nodeIds",
+		property: "nodeIds",
 		propertyKey: groupId,
 	};
 }
@@ -42,7 +42,7 @@ export function getNodeIdsValueId(groupId: number): ValueID {
 export function getGroupCountValueId(): ValueID {
 	return {
 		commandClass: CommandClasses.Association,
-		propertyName: "groupCount",
+		property: "groupCount",
 	};
 }
 

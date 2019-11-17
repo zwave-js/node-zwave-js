@@ -1,0 +1,502 @@
+// Goap ZMNHID
+// Flush on/off thermostat
+{
+	"_approved": true,
+	"manufacturer": "Goap",
+	"manufacturerId": "0x0159",
+	"label": "ZMNHID",
+	"description": "Flush on/off thermostat",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x0051"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Basic on/off Q1",
+			"maxNodes": 16
+		},
+		"2": {
+			"label": "Basic on/off I2",
+			"maxNodes": 16
+		},
+		"3": {
+			"label": "Basic on/off I3",
+			"maxNodes": 16
+		},
+		"4": {
+			"label": "High Temperature",
+			"maxNodes": 16
+		},
+		"5": {
+			"label": "Low Temperature",
+			"maxNodes": 16
+		},
+		"6": {
+			"label": "Default Reporting Group",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Input 1 switch type",
+			"description": "Input 1 switch type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "mono-stable switch type (push button)",
+					"value": 0
+				},
+				{
+					"label": "bi-stable switch type",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Input 2 switch type",
+			"description": "Input 2 switch type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "mono-stable switch type (push button)",
+					"value": 0
+				},
+				{
+					"label": "bi-stable switch type",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Input 3 switch type",
+			"description": "Input 3 switch type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "mono-stable switch type (push button)",
+					"value": 0
+				},
+				{
+					"label": "bi-stable switch type",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Input 1 contact type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO (normally open) input type",
+					"value": 0
+				},
+				{
+					"label": "NC (normally close) input type",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Input 2 contact type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO (normally open) input type",
+					"value": 0
+				},
+				{
+					"label": "NC (normally close) input type",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Parameter   no.   6",
+			"description": "Input 3 contact type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO (normally open) input type",
+					"value": 0
+				},
+				{
+					"label": "NC (normally close) input type",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "Parameter   no.   10",
+			"description": "Activate / deactivate functions ALL ON/ALL OFF",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "ALL ON is not active ALL OFF is not active",
+					"value": 0
+				},
+				{
+					"label": "ALL ON is not active ALL OFF active",
+					"value": 1
+				},
+				{
+					"label": "ALL ON active ALL OFF is not active",
+					"value": 2
+				},
+				{
+					"label": "ALL ON active, ALL OFF active",
+					"value": 255
+				}
+			]
+		},
+		"11": {
+			"label": "Parameter no. 11",
+			"description": "I1 Functionality selection",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Parameter   no.   12",
+			"description": "I2 Functionality selection",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Parameter   no.   13",
+			"description": "I3 Functionality selection",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 32767,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40": {
+			"label": "Parameter   no.   40",
+			"description": "Power reporting in Watts on Power change",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"42": {
+			"label": "Parameter   no.   42",
+			"description": "Power reporting in Watts by time interval for Q1",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"43": {
+			"label": "Parameter   no.   43",
+			"description": "Hysteresis On",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 1005,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"44": {
+			"label": "Parameter   no.   44",
+			"description": "Hysteresis Off",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"45": {
+			"label": "Parameter   no.   45",
+			"description": "Antifreeze",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"59": {
+			"label": "Parameter   no.   59",
+			"description": "Thermostat Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Heat Mode",
+					"value": 0
+				},
+				{
+					"label": "Cool Mode",
+					"value": 1
+				}
+			]
+		},
+		"60": {
+			"label": "Parameter   no.   60",
+			"description": "Too low temperature limit",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"61": {
+			"label": "Parameter   no.   61",
+			"description": "Too high temperature limit",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 700,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"63": {
+			"label": "Parameter   no.   63",
+			"description": "Output Switch selection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "When system is turned off the output is 0 V.",
+					"value": 0
+				},
+				{
+					"label": "When system is turned off the output is 230 V.",
+					"value": 1
+				}
+			]
+		},
+		"70": {
+			"label": "Input 1 status on delay",
+			"description": "Switching reaction time on delay for I1",
+			"unit": "Seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"71": {
+			"label": "Input 1 status off delay",
+			"description": "Switching reaction time off delay for I1",
+			"unit": "Seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"72": {
+			"label": "Input 2 status on delay",
+			"description": "Switching reaction time on delay for I2",
+			"unit": "Seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"73": {
+			"label": "Input 2 status off delay",
+			"description": "Switching reaction time off delay for I2",
+			"unit": "Seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"74": {
+			"label": "Input 3 status on delay",
+			"description": "Switching reaction time on delay for I3",
+			"unit": "Seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"75": {
+			"label": "Input 3 status off delay",
+			"description": "Switching reaction time off delay for I3",
+			"unit": "Seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"100": {
+			"label": "Parameter  no.  100",
+			"description": "Enable / Disable Endpoint I1 or select Notification Type and Event",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"101": {
+			"label": "Parameter  no.  101",
+			"description": "Enable  /  Disable  Endpoint I2  or  select Notification Type and Event",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"102": {
+			"label": "Parameter  no.  102",
+			"description": "Enable  /  Disable  Endpoint I3  or  select Notification Type and Event",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"110": {
+			"label": "Parameter no. 110",
+			"description": "Temperature sensor offset settings",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 32536,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"120": {
+			"label": "Parameter   no.   120",
+			"description": "Digital   temperature   sensor  reporting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"121": {
+			"label": "Parameter   no.   121",
+			"description": "Digital   temperature   sensor   /  setpoint selector",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"122": {
+			"label": "Parameter   no.   122",
+			"description": "Node   ID   of   external   battery  powered room sensor",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 254,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

@@ -587,3 +587,435 @@
 	"0x5254": "Remotec",
 	"0xFFFF": "_Not defined"
 }
+
+// From CD Jackson:
+// Reitz-Group.de 	0064
+// OpenPeak Inc. 	0041
+// SafeTech Products 	023C
+// Eka Systems 	0087
+// ASSA ABLOY 	0129
+// STRATTEC Security Corporation 	0168
+// Inlon Srl 	003A
+// Amdocs 	019C
+// Vipa-Star 	0188
+// Manodo / KTC 	006E
+// Cisco Consumer Business Group 	0082
+// AEON Labs 	0086 	http://aeotec.com/
+// PassivSystems Limited 	0172
+// San Shih Electrical Enterprise Co., Ltd. 	0093
+// El-Gev Electronics LTD 	0034
+// BRK Brands, Inc. 	0138
+// Swann Communications Pty Ltd 	0191
+// Intel 	0006
+// Asia Heading 	0029
+// Vivint 	0156
+// Martin Renz GmbH 	0092
+// Color Kinetics Incorporated 	002F
+// Meedio, LLC 	0027
+// ConnectHome 	0179
+// Vision Security 	0109 	http://www.visionsecurity.com.tw/
+// Secure Wireless 	011E
+// Embedit A/S 	0035
+// Hauppauge 	025C
+// McoHome Technology Co., Ltd 	015F 	http://www.mcohome.com/
+// TAEWON Lighting Co., Ltd. 	0235
+// Internet Dom 	0013
+// AT&T 	0134
+// Wayne Dalton 	0008
+// Whirlpool 	0057
+// Milanity, Inc. 	0238
+// Cooper Lighting 	0079
+// Ecolink 	014A
+// Seluxit 	0069
+// Erone 	006F
+// HiTech Automation 	0017
+// wiDom 	0149
+// Technicolor 	0240
+// iungo.nl B.V. 	0253
+// Athom BV 	0244
+// Balboa Instruments 	0018
+// Winytechnology 	0242
+// MODACOM CO., LTD. 	0232
+// PiTech 	007B
+// CyberTAN Technology, Inc. 	0067
+// TKB Home 	0118
+// Sercomm Corp 	0151
+// Exhausto 	0004
+// Home Automated Living 	000D
+// EcoNet Controls 	0157
+// Telsey 	0048
+// JSW Pacific Corporation 	0164
+// There Corporation 	010C
+// Kopera Development Inc. 	0174
+// Beijing Universal Energy Huaxia Technology Co.,Ltd 	0251
+// Motorola 	003F
+// PowerLynx 	0016
+// Decoris Intelligent System Limited 	020A
+// NorthQ 	0096
+// Shanghai Longchuang Eco-energy Systems Co., Ltd 	0205
+// Flextronics 	018D
+// Home Director 	0038
+// D-Link 	0108 	http://www.dlink.com/
+// LS Control 	0071
+// TrickleStar 	0066
+// Leak Intelligence, LLC 	0173
+// BFT S.p.A. 	014B
+// 2gig Technologies Inc. 	009B
+// myStrom 	0143
+// Pulse Technologies (Aspalis) 	005D
+// Diehl AKO 	0103
+// Eurotronics 	0148
+// Shenzhen iSurpass Technology Co. ,Ltd 	021C
+// Focal Point Limited 	018F
+// HomeScenario 	0162
+// Huapin Information Technology Co.,Ltd 	0180
+// Twisthink 	0049
+// WRT Intelligent Technology CO., LTD. 	022F
+// LG Electronics 	015B
+// Boca Devices 	0023
+// Abilia 	0117
+// Nefit 	006D
+// Quby 	0130
+// DigitalZone 	0228
+// ACT - Advanced Control Technologies 	0001
+// Shenzhen Tripath Digital Audio Equipment Co.,Ltd 	0250
+// Foxconn 	011D
+// Remotec 	5254
+// Smart Products, Inc. 	0046
+// GKB Security Corporation 	022B
+// iAutomade Pte Ltd 	0218
+// Universe Future 	0183
+// Zdata, LLC. 	004E
+// Light Engine Limited 	0210
+// BTSTAR(HK) TECHNOLOGY COMPANY LIMITED 	024A
+// Linear Corp 	014F
+// Newland Communication Science Technology Co., Ltd. 	0203
+// Raritan 	008E
+// Dongguan Zhou Da Electronics Co.,Ltd 	020C
+// FortrezZ LLC 	0084
+// Spectrum Brands 	0254
+// Good Way Technology Co., Ltd 	0068
+// Impact Technologies and Products 	0056
+// Venstar Inc. 	0198
+// Zonoff 	0120
+// Locstar Technology Co., Ltd 	015E
+// BuLogics 	0026
+// Intermatic 	0005
+// North China University of Technology 	0252
+// RET Nanjing Intelligence System CO.,Ltd 	0216
+// DynaQuip Controls 	0132
+// RPE Ajax LLC (dbs Secur Ltd) 	0197
+// Echostar 	016B
+// Popp & Co 	0154
+// Starkoff 	0259
+// Ingersoll Rand (Schlage) 	006C
+// Alarm.com 	0094
+// Viewsonic 	0053
+// LVI Produkter AB 	0062
+// casenio AG 	0243
+// Evolve 	0113
+// Omnima Limited 	0119
+// Merten 	007A
+// Panasonic Electric Works Co., Ltd. 	0104
+// Samsung Electronics Co., Ltd. 	0201
+// Electronic Solutions 	0033
+// CBCC Domotique SAS 	0166
+// Sumitomo 	0105
+// Innoband Technologies, Inc 	0141
+// American Grid, Inc. 	005A
+// Visualize 	004A
+// Marmitek BV 	003D
+// Climax Technology, Ltd. 	018E
+// Computime 	0140
+// Radio Thermostat Company of America (RTC) 	0098
+// Pella 	013D
+// SANAV 	012C
+// ELK Products, Inc. 	001B
+// GuangZhou Zeewave Information Technology Co., Ltd. 	0158
+// Allegion 	003B
+// Sylvania 	0009
+// IntelliCon 	001C
+// ASITEQ 	0231
+// Vs-Safety AS 	017B
+// MB Turn Key Design 	008F
+// MegaChips 	0107
+// ControlThink LC 	0019
+// Fibargroup 	010F 	http://www.fibaro.com/
+// SecureNet Technologies 	0167
+// Enblink Co. Ltd 	014D
+// Hawking Technologies Inc. 	0073
+// Residential Control Systems, Inc. (RCS) 	0010
+// Team Digital Limited 	0186
+// IQ-Group 	005F
+// Applied Micro Electronics "AME" BV 	0144
+// Webee Life 	019F
+// Willis Electric Co., Ltd. 	015D
+// MITSUMI 	0112
+// Coventive Technologies Inc. 	009D
+// Express Controls 	001E
+// Senmatic A/S 	0043
+// Essence Security 	0160
+// Holion Electronic Engineering Co., Ltd 	0181
+// ThermoFloor 	019B
+// Tecom Co., Ltd. 	012F
+// IWATSU 	0123
+// Avadesign Technology Co., Ltd. 	0155
+// Kamstrup A/S 	0091
+// Bandi Comm Tech Inc. 	0236
+// Wireless Maingate AB 	0199
+// Modstrøm 	008D
+// Powerhouse Dynamics 	0170
+// Cytech Technology Pre Ltd. 	0030
+// Danfoss 	0002
+// Shangdong Smart Life Data System Co.,Ltd 	0215
+// Exigent Sensors 	009F
+// Home Automation Europe 	009A
+// ID-RF 	0165 	http://www.nodon.fr/
+// Telular 	017E
+// TIMEVALVE, Inc. 	022A
+// KUMHO ELECTRIC, INC 	023A
+// Bellatrix Systems, Inc. 	0196
+// 2B Electronics 	0028
+// MSK - Miyakawa Seisakusho 	0122
+// Pragmatic Consulting Inc. 	0042
+// Defacontrols BV 	013F
+// Honeywell 	0039
+// Sharp 	010B
+// Flue Sentinel 	0024
+// Homemanageables, Inc. 	0070
+// Domitech Products, LLC 	020E
+// Tricklestar Ltd. (former Empower Controls Ltd.) 	006B
+// LEVION Technologies Gmbh 	0187
+// Bit7 Inc. 	0052
+// 3e Technologies 	002A
+// Nanjing Easthouse Electrical Co., Ltd. 	016E
+// Qees 	0095
+// Digital 5, Inc. 	0032
+// Airline Mechanical Co., Ltd. 	0111
+// Shenzhen Kaadas Intelligent Technology Co., Ltd 	021D
+// FollowGood Technology Company Ltd. 	0137
+// Honest Technology Co., Ltd. 	023D
+// SIEGENIA-AUBI KG 	0081 	https://www.siegenia.com
+// Frostdale 	0110
+// Huawei Technologies Co., Ltd. 	024B
+// Universal Devices, Inc 	0193
+// Wuhan NWD Technology Co., Ltd. 	012E
+// LifeShield, LLC 	0224
+// Bosch Security Systems, Inc 	015C
+// ADOX, Inc. 	0101
+// Devolo 	0175
+// Ness Corporation Pty Ltd 	0189
+// Queenlock Ind. Co., Ltd. 	0163
+// DMP (Digital Monitoring Products) 	0127
+// Leviton 	001D
+// Goap 	0159 	http://www.qubino.com/
+// Smartly AS 	024F
+// Globalchina-Tech 	018A
+// Icontrol Networks 	0106
+// UTC Fire and Security Americas Corp 	0209
+// Zhejiang Jiuxing Electric Co Ltd 	016F
+// Liveguard Ltd. 	017A
+// Buffalo Inc. 	0145
+// Physical Graph Corporation 	0150
+// NextEnergy 	0075
+// Red Bee Co. Ltd 	021E
+// DRACOR Inc. 	017D
+// BeNext 	008A 	http://www.benext.eu/
+// Square Connect 	0124
+// Grib 	018B
+// Impact Technologies BV 	0061
+// Adventure Interactive 	009E
+// Vero Duco 	0080
+// Z-Wave Technologia 	004F
+// Logitech 	007F
+// Cameo Communications Inc. 	009C
+// Horstmann Controls Limited 	0059
+// Novar Electrical Devices and Systems (EDS) 	0040
+// Revolv Inc 	0153
+// EASY SAVER Co., Inc 	0247
+// Jasco Products 	0063
+// OnSite Pro 	014C
+// RS Scene Automation 	0065
+// e-Home AUTOMATION 	010D
+// Bönig und Kallenbach oHG 	0169
+// Strattec Advanced Logic,LLC 	0217
+// Inkel Corp. 	0256
+// Alertme 	0126
+// ViewSonic Corporation 	005E
+// M2M Solution 	0195
+// Check-It Solutions Inc. 	014E
+// INNOVUS 	0077
+// PARATECH 	0257
+// Samsung SDS 	022E
+// Elexa Consumer Products Inc. 	021F
+// Zipato 	0131 	http://www.zipato.com/
+// Superna 	0054
+// Insignia 	0100
+// anyCOMM Corporation 	0078
+// Vitelec 	0058
+// Martec Access Products 	003E
+// Cloud Media 	0200
+// Connected Object 	011B
+// GreenWave Reality Inc. 	0099
+// permundo GmbH 	0245
+// Scientia Technologies, Inc. 	001F
+// Embedded System Design Limited 	020B
+// Hankook Gas Kiki CO.,LTD. 	024C
+// Dragon Tech Industrial, Ltd. 	0184
+// Systech Corporation 	0136
+// Interactive Electronics Systems (IES) 	0072
+// AstraLink 	013B
+// Watt Stopper 	004B
+// MCT CO., LTD 	0222
+// WeBeHome AB 	0171
+// Mercury Corporation 	022D
+// CoolGuard 	007D
+// Ingersoll Rand (was Ecolink) 	011F
+// Securifi Ltd. 	0182
+// Enwox Technologies s.r.o. 	0219
+// Herald Datanetics Limited 	020F
+// Trane Corporation 	008B
+// Team Precision PCL 	0089
+// iRevo 	0212
+// Atech 	002B
+// Axesstel Inc 	0146
+// Wilshine Holding Co., Ltd 	012D
+// MOBILUS MOTOR Spólka z o.o. 	019D
+// Cyberhouse 	0014
+// Z-Wave.Me 	0115
+// Sequoia Technology LTD 	0044
+// Exceptional Innovations 	0036
+// Holtec Electronics BV 	013E
+// Fakro 	0085
+// Tell It Online 	0012
+// Jin Tao Bao 	015A
+// Kellendonk Elektronik 	006A
+// Beijing Sino-American Boyi Software Development Co 	0204
+// Motion Control Systems 	0125
+// PowerLinx 	0074
+// Dawon DNS 	018C
+// Philio Technology Corp 	013C 	http://www.philio-tech.com/
+// Shanghai Dorlink Intelligent Technologies Co.,Ltd 	023E
+// eZEX Corporation 	0233
+// Home Automation Inc. 	005B
+// Sensative AB 	019A
+// Terra Optima B.V. (tidligere Primair Services) 	005C
+// Kaipule Technology Co., Ltd. 	0214
+// TKH Group / Eminent 	011C
+// Lagotek Corporation 	0051
+// BeSafer 	002C
+// Not defined 	FFFF
+// MTC Maintronic Germany 	0083
+// Promixis, LLC 	0161
+// Destiny Networks 	0031
+// R-import Ltd. 	0147
+// SHENZHEN AOYA INDUSTRY CO. LTD 	021A
+// Foard Systems 	0037
+// Homepro 	0050
+// HOSEOTELNET 	0221
+// Tridium 	0055
+// Woodward Labs 	004C
+// Lexel 	0015
+// BMS Evler LTD 	0213
+// A-1 Components 	0022
+// Napco Security Technologies, Inc. 	0121
+// Qolsys 	012A
+// Digital Home Systems Pty Ltd, 	024E 	https://digitalhomesystems.com.au/
+// Wenzhou MTLC Electric Appliances Co.,Ltd. 	011A
+// Shenzhen Liao Wang Tong Da Technology Ltd 	0211
+// Forest Group Nederland B.V 	0207
+// Sine Wireless 	0045
+// GES 	025A
+// Hunter Douglas 	007C
+// Universal Electronics Inc. 	0020
+// Xanboo 	004D
+// Lifestyle Networks 	003C
+// Broadband Energy Networks Inc. 	002D
+// Advanced Optronic Devices Co.,Ltd 	016C
+// Sigma Designs (Former Zensys) 	0000
+// Netgear 	0133
+// Rademacher Geräte-Elektronik GmbH & Co. KG 	0142
+// Domino sistemi d.o.o. 	0177
+// Monster Cable 	007E
+// Wintop 	0097
+// SMK Manufacturing Inc. 	0102
+// Goggin Research 	0076
+// iEXERGY GmbH 	019E
+// VDA 	010A
+// Zhome 	0139
+// Living Style Enterprises, Ltd. 	013A
+// Building 36 Technologies 	0190
+// Cooper Wiring Devices 	001A
+// Ningbo Sentek Electronics Co., Ltd 	0185
+// Remote Solution 	022C
+// DTV Research Unipessoal, Lda 	0223
+// ROC-Connect, Inc. 	023B
+// EbV 	017C
+// Vera Control 	008C
+// ST&T Electric Corporation 	021B
+// Guangzhou Ruixiang M&E Co., Ltd 	016D
+// Infusion Development 	012B
+// Airvent SAM S.p.A. 	0088
+// Vestel Elektronik Ticaret ve Sanayi A.S. 	0237
+// Z-works Inc. 	024D
+// Loudwater Technologies, LLC 	0025
+// Carrier 	002E
+// Everspring 	0060
+// Novateqni HK Ltd 	020D
+// Telldus Technologies AB 	0176 	http://www.telldus.com/
+// Black & Decker 	0090 	http://www.kwikset.com/
+// Nexia Home Intelligence 	0178 	http://www.nexiahome.com
+// Stelpro 	0239 	http://www.stelpro.com/
+// ZyXEL 	0135
+// Chromagic Technologies Corporation 	0116 	http://www.ctc-chromagic.com/
+// Prodrive Technologies 	0128 	http://prodrive-technologies.com/
+// HomeSeer Technologies 	000C 	http://www.homeseer.com/
+// iCOM Technology b.v. 	0011
+// Mohito Networks 	000E
+// Techniku 	000A
+// Vimar CRS 	0007
+// Wr@p 	0003
+// CasaWorks 	000B
+// ConvergeX Ltd. 	000F
+// Somfy 	0047 	http://www.somfy.com/
+// Alphonsus Tech 	0230 	http://www.idlock.no
+// Logic Group 	0234 	http://www.logic-group.com
+// Kichler 	0114
+// Shenzhen Neo Electronics Co., Ltd 	0258 	http://www.szneo.com/
+// Fantem 	016A 	http://www.oomi.com/
+// Zykronix 	0021
+// Poly-control 	010E 	https://www.danalock.com/
+// Monoprice 	0202
+// CentraLite Systems, Inc 	0246
+// Coqon 	0248
+// Systemair Sverige AS 	0276
+// UFairy G.R. Tech 	0152
+// Wink Inc. 	017F
+// Hank 	0208 	http://www.hank-tech.com/
+// Zooz 	027A 	http://www.getzooz.com/
+// Heiman Technology Co. Ltd 	0260 	http://www.heimantech.com/
+// Hogar Controls 	0293 	http://hogarcontrols.com/
+// Seco 	0301 	http://www.seco.com/
+// Graber 	026E
+// Z Wave Products Inc. 	0315
+// NIE Technology 	0312
+// Steinel 	0271
+// Vemmio 	030F
+// Everyoo 	030D 	http://www.everyoo.com
+// Fireangle 	026F
+// August Smart Locks 	033F
+// Sunricher 	0330 	www.sunricher.com
+// Benetek 	032D 	http://www.benetek.co.nz
+// Defaro 	032E 	http://defaro.ru
+// ID Lock AS 	0373
+// Ring 	0346
+// Avadesign Technology Co. 	025D
+// Aeotec Limited 	0371
+// SimonTech S.L.U 	0267
+// Heltun 	0344
+// ABUS Security-Center GmbH & Co. KG 	0403
+// HAB Home Intelligence, LLC 	0287
+// SWidget 	0345
+// Inovelli 	031E
+// EcoBright 	0431
+// Shenzhen Saykey Technology 	032C

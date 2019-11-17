@@ -6,8 +6,8 @@ import { ValueMetadata } from "../values/Metadata";
 export interface ValueID {
 	commandClass: CommandClasses;
 	endpoint?: number;
-	propertyName: string;
-	propertyKey?: number | string;
+	property: string | number;
+	propertyKey?: string | number;
 }
 export interface ValueUpdatedArgs extends ValueID {
 	prevValue: unknown;
@@ -59,13 +59,13 @@ export interface ValueDB {
 export function valueIdToString({
 	commandClass,
 	endpoint,
-	propertyName,
+	property,
 	propertyKey,
 }: ValueID): string {
 	const jsonKey: Record<string, unknown> = {
 		commandClass,
-		endpoint: endpoint || 0,
-		propertyName,
+		endpoint: endpoint ?? 0,
+		property,
 	};
 	if (propertyKey != undefined) jsonKey.propertyKey = propertyKey;
 	return JSON.stringify(jsonKey);

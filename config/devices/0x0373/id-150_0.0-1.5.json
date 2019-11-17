@@ -1,0 +1,186 @@
+// ID Lock AS ID-150
+// Z wave module for ID Lock 150 and 101
+{
+    "_approved": true,
+    "manufacturer": "ID Lock AS",
+    "manufacturerId": "0x0373",
+    "label": "ID-150",
+    "description": "Z wave module for ID Lock 150 and 101",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "1.5"
+    },
+    "supportsZWavePlus": true,
+    "paramInformation": {
+        "1": {
+            "label": "Door lock mode",
+            "description": "Set if the lock is in away mode and if automatic locking should be enabled",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable Away Manual Lock",
+                    "value": 0
+                },
+                {
+                    "label": "Disable Away Auto Lock",
+                    "value": 1
+                },
+                {
+                    "label": "Enable Away Manual Lock",
+                    "value": 2
+                },
+                {
+                    "label": "Enable Away Auto Lock",
+                    "value": 3
+                }
+            ]
+        },
+        "3": {
+            "label": "Door Hinge Position Mode",
+            "description": "Tell the lock which side your hinges are on",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Right handle",
+                    "value": 0
+                },
+                {
+                    "label": "Left handle",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Door Audio Volume Level",
+            "description": "Set the Audio Volume Level of the Lock",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 6,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No sound",
+                    "value": 0
+                },
+                {
+                    "label": "Level 1",
+                    "value": 1
+                },
+                {
+                    "label": "Level 2",
+                    "value": 2
+                },
+                {
+                    "label": "Level 3",
+                    "value": 3
+                },
+                {
+                    "label": "Level 4",
+                    "value": 4
+                },
+                {
+                    "label": "Level 5",
+                    "value": 5
+                },
+                {
+                    "label": "Max. sound level",
+                    "value": 6
+                }
+            ]
+        },
+        "5": {
+            "label": "Door ReLock Mode",
+            "description": "Sets if the door should relock or not",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "6": {
+            "label": "Service PIN Mode",
+            "description": "Sets the validity of the service PIN",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 9,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Deactivated",
+                    "value": 0
+                },
+                {
+                    "label": "Valid 1 time",
+                    "value": 1
+                },
+                {
+                    "label": "Valid 2 times",
+                    "value": 2
+                },
+                {
+                    "label": "Valid 5 times",
+                    "value": 3
+                },
+                {
+                    "label": "Valid 10 times",
+                    "value": 4
+                },
+                {
+                    "label": "Valid for 12h",
+                    "value": 8
+                },
+                {
+                    "label": "Valid for 24h",
+                    "value": 9
+                }
+            ]
+        },
+        "7": {
+            "label": "Door Lock Model Type",
+            "description": "Sends information if the model of the lock is 101 or 150",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

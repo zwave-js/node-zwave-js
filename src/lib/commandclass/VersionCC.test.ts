@@ -160,7 +160,7 @@ describe("lib/commandclass/VersionCC => ", () => {
 				{
 					commandClass: CommandClasses.Version,
 					endpoint: 0,
-					propertyName: "supportsZWaveSoftwareGet",
+					property: "supportsZWaveSoftwareGet",
 				},
 				true,
 			);
