@@ -1,8 +1,8 @@
-// Linear Corp FS20Z
+// Nortek Security & Control LLC FS20Z
 // Isolated Contact Fixture Module
 {
     "_approved": true,
-    "manufacturer": "Linear Corp",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "FS20Z",
     "description": "Isolated Contact Fixture Module",

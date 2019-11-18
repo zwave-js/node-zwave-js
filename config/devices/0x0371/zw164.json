@@ -1,8 +1,8 @@
-// Aeotec Limited ZW164
+// Aeotec Ltd. ZW164
 // Indoor Siren 6 and Doorbell 6
 {
     "_approved": true,
-    "manufacturer": "Aeotec Limited",
+    "manufacturer": "Aeotec Ltd.",
     "manufacturerId": "0x0371",
     "label": "ZW164",
     "description": "Indoor Siren 6 and Doorbell 6",

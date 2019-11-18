@@ -1,8 +1,8 @@
-// McoHome Technology Co., Ltd MH-P311
+// McoHome Technology Co., Ltd. MH-P311
 // MCO Home Dimmer Switch
 {
     "_approved": true,
-    "manufacturer": "McoHome Technology Co., Ltd",
+    "manufacturer": "McoHome Technology Co., Ltd.",
     "manufacturerId": "0x015f",
     "label": "MH-P311",
     "description": "MCO Home Dimmer Switch",

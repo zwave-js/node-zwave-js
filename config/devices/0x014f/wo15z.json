@@ -1,8 +1,8 @@
-// Linear Corp WO15Z
+// Nortek Security & Control LLC WO15Z
 // Single Wall Outlet
 {
     "_approved": true,
-    "manufacturer": "Linear Corp",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "WO15Z",
     "description": "Single Wall Outlet",

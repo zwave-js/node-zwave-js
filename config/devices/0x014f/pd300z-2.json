@@ -1,8 +1,8 @@
-// Linear Corp PD300Z-2
+// Nortek Security & Control LLC PD300Z-2
 // Plug-in Wall Dimmer
 {
     "_approved": true,
-    "manufacturer": "Linear Corp",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "PD300Z-2",
     "description": "Plug-in Wall Dimmer",

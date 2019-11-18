@@ -1,8 +1,8 @@
-// Z Wave Products Inc. ZL-PA-100
+// zwaveproducts.com ZL-PA-100
 // ZL-PA-100
 {
     "_approved": true,
-    "manufacturer": "Z Wave Products Inc.",
+    "manufacturer": "zwaveproducts.com",
     "manufacturerId": "0x0315",
     "label": "ZL-PA-100",
     "description": "ZL-PA-100",

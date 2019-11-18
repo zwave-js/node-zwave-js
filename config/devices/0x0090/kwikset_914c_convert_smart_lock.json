@@ -1,8 +1,8 @@
-// Black & Decker Kwikset 914C Convert Smart Lock
+// Spectrum Brands Kwikset 914C Convert Smart Lock
 // Smart Lock
 {
     "_approved": true,
-    "manufacturer": "Black & Decker",
+    "manufacturer": "Spectrum Brands",
     "manufacturerId": "0x0090",
     "label": "Kwikset 914C Convert Smart Lock",
     "description": "Smart Lock",

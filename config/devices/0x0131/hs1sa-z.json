@@ -1,8 +1,8 @@
-// Heiman Technology Co. Ltd HS1SA-Z
+// Zipato HS1SA-Z
 // Smart Smoke Detector
 {
     "_approved": true,
-    "manufacturer": "Heiman Technology Co. Ltd",
+    "manufacturer": "Zipato",
     "manufacturerId": "0x0131",
     "label": "HS1SA-Z",
     "description": "Smart Smoke Detector",

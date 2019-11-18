@@ -1,11 +1,11 @@
-// Aeotec Limited ZW175
+// Aeotec Ltd. ZW175
 // Smart Switch 7
 {
     "_approved": true,
     "_warnings": [
         "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
     ],
-    "manufacturer": "Aeotec Limited",
+    "manufacturer": "Aeotec Ltd.",
     "manufacturerId": "0x0371",
     "label": "ZW175",
     "description": "Smart Switch 7",

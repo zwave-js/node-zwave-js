@@ -1,8 +1,8 @@
-// McoHome Technology Co., Ltd MH-P220
+// McoHome Technology Co., Ltd. MH-P220
 // Micro Dimmer
 {
     "_approved": true,
-    "manufacturer": "McoHome Technology Co., Ltd",
+    "manufacturer": "McoHome Technology Co., Ltd.",
     "manufacturerId": "0x015f",
     "label": "MH-P220",
     "description": "Micro Dimmer",

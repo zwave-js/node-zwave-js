@@ -1,8 +1,8 @@
-// ACT - Advanced Control Technologies ZDP200
+// Scientia Technologies, Inc. ZDP200
 // HomePro ZDP200 Wall Dimmer
 {
     "_approved": true,
-    "manufacturer": "ACT - Advanced Control Technologies",
+    "manufacturer": "Scientia Technologies, Inc.",
     "manufacturerId": "0x001f",
     "label": "ZDP200",
     "description": "HomePro ZDP200 Wall Dimmer",

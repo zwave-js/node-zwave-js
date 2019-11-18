@@ -1,8 +1,8 @@
-// Sunricher ZV9001T4-DIM
+// AEON Labs ZV9001T4-DIM
 // 4 group single colour touch panel secondary controller
 {
     "_approved": true,
-    "manufacturer": "Sunricher",
+    "manufacturer": "AEON Labs",
     "manufacturerId": "0x0086",
     "label": "ZV9001T4-DIM",
     "description": "4 group single colour touch panel secondary controller",

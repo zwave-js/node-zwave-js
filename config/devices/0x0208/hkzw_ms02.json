@@ -1,8 +1,8 @@
-// Hank HKZW_MS02
+// HANK Electronics Ltd. HKZW_MS02
 // Motion Sensor
 {
     "_approved": true,
-    "manufacturer": "Hank",
+    "manufacturer": "HANK Electronics Ltd.",
     "manufacturerId": "0x0208",
     "label": "HKZW_MS02",
     "description": "Motion Sensor",

@@ -1,8 +1,8 @@
-// Heiman Technology Co. Ltd HS1DS-Z
+// Shenzhen Heiman Technology Co., Ltd. HS1DS-Z
 // Smart Door Sensor
 {
     "_approved": true,
-    "manufacturer": "Heiman Technology Co. Ltd",
+    "manufacturer": "Shenzhen Heiman Technology Co., Ltd.",
     "manufacturerId": "0x0260",
     "label": "HS1DS-Z",
     "description": "Smart Door Sensor",

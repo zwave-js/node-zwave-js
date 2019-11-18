@@ -1,4 +1,4 @@
-// Hogar Controls Lumi LM-S4ZW (C-L)
+// Home controls Lumi LM-S4ZW (C-L)
 // Z-Wave Switch with 2 on/off light switches and 2 up/down blinds switches
 {
     "_approved": true,
@@ -8,7 +8,7 @@
         "Endpoint 2 contains both switch and dimmer channels. It probably should only include dimmer!",
         "Endpoint 3 contains both switch and dimmer channels. It probably should only include dimmer!"
     ],
-    "manufacturer": "Hogar Controls",
+    "manufacturer": "Home controls",
     "manufacturerId": "0x0293",
     "label": "Lumi LM-S4ZW (C-L)",
     "description": "Z-Wave Switch with 2 on/off light switches and 2 up/down blinds switches",

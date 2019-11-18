@@ -1,4 +1,4 @@
-// Devolo MT:2649
+// Danfoss MT:2649
 // Room Sensor
 {
     "_approved": false,
@@ -7,7 +7,7 @@
         "`thingid` can not be empty.",
         "Device has configuration parameters defined, but does not support the CONFIGURATION command class."
     ],
-    "manufacturer": "Devolo",
+    "manufacturer": "Danfoss",
     "manufacturerId": "0x0002",
     "label": "MT:2649",
     "description": "Room Sensor",

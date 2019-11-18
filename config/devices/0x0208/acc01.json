@@ -1,11 +1,11 @@
-// Hank ACC01
+// HANK Electronics Ltd. ACC01
 // HKZW
 {
     "_approved": true,
     "_warnings": [
         "No channels have been assigned even though there are user configurable command classes."
     ],
-    "manufacturer": "Hank",
+    "manufacturer": "HANK Electronics Ltd.",
     "manufacturerId": "0x0208",
     "label": "ACC01",
     "description": "HKZW",

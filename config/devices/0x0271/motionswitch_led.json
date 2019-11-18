@@ -1,8 +1,8 @@
-// Steinel MotionSwitch LED
+// STEINEL GmbH MotionSwitch LED
 // Infrared motion detector with orientation light
 {
     "_approved": true,
-    "manufacturer": "Steinel",
+    "manufacturer": "STEINEL GmbH",
     "manufacturerId": "0x0271",
     "label": "MotionSwitch LED",
     "description": "Infrared motion detector with orientation light",

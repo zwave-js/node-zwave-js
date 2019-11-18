@@ -1,4 +1,4 @@
-// Shenzhen iSurpass Technology Co. ,Ltd J1505
+// Shenzhen iSurpass Technology Co. , Ltd. J1505
 // Motion Sensor
 {
     "_approved": true,
@@ -9,7 +9,7 @@
         "Wakeup information is not set",
         "At least one device manual must be uploaded as PDF"
     ],
-    "manufacturer": "Shenzhen iSurpass Technology Co. ,Ltd",
+    "manufacturer": "Shenzhen iSurpass Technology Co. , Ltd.",
     "manufacturerId": "0x021c",
     "label": "J1505",
     "description": "Motion Sensor",

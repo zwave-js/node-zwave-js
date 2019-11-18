@@ -1,8 +1,8 @@
-// Jasco Products ZW6302
+// Zooz ZW6302
 // Portable Smart Motion Sensor
 {
     "_approved": true,
-    "manufacturer": "Jasco Products",
+    "manufacturer": "Zooz",
     "manufacturerId": "0x027a",
     "label": "ZW6302",
     "description": "Portable Smart Motion Sensor",

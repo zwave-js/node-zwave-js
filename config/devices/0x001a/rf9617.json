@@ -1,8 +1,8 @@
-// Cooper Wiring Devices RF9617
+// Eaton RF9617
 // Z-Wave Plus smart accessory switch
 {
     "_approved": true,
-    "manufacturer": "Cooper Wiring Devices",
+    "manufacturer": "Eaton",
     "manufacturerId": "0x001a",
     "label": "RF9617",
     "description": "Z-Wave Plus smart accessory switch",

@@ -1,8 +1,8 @@
-// Heiman Technology Co. Ltd HS1MS-Z
+// Shenzhen Heiman Technology Co., Ltd. HS1MS-Z
 // Smart Motion Sensor
 {
     "_approved": true,
-    "manufacturer": "Heiman Technology Co. Ltd",
+    "manufacturer": "Shenzhen Heiman Technology Co., Ltd.",
     "manufacturerId": "0x0260",
     "label": "HS1MS-Z",
     "description": "Smart Motion Sensor",

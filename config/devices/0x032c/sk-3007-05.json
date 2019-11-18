@@ -1,8 +1,8 @@
-// Shenzhen Saykey Technology SK-3007-05
+// Shenzhen Saykey Technology Co., Ltd. SK-3007-05
 // Curtain Motor Control external module
 {
     "_approved": true,
-    "manufacturer": "Shenzhen Saykey Technology",
+    "manufacturer": "Shenzhen Saykey Technology Co., Ltd.",
     "manufacturerId": "0x032c",
     "label": "SK-3007-05",
     "description": "Curtain Motor Control external module",

@@ -1,8 +1,8 @@
-// NIE Technology NZW37
+// NIE Technology Co., Ltd. NZW37
 // 2-Channel Dual Smart Plug
 {
     "_approved": true,
-    "manufacturer": "NIE Technology",
+    "manufacturer": "NIE Technology Co., Ltd.",
     "manufacturerId": "0x0312",
     "label": "NZW37",
     "description": "2-Channel Dual Smart Plug",

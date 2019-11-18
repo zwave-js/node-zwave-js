@@ -1,8 +1,8 @@
-// Hank DWS01
+// HANK Electronics Ltd. DWS01
 // Door and Window Sensor
 {
     "_approved": true,
-    "manufacturer": "Hank",
+    "manufacturer": "HANK Electronics Ltd.",
     "manufacturerId": "0x0208",
     "label": "DWS01",
     "description": "Door and Window Sensor",

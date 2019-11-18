@@ -1,8 +1,8 @@
-// Wintop ITEMP
+// Chromagic Technologies Corporation ITEMP
 // Contact and temperature sensor
 {
     "_approved": true,
-    "manufacturer": "Wintop",
+    "manufacturer": "Chromagic Technologies Corporation",
     "manufacturerId": "0x0116",
     "label": "ITEMP",
     "description": "Contact and temperature sensor",

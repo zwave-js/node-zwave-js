@@ -1,8 +1,8 @@
-// Horstmann Controls Limited SRT323
+// Secure Meters (UK) Ltd. SRT323
 // Secure Z-Wave Room Thermostat
 {
     "_approved": true,
-    "manufacturer": "Horstmann Controls Limited",
+    "manufacturer": "Secure Meters (UK) Ltd.",
     "manufacturerId": "0x0059",
     "label": "SRT323",
     "description": "Secure Z-Wave Room Thermostat",

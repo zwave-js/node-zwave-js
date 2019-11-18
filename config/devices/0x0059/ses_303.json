@@ -1,8 +1,8 @@
-// Horstmann Controls Limited SES 303
+// Secure Meters (UK) Ltd. SES 303
 // Temperature and humidity sensor
 {
     "_approved": true,
-    "manufacturer": "Horstmann Controls Limited",
+    "manufacturer": "Secure Meters (UK) Ltd.",
     "manufacturerId": "0x0059",
     "label": "SES 303",
     "description": "Temperature and humidity sensor",

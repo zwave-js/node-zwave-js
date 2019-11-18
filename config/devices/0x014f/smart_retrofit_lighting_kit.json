@@ -1,8 +1,8 @@
-// Linear Corp Smart Retrofit Lighting Kit
+// Nortek Security & Control LLC Smart Retrofit Lighting Kit
 // LB65R6Z-1
 {
     "_approved": true,
-    "manufacturer": "Linear Corp",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "Smart Retrofit Lighting Kit",
     "description": "LB65R6Z-1",

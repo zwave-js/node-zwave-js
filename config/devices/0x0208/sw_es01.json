@@ -1,4 +1,4 @@
-// Hank SW es01
+// HANK Electronics Ltd. SW es01
 // Siterwell eyesonsor
 {
     "_approved": true,
@@ -13,7 +13,7 @@
         "Exclusion information is not set",
         "Wakeup information is not set"
     ],
-    "manufacturer": "Hank",
+    "manufacturer": "HANK Electronics Ltd.",
     "manufacturerId": "0x0208",
     "label": "SW es01",
     "description": "Siterwell eyesonsor",

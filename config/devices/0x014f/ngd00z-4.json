@@ -1,8 +1,8 @@
-// Linear Corp NGD00Z-4
+// Nortek Security & Control LLC NGD00Z-4
 // Garage Door Controller
 {
     "_approved": true,
-    "manufacturer": "Linear Corp",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "NGD00Z-4",
     "description": "Garage Door Controller",

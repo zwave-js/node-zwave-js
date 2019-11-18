@@ -1,8 +1,8 @@
-// Cooper Wiring Devices RFTR9505
+// Eaton RFTR9505
 // Duplex receptacle
 {
     "_approved": true,
-    "manufacturer": "Cooper Wiring Devices",
+    "manufacturer": "Eaton",
     "manufacturerId": "0x001a",
     "label": "RFTR9505",
     "description": "Duplex receptacle",

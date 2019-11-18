@@ -1,11 +1,11 @@
-// Wenzhou MTLC Electric Appliances Co.,Ltd. Plug-In Smart Meter Dimmer Switch
+// Wenzhou MTLC Electric Appliances Co., Ltd. Plug-In Smart Meter Dimmer Switch
 // ZWN323M
 {
     "_approved": true,
     "_warnings": [
         "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
     ],
-    "manufacturer": "Wenzhou MTLC Electric Appliances Co.,Ltd.",
+    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
     "manufacturerId": "0x011a",
     "label": "Plug-In Smart Meter Dimmer Switch",
     "description": "ZWN323M",

@@ -1,11 +1,11 @@
-// Willis Electric Co., Ltd. NZW36
+// NIE Technology Co., Ltd. NZW36
 // Show home, Inovelli 1 channel smart plug, ZWave Plus
 {
     "_approved": true,
     "_warnings": [
         "Exclusion information is not set"
     ],
-    "manufacturer": "Willis Electric Co., Ltd.",
+    "manufacturer": "NIE Technology Co., Ltd.",
     "manufacturerId": "0x0312",
     "label": "NZW36",
     "description": "Show home, Inovelli 1 channel smart plug, ZWave Plus",

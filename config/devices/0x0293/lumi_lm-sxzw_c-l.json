@@ -1,8 +1,8 @@
-// Hogar Controls Lumi LM-SxZW (C-L)
+// Home controls Lumi LM-SxZW (C-L)
 // Z-Wave Switch with 4 on/off light switches
 {
     "_approved": true,
-    "manufacturer": "Hogar Controls",
+    "manufacturer": "Home controls",
     "manufacturerId": "0x0293",
     "label": "Lumi LM-SxZW (C-L)",
     "description": "Z-Wave Switch with 4 on/off light switches",

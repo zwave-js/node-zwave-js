@@ -1,8 +1,8 @@
-// NIE Technology NZW31S
+// NIE Technology Co., Ltd. NZW31S
 // In-Wall Dimming Switch /w Scenes + Repeater
 {
     "_approved": true,
-    "manufacturer": "NIE Technology",
+    "manufacturer": "NIE Technology Co., Ltd.",
     "manufacturerId": "0x0312",
     "label": "NZW31S",
     "description": "In-Wall Dimming Switch /w Scenes + Repeater",

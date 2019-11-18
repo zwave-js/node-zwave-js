@@ -1,8 +1,8 @@
-// Horstmann Controls Limited S123A00R
+// Secure Meters (UK) Ltd. S123A00R
 // Z-Wave home energy meter
 {
     "_approved": true,
-    "manufacturer": "Horstmann Controls Limited",
+    "manufacturer": "Secure Meters (UK) Ltd.",
     "manufacturerId": "0x0059",
     "label": "S123A00R",
     "description": "Z-Wave home energy meter",

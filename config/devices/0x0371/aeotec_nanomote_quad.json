@@ -1,8 +1,8 @@
-// Aeotec Limited Aeotec NanoMote Quad
+// Aeotec Ltd. Aeotec NanoMote Quad
 // NanoMote Quad
 {
     "_approved": true,
-    "manufacturer": "Aeotec Limited",
+    "manufacturer": "Aeotec Ltd.",
     "manufacturerId": "0x0371",
     "label": "Aeotec NanoMote Quad",
     "description": "NanoMote Quad",

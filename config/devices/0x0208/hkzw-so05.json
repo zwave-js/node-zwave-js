@@ -1,8 +1,8 @@
-// Hank HKZW-SO05
+// HANK Electronics Ltd. HKZW-SO05
 // Smart Plug
 {
     "_approved": true,
-    "manufacturer": "Hank",
+    "manufacturer": "HANK Electronics Ltd.",
     "manufacturerId": "0x0208",
     "label": "HKZW-SO05",
     "description": "Smart Plug",

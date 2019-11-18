@@ -1,8 +1,8 @@
-// ABUS Security-Center GmbH & Co. KG  SHRM10000
+// R-import Ltd. SHRM10000
 // Smoke detector
 {
     "_approved": true,
-    "manufacturer": "ABUS Security-Center GmbH & Co. KG ",
+    "manufacturer": "R-import Ltd.",
     "manufacturerId": "0x0147",
     "label": "SHRM10000",
     "description": "Smoke detector",

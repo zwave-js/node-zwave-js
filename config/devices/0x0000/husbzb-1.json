@@ -1,11 +1,11 @@
-// Linear Corp HUSBZB-1
+// Sigma Designs (Former Zensys) HUSBZB-1
 // QuickStick Combo
 {
     "_approved": false,
     "_errors": [
         "No endpoints are configured"
     ],
-    "manufacturer": "Linear Corp",
+    "manufacturer": "Sigma Designs (Former Zensys)",
     "manufacturerId": "0x0000",
     "label": "HUSBZB-1",
     "description": "QuickStick Combo",

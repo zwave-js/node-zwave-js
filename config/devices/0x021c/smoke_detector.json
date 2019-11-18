@@ -1,8 +1,8 @@
-// Shenzhen iSurpass Technology Co. ,Ltd Smoke Detector
+// Shenzhen iSurpass Technology Co. , Ltd. Smoke Detector
 // Carbon monoxide detector, smoke detector
 {
     "_approved": true,
-    "manufacturer": "Shenzhen iSurpass Technology Co. ,Ltd",
+    "manufacturer": "Shenzhen iSurpass Technology Co. , Ltd.",
     "manufacturerId": "0x021c",
     "label": "Smoke Detector",
     "description": "Carbon monoxide detector, smoke detector",

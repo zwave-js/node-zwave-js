@@ -1,8 +1,8 @@
-// Linear Corp PS15EMZ51
+// Nortek Security & Control LLC PS15EMZ51
 // Appliance Module
 {
     "_approved": true,
-    "manufacturer": "Linear Corp",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "PS15EMZ51",
     "description": "Appliance Module",

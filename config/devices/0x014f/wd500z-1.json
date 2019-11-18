@@ -1,8 +1,8 @@
-// Linear Corp WD500Z-1
+// Nortek Security & Control LLC WD500Z-1
 // Wall Dimmer Switch
 {
     "_approved": true,
-    "manufacturer": "Linear Corp",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "WD500Z-1",
     "description": "Wall Dimmer Switch",

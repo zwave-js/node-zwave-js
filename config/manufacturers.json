@@ -1,7 +1,7 @@
 // Z-Wave manufacturer IDs
 // based on SDS13425, version 2019-03-18
 {
-	"0x0000": "Z-Wave",
+	"0x0000": "Sigma Designs (Former Zensys)",
 	"0x0001": "ACT - Advanced Control Technologies",
 	"0x0002": "Danfoss",
 	"0x0003": "Wr@p",

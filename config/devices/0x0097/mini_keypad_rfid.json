@@ -1,8 +1,8 @@
-// Zipato MINI KEYPAD RFID
+// Wintop MINI KEYPAD RFID
 // Keypad with alarm activation rfid tag
 {
     "_approved": true,
-    "manufacturer": "Zipato",
+    "manufacturer": "Wintop",
     "manufacturerId": "0x0097",
     "label": "MINI KEYPAD RFID",
     "description": "Keypad with alarm activation rfid tag",

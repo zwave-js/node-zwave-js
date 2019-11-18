@@ -1,8 +1,8 @@
-// McoHome Technology Co., Ltd MH-S513
+// McoHome Technology Co., Ltd. MH-S513
 // Touch Panel Switch 3-Way
 {
     "_approved": true,
-    "manufacturer": "McoHome Technology Co., Ltd",
+    "manufacturer": "McoHome Technology Co., Ltd.",
     "manufacturerId": "0x015f",
     "label": "MH-S513",
     "description": "Touch Panel Switch 3-Way",

@@ -1,8 +1,8 @@
-// Linear Corp LB60Z-1
+// Nortek Security & Control LLC LB60Z-1
 // Dimmable LED Light Bulb
 {
     "_approved": true,
-    "manufacturer": "Linear Corp",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "LB60Z-1",
     "description": "Dimmable LED Light Bulb",

@@ -1,8 +1,8 @@
-// Linear Corp GB00Z
+// Nortek Security & Control LLC GB00Z
 // Glass Break Detector
 {
     "_approved": true,
-    "manufacturer": "Linear Corp",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "GB00Z",
     "description": "Glass Break Detector",

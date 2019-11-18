@@ -1,8 +1,8 @@
-// Horstmann Controls Limited ASR-ZW
+// Secure Meters (UK) Ltd. ASR-ZW
 // Thermostat Receiver
 {
     "_approved": true,
-    "manufacturer": "Horstmann Controls Limited",
+    "manufacturer": "Secure Meters (UK) Ltd.",
     "manufacturerId": "0x0059",
     "label": "ASR-ZW",
     "description": "Thermostat Receiver",

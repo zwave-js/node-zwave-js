@@ -1,8 +1,8 @@
-// Reitz-Group.de swiidplug
+// CBCC Domotique SAS swiidplug
 // SwiidPlug
 {
     "_approved": true,
-    "manufacturer": "Reitz-Group.de",
+    "manufacturer": "CBCC Domotique SAS",
     "manufacturerId": "0x0166",
     "label": "swiidplug",
     "description": "SwiidPlug",

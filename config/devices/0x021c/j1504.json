@@ -1,8 +1,8 @@
-// Shenzhen iSurpass Technology Co. ,Ltd J1504
+// Shenzhen iSurpass Technology Co. , Ltd. J1504
 // Door Sensor
 {
     "_approved": true,
-    "manufacturer": "Shenzhen iSurpass Technology Co. ,Ltd",
+    "manufacturer": "Shenzhen iSurpass Technology Co. , Ltd.",
     "manufacturerId": "0x021c",
     "label": "J1504",
     "description": "Door Sensor",

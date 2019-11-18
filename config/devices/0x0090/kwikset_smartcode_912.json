@@ -1,8 +1,8 @@
-// Black & Decker Kwikset SmartCode 912
+// Spectrum Brands Kwikset SmartCode 912
 // Touch Pad Keyed Entry Lever
 {
     "_approved": true,
-    "manufacturer": "Black & Decker",
+    "manufacturer": "Spectrum Brands",
     "manufacturerId": "0x0090",
     "label": "Kwikset SmartCode 912",
     "description": "Touch Pad Keyed Entry Lever",

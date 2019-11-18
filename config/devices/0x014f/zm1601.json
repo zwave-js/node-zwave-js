@@ -1,8 +1,8 @@
-// Vision Security ZM1601
+// Nortek Security & Control LLC ZM1601
 // Battery Operated Siren
 {
     "_approved": true,
-    "manufacturer": "Vision Security",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "ZM1601",
     "description": "Battery Operated Siren",

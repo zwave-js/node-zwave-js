@@ -1,8 +1,8 @@
-// Heiman Technology Co. Ltd HS2WD-Z
+// Shenzhen Heiman Technology Co., Ltd. HS2WD-Z
 // Smart Siren
 {
     "_approved": true,
-    "manufacturer": "Heiman Technology Co. Ltd",
+    "manufacturer": "Shenzhen Heiman Technology Co., Ltd.",
     "manufacturerId": "0x0260",
     "label": "HS2WD-Z",
     "description": "Smart Siren",

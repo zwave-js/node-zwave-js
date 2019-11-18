@@ -1,8 +1,8 @@
-// Good Way Technology Co., Ltd 78008
+// Good Way Technology Co., Ltd. 78008
 // Door/Window Sensor with Magnet
 {
     "_approved": true,
-    "manufacturer": "Good Way Technology Co., Ltd",
+    "manufacturer": "Good Way Technology Co., Ltd.",
     "manufacturerId": "0x0068",
     "label": "78008",
     "description": "Door/Window Sensor with Magnet",

@@ -1,8 +1,8 @@
-// Hank SCN01
+// HANK Electronics Ltd. SCN01
 // One-key Scene Controller
 {
     "_approved": true,
-    "manufacturer": "Hank",
+    "manufacturer": "HANK Electronics Ltd.",
     "manufacturerId": "0x0208",
     "label": "SCN01",
     "description": "One-key Scene Controller",
