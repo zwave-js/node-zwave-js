@@ -8,9 +8,10 @@
 			}
 		],
 
-		// To enable Babel support
+		// Enable Babel support for default imports because a couple of
+		// type definitions use `export =`
 		"allowSyntheticDefaultImports": true,
-		"esModuleInterop": true,
+		// Speed up compilation in unit tests
 		"isolatedModules": true,
 
 		"noEmit": true,
