@@ -1,94 +1,94 @@
 // AEON Labs DSD37
 // Range Extender
 {
-    "_approved": true,
-    "_warnings": [
-        "No channels have been assigned even though there are user configurable command classes."
-    ],
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "DSD37",
-    "description": "Range Extender",
-    "devices": [
-        {
-            "productType": "0x0004",
-            "productId": "0x0025"
-        },
-        {
-            "productType": "0x0019",
-            "productId": "0x0004"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Retransmit",
-            "maxNodes": 5
-        }
-    },
-    "paramInformation": {
-        "200": {
-            "label": "Partner ID",
-            "description": "Partner ID",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Aeon Labs’s Standard Product",
-                    "value": 0
-                },
-                {
-                    "label": "AT&T",
-                    "value": 1
-                },
-                {
-                    "label": "Jean",
-                    "value": 2
-                },
-                {
-                    "label": "Telefonica",
-                    "value": 3
-                },
-                {
-                    "label": "Reserved for other Partner",
-                    "value": 4
-                }
-            ]
-        },
-        "254": {
-            "label": "Device Tag",
-            "description": "When Repeater removed from z-wave network, Device Tag will not change",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "255": {
-            "label": "Reset configuration settings to default values",
-            "description": "Reset configuration settings to default values, except parameter is 254",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"_approved": true,
+	"_warnings": [
+		"No channels have been assigned even though there are user configurable command classes."
+	],
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "DSD37",
+	"description": "Range Extender",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0025"
+		},
+		{
+			"productType": "0x0019",
+			"productId": "0x0004"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Retransmit",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"200": {
+			"label": "Partner ID",
+			"description": "Partner ID",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Aeon Labs’s Standard Product",
+					"value": 0
+				},
+				{
+					"label": "AT&T",
+					"value": 1
+				},
+				{
+					"label": "Jean",
+					"value": 2
+				},
+				{
+					"label": "Telefonica",
+					"value": 3
+				},
+				{
+					"label": "Reserved for other Partner",
+					"value": 4
+				}
+			]
+		},
+		"254": {
+			"label": "Device Tag",
+			"description": "When Repeater removed from z-wave network, Device Tag will not change",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"255": {
+			"label": "Reset configuration settings to default values",
+			"description": "Reset configuration settings to default values, except parameter is 254",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

@@ -1,26 +1,26 @@
 // Eaton RF9575
 // Anyplace Switch
 {
-    "_approved": true,
-    "manufacturer": "Eaton",
-    "manufacturerId": "0x001a",
-    "label": "RF9575",
-    "description": "Anyplace Switch",
-    "devices": [
-        {
-            "productType": "0x4243",
-            "productId": "0x0000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Eaton",
+	"manufacturerId": "0x001a",
+	"label": "RF9575",
+	"description": "Anyplace Switch",
+	"devices": [
+		{
+			"productType": "0x4243",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	}
 }
