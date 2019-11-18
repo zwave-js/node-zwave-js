@@ -1,11 +1,11 @@
-// Linear Corp WT00Z-1
+// Nortek Security & Control LLC WT00Z-1
 // 3-Way Wall Accessory Switch
 {
     "_approved": true,
     "_warnings": [
         "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
     ],
-    "manufacturer": "Linear Corp",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "WT00Z-1",
     "description": "3-Way Wall Accessory Switch",

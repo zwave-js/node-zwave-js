@@ -1,11 +1,11 @@
-// MOBILUS MOTOR Spólka z o.o. EZRS
+// MOBILUS MOTOR Spółka z o.o. EZRS
 // Mobilus Tubular Motor
 {
     "_approved": true,
     "_warnings": [
         "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
     ],
-    "manufacturer": "MOBILUS MOTOR Spólka z o.o.",
+    "manufacturer": "MOBILUS MOTOR Spółka z o.o.",
     "manufacturerId": "0x019d",
     "label": "EZRS",
     "description": "Mobilus Tubular Motor",

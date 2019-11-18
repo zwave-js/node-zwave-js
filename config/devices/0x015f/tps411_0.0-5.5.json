@@ -1,8 +1,8 @@
-// McoHome Technology Co., Ltd TPS411
+// McoHome Technology Co., Ltd. TPS411
 // Touch Panel Switch 1 Button
 {
     "_approved": true,
-    "manufacturer": "McoHome Technology Co., Ltd",
+    "manufacturer": "McoHome Technology Co., Ltd.",
     "manufacturerId": "0x015f",
     "label": "TPS411",
     "description": "Touch Panel Switch 1 Button",

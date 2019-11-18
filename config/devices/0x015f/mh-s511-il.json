@@ -1,4 +1,4 @@
-// McoHome Technology Co., Ltd MH-S511-IL
+// McoHome Technology Co., Ltd. MH-S511-IL
 // MCOHome touch switch Relay
 {
     "_approved": true,
@@ -10,7 +10,7 @@
         "Inclusion information is not set",
         "Exclusion information is not set"
     ],
-    "manufacturer": "McoHome Technology Co., Ltd",
+    "manufacturer": "McoHome Technology Co., Ltd.",
     "manufacturerId": "0x015f",
     "label": "MH-S511-IL",
     "description": "MCOHome touch switch Relay",

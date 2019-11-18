@@ -1,8 +1,8 @@
-// McoHome Technology Co., Ltd MH7
+// McoHome Technology Co., Ltd. MH7
 // Water/Electrical Heating Thermostat
 {
     "_approved": true,
-    "manufacturer": "McoHome Technology Co., Ltd",
+    "manufacturer": "McoHome Technology Co., Ltd.",
     "manufacturerId": "0x015f",
     "label": "MH7",
     "description": "Water/Electrical Heating Thermostat",

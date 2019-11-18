@@ -1,8 +1,8 @@
-// Systemair Sverige AS 29990
+// Systemair Sverige AB 29990
 // Remotely Controlled Ventilation
 {
     "_approved": true,
-    "manufacturer": "Systemair Sverige AS",
+    "manufacturer": "Systemair Sverige AB",
     "manufacturerId": "0x0276",
     "label": "29990",
     "description": "Remotely Controlled Ventilation",

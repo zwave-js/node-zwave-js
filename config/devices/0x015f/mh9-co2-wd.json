@@ -1,8 +1,8 @@
-// McoHome Technology Co., Ltd MH9-CO2-WD
+// McoHome Technology Co., Ltd. MH9-CO2-WD
 // CO2 Monitor Air quality detector
 {
     "_approved": true,
-    "manufacturer": "McoHome Technology Co., Ltd",
+    "manufacturer": "McoHome Technology Co., Ltd.",
     "manufacturerId": "0x015f",
     "label": "MH9-CO2-WD",
     "description": "CO2 Monitor Air quality detector",

@@ -1,8 +1,8 @@
-// Wenzhou MTLC Electric Appliances Co.,Ltd. ZWN-RSM2
+// Wenzhou MTLC Electric Appliances Co., Ltd. ZWN-RSM2
 // Smart Dual Relay Switch Module
 {
     "_approved": true,
-    "manufacturer": "Wenzhou MTLC Electric Appliances Co.,Ltd.",
+    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
     "manufacturerId": "0x011a",
     "label": "ZWN-RSM2",
     "description": "Smart Dual Relay Switch Module",

@@ -1,8 +1,8 @@
-// Black & Decker Kwikset SmartCode 910
+// Spectrum Brands Kwikset SmartCode 910
 // Touchpad Electronic Deadbolt with Z-Wave
 {
     "_approved": true,
-    "manufacturer": "Black & Decker",
+    "manufacturer": "Spectrum Brands",
     "manufacturerId": "0x0090",
     "label": "Kwikset SmartCode 910",
     "description": "Touchpad Electronic Deadbolt with Z-Wave",

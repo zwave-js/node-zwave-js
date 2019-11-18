@@ -1,8 +1,8 @@
-// Hogar Controls HTP-4S1-FB
+// Home controls HTP-4S1-FB
 // Four Touch Panel and Power Socket
 {
     "_approved": true,
-    "manufacturer": "Hogar Controls",
+    "manufacturer": "Home controls",
     "manufacturerId": "0x0293",
     "label": "HTP-4S1-FB",
     "description": "Four Touch Panel and Power Socket",

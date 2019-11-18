@@ -1,8 +1,8 @@
-// Defaro DSI-101 binary switch
+// DEFARO DSI-101 binary switch
 // DSI-101 binary switch
 {
     "_approved": true,
-    "manufacturer": "Defaro",
+    "manufacturer": "DEFARO",
     "manufacturerId": "0x032e",
     "label": "DSI-101 binary switch",
     "description": "DSI-101 binary switch",

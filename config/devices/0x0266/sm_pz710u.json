@@ -1,4 +1,4 @@
-// Hank SM_PZ710U
+// Siterwell Technology HK Co., Ltd. SM_PZ710U
 // Power Plug
 {
     "_approved": false,
@@ -11,7 +11,7 @@
         "Inclusion information is not set",
         "Exclusion information is not set"
     ],
-    "manufacturer": "Hank",
+    "manufacturer": "Siterwell Technology HK Co., Ltd.",
     "manufacturerId": "0x0266",
     "label": "SM_PZ710U",
     "description": "Power Plug",

@@ -25,6 +25,10 @@ import {
 	DeviceConfig,
 	DeviceConfigIndexEntry,
 } from "../src/lib/config/Devices";
+import {
+	loadManufacturers,
+	lookupManufacturer,
+} from "../src/lib/config/Manufacturers";
 import { num2hex } from "../src/lib/util/strings";
 
 // Where the files are located
@@ -440,9 +444,41 @@ ${JSON.stringify(index, undefined, 4)}`,
 	);
 }
 
+/** Changes the manufacturer names in all device config files to match manufacturers.json */
+async function updateManufacturerNames(): Promise<void> {
+	const configFiles = await enumFilesRecursive(
+		processedDir,
+		file => file.endsWith(".json") && !file.endsWith("index.json"),
+	);
+	await loadManufacturers();
+
+	for (const file of configFiles) {
+		let fileContents = await fs.readFile(file, "utf8");
+		const id = parseInt(
+			fileContents.match(/"manufacturerId"\: "0x([0-9a-fA-F]+)"/)![1],
+			16,
+		);
+		const name = lookupManufacturer(id);
+		const oldName = fileContents.match(/"manufacturer"\: "([^\"]+)"/)![1];
+		if (oldName && name && name !== oldName) {
+			fileContents = fileContents.replace(
+				`// ${oldName} `,
+				`// ${name} `,
+			);
+			fileContents = fileContents.replace(
+				`"manufacturer": "${oldName}"`,
+				`"manufacturer": "${name}"`,
+			);
+			await fs.writeFile(file, fileContents, "utf8");
+		}
+	}
+}
+
 (async () => {
 	if (process.argv.includes("manufacturers")) {
 		await downloadManufacturers();
+	} else if (process.argv.includes("manufacturerNames")) {
+		await updateManufacturerNames();
 	} else if (process.argv.includes("download")) {
 		await downloadManufacturers();
 		await downloadDevices();

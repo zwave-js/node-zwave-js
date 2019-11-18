@@ -1,8 +1,8 @@
-// McoHome Technology Co., Ltd MH8-FC
+// McoHome Technology Co., Ltd. MH8-FC
 // Fan Coil Thermostat
 {
     "_approved": true,
-    "manufacturer": "McoHome Technology Co., Ltd",
+    "manufacturer": "McoHome Technology Co., Ltd.",
     "manufacturerId": "0x015f",
     "label": "MH8-FC",
     "description": "Fan Coil Thermostat",

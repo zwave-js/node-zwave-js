@@ -1,8 +1,8 @@
-// McoHome Technology Co., Ltd MH10-PM2.5-WA
+// McoHome Technology Co., Ltd. MH10-PM2.5-WA
 // PM2.5 Monitor
 {
     "_approved": true,
-    "manufacturer": "McoHome Technology Co., Ltd",
+    "manufacturer": "McoHome Technology Co., Ltd.",
     "manufacturerId": "0x015f",
     "label": "MH10-PM2.5-WA",
     "description": "PM2.5 Monitor",

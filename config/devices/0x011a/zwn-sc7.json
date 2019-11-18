@@ -1,4 +1,4 @@
-// Wenzhou MTLC Electric Appliances Co.,Ltd. ZWN-SC7
+// Wenzhou MTLC Electric Appliances Co., Ltd. ZWN-SC7
 // Scene Controller
 {
     "_approved": true,
@@ -7,7 +7,7 @@
         "Inclusion information is not set",
         "Exclusion information is not set"
     ],
-    "manufacturer": "Wenzhou MTLC Electric Appliances Co.,Ltd.",
+    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
     "manufacturerId": "0x011a",
     "label": "ZWN-SC7",
     "description": "Scene Controller",

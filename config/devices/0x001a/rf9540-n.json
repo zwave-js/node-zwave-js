@@ -1,8 +1,8 @@
-// Cooper Wiring Devices RF9540-N
+// Eaton RF9540-N
 // All Load Dimmer Light Switch
 {
 	"_approved": true,
-	"manufacturer": "Cooper Wiring Devices",
+	"manufacturer": "Eaton",
 	"manufacturerId": "0x001a",
 	"label": "RF9540-N",
 	"description": "All Load Dimmer Light Switch",

@@ -1,8 +1,8 @@
-// Wenzhou MTLC Electric Appliances Co.,Ltd. ZW500DM
+// Wenzhou MTLC Electric Appliances Co., Ltd. ZW500DM
 // In-wall Smart Meter Dimmer Switch
 {
     "_approved": true,
-    "manufacturer": "Wenzhou MTLC Electric Appliances Co.,Ltd.",
+    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
     "manufacturerId": "0x011a",
     "label": "ZW500DM",
     "description": "In-wall Smart Meter Dimmer Switch",

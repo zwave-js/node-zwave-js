@@ -1,4 +1,4 @@
-// Cooper Wiring Devices RF9537
+// Eaton RF9537
 // 1000W Dimmer Light Switch
 {
 	"_approved": false,
@@ -13,7 +13,7 @@
 		"Exclusion information is not set",
 		"No endpoints are configured"
 	],
-	"manufacturer": "Cooper Wiring Devices",
+	"manufacturer": "Eaton",
 	"manufacturerId": "0x001a",
 	"label": "RF9537",
 	"description": "1000W Dimmer Light Switch",

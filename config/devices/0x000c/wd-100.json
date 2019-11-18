@@ -1,8 +1,8 @@
-// Dragon Tech Industrial, Ltd. WD-100
+// HomeSeer Technologies WD-100
 // Wall Dimmer Switch
 {
     "_approved": true,
-    "manufacturer": "Dragon Tech Industrial, Ltd.",
+    "manufacturer": "HomeSeer Technologies",
     "manufacturerId": "0x000c",
     "label": "WD-100",
     "description": "Wall Dimmer Switch",

@@ -1,8 +1,8 @@
-// Coqon PSMZ0001
+// neusta next GmbH & Co. KG PSMZ0001
 // Plug module
 {
     "_approved": true,
-    "manufacturer": "Coqon",
+    "manufacturer": "neusta next GmbH & Co. KG",
     "manufacturerId": "0x0248",
     "label": "PSMZ0001",
     "description": "Plug module",

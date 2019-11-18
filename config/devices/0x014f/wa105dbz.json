@@ -1,4 +1,4 @@
-// Linear Corp WA105DBZ
+// Nortek Security & Control LLC WA105DBZ
 // Siren and Strobe
 {
     "_approved": true,
@@ -7,7 +7,7 @@
         "Inclusion information is not set",
         "Exclusion information is not set"
     ],
-    "manufacturer": "Linear Corp",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "WA105DBZ",
     "description": "Siren and Strobe",

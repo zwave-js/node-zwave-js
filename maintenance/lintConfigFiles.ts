@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { green, red, underline, yellow } from "ansi-colors";
+import { green, red, yellow } from "ansi-colors";
 import { readFile } from "fs-extra";
 import * as path from "path";
 import {
@@ -33,7 +33,16 @@ async function lintDevices(): Promise<void> {
 		.filter((filename, index, self) => self.indexOf(filename) === index)
 		.sort();
 
-	const errors: { filename: string; error: any }[] = [];
+	const errors = new Map<string, string[]>();
+	function addError(filename: string, error: string) {
+		if (!errors.has(filename)) errors.set(filename, []);
+		errors.get(filename)!.push(error);
+	}
+	const warnings = new Map<string, string[]>();
+	function addWarning(filename: string, warning: string) {
+		if (!warnings.has(filename)) warnings.set(filename, []);
+		warnings.get(filename)!.push(warning);
+	}
 
 	for (const file of uniqueFiles) {
 		const filePath = path.join(configDir, "devices", file);
@@ -43,7 +52,7 @@ async function lintDevices(): Promise<void> {
 		try {
 			config = new DeviceConfig(file, fileContents);
 		} catch (e) {
-			errors.push({ filename: file, error: e });
+			addError(file, e.message);
 			continue;
 		}
 
@@ -61,38 +70,61 @@ async function lintDevices(): Promise<void> {
 				lifelines.find(l => l.maxNodes === 1) &&
 				lifelines.find(l => l.maxNodes > 1)
 			) {
-				console.warn(underline(`config/devices/${file}:`));
-				console.warn(
-					yellow(
-						`[WARN] A lifeline with 1 node plus another one with more nodes found!`,
-					),
+				addWarning(
+					file,
+					`A lifeline with 1 node plus another one with more nodes found!
+This is likely an error!`,
 				);
-				console.warn(yellow(`This is likely an error!`));
-				console.warn();
+			}
+			if (
+				lifelines.some(
+					l =>
+						l.label === "Lifeline" &&
+						l.groupId === 1 &&
+						l.maxNodes > 1,
+				)
+			) {
+				addWarning(
+					file,
+					`Found an association that looks like a Z-Wave+ lifeline but has more than 1 max nodes!`,
+				);
 			}
 		}
 
 		if (config.paramInformation?.size) {
 			for (const [key, value] of config.paramInformation.entries()) {
 				if (!value.allowManualEntry && !value.options?.length) {
-					errors.push({
-						filename: file,
-						error: new Error(
-							`Parameter #${key} must allow manual entry if there are no options defined!`,
-						),
-					});
+					addError(
+						file,
+						`Parameter #${key} must allow manual entry if there are no options defined!`,
+					);
 				}
 			}
 		}
 	}
 
-	if (errors.length) {
-		for (const { filename, error } of errors) {
-			const lines = (error.message as string)
-				.split("\n")
-				.filter(line => !line.endsWith(filename + ":"));
+	if (warnings.size) {
+		for (const [filename, fileWarnings] of warnings.entries()) {
+			console.warn(`config/devices/${filename}:`);
+			for (const warning of fileWarnings) {
+				const lines = warning
+					.split("\n")
+					.filter(line => !line.endsWith(filename + ":"));
+				console.warn(yellow("[WARN] " + lines.join("\n")));
+			}
+			console.warn();
+		}
+	}
+
+	if (errors.size) {
+		for (const [filename, fileErrors] of errors.entries()) {
 			console.error(`config/devices/${filename}:`);
-			console.error(red(lines.join("\n")));
+			for (const error of fileErrors) {
+				const lines = error
+					.split("\n")
+					.filter(line => !line.endsWith(filename + ":"));
+				console.error("[ERR] " + red(lines.join("\n")));
+			}
 			console.error();
 		}
 		process.exit(1);

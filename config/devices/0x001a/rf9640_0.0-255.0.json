@@ -1,8 +1,8 @@
-// Cooper Wiring Devices RF9640
+// Eaton RF9640
 // Z-Wave Plus universal smart dimmer
 {
     "_approved": true,
-    "manufacturer": "Cooper Wiring Devices",
+    "manufacturer": "Eaton",
     "manufacturerId": "0x001a",
     "label": "RF9640",
     "description": "Z-Wave Plus universal smart dimmer",

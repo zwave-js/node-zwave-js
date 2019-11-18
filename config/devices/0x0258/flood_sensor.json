@@ -1,8 +1,8 @@
-// Shenzhen Neo Electronics Co., Ltd Flood sensor
+// Shenzhen Neo Electronics Co., Ltd. Flood sensor
 // Flood/water sensor
 {
     "_approved": true,
-    "manufacturer": "Shenzhen Neo Electronics Co., Ltd",
+    "manufacturer": "Shenzhen Neo Electronics Co., Ltd.",
     "manufacturerId": "0x0258",
     "label": "Flood sensor",
     "description": "Flood/water sensor",

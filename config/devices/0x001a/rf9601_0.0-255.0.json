@@ -1,8 +1,8 @@
-// Cooper Wiring Devices RF9601
+// Eaton RF9601
 // Z-Wave Plus wireless switch
 {
     "_approved": true,
-    "manufacturer": "Cooper Wiring Devices",
+    "manufacturer": "Eaton",
     "manufacturerId": "0x001a",
     "label": "RF9601",
     "description": "Z-Wave Plus wireless switch",

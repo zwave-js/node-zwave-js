@@ -1,8 +1,8 @@
-// Devolo 09813
+// Fibargroup 09813
 // Home Control Smoke Detector
 {
     "_approved": true,
-    "manufacturer": "Devolo",
+    "manufacturer": "Fibargroup",
     "manufacturerId": "0x010f",
     "label": "09813",
     "description": "Home Control Smoke Detector",

@@ -1,4 +1,4 @@
-// Shenzhen iSurpass Technology Co. ,Ltd J1506
+// Shenzhen iSurpass Technology Co. , Ltd. J1506
 // 1 Gang Wall Switch
 {
     "_approved": false,
@@ -8,7 +8,7 @@
         "Exclusion information is not set",
         "At least one device manual must be uploaded as PDF"
     ],
-    "manufacturer": "Shenzhen iSurpass Technology Co. ,Ltd",
+    "manufacturer": "Shenzhen iSurpass Technology Co. , Ltd.",
     "manufacturerId": "0x021c",
     "label": "J1506",
     "description": "1 Gang Wall Switch",

@@ -1,8 +1,8 @@
-// Wenzhou MTLC Electric Appliances Co.,Ltd. ZW500D
+// Wenzhou MTLC Electric Appliances Co., Ltd. ZW500D
 // Dimmer
 {
     "_approved": true,
-    "manufacturer": "Wenzhou MTLC Electric Appliances Co.,Ltd.",
+    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
     "manufacturerId": "0x011a",
     "label": "ZW500D",
     "description": "Dimmer",

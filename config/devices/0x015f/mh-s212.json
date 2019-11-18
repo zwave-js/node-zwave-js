@@ -1,4 +1,4 @@
-// McoHome Technology Co., Ltd MH-S212
+// McoHome Technology Co., Ltd. MH-S212
 // Mini Combo Switch
 {
     "_approved": true,
@@ -12,7 +12,7 @@
         "Inclusion information is not set",
         "Exclusion information is not set"
     ],
-    "manufacturer": "McoHome Technology Co., Ltd",
+    "manufacturer": "McoHome Technology Co., Ltd.",
     "manufacturerId": "0x015f",
     "label": "MH-S212",
     "description": "Mini Combo Switch",

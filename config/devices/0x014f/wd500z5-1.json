@@ -1,8 +1,8 @@
-// Linear Corp WD500Z5-1
+// Nortek Security & Control LLC WD500Z5-1
 // An in-wall lighting dimmer
 {
     "_approved": true,
-    "manufacturer": "Linear Corp",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "WD500Z5-1",
     "description": "An in-wall lighting dimmer",

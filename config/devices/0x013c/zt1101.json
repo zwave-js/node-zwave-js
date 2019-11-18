@@ -1,8 +1,8 @@
-// Vision Security ZT1101
+// Philio Technology Corp ZT1101
 // 4 Button Key Fob
 {
     "_approved": true,
-    "manufacturer": "Vision Security",
+    "manufacturer": "Philio Technology Corp",
     "manufacturerId": "0x013c",
     "label": "ZT1101",
     "description": "4 Button Key Fob",

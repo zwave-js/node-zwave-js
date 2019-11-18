@@ -1,8 +1,8 @@
-// Airline Mechanical Co., Ltd. ZDS-UD10
+// Tronico Technology Co. Ltd. ZDS-UD10
 // Dimming Switch Module
 {
     "_approved": true,
-    "manufacturer": "Airline Mechanical Co., Ltd.",
+    "manufacturer": "Tronico Technology Co. Ltd.",
     "manufacturerId": "0x0111",
     "label": "ZDS-UD10",
     "description": "Dimming Switch Module",

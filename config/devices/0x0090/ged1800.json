@@ -1,4 +1,4 @@
-// Black & Decker GED1800
+// Spectrum Brands GED1800
 // SmartCode 10 Touchpad Electronic Deadbolt
 {
     "_approved": false,
@@ -9,7 +9,7 @@
     "_warnings": [
         "No channels have been assigned even though there are user configurable command classes."
     ],
-    "manufacturer": "Black & Decker",
+    "manufacturer": "Spectrum Brands",
     "manufacturerId": "0x0090",
     "label": "GED1800",
     "description": "SmartCode 10 Touchpad Electronic Deadbolt",

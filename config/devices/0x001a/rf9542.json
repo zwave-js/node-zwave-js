@@ -1,8 +1,8 @@
-// Cooper Wiring Devices RF9542
+// Eaton RF9542
 // Dimmer Accessory Switch
 {
     "_approved": true,
-    "manufacturer": "Cooper Wiring Devices",
+    "manufacturer": "Eaton",
     "manufacturerId": "0x001a",
     "label": "RF9542",
     "description": "Dimmer Accessory Switch",

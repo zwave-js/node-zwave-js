@@ -1,8 +1,8 @@
-// Cooper Wiring Devices RFWC5
+// Eaton RFWC5
 // 5-Scene Keypad
 {
     "_approved": true,
-    "manufacturer": "Cooper Wiring Devices",
+    "manufacturer": "Eaton",
     "manufacturerId": "0x001a",
     "label": "RFWC5",
     "description": "5-Scene Keypad",

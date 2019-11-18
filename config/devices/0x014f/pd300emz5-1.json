@@ -1,8 +1,8 @@
-// Linear Corp PD300EMZ5-1
+// Nortek Security & Control LLC PD300EMZ5-1
 // 300 Watt, Plug-In Dimmer Series 500
 {
     "_approved": true,
-    "manufacturer": "Linear Corp",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "PD300EMZ5-1",
     "description": "300 Watt, Plug-In Dimmer Series 500",

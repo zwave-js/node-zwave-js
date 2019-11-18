@@ -1,8 +1,8 @@
-// Linear Corp WA00Z-1
+// Nortek Security & Control LLC WA00Z-1
 // Wall Mounted Switch
 {
     "_approved": true,
-    "manufacturer": "Linear Corp",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "WA00Z-1",
     "description": "Wall Mounted Switch",

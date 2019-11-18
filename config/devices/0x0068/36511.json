@@ -1,11 +1,11 @@
-// Good Way Technology Co., Ltd 36511
+// Good Way Technology Co., Ltd. 36511
 // RGBW Dimmer Module
 {
     "_approved": true,
     "_warnings": [
         "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
     ],
-    "manufacturer": "Good Way Technology Co., Ltd",
+    "manufacturer": "Good Way Technology Co., Ltd.",
     "manufacturerId": "0x0068",
     "label": "36511",
     "description": "RGBW Dimmer Module",

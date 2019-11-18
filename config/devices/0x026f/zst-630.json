@@ -1,8 +1,8 @@
-// Fireangle ZST-630
+// Sprue Safety Products Ltd. ZST-630
 // Thermoptek Smoke Alarm/Smoke Detector
 {
     "_approved": true,
-    "manufacturer": "Fireangle",
+    "manufacturer": "Sprue Safety Products Ltd.",
     "manufacturerId": "0x026f",
     "label": "ZST-630",
     "description": "Thermoptek Smoke Alarm/Smoke Detector",
@@ -19,8 +19,7 @@
     "associations": {
         "1": {
             "label": "Lifeline",
-            "description": "Z-Wave Plus Lifeline",
-            "maxNodes": 5,
+            "maxNodes": 1,
             "isLifeline": true
         },
         "2": {

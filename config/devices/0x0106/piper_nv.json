@@ -1,4 +1,4 @@
-// Icontrol Networks Piper NV
+// iControl Piper NV
 // Piper NV Security camera / sensor
 {
     "_approved": false,
@@ -9,7 +9,7 @@
     "_warnings": [
         "No channels have been assigned even though there are user configurable command classes."
     ],
-    "manufacturer": "Icontrol Networks",
+    "manufacturer": "iControl",
     "manufacturerId": "0x0106",
     "label": "Piper NV",
     "description": "Piper NV Security camera / sensor",

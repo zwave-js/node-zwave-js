@@ -1,8 +1,8 @@
-// Heiman Technology Co. Ltd DX1CG-Z
+// Shenzhen Heiman Technology Co., Ltd. DX1CG-Z
 // CH4 Gas Sensor
 {
     "_approved": true,
-    "manufacturer": "Heiman Technology Co. Ltd",
+    "manufacturer": "Shenzhen Heiman Technology Co., Ltd.",
     "manufacturerId": "0x0260",
     "label": "DX1CG-Z",
     "description": "CH4 Gas Sensor",

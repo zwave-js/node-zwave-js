@@ -1,8 +1,8 @@
-// Black & Decker 914TRL
+// Leviton 914TRL
 // Touchpad Electronic Deadbolt
 {
     "_approved": false,
-    "manufacturer": "Black & Decker",
+    "manufacturer": "Leviton",
     "manufacturerId": "0x001d",
     "label": "914TRL",
     "description": "Touchpad Electronic Deadbolt",

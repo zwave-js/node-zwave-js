@@ -1,8 +1,8 @@
-// Cooper Wiring Devices RF9500
+// Eaton RF9500
 // Battery Switch
 {
     "_approved": true,
-    "manufacturer": "Cooper Wiring Devices",
+    "manufacturer": "Eaton",
     "manufacturerId": "0x001a",
     "label": "RF9500",
     "description": "Battery Switch",

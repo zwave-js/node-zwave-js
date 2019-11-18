@@ -1,8 +1,8 @@
-// Hank RGB bulb
+// HANK Electronics Ltd. RGB bulb
 // HKZW-RGB01-V1.0
 {
     "_approved": true,
-    "manufacturer": "Hank",
+    "manufacturer": "HANK Electronics Ltd.",
     "manufacturerId": "0x0208",
     "label": "RGB bulb",
     "description": "HKZW-RGB01-V1.0",

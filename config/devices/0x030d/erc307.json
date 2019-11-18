@@ -1,4 +1,4 @@
-// Everyoo ERC307
+// Hampoo ERC307
 // Z-Wave Plus Wireless Receiving Controller
 {
     "_approved": true,
@@ -12,7 +12,7 @@
         "Inclusion information is not set",
         "Exclusion information is not set"
     ],
-    "manufacturer": "Everyoo",
+    "manufacturer": "Hampoo",
     "manufacturerId": "0x030d",
     "label": "ERC307",
     "description": "Z-Wave Plus Wireless Receiving Controller",

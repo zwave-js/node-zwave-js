@@ -1,8 +1,8 @@
-// Horstmann Controls Limited SSP302
+// Secure Meters (UK) Ltd. SSP302
 // Switch Meter Plugin
 {
     "_approved": true,
-    "manufacturer": "Horstmann Controls Limited",
+    "manufacturer": "Secure Meters (UK) Ltd.",
     "manufacturerId": "0x0059",
     "label": "SSP302",
     "description": "Switch Meter Plugin",

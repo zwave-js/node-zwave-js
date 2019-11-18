@@ -1,8 +1,8 @@
-// Horstmann Controls Limited HRT4-ZW
+// Secure Meters (UK) Ltd. HRT4-ZW
 // Battery Powered Wall Thermostat
 {
     "_approved": true,
-    "manufacturer": "Horstmann Controls Limited",
+    "manufacturer": "Secure Meters (UK) Ltd.",
     "manufacturerId": "0x0059",
     "label": "HRT4-ZW",
     "description": "Battery Powered Wall Thermostat",

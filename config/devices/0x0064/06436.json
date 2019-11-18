@@ -1,8 +1,8 @@
-// Z-Wave.Me 06436
+// Reitz-Group.de 06436
 // Insert blind control
 {
     "_approved": true,
-    "manufacturer": "Z-Wave.Me",
+    "manufacturer": "Reitz-Group.de",
     "manufacturerId": "0x0064",
     "label": "06436",
     "description": "Insert blind control",

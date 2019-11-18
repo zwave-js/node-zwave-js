@@ -1,4 +1,4 @@
-// McoHome Technology Co., Ltd MH3700-HP
+// McoHome Technology Co., Ltd. MH3700-HP
 // Programmable Thermostat
 {
     "_approved": false,
@@ -11,7 +11,7 @@
         "Device category is not set.",
         "At least one manufacturers product image must be uploaded"
     ],
-    "manufacturer": "McoHome Technology Co., Ltd",
+    "manufacturer": "McoHome Technology Co., Ltd.",
     "manufacturerId": "0x015f",
     "label": "MH3700-HP",
     "description": "Programmable Thermostat",

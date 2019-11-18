@@ -1,8 +1,8 @@
-// Monoprice PID15654
+// HANK Electronics Ltd. PID15654
 // Z Wave Wall Socket Plug In Receptical
 {
     "_approved": true,
-    "manufacturer": "Monoprice",
+    "manufacturer": "HANK Electronics Ltd.",
     "manufacturerId": "0x0208",
     "label": "PID15654",
     "description": "Z Wave Wall Socket Plug In Receptical",

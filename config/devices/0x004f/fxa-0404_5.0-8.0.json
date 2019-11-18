@@ -1,4 +1,4 @@
-// Z-Wave Technologia FXA-0404
+// Flex Automation FXA-0404
 // Touch Panel- 4 Dimmers plus 4 ON-OFF- 5 Scenes
 {
     "_approved": true,
@@ -10,7 +10,7 @@
     "_warnings": [
         "No endpoints are configured"
     ],
-    "manufacturer": "Z-Wave Technologia",
+    "manufacturer": "Flex Automation",
     "manufacturerId": "0x004f",
     "label": "FXA-0404",
     "description": "Touch Panel- 4 Dimmers plus 4 ON-OFF- 5 Scenes",

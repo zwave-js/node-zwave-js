@@ -1,8 +1,8 @@
-// Linear Corp GoControl Smart Irrigation Controller
+// Nortek Security & Control LLC GoControl Smart Irrigation Controller
 // Sprinkler Controller Supporting Flow Sensors, Rain Sensors and Moisture Sensors
 {
     "_approved": true,
-    "manufacturer": "Linear Corp",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "GoControl Smart Irrigation Controller",
     "description": "Sprinkler Controller Supporting Flow Sensors, Rain Sensors and Moisture Sensors",

@@ -1,8 +1,8 @@
-// Hogar Controls HTP-8S0-XX
+// Home controls HTP-8S0-XX
 // 8 way touch light switch
 {
     "_approved": true,
-    "manufacturer": "Hogar Controls",
+    "manufacturer": "Home controls",
     "manufacturerId": "0x0293",
     "label": "HTP-8S0-XX",
     "description": "8 way touch light switch",

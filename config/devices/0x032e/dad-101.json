@@ -1,8 +1,8 @@
-// Defaro DAD-101
+// DEFARO DAD-101
 // Dimmer with sensors support
 {
     "_approved": true,
-    "manufacturer": "Defaro",
+    "manufacturer": "DEFARO",
     "manufacturerId": "0x032e",
     "label": "DAD-101",
     "description": "Dimmer with sensors support",

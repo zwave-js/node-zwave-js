@@ -1,4 +1,4 @@
-// Good Way Technology Co., Ltd TD1311
+// Good Way Technology Co., Ltd. TD1311
 // In wall Power Monitor Switch
 {
     "_approved": true,
@@ -6,7 +6,7 @@
         "Inclusion information is not set",
         "Exclusion information is not set"
     ],
-    "manufacturer": "Good Way Technology Co., Ltd",
+    "manufacturer": "Good Way Technology Co., Ltd.",
     "manufacturerId": "0x0068",
     "label": "TD1311",
     "description": "In wall Power Monitor Switch",

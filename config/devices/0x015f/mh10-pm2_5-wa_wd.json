@@ -1,8 +1,8 @@
-// McoHome Technology Co., Ltd MH10-PM2.5-WA/WD
+// McoHome Technology Co., Ltd. MH10-PM2.5-WA/WD
 // PM2.5 Monitor (Zwave Plus)
 {
     "_approved": true,
-    "manufacturer": "McoHome Technology Co., Ltd",
+    "manufacturer": "McoHome Technology Co., Ltd.",
     "manufacturerId": "0x015f",
     "label": "MH10-PM2.5-WA/WD",
     "description": "PM2.5 Monitor (Zwave Plus)",

@@ -1,8 +1,8 @@
-// Linear Corp LBR30Z-1
+// Nortek Security & Control LLC LBR30Z-1
 // Dimmable LED Light Bulb
 {
     "_approved": true,
-    "manufacturer": "Linear Corp",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "LBR30Z-1",
     "description": "Dimmable LED Light Bulb",

@@ -1,8 +1,8 @@
-// Z Wave Products Inc. WD-100
+// zwaveproducts.com WD-100
 // In-Wall Dimmer
 {
     "_approved": true,
-    "manufacturer": "Z Wave Products Inc.",
+    "manufacturer": "zwaveproducts.com",
     "manufacturerId": "0x0315",
     "label": "WD-100",
     "description": "In-Wall Dimmer",

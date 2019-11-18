@@ -1,8 +1,8 @@
-// Steinel L 810 LED iHF
+// STEINEL GmbH L 810 LED iHF
 // Sensor-switched outdoor up and downlighting
 {
     "_approved": true,
-    "manufacturer": "Steinel",
+    "manufacturer": "STEINEL GmbH",
     "manufacturerId": "0x0271",
     "label": "L 810 LED iHF",
     "description": "Sensor-switched outdoor up and downlighting",

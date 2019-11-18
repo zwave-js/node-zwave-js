@@ -1,8 +1,8 @@
-// Linear Corp WAPIRZ-1
+// Nortek Security & Control LLC WAPIRZ-1
 // PIR Motion Detector
 {
     "_approved": true,
-    "manufacturer": "Linear Corp",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "WAPIRZ-1",
     "description": "PIR Motion Detector",

@@ -1,8 +1,8 @@
-// ABUS Security-Center GmbH & Co. KG  SHLM10010
+// ABUS Security-Center GmbH & Co. KG SHLM10010
 // ABUS Security Center Bulb
 {
 	"_approved": true,
-	"manufacturer": "ABUS Security-Center GmbH & Co. KG ",
+	"manufacturer": "ABUS Security-Center GmbH & Co. KG",
 	"manufacturerId": "0x0403",
 	"label": "SHLM10010",
 	"description": "ABUS Security Center Bulb",

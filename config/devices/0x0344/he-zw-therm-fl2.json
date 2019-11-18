@@ -1,8 +1,8 @@
-// Heltun HE-ZW-THERM-FL2
+// HELTUN HE-ZW-THERM-FL2
 // Wall Heating Thermostat
 {
     "_approved": true,
-    "manufacturer": "Heltun",
+    "manufacturer": "HELTUN",
     "manufacturerId": "0x0344",
     "label": "HE-ZW-THERM-FL2",
     "description": "Wall Heating Thermostat",

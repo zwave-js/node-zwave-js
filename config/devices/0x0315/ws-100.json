@@ -1,8 +1,8 @@
-// Z Wave Products Inc. WS-100
+// zwaveproducts.com WS-100
 // Switch
 {
     "_approved": true,
-    "manufacturer": "Z Wave Products Inc.",
+    "manufacturer": "zwaveproducts.com",
     "manufacturerId": "0x0315",
     "label": "WS-100",
     "description": "Switch",
