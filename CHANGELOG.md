@@ -8,6 +8,11 @@
 ### Changes for users
 * The `value updated` event is no longer emitted for `interviewComplete` every time a command is received
 * `Basic CC` is no longer reported as supported when other actuator CCs are supported
+* If a node only controls a CC, the corresponding CCAPI is no longer falsely offered
+* The driver no longer overrides the CC version that was determined by the CC constructor
+* `Binary Sensor CC` is now correctly interviewed
+* Added a large amount of device configuration files. This powers the `Configuration CC` for versions <3 and enables lifeline associations for devices that don't support the Z-Wave+ standard.
+* Renamed a few manufacturers
 
 ### Breaking changes
 * Added a new member to `ValueID`: `property` (`number | string`) replaces `propertyName` as the property identifier. `propertyName` is now in line with `commandClassName` and `propertyKeyName` and contains a speaking representation of the property
