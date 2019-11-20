@@ -247,13 +247,30 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			message: "querying all endpoints...",
 			direction: "outbound",
 		});
-		const foundEndpoints = await api.findEndpoints(0xff, 0xff);
-		log.controller.logNode(node.id, {
-			message: `received endpoints: ${foundEndpoints
-				.map(String)
-				.join(", ")}`,
-			direction: "inbound",
-		});
+		const foundEndpoints = [...(await api.findEndpoints(0xff, 0xff))];
+		if (!foundEndpoints.length) {
+			log.controller.logNode(node.id, {
+				message: `Endpoint query returned no results, assuming that endpoints are sequential`,
+				direction: "inbound",
+			});
+			// Create a sequential list of endpoints
+			for (
+				let i = 1;
+				i <=
+				multiResponse.individualEndpointCount +
+					(multiResponse.aggregatedEndpointCount ?? 0);
+				i++
+			) {
+				foundEndpoints.push(i);
+			}
+		} else {
+			log.controller.logNode(node.id, {
+				message: `received endpoints: ${foundEndpoints
+					.map(String)
+					.join(", ")}`,
+				direction: "inbound",
+			});
+		}
 
 		// Step 3: Query endpoints
 		for (const endpoint of foundEndpoints) {
@@ -445,9 +462,9 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 		this._specificClass = this.payload[2];
 
 		validatePayload(this.payload.length >= 4);
-		this._foundEndpoints = [...this.payload.slice(3)].map(
-			e => e & 0b01111111,
-		);
+		this._foundEndpoints = [...this.payload.slice(3)]
+			.map(e => e & 0b01111111)
+			.filter(e => e !== 0);
 	}
 
 	private _genericClass: GenericDeviceClasses;
