@@ -14,6 +14,9 @@
 * Added a large amount of device configuration files. This powers the `Configuration CC` for versions <3 and enables lifeline associations for devices that don't support the Z-Wave+ standard.
 * Renamed a few manufacturers
 
+# Bugfixes
+* `Multi Channel CC` no longer queries endpoint #0 if EndpointFind returns no results or only zeroes.
+
 ### Breaking changes
 * Added a new member to `ValueID`: `property` (`number | string`) replaces `propertyName` as the property identifier. `propertyName` is now in line with `commandClassName` and `propertyKeyName` and contains a speaking representation of the property
 
