@@ -1,14 +1,7 @@
 import { composeObject, entries } from "alcalzone-shared/objects";
 
-export type Key<T extends (string | number)[]> = Partial<
-	Record<T[number], any>
->;
-
-export class ObjectKeyMap<
-	KeyPropertyNames extends (string | number)[],
-	TValue
-> {
-	public constructor(entries?: [Key<KeyPropertyNames>, TValue][]) {
+export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
+	public constructor(entries?: [TKey, TValue][]) {
 		this._map = new Map();
 		if (entries?.length) {
 			for (const [key, value] of entries) {
@@ -19,19 +12,19 @@ export class ObjectKeyMap<
 
 	private _map: Map<string, TValue>;
 
-	public has(key: Key<KeyPropertyNames>): boolean {
+	public has(key: TKey): boolean {
 		return this._map.has(this.keyToString(key));
 	}
 
-	public get(key: Key<KeyPropertyNames>): TValue | undefined {
+	public get(key: TKey): TValue | undefined {
 		return this._map.get(this.keyToString(key));
 	}
 
-	public set(key: Key<KeyPropertyNames>, value: TValue): void {
+	public set(key: TKey, value: TValue): void {
 		this._map.set(this.keyToString(key), value);
 	}
 
-	public delete(key: Key<KeyPropertyNames>): boolean {
+	public delete(key: TKey): boolean {
 		return this._map.delete(this.keyToString(key));
 	}
 
@@ -39,33 +32,30 @@ export class ObjectKeyMap<
 		this._map.clear();
 	}
 
-	public entries(): IterableIterator<[Key<KeyPropertyNames>, TValue]> {
+	public get size(): number {
+		return this._map.size;
+	}
+
+	public entries(): IterableIterator<[TKey, TValue]> {
 		const map = this._map;
 		return (function*() {
 			const _entries = map.entries();
 			let entry = _entries.next();
 			while (!entry.done) {
-				const objKey = JSON.parse(entry.value[0]) as Key<
-					KeyPropertyNames
-				>;
-				yield [objKey, entry.value[1]] as [
-					Key<KeyPropertyNames>,
-					TValue,
-				];
+				const objKey = JSON.parse(entry.value[0]);
+				yield [objKey, entry.value[1]] as [TKey, TValue];
 				entry = _entries.next();
 			}
 		})();
 	}
 
-	public keys(): IterableIterator<Key<KeyPropertyNames>> {
+	public keys(): IterableIterator<TKey> {
 		const map = this._map;
 		return (function*() {
 			const _keys = map.entries();
 			let key = _keys.next();
 			while (!key.done) {
-				const objKey = JSON.parse(key.value[0]) as Key<
-					KeyPropertyNames
-				>;
+				const objKey = JSON.parse(key.value[0]) as TKey;
 				yield objKey;
 				key = _keys.next();
 			}
@@ -76,7 +66,7 @@ export class ObjectKeyMap<
 		return this._map.values();
 	}
 
-	private keyToString(key: Key<KeyPropertyNames>): string {
+	private keyToString(key: TKey): string {
 		const _key = composeObject(
 			entries(key)
 				.filter(([, value]) => value != undefined)
@@ -87,3 +77,11 @@ export class ObjectKeyMap<
 		return JSON.stringify(_key);
 	}
 }
+
+export type ReadonlyObjectKeyMap<
+	TKey extends Record<string | number, any>,
+	TValue
+> = Pick<
+	ObjectKeyMap<TKey, TValue>,
+	"has" | "get" | "entries" | "keys" | "values" | "size"
+>;

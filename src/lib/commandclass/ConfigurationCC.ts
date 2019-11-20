@@ -1,6 +1,6 @@
 import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
-import { ParamInformation } from "../config/Devices";
+import { ParamInfoMap } from "../config/Devices";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
@@ -445,7 +445,7 @@ export class ConfigurationCC extends CommandClass {
 						message: `querying parameter #${param} value...`,
 						direction: "outbound",
 					});
-					await api.get(param);
+					await api.get(param.parameter);
 				}
 			} else {
 				log.controller.logNode(node.id, {
@@ -587,33 +587,31 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	}
 
 	/** Deserializes the config parameter info from a config file */
-	public deserializeParamInformationFromConfig(
-		config: ReadonlyMap<number, ParamInformation>,
-	): void {
+	public deserializeParamInformationFromConfig(config: ParamInfoMap): void {
 		// TODO: Clear existing param info
-		for (const [id, paramInfo] of config.entries()) {
+		for (const [param, info] of config.entries()) {
 			// We need to make the config information compatible with the
 			// format that ConfigurationCC reports
-			this.extendParamInformation(id, paramInfo.valueBitMask, {
+			this.extendParamInformation(param.parameter, param.valueBitMask, {
 				// TODO: Make this smarter!
 				type: "number",
-				min: paramInfo.minValue,
-				max: paramInfo.maxValue,
-				default: paramInfo.defaultValue,
-				readable: !paramInfo.writeOnly,
-				writeable: !paramInfo.readOnly,
-				allowManualEntry: paramInfo.allowManualEntry,
+				min: info.minValue,
+				max: info.maxValue,
+				default: info.defaultValue,
+				readable: !info.writeOnly,
+				writeable: !info.readOnly,
+				allowManualEntry: info.allowManualEntry,
 				states:
-					!paramInfo.allowManualEntry && paramInfo.options.length > 0
+					!info.allowManualEntry && info.options.length > 0
 						? composeObject(
-								paramInfo.options.map(({ label, value }) => [
+								info.options.map(({ label, value }) => [
 									value.toString(),
 									label,
 								]),
 						  )
 						: undefined,
-				label: paramInfo.label,
-				description: paramInfo.description,
+				label: info.label,
+				description: info.description,
 				isFromConfig: true,
 			});
 		}
