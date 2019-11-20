@@ -102,6 +102,17 @@ export class ConfigurationCCError extends ZWaveError {
 	}
 }
 
+export function getParamInformationValueID(
+	parameter: number,
+	bitmask?: number,
+): ValueID {
+	return {
+		commandClass: CommandClasses.Configuration,
+		property: parameter,
+		propertyKey: bitmask,
+	};
+}
+
 @API(CommandClasses.Configuration)
 export class ConfigurationCCAPI extends CCAPI {
 	public supportsCommand(cmd: ConfigurationCommand): Maybe<boolean> {
@@ -528,41 +539,33 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 */
 	public extendParamInformation(
 		parameter: number,
+		valueBitMask: number | undefined,
 		info: Partial<ConfigurationMetadata>,
-		valueBitMask?: number,
 	): void {
 		// Don't trust param information that a node reports if we have already loaded it from a config file
 		if (this.isParamInformationFromConfig) return;
 
 		const valueDB = this.getValueDB();
-		const paramInformationValueID: ValueID = {
-			commandClass: getCommandClass(this),
-			property: parameter,
-			propertyKey: valueBitMask,
-		};
+		const valueId = getParamInformationValueID(parameter, valueBitMask);
 		// Retrieve the base metadata
 		const metadata = this.getParamInformation(parameter);
 		// Override it with new data
 		Object.assign(metadata, info);
 		// And store it back
-		valueDB.setMetadata(paramInformationValueID, metadata);
+		valueDB.setMetadata(valueId, metadata);
 	}
 
 	/**
 	 * @internal
 	 * Returns stored config parameter metadata for this CC's node
 	 */
-	public getParamInformation(parameter: number): ConfigurationMetadata {
+	public getParamInformation(
+		parameter: number,
+		valueBitMask?: number,
+	): ConfigurationMetadata {
 		const valueDB = this.getValueDB();
-		const paramInformationValueID: ValueID = {
-			commandClass: getCommandClass(this),
-			property: parameter,
-		};
-		return (
-			valueDB.getMetadata(paramInformationValueID) ?? {
-				...ValueMetadata.Any,
-			}
-		);
+		const valueId = getParamInformationValueID(parameter, valueBitMask);
+		return valueDB.getMetadata(valueId) ?? { ...ValueMetadata.Any };
 	}
 
 	public serializeValuesForCache(): CacheValue[] {
@@ -591,7 +594,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		for (const [id, paramInfo] of config.entries()) {
 			// We need to make the config information compatible with the
 			// format that ConfigurationCC reports
-			this.extendParamInformation(id, {
+			this.extendParamInformation(id, paramInfo.valueBitMask, {
 				// TODO: Make this smarter!
 				type: "number",
 				min: paramInfo.minValue,
@@ -672,7 +675,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			oldParamInformation.format || ValueFormat.SignedInteger,
 		);
 		// Store the parameter size and value
-		this.extendParamInformation(this._parameter, {
+		this.extendParamInformation(this._parameter, undefined, {
 			valueSize: this._valueSize,
 			type:
 				oldParamInformation.format === ValueFormat.BitField
@@ -690,6 +693,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 				oldParamInformation.format === ValueFormat.SignedInteger;
 			this.extendParamInformation(
 				this._parameter,
+				undefined,
 				getIntegerLimits(this._valueSize as any, isSigned),
 			);
 		}
@@ -1087,7 +1091,9 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		this._name = [...partials, this]
 			.map(report => report._name)
 			.reduce((prev, cur) => prev + cur, "");
-		this.extendParamInformation(this.parameter, { name: this.name });
+		this.extendParamInformation(this.parameter, undefined, {
+			name: this.name,
+		});
 	}
 }
 
@@ -1157,7 +1163,7 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		this._info = [...partials, this]
 			.map(report => report._info)
 			.reduce((prev, cur) => prev + cur, "");
-		this.extendParamInformation(this._parameter, {
+		this.extendParamInformation(this._parameter, undefined, {
 			info: this._info,
 		});
 	}
@@ -1266,7 +1272,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 				isAdvanced: this._isAdvanced,
 				noBulkSupport: this._noBulkSupport,
 			});
-			this.extendParamInformation(this._parameter, paramInfo);
+			this.extendParamInformation(this._parameter, undefined, paramInfo);
 		}
 	}
 

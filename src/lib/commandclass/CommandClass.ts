@@ -684,8 +684,12 @@ export class CommandClass {
 	/**
 	 * Translates a property identifier into a speaking name for use in an external API
 	 * @param property The property identifier that should be translated
+	 * @param _propertyKey The (optional) property key the translated name may depend on
 	 */
-	public static translateProperty(property: string | number): string {
+	public static translateProperty(
+		property: string | number,
+		_propertyKey?: string | number,
+	): string {
 		// Overwrite this in derived classes, by default just return the property key
 		return property.toString();
 	}
