@@ -1,6 +1,11 @@
 import { assertZWaveError } from "../../../test/util";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { isConsecutiveArray, stripUndefined, validatePayload } from "./misc";
+import {
+	getMinimumShiftForBitMask,
+	isConsecutiveArray,
+	stripUndefined,
+	validatePayload,
+} from "./misc";
 
 describe("lib/util/misc", () => {
 	describe("isConsecutiveArray()", () => {
@@ -82,6 +87,28 @@ describe("lib/util/misc", () => {
 				assertZWaveError(() => validatePayload(...args), {
 					errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
 				});
+			}
+		});
+	});
+
+	describe("getMinimumShiftForBitMask", () => {
+		it("returns 0 if the mask is 0", () => {
+			expect(getMinimumShiftForBitMask(0)).toBe(0);
+		});
+
+		it("returns the correct bit shift for sensible bit masks", () => {
+			const tests = [
+				{ input: 0b1, expected: 0 },
+				{ input: 0b10, expected: 1 },
+				{ input: 0b100, expected: 2 },
+				{ input: 0b1000, expected: 3 },
+				{ input: 0b1010, expected: 1 },
+				{ input: 0b1100, expected: 2 },
+				{ input: 0b1111, expected: 0 },
+				{ input: 0b1011, expected: 0 },
+			];
+			for (const { input, expected } of tests) {
+				expect(getMinimumShiftForBitMask(input)).toBe(expected);
 			}
 		});
 	});
