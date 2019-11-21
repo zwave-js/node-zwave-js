@@ -686,7 +686,7 @@ export class CommandClass {
 	 * @param property The property identifier that should be translated
 	 * @param _propertyKey The (optional) property key the translated name may depend on
 	 */
-	public static translateProperty(
+	public translateProperty(
 		property: string | number,
 		_propertyKey?: string | number,
 	): string {
@@ -699,10 +699,10 @@ export class CommandClass {
 	 * @param property The property the key in question belongs to
 	 * @param propertyKey The property key for which the speaking name should be retrieved
 	 */
-	public static translatePropertyKey(
+	public translatePropertyKey(
 		property: string | number,
 		propertyKey: string | number,
-	): string {
+	): string | undefined {
 		// Overwrite this in derived classes, by default just return the property key
 		return propertyKey.toString();
 	}

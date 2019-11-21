@@ -8,11 +8,7 @@ import {
 	CentralSceneKeys,
 	getSceneValueId,
 } from "../commandclass/CentralSceneCC";
-import {
-	CommandClass,
-	getCCConstructor,
-	getCCValueMetadata,
-} from "../commandclass/CommandClass";
+import { CommandClass, getCCValueMetadata } from "../commandclass/CommandClass";
 import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
 import { getEndpointCCsValueId } from "../commandclass/MultiChannelCC";
 import { NotificationCCReport } from "../commandclass/NotificationCC";
@@ -186,13 +182,22 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			commandClassName,
 			...valueId,
 		};
-		const ccConstructor: typeof CommandClass =
-			(getCCConstructor(valueId.commandClass) as any) ?? CommandClass;
+		const ccInstance = this.createCCInstanceUnsafe(valueId.commandClass);
+		if (!ccInstance) {
+			throw new ZWaveError(
+				`Cannot translate a value ID for the non-implemented CC ${getEnumMemberName(
+					CommandClasses,
+					valueId.commandClass,
+				)}`,
+				ZWaveErrorCodes.CC_NotImplemented,
+			);
+		}
+
 		// Retrieve the speaking property name
-		ret.propertyName = ccConstructor.translateProperty(valueId.property);
+		ret.propertyName = ccInstance.translateProperty(valueId.property);
 		// Try to retrieve the speaking property key
 		if (valueId.propertyKey != undefined) {
-			const propertyKey = ccConstructor.translatePropertyKey(
+			const propertyKey = ccInstance.translatePropertyKey(
 				valueId.property,
 				valueId.propertyKey,
 			);
