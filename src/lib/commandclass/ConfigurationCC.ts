@@ -641,22 +641,30 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		);
 	}
 
-	// public static translatePropertyKey(
-	// property: string | number,
-	// propertyKey: string | number,
-	// ): string {
-	// 	if (property === "values" && typeof propertyKey === "number") {
-	// 		const type = lookupSensorType(propertyKey);
-	// 		if (type) return type.label;
-	// 	}
-	// 	return super.translatePropertyKey(property, propertyKey);
-	// }
+	public translatePropertyKey(): string | undefined {
+		// This CC names all configuration parameters differently,
+		// so no name for the property key is required
+		return undefined;
+	}
 
-	public static translateProperty(property: string | number): string {
-		if (typeof property === "number") {
-			return `param${padStart(property.toString(), 3, "0")}`;
+	public translateProperty(
+		property: string | number,
+		propertyKey?: string | number,
+	): string {
+		// Try to retrieve the configured param label
+		if (
+			typeof property === "number" &&
+			(propertyKey == undefined || typeof propertyKey === "number")
+		) {
+			const paramInfo = this.getParamInformation(property, propertyKey);
+			if (paramInfo.label) return paramInfo.label;
 		}
-		return super.translateProperty(property);
+		// fall back to paramXYZ[_key] if none is defined
+		let ret = `param${padStart(property.toString(), 3, "0")}`;
+		if (propertyKey != undefined) {
+			ret += "_" + propertyKey.toString();
+		}
+		return ret;
 	}
 }
 
