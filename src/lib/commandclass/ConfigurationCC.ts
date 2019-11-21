@@ -7,6 +7,7 @@ import log from "../log";
 import { ValueID } from "../node/ValueDB";
 import {
 	getEnumMemberName,
+	getMinimumShiftForBitMask,
 	isConsecutiveArray,
 	stripUndefined,
 	validatePayload,
@@ -26,6 +27,7 @@ import {
 	SET_VALUE,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
+	throwWrongValueType,
 } from "./API";
 import {
 	API,
@@ -104,12 +106,12 @@ export class ConfigurationCCError extends ZWaveError {
 
 export function getParamInformationValueID(
 	parameter: number,
-	bitmask?: number,
+	bitMask?: number,
 ): ValueID {
 	return {
 		commandClass: CommandClasses.Configuration,
 		property: parameter,
-		propertyKey: bitmask,
+		propertyKey: bitMask,
 	};
 }
 
@@ -147,19 +149,32 @@ export class ConfigurationCCAPI extends CCAPI {
 		if (propertyKey != undefined && typeof propertyKey !== "number") {
 			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
 		}
+		if (typeof value !== "number") {
+			throwWrongValueType(this.ccId, property, "number", typeof value);
+		}
 
 		const ccInstance = this.endpoint.createCCInstance(ConfigurationCC)!;
 		const valueSize = ccInstance.getParamInformation(property).valueSize;
 
-		// if (typeof value !== "number") {
-		// 	throwWrongValueType(
-		// 		this.ccId,
-		// 		propertyName,
-		// 		"number",
-		// 		typeof value,
-		// 	);
-		// }
-		await this.set(property, value as any, (valueSize || 1) as any);
+		let targetValue: number;
+		if (propertyKey) {
+			// This is a partial value, we need to update some bits only
+			// Retrieve the previous value
+			const node = this.endpoint.getNodeUnsafe()!;
+			const valueId: ValueID = {
+				commandClass: this.ccId,
+				property,
+				propertyKey,
+			};
+			const oldValue = node.getValue<number>(valueId) ?? 0;
+			const shift = getMinimumShiftForBitMask(propertyKey);
+			// And replace the masked bits
+			targetValue = (oldValue & ~propertyKey) | (value << shift);
+		} else {
+			targetValue = value;
+		}
+
+		await this.set(property, targetValue, (valueSize || 1) as any);
 
 		// Refresh the current value and ignore potential timeouts
 		void this.get(property).catch(() => {});
@@ -548,7 +563,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		const valueDB = this.getValueDB();
 		const valueId = getParamInformationValueID(parameter, valueBitMask);
 		// Retrieve the base metadata
-		const metadata = this.getParamInformation(parameter);
+		const metadata = this.getParamInformation(parameter, valueBitMask);
 		// Override it with new data
 		Object.assign(metadata, info);
 		// And store it back
