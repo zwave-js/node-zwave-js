@@ -154,22 +154,24 @@ export class ConfigurationCCAPI extends CCAPI {
 		}
 
 		const ccInstance = this.endpoint.createCCInstance(ConfigurationCC)!;
-		const valueSize = ccInstance.getParamInformation(property).valueSize;
+		let valueSize = ccInstance.getParamInformation(property).valueSize;
 
 		let targetValue: number;
 		if (propertyKey) {
 			// This is a partial value, we need to update some bits only
-			// Retrieve the previous value
-			const node = this.endpoint.getNodeUnsafe()!;
-			const valueId: ValueID = {
-				commandClass: this.ccId,
+			// Find out the correct value size
+			if (!valueSize) {
+				valueSize = ccInstance.getParamInformation(
+					property,
+					propertyKey,
+				).valueSize;
+			}
+			// Add the target value to the remaining partial values
+			targetValue = ccInstance.composePartialParamValue(
 				property,
 				propertyKey,
-			};
-			const oldValue = node.getValue<number>(valueId) ?? 0;
-			const shift = getMinimumShiftForBitMask(propertyKey);
-			// And replace the masked bits
-			targetValue = (oldValue & ~propertyKey) | (value << shift);
+				value,
+			);
 		} else {
 			targetValue = value;
 		}
@@ -186,7 +188,10 @@ export class ConfigurationCCAPI extends CCAPI {
 	 * If the node replied with a different parameter number, a `ConfigurationCCError`
 	 * is thrown with the `argument` property set to the reported parameter number.
 	 */
-	public async get(parameter: number): Promise<ConfigValue | undefined> {
+	public async get(
+		parameter: number,
+		valueBitMask?: number,
+	): Promise<ConfigValue | undefined> {
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Get,
@@ -203,7 +208,14 @@ export class ConfigurationCCAPI extends CCAPI {
 			>(cc))!;
 			// Nodes may respond with a different parameter, e.g. if we
 			// requested a non-existing one
-			if (response.parameter === parameter) return response.value;
+			if (response.parameter === parameter) {
+				if (!valueBitMask) return response.value;
+				// If a partial parameter was requested, extract that value
+				return (
+					((response.value as any) & valueBitMask) >>>
+					getMinimumShiftForBitMask(valueBitMask)
+				);
+			}
 			log.controller.logNode(this.endpoint.nodeId, {
 				message: `Received unexpected ConfigurationReport (param = ${response.parameter}, value = ${response.value})`,
 				direction: "inbound",
@@ -583,6 +595,50 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		return valueDB.getMetadata(valueId) ?? { ...ValueMetadata.Any };
 	}
 
+	/**
+	 * Returns stored config parameter metadata for all partial config params addressed with the given parameter number
+	 */
+	public getPartialParamInfos(
+		parameter: number,
+	): (ValueID & { metadata: ConfigurationMetadata })[] {
+		const valueDB = this.getValueDB();
+		return valueDB
+			.getAllMetadata(this.ccId)
+			.filter(
+				({ property, propertyKey }) =>
+					property === parameter && propertyKey != undefined,
+			) as (ValueID & { metadata: ConfigurationMetadata })[];
+	}
+
+	/**
+	 * Returns stored config parameter metadata for all partial config params addressed with the given parameter number
+	 */
+	public composePartialParamValue(
+		parameter: number,
+		valueBitMask: number,
+		maskedValue: number,
+	): number {
+		const valueDB = this.getValueDB();
+		// Add the other values
+		const otherValues = valueDB
+			.getValues(this.ccId)
+			.filter(
+				({ property, propertyKey }) =>
+					property === parameter && propertyKey != undefined,
+			)
+			.map(({ propertyKey, value }) =>
+				propertyKey === valueBitMask
+					? 0
+					: (value as number) <<
+					  getMinimumShiftForBitMask(propertyKey as number),
+			)
+			.reduce((prev, cur) => prev | cur, 0);
+		return (
+			(otherValues & ~valueBitMask) |
+			(maskedValue << getMinimumShiftForBitMask(valueBitMask))
+		);
+	}
+
 	public serializeValuesForCache(): CacheValue[] {
 		// Leave out the paramInformation if we have loaded it from a config file
 		let values = super.serializeValuesForCache();
@@ -610,6 +666,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 			this.extendParamInformation(param.parameter, param.valueBitMask, {
 				// TODO: Make this smarter!
 				type: "number",
+				valueSize: info.valueSize,
 				min: info.minValue,
 				max: info.maxValue,
 				default: info.defaultValue,
@@ -641,10 +698,19 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		);
 	}
 
-	public translatePropertyKey(): string | undefined {
-		// This CC names all configuration parameters differently,
-		// so no name for the property key is required
-		return undefined;
+	public translatePropertyKey(
+		property: string | number,
+		propertyKey?: string | number,
+	): string | undefined {
+		if (
+			typeof property === "number" &&
+			(propertyKey == undefined || typeof propertyKey === "number")
+		) {
+			// This CC names all configuration parameters differently,
+			// so no name for the property key is required
+			return undefined;
+		}
+		return super.translateProperty(property, propertyKey);
 	}
 
 	public translateProperty(
@@ -658,13 +724,14 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		) {
 			const paramInfo = this.getParamInformation(property, propertyKey);
 			if (paramInfo.label) return paramInfo.label;
+			// fall back to paramXYZ[_key] if none is defined
+			let ret = `param${padStart(property.toString(), 3, "0")}`;
+			if (propertyKey != undefined) {
+				ret += "_" + propertyKey.toString();
+			}
+			return ret;
 		}
-		// fall back to paramXYZ[_key] if none is defined
-		let ret = `param${padStart(property.toString(), 3, "0")}`;
-		if (propertyKey != undefined) {
-			ret += "_" + propertyKey.toString();
-		}
-		return ret;
+		return super.translateProperty(property, propertyKey);
 	}
 }
 
@@ -719,13 +786,32 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			);
 		}
 		// And store the value itself
-		this.getValueDB().setValue(
-			{
-				commandClass: this.ccId,
-				property: this._parameter,
-			},
-			this._value,
-		);
+		// If we have partial config params defined, we need to split the value
+		const partialParams = this.getPartialParamInfos(this._parameter);
+		if (partialParams.length > 0) {
+			for (const param of partialParams) {
+				if (typeof param.propertyKey === "number") {
+					this.getValueDB().setValue(
+						{
+							commandClass: this.ccId,
+							property: this._parameter,
+							propertyKey: param.propertyKey,
+						},
+						((this._value as any) & param.propertyKey) >>>
+							getMinimumShiftForBitMask(param.propertyKey),
+					);
+				}
+			}
+		} else {
+			// This is a single param
+			this.getValueDB().setValue(
+				{
+					commandClass: this.ccId,
+					property: this._parameter,
+				},
+				this._value,
+			);
+		}
 	}
 
 	private _parameter: number;

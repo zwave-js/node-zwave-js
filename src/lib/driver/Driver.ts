@@ -397,12 +397,7 @@ export class Driver extends EventEmitter implements IDriver {
 
 	/** Is called when a node interview is completed */
 	private onNodeInterviewCompleted(node: ZWaveNode): void {
-		if (
-			!this.hasPendingMessages(node) &&
-			node.supportsCC(CommandClasses["Wake Up"])
-		) {
-			node.sendNoMoreInformation();
-		}
+		this.markNodeForPotentialSleep(node);
 	}
 
 	/** This is called when a new node has been added to the network */
@@ -1178,13 +1173,8 @@ ${handlers.length} left`,
 		// and resolve the current transaction
 		promise.resolve(response);
 		this.currentTransaction = undefined;
-		// If a sleeping node has no messages pending, send it back to sleep
-		if (
-			node?.supportsCC(CommandClasses["Wake Up"]) &&
-			!this.hasPendingMessages(node)
-		) {
-			node.sendNoMoreInformation();
-		}
+
+		if (node) this.markNodeForPotentialSleep(node);
 		// Resume the send queue
 		if (resumeQueue) {
 			log.driver.print("resuming send queue", "debug");
@@ -1551,6 +1541,34 @@ ${handlers.length} left`,
 				`  restoring the network from cache failed: ${e}`,
 				"error",
 			);
+		}
+	}
+
+	private sendNodeToSleepTimers = new Map<number, NodeJS.Timeout>();
+
+	/** Sends a node to sleep if it has no more messages. DON'T CALL THIS DIRECTLY! */
+	private sendNodeToSleep(node: ZWaveNode): void {
+		this.sendNodeToSleepTimers.delete(node.id);
+		if (!this.hasPendingMessages(node)) {
+			node.sendNoMoreInformation();
+		}
+	}
+
+	/**
+	 * Marks a node for a later sleep command. Every call prolongs the period until the node actually goes to sleep
+	 */
+	private markNodeForPotentialSleep(node: ZWaveNode): void {
+		// Delete old timers if any exist
+		if (this.sendNodeToSleepTimers.has(node.id)) {
+			clearTimeout(this.sendNodeToSleepTimers.get(node.id)!);
+		}
+
+		// If a sleeping node has no messages pending, we may send it back to sleep
+		if (
+			node.supportsCC(CommandClasses["Wake Up"]) &&
+			!this.hasPendingMessages(node)
+		) {
+			setTimeout(() => this.sendNodeToSleep(node), 1000).unref();
 		}
 	}
 }
