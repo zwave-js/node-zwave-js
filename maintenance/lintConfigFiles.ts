@@ -14,6 +14,8 @@ import {
 } from "../src/lib/config/Scales";
 import { loadSensorTypesInternal } from "../src/lib/config/SensorTypes";
 import { configDir } from "../src/lib/config/utils";
+import { getMinimumShiftForBitMask } from "../src/lib/util/misc";
+import { num2hex } from "../src/lib/util/strings";
 
 async function lintNotifications(): Promise<void> {
 	await loadNotificationsInternal();
@@ -102,20 +104,47 @@ This is likely an error!`,
 				}
 			}
 
+			const partialParams = [...config.paramInformation.entries()].filter(
+				([k]) => !!k.valueBitMask,
+			);
+
 			// Check if there are parameters with a single bit mask
-			const partialParams = [...config.paramInformation.keys()]
-				.filter(k => !!k.valueBitMask)
+			const partialParamCounts = partialParams
+				.map(([k]) => k)
 				.reduce((map, key) => {
 					if (!map.has(key.parameter)) map.set(key.parameter, 0);
 					map.set(key.parameter, map.get(key.parameter)! + 1);
 					return map;
 				}, new Map<number, number>());
-			for (const [param, count] of partialParams.entries()) {
+			for (const [param, count] of partialParamCounts.entries()) {
 				if (count === 1) {
 					addError(
 						file,
 						`Parameter #${param} has a single bit mask defined. Either add more, or delete the bit mask.`,
 					);
+				}
+			}
+
+			// Check if there are partial parameters with incompatible options
+			const partialParamsWithOptions = partialParams.filter(
+				([, p]) => p.options.length > 0,
+			);
+			for (const [key, param] of partialParamsWithOptions) {
+				const bitMask = key.valueBitMask!;
+				const shiftAmount = getMinimumShiftForBitMask(bitMask);
+				const shiftedBitMask = bitMask >>> shiftAmount;
+				for (const opt of param.options) {
+					if ((opt.value & shiftedBitMask) !== opt.value) {
+						addError(
+							file,
+							`Parameter #${key.parameter}[${num2hex(
+								bitMask,
+							)}]: Option ${
+								opt.value
+							} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). Option values are always relative to the rightmost bit of the mask!
+Did you mean to use ${opt.value >>> shiftAmount}?`,
+						);
+					}
 				}
 			}
 		}
