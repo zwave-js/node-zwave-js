@@ -103,6 +103,13 @@ This is likely an error!`,
 						`Parameter #${key} must allow manual entry if there are no options defined!`,
 					);
 				}
+
+				if (value.readOnly && value.writeOnly) {
+					addError(
+						file,
+						`Parameter #${key} is invalid: readOnly and writeOnly are mutually exclusive!`,
+					);
+				}
 			}
 
 			const partialParams = [...config.paramInformation.entries()].filter(
