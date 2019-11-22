@@ -36,12 +36,13 @@ async function lintDevices(): Promise<void> {
 		.sort();
 
 	const errors = new Map<string, string[]>();
-	function addError(filename: string, error: string) {
+	function addError(filename: string, error: string): void {
 		if (!errors.has(filename)) errors.set(filename, []);
 		errors.get(filename)!.push(error);
 	}
+
 	const warnings = new Map<string, string[]>();
-	function addWarning(filename: string, warning: string) {
+	function addWarning(filename: string, warning: string): void {
 		if (!warnings.has(filename)) warnings.set(filename, []);
 		warnings.get(filename)!.push(warning);
 	}
@@ -121,6 +122,49 @@ This is likely an error!`,
 					addError(
 						file,
 						`Parameter #${param} has a single bit mask defined. Either add more, or delete the bit mask.`,
+					);
+				}
+			}
+
+			// Check if there are partial parameters with incompatible min/max/default values
+			for (const [key, param] of partialParams) {
+				const bitMask = key.valueBitMask!;
+				const shiftAmount = getMinimumShiftForBitMask(bitMask);
+				const shiftedBitMask = bitMask >>> shiftAmount;
+				if ((param.minValue & shiftedBitMask) !== param.minValue) {
+					addError(
+						file,
+						`Parameter #${key.parameter}[${num2hex(
+							bitMask,
+						)}]: minimum value ${
+							param.minValue
+						} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). All values are relative to the rightmost bit of the mask!
+Did you mean to use ${param.minValue >>> shiftAmount}?`,
+					);
+				}
+				if ((param.maxValue & shiftedBitMask) !== param.maxValue) {
+					addError(
+						file,
+						`Parameter #${key.parameter}[${num2hex(
+							bitMask,
+						)}]: maximum value ${
+							param.maxValue
+						} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). All values are relative to the rightmost bit of the mask!
+Did you mean to use ${param.maxValue >>> shiftAmount}?`,
+					);
+				}
+				if (
+					(param.defaultValue & shiftedBitMask) !==
+					param.defaultValue
+				) {
+					addError(
+						file,
+						`Parameter #${key.parameter}[${num2hex(
+							bitMask,
+						)}]: default value ${
+							param.defaultValue
+						} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). All values are relative to the rightmost bit of the mask!
+Did you mean to use ${param.defaultValue >>> shiftAmount}?`,
 					);
 				}
 			}
