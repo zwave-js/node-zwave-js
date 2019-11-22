@@ -182,7 +182,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			commandClassName,
 			...valueId,
 		};
-		const ccInstance = this.createCCInstanceUnsafe(valueId.commandClass);
+		const ccInstance = this.createCCInstanceInternal(valueId.commandClass);
 		if (!ccInstance) {
 			throw new ZWaveError(
 				`Cannot translate a value ID for the non-implemented CC ${getEnumMemberName(
