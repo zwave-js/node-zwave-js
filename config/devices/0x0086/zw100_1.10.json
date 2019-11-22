@@ -825,7 +825,6 @@
 		"49[0xff00]": {
 			"label": "Unit for upper limit value of temp sensor",
 			"description": "Unit selection for upper limit value of temperature sensor",
-			"unit": "°C",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2,
@@ -844,15 +843,16 @@
 				}
 			]
 		},
-		"49[0x7fff0000]": {
+		"49[0xffff0000]": {
 			"label": "Upper limit value of temp sensor",
 			"description": "Upper limit value of temperature sensor",
+			"unit": "0.1 * unit",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
+			"minValue": -40,
+			"maxValue": 2120,
 			"defaultValue": 280,
 			"readOnly": false,
-			"writeOnly": true,
+			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"50[0xff00]": {
@@ -876,15 +876,15 @@
 				}
 			]
 		},
-		"50[0x7fff0000]": {
+		"50[0xffff0000]": {
 			"label": "Lower limit value of temperature sensor",
 			"description": "Lower limit value of temperature sensor",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 2678400,
+			"minValue": -40,
+			"maxValue": 2120,
 			"defaultValue": 0,
 			"readOnly": false,
-			"writeOnly": true,
+			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"201[0xff]": {

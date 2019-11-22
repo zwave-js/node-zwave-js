@@ -233,19 +233,25 @@
 			"allowManualEntry": true
 		},
 		"37[0x1f]": {
-			"label": "Colour Change Speed Level",
-			"description": "Colour Change Speed Level",
+			"label": "Color Change Speed Level",
+			"description": "Applies only when the Color Transition Style is set to Fade Out/In",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 31,
+			"maxValue": 30,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Constant Speed",
+					"value": 0
+				}
+			]
 		},
 		"37[0xe0]": {
-			"label": "Time Base of Colour Change Speed",
-			"description": "Time Base of Colour Change Speed",
+			"label": "Time Base of Color Change Speed",
+			"description": "Applies only when the Color Transition Style is  set to Fade Out/In",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2,
@@ -255,25 +261,25 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Time base is 1s.",
+					"label": "Time base is 1s",
 					"value": 0
 				},
 				{
-					"label": "Time base is 10ms.",
+					"label": "Time base is 10ms",
 					"value": 1
 				},
 				{
-					"label": "Time base is 100ms.",
+					"label": "Time base is 100ms",
 					"value": 2
 				}
 			]
 		},
 		"37[0xff00]": {
 			"label": "Cycle Count",
-			"description": "Cycle Count",
+			"description": "Defines the number of repetitions of the color transition cycle",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 254,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
@@ -281,7 +287,7 @@
 		},
 		"37[0xff0000]": {
 			"label": "Brightness",
-			"description": "Brightness",
+			"description": "Brightness when in color transition mode",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 99,
@@ -291,52 +297,66 @@
 			"allowManualEntry": true
 		},
 		"37[0x07000000]": {
-			"label": "Colour Display Cycle",
-			"description": "Colour Display Cycle",
+			"label": "Color Display Cycle",
+			"description": "Defines the mode for determining colors used in color transitions",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 15,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Inactive (keep the current configuration value)",
+					"value": 0
+				},
+				{
+					"label": "Rainbow mode",
+					"value": 1
+				},
+				{
+					"label": "Multi color mode",
+					"value": 2
+				},
+				{
+					"label": "Random mode",
+					"value": 3
+				},
+				{
+					"label": "Single color mode",
+					"value": 4
+				}
+			]
+		},
+		"37[0x38000000]": {
+			"label": "Color Change Speed Option",
+			"description": "Applies only when the Color Transition Style is set to Fade Out/In",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Inactive",
+					"label": "Fade in for 1/2 second and fade out for 1/2 second",
 					"value": 0
 				},
 				{
-					"label": "Rainbow Mode",
+					"label": "Fade in for 5ms and fade out for 5ms",
 					"value": 1
 				},
 				{
-					"label": "Multi Colour Mode",
+					"label": "Fade in for 50ms and fade out for 50ms",
 					"value": 2
-				},
-				{
-					"label": "Random Mode",
-					"value": 3
-				},
-				{
-					"label": "Single Colour Mode.",
-					"value": 4
 				}
 			]
 		},
-		"37[0x38000000]": {
-			"label": "Colour Change Speed Option",
-			"description": "Colour Change Speed Option",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
 		"37[0x40000000]": {
-			"label": "Colour Transition Style",
-			"description": "Colour Transition Style",
+			"label": "Color Transition Style",
+			"description": "Defines how the strip transitions between colors",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
@@ -346,11 +366,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Smooth Colour Transition",
+					"label": "Smooth color transition",
 					"value": 0
 				},
 				{
-					"label": "Fade Out Fade In Transition",
+					"label": "Fade out fade in transition",
 					"value": 1
 				}
 			]
