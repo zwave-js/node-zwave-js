@@ -1,151 +1,151 @@
 // AEON Labs ZW117
 // Range Extender 6
 {
-    "_approved": true,
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "ZW117",
-    "description": "Range Extender 6",
-    "devices": [
-        {
-            "productType": "0x0004",
-            "productId": "0x0075"
-        },
-        {
-            "productType": "0x0104",
-            "productId": "0x0075"
-        },
-        {
-            "productType": "0x0204",
-            "productId": "0x0075"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "33[0x21]": {
-            "label": "RGB value",
-            "description": "Set the RGB value of the LED for the quality test of the LED diode.",
-            "valueSize": 3,
-            "minValue": 1,
-            "maxValue": 4,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Reserved",
-                    "value": 1
-                },
-                {
-                    "label": "Red value",
-                    "value": 2
-                },
-                {
-                    "label": "Green value",
-                    "value": 3
-                },
-                {
-                    "label": "Blue value",
-                    "value": 4
-                }
-            ]
-        },
-        "82[0x52]": {
-            "label": "Default status of the LED",
-            "description": "Set the default status of the LED when the Range Extender relays Z-Wave message.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "The green LED remains On for 2 seconds",
-                    "value": 0
-                },
-                {
-                    "label": "Off",
-                    "value": 1
-                }
-            ]
-        },
-        "200[0xc8]": {
-            "label": "Partner ID",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Aeon Labs Standard Product",
-                    "value": 0
-                },
-                {
-                    "label": "others",
-                    "value": 1
-                }
-            ]
-        },
-        "252[0xfc]": {
-            "label": "Enable/disable the Configuration to be locked",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "disable",
-                    "value": 0
-                },
-                {
-                    "label": "enable",
-                    "value": 1
-                }
-            ]
-        },
-        "254[0xfe]": {
-            "label": "Device Tag.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "255[0xff]": {
-            "label": "Reset to factory default",
-            "description": "Reset to factory default settings and removed from the z-wave network",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 1431655765,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Reset to factory default settings",
-                    "value": 1
-                },
-                {
-                    "label": "Reset to factory default & remove from network",
-                    "value": 1431655765
-                }
-            ]
-        }
-    }
+	"_approved": true,
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "ZW117",
+	"description": "Range Extender 6",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0075"
+		},
+		{
+			"productType": "0x0104",
+			"productId": "0x0075"
+		},
+		{
+			"productType": "0x0204",
+			"productId": "0x0075"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"33": {
+			"label": "RGB value",
+			"description": "Set the RGB value of the LED for the quality test of the LED diode.",
+			"valueSize": 3,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reserved",
+					"value": 1
+				},
+				{
+					"label": "Red value",
+					"value": 2
+				},
+				{
+					"label": "Green value",
+					"value": 3
+				},
+				{
+					"label": "Blue value",
+					"value": 4
+				}
+			]
+		},
+		"82": {
+			"label": "Default status of the LED",
+			"description": "Set the default status of the LED when the Range Extender relays Z-Wave message.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The green LED remains On for 2 seconds",
+					"value": 0
+				},
+				{
+					"label": "Off",
+					"value": 1
+				}
+			]
+		},
+		"200": {
+			"label": "Partner ID",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Aeon Labs Standard Product",
+					"value": 0
+				},
+				{
+					"label": "others",
+					"value": 1
+				}
+			]
+		},
+		"252": {
+			"label": "Enable/disable the Configuration to be locked",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disable",
+					"value": 0
+				},
+				{
+					"label": "enable",
+					"value": 1
+				}
+			]
+		},
+		"254": {
+			"label": "Device Tag.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"255": {
+			"label": "Reset to factory default",
+			"description": "Reset to factory default settings and removed from the z-wave network",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 1431655765,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reset to factory default settings",
+					"value": 1
+				},
+				{
+					"label": "Reset to factory default & remove from network",
+					"value": 1431655765
+				}
+			]
+		}
+	}
 }

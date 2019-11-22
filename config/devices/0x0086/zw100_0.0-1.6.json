@@ -306,24 +306,112 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"102[0xff]": {
-			"label": "Group 2 Periodic Reports",
-			"description": "Periodic reports to send to Group 2",
+		"102[0x1]": {
+			"label": "Group 2: Send battery reports",
+			"description": "Include battery information in periodic reports to Group 2",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"103[0xff]": {
-			"label": "Group 3 Periodic Reports",
-			"description": "Periodic reports to send to Group 3",
+		"102[0x10]": {
+			"label": "Group 2: Send ultraviolet reports",
+			"description": "Include ultraviolet information in periodic reports to Group 2",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"102[0x20]": {
+			"label": "Group 2: Send temperature reports",
+			"description": "Include temperature information in periodic reports to Group 2",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"102[0x40]": {
+			"label": "Group 2: Send humidity reports",
+			"description": "Include humidity information in periodic reports to Group 2",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"102[0x80]": {
+			"label": "Group 2: Send luminance reports",
+			"description": "Include luminance information in periodic reports to Group 2",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"103[0x1]": {
+			"label": "Group 3: Send battery reports",
+			"description": "Include battery information in periodic reports to Group 3",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"103[0x10]": {
+			"label": "Group 3: Send ultraviolet reports",
+			"description": "Include ultraviolet information in periodic reports to Group 3",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"103[0x20]": {
+			"label": "Group 3: Send temperature reports",
+			"description": "Include temperature information in periodic reports to Group 3",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"103[0x40]": {
+			"label": "Group 3: Send humidity reports",
+			"description": "Include humidity information in periodic reports to Group 3",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"103[0x80]": {
+			"label": "Group 3: Send luminance reports",
+			"description": "Include luminance information in periodic reports to Group 3",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true

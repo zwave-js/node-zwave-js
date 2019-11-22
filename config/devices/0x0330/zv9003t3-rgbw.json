@@ -1,64 +1,64 @@
 // Sunricher ZV9003T3-RGBW
 // RGBW 3 Scene Wall Controller
 {
-    "_approved": true,
-    "manufacturer": "Sunricher",
-    "manufacturerId": "0x0330",
-    "label": "ZV9003T3-RGBW",
-    "description": "RGBW 3 Scene Wall Controller",
-    "devices": [
-        {
-            "productType": "0x0301",
-            "productId": "0xa106"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3[0x01]": {
-            "label": "Scene Command Type",
-            "description": "Set to choose between CENTRAL_SCENE or SCENE_ACTIVATION command types",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "CENTRAL_SCENE (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "SCENE_ACTIVATION",
-                    "value": 1
-                }
-            ]
-        },
-        "4[0x01]": {
-            "label": "Scene Command Target Role",
-            "description": "Send Scene Commands to Gateway or Controller Devices",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Gateway",
-                    "value": 0
-                },
-                {
-                    "label": "Controlled Devices (Default)",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Sunricher",
+	"manufacturerId": "0x0330",
+	"label": "ZV9003T3-RGBW",
+	"description": "RGBW 3 Scene Wall Controller",
+	"devices": [
+		{
+			"productType": "0x0301",
+			"productId": "0xa106"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "Scene Command Type",
+			"description": "Set to choose between CENTRAL_SCENE or SCENE_ACTIVATION command types",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "CENTRAL_SCENE (Default)",
+					"value": 0
+				},
+				{
+					"label": "SCENE_ACTIVATION",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Scene Command Target Role",
+			"description": "Send Scene Commands to Gateway or Controller Devices",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Gateway",
+					"value": 0
+				},
+				{
+					"label": "Controlled Devices (Default)",
+					"value": 1
+				}
+			]
+		}
+	}
 }
