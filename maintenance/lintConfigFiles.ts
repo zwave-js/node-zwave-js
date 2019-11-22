@@ -92,11 +92,29 @@ This is likely an error!`,
 		}
 
 		if (config.paramInformation?.size) {
+			// Check if there are options when manual entry is forbidden
 			for (const [key, value] of config.paramInformation.entries()) {
 				if (!value.allowManualEntry && !value.options?.length) {
 					addError(
 						file,
 						`Parameter #${key} must allow manual entry if there are no options defined!`,
+					);
+				}
+			}
+
+			// Check if there are parameters with a single bit mask
+			const partialParams = [...config.paramInformation.keys()]
+				.filter(k => !!k.valueBitMask)
+				.reduce((map, key) => {
+					if (!map.has(key.parameter)) map.set(key.parameter, 0);
+					map.set(key.parameter, map.get(key.parameter)! + 1);
+					return map;
+				}, new Map<number, number>());
+			for (const [param, count] of partialParams.entries()) {
+				if (count === 1) {
+					addError(
+						file,
+						`Parameter #${param} has a single bit mask defined. Either add more, or delete the bit mask.`,
 					);
 				}
 			}
