@@ -131,7 +131,11 @@ This is likely an error!`,
 				const bitMask = key.valueBitMask!;
 				const shiftAmount = getMinimumShiftForBitMask(bitMask);
 				const shiftedBitMask = bitMask >>> shiftAmount;
-				if ((param.minValue & shiftedBitMask) !== param.minValue) {
+				// TODO: Find out how to test this with negative values
+				if (
+					param.minValue >= 0 &&
+					(param.minValue & shiftedBitMask) !== param.minValue
+				) {
 					addError(
 						file,
 						`Parameter #${key.parameter}[${num2hex(
@@ -142,7 +146,10 @@ This is likely an error!`,
 Did you mean to use ${param.minValue >>> shiftAmount}?`,
 					);
 				}
-				if ((param.maxValue & shiftedBitMask) !== param.maxValue) {
+				if (
+					param.maxValue >= 0 &&
+					(param.maxValue & shiftedBitMask) !== param.maxValue
+				) {
 					addError(
 						file,
 						`Parameter #${key.parameter}[${num2hex(
@@ -154,8 +161,8 @@ Did you mean to use ${param.maxValue >>> shiftAmount}?`,
 					);
 				}
 				if (
-					(param.defaultValue & shiftedBitMask) !==
-					param.defaultValue
+					param.defaultValue >= 0 &&
+					(param.defaultValue & shiftedBitMask) !== param.defaultValue
 				) {
 					addError(
 						file,
