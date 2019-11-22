@@ -194,7 +194,10 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		}
 
 		// Retrieve the speaking property name
-		ret.propertyName = ccInstance.translateProperty(valueId.property);
+		ret.propertyName = ccInstance.translateProperty(
+			valueId.property,
+			valueId.propertyKey,
+		);
 		// Try to retrieve the speaking property key
 		if (valueId.propertyKey != undefined) {
 			const propertyKey = ccInstance.translatePropertyKey(
@@ -401,7 +404,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 					ret.push(
 						...ccInstance
 							.getDefinedValueIDs()
-							.map(this.translateValueID),
+							.map(id => this.translateValueID(id)),
 					);
 				}
 			}
@@ -1368,6 +1371,30 @@ version:               ${this.version}`;
 					isControlled: enforceType(isControlled, "boolean"),
 					version: enforceType(version, "number"),
 				});
+				// Metadata must be deserialized before values since that may be necessary to correctly translate value IDs
+				if (isArray(metadata) && metadata.length > 0) {
+					// If any exist, deserialize the metadata aswell
+					const ccInstance = this.createCCInstance(ccNum);
+					if (ccInstance) {
+						// In v2.0.0, propertyName was changed to property. The network caches might still reference the old property names
+						for (const m of metadata) {
+							if ("propertyName" in m) {
+								m.property = m.propertyName;
+								delete m.propertyName;
+							}
+						}
+						try {
+							ccInstance.deserializeMetadataFromCache(
+								metadata as CacheMetadata[],
+							);
+						} catch (e) {
+							log.controller.logNode(this.id, {
+								message: `Error during deserialization of CC value metadata from cache:\n${e}`,
+								level: "error",
+							});
+						}
+					}
+				}
 				if (isArray(values) && values.length > 0) {
 					// If any exist, deserialize the values aswell
 					const ccInstance = this.createCCInstance(ccNum);
@@ -1386,29 +1413,6 @@ version:               ${this.version}`;
 						} catch (e) {
 							log.controller.logNode(this.id, {
 								message: `Error during deserialization of CC values from cache:\n${e}`,
-								level: "error",
-							});
-						}
-					}
-				}
-				if (isArray(metadata) && metadata.length > 0) {
-					// If any exist, deserialize the values aswell
-					const ccInstance = this.createCCInstance(ccNum);
-					if (ccInstance) {
-						// In v2.0.0, propertyName was changed to property. The network caches might still reference the old property names
-						for (const m of metadata) {
-							if ("propertyName" in m) {
-								m.property = m.propertyName;
-								delete m.propertyName;
-							}
-						}
-						try {
-							ccInstance.deserializeMetadataFromCache(
-								metadata as CacheMetadata[],
-							);
-						} catch (e) {
-							log.controller.logNode(this.id, {
-								message: `Error during deserialization of CC value metadata from cache:\n${e}`,
 								level: "error",
 							});
 						}
