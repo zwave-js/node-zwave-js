@@ -219,10 +219,10 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 export class ThermostatSetpointCC extends CommandClass {
 	declare ccCommand: ThermostatSetpointCommand;
 
-	public static translatePropertyKey(
+	public translatePropertyKey(
 		property: string | number,
 		propertyKey: string | number,
-	): string {
+	): string | undefined {
 		if (property === "setpoint") {
 			return getEnumMemberName(
 				ThermostatSetpointType,

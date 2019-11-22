@@ -8,6 +8,7 @@ import * as semver from "semver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { JSONObject } from "../util/misc";
+import { ObjectKeyMap, ReadonlyObjectKeyMap } from "../util/ObjectKeyMap";
 import { configDir, hexKeyRegex4Digits, throwInvalidConfig } from "./utils";
 
 export interface FirmwareVersionRange {
@@ -22,6 +23,11 @@ export interface DeviceConfigIndexEntry {
 	firmwareVersion: FirmwareVersionRange;
 	filename: string;
 }
+
+export type ParamInfoMap = ReadonlyObjectKeyMap<
+	{ parameter: number; valueBitMask?: number },
+	ParamInformation
+>;
 
 const indexPath = path.join(configDir, "devices/index.json");
 let index: readonly DeviceConfigIndexEntry[] | undefined;
@@ -236,7 +242,10 @@ found non-numeric group id "${key}" in associations`,
 		}
 
 		if (definition.paramInformation != undefined) {
-			const paramInformation = new Map<number, ParamInformation>();
+			const paramInformation = new ObjectKeyMap<
+				{ parameter: number; valueBitMask?: number },
+				ParamInformation
+			>();
 			if (!isObject(definition.paramInformation)) {
 				throwInvalidConfig(
 					`device`,
@@ -259,7 +268,7 @@ found invalid param number "${key}" in paramInformation`,
 				const bitMask =
 					match[2] != undefined ? parseInt(match[2], 16) : undefined;
 				paramInformation.set(
-					keyNum,
+					{ parameter: keyNum, valueBitMask: bitMask },
 					new ParamInformation(
 						filename,
 						keyNum,
@@ -282,7 +291,7 @@ found invalid param number "${key}" in paramInformation`,
 	}[];
 	public readonly firmwareVersion: FirmwareVersionRange;
 	public readonly associations?: ReadonlyMap<number, AssociationConfig>;
-	public readonly paramInformation?: ReadonlyMap<number, ParamInformation>;
+	public readonly paramInformation?: ParamInfoMap;
 }
 
 export class AssociationConfig {

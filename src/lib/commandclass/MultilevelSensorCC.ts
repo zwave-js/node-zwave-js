@@ -242,10 +242,10 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 		this.interviewComplete = true;
 	}
 
-	public static translatePropertyKey(
+	public translatePropertyKey(
 		property: string | number,
 		propertyKey: string | number,
-	): string {
+	): string | undefined {
 		// TODO: check this
 		if (property === "values" && typeof propertyKey === "number") {
 			const type = lookupSensorType(propertyKey);

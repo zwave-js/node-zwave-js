@@ -68,3 +68,24 @@ export function getEnumMemberName(enumeration: unknown, value: number): string {
 export function skipBytes(buf: Buffer, n: number): Buffer {
 	return Buffer.from(buf.slice(n));
 }
+
+/**
+ * Determines how many bits a value must be shifted to be right-aligned with a given bit mask
+ * Example:
+ * ```txt
+ *   Mask = 00110000
+ *             ^---- => 4 bits
+ *
+ *   Mask = 00110001
+ *                 ^ => 0 bits
+ * ```
+ */
+export function getMinimumShiftForBitMask(mask: number): number {
+	let i = 0;
+	while (mask % 2 === 0) {
+		mask >>>= 1;
+		if (mask === 0) break;
+		i++;
+	}
+	return i;
+}
