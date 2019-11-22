@@ -1133,7 +1133,7 @@ describe("lib/node/Node", () => {
 		});
 
 		it("should contain a speaking name for the CC", () => {
-			const cc = CommandClasses.Irrigation;
+			const cc = CommandClasses["Wake Up"];
 			const ccName = CommandClasses[cc];
 			const valueId: ValueID = {
 				commandClass: cc,
@@ -1307,10 +1307,11 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("getValue()", () => {
+		const fakeDriver = createEmptyMockDriver();
 		it("returns the values stored in the value DB", () => {
-			const node = new ZWaveNode(1, undefined as any);
+			const node = new ZWaveNode(1, fakeDriver as any);
 			const valueId: ValueID = {
-				commandClass: 1,
+				commandClass: CommandClasses.Version,
 				endpoint: 2,
 				property: "3",
 			};
