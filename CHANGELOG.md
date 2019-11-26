@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.0.0 (2019-11-26)
 ### Changes for users
 * The `value updated` event is no longer emitted for `interviewComplete` every time a command is received
 * `Basic CC` is no longer reported as supported when other actuator CCs are supported
