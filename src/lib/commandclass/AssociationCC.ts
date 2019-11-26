@@ -249,12 +249,13 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 			});
 		}
 
+		const ownNodeId = this.driver.controller.ownNodeId!;
+
 		// If the target node supports Z-Wave+ info that means the lifeline MUST be group #1
 		if (node.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
 			// Check if we are already in the lifeline group
 			const lifelineNodeIds: number[] =
 				this.getValueDB().getValue(getNodeIdsValueId(1)) || [];
-			const ownNodeId = this.driver.controller.ownNodeId!;
 			if (!lifelineNodeIds.includes(ownNodeId)) {
 				log.controller.logNode(node.id, {
 					message:
@@ -263,6 +264,34 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 				});
 				await api.addNodeIds(1, ownNodeId);
 			}
+		} else if (node.deviceConfig?.associations?.size) {
+			// We have a device config file that tells us which association to assign
+			const lifelineGroups = [...node.deviceConfig.associations.values()]
+				.filter(a => a.isLifeline)
+				.map(a => a.groupId);
+			if (lifelineGroups.length > 0) {
+				log.controller.logNode(node.id, {
+					message: `has a config file, assigning ourselves to the configured Lifeline group${
+						lifelineGroups.length > 1 ? "s" : ""
+					}: ${lifelineGroups.join(", ")}`,
+					direction: "outbound",
+				});
+				for (const group of lifelineGroups) {
+					// Check if we are already in the lifeline group
+					const lifelineNodeIds: number[] =
+						this.getValueDB().getValue(getNodeIdsValueId(group)) ||
+						[];
+					if (!lifelineNodeIds.includes(ownNodeId))
+						await api.addNodeIds(group, ownNodeId);
+				}
+			}
+		} else {
+			log.controller.logNode(node.id, {
+				message:
+					"No information about Lifeline associations, cannot assign ourselves!",
+				direction: "outbound",
+				level: "warn",
+			});
 		}
 
 		// Remember that the interview is complete
