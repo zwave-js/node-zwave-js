@@ -3,13 +3,19 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
 import { CCAPI } from "../commandclass/API";
+import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import {
 	CentralSceneCCNotification,
 	CentralSceneKeys,
 	getSceneValueId,
 } from "../commandclass/CentralSceneCC";
 import { CommandClass, getCCValueMetadata } from "../commandclass/CommandClass";
-import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
+import {
+	actuatorCCs,
+	CommandClasses,
+	getCCName,
+	sensorCCs,
+} from "../commandclass/CommandClasses";
 import { getEndpointCCsValueId } from "../commandclass/MultiChannelCC";
 import { NotificationCCReport } from "../commandclass/NotificationCC";
 import { WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
@@ -924,7 +930,40 @@ version:               ${this.version}`;
 		}
 
 		// As the NIF is sent on wakeup, treat this as a sign that the node is awake
-		this.setAwake(true);
+		if (!this.isAwake()) {
+			this.setAwake(true);
+		}
+	}
+
+	/**
+	 * Refreshes all non-static values from this node.
+	 * WARNING: It is not recommended to await this method!
+	 */
+	private async refreshValues(): Promise<void> {
+		for (const endpoint of this.getAllEndpoints()) {
+			for (const cc of endpoint.getSupportedCCInstances()) {
+				// Only query actuator and sensor CCs
+				if (
+					!actuatorCCs.includes(cc.ccId) &&
+					!sensorCCs.includes(cc.ccId)
+				) {
+					continue;
+				}
+				// Don't do a complete interview, only dynamic values
+				try {
+					await cc.interview(false);
+				} catch (e) {
+					log.controller.logNode(
+						this.id,
+						`failed to refresh values for ${getEnumMemberName(
+							CommandClasses,
+							cc.ccId,
+						)}, endpoint ${endpoint.index}: ${e.message}`,
+						"error",
+					);
+				}
+			}
+		}
 	}
 
 	/** Overwrites the reported configuration with information from a config file */
@@ -1429,7 +1468,18 @@ version:               ${this.version}`;
 	 */
 	public setAwake(awake: boolean): void {
 		if (!this.supportsCC(CommandClasses["Wake Up"])) return;
-		WakeUpCC.setAwake(this, awake);
+		if (awake !== this.isAwake()) {
+			WakeUpCC.setAwake(this, awake);
+			if (
+				awake &&
+				this.interviewStage === InterviewStage.Complete &&
+				!this.supportsCC(CommandClasses["Z-Wave Plus Info"]) &&
+				!this.valueDB.getValue(getHasLifelineValueId())
+			) {
+				// (GH#398) If there was no lifeline configured, we assume that the controller does not receive updates from the node
+				this.refreshValues();
+			}
+		}
 	}
 
 	/** Returns whether the node is currently assumed awake */

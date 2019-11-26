@@ -1,7 +1,6 @@
 import { num2hex } from "../util/strings";
 
 /* A dictionary of all command classes as of 2018-03-30 */
-/* A dictionary of all command classes as of 2018-03-30 */
 export enum CommandClasses {
 	// "Alarm" = 0x71, // superseded by Notification
 	"Alarm Sensor" = 0x9c,
@@ -143,4 +142,17 @@ export const actuatorCCs: readonly CommandClasses[] = [
 	CommandClasses["Thermostat Setpoint"],
 	CommandClasses["Thermostat Mode"],
 	CommandClasses["Window Covering"],
+];
+
+/**
+ * Defines which CCs are considered Sensor CCs
+ */
+export const sensorCCs: readonly CommandClasses[] = [
+	CommandClasses["Alarm Sensor"],
+	CommandClasses.Battery,
+	CommandClasses["Binary Sensor"],
+	CommandClasses["Energy Production"],
+	CommandClasses.Meter,
+	CommandClasses["Multilevel Sensor"],
+	CommandClasses["Pulse Meter"],
 ];

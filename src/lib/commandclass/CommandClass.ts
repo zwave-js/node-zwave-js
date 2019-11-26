@@ -640,7 +640,6 @@ export class CommandClass {
 	/** Deserializes values from the cache */
 	public deserializeValuesFromCache(values: CacheValue[]): void {
 		const cc = getCommandClass(this);
-		// const ccValues = getCCValueDefinitions(this);
 		for (const val of values) {
 			this.getValueDB().setValue(
 				{
@@ -650,8 +649,9 @@ export class CommandClass {
 					propertyKey: val.propertyKey,
 				},
 				deserializeCacheValue(val.value),
+				// Don't emit the added/updated events, as this will spam applications with untranslated events
+				{ noEvent: true },
 			);
-			// }
 		}
 	}
 
@@ -667,6 +667,8 @@ export class CommandClass {
 					propertyKey: meta.propertyKey,
 				},
 				meta.metadata,
+				// Don't emit the added/updated events, as this will spam applications with untranslated events
+				{ noEvent: true },
 			);
 		}
 	}
