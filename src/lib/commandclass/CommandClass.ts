@@ -421,11 +421,14 @@ export class CommandClass {
 	private _registeredCCValues = new Map<string | number, boolean>();
 	/**
 	 * Creates a value that will be stored in the valueDB alongside with the ones marked with `@ccValue()`
-	 * @param name The name of the value
+	 * @param property The property the value belongs to
 	 * @param internal Whether the value should be exposed to library users
 	 */
-	public registerValue(name: keyof this, internal: boolean = false): void {
-		this._registeredCCValues.set(name as string, internal);
+	public registerValue(
+		property: string | number,
+		internal: boolean = false,
+	): void {
+		this._registeredCCValues.set(property, internal);
 	}
 
 	/** Returns a list of all value names that are defined for this CommandClass */

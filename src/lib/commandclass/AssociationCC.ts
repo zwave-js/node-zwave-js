@@ -14,6 +14,7 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	CommandClassOptions,
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
@@ -43,6 +44,14 @@ export function getGroupCountValueId(): ValueID {
 	return {
 		commandClass: CommandClasses.Association,
 		property: "groupCount",
+	};
+}
+
+/** Returns the ValueID used to store whether a node has a lifeline association */
+export function getHasLifelineValueId(): ValueID {
+	return {
+		commandClass: CommandClasses.Association,
+		property: "hasLifeline",
 	};
 }
 
@@ -171,6 +180,11 @@ export class AssociationCCAPI extends CCAPI {
 export class AssociationCC extends CommandClass {
 	declare ccCommand: AssociationCommand;
 
+	public constructor(driver: IDriver, options: CommandClassOptions) {
+		super(driver, options);
+		this.registerValue(getHasLifelineValueId().property, true);
+	}
+
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
 		// AssociationCC must be interviewed after Z-Wave+ if that is supported
 		return [
@@ -250,12 +264,13 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 		}
 
 		const ownNodeId = this.driver.controller.ownNodeId!;
+		const valueDB = this.getValueDB();
 
 		// If the target node supports Z-Wave+ info that means the lifeline MUST be group #1
 		if (node.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
 			// Check if we are already in the lifeline group
 			const lifelineNodeIds: number[] =
-				this.getValueDB().getValue(getNodeIdsValueId(1)) || [];
+				valueDB.getValue(getNodeIdsValueId(1)) || [];
 			if (!lifelineNodeIds.includes(ownNodeId)) {
 				log.controller.logNode(node.id, {
 					message:
@@ -264,6 +279,8 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 				});
 				await api.addNodeIds(1, ownNodeId);
 			}
+			// Remember that we have a lifeline association
+			valueDB.setValue(getHasLifelineValueId(), true);
 		} else if (node.deviceConfig?.associations?.size) {
 			// We have a device config file that tells us which association to assign
 			const lifelineGroups = [...node.deviceConfig.associations.values()]
@@ -279,11 +296,12 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 				for (const group of lifelineGroups) {
 					// Check if we are already in the lifeline group
 					const lifelineNodeIds: number[] =
-						this.getValueDB().getValue(getNodeIdsValueId(group)) ||
-						[];
+						valueDB.getValue(getNodeIdsValueId(group)) || [];
 					if (!lifelineNodeIds.includes(ownNodeId))
 						await api.addNodeIds(group, ownNodeId);
 				}
+				// Remember that we have a lifeline association
+				valueDB.setValue(getHasLifelineValueId(), true);
 			}
 		} else {
 			log.controller.logNode(node.id, {
@@ -292,6 +310,8 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 				direction: "outbound",
 				level: "warn",
 			});
+			// Remember that we have NO lifeline association
+			valueDB.setValue(getHasLifelineValueId(), false);
 		}
 
 		// Remember that the interview is complete

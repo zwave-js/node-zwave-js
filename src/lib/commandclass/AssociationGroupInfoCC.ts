@@ -328,8 +328,8 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	public constructor(driver: IDriver, options: CommandClassOptions) {
 		super(driver, options);
-		this.registerValue(getGroupNameValueID(0).property as any, true);
-		this.registerValue(getGroupInfoValueID(0).property as any, true);
+		this.registerValue(getGroupNameValueID(0).property, true);
+		this.registerValue(getGroupInfoValueID(0).property, true);
 	}
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
