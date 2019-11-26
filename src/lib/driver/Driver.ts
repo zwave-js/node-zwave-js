@@ -709,7 +709,23 @@ export class Driver extends EventEmitter implements IDriver {
 			// all good, send ACK
 			this.send(MessageHeaders.ACK);
 			// and handle the response (if it could be decoded)
-			if (msg) await this.handleMessage(msg);
+			if (msg) {
+				try {
+					await this.handleMessage(msg);
+				} catch (e) {
+					if (
+						e instanceof ZWaveError &&
+						e.code === ZWaveErrorCodes.Driver_NotReady
+					) {
+						log.driver.print(
+							`Cannot handle message because the driver is not ready to handle it yet.`,
+							"warn",
+						);
+					} else {
+						throw e;
+					}
+				}
+			}
 		}
 
 		log.serial.message(
