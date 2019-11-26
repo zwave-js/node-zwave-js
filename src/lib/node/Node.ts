@@ -3,17 +3,22 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
 import { CCAPI } from "../commandclass/API";
+import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import {
 	CentralSceneCCNotification,
 	CentralSceneKeys,
 	getSceneValueId,
 } from "../commandclass/CentralSceneCC";
 import { CommandClass, getCCValueMetadata } from "../commandclass/CommandClass";
-import { CommandClasses, getCCName } from "../commandclass/CommandClasses";
+import {
+	actuatorCCs,
+	CommandClasses,
+	getCCName,
+	sensorCCs,
+} from "../commandclass/CommandClasses";
 import { getEndpointCCsValueId } from "../commandclass/MultiChannelCC";
 import { NotificationCCReport } from "../commandclass/NotificationCC";
 import { WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
-import { getZWavePlusVersionValueId } from "../commandclass/ZWavePlusCC";
 import { DeviceConfig, lookupDevice } from "../config/Devices";
 import { lookupNotification } from "../config/Notifications";
 import {
@@ -929,9 +934,9 @@ version:               ${this.version}`;
 			this.setAwake(true);
 		} else if (
 			this.interviewStage === InterviewStage.Complete &&
-			!this.valueDB.getValue(getZWavePlusVersionValueId())
+			!this.valueDB.getValue(getHasLifelineValueId())
 		) {
-			// (GH#398) If Z-Wave+ is not supported, we assume that the controller does not receive updates from the node
+			// (GH#398) If there was no lifeline configured, we assume that the controller does not receive updates from the node
 			this.refreshValues();
 		}
 	}
@@ -943,6 +948,13 @@ version:               ${this.version}`;
 	private async refreshValues(): Promise<void> {
 		for (const endpoint of this.getAllEndpoints()) {
 			for (const cc of endpoint.getSupportedCCInstances()) {
+				// Only query actuator and sensor CCs
+				if (
+					!actuatorCCs.includes(cc.ccId) &&
+					!sensorCCs.includes(cc.ccId)
+				) {
+					continue;
+				}
 				// Don't do a complete interview, only dynamic values
 				try {
 					await cc.interview(false);
