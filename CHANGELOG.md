@@ -13,9 +13,11 @@
 * `Binary Sensor CC` is now correctly interviewed
 * Added a large amount of device configuration files. This powers the `Configuration CC` for versions <3 and enables lifeline associations for devices that don't support the Z-Wave+ standard.
 * Renamed a few manufacturers
+* When devices wake up that neither support Z-Wave+ nor have a lifeline association, all sensor and actuator CCs are queried for updated values
 
-# Bugfixes
+### Bugfixes
 * `Multi Channel CC` no longer queries endpoint #0 if EndpointFind returns no results or only zeroes.
+* When values and metadata are deserialized from the cache, no more events are emitted. If you relied on this behavior, use `getDefinedValueIDs()` instead **after** the interview was completed.
 
 ### Breaking changes
 * Added a new member to `ValueID`: `property` (`number | string`) replaces `propertyName` as the property identifier. `propertyName` is now in line with `commandClassName` and `propertyKeyName` and contains a speaking representation of the property
