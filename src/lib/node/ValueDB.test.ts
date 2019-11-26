@@ -106,6 +106,49 @@ describe("lib/node/ValueDB => ", () => {
 		});
 	});
 
+	describe("setValue()/removeValue() (with the noEvent parameter set to true)", () => {
+		beforeAll(() => {
+			valueDB.setValue(
+				{
+					commandClass: CommandClasses["Alarm Sensor"],
+					endpoint: 4,
+					property: "foo",
+				},
+				"bar",
+				{ noEvent: true },
+			);
+			valueDB.setValue(
+				{
+					commandClass: CommandClasses["Alarm Sensor"],
+					endpoint: 4,
+					property: "foo",
+				},
+				"baz",
+				{ noEvent: true },
+			);
+			valueDB.removeValue(
+				{
+					commandClass: CommandClasses["Alarm Sensor"],
+					endpoint: 4,
+					property: "foo",
+				},
+				{ noEvent: true },
+			);
+		});
+
+		afterAll(() => {
+			onValueAdded.mockClear();
+			onValueUpdated.mockClear();
+			onValueRemoved.mockClear();
+		});
+
+		it("should not emit any events", () => {
+			expect(onValueAdded).not.toBeCalled();
+			expect(onValueUpdated).not.toBeCalled();
+			expect(onValueRemoved).not.toBeCalled();
+		});
+	});
+
 	describe("values with a property key", () => {
 		const cc = CommandClasses["Wake Up"];
 

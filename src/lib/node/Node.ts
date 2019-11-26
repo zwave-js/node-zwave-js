@@ -932,12 +932,6 @@ version:               ${this.version}`;
 		// As the NIF is sent on wakeup, treat this as a sign that the node is awake
 		if (!this.isAwake()) {
 			this.setAwake(true);
-		} else if (
-			this.interviewStage === InterviewStage.Complete &&
-			!this.valueDB.getValue(getHasLifelineValueId())
-		) {
-			// (GH#398) If there was no lifeline configured, we assume that the controller does not receive updates from the node
-			this.refreshValues();
 		}
 	}
 
@@ -1476,7 +1470,15 @@ version:               ${this.version}`;
 		if (!this.supportsCC(CommandClasses["Wake Up"])) return;
 		if (awake !== this.isAwake()) {
 			WakeUpCC.setAwake(this, awake);
-			if (awake) this.refreshValues();
+			if (
+				awake &&
+				this.interviewStage === InterviewStage.Complete &&
+				!this.supportsCC(CommandClasses["Z-Wave Plus Info"]) &&
+				!this.valueDB.getValue(getHasLifelineValueId())
+			) {
+				// (GH#398) If there was no lifeline configured, we assume that the controller does not receive updates from the node
+				this.refreshValues();
+			}
 		}
 	}
 

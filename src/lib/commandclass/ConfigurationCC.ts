@@ -666,7 +666,12 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		for (const meta of valueDB.getAllMetadata(this.ccId)) {
 			if (typeof meta.property === "number") {
 				// this is a param information, delete it
-				valueDB.setMetadata(meta, undefined);
+				valueDB.setMetadata(
+					meta,
+					undefined,
+					// Don't emit the added/updated events, as this will spam applications with untranslated events
+					{ noEvent: true },
+				);
 			}
 		}
 

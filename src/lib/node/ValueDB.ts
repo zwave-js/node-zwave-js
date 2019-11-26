@@ -71,6 +71,11 @@ export function valueIdToString({
 	return JSON.stringify(jsonKey);
 }
 
+export interface SetValueOptions {
+	/** When this is true, no event will be emitted for the value change */
+	noEvent?: boolean;
+}
+
 /**
  * The value store for a single node
  */
@@ -81,7 +86,11 @@ export class ValueDB extends EventEmitter {
 	/**
 	 * Stores a value for a given value id
 	 */
-	public setValue(valueId: ValueID, value: unknown): void {
+	public setValue(
+		valueId: ValueID,
+		value: unknown,
+		options: SetValueOptions = {},
+	): void {
 		const cbArg: ValueAddedArgs | ValueUpdatedArgs = {
 			...valueId,
 			newValue: value,
@@ -97,13 +106,18 @@ export class ValueDB extends EventEmitter {
 		}
 
 		this._db.set(dbKey, value);
-		this.emit(event, cbArg);
+		if (options.noEvent !== true) {
+			this.emit(event, cbArg);
+		}
 	}
 
 	/**
 	 * Removes a value for a given value id
 	 */
-	public removeValue(valueId: ValueID): boolean {
+	public removeValue(
+		valueId: ValueID,
+		options: SetValueOptions = {},
+	): boolean {
 		const dbKey: string = valueIdToString(valueId);
 		if (this._db.has(dbKey)) {
 			const prevValue = this._db.get(dbKey);
@@ -112,7 +126,9 @@ export class ValueDB extends EventEmitter {
 				...valueId,
 				prevValue,
 			};
-			this.emit("value removed", cbArg);
+			if (options.noEvent !== true) {
+				this.emit("value removed", cbArg);
+			}
 			return true;
 		}
 		return false;
@@ -146,14 +162,14 @@ export class ValueDB extends EventEmitter {
 	}
 
 	/** Clears all values from the value DB */
-	public clear(): void {
+	public clear(options: SetValueOptions = {}): void {
 		this._db.forEach((_val, key) => {
 			const valueId: ValueID = JSON.parse(key);
-			this.removeValue(valueId);
+			this.removeValue(valueId, options);
 		});
 		this._metadata.forEach((_meta, key) => {
 			const valueId = JSON.parse(key);
-			this.setMetadata(valueId, undefined);
+			this.setMetadata(valueId, undefined, options);
 		});
 	}
 
@@ -163,6 +179,7 @@ export class ValueDB extends EventEmitter {
 	public setMetadata(
 		valueId: ValueID,
 		metadata: ValueMetadata | undefined,
+		options: SetValueOptions = {},
 	): void {
 		const dbKey: string = valueIdToString(valueId);
 		if (metadata) {
@@ -175,7 +192,9 @@ export class ValueDB extends EventEmitter {
 			...valueId,
 			metadata,
 		};
-		this.emit("metadata updated", cbArg);
+		if (options.noEvent !== true) {
+			this.emit("metadata updated", cbArg);
+		}
 	}
 
 	/**
