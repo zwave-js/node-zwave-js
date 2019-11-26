@@ -39,7 +39,6 @@ import {
 	CommandClassOptions,
 	DynamicCCResponse,
 	expectedCCResponse,
-	getCommandClass,
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
@@ -114,6 +113,11 @@ export function getParamInformationValueID(
 		propertyKey: bitMask,
 	};
 }
+
+const isParamInfoFromConfigValueId: ValueID = {
+	commandClass: CommandClasses.Configuration,
+	property: "isParamInformationFromConfig",
+};
 
 @API(CommandClasses.Configuration)
 export class ConfigurationCCAPI extends CCAPI {
@@ -553,10 +557,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 */
 	protected get isParamInformationFromConfig(): boolean {
 		return (
-			this.getValueDB().getValue({
-				commandClass: getCommandClass(this),
-				property: "isParamInformationFromConfig",
-			}) === true
+			this.getValueDB().getValue(isParamInfoFromConfigValueId) === true
 		);
 	}
 
@@ -659,12 +660,24 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 
 	/** Deserializes the config parameter info from a config file */
 	public deserializeParamInformationFromConfig(config: ParamInfoMap): void {
-		// TODO: Clear existing param info
+		const valueDB = this.getValueDB();
+
+		// Clear old param information
+		for (const meta of valueDB.getAllMetadata(this.ccId)) {
+			if (typeof meta.property === "number") {
+				// this is a param information, delete it
+				valueDB.setMetadata(meta, undefined);
+			}
+		}
+
+		// Allow overwriting the param info (mark it as unloaded)
+		valueDB.setValue(isParamInfoFromConfigValueId, false);
+
 		for (const [param, info] of config.entries()) {
 			// We need to make the config information compatible with the
 			// format that ConfigurationCC reports
 			this.extendParamInformation(param.parameter, param.valueBitMask, {
-				// TODO: Make this smarter!
+				// TODO: Make this smarter! (0...1 ==> boolean)
 				type: "number",
 				valueSize: info.valueSize,
 				min: info.minValue,
@@ -689,13 +702,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		}
 
 		// Remember that we loaded the param information from a config file
-		this.getValueDB().setValue(
-			{
-				commandClass: getCommandClass(this),
-				property: "isParamInformationFromConfig",
-			},
-			true,
-		);
+		valueDB.setValue(isParamInfoFromConfigValueId, true);
 	}
 
 	public translatePropertyKey(
