@@ -46,7 +46,7 @@ export function getZWavePlusVersionValueId(endpoint: number = 0): ValueID {
 	return {
 		commandClass: CommandClasses["Z-Wave Plus Info"],
 		endpoint,
-		propertyName: "zwavePlusVersion",
+		property: "zwavePlusVersion",
 	};
 }
 
