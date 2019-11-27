@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.0.1 (2019-11-27)
 ### Bugfixes
 * Fixed a crash that happened when saving the network cache with a CC that is neither supported nor controlled
 
