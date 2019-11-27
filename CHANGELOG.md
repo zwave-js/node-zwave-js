@@ -4,6 +4,13 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed a crash that happened when saving the network cache with a CC that is neither supported nor controlled
+
+### Changes under the hood
+* Errors in stack traces are now mapped to the original TypeScript sources.
+
 ## 2.0.0 (2019-11-26)
 ### Changes for users
 * The `value updated` event is no longer emitted for `interviewComplete` every time a command is received
