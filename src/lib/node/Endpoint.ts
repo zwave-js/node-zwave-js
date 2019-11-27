@@ -99,6 +99,13 @@ export class Endpoint {
 		) {
 			// We still want to know if BasicCC is controlled, so only mark it as not supported
 			this.addCC(CommandClasses.Basic, { isSupported: false });
+			// If the record is now only a dummy, remove the CC
+			if (
+				!this.supportsCC(CommandClasses.Basic) &&
+				!this.controlsCC(CommandClasses.Basic)
+			) {
+				this.removeCC(CommandClasses.Basic);
+			}
 		}
 	}
 
