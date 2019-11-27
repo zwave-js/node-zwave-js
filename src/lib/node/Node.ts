@@ -1323,7 +1323,7 @@ version:               ${this.version}`;
 						} as any;
 						// If the CC is implemented and has values or value metadata,
 						// store them
-						const ccInstance = this.createCCInstance(cc);
+						const ccInstance = this.createCCInstanceUnsafe(cc);
 						if (ccInstance) {
 							// Store values if there ara any
 							const ccValues = ccInstance.serializeValuesForCache();
