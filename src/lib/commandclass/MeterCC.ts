@@ -37,7 +37,7 @@ export enum RateType {
 }
 
 @commandClass(CommandClasses.Meter)
-@implementedVersion(2)
+@implementedVersion(3)
 export class MeterCC extends CommandClass {
 	declare ccCommand: MeterCommand;
 }
@@ -53,10 +53,13 @@ export class MeterCCReport extends MeterCC {
 		validatePayload(this.payload.length >= 2);
 		this._type = this.payload[0] & 0b0_00_11111;
 		this._rateType = (this.payload[0] & 0b0_11_00000) >>> 5;
+		const scale2Bit = (this.payload[0] & 0b1_00_00000) >>> 7;
 
-		const { scale, value, bytesRead } = parseFloatWithScale(
+		const { scale: scaleBits10, value, bytesRead } = parseFloatWithScale(
 			this.payload.slice(1),
 		);
+		// The scale is composed of two fields (see SDS13781)
+		const scale = (scale2Bit << 2) | scaleBits10;
 		this._scale = lookupMeterScale(this._type, scale);
 		this._value = value;
 
@@ -142,7 +145,15 @@ export class MeterCCGet extends MeterCC {
 	public scale: number | undefined;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.scale || 0]);
+		const maskedScale =
+			(this.scale == undefined
+				? 0
+				: this.version >= 3
+				? this.scale & 0b111
+				: this.version >= 2
+				? this.scale & 0b11
+				: 0) << 3;
+		this.payload = Buffer.from([maskedScale]);
 		return super.serialize();
 	}
 }
@@ -157,10 +168,7 @@ export class MeterCCSupportedReport extends MeterCC {
 		validatePayload(this.payload.length >= 2);
 		this._type = this.payload[0] & 0b0_00_11111;
 		this._supportsReset = !!(this.payload[0] & 0b1_00_00000);
-		this._supportedScales = parseBitMask(
-			Buffer.from([this.payload[1] & 0b1111]),
-			0,
-		);
+		this._supportedScales = parseBitMask(this.payload.slice(1, 2), 0);
 	}
 
 	private _type: number;
