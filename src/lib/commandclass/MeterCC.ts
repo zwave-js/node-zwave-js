@@ -1,7 +1,11 @@
-import { lookupMeterScale, MeterScale } from "../config/Meters";
+import { lookupMeter, lookupMeterScale, MeterScale } from "../config/Meters";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { validatePayload } from "../util/misc";
+import log from "../log";
+import { ValueID } from "../node/ValueDB";
+import { getEnumMemberName, validatePayload } from "../util/misc";
+import { num2hex } from "../util/strings";
+import { ValueMetadata } from "../values/Metadata";
 import {
 	getMinIntegerSize,
 	Maybe,
@@ -40,6 +44,24 @@ export enum RateType {
 	Produced = 0x02,
 }
 
+function toPropertyKey(rateType: RateType, scale: number): number {
+	return (scale << 8) | rateType;
+}
+
+// We can use this when we implement a button for reset
+// function splitPropertyKey(key: number): { rateType: RateType; scale: number } {
+// 	return {
+// 		rateType: key & 0xff,
+// 		scale: key >>> 8,
+// 	};
+// }
+
+function getMeterTypeName(type: number): string {
+	return lookupMeter(type)?.name ?? `UNKNOWN (${num2hex(type)})`;
+}
+
+// @noSetValueAPI This CC is read-only
+
 @API(CommandClasses.Meter)
 export class MeterCCAPI extends CCAPI {
 	public supportsCommand(cmd: MeterCommand): Maybe<boolean> {
@@ -62,7 +84,7 @@ export class MeterCCAPI extends CCAPI {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-	public async get(options: MeterCCGetOptions) {
+	public async get(options?: MeterCCGetOptions) {
 		this.assertSupportsCommand(MeterCommand, MeterCommand.Get);
 
 		const cc = new MeterCCGet(this.driver, {
@@ -96,6 +118,7 @@ export class MeterCCAPI extends CCAPI {
 			type: response.type,
 			supportsReset: response.supportsReset,
 			supportedScales: response.supportedScales,
+			supportedRateTypes: response.supportedRateTypes,
 		};
 	}
 
@@ -115,6 +138,76 @@ export class MeterCCAPI extends CCAPI {
 @implementedVersion(6)
 export class MeterCC extends CommandClass {
 	declare ccCommand: MeterCommand;
+
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const api = this.getEndpoint()!.commandClasses.Meter;
+
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		if (this.version >= 2) {
+			log.controller.logNode(node.id, {
+				message: "querying meter support...",
+				direction: "outbound",
+			});
+
+			const supported = await api.getSupported();
+			const logMessage = `received meter support:
+type:                 ${getMeterTypeName(supported.type)}
+supported scales:     ${supported.supportedScales
+				.map(s => lookupMeterScale(supported.type, s).label)
+				.map(label => `\n* ${label}`)}
+supported rate types: ${supported.supportedRateTypes
+				.map(rt => getEnumMemberName(RateType, rt))
+				.map(label => `\n* ${label}`)}
+supports reset:       ${supported.supportsReset}`;
+			log.controller.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
+
+			const rateTypes = supported.supportedRateTypes.length
+				? supported.supportedRateTypes
+				: [undefined];
+			for (const rateType of rateTypes) {
+				for (const scale of supported.supportedScales) {
+					log.controller.logNode(node.id, {
+						message: `querying meter value (type = ${getMeterTypeName(
+							supported.type,
+						)}, scale = ${
+							lookupMeterScale(supported.type, scale).label
+						}${
+							rateType != undefined
+								? `, rate type = ${getEnumMemberName(
+										RateType,
+										rateType,
+								  )}`
+								: ""
+						})...`,
+						direction: "outbound",
+					});
+					await api.get({
+						scale,
+						rateType,
+					});
+				}
+			}
+		} else {
+			log.controller.logNode(node.id, {
+				message: `querying default meter value...`,
+				direction: "outbound",
+			});
+			await api.get();
+		}
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
 }
 
 @CCCommand(MeterCommand.Report)
@@ -174,6 +267,59 @@ export class MeterCCReport extends MeterCC {
 		}
 		const scale = scale1 === 7 ? scale1 + scale2 : scale1;
 		this._scale = lookupMeterScale(this._type, scale);
+
+		// Store values
+		const valueIdBase: Omit<ValueID, "property"> = {
+			commandClass: this.ccId,
+			endpoint: this.endpointIndex,
+			propertyKey: toPropertyKey(this._rateType, this._scale.key),
+		};
+		const valueDB = this.getValueDB();
+		valueDB.setMetadata(
+			{ ...valueIdBase, property: "value" },
+			{
+				...ValueMetadata.ReadOnlyNumber,
+				label: `Value (${getMeterTypeName(this._type)}${
+					this._rateType
+						? `, ${getEnumMemberName(RateType, this._rateType)}`
+						: ""
+				})`,
+				unit: this._scale.label,
+			},
+		);
+		valueDB.setValue({ ...valueIdBase, property: "value" }, this._value);
+		if (this._previousValue != undefined) {
+			valueDB.setMetadata(
+				{ ...valueIdBase, property: "previousValue" },
+				{
+					...ValueMetadata.ReadOnlyNumber,
+					label: `Previous value (${getMeterTypeName(this._type)}${
+						this._rateType
+							? `, ${getEnumMemberName(RateType, this._rateType)}`
+							: ""
+					})`,
+					unit: this._scale.label,
+				},
+			);
+			valueDB.setValue(
+				{ ...valueIdBase, property: "previousValue" },
+				this._previousValue,
+			);
+		}
+		if (this._deltaTime != "unknown") {
+			valueDB.setMetadata(
+				{ ...valueIdBase, property: "deltaTime" },
+				{
+					...ValueMetadata.ReadOnlyNumber,
+					label: `Time since the previous reading`,
+					unit: "s",
+				},
+			);
+			valueDB.setValue(
+				{ ...valueIdBase, property: "deltaTime" },
+				this._deltaTime,
+			);
+		}
 	}
 
 	private _type: number;
@@ -312,6 +458,7 @@ export class MeterCCSupportedReport extends MeterCC {
 	}
 
 	private _type: number;
+	@ccValue({ internal: true })
 	public get type(): number {
 		return this._type;
 	}
@@ -323,11 +470,13 @@ export class MeterCCSupportedReport extends MeterCC {
 	}
 
 	private _supportedScales: number[];
+	@ccValue({ internal: true })
 	public get supportedScales(): readonly number[] {
 		return this._supportedScales;
 	}
 
 	private _supportedRateTypes: RateType[];
+	@ccValue({ internal: true })
 	public get supportedRateTypes(): readonly RateType[] {
 		return this._supportedRateTypes;
 	}
