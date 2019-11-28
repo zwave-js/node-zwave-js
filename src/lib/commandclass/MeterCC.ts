@@ -9,7 +9,9 @@ import {
 	parseFloatWithScale,
 	unknownNumber,
 } from "../values/Primitive";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
@@ -17,6 +19,7 @@ import {
 	commandClass,
 	CommandClassDeserializationOptions,
 	expectedCCResponse,
+	getCommandClass,
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
@@ -35,6 +38,77 @@ export enum RateType {
 	Unspecified = 0x00,
 	Consumed = 0x01,
 	Produced = 0x02,
+}
+
+@API(CommandClasses.Meter)
+export class MeterCCAPI extends CCAPI {
+	public supportsCommand(cmd: MeterCommand): Maybe<boolean> {
+		switch (cmd) {
+			case MeterCommand.Get:
+				return true; // This is mandatory
+			case MeterCommand.SupportedGet:
+				return this.version >= 2;
+			case MeterCommand.Reset: {
+				const node = this.endpoint.getNodeUnsafe()!;
+				const ret = node.getValue<boolean>({
+					commandClass: getCommandClass(this),
+					endpoint: this.endpoint.index,
+					property: "supportsReset",
+				});
+				return ret === true;
+			}
+		}
+		return super.supportsCommand(cmd);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async get(options: MeterCCGetOptions) {
+		this.assertSupportsCommand(MeterCommand, MeterCommand.Get);
+
+		const cc = new MeterCCGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...options,
+		});
+		const response = (await this.driver.sendCommand<MeterCCReport>(cc))!;
+		return {
+			type: response.type,
+			scale: response.scale,
+			value: response.value,
+			previousValue: response.previousValue,
+			rateType: response.rateType,
+			deltaTime: response.deltaTime,
+		};
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async getSupported() {
+		this.assertSupportsCommand(MeterCommand, MeterCommand.SupportedGet);
+
+		const cc = new MeterCCSupportedGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<MeterCCSupportedReport>(
+			cc,
+		))!;
+		return {
+			type: response.type,
+			supportsReset: response.supportsReset,
+			supportedScales: response.supportedScales,
+		};
+	}
+
+	public async reset(options: MeterCCResetOptions): Promise<void> {
+		this.assertSupportsCommand(MeterCommand, MeterCommand.Reset);
+
+		const cc = new MeterCCReset(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...options,
+		});
+		await this.driver.sendCommand(cc);
+	}
 }
 
 @commandClass(CommandClasses.Meter)
