@@ -3,6 +3,7 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
 import {
+	getMinIntegerSize,
 	Maybe,
 	parseBitMask,
 	parseFloatWithScale,
@@ -37,7 +38,7 @@ export enum RateType {
 }
 
 @commandClass(CommandClasses.Meter)
-@implementedVersion(4)
+@implementedVersion(6)
 export class MeterCC extends CommandClass {
 	declare ccCommand: MeterCommand;
 }
@@ -132,7 +133,7 @@ export class MeterCCReport extends MeterCC {
 	}
 }
 
-interface MeterCCGetOptions extends CCCommandOptions {
+interface MeterCCGetOptions {
 	scale?: number;
 	rateType?: RateType;
 }
@@ -142,7 +143,9 @@ interface MeterCCGetOptions extends CCCommandOptions {
 export class MeterCCGet extends MeterCC {
 	public constructor(
 		driver: IDriver,
-		options: CommandClassDeserializationOptions | MeterCCGetOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (MeterCCGetOptions & CCCommandOptions),
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
@@ -260,5 +263,62 @@ export class MeterCCSupportedReport extends MeterCC {
 @expectedCCResponse(MeterCCSupportedReport)
 export class MeterCCSupportedGet extends MeterCC {}
 
+type MeterCCResetOptions =
+	| {
+			type?: undefined;
+			targetValue?: undefined;
+	  }
+	| {
+			type: number;
+			targetValue: number;
+	  };
+
 @CCCommand(MeterCommand.Reset)
-export class MeterCCReset extends MeterCC {}
+export class MeterCCReset extends MeterCC {
+	public constructor(
+		driver: IDriver,
+		options:
+			| CommandClassDeserializationOptions
+			| (MeterCCResetOptions & CCCommandOptions),
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this.type = options.type;
+			this.targetValue = options.targetValue;
+			// Test if this is a valid target value
+			if (
+				this.targetValue != undefined &&
+				!getMinIntegerSize(this.targetValue, true)
+			) {
+				throw new ZWaveError(
+					`${this.targetValue} is not a valid target value!`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+		}
+	}
+
+	public type: number | undefined;
+	public targetValue: number | undefined;
+
+	public serialize(): Buffer {
+		if (this.version >= 6 && this.targetValue != undefined && this.type) {
+			const size =
+				(this.targetValue &&
+					getMinIntegerSize(this.targetValue, true)) ||
+				0;
+			if (size > 0) {
+				this.payload = Buffer.allocUnsafe(1 + size);
+				this.payload[0] = (size << 5) | (this.type & 0b11111);
+				this.payload.writeIntBE(this.targetValue, 1, size);
+			}
+		}
+		return super.serialize();
+	}
+}
