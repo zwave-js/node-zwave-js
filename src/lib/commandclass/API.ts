@@ -135,6 +135,7 @@ export interface CCAPIs {
 	Language: import("./LanguageCC").LanguageCCAPI;
 	"Manufacturer Proprietary": import("./ManufacturerProprietaryCC").ManufacturerProprietaryCCAPI;
 	"Manufacturer Specific": import("./ManufacturerSpecificCC").ManufacturerSpecificCCAPI;
+	Meter: import("./MeterCC").MeterCCAPI;
 	"Multi Channel Association": import("./MultiChannelAssociationCC").MultiChannelAssociationCCAPI;
 	"Multi Channel": import("./MultiChannelCC").MultiChannelCCAPI;
 	"Multi Command": import("./MultiCommandCC").MultiCommandCCAPI;

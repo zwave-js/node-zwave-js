@@ -37,9 +37,6 @@ const dummyNotifications = {
 	},
 };
 
-// I don't get why these tests don't play nice with the unsuccessful ones
-// But since I see no other way, they are now in their own file
-
 describe("lib/config/Notifications", () => {
 	describe("lookupNotification (with missing file)", () => {
 		beforeAll(async () => {
