@@ -18,6 +18,7 @@ import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { loadDeviceIndex } from "../config/Devices";
 import { loadManufacturers } from "../config/Manufacturers";
+import { loadMeters } from "../config/Meters";
 import { loadNotifications } from "../config/Notifications";
 import { loadNamedScales } from "../config/Scales";
 import { loadSensorTypes } from "../config/SensorTypes";
@@ -268,6 +269,7 @@ export class Driver extends EventEmitter implements IDriver {
 					await loadNotifications();
 					await loadNamedScales();
 					await loadSensorTypes();
+					await loadMeters();
 
 					log.driver.print("beginning interview...");
 					await this.initializeControllerAndNodes();
