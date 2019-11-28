@@ -11,8 +11,8 @@
 			"0x04": "V",
 			"0x05": "A",
 			"0x06": "Power Factor",
-			"0x08": "kVar",
-			"0x09": "kVarh"
+			"0x07": "kVar",
+			"0x08": "kVarh"
 		}
 	},
 	"0x02": {

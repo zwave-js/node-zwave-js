@@ -37,7 +37,7 @@ export enum RateType {
 }
 
 @commandClass(CommandClasses.Meter)
-@implementedVersion(3)
+@implementedVersion(4)
 export class MeterCC extends CommandClass {
 	declare ccCommand: MeterCommand;
 }
@@ -53,39 +53,52 @@ export class MeterCCReport extends MeterCC {
 		validatePayload(this.payload.length >= 2);
 		this._type = this.payload[0] & 0b0_00_11111;
 		this._rateType = (this.payload[0] & 0b0_11_00000) >>> 5;
-		const scale2Bit = (this.payload[0] & 0b1_00_00000) >>> 7;
+		const scale1Bit2 = (this.payload[0] & 0b1_00_00000) >>> 7;
 
-		const { scale: scaleBits10, value, bytesRead } = parseFloatWithScale(
+		const { scale: scale1Bits10, value, bytesRead } = parseFloatWithScale(
 			this.payload.slice(1),
 		);
+		let offset = 2 + bytesRead;
 		// The scale is composed of two fields (see SDS13781)
-		const scale = (scale2Bit << 2) | scaleBits10;
-		this._scale = lookupMeterScale(this._type, scale);
+		const scale1 = (scale1Bit2 << 2) | scale1Bits10;
+		let scale2 = 0;
 		this._value = value;
 
-		if (this.version >= 2 && this.payload.length >= 2 + bytesRead + 2) {
-			this._deltaTime = this.payload.readUInt16BE(2 + bytesRead);
+		if (this.version >= 2 && this.payload.length >= offset + 2) {
+			this._deltaTime = this.payload.readUInt16BE(offset);
+			offset += 2;
 			if (this._deltaTime === 0xffff) {
 				this._deltaTime = unknownNumber;
 			}
+
 			if (
 				// 0 means that no previous value is included
 				this.deltaTime !== 0 &&
-				this.payload.length >= 2 + bytesRead + 2 + bytesRead
+				this.payload.length >= offset + bytesRead
 			) {
 				const { value: prevValue } = parseFloatWithScale(
 					// This float is split in the payload
 					Buffer.concat([
 						Buffer.from([this.payload[1]]),
-						this.payload.slice(2 + bytesRead + 2),
+						this.payload.slice(offset),
 					]),
 				);
+				offset += bytesRead;
 				this._previousValue = prevValue;
+			}
+			if (
+				this.version >= 4 &&
+				scale1 === 7 &&
+				this.payload.length >= offset + 1
+			) {
+				scale2 = this.payload[offset];
 			}
 		} else {
 			// 0 means that no previous value is included
 			this._deltaTime = 0;
 		}
+		const scale = scale1 === 7 ? scale1 + scale2 : scale1;
+		this._scale = lookupMeterScale(this._type, scale);
 	}
 
 	private _type: number;
@@ -121,6 +134,7 @@ export class MeterCCReport extends MeterCC {
 
 interface MeterCCGetOptions extends CCCommandOptions {
 	scale?: number;
+	rateType?: RateType;
 }
 
 @CCCommand(MeterCommand.Get)
@@ -138,22 +152,45 @@ export class MeterCCGet extends MeterCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
+			this.rateType = options.rateType;
 			this.scale = options.scale;
 		}
 	}
 
+	public rateType: RateType | undefined;
 	public scale: number | undefined;
 
 	public serialize(): Buffer {
-		const maskedScale =
-			(this.scale == undefined
-				? 0
-				: this.version >= 3
-				? this.scale & 0b111
-				: this.version >= 2
-				? this.scale & 0b11
-				: 0) << 3;
-		this.payload = Buffer.from([maskedScale]);
+		let scale1: number;
+		let scale2: number | undefined;
+		let bufferLength = 0;
+
+		if (this.scale == undefined) {
+			scale1 = 0;
+		} else if (this.version >= 4 && this.scale >= 7) {
+			scale1 = 7;
+			scale2 = this.scale >>> 3;
+			bufferLength = 2;
+		} else if (this.version >= 3) {
+			scale1 = this.scale & 0b111;
+			bufferLength = 1;
+		} else if (this.version >= 2) {
+			scale1 = this.scale & 0b11;
+			bufferLength = 1;
+		} else {
+			scale1 = 0;
+		}
+
+		let rateTypeFlags = 0;
+		if (this.version >= 4 && this.rateType != undefined) {
+			rateTypeFlags = this.rateType & 0b11;
+			bufferLength = Math.max(bufferLength, 1);
+		}
+
+		this.payload = Buffer.alloc(bufferLength, 0);
+		this.payload[0] = (rateTypeFlags << 6) | (scale1 << 3);
+		if (scale2) this.payload[1] = scale2;
+
 		return super.serialize();
 	}
 }
@@ -168,7 +205,33 @@ export class MeterCCSupportedReport extends MeterCC {
 		validatePayload(this.payload.length >= 2);
 		this._type = this.payload[0] & 0b0_00_11111;
 		this._supportsReset = !!(this.payload[0] & 0b1_00_00000);
-		this._supportedScales = parseBitMask(this.payload.slice(1, 2), 0);
+		const hasMoreScales = !!(this.payload[1] & 0b1_0000000);
+		if (hasMoreScales) {
+			// The bitmask is spread out
+			validatePayload(this.payload.length >= 3);
+			const extraBytes = this.payload[2];
+			validatePayload(this.payload.length >= 3 + extraBytes);
+			// The bitmask is the original payload byte plus all following bytes
+			// Since the first byte only has 7 bits, we need to reduce all following bits by 1
+			this._supportedScales = parseBitMask(
+				Buffer.concat([
+					Buffer.from([this.payload[1] & 0b0_1111111]),
+					this.payload.slice(3, 3 + extraBytes),
+				]),
+				0,
+			).map(scale => (scale >= 8 ? scale - 1 : scale));
+		} else {
+			// only 7 bits in the bitmask. Bit 7 is 0, so no need to mask it out
+			this._supportedScales = parseBitMask(
+				Buffer.from([this.payload[1]]),
+				0,
+			);
+		}
+		// This is only present in V4+
+		this._supportedRateTypes = parseBitMask(
+			Buffer.from([(this.payload[0] & 0b0_11_00000) >>> 5]),
+			1,
+		);
 	}
 
 	private _type: number;
@@ -185,6 +248,11 @@ export class MeterCCSupportedReport extends MeterCC {
 	private _supportedScales: number[];
 	public get supportedScales(): readonly number[] {
 		return this._supportedScales;
+	}
+
+	private _supportedRateTypes: RateType[];
+	public get supportedRateTypes(): readonly RateType[] {
+		return this._supportedRateTypes;
 	}
 }
 
