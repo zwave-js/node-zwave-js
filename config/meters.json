@@ -11,7 +11,8 @@
 			"0x04": "V",
 			"0x05": "A",
 			"0x06": "Power Factor",
-			"0x07": "M.S.T"
+			"0x08": "kVar",
+			"0x09": "kVarh"
 		}
 	},
 	"0x02": {
@@ -19,9 +20,7 @@
 		"scales": {
 			"0x00": "Cubic meters",
 			"0x01": "Cubic feet",
-			"0x02": "Reserved",
-			"0x03": "Pulse count",
-			"0x07": "M.S.T"
+			"0x03": "Pulse count"
 		}
 	},
 	"0x03": {
@@ -30,8 +29,7 @@
 			"0x00": "Cubic meters",
 			"0x01": "Cubic feet",
 			"0x02": "US gallons",
-			"0x03": "Pulse count",
-			"0x07": "M.S.T"
+			"0x03": "Pulse count"
 		}
 	},
 	"0x04": {

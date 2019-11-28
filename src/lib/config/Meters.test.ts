@@ -71,7 +71,10 @@ describe("lib/config/Meters", () => {
 			const test1 = lookupMeter(0x01);
 			expect(test1).not.toBeUndefined();
 			expect(test1!.name).toBe("Dummy meter");
-			expect(test1!.scales.get(0x01)).toBe("Scale 2");
+			expect(test1!.scales.get(0x01)).toEqual({
+				key: 0x01,
+				label: "Scale 2",
+			});
 
 			expect(lookupMeter(0xff)).toBeUndefined();
 		});
