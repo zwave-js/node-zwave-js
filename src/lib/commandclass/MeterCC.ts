@@ -226,7 +226,7 @@ export class MeterCCReport extends MeterCC {
 		const { scale: scale1Bits10, value, bytesRead } = parseFloatWithScale(
 			this.payload.slice(1),
 		);
-		let offset = 2 + bytesRead;
+		let offset = 2 + (bytesRead - 1);
 		// The scale is composed of two fields (see SDS13781)
 		const scale1 = (scale1Bit2 << 2) | scale1Bits10;
 		let scale2 = 0;
@@ -242,7 +242,7 @@ export class MeterCCReport extends MeterCC {
 			if (
 				// 0 means that no previous value is included
 				this.deltaTime !== 0 &&
-				this.payload.length >= offset + bytesRead
+				this.payload.length >= offset + (bytesRead - 1)
 			) {
 				const { value: prevValue } = parseFloatWithScale(
 					// This float is split in the payload
@@ -251,7 +251,7 @@ export class MeterCCReport extends MeterCC {
 						this.payload.slice(offset),
 					]),
 				);
-				offset += bytesRead;
+				offset += bytesRead - 1;
 				this._previousValue = prevValue;
 			}
 			if (
