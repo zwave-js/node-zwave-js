@@ -5,6 +5,9 @@
 -->
 
 ## 2.0.1 (2019-11-27)
+### Features
+* Added support for `Meter CC`
+
 ### Bugfixes
 * Fixed a crash that happened when saving the network cache with a CC that is neither supported nor controlled
 
