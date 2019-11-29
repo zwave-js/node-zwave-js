@@ -6,8 +6,7 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "files": [
-    "build/**/*.js",
-    "build/**/*.d.ts",
+    "build/**/*.{js,d.ts,map}",
     "config/"
   ],
   "author": {
