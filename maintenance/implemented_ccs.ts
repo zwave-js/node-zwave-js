@@ -186,7 +186,7 @@ function writeTable(rows: string[][], flavor: "console" | "github"): void {
 	}
 }
 
-// Taken from https://www.silabs.com/documents/login/miscellaneous/SDS13781-Z-Wave-Application-Command-Class-Specification.pdf
+// Taken from SDS13548
 const ccVersions: Record<
 	string,
 	| { version: string | number; deprecated?: boolean; obsolete?: boolean }
@@ -240,7 +240,7 @@ const ccVersions: Record<
 	"0x69": { version: 1 },
 	"0x91": { version: 1 },
 	"0x72": { version: 2 },
-	"0x32": { version: 5 },
+	"0x32": { version: 6 },
 	"0x3C": { version: 1 },
 	"0x3D": { version: 3 },
 	"0x3E": { version: 1 },
