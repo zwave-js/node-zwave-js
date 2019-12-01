@@ -1,177 +1,182 @@
 // Shenzhen Neo Electronics Co., Ltd. Motion Sensor IN
 // Motion Sensor IN
 {
-    "_approved": true,
-    "manufacturer": "Shenzhen Neo Electronics Co., Ltd.",
-    "manufacturerId": "0x0258",
-    "label": "Motion Sensor IN",
-    "description": "Motion Sensor IN",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x3083"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Sensitivity Level Setting",
-            "description": "Defines the sensitivity of PIR sensor.",
-            "valueSize": 1,
-            "minValue": 8,
-            "maxValue": 255,
-            "defaultValue": 12,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "ON/OFF Duration Setting",
-            "description": "Determined how long the associated devices should stay ON status",
-            "unit": "Seconds",
-            "valueSize": 2,
-            "minValue": 5,
-            "maxValue": 600,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Basic Set Level",
-            "description": "Basic Set Command will be sent when the door/window is opened or closed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Enable/Disable PIR Function",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable PIR Detector Function",
-                    "value": 0
-                },
-                {
-                    "label": "Enable PIR Detector Function",
-                    "value": 255
-                }
-            ]
-        },
-        "5": {
-            "label": "Lux Level Set",
-            "description": "Set a lux level value which determines when the light sensor is activated.",
-            "unit": "LUX",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1000,
-            "defaultValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Re-trigger Interval",
-            "description": "Adjust the interval of PIR being re-triggered",
-            "unit": "Seconds",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 8,
-            "defaultValue": 8,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Light Sensor Polling Interval",
-            "description": "The Intervall after which the Light Sensor Measure is polled.",
-            "unit": "Seconds",
-            "valueSize": 2,
-            "minValue": 60,
-            "maxValue": 36000,
-            "defaultValue": 180,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Lux Level Function Enable",
-            "description": "0 = Off, 1 =On",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable Lux Level Function",
-                    "value": 0
-                },
-                {
-                    "label": "Enable Lux Level Function",
-                    "value": 1
-                }
-            ]
-        },
-        "9": {
-            "label": "Lux Level Changed Report",
-            "description": "How much the Lux Level must change",
-            "unit": "LUX",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "LED Blink Enable",
-            "description": "Defines whether the LED blinking is on / off",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable LED blinking",
-                    "value": 0
-                },
-                {
-                    "label": "Enable LED blinking",
-                    "value": 1
-                }
-            ]
-        },
-        "99": {
-            "label": "Ambient light intensity calibration",
-            "description": "Define the calibrated scale for ambient light intensity",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 1000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Shenzhen Neo Electronics Co., Ltd.",
+	"manufacturerId": "0x0258",
+	"label": "Motion Sensor IN",
+	"description": "Motion Sensor IN",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x3083"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Sensitivity Level Setting",
+			"description": "Defines the sensitivity of PIR sensor.",
+			"valueSize": 1,
+			"minValue": 8,
+			"maxValue": 255,
+			"defaultValue": 12,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "ON/OFF Duration Setting",
+			"description": "Determined how long the associated devices should stay ON status",
+			"unit": "Seconds",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 600,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Basic Set Level",
+			"description": "Basic Set Command will be sent when the door/window is opened or closed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Enable/Disable PIR Function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable PIR Detector Function",
+					"value": 0
+				},
+				{
+					"label": "Enable PIR Detector Function",
+					"value": 255
+				}
+			]
+		},
+		"5": {
+			"label": "Lux Level Set",
+			"description": "Set a lux level value which determines when the light sensor is activated.",
+			"unit": "LUX",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Re-trigger Interval",
+			"description": "Adjust the interval of PIR being re-triggered",
+			"unit": "Seconds",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 8,
+			"defaultValue": 8,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Light Sensor Polling Interval",
+			"description": "The Intervall after which the Light Sensor Measure is polled.",
+			"unit": "Seconds",
+			"valueSize": 2,
+			"minValue": 60,
+			"maxValue": 36000,
+			"defaultValue": 180,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Lux Level Function Enable",
+			"description": "0 = Off, 1 =On",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Lux Level Function",
+					"value": 0
+				},
+				{
+					"label": "Enable Lux Level Function",
+					"value": 1
+				}
+			]
+		},
+		"9": {
+			"label": "Lux Level Changed Report",
+			"description": "How much the Lux Level must change",
+			"unit": "LUX",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "LED Blink Enable",
+			"description": "Defines whether the LED blinking is on / off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable LED blinking",
+					"value": 0
+				},
+				{
+					"label": "Enable LED blinking",
+					"value": 1
+				}
+			]
+		},
+		"99": {
+			"label": "Ambient light intensity calibration",
+			"description": "Define the calibrated scale for ambient light intensity",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 1000,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

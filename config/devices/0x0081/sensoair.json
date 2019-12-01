@@ -1,50 +1,52 @@
 // SIEGENIA-AUBI KG Sensoair
 // Air quality sensor for indoor use
 {
-    "_approved": true,
-    "manufacturer": "SIEGENIA-AUBI KG",
-    "manufacturerId": "0x0081",
-    "label": "Sensoair",
-    "description": "Air quality sensor for indoor use",
-    "devices": [
-        {
-            "productType": "0x00a0",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Device Configuration Value 1",
-            "description": "Configuration of the device operating mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 143,
-            "defaultValue": 141,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Interval for unsolicited Sensor Report Mode B",
-            "description": "defines how often a Sensor report is sent",
-            "valueSize": 2,
-            "minValue": 5,
-            "maxValue": 65000,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"_approved": true,
+	"manufacturer": "SIEGENIA-AUBI KG",
+	"manufacturerId": "0x0081",
+	"label": "Sensoair",
+	"description": "Air quality sensor for indoor use",
+	"devices": [
+		{
+			"productType": "0x00a0",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Device Configuration Value 1",
+			"description": "Configuration of the device operating mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 143,
+			"defaultValue": 141,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Interval for unsolicited Sensor Report Mode B",
+			"description": "defines how often a Sensor report is sent",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 65000,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

@@ -1,140 +1,144 @@
 // Remotec ZXT-120
 // AC IR Remote
 {
-    "_approved": true,
-    "manufacturer": "Remotec",
-    "manufacturerId": "0x5254",
-    "label": "ZXT-120",
-    "description": "AC IR Remote",
-    "devices": [
-        {
-            "productType": "0x0100",
-            "productId": "0x8377"
-        },
-        {
-            "productType": "0x0101",
-            "productId": "0x8377"
-        },
-        {
-            "productType": "0x0102",
-            "productId": "0x8377"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "25": {
-            "label": "Location",
-            "description": "Location",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 22,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "26": {
-            "label": "Learning status register (Read Only)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "27": {
-            "label": "IR code number for built-in code library",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "28": {
-            "label": "External IR Emitter power level",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal power mode",
-                    "value": 0
-                },
-                {
-                    "label": "High power mode",
-                    "value": 255
-                }
-            ]
-        },
-        "32": {
-            "label": "Surround IR control",
-            "valueSize": 1,
-            "minValue": -1,
-            "maxValue": 255,
-            "defaultValue": -1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Enable Surround IR Emitters",
-                    "value": -1
-                },
-                {
-                    "label": "Disable Surround IR Emitters",
-                    "value": 0
-                }
-            ]
-        },
-        "33": {
-            "label": "AC function Swing control",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Swing Off",
-                    "value": 0
-                },
-                {
-                    "label": "Swing Auto",
-                    "value": 1
-                }
-            ]
-        },
-        "35": {
-            "label": "Learn location status. Bitmask. (Read Only)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "37": {
-            "label": "Sensor temperature compensation",
-            "valueSize": 1,
-            "minValue": -5,
-            "maxValue": 5,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Remotec",
+	"manufacturerId": "0x5254",
+	"label": "ZXT-120",
+	"description": "AC IR Remote",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x8377"
+		},
+		{
+			"productType": "0x0101",
+			"productId": "0x8377"
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x8377"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"25": {
+			"label": "Location",
+			"description": "Location",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 22,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"26": {
+			"label": "Learning status register (Read Only)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"27": {
+			"label": "IR code number for built-in code library",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"28": {
+			"label": "External IR Emitter power level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal power mode",
+					"value": 0
+				},
+				{
+					"label": "High power mode",
+					"value": 255
+				}
+			]
+		},
+		"32": {
+			"label": "Surround IR control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable Surround IR Emitters",
+					"value": 255
+				},
+				{
+					"label": "Disable Surround IR Emitters",
+					"value": 0
+				}
+			]
+		},
+		"33": {
+			"label": "AC function Swing control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Swing Off",
+					"value": 0
+				},
+				{
+					"label": "Swing Auto",
+					"value": 1
+				}
+			]
+		},
+		"35": {
+			"label": "Learn location status. Bitmask. (Read Only)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"37": {
+			"label": "Sensor temperature compensation",
+			"valueSize": 1,
+			"minValue": -5,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

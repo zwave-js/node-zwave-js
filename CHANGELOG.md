@@ -4,10 +4,17 @@
 	## __WORK IN PROGRESS__
 -->
 
-## 2.0.1 (2019-11-27)
+## __WORK IN PROGRESS__
 ### Features
 * Added support for `Meter CC`
 
+### Bugfixes
+* Fixed a crash that happened when setting a configuration value that would not fit in the configured value size by marking many configuration parameters in device config files as unsigned.
+
+### Changes under the hood
+* The min/max value for configuration parameters in device config files is now validated
+
+## 2.0.1 (2019-11-27)
 ### Bugfixes
 * Fixed a crash that happened when saving the network cache with a CC that is neither supported nor controlled
 

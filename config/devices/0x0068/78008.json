@@ -1,184 +1,188 @@
 // Good Way Technology Co., Ltd. 78008
 // Door/Window Sensor with Magnet
 {
-    "_approved": true,
-    "manufacturer": "Good Way Technology Co., Ltd.",
-    "manufacturerId": "0x0068",
-    "label": "78008",
-    "description": "Door/Window Sensor with Magnet",
-    "devices": [
-        {
-            "productType": "0x0000",
-            "productId": "0x000d"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Reports",
-            "description": "All autoreports send to Group 1",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Sensor",
-            "description": "ON/OFF status (Basic_set command)",
-            "maxNodes": 5
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Basic set level for nodes of group2",
-            "description": "255: Binary switch ON, 1-99: Dimmer level",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Basic set OFF delay time for nodes of group2",
-            "description": "0: Disable, 0-127 Second",
-            "unit": "Seconds",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Delay time to enter standby mode",
-            "description": "After force to wake up, delay time to enter standby mode again",
-            "unit": "Seconds",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Delay time to enter standby after wake up",
-            "description": "Delay time to enter standby after wake up",
-            "unit": "Seconds",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Set waiting exclusion time",
-            "description": "Set waiting exclusion time",
-            "unit": "Seconds",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Activate/Deactivate WUT standby mode",
-            "description": "0: Always wake up, 1: Enter standby mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Alwas wake up",
-                    "value": 0
-                },
-                {
-                    "label": "Enter standby mode",
-                    "value": 1
-                }
-            ]
-        },
-        "7": {
-            "label": "Activate/Deactivate Tamper alarm mode",
-            "description": "0: Disable, 1: Enable",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "8": {
-            "label": "Tamper alarm continuously send",
-            "description": "In tamper alarm mode, delay time for continuously send Sensor_Binary_report",
-            "unit": "Seconds",
-            "valueSize": 1,
-            "minValue": 3,
-            "maxValue": 30,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Interval time for sending battery report",
-            "description": "The interval time of sending battery report",
-            "unit": "Minutes",
-            "valueSize": 1,
-            "minValue": 3,
-            "maxValue": 10,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Report every 3 minutes",
-                    "value": 3
-                },
-                {
-                    "label": "Report every 5 minutes",
-                    "value": 5
-                },
-                {
-                    "label": "Report every 10 minutes",
-                    "value": 10
-                }
-            ]
-        },
-        "10": {
-            "label": "set the configuration of 2 external sensors",
-            "description": "BIT0: sensor1 (S1), BIT1: sensor2 (S2)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Good Way Technology Co., Ltd.",
+	"manufacturerId": "0x0068",
+	"label": "78008",
+	"description": "Door/Window Sensor with Magnet",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x000d"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Reports",
+			"description": "All autoreports send to Group 1",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Sensor",
+			"description": "ON/OFF status (Basic_set command)",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Basic set level for nodes of group2",
+			"description": "255: Binary switch ON, 1-99: Dimmer level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Basic set OFF delay time for nodes of group2",
+			"description": "0: Disable, 0-127 Second",
+			"unit": "Seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Delay time to enter standby mode",
+			"description": "After force to wake up, delay time to enter standby mode again",
+			"unit": "Seconds",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Delay time to enter standby after wake up",
+			"description": "Delay time to enter standby after wake up",
+			"unit": "Seconds",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Set waiting exclusion time",
+			"description": "Set waiting exclusion time",
+			"unit": "Seconds",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Activate/Deactivate WUT standby mode",
+			"description": "0: Always wake up, 1: Enter standby mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Alwas wake up",
+					"value": 0
+				},
+				{
+					"label": "Enter standby mode",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "Activate/Deactivate Tamper alarm mode",
+			"description": "0: Disable, 1: Enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Tamper alarm continuously send",
+			"description": "In tamper alarm mode, delay time for continuously send Sensor_Binary_report",
+			"unit": "Seconds",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 30,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Interval time for sending battery report",
+			"description": "The interval time of sending battery report",
+			"unit": "Minutes",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 10,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Report every 3 minutes",
+					"value": 3
+				},
+				{
+					"label": "Report every 5 minutes",
+					"value": 5
+				},
+				{
+					"label": "Report every 10 minutes",
+					"value": 10
+				}
+			]
+		},
+		"10": {
+			"label": "set the configuration of 2 external sensors",
+			"description": "BIT0: sensor1 (S1), BIT1: sensor2 (S2)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

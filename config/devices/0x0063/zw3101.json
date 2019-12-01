@@ -1,130 +1,135 @@
 // Jasco Products ZW3101
 // Lamp Module
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "ZW3101",
-    "description": "Lamp Module",
-    "devices": [
-        {
-            "productType": "0x4450",
-            "productId": "0x3030"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "5": {
-            "label": "Ignore Start-Level (Receiving)",
-            "description": "This dimmer will start dimming from its current level.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No",
-                    "value": 0
-                },
-                {
-                    "label": "Yes",
-                    "value": 1
-                }
-            ]
-        },
-        "7": {
-            "label": "On/Off Command Dim Step",
-            "description": "Indicates how many levels the dimmer will change for each dimming step.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "On/Off Command Dim Rate",
-            "description": "Dim Rate",
-            "unit": "10 millisecond",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Local Control Dim Step",
-            "description": "Indicates how many levels the dimmer will change for each dimming step.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Local Control Dim Rate",
-            "description": "Local Control Dim Rate",
-            "unit": "10 millisecond",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "ALL ON/ALL OFF Dim Step",
-            "description": "Indicates how many levels the dimmer will change for each dimming step.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "ALL ON/ALL OFF Dim Rate",
-            "unit": "10 millisecond",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "29": {
-            "label": "Load Sensing",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Load sensing is disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Load sensing is enabled",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "ZW3101",
+	"description": "Lamp Module",
+	"devices": [
+		{
+			"productType": "0x4450",
+			"productId": "0x3030"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"5": {
+			"label": "Ignore Start-Level (Receiving)",
+			"description": "This dimmer will start dimming from its current level.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "On/Off Command Dim Step",
+			"description": "Indicates how many levels the dimmer will change for each dimming step.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "On/Off Command Dim Rate",
+			"description": "Dim Rate",
+			"unit": "10 millisecond",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Local Control Dim Step",
+			"description": "Indicates how many levels the dimmer will change for each dimming step.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Local Control Dim Rate",
+			"description": "Local Control Dim Rate",
+			"unit": "10 millisecond",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "ALL ON/ALL OFF Dim Step",
+			"description": "Indicates how many levels the dimmer will change for each dimming step.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "ALL ON/ALL OFF Dim Rate",
+			"unit": "10 millisecond",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"29": {
+			"label": "Load Sensing",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Load sensing is disabled",
+					"value": 0
+				},
+				{
+					"label": "Load sensing is enabled",
+					"value": 1
+				}
+			]
+		}
+	}
 }

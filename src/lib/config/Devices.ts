@@ -402,7 +402,7 @@ Parameter #${parameterNumber} has an invalid value size`,
 			throwInvalidConfig(
 				"devices",
 				`config/devices/${filename}:
-Parameter #${parameterNumber} has a non-numeric minValue`,
+Parameter #${parameterNumber} has a non-numeric property minValue`,
 			);
 		}
 		this.minValue = definition.minValue;
@@ -411,7 +411,7 @@ Parameter #${parameterNumber} has a non-numeric minValue`,
 			throwInvalidConfig(
 				"devices",
 				`config/devices/${filename}:
-Parameter #${parameterNumber} has a non-numeric maxValue`,
+Parameter #${parameterNumber} has a non-numeric property maxValue`,
 			);
 		}
 		this.maxValue = definition.maxValue;
@@ -420,10 +420,22 @@ Parameter #${parameterNumber} has a non-numeric maxValue`,
 			throwInvalidConfig(
 				"devices",
 				`config/devices/${filename}:
-Parameter #${parameterNumber} has a non-numeric defaultValue`,
+Parameter #${parameterNumber} has a non-numeric property defaultValue`,
 			);
 		}
 		this.defaultValue = definition.defaultValue;
+
+		if (
+			definition.unsigned != undefined &&
+			typeof definition.unsigned !== "boolean"
+		) {
+			throwInvalidConfig(
+				"devices",
+				`config/devices/${filename}:
+Parameter #${parameterNumber} has a non-boolean property unsigned`,
+			);
+		}
+		this.unsigned = definition.unsigned === true;
 
 		if (typeof definition.readOnly !== "boolean") {
 			throwInvalidConfig(
@@ -483,6 +495,7 @@ Parameter #${parameterNumber}: options is malformed!`,
 	public readonly valueSize: number;
 	public readonly minValue: number;
 	public readonly maxValue: number;
+	public readonly unsigned?: boolean;
 	public readonly defaultValue: number;
 	public readonly readOnly: boolean;
 	public readonly writeOnly: boolean;

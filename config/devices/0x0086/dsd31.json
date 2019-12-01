@@ -1,134 +1,137 @@
 // AEON Labs DSD31
 // Outlet Plugable Siren
 {
-    "_approved": true,
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "DSD31",
-    "description": "Outlet Plugable Siren",
-    "devices": [
-        {
-            "productType": "0x0004",
-            "productId": "0x0050"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "37": {
-            "label": "Sirensound and Volume",
-            "description": "Sets the sound type and volume",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 13,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "80": {
-            "label": "Send Notifications",
-            "description": "send notifications to associated devices",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Nothing",
-                    "value": 0
-                },
-                {
-                    "label": "Hail CC",
-                    "value": 1
-                },
-                {
-                    "label": "Basic CC Report",
-                    "value": 2
-                }
-            ]
-        },
-        "252": {
-            "label": "Enable/Disable 'Lock' - Configuration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "37[0x0f]": {
-            "label": "Siren Sound",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 5,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Siren Sound 1",
-                    "value": 1
-                },
-                {
-                    "label": "Siren Sound 2",
-                    "value": 2
-                },
-                {
-                    "label": "Siren Sound 3",
-                    "value": 3
-                },
-                {
-                    "label": "Siren Sound 4",
-                    "value": 4
-                },
-                {
-                    "label": "Siren Sound 5",
-                    "value": 5
-                }
-            ]
-        },
-        "37[0x0f00]": {
-            "label": "Siren Volume",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "88dB",
-                    "value": 1
-                },
-                {
-                    "label": "100dB",
-                    "value": 2
-                },
-                {
-                    "label": "105dB",
-                    "value": 3
-                }
-            ]
-        }
-    }
+	"_approved": true,
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "DSD31",
+	"description": "Outlet Plugable Siren",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0050"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"37": {
+			"label": "Sirensound and Volume",
+			"description": "Sets the sound type and volume",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 13,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"80": {
+			"label": "Send Notifications",
+			"description": "send notifications to associated devices",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Nothing",
+					"value": 0
+				},
+				{
+					"label": "Hail CC",
+					"value": 1
+				},
+				{
+					"label": "Basic CC Report",
+					"value": 2
+				}
+			]
+		},
+		"252": {
+			"label": "Enable/Disable 'Lock' - Configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"37[0x0f]": {
+			"label": "Siren Sound",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Siren Sound 1",
+					"value": 1
+				},
+				{
+					"label": "Siren Sound 2",
+					"value": 2
+				},
+				{
+					"label": "Siren Sound 3",
+					"value": 3
+				},
+				{
+					"label": "Siren Sound 4",
+					"value": 4
+				},
+				{
+					"label": "Siren Sound 5",
+					"value": 5
+				}
+			]
+		},
+		"37[0x0f00]": {
+			"label": "Siren Volume",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "88dB",
+					"value": 1
+				},
+				{
+					"label": "100dB",
+					"value": 2
+				},
+				{
+					"label": "105dB",
+					"value": 3
+				}
+			]
+		}
+	}
 }

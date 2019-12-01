@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { green, red, yellow } from "ansi-colors";
+import { green, red, white, yellow } from "ansi-colors";
 import { readFile } from "fs-extra";
 import * as path from "path";
 import {
@@ -16,6 +16,7 @@ import { loadSensorTypesInternal } from "../src/lib/config/SensorTypes";
 import { configDir } from "../src/lib/config/utils";
 import { getMinimumShiftForBitMask } from "../src/lib/util/misc";
 import { num2hex } from "../src/lib/util/strings";
+import { getIntegerLimits } from "../src/lib/values/Primitive";
 
 async function lintNotifications(): Promise<void> {
 	await loadNotificationsInternal();
@@ -96,19 +97,111 @@ This is likely an error!`,
 
 		if (config.paramInformation?.size) {
 			// Check if there are options when manual entry is forbidden
-			for (const [key, value] of config.paramInformation.entries()) {
+			for (const [
+				{ parameter },
+				value,
+			] of config.paramInformation.entries()) {
 				if (!value.allowManualEntry && !value.options?.length) {
 					addError(
 						file,
-						`Parameter #${key} must allow manual entry if there are no options defined!`,
+						`Parameter #${parameter} must allow manual entry if there are no options defined!`,
 					);
 				}
 
 				if (value.readOnly && value.writeOnly) {
 					addError(
 						file,
-						`Parameter #${key} is invalid: readOnly and writeOnly are mutually exclusive!`,
+						`Parameter #${parameter} is invalid: readOnly and writeOnly are mutually exclusive!`,
 					);
+				}
+			}
+
+			// Check if there are options where min/max values is not compatible with the valueSize
+			for (const [
+				{ parameter },
+				value,
+			] of config.paramInformation.entries()) {
+				if (value.valueSize < 1 || value.valueSize > 4) {
+					addError(
+						file,
+						`Parameter #${parameter} is invalid: valueSize must be in the range 1...4!`,
+					);
+				} else {
+					if (value.minValue > value.maxValue) {
+						addError(
+							file,
+							`Parameter #${parameter} is invalid: minValue must not be greater than maxValue!`,
+						);
+					}
+
+					// All values are signed by the specs
+					const limits = getIntegerLimits(
+						value.valueSize as any,
+						true,
+					);
+					const unsignedLimits = getIntegerLimits(
+						value.valueSize as any,
+						false,
+					);
+					if (!limits) {
+						addError(
+							file,
+							`Parameter #${parameter} is invalid: cannot determine limits for valueSize ${value.valueSize}!`,
+						);
+					} else {
+						const fitsSignedLimits =
+							value.minValue >= limits.min &&
+							value.minValue <= limits.max &&
+							value.maxValue >= limits.min &&
+							value.maxValue <= limits.max;
+						const fitsUnsignedLimits =
+							value.minValue >= unsignedLimits.min &&
+							value.minValue <= unsignedLimits.max &&
+							value.maxValue >= unsignedLimits.min &&
+							value.maxValue <= unsignedLimits.max;
+
+						if (!value.unsigned && !fitsSignedLimits) {
+							if (fitsUnsignedLimits) {
+								addError(
+									file,
+									`Parameter #${parameter} is invalid: min/maxValue is incompatible with valueSize ${
+										value.valueSize
+									} (min = ${limits.min}, max = ${
+										limits.max
+									}).
+Consider converting this parameter to unsigned using ${white(
+										`"unsigned": true`,
+									)}!`,
+								);
+							} else {
+								if (value.minValue < limits.min) {
+									addError(
+										file,
+										`Parameter #${parameter} is invalid: minValue ${value.minValue} is incompatible with valueSize ${value.valueSize} (min = ${limits.min})!`,
+									);
+								}
+								if (value.maxValue > limits.max) {
+									addError(
+										file,
+										`Parameter #${parameter} is invalid: maxValue ${value.maxValue} is incompatible with valueSize ${value.valueSize} (max = ${limits.max})!`,
+									);
+								}
+							}
+						} else if (value.unsigned && !fitsUnsignedLimits) {
+							if (value.minValue < unsignedLimits.min) {
+								addError(
+									file,
+									`Parameter #${parameter} is invalid: minValue ${value.minValue} is incompatible with valueSize ${value.valueSize} (min = ${unsignedLimits.min})!`,
+								);
+							}
+							if (value.maxValue > unsignedLimits.max) {
+								addError(
+									file,
+									`Parameter #${parameter} is invalid: maxValue ${value.maxValue} is incompatible with valueSize ${value.valueSize} (max = ${unsignedLimits.max})!`,
+								);
+							}
+						}
+					}
 				}
 			}
 

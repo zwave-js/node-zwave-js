@@ -1,118 +1,115 @@
 // Jasco Products ZW3102
 // Jasco Energy Monitoring Lamp Dimmer
 {
-    "_approved": true,
-    "_warnings": [
-        "Inclusion information is not set",
-        "Exclusion information is not set"
-    ],
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "ZW3102",
-    "description": "Jasco Energy Monitoring Lamp Dimmer",
-    "devices": [
-        {
-            "productType": "0x4450",
-            "productId": "0x3031"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "5": {
-            "label": "Ignore start level",
-            "description": "Ignore start level when receiving zwave dim commands",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Obey commend start level",
-                    "value": 0
-                },
-                {
-                    "label": "Ignore commend start level",
-                    "value": 1
-                }
-            ]
-        },
-        "7": {
-            "label": "Zwave Dim Steps",
-            "description": "Number of dim steps when receving a zwave dim command",
-            "unit": "1",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Zwave Step Timing",
-            "description": "Timing of dim steps when receving a zwave dim command",
-            "unit": "1",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Rocker Dim Steps",
-            "description": "Number of dim steps when pressing the rocker",
-            "unit": "1",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Rocker Step Timing",
-            "description": "Timing of dim steps when pressing the rocker",
-            "unit": "1",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Zwave Dim Steps - All Command",
-            "description": "Number of dim steps when receving a zwave All-On or All-off command",
-            "unit": "1",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Zwave Step Timing - All Command",
-            "description": "Timing of dim steps when receving a zwave All-On or All-Off command",
-            "unit": "1",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"_approved": true,
+	"_warnings": [
+		"Inclusion information is not set",
+		"Exclusion information is not set"
+	],
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "ZW3102",
+	"description": "Jasco Energy Monitoring Lamp Dimmer",
+	"devices": [
+		{
+			"productType": "0x4450",
+			"productId": "0x3031"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"5": {
+			"label": "Ignore start level",
+			"description": "Ignore start level when receiving zwave dim commands",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Obey commend start level",
+					"value": 0
+				},
+				{
+					"label": "Ignore commend start level",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "Zwave Dim Steps",
+			"description": "Number of dim steps when receving a zwave dim command",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Zwave Step Timing",
+			"description": "Timing of dim steps when receving a zwave dim command",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Rocker Dim Steps",
+			"description": "Number of dim steps when pressing the rocker",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Rocker Step Timing",
+			"description": "Timing of dim steps when pressing the rocker",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Zwave Dim Steps - All Command",
+			"description": "Number of dim steps when receving a zwave All-On or All-off command",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Zwave Step Timing - All Command",
+			"description": "Timing of dim steps when receving a zwave All-On or All-Off command",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

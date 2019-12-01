@@ -1,265 +1,267 @@
 // Jasco Products 26931/ZW4006
 // In-Wall Smart Motion Switch
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "26931/ZW4006",
-    "description": "In-Wall Smart Motion Switch",
-    "devices": [
-        {
-            "productType": "0x494d",
-            "productId": "0x3032"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Timeout Duration",
-            "description": "Amount of time the light stays on after motion stops",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Test (5s)",
-                    "value": 0
-                },
-                {
-                    "label": "One minute",
-                    "value": 1
-                },
-                {
-                    "label": "Five minutes",
-                    "value": 5
-                },
-                {
-                    "label": "Fifteen minutes",
-                    "value": 15
-                },
-                {
-                    "label": "Thirty minutes",
-                    "value": 30
-                },
-                {
-                    "label": "Disable timeout",
-                    "value": 255
-                }
-            ]
-        },
-        "2": {
-            "label": "Dim level",
-            "description": "Change brightness of associated light bulb(s)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Default",
-                    "value": 255
-                }
-            ]
-        },
-        "3": {
-            "label": "Operation Mode",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Manual",
-                    "value": 1
-                },
-                {
-                    "label": "Vacancy",
-                    "value": 2
-                },
-                {
-                    "label": "Occupancy",
-                    "value": 3
-                }
-            ]
-        },
-        "4": {
-            "label": "Association Mode",
-            "description": "Enable/Disable Association Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "Invert Switch",
-            "description": "In a 3-way configuration, invert the connected Add-On Switch buttons",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "6": {
-            "label": "Motion Sensor",
-            "description": "Enable/Disable Motion Sensor",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "13": {
-            "label": "Motion Sensor Sensitivity",
-            "description": "Amount of motion required to turn on the light",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "High",
-                    "value": 1
-                },
-                {
-                    "label": "Medium",
-                    "value": 2
-                },
-                {
-                    "label": "Low",
-                    "value": 3
-                }
-            ]
-        },
-        "14": {
-            "label": "Light Sensing",
-            "description": "Enable/Disable whether motion sensor only turns light on if room is dark",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "15": {
-            "label": "Reset Cycle",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 110,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "10 secs",
-                    "value": 1
-                },
-                {
-                    "label": "20 secs",
-                    "value": 2
-                },
-                {
-                    "label": "30 secs",
-                    "value": 3
-                },
-                {
-                    "label": "45 secs",
-                    "value": 4
-                },
-                {
-                    "label": "27 mins",
-                    "value": 110
-                }
-            ]
-        },
-        "19": {
-            "label": "Exclusion Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal",
-                    "value": 0
-                },
-                {
-                    "label": "Alternate",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "26931/ZW4006",
+	"description": "In-Wall Smart Motion Switch",
+	"devices": [
+		{
+			"productType": "0x494d",
+			"productId": "0x3032"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Timeout Duration",
+			"description": "Amount of time the light stays on after motion stops",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Test (5s)",
+					"value": 0
+				},
+				{
+					"label": "One minute",
+					"value": 1
+				},
+				{
+					"label": "Five minutes",
+					"value": 5
+				},
+				{
+					"label": "Fifteen minutes",
+					"value": 15
+				},
+				{
+					"label": "Thirty minutes",
+					"value": 30
+				},
+				{
+					"label": "Disable timeout",
+					"value": 255
+				}
+			]
+		},
+		"2": {
+			"label": "Dim level",
+			"description": "Change brightness of associated light bulb(s)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Default",
+					"value": 255
+				}
+			]
+		},
+		"3": {
+			"label": "Operation Mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Manual",
+					"value": 1
+				},
+				{
+					"label": "Vacancy",
+					"value": 2
+				},
+				{
+					"label": "Occupancy",
+					"value": 3
+				}
+			]
+		},
+		"4": {
+			"label": "Association Mode",
+			"description": "Enable/Disable Association Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Invert Switch",
+			"description": "In a 3-way configuration, invert the connected Add-On Switch buttons",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Motion Sensor",
+			"description": "Enable/Disable Motion Sensor",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"13": {
+			"label": "Motion Sensor Sensitivity",
+			"description": "Amount of motion required to turn on the light",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "High",
+					"value": 1
+				},
+				{
+					"label": "Medium",
+					"value": 2
+				},
+				{
+					"label": "Low",
+					"value": 3
+				}
+			]
+		},
+		"14": {
+			"label": "Light Sensing",
+			"description": "Enable/Disable whether motion sensor only turns light on if room is dark",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "Reset Cycle",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 110,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "10 secs",
+					"value": 1
+				},
+				{
+					"label": "20 secs",
+					"value": 2
+				},
+				{
+					"label": "30 secs",
+					"value": 3
+				},
+				{
+					"label": "45 secs",
+					"value": 4
+				},
+				{
+					"label": "27 mins",
+					"value": 110
+				}
+			]
+		},
+		"19": {
+			"label": "Exclusion Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Alternate",
+					"value": 1
+				}
+			]
+		}
+	}
 }

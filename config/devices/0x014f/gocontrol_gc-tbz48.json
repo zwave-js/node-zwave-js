@@ -1,576 +1,577 @@
 // Nortek Security & Control LLC GoControl GC-TBZ48
 // Z-Wave Plus Thermostat
 {
-    "_approved": true,
-    "manufacturer": "Nortek Security & Control LLC",
-    "manufacturerId": "0x014f",
-    "label": "GoControl GC-TBZ48",
-    "description": "Z-Wave Plus Thermostat",
-    "devices": [
-        {
-            "productType": "0x5442",
-            "productId": "0x5431"
-        },
-        {
-            "productType": "0x5442",
-            "productId": "0x5436"
-        },
-        {
-            "productType": "0x5442",
-            "productId": "0x5437"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "System Type",
-            "description": "System Type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Standard",
-                    "value": 0
-                },
-                {
-                    "label": "Heat Pump",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Fan Type",
-            "description": "Fan Type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Gas",
-                    "value": 0
-                },
-                {
-                    "label": "Electric",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Change Over Type",
-            "description": "Change Over Type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "w/Cool",
-                    "value": 0
-                },
-                {
-                    "label": "w/Heat",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "2nd Stage Heat Enable",
-            "description": "2nd Stage Heat Enable",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "Aux Heat Enable",
-            "description": "Aux Heat Enable",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "6": {
-            "label": "2nd Stage Cool Enable",
-            "description": "2nd Stage Cool Enable",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "7": {
-            "label": "Temperature Unit",
-            "description": "Temperature Unit",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Celsius",
-                    "value": 0
-                },
-                {
-                    "label": "Fahrenheit",
-                    "value": 1
-                }
-            ]
-        },
-        "8": {
-            "label": "Minimum Off Time",
-            "description": "Minimum Off Time",
-            "unit": "minutes",
-            "valueSize": 1,
-            "minValue": 5,
-            "maxValue": 9,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Minimum Run Time",
-            "description": "Minimum Run Time",
-            "unit": "minutes",
-            "valueSize": 1,
-            "minValue": 3,
-            "maxValue": 9,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Setpoint H/C Delta",
-            "description": "Setpoint H/C Delta",
-            "unit": "fahrenheit",
-            "valueSize": 1,
-            "minValue": 3,
-            "maxValue": 15,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "H Delta Stage 1 ON",
-            "description": "H Delta Stage 1 ON",
-            "unit": "fahrenheit",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 6,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "H Delta Stage 1 OFF",
-            "description": "H Delta Stage 1 OFF",
-            "unit": "fahrenheit",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 5,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "H Delta Stage 2 ON",
-            "description": "H Delta Stage 2 ON",
-            "unit": "fahrenheit",
-            "valueSize": 1,
-            "minValue": 2,
-            "maxValue": 7,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "14": {
-            "label": "H Delta Stage 2 OFF",
-            "description": "H Delta Stage 2 OFF",
-            "unit": "fahrenheit",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 6,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "15": {
-            "label": "H Delta Aux ON",
-            "description": "H Delta Aux ON",
-            "unit": "fahrenheit",
-            "valueSize": 1,
-            "minValue": 3,
-            "maxValue": 8,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "16": {
-            "label": "H Delta Stage 3 OFF",
-            "description": "H Delta Stage 3 OFF",
-            "unit": "fahrenheit",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 7,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "17": {
-            "label": "C Delta Stage 1 ON",
-            "description": "C Delta Stage 1 ON",
-            "unit": "fahrenheit",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 6,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "18": {
-            "label": "C Delta Stage 1 OFF",
-            "description": "C Delta Stage 1 OFF",
-            "unit": "fahrenheit",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 5,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "19": {
-            "label": "C Delta Stage 2 ON",
-            "description": "C Delta Stage 2 ON",
-            "unit": "fahrenheit",
-            "valueSize": 1,
-            "minValue": 2,
-            "maxValue": 7,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "20": {
-            "label": "C Delta Stage 2 OFF",
-            "description": "C Delta Stage 2 OFF",
-            "unit": "fahrenheit",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 6,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "23": {
-            "label": "Lifeline Association Group Report To Send",
-            "description": "Lifeline Association Group Report To Send",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 8319,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "24": {
-            "label": "Display Lock",
-            "description": "Display Lock",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Unlocked",
-                    "value": 0
-                },
-                {
-                    "label": "Locked",
-                    "value": 1
-                }
-            ]
-        },
-        "26": {
-            "label": "Backlight Timer",
-            "description": "Backlight Timer",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": 10,
-            "maxValue": 30,
-            "defaultValue": 20,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "33": {
-            "label": "Max Heat Setpoint",
-            "description": "Max Heat Setpoint",
-            "valueSize": 1,
-            "minValue": 30,
-            "maxValue": 109,
-            "defaultValue": 90,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "34": {
-            "label": "Min Cool Setpoint",
-            "description": "Min Cool Setpoint",
-            "valueSize": 1,
-            "minValue": 33,
-            "maxValue": 112,
-            "defaultValue": 61,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "38": {
-            "label": "Schedule Enable",
-            "description": "Schedule Enable",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "39": {
-            "label": "Run/Hold Mode",
-            "description": "Run/Hold Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Hold",
-                    "value": 0
-                },
-                {
-                    "label": "Run",
-                    "value": 1
-                }
-            ]
-        },
-        "40": {
-            "label": "Setback Mode",
-            "description": "Setback Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No Setback",
-                    "value": 0
-                },
-                {
-                    "label": "Unoccupied Mode",
-                    "value": 2
-                }
-            ]
-        },
-        "41": {
-            "label": "Un-Occupied HSP",
-            "description": "Un-Occupied HSP",
-            "valueSize": 1,
-            "minValue": 30,
-            "maxValue": 109,
-            "defaultValue": 62,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "42": {
-            "label": "Un-Occupied CSP",
-            "description": "Un-Occupied CSP",
-            "valueSize": 1,
-            "minValue": 33,
-            "maxValue": 112,
-            "defaultValue": 80,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "43": {
-            "label": "Remote Sensor 1 Node Number",
-            "description": "Remote Sensor 1 Node Number",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 252,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "46": {
-            "label": "Remote Sensor 1 Temperature",
-            "description": "Remote Sensor 1 Temperature",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 112,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "48": {
-            "label": "Internal Sensor Temp Offset",
-            "description": "Internal Sensor Temp Offset",
-            "valueSize": 1,
-            "minValue": -7,
-            "maxValue": 7,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "49": {
-            "label": "R1 Sensor Temp Offset",
-            "description": "R1 Sensor Temp Offset",
-            "valueSize": 1,
-            "minValue": -7,
-            "maxValue": 7,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "54": {
-            "label": "Heat Timer",
-            "description": "Heat Timer",
-            "unit": "hours",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 4000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "55": {
-            "label": "Cool Timer",
-            "description": "Cool Timer",
-            "unit": "hours",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 4000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "61": {
-            "label": "Fan Purge Heat",
-            "description": "Fan Purge Heat",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 90,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "62": {
-            "label": "Fan Purge Cool",
-            "description": "Fan Purge Cool",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 90,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Nortek Security & Control LLC",
+	"manufacturerId": "0x014f",
+	"label": "GoControl GC-TBZ48",
+	"description": "Z-Wave Plus Thermostat",
+	"devices": [
+		{
+			"productType": "0x5442",
+			"productId": "0x5431"
+		},
+		{
+			"productType": "0x5442",
+			"productId": "0x5436"
+		},
+		{
+			"productType": "0x5442",
+			"productId": "0x5437"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "System Type",
+			"description": "System Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Standard",
+					"value": 0
+				},
+				{
+					"label": "Heat Pump",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Fan Type",
+			"description": "Fan Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Gas",
+					"value": 0
+				},
+				{
+					"label": "Electric",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Change Over Type",
+			"description": "Change Over Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "w/Cool",
+					"value": 0
+				},
+				{
+					"label": "w/Heat",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "2nd Stage Heat Enable",
+			"description": "2nd Stage Heat Enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Aux Heat Enable",
+			"description": "Aux Heat Enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "2nd Stage Cool Enable",
+			"description": "2nd Stage Cool Enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "Temperature Unit",
+			"description": "Temperature Unit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Minimum Off Time",
+			"description": "Minimum Off Time",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 9,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Minimum Run Time",
+			"description": "Minimum Run Time",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 9,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Setpoint H/C Delta",
+			"description": "Setpoint H/C Delta",
+			"unit": "fahrenheit",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 15,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "H Delta Stage 1 ON",
+			"description": "H Delta Stage 1 ON",
+			"unit": "fahrenheit",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "H Delta Stage 1 OFF",
+			"description": "H Delta Stage 1 OFF",
+			"unit": "fahrenheit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "H Delta Stage 2 ON",
+			"description": "H Delta Stage 2 ON",
+			"unit": "fahrenheit",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "H Delta Stage 2 OFF",
+			"description": "H Delta Stage 2 OFF",
+			"unit": "fahrenheit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "H Delta Aux ON",
+			"description": "H Delta Aux ON",
+			"unit": "fahrenheit",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 8,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "H Delta Stage 3 OFF",
+			"description": "H Delta Stage 3 OFF",
+			"unit": "fahrenheit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"17": {
+			"label": "C Delta Stage 1 ON",
+			"description": "C Delta Stage 1 ON",
+			"unit": "fahrenheit",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "C Delta Stage 1 OFF",
+			"description": "C Delta Stage 1 OFF",
+			"unit": "fahrenheit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19": {
+			"label": "C Delta Stage 2 ON",
+			"description": "C Delta Stage 2 ON",
+			"unit": "fahrenheit",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "C Delta Stage 2 OFF",
+			"description": "C Delta Stage 2 OFF",
+			"unit": "fahrenheit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23": {
+			"label": "Lifeline Association Group Report To Send",
+			"description": "Lifeline Association Group Report To Send",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 8319,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24": {
+			"label": "Display Lock",
+			"description": "Display Lock",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unlocked",
+					"value": 0
+				},
+				{
+					"label": "Locked",
+					"value": 1
+				}
+			]
+		},
+		"26": {
+			"label": "Backlight Timer",
+			"description": "Backlight Timer",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 30,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"33": {
+			"label": "Max Heat Setpoint",
+			"description": "Max Heat Setpoint",
+			"valueSize": 1,
+			"minValue": 30,
+			"maxValue": 109,
+			"defaultValue": 90,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"34": {
+			"label": "Min Cool Setpoint",
+			"description": "Min Cool Setpoint",
+			"valueSize": 1,
+			"minValue": 33,
+			"maxValue": 112,
+			"defaultValue": 61,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"38": {
+			"label": "Schedule Enable",
+			"description": "Schedule Enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"39": {
+			"label": "Run/Hold Mode",
+			"description": "Run/Hold Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Hold",
+					"value": 0
+				},
+				{
+					"label": "Run",
+					"value": 1
+				}
+			]
+		},
+		"40": {
+			"label": "Setback Mode",
+			"description": "Setback Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Setback",
+					"value": 0
+				},
+				{
+					"label": "Unoccupied Mode",
+					"value": 2
+				}
+			]
+		},
+		"41": {
+			"label": "Un-Occupied HSP",
+			"description": "Un-Occupied HSP",
+			"valueSize": 1,
+			"minValue": 30,
+			"maxValue": 109,
+			"defaultValue": 62,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"42": {
+			"label": "Un-Occupied CSP",
+			"description": "Un-Occupied CSP",
+			"valueSize": 1,
+			"minValue": 33,
+			"maxValue": 112,
+			"defaultValue": 80,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"43": {
+			"label": "Remote Sensor 1 Node Number",
+			"description": "Remote Sensor 1 Node Number",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 252,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"46": {
+			"label": "Remote Sensor 1 Temperature",
+			"description": "Remote Sensor 1 Temperature",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 112,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"48": {
+			"label": "Internal Sensor Temp Offset",
+			"description": "Internal Sensor Temp Offset",
+			"valueSize": 1,
+			"minValue": -7,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"49": {
+			"label": "R1 Sensor Temp Offset",
+			"description": "R1 Sensor Temp Offset",
+			"valueSize": 1,
+			"minValue": -7,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"54": {
+			"label": "Heat Timer",
+			"description": "Heat Timer",
+			"unit": "hours",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"55": {
+			"label": "Cool Timer",
+			"description": "Cool Timer",
+			"unit": "hours",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"61": {
+			"label": "Fan Purge Heat",
+			"description": "Fan Purge Heat",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 90,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"62": {
+			"label": "Fan Purge Cool",
+			"description": "Fan Purge Cool",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 90,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

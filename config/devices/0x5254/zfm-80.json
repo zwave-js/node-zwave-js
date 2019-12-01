@@ -1,95 +1,97 @@
 // Remotec ZFM-80
 // Fixture Switch Module
 {
-    "_approved": true,
-    "manufacturer": "Remotec",
-    "manufacturerId": "0x5254",
-    "label": "ZFM-80",
-    "description": "Fixture Switch Module",
-    "devices": [
-        {
-            "productType": "0x8000",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "AssociationGroup",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "ExternalSwitchType",
-            "description": "Set External switch type Definitions",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "TypeA",
-                    "value": 1
-                },
-                {
-                    "label": "TypeB",
-                    "value": 2
-                },
-                {
-                    "label": "TypeC",
-                    "value": 3
-                },
-                {
-                    "label": "TypeD",
-                    "value": 4
-                }
-            ]
-        },
-        "2": {
-            "label": "Timeout",
-            "description": "Set timeout period",
-            "unit": "minutes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 240,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "NodeIdNumber",
-            "description": "Configure Node ID number for Z-Wave command source",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 232,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "OutputStatus",
-            "description": "Set relay output status if timeout period has been reached",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Remotec",
+	"manufacturerId": "0x5254",
+	"label": "ZFM-80",
+	"description": "Fixture Switch Module",
+	"devices": [
+		{
+			"productType": "0x8000",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "AssociationGroup",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "ExternalSwitchType",
+			"description": "Set External switch type Definitions",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "TypeA",
+					"value": 1
+				},
+				{
+					"label": "TypeB",
+					"value": 2
+				},
+				{
+					"label": "TypeC",
+					"value": 3
+				},
+				{
+					"label": "TypeD",
+					"value": 4
+				}
+			]
+		},
+		"2": {
+			"label": "Timeout",
+			"description": "Set timeout period",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 240,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "NodeIdNumber",
+			"description": "Configure Node ID number for Z-Wave command source",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 232,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "OutputStatus",
+			"description": "Set relay output status if timeout period has been reached",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

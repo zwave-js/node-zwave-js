@@ -681,13 +681,16 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		for (const [param, info] of config.entries()) {
 			// We need to make the config information compatible with the
 			// format that ConfigurationCC reports
-			this.extendParamInformation(param.parameter, param.valueBitMask, {
+			const paramInfo: Partial<ConfigurationMetadata> = {
 				// TODO: Make this smarter! (0...1 ==> boolean)
 				type: "number",
 				valueSize: info.valueSize,
 				min: info.minValue,
 				max: info.maxValue,
 				default: info.defaultValue,
+				format: info.unsigned
+					? ValueFormat.UnsignedInteger
+					: ValueFormat.SignedInteger,
 				readable: !info.writeOnly,
 				writeable: !info.readOnly,
 				allowManualEntry: info.allowManualEntry,
@@ -703,7 +706,12 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				label: info.label,
 				description: info.description,
 				isFromConfig: true,
-			});
+			};
+			this.extendParamInformation(
+				param.parameter,
+				param.valueBitMask,
+				paramInfo,
+			);
 		}
 
 		// Remember that we loaded the param information from a config file

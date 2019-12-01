@@ -1,232 +1,240 @@
 // AEON Labs DSC19
 // Micro Smart Energy Illuminator G2
 {
-    "_approved": true,
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "DSC19",
-    "description": "Micro Smart Energy Illuminator G2",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0013"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Target for automatic meter reports",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Target for automatic reports",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "2": {
-            "label": "Make Micro Smart Dimmer 2nd Edition Blink",
-            "description": "The LSB defines the total time the device need to blink.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Current Overload Protection",
-            "description": "Load will be closed when current more that 2.7A and time more than 2 minutes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Deactivate",
-                    "value": 0
-                },
-                {
-                    "label": "Activate",
-                    "value": 1
-                }
-            ]
-        },
-        "13": {
-            "label": "Enable/Disable CRC16 encapsulation",
-            "description": "Parameter to Enable/Disable CRC16 encapsulation",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "80": {
-            "label": "Notification on Status Change",
-            "description": "Send load notification to associated devices",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Deactivate",
-                    "value": 0
-                },
-                {
-                    "label": "Hail CC Sent",
-                    "value": 1
-                },
-                {
-                    "label": "Basic CC Report Sent",
-                    "value": 2
-                }
-            ]
-        },
-        "90": {
-            "label": "Sending a Report triggered by min change of value",
-            "description": "Automated sending of a Report triggered by minimal change of value.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Deavtivate",
-                    "value": 0
-                },
-                {
-                    "label": "Activate",
-                    "value": 1
-                }
-            ]
-        },
-        "91": {
-            "label": "Minimum Change to send Report (Watt)",
-            "description": "The value represents the minimum change in Wattage for a Report to be sent.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 25,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "92": {
-            "label": "Minimum Change to send Report (%)",
-            "description": "The minimum change in Watage Percent for a report to be sent.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "101": {
-            "label": "Reports for Group 1",
-            "description": "Which reports need to send automatically in timing intervals for group 1",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "102": {
-            "label": "Reports for Group 2",
-            "description": "Which reports need to send automatically in timing intervals for group 2",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 8,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "103": {
-            "label": "Reports for Group 3",
-            "description": "Which reports need to send automatically in timing intervals for group 3",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "111": {
-            "label": "Interval to send out reports of group 1",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 2678400,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "112": {
-            "label": "Interval to send out reports of group 2",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 2678400,
-            "defaultValue": 600,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "113": {
-            "label": "Interval to send out reports of group 3",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 2678400,
-            "defaultValue": 600,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "120": {
-            "label": "Turn External Button Mode",
-            "description": "Parameter to set External button type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Momentary Button Mode",
-                    "value": 0
-                },
-                {
-                    "label": "2 State Switch Mode",
-                    "value": 1
-                },
-                {
-                    "label": "3 Way Switch Mode",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"_approved": true,
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "DSC19",
+	"description": "Micro Smart Energy Illuminator G2",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0013"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Target for automatic meter reports",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Target for automatic reports",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"2": {
+			"label": "Make Micro Smart Dimmer 2nd Edition Blink",
+			"description": "The LSB defines the total time the device need to blink.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Current Overload Protection",
+			"description": "Load will be closed when current more that 2.7A and time more than 2 minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Deactivate",
+					"value": 0
+				},
+				{
+					"label": "Activate",
+					"value": 1
+				}
+			]
+		},
+		"13": {
+			"label": "Enable/Disable CRC16 encapsulation",
+			"description": "Parameter to Enable/Disable CRC16 encapsulation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"80": {
+			"label": "Notification on Status Change",
+			"description": "Send load notification to associated devices",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Deactivate",
+					"value": 0
+				},
+				{
+					"label": "Hail CC Sent",
+					"value": 1
+				},
+				{
+					"label": "Basic CC Report Sent",
+					"value": 2
+				}
+			]
+		},
+		"90": {
+			"label": "Sending a Report triggered by min change of value",
+			"description": "Automated sending of a Report triggered by minimal change of value.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Deavtivate",
+					"value": 0
+				},
+				{
+					"label": "Activate",
+					"value": 1
+				}
+			]
+		},
+		"91": {
+			"label": "Minimum Change to send Report (Watt)",
+			"description": "The value represents the minimum change in Wattage for a Report to be sent.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 25,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"92": {
+			"label": "Minimum Change to send Report (%)",
+			"description": "The minimum change in Watage Percent for a report to be sent.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"101": {
+			"label": "Reports for Group 1",
+			"description": "Which reports need to send automatically in timing intervals for group 1",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"102": {
+			"label": "Reports for Group 2",
+			"description": "Which reports need to send automatically in timing intervals for group 2",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 8,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"103": {
+			"label": "Reports for Group 3",
+			"description": "Which reports need to send automatically in timing intervals for group 3",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"111": {
+			"label": "Interval to send out reports of group 1",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 2678400,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"112": {
+			"label": "Interval to send out reports of group 2",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 2678400,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"113": {
+			"label": "Interval to send out reports of group 3",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 2678400,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"120": {
+			"label": "Turn External Button Mode",
+			"description": "Parameter to set External button type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary Button Mode",
+					"value": 0
+				},
+				{
+					"label": "2 State Switch Mode",
+					"value": 1
+				},
+				{
+					"label": "3 Way Switch Mode",
+					"value": 2
+				}
+			]
+		}
+	}
 }

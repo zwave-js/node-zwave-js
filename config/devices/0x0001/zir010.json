@@ -1,111 +1,113 @@
 // ACT - Advanced Control Technologies ZIR010
 // PIR Motion Sensor
 {
-    "_approved": true,
-    "manufacturer": "ACT - Advanced Control Technologies",
-    "manufacturerId": "0x0001",
-    "label": "ZIR010",
-    "description": "PIR Motion Sensor",
-    "devices": [
-        {
-            "productType": "0x4952",
-            "productId": "0x3030"
-        },
-        {
-            "productType": "0x4952",
-            "productId": "0x3130"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Motion",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Tamper",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "3": {
-            "label": "Battery",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "17": {
-            "label": "Mode",
-            "description": "Notification modes: 0=light, 1=alarm, 2=sensor",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Lightning",
-                    "value": 0
-                },
-                {
-                    "label": "Alarm",
-                    "value": 1
-                },
-                {
-                    "label": "Sensor",
-                    "value": 2
-                }
-            ]
-        },
-        "18": {
-            "label": "Off/Idle delay",
-            "description": "Configuring the off/idle delay",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "19": {
-            "label": "Unsolicited Commands",
-            "description": "Disabling the zir010 trom sending commands unsolicited",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "disabled",
-                    "value": 0
-                },
-                {
-                    "label": "enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "22": {
-            "label": "Awake Time",
-            "description": "Duration ranges from 15 to 45 seconds. Valid values range from 15 to 45.",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": 15,
-            "maxValue": 45,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"_approved": true,
+	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturerId": "0x0001",
+	"label": "ZIR010",
+	"description": "PIR Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3030"
+		},
+		{
+			"productType": "0x4952",
+			"productId": "0x3130"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Motion",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Tamper",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"3": {
+			"label": "Battery",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"17": {
+			"label": "Mode",
+			"description": "Notification modes: 0=light, 1=alarm, 2=sensor",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Lightning",
+					"value": 0
+				},
+				{
+					"label": "Alarm",
+					"value": 1
+				},
+				{
+					"label": "Sensor",
+					"value": 2
+				}
+			]
+		},
+		"18": {
+			"label": "Off/Idle delay",
+			"description": "Configuring the off/idle delay",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19": {
+			"label": "Unsolicited Commands",
+			"description": "Disabling the zir010 trom sending commands unsolicited",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disabled",
+					"value": 0
+				},
+				{
+					"label": "enabled",
+					"value": 1
+				}
+			]
+		},
+		"22": {
+			"label": "Awake Time",
+			"description": "Duration ranges from 15 to 45 seconds. Valid values range from 15 to 45.",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 15,
+			"maxValue": 45,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }
