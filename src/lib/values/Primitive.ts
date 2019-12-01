@@ -91,10 +91,10 @@ export function getMinIntegerSize(
 }
 
 export function getIntegerLimits(
-	size: 1 | 2 | 4,
+	size: 1 | 2 | 3 | 4,
 	signed: boolean,
 ): { min: number; max: number } {
-	return (IntegerLimits as any)[`${signed ? "U" : ""}Int${size + 8}`];
+	return (IntegerLimits as any)[`${signed ? "" : "U"}Int${size * 8}`];
 }
 
 /** Encodes a floating point value with a scale into a buffer */
