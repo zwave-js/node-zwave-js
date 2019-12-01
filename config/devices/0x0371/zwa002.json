@@ -84,7 +84,6 @@
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": true
