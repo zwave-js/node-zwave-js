@@ -98,7 +98,7 @@ This is likely an error!`,
 		if (config.paramInformation?.size) {
 			// Check if there are options when manual entry is forbidden
 			for (const [
-				{ parameter, valueBitMask },
+				{ parameter },
 				value,
 			] of config.paramInformation.entries()) {
 				if (!value.allowManualEntry && !value.options?.length) {
@@ -118,7 +118,7 @@ This is likely an error!`,
 
 			// Check if there are options where min/max values is not compatible with the valueSize
 			for (const [
-				{ parameter, valueBitMask },
+				{ parameter },
 				value,
 			] of config.paramInformation.entries()) {
 				if (value.valueSize < 1 || value.valueSize > 4) {
