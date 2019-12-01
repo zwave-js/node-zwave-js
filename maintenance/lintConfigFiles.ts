@@ -160,27 +160,44 @@ This is likely an error!`,
 							value.maxValue >= unsignedLimits.min &&
 							value.maxValue <= unsignedLimits.max;
 
-						if (!fitsSignedLimits && fitsUnsignedLimits) {
-							addError(
-								file,
-								`Parameter #${parameter} is invalid: min/maxValue is incompatible with valueSize ${
-									value.valueSize
-								} (min = ${limits.min}, max = ${limits.max}).
-Consider converting this parameter to unsigned using ${white(
-									`"unsigned": true`,
-								)}!`,
-							);
-						} else if (!fitsSignedLimits) {
-							if (value.minValue < limits.min) {
+						if (!value.unsigned && !fitsSignedLimits) {
+							if (fitsUnsignedLimits) {
 								addError(
 									file,
-									`Parameter #${parameter} is invalid: minValue ${value.minValue} is incompatible with valueSize ${value.valueSize} (min = ${limits.min})!`,
+									`Parameter #${parameter} is invalid: min/maxValue is incompatible with valueSize ${
+										value.valueSize
+									} (min = ${limits.min}, max = ${
+										limits.max
+									}).
+Consider converting this parameter to unsigned using ${white(
+										`"unsigned": true`,
+									)}!`,
+								);
+							} else {
+								if (value.minValue < limits.min) {
+									addError(
+										file,
+										`Parameter #${parameter} is invalid: minValue ${value.minValue} is incompatible with valueSize ${value.valueSize} (min = ${limits.min})!`,
+									);
+								}
+								if (value.maxValue > limits.max) {
+									addError(
+										file,
+										`Parameter #${parameter} is invalid: maxValue ${value.maxValue} is incompatible with valueSize ${value.valueSize} (max = ${limits.max})!`,
+									);
+								}
+							}
+						} else if (value.unsigned && !fitsUnsignedLimits) {
+							if (value.minValue < unsignedLimits.min) {
+								addError(
+									file,
+									`Parameter #${parameter} is invalid: minValue ${value.minValue} is incompatible with valueSize ${value.valueSize} (min = ${unsignedLimits.min})!`,
 								);
 							}
-							if (value.maxValue > limits.max) {
+							if (value.maxValue > unsignedLimits.max) {
 								addError(
 									file,
-									`Parameter #${parameter} is invalid: maxValue ${value.maxValue} is incompatible with valueSize ${value.valueSize} (max = ${limits.max})!`,
+									`Parameter #${parameter} is invalid: maxValue ${value.maxValue} is incompatible with valueSize ${value.valueSize} (max = ${unsignedLimits.max})!`,
 								);
 							}
 						}
