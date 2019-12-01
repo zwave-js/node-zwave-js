@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { green, red, yellow } from "ansi-colors";
+import { green, red, white, yellow } from "ansi-colors";
 import { readFile } from "fs-extra";
 import * as path from "path";
 import {
@@ -161,15 +161,15 @@ This is likely an error!`,
 							value.maxValue <= unsignedLimits.max;
 
 						if (!fitsSignedLimits && fitsUnsignedLimits) {
-							// 							addError(
-							// 								file,
-							// 								`Parameter #${parameter} is invalid: min/maxValue is incompatible with valueSize ${
-							// 									value.valueSize
-							// 								} (min = ${limits.min}, max = ${limits.max}).
-							// Consider converting this parameter to unsigned using ${white(
-							// 									`"unsigned": true`,
-							// 								)}!`,
-							// 							);
+							addError(
+								file,
+								`Parameter #${parameter} is invalid: min/maxValue is incompatible with valueSize ${
+									value.valueSize
+								} (min = ${limits.min}, max = ${limits.max}).
+Consider converting this parameter to unsigned using ${white(
+									`"unsigned": true`,
+								)}!`,
+							);
 						} else if (!fitsSignedLimits) {
 							if (value.minValue < limits.min) {
 								addError(
