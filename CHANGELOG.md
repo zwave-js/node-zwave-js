@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.1.0 (2019-12-01)
 ### Features
 * Added support for `Meter CC`
 
