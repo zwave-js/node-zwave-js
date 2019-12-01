@@ -67,6 +67,7 @@
 			"minValue": 8,
 			"maxValue": 255,
 			"defaultValue": 10,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -112,6 +113,7 @@
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 30,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -123,6 +125,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -149,6 +152,7 @@
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 200,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -185,6 +189,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -196,6 +201,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -218,6 +224,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 30,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -229,6 +236,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -262,6 +270,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -284,6 +293,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 200,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -295,6 +305,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -306,6 +317,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -318,6 +330,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 900,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -329,6 +342,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -340,6 +354,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -351,6 +366,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -484,6 +500,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 100,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -496,6 +513,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 1000,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -529,6 +547,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,

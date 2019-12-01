@@ -43,7 +43,6 @@
 		"13": {
 			"label": "LED frame – brightness",
 			"description": "This parameter allows to adjust the LED frame brightness.",
-			"unit": "1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,

@@ -43,6 +43,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 12,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -54,6 +55,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 3,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -65,6 +67,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -76,6 +79,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 15,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -87,6 +91,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -98,6 +103,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -109,6 +115,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -120,6 +127,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -131,6 +139,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -142,6 +151,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 50,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -153,6 +163,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 100,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -164,6 +175,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 3,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true

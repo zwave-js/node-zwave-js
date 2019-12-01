@@ -154,7 +154,6 @@
 		"2[0x1f]": {
 			"label": "Relay 2 Trigger Interval",
 			"description": "Momentary trigger time in 100ms intervals, 10=1s, 0=disable",
-			"unit": "1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 31,

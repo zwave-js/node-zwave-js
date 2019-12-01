@@ -1,161 +1,160 @@
 // ThermoFloor HeatIt ZDim
 // Knob Smart Dimmer
 {
-    "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "ThermoFloor",
-    "manufacturerId": "0x019b",
-    "label": "HeatIt ZDim",
-    "description": "Knob Smart Dimmer",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x2200"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Connected Load",
-            "description": "Defines the value of connected load",
-            "unit": "1",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 200,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Minimum Dim level",
-            "description": "efines the lowest dimming level",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 98,
-            "defaultValue": 20,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Maximum Dim level",
-            "description": "Defines the highest dimming level of the dimmer",
-            "unit": "1",
-            "valueSize": 1,
-            "minValue": 2,
-            "maxValue": 99,
-            "defaultValue": 85,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Total steps",
-            "description": "How many steps it should take to dim from min to max",
-            "valueSize": 1,
-            "minValue": 5,
-            "maxValue": 255,
-            "defaultValue": 15,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Double press function",
-            "description": "Defines the double press functionality",
-            "unit": "1",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Dim to highest level",
-                    "value": 1
-                }
-            ]
-        },
-        "6": {
-            "label": "Scene controller",
-            "description": "Enables scene controller",
-            "unit": "1",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Active (Default)",
-                    "value": 1
-                }
-            ]
-        },
-        "7": {
-            "label": "Switch ON level",
-            "description": "Defines the dim level when restored from OFF state by push button",
-            "unit": "%",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Dimming Duration",
-            "description": "Defines how long it takes to dim to desired level.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Meter Report Interval",
-            "description": "Defines report interval for Power Metering",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Power restore level",
-            "description": "Defines initial dimming level after power loss.",
-            "unit": "%",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 50,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"_approved": true,
+	"_warnings": [
+		"Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
+	],
+	"manufacturer": "ThermoFloor",
+	"manufacturerId": "0x019b",
+	"label": "HeatIt ZDim",
+	"description": "Knob Smart Dimmer",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x2200"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Connected Load",
+			"description": "Defines the value of connected load",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 200,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Minimum Dim level",
+			"description": "efines the lowest dimming level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 98,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Maximum Dim level",
+			"description": "Defines the highest dimming level of the dimmer",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 99,
+			"defaultValue": 85,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Total steps",
+			"description": "How many steps it should take to dim from min to max",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 255,
+			"defaultValue": 15,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Double press function",
+			"description": "Defines the double press functionality",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Dim to highest level",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Scene controller",
+			"description": "Enables scene controller",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Active (Default)",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "Switch ON level",
+			"description": "Defines the dim level when restored from OFF state by push button",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Dimming Duration",
+			"description": "Defines how long it takes to dim to desired level.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Meter Report Interval",
+			"description": "Defines report interval for Power Metering",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Power restore level",
+			"description": "Defines initial dimming level after power loss.",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

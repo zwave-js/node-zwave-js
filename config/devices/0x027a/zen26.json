@@ -1,112 +1,112 @@
 // Zooz ZEN26
 // Z-Wave Plus S2 ON/OFF Switch
 {
-    "_approved": true,
-    "manufacturer": "Zooz",
-    "manufacturerId": "0x027a",
-    "label": "ZEN26",
-    "description": "Z-Wave Plus S2 ON/OFF Switch",
-    "devices": [
-        {
-            "productType": "0xa000",
-            "productId": "0xa001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Paddle Control",
-            "description": "Choose Paddle Functionality (Invert)",
-            "unit": "byte",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Top on, Bottom off",
-                    "value": 0
-                },
-                {
-                    "label": "Top off, Bottom on",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "LED Indicator Control",
-            "description": "Change behavior of the LED indicator",
-            "unit": "byte",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED on when switch off",
-                    "value": 0
-                },
-                {
-                    "label": "LED on when switch on",
-                    "value": 1
-                },
-                {
-                    "label": "LED off",
-                    "value": 2
-                },
-                {
-                    "label": "LED on",
-                    "value": 3
-                }
-            ]
-        },
-        "3": {
-            "label": "Auto Turn-Off Timer",
-            "description": "enable the Auto Turn-Off Timer",
-            "unit": "byte",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32768,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "On Off Status After Power Failure",
-            "description": "Set the on off status for the switch after power failure.",
-            "unit": "byte",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "On",
-                    "value": 1
-                },
-                {
-                    "label": "last state",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN26",
+	"description": "Z-Wave Plus S2 ON/OFF Switch",
+	"devices": [
+		{
+			"productType": "0xa000",
+			"productId": "0xa001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Paddle Control",
+			"description": "Choose Paddle Functionality (Invert)",
+			"unit": "byte",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Top on, Bottom off",
+					"value": 0
+				},
+				{
+					"label": "Top off, Bottom on",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "LED Indicator Control",
+			"description": "Change behavior of the LED indicator",
+			"unit": "byte",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when switch off",
+					"value": 0
+				},
+				{
+					"label": "LED on when switch on",
+					"value": 1
+				},
+				{
+					"label": "LED off",
+					"value": 2
+				},
+				{
+					"label": "LED on",
+					"value": 3
+				}
+			]
+		},
+		"3": {
+			"label": "Auto Turn-Off Timer",
+			"description": "enable the Auto Turn-Off Timer",
+			"unit": "byte",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "On Off Status After Power Failure",
+			"description": "Set the on off status for the switch after power failure.",
+			"unit": "byte",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				},
+				{
+					"label": "last state",
+					"value": 2
+				}
+			]
+		}
+	}
 }

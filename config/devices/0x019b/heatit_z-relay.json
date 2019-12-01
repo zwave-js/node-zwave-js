@@ -1,230 +1,233 @@
 // ThermoFloor HEATIT Z-RELAY
 // Multipurpose relay
 {
-    "_approved": true,
-    "manufacturer": "ThermoFloor",
-    "manufacturerId": "0x019b",
-    "label": "HEATIT Z-RELAY",
-    "description": "Multipurpose relay",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0208"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Status LED.",
-            "description": "Configuration of the status LED.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Status LED brightness level.",
-            "description": "Configure the percentage of light in the status LED, when the LED is turned on",
-            "unit": "%",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 50,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Thermistor type for input 1.",
-            "description": "Configures the thermistor type connected to input 1.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Thermistor type for input 2.",
-            "description": "Configures the thermistor type connected to input 2. VALUE DESCRIPTION",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Temperature offset on input 1.",
-            "description": "Configures a temperature offset, input 1.",
-            "unit": "°C*10",
-            "valueSize": 1,
-            "minValue": -40,
-            "maxValue": 40,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Temperature offset on input 2.",
-            "description": "Configures a temperature offset, input 2.",
-            "unit": "°C*10",
-            "valueSize": 1,
-            "minValue": -40,
-            "maxValue": 40,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Time interval for reports sent about input 1.",
-            "description": "Configures the time interval between when sensor reports, input 1.",
-            "unit": "s",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 8640,
-            "defaultValue": 6,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Time interval for reports sent about input 2.",
-            "description": "Configures the time interval between when sensor reports, input 2.",
-            "unit": "s",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 8640,
-            "defaultValue": 6,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Time interval input 3 reports.",
-            "description": "Configures time interval for notification reports, flood input 3.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 8640,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Time interval between meter reports.",
-            "description": "Time interval between meter reports.",
-            "unit": "s",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 8640,
-            "defaultValue": 90,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Flood steady timer",
-            "description": "Input 3 steady time.",
-            "unit": "s",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 60,
-            "defaultValue": 6,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Auto relay on.",
-            "description": "Configures internal states that will cause the relay to be turned on.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Auto relay off.",
-            "description": "Configures internal states that will cause the relay to be turned off.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "14": {
-            "label": "Flood detection threshold.",
-            "description": "Configures the threshold for input 3 that will cause a flood to be detected.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 4095,
-            "defaultValue": 2048,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "15": {
-            "label": "Voltage.",
-            "description": "Voltage value used for power calculation.",
-            "unit": "V",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 250,
-            "defaultValue": 220,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "16": {
-            "label": "Ampere",
-            "description": "NOT USED",
-            "unit": "A",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "17": {
-            "label": "Digital value per ampere.",
-            "description": "DO NOT CHANGE THIS VALUE, UNLESS INSTRUCTED TO.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 81,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "18": {
-            "label": "Size of load connected on the relay output.",
-            "description": "Actual load in Watt.",
-            "unit": "W",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 6000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"_approved": true,
+	"manufacturer": "ThermoFloor",
+	"manufacturerId": "0x019b",
+	"label": "HEATIT Z-RELAY",
+	"description": "Multipurpose relay",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0208"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Status LED.",
+			"description": "Configuration of the status LED.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Status LED brightness level.",
+			"description": "Configure the percentage of light in the status LED, when the LED is turned on",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Thermistor type for input 1.",
+			"description": "Configures the thermistor type connected to input 1.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Thermistor type for input 2.",
+			"description": "Configures the thermistor type connected to input 2. VALUE DESCRIPTION",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Temperature offset on input 1.",
+			"description": "Configures a temperature offset, input 1.",
+			"unit": "°C*10",
+			"valueSize": 1,
+			"minValue": -40,
+			"maxValue": 40,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Temperature offset on input 2.",
+			"description": "Configures a temperature offset, input 2.",
+			"unit": "°C*10",
+			"valueSize": 1,
+			"minValue": -40,
+			"maxValue": 40,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Time interval for reports sent about input 1.",
+			"description": "Configures the time interval between when sensor reports, input 1.",
+			"unit": "s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 8640,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Time interval for reports sent about input 2.",
+			"description": "Configures the time interval between when sensor reports, input 2.",
+			"unit": "s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 8640,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Time interval input 3 reports.",
+			"description": "Configures time interval for notification reports, flood input 3.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 8640,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Time interval between meter reports.",
+			"description": "Time interval between meter reports.",
+			"unit": "s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 8640,
+			"defaultValue": 90,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Flood steady timer",
+			"description": "Input 3 steady time.",
+			"unit": "s",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Auto relay on.",
+			"description": "Configures internal states that will cause the relay to be turned on.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Auto relay off.",
+			"description": "Configures internal states that will cause the relay to be turned off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Flood detection threshold.",
+			"description": "Configures the threshold for input 3 that will cause a flood to be detected.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 4095,
+			"defaultValue": 2048,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Voltage.",
+			"description": "Voltage value used for power calculation.",
+			"unit": "V",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 250,
+			"defaultValue": 220,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "Ampere",
+			"description": "NOT USED",
+			"unit": "A",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"17": {
+			"label": "Digital value per ampere.",
+			"description": "DO NOT CHANGE THIS VALUE, UNLESS INSTRUCTED TO.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 81,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "Size of load connected on the relay output.",
+			"description": "Actual load in Watt.",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 6000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

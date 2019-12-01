@@ -1,398 +1,406 @@
 // DEFARO DAS-102
 // Double relay Switch 2x1.7kW
 {
-    "_approved": true,
-    "manufacturer": "DEFARO",
-    "manufacturerId": "0x032e",
-    "label": "DAS-102",
-    "description": "Double relay Switch 2x1.7kW",
-    "devices": [
-        {
-            "productType": "0x0021",
-            "productId": "0x0013"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "State changes",
-            "description": "State changes -- general",
-            "maxNodes": 3,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Switch 1",
-            "description": "Switch 1 ON/OFF associations",
-            "maxNodes": 10
-        },
-        "3": {
-            "label": "Switch 2",
-            "description": "Switch 2 ON/OFF associations",
-            "maxNodes": 10
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Switch behavior",
-            "description": "Selects ON/OFF/BLINK modes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal",
-                    "value": 0
-                },
-                {
-                    "label": "Reverse",
-                    "value": 1
-                },
-                {
-                    "label": "Blink mode",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "Relay closed interval",
-            "description": "For blink mode for both S1 and S2",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65000,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Relay open interval",
-            "description": "For blink mode for both S1 and S2",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65000,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "S1 auto off delay",
-            "description": "Sets auto off delay for S1",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                }
-            ]
-        },
-        "5": {
-            "label": "S1 On delay",
-            "description": "Delay after ON command received",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                }
-            ]
-        },
-        "6": {
-            "label": "S1 smart delay",
-            "description": "Smart off delay for S1",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                }
-            ]
-        },
-        "7": {
-            "label": "S1 powerfail recovery",
-            "description": "Powerfail recovery mode for S1",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Restore previous state",
-                    "value": 0
-                },
-                {
-                    "label": "Always set to OFF state",
-                    "value": 1
-                }
-            ]
-        },
-        "8": {
-            "label": "All ON/OFF behaviour",
-            "description": "All ON/OFF behaviour",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Relay S2 mode",
-            "description": "Relay S2 mode of operation",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal",
-                    "value": 0
-                },
-                {
-                    "label": "Reverse",
-                    "value": 1
-                },
-                {
-                    "label": "Blink",
-                    "value": 2
-                }
-            ]
-        },
-        "11": {
-            "label": "S2 auto off time",
-            "description": "Sets auto off time for S2",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                }
-            ]
-        },
-        "12": {
-            "label": "S2 turn on delay",
-            "description": "Sets turn on delay for S2",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                }
-            ]
-        },
-        "13": {
-            "label": "S2 smart delay",
-            "description": "Smart delay for S2",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                }
-            ]
-        },
-        "14": {
-            "label": "S2 powerfail recovery",
-            "description": "Powerfail recovery mode for S2",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Restore state",
-                    "value": 0
-                },
-                {
-                    "label": "Set to OFF",
-                    "value": 1
-                }
-            ]
-        },
-        "15": {
-            "label": "S1 button mode",
-            "description": "S1 button operation mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Monostable (push button)",
-                    "value": 0
-                },
-                {
-                    "label": "Bistable (switch)",
-                    "value": 1
-                },
-                {
-                    "label": "Bistable (fixed switch)",
-                    "value": 2
-                },
-                {
-                    "label": "Bistable (reversed fixed switch)",
-                    "value": 3
-                }
-            ]
-        },
-        "16": {
-            "label": "S2 button mode",
-            "description": "S2 button operation mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Monostable (push button)",
-                    "value": 0
-                },
-                {
-                    "label": "Bistable (switch button)",
-                    "value": 1
-                },
-                {
-                    "label": "Bistable (fixed switch button)",
-                    "value": 2
-                },
-                {
-                    "label": "Bistable (reversed fixed switch)",
-                    "value": 3
-                }
-            ]
-        },
-        "18": {
-            "label": "Smart delay",
-            "description": "Smart delay mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "50": {
-            "label": "Forced secure mode",
-            "description": "Forced secure mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Accept non-secure commands",
-                    "value": 0
-                },
-                {
-                    "label": "Accept only secure commands",
-                    "value": 1
-                }
-            ]
-        },
-        "51": {
-            "label": "Secure send for S1",
-            "description": "Send secure commands for S1",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Non-secure",
-                    "value": 0
-                },
-                {
-                    "label": "Secure",
-                    "value": 1
-                }
-            ]
-        },
-        "52": {
-            "label": "Secure send for S2",
-            "description": "Send secure commands for S2",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Non-secure",
-                    "value": 0
-                },
-                {
-                    "label": "Secure",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"_approved": true,
+	"manufacturer": "DEFARO",
+	"manufacturerId": "0x032e",
+	"label": "DAS-102",
+	"description": "Double relay Switch 2x1.7kW",
+	"devices": [
+		{
+			"productType": "0x0021",
+			"productId": "0x0013"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "State changes",
+			"description": "State changes -- general",
+			"maxNodes": 3,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Switch 1",
+			"description": "Switch 1 ON/OFF associations",
+			"maxNodes": 10
+		},
+		"3": {
+			"label": "Switch 2",
+			"description": "Switch 2 ON/OFF associations",
+			"maxNodes": 10
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Switch behavior",
+			"description": "Selects ON/OFF/BLINK modes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Reverse",
+					"value": 1
+				},
+				{
+					"label": "Blink mode",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Relay closed interval",
+			"description": "For blink mode for both S1 and S2",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65000,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Relay open interval",
+			"description": "For blink mode for both S1 and S2",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65000,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "S1 auto off delay",
+			"description": "Sets auto off delay for S1",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65000,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"5": {
+			"label": "S1 On delay",
+			"description": "Delay after ON command received",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65000,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"6": {
+			"label": "S1 smart delay",
+			"description": "Smart off delay for S1",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65000,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"7": {
+			"label": "S1 powerfail recovery",
+			"description": "Powerfail recovery mode for S1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Restore previous state",
+					"value": 0
+				},
+				{
+					"label": "Always set to OFF state",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "All ON/OFF behaviour",
+			"description": "All ON/OFF behaviour",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Relay S2 mode",
+			"description": "Relay S2 mode of operation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Reverse",
+					"value": 1
+				},
+				{
+					"label": "Blink",
+					"value": 2
+				}
+			]
+		},
+		"11": {
+			"label": "S2 auto off time",
+			"description": "Sets auto off time for S2",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65000,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"12": {
+			"label": "S2 turn on delay",
+			"description": "Sets turn on delay for S2",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65000,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"13": {
+			"label": "S2 smart delay",
+			"description": "Smart delay for S2",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65000,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"14": {
+			"label": "S2 powerfail recovery",
+			"description": "Powerfail recovery mode for S2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Restore state",
+					"value": 0
+				},
+				{
+					"label": "Set to OFF",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "S1 button mode",
+			"description": "S1 button operation mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Monostable (push button)",
+					"value": 0
+				},
+				{
+					"label": "Bistable (switch)",
+					"value": 1
+				},
+				{
+					"label": "Bistable (fixed switch)",
+					"value": 2
+				},
+				{
+					"label": "Bistable (reversed fixed switch)",
+					"value": 3
+				}
+			]
+		},
+		"16": {
+			"label": "S2 button mode",
+			"description": "S2 button operation mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Monostable (push button)",
+					"value": 0
+				},
+				{
+					"label": "Bistable (switch button)",
+					"value": 1
+				},
+				{
+					"label": "Bistable (fixed switch button)",
+					"value": 2
+				},
+				{
+					"label": "Bistable (reversed fixed switch)",
+					"value": 3
+				}
+			]
+		},
+		"18": {
+			"label": "Smart delay",
+			"description": "Smart delay mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"50": {
+			"label": "Forced secure mode",
+			"description": "Forced secure mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Accept non-secure commands",
+					"value": 0
+				},
+				{
+					"label": "Accept only secure commands",
+					"value": 1
+				}
+			]
+		},
+		"51": {
+			"label": "Secure send for S1",
+			"description": "Send secure commands for S1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Non-secure",
+					"value": 0
+				},
+				{
+					"label": "Secure",
+					"value": 1
+				}
+			]
+		},
+		"52": {
+			"label": "Secure send for S2",
+			"description": "Send secure commands for S2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Non-secure",
+					"value": 0
+				},
+				{
+					"label": "Secure",
+					"value": 1
+				}
+			]
+		}
+	}
 }

@@ -1,62 +1,63 @@
 // NIE Technology Co., Ltd. NZW36
 // On/Off Smart Plug + Signal Repeater (Z-Wave Plus)
 {
-    "_approved": true,
-    "manufacturer": "NIE Technology Co., Ltd.",
-    "manufacturerId": "0x0312",
-    "label": "NZW36",
-    "description": "On/Off Smart Plug + Signal Repeater (Z-Wave Plus)",
-    "devices": [
-        {
-            "productType": "0x2400",
-            "productId": "0x2400"
-        },
-        {
-            "productType": "0xb211",
-            "productId": "0x241c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "LED Indicator",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Plug On / LED On",
-                    "value": 0
-                },
-                {
-                    "label": "Plug On / LED Off",
-                    "value": 1
-                },
-                {
-                    "label": "LED Disabled",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "Countdown",
-            "description": "Plug Auto Shut Off",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 36000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"_approved": true,
+	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturerId": "0x0312",
+	"label": "NZW36",
+	"description": "On/Off Smart Plug + Signal Repeater (Z-Wave Plus)",
+	"devices": [
+		{
+			"productType": "0x2400",
+			"productId": "0x2400"
+		},
+		{
+			"productType": "0xb211",
+			"productId": "0x241c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "LED Indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Plug On / LED On",
+					"value": 0
+				},
+				{
+					"label": "Plug On / LED Off",
+					"value": 1
+				},
+				{
+					"label": "LED Disabled",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Countdown",
+			"description": "Plug Auto Shut Off",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 36000,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

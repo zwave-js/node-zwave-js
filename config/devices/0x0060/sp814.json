@@ -46,6 +46,7 @@
             "minValue": 0,
             "maxValue": 255,
             "defaultValue": 1,
+            "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
@@ -100,6 +101,7 @@
             "minValue": 5,
             "maxValue": 255,
             "defaultValue": 5,
+            "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true

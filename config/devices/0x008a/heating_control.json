@@ -1,194 +1,202 @@
 // BeNext Heating Control
 // Thermostat for controlling the opentherm protocol
 {
-    "_approved": false,
-    "_errors": [
-        "Channel \"sensor_temperature\" in endpoint 0 command class SENSOR_MULTILEVEL is duplicated!"
-    ],
-    "manufacturer": "BeNext",
-    "manufacturerId": "0x008a",
-    "label": "Heating Control",
-    "description": "Thermostat for controlling the opentherm protocol",
-    "devices": [
-        {
-            "productType": "0x0021",
-            "productId": "0x0102"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "description": "Unsolicited reports",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Set to default",
-            "description": "Set all configuration values to default values (factory settings)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Reset",
-                    "value": 255
-                }
-            ]
-        },
-        "2": {
-            "label": "Data request interval",
-            "description": "Interval of updating data from thermostat and boiler",
-            "unit": "Seconds",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 14,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "T room update difference",
-            "description": "Difference of temperature before new update",
-            "unit": "*0,1 degrees Celcius",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "T setpoint update difference",
-            "description": "Difference in setpoint before new update",
-            "unit": "*0,1 degrees Celcius",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Unsolicited CRC",
-            "description": "CRC-16 encapulation",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "On",
-                    "value": 255
-                }
-            ]
-        },
-        "6": {
-            "label": "Type of 'special' thermostat",
-            "description": "Type of 'special' thermostat if applicable",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No special",
-                    "value": 0
-                },
-                {
-                    "label": "Remeha Celcia 20",
-                    "value": 1
-                },
-                {
-                    "label": "Honeywell (rounded temperatures)",
-                    "value": 2
-                }
-            ]
-        },
-        "7": {
-            "label": "Status auto report",
-            "description": "Status auto report boiler/thermostat report.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable messages auto report",
-                    "value": 0
-                },
-                {
-                    "label": "Enable status messages auto report",
-                    "value": 255
-                }
-            ]
-        },
-        "9": {
-            "label": "Enable/Disable thermostat schedule",
-            "description": "Enable/Disable thermostat schedule inside the controller",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable thermostat schedule",
-                    "value": 0
-                },
-                {
-                    "label": "Enable thermostat schedule",
-                    "value": 255
-                }
-            ]
-        },
-        "11": {
-            "label": "Readout manual setpoint thermostat",
-            "description": "Readout manual setpoint thermostat",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Readout OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Readout ON",
-                    "value": 255
-                }
-            ]
-        }
-    }
+	"_approved": false,
+	"_errors": [
+		"Channel \"sensor_temperature\" in endpoint 0 command class SENSOR_MULTILEVEL is duplicated!"
+	],
+	"manufacturer": "BeNext",
+	"manufacturerId": "0x008a",
+	"label": "Heating Control",
+	"description": "Thermostat for controlling the opentherm protocol",
+	"devices": [
+		{
+			"productType": "0x0021",
+			"productId": "0x0102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"description": "Unsolicited reports",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Set to default",
+			"description": "Set all configuration values to default values (factory settings)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Reset",
+					"value": 255
+				}
+			]
+		},
+		"2": {
+			"label": "Data request interval",
+			"description": "Interval of updating data from thermostat and boiler",
+			"unit": "Seconds",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 14,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "T room update difference",
+			"description": "Difference of temperature before new update",
+			"unit": "*0,1 degrees Celcius",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "T setpoint update difference",
+			"description": "Difference in setpoint before new update",
+			"unit": "*0,1 degrees Celcius",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Unsolicited CRC",
+			"description": "CRC-16 encapulation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		"6": {
+			"label": "Type of 'special' thermostat",
+			"description": "Type of 'special' thermostat if applicable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No special",
+					"value": 0
+				},
+				{
+					"label": "Remeha Celcia 20",
+					"value": 1
+				},
+				{
+					"label": "Honeywell (rounded temperatures)",
+					"value": 2
+				}
+			]
+		},
+		"7": {
+			"label": "Status auto report",
+			"description": "Status auto report boiler/thermostat report.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable messages auto report",
+					"value": 0
+				},
+				{
+					"label": "Enable status messages auto report",
+					"value": 255
+				}
+			]
+		},
+		"9": {
+			"label": "Enable/Disable thermostat schedule",
+			"description": "Enable/Disable thermostat schedule inside the controller",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable thermostat schedule",
+					"value": 0
+				},
+				{
+					"label": "Enable thermostat schedule",
+					"value": 255
+				}
+			]
+		},
+		"11": {
+			"label": "Readout manual setpoint thermostat",
+			"description": "Readout manual setpoint thermostat",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Readout OFF",
+					"value": 0
+				},
+				{
+					"label": "Readout ON",
+					"value": 255
+				}
+			]
+		}
+	}
 }

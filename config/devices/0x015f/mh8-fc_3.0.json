@@ -109,6 +109,7 @@
             "minValue": 10,
             "maxValue": 65535,
             "defaultValue": 30,
+            "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true

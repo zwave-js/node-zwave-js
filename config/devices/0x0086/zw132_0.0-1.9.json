@@ -228,6 +228,7 @@
             "minValue": 0,
             "maxValue": 60000,
             "defaultValue": 25,
+            "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
