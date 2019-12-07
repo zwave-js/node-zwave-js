@@ -570,7 +570,7 @@ export class Driver extends EventEmitter implements IDriver {
 		process.removeListener("uncaughtException", this._cleanupHandler);
 		// the serialport must be closed in any case
 		if (this.serial != undefined) {
-			this.serial.close();
+			if (this.serial.isOpen) this.serial.close();
 			this.serial = undefined;
 		}
 	}
