@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* The serial port will now only be closed if it is already open. This causes less errors to be thrown when opening the port fails.
+
 ## 2.1.0 (2019-12-01)
 ### Features
 * Added support for `Meter CC`
