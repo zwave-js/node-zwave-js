@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.1.1 (2019-12-07)
 ### Bugfixes
 * The serial port will now only be closed if it is already open. This causes less errors to be thrown when opening the port fails.
 
