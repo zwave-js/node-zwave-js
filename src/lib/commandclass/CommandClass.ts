@@ -649,8 +649,12 @@ export class CommandClass {
 					propertyKey: val.propertyKey,
 				},
 				deserializeCacheValue(val.value),
-				// Don't emit the added/updated events, as this will spam applications with untranslated events
-				{ noEvent: true },
+				{
+					// Don't emit the added/updated events, as this will spam applications with untranslated events
+					noEvent: true,
+					// Don't throw when there is an invalid Value ID in the cache
+					noThrow: true,
+				},
 			);
 		}
 	}
@@ -667,8 +671,12 @@ export class CommandClass {
 					propertyKey: meta.propertyKey,
 				},
 				meta.metadata,
-				// Don't emit the added/updated events, as this will spam applications with untranslated events
-				{ noEvent: true },
+				{
+					// Don't emit the added/updated events, as this will spam applications with untranslated events
+					noEvent: true,
+					// Don't throw when there is an invalid Value ID in the cache
+					noThrow: true,
+				},
 			);
 		}
 	}

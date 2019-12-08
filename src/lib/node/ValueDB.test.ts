@@ -1,4 +1,6 @@
+import { assertZWaveError } from "../../../test/util";
 import { CommandClasses } from "../commandclass/CommandClasses";
+import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { ValueMetadata } from "../values/Metadata";
 import { ValueDB, ValueID } from "./ValueDB";
 
@@ -588,6 +590,108 @@ describe("lib/node/ValueDB => ", () => {
 			it("The callback arg should contain the new metadata", () => {
 				expect(cbArg.metadata).toBe(ValueMetadata.Any);
 			});
+		});
+	});
+
+	describe("invalid value IDs should cause an error to be thrown", () => {
+		const invalidValueIDs = [
+			// missing required properties
+			{ commandClass: undefined, property: "test" },
+			{ commandClass: 1, property: undefined },
+			// wrong type
+			{ commandClass: "1", property: 5, propertyKey: 7, endpoint: 1 },
+			{ commandClass: 1, property: true, propertyKey: 7, endpoint: 1 },
+			{ commandClass: 1, property: 5, propertyKey: false, endpoint: 1 },
+			{ commandClass: 1, property: 5, propertyKey: 7, endpoint: "5" },
+		];
+		it("getValue()", () => {
+			for (const valueId of invalidValueIDs) {
+				assertZWaveError(() => valueDB.getValue(valueId as any), {
+					errorCode: ZWaveErrorCodes.Argument_Invalid,
+				});
+			}
+		});
+
+		it("setValue()", () => {
+			for (const valueId of invalidValueIDs) {
+				assertZWaveError(() => valueDB.setValue(valueId as any, 0), {
+					errorCode: ZWaveErrorCodes.Argument_Invalid,
+				});
+			}
+		});
+
+		it("hasValue()", () => {
+			for (const valueId of invalidValueIDs) {
+				assertZWaveError(() => valueDB.hasValue(valueId as any), {
+					errorCode: ZWaveErrorCodes.Argument_Invalid,
+				});
+			}
+		});
+
+		it("removeValue()", () => {
+			for (const valueId of invalidValueIDs) {
+				assertZWaveError(() => valueDB.removeValue(valueId as any), {
+					errorCode: ZWaveErrorCodes.Argument_Invalid,
+				});
+			}
+		});
+
+		it("getMetadata()", () => {
+			for (const valueId of invalidValueIDs) {
+				assertZWaveError(() => valueDB.getMetadata(valueId as any), {
+					errorCode: ZWaveErrorCodes.Argument_Invalid,
+				});
+			}
+		});
+
+		it("setMetadata()", () => {
+			for (const valueId of invalidValueIDs) {
+				assertZWaveError(
+					() => valueDB.setMetadata(valueId as any, {} as any),
+					{
+						errorCode: ZWaveErrorCodes.Argument_Invalid,
+					},
+				);
+			}
+		});
+
+		it("hasMetadata()", () => {
+			for (const valueId of invalidValueIDs) {
+				assertZWaveError(() => valueDB.hasMetadata(valueId as any), {
+					errorCode: ZWaveErrorCodes.Argument_Invalid,
+				});
+			}
+		});
+	});
+
+	describe(`invalid value IDs should be ignored by the setXYZ methods when the "noThrow" parameter is true`, () => {
+		const invalidValueIDs = [
+			// missing required properties
+			{ commandClass: undefined, property: "test" },
+			{ commandClass: 1, property: undefined },
+			// wrong type
+			{ commandClass: "1", property: 5, propertyKey: 7, endpoint: 1 },
+			{ commandClass: 1, property: true, propertyKey: 7, endpoint: 1 },
+			{ commandClass: 1, property: 5, propertyKey: false, endpoint: 1 },
+			{ commandClass: 1, property: 5, propertyKey: 7, endpoint: "5" },
+		];
+
+		it("setValue()", () => {
+			for (const valueId of invalidValueIDs) {
+				expect(() =>
+					valueDB.setValue(valueId as any, 0, { noThrow: true }),
+				).not.toThrow();
+			}
+		});
+
+		it("setMetadata()", () => {
+			for (const valueId of invalidValueIDs) {
+				expect(() =>
+					valueDB.setMetadata(valueId as any, {} as any, {
+						noThrow: true,
+					}),
+				).not.toThrow();
+			}
 		});
 	});
 });
