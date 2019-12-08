@@ -933,6 +933,22 @@ version:               ${this.version}`;
 		if (!this.isAwake()) {
 			this.setAwake(true);
 		}
+
+		// (GH#398) If there was no lifeline configured, we assume that the controller does not receive updates from the node
+		log.driver.print(
+			`NIF received.
+  interview complete: ${this.interviewStage === InterviewStage.Complete}
+  supports Z-Wave+:   ${this.supportsCC(CommandClasses["Z-Wave Plus Info"])}
+  has lifeline:       ${this.valueDB.getValue(getHasLifelineValueId())}`,
+			"verbose",
+		);
+		if (
+			this.interviewStage === InterviewStage.Complete &&
+			!this.supportsCC(CommandClasses["Z-Wave Plus Info"]) &&
+			!this.valueDB.getValue(getHasLifelineValueId())
+		) {
+			this.refreshValues();
+		}
 	}
 
 	/**
@@ -1468,18 +1484,7 @@ version:               ${this.version}`;
 	 */
 	public setAwake(awake: boolean): void {
 		if (!this.supportsCC(CommandClasses["Wake Up"])) return;
-		if (awake !== this.isAwake()) {
-			WakeUpCC.setAwake(this, awake);
-			if (
-				awake &&
-				this.interviewStage === InterviewStage.Complete &&
-				!this.supportsCC(CommandClasses["Z-Wave Plus Info"]) &&
-				!this.valueDB.getValue(getHasLifelineValueId())
-			) {
-				// (GH#398) If there was no lifeline configured, we assume that the controller does not receive updates from the node
-				this.refreshValues();
-			}
-		}
+		WakeUpCC.setAwake(this, awake);
 	}
 
 	/** Returns whether the node is currently assumed awake */
