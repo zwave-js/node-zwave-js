@@ -663,4 +663,35 @@ describe("lib/node/ValueDB => ", () => {
 			}
 		});
 	});
+
+	describe(`invalid value IDs should be ignored by the setXYZ methods when the "noThrow" parameter is true`, () => {
+		const invalidValueIDs = [
+			// missing required properties
+			{ commandClass: undefined, property: "test" },
+			{ commandClass: 1, property: undefined },
+			// wrong type
+			{ commandClass: "1", property: 5, propertyKey: 7, endpoint: 1 },
+			{ commandClass: 1, property: true, propertyKey: 7, endpoint: 1 },
+			{ commandClass: 1, property: 5, propertyKey: false, endpoint: 1 },
+			{ commandClass: 1, property: 5, propertyKey: 7, endpoint: "5" },
+		];
+
+		it("setValue()", () => {
+			for (const valueId of invalidValueIDs) {
+				expect(() =>
+					valueDB.setValue(valueId as any, 0, { noThrow: true }),
+				).not.toThrow();
+			}
+		});
+
+		it("setMetadata()", () => {
+			for (const valueId of invalidValueIDs) {
+				expect(() =>
+					valueDB.setMetadata(valueId as any, {} as any, {
+						noThrow: true,
+					}),
+				).not.toThrow();
+			}
+		});
+	});
 });

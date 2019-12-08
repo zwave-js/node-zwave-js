@@ -133,7 +133,20 @@ export class ValueDB extends EventEmitter {
 			...valueId,
 			newValue: value,
 		};
-		const dbKey: string = valueIdToString(valueId);
+		let dbKey: string;
+		try {
+			dbKey = valueIdToString(valueId);
+		} catch (e) {
+			if (
+				e instanceof ZWaveError &&
+				e.code === ZWaveErrorCodes.Argument_Invalid &&
+				options.noThrow === true
+			) {
+				// ignore invalid value IDs
+				return;
+			}
+			throw e;
+		}
 
 		let event: string;
 		if (this._db.has(dbKey)) {
@@ -219,7 +232,21 @@ export class ValueDB extends EventEmitter {
 		metadata: ValueMetadata | undefined,
 		options: SetValueOptions = {},
 	): void {
-		const dbKey: string = valueIdToString(valueId);
+		let dbKey: string;
+		try {
+			dbKey = valueIdToString(valueId);
+		} catch (e) {
+			if (
+				e instanceof ZWaveError &&
+				e.code === ZWaveErrorCodes.Argument_Invalid &&
+				options.noThrow === true
+			) {
+				// ignore invalid value IDs
+				return;
+			}
+			throw e;
+		}
+
 		if (metadata) {
 			this._metadata.set(dbKey, metadata);
 		} else {
