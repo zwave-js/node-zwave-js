@@ -1,5 +1,6 @@
 import { EventEmitter } from "events";
 import { CommandClasses } from "../commandclass/CommandClasses";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { ValueMetadata } from "../values/Metadata";
 
 /** Uniquely identifies to which CC, endpoint and property a value belongs to */
@@ -40,6 +41,40 @@ interface ValueDBEventCallbacks {
 
 type ValueDBEvents = Extract<keyof ValueDBEventCallbacks, string>;
 
+export function isValueID(param: any): param is ValueID {
+	// commandClass is mandatory and must be numeric
+	if (typeof param.commandClass !== "number") return false;
+	// property is mandatory and must be a number or string
+	if (
+		typeof param.property !== "number" &&
+		typeof param.property !== "string"
+	) {
+		return false;
+	}
+	// propertyKey is optional and must be a number or string
+	if (
+		param.propertyKey != undefined &&
+		typeof param.propertyKey !== "number" &&
+		typeof param.propertyKey !== "string"
+	) {
+		return false;
+	}
+	// endpoint is optional and must be a number
+	if (param.endpoint != undefined && typeof param.endpoint !== "number") {
+		return false;
+	}
+	return true;
+}
+
+export function assertValueID(param: any): asserts param is ValueID {
+	if (!isValueID(param)) {
+		throw new ZWaveError(
+			`Invalid ValueID passed!`,
+			ZWaveErrorCodes.Argument_Invalid,
+		);
+	}
+}
+
 export interface ValueDB {
 	on<TEvent extends ValueDBEvents>(
 		event: TEvent,
@@ -56,12 +91,13 @@ export interface ValueDB {
 	removeAllListeners(event?: ValueDBEvents): this;
 }
 
-export function valueIdToString({
-	commandClass,
-	endpoint,
-	property,
-	propertyKey,
-}: ValueID): string {
+export function valueIdToString(valueID: ValueID): string {
+	// valueIdToString is used by all other methods of the Value DB.
+	// Since those may be called by unsanitized value IDs, we need
+	// to make sure we have a valid value ID at our hands
+	assertValueID(valueID);
+	const { commandClass, endpoint, property, propertyKey } = valueID;
+
 	const jsonKey: Record<string, unknown> = {
 		commandClass,
 		endpoint: endpoint ?? 0,
@@ -74,6 +110,8 @@ export function valueIdToString({
 export interface SetValueOptions {
 	/** When this is true, no event will be emitted for the value change */
 	noEvent?: boolean;
+	/** When this is true,  */
+	noThrow?: boolean;
 }
 
 /**
