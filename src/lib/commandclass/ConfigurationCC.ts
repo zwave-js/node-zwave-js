@@ -183,7 +183,9 @@ export class ConfigurationCCAPI extends CCAPI {
 		await this.set(property, targetValue, (valueSize || 1) as any);
 
 		// Refresh the current value and ignore potential timeouts
-		void this.get(property).catch(() => {});
+		void this.get(property).catch(() => {
+			/* ignore */
+		});
 	};
 
 	/**
