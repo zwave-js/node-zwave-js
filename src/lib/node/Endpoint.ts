@@ -255,51 +255,55 @@ export class Endpoint {
 
 	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();
 	private _commandClassAPIsProxy = new Proxy(this._commandClassAPIs, {
-		get: (target, ccNameOrId: string) => {
+		get: (target, ccNameOrId: string | symbol) => {
 			// Avoid ultra-weird error messages during testing
-			if (process.env.NODE_ENV === "test") {
-				if (
-					// wotan-disable-next-line
-					typeof ccNameOrId === "string" &&
-					(ccNameOrId === "$$typeof" ||
-						ccNameOrId === "constructor" ||
-						ccNameOrId.includes("@@__IMMUTABLE"))
-				) {
-					return undefined;
-				}
-				// @ts-ignore
-				if (ccNameOrId === Symbol.toStringTag) return "[object Object]";
-			}
-			// Allow access to the iterator symbol
-			if ((ccNameOrId as any) === Symbol.iterator) {
-				return this.commandClassesIterator;
+			if (
+				process.env.NODE_ENV === "test" &&
+				typeof ccNameOrId === "string" &&
+				(ccNameOrId === "$$typeof" ||
+					ccNameOrId === "constructor" ||
+					ccNameOrId.includes("@@__IMMUTABLE"))
+			) {
+				return undefined;
 			}
 
-			let ccId: CommandClasses | undefined;
-			// The command classes are exposed to library users by their name or the ID
-			if (/\d+/.test(ccNameOrId)) {
-				// Since this is a property accessor, ccNameOrID is passed as a string,
-				// even when it was a number (CommandClasses)
-				ccId = +ccNameOrId;
+			if (typeof ccNameOrId === "symbol") {
+				// Allow access to the iterator symbol
+				if (ccNameOrId === Symbol.iterator) {
+					return this.commandClassesIterator;
+				} else if (ccNameOrId === Symbol.toStringTag) {
+					return "[object Object]";
+				}
+				// ignore all other symbols
+				return undefined;
 			} else {
-				// If a name was given, retrieve the corresponding ID
-				ccId = (CommandClasses[ccNameOrId as any] as unknown) as
-					| CommandClasses
-					| undefined;
-				if (ccId == undefined) {
-					throw new ZWaveError(
-						`Command Class ${ccNameOrId} is not implemented! If you are sure that the name/id is correct, consider opening an issue at https://github.com/AlCalzone/node-zwave-js`,
-						ZWaveErrorCodes.CC_NotImplemented,
-					);
+				// typeof ccNameOrId === "string"
+				let ccId: CommandClasses | undefined;
+				// The command classes are exposed to library users by their name or the ID
+				if (/\d+/.test(ccNameOrId)) {
+					// Since this is a property accessor, ccNameOrID is passed as a string,
+					// even when it was a number (CommandClasses)
+					ccId = +ccNameOrId;
+				} else {
+					// If a name was given, retrieve the corresponding ID
+					ccId = (CommandClasses[ccNameOrId as any] as unknown) as
+						| CommandClasses
+						| undefined;
+					if (ccId == undefined) {
+						throw new ZWaveError(
+							`Command Class ${ccNameOrId} is not implemented! If you are sure that the name/id is correct, consider opening an issue at https://github.com/AlCalzone/node-zwave-js`,
+							ZWaveErrorCodes.CC_NotImplemented,
+						);
+					}
 				}
-			}
 
-			// When accessing a CC API for the first time, we need to create it
-			if (!target.has(ccId)) {
-				const api = this.createAPI(ccId);
-				target.set(ccId, api);
+				// When accessing a CC API for the first time, we need to create it
+				if (!target.has(ccId)) {
+					const api = this.createAPI(ccId);
+					target.set(ccId, api);
+				}
+				return target.get(ccId);
 			}
-			return target.get(ccId);
 		},
 	});
 
