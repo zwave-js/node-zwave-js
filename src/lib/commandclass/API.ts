@@ -132,6 +132,7 @@ export interface CCAPIs {
 	"Central Scene": import("./CentralSceneCC").CentralSceneCCAPI;
 	"Climate Control Schedule": import("./ClimateControlScheduleCC").ClimateControlScheduleCCAPI;
 	Configuration: import("./ConfigurationCC").ConfigurationCCAPI;
+	Indicator: import("./IndicatorCC").IndicatorCCAPI;
 	Language: import("./LanguageCC").LanguageCCAPI;
 	"Manufacturer Proprietary": import("./ManufacturerProprietaryCC").ManufacturerProprietaryCCAPI;
 	"Manufacturer Specific": import("./ManufacturerSpecificCC").ManufacturerSpecificCCAPI;
