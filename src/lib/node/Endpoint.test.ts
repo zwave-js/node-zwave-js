@@ -74,6 +74,20 @@ describe("lib/node/Endpoint", () => {
 				// WakeUpCCAPI is not supported (only controlled), so no API!
 			]);
 		});
+
+		it("returns [object Object] when turned into a string", () => {
+			const node = new ZWaveNode(2, fakeDriver, undefined, []);
+			expect((node.commandClasses as any)[Symbol.toStringTag]).toBe(
+				"[object Object]",
+			);
+		});
+
+		it("returns undefined for other symbol properties", () => {
+			const node = new ZWaveNode(2, fakeDriver, undefined, []);
+			expect(
+				(node.commandClasses as any)[Symbol.unscopables],
+			).toBeUndefined();
+		});
 	});
 
 	describe("createCCInstance()", () => {
