@@ -6,6 +6,7 @@ import {
 	DeviceConfig,
 	loadDeviceIndexInternal,
 } from "../src/lib/config/Devices";
+import { loadIndicatorsInternal } from "../src/lib/config/Indicators";
 import { loadManufacturersInternal } from "../src/lib/config/Manufacturers";
 import { loadNotificationsInternal } from "../src/lib/config/Notifications";
 import {
@@ -25,6 +26,11 @@ async function lintNotifications(): Promise<void> {
 
 async function lintManufacturers(): Promise<void> {
 	await loadManufacturersInternal();
+	// TODO: Validate that the file is semantically correct
+}
+
+async function lintIndicators(): Promise<void> {
+	await loadIndicatorsInternal();
 	// TODO: Validate that the file is semantically correct
 }
 
@@ -351,6 +357,7 @@ Promise.resolve()
 	.then(lintNotifications)
 	.then(lintNamedScales)
 	.then(lintSensorTypes)
+	.then(lintIndicators)
 	.then(() => {
 		console.log();
 		console.log(green("The config files are valid!"));

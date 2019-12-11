@@ -1,0 +1,90 @@
+// Z-Wave indicator definitions
+// based on SDS14220, version 2019-05-06
+{
+	"indicators": {
+		"0x01": "Armed",
+		"0x02": "Not armed / disarmed",
+		"0x03": "Ready",
+		"0x04": "Fault",
+		"0x05": "Busy",
+		"0x06": "Enter ID",
+		"0x07": "Enter PIN",
+		"0x08": "Code Accepted",
+		"0x09": "Code not accepted",
+		"0x0A": "Armed Stay",
+		"0x0B": "Armed Away",
+		"0x0C": "Alarming",
+		"0x0D": "Alarming: Burglar",
+		"0x0E": "Alarming: Smoke / Fire",
+		"0x0F": "Alarming: Carbon Monoxide",
+		"0x10": "Bypass challenge",
+		"0x11": "Entry Delay",
+		"0x12": "Exit Delay",
+		"0x20": "Zone 1 armed",
+		"0x21": "Zone 2 armed",
+		"0x22": "Zone 3 armed",
+		"0x23": "Zone 4 armed",
+		"0x24": "Zone 5 armed",
+		"0x25": "Zone 6 armed",
+		"0x30": "LCD backlight",
+		"0x40": "Button backlight letters",
+		"0x41": "Button backlight digits",
+		"0x42": "Button backlight command",
+		"0x43": "Button 1 indication",
+		"0x44": "Button 2 indication",
+		"0x45": "Button 3 indication",
+		"0x46": "Button 4 indication",
+		"0x47": "Button 5 indication",
+		"0x48": "Button 6 indication",
+		"0x49": "Button 7 indication",
+		"0x4A": "Button 8 indication",
+		"0x4B": "Button 9 indication",
+		"0x4C": "Button 10 indication",
+		"0x4D": "Button 11 indication",
+		"0x4E": "Button 12 indication",
+		"0x50": "Node Identify",
+		"0xF0": "Buzzer"
+	},
+	"properties": {
+		"0x01": {
+			"label": "Multilevel"
+		},
+		"0x02": {
+			"label": "Binary"
+		},
+		"0x03": {
+			"label": "On/Off Period: Duration",
+			"description": "Sets the duration of an on/off period in 1/10th seconds. Must be set together with \"On/Off Cycle Count\""
+		},
+		"0x04": {
+			"label": "On/Off Cycle Count",
+			"description": "Sets the number of on/off periods. 0xff means infinite. Must be set together with \"On/Off Period duration\""
+		},
+		"0x05": {
+			"label": "On/Off Period: On time",
+			"description": "This property is used to set the length of the On time during an On/Off period. It allows asymetic On/Off periods. The value 0x00 MUST represent symmetric On/Off period (On time equal to Off time)"
+		},
+		"0x06": {
+			"label": "Timeout: Minutes",
+			"description": "Turns the indicator of after this amount of minutes. Can be used together with other timeout properties"
+		},
+		"0x07": {
+			"label": "Timeout: Seconds",
+			"description": "Turns the indicator of after this amount of seconds. Can be used together with other timeout properties"
+		},
+		"0x08": {
+			"label": "Timeout: 1/100th seconds",
+			"description": "Turns the indicator of after this amount of 1/100th seconds. Can be used together with other timeout properties"
+		},
+		"0x09": {
+			"label": "Sound level",
+			"description": "This property is used to set the volume of a indicator. 0 means off/mute.",
+			"max": 100
+		},
+		"0x10": {
+			"label": "Low power",
+			"description": "This property MAY be used to by a supporting node advertise that the indicator can continue working in sleep mode.",
+			"readonly": true
+		}
+	}
+}
