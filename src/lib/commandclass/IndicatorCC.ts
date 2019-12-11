@@ -1,3 +1,4 @@
+import { lookupIndicator, lookupProperty } from "../config/Indicators";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
@@ -68,6 +69,34 @@ function getIndicatorValueValueID(
 			endpoint,
 			property: indicatorId,
 			propertyKey: propertyId,
+		};
+	}
+}
+
+/**
+ * Looks up the configured metadata for the given indicator and property
+ */
+function getIndicatorMetadata(
+	indicatorId: number,
+	propertyId: number,
+): ValueMetadata {
+	const label = lookupIndicator(indicatorId);
+	const prop = lookupProperty(propertyId);
+	if (!label && !prop) {
+		return { ...ValueMetadata.UInt8 };
+	} else if (!prop) {
+		return {
+			...ValueMetadata.UInt8,
+			label,
+		};
+	} else {
+		return {
+			...ValueMetadata.UInt8,
+			label: `${label} - ${prop.label}`,
+			description: prop.description,
+			min: prop.min,
+			max: prop.max,
+			readable: !prop.readonly,
 		};
 	}
 }
@@ -185,7 +214,9 @@ export class IndicatorCCAPI extends CCAPI {
 		};
 	}
 
-	/** Instructs the node to identify itself */
+	/**
+	 * Instructs the node to identify itself. Available starting with V3 of this CC.
+	 */
 	public async identify(): Promise<void> {
 		if (this.version <= 3) {
 			throw new ZWaveError(
@@ -293,6 +324,31 @@ export class IndicatorCC extends CommandClass {
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
+	}
+
+	public translatePropertyKey(
+		property: string | number,
+		propertyKey?: string | number,
+	): string | undefined {
+		if (property === "value") {
+			// CC version 1 only has a single value that doesn't need to be translated
+			return undefined;
+		} else if (typeof property === "number") {
+			const label = lookupIndicator(property);
+			if (label) return label;
+		}
+		return super.translateProperty(property, propertyKey);
+	}
+
+	public translateProperty(
+		property: string | number,
+		propertyKey?: string | number,
+	): string {
+		if (typeof property === "number" && typeof propertyKey === "number") {
+			const prop = lookupProperty(property);
+			if (prop) return prop.label;
+		}
+		return super.translateProperty(property, propertyKey);
 	}
 }
 
@@ -412,9 +468,10 @@ export class IndicatorCCReport extends IndicatorCC {
 					value.indicatorId,
 					value.propertyId,
 				);
-				valueDB.setMetadata(valueId, {
-					...ValueMetadata.UInt8,
-				});
+				valueDB.setMetadata(
+					valueId,
+					getIndicatorMetadata(value.indicatorId, value.propertyId),
+				);
 				valueDB.setValue(valueId, this.value);
 			}
 		}
