@@ -4,6 +4,14 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Accessing a node's or endpoint's `commandClasses` property with `Symbol`s no longer causes a crash
+* Revised querying logic for devices without Z-Wave+ or Lifeline associations
+
+### Features:
+* Added support for `Indicator CC`
+
 ## 2.1.1 (2019-12-07)
 ### Bugfixes
 * The serial port will now only be closed if it is already open. This causes less errors to be thrown when opening the port fails.
