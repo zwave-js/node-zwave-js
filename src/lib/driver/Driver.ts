@@ -17,6 +17,7 @@ import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { loadDeviceIndex } from "../config/Devices";
+import { loadIndicators } from "../config/Indicators";
 import { loadManufacturers } from "../config/Manufacturers";
 import { loadMeters } from "../config/Meters";
 import { loadNotifications } from "../config/Notifications";
@@ -270,6 +271,7 @@ export class Driver extends EventEmitter implements IDriver {
 					await loadNamedScales();
 					await loadSensorTypes();
 					await loadMeters();
+					await loadIndicators();
 
 					log.driver.print("beginning interview...");
 					await this.initializeControllerAndNodes();
