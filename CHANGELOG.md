@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.2.0 (2019-12-11)
 ### Bugfixes
 * Accessing a node's or endpoint's `commandClasses` property with `Symbol`s no longer causes a crash
 * Revised querying logic for devices without Z-Wave+ or Lifeline associations
