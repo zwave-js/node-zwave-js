@@ -4,6 +4,11 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Removed deadlocks that happened when stopping the inclusion or exclusion process
+* The start and stop of an in- or exclusion process is now correctly announced using the `inclusion started`, `inclusion stopped`, `exclusion started` and `exclusion stopped` events.
+
 ## 2.2.0 (2019-12-11)
 ### Bugfixes
 * Accessing a node's or endpoint's `commandClasses` property with `Symbol`s no longer causes a crash
