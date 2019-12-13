@@ -64,6 +64,10 @@ import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 interface ControllerEventCallbacks {
 	"inclusion failed": () => void;
 	"exclusion failed": () => void;
+	"inclusion started": () => void;
+	"exclusion started": () => void;
+	"inclusion stopped": () => void;
+	"exclusion stopped": () => void;
 	"node added": (node: ZWaveNode) => void;
 	"node removed": (node: ZWaveNode) => void;
 }
@@ -490,13 +494,10 @@ export class ZWaveController extends EventEmitter {
 		return this._beginInclusionPromise;
 	}
 
-	/**
-	 * Stops an active inclusion process. Resolves to true when the controller leaves inclusion mode,
-	 * and false if the inclusion was not active.
-	 */
-	public async stopInclusion(): Promise<boolean> {
+	/** Is used internally to stop an active inclusion process without creating deadlocks */
+	private async stopInclusionInternal(): Promise<void> {
 		// don't stop it twice
-		if (!this._inclusionActive) return false;
+		if (!this._inclusionActive) return;
 		this._inclusionActive = false;
 
 		log.controller.print(`stopping inclusion process...`);
@@ -513,9 +514,25 @@ export class ZWaveController extends EventEmitter {
 			}),
 		);
 
-		const result = await this._stopInclusionPromise;
-		log.controller.print(`the inclusion process was stopped`);
-		return result;
+		// Don't await the promise or we create a deadlock
+		void this._stopInclusionPromise.then(() => {
+			log.controller.print(`the inclusion process was stopped`);
+			this.emit("inclusion stopped");
+		});
+	}
+
+	/**
+	 * Stops an active inclusion process. Resolves to true when the controller leaves inclusion mode,
+	 * and false if the inclusion was not active.
+	 */
+	public async stopInclusion(): Promise<boolean> {
+		// don't stop it twice
+		if (!this._inclusionActive) return false;
+		this._inclusionActive = false;
+
+		await this.stopInclusionInternal();
+
+		return this._stopInclusionPromise!;
 	}
 
 	/**
@@ -545,13 +562,10 @@ export class ZWaveController extends EventEmitter {
 		return this._beginInclusionPromise;
 	}
 
-	/**
-	 * Stops an active exclusion process. Resolves to true when the controller leaves exclusion mode,
-	 * and false if the inclusion was not active.
-	 */
-	public async stopExclusion(): Promise<boolean> {
+	/** Is used internally to stop an active inclusion process without creating deadlocks */
+	private async stopExclusionInternal(): Promise<void> {
 		// don't stop it twice
-		if (!this._exclusionActive) return false;
+		if (!this._exclusionActive) return;
 		this._exclusionActive = false;
 
 		log.controller.print(`stopping exclusion process...`);
@@ -568,9 +582,24 @@ export class ZWaveController extends EventEmitter {
 			}),
 		);
 
-		const result = await this._stopInclusionPromise;
-		log.controller.print(`the exclusion process was stopped`);
-		return result;
+		void this._stopInclusionPromise.then(() => {
+			log.controller.print(`the exclusion process was stopped`);
+			this.emit("exclusion stopped");
+		});
+	}
+
+	/**
+	 * Stops an active exclusion process. Resolves to true when the controller leaves exclusion mode,
+	 * and false if the inclusion was not active.
+	 */
+	public async stopExclusion(): Promise<boolean> {
+		// don't stop it twice
+		if (!this._exclusionActive) return false;
+		this._exclusionActive = false;
+
+		await this.stopExclusionInternal();
+
+		return this._stopInclusionPromise!;
 	}
 
 	/**
@@ -653,8 +682,10 @@ export class ZWaveController extends EventEmitter {
 				log.controller.print(
 					`  the controller is now ready to add nodes`,
 				);
-				if (this._beginInclusionPromise != null)
+				if (this._beginInclusionPromise != null) {
 					this._beginInclusionPromise.resolve(true);
+					this.emit("inclusion started");
+				}
 				break;
 			case AddNodeStatus.Failed:
 				// this is called when inclusion could not be started...
@@ -676,7 +707,7 @@ export class ZWaveController extends EventEmitter {
 				}
 				// in any case, stop the inclusion process so we don't accidentally add another node
 				try {
-					await this.stopInclusion();
+					await this.stopInclusionInternal();
 				} catch (e) {
 					/* ok */
 				}
@@ -700,7 +731,7 @@ export class ZWaveController extends EventEmitter {
 				// this is called after a new node is added
 				// stop the inclusion process so we don't accidentally add another node
 				try {
-					await this.stopInclusion();
+					await this.stopInclusionInternal();
 				} catch (e) {
 					/* ok */
 				}
@@ -783,8 +814,10 @@ export class ZWaveController extends EventEmitter {
 				log.controller.print(
 					`  the controller is now ready to remove nodes`,
 				);
-				if (this._beginInclusionPromise != null)
+				if (this._beginInclusionPromise != null) {
 					this._beginInclusionPromise.resolve(true);
+					this.emit("exclusion started");
+				}
 				break;
 
 			case RemoveNodeStatus.Failed:
@@ -807,7 +840,7 @@ export class ZWaveController extends EventEmitter {
 				}
 				// in any case, stop the exclusion process so we don't accidentally remove another node
 				try {
-					await this.stopExclusion();
+					await this.stopExclusionInternal();
 				} catch (e) {
 					/* ok */
 				}
@@ -826,7 +859,7 @@ export class ZWaveController extends EventEmitter {
 				// this is called when the exclusion was completed
 				// stop the exclusion process so we don't accidentally remove another node
 				try {
-					await this.stopExclusion();
+					await this.stopExclusionInternal();
 				} catch (e) {
 					/* ok */
 				}
