@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.2.1 (2019-12-13)
 ### Bugfixes
 * Removed deadlocks that happened when stopping the inclusion or exclusion process
 * The start and stop of an in- or exclusion process is now correctly announced using the `inclusion started`, `inclusion stopped`, `exclusion started` and `exclusion stopped` events.
