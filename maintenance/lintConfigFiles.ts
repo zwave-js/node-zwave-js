@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { distinct } from "alcalzone-shared/arrays";
 import { green, red, white, yellow } from "ansi-colors";
 import { readFile } from "fs-extra";
 import * as path from "path";
@@ -37,10 +38,7 @@ async function lintIndicators(): Promise<void> {
 async function lintDevices(): Promise<void> {
 	const index = (await loadDeviceIndexInternal())!;
 	// Device config files are lazy-loaded, so we need to parse them all
-	const uniqueFiles = index
-		.map(e => e.filename)
-		.filter((filename, index, self) => self.indexOf(filename) === index)
-		.sort();
+	const uniqueFiles = distinct(index.map(e => e.filename)).sort();
 
 	const errors = new Map<string, string[]>();
 	function addError(filename: string, error: string): void {
