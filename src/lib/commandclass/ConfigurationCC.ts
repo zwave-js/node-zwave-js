@@ -475,7 +475,7 @@ export class ConfigurationCC extends CommandClass {
 
 					// Query the current value
 					log.controller.logNode(node.id, {
-						message: `querying parameter #${param} value...`,
+						message: `querying parameter #${param.parameter} value...`,
 						direction: "outbound",
 					});
 					await api.get(param.parameter);
