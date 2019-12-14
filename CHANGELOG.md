@@ -4,6 +4,17 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* Using the env variable `LOGTOFILE=true`, the log output can now be redirected to a file instead of `stdout`.
+
+### Bugfixes
+* Updated `alcalzone-shared` lib to a working version
+* The parameter number during interview of `Configuration CC` is now logged correctly instead of `[object Object]`.
+
+### Changes under the hood
+* Updated several dependencies
+
 ## 2.2.1 (2019-12-13)
 ### Bugfixes
 * Removed deadlocks that happened when stopping the inclusion or exclusion process
@@ -14,7 +25,7 @@
 * Accessing a node's or endpoint's `commandClasses` property with `Symbol`s no longer causes a crash
 * Revised querying logic for devices without Z-Wave+ or Lifeline associations
 
-### Features:
+### Features
 * Added support for `Indicator CC`
 
 ## 2.1.1 (2019-12-07)
