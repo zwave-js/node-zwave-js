@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.3.0 (2019-12-14)
 ### Features
 * Using the env variable `LOGTOFILE=true`, the log output can now be redirected to a file instead of `stdout`.
 
