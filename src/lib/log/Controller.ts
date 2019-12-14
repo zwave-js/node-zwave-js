@@ -9,8 +9,7 @@ import {
 	ValueUpdatedArgs,
 } from "../node/ValueDB";
 import {
-	createConsoleTransport,
-	createLoggerFormat,
+	createLogTransports,
 	DataDirection,
 	getDirectionPrefix,
 	isLoglevelVisible,
@@ -22,12 +21,9 @@ const CONTROLLER_LABEL = "CNTRLR";
 const CONTROLLER_LOGLEVEL = "info";
 const VALUE_LOGLEVEL = "debug";
 
-export const controllerLoggerFormat = createLoggerFormat(CONTROLLER_LABEL);
-
 if (!winston.loggers.has("controller")) {
 	winston.loggers.add("controller", {
-		format: controllerLoggerFormat,
-		transports: [createConsoleTransport()],
+		transports: createLogTransports(CONTROLLER_LABEL),
 	});
 }
 const logger: ZWaveLogger = winston.loggers.get("controller");
