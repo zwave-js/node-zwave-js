@@ -9,7 +9,7 @@ import {
 	ZWaveLogger,
 } from "./shared";
 
-const SERIAL_LABEL = "SERIAL";
+export const SERIAL_LABEL = "SERIAL";
 const SERIAL_LOGLEVEL = "debug";
 
 if (!winston.loggers.has("serial")) {

@@ -5,6 +5,7 @@ import {
 	SpyTransport,
 } from "../../../test/SpyTransport";
 import log from "./index";
+import { REFLECTION_LABEL } from "./Reflection";
 import { restoreSilence } from "./shared";
 
 describe("lib/log/Reflection =>", () => {
@@ -17,7 +18,7 @@ describe("lib/log/Reflection =>", () => {
 		// the loggers are lazy-loaded, so force loading
 		void log.reflection;
 		reflectionLogger = winston.loggers.get("reflection");
-		spyTransport = new SpyTransport();
+		spyTransport = new SpyTransport(REFLECTION_LABEL);
 		// Uncomment this to debug the log outputs manually
 		// wasSilenced = unsilence(reflectionLogger);
 		reflectionLogger.add(spyTransport);

@@ -7,7 +7,7 @@ import {
 	ZWaveLogger,
 } from "./shared";
 
-const REFLECTION_LABEL = "RFLCTN";
+export const REFLECTION_LABEL = "RFLCTN";
 const REFLECTION_LOGLEVEL = "silly";
 
 if (!winston.loggers.has("reflection")) {

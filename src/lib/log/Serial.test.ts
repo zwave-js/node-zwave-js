@@ -3,6 +3,7 @@ import { pseudoRandomBytes } from "crypto";
 import winston from "winston";
 import { assertMessage, SpyTransport } from "../../../test/SpyTransport";
 import log from "./index";
+import { SERIAL_LABEL } from "./Serial";
 import { restoreSilence } from "./shared";
 
 describe("lib/log/Serial =>", () => {
@@ -15,7 +16,7 @@ describe("lib/log/Serial =>", () => {
 		// the loggers are lazy-loaded, so force loading
 		void log.serial;
 		serialLogger = winston.loggers.get("serial");
-		spyTransport = new SpyTransport();
+		spyTransport = new SpyTransport(SERIAL_LABEL);
 		// Uncomment this to debug the log outputs manually
 		// wasSilenced = unsilence(serialLogger);
 		serialLogger.add(spyTransport);

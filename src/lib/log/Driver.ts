@@ -16,7 +16,7 @@ import {
 	ZWaveLogger,
 } from "./shared";
 
-const DRIVER_LABEL = "DRIVER";
+export const DRIVER_LABEL = "DRIVER";
 const DRIVER_LOGLEVEL = "verbose";
 const SENDQUEUE_LOGLEVEL = "silly";
 
