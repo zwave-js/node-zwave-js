@@ -9,8 +9,7 @@ import {
 } from "../message/Constants";
 import { Message, ResponseRole } from "../message/Message";
 import {
-	createConsoleTransport,
-	createLoggerFormat,
+	createLogTransports,
 	getDirectionPrefix,
 	isLoglevelVisible,
 	tagify,
@@ -21,12 +20,9 @@ const DRIVER_LABEL = "DRIVER";
 const DRIVER_LOGLEVEL = "verbose";
 const SENDQUEUE_LOGLEVEL = "silly";
 
-export const driverLoggerFormat = createLoggerFormat(DRIVER_LABEL);
-
 if (!winston.loggers.has("driver")) {
 	winston.loggers.add("driver", {
-		format: driverLoggerFormat,
-		transports: [createConsoleTransport()],
+		transports: createLogTransports(DRIVER_LABEL),
 	});
 }
 const logger: ZWaveLogger = winston.loggers.get("driver");

@@ -1,5 +1,6 @@
 import colors from "ansi-colors";
 import { Format, TransformableInfo, TransformFunction } from "logform";
+import * as path from "path";
 import { configs, MESSAGE } from "triple-beam";
 import winston, { Logger } from "winston";
 import Transport from "winston-transport";
@@ -10,6 +11,13 @@ const loglevels = configs.npm.levels;
 const transportLoglevel =
 	process.env.LOGLEVEL! in loglevels ? process.env.LOGLEVEL! : "debug";
 const transportLoglevelNumeric = loglevels[transportLoglevel];
+
+const logToFile = !!process.env.LOGTOFILE;
+const logFilename = path.join(
+	__dirname,
+	"../../..",
+	`zwave-${process.pid}.log`,
+);
 
 /** An invisible char with length >= 0 */
 // This is necessary to "print" zero spaces for the right padding
@@ -192,14 +200,20 @@ export const logMessagePrinter: Format = {
 };
 
 /** The common logger format for all channels */
-export function createLoggerFormat(channel: string): Format {
-	return combine(
+export function createLoggerFormat(
+	channel: string,
+	colorize: boolean = true,
+): Format {
+	const formats: Format[] = [];
+	formats.push(
 		label({ label: channel }),
 		timestamp({ format: timestampFormat }),
 		logMessageFormatter,
-		colorizer(),
-		logMessagePrinter,
 	);
+	if (colorize) formats.push(colorizer());
+	formats.push(logMessagePrinter);
+
+	return combine(...formats);
 }
 
 /** Wraps an array of strings in square brackets and joins them with spaces */
@@ -233,21 +247,48 @@ export function restoreSilence(
 	}
 }
 
-export function createConsoleTransport(): Transport {
+let hasLoggedTargetFilename = false;
+
+export function createLogTransports(channel: string): Transport[] {
+	const ret: Transport[] = [];
+	if (logToFile) {
+		ret.push(createFileTransport(createLoggerFormat(channel, false)));
+		if (!hasLoggedTargetFilename) {
+			hasLoggedTargetFilename = true;
+			console.log(`Logging to file:
+${logFilename}`);
+		}
+	} else {
+		ret.push(createConsoleTransport(createLoggerFormat(channel)));
+	}
+	return ret;
+}
+
+export function createConsoleTransport(format?: Format): Transport {
 	return new winston.transports.Console({
 		level: transportLoglevel,
 		silent: process.env.NODE_ENV === "test",
+		format,
+	});
+}
+
+export function createFileTransport(format?: Format): Transport {
+	return new winston.transports.File({
+		filename: logFilename,
+		level: transportLoglevel,
+		format,
 	});
 }
 
 const loglevelVisibleCache = new Map<string, boolean>();
 const isTTY = process.stdout.isTTY;
 const isUnitTest = process.env.NODE_ENV === "test";
+
 /** Tests whether a log using the given loglevel will be logged */
 export function isLoglevelVisible(loglevel: string): boolean {
-	// If we are not connected to a TTY (or unit testing), we won't see anything
+	// If we are not connected to a TTY, not unit testing and not logging to a file, we won't see anything
 	if (isUnitTest) return true;
-	if (!isTTY) return false;
+	if (!isTTY && !logToFile) return false;
 
 	if (!loglevelVisibleCache.has(loglevel)) {
 		loglevelVisibleCache.set(
