@@ -79,7 +79,10 @@ jobs:
 
   # Generate coverage reports when the unit tests have succeeded
   coverage:
-    if: contains(github.event.head_commit.message, '[skip ci]') == false
+    # Trigger this step only on pushes, because the job often fails for pull requests
+    if: |
+      contains(github.event.head_commit.message, '[skip ci]') == false &&
+      github.event_name == 'push'
 
     needs: [unit-tests]
 
