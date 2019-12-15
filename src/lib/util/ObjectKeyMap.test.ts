@@ -3,7 +3,10 @@ import { ObjectKeyMap } from "./ObjectKeyMap";
 
 describe("lib/util/ObjectKeyMap", () => {
 	describe("get()", () => {
-		const map = new ObjectKeyMap<["property", "propertyKey"], number>();
+		const map = new ObjectKeyMap<
+			{ property: string; propertyKey: string },
+			number
+		>();
 		beforeAll(() => {
 			map.set(
 				{
@@ -54,7 +57,10 @@ describe("lib/util/ObjectKeyMap", () => {
 	});
 
 	describe("has()", () => {
-		const map = new ObjectKeyMap<["property", "propertyKey"], number>();
+		const map = new ObjectKeyMap<
+			{ property: string; propertyKey: string },
+			number
+		>();
 		beforeAll(() => {
 			map.set(
 				{
@@ -99,7 +105,10 @@ describe("lib/util/ObjectKeyMap", () => {
 	});
 
 	describe("set()", () => {
-		const map = new ObjectKeyMap<["property", "propertyKey"], number>();
+		const map = new ObjectKeyMap<
+			{ property: string; propertyKey: string },
+			number
+		>();
 
 		it("should overwrite previous values", () => {
 			map.set(
@@ -127,7 +136,10 @@ describe("lib/util/ObjectKeyMap", () => {
 	});
 
 	describe("values()", () => {
-		const map = new ObjectKeyMap<["property", "propertyKey"], number>();
+		const map = new ObjectKeyMap<
+			{ property: string; propertyKey: string },
+			number
+		>();
 		const entries = [
 			[
 				{
@@ -157,7 +169,10 @@ describe("lib/util/ObjectKeyMap", () => {
 	});
 
 	describe("keys()", () => {
-		const map = new ObjectKeyMap<["property", "propertyKey"], number>();
+		const map = new ObjectKeyMap<
+			{ property: string; propertyKey: string },
+			number
+		>();
 		const entries = [
 			[
 				{
@@ -183,6 +198,21 @@ describe("lib/util/ObjectKeyMap", () => {
 
 		it("works like on the original Map class", () => {
 			expect([...map.keys()]).toEqual(entries.map(([k]) => k));
+		});
+	});
+
+	describe("required key properties", () => {
+		it("should automatically be filled in", () => {
+			const map = new ObjectKeyMap<
+				{ property: string; propertyKey?: string },
+				number
+			>(undefined, { propertyKey: "5" });
+			map.set({ property: "foo" }, 1);
+			map.set({ property: "foo", propertyKey: "1" }, 2);
+			expect([...map.keys()]).toEqual([
+				{ property: "foo", propertyKey: "5" },
+				{ property: "foo", propertyKey: "1" },
+			]);
 		});
 	});
 });

@@ -1,16 +1,21 @@
 import { composeObject, entries } from "alcalzone-shared/objects";
 
 export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
-	public constructor(entries?: [TKey, TValue][]) {
+	public constructor(
+		entries?: [TKey, TValue][],
+		defaultKeyProps?: Partial<TKey>,
+	) {
 		this._map = new Map();
 		if (entries?.length) {
 			for (const [key, value] of entries) {
 				this.set(key, value);
 			}
 		}
+		this.defaultKeyProps = defaultKeyProps;
 	}
 
 	private _map: Map<string, TValue>;
+	private defaultKeyProps: Partial<TKey> | undefined;
 
 	public has(key: TKey): boolean {
 		return this._map.has(this.keyToString(key));
@@ -34,6 +39,14 @@ export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
 
 	public get size(): number {
 		return this._map.size;
+	}
+
+	public forEach(
+		callbackfn: (value: TValue, key: TKey, map: this) => void,
+	): void {
+		this._map.forEach((value, keyAsString) => {
+			callbackfn(value, JSON.parse(keyAsString), this);
+		});
 	}
 
 	public entries(): IterableIterator<[TKey, TValue]> {
@@ -67,8 +80,14 @@ export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
 	}
 
 	private keyToString(key: TKey): string {
+		const filledKey = { ...key };
+		if (this.defaultKeyProps) {
+			for (const [required, def] of entries(this.defaultKeyProps)) {
+				if (!(required in filledKey)) filledKey[required as any] = def;
+			}
+		}
 		const _key = composeObject(
-			entries(key)
+			entries(filledKey)
 				.filter(([, value]) => value != undefined)
 				.sort(([keyA], [keyB]) =>
 					keyA > keyB ? 1 : keyA < keyB ? -1 : 0,
