@@ -469,9 +469,15 @@ export class ConfigurationCC extends CommandClass {
 			const paramInfo = node.deviceConfig?.paramInformation;
 			if (paramInfo?.size) {
 				// Query all values
+				// Because partial params share the same parameter number,
+				// we need to remember which ones we have already queried.
+				const alreadyQueried = new Set<number>();
 				for (const param of paramInfo.keys()) {
 					// No need to query writeonly params
 					if (paramInfo.get(param)!.writeOnly) continue;
+					// Don't double-query params
+					if (alreadyQueried.has(param.parameter)) continue;
+					alreadyQueried.add(param.parameter);
 
 					// Query the current value
 					log.controller.logNode(node.id, {
