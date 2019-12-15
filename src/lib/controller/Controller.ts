@@ -70,6 +70,8 @@ interface ControllerEventCallbacks {
 	"exclusion stopped": () => void;
 	"node added": (node: ZWaveNode) => void;
 	"node removed": (node: ZWaveNode) => void;
+	"heal network progress": (result: ReadonlyMap<number, boolean>) => void;
+	"heal network done": (result: ReadonlyMap<number, boolean>) => void;
 }
 
 type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
@@ -602,19 +604,77 @@ export class ZWaveController extends EventEmitter {
 		return this._stopInclusionPromise!;
 	}
 
+	private _healNetworkActive: boolean = false;
+	private _healNetworkProgress = new Map<number, boolean>();
+
+	/** @deprecated Use `beginHealNetwork` instead */
+	public healNetwork(): boolean {
+		return this.beginHealNetwork();
+	}
+
 	/**
 	 * Requests ALL slave nodes to update their neighbor lists
 	 */
-	public async healNetwork(): Promise<void> {
-		for (const nodeId of this._nodes.keys()) {
-			if (nodeId !== this._ownNodeId) {
-				try {
-					await this.healNode(nodeId);
-				} catch (e) {
-					// we don't care for now
-				}
+	public beginHealNetwork(): boolean {
+		// Don't start the process twice
+		if (this._healNetworkActive) return false;
+		this._healNetworkActive = true;
+
+		log.controller.print(`starting network heal...`);
+
+		// Reset all nodes to "not healed"
+		this._healNetworkProgress.clear();
+		for (const key of this._nodes.keys()) {
+			if (key !== this._ownNodeId) {
+				this._healNetworkProgress.set(key, false);
 			}
 		}
+
+		// Do the heal process in the background
+		(async () => {
+			const tasks = [...this._nodes.keys()]
+				.filter(nodeId => nodeId !== this._ownNodeId)
+				.map(async nodeId => {
+					// await the heal process for each node and treat errors as a non-successful heal
+					const result = await this.healNode(nodeId).catch(
+						() => false,
+					);
+					if (!this._healNetworkActive) return;
+
+					// Track the success in a map
+					this._healNetworkProgress.set(nodeId, result);
+					// Notify listeners about the progress
+					this.emit(
+						"heal network progress",
+						new Map(this._healNetworkProgress),
+					);
+				});
+			await Promise.all(tasks);
+			// Only emit the done event when the process wasn't stopped in the meantime
+			if (this._healNetworkActive) {
+				this.emit(
+					"heal network done",
+					new Map(this._healNetworkProgress),
+				);
+			}
+			// We're done!
+			this._healNetworkActive = false;
+		})();
+
+		return true;
+	}
+
+	/**
+	 * Stops an network healing process. Resolves false if the process was not active, true otherwise.
+	 */
+	public async stopHealNetwork(): Promise<boolean> {
+		// don't stop it twice
+		if (!this._healNetworkActive) return false;
+		this._healNetworkActive = false;
+
+		log.controller.print(`stopping network heal...`);
+
+		return true;
 	}
 
 	/**
@@ -633,6 +693,9 @@ export class ZWaveController extends EventEmitter {
 					nodeId,
 				}),
 			);
+			// If the process was stopped before the node could respond, cancel it
+			if (!this._healNetworkActive) return false;
+
 			if (resp.updateStatus === NodeNeighborUpdateStatus.UpdateDone) {
 				log.controller.logNode(nodeId, {
 					message: "neighbor list refreshed...",
