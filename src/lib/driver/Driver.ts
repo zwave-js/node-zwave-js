@@ -51,6 +51,18 @@ import { num2hex } from "../util/strings";
 import { DriverEventCallbacks, DriverEvents, IDriver } from "./IDriver";
 import { Transaction } from "./Transaction";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { version: libVersion } = require("../../../package.json");
+// This is made with cfonts:
+const libNameString = `
+███████╗ ██╗    ██╗  █████╗  ██╗   ██╗ ███████╗             ██╗ ███████╗
+╚══███╔╝ ██║    ██║ ██╔══██╗ ██║   ██║ ██╔════╝             ██║ ██╔════╝
+  ███╔╝  ██║ █╗ ██║ ███████║ ██║   ██║ █████╗   █████╗      ██║ ███████╗
+ ███╔╝   ██║███╗██║ ██╔══██║ ╚██╗ ██╔╝ ██╔══╝   ╚════╝ ██   ██║ ╚════██║
+███████╗ ╚███╔███╔╝ ██║  ██║  ╚████╔╝  ███████╗        ╚█████╔╝ ███████║
+╚══════╝  ╚══╝╚══╝  ╚═╝  ╚═╝   ╚═══╝   ╚══════╝         ╚════╝  ╚══════╝
+`;
+
 export interface ZWaveOptions {
 	timeouts: {
 		/** how long to wait for an ACK */
@@ -246,8 +258,14 @@ export class Driver extends EventEmitter implements IDriver {
 
 		const spOpenPromise = createDeferredPromise();
 
-		// Open the serial port
+		// Log which version is running
+		log.driver.print(libNameString, "info");
+		log.driver.print(`version ${libVersion}`, "info");
+		log.driver.print("", "info");
+
 		log.driver.print("starting driver...");
+		// Open the serial port
+		log.driver.print(`opening serial port ${this.port}`);
 		this.serial = new SerialPort(this.port, {
 			autoOpen: false,
 			baudRate: 115200,

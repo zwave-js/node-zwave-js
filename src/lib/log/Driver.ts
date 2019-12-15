@@ -35,7 +35,7 @@ const isSendQueueLogVisible = isLoglevelVisible(SENDQUEUE_LOGLEVEL);
  */
 export function print(
 	message: string,
-	level?: "debug" | "verbose" | "warn" | "error",
+	level?: "debug" | "verbose" | "warn" | "error" | "info",
 ): void {
 	const actualLevel = level || DRIVER_LOGLEVEL;
 	if (!isLoglevelVisible(actualLevel)) return;
