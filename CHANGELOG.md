@@ -4,6 +4,21 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* The log output now contains the version of this library (and a fancy title!)
+* Reworked the `healNetwork` process:
+    * There are now two additional methods: `beginHealNetwork` and `stopHealNetwork`. The original `healNetwork` now simply calls `beginHealNetwork` and is deprecated.
+    * Two additional events (`heal network progress` and `heal network done`) are emitted during the process. The event callback receives a map with the current process: *node id* (`number`) => *heal done* (`boolean`).
+
+### Bugfixes
+* Config parameters are no longer queried multiple times if there are partial config params defined
+* If a ping failed and the node's messages are moved to the wake up queue, the send queue is no longer stalled by the unanswered ping
+* When sending a message to a node that is known to be asleep, the message's priority is automatically set to `Wake Up`.
+
+### Changes under the hood
+* `ValueDB` now uses a `ObjectKeyMap` internally
+
 ## 2.3.0 (2019-12-14)
 ### Features
 * Using the env variable `LOGTOFILE=true`, the log output can now be redirected to a file instead of `stdout`.
