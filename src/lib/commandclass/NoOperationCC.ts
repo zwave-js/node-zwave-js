@@ -1,5 +1,6 @@
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { MessagePriority } from "../message/Constants";
+import { Message } from "../message/Message";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -8,6 +9,7 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
+import { isCommandClassContainer } from "./ICommandClassContainer";
 
 // @noSetValueAPI This CC has no set-type commands
 // @noInterview There's nothing to interview here
@@ -34,4 +36,11 @@ export class NoOperationCCAPI extends CCAPI {
 @implementedVersion(1)
 export class NoOperationCC extends CommandClass {
 	declare ccCommand: undefined;
+}
+
+/** Tests if a given message is a ping */
+export function messageIsPing<T extends Message>(
+	msg: T,
+): msg is T & { command: NoOperationCC } {
+	return isCommandClassContainer(msg) && msg.command instanceof NoOperationCC;
 }

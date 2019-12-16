@@ -14,7 +14,7 @@ import { CommandClasses } from "../commandclass/CommandClasses";
 import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
-import { NoOperationCC } from "../commandclass/NoOperationCC";
+import { messageIsPing } from "../commandclass/NoOperationCC";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { loadDeviceIndex } from "../config/Devices";
 import { loadIndicators } from "../config/Indicators";
@@ -1285,8 +1285,8 @@ ${handlers.length} left`,
 				ZWaveErrorCodes.Driver_NoPriority,
 			);
 		}
-		if (options.supportCheck == undefined) options.supportCheck = true;
 
+		if (options.supportCheck == undefined) options.supportCheck = true;
 		if (
 			options.supportCheck &&
 			this._controller != undefined &&
@@ -1306,6 +1306,13 @@ ${handlers.length} left`,
 			MultiChannelCC.requiresEncapsulation(msg.command)
 		) {
 			msg.command = MultiChannelCC.encapsulate(this, msg.command);
+		}
+
+		// When sending a message to a node that is known to be sleeping,
+		// the priority should be WakeUp, so the message gets deprioritized
+		// in comparison with messages to awake nodes
+		if (isNodeQuery(msg) && msg.getNodeUnsafe()?.isAwake() === false) {
+			options.priority = MessagePriority.WakeUp;
 		}
 
 		// create the transaction and enqueue it
@@ -1438,10 +1445,7 @@ ${handlers.length} left`,
 			const msg = transaction.message;
 			const targetNodeId = msg.getNodeId();
 			if (targetNodeId === nodeId) {
-				if (
-					isCommandClassContainer(msg) &&
-					msg.command instanceof NoOperationCC
-				) {
+				if (messageIsPing(msg)) {
 					pingsToRemove.push(transaction);
 				} else {
 					// Change the priority to WakeUp
@@ -1456,13 +1460,16 @@ ${handlers.length} left`,
 		// This must be done anyways, as removing the items does not change the location of others
 		this.sortSendQueue();
 
-		// Don't forget the current transaction
+		// The current transaction must also be transferred
 		if (this.currentTransaction?.message.getNodeId() === nodeId) {
-			// Change the priority to WakeUp and re-add it to the queue
-			this.currentTransaction.priority = MessagePriority.WakeUp;
-			this.sendQueue.add(this.currentTransaction);
-			// Reset send attempts - we might have already used all of them
-			this.currentTransaction.sendAttempts = 0;
+			// But only if it is not a ping, because that will block the send queue until wakeup
+			if (!messageIsPing(this.currentTransaction.message)) {
+				// Change the priority to WakeUp and re-add it to the queue
+				this.currentTransaction.priority = MessagePriority.WakeUp;
+				this.sendQueue.add(this.currentTransaction);
+				// Reset send attempts - we might have already used all of them
+				this.currentTransaction.sendAttempts = 0;
+			}
 			// "reset" the current transaction to none
 			this.currentTransaction = undefined;
 		}
