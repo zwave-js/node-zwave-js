@@ -4,11 +4,11 @@
 	## __WORK IN PROGRESS__
 -->
 
-## 2.4.0-beta.0 (2019-12-16)
+## __WORK IN PROGRESS__
 ### Features
 * The log output now contains the version of this library (and a fancy title!)
 * Reworked the `healNetwork` process:
-    * There are now two additional methods: `beginHealNetwork` and `stopHealNetwork`. The original `healNetwork` now simply calls `beginHealNetwork` and is deprecated.
+    * There are now two additional methods: `beginHealingNetwork` and `stopHealingNetwork`. The original `healNetwork` now simply calls `beginHealingNetwork` and is deprecated.
     * Two additional events (`heal network progress` and `heal network done`) are emitted during the process. The event callback receives a map with the current process: *node id* (`number`) => *heal done* (`boolean`).
 
 ### Bugfixes

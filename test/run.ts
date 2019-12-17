@@ -35,6 +35,11 @@ const driver = new Driver("COM5").once("driver ready", async () => {
 	// 	supportCheck: false,
 	// });
 	// await driver.hardReset();
+	// await require("alcalzone-shared/async").wait(25000);
+	// console.error();
+	// console.error("HEAL");
+	// console.error();
+	// driver.controller.beginHealingNetwork();
 	// console.error();
 	// console.error("INCLUSION");
 	// console.error();

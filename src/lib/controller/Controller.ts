@@ -609,13 +609,13 @@ export class ZWaveController extends EventEmitter {
 
 	/** @deprecated Use `beginHealNetwork` instead */
 	public healNetwork(): boolean {
-		return this.beginHealNetwork();
+		return this.beginHealingNetwork();
 	}
 
 	/**
 	 * Requests ALL slave nodes to update their neighbor lists
 	 */
-	public beginHealNetwork(): boolean {
+	public beginHealingNetwork(): boolean {
 		// Don't start the process twice
 		if (this._healNetworkActive) return false;
 		this._healNetworkActive = true;
@@ -667,7 +667,7 @@ export class ZWaveController extends EventEmitter {
 	/**
 	 * Stops an network healing process. Resolves false if the process was not active, true otherwise.
 	 */
-	public async stopHealNetwork(): Promise<boolean> {
+	public stopHealingNetwork(): boolean {
 		// don't stop it twice
 		if (!this._healNetworkActive) return false;
 		this._healNetworkActive = false;
