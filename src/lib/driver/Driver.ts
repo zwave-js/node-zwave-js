@@ -404,6 +404,9 @@ export class Driver extends EventEmitter implements IDriver {
 	private onNodeWakeUp(node: IZWaveNode): void {
 		log.controller.logNode(node.id, "The node is now awake.");
 
+		// Start the timeouts after which the node is assumed asleep
+		this.resetNodeAwakeTimeout(this.controller.nodes.get(node.id)!);
+
 		// It *should* not be necessary to restart the node interview here.
 		// When a node that supports wakeup does not respond, pending promises
 		// are not rejected.
@@ -428,7 +431,7 @@ export class Driver extends EventEmitter implements IDriver {
 
 	/** Is called when a node interview is completed */
 	private onNodeInterviewCompleted(node: ZWaveNode): void {
-		this.markNodeForPotentialSleep(node);
+		this.debounceSendNodeToSleep(node);
 	}
 
 	/** This is called when a new node has been added to the network */
@@ -1231,7 +1234,15 @@ ${handlers.length} left`,
 		promise.resolve(response);
 		this.currentTransaction = undefined;
 
-		if (node) this.markNodeForPotentialSleep(node);
+		if (node) {
+			// If the node is not meant to be kept awake, try to send it back to sleep
+			if (!node.keepAwake) {
+				this.debounceSendNodeToSleep(node);
+			}
+			// Also refresh the timeout after which the node is assumed asleep
+			// This is necessary in case sending it to sleep fails
+			this.resetNodeAwakeTimeout(node);
+		}
 		// Resume the send queue
 		if (resumeQueue) {
 			log.driver.print("resuming send queue", "debug");
@@ -1631,30 +1642,58 @@ ${handlers.length} left`,
 	}
 
 	private sendNodeToSleepTimers = new Map<number, NodeJS.Timeout>();
-
-	/** Sends a node to sleep if it has no more messages. DON'T CALL THIS DIRECTLY! */
-	private sendNodeToSleep(node: ZWaveNode): void {
-		this.sendNodeToSleepTimers.delete(node.id);
-		if (!this.hasPendingMessages(node)) {
-			node.sendNoMoreInformation();
-		}
-	}
-
 	/**
 	 * Marks a node for a later sleep command. Every call prolongs the period until the node actually goes to sleep
 	 */
-	private markNodeForPotentialSleep(node: ZWaveNode): void {
+	private debounceSendNodeToSleep(node: ZWaveNode): void {
 		// Delete old timers if any exist
 		if (this.sendNodeToSleepTimers.has(node.id)) {
 			clearTimeout(this.sendNodeToSleepTimers.get(node.id)!);
 		}
+
+		// Sends a node to sleep if it has no more messages.
+		const sendNodeToSleep = (node: ZWaveNode): void => {
+			this.sendNodeToSleepTimers.delete(node.id);
+			if (!this.hasPendingMessages(node)) {
+				node.sendNoMoreInformation();
+			}
+		};
 
 		// If a sleeping node has no messages pending, we may send it back to sleep
 		if (
 			node.supportsCC(CommandClasses["Wake Up"]) &&
 			!this.hasPendingMessages(node)
 		) {
-			setTimeout(() => this.sendNodeToSleep(node), 1000).unref();
+			setTimeout(() => sendNodeToSleep(node), 1000).unref();
+		}
+	}
+
+	private nodeAwakeTimeouts = new Map<number, NodeJS.Timeout>();
+	/**
+	 * A sleeping node will go to sleep 10s after the wake up notification or after the last message has been answered.
+	 * Every call to this method prolongs the period after which the node is assumed asleep
+	 */
+	private resetNodeAwakeTimeout(node: ZWaveNode): void {
+		// Delete old timers if any exist
+		if (this.nodeAwakeTimeouts.has(node.id)) {
+			clearTimeout(this.nodeAwakeTimeouts.get(node.id)!);
+		}
+
+		// Marks a node as (most likely) asleep
+		const markNodeAsAsleep = (node: ZWaveNode): void => {
+			this.nodeAwakeTimeouts.delete(node.id);
+			if (node.isAwake()) {
+				log.driver.print(
+					`The awake timeout for node ${node.id} has elapsed. Assuming it is asleep.`,
+					"verbose",
+				);
+				WakeUpCC.setAwake(node, false);
+			}
+		};
+
+		// If a sleeping node has no messages pending, we may send it back to sleep
+		if (node.supportsCC(CommandClasses["Wake Up"]) && node.isAwake()) {
+			setTimeout(() => markNodeAsAsleep(node), 10000).unref();
 		}
 	}
 }
