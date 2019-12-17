@@ -1,7 +1,6 @@
 import { EventEmitter } from "events";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { ObjectKeyMap } from "../util/ObjectKeyMap";
 import { ValueMetadata } from "../values/Metadata";
 
 /** Uniquely identifies to which CC, endpoint and property a value belongs to */
@@ -119,12 +118,8 @@ export interface SetValueOptions {
  * The value store for a single node
  */
 export class ValueDB extends EventEmitter {
-	private _db = new ObjectKeyMap<ValueID, unknown>(undefined, {
-		endpoint: 0,
-	});
-	private _metadata = new ObjectKeyMap<ValueID, ValueMetadata>(undefined, {
-		endpoint: 0,
-	});
+	private _db = new Map<string, unknown>();
+	private _metadata = new Map<string, ValueMetadata>();
 
 	/**
 	 * Stores a value for a given value id
@@ -138,8 +133,9 @@ export class ValueDB extends EventEmitter {
 			...valueId,
 			newValue: value,
 		};
+		let dbKey: string;
 		try {
-			assertValueID(valueId);
+			dbKey = valueIdToString(valueId);
 		} catch (e) {
 			if (
 				e instanceof ZWaveError &&
@@ -153,14 +149,14 @@ export class ValueDB extends EventEmitter {
 		}
 
 		let event: string;
-		if (this._db.has(valueId)) {
+		if (this._db.has(dbKey)) {
 			event = "value updated";
-			(cbArg as ValueUpdatedArgs).prevValue = this._db.get(valueId);
+			(cbArg as ValueUpdatedArgs).prevValue = this._db.get(dbKey);
 		} else {
 			event = "value added";
 		}
 
-		this._db.set(valueId, value);
+		this._db.set(dbKey, value);
 		if (options.noEvent !== true) {
 			this.emit(event, cbArg);
 		}
@@ -173,10 +169,10 @@ export class ValueDB extends EventEmitter {
 		valueId: ValueID,
 		options: SetValueOptions = {},
 	): boolean {
-		assertValueID(valueId);
-		if (this._db.has(valueId)) {
-			const prevValue = this._db.get(valueId);
-			this._db.delete(valueId);
+		const dbKey: string = valueIdToString(valueId);
+		if (this._db.has(dbKey)) {
+			const prevValue = this._db.get(dbKey);
+			this._db.delete(dbKey);
 			const cbArg: ValueRemovedArgs = {
 				...valueId,
 				prevValue,
@@ -194,22 +190,23 @@ export class ValueDB extends EventEmitter {
 	 */
 	/* wotan-disable-next-line no-misused-generics */
 	public getValue<T = unknown>(valueId: ValueID): T | undefined {
-		assertValueID(valueId);
-		return this._db.get(valueId) as T | undefined;
+		const key = valueIdToString(valueId);
+		return this._db.get(key) as T | undefined;
 	}
 
 	/**
 	 * Checks if a value for a given value id exists in this ValueDB
 	 */
 	public hasValue(valueId: ValueID): boolean {
-		assertValueID(valueId);
-		return this._db.has(valueId);
+		const key = valueIdToString(valueId);
+		return this._db.has(key);
 	}
 
 	/** Returns all values that are stored for a given CC */
 	public getValues(forCC: CommandClasses): (ValueID & { value: unknown })[] {
 		const ret: ReturnType<ValueDB["getValues"]> = [];
-		this._db.forEach((value, valueId) => {
+		this._db.forEach((value, key) => {
+			const valueId: ValueID = JSON.parse(key);
 			if (forCC === valueId.commandClass) ret.push({ ...valueId, value });
 		});
 		return ret;
@@ -217,10 +214,12 @@ export class ValueDB extends EventEmitter {
 
 	/** Clears all values from the value DB */
 	public clear(options: SetValueOptions = {}): void {
-		this._db.forEach((_val, valueId) => {
+		this._db.forEach((_val, key) => {
+			const valueId: ValueID = JSON.parse(key);
 			this.removeValue(valueId, options);
 		});
-		this._metadata.forEach((_meta, valueId) => {
+		this._metadata.forEach((_meta, key) => {
+			const valueId = JSON.parse(key);
 			this.setMetadata(valueId, undefined, options);
 		});
 	}
@@ -233,8 +232,9 @@ export class ValueDB extends EventEmitter {
 		metadata: ValueMetadata | undefined,
 		options: SetValueOptions = {},
 	): void {
+		let dbKey: string;
 		try {
-			assertValueID(valueId);
+			dbKey = valueIdToString(valueId);
 		} catch (e) {
 			if (
 				e instanceof ZWaveError &&
@@ -248,9 +248,9 @@ export class ValueDB extends EventEmitter {
 		}
 
 		if (metadata) {
-			this._metadata.set(valueId, metadata);
+			this._metadata.set(dbKey, metadata);
 		} else {
-			this._metadata.delete(valueId);
+			this._metadata.delete(dbKey);
 		}
 
 		const cbArg: MetadataUpdatedArgs = {
@@ -266,16 +266,16 @@ export class ValueDB extends EventEmitter {
 	 * Checks if metadata for a given value id exists in this ValueDB
 	 */
 	public hasMetadata(valueId: ValueID): boolean {
-		assertValueID(valueId);
-		return this._metadata.has(valueId);
+		const key = valueIdToString(valueId);
+		return this._metadata.has(key);
 	}
 
 	/**
 	 * Retrieves metadata for a given value id
 	 */
 	public getMetadata(valueId: ValueID): ValueMetadata | undefined {
-		assertValueID(valueId);
-		return this._metadata.get(valueId);
+		const key = valueIdToString(valueId);
+		return this._metadata.get(key);
 	}
 
 	/** Returns all metadata that is stored for a given CC */
@@ -285,7 +285,8 @@ export class ValueDB extends EventEmitter {
 		metadata: ValueMetadata;
 	})[] {
 		const ret: ReturnType<ValueDB["getAllMetadata"]> = [];
-		this._metadata.forEach((meta, valueId) => {
+		this._metadata.forEach((meta, key) => {
+			const valueId: ValueID = JSON.parse(key);
 			if (forCC === valueId.commandClass)
 				ret.push({ ...valueId, metadata: meta });
 		});
