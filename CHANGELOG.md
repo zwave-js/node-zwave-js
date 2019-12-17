@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.4.0-beta.1 (2019-12-17)
 ### Features
 * The log output now contains the version of this library (and a fancy title!)
 * Reworked the `healNetwork` process:
