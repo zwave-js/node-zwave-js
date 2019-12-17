@@ -111,21 +111,27 @@ export function sendQueue(queue: SortedList<Transaction>): void {
 	if (!isSendQueueLogVisible) return;
 
 	let message = "Send queue:";
-	for (const trns of queue) {
-		// TODO: This formatting should be shared with the other logging methods
-		const node = trns.message.getNodeUnsafe();
-		const prefix =
-			trns.message.type === MessageType.Request ? "[REQ]" : "[RES]";
-		const postfix =
-			node != undefined
-				? ` [Node ${node.id}, ${node.isAwake() ? "awake" : "asleep"}]`
+	if (queue.length > 0) {
+		for (const trns of queue) {
+			// TODO: This formatting should be shared with the other logging methods
+			const node = trns.message.getNodeUnsafe();
+			const prefix =
+				trns.message.type === MessageType.Request ? "[REQ]" : "[RES]";
+			const postfix =
+				node != undefined
+					? ` [Node ${node.id}, ${
+							node.isAwake() ? "awake" : "asleep"
+					  }]`
+					: "";
+			const command = isCommandClassContainer(trns.message)
+				? ` (${trns.message.command.constructor.name})`
 				: "";
-		const command = isCommandClassContainer(trns.message)
-			? ` (${trns.message.command.constructor.name})`
-			: "";
-		message += `\n· ${prefix} ${
-			FunctionType[trns.message.functionType]
-		}${command}${postfix}`;
+			message += `\n· ${prefix} ${
+				FunctionType[trns.message.functionType]
+			}${command}${postfix}`;
+		}
+	} else {
+		message += " (empty)";
 	}
 	logger.log({
 		level: SENDQUEUE_LOGLEVEL,

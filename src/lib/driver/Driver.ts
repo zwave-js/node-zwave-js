@@ -321,8 +321,9 @@ export class Driver extends EventEmitter implements IDriver {
 	private async initializeControllerAndNodes(): Promise<void> {
 		if (this._controller == undefined) {
 			this._controller = new ZWaveController(this);
-			this._controller.on("node added", this.onNodeAdded.bind(this));
-			// TODO: Add handler for removing nodes
+			this._controller
+				.on("node added", this.onNodeAdded.bind(this))
+				.on("node removed", this.onNodeRemoved.bind(this));
 		}
 		if (!this.options.skipInterview) {
 			// Interview the controller
@@ -391,6 +392,14 @@ export class Driver extends EventEmitter implements IDriver {
 			);
 	}
 
+	/** Removes a node's event handlers that were added with addNodeEventHandlers */
+	private removeNodeEventHandlers(node: ZWaveNode): void {
+		node.removeAllListeners("wake up")
+			.removeAllListeners("sleep")
+			.removeAllListeners("alive")
+			.removeAllListeners("interview completed");
+	}
+
 	/** Is called when a node wakes up */
 	private onNodeWakeUp(node: IZWaveNode): void {
 		log.controller.logNode(node.id, "The node is now awake.");
@@ -431,6 +440,16 @@ export class Driver extends EventEmitter implements IDriver {
 			// if a node is asleep
 			void this.interviewNode(node);
 		}
+	}
+
+	/** This is called when a node was removed from the network */
+
+	private onNodeRemoved(node: ZWaveNode): void {
+		this.removeNodeEventHandlers(node);
+		this.rejectAllTransactionsForNode(
+			node.id,
+			"The node was removed from the network",
+		);
 	}
 
 	/** Checks if there are any pending messages for the given node */
@@ -1480,17 +1499,19 @@ ${handlers.length} left`,
 		}
 	}
 
-	/** Rejects all pending transactions for a node and removes them from the send queue */
-	private rejectAllTransactionsForNode(
-		nodeId: number,
-		errorMsg: string = `The node is dead`,
+	/**
+	 * @internal
+	 * Rejects all pending transactions that match a predicate and removes them from the send queue
+	 */
+	public rejectTransactions(
+		predicate: (t: Transaction) => boolean,
+		errorMsg: string = `The message has been removed from the queue`,
 	): void {
 		const transactionsToRemove: Transaction[] = [];
 
+		// Find all transactions that match the predicate and reject them
 		for (const transaction of this.sendQueue) {
-			const msg = transaction.message;
-			const targetNodeId = msg.getNodeId();
-			if (targetNodeId === nodeId) {
+			if (predicate(transaction)) {
 				transactionsToRemove.push(transaction);
 				transaction.promise.reject(
 					new ZWaveError(
@@ -1500,11 +1521,10 @@ ${handlers.length} left`,
 				);
 			}
 		}
-		// Remove all transactions that belong to the node
 		this.sendQueue.remove(...transactionsToRemove);
 
 		// Don't forget the current transaction
-		if (this.currentTransaction?.message.getNodeId() === nodeId) {
+		if (this.currentTransaction && predicate(this.currentTransaction)) {
 			this.rejectCurrentTransaction(
 				new ZWaveError(
 					errorMsg,
@@ -1512,6 +1532,22 @@ ${handlers.length} left`,
 				),
 			);
 		}
+
+		log.driver.sendQueue(this.sendQueue);
+	}
+
+	/**
+	 * @internal
+	 * Rejects all pending transactions for a node and removes them from the send queue
+	 */
+	public rejectAllTransactionsForNode(
+		nodeId: number,
+		errorMsg: string = `The node is dead`,
+	): void {
+		this.rejectTransactions(
+			t => t.message.getNodeId() === nodeId,
+			errorMsg,
+		);
 	}
 
 	/** Re-sorts the send queue */
