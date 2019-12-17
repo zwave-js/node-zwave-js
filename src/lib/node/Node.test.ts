@@ -482,7 +482,6 @@ describe("lib/node/Node", () => {
 				};
 				originalMethods = {
 					queryProtocolInfo: node.queryProtocolInfo,
-					ping: node.ping,
 					queryNodeInfo: node.queryNodeInfo,
 					interviewCCs: node.interviewCCs,
 					// queryNodePlusInfo: node.queryNodePlusInfo,
@@ -545,8 +544,6 @@ describe("lib/node/Node", () => {
 				await node.interview();
 
 				const expectCalled = [
-					// Ping must always be called when the interview is not complete
-					"ping",
 					"interviewCCs",
 					// "queryNodePlusInfo",
 					// "queryManufacturerSpecific",
