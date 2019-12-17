@@ -31,6 +31,7 @@ import {
 	GetControllerVersionRequest,
 	GetControllerVersionResponse,
 } from "./GetControllerVersionMessages";
+import { GetRoutingInfoRequest } from "./GetRoutingInfoMessages";
 import {
 	GetSerialApiCapabilitiesRequest,
 	GetSerialApiCapabilitiesResponse,
@@ -673,6 +674,13 @@ export class ZWaveController extends EventEmitter {
 		this._healNetworkActive = false;
 
 		log.controller.print(`stopping network heal...`);
+
+		// Cancel all transactions that were created by the healing process
+		this.driver.rejectTransactions(
+			t =>
+				t.message instanceof RequestNodeNeighborUpdateRequest ||
+				t.message instanceof GetRoutingInfoRequest,
+		);
 
 		return true;
 	}
