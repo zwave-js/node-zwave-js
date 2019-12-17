@@ -8,16 +8,15 @@
 ### Features
 * The log output now contains the version of this library (and a fancy title!)
 * Reworked the `healNetwork` process:
-    * There are now two additional methods: `beginHealingNetwork` and `stopHealingNetwork`. The original `healNetwork` now simply calls `beginHealingNetwork` and is deprecated.
+    * The controller now has two additional methods: `beginHealingNetwork` and `stopHealingNetwork`. The original `healNetwork` now simply calls `beginHealingNetwork` and is deprecated.
     * Two additional events (`heal network progress` and `heal network done`) are emitted during the process. The event callback receives a map with the current process: *node id* (`number`) => *heal done* (`boolean`).
+* Pending messages are now automatically removed from the send queue if they no longer serve a purpose (e.g. node removed or healing process stopped)
+* The status of sleeping nodes is automatically reset to `asleep` 10 seconds after the wake up or the last completed transaction.
 
 ### Bugfixes
 * Config parameters are no longer queried multiple times if there are partial config params defined
 * If a ping failed and the node's messages are moved to the wake up queue, the send queue is no longer stalled by the unanswered ping
 * When sending a message to a node that is known to be asleep, the message's priority is automatically set to `Wake Up` (except for `NoOperationCC`s).
-
-### Changes under the hood
-* `ValueDB` now uses a `ObjectKeyMap` internally
 
 ## 2.3.0 (2019-12-14)
 ### Features
