@@ -1311,7 +1311,12 @@ ${handlers.length} left`,
 		// When sending a message to a node that is known to be sleeping,
 		// the priority should be WakeUp, so the message gets deprioritized
 		// in comparison with messages to awake nodes
-		if (isNodeQuery(msg) && msg.getNodeUnsafe()?.isAwake() === false) {
+		// Pings are an exception, because we don't want them in the wakeup queue
+		if (
+			isNodeQuery(msg) &&
+			!messageIsPing(msg) &&
+			msg.getNodeUnsafe()?.isAwake() === false
+		) {
 			options.priority = MessagePriority.WakeUp;
 		}
 

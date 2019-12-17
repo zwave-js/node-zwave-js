@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## 2.4.0-beta.1 (2019-12-17)
+## __WORK IN PROGRESS__
 ### Features
 * The log output now contains the version of this library (and a fancy title!)
 * Reworked the `healNetwork` process:
@@ -14,7 +14,7 @@
 ### Bugfixes
 * Config parameters are no longer queried multiple times if there are partial config params defined
 * If a ping failed and the node's messages are moved to the wake up queue, the send queue is no longer stalled by the unanswered ping
-* When sending a message to a node that is known to be asleep, the message's priority is automatically set to `Wake Up`.
+* When sending a message to a node that is known to be asleep, the message's priority is automatically set to `Wake Up` (except for `NoOperationCC`s).
 
 ### Changes under the hood
 * `ValueDB` now uses a `ObjectKeyMap` internally
