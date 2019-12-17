@@ -579,14 +579,6 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			await this.queryProtocolInfo();
 		}
 
-		// The following stages require communication with the node. Before continuing, we
-		// ping the node to see if it is alive and awake
-
-		if (this.interviewStage >= InterviewStage.ProtocolInfo) {
-			// Make sure the device answers
-			if (!(await this.ping())) return false;
-		}
-
 		if (this.interviewStage === InterviewStage.ProtocolInfo) {
 			await this.queryNodeInfo();
 		}
