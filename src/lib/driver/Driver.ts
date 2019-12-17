@@ -1664,7 +1664,10 @@ ${handlers.length} left`,
 			node.supportsCC(CommandClasses["Wake Up"]) &&
 			!this.hasPendingMessages(node)
 		) {
-			setTimeout(() => sendNodeToSleep(node), 1000).unref();
+			this.sendNodeToSleepTimers.set(
+				node.id,
+				setTimeout(() => sendNodeToSleep(node), 1000).unref(),
+			);
 		}
 	}
 
@@ -1693,7 +1696,10 @@ ${handlers.length} left`,
 
 		// If a sleeping node has no messages pending, we may send it back to sleep
 		if (node.supportsCC(CommandClasses["Wake Up"]) && node.isAwake()) {
-			setTimeout(() => markNodeAsAsleep(node), 10000).unref();
+			this.nodeAwakeTimeouts.set(
+				node.id,
+				setTimeout(() => markNodeAsAsleep(node), 10000).unref(),
+			);
 		}
 	}
 }
