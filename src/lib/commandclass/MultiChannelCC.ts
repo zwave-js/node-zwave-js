@@ -557,6 +557,10 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 	public get endpointIndex(): number {
 		return this.aggregatedEndpointMembers[0];
 	}
+	public set endpointIndex(value: number) {
+		// Ignore. Change this when we ever start sending these CCs
+		// https://sentry.io/share/issue/2619b8fcfbf84e61885ecc899fb1fd93/
+	}
 
 	public get members(): readonly number[] {
 		return this.aggregatedEndpointMembers[1];
