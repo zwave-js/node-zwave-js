@@ -147,6 +147,16 @@ jobs:
         npm whoami
         npm publish
 
+    - name: Notify Sentry.io about the release
+      run: |
+        npm i -g @sentry/cli
+        export VERSION=${${{ github.ref }}##*/v}
+        echo "$VERSION"
+        export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
+        export SENTRY_ORG=alcalzone
+        sentry-cli releases new -p iobroker_zwave zwave-js@$VERSION
+        sentry-cli releases set-commits --auto zwave-js@$VERSION
+
   # ===================
 
   # Dummy job for skipped builds - without this, github reports the build as failed
