@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes (or maybe it's a feature?)
+* `BasicCCSet` commands that are received from a node are now treated like reports
+
 ## 2.4.1 (2019-12-18)
 ### Bugfixes
 * Fixed a crash that happens when a `MultiChannelCCAggregatedMembersReport` is received.
