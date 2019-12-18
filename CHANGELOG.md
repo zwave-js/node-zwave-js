@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.4.1 (2019-12-18)
 ### Bugfixes
 * Fixed a crash that happens when a `MultiChannelCCAggregatedMembersReport` is received.
 * Fixed a crash that happens when receiving a message from a node endpoint, but that endpoint was not known to the controller
