@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed a crash that happens when a `MultiChannelCCAggregatedMembersReport` is received.
+
 ## 2.4.0 (2019-12-17)
 ### Features
 * The log output now contains the version of this library (and a fancy title!)
