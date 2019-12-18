@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## 2.4.2-beta.0 (2019-12-18)
+## __WORK IN PROGRESS__
 ### Bugfixes (or maybe it's a feature?)
 * `BasicCCSet` commands that are received from a node are now treated like reports
 
