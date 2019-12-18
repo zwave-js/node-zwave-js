@@ -257,6 +257,18 @@ export class MultilevelSwitchCC extends CommandClass {
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
+
+	public setMappedBasicValue(value: number): boolean {
+		this.getValueDB().setValue(
+			{
+				commandClass: this.ccId,
+				endpoint: this.endpointIndex,
+				property: "currentValue",
+			},
+			value,
+		);
+		return true;
+	}
 }
 
 interface MultilevelSwitchCCSetOptions extends CCCommandOptions {

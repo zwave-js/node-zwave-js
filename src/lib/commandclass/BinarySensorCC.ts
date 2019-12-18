@@ -45,6 +45,17 @@ export enum BinarySensorType {
 	Any = 0xff,
 }
 
+export function getBinarySensorValueId(
+	endpointIndex: number | undefined,
+	sensorType: BinarySensorType,
+): ValueID {
+	return {
+		commandClass: CommandClasses["Binary Sensor"],
+		endpoint: endpointIndex,
+		property: getEnumMemberName(BinarySensorType, sensorType),
+	};
+}
+
 export function getSupportedSensorTypesValueId(endpointIndex: number): ValueID {
 	return {
 		commandClass: CommandClasses["Binary Sensor"],
@@ -174,6 +185,14 @@ export class BinarySensorCC extends CommandClass {
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
+
+	public setMappedBasicValue(value: number): boolean {
+		this.getValueDB().setValue(
+			getBinarySensorValueId(this.endpointIndex, BinarySensorType.Any),
+			value === 0xff,
+		);
+		return true;
+	}
 }
 
 @CCCommand(BinarySensorCommand.Report)
@@ -191,12 +210,10 @@ export class BinarySensorCCReport extends BinarySensorCC {
 			this._type = this.payload[1];
 		}
 
-		const valueId: ValueID = {
-			commandClass: this.ccId,
-			endpoint: this.endpointIndex,
-			property: getEnumMemberName(BinarySensorType, this._type),
-		};
-
+		const valueId: ValueID = getBinarySensorValueId(
+			this.endpointIndex,
+			this._type,
+		);
 		this.getValueDB().setMetadata(valueId, {
 			...ValueMetadata.ReadOnlyBoolean,
 		});

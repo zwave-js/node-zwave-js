@@ -390,10 +390,20 @@ export class CommandClass {
 	}
 
 	/**
-	 * Whether the endpoint interview may be skipped by a CC.
+	 * Whether the endpoint interview may be skipped by a CC. Can be overwritten by a subclass.
 	 */
 	public skipEndpointInterview(): boolean {
 		// By default no interview may be skipped
+		return false;
+	}
+
+	/**
+	 * Maps a BasicCC value to a more specific CC implementation. Returns true if the value was mapped, false otherwise.
+	 * @param value The value of the received BasicCC
+	 */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	public setMappedBasicValue(value: number): boolean {
+		// By default, don't map
 		return false;
 	}
 

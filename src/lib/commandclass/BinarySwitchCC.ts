@@ -143,6 +143,18 @@ remaining duration: ${binarySwitchResponse.duration}`;
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
+
+	public setMappedBasicValue(value: number): boolean {
+		this.getValueDB().setValue(
+			{
+				commandClass: this.ccId,
+				endpoint: this.endpointIndex,
+				property: "currentValue",
+			},
+			value === 0xff,
+		);
+		return true;
+	}
 }
 
 interface BinarySwitchCCSetOptions extends CCCommandOptions {

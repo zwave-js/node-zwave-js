@@ -48,6 +48,7 @@ import {
 	BasicDeviceClasses,
 	DeviceClass,
 	GenericDeviceClass,
+	GenericDeviceClasses,
 	SpecificDeviceClass,
 } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
@@ -1154,38 +1155,78 @@ version:               ${this.version}`;
 
 	/** Handles the receipt of a BasicCC Set or Report */
 	private async handleBasicCommand(command: BasicCC): Promise<void> {
-		// Some devices send their current state using `BasicCCSet`s to their associations
-		// instead of using reports. We still interpret them like reports
-		// TODO: find out if that breaks other devices
-
-		// TODO: Map the values based on the device type
+		// Depending on the generic device class, we may need to map the basic command to other CCs
+		let mappedTargetCC: CommandClass | undefined;
+		switch (this.deviceClass?.generic.key) {
+			case GenericDeviceClasses["Binary Sensor"]:
+				mappedTargetCC = this.createCCInstanceUnsafe(
+					CommandClasses["Binary Sensor"],
+				);
+				break;
+			// TODO: Which sensor type to use here?
+			// case GenericDeviceClasses["Multilevel Sensor"]:
+			// 	mappedTargetCC = this.createCCInstanceUnsafe(
+			// 		CommandClasses["Multilevel Sensor"],
+			// 	);
+			// 	break;
+			case GenericDeviceClasses["Binary Switch"]:
+				mappedTargetCC = this.createCCInstanceUnsafe(
+					CommandClasses["Binary Switch"],
+				);
+				break;
+			case GenericDeviceClasses["Multilevel Switch"]:
+				mappedTargetCC = this.createCCInstanceUnsafe(
+					CommandClasses["Multilevel Switch"],
+				);
+				break;
+		}
 
 		if (command instanceof BasicCCReport) {
-			// Reports store their value automatically - no need to handle them
+			// Try to set the mapped value on the target CC
+			const didSetMappedValue =
+				typeof command.currentValue === "number" &&
+				mappedTargetCC?.setMappedBasicValue(command.currentValue);
 
-			// Since the node sent us a Basic report, we are sure that it is at least supported
-			// If this is the only supported actuator CC, add it to the support list,
-			// so the information lands in the network cache
-			if (!actuatorCCs.some(cc => this.supportsCC(cc))) {
-				this.addCC(CommandClasses.Basic, { isControlled: true });
+			// Otherwise fall back to setting it ourselves
+			if (!didSetMappedValue) {
+				// Reports store their value automatically - no need to handle them
+
+				// Since the node sent us a Basic report, we are sure that it is at least supported
+				// If this is the only supported actuator CC, add it to the support list,
+				// so the information lands in the network cache
+				if (!actuatorCCs.some(cc => this.supportsCC(cc))) {
+					this.addCC(CommandClasses.Basic, { isControlled: true });
+				}
 			}
 		} else if (command instanceof BasicCCSet) {
+			// Some devices send their current state using `BasicCCSet`s to their associations
+			// instead of using reports. We still interpret them like reports
+			// TODO: find out if that breaks other devices
 			log.controller.logNode(this.id, {
 				message: "treating BasicCC Set as a report",
 			});
-			// Sets don't store their value automatically, so store the values manually
-			this._valueDB.setValue(
-				{
-					commandClass: CommandClasses.Basic,
-					endpoint: command.endpointIndex,
-					property: "currentValue",
-				},
+
+			// Try to set the mapped value on the target CC
+			const didSetMappedValue = mappedTargetCC?.setMappedBasicValue(
 				command.targetValue,
 			);
-			// Since the node sent us a Basic command, we are sure that it is at least controlled
-			// Add it to the support list, so the information lands in the network cache
-			if (!this.controlsCC(CommandClasses.Basic)) {
-				this.addCC(CommandClasses.Basic, { isControlled: true });
+
+			// Otherwise fall back to setting it ourselves
+			if (!didSetMappedValue) {
+				// Sets don't store their value automatically, so store the values manually
+				this._valueDB.setValue(
+					{
+						commandClass: CommandClasses.Basic,
+						endpoint: command.endpointIndex,
+						property: "currentValue",
+					},
+					command.targetValue,
+				);
+				// Since the node sent us a Basic command, we are sure that it is at least controlled
+				// Add it to the support list, so the information lands in the network cache
+				if (!this.controlsCC(CommandClasses.Basic)) {
+					this.addCC(CommandClasses.Basic, { isControlled: true });
+				}
 			}
 		}
 	}
