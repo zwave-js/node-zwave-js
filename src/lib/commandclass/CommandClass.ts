@@ -136,6 +136,10 @@ export class CommandClass {
 			this.nodeId,
 			this.endpointIndex,
 		);
+		// If we received a CC from a node, it must support at least version 1
+		if (this.version === 0 && gotDeserializationOptions(options)) {
+			this.version = 1;
+		}
 	}
 
 	protected driver: IDriver;

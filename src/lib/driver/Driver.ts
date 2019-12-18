@@ -46,7 +46,7 @@ import { getDefaultPriority, Message } from "../message/Message";
 import { InterviewStage, IZWaveNode, NodeStatus } from "../node/INode";
 import { isNodeQuery } from "../node/INodeQuery";
 import { ZWaveNode } from "../node/Node";
-import { DeepPartial, getEnumMemberName, skipBytes } from "../util/misc";
+import { DeepPartial, skipBytes } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { DriverEventCallbacks, DriverEvents, IDriver } from "./IDriver";
 import { Transaction } from "./Transaction";
@@ -472,20 +472,18 @@ export class Driver extends EventEmitter implements IDriver {
 		nodeId: number,
 		endpointIndex: number = 0,
 	): number {
-		if (this._controller == undefined || !this.controller.nodes.has(nodeId))
+		if (
+			this._controller == undefined ||
+			!this.controller.nodes.has(nodeId)
+		) {
 			return 0;
-		const endpoint = this.controller.nodes
-			.get(nodeId)!
-			.getEndpoint(endpointIndex);
-		if (!endpoint) {
-			throw new Error(
-				`getSupportedCCVersionForEndpoint failed. cc = ${getEnumMemberName(
-					CommandClasses,
-					cc,
-				)} nodeId = ${nodeId}, endpointIndex = ${endpointIndex}`,
-			);
 		}
-		return endpoint.getCCVersion(cc);
+		const node = this.controller.nodes.get(nodeId)!;
+		const endpoint = node.getEndpoint(endpointIndex);
+		if (endpoint) return endpoint.getCCVersion(cc);
+		// We sometimes receive messages from an endpoint, but can't find that endpoint.
+		// In that case fall back to the root endpoint to determine the supported version.
+		return node.getCCVersion(cc);
 	}
 
 	/**
