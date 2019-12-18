@@ -536,6 +536,13 @@ export class Driver extends EventEmitter implements IDriver {
 		// Calling ensureReady with true ensures that _controller is defined
 		await this._controller!.hardReset();
 
+		// Clean up
+		this.rejectTransactions(() => true, `The controller was hard-reset`);
+		this.nodeAwakeTimeouts.forEach(timeout => clearTimeout(timeout));
+		this.nodeAwakeTimeouts.clear();
+		this.sendNodeToSleepTimers.forEach(timeout => clearTimeout(timeout));
+		this.sendNodeToSleepTimers.clear();
+
 		this._controllerInterviewed = false;
 		void this.initializeControllerAndNodes();
 	}

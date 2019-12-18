@@ -433,6 +433,11 @@ export class ZWaveController extends EventEmitter {
 			// handle the incoming message
 			const handler: RequestHandler = _msg => {
 				log.controller.print(`  hard reset succeeded`);
+
+				// Clean up
+				this._nodes.forEach(node => node.removeAllListeners());
+				this._nodes.clear();
+
 				resolve();
 				return true;
 			};
