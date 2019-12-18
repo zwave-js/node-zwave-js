@@ -150,7 +150,7 @@ jobs:
     - name: Notify Sentry.io about the release
       run: |
         npm i -g @sentry/cli
-        export VERSION=${${{ github.ref }}##*/v}
+        export VERSION="${{ github.ref }}" && export VERSION=${VERSION##*/v}
         echo "$VERSION"
         export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
         export SENTRY_ORG=alcalzone
