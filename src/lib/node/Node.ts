@@ -4,7 +4,7 @@ import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
 import { CCAPI } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
-import { BasicCC, BasicCCSet } from "../commandclass/BasicCC";
+import { BasicCC, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
 import {
 	CentralSceneCCNotification,
 	CentralSceneKeys,
@@ -1160,10 +1160,23 @@ version:               ${this.version}`;
 
 		// TODO: Map the values based on the device type
 
-		// Reports store their value automatically - no need to handle them
-		// Sets don't, so store the values manually
-		if (command instanceof BasicCCSet) {
+		if (command instanceof BasicCCReport) {
+			// Reports store their value automatically - no need to handle them
+
+			// Since the node sent us a Basic report, we are sure that it is at least supported
+			// If this is the only supported actuator CC, add it to the support list,
+			// so the information lands in the network cache
+			if (!actuatorCCs.some(cc => this.supportsCC(cc))) {
+				this.addCC(CommandClasses.Basic, { isControlled: true });
+			}
+		} else if (command instanceof BasicCCSet) {
+			// Sets don't store their value automatically, so store the values manually
 			command.persistValues();
+			// Since the node sent us a Basic command, we are sure that it is at least controlled
+			// Add it to the support list, so the information lands in the network cache
+			if (!this.controlsCC(CommandClasses.Basic)) {
+				this.addCC(CommandClasses.Basic, { isControlled: true });
+			}
 		}
 	}
 
