@@ -1170,8 +1170,18 @@ version:               ${this.version}`;
 				this.addCC(CommandClasses.Basic, { isControlled: true });
 			}
 		} else if (command instanceof BasicCCSet) {
+			log.controller.logNode(this.id, {
+				message: "treating BasicCC Set as a report",
+			});
 			// Sets don't store their value automatically, so store the values manually
-			command.persistValues();
+			this._valueDB.setValue(
+				{
+					commandClass: CommandClasses.Basic,
+					endpoint: command.endpointIndex,
+					property: "currentValue",
+				},
+				command.targetValue,
+			);
 			// Since the node sent us a Basic command, we are sure that it is at least controlled
 			// Add it to the support list, so the information lands in the network cache
 			if (!this.controlsCC(CommandClasses.Basic)) {
