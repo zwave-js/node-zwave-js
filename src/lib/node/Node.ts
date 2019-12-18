@@ -4,6 +4,7 @@ import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
 import { CCAPI } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
+import { BasicCC, BasicCCSet } from "../commandclass/BasicCC";
 import {
 	CentralSceneCCNotification,
 	CentralSceneKeys,
@@ -1026,7 +1027,9 @@ version:               ${this.version}`;
 	 * Handles an ApplicationCommandRequest received from this node
 	 */
 	public async handleCommand(command: CommandClass): Promise<void> {
-		if (command instanceof CentralSceneCCNotification) {
+		if (command instanceof BasicCC) {
+			return this.handleBasicCommand(command);
+		} else if (command instanceof CentralSceneCCNotification) {
 			return this.handleCentralSceneNotification(command);
 		} else if (command instanceof WakeUpCCWakeUpNotification) {
 			return this.handleWakeUpNotification();
@@ -1147,6 +1150,21 @@ version:               ${this.version}`;
 			direction: "inbound",
 		});
 		this.setAwake(true);
+	}
+
+	/** Handles the receipt of a BasicCC Set or Report */
+	private async handleBasicCommand(command: BasicCC): Promise<void> {
+		// Some devices send their current state using `BasicCCSet`s to their associations
+		// instead of using reports. We still interpret them like reports
+		// TODO: find out if that breaks other devices
+
+		// TODO: Map the values based on the device type
+
+		// Reports store their value automatically - no need to handle them
+		// Sets don't, so store the values manually
+		if (command instanceof BasicCCSet) {
+			command.persistValues();
+		}
 	}
 
 	/**
