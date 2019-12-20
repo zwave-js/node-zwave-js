@@ -596,7 +596,6 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 
 		// The node is deemed ready when has been interviewed completely at least once
 		if (this.interviewStage === InterviewStage.RestartFromCache) {
-			// TODO: delay this until the node has responded
 			this.emit("ready", this);
 			nodeReadyEmitted = true;
 		}
