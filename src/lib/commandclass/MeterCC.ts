@@ -44,17 +44,23 @@ export enum RateType {
 	Produced = 0x02,
 }
 
-function toPropertyKey(rateType: RateType, scale: number): number {
-	return (scale << 8) | rateType;
+function toPropertyKey(
+	meterType: number,
+	rateType: RateType,
+	scale: number,
+): number {
+	return (meterType << 16) | (scale << 8) | rateType;
 }
 
-// We can use this when we implement a button for reset
-// function splitPropertyKey(key: number): { rateType: RateType; scale: number } {
-// 	return {
-// 		rateType: key & 0xff,
-// 		scale: key >>> 8,
-// 	};
-// }
+function splitPropertyKey(
+	key: number,
+): { meterType: number; rateType: RateType; scale: number } {
+	return {
+		rateType: key & 0xff,
+		scale: (key >>> 8) & 0xff,
+		meterType: key >>> 16,
+	};
+}
 
 function getMeterTypeName(type: number): string {
 	return lookupMeter(type)?.name ?? `UNKNOWN (${num2hex(type)})`;
@@ -208,6 +214,36 @@ supports reset:       ${supported.supportsReset}`;
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
+
+	public translateProperty(
+		property: string | number,
+		propertyKey: string | number,
+	): string {
+		if (property === "value" && typeof propertyKey === "number") {
+			const { meterType } = splitPropertyKey(propertyKey);
+			const meter = lookupMeter(meterType);
+			return meter?.name ?? "value";
+		}
+		return super.translateProperty(property, propertyKey);
+	}
+
+	public translatePropertyKey(
+		property: string | number,
+		propertyKey: string | number,
+	): string | undefined {
+		if (property === "value" && typeof propertyKey === "number") {
+			const { meterType, rateType, scale } = splitPropertyKey(
+				propertyKey,
+			);
+			const meterScale = lookupMeterScale(meterType, scale);
+			let ret: string = meterScale.label;
+			if (rateType !== RateType.Unspecified) {
+				ret += " " + getEnumMemberName(RateType, rateType);
+			}
+			return ret;
+		}
+		return super.translatePropertyKey(property, propertyKey);
+	}
 }
 
 @CCCommand(MeterCommand.Report)
@@ -272,7 +308,11 @@ export class MeterCCReport extends MeterCC {
 		const valueIdBase: Omit<ValueID, "property"> = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
-			propertyKey: toPropertyKey(this._rateType, this._scale.key),
+			propertyKey: toPropertyKey(
+				this._type,
+				this._rateType,
+				this._scale.key,
+			),
 		};
 		const valueDB = this.getValueDB();
 		valueDB.setMetadata(
