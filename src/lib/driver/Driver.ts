@@ -314,6 +314,8 @@ export class Driver extends EventEmitter implements IDriver {
 	// wotan-enable async-function-assignability
 
 	private _controllerInterviewed: boolean = false;
+	private _nodesReady = new Set<number>();
+	private _nodesReadyEventEmitted: boolean = false;
 	/**
 	 * Initializes the variables for controller and nodes,
 	 * adds event handlers and starts the interview process.
@@ -343,6 +345,9 @@ export class Driver extends EventEmitter implements IDriver {
 		for (const node of this._controller.nodes.values()) {
 			this.addNodeEventHandlers(node);
 		}
+		// Before interviewing nodes reset our knowledge about their ready state
+		this._nodesReady.clear();
+		this._nodesReadyEventEmitted = false;
 
 		if (!this.options.skipInterview) {
 			// Now interview all nodes
@@ -386,10 +391,8 @@ export class Driver extends EventEmitter implements IDriver {
 		node.on("wake up", this.onNodeWakeUp.bind(this))
 			.on("sleep", this.onNodeSleep.bind(this))
 			.on("alive", this.onNodeAlive.bind(this))
-			.on(
-				"interview completed",
-				this.onNodeInterviewCompleted.bind(this),
-			);
+			.on("interview completed", this.onNodeInterviewCompleted.bind(this))
+			.on("ready", this.onNodeReady.bind(this));
 	}
 
 	/** Removes a node's event handlers that were added with addNodeEventHandlers */
@@ -397,7 +400,8 @@ export class Driver extends EventEmitter implements IDriver {
 		node.removeAllListeners("wake up")
 			.removeAllListeners("sleep")
 			.removeAllListeners("alive")
-			.removeAllListeners("interview completed");
+			.removeAllListeners("interview completed")
+			.removeAllListeners("ready");
 	}
 
 	/** Is called when a node wakes up */
@@ -427,6 +431,25 @@ export class Driver extends EventEmitter implements IDriver {
 		if (node.interviewStage !== InterviewStage.Complete) {
 			void this.interviewNode(node);
 		}
+	}
+
+	/** Is called when a node is ready to be used */
+	private onNodeReady(node: ZWaveNode): void {
+		this._nodesReady.add(node.id);
+		log.controller.logNode(node.id, "The node is ready to be used");
+
+		// Only check for "all nodes ready" once
+		if (this._nodesReadyEventEmitted) return;
+
+		for (const nodeId of this.controller.nodes.keys()) {
+			if (!this._nodesReady.has(nodeId)) {
+				return;
+			}
+		}
+		// All nodes are ready
+		log.controller.print("All nodes are ready to be used");
+		this.emit("all nodes ready");
+		this._nodesReadyEventEmitted = true;
 	}
 
 	/** Is called when a node interview is completed */

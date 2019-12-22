@@ -6,6 +6,7 @@ import { SendMessageOptions, ZWaveOptions } from "./Driver";
 
 export interface DriverEventCallbacks {
 	"driver ready": () => void;
+	"all nodes ready": () => void;
 	error: (err: Error) => void;
 }
 

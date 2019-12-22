@@ -113,9 +113,13 @@ interface ZWaveNodeValueEventCallbacks {
 
 type ZWaveNodeEventCallbacks = Overwrite<
 	{
-		[K in "wake up" | "sleep" | "interview completed" | "dead" | "alive"]: (
-			node: ZWaveNode,
-		) => void;
+		[K in
+			| "wake up"
+			| "sleep"
+			| "interview completed"
+			| "ready"
+			| "dead"
+			| "alive"]: (node: ZWaveNode) => void;
 	},
 	ZWaveNodeValueEventCallbacks
 >;
@@ -568,6 +572,8 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			log.controller.interviewStart(this);
 		}
 
+		let nodeReadyEmitted = false;
+
 		// The interview is done in several stages. At each point, the interview process might be aborted
 		// due to a stage failing. The reached stage is saved, so we can continue it later without
 		// repeating stages unnecessarily
@@ -588,6 +594,12 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		// // TODO:
 		// // SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
 
+		// The node is deemed ready when has been interviewed completely at least once
+		if (this.interviewStage === InterviewStage.RestartFromCache) {
+			this.emit("ready", this);
+			nodeReadyEmitted = true;
+		}
+
 		// At this point the basic interview of new nodes is done. Start here when re-interviewing known nodes
 		// to get updated information about command classes
 		if (
@@ -607,11 +619,11 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			await this.queryNeighbors();
 		}
 
-		// for testing purposes we skip to the end
 		await this.setInterviewStage(InterviewStage.Complete);
 
 		// Tell listeners that the interview is completed
-		// The driver will send this node to sleep
+		// The driver will then send this node to sleep
+		if (!nodeReadyEmitted) this.emit("ready", this);
 		this.emit("interview completed", this);
 		return true;
 	}
