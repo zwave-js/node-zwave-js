@@ -334,8 +334,9 @@ export class IndicatorCC extends CommandClass {
 			// CC version 1 only has a single value that doesn't need to be translated
 			return undefined;
 		} else if (typeof property === "number") {
-			const label = lookupIndicator(property);
-			if (label) return label;
+			// The indicator property is our property key
+			const prop = lookupProperty(property);
+			if (prop) return prop.label;
 		}
 		return super.translateProperty(property, propertyKey);
 	}
@@ -345,8 +346,9 @@ export class IndicatorCC extends CommandClass {
 		propertyKey?: string | number,
 	): string {
 		if (typeof property === "number" && typeof propertyKey === "number") {
-			const prop = lookupProperty(property);
-			if (prop) return prop.label;
+			// The indicator corresponds to our property
+			const label = lookupIndicator(property);
+			if (label) return label;
 		}
 		return super.translateProperty(property, propertyKey);
 	}
@@ -449,6 +451,7 @@ export class IndicatorCCReport extends IndicatorCC {
 			const valueId = getIndicatorValueValueID(this.endpointIndex, 0, 1);
 			valueDB.setMetadata(valueId, {
 				...ValueMetadata.UInt8,
+				label: "Indicator value",
 			});
 			valueDB.setValue(valueId, this.value);
 		} else {
