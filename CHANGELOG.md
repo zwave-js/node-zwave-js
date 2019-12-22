@@ -14,7 +14,10 @@
 
 ### Definitely Bugfixes
 * Avoid resetting the IO layer while the driver is not ready
-* `IndicatorCC`: Corrected the expected response to `SupportedGet` command
+* `IndicatorCC`: 
+    * Corrected the expected response to `SupportedGet` command
+    * Improved property(Key) translation
+* `MeterCC`: Add translation for property and propertyKey
 * Nodes and timers are now cleaned up after a hard reset of the controller
 
 ## 2.4.1 (2019-12-18)
