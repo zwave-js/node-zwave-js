@@ -4,7 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
-## 2.4.2-beta.4 (2019-12-22)
+## __WORK IN PROGRESS__
+## Features
+* Added the event `"ready"` to `ZWaveNode` and `"all nodes ready"` to `Driver` to notify users that a node respectively all nodes are safe to be used
+
 ### Bugfixes (or maybe it's a feature?)
 * `BasicCCSet` commands that are received from a node are now treated like reports
 * If possible, received `BasicCC` commands are mapped to specific CCs
@@ -12,6 +15,7 @@
 ### Definitely Bugfixes
 * Avoid resetting the IO layer while the driver is not ready
 * `IndicatorCC`: Corrected the expected response to `SupportedGet` command
+* Nodes and timers are now cleaned up after a hard reset of the controller
 
 ## 2.4.1 (2019-12-18)
 ### Bugfixes
