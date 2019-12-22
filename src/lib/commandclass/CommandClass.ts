@@ -357,8 +357,12 @@ export class CommandClass {
 			nodeId: this.nodeId,
 			ccId: CommandClasses[this.ccId] || num2hex(this.ccId),
 		};
-		if (this.payload.length > 0)
+		if (this.ccCommand != undefined) {
+			ret.ccCommand = num2hex(this.ccCommand);
+		}
+		if (this.payload.length > 0) {
 			ret.payload = "0x" + this.payload.toString("hex");
+		}
 		return ret;
 	}
 
