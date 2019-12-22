@@ -4,6 +4,7 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { Endpoint } from "../node/Endpoint";
+import { InterviewStage } from "../node/INode";
 import { ZWaveNode } from "../node/Node";
 import { ValueDB, ValueID, valueIdToString } from "../node/ValueDB";
 import {
@@ -137,7 +138,12 @@ export class CommandClass {
 			this.endpointIndex,
 		);
 		// If we received a CC from a node, it must support at least version 1
-		if (this.version === 0 && gotDeserializationOptions(options)) {
+		// Make sure that the interview is complete or we cannot be sure that the assumption is correct
+		if (
+			this.getNode()?.interviewStage === InterviewStage.Complete &&
+			this.version === 0 &&
+			gotDeserializationOptions(options)
+		) {
 			this.version = 1;
 		}
 	}
