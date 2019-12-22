@@ -1155,11 +1155,15 @@ version:               ${this.version}`;
 
 	/** Handles the receipt of a BasicCC Set or Report */
 	private async handleBasicCommand(command: BasicCC): Promise<void> {
+		// Retrieve the endpoint the command is coming from
+		const sourceEndpoint =
+			this.getEndpoint(command.endpointIndex ?? 0) ?? this;
+
 		// Depending on the generic device class, we may need to map the basic command to other CCs
 		let mappedTargetCC: CommandClass | undefined;
 		switch (this.deviceClass?.generic.key) {
 			case GenericDeviceClasses["Binary Sensor"]:
-				mappedTargetCC = this.createCCInstanceUnsafe(
+				mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
 					CommandClasses["Binary Sensor"],
 				);
 				break;
@@ -1170,12 +1174,12 @@ version:               ${this.version}`;
 			// 	);
 			// 	break;
 			case GenericDeviceClasses["Binary Switch"]:
-				mappedTargetCC = this.createCCInstanceUnsafe(
+				mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
 					CommandClasses["Binary Switch"],
 				);
 				break;
 			case GenericDeviceClasses["Multilevel Switch"]:
-				mappedTargetCC = this.createCCInstanceUnsafe(
+				mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
 					CommandClasses["Multilevel Switch"],
 				);
 				break;
@@ -1194,8 +1198,10 @@ version:               ${this.version}`;
 				// Since the node sent us a Basic report, we are sure that it is at least supported
 				// If this is the only supported actuator CC, add it to the support list,
 				// so the information lands in the network cache
-				if (!actuatorCCs.some(cc => this.supportsCC(cc))) {
-					this.addCC(CommandClasses.Basic, { isControlled: true });
+				if (!actuatorCCs.some(cc => sourceEndpoint.supportsCC(cc))) {
+					sourceEndpoint.addCC(CommandClasses.Basic, {
+						isControlled: true,
+					});
 				}
 			}
 		} else if (command instanceof BasicCCSet) {
@@ -1224,8 +1230,10 @@ version:               ${this.version}`;
 				);
 				// Since the node sent us a Basic command, we are sure that it is at least controlled
 				// Add it to the support list, so the information lands in the network cache
-				if (!this.controlsCC(CommandClasses.Basic)) {
-					this.addCC(CommandClasses.Basic, { isControlled: true });
+				if (!sourceEndpoint.controlsCC(CommandClasses.Basic)) {
+					sourceEndpoint.addCC(CommandClasses.Basic, {
+						isControlled: true,
+					});
 				}
 			}
 		}
