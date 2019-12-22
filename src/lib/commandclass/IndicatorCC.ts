@@ -559,7 +559,7 @@ interface IndicatorCCSupportedGetOptions extends CCCommandOptions {
 }
 
 @CCCommand(IndicatorCommand.SupportedGet)
-@expectedCCResponse(IndicatorCCReport)
+@expectedCCResponse(IndicatorCCSupportedReport)
 export class IndicatorCCSupportedGet extends IndicatorCC {
 	public constructor(
 		driver: IDriver,
