@@ -542,7 +542,12 @@ export class Driver extends EventEmitter implements IDriver {
 
 	/** Resets the IO layer */
 	private resetIO(): void {
-		this.ensureReady();
+		try {
+			this.ensureReady();
+		} catch (e) {
+			// The driver is not ready yet or is being reset
+			return;
+		}
 		log.driver.print("resetting driver instance...");
 
 		// re-sync communication
