@@ -215,30 +215,27 @@ supports reset:       ${supported.supportsReset}`;
 		this.interviewComplete = true;
 	}
 
-	public translateProperty(
-		property: string | number,
-		propertyKey: string | number,
-	): string {
-		if (property === "value" && typeof propertyKey === "number") {
-			const { meterType } = splitPropertyKey(propertyKey);
-			const meter = lookupMeter(meterType);
-			return meter?.name ?? "value";
-		}
-		return super.translateProperty(property, propertyKey);
-	}
-
 	public translatePropertyKey(
 		property: string | number,
 		propertyKey: string | number,
 	): string | undefined {
-		if (property === "value" && typeof propertyKey === "number") {
+		if (
+			(property === "value" ||
+				property === "previousValue" ||
+				property === "deltaTime") &&
+			typeof propertyKey === "number"
+		) {
 			const { meterType, rateType, scale } = splitPropertyKey(
 				propertyKey,
 			);
-			const meterScale = lookupMeterScale(meterType, scale);
-			let ret: string = meterScale.label;
+			let ret: string;
+			if (meterType !== 0) {
+				ret = lookupMeterScale(meterType, scale).label;
+			} else {
+				ret = "default";
+			}
 			if (rateType !== RateType.Unspecified) {
-				ret += " " + getEnumMemberName(RateType, rateType);
+				ret += "_" + getEnumMemberName(RateType, rateType);
 			}
 			return ret;
 		}
