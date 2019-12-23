@@ -5,6 +5,7 @@ import { ZWaveNode } from "../node/Node";
 import { CommandClasses } from "./CommandClasses";
 import {
 	getIndicatorValueValueID,
+	getSupportedIndicatorIDsValueID,
 	IndicatorCC,
 	IndicatorCCGet,
 	IndicatorCCReport,
@@ -31,7 +32,7 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 		fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 		node = new ZWaveNode(1, fakeDriver as any);
 		(fakeDriver.controller.nodes as any).set(1, node);
-		node.addCC(CommandClasses.Indicator, { isSupported: true });
+		node.addCC(CommandClasses.Indicator, { isSupported: true, version: 3 });
 		await loadIndicatorsInternal();
 	});
 
@@ -179,6 +180,62 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 		);
 		expect(translatedProperty).toBe("Button 1 indication");
 		expect(translatedPropertyKey).toBe("Binary");
+	});
+
+	describe("interviewing the node", () => {
+		beforeAll(() => {
+			(fakeDriver.sendCommand as jest.Mock)
+				// getSupported
+				.mockResolvedValueOnce({
+					supportedProperties: [],
+					nextIndicatorId: 0x30,
+				})
+				.mockResolvedValueOnce({
+					supportedProperties: [2, 3, 4],
+					nextIndicatorId: 0x46,
+				})
+				.mockResolvedValueOnce({
+					supportedProperties: [2, 3, 4],
+					nextIndicatorId: 0x47,
+				})
+				.mockResolvedValueOnce({
+					supportedProperties: [2, 3, 4],
+					nextIndicatorId: 0x00,
+				})
+				// get
+				.mockResolvedValueOnce([
+					{
+						indicatorId: 0x30,
+						propertyId: 0x02,
+						value: 0xff,
+					},
+				])
+				.mockResolvedValueOnce([
+					{
+						indicatorId: 0x46,
+						propertyId: 0x02,
+						value: 0xff,
+					},
+				])
+				.mockResolvedValueOnce([
+					{
+						indicatorId: 0x47,
+						propertyId: 0x02,
+						value: 0xff,
+					},
+				]);
+		});
+
+		it("should return all supported indicator IDs", async () => {
+			const ccInstance = node.createCCInstance(CommandClasses.Indicator)!;
+			await ccInstance.interview(true);
+
+			const indicatorIds = [0x30, 0x46, 0x47];
+			expect(node.getValue(getSupportedIndicatorIDsValueID(0))).toEqual(
+				indicatorIds,
+			);
+			// We cannot test the contents of the value ID because we don't really parse the CCs
+		});
 	});
 
 	// it("the CC values should have the correct metadata", () => {
