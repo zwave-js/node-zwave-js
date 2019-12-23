@@ -139,8 +139,14 @@ export class CommandClass {
 		);
 		// If we received a CC from a node, it must support at least version 1
 		// Make sure that the interview is complete or we cannot be sure that the assumption is correct
+		let node: ZWaveNode | undefined;
+		try {
+			node = this.getNode();
+		} catch (e) {
+			/* okay */
+		}
 		if (
-			this.getNode()?.interviewStage === InterviewStage.Complete &&
+			node?.interviewStage === InterviewStage.Complete &&
 			this.version === 0 &&
 			gotDeserializationOptions(options)
 		) {
