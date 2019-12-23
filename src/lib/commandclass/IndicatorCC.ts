@@ -478,7 +478,7 @@ export class IndicatorCCReport extends IndicatorCC {
 					valueId,
 					getIndicatorMetadata(value.indicatorId, value.propertyId),
 				);
-				valueDB.setValue(valueId, this.value);
+				valueDB.setValue(valueId, value);
 			}
 		}
 	}
