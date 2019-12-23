@@ -862,15 +862,23 @@ describe("lib/node/Node", () => {
 			commandClasses: {
 				"0x25": {
 					name: "Binary Switch",
-					isSupported: false,
-					isControlled: true,
-					version: 3,
+					endpoints: {
+						"0": {
+							isSupported: false,
+							isControlled: true,
+							version: 3,
+						},
+					},
 				},
 				"0x26": {
 					name: "Multilevel Switch",
-					isSupported: false,
-					isControlled: true,
-					version: 4,
+					endpoints: {
+						"0": {
+							isSupported: false,
+							isControlled: true,
+							version: 4,
+						},
+					},
 				},
 			},
 			// TODO: These should be values
