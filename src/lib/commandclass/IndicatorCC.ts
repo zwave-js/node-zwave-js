@@ -28,7 +28,7 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
-function getSupportedIndicatorIDsValueID(
+export function getSupportedIndicatorIDsValueID(
 	endpoint: number | undefined,
 ): ValueID {
 	return {
@@ -38,7 +38,7 @@ function getSupportedIndicatorIDsValueID(
 	};
 }
 
-function getSupportedPropertyIDsValueID(
+export function getSupportedPropertyIDsValueID(
 	endpoint: number | undefined,
 	indicatorId: number,
 ): ValueID {
@@ -50,7 +50,7 @@ function getSupportedPropertyIDsValueID(
 	};
 }
 
-function getIndicatorValueValueID(
+export function getIndicatorValueValueID(
 	endpoint: number | undefined,
 	indicatorId: number,
 	propertyId: number,
@@ -328,17 +328,20 @@ export class IndicatorCC extends CommandClass {
 
 	public translatePropertyKey(
 		property: string | number,
-		propertyKey?: string | number,
+		propertyKey: string | number,
 	): string | undefined {
 		if (property === "value") {
 			// CC version 1 only has a single value that doesn't need to be translated
 			return undefined;
-		} else if (typeof property === "number") {
+		} else if (
+			typeof property === "number" &&
+			typeof propertyKey === "number"
+		) {
 			// The indicator property is our property key
-			const prop = lookupProperty(property);
+			const prop = lookupProperty(propertyKey);
 			if (prop) return prop.label;
 		}
-		return super.translateProperty(property, propertyKey);
+		return super.translatePropertyKey(property, propertyKey);
 	}
 
 	public translateProperty(

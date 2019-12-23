@@ -4,6 +4,7 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveNode } from "../node/Node";
 import { CommandClasses } from "./CommandClasses";
 import {
+	getIndicatorValueValueID,
 	IndicatorCC,
 	IndicatorCCGet,
 	IndicatorCCReport,
@@ -30,6 +31,7 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 		fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 		node = new ZWaveNode(1, fakeDriver as any);
 		(fakeDriver.controller.nodes as any).set(1, node);
+		node.addCC(CommandClasses.Indicator, { isSupported: true });
 		await loadIndicatorsInternal();
 	});
 
@@ -162,6 +164,21 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 			data: serializedCC,
 		});
 		expect(cc.constructor).toBe(IndicatorCC);
+	});
+
+	it("the value IDs should be translated properly", () => {
+		const valueId = getIndicatorValueValueID(2, 0x43, 2);
+		const ccInstance = node.createCCInstance(CommandClasses.Indicator)!;
+		const translatedProperty = ccInstance.translateProperty(
+			valueId.property,
+			valueId.propertyKey,
+		);
+		const translatedPropertyKey = ccInstance.translatePropertyKey(
+			valueId.property,
+			valueId.propertyKey!,
+		);
+		expect(translatedProperty).toBe("Button 1 indication");
+		expect(translatedPropertyKey).toBe("Binary");
 	});
 
 	// it("the CC values should have the correct metadata", () => {
