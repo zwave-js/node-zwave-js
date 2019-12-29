@@ -90,9 +90,11 @@ export class ZWavePlusCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses["Z-Wave Plus Info"];
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Z-Wave Plus Info"];
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -102,6 +104,7 @@ export class ZWavePlusCC extends CommandClass {
 		if (complete) {
 			// This information does not change
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: "querying Z-Wave+ information...",
 				direction: "outbound",
 			});
@@ -115,6 +118,7 @@ node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}
 installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}
 user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});

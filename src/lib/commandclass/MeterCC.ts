@@ -147,9 +147,11 @@ export class MeterCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses.Meter;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Meter;
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -158,6 +160,7 @@ export class MeterCC extends CommandClass {
 
 		if (this.version >= 2) {
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: "querying meter support...",
 				direction: "outbound",
 			});
@@ -173,6 +176,7 @@ supported rate types: ${supported.supportedRateTypes
 				.map(label => `\n* ${label}`)}
 supports reset:       ${supported.supportsReset}`;
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -183,6 +187,7 @@ supports reset:       ${supported.supportsReset}`;
 			for (const rateType of rateTypes) {
 				for (const scale of supported.supportedScales) {
 					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
 						message: `querying meter value (type = ${getMeterTypeName(
 							supported.type,
 						)}, scale = ${
@@ -205,6 +210,7 @@ supports reset:       ${supported.supportsReset}`;
 			}
 		} else {
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: `querying default meter value...`,
 				direction: "outbound",
 			});

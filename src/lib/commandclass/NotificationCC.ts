@@ -213,9 +213,11 @@ export class NotificationCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses.Notification;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Notification;
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -239,6 +241,7 @@ export class NotificationCC extends CommandClass {
 
 			if (complete) {
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: "querying supported notification types...",
 					direction: "outbound",
 				});
@@ -250,6 +253,7 @@ export class NotificationCC extends CommandClass {
 					"received supported notification types:" +
 					supportedNotificationNames.map(name => "\n* " + name);
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
@@ -265,6 +269,7 @@ export class NotificationCC extends CommandClass {
 						const name = supportedNotificationNames[i];
 
 						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
 							message: `querying supported notification events for ${name}...`,
 							direction: "outbound",
 						});
@@ -272,6 +277,7 @@ export class NotificationCC extends CommandClass {
 							type,
 						);
 						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
 							message: `received supported notification events for ${name}: ${supportedEvents
 								.map(String)
 								.join(", ")}`,
@@ -307,6 +313,7 @@ export class NotificationCC extends CommandClass {
 				const name = supportedNotificationNames[i];
 
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: `querying notification status for ${name}...`,
 					direction: "outbound",
 				});

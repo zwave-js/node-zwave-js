@@ -131,9 +131,11 @@ export class MultilevelSensorCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses["Multilevel Sensor"];
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Multilevel Sensor"];
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -145,6 +147,7 @@ export class MultilevelSensorCC extends CommandClass {
 			// This is to be requested every time
 
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: "querying current sensor reading...",
 				direction: "outbound",
 			});
@@ -157,6 +160,7 @@ export class MultilevelSensorCC extends CommandClass {
 sensor type: ${getSensorTypeName(mlsResponse.type)}
 value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -167,6 +171,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 			let sensorTypes: readonly number[];
 			if (complete) {
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: "retrieving supported sensor types...",
 					direction: "outbound",
 				});
@@ -178,6 +183,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 						.map(name => `* ${name}`)
 						.join("\n");
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
@@ -195,6 +201,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 				let sensorScales: readonly number[];
 				if (complete) {
 					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
 						message: `querying supported scales for ${getSensorTypeName(
 							type,
 						)} sensor`,
@@ -208,6 +215,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 							.map(name => `* ${name}`)
 							.join("\n");
 					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
 					});
@@ -223,6 +231,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 
 				// Always query the current sensor reading
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: "querying current sensor reading...",
 					direction: "outbound",
 				});
@@ -232,6 +241,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 				const logMessage = `received current sensor reading: ${value} ${scale.unit ||
 					""}`;
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});

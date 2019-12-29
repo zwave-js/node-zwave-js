@@ -172,6 +172,7 @@ export class VersionCC extends CommandClass {
 		const api = endpoint.commandClasses.Version;
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -182,6 +183,7 @@ export class VersionCC extends CommandClass {
 		if (complete) {
 			// Step 1: Query node versions
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: "querying node versions...",
 				direction: "outbound",
 			});
@@ -196,12 +198,14 @@ export class VersionCC extends CommandClass {
 			}
 
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 
 			// Step 2: Query all CC versions
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: "querying CC versions...",
 				direction: "outbound",
 			});
@@ -218,6 +222,7 @@ export class VersionCC extends CommandClass {
 					continue;
 				}
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: `  querying the CC version for ${
 						CommandClasses[cc]
 					} (${num2hex(cc)})...`,
@@ -253,6 +258,7 @@ export class VersionCC extends CommandClass {
 			) {
 				// Step 3a: Support for SoftwareGet
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: "querying if Z-Wave Software Get is supported...",
 					direction: "outbound",
 				});
@@ -260,6 +266,7 @@ export class VersionCC extends CommandClass {
 					supportsZWaveSoftwareGet,
 				} = await api.getCapabilities();
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: `Z-Wave Software Get is${
 						supportsZWaveSoftwareGet ? "" : " not"
 					} supported`,
@@ -269,11 +276,13 @@ export class VersionCC extends CommandClass {
 				if (supportsZWaveSoftwareGet) {
 					// Step 3b: Query Z-Wave Software versions
 					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
 						message: "querying Z-Wave software versions...",
 						direction: "outbound",
 					});
 					await api.getZWaveSoftware();
 					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
 						message: "received Z-Wave software versions..",
 						direction: "inbound",
 					});

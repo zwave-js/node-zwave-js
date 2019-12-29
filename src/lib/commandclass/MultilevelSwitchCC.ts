@@ -223,9 +223,11 @@ export class MultilevelSwitchCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses["Multilevel Switch"];
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Multilevel Switch"];
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -235,11 +237,13 @@ export class MultilevelSwitchCC extends CommandClass {
 		if (complete && this.version >= 3) {
 			// Find out which kind of switch this is
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: "requesting switch type...",
 				direction: "outbound",
 			});
 			const switchType = await api.getSupported();
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: `has switch type ${getEnumMemberName(
 					SwitchType,
 					switchType,
@@ -249,6 +253,7 @@ export class MultilevelSwitchCC extends CommandClass {
 		}
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: "requesting current switch state...",
 			direction: "outbound",
 		});

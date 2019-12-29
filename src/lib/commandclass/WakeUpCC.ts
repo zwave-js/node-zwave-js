@@ -170,9 +170,11 @@ export class WakeUpCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses["Wake Up"];
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Wake Up"];
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -195,6 +197,7 @@ export class WakeUpCC extends CommandClass {
 				// This information does not change
 				if (this.version >= 2) {
 					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
 						message:
 							"retrieving wakeup capabilities from the device...",
 						direction: "outbound",
@@ -206,6 +209,7 @@ minimum wakeup interval: ${wakeupCaps.minWakeUpInterval} seconds
 maximum wakeup interval: ${wakeupCaps.maxWakeUpInterval} seconds
 wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds`;
 					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
 					});
@@ -217,6 +221,7 @@ wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds`;
 			// So for now get the current interval and just set the controller ID
 
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: "retrieving wakeup interval from the device...",
 				direction: "outbound",
 			});
@@ -225,6 +230,7 @@ wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds`;
 wakeup interval: ${wakeupResp.wakeUpInterval} seconds
 controller node: ${wakeupResp.controllerNodeId}`;
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -233,6 +239,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 			// Only change the destination if necessary
 			if (wakeupResp.controllerNodeId !== ownNodeId) {
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: "configuring wakeup destination node",
 					direction: "outbound",
 				});

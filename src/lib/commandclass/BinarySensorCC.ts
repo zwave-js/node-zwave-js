@@ -126,9 +126,11 @@ export class BinarySensorCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses["Binary Sensor"];
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Binary Sensor"];
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -139,6 +141,7 @@ export class BinarySensorCC extends CommandClass {
 		let supportedSensorTypes: readonly BinarySensorType[] | undefined;
 		if (complete && this.version >= 2) {
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: "querying supported sensor types...",
 				direction: "outbound",
 			});
@@ -147,6 +150,7 @@ export class BinarySensorCC extends CommandClass {
 				.map(type => getEnumMemberName(BinarySensorType, type))
 				.map(name => "\n* " + name)}`;
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -159,11 +163,13 @@ export class BinarySensorCC extends CommandClass {
 		// Always query (all of) the sensor's current value(s)
 		if (this.version === 1) {
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: "querying current value...",
 				direction: "outbound",
 			});
 			const currentValue = await api.get();
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: `received current value: ${currentValue}`,
 				direction: "inbound",
 			});
@@ -171,11 +177,13 @@ export class BinarySensorCC extends CommandClass {
 			for (const type of supportedSensorTypes) {
 				const sensorName = getEnumMemberName(BinarySensorType, type);
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: `querying current value for ${sensorName}...`,
 					direction: "outbound",
 				});
 				const currentValue = await api.get(type);
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: `received current value for ${sensorName}: ${currentValue}`,
 					direction: "inbound",
 				});

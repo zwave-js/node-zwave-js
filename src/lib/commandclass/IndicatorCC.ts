@@ -263,9 +263,11 @@ export class IndicatorCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses.Indicator;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Indicator;
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -274,6 +276,7 @@ export class IndicatorCC extends CommandClass {
 
 		if (this.version === 1) {
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: "requesting current indicator value...",
 				direction: "outbound",
 			});
@@ -282,6 +285,7 @@ export class IndicatorCC extends CommandClass {
 			let supportedIndicatorIds: number[];
 			if (complete) {
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: "scanning supported indicator IDs...",
 					direction: "outbound",
 				});
@@ -301,6 +305,7 @@ export class IndicatorCC extends CommandClass {
 					", ",
 				)}`;
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
@@ -313,6 +318,7 @@ export class IndicatorCC extends CommandClass {
 
 			for (const indicatorId of supportedIndicatorIds) {
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: `requesting current indicator value (id = ${num2hex(
 						indicatorId,
 					)})...`,

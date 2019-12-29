@@ -235,9 +235,11 @@ export class ThermostatSetpointCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses["Thermostat Setpoint"];
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Thermostat Setpoint"];
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -270,6 +272,7 @@ export class ThermostatSetpointCC extends CommandClass {
 				);
 				// Every time, query the current value
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: `querying current value of setpoint ${setpointName}...`,
 					direction: "outbound",
 				});
@@ -284,6 +287,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					logMessage = `Setpoint ${setpointName} is not supported`;
 				}
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
@@ -303,6 +307,7 @@ export class ThermostatSetpointCC extends CommandClass {
 			let setpointTypes: ThermostatSetpointType[];
 			if (complete) {
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: "retrieving supported setpoint types...",
 					direction: "outbound",
 				});
@@ -316,6 +321,7 @@ export class ThermostatSetpointCC extends CommandClass {
 						.map(name => `* ${name}`)
 						.join("\n");
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
@@ -336,6 +342,7 @@ export class ThermostatSetpointCC extends CommandClass {
 				// If we haven't yet, find out the capabilities of this setpoint
 				if (complete) {
 					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
 						message: `retrieving capabilities for setpoint ${setpointName}...`,
 						direction: "outbound",
 					});
@@ -350,12 +357,14 @@ export class ThermostatSetpointCC extends CommandClass {
 minimum value: ${setpointCaps.minValue} ${minValueUnit}
 maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
 					});
 				}
 				// Every time, query the current value
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: `querying current value of setpoint ${setpointName}...`,
 					direction: "outbound",
 				});
@@ -371,6 +380,7 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 					logMessage = `Setpoint ${setpointName} is not supported`;
 				}
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
