@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## 2.4.2-beta.5 (2019-12-22)
+## __WORK IN PROGRESS__
 ## Features
 * Added the event `"ready"` to `ZWaveNode` and `"all nodes ready"` to `Driver` to notify users that a node respectively all nodes are safe to be used
 
@@ -19,6 +19,9 @@
     * Improved property(Key) translation
 * `MeterCC`: Add translation for property and propertyKey
 * Nodes and timers are now cleaned up after a hard reset of the controller
+* Supported CC and their versions are now correctly stored in the cache file
+* The cache file is no longer discarded when it contains a value of an unsupported CC
+* Endpoints can no longer be accessed before the `Multi Channel` interview is completed.
 
 ## 2.4.1 (2019-12-18)
 ### Bugfixes
