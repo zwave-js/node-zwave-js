@@ -807,6 +807,14 @@ describe("lib/node/Node", () => {
 
 		it("returns a new endpoint with the correct endpoint index otherwise", () => {
 			const node = new ZWaveNode(2, fakeDriver as any);
+			// interviewComplete needs to be true for getEndpoint to work
+			node.valueDB.setValue(
+				{
+					commandClass: CommandClasses["Multi Channel"],
+					property: "interviewComplete",
+				},
+				true,
+			);
 			node.valueDB.setValue(
 				{
 					commandClass: CommandClasses["Multi Channel"],
@@ -821,6 +829,14 @@ describe("lib/node/Node", () => {
 
 		it("caches the created endpoint instances", () => {
 			const node = new ZWaveNode(2, fakeDriver as any);
+			// interviewComplete needs to be true for getEndpoint to work
+			node.valueDB.setValue(
+				{
+					commandClass: CommandClasses["Multi Channel"],
+					property: "interviewComplete",
+				},
+				true,
+			);
 			node.valueDB.setValue(
 				{
 					commandClass: CommandClasses["Multi Channel"],
