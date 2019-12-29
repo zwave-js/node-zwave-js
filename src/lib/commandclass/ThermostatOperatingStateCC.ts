@@ -81,11 +81,11 @@ export class ThermostatOperatingStateCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses[
-			"Thermostat Operating State"
-		];
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Thermostat Operating State"];
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -94,6 +94,7 @@ export class ThermostatOperatingStateCC extends CommandClass {
 
 		// Always query the current state
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: "querying thermostat operating state...",
 			direction: "outbound",
 		});
@@ -101,6 +102,7 @@ export class ThermostatOperatingStateCC extends CommandClass {
 		const state = await api.get();
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `received current thermostat operating state: ${getEnumMemberName(
 				ThermostatOperatingState,
 				state,

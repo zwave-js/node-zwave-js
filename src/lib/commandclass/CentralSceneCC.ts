@@ -167,6 +167,7 @@ export class CentralSceneCC extends CommandClass {
 		const api = endpoint.commandClasses["Central Scene"];
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -190,6 +191,7 @@ export class CentralSceneCC extends CommandClass {
 				// We always grab the first group - usually it should be the lifeline
 				const groupId = groupsIssueingNotifications[0];
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message:
 						"Configuring associations to receive Central Scene notifications...",
 					direction: "outbound",
@@ -200,6 +202,7 @@ export class CentralSceneCC extends CommandClass {
 				);
 
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: "Querying supported scenes...",
 					direction: "outbound",
 				});
@@ -208,6 +211,7 @@ export class CentralSceneCC extends CommandClass {
 # of scenes:           ${ccSupported.sceneCount}
 supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
@@ -215,6 +219,7 @@ supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
 				// The slow refresh capability should be enabled whenever possible
 				if (this.version >= 3 && ccSupported.supportsSlowRefresh) {
 					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
 						message: "Enabling slow refresh capability...",
 						direction: "outbound",
 					});

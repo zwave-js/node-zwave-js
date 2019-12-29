@@ -111,9 +111,11 @@ export class BinarySwitchCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses["Binary Switch"];
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Binary Switch"];
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -122,6 +124,7 @@ export class BinarySwitchCC extends CommandClass {
 
 		// always query the current state
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: "querying Binary Switch state...",
 			direction: "outbound",
 		});
@@ -136,6 +139,7 @@ target value:       ${binarySwitchResponse.targetValue}
 remaining duration: ${binarySwitchResponse.duration}`;
 		}
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: logMessage,
 			direction: "inbound",
 		});

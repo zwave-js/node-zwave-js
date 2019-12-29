@@ -49,6 +49,7 @@ interface LogNodeOptions {
 	message: string;
 	level?: "warn" | "error";
 	direction?: DataDirection;
+	endpoint?: number;
 }
 
 /**
@@ -76,7 +77,7 @@ export function logNode(
 		return logNode(nodeId, { message: messageOrOptions, level: logLevel });
 	}
 
-	const { level, message, direction } = messageOrOptions;
+	const { level, message, direction, endpoint } = messageOrOptions;
 	const actualLevel = level || CONTROLLER_LOGLEVEL;
 	if (!isLoglevelVisible(actualLevel)) return;
 
@@ -84,6 +85,7 @@ export function logNode(
 		level: actualLevel,
 		primaryTags: tagify([getNodeTag(nodeId)]),
 		message,
+		secondaryTags: endpoint ? tagify([`Endpoint ${endpoint}`]) : undefined,
 		direction: getDirectionPrefix(direction || "none"),
 	});
 }

@@ -106,9 +106,11 @@ export class ManufacturerSpecificCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses["Manufacturer Specific"];
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Manufacturer Specific"];
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -124,6 +126,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 				);
 			} else {
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: "querying manufacturer information...",
 					direction: "outbound",
 				});
@@ -134,6 +137,7 @@ export class ManufacturerSpecificCC extends CommandClass {
   product type: ${num2hex(mfResp.productType)}
   product id:   ${num2hex(mfResp.productId)}`;
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});

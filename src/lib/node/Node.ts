@@ -1,4 +1,3 @@
-import { composeObject } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
@@ -10,7 +9,11 @@ import {
 	CentralSceneKeys,
 	getSceneValueId,
 } from "../commandclass/CentralSceneCC";
-import { CommandClass, getCCValueMetadata } from "../commandclass/CommandClass";
+import {
+	CommandClass,
+	CommandClassInfo,
+	getCCValueMetadata,
+} from "../commandclass/CommandClass";
 import {
 	actuatorCCs,
 	CommandClasses,
@@ -505,6 +508,15 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		);
 	}
 
+	/** Whether the Multi Channel CC has been interviewed and all endpoint information is known */
+	private get isMultiChannelInterviewComplete(): boolean {
+		return !!this.getValue({
+			commandClass: CommandClasses["Multi Channel"],
+			endpoint: 0,
+			property: "interviewComplete",
+		});
+	}
+
 	/** Cache for this node's endpoint instances */
 	private _endpointInstances = new Map<number, Endpoint>();
 	/**
@@ -522,6 +534,15 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		if (index === 0) return this;
 		// Check if the requested endpoint exists on the physical node
 		if (index > this.getEndpointCount()) return undefined;
+		// Check if the Multi Channel CC interview for this node is completed,
+		// because we don't have all the information before that
+		if (!this.isMultiChannelInterviewComplete) {
+			log.driver.print(
+				`Node ${this.nodeId}, Endpoint ${index}: Trying to access endpoint instance before Multi Channel interview`,
+				"error",
+			);
+			return undefined;
+		}
 		// Create an endpoint instance if it does not exist
 		if (!this._endpointInstances.has(index)) {
 			this._endpointInstances.set(
@@ -540,9 +561,13 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	/** Returns a list of all endpoints of this node, including the root endpoint (index 0) */
 	public getAllEndpoints(): Endpoint[] {
 		const ret: Endpoint[] = [this];
-		for (let i = 1; i <= this.getEndpointCount(); i++) {
-			// Iterating over the endpoint count ensures that we don't get undefined
-			ret.push(this.getEndpoint(i)!);
+		// Check if the Multi Channel CC interview for this node is completed,
+		// because we don't have all the endpoint information before that
+		if (this.isMultiChannelInterviewComplete) {
+			for (let i = 1; i <= this.getEndpointCount(); i++) {
+				// Iterating over the endpoint count ensures that we don't get undefined
+				ret.push(this.getEndpoint(i)!);
+			}
 		}
 		return ret;
 	}
@@ -1404,7 +1429,7 @@ version:               ${this.version}`;
 	 * Serializes this node in order to store static data in a cache
 	 */
 	public serialize(): JSONObject {
-		return {
+		const ret = {
 			id: this.id,
 			interviewStage:
 				this.interviewStage >= InterviewStage.RestartFromCache
@@ -1422,30 +1447,39 @@ version:               ${this.version}`;
 			isSecure: this.isSecure,
 			isBeaming: this.isBeaming,
 			version: this.version,
-			commandClasses: composeObject(
-				[...this.implementedCommandClasses.entries()]
-					.sort((a, b) => Math.sign(a[0] - b[0]))
-					.map(([cc, info]) => {
-						// Store the normal CC info
-						const ret = {
-							name: CommandClasses[cc],
-							...info,
-						} as any;
-						// If the CC is implemented and has values or value metadata,
-						// store them
-						const ccInstance = this.createCCInstanceUnsafe(cc);
-						if (ccInstance) {
-							// Store values if there ara any
-							const ccValues = ccInstance.serializeValuesForCache();
-							if (ccValues.length > 0) ret.values = ccValues;
-							const ccMetadata = ccInstance.serializeMetadataForCache();
-							if (ccMetadata.length > 0)
-								ret.metadata = ccMetadata;
-						}
-						return [num2hex(cc), ret] as [string, object];
-					}),
-			),
+			commandClasses: {} as JSONObject,
 		};
+		// Sort the CCs by their key before writing to the object
+		const sortedCCs = [
+			...this.implementedCommandClasses.keys(),
+		].sort((a, b) => Math.sign(a - b));
+		for (const cc of sortedCCs) {
+			const serializedCC = {
+				name: CommandClasses[cc],
+				endpoints: {} as JSONObject,
+			} as JSONObject;
+			// We store the support and version information in this location rather than in the version CC
+			// Therefore request the information from all endpoints
+			for (const endpoint of this.getAllEndpoints()) {
+				if (endpoint.implementedCommandClasses.has(cc)) {
+					serializedCC.endpoints[
+						endpoint.index
+					] = endpoint.implementedCommandClasses.get(cc);
+				}
+			}
+			// If the CC is implemented and has values or value metadata,
+			// store them
+			const ccInstance = this.createCCInstanceUnsafe(cc);
+			if (ccInstance) {
+				// Store values if there ara any
+				const ccValues = ccInstance.serializeValuesForCache();
+				if (ccValues.length > 0) serializedCC.values = ccValues;
+				const ccMetadata = ccInstance.serializeMetadataForCache();
+				if (ccMetadata.length > 0) serializedCC.metadata = ccMetadata;
+			}
+			ret.commandClasses[num2hex(cc)] = serializedCC;
+		}
+		return ret;
 	}
 
 	/**
@@ -1498,6 +1532,12 @@ version:               ${this.version}`;
 			return typeof val === type ? val : undefined;
 		}
 
+		// We need to cache the endpoint CC support until all CCs have been deserialized
+		const endpointCCSupport = new Map<
+			number,
+			Map<number, Partial<CommandClassInfo>>
+		>();
+
 		// Parse CommandClasses
 		if (isObject(obj.commandClasses)) {
 			const ccDict = obj.commandClasses;
@@ -1509,21 +1549,60 @@ version:               ${this.version}`;
 
 				// Parse the information we have
 				const {
+					values,
+					metadata,
+					// Starting with v2.4.2, the CC versions are stored in the endpoints object
+					endpoints,
+					// These are for compatibility with older versions
 					isSupported,
 					isControlled,
 					version,
-					values,
-					metadata,
 				} = ccDict[ccHex];
-				this.addCC(ccNum, {
-					isSupported: enforceType(isSupported, "boolean"),
-					isControlled: enforceType(isControlled, "boolean"),
-					version: enforceType(version, "number"),
-				});
+				if (isObject(endpoints)) {
+					// New cache file with a dictionary of CC support information
+					const support = new Map<
+						number,
+						Partial<CommandClassInfo>
+					>();
+					for (const endpointIndex of Object.keys(endpoints)) {
+						// First make sure this key is a number
+						if (!/^\d+$/.test(endpointIndex)) continue;
+						const numEndpointIndex = parseInt(endpointIndex, 10);
+
+						// Verify the info object
+						const info = (endpoints as any)[
+							endpointIndex
+						] as CommandClassInfo;
+						info.isSupported = enforceType(
+							info.isSupported,
+							"boolean",
+						);
+						info.isControlled = enforceType(
+							info.isControlled,
+							"boolean",
+						);
+						info.version = enforceType(info.version, "number");
+
+						// Update the root endpoint immediately, save non-root endpoint information for later
+						if (numEndpointIndex === 0) {
+							this.addCC(ccNum, info);
+						} else {
+							support.set(numEndpointIndex, info);
+						}
+					}
+					endpointCCSupport.set(ccNum, support);
+				} else {
+					// Legacy cache with single properties for the root endpoint
+					this.addCC(ccNum, {
+						isSupported: enforceType(isSupported, "boolean"),
+						isControlled: enforceType(isControlled, "boolean"),
+						version: enforceType(version, "number"),
+					});
+				}
 				// Metadata must be deserialized before values since that may be necessary to correctly translate value IDs
 				if (isArray(metadata) && metadata.length > 0) {
 					// If any exist, deserialize the metadata aswell
-					const ccInstance = this.createCCInstance(ccNum);
+					const ccInstance = this.createCCInstanceUnsafe(ccNum);
 					if (ccInstance) {
 						// In v2.0.0, propertyName was changed to property. The network caches might still reference the old property names
 						for (const m of metadata) {
@@ -1546,7 +1625,7 @@ version:               ${this.version}`;
 				}
 				if (isArray(values) && values.length > 0) {
 					// If any exist, deserialize the values aswell
-					const ccInstance = this.createCCInstance(ccNum);
+					const ccInstance = this.createCCInstanceUnsafe(ccNum);
 					if (ccInstance) {
 						// In v2.0.0, propertyName was changed to property. The network caches might still reference the old property names
 						for (const v of values) {
@@ -1567,6 +1646,15 @@ version:               ${this.version}`;
 						}
 					}
 				}
+			}
+		}
+
+		// Now restore the CC versions for each non-root endpoint
+		for (const [cc, support] of endpointCCSupport) {
+			for (const [endpointIndex, info] of support) {
+				const endpoint = this.getEndpoint(endpointIndex);
+				if (!endpoint) continue;
+				endpoint.addCC(cc, info);
 			}
 		}
 	}

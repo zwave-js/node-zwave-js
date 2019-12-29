@@ -96,9 +96,11 @@ export class BasicCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses.Basic;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Basic;
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -107,6 +109,7 @@ export class BasicCC extends CommandClass {
 
 		// always query the current state
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: "querying Basic CC state...",
 			direction: "outbound",
 		});
@@ -121,6 +124,7 @@ target value:       ${basicResponse.targetValue}
 remaining duration: ${basicResponse.duration}`;
 		}
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: logMessage,
 			direction: "inbound",
 		});

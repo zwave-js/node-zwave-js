@@ -216,6 +216,7 @@ export class AssociationCC extends CommandClass {
 			endpoint.commandClasses["Multi Channel Association"].isSupported()
 		) {
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: `${this.constructor.name}: skipping interview because Multi Channel Association is supported...`,
 				direction: "none",
 			});
@@ -224,6 +225,7 @@ export class AssociationCC extends CommandClass {
 		}
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -234,11 +236,13 @@ export class AssociationCC extends CommandClass {
 		if (complete) {
 			// First find out how many groups are supported
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: "querying number of association groups...",
 				direction: "outbound",
 			});
 			groupCount = await api.getGroupCount();
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: `supports ${groupCount} association groups`,
 				direction: "inbound",
 			});
@@ -250,6 +254,7 @@ export class AssociationCC extends CommandClass {
 		// Then query each association group
 		for (let groupId = 1; groupId <= groupCount; groupId++) {
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: `querying association group #${groupId}...`,
 				direction: "outbound",
 			});
@@ -258,6 +263,7 @@ export class AssociationCC extends CommandClass {
 maximum # of nodes: ${group.maxNodes}
 currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -273,6 +279,7 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 				valueDB.getValue(getNodeIdsValueId(1)) || [];
 			if (!lifelineNodeIds.includes(ownNodeId)) {
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message:
 						"supports Z-Wave+, assigning ourselves to the Lifeline group...",
 					direction: "outbound",
@@ -288,6 +295,7 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 				.map(a => a.groupId);
 			if (lifelineGroups.length > 0) {
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: `has a config file, assigning ourselves to the configured Lifeline group${
 						lifelineGroups.length > 1 ? "s" : ""
 					}: ${lifelineGroups.join(", ")}`,
@@ -305,6 +313,7 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 			}
 		} else {
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message:
 					"No information about Lifeline associations, cannot assign ourselves!",
 				direction: "outbound",

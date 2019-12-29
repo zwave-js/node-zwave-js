@@ -457,6 +457,7 @@ export class ConfigurationCC extends CommandClass {
 		const config = node.deviceConfig?.paramInformation;
 		if (config) {
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: `${this.constructor.name}: Loading configuration parameters from device config`,
 				direction: "none",
 			});
@@ -481,6 +482,7 @@ export class ConfigurationCC extends CommandClass {
 
 					// Query the current value
 					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
 						message: `querying parameter #${param.parameter} value...`,
 						direction: "outbound",
 					});
@@ -488,6 +490,7 @@ export class ConfigurationCC extends CommandClass {
 				}
 			} else {
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: `${this.constructor.name}: skipping interview because CC version is < 3 and there is no config file`,
 					direction: "none",
 				});
@@ -495,6 +498,7 @@ export class ConfigurationCC extends CommandClass {
 		} else {
 			// Version >= 3
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: `${this.constructor.name}: doing a ${
 					complete ? "complete" : "partial"
 				} interview...`,
@@ -502,6 +506,7 @@ export class ConfigurationCC extends CommandClass {
 			});
 
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: "finding first configuration parameter...",
 				direction: "outbound",
 			});
@@ -509,6 +514,7 @@ export class ConfigurationCC extends CommandClass {
 
 			while (param > 0) {
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: `querying parameter #${param} information...`,
 					direction: "outbound",
 				});
@@ -540,12 +546,14 @@ has bulk support:    ${!properties.noBulkSupport}
 alters capabilities: ${!!properties.altersCapabilities}`;
 				}
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 
 				// Query the current value
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: `querying parameter #${param} value...`,
 					direction: "outbound",
 				});

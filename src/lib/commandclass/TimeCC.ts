@@ -118,9 +118,11 @@ export class TimeCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses.Time;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Time;
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -130,6 +132,7 @@ export class TimeCC extends CommandClass {
 		// Always keep the slave's time in sync
 		if (api.version >= 2) {
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: "setting timezone information...",
 				direction: "outbound",
 			});

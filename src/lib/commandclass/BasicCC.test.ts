@@ -127,6 +127,14 @@ describe("lib/commandclass/BasicCC => ", () => {
 			// Repro for GH#377
 			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
 			(fakeDriver as any).controller.nodes.set(node.id, node);
+			// interviewComplete needs to be true for getEndpoint to work
+			node.valueDB.setValue(
+				{
+					commandClass: CommandClasses["Multi Channel"],
+					property: "interviewComplete",
+				},
+				true,
+			);
 			// We have 2 endpoints
 			node.valueDB.setValue(
 				{

@@ -98,9 +98,11 @@ export class BatteryCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses.Battery;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Battery;
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -109,6 +111,7 @@ export class BatteryCC extends CommandClass {
 
 		// always query the status
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: "querying battery status...",
 			direction: "outbound",
 		});
@@ -134,6 +137,7 @@ needs to be replaced or charged: ${
 is disconnected:                 ${batteryStatus.disconnected}`;
 		}
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: logMessage,
 			direction: "inbound",
 		});
@@ -141,6 +145,7 @@ is disconnected:                 ${batteryStatus.disconnected}`;
 		if (this.version >= 2) {
 			// always query the health
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: "querying battery health...",
 				direction: "outbound",
 			});
@@ -151,6 +156,7 @@ is disconnected:                 ${batteryStatus.disconnected}`;
 max. capacity: ${batteryHealth.maximumCapacity} %
 temperature:   ${batteryHealth.temperature} °C`;
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});

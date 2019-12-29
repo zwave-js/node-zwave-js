@@ -225,6 +225,7 @@ export class MultiChannelCC extends CommandClass {
 
 		// Step 1: Retrieve general information about end points
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: "querying device endpoint information...",
 			direction: "outbound",
 		});
@@ -238,18 +239,21 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			logMessage += `\nendpoint count (aggregated): ${multiResponse.aggregatedEndpointCount}`;
 		}
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: logMessage,
 			direction: "inbound",
 		});
 
 		// Step 2: Find all endpoints
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: "querying all endpoints...",
 			direction: "outbound",
 		});
 		const foundEndpoints = [...(await api.findEndpoints(0xff, 0xff))];
 		if (!foundEndpoints.length) {
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: `Endpoint query returned no results, assuming that endpoints are sequential`,
 				direction: "inbound",
 			});
@@ -265,6 +269,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			}
 		} else {
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: `received endpoints: ${foundEndpoints
 					.map(String)
 					.join(", ")}`,
@@ -280,11 +285,13 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			) {
 				// Find members of aggregated end point
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: `querying members of aggregated endpoint #${endpoint}...`,
 					direction: "outbound",
 				});
 				const members = await api.getAggregatedMembers(endpoint);
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: `aggregated endpoint #${endpoint} has members ${members
 						.map(String)
 						.join(", ")}`,
@@ -294,6 +301,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 
 			// TODO: When security is implemented, we need to change stuff here
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: `querying capabilities for endpoint #${endpoint}...`,
 				direction: "outbound",
 			});
@@ -308,6 +316,7 @@ supported CCs:`;
 				logMessage += `\n  · ${ccName ? ccName : num2hex(cc)}`;
 			}
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});

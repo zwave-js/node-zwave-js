@@ -153,9 +153,11 @@ export class ThermostatModeCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses["Thermostat Mode"];
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Thermostat Mode"];
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -165,6 +167,7 @@ export class ThermostatModeCC extends CommandClass {
 		if (complete) {
 			// First query the possible modes to set the metadata
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: "querying supported thermostat modes...",
 				direction: "outbound",
 			});
@@ -177,6 +180,7 @@ export class ThermostatModeCC extends CommandClass {
 					mode => "\n* " + getEnumMemberName(ThermostatMode, mode),
 				);
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -184,11 +188,13 @@ export class ThermostatModeCC extends CommandClass {
 
 		// Always query the actual status
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: "querying current thermostat mode...",
 			direction: "outbound",
 		});
 		const currentStatus = await api.get();
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message:
 				"received current thermostat mode: " +
 				getEnumMemberName(ThermostatMode, currentStatus.mode),

@@ -399,6 +399,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 		const api = endpoint.commandClasses["Association Group Information"];
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -411,12 +412,14 @@ export class AssociationGroupInfoCC extends CommandClass {
 			if (complete) {
 				// First get the group's name
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: `Association group #${groupId}: Querying name...`,
 					direction: "outbound",
 				});
 				const name = await api.getGroupName(groupId);
 				const logMessage = `Association group #${groupId} has name "${name}"`;
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
@@ -435,6 +438,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 			if (complete || hasDynamicInfo) {
 				// Then its information
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: `Association group #${groupId}: Querying info...`,
 					direction: "outbound",
 				});
@@ -446,6 +450,7 @@ profile:         ${getEnumMemberName(
 					info.profile,
 				)}`;
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
@@ -453,6 +458,7 @@ profile:         ${getEnumMemberName(
 
 			if (complete) {
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message: `Association group #${groupId}: Querying command list...`,
 					direction: "outbound",
 				});

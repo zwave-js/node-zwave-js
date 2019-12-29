@@ -275,11 +275,11 @@ export class MultiChannelAssociationCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses[
-			"Multi Channel Association"
-		];
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Multi Channel Association"];
 
 		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -290,11 +290,13 @@ export class MultiChannelAssociationCC extends CommandClass {
 		if (complete) {
 			// First find out how many groups are supported
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: "querying number of association groups...",
 				direction: "outbound",
 			});
 			groupCount = await api.getGroupCount();
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: `supports ${groupCount} association groups`,
 				direction: "inbound",
 			});
@@ -307,6 +309,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 		// Then query each association group
 		for (let groupId = 1; groupId <= groupCount; groupId++) {
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: `querying association group #${groupId}...`,
 				direction: "outbound",
 			});
@@ -322,6 +325,7 @@ currently assigned endpoints: ${group.endpoints.map(({ nodeId, endpoint }) => {
 				}
 			})}`;
 			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -342,6 +346,7 @@ currently assigned endpoints: ${group.endpoints.map(({ nodeId, endpoint }) => {
 				)
 			) {
 				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
 					message:
 						"supports Z-Wave+, assigning ourselves to the Lifeline group...",
 					direction: "outbound",
