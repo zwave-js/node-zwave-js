@@ -508,6 +508,15 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		);
 	}
 
+	/** Whether the Multi Channel CC has been interviewed and all endpoint information is known */
+	private get isMultiChannelInterviewComplete(): boolean {
+		return !!this.getValue({
+			commandClass: CommandClasses["Multi Channel"],
+			endpoint: 0,
+			property: "interviewComplete",
+		});
+	}
+
 	/** Cache for this node's endpoint instances */
 	private _endpointInstances = new Map<number, Endpoint>();
 	/**
@@ -525,6 +534,15 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		if (index === 0) return this;
 		// Check if the requested endpoint exists on the physical node
 		if (index > this.getEndpointCount()) return undefined;
+		// Check if the Multi Channel CC interview for this node is completed,
+		// because we don't have all the information before that
+		if (!this.isMultiChannelInterviewComplete) {
+			log.driver.print(
+				`Node ${this.nodeId}, Endpoint ${index}: Trying to access endpoint instance before Multi Channel interview`,
+				"error",
+			);
+			return undefined;
+		}
 		// Create an endpoint instance if it does not exist
 		if (!this._endpointInstances.has(index)) {
 			this._endpointInstances.set(
@@ -543,9 +561,13 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	/** Returns a list of all endpoints of this node, including the root endpoint (index 0) */
 	public getAllEndpoints(): Endpoint[] {
 		const ret: Endpoint[] = [this];
-		for (let i = 1; i <= this.getEndpointCount(); i++) {
-			// Iterating over the endpoint count ensures that we don't get undefined
-			ret.push(this.getEndpoint(i)!);
+		// Check if the Multi Channel CC interview for this node is completed,
+		// because we don't have all the endpoint information before that
+		if (this.isMultiChannelInterviewComplete) {
+			for (let i = 1; i <= this.getEndpointCount(); i++) {
+				// Iterating over the endpoint count ensures that we don't get undefined
+				ret.push(this.getEndpoint(i)!);
+			}
 		}
 		return ret;
 	}
@@ -1510,13 +1532,13 @@ version:               ${this.version}`;
 			return typeof val === type ? val : undefined;
 		}
 
-		// Parse CommandClasses
 		// We need to cache the endpoint CC support until all CCs have been deserialized
 		const endpointCCSupport = new Map<
 			number,
 			Map<number, Partial<CommandClassInfo>>
 		>();
 
+		// Parse CommandClasses
 		if (isObject(obj.commandClasses)) {
 			const ccDict = obj.commandClasses;
 			for (const ccHex of Object.keys(ccDict)) {
@@ -1545,16 +1567,28 @@ version:               ${this.version}`;
 					for (const endpointIndex of Object.keys(endpoints)) {
 						// First make sure this key is a number
 						if (!/^\d+$/.test(endpointIndex)) continue;
-						const {
-							isSupported,
-							isControlled,
-							version,
-						} = (endpoints as any)[endpointIndex];
-						support.set(parseInt(endpointIndex, 10), {
-							isSupported: enforceType(isSupported, "boolean"),
-							isControlled: enforceType(isControlled, "boolean"),
-							version: enforceType(version, "number"),
-						});
+						const numEndpointIndex = parseInt(endpointIndex, 10);
+
+						// Verify the info object
+						const info = (endpoints as any)[
+							endpointIndex
+						] as CommandClassInfo;
+						info.isSupported = enforceType(
+							info.isSupported,
+							"boolean",
+						);
+						info.isControlled = enforceType(
+							info.isControlled,
+							"boolean",
+						);
+						info.version = enforceType(info.version, "number");
+
+						// Update the root endpoint immediately, save non-root endpoint information for later
+						if (numEndpointIndex === 0) {
+							this.addCC(ccNum, info);
+						} else {
+							support.set(numEndpointIndex, info);
+						}
 					}
 					endpointCCSupport.set(ccNum, support);
 				} else {
@@ -1615,7 +1649,7 @@ version:               ${this.version}`;
 			}
 		}
 
-		// Now restore the CC versions for each endpoint
+		// Now restore the CC versions for each non-root endpoint
 		for (const [cc, support] of endpointCCSupport) {
 			for (const [endpointIndex, info] of support) {
 				const endpoint = this.getEndpoint(endpointIndex);
