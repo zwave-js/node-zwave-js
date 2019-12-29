@@ -1602,7 +1602,7 @@ version:               ${this.version}`;
 				// Metadata must be deserialized before values since that may be necessary to correctly translate value IDs
 				if (isArray(metadata) && metadata.length > 0) {
 					// If any exist, deserialize the metadata aswell
-					const ccInstance = this.createCCInstance(ccNum);
+					const ccInstance = this.createCCInstanceUnsafe(ccNum);
 					if (ccInstance) {
 						// In v2.0.0, propertyName was changed to property. The network caches might still reference the old property names
 						for (const m of metadata) {
@@ -1625,7 +1625,7 @@ version:               ${this.version}`;
 				}
 				if (isArray(values) && values.length > 0) {
 					// If any exist, deserialize the values aswell
-					const ccInstance = this.createCCInstance(ccNum);
+					const ccInstance = this.createCCInstanceUnsafe(ccNum);
 					if (ccInstance) {
 						// In v2.0.0, propertyName was changed to property. The network caches might still reference the old property names
 						for (const v of values) {
