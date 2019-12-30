@@ -30,15 +30,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "momentary switches",
+					"label": "Momentary switches",
 					"value": 0
 				},
 				{
-					"label": "toggle switches",
+					"label": "Toggle switches",
 					"value": 1
 				},
 				{
-					"label": "single",
+					"label": "Single momentary switch (S1)",
 					"value": 2
 				}
 			]
@@ -85,23 +85,89 @@
 				}
 			]
 		},
-		"40": {
-			"label": "S1 Switch Scenes sent",
-			"description": "Parameter values may be combined",
+		"40[0x01]": {
+			"label": "S1 scenes: Pressed 1 time",
+			"description": "Send a Central Scene notification when S1 is pressed 1 time",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 15,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"41": {
-			"label": "S2 Switch Scenes sent",
-			"description": "Parameter values may be combined",
+		"40[0x02]": {
+			"label": "S1 scenes: Pressed 2 times",
+			"description": "Send a Central Scene notification when S1 is pressed 2 times",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 15,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40[0x04]": {
+			"label": "S1 scenes: Pressed 3 time",
+			"description": "Send a Central Scene notification when S1 is pressed 3 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40[0x08]": {
+			"label": "S1 scenes: Hold down / Release",
+			"description": "Send a Central Scene notification when S1 is held down or released",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"41[0x01]": {
+			"label": "S2 scenes: Pressed 1 time",
+			"description": "Send a Central Scene notification when S2 is pressed 1 time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"41[0x02]": {
+			"label": "S2 scenes: Pressed 2 times",
+			"description": "Send a Central Scene notification when S2 is pressed 2 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"41[0x04]": {
+			"label": "S2 scenes: Pressed 3 time",
+			"description": "Send a Central Scene notification when S2 is pressed 3 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"41[0x08]": {
+			"label": "S2 scenes: Hold down / Release",
+			"description": "Send a Central Scene notification when S2 is held down or released",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
@@ -237,9 +303,10 @@
 		"152": {
 			"label": "Venetian blind - time of full turn of the slats",
 			"description": "Venetian blind - time of full turn of the slats",
+			"unit": "1/100 sec",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 90000,
+			"maxValue": 65535,
 			"defaultValue": 150,
 			"readOnly": false,
 			"writeOnly": false,
@@ -257,15 +324,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "slats return #1",
+					"label": "Main controller operation",
 					"value": 0
 				},
 				{
-					"label": "slats return #2",
+					"label": "Controller, Momentary Switch, Limit Switch",
 					"value": 1
 				},
 				{
-					"label": "slats return #3",
+					"label": "Controller, both Switches, Multilevel Stop",
 					"value": 2
 				}
 			]
@@ -273,9 +340,10 @@
 		"154": {
 			"label": "Delay motor stop",
 			"description": "Delay motor stop after reaching end switch",
+			"unit": "1/10 sec",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 600,
+			"maxValue": 255,
 			"defaultValue": 10,
 			"readOnly": false,
 			"writeOnly": false,
@@ -283,7 +351,8 @@
 		},
 		"155": {
 			"label": "Motor operation detection",
-			"description": "Motor operation detection",
+			"description": "Power threshold to be interpreted as reaching a limit switch",
+			"unit": "1/10 sec",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -295,9 +364,10 @@
 		"156": {
 			"label": "Time of up movement",
 			"description": "Time of up movement",
+			"unit": "1/100 sec",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 90000,
+			"maxValue": 65535,
 			"defaultValue": 6000,
 			"readOnly": false,
 			"writeOnly": false,
@@ -306,17 +376,18 @@
 		"157": {
 			"label": "Time of down movement",
 			"description": "Time of down movement",
+			"unit": "1/100 sec",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 90000,
+			"maxValue": 65535,
 			"defaultValue": 6000,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"30[0xff]": {
-			"label": "Action for Blinds",
-			"description": "Action for Blinds",
+			"label": "Alarm #1: Action",
+			"description": "Which action to perform when Alarm #1 is triggered",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2,
@@ -340,8 +411,8 @@
 			]
 		},
 		"30[0xff00]": {
-			"label": "Event/State Parameters - Blinda",
-			"description": "Event/State Parameters for blinds",
+			"label": "Alarm #1: Event/State Parameters",
+			"description": "Which event parameters Alarm #1 should be limited to",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -351,19 +422,25 @@
 			"allowManualEntry": true
 		},
 		"30[0xff0000]": {
-			"label": "Notification Status for Blinds",
-			"description": "Notification Status for Blinds",
+			"label": "Alarm #1: Notification Status",
+			"description": "Which notification status Alarm #1 should be limited to",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Any",
+					"value": 255
+				}
+			]
 		},
 		"30[0xff000000]": {
-			"label": "Notification Type for Blinds",
-			"description": "Notification Type for Blinds",
+			"label": "Alarm #1: Notification Type",
+			"description": "Which notification type should raise Alarm #1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -373,8 +450,8 @@
 			"allowManualEntry": true
 		},
 		"31[0xff]": {
-			"label": "Action for Water",
-			"description": "Action for Water",
+			"label": "Alarm #2: Action",
+			"description": "Which action to perform when Alarm #2 is triggered",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2,
@@ -398,8 +475,8 @@
 			]
 		},
 		"31[0xff00]": {
-			"label": "Event/State Parameters for Water",
-			"description": "Event/State Parameters for Water",
+			"label": "Alarm #2: Event/State Parameters",
+			"description": "Which event parameters Alarm #2 should be limited to",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -409,30 +486,36 @@
 			"allowManualEntry": true
 		},
 		"31[0xff0000]": {
-			"label": "Notification Status for Water",
-			"description": "Notification Status for Water",
+			"label": "Alarm #2: Notification Status",
+			"description": "Which notification status Alarm #2 should be limited to",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Any",
+					"value": 255
+				}
+			]
 		},
 		"31[0xff000000]": {
-			"label": "Notification Type for Water",
-			"description": "Notification Type for Water",
+			"label": "Alarm #2: Notification Type",
+			"description": "Which notification type should raise Alarm #2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 5,
+			"defaultValue": 5, // Water
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"32[0xff]": {
-			"label": "Action for Smoke",
-			"description": "Action for Smoke",
+			"label": "Alarm #3: Action",
+			"description": "Which action to perform when Alarm #3 is triggered",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2,
@@ -456,8 +539,8 @@
 			]
 		},
 		"32[0xff00]": {
-			"label": "Event/State Parameters for Smoke",
-			"description": "Event/State Parameters for Smoke",
+			"label": "Alarm #3: Event/State Parameters",
+			"description": "Which event parameters Alarm #3 should be limited to",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -467,30 +550,36 @@
 			"allowManualEntry": true
 		},
 		"32[0xff0000]": {
-			"label": "Notification Status for Smoke",
-			"description": "Notification Status for Smoke",
+			"label": "Alarm #3: Notification Status",
+			"description": "Which notification status Alarm #3 should be limited to",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Any",
+					"value": 255
+				}
+			]
 		},
 		"32[0xff000000]": {
-			"label": "Notification Type for Smoke",
-			"description": "Notification Type for Smoke",
+			"label": "Alarm #3: Notification Type",
+			"description": "Which notification type should raise Alarm #3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 1,
-			"readOnly": true,
+			"defaultValue": 1, // Smoke
+			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"33[0xff]": {
-			"label": "Action for CO",
-			"description": "Action for CO",
+			"label": "Alarm #4: Action",
+			"description": "Which action to perform when Alarm #4 is triggered",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2,
@@ -514,41 +603,47 @@
 			]
 		},
 		"33[0xff00]": {
-			"label": "Event/State Parameters for CO",
-			"description": "Event/State Parameters for CO",
+			"label": "Alarm #4: Event/State Parameters",
+			"description": "Which event parameters Alarm #4 should be limited to",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
-			"readOnly": true,
+			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"33[0xff0000]": {
-			"label": "Notification Status for CO",
-			"description": "Notification Status for CO",
+			"label": "Alarm #4: Notification Status",
+			"description": "Which notification status Alarm #4 should be limited to",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Any",
+					"value": 255
+				}
+			]
 		},
 		"33[0xff000000]": {
-			"label": "Notification Type for CO",
-			"description": "Notification Type for CO",
+			"label": "Alarm #4: Notification Type",
+			"description": "Which notification type should raise Alarm #4",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 2,
+			"defaultValue": 2, // CO
 			"readOnly": false,
-			"writeOnly": true,
+			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"34[0xff]": {
-			"label": "Action for Heat",
-			"description": "Action for Heat",
+			"label": "Alarm #5: Action",
+			"description": "Which action to perform when Alarm #5 is triggered",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2,
@@ -572,8 +667,8 @@
 			]
 		},
 		"34[0xff00]": {
-			"label": "Event/State Parameters for Heat",
-			"description": "Event/State Parameters for Heat",
+			"label": "Alarm #5: Event/State Parameters",
+			"description": "Which event parameters Alarm #5 should be limited to",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -583,23 +678,29 @@
 			"allowManualEntry": true
 		},
 		"34[0xff0000]": {
-			"label": "Notification Status for Heat",
-			"description": "Notification Status for Heat",
+			"label": "Alarm #5: Notification Status",
+			"description": "Which notification status Alarm #5 should be limited to",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Any",
+					"value": 255
+				}
+			]
 		},
 		"34[0xff000000]": {
-			"label": "Notification Status for Heat",
-			"description": "Notification Status for Heat",
+			"label": "Alarm #5: Notification Type",
+			"description": "Which notification type should raise Alarm #5",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 4,
+			"defaultValue": 4, // Heat
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
