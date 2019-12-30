@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.5.1 (2019-12-30)
 ### Bugfixes
 * The device config is now also loaded when deserializing nodes from the cache
 
