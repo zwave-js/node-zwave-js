@@ -22,6 +22,11 @@
 * Supported CC and their versions are now correctly stored in the cache file
 * The cache file is no longer discarded when it contains a value of an unsupported CC
 * Endpoints can no longer be accessed before the `Multi Channel` interview is completed.
+* Duplicate labels for several configuration parameters were renamed
+
+### Changes under the hood
+* Updated several dependencies
+* Duplicate configuration parameter labels are now marked as a warning
 
 ## 2.4.1 (2019-12-18)
 ### Bugfixes
