@@ -209,6 +209,35 @@ Consider converting this parameter to unsigned using ${white(
 				}
 			}
 
+			// Check if there are parameters with identical labels
+			const labelCounts = new Map<
+				string,
+				{ parameter: number; valueBitMask?: number }[]
+			>();
+			for (const [
+				param,
+				{ label },
+			] of config.paramInformation.entries()) {
+				if (!labelCounts.has(label)) labelCounts.set(label, []);
+				labelCounts.get(label)!.push(param);
+			}
+			for (const [label, params] of labelCounts) {
+				if (params.length === 1) continue;
+				addWarning(
+					file,
+					`Label "${label}" is duplicated in the following parameters: ${params
+						.map(
+							p =>
+								`${p.parameter}${
+									p.valueBitMask
+										? `[${num2hex(p.valueBitMask)}]`
+										: ""
+								}`,
+						)
+						.join(", ")}`,
+				);
+			}
+
 			const partialParams = [...config.paramInformation.entries()].filter(
 				([k]) => !!k.valueBitMask,
 			);

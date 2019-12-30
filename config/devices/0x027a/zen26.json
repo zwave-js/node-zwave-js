@@ -21,7 +21,6 @@
 		"1": {
 			"label": "Paddle Control",
 			"description": "Choose Paddle Functionality (Invert)",
-			"unit": "byte",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -43,7 +42,6 @@
 		"2": {
 			"label": "LED Indicator Control",
 			"description": "Change behavior of the LED indicator",
-			"unit": "byte",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -73,7 +71,6 @@
 		"3": {
 			"label": "Auto Turn-Off Timer",
 			"description": "enable the Auto Turn-Off Timer",
-			"unit": "byte",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -85,7 +82,6 @@
 		"5": {
 			"label": "On Off Status After Power Failure",
 			"description": "Set the on off status for the switch after power failure.",
-			"unit": "byte",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

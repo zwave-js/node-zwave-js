@@ -134,8 +134,7 @@
 			]
 		},
 		"7[0x10]": {
-			"label": "Customer Function",
-			"description": "Notification Type",
+			"label": "Customer Function: Notification Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -145,18 +144,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Using Notification Report",
+					"label": "Notification Report",
 					"value": 0
 				},
 				{
-					"label": "Using Sensor Binary Report",
+					"label": "Sensor Binary Report",
 					"value": 1
 				}
 			]
 		},
 		"7[0x20]": {
-			"label": "Customer Function",
-			"description": "Disable Multi CC in auto report",
+			"label": "Customer Function: Disable Multi CC",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
