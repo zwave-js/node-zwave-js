@@ -137,18 +137,6 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"57": {
-			"label": "Recover limit value",
-			"description": "Set the recover limit value of the temperature sensor",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
 		"64": {
 			"label": "Default Temperature Unit",
 			"description": "Sets the default temperature unit.",
@@ -469,11 +457,10 @@
 			"allowManualEntry": true
 		},
 		"57[0x0f]": {
-			"label": "Temperature recover unit",
-			"description": "Celsius or Fahrenheit",
+			"label": "Temperature recover limit (Unit)",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 1,
+			"minValue": 1,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
@@ -481,17 +468,17 @@
 			"options": [
 				{
 					"label": "Celsius",
-					"value": 0
+					"value": 1
 				},
 				{
 					"label": "Fahrenheit",
-					"value": 1
+					"value": 2
 				}
 			]
 		},
 		"57[0xff00]": {
-			"label": "Recover limit value",
-			"description": "Recover limit value",
+			"label": "Temperature recover limit (Value)",
+			"unit": "1/10",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
