@@ -179,18 +179,6 @@
 				}
 			]
 		},
-		"41": {
-			"label": "Temperature Threshold",
-			"description": "Temperature change threshold",
-			"unit": "degrees",
-			"valueSize": 3,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
 		"42": {
 			"label": "Humidity Threshold",
 			"description": "Humidity percent change threshold",
@@ -564,8 +552,7 @@
 			]
 		},
 		"41[0x0f]": {
-			"label": "Temperature Threshold Unit",
-			"description": "Sets the unit of the threshold",
+			"label": "Temperature Threshold (Unit)",
 			"valueSize": 3,
 			"minValue": 1,
 			"maxValue": 2,
@@ -587,10 +574,11 @@
 		"41[0xffff00]": {
 			"label": "Temperature Threshold",
 			"description": "Threshold change in temperature to induce an automatic report.",
+			"unit": "1/10",
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 0,
+			"defaultValue": 20,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true

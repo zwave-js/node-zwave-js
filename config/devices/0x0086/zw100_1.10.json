@@ -175,18 +175,6 @@
 				}
 			]
 		},
-		"41": {
-			"label": "Temperature Threshold",
-			"description": "Temperature change threshold",
-			"unit": "degrees",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 2678400,
-			"defaultValue": 20,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": true
-		},
 		"42": {
 			"label": "Humidity Threshold",
 			"description": "Humidity percent change threshold",
@@ -674,17 +662,6 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"201": {
-			"label": "Temperature Calibration",
-			"description": "Temperature calibration in 0.1 deg steps",
-			"valueSize": 2,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
 		"202": {
 			"label": "Humidity Sensor Calibration",
 			"description": "Humidity Sensor Calibration",
@@ -799,10 +776,9 @@
 				}
 			]
 		},
-		"41[0xff00]": {
-			"label": "Temperature Threshold Unit",
-			"description": "Sets the unit of the threshold",
-			"valueSize": 4,
+		"41[0x0f]": {
+			"label": "Temperature Threshold (Unit)",
+			"valueSize": 3,
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 1,
@@ -820,20 +796,20 @@
 				}
 			]
 		},
-		"41[0xff0000]": {
+		"41[0xffff00]": {
 			"label": "Temperature Threshold",
 			"description": "Threshold change in temperature to induce an automatic report.",
-			"valueSize": 4,
+			"unit": "1/10",
+			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 0,
+			"defaultValue": 20,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"49[0xff00]": {
-			"label": "Unit for upper limit value of temp sensor",
-			"description": "Unit selection for upper limit value of temperature sensor",
+			"label": "Upper temperature limit (Unit)",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2,
@@ -853,11 +829,10 @@
 			]
 		},
 		"49[0xffff0000]": {
-			"label": "Upper limit value of temp sensor",
-			"description": "Upper limit value of temperature sensor",
-			"unit": "0.1 * unit",
+			"label": "Upper temperature limit",
+			"unit": "1/10",
 			"valueSize": 4,
-			"minValue": -40,
+			"minValue": -400,
 			"maxValue": 2120,
 			"defaultValue": 280,
 			"readOnly": false,
@@ -865,8 +840,7 @@
 			"allowManualEntry": true
 		},
 		"50[0xff00]": {
-			"label": "Unit for lower limit value of temp sensor",
-			"description": "Unit selection for lower limit value of temperature sensor",
+			"label": "Lower temperature limit (Unit)",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2,
@@ -886,10 +860,10 @@
 			]
 		},
 		"50[0xffff0000]": {
-			"label": "Lower limit value of temperature sensor",
-			"description": "Lower limit value of temperature sensor",
+			"label": "Lower temperature limit",
+			"unit": "1/10",
 			"valueSize": 4,
-			"minValue": -40,
+			"minValue": -400,
 			"maxValue": 2120,
 			"defaultValue": 0,
 			"readOnly": false,
@@ -897,7 +871,7 @@
 			"allowManualEntry": true
 		},
 		"201[0xff]": {
-			"label": "Temperature Calibration Unit",
+			"label": "Temperature Calibration (Unit)",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 2,
@@ -917,8 +891,8 @@
 			]
 		},
 		"201[0xff00]": {
-			"label": "Temperature Calibration Value",
-			"description": "Calibration value containing one decimal point",
+			"label": "Temperature Calibration",
+			"unit": "1/10",
 			"valueSize": 2,
 			"minValue": -127,
 			"maxValue": 127,
