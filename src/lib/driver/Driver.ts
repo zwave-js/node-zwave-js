@@ -1662,7 +1662,7 @@ ${handlers.length} left`,
 				)} found, attempting to restore the network from cache...`,
 			);
 			const cacheObj = await fs.readJSON(cacheFile);
-			this.controller.deserialize(cacheObj);
+			await this.controller.deserialize(cacheObj);
 			log.driver.print(
 				`  Restoring the network from cache was successful!`,
 			);

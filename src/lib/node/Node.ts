@@ -1486,7 +1486,7 @@ version:               ${this.version}`;
 	 * @internal
 	 * Deserializes the information of this node from a cache.
 	 */
-	public deserialize(obj: any): void {
+	public async deserialize(obj: any): Promise<void> {
 		if (obj.interviewStage in InterviewStage) {
 			this.interviewStage =
 				typeof obj.interviewStage === "number"
@@ -1657,6 +1657,9 @@ version:               ${this.version}`;
 				endpoint.addCC(cc, info);
 			}
 		}
+
+		// And restore the device config
+		await this.loadDeviceConfig();
 	}
 
 	/**

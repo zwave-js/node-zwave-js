@@ -983,7 +983,7 @@ export class ZWaveController extends EventEmitter {
 	 * @internal
 	 * Deserializes the controller information and all nodes from the cache.
 	 */
-	public deserialize(serialized: any): void {
+	public async deserialize(serialized: any): Promise<void> {
 		if (isObject(serialized.nodes)) {
 			for (const nodeId of Object.keys(serialized.nodes)) {
 				const serializedNode = serialized.nodes[nodeId];
@@ -999,7 +999,7 @@ export class ZWaveController extends EventEmitter {
 				}
 
 				if (this.nodes.has(serializedNode.id)) {
-					this.nodes
+					await this.nodes
 						.get(serializedNode.id)!
 						.deserialize(serializedNode);
 				}
