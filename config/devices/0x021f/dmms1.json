@@ -21,7 +21,6 @@
 		"1": {
 			"label": "Motion Sensitivity",
 			"description": "8 = high; 255 = low",
-			"unit": "byte",
 			"valueSize": 1,
 			"minValue": 8,
 			"maxValue": 255,
@@ -46,7 +45,6 @@
 		"3": {
 			"label": "Trigger Action",
 			"description": "Brightness to turn on the associated device 1-99, 255=ON",
-			"unit": "byte",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -59,7 +57,6 @@
 		"4": {
 			"label": "Motion Detection",
 			"description": "255=Motion Detection Enabled",
-			"unit": "byte",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -72,7 +69,6 @@
 		"5": {
 			"label": "Light Trigger Level",
 			"description": "Max Light level which enables motion trigger",
-			"unit": "byte",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
@@ -84,7 +80,6 @@
 		"6": {
 			"label": "Motion Trigger Interval",
 			"description": "Minimum time between motion triggers.",
-			"unit": "byte",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
@@ -96,7 +91,6 @@
 		"7": {
 			"label": "Light Polling Interval",
 			"description": "Interval between light level reporting",
-			"unit": "byte",
 			"valueSize": 2,
 			"minValue": 60,
 			"maxValue": 36000,
@@ -109,7 +103,6 @@
 		"8": {
 			"label": "Light Trigger",
 			"description": "255=enable Light sensor",
-			"unit": "byte",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -122,7 +115,6 @@
 		"9": {
 			"label": "Light Report",
 			"description": "Light level change to be reported.",
-			"unit": "byte",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -135,7 +127,6 @@
 		"10": {
 			"label": "LED Notifications",
 			"description": "0=disable, 1=enable",
-			"unit": "byte",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

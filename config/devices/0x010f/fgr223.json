@@ -21,7 +21,6 @@
 		"20": {
 			"label": "Switch type",
 			"description": "Switch type",
-			"unit": "byte",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -47,7 +46,6 @@
 		"24": {
 			"label": "Inputs orientation",
 			"description": "Inputs orientation",
-			"unit": "byte",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -69,7 +67,6 @@
 		"25": {
 			"label": "Outputs orientation",
 			"description": "Outputs orientation",
-			"unit": "byte",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -178,7 +175,6 @@
 		"150": {
 			"label": "Force calibration",
 			"description": "Force calibration",
-			"unit": "byte",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -204,7 +200,6 @@
 		"151": {
 			"label": "Operating mode",
 			"description": "Operating mode",
-			"unit": "byte",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 6,
@@ -253,7 +248,6 @@
 		"153": {
 			"label": "Set slats back to previous position",
 			"description": "Set slats back to previous position",
-			"unit": "byte",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
