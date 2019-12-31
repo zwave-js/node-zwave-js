@@ -447,27 +447,6 @@
 				}
 			]
 		},
-		"16": {
-			"label": "Multilevel Switch for button #4",
-			"description": "Configuration of the Multilevel Switch",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
-		},
 		"19": {
 			"label": "Association groups for button 1",
 			"description": "Association groups for button 1",
