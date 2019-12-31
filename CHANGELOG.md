@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.5.2-beta.0 (2019-12-31)
 Debug release
 
 ## 2.5.1 (2019-12-30)
