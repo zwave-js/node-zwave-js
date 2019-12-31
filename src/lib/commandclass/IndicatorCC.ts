@@ -194,7 +194,13 @@ export class IndicatorCCAPI extends CCAPI {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-	public async getSupported(indicatorId: number) {
+	public async getSupported(
+		indicatorId: number,
+	): Promise<{
+		indicatorId?: number;
+		supportedProperties: readonly number[];
+		nextIndicatorId: number;
+	}> {
 		this.assertSupportsCommand(
 			IndicatorCommand,
 			IndicatorCommand.SupportedGet,
@@ -209,6 +215,10 @@ export class IndicatorCCAPI extends CCAPI {
 			IndicatorCCSupportedReport
 		>(cc))!;
 		return {
+			// Include the actual indicator ID if 0x00 was requested
+			...(indicatorId === 0x00
+				? { indicatorId: response.indicatorId }
+				: undefined),
 			supportedProperties: response.supportedProperties,
 			nextIndicatorId: response.nextIndicatorId,
 		};
@@ -289,27 +299,16 @@ export class IndicatorCC extends CommandClass {
 					message: "scanning supported indicator IDs...",
 					direction: "outbound",
 				});
-				let nextId = (await api.getSupported(0x00)).nextIndicatorId;
+				// Query ID 0 to get the first supported ID
+				let curId = 0x00;
 				supportedIndicatorIds = [];
-				while (nextId !== 0x00) {
-					supportedIndicatorIds.push(nextId);
-					log.controller.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `received an indicator ID, supportedIndicatorIds = ${JSON.stringify(
-							supportedIndicatorIds,
-						)}`,
-						direction: "none",
-					});
-					const supportedResponse = await api.getSupported(nextId);
-					nextId = supportedResponse.nextIndicatorId;
+				while (curId !== 0x00) {
+					const supportedResponse = await api.getSupported(curId);
+					supportedIndicatorIds.push(
+						supportedResponse.indicatorId ?? curId,
+					);
+					curId = supportedResponse.nextIndicatorId;
 				}
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `received all indicator IDs, supportedIndicatorIds = ${JSON.stringify(
-						supportedIndicatorIds,
-					)}`,
-					direction: "none",
-				});
 				// The IDs are not stored by the report CCs
 				this.getValueDB().setValue(
 					getSupportedIndicatorIDsValueID(this.endpointIndex),
