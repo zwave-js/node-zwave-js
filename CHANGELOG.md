@@ -4,8 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
-## 2.5.2-beta.0 (2019-12-31)
-Debug release
+## __WORK IN PROGRESS__
+### Bugfixes
+* Removed a duplicate config parameter from Heatit Z-Scene Controller
+* `IndicatorCC`: The first indicator ID is no longer ignored
 
 ## 2.5.1 (2019-12-30)
 ### Bugfixes
