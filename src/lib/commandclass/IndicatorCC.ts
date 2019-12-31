@@ -293,9 +293,23 @@ export class IndicatorCC extends CommandClass {
 				supportedIndicatorIds = [];
 				while (nextId !== 0x00) {
 					supportedIndicatorIds.push(nextId);
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `received an indicator ID, supportedIndicatorIds = ${JSON.stringify(
+							supportedIndicatorIds,
+						)}`,
+						direction: "none",
+					});
 					const supportedResponse = await api.getSupported(nextId);
 					nextId = supportedResponse.nextIndicatorId;
 				}
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `received all indicator IDs, supportedIndicatorIds = ${JSON.stringify(
+						supportedIndicatorIds,
+					)}`,
+					direction: "none",
+				});
 				// The IDs are not stored by the report CCs
 				this.getValueDB().setValue(
 					getSupportedIndicatorIDsValueID(this.endpointIndex),
