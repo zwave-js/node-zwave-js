@@ -67,6 +67,36 @@ describe("lib/util/Duration", () => {
 		});
 	});
 
+	describe("parseSet()", () => {
+		it("should correctly parse default durations", () => {
+			const duration = Duration.parseSet(0xff);
+			expect(duration!.unit).toBe("default");
+			expect(duration!.value).toBe(0);
+		});
+
+		it("should return undefined when undefined is passed", () => {
+			const duration = Duration.parseSet(undefined);
+			expect(duration).toBeUndefined();
+		});
+
+		it("should correctly parse valid durations", () => {
+			const tests = [
+				{ payload: 0x80, unit: "minutes", value: 1 },
+				{ payload: 0x83, unit: "minutes", value: 4 },
+				{ payload: 0xfe, unit: "minutes", value: 127 },
+				{ payload: 0x00, unit: "seconds", value: 0 },
+				{ payload: 0x01, unit: "seconds", value: 1 },
+				{ payload: 0x08, unit: "seconds", value: 8 },
+				{ payload: 0x7f, unit: "seconds", value: 127 },
+			];
+			for (const { payload, unit, value } of tests) {
+				const duration = Duration.parseSet(payload);
+				expect(duration!.unit).toBe(unit);
+				expect(duration!.value).toBe(value);
+			}
+		});
+	});
+
 	describe("serializeSet()", () => {
 		it("should correctly parse default durations", () => {
 			const payload = new Duration(0, "default").serializeSet();

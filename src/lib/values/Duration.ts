@@ -38,6 +38,15 @@ export class Duration {
 		return new Duration(value, isMinutes ? "minutes" : "seconds");
 	}
 
+	/** Parses a duration as represented in Set commands */
+	public static parseSet(payload?: number): Duration | undefined {
+		if (payload == undefined) return undefined;
+		if (payload === 0xff) return new Duration(0, "default");
+		const isMinutes = !!(payload & 0b1000_0000);
+		const value = (payload & 0b0111_1111) + (isMinutes ? 1 : 0); // minutes start at 1
+		return new Duration(value, isMinutes ? "minutes" : "seconds");
+	}
+
 	/** Serializes a duration for a Set command */
 	public serializeSet(): number {
 		if (this.unit === "default") return 0xff;
