@@ -96,9 +96,12 @@ export class SceneActivationCCSet extends SceneActivationCC {
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
 			this.sceneId = this.payload[0];
-			validatePayload(this.sceneId >= 1, this.sceneId <= 255);
 			this.dimmingDuration = Duration.parseSet(this.payload[1]);
+
+			validatePayload(this.sceneId >= 1, this.sceneId <= 255);
+			this.persistValues();
 		} else {
 			this.sceneId = options.sceneId;
 			this.dimmingDuration = options.dimmingDuration;
