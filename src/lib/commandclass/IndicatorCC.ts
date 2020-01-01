@@ -302,13 +302,13 @@ export class IndicatorCC extends CommandClass {
 				// Query ID 0 to get the first supported ID
 				let curId = 0x00;
 				supportedIndicatorIds = [];
-				while (curId !== 0x00) {
+				do {
 					const supportedResponse = await api.getSupported(curId);
 					supportedIndicatorIds.push(
 						supportedResponse.indicatorId ?? curId,
 					);
 					curId = supportedResponse.nextIndicatorId;
-				}
+				} while (curId !== 0x00);
 				// The IDs are not stored by the report CCs
 				this.getValueDB().setValue(
 					getSupportedIndicatorIDsValueID(this.endpointIndex),

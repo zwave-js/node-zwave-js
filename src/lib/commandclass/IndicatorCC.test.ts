@@ -187,18 +187,18 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 			(fakeDriver.sendCommand as jest.Mock)
 				// getSupported
 				.mockResolvedValueOnce({
+					// (0x00)
 					supportedProperties: [],
-					nextIndicatorId: 0x30,
-				})
-				.mockResolvedValueOnce({
-					supportedProperties: [2, 3, 4],
+					indicatorId: 0x30,
 					nextIndicatorId: 0x46,
 				})
 				.mockResolvedValueOnce({
+					// (0x46)
 					supportedProperties: [2, 3, 4],
 					nextIndicatorId: 0x47,
 				})
 				.mockResolvedValueOnce({
+					// (0x47)
 					supportedProperties: [2, 3, 4],
 					nextIndicatorId: 0x00,
 				})
