@@ -14,7 +14,7 @@
 * The device config is now also loaded when deserializing nodes from the cache
 
 ## 2.5.0 (2019-12-30)
-## Features
+### Features
 * Added the event `"ready"` to `ZWaveNode` and `"all nodes ready"` to `Driver` to notify users that a node respectively all nodes are safe to be used
 
 ### Bugfixes (or maybe it's a feature?)
