@@ -24,6 +24,8 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
+// @noInterview This CC is write-only
+
 // All the supported commands
 export enum SceneActivationCommand {
 	Set = 0x01,
