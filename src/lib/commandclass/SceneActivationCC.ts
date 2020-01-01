@@ -33,12 +33,14 @@ export enum SceneActivationCommand {
 
 @API(CommandClasses["Scene Activation"])
 export class SceneActivationCCAPI extends CCAPI {
-	public supportsCommand(cmd: SceneActivationCommand): Maybe<boolean> {
-		switch (cmd) {
-			case SceneActivationCommand.Set:
-				return true; // This is mandatory
-		}
-		return super.supportsCommand(cmd);
+	public supportsCommand(_cmd: SceneActivationCommand): Maybe<boolean> {
+		// There is only one command
+		return true;
+		// switch (cmd) {
+		// 	case SceneActivationCommand.Set:
+		// 		return true; // This is mandatory
+		// }
+		// return super.supportsCommand(cmd);
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
