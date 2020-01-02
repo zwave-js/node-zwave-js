@@ -539,30 +539,62 @@ export class IndicatorCCReport extends IndicatorCC {
 					value: this.payload[offset + 2],
 				};
 
-				const metadata = getIndicatorMetadata(
-					value.indicatorId,
-					value.propertyId,
-				);
-				// Some values need to be converted
-				if (metadata.type === "boolean") {
-					value.value = !!value.value;
-				}
-				this.values.push(value);
-
-				// Publish the value
-				const valueId = getIndicatorValueValueID(
-					this.endpointIndex,
-					value.indicatorId,
-					value.propertyId,
-				);
-				valueDB.setMetadata(valueId, metadata);
-				valueDB.setValue(valueId, value.value);
+				this.setIndicatorValue(value);
 			}
+
+			// TODO: Think if we want this:
+
+			// // If not all Property IDs are included in the command for the actual Indicator ID,
+			// // a controlling node MUST assume non-specified Property IDs values to be 0x00.
+			// const indicatorId = this.values[0].indicatorId;
+			// const supportedIndicatorProperties =
+			// 	valueDB.getValue<number[]>(
+			// 		getSupportedPropertyIDsValueID(
+			// 			this.endpointIndex,
+			// 			indicatorId,
+			// 		),
+			// 	) ?? [];
+			// // Find out which ones are missing
+			// const missingIndicatorProperties = supportedIndicatorProperties.filter(
+			// 	prop =>
+			// 		!this.values!.find(({ propertyId }) => prop === propertyId),
+			// );
+			// // And assume they are 0 (false)
+			// for (const missing of missingIndicatorProperties) {
+			// 	this.setIndicatorValue({
+			// 		indicatorId,
+			// 		propertyId: missing,
+			// 		value: 0,
+			// 	});
+			// }
 		}
 	}
 
 	public readonly value: number | undefined;
 	public readonly values: IndicatorObject[] | undefined;
+
+	private setIndicatorValue(value: IndicatorObject): void {
+		const valueDB = this.getValueDB();
+
+		const metadata = getIndicatorMetadata(
+			value.indicatorId,
+			value.propertyId,
+		);
+		// Some values need to be converted
+		if (metadata.type === "boolean") {
+			value.value = !!value.value;
+		}
+		this.values!.push(value);
+
+		// Publish the value
+		const valueId = getIndicatorValueValueID(
+			this.endpointIndex,
+			value.indicatorId,
+			value.propertyId,
+		);
+		valueDB.setMetadata(valueId, metadata);
+		valueDB.setValue(valueId, value.value);
+	}
 }
 
 interface IndicatorCCGetOptions extends CCCommandOptions {
