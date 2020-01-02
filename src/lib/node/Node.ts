@@ -22,6 +22,7 @@ import {
 } from "../commandclass/CommandClasses";
 import { getEndpointCCsValueId } from "../commandclass/MultiChannelCC";
 import { NotificationCCReport } from "../commandclass/NotificationCC";
+import { SceneActivationCCSet } from "../commandclass/SceneActivationCC";
 import { WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
 import { DeviceConfig, lookupDevice } from "../config/Devices";
 import { lookupNotification } from "../config/Notifications";
@@ -1073,6 +1074,17 @@ version:               ${this.version}`;
 			return this.handleWakeUpNotification();
 		} else if (command instanceof NotificationCCReport) {
 			return this.handleNotificationReport(command);
+		}
+
+		// Ignore all commands that don't need to be handled
+		if (command.constructor.name.endsWith("Report")) {
+			// Reports are either a response to a Get command or
+			// automatically store their values in the Value DB.
+			// No need to manually handle them
+			return;
+		} else if (command instanceof SceneActivationCCSet) {
+			// This does so too
+			return;
 		}
 
 		log.controller.logNode(this.id, {
