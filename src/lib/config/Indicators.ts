@@ -14,7 +14,10 @@ let indicators: ReadonlyMap<number, string> | undefined;
 let properties: ReadonlyMap<number, IndicatorProperty> | undefined;
 
 /** @internal */
-export async function loadIndicatorsInternal(): Promise<void> {
+export async function loadIndicatorsInternal(): Promise<{
+	indicators: Exclude<typeof indicators, undefined>;
+	properties: Exclude<typeof properties, undefined>;
+}> {
 	if (!(await pathExists(configPath))) {
 		throw new ZWaveError(
 			"The config file does not exist!",
@@ -71,6 +74,8 @@ export async function loadIndicatorsInternal(): Promise<void> {
 			);
 		}
 		properties = _properties;
+
+		return { indicators, properties };
 	} catch (e) {
 		if (e instanceof ZWaveError) {
 			throw e;
