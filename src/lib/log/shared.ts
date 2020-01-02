@@ -8,9 +8,12 @@ import { colorizer } from "./Colorizer";
 const { combine, timestamp, label } = winston.format;
 
 const loglevels = configs.npm.levels;
-const transportLoglevel =
-	process.env.LOGLEVEL! in loglevels ? process.env.LOGLEVEL! : "debug";
-const transportLoglevelNumeric = loglevels[transportLoglevel];
+function getTransportLoglevel(): string {
+	return process.env.LOGLEVEL! in loglevels ? process.env.LOGLEVEL! : "debug";
+}
+function getTransportLoglevelNumeric(): number {
+	return loglevels[getTransportLoglevel()];
+}
 
 function shouldLogToFile(): boolean {
 	return !!process.env.LOGTOFILE;
@@ -268,7 +271,7 @@ ${logFilename}`);
 
 export function createConsoleTransport(format?: Format): Transport {
 	return new winston.transports.Console({
-		level: transportLoglevel,
+		level: getTransportLoglevel(),
 		silent: process.env.NODE_ENV === "test",
 		format,
 	});
@@ -277,7 +280,7 @@ export function createConsoleTransport(format?: Format): Transport {
 export function createFileTransport(format?: Format): Transport {
 	return new winston.transports.File({
 		filename: logFilename,
-		level: transportLoglevel,
+		level: getTransportLoglevel(),
 		format,
 	});
 }
@@ -296,7 +299,7 @@ export function isLoglevelVisible(loglevel: string): boolean {
 		loglevelVisibleCache.set(
 			loglevel,
 			loglevel in loglevels &&
-				loglevels[loglevel] <= transportLoglevelNumeric,
+				loglevels[loglevel] <= getTransportLoglevelNumeric(),
 		);
 	}
 	return loglevelVisibleCache.get(loglevel)!;
