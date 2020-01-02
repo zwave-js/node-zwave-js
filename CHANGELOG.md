@@ -4,6 +4,13 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* Implemented `Scene Activation` CC
+
+### Bugfixes
+* The env variables `LOGTOFILE` and `LOGLEVEL` are now lazily evaluated
+
 ## 2.5.2 (2020-01-01)
 ### Bugfixes
 * Removed a duplicate config parameter from Heatit Z-Scene Controller
