@@ -176,7 +176,8 @@ export class BasicCCReport extends BasicCC {
 			this._targetValue = parseNumber(this.payload[1]);
 			this._duration = Duration.parseReport(this.payload[2]);
 		}
-		this.persistValues();
+		// Do not persist values here. We want to control when this is happening,
+		// in case the report is mapped to another CC
 	}
 
 	private _currentValue: Maybe<number> | undefined;
