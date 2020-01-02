@@ -12,7 +12,9 @@ const transportLoglevel =
 	process.env.LOGLEVEL! in loglevels ? process.env.LOGLEVEL! : "debug";
 const transportLoglevelNumeric = loglevels[transportLoglevel];
 
-const logToFile = !!process.env.LOGTOFILE;
+function shouldLogToFile(): boolean {
+	return !!process.env.LOGTOFILE;
+}
 const logFilename = path.join(
 	__dirname,
 	"../../..",
@@ -251,7 +253,7 @@ let hasLoggedTargetFilename = false;
 
 export function createLogTransports(channel: string): Transport[] {
 	const ret: Transport[] = [];
-	if (logToFile) {
+	if (shouldLogToFile()) {
 		ret.push(createFileTransport(createLoggerFormat(channel, false)));
 		if (!hasLoggedTargetFilename) {
 			hasLoggedTargetFilename = true;
@@ -288,7 +290,7 @@ const isUnitTest = process.env.NODE_ENV === "test";
 export function isLoglevelVisible(loglevel: string): boolean {
 	// If we are not connected to a TTY, not unit testing and not logging to a file, we won't see anything
 	if (isUnitTest) return true;
-	if (!isTTY && !logToFile) return false;
+	if (!isTTY && !shouldLogToFile()) return false;
 
 	if (!loglevelVisibleCache.has(loglevel)) {
 		loglevelVisibleCache.set(
