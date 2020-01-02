@@ -50,7 +50,8 @@
 			"label": "Multilevel"
 		},
 		"0x02": {
-			"label": "Binary"
+			"label": "Binary",
+			"type": "boolean"
 		},
 		"0x03": {
 			"label": "On/Off Period: Duration",
@@ -84,7 +85,8 @@
 		"0x10": {
 			"label": "Low power",
 			"description": "This property MAY be used to by a supporting node advertise that the indicator can continue working in sleep mode.",
-			"readonly": true
+			"readonly": true,
+			"type": "boolean"
 		}
 	}
 }

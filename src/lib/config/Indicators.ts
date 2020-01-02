@@ -7,6 +7,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
+import { ValueType } from "../values/Metadata";
 import { configDir, hexKeyRegexNDigits, throwInvalidConfig } from "./utils";
 
 const configPath = path.join(configDir, "indicators.json");
@@ -14,7 +15,10 @@ let indicators: ReadonlyMap<number, string> | undefined;
 let properties: ReadonlyMap<number, IndicatorProperty> | undefined;
 
 /** @internal */
-export async function loadIndicatorsInternal(): Promise<void> {
+export async function loadIndicatorsInternal(): Promise<{
+	indicators: Exclude<typeof indicators, undefined>;
+	properties: Exclude<typeof properties, undefined>;
+}> {
 	if (!(await pathExists(configPath))) {
 		throw new ZWaveError(
 			"The config file does not exist!",
@@ -71,6 +75,8 @@ export async function loadIndicatorsInternal(): Promise<void> {
 			);
 		}
 		properties = _properties;
+
+		return { indicators, properties };
 	} catch (e) {
 		if (e instanceof ZWaveError) {
 			throw e;
@@ -188,6 +194,18 @@ export class IndicatorProperty {
 			);
 		}
 		this.readonly = definition.readonly;
+
+		if (
+			definition.type != undefined &&
+			typeof definition.type !== "string"
+		) {
+			throwInvalidConfig(
+				"indicators",
+				`type for property ${num2hex(id)} is not a string!`,
+			);
+		}
+		// TODO: Validate that the value is ok
+		this.type = definition.type;
 	}
 
 	public readonly id: number;
@@ -196,4 +214,5 @@ export class IndicatorProperty {
 	public readonly min: number | undefined;
 	public readonly max: number | undefined;
 	public readonly readonly: boolean | undefined;
+	public readonly type: ValueType | undefined;
 }

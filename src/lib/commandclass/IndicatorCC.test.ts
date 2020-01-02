@@ -146,7 +146,7 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 			{
 				indicatorId: 1,
 				propertyId: 2,
-				value: 3,
+				value: true, // this is a binary indicator
 			},
 			{
 				indicatorId: 5,

@@ -31,8 +31,16 @@ async function lintManufacturers(): Promise<void> {
 }
 
 async function lintIndicators(): Promise<void> {
-	await loadIndicatorsInternal();
-	// TODO: Validate that the file is semantically correct
+	const { properties, indicators } = await loadIndicatorsInternal();
+
+	if (!(properties.get(1)?.label === "Multilevel")) {
+		throw new Error(
+			`The indicator property Multilevel (0x01) is required!`,
+		);
+	}
+	if (!(properties.get(2)?.label === "Binary")) {
+		throw new Error(`The indicator property Binary (0x02) is required!`);
+	}
 }
 
 async function lintDevices(): Promise<void> {
