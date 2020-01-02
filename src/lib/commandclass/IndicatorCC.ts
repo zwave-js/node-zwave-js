@@ -387,14 +387,14 @@ export class IndicatorCC extends CommandClass {
 
 	protected supportsV2Indicators(): boolean {
 		// First test if there are any indicator ids defined
-		const supportedIndicatorIds = this.getValueDB().getValue<
-			number[] | undefined
-		>(getSupportedIndicatorIDsValueID(this.endpointIndex));
+		const supportedIndicatorIds = this.getValueDB().getValue<number[]>(
+			getSupportedIndicatorIDsValueID(this.endpointIndex),
+		);
 		if (!supportedIndicatorIds?.length) return false;
 		// Then test if there are any property ids defined
 		return supportedIndicatorIds.some(
 			indicatorId =>
-				!!this.getValueDB().getValue<number[] | undefined>(
+				!!this.getValueDB().getValue<number[]>(
 					getSupportedPropertyIDsValueID(
 						this.endpointIndex,
 						indicatorId,
