@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.6.0 (2020-01-02)
 ### Features
 * Implemented `Scene Activation` CC
 
