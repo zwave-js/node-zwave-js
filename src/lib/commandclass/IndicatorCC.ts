@@ -90,14 +90,24 @@ function getIndicatorMetadata(
 			label,
 		};
 	} else {
-		return {
-			...ValueMetadata.UInt8,
-			label: `${label} - ${prop.label}`,
-			description: prop.description,
-			min: prop.min,
-			max: prop.max,
-			readable: !prop.readonly,
-		};
+		if (prop.type === "boolean") {
+			return {
+				...ValueMetadata.Boolean,
+				label: `${label} - ${prop.label}`,
+				description: prop.description,
+				readable: !prop.readonly,
+			};
+		} else {
+			// UInt8
+			return {
+				...ValueMetadata.UInt8,
+				label: `${label} - ${prop.label}`,
+				description: prop.description,
+				min: prop.min,
+				max: prop.max,
+				readable: !prop.readonly,
+			};
+		}
 	}
 }
 
@@ -374,12 +384,30 @@ export class IndicatorCC extends CommandClass {
 		}
 		return super.translateProperty(property, propertyKey);
 	}
+
+	protected supportsV2Indicators(): boolean {
+		// First test if there are any indicator ids defined
+		const supportedIndicatorIds = this.getValueDB().getValue<
+			number[] | undefined
+		>(getSupportedIndicatorIDsValueID(this.endpointIndex));
+		if (!supportedIndicatorIds?.length) return false;
+		// Then test if there are any property ids defined
+		return supportedIndicatorIds.some(
+			indicatorId =>
+				!!this.getValueDB().getValue<number[] | undefined>(
+					getSupportedPropertyIDsValueID(
+						this.endpointIndex,
+						indicatorId,
+					),
+				)?.length,
+		);
+	}
 }
 
 export interface IndicatorObject {
 	indicatorId: number;
 	propertyId: number;
-	value: number;
+	value: number | boolean;
 }
 
 type IndicatorCCSetOptions =
@@ -441,7 +469,18 @@ export class IndicatorCCSet extends IndicatorCC {
 			const objCount = values.length & MAX_INDICATOR_OBJECTS;
 			const valuesFlat = values
 				.slice(0, objCount + 1)
-				.map(o => [o.indicatorId, o.propertyId, o.value] as const)
+				.map(
+					o =>
+						[
+							o.indicatorId,
+							o.propertyId,
+							typeof o.value === "number"
+								? o.value
+								: o.value
+								? 0xff
+								: 0x00,
+						] as const,
+				)
 				.reduce((acc, cur) => acc.concat(...cur), [] as number[]);
 			this.payload = Buffer.concat([
 				Buffer.from([0, objCount]),
@@ -469,34 +508,54 @@ export class IndicatorCCReport extends IndicatorCC {
 		if (objCount === 0) {
 			this.value = this.payload[0];
 
-			// Publish the value
-			const valueId = getIndicatorValueValueID(this.endpointIndex, 0, 1);
-			valueDB.setMetadata(valueId, {
-				...ValueMetadata.UInt8,
-				label: "Indicator value",
-			});
-			valueDB.setValue(valueId, this.value);
+			if (!this.supportsV2Indicators()) {
+				// Publish the value
+				const valueId = getIndicatorValueValueID(
+					this.endpointIndex,
+					0,
+					1,
+				);
+				valueDB.setMetadata(valueId, {
+					...ValueMetadata.UInt8,
+					label: "Indicator value",
+				});
+				valueDB.setValue(valueId, this.value);
+			} else {
+				// Don't!
+				log.controller.logNode(this.nodeId, {
+					message: `ignoring V1 indicator report because the node supports V2 indicators`,
+					direction: "none",
+					endpoint: this.endpointIndex,
+				});
+			}
 		} else {
 			validatePayload(this.payload.length >= 2 + 3 * objCount);
 			this.values = [];
 			for (let i = 0; i < objCount; i++) {
 				const offset = 2 + 3 * i;
-				const value = {
+				const value: IndicatorObject = {
 					indicatorId: this.payload[offset],
 					propertyId: this.payload[offset + 1],
 					value: this.payload[offset + 2],
 				};
+
+				const metadata = getIndicatorMetadata(
+					value.indicatorId,
+					value.propertyId,
+				);
+				// Some values need to be converted
+				if (metadata.type === "boolean") {
+					value.value = !!value.value;
+				}
 				this.values.push(value);
+
 				// Publish the value
 				const valueId = getIndicatorValueValueID(
 					this.endpointIndex,
 					value.indicatorId,
 					value.propertyId,
 				);
-				valueDB.setMetadata(
-					valueId,
-					getIndicatorMetadata(value.indicatorId, value.propertyId),
-				);
+				valueDB.setMetadata(valueId, metadata);
 				valueDB.setValue(valueId, value.value);
 			}
 		}
