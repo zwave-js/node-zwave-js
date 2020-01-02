@@ -1230,7 +1230,8 @@ version:               ${this.version}`;
 
 			// Otherwise fall back to setting it ourselves
 			if (!didSetMappedValue) {
-				// Reports store their value automatically - no need to handle them
+				// Store the value in the value DB now
+				command.persistValues();
 
 				// Since the node sent us a Basic report, we are sure that it is at least supported
 				// If this is the only supported actuator CC, add it to the support list,
@@ -1256,7 +1257,7 @@ version:               ${this.version}`;
 
 			// Otherwise fall back to setting it ourselves
 			if (!didSetMappedValue) {
-				// Sets don't store their value automatically, so store the values manually
+				// Sets cannot store their value automatically, so store the values manually
 				this._valueDB.setValue(
 					{
 						commandClass: CommandClasses.Basic,
