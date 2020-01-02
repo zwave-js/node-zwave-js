@@ -31,7 +31,7 @@ async function lintManufacturers(): Promise<void> {
 }
 
 async function lintIndicators(): Promise<void> {
-	const { properties, indicators } = await loadIndicatorsInternal();
+	const { properties } = await loadIndicatorsInternal();
 
 	if (!(properties.get(1)?.label === "Multilevel")) {
 		throw new Error(
