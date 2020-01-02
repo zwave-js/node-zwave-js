@@ -7,6 +7,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
+import { ValueType } from "../values/Metadata";
 import { configDir, hexKeyRegexNDigits, throwInvalidConfig } from "./utils";
 
 const configPath = path.join(configDir, "indicators.json");
@@ -193,6 +194,18 @@ export class IndicatorProperty {
 			);
 		}
 		this.readonly = definition.readonly;
+
+		if (
+			definition.type != undefined &&
+			typeof definition.type !== "string"
+		) {
+			throwInvalidConfig(
+				"indicators",
+				`type for property ${num2hex(id)} is not a string!`,
+			);
+		}
+		// TODO: Validate that the value is ok
+		this.type = definition.type;
 	}
 
 	public readonly id: number;
@@ -201,4 +214,5 @@ export class IndicatorProperty {
 	public readonly min: number | undefined;
 	public readonly max: number | undefined;
 	public readonly readonly: boolean | undefined;
+	public readonly type: ValueType | undefined;
 }
