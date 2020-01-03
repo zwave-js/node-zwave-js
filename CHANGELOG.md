@@ -4,6 +4,17 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* `Basic CC` reports no longer create a value when they are mapped to another CC
+* `IndicatorCC`:
+    * Binary indicators now use `boolean` values
+    * V1 indicators (unspecified) are now ignored if an endpoint is known to have V2 indicators
+
+### Bugfixes
+* Many occurences of `TODO: no handler for application command` in the log were removed
+* The driver is no longer reset when unexpected data is received. Instead the invalid bytes are skipped.
+
 ## 2.6.0 (2020-01-02)
 ### Features
 * Implemented `Scene Activation` CC
