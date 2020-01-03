@@ -25,7 +25,7 @@
 			],
 			"env": {
 				// "NO_CACHE": "true",
-				"LOGLEVEL": "info"
+				// "LOGLEVEL": "info"
 			},
 			"console": "integratedTerminal",
 			"sourceMaps": true
