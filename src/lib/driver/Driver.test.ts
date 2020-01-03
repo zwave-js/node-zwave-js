@@ -230,75 +230,104 @@ describe("lib/driver/Driver => ", () => {
 
 			driver.destroy();
 		});
-	});
 
-	describe("resetting the driver => ", () => {
-		let driver: Driver;
-		let serialport: MockSerialPort;
-
-		beforeEach(async () => {
-			({ driver, serialport } = await createAndStartDriver());
-		});
-
-		afterEach(() => {
-			driver.destroy();
-			driver.removeAllListeners();
-		});
-
-		it("should send a NAK", async () => {
-			const errorSpy = jest.fn();
-			driver.on("error", errorSpy);
-
-			// receive something that's not a message header
-			serialport.receiveData(Buffer.from([0xff]));
-			expect(errorSpy).toBeCalledTimes(1);
-			assertZWaveError(errorSpy.mock.calls[0][0] as unknown, {
-				errorCode: ZWaveErrorCodes.Driver_InvalidDataReceived,
-			});
-
-			// trigger the send queue
-			jest.runAllTimers();
-			expect(serialport.writeStub).toHaveBeenCalledWith(
-				Buffer.from([MessageHeaders.NAK]),
-			);
-		});
-
-		it("should happen on invalid data in the receive buffer", () => {
-			// swallow the error
-			driver.on("error", () => {});
-			// receive an invalid message
-			serialport.receiveData(Buffer.from([0x01, 0x03, 0x00, 0x00, 0x00]));
-			// trigger the send queue
-			jest.runAllTimers();
-			expect(serialport.writeStub).toHaveBeenCalledWith(
-				Buffer.from([MessageHeaders.NAK]),
-			);
-		});
-
-		it("should reject the current (pending) transaction", async () => {
-			// swallow the error
-			driver.on("error", () => {});
+		it("invalid data before a message should be ignored", async () => {
+			const { driver, serialport } = await createAndStartDriver();
 
 			const req = new MockRequestMessageWithExpectation(driver);
 
 			// send a message
-			const errorSpy = jest.fn();
-			// And catch the thrown error
-			const promise = driver.sendMessage(req).catch(errorSpy);
+			const resolvedSpy = jest.fn();
+			const promise = driver.sendMessage(req);
+			promise.then(resolvedSpy);
 			// trigger the send queue
 			jest.runAllTimers();
 
-			// receive something that's not a message header
-			serialport.receiveData(Buffer.from([0xff]));
+			expect(resolvedSpy).not.toBeCalled();
 
-			// This is necessary or the test will finish too early and fail
-			await promise;
-			expect(errorSpy).toBeCalledTimes(1);
-			assertZWaveError(errorSpy.mock.calls[0][0] as unknown, {
-				errorCode: ZWaveErrorCodes.Driver_Reset,
-			});
+			// receive the message (with some noise ahead of it)
+			const resp = new MockResponseMessage(driver);
+			serialport.receiveData(
+				Buffer.concat([Buffer.from([0xff]), resp.serialize()]),
+			);
+			expect(resolvedSpy).not.toBeCalled();
+			// receive the ACK
+			serialport.receiveData(Buffer.from([MessageHeaders.ACK]));
+
+			const msg = await promise;
+			expect(msg).toBeInstanceOf(MockResponseMessage);
+
+			driver.destroy();
 		});
 	});
+
+	// describe("resetting the driver => ", () => {
+	// 	let driver: Driver;
+	// 	let serialport: MockSerialPort;
+
+	// 	beforeEach(async () => {
+	// 		({ driver, serialport } = await createAndStartDriver());
+	// 	});
+
+	// 	afterEach(() => {
+	// 		driver.destroy();
+	// 		driver.removeAllListeners();
+	// 	});
+
+	// 	it("should send a NAK", async () => {
+	// 		const errorSpy = jest.fn();
+	// 		driver.on("error", errorSpy);
+
+	// 		// receive something that's not a message header
+	// 		serialport.receiveData(Buffer.from([0xff]));
+	// 		expect(errorSpy).toBeCalledTimes(1);
+	// 		assertZWaveError(errorSpy.mock.calls[0][0] as unknown, {
+	// 			errorCode: ZWaveErrorCodes.Driver_InvalidDataReceived,
+	// 		});
+
+	// 		// trigger the send queue
+	// 		jest.runAllTimers();
+	// 		expect(serialport.writeStub).toHaveBeenCalledWith(
+	// 			Buffer.from([MessageHeaders.NAK]),
+	// 		);
+	// 	});
+
+	// 	it("should happen on invalid data in the receive buffer", () => {
+	// 		// swallow the error
+	// 		driver.on("error", () => {});
+	// 		// receive an invalid message
+	// 		serialport.receiveData(Buffer.from([0x01, 0x03, 0x00, 0x00, 0x00]));
+	// 		// trigger the send queue
+	// 		jest.runAllTimers();
+	// 		expect(serialport.writeStub).toHaveBeenCalledWith(
+	// 			Buffer.from([MessageHeaders.NAK]),
+	// 		);
+	// 	});
+
+	// 	it("should reject the current (pending) transaction", async () => {
+	// 		// swallow the error
+	// 		driver.on("error", () => {});
+
+	// 		const req = new MockRequestMessageWithExpectation(driver);
+
+	// 		// send a message
+	// 		const errorSpy = jest.fn();
+	// 		// And catch the thrown error
+	// 		const promise = driver.sendMessage(req).catch(errorSpy);
+	// 		// trigger the send queue
+	// 		jest.runAllTimers();
+
+	// 		// receive something that's not a message header
+	// 		serialport.receiveData(Buffer.from([0xff]));
+
+	// 		// This is necessary or the test will finish too early and fail
+	// 		await promise;
+	// 		expect(errorSpy).toBeCalledTimes(1);
+	// 		assertZWaveError(errorSpy.mock.calls[0][0] as unknown, {
+	// 			errorCode: ZWaveErrorCodes.Driver_Reset,
+	// 		});
+	// 	});
+	// });
 
 	describe("when a CAN is received", () => {
 		let driver: Driver;

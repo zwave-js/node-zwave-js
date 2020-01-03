@@ -281,12 +281,12 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 		this.serial
 			.on("open", async () => {
-				this.send(MessageHeaders.NAK);
-				await wait(1500);
-
 				log.driver.print("serial port opened");
 				this._isOpen = true;
 				spOpenPromise.resolve();
+
+				this.send(MessageHeaders.NAK);
+				await wait(1500);
 
 				setImmediate(async () => {
 					// Load the necessary configuration
