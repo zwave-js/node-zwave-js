@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.7.0 (2020-01-03)
 ### Features
 * `Basic CC` reports no longer create a value when they are mapped to another CC
 * `IndicatorCC`:
