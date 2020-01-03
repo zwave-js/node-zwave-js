@@ -1,3 +1,4 @@
+import { wait } from "alcalzone-shared/async";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { entries } from "alcalzone-shared/objects";
 import { SortedList } from "alcalzone-shared/sorted-list";
@@ -6,6 +7,7 @@ import { EventEmitter } from "events";
 import fs from "fs-extra";
 import path from "path";
 import SerialPort from "serialport";
+import { promisify } from "util";
 import {
 	CommandClass,
 	getImplementedVersion,
@@ -243,7 +245,7 @@ export class Driver extends EventEmitter implements IDriver {
 
 	/** Start the driver */
 	// wotan-disable async-function-assignability
-	public start(): Promise<void> {
+	public async start(): Promise<void> {
 		// avoid starting twice
 		if (this._wasDestroyed) {
 			return Promise.reject(
@@ -273,11 +275,17 @@ export class Driver extends EventEmitter implements IDriver {
 			stopBits: 1,
 			parity: "none",
 		});
+		// If the port is already open, close it first. We will reopen it later
+		if (this.serial.isOpen) {
+			await promisify(this.serial.close.bind(this.serial))();
+		}
 		this.serial
 			.on("open", async () => {
+				this.send(MessageHeaders.NAK);
+				await wait(1500);
+
 				log.driver.print("serial port opened");
 				this._isOpen = true;
-				this.resetIO();
 				spOpenPromise.resolve();
 
 				setImmediate(async () => {
@@ -570,34 +578,6 @@ export class Driver extends EventEmitter implements IDriver {
 		void this.initializeControllerAndNodes();
 	}
 
-	/** Resets the IO layer */
-	private resetIO(): void {
-		try {
-			this.ensureReady();
-		} catch (e) {
-			// The driver is not ready yet or is being reset
-			return;
-		}
-		log.driver.print("resetting driver instance...");
-
-		// re-sync communication
-		this.send(MessageHeaders.NAK);
-
-		// clear buffers
-		this.receiveBuffer = Buffer.from([]);
-		this.sendQueue.clear();
-		// clear the currently pending request
-		if (this.currentTransaction) {
-			this.currentTransaction.promise.reject(
-				new ZWaveError(
-					"The driver was reset",
-					ZWaveErrorCodes.Driver_Reset,
-				),
-			);
-		}
-		this.currentTransaction = undefined;
-	}
-
 	private _wasDestroyed: boolean = false;
 	/**
 	 * Ensures that the driver is ready to communicate (serial port open and not destroyed).
@@ -656,19 +636,6 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	/**
-	 * Is called when the serial port has received invalid data
-	 */
-	private onInvalidData(data: Buffer, message: string): void {
-		this.emit(
-			"error",
-			new ZWaveError(message, ZWaveErrorCodes.Driver_InvalidDataReceived),
-		);
-		// Invalid data means we can no longer parse whats in the receive buffer and need to
-		// reset the serial port
-		this.resetIO();
-	}
-
-	/**
 	 * Is called when the serial port has received any data
 	 */
 	// eslint-disable-next-line @typescript-eslint/camelcase
@@ -699,14 +666,12 @@ export class Driver extends EventEmitter implements IDriver {
 						break;
 					}
 					default: {
-						// TODO: Log this
-						const message = `The receive buffer starts with unexpected data: 0x${data.toString(
-							"hex",
-						)}`;
-						this.onInvalidData(this.receiveBuffer, message);
-						return;
+						// INS12350: A host or a Z-Wave chip waiting for new traffic MUST ignore all other
+						// byte values than 0x06 (ACK), 0x15 (NAK), 0x18 (CAN) or 0x01 (Data frame).
+						// Just skip this byte
 					}
 				}
+				// Continue with the next byte
 				this.receiveBuffer = skipBytes(this.receiveBuffer, 1);
 				continue;
 			}
@@ -730,10 +695,11 @@ export class Driver extends EventEmitter implements IDriver {
 					switch (e.code) {
 						case ZWaveErrorCodes.PacketFormat_Invalid:
 						case ZWaveErrorCodes.PacketFormat_Checksum:
-							this.onInvalidData(
-								this.receiveBuffer,
-								e.toString(),
+							log.driver.print(
+								`Dropping message because it contains invalid data`,
+								"warn",
 							);
+							this.send(MessageHeaders.NAK);
 							return;
 
 						case ZWaveErrorCodes.Deserialization_NotImplemented:
