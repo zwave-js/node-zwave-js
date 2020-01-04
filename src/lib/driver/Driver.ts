@@ -202,7 +202,7 @@ export class Driver extends EventEmitter implements IDriver {
 	/** A map of handlers for all sorts of requests */
 	private requestHandlers = new Map<FunctionType, RequestHandlerEntry[]>();
 
-	private readonly cacheDir: string;
+	public readonly cacheDir: string;
 
 	private _controller: ZWaveController | undefined;
 	/** Encapsulates information about the Z-Wave controller and provides access to its nodes */
