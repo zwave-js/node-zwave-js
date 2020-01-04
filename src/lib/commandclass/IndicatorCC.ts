@@ -156,17 +156,26 @@ export class IndicatorCCAPI extends CCAPI {
 			typeof property === "number" &&
 			typeof propertyKey === "number"
 		) {
+			const indicatorId = property;
+			const propertyId = propertyKey;
+			const expectedType = getIndicatorMetadata(indicatorId, propertyId)
+				.type as "number" | "boolean";
+
 			// V2+ value
-			if (typeof value !== "number") {
+			if (typeof value !== expectedType) {
 				throwWrongValueType(
 					this.ccId,
 					property,
-					"number",
+					expectedType,
 					typeof value,
 				);
 			}
 			await this.set([
-				{ indicatorId: property, propertyId: propertyKey, value },
+				{
+					indicatorId: property,
+					propertyId: propertyKey,
+					value: value as any,
+				},
 			]);
 			// Refresh the current value
 			await this.get(property);
