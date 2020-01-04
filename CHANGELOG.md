@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.8.0 (2020-01-04)
 ### Features
 * Added the driver options `fs` and `cacheDir` to replace the default fs driver and/or cache directory
 
