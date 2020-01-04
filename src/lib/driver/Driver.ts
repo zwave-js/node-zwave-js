@@ -79,6 +79,7 @@ export interface ZWaveOptions {
 	 * Set this to true to skip the controller interview. Useful for testing purposes
 	 */
 	skipInterview?: boolean;
+	cacheDir: string;
 }
 
 const defaultOptions: ZWaveOptions = {
@@ -88,6 +89,7 @@ const defaultOptions: ZWaveOptions = {
 		report: 1000,
 	},
 	skipInterview: false,
+	cacheDir: path.resolve(__dirname, "../../..", "cache"),
 };
 
 /**
@@ -193,7 +195,7 @@ export class Driver extends EventEmitter implements IDriver {
 	/** A map of handlers for all sorts of requests */
 	private requestHandlers = new Map<FunctionType, RequestHandlerEntry[]>();
 
-	public readonly cacheDir = path.resolve(__dirname, "../../..", "cache");
+	public readonly cacheDir: string;
 
 	private _controller: ZWaveController | undefined;
 	/** Encapsulates information about the Z-Wave controller and provides access to its nodes */
@@ -221,6 +223,7 @@ export class Driver extends EventEmitter implements IDriver {
 		) as ZWaveOptions;
 		// And make sure they contain valid values
 		checkOptions(this.options);
+		this.cacheDir = this.options.cacheDir;
 
 		// register some cleanup handlers in case the program doesn't get closed cleanly
 		this._cleanupHandler = this._cleanupHandler.bind(this);
