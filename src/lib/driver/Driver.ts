@@ -4,7 +4,7 @@ import { entries } from "alcalzone-shared/objects";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import { isArray } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
-import fs from "fs-extra";
+import fsExtra from "fs-extra";
 import path from "path";
 import SerialPort from "serialport";
 import { promisify } from "util";
@@ -50,6 +50,7 @@ import { isNodeQuery } from "../node/INodeQuery";
 import { ZWaveNode } from "../node/Node";
 import { DeepPartial, skipBytes } from "../util/misc";
 import { num2hex } from "../util/strings";
+import { FileSystem } from "./FileSystem";
 import { DriverEventCallbacks, DriverEvents, IDriver } from "./IDriver";
 import { Transaction } from "./Transaction";
 
@@ -79,6 +80,12 @@ export interface ZWaveOptions {
 	 * Set this to true to skip the controller interview. Useful for testing purposes
 	 */
 	skipInterview?: boolean;
+	/**
+	 * Allows you to replace the default file system driver used to store and read the cache
+	 */
+	fs: FileSystem;
+	/** Allows you to specify a different cache directory */
+	cacheDir: string;
 }
 
 const defaultOptions: ZWaveOptions = {
@@ -88,6 +95,8 @@ const defaultOptions: ZWaveOptions = {
 		report: 1000,
 	},
 	skipInterview: false,
+	fs: fsExtra,
+	cacheDir: path.resolve(__dirname, "../../..", "cache"),
 };
 
 /**
@@ -193,7 +202,7 @@ export class Driver extends EventEmitter implements IDriver {
 	/** A map of handlers for all sorts of requests */
 	private requestHandlers = new Map<FunctionType, RequestHandlerEntry[]>();
 
-	public readonly cacheDir = path.resolve(__dirname, "../../..", "cache");
+	public readonly cacheDir: string;
 
 	private _controller: ZWaveController | undefined;
 	/** Encapsulates information about the Z-Wave controller and provides access to its nodes */
@@ -221,6 +230,7 @@ export class Driver extends EventEmitter implements IDriver {
 		) as ZWaveOptions;
 		// And make sure they contain valid values
 		checkOptions(this.options);
+		this.cacheDir = this.options.cacheDir;
 
 		// register some cleanup handlers in case the program doesn't get closed cleanly
 		this._cleanupHandler = this._cleanupHandler.bind(this);
@@ -1578,13 +1588,16 @@ ${handlers.length} left`,
 	 */
 	private async saveNetworkToCacheInternal(): Promise<void> {
 		if (!this._controller || !this.controller.homeId) return;
+
+		await this.options.fs.ensureDir(this.cacheDir);
 		const cacheFile = path.join(
 			this.cacheDir,
 			this.controller.homeId.toString(16) + ".json",
 		);
+
 		const serializedObj = this.controller.serialize();
-		await fs.ensureDir(this.cacheDir);
-		await fs.writeJSON(cacheFile, serializedObj, { spaces: 4 });
+		const jsonString = JSON.stringify(serializedObj, undefined, 4);
+		await this.options.fs.writeFile(cacheFile, jsonString, "utf8");
 	}
 
 	/**
@@ -1620,23 +1633,26 @@ ${handlers.length} left`,
 			this.cacheDir,
 			this.controller.homeId.toString(16) + ".json",
 		);
-		if (!(await fs.pathExists(cacheFile))) return;
+		if (!(await this.options.fs.pathExists(cacheFile))) return;
 		try {
 			log.driver.print(
 				`Cache file for homeId ${num2hex(
 					this.controller.homeId,
 				)} found, attempting to restore the network from cache...`,
 			);
-			const cacheObj = await fs.readJSON(cacheFile);
+			const cacheString = await this.options.fs.readFile(
+				cacheFile,
+				"utf8",
+			);
+			const cacheObj = JSON.parse(cacheString);
 			await this.controller.deserialize(cacheObj);
 			log.driver.print(
-				`  Restoring the network from cache was successful!`,
+				`Restoring the network from cache was successful!`,
 			);
 		} catch (e) {
-			log.driver.print(
-				`  restoring the network from cache failed: ${e}`,
-				"error",
-			);
+			const message = `Restoring the network from cache failed: ${e}`;
+			this.emit("error", message);
+			log.driver.print(message, "error");
 		}
 	}
 
