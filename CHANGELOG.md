@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* Added the driver options `fs` and `cacheDir` to replace the default fs driver and/or cache directory
+
 ## 2.7.1 (2020-01-04)
 ### Bugfixes
 * The `Indicator CC` `setValue` API now accepts `boolean` values for binary indicators
