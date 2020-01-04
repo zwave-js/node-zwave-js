@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.7.1 (2020-01-04)
 ### Bugfixes
 * The `Indicator CC` `setValue` API now accepts `boolean` values for binary indicators
 
