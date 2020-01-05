@@ -139,8 +139,8 @@ export enum FunctionType {
 
 	RequestNodeInfo = 0x60, // Get info (supported command classes) for the specified node
 
-	FUNC_ID_ZW_REMOVE_FAILED_NODE_ID = 0x61, // Mark a specified node id as failed
-	FUNC_ID_ZW_IS_FAILED_NODE_ID = 0x62, // Check to see if a specified node has failed
+	RemoveFailedNode = 0x61, // Mark a specified node id as failed
+	IsFailedNode = 0x62, // Check to see if a specified node has failed
 	FUNC_ID_ZW_REPLACE_FAILED_NODE = 0x63, // Remove a failed node from the controller's list (?)
 
 	UNKNOWN_FUNC_UNKNOWN_0x66 = 0x66, // ??
