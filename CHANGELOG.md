@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.9.0 (2020-01-05)
 ### Features
 * Added `isFailedNode()` and `removeFailedNode()` to the `Controller` class
 * The scenes of the `Scene Activation` CC are now automatically reset after the duration has elapsed.
