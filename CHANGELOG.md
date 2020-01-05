@@ -4,6 +4,11 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* Added `isFailedNode()` and `removeFailedNode()` to the `Controller` class
+* The scenes of the `Scene Activation` CC are now automatically reset after the duration has elapsed.
+
 ## 2.8.0 (2020-01-04)
 ### Features
 * Added the driver options `fs` and `cacheDir` to replace the default fs driver and/or cache directory
