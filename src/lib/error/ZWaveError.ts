@@ -39,13 +39,19 @@ export enum ZWaveErrorCodes {
 
 	Config_Invalid,
 
+	// Here follow message specific errors
+	/** The removal process could not be started or completed due to one or several reasons */
+	RemoveFailedNode_Failed,
+	/** The removal process was aborted because the node has responded */
+	RemoveFailedNode_NodeOK,
+
 	// Here follow CC specific errors
 
 	/**
 	 * Used to report the first existing parameter number
 	 * available in a node's configuration
 	 */
-	ConfigurationCC_FirstParameterNumber = 100,
+	ConfigurationCC_FirstParameterNumber = 1000,
 	/**
 	 * Used to report that a V3+ node should not have its parameters scanned with get/set commands
 	 */

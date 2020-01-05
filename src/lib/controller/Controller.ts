@@ -46,6 +46,17 @@ import {
 } from "./GetSUCNodeIdMessages";
 import { HardResetRequest } from "./HardResetRequest";
 import {
+	IsFailedNodeRequest,
+	IsFailedNodeResponse,
+} from "./IsFailedNodeMessages";
+import {
+	RemoveFailedNodeRequest,
+	RemoveFailedNodeRequestStatusReport,
+	RemoveFailedNodeResponse,
+	RemoveFailedNodeStartFlags,
+	RemoveFailedNodeStatus,
+} from "./RemoveFailedNodeMessages";
+import {
 	RemoveNodeFromNetworkRequest,
 	RemoveNodeStatus,
 	RemoveNodeType,
@@ -54,7 +65,7 @@ import {
 	NodeNeighborUpdateStatus,
 	RequestNodeNeighborUpdateReport,
 	RequestNodeNeighborUpdateRequest,
-} from "./RequestNodeNeighborUpdate";
+} from "./RequestNodeNeighborUpdateMessages";
 import {
 	SetSerialApiTimeoutsRequest,
 	SetSerialApiTimeoutsResponse,
@@ -962,6 +973,85 @@ export class ZWaveController extends EventEmitter {
 				return false;
 		}
 		return true; // Don't invoke any more handlers
+	}
+
+	/**
+	 * Tests if a node is marked as failed in the controller's memory
+	 * @param nodeId The id of the node in question
+	 */
+	public async isFailedNode(nodeId: number): Promise<boolean> {
+		const result = await this.driver.sendMessage<IsFailedNodeResponse>(
+			new IsFailedNodeRequest(this.driver, { failedNodeId: nodeId }),
+		);
+		return result.result;
+	}
+
+	/**
+	 * Removes a failed node from the controller's memory. If the process fails, this will throw an exception with the details why.
+	 * @param nodeId The id of the node to remove
+	 */
+	public async removeFailedNode(nodeId: number): Promise<void> {
+		const result = await this.driver.sendMessage<
+			RemoveFailedNodeRequestStatusReport | RemoveFailedNodeResponse
+		>(new RemoveFailedNodeRequest(this.driver, { failedNodeId: nodeId }));
+
+		if (result instanceof RemoveFailedNodeResponse) {
+			// This implicates that the process was unsuccessful.
+			let message = `The node removal process could not be started due to the following reasons:`;
+			if (
+				!!(
+					result.removeStatus &
+					RemoveFailedNodeStartFlags.NotPrimaryController
+				)
+			) {
+				message += "\n* This controller is not the primary controller";
+			}
+			if (
+				!!(
+					result.removeStatus &
+					RemoveFailedNodeStartFlags.NodeNotFound
+				)
+			) {
+				message += `\n* The node ${nodeId} was not found`;
+			}
+			if (
+				!!(
+					result.removeStatus &
+					RemoveFailedNodeStartFlags.RemoveProcessBusy
+				)
+			) {
+				message += `\n* The node removal process is currently busy`;
+			}
+			if (
+				!!(
+					result.removeStatus &
+					RemoveFailedNodeStartFlags.RemoveFailed
+				)
+			) {
+				message += `\n* The controller is busy or the node has responded`;
+			}
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.RemoveFailedNode_Failed,
+			);
+		} else {
+			switch (result.removeStatus) {
+				case RemoveFailedNodeStatus.NodeOK:
+					throw new ZWaveError(
+						`The node could not be removed because it has responded`,
+						ZWaveErrorCodes.RemoveFailedNode_NodeOK,
+					);
+				case RemoveFailedNodeStatus.NodeNotRemoved:
+					throw new ZWaveError(
+						`The removal process could not be completed`,
+						ZWaveErrorCodes.RemoveFailedNode_Failed,
+					);
+				default:
+					// RemoveFailedNodeStatus.NodeRemoved:
+					// This is OK
+					return;
+			}
+		}
 	}
 
 	/**
