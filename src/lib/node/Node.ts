@@ -22,7 +22,11 @@ import {
 } from "../commandclass/CommandClasses";
 import { getEndpointCCsValueId } from "../commandclass/MultiChannelCC";
 import { NotificationCCReport } from "../commandclass/NotificationCC";
-import { SceneActivationCCSet } from "../commandclass/SceneActivationCC";
+import {
+	getDimmingDurationValueID,
+	getSceneIdValueID,
+	SceneActivationCCSet,
+} from "../commandclass/SceneActivationCC";
 import { WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
 import { DeviceConfig, lookupDevice } from "../config/Devices";
 import { lookupNotification } from "../config/Notifications";
@@ -1074,6 +1078,8 @@ version:               ${this.version}`;
 			return this.handleWakeUpNotification();
 		} else if (command instanceof NotificationCCReport) {
 			return this.handleNotificationReport(command);
+		} else if (command instanceof SceneActivationCCSet) {
+			return this.handleSceneActivationSet(command);
 		}
 
 		// Ignore all commands that don't need to be handled
@@ -1081,9 +1087,6 @@ version:               ${this.version}`;
 			// Reports are either a response to a Get command or
 			// automatically store their values in the Value DB.
 			// No need to manually handle them
-			return;
-		} else if (command instanceof SceneActivationCCSet) {
-			// This does so too
 			return;
 		}
 
@@ -1435,6 +1438,28 @@ version:               ${this.version}`;
 			this.valueDB.setValue(valueId, command.notificationEvent);
 			// We don't know what this notification refers to, so we don't force a reset
 		}
+	}
+
+	private sceneActivationResetTimeout: NodeJS.Timeout | undefined;
+	/** Handles the receipt of a SceneActivation Set and the automatic reset of the value */
+	private handleSceneActivationSet(command: SceneActivationCCSet): void {
+		if (this.sceneActivationResetTimeout) {
+			clearTimeout(this.sceneActivationResetTimeout);
+		}
+		// Schedule a reset of the CC values
+		this.sceneActivationResetTimeout = setTimeout(() => {
+			this.sceneActivationResetTimeout = undefined;
+			// Reset scene and duration to undefined
+			this.valueDB.setValue(
+				getSceneIdValueID(command.endpointIndex),
+				undefined,
+			);
+			this.valueDB.setValue(
+				getDimmingDurationValueID(command.endpointIndex),
+				undefined,
+			);
+		}, command.dimmingDuration?.toMilliseconds() ?? 0).unref();
+		// Unref'ing long running timeouts allows to quit the application before the timeout elapses
 	}
 
 	/**

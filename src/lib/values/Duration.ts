@@ -69,4 +69,29 @@ export class Duration {
 			unit: this.unit,
 		};
 	}
+
+	public toMilliseconds(): number | undefined {
+		switch (this.unit) {
+			case "minutes":
+				return this._value * 60000;
+			case "seconds":
+				return this._value * 1000;
+		}
+		// The other values have no ms representation
+	}
+
+	public toString(): string {
+		switch (this.unit) {
+			case "minutes":
+				return `[Duration: ${this._value}${
+					this.value === 1 ? "minute" : "minutes"
+				}]`;
+			case "seconds":
+				return `[Duration: ${this._value}${
+					this.value === 1 ? "second" : "seconds"
+				}]`;
+			default:
+				return `[Duration: ${this.unit}]`;
+		}
+	}
 }

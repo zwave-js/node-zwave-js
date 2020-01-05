@@ -1,4 +1,5 @@
 import { IDriver } from "../driver/IDriver";
+import { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { ValueMetadata } from "../values/Metadata";
@@ -25,6 +26,22 @@ import {
 import { CommandClasses } from "./CommandClasses";
 
 // @noInterview This CC is write-only
+
+export function getSceneIdValueID(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Scene Activation"],
+		endpoint,
+		property: "sceneId",
+	};
+}
+
+export function getDimmingDurationValueID(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Scene Activation"],
+		endpoint,
+		property: "dimmingDuration",
+	};
+}
 
 // All the supported commands
 export enum SceneActivationCommand {

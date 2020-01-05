@@ -29,7 +29,7 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
-/** Returns the ValueID used to store the maximum number of nodes of an association group */
+/** Returns the ValueID used to store the current value of a Central Scene */
 export function getSceneValueId(sceneNumber: number): ValueID {
 	return {
 		commandClass: CommandClasses["Central Scene"],
