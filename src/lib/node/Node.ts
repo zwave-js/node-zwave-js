@@ -289,6 +289,26 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		} else if (this._status === NodeStatus.Dead) {
 			this.emit("dead", this);
 		}
+
+		// A dead or unknown node cannot be ready
+		if (
+			this.nodeMayBeReady &&
+			(this._status === NodeStatus.Asleep ||
+				this._status === NodeStatus.Awake)
+		) {
+			this.emitReadyEventOnce();
+		}
+	}
+
+	// The node is only ready when the interview has been completed
+	// to a certain degree
+	private nodeMayBeReady = false;
+	private nodeReadyEmitted = false;
+	/** Emits the ready event if it has not been emitted yet */
+	private emitReadyEventOnce(): void {
+		if (this.nodeReadyEmitted) return;
+		this.emit("ready", this);
+		this.nodeReadyEmitted = true;
 	}
 
 	private _deviceClass: DeviceClass | undefined;
@@ -600,8 +620,6 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			log.controller.interviewStart(this);
 		}
 
-		let nodeReadyEmitted = false;
-
 		// The interview is done in several stages. At each point, the interview process might be aborted
 		// due to a stage failing. The reached stage is saved, so we can continue it later without
 		// repeating stages unnecessarily
@@ -624,8 +642,8 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 
 		// The node is deemed ready when has been interviewed completely at least once
 		if (this.interviewStage === InterviewStage.RestartFromCache) {
-			this.emit("ready", this);
-			nodeReadyEmitted = true;
+			// Mark the node as potentially ready. The first message will determine if it is
+			this.nodeMayBeReady = true;
 		}
 
 		// At this point the basic interview of new nodes is done. Start here when re-interviewing known nodes
@@ -649,9 +667,11 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 
 		await this.setInterviewStage(InterviewStage.Complete);
 
+		this.nodeMayBeReady = true;
+		this.emitReadyEventOnce();
+
 		// Tell listeners that the interview is completed
 		// The driver will then send this node to sleep
-		if (!nodeReadyEmitted) this.emit("ready", this);
 		this.emit("interview completed", this);
 		return true;
 	}
