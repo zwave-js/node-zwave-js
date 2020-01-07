@@ -409,6 +409,7 @@ export class Driver extends EventEmitter implements IDriver {
 		node.on("wake up", this.onNodeWakeUp.bind(this))
 			.on("sleep", this.onNodeSleep.bind(this))
 			.on("alive", this.onNodeAlive.bind(this))
+			.on("dead", this.onNodeDead.bind(this))
 			.on("interview completed", this.onNodeInterviewCompleted.bind(this))
 			.on("ready", this.onNodeReady.bind(this));
 	}
@@ -418,6 +419,7 @@ export class Driver extends EventEmitter implements IDriver {
 		node.removeAllListeners("wake up")
 			.removeAllListeners("sleep")
 			.removeAllListeners("alive")
+			.removeAllListeners("dead")
 			.removeAllListeners("interview completed")
 			.removeAllListeners("ready");
 	}
@@ -449,6 +451,15 @@ export class Driver extends EventEmitter implements IDriver {
 		if (node.interviewStage !== InterviewStage.Complete) {
 			void this.interviewNode(node);
 		}
+	}
+
+	/** Is called when a node is marked as dead */
+	private onNodeDead(node: ZWaveNode): void {
+		log.controller.logNode(node.id, "The node is now dead.");
+
+		// This could mean that we need to ignore it in the all nodes ready check,
+		// so perform the check again
+		this.checkAllNodesReady();
 	}
 
 	/** Is called when a node is ready to be used */
