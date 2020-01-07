@@ -456,13 +456,19 @@ export class Driver extends EventEmitter implements IDriver {
 		this._nodesReady.add(node.id);
 		log.controller.logNode(node.id, "The node is ready to be used");
 
-		// Only check for "all nodes ready" once
+		this.checkAllNodesReady();
+	}
+
+	/** Checks if all nodes are ready and emits the "all nodes ready" event if they are */
+	private async checkAllNodesReady(): Promise<void> {
+		// Only emit "all nodes ready" once
 		if (this._nodesReadyEventEmitted) return;
 
-		for (const nodeId of this.controller.nodes.keys()) {
-			if (!this._nodesReady.has(nodeId)) {
-				return;
-			}
+		for (const [id, node] of this.controller.nodes) {
+			// Ignore dead nodes or the all nodes ready event will never be emitted without physical user interaction
+			if (node.status === NodeStatus.Dead) continue;
+
+			if (!this._nodesReady.has(id)) return;
 		}
 		// All nodes are ready
 		log.controller.print("All nodes are ready to be used");
@@ -487,13 +493,14 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	/** This is called when a node was removed from the network */
-
 	private onNodeRemoved(node: ZWaveNode): void {
 		this.removeNodeEventHandlers(node);
 		this.rejectAllTransactionsForNode(
 			node.id,
 			"The node was removed from the network",
 		);
+		// If this was a failed node it could mean that all nodes are now ready
+		this.checkAllNodesReady();
 	}
 
 	/** Checks if there are any pending messages for the given node */
