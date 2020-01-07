@@ -601,7 +601,7 @@ describe("lib/node/Node", () => {
 			const sleepSpy = jest.fn();
 			node.on("wake up", wakeupSpy).on("sleep", sleepSpy);
 			for (const { state, expectWakeup, expectSleep } of [
-				{ state: false, expectSleep: false, expectWakeup: false },
+				{ state: false, expectSleep: true, expectWakeup: false },
 				{ state: true, expectSleep: false, expectWakeup: true },
 				{ state: true, expectSleep: false, expectWakeup: false },
 				{ state: false, expectSleep: true, expectWakeup: false },
@@ -1273,30 +1273,27 @@ describe("lib/node/Node", () => {
 			});
 		});
 
-		it("from unknown to dead should NOT raise the dead event", () => {
+		it("from unknown to dead should raise the dead event", () => {
 			performTest({
 				initialStatus: NodeStatus.Unknown,
 				targetStatus: NodeStatus.Dead,
 				expectedEvent: "dead",
-				expectCall: false,
 			});
 		});
 
-		it("from unknown to awake should NOT raise the wake up event", () => {
+		it("from unknown to awake should raise the wake up event", () => {
 			performTest({
 				initialStatus: NodeStatus.Unknown,
 				targetStatus: NodeStatus.Awake,
 				expectedEvent: "wake up",
-				expectCall: false,
 			});
 		});
 
-		it("from unknown to asleep should NOT raise the sleep event", () => {
+		it("from unknown to asleep should raise the sleep event", () => {
 			performTest({
 				initialStatus: NodeStatus.Unknown,
 				targetStatus: NodeStatus.Asleep,
 				expectedEvent: "sleep",
-				expectCall: false,
 			});
 		});
 

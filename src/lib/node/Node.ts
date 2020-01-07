@@ -279,17 +279,15 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		this._status = value;
 		if (oldStatus === this._status) return;
 
-		if (oldStatus !== NodeStatus.Unknown) {
-			if (oldStatus === NodeStatus.Dead) {
-				this.emit("alive", this);
-			}
-			if (this._status === NodeStatus.Asleep) {
-				this.emit("sleep", this);
-			} else if (this._status === NodeStatus.Awake) {
-				this.emit("wake up", this);
-			} else if (this._status === NodeStatus.Dead) {
-				this.emit("dead", this);
-			}
+		if (oldStatus === NodeStatus.Dead) {
+			this.emit("alive", this);
+		}
+		if (this._status === NodeStatus.Asleep) {
+			this.emit("sleep", this);
+		} else if (this._status === NodeStatus.Awake) {
+			this.emit("wake up", this);
+		} else if (this._status === NodeStatus.Dead) {
+			this.emit("dead", this);
 		}
 	}
 
