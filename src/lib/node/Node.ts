@@ -1067,7 +1067,7 @@ version:               ${this.version}`;
 
 	/**
 	 * @internal
-	 * Handles an ApplicationCommandRequest received from this node
+	 * Handles a CommandClass that was received from this node
 	 */
 	public async handleCommand(command: CommandClass): Promise<void> {
 		if (command instanceof BasicCC) {
@@ -1319,7 +1319,9 @@ version:               ${this.version}`;
 		}
 	}
 
-	/** Handles the receipt of a Notification Report */
+	/**
+	 * Handles the receipt of a Notification Report
+	 */
 	private handleNotificationReport(command: NotificationCCReport): void {
 		if (command.notificationType == undefined) {
 			log.controller.logNode(this.id, {

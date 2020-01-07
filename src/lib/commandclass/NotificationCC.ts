@@ -64,8 +64,12 @@ export class NotificationCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-	public async get(options: NotificationCCGetSpecificOptions) {
+	/**
+	 * @internal
+	 */
+	public async getInternal(
+		options: NotificationCCGetSpecificOptions,
+	): Promise<NotificationCCReport> {
 		this.assertSupportsCommand(
 			NotificationCommand,
 			NotificationCommand.Get,
@@ -76,9 +80,12 @@ export class NotificationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		const response = (await this.driver.sendCommand<NotificationCCReport>(
-			cc,
-		))!;
+		return (await this.driver.sendCommand<NotificationCCReport>(cc))!;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async get(options: NotificationCCGetSpecificOptions) {
+		const response = await this.getInternal(options);
 		return {
 			notificationStatus: response.notificationStatus,
 			notificationEvent: response.notificationEvent,
@@ -317,7 +324,13 @@ export class NotificationCC extends CommandClass {
 					message: `querying notification status for ${name}...`,
 					direction: "outbound",
 				});
-				await api.get({ notificationType: type });
+				const response = await api.getInternal({
+					notificationType: type,
+				});
+				// NotificationReports don't store their values themselves,
+				// because the behaviour is too complex and spans the lifetime
+				// of several reports. Thus we handle it in the Node instance
+				await node.handleCommand(response);
 			}
 		}
 
