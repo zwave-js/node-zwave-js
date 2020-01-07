@@ -1047,8 +1047,13 @@ export class ZWaveController extends EventEmitter {
 						ZWaveErrorCodes.RemoveFailedNode_Failed,
 					);
 				default:
-					// RemoveFailedNodeStatus.NodeRemoved:
-					// This is OK
+					// If everything went well, the status is RemoveFailedNodeStatus.NodeRemoved
+
+					// Emit the removed event so the driver and applications can react
+					this.emit("node removed", this.nodes.get(nodeId));
+					// and forget the node
+					this._nodes.delete(nodeId);
+
 					return;
 			}
 		}

@@ -4,6 +4,13 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Miscellaneous changes
+* The `alive`, `awake` and `dead` events are now also emitted for nodes if their status was previously unknown.
+
+### Bugfixes
+* `Notification CC` Reports that are received as a response during the interview are now correctly handled
+
 ## 2.9.0 (2020-01-05)
 ### Features
 * Added `isFailedNode()` and `removeFailedNode()` to the `Controller` class
