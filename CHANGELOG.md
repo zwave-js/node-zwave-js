@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.9.1 (2020-01-07)
 ### Bugfixes
 * `Notification CC` Reports that are received as a response during the interview are now correctly handled
 * The `ready` event is now only for nodes that are known to be alive or asleep
