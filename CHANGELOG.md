@@ -5,11 +5,13 @@
 -->
 
 ## __WORK IN PROGRESS__
-### Miscellaneous changes
-* The `alive`, `awake` and `dead` events are now also emitted for nodes if their status was previously unknown.
-
 ### Bugfixes
 * `Notification CC` Reports that are received as a response during the interview are now correctly handled
+* The `ready` event is now only for nodes that are known to be alive or asleep
+* After `removeFailedNode()` has succeeded, the node is removed from the driver and the corresponding events are emitted
+* The `alive`, `awake` and `dead` events are now also emitted for nodes if their status was previously unknown.
+* After a node was removed, the check for `all nodes ready` is performed again
+* Dead nodes are ignored in the check for `all nodes ready` to avoid the necessity for physical user interaction
 
 ## 2.9.0 (2020-01-05)
 ### Features
