@@ -1,12 +1,20 @@
-# node-zwave-js
+![node-zwave-js](images/logo.svg)
 
-Z-Wave driver written entirely in JavaScript/TypeScript
-
-[![node](https://img.shields.io/node/v/zwave-js.svg) ![npm](https://img.shields.io/npm/v/zwave-js.svg)](https://www.npmjs.com/package/zwave-js)
+<h2 align="center">Z-Wave driver written entirely in JavaScript/TypeScript</h2>
 
 ![Build Status](https://action-badges.now.sh/AlCalzone/node-zwave-js)
 [![Coverage Status](https://img.shields.io/coveralls/github/AlCalzone/node-zwave-js.svg)](https://coveralls.io/github/AlCalzone/node-zwave-js)
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/AlCalzone/node-zwave-js.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/AlCalzone/node-zwave-js/context:javascript)
+[![node](https://img.shields.io/node/v/zwave-js.svg) ![npm](https://img.shields.io/npm/v/zwave-js.svg)](https://www.npmjs.com/package/zwave-js)
+
+<p align="center">
+  📡 Control your <b>Z-Wave</b> network from Node.js<br />
+  👶 Easy <b>high-level</b> API<br />
+  😊 Just <b>JavaScript</b> <sup>(or rather TypeScript)</sup>, no static library mess<br />
+  🔥 <a href="https://twitter.com/acdlite/status/974390255393505280" target="_blank">blazing</a> fast
+</p>
+
+## Quick Links
 
 -   [License](LICENSE)
 -   [Changelog](CHANGELOG.md)
