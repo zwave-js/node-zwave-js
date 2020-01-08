@@ -1,7 +1,9 @@
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
+import { RemoveFailedNodeRequest } from "../controller/RemoveFailedNodeMessages";
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { MessagePriority } from "../message/Constants";
+import { getDefaultPriority, Message } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
 import { Driver } from "./Driver";
 import { MAX_SEND_ATTEMPTS, Transaction } from "./Transaction";
@@ -13,6 +15,12 @@ function createTransactionWithPriority(priority: MessagePriority): Transaction {
 		undefined as any,
 		priority,
 	);
+}
+
+interface MockNode {
+	id: number;
+	isAwake(): boolean;
+	supportsCC: ZWaveNode["supportsCC"];
 }
 
 describe("lib/driver/Transaction => ", () => {
@@ -139,12 +147,6 @@ describe("lib/driver/Transaction => ", () => {
 	});
 
 	it("Messages in the wakeup queue should be preferred over lesser priorities only if the node is awake", () => {
-		interface MockNode {
-			id: number;
-			isAwake(): boolean;
-			supportsCC: ZWaveNode["supportsCC"];
-		}
-
 		function supportsCC(cc: CommandClasses) {
 			return cc === CommandClasses["Wake Up"];
 		}
@@ -255,5 +257,72 @@ describe("lib/driver/Transaction => ", () => {
 			test.maxSendAttempts = -1;
 			expect(test.maxSendAttempts).toBe(1);
 		});
+	});
+
+	// Repro for #550
+	it("Controller message should be preferred over messages for sleeping nodes", () => {
+		const driverMock = ({
+			controller: {
+				nodes: new Map<number, MockNode>([
+					// 1: non-sleeping
+					[
+						1,
+						{
+							id: 1,
+							isAwake() {
+								return true;
+							},
+							// non-sleeping
+							supportsCC: () => false,
+						},
+					],
+					// 2: not awake
+					[
+						2,
+						{
+							id: 2,
+							isAwake() {
+								return false;
+							},
+							supportsCC(cc: CommandClasses) {
+								return cc === CommandClasses["Wake Up"];
+							},
+						},
+					],
+				]),
+			},
+			getSafeCCVersionForNode() {},
+		} as unknown) as Driver;
+
+		let creationTimestamp = 0;
+		function createTransaction(
+			msg: Message,
+			priority: MessagePriority = getDefaultPriority(msg)!,
+		) {
+			const driver = driverMock;
+			const ret = new Transaction(
+				driver,
+				msg,
+				undefined as any,
+				priority,
+			);
+			ret.creationTimestamp = ++creationTimestamp;
+			return ret;
+		}
+
+		const msgForSleepingNode = new SendDataRequest(driverMock, {
+			command: new NoOperationCC(driverMock, { nodeId: 2 }),
+		});
+		const tSleepingNode = createTransaction(
+			msgForSleepingNode,
+			MessagePriority.WakeUp,
+		);
+		const msgForController = new RemoveFailedNodeRequest(driverMock, {
+			failedNodeId: 3,
+		});
+		const tController = createTransaction(msgForController);
+
+		// The controller transaction should have a higher priority
+		expect(tController.compareTo(tSleepingNode)).toBe(-1);
 	});
 });
