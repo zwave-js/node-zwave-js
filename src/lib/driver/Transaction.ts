@@ -83,7 +83,7 @@ export class Transaction implements Comparable<Transaction> {
 				// transaction is not for a node, it targets the controller which
 				// is assumed always awake
 				const thisIsAsleep = !thisNode.isAwake();
-				const otherIsAsleep = !(otherNode && otherNode.isAwake());
+				const otherIsAsleep = otherNode?.isAwake() === false;
 				// If both nodes are asleep, the conventional order applies
 				// Asleep nodes always have the lowest priority
 				if (thisIsAsleep && !otherIsAsleep) return 1;
