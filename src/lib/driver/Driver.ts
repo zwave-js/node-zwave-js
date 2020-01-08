@@ -13,6 +13,7 @@ import {
 	getImplementedVersion,
 } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
+import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
 import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
@@ -1114,9 +1115,39 @@ ${handlers.length} left`,
 				return;
 			}
 
-			// dispatch the command to the node itself
 			const node = this.controller.nodes.get(nodeId)!;
-			await node.handleCommand(msg.command);
+			// Check if we need to handle the command ourselves
+			if (
+				msg.command.ccId === CommandClasses["Device Reset Locally"] &&
+				msg.command instanceof DeviceResetLocallyCCNotification
+			) {
+				log.controller.logNode(nodeId, {
+					message: `The node was reset locally, removing it`,
+					direction: "inbound",
+				});
+				if (!(await this.controller.isFailedNode(nodeId))) {
+					try {
+						// Force a ping of the node, so it gets added to the failed nodes list
+						node.setAwake(true);
+						await node.commandClasses["No Operation"].send();
+					} catch (e) {
+						// this is expected
+					}
+				}
+
+				try {
+					// ...because we can only remove failed nodes
+					await this.controller.removeFailedNode(nodeId);
+				} catch (e) {
+					log.controller.logNode(nodeId, {
+						message: "removing the node failed: " + e,
+						level: "error",
+					});
+				}
+			} else {
+				// dispatch the command to the node itself
+				await node.handleCommand(msg.command);
+			}
 
 			return;
 		} else if (msg instanceof ApplicationUpdateRequest) {
