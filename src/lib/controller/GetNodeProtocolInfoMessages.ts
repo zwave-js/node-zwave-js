@@ -54,7 +54,7 @@ interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
 
 @messageTypes(MessageType.Request, FunctionType.GetNodeProtocolInfo)
 @expectedResponse(FunctionType.GetNodeProtocolInfo)
-@priority(MessagePriority.NodeQuery)
+@priority(MessagePriority.Controller)
 export class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
 	public constructor(
 		driver: IDriver,

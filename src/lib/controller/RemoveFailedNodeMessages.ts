@@ -51,7 +51,7 @@ export enum RemoveFailedNodeStatus {
 }
 
 @messageTypes(MessageType.Request, FunctionType.RemoveFailedNode)
-@priority(MessagePriority.Normal)
+@priority(MessagePriority.Controller)
 export class RemoveFailedNodeRequestBase extends Message {
 	public constructor(driver: IDriver, options: MessageOptions) {
 		if (

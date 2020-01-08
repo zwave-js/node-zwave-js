@@ -20,7 +20,7 @@ export interface IsFailedNodeRequestOptions extends MessageBaseOptions {
 
 @messageTypes(MessageType.Request, FunctionType.IsFailedNode)
 @expectedResponse(FunctionType.IsFailedNode)
-@priority(MessagePriority.Normal)
+@priority(MessagePriority.Controller)
 export class IsFailedNodeRequest extends Message {
 	public constructor(driver: IDriver, options: IsFailedNodeRequestOptions) {
 		super(driver, options);
