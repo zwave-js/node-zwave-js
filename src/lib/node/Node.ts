@@ -984,25 +984,28 @@ version:               ${this.version}`;
 		}
 
 		// As the NIF is sent on wakeup, treat this as a sign that the node is awake
-		if (!this.isAwake()) {
-			this.setAwake(true);
-		}
+		if (!this.isAwake()) this.setAwake(true);
 
-		// (GH#398) If there was no lifeline configured, we assume that the controller does not receive updates from the node
-		log.driver.print(
-			`NIF received.
-  interview complete: ${this.interviewStage === InterviewStage.Complete}
-  supports Z-Wave+:   ${this.supportsCC(CommandClasses["Z-Wave Plus Info"])}
-  has lifeline:       ${this.valueDB.getValue(getHasLifelineValueId())}`,
-			"verbose",
-		);
-		if (
+		// SDS14223 Unless unsolicited <XYZ> Report Commands are received,
+		// a controlling node MUST probe the current values when the
+		// supporting node issues a Wake Up Notification Command for sleeping nodes.
+		if (this.requiresManualValueRefresh()) {
+			log.controller.logNode(this.nodeId, {
+				message: `Node does not send unsolicited updates, refreshing actuator and sensor values...`,
+			});
+			this.refreshValues();
+		}
+	}
+
+	/** Returns whether a manual refresh of non-static values is likely necessary for this node */
+	public requiresManualValueRefresh(): boolean {
+		// If there was no lifeline configured, we assume that the controller
+		// does not receive unsolicited updates from the node
+		return (
 			this.interviewStage === InterviewStage.Complete &&
 			!this.supportsCC(CommandClasses["Z-Wave Plus Info"]) &&
 			!this.valueDB.getValue(getHasLifelineValueId())
-		) {
-			this.refreshValues();
-		}
+		);
 	}
 
 	/**
