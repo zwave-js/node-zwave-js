@@ -66,6 +66,38 @@ function getMeterTypeName(type: number): string {
 	return lookupMeter(type)?.name ?? `UNKNOWN (${num2hex(type)})`;
 }
 
+export function getTypeValueId(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses.Meter,
+		endpoint,
+		property: "type",
+	};
+}
+
+export function getSupportsResetValueId(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses.Meter,
+		endpoint,
+		property: "supportsReset",
+	};
+}
+
+export function getSupportedScalesValueId(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses.Meter,
+		endpoint,
+		property: "supportedScales",
+	};
+}
+
+export function getSupportedRateTypesValueId(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses.Meter,
+		endpoint,
+		property: "supportedRateTypes",
+	};
+}
+
 // @noSetValueAPI This CC is read-only
 
 @API(CommandClasses.Meter)
@@ -159,40 +191,68 @@ export class MeterCC extends CommandClass {
 		});
 
 		if (this.version >= 2) {
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: "querying meter support...",
-				direction: "outbound",
-			});
+			let type: number;
+			let supportsReset: boolean;
+			let supportedScales: readonly number[];
+			let supportedRateTypes: readonly RateType[];
 
-			const supported = await api.getSupported();
-			const logMessage = `received meter support:
-type:                 ${getMeterTypeName(supported.type)}
-supported scales:     ${supported.supportedScales
-				.map(s => lookupMeterScale(supported.type, s).label)
-				.map(label => `\n* ${label}`)}
-supported rate types: ${supported.supportedRateTypes
-				.map(rt => getEnumMemberName(RateType, rt))
-				.map(label => `\n* ${label}`)}
-supports reset:       ${supported.supportsReset}`;
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: logMessage,
-				direction: "inbound",
-			});
+			const storedType = node.getValue<number>(
+				getTypeValueId(this.endpointIndex),
+			);
 
-			const rateTypes = supported.supportedRateTypes.length
-				? supported.supportedRateTypes
+			if (complete || storedType == undefined) {
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: "querying meter support...",
+					direction: "outbound",
+				});
+
+				({
+					type,
+					supportsReset,
+					supportedScales,
+					supportedRateTypes,
+				} = await api.getSupported());
+				const logMessage = `received meter support:
+type:                 ${getMeterTypeName(type)}
+supported scales:     ${supportedScales
+					.map(s => lookupMeterScale(type, s).label)
+					.map(label => `\n* ${label}`)}
+supported rate types: ${supportedRateTypes
+					.map(rt => getEnumMemberName(RateType, rt))
+					.map(label => `\n* ${label}`)}
+supports reset:       ${supportsReset}`;
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
+			} else {
+				type = storedType;
+				supportsReset =
+					node.getValue(
+						getSupportsResetValueId(this.endpointIndex),
+					) ?? false;
+				supportedScales =
+					node.getValue(
+						getSupportedScalesValueId(this.endpointIndex),
+					) ?? [];
+				supportedRateTypes =
+					node.getValue(
+						getSupportedRateTypesValueId(this.endpointIndex),
+					) ?? [];
+			}
+
+			const rateTypes = supportedRateTypes.length
+				? supportedRateTypes
 				: [undefined];
 			for (const rateType of rateTypes) {
-				for (const scale of supported.supportedScales) {
+				for (const scale of supportedScales) {
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `querying meter value (type = ${getMeterTypeName(
-							supported.type,
-						)}, scale = ${
-							lookupMeterScale(supported.type, scale).label
-						}${
+							type,
+						)}, scale = ${lookupMeterScale(type, scale).label}${
 							rateType != undefined
 								? `, rate type = ${getEnumMemberName(
 										RateType,
