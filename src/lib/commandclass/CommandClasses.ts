@@ -154,5 +154,6 @@ export const sensorCCs: readonly CommandClasses[] = [
 	CommandClasses["Energy Production"],
 	CommandClasses.Meter,
 	CommandClasses["Multilevel Sensor"],
+	CommandClasses.Notification, // For pull nodes
 	CommandClasses["Pulse Meter"],
 ];
