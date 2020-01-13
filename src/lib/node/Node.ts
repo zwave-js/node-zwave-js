@@ -47,6 +47,7 @@ import {
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import { timespan } from "../util/date";
 import { topologicalSort } from "../util/graph";
 import { getEnumMemberName, JSONObject, Mixin } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
@@ -670,6 +671,9 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		this.nodeMayBeReady = true;
 		this.emitReadyEventOnce();
 
+		// Regularly query listening nodes for updated values
+		this.scheduleManualValueRefreshesForListeningNodes();
+
 		// Tell listeners that the interview is completed
 		// The driver will then send this node to sleep
 		this.emit("interview completed", this);
@@ -1009,6 +1013,83 @@ version:               ${this.version}`;
 	}
 
 	/**
+	 * Schedules the regular refreshes of some CC values
+	 */
+	private scheduleManualValueRefreshesForListeningNodes(): void {
+		// Only schedule this for listening nodes. Sleeping nodes are queried on wakeup
+		if (this.supportsCC(CommandClasses["Wake Up"])) return;
+		// Only schedule this if we don't expect any unsolicited updates
+		if (!this.requiresManualValueRefresh()) return;
+
+		// TODO: The timespan definitions should be on the CCs themselves (probably as decorators)
+		this.scheduleManualValueRefresh(
+			CommandClasses.Battery,
+			// The specs say once per month, but that's a bit too unfrequent IMO
+			// Also the maximum that setInterval supports is ~24.85 days
+			timespan.days(7),
+		);
+		this.scheduleManualValueRefresh(
+			CommandClasses.Meter,
+			timespan.hours(6),
+		);
+		this.scheduleManualValueRefresh(
+			CommandClasses["Multilevel Sensor"],
+			timespan.hours(6),
+		);
+	}
+
+	private manualRefreshTimers = new Map<CommandClasses, NodeJS.Timer>();
+	/**
+	 * Is used to schedule a manual value refresh for nodes that don't send unsolicited commands
+	 */
+	private scheduleManualValueRefresh(
+		cc: CommandClasses,
+		timeout: number,
+	): void {
+		// // Avoid triggering the refresh multiple times
+		// this.cancelManualValueRefresh(cc);
+		this.manualRefreshTimers.set(
+			cc,
+			setInterval(() => {
+				this.refreshCCValues(cc);
+			}, timeout).unref(),
+		);
+	}
+
+	private cancelManualValueRefresh(cc: CommandClasses): void {
+		if (this.manualRefreshTimers.has(cc)) {
+			const timeout = this.manualRefreshTimers.get(cc)!;
+			clearTimeout(timeout);
+			this.manualRefreshTimers.delete(cc);
+		}
+	}
+
+	/**
+	 * Refreshes all non-static values of a single CC from this node.
+	 * WARNING: It is not recommended to await this method!
+	 */
+	private async refreshCCValues(cc: CommandClasses): Promise<void> {
+		for (const endpoint of this.getAllEndpoints()) {
+			const instance = endpoint.createCCInstanceUnsafe(cc);
+			if (instance) {
+				// Don't do a complete interview, only dynamic values
+				try {
+					await instance.interview(false);
+				} catch (e) {
+					log.controller.logNode(
+						this.id,
+						`failed to refresh values for ${getEnumMemberName(
+							CommandClasses,
+							cc,
+						)}, endpoint ${endpoint.index}: ${e.message}`,
+						"error",
+					);
+				}
+			}
+		}
+	}
+
+	/**
 	 * Refreshes all non-static values from this node.
 	 * WARNING: It is not recommended to await this method!
 	 */
@@ -1084,13 +1165,15 @@ version:               ${this.version}`;
 		await this.setInterviewStage(InterviewStage.Neighbors);
 	}
 
-	// TODO: Add a handler around for each CC to interpret the received data
-
 	/**
 	 * @internal
 	 * Handles a CommandClass that was received from this node
 	 */
 	public async handleCommand(command: CommandClass): Promise<void> {
+		// If the node sent us an unsolicited update, our initial assumption
+		// was wrong. Stop querying it regularly for updates
+		this.cancelManualValueRefresh(command.ccId);
+
 		if (command instanceof BasicCC) {
 			return this.handleBasicCommand(command);
 		} else if (command instanceof CentralSceneCCNotification) {
