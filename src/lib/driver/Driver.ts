@@ -649,6 +649,21 @@ export class Driver extends EventEmitter implements IDriver {
 			);
 		}
 
+		// Remove all timeouts
+		for (const timeout of [
+			this.sendQueueTimer,
+			this.saveToCacheTimer,
+			...this.sendNodeToSleepTimers.values(),
+			...this.nodeAwakeTimeouts.values(),
+			this.currentTransaction?.timeoutInstance,
+			this.retryTransactionTimeout,
+		]) {
+			if (timeout) clearTimeout(timeout);
+		}
+
+		// Destroy all nodes
+		this._controller?.nodes.forEach(n => n.destroy());
+
 		process.removeListener("exit", this._cleanupHandler);
 		process.removeListener("SIGINT", this._cleanupHandler);
 		process.removeListener("uncaughtException", this._cleanupHandler);
@@ -1267,6 +1282,8 @@ ${handlers.length} left`,
 		);
 	}
 
+	private retryTransactionTimeout: NodeJS.Timeout | undefined;
+
 	/** Retries the current transaction and returns the calculated timeout */
 	private retryCurrentTransaction(timeout?: number): number {
 		// If no timeout was given, fallback to the default timeout as defined in the Z-Wave specs
@@ -1275,7 +1292,10 @@ ${handlers.length} left`,
 		}
 		this.currentTransaction!.sendAttempts++;
 		// Unref'ing long running timers allows the process to exit mid-timeout
-		setTimeout(() => this.retransmit(), timeout).unref();
+		this.retryTransactionTimeout = setTimeout(() => {
+			this.retryTransactionTimeout = undefined;
+			this.retransmit();
+		}, timeout).unref();
 		return timeout;
 	}
 

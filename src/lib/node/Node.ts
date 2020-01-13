@@ -192,6 +192,21 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	}
 
 	/**
+	 * Cleans up all resources used by this node
+	 */
+	public destroy(): void {
+		// Remove all timeouts
+		for (const timeout of [
+			this.sceneActivationResetTimeout,
+			this.centralSceneKeyHeldDownContext?.timeout,
+			...this.notificationIdleTimeouts.values(),
+			...this.manualRefreshTimers.values(),
+		]) {
+			if (timeout) clearTimeout(timeout);
+		}
+	}
+
+	/**
 	 * Enhances a value id so it can be consumed better by applications
 	 */
 	private translateValueID<T extends ValueID>(
@@ -1038,7 +1053,7 @@ version:               ${this.version}`;
 		);
 	}
 
-	private manualRefreshTimers = new Map<CommandClasses, NodeJS.Timer>();
+	private manualRefreshTimers = new Map<CommandClasses, NodeJS.Timeout>();
 	/**
 	 * Is used to schedule a manual value refresh for nodes that don't send unsolicited commands
 	 */
@@ -1205,7 +1220,7 @@ version:               ${this.version}`;
 	/** Stores information about a currently held down key */
 	private centralSceneKeyHeldDownContext:
 		| {
-				timeout: NodeJS.Timer;
+				timeout: NodeJS.Timeout;
 				sceneNumber: number;
 		  }
 		| undefined;
