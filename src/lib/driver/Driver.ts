@@ -15,9 +15,13 @@ import {
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
 import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
-import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
+import {
+	ICommandClassContainer,
+	isCommandClassContainer,
+} from "../commandclass/ICommandClassContainer";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { messageIsPing } from "../commandclass/NoOperationCC";
+import { SupervisionCC } from "../commandclass/SupervisionCC";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { loadDeviceIndex } from "../config/Devices";
 import { loadIndicators } from "../config/Indicators";
@@ -826,50 +830,7 @@ export class Driver extends EventEmitter implements IDriver {
 	 */
 	private async handleMessage(msg: Message): Promise<void> {
 		// Before doing anything else, unwrap encapsulated commands
-		if (isCommandClassContainer(msg)) {
-			// SDS13783-11B defines the encapsulation order, we unwrap in the opposite order
-
-			// TODO: Remember the command encapsulation order in case we need to respond
-
-			// Unwrap encapsulating CCs until we get to the core
-			while (isEncapsulatingCommandClass(msg.command)) {
-				const unwrapped = msg.command.constructor.unwrap(msg.command);
-				if (isArray(unwrapped)) {
-					log.driver.print(
-						`Received a command that contains multiple CommandClasses. This is not supported yet! Discarding the message...`,
-						"warn",
-					);
-					return;
-				}
-				msg.command = unwrapped;
-			}
-
-			// // 5. Any one of the following combinations:
-			// //   a. Security (S0 or S2) followed by transport service
-			// //   b. Transport Service
-			// //   c. Security (S0 or S2)
-			// //   d. CRC16
-			// // b and d are mutually exclusive, security is not
-			// if (msg.command instanceof CRC16CCCommandEncapsulation) {
-			// 	log.driver.print("Unwrapping CRC-16 encapsulated command");
-			// 	msg.command = CRC16CC.unwrap(msg.command);
-			// }
-			// // else if (... TransportService)
-
-			// // if (... Security)
-
-			// // 4. Multi Channel
-			// if (msg.command instanceof MultiChannelCCCommandEncapsulation) {
-			// 	log.driver.print(
-			// 		"Unwrapping MultiChannel encapsulated command",
-			// 	);
-			// 	msg.command = MultiChannelCC.unwrap(msg.command);
-			// }
-
-			// // 3. Supervision
-			// // 2. Multi Command
-			// // 1. Encapsulated Command Class (payload), e.g. Basic Set
-		}
+		if (isCommandClassContainer(msg)) this.unwrapCommands(msg);
 
 		// if we have a pending request, check if that is waiting for this message
 		if (this.currentTransaction != undefined) {
@@ -1360,6 +1321,51 @@ ${handlers.length} left`,
 		return this.lastCallbackId;
 	}
 
+	private encapsulateCommands(msg: Message & ICommandClassContainer): void {
+		// The encapsulation order (from outside to inside) is as follows:
+		// 5. Any one of the following combinations:
+		//   a. Security (S0 or S2) followed by transport service
+		//   b. Transport Service
+		//   c. Security (S0 or S2)
+		//   d. CRC16
+		// b and d are mutually exclusive, security is not
+		// 4. Multi Channel
+		// 3. Supervision
+		// 2. Multi Command
+		// 1. Encapsulated Command Class (payload), e.g. Basic Set
+
+		// TODO: 2.
+
+		// 3.
+		if (SupervisionCC.requiresEncapsulation(msg.command)) {
+			msg.command = SupervisionCC.encapsulate(this, msg.command);
+		}
+
+		// 4.
+		if (MultiChannelCC.requiresEncapsulation(msg.command)) {
+			msg.command = MultiChannelCC.encapsulate(this, msg.command);
+		}
+
+		// TODO: 5.
+	}
+
+	private unwrapCommands(msg: Message & ICommandClassContainer): void {
+		// TODO: Remember the command encapsulation order in case we need to respond
+
+		// Unwrap encapsulating CCs until we get to the core
+		while (isEncapsulatingCommandClass(msg.command)) {
+			const unwrapped = msg.command.constructor.unwrap(msg.command);
+			if (isArray(unwrapped)) {
+				log.driver.print(
+					`Received a command that contains multiple CommandClasses. This is not supported yet! Discarding the message...`,
+					"warn",
+				);
+				return;
+			}
+			msg.command = unwrapped;
+		}
+	}
+
 	// wotan-disable no-misused-generics
 	/**
 	 * Sends a message to the Z-Wave stick.
@@ -1408,13 +1414,8 @@ ${handlers.length} left`,
 			);
 		}
 
-		// Automatically encapsulate commands that are supposed to target a specific endpoint
-		if (
-			isCommandClassContainer(msg) &&
-			MultiChannelCC.requiresEncapsulation(msg.command)
-		) {
-			msg.command = MultiChannelCC.encapsulate(this, msg.command);
-		}
+		// Automatically encapsulate commands
+		if (isCommandClassContainer(msg)) this.encapsulateCommands(msg);
 
 		// When sending a message to a node that is known to be sleeping,
 		// the priority should be WakeUp, so the message gets deprioritized

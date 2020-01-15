@@ -49,6 +49,7 @@ export function gotDeserializationOptions(
 export interface CCCommandOptions {
 	nodeId: number;
 	endpoint?: number;
+	supervised?: boolean;
 }
 
 interface CommandClassCreationOptions extends CCCommandOptions {
@@ -71,7 +72,11 @@ export class CommandClass {
 		// Extract the cc from declared metadata if not provided
 		this.ccId = getCommandClass(this);
 		// Default to the root endpoint - Inherited classes may override this behavior
-		this.endpointIndex = ("endpoint" in options && options.endpoint) || 0;
+		this.endpointIndex =
+			("endpoint" in options ? options.endpoint : undefined) ?? 0;
+		// Default to non-supervised commands
+		this.supervised =
+			("supervised" in options ? options.supervised : undefined) ?? false;
 		// We cannot use @ccValue for non-derived classes, so register interviewComplete as an internal value here
 		this.registerValue("interviewComplete", true);
 
@@ -170,6 +175,12 @@ export class CommandClass {
 
 	/** Which endpoint of the node this CC belongs to. 0 for the root device. */
 	public endpointIndex: number;
+
+	/**
+	 * Whether the command progress should be supervised.
+	 * This is only available if the target endpoint supports the Supervision CC
+	 */
+	public supervised: boolean;
 
 	/** Returns true if this CC is an extended CC (0xF100..0xFFFF) */
 	public isExtended(): boolean {

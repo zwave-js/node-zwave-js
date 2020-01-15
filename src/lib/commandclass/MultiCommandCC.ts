@@ -70,6 +70,8 @@ export class MultiCommandCC extends CommandClass {
 		return new MultiCommandCCCommandEncapsulation(driver, {
 			nodeId: CCs[0].nodeId,
 			encapsulated: CCs,
+			// MultiCommand CC is wrapped inside Supervision CC, so the supervision status must be preserved
+			supervised: CCs.some(cc => cc.supervised),
 		});
 	}
 
