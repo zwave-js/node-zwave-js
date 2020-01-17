@@ -829,14 +829,16 @@ export class Driver extends EventEmitter implements IDriver {
 	 * @param msg The decoded message
 	 */
 	private async handleMessage(msg: Message): Promise<void> {
-		// Before doing anything else, unwrap encapsulated commands
-		if (isCommandClassContainer(msg)) this.unwrapCommands(msg);
-
 		// if we have a pending request, check if that is waiting for this message
 		if (this.currentTransaction != undefined) {
+			// Use the entire encapsulation stack to test what to do with this response
+			// because some encapsulation requires this information
 			const responseRole = this.currentTransaction.message.testResponse(
 				msg,
 			);
+			// For further actions, we are only interested in the innermost CC
+			if (isCommandClassContainer(msg)) this.unwrapCommands(msg);
+
 			switch (responseRole) {
 				case "confirmation":
 					log.driver.transactionResponse(msg, "confirmation");
@@ -980,6 +982,9 @@ export class Driver extends EventEmitter implements IDriver {
 					// unexpected, nothing to do here => check registered handlers
 					break;
 			}
+		} else {
+			// For further actions, we are only interested in the innermost CC
+			if (isCommandClassContainer(msg)) this.unwrapCommands(msg);
 		}
 
 		if (msg.type === MessageType.Request) {
@@ -1059,12 +1064,6 @@ ${handlers.length} left`,
 				node.status = NodeStatus.Unknown;
 			}
 		}
-
-		// TODO: find a nice way to observe the different stages of a response.
-		// for example a SendDataRequest with a VersionCC gets 3 responses:
-		// 1. SendDataResponse with info if the data was sent
-		// 2. SendDataRequest with info if the node responded
-		// 3. ApplicationCommandRequest with the actual response
 
 		if (msg instanceof ApplicationCommandRequest) {
 			// we handle ApplicationCommandRequests differently because they are handled by the nodes directly
