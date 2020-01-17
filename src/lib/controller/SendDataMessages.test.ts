@@ -78,6 +78,7 @@ describe("lib/controller/SendDataRequest => ", () => {
 					hasCallbackId: () => true,
 					callbackId: (nodeFail as SendDataRequestTransmitReport)
 						.callbackId,
+					command: {} as any,
 				} as any,
 				nodeFail,
 			),
@@ -94,6 +95,7 @@ describe("lib/controller/SendDataRequest => ", () => {
 					hasCallbackId: () => true,
 					callbackId: (nodeSuccess as SendDataRequestTransmitReport)
 						.callbackId,
+					command: {} as any,
 				} as any,
 				nodeSuccess,
 			),
@@ -104,7 +106,14 @@ describe("lib/controller/SendDataRequest => ", () => {
 			functionType: FunctionType.ApplicationCommand,
 		});
 		// "An unrelated message was not detected as unexpected!"
-		expect(predicate({} as any, somethingElse)).toBe("unexpected");
+		expect(
+			predicate(
+				{
+					command: {} as any,
+				} as any,
+				somethingElse,
+			),
+		).toBe("unexpected");
 	});
 
 	// We cannot parse these kinds of messages atm.
