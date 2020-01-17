@@ -1,8 +1,10 @@
 import {
+	CCResponseRole,
 	CommandClass,
 	getExpectedCCResponse,
 	isDynamicCCResponse,
 } from "../commandclass/CommandClass";
+import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
 import {
 	ICommandClassContainer,
 	isCommandClassContainer,
@@ -25,6 +27,7 @@ import {
 	ResponseRole,
 } from "../message/Message";
 import { JSONObject, staticExtends } from "../util/misc";
+import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
 
 export enum TransmitOptions {
 	NotSet = 0,
@@ -113,6 +116,18 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			(partials as SendDataRequest[]).map(p => p.command),
 		);
 	}
+
+	/** @inheritDoc */
+	public testResponse(msg: Message): ResponseRole {
+		const ret = super.testResponse(msg);
+		// We handle a special case here: A node's response to a SendDataRequest comes in an
+		// ApplicationCommandRequest which does not have a callback id, so it is classified as
+		// "unexpected". Test those again with the predicate for SendDataRequests
+		if (ret === "unexpected" && msg instanceof ApplicationCommandRequest) {
+			return testResponseForSendDataRequest(this, msg);
+		}
+		return ret;
+	}
 }
 
 // Generic handler for all potential responses to SendDataRequests
@@ -127,46 +142,83 @@ function testResponseForSendDataRequest(
 		// send data requests are final unless stated otherwise by a CommandClass
 		if (received.isFailed()) return "fatal_node";
 		msgIsPositiveTransmitReport = true;
+	} else if (!(received instanceof ApplicationCommandRequest)) {
+		return "unexpected";
 	}
 
-	// If the contained CC expects a certain response (which will come in an "unexpected" ApplicationCommandRequest)
-	// we declare that as final and the original "final" response, i.e. the SendDataRequest becomes a confirmation
+	const sentCommand = sent.command;
+	const receivedCommand = isCommandClassContainer(received)
+		? received.command
+		: undefined;
 
-	let expected = getExpectedCCResponse(sent.command);
-	// Dynamic CC responses are evaluated now
+	// Check the sent command if it expects this response
+	const ret = testResponseForCC(
+		sentCommand,
+		receivedCommand,
+		msgIsPositiveTransmitReport,
+	);
+	return ret;
+}
+
+function testResponseForCC(
+	sent: CommandClass,
+	received: CommandClass | undefined,
+	isTransmitReport: boolean,
+): Exclude<CCResponseRole, "checkEncapsulated"> {
+	// Check the response role recursively from the inside to the outside
+	let role: CCResponseRole | undefined;
+	let isEncapCC = false;
+	if (isEncapsulatingCommandClass(sent)) {
+		isEncapCC = true;
+		role = testResponseForCC(
+			sent.encapsulated,
+			isEncapsulatingCommandClass(received)
+				? received.encapsulated
+				: undefined,
+			isTransmitReport,
+		);
+	}
+	// If the innermost CC says this message is unexpected or wants to check
+	// the non-existing encapsulated CC, the response must be unexpected
+	if (role === "unexpected" || role === "checkEncapsulated") {
+		return "unexpected";
+	}
+
+	// Otherwise check the current CC
+	let expected = getExpectedCCResponse(sent);
+	// Evaluate dynamic CC responses
 	if (
 		typeof expected === "function" &&
 		!staticExtends(expected, CommandClass) &&
 		isDynamicCCResponse(expected)
 	) {
-		expected = expected(sent.command);
+		expected = expected(sent);
 	}
 
+	let ret: CCResponseRole;
 	if (expected == undefined) {
 		// The CC expects no CC response, a transmit report is the final message
-		return msgIsPositiveTransmitReport ? "final" : "unexpected";
-	} else if (msgIsPositiveTransmitReport) {
+		ret = isTransmitReport ? "final" : "unexpected";
+	} else if (isTransmitReport) {
 		// A positive transmit report was received, but we expect a CC in response
-		return "confirmation";
-	}
-
-	if (staticExtends(expected, CommandClass)) {
+		ret = "confirmation";
+	} else if (staticExtends(expected, CommandClass)) {
 		// The CC always expects the same response, check if this is the one
-		if (
-			isCommandClassContainer(received) &&
-			received.command instanceof expected
-		) {
-			return received.command.expectMoreMessages() ? "partial" : "final";
+		if (received && received instanceof expected) {
+			ret = received.expectMoreMessages()
+				? "partial"
+				: isEncapCC
+				? "checkEncapsulated"
+				: "final";
 		} else {
-			return "unexpected";
+			ret = "unexpected";
 		}
 	} else {
 		// The CC wants to test the response itself, let it do so
-		return expected(
-			sent.command,
-			isCommandClassContainer(received) ? received.command : undefined,
-		);
+		ret = expected(sent, received);
 	}
+	// If the role depends on the inner role, pass that through
+	return ret === "checkEncapsulated" ? role ?? "unexpected" : ret;
 }
 
 export class SendDataRequestTransmitReport extends SendDataRequestBase {

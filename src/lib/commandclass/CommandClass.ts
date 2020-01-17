@@ -806,7 +806,9 @@ export type DynamicCCResponse<T extends CommandClass = CommandClass> = (
 
 export type CCResponseRole =
 	| "unexpected" // a CC that does not belong to this transaction
+	| "partial" // a partial response, that (once assembled) will become final. E.g. a multi-report CC container
 	| "confirmation" // a confirmation response, e.g. report that a process has started
+	| "checkEncapsulated" // The response role depends on the encapsulated CC
 	| "final"; // a final response (leading to a resolved transaction)
 
 /**
