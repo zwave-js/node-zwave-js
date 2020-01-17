@@ -1,8 +1,8 @@
 import {
 	CommandClass,
 	getExpectedCCResponse,
+	isDynamicCCResponse,
 } from "../commandclass/CommandClass";
-import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
 import {
 	ICommandClassContainer,
 	isCommandClassContainer,
@@ -132,37 +132,41 @@ function testResponseForSendDataRequest(
 	// If the contained CC expects a certain response (which will come in an "unexpected" ApplicationCommandRequest)
 	// we declare that as final and the original "final" response, i.e. the SendDataRequest becomes a confirmation
 
-	// TODO: Include the stack of encapsulations to find out which CC is expected
-
-	// To test the response, we unwrap ourselves until we reach the inner (payload) CC
-	let command: CommandClass = sent.command;
-	while (isEncapsulatingCommandClass(command)) {
-		command = command.constructor.unwrap(command);
+	let expected = getExpectedCCResponse(sent.command);
+	// Dynamic CC responses are evaluated now
+	if (
+		typeof expected === "function" &&
+		!staticExtends(expected, CommandClass) &&
+		isDynamicCCResponse(expected)
+	) {
+		expected = expected(sent.command);
 	}
-	// The CC in the received message is already unwrapped by the driver
-
-	const expectedCCOrDynamic = getExpectedCCResponse(command);
-	const expected =
-		typeof expectedCCOrDynamic === "function" &&
-		!staticExtends(expectedCCOrDynamic, CommandClass)
-			? expectedCCOrDynamic(command)
-			: expectedCCOrDynamic;
 
 	if (expected == undefined) {
-		// "final" | "unexpected"
+		// The CC expects no CC response, a transmit report is the final message
 		return msgIsPositiveTransmitReport ? "final" : "unexpected";
 	} else if (msgIsPositiveTransmitReport) {
 		// A positive transmit report was received, but we expect a CC in response
 		return "confirmation";
 	}
 
-	if (
-		isCommandClassContainer(received) &&
-		received.command instanceof expected
-	) {
-		return received.command.expectMoreMessages() ? "partial" : "final";
+	if (staticExtends(expected, CommandClass)) {
+		// The CC always expects the same response, check if this is the one
+		if (
+			isCommandClassContainer(received) &&
+			received.command instanceof expected
+		) {
+			return received.command.expectMoreMessages() ? "partial" : "final";
+		} else {
+			return "unexpected";
+		}
+	} else {
+		// The CC wants to test the response itself, let it do so
+		return expected(
+			sent.command,
+			isCommandClassContainer(received) ? received.command : undefined,
+		);
 	}
-	return "unexpected";
 }
 
 export class SendDataRequestTransmitReport extends SendDataRequestBase {
