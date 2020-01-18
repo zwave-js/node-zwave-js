@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.10.0 (2020-01-18)
 ### Features
 * Locally reset devices are now treated like failing nodes and automatically removed from the controller
 * The `Notification` status is now also queried on wakeup
