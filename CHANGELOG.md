@@ -4,6 +4,17 @@
 	## __WORK IN PROGRESS__
 -->
 
+## 2.10.0 (2020-01-18)
+### Features
+* Locally reset devices are now treated like failing nodes and automatically removed from the controller
+* The `Notification` status is now also queried on wakeup
+* The status of non-reporting listening nodes is now regularly queried
+
+### Bugfixes
+* The controller is now correctly treated as an awake node when prioritizing messages
+* The partial interview for the `Meter` CC no longer re-queries the capabilities
+* All timeouts and intervals are now cleared when the driver is shut down.
+
 ## 2.9.1 (2020-01-07)
 ### Bugfixes
 * `Notification CC` Reports that are received as a response during the interview are now correctly handled

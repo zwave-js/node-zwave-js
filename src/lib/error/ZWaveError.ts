@@ -20,7 +20,8 @@ export enum ZWaveErrorCodes {
 	Driver_InvalidCache,
 	Driver_InvalidOptions,
 
-	Controller_MessageTimeout,
+	/** The controller has timed out while waiting for a report from the node */
+	Controller_NodeTimeout,
 	Controller_MessageDropped,
 	Controller_InclusionFailed,
 	Controller_ExclusionFailed,
