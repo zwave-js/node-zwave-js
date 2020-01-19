@@ -235,7 +235,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		} catch (e) {
 			if (
 				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Controller_MessageTimeout
+				e.code === ZWaveErrorCodes.Controller_NodeTimeout
 			) {
 				// A timeout has to be expefcted. We return undefined to
 				// signal that no value was received
@@ -273,7 +273,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		} catch (e) {
 			if (
 				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Controller_MessageTimeout
+				e.code === ZWaveErrorCodes.Controller_NodeTimeout
 			) {
 				// A timeout has to be expected
 				return false;
@@ -307,7 +307,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		} catch (e) {
 			if (
 				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Controller_MessageTimeout
+				e.code === ZWaveErrorCodes.Controller_NodeTimeout
 			) {
 				// A timeout has to be expected
 				return false;
