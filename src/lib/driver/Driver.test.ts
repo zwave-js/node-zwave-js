@@ -165,7 +165,7 @@ describe("lib/driver/Driver => ", () => {
 			const resolvedSpy = jest.fn();
 			const promise = driver.sendMessage(msg).then(resolvedSpy);
 			// trigger the send queue
-			jest.runAllTimers();
+			jest.runAllImmediates();
 
 			expect(resolvedSpy).not.toBeCalled();
 			expect(resolvedSpy).not.toBeCalled();
@@ -187,7 +187,7 @@ describe("lib/driver/Driver => ", () => {
 			const promise = driver.sendMessage(req);
 			promise.then(resolvedSpy);
 			// trigger the send queue
-			jest.runAllTimers();
+			jest.runAllImmediates();
 
 			expect(resolvedSpy).not.toBeCalled();
 
@@ -214,7 +214,7 @@ describe("lib/driver/Driver => ", () => {
 			const promise = driver.sendMessage(req);
 			promise.then(resolvedSpy);
 			// trigger the send queue
-			jest.runAllTimers();
+			jest.runAllImmediates();
 
 			expect(resolvedSpy).not.toBeCalled();
 
@@ -241,7 +241,7 @@ describe("lib/driver/Driver => ", () => {
 			const promise = driver.sendMessage(req);
 			promise.then(resolvedSpy);
 			// trigger the send queue
-			jest.runAllTimers();
+			jest.runAllImmediates();
 
 			expect(resolvedSpy).not.toBeCalled();
 
@@ -379,13 +379,14 @@ describe("lib/driver/Driver => ", () => {
 			// And catch the thrown error
 			const promise = driver.sendMessage(req).catch(errorSpy);
 			// trigger the send queue
-			jest.runAllTimers();
+			jest.runAllImmediates();
 
 			// Receive a CAN to trigger the resend check
 			serialport.receiveData(Buffer.from([MessageHeaders.CAN]));
 
 			// trigger the send queue again
-			jest.runAllTimers();
+			jest.advanceTimersToNextTimer();
+			jest.runAllImmediates();
 
 			// Confirm the transmission with an ACK
 			serialport.receiveData(Buffer.from([MessageHeaders.ACK]));

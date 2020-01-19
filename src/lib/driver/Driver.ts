@@ -651,7 +651,7 @@ export class Driver extends EventEmitter implements IDriver {
 
 		// Remove all timeouts
 		for (const timeout of [
-			this.sendQueueTimer,
+			this.ackTimeout,
 			this.saveToCacheTimer,
 			...this.sendNodeToSleepTimers.values(),
 			...this.nodeAwakeTimeouts.values(),
@@ -904,7 +904,7 @@ export class Driver extends EventEmitter implements IDriver {
 								this.rejectCurrentTransaction(
 									new ZWaveError(
 										"The transaction timed out",
-										ZWaveErrorCodes.Controller_MessageTimeout,
+										ZWaveErrorCodes.Controller_NodeTimeout,
 									),
 								);
 							},
@@ -1225,6 +1225,8 @@ ${handlers.length} left`,
 		const trnsact = this.currentTransaction;
 		if (trnsact != undefined && trnsact.ackPending) {
 			trnsact.ackPending = false;
+			this.clearAckTimeout();
+
 			log.driver.print(
 				`ACK received from controller for current transaction`,
 			);
@@ -1244,34 +1246,43 @@ ${handlers.length} left`,
 	}
 
 	private handleNAK(): void {
-		// TODO: what to do with this NAK?
+		this.handleUnsuccessfulTransmission("NAK");
 	}
 
 	/** Is called when the controller drops a message because it is busy */
 	private handleCAN(): void {
+		this.handleUnsuccessfulTransmission("CAN");
+	}
+
+	private handleUnsuccessfulTransmission(
+		reason: "CAN" | "NAK" | "timeout",
+	): void {
 		if (this.currentTransaction != undefined) {
+			const msg =
+				reason === "timeout"
+					? "Timeout occured waiting for ACK"
+					: `${reason} received`;
 			if (this.mayRetryCurrentTransaction()) {
 				const timeout = this.retryCurrentTransaction();
 				log.driver.print(
-					`CAN received - scheduling transmission attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`,
+					`${msg} - scheduling transmission attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`,
 					"warn",
 				);
 			} else {
 				log.driver.print(
-					`CAN received - maximum transmission attempts for the current transaction reached, dropping it...`,
+					`${msg} received - maximum transmission attempts for the current transaction reached, dropping it...`,
 					"error",
 				);
 
 				this.rejectCurrentTransaction(
 					new ZWaveError(
-						`The message was dropped by the controller after ${this.currentTransaction.maxSendAttempts} attempts`,
+						`Failed to send the message after ${this.currentTransaction.maxSendAttempts} attempts`,
 						ZWaveErrorCodes.Controller_MessageDropped,
 					),
 					false /* don't resume queue, that happens automatically */,
 				);
 			}
 		}
-		// else: TODO: what to do with this CAN?
 	}
 
 	/** Checks if the current transaction may still be retried */
@@ -1475,13 +1486,21 @@ ${handlers.length} left`,
 		return;
 	}
 
-	private sendQueueTimer: NodeJS.Timer | undefined;
-	private workOffSendQueue(): void {
-		if (this.sendQueueTimer != undefined) {
-			clearTimeout(this.sendQueueTimer);
-			this.sendQueueTimer = undefined;
+	private ackTimeout: NodeJS.Timer | undefined;
+	private startAckTimeout(): void {
+		this.clearAckTimeout();
+		this.ackTimeout = setTimeout(() => {
+			this.handleUnsuccessfulTransmission("timeout");
+		}, 1600).unref();
+	}
+	private clearAckTimeout(): void {
+		if (this.ackTimeout) {
+			clearTimeout(this.ackTimeout);
+			this.ackTimeout = undefined;
 		}
+	}
 
+	private workOffSendQueue(): void {
 		// is there something to send?
 		if (this.sendQueue.length === 0) {
 			log.driver.print("The send queue is empty", "debug");
@@ -1518,19 +1537,17 @@ ${handlers.length} left`,
 			log.serial.data("outbound", data);
 			this.doSend(data);
 
-			if (this.sendQueue.length > 0) {
-				// to avoid any deadlocks we didn't think of, re-call this later
-				// Unref'ing long running timers allows the process to exit mid-timeout
-				this.sendQueueTimer = setTimeout(
-					() => this.workOffSendQueue(),
-					1000,
-				).unref();
-			}
+			// INS12350-14:
+			// A transmitting host or Z-Wave chip may time out waiting for an ACK frame after transmitting a Data frame.
+			// If no ACK frame is received, the Data frame MAY be retransmitted.
+			// The transmitter MUST wait for at least 1600ms before deeming the Data frame lost.
+			this.startAckTimeout();
 		} else {
 			log.driver.print(
 				`The remaining ${this.sendQueue.length} messages are for sleeping nodes, not sending anything!`,
 				"debug",
 			);
+			log.driver.sendQueue(this.sendQueue);
 		}
 	}
 
@@ -1542,6 +1559,9 @@ ${handlers.length} left`,
 		const data = msg.serialize();
 		log.serial.data("outbound", data);
 		this.doSend(data);
+
+		// Retransmissions must also timeout
+		this.startAckTimeout();
 	}
 
 	/** Sends a raw datagram to the serialport (if that is open) */
