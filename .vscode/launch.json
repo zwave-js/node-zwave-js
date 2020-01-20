@@ -7,14 +7,24 @@
 		{
 			"type": "node",
 			"request": "attach",
-			"name": "Attach",
-			"port": 9229
-			// "sourceMaps": true
+			"name": "Attach (RasPi)",
+			"address": "heizung.fritz.box",
+			"port": 9229,
+			"localRoot": "${workspaceFolder}",
+			"remoteRoot": "/opt/iobroker/node_modules/zwave-js",
+			"skipFiles": ["<node_internals>/**"]
+		},
+		{
+			"type": "node",
+			"request": "attach",
+			"name": "Attach (localhost)",
+			"port": 9229,
+			"sourceMaps": true
 		},
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Launch Program",
+			"name": "Debug locally",
 			"port": 9229,
 			"runtimeArgs": [
 				"--async-stack-traces",

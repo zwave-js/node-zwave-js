@@ -247,9 +247,7 @@ export class Driver extends EventEmitter implements IDriver {
 	/** Enumerates all existing serial ports */
 	public static async enumerateSerialPorts(): Promise<string[]> {
 		const ports = await SerialPort.list();
-		return ports.map(port =>
-			"path" in port ? (port as any).path : port.comName,
-		);
+		return ports.map(port => port.path);
 	}
 
 	/** @internal */
@@ -448,6 +446,12 @@ export class Driver extends EventEmitter implements IDriver {
 	/** Is called when a node goes to sleep */
 	private onNodeSleep(node: ZWaveNode): void {
 		log.controller.logNode(node.id, "The node is now asleep.");
+
+		// Move all its pending messages to the WakeupQueue
+		// This clears the current transaction
+		this.moveMessagesToWakeupQueue(node.id);
+		// And continue with the next messages
+		setImmediate(() => this.workOffSendQueue());
 	}
 
 	/** Is called when a previously dead node starts communicating again */
@@ -918,11 +922,7 @@ export class Driver extends EventEmitter implements IDriver {
 						);
 						// The node is asleep
 						WakeUpCC.setAwake(node, false);
-						// Move all its pending messages to the WakeupQueue
-						// This clears the current transaction
-						this.moveMessagesToWakeupQueue(node.id);
-						// And continue with the next messages
-						setImmediate(() => this.workOffSendQueue());
+						// The handler for the asleep status will move the messages to the wakeup queue
 					} else if (this.mayRetryCurrentTransaction()) {
 						// The Z-Wave specs define 500ms as the waiting period for SendData messages
 						const timeout = this.retryCurrentTransaction(500);
@@ -1428,11 +1428,11 @@ ${handlers.length} left`,
 		if (isCommandClassContainer(msg)) this.encapsulateCommands(msg);
 
 		// When sending a message to a node that is known to be sleeping,
-		// the priority should be WakeUp, so the message gets deprioritized
+		// the priority must be WakeUp, so the message gets deprioritized
 		// in comparison with messages to awake nodes
 		// Pings are an exception, because we don't want them in the wakeup queue
 		if (
-			isNodeQuery(msg) &&
+			(isNodeQuery(msg) || isCommandClassContainer(msg)) &&
 			!messageIsPing(msg) &&
 			msg.getNodeUnsafe()?.isAwake() === false
 		) {
@@ -1554,6 +1554,10 @@ ${handlers.length} left`,
 	/** Retransmits the current transaction (if there is any) */
 	private retransmit(): void {
 		if (!this.currentTransaction) return;
+
+		// Since we're sending a new message, we expect an ACK again
+		this.currentTransaction.ackPending = true;
+
 		log.driver.transaction(this.currentTransaction);
 		const msg = this.currentTransaction.message;
 		const data = msg.serialize();
