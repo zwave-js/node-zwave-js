@@ -5,9 +5,16 @@
 -->
 
 ## __WORK IN PROGRESS__
+### Features
+* Implemented the `Supervision` CC. The `Driver` now has two additional methods to make use of that feature:
+    * `sendSupervisedCommand()`: Sends a command to a node using supervision and returns with the reported status (success, working, fail). This method throws if `Supervision CC` is not supported.
+    * `trySendCommandSupervised()`: Convenience wrapper around `sendSupervisedCommand` and `sendCommand`. Automatically determines whether supervision is supported. Returns the supervision status if it is, and nothing otherwise
+
 ### Bugfixes
 * Messages to sleeping nodes are now correctly de-prioritized when the awake timeout elapses
 * Messages are now automatically re-transmitted when the controller responds with a `NAK` or when it fails to respond at all
+* `ACK`s from the controller after a retransmit are no longer treated as unexpected
+* The logic that determines a message's role (expected, unexpected, confirmation, ...) now takes the encapsulation stack into account.
 
 ## 2.10.0 (2020-01-18)
 ### Features
