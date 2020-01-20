@@ -21,7 +21,13 @@ import {
 } from "../commandclass/ICommandClassContainer";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { messageIsPing } from "../commandclass/NoOperationCC";
-import { SupervisionCC } from "../commandclass/SupervisionCC";
+import {
+	SupervisionCC,
+	SupervisionCCGet,
+	SupervisionCCReport,
+	SupervisionResult,
+	SupervisionStatus,
+} from "../commandclass/SupervisionCC";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { loadDeviceIndex } from "../config/Devices";
 import { loadIndicators } from "../config/Indicators";
@@ -55,6 +61,7 @@ import { isNodeQuery } from "../node/INodeQuery";
 import { ZWaveNode } from "../node/Node";
 import { DeepPartial, skipBytes } from "../util/misc";
 import { num2hex } from "../util/strings";
+import { Duration } from "../values/Duration";
 import { FileSystem } from "./FileSystem";
 import { DriverEventCallbacks, DriverEvents, IDriver } from "./IDriver";
 import { Transaction } from "./Transaction";
@@ -169,6 +176,22 @@ export interface SendMessageOptions {
 	supportCheck?: boolean;
 }
 
+export type SupervisionUpdateHandler = (
+	status: SupervisionStatus,
+	remainingDuration?: Duration,
+) => void;
+
+export type SendSupervisedCommandOptions = SendMessageOptions &
+	(
+		| {
+				requestStatusUpdates: false;
+		  }
+		| {
+				requestStatusUpdates: true;
+				onUpdate: SupervisionUpdateHandler;
+		  }
+	);
+
 // Strongly type the event emitter events
 export interface Driver {
 	on<TEvent extends DriverEvents>(
@@ -206,6 +229,8 @@ export class Driver extends EventEmitter implements IDriver {
 	private sendQueue = new SortedList<Transaction>();
 	/** A map of handlers for all sorts of requests */
 	private requestHandlers = new Map<FunctionType, RequestHandlerEntry[]>();
+	/** A map of all current supervision sessions that may still receive updates */
+	private supervisionSessions = new Map<number, SupervisionUpdateHandler>();
 
 	public readonly cacheDir: string;
 
@@ -1119,6 +1144,22 @@ ${handlers.length} left`,
 						level: "error",
 					});
 				}
+			} else if (
+				msg.command.ccId === CommandClasses.Supervision &&
+				msg.command instanceof SupervisionCCReport &&
+				this.supervisionSessions.has(msg.command.sessionId)
+			) {
+				// Supervision commands are handled here
+
+				// Call the update handler
+				this.supervisionSessions.get(msg.command.sessionId)!(
+					msg.command.status,
+					msg.command.duration,
+				);
+				// If this was a final report, remove the handler
+				if (msg.command.status !== SupervisionStatus.Working) {
+					this.supervisionSessions.delete(msg.command.sessionId);
+				}
 			} else {
 				// dispatch the command to the node itself
 				await node.handleCommand(msg.command);
@@ -1472,6 +1513,71 @@ ${handlers.length} left`,
 		const resp = await this.sendMessage(msg, options);
 		if (isCommandClassContainer(resp)) {
 			return resp.command as TResponse;
+		}
+	}
+
+	/**
+	 * Sends a supervised command to a Z-Wave node. When status updates are requested, the passed callback will be executed for every non-final update.
+	 * @param command The command to send
+	 * @param options (optional) Options regarding the message transmission
+	 */
+	public async sendSupervisedCommand(
+		command: CommandClass,
+		options: SendSupervisedCommandOptions = {
+			requestStatusUpdates: false,
+		},
+	): Promise<SupervisionResult> {
+		// Check if the target supports this command
+		if (!command.getNode()?.supportsCC(CommandClasses.Supervision)) {
+			throw new ZWaveError(
+				`Node ${command.nodeId} does not support the Supervision CC!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
+
+		// Create the encapsulating CC so we have a session ID
+		command = SupervisionCC.encapsulate(
+			this,
+			command,
+			options.requestStatusUpdates,
+		);
+
+		const resp = (await this.sendCommand<SupervisionCCReport>(
+			command,
+			options,
+		))!;
+		// If the command is still in progress, listen for future updates
+		if (
+			options.requestStatusUpdates &&
+			resp.status === SupervisionStatus.Working
+		) {
+			this.supervisionSessions.set(
+				(command as SupervisionCCGet).sessionId,
+				options.onUpdate,
+			);
+		}
+		// In any case, return the status
+		return {
+			status: resp.status,
+			remainingDuration: resp.duration,
+		};
+	}
+
+	/**
+	 * Sends a supervised command to a Z-Wave node if the Supervision CC is supported. If not, a normal command is sent.
+	 * This does not return any Report values, so only use this for Set-type commands.
+	 *
+	 * @param command The command to send
+	 * @param options (optional) Options regarding the message transmission
+	 */
+	public async trySendCommandSupervised(
+		command: CommandClass,
+		options?: SendSupervisedCommandOptions,
+	): Promise<SupervisionResult | undefined> {
+		if (command.getNode()?.supportsCC(CommandClasses.Supervision)) {
+			return this.sendSupervisedCommand(command, options);
+		} else {
+			await this.sendCommand(command, options);
 		}
 	}
 

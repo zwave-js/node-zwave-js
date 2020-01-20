@@ -8,6 +8,7 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
+	CCResponsePredicate,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -31,6 +32,11 @@ export enum SupervisionStatus {
 	Working = 0x01,
 	Fail = 0x02,
 	Success = 0xff,
+}
+
+export interface SupervisionResult {
+	status: SupervisionStatus;
+	remainingDuration?: Duration;
 }
 
 let sessionId = 0;
@@ -82,13 +88,14 @@ export class SupervisionCC extends CommandClass {
 	public static encapsulate(
 		driver: IDriver,
 		cc: CommandClass,
+		requestStatusUpdates: boolean = true,
 	): SupervisionCCGet {
 		return new SupervisionCCGet(driver, {
 			nodeId: cc.nodeId,
 			// Supervision CC is wrapped inside MultiChannel CCs, so the endpoint must be copied
 			endpoint: cc.endpointIndex,
 			encapsulated: cc,
-			requestStatusUpdates: true,
+			requestStatusUpdates,
 		});
 	}
 
@@ -124,8 +131,18 @@ interface SupervisionCCGetOptions extends CCCommandOptions {
 	encapsulated: CommandClass;
 }
 
+const testResponseForSupervisionCCGet: CCResponsePredicate = (
+	sent: SupervisionCCGet,
+	received,
+) => {
+	return received instanceof SupervisionCCReport &&
+		received.sessionId === sent.sessionId
+		? "final"
+		: "unexpected";
+};
+
 @CCCommand(SupervisionCommand.Get)
-@expectedCCResponse(SupervisionCCReport)
+@expectedCCResponse(testResponseForSupervisionCCGet)
 export class SupervisionCCGet extends SupervisionCC {
 	public constructor(
 		driver: IDriver,

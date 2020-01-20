@@ -177,8 +177,11 @@ export class CommandClass {
 	public endpointIndex: number;
 
 	/**
+	 * @internal
 	 * Whether the command progress should be supervised.
-	 * This is only available if the target endpoint supports the Supervision CC
+	 * This only has an effect if the target endpoint supports the Supervision CC.
+	 *
+	 * Don't use this directly, but rather use `Driver.sendSupervisedCommand`
 	 */
 	public supervised: boolean;
 
