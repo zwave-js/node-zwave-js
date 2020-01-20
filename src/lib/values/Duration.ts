@@ -61,6 +61,15 @@ export class Duration {
 		return payload;
 	}
 
+	/** Serializes a duration for a Report command */
+	public serializeReport(): number {
+		if (this.unit === "unknown") return 0xfe;
+		const isMinutes = this.unit === "minutes";
+		let payload = isMinutes ? 0b1000_0000 : 0;
+		payload += (this._value - (isMinutes ? 1 : 0)) & 0b0111_1111;
+		return payload;
+	}
+
 	public toJSON(): string | JSONObject {
 		if (this.unit === "default" || this.unit === "unknown")
 			return this.unit;

@@ -161,23 +161,42 @@ export class BasicCCSet extends BasicCC {
 	}
 }
 
+type BasicCCReportOptions = CCCommandOptions &
+	({
+		currentValue: number;
+	} & (
+		| {}
+		| {
+				targetValue: number;
+				duration: Duration;
+		  }
+	));
+
 @CCCommand(BasicCommand.Report)
 export class BasicCCReport extends BasicCC {
 	public constructor(
 		driver: IDriver,
-		options: CommandClassDeserializationOptions,
+		options: CommandClassDeserializationOptions | BasicCCReportOptions,
 	) {
 		super(driver, options);
 
-		validatePayload(this.payload.length >= 1);
-		this._currentValue = parseMaybeNumber(this.payload[0]);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this._currentValue = parseMaybeNumber(this.payload[0]);
 
-		if (this.version >= 2 && this.payload.length >= 3) {
-			this._targetValue = parseNumber(this.payload[1]);
-			this._duration = Duration.parseReport(this.payload[2]);
+			if (this.version >= 2 && this.payload.length >= 3) {
+				this._targetValue = parseNumber(this.payload[1]);
+				this._duration = Duration.parseReport(this.payload[2]);
+			}
+			// Do not persist values here. We want to control when this is happening,
+			// in case the report is mapped to another CC
+		} else {
+			this._currentValue = options.currentValue;
+			if ("targetValue" in options) {
+				this._targetValue = options.targetValue;
+				this._duration = options.duration;
+			}
 		}
-		// Do not persist values here. We want to control when this is happening,
-		// in case the report is mapped to another CC
 	}
 
 	private _currentValue: Maybe<number> | undefined;
@@ -208,6 +227,17 @@ export class BasicCCReport extends BasicCC {
 	})
 	public get duration(): Duration | undefined {
 		return this._duration;
+	}
+
+	public serialize(): Buffer {
+		const payload: number[] = [
+			typeof this._currentValue !== "number" ? 0xfe : this._currentValue,
+		];
+		if (this.version >= 2 && this._targetValue && this._duration) {
+			payload.push(this._targetValue, this._duration.serializeReport());
+		}
+		this.payload = Buffer.from(payload);
+		return super.serialize();
 	}
 
 	public toJSON(): JSONObject {
