@@ -4,6 +4,11 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Messages to sleeping nodes are now correctly de-prioritized when the awake timeout elapses
+* Messages are now automatically re-transmitted when the controller responds with a `NAK` or when it fails to respond at all
+
 ## 2.10.0 (2020-01-18)
 ### Features
 * Locally reset devices are now treated like failing nodes and automatically removed from the controller
