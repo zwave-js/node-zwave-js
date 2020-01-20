@@ -1,8 +1,13 @@
 import { CommandClass } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
+import { SupervisionResult } from "../commandclass/SupervisionCC";
 import { ZWaveController } from "../controller/Controller";
 import { Message } from "../message/Message";
-import { SendMessageOptions, ZWaveOptions } from "./Driver";
+import {
+	SendMessageOptions,
+	SendSupervisedCommandOptions,
+	ZWaveOptions,
+} from "./Driver";
 
 export interface DriverEventCallbacks {
 	"driver ready": () => void;
@@ -34,6 +39,16 @@ export interface IDriver {
 		command: CommandClass,
 		options?: SendMessageOptions,
 	): Promise<TResponse | undefined>;
+
+	sendSupervisedCommand(
+		command: CommandClass,
+		options?: SendSupervisedCommandOptions,
+	): Promise<SupervisionResult>;
+
+	trySendCommandSupervised(
+		command: CommandClass,
+		options?: SendSupervisedCommandOptions,
+	): Promise<SupervisionResult | undefined>;
 
 	on<TEvent extends DriverEvents>(
 		event: TEvent,

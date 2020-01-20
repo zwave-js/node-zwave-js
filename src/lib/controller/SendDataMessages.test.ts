@@ -1,6 +1,13 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
-import { BasicCCGet } from "../commandclass/BasicCC";
+import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
+import { MultiChannelCC } from "../commandclass/MultiChannelCC";
+import { MultiCommandCC } from "../commandclass/MultiCommandCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
+import {
+	SupervisionCC,
+	SupervisionCCReport,
+	SupervisionStatus,
+} from "../commandclass/SupervisionCC";
 import { IDriver } from "../driver/IDriver";
 import { FunctionType, MessageType } from "../message/Constants";
 import {
@@ -10,12 +17,14 @@ import {
 	Message,
 	ResponsePredicate,
 } from "../message/Message";
+import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
 import {
 	SendDataRequest,
 	SendDataRequestBase,
 	SendDataRequestTransmitReport,
 	SendDataResponse,
 	TransmitOptions,
+	TransmitStatus,
 } from "./SendDataMessages";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
@@ -78,6 +87,7 @@ describe("lib/controller/SendDataRequest => ", () => {
 					hasCallbackId: () => true,
 					callbackId: (nodeFail as SendDataRequestTransmitReport)
 						.callbackId,
+					command: {} as any,
 				} as any,
 				nodeFail,
 			),
@@ -94,6 +104,7 @@ describe("lib/controller/SendDataRequest => ", () => {
 					hasCallbackId: () => true,
 					callbackId: (nodeSuccess as SendDataRequestTransmitReport)
 						.callbackId,
+					command: {} as any,
 				} as any,
 				nodeSuccess,
 			),
@@ -104,7 +115,14 @@ describe("lib/controller/SendDataRequest => ", () => {
 			functionType: FunctionType.ApplicationCommand,
 		});
 		// "An unrelated message was not detected as unexpected!"
-		expect(predicate({} as any, somethingElse)).toBe("unexpected");
+		expect(
+			predicate(
+				{
+					command: {} as any,
+				} as any,
+				somethingElse,
+			),
+		).toBe("unexpected");
 	});
 
 	// We cannot parse these kinds of messages atm.
@@ -192,5 +210,301 @@ describe("lib/controller/SendDataResponse => ", () => {
 	});
 	it("that expects NO response", () => {
 		expect(getExpectedResponse(res)).toBeUndefined();
+	});
+});
+
+describe("testResponse() returns the correct ResponseRole", () => {
+	it("BasicCCSet => TransmitReport = final", () => {
+		const ccRequest = new BasicCCSet(fakeDriver, {
+			nodeId: 2,
+			endpoint: 2,
+			targetValue: 7,
+		});
+
+		const msgRequest = new SendDataRequest(fakeDriver, {
+			command: ccRequest,
+			callbackId: 99,
+		});
+		const msgResponse = new SendDataRequestTransmitReport(fakeDriver, {
+			transmitStatus: TransmitStatus.OK,
+			callbackId: msgRequest.callbackId,
+		});
+
+		expect(msgRequest.testResponse(msgResponse)).toBe("final");
+	});
+
+	it("BasicCCSet => BasicCCReport = unexpected", () => {
+		const ccRequest = new BasicCCSet(fakeDriver, {
+			nodeId: 2,
+			endpoint: 2,
+			targetValue: 7,
+		});
+		const ccResponse = new BasicCCReport(fakeDriver, {
+			nodeId: ccRequest.nodeId,
+			currentValue: 7,
+		});
+
+		const msgRequest = new SendDataRequest(fakeDriver, {
+			command: ccRequest,
+			callbackId: 99,
+		});
+		const msgResponse = new ApplicationCommandRequest(fakeDriver, {
+			command: ccResponse,
+		});
+
+		expect(msgRequest.testResponse(msgResponse)).toBe("unexpected");
+	});
+
+	it("BasicCCGet => TransmitReport = confirmation", () => {
+		const ccRequest = new BasicCCGet(fakeDriver, {
+			nodeId: 2,
+		});
+
+		const msgRequest = new SendDataRequest(fakeDriver, {
+			command: ccRequest,
+			callbackId: 8,
+		});
+		const msgResponse = new SendDataRequestTransmitReport(fakeDriver, {
+			transmitStatus: TransmitStatus.OK,
+			callbackId: msgRequest.callbackId,
+		});
+
+		expect(msgRequest.testResponse(msgResponse)).toBe("confirmation");
+	});
+
+	it("BasicCCGet => BasicCCReport = final", () => {
+		const ccRequest = new BasicCCGet(fakeDriver, {
+			nodeId: 2,
+		});
+		const ccResponse = new BasicCCReport(fakeDriver, {
+			nodeId: ccRequest.nodeId,
+			currentValue: 7,
+		});
+
+		const msgRequest = new SendDataRequest(fakeDriver, {
+			command: ccRequest,
+			callbackId: 8,
+		});
+		const msgResponse = new ApplicationCommandRequest(fakeDriver, {
+			command: ccResponse,
+		});
+
+		expect(msgRequest.testResponse(msgResponse)).toBe("final");
+	});
+
+	it("BasicCCGet => BasicCCSet = unexpected", () => {
+		const ccRequest = new BasicCCGet(fakeDriver, {
+			nodeId: 2,
+		});
+		const ccResponse = new BasicCCSet(fakeDriver, {
+			nodeId: ccRequest.nodeId,
+			targetValue: 7,
+		});
+
+		const msgRequest = new SendDataRequest(fakeDriver, {
+			command: ccRequest,
+			callbackId: 8,
+		});
+		const msgResponse = new ApplicationCommandRequest(fakeDriver, {
+			command: ccResponse,
+		});
+
+		expect(msgRequest.testResponse(msgResponse)).toBe("unexpected");
+	});
+
+	it("MultiChannelCC/BasicCCGet => MultiChannelCC/BasicCCReport = final", () => {
+		const ccRequest = MultiChannelCC.encapsulate(
+			fakeDriver,
+			new BasicCCGet(fakeDriver, {
+				nodeId: 2,
+				endpoint: 2,
+			}),
+		);
+		const ccResponse = MultiChannelCC.encapsulate(
+			fakeDriver,
+			new BasicCCReport(fakeDriver, {
+				nodeId: ccRequest.nodeId,
+				currentValue: 7,
+			}),
+		);
+
+		const msgRequest = new SendDataRequest(fakeDriver, {
+			command: ccRequest,
+			callbackId: 8,
+		});
+		const msgResponse = new ApplicationCommandRequest(fakeDriver, {
+			command: ccResponse,
+		});
+
+		expect(msgRequest.testResponse(msgResponse)).toBe("final");
+	});
+
+	it("MultiChannelCC/BasicCCGet => MultiChannelCC/BasicCCGet = unexpected", () => {
+		const ccRequest = MultiChannelCC.encapsulate(
+			fakeDriver,
+			new BasicCCGet(fakeDriver, {
+				nodeId: 2,
+				endpoint: 2,
+			}),
+		);
+		const ccResponse = MultiChannelCC.encapsulate(
+			fakeDriver,
+			new BasicCCGet(fakeDriver, {
+				nodeId: ccRequest.nodeId,
+				endpoint: 2,
+			}),
+		);
+
+		const msgRequest = new SendDataRequest(fakeDriver, {
+			command: ccRequest,
+			callbackId: 8,
+		});
+		const msgResponse = new ApplicationCommandRequest(fakeDriver, {
+			command: ccResponse,
+		});
+
+		expect(msgRequest.testResponse(msgResponse)).toBe("unexpected");
+	});
+
+	it("MultiChannelCC/BasicCCGet => TransmitReport = confirmation", () => {
+		const ccRequest = MultiChannelCC.encapsulate(
+			fakeDriver,
+			new BasicCCGet(fakeDriver, {
+				nodeId: 2,
+				endpoint: 2,
+			}),
+		);
+
+		const msgRequest = new SendDataRequest(fakeDriver, {
+			command: ccRequest,
+			callbackId: 8,
+		});
+		const msgResponse = new SendDataRequestTransmitReport(fakeDriver, {
+			transmitStatus: TransmitStatus.OK,
+			callbackId: msgRequest.callbackId,
+		});
+
+		expect(msgRequest.testResponse(msgResponse)).toBe("confirmation");
+	});
+
+	it("MultiChannelCC/BasicCCSet => TransmitReport = final", () => {
+		const ccRequest = MultiChannelCC.encapsulate(
+			fakeDriver,
+			new BasicCCSet(fakeDriver, {
+				nodeId: 2,
+				endpoint: 2,
+				targetValue: 7,
+			}),
+		);
+
+		const msgRequest = new SendDataRequest(fakeDriver, {
+			command: ccRequest,
+			callbackId: 88,
+		});
+		const msgResponse = new SendDataRequestTransmitReport(fakeDriver, {
+			transmitStatus: TransmitStatus.OK,
+			callbackId: msgRequest.callbackId,
+		});
+
+		expect(msgRequest.testResponse(msgResponse)).toBe("final");
+	});
+
+	it("MultiChannelCC/BasicCCGet => MultiCommandCC/BasicCCReport = unexpected", () => {
+		const ccRequest = MultiChannelCC.encapsulate(
+			fakeDriver,
+			new BasicCCGet(fakeDriver, {
+				nodeId: 2,
+				endpoint: 2,
+			}),
+		);
+		const ccResponse = MultiCommandCC.encapsulate(fakeDriver, [
+			new BasicCCReport(fakeDriver, {
+				nodeId: ccRequest.nodeId,
+				currentValue: 7,
+			}),
+		]);
+
+		const msgRequest = new SendDataRequest(fakeDriver, {
+			command: ccRequest,
+			callbackId: 8,
+		});
+		const msgResponse = new ApplicationCommandRequest(fakeDriver, {
+			command: ccResponse,
+		});
+
+		expect(msgRequest.testResponse(msgResponse)).toBe("unexpected");
+	});
+
+	it("SupervisionCC/BasicCCSet => TransmitReport = confirmation", () => {
+		const ccRequest = SupervisionCC.encapsulate(
+			fakeDriver,
+			new BasicCCSet(fakeDriver, {
+				nodeId: 2,
+				targetValue: 5,
+			}),
+		);
+
+		const msgRequest = new SendDataRequest(fakeDriver, {
+			command: ccRequest,
+			callbackId: 8,
+		});
+		const msgResponse = new SendDataRequestTransmitReport(fakeDriver, {
+			transmitStatus: TransmitStatus.OK,
+			callbackId: msgRequest.callbackId,
+		});
+
+		expect(msgRequest.testResponse(msgResponse)).toBe("confirmation");
+	});
+
+	it("SupervisionCC/BasicCCSet => SupervisionCCReport (correct session ID) = final", () => {
+		const ccRequest = SupervisionCC.encapsulate(
+			fakeDriver,
+			new BasicCCSet(fakeDriver, {
+				nodeId: 2,
+				targetValue: 5,
+			}),
+		);
+		const ccResponse = new SupervisionCCReport(fakeDriver, {
+			nodeId: 2,
+			moreUpdatesFollow: false,
+			sessionId: ccRequest.sessionId,
+			status: SupervisionStatus.Success,
+		});
+
+		const msgRequest = new SendDataRequest(fakeDriver, {
+			command: ccRequest,
+			callbackId: 89,
+		});
+		const msgResponse = new ApplicationCommandRequest(fakeDriver, {
+			command: ccResponse,
+		});
+
+		expect(msgRequest.testResponse(msgResponse)).toBe("final");
+	});
+
+	it("SupervisionCC/BasicCCSet => SupervisionCCReport (wrong session ID) = unexpected", () => {
+		const ccRequest = SupervisionCC.encapsulate(
+			fakeDriver,
+			new BasicCCSet(fakeDriver, {
+				nodeId: 2,
+				targetValue: 5,
+			}),
+		);
+		const ccResponse = new SupervisionCCReport(fakeDriver, {
+			nodeId: 2,
+			moreUpdatesFollow: false,
+			sessionId: ccRequest.sessionId + 1,
+			status: SupervisionStatus.Success,
+		});
+
+		const msgRequest = new SendDataRequest(fakeDriver, {
+			command: ccRequest,
+			callbackId: 89,
+		});
+		const msgResponse = new ApplicationCommandRequest(fakeDriver, {
+			command: ccResponse,
+		});
+
+		expect(msgRequest.testResponse(msgResponse)).toBe("unexpected");
 	});
 });

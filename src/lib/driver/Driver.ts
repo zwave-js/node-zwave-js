@@ -15,9 +15,19 @@ import {
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
 import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
-import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
+import {
+	ICommandClassContainer,
+	isCommandClassContainer,
+} from "../commandclass/ICommandClassContainer";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { messageIsPing } from "../commandclass/NoOperationCC";
+import {
+	SupervisionCC,
+	SupervisionCCGet,
+	SupervisionCCReport,
+	SupervisionResult,
+	SupervisionStatus,
+} from "../commandclass/SupervisionCC";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { loadDeviceIndex } from "../config/Devices";
 import { loadIndicators } from "../config/Indicators";
@@ -51,6 +61,7 @@ import { isNodeQuery } from "../node/INodeQuery";
 import { ZWaveNode } from "../node/Node";
 import { DeepPartial, skipBytes } from "../util/misc";
 import { num2hex } from "../util/strings";
+import { Duration } from "../values/Duration";
 import { FileSystem } from "./FileSystem";
 import { DriverEventCallbacks, DriverEvents, IDriver } from "./IDriver";
 import { Transaction } from "./Transaction";
@@ -165,6 +176,22 @@ export interface SendMessageOptions {
 	supportCheck?: boolean;
 }
 
+export type SupervisionUpdateHandler = (
+	status: SupervisionStatus,
+	remainingDuration?: Duration,
+) => void;
+
+export type SendSupervisedCommandOptions = SendMessageOptions &
+	(
+		| {
+				requestStatusUpdates: false;
+		  }
+		| {
+				requestStatusUpdates: true;
+				onUpdate: SupervisionUpdateHandler;
+		  }
+	);
+
 // Strongly type the event emitter events
 export interface Driver {
 	on<TEvent extends DriverEvents>(
@@ -202,6 +229,8 @@ export class Driver extends EventEmitter implements IDriver {
 	private sendQueue = new SortedList<Transaction>();
 	/** A map of handlers for all sorts of requests */
 	private requestHandlers = new Map<FunctionType, RequestHandlerEntry[]>();
+	/** A map of all current supervision sessions that may still receive updates */
+	private supervisionSessions = new Map<number, SupervisionUpdateHandler>();
 
 	public readonly cacheDir: string;
 
@@ -829,57 +858,16 @@ export class Driver extends EventEmitter implements IDriver {
 	 * @param msg The decoded message
 	 */
 	private async handleMessage(msg: Message): Promise<void> {
-		// Before doing anything else, unwrap encapsulated commands
-		if (isCommandClassContainer(msg)) {
-			// SDS13783-11B defines the encapsulation order, we unwrap in the opposite order
-
-			// TODO: Remember the command encapsulation order in case we need to respond
-
-			// Unwrap encapsulating CCs until we get to the core
-			while (isEncapsulatingCommandClass(msg.command)) {
-				const unwrapped = msg.command.constructor.unwrap(msg.command);
-				if (isArray(unwrapped)) {
-					log.driver.print(
-						`Received a command that contains multiple CommandClasses. This is not supported yet! Discarding the message...`,
-						"warn",
-					);
-					return;
-				}
-				msg.command = unwrapped;
-			}
-
-			// // 5. Any one of the following combinations:
-			// //   a. Security (S0 or S2) followed by transport service
-			// //   b. Transport Service
-			// //   c. Security (S0 or S2)
-			// //   d. CRC16
-			// // b and d are mutually exclusive, security is not
-			// if (msg.command instanceof CRC16CCCommandEncapsulation) {
-			// 	log.driver.print("Unwrapping CRC-16 encapsulated command");
-			// 	msg.command = CRC16CC.unwrap(msg.command);
-			// }
-			// // else if (... TransportService)
-
-			// // if (... Security)
-
-			// // 4. Multi Channel
-			// if (msg.command instanceof MultiChannelCCCommandEncapsulation) {
-			// 	log.driver.print(
-			// 		"Unwrapping MultiChannel encapsulated command",
-			// 	);
-			// 	msg.command = MultiChannelCC.unwrap(msg.command);
-			// }
-
-			// // 3. Supervision
-			// // 2. Multi Command
-			// // 1. Encapsulated Command Class (payload), e.g. Basic Set
-		}
-
 		// if we have a pending request, check if that is waiting for this message
 		if (this.currentTransaction != undefined) {
+			// Use the entire encapsulation stack to test what to do with this response
+			// because some encapsulation requires this information
 			const responseRole = this.currentTransaction.message.testResponse(
 				msg,
 			);
+			// For further actions, we are only interested in the innermost CC
+			if (isCommandClassContainer(msg)) this.unwrapCommands(msg);
+
 			switch (responseRole) {
 				case "confirmation":
 					log.driver.transactionResponse(msg, "confirmation");
@@ -1019,6 +1007,9 @@ export class Driver extends EventEmitter implements IDriver {
 					// unexpected, nothing to do here => check registered handlers
 					break;
 			}
+		} else {
+			// For further actions, we are only interested in the innermost CC
+			if (isCommandClassContainer(msg)) this.unwrapCommands(msg);
 		}
 
 		if (msg.type === MessageType.Request) {
@@ -1099,12 +1090,6 @@ ${handlers.length} left`,
 			}
 		}
 
-		// TODO: find a nice way to observe the different stages of a response.
-		// for example a SendDataRequest with a VersionCC gets 3 responses:
-		// 1. SendDataResponse with info if the data was sent
-		// 2. SendDataRequest with info if the node responded
-		// 3. ApplicationCommandRequest with the actual response
-
 		if (msg instanceof ApplicationCommandRequest) {
 			// we handle ApplicationCommandRequests differently because they are handled by the nodes directly
 			const ccId = msg.command.ccId;
@@ -1158,6 +1143,22 @@ ${handlers.length} left`,
 						message: "removing the node failed: " + e,
 						level: "error",
 					});
+				}
+			} else if (
+				msg.command.ccId === CommandClasses.Supervision &&
+				msg.command instanceof SupervisionCCReport &&
+				this.supervisionSessions.has(msg.command.sessionId)
+			) {
+				// Supervision commands are handled here
+
+				// Call the update handler
+				this.supervisionSessions.get(msg.command.sessionId)!(
+					msg.command.status,
+					msg.command.duration,
+				);
+				// If this was a final report, remove the handler
+				if (msg.command.status !== SupervisionStatus.Working) {
+					this.supervisionSessions.delete(msg.command.sessionId);
 				}
 			} else {
 				// dispatch the command to the node itself
@@ -1371,6 +1372,51 @@ ${handlers.length} left`,
 		return this.lastCallbackId;
 	}
 
+	private encapsulateCommands(msg: Message & ICommandClassContainer): void {
+		// The encapsulation order (from outside to inside) is as follows:
+		// 5. Any one of the following combinations:
+		//   a. Security (S0 or S2) followed by transport service
+		//   b. Transport Service
+		//   c. Security (S0 or S2)
+		//   d. CRC16
+		// b and d are mutually exclusive, security is not
+		// 4. Multi Channel
+		// 3. Supervision
+		// 2. Multi Command
+		// 1. Encapsulated Command Class (payload), e.g. Basic Set
+
+		// TODO: 2.
+
+		// 3.
+		if (SupervisionCC.requiresEncapsulation(msg.command)) {
+			msg.command = SupervisionCC.encapsulate(this, msg.command);
+		}
+
+		// 4.
+		if (MultiChannelCC.requiresEncapsulation(msg.command)) {
+			msg.command = MultiChannelCC.encapsulate(this, msg.command);
+		}
+
+		// TODO: 5.
+	}
+
+	private unwrapCommands(msg: Message & ICommandClassContainer): void {
+		// TODO: Remember the command encapsulation order in case we need to respond
+
+		// Unwrap encapsulating CCs until we get to the core
+		while (isEncapsulatingCommandClass(msg.command)) {
+			const unwrapped = msg.command.constructor.unwrap(msg.command);
+			if (isArray(unwrapped)) {
+				log.driver.print(
+					`Received a command that contains multiple CommandClasses. This is not supported yet! Discarding the message...`,
+					"warn",
+				);
+				return;
+			}
+			msg.command = unwrapped;
+		}
+	}
+
 	// wotan-disable no-misused-generics
 	/**
 	 * Sends a message to the Z-Wave stick.
@@ -1419,13 +1465,8 @@ ${handlers.length} left`,
 			);
 		}
 
-		// Automatically encapsulate commands that are supposed to target a specific endpoint
-		if (
-			isCommandClassContainer(msg) &&
-			MultiChannelCC.requiresEncapsulation(msg.command)
-		) {
-			msg.command = MultiChannelCC.encapsulate(this, msg.command);
-		}
+		// Automatically encapsulate commands
+		if (isCommandClassContainer(msg)) this.encapsulateCommands(msg);
 
 		// When sending a message to a node that is known to be sleeping,
 		// the priority must be WakeUp, so the message gets deprioritized
@@ -1472,6 +1513,71 @@ ${handlers.length} left`,
 		const resp = await this.sendMessage(msg, options);
 		if (isCommandClassContainer(resp)) {
 			return resp.command as TResponse;
+		}
+	}
+
+	/**
+	 * Sends a supervised command to a Z-Wave node. When status updates are requested, the passed callback will be executed for every non-final update.
+	 * @param command The command to send
+	 * @param options (optional) Options regarding the message transmission
+	 */
+	public async sendSupervisedCommand(
+		command: CommandClass,
+		options: SendSupervisedCommandOptions = {
+			requestStatusUpdates: false,
+		},
+	): Promise<SupervisionResult> {
+		// Check if the target supports this command
+		if (!command.getNode()?.supportsCC(CommandClasses.Supervision)) {
+			throw new ZWaveError(
+				`Node ${command.nodeId} does not support the Supervision CC!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
+
+		// Create the encapsulating CC so we have a session ID
+		command = SupervisionCC.encapsulate(
+			this,
+			command,
+			options.requestStatusUpdates,
+		);
+
+		const resp = (await this.sendCommand<SupervisionCCReport>(
+			command,
+			options,
+		))!;
+		// If the command is still in progress, listen for future updates
+		if (
+			options.requestStatusUpdates &&
+			resp.status === SupervisionStatus.Working
+		) {
+			this.supervisionSessions.set(
+				(command as SupervisionCCGet).sessionId,
+				options.onUpdate,
+			);
+		}
+		// In any case, return the status
+		return {
+			status: resp.status,
+			remainingDuration: resp.duration,
+		};
+	}
+
+	/**
+	 * Sends a supervised command to a Z-Wave node if the Supervision CC is supported. If not, a normal command is sent.
+	 * This does not return any Report values, so only use this for Set-type commands.
+	 *
+	 * @param command The command to send
+	 * @param options (optional) Options regarding the message transmission
+	 */
+	public async trySendCommandSupervised(
+		command: CommandClass,
+		options?: SendSupervisedCommandOptions,
+	): Promise<SupervisionResult | undefined> {
+		if (command.getNode()?.supportsCC(CommandClasses.Supervision)) {
+			return this.sendSupervisedCommand(command, options);
+		} else {
+			await this.sendCommand(command, options);
 		}
 	}
 

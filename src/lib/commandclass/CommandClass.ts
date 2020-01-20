@@ -49,6 +49,7 @@ export function gotDeserializationOptions(
 export interface CCCommandOptions {
 	nodeId: number;
 	endpoint?: number;
+	supervised?: boolean;
 }
 
 interface CommandClassCreationOptions extends CCCommandOptions {
@@ -71,7 +72,11 @@ export class CommandClass {
 		// Extract the cc from declared metadata if not provided
 		this.ccId = getCommandClass(this);
 		// Default to the root endpoint - Inherited classes may override this behavior
-		this.endpointIndex = ("endpoint" in options && options.endpoint) || 0;
+		this.endpointIndex =
+			("endpoint" in options ? options.endpoint : undefined) ?? 0;
+		// Default to non-supervised commands
+		this.supervised =
+			("supervised" in options ? options.supervised : undefined) ?? false;
 		// We cannot use @ccValue for non-derived classes, so register interviewComplete as an internal value here
 		this.registerValue("interviewComplete", true);
 
@@ -170,6 +175,15 @@ export class CommandClass {
 
 	/** Which endpoint of the node this CC belongs to. 0 for the root device. */
 	public endpointIndex: number;
+
+	/**
+	 * @internal
+	 * Whether the command progress should be supervised.
+	 * This only has an effect if the target endpoint supports the Supervision CC.
+	 *
+	 * Don't use this directly, but rather use `Driver.sendSupervisedCommand`
+	 */
+	public supervised: boolean;
 
 	/** Returns true if this CC is an extended CC (0xF100..0xFFFF) */
 	public isExtended(): boolean {
@@ -781,15 +795,44 @@ type APIConstructor = new (driver: IDriver, endpoint: Endpoint) => CCAPI;
 type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
 type CCCommandMap = Map<string, Constructable<CommandClass>>;
 type APIMap = Map<CommandClasses, APIConstructor>;
-/**
- * A predicate function to test if a received CC matches to the sent CC
- */
-export type DynamicCCResponse<T extends CommandClass = CommandClass> = (
-	sentCC: T,
-) => typeof CommandClass | undefined;
 
 function getCCCommandMapKey(ccId: CommandClasses, ccCommand: number): string {
 	return JSON.stringify({ ccId, ccCommand });
+}
+
+/**
+ * May be used to define different expected CC responses depending on the sent CC
+ */
+export type DynamicCCResponse<T extends CommandClass = CommandClass> = (
+	sentCC?: T,
+) => typeof CommandClass | undefined;
+
+export type CCResponseRole =
+	| "unexpected" // a CC that does not belong to this transaction
+	| "partial" // a partial response, that (once assembled) will become final. E.g. a multi-report CC container
+	| "confirmation" // a confirmation response, e.g. report that a process has started
+	| "checkEncapsulated" // The response role depends on the encapsulated CC
+	| "final"; // a final response (leading to a resolved transaction)
+
+/**
+ * A predicate function to test if a received CC matches the sent CC
+ */
+export type CCResponsePredicate<T extends CommandClass = CommandClass> = (
+	sentCommand: T,
+	receivedCommand: CommandClass | undefined,
+	isPositiveTransmitReport: boolean,
+) => CCResponseRole;
+
+export function isDynamicCCResponse(
+	fn: DynamicCCResponse | CCResponsePredicate,
+): fn is DynamicCCResponse {
+	return fn.length <= 1;
+}
+
+export function isCCResponsePredicate(
+	fn: DynamicCCResponse | CCResponsePredicate,
+): fn is CCResponsePredicate {
+	return fn.length === 2;
 }
 
 /**
@@ -1014,29 +1057,45 @@ function getCCCommandConstructor<TBase extends CommandClass>(
  */
 export function expectedCCResponse(cc: typeof CommandClass): ClassDecorator;
 export function expectedCCResponse(
-	dynamic: DynamicCCResponse<CommandClass>,
+	predicateOrDynamic: CCResponsePredicate | DynamicCCResponse,
 ): ClassDecorator;
 export function expectedCCResponse<T extends CommandClass>(
-	ccOrDynamic: typeof CommandClass | DynamicCCResponse<T>,
+	ccOrPredicateOrDynamic:
+		| typeof CommandClass
+		| CCResponsePredicate<T>
+		| DynamicCCResponse<T>,
 ): ClassDecorator {
 	return ccClass => {
-		if (staticExtends(ccOrDynamic, CommandClass)) {
+		if (staticExtends(ccOrPredicateOrDynamic, CommandClass)) {
 			log.reflection.define(
 				ccClass.name,
 				"expected CC response",
-				ccOrDynamic.name,
+				ccOrPredicateOrDynamic.name,
 			);
-		} else {
-			const dynamic = ccOrDynamic;
+		} else if (ccOrPredicateOrDynamic.length <= 1) {
+			const dynamic = ccOrPredicateOrDynamic;
 			log.reflection.define(
 				ccClass.name,
 				"expected CC response",
-				`dynamic${dynamic.name.length > 0 ? " " + dynamic.name : ""}`,
+				`Dynamic${dynamic.name.length > 0 ? " " + dynamic.name : ""}`,
+			);
+		} else if (ccOrPredicateOrDynamic.length === 2) {
+			const predicate = ccOrPredicateOrDynamic;
+			log.reflection.define(
+				ccClass.name,
+				"expected CC response",
+				`Predicate${
+					predicate.name.length > 0 ? " " + predicate.name : ""
+				}`,
 			);
 		}
 
 		// and store the metadata
-		Reflect.defineMetadata(METADATA_ccResponse, ccOrDynamic, ccClass);
+		Reflect.defineMetadata(
+			METADATA_ccResponse,
+			ccOrPredicateOrDynamic,
+			ccClass,
+		);
 	};
 }
 
@@ -1045,13 +1104,18 @@ export function expectedCCResponse<T extends CommandClass>(
  */
 export function getExpectedCCResponse<T extends CommandClass>(
 	ccClass: T,
-): typeof CommandClass | DynamicCCResponse<T> | undefined {
+):
+	| typeof CommandClass
+	| DynamicCCResponse<T>
+	| CCResponsePredicate<T>
+	| undefined {
 	// get the class constructor
 	const constr = ccClass.constructor;
 	// retrieve the current metadata
 	const ret:
 		| typeof CommandClass
 		| DynamicCCResponse<T>
+		| CCResponsePredicate<T>
 		| undefined = Reflect.getMetadata(METADATA_ccResponse, constr);
 	if (!ret || staticExtends(ret, CommandClass)) {
 		log.reflection.lookup(
@@ -1059,11 +1123,17 @@ export function getExpectedCCResponse<T extends CommandClass>(
 			"expected CC response",
 			`${ret ? ret.constructor.name : "none"}`,
 		);
-	} else {
+	} else if (ret.length <= 1) {
 		log.reflection.lookup(
 			constr.name,
 			"expected CC response",
-			`dynamic${ret.name.length > 0 ? " " + ret.name : ""}`,
+			`Dynamic${ret.name.length > 0 ? " " + ret.name : ""}`,
+		);
+	} else if (ret.length === 2) {
+		log.reflection.lookup(
+			constr.name,
+			"expected CC response",
+			`Predicate${ret.name.length > 0 ? " " + ret.name : ""}`,
 		);
 	}
 	return ret;

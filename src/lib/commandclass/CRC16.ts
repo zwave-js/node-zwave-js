@@ -76,7 +76,7 @@ interface CRC16CCCommandEncapsulationOptions extends CCCommandOptions {
 	encapsulatedCC: CommandClass;
 }
 
-// This indirection is necessary to expect the same message in response
+// This indirection is necessary to be able to define the same CC as the response
 const getResponseForCommandEncapsulation: DynamicCCResponse = () =>
 	CRC16CCCommandEncapsulation;
 

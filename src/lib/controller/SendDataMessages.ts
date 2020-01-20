@@ -1,8 +1,13 @@
 import {
+	CCResponseRole,
 	CommandClass,
 	getExpectedCCResponse,
+	isDynamicCCResponse,
 } from "../commandclass/CommandClass";
-import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
+import {
+	EncapsulatingCommandClass,
+	isEncapsulatingCommandClass,
+} from "../commandclass/EncapsulatingCommandClass";
 import {
 	ICommandClassContainer,
 	isCommandClassContainer,
@@ -25,6 +30,7 @@ import {
 	ResponseRole,
 } from "../message/Message";
 import { JSONObject, staticExtends } from "../util/misc";
+import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
 
 export enum TransmitOptions {
 	NotSet = 0,
@@ -107,71 +113,184 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		});
 	}
 
-	// TODO: Refactor this testResponse mess
-	// TODO: Include the stack of encapsulations to find out which CC is expected
-	/** @inheritDoc */
-	public testResponse(msg: Message): ResponseRole {
-		const ret = super.testResponse(msg);
-		if (ret === "confirmation" || ret.startsWith("fatal")) return ret;
-		if (ret === "unexpected" && !isCommandClassContainer(msg)) return ret;
-
-		// We handle a special case here:
-		// If the contained CC expects a certain response (which will come in an "unexpected" ApplicationCommandRequest)
-		// we declare that as final and the original "final" response, i.e. the SendDataRequest becomes a confirmation
-
-		// To test the response, we unwrap ourselves until we reach the inner (payload) CC
-		let command: CommandClass = this.command;
-		while (isEncapsulatingCommandClass(command)) {
-			command = command.constructor.unwrap(command);
-		}
-		// The CC in msg is already unwrapped by the driver
-
-		const expectedCCOrDynamic = getExpectedCCResponse(command);
-		const expected =
-			typeof expectedCCOrDynamic === "function" &&
-			!staticExtends(expectedCCOrDynamic, CommandClass)
-				? expectedCCOrDynamic(command)
-				: expectedCCOrDynamic;
-
-		if (expected == undefined) {
-			// "final" | "unexpected"
-			return ret;
-		} else if (ret === "final") {
-			// A positive transmit report was received
-			return "confirmation";
-		}
-
-		if (isCommandClassContainer(msg)) {
-			// TODO: Is "confirmation" the correct return value here?
-			// Or is it "unexpected"?
-
-			if (msg.command instanceof expected) {
-				return msg.command.expectMoreMessages() ? "partial" : "final";
-			}
-			// return expected === msg.command.ccId ? "final" : "confirmation"; // not sure if other CCs can come in the meantime
-		}
-		return "unexpected";
-	}
-
 	/** Include previously received partial responses into a final message */
 	public mergePartialMessages(partials: Message[]): void {
 		this.command.mergePartialCCs(
 			(partials as SendDataRequest[]).map(p => p.command),
 		);
 	}
+
+	/** @inheritDoc */
+	public testResponse(msg: Message): ResponseRole {
+		const ret = super.testResponse(msg);
+		// We handle a special case here: A node's response to a SendDataRequest comes in an
+		// ApplicationCommandRequest which does not have a callback id, so it is classified as
+		// "unexpected". Test those again with the predicate for SendDataRequests
+		if (ret === "unexpected" && msg instanceof ApplicationCommandRequest) {
+			return testResponseForSendDataRequest(this, msg);
+		}
+		return ret;
+	}
+}
+
+// Generic handler for all potential responses to SendDataRequests
+function testResponseForSendDataRequest(
+	sent: SendDataRequest,
+	received: Message,
+): ResponseRole {
+	let msgIsPositiveTransmitReport = false;
+	if (received instanceof SendDataResponse) {
+		return received.wasSent ? "confirmation" : "fatal_controller";
+	} else if (received instanceof SendDataRequestTransmitReport) {
+		// send data requests are final unless stated otherwise by a CommandClass
+		if (received.isFailed()) return "fatal_node";
+		msgIsPositiveTransmitReport = true;
+	} else if (!(received instanceof ApplicationCommandRequest)) {
+		return "unexpected";
+	}
+
+	const sentCommand = sent.command;
+	const receivedCommand = isCommandClassContainer(received)
+		? received.command
+		: undefined;
+
+	// Check the sent command if it expects this response
+	const ret = testResponseForCC(
+		sentCommand,
+		receivedCommand,
+		msgIsPositiveTransmitReport,
+	);
+	return ret;
+}
+
+function testResponseForCC(
+	sent: CommandClass,
+	received: CommandClass | undefined,
+	isTransmitReport: boolean,
+): Exclude<CCResponseRole, "checkEncapsulated"> {
+	let ret: CCResponseRole | undefined;
+	const isEncapCC = isEncapsulatingCommandClass(sent);
+
+	let expected = getExpectedCCResponse(sent);
+	// Evaluate dynamic CC responses
+	if (
+		typeof expected === "function" &&
+		!staticExtends(expected, CommandClass) &&
+		isDynamicCCResponse(expected)
+	) {
+		expected = expected(sent);
+	}
+
+	if (expected == undefined) {
+		// The CC expects no CC response, a transmit report is the final message
+		ret = isTransmitReport ? "final" : "unexpected";
+	} else if (staticExtends(expected, CommandClass)) {
+		// The CC always expects the same response, check if this is the one
+		if (received && received instanceof expected) {
+			ret = received.expectMoreMessages()
+				? "partial"
+				: isEncapCC
+				? "checkEncapsulated"
+				: "final";
+		} else if (isTransmitReport) {
+			ret = isEncapCC ? "checkEncapsulated" : "confirmation";
+		} else {
+			ret = "unexpected";
+		}
+	} else {
+		// The CC wants to test the response itself, let it do so
+		ret = expected(sent, received, isTransmitReport);
+	}
+
+	if (ret === "checkEncapsulated") {
+		ret = testResponseForCC(
+			((sent as unknown) as EncapsulatingCommandClass).encapsulated,
+			isEncapsulatingCommandClass(received)
+				? received.encapsulated
+				: undefined,
+			isTransmitReport,
+		);
+	}
+
+	return ret;
+
+	// // Check the response role recursively from the inside to the outside
+	// let role: CCResponseRole | undefined;
+	// let isEncapCC = false;
+	// if (isEncapsulatingCommandClass(sent)) {
+	// 	isEncapCC = true;
+	// 	role = testResponseForCC(
+	// 		sent.encapsulated,
+	// 		isEncapsulatingCommandClass(received)
+	// 			? received.encapsulated
+	// 			: undefined,
+	// 		isTransmitReport,
+	// 	);
+	// }
+	// // If the innermost CC says this message is unexpected or wants to check
+	// // the non-existing encapsulated CC, the response must be unexpected
+	// if (role === "unexpected" || role === "checkEncapsulated") {
+	// 	return "unexpected";
+	// }
+	// // Otherwise check the current CC
+	// let expected = getExpectedCCResponse(sent);
+	// // Evaluate dynamic CC responses
+	// if (
+	// 	typeof expected === "function" &&
+	// 	!staticExtends(expected, CommandClass) &&
+	// 	isDynamicCCResponse(expected)
+	// ) {
+	// 	expected = expected(sent);
+	// }
+	// let ret: CCResponseRole;
+	// if (expected == undefined) {
+	// 	// The CC expects no CC response, a transmit report is the final message
+	// 	ret = isTransmitReport ? "final" : "unexpected";
+	// } else if (isTransmitReport) {
+	// 	// A positive transmit report was received, but we expect a CC in response
+	// 	ret = "confirmation";
+	// } else if (staticExtends(expected, CommandClass)) {
+	// 	// The CC always expects the same response, check if this is the one
+	// 	if (received && received instanceof expected) {
+	// 		ret = received.expectMoreMessages()
+	// 			? "partial"
+	// 			: isEncapCC
+	// 			? "checkEncapsulated"
+	// 			: "final";
+	// 	} else {
+	// 		ret = "unexpected";
+	// 	}
+	// } else {
+	// 	// The CC wants to test the response itself, let it do so
+	// 	ret = expected(sent, received);
+	// }
+	// // If the role depends on the inner role, pass that through
+	// return ret === "checkEncapsulated" ? role ?? "unexpected" : ret;
+}
+
+interface SendDataRequestTransmitReportOptions extends MessageBaseOptions {
+	transmitStatus: TransmitStatus;
+	callbackId: number;
 }
 
 export class SendDataRequestTransmitReport extends SendDataRequestBase {
 	public constructor(
 		driver: IDriver,
-		options: MessageDeserializationOptions,
+		options:
+			| MessageDeserializationOptions
+			| SendDataRequestTransmitReportOptions,
 	) {
 		super(driver, options);
 
-		this.callbackId = this.payload[0];
-		this._transmitStatus = this.payload[1];
-		// not sure what bytes 2 and 3 mean
-		// the CC seems not to be included in this, but rather come in an application command later
+		if (gotDeserializationOptions(options)) {
+			this.callbackId = this.payload[0];
+			this._transmitStatus = this.payload[1];
+			// not sure what bytes 2 and 3 mean
+			// the CC seems not to be included in this, but rather come in an application command later
+		} else {
+			this.callbackId = options.callbackId;
+			this._transmitStatus = options.transmitStatus;
+		}
 	}
 
 	private _transmitStatus: TransmitStatus;
@@ -219,17 +338,4 @@ export class SendDataResponse extends Message {
 			// errorCode: this.errorCode,
 		});
 	}
-}
-
-// Generic handler for all potential responses to SendDataRequests
-function testResponseForSendDataRequest(
-	sent: SendDataRequest,
-	received: Message,
-): ResponseRole {
-	if (received instanceof SendDataResponse) {
-		return received.wasSent ? "confirmation" : "fatal_controller";
-	} else if (received instanceof SendDataRequestTransmitReport) {
-		return received.isFailed() ? "fatal_node" : "final"; // send data requests are final unless stated otherwise by a CommandClass
-	}
-	return "unexpected";
 }
