@@ -78,17 +78,17 @@ export class Transaction implements Comparable<Transaction> {
 		): CompareResult | undefined {
 			const thisNode = _this.message.getNodeUnsafe();
 			const otherNode = _other.message.getNodeUnsafe();
-			if (thisNode) {
-				// We don't require existence of the other node. If the other
-				// transaction is not for a node, it targets the controller which
-				// is assumed always awake
-				const thisIsAsleep = !thisNode.isAwake();
-				const otherIsAsleep = otherNode?.isAwake() === false;
-				// If both nodes are asleep, the conventional order applies
-				// Asleep nodes always have the lowest priority
-				if (thisIsAsleep && !otherIsAsleep) return 1;
-				if (otherIsAsleep && !thisIsAsleep) return -1;
-			}
+
+			// We don't require existence of the node object
+			// If any transaction is not for a node, it targets the controller
+			// which is always awake
+			const thisIsAsleep = thisNode?.isAwake() === false;
+			const otherIsAsleep = otherNode?.isAwake() === false;
+
+			// If both nodes are asleep, the conventional order applies
+			// Asleep nodes always have the lowest priority
+			if (thisIsAsleep && !otherIsAsleep) return 1;
+			if (otherIsAsleep && !thisIsAsleep) return -1;
 		}
 
 		// delay messages for sleeping nodes
