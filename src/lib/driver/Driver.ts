@@ -1554,6 +1554,10 @@ ${handlers.length} left`,
 	/** Retransmits the current transaction (if there is any) */
 	private retransmit(): void {
 		if (!this.currentTransaction) return;
+
+		// Since we're sending a new message, we expect an ACK again
+		this.currentTransaction.ackPending = true;
+
 		log.driver.transaction(this.currentTransaction);
 		const msg = this.currentTransaction.message;
 		const data = msg.serialize();
