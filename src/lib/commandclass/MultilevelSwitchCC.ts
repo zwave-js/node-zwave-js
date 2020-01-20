@@ -26,6 +26,7 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
+import { SupervisionStatus } from "./SupervisionCC";
 
 export enum MultilevelSwitchCommand {
 	Set = 0x01,
@@ -119,10 +120,32 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			targetValue,
 			duration,
 		});
-		await this.driver.sendCommand(cc);
+
+		// Multilevel Switch commands may take some time to be executed.
+		// Therefore we try to supervise the command execution
+		const supervisionResult = await this.driver.trySendCommandSupervised(
+			cc,
+			{
+				requestStatusUpdates: true,
+				onUpdate: status => {
+					if (
+						status === SupervisionStatus.Working ||
+						status === SupervisionStatus.Success
+					) {
+						this.get();
+					}
+				},
+			},
+		);
 
 		// Refresh the current value
-		await this.get();
+		if (
+			!supervisionResult ||
+			supervisionResult.status === SupervisionStatus.Working ||
+			supervisionResult.status === SupervisionStatus.Success
+		) {
+			await this.get();
+		}
 	}
 
 	public async startLevelChange(
