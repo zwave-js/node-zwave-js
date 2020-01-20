@@ -1,5 +1,6 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
-import { BasicCCGet } from "../commandclass/BasicCC";
+import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
+import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { IDriver } from "../driver/IDriver";
 import { FunctionType, MessageType } from "../message/Constants";
@@ -10,12 +11,14 @@ import {
 	Message,
 	ResponsePredicate,
 } from "../message/Message";
+import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
 import {
 	SendDataRequest,
 	SendDataRequestBase,
 	SendDataRequestTransmitReport,
 	SendDataResponse,
 	TransmitOptions,
+	TransmitStatus,
 } from "./SendDataMessages";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
@@ -114,6 +117,77 @@ describe("lib/controller/SendDataRequest => ", () => {
 				somethingElse,
 			),
 		).toBe("unexpected");
+	});
+
+	describe("testResponse() returns the correct ResponseRole", () => {
+		it("BasicCCGet => BasicCCReport = final", () => {
+			const ccRequest = new BasicCCGet(fakeDriver, {
+				nodeId: 2,
+			});
+			const ccResponse = new BasicCCReport(fakeDriver, {
+				nodeId: ccRequest.nodeId,
+				currentValue: 7,
+			});
+
+			const msgRequest = new SendDataRequest(fakeDriver, {
+				command: ccRequest,
+				callbackId: 8,
+			});
+			const msgResponse = new ApplicationCommandRequest(fakeDriver, {
+				command: ccResponse,
+			});
+
+			expect(msgRequest.testResponse(msgResponse)).toBe("final");
+		});
+
+		it("MultiChannelCC/BasicCCGet => MultiChannelCC/BasicCCReport = final", () => {
+			const ccRequest = MultiChannelCC.encapsulate(
+				fakeDriver,
+				new BasicCCGet(fakeDriver, {
+					nodeId: 2,
+					endpoint: 2,
+				}),
+			);
+			const ccResponse = MultiChannelCC.encapsulate(
+				fakeDriver,
+				new BasicCCReport(fakeDriver, {
+					nodeId: ccRequest.nodeId,
+					currentValue: 7,
+				}),
+			);
+
+			const msgRequest = new SendDataRequest(fakeDriver, {
+				command: ccRequest,
+				callbackId: 8,
+			});
+			const msgResponse = new ApplicationCommandRequest(fakeDriver, {
+				command: ccResponse,
+			});
+
+			expect(msgRequest.testResponse(msgResponse)).toBe("final");
+		});
+
+		it("MultiChannelCC/BasicCCSet => NOTHING = final", () => {
+			const ccRequest = MultiChannelCC.encapsulate(
+				fakeDriver,
+				new BasicCCSet(fakeDriver, {
+					nodeId: 2,
+					endpoint: 2,
+					targetValue: 7,
+				}),
+			);
+
+			const msgRequest = new SendDataRequest(fakeDriver, {
+				command: ccRequest,
+				callbackId: 88,
+			});
+			const msgResponse = new SendDataRequestTransmitReport(fakeDriver, {
+				transmitStatus: TransmitStatus.OK,
+				callbackId: msgRequest.callbackId,
+			});
+
+			expect(msgRequest.testResponse(msgResponse)).toBe("final");
+		});
 	});
 
 	// We cannot parse these kinds of messages atm.

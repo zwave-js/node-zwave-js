@@ -221,17 +221,29 @@ function testResponseForCC(
 	return ret === "checkEncapsulated" ? role ?? "unexpected" : ret;
 }
 
+interface SendDataRequestTransmitReportOptions extends MessageBaseOptions {
+	transmitStatus: TransmitStatus;
+	callbackId: number;
+}
+
 export class SendDataRequestTransmitReport extends SendDataRequestBase {
 	public constructor(
 		driver: IDriver,
-		options: MessageDeserializationOptions,
+		options:
+			| MessageDeserializationOptions
+			| SendDataRequestTransmitReportOptions,
 	) {
 		super(driver, options);
 
-		this.callbackId = this.payload[0];
-		this._transmitStatus = this.payload[1];
-		// not sure what bytes 2 and 3 mean
-		// the CC seems not to be included in this, but rather come in an application command later
+		if (gotDeserializationOptions(options)) {
+			this.callbackId = this.payload[0];
+			this._transmitStatus = this.payload[1];
+			// not sure what bytes 2 and 3 mean
+			// the CC seems not to be included in this, but rather come in an application command later
+		} else {
+			this.callbackId = options.callbackId;
+			this._transmitStatus = options.transmitStatus;
+		}
 	}
 
 	private _transmitStatus: TransmitStatus;
