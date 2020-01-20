@@ -4,7 +4,10 @@ import {
 	getExpectedCCResponse,
 	isDynamicCCResponse,
 } from "../commandclass/CommandClass";
-import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
+import {
+	EncapsulatingCommandClass,
+	isEncapsulatingCommandClass,
+} from "../commandclass/EncapsulatingCommandClass";
 import {
 	ICommandClassContainer,
 	isCommandClassContainer,
@@ -165,26 +168,9 @@ function testResponseForCC(
 	received: CommandClass | undefined,
 	isTransmitReport: boolean,
 ): Exclude<CCResponseRole, "checkEncapsulated"> {
-	// Check the response role recursively from the inside to the outside
-	let role: CCResponseRole | undefined;
-	let isEncapCC = false;
-	if (isEncapsulatingCommandClass(sent)) {
-		isEncapCC = true;
-		role = testResponseForCC(
-			sent.encapsulated,
-			isEncapsulatingCommandClass(received)
-				? received.encapsulated
-				: undefined,
-			isTransmitReport,
-		);
-	}
-	// If the innermost CC says this message is unexpected or wants to check
-	// the non-existing encapsulated CC, the response must be unexpected
-	if (role === "unexpected" || role === "checkEncapsulated") {
-		return "unexpected";
-	}
+	let ret: CCResponseRole | undefined;
+	const isEncapCC = isEncapsulatingCommandClass(sent);
 
-	// Otherwise check the current CC
 	let expected = getExpectedCCResponse(sent);
 	// Evaluate dynamic CC responses
 	if (
@@ -195,13 +181,9 @@ function testResponseForCC(
 		expected = expected(sent);
 	}
 
-	let ret: CCResponseRole;
 	if (expected == undefined) {
 		// The CC expects no CC response, a transmit report is the final message
 		ret = isTransmitReport ? "final" : "unexpected";
-	} else if (isTransmitReport) {
-		// A positive transmit report was received, but we expect a CC in response
-		ret = "confirmation";
 	} else if (staticExtends(expected, CommandClass)) {
 		// The CC always expects the same response, check if this is the one
 		if (received && received instanceof expected) {
@@ -210,15 +192,80 @@ function testResponseForCC(
 				: isEncapCC
 				? "checkEncapsulated"
 				: "final";
+		} else if (isTransmitReport) {
+			ret = isEncapCC ? "checkEncapsulated" : "confirmation";
 		} else {
 			ret = "unexpected";
 		}
 	} else {
 		// The CC wants to test the response itself, let it do so
-		ret = expected(sent, received);
+		ret = expected(sent, received, isTransmitReport);
 	}
-	// If the role depends on the inner role, pass that through
-	return ret === "checkEncapsulated" ? role ?? "unexpected" : ret;
+
+	if (ret === "checkEncapsulated") {
+		ret = testResponseForCC(
+			((sent as unknown) as EncapsulatingCommandClass).encapsulated,
+			isEncapsulatingCommandClass(received)
+				? received.encapsulated
+				: undefined,
+			isTransmitReport,
+		);
+	}
+
+	return ret;
+
+	// // Check the response role recursively from the inside to the outside
+	// let role: CCResponseRole | undefined;
+	// let isEncapCC = false;
+	// if (isEncapsulatingCommandClass(sent)) {
+	// 	isEncapCC = true;
+	// 	role = testResponseForCC(
+	// 		sent.encapsulated,
+	// 		isEncapsulatingCommandClass(received)
+	// 			? received.encapsulated
+	// 			: undefined,
+	// 		isTransmitReport,
+	// 	);
+	// }
+	// // If the innermost CC says this message is unexpected or wants to check
+	// // the non-existing encapsulated CC, the response must be unexpected
+	// if (role === "unexpected" || role === "checkEncapsulated") {
+	// 	return "unexpected";
+	// }
+	// // Otherwise check the current CC
+	// let expected = getExpectedCCResponse(sent);
+	// // Evaluate dynamic CC responses
+	// if (
+	// 	typeof expected === "function" &&
+	// 	!staticExtends(expected, CommandClass) &&
+	// 	isDynamicCCResponse(expected)
+	// ) {
+	// 	expected = expected(sent);
+	// }
+	// let ret: CCResponseRole;
+	// if (expected == undefined) {
+	// 	// The CC expects no CC response, a transmit report is the final message
+	// 	ret = isTransmitReport ? "final" : "unexpected";
+	// } else if (isTransmitReport) {
+	// 	// A positive transmit report was received, but we expect a CC in response
+	// 	ret = "confirmation";
+	// } else if (staticExtends(expected, CommandClass)) {
+	// 	// The CC always expects the same response, check if this is the one
+	// 	if (received && received instanceof expected) {
+	// 		ret = received.expectMoreMessages()
+	// 			? "partial"
+	// 			: isEncapCC
+	// 			? "checkEncapsulated"
+	// 			: "final";
+	// 	} else {
+	// 		ret = "unexpected";
+	// 	}
+	// } else {
+	// 	// The CC wants to test the response itself, let it do so
+	// 	ret = expected(sent, received);
+	// }
+	// // If the role depends on the inner role, pass that through
+	// return ret === "checkEncapsulated" ? role ?? "unexpected" : ret;
 }
 
 interface SendDataRequestTransmitReportOptions extends MessageBaseOptions {

@@ -105,19 +105,46 @@ export class SupervisionCC extends CommandClass {
 	}
 }
 
+type SupervisionCCReportOptions = CCCommandOptions & {
+	moreUpdatesFollow: boolean;
+	sessionId: number;
+} & (
+		| {
+				status: SupervisionStatus.Working;
+				duration: Duration;
+		  }
+		| {
+				status:
+					| SupervisionStatus.NoSupport
+					| SupervisionStatus.Fail
+					| SupervisionStatus.Success;
+		  }
+	);
+
 @CCCommand(SupervisionCommand.Report)
 export class SupervisionCCReport extends SupervisionCC {
 	public constructor(
 		driver: IDriver,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| SupervisionCCReportOptions,
 	) {
 		super(driver, options);
 
-		validatePayload(this.payload.length >= 3);
-		this.moreUpdatesFollow = !!(this.payload[0] & 0b1_0_000000);
-		this.sessionId = this.payload[0] & 0b111111;
-		this.status = this.payload[1];
-		this.duration = Duration.parseReport(this.payload[2]);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 3);
+			this.moreUpdatesFollow = !!(this.payload[0] & 0b1_0_000000);
+			this.sessionId = this.payload[0] & 0b111111;
+			this.status = this.payload[1];
+			this.duration = Duration.parseReport(this.payload[2]);
+		} else {
+			this.moreUpdatesFollow = options.moreUpdatesFollow;
+			this.sessionId = options.sessionId;
+			this.status = options.status;
+			if (options.status === SupervisionStatus.Working) {
+				this.duration = options.duration;
+			}
+		}
 	}
 
 	public readonly moreUpdatesFollow: boolean;
@@ -134,10 +161,13 @@ interface SupervisionCCGetOptions extends CCCommandOptions {
 const testResponseForSupervisionCCGet: CCResponsePredicate = (
 	sent: SupervisionCCGet,
 	received,
+	isPositiveTransmitReport,
 ) => {
 	return received instanceof SupervisionCCReport &&
 		received.sessionId === sent.sessionId
 		? "final"
+		: isPositiveTransmitReport
+		? "confirmation"
 		: "unexpected";
 };
 

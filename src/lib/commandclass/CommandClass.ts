@@ -820,6 +820,7 @@ export type CCResponseRole =
 export type CCResponsePredicate<T extends CommandClass = CommandClass> = (
 	sentCommand: T,
 	receivedCommand: CommandClass | undefined,
+	isPositiveTransmitReport: boolean,
 ) => CCResponseRole;
 
 export function isDynamicCCResponse(
