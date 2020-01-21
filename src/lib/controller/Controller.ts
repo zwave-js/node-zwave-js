@@ -622,7 +622,7 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	private _healNetworkActive: boolean = false;
-	private _healNetworkProgress = new Map<number, boolean>();
+	private _healNetworkProgress = new Map<number, boolean | undefined>();
 
 	/** @deprecated Use `beginHealNetwork` instead */
 	public healNetwork(): boolean {
@@ -643,7 +643,7 @@ export class ZWaveController extends EventEmitter {
 		this._healNetworkProgress.clear();
 		for (const key of this._nodes.keys()) {
 			if (key !== this._ownNodeId) {
-				this._healNetworkProgress.set(key, false);
+				this._healNetworkProgress.set(key, undefined);
 			}
 		}
 
