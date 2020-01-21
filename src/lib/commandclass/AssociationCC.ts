@@ -2,6 +2,7 @@ import { MAX_NODES } from "../controller/NodeBitMask";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import { MessageOrCCLogEntry } from "../log/shared";
 import { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { Maybe } from "../values/Primitive";
@@ -491,6 +492,17 @@ export class AssociationCCReport extends AssociationCC {
 			this._nodeIds,
 		);
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `
+groupId:         ${this.groupId}
+maxNodes:        ${this.maxNodes}
+nodeIds:         ${this.nodeIds.join(", ")}
+reportsToFollow: ${this.reportsToFollow}`.trimLeft(),
+		};
+	}
 }
 
 interface AssociationCCGetOptions extends CCCommandOptions {
@@ -528,6 +540,13 @@ export class AssociationCCGet extends AssociationCC {
 		this.payload = Buffer.from([this.groupId]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `groupId: ${this.groupId}`,
+		};
+	}
 }
 
 @CCCommand(AssociationCommand.SupportedGroupingsReport)
@@ -548,6 +567,13 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 	@ccValue({ internal: true })
 	public get groupCount(): number {
 		return this._groupCount;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `groupCount: ${this.groupCount}`,
+		};
 	}
 }
 

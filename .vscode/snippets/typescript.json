@@ -88,7 +88,7 @@
 		"body": [
 			"public toLogEntry(): MessageOrCCLogEntry {",
 			"\treturn {",
-			"\t\t...super.toLogMessage(),",
+			"\t\t...super.toLogEntry(),",
 			"\t\tmessage: `${1:someProp}: ${this.${1}}`,",
 			"\t};",
 			"}"

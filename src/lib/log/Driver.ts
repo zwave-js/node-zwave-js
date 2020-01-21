@@ -98,22 +98,38 @@ function logMessage(
 ): void {
 	if (!isDriverLogVisible) return;
 
+	const isCCContainer = isCommandClassContainer(message);
 	const logEntry = message.toLogEntry();
 
-	const msg: string[] = [tagify(logEntry.tags)];
+	let msg: string[] = [tagify(logEntry.tags)];
+	if (logEntry.message) {
+		msg.push(
+			...messageToLines(logEntry.message).map(
+				line => (isCCContainer ? "│ " : "  ") + line,
+			),
+		);
+	}
 
 	// If possible, include information about the CCs
 	if (isCommandClassContainer(message)) {
+		// Remove the default payload message and draw a bracket
+		msg = msg.filter(line => !line.startsWith("│ payload:"));
+
 		let indent = 0;
 		let cc: CommandClass = message.command;
 		while (true) {
+			const isEncapCC = isEncapsulatingCommandClass(cc);
 			const loggedCC = cc.toLogEntry();
 			msg.push(" ".repeat(indent * 2) + "└─" + tagify(loggedCC.tags));
+
 			indent++;
 			if (loggedCC.message) {
 				msg.push(
 					...messageToLines(loggedCC.message).map(
-						line => `${" ".repeat(indent * 2)}${line}`,
+						line =>
+							`${" ".repeat(indent * 2)}${
+								isEncapCC ? "│ " : "  "
+							}${line}`,
 					),
 				);
 			}
@@ -123,13 +139,6 @@ function logMessage(
 			} else {
 				break;
 			}
-		}
-	} else if (logEntry.message) {
-		// If not, use the default message
-		if (typeof logEntry.message === "string") {
-			msg.push(logEntry.message);
-		} else {
-			msg.push(...logEntry.message);
 		}
 	}
 

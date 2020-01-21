@@ -13,6 +13,7 @@ import {
 	isCommandClassContainer,
 } from "../commandclass/ICommandClassContainer";
 import { IDriver } from "../driver/IDriver";
+import { MessageOrCCLogEntry } from "../log/shared";
 import {
 	FunctionType,
 	MessagePriority,
@@ -29,7 +30,8 @@ import {
 	priority,
 	ResponseRole,
 } from "../message/Message";
-import { JSONObject, staticExtends } from "../util/misc";
+import { getEnumMemberName, JSONObject, staticExtends } from "../util/misc";
+import { num2hex } from "../util/strings";
 import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
 
 export enum TransmitOptions {
@@ -111,6 +113,14 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			callbackId: this.callbackId,
 			command: this.command,
 		});
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `transmitOptions: ${num2hex(this.transmitOptions)}
+callbackId:      ${this.callbackId}`,
+		};
 	}
 
 	/** Include previously received partial responses into a final message */
@@ -213,59 +223,6 @@ function testResponseForCC(
 	}
 
 	return ret;
-
-	// // Check the response role recursively from the inside to the outside
-	// let role: CCResponseRole | undefined;
-	// let isEncapCC = false;
-	// if (isEncapsulatingCommandClass(sent)) {
-	// 	isEncapCC = true;
-	// 	role = testResponseForCC(
-	// 		sent.encapsulated,
-	// 		isEncapsulatingCommandClass(received)
-	// 			? received.encapsulated
-	// 			: undefined,
-	// 		isTransmitReport,
-	// 	);
-	// }
-	// // If the innermost CC says this message is unexpected or wants to check
-	// // the non-existing encapsulated CC, the response must be unexpected
-	// if (role === "unexpected" || role === "checkEncapsulated") {
-	// 	return "unexpected";
-	// }
-	// // Otherwise check the current CC
-	// let expected = getExpectedCCResponse(sent);
-	// // Evaluate dynamic CC responses
-	// if (
-	// 	typeof expected === "function" &&
-	// 	!staticExtends(expected, CommandClass) &&
-	// 	isDynamicCCResponse(expected)
-	// ) {
-	// 	expected = expected(sent);
-	// }
-	// let ret: CCResponseRole;
-	// if (expected == undefined) {
-	// 	// The CC expects no CC response, a transmit report is the final message
-	// 	ret = isTransmitReport ? "final" : "unexpected";
-	// } else if (isTransmitReport) {
-	// 	// A positive transmit report was received, but we expect a CC in response
-	// 	ret = "confirmation";
-	// } else if (staticExtends(expected, CommandClass)) {
-	// 	// The CC always expects the same response, check if this is the one
-	// 	if (received && received instanceof expected) {
-	// 		ret = received.expectMoreMessages()
-	// 			? "partial"
-	// 			: isEncapCC
-	// 			? "checkEncapsulated"
-	// 			: "final";
-	// 	} else {
-	// 		ret = "unexpected";
-	// 	}
-	// } else {
-	// 	// The CC wants to test the response itself, let it do so
-	// 	ret = expected(sent, received);
-	// }
-	// // If the role depends on the inner role, pass that through
-	// return ret === "checkEncapsulated" ? role ?? "unexpected" : ret;
 }
 
 interface SendDataRequestTransmitReportOptions extends MessageBaseOptions {
@@ -309,6 +266,14 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase {
 			transmitStatus: this.transmitStatus,
 		});
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `callbackId:     ${this.callbackId}
+transmitStatus: ${getEnumMemberName(TransmitStatus, this.transmitStatus)}`,
+		};
+	}
 }
 
 @messageTypes(MessageType.Response, FunctionType.SendData)
@@ -337,5 +302,12 @@ export class SendDataResponse extends Message {
 			wasSent: this.wasSent,
 			// errorCode: this.errorCode,
 		});
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `wasSent: ${this.wasSent}`,
+		};
 	}
 }
