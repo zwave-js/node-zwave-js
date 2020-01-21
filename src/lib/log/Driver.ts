@@ -22,7 +22,7 @@ import {
 
 export const DRIVER_LABEL = "DRIVER";
 const DRIVER_LOGLEVEL = "verbose";
-const SENDQUEUE_LOGLEVEL = "silly";
+const SENDQUEUE_LOGLEVEL = "debug";
 
 if (!winston.loggers.has("driver")) {
 	winston.loggers.add("driver", {

@@ -1614,8 +1614,8 @@ ${handlers.length} left`,
 		if (this.sendQueue.length === 0) {
 			log.driver.print("The send queue is empty", "debug");
 			return;
-		} else {
-			log.driver.sendQueue(this.sendQueue);
+			// } else {
+			// 	log.driver.sendQueue(this.sendQueue);
 		}
 		// we are still waiting for the current transaction to finish
 		if (this.currentTransaction != undefined) {
@@ -1750,7 +1750,7 @@ ${handlers.length} left`,
 			);
 		}
 
-		log.driver.sendQueue(this.sendQueue);
+		// log.driver.sendQueue(this.sendQueue);
 	}
 
 	/**
