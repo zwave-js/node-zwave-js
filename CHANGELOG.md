@@ -4,6 +4,14 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* A potential source of stalled communication because of a missing timeout was eliminated
+
+### Changes under the hood
+* Improved the log output for bullet points as well as sent and received messages
+* Log lines that are completely filled and have secondary tags no longer include garbage when logging to a file
+
 ## 2.11.0 (2020-01-21)
 ### Features
 * Implemented the `Supervision` CC. The `Driver` now has two additional methods to make use of that feature:
