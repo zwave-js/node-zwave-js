@@ -148,7 +148,7 @@ export class BinarySensorCC extends CommandClass {
 			supportedSensorTypes = await api.getSupportedSensorTypes();
 			const logMessage = `received supported sensor types: ${supportedSensorTypes
 				.map(type => getEnumMemberName(BinarySensorType, type))
-				.map(name => "\n* " + name)}`;
+				.map(name => "\n· " + name)}`;
 			log.controller.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,

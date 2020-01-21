@@ -318,7 +318,7 @@ export class ThermostatSetpointCC extends CommandClass {
 						.map(type =>
 							getEnumMemberName(ThermostatSetpointType, type),
 						)
-						.map(name => `* ${name}`)
+						.map(name => `· ${name}`)
 						.join("\n");
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,

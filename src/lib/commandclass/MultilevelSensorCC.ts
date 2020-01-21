@@ -180,7 +180,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 					"received supported sensor types:\n" +
 					sensorTypes
 						.map(getSensorTypeName)
-						.map(name => `* ${name}`)
+						.map(name => `· ${name}`)
 						.join("\n");
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
@@ -212,7 +212,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 						"received supported scales:\n" +
 						sensorScales
 							.map(s => lookupSensorScale(type, s).label)
-							.map(name => `* ${name}`)
+							.map(name => `· ${name}`)
 							.join("\n");
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,

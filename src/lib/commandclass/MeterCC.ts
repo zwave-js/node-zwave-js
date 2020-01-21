@@ -217,10 +217,10 @@ export class MeterCC extends CommandClass {
 type:                 ${getMeterTypeName(type)}
 supported scales:     ${supportedScales
 					.map(s => lookupMeterScale(type, s).label)
-					.map(label => `\n* ${label}`)}
+					.map(label => `\n· ${label}`)}
 supported rate types: ${supportedRateTypes
 					.map(rt => getEnumMemberName(RateType, rt))
-					.map(label => `\n* ${label}`)}
+					.map(label => `\n· ${label}`)}
 supports reset:       ${supportsReset}`;
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,

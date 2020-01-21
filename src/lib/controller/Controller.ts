@@ -1004,7 +1004,7 @@ export class ZWaveController extends EventEmitter {
 					RemoveFailedNodeStartFlags.NotPrimaryController
 				)
 			) {
-				message += "\n* This controller is not the primary controller";
+				message += "\n· This controller is not the primary controller";
 			}
 			if (
 				!!(
@@ -1012,7 +1012,7 @@ export class ZWaveController extends EventEmitter {
 					RemoveFailedNodeStartFlags.NodeNotFound
 				)
 			) {
-				message += `\n* The node ${nodeId} was not found`;
+				message += `\n· The node ${nodeId} was not found`;
 			}
 			if (
 				!!(
@@ -1020,7 +1020,7 @@ export class ZWaveController extends EventEmitter {
 					RemoveFailedNodeStartFlags.RemoveProcessBusy
 				)
 			) {
-				message += `\n* The node removal process is currently busy`;
+				message += `\n· The node removal process is currently busy`;
 			}
 			if (
 				!!(
@@ -1028,7 +1028,7 @@ export class ZWaveController extends EventEmitter {
 					RemoveFailedNodeStartFlags.RemoveFailed
 				)
 			) {
-				message += `\n* The controller is busy or the node has responded`;
+				message += `\n· The controller is busy or the node has responded`;
 			}
 			throw new ZWaveError(
 				message,

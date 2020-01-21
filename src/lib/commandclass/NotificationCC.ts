@@ -258,7 +258,7 @@ export class NotificationCC extends CommandClass {
 
 				const logMessage =
 					"received supported notification types:" +
-					supportedNotificationNames.map(name => "\n* " + name);
+					supportedNotificationNames.map(name => "\n· " + name);
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
