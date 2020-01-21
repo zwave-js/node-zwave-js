@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.11.1 (2020-01-21)
 ### Bugfixes
 * A potential source of stalled communication because of a missing timeout was eliminated
 * The progress report for network healing now correctly distinguishes between not yet healed nodes and nodes that failed to heal
