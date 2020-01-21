@@ -1157,7 +1157,7 @@ ${handlers.length} left`,
 					msg.command.duration,
 				);
 				// If this was a final report, remove the handler
-				if (msg.command.status !== SupervisionStatus.Working) {
+				if (!msg.command.moreUpdatesFollow) {
 					this.supervisionSessions.delete(msg.command.sessionId);
 				}
 			} else {
@@ -1546,11 +1546,8 @@ ${handlers.length} left`,
 			command,
 			options,
 		))!;
-		// If the command is still in progress, listen for future updates
-		if (
-			options.requestStatusUpdates &&
-			resp.status === SupervisionStatus.Working
-		) {
+		// If future updates are expected, listen for them
+		if (options.requestStatusUpdates && resp.moreUpdatesFollow) {
 			this.supervisionSessions.set(
 				(command as SupervisionCCGet).sessionId,
 				options.onUpdate,

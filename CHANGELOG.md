@@ -9,7 +9,7 @@
 * Implemented the `Supervision` CC. The `Driver` now has two additional methods to make use of that feature:
     * `sendSupervisedCommand()`: Sends a command to a node using supervision and returns with the reported status (success, working, fail). This method throws if `Supervision CC` is not supported.
     * `trySendCommandSupervised()`: Convenience wrapper around `sendSupervisedCommand` and `sendCommand`. Automatically determines whether supervision is supported. Returns the supervision status if it is, and nothing otherwise
-* The `Multilevel Switch CC` now makes use of supervised commands if possible.
+* The `Multilevel Switch CC` now makes use of supervised set commands if possible.
 
 ### Bugfixes
 * Messages to sleeping nodes are now correctly de-prioritized when the awake timeout elapses
