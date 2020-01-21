@@ -1210,9 +1210,7 @@ version:               ${this.version}`;
 		}
 
 		log.controller.logNode(this.id, {
-			message: `TODO: no handler for application command ${stringify(
-				command,
-			)}`,
+			message: `TODO: no handler for application command`,
 			direction: "inbound",
 		});
 	}

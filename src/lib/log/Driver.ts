@@ -1,7 +1,7 @@
 import { SortedList } from "alcalzone-shared/sorted-list";
 import winston from "winston";
 import { CommandClass } from "../commandclass/CommandClass";
-import { EncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
+import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { Transaction } from "../driver/Transaction";
 import {
@@ -14,7 +14,6 @@ import {
 	createLogTransports,
 	DataDirection,
 	getDirectionPrefix,
-	getNodeTag,
 	isLoglevelVisible,
 	messageToLines,
 	tagify,
@@ -87,7 +86,7 @@ export function transactionResponse(
 	logMessage(message, { secondaryTags: [role], direction: "inbound" });
 }
 
-export function logMessage(
+function logMessage(
 	message: Message,
 	{
 		secondaryTags,
@@ -99,24 +98,39 @@ export function logMessage(
 ): void {
 	if (!isDriverLogVisible) return;
 
-	const msg = [tagify(getPrimaryTagsForMessage(message))];
-	// Include information about the CCs if possible
-	let indent = 0;
-	let cc: CommandClass | undefined;
-	if (isCommandClassContainer(message)) cc = message.command;
-	while (cc) {
-		const loggedCC = cc.toLogMessage();
-		msg.push(" ".repeat(indent * 2) + "› " + tagify(loggedCC.tags));
-		indent++;
-		if (loggedCC.message) {
-			msg.push(
-				...messageToLines(loggedCC.message).map(
-					line => `${" ".repeat(indent * 2)}${line}`,
-				),
-			);
+	const logEntry = message.toLogEntry();
+
+	const msg: string[] = [tagify(logEntry.tags)];
+
+	// If possible, include information about the CCs
+	if (isCommandClassContainer(message)) {
+		let indent = 0;
+		let cc: CommandClass = message.command;
+		while (true) {
+			const loggedCC = cc.toLogEntry();
+			msg.push(" ".repeat(indent * 2) + "└─" + tagify(loggedCC.tags));
+			indent++;
+			if (loggedCC.message) {
+				msg.push(
+					...messageToLines(loggedCC.message).map(
+						line => `${" ".repeat(indent * 2)}${line}`,
+					),
+				);
+			}
+			// If this is an encap CC, continue
+			if (isEncapsulatingCommandClass(cc)) {
+				cc = cc.encapsulated;
+			} else {
+				break;
+			}
 		}
-		// If this is an encap CC, continue
-		cc = ((cc as unknown) as EncapsulatingCommandClass).encapsulated;
+	} else if (logEntry.message) {
+		// If not, use the default message
+		if (typeof logEntry.message === "string") {
+			msg.push(logEntry.message);
+		} else {
+			msg.push(...logEntry.message);
+		}
 	}
 
 	logger.log({
@@ -130,18 +144,6 @@ export function logMessage(
 		// (not to confuse with the message type, which may be Request or Response)
 		direction: getDirectionPrefix(direction),
 	});
-}
-
-function getPrimaryTagsForMessage(message: Message): string[] {
-	const ret = [
-		message.type === MessageType.Request ? "REQ" : "RES",
-		FunctionType[message.functionType],
-	];
-	const nodeId = message.getNodeId();
-	if (nodeId) {
-		ret.unshift(getNodeTag(nodeId));
-	}
-	return ret;
 }
 
 /** Logs whats currently in the driver's send queue */

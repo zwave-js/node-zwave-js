@@ -83,13 +83,14 @@
 			"});"
 		]
 	},
-	"Z-Wave toJSON override": {
-		"prefix": "zwjson",
+	"Z-Wave Command Class log override": {
+		"prefix": "zwcclog",
 		"body": [
-			"public toJSON(): JSONObject {",
-			"\treturn super.toJSONInherited({",
-			"\t\t${0}",
-			"\t});",
+			"public toLogEntry(): MessageOrCCLogEntry {",
+			"\treturn {",
+			"\t\t...super.toLogMessage(),",
+			"\t\tmessage: `${1:someProp}: ${this.${1}}`,",
+			"\t};",
 			"}"
 		]
 	},

@@ -3,6 +3,7 @@ import fs from "fs";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import { MessageOrCCLogEntry } from "../log/shared";
 import { Endpoint } from "../node/Endpoint";
 import { InterviewStage } from "../node/INode";
 import { ZWaveNode } from "../node/Node";
@@ -371,6 +372,17 @@ export class CommandClass {
 			encapCC,
 		});
 		return ret;
+	}
+
+	/** Generates a representation of this CC for the log */
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			tags: [this.constructor.name],
+			message:
+				this.payload.length > 0
+					? "payload: 0x" + this.payload.toString("hex")
+					: undefined,
+		};
 	}
 
 	/** Generates the JSON representation of this CC */

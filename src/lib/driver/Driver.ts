@@ -865,12 +865,14 @@ export class Driver extends EventEmitter implements IDriver {
 			const responseRole = this.currentTransaction.message.testResponse(
 				msg,
 			);
+			if (responseRole !== "unexpected") {
+				log.driver.transactionResponse(msg, responseRole);
+			}
 			// For further actions, we are only interested in the innermost CC
 			if (isCommandClassContainer(msg)) this.unwrapCommands(msg);
 
 			switch (responseRole) {
 				case "confirmation":
-					log.driver.transactionResponse(msg, "confirmation");
 					// When a node has received the message, it confirms the receipt with a SendDataRequest
 					if (
 						msg.type === MessageType.Request &&
@@ -910,7 +912,6 @@ export class Driver extends EventEmitter implements IDriver {
 					return;
 
 				case "fatal_controller":
-					log.driver.transactionResponse(msg, "fatal_controller");
 					// The message was not sent
 					if (this.mayRetryCurrentTransaction()) {
 						// The Z-Wave specs define 500ms as the waiting period for SendData messages
@@ -935,7 +936,6 @@ export class Driver extends EventEmitter implements IDriver {
 					return;
 
 				case "fatal_node":
-					log.driver.transactionResponse(msg, "fatal_node");
 					// The node did not respond
 					const node = this.currentTransaction.message.getNodeUnsafe();
 					if (!node) return; // This should never happen, but whatever
@@ -974,13 +974,11 @@ export class Driver extends EventEmitter implements IDriver {
 
 				case "partial":
 					// This is a multi-step response and we just received a part of it, which is not the final one
-					log.driver.transactionResponse(msg, "partial");
 					this.currentTransaction.partialResponses.push(msg);
 					return;
 
 				case "final":
 					// this is the expected response!
-					log.driver.transactionResponse(msg, "final");
 					this.currentTransaction.response = msg;
 					if (this.currentTransaction.partialResponses.length > 0) {
 						msg.mergePartialMessages(
@@ -1092,14 +1090,7 @@ ${handlers.length} left`,
 
 		if (msg instanceof ApplicationCommandRequest) {
 			// we handle ApplicationCommandRequests differently because they are handled by the nodes directly
-			const ccId = msg.command.ccId;
 			const nodeId = msg.command.nodeId;
-			// TODO: This deserves a better formatting
-			log.driver.print(
-				`handling application command request ${
-					CommandClasses[ccId]
-				} (${num2hex(ccId)}) for node ${nodeId}`,
-			);
 			// cannot handle ApplicationCommandRequests without a controller
 			if (this._controller == undefined) {
 				log.driver.print(
@@ -1150,6 +1141,10 @@ ${handlers.length} left`,
 				this.supervisionSessions.has(msg.command.sessionId)
 			) {
 				// Supervision commands are handled here
+				log.controller.logNode(nodeId, {
+					message: `Received update for a Supervision session`,
+					direction: "inbound",
+				});
 
 				// Call the update handler
 				this.supervisionSessions.get(msg.command.sessionId)!(
@@ -1627,16 +1622,11 @@ ${handlers.length} left`,
 			// get the next transaction
 			this.currentTransaction = this.sendQueue.shift()!;
 			const msg = this.currentTransaction.message;
-			log.driver.print(
-				`workOffSendQueue > sending next message (${
-					FunctionType[msg.functionType]
-				})${targetNode ? ` to node ${targetNode.id}` : ""}...`,
-				"debug",
-			);
 
 			// And send it
 			this.currentTransaction.markAsSent();
 			const data = msg.serialize();
+			log.driver.transaction(this.currentTransaction);
 			log.serial.data("outbound", data);
 			this.doSend(data);
 

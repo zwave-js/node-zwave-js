@@ -60,7 +60,7 @@ export interface ZWaveLogInfo extends Omit<TransformableInfo, "message"> {
 	message: string | string[];
 }
 
-export interface CCLogMessage {
+export interface MessageOrCCLogEntry {
 	tags: string[];
 	message?: string | string[];
 }

@@ -45,7 +45,7 @@ export const colorizer = format((((
 			colorizeTextAndTags(msg, textColor, bgColor),
 		);
 	}
-	info.direction = colors.gray(info.direction);
+	info.direction = colors.white(info.direction);
 	if (info.label) {
 		info.label = colors.gray.inverse(info.label);
 	}

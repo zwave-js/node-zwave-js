@@ -5,6 +5,7 @@ import { isCommandClassContainer } from "../commandclass/ICommandClassContainer"
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import { getNodeTag, MessageOrCCLogEntry } from "../log/shared";
 import { isNodeQuery } from "../node/INodeQuery";
 import { ZWaveNode } from "../node/Node";
 import { JSONObject } from "../util/misc";
@@ -227,6 +228,25 @@ export class Message {
 		const messageLength = Message.getMessageLength(data);
 		const payloadLength = messageLength - 5;
 		return data.slice(4, 4 + payloadLength);
+	}
+
+	/** Generates a representation of this Message for the log */
+	public toLogEntry(): MessageOrCCLogEntry {
+		const tags = [
+			this.type === MessageType.Request ? "REQ" : "RES",
+			FunctionType[this.functionType],
+		];
+		const nodeId = this.getNodeId();
+		if (nodeId) {
+			tags.unshift(getNodeTag(nodeId));
+		}
+		return {
+			tags,
+			message:
+				this.payload.length > 0
+					? "payload: 0x" + this.payload.toString("hex")
+					: undefined,
+		};
 	}
 
 	/** Generates the JSON representation of this Message */
