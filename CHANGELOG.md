@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## 2.11.0-beta.0 (2020-01-20)
+## __WORK IN PROGRESS__
 ### Features
 * Implemented the `Supervision` CC. The `Driver` now has two additional methods to make use of that feature:
     * `sendSupervisedCommand()`: Sends a command to a node using supervision and returns with the reported status (success, working, fail). This method throws if `Supervision CC` is not supported.
