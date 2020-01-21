@@ -1,4 +1,3 @@
-import { padStart } from "alcalzone-shared/strings";
 import winston from "winston";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { InterviewStage, IZWaveNode } from "../node/INode";
@@ -12,6 +11,7 @@ import {
 	createLogTransports,
 	DataDirection,
 	getDirectionPrefix,
+	getNodeTag,
 	isLoglevelVisible,
 	tagify,
 	ZWaveLogger,
@@ -26,7 +26,7 @@ if (!winston.loggers.has("controller")) {
 		transports: createLogTransports(CONTROLLER_LABEL),
 	});
 }
-const logger: ZWaveLogger = winston.loggers.get("controller");
+const logger = (winston.loggers.get("controller") as unknown) as ZWaveLogger;
 const isValueLogVisible = isLoglevelVisible(VALUE_LOGLEVEL);
 const isControllerLogVisible = isLoglevelVisible(CONTROLLER_LOGLEVEL);
 
@@ -193,11 +193,6 @@ export function metadataUpdated(args: LogValueArgs<ValueID>): void {
 		message,
 		direction: getDirectionPrefix("none"),
 	});
-}
-
-/** Returns the tag used to log node related messages */
-function getNodeTag(nodeId: number): string {
-	return "Node " + padStart(nodeId.toString(), 3, "0");
 }
 
 /** Logs the interview progress of a node */

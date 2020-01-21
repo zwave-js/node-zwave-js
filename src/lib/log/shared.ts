@@ -1,3 +1,4 @@
+import { padStart } from "alcalzone-shared/strings";
 import { Format, TransformableInfo, TransformFunction } from "logform";
 import * as path from "path";
 import { configs, MESSAGE } from "triple-beam";
@@ -45,7 +46,7 @@ export const LOG_WIDTH = 80;
 /** The width of the columns containing the timestamp and channel */
 export const LOG_PREFIX_WIDTH = 20;
 
-export interface ZWaveLogInfo extends TransformableInfo {
+export interface ZWaveLogInfo extends Omit<TransformableInfo, "message"> {
 	direction: string;
 	/** Primary tags are printed before the message and must fit into the first line.
 	 * They don't have to be enclosed in square brackets */
@@ -56,6 +57,17 @@ export interface ZWaveLogInfo extends TransformableInfo {
 	multiline?: boolean;
 	timestamp?: string;
 	label?: string;
+	message: string | string[];
+}
+
+export interface CCLogMessage {
+	tags: string[];
+	message?: string | string[];
+}
+
+/** Returns the tag used to log node related messages */
+export function getNodeTag(nodeId: number): string {
+	return "Node " + padStart(nodeId.toString(), 3, "0");
 }
 
 export const timestampFormat = "HH:mm:ss.SSS";
@@ -103,10 +115,20 @@ export function messageFitsIntoOneLine(
 	return totalLength <= LOG_WIDTH;
 }
 
+export function messageToLines(message: string | string[]): string[] {
+	if (typeof message === "string") {
+		return message.split("\n");
+	} else if (message.length > 0) {
+		return message;
+	} else {
+		return [""];
+	}
+}
+
 /** Formats the log message and calculates the necessary paddings */
 export const logMessageFormatter: Format = {
-	transform: ((info: ZWaveLogInfo) => {
-		const messageLines = info.message.split("\n");
+	transform: (((info: ZWaveLogInfo) => {
+		const messageLines = messageToLines(info.message);
 		const firstMessageLineLength = messageLines[0].length;
 		info.multiline =
 			messageLines.length > 1 ||
@@ -145,14 +167,14 @@ export const logMessageFormatter: Format = {
 			info.message = lines.join("\n");
 		}
 		return info;
-	}) as TransformFunction,
+	}) as unknown) as TransformFunction,
 };
 
 /** Prints a formatted and colorized log message */
 export const logMessagePrinter: Format = {
-	transform: ((info: ZWaveLogInfo) => {
+	transform: (((info: ZWaveLogInfo) => {
 		// The formatter has already split the message into multiple lines
-		const messageLines = info.message.split("\n");
+		const messageLines = messageToLines(info.message);
 		// Also this can only happen if the user forgot to call the formatter first
 		if (info.secondaryTagPadding == undefined)
 			info.secondaryTagPadding = -1;
@@ -197,7 +219,7 @@ export const logMessagePrinter: Format = {
 		}
 		info[MESSAGE] = lines.join("\n");
 		return info;
-	}) as TransformFunction,
+	}) as unknown) as TransformFunction,
 };
 
 /** The common logger format for all channels */

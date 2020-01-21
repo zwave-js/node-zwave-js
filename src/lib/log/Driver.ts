@@ -1,5 +1,7 @@
 import { SortedList } from "alcalzone-shared/sorted-list";
 import winston from "winston";
+import { CommandClass } from "../commandclass/CommandClass";
+import { EncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { Transaction } from "../driver/Transaction";
 import {
@@ -10,8 +12,11 @@ import {
 import { Message, ResponseRole } from "../message/Message";
 import {
 	createLogTransports,
+	DataDirection,
 	getDirectionPrefix,
+	getNodeTag,
 	isLoglevelVisible,
+	messageToLines,
 	tagify,
 	ZWaveLogger,
 } from "./shared";
@@ -25,7 +30,7 @@ if (!winston.loggers.has("driver")) {
 		transports: createLogTransports(DRIVER_LABEL),
 	});
 }
-const logger: ZWaveLogger = winston.loggers.get("driver");
+const logger = (winston.loggers.get("driver") as unknown) as ZWaveLogger;
 const isDriverLogVisible = isLoglevelVisible(DRIVER_LOGLEVEL);
 const isSendQueueLogVisible = isLoglevelVisible(SENDQUEUE_LOGLEVEL);
 
@@ -54,8 +59,6 @@ export function transaction(transaction: Transaction): void {
 	if (!isDriverLogVisible) return;
 
 	const { message } = transaction;
-	const primaryTags: string[] = getPrimaryTagsForMessage(message);
-
 	// On the first attempt, we print the basic information about the transaction
 	const secondaryTags: string[] = [];
 	if (transaction.sendAttempts === 1) {
@@ -67,14 +70,11 @@ export function transaction(transaction: Transaction): void {
 		);
 	}
 
-	logger.log({
-		level: DRIVER_LOGLEVEL,
-		primaryTags: tagify(primaryTags),
-		secondaryTags: tagify(secondaryTags),
-		message: "",
+	logMessage(message, {
+		secondaryTags,
 		// Since we are programming a controller, the first message of a transaction is always outbound
 		// (not to confuse with the message type, which may be Request or Response)
-		direction: getDirectionPrefix("outbound"),
+		direction: "outbound",
 	});
 }
 
@@ -84,26 +84,64 @@ export function transactionResponse(
 	role: ResponseRole,
 ): void {
 	if (!isDriverLogVisible) return;
+	logMessage(message, { secondaryTags: [role], direction: "inbound" });
+}
 
-	const primaryTags: string[] = getPrimaryTagsForMessage(message);
-	const secondaryTags = [role];
+export function logMessage(
+	message: Message,
+	{
+		secondaryTags,
+		direction = "none",
+	}: {
+		secondaryTags?: string[];
+		direction?: DataDirection;
+	},
+): void {
+	if (!isDriverLogVisible) return;
+
+	const msg = [tagify(getPrimaryTagsForMessage(message))];
+	// Include information about the CCs if possible
+	let indent = 0;
+	let cc: CommandClass | undefined;
+	if (isCommandClassContainer(message)) cc = message.command;
+	while (cc) {
+		const loggedCC = cc.toLogMessage();
+		msg.push(" ".repeat(indent * 2) + "› " + tagify(loggedCC.tags));
+		indent++;
+		if (loggedCC.message) {
+			msg.push(
+				...messageToLines(loggedCC.message).map(
+					line => `${" ".repeat(indent * 2)}${line}`,
+				),
+			);
+		}
+		// If this is an encap CC, continue
+		cc = ((cc as unknown) as EncapsulatingCommandClass).encapsulated;
+	}
 
 	logger.log({
 		level: DRIVER_LOGLEVEL,
-		primaryTags: tagify(primaryTags),
-		secondaryTags: tagify(secondaryTags),
-		message: "",
+		secondaryTags:
+			secondaryTags && secondaryTags.length > 0
+				? tagify(secondaryTags)
+				: undefined,
+		message: msg,
 		// Since we are programming a controller, responses are always inbound
 		// (not to confuse with the message type, which may be Request or Response)
-		direction: getDirectionPrefix("inbound"),
+		direction: getDirectionPrefix(direction),
 	});
 }
 
 function getPrimaryTagsForMessage(message: Message): string[] {
-	return [
+	const ret = [
 		message.type === MessageType.Request ? "REQ" : "RES",
 		FunctionType[message.functionType],
 	];
+	const nodeId = message.getNodeId();
+	if (nodeId) {
+		ret.unshift(getNodeTag(nodeId));
+	}
+	return ret;
 }
 
 /** Logs whats currently in the driver's send queue */

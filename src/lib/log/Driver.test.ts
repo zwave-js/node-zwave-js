@@ -355,5 +355,23 @@ describe("lib/log/Driver =>", () => {
 				ignoreColor: false,
 			});
 		});
+
+		it("inline tags are printed in inverse colors", () => {
+			log.driver.print(`This is a message [with] [inline] tags...`);
+
+			const expected1 =
+				colors.bgCyan("[") +
+				colors.inverse("with") +
+				colors.bgCyan("]") +
+				" " +
+				colors.bgCyan("[") +
+				colors.inverse("inline") +
+				colors.bgCyan("]");
+
+			assertMessage(spyTransport, {
+				predicate: msg => msg.includes(expected1),
+				ignoreColor: false,
+			});
+		});
 	});
 });

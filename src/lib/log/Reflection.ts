@@ -15,7 +15,7 @@ if (!winston.loggers.has("reflection")) {
 		transports: createLogTransports(REFLECTION_LABEL),
 	});
 }
-const logger: ZWaveLogger = winston.loggers.get("reflection");
+const logger = (winston.loggers.get("reflection") as unknown) as ZWaveLogger;
 const isVisible = isLoglevelVisible(REFLECTION_LOGLEVEL);
 
 /**

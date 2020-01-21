@@ -17,7 +17,7 @@ if (!winston.loggers.has("serial")) {
 		transports: createLogTransports(SERIAL_LABEL),
 	});
 }
-const logger: ZWaveLogger = winston.loggers.get("serial");
+const logger = (winston.loggers.get("serial") as unknown) as ZWaveLogger;
 const isVisible = isLoglevelVisible(SERIAL_LOGLEVEL);
 
 /**
