@@ -874,11 +874,8 @@ export class Driver extends EventEmitter implements IDriver {
 			switch (responseRole) {
 				case "confirmation":
 					// When a node has received the message, it confirms the receipt with a SendDataRequest
-					if (
-						msg.type === MessageType.Request &&
-						!this.currentTransaction.timeoutInstance
-					) {
-						// As per SDS11846, start a timeout for the response
+					if (msg.type === MessageType.Request) {
+						// As per SDS11846, start a timeout for the expected response
 						this.currentTransaction.computeRTT();
 						const msRTT = this.currentTransaction.rtt / 1e6;
 
@@ -887,6 +884,14 @@ export class Driver extends EventEmitter implements IDriver {
 								2,
 							)} ms`,
 						);
+
+						// In some rare (timing?) cases it can happen that this code is executed while
+						// timeoutInstance is still set
+						if (this.currentTransaction.timeoutInstance) {
+							clearTimeout(
+								this.currentTransaction.timeoutInstance,
+							);
+						}
 
 						this.currentTransaction.timeoutInstance = setTimeout(
 							() => {
@@ -1314,7 +1319,10 @@ ${handlers.length} left`,
 		const node = this.currentTransaction!.message.getNodeUnsafe();
 		const { promise, response, timeoutInstance } = this.currentTransaction!;
 		// Cancel any running timers
-		if (timeoutInstance) clearTimeout(timeoutInstance);
+		if (timeoutInstance) {
+			clearTimeout(timeoutInstance);
+			this.currentTransaction!.timeoutInstance = undefined;
+		}
 		// and resolve the current transaction
 		promise.resolve(response);
 		this.currentTransaction = undefined;
@@ -1345,7 +1353,10 @@ ${handlers.length} left`,
 	): void {
 		const { promise, timeoutInstance } = this.currentTransaction!;
 		// Cancel any running timers
-		if (timeoutInstance) clearTimeout(timeoutInstance);
+		if (timeoutInstance) {
+			clearTimeout(timeoutInstance);
+			this.currentTransaction!.timeoutInstance = undefined;
+		}
 		// and reject the current transaction
 		promise.reject(reason);
 		this.currentTransaction = undefined;
