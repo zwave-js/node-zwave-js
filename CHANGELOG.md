@@ -7,6 +7,7 @@
 ## __WORK IN PROGRESS__
 ### Bugfixes
 * A potential source of stalled communication because of a missing timeout was eliminated
+* The progress report for network healing now correctly distinguishes between not yet healed nodes and nodes that failed to heal
 
 ### Changes under the hood
 * Improved the log output for bullet points as well as sent and received messages
