@@ -1,6 +1,7 @@
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import { MessageOrCCLogEntry } from "../log/shared";
 import { MessagePriority } from "../message/Constants";
 import { GenericDeviceClasses } from "../node/DeviceClass";
 import {
@@ -368,6 +369,19 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 	public get aggregatedCount(): number | undefined {
 		return this._aggregatedCount;
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const ret = {
+			...super.toLogEntry(),
+			message: `endpoint count (individual): ${this.individualCount}
+count is dynamic:            ${this.countIsDynamic}
+identical capabilities:      ${this.identicalCapabilities}`,
+		};
+		if (this.aggregatedCount != undefined) {
+			ret.message += `\nendpoint count (aggregated): ${this.aggregatedCount}`;
+		}
+		return ret;
+	}
 }
 
 @CCCommand(MultiChannelCommand.EndPointGet)
@@ -422,6 +436,27 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 
 	public readonly endpointIndex: number;
 	public readonly capability: EndpointCapability;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		let message = `endpoint index:        ${this.endpointIndex}
+generic device class:  ${this.capability.generic.name} (${num2hex(
+			this.capability.generic.key,
+		)})
+specific device class: ${this.capability.specific.name} (${num2hex(
+			this.capability.specific.key,
+		)})
+is dynamic end point:  ${this.capability.isDynamic}
+supported CCs:`;
+		for (const cc of this.capability.supportedCCs) {
+			const ccName = CommandClasses[cc];
+			message += `\n· ${ccName ? ccName : num2hex(cc)}`;
+		}
+
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 interface MultiChannelCCCapabilityGetOptions extends CCCommandOptions {
@@ -454,6 +489,13 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.requestedEndpoint & 0b01111111]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `endpoint: ${this.requestedEndpoint}`,
+		};
 	}
 }
 
@@ -574,6 +616,14 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 	public get members(): readonly number[] {
 		return this.aggregatedEndpointMembers[1];
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `endpoint: ${this.endpointIndex}
+members:  ${this.members.join(", ")}`,
+		};
+	}
 }
 
 interface MultiChannelCCAggregatedMembersGetOptions extends CCCommandOptions {
@@ -606,6 +656,13 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.requestedEndpoint & 0b0111_1111]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `endpoint: ${this.requestedEndpoint}`,
+		};
 	}
 }
 
@@ -679,5 +736,16 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			this.encapsulated.serializeForEncapsulation(),
 		]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `destination: ${
+				typeof this.destination === "number"
+					? this.destination
+					: this.destination.join(", ")
+			}`,
+		};
 	}
 }
