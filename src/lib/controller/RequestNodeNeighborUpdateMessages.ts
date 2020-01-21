@@ -1,4 +1,5 @@
 import { IDriver } from "../driver/IDriver";
+import { MessageOrCCLogEntry } from "../log/shared";
 import {
 	FunctionType,
 	MessagePriority,
@@ -15,6 +16,7 @@ import {
 	priority,
 	ResponseRole,
 } from "../message/Message";
+import { getEnumMemberName } from "../util/misc";
 
 export enum NodeNeighborUpdateStatus {
 	UpdateStarted = 0x21,
@@ -70,6 +72,13 @@ export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateR
 		this.payload = Buffer.from([this.nodeId, this.callbackId]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `callbackId: ${this.callbackId}`,
+		};
+	}
 }
 
 export class RequestNodeNeighborUpdateReport extends RequestNodeNeighborUpdateRequestBase {
@@ -86,5 +95,16 @@ export class RequestNodeNeighborUpdateReport extends RequestNodeNeighborUpdateRe
 	private _updateStatus: NodeNeighborUpdateStatus;
 	public get updateStatus(): NodeNeighborUpdateStatus {
 		return this._updateStatus;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `callbackId:    ${this.callbackId},
+update status: ${getEnumMemberName(
+				NodeNeighborUpdateStatus,
+				this._updateStatus,
+			)}`,
+		};
 	}
 }

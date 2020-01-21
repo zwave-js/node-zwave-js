@@ -1,4 +1,5 @@
 import { IDriver } from "../driver/IDriver";
+import { MessageOrCCLogEntry } from "../log/shared";
 import {
 	FunctionType,
 	MessagePriority,
@@ -53,6 +54,14 @@ export class GetRoutingInfoRequest extends Message {
 			removeBadLinks: this.removeBadLinks,
 		});
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `removeNonRepeaters: ${this.removeNonRepeaters}
+removeBadLinks:     ${this.removeBadLinks}`,
+		};
+	}
 }
 
 @messageTypes(MessageType.Response, FunctionType.GetRoutingInfo)
@@ -74,5 +83,12 @@ export class GetRoutingInfoResponse extends Message {
 	private _nodeIds: number[];
 	public get nodeIds(): number[] {
 		return this._nodeIds;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `node ids: ${this._nodeIds.join(", ")}`,
+		};
 	}
 }
