@@ -1,4 +1,3 @@
-import colors from "ansi-colors";
 import { Format, TransformableInfo, TransformFunction } from "logform";
 import * as path from "path";
 import { configs, MESSAGE } from "triple-beam";
@@ -23,11 +22,6 @@ const logFilename = path.join(
 	"../../..",
 	`zwave-${process.pid}.log`,
 );
-
-/** An invisible char with length >= 0 */
-// This is necessary to "print" zero spaces for the right padding
-// There's probably a nicer way
-export const INVISIBLE = colors.black("\u001b[39m");
 
 export type DataDirection = "inbound" | "outbound" | "none";
 
@@ -168,10 +162,12 @@ export const logMessagePrinter: Format = {
 			messageLines[0],
 			info.secondaryTagPadding < 0
 				? undefined
-				: info.secondaryTagPadding === 0
-				? INVISIBLE
 				: " ".repeat(info.secondaryTagPadding),
-			info.secondaryTags,
+			// If the secondary tag padding is zero, the previous segment gets
+			// filtered out and we have one less space than necessary
+			info.secondaryTagPadding === 0 && info.secondaryTags
+				? " " + info.secondaryTags
+				: info.secondaryTags,
 		]
 			.filter(item => !!item)
 			.join(" ");
