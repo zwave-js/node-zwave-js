@@ -11,6 +11,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { FunctionType } from "../message/Constants";
 import { BasicDeviceClasses, DeviceClass } from "../node/DeviceClass";
+import { InterviewStage, NodeStatus } from "../node/INode";
 import { ZWaveNode } from "../node/Node";
 import { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
@@ -72,6 +73,8 @@ import {
 } from "./SetSerialApiTimeoutsMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
+type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
+
 // Strongly type the event emitter events
 interface ControllerEventCallbacks {
 	"inclusion failed": () => void;
@@ -82,8 +85,10 @@ interface ControllerEventCallbacks {
 	"exclusion stopped": () => void;
 	"node added": (node: ZWaveNode) => void;
 	"node removed": (node: ZWaveNode) => void;
-	"heal network progress": (result: ReadonlyMap<number, boolean>) => void;
-	"heal network done": (result: ReadonlyMap<number, boolean>) => void;
+	"heal network progress": (
+		result: ReadonlyMap<number, HealNodeStatus>,
+	) => void;
+	"heal network done": (result: ReadonlyMap<number, HealNodeStatus>) => void;
 }
 
 type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
@@ -622,7 +627,7 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	private _healNetworkActive: boolean = false;
-	private _healNetworkProgress = new Map<number, boolean | undefined>();
+	private _healNetworkProgress = new Map<number, HealNodeStatus>();
 
 	/** @deprecated Use `beginHealNetwork` instead */
 	public healNetwork(): boolean {
@@ -630,7 +635,7 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	/**
-	 * Requests ALL slave nodes to update their neighbor lists
+	 * Requests all alive slave nodes to update their neighbor lists
 	 */
 	public beginHealingNetwork(): boolean {
 		// Don't start the process twice
@@ -641,17 +646,32 @@ export class ZWaveController extends EventEmitter {
 
 		// Reset all nodes to "not healed"
 		this._healNetworkProgress.clear();
-		for (const key of this._nodes.keys()) {
-			if (key !== this._ownNodeId) {
-				this._healNetworkProgress.set(key, undefined);
+		for (const [id, node] of this._nodes) {
+			if (id === this._ownNodeId) continue;
+			if (
+				// The node is known to be dead
+				node.status === NodeStatus.Dead ||
+				// The node is assumed asleep but has never been interviewed.
+				// It is most likely dead
+				(node.status === NodeStatus.Asleep &&
+					node.interviewStage === InterviewStage.ProtocolInfo)
+			) {
+				// Don't interview dead nodes
+				log.controller.logNode(
+					id,
+					`Skipping heal because the node is not responding.`,
+				);
+				this._healNetworkProgress.set(id, "skipped");
+			} else {
+				this._healNetworkProgress.set(id, "pending");
 			}
 		}
 
 		// Do the heal process in the background
 		(async () => {
-			const tasks = [...this._nodes.keys()]
-				.filter(nodeId => nodeId !== this._ownNodeId)
-				.map(async nodeId => {
+			const tasks = [...this._healNetworkProgress]
+				.filter(([, status]) => status === "pending")
+				.map(async ([nodeId]) => {
 					// await the heal process for each node and treat errors as a non-successful heal
 					const result = await this.healNode(nodeId).catch(
 						() => false,
@@ -659,7 +679,10 @@ export class ZWaveController extends EventEmitter {
 					if (!this._healNetworkActive) return;
 
 					// Track the success in a map
-					this._healNetworkProgress.set(nodeId, result);
+					this._healNetworkProgress.set(
+						nodeId,
+						result ? "done" : "failed",
+					);
 					// Notify listeners about the progress
 					this.emit(
 						"heal network progress",
