@@ -73,6 +73,8 @@ import {
 } from "./SetSerialApiTimeoutsMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
+type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
+
 // Strongly type the event emitter events
 interface ControllerEventCallbacks {
 	"inclusion failed": () => void;
@@ -83,8 +85,10 @@ interface ControllerEventCallbacks {
 	"exclusion stopped": () => void;
 	"node added": (node: ZWaveNode) => void;
 	"node removed": (node: ZWaveNode) => void;
-	"heal network progress": (result: ReadonlyMap<number, boolean>) => void;
-	"heal network done": (result: ReadonlyMap<number, boolean>) => void;
+	"heal network progress": (
+		result: ReadonlyMap<number, HealNodeStatus>,
+	) => void;
+	"heal network done": (result: ReadonlyMap<number, HealNodeStatus>) => void;
 }
 
 type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
@@ -623,7 +627,7 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	private _healNetworkActive: boolean = false;
-	private _healNetworkProgress = new Map<number, boolean | undefined>();
+	private _healNetworkProgress = new Map<number, HealNodeStatus>();
 
 	/** @deprecated Use `beginHealNetwork` instead */
 	public healNetwork(): boolean {
@@ -631,7 +635,7 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	/**
-	 * Requests ALL slave nodes to update their neighbor lists
+	 * Requests all alive slave nodes to update their neighbor lists
 	 */
 	public beginHealingNetwork(): boolean {
 		// Don't start the process twice
@@ -653,16 +657,20 @@ export class ZWaveController extends EventEmitter {
 					node.interviewStage === InterviewStage.ProtocolInfo)
 			) {
 				// Don't interview dead nodes
-				this._healNetworkProgress.set(id, false);
+				log.controller.logNode(
+					id,
+					`Skipping heal because the node is not responding.`,
+				);
+				this._healNetworkProgress.set(id, "skipped");
 			} else {
-				this._healNetworkProgress.set(id, undefined);
+				this._healNetworkProgress.set(id, "pending");
 			}
 		}
 
 		// Do the heal process in the background
 		(async () => {
 			const tasks = [...this._healNetworkProgress]
-				.filter(([, status]) => status === undefined)
+				.filter(([, status]) => status === "pending")
 				.map(async ([nodeId]) => {
 					// await the heal process for each node and treat errors as a non-successful heal
 					const result = await this.healNode(nodeId).catch(
@@ -671,7 +679,10 @@ export class ZWaveController extends EventEmitter {
 					if (!this._healNetworkActive) return;
 
 					// Track the success in a map
-					this._healNetworkProgress.set(nodeId, result);
+					this._healNetworkProgress.set(
+						nodeId,
+						result ? "done" : "failed",
+					);
 					// Notify listeners about the progress
 					this.emit(
 						"heal network progress",
