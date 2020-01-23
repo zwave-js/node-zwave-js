@@ -11,6 +11,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { FunctionType } from "../message/Constants";
 import { BasicDeviceClasses, DeviceClass } from "../node/DeviceClass";
+import { InterviewStage, NodeStatus } from "../node/INode";
 import { ZWaveNode } from "../node/Node";
 import { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
@@ -641,17 +642,28 @@ export class ZWaveController extends EventEmitter {
 
 		// Reset all nodes to "not healed"
 		this._healNetworkProgress.clear();
-		for (const key of this._nodes.keys()) {
-			if (key !== this._ownNodeId) {
-				this._healNetworkProgress.set(key, undefined);
+		for (const [id, node] of this._nodes) {
+			if (id === this._ownNodeId) continue;
+			if (
+				// The node is known to be dead
+				node.status === NodeStatus.Dead ||
+				// The node is assumed asleep but has never been interviewed.
+				// It is most likely dead
+				(node.status === NodeStatus.Asleep &&
+					node.interviewStage === InterviewStage.ProtocolInfo)
+			) {
+				// Don't interview dead nodes
+				this._healNetworkProgress.set(id, false);
+			} else {
+				this._healNetworkProgress.set(id, undefined);
 			}
 		}
 
 		// Do the heal process in the background
 		(async () => {
-			const tasks = [...this._nodes.keys()]
-				.filter(nodeId => nodeId !== this._ownNodeId)
-				.map(async nodeId => {
+			const tasks = [...this._healNetworkProgress]
+				.filter(([, status]) => status === undefined)
+				.map(async ([nodeId]) => {
 					// await the heal process for each node and treat errors as a non-successful heal
 					const result = await this.healNode(nodeId).catch(
 						() => false,
