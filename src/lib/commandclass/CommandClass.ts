@@ -5,7 +5,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { MessageOrCCLogEntry } from "../log/shared";
 import type { Endpoint } from "../node/Endpoint";
-import { InterviewStage } from "../node/INode";
+import { InterviewStage } from "../node/Node";
 import type { ZWaveNode } from "../node/Node";
 import { ValueDB, ValueID, valueIdToString } from "../node/ValueDB";
 import { JSONObject, staticExtends, stripUndefined, validatePayload } from "../util/misc";

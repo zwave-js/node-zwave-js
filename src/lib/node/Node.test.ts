@@ -1,7 +1,7 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertCC, assertZWaveError } from "../../../test/util";
 import { BasicCC, BasicCommand } from "../commandclass/BasicCC";
-import { CommandClassInfo } from "../commandclass/CommandClass";
+import type { CommandClassInfo } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
@@ -18,7 +18,7 @@ import {
 	GetRoutingInfoResponse,
 } from "../controller/GetRoutingInfoMessages";
 import { SendDataRequest } from "../controller/SendDataMessages";
-import { Driver } from "../driver/Driver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { ValueMetadata } from "../values/Metadata";
 import {
@@ -28,9 +28,9 @@ import {
 	GenericDeviceClasses,
 	SpecificDeviceClass,
 } from "./DeviceClass";
-import { InterviewStage, NodeStatus } from "./INode";
+import { InterviewStage, NodeStatus } from "./Node";
 import { ZWaveNode, ZWaveNodeEvents } from "./Node";
-import { NodeUpdatePayload } from "./NodeInfo";
+import type { NodeUpdatePayload } from "./NodeInfo";
 import { RequestNodeInfoRequest } from "./RequestNodeInfoMessages";
 import { ValueDB, ValueID } from "./ValueDB";
 
@@ -118,11 +118,11 @@ describe("lib/node/Node", () => {
 				supported: CommandClasses[];
 				controlled: CommandClasses[];
 			}[] = [
-				{
-					supported: [CommandClasses["Anti-theft"]],
-					controlled: [CommandClasses.Basic],
-				},
-			];
+					{
+						supported: [CommandClasses["Anti-theft"]],
+						controlled: [CommandClasses.Basic],
+					},
+				];
 			for (const { supported, controlled } of tests) {
 				const node = makeNode(supported, controlled);
 
@@ -206,29 +206,29 @@ describe("lib/node/Node", () => {
 					isFrequentListening,
 					supportsWakeup,
 				} of [
-					// Test 1-3: not sleeping
-					{
-						isListening: true,
-						isFrequentListening: true,
-						supportsWakeup: false,
-					},
-					{
-						isListening: false,
-						isFrequentListening: true,
-						supportsWakeup: false,
-					},
-					{
-						isListening: true,
-						isFrequentListening: false,
-						supportsWakeup: false,
-					},
-					// Test 4: sleeping
-					{
-						isListening: false,
-						isFrequentListening: false,
-						supportsWakeup: true,
-					},
-				]) {
+						// Test 1-3: not sleeping
+						{
+							isListening: true,
+							isFrequentListening: true,
+							supportsWakeup: false,
+						},
+						{
+							isListening: false,
+							isFrequentListening: true,
+							supportsWakeup: false,
+						},
+						{
+							isListening: true,
+							isFrequentListening: false,
+							supportsWakeup: false,
+						},
+						// Test 4: sleeping
+						{
+							isListening: false,
+							isFrequentListening: false,
+							supportsWakeup: true,
+						},
+					]) {
 					Object.assign(expected, {
 						isListening,
 						isFrequentListening,

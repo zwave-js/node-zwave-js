@@ -8,7 +8,7 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { FunctionType } from "../message/Constants";
 import { BasicDeviceClasses, DeviceClass } from "../node/DeviceClass";
-import { InterviewStage, NodeStatus } from "../node/INode";
+import { InterviewStage, NodeStatus } from "../node/Node";
 import { ZWaveNode } from "../node/Node";
 import type { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";

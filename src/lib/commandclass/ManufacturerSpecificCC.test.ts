@@ -1,4 +1,4 @@
-import { Driver, ZWaveNode } from "../..";
+import { ZWaveNode } from "../../lib/node/Node";
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertCC } from "../../../test/util";
 import { loadManufacturers } from "../config/Manufacturers";

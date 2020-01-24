@@ -27,7 +27,6 @@ import type { CacheMetadata, CacheValue } from "../values/Cache";
 import type { ValueMetadata } from "../values/Metadata";
 import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, GenericDeviceClasses, SpecificDeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
-import { InterviewStage, IZWaveNode, NodeStatus } from "./INode";
 import type { NodeUpdatePayload } from "./NodeInfo";
 import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
 import { MetadataUpdatedArgs, ValueAddedArgs, ValueDB, ValueID, valueIdToString, ValueRemovedArgs, ValueUpdatedArgs } from "./ValueDB";
@@ -115,12 +114,43 @@ export interface ZWaveNode {
 	): this;
 }
 
+
+// prettier-ignore
+export enum InterviewStage {
+	None,					// [✓] Query process hasn't started for this node
+	ProtocolInfo,			// [✓] Retrieve protocol information
+	NodeInfo,				// [✓] Retrieve info about supported and controlled command classes
+	// SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
+
+	// ===== the stuff above should never change =====
+	RestartFromCache,		// This marks the beginning of re-interviews on application startup.
+	// 						   RestartFromCache and later stages will be serialized as "Complete" in the cache
+	// 						   [✓] Ping each device upon restarting with cached config
+	// ===== the stuff below changes frequently, so it has to be redone on every start =====
+	CommandClasses,			// [ ] Retrieve info about all command classes. This includes static information that is requested once
+	// 						       as well as dynamic information that is requested on every restart
+
+	// TODO: Heal network
+
+	OverwriteConfig,		// [ ] Load node configuration from a configuration file
+	Neighbors,				// [✓] Retrieve node neighbor list
+	Configuration,			// [ ] Retrieve configurable parameter information (only done on request)
+	Complete,				// [✓] Query process is completed for this node
+}
+
+export enum NodeStatus {
+	Unknown,
+	Asleep,
+	Awake,
+	Dead,
+}
+
 /**
  * A ZWaveNode represents a node in a Z-Wave network. It is also an instance
  * of its root endpoint (index 0)
  */
 @Mixin([EventEmitter])
-export class ZWaveNode extends Endpoint implements IZWaveNode {
+export class ZWaveNode extends Endpoint {
 	public constructor(
 		public readonly id: number,
 		driver: Driver,

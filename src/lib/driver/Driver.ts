@@ -32,9 +32,9 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";
-import { InterviewStage, IZWaveNode, NodeStatus } from "../node/INode";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
+import { InterviewStage, NodeStatus } from "../node/Node";
 import { DeepPartial, skipBytes } from "../util/misc";
 import { num2hex } from "../util/strings";
 import type { Duration } from "../values/Duration";
@@ -437,7 +437,7 @@ export class Driver extends EventEmitter {
 	}
 
 	/** Is called when a node wakes up */
-	private onNodeWakeUp(node: IZWaveNode): void {
+	private onNodeWakeUp(node: ZWaveNode): void {
 		log.controller.logNode(node.id, "The node is now awake.");
 
 		// Start the timeouts after which the node is assumed asleep

@@ -2,7 +2,7 @@ import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { NodeStatus } from "../node/INode";
+import { NodeStatus } from "../node/Node";
 import type { ZWaveNode } from "../node/Node";
 import { validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";

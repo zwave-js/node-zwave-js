@@ -5,7 +5,7 @@ import {
 	SpyTransport,
 } from "../../../test/SpyTransport";
 import { CommandClasses } from "../commandclass/CommandClasses";
-import { InterviewStage } from "../node/INode";
+import { InterviewStage } from "../node/Node";
 import { CONTROLLER_LABEL } from "./Controller";
 import log from "./index";
 import { restoreSilence } from "./shared";

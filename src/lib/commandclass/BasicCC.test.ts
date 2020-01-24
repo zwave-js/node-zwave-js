@@ -1,6 +1,5 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import type { Driver } from "../driver/Driver";
-import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { BasicCC, BasicCCGet, BasicCCReport, BasicCCSet, BasicCommand } from "./BasicCC";
 import { getCCValueMetadata } from "./CommandClass";
