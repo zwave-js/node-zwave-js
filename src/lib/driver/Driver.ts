@@ -544,6 +544,14 @@ export class Driver extends EventEmitter implements IDriver {
 			node.id,
 			"The node was removed from the network",
 		);
+		// Asynchronously remove the node from all possible associations, ignore potential errors
+		this.controller.removeNodeFromAllAssocations(node.id).catch(err => {
+			log.driver.print(
+				`Failed to remove node ${node.id} from all associations: ${err.message}`,
+				"error",
+			);
+		});
+
 		// If this was a failed node it could mean that all nodes are now ready
 		this.checkAllNodesReady();
 	}
