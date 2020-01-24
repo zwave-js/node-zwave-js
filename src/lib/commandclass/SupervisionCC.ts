@@ -1,21 +1,10 @@
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
-import { Maybe } from "../values/Primitive";
+import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	CCResponsePredicate,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	expectedCCResponse,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import { API, CCCommand, CCCommandOptions, CCResponsePredicate, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 // @noSetValueAPI - This CC has no values to set
@@ -110,15 +99,15 @@ type SupervisionCCReportOptions = CCCommandOptions & {
 	sessionId: number;
 } & (
 		| {
-				status: SupervisionStatus.Working;
-				duration: Duration;
-		  }
+			status: SupervisionStatus.Working;
+			duration: Duration;
+		}
 		| {
-				status:
-					| SupervisionStatus.NoSupport
-					| SupervisionStatus.Fail
-					| SupervisionStatus.Success;
-		  }
+			status:
+			| SupervisionStatus.NoSupport
+			| SupervisionStatus.Fail
+			| SupervisionStatus.Success;
+		}
 	);
 
 @CCCommand(SupervisionCommand.Report)
@@ -167,8 +156,8 @@ const testResponseForSupervisionCCGet: CCResponsePredicate = (
 		received.sessionId === sent.sessionId
 		? "final"
 		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
+			? "confirmation"
+			: "unexpected";
 };
 
 @CCCommand(SupervisionCommand.Get)
@@ -201,7 +190,7 @@ export class SupervisionCCGet extends SupervisionCC {
 		this.payload = Buffer.concat([
 			Buffer.from([
 				(this.requestStatusUpdates ? 0b10_000000 : 0) |
-					(this.sessionId & 0b111111),
+				(this.sessionId & 0b111111),
 				encapCC.length,
 			]),
 			encapCC,

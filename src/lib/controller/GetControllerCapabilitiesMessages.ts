@@ -1,17 +1,7 @@
-import { IDriver } from "../driver/IDriver";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
-import {
-	expectedResponse,
-	Message,
-	MessageDeserializationOptions,
-	messageTypes,
-	priority,
-} from "../message/Message";
-import { JSONObject } from "../util/misc";
+import type { IDriver } from "../driver/IDriver";
+import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import { expectedResponse, Message, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
+import type { JSONObject } from "../util/misc";
 
 enum ControllerCapabilityFlags {
 	Secondary = 1 << 0, // Controller is a secondary
@@ -24,7 +14,7 @@ enum ControllerCapabilityFlags {
 @messageTypes(MessageType.Request, FunctionType.GetControllerCapabilities)
 @expectedResponse(FunctionType.GetControllerCapabilities)
 @priority(MessagePriority.Controller)
-export class GetControllerCapabilitiesRequest extends Message {}
+export class GetControllerCapabilitiesRequest extends Message { }
 
 @messageTypes(MessageType.Response, FunctionType.GetControllerCapabilities)
 export class GetControllerCapabilitiesResponse extends Message {

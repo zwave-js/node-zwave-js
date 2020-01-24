@@ -1,19 +1,8 @@
-import { IDriver } from "../driver/IDriver";
-import { MessageOrCCLogEntry } from "../log/shared";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
-import {
-	expectedResponse,
-	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	messageTypes,
-	priority,
-} from "../message/Message";
-import { JSONObject } from "../util/misc";
+import type { IDriver } from "../driver/IDriver";
+import type { MessageOrCCLogEntry } from "../log/shared";
+import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import { expectedResponse, Message, MessageBaseOptions, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
+import type { JSONObject } from "../util/misc";
 import { NUM_NODEMASK_BYTES, parseNodeBitMask } from "./NodeBitMask";
 
 interface GetRoutingInfoRequestOptions extends MessageBaseOptions {

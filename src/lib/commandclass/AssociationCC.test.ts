@@ -1,14 +1,6 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
-import { IDriver } from "../driver/IDriver";
-import {
-	AssociationCCGet,
-	AssociationCCRemove,
-	AssociationCCReport,
-	AssociationCCSet,
-	AssociationCCSupportedGroupingsGet,
-	AssociationCCSupportedGroupingsReport,
-	AssociationCommand,
-} from "./AssociationCC";
+import type { IDriver } from "../driver/IDriver";
+import { AssociationCCGet, AssociationCCRemove, AssociationCCReport, AssociationCCSet, AssociationCCSupportedGroupingsGet, AssociationCCSupportedGroupingsReport, AssociationCommand } from "./AssociationCC";
 import { CommandClasses } from "./CommandClasses";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;

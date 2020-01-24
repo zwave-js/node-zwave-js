@@ -1,33 +1,16 @@
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { MessageOrCCLogEntry } from "../log/shared";
+import type { MessageOrCCLogEntry } from "../log/shared";
 import { MessagePriority } from "../message/Constants";
 import { GenericDeviceClasses } from "../node/DeviceClass";
-import {
-	NodeInformationFrame,
-	parseNodeInformationFrame,
-} from "../node/NodeInfo";
-import { ValueID } from "../node/ValueDB";
+import { NodeInformationFrame, parseNodeInformationFrame } from "../node/NodeInfo";
+import type { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	ccKeyValuePair,
-	ccValue,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	CommandClassOptions,
-	DynamicCCResponse,
-	expectedCCResponse,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import { API, CCCommand, CCCommandOptions, ccKeyValuePair, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, CommandClassOptions, DynamicCCResponse, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum MultiChannelCommand {
@@ -263,7 +246,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				let i = 1;
 				i <=
 				multiResponse.individualEndpointCount +
-					(multiResponse.aggregatedEndpointCount ?? 0);
+				(multiResponse.aggregatedEndpointCount ?? 0);
 				i++
 			) {
 				foundEndpoints.push(i);
@@ -417,7 +400,7 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 		capability.wasRemoved =
 			capability.isDynamic &&
 			capability.generic.key ===
-				GenericDeviceClasses["Non-Interoperable"] &&
+			GenericDeviceClasses["Non-Interoperable"] &&
 			capability.specific.key === 0x00;
 
 		this.capability = capability;
@@ -728,9 +711,9 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		const destination =
 			typeof this.destination === "number"
 				? // The destination is a single number
-				  this.destination & 0b0111_1111
+				this.destination & 0b0111_1111
 				: // The destination is a bit mask
-				  encodeBitMask(this.destination, 7)[0] | 0b1000_0000;
+				encodeBitMask(this.destination, 7)[0] | 0b1000_0000;
 		this.payload = Buffer.concat([
 			Buffer.from([this.endpointIndex & 0b0111_1111, destination]),
 			this.encapsulated.serializeForEncapsulation(),
@@ -745,7 +728,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 				typeof this.destination === "number"
 					? this.destination
 					: this.destination.join(", ")
-			}`,
+				}`,
 		};
 	}
 }

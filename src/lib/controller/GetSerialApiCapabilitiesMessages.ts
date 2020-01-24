@@ -1,17 +1,7 @@
-import { IDriver } from "../driver/IDriver";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
-import {
-	expectedResponse,
-	Message,
-	MessageDeserializationOptions,
-	messageTypes,
-	priority,
-} from "../message/Message";
-import { JSONObject } from "../util/misc";
+import type { IDriver } from "../driver/IDriver";
+import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import { expectedResponse, Message, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
+import type { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { parseBitMask } from "../values/Primitive";
 
@@ -21,7 +11,7 @@ const NUM_FUNCTION_BYTES = NUM_FUNCTIONS / 8;
 @messageTypes(MessageType.Request, FunctionType.GetSerialApiCapabilities)
 @expectedResponse(FunctionType.GetSerialApiCapabilities)
 @priority(MessagePriority.Controller)
-export class GetSerialApiCapabilitiesRequest extends Message {}
+export class GetSerialApiCapabilitiesRequest extends Message { }
 
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiCapabilities)
 export class GetSerialApiCapabilitiesResponse extends Message {

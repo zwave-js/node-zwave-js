@@ -1,28 +1,11 @@
-import { IDriver } from "../driver/IDriver";
-import { ValueID } from "../node/ValueDB";
+import type { IDriver } from "../driver/IDriver";
+import type { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { ValueMetadata } from "../values/Metadata";
-import { Maybe } from "../values/Primitive";
-import {
-	CCAPI,
-	SetValueImplementation,
-	SET_VALUE,
-	throwUnsupportedProperty,
-	throwWrongValueType,
-} from "./API";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	ccValue,
-	ccValueMetadata,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import type { Maybe } from "../values/Primitive";
+import { CCAPI, SetValueImplementation, SET_VALUE, throwUnsupportedProperty, throwWrongValueType } from "./API";
+import { API, CCCommand, CCCommandOptions, ccValue, ccValueMetadata, CommandClass, commandClass, CommandClassDeserializationOptions, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 // @noInterview This CC is write-only

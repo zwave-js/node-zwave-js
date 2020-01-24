@@ -1,25 +1,13 @@
 import { MAX_NODES } from "../controller/NodeBitMask";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { MessageOrCCLogEntry } from "../log/shared";
-import { ValueID } from "../node/ValueDB";
+import type { MessageOrCCLogEntry } from "../log/shared";
+import type { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
-import { Maybe } from "../values/Primitive";
+import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	ccValue,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	CommandClassOptions,
-	expectedCCResponse,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import { API, CCCommand, CCCommandOptions, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, CommandClassOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 /** Returns the ValueID used to store the maximum number of nodes of an association group */
@@ -229,7 +217,7 @@ export class AssociationCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-			} interview...`,
+				} interview...`,
 			direction: "none",
 		});
 
@@ -299,7 +287,7 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 					endpoint: this.endpointIndex,
 					message: `has a config file, assigning ourselves to the configured Lifeline group${
 						lifelineGroups.length > 1 ? "s" : ""
-					}: ${lifelineGroups.join(", ")}`,
+						}: ${lifelineGroups.join(", ")}`,
 					direction: "outbound",
 				});
 				for (const group of lifelineGroups) {
@@ -579,4 +567,4 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 
 @CCCommand(AssociationCommand.SupportedGroupingsGet)
 @expectedCCResponse(AssociationCCSupportedGroupingsReport)
-export class AssociationCCSupportedGroupingsGet extends AssociationCC {}
+export class AssociationCCSupportedGroupingsGet extends AssociationCC { }

@@ -1,49 +1,21 @@
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { Overwrite } from "alcalzone-shared/types";
+import type { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
-import { CCAPI } from "../commandclass/API";
+import type { CCAPI } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import { BasicCC, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
-import {
-	CentralSceneCCNotification,
-	CentralSceneKeys,
-	getSceneValueId,
-} from "../commandclass/CentralSceneCC";
-import {
-	CommandClass,
-	CommandClassInfo,
-	getCCValueMetadata,
-} from "../commandclass/CommandClass";
-import {
-	actuatorCCs,
-	CommandClasses,
-	getCCName,
-	sensorCCs,
-} from "../commandclass/CommandClasses";
+import { CentralSceneCCNotification, CentralSceneKeys, getSceneValueId } from "../commandclass/CentralSceneCC";
+import { CommandClass, CommandClassInfo, getCCValueMetadata } from "../commandclass/CommandClass";
+import { actuatorCCs, CommandClasses, getCCName, sensorCCs } from "../commandclass/CommandClasses";
 import { getEndpointCCsValueId } from "../commandclass/MultiChannelCC";
 import { NotificationCCReport } from "../commandclass/NotificationCC";
-import {
-	getDimmingDurationValueID,
-	getSceneIdValueID,
-	SceneActivationCCSet,
-} from "../commandclass/SceneActivationCC";
+import { getDimmingDurationValueID, getSceneIdValueID, SceneActivationCCSet } from "../commandclass/SceneActivationCC";
 import { WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
 import { DeviceConfig, lookupDevice } from "../config/Devices";
 import { lookupNotification } from "../config/Notifications";
-import {
-	ApplicationUpdateRequest,
-	ApplicationUpdateRequestNodeInfoReceived,
-	ApplicationUpdateRequestNodeInfoRequestFailed,
-} from "../controller/ApplicationUpdateRequest";
-import {
-	Baudrate,
-	GetNodeProtocolInfoRequest,
-	GetNodeProtocolInfoResponse,
-} from "../controller/GetNodeProtocolInfoMessages";
-import {
-	GetRoutingInfoRequest,
-	GetRoutingInfoResponse,
-} from "../controller/GetRoutingInfoMessages";
+import { ApplicationUpdateRequest, ApplicationUpdateRequestNodeInfoReceived, ApplicationUpdateRequestNodeInfoRequestFailed } from "../controller/ApplicationUpdateRequest";
+import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "../controller/GetNodeProtocolInfoMessages";
+import { GetRoutingInfoRequest, GetRoutingInfoResponse } from "../controller/GetRoutingInfoMessages";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
@@ -51,31 +23,14 @@ import { timespan } from "../util/date";
 import { topologicalSort } from "../util/graph";
 import { getEnumMemberName, JSONObject, Mixin } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
-import { CacheMetadata, CacheValue } from "../values/Cache";
-import { ValueMetadata } from "../values/Metadata";
-import {
-	BasicDeviceClasses,
-	DeviceClass,
-	GenericDeviceClass,
-	GenericDeviceClasses,
-	SpecificDeviceClass,
-} from "./DeviceClass";
+import type { CacheMetadata, CacheValue } from "../values/Cache";
+import type { ValueMetadata } from "../values/Metadata";
+import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, GenericDeviceClasses, SpecificDeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
 import { InterviewStage, IZWaveNode, NodeStatus } from "./INode";
-import { NodeUpdatePayload } from "./NodeInfo";
-import {
-	RequestNodeInfoRequest,
-	RequestNodeInfoResponse,
-} from "./RequestNodeInfoMessages";
-import {
-	MetadataUpdatedArgs,
-	ValueAddedArgs,
-	ValueDB,
-	ValueID,
-	valueIdToString,
-	ValueRemovedArgs,
-	ValueUpdatedArgs,
-} from "./ValueDB";
+import type { NodeUpdatePayload } from "./NodeInfo";
+import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
+import { MetadataUpdatedArgs, ValueAddedArgs, ValueDB, ValueID, valueIdToString, ValueRemovedArgs, ValueUpdatedArgs } from "./ValueDB";
 
 export interface TranslatedValueID extends ValueID {
 	commandClassName: string;
@@ -123,12 +78,12 @@ interface ZWaveNodeValueEventCallbacks {
 type ZWaveNodeEventCallbacks = Overwrite<
 	{
 		[K in
-			| "wake up"
-			| "sleep"
-			| "interview completed"
-			| "ready"
-			| "dead"
-			| "alive"]: (node: ZWaveNode) => void;
+		| "wake up"
+		| "sleep"
+		| "interview completed"
+		| "ready"
+		| "dead"
+		| "alive"]: (node: ZWaveNode) => void;
 	},
 	ZWaveNodeValueEventCallbacks
 >;
@@ -1218,9 +1173,9 @@ version:               ${this.version}`;
 	/** Stores information about a currently held down key */
 	private centralSceneKeyHeldDownContext:
 		| {
-				timeout: NodeJS.Timeout;
-				sceneNumber: number;
-		  }
+			timeout: NodeJS.Timeout;
+			sceneNumber: number;
+		}
 		| undefined;
 	private lastCentralSceneNotificationSequenceNumber: number | undefined;
 
@@ -1279,7 +1234,7 @@ version:               ${this.version}`;
 		if (
 			this.centralSceneKeyHeldDownContext &&
 			this.centralSceneKeyHeldDownContext.sceneNumber !==
-				command.sceneNumber
+			command.sceneNumber
 		) {
 			// The user pressed another button, force release
 			forceKeyUp();

@@ -1,12 +1,9 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { BasicCCSet } from "./BasicCC";
 import { CommandClass, getExpectedCCResponse } from "./CommandClass";
 import { isEncapsulatingCommandClass } from "./EncapsulatingCommandClass";
-import {
-	MultiChannelCC,
-	MultiChannelCCCommandEncapsulation,
-} from "./MultiChannelCC";
+import { MultiChannelCC, MultiChannelCCCommandEncapsulation } from "./MultiChannelCC";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 

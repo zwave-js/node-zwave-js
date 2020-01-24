@@ -1,7 +1,7 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { BasicCCSet } from "./BasicCC";
-import { CommandClass } from "./CommandClass";
+import type { CommandClass } from "./CommandClass";
 import { isMultiEncapsulatingCommandClass } from "./EncapsulatingCommandClass";
 import { MultiCommandCC } from "./MultiCommandCC";
 

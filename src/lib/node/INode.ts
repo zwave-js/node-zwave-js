@@ -1,8 +1,8 @@
 // This file is used to break some circular dependencies
 
-import { CommandClass, Constructable } from "../commandclass/CommandClass";
-import { CommandClasses } from "../commandclass/CommandClasses";
-import { Endpoint } from "./Endpoint";
+import type { CommandClass, Constructable } from "../commandclass/CommandClass";
+import type { CommandClasses } from "../commandclass/CommandClasses";
+import type { Endpoint } from "./Endpoint";
 
 // prettier-ignore
 export enum InterviewStage {

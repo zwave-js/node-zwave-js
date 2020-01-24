@@ -1,21 +1,7 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
-import { IDriver } from "../driver/IDriver";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
-import {
-	getDefaultPriority,
-	getDefaultPriorityStatic,
-	getExpectedResponse,
-	getExpectedResponseStatic,
-	getFunctionType,
-	getFunctionTypeStatic,
-	getMessageType,
-	getMessageTypeStatic,
-	Message,
-} from "../message/Message";
+import type { IDriver } from "../driver/IDriver";
+import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import { getDefaultPriority, getDefaultPriorityStatic, getExpectedResponse, getExpectedResponseStatic, getFunctionType, getFunctionTypeStatic, getMessageType, getMessageTypeStatic, Message } from "../message/Message";
 import { GetSUCNodeIdRequest } from "./GetSUCNodeIdMessages";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;

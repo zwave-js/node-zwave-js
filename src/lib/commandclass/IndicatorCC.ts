@@ -1,31 +1,14 @@
 import { lookupIndicator, lookupProperty } from "../config/Indicators";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, parseBitMask } from "../values/Primitive";
-import {
-	CCAPI,
-	SetValueImplementation,
-	SET_VALUE,
-	throwUnsupportedProperty,
-	throwWrongValueType,
-} from "./API";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	CommandClassOptions,
-	expectedCCResponse,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import { CCAPI, SetValueImplementation, SET_VALUE, throwUnsupportedProperty, throwWrongValueType } from "./API";
+import { API, CCCommand, CCCommandOptions, CommandClass, commandClass, CommandClassDeserializationOptions, CommandClassOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export function getSupportedIndicatorIDsValueID(
@@ -299,7 +282,7 @@ export class IndicatorCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-			} interview...`,
+				} interview...`,
 			direction: "none",
 		});
 
@@ -421,11 +404,11 @@ export interface IndicatorObject {
 
 type IndicatorCCSetOptions =
 	| {
-			value: number;
-	  }
+		value: number;
+	}
 	| {
-			values: IndicatorObject[];
-	  };
+		values: IndicatorObject[];
+	};
 
 @CCCommand(IndicatorCommand.Set)
 export class IndicatorCCSet extends IndicatorCC {
@@ -486,8 +469,8 @@ export class IndicatorCCSet extends IndicatorCC {
 							typeof o.value === "number"
 								? o.value
 								: o.value
-								? 0xff
-								: 0x00,
+									? 0xff
+									: 0x00,
 						] as const,
 				)
 				.reduce((acc, cur) => acc.concat(...cur), [] as number[]);

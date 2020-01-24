@@ -2,20 +2,15 @@
 
 import { entries } from "alcalzone-shared/objects";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { getNodeTag, MessageOrCCLogEntry } from "../log/shared";
 import { isNodeQuery } from "../node/INodeQuery";
-import { ZWaveNode } from "../node/Node";
-import { JSONObject } from "../util/misc";
+import type { ZWaveNode } from "../node/Node";
+import type { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
-import {
-	FunctionType,
-	MessageHeaders,
-	MessagePriority,
-	MessageType,
-} from "./Constants";
+import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "./Constants";
 
 type Constructable<T extends Message> = new (
 	driver: IDriver,
@@ -516,7 +511,7 @@ export function expectedResponse(
 				messageClass.name,
 				"expected response",
 				`Predicate${
-					predicate.name.length > 0 ? " " + predicate.name : ""
+				predicate.name.length > 0 ? " " + predicate.name : ""
 				}`,
 			);
 		}
@@ -571,9 +566,9 @@ export function getExpectedResponseStatic<T extends Constructable<Message>>(
 		| FunctionType
 		| ResponsePredicate
 		| undefined = Reflect.getMetadata(
-		METADATA_expectedResponse,
-		classConstructor,
-	);
+			METADATA_expectedResponse,
+			classConstructor,
+		);
 	if (typeof ret === "number") {
 		log.reflection.lookup(
 			classConstructor.name,

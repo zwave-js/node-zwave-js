@@ -1,18 +1,9 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { loadMetersInternal } from "../config/Meters";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveNode } from "../node/Node";
 import { CommandClasses } from "./CommandClasses";
-import {
-	MeterCC,
-	MeterCCGet,
-	MeterCCReport,
-	MeterCCReset,
-	MeterCCSupportedGet,
-	MeterCCSupportedReport,
-	MeterCommand,
-	RateType,
-} from "./MeterCC";
+import { MeterCC, MeterCCGet, MeterCCReport, MeterCCReset, MeterCCSupportedGet, MeterCCSupportedReport, MeterCommand, RateType } from "./MeterCC";
 
 function buildCCBuffer(nodeId: number, payload: Buffer): Buffer {
 	return Buffer.concat([

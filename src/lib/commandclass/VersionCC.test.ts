@@ -1,18 +1,12 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertCC } from "../../../test/util";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
-import { Driver } from "../driver/Driver";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveNode } from "../node/Node";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
-import {
-	VersionCC,
-	VersionCCCapabilitiesGet,
-	VersionCCCommandClassGet,
-	VersionCCGet,
-	VersionCCZWaveSoftwareGet,
-} from "./VersionCC";
+import { VersionCC, VersionCCCapabilitiesGet, VersionCCCommandClassGet, VersionCCGet, VersionCCZWaveSoftwareGet } from "./VersionCC";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 

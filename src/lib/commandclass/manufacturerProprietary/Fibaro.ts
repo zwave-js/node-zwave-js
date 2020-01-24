@@ -1,6 +1,6 @@
 import { ZWaveError, ZWaveErrorCodes } from "../../error/ZWaveError";
 import { validatePayload } from "../../util/misc";
-import { ProprietaryCommand } from "../ManufacturerProprietaryCC";
+import type { ProprietaryCommand } from "../ManufacturerProprietaryCC";
 
 export class FibaroCC implements ProprietaryCommand {
 	public constructor(dataOrOptions?: Buffer | {}) {
@@ -60,11 +60,11 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 
 export type FibaroVenetianBlindCCSetOptions =
 	| {
-			position: number;
-	  }
+		position: number;
+	}
 	| {
-			tilt: number;
-	  };
+		tilt: number;
+	};
 
 export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 	public constructor(

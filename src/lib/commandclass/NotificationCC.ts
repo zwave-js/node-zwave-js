@@ -1,25 +1,14 @@
 import { lookupNotification } from "../config/Notifications";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { JSONObject, validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { ValueMetadata, ValueMetadataNumeric } from "../values/Metadata";
 import { Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	ccValue,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	expectedCCResponse,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import { API, CCCommand, CCCommandOptions, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum NotificationCommand {
@@ -227,7 +216,7 @@ export class NotificationCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-			} interview...`,
+				} interview...`,
 			direction: "none",
 		});
 
@@ -472,12 +461,12 @@ export class NotificationCCReport extends NotificationCC {
 
 type NotificationCCGetSpecificOptions =
 	| {
-			alarmType: number;
-	  }
+		alarmType: number;
+	}
 	| {
-			notificationType: NotificationType;
-			notificationEvent?: number;
-	  };
+		notificationType: NotificationType;
+		notificationEvent?: number;
+	};
 type NotificationCCGetOptions = CCCommandOptions &
 	NotificationCCGetSpecificOptions;
 

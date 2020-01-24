@@ -1,17 +1,9 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { loadIndicatorsInternal } from "../config/Indicators";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveNode } from "../node/Node";
 import { CommandClasses } from "./CommandClasses";
-import {
-	getIndicatorValueValueID,
-	getSupportedIndicatorIDsValueID,
-	IndicatorCC,
-	IndicatorCCGet,
-	IndicatorCCReport,
-	IndicatorCCSet,
-	IndicatorCommand,
-} from "./IndicatorCC";
+import { getIndicatorValueValueID, getSupportedIndicatorIDsValueID, IndicatorCC, IndicatorCCGet, IndicatorCCReport, IndicatorCCSet, IndicatorCommand } from "./IndicatorCC";
 
 function buildCCBuffer(nodeId: number, payload: Buffer): Buffer {
 	return Buffer.concat([

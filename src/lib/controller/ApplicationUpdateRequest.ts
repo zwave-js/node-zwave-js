@@ -1,12 +1,8 @@
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { FunctionType, MessageType } from "../message/Constants";
-import {
-	Message,
-	MessageDeserializationOptions,
-	messageTypes,
-} from "../message/Message";
+import { Message, MessageDeserializationOptions, messageTypes } from "../message/Message";
 import { NodeUpdatePayload, parseNodeUpdatePayload } from "../node/NodeInfo";
-import { JSONObject } from "../util/misc";
+import type { JSONObject } from "../util/misc";
 
 /* eslint-disable @typescript-eslint/camelcase */
 export enum ApplicationUpdateTypes {
@@ -40,7 +36,7 @@ export class ApplicationUpdateRequest extends Message {
 			);
 		} else if (
 			this._updateType ===
-				ApplicationUpdateTypes.NodeInfo_RequestFailed &&
+			ApplicationUpdateTypes.NodeInfo_RequestFailed &&
 			new.target !== ApplicationUpdateRequestNodeInfoRequestFailed
 		) {
 			return new ApplicationUpdateRequestNodeInfoRequestFailed(
@@ -85,4 +81,4 @@ export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateR
 	}
 }
 
-export class ApplicationUpdateRequestNodeInfoRequestFailed extends ApplicationUpdateRequest {}
+export class ApplicationUpdateRequestNodeInfoRequestFailed extends ApplicationUpdateRequest { }

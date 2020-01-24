@@ -1,10 +1,10 @@
 import { isArray } from "alcalzone-shared/typeguards";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { CommandClass, CommandClassOptions } from "./CommandClass";
 
 /** Defines the static side of an encapsulating command class */
 export interface EncapsulatingCommandClassStatic {
-	new (
+	new(
 		driver: IDriver,
 		options: CommandClassOptions,
 	): EncapsulatingCommandClass;
@@ -48,7 +48,7 @@ export function isEncapsulatingCommandClass(
 
 /** Defines the static side of an encapsulating command class */
 export interface MultiEncapsulatingCommandClassStatic {
-	new (
+	new(
 		driver: IDriver,
 		options: CommandClassOptions,
 	): MultiEncapsulatingCommandClass;

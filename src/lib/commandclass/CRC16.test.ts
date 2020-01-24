@@ -1,6 +1,6 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { BasicCCGet, BasicCCSet } from "./BasicCC";
 import { CommandClass } from "./CommandClass";

@@ -1,22 +1,12 @@
-import { IDriver } from "../driver/IDriver";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
-import {
-	expectedResponse,
-	Message,
-	MessageDeserializationOptions,
-	messageTypes,
-	priority,
-} from "../message/Message";
-import { JSONObject } from "../util/misc";
+import type { IDriver } from "../driver/IDriver";
+import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import { expectedResponse, Message, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
+import type { JSONObject } from "../util/misc";
 
 @messageTypes(MessageType.Request, FunctionType.GetSUCNodeId)
 @expectedResponse(FunctionType.GetSUCNodeId)
 @priority(MessagePriority.Controller)
-export class GetSUCNodeIdRequest extends Message {}
+export class GetSUCNodeIdRequest extends Message { }
 
 @messageTypes(MessageType.Response, FunctionType.GetSUCNodeId)
 export class GetSUCNodeIdResponse extends Message {

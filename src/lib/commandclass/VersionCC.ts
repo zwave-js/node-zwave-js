@@ -1,5 +1,5 @@
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { validatePayload } from "../util/misc";
@@ -7,21 +7,7 @@ import { num2hex } from "../util/strings";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, unknownBoolean } from "../values/Primitive";
 import { CCAPI } from "./API";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	ccValue,
-	ccValueMetadata,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	expectedCCResponse,
-	getCommandClass,
-	getImplementedVersion,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import { API, CCCommand, CCCommandOptions, ccValue, ccValueMetadata, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, getCommandClass, getImplementedVersion, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum VersionCommand {
@@ -175,7 +161,7 @@ export class VersionCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-			} interview...`,
+				} interview...`,
 			direction: "none",
 		});
 
@@ -225,7 +211,7 @@ export class VersionCC extends CommandClass {
 					endpoint: this.endpointIndex,
 					message: `  querying the CC version for ${
 						CommandClasses[cc]
-					} (${num2hex(cc)})...`,
+						} (${num2hex(cc)})...`,
 					direction: "outbound",
 				});
 				// query the CC version
@@ -236,13 +222,13 @@ export class VersionCC extends CommandClass {
 					endpoint.addCC(cc, { version: supportedVersion });
 					logMessage = `  supports CC ${
 						CommandClasses[cc]
-					} (${num2hex(cc)}) in version ${supportedVersion}`;
+						} (${num2hex(cc)}) in version ${supportedVersion}`;
 				} else {
 					// We were lied to - the NIF said this CC is supported, now the node claims it isn't
 					endpoint.removeCC(cc);
 					logMessage = `  does NOT support CC ${
 						CommandClasses[cc]
-					} (${num2hex(cc)})`;
+						} (${num2hex(cc)})`;
 				}
 				log.controller.logNode(node.id, logMessage);
 			}
@@ -269,7 +255,7 @@ export class VersionCC extends CommandClass {
 					endpoint: this.endpointIndex,
 					message: `Z-Wave Software Get is${
 						supportsZWaveSoftwareGet ? "" : " not"
-					} supported`,
+						} supported`,
 					direction: "inbound",
 				});
 

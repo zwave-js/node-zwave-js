@@ -1,17 +1,7 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveNode } from "../node/Node";
-import {
-	AssociationGroupInfoCC,
-	AssociationGroupInfoCCCommandListGet,
-	AssociationGroupInfoCCCommandListReport,
-	AssociationGroupInfoCCInfoGet,
-	AssociationGroupInfoCCInfoReport,
-	AssociationGroupInfoCCNameGet,
-	AssociationGroupInfoCCNameReport,
-	AssociationGroupInfoCommand,
-	AssociationGroupInfoProfile,
-} from "./AssociationGroupInfoCC";
+import { AssociationGroupInfoCC, AssociationGroupInfoCCCommandListGet, AssociationGroupInfoCCCommandListReport, AssociationGroupInfoCCInfoGet, AssociationGroupInfoCCInfoReport, AssociationGroupInfoCCNameGet, AssociationGroupInfoCCNameReport, AssociationGroupInfoCommand, AssociationGroupInfoProfile } from "./AssociationGroupInfoCC";
 import { BasicCommand } from "./BasicCC";
 import { CommandClasses } from "./CommandClasses";
 

@@ -1,5 +1,5 @@
 import { createEmptyMockDriver } from "../../../../test/mocks";
-import { IDriver } from "../../driver/IDriver";
+import type { IDriver } from "../../driver/IDriver";
 import { CommandClasses } from "../CommandClasses";
 import { ManufacturerProprietaryCC } from "../ManufacturerProprietaryCC";
 import { FibaroVenetianBlindCCSet } from "./Fibaro";

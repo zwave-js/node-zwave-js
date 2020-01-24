@@ -1,5 +1,5 @@
 import { CommandClasses } from "../commandclass/CommandClasses";
-import { JSONObject } from "../util/misc";
+import type { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
 
 export enum BasicDeviceClasses {
@@ -82,7 +82,7 @@ export class SpecificDeviceClass {
 		public readonly mandatorySupportedCCs: CommandClasses[] = [],
 		public readonly mandatoryControlCCs: CommandClasses[] = [],
 		public readonly basicCCForbidden: boolean = false,
-	) {}
+	) { }
 
 	public static readonly NOT_USED = Object.freeze(
 		new SpecificDeviceClass("not used", 0x00),

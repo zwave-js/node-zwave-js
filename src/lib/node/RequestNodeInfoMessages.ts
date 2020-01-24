@@ -1,24 +1,9 @@
-import {
-	ApplicationUpdateRequestNodeInfoReceived,
-	ApplicationUpdateRequestNodeInfoRequestFailed,
-} from "../controller/ApplicationUpdateRequest";
-import { IDriver } from "../driver/IDriver";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
-import {
-	expectedResponse,
-	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	messageTypes,
-	priority,
-	ResponseRole,
-} from "../message/Message";
-import { JSONObject } from "../util/misc";
-import { INodeQuery } from "./INodeQuery";
+import { ApplicationUpdateRequestNodeInfoReceived, ApplicationUpdateRequestNodeInfoRequestFailed } from "../controller/ApplicationUpdateRequest";
+import type { IDriver } from "../driver/IDriver";
+import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import { expectedResponse, Message, MessageBaseOptions, MessageDeserializationOptions, messageTypes, priority, ResponseRole } from "../message/Message";
+import type { JSONObject } from "../util/misc";
+import type { INodeQuery } from "./INodeQuery";
 
 interface RequestNodeInfoRequestOptions extends MessageBaseOptions {
 	nodeId: number;

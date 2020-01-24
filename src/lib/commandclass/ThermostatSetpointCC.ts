@@ -1,35 +1,13 @@
 import { lookupNamedScale, Scale } from "../config/Scales";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { getNumericEnumValues, ValueMetadata } from "../values/Metadata";
-import {
-	encodeFloatWithScale,
-	Maybe,
-	parseBitMask,
-	parseFloatWithScale,
-} from "../values/Primitive";
-import {
-	CCAPI,
-	SetValueImplementation,
-	SET_VALUE,
-	throwUnsupportedProperty,
-	throwWrongValueType,
-} from "./API";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	ccValue,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	expectedCCResponse,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import { encodeFloatWithScale, Maybe, parseBitMask, parseFloatWithScale } from "../values/Primitive";
+import { CCAPI, SetValueImplementation, SET_VALUE, throwUnsupportedProperty, throwWrongValueType } from "./API";
+import { API, CCCommand, CCCommandOptions, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum ThermostatSetpointCommand {
@@ -106,7 +84,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		if (typeof propertyKey !== "number") {
 			throw new ZWaveError(
 				`${
-					CommandClasses[this.ccId]
+				CommandClasses[this.ccId]
 				}: "${property}" must be further specified by a numeric property key`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
@@ -139,12 +117,12 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		>(cc))!;
 		return response.type === 0
 			? // not supported
-			  undefined
+			undefined
 			: // supported
-			  {
-					value: response.value,
-					scale: response.scale,
-			  };
+			{
+				value: response.value,
+				scale: response.scale,
+			};
 	}
 
 	public async set(
@@ -242,7 +220,7 @@ export class ThermostatSetpointCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-			} interview...`,
+				} interview...`,
 			direction: "none",
 		});
 
@@ -282,7 +260,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					supportedSetpointTypes.push(type);
 					logMessage = `received current value of setpoint ${setpointName}: ${
 						setpoint.value
-					} ${setpoint.scale.unit ?? ""}`;
+						} ${setpoint.scale.unit ?? ""}`;
 				} else {
 					logMessage = `Setpoint ${setpointName} is not supported`;
 				}
@@ -373,7 +351,7 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 				if (setpoint) {
 					logMessage = `received current value of setpoint ${setpointName}: ${
 						setpoint.value
-					} ${setpoint.scale.unit ?? ""}`;
+						} ${setpoint.scale.unit ?? ""}`;
 				} else {
 					// This shouldn't happen since we used getSupported
 					// But better be sure we don't crash

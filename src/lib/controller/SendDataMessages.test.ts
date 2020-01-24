@@ -3,29 +3,12 @@ import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { MultiCommandCC } from "../commandclass/MultiCommandCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
-import {
-	SupervisionCC,
-	SupervisionCCReport,
-	SupervisionStatus,
-} from "../commandclass/SupervisionCC";
-import { IDriver } from "../driver/IDriver";
+import { SupervisionCC, SupervisionCCReport, SupervisionStatus } from "../commandclass/SupervisionCC";
+import type { IDriver } from "../driver/IDriver";
 import { FunctionType, MessageType } from "../message/Constants";
-import {
-	getExpectedResponse,
-	getFunctionType,
-	getMessageType,
-	Message,
-	ResponsePredicate,
-} from "../message/Message";
+import { getExpectedResponse, getFunctionType, getMessageType, Message, ResponsePredicate } from "../message/Message";
 import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
-import {
-	SendDataRequest,
-	SendDataRequestBase,
-	SendDataRequestTransmitReport,
-	SendDataResponse,
-	TransmitOptions,
-	TransmitStatus,
-} from "./SendDataMessages";
+import { SendDataRequest, SendDataRequestBase, SendDataRequestTransmitReport, SendDataResponse, TransmitOptions, TransmitStatus } from "./SendDataMessages";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
@@ -156,7 +139,7 @@ describe("lib/controller/SendDataRequest => ", () => {
 	// 	expect(srq.command).toBeInstanceOf(NoOperationCC);
 	// });
 
-	const createRequest = (function*() {
+	const createRequest = (function* () {
 		const noOp = new NoOperationCC(fakeDriver, { nodeId: 2 });
 		while (true) yield new SendDataRequest(fakeDriver, { command: noOp });
 	})();

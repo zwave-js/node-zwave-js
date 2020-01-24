@@ -1,30 +1,14 @@
-import { Scale } from "../config/Scales";
-import {
-	getSensorTypeName,
-	lookupSensorScale,
-	lookupSensorType,
-} from "../config/SensorTypes";
-import { IDriver } from "../driver/IDriver";
+import type { Scale } from "../config/Scales";
+import { getSensorTypeName, lookupSensorScale, lookupSensorType } from "../config/SensorTypes";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, parseBitMask, parseFloatWithScale } from "../values/Primitive";
 import { CCAPI } from "./API";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	ccKeyValuePair,
-	ccValue,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	expectedCCResponse,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import { API, CCCommand, CCCommandOptions, ccKeyValuePair, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum MultilevelSensorCommand {
@@ -138,7 +122,7 @@ export class MultilevelSensorCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-			} interview...`,
+				} interview...`,
 			direction: "none",
 		});
 

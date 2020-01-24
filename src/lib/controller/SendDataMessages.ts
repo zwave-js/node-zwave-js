@@ -1,35 +1,10 @@
-import {
-	CCResponseRole,
-	CommandClass,
-	getExpectedCCResponse,
-	isDynamicCCResponse,
-} from "../commandclass/CommandClass";
-import {
-	EncapsulatingCommandClass,
-	isEncapsulatingCommandClass,
-} from "../commandclass/EncapsulatingCommandClass";
-import {
-	ICommandClassContainer,
-	isCommandClassContainer,
-} from "../commandclass/ICommandClassContainer";
-import { IDriver } from "../driver/IDriver";
-import { MessageOrCCLogEntry } from "../log/shared";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
-import {
-	expectedResponse,
-	gotDeserializationOptions,
-	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	MessageOptions,
-	messageTypes,
-	priority,
-	ResponseRole,
-} from "../message/Message";
+import { CCResponseRole, CommandClass, getExpectedCCResponse, isDynamicCCResponse } from "../commandclass/CommandClass";
+import { EncapsulatingCommandClass, isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
+import { ICommandClassContainer, isCommandClassContainer } from "../commandclass/ICommandClassContainer";
+import type { IDriver } from "../driver/IDriver";
+import type { MessageOrCCLogEntry } from "../log/shared";
+import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import { expectedResponse, gotDeserializationOptions, Message, MessageBaseOptions, MessageDeserializationOptions, MessageOptions, messageTypes, priority, ResponseRole } from "../message/Message";
 import { getEnumMemberName, JSONObject, staticExtends } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
@@ -200,8 +175,8 @@ function testResponseForCC(
 			ret = received.expectMoreMessages()
 				? "partial"
 				: isEncapCC
-				? "checkEncapsulated"
-				: "final";
+					? "checkEncapsulated"
+					: "final";
 		} else if (isTransmitReport) {
 			ret = isEncapCC ? "checkEncapsulated" : "confirmation";
 		} else {

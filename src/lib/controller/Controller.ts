@@ -1,76 +1,31 @@
-import {
-	createDeferredPromise,
-	DeferredPromise,
-} from "alcalzone-shared/deferred-promise";
+import { createDeferredPromise, DeferredPromise } from "alcalzone-shared/deferred-promise";
 import { composeObject } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
 import { CommandClasses } from "../commandclass/CommandClasses";
-import { Driver, RequestHandler } from "../driver/Driver";
+import type { Driver, RequestHandler } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { FunctionType } from "../message/Constants";
 import { BasicDeviceClasses, DeviceClass } from "../node/DeviceClass";
 import { InterviewStage, NodeStatus } from "../node/INode";
 import { ZWaveNode } from "../node/Node";
-import { JSONObject } from "../util/misc";
+import type { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
-import {
-	AddNodeStatus,
-	AddNodeToNetworkRequest,
-	AddNodeType,
-} from "./AddNodeToNetworkRequest";
-import {
-	GetControllerCapabilitiesRequest,
-	GetControllerCapabilitiesResponse,
-} from "./GetControllerCapabilitiesMessages";
-import {
-	GetControllerIdRequest,
-	GetControllerIdResponse,
-} from "./GetControllerIdMessages";
-import {
-	GetControllerVersionRequest,
-	GetControllerVersionResponse,
-} from "./GetControllerVersionMessages";
+import { AddNodeStatus, AddNodeToNetworkRequest, AddNodeType } from "./AddNodeToNetworkRequest";
+import { GetControllerCapabilitiesRequest, GetControllerCapabilitiesResponse } from "./GetControllerCapabilitiesMessages";
+import { GetControllerIdRequest, GetControllerIdResponse } from "./GetControllerIdMessages";
+import { GetControllerVersionRequest, GetControllerVersionResponse } from "./GetControllerVersionMessages";
 import { GetRoutingInfoRequest } from "./GetRoutingInfoMessages";
-import {
-	GetSerialApiCapabilitiesRequest,
-	GetSerialApiCapabilitiesResponse,
-} from "./GetSerialApiCapabilitiesMessages";
-import {
-	GetSerialApiInitDataRequest,
-	GetSerialApiInitDataResponse,
-} from "./GetSerialApiInitDataMessages";
-import {
-	GetSUCNodeIdRequest,
-	GetSUCNodeIdResponse,
-} from "./GetSUCNodeIdMessages";
+import { GetSerialApiCapabilitiesRequest, GetSerialApiCapabilitiesResponse } from "./GetSerialApiCapabilitiesMessages";
+import { GetSerialApiInitDataRequest, GetSerialApiInitDataResponse } from "./GetSerialApiInitDataMessages";
+import { GetSUCNodeIdRequest, GetSUCNodeIdResponse } from "./GetSUCNodeIdMessages";
 import { HardResetRequest } from "./HardResetRequest";
-import {
-	IsFailedNodeRequest,
-	IsFailedNodeResponse,
-} from "./IsFailedNodeMessages";
-import {
-	RemoveFailedNodeRequest,
-	RemoveFailedNodeRequestStatusReport,
-	RemoveFailedNodeResponse,
-	RemoveFailedNodeStartFlags,
-	RemoveFailedNodeStatus,
-} from "./RemoveFailedNodeMessages";
-import {
-	RemoveNodeFromNetworkRequest,
-	RemoveNodeStatus,
-	RemoveNodeType,
-} from "./RemoveNodeFromNetworkRequest";
-import {
-	NodeNeighborUpdateStatus,
-	RequestNodeNeighborUpdateReport,
-	RequestNodeNeighborUpdateRequest,
-} from "./RequestNodeNeighborUpdateMessages";
-import {
-	SetSerialApiTimeoutsRequest,
-	SetSerialApiTimeoutsResponse,
-} from "./SetSerialApiTimeoutsMessages";
+import { IsFailedNodeRequest, IsFailedNodeResponse } from "./IsFailedNodeMessages";
+import { RemoveFailedNodeRequest, RemoveFailedNodeRequestStatusReport, RemoveFailedNodeResponse, RemoveFailedNodeStartFlags, RemoveFailedNodeStatus } from "./RemoveFailedNodeMessages";
+import { RemoveNodeFromNetworkRequest, RemoveNodeStatus, RemoveNodeType } from "./RemoveNodeFromNetworkRequest";
+import { NodeNeighborUpdateStatus, RequestNodeNeighborUpdateReport, RequestNodeNeighborUpdateRequest } from "./RequestNodeNeighborUpdateMessages";
+import { SetSerialApiTimeoutsRequest, SetSerialApiTimeoutsResponse } from "./SetSerialApiTimeoutsMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
 type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
@@ -310,8 +265,8 @@ export class ZWaveController extends EventEmitter {
   product type:        ${num2hex(this._productType)}
   product ID:          ${num2hex(this._productId)}
   supported functions: ${this._supportedFunctionTypes
-		.map(fn => `\n  · ${FunctionType[fn]} (${num2hex(fn)})`)
-		.join("")}`,
+				.map(fn => `\n  · ${FunctionType[fn]} (${num2hex(fn)})`)
+				.join("")}`,
 		);
 
 		// now we can check if a function is supported
@@ -778,7 +733,7 @@ export class ZWaveController extends EventEmitter {
 	): Promise<boolean> {
 		log.controller.print(
 			`handling add node request (status = ${
-				AddNodeStatus[msg.status!]
+			AddNodeStatus[msg.status!]
 			})`,
 		);
 		if (!this._inclusionActive && msg.status !== AddNodeStatus.Done) {
@@ -871,8 +826,8 @@ export class ZWaveController extends EventEmitter {
 					log.controller.print(
 						`finished adding node ${newNode.id}:
   basic device class:    ${
-		BasicDeviceClasses[newNode.deviceClass!.basic]
-  } (${num2hex(newNode.deviceClass!.basic)})
+						BasicDeviceClasses[newNode.deviceClass!.basic]
+						} (${num2hex(newNode.deviceClass!.basic)})
   generic device class:  ${newNode.deviceClass!.generic.name} (${num2hex(
 							newNode.deviceClass!.generic.key,
 						)})
@@ -880,11 +835,11 @@ export class ZWaveController extends EventEmitter {
 							newNode.deviceClass!.specific.key,
 						)})
   supported CCs: ${supportedCommandClasses
-		.map(cc => `\n    ${CommandClasses[cc]} (${num2hex(cc)})`)
-		.join("")}
+							.map(cc => `\n    ${CommandClasses[cc]} (${num2hex(cc)})`)
+							.join("")}
   controlled CCs: ${controlledCommandClasses
-		.map(cc => `\n    ${CommandClasses[cc]} (${num2hex(cc)})`)
-		.join("")}`,
+							.map(cc => `\n    ${CommandClasses[cc]} (${num2hex(cc)})`)
+							.join("")}`,
 					);
 					// remember the node
 					this._nodes.set(newNode.id, newNode);
@@ -910,7 +865,7 @@ export class ZWaveController extends EventEmitter {
 	): Promise<boolean> {
 		log.controller.print(
 			`handling remove node request (status = ${
-				RemoveNodeStatus[msg.status!]
+			RemoveNodeStatus[msg.status!]
 			})`,
 		);
 		if (!this._exclusionActive && msg.status !== RemoveNodeStatus.Done) {

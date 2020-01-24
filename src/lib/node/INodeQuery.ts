@@ -1,4 +1,4 @@
-import { Message } from "../message/Message";
+import type { Message } from "../message/Message";
 
 export interface INodeQuery {
 	nodeId: number;

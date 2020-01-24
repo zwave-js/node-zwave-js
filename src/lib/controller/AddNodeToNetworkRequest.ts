@@ -1,23 +1,8 @@
-import { CommandClasses } from "../commandclass/CommandClasses";
-import { IDriver } from "../driver/IDriver";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
-import {
-	gotDeserializationOptions,
-	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	messageTypes,
-	priority,
-} from "../message/Message";
-import {
-	BasicDeviceClasses,
-	GenericDeviceClass,
-	SpecificDeviceClass,
-} from "../node/DeviceClass";
+import type { CommandClasses } from "../commandclass/CommandClasses";
+import type { IDriver } from "../driver/IDriver";
+import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import { gotDeserializationOptions, Message, MessageBaseOptions, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
+import type { BasicDeviceClasses, GenericDeviceClass, SpecificDeviceClass } from "../node/DeviceClass";
 import { parseNodeUpdatePayload } from "../node/NodeInfo";
 
 export enum AddNodeType {

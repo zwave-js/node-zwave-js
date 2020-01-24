@@ -1,21 +1,8 @@
 import winston from "winston";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { InterviewStage, IZWaveNode } from "../node/INode";
-import {
-	ValueAddedArgs,
-	ValueID,
-	ValueRemovedArgs,
-	ValueUpdatedArgs,
-} from "../node/ValueDB";
-import {
-	createLogTransports,
-	DataDirection,
-	getDirectionPrefix,
-	getNodeTag,
-	isLoglevelVisible,
-	tagify,
-	ZWaveLogger,
-} from "./shared";
+import type { ValueAddedArgs, ValueID, ValueRemovedArgs, ValueUpdatedArgs } from "../node/ValueDB";
+import { createLogTransports, DataDirection, getDirectionPrefix, getNodeTag, isLoglevelVisible, tagify, ZWaveLogger } from "./shared";
 
 export const CONTROLLER_LABEL = "CNTRLR";
 const CONTROLLER_LOGLEVEL = "info";
@@ -206,8 +193,8 @@ export function interviewStage(node: IZWaveNode): void {
 			node.interviewStage === InterviewStage.Complete
 				? "Interview completed"
 				: `Interview stage completed: ${
-						InterviewStage[node.interviewStage]
-				  }`,
+				InterviewStage[node.interviewStage]
+				}`,
 		direction: getDirectionPrefix("none"),
 	});
 }
@@ -218,7 +205,7 @@ export function interviewStart(node: IZWaveNode): void {
 
 	const message = `Beginning interview - last completed stage: ${
 		InterviewStage[node.interviewStage]
-	}`;
+		}`;
 	logger.log({
 		level: CONTROLLER_LOGLEVEL,
 		primaryTags: tagify([getNodeTag(node.id)]),

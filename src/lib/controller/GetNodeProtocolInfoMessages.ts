@@ -1,25 +1,9 @@
-import { IDriver } from "../driver/IDriver";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
-import {
-	expectedResponse,
-	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	messageTypes,
-	priority,
-} from "../message/Message";
-import {
-	BasicDeviceClasses,
-	DeviceClass,
-	GenericDeviceClass,
-	SpecificDeviceClass,
-} from "../node/DeviceClass";
-import { INodeQuery } from "../node/INodeQuery";
-import { JSONObject } from "../util/misc";
+import type { IDriver } from "../driver/IDriver";
+import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import { expectedResponse, Message, MessageBaseOptions, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
+import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "../node/DeviceClass";
+import type { INodeQuery } from "../node/INodeQuery";
+import type { JSONObject } from "../util/misc";
 
 /* eslint-disable @typescript-eslint/camelcase */
 enum NodeCapabilityFlags {

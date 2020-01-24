@@ -1,26 +1,12 @@
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
-import { Maybe } from "../values/Primitive";
+import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import { AssociationCC } from "./AssociationCC";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	ccKeyValuePair,
-	ccValue,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	CommandClassOptions,
-	expectedCCResponse,
-	gotDeserializationOptions,
-	implementedVersion,
-	parseCCId,
-} from "./CommandClass";
+import { API, CCCommand, CCCommandOptions, ccKeyValuePair, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, CommandClassOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion, parseCCId } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { MultiChannelAssociationCC } from "./MultiChannelAssociationCC";
 
@@ -402,7 +388,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-			} interview...`,
+				} interview...`,
 			direction: "none",
 		});
 
@@ -581,11 +567,11 @@ type AssociationGroupInfoCCInfoGetOptions = CCCommandOptions & {
 	refreshCache: boolean;
 } & (
 		| {
-				listMode: boolean;
-		  }
+			listMode: boolean;
+		}
 		| {
-				groupId: number;
-		  }
+			groupId: number;
+		}
 	);
 
 @CCCommand(AssociationGroupInfoCommand.InfoGet)

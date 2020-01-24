@@ -1,13 +1,9 @@
-import { CommandClass } from "../commandclass/CommandClass";
-import { CommandClasses } from "../commandclass/CommandClasses";
-import { SupervisionResult } from "../commandclass/SupervisionCC";
-import { ZWaveController } from "../controller/Controller";
-import { Message } from "../message/Message";
-import {
-	SendMessageOptions,
-	SendSupervisedCommandOptions,
-	ZWaveOptions,
-} from "./Driver";
+import type { CommandClass } from "../commandclass/CommandClass";
+import type { CommandClasses } from "../commandclass/CommandClasses";
+import type { SupervisionResult } from "../commandclass/SupervisionCC";
+import type { ZWaveController } from "../controller/Controller";
+import type { Message } from "../message/Message";
+import type { SendMessageOptions, SendSupervisedCommandOptions, ZWaveOptions } from "./Driver";
 
 export interface DriverEventCallbacks {
 	"driver ready": () => void;

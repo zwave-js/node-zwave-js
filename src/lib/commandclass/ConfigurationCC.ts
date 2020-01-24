@@ -1,47 +1,16 @@
 import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
-import { ParamInfoMap } from "../config/Devices";
-import { IDriver } from "../driver/IDriver";
+import type { ParamInfoMap } from "../config/Devices";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ValueID } from "../node/ValueDB";
-import {
-	getEnumMemberName,
-	getMinimumShiftForBitMask,
-	isConsecutiveArray,
-	stripUndefined,
-	validatePayload,
-} from "../util/misc";
-import { CacheMetadata, CacheValue } from "../values/Cache";
+import type { ValueID } from "../node/ValueDB";
+import { getEnumMemberName, getMinimumShiftForBitMask, isConsecutiveArray, stripUndefined, validatePayload } from "../util/misc";
+import type { CacheMetadata, CacheValue } from "../values/Cache";
 import { ValueMetadata, ValueMetadataBase } from "../values/Metadata";
-import {
-	encodeBitMask,
-	getIntegerLimits,
-	getMinIntegerSize,
-	Maybe,
-	parseBitMask,
-} from "../values/Primitive";
-import {
-	CCAPI,
-	SetValueImplementation,
-	SET_VALUE,
-	throwUnsupportedProperty,
-	throwUnsupportedPropertyKey,
-	throwWrongValueType,
-} from "./API";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	CommandClassOptions,
-	DynamicCCResponse,
-	expectedCCResponse,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import { encodeBitMask, getIntegerLimits, getMinIntegerSize, Maybe, parseBitMask } from "../values/Primitive";
+import { CCAPI, SetValueImplementation, SET_VALUE, throwUnsupportedProperty, throwUnsupportedPropertyKey, throwWrongValueType } from "./API";
+import { API, CCCommand, CCCommandOptions, CommandClass, commandClass, CommandClassDeserializationOptions, CommandClassOptions, DynamicCCResponse, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum ConfigurationCommand {
@@ -429,7 +398,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				if (
 					e instanceof ConfigurationCCError &&
 					e.code ===
-						ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber
+					ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber
 				) {
 					// Continue iterating with the next param
 					if (e.argument - 1 > param) param = e.argument - 1;
@@ -501,7 +470,7 @@ export class ConfigurationCC extends CommandClass {
 				endpoint: this.endpointIndex,
 				message: `${this.constructor.name}: doing a ${
 					complete ? "complete" : "partial"
-				} interview...`,
+					} interview...`,
 				direction: "none",
 			});
 
@@ -647,7 +616,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				propertyKey === valueBitMask
 					? 0
 					: (value as number) <<
-					  getMinimumShiftForBitMask(propertyKey as number),
+					getMinimumShiftForBitMask(propertyKey as number),
 			)
 			.reduce((prev, cur) => prev | cur, 0);
 		return (
@@ -713,11 +682,11 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				states:
 					!info.allowManualEntry && info.options.length > 0
 						? composeObject(
-								info.options.map(({ label, value }) => [
-									value.toString(),
-									label,
-								]),
-						  )
+							info.options.map(({ label, value }) => [
+								value.toString(),
+								label,
+							]),
+						)
 						: undefined,
 				label: info.label,
 				description: info.description,
@@ -834,7 +803,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 							propertyKey: param.propertyKey,
 						},
 						((this._value as any) & param.propertyKey) >>>
-							getMinimumShiftForBitMask(param.propertyKey),
+						getMinimumShiftForBitMask(param.propertyKey),
 					);
 				}
 			}
@@ -900,15 +869,15 @@ export class ConfigurationCCGet extends ConfigurationCC {
 type ConfigurationCCSetOptions = CCCommandOptions &
 	(
 		| {
-				parameter: number;
-				resetToDefault: true;
-		  }
+			parameter: number;
+			resetToDefault: true;
+		}
 		| {
-				parameter: number;
-				resetToDefault?: false;
-				valueSize: number;
-				value: ConfigValue;
-		  }
+			parameter: number;
+			resetToDefault?: false;
+			valueSize: number;
+			value: ConfigValue;
+		}
 	);
 
 @CCCommand(ConfigurationCommand.Set)
@@ -962,7 +931,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 				2,
 				valueSize,
 				this.getParamInformation(this.parameter).format ||
-					ValueFormat.SignedInteger,
+				ValueFormat.SignedInteger,
 				this.value!,
 			);
 		}
@@ -975,13 +944,13 @@ type ConfigurationCCBulkSetOptions = CCCommandOptions & {
 	handshake?: boolean;
 } & (
 		| {
-				resetToDefault: true;
-		  }
+			resetToDefault: true;
+		}
 		| {
-				resetToDefault?: false;
-				valueSize: number;
-				values: number[];
-		  }
+			resetToDefault?: false;
+			valueSize: number;
+			values: number[];
+		}
 	);
 
 const getResponseForBulkSet: DynamicCCResponse = (
@@ -1070,7 +1039,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 					4 + i * valueSize,
 					valueSize,
 					this.getParamInformation(param).format ||
-						ValueFormat.SignedInteger,
+					ValueFormat.SignedInteger,
 					this._values[i],
 				);
 			}
@@ -1106,7 +1075,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 					this.payload.slice(5 + i * this.valueSize),
 					this.valueSize,
 					this.getParamInformation(param).format ||
-						ValueFormat.SignedInteger,
+					ValueFormat.SignedInteger,
 				),
 			);
 		}
@@ -1400,7 +1369,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		if (this._valueSize > 0) {
 			const valueType =
 				this._valueFormat === ValueFormat.SignedInteger ||
-				this._valueFormat === ValueFormat.UnsignedInteger
+					this._valueFormat === ValueFormat.UnsignedInteger
 					? "number"
 					: "number[]";
 			const paramInfo: Partial<ConfigurationMetadata> = stripUndefined({

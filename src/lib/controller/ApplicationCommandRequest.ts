@@ -1,19 +1,8 @@
 import { CommandClass } from "../commandclass/CommandClass";
-import { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
-import { IDriver } from "../driver/IDriver";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
-import {
-	gotDeserializationOptions,
-	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	messageTypes,
-	priority,
-} from "../message/Message";
+import type { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
+import type { IDriver } from "../driver/IDriver";
+import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import { gotDeserializationOptions, Message, MessageBaseOptions, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
 
 enum StatusFlags {
 	RoutedBusy = 1 << 0,

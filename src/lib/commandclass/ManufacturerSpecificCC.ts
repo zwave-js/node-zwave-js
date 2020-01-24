@@ -1,27 +1,15 @@
 import { lookupManufacturer } from "../config/Manufacturers";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { ValueMetadata } from "../values/Metadata";
-import { Maybe } from "../values/Primitive";
+import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	ccValue,
-	ccValueMetadata,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	expectedCCResponse,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import { API, CCCommand, CCCommandOptions, ccValue, ccValueMetadata, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum ManufacturerSpecificCommand {
@@ -113,7 +101,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-			} interview...`,
+				} interview...`,
 			direction: "none",
 		});
 
@@ -133,7 +121,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 				const mfResp = await api.get();
 				const logMessage = `received response for manufacturer information:
   manufacturer: ${lookupManufacturer(mfResp.manufacturerId) ||
-		"unknown"} (${num2hex(mfResp.manufacturerId)})
+					"unknown"} (${num2hex(mfResp.manufacturerId)})
   product type: ${num2hex(mfResp.productType)}
   product id:   ${num2hex(mfResp.productId)}`;
 				log.controller.logNode(node.id, {

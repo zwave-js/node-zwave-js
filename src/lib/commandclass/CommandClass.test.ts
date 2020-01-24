@@ -1,31 +1,17 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { ZWaveNode } from "../node/Node";
 import { BasicCC, BasicCCSet, BasicCommand } from "./BasicCC";
-import {
-	CommandClass,
-	commandClass,
-	expectedCCResponse,
-	getExpectedCCResponse,
-	getImplementedVersion,
-	getImplementedVersionStatic,
-	implementedVersion,
-} from "./CommandClass";
+import { CommandClass, commandClass, expectedCCResponse, getExpectedCCResponse, getImplementedVersion, getImplementedVersionStatic, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
-import {
-	MultiChannelCC,
-	MultiChannelCCCommandEncapsulation,
-} from "./MultiChannelCC";
-import {
-	MultiCommandCC,
-	MultiCommandCCCommandEncapsulation,
-} from "./MultiCommandCC";
+import { MultiChannelCC, MultiChannelCCCommandEncapsulation } from "./MultiChannelCC";
+import { MultiCommandCC, MultiCommandCCCommandEncapsulation } from "./MultiCommandCC";
 
 @implementedVersion(7)
 @commandClass(0xffff as any)
-class DummyCC extends CommandClass {}
+class DummyCC extends CommandClass { }
 class DummyCCSubClass1 extends DummyCC {
 	private x: any;
 }
@@ -154,7 +140,7 @@ describe("lib/commandclass/CommandClass => ", () => {
 			expect(getImplementedVersion(cc)).toBe(0);
 		});
 
-		it("should work with inheritance", () => {});
+		it("should work with inheritance", () => { });
 	});
 
 	describe("getImplementedVersionStatic()", () => {

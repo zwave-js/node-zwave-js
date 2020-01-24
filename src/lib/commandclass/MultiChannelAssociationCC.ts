@@ -1,23 +1,12 @@
 import { MAX_NODES } from "../controller/NodeBitMask";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	ccValue,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	expectedCCResponse,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import { API, CCCommand, CCCommandOptions, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 /** Returns the ValueID used to store the maximum number of nodes of an association group */
@@ -73,10 +62,10 @@ function serializeMultiChannelAssociationDestination(
 	const payload = Buffer.allocUnsafe(
 		// node addresses
 		nodeAddressBytes +
-			// endpoint marker
-			(endpointAddressBytes > 0 ? 1 : 0) +
-			// endpoints
-			endpointAddressBytes,
+		// endpoint marker
+		(endpointAddressBytes > 0 ? 1 : 0) +
+		// endpoints
+		endpointAddressBytes,
 	);
 	// write node addresses
 	for (let i = 0; i < nodeIds.length; i++) {
@@ -92,9 +81,9 @@ function serializeMultiChannelAssociationDestination(
 			const destination =
 				typeof endpoint.endpoint === "number"
 					? // The destination is a single number
-					  endpoint.endpoint & 0b0111_1111
+					endpoint.endpoint & 0b0111_1111
 					: // The destination is a bit mask
-					  encodeBitMask(endpoint.endpoint, 7)[0] | 0b1000_0000;
+					encodeBitMask(endpoint.endpoint, 7)[0] | 0b1000_0000;
 
 			payload[offset + 2 * i] = endpoint.nodeId;
 			payload[offset + 2 * i + 1] = destination;
@@ -282,7 +271,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-			} interview...`,
+				} interview...`,
 			direction: "none",
 		});
 
@@ -374,10 +363,10 @@ currently assigned endpoints: ${group.endpoints.map(({ nodeId, endpoint }) => {
 type MultiChannelAssociationCCSetOptions = {
 	groupId: number;
 } & (
-	| { nodeIds: number[] }
-	| { endpoints: EndpointAddress[] }
-	| { nodeIds: number[]; endpoints: EndpointAddress[] }
-);
+		| { nodeIds: number[] }
+		| { endpoints: EndpointAddress[] }
+		| { nodeIds: number[]; endpoints: EndpointAddress[] }
+	);
 
 @CCCommand(MultiChannelAssociationCommand.Set)
 export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
@@ -638,4 +627,4 @@ export class MultiChannelAssociationCCSupportedGroupingsReport extends MultiChan
 
 @CCCommand(MultiChannelAssociationCommand.SupportedGroupingsGet)
 @expectedCCResponse(MultiChannelAssociationCCSupportedGroupingsReport)
-export class MultiChannelAssociationCCSupportedGroupingsGet extends MultiChannelAssociationCC {}
+export class MultiChannelAssociationCCSupportedGroupingsGet extends MultiChannelAssociationCC { }

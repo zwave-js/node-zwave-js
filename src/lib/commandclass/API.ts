@@ -1,7 +1,7 @@
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { Endpoint } from "../node/Endpoint";
-import { ValueID } from "../node/ValueDB";
+import type { Endpoint } from "../node/Endpoint";
+import type { ValueID } from "../node/ValueDB";
 import { getEnumMemberName } from "../util/misc";
 import { Maybe, unknownBoolean } from "../values/Primitive";
 import { getCommandClass } from "./CommandClass";
@@ -103,9 +103,9 @@ export class CCAPI {
 		if (this.supportsCommand(command) !== true) {
 			throw new ZWaveError(
 				`Node #${this.endpoint.nodeId}${
-					this.endpoint.index > 0
-						? ` (Endpoint ${this.endpoint.index})`
-						: ""
+				this.endpoint.index > 0
+					? ` (Endpoint ${this.endpoint.index})`
+					: ""
 				} does not support the command ${getEnumMemberName(
 					commandEnum,
 					command,

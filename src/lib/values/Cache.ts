@@ -1,8 +1,8 @@
 import { composeObject, entries } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { ValueID } from "../node/ValueDB";
-import { JSONObject } from "../util/misc";
-import { ValueMetadata } from "./Metadata";
+import type { ValueID } from "../node/ValueDB";
+import type { JSONObject } from "../util/misc";
+import type { ValueMetadata } from "./Metadata";
 
 // export type SerializableValue = number | string | boolean | Map<string | number, any> | JSONObject;
 type SerializedValue = number | string | boolean | JSONObject | undefined;

@@ -7,7 +7,7 @@ import path from "path";
 import * as semver from "semver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { JSONObject } from "../util/misc";
+import type { JSONObject } from "../util/misc";
 import { ObjectKeyMap, ReadonlyObjectKeyMap } from "../util/ObjectKeyMap";
 import { configDir, hexKeyRegex4Digits, throwInvalidConfig } from "./utils";
 

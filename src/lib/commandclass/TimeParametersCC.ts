@@ -1,26 +1,10 @@
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import log from "../log";
-import { Endpoint } from "../node/Endpoint";
+import type { Endpoint } from "../node/Endpoint";
 import { validatePayload } from "../util/misc";
-import { Maybe } from "../values/Primitive";
-import {
-	CCAPI,
-	SetValueImplementation,
-	SET_VALUE,
-	throwUnsupportedProperty,
-	throwWrongValueType,
-} from "./API";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	CommandClass,
-	commandClass,
-	CommandClassDeserializationOptions,
-	expectedCCResponse,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import type { Maybe } from "../values/Primitive";
+import { CCAPI, SetValueImplementation, SET_VALUE, throwUnsupportedProperty, throwWrongValueType } from "./API";
+import { API, CCCommand, CCCommandOptions, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 // All the supported commands
@@ -166,7 +150,7 @@ export class TimeParametersCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-			} interview...`,
+				} interview...`,
 			direction: "none",
 		});
 
@@ -212,7 +196,7 @@ export class TimeParametersCCReport extends TimeParametersCC {
 
 @CCCommand(TimeParametersCommand.Get)
 @expectedCCResponse(TimeParametersCCReport)
-export class TimeParametersCCGet extends TimeParametersCC {}
+export class TimeParametersCCGet extends TimeParametersCC { }
 
 interface TimeParametersCCSetOptions extends CCCommandOptions {
 	dateAndTime: Date;

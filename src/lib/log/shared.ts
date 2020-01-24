@@ -1,9 +1,9 @@
 import { padStart } from "alcalzone-shared/strings";
-import { Format, TransformableInfo, TransformFunction } from "logform";
+import type { Format, TransformableInfo, TransformFunction } from "logform";
 import * as path from "path";
 import { configs, MESSAGE } from "triple-beam";
 import winston, { Logger } from "winston";
-import Transport from "winston-transport";
+import type Transport from "winston-transport";
 import { colorizer } from "./Colorizer";
 const { combine, timestamp, label } = winston.format;
 
@@ -31,8 +31,8 @@ export function getDirectionPrefix(direction: DataDirection) {
 	return direction === "inbound"
 		? "« "
 		: direction === "outbound"
-		? "» "
-		: "  ";
+			? "» "
+			: "  ";
 }
 /** The space the directional arrows, grouping brackets and padding occupies */
 export const CONTROL_CHAR_WIDTH = 2;
@@ -142,8 +142,8 @@ export const logMessageFormatter: Format = {
 				// because the message takes all the available space
 				-1,
 				LOG_WIDTH -
-					1 -
-					calculateFirstLineLength(info, firstMessageLineLength),
+				1 -
+				calculateFirstLineLength(info, firstMessageLineLength),
 			);
 		}
 
@@ -317,7 +317,7 @@ export function isLoglevelVisible(loglevel: string): boolean {
 		loglevelVisibleCache.set(
 			loglevel,
 			loglevel in loglevels &&
-				loglevels[loglevel] <= getTransportLoglevelNumeric(),
+			loglevels[loglevel] <= getTransportLoglevelNumeric(),
 		);
 	}
 	return loglevelVisibleCache.get(loglevel)!;

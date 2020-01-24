@@ -1,8 +1,8 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { INodeQuery } from "../node/INodeQuery";
+import type { INodeQuery } from "../node/INodeQuery";
 import { FunctionType, MessageType } from "./Constants";
 import { Message, messageTypes, ResponseRole } from "./Message";
 
@@ -427,7 +427,7 @@ describe("lib/message", () => {
 			);
 
 			@messageTypes(undefined as any, 0xff)
-			class FakeMessageWithoutMessageType extends Message {}
+			class FakeMessageWithoutMessageType extends Message { }
 
 			assertZWaveError(
 				() => new FakeMessageWithoutMessageType(fakeDriver),
@@ -448,7 +448,7 @@ describe("lib/message", () => {
 			);
 
 			@messageTypes(MessageType.Request, undefined as any)
-			class FakeMessageWithoutFunctionType extends Message {}
+			class FakeMessageWithoutFunctionType extends Message { }
 
 			assertZWaveError(
 				() => new FakeMessageWithoutFunctionType(fakeDriver),
@@ -462,7 +462,7 @@ describe("lib/message", () => {
 		describe("getNodeUnsafe()", () => {
 			it("returns undefined when the controller is not initialized yet", () => {
 				const fakeDriver = ({
-					getSafeCCVersionForNode() {},
+					getSafeCCVersionForNode() { },
 				} as any) as IDriver;
 				const msg = new Message(fakeDriver, {
 					type: MessageType.Request,
@@ -473,7 +473,7 @@ describe("lib/message", () => {
 
 			it("returns undefined when the message is no node query", () => {
 				const fakeDriver = ({
-					getSafeCCVersionForNode() {},
+					getSafeCCVersionForNode() { },
 					controller: { nodes: new Map() },
 				} as any) as IDriver;
 				const msg = new Message(fakeDriver, {
@@ -485,7 +485,7 @@ describe("lib/message", () => {
 
 			it("returns the associated node otherwise", () => {
 				const fakeDriver = ({
-					getSafeCCVersionForNode() {},
+					getSafeCCVersionForNode() { },
 					controller: { nodes: new Map() },
 				} as any) as IDriver;
 				// @ts-ignore We need write access

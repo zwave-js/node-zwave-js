@@ -1,26 +1,16 @@
 import { isArray } from "alcalzone-shared/typeguards";
 import fs from "fs";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { MessageOrCCLogEntry } from "../log/shared";
-import { Endpoint } from "../node/Endpoint";
+import type { MessageOrCCLogEntry } from "../log/shared";
+import type { Endpoint } from "../node/Endpoint";
 import { InterviewStage } from "../node/INode";
-import { ZWaveNode } from "../node/Node";
+import type { ZWaveNode } from "../node/Node";
 import { ValueDB, ValueID, valueIdToString } from "../node/ValueDB";
-import {
-	JSONObject,
-	staticExtends,
-	stripUndefined,
-	validatePayload,
-} from "../util/misc";
+import { JSONObject, staticExtends, stripUndefined, validatePayload } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
-import {
-	CacheMetadata,
-	CacheValue,
-	deserializeCacheValue,
-	serializeCacheValue,
-} from "../values/Cache";
+import { CacheMetadata, CacheValue, deserializeCacheValue, serializeCacheValue } from "../values/Cache";
 import { ValueMetadata } from "../values/Metadata";
 import { CCAPI } from "./API";
 import { CommandClasses, getCCName } from "./CommandClasses";
@@ -33,12 +23,12 @@ export interface CommandClassInfo {
 
 export type CommandClassDeserializationOptions = { data: Buffer } & (
 	| {
-			fromEncapsulation?: false;
-	  }
+		fromEncapsulation?: false;
+	}
 	| {
-			fromEncapsulation: true;
-			encapCC: CommandClass;
-	  }
+		fromEncapsulation: true;
+		encapCC: CommandClass;
+	}
 );
 
 export function gotDeserializationOptions(
@@ -795,7 +785,7 @@ const METADATA_APIMap = Symbol("APIMap");
 /* eslint-enable @typescript-eslint/camelcase */
 
 export interface Constructable<T extends CommandClass> {
-	new (
+	new(
 		driver: IDriver,
 		options:
 			| CommandClassCreationOptions
@@ -882,8 +872,8 @@ export function getCommandClass<T extends CommandClass | CCAPI>(
 		cc instanceof CommandClass
 			? Reflect.getMetadata(METADATA_commandClass, constr)
 			: cc instanceof CCAPI
-			? Reflect.getMetadata(METADATA_API, constr)
-			: undefined;
+				? Reflect.getMetadata(METADATA_API, constr)
+				: undefined;
 	if (ret == undefined) {
 		throw new ZWaveError(
 			`No command class defined for ${constr.name}!`,
@@ -1097,7 +1087,7 @@ export function expectedCCResponse<T extends CommandClass>(
 				ccClass.name,
 				"expected CC response",
 				`Predicate${
-					predicate.name.length > 0 ? " " + predicate.name : ""
+				predicate.name.length > 0 ? " " + predicate.name : ""
 				}`,
 			);
 		}

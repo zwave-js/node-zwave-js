@@ -1,12 +1,7 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { FunctionType, MessageType } from "../message/Constants";
-import {
-	getExpectedResponse,
-	getFunctionType,
-	getMessageType,
-	Message,
-} from "../message/Message";
+import { getExpectedResponse, getFunctionType, getMessageType, Message } from "../message/Message";
 import { GetControllerVersionRequest } from "./GetControllerVersionMessages";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;

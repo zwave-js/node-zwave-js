@@ -1,24 +1,14 @@
-import { IDriver } from "../driver/IDriver";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
-import {
-	expectedResponse,
-	Message,
-	MessageDeserializationOptions,
-	messageTypes,
-	priority,
-} from "../message/Message";
-import { JSONObject } from "../util/misc";
+import type { IDriver } from "../driver/IDriver";
+import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import { expectedResponse, Message, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
+import type { JSONObject } from "../util/misc";
 import { cpp2js } from "../util/strings";
-import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
+import type { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerVersion)
 @expectedResponse(FunctionType.GetControllerVersion)
 @priority(MessagePriority.Controller)
-export class GetControllerVersionRequest extends Message {}
+export class GetControllerVersionRequest extends Message { }
 
 @messageTypes(MessageType.Response, FunctionType.GetControllerVersion)
 export class GetControllerVersionResponse extends Message {

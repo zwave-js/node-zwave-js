@@ -1,19 +1,12 @@
-import { CCAPI, CCAPIs } from "../commandclass/API";
-import {
-	CommandClass,
-	CommandClassInfo,
-	Constructable,
-	getAPI,
-	getCCConstructor,
-	getCommandClassStatic,
-} from "../commandclass/CommandClass";
+import type { CCAPI, CCAPIs } from "../commandclass/API";
+import { CommandClass, CommandClassInfo, Constructable, getAPI, getCCConstructor, getCommandClassStatic } from "../commandclass/CommandClass";
 import { actuatorCCs, CommandClasses } from "../commandclass/CommandClasses";
-import { Driver } from "../driver/Driver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { GraphNode } from "../util/graph";
 import { num2hex } from "../util/strings";
-import { GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
-import { ZWaveNode } from "./Node";
+import type { GenericDeviceClass, SpecificDeviceClass } from "./DeviceClass";
+import type { ZWaveNode } from "./Node";
 
 export interface EndpointCapabilities {
 	isDynamic: boolean;
@@ -140,7 +133,7 @@ export class Endpoint {
 		if (!this.supportsCC(ccId) && !this.controlsCC(ccId)) {
 			throw new ZWaveError(
 				`Cannot create an instance of the unsupported CC ${
-					CommandClasses[ccId]
+				CommandClasses[ccId]
 				} (${num2hex(ccId)})`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
@@ -243,7 +236,7 @@ export class Endpoint {
 				) {
 					throw new ZWaveError(
 						`Node ${this.nodeId}${
-							this.index === 0 ? "" : ` (endpoint ${this.index})`
+						this.index === 0 ? "" : ` (endpoint ${this.index})`
 						} does not support the Command Class ${ccName}!`,
 						ZWaveErrorCodes.CC_NotSupported,
 					);
@@ -310,7 +303,7 @@ export class Endpoint {
 	/**
 	 * Used to iterate over the commandClasses API without throwing errors by accessing unsupported CCs
 	 */
-	private readonly commandClassesIterator: () => Iterator<CCAPI> = function*(
+	private readonly commandClassesIterator: () => Iterator<CCAPI> = function* (
 		this: Endpoint,
 	) {
 		for (const cc of this.implementedCommandClasses.keys()) {

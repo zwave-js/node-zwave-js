@@ -1,15 +1,7 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
-import { IDriver } from "../driver/IDriver";
+import type { IDriver } from "../driver/IDriver";
 import { CommandClasses } from "./CommandClasses";
-import {
-	MultiChannelAssociationCCGet,
-	MultiChannelAssociationCCRemove,
-	MultiChannelAssociationCCReport,
-	MultiChannelAssociationCCSet,
-	MultiChannelAssociationCCSupportedGroupingsGet,
-	MultiChannelAssociationCCSupportedGroupingsReport,
-	MultiChannelAssociationCommand,
-} from "./MultiChannelAssociationCC";
+import { MultiChannelAssociationCCGet, MultiChannelAssociationCCRemove, MultiChannelAssociationCCReport, MultiChannelAssociationCCSet, MultiChannelAssociationCCSupportedGroupingsGet, MultiChannelAssociationCCSupportedGroupingsReport, MultiChannelAssociationCommand } from "./MultiChannelAssociationCC";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 

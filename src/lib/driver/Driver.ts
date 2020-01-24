@@ -8,26 +8,14 @@ import fsExtra from "fs-extra";
 import path from "path";
 import SerialPort from "serialport";
 import { promisify } from "util";
-import {
-	CommandClass,
-	getImplementedVersion,
-} from "../commandclass/CommandClass";
+import { CommandClass, getImplementedVersion } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
 import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
-import {
-	ICommandClassContainer,
-	isCommandClassContainer,
-} from "../commandclass/ICommandClassContainer";
+import { ICommandClassContainer, isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { messageIsPing } from "../commandclass/NoOperationCC";
-import {
-	SupervisionCC,
-	SupervisionCCGet,
-	SupervisionCCReport,
-	SupervisionResult,
-	SupervisionStatus,
-} from "../commandclass/SupervisionCC";
+import { SupervisionCC, SupervisionCCGet, SupervisionCCReport, SupervisionResult, SupervisionStatus } from "../commandclass/SupervisionCC";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { loadDeviceIndex } from "../config/Devices";
 import { loadIndicators } from "../config/Indicators";
@@ -37,33 +25,21 @@ import { loadNotifications } from "../config/Notifications";
 import { loadNamedScales } from "../config/Scales";
 import { loadSensorTypes } from "../config/SensorTypes";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
-import {
-	ApplicationUpdateRequest,
-	ApplicationUpdateRequestNodeInfoReceived,
-} from "../controller/ApplicationUpdateRequest";
+import { ApplicationUpdateRequest, ApplicationUpdateRequestNodeInfoReceived } from "../controller/ApplicationUpdateRequest";
 import { ZWaveController } from "../controller/Controller";
-import {
-	SendDataRequest,
-	SendDataRequestTransmitReport,
-	TransmitStatus,
-} from "../controller/SendDataMessages";
+import { SendDataRequest, SendDataRequestTransmitReport, TransmitStatus } from "../controller/SendDataMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import {
-	FunctionType,
-	MessageHeaders,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
+import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";
 import { InterviewStage, IZWaveNode, NodeStatus } from "../node/INode";
 import { isNodeQuery } from "../node/INodeQuery";
-import { ZWaveNode } from "../node/Node";
+import type { ZWaveNode } from "../node/Node";
 import { DeepPartial, skipBytes } from "../util/misc";
 import { num2hex } from "../util/strings";
-import { Duration } from "../values/Duration";
-import { FileSystem } from "./FileSystem";
-import { DriverEventCallbacks, DriverEvents, IDriver } from "./IDriver";
+import type { Duration } from "../values/Duration";
+import type { FileSystem } from "./FileSystem";
+import type { DriverEventCallbacks, DriverEvents, IDriver } from "./IDriver";
 import { Transaction } from "./Transaction";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -184,12 +160,12 @@ export type SupervisionUpdateHandler = (
 export type SendSupervisedCommandOptions = SendMessageOptions &
 	(
 		| {
-				requestStatusUpdates: false;
-		  }
+			requestStatusUpdates: false;
+		}
 		| {
-				requestStatusUpdates: true;
-				onUpdate: SupervisionUpdateHandler;
-		  }
+			requestStatusUpdates: true;
+			onUpdate: SupervisionUpdateHandler;
+		}
 	);
 
 // Strongly type the event emitter events
@@ -966,7 +942,7 @@ export class Driver extends EventEmitter implements IDriver {
 						if (msg instanceof SendDataRequestTransmitReport) {
 							errorMsg += ` (Status ${
 								TransmitStatus[msg.transmitStatus]
-							})`;
+								})`;
 						}
 						log.controller.logNode(node.id, `${errorMsg}`, "warn");
 
@@ -1045,7 +1021,7 @@ export class Driver extends EventEmitter implements IDriver {
 		handlers.push(entry);
 		log.driver.print(
 			`added${oneTime ? " one-time" : ""} request handler for ${
-				FunctionType[fnType]
+			FunctionType[fnType]
 			} (${num2hex(fnType)})...
 ${handlers.length} registered`,
 		);
@@ -1182,7 +1158,7 @@ ${handlers.length} left`,
 			// TODO: This deserves a nicer formatting
 			log.driver.print(
 				`handling request ${FunctionType[msg.functionType]} (${
-					msg.functionType
+				msg.functionType
 				})`,
 			);
 			handlers = this.requestHandlers.get(msg.functionType);
@@ -1191,7 +1167,7 @@ ${handlers.length} left`,
 		if (handlers != undefined && handlers.length > 0) {
 			log.driver.print(
 				`  ${handlers.length} handler${
-					handlers.length !== 1 ? "s" : ""
+				handlers.length !== 1 ? "s" : ""
 				} registered!`,
 			);
 			// loop through all handlers and find the first one that returns true to indicate that it handled the message
@@ -1465,7 +1441,7 @@ ${handlers.length} left`,
 		) {
 			throw new ZWaveError(
 				`Your hardware does not support the ${
-					FunctionType[msg.functionType]
+				FunctionType[msg.functionType]
 				} function`,
 				ZWaveErrorCodes.Driver_NotSupported,
 			);
