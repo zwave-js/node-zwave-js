@@ -24,6 +24,7 @@
 		"removeComments": false,
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
+		"importsNotUsedAsValues": "error",
 		"sourceMap": true,
 		"inlineSourceMap": false,
 		"stripInternal": true,
