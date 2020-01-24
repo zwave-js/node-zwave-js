@@ -4,13 +4,13 @@ import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { MultiCommandCC } from "../commandclass/MultiCommandCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { SupervisionCC, SupervisionCCReport, SupervisionStatus } from "../commandclass/SupervisionCC";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { FunctionType, MessageType } from "../message/Constants";
 import { getExpectedResponse, getFunctionType, getMessageType, Message, ResponsePredicate } from "../message/Message";
 import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
 import { SendDataRequest, SendDataRequestBase, SendDataRequestTransmitReport, SendDataResponse, TransmitOptions, TransmitStatus } from "./SendDataMessages";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 function createSendDataMessage(
 	type: MessageType,

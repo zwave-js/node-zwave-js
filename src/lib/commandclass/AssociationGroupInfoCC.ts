@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { ValueID } from "../node/ValueDB";
@@ -312,7 +312,7 @@ export class AssociationGroupInfoCCAPI extends CCAPI {
 export class AssociationGroupInfoCC extends CommandClass {
 	declare ccCommand: AssociationGroupInfoCommand;
 
-	public constructor(driver: IDriver, options: CommandClassOptions) {
+	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
 		this.registerValue(getGroupNameValueID(0).property, true);
 		this.registerValue(getGroupInfoValueID(0).property, true);
@@ -461,7 +461,7 @@ profile:         ${getEnumMemberName(
 @CCCommand(AssociationGroupInfoCommand.NameReport)
 export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -487,7 +487,7 @@ interface AssociationGroupInfoCCNameGetOptions extends CCCommandOptions {
 @expectedCCResponse(AssociationGroupInfoCCNameReport)
 export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCNameGetOptions,
@@ -522,7 +522,7 @@ export interface AssociationGroupInfo {
 @CCCommand(AssociationGroupInfoCommand.InfoReport)
 export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -578,7 +578,7 @@ type AssociationGroupInfoCCInfoGetOptions = CCCommandOptions & {
 @expectedCCResponse(AssociationGroupInfoCCInfoReport)
 export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCInfoGetOptions,
@@ -617,7 +617,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 @CCCommand(AssociationGroupInfoCommand.CommandListReport)
 export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInfoCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -662,7 +662,7 @@ interface AssociationGroupInfoCCCommandListGetOptions extends CCCommandOptions {
 @expectedCCResponse(AssociationGroupInfoCCCommandListReport)
 export class AssociationGroupInfoCCCommandListGet extends AssociationGroupInfoCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCCommandListGetOptions,

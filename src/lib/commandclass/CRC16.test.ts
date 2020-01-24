@@ -1,12 +1,12 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { BasicCCGet, BasicCCSet } from "./BasicCC";
 import { CommandClass } from "./CommandClass";
 import { CRC16CC, CRC16CCCommandEncapsulation } from "./CRC16";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 describe("lib/commandclass/CRC16 => ", () => {
 	describe("CommandEncapsulation (V1)", () => {

@@ -1,5 +1,5 @@
 import { lookupNamedScale, Scale } from "../config/Scales";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { ValueID } from "../node/ValueDB";
@@ -379,7 +379,7 @@ interface ThermostatSetpointCCSetOptions extends CCCommandOptions {
 @CCCommand(ThermostatSetpointCommand.Set)
 export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetpointCCSetOptions,
@@ -414,7 +414,7 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 @CCCommand(ThermostatSetpointCommand.Report)
 export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -472,7 +472,7 @@ interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(ThermostatSetpointCCReport)
 export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetpointCCGetOptions,
@@ -500,7 +500,7 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 @CCCommand(ThermostatSetpointCommand.CapabilitiesReport)
 export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -572,7 +572,7 @@ interface ThermostatSetpointCCCapabilitiesGetOptions extends CCCommandOptions {
 @expectedCCResponse(ThermostatSetpointCCCapabilitiesReport)
 export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetpointCCCapabilitiesGetOptions,
@@ -600,7 +600,7 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 @CCCommand(ThermostatSetpointCommand.SupportedReport)
 export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -646,7 +646,7 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
  */
 export class ThermostatSetpointCCSupportedGet extends ThermostatSetpointCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);

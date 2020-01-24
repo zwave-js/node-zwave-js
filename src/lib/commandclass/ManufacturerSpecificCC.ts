@@ -1,5 +1,5 @@
 import { lookupManufacturer } from "../config/Manufacturers";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
@@ -140,7 +140,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 @CCCommand(ManufacturerSpecificCommand.Report)
 export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -187,7 +187,7 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 @expectedCCResponse(ManufacturerSpecificCCReport)
 export class ManufacturerSpecificCCGet extends ManufacturerSpecificCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
@@ -197,7 +197,7 @@ export class ManufacturerSpecificCCGet extends ManufacturerSpecificCC {
 @CCCommand(ManufacturerSpecificCommand.DeviceSpecificReport)
 export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpecificCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -247,7 +247,7 @@ interface ManufacturerSpecificCCDeviceSpecificGetOptions
 @expectedCCResponse(ManufacturerSpecificCCDeviceSpecificReport)
 export class ManufacturerSpecificCCDeviceSpecificGet extends ManufacturerSpecificCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| ManufacturerSpecificCCDeviceSpecificGetOptions,

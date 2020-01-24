@@ -1,10 +1,10 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { Duration } from "../values/Duration";
 import { CommandClasses } from "./CommandClasses";
 import { MultilevelSwitchCC, MultilevelSwitchCCGet, MultilevelSwitchCCReport, MultilevelSwitchCCSet, MultilevelSwitchCCStartLevelChange, MultilevelSwitchCCStopLevelChange, MultilevelSwitchCCSupportedGet, MultilevelSwitchCommand } from "./MultilevelSwitchCC";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 function buildCCBuffer(nodeId: number, payload: Buffer): Buffer {
 	return Buffer.concat([

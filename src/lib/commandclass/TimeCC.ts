@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { DSTInfo, getDefaultDSTInfo, getDSTInfo } from "../util/date";
@@ -145,7 +145,7 @@ interface TimeCCTimeReportOptions extends CCCommandOptions {
 @CCCommand(TimeCommand.TimeReport)
 export class TimeCCTimeReport extends TimeCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | TimeCCTimeReportOptions,
 	) {
 		super(driver, options);
@@ -191,7 +191,7 @@ interface TimeCCDateReportOptions extends CCCommandOptions {
 @CCCommand(TimeCommand.DateReport)
 export class TimeCCDateReport extends TimeCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | TimeCCDateReportOptions,
 	) {
 		super(driver, options);
@@ -238,7 +238,7 @@ interface TimeCCTimeOffsetSetOptions extends CCCommandOptions {
 @CCCommand(TimeCommand.TimeOffsetSet)
 export class TimeCCTimeOffsetSet extends TimeCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| TimeCCTimeOffsetSetOptions,
@@ -292,7 +292,7 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 @CCCommand(TimeCommand.TimeOffsetReport)
 export class TimeCCTimeOffsetReport extends TimeCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);

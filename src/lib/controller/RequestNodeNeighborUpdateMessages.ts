@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import type { MessageOrCCLogEntry } from "../log/shared";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, gotDeserializationOptions, Message, MessageBaseOptions, MessageDeserializationOptions, MessageOptions, messageTypes, priority, ResponseRole } from "../message/Message";
@@ -31,7 +31,7 @@ function testResponseForNodeNeighborUpdateRequest(
 @messageTypes(MessageType.Request, FunctionType.RequestNodeNeighborUpdate)
 @priority(MessagePriority.Controller)
 export class RequestNodeNeighborUpdateRequestBase extends Message {
-	public constructor(driver: IDriver, options: MessageOptions) {
+	public constructor(driver: Driver, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== RequestNodeNeighborUpdateReport
@@ -45,7 +45,7 @@ export class RequestNodeNeighborUpdateRequestBase extends Message {
 @expectedResponse(testResponseForNodeNeighborUpdateRequest)
 export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateRequestBase {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: RequestNodeNeighborUpdateRequestOptions,
 	) {
 		super(driver, options);
@@ -69,7 +69,7 @@ export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateR
 
 export class RequestNodeNeighborUpdateReport extends RequestNodeNeighborUpdateRequestBase {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: MessageDeserializationOptions,
 	) {
 		super(driver, options);

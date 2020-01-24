@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
@@ -75,7 +75,7 @@ export class SupervisionCC extends CommandClass {
 
 	/** Encapsulates a command that targets a specific endpoint */
 	public static encapsulate(
-		driver: IDriver,
+		driver: Driver,
 		cc: CommandClass,
 		requestStatusUpdates: boolean = true,
 	): SupervisionCCGet {
@@ -113,7 +113,7 @@ type SupervisionCCReportOptions = CCCommandOptions & {
 @CCCommand(SupervisionCommand.Report)
 export class SupervisionCCReport extends SupervisionCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| SupervisionCCReportOptions,
@@ -164,7 +164,7 @@ const testResponseForSupervisionCCGet: CCResponsePredicate = (
 @expectedCCResponse(testResponseForSupervisionCCGet)
 export class SupervisionCCGet extends SupervisionCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | SupervisionCCGetOptions,
 	) {
 		super(driver, options);

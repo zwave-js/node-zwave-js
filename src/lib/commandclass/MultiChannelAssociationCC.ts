@@ -1,5 +1,5 @@
 import { MAX_NODES } from "../controller/NodeBitMask";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { ValueID } from "../node/ValueDB";
@@ -371,7 +371,7 @@ type MultiChannelAssociationCCSetOptions = {
 @CCCommand(MultiChannelAssociationCommand.Set)
 export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| (MultiChannelAssociationCCSetOptions & CCCommandOptions),
@@ -431,7 +431,7 @@ interface MultiChannelAssociationCCRemoveOptions {
 @CCCommand(MultiChannelAssociationCommand.Remove)
 export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| (MultiChannelAssociationCCRemoveOptions & CCCommandOptions),
@@ -490,7 +490,7 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 @CCCommand(MultiChannelAssociationCommand.Report)
 export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -573,7 +573,7 @@ interface MultiChannelAssociationCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelAssociationCCReport)
 export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelAssociationCCGetOptions,
@@ -607,7 +607,7 @@ export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 @CCCommand(MultiChannelAssociationCommand.SupportedGroupingsReport)
 export class MultiChannelAssociationCCSupportedGroupingsReport extends MultiChannelAssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);

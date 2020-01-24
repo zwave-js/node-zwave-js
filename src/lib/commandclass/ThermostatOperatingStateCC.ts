@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { enumValuesToMetadataStates, ValueMetadata } from "../values/Metadata";
@@ -108,7 +108,7 @@ export class ThermostatOperatingStateCC extends CommandClass {
 @CCCommand(ThermostatOperatingStateCommand.Report)
 export class ThermostatOperatingStateCCReport extends ThermostatOperatingStateCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);

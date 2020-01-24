@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import log from "../log";
 import type { ValueID } from "../node/ValueDB";
 import { JSONObject, validatePayload } from "../util/misc";
@@ -160,7 +160,7 @@ temperature:   ${batteryHealth.temperature} °C`;
 @CCCommand(BatteryCommand.Report)
 export class BatteryCCReport extends BatteryCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -307,7 +307,7 @@ export class BatteryCCGet extends BatteryCC { }
 @CCCommand(BatteryCommand.HealthReport)
 export class BatteryCCHealthReport extends BatteryCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);

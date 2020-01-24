@@ -1,5 +1,5 @@
 import type { CommandClasses } from "../commandclass/CommandClasses";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { gotDeserializationOptions, Message, MessageBaseOptions, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
 import type { BasicDeviceClasses, GenericDeviceClass, SpecificDeviceClass } from "../node/DeviceClass";
@@ -40,7 +40,7 @@ interface RemoveNodeFromNetworkRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Controller)
 export class RemoveNodeFromNetworkRequest extends Message {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| MessageDeserializationOptions
 			| RemoveNodeFromNetworkRequestOptions = {},

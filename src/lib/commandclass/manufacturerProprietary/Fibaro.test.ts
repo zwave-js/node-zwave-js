@@ -1,10 +1,10 @@
 import { createEmptyMockDriver } from "../../../../test/mocks";
-import type { IDriver } from "../../driver/IDriver";
+import type { Driver } from "../../driver/Driver";
 import { CommandClasses } from "../CommandClasses";
 import { ManufacturerProprietaryCC } from "../ManufacturerProprietaryCC";
 import { FibaroVenetianBlindCCSet } from "./Fibaro";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 	it("the set tilt command should serialize correctly", () => {

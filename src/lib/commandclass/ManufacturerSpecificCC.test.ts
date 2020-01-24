@@ -2,12 +2,12 @@ import { Driver, ZWaveNode } from "../..";
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertCC } from "../../../test/util";
 import { loadManufacturers } from "../config/Manufacturers";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { ManufacturerSpecificCC, ManufacturerSpecificCCGet } from "./ManufacturerSpecificCC";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 	const cc = new ManufacturerSpecificCCGet(fakeDriver, { nodeId: 2 });

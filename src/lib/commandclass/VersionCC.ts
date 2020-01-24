@@ -1,5 +1,5 @@
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { validatePayload } from "../util/misc";
@@ -284,7 +284,7 @@ export class VersionCC extends CommandClass {
 @CCCommand(VersionCommand.Report)
 export class VersionCCReport extends VersionCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -351,7 +351,7 @@ export class VersionCCReport extends VersionCC {
 @expectedCCResponse(VersionCCReport)
 export class VersionCCGet extends VersionCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
@@ -361,7 +361,7 @@ export class VersionCCGet extends VersionCC {
 @CCCommand(VersionCommand.CommandClassReport)
 export class VersionCCCommandClassReport extends VersionCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -390,7 +390,7 @@ interface VersionCCCommandClassGetOptions extends CCCommandOptions {
 @expectedCCResponse(VersionCCCommandClassReport)
 export class VersionCCCommandClassGet extends VersionCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| VersionCCCommandClassGetOptions,
@@ -418,7 +418,7 @@ export class VersionCCCommandClassGet extends VersionCC {
 @CCCommand(VersionCommand.CapabilitiesReport)
 export class VersionCCCapabilitiesReport extends VersionCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -443,7 +443,7 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 @expectedCCResponse(VersionCCCapabilitiesReport)
 export class VersionCCCapabilitiesGet extends VersionCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
@@ -453,7 +453,7 @@ export class VersionCCCapabilitiesGet extends VersionCC {
 @CCCommand(VersionCommand.ZWaveSoftwareReport)
 export class VersionCCZWaveSoftwareReport extends VersionCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -542,7 +542,7 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 @expectedCCResponse(VersionCCZWaveSoftwareReport)
 export class VersionCCZWaveSoftwareGet extends VersionCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);

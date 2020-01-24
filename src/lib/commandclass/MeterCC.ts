@@ -1,5 +1,5 @@
 import { lookupMeter, lookupMeterScale, MeterScale } from "../config/Meters";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { ValueID } from "../node/ValueDB";
@@ -294,7 +294,7 @@ supports reset:       ${supportsReset}`;
 @CCCommand(MeterCommand.Report)
 export class MeterCCReport extends MeterCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -447,7 +447,7 @@ interface MeterCCGetOptions {
 @expectedCCResponse(MeterCCReport)
 export class MeterCCGet extends MeterCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| (MeterCCGetOptions & CCCommandOptions),
@@ -506,7 +506,7 @@ export class MeterCCGet extends MeterCC {
 @CCCommand(MeterCommand.SupportedReport)
 export class MeterCCSupportedReport extends MeterCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -584,7 +584,7 @@ type MeterCCResetOptions =
 @CCCommand(MeterCommand.Reset)
 export class MeterCCReset extends MeterCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| (MeterCCResetOptions & CCCommandOptions),

@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, MessageBaseOptions, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
 import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "../node/DeviceClass";
@@ -41,7 +41,7 @@ interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Controller)
 export class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: GetNodeProtocolInfoRequestOptions,
 	) {
 		super(driver, options);
@@ -65,7 +65,7 @@ export class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
 @messageTypes(MessageType.Response, FunctionType.GetNodeProtocolInfo)
 export class GetNodeProtocolInfoResponse extends Message {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: MessageDeserializationOptions,
 	) {
 		super(driver, options);

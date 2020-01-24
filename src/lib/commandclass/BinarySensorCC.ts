@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { ValueID } from "../node/ValueDB";
@@ -195,7 +195,7 @@ export class BinarySensorCC extends CommandClass {
 @CCCommand(BinarySensorCommand.Report)
 export class BinarySensorCCReport extends BinarySensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -236,7 +236,7 @@ interface BinarySensorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(BinarySensorCCReport)
 export class BinarySensorCCGet extends BinarySensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | BinarySensorCCGetOptions,
 	) {
 		super(driver, options);
@@ -263,7 +263,7 @@ export class BinarySensorCCGet extends BinarySensorCC {
 @CCCommand(BinarySensorCommand.SupportedReport)
 export class BinarySensorCCSupportedReport extends BinarySensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -284,7 +284,7 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 @expectedCCResponse(BinarySensorCCSupportedReport)
 export class BinarySensorCCSupportedGet extends BinarySensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);

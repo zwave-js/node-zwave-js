@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import log from "../log";
 import type { Endpoint } from "../node/Endpoint";
 import { validatePayload } from "../util/misc";
@@ -170,7 +170,7 @@ export class TimeParametersCC extends CommandClass {
 @CCCommand(TimeParametersCommand.Report)
 export class TimeParametersCCReport extends TimeParametersCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -205,7 +205,7 @@ interface TimeParametersCCSetOptions extends CCCommandOptions {
 @CCCommand(TimeParametersCommand.Set)
 export class TimeParametersCCSet extends TimeParametersCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| TimeParametersCCSetOptions,

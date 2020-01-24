@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { JSONObject, validatePayload } from "../util/misc";
@@ -151,7 +151,7 @@ interface BinarySwitchCCSetOptions extends CCCommandOptions {
 @CCCommand(BinarySwitchCommand.Set)
 export class BinarySwitchCCSet extends BinarySwitchCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | BinarySwitchCCSetOptions,
 	) {
 		super(driver, options);
@@ -182,7 +182,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 @CCCommand(BinarySwitchCommand.Report)
 export class BinarySwitchCCReport extends BinarySwitchCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -241,7 +241,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 @expectedCCResponse(BinarySwitchCCReport)
 export class BinarySwitchCCGet extends BinarySwitchCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);

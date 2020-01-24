@@ -2,13 +2,13 @@ import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertCC } from "../../../test/util";
 import { SendDataRequest, TransmitOptions } from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { ZWavePlusCC, ZWavePlusCommand } from "./ZWavePlusCC";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 describe("lib/commandclass/ZWavePlusCC => ", () => {
 	const cc = new ZWavePlusCC(fakeDriver, { nodeId: 9 });

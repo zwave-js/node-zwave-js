@@ -1,10 +1,10 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { FunctionType, MessageType } from "../message/Constants";
 import { getExpectedResponse, getFunctionType, getMessageType, Message } from "../message/Message";
 import { GetControllerVersionRequest } from "./GetControllerVersionMessages";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 describe("lib/driver/GetControllerVersionRequest => ", () => {
 	const req = new GetControllerVersionRequest(fakeDriver);

@@ -1,10 +1,10 @@
 import { createEmptyMockDriver, mockDriverDummyCallbackId } from "../../../test/mocks";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { getDefaultPriority, getDefaultPriorityStatic, getExpectedResponse, getExpectedResponseStatic, getFunctionType, getFunctionTypeStatic, getMessageType, getMessageTypeStatic, Message } from "../message/Message";
 import { AddNodeToNetworkRequest, AddNodeType } from "./AddNodeToNetworkRequest";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 describe("lib/controller/AddNodeToNetworkRequest => ", () => {
 	const req = new AddNodeToNetworkRequest(fakeDriver);

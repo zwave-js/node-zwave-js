@@ -1,11 +1,11 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { BasicCCSet } from "./BasicCC";
 import { CommandClass, getExpectedCCResponse } from "./CommandClass";
 import { isEncapsulatingCommandClass } from "./EncapsulatingCommandClass";
 import { MultiChannelCC, MultiChannelCCCommandEncapsulation } from "./MultiChannelCC";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 describe("lib/commandclass/MultiChannelCC", () => {
 	describe("class MultiChannelCC", () => {

@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
@@ -66,7 +66,7 @@ interface LanguageCCSetOptions extends CCCommandOptions {
 @CCCommand(LanguageCommand.Set)
 export class LanguageCCSet extends LanguageCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | LanguageCCSetOptions,
 	) {
 		super(driver, options);
@@ -123,7 +123,7 @@ export class LanguageCCSet extends LanguageCC {
 @CCCommand(LanguageCommand.Report)
 export class LanguageCCReport extends LanguageCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -153,7 +153,7 @@ export class LanguageCCReport extends LanguageCC {
 @expectedCCResponse(LanguageCCReport)
 export class LanguageCCGet extends LanguageCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);

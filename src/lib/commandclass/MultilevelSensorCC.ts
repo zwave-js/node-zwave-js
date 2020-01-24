@@ -1,6 +1,6 @@
 import type { Scale } from "../config/Scales";
 import { getSensorTypeName, lookupSensorScale, lookupSensorType } from "../config/SensorTypes";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { ValueID } from "../node/ValueDB";
@@ -252,7 +252,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 @CCCommand(MultilevelSensorCommand.Report)
 export class MultilevelSensorCCReport extends MultilevelSensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -306,7 +306,7 @@ type MultilevelSensorCCGetOptions =
 @expectedCCResponse(MultilevelSensorCCReport)
 export class MultilevelSensorCCGet extends MultilevelSensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCGetOptions,
@@ -347,7 +347,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 @CCCommand(MultilevelSensorCommand.SupportedSensorReport)
 export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -368,7 +368,7 @@ export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC 
 @expectedCCResponse(MultilevelSensorCCSupportedSensorReport)
 export class MultilevelSensorCCGetSupportedSensor extends MultilevelSensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
@@ -378,7 +378,7 @@ export class MultilevelSensorCCGetSupportedSensor extends MultilevelSensorCC {
 @CCCommand(MultilevelSensorCommand.SupportedScaleReport)
 export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -413,7 +413,7 @@ interface MultilevelSensorCCGetSupportedScaleOptions extends CCCommandOptions {
 @expectedCCResponse(MultilevelSensorCCSupportedScaleReport)
 export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCGetSupportedScaleOptions,

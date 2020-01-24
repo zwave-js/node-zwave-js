@@ -39,7 +39,6 @@ import { DeepPartial, skipBytes } from "../util/misc";
 import { num2hex } from "../util/strings";
 import type { Duration } from "../values/Duration";
 import type { FileSystem } from "./FileSystem";
-import type { DriverEventCallbacks, DriverEvents, IDriver } from "./IDriver";
 import { Transaction } from "./Transaction";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -169,6 +168,15 @@ export type SendSupervisedCommandOptions = SendMessageOptions &
 	);
 
 // Strongly type the event emitter events
+
+export interface DriverEventCallbacks {
+	"driver ready": () => void;
+	"all nodes ready": () => void;
+	error: (err: Error) => void;
+}
+
+export type DriverEvents = Extract<keyof DriverEventCallbacks, string>;
+
 export interface Driver {
 	on<TEvent extends DriverEvents>(
 		event: TEvent,
@@ -195,7 +203,7 @@ export interface Driver {
  * Any action you want to perform on the Z-Wave network must go through a driver
  * instance or its associated nodes.
  */
-export class Driver extends EventEmitter implements IDriver {
+export class Driver extends EventEmitter {
 	/** The serial port instance */
 	private serial: SerialPort | undefined;
 	/** A buffer of received but unprocessed data */

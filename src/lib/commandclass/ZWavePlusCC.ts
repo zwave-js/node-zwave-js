@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import type { ValueID } from "../node/ValueDB";
@@ -121,7 +121,7 @@ user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
 @CCCommand(ZWavePlusCommand.Report)
 export class ZWavePlusCCReport extends ZWavePlusCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -194,7 +194,7 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 @expectedCCResponse(ZWavePlusCCReport)
 export class ZWavePlusCCGet extends ZWavePlusCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);

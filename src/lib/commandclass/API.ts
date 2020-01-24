@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import type { Endpoint } from "../node/Endpoint";
 import type { ValueID } from "../node/ValueDB";
@@ -52,7 +52,7 @@ export function throwWrongValueType(
 /** The base class for all CC APIs exposed via `Node.commandClasses.<CCName>` */
 export class CCAPI {
 	public constructor(
-		protected readonly driver: IDriver,
+		protected readonly driver: Driver,
 		protected readonly endpoint: Endpoint,
 	) {
 		this.ccId = getCommandClass(this);

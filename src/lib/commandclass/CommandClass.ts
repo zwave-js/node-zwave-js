@@ -1,6 +1,6 @@
 import { isArray } from "alcalzone-shared/typeguards";
 import fs from "fs";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { MessageOrCCLogEntry } from "../log/shared";
@@ -58,7 +58,7 @@ export type CommandClassOptions =
 
 export class CommandClass {
 	// empty constructor to parse messages
-	public constructor(driver: IDriver, options: CommandClassOptions) {
+	public constructor(driver: Driver, options: CommandClassOptions) {
 		this.driver = driver;
 		// Extract the cc from declared metadata if not provided
 		this.ccId = getCommandClass(this);
@@ -150,7 +150,7 @@ export class CommandClass {
 		}
 	}
 
-	protected driver: IDriver;
+	protected driver: Driver;
 
 	/** This CC's identifier */
 	public ccId: CommandClasses;
@@ -338,7 +338,7 @@ export class CommandClass {
 	}
 
 	/** Creates an instance of the CC that is serialized in the given buffer */
-	public static from(driver: IDriver, serializedCC: Buffer): CommandClass {
+	public static from(driver: Driver, serializedCC: Buffer): CommandClass {
 		// Fall back to unspecified command class in case we receive one that is not implemented
 		const Constructor = CommandClass.getConstructor(serializedCC);
 		const ret = new Constructor(driver, { data: serializedCC });
@@ -350,7 +350,7 @@ export class CommandClass {
 	 * The buffer must be the payload of an encapsulation CC, so it must not contain the header bytes.
 	 */
 	public static fromEncapsulated(
-		driver: IDriver,
+		driver: Driver,
 		encapCC: CommandClass,
 		serializedCC: Buffer,
 	): CommandClass {
@@ -786,13 +786,13 @@ const METADATA_APIMap = Symbol("APIMap");
 
 export interface Constructable<T extends CommandClass> {
 	new(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassCreationOptions
 			| CommandClassDeserializationOptions,
 	): T;
 }
-type APIConstructor = new (driver: IDriver, endpoint: Endpoint) => CCAPI;
+type APIConstructor = new (driver: Driver, endpoint: Endpoint) => CCAPI;
 
 type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
 type CCCommandMap = Map<string, Constructable<CommandClass>>;

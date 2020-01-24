@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, MessageBaseOptions, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
 import type { JSONObject } from "../util/misc";
@@ -13,7 +13,7 @@ interface SetSerialApiTimeoutsRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Controller)
 export class SetSerialApiTimeoutsRequest extends Message {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: SetSerialApiTimeoutsRequestOptions,
 	) {
 		super(driver, options);
@@ -43,7 +43,7 @@ export class SetSerialApiTimeoutsRequest extends Message {
 @messageTypes(MessageType.Response, FunctionType.SetSerialApiTimeouts)
 export class SetSerialApiTimeoutsResponse extends Message {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: MessageDeserializationOptions,
 	) {
 		super(driver, options);

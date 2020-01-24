@@ -1,6 +1,6 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { ZWaveNode } from "../node/Node";
 import { BasicCC, BasicCCSet, BasicCommand } from "./BasicCC";
@@ -20,7 +20,7 @@ class DummyCCSubClass2 extends DummyCC {
 	private y: any;
 }
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 describe("lib/commandclass/CommandClass => ", () => {
 	describe("from()", () => {

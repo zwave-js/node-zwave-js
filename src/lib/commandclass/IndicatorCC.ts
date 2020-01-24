@@ -1,5 +1,5 @@
 import { lookupIndicator, lookupProperty } from "../config/Indicators";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { ValueID } from "../node/ValueDB";
@@ -261,7 +261,7 @@ export class IndicatorCCAPI extends CCAPI {
 export class IndicatorCC extends CommandClass {
 	declare ccCommand: IndicatorCommand;
 
-	public constructor(driver: IDriver, options: CommandClassOptions) {
+	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
 		this.registerValue(
 			getSupportedIndicatorIDsValueID(undefined).property,
@@ -413,7 +413,7 @@ type IndicatorCCSetOptions =
 @CCCommand(IndicatorCommand.Set)
 export class IndicatorCCSet extends IndicatorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| (IndicatorCCSetOptions & CCCommandOptions),
@@ -486,7 +486,7 @@ export class IndicatorCCSet extends IndicatorCC {
 @CCCommand(IndicatorCommand.Report)
 export class IndicatorCCReport extends IndicatorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -597,7 +597,7 @@ interface IndicatorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(IndicatorCCReport)
 export class IndicatorCCGet extends IndicatorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | IndicatorCCGetOptions,
 	) {
 		super(driver, options);
@@ -625,7 +625,7 @@ export class IndicatorCCGet extends IndicatorCC {
 @CCCommand(IndicatorCommand.SupportedReport)
 export class IndicatorCCSupportedReport extends IndicatorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -670,7 +670,7 @@ interface IndicatorCCSupportedGetOptions extends CCCommandOptions {
 @expectedCCResponse(IndicatorCCSupportedReport)
 export class IndicatorCCSupportedGet extends IndicatorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| IndicatorCCSupportedGetOptions,

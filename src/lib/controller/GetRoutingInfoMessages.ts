@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import type { MessageOrCCLogEntry } from "../log/shared";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, MessageBaseOptions, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
@@ -15,7 +15,7 @@ interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.GetRoutingInfo)
 @priority(MessagePriority.Controller)
 export class GetRoutingInfoRequest extends Message {
-	public constructor(driver: IDriver, options: GetRoutingInfoRequestOptions) {
+	public constructor(driver: Driver, options: GetRoutingInfoRequestOptions) {
 		super(driver, options);
 		this.nodeId = options.nodeId;
 		this.removeNonRepeaters = !!options.removeNonRepeaters;
@@ -56,7 +56,7 @@ removeBadLinks:     ${this.removeBadLinks}`,
 @messageTypes(MessageType.Response, FunctionType.GetRoutingInfo)
 export class GetRoutingInfoResponse extends Message {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: MessageDeserializationOptions,
 	) {
 		super(driver, options);

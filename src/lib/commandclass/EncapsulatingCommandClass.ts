@@ -1,15 +1,15 @@
 import { isArray } from "alcalzone-shared/typeguards";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { CommandClass, CommandClassOptions } from "./CommandClass";
 
 /** Defines the static side of an encapsulating command class */
 export interface EncapsulatingCommandClassStatic {
 	new(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassOptions,
 	): EncapsulatingCommandClass;
 
-	encapsulate(driver: IDriver, cc: CommandClass): EncapsulatingCommandClass;
+	encapsulate(driver: Driver, cc: CommandClass): EncapsulatingCommandClass;
 	unwrap(cc: EncapsulatingCommandClass): CommandClass;
 }
 
@@ -49,13 +49,13 @@ export function isEncapsulatingCommandClass(
 /** Defines the static side of an encapsulating command class */
 export interface MultiEncapsulatingCommandClassStatic {
 	new(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassOptions,
 	): MultiEncapsulatingCommandClass;
 
 	requiresEncapsulation(cc: CommandClass): boolean;
 	encapsulate(
-		driver: IDriver,
+		driver: Driver,
 		CCs: CommandClass[],
 	): MultiEncapsulatingCommandClass;
 	unwrap(cc: MultiEncapsulatingCommandClass): CommandClass[];

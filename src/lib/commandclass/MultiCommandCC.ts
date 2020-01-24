@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { validatePayload } from "../util/misc";
 import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
@@ -55,7 +55,7 @@ export class MultiCommandCC extends CommandClass {
 
 	/** Encapsulates a command that targets a specific endpoint */
 	public static encapsulate(
-		driver: IDriver,
+		driver: Driver,
 		CCs: CommandClass[],
 	): MultiCommandCCCommandEncapsulation {
 		return new MultiCommandCCCommandEncapsulation(driver, {
@@ -82,7 +82,7 @@ interface MultiCommandCCCommandEncapsulationOptions extends CCCommandOptions {
 // TODO: This probably expects multiple commands in return
 export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiCommandCCCommandEncapsulationOptions,

@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { ValueMetadata } from "../values/Metadata";
 import type { Maybe } from "../values/Primitive";
@@ -129,7 +129,7 @@ interface NodeNamingAndLocationCCNameSetOptions extends CCCommandOptions {
 @CCCommand(NodeNamingAndLocationCommand.NameSet)
 export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| NodeNamingAndLocationCCNameSetOptions,
@@ -173,7 +173,7 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 @CCCommand(NodeNamingAndLocationCommand.NameReport)
 export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
@@ -201,7 +201,7 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 @expectedCCResponse(NodeNamingAndLocationCCNameReport)
 export class NodeNamingAndLocationCCNameGet extends NodeNamingAndLocationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
@@ -215,7 +215,7 @@ interface NodeNamingAndLocationCCLocationSetOptions extends CCCommandOptions {
 @CCCommand(NodeNamingAndLocationCommand.LocationSet)
 export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| NodeNamingAndLocationCCLocationSetOptions,
@@ -259,7 +259,7 @@ export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC 
 @CCCommand(NodeNamingAndLocationCommand.LocationReport)
 export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
@@ -287,7 +287,7 @@ export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocation
 @expectedCCResponse(NodeNamingAndLocationCCLocationReport)
 export class NodeNamingAndLocationCCLocationGet extends NodeNamingAndLocationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);

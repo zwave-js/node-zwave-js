@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, Message, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
 import type { JSONObject } from "../util/misc";
@@ -16,7 +16,7 @@ export class GetSerialApiCapabilitiesRequest extends Message { }
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiCapabilities)
 export class GetSerialApiCapabilitiesResponse extends Message {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: MessageDeserializationOptions,
 	) {
 		super(driver, options);

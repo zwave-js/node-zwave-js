@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { MessageOrCCLogEntry } from "../log/shared";
@@ -171,7 +171,7 @@ export interface EndpointCapability extends NodeInformationFrame {
 export class MultiChannelCC extends CommandClass {
 	declare ccCommand: MultiChannelCommand;
 
-	public constructor(driver: IDriver, options: CommandClassOptions) {
+	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
 		this.registerValue(getEndpointCCsValueId(0).property, true);
 	}
@@ -186,7 +186,7 @@ export class MultiChannelCC extends CommandClass {
 
 	/** Encapsulates a command that targets a specific endpoint */
 	public static encapsulate(
-		driver: IDriver,
+		driver: Driver,
 		cc: CommandClass,
 	): MultiChannelCCCommandEncapsulation {
 		return new MultiChannelCCCommandEncapsulation(driver, {
@@ -314,7 +314,7 @@ supported CCs:`;
 @CCCommand(MultiChannelCommand.EndPointReport)
 export class MultiChannelCCEndPointReport extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -371,7 +371,7 @@ identical capabilities:      ${this.identicalCapabilities}`,
 @expectedCCResponse(MultiChannelCCEndPointReport)
 export class MultiChannelCCEndPointGet extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
@@ -381,7 +381,7 @@ export class MultiChannelCCEndPointGet extends MultiChannelCC {
 @CCCommand(MultiChannelCommand.CapabilityReport)
 export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -450,7 +450,7 @@ interface MultiChannelCCCapabilityGetOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelCCCapabilityReport)
 export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCCapabilityGetOptions,
@@ -485,7 +485,7 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 @CCCommand(MultiChannelCommand.EndPointFindReport)
 export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -541,7 +541,7 @@ interface MultiChannelCCEndPointFindOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelCCEndPointFindReport)
 export class MultiChannelCCEndPointFind extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCEndPointFindOptions,
@@ -571,7 +571,7 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 @CCCommand(MultiChannelCommand.AggregatedMembersReport)
 export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -617,7 +617,7 @@ interface MultiChannelCCAggregatedMembersGetOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelCCAggregatedMembersReport)
 export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCAggregatedMembersGetOptions,
@@ -673,7 +673,7 @@ const getResponseForCommandEncapsulation: DynamicCCResponse = (
 @expectedCCResponse(getResponseForCommandEncapsulation)
 export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCCommandEncapsulationOptions,

@@ -1,11 +1,11 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { AssociationGroupInfoCC, AssociationGroupInfoCCCommandListGet, AssociationGroupInfoCCCommandListReport, AssociationGroupInfoCCInfoGet, AssociationGroupInfoCCInfoReport, AssociationGroupInfoCCNameGet, AssociationGroupInfoCCNameReport, AssociationGroupInfoCommand, AssociationGroupInfoProfile } from "./AssociationGroupInfoCC";
 import { BasicCommand } from "./BasicCC";
 import { CommandClasses } from "./CommandClasses";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 const node1 = new ZWaveNode(1, fakeDriver as any);
 (fakeDriver.controller!.nodes as any).set(1, node1);
 

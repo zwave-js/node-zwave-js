@@ -1,7 +1,7 @@
 import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
 import type { ParamInfoMap } from "../config/Devices";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { ValueID } from "../node/ValueDB";
@@ -415,7 +415,7 @@ export class ConfigurationCCAPI extends CCAPI {
 export class ConfigurationCC extends CommandClass {
 	declare ccCommand: ConfigurationCommand;
 
-	public constructor(driver: IDriver, options: CommandClassOptions) {
+	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
 		this.registerValue("isParamInformationFromConfig" as any, true);
 	}
@@ -743,7 +743,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 @CCCommand(ConfigurationCommand.Report)
 export class ConfigurationCCReport extends ConfigurationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -843,7 +843,7 @@ interface ConfigurationCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(ConfigurationCCReport)
 export class ConfigurationCCGet extends ConfigurationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
 	) {
 		super(driver, options);
@@ -883,7 +883,7 @@ type ConfigurationCCSetOptions = CCCommandOptions &
 @CCCommand(ConfigurationCommand.Set)
 export class ConfigurationCCSet extends ConfigurationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | ConfigurationCCSetOptions,
 	) {
 		super(driver, options);
@@ -963,7 +963,7 @@ const getResponseForBulkSet: DynamicCCResponse = (
 @expectedCCResponse(getResponseForBulkSet)
 export class ConfigurationCCBulkSet extends ConfigurationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| ConfigurationCCBulkSetOptions,
@@ -1051,7 +1051,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 @CCCommand(ConfigurationCommand.BulkReport)
 export class ConfigurationCCBulkReport extends ConfigurationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -1129,7 +1129,7 @@ interface ConfigurationCCBulkGetOptions extends CCCommandOptions {
 @expectedCCResponse(ConfigurationCCBulkReport)
 export class ConfigurationCCBulkGet extends ConfigurationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| ConfigurationCCBulkGetOptions,
@@ -1168,7 +1168,7 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 @CCCommand(ConfigurationCommand.NameReport)
 export class ConfigurationCCNameReport extends ConfigurationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -1213,7 +1213,7 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 @expectedCCResponse(ConfigurationCCNameReport)
 export class ConfigurationCCNameGet extends ConfigurationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
 	) {
 		super(driver, options);
@@ -1240,7 +1240,7 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 @CCCommand(ConfigurationCommand.InfoReport)
 export class ConfigurationCCInfoReport extends ConfigurationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -1285,7 +1285,7 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 @expectedCCResponse(ConfigurationCCInfoReport)
 export class ConfigurationCCInfoGet extends ConfigurationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
 	) {
 		super(driver, options);
@@ -1312,7 +1312,7 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 @CCCommand(ConfigurationCommand.PropertiesReport)
 export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -1448,7 +1448,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 @expectedCCResponse(ConfigurationCCPropertiesReport)
 export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
 	) {
 		super(driver, options);
@@ -1475,7 +1475,7 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 @CCCommand(ConfigurationCommand.DefaultReset)
 export class ConfigurationCCDefaultReset extends ConfigurationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);

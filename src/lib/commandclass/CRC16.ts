@@ -1,4 +1,4 @@
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { CRC16_CCITT } from "../util/crc";
 import { validatePayload } from "../util/misc";
 import type { Maybe } from "../values/Primitive";
@@ -46,7 +46,7 @@ export class CRC16CC extends CommandClass {
 
 	/** Encapsulates a command in a CRC-16 CC */
 	public static encapsulate(
-		driver: IDriver,
+		driver: Driver,
 		cc: CommandClass,
 	): CRC16CCCommandEncapsulation {
 		return new CRC16CCCommandEncapsulation(driver, {
@@ -73,7 +73,7 @@ const getResponseForCommandEncapsulation: DynamicCCResponse = () =>
 @expectedCCResponse(getResponseForCommandEncapsulation)
 export class CRC16CCCommandEncapsulation extends CRC16CC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| CRC16CCCommandEncapsulationOptions,

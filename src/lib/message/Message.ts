@@ -2,7 +2,7 @@
 
 import { entries } from "alcalzone-shared/objects";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { getNodeTag, MessageOrCCLogEntry } from "../log/shared";
@@ -13,7 +13,7 @@ import { num2hex } from "../util/strings";
 import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "./Constants";
 
 type Constructable<T extends Message> = new (
-	driver: IDriver,
+	driver: Driver,
 	options?: MessageOptions,
 ) => T;
 
@@ -50,7 +50,7 @@ export type MessageOptions =
  */
 export class Message {
 	public constructor(
-		protected driver: IDriver,
+		protected driver: Driver,
 		options: MessageOptions = {},
 	) {
 		// decide which implementation we follow
@@ -212,7 +212,7 @@ export class Message {
 	}
 
 	/** Creates an instance of the message that is serialized in the given buffer */
-	public static from(driver: IDriver, data: Buffer): Message {
+	public static from(driver: Driver, data: Buffer): Message {
 		const Constructor = Message.getConstructor(data);
 		const ret = new Constructor(driver, { data });
 		return ret;

@@ -1,5 +1,5 @@
 import { MAX_NODES } from "../controller/NodeBitMask";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { MessageOrCCLogEntry } from "../log/shared";
@@ -169,7 +169,7 @@ export class AssociationCCAPI extends CCAPI {
 export class AssociationCC extends CommandClass {
 	declare ccCommand: AssociationCommand;
 
-	public constructor(driver: IDriver, options: CommandClassOptions) {
+	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
 		this.registerValue(getHasLifelineValueId().property, true);
 	}
@@ -325,7 +325,7 @@ interface AssociationCCSetOptions extends CCCommandOptions {
 @CCCommand(AssociationCommand.Set)
 export class AssociationCCSet extends AssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | AssociationCCSetOptions,
 	) {
 		super(driver, options);
@@ -372,7 +372,7 @@ interface AssociationCCRemoveOptions {
 @CCCommand(AssociationCommand.Remove)
 export class AssociationCCRemove extends AssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| (AssociationCCRemoveOptions & CCCommandOptions),
@@ -426,7 +426,7 @@ export class AssociationCCRemove extends AssociationCC {
 @CCCommand(AssociationCommand.Report)
 export class AssociationCCReport extends AssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -501,7 +501,7 @@ interface AssociationCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(AssociationCCReport)
 export class AssociationCCGet extends AssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | AssociationCCGetOptions,
 	) {
 		super(driver, options);
@@ -540,7 +540,7 @@ export class AssociationCCGet extends AssociationCC {
 @CCCommand(AssociationCommand.SupportedGroupingsReport)
 export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);

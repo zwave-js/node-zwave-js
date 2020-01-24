@@ -1,6 +1,6 @@
 import { CommandClass } from "../commandclass/CommandClass";
 import type { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { gotDeserializationOptions, Message, MessageBaseOptions, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
 
@@ -21,7 +21,7 @@ interface ApplicationCommandRequestOptions extends MessageBaseOptions {
 export class ApplicationCommandRequest extends Message
 	implements ICommandClassContainer {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| MessageDeserializationOptions
 			| ApplicationCommandRequestOptions,

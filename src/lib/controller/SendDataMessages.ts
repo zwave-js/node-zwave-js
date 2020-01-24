@@ -1,7 +1,7 @@
 import { CCResponseRole, CommandClass, getExpectedCCResponse, isDynamicCCResponse } from "../commandclass/CommandClass";
 import { EncapsulatingCommandClass, isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
 import { ICommandClassContainer, isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import type { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import type { MessageOrCCLogEntry } from "../log/shared";
 import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { expectedResponse, gotDeserializationOptions, Message, MessageBaseOptions, MessageDeserializationOptions, MessageOptions, messageTypes, priority, ResponseRole } from "../message/Message";
@@ -33,7 +33,7 @@ export enum TransmitStatus {
 @messageTypes(MessageType.Request, FunctionType.SendData)
 @priority(MessagePriority.Normal)
 export class SendDataRequestBase extends Message {
-	public constructor(driver: IDriver, options: MessageOptions) {
+	public constructor(driver: Driver, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== SendDataRequestTransmitReport
@@ -55,7 +55,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	extends SendDataRequestBase
 	implements ICommandClassContainer {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: SendDataRequestOptions<CCType>,
 	) {
 		super(driver, options);
@@ -207,7 +207,7 @@ interface SendDataRequestTransmitReportOptions extends MessageBaseOptions {
 
 export class SendDataRequestTransmitReport extends SendDataRequestBase {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| MessageDeserializationOptions
 			| SendDataRequestTransmitReportOptions,
@@ -254,7 +254,7 @@ transmitStatus: ${getEnumMemberName(TransmitStatus, this.transmitStatus)}`,
 @messageTypes(MessageType.Response, FunctionType.SendData)
 export class SendDataResponse extends Message {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: MessageDeserializationOptions,
 	) {
 		super(driver, options);
