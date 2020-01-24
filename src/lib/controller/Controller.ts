@@ -770,6 +770,36 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	/**
+	 * Removes a node from all other nodes' associations
+	 * WARNING: It is not recommended to await this method
+	 */
+	public async removeNodeFromAllAssocations(nodeId: number): Promise<void> {
+		// Create all async tasks
+		const tasks = [...this.nodes.values()]
+			.filter(node => node.id !== this._ownNodeId && node.id !== nodeId)
+			.map(node => {
+				// Prefer multi channel associations if that is available
+				if (
+					node.commandClasses[
+						"Multi Channel Association"
+					].isSupported()
+				) {
+					return node.commandClasses[
+						"Multi Channel Association"
+					].removeDestinations({
+						nodeIds: [nodeId],
+					});
+				} else if (node.commandClasses.Association.isSupported()) {
+					return node.commandClasses.Association.removeNodeIdsFromAllGroups(
+						[nodeId],
+					);
+				}
+			})
+			.filter(task => !!task) as Promise<void>[];
+		await Promise.all(tasks);
+	}
+
+	/**
 	 * Is called when an AddNode request is received from the controller.
 	 * Handles and controls the inclusion process.
 	 */
