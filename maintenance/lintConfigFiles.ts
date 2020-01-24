@@ -340,6 +340,14 @@ Did you mean to use ${opt.value >>> shiftAmount}?`,
 				}
 			}
 		}
+
+		// Validate firmware versions
+		if (config.firmwareVersion.max === "255.0") {
+			addWarning(
+				file,
+				`The maximum firmware version is 255.0. Did you mean 255.255?`,
+			);
+		}
 	}
 
 	if (warnings.size) {
