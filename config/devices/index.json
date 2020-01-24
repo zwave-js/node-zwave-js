@@ -806,9 +806,9 @@
         "productId": "0x0503",
         "firmwareVersion": {
             "min": "0.0",
-            "max": "255.0"
+            "max": "255.255"
         },
-        "filename": "0x001a/rf9601_0.0-255.0.json"
+        "filename": "0x001a/rf9601.json"
     },
     {
         "manufacturerId": "0x001a",
@@ -826,9 +826,9 @@
         "productId": "0x0501",
         "firmwareVersion": {
             "min": "0.0",
-            "max": "255.0"
+            "max": "255.255"
         },
-        "filename": "0x001a/rf9640_0.0-255.0.json"
+        "filename": "0x001a/rf9640.json"
     },
     {
         "manufacturerId": "0x001a",
