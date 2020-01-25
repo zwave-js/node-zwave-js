@@ -73,7 +73,7 @@ import {
 } from "./SetSerialApiTimeoutsMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
-type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
+export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
 
 // Strongly type the event emitter events
 interface ControllerEventCallbacks {
