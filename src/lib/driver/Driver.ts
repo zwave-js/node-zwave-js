@@ -443,7 +443,9 @@ export class Driver extends EventEmitter implements IDriver {
 						`Interview attempt (${node.interviewAttempts} / ${this.options.nodeInterviewAttempts}) failed, retrying...`,
 						"warn",
 					);
-					setImmediate(() => this.interviewNode(node));
+					setImmediate(() => {
+						this.interviewNode(node);
+					});
 				} else {
 					log.controller.logNode(
 						node.id,
