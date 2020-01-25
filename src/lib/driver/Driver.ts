@@ -59,7 +59,7 @@ import { getDefaultPriority, Message } from "../message/Message";
 import { InterviewStage, IZWaveNode, NodeStatus } from "../node/INode";
 import { isNodeQuery } from "../node/INodeQuery";
 import { ZWaveNode } from "../node/Node";
-import { DeepPartial, skipBytes } from "../util/misc";
+import { DeepPartial, getEnumMemberName, skipBytes } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { Duration } from "../values/Duration";
 import { FileSystem } from "./FileSystem";
@@ -111,7 +111,7 @@ const defaultOptions: ZWaveOptions = {
 		report: 1000,
 	},
 	skipInterview: false,
-	nodeInterviewAttempts: 3,
+	nodeInterviewAttempts: 5,
 	fs: fsExtra,
 	cacheDir: path.resolve(__dirname, "../../..", "cache"),
 };
@@ -417,6 +417,7 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 	}
 
+	private retryNodeInterviewTimeouts = new Map<number, NodeJS.Timeout>();
 	/**
 	 * Starts or resumes the interview of a Z-Wave node. It is advised to NOT
 	 * await this method as it can take a very long time (minutes to hours)!
@@ -438,14 +439,24 @@ export class Driver extends EventEmitter implements IDriver {
 				} else if (
 					node.interviewAttempts < this.options.nodeInterviewAttempts
 				) {
+					// This is most likely because the node is unable to handle our load of requests now. Give it some time
+					const retryTimeout = Math.min(
+						30000,
+						node.interviewAttempts * 5000,
+					);
 					log.controller.logNode(
 						node.id,
-						`Interview attempt (${node.interviewAttempts} / ${this.options.nodeInterviewAttempts}) failed, retrying...`,
+						`Interview attempt ${node.interviewAttempts}/${this.options.nodeInterviewAttempts} failed, retrying in ${retryTimeout} ms...`,
 						"warn",
 					);
-					setImmediate(() => {
-						this.interviewNode(node);
-					});
+					// Schedule the retry and remember the timeout instance
+					this.retryNodeInterviewTimeouts.set(
+						node.id,
+						setTimeout(() => {
+							this.retryNodeInterviewTimeouts.delete(node.id);
+							this.interviewNode(node);
+						}, retryTimeout).unref(),
+					);
 				} else {
 					log.controller.logNode(
 						node.id,
@@ -674,6 +685,10 @@ export class Driver extends EventEmitter implements IDriver {
 		this.nodeAwakeTimeouts.clear();
 		this.sendNodeToSleepTimers.forEach(timeout => clearTimeout(timeout));
 		this.sendNodeToSleepTimers.clear();
+		this.retryNodeInterviewTimeouts.forEach(timeout =>
+			clearTimeout(timeout),
+		);
+		this.retryNodeInterviewTimeouts.clear();
 
 		this._controllerInterviewed = false;
 		void this.initializeControllerAndNodes();
@@ -727,6 +742,7 @@ export class Driver extends EventEmitter implements IDriver {
 			this.saveToCacheTimer,
 			...this.sendNodeToSleepTimers.values(),
 			...this.nodeAwakeTimeouts.values(),
+			...this.retryNodeInterviewTimeouts.values(),
 			this.currentTransaction?.timeoutInstance,
 			this.retryTransactionTimeout,
 		]) {
@@ -893,6 +909,47 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	/**
+	 * Handles the case that a node failed to respond in time
+	 */
+	private handleMissingNodeResponse(transmitStatus?: TransmitStatus): void {
+		if (!this.currentTransaction) return;
+		const node = this.currentTransaction.message.getNodeUnsafe();
+		if (!node) return; // This should never happen, but whatever
+		if (node.supportsCC(CommandClasses["Wake Up"])) {
+			log.controller.logNode(
+				node.id,
+				`The node did not respond because it is asleep, moving its messages to the wakeup queue`,
+				"warn",
+			);
+			// The node is asleep
+			WakeUpCC.setAwake(node, false);
+			// The handler for the asleep status will move the messages to the wakeup queue
+		} else if (this.mayRetryCurrentTransaction()) {
+			// The Z-Wave specs define 500ms as the waiting period for SendData messages
+			const timeout = this.retryCurrentTransaction(500);
+			log.controller.logNode(
+				node.id,
+				`The node did not respond to the current transaction, scheduling attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`,
+				"warn",
+			);
+		} else {
+			let errorMsg = `The node did not respond to the current transaction after ${this.currentTransaction.maxSendAttempts} attempts, it is presumed dead`;
+			if (transmitStatus != undefined) {
+				errorMsg += ` (Status ${getEnumMemberName(
+					TransmitStatus,
+					transmitStatus,
+				)})`;
+			}
+			log.controller.logNode(node.id, `${errorMsg}`, "warn");
+
+			node.status = NodeStatus.Dead;
+			this.rejectAllTransactionsForNode(node.id, errorMsg);
+			// And continue with the next messages
+			setImmediate(() => this.workOffSendQueue());
+		}
+	}
+
+	/**
 	 * Is called when a complete message was decoded from the receive buffer
 	 * @param msg The decoded message
 	 */
@@ -933,19 +990,7 @@ export class Driver extends EventEmitter implements IDriver {
 						}
 
 						this.currentTransaction.timeoutInstance = setTimeout(
-							() => {
-								if (!this.currentTransaction) return;
-								log.driver.print(
-									"The transaction timed out",
-									"warn",
-								);
-								this.rejectCurrentTransaction(
-									new ZWaveError(
-										"The transaction timed out",
-										ZWaveErrorCodes.Controller_NodeTimeout,
-									),
-								);
-							},
+							() => this.handleMissingNodeResponse(),
 							// The timeout SHOULD be RTT + 1s
 							msRTT + this.options.timeouts.report,
 						)
@@ -981,39 +1026,11 @@ export class Driver extends EventEmitter implements IDriver {
 
 				case "fatal_node":
 					// The node did not respond
-					const node = this.currentTransaction.message.getNodeUnsafe();
-					if (!node) return; // This should never happen, but whatever
-					if (node.supportsCC(CommandClasses["Wake Up"])) {
-						log.controller.logNode(
-							node.id,
-							`The node did not respond because it is asleep, moving its messages to the wakeup queue`,
-							"warn",
-						);
-						// The node is asleep
-						WakeUpCC.setAwake(node, false);
-						// The handler for the asleep status will move the messages to the wakeup queue
-					} else if (this.mayRetryCurrentTransaction()) {
-						// The Z-Wave specs define 500ms as the waiting period for SendData messages
-						const timeout = this.retryCurrentTransaction(500);
-						log.controller.logNode(
-							node.id,
-							`The node did not respond to the current transaction, scheduling attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`,
-							"warn",
-						);
-					} else {
-						let errorMsg = `The node did not respond to the current transaction after ${this.currentTransaction.maxSendAttempts} attempts, it is presumed dead`;
-						if (msg instanceof SendDataRequestTransmitReport) {
-							errorMsg += ` (Status ${
-								TransmitStatus[msg.transmitStatus]
-							})`;
-						}
-						log.controller.logNode(node.id, `${errorMsg}`, "warn");
-
-						node.status = NodeStatus.Dead;
-						this.rejectAllTransactionsForNode(node.id, errorMsg);
-						// And continue with the next messages
-						setImmediate(() => this.workOffSendQueue());
-					}
+					this.handleMissingNodeResponse(
+						msg instanceof SendDataRequestTransmitReport
+							? msg.transmitStatus
+							: undefined,
+					);
 					return;
 
 				case "partial":
