@@ -45,7 +45,7 @@ class TestNode extends ZWaveNode {
 	public async queryNodeInfo(): Promise<void> {
 		return super.queryNodeInfo();
 	}
-	public async interviewCCs(): Promise<void> {
+	public async interviewCCs(): Promise<boolean> {
 		return super.interviewCCs();
 	}
 	// public async queryManufacturerSpecific(): Promise<void> {
@@ -355,11 +355,6 @@ describe("lib/node/Node", () => {
 			);
 			beforeEach(() => fakeDriver.sendMessage.mockClear());
 
-			it(`should set the interview stage to "CommandClasses"`, async () => {
-				await node.interviewCCs();
-				expect(node.interviewStage).toBe(InterviewStage.CommandClasses);
-			});
-
 			it.todo("test that the CC interview methods are called");
 
 			// it("should not send anything if the node is the controller", async () => {
@@ -468,29 +463,17 @@ describe("lib/node/Node", () => {
 					queryProtocolInfo: InterviewStage.ProtocolInfo,
 					queryNodeInfo: InterviewStage.NodeInfo,
 					interviewCCs: InterviewStage.CommandClasses,
-					// queryNodePlusInfo: InterviewStage.NodePlusInfo,
-					// queryManufacturerSpecific:
-					// 	InterviewStage.ManufacturerSpecific,
-					// queryCCVersions: InterviewStage.Versions,
-					// queryEndpoints: InterviewStage.Endpoints,
 					queryNeighbors: InterviewStage.Neighbors,
-					// configureWakeup: InterviewStage.WakeUp,
-					// requestStaticValues: InterviewStage.Static,
 				};
 				const returnValues: Partial<Record<keyof TestNode, any>> = {
 					ping: true,
+					interviewCCs: true,
 				};
 				originalMethods = {
 					queryProtocolInfo: node.queryProtocolInfo,
 					queryNodeInfo: node.queryNodeInfo,
 					interviewCCs: node.interviewCCs,
-					// queryNodePlusInfo: node.queryNodePlusInfo,
-					// queryManufacturerSpecific: node.queryManufacturerSpecific,
-					// queryCCVersions: node.queryCCVersions,
-					// queryEndpoints: node.queryEndpoints,
 					queryNeighbors: node.queryNeighbors,
-					// configureWakeup: node.configureWakeup,
-					// requestStaticValues: node.requestStaticValues,
 				};
 				for (const method of Object.keys(
 					originalMethods,

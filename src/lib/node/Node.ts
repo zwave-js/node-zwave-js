@@ -616,6 +616,12 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	 */
 	public interviewStage: InterviewStage = InterviewStage.None;
 
+	private _interviewAttempts: number = 0;
+	/** How many attempts to interview this node have already been made */
+	public get interviewAttempts(): number {
+		return this._interviewAttempts;
+	}
+
 	/** Utility function to check if this node is the controller */
 	public isControllerNode(): boolean {
 		return this.id === this.driver.controller.ownNodeId;
@@ -635,6 +641,9 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		} else {
 			log.controller.interviewStart(this);
 		}
+
+		// Remember that we tried to interview this node
+		this._interviewAttempts++;
 
 		// The interview is done in several stages. At each point, the interview process might be aborted
 		// due to a stage failing. The reached stage is saved, so we can continue it later without
@@ -668,7 +677,12 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			this.interviewStage === InterviewStage.RestartFromCache ||
 			this.interviewStage === InterviewStage.NodeInfo
 		) {
-			await this.interviewCCs();
+			// Only advance the interview if it was completed, otherwise abort
+			if (await this.interviewCCs()) {
+				await this.setInterviewStage(InterviewStage.CommandClasses);
+			} else {
+				return false;
+			}
 		}
 
 		if (this.interviewStage === InterviewStage.CommandClasses) {
@@ -876,7 +890,7 @@ version:               ${this.version}`;
 	}
 
 	/** Step #? of the node interview */
-	protected async interviewCCs(): Promise<void> {
+	protected async interviewCCs(): Promise<boolean> {
 		// We determine the correct interview order by topologically sorting a dependency graph
 		let interviewGraph = this.buildCCInterviewGraph();
 		let interviewOrder: CommandClasses[];
@@ -892,35 +906,50 @@ version:               ${this.version}`;
 
 		// Now that we know the correct order, do the interview in sequence
 		for (const cc of interviewOrder) {
+			let instance: CommandClass;
 			try {
-				let instance: CommandClass;
-				try {
-					instance = this.createCCInstance(cc)!;
-				} catch (e) {
-					if (
-						e instanceof ZWaveError &&
-						e.code === ZWaveErrorCodes.CC_NotSupported
-					) {
-						// The CC is no longer supported. This can happen if the node tells us
-						// something different in the Version interview than it did in its NIF
-						continue;
-					}
-					// we want to pass all other errors through
-					throw e;
+				instance = this.createCCInstance(cc)!;
+			} catch (e) {
+				if (
+					e instanceof ZWaveError &&
+					e.code === ZWaveErrorCodes.CC_NotSupported
+				) {
+					// The CC is no longer supported. This can happen if the node tells us
+					// something different in the Version interview than it did in its NIF
+					continue;
 				}
+				// we want to pass all other errors through
+				throw e;
+			}
+
+			try {
 				await instance.interview(!instance.interviewComplete);
+			} catch (e) {
+				if (
+					e instanceof ZWaveError &&
+					(e.code === ZWaveErrorCodes.Controller_MessageDropped ||
+						e.code === ZWaveErrorCodes.Controller_NodeTimeout)
+				) {
+					// We had a CAN or timeout during the interview
+					// or the node is presumed dead. Abort the process
+					return false;
+				}
+				// we want to pass all other errors through
+				throw e;
+			}
+
+			try {
 				if (cc === CommandClasses.Version) {
 					// After the version CC interview, we have enough info to load the correct device config file
 					await this.loadDeviceConfig();
 				}
 				await this.driver.saveNetworkToCache();
 			} catch (e) {
-				// TODO: Should this cancel the entire interview procedure?
 				log.controller.print(
 					`${getEnumMemberName(
 						CommandClasses,
 						cc,
-					)}: Interview failed:\n${e.message}`,
+					)}: Error after interview:\n${e.message}`,
 					"error",
 				);
 			}
@@ -948,31 +977,46 @@ version:               ${this.version}`;
 
 			// Now that we know the correct order, do the interview in sequence
 			for (const cc of interviewOrder) {
+				let instance: CommandClass;
 				try {
-					let instance: CommandClass;
-					try {
-						instance = endpoint.createCCInstance(cc)!;
-					} catch (e) {
-						if (
-							e instanceof ZWaveError &&
-							e.code === ZWaveErrorCodes.CC_NotSupported
-						) {
-							// The CC is no longer supported. This can happen if the node tells us
-							// something different in the Version interview than it did in its NIF
-							continue;
-						}
-						// we want to pass all other errors through
-						throw e;
+					instance = endpoint.createCCInstance(cc)!;
+				} catch (e) {
+					if (
+						e instanceof ZWaveError &&
+						e.code === ZWaveErrorCodes.CC_NotSupported
+					) {
+						// The CC is no longer supported. This can happen if the node tells us
+						// something different in the Version interview than it did in its NIF
+						continue;
 					}
+					// we want to pass all other errors through
+					throw e;
+				}
+
+				try {
 					await instance.interview(!instance.interviewComplete);
+				} catch (e) {
+					if (
+						e instanceof ZWaveError &&
+						(e.code === ZWaveErrorCodes.Controller_MessageDropped ||
+							e.code === ZWaveErrorCodes.Controller_NodeTimeout)
+					) {
+						// We had a CAN or timeout during the interview
+						// or the node is presumed dead. Abort the process
+						return false;
+					}
+					// we want to pass all other errors through
+					throw e;
+				}
+
+				try {
 					await this.driver.saveNetworkToCache();
 				} catch (e) {
-					// TODO: Should this cancel the entire interview procedure?
 					log.controller.print(
 						`${getEnumMemberName(
 							CommandClasses,
 							cc,
-						)}: Interview failed:\n${e.message}`,
+						)}: Error after interview:\n${e.message}`,
 						"error",
 					);
 				}
@@ -986,7 +1030,7 @@ version:               ${this.version}`;
 
 		// TODO: Overwrite the reported config with configuration files (like OZW does)
 
-		await this.setInterviewStage(InterviewStage.CommandClasses);
+		return true;
 	}
 
 	/**
