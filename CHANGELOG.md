@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.12.0 (2020-01-25)
 ### Features
 * When a node is removed from the network, all associations to it are also removed
 * The interview procedure is now canceled and retried when an error occurs instead of silently failing all futher steps
