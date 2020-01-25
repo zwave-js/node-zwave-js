@@ -1833,8 +1833,9 @@ ${handlers.length} left`,
 	}
 
 	private lastSaveToCache: number = 0;
-	private readonly saveToCacheInterval: number = 50;
+	private readonly saveToCacheInterval: number = 150;
 	private saveToCacheTimer: NodeJS.Timer | undefined;
+	private isSavingToCache: boolean = false;
 
 	/**
 	 * Does the work for saveNetworkToCache. This is not throttled, so any call
@@ -1861,7 +1862,10 @@ ${handlers.length} left`,
 	public async saveNetworkToCache(): Promise<void> {
 		if (!this._controller || !this.controller.homeId) return;
 		// Ensure this method isn't being executed too often
-		if (Date.now() - this.lastSaveToCache < this.saveToCacheInterval) {
+		if (
+			this.isSavingToCache ||
+			Date.now() - this.lastSaveToCache < this.saveToCacheInterval
+		) {
 			// Schedule a save in a couple of ms to collect changes
 			if (!this.saveToCacheTimer) {
 				this.saveToCacheTimer = setTimeout(
@@ -1873,8 +1877,10 @@ ${handlers.length} left`,
 		} else {
 			this.saveToCacheTimer = undefined;
 		}
+		this.isSavingToCache = true;
+		await this.saveNetworkToCacheInternal();
+		this.isSavingToCache = false;
 		this.lastSaveToCache = Date.now();
-		return this.saveNetworkToCacheInternal();
 	}
 
 	/**
