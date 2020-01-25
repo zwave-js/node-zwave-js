@@ -4,6 +4,18 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* When a node is removed from the network, all associations to it are also removed
+* The interview procedure is now canceled and retried when an error occurs instead of silently failing all futher steps
+* The progress report for network healing distinguishes between failed, skipped, pending and healed nodes.
+
+### Bugfixes
+* The network heal now skips nodes that are dead or likely dead
+
+### Changes under the hood
+* Added some lint rules for the firmware in device config files
+
 ## 2.11.1 (2020-01-21)
 ### Bugfixes
 * A potential source of stalled communication because of a missing timeout was eliminated
