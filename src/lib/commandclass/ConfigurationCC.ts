@@ -237,7 +237,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
 			) {
-				// A timeout has to be expefcted. We return undefined to
+				// A timeout has to be expected. We return undefined to
 				// signal that no value was received
 				return undefined;
 			}
@@ -486,7 +486,21 @@ export class ConfigurationCC extends CommandClass {
 						message: `querying parameter #${param.parameter} value...`,
 						direction: "outbound",
 					});
-					await api.get(param.parameter);
+					// ... at least try to
+					try {
+						await api.get(param.parameter);
+					} catch (e) {
+						if (
+							e instanceof ZWaveError &&
+							e.code ===
+								ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber
+						) {
+							// ignore, we don't want to cancel the interview just
+							// because one configuration report was received out of sequence
+						} else {
+							throw e;
+						}
+					}
 				}
 			} else {
 				log.controller.logNode(node.id, {
