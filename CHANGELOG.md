@@ -4,6 +4,13 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* The node interview is no longer aborted when an unexpected `ConfigurationReport` is received
+* Retrying the interview procedure now happens after a short waiting period to give nodes time to recover
+* If a node times out after a confirmation, the sent message is retried just like if there was no response at all
+* Messages to sleeping nodes are now also retried before immediately assuming they are asleep
+
 ## 2.12.0 (2020-01-25)
 ### Features
 * When a node is removed from the network, all associations to it are also removed
