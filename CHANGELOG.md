@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.12.1 (2020-01-25)
 ### Bugfixes
 * The node interview is no longer aborted when an unexpected `ConfigurationReport` is received
 * Retrying the interview procedure now happens after a short waiting period to give nodes time to recover
