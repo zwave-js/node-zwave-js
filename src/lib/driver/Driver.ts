@@ -93,6 +93,10 @@ export interface ZWaveOptions {
 	 */
 	skipInterview?: boolean;
 	/**
+	 * How many attempts should be made for each node interview before giving up
+	 */
+	nodeInterviewAttempts: number;
+	/**
 	 * Allows you to replace the default file system driver used to store and read the cache
 	 */
 	fs: FileSystem;
@@ -107,6 +111,7 @@ const defaultOptions: ZWaveOptions = {
 		report: 1000,
 	},
 	skipInterview: false,
+	nodeInterviewAttempts: 3,
 	fs: fsExtra,
 	cacheDir: path.resolve(__dirname, "../../..", "cache"),
 };
@@ -422,7 +427,31 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 
 		try {
-			await node.interview();
+			if (!(await node.interview())) {
+				// Find out if we may retry the interview
+				if (node.status === NodeStatus.Dead) {
+					log.controller.logNode(
+						node.id,
+						`Interview attempt (${node.interviewAttempts} / ${this.options.nodeInterviewAttempts}) failed, node is dead.`,
+						"warn",
+					);
+				} else if (
+					node.interviewAttempts < this.options.nodeInterviewAttempts
+				) {
+					log.controller.logNode(
+						node.id,
+						`Interview attempt (${node.interviewAttempts} / ${this.options.nodeInterviewAttempts}) failed, retrying...`,
+						"warn",
+					);
+					setImmediate(() => this.interviewNode(node));
+				} else {
+					log.controller.logNode(
+						node.id,
+						`Failed all interview attempts, giving up.`,
+						"warn",
+					);
+				}
+			}
 		} catch (e) {
 			if (e instanceof ZWaveError) {
 				log.controller.print("node interview failed: " + e, "error");
