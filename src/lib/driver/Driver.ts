@@ -915,6 +915,7 @@ export class Driver extends EventEmitter implements IDriver {
 		if (!this.currentTransaction) return;
 		const node = this.currentTransaction.message.getNodeUnsafe();
 		if (!node) return; // This should never happen, but whatever
+
 		if (this.mayRetryCurrentTransaction()) {
 			// The Z-Wave specs define 500ms as the waiting period for SendData messages
 			const timeout = this.retryCurrentTransaction(500);
@@ -934,7 +935,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			WakeUpCC.setAwake(node, false);
 			// The handler for the asleep status will move the messages to the wakeup queue
 		} else {
-			let errorMsg = `The node did not respond to the current transaction after ${this.currentTransaction.maxSendAttempts} attempts, it is presumed dead`;
+			let errorMsg = `Node ${node.id} did not respond to the current transaction after ${this.currentTransaction.maxSendAttempts} attempts, it is presumed dead`;
 			if (transmitStatus != undefined) {
 				errorMsg += ` (Status ${getEnumMemberName(
 					TransmitStatus,
@@ -1497,7 +1498,7 @@ ${handlers.length} left`,
 			const node = msg.getNodeUnsafe();
 			if (node?.status === NodeStatus.Dead) {
 				throw new ZWaveError(
-					"The message will not be sent because the node is presumed dead",
+					`The message will not be sent because node ${node.id} is presumed dead`,
 					ZWaveErrorCodes.Controller_MessageDropped,
 				);
 			}
