@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.12.2 (2020-01-26)
 ### Bugfixes
 * `Thermostat Setpoint CC`: In Version 1 and 2, the setpoint type `N/A` is no longer scanned.
 
