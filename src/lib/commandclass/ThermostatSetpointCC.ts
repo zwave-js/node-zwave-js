@@ -137,7 +137,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			ThermostatSetpointCCReport
 		>(cc))!;
-		return response.type === 0
+		return response.type === ThermostatSetpointType["N/A"]
 			? // not supported
 			  undefined
 			: // supported
@@ -258,7 +258,7 @@ export class ThermostatSetpointCC extends CommandClass {
 			if (complete) {
 				queriedSetpointTypes = getNumericEnumValues(
 					ThermostatSetpointType,
-				);
+				).filter(t => t !== ThermostatSetpointType["N/A"]);
 			} else {
 				queriedSetpointTypes =
 					this.getValueDB().getValue(supportedSetpointTypesValueId) ||

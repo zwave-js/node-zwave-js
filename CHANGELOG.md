@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* `Thermostat Setpoint CC`: In Version 1 and 2, the setpoint type `N/A` is no longer scanned.
+
 ## 2.12.1 (2020-01-25)
 ### Bugfixes
 * The node interview is no longer aborted when an unexpected `ConfigurationReport` is received
