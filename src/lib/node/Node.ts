@@ -293,24 +293,27 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	public set status(value: NodeStatus) {
 		const oldStatus = this._status;
 		this._status = value;
-		if (oldStatus === this._status) return;
 
-		if (oldStatus === NodeStatus.Dead) {
-			this.emit("alive", this);
-		}
-		if (this._status === NodeStatus.Asleep) {
-			this.emit("sleep", this);
-		} else if (this._status === NodeStatus.Awake) {
-			this.emit("wake up", this);
-		} else if (this._status === NodeStatus.Dead) {
-			this.emit("dead", this);
+		if (oldStatus !== this._status) {
+			if (oldStatus === NodeStatus.Dead) {
+				this.emit("alive", this);
+			}
+			if (this._status === NodeStatus.Asleep) {
+				this.emit("sleep", this);
+			} else if (this._status === NodeStatus.Awake) {
+				this.emit("wake up", this);
+			} else if (this._status === NodeStatus.Dead) {
+				this.emit("dead", this);
+			}
 		}
 
-		// A dead or unknown node cannot be ready
+		// To be marked ready, a node must be known to be not dead
 		if (
 			this.nodeMayBeReady &&
-			(this._status === NodeStatus.Asleep ||
-				this._status === NodeStatus.Awake)
+			// listening nodes must have communicated with us
+			((this._isListening && this._status === NodeStatus.Awake) ||
+				// sleeping nodes are assumed to be ready
+				(!this._isListening && this._status !== NodeStatus.Dead))
 		) {
 			this.emitReadyEventOnce();
 		}
@@ -324,6 +327,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	private emitReadyEventOnce(): void {
 		if (this.nodeReadyEmitted) return;
 		this.emit("ready", this);
+		log.controller.logNode(this.id, `node is ready`, "warn");
 		this.nodeReadyEmitted = true;
 	}
 
@@ -669,6 +673,8 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 		if (this.interviewStage === InterviewStage.RestartFromCache) {
 			// Mark the node as potentially ready. The first message will determine if it is
 			this.nodeMayBeReady = true;
+			// Sleeping nodes are assumed to be ready immediately. Otherwise the library would wait until 3 messages have timed out, which is weird.
+			if (!this._isListening) this.emitReadyEventOnce();
 		}
 
 		// At this point the basic interview of new nodes is done. Start here when re-interviewing known nodes

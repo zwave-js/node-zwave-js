@@ -970,7 +970,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			if (isCommandClassContainer(msg)) this.unwrapCommands(msg);
 
 			switch (responseRole) {
-				case "confirmation":
+				case "confirmation": {
 					// When a node has received the message, it confirms the receipt with a SendDataRequest
 					if (msg.type === MessageType.Request) {
 						// As per SDS11846, start a timeout for the expected response
@@ -982,6 +982,10 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 								2,
 							)} ms`,
 						);
+
+						// Since the node actively responded to our request, we now know that it must be awake
+						const node = msg.getNodeUnsafe();
+						if (node) node.status = NodeStatus.Awake;
 
 						// In some rare (timing?) cases it can happen that this code is executed while
 						// timeoutInstance is still set
@@ -1001,8 +1005,9 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 					}
 					// no need to further process intermediate responses, as they only tell us things are good
 					return;
+				}
 
-				case "fatal_controller":
+				case "fatal_controller": {
 					// The message was not sent
 					if (this.mayRetryCurrentTransaction()) {
 						// The Z-Wave specs define 500ms as the waiting period for SendData messages
@@ -1025,8 +1030,9 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 						);
 					}
 					return;
+				}
 
-				case "fatal_node":
+				case "fatal_node": {
 					// The node did not respond
 					this.handleMissingNodeResponse(
 						msg instanceof SendDataRequestTransmitReport
@@ -1034,13 +1040,20 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 							: undefined,
 					);
 					return;
+				}
 
-				case "partial":
+				case "partial": {
 					// This is a multi-step response and we just received a part of it, which is not the final one
 					this.currentTransaction.partialResponses.push(msg);
-					return;
 
-				case "final":
+					// Since the node actively responded to our request, we now know that it must be awake
+					const node = msg.getNodeUnsafe();
+					if (node) node.status = NodeStatus.Awake;
+
+					return;
+				}
+
+				case "final": {
 					// this is the expected response!
 					this.currentTransaction.response = msg;
 					if (this.currentTransaction.partialResponses.length > 0) {
@@ -1048,6 +1061,11 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 							this.currentTransaction.partialResponses,
 						);
 					}
+
+					// Since the node actively responded to our request, we now know that it must be awake
+					const node = msg.getNodeUnsafe();
+					if (node) node.status = NodeStatus.Awake;
+
 					if (!this.currentTransaction.ackPending) {
 						log.driver.print(
 							`ACK already received, resolving transaction`,
@@ -1063,6 +1081,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 					}
 					// if the response was expected, don't check any more handlers
 					return;
+				}
 
 				default:
 					// unexpected, nothing to do here => check registered handlers
