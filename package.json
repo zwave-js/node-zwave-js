@@ -60,7 +60,7 @@
     "@types/yargs": "^15.0.1",
     "@typescript-eslint/eslint-plugin": "^2.17.0",
     "@typescript-eslint/parser": "^2.17.0",
-    "axios": "^0.19.1",
+    "axios": "^0.19.2",
     "clipboardy": "^2.1.0",
     "commitizen": "^4.0.3",
     "coveralls": "^3.0.7",
