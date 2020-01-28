@@ -229,10 +229,10 @@ supports reset:       ${supportsReset}`;
 				});
 			} else {
 				type = storedType;
-				supportsReset =
-					node.getValue(
-						getSupportsResetValueId(this.endpointIndex),
-					) ?? false;
+				// supportsReset =
+				// 	node.getValue(
+				// 		getSupportsResetValueId(this.endpointIndex),
+				// 	) ?? false;
 				supportedScales =
 					node.getValue(
 						getSupportedScalesValueId(this.endpointIndex),
