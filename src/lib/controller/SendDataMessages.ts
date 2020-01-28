@@ -136,7 +136,12 @@ callbackId:      ${this.callbackId}`,
 		// We handle a special case here: A node's response to a SendDataRequest comes in an
 		// ApplicationCommandRequest which does not have a callback id, so it is classified as
 		// "unexpected". Test those again with the predicate for SendDataRequests
-		if (ret === "unexpected" && msg instanceof ApplicationCommandRequest) {
+		if (
+			ret === "unexpected" &&
+			msg instanceof ApplicationCommandRequest &&
+			// Ensure the nodeId matches (GH #623)
+			msg.command.nodeId === this.command.nodeId
+		) {
 			return testResponseForSendDataRequest(this, msg);
 		}
 		return ret;

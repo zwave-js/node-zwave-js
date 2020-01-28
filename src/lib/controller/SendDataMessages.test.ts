@@ -292,6 +292,26 @@ describe("testResponse() returns the correct ResponseRole", () => {
 		expect(msgRequest.testResponse(msgResponse)).toBe("final");
 	});
 
+	it("BasicCCGet => BasicCCReport (wrong node) = unexpected", () => {
+		const ccRequest = new BasicCCGet(fakeDriver, {
+			nodeId: 2,
+		});
+		const ccResponse = new BasicCCReport(fakeDriver, {
+			nodeId: ccRequest.nodeId + 1,
+			currentValue: 7,
+		});
+
+		const msgRequest = new SendDataRequest(fakeDriver, {
+			command: ccRequest,
+			callbackId: 8,
+		});
+		const msgResponse = new ApplicationCommandRequest(fakeDriver, {
+			command: ccResponse,
+		});
+
+		expect(msgRequest.testResponse(msgResponse)).toBe("unexpected");
+	});
+
 	it("BasicCCGet => BasicCCSet = unexpected", () => {
 		const ccRequest = new BasicCCGet(fakeDriver, {
 			nodeId: 2,
