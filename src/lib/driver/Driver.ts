@@ -1736,12 +1736,12 @@ ${handlers.length} left`,
 	private retransmit(): void {
 		if (!this.currentTransaction) return;
 
-		// Since we're sending a new message, we expect an ACK again
-		this.currentTransaction.ackPending = true;
-
-		log.driver.transaction(this.currentTransaction);
+		// TODO: these 6 lines are duplicated in lines 1714 ff.
 		const msg = this.currentTransaction.message;
+
+		this.currentTransaction.markAsSent();
 		const data = msg.serialize();
+		log.driver.transaction(this.currentTransaction);
 		log.serial.data("outbound", data);
 		this.doSend(data);
 
