@@ -305,12 +305,11 @@ export class NotificationCC extends CommandClass {
 				}
 			} else {
 				// Load supported notification types from cache
-				supportedNotificationTypes = this.getValueDB().getValue<
-					readonly NotificationType[]
-				>({
-					commandClass: this.ccId,
-					property: "supportedNotificationTypes",
-				})!;
+				supportedNotificationTypes =
+					this.getValueDB().getValue<readonly NotificationType[]>({
+						commandClass: this.ccId,
+						property: "supportedNotificationTypes",
+					}) ?? [];
 				supportedNotificationNames = lookupNotificationNames();
 			}
 
