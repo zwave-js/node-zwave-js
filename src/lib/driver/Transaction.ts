@@ -66,7 +66,9 @@ export class Transaction implements Comparable<Transaction> {
 
 	/** Marks this transaction as sent. */
 	public markAsSent(): void {
-		this.sendAttempts = 1;
+		if (this.sendAttempts === 0) this.sendAttempts = 1;
+		// If this is a retransmit, reset ack and timestamp
+		this.ackPending = true;
 		this.txTimestamp = highResTimestamp();
 	}
 
