@@ -605,12 +605,8 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 	@ccKeyValuePair({ internal: true })
 	private aggregatedEndpointMembers: [number, number[]];
 
-	public get endpointIndex(): number {
+	public get aggregatedEndpoint(): number {
 		return this.aggregatedEndpointMembers[0];
-	}
-	public set endpointIndex(value: number) {
-		// Ignore. Change this when we ever start sending these CCs
-		// https://sentry.io/share/issue/2619b8fcfbf84e61885ecc899fb1fd93/
 	}
 
 	public get members(): readonly number[] {
