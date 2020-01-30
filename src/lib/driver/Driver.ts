@@ -45,6 +45,7 @@ import { ZWaveController } from "../controller/Controller";
 import {
 	SendDataRequest,
 	SendDataRequestTransmitReport,
+	SendDataResponse,
 	TransmitStatus,
 } from "../controller/SendDataMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -924,6 +925,15 @@ export class Driver extends EventEmitter implements IDriver {
 				`The node did not respond to the current transaction, scheduling attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`,
 				"warn",
 			);
+		} else if (!this.currentTransaction.nodeAckPending) {
+			// The node has already confirmed the receipt, but did not respond to our get-type request
+			// This does not mean that the node is asleep or dead!
+			this.rejectCurrentTransaction(
+				new ZWaveError(
+					`The transaction timed out`,
+					ZWaveErrorCodes.Controller_NodeTimeout,
+				),
+			);
 		} else if (node.supportsCC(CommandClasses["Wake Up"])) {
 			log.controller.logNode(
 				node.id,
@@ -986,6 +996,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 						// Since the node actively responded to our request, we now know that it must be awake
 						const node = msg.getNodeUnsafe();
 						if (node) node.status = NodeStatus.Awake;
+						this.currentTransaction.nodeAckPending = false;
 
 						// In some rare (timing?) cases it can happen that this code is executed while
 						// timeoutInstance is still set
@@ -1002,6 +1013,9 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 						)
 							// Unref'ing long running timers allows the process to exit mid-timeout
 							.unref();
+					} else if (msg instanceof SendDataResponse) {
+						// The message was sent to the node
+						this.currentTransaction.nodeAckPending = true;
 					}
 					// no need to further process intermediate responses, as they only tell us things are good
 					return;
@@ -1033,7 +1047,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 				}
 
 				case "fatal_node": {
-					// The node did not respond
+					// The node did not acknowledge the receipt
 					this.handleMissingNodeResponse(
 						msg instanceof SendDataRequestTransmitReport
 							? msg.transmitStatus
@@ -1066,7 +1080,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 					const node = msg.getNodeUnsafe();
 					if (node) node.status = NodeStatus.Awake;
 
-					if (!this.currentTransaction.ackPending) {
+					if (!this.currentTransaction.controllerAckPending) {
 						log.driver.print(
 							`ACK already received, resolving transaction`,
 							"debug",
@@ -1301,8 +1315,8 @@ ${handlers.length} left`,
 	private handleACK(): void {
 		// if we have a pending request waiting for the ACK, ACK it
 		const trnsact = this.currentTransaction;
-		if (trnsact != undefined && trnsact.ackPending) {
-			trnsact.ackPending = false;
+		if (trnsact != undefined && trnsact.controllerAckPending) {
+			trnsact.controllerAckPending = false;
 			this.clearAckTimeout();
 
 			log.driver.print(
