@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.12.3 (2020-02-02)
 ### Bugfixes
 * The interview sequence for `Thermostat CC` V1/V2 should no longer get stuck
 * Nodes that confirm the receipt of a request but do not respond are no longer marked as sleeping or dead
