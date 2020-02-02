@@ -4,6 +4,15 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* The interview sequence for `Thermostat CC` V1/V2 should no longer get stuck
+* Nodes that confirm the receipt of a request but do not respond are no longer marked as sleeping or dead
+* Messages from wrong nodes are no longer considered as a potential response to the current transaction
+* The RTT calculation now works correctly for retransmitted messages
+* Fixed a crash that could happen when receiving a `MultiChannelCCAggregatedMembersReport`
+* Fixed a crash that could happen during the `Notification CC` interview
+
 ## 2.12.2 (2020-01-26)
 ### Bugfixes
 * `Thermostat Setpoint CC`: In Version 1 and 2, the setpoint type `N/A` is no longer scanned.
