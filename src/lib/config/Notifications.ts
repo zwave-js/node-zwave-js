@@ -26,6 +26,7 @@ export type NotificationValueDefinition = (
 ) & {
 	description?: string;
 	label: string;
+	parameter?: NotificationParameter;
 };
 
 const configPath = path.join(configDir, "notifications.json");
@@ -167,6 +168,7 @@ export class Notification {
 				label: state.label,
 				description: state.description,
 				variableName: variable.name,
+				parameter: state.parameter,
 			};
 		}
 	}

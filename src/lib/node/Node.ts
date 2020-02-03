@@ -29,7 +29,10 @@ import {
 } from "../commandclass/SceneActivationCC";
 import { WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
 import { DeviceConfig, lookupDevice } from "../config/Devices";
-import { lookupNotification } from "../config/Notifications";
+import {
+	lookupNotification,
+	NotificationDurationParameter,
+} from "../config/Notifications";
 import {
 	ApplicationUpdateRequest,
 	ApplicationUpdateRequestNodeInfoReceived,
@@ -52,6 +55,7 @@ import { topologicalSort } from "../util/graph";
 import { getEnumMemberName, JSONObject, Mixin } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import { CacheMetadata, CacheValue } from "../values/Cache";
+import { Duration } from "../values/Duration";
 import { ValueMetadata } from "../values/Metadata";
 import {
 	BasicDeviceClasses,
@@ -106,10 +110,20 @@ export type ZWaveNodeMetadataUpdatedCallback = (
 	args: ZWaveNodeMetadataUpdatedArgs,
 ) => void;
 
+export type ZWaveNotificationParameters =
+	| {
+			type: "duration";
+			duration: Duration | undefined;
+	  }
+	| {
+			type?: undefined;
+			raw: Buffer;
+	  };
+
 export type ZWaveNotificationCallback = (
 	node: ZWaveNode,
 	notificationLabel: string,
-	parameters?: Buffer,
+	parameters?: ZWaveNotificationParameters,
 ) => void;
 
 interface ZWaveNodeValueEventCallbacks {
@@ -1567,11 +1581,29 @@ version:               ${this.version}`;
 				propertyKey = valueConfig.variableName;
 				allowIdleReset = valueConfig.idle;
 			} else {
+				let eventParameters: ZWaveNotificationParameters | undefined;
+				if (command.eventParameters) {
+					if (
+						valueConfig.parameter instanceof
+						NotificationDurationParameter
+					) {
+						eventParameters = {
+							type: "duration",
+							duration: Duration.parseReport(
+								command.eventParameters[0],
+							),
+						};
+					} else {
+						eventParameters = {
+							raw: command.eventParameters,
+						};
+					}
+				}
 				this.emit(
 					"notification",
 					this,
 					valueConfig.label,
-					command.eventParameters,
+					eventParameters,
 				);
 				return;
 			}
