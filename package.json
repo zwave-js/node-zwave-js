@@ -33,7 +33,7 @@
     "@actions/exec": "^1.0.2",
     "@actions/github": "^2.1.0",
     "@alcalzone/release-script": "^1.1.1",
-    "@babel/cli": "^7.8.3",
+    "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.3",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-decorators": "^7.8.3",
