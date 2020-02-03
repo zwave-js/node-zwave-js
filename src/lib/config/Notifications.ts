@@ -231,11 +231,31 @@ export class NotificationState {
 			);
 		}
 		this.description = definition.description;
+
+		if (definition.params != undefined) {
+			if (!isObject(definition.params)) {
+				throwInvalidConfig(
+					"notifications",
+					`The parameter definition of notification state ${num2hex(
+						id,
+					)} must be an object`,
+				);
+			} else if (typeof (definition.params as any).type !== "string") {
+				throwInvalidConfig(
+					"notifications",
+					`The parameter type of notification state ${num2hex(
+						id,
+					)} must be a string`,
+				);
+			}
+			this.parameter = new NotificationParameter(definition.params);
+		}
 	}
 
 	public readonly id: number;
 	public readonly label: string;
 	public readonly description?: string;
+	public readonly parameter?: NotificationParameter;
 }
 
 export class NotificationEvent {
@@ -243,8 +263,50 @@ export class NotificationEvent {
 		this.id = id;
 		this.label = definition.label;
 		this.description = definition.description;
+
+		if (definition.params != undefined) {
+			if (!isObject(definition.params)) {
+				throwInvalidConfig(
+					"notifications",
+					`The parameter definition of notification event ${num2hex(
+						id,
+					)} must be an object`,
+				);
+			} else if (typeof (definition.params as any).type !== "string") {
+				throwInvalidConfig(
+					"notifications",
+					`The parameter type of notification event ${num2hex(
+						id,
+					)} must be a string`,
+				);
+			}
+			this.parameter = new NotificationParameter(definition.params);
+		}
 	}
 	public readonly id: number;
 	public readonly label: string;
 	public readonly description?: string;
+	public readonly parameter?: NotificationParameter;
+}
+
+export class NotificationParameter {
+	public constructor(definition: JSONObject) {
+		// Allow subclassing
+		if (new.target !== NotificationParameter) return;
+
+		// Return the correct subclass
+		switch (definition.type) {
+			case "duration":
+				return new NotificationDurationParameter(definition);
+			case "enum":
+				// TODO
+				break;
+		}
+	}
+}
+
+export class NotificationDurationParameter {
+	public constructor(_definition: JSONObject) {
+		// nothing to do
+	}
 }
