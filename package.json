@@ -74,7 +74,7 @@
     "jest-extended": "^0.11.2",
     "mockdate": "2.0.5",
     "prettier": "^1.19.1",
-    "rimraf": "^3.0.0",
+    "rimraf": "^3.0.1",
     "semver": "^7.1.1",
     "supports-color": "^7.1.0",
     "ts-node": "^8.6.2",
