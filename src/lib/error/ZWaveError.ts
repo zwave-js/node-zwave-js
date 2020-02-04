@@ -59,6 +59,11 @@ export enum ZWaveErrorCodes {
 	 * Used to report that a node using V3 or less MUST not use the resetToDefault flag
 	 */
 	ConfigurationCC_NoResetToDefaultOnLegacyDevices,
+
+	/**
+	 * Used to report that the command was not executed by the target node
+	 */
+	SupervisionCC_CommandFailed = 1100,
 }
 
 /**

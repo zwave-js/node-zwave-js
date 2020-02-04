@@ -161,7 +161,22 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.driver.sendCommand(cc);
+
+		// Try to supervise the command execution
+		const supervisionResult = await this.driver.trySendCommandSupervised(
+			cc,
+		);
+
+		if (
+			supervisionResult &&
+			(supervisionResult.status === SupervisionStatus.Fail ||
+				supervisionResult.status === SupervisionStatus.NoSupport)
+		) {
+			throw new ZWaveError(
+				"startLevelChange failed",
+				ZWaveErrorCodes.SupervisionCC_CommandFailed,
+			);
+		}
 	}
 
 	public async stopLevelChange(): Promise<void> {
@@ -174,7 +189,22 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		await this.driver.sendCommand(cc);
+
+		// Try to supervise the command execution
+		const supervisionResult = await this.driver.trySendCommandSupervised(
+			cc,
+		);
+
+		if (
+			supervisionResult &&
+			(supervisionResult.status === SupervisionStatus.Fail ||
+				supervisionResult.status === SupervisionStatus.NoSupport)
+		) {
+			throw new ZWaveError(
+				"stopLevelChange failed",
+				ZWaveErrorCodes.SupervisionCC_CommandFailed,
+			);
+		}
 	}
 
 	public async getSupported(): Promise<SwitchType> {
