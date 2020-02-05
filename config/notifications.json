@@ -484,8 +484,12 @@
 				"name": "Barrier sensor status",
 				"states": {
 					"0x49": {
-						"label": "Barrier sensor not detected / supervisory error"
-						// TODO: Param contains sensor ID
+						"label": "Barrier sensor not detected / supervisory error",
+						// Param contains sensor ID
+						"params": {
+							"type": "value",
+							"name": "sensor ID"
+						}
 					}
 				}
 			},
@@ -493,8 +497,12 @@
 				"name": "Barrier battery status",
 				"states": {
 					"0x4a": {
-						"label": "Barrier sensor low battery warning"
-						// TODO: Param contains sensor ID
+						"label": "Barrier sensor low battery warning",
+						// Param contains sensor ID
+						"params": {
+							"type": "value",
+							"name": "sensor ID"
+						}
 					}
 				}
 			},
@@ -575,8 +583,12 @@
 				"label": "Locked by RF with invalid user code"
 			},
 			"0x20": {
-				"label": "Messaging User Code entered via keypad"
-				// TODO: Event parameter 2 bytes: User Code User Identifier (User Code Command Class, version 2)
+				"label": "Messaging User Code entered via keypad",
+				// Param contains UserCodeCC User Identifier (2 bytes)
+				"params": {
+					"type": "value",
+					"name": "user ID"
+				}
 			},
 			"0x41": {
 				"label": "Barrier operation (open/close) force has been exceeded"
@@ -1199,12 +1211,20 @@
 				"name": "Schedule (id) status",
 				"states": {
 					"0x01": {
-						"label": "Schedule started"
-						// TODO: Event parameter (1 byte) contains the schedule ID
+						"label": "Schedule started",
+						// Event parameter (1 byte) contains the schedule ID
+						"params": {
+							"type": "value",
+							"name": "schedule ID"
+						}
 					},
 					"0x02": {
-						"label": "Schedule finished"
-						// TODO: Event parameter (1 byte) contains the schedule ID
+						"label": "Schedule finished",
+						// Event parameter (1 byte) contains the schedule ID
+						"params": {
+							"type": "value",
+							"name": "schedule ID"
+						}
 					}
 				}
 			},
@@ -1212,12 +1232,20 @@
 				"name": "Valve (id) run status",
 				"states": {
 					"0x03": {
-						"label": "Valve table run started"
-						// TODO: Event parameter (1 byte) contains the Valve table ID
+						"label": "Valve table run started",
+						// Event parameter (1 byte) contains the Valve table ID
+						"params": {
+							"type": "value",
+							"name": "valve table ID"
+						}
 					},
 					"0x04": {
-						"label": "Valve table run finished"
-						// TODO: Event parameter (1 byte) contains the Valve table ID
+						"label": "Valve table run finished",
+						// Event parameter (1 byte) contains the Valve table ID
+						"params": {
+							"type": "value",
+							"name": "valve table ID"
+						}
 					}
 				}
 			},
@@ -1432,8 +1460,12 @@
 				"name": "Filter cleaning status",
 				"states": {
 					"0x09": {
-						"label": "Filter cleaning ongoing"
-						// TODO: Event Parameter (1 byte) contains the # of the filter
+						"label": "Filter cleaning ongoing",
+						// Event Parameter (1 byte) contains the # of the filter
+						"params": {
+							"type": "value",
+							"name": "filter number"
+						}
 					}
 				}
 			},

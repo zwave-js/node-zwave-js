@@ -2,6 +2,7 @@ import {
 	lookupNotification,
 	NotificationParameterWithCommandClass,
 	NotificationParameterWithDuration,
+	NotificationParameterWithValue,
 } from "../config/Notifications";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -433,8 +434,13 @@ export class NotificationCCReport extends NotificationCC {
 		return this._zensorNetSourceNodeId;
 	}
 
-	private _eventParameters: Buffer | Duration | CommandClass | undefined;
-	public get eventParameters(): Buffer | Duration | CommandClass | undefined {
+	private _eventParameters: NotificationCCReport["eventParameters"];
+	public get eventParameters():
+		| Buffer
+		| Duration
+		| CommandClass
+		| Record<string, number>
+		| undefined {
 		return this._eventParameters;
 	}
 
@@ -479,6 +485,7 @@ export class NotificationCCReport extends NotificationCC {
 		if (
 			valueConfig.parameter instanceof NotificationParameterWithDuration
 		) {
+			// The parameters contain a Duration
 			this._eventParameters = Duration.parseReport(
 				this._eventParameters[0],
 			);
@@ -486,11 +493,23 @@ export class NotificationCCReport extends NotificationCC {
 			valueConfig.parameter instanceof
 			NotificationParameterWithCommandClass
 		) {
+			// The parameters contain a CC
 			this._eventParameters = CommandClass.fromEncapsulated(
 				this.driver,
 				this,
 				this._eventParameters,
 			);
+		} else if (
+			valueConfig.parameter instanceof NotificationParameterWithValue
+		) {
+			// The parameters contain a named value
+			this._eventParameters = {
+				[valueConfig.parameter
+					.propertyName]: this._eventParameters.readUIntBE(
+					0,
+					this._eventParameters.length,
+				),
+			};
 		}
 	}
 }

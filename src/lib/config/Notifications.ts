@@ -302,6 +302,8 @@ export class NotificationParameter {
 				return new NotificationParameterWithDuration(definition);
 			case "commandclass":
 				return new NotificationParameterWithCommandClass(definition);
+			case "value":
+				return new NotificationParameterWithValue(definition);
 			case "enum":
 				// TODO
 				break;
@@ -321,4 +323,17 @@ export class NotificationParameterWithCommandClass {
 	public constructor(_definition: JSONObject) {
 		// nothing to do
 	}
+}
+
+export class NotificationParameterWithValue {
+	public constructor(definition: JSONObject) {
+		if (typeof definition.name !== "string") {
+			throwInvalidConfig(
+				"notifications",
+				`Missing property name definition for Notification parameter with type: "value"!`,
+			);
+		}
+		this.propertyName = definition.name;
+	}
+	public readonly propertyName: string;
 }
