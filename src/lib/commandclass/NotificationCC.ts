@@ -1,10 +1,14 @@
-import { lookupNotification } from "../config/Notifications";
+import {
+	lookupNotification,
+	NotificationParameterWithDuration,
+} from "../config/Notifications";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { ValueID } from "../node/ValueDB";
 import { JSONObject, validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
+import { Duration } from "../values/Duration";
 import { ValueMetadata, ValueMetadataNumeric } from "../values/Metadata";
 import { Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
@@ -391,6 +395,9 @@ export class NotificationCCReport extends NotificationCC {
 				validatePayload(this.payload.length >= 7 + numEventParams + 1);
 				this._sequenceNumber = this.payload[7 + numEventParams];
 			}
+
+			// Turn the event parameters into something useful
+			this.parseEventParameters();
 		}
 	}
 
@@ -425,8 +432,8 @@ export class NotificationCCReport extends NotificationCC {
 		return this._zensorNetSourceNodeId;
 	}
 
-	private _eventParameters: Buffer | undefined;
-	public get eventParameters(): Buffer | undefined {
+	private _eventParameters: Buffer | Duration | CommandClass | undefined;
+	public get eventParameters(): Buffer | Duration | CommandClass | undefined {
 		return this._eventParameters;
 	}
 
@@ -449,6 +456,32 @@ export class NotificationCCReport extends NotificationCC {
 			eventParameters: this.eventParameters,
 			sequenceNumber: this.sequenceNumber,
 		});
+	}
+
+	private parseEventParameters(): void {
+		if (
+			this.notificationType == undefined ||
+			this.notificationEvent == undefined ||
+			!Buffer.isBuffer(this._eventParameters)
+		) {
+			return;
+		}
+		// Look up the received notification and value in the config
+		const notificationConfig = lookupNotification(this.notificationType);
+		if (!notificationConfig) return;
+		const valueConfig = notificationConfig.lookupValue(
+			this.notificationEvent,
+		);
+		if (!valueConfig) return;
+
+		// Parse the event parameters if possible
+		if (
+			valueConfig.parameter instanceof NotificationParameterWithDuration
+		) {
+			this._eventParameters = Duration.parseReport(
+				this._eventParameters[0],
+			);
+		}
 	}
 }
 

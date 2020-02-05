@@ -299,7 +299,9 @@ export class NotificationParameter {
 		// Return the correct subclass
 		switch (definition.type) {
 			case "duration":
-				return new NotificationDurationParameter(definition);
+				return new NotificationParameterWithDuration(definition);
+			case "commandclass":
+				return new NotificationParameterWithCommandClass(definition);
 			case "enum":
 				// TODO
 				break;
@@ -307,7 +309,15 @@ export class NotificationParameter {
 	}
 }
 
-export class NotificationDurationParameter {
+/** Marks a notification that contains a duration */
+export class NotificationParameterWithDuration {
+	public constructor(_definition: JSONObject) {
+		// nothing to do
+	}
+}
+
+/** Marks a notification that contains a CC */
+export class NotificationParameterWithCommandClass {
 	public constructor(_definition: JSONObject) {
 		// nothing to do
 	}
