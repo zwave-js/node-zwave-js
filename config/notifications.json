@@ -529,12 +529,14 @@
 				"label": "RF unlock operation"
 			},
 			"0x05": {
-				"label": "Keypad lock operation"
-				// TODO: parameters contain User Code Report
+				"label": "Keypad lock operation",
+				// parameters contain User Code Report
+				"params": { "type": "commandclass" }
 			},
 			"0x06": {
-				"label": "Keypad unlock operation"
-				// TODO: parameters contain User Code Report
+				"label": "Keypad unlock operation",
+				// parameters contain User Code Report
+				"params": { "type": "commandclass" }
 			},
 			"0x07": {
 				"label": "Manual not fully locked operation"
@@ -1201,7 +1203,7 @@
 						// TODO: Event parameter (1 byte) contains the schedule ID
 					},
 					"0x02": {
-						"label": "Schedule Finished"
+						"label": "Schedule finished"
 						// TODO: Event parameter (1 byte) contains the schedule ID
 					}
 				}
@@ -1214,7 +1216,7 @@
 						// TODO: Event parameter (1 byte) contains the Valve table ID
 					},
 					"0x04": {
-						"label": "Valve table run Finished"
+						"label": "Valve table run finished"
 						// TODO: Event parameter (1 byte) contains the Valve table ID
 					}
 				}

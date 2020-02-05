@@ -1,5 +1,6 @@
 import {
 	lookupNotification,
+	NotificationParameterWithCommandClass,
 	NotificationParameterWithDuration,
 } from "../config/Notifications";
 import { IDriver } from "../driver/IDriver";
@@ -480,6 +481,15 @@ export class NotificationCCReport extends NotificationCC {
 		) {
 			this._eventParameters = Duration.parseReport(
 				this._eventParameters[0],
+			);
+		} else if (
+			valueConfig.parameter instanceof
+			NotificationParameterWithCommandClass
+		) {
+			this._eventParameters = CommandClass.fromEncapsulated(
+				this.driver,
+				this,
+				this._eventParameters,
 			);
 		}
 	}
