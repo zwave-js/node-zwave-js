@@ -109,7 +109,7 @@ export type ZWaveNodeMetadataUpdatedCallback = (
 export type ZWaveNotificationCallback = (
 	node: ZWaveNode,
 	notificationLabel: string,
-	parameters?: Buffer,
+	parameters?: NotificationCCReport["eventParameters"],
 ) => void;
 
 interface ZWaveNodeValueEventCallbacks {
@@ -1557,6 +1557,7 @@ version:               ${this.version}`;
 			let propertyKey: string;
 			// Find out which property we need to update
 			const valueConfig = notificationConfig.lookupValue(value);
+
 			let allowIdleReset: boolean;
 			if (!valueConfig) {
 				// This is an unknown value, collect it in an unknown bucket

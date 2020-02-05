@@ -26,6 +26,7 @@ export type NotificationValueDefinition = (
 ) & {
 	description?: string;
 	label: string;
+	parameter?: NotificationParameter;
 };
 
 const configPath = path.join(configDir, "notifications.json");
@@ -167,6 +168,7 @@ export class Notification {
 				label: state.label,
 				description: state.description,
 				variableName: variable.name,
+				parameter: state.parameter,
 			};
 		}
 	}
@@ -231,11 +233,31 @@ export class NotificationState {
 			);
 		}
 		this.description = definition.description;
+
+		if (definition.params != undefined) {
+			if (!isObject(definition.params)) {
+				throwInvalidConfig(
+					"notifications",
+					`The parameter definition of notification state ${num2hex(
+						id,
+					)} must be an object`,
+				);
+			} else if (typeof (definition.params as any).type !== "string") {
+				throwInvalidConfig(
+					"notifications",
+					`The parameter type of notification state ${num2hex(
+						id,
+					)} must be a string`,
+				);
+			}
+			this.parameter = new NotificationParameter(definition.params);
+		}
 	}
 
 	public readonly id: number;
 	public readonly label: string;
 	public readonly description?: string;
+	public readonly parameter?: NotificationParameter;
 }
 
 export class NotificationEvent {
@@ -243,8 +265,75 @@ export class NotificationEvent {
 		this.id = id;
 		this.label = definition.label;
 		this.description = definition.description;
+
+		if (definition.params != undefined) {
+			if (!isObject(definition.params)) {
+				throwInvalidConfig(
+					"notifications",
+					`The parameter definition of notification event ${num2hex(
+						id,
+					)} must be an object`,
+				);
+			} else if (typeof (definition.params as any).type !== "string") {
+				throwInvalidConfig(
+					"notifications",
+					`The parameter type of notification event ${num2hex(
+						id,
+					)} must be a string`,
+				);
+			}
+			this.parameter = new NotificationParameter(definition.params);
+		}
 	}
 	public readonly id: number;
 	public readonly label: string;
 	public readonly description?: string;
+	public readonly parameter?: NotificationParameter;
+}
+
+export class NotificationParameter {
+	public constructor(definition: JSONObject) {
+		// Allow subclassing
+		if (new.target !== NotificationParameter) return;
+
+		// Return the correct subclass
+		switch (definition.type) {
+			case "duration":
+				return new NotificationParameterWithDuration(definition);
+			case "commandclass":
+				return new NotificationParameterWithCommandClass(definition);
+			case "value":
+				return new NotificationParameterWithValue(definition);
+			case "enum":
+				// TODO
+				break;
+		}
+	}
+}
+
+/** Marks a notification that contains a duration */
+export class NotificationParameterWithDuration {
+	public constructor(_definition: JSONObject) {
+		// nothing to do
+	}
+}
+
+/** Marks a notification that contains a CC */
+export class NotificationParameterWithCommandClass {
+	public constructor(_definition: JSONObject) {
+		// nothing to do
+	}
+}
+
+export class NotificationParameterWithValue {
+	public constructor(definition: JSONObject) {
+		if (typeof definition.name !== "string") {
+			throwInvalidConfig(
+				"notifications",
+				`Missing property name definition for Notification parameter with type: "value"!`,
+			);
+		}
+		this.propertyName = definition.name;
+	}
+	public readonly propertyName: string;
 }
