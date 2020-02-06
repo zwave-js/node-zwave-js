@@ -4,6 +4,15 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* Improved support for notifications with the following event parameters: Duration, Command Classes, named numeric values
+* Added support for the `Clock CC`.
+* `Multilevel CC`: `Start/StopLevelChange` commands are now supervised if possible
+
+### Bugfixes
+* `Get`-type commands which request a specific type now inspect received `Report`s whether they match the request
+
 ## 2.12.3 (2020-02-02)
 ### Bugfixes
 * The interview sequence for `Thermostat CC` V1/V2 should no longer get stuck
