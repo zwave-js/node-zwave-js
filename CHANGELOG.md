@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.13.0 (2020-02-06)
 ### Features
 * Improved support for notifications with the following event parameters: Duration, Command Classes, named numeric values
 * Added support for the `Clock CC`.
