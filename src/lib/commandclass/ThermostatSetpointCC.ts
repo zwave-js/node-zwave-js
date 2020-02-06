@@ -22,6 +22,7 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
+	CCResponsePredicate,
 	ccValue,
 	CommandClass,
 	commandClass,
@@ -609,12 +610,26 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	}
 }
 
+const testResponseForThermostatSetpointGet: CCResponsePredicate = (
+	sent: ThermostatSetpointCCGet,
+	received,
+	isPositiveTransmitReport,
+) => {
+	// We expect a Thermostat Setpoint Report that matches the requested setpoint type
+	return received instanceof ThermostatSetpointCCReport &&
+		received.type === sent.setpointType
+		? "final"
+		: isPositiveTransmitReport
+		? "confirmation"
+		: "unexpected";
+};
+
 interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
 	setpointType: ThermostatSetpointType;
 }
 
 @CCCommand(ThermostatSetpointCommand.Get)
-@expectedCCResponse(ThermostatSetpointCCReport)
+@expectedCCResponse(testResponseForThermostatSetpointGet)
 export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 	public constructor(
 		driver: IDriver,
