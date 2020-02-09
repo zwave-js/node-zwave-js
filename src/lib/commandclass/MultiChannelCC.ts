@@ -58,12 +58,13 @@ export function getEndpointCCsValueId(endpointIndex: number): ValueID {
 export class MultiChannelCCAPI extends CCAPI {
 	public supportsCommand(cmd: MultiChannelCommand): Maybe<boolean> {
 		switch (cmd) {
-			// We don't know what's supported in V2
+			// The specs start at version 3 but according to OZW,
+			// these do seem to be supported in version 2
 			case MultiChannelCommand.EndPointGet:
 			case MultiChannelCommand.CapabilityGet:
 			case MultiChannelCommand.EndPointFind:
 			case MultiChannelCommand.CommandEncapsulation:
-				return this.version >= 3;
+				return this.version >= 2;
 			case MultiChannelCommand.AggregatedMembersGet:
 				return this.version >= 4;
 		}
