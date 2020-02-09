@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.13.1 (2020-02-09)
 ### Bugfixes
 * The lower limit for the `Multi Channel CC` has been set to V2
 
