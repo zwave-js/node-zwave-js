@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* The lower limit for the `Multi Channel CC` has been set to V2
+
 ## 2.13.0 (2020-02-06)
 ### Features
 * Improved support for notifications with the following event parameters: Duration, Command Classes, named numeric values
