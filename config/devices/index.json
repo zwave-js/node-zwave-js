@@ -12622,6 +12622,16 @@
     },
     {
         "manufacturerId": "0x019b",
+        "productType": "0x0300",
+        "productId": "0xa305",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x019b/heatit_z_push_button_8.json"
+    },
+    {
+        "manufacturerId": "0x019b",
         "productType": "0x0003",
         "productId": "0x020a",
         "firmwareVersion": {
