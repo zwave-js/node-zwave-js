@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.13.2 (2020-02-10)
 ### Bugfixes
 * The config file for `HeatIt Z-Push Button 8` is now correctly retrieved
 * `Multilevel Switch CC`: Start level change commands now include the start level even if the `ignoreStartLevel` flag is set. Some devices might ignore this flag and behave oddly.
