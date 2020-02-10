@@ -4,6 +4,11 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* The config file for `HeatIt Z-Push Button 8` is now correctly retrieved
+* `Multilevel Switch CC`: Start level change commands now include the start level even if the `ignoreStartLevel` flag is set. Some devices might ignore this flag and behave oddly.
+
 ## 2.13.1 (2020-02-09)
 ### Bugfixes
 * The lower limit for the `Multi Channel CC` has been set to V2
@@ -12,7 +17,7 @@
 ### Features
 * Improved support for notifications with the following event parameters: Duration, Command Classes, named numeric values
 * Added support for the `Clock CC`.
-* `Multilevel CC`: `Start/StopLevelChange` commands are now supervised if possible
+* `Multilevel Switch CC`: `Start/StopLevelChange` commands are now supervised if possible
 
 ### Bugfixes
 * `Get`-type commands which request a specific type now inspect received `Report`s whether they match the request
