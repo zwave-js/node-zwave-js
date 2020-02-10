@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@actions/core": "^1.2.2",
-    "@actions/exec": "^1.0.2",
+    "@actions/exec": "^1.0.3",
     "@actions/github": "^2.1.0",
     "@alcalzone/release-script": "^1.1.1",
     "@babel/cli": "^7.8.4",
