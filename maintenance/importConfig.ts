@@ -14,6 +14,7 @@ process.on("unhandledRejection", r => {
 
 import { composeObject, entries } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
+import { isArray } from "alcalzone-shared/typeguards";
 import { red } from "ansi-colors";
 import { AssertionError, ok } from "assert";
 import axios from "axios";
@@ -21,14 +22,8 @@ import * as fs from "fs-extra";
 import * as JSON5 from "json5";
 import * as path from "path";
 import * as qs from "querystring";
-import {
-	DeviceConfig,
-	DeviceConfigIndexEntry,
-} from "../src/lib/config/Devices";
-import {
-	loadManufacturers,
-	lookupManufacturer,
-} from "../src/lib/config/Manufacturers";
+import { DeviceConfig, DeviceConfigIndexEntry } from "../src/lib/config/Devices";
+import { loadManufacturers, lookupManufacturer } from "../src/lib/config/Manufacturers";
 import { num2hex } from "../src/lib/util/strings";
 
 // Where the files are located
@@ -92,12 +87,17 @@ async function fetchDevice(id: string): Promise<string> {
 	return JSON.stringify(source, null, "\t");
 }
 
-/** Downloads all device information */
-async function downloadDevices(): Promise<void> {
-	process.stdout.write("Fetching database IDs...");
-	const IDs = await fetchIDs();
-	// Delete the last line
-	process.stdout.write("\r\x1b[K");
+/** 
+ * Downloads all device information
+ * @param IDs If given, only these IDs are downloaded
+ */
+async function downloadDevices(IDs?: string[]): Promise<void> {
+	if (!isArray(IDs) || !IDs.length) {
+		process.stdout.write("Fetching database IDs...");
+		IDs = await fetchIDs();
+		// Delete the last line
+		process.stdout.write("\r\x1b[K");
+	}
 
 	await fs.ensureDir(importDir);
 	for (let i = 0; i < IDs.length; i++) {
@@ -480,8 +480,13 @@ async function updateManufacturerNames(): Promise<void> {
 	} else if (process.argv.includes("manufacturerNames")) {
 		await updateManufacturerNames();
 	} else if (process.argv.includes("download")) {
-		await downloadManufacturers();
-		await downloadDevices();
+		const id = process.argv[process.argv.indexOf("download") + 1];
+		if (!id || id === "all") {
+			await downloadManufacturers();
+			await downloadDevices();
+		} else {
+			await downloadDevices(id.split(","));
+		}
 	} else if (process.argv.includes("import")) {
 		await importConfigFiles();
 		await generateDeviceIndex();
