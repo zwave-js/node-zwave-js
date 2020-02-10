@@ -83,7 +83,7 @@
   },
   "dependencies": {
     "@sentry/integrations": "^5.11.1",
-    "@sentry/node": "^5.11.2",
+    "@sentry/node": "^5.12.3",
     "alcalzone-shared": "^2.2.0",
     "ansi-colors": "^4.1.1",
     "fs-extra": "^8.1.0",
