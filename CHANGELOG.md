@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* `Multi Channel CC`: The `EndPointFind` is no longer used in V2
+
 ## 2.13.2 (2020-02-10)
 ### Bugfixes
 * The config file for `HeatIt Z-Push Button 8` is now correctly retrieved
