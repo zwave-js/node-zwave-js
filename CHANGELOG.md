@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.13.3 (2020-02-13)
 ### Bugfixes
 * `Multi Channel CC`: The `EndPointFind` is no longer used in V2
 
