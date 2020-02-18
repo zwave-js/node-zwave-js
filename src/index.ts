@@ -33,11 +33,10 @@ fs.readFile(path.join(__dirname, "../package.json"), "utf8").then(
 					}
 				}
 				return event;
-			}
+			},
 		});
 	},
 );
 
 export { Driver } from "./lib/driver/Driver";
 export { ZWaveNode } from "./lib/node/Node";
-
