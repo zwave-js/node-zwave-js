@@ -70,8 +70,7 @@ export enum FunctionType {
 	FUNC_ID_ZW_SEND_NODE_INFORMATION = 0x12, // Send Node Information Frame of the stick
 
 	SendData = 0x13, // Send data
-
-	UNKNOWN_FUNC_SEND_DATA_MULTI = 0x14, // ??
+	SendDataMulticast = 0x14, // Send data using multicast
 
 	GetControllerVersion = 0x15,
 

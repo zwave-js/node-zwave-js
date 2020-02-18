@@ -13,6 +13,7 @@ import {
 	isCommandClassContainer,
 } from "../commandclass/ICommandClassContainer";
 import { IDriver } from "../driver/IDriver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { MessageOrCCLogEntry } from "../log/shared";
 import {
 	FunctionType,
@@ -32,7 +33,9 @@ import {
 } from "../message/Message";
 import { getEnumMemberName, JSONObject, staticExtends } from "../util/misc";
 import { num2hex } from "../util/strings";
+import { encodeBitMask } from "../values/Primitive";
 import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
+import { MAX_NODES } from "./NodeBitMask";
 
 export enum TransmitOptions {
 	NotSet = 0,
@@ -306,6 +309,205 @@ export class SendDataResponse extends Message {
 		return super.toJSONInherited({
 			wasSent: this.wasSent,
 			// errorCode: this.errorCode,
+		});
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `wasSent: ${this.wasSent}`,
+		};
+	}
+}
+
+@messageTypes(MessageType.Request, FunctionType.SendDataMulticast)
+@priority(MessagePriority.Normal)
+export class SendDataMulticastRequestBase extends Message {
+	public constructor(driver: IDriver, options: MessageOptions) {
+		if (
+			gotDeserializationOptions(options) &&
+			(new.target as any) !== SendDataMulticastRequestTransmitReport
+		) {
+			return new SendDataMulticastRequestTransmitReport(driver, options);
+		}
+		super(driver, options);
+	}
+}
+
+interface SendDataMulticastRequestOptions<
+	CCType extends CommandClass = CommandClass
+> extends MessageBaseOptions {
+	nodeIds: [number, ...number[]];
+	command: CCType;
+	transmitOptions?: TransmitOptions;
+}
+
+@expectedResponse(testResponseForSendDataMulticastRequest)
+export class SendDataMulticastRequest<
+	CCType extends CommandClass = CommandClass
+> extends SendDataMulticastRequestBase implements ICommandClassContainer {
+	public constructor(
+		driver: IDriver,
+		options: SendDataMulticastRequestOptions<CCType>,
+	) {
+		super(driver, options);
+
+		this.command = options.command;
+		this.transmitOptions =
+			options.transmitOptions != undefined
+				? options.transmitOptions
+				: TransmitOptions.DEFAULT;
+
+		if (options.nodeIds.length === 0) {
+			throw new ZWaveError(
+				`At least one node must be targeted`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (options.nodeIds.some(n => n < 1 || n > MAX_NODES)) {
+			throw new ZWaveError(
+				`All node IDs must be between 1 and ${MAX_NODES}!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+		this.nodeIds = options.nodeIds;
+	}
+
+	/** The command this message contains */
+	public command: CCType;
+	/** Options regarding the transmission of the message */
+	public transmitOptions: TransmitOptions;
+	/** The IDs of all nodes that should receive this message */
+	public nodeIds: number[];
+
+	public serialize(): Buffer {
+		// The payload CC must not include the target node ids, so strip the header out
+		// TODO: Refactor this and CommandClass.serialize()
+		const serializedCC = this.command.serializeForEncapsulation();
+		const destinationBitMask = encodeBitMask(
+			this.nodeIds,
+			Math.max(...this.nodeIds),
+		);
+		this.payload = Buffer.concat([
+			// Target bit mask + length
+			Buffer.from([destinationBitMask.length]),
+			destinationBitMask,
+			// payload
+			serializedCC,
+			Buffer.from([this.transmitOptions, this.callbackId]),
+		]);
+
+		return super.serialize();
+	}
+
+	public toJSON(): JSONObject {
+		return super.toJSONInherited({
+			transmitOptions: this.transmitOptions,
+			callbackId: this.callbackId,
+			command: this.command,
+		});
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `transmitOptions: ${num2hex(this.transmitOptions)}
+callbackId:      ${this.callbackId}`,
+		};
+	}
+
+	/** Include previously received partial responses into a final message */
+	public mergePartialMessages(partials: Message[]): void {
+		this.command.mergePartialCCs(
+			(partials as SendDataMulticastRequest[]).map(p => p.command),
+		);
+	}
+}
+
+// Generic handler for all potential responses to SendDataMulticastRequests
+function testResponseForSendDataMulticastRequest(
+	sent: SendDataMulticastRequest,
+	received: Message,
+): ResponseRole {
+	if (received instanceof SendDataMulticastResponse) {
+		return received.wasSent ? "confirmation" : "fatal_controller";
+	} else if (received instanceof SendDataMulticastRequestTransmitReport) {
+		return received.isFailed() ? "fatal_node" : "final";
+	}
+	// Multicast messages cannot expect a response from the nodes
+	return "unexpected";
+}
+
+interface SendDataMulticastRequestTransmitReportOptions
+	extends MessageBaseOptions {
+	transmitStatus: TransmitStatus;
+	callbackId: number;
+}
+
+export class SendDataMulticastRequestTransmitReport extends SendDataMulticastRequestBase {
+	public constructor(
+		driver: IDriver,
+		options:
+			| MessageDeserializationOptions
+			| SendDataMulticastRequestTransmitReportOptions,
+	) {
+		super(driver, options);
+
+		if (gotDeserializationOptions(options)) {
+			this.callbackId = this.payload[0];
+			this._transmitStatus = this.payload[1];
+			// not sure what bytes 2 and 3 mean
+			// the CC seems not to be included in this, but rather come in an application command later
+		} else {
+			this.callbackId = options.callbackId;
+			this._transmitStatus = options.transmitStatus;
+		}
+	}
+
+	private _transmitStatus: TransmitStatus;
+	public get transmitStatus(): TransmitStatus {
+		return this._transmitStatus;
+	}
+
+	/** Checks if a received SendDataMulticastRequest indicates that sending failed */
+	public isFailed(): boolean {
+		return this._transmitStatus !== TransmitStatus.OK;
+	}
+
+	public toJSON(): JSONObject {
+		return super.toJSONInherited({
+			callbackId: this.callbackId,
+			transmitStatus: this.transmitStatus,
+		});
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `callbackId:     ${this.callbackId}
+transmitStatus: ${getEnumMemberName(TransmitStatus, this.transmitStatus)}`,
+		};
+	}
+}
+
+@messageTypes(MessageType.Response, FunctionType.SendDataMulticast)
+export class SendDataMulticastResponse extends Message {
+	public constructor(
+		driver: IDriver,
+		options: MessageDeserializationOptions,
+	) {
+		super(driver, options);
+		this._wasSent = this.payload[0] !== 0;
+		// if (!this._wasSent) this._errorCode = this.payload[0];
+	}
+
+	private _wasSent: boolean;
+	public get wasSent(): boolean {
+		return this._wasSent;
+	}
+
+	public toJSON(): JSONObject {
+		return super.toJSONInherited({
+			wasSent: this.wasSent,
 		});
 	}
 
