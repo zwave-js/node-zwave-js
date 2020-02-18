@@ -518,3 +518,25 @@ export class SendDataMulticastResponse extends Message {
 		};
 	}
 }
+
+/** Checks whether the message is a report that tells us that a message was sent */
+export function isSendReport(
+	msg: Message,
+): msg is SendDataResponse | SendDataMulticastResponse {
+	return (
+		msg instanceof SendDataResponse ||
+		msg instanceof SendDataMulticastResponse
+	);
+}
+
+/** Checks whether the message is a report that contains the transmit status of a message */
+export function isTransmitReport(
+	msg: Message,
+): msg is
+	| SendDataRequestTransmitReport
+	| SendDataMulticastRequestTransmitReport {
+	return (
+		msg instanceof SendDataRequestTransmitReport ||
+		msg instanceof SendDataMulticastRequestTransmitReport
+	);
+}

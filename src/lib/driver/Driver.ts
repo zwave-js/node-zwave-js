@@ -43,9 +43,9 @@ import {
 } from "../controller/ApplicationUpdateRequest";
 import { ZWaveController } from "../controller/Controller";
 import {
+	isSendReport,
+	isTransmitReport,
 	SendDataRequest,
-	SendDataRequestTransmitReport,
-	SendDataResponse,
 	TransmitStatus,
 } from "../controller/SendDataMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -982,7 +982,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			switch (responseRole) {
 				case "confirmation": {
 					// When a node has received the message, it confirms the receipt with a SendDataRequest
-					if (msg.type === MessageType.Request) {
+					if (msg instanceof SendDataRequest) {
 						// As per SDS11846, start a timeout for the expected response
 						this.currentTransaction.computeRTT();
 						const msRTT = this.currentTransaction.rtt / 1e6;
@@ -1013,8 +1013,8 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 						)
 							// Unref'ing long running timers allows the process to exit mid-timeout
 							.unref();
-					} else if (msg instanceof SendDataResponse) {
-						// The message was sent to the node
+					} else if (isSendReport(msg)) {
+						// The message was sent to the node(s)
 						this.currentTransaction.nodeAckPending = true;
 					}
 					// no need to further process intermediate responses, as they only tell us things are good
@@ -1049,9 +1049,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 				case "fatal_node": {
 					// The node did not acknowledge the receipt
 					this.handleMissingNodeResponse(
-						msg instanceof SendDataRequestTransmitReport
-							? msg.transmitStatus
-							: undefined,
+						isTransmitReport(msg) ? msg.transmitStatus : undefined,
 					);
 					return;
 				}
@@ -1172,7 +1170,7 @@ ${handlers.length} left`,
 	/**
 	 * Is called when a Request-type message was received
 	 */
-	private async handleRequest(msg: Message | SendDataRequest): Promise<void> {
+	private async handleRequest(msg: Message): Promise<void> {
 		let handlers: RequestHandlerEntry[] | undefined;
 
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
