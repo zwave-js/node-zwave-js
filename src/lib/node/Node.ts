@@ -495,13 +495,17 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			);
 			return true;
 		} catch (e) {
-			if (
-				e instanceof ZWaveError &&
-				(e.code === ZWaveErrorCodes.CC_NotImplemented ||
-					e.code === ZWaveErrorCodes.CC_NoAPI)
-			) {
-				// This CC or API is not implemented
-				return false;
+			// Define which errors during setValue are expected and won't crash
+			// the driver:
+			if (e instanceof ZWaveError) {
+				switch (e.code) {
+					// This CC or API is not implemented
+					case ZWaveErrorCodes.CC_NotImplemented:
+					case ZWaveErrorCodes.CC_NoAPI:
+					// A user tried to set an invalid value
+					case ZWaveErrorCodes.Argument_Invalid:
+						return false;
+				}
 			}
 			throw e;
 		}
