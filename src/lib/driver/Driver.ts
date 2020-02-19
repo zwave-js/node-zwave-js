@@ -45,6 +45,7 @@ import { ZWaveController } from "../controller/Controller";
 import {
 	isSendReport,
 	isTransmitReport,
+	SendDataMulticastRequest,
 	SendDataRequest,
 	TransmitStatus,
 } from "../controller/SendDataMessages";
@@ -1565,12 +1566,16 @@ ${handlers.length} left`,
 
 		// When sending a message to a node that is known to be sleeping,
 		// the priority must be WakeUp, so the message gets deprioritized
-		// in comparison with messages to awake nodes
-		// Pings are an exception, because we don't want them in the wakeup queue
+		// in comparison with messages to awake nodes.
+		// However there are a few exceptions...
 		if (
 			(isNodeQuery(msg) || isCommandClassContainer(msg)) &&
+			// We don't want pings in the wakeup queue
 			!messageIsPing(msg) &&
-			msg.getNodeUnsafe()?.isAwake() === false
+			msg.getNodeUnsafe()?.isAwake() === false &&
+			// If we move multicasts to the wakeup queue, it is unlikely
+			// that there is ever a points where all targets are awake
+			!(msg instanceof SendDataMulticastRequest)
 		) {
 			options.priority = MessagePriority.WakeUp;
 		}
