@@ -60,7 +60,7 @@ import {
 import { getDefaultPriority, Message } from "../message/Message";
 import { InterviewStage, IZWaveNode, NodeStatus } from "../node/INode";
 import { isNodeQuery } from "../node/INodeQuery";
-import { ZWaveNode } from "../node/Node";
+import { NODE_ID_MULTICAST, ZWaveNode } from "../node/Node";
 import { DeepPartial, getEnumMemberName, skipBytes } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { Duration } from "../values/Duration";
@@ -181,6 +181,15 @@ export interface SendMessageOptions {
 	priority?: MessagePriority;
 	/** If an exception should be thrown when the message to send is not supported. Setting this to false is is useful if the capabilities haven't been determined yet. Default: true */
 	supportCheck?: boolean;
+}
+
+export interface SendCommandOptions extends SendMessageOptions {
+	/**
+	 * The destination node(s) to send this command to. When set, this overrides
+	 * the node id in the command. When this is an array, the command is sent
+	 * using multicast instead of singlecast
+	 */
+	destination?: number | [number, number, ...number[]];
 }
 
 export type SupervisionUpdateHandler = (
@@ -1599,17 +1608,28 @@ ${handlers.length} left`,
 
 	/**
 	 * Sends a command to a Z-Wave node.
-	 * @param command The command to send. It will be encapsulated in a SendDataRequest.
+	 * @param command The command to send. It will be encapsulated in a SendData[Multicast]Request.
 	 * @param options (optional) Options regarding the message transmission
 	 */
 	// wotan-disable-next-line no-misused-generics
 	public async sendCommand<TResponse extends CommandClass = CommandClass>(
 		command: CommandClass,
-		options: SendMessageOptions = {},
+		options: SendCommandOptions = {},
 	): Promise<TResponse | undefined> {
-		const msg = new SendDataRequest(this, {
-			command,
-		});
+		let msg: Message;
+		// use multicast when targeting multiple destinations
+		if (isArray(options.destination)) {
+			// Overwrite the destination node id with the multicast id so we can
+			// identify multicast commands
+			command.nodeId = NODE_ID_MULTICAST;
+			msg = new SendDataMulticastRequest(this, {
+				command,
+				nodeIds: options.destination,
+			});
+		} else {
+			if (options.destination) command.nodeId = options.destination;
+			msg = new SendDataRequest(this, { command });
+		}
 		const resp = await this.sendMessage(msg, options);
 		if (isCommandClassContainer(resp)) {
 			return resp.command as TResponse;

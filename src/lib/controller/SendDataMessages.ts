@@ -338,7 +338,7 @@ export class SendDataMulticastRequestBase extends Message {
 interface SendDataMulticastRequestOptions<
 	CCType extends CommandClass = CommandClass
 > extends MessageBaseOptions {
-	nodeIds: [number, ...number[]];
+	nodeIds: [number, number, ...number[]];
 	command: CCType;
 	transmitOptions?: TransmitOptions;
 }
