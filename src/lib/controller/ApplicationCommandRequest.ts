@@ -43,11 +43,14 @@ export class ApplicationCommandRequest extends Message
 			const status = this.payload[0];
 			this._isBroadcast = (status & StatusFlags.Broadcast) !== 0;
 			this._routedBusy = (status & StatusFlags.RoutedBusy) !== 0;
-			// followed by a command class
-			this.command = CommandClass.from(
-				this.driver,
-				this.payload.slice(1),
-			);
+			// followed by a node ID
+			const nodeId = this.payload[1];
+			// and a command class
+			const commandLength = this.payload[2];
+			this.command = CommandClass.from(this.driver, {
+				data: this.payload.slice(3, 3 + commandLength),
+				nodeId,
+			});
 		} else {
 			this._isBroadcast = !!options.isBroadcast;
 			this._routedBusy = !!options.routedBusy;
@@ -73,9 +76,10 @@ export class ApplicationCommandRequest extends Message
 			(this._isBroadcast ? StatusFlags.Broadcast : 0) |
 			(this._routedBusy ? StatusFlags.RoutedBusy : 0);
 
+		const serializedCC = this.command.serialize();
 		this.payload = Buffer.concat([
-			Buffer.from([statusByte]),
-			this.command.serialize(),
+			Buffer.from([statusByte, this.command.nodeId, serializedCC.length]),
+			serializedCC,
 		]);
 
 		return super.serialize();

@@ -103,6 +103,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	public serialize(): Buffer {
 		const serializedCC = this.command.serialize();
 		this.payload = Buffer.concat([
+			Buffer.from([this.command.nodeId, serializedCC.length]),
 			serializedCC,
 			Buffer.from([this.transmitOptions, this.callbackId]),
 		]);
@@ -381,8 +382,7 @@ export class SendDataMulticastRequest<
 
 	public serialize(): Buffer {
 		// The payload CC must not include the target node ids, so strip the header out
-		// TODO: Refactor this and CommandClass.serialize()
-		const serializedCC = this.command.serializeForEncapsulation();
+		const serializedCC = this.command.serialize();
 		const destinationBitMask = encodeBitMask(
 			this.nodeIds,
 			Math.max(...this.nodeIds),

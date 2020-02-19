@@ -494,11 +494,11 @@ export class NotificationCCReport extends NotificationCC {
 			NotificationParameterWithCommandClass
 		) {
 			// The parameters contain a CC
-			this._eventParameters = CommandClass.fromEncapsulated(
-				this.driver,
-				this,
-				this._eventParameters,
-			);
+			this._eventParameters = CommandClass.from(this.driver, {
+				data: this._eventParameters,
+				fromEncapsulation: true,
+				encapCC: this,
+			});
 		} else if (
 			valueConfig.parameter instanceof NotificationParameterWithValue
 		) {

@@ -197,7 +197,7 @@ export class SupervisionCCGet extends SupervisionCC {
 	public encapsulated: CommandClass;
 
 	public serialize(): Buffer {
-		const encapCC = this.encapsulated.serializeForEncapsulation();
+		const encapCC = this.encapsulated.serialize();
 		this.payload = Buffer.concat([
 			Buffer.from([
 				(this.requestStatusUpdates ? 0b10_000000 : 0) |
