@@ -25,6 +25,8 @@ import { ValueMetadata } from "../values/Metadata";
 import { CCAPI } from "./API";
 import { CommandClasses, getCCName } from "./CommandClasses";
 
+export type MulticastDestination = [number, number, ...number[]];
+
 export interface CommandClassInfo {
 	isSupported: boolean;
 	isControlled: boolean;
@@ -49,7 +51,7 @@ export function gotDeserializationOptions(
 }
 
 export interface CCCommandOptions {
-	nodeId: number;
+	nodeId: number | MulticastDestination;
 	endpoint?: number;
 	supervised?: boolean;
 }
@@ -60,7 +62,7 @@ interface CommandClassCreationOptions extends CCCommandOptions {
 }
 
 function gotCCCommandOptions(options: any): options is CCCommandOptions {
-	return typeof options.nodeId === "number";
+	return typeof options.nodeId === "number" || isArray(options.nodeId);
 }
 
 export type CommandClassOptions =
@@ -123,26 +125,29 @@ export class CommandClass {
 			this.ccCommand = ccCommand;
 			this.payload = payload;
 		}
-		// Set the CC version as high as possible
-		this.version = this.driver.getSafeCCVersionForNode(
-			this.ccId,
-			this.nodeId,
-			this.endpointIndex,
-		);
-		// If we received a CC from a node, it must support at least version 1
-		// Make sure that the interview is complete or we cannot be sure that the assumption is correct
-		let node: ZWaveNode | undefined;
-		try {
-			node = this.getNode();
-		} catch (e) {
-			/* okay */
-		}
-		if (
-			node?.interviewStage === InterviewStage.Complete &&
-			this.version === 0 &&
-			gotDeserializationOptions(options)
-		) {
-			this.version = 1;
+
+		if (this.isSinglecast()) {
+			// For singlecast CCs, set the CC version as high as possible
+			this.version = this.driver.getSafeCCVersionForNode(
+				this.ccId,
+				this.nodeId,
+				this.endpointIndex,
+			);
+			// If we received a CC from a node, it must support at least version 1
+			// Make sure that the interview is complete or we cannot be sure that the assumption is correct
+			let node: ZWaveNode | undefined;
+			try {
+				node = this.getNode();
+			} catch (e) {
+				/* okay */
+			}
+			if (
+				node?.interviewStage === InterviewStage.Complete &&
+				this.version === 0 &&
+				gotDeserializationOptions(options)
+			) {
+				this.version = 1;
+			}
 		}
 	}
 
@@ -150,8 +155,9 @@ export class CommandClass {
 
 	/** This CC's identifier */
 	public ccId: CommandClasses;
-	// Work around https://github.com/Microsoft/TypeScript/issues/27555
-	public nodeId!: number;
+	/** The ID of the target node(s) */
+	public nodeId!: number | MulticastDestination;
+
 	public ccCommand?: number;
 	// Work around https://github.com/Microsoft/TypeScript/issues/27555
 	public payload!: Buffer;
@@ -372,11 +378,21 @@ export class CommandClass {
 		return false;
 	}
 
+	public isSinglecast(): this is SinglecastCC<this> {
+		return typeof this.nodeId === "number";
+	}
+
+	public isMulticast(): this is MulticastCC<this> {
+		return isArray(this.nodeId);
+	}
+
 	/**
 	 * Returns the node this CC is linked to. Throws if the controller is not yet ready.
 	 */
 	public getNode(): ZWaveNode | undefined {
-		return this.driver.controller.nodes.get(this.nodeId);
+		if (this.isSinglecast()) {
+			return this.driver.controller.nodes.get(this.nodeId);
+		}
 	}
 
 	public getEndpoint(): Endpoint | undefined {
@@ -699,6 +715,14 @@ export class CommandClass {
 		return propertyKey.toString();
 	}
 }
+
+export type SinglecastCC<T extends CommandClass = CommandClass> = T & {
+	nodeId: number;
+};
+
+export type MulticastCC<T extends CommandClass = CommandClass> = T & {
+	nodeId: MulticastDestination;
+};
 
 // =======================
 // use decorators to link command class values to actual command classes

@@ -70,7 +70,10 @@ describe("lib/commandclass/BinarySwitchCC => ", () => {
 				0xff, // current value
 			]),
 		);
-		const cc = new BinarySwitchCCReport(fakeDriver, { data: ccData });
+		const cc = new BinarySwitchCCReport(fakeDriver, {
+			nodeId: 2,
+			data: ccData,
+		});
 
 		expect(cc.currentValue).toBe(true);
 		expect(cc.targetValue).toBeUndefined();
@@ -86,7 +89,10 @@ describe("lib/commandclass/BinarySwitchCC => ", () => {
 				1, // duration
 			]),
 		);
-		const cc = new BinarySwitchCCReport(fakeDriver, { data: ccData });
+		const cc = new BinarySwitchCCReport(fakeDriver, {
+			nodeId: 2,
+			data: ccData,
+		});
 
 		expect(cc.currentValue).toBe(true);
 		expect(cc.targetValue).toBe(false);
@@ -99,6 +105,7 @@ describe("lib/commandclass/BinarySwitchCC => ", () => {
 			Buffer.from([255]), // not a valid command
 		);
 		const cc: any = new BinarySwitchCC(fakeDriver, {
+			nodeId: 2,
 			data: serializedCC,
 		});
 		expect(cc.constructor).toBe(BinarySwitchCC);

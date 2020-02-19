@@ -55,7 +55,10 @@ describe("lib/commandclass/BasicCC => ", () => {
 				55, // current value
 			]),
 		);
-		const basicCC = new BasicCCReport(fakeDriver, { data: ccData });
+		const basicCC = new BasicCCReport(fakeDriver, {
+			nodeId: 2,
+			data: ccData,
+		});
 
 		expect(basicCC.currentValue).toBe(55);
 		expect(basicCC.targetValue).toBeUndefined();
@@ -71,7 +74,10 @@ describe("lib/commandclass/BasicCC => ", () => {
 				1, // duration
 			]),
 		);
-		const basicCC = new BasicCCReport(fakeDriver, { data: ccData });
+		const basicCC = new BasicCCReport(fakeDriver, {
+			nodeId: 2,
+			data: ccData,
+		});
 
 		expect(basicCC.currentValue).toBe(55);
 		expect(basicCC.targetValue).toBe(66);
@@ -84,6 +90,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 			Buffer.from([255]), // not a valid command
 		);
 		const basicCC: any = new BasicCC(fakeDriver, {
+			nodeId: 2,
 			data: serializedCC,
 		});
 		expect(basicCC.constructor).toBe(BasicCC);

@@ -1,4 +1,4 @@
-import { CommandClass } from "../commandclass/CommandClass";
+import { CommandClass, SinglecastCC } from "../commandclass/CommandClass";
 import { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { IDriver } from "../driver/IDriver";
 import {
@@ -31,7 +31,7 @@ enum StatusFlags {
 }
 
 interface ApplicationCommandRequestOptions extends MessageBaseOptions {
-	command: CommandClass;
+	command: SinglecastCC;
 	frameType?: ApplicationCommandRequest["frameType"];
 	routedBusy?: boolean;
 }
@@ -75,7 +75,7 @@ export class ApplicationCommandRequest extends Message
 			this.command = CommandClass.from(this.driver, {
 				data: this.payload.slice(3, 3 + commandLength),
 				nodeId,
-			});
+			}) as SinglecastCC;
 		} else {
 			this.frameType = options.frameType ?? "singlecast";
 			this.routedBusy = !!options.routedBusy;
@@ -93,7 +93,7 @@ export class ApplicationCommandRequest extends Message
 	public readonly fromForeignHomeId: boolean;
 
 	// This needs to be writable or unwrapping MultiChannelCCs crashes
-	public command: CommandClass;
+	public command: CommandClass & { nodeId: number };
 
 	public serialize(): Buffer {
 		const statusByte =

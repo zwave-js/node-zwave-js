@@ -3,6 +3,8 @@ import {
 	CommandClass,
 	getExpectedCCResponse,
 	isDynamicCCResponse,
+	MulticastCC,
+	SinglecastCC,
 } from "../commandclass/CommandClass";
 import {
 	EncapsulatingCommandClass,
@@ -72,14 +74,14 @@ export class SendDataRequestBase extends Message {
 	}
 }
 
-interface SendDataRequestOptions<CCType extends CommandClass = CommandClass>
+interface SendDataRequestOptions<CCType extends SinglecastCC = SinglecastCC>
 	extends MessageBaseOptions {
 	command: CCType;
 	transmitOptions?: TransmitOptions;
 }
 
 @expectedResponse(testResponseForSendDataRequest)
-export class SendDataRequest<CCType extends CommandClass = CommandClass>
+export class SendDataRequest<CCType extends SinglecastCC = SinglecastCC>
 	extends SendDataRequestBase
 	implements ICommandClassContainer {
 	public constructor(
@@ -336,17 +338,16 @@ export class SendDataMulticastRequestBase extends Message {
 }
 
 interface SendDataMulticastRequestOptions<
-	CCType extends CommandClass = CommandClass
+	CCType extends MulticastCC = MulticastCC
 > extends MessageBaseOptions {
-	nodeIds: [number, number, ...number[]];
 	command: CCType;
 	transmitOptions?: TransmitOptions;
 }
 
 @expectedResponse(testResponseForSendDataMulticastRequest)
-export class SendDataMulticastRequest<
-	CCType extends CommandClass = CommandClass
-> extends SendDataMulticastRequestBase implements ICommandClassContainer {
+export class SendDataMulticastRequest<CCType extends MulticastCC = MulticastCC>
+	extends SendDataMulticastRequestBase
+	implements ICommandClassContainer {
 	public constructor(
 		driver: IDriver,
 		options: SendDataMulticastRequestOptions<CCType>,
@@ -359,33 +360,30 @@ export class SendDataMulticastRequest<
 				? options.transmitOptions
 				: TransmitOptions.DEFAULT;
 
-		if (options.nodeIds.length === 0) {
+		if (this.command.nodeId.length === 0) {
 			throw new ZWaveError(
 				`At least one node must be targeted`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
-		} else if (options.nodeIds.some(n => n < 1 || n > MAX_NODES)) {
+		} else if (this.command.nodeId.some(n => n < 1 || n > MAX_NODES)) {
 			throw new ZWaveError(
 				`All node IDs must be between 1 and ${MAX_NODES}!`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
-		this.nodeIds = options.nodeIds;
 	}
 
 	/** The command this message contains */
 	public command: CCType;
 	/** Options regarding the transmission of the message */
 	public transmitOptions: TransmitOptions;
-	/** The IDs of all nodes that should receive this message */
-	public nodeIds: number[];
 
 	public serialize(): Buffer {
 		// The payload CC must not include the target node ids, so strip the header out
 		const serializedCC = this.command.serialize();
 		const destinationBitMask = encodeBitMask(
-			this.nodeIds,
-			Math.max(...this.nodeIds),
+			this.command.nodeId,
+			Math.max(...this.command.nodeId),
 		);
 		this.payload = Buffer.concat([
 			// Target bit mask + length

@@ -60,7 +60,7 @@ import {
 import { getDefaultPriority, Message } from "../message/Message";
 import { InterviewStage, IZWaveNode, NodeStatus } from "../node/INode";
 import { isNodeQuery } from "../node/INodeQuery";
-import { NODE_ID_MULTICAST, ZWaveNode } from "../node/Node";
+import { ZWaveNode } from "../node/Node";
 import { DeepPartial, getEnumMemberName, skipBytes } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { Duration } from "../values/Duration";
@@ -181,15 +181,6 @@ export interface SendMessageOptions {
 	priority?: MessagePriority;
 	/** If an exception should be thrown when the message to send is not supported. Setting this to false is is useful if the capabilities haven't been determined yet. Default: true */
 	supportCheck?: boolean;
-}
-
-export interface SendCommandOptions extends SendMessageOptions {
-	/**
-	 * The destination node(s) to send this command to. When set, this overrides
-	 * the node id in the command. When this is an array, the command is sent
-	 * using multicast instead of singlecast
-	 */
-	destination?: number | [number, number, ...number[]];
 }
 
 export type SupervisionUpdateHandler = (
@@ -1216,11 +1207,11 @@ ${handlers.length} left`,
 				msg.command.ccId === CommandClasses["Device Reset Locally"] &&
 				msg.command instanceof DeviceResetLocallyCCNotification
 			) {
-				log.controller.logNode(nodeId, {
+				log.controller.logNode(msg.command.nodeId, {
 					message: `The node was reset locally, removing it`,
 					direction: "inbound",
 				});
-				if (!(await this.controller.isFailedNode(nodeId))) {
+				if (!(await this.controller.isFailedNode(msg.command.nodeId))) {
 					try {
 						// Force a ping of the node, so it gets added to the failed nodes list
 						node.setAwake(true);
@@ -1232,9 +1223,9 @@ ${handlers.length} left`,
 
 				try {
 					// ...because we can only remove failed nodes
-					await this.controller.removeFailedNode(nodeId);
+					await this.controller.removeFailedNode(msg.command.nodeId);
 				} catch (e) {
-					log.controller.logNode(nodeId, {
+					log.controller.logNode(msg.command.nodeId, {
 						message: "removing the node failed: " + e,
 						level: "error",
 					});
@@ -1245,7 +1236,7 @@ ${handlers.length} left`,
 				this.supervisionSessions.has(msg.command.sessionId)
 			) {
 				// Supervision commands are handled here
-				log.controller.logNode(nodeId, {
+				log.controller.logNode(msg.command.nodeId, {
 					message: `Received update for a Supervision session`,
 					direction: "inbound",
 				});
@@ -1614,21 +1605,18 @@ ${handlers.length} left`,
 	// wotan-disable-next-line no-misused-generics
 	public async sendCommand<TResponse extends CommandClass = CommandClass>(
 		command: CommandClass,
-		options: SendCommandOptions = {},
+		options: SendMessageOptions = {},
 	): Promise<TResponse | undefined> {
 		let msg: Message;
-		// use multicast when targeting multiple destinations
-		if (isArray(options.destination)) {
-			// Overwrite the destination node id with the multicast id so we can
-			// identify multicast commands
-			command.nodeId = NODE_ID_MULTICAST;
-			msg = new SendDataMulticastRequest(this, {
-				command,
-				nodeIds: options.destination,
-			});
-		} else {
-			if (options.destination) command.nodeId = options.destination;
+		if (command.isSinglecast()) {
 			msg = new SendDataRequest(this, { command });
+		} else if (command.isMulticast()) {
+			msg = new SendDataMulticastRequest(this, { command });
+		} else {
+			throw new ZWaveError(
+				`A CC must either be singlecast or multicast`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 		}
 		const resp = await this.sendMessage(msg, options);
 		if (isCommandClassContainer(resp)) {
