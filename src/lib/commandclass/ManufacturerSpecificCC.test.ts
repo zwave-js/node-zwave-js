@@ -27,11 +27,14 @@ describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 
 	it("should serialize correctly", () => {
 		serialized = cc.serialize();
-		expect(serialized).toEqual(Buffer.from("02027204", "hex"));
+		expect(serialized).toEqual(Buffer.from("7204", "hex"));
 	});
 
 	it("should deserialize correctly", () => {
-		const deserialized = CommandClass.from(fakeDriver, serialized);
+		const deserialized = CommandClass.from(fakeDriver, {
+			nodeId: cc.nodeId,
+			data: serialized,
+		});
 		expect(deserialized).toBeInstanceOf(ManufacturerSpecificCC);
 		expect(deserialized.nodeId).toBe(cc.nodeId);
 	});

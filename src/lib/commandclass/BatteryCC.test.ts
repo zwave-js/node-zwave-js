@@ -19,8 +19,6 @@ describe("lib/commandclass/BatteryCC => ", () => {
 	it("the Get command should serialize correctly", () => {
 		const batteryCC = new BatteryCCGet(fakeDriver, { nodeId: 1 });
 		const expected = Buffer.from([
-			1, // node number
-			2, // remaining length
 			CommandClasses.Battery, // CC
 			BatteryCommand.Get, // CC Command
 		]);
@@ -30,13 +28,12 @@ describe("lib/commandclass/BatteryCC => ", () => {
 	describe("the Report command (v1) should be deserialized correctly", () => {
 		it("when the battery is not low", () => {
 			const ccData = Buffer.from([
-				2, // node number
-				3, // remaining length
 				CommandClasses.Battery, // CC
 				BatteryCommand.Report, // CC Command
 				55, // current value
 			]);
 			const batteryCC = new BatteryCC(fakeDriver, {
+				nodeId: 7,
 				data: ccData,
 			}) as BatteryCCReport;
 
@@ -46,13 +43,12 @@ describe("lib/commandclass/BatteryCC => ", () => {
 
 		it("when the battery is low", () => {
 			const ccData = Buffer.from([
-				2, // node number
-				3, // remaining length
 				CommandClasses.Battery, // CC
 				BatteryCommand.Report, // CC Command
 				0xff, // current value
 			]);
 			const batteryCC = new BatteryCC(fakeDriver, {
+				nodeId: 7,
 				data: ccData,
 			}) as BatteryCCReport;
 
@@ -64,8 +60,6 @@ describe("lib/commandclass/BatteryCC => ", () => {
 	describe("the Report command (v2) should be deserialized correctly", () => {
 		it("all flags set", () => {
 			const ccData = Buffer.from([
-				2, // node number
-				5, // remaining length
 				CommandClasses.Battery, // CC
 				BatteryCommand.Report, // CC Command
 				55, // current value
@@ -73,6 +67,7 @@ describe("lib/commandclass/BatteryCC => ", () => {
 				1, // disconnected
 			]);
 			const batteryCC = new BatteryCC(fakeDriver, {
+				nodeId: 7,
 				data: ccData,
 			}) as BatteryCCReport;
 
@@ -85,8 +80,6 @@ describe("lib/commandclass/BatteryCC => ", () => {
 
 		it("charging status", () => {
 			const ccData = Buffer.from([
-				2, // node number
-				5, // remaining length
 				CommandClasses.Battery, // CC
 				BatteryCommand.Report, // CC Command
 				55,
@@ -94,6 +87,7 @@ describe("lib/commandclass/BatteryCC => ", () => {
 				0,
 			]);
 			const batteryCC = new BatteryCC(fakeDriver, {
+				nodeId: 7,
 				data: ccData,
 			}) as BatteryCCReport;
 
@@ -104,8 +98,6 @@ describe("lib/commandclass/BatteryCC => ", () => {
 
 		it("charging status", () => {
 			const ccData = Buffer.from([
-				2, // node number
-				5, // remaining length
 				CommandClasses.Battery, // CC
 				BatteryCommand.Report, // CC Command
 				55,
@@ -113,6 +105,7 @@ describe("lib/commandclass/BatteryCC => ", () => {
 				0,
 			]);
 			const batteryCC = new BatteryCC(fakeDriver, {
+				nodeId: 7,
 				data: ccData,
 			}) as BatteryCCReport;
 
@@ -124,12 +117,11 @@ describe("lib/commandclass/BatteryCC => ", () => {
 
 	it("deserializing an unsupported command should return an unspecified version of BatteryCC", () => {
 		const serializedCC = Buffer.from([
-			2, // node number
-			2, // remaining length
 			CommandClasses.Battery, // CC
 			255, // not a valid command
 		]);
 		const basicCC: any = new BatteryCC(fakeDriver, {
+			nodeId: 7,
 			data: serializedCC,
 		});
 		expect(basicCC.constructor).toBe(BatteryCC);

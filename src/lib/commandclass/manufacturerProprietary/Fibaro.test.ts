@@ -14,8 +14,6 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 			proprietaryCommand: new FibaroVenetianBlindCCSet({ tilt: 99 }),
 		});
 		const expected = Buffer.from([
-			1, // node number
-			8, // remaining length
 			CommandClasses["Manufacturer Proprietary"], // CC
 			0x01,
 			0x0f,
