@@ -148,6 +148,10 @@ export class CommandClass {
 			) {
 				this.version = 1;
 			}
+		} else {
+			// For multicast CCs, we just use the highest implemented version to serialize
+			// Older nodes will ignore the additional fields
+			this.version = getImplementedVersion(this.ccId);
 		}
 	}
 
@@ -291,7 +295,6 @@ export class CommandClass {
 
 	/**
 	 * Creates an instance of the CC that is serialized in the given buffer
-	 * @param encapCC The command class that is encapsulating this CC payload
 	 */
 	public static from(
 		driver: IDriver,
