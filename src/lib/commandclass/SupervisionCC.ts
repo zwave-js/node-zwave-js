@@ -78,6 +78,8 @@ export class SupervisionCCAPI extends CCAPI {
 @implementedVersion(1)
 export class SupervisionCC extends CommandClass {
 	declare ccCommand: SupervisionCommand;
+	// Force singlecast for the supervision CC
+	declare nodeId: number;
 
 	/** Tests if a command should be supervised and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
@@ -90,6 +92,13 @@ export class SupervisionCC extends CommandClass {
 		cc: CommandClass,
 		requestStatusUpdates: boolean = true,
 	): SupervisionCCGet {
+		if (!cc.isSinglecast()) {
+			throw new ZWaveError(
+				`Supervision is only possible for singlecast commands!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
 		return new SupervisionCCGet(driver, {
 			nodeId: cc.nodeId,
 			// Supervision CC is wrapped inside MultiChannel CCs, so the endpoint must be copied
@@ -197,7 +206,7 @@ export class SupervisionCCGet extends SupervisionCC {
 	public encapsulated: CommandClass;
 
 	public serialize(): Buffer {
-		const encapCC = this.encapsulated.serializeForEncapsulation();
+		const encapCC = this.encapsulated.serialize();
 		this.payload = Buffer.concat([
 			Buffer.from([
 				(this.requestStatusUpdates ? 0b10_000000 : 0) |

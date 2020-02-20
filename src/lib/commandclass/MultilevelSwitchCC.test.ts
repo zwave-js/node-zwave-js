@@ -15,11 +15,9 @@ import {
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
-function buildCCBuffer(nodeId: number, payload: Buffer): Buffer {
+function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
 		Buffer.from([
-			nodeId, // node number
-			payload.length + 1, // remaining length
 			CommandClasses["Multilevel Switch"], // CC
 		]),
 		payload,
@@ -30,7 +28,6 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 	it("the Get command should serialize correctly", () => {
 		const cc = new MultilevelSwitchCCGet(fakeDriver, { nodeId: 1 });
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				MultilevelSwitchCommand.Get, // CC Command
 			]),
@@ -44,7 +41,6 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 			targetValue: 55,
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				MultilevelSwitchCommand.Set, // CC Command
 				55, // target value
@@ -60,7 +56,6 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 			duration: new Duration(2, "minutes"),
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				MultilevelSwitchCommand.Set, // CC Command
 				55, // target value,
@@ -72,13 +67,15 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 
 	it("the Report command (V1) should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				MultilevelSwitchCommand.Report, // CC Command
 				55, // current value
 			]),
 		);
-		const cc = new MultilevelSwitchCCReport(fakeDriver, { data: ccData });
+		const cc = new MultilevelSwitchCCReport(fakeDriver, {
+			nodeId: 2,
+			data: ccData,
+		});
 
 		expect(cc.currentValue).toBe(55);
 		expect(cc.targetValue).toBeUndefined();
@@ -87,7 +84,6 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 
 	it("the Report command (v4) should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				MultilevelSwitchCommand.Report, // CC Command
 				55, // current value
@@ -95,7 +91,10 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 				1, // duration
 			]),
 		);
-		const cc = new MultilevelSwitchCCReport(fakeDriver, { data: ccData });
+		const cc = new MultilevelSwitchCCReport(fakeDriver, {
+			nodeId: 2,
+			data: ccData,
+		});
 
 		expect(cc.currentValue).toBe(55);
 		expect(cc.targetValue).toBe(66);
@@ -110,7 +109,6 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 			ignoreStartLevel: true,
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				MultilevelSwitchCommand.StartLevelChange, // CC Command
 				0b001_00000, // up, ignore start level,
@@ -128,7 +126,6 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 			startLevel: 50,
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				MultilevelSwitchCommand.StartLevelChange, // CC Command
 				0b010_00000, // down,
@@ -143,7 +140,6 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 			nodeId: 1,
 		});
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				MultilevelSwitchCommand.StopLevelChange, // CC Command
 			]),
@@ -160,7 +156,6 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 			duration: new Duration(3, "seconds"),
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				MultilevelSwitchCommand.StartLevelChange, // CC Command
 				0b010_00000, // down,
@@ -176,7 +171,6 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 			nodeId: 1,
 		});
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				MultilevelSwitchCommand.SupportedGet, // CC Command
 			]),
@@ -186,10 +180,10 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 
 	it("deserializing an unsupported command should return an unspecified version of MultilevelSwitchCC", () => {
 		const serializedCC = buildCCBuffer(
-			1,
 			Buffer.from([255]), // not a valid command
 		);
 		const cc: any = new MultilevelSwitchCC(fakeDriver, {
+			nodeId: 2,
 			data: serializedCC,
 		});
 		expect(cc.constructor).toBe(MultilevelSwitchCC);

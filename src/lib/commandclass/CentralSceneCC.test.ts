@@ -18,11 +18,9 @@ const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 const node1 = new ZWaveNode(1, fakeDriver as any);
 (fakeDriver.controller!.nodes as any).set(1, node1);
 
-function buildCCBuffer(nodeId: number, payload: Buffer): Buffer {
+function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
 		Buffer.from([
-			nodeId, // node number
-			payload.length + 1, // remaining length
 			CommandClasses["Central Scene"], // CC
 		]),
 		payload,
@@ -35,7 +33,6 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 			nodeId: 1,
 		});
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				CentralSceneCommand.ConfigurationGet, // CC Command
 			]),
@@ -49,7 +46,6 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 			slowRefresh: true,
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				CentralSceneCommand.ConfigurationSet, // CC Command
 				0b1000_0000,
@@ -64,7 +60,6 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 			slowRefresh: false,
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				CentralSceneCommand.ConfigurationSet, // CC Command
 				0,
@@ -75,13 +70,13 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 
 	it("the ConfigurationReport command should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				CentralSceneCommand.ConfigurationReport, // CC Command
 				0b1000_0000,
 			]),
 		);
 		const cc = new CentralSceneCCConfigurationReport(fakeDriver, {
+			nodeId: 1,
 			data: ccData,
 		});
 
@@ -93,7 +88,6 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 			nodeId: 1,
 		});
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				CentralSceneCommand.SupportedGet, // CC Command
 			]),
@@ -103,7 +97,6 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 
 	it("the SupportedReport command should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				CentralSceneCommand.SupportedReport, // CC Command
 				2, // # of scenes
@@ -115,6 +108,7 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 			]),
 		);
 		const cc = new CentralSceneCCSupportedReport(fakeDriver, {
+			nodeId: 1,
 			data: ccData,
 		});
 
@@ -128,7 +122,6 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 
 	it("the Notification command should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				CentralSceneCommand.Notification, // CC Command
 				7, // sequence number
@@ -137,6 +130,7 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 			]),
 		);
 		const cc = new CentralSceneCCNotification(fakeDriver, {
+			nodeId: 1,
 			data: ccData,
 		});
 
@@ -149,7 +143,6 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 
 	it("the Notification command should be deserialized correctly (KeyHeldDown)", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				CentralSceneCommand.Notification, // CC Command
 				7, // sequence number
@@ -158,6 +151,7 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 			]),
 		);
 		const cc = new CentralSceneCCNotification(fakeDriver, {
+			nodeId: 1,
 			data: ccData,
 		});
 
@@ -169,10 +163,10 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 
 	it("deserializing an unsupported command should return an unspecified version of CentralSceneCC", () => {
 		const serializedCC = buildCCBuffer(
-			1,
 			Buffer.from([255]), // not a valid command
 		);
 		const cc: any = new CentralSceneCC(fakeDriver, {
+			nodeId: 1,
 			data: serializedCC,
 		});
 		expect(cc.constructor).toBe(CentralSceneCC);

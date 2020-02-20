@@ -721,11 +721,11 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 				this.destination = destination;
 			}
 			// No need to validate further, each CC does it for itself
-			this.encapsulated = CommandClass.fromEncapsulated(
-				this.driver,
-				this,
-				this.payload.slice(2),
-			);
+			this.encapsulated = CommandClass.from(this.driver, {
+				data: this.payload.slice(2),
+				fromEncapsulation: true,
+				encapCC: this,
+			});
 		} else {
 			this.encapsulated = options.encapsulated;
 			this.destination = options.destination;
@@ -745,7 +745,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 				  encodeBitMask(this.destination, 7)[0] | 0b1000_0000;
 		this.payload = Buffer.concat([
 			Buffer.from([this.endpointIndex & 0b0111_1111, destination]),
-			this.encapsulated.serializeForEncapsulation(),
+			this.encapsulated.serialize(),
 		]);
 		return super.serialize();
 	}

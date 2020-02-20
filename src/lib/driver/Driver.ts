@@ -43,9 +43,10 @@ import {
 } from "../controller/ApplicationUpdateRequest";
 import { ZWaveController } from "../controller/Controller";
 import {
+	isSendReport,
+	isTransmitReport,
+	SendDataMulticastRequest,
 	SendDataRequest,
-	SendDataRequestTransmitReport,
-	SendDataResponse,
 	TransmitStatus,
 } from "../controller/SendDataMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -982,7 +983,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			switch (responseRole) {
 				case "confirmation": {
 					// When a node has received the message, it confirms the receipt with a SendDataRequest
-					if (msg.type === MessageType.Request) {
+					if (msg instanceof SendDataRequest) {
 						// As per SDS11846, start a timeout for the expected response
 						this.currentTransaction.computeRTT();
 						const msRTT = this.currentTransaction.rtt / 1e6;
@@ -1013,8 +1014,8 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 						)
 							// Unref'ing long running timers allows the process to exit mid-timeout
 							.unref();
-					} else if (msg instanceof SendDataResponse) {
-						// The message was sent to the node
+					} else if (isSendReport(msg)) {
+						// The message was sent to the node(s)
 						this.currentTransaction.nodeAckPending = true;
 					}
 					// no need to further process intermediate responses, as they only tell us things are good
@@ -1049,9 +1050,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 				case "fatal_node": {
 					// The node did not acknowledge the receipt
 					this.handleMissingNodeResponse(
-						msg instanceof SendDataRequestTransmitReport
-							? msg.transmitStatus
-							: undefined,
+						isTransmitReport(msg) ? msg.transmitStatus : undefined,
 					);
 					return;
 				}
@@ -1172,7 +1171,7 @@ ${handlers.length} left`,
 	/**
 	 * Is called when a Request-type message was received
 	 */
-	private async handleRequest(msg: Message | SendDataRequest): Promise<void> {
+	private async handleRequest(msg: Message): Promise<void> {
 		let handlers: RequestHandlerEntry[] | undefined;
 
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
@@ -1208,11 +1207,11 @@ ${handlers.length} left`,
 				msg.command.ccId === CommandClasses["Device Reset Locally"] &&
 				msg.command instanceof DeviceResetLocallyCCNotification
 			) {
-				log.controller.logNode(nodeId, {
+				log.controller.logNode(msg.command.nodeId, {
 					message: `The node was reset locally, removing it`,
 					direction: "inbound",
 				});
-				if (!(await this.controller.isFailedNode(nodeId))) {
+				if (!(await this.controller.isFailedNode(msg.command.nodeId))) {
 					try {
 						// Force a ping of the node, so it gets added to the failed nodes list
 						node.setAwake(true);
@@ -1224,9 +1223,9 @@ ${handlers.length} left`,
 
 				try {
 					// ...because we can only remove failed nodes
-					await this.controller.removeFailedNode(nodeId);
+					await this.controller.removeFailedNode(msg.command.nodeId);
 				} catch (e) {
-					log.controller.logNode(nodeId, {
+					log.controller.logNode(msg.command.nodeId, {
 						message: "removing the node failed: " + e,
 						level: "error",
 					});
@@ -1237,7 +1236,7 @@ ${handlers.length} left`,
 				this.supervisionSessions.has(msg.command.sessionId)
 			) {
 				// Supervision commands are handled here
-				log.controller.logNode(nodeId, {
+				log.controller.logNode(msg.command.nodeId, {
 					message: `Received update for a Supervision session`,
 					direction: "inbound",
 				});
@@ -1567,12 +1566,16 @@ ${handlers.length} left`,
 
 		// When sending a message to a node that is known to be sleeping,
 		// the priority must be WakeUp, so the message gets deprioritized
-		// in comparison with messages to awake nodes
-		// Pings are an exception, because we don't want them in the wakeup queue
+		// in comparison with messages to awake nodes.
+		// However there are a few exceptions...
 		if (
 			(isNodeQuery(msg) || isCommandClassContainer(msg)) &&
+			// We don't want pings in the wakeup queue
 			!messageIsPing(msg) &&
-			msg.getNodeUnsafe()?.isAwake() === false
+			msg.getNodeUnsafe()?.isAwake() === false &&
+			// If we move multicasts to the wakeup queue, it is unlikely
+			// that there is ever a points where all targets are awake
+			!(msg instanceof SendDataMulticastRequest)
 		) {
 			options.priority = MessagePriority.WakeUp;
 		}
@@ -1596,7 +1599,7 @@ ${handlers.length} left`,
 
 	/**
 	 * Sends a command to a Z-Wave node.
-	 * @param command The command to send. It will be encapsulated in a SendDataRequest.
+	 * @param command The command to send. It will be encapsulated in a SendData[Multicast]Request.
 	 * @param options (optional) Options regarding the message transmission
 	 */
 	// wotan-disable-next-line no-misused-generics
@@ -1604,9 +1607,17 @@ ${handlers.length} left`,
 		command: CommandClass,
 		options: SendMessageOptions = {},
 	): Promise<TResponse | undefined> {
-		const msg = new SendDataRequest(this, {
-			command,
-		});
+		let msg: Message;
+		if (command.isSinglecast()) {
+			msg = new SendDataRequest(this, { command });
+		} else if (command.isMulticast()) {
+			msg = new SendDataMulticastRequest(this, { command });
+		} else {
+			throw new ZWaveError(
+				`A CC must either be singlecast or multicast`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
 		const resp = await this.sendMessage(msg, options);
 		if (isCommandClassContainer(resp)) {
 			return resp.command as TResponse;

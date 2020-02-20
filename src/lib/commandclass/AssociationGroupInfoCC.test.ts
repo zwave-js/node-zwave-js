@@ -19,11 +19,9 @@ const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 const node1 = new ZWaveNode(1, fakeDriver as any);
 (fakeDriver.controller!.nodes as any).set(1, node1);
 
-function buildCCBuffer(nodeId: number, payload: Buffer): Buffer {
+function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
 		Buffer.from([
-			nodeId, // node number
-			payload.length + 1, // remaining length
 			CommandClasses["Association Group Information"], // CC
 		]),
 		payload,
@@ -37,7 +35,6 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 			groupId: 7,
 		});
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				AssociationGroupInfoCommand.NameGet, // CC Command
 				7, // group id
@@ -48,7 +45,6 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 
 	it("the NameReport command should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				AssociationGroupInfoCommand.NameReport, // CC Command
 				7, // group id
@@ -63,6 +59,7 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 			]),
 		);
 		const cc = new AssociationGroupInfoCCNameReport(fakeDriver, {
+			nodeId: 1,
 			data: ccData,
 		});
 
@@ -78,7 +75,6 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 			refreshCache: false,
 		});
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				AssociationGroupInfoCommand.InfoGet, // CC Command
 				0, // flags
@@ -96,7 +92,6 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 			refreshCache: true,
 		});
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				AssociationGroupInfoCommand.InfoGet, // CC Command
 				0b1000_0000, // flags
@@ -114,7 +109,6 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 			refreshCache: false,
 		});
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				AssociationGroupInfoCommand.InfoGet, // CC Command
 				0b0100_0000, // flags
@@ -126,7 +120,6 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 
 	it("the Info Report command should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				AssociationGroupInfoCommand.InfoReport, // CC Command
 				0b1100_0000 | 2, // Flags | group count
@@ -152,6 +145,7 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 			]),
 		);
 		const cc = new AssociationGroupInfoCCInfoReport(fakeDriver, {
+			nodeId: 1,
 			data: ccData,
 		});
 
@@ -173,7 +167,6 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 			allowCache: true,
 		});
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				AssociationGroupInfoCommand.CommandListGet, // CC Command
 				0b1000_0000, // allow cache
@@ -185,7 +178,6 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 
 	it("the CommandListReport command should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				AssociationGroupInfoCommand.CommandListReport, // CC Command
 				7, // group id
@@ -199,6 +191,7 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 			]),
 		);
 		const cc = new AssociationGroupInfoCCCommandListReport(fakeDriver, {
+			nodeId: 1,
 			data: ccData,
 		});
 
@@ -213,10 +206,10 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 
 	it("deserializing an unsupported command should return an unspecified version of AssociationGroupInfoCC", () => {
 		const serializedCC = buildCCBuffer(
-			1,
 			Buffer.from([255]), // not a valid command
 		);
 		const cc: any = new AssociationGroupInfoCC(fakeDriver, {
+			nodeId: 1,
 			data: serializedCC,
 		});
 		expect(cc.constructor).toBe(AssociationGroupInfoCC);

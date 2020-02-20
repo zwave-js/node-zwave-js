@@ -36,6 +36,8 @@ export class NoOperationCCAPI extends CCAPI {
 @implementedVersion(1)
 export class NoOperationCC extends CommandClass {
 	declare ccCommand: undefined;
+	// Force singlecast
+	declare nodeId: number;
 }
 
 /** Tests if a given message is a ping */

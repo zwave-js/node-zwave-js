@@ -3,7 +3,7 @@ import { assertZWaveError } from "../../../test/util";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { ZWaveNode } from "../node/Node";
-import { BasicCC, BasicCCSet, BasicCommand } from "./BasicCC";
+import { BasicCC, BasicCCSet } from "./BasicCC";
 import {
 	CommandClass,
 	commandClass,
@@ -14,14 +14,6 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
-import {
-	MultiChannelCC,
-	MultiChannelCCCommandEncapsulation,
-} from "./MultiChannelCC";
-import {
-	MultiCommandCC,
-	MultiCommandCCCommandEncapsulation,
-} from "./MultiCommandCC";
 
 @implementedVersion(7)
 @commandClass(0xffff as any)
@@ -50,86 +42,6 @@ describe("lib/commandclass/CommandClass => ", () => {
 					errorCode: ZWaveErrorCodes.CC_NotImplemented,
 				},
 			);
-		});
-	});
-
-	describe("fromEncapsulated()", () => {
-		it.skip("throws CC_NotImplemented when receiving a non-implemented CC", () => {
-			// TODO: This is a meter CC. Change it when that CC is implemented
-			assertZWaveError(
-				() =>
-					CommandClass.fromEncapsulated(
-						fakeDriver,
-						undefined as any,
-						Buffer.from("0b0a32022144000000a30000", "hex"),
-					),
-				{
-					errorCode: ZWaveErrorCodes.CC_NotImplemented,
-				},
-			);
-		});
-
-		it("correctly copies the source endpoint from the encapsulating CC", () => {
-			let cc: CommandClass = new BasicCCSet(fakeDriver, {
-				nodeId: 4,
-				targetValue: 5,
-			});
-			cc = MultiChannelCC.encapsulate(fakeDriver, cc);
-			(cc as MultiChannelCCCommandEncapsulation).endpointIndex = 5;
-			const serialized = cc.serialize();
-			// ---------------
-			let deserialized: CommandClass = CommandClass.from(
-				fakeDriver,
-				serialized,
-			);
-			deserialized = MultiChannelCC.unwrap(
-				deserialized as MultiChannelCCCommandEncapsulation,
-			);
-			expect(deserialized.endpointIndex).toBe(
-				(cc as MultiChannelCCCommandEncapsulation).endpointIndex,
-			);
-		});
-
-		it("correctly copies the source endpoint from the encapsulating CC (multiple layers)", () => {
-			let cc: CommandClass = new BasicCCSet(fakeDriver, {
-				nodeId: 4,
-				targetValue: 5,
-			});
-			cc.endpointIndex = 5;
-			// TODO: Add this method
-			cc = MultiCommandCC.encapsulate(fakeDriver, [cc]);
-			cc = MultiChannelCC.encapsulate(fakeDriver, cc);
-			const serialized = cc.serialize();
-			// ---------------
-			let deserialized: CommandClass = CommandClass.from(
-				fakeDriver,
-				serialized,
-			);
-			deserialized = MultiChannelCC.unwrap(
-				deserialized as MultiChannelCCCommandEncapsulation,
-			);
-			// TODO: Add this method
-			deserialized = MultiCommandCC.unwrap(
-				deserialized as MultiCommandCCCommandEncapsulation,
-			)[0];
-			expect(deserialized.endpointIndex).toBe(cc.endpointIndex);
-		});
-	});
-
-	describe("serializeForEncapsulation()", () => {
-		it("works correctly", () => {
-			// Test with a BasicCC Set
-			const cc = new BasicCCSet(fakeDriver, {
-				nodeId: 2,
-				targetValue: 55,
-			});
-			const serialized = cc.serializeForEncapsulation();
-			const expected = Buffer.from([
-				CommandClasses.Basic,
-				BasicCommand.Set,
-				cc.targetValue,
-			]);
-			expect(serialized).toEqual(expected);
 		});
 	});
 

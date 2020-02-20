@@ -44,6 +44,7 @@ import {
 	GetRoutingInfoRequest,
 	GetRoutingInfoResponse,
 } from "../controller/GetRoutingInfoMessages";
+import { MAX_NODES } from "../controller/NodeBitMask";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
@@ -76,6 +77,11 @@ import {
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 } from "./ValueDB";
+
+/** The broadcast target node id */
+export const NODE_ID_BROADCAST = 0xff;
+/** The highest allowed node id */
+export const NODE_ID_MAX = MAX_NODES;
 
 export interface TranslatedValueID extends ValueID {
 	commandClassName: string;

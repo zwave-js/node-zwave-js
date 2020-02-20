@@ -11,11 +11,9 @@ import {
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 
-function buildCCBuffer(nodeId: number, payload: Buffer): Buffer {
+function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
 		Buffer.from([
-			nodeId, // node number
-			payload.length + 1, // remaining length
 			CommandClasses.Language, // CC
 		]),
 		payload,
@@ -26,7 +24,6 @@ describe("lib/commandclass/LanguageCC => ", () => {
 	it("the Get command should serialize correctly", () => {
 		const cc = new LanguageCCGet(fakeDriver, { nodeId: 1 });
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				LanguageCommand.Get, // CC Command
 			]),
@@ -40,7 +37,6 @@ describe("lib/commandclass/LanguageCC => ", () => {
 			language: "deu",
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				LanguageCommand.Set, // CC Command
 				// "deu"
@@ -59,7 +55,6 @@ describe("lib/commandclass/LanguageCC => ", () => {
 			country: "DE",
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				LanguageCommand.Set, // CC Command
 				// "deu"
@@ -76,7 +71,6 @@ describe("lib/commandclass/LanguageCC => ", () => {
 
 	it("the Report command should be deserialized correctly (w/o country code)", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				LanguageCommand.Report, // CC Command
 				// "deu"
@@ -85,7 +79,10 @@ describe("lib/commandclass/LanguageCC => ", () => {
 				0x75,
 			]),
 		);
-		const cc = new LanguageCCReport(fakeDriver, { data: ccData });
+		const cc = new LanguageCCReport(fakeDriver, {
+			nodeId: 4,
+			data: ccData,
+		});
 
 		expect(cc.language).toBe("deu");
 		expect(cc.country).toBeUndefined();
@@ -93,7 +90,6 @@ describe("lib/commandclass/LanguageCC => ", () => {
 
 	it("the Report command should be deserialized correctly (w/ country code)", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				LanguageCommand.Report, // CC Command
 				// "deu"
@@ -105,7 +101,10 @@ describe("lib/commandclass/LanguageCC => ", () => {
 				0x45,
 			]),
 		);
-		const cc = new LanguageCCReport(fakeDriver, { data: ccData });
+		const cc = new LanguageCCReport(fakeDriver, {
+			nodeId: 4,
+			data: ccData,
+		});
 
 		expect(cc.language).toBe("deu");
 		expect(cc.country).toBe("DE");
@@ -113,10 +112,10 @@ describe("lib/commandclass/LanguageCC => ", () => {
 
 	it("deserializing an unsupported command should return an unspecified version of LanguageCC", () => {
 		const serializedCC = buildCCBuffer(
-			1,
 			Buffer.from([255]), // not a valid command
 		);
 		const cc: any = new LanguageCC(fakeDriver, {
+			nodeId: 4,
 			data: serializedCC,
 		});
 		expect(cc.constructor).toBe(LanguageCC);

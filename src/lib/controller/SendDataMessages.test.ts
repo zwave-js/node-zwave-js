@@ -180,6 +180,10 @@ describe("lib/controller/SendDataRequest => ", () => {
 		const serializedMsg = msg.payload;
 
 		const expected = Buffer.concat([
+			Buffer.from([
+				1, // nodeId
+				serializedCC.length, // data length
+			]),
 			serializedCC,
 			Buffer.from([TransmitOptions.DEFAULT, 66]),
 		]);
