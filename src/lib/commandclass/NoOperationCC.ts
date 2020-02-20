@@ -1,4 +1,3 @@
-import { SendDataRequest } from "../controller/SendDataMessages";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
 import { CCAPI } from "./API";
@@ -17,18 +16,18 @@ import { isCommandClassContainer } from "./ICommandClassContainer";
 @API(CommandClasses["No Operation"])
 export class NoOperationCCAPI extends CCAPI {
 	public async send(): Promise<void> {
-		const request = new SendDataRequest(this.driver, {
-			command: new NoOperationCC(this.driver, {
+		await this.driver.sendCommand(
+			new NoOperationCC(this.driver, {
 				nodeId: this.endpoint.nodeId,
 				endpoint: this.endpoint.index,
 			}),
-		});
-		// Don't retry sending ping packets
-		request.maxSendAttempts = 1;
-		// set the priority manually, as SendData can be Application level too
-		await this.driver.sendMessage<SendDataRequest>(request, {
-			priority: MessagePriority.NodeQuery,
-		});
+			{
+				// Don't retry sending ping packets
+				maxSendAttempts: 1,
+				// set the priority manually, as SendData can be Application level too
+				priority: MessagePriority.NodeQuery,
+			},
+		);
 	}
 }
 
@@ -36,8 +35,6 @@ export class NoOperationCCAPI extends CCAPI {
 @implementedVersion(1)
 export class NoOperationCC extends CommandClass {
 	declare ccCommand: undefined;
-	// Force singlecast
-	declare nodeId: number;
 }
 
 /** Tests if a given message is a ping */
