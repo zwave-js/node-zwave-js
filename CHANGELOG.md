@@ -4,6 +4,15 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* Added experimental support for multicast destinations in CCs
+* `Multichannel CC`: The interview now needs less messages when a node reports identical endpoint capabilities
+
+### Bugfixes
+* The `setValue` API no longer crashes the driver if an invalid value for the CC is passed
+* `Configuration CC`: The `Set` command no longer accepts values that are too large for the param's value size.
+
 ## 2.13.3 (2020-02-13)
 ### Bugfixes
 * `Multi Channel CC`: The `EndPointFind` is no longer used in V2
