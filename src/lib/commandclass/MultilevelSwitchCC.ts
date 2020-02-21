@@ -1,7 +1,7 @@
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { ValueMetadata } from "../values/Metadata";
