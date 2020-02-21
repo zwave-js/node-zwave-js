@@ -15,6 +15,8 @@ import { ValueMetadata } from "../values/Metadata";
 import { CCAPI } from "./API";
 import { CommandClasses, getCCName } from "./CommandClasses";
 
+export type MulticastDestination = [number, number, ...number[]];
+
 export interface CommandClassInfo {
 	isSupported: boolean;
 	isControlled: boolean;
@@ -23,8 +25,9 @@ export interface CommandClassInfo {
 
 export type CommandClassDeserializationOptions = { data: Buffer } & (
 	| {
-		fromEncapsulation?: false;
-	}
+			fromEncapsulation?: false;
+			nodeId: number;
+	  }
 	| {
 		fromEncapsulation: true;
 		encapCC: CommandClass;
@@ -38,7 +41,7 @@ export function gotDeserializationOptions(
 }
 
 export interface CCCommandOptions {
-	nodeId: number;
+	nodeId: number | MulticastDestination;
 	endpoint?: number;
 	supervised?: boolean;
 }
@@ -49,7 +52,7 @@ interface CommandClassCreationOptions extends CCCommandOptions {
 }
 
 function gotCCCommandOptions(options: any): options is CCCommandOptions {
-	return typeof options.nodeId === "number";
+	return typeof options.nodeId === "number" || isArray(options.nodeId);
 }
 
 export type CommandClassOptions =
@@ -73,9 +76,7 @@ export class CommandClass {
 
 		if (gotDeserializationOptions(options)) {
 			// For deserialized commands, try to invoke the correct subclass constructor
-			const ccCommand = options.fromEncapsulation
-				? CommandClass.getCCCommandWithoutHeader(options.data)
-				: CommandClass.getCCCommand(options.data);
+			const ccCommand = CommandClass.getCCCommand(options.data);
 			if (ccCommand != undefined) {
 				const CommandConstructor = getCCCommandConstructor(
 					this.ccId,
@@ -91,32 +92,19 @@ export class CommandClass {
 
 			// If the constructor is correct or none was found, fall back to normal deserialization
 			if (options.fromEncapsulation) {
-				({
-					nodeId: this.nodeId,
-					ccId: this.ccId,
-					ccCommand: this.ccCommand,
-					payload: this.payload,
-				} = this.deserializeFromEncapsulation(
-					options.encapCC,
-					options.data,
-				));
-				// Propagate the endpoint index from the encapsulating CC
+				// Propagate the node ID and endpoint index from the encapsulating CC
+				this.nodeId = options.encapCC.nodeId;
 				if (!this.endpointIndex && options.encapCC.endpointIndex) {
 					this.endpointIndex = options.encapCC.endpointIndex;
 				}
 			} else {
-				this.nodeId = CommandClass.getNodeId(options.data);
-				const lengthWithoutHeader = options.data[1];
-				const dataWithoutHeader = options.data.slice(
-					2,
-					2 + lengthWithoutHeader,
-				);
-				({
-					ccId: this.ccId,
-					ccCommand: this.ccCommand,
-					payload: this.payload,
-				} = this.deserializeWithoutHeader(dataWithoutHeader));
+				this.nodeId = options.nodeId;
 			}
+			({
+				ccId: this.ccId,
+				ccCommand: this.ccCommand,
+				payload: this.payload,
+			} = this.deserialize(options.data));
 		} else if (gotCCCommandOptions(options)) {
 			const {
 				nodeId,
@@ -127,26 +115,33 @@ export class CommandClass {
 			this.ccCommand = ccCommand;
 			this.payload = payload;
 		}
-		// Set the CC version as high as possible
-		this.version = this.driver.getSafeCCVersionForNode(
-			this.ccId,
-			this.nodeId,
-			this.endpointIndex,
-		);
-		// If we received a CC from a node, it must support at least version 1
-		// Make sure that the interview is complete or we cannot be sure that the assumption is correct
-		let node: ZWaveNode | undefined;
-		try {
-			node = this.getNode();
-		} catch (e) {
-			/* okay */
-		}
-		if (
-			node?.interviewStage === InterviewStage.Complete &&
-			this.version === 0 &&
-			gotDeserializationOptions(options)
-		) {
-			this.version = 1;
+
+		if (this.isSinglecast()) {
+			// For singlecast CCs, set the CC version as high as possible
+			this.version = this.driver.getSafeCCVersionForNode(
+				this.ccId,
+				this.nodeId,
+				this.endpointIndex,
+			);
+			// If we received a CC from a node, it must support at least version 1
+			// Make sure that the interview is complete or we cannot be sure that the assumption is correct
+			let node: ZWaveNode | undefined;
+			try {
+				node = this.getNode();
+			} catch (e) {
+				/* okay */
+			}
+			if (
+				node?.interviewStage === InterviewStage.Complete &&
+				this.version === 0 &&
+				gotDeserializationOptions(options)
+			) {
+				this.version = 1;
+			}
+		} else {
+			// For multicast CCs, we just use the highest implemented version to serialize
+			// Older nodes will ignore the additional fields
+			this.version = getImplementedVersion(this.ccId);
 		}
 	}
 
@@ -154,8 +149,9 @@ export class CommandClass {
 
 	/** This CC's identifier */
 	public ccId: CommandClasses;
-	// Work around https://github.com/Microsoft/TypeScript/issues/27555
-	public nodeId!: number;
+	/** The ID of the target node(s) */
+	public nodeId!: number | MulticastDestination;
+
 	public ccCommand?: number;
 	// Work around https://github.com/Microsoft/TypeScript/issues/27555
 	public payload!: Buffer;
@@ -210,11 +206,11 @@ export class CommandClass {
 	}
 
 	/**
-	 * Deserializes a CC from a buffer that does not start with the CC header (node id + serialized length)
+	 * Deserializes a CC from a buffer that contains a serialized CC
 	 */
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-	private deserializeWithoutHeader(data: Buffer) {
-		const ccId = CommandClass.getCommandClassWithoutHeader(data);
+	private deserialize(data: Buffer) {
+		const ccId = CommandClass.getCommandClass(data);
 		const ccIdLength = this.isExtended() ? 2 : 1;
 		if (data.length > ccIdLength) {
 			// This is not a NoOp CC (contains command and payload)
@@ -233,34 +229,12 @@ export class CommandClass {
 	}
 
 	/**
-	 * Serializes this CommandClass without the nodeId + length header
-	 * as required for encapsulation
-	 */
-	public serializeForEncapsulation(): Buffer {
-		// We need to invoke the subclassed serialize implementations or
-		// this.payload will not be filled.
-		// TODO: Refactor this so we don't append two bytes and strip them out immediately afterwards
-		return this.serialize().slice(2);
-	}
-
-	/** Creates the CC header (node id + serialized length) */
-	private getHeader(dataLength: number): Buffer {
-		return Buffer.from([this.nodeId, dataLength]);
-	}
-
-	/** Prepends the CC header (node id + serialized length) to a buffer */
-	private prependHeader(data: Buffer): Buffer {
-		return Buffer.concat([this.getHeader(data.length), data]);
-	}
-
-	/**
-	 * Serializes this CommandClass to be embedded in a message payload.
-	 * The result of this operation will include the header bytes
+	 * Serializes this CommandClass to be embedded in a message payload or another CC
 	 */
 	public serialize(): Buffer {
 		// NoOp CCs have no command and no payload
 		if (this.ccId === CommandClasses["No Operation"])
-			return this.prependHeader(Buffer.from([this.ccId]));
+			return Buffer.from([this.ccId]);
 		else if (this.ccCommand == undefined) {
 			throw new ZWaveError(
 				"Cannot serialize a Command Class without a command",
@@ -276,56 +250,28 @@ export class CommandClass {
 		if (payloadLength > 0 /* implies payload != undefined */) {
 			this.payload.copy(data, 1 + ccIdLength);
 		}
-		return this.prependHeader(data);
+		return data;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-	private deserializeFromEncapsulation(encapCC: CommandClass, data: Buffer) {
-		return {
-			nodeId: encapCC.nodeId,
-			...this.deserializeWithoutHeader(data),
-		};
-	}
-
-	/** Extracts the node id from a serialized CC */
-	public static getNodeId(ccData: Buffer): number {
-		return ccData[0];
-	}
-
-	/** Extracts the CC id from a buffer that does NOT contain the header bytes */
-	private static getCommandClassWithoutHeader(data: Buffer): CommandClasses {
+	/** Extracts the CC id from a buffer that contains a serialized CC */
+	private static getCommandClass(data: Buffer): CommandClasses {
 		return parseCCId(data).ccId;
 	}
 
-	/** Extracts the CC id from a buffer that DOES contain the header bytes */
-	public static getCommandClass(ccData: Buffer): CommandClasses {
-		return this.getCommandClassWithoutHeader(ccData.slice(2));
-	}
-
-	/** Extracts the CC command from a buffer that does NOT contain the header bytes */
-	public static getCCCommandWithoutHeader(data: Buffer): number | undefined {
+	/** Extracts the CC command from a buffer that contains a serialized CC  */
+	public static getCCCommand(data: Buffer): number | undefined {
 		if (data[0] === 0) return undefined; // NoOp
 		const isExtendedCC = data[0] >= 0xf1;
 		return isExtendedCC ? data[2] : data[1];
-	}
-
-	/** Extracts the CC command from a buffer that DOES contain the header bytes */
-	public static getCCCommand(ccData: Buffer): number | undefined {
-		return this.getCCCommandWithoutHeader(ccData.slice(2));
 	}
 
 	/**
 	 * Retrieves the correct constructor for the CommandClass in the given Buffer.
 	 * It is assumed that the buffer only contains the serialized CC. This throws if the CC is not implemented.
 	 */
-	public static getConstructor(
-		ccData: Buffer,
-		encapsulated: boolean = false,
-	): Constructable<CommandClass> {
+	public static getConstructor(ccData: Buffer): Constructable<CommandClass> {
 		// Encapsulated CCs don't have the two header bytes
-		const cc = encapsulated
-			? CommandClass.getCommandClassWithoutHeader(ccData)
-			: CommandClass.getCommandClass(ccData);
+		const cc = CommandClass.getCommandClass(ccData);
 		const ret = getCCConstructor(cc);
 		if (!ret) {
 			const ccName = getCCName(cc);
@@ -337,30 +283,16 @@ export class CommandClass {
 		return ret;
 	}
 
-	/** Creates an instance of the CC that is serialized in the given buffer */
-	public static from(driver: Driver, serializedCC: Buffer): CommandClass {
-		// Fall back to unspecified command class in case we receive one that is not implemented
-		const Constructor = CommandClass.getConstructor(serializedCC);
-		const ret = new Constructor(driver, { data: serializedCC });
-		return ret;
-	}
-
 	/**
-	 * Creates an instance of the CC that is serialized in the given buffer.
-	 * The buffer must be the payload of an encapsulation CC, so it must not contain the header bytes.
+	 * Creates an instance of the CC that is serialized in the given buffer
 	 */
-	public static fromEncapsulated(
+	public static from(
 		driver: Driver,
-		encapCC: CommandClass,
-		serializedCC: Buffer,
+		options: CommandClassDeserializationOptions,
 	): CommandClass {
 		// Fall back to unspecified command class in case we receive one that is not implemented
-		const Constructor = CommandClass.getConstructor(serializedCC, true);
-		const ret = new Constructor(driver, {
-			data: serializedCC,
-			fromEncapsulation: true,
-			encapCC,
-		});
+		const Constructor = CommandClass.getConstructor(options.data);
+		const ret = new Constructor(driver, options);
 		return ret;
 	}
 
@@ -439,11 +371,21 @@ export class CommandClass {
 		return false;
 	}
 
+	public isSinglecast(): this is SinglecastCC<this> {
+		return typeof this.nodeId === "number";
+	}
+
+	public isMulticast(): this is MulticastCC<this> {
+		return isArray(this.nodeId);
+	}
+
 	/**
 	 * Returns the node this CC is linked to. Throws if the controller is not yet ready.
 	 */
 	public getNode(): ZWaveNode | undefined {
-		return this.driver.controller.nodes.get(this.nodeId);
+		if (this.isSinglecast()) {
+			return this.driver.controller.nodes.get(this.nodeId);
+		}
 	}
 
 	public getEndpoint(): Endpoint | undefined {
@@ -766,6 +708,14 @@ export class CommandClass {
 		return propertyKey.toString();
 	}
 }
+
+export type SinglecastCC<T extends CommandClass = CommandClass> = T & {
+	nodeId: number;
+};
+
+export type MulticastCC<T extends CommandClass = CommandClass> = T & {
+	nodeId: MulticastDestination;
+};
 
 // =======================
 // use decorators to link command class values to actual command classes

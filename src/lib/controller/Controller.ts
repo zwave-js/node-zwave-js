@@ -28,7 +28,7 @@ import { NodeNeighborUpdateStatus, RequestNodeNeighborUpdateReport, RequestNodeN
 import { SetSerialApiTimeoutsRequest, SetSerialApiTimeoutsResponse } from "./SetSerialApiTimeoutsMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
-type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
+export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
 
 // Strongly type the event emitter events
 interface ControllerEventCallbacks {
@@ -722,6 +722,36 @@ export class ZWaveController extends EventEmitter {
 			);
 			throw e;
 		}
+	}
+
+	/**
+	 * Removes a node from all other nodes' associations
+	 * WARNING: It is not recommended to await this method
+	 */
+	public async removeNodeFromAllAssocations(nodeId: number): Promise<void> {
+		// Create all async tasks
+		const tasks = [...this.nodes.values()]
+			.filter(node => node.id !== this._ownNodeId && node.id !== nodeId)
+			.map(node => {
+				// Prefer multi channel associations if that is available
+				if (
+					node.commandClasses[
+						"Multi Channel Association"
+					].isSupported()
+				) {
+					return node.commandClasses[
+						"Multi Channel Association"
+					].removeDestinations({
+						nodeIds: [nodeId],
+					});
+				} else if (node.commandClasses.Association.isSupported()) {
+					return node.commandClasses.Association.removeNodeIdsFromAllGroups(
+						[nodeId],
+					);
+				}
+			})
+			.filter(task => !!task) as Promise<void>[];
+		await Promise.all(tasks);
 	}
 
 	/**

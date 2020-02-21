@@ -162,6 +162,29 @@ export class AssociationCCAPI extends CCAPI {
 		});
 		await this.driver.sendCommand(cc);
 	}
+
+	/**
+	 * Removes nodes from all association groups
+	 */
+	public async removeNodeIdsFromAllGroups(nodeIds: number[]): Promise<void> {
+		this.assertSupportsCommand(
+			AssociationCommand,
+			AssociationCommand.Remove,
+		);
+
+		if (this.version >= 2) {
+			// The node supports bulk removal
+			return this.removeNodeIds({ nodeIds, groupId: 0 });
+		} else {
+			// We have to remove the node manually from all groups
+			const node = this.endpoint.getNodeUnsafe()!;
+			const groupCount =
+				node.valueDB.getValue<number>(getGroupCountValueId()) ?? 0;
+			for (let groupId = 1; groupId <= groupCount; groupId++) {
+				await this.removeNodeIds({ nodeIds, groupId });
+			}
+		}
+	}
 }
 
 @commandClass(CommandClasses.Association)
@@ -342,7 +365,7 @@ export class AssociationCCSet extends AssociationCC {
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
-			if (!options.nodeIds.every(n => n > 0 && n < MAX_NODES)) {
+			if (options.nodeIds.some(n => n < 1 || n > MAX_NODES)) {
 				throw new ZWaveError(
 					`All node IDs must be between 1 and ${MAX_NODES}!`,
 					ZWaveErrorCodes.Argument_Invalid,

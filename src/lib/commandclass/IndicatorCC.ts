@@ -513,12 +513,14 @@ export class IndicatorCCReport extends IndicatorCC {
 				});
 				valueDB.setValue(valueId, this.value);
 			} else {
-				// Don't!
-				log.controller.logNode(this.nodeId, {
-					message: `ignoring V1 indicator report because the node supports V2 indicators`,
-					direction: "none",
-					endpoint: this.endpointIndex,
-				});
+				if (this.isSinglecast()) {
+					// Don't!
+					log.controller.logNode(this.nodeId, {
+						message: `ignoring V1 indicator report because the node supports V2 indicators`,
+						direction: "none",
+						endpoint: this.endpointIndex,
+					});
+				}
 			}
 		} else {
 			validatePayload(this.payload.length >= 2 + 3 * objCount);

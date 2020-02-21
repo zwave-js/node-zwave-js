@@ -8,7 +8,7 @@ import { num2hex } from "../util/strings";
 import { ValueMetadata } from "../values/Metadata";
 import { getMinIntegerSize, Maybe, parseBitMask, parseFloatWithScale, unknownNumber } from "../values/Primitive";
 import { CCAPI } from "./API";
-import { API, CCCommand, CCCommandOptions, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, getCommandClass, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import { API, CCCommand, CCCommandOptions, CCResponsePredicate, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, getCommandClass, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 // All the supported commands
@@ -211,10 +211,10 @@ supports reset:       ${supportsReset}`;
 				});
 			} else {
 				type = storedType;
-				supportsReset =
-					node.getValue(
-						getSupportsResetValueId(this.endpointIndex),
-					) ?? false;
+				// supportsReset =
+				// 	node.getValue(
+				// 		getSupportsResetValueId(this.endpointIndex),
+				// 	) ?? false;
 				supportedScales =
 					node.getValue(
 						getSupportedScalesValueId(this.endpointIndex),
@@ -438,13 +438,29 @@ export class MeterCCReport extends MeterCC {
 	}
 }
 
+const testResponseForMeterGet: CCResponsePredicate = (
+	sent: MeterCCGet,
+	received,
+	isPositiveTransmitReport,
+) => {
+	// We expect a Meter Report that matches the requested scale and rate type
+	// (if they were requested)
+	return received instanceof MeterCCReport &&
+		(sent.scale == undefined || sent.scale === received.scale.key) &&
+		(sent.rateType == undefined || sent.rateType == received.rateType)
+		? "final"
+		: isPositiveTransmitReport
+		? "confirmation"
+		: "unexpected";
+};
+
 interface MeterCCGetOptions {
 	scale?: number;
 	rateType?: RateType;
 }
 
 @CCCommand(MeterCommand.Get)
-@expectedCCResponse(MeterCCReport)
+@expectedCCResponse(testResponseForMeterGet)
 export class MeterCCGet extends MeterCC {
 	public constructor(
 		driver: Driver,

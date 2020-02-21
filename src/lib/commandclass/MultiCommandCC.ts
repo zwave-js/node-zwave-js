@@ -98,11 +98,14 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 				const cmdLength = this.payload[offset];
 				validatePayload(this.payload.length >= offset + 1 + cmdLength);
 				this.encapsulated.push(
-					CommandClass.fromEncapsulated(
-						this.driver,
-						this,
-						this.payload.slice(offset + 1, offset + 1 + cmdLength),
-					),
+					CommandClass.from(this.driver, {
+						data: this.payload.slice(
+							offset + 1,
+							offset + 1 + cmdLength,
+						),
+						fromEncapsulation: true,
+						encapCC: this,
+					}),
 				);
 				offset += 1 + cmdLength;
 			}
@@ -117,7 +120,7 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 		const buffers: Buffer[] = [];
 		buffers.push(Buffer.from([this.encapsulated.length]));
 		for (const cmd of this.encapsulated) {
-			const cmdBuffer = cmd.serializeForEncapsulation();
+			const cmdBuffer = cmd.serialize();
 			buffers.push(Buffer.from([cmdBuffer.length]));
 			buffers.push(cmdBuffer);
 		}

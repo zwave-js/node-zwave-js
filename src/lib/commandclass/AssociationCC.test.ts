@@ -5,11 +5,9 @@ import { CommandClasses } from "./CommandClasses";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
-function buildCCBuffer(nodeId: number, payload: Buffer): Buffer {
+function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
 		Buffer.from([
-			nodeId, // node number
-			payload.length + 1, // remaining length
 			CommandClasses.Association, // CC
 		]),
 		payload,
@@ -22,7 +20,6 @@ describe("lib/commandclass/AssociationCC => ", () => {
 			nodeId: 1,
 		});
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				AssociationCommand.SupportedGroupingsGet, // CC Command
 			]),
@@ -32,7 +29,6 @@ describe("lib/commandclass/AssociationCC => ", () => {
 
 	it("the SupportedGroupingsReport command should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				AssociationCommand.SupportedGroupingsReport, // CC Command
 				7, // # of groups
@@ -52,7 +48,6 @@ describe("lib/commandclass/AssociationCC => ", () => {
 			nodeIds: [1, 2, 5],
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				AssociationCommand.Set, // CC Command
 				5, // group id
@@ -70,7 +65,6 @@ describe("lib/commandclass/AssociationCC => ", () => {
 			groupId: 9,
 		});
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				AssociationCommand.Get, // CC Command
 				9, // group ID
@@ -81,7 +75,6 @@ describe("lib/commandclass/AssociationCC => ", () => {
 
 	it("the Report command should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
-			2,
 			Buffer.from([
 				AssociationCommand.Report, // CC Command
 				5, // group id
@@ -110,7 +103,6 @@ describe("lib/commandclass/AssociationCC => ", () => {
 			nodeIds: [1, 2, 5],
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				AssociationCommand.Remove, // CC Command
 				5, // group id
@@ -129,7 +121,6 @@ describe("lib/commandclass/AssociationCC => ", () => {
 			groupId: 5,
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				AssociationCommand.Remove, // CC Command
 				5, // group id

@@ -392,7 +392,7 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 			}
 			this.groupId = options.groupId;
 			this.nodeIds = ("nodeIds" in options && options.nodeIds) || [];
-			if (!this.nodeIds.every(n => n > 0 && n < MAX_NODES)) {
+			if (this.nodeIds.some(n => n < 1 || n > MAX_NODES)) {
 				throw new ZWaveError(
 					`All node IDs must be between 1 and ${MAX_NODES}!`,
 					ZWaveErrorCodes.Argument_Invalid,
@@ -420,7 +420,7 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 }
 
 interface MultiChannelAssociationCCRemoveOptions {
-	/** The group from which to remove the nodes. If none is specified, the nodes will be removed from all nodes. */
+	/** The group from which to remove the nodes. If none is specified, the nodes will be removed from all groups. */
 	groupId?: number;
 	/** The nodes to remove. If none are specified, ALL nodes will be removed. */
 	nodeIds?: number[];

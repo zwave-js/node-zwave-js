@@ -41,11 +41,13 @@ export function getEndpointCCsValueId(endpointIndex: number): ValueID {
 export class MultiChannelCCAPI extends CCAPI {
 	public supportsCommand(cmd: MultiChannelCommand): Maybe<boolean> {
 		switch (cmd) {
-			// We don't know what's supported in V2
+			// The specs start at version 3 but according to OZW,
+			// these do seem to be supported in version 2
 			case MultiChannelCommand.EndPointGet:
 			case MultiChannelCommand.CapabilityGet:
-			case MultiChannelCommand.EndPointFind:
 			case MultiChannelCommand.CommandEncapsulation:
+				return this.version >= 2;
+			case MultiChannelCommand.EndPointFind:
 				return this.version >= 3;
 			case MultiChannelCommand.AggregatedMembersGet:
 				return this.version >= 4;
@@ -228,20 +230,8 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			direction: "inbound",
 		});
 
-		// Step 2: Find all endpoints
-		log.controller.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: "querying all endpoints...",
-			direction: "outbound",
-		});
-		const foundEndpoints = [...(await api.findEndpoints(0xff, 0xff))];
-		if (!foundEndpoints.length) {
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: `Endpoint query returned no results, assuming that endpoints are sequential`,
-				direction: "inbound",
-			});
-			// Create a sequential list of endpoints
+		const endpointsToQuery: number[] = [];
+		const addSequentialEndpoints = (): void => {
 			for (
 				let i = 1;
 				i <=
@@ -249,20 +239,47 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				(multiResponse.aggregatedEndpointCount ?? 0);
 				i++
 			) {
-				foundEndpoints.push(i);
+				endpointsToQuery.push(i);
 			}
-		} else {
+		};
+		if (api.supportsCommand(MultiChannelCommand.EndPointFind)) {
+			// Step 2a: Find all endpoints
 			log.controller.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: `received endpoints: ${foundEndpoints
-					.map(String)
-					.join(", ")}`,
-				direction: "inbound",
+				message: "querying all endpoints...",
+				direction: "outbound",
 			});
+			endpointsToQuery.push(...(await api.findEndpoints(0xff, 0xff)));
+			if (!endpointsToQuery.length) {
+				// Create a sequential list of endpoints
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `Endpoint query returned no results, assuming that endpoints are sequential`,
+					direction: "inbound",
+				});
+				addSequentialEndpoints();
+			} else {
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `received endpoints: ${endpointsToQuery
+						.map(String)
+						.join(", ")}`,
+					direction: "inbound",
+				});
+			}
+		} else {
+			// Step 2b: Assume that the endpoints are in sequential order
+			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `does not support EndPointFind, assuming that endpoints are sequential`,
+				direction: "none",
+			});
+			addSequentialEndpoints();
 		}
 
 		// Step 3: Query endpoints
-		for (const endpoint of foundEndpoints) {
+		let hasQueriedCapabilities = false;
+		for (const endpoint of endpointsToQuery) {
 			if (
 				endpoint > multiResponse.individualEndpointCount &&
 				this.version >= 4
@@ -283,6 +300,26 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				});
 			}
 
+			// When the device reports identical capabilities for all endpoints,
+			// we don't need to query them all
+			if (multiResponse.identicalCapabilities && hasQueriedCapabilities) {
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `all endpoints idendical, skipping capability query for endpoint #${endpoint}...`,
+					direction: "none",
+				});
+
+				// copy the capabilities from the first endpoint
+				const ep1Caps = this.getValueDB().getValue<CommandClasses[]>(
+					getEndpointCCsValueId(endpointsToQuery[0]),
+				)!;
+				this.getValueDB().setValue(getEndpointCCsValueId(endpoint), [
+					...ep1Caps,
+				]);
+
+				continue;
+			}
+
 			// TODO: When security is implemented, we need to change stuff here
 			log.controller.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -290,6 +327,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				direction: "outbound",
 			});
 			const caps = await api.getEndpointCapabilities(endpoint);
+			hasQueriedCapabilities = true;
 			logMessage = `received response for endpoint capabilities (#${endpoint}):
 generic device class:  ${caps.generic.name} (${num2hex(caps.generic.key)})
 specific device class: ${caps.specific.name} (${num2hex(caps.specific.key)})
@@ -588,12 +626,8 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 	@ccKeyValuePair({ internal: true })
 	private aggregatedEndpointMembers: [number, number[]];
 
-	public get endpointIndex(): number {
+	public get aggregatedEndpoint(): number {
 		return this.aggregatedEndpointMembers[0];
-	}
-	public set endpointIndex(value: number) {
-		// Ignore. Change this when we ever start sending these CCs
-		// https://sentry.io/share/issue/2619b8fcfbf84e61885ecc899fb1fd93/
 	}
 
 	public get members(): readonly number[] {
@@ -692,11 +726,11 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 				this.destination = destination;
 			}
 			// No need to validate further, each CC does it for itself
-			this.encapsulated = CommandClass.fromEncapsulated(
-				this.driver,
-				this,
-				this.payload.slice(2),
-			);
+			this.encapsulated = CommandClass.from(this.driver, {
+				data: this.payload.slice(2),
+				fromEncapsulation: true,
+				encapCC: this,
+			});
 		} else {
 			this.encapsulated = options.encapsulated;
 			this.destination = options.destination;
@@ -716,7 +750,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 				encodeBitMask(this.destination, 7)[0] | 0b1000_0000;
 		this.payload = Buffer.concat([
 			Buffer.from([this.endpointIndex & 0b0111_1111, destination]),
-			this.encapsulated.serializeForEncapsulation(),
+			this.encapsulated.serialize(),
 		]);
 		return super.serialize();
 	}

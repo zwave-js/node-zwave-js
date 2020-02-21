@@ -5,11 +5,9 @@ import { ZWaveNode } from "../node/Node";
 import { CommandClasses } from "./CommandClasses";
 import { getIndicatorValueValueID, getSupportedIndicatorIDsValueID, IndicatorCC, IndicatorCCGet, IndicatorCCReport, IndicatorCCSet, IndicatorCommand } from "./IndicatorCC";
 
-function buildCCBuffer(nodeId: number, payload: Buffer): Buffer {
+function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
 		Buffer.from([
-			nodeId, // node number
-			payload.length + 1, // remaining length
 			CommandClasses.Indicator, // CC
 		]),
 		payload,
@@ -18,20 +16,22 @@ function buildCCBuffer(nodeId: number, payload: Buffer): Buffer {
 
 describe("lib/commandclass/IndicatorCC => ", () => {
 	let fakeDriver: Driver;
-	let node: ZWaveNode;
+	let node1: ZWaveNode;
 
 	beforeAll(async () => {
 		fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
-		node = new ZWaveNode(1, fakeDriver as any);
-		(fakeDriver.controller.nodes as any).set(1, node);
-		node.addCC(CommandClasses.Indicator, { isSupported: true, version: 3 });
+		node1 = new ZWaveNode(1, fakeDriver as any);
+		(fakeDriver.controller.nodes as any).set(1, node1);
+		node1.addCC(CommandClasses.Indicator, {
+			isSupported: true,
+			version: 3,
+		});
 		await loadIndicatorsInternal();
 	});
 
 	it("the Get command (V1) should serialize correctly", () => {
 		const cc = new IndicatorCCGet(fakeDriver, { nodeId: 1 });
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				IndicatorCommand.Get, // CC Command
 			]),
@@ -45,7 +45,6 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 			indicatorId: 5,
 		});
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				IndicatorCommand.Get, // CC Command
 				5,
@@ -60,7 +59,6 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 			value: 23,
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				IndicatorCommand.Set, // CC Command
 				23, // value
@@ -86,7 +84,6 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 			],
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				IndicatorCommand.Set, // CC Command
 				0,
@@ -104,13 +101,15 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 
 	it("the Report command (v1) should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				IndicatorCommand.Report, // CC Command
 				55, // value
 			]),
 		);
-		const cc = new IndicatorCCReport(fakeDriver, { data: ccData });
+		const cc = new IndicatorCCReport(fakeDriver, {
+			nodeId: 1,
+			data: ccData,
+		});
 
 		expect(cc.value).toBe(55);
 		expect(cc.values).toBeUndefined();
@@ -118,7 +117,6 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 
 	it("the Report command (v2) should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				IndicatorCommand.Report, // CC Command
 				0,
@@ -131,7 +129,10 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 				1, // value
 			]),
 		);
-		const cc = new IndicatorCCReport(fakeDriver, { data: ccData });
+		const cc = new IndicatorCCReport(fakeDriver, {
+			nodeId: 1,
+			data: ccData,
+		});
 
 		expect(cc.value).toBe(undefined);
 		expect(cc.values).toEqual([
@@ -150,10 +151,10 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 
 	it("deserializing an unsupported command should return an unspecified version of IndicatorCC", () => {
 		const serializedCC = buildCCBuffer(
-			1,
 			Buffer.from([255]), // not a valid command
 		);
 		const cc: any = new IndicatorCC(fakeDriver, {
+			nodeId: 1,
 			data: serializedCC,
 		});
 		expect(cc.constructor).toBe(IndicatorCC);
@@ -161,7 +162,7 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 
 	it("the value IDs should be translated properly", () => {
 		const valueId = getIndicatorValueValueID(2, 0x43, 2);
-		const ccInstance = node.createCCInstance(CommandClasses.Indicator)!;
+		const ccInstance = node1.createCCInstance(CommandClasses.Indicator)!;
 		const translatedProperty = ccInstance.translateProperty(
 			valueId.property,
 			valueId.propertyKey,
@@ -219,11 +220,13 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 		});
 
 		it("should return all supported indicator IDs", async () => {
-			const ccInstance = node.createCCInstance(CommandClasses.Indicator)!;
+			const ccInstance = node1.createCCInstance(
+				CommandClasses.Indicator,
+			)!;
 			await ccInstance.interview(true);
 
 			const indicatorIds = [0x30, 0x46, 0x47];
-			expect(node.getValue(getSupportedIndicatorIDsValueID(0))).toEqual(
+			expect(node1.getValue(getSupportedIndicatorIDsValueID(0))).toEqual(
 				indicatorIds,
 			);
 			// We cannot test the contents of the value ID because we don't really parse the CCs

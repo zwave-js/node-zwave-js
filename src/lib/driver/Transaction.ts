@@ -44,7 +44,9 @@ export class Transaction implements Comparable<Transaction> {
 	public readonly partialResponses: Message[] = [];
 
 	/** Whether we're still waiting for an ACK from the controller */
-	public ackPending: boolean = true;
+	public controllerAckPending: boolean = true;
+	/** Whether we're still waiting for an ACK from the node */
+	public nodeAckPending: boolean | undefined;
 
 	public response?: Message;
 
@@ -62,7 +64,10 @@ export class Transaction implements Comparable<Transaction> {
 
 	/** Marks this transaction as sent. */
 	public markAsSent(): void {
-		this.sendAttempts = 1;
+		if (this.sendAttempts === 0) this.sendAttempts = 1;
+		// If this is a retransmit, reset ack and timestamp
+		this.controllerAckPending = true;
+		this.nodeAckPending = undefined;
 		this.txTimestamp = highResTimestamp();
 	}
 

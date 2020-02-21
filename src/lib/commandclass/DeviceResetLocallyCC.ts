@@ -17,6 +17,8 @@ export enum DeviceResetLocallyCommand {
 @implementedVersion(1)
 export class DeviceResetLocallyCC extends CommandClass {
 	declare ccCommand: DeviceResetLocallyCommand;
+	// Force singlecast
+	declare nodeId: number;
 }
 
 @CCCommand(DeviceResetLocallyCommand.Notification)

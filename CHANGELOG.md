@@ -4,6 +4,69 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* Added experimental support for multicast destinations in CCs
+* `Multichannel CC`: The interview now needs less messages when a node reports identical endpoint capabilities
+
+### Bugfixes
+* The `setValue` API no longer crashes the driver if an invalid value for the CC is passed
+* `Configuration CC`: The `Set` command no longer accepts values that are too large for the param's value size.
+
+## 2.13.3 (2020-02-13)
+### Bugfixes
+* `Multi Channel CC`: The `EndPointFind` is no longer used in V2
+
+## 2.13.2 (2020-02-10)
+### Bugfixes
+* The config file for `HeatIt Z-Push Button 8` is now correctly retrieved
+* `Multilevel Switch CC`: Start level change commands now include the start level even if the `ignoreStartLevel` flag is set. Some devices might ignore this flag and behave oddly.
+
+## 2.13.1 (2020-02-09)
+### Bugfixes
+* The lower limit for the `Multi Channel CC` has been set to V2
+
+## 2.13.0 (2020-02-06)
+### Features
+* Improved support for notifications with the following event parameters: Duration, Command Classes, named numeric values
+* Added support for the `Clock CC`.
+* `Multilevel Switch CC`: `Start/StopLevelChange` commands are now supervised if possible
+
+### Bugfixes
+* `Get`-type commands which request a specific type now inspect received `Report`s whether they match the request
+
+## 2.12.3 (2020-02-02)
+### Bugfixes
+* The interview sequence for `Thermostat CC` V1/V2 should no longer get stuck
+* Nodes that confirm the receipt of a request but do not respond are no longer marked as sleeping or dead
+* Messages from wrong nodes are no longer considered as a potential response to the current transaction
+* The RTT calculation now works correctly for retransmitted messages
+* Fixed a crash that could happen when receiving a `MultiChannelCCAggregatedMembersReport`
+* Fixed a crash that could happen during the `Notification CC` interview
+
+## 2.12.2 (2020-01-26)
+### Bugfixes
+* `Thermostat Setpoint CC`: In Version 1 and 2, the setpoint type `N/A` is no longer scanned.
+
+## 2.12.1 (2020-01-25)
+### Bugfixes
+* The node interview is no longer aborted when an unexpected `ConfigurationReport` is received
+* Retrying the interview procedure now happens after a short waiting period to give nodes time to recover
+* If a node times out after a confirmation, the sent message is retried just like if there was no response at all
+* Messages to sleeping nodes are now also retried before immediately assuming they are asleep
+
+## 2.12.0 (2020-01-25)
+### Features
+* When a node is removed from the network, all associations to it are also removed
+* The interview procedure is now canceled and retried when an error occurs instead of silently failing all futher steps
+* The progress report for network healing distinguishes between failed, skipped, pending and healed nodes.
+
+### Bugfixes
+* The network heal now skips nodes that are dead or likely dead
+
+### Changes under the hood
+* Added some lint rules for the firmware in device config files
+
 ## 2.11.1 (2020-01-21)
 ### Bugfixes
 * A potential source of stalled communication because of a missing timeout was eliminated

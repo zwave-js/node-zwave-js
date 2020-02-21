@@ -9,6 +9,7 @@ import * as path from "path";
 // By installing source map support, we get the original source
 // locations in error messages
 import "source-map-support/register";
+import { ZWaveError, ZWaveErrorCodes } from "./lib/error/ZWaveError";
 
 // Parse package.json and init sentry
 fs.readFile(path.join(__dirname, "../package.json"), "utf8").then(
@@ -18,6 +19,21 @@ fs.readFile(path.join(__dirname, "../package.json"), "utf8").then(
 			release: `${packageJson.name}@${packageJson.version}`,
 			dsn: "https://841e902ca32842beadada39343a72479@sentry.io/1839595",
 			integrations: [new Integrations.Dedupe()],
+			beforeSend(event, hint) {
+				// Filter out specific errors that shouldn't create a report on sentry
+				// because they should be handled by the library user
+
+				// TODO: Should this filter out all ZWaveErrors?
+
+				if (hint?.originalException instanceof ZWaveError) {
+					switch (hint.originalException.code) {
+						// we don't care about timeouts
+						case ZWaveErrorCodes.Controller_MessageDropped:
+							return null;
+					}
+				}
+				return event;
+			},
 		});
 	},
 );

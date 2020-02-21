@@ -16,6 +16,7 @@ import { lookupNotification } from "../config/Notifications";
 import { ApplicationUpdateRequest, ApplicationUpdateRequestNodeInfoReceived, ApplicationUpdateRequestNodeInfoRequestFailed } from "../controller/ApplicationUpdateRequest";
 import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "../controller/GetNodeProtocolInfoMessages";
 import { GetRoutingInfoRequest, GetRoutingInfoResponse } from "../controller/GetRoutingInfoMessages";
+import { MAX_NODES } from "../controller/NodeBitMask";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
@@ -30,6 +31,11 @@ import { Endpoint } from "./Endpoint";
 import type { NodeUpdatePayload } from "./NodeInfo";
 import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
 import { MetadataUpdatedArgs, ValueAddedArgs, ValueDB, ValueID, valueIdToString, ValueRemovedArgs, ValueUpdatedArgs } from "./ValueDB";
+
+/** The broadcast target node id */
+export const NODE_ID_BROADCAST = 0xff;
+/** The highest allowed node id */
+export const NODE_ID_MAX = MAX_NODES;
 
 export interface TranslatedValueID extends ValueID {
 	commandClassName: string;
@@ -63,7 +69,7 @@ export type ZWaveNodeMetadataUpdatedCallback = (
 export type ZWaveNotificationCallback = (
 	node: ZWaveNode,
 	notificationLabel: string,
-	parameters?: Buffer,
+	parameters?: NotificationCCReport["eventParameters"],
 ) => void;
 
 interface ZWaveNodeValueEventCallbacks {
@@ -278,24 +284,27 @@ export class ZWaveNode extends Endpoint {
 	public set status(value: NodeStatus) {
 		const oldStatus = this._status;
 		this._status = value;
-		if (oldStatus === this._status) return;
 
-		if (oldStatus === NodeStatus.Dead) {
-			this.emit("alive", this);
-		}
-		if (this._status === NodeStatus.Asleep) {
-			this.emit("sleep", this);
-		} else if (this._status === NodeStatus.Awake) {
-			this.emit("wake up", this);
-		} else if (this._status === NodeStatus.Dead) {
-			this.emit("dead", this);
+		if (oldStatus !== this._status) {
+			if (oldStatus === NodeStatus.Dead) {
+				this.emit("alive", this);
+			}
+			if (this._status === NodeStatus.Asleep) {
+				this.emit("sleep", this);
+			} else if (this._status === NodeStatus.Awake) {
+				this.emit("wake up", this);
+			} else if (this._status === NodeStatus.Dead) {
+				this.emit("dead", this);
+			}
 		}
 
-		// A dead or unknown node cannot be ready
+		// To be marked ready, a node must be known to be not dead
 		if (
 			this.nodeMayBeReady &&
-			(this._status === NodeStatus.Asleep ||
-				this._status === NodeStatus.Awake)
+			// listening nodes must have communicated with us
+			((this._isListening && this._status === NodeStatus.Awake) ||
+				// sleeping nodes are assumed to be ready
+				(!this._isListening && this._status !== NodeStatus.Dead))
 		) {
 			this.emitReadyEventOnce();
 		}
@@ -309,6 +318,7 @@ export class ZWaveNode extends Endpoint {
 	private emitReadyEventOnce(): void {
 		if (this.nodeReadyEmitted) return;
 		this.emit("ready", this);
+		log.controller.logNode(this.id, `node is ready`, "warn");
 		this.nodeReadyEmitted = true;
 	}
 
@@ -476,13 +486,25 @@ export class ZWaveNode extends Endpoint {
 			);
 			return true;
 		} catch (e) {
-			if (
-				e instanceof ZWaveError &&
-				(e.code === ZWaveErrorCodes.CC_NotImplemented ||
-					e.code === ZWaveErrorCodes.CC_NoAPI)
-			) {
-				// This CC or API is not implemented
-				return false;
+			// Define which errors during setValue are expected and won't crash
+			// the driver:
+			if (e instanceof ZWaveError) {
+				let handled = false;
+				let emitErrorEvent = false;
+				switch (e.code) {
+					// This CC or API is not implemented
+					case ZWaveErrorCodes.CC_NotImplemented:
+					case ZWaveErrorCodes.CC_NoAPI:
+						handled = true;
+						break;
+					// A user tried to set an invalid value
+					case ZWaveErrorCodes.Argument_Invalid:
+						handled = true;
+						emitErrorEvent = true;
+						break;
+				}
+				if (emitErrorEvent) this.driver.emit("error", e.message);
+				if (handled) return false;
 			}
 			throw e;
 		}
@@ -601,6 +623,12 @@ export class ZWaveNode extends Endpoint {
 	 */
 	public interviewStage: InterviewStage = InterviewStage.None;
 
+	private _interviewAttempts: number = 0;
+	/** How many attempts to interview this node have already been made */
+	public get interviewAttempts(): number {
+		return this._interviewAttempts;
+	}
+
 	/** Utility function to check if this node is the controller */
 	public isControllerNode(): boolean {
 		return this.id === this.driver.controller.ownNodeId;
@@ -620,6 +648,9 @@ export class ZWaveNode extends Endpoint {
 		} else {
 			log.controller.interviewStart(this);
 		}
+
+		// Remember that we tried to interview this node
+		this._interviewAttempts++;
 
 		// The interview is done in several stages. At each point, the interview process might be aborted
 		// due to a stage failing. The reached stage is saved, so we can continue it later without
@@ -645,6 +676,8 @@ export class ZWaveNode extends Endpoint {
 		if (this.interviewStage === InterviewStage.RestartFromCache) {
 			// Mark the node as potentially ready. The first message will determine if it is
 			this.nodeMayBeReady = true;
+			// Sleeping nodes are assumed to be ready immediately. Otherwise the library would wait until 3 messages have timed out, which is weird.
+			if (!this._isListening) this.emitReadyEventOnce();
 		}
 
 		// At this point the basic interview of new nodes is done. Start here when re-interviewing known nodes
@@ -653,7 +686,12 @@ export class ZWaveNode extends Endpoint {
 			this.interviewStage === InterviewStage.RestartFromCache ||
 			this.interviewStage === InterviewStage.NodeInfo
 		) {
-			await this.interviewCCs();
+			// Only advance the interview if it was completed, otherwise abort
+			if (await this.interviewCCs()) {
+				await this.setInterviewStage(InterviewStage.CommandClasses);
+			} else {
+				return false;
+			}
 		}
 
 		if (this.interviewStage === InterviewStage.CommandClasses) {
@@ -861,7 +899,7 @@ version:               ${this.version}`;
 	}
 
 	/** Step #? of the node interview */
-	protected async interviewCCs(): Promise<void> {
+	protected async interviewCCs(): Promise<boolean> {
 		// We determine the correct interview order by topologically sorting a dependency graph
 		let interviewGraph = this.buildCCInterviewGraph();
 		let interviewOrder: CommandClasses[];
@@ -877,35 +915,50 @@ version:               ${this.version}`;
 
 		// Now that we know the correct order, do the interview in sequence
 		for (const cc of interviewOrder) {
+			let instance: CommandClass;
 			try {
-				let instance: CommandClass;
-				try {
-					instance = this.createCCInstance(cc)!;
-				} catch (e) {
-					if (
-						e instanceof ZWaveError &&
-						e.code === ZWaveErrorCodes.CC_NotSupported
-					) {
-						// The CC is no longer supported. This can happen if the node tells us
-						// something different in the Version interview than it did in its NIF
-						continue;
-					}
-					// we want to pass all other errors through
-					throw e;
+				instance = this.createCCInstance(cc)!;
+			} catch (e) {
+				if (
+					e instanceof ZWaveError &&
+					e.code === ZWaveErrorCodes.CC_NotSupported
+				) {
+					// The CC is no longer supported. This can happen if the node tells us
+					// something different in the Version interview than it did in its NIF
+					continue;
 				}
+				// we want to pass all other errors through
+				throw e;
+			}
+
+			try {
 				await instance.interview(!instance.interviewComplete);
+			} catch (e) {
+				if (
+					e instanceof ZWaveError &&
+					(e.code === ZWaveErrorCodes.Controller_MessageDropped ||
+						e.code === ZWaveErrorCodes.Controller_NodeTimeout)
+				) {
+					// We had a CAN or timeout during the interview
+					// or the node is presumed dead. Abort the process
+					return false;
+				}
+				// we want to pass all other errors through
+				throw e;
+			}
+
+			try {
 				if (cc === CommandClasses.Version) {
 					// After the version CC interview, we have enough info to load the correct device config file
 					await this.loadDeviceConfig();
 				}
 				await this.driver.saveNetworkToCache();
 			} catch (e) {
-				// TODO: Should this cancel the entire interview procedure?
 				log.controller.print(
 					`${getEnumMemberName(
 						CommandClasses,
 						cc,
-					)}: Interview failed:\n${e.message}`,
+					)}: Error after interview:\n${e.message}`,
 					"error",
 				);
 			}
@@ -933,31 +986,46 @@ version:               ${this.version}`;
 
 			// Now that we know the correct order, do the interview in sequence
 			for (const cc of interviewOrder) {
+				let instance: CommandClass;
 				try {
-					let instance: CommandClass;
-					try {
-						instance = endpoint.createCCInstance(cc)!;
-					} catch (e) {
-						if (
-							e instanceof ZWaveError &&
-							e.code === ZWaveErrorCodes.CC_NotSupported
-						) {
-							// The CC is no longer supported. This can happen if the node tells us
-							// something different in the Version interview than it did in its NIF
-							continue;
-						}
-						// we want to pass all other errors through
-						throw e;
+					instance = endpoint.createCCInstance(cc)!;
+				} catch (e) {
+					if (
+						e instanceof ZWaveError &&
+						e.code === ZWaveErrorCodes.CC_NotSupported
+					) {
+						// The CC is no longer supported. This can happen if the node tells us
+						// something different in the Version interview than it did in its NIF
+						continue;
 					}
+					// we want to pass all other errors through
+					throw e;
+				}
+
+				try {
 					await instance.interview(!instance.interviewComplete);
+				} catch (e) {
+					if (
+						e instanceof ZWaveError &&
+						(e.code === ZWaveErrorCodes.Controller_MessageDropped ||
+							e.code === ZWaveErrorCodes.Controller_NodeTimeout)
+					) {
+						// We had a CAN or timeout during the interview
+						// or the node is presumed dead. Abort the process
+						return false;
+					}
+					// we want to pass all other errors through
+					throw e;
+				}
+
+				try {
 					await this.driver.saveNetworkToCache();
 				} catch (e) {
-					// TODO: Should this cancel the entire interview procedure?
 					log.controller.print(
 						`${getEnumMemberName(
 							CommandClasses,
 							cc,
-						)}: Interview failed:\n${e.message}`,
+						)}: Error after interview:\n${e.message}`,
 						"error",
 					);
 				}
@@ -971,7 +1039,7 @@ version:               ${this.version}`;
 
 		// TODO: Overwrite the reported config with configuration files (like OZW does)
 
-		await this.setInterviewStage(InterviewStage.CommandClasses);
+		return true;
 	}
 
 	/**
@@ -1492,6 +1560,7 @@ version:               ${this.version}`;
 			let propertyKey: string;
 			// Find out which property we need to update
 			const valueConfig = notificationConfig.lookupValue(value);
+
 			let allowIdleReset: boolean;
 			if (!valueConfig) {
 				// This is an unknown value, collect it in an unknown bucket

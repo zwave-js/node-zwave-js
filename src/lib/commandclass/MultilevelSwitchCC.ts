@@ -1,6 +1,7 @@
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { ValueMetadata } from "../values/Metadata";
@@ -47,6 +48,14 @@ const switchTypeProperties = Object.keys(SwitchType)
 	.filter(key => key.indexOf("/") > -1)
 	.map(key => switchTypeToActions(key))
 	.reduce<string[]>((acc, cur) => acc.concat(...cur), []);
+
+function getCurrentValueValueID(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Multilevel Switch"],
+		endpoint,
+		property: "currentValue",
+	};
+}
 
 @API(CommandClasses["Multilevel Switch"])
 export class MultilevelSwitchCCAPI extends CCAPI {
@@ -143,7 +152,22 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.driver.sendCommand(cc);
+
+		// Try to supervise the command execution
+		const supervisionResult = await this.driver.trySendCommandSupervised(
+			cc,
+		);
+
+		if (
+			supervisionResult &&
+			(supervisionResult.status === SupervisionStatus.Fail ||
+				supervisionResult.status === SupervisionStatus.NoSupport)
+		) {
+			throw new ZWaveError(
+				"startLevelChange failed",
+				ZWaveErrorCodes.SupervisionCC_CommandFailed,
+			);
+		}
 	}
 
 	public async stopLevelChange(): Promise<void> {
@@ -156,7 +180,22 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		await this.driver.sendCommand(cc);
+
+		// Try to supervise the command execution
+		const supervisionResult = await this.driver.trySendCommandSupervised(
+			cc,
+		);
+
+		if (
+			supervisionResult &&
+			(supervisionResult.status === SupervisionStatus.Fail ||
+				supervisionResult.status === SupervisionStatus.NoSupport)
+		) {
+			throw new ZWaveError(
+				"stopLevelChange failed",
+				ZWaveErrorCodes.SupervisionCC_CommandFailed,
+			);
+		}
 	}
 
 	public async getSupported(): Promise<SwitchType> {
@@ -208,9 +247,19 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 					switchTypeProperties.indexOf(property as string) % 2 === 0
 						? "down"
 						: "up";
+				// Try to retrieve the current value to use as the start level,
+				// even if the target node is going to ignore it. There might
+				// be some bugged devices that ignore the ignore start level flag.
+				const startLevel = this.endpoint
+					.getNodeUnsafe()
+					?.getValue<number>(
+						getCurrentValueValueID(this.endpoint.index),
+					);
+				// And perform the level change
 				await this.startLevelChange({
 					direction,
 					ignoreStartLevel: true,
+					startLevel,
 				});
 			} else {
 				await this.stopLevelChange();
@@ -388,8 +437,9 @@ type MultilevelSwitchCCStartLevelChangeOptions = {
 } & (
 		| {
 			ignoreStartLevel: true;
-		}
-		| {
+			startLevel?: number;
+	  }
+	| {
 			ignoreStartLevel: false;
 			startLevel: number;
 		}
@@ -416,7 +466,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 		} else {
 			this.duration = options.duration;
 			this.ignoreStartLevel = options.ignoreStartLevel;
-			this.startLevel = options.ignoreStartLevel ? 0 : options.startLevel;
+			this.startLevel = options.startLevel ?? 0;
 			this.direction = options.direction;
 		}
 	}

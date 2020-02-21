@@ -7,11 +7,9 @@ import { CommandClasses } from "./CommandClasses";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
-function buildCCBuffer(nodeId: number, payload: Buffer): Buffer {
+function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
 		Buffer.from([
-			nodeId, // node number
-			payload.length + 1, // remaining length
 			CommandClasses.Basic, // CC
 		]),
 		payload,
@@ -22,7 +20,6 @@ describe("lib/commandclass/BasicCC => ", () => {
 	it("the Get command should serialize correctly", () => {
 		const basicCC = new BasicCCGet(fakeDriver, { nodeId: 1 });
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				BasicCommand.Get, // CC Command
 			]),
@@ -36,7 +33,6 @@ describe("lib/commandclass/BasicCC => ", () => {
 			targetValue: 55,
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				BasicCommand.Set, // CC Command
 				55, // target value
@@ -47,13 +43,15 @@ describe("lib/commandclass/BasicCC => ", () => {
 
 	it("the Report command (v1) should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				BasicCommand.Report, // CC Command
 				55, // current value
 			]),
 		);
-		const basicCC = new BasicCCReport(fakeDriver, { data: ccData });
+		const basicCC = new BasicCCReport(fakeDriver, {
+			nodeId: 2,
+			data: ccData,
+		});
 
 		expect(basicCC.currentValue).toBe(55);
 		expect(basicCC.targetValue).toBeUndefined();
@@ -62,7 +60,6 @@ describe("lib/commandclass/BasicCC => ", () => {
 
 	it("the Report command (v2) should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				BasicCommand.Report, // CC Command
 				55, // current value
@@ -70,7 +67,10 @@ describe("lib/commandclass/BasicCC => ", () => {
 				1, // duration
 			]),
 		);
-		const basicCC = new BasicCCReport(fakeDriver, { data: ccData });
+		const basicCC = new BasicCCReport(fakeDriver, {
+			nodeId: 2,
+			data: ccData,
+		});
 
 		expect(basicCC.currentValue).toBe(55);
 		expect(basicCC.targetValue).toBe(66);
@@ -80,10 +80,10 @@ describe("lib/commandclass/BasicCC => ", () => {
 
 	it("deserializing an unsupported command should return an unspecified version of BasicCC", () => {
 		const serializedCC = buildCCBuffer(
-			1,
 			Buffer.from([255]), // not a valid command
 		);
 		const basicCC: any = new BasicCC(fakeDriver, {
+			nodeId: 2,
 			data: serializedCC,
 		});
 		expect(basicCC.constructor).toBe(BasicCC);

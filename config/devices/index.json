@@ -806,9 +806,9 @@
         "productId": "0x0503",
         "firmwareVersion": {
             "min": "0.0",
-            "max": "255.0"
+            "max": "255.255"
         },
-        "filename": "0x001a/rf9601_0.0-255.0.json"
+        "filename": "0x001a/rf9601.json"
     },
     {
         "manufacturerId": "0x001a",
@@ -826,9 +826,9 @@
         "productId": "0x0501",
         "firmwareVersion": {
             "min": "0.0",
-            "max": "255.0"
+            "max": "255.255"
         },
-        "filename": "0x001a/rf9640_0.0-255.0.json"
+        "filename": "0x001a/rf9640.json"
     },
     {
         "manufacturerId": "0x001a",
@@ -12619,6 +12619,16 @@
             "max": "2.255"
         },
         "filename": "0x019b/heatit_z-trm_2_2.6-2.255.json"
+    },
+    {
+        "manufacturerId": "0x019b",
+        "productType": "0x0300",
+        "productId": "0xa305",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x019b/heatit_z_push_button_8.json"
     },
     {
         "manufacturerId": "0x019b",

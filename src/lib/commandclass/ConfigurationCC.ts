@@ -206,7 +206,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
 			) {
-				// A timeout has to be expefcted. We return undefined to
+				// A timeout has to be expected. We return undefined to
 				// signal that no value was received
 				return undefined;
 			}
@@ -455,7 +455,21 @@ export class ConfigurationCC extends CommandClass {
 						message: `querying parameter #${param.parameter} value...`,
 						direction: "outbound",
 					});
-					await api.get(param.parameter);
+					// ... at least try to
+					try {
+						await api.get(param.parameter);
+					} catch (e) {
+						if (
+							e instanceof ZWaveError &&
+							e.code ===
+								ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber
+						) {
+							// ignore, we don't want to cancel the interview just
+							// because one configuration report was received out of sequence
+						} else {
+							throw e;
+						}
+					}
 				}
 			} else {
 				log.controller.logNode(node.id, {
@@ -926,14 +940,26 @@ export class ConfigurationCCSet extends ConfigurationCC {
 		this.payload[1] =
 			(this.resetToDefault ? 0b1000_0000 : 0) | (valueSize & 0b111);
 		if (!this.resetToDefault) {
-			serializeValue(
-				this.payload,
-				2,
-				valueSize,
+			const valueFormat =
 				this.getParamInformation(this.parameter).format ||
-				ValueFormat.SignedInteger,
-				this.value!,
-			);
+				ValueFormat.SignedInteger;
+			try {
+				serializeValue(
+					this.payload,
+					2,
+					valueSize,
+					valueFormat,
+					this.value!,
+				);
+			} catch (e) {
+				tryCatchOutOfBoundsError(
+					e,
+					this.value,
+					this.parameter,
+					valueSize,
+					valueFormat,
+				);
+			}
 		}
 		return super.serialize();
 	}
@@ -1034,14 +1060,26 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 		if (!this._resetToDefault) {
 			for (let i = 0; i < this.parameters.length; i++) {
 				const param = this._parameters[i];
-				serializeValue(
-					this.payload,
-					4 + i * valueSize,
-					valueSize,
+				const valueFormat =
 					this.getParamInformation(param).format ||
-					ValueFormat.SignedInteger,
-					this._values[i],
-				);
+					ValueFormat.SignedInteger;
+				try {
+					serializeValue(
+						this.payload,
+						4 + i * valueSize,
+						valueSize,
+						valueFormat,
+						this._values[i],
+					);
+				} catch (e) {
+					tryCatchOutOfBoundsError(
+						e,
+						this._values[i],
+						param,
+						valueSize,
+						valueFormat,
+					);
+				}
 			}
 		}
 		return super.serialize();
@@ -1517,6 +1555,26 @@ function parseValue(
 			return raw.readUIntBE(0, size);
 		case ValueFormat.BitField:
 			return new Set(parseBitMask(raw.slice(0, size)));
+	}
+}
+
+function tryCatchOutOfBoundsError(
+	e: Error,
+	value: any,
+	parameter: number,
+	valueSize: number,
+	valueFormat: ValueFormat,
+): void {
+	if (e.message.includes("out of bounds")) {
+		throw new ZWaveError(
+			`The value ${value} is invalid for configuration parameter ${parameter} (size = ${valueSize}, format = ${getEnumMemberName(
+				ValueFormat,
+				valueFormat,
+			)})!`,
+			ZWaveErrorCodes.Argument_Invalid,
+		);
+	} else {
+		throw e;
 	}
 }
 

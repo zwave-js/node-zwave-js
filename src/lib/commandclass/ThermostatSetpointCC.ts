@@ -4,10 +4,10 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
-import { getNumericEnumValues, ValueMetadata } from "../values/Metadata";
+import { ValueMetadata } from "../values/Metadata";
 import { encodeFloatWithScale, Maybe, parseBitMask, parseFloatWithScale } from "../values/Primitive";
 import { CCAPI, SetValueImplementation, SET_VALUE, throwUnsupportedProperty, throwWrongValueType } from "./API";
-import { API, CCCommand, CCCommandOptions, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import { API, CCCommand, CCCommandOptions, CCResponsePredicate, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, CommandClassOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum ThermostatSetpointCommand {
@@ -60,6 +60,22 @@ export interface ThermostatSetpointCapabilities {
 	maxValueScale: number;
 }
 
+function getSupportedSetpointTypesValueID(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Thermostat Setpoint"],
+		property: "supportedSetpointTypes",
+		endpoint,
+	};
+}
+
+function getSetpointTypesInterpretationValueID(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Thermostat Setpoint"],
+		property: "setpointTypesInterpretation",
+		endpoint,
+	};
+}
+
 @API(CommandClasses["Thermostat Setpoint"])
 export class ThermostatSetpointCCAPI extends CCAPI {
 	public supportsCommand(cmd: ThermostatSetpointCommand): Maybe<boolean> {
@@ -94,6 +110,8 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		}
 
 		// TODO: GH#323 retrieve the actual scale the thermostat is using
+		// SDS14223: The Scale field value MUST be identical to the value received in the Thermostat Setpoint Report for the
+		// actual Setpoint Type during the node interview.
 		await this.set(propertyKey, value, 0);
 
 		// Refresh the current value
@@ -115,7 +133,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			ThermostatSetpointCCReport
 		>(cc))!;
-		return response.type === 0
+		return response.type === ThermostatSetpointType["N/A"]
 			? // not supported
 			undefined
 			: // supported
@@ -197,6 +215,14 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 export class ThermostatSetpointCC extends CommandClass {
 	declare ccCommand: ThermostatSetpointCommand;
 
+	public constructor(driver: Driver, options: CommandClassOptions) {
+		super(driver, options);
+		this.registerValue(
+			getSetpointTypesInterpretationValueID(0).property,
+			true,
+		);
+	}
+
 	public translatePropertyKey(
 		property: string | number,
 		propertyKey: string | number,
@@ -225,25 +251,72 @@ export class ThermostatSetpointCC extends CommandClass {
 		});
 
 		if (this.version <= 2) {
-			const supportedSetpointTypes: ThermostatSetpointType[] = [];
-			let queriedSetpointTypes: readonly ThermostatSetpointType[] = [];
-			const supportedSetpointTypesValueId: ValueID = {
-				commandClass: this.ccId,
-				endpoint: this.endpointIndex,
-				property: "supportedSetpointTypes",
-			};
+			let setpointTypes: ThermostatSetpointType[];
+			let interpretation: "A" | "B" | undefined;
+			// Whether our tests changed the assumed bitmask interpretation
+			let interpretationChanged = false;
 
+			const supportedSetpointTypesValueId = getSupportedSetpointTypesValueID(
+				this.endpointIndex,
+			);
+
+			// If we haven't yet, query the supported setpoint types
 			if (complete) {
-				queriedSetpointTypes = getNumericEnumValues(
-					ThermostatSetpointType,
-				);
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: "retrieving supported setpoint types...",
+					direction: "outbound",
+				});
+				setpointTypes = [...(await api.getSupportedSetpointTypes())];
+				interpretation = undefined; // we don't know yet which interpretation the device uses
 			} else {
-				queriedSetpointTypes =
-					this.getValueDB().getValue(supportedSetpointTypesValueId) ||
+				setpointTypes =
+					this.getValueDB().getValue(supportedSetpointTypesValueId) ??
 					[];
+				interpretation = this.getValueDB().getValue(
+					getSetpointTypesInterpretationValueID(this.endpointIndex),
+				);
 			}
-			// Scan all setpoint types to find out which are actually supported
-			for (const type of queriedSetpointTypes) {
+
+			// If necessary, test which interpretation the device follows
+
+			// Assume interpretation B
+			// --> If setpoints 3,4,5 or 6 are supported, the assumption is wrong ==> A
+			function switchToInterpretationA(): void {
+				setpointTypes = setpointTypes.map(
+					i => thermostatSetpointTypeMap[i],
+				);
+				interpretation = "A";
+				interpretationChanged = true;
+			}
+
+			if (!interpretation) {
+				if ([3, 4, 5, 6].some(type => setpointTypes.includes(type))) {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"uses Thermostat Setpoint bitmap interpretation A",
+						direction: "none",
+					});
+					switchToInterpretationA();
+				} else {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"Thermostat Setpoint bitmap interpretation is unknown, assuming B for now",
+						direction: "none",
+					});
+				}
+			} else if (interpretation === "A") {
+				setpointTypes = setpointTypes.map(
+					i => thermostatSetpointTypeMap[i],
+				);
+			}
+
+			// Now scan all endpoints. Each type we received a value for gets marked as supported
+			const supportedSetpointTypes: ThermostatSetpointType[] = [];
+			for (let i = 0; i < setpointTypes.length; i++) {
+				const type = setpointTypes[i];
 				const setpointName = getEnumMemberName(
 					ThermostatSetpointType,
 					type,
@@ -254,14 +327,46 @@ export class ThermostatSetpointCC extends CommandClass {
 					message: `querying current value of setpoint ${setpointName}...`,
 					direction: "outbound",
 				});
-				const setpoint = await api.get(type);
+
+				let setpoint:
+					| {
+							value: number;
+							scale: Scale;
+					  }
+					| undefined;
+				try {
+					setpoint = await api.get(type);
+				} catch (e) {
+					if (
+						e instanceof ZWaveError &&
+						e.code === ZWaveErrorCodes.Controller_NodeTimeout
+					) {
+						// The node did not respond, assume the setpoint type is not supported
+					} else {
+						throw e;
+					}
+				}
+
 				let logMessage: string;
 				if (setpoint) {
+					// Setpoint supported, remember the type
 					supportedSetpointTypes.push(type);
 					logMessage = `received current value of setpoint ${setpointName}: ${
 						setpoint.value
-						} ${setpoint.scale.unit ?? ""}`;
+					} ${setpoint.scale.unit ?? ""}`;
+				} else if (!interpretation) {
+					// The setpoint type is not supported, switch to interpretation A
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `the setpoint type ${setpointTypes} is unsupported, switching to interpretation A`,
+						direction: "none",
+					});
+					switchToInterpretationA();
+					// retry the current type and scan the remaining types as A
+					i--;
+					continue;
 				} else {
+					// We're sure about the interpretation - this should not happen
 					logMessage = `Setpoint ${setpointName} is not supported`;
 				}
 				log.controller.logNode(node.id, {
@@ -271,11 +376,28 @@ export class ThermostatSetpointCC extends CommandClass {
 				});
 			}
 
+			// If we made an assumption and did not switch to interpretation A,
+			// the device adheres to interpretation B
+			// wotan-disable-next-line no-useless-predicate
+			if (!interpretation && !interpretationChanged) {
+				// our assumption about interpretation B was correct
+				interpretation = "B";
+				interpretationChanged = true;
+			}
+
 			// After a complete interview, we need to remember which setpoint types are supported
 			if (complete) {
 				this.getValueDB().setValue(
 					supportedSetpointTypesValueId,
 					supportedSetpointTypes,
+				);
+			}
+
+			// Also save the bitmap interpretation if we know it now
+			if (interpretationChanged) {
+				this.getValueDB().setValue(
+					getSetpointTypesInterpretationValueID(this.endpointIndex),
+					interpretation,
 				);
 			}
 		} else {
@@ -464,12 +586,26 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	}
 }
 
+const testResponseForThermostatSetpointGet: CCResponsePredicate = (
+	sent: ThermostatSetpointCCGet,
+	received,
+	isPositiveTransmitReport,
+) => {
+	// We expect a Thermostat Setpoint Report that matches the requested setpoint type
+	return received instanceof ThermostatSetpointCCReport &&
+		received.type === sent.setpointType
+		? "final"
+		: isPositiveTransmitReport
+		? "confirmation"
+		: "unexpected";
+};
+
 interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
 	setpointType: ThermostatSetpointType;
 }
 
 @CCCommand(ThermostatSetpointCommand.Get)
-@expectedCCResponse(ThermostatSetpointCCReport)
+@expectedCCResponse(testResponseForThermostatSetpointGet)
 export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 	public constructor(
 		driver: Driver,
@@ -614,7 +750,8 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 				i => thermostatSetpointTypeMap[i],
 			);
 		} else {
-			// TODO: Determine which interpretation the device complies to
+			// It is unknown which interpretation the device complies to.
+			// This must be tested during the interview
 			this._supportedSetpointTypes = supported;
 		}
 

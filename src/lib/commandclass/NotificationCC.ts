@@ -1,10 +1,11 @@
-import { lookupNotification } from "../config/Notifications";
+import { lookupNotification, NotificationParameterWithCommandClass, NotificationParameterWithDuration, NotificationParameterWithValue } from "../config/Notifications";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { ValueID } from "../node/ValueDB";
 import { JSONObject, validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
+import { Duration } from "../values/Duration";
 import { ValueMetadata, ValueMetadataNumeric } from "../values/Metadata";
 import { Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
@@ -20,23 +21,6 @@ export enum NotificationCommand {
 	Set = 0x06,
 	SupportedGet = 0x07,
 	SupportedReport = 0x08,
-}
-
-export enum NotificationType {
-	General = 0,
-	Smoke,
-	CarbonMonoxide,
-	CarbonDioxide,
-	Heat,
-	Flood,
-	AccessControl,
-	Burglar,
-	PowerManagement,
-	System,
-	Emergency,
-	Clock,
-	Appliance,
-	HomeHealth,
 }
 
 @API(CommandClasses.Notification)
@@ -86,7 +70,7 @@ export class NotificationCCAPI extends CCAPI {
 	}
 
 	public async set(
-		notificationType: NotificationType,
+		notificationType: number,
 		notificationStatus: boolean,
 	): Promise<void> {
 		this.assertSupportsCommand(
@@ -124,7 +108,7 @@ export class NotificationCCAPI extends CCAPI {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-	public async getSupportedEvents(notificationType: NotificationType) {
+	public async getSupportedEvents(notificationType: number) {
 		this.assertSupportsCommand(
 			NotificationCommand,
 			NotificationCommand.EventSupportedGet,
@@ -144,7 +128,7 @@ export class NotificationCCAPI extends CCAPI {
 
 function defineMetadataForNotificationEvents(
 	endpoint: number,
-	type: NotificationType,
+	type: number,
 	events: readonly number[],
 ): ReadonlyMap<string, ValueMetadata> {
 	const ret = new Map<string, ValueMetadataNumeric>();
@@ -221,7 +205,7 @@ export class NotificationCC extends CommandClass {
 		});
 
 		if (this.version >= 2) {
-			let supportedNotificationTypes: readonly NotificationType[];
+			let supportedNotificationTypes: readonly number[];
 			let supportedNotificationNames: string[];
 
 			function lookupNotificationNames(): string[] {
@@ -294,12 +278,11 @@ export class NotificationCC extends CommandClass {
 				}
 			} else {
 				// Load supported notification types from cache
-				supportedNotificationTypes = this.getValueDB().getValue<
-					readonly NotificationType[]
-				>({
-					commandClass: this.ccId,
-					property: "supportedNotificationTypes",
-				})!;
+				supportedNotificationTypes =
+					this.getValueDB().getValue<readonly number[]>({
+						commandClass: this.ccId,
+						property: "supportedNotificationTypes",
+					}) ?? [];
 				supportedNotificationNames = lookupNotificationNames();
 			}
 
@@ -329,7 +312,7 @@ export class NotificationCC extends CommandClass {
 }
 
 interface NotificationCCSetOptions extends CCCommandOptions {
-	notificationType: NotificationType;
+	notificationType: number;
 	notificationStatus: boolean;
 }
 
@@ -351,7 +334,7 @@ export class NotificationCCSet extends NotificationCC {
 			this.notificationStatus = options.notificationStatus;
 		}
 	}
-	public notificationType: NotificationType;
+	public notificationType: number;
 	public notificationStatus: boolean;
 
 	public serialize(): Buffer {
@@ -398,6 +381,9 @@ export class NotificationCCReport extends NotificationCC {
 				validatePayload(this.payload.length >= 7 + numEventParams + 1);
 				this._sequenceNumber = this.payload[7 + numEventParams];
 			}
+
+			// Turn the event parameters into something useful
+			this.parseEventParameters();
 		}
 	}
 
@@ -408,8 +394,8 @@ export class NotificationCCReport extends NotificationCC {
 		return this._alarmType;
 	}
 
-	private _notificationType: NotificationType | undefined;
-	public get notificationType(): NotificationType | undefined {
+	private _notificationType: number | undefined;
+	public get notificationType(): number | undefined {
 		return this._notificationType;
 	}
 	private _notificationStatus: boolean | undefined;
@@ -432,8 +418,13 @@ export class NotificationCCReport extends NotificationCC {
 		return this._zensorNetSourceNodeId;
 	}
 
-	private _eventParameters: Buffer | undefined;
-	public get eventParameters(): Buffer | undefined {
+	private _eventParameters: NotificationCCReport["eventParameters"];
+	public get eventParameters():
+		| Buffer
+		| Duration
+		| CommandClass
+		| Record<string, number>
+		| undefined {
 		return this._eventParameters;
 	}
 
@@ -447,7 +438,7 @@ export class NotificationCCReport extends NotificationCC {
 			alarmType: this.alarmType,
 			notificationType:
 				this.notificationType != undefined
-					? NotificationType[this.notificationType]
+					? lookupNotification(this.notificationType)?.name
 					: this.notificationType,
 			notificationStatus: this.notificationStatus,
 			notificationEvent: this.notificationEvent,
@@ -457,6 +448,54 @@ export class NotificationCCReport extends NotificationCC {
 			sequenceNumber: this.sequenceNumber,
 		});
 	}
+
+	private parseEventParameters(): void {
+		if (
+			this.notificationType == undefined ||
+			this.notificationEvent == undefined ||
+			!Buffer.isBuffer(this._eventParameters)
+		) {
+			return;
+		}
+		// Look up the received notification and value in the config
+		const notificationConfig = lookupNotification(this.notificationType);
+		if (!notificationConfig) return;
+		const valueConfig = notificationConfig.lookupValue(
+			this.notificationEvent,
+		);
+		if (!valueConfig) return;
+
+		// Parse the event parameters if possible
+		if (
+			valueConfig.parameter instanceof NotificationParameterWithDuration
+		) {
+			// The parameters contain a Duration
+			this._eventParameters = Duration.parseReport(
+				this._eventParameters[0],
+			);
+		} else if (
+			valueConfig.parameter instanceof
+			NotificationParameterWithCommandClass
+		) {
+			// The parameters contain a CC
+			this._eventParameters = CommandClass.from(this.driver, {
+				data: this._eventParameters,
+				fromEncapsulation: true,
+				encapCC: this,
+			});
+		} else if (
+			valueConfig.parameter instanceof NotificationParameterWithValue
+		) {
+			// The parameters contain a named value
+			this._eventParameters = {
+				[valueConfig.parameter
+					.propertyName]: this._eventParameters.readUIntBE(
+					0,
+					this._eventParameters.length,
+				),
+			};
+		}
+	}
 }
 
 type NotificationCCGetSpecificOptions =
@@ -464,9 +503,9 @@ type NotificationCCGetSpecificOptions =
 		alarmType: number;
 	}
 	| {
-		notificationType: NotificationType;
-		notificationEvent?: number;
-	};
+			notificationType: number;
+			notificationEvent?: number;
+	  };
 type NotificationCCGetOptions = CCCommandOptions &
 	NotificationCCGetSpecificOptions;
 
@@ -497,7 +536,7 @@ export class NotificationCCGet extends NotificationCC {
 	/** Proprietary V1/V2 alarm type */
 	public alarmType: number | undefined;
 	/** Regulated V3+ notification type */
-	public notificationType: NotificationType | undefined;
+	public notificationType: number | undefined;
 	public notificationEvent: number | undefined;
 
 	public serialize(): Buffer {
@@ -546,9 +585,9 @@ export class NotificationCCSupportedReport extends NotificationCC {
 		return this._supportsV1Alarm;
 	}
 
-	private _supportedNotificationTypes: NotificationType[];
+	private _supportedNotificationTypes: number[];
 	@ccValue({ internal: true })
-	public get supportedNotificationTypes(): readonly NotificationType[] {
+	public get supportedNotificationTypes(): readonly number[] {
 		return this._supportedNotificationTypes;
 	}
 }
@@ -595,8 +634,8 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		// This happens during the node interview
 	}
 
-	private _notificationType: NotificationType;
-	public get notificationType(): NotificationType {
+	private _notificationType: number;
+	public get notificationType(): number {
 		return this._notificationType;
 	}
 
@@ -607,7 +646,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 }
 
 interface NotificationCCEventSupportedGetOptions extends CCCommandOptions {
-	notificationType: NotificationType;
+	notificationType: number;
 }
 
 @CCCommand(NotificationCommand.EventSupportedGet)
@@ -631,7 +670,7 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 		}
 	}
 
-	public notificationType: NotificationType;
+	public notificationType: number;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.notificationType]);

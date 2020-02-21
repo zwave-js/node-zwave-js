@@ -300,7 +300,9 @@ export class Message {
 	/** Finds the ID of the target or source node in a message, if it contains that information */
 	public getNodeId(): number | undefined {
 		if (isNodeQuery(this)) return this.nodeId;
-		if (isCommandClassContainer(this)) return this.command.nodeId;
+		if (isCommandClassContainer(this) && this.command.isSinglecast()) {
+			return this.command.nodeId;
+		}
 	}
 
 	/**

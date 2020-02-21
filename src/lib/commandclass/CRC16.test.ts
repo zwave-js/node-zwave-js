@@ -14,8 +14,7 @@ describe("lib/commandclass/CRC16 => ", () => {
 			// SDS13783 contains the following sample encapsulated command:
 			const basicCCGet = new BasicCCGet(fakeDriver, { nodeId: 1 });
 			const crc16 = CRC16CC.encapsulate(fakeDriver, basicCCGet);
-			// Use serializeForEncapsulation to exclude the nodeId and payload length
-			const serialized = crc16.serializeForEncapsulation();
+			const serialized = crc16.serialize();
 			const expected = Buffer.from("560120024d26", "hex");
 			expect(serialized).toEqual(expected);
 		});
@@ -30,7 +29,10 @@ describe("lib/commandclass/CRC16 => ", () => {
 			expect(crc16.encapsulatedCC).toBe(basicCCSet);
 			const serialized = crc16.serialize();
 
-			const deserialized = CommandClass.from(fakeDriver, serialized);
+			const deserialized = CommandClass.from(fakeDriver, {
+				nodeId: basicCCSet.nodeId,
+				data: serialized,
+			});
 			expect(deserialized.nodeId).toBe(basicCCSet.nodeId);
 			const deserializedPayload = (deserialized as CRC16CCCommandEncapsulation)
 				.encapsulatedCC as BasicCCSet;
@@ -52,9 +54,16 @@ describe("lib/commandclass/CRC16 => ", () => {
 			const serialized = crc16.serialize();
 			serialized[serialized.length - 1] ^= 0xff;
 
-			assertZWaveError(() => CommandClass.from(fakeDriver, serialized), {
-				errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
-			});
+			assertZWaveError(
+				() =>
+					CommandClass.from(fakeDriver, {
+						nodeId: basicCCSet.nodeId,
+						data: serialized,
+					}),
+				{
+					errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
+				},
+			);
 		});
 	});
 });

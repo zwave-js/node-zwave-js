@@ -5,11 +5,9 @@ import { TimeCC, TimeCCDateGet, TimeCCDateReport, TimeCCTimeGet, TimeCCTimeRepor
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
-function buildCCBuffer(nodeId: number, payload: Buffer): Buffer {
+function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
 		Buffer.from([
-			nodeId, // node number
-			payload.length + 1, // remaining length
 			CommandClasses.Time, // CC
 		]),
 		payload,
@@ -20,7 +18,6 @@ describe("lib/commandclass/TimeCC => ", () => {
 	it("the TimeGet command should serialize correctly", () => {
 		const cc = new TimeCCTimeGet(fakeDriver, { nodeId: 1 });
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				TimeCommand.TimeGet, // CC Command
 			]),
@@ -30,7 +27,6 @@ describe("lib/commandclass/TimeCC => ", () => {
 
 	it("the TimeReport command should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				TimeCommand.TimeReport, // CC Command
 				14,
@@ -38,7 +34,10 @@ describe("lib/commandclass/TimeCC => ", () => {
 				59,
 			]),
 		);
-		const cc = new TimeCCTimeReport(fakeDriver, { data: ccData });
+		const cc = new TimeCCTimeReport(fakeDriver, {
+			nodeId: 8,
+			data: ccData,
+		});
 
 		expect(cc.hour).toBe(14);
 		expect(cc.minute).toBe(23);
@@ -48,7 +47,6 @@ describe("lib/commandclass/TimeCC => ", () => {
 	it("the DateGet command should serialize correctly", () => {
 		const cc = new TimeCCDateGet(fakeDriver, { nodeId: 1 });
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				TimeCommand.DateGet, // CC Command
 			]),
@@ -58,7 +56,6 @@ describe("lib/commandclass/TimeCC => ", () => {
 
 	it("the DateReport command should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				TimeCommand.DateReport, // CC Command
 				0x07,
@@ -67,7 +64,10 @@ describe("lib/commandclass/TimeCC => ", () => {
 				17,
 			]),
 		);
-		const cc = new TimeCCDateReport(fakeDriver, { data: ccData });
+		const cc = new TimeCCDateReport(fakeDriver, {
+			nodeId: 8,
+			data: ccData,
+		});
 
 		expect(cc.year).toBe(1989);
 		expect(cc.month).toBe(10);
@@ -76,10 +76,10 @@ describe("lib/commandclass/TimeCC => ", () => {
 
 	it("deserializing an unsupported command should return an unspecified version of TimeCC", () => {
 		const serializedCC = buildCCBuffer(
-			1,
 			Buffer.from([255]), // not a valid command
 		);
 		const cc: any = new TimeCC(fakeDriver, {
+			nodeId: 8,
 			data: serializedCC,
 		});
 		expect(cc.constructor).toBe(TimeCC);

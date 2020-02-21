@@ -5,11 +5,9 @@ import { MultiChannelAssociationCCGet, MultiChannelAssociationCCRemove, MultiCha
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
-function buildCCBuffer(nodeId: number, payload: Buffer): Buffer {
+function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
 		Buffer.from([
-			nodeId, // node number
-			payload.length + 1, // remaining length
 			CommandClasses["Multi Channel Association"], // CC
 		]),
 		payload,
@@ -23,7 +21,6 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 			{ nodeId: 1 },
 		);
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				MultiChannelAssociationCommand.SupportedGroupingsGet, // CC Command
 			]),
@@ -33,7 +30,6 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 
 	it("the SupportedGroupingsReport command should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				MultiChannelAssociationCommand.SupportedGroupingsReport, // CC Command
 				7, // # of groups
@@ -42,6 +38,7 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 		const cc = new MultiChannelAssociationCCSupportedGroupingsReport(
 			fakeDriver,
 			{
+				nodeId: 4,
 				data: ccData,
 			},
 		);
@@ -56,7 +53,6 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 			nodeIds: [1, 2, 5],
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				MultiChannelAssociationCommand.Set, // CC Command
 				5, // group id
@@ -85,7 +81,6 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 			],
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				MultiChannelAssociationCommand.Set, // CC Command
 				5, // group id
@@ -118,7 +113,6 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 			],
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				MultiChannelAssociationCommand.Set, // CC Command
 				5, // group id
@@ -144,7 +138,6 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 			groupId: 9,
 		});
 		const expected = buildCCBuffer(
-			1,
 			Buffer.from([
 				MultiChannelAssociationCommand.Get, // CC Command
 				9, // group ID
@@ -155,7 +148,6 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 
 	it("the Report command should be deserialized correctly (node IDs only)", () => {
 		const ccData = buildCCBuffer(
-			2,
 			Buffer.from([
 				MultiChannelAssociationCommand.Report, // CC Command
 				5, // group id
@@ -168,6 +160,7 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 			]),
 		);
 		const cc = new MultiChannelAssociationCCReport(fakeDriver, {
+			nodeId: 4,
 			data: ccData,
 		});
 
@@ -180,7 +173,6 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 
 	it("the Report command should be deserialized correctly (endpoint addresses only)", () => {
 		const ccData = buildCCBuffer(
-			2,
 			Buffer.from([
 				MultiChannelAssociationCommand.Report, // CC Command
 				5, // group id
@@ -196,6 +188,7 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 			]),
 		);
 		const cc = new MultiChannelAssociationCCReport(fakeDriver, {
+			nodeId: 4,
 			data: ccData,
 		});
 
@@ -214,7 +207,6 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 
 	it("the Report command should be deserialized correctly (both options)", () => {
 		const ccData = buildCCBuffer(
-			2,
 			Buffer.from([
 				MultiChannelAssociationCommand.Report, // CC Command
 				5, // group id
@@ -233,6 +225,7 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 			]),
 		);
 		const cc = new MultiChannelAssociationCCReport(fakeDriver, {
+			nodeId: 4,
 			data: ccData,
 		});
 
@@ -256,7 +249,6 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 			nodeIds: [1, 2, 5],
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				MultiChannelAssociationCommand.Remove, // CC Command
 				5, // group id
@@ -285,7 +277,6 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 			],
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				MultiChannelAssociationCommand.Remove, // CC Command
 				5, // group id
@@ -318,7 +309,6 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 			],
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				MultiChannelAssociationCommand.Remove, // CC Command
 				5, // group id
@@ -344,7 +334,6 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 			groupId: 5,
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				MultiChannelAssociationCommand.Remove, // CC Command
 				5, // group id

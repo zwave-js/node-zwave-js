@@ -131,6 +131,7 @@ export interface CCAPIs {
 	"CRC-16 Encapsulation": import("./CRC16").CRC16CCAPI;
 	"Central Scene": import("./CentralSceneCC").CentralSceneCCAPI;
 	"Climate Control Schedule": import("./ClimateControlScheduleCC").ClimateControlScheduleCCAPI;
+	Clock: import("./ClockCC").ClockCCAPI;
 	Configuration: import("./ConfigurationCC").ConfigurationCCAPI;
 	Indicator: import("./IndicatorCC").IndicatorCCAPI;
 	Language: import("./LanguageCC").LanguageCCAPI;

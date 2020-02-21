@@ -6,11 +6,9 @@ import { SceneActivationCC, SceneActivationCCSet, SceneActivationCommand } from 
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
-function buildCCBuffer(nodeId: number, payload: Buffer): Buffer {
+function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
 		Buffer.from([
-			nodeId, // node number
-			payload.length + 1, // remaining length
 			CommandClasses["Scene Activation"], // CC
 		]),
 		payload,
@@ -24,7 +22,6 @@ describe("lib/commandclass/SceneActivationCC => ", () => {
 			sceneId: 55,
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				SceneActivationCommand.Set, // CC Command
 				55, // id
@@ -41,7 +38,6 @@ describe("lib/commandclass/SceneActivationCC => ", () => {
 			dimmingDuration: new Duration(1, "minutes"),
 		});
 		const expected = buildCCBuffer(
-			2,
 			Buffer.from([
 				SceneActivationCommand.Set, // CC Command
 				56, // id
@@ -53,14 +49,16 @@ describe("lib/commandclass/SceneActivationCC => ", () => {
 
 	it("the Set command should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
-			1,
 			Buffer.from([
 				SceneActivationCommand.Set, // CC Command
 				15, // id
 				0x00, // 0 seconds
 			]),
 		);
-		const cc = new SceneActivationCCSet(fakeDriver, { data: ccData });
+		const cc = new SceneActivationCCSet(fakeDriver, {
+			nodeId: 2,
+			data: ccData,
+		});
 
 		expect(cc.sceneId).toBe(15);
 		expect(cc.dimmingDuration).toEqual(new Duration(0, "seconds"));
@@ -68,10 +66,10 @@ describe("lib/commandclass/SceneActivationCC => ", () => {
 
 	it("deserializing an unsupported command should return an unspecified version of SceneActivationCC", () => {
 		const serializedCC = buildCCBuffer(
-			1,
 			Buffer.from([255]), // not a valid command
 		);
 		const cc: any = new SceneActivationCC(fakeDriver, {
+			nodeId: 2,
 			data: serializedCC,
 		});
 		expect(cc.constructor).toBe(SceneActivationCC);

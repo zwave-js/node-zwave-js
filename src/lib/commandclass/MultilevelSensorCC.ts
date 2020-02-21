@@ -8,7 +8,7 @@ import { validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, parseBitMask, parseFloatWithScale } from "../values/Primitive";
 import { CCAPI } from "./API";
-import { API, CCCommand, CCCommandOptions, ccKeyValuePair, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import { API, CCCommand, CCCommandOptions, ccKeyValuePair, CCResponsePredicate, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum MultilevelSensorCommand {
@@ -293,6 +293,20 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 	}
 }
 
+const testResponseForMultilevelSensorGet: CCResponsePredicate = (
+	sent: MultilevelSensorCCGet,
+	received,
+	isPositiveTransmitReport,
+) => {
+	// We expect a Multilevel Sensor Report that matches the requested sensor type (if a type was requested)
+	return received instanceof MultilevelSensorCCReport &&
+		(sent.sensorType == undefined || received.type === sent.sensorType)
+		? "final"
+		: isPositiveTransmitReport
+		? "confirmation"
+		: "unexpected";
+};
+
 // These options are supported starting in V5
 interface MultilevelSensorCCGetSpecificOptions {
 	sensorType: number;
@@ -303,7 +317,7 @@ type MultilevelSensorCCGetOptions =
 	| (CCCommandOptions & MultilevelSensorCCGetSpecificOptions);
 
 @CCCommand(MultilevelSensorCommand.Get)
-@expectedCCResponse(MultilevelSensorCCReport)
+@expectedCCResponse(testResponseForMultilevelSensorGet)
 export class MultilevelSensorCCGet extends MultilevelSensorCC {
 	public constructor(
 		driver: Driver,
