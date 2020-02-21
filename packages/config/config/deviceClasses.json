@@ -1,0 +1,148 @@
+{
+	// Define the basic device classes
+	"basic": {
+		"0x01": "Controller",
+		"0x02": "Routing Slave",
+		"0x03": "Slave",
+		"0x04": "Static Controller"
+	},
+	"generic": {
+		"0x01": {
+			"label": "Remote Controller",
+			"controlledCCs": [
+				"0x20" // Basic
+			],
+			"specific": {
+				"0x01": { "label": "Portable Remote Controller" },
+				"0x02": {
+					"label": "Portable Scene Controller",
+					"supportedCCs": [
+						"Association",
+						"Scene Controller Configuration",
+						"Manufacturer Specific"
+					],
+					"controlledCCs": ["Basic", "Scene Activation"]
+				},
+				"0x03": {
+					"label": "Portable Installer Tool",
+					"supportedCCs": [
+						"Controller Replication",
+						"Multi Command",
+						"Manufacturer Specific",
+						"Version"
+					],
+					"controlledCCs": [
+						"Association",
+						"Configuration",
+						"Controller Replication",
+						"Multi Channel",
+						"Multi Channel Association",
+						"Manufacturer Specific",
+						"Version",
+						"Wake Up"
+					]
+				}
+			}
+		},
+		"0x02": {
+			"label": "Static Controller",
+			"specific": {}
+		},
+		"0x03": {
+			"label": "AV Control Point",
+			"specific": {}
+		},
+		"0x04": {
+			"label": "Display",
+			"specific": {}
+		},
+		"0x05": {
+			"label": "Network Extender",
+			"specific": {}
+		},
+		"0x06": {
+			"label": "Appliance",
+			"specific": {}
+		},
+		"0x07": {
+			"label": "Notification Sensor",
+			"specific": {}
+		},
+		"0x08": {
+			"label": "Thermostat",
+			"specific": {}
+		},
+		"0x09": {
+			"label": "Window Covering",
+			"specific": {}
+		},
+		"0x0f": {
+			"label": "Repeater Slave",
+			"specific": {}
+		},
+		"0x10": {
+			"label": "Binary Switch",
+			"specific": {}
+		},
+		"0x11": {
+			"label": "Multilevel Switch",
+			"specific": {}
+		},
+		"0x12": {
+			"label": "Remote Switch",
+			"specific": {}
+		},
+		"0x13": {
+			"label": "Toggle Switch",
+			"specific": {}
+		},
+		"0x15": {
+			"label": "ZIP Node",
+			"specific": {}
+		},
+		"0x16": {
+			"label": "Ventilation",
+			"specific": {}
+		},
+		"0x17": {
+			"label": "Security Panel",
+			"specific": {}
+		},
+		"0x18": {
+			"label": "Wall Controller",
+			"specific": {}
+		},
+		"0x20": {
+			"label": "Binary Sensor",
+			"specific": {}
+		},
+		"0x21": {
+			"label": "Multilevel Sensor",
+			"specific": {}
+		},
+		"0x30": {
+			"label": "Pulse Meter",
+			"specific": {}
+		},
+		"0x31": {
+			"label": "Meter",
+			"specific": {}
+		},
+		"0x40": {
+			"label": "Entry Control",
+			"specific": {}
+		},
+		"0x50": {
+			"label": "Semi-Interoperable",
+			"specific": {}
+		},
+		"0xa1": {
+			"label": "Alarm Sensor",
+			"specific": {}
+		},
+		"0xff": {
+			"label": "Non-Interoperable",
+			"specific": {}
+		}
+	}
+}
