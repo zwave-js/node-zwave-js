@@ -295,6 +295,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 		}
 
 		// Step 3: Query endpoints
+		let hasQueriedCapabilities = false;
 		for (const endpoint of endpointsToQuery) {
 			if (
 				endpoint > multiResponse.individualEndpointCount &&
@@ -316,6 +317,26 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				});
 			}
 
+			// When the device reports identical capabilities for all endpoints,
+			// we don't need to query them all
+			if (multiResponse.identicalCapabilities && hasQueriedCapabilities) {
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `all endpoints idendical, skipping capability query for endpoint #${endpoint}...`,
+					direction: "none",
+				});
+
+				// copy the capabilities from the first endpoint
+				const ep1Caps = this.getValueDB().getValue<CommandClasses[]>(
+					getEndpointCCsValueId(endpointsToQuery[0]),
+				)!;
+				this.getValueDB().setValue(getEndpointCCsValueId(endpoint), [
+					...ep1Caps,
+				]);
+
+				continue;
+			}
+
 			// TODO: When security is implemented, we need to change stuff here
 			log.controller.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -323,6 +344,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				direction: "outbound",
 			});
 			const caps = await api.getEndpointCapabilities(endpoint);
+			hasQueriedCapabilities = true;
 			logMessage = `received response for endpoint capabilities (#${endpoint}):
 generic device class:  ${caps.generic.name} (${num2hex(caps.generic.key)})
 specific device class: ${caps.specific.name} (${num2hex(caps.specific.key)})
