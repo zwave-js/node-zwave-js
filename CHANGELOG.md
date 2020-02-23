@@ -6,7 +6,7 @@
 
 ## __WORK IN PROGRESS__
 ### Features
-* Added experimental support for multicast destinations in CCs
+* Added support for multicast destinations in CCs
 * `Multichannel CC`: The interview now needs less messages when a node reports identical endpoint capabilities
 
 ### Bugfixes
