@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.14.0 (2020-02-23)
 ### Features
 * Added support for multicast destinations in CCs
 * `Multichannel CC`: The interview now needs less messages when a node reports identical endpoint capabilities
