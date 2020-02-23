@@ -35,7 +35,6 @@ import {
 } from "../message/Message";
 import { getEnumMemberName, JSONObject, staticExtends } from "../util/misc";
 import { num2hex } from "../util/strings";
-import { encodeBitMask } from "../values/Primitive";
 import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
 import { MAX_NODES } from "./NodeBitMask";
 
@@ -381,14 +380,13 @@ export class SendDataMulticastRequest<CCType extends MulticastCC = MulticastCC>
 	public serialize(): Buffer {
 		// The payload CC must not include the target node ids, so strip the header out
 		const serializedCC = this.command.serialize();
-		const destinationBitMask = encodeBitMask(
-			this.command.nodeId,
-			Math.max(...this.command.nodeId),
-		);
 		this.payload = Buffer.concat([
-			// Target bit mask + length
-			Buffer.from([destinationBitMask.length]),
-			destinationBitMask,
+			// # of target nodes and nodeIds
+			Buffer.from([
+				this.command.nodeId.length,
+				...this.command.nodeId,
+				serializedCC.length,
+			]),
 			// payload
 			serializedCC,
 			Buffer.from([this.transmitOptions, this.callbackId]),
