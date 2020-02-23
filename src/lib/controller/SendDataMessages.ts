@@ -382,7 +382,11 @@ export class SendDataMulticastRequest<CCType extends MulticastCC = MulticastCC>
 		const serializedCC = this.command.serialize();
 		this.payload = Buffer.concat([
 			// # of target nodes and nodeIds
-			Buffer.from([this.command.nodeId.length, ...this.command.nodeId]),
+			Buffer.from([
+				this.command.nodeId.length,
+				...this.command.nodeId,
+				serializedCC.length,
+			]),
 			// payload
 			serializedCC,
 			Buffer.from([this.transmitOptions, this.callbackId]),
