@@ -1048,10 +1048,25 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 				}
 
 				case "fatal_node": {
-					// The node did not acknowledge the receipt
-					this.handleMissingNodeResponse(
-						isTransmitReport(msg) ? msg.transmitStatus : undefined,
-					);
+					if (
+						this.currentTransaction.message instanceof
+						SendDataMulticastRequest
+					) {
+						// Don't try to resend multicast messages. One or more nodes might have already reacted
+						this.rejectCurrentTransaction(
+							new ZWaveError(
+								`One or more nodes did not respond to the request.`,
+								ZWaveErrorCodes.Controller_MessageDropped,
+							),
+						);
+					} else {
+						// The node did not acknowledge the receipt
+						this.handleMissingNodeResponse(
+							isTransmitReport(msg)
+								? msg.transmitStatus
+								: undefined,
+						);
+					}
 					return;
 				}
 
