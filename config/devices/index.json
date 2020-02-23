@@ -13246,9 +13246,19 @@
         "productId": "0x010c",
         "firmwareVersion": {
             "min": "0.0",
+            "max": "2.1"
+        },
+        "filename": "0x0234/heatit_z-scene_controller_0.0-2.1.json"
+    },
+    {
+        "manufacturerId": "0x0234",
+        "productType": "0x0003",
+        "productId": "0x010c",
+        "firmwareVersion": {
+            "min": "2.2",
             "max": "255.255"
         },
-        "filename": "0x0234/heatit_z-scene_controller.json"
+        "filename": "0x0234/heatit_z-scene_controller_2.2.json"
     },
     {
         "manufacturerId": "0x0234",
