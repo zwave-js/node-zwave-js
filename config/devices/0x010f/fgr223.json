@@ -17,6 +17,9 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
+	"proprietary": {
+		"fibaroCCs": [38 /* 0x26 (Venetian Blinds) */]
+	},
 	"paramInformation": {
 		"20": {
 			"label": "Switch type",
