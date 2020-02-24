@@ -89,7 +89,7 @@
     "fs-extra": "^8.1.0",
     "json5": "^2.1.1",
     "moment": "^2.24.0",
-    "moment-timezone": "^0.5.27",
+    "moment-timezone": "^0.5.28",
     "reflect-metadata": "^0.1.13",
     "serialport": "^8.0.7",
     "source-map-support": "^0.5.16",
