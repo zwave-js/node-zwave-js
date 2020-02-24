@@ -9,7 +9,7 @@ import {
 	parseNodeInformationFrame,
 } from "../node/NodeInfo";
 import { ValueID } from "../node/ValueDB";
-import { validatePayload } from "../util/misc";
+import { getEnumMemberName, validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
@@ -264,6 +264,9 @@ export class MultiChannelCC extends CommandClass {
 	}
 
 	public async interview(): Promise<void> {
+		// Special interview procedure for legacy nodes
+		if (this.version === 1) return this.interviewV1();
+
 		const node = this.getNode()!;
 		const api = node.getEndpoint(this.endpointIndex)!.commandClasses[
 			"Multi Channel"
@@ -402,6 +405,44 @@ supported CCs:`;
 				message: logMessage,
 				direction: "inbound",
 			});
+		}
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	private async interviewV1(): Promise<void> {
+		const node = this.getNode()!;
+		const api = node.getEndpoint(this.endpointIndex)!.commandClasses[
+			"Multi Channel"
+		];
+
+		// V1 works the opposite way - we scan all CCs and remember how many
+		// endpoints they have
+		const supportedCCs = [...node.implementedCommandClasses.keys()]
+			// Don't query CCs the node only controls
+			.filter(cc => node.supportsCC(cc))
+			// Don't query CCs that want to skip the endpoint interview
+			.filter(cc => !node.createCCInstance(cc)?.skipEndpointInterview());
+		for (const ccId of supportedCCs) {
+			log.controller.logNode(node.id, {
+				message: `Querying endpoint count for CommandClass ${getEnumMemberName(
+					CommandClasses,
+					ccId,
+				)}...`,
+				direction: "outbound",
+			});
+			const endpointCount = await api.getEndpointCountV1(ccId);
+			log.controller.logNode(node.id, {
+				message: `CommandClass ${getEnumMemberName(
+					CommandClasses,
+					ccId,
+				)} has ${endpointCount} endpoints`,
+				direction: "inbound",
+			});
+
+			// TODO: Remember the capabilities of this CC/Endpoint combination
+			// TODO: Should the V1 interview be done AFTER the CCs?
 		}
 
 		// Remember that the interview is complete
