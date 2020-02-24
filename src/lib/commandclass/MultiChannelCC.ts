@@ -32,9 +32,9 @@ import { CommandClasses } from "./CommandClasses";
 
 export enum MultiChannelCommand {
 	// Legacy commands for V1 (Multi Instance)
-	V1_Get = 0x04,
-	V1_Report = 0x05,
-	V1_CommandEncapsulation = 0x06,
+	GetV1 = 0x04,
+	ReportV1 = 0x05,
+	CommandEncapsulationV1 = 0x06,
 
 	// V2+
 	EndPointGet = 0x07,
@@ -65,8 +65,8 @@ export class MultiChannelCCAPI extends CCAPI {
 	public supportsCommand(cmd: MultiChannelCommand): Maybe<boolean> {
 		switch (cmd) {
 			// Legacy commands:
-			case MultiChannelCommand.V1_Get:
-			case MultiChannelCommand.V1_CommandEncapsulation:
+			case MultiChannelCommand.GetV1:
+			case MultiChannelCommand.CommandEncapsulationV1:
 				return this.version === 1;
 
 			// The specs start at version 3 but according to OZW,
@@ -193,7 +193,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	public async getEndpointCountV1(ccId: CommandClasses): Promise<number> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
-			MultiChannelCommand.V1_Get,
+			MultiChannelCommand.GetV1,
 		);
 
 		const cc = new MultiChannelCCV1Get(this.driver, {
@@ -212,7 +212,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	public async sendEncapsulatedV1(encapsulated: CommandClass): Promise<void> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
-			MultiChannelCommand.V1_CommandEncapsulation,
+			MultiChannelCommand.CommandEncapsulationV1,
 		);
 
 		const cc = new MultiChannelCCV1CommandEncapsulation(this.driver, {
@@ -868,7 +868,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	}
 }
 
-@CCCommand(MultiChannelCommand.V1_Report)
+@CCCommand(MultiChannelCommand.ReportV1)
 export class MultiChannelCCV1Report extends MultiChannelCC {
 	public constructor(
 		driver: IDriver,
@@ -889,7 +889,7 @@ interface MultiChannelCCV1GetOptions extends CCCommandOptions {
 	requestedCC: CommandClasses;
 }
 
-@CCCommand(MultiChannelCommand.V1_Get)
+@CCCommand(MultiChannelCommand.GetV1)
 @expectedCCResponse(MultiChannelCCV1Report)
 export class MultiChannelCCV1Get extends MultiChannelCC {
 	public constructor(
@@ -922,7 +922,7 @@ interface MultiChannelCCV1CommandEncapsulationOptions extends CCCommandOptions {
 	encapsulated: CommandClass;
 }
 
-@CCCommand(MultiChannelCommand.V1_CommandEncapsulation)
+@CCCommand(MultiChannelCommand.CommandEncapsulationV1)
 @expectedCCResponse(MultiChannelCCV1CommandEncapsulation)
 export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 	public constructor(
