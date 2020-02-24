@@ -31,6 +31,12 @@ import {
 import { CommandClasses } from "./CommandClasses";
 
 export enum MultiChannelCommand {
+	// Legacy commands for V1 (Multi Instance)
+	V1_Get = 0x04,
+	V1_Report = 0x05,
+	V1_CommandEncapsulation = 0x06,
+
+	// V2+
 	EndPointGet = 0x07,
 	EndPointReport = 0x08,
 	CapabilityGet = 0x09,
@@ -58,6 +64,11 @@ export function getEndpointCCsValueId(endpointIndex: number): ValueID {
 export class MultiChannelCCAPI extends CCAPI {
 	public supportsCommand(cmd: MultiChannelCommand): Maybe<boolean> {
 		switch (cmd) {
+			// Legacy commands:
+			case MultiChannelCommand.V1_Get:
+			case MultiChannelCommand.V1_CommandEncapsulation:
+				return this.version === 1;
+
 			// The specs start at version 3 but according to OZW,
 			// these do seem to be supported in version 2
 			case MultiChannelCommand.EndPointGet:
@@ -175,6 +186,38 @@ export class MultiChannelCCAPI extends CCAPI {
 		const cc = new MultiChannelCCCommandEncapsulation(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			...options,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
+	public async getEndpointCountV1(ccId: CommandClasses): Promise<number> {
+		this.assertSupportsCommand(
+			MultiChannelCommand,
+			MultiChannelCommand.V1_Get,
+		);
+
+		const cc = new MultiChannelCCV1Get(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			requestedCC: ccId,
+		});
+		const response = (await this.driver.sendCommand<MultiChannelCCV1Report>(
+			cc,
+			{
+				priority: MessagePriority.NodeQuery,
+			},
+		))!;
+		return response.endpointCount;
+	}
+
+	public async sendEncapsulatedV1(encapsulated: CommandClass): Promise<void> {
+		this.assertSupportsCommand(
+			MultiChannelCommand,
+			MultiChannelCommand.V1_CommandEncapsulation,
+		);
+
+		const cc = new MultiChannelCCV1CommandEncapsulation(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			encapsulated,
 		});
 		await this.driver.sendCommand(cc);
 	}
@@ -781,5 +824,97 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 					: this.destination.join(", ")
 			}`,
 		};
+	}
+}
+
+@CCCommand(MultiChannelCommand.V1_Report)
+export class MultiChannelCCV1Report extends MultiChannelCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		// V1 won't be extended in the future, so do an exact check
+		validatePayload(this.payload.length === 2);
+		this.requestedCC = this.payload[0];
+		this.endpointCount = this.payload[1];
+	}
+
+	public readonly requestedCC: CommandClasses;
+	public readonly endpointCount: number;
+}
+
+interface MultiChannelCCV1GetOptions extends CCCommandOptions {
+	requestedCC: CommandClasses;
+}
+
+@CCCommand(MultiChannelCommand.V1_Get)
+@expectedCCResponse(MultiChannelCCV1Report)
+export class MultiChannelCCV1Get extends MultiChannelCC {
+	public constructor(
+		driver: IDriver,
+		options:
+			| CommandClassDeserializationOptions
+			| MultiChannelCCV1GetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this.requestedCC = options.requestedCC;
+		}
+	}
+
+	public requestedCC: CommandClasses;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.requestedCC]);
+		return super.serialize();
+	}
+}
+
+interface MultiChannelCCV1CommandEncapsulationOptions extends CCCommandOptions {
+	encapsulated: CommandClass;
+}
+
+@CCCommand(MultiChannelCommand.V1_CommandEncapsulation)
+@expectedCCResponse(MultiChannelCCV1CommandEncapsulation)
+export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
+	public constructor(
+		driver: IDriver,
+		options:
+			| CommandClassDeserializationOptions
+			| MultiChannelCCV1CommandEncapsulationOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.endpointIndex = this.payload[0];
+
+			// No need to validate further, each CC does it for itself
+			this.encapsulated = CommandClass.from(this.driver, {
+				data: this.payload.slice(2),
+				fromEncapsulation: true,
+				encapCC: this,
+			});
+		} else {
+			this.encapsulated = options.encapsulated;
+			// No need to distinguish between source and destination in V1
+			this.endpointIndex = this.encapsulated.endpointIndex;
+		}
+	}
+
+	public encapsulated: CommandClass;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([this.endpointIndex]),
+			this.encapsulated.serialize(),
+		]);
+		return super.serialize();
 	}
 }
