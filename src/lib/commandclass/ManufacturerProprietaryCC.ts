@@ -1,4 +1,6 @@
+import { isArray } from "alcalzone-shared/typeguards";
 import { IDriver } from "../driver/IDriver";
+import log from "../log";
 import { validatePayload } from "../util/misc";
 import { CCAPI } from "./API";
 import {
@@ -11,7 +13,11 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
-import { FibaroCC } from "./manufacturerProprietary/Fibaro";
+import {
+	FibaroCC,
+	FibaroVenetianBlindCC,
+	MANUFACTURERID_FIBARO,
+} from "./manufacturerProprietary/Fibaro";
 
 @API(CommandClasses["Manufacturer Proprietary"])
 export class ManufacturerProprietaryCCAPI extends CCAPI {
@@ -22,16 +28,12 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		const cc = new ManufacturerProprietaryCC(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			manufacturerId,
-			proprietaryCommand: data || Buffer.allocUnsafe(0),
 		});
+		cc.manufacturerId = manufacturerId;
+		cc.payload = data ?? Buffer.allocUnsafe(0);
+
 		await this.driver.sendCommand(cc);
 	}
-}
-
-interface ManufacturerProprietaryOptions extends CCCommandOptions {
-	manufacturerId: number;
-	proprietaryCommand: Buffer | ProprietaryCommand;
 }
 
 @commandClass(CommandClasses["Manufacturer Proprietary"])
@@ -42,73 +44,79 @@ export class ManufacturerProprietaryCC extends CommandClass {
 
 	public constructor(
 		driver: IDriver,
-		options:
-			| CommandClassDeserializationOptions
-			| ManufacturerProprietaryOptions,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
 
 		if (gotDeserializationOptions(options)) {
-			// ManufacturerProprietaryCC has no CC command, so the first byte
-			// is stored in ccCommand
-			const rawPayload = Buffer.concat([
-				Buffer.from([super.ccCommand!]),
-				this.payload,
-			]);
+			validatePayload(this.payload.length >= 1);
+			// ManufacturerProprietaryCC has no CC command, so the first byte is stored in ccCommand.
+			this.manufacturerId = (super.ccCommand! << 8) + this.payload[0];
+			// If this is not called from a subclass, shorten the payload for the following subclass deserialization
+			if (new.target === ManufacturerProprietaryCC) {
+				this.payload = this.payload.slice(1);
+			}
 
-			validatePayload(rawPayload.length >= 2);
-			this.manufacturerId = rawPayload.readUInt16BE(0);
 			// Try to parse the proprietary command
-			const PCConstructor = getProprietaryCommandConstructor(
+			const PCConstructor = getProprietaryCCConstructor(
 				this.manufacturerId,
 			);
-			this.proprietaryCommand = rawPayload.slice(2);
-			if (typeof PCConstructor === "function") {
-				this.proprietaryCommand = new PCConstructor(
-					this.proprietaryCommand,
-				);
+			if (PCConstructor && new.target !== PCConstructor) {
+				return new PCConstructor(driver, options);
 			}
-		} else {
-			this.manufacturerId = options.manufacturerId;
-			this.proprietaryCommand = options.proprietaryCommand;
 		}
 	}
 
-	public manufacturerId: number;
-	public proprietaryCommand: Buffer | ProprietaryCommand;
+	// This must be set in subclasses
+	public manufacturerId!: number;
 
 	public serialize(): Buffer {
-		const rawPayload = Buffer.concat([
-			Buffer.from([
-				// Placeholder for manufacturerId
-				0x00,
-				0x00,
-			]),
-			this.proprietaryCommand instanceof Buffer
-				? this.proprietaryCommand
-				: this.proprietaryCommand.serialize(),
-		]);
-		rawPayload.writeUInt16BE(this.manufacturerId, 0);
-
 		// ManufacturerProprietaryCC has no CC command, so the first byte
 		// is stored in ccCommand
-		super.ccCommand = rawPayload[0];
-		this.payload = rawPayload.slice(1);
+		super.ccCommand = (this.manufacturerId >>> 8) & 0xff;
+		// The 2nd byte is in the payload
+		this.payload = Buffer.concat([
+			Buffer.from([
+				// 2nd byte of manufacturerId
+				this.manufacturerId & 0xff,
+			]),
+			this.payload,
+		]);
 		return super.serialize();
+	}
+
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+
+		// TODO: Can this be refactored?
+		const proprietaryConfig = node.deviceConfig?.proprietary;
+		if (
+			this.manufacturerId === 0x010f /* Fibaro */ &&
+			proprietaryConfig &&
+			isArray(proprietaryConfig.fibaroCCs) &&
+			proprietaryConfig.fibaroCCs.includes(0x26 /* Venetian Blinds */)
+		) {
+			return new FibaroVenetianBlindCC(this.driver, {
+				nodeId: this.nodeId,
+				endpoint: this.endpointIndex,
+			}).interview(complete);
+		} else {
+			log.controller.logNode(node.id, {
+				message: `${this.constructor.name}: skipping interview because none of the implemented proprietary CCs are supported...`,
+				direction: "none",
+			});
+		}
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
 	}
 }
 
-type ProprietaryCommandConstructor = new (from: Buffer) => ProprietaryCommand;
-
-export interface ProprietaryCommand {
-	serialize(): Buffer;
-}
-
-function getProprietaryCommandConstructor(
+function getProprietaryCCConstructor(
 	manufacturerId: number,
-): ProprietaryCommandConstructor | undefined {
+): typeof ManufacturerProprietaryCC | undefined {
 	switch (manufacturerId) {
-		case 0x010f:
+		case MANUFACTURERID_FIBARO:
 			return FibaroCC;
 	}
 }

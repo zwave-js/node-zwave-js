@@ -1,28 +1,87 @@
+import { IDriver } from "../../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../../error/ZWaveError";
+import log from "../../log";
+import { ValueID } from "../../node/ValueDB";
 import { validatePayload } from "../../util/misc";
-import { ProprietaryCommand } from "../ManufacturerProprietaryCC";
+import { ValueMetadata } from "../../values/Metadata";
+import {
+	CCCommandOptions,
+	CommandClassDeserializationOptions,
+	gotDeserializationOptions,
+} from "../CommandClass";
+import { CommandClasses } from "../CommandClasses";
+import { ManufacturerProprietaryCC } from "../ManufacturerProprietaryCC";
 
-export class FibaroCC implements ProprietaryCommand {
-	public constructor(dataOrOptions?: Buffer | {}) {
-		if (Buffer.isBuffer(dataOrOptions)) {
-			// Deserialization
-			validatePayload(dataOrOptions.length >= 2);
-			this.fibaroCCId = dataOrOptions[0];
+export const MANUFACTURERID_FIBARO = 0x10f;
+
+/** Returns the ValueID used to store the current venetian blind position */
+export function getFibaroVenetianBlindPositionValueId(
+	endpoint: number,
+): ValueID {
+	return {
+		commandClass: CommandClasses["Manufacturer Proprietary"],
+		endpoint,
+		property: "fibaro",
+		propertyKey: "venetianBlindsPosition",
+	};
+}
+
+/** Returns the value metadata for venetian blind position */
+export function getFibaroVenetianBlindPositionMetadata(): ValueMetadata {
+	return {
+		...ValueMetadata.Level,
+		label: "Venetian blinds position",
+	};
+}
+
+/** Returns the ValueID used to store the current venetian blind tilt */
+export function getFibaroVenetianBlindTiltValueId(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Manufacturer Proprietary"],
+		endpoint,
+		property: "fibaro",
+		propertyKey: "venetianBlindsTilt",
+	};
+}
+
+/** Returns the value metadata for venetian blind tilt */
+export function getFibaroVenetianBlindTiltMetadata(): ValueMetadata {
+	return {
+		...ValueMetadata.Level,
+		label: "Venetian blinds tilt",
+	};
+}
+
+export enum FibaroCCIDs {
+	VenetianBlind = 0x26,
+}
+
+export class FibaroCC extends ManufacturerProprietaryCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.fibaroCCId = this.payload[0];
+			this.fibaroCCCommand = this.payload[1];
+			if (new.target === FibaroCC) {
+				this.payload = this.payload.slice(2);
+			}
+
 			if (
-				this.fibaroCCId === 0x26 &&
+				this.fibaroCCId === FibaroCCIDs.VenetianBlind &&
 				(new.target as any) !== FibaroVenetianBlindCC
 			) {
-				return new FibaroVenetianBlindCC(dataOrOptions);
+				return new FibaroVenetianBlindCC(driver, options);
 			}
-			this.fibaroCCCommand = dataOrOptions[1];
-			this.payload = dataOrOptions.slice(2);
+		} else {
 		}
 	}
 
-	public fibaroCCId!: number;
+	public fibaroCCId!: number; // This is either deserialized or set by a subclass
 	public fibaroCCCommand!: number;
-
-	public payload!: Buffer;
 
 	public serialize(): Buffer {
 		return Buffer.concat([
@@ -38,51 +97,79 @@ export enum FibaroVenetianBlindCCCommand {
 	Report = 0x03,
 }
 
-export interface FibaroVenetianBlindCC {
-	ccCommand: FibaroVenetianBlindCCCommand;
-}
-
 export class FibaroVenetianBlindCC extends FibaroCC {
-	public constructor(dataOrOptions?: Buffer | {}) {
-		super(dataOrOptions);
-		this.fibaroCCId = 0x26;
+	declare fibaroCCCommand: FibaroVenetianBlindCCCommand;
 
-		if (Buffer.isBuffer(dataOrOptions)) {
-			if (
-				this.fibaroCCCommand === FibaroVenetianBlindCCCommand.Get &&
-				(new.target as any) !== FibaroVenetianBlindCCGet
-			) {
-				return new FibaroVenetianBlindCC(dataOrOptions);
-			}
-		}
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
+		this.fibaroCCId = FibaroCCIDs.VenetianBlind;
+	}
+
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const api = this.getEndpoint()!.commandClasses[
+			"Manufacturer Proprietary"
+		];
+
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		log.controller.logNode(node.id, {
+			message: "doing something...",
+			direction: "outbound",
+		});
+		// TODO: Implementation
+		const logMessage = `received response for something...`;
+		log.controller.logNode(node.id, {
+			message: logMessage,
+			direction: "inbound",
+		});
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
 	}
 }
 
-export type FibaroVenetianBlindCCSetOptions =
-	| {
-			position: number;
-	  }
-	| {
-			tilt: number;
-	  };
+export type FibaroVenetianBlindCCSetOptions = CCCommandOptions &
+	(
+		| {
+				position: number;
+		  }
+		| {
+				tilt: number;
+		  }
+		| {
+				position: number;
+				tilt: number;
+		  }
+	);
 
 export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 	public constructor(
-		dataOrOptions: Buffer | FibaroVenetianBlindCCSetOptions,
+		driver: IDriver,
+		options:
+			| CommandClassDeserializationOptions
+			| FibaroVenetianBlindCCSetOptions,
 	) {
-		super(dataOrOptions);
+		super(driver, options);
 		this.fibaroCCCommand = FibaroVenetianBlindCCCommand.Set;
 
-		if (Buffer.isBuffer(dataOrOptions)) {
+		if (Buffer.isBuffer(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			if ("position" in dataOrOptions)
-				this.position = dataOrOptions.position;
-			if ("tilt" in dataOrOptions) this.tilt = dataOrOptions.tilt;
+			if ("position" in options) this.position = options.position;
+			if ("tilt" in options) this.tilt = options.tilt;
 		}
 	}
 
@@ -90,51 +177,67 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 	public tilt: number | undefined;
 
 	public serialize(): Buffer {
+		const controlByte =
+			(this.position != undefined ? 0b10 : 0) |
+			(this.tilt != undefined ? 0b01 : 0);
 		this.payload = Buffer.from([
-			// Is this a bitmap for position and/or tilt?
-			this.position != undefined ? 0x02 : 0x01,
-			this.position || 0x00,
-			this.tilt || 0x00,
+			controlByte,
+			this.position ?? 0,
+			this.tilt ?? 0,
 		]);
 		return super.serialize();
 	}
 }
 
 export class FibaroVenetianBlindCCGet extends FibaroVenetianBlindCC {
-	public constructor(dataOrOptions: Buffer) {
-		super(dataOrOptions);
+	public constructor(
+		driver: IDriver,
+		options:
+			| CommandClassDeserializationOptions
+			| FibaroVenetianBlindCCSetOptions,
+	) {
+		super(driver, options);
 		this.fibaroCCCommand = FibaroVenetianBlindCCCommand.Get;
 	}
 }
 
 export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
-	public constructor(dataOrOptions: Buffer) {
-		super(dataOrOptions);
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
 		this.fibaroCCCommand = FibaroVenetianBlindCCCommand.Report;
 
-		// payload[0] contains a 3
-		this._position = this.payload[1];
-		this._tilt = this.payload[2];
+		validatePayload(this.payload.length >= 3);
+
+		const valueDB = this.getValueDB();
+		// When the node sends a report, payload[0] === 0b11. This is probably a
+		// bit mask for position and tilt
+		if (!!(this.payload[0] & 0b10)) {
+			this.position = this.payload[1];
+			const positionValueId = getFibaroVenetianBlindPositionValueId(
+				this.endpointIndex,
+			);
+			valueDB.setMetadata(positionValueId, {
+				...ValueMetadata.Level,
+				label: "Venetian blinds position",
+			});
+			valueDB.setValue(positionValueId, this.position);
+		}
+		if (!!(this.payload[0] & 0b01)) {
+			this.tilt = this.payload[2];
+			const tiltValueId = getFibaroVenetianBlindTiltValueId(
+				this.endpointIndex,
+			);
+			valueDB.setMetadata(tiltValueId, {
+				...ValueMetadata.Level,
+				label: "Venetian blinds tilt",
+			});
+			valueDB.setValue(tiltValueId, this.tilt);
+		}
 	}
 
-	private _position: number;
-	// FIXME: This is not a CC, so we cannot use @ccValue
-	// @ccValue()
-	// @ccValueMetadata({
-	// 	...ValueMetadata.Level,
-	// 	label: "Venetion Blinds position",
-	// })
-	public get position(): number {
-		return this._position;
-	}
-
-	private _tilt: number;
-	// @ccValue()
-	// @ccValueMetadata({
-	// 	...ValueMetadata.Level,
-	// 	label: "Venetion Blinds tilt",
-	// })
-	public get tilt(): number {
-		return this._tilt;
-	}
+	public readonly position?: number;
+	public readonly tilt?: number;
 }
