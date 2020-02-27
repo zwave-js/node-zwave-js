@@ -13,11 +13,7 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
-import {
-	FibaroCC,
-	FibaroVenetianBlindCC,
-	MANUFACTURERID_FIBARO,
-} from "./manufacturerProprietary/Fibaro";
+import { MANUFACTURERID_FIBARO } from "./manufacturerProprietary/Constants";
 
 @API(CommandClasses["Manufacturer Proprietary"])
 export class ManufacturerProprietaryCCAPI extends CCAPI {
@@ -96,6 +92,8 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			isArray(proprietaryConfig.fibaroCCs) &&
 			proprietaryConfig.fibaroCCs.includes(0x26 /* Venetian Blinds */)
 		) {
+			const FibaroVenetianBlindCC = require("./manufacturerProprietary/Fibaro")
+				.FibaroVenetianBlindCC;
 			return new FibaroVenetianBlindCC(this.driver, {
 				nodeId: this.nodeId,
 				endpoint: this.endpointIndex,
@@ -117,6 +115,6 @@ function getProprietaryCCConstructor(
 ): typeof ManufacturerProprietaryCC | undefined {
 	switch (manufacturerId) {
 		case MANUFACTURERID_FIBARO:
-			return FibaroCC;
+			return require("./manufacturerProprietary/Fibaro").FibaroCC;
 	}
 }
