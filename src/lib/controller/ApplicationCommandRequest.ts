@@ -1,6 +1,7 @@
 import { CommandClass, SinglecastCC } from "../commandclass/CommandClass";
 import { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { IDriver } from "../driver/IDriver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import {
 	FunctionType,
 	MessagePriority,
@@ -31,7 +32,7 @@ enum StatusFlags {
 }
 
 interface ApplicationCommandRequestOptions extends MessageBaseOptions {
-	command: SinglecastCC;
+	command: CommandClass;
 	frameType?: ApplicationCommandRequest["frameType"];
 	routedBusy?: boolean;
 }
@@ -77,6 +78,14 @@ export class ApplicationCommandRequest extends Message
 				nodeId,
 			}) as SinglecastCC;
 		} else {
+			// TODO: This logic is unsound
+			if (!options.command.isSinglecast()) {
+				throw new ZWaveError(
+					`ApplicationCommandRequest can only be used for singlecast CCs`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+
 			this.frameType = options.frameType ?? "singlecast";
 			this.routedBusy = !!options.routedBusy;
 			this.command = options.command;
@@ -93,7 +102,7 @@ export class ApplicationCommandRequest extends Message
 	public readonly fromForeignHomeId: boolean;
 
 	// This needs to be writable or unwrapping MultiChannelCCs crashes
-	public command: CommandClass & { nodeId: number };
+	public command: SinglecastCC;
 
 	public serialize(): Buffer {
 		const statusByte =

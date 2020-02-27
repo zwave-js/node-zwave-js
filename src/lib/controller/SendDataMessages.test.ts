@@ -47,7 +47,9 @@ function createSendDataMessage(
 }
 
 describe("lib/controller/SendDataRequest => ", () => {
-	const req = new SendDataRequest(fakeDriver, {} as any);
+	const req = new SendDataRequest(fakeDriver, {
+		command: new NoOperationCC(fakeDriver, { nodeId: 1 }),
+	});
 
 	it("should be a Message", () => {
 		expect(req).toBeInstanceOf(Message);
@@ -301,7 +303,7 @@ describe("testResponse() returns the correct ResponseRole", () => {
 			nodeId: 2,
 		});
 		const ccResponse = new BasicCCReport(fakeDriver, {
-			nodeId: ccRequest.nodeId + 1,
+			nodeId: (ccRequest.nodeId as number) + 1,
 			currentValue: 7,
 		});
 
