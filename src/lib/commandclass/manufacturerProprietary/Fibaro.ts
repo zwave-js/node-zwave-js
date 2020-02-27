@@ -111,9 +111,6 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses[
-			"Manufacturer Proprietary"
-		];
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
