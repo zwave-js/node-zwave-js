@@ -73,14 +73,14 @@ export class SendDataRequestBase extends Message {
 	}
 }
 
-interface SendDataRequestOptions<CCType extends SinglecastCC = SinglecastCC>
+interface SendDataRequestOptions<CCType extends CommandClass = CommandClass>
 	extends MessageBaseOptions {
 	command: CCType;
 	transmitOptions?: TransmitOptions;
 }
 
 @expectedResponse(testResponseForSendDataRequest)
-export class SendDataRequest<CCType extends SinglecastCC = SinglecastCC>
+export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	extends SendDataRequestBase
 	implements ICommandClassContainer {
 	public constructor(
@@ -88,6 +88,13 @@ export class SendDataRequest<CCType extends SinglecastCC = SinglecastCC>
 		options: SendDataRequestOptions<CCType>,
 	) {
 		super(driver, options);
+
+		if (!options.command.isSinglecast()) {
+			throw new ZWaveError(
+				`SendDataRequest can only be used for singlecast and broadcast CCs`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
 
 		this.command = options.command;
 		this.transmitOptions =
@@ -97,7 +104,7 @@ export class SendDataRequest<CCType extends SinglecastCC = SinglecastCC>
 	}
 
 	/** The command this message contains */
-	public command: CCType;
+	public command: SinglecastCC<CCType>;
 	/** Options regarding the transmission of the message */
 	public transmitOptions: TransmitOptions;
 
@@ -336,44 +343,48 @@ export class SendDataMulticastRequestBase extends Message {
 	}
 }
 
-interface SendDataMulticastRequestOptions<
-	CCType extends MulticastCC = MulticastCC
-> extends MessageBaseOptions {
+interface SendDataMulticastRequestOptions<CCType extends CommandClass>
+	extends MessageBaseOptions {
 	command: CCType;
 	transmitOptions?: TransmitOptions;
 }
 
 @expectedResponse(testResponseForSendDataMulticastRequest)
-export class SendDataMulticastRequest<CCType extends MulticastCC = MulticastCC>
-	extends SendDataMulticastRequestBase
-	implements ICommandClassContainer {
+export class SendDataMulticastRequest<
+	CCType extends CommandClass = CommandClass
+> extends SendDataMulticastRequestBase implements ICommandClassContainer {
 	public constructor(
 		driver: IDriver,
 		options: SendDataMulticastRequestOptions<CCType>,
 	) {
 		super(driver, options);
 
-		this.command = options.command;
-		this.transmitOptions =
-			options.transmitOptions != undefined
-				? options.transmitOptions
-				: TransmitOptions.DEFAULT;
-
-		if (this.command.nodeId.length === 0) {
+		if (!options.command.isMulticast()) {
+			throw new ZWaveError(
+				`SendDataMulticastRequest can only be used for multicast CCs`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (options.command.nodeId.length === 0) {
 			throw new ZWaveError(
 				`At least one node must be targeted`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
-		} else if (this.command.nodeId.some(n => n < 1 || n > MAX_NODES)) {
+		} else if (options.command.nodeId.some(n => n < 1 || n > MAX_NODES)) {
 			throw new ZWaveError(
 				`All node IDs must be between 1 and ${MAX_NODES}!`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
+
+		this.command = options.command;
+		this.transmitOptions =
+			options.transmitOptions != undefined
+				? options.transmitOptions
+				: TransmitOptions.DEFAULT;
 	}
 
 	/** The command this message contains */
-	public command: CCType;
+	public command: MulticastCC<CCType>;
 	/** Options regarding the transmission of the message */
 	public transmitOptions: TransmitOptions;
 
