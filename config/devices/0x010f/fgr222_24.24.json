@@ -43,6 +43,9 @@
 			"isLifeline": true
 		}
 	},
+	"proprietary": {
+		"fibaroCCs": [38 /* 0x26 (Venetian Blinds) */]
+	},
 	"paramInformation": {
 		"3": {
 			"label": "Reports type",
