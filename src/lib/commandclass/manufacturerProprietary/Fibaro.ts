@@ -11,8 +11,7 @@ import {
 } from "../CommandClass";
 import { CommandClasses } from "../CommandClasses";
 import { ManufacturerProprietaryCC } from "../ManufacturerProprietaryCC";
-
-export const MANUFACTURERID_FIBARO = 0x10f;
+import { MANUFACTURERID_FIBARO } from "./Constants";
 
 /** Returns the ValueID used to store the current venetian blind position */
 export function getFibaroVenetianBlindPositionValueId(
@@ -77,6 +76,7 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 				return new FibaroVenetianBlindCC(driver, options);
 			}
 		} else {
+			this.manufacturerId = MANUFACTURERID_FIBARO;
 		}
 	}
 
@@ -84,10 +84,11 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 	public fibaroCCCommand!: number;
 
 	public serialize(): Buffer {
-		return Buffer.concat([
+		this.payload = Buffer.concat([
 			Buffer.from([this.fibaroCCId, this.fibaroCCCommand]),
 			this.payload,
 		]);
+		return super.serialize();
 	}
 }
 
@@ -122,11 +123,20 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 		});
 
 		log.controller.logNode(node.id, {
-			message: "doing something...",
+			message: "Requesting venetian blind position and tilt...",
 			direction: "outbound",
 		});
-		// TODO: Implementation
-		const logMessage = `received response for something...`;
+		const { position, tilt } = (await this.driver.sendCommand<
+			FibaroVenetianBlindCCReport
+		>(
+			new FibaroVenetianBlindCCGet(this.driver, {
+				nodeId: this.nodeId,
+				endpoint: this.endpointIndex,
+			}),
+		))!;
+		const logMessage = `received venetian blind state:
+position: ${position}
+tilt:     ${tilt}`;
 		log.controller.logNode(node.id, {
 			message: logMessage,
 			direction: "inbound",
@@ -192,9 +202,7 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 export class FibaroVenetianBlindCCGet extends FibaroVenetianBlindCC {
 	public constructor(
 		driver: IDriver,
-		options:
-			| CommandClassDeserializationOptions
-			| FibaroVenetianBlindCCSetOptions,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
 		this.fibaroCCCommand = FibaroVenetianBlindCCCommand.Get;
