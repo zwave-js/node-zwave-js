@@ -60,6 +60,31 @@ export function getEndpointCCsValueId(endpointIndex: number): ValueID {
 	};
 }
 
+export function getCountIsDynamicValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Multi Channel"],
+		property: "countIsDynamic",
+	};
+}
+export function getIdenticalCapabilitiesValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Multi Channel"],
+		property: "identicalCapabilities",
+	};
+}
+export function getIndividualCountValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Multi Channel"],
+		property: "individualCount",
+	};
+}
+export function getAggregatedCountValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Multi Channel"],
+		property: "aggregatedCount",
+	};
+}
+
 @API(CommandClasses["Multi Channel"])
 export class MultiChannelCCAPI extends CCAPI {
 	public supportsCommand(cmd: MultiChannelCommand): Maybe<boolean> {
@@ -263,9 +288,9 @@ export class MultiChannelCC extends CommandClass {
 		return cc.encapsulated;
 	}
 
-	public async interview(): Promise<void> {
+	public async interview(complete: boolean = true): Promise<void> {
 		// Special interview procedure for legacy nodes
-		if (this.version === 1) return this.interviewV1();
+		if (this.version === 1) return this.interviewV1(complete);
 
 		const node = this.getNode()!;
 		const api = node.getEndpoint(this.endpointIndex)!.commandClasses[
@@ -411,38 +436,73 @@ supported CCs:`;
 		this.interviewComplete = true;
 	}
 
-	private async interviewV1(): Promise<void> {
-		const node = this.getNode()!;
-		const api = node.getEndpoint(this.endpointIndex)!.commandClasses[
-			"Multi Channel"
-		];
+	private async interviewV1(complete: boolean = true): Promise<void> {
+		// Only do the interview once
+		if (complete) {
+			const node = this.getNode()!;
+			const api = node.getEndpoint(this.endpointIndex)!.commandClasses[
+				"Multi Channel"
+			];
 
-		// V1 works the opposite way - we scan all CCs and remember how many
-		// endpoints they have
-		const supportedCCs = [...node.implementedCommandClasses.keys()]
-			// Don't query CCs the node only controls
-			.filter(cc => node.supportsCC(cc))
-			// Don't query CCs that want to skip the endpoint interview
-			.filter(cc => !node.createCCInstance(cc)?.skipEndpointInterview());
-		for (const ccId of supportedCCs) {
-			log.controller.logNode(node.id, {
-				message: `Querying endpoint count for CommandClass ${getEnumMemberName(
-					CommandClasses,
-					ccId,
-				)}...`,
-				direction: "outbound",
-			});
-			const endpointCount = await api.getEndpointCountV1(ccId);
-			log.controller.logNode(node.id, {
-				message: `CommandClass ${getEnumMemberName(
-					CommandClasses,
-					ccId,
-				)} has ${endpointCount} endpoints`,
-				direction: "inbound",
-			});
+			// V1 works the opposite way - we scan all CCs and remember how many
+			// endpoints they have
+			const supportedCCs = [...node.implementedCommandClasses.keys()]
+				// Don't query CCs the node only controls
+				.filter(cc => node.supportsCC(cc))
+				// Don't query CCs that want to skip the endpoint interview
+				.filter(
+					cc => !node.createCCInstance(cc)?.skipEndpointInterview(),
+				);
+			const endpointCounts = new Map<CommandClasses, number>();
+			for (const ccId of supportedCCs) {
+				log.controller.logNode(node.id, {
+					message: `Querying endpoint count for CommandClass ${getEnumMemberName(
+						CommandClasses,
+						ccId,
+					)}...`,
+					direction: "outbound",
+				});
+				const endpointCount = await api.getEndpointCountV1(ccId);
+				endpointCounts.set(ccId, endpointCount);
 
-			// TODO: Remember the capabilities of this CC/Endpoint combination
-			// TODO: Should the V1 interview be done AFTER the CCs?
+				log.controller.logNode(node.id, {
+					message: `CommandClass ${getEnumMemberName(
+						CommandClasses,
+						ccId,
+					)} has ${endpointCount} endpoints`,
+					direction: "inbound",
+				});
+			}
+
+			// Store the collected information
+			// We have only individual and no dynamic and no aggregated endpoints
+			const numEndpoints = Math.max(...endpointCounts.values());
+			node.valueDB.setValue(getCountIsDynamicValueId(), false);
+			node.valueDB.setValue(getAggregatedCountValueId(), 0);
+			node.valueDB.setValue(getIndividualCountValueId(), numEndpoints);
+			// Since we queried all CCs separately, we can assume that all
+			// endpoints have different capabilities
+			node.valueDB.setValue(getIdenticalCapabilitiesValueId(), false);
+
+			for (let endpoint = 1; endpoint <= numEndpoints; endpoint++) {
+				// Check which CCs exist on this endpoint
+				const endpointCCs = [...endpointCounts.entries()]
+					.filter(([, ccEndpoints]) => ccEndpoints <= endpoint)
+					.map(([ccId]) => ccId);
+				// Create a new capability value from the CCs
+				const capability: EndpointCapability = {
+					generic: 0 as any, // unknown
+					specific: 0 as any, // unknown
+					isDynamic: false,
+					wasRemoved: false,
+					supportedCCs: endpointCCs,
+				};
+				// And store it
+				node.valueDB.setValue(
+					getEndpointCCsValueId(endpoint),
+					capability,
+				);
+			}
 		}
 
 		// Remember that the interview is complete
