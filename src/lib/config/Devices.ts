@@ -260,7 +260,7 @@ paramInformation is not an object`,
 				if (!match) {
 					throwInvalidConfig(
 						`device`,
-						`config/devices/${filename}:
+						`config/devices/${filename}: 
 found invalid param number "${key}" in paramInformation`,
 					);
 				}
@@ -279,6 +279,17 @@ found invalid param number "${key}" in paramInformation`,
 			}
 			this.paramInformation = paramInformation;
 		}
+
+		if (definition.proprietary != undefined) {
+			if (!isObject(definition.proprietary)) {
+				throwInvalidConfig(
+					`device`,
+					`config/devices/${filename}:
+proprietary is not an object`,
+				);
+			}
+			this.proprietary = definition.proprietary;
+		}
 	}
 
 	public readonly manufacturer!: string;
@@ -292,6 +303,11 @@ found invalid param number "${key}" in paramInformation`,
 	public readonly firmwareVersion: FirmwareVersionRange;
 	public readonly associations?: ReadonlyMap<number, AssociationConfig>;
 	public readonly paramInformation?: ParamInfoMap;
+	/**
+	 * Contains manufacturer-specific support information for the
+	 * ManufacturerProprietary CC
+	 */
+	public readonly proprietary?: Record<string, unknown>;
 }
 
 export class AssociationConfig {

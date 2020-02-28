@@ -1,5 +1,6 @@
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
+import { GetControllerVersionRequest } from "../controller/GetControllerVersionMessages";
 import { RemoveFailedNodeRequest } from "../controller/RemoveFailedNodeMessages";
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { MessagePriority } from "../message/Constants";
@@ -71,13 +72,16 @@ describe("lib/driver/Transaction => ", () => {
 		};
 
 		function createTransactionForNode(
-			nodeId: number,
+			nodeId: number | undefined,
 			priority: MessagePriority = MessagePriority.NodeQuery,
 		) {
 			const driver = (driverMock as any) as Driver;
-			const msg = new SendDataRequest(driver, {
-				command: new NoOperationCC(driver, { nodeId }),
-			});
+			const msg =
+				nodeId != undefined
+					? new SendDataRequest(driver, {
+							command: new NoOperationCC(driver, { nodeId }),
+					  })
+					: new GetControllerVersionRequest(driver);
 			const ret = new Transaction(
 				driver,
 				msg,
