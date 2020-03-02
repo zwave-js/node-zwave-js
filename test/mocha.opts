@@ -1,6 +1,0 @@
---require test/mocha.setup.js
---require ts-node/register
---require source-map-support/register
---require reflect-metadata
---watch-extensions ts
-src/**/*.test.ts
