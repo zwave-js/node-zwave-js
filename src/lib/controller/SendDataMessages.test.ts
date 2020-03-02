@@ -353,6 +353,7 @@ describe("testResponse() returns the correct ResponseRole", () => {
 				currentValue: 7,
 			}),
 		);
+		ccResponse.endpointIndex = 2;
 
 		const msgRequest = new SendDataRequest(fakeDriver, {
 			command: ccRequest,
@@ -380,6 +381,7 @@ describe("testResponse() returns the correct ResponseRole", () => {
 				endpoint: 2,
 			}),
 		);
+		ccResponse.endpointIndex = 2;
 
 		const msgRequest = new SendDataRequest(fakeDriver, {
 			command: ccRequest,
@@ -449,6 +451,7 @@ describe("testResponse() returns the correct ResponseRole", () => {
 				currentValue: 7,
 			}),
 		]);
+		ccResponse.endpointIndex = 2;
 
 		const msgRequest = new SendDataRequest(fakeDriver, {
 			command: ccRequest,
@@ -459,6 +462,29 @@ describe("testResponse() returns the correct ResponseRole", () => {
 		});
 
 		expect(msgRequest.testResponse(msgResponse)).toBe("unexpected");
+	});
+
+	it("MultiChannelCC/BasicCCGet (Multicast) => TransmitReport = final", () => {
+		const ccRequest = MultiChannelCC.encapsulate(
+			fakeDriver,
+			new BasicCCGet(fakeDriver, {
+				nodeId: 2,
+				endpoint: 2,
+			}),
+		);
+		// A multicast request never expects a response
+		ccRequest.destination = [1, 2, 3];
+
+		const msgRequest = new SendDataRequest(fakeDriver, {
+			command: ccRequest,
+			callbackId: 8,
+		});
+		const msgResponse = new SendDataRequestTransmitReport(fakeDriver, {
+			transmitStatus: TransmitStatus.OK,
+			callbackId: msgRequest.callbackId,
+		});
+
+		expect(msgRequest.testResponse(msgResponse)).toBe("final");
 	});
 
 	it("SupervisionCC/BasicCCSet => TransmitReport = confirmation", () => {

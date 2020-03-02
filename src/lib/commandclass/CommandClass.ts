@@ -794,7 +794,7 @@ export function isDynamicCCResponse(
 export function isCCResponsePredicate(
 	fn: DynamicCCResponse | CCResponsePredicate,
 ): fn is CCResponsePredicate {
-	return fn.length === 2;
+	return fn.length === 3;
 }
 
 /**

@@ -18,6 +18,7 @@ import {
 	CCCommand,
 	CCCommandOptions,
 	ccKeyValuePair,
+	CCResponsePredicate,
 	ccValue,
 	CommandClass,
 	commandClass,
@@ -851,21 +852,30 @@ interface MultiChannelCCCommandEncapsulationOptions extends CCCommandOptions {
 	destination: MultiChannelCCDestination;
 }
 
-const getResponseForCommandEncapsulation: DynamicCCResponse = (
-	sent: MultiChannelCCCommandEncapsulation,
+const testResponseForCommandEncapsulation: CCResponsePredicate<MultiChannelCCCommandEncapsulation> = (
+	sent,
+	received,
+	isPositiveTransmitReport,
 ) => {
 	// SDS13783: A receiving node MAY respond to a Multi Channel encapsulated command if the Destination
 	// End Point field specifies a single End Point. In that case, the response MUST be Multi Channel
 	// encapsulated.
 	// A receiving node MUST NOT respond to a Multi Channel encapsulated command if the
 	// Destination End Point field specifies multiple End Points via bit mask addressing.
-	return typeof sent.destination === "number"
-		? MultiChannelCCCommandEncapsulation
-		: undefined;
+	if (typeof sent.destination === "number") {
+		return received instanceof MultiChannelCCCommandEncapsulation &&
+			sent.destination === received.endpointIndex
+			? "checkEncapsulated"
+			: isPositiveTransmitReport
+			? "checkEncapsulated"
+			: "unexpected";
+	} else {
+		return isPositiveTransmitReport ? "final" : "unexpected";
+	}
 };
 
 @CCCommand(MultiChannelCommand.CommandEncapsulation)
-@expectedCCResponse(getResponseForCommandEncapsulation)
+@expectedCCResponse(testResponseForCommandEncapsulation)
 export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	public constructor(
 		driver: IDriver,
