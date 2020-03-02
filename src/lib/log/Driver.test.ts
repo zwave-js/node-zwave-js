@@ -4,18 +4,10 @@ import colors from "ansi-colors";
 import MockDate from "mockdate";
 import winston from "winston";
 import { createEmptyMockDriver } from "../../../test/mocks";
-import {
-	assertLogInfo,
-	assertMessage,
-	SpyTransport,
-} from "../../../test/SpyTransport";
-import { Driver } from "../driver/Driver";
+import { assertLogInfo, assertMessage, SpyTransport } from "../../../test/SpyTransport";
+import type { Driver } from "../driver/Driver";
 import { Transaction } from "../driver/Transaction";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
+import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
 import { Message } from "../message/Message";
 import { DRIVER_LABEL } from "./Driver";
 import log from "./index";

@@ -1,8 +1,5 @@
 import { entries } from "alcalzone-shared/objects";
-import {
-	CommandClass,
-	Constructable,
-} from "../src/lib/commandclass/CommandClass";
+import type { CommandClass, Constructable } from "../src/lib/commandclass/CommandClass";
 import { SendDataRequest } from "../src/lib/controller/SendDataMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../src/lib/error/ZWaveError";
 

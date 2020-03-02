@@ -1,6 +1,6 @@
-import { ZWaveNode } from "../../lib/node/Node";
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertCC } from "../../../test/util";
+import { ZWaveNode } from "../../lib/node/Node";
 import { loadManufacturers } from "../config/Manufacturers";
 import type { Driver } from "../driver/Driver";
 import { CommandClass, getCommandClass } from "./CommandClass";
@@ -29,7 +29,7 @@ describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 
 	it("should deserialize correctly", () => {
 		const deserialized = CommandClass.from(fakeDriver, {
-			nodeId: cc.nodeId,
+			nodeId: cc.nodeId as number,
 			data: serialized,
 		});
 		expect(deserialized).toBeInstanceOf(ManufacturerSpecificCC);

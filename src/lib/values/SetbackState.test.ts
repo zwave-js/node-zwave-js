@@ -7,7 +7,9 @@ import {
 describe("lib/values/SetbackState", () => {
 	describe("encodeSetbackState()", () => {
 		it("should return the defined values for the special states", () => {
-			for (const state of Object.keys(setbackSpecialStateValues)) {
+			for (const state of Object.keys(
+				setbackSpecialStateValues,
+			) as (keyof typeof setbackSpecialStateValues)[]) {
 				expect(encodeSetbackState(state as any)).toBe(
 					setbackSpecialStateValues[state],
 				);
@@ -23,7 +25,9 @@ describe("lib/values/SetbackState", () => {
 
 	describe("decodeSetbackState()", () => {
 		it("should return the defined values for the special states", () => {
-			for (const state of Object.keys(setbackSpecialStateValues)) {
+			for (const state of Object.keys(
+				setbackSpecialStateValues,
+			) as (keyof typeof setbackSpecialStateValues)[]) {
 				expect(
 					decodeSetbackState(setbackSpecialStateValues[state]),
 				).toBe(state);
