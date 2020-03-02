@@ -34,7 +34,7 @@
     "@actions/github": "^2.1.1",
     "@alcalzone/release-script": "^1.1.1",
     "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.8.4",
+    "@babel/core": "git+https://github.com/spatialsys/spatialwebapp-gitpkg-registry.git#babel-core-v7.8.4-gitpkg",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-decorators": "^7.8.3",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
