@@ -5,33 +5,19 @@ import type { CommandClassInfo } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
-import {
-	ApplicationUpdateRequest,
-	ApplicationUpdateTypes,
-} from "../controller/ApplicationUpdateRequest";
-import {
-	GetNodeProtocolInfoRequest,
-	GetNodeProtocolInfoResponse,
-} from "../controller/GetNodeProtocolInfoMessages";
-import {
-	GetRoutingInfoRequest,
-	GetRoutingInfoResponse,
-} from "../controller/GetRoutingInfoMessages";
+import { ApplicationUpdateRequest, ApplicationUpdateTypes } from "../controller/ApplicationUpdateRequest";
+import { GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "../controller/GetNodeProtocolInfoMessages";
+import { GetRoutingInfoRequest, GetRoutingInfoResponse } from "../controller/GetRoutingInfoMessages";
 import { SendDataRequest } from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { ValueMetadata } from "../values/Metadata";
-import {
-	BasicDeviceClasses,
-	DeviceClass,
-	GenericDeviceClass,
-	GenericDeviceClasses,
-	SpecificDeviceClass,
-} from "./DeviceClass";
-import { InterviewStage, NodeStatus } from "./Node";
-import { ZWaveNode, ZWaveNodeEvents } from "./Node";
+import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, GenericDeviceClasses, SpecificDeviceClass } from "./DeviceClass";
+import { ZWaveNode } from "./Node";
 import type { NodeUpdatePayload } from "./NodeInfo";
 import { RequestNodeInfoRequest } from "./RequestNodeInfoMessages";
+import { InterviewStage, NodeStatus } from "./Types";
+import type { ZWaveNodeEvents } from "./Types";
 import { ValueDB, ValueID } from "./ValueDB";
 
 /** This is an ugly hack to be able to test the private methods without resorting to @internal */
@@ -75,6 +61,13 @@ class TestNode extends ZWaveNode {
 }
 
 describe("lib/node/Node", () => {
+	beforeAll(async () => {
+		// Load all CCs manually to populate the metadata
+		await import("../commandclass/BatteryCC");
+		await import("../commandclass/ThermostatSetpointCC");
+		await import("../commandclass/VersionCC");
+	});
+
 	describe("constructor", () => {
 		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 		it("stores the given Node ID", () => {

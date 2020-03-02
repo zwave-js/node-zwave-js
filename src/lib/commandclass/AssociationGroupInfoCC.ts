@@ -5,10 +5,10 @@ import type { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
-import { AssociationCC } from "./AssociationCC";
+import type { AssociationCC } from "./AssociationCC";
 import { API, CCCommand, CCCommandOptions, ccKeyValuePair, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, CommandClassOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion, parseCCId } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
-import { MultiChannelAssociationCC } from "./MultiChannelAssociationCC";
+import type { MultiChannelAssociationCC } from "./MultiChannelAssociationCC";
 
 // @noSetValueAPI This CC only has get-type commands
 
@@ -368,11 +368,11 @@ export class AssociationGroupInfoCC extends CommandClass {
 		// First query the Multi Channel Association CC
 		return (
 			endpoint
-				.createCCInstanceUnsafe(MultiChannelAssociationCC)
+				.createCCInstanceUnsafe<MultiChannelAssociationCC>(CommandClasses["Multi Channel Association"])
 				?.getGroupCountCached() ||
 			// Then the Association CC
 			endpoint
-				.createCCInstanceUnsafe(AssociationCC)
+				.createCCInstanceUnsafe<AssociationCC>(CommandClasses.Association)
 				?.getGroupCountCached() ||
 			// And fall back to 0
 			0

@@ -1,7 +1,7 @@
 import winston from "winston";
 import { CommandClasses } from "../commandclass/CommandClasses";
-import { InterviewStage } from "../node/Node";
 import type { ZWaveNode } from "../node/Node";
+import { InterviewStage } from "../node/Types";
 import type { ValueAddedArgs, ValueID, ValueRemovedArgs, ValueUpdatedArgs } from "../node/ValueDB";
 import { createLogTransports, DataDirection, getDirectionPrefix, getNodeTag, isLoglevelVisible, tagify, ZWaveLogger } from "./shared";
 
