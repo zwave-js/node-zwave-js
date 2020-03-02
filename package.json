@@ -82,7 +82,7 @@
     "yargs": "^15.1.0"
   },
   "dependencies": {
-    "@sentry/integrations": "^5.12.4",
+    "@sentry/integrations": "^5.13.0",
     "@sentry/node": "^5.13.1",
     "alcalzone-shared": "^2.2.0",
     "ansi-colors": "^4.1.1",
