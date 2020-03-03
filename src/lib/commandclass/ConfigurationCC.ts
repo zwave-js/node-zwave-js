@@ -33,6 +33,7 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
+	CCResponsePredicate,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -880,12 +881,26 @@ export class ConfigurationCCReport extends ConfigurationCC {
 	}
 }
 
+const testResponseForConfigurationGet: CCResponsePredicate<ConfigurationCCGet> = (
+	sent,
+	received,
+	isPositiveTransmitReport,
+) => {
+	// We expect a Configuration Report that matches the requested parameter
+	return received instanceof ConfigurationCCReport &&
+		sent.parameter === received.parameter
+		? "final"
+		: isPositiveTransmitReport
+		? "confirmation"
+		: "unexpected";
+};
+
 interface ConfigurationCCGetOptions extends CCCommandOptions {
 	parameter: number;
 }
 
 @CCCommand(ConfigurationCommand.Get)
-@expectedCCResponse(ConfigurationCCReport)
+@expectedCCResponse(testResponseForConfigurationGet)
 export class ConfigurationCCGet extends ConfigurationCC {
 	public constructor(
 		driver: IDriver,
