@@ -4,6 +4,7 @@ import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import { NodeStatus } from "../node/INode";
 import { ZWaveNode } from "../node/Node";
+import { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe } from "../values/Primitive";
@@ -28,6 +29,13 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
+
+export function getWakeUpIntervalValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Wake Up"],
+		property: "wakeUpInterval",
+	};
+}
 
 export enum WakeUpCommand {
 	IntervalSet = 0x04,
