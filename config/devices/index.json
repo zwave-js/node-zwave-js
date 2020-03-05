@@ -202,16 +202,6 @@
     },
     {
         "manufacturerId": "0x0002",
-        "productType": "0x0003",
-        "productId": "0x8010",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x0002/014g0160.json"
-    },
-    {
-        "manufacturerId": "0x0002",
         "productType": "0x0002",
         "productId": "0x400a",
         "firmwareVersion": {
@@ -572,6 +562,16 @@
     },
     {
         "manufacturerId": "0x000c",
+        "productType": "0x4744",
+        "productId": "0x3032",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x000c/hs-wd100.json"
+    },
+    {
+        "manufacturerId": "0x000c",
         "productType": "0x4447",
         "productId": "0x3036",
         "firmwareVersion": {
@@ -609,26 +609,6 @@
             "max": "255.255"
         },
         "filename": "0x000c/hs-ws200.json"
-    },
-    {
-        "manufacturerId": "0x000c",
-        "productType": "0x4447",
-        "productId": "0x3034",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x000c/wd-100.json"
-    },
-    {
-        "manufacturerId": "0x000c",
-        "productType": "0x4744",
-        "productId": "0x3032",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x000c/wd-100.json"
     },
     {
         "manufacturerId": "0x0010",
@@ -5511,36 +5491,6 @@
         "filename": "0x0097/pluginswitch.json"
     },
     {
-        "manufacturerId": "0x0097",
-        "productType": "0x6131",
-        "productId": "0x4101",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x0097/wtrfid.json"
-    },
-    {
-        "manufacturerId": "0x0097",
-        "productType": "0x6131",
-        "productId": "0x4501",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x0097/wtrfid.json"
-    },
-    {
-        "manufacturerId": "0x0097",
-        "productType": "0x6131",
-        "productId": "0x5501",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x0097/wtrfid.json"
-    },
-    {
         "manufacturerId": "0x0098",
         "productType": "0x6401",
         "productId": "0x0015",
@@ -6439,26 +6389,6 @@
             "max": "255.255"
         },
         "filename": "0x010e/umv3-btz.json"
-    },
-    {
-        "manufacturerId": "0x010f",
-        "productType": "0x0502",
-        "productId": "0x1000",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x010f/09813.json"
-    },
-    {
-        "manufacturerId": "0x010f",
-        "productType": "0x2004",
-        "productId": "0x04a4",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x010f/09813.json"
     },
     {
         "manufacturerId": "0x010f",
@@ -9608,16 +9538,6 @@
             "min": "0.0",
             "max": "255.255"
         },
-        "filename": "0x0131/hs1sa-z.json"
-    },
-    {
-        "manufacturerId": "0x0131",
-        "productType": "0x8002",
-        "productId": "0x1000",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
         "filename": "0x0131/hs1sa.json"
     },
     {
@@ -10119,26 +10039,6 @@
             "max": "255.255"
         },
         "filename": "0x0147/razberry_controller_2016_zwave_1.1.json"
-    },
-    {
-        "manufacturerId": "0x0147",
-        "productType": "0x0002",
-        "productId": "0x0003",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x0147/shrm10000.json"
-    },
-    {
-        "manufacturerId": "0x0147",
-        "productType": "0x0400",
-        "productId": "0x0002",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x0147/shrm10000.json"
     },
     {
         "manufacturerId": "0x0148",
@@ -10992,16 +10892,6 @@
     },
     {
         "manufacturerId": "0x0157",
-        "productType": "0x0003",
-        "productId": "0x0512",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x0157/gr-105.json"
-    },
-    {
-        "manufacturerId": "0x0157",
         "productType": "0x0005",
         "productId": "0x0003",
         "firmwareVersion": {
@@ -11492,36 +11382,6 @@
     },
     {
         "manufacturerId": "0x015f",
-        "productType": "0x0000",
-        "productId": "0x0000",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x015f/mh-a100-co.json"
-    },
-    {
-        "manufacturerId": "0x015f",
-        "productType": "0x0000",
-        "productId": "0x0000",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x015f/mh-a100-co2.json"
-    },
-    {
-        "manufacturerId": "0x015f",
-        "productType": "0x0000",
-        "productId": "0x0000",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x015f/mh-a100-sk.json"
-    },
-    {
-        "manufacturerId": "0x015f",
         "productType": "0x0301",
         "productId": "0x1001",
         "firmwareVersion": {
@@ -11809,16 +11669,6 @@
             "max": "255.255"
         },
         "filename": "0x015f/mh10-pm2_5-wa_wd.json"
-    },
-    {
-        "manufacturerId": "0x015f",
-        "productType": "0x0000",
-        "productId": "0x0000",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x015f/mh3700-hp.json"
     },
     {
         "manufacturerId": "0x015f",
@@ -12131,16 +11981,6 @@
         "filename": "0x0166/sw-zcs-1.json"
     },
     {
-        "manufacturerId": "0x0166",
-        "productType": "0x2007",
-        "productId": "0x0706",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x0166/swiidplug.json"
-    },
-    {
         "manufacturerId": "0x0169",
         "productType": "0x0001",
         "productId": "0x0001",
@@ -12309,6 +12149,26 @@
             "max": "255.255"
         },
         "filename": "0x0173/lgzw.json"
+    },
+    {
+        "manufacturerId": "0x0175",
+        "productType": "0x0502",
+        "productId": "0x1000",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x0175/09813.json"
+    },
+    {
+        "manufacturerId": "0x0175",
+        "productType": "0x2004",
+        "productId": "0x04a4",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x0175/09813.json"
     },
     {
         "manufacturerId": "0x0175",
@@ -12889,16 +12749,6 @@
             "max": "255.255"
         },
         "filename": "0x0208/hkzw_so03.json"
-    },
-    {
-        "manufacturerId": "0x0208",
-        "productType": "0x0101",
-        "productId": "0x0005",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x0208/pid15654.json"
     },
     {
         "manufacturerId": "0x0208",
@@ -14719,16 +14569,6 @@
             "max": "255.255"
         },
         "filename": "0x0330/heatit_z-push_button_8.json"
-    },
-    {
-        "manufacturerId": "0x0330",
-        "productType": "0x0300",
-        "productId": "0xa305",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x0330/heatit_z_push_button_8.json"
     },
     {
         "manufacturerId": "0x0330",
