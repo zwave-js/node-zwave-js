@@ -1410,8 +1410,9 @@ version:               ${this.version}`;
 			// The wakeup interval is specified in seconds. Also give 5s tolerance to avoid
 			// unnecessary queries since there might be some delay
 			if ((now - this.lastWakeUp) / 1000 > wakeUpInterval + 5) {
-				// Don't throw if there's an error
-				this.commandClasses["Wake Up"].getInterval().catch(() => {});
+				this.commandClasses["Wake Up"].getInterval().catch(() => {
+					// Don't throw if there's an error
+				});
 			}
 		}
 		this.lastWakeUp = now;
