@@ -27,7 +27,11 @@ import {
 	getSceneIdValueID,
 	SceneActivationCCSet,
 } from "../commandclass/SceneActivationCC";
-import { WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
+import {
+	getWakeUpIntervalValueId,
+	WakeUpCC,
+	WakeUpCCWakeUpNotification,
+} from "../commandclass/WakeUpCC";
 import { DeviceConfig, lookupDevice } from "../config/Devices";
 import { lookupNotification } from "../config/Notifications";
 import {
@@ -1076,6 +1080,9 @@ version:               ${this.version}`;
 		// SDS14223 Unless unsolicited <XYZ> Report Commands are received,
 		// a controlling node MUST probe the current values when the
 		// supporting node issues a Wake Up Notification Command for sleeping nodes.
+
+		// This is not the handler for wakeup notifications, but some legacy devices send this
+		// message whenever there's an update
 		if (this.requiresManualValueRefresh()) {
 			log.controller.logNode(this.nodeId, {
 				message: `Node does not send unsolicited updates, refreshing actuator and sensor values...`,
@@ -1381,6 +1388,9 @@ version:               ${this.version}`;
 		});
 	}
 
+	/** The timestamp of the last received wakeup notification */
+	private lastWakeUp: number | undefined;
+
 	/** Handles the receipt of a Wake Up notification */
 	private handleWakeUpNotification(): void {
 		log.controller.logNode(this.id, {
@@ -1388,6 +1398,24 @@ version:               ${this.version}`;
 			direction: "inbound",
 		});
 		this.setAwake(true);
+
+		// From the specs:
+		// A controlling node SHOULD read the Wake Up Interval of a supporting node when the delays between
+		// Wake Up periods are larger than what was last set at the supporting node.
+		const now = Date.now();
+		if (this.lastWakeUp) {
+			// we've already measured the wake up interval, so we can check whether a refresh is necessary
+			const wakeUpInterval =
+				this.getValue<number>(getWakeUpIntervalValueId()) ?? 0;
+			// The wakeup interval is specified in seconds. Also give 5s tolerance to avoid
+			// unnecessary queries since there might be some delay
+			if ((now - this.lastWakeUp) / 1000 > wakeUpInterval + 5) {
+				this.commandClasses["Wake Up"].getInterval().catch(() => {
+					// Don't throw if there's an error
+				});
+			}
+		}
+		this.lastWakeUp = now;
 	}
 
 	/** Handles the receipt of a BasicCC Set or Report */
