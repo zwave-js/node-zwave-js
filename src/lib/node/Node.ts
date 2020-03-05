@@ -9,6 +9,7 @@ import {
 	CentralSceneKeys,
 	getSceneValueId,
 } from "../commandclass/CentralSceneCC";
+import { ClockCCReport } from "../commandclass/ClockCC";
 import {
 	CommandClass,
 	CommandClassInfo,
@@ -1267,6 +1268,8 @@ version:               ${this.version}`;
 			return this.handleNotificationReport(command);
 		} else if (command instanceof SceneActivationCCSet) {
 			return this.handleSceneActivationSet(command);
+		} else if (command instanceof ClockCCReport) {
+			return this.handleClockReport(command);
 		}
 
 		// Ignore all commands that don't need to be handled
@@ -1648,6 +1651,39 @@ version:               ${this.version}`;
 			);
 		}, command.dimmingDuration?.toMilliseconds() ?? 0).unref();
 		// Unref'ing long running timeouts allows to quit the application before the timeout elapses
+	}
+
+	private handleClockReport(command: ClockCCReport): void {
+		// A Z-Wave Plus node SHOULD issue a Clock Report Command via the Lifeline Association Group if they
+		// suspect to have inaccurate time and/or weekdays (e.g. after battery removal).
+		// A controlling node SHOULD compare the received time and weekday with its current time and set the
+		// time again at the supporting node if a deviation is observed (e.g. different weekday or more than a
+		// minute difference)
+		const now = new Date();
+		// local time
+		const hours = now.getHours();
+		const minutes = now.getMinutes();
+		let weekday = now.getDay();
+		if (weekday === 0) weekday = 7;
+
+		if (
+			command.weekday !== weekday ||
+			command.hour !== hours ||
+			command.minute !== minutes
+		) {
+			const endpoint = command.getEndpoint();
+			if (!endpoint) return;
+
+			log.controller.logNode(
+				this.nodeId,
+				`detected a deviation of the node's clock, updating it...`,
+			);
+			endpoint.commandClasses.Clock.set(hours, minutes, weekday).catch(
+				() => {
+					// Don't throw when the update fails
+				},
+			);
+		}
 	}
 
 	/**
