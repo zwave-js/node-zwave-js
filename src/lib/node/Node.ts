@@ -1662,7 +1662,13 @@ version:               ${this.version}`;
 		const now = new Date();
 		// local time
 		const hours = now.getHours();
-		const minutes = now.getMinutes();
+		let minutes = now.getMinutes();
+		// A sending node knowing the current time with seconds precision SHOULD round its
+		// current time to the nearest minute when sending this command.
+		if (now.getSeconds() >= 30) {
+			minutes = (minutes + 1) % 60;
+		}
+		// Sunday is 0 in JS, but 7 in Z-Wave
 		let weekday = now.getDay();
 		if (weekday === 0) weekday = 7;
 
