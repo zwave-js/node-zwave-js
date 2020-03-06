@@ -9,6 +9,8 @@
 * Config files may now specify manufacturer proprietary parameters. This can be used to enable certain manufacturer proprietary commands
 * Completed support for the `Fibaro Venetian Blind CC`
 * Added support for some legacy devices by implementing `Multi Instance CC` (version 1 of the `Multi Channel CC`)
+* When the wake up interval of a device seems to be longer than configured, the current interval is now re-queried
+* Upon receipt of a `ClockCCReport` which deviates from the controller's clock, the sending node's clock setting now gets updated
 
 ### Bugfixes
 * Fixed a compilation issue regarding `Send Data` message arguments
@@ -17,6 +19,7 @@
 
 ### Configuration updates
 * Updated `ZHC5002` configuration for firmware versions >= 2.02
+* Removed a bunch of duplicate and incomplete configuration files
 
 ## 2.14.0 (2020-02-23)
 ### Features
