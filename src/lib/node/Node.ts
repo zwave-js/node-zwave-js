@@ -17,6 +17,7 @@ import {
 } from "../commandclass/CommandClass";
 import {
 	actuatorCCs,
+	applicationCCs,
 	CommandClasses,
 	getCCName,
 	sensorCCs,
@@ -478,7 +479,37 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 				}
 			}
 		}
-		return ret;
+
+		// Application command classes of the Root Device capabilities that are also advertised by at
+		// least one End Point SHOULD be filtered out by controlling nodes before presenting the functionalities
+		// via service discovery mechanisms like mDNS or to users in a GUI.
+		return this.filterRootApplicationCCValueIDs(ret);
+	}
+
+	/**
+	 * Removes all Value IDs from an array that belong to a root endpoint and have a corresponding
+	 * Value ID on a non-root endpoint
+	 */
+	private filterRootApplicationCCValueIDs(
+		allValueIds: TranslatedValueID[],
+	): TranslatedValueID[] {
+		return allValueIds.filter(vid => {
+			// Non-root endpoint values don't need to be filtered
+			if (!!vid.endpoint) return true;
+			// Non-application CCs don't need to be filtered
+			if (!applicationCCs.includes(vid.commandClass)) return true;
+			// Filter out root values if an identical value ID exists for another endpoint
+			return allValueIds.some(
+				other =>
+					// same CC
+					other.commandClass === vid.commandClass &&
+					// non-root endpoint
+					!!other.endpoint &&
+					// same property and key
+					other.property === vid.property &&
+					other.propertyKey === vid.propertyKey,
+			);
+		});
 	}
 
 	/**
