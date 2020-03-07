@@ -2,7 +2,7 @@
 import { Driver } from "../";
 
 // @ts-ignore
-const driver = new Driver("COM5").once("driver ready", async () => {
+const driver = new Driver("COM4").once("driver ready", async () => {
 	// console.log(`sending application info...`);
 	// // A list of all CCs the controller will respond to
 	// const supportedCCs = [CommandClasses.Time];

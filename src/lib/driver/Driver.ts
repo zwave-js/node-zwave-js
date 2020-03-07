@@ -47,6 +47,7 @@ import {
 	isTransmitReport,
 	SendDataMulticastRequest,
 	SendDataRequest,
+	SendDataRequestTransmitReport,
 	TransmitStatus,
 } from "../controller/SendDataMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -983,7 +984,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			switch (responseRole) {
 				case "confirmation": {
 					// When a node has received the message, it confirms the receipt with a SendDataRequest
-					if (msg instanceof SendDataRequest) {
+					if (msg instanceof SendDataRequestTransmitReport) {
 						// As per SDS11846, start a timeout for the expected response
 						this.currentTransaction.computeRTT();
 						const msRTT = this.currentTransaction.rtt / 1e6;
