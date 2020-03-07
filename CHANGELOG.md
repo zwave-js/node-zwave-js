@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Send data transmit reports for singlecast messages are detected correctly again
+
 ## 2.15.0 (2020-03-07)
 ### Featues
 * Config files may now specify manufacturer proprietary parameters. This can be used to enable certain manufacturer proprietary commands
