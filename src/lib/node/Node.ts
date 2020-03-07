@@ -924,7 +924,6 @@ version:               ${this.version}`;
 	protected async loadDeviceConfig(): Promise<void> {
 		// But the configuration definitions might change
 		if (
-			!this.isControllerNode() &&
 			this.manufacturerId != undefined &&
 			this.productType != undefined &&
 			this.productId != undefined
@@ -1244,6 +1243,12 @@ version:               ${this.version}`;
 
 	/** Overwrites the reported configuration with information from a config file */
 	protected async overwriteConfig(): Promise<void> {
+		if (this.isControllerNode()) {
+			// The device config was not loaded prior to this step because the Version CC is not interviewed.
+			// Therefore do it here.
+			await this.loadDeviceConfig();
+		}
+
 		if (this.deviceConfig) {
 			// TODO: Override stuff
 		}

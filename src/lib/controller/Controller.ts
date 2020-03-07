@@ -6,6 +6,14 @@ import { composeObject } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
 import { CommandClasses } from "../commandclass/CommandClasses";
+import {
+	getManufacturerIdValueId,
+	getManufacturerIdValueMetadata,
+	getProductIdValueId,
+	getProductIdValueMetadata,
+	getProductTypeValueId,
+	getProductTypeValueMetadata,
+} from "../commandclass/ManufacturerSpecificCC";
 import { Driver, RequestHandler } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
@@ -363,6 +371,27 @@ export class ZWaveController extends EventEmitter {
 		for (const nodeId of initData.nodeIds) {
 			this._nodes.set(nodeId, new ZWaveNode(nodeId, this.driver));
 		}
+
+		// Set manufacturer information for the controller node
+		const controllerValueDB = this._nodes.get(this._ownNodeId)!.valueDB;
+		controllerValueDB.setValue(
+			getManufacturerIdValueId(),
+			getManufacturerIdValueMetadata(),
+		);
+		controllerValueDB.setValue(
+			getProductTypeValueId(),
+			getProductTypeValueMetadata(),
+		);
+		controllerValueDB.setValue(
+			getProductIdValueId(),
+			getProductIdValueMetadata(),
+		);
+		controllerValueDB.setValue(
+			getManufacturerIdValueId(),
+			this._manufacturerId,
+		);
+		controllerValueDB.setValue(getProductTypeValueId(), this._productType);
+		controllerValueDB.setValue(getProductIdValueId(), this._productId);
 
 		if (
 			this.type !== ZWaveLibraryTypes["Bridge Controller"] &&
