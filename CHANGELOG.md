@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.15.2 (2020-03-07)
 ### Bugfixes
 * Fixed the logic for filtering out root endpoint values
 
