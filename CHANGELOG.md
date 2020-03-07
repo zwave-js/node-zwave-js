@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed the logic for filtering out root endpoint values
+
 ## 2.15.1 (2020-03-07)
 ### Bugfixes
 * Send data transmit reports for singlecast messages are detected correctly again

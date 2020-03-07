@@ -499,7 +499,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 			// Non-application CCs don't need to be filtered
 			if (!applicationCCs.includes(vid.commandClass)) return true;
 			// Filter out root values if an identical value ID exists for another endpoint
-			return allValueIds.some(
+			const valueExistsOnAnotherEndpoint = allValueIds.some(
 				other =>
 					// same CC
 					other.commandClass === vid.commandClass &&
@@ -509,6 +509,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 					other.property === vid.property &&
 					other.propertyKey === vid.propertyKey,
 			);
+			return !valueExistsOnAnotherEndpoint;
 		});
 	}
 
