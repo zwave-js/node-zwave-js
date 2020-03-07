@@ -11,11 +11,13 @@
 * Added support for some legacy devices by implementing `Multi Instance CC` (version 1 of the `Multi Channel CC`)
 * When the wake up interval of a device seems to be longer than configured, the current interval is now re-queried
 * Upon receipt of a `ClockCCReport` which deviates from the controller's clock, the sending node's clock setting now gets updated
+* Value IDs of the root endpoint which have a corresponding value on another endpoint are now filtered out
 
 ### Bugfixes
 * Fixed a compilation issue regarding `Send Data` message arguments
 * When testing potential responses of Multi Channel requests, the response's source endpoint is now checked
 * When testing potential responses of `ConfigurationGet` requests, the response's parameter number is now checked
+* The device config for the controller node now gets loaded if possible
 
 ### Configuration updates
 * Updated `ZHC5002` configuration for firmware versions >= 2.02
