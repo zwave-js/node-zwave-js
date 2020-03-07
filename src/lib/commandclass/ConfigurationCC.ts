@@ -10,7 +10,7 @@ import type { CacheMetadata, CacheValue } from "../values/Cache";
 import { ValueMetadata, ValueMetadataBase } from "../values/Metadata";
 import { encodeBitMask, getIntegerLimits, getMinIntegerSize, Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI, SetValueImplementation, SET_VALUE, throwUnsupportedProperty, throwUnsupportedPropertyKey, throwWrongValueType } from "./API";
-import { API, CCCommand, CCCommandOptions, CommandClass, commandClass, CommandClassDeserializationOptions, CommandClassOptions, DynamicCCResponse, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import { API, CCCommand, CCCommandOptions, CCResponsePredicate, CommandClass, commandClass, CommandClassDeserializationOptions, CommandClassOptions, DynamicCCResponse, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum ConfigurationCommand {
@@ -165,17 +165,23 @@ export class ConfigurationCCAPI extends CCAPI {
 	 */
 	public async get(
 		parameter: number,
-		valueBitMask?: number,
+		options?: {
+			valueBitMask?: number;
+			allowUnexpectedResponse?: boolean;
+		},
 	): Promise<ConfigValue | undefined> {
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Get,
 		);
 
+		const { valueBitMask, allowUnexpectedResponse } = options ?? {};
+
 		const cc = new ConfigurationCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
 			parameter,
+			allowUnexpectedResponse,
 		});
 		try {
 			const response = (await this.driver.sendCommand<
@@ -383,7 +389,12 @@ export class ConfigurationCCAPI extends CCAPI {
 				direction: "outbound",
 			});
 			try {
-				originalValue = await this.get(param);
+				originalValue = await this.get(param, {
+					// When requesting a non-existing parameter, a node SHOULD respond with the
+					// first available parameter. We use this for the first param only,
+					// because delayed responses might otherwise confuse the interview process
+					allowUnexpectedResponse: param === 1,
+				});
 				if (originalValue != undefined) {
 					const logMessage = `  Param ${param}:
     readable  = true
@@ -456,19 +467,20 @@ export class ConfigurationCC extends CommandClass {
 						direction: "outbound",
 					});
 					// ... at least try to
-					try {
-						await api.get(param.parameter);
-					} catch (e) {
-						if (
-							e instanceof ZWaveError &&
-							e.code ===
-								ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber
-						) {
-							// ignore, we don't want to cancel the interview just
-							// because one configuration report was received out of sequence
-						} else {
-							throw e;
-						}
+					const paramValue = await api.get(param.parameter);
+					if (typeof paramValue === "number") {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `parameter #${param.parameter} has value: ${paramValue}`,
+							direction: "inbound",
+						});
+					} else if (!paramValue) {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `received no value for parameter #${param.parameter}`,
+							direction: "inbound",
+							level: "warn",
+						});
 					}
 				}
 			} else {
@@ -849,12 +861,31 @@ export class ConfigurationCCReport extends ConfigurationCC {
 	}
 }
 
+const testResponseForConfigurationGet: CCResponsePredicate<ConfigurationCCGet> = (
+	sent,
+	received,
+	isPositiveTransmitReport,
+) => {
+	// We expect a Configuration Report that matches the requested parameter
+	return received instanceof ConfigurationCCReport &&
+		(sent.parameter === received.parameter || sent.allowUnexpectedResponse)
+		? "final"
+		: isPositiveTransmitReport
+		? "confirmation"
+		: "unexpected";
+};
+
 interface ConfigurationCCGetOptions extends CCCommandOptions {
 	parameter: number;
+	/**
+	 * If this is `true`, responses with different parameters than expected are accepted
+	 * and treated as hints for the first parameter number.
+	 */
+	allowUnexpectedResponse?: boolean;
 }
 
 @CCCommand(ConfigurationCommand.Get)
-@expectedCCResponse(ConfigurationCCReport)
+@expectedCCResponse(testResponseForConfigurationGet)
 export class ConfigurationCCGet extends ConfigurationCC {
 	public constructor(
 		driver: Driver,
@@ -869,10 +900,13 @@ export class ConfigurationCCGet extends ConfigurationCC {
 			);
 		} else {
 			this.parameter = options.parameter;
+			this.allowUnexpectedResponse =
+				options.allowUnexpectedResponse ?? false;
 		}
 	}
 
 	public parameter: number;
+	public allowUnexpectedResponse: boolean;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.parameter]);

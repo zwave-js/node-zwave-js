@@ -1,33 +1,33 @@
-// R-import Ltd. RaZberry Controller 2016 ZWave+
+// Z-Wave.me RaZberry Controller 2016 ZWave+
 // Z-Wave.Me Razberry daughtercard
 {
-    "_approved": false,
-    "_errors": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set",
-        "Device category is not set.",
-        "At least one device manual must be uploaded as PDF"
-    ],
-    "_warnings": [
-        "No channels have been assigned even though there are user configurable command classes."
-    ],
-    "manufacturer": "R-import Ltd.",
-    "manufacturerId": "0x0147",
-    "label": "RaZberry Controller 2016 ZWave+",
-    "description": "Z-Wave.Me Razberry daughtercard",
-    "devices": [
-        {
-            "productType": "0x0400",
-            "productId": "0x0001"
-        },
-        {
-            "productType": "0x0400",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "1.1",
-        "max": "255.255"
-    }
+	"_approved": false,
+	"_errors": [
+		"Overview information is not set",
+		"Inclusion information is not set",
+		"Exclusion information is not set",
+		"Device category is not set.",
+		"At least one device manual must be uploaded as PDF"
+	],
+	"_warnings": [
+		"No channels have been assigned even though there are user configurable command classes."
+	],
+	"manufacturer": "Z-Wave.me",
+	"manufacturerId": "0x0147",
+	"label": "RaZberry Controller 2016 ZWave+",
+	"description": "Z-Wave.Me Razberry daughtercard",
+	"devices": [
+		{
+			"productType": "0x0400",
+			"productId": "0x0001"
+		},
+		{
+			"productType": "0x0400",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "1.1",
+		"max": "255.255"
+	}
 }

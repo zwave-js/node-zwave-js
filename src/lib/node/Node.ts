@@ -4,12 +4,13 @@ import type { CCAPI } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import { BasicCC, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
 import { CentralSceneCCNotification, CentralSceneKeys, getSceneValueId } from "../commandclass/CentralSceneCC";
+import { ClockCCReport } from "../commandclass/ClockCC";
 import { CommandClass, CommandClassInfo, getCCValueMetadata } from "../commandclass/CommandClass";
-import { actuatorCCs, CommandClasses, getCCName, sensorCCs } from "../commandclass/CommandClasses";
+import { actuatorCCs, applicationCCs, CommandClasses, getCCName, sensorCCs } from "../commandclass/CommandClasses";
 import { getEndpointCCsValueId } from "../commandclass/MultiChannelCC";
 import { NotificationCCReport } from "../commandclass/NotificationCC";
 import { getDimmingDurationValueID, getSceneIdValueID, SceneActivationCCSet } from "../commandclass/SceneActivationCC";
-import { WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
+import { getWakeUpIntervalValueId, WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
 import { DeviceConfig, lookupDevice } from "../config/Devices";
 import { lookupNotification } from "../config/Notifications";
 import { ApplicationUpdateRequest, ApplicationUpdateRequestNodeInfoReceived, ApplicationUpdateRequestNodeInfoRequestFailed } from "../controller/ApplicationUpdateRequest";
@@ -364,7 +365,37 @@ export class ZWaveNode extends Endpoint {
 				}
 			}
 		}
-		return ret;
+
+		// Application command classes of the Root Device capabilities that are also advertised by at
+		// least one End Point SHOULD be filtered out by controlling nodes before presenting the functionalities
+		// via service discovery mechanisms like mDNS or to users in a GUI.
+		return this.filterRootApplicationCCValueIDs(ret);
+	}
+
+	/**
+	 * Removes all Value IDs from an array that belong to a root endpoint and have a corresponding
+	 * Value ID on a non-root endpoint
+	 */
+	private filterRootApplicationCCValueIDs(
+		allValueIds: TranslatedValueID[],
+	): TranslatedValueID[] {
+		return allValueIds.filter(vid => {
+			// Non-root endpoint values don't need to be filtered
+			if (!!vid.endpoint) return true;
+			// Non-application CCs don't need to be filtered
+			if (!applicationCCs.includes(vid.commandClass)) return true;
+			// Filter out root values if an identical value ID exists for another endpoint
+			return allValueIds.some(
+				other =>
+					// same CC
+					other.commandClass === vid.commandClass &&
+					// non-root endpoint
+					!!other.endpoint &&
+					// same property and key
+					other.property === vid.property &&
+					other.propertyKey === vid.propertyKey,
+			);
+		});
 	}
 
 	/**
@@ -967,6 +998,9 @@ version:               ${this.version}`;
 		// SDS14223 Unless unsolicited <XYZ> Report Commands are received,
 		// a controlling node MUST probe the current values when the
 		// supporting node issues a Wake Up Notification Command for sleeping nodes.
+
+		// This is not the handler for wakeup notifications, but some legacy devices send this
+		// message whenever there's an update
 		if (this.requiresManualValueRefresh()) {
 			log.controller.logNode(this.nodeId, {
 				message: `Node does not send unsolicited updates, refreshing actuator and sensor values...`,
@@ -1158,6 +1192,8 @@ version:               ${this.version}`;
 			return this.handleNotificationReport(command);
 		} else if (command instanceof SceneActivationCCSet) {
 			return this.handleSceneActivationSet(command);
+		} else if (command instanceof ClockCCReport) {
+			return this.handleClockReport(command);
 		}
 
 		// Ignore all commands that don't need to be handled
@@ -1272,6 +1308,9 @@ version:               ${this.version}`;
 		});
 	}
 
+	/** The timestamp of the last received wakeup notification */
+	private lastWakeUp: number | undefined;
+
 	/** Handles the receipt of a Wake Up notification */
 	private handleWakeUpNotification(): void {
 		log.controller.logNode(this.id, {
@@ -1279,6 +1318,24 @@ version:               ${this.version}`;
 			direction: "inbound",
 		});
 		this.setAwake(true);
+
+		// From the specs:
+		// A controlling node SHOULD read the Wake Up Interval of a supporting node when the delays between
+		// Wake Up periods are larger than what was last set at the supporting node.
+		const now = Date.now();
+		if (this.lastWakeUp) {
+			// we've already measured the wake up interval, so we can check whether a refresh is necessary
+			const wakeUpInterval =
+				this.getValue<number>(getWakeUpIntervalValueId()) ?? 0;
+			// The wakeup interval is specified in seconds. Also give 5s tolerance to avoid
+			// unnecessary queries since there might be some delay
+			if ((now - this.lastWakeUp) / 1000 > wakeUpInterval + 5) {
+				this.commandClasses["Wake Up"].getInterval().catch(() => {
+					// Don't throw if there's an error
+				});
+			}
+		}
+		this.lastWakeUp = now;
 	}
 
 	/** Handles the receipt of a BasicCC Set or Report */
@@ -1539,6 +1596,45 @@ version:               ${this.version}`;
 			);
 		}, command.dimmingDuration?.toMilliseconds() ?? 0).unref();
 		// Unref'ing long running timeouts allows to quit the application before the timeout elapses
+	}
+
+	private handleClockReport(command: ClockCCReport): void {
+		// A Z-Wave Plus node SHOULD issue a Clock Report Command via the Lifeline Association Group if they
+		// suspect to have inaccurate time and/or weekdays (e.g. after battery removal).
+		// A controlling node SHOULD compare the received time and weekday with its current time and set the
+		// time again at the supporting node if a deviation is observed (e.g. different weekday or more than a
+		// minute difference)
+		const now = new Date();
+		// local time
+		const hours = now.getHours();
+		let minutes = now.getMinutes();
+		// A sending node knowing the current time with seconds precision SHOULD round its
+		// current time to the nearest minute when sending this command.
+		if (now.getSeconds() >= 30) {
+			minutes = (minutes + 1) % 60;
+		}
+		// Sunday is 0 in JS, but 7 in Z-Wave
+		let weekday = now.getDay();
+		if (weekday === 0) weekday = 7;
+
+		if (
+			command.weekday !== weekday ||
+			command.hour !== hours ||
+			command.minute !== minutes
+		) {
+			const endpoint = command.getEndpoint();
+			if (!endpoint) return;
+
+			log.controller.logNode(
+				this.nodeId,
+				`detected a deviation of the node's clock, updating it...`,
+			);
+			endpoint.commandClasses.Clock.set(hours, minutes, weekday).catch(
+				() => {
+					// Don't throw when the update fails
+				},
+			);
+		}
 	}
 
 	/**

@@ -15,7 +15,7 @@ import {
 	loadNamedScalesInternal,
 } from "../src/lib/config/Scales";
 import { loadSensorTypesInternal } from "../src/lib/config/SensorTypes";
-import { configDir } from "../src/lib/config/utils";
+import { configDir, getDeviceEntryPredicate } from "../src/lib/config/utils";
 import { getMinimumShiftForBitMask } from "../src/lib/util/misc";
 import { num2hex } from "../src/lib/util/strings";
 import { getIntegerLimits } from "../src/lib/values/Primitive";
@@ -378,6 +378,31 @@ Did you mean to use ${opt.value >>> shiftAmount}?`,
 					`The maximum firmware version ${config.firmwareVersion.max} is invalid. Each version part must be between 0 and 255.`,
 				);
 			}
+		}
+	}
+
+	// Check for duplicate definitions
+	for (let i = 0; i < index.length; i++) {
+		const entry = index[i];
+		const firstIndex = index.findIndex(
+			getDeviceEntryPredicate(
+				parseInt(entry.manufacturerId, 16),
+				parseInt(entry.productType, 16),
+				parseInt(entry.productId, 16),
+			),
+		);
+		if (
+			firstIndex !== i &&
+			index[firstIndex].firmwareVersion.min ===
+				entry.firmwareVersion.min &&
+			index[firstIndex].firmwareVersion.max === entry.firmwareVersion.max
+		) {
+			// This is a duplicate!
+			addError(
+				entry.filename,
+				`Duplicate config file detected for device (manufacturer id = ${entry.manufacturerId}, product type = ${entry.productType}, product id = ${entry.productId})
+The first occurence of this device is in file config/devices/${index[firstIndex].filename}`,
+			);
 		}
 	}
 

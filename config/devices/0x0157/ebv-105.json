@@ -1,26 +1,20 @@
 // EcoNet Controls EBV-105
 // Wireless Water Shutoff Valve
 {
-    "_approved": true,
-    "manufacturer": "EcoNet Controls",
-    "manufacturerId": "0x0157",
-    "label": "EBV-105",
-    "description": "Wireless Water Shutoff Valve",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0512"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"_approved": true,
+	"manufacturer": "EcoNet Controls",
+	"manufacturerId": "0x0157",
+	"label": "EBV-105",
+	"description": "Wireless Water Shutoff Valve",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0512"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

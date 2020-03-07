@@ -1,144 +1,140 @@
 // HANK Electronics Ltd. PID15654
-// Z Wave Wall Socket Plug In Receptical
+// Smart Plug with two USB ports
 {
-    "_approved": true,
-    "manufacturer": "HANK Electronics Ltd.",
-    "manufacturerId": "0x0208",
-    "label": "PID15654",
-    "description": "Z Wave Wall Socket Plug In Receptical",
-    "devices": [
-        {
-            "productType": "0x0101",
-            "productId": "0x0005"
-        },
-        {
-            "productType": "0x0208",
-            "productId": "0x0101"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "20": {
-            "label": "Overload Protection",
-            "description": "If current exceeds 16.5A over 5 seconds, relay will turn off.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "21": {
-            "label": "Device Status after Power Failure",
-            "description": "Define how the plug reacts after power failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "24": {
-            "label": "Notifcation on Load Change",
-            "description": "Smart Plug can send notifications to association device load state changes.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "27": {
-            "label": "Indicator Modes",
-            "description": "LED in the device will indicate the state of load",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "151": {
-            "label": "Threshold of power report",
-            "description": "Power Threshold at which to send meter report",
-            "unit": "Watts",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 50,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "152": {
-            "label": "Percentage Threshold of Power Report",
-            "description": "Percentage Threshold at which to send meter report",
-            "unit": "%",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 10,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "171": {
-            "label": "Power Report Frequency",
-            "description": "The interval of sending power report to association device (Group Lifeline).",
-            "unit": "Seconds",
-            "valueSize": 4,
-            "minValue": 5,
-            "maxValue": 2678400,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "172": {
-            "label": "Energy Report Frequency",
-            "description": "The interval of sending energy report to association device (Group Lifeline).",
-            "unit": "Seconds",
-            "valueSize": 4,
-            "minValue": 5,
-            "maxValue": 2678400,
-            "defaultValue": 300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "173": {
-            "label": "Voltage Report Frequency",
-            "description": "The interval of sending voltage report to association device (Group Lifeline)",
-            "unit": "Seconds",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2678400,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "174": {
-            "label": "Electricity Report Frequency",
-            "description": "Interval for sending electricity report.",
-            "unit": "Seconds",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2678400,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"_approved": true,
+	"manufacturer": "HANK Electronics Ltd.",
+	"manufacturerId": "0x0208",
+	"label": "PID15654",
+	"description": "Smart Plug with two USB ports",
+	"devices": [
+		{
+			"productType": "0x0208",
+			"productId": "0x0101"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"20": {
+			"label": "Overload Protection",
+			"description": "If current exceeds 16.5A over 5 seconds, relay will turn off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "Device Status after Power Failure",
+			"description": "Define how the plug reacts after power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24": {
+			"label": "Notifcation on Load Change",
+			"description": "Smart Plug can send notifications to association device load state changes.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"27": {
+			"label": "Indicator Modes",
+			"description": "LED in the device will indicate the state of load",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"151": {
+			"label": "Threshold of power report",
+			"description": "Power Threshold at which to send meter report",
+			"unit": "Watts",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"152": {
+			"label": "Percentage Threshold of Power Report",
+			"description": "Percentage Threshold at which to send meter report",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"171": {
+			"label": "Power Report Frequency",
+			"description": "The interval of sending power report to association device (Group Lifeline).",
+			"unit": "Seconds",
+			"valueSize": 4,
+			"minValue": 5,
+			"maxValue": 2678400,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"172": {
+			"label": "Energy Report Frequency",
+			"description": "The interval of sending energy report to association device (Group Lifeline).",
+			"unit": "Seconds",
+			"valueSize": 4,
+			"minValue": 5,
+			"maxValue": 2678400,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"173": {
+			"label": "Voltage Report Frequency",
+			"description": "The interval of sending voltage report to association device (Group Lifeline)",
+			"unit": "Seconds",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"174": {
+			"label": "Electricity Report Frequency",
+			"description": "Interval for sending electricity report.",
+			"unit": "Seconds",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

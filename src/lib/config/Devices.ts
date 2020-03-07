@@ -1,15 +1,18 @@
 import { entries } from "alcalzone-shared/objects";
-import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
-import * as semver from "semver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { JSONObject } from "../util/misc";
 import { ObjectKeyMap, ReadonlyObjectKeyMap } from "../util/ObjectKeyMap";
-import { configDir, hexKeyRegex4Digits, throwInvalidConfig } from "./utils";
+import {
+	configDir,
+	getDeviceEntryPredicate,
+	hexKeyRegex4Digits,
+	throwInvalidConfig,
+} from "./utils";
 
 export interface FirmwareVersionRange {
 	min: string;
@@ -77,15 +80,6 @@ export async function loadDeviceIndex(): Promise<void> {
 	}
 }
 
-function formatId(id: number): string {
-	return "0x" + padStart(id.toString(16), 4, "0");
-}
-
-/** Pads a firmware version string, so it can be compared with semver */
-function padVersion(version: string): string {
-	return version + ".0";
-}
-
 /**
  * Looks up the definition of a given device in the configuration DB
  * @param manufacturerId The manufacturer id of the device
@@ -108,19 +102,12 @@ export async function lookupDevice(
 
 	// Look up the device in the index
 	const indexEntry = index.find(
-		entry =>
-			entry.manufacturerId === formatId(manufacturerId) &&
-			entry.productType === formatId(productType) &&
-			entry.productId === formatId(productId) &&
-			(firmwareVersion == undefined ||
-				(semver.lte(
-					padVersion(entry.firmwareVersion.min),
-					padVersion(firmwareVersion),
-				) &&
-					semver.gte(
-						padVersion(entry.firmwareVersion.max),
-						padVersion(firmwareVersion),
-					))),
+		getDeviceEntryPredicate(
+			manufacturerId,
+			productType,
+			productId,
+			firmwareVersion,
+		),
 	);
 
 	if (indexEntry) {
