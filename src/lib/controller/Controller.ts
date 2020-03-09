@@ -658,11 +658,6 @@ export class ZWaveController extends EventEmitter {
 	private _healNetworkActive: boolean = false;
 	private _healNetworkProgress = new Map<number, HealNodeStatus>();
 
-	/** @deprecated Use `beginHealNetwork` instead */
-	public healNetwork(): boolean {
-		return this.beginHealingNetwork();
-	}
-
 	/**
 	 * Requests all alive slave nodes to update their neighbor lists
 	 */
