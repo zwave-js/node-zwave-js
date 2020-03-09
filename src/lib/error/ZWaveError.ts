@@ -73,6 +73,11 @@ export enum ZWaveErrorCodes {
 	 * because of a missing manufacturer ID.
 	 */
 	ManufacturerProprietaryCC_NoManufacturerId = 1200,
+
+	/**
+	 * Used to report that an invalid group ID was used to address a (Multi Channel) Association
+	 */
+	AssociationCC_InvalidGroup = 1300,
 }
 
 /**

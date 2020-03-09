@@ -834,6 +834,71 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	/**
+	 * Adds an association to a node
+	 */
+	public addAssociation(
+		nodeId: number,
+		group: number,
+		association: Association,
+	): Promise<void> {
+		const node = this.nodes.get(nodeId);
+		if (!node) {
+			throw new ZWaveError(
+				`Node ${nodeId} was not found!`,
+				ZWaveErrorCodes.Controller_NodeNotFound,
+			);
+		}
+
+		if (node.supportsCC(CommandClasses["Multi Channel Association"])) {
+			// Prefer multi channel associations
+			const cc = node.createCCInstanceUnsafe<MultiChannelAssociationCC>(
+				CommandClasses["Multi Channel Association"],
+			)!;
+			if (group > cc.getGroupCountCached()) {
+				throw new ZWaveError(
+					`Group ${group} does not exist on node ${nodeId}`,
+					ZWaveErrorCodes.AssociationCC_InvalidGroup,
+				);
+			}
+			return node.commandClasses[
+				"Multi Channel Association"
+			].addDestinations({
+				groupId: group,
+				nodeIds: [association.nodeId],
+				...(association.endpoint != undefined
+					? { endpoints: [association.endpoint] }
+					: {}),
+			});
+		} else if (node.supportsCC(CommandClasses.Association)) {
+			// Use normal associations as a fallback
+			const cc = node.createCCInstanceUnsafe<AssociationCC>(
+				CommandClasses.Association,
+			)!;
+			if (group > cc.getGroupCountCached()) {
+				throw new ZWaveError(
+					`Group ${group} does not exist on node ${nodeId}`,
+					ZWaveErrorCodes.AssociationCC_InvalidGroup,
+				);
+			}
+			if (association.endpoint != undefined) {
+				throw new ZWaveError(
+					`Node ${nodeId} does not support multi channel associations!`,
+					ZWaveErrorCodes.CC_NotSupported,
+				);
+			}
+			return node.commandClasses.Association.addNodeIds(
+				group,
+				association.nodeId,
+			);
+		} else {
+			throw new ZWaveError(
+				`Node ${nodeId} does not support sssociations!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
+	}
+
+	/**
 	 * Removes a node from all other nodes' associations
 	 * WARNING: It is not recommended to await this method
 	 */
