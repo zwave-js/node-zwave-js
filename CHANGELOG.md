@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.15.3 (2020-03-09)
 ### Bugfixes
 * The `firmwareVersion` property of a node now returns a value again
 * Fixed the interview procedure of `Manufacturer Proprietary CC` by reading the manufacturer ID from the Value DB inside the constructor
