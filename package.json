@@ -29,7 +29,7 @@
     "node": ">=8.0.0"
   },
   "devDependencies": {
-    "@actions/core": "^1.2.2",
+    "@actions/core": "^1.2.3",
     "@actions/exec": "^1.0.3",
     "@actions/github": "^2.1.1",
     "@alcalzone/release-script": "^1.1.1",
