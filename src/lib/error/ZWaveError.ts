@@ -26,6 +26,9 @@ export enum ZWaveErrorCodes {
 	Controller_InclusionFailed,
 	Controller_ExclusionFailed,
 
+	/** The node with the given node ID was not found */
+	Controller_NodeNotFound,
+
 	CC_Invalid,
 	CC_NoNodeID,
 	CC_NotSupported,

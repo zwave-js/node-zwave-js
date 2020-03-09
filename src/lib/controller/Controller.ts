@@ -5,6 +5,7 @@ import {
 import { composeObject } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
+import { AssociationCC } from "../commandclass/AssociationCC";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import {
 	getManufacturerIdValueId,
@@ -14,6 +15,10 @@ import {
 	getProductTypeValueId,
 	getProductTypeValueMetadata,
 } from "../commandclass/ManufacturerSpecificCC";
+import {
+	Association,
+	MultiChannelAssociationCC,
+} from "../commandclass/MultiChannelAssociationCC";
 import { Driver, RequestHandler } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
@@ -795,6 +800,36 @@ export class ZWaveController extends EventEmitter {
 				"error",
 			);
 			throw e;
+		}
+	}
+
+	/** Returns all Associations (Multi Channel or normal) that are configured on a node */
+	public getAssociations(
+		nodeId: number,
+	): ReadonlyMap<number, readonly Association[]> {
+		const node = this.nodes.get(nodeId);
+		if (!node) {
+			throw new ZWaveError(
+				`Node ${nodeId} was not found!`,
+				ZWaveErrorCodes.Controller_NodeNotFound,
+			);
+		}
+
+		if (node.supportsCC(CommandClasses["Multi Channel Association"])) {
+			const cc = node.createCCInstanceUnsafe<MultiChannelAssociationCC>(
+				CommandClasses["Multi Channel Association"],
+			)!;
+			return cc.getAllDestinationsCached();
+		} else if (node.supportsCC(CommandClasses.Association)) {
+			const cc = node.createCCInstanceUnsafe<AssociationCC>(
+				CommandClasses.Association,
+			)!;
+			return cc.getAllDestinationsCached();
+		} else {
+			throw new ZWaveError(
+				`Node ${nodeId} does not support sssociations!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
 		}
 	}
 

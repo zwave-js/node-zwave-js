@@ -19,6 +19,12 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
+import { getEndpointCCsValueId } from "./MultiChannelCC";
+
+export interface Association {
+	nodeId: number;
+	endpoint?: number;
+}
 
 /** Returns the ValueID used to store the maximum number of nodes of an association group */
 export function getMaxNodesValueId(groupId: number): ValueID {
@@ -271,6 +277,61 @@ export class MultiChannelAssociationCC extends CommandClass {
 	 */
 	public getGroupCountCached(): number {
 		return this.getValueDB().getValue(getGroupCountValueId()) || 0;
+	}
+
+	/**
+	 * Returns all the destinations of all association groups reported by the node.
+	 * This only works AFTER the interview process
+	 */
+	public getAllDestinationsCached(): ReadonlyMap<
+		number,
+		readonly Association[]
+	> {
+		const ret = new Map<number, Association[]>();
+		const groupCount = this.getGroupCountCached();
+		const valueDB = this.getValueDB();
+		for (let i = 1; i <= groupCount; i++) {
+			const groupDestinations: Association[] = [];
+			// Add all root destinations
+			const nodes =
+				valueDB.getValue<number[]>(getNodeIdsValueId(i)) ?? [];
+			groupDestinations.push(
+				...nodes.map(nodeId => ({ nodeId, endpoint: 0 })),
+			);
+			// And all endpoint destinations
+			const endpoints =
+				valueDB.getValue<EndpointAddress[]>(getEndpointCCsValueId(i)) ??
+				[];
+			for (const ep of endpoints) {
+				if (typeof ep.endpoint === "number") {
+					groupDestinations.push({
+						nodeId: ep.nodeId,
+						endpoint: ep.endpoint,
+					});
+				} else {
+					groupDestinations.push(
+						...ep.endpoint.map(e => ({
+							nodeId: ep.nodeId,
+							endpoint: e,
+						})),
+					);
+				}
+			}
+			ret.set(
+				i,
+				// Filter out duplicates
+				groupDestinations.filter(
+					(addr, index) =>
+						index ===
+						groupDestinations.findIndex(
+							({ nodeId, endpoint }) =>
+								nodeId === addr.nodeId &&
+								endpoint === addr.endpoint,
+						),
+				),
+			);
+		}
+		return ret;
 	}
 
 	public async interview(complete: boolean = true): Promise<void> {
