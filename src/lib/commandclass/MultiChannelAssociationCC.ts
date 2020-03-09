@@ -494,9 +494,9 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 interface MultiChannelAssociationCCRemoveOptions {
 	/** The group from which to remove the nodes. If none is specified, the nodes will be removed from all groups. */
 	groupId?: number;
-	/** The nodes to remove. If none are specified, ALL nodes will be removed. */
+	/** The nodes to remove. If no nodeIds and no endpoint addresses are specified, ALL nodes will be removed. */
 	nodeIds?: number[];
-	/** The single endpoints to remove. If none are specified, ALL will be removed. */
+	/** The single endpoints to remove. If no nodeIds and no endpoint addresses are specified, ALL will be removed. */
 	endpoints?: EndpointAddress[];
 }
 
