@@ -64,6 +64,12 @@ export enum ZWaveErrorCodes {
 	 * Used to report that the command was not executed by the target node
 	 */
 	SupervisionCC_CommandFailed = 1100,
+
+	/**
+	 * Used to report that a ManufacturerProprietaryCC could not be instanciated
+	 * because of a missing manufacturer ID.
+	 */
+	ManufacturerProprietaryCC_NoManufacturerId = 1200,
 }
 
 /**

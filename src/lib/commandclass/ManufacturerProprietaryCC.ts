@@ -1,5 +1,6 @@
 import { isArray } from "alcalzone-shared/typeguards";
 import { IDriver } from "../driver/IDriver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { validatePayload } from "../util/misc";
 import { CCAPI } from "./API";
@@ -14,6 +15,7 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { MANUFACTURERID_FIBARO } from "./manufacturerProprietary/Constants";
+import { getManufacturerIdValueId } from "./ManufacturerSpecificCC";
 
 @API(CommandClasses["Manufacturer Proprietary"])
 export class ManufacturerProprietaryCCAPI extends CCAPI {
@@ -60,6 +62,18 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			if (PCConstructor && new.target !== PCConstructor) {
 				return new PCConstructor(driver, options);
 			}
+		} else {
+			// To create this CC, a manufacturer ID must exist in the value DB
+			const manufacturerId = this.getValueDB().getValue<number>(
+				getManufacturerIdValueId(),
+			);
+			if (manufacturerId == undefined) {
+				throw new ZWaveError(
+					`To create an instance of ManufacturerProprietaryCC, the manufacturer ID must be stored in the value DB`,
+					ZWaveErrorCodes.ManufacturerProprietaryCC_NoManufacturerId,
+				);
+			}
+			this.manufacturerId = manufacturerId;
 		}
 	}
 
