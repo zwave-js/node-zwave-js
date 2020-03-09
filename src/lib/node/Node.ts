@@ -22,6 +22,11 @@ import {
 	getCCName,
 	sensorCCs,
 } from "../commandclass/CommandClasses";
+import {
+	getManufacturerIdValueId,
+	getProductIdValueId,
+	getProductTypeValueId,
+} from "../commandclass/ManufacturerSpecificCC";
 import { getEndpointCCsValueId } from "../commandclass/MultiChannelCC";
 import { NotificationCCReport } from "../commandclass/NotificationCC";
 import {
@@ -29,6 +34,7 @@ import {
 	getSceneIdValueID,
 	SceneActivationCCSet,
 } from "../commandclass/SceneActivationCC";
+import { getFirmwareVersionsValueId } from "../commandclass/VersionCC";
 import {
 	getWakeUpIntervalValueId,
 	WakeUpCC,
@@ -385,31 +391,20 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	}
 
 	public get manufacturerId(): number | undefined {
-		return this.getValue({
-			commandClass: CommandClasses["Manufacturer Specific"],
-			property: "manufacturerId",
-		});
+		return this.getValue(getManufacturerIdValueId());
 	}
 
 	public get productId(): number | undefined {
-		return this.getValue({
-			commandClass: CommandClasses["Manufacturer Specific"],
-			property: "productId",
-		});
+		return this.getValue(getProductIdValueId());
 	}
 
 	public get productType(): number | undefined {
-		return this.getValue({
-			commandClass: CommandClasses["Manufacturer Specific"],
-			property: "productType",
-		});
+		return this.getValue(getProductTypeValueId());
 	}
 
 	public get firmwareVersion(): string | undefined {
-		return this.getValue({
-			commandClass: CommandClasses.Version,
-			property: "firmwareVersion",
-		});
+		// We're only interested in the first (main) firmware
+		return this.getValue<string[]>(getFirmwareVersionsValueId())?.[0];
 	}
 
 	private _deviceConfig: DeviceConfig | undefined;
