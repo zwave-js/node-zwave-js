@@ -2,6 +2,7 @@ import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { ValueMetadata } from "../values/Metadata";
@@ -23,6 +24,13 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
+
+export function getFirmwareVersionsValueId(): ValueID {
+	return {
+		commandClass: CommandClasses.Version,
+		property: "firmwareVersions",
+	};
+}
 
 export enum VersionCommand {
 	Get = 0x11,
