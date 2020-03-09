@@ -27,6 +27,18 @@ const node2 = new ZWaveNode(2, fakeDriver as any);
 fakeDriver.controller.nodes.set(2, node2);
 
 describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
+	beforeAll(async () => {
+		const manufacturerId = 0x10f;
+		node2.valueDB.setValue(getManufacturerIdValueId(), manufacturerId);
+
+		node2.addCC(CommandClasses["Manufacturer Proprietary"], {
+			isSupported: true,
+			version: 1,
+		});
+
+		await loadDeviceIndex();
+	});
+
 	it("the set tilt command should serialize correctly", () => {
 		const blindCC = new FibaroVenetianBlindCCSet(fakeDriver, {
 			nodeId: 2,
@@ -126,12 +138,10 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 
 	describe("Fibaro FGR222 should support this CC", () => {
 		beforeAll(async () => {
-			const manufacturerId = 0x10f;
 			const productType = 0x0302;
 			const productId = 0x1000;
 			const firmwareVersion = "25.25";
 
-			node2.valueDB.setValue(getManufacturerIdValueId(), manufacturerId);
 			node2.valueDB.setValue(getProductTypeValueId(), productType);
 			node2.valueDB.setValue(getProductIdValueId(), productId);
 			node2.valueDB.setValue(
@@ -142,12 +152,6 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 				firmwareVersion,
 			);
 
-			node2.addCC(CommandClasses["Manufacturer Proprietary"], {
-				isSupported: true,
-				version: 1,
-			});
-
-			await loadDeviceIndex();
 			await (node2 as any).loadDeviceConfig();
 
 			fakeDriver.sendCommand.mockClear();
@@ -162,7 +166,10 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 			const cc = node2.createCCInstance(
 				CommandClasses["Manufacturer Proprietary"],
 			)!;
-			cc.interview();
+
+			cc.interview().catch(() => {
+				// we expect an error, since there will be no response
+			});
 
 			expect(fakeDriver.sendCommand).toHaveBeenCalledTimes(1);
 			expect(fakeDriver.sendCommand.mock.calls[0][0]).toBeInstanceOf(
