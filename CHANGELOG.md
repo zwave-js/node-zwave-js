@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* The `FibaroVenetianBlindCCGet` now correctly expects a response
+
 ## 2.15.3 (2020-03-09)
 ### Bugfixes
 * The `firmwareVersion` property of a node now returns a value again
