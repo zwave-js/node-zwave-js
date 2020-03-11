@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.15.4 (2020-03-11)
 ### Bugfixes
 * The `FibaroVenetianBlindCCGet` now correctly expects a response
 
