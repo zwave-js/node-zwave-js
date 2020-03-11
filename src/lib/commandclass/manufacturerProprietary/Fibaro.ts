@@ -7,6 +7,7 @@ import { ValueMetadata } from "../../values/Metadata";
 import {
 	CCCommandOptions,
 	CommandClassDeserializationOptions,
+	expectedCCResponse,
 	gotDeserializationOptions,
 } from "../CommandClass";
 import { CommandClasses } from "../CommandClasses";
@@ -196,16 +197,6 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 	}
 }
 
-export class FibaroVenetianBlindCCGet extends FibaroVenetianBlindCC {
-	public constructor(
-		driver: IDriver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-		this.fibaroCCCommand = FibaroVenetianBlindCCCommand.Get;
-	}
-}
-
 export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 	public constructor(
 		driver: IDriver,
@@ -245,4 +236,15 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 
 	public readonly position?: number;
 	public readonly tilt?: number;
+}
+
+@expectedCCResponse(FibaroVenetianBlindCCReport)
+export class FibaroVenetianBlindCCGet extends FibaroVenetianBlindCC {
+	public constructor(
+		driver: IDriver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
+		this.fibaroCCCommand = FibaroVenetianBlindCCCommand.Get;
+	}
 }
