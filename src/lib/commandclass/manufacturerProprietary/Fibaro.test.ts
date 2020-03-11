@@ -6,6 +6,7 @@ import {
 	SendDataRequestTransmitReport,
 	TransmitStatus,
 } from "../../controller/SendDataMessages";
+import { IDriver } from "../../driver/IDriver";
 import { ZWaveNode } from "../../node/Node";
 import { CommandClasses } from "../CommandClasses";
 import {
@@ -22,9 +23,9 @@ import {
 	FibaroVenetianBlindCCSet,
 } from "./Fibaro";
 
-const fakeDriver = createEmptyMockDriver();
+const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
 const node2 = new ZWaveNode(2, fakeDriver as any);
-fakeDriver.controller.nodes.set(2, node2);
+(fakeDriver.controller.nodes as any).set(2, node2);
 
 describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 	beforeAll(async () => {
@@ -106,7 +107,7 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 			expect(msgRequest.testResponse(msgResponse)).toBe("unexpected");
 		});
 
-		it("FibaroVenetianBlindCCGet => FibaroVenetianBlindCCReport = unexpected", () => {
+		it("FibaroVenetianBlindCCGet => FibaroVenetianBlindCCReport = final", () => {
 			const ccRequest = new FibaroVenetianBlindCCGet(fakeDriver, {
 				nodeId: 2,
 			});
@@ -132,7 +133,7 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 				command: ccResponse,
 			});
 
-			expect(msgRequest.testResponse(msgResponse)).toBe("unexpected");
+			expect(msgRequest.testResponse(msgResponse)).toBe("final");
 		});
 	});
 
@@ -154,7 +155,7 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 
 			await (node2 as any).loadDeviceConfig();
 
-			fakeDriver.sendCommand.mockClear();
+			(fakeDriver as any).sendCommand.mockClear();
 		});
 
 		it("loads the correct device config", () => {
@@ -171,10 +172,10 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 				// we expect an error, since there will be no response
 			});
 
-			expect(fakeDriver.sendCommand).toHaveBeenCalledTimes(1);
-			expect(fakeDriver.sendCommand.mock.calls[0][0]).toBeInstanceOf(
-				FibaroVenetianBlindCCGet,
-			);
+			expect((fakeDriver as any).sendCommand).toHaveBeenCalledTimes(1);
+			expect(
+				(fakeDriver as any).sendCommand.mock.calls[0][0],
+			).toBeInstanceOf(FibaroVenetianBlindCCGet);
 		});
 	});
 });
