@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.15.5 (2020-03-15)
 ### Bugfixes
 * Delayed the check for manufacturer ID until the `Manufacturer Proprietary CC` needs it to avoid crashing during cache serialization
 
