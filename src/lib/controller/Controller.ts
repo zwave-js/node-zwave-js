@@ -7,7 +7,7 @@ import { isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
 import { AssociationCC } from "../commandclass/AssociationCC";
 import { AssociationGroupInfoCC } from "../commandclass/AssociationGroupInfoCC";
-import { CommandClasses } from "../commandclass/CommandClasses";
+import { actuatorCCs, CommandClasses } from "../commandclass/CommandClasses";
 import {
 	getManufacturerIdValueId,
 	getManufacturerIdValueMetadata,
@@ -898,7 +898,16 @@ export class ZWaveController extends EventEmitter {
 		}
 		const groupCCs = [...groupCommandList.keys()];
 
-		// Check that at least one issued CC is supported
+		// A controlling node MAY create an association to a destination supporting an
+		// actuator Command Class if the actual association group sends Basic Control Command Class.
+		if (
+			groupCCs.includes(CommandClasses.Basic) &&
+			actuatorCCs.some(cc => targetEndpoint.supportsCC(cc))
+		) {
+			return true;
+		}
+
+		// Enforce that at least one issued CC is supported
 		return groupCCs.some(cc => targetEndpoint.supportsCC(cc));
 	}
 
