@@ -1,3 +1,4 @@
+import { distinct } from "alcalzone-shared/arrays";
 import { MAX_NODES } from "../controller/NodeBitMask";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -21,6 +22,7 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
+import { Association } from "./MultiChannelAssociationCC";
 
 /** Returns the ValueID used to store the maximum number of nodes of an association group */
 export function getMaxNodesValueId(groupId: number): ValueID {
@@ -228,6 +230,31 @@ export class AssociationCC extends CommandClass {
 	 */
 	public getGroupCountCached(): number {
 		return this.getValueDB().getValue(getGroupCountValueId()) || 0;
+	}
+
+	/**
+	 * Returns all the destinations of all association groups reported by the node.
+	 * This only works AFTER the interview process
+	 */
+	public getAllDestinationsCached(): ReadonlyMap<
+		number,
+		readonly Association[]
+	> {
+		const ret = new Map<number, Association[]>();
+		const groupCount = this.getGroupCountCached();
+		const valueDB = this.getValueDB();
+		for (let i = 1; i <= groupCount; i++) {
+			// Add all root destinations
+			const nodes =
+				valueDB.getValue<number[]>(getNodeIdsValueId(i)) ?? [];
+
+			ret.set(
+				i,
+				// Filter out duplicates
+				distinct(nodes).map(nodeId => ({ nodeId })),
+			);
+		}
+		return ret;
 	}
 
 	public async interview(complete: boolean = true): Promise<void> {

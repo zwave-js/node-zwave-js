@@ -26,6 +26,11 @@ export enum ZWaveErrorCodes {
 	Controller_InclusionFailed,
 	Controller_ExclusionFailed,
 
+	/** The node with the given node ID was not found */
+	Controller_NodeNotFound,
+	/** The endpoint with the given index was not found on the node */
+	Controller_EndpointNotFound,
+
 	CC_Invalid,
 	CC_NoNodeID,
 	CC_NotSupported,
@@ -70,6 +75,13 @@ export enum ZWaveErrorCodes {
 	 * because of a missing manufacturer ID.
 	 */
 	ManufacturerProprietaryCC_NoManufacturerId = 1200,
+
+	/**
+	 * Used to report that an invalid group ID was used to address a (Multi Channel) Association
+	 */
+	AssociationCC_InvalidGroup = 1300,
+	/** Cannot add an association because it is not allowed */
+	AssociationCC_NotAllowed,
 }
 
 /**

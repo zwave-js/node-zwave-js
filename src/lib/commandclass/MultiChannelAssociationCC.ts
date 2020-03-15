@@ -19,6 +19,12 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
+import { getEndpointCCsValueId } from "./MultiChannelCC";
+
+export interface Association {
+	nodeId: number;
+	endpoint?: number;
+}
 
 /** Returns the ValueID used to store the maximum number of nodes of an association group */
 export function getMaxNodesValueId(groupId: number): ValueID {
@@ -273,6 +279,61 @@ export class MultiChannelAssociationCC extends CommandClass {
 		return this.getValueDB().getValue(getGroupCountValueId()) || 0;
 	}
 
+	/**
+	 * Returns all the destinations of all association groups reported by the node.
+	 * This only works AFTER the interview process
+	 */
+	public getAllDestinationsCached(): ReadonlyMap<
+		number,
+		readonly Association[]
+	> {
+		const ret = new Map<number, Association[]>();
+		const groupCount = this.getGroupCountCached();
+		const valueDB = this.getValueDB();
+		for (let i = 1; i <= groupCount; i++) {
+			const groupDestinations: Association[] = [];
+			// Add all root destinations
+			const nodes =
+				valueDB.getValue<number[]>(getNodeIdsValueId(i)) ?? [];
+			groupDestinations.push(
+				...nodes.map(nodeId => ({ nodeId, endpoint: 0 })),
+			);
+			// And all endpoint destinations
+			const endpoints =
+				valueDB.getValue<EndpointAddress[]>(getEndpointCCsValueId(i)) ??
+				[];
+			for (const ep of endpoints) {
+				if (typeof ep.endpoint === "number") {
+					groupDestinations.push({
+						nodeId: ep.nodeId,
+						endpoint: ep.endpoint,
+					});
+				} else {
+					groupDestinations.push(
+						...ep.endpoint.map(e => ({
+							nodeId: ep.nodeId,
+							endpoint: e,
+						})),
+					);
+				}
+			}
+			ret.set(
+				i,
+				// Filter out duplicates
+				groupDestinations.filter(
+					(addr, index) =>
+						index ===
+						groupDestinations.findIndex(
+							({ nodeId, endpoint }) =>
+								nodeId === addr.nodeId &&
+								endpoint === addr.endpoint,
+						),
+				),
+			);
+		}
+		return ret;
+	}
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
@@ -433,9 +494,9 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 interface MultiChannelAssociationCCRemoveOptions {
 	/** The group from which to remove the nodes. If none is specified, the nodes will be removed from all groups. */
 	groupId?: number;
-	/** The nodes to remove. If none are specified, ALL nodes will be removed. */
+	/** The nodes to remove. If no nodeIds and no endpoint addresses are specified, ALL nodes will be removed. */
 	nodeIds?: number[];
-	/** The single endpoints to remove. If none are specified, ALL will be removed. */
+	/** The single endpoints to remove. If no nodeIds and no endpoint addresses are specified, ALL will be removed. */
 	endpoints?: EndpointAddress[];
 }
 

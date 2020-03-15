@@ -5,7 +5,9 @@ import {
 import { composeObject } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
-import { CommandClasses } from "../commandclass/CommandClasses";
+import { AssociationCC } from "../commandclass/AssociationCC";
+import { AssociationGroupInfoCC } from "../commandclass/AssociationGroupInfoCC";
+import { actuatorCCs, CommandClasses } from "../commandclass/CommandClasses";
 import {
 	getManufacturerIdValueId,
 	getManufacturerIdValueMetadata,
@@ -14,6 +16,11 @@ import {
 	getProductTypeValueId,
 	getProductTypeValueMetadata,
 } from "../commandclass/ManufacturerSpecificCC";
+import {
+	Association,
+	EndpointAddress,
+	MultiChannelAssociationCC,
+} from "../commandclass/MultiChannelAssociationCC";
 import { Driver, RequestHandler } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
@@ -795,6 +802,288 @@ export class ZWaveController extends EventEmitter {
 				"error",
 			);
 			throw e;
+		}
+	}
+
+	/** Returns all Associations (Multi Channel or normal) that are configured on a node */
+	public getAssociations(
+		nodeId: number,
+	): ReadonlyMap<number, readonly Association[]> {
+		const node = this.nodes.get(nodeId);
+		if (!node) {
+			throw new ZWaveError(
+				`Node ${nodeId} was not found!`,
+				ZWaveErrorCodes.Controller_NodeNotFound,
+			);
+		}
+
+		if (node.supportsCC(CommandClasses["Multi Channel Association"])) {
+			const cc = node.createCCInstanceUnsafe<MultiChannelAssociationCC>(
+				CommandClasses["Multi Channel Association"],
+			)!;
+			return cc.getAllDestinationsCached();
+		} else if (node.supportsCC(CommandClasses.Association)) {
+			const cc = node.createCCInstanceUnsafe<AssociationCC>(
+				CommandClasses.Association,
+			)!;
+			return cc.getAllDestinationsCached();
+		} else {
+			throw new ZWaveError(
+				`Node ${nodeId} does not support sssociations!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
+	}
+
+	/** Checks if a given association is allowed */
+	public isAssociationAllowed(
+		nodeId: number,
+		group: number,
+		association: Association,
+	): boolean {
+		const node = this.nodes.get(nodeId);
+		if (!node) {
+			throw new ZWaveError(
+				`Node ${nodeId} was not found!`,
+				ZWaveErrorCodes.Controller_NodeNotFound,
+			);
+		}
+
+		const targetNode = this.nodes.get(association.nodeId);
+		if (!targetNode) {
+			throw new ZWaveError(
+				`Node ${association.nodeId} was not found!`,
+				ZWaveErrorCodes.Controller_NodeNotFound,
+			);
+		}
+
+		const targetEndpoint = targetNode.getEndpoint(
+			association.endpoint ?? 0,
+		);
+		if (!targetEndpoint) {
+			throw new ZWaveError(
+				`The endpoint ${association.endpoint} was not found on node ${association.nodeId}!`,
+				ZWaveErrorCodes.Controller_EndpointNotFound,
+			);
+		}
+
+		// SDS14223:
+		// A controlling node MUST NOT associate Node A to a Node B destination that does not support
+		// the Command Class that the Node A will be controlling
+		//
+		// To determine this, the node must support the AGI CC or we have no way of knowing which
+		// CCs the node will control
+		if (
+			!node.supportsCC(CommandClasses.Association) &&
+			!node.supportsCC(CommandClasses["Multi Channel Association"])
+		) {
+			throw new ZWaveError(
+				`Node ${nodeId} does not support associations!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		} else if (
+			!node.supportsCC(CommandClasses["Association Group Information"])
+		) {
+			return true;
+		}
+
+		const groupCommandList = node
+			.createCCInstanceInternal<AssociationGroupInfoCC>(
+				CommandClasses["Association Group Information"],
+			)!
+			.getIssuedCommandsCached(group);
+		if (!groupCommandList || !groupCommandList.size) {
+			// We don't know which CCs this group controls, just allow it
+			return true;
+		}
+		const groupCCs = [...groupCommandList.keys()];
+
+		// A controlling node MAY create an association to a destination supporting an
+		// actuator Command Class if the actual association group sends Basic Control Command Class.
+		if (
+			groupCCs.includes(CommandClasses.Basic) &&
+			actuatorCCs.some(cc => targetEndpoint.supportsCC(cc))
+		) {
+			return true;
+		}
+
+		// Enforce that at least one issued CC is supported
+		return groupCCs.some(cc => targetEndpoint.supportsCC(cc));
+	}
+
+	/**
+	 * Adds associations to a node
+	 */
+	public addAssociations(
+		nodeId: number,
+		group: number,
+		associations: Association[],
+	): Promise<void> {
+		const node = this.nodes.get(nodeId);
+		if (!node) {
+			throw new ZWaveError(
+				`Node ${nodeId} was not found!`,
+				ZWaveErrorCodes.Controller_NodeNotFound,
+			);
+		}
+
+		if (node.supportsCC(CommandClasses["Multi Channel Association"])) {
+			// Prefer multi channel associations
+			const cc = node.createCCInstanceUnsafe<MultiChannelAssociationCC>(
+				CommandClasses["Multi Channel Association"],
+			)!;
+			if (group > cc.getGroupCountCached()) {
+				throw new ZWaveError(
+					`Group ${group} does not exist on node ${nodeId}`,
+					ZWaveErrorCodes.AssociationCC_InvalidGroup,
+				);
+			}
+			// Check that all associations are allowed
+			const disallowedAssociations = associations.filter(
+				a => !this.isAssociationAllowed(nodeId, group, a),
+			);
+			if (disallowedAssociations.length) {
+				let message = `The following associations are not allowed:`;
+				message += disallowedAssociations
+					.map(
+						a =>
+							`\n· Node ${a.nodeId}${
+								a.endpoint ? `, endpoint ${a.endpoint}` : ""
+							}`,
+					)
+					.join("");
+				throw new ZWaveError(
+					message,
+					ZWaveErrorCodes.AssociationCC_NotAllowed,
+				);
+			}
+
+			// Split associations into conventional and endpoint associations
+			const nodeAssociations = associations
+				.filter(a => a.endpoint == undefined)
+				.map(a => a.nodeId);
+			const endpointAssociations = associations.filter(
+				a => a.endpoint != undefined,
+			) as EndpointAddress[];
+			// And add them
+			return node.commandClasses[
+				"Multi Channel Association"
+			].addDestinations({
+				groupId: group,
+				nodeIds: nodeAssociations,
+				endpoints: endpointAssociations,
+			});
+		} else if (node.supportsCC(CommandClasses.Association)) {
+			// Use normal associations as a fallback
+			const cc = node.createCCInstanceUnsafe<AssociationCC>(
+				CommandClasses.Association,
+			)!;
+			if (group > cc.getGroupCountCached()) {
+				throw new ZWaveError(
+					`Group ${group} does not exist on node ${nodeId}`,
+					ZWaveErrorCodes.AssociationCC_InvalidGroup,
+				);
+			}
+			if (associations.some(a => a.endpoint != undefined)) {
+				throw new ZWaveError(
+					`Node ${nodeId} does not support multi channel associations!`,
+					ZWaveErrorCodes.CC_NotSupported,
+				);
+			}
+
+			// Check that all associations are allowed
+			const disallowedAssociations = associations.filter(
+				a => !this.isAssociationAllowed(nodeId, group, a),
+			);
+			if (disallowedAssociations.length) {
+				throw new ZWaveError(
+					`The associations to the following nodes are not allowed: ${disallowedAssociations
+						.map(a => a.nodeId)
+						.join(", ")}`,
+					ZWaveErrorCodes.AssociationCC_NotAllowed,
+				);
+			}
+
+			return node.commandClasses.Association.addNodeIds(
+				group,
+				...associations.map(a => a.nodeId),
+			);
+		} else {
+			throw new ZWaveError(
+				`Node ${nodeId} does not support associations!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
+	}
+
+	/**
+	 * Removes the specific associations from a node
+	 */
+	public removeAssociations(
+		nodeId: number,
+		group: number,
+		associations: Association[],
+	): Promise<void> {
+		const node = this.nodes.get(nodeId);
+		if (!node) {
+			throw new ZWaveError(
+				`Node ${nodeId} was not found!`,
+				ZWaveErrorCodes.Controller_NodeNotFound,
+			);
+		}
+
+		if (node.supportsCC(CommandClasses["Multi Channel Association"])) {
+			// Prefer multi channel associations
+			const cc = node.createCCInstanceUnsafe<MultiChannelAssociationCC>(
+				CommandClasses["Multi Channel Association"],
+			)!;
+			if (group > cc.getGroupCountCached()) {
+				throw new ZWaveError(
+					`Group ${group} does not exist on node ${nodeId}`,
+					ZWaveErrorCodes.AssociationCC_InvalidGroup,
+				);
+			}
+			// Split associations into conventional and endpoint associations
+			const nodeAssociations = associations
+				.filter(a => a.endpoint == undefined)
+				.map(a => a.nodeId);
+			const endpointAssociations = associations.filter(
+				a => a.endpoint != undefined,
+			) as EndpointAddress[];
+			// And remove them
+			return node.commandClasses[
+				"Multi Channel Association"
+			].removeDestinations({
+				groupId: group,
+				nodeIds: nodeAssociations,
+				endpoints: endpointAssociations,
+			});
+		} else if (node.supportsCC(CommandClasses.Association)) {
+			// Use normal associations as a fallback
+			const cc = node.createCCInstanceUnsafe<AssociationCC>(
+				CommandClasses.Association,
+			)!;
+			if (group > cc.getGroupCountCached()) {
+				throw new ZWaveError(
+					`Group ${group} does not exist on node ${nodeId}`,
+					ZWaveErrorCodes.AssociationCC_InvalidGroup,
+				);
+			}
+			if (associations.some(a => a.endpoint != undefined)) {
+				throw new ZWaveError(
+					`Node ${nodeId} does not support multi channel associations!`,
+					ZWaveErrorCodes.CC_NotSupported,
+				);
+			}
+			return node.commandClasses.Association.removeNodeIds({
+				groupId: group,
+				nodeIds: associations.map(a => a.nodeId),
+			});
+		} else {
+			throw new ZWaveError(
+				`Node ${nodeId} does not support associations!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
 		}
 	}
 
