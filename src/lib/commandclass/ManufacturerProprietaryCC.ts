@@ -63,24 +63,29 @@ export class ManufacturerProprietaryCC extends CommandClass {
 				return new PCConstructor(driver, options);
 			}
 		} else {
-			// To create this CC, a manufacturer ID must exist in the value DB
-			const manufacturerId = this.getValueDB().getValue<number>(
+			this.manufacturerId = this.getValueDB().getValue<number>(
 				getManufacturerIdValueId(),
-			);
-			if (manufacturerId == undefined) {
-				throw new ZWaveError(
-					`To create an instance of ManufacturerProprietaryCC, the manufacturer ID must be stored in the value DB`,
-					ZWaveErrorCodes.ManufacturerProprietaryCC_NoManufacturerId,
-				);
-			}
-			this.manufacturerId = manufacturerId;
+			)!;
+			// To use this CC, a manufacturer ID must exist in the value DB
+			// If it doesn't, the interview procedure will throw.
 		}
 	}
 
 	// This must be set in subclasses
 	public manufacturerId!: number;
 
+	private assertManufacturerIdIsSet(): void {
+		// wotan-disable-next-line
+		if (this.manufacturerId == undefined) {
+			throw new ZWaveError(
+				`To use an instance of ManufacturerProprietaryCC, the manufacturer ID must be stored in the value DB`,
+				ZWaveErrorCodes.ManufacturerProprietaryCC_NoManufacturerId,
+			);
+		}
+	}
+
 	public serialize(): Buffer {
+		this.assertManufacturerIdIsSet();
 		// ManufacturerProprietaryCC has no CC command, so the first byte
 		// is stored in ccCommand
 		super.ccCommand = (this.manufacturerId >>> 8) & 0xff;
@@ -96,8 +101,9 @@ export class ManufacturerProprietaryCC extends CommandClass {
 	}
 
 	public async interview(complete: boolean = true): Promise<void> {
-		const node = this.getNode()!;
+		this.assertManufacturerIdIsSet();
 
+		const node = this.getNode()!;
 		// TODO: Can this be refactored?
 		const proprietaryConfig = node.deviceConfig?.proprietary;
 		if (
