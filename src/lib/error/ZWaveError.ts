@@ -28,6 +28,8 @@ export enum ZWaveErrorCodes {
 
 	/** The node with the given node ID was not found */
 	Controller_NodeNotFound,
+	/** The endpoint with the given index was not found on the node */
+	Controller_EndpointNotFound,
 
 	CC_Invalid,
 	CC_NoNodeID,

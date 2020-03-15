@@ -6,6 +6,7 @@ import { composeObject } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
 import { AssociationCC } from "../commandclass/AssociationCC";
+import { AssociationGroupInfoCC } from "../commandclass/AssociationGroupInfoCC";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import {
 	getManufacturerIdValueId,
@@ -834,6 +835,73 @@ export class ZWaveController extends EventEmitter {
 		}
 	}
 
+	/** Checks if a given association is allowed */
+	public isAssociationAllowed(
+		nodeId: number,
+		group: number,
+		association: Association,
+	): boolean {
+		const node = this.nodes.get(nodeId);
+		if (!node) {
+			throw new ZWaveError(
+				`Node ${nodeId} was not found!`,
+				ZWaveErrorCodes.Controller_NodeNotFound,
+			);
+		}
+
+		const targetNode = this.nodes.get(association.nodeId);
+		if (!targetNode) {
+			throw new ZWaveError(
+				`Node ${association.nodeId} was not found!`,
+				ZWaveErrorCodes.Controller_NodeNotFound,
+			);
+		}
+
+		const targetEndpoint = targetNode.getEndpoint(
+			association.endpoint ?? 0,
+		);
+		if (!targetEndpoint) {
+			throw new ZWaveError(
+				`The endpoint ${association.endpoint} was not found on node ${association.nodeId}!`,
+				ZWaveErrorCodes.Controller_EndpointNotFound,
+			);
+		}
+
+		// SDS14223:
+		// A controlling node MUST NOT associate Node A to a Node B destination that does not support
+		// the Command Class that the Node A will be controlling
+		//
+		// To determine this, the node must support the AGI CC or we have no way of knowing which
+		// CCs the node will control
+		if (
+			!node.supportsCC(CommandClasses.Association) &&
+			!node.supportsCC(CommandClasses["Multi Channel Association"])
+		) {
+			throw new ZWaveError(
+				`Node ${nodeId} does not support associations!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		} else if (
+			!node.supportsCC(CommandClasses["Association Group Information"])
+		) {
+			return true;
+		}
+
+		const groupCommandList = node
+			.createCCInstanceInternal<AssociationGroupInfoCC>(
+				CommandClasses["Association Group Information"],
+			)!
+			.getIssuedCommandsCached(group);
+		if (!groupCommandList || !groupCommandList.size) {
+			// We don't know which CCs this group controls, just allow it
+			return true;
+		}
+		const groupCCs = [...groupCommandList.keys()];
+
+		// Check that at least one issued CC is supported
+		return groupCCs.some(cc => targetEndpoint.supportsCC(cc));
+	}
+
 	/**
 	 * Adds associations to a node
 	 */
@@ -899,7 +967,7 @@ export class ZWaveController extends EventEmitter {
 			);
 		} else {
 			throw new ZWaveError(
-				`Node ${nodeId} does not support sssociations!`,
+				`Node ${nodeId} does not support associations!`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
@@ -970,7 +1038,7 @@ export class ZWaveController extends EventEmitter {
 			});
 		} else {
 			throw new ZWaveError(
-				`Node ${nodeId} does not support sssociations!`,
+				`Node ${nodeId} does not support associations!`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
