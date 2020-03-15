@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Delayed the check for manufacturer ID until the `Manufacturer Proprietary CC` needs it to avoid crashing during cache serialization
+
 ## 2.15.4 (2020-03-11)
 ### Bugfixes
 * The `FibaroVenetianBlindCCGet` now correctly expects a response
