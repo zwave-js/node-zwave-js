@@ -12,6 +12,48 @@ import { CCAPI } from "./API";
 import { API, CCCommand, CCCommandOptions, ccValue, ccValueMetadata, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
+export function getManufacturerIdValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Manufacturer Specific"],
+		property: "manufacturerId",
+	};
+}
+
+export function getProductTypeValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Manufacturer Specific"],
+		property: "productType",
+	};
+}
+
+export function getProductIdValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Manufacturer Specific"],
+		property: "productId",
+	};
+}
+
+export function getManufacturerIdValueMetadata(): ValueMetadata {
+	return {
+		...ValueMetadata.ReadOnlyUInt16,
+		label: "Manufacturer ID",
+	};
+}
+
+export function getProductTypeValueMetadata(): ValueMetadata {
+	return {
+		...ValueMetadata.ReadOnlyUInt16,
+		label: "Product type",
+	};
+}
+
+export function getProductIdValueMetadata(): ValueMetadata {
+	return {
+		...ValueMetadata.ReadOnlyUInt16,
+		label: "Product ID",
+	};
+}
+
 export enum ManufacturerSpecificCommand {
 	Get = 0x04,
 	Report = 0x05,
@@ -154,30 +196,21 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 
 	private _manufacturerId: number;
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt16,
-		label: "Manufacturer ID",
-	})
+	@ccValueMetadata(getManufacturerIdValueMetadata())
 	public get manufacturerId(): number {
 		return this._manufacturerId;
 	}
 
 	private _productType: number;
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt16,
-		label: "Product type",
-	})
+	@ccValueMetadata(getProductTypeValueMetadata())
 	public get productType(): number {
 		return this._productType;
 	}
 
 	private _productId: number;
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt16,
-		label: "Product ID",
-	})
+	@ccValueMetadata(getProductIdValueMetadata())
 	public get productId(): number {
 		return this._productId;
 	}

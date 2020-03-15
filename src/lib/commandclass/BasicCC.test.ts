@@ -116,7 +116,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 	});
 
 	describe("getDefinedValueIDs()", () => {
-		it("should include the target value for all endpoints and the node itself", () => {
+		it("should include the target value for all endpoints except the node itself", () => {
 			// Repro for GH#377
 			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
 			(fakeDriver as any).controller.nodes.set(node.id, node);
@@ -153,7 +153,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 				);
 			const endpoints = valueIDs.map(({ endpoint }) => endpoint);
 
-			expect(endpoints).toEqual([0, 1, 2]);
+			expect(endpoints).toEqual([1, 2]);
 		});
 	});
 });

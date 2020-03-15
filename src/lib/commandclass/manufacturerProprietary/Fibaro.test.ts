@@ -1,17 +1,35 @@
 import { createEmptyMockDriver } from "../../../../test/mocks";
+import { loadDeviceIndex } from "../../config/Devices";
 import { ApplicationCommandRequest } from "../../controller/ApplicationCommandRequest";
 import { SendDataRequest, SendDataRequestTransmitReport, TransmitStatus } from "../../controller/SendDataMessages";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
 import { CommandClasses } from "../CommandClasses";
+import {
+	getManufacturerIdValueId,
+	getProductIdValueId,
+	getProductTypeValueId,
+} from "../ManufacturerSpecificCC";
 import { MANUFACTURERID_FIBARO } from "./Constants";
 import { FibaroCCIDs, FibaroVenetianBlindCCCommand, FibaroVenetianBlindCCGet, FibaroVenetianBlindCCReport, FibaroVenetianBlindCCSet } from "./Fibaro";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 const node2 = new ZWaveNode(2, fakeDriver as any);
-(fakeDriver.controller!.nodes as any).set(2, node2);
+(fakeDriver.controller.nodes as any).set(2, node2);
 
 describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
+	beforeAll(async () => {
+		const manufacturerId = 0x10f;
+		node2.valueDB.setValue(getManufacturerIdValueId(), manufacturerId);
+
+		node2.addCC(CommandClasses["Manufacturer Proprietary"], {
+			isSupported: true,
+			version: 1,
+		});
+
+		await loadDeviceIndex();
+	});
+
 	it("the set tilt command should serialize correctly", () => {
 		const blindCC = new FibaroVenetianBlindCCSet(fakeDriver, {
 			nodeId: 2,
@@ -79,7 +97,7 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 			expect(msgRequest.testResponse(msgResponse)).toBe("unexpected");
 		});
 
-		it("FibaroVenetianBlindCCGet => FibaroVenetianBlindCCReport = unexpected", () => {
+		it("FibaroVenetianBlindCCGet => FibaroVenetianBlindCCReport = final", () => {
 			const ccRequest = new FibaroVenetianBlindCCGet(fakeDriver, {
 				nodeId: 2,
 			});
@@ -105,7 +123,49 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 				command: ccResponse,
 			});
 
-			expect(msgRequest.testResponse(msgResponse)).toBe("unexpected");
+			expect(msgRequest.testResponse(msgResponse)).toBe("final");
+		});
+	});
+
+	describe("Fibaro FGR222 should support this CC", () => {
+		beforeAll(async () => {
+			const productType = 0x0302;
+			const productId = 0x1000;
+			const firmwareVersion = "25.25";
+
+			node2.valueDB.setValue(getProductTypeValueId(), productType);
+			node2.valueDB.setValue(getProductIdValueId(), productId);
+			node2.valueDB.setValue(
+				{
+					commandClass: CommandClasses.Version,
+					property: "firmwareVersion",
+				},
+				firmwareVersion,
+			);
+
+			await (node2 as any).loadDeviceConfig();
+
+			(fakeDriver as any).sendCommand.mockClear();
+		});
+
+		it("loads the correct device config", () => {
+			const CCs = node2.deviceConfig?.proprietary?.fibaroCCs ?? [];
+			expect(CCs).toContain(0x26);
+		});
+
+		it("does the interview correctly", () => {
+			const cc = node2.createCCInstance(
+				CommandClasses["Manufacturer Proprietary"],
+			)!;
+
+			cc.interview().catch(() => {
+				// we expect an error, since there will be no response
+			});
+
+			expect((fakeDriver as any).sendCommand).toHaveBeenCalledTimes(1);
+			expect(
+				(fakeDriver as any).sendCommand.mock.calls[0][0],
+			).toBeInstanceOf(FibaroVenetianBlindCCGet);
 		});
 	});
 });

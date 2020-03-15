@@ -2,6 +2,7 @@ import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { ValueMetadata } from "../values/Metadata";
@@ -9,6 +10,13 @@ import { Maybe, unknownBoolean } from "../values/Primitive";
 import { CCAPI } from "./API";
 import { API, CCCommand, CCCommandOptions, ccValue, ccValueMetadata, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, getCommandClass, getImplementedVersion, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
+
+export function getFirmwareVersionsValueId(): ValueID {
+	return {
+		commandClass: CommandClasses.Version,
+		property: "firmwareVersions",
+	};
+}
 
 export enum VersionCommand {
 	Get = 0x11,

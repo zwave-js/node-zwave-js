@@ -27,7 +27,7 @@ import { loadSensorTypes } from "../config/SensorTypes";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import { ApplicationUpdateRequest, ApplicationUpdateRequestNodeInfoReceived } from "../controller/ApplicationUpdateRequest";
 import { ZWaveController } from "../controller/Controller";
-import { isSendReport, isTransmitReport, SendDataMulticastRequest, SendDataRequest, TransmitStatus } from "../controller/SendDataMessages";
+import { isSendReport, isTransmitReport, SendDataMulticastRequest, SendDataRequest, SendDataRequestTransmitReport, TransmitStatus } from "../controller/SendDataMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "../message/Constants";
@@ -965,7 +965,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			switch (responseRole) {
 				case "confirmation": {
 					// When a node has received the message, it confirms the receipt with a SendDataRequest
-					if (msg instanceof SendDataRequest) {
+					if (msg instanceof SendDataRequestTransmitReport) {
 						// As per SDS11846, start a timeout for the expected response
 						this.currentTransaction.computeRTT();
 						const msRTT = this.currentTransaction.rtt / 1e6;

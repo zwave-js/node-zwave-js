@@ -4,7 +4,7 @@ import log from "../../log";
 import type { ValueID } from "../../node/ValueDB";
 import { validatePayload } from "../../util/misc";
 import { ValueMetadata } from "../../values/Metadata";
-import { CCCommandOptions, CommandClassDeserializationOptions, gotDeserializationOptions } from "../CommandClass";
+import { CCCommandOptions, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions } from "../CommandClass";
 import { CommandClasses } from "../CommandClasses";
 import { ManufacturerProprietaryCC } from "../ManufacturerProprietaryCC";
 import { MANUFACTURERID_FIBARO } from "./Constants";
@@ -192,16 +192,6 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 	}
 }
 
-export class FibaroVenetianBlindCCGet extends FibaroVenetianBlindCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-		this.fibaroCCCommand = FibaroVenetianBlindCCCommand.Get;
-	}
-}
-
 export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 	public constructor(
 		driver: Driver,
@@ -241,4 +231,15 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 
 	public readonly position?: number;
 	public readonly tilt?: number;
+}
+
+@expectedCCResponse(FibaroVenetianBlindCCReport)
+export class FibaroVenetianBlindCCGet extends FibaroVenetianBlindCC {
+	public constructor(
+		driver: Driver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
+		this.fibaroCCCommand = FibaroVenetianBlindCCCommand.Get;
+	}
 }

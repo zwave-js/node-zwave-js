@@ -1,11 +1,13 @@
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { validatePayload } from "../util/misc";
 import { CCAPI } from "./API";
 import { API, CCCommandOptions, CommandClass, commandClass, CommandClassDeserializationOptions, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { MANUFACTURERID_FIBARO } from "./manufacturerProprietary/Constants";
+import { getManufacturerIdValueId } from "./ManufacturerSpecificCC";
 
 @API(CommandClasses["Manufacturer Proprietary"])
 export class ManufacturerProprietaryCCAPI extends CCAPI {
@@ -52,13 +54,30 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			if (PCConstructor && new.target !== PCConstructor) {
 				return new PCConstructor(driver, options);
 			}
+		} else {
+			this.manufacturerId = this.getValueDB().getValue<number>(
+				getManufacturerIdValueId(),
+			)!;
+			// To use this CC, a manufacturer ID must exist in the value DB
+			// If it doesn't, the interview procedure will throw.
 		}
 	}
 
 	// This must be set in subclasses
 	public manufacturerId!: number;
 
+	private assertManufacturerIdIsSet(): void {
+		// wotan-disable-next-line
+		if (this.manufacturerId == undefined) {
+			throw new ZWaveError(
+				`To use an instance of ManufacturerProprietaryCC, the manufacturer ID must be stored in the value DB`,
+				ZWaveErrorCodes.ManufacturerProprietaryCC_NoManufacturerId,
+			);
+		}
+	}
+
 	public serialize(): Buffer {
+		this.assertManufacturerIdIsSet();
 		// ManufacturerProprietaryCC has no CC command, so the first byte
 		// is stored in ccCommand
 		super.ccCommand = (this.manufacturerId >>> 8) & 0xff;
@@ -74,8 +93,9 @@ export class ManufacturerProprietaryCC extends CommandClass {
 	}
 
 	public async interview(complete: boolean = true): Promise<void> {
-		const node = this.getNode()!;
+		this.assertManufacturerIdIsSet();
 
+		const node = this.getNode()!;
 		// TODO: Can this be refactored?
 		const proprietaryConfig = node.deviceConfig?.proprietary;
 		if (

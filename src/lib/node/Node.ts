@@ -7,9 +7,11 @@ import { CentralSceneCCNotification, CentralSceneKeys, getSceneValueId } from ".
 import { ClockCCReport } from "../commandclass/ClockCC";
 import { CommandClass, CommandClassInfo, getCCValueMetadata } from "../commandclass/CommandClass";
 import { actuatorCCs, applicationCCs, CommandClasses, getCCName, sensorCCs } from "../commandclass/CommandClasses";
+import { getManufacturerIdValueId, getProductIdValueId, getProductTypeValueId } from "../commandclass/ManufacturerSpecificCC";
 import { getEndpointCCsValueId } from "../commandclass/MultiChannelCC";
 import { NotificationCCReport } from "../commandclass/NotificationCC";
 import { getDimmingDurationValueID, getSceneIdValueID, SceneActivationCCSet } from "../commandclass/SceneActivationCC";
+import { getFirmwareVersionsValueId } from "../commandclass/VersionCC";
 import { getWakeUpIntervalValueId, WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
 import { DeviceConfig, lookupDevice } from "../config/Devices";
 import { lookupNotification } from "../config/Notifications";
@@ -271,31 +273,20 @@ export class ZWaveNode extends Endpoint {
 	}
 
 	public get manufacturerId(): number | undefined {
-		return this.getValue({
-			commandClass: CommandClasses["Manufacturer Specific"],
-			property: "manufacturerId",
-		});
+		return this.getValue(getManufacturerIdValueId());
 	}
 
 	public get productId(): number | undefined {
-		return this.getValue({
-			commandClass: CommandClasses["Manufacturer Specific"],
-			property: "productId",
-		});
+		return this.getValue(getProductIdValueId());
 	}
 
 	public get productType(): number | undefined {
-		return this.getValue({
-			commandClass: CommandClasses["Manufacturer Specific"],
-			property: "productType",
-		});
+		return this.getValue(getProductTypeValueId());
 	}
 
 	public get firmwareVersion(): string | undefined {
-		return this.getValue({
-			commandClass: CommandClasses.Version,
-			property: "firmwareVersion",
-		});
+		// We're only interested in the first (main) firmware
+		return this.getValue<string[]>(getFirmwareVersionsValueId())?.[0];
 	}
 
 	private _deviceConfig: DeviceConfig | undefined;
@@ -385,7 +376,7 @@ export class ZWaveNode extends Endpoint {
 			// Non-application CCs don't need to be filtered
 			if (!applicationCCs.includes(vid.commandClass)) return true;
 			// Filter out root values if an identical value ID exists for another endpoint
-			return allValueIds.some(
+			const valueExistsOnAnotherEndpoint = allValueIds.some(
 				other =>
 					// same CC
 					other.commandClass === vid.commandClass &&
@@ -395,6 +386,7 @@ export class ZWaveNode extends Endpoint {
 					other.property === vid.property &&
 					other.propertyKey === vid.propertyKey,
 			);
+			return !valueExistsOnAnotherEndpoint;
 		});
 	}
 
@@ -810,7 +802,6 @@ version:               ${this.version}`;
 	protected async loadDeviceConfig(): Promise<void> {
 		// But the configuration definitions might change
 		if (
-			!this.isControllerNode() &&
 			this.manufacturerId != undefined &&
 			this.productType != undefined &&
 			this.productId != undefined
@@ -1130,6 +1121,12 @@ version:               ${this.version}`;
 
 	/** Overwrites the reported configuration with information from a config file */
 	protected async overwriteConfig(): Promise<void> {
+		if (this.isControllerNode()) {
+			// The device config was not loaded prior to this step because the Version CC is not interviewed.
+			// Therefore do it here.
+			await this.loadDeviceConfig();
+		}
+
 		if (this.deviceConfig) {
 			// TODO: Override stuff
 		}
