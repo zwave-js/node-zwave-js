@@ -80,6 +80,8 @@ export enum ZWaveErrorCodes {
 	 * Used to report that an invalid group ID was used to address a (Multi Channel) Association
 	 */
 	AssociationCC_InvalidGroup = 1300,
+	/** Cannot add an association because it is not allowed */
+	AssociationCC_NotAllowed,
 }
 
 /**

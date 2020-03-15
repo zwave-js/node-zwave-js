@@ -929,6 +929,26 @@ export class ZWaveController extends EventEmitter {
 					ZWaveErrorCodes.AssociationCC_InvalidGroup,
 				);
 			}
+			// Check that all associations are allowed
+			const disallowedAssociations = associations.filter(
+				a => !this.isAssociationAllowed(nodeId, group, a),
+			);
+			if (disallowedAssociations.length) {
+				let message = `The following associations are not allowed:`;
+				message += disallowedAssociations
+					.map(
+						a =>
+							`\n· Node ${a.nodeId}${
+								a.endpoint ? `, endpoint ${a.endpoint}` : ""
+							}`,
+					)
+					.join("");
+				throw new ZWaveError(
+					message,
+					ZWaveErrorCodes.AssociationCC_NotAllowed,
+				);
+			}
+
 			// Split associations into conventional and endpoint associations
 			const nodeAssociations = associations
 				.filter(a => a.endpoint == undefined)
@@ -961,6 +981,20 @@ export class ZWaveController extends EventEmitter {
 					ZWaveErrorCodes.CC_NotSupported,
 				);
 			}
+
+			// Check that all associations are allowed
+			const disallowedAssociations = associations.filter(
+				a => !this.isAssociationAllowed(nodeId, group, a),
+			);
+			if (disallowedAssociations.length) {
+				throw new ZWaveError(
+					`The associations to the following nodes are not allowed: ${disallowedAssociations
+						.map(a => a.nodeId)
+						.join(", ")}`,
+					ZWaveErrorCodes.AssociationCC_NotAllowed,
+				);
+			}
+
 			return node.commandClasses.Association.addNodeIds(
 				group,
 				...associations.map(a => a.nodeId),
