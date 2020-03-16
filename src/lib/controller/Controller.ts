@@ -1,12 +1,26 @@
-import { createDeferredPromise, DeferredPromise } from "alcalzone-shared/deferred-promise";
+import {
+	createDeferredPromise,
+	DeferredPromise,
+} from "alcalzone-shared/deferred-promise";
 import { composeObject } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
 import type { AssociationCC } from "../commandclass/AssociationCC";
 import type { AssociationGroupInfoCC } from "../commandclass/AssociationGroupInfoCC";
 import { actuatorCCs, CommandClasses } from "../commandclass/CommandClasses";
-import { getManufacturerIdValueId, getManufacturerIdValueMetadata, getProductIdValueId, getProductIdValueMetadata, getProductTypeValueId, getProductTypeValueMetadata } from "../commandclass/ManufacturerSpecificCC";
-import type { Association, EndpointAddress, MultiChannelAssociationCC } from "../commandclass/MultiChannelAssociationCC";
+import {
+	getManufacturerIdValueId,
+	getManufacturerIdValueMetadata,
+	getProductIdValueId,
+	getProductIdValueMetadata,
+	getProductTypeValueId,
+	getProductTypeValueMetadata,
+} from "../commandclass/ManufacturerSpecificCC";
+import type {
+	Association,
+	EndpointAddress,
+	MultiChannelAssociationCC,
+} from "../commandclass/MultiChannelAssociationCC";
 import type { Driver, RequestHandler } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
@@ -16,20 +30,62 @@ import { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
 import type { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
-import { AddNodeStatus, AddNodeToNetworkRequest, AddNodeType } from "./AddNodeToNetworkRequest";
-import { GetControllerCapabilitiesRequest, GetControllerCapabilitiesResponse } from "./GetControllerCapabilitiesMessages";
-import { GetControllerIdRequest, GetControllerIdResponse } from "./GetControllerIdMessages";
-import { GetControllerVersionRequest, GetControllerVersionResponse } from "./GetControllerVersionMessages";
+import {
+	AddNodeStatus,
+	AddNodeToNetworkRequest,
+	AddNodeType,
+} from "./AddNodeToNetworkRequest";
+import {
+	GetControllerCapabilitiesRequest,
+	GetControllerCapabilitiesResponse,
+} from "./GetControllerCapabilitiesMessages";
+import {
+	GetControllerIdRequest,
+	GetControllerIdResponse,
+} from "./GetControllerIdMessages";
+import {
+	GetControllerVersionRequest,
+	GetControllerVersionResponse,
+} from "./GetControllerVersionMessages";
 import { GetRoutingInfoRequest } from "./GetRoutingInfoMessages";
-import { GetSerialApiCapabilitiesRequest, GetSerialApiCapabilitiesResponse } from "./GetSerialApiCapabilitiesMessages";
-import { GetSerialApiInitDataRequest, GetSerialApiInitDataResponse } from "./GetSerialApiInitDataMessages";
-import { GetSUCNodeIdRequest, GetSUCNodeIdResponse } from "./GetSUCNodeIdMessages";
+import {
+	GetSerialApiCapabilitiesRequest,
+	GetSerialApiCapabilitiesResponse,
+} from "./GetSerialApiCapabilitiesMessages";
+import {
+	GetSerialApiInitDataRequest,
+	GetSerialApiInitDataResponse,
+} from "./GetSerialApiInitDataMessages";
+import {
+	GetSUCNodeIdRequest,
+	GetSUCNodeIdResponse,
+} from "./GetSUCNodeIdMessages";
 import { HardResetRequest } from "./HardResetRequest";
-import { IsFailedNodeRequest, IsFailedNodeResponse } from "./IsFailedNodeMessages";
-import { RemoveFailedNodeRequest, RemoveFailedNodeRequestStatusReport, RemoveFailedNodeResponse, RemoveFailedNodeStartFlags, RemoveFailedNodeStatus } from "./RemoveFailedNodeMessages";
-import { RemoveNodeFromNetworkRequest, RemoveNodeStatus, RemoveNodeType } from "./RemoveNodeFromNetworkRequest";
-import { NodeNeighborUpdateStatus, RequestNodeNeighborUpdateReport, RequestNodeNeighborUpdateRequest } from "./RequestNodeNeighborUpdateMessages";
-import { SetSerialApiTimeoutsRequest, SetSerialApiTimeoutsResponse } from "./SetSerialApiTimeoutsMessages";
+import {
+	IsFailedNodeRequest,
+	IsFailedNodeResponse,
+} from "./IsFailedNodeMessages";
+import {
+	RemoveFailedNodeRequest,
+	RemoveFailedNodeRequestStatusReport,
+	RemoveFailedNodeResponse,
+	RemoveFailedNodeStartFlags,
+	RemoveFailedNodeStatus,
+} from "./RemoveFailedNodeMessages";
+import {
+	RemoveNodeFromNetworkRequest,
+	RemoveNodeStatus,
+	RemoveNodeType,
+} from "./RemoveNodeFromNetworkRequest";
+import {
+	NodeNeighborUpdateStatus,
+	RequestNodeNeighborUpdateReport,
+	RequestNodeNeighborUpdateRequest,
+} from "./RequestNodeNeighborUpdateMessages";
+import {
+	SetSerialApiTimeoutsRequest,
+	SetSerialApiTimeoutsResponse,
+} from "./SetSerialApiTimeoutsMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
 export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
@@ -269,8 +325,8 @@ export class ZWaveController extends EventEmitter {
   product type:        ${num2hex(this._productType)}
   product ID:          ${num2hex(this._productId)}
   supported functions: ${this._supportedFunctionTypes
-				.map(fn => `\n  · ${FunctionType[fn]} (${num2hex(fn)})`)
-				.join("")}`,
+		.map((fn) => `\n  · ${FunctionType[fn]} (${num2hex(fn)})`)
+		.join("")}`,
 		);
 
 		// now we can check if a function is supported
@@ -427,11 +483,11 @@ export class ZWaveController extends EventEmitter {
 		// wotan-disable-next-line async-function-assignability
 		return new Promise(async (resolve, reject) => {
 			// handle the incoming message
-			const handler: RequestHandler = _msg => {
+			const handler: RequestHandler = (_msg) => {
 				log.controller.print(`  hard reset succeeded`);
 
 				// Clean up
-				this._nodes.forEach(node => node.removeAllListeners());
+				this._nodes.forEach((node) => node.removeAllListeners());
 				this._nodes.clear();
 
 				resolve();
@@ -696,7 +752,7 @@ export class ZWaveController extends EventEmitter {
 
 		// Cancel all transactions that were created by the healing process
 		this.driver.rejectTransactions(
-			t =>
+			(t) =>
 				t.message instanceof RequestNodeNeighborUpdateRequest ||
 				t.message instanceof GetRoutingInfoRequest,
 		);
@@ -846,13 +902,13 @@ export class ZWaveController extends EventEmitter {
 		// actuator Command Class if the actual association group sends Basic Control Command Class.
 		if (
 			groupCCs.includes(CommandClasses.Basic) &&
-			actuatorCCs.some(cc => targetEndpoint.supportsCC(cc))
+			actuatorCCs.some((cc) => targetEndpoint.supportsCC(cc))
 		) {
 			return true;
 		}
 
 		// Enforce that at least one issued CC is supported
-		return groupCCs.some(cc => targetEndpoint.supportsCC(cc));
+		return groupCCs.some((cc) => targetEndpoint.supportsCC(cc));
 	}
 
 	/**
@@ -884,13 +940,13 @@ export class ZWaveController extends EventEmitter {
 			}
 			// Check that all associations are allowed
 			const disallowedAssociations = associations.filter(
-				a => !this.isAssociationAllowed(nodeId, group, a),
+				(a) => !this.isAssociationAllowed(nodeId, group, a),
 			);
 			if (disallowedAssociations.length) {
 				let message = `The following associations are not allowed:`;
 				message += disallowedAssociations
 					.map(
-						a =>
+						(a) =>
 							`\n· Node ${a.nodeId}${
 								a.endpoint ? `, endpoint ${a.endpoint}` : ""
 							}`,
@@ -904,10 +960,10 @@ export class ZWaveController extends EventEmitter {
 
 			// Split associations into conventional and endpoint associations
 			const nodeAssociations = associations
-				.filter(a => a.endpoint == undefined)
-				.map(a => a.nodeId);
+				.filter((a) => a.endpoint == undefined)
+				.map((a) => a.nodeId);
 			const endpointAssociations = associations.filter(
-				a => a.endpoint != undefined,
+				(a) => a.endpoint != undefined,
 			) as EndpointAddress[];
 			// And add them
 			return node.commandClasses[
@@ -928,7 +984,7 @@ export class ZWaveController extends EventEmitter {
 					ZWaveErrorCodes.AssociationCC_InvalidGroup,
 				);
 			}
-			if (associations.some(a => a.endpoint != undefined)) {
+			if (associations.some((a) => a.endpoint != undefined)) {
 				throw new ZWaveError(
 					`Node ${nodeId} does not support multi channel associations!`,
 					ZWaveErrorCodes.CC_NotSupported,
@@ -937,12 +993,12 @@ export class ZWaveController extends EventEmitter {
 
 			// Check that all associations are allowed
 			const disallowedAssociations = associations.filter(
-				a => !this.isAssociationAllowed(nodeId, group, a),
+				(a) => !this.isAssociationAllowed(nodeId, group, a),
 			);
 			if (disallowedAssociations.length) {
 				throw new ZWaveError(
 					`The associations to the following nodes are not allowed: ${disallowedAssociations
-						.map(a => a.nodeId)
+						.map((a) => a.nodeId)
 						.join(", ")}`,
 					ZWaveErrorCodes.AssociationCC_NotAllowed,
 				);
@@ -950,7 +1006,7 @@ export class ZWaveController extends EventEmitter {
 
 			return node.commandClasses.Association.addNodeIds(
 				group,
-				...associations.map(a => a.nodeId),
+				...associations.map((a) => a.nodeId),
 			);
 		} else {
 			throw new ZWaveError(
@@ -989,10 +1045,10 @@ export class ZWaveController extends EventEmitter {
 			}
 			// Split associations into conventional and endpoint associations
 			const nodeAssociations = associations
-				.filter(a => a.endpoint == undefined)
-				.map(a => a.nodeId);
+				.filter((a) => a.endpoint == undefined)
+				.map((a) => a.nodeId);
 			const endpointAssociations = associations.filter(
-				a => a.endpoint != undefined,
+				(a) => a.endpoint != undefined,
 			) as EndpointAddress[];
 			// And remove them
 			return node.commandClasses[
@@ -1013,7 +1069,7 @@ export class ZWaveController extends EventEmitter {
 					ZWaveErrorCodes.AssociationCC_InvalidGroup,
 				);
 			}
-			if (associations.some(a => a.endpoint != undefined)) {
+			if (associations.some((a) => a.endpoint != undefined)) {
 				throw new ZWaveError(
 					`Node ${nodeId} does not support multi channel associations!`,
 					ZWaveErrorCodes.CC_NotSupported,
@@ -1021,7 +1077,7 @@ export class ZWaveController extends EventEmitter {
 			}
 			return node.commandClasses.Association.removeNodeIds({
 				groupId: group,
-				nodeIds: associations.map(a => a.nodeId),
+				nodeIds: associations.map((a) => a.nodeId),
 			});
 		} else {
 			throw new ZWaveError(
@@ -1038,8 +1094,8 @@ export class ZWaveController extends EventEmitter {
 	public async removeNodeFromAllAssocations(nodeId: number): Promise<void> {
 		// Create all async tasks
 		const tasks = [...this.nodes.values()]
-			.filter(node => node.id !== this._ownNodeId && node.id !== nodeId)
-			.map(node => {
+			.filter((node) => node.id !== this._ownNodeId && node.id !== nodeId)
+			.map((node) => {
 				// Prefer multi channel associations if that is available
 				if (
 					node.commandClasses[
@@ -1057,7 +1113,7 @@ export class ZWaveController extends EventEmitter {
 					);
 				}
 			})
-			.filter(task => !!task) as Promise<void>[];
+			.filter((task) => !!task) as Promise<void>[];
 		await Promise.all(tasks);
 	}
 
@@ -1070,7 +1126,7 @@ export class ZWaveController extends EventEmitter {
 	): Promise<boolean> {
 		log.controller.print(
 			`handling add node request (status = ${
-			AddNodeStatus[msg.status!]
+				AddNodeStatus[msg.status!]
 			})`,
 		);
 		if (!this._inclusionActive && msg.status !== AddNodeStatus.Done) {
@@ -1163,8 +1219,8 @@ export class ZWaveController extends EventEmitter {
 					log.controller.print(
 						`finished adding node ${newNode.id}:
   basic device class:    ${
-						BasicDeviceClasses[newNode.deviceClass!.basic]
-						} (${num2hex(newNode.deviceClass!.basic)})
+		BasicDeviceClasses[newNode.deviceClass!.basic]
+  } (${num2hex(newNode.deviceClass!.basic)})
   generic device class:  ${newNode.deviceClass!.generic.name} (${num2hex(
 							newNode.deviceClass!.generic.key,
 						)})
@@ -1172,11 +1228,11 @@ export class ZWaveController extends EventEmitter {
 							newNode.deviceClass!.specific.key,
 						)})
   supported CCs: ${supportedCommandClasses
-							.map(cc => `\n    ${CommandClasses[cc]} (${num2hex(cc)})`)
-							.join("")}
+		.map((cc) => `\n    ${CommandClasses[cc]} (${num2hex(cc)})`)
+		.join("")}
   controlled CCs: ${controlledCommandClasses
-							.map(cc => `\n    ${CommandClasses[cc]} (${num2hex(cc)})`)
-							.join("")}`,
+		.map((cc) => `\n    ${CommandClasses[cc]} (${num2hex(cc)})`)
+		.join("")}`,
 					);
 					// remember the node
 					this._nodes.set(newNode.id, newNode);
@@ -1202,7 +1258,7 @@ export class ZWaveController extends EventEmitter {
 	): Promise<boolean> {
 		log.controller.print(
 			`handling remove node request (status = ${
-			RemoveNodeStatus[msg.status!]
+				RemoveNodeStatus[msg.status!]
 			})`,
 		);
 		if (!this._exclusionActive && msg.status !== RemoveNodeStatus.Done) {

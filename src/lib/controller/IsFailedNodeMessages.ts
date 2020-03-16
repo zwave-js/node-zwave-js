@@ -1,6 +1,17 @@
 import type { Driver } from "../driver/Driver";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, MessageBaseOptions, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	Message,
+	MessageBaseOptions,
+	MessageDeserializationOptions,
+	messageTypes,
+	priority,
+} from "../message/Message";
 
 export interface IsFailedNodeRequestOptions extends MessageBaseOptions {
 	// This must not be called nodeId or rejectAllTransactions may reject the request
@@ -27,10 +38,7 @@ export class IsFailedNodeRequest extends Message {
 
 @messageTypes(MessageType.Response, FunctionType.IsFailedNode)
 export class IsFailedNodeResponse extends Message {
-	public constructor(
-		driver: Driver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this.result = !!this.payload[0];
 	}

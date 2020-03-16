@@ -3,7 +3,15 @@ import { loadIndicatorsInternal } from "../config/Indicators";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { CommandClasses } from "./CommandClasses";
-import { getIndicatorValueValueID, getSupportedIndicatorIDsValueID, IndicatorCC, IndicatorCCGet, IndicatorCCReport, IndicatorCCSet, IndicatorCommand } from "./IndicatorCC";
+import {
+	getIndicatorValueValueID,
+	getSupportedIndicatorIDsValueID,
+	IndicatorCC,
+	IndicatorCCGet,
+	IndicatorCCReport,
+	IndicatorCCSet,
+	IndicatorCommand,
+} from "./IndicatorCC";
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([

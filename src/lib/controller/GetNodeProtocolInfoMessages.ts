@@ -1,7 +1,23 @@
 import type { Driver } from "../driver/Driver";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, MessageBaseOptions, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
-import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, SpecificDeviceClass } from "../node/DeviceClass";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	Message,
+	MessageBaseOptions,
+	MessageDeserializationOptions,
+	messageTypes,
+	priority,
+} from "../message/Message";
+import {
+	BasicDeviceClasses,
+	DeviceClass,
+	GenericDeviceClass,
+	SpecificDeviceClass,
+} from "../node/DeviceClass";
 import type { INodeQuery } from "../node/INodeQuery";
 import type { JSONObject } from "../util/misc";
 
@@ -64,10 +80,7 @@ export class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
 
 @messageTypes(MessageType.Response, FunctionType.GetNodeProtocolInfo)
 export class GetNodeProtocolInfoResponse extends Message {
-	public constructor(
-		driver: Driver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
 		const capabilities = this.payload[0];

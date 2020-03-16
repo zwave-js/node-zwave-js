@@ -2,7 +2,16 @@ import type { Driver } from "../driver/Driver";
 import { validatePayload } from "../util/misc";
 import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
-import { API, CCCommand, CCCommandOptions, CommandClass, commandClass, CommandClassDeserializationOptions, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum MultiCommandCommand {
@@ -62,7 +71,7 @@ export class MultiCommandCC extends CommandClass {
 			nodeId: CCs[0].nodeId,
 			encapsulated: CCs,
 			// MultiCommand CC is wrapped inside Supervision CC, so the supervision status must be preserved
-			supervised: CCs.some(cc => cc.supervised),
+			supervised: CCs.some((cc) => cc.supervised),
 		});
 	}
 

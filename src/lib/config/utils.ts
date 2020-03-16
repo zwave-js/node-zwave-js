@@ -24,7 +24,7 @@ export function getDeviceEntryPredicate(
 	productId: number,
 	firmwareVersion?: string,
 ): (entry: DeviceConfigIndexEntry) => boolean {
-	return entry =>
+	return (entry) =>
 		entry.manufacturerId === formatId(manufacturerId) &&
 		entry.productType === formatId(productType) &&
 		entry.productId === formatId(productId) &&

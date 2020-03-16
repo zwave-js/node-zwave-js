@@ -1,6 +1,17 @@
 import type { Driver } from "../driver/Driver";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, MessageBaseOptions, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	Message,
+	MessageBaseOptions,
+	MessageDeserializationOptions,
+	messageTypes,
+	priority,
+} from "../message/Message";
 import type { JSONObject } from "../util/misc";
 
 interface SetSerialApiTimeoutsRequestOptions extends MessageBaseOptions {
@@ -42,10 +53,7 @@ export class SetSerialApiTimeoutsRequest extends Message {
 
 @messageTypes(MessageType.Response, FunctionType.SetSerialApiTimeouts)
 export class SetSerialApiTimeoutsResponse extends Message {
-	public constructor(
-		driver: Driver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._oldAckTimeout = this.payload[0] * 10;
 		this._oldByteTimeout = this.payload[1] * 10;

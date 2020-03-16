@@ -6,9 +6,28 @@ import type { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { ValueMetadata } from "../values/Metadata";
-import { getMinIntegerSize, Maybe, parseBitMask, parseFloatWithScale, unknownNumber } from "../values/Primitive";
+import {
+	getMinIntegerSize,
+	Maybe,
+	parseBitMask,
+	parseFloatWithScale,
+	unknownNumber,
+} from "../values/Primitive";
 import { CCAPI } from "./API";
-import { API, CCCommand, CCCommandOptions, CCResponsePredicate, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, getCommandClass, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	CCResponsePredicate,
+	ccValue,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	getCommandClass,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 // All the supported commands
@@ -168,7 +187,7 @@ export class MeterCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-				} interview...`,
+			} interview...`,
 			direction: "none",
 		});
 
@@ -198,11 +217,11 @@ export class MeterCC extends CommandClass {
 				const logMessage = `received meter support:
 type:                 ${getMeterTypeName(type)}
 supported scales:     ${supportedScales
-						.map(s => lookupMeterScale(type, s).label)
-						.map(label => `\n· ${label}`)}
+					.map((s) => lookupMeterScale(type, s).label)
+					.map((label) => `\n· ${label}`)}
 supported rate types: ${supportedRateTypes
-						.map(rt => getEnumMemberName(RateType, rt))
-						.map(label => `\n· ${label}`)}
+					.map((rt) => getEnumMemberName(RateType, rt))
+					.map((label) => `\n· ${label}`)}
 supports reset:       ${supportsReset}`;
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
@@ -237,11 +256,11 @@ supports reset:       ${supportsReset}`;
 						)}, scale = ${lookupMeterScale(type, scale).label}${
 							rateType != undefined
 								? `, rate type = ${getEnumMemberName(
-									RateType,
-									rateType,
-								)}`
+										RateType,
+										rateType,
+								  )}`
 								: ""
-							})...`,
+						})...`,
 						direction: "outbound",
 					});
 					await api.get({
@@ -368,7 +387,7 @@ export class MeterCCReport extends MeterCC {
 					this._rateType
 						? `, ${getEnumMemberName(RateType, this._rateType)}`
 						: ""
-					})`,
+				})`,
 				unit: this._scale.label,
 			},
 		);
@@ -382,7 +401,7 @@ export class MeterCCReport extends MeterCC {
 						this._rateType
 							? `, ${getEnumMemberName(RateType, this._rateType)}`
 							: ""
-						})`,
+					})`,
 					unit: this._scale.label,
 				},
 			);
@@ -543,7 +562,7 @@ export class MeterCCSupportedReport extends MeterCC {
 					this.payload.slice(3, 3 + extraBytes),
 				]),
 				0,
-			).map(scale => (scale >= 8 ? scale - 1 : scale));
+			).map((scale) => (scale >= 8 ? scale - 1 : scale));
 		} else {
 			// only 7 bits in the bitmask. Bit 7 is 0, so no need to mask it out
 			this._supportedScales = parseBitMask(
@@ -585,17 +604,17 @@ export class MeterCCSupportedReport extends MeterCC {
 
 @CCCommand(MeterCommand.SupportedGet)
 @expectedCCResponse(MeterCCSupportedReport)
-export class MeterCCSupportedGet extends MeterCC { }
+export class MeterCCSupportedGet extends MeterCC {}
 
 type MeterCCResetOptions =
 	| {
-		type?: undefined;
-		targetValue?: undefined;
-	}
+			type?: undefined;
+			targetValue?: undefined;
+	  }
 	| {
-		type: number;
-		targetValue: number;
-	};
+			type: number;
+			targetValue: number;
+	  };
 
 @CCCommand(MeterCommand.Reset)
 export class MeterCCReset extends MeterCC {

@@ -4,7 +4,19 @@ import { validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
 import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
-import { API, CCCommand, CCCommandOptions, ccValue, ccValueMetadata, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	ccValue,
+	ccValueMetadata,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum LanguageCommand {

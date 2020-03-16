@@ -2,7 +2,16 @@ import { createEmptyMockDriver } from "../../../test/mocks";
 import type { Driver } from "../driver/Driver";
 import { Duration } from "../values/Duration";
 import { CommandClasses } from "./CommandClasses";
-import { MultilevelSwitchCC, MultilevelSwitchCCGet, MultilevelSwitchCCReport, MultilevelSwitchCCSet, MultilevelSwitchCCStartLevelChange, MultilevelSwitchCCStopLevelChange, MultilevelSwitchCCSupportedGet, MultilevelSwitchCommand } from "./MultilevelSwitchCC";
+import {
+	MultilevelSwitchCC,
+	MultilevelSwitchCCGet,
+	MultilevelSwitchCCReport,
+	MultilevelSwitchCCSet,
+	MultilevelSwitchCCStartLevelChange,
+	MultilevelSwitchCCStopLevelChange,
+	MultilevelSwitchCCSupportedGet,
+	MultilevelSwitchCommand,
+} from "./MultilevelSwitchCC";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 

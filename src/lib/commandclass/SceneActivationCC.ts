@@ -4,8 +4,25 @@ import { validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { ValueMetadata } from "../values/Metadata";
 import type { Maybe } from "../values/Primitive";
-import { CCAPI, SetValueImplementation, SET_VALUE, throwUnsupportedProperty, throwWrongValueType } from "./API";
-import { API, CCCommand, CCCommandOptions, ccValue, ccValueMetadata, CommandClass, commandClass, CommandClassDeserializationOptions, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "./API";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	ccValue,
+	ccValueMetadata,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 // @noInterview This CC is write-only

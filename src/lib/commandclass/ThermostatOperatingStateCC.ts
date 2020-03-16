@@ -4,7 +4,17 @@ import { getEnumMemberName, validatePayload } from "../util/misc";
 import { enumValuesToMetadataStates, ValueMetadata } from "../values/Metadata";
 import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
-import { API, CCCommand, ccValue, ccValueMetadata, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, implementedVersion } from "./CommandClass";
+import {
+	API,
+	CCCommand,
+	ccValue,
+	ccValueMetadata,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 // All the supported commands
@@ -78,7 +88,7 @@ export class ThermostatOperatingStateCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-				} interview...`,
+			} interview...`,
 			direction: "none",
 		});
 
@@ -132,4 +142,4 @@ export class ThermostatOperatingStateCCReport extends ThermostatOperatingStateCC
 
 @CCCommand(ThermostatOperatingStateCommand.Get)
 @expectedCCResponse(ThermostatOperatingStateCCReport)
-export class ThermostatOperatingStateCCGet extends ThermostatOperatingStateCC { }
+export class ThermostatOperatingStateCCGet extends ThermostatOperatingStateCC {}

@@ -8,7 +8,19 @@ import type { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
-import { API, CCCommand, CCCommandOptions, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, CommandClassOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	ccValue,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	CommandClassOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { Association } from "./MultiChannelAssociationCC";
 
@@ -239,7 +251,7 @@ export class AssociationCC extends CommandClass {
 			ret.set(
 				i,
 				// Filter out duplicates
-				distinct(nodes).map(nodeId => ({ nodeId })),
+				distinct(nodes).map((nodeId) => ({ nodeId })),
 			);
 		}
 		return ret;
@@ -267,7 +279,7 @@ export class AssociationCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-				} interview...`,
+			} interview...`,
 			direction: "none",
 		});
 
@@ -330,14 +342,14 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 		} else if (node.deviceConfig?.associations?.size) {
 			// We have a device config file that tells us which association to assign
 			const lifelineGroups = [...node.deviceConfig.associations.values()]
-				.filter(a => a.isLifeline)
-				.map(a => a.groupId);
+				.filter((a) => a.isLifeline)
+				.map((a) => a.groupId);
 			if (lifelineGroups.length > 0) {
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `has a config file, assigning ourselves to the configured Lifeline group${
 						lifelineGroups.length > 1 ? "s" : ""
-						}: ${lifelineGroups.join(", ")}`,
+					}: ${lifelineGroups.join(", ")}`,
 					direction: "outbound",
 				});
 				for (const group of lifelineGroups) {
@@ -392,7 +404,7 @@ export class AssociationCCSet extends AssociationCC {
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
-			if (options.nodeIds.some(n => n < 1 || n > MAX_NODES)) {
+			if (options.nodeIds.some((n) => n < 1 || n > MAX_NODES)) {
 				throw new ZWaveError(
 					`All node IDs must be between 1 and ${MAX_NODES}!`,
 					ZWaveErrorCodes.Argument_Invalid,
@@ -450,7 +462,7 @@ export class AssociationCCRemove extends AssociationCC {
 				);
 			}
 
-			if (options.nodeIds?.some(n => n < 1 || n > MAX_NODES)) {
+			if (options.nodeIds?.some((n) => n < 1 || n > MAX_NODES)) {
 				throw new ZWaveError(
 					`All node IDs must be between 1 and ${MAX_NODES}!`,
 					ZWaveErrorCodes.Argument_Invalid,
@@ -517,7 +529,7 @@ export class AssociationCCReport extends AssociationCC {
 	public mergePartialCCs(partials: AssociationCCReport[]): void {
 		// Concat the list of nodes
 		this._nodeIds = [...partials, this]
-			.map(report => report._nodeIds)
+			.map((report) => report._nodeIds)
 			.reduce((prev, cur) => prev.concat(...cur), []);
 
 		// Persist values
@@ -617,4 +629,4 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 
 @CCCommand(AssociationCommand.SupportedGroupingsGet)
 @expectedCCResponse(AssociationCCSupportedGroupingsReport)
-export class AssociationCCSupportedGroupingsGet extends AssociationCC { }
+export class AssociationCCSupportedGroupingsGet extends AssociationCC {}

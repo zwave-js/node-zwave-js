@@ -5,8 +5,26 @@ import type { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { enumValuesToMetadataStates, ValueMetadata } from "../values/Metadata";
 import { Maybe, parseBitMask } from "../values/Primitive";
-import { CCAPI, SetValueImplementation, SET_VALUE, throwUnsupportedProperty, throwWrongValueType } from "./API";
-import { API, CCCommand, CCCommandOptions, ccValue, ccValueMetadata, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "./API";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	ccValue,
+	ccValueMetadata,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 // All the supported commands
@@ -142,7 +160,7 @@ export class ThermostatModeCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-				} interview...`,
+			} interview...`,
 			direction: "none",
 		});
 
@@ -159,7 +177,7 @@ export class ThermostatModeCC extends CommandClass {
 			const logMessage =
 				`received supported thermostat modes:` +
 				supportedModes.map(
-					mode => "\n· " + getEnumMemberName(ThermostatMode, mode),
+					(mode) => "\n· " + getEnumMemberName(ThermostatMode, mode),
 				);
 			log.controller.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -191,15 +209,15 @@ export class ThermostatModeCC extends CommandClass {
 type ThermostatModeCCSetOptions = CCCommandOptions &
 	(
 		| {
-			mode: Exclude<
-				ThermostatMode,
-				typeof ThermostatMode["Manufacturer specific"]
-			>;
-		}
+				mode: Exclude<
+					ThermostatMode,
+					typeof ThermostatMode["Manufacturer specific"]
+				>;
+		  }
 		| {
-			mode: typeof ThermostatMode["Manufacturer specific"];
-			manufacturerData: Buffer;
-		}
+				mode: typeof ThermostatMode["Manufacturer specific"];
+				manufacturerData: Buffer;
+		  }
 	);
 
 @CCCommand(ThermostatModeCommand.Set)
@@ -230,8 +248,8 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 	public serialize(): Buffer {
 		const manufacturerData =
 			this.version >= 3 &&
-				this.mode === ThermostatMode["Manufacturer specific"] &&
-				this.manufacturerData
+			this.mode === ThermostatMode["Manufacturer specific"] &&
+			this.manufacturerData
 				? this.manufacturerData
 				: Buffer.from([]);
 		const manufacturerDataLength = manufacturerData.length;
@@ -291,7 +309,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 
 @CCCommand(ThermostatModeCommand.Get)
 @expectedCCResponse(ThermostatModeCCReport)
-export class ThermostatModeCCGet extends ThermostatModeCC { }
+export class ThermostatModeCCGet extends ThermostatModeCC {}
 
 @CCCommand(ThermostatModeCommand.SupportedReport)
 export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
@@ -328,4 +346,4 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 
 @CCCommand(ThermostatModeCommand.SupportedGet)
 @expectedCCResponse(ThermostatModeCCSupportedReport)
-export class ThermostatModeCCSupportedGet extends ThermostatModeCC { }
+export class ThermostatModeCCSupportedGet extends ThermostatModeCC {}

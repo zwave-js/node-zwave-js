@@ -5,9 +5,33 @@ import log from "../log";
 import type { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
-import { encodeFloatWithScale, Maybe, parseBitMask, parseFloatWithScale } from "../values/Primitive";
-import { CCAPI, SetValueImplementation, SET_VALUE, throwUnsupportedProperty, throwWrongValueType } from "./API";
-import { API, CCCommand, CCCommandOptions, CCResponsePredicate, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, CommandClassOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	encodeFloatWithScale,
+	Maybe,
+	parseBitMask,
+	parseFloatWithScale,
+} from "../values/Primitive";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "./API";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	CCResponsePredicate,
+	ccValue,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	CommandClassOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum ThermostatSetpointCommand {
@@ -100,7 +124,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		if (typeof propertyKey !== "number") {
 			throw new ZWaveError(
 				`${
-				CommandClasses[this.ccId]
+					CommandClasses[this.ccId]
 				}: "${property}" must be further specified by a numeric property key`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
@@ -135,12 +159,12 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		>(cc))!;
 		return response.type === ThermostatSetpointType["N/A"]
 			? // not supported
-			undefined
+			  undefined
 			: // supported
-			{
-				value: response.value,
-				scale: response.scale,
-			};
+			  {
+					value: response.value,
+					scale: response.scale,
+			  };
 	}
 
 	public async set(
@@ -246,7 +270,7 @@ export class ThermostatSetpointCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-				} interview...`,
+			} interview...`,
 			direction: "none",
 		});
 
@@ -284,14 +308,14 @@ export class ThermostatSetpointCC extends CommandClass {
 			// --> If setpoints 3,4,5 or 6 are supported, the assumption is wrong ==> A
 			function switchToInterpretationA(): void {
 				setpointTypes = setpointTypes.map(
-					i => thermostatSetpointTypeMap[i],
+					(i) => thermostatSetpointTypeMap[i],
 				);
 				interpretation = "A";
 				interpretationChanged = true;
 			}
 
 			if (!interpretation) {
-				if ([3, 4, 5, 6].some(type => setpointTypes.includes(type))) {
+				if ([3, 4, 5, 6].some((type) => setpointTypes.includes(type))) {
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
@@ -309,7 +333,7 @@ export class ThermostatSetpointCC extends CommandClass {
 				}
 			} else if (interpretation === "A") {
 				setpointTypes = setpointTypes.map(
-					i => thermostatSetpointTypeMap[i],
+					(i) => thermostatSetpointTypeMap[i],
 				);
 			}
 
@@ -415,10 +439,10 @@ export class ThermostatSetpointCC extends CommandClass {
 				const logMessage =
 					"received supported setpoint types:\n" +
 					setpointTypes
-						.map(type =>
+						.map((type) =>
 							getEnumMemberName(ThermostatSetpointType, type),
 						)
-						.map(name => `· ${name}`)
+						.map((name) => `· ${name}`)
 						.join("\n");
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
@@ -473,7 +497,7 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 				if (setpoint) {
 					logMessage = `received current value of setpoint ${setpointName}: ${
 						setpoint.value
-						} ${setpoint.scale.unit ?? ""}`;
+					} ${setpoint.scale.unit ?? ""}`;
 				} else {
 					// This shouldn't happen since we used getSupported
 					// But better be sure we don't crash
@@ -747,7 +771,7 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 		if (this.version >= 3) {
 			// Interpretation A
 			this._supportedSetpointTypes = supported.map(
-				i => thermostatSetpointTypeMap[i],
+				(i) => thermostatSetpointTypeMap[i],
 			);
 		} else {
 			// It is unknown which interpretation the device complies to.

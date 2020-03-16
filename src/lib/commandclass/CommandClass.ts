@@ -7,9 +7,19 @@ import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage } from "../node/Types";
 import { ValueDB, ValueID, valueIdToString } from "../node/ValueDB";
-import { JSONObject, staticExtends, stripUndefined, validatePayload } from "../util/misc";
+import {
+	JSONObject,
+	staticExtends,
+	stripUndefined,
+	validatePayload,
+} from "../util/misc";
 import { num2hex } from "../util/strings";
-import { CacheMetadata, CacheValue, deserializeCacheValue, serializeCacheValue } from "../values/Cache";
+import {
+	CacheMetadata,
+	CacheValue,
+	deserializeCacheValue,
+	serializeCacheValue,
+} from "../values/Cache";
 import { ValueMetadata } from "../values/Metadata";
 import { CCAPI } from "./API";
 import { CommandClasses, getCCName } from "./CommandClasses";
@@ -28,9 +38,9 @@ export type CommandClassDeserializationOptions = { data: Buffer } & (
 			nodeId: number;
 	  }
 	| {
-		fromEncapsulation: true;
-		encapCC: CommandClass;
-	}
+			fromEncapsulation: true;
+			encapCC: CommandClass;
+	  }
 );
 
 export function gotDeserializationOptions(
@@ -441,7 +451,7 @@ export class CommandClass {
 		const registeredCCValueNames = [...this._registeredCCValues]
 			.filter(([, isInternal]) => !isInternal)
 			.map(([key]) => key);
-		registeredCCValueNames.forEach(property => addValueId(property));
+		registeredCCValueNames.forEach((property) => addValueId(property));
 
 		// Return all defined non-internal CC values that are available in the current version of this CC
 		const valueDefinitions = getCCValueDefinitions(this);
@@ -453,7 +463,7 @@ export class CommandClass {
 						options.minVersion <= this.version),
 			)
 			.map(([key]) => key);
-		definedCCValueNames.forEach(property => addValueId(property));
+		definedCCValueNames.forEach((property) => addValueId(property));
 
 		const kvpDefinitions = getCCKeyValuePairDefinitions(this);
 
@@ -462,21 +472,21 @@ export class CommandClass {
 			...this.getValueDB().getValues(this.ccId),
 			...this.getValueDB().getAllMetadata(this.ccId),
 		]
-			.filter(valueId => valueId.endpoint === this.endpointIndex)
+			.filter((valueId) => valueId.endpoint === this.endpointIndex)
 			// allow the value id if it is NOT registered or it is registered as non-internal
 			.filter(
-				valueId =>
+				(valueId) =>
 					!this._registeredCCValues.has(valueId.property) ||
 					this._registeredCCValues.get(valueId.property)! === false,
 			)
 			// allow the value id if it is NOT defined or it is defined as non-internal
 			.filter(
-				valueId =>
+				(valueId) =>
 					!valueDefinitions.has(valueId.property) ||
 					valueDefinitions.get(valueId.property)! === false,
 			)
 			.filter(
-				valueId =>
+				(valueId) =>
 					!kvpDefinitions.has(valueId.property) ||
 					kvpDefinitions.get(valueId.property)! === false,
 			);
@@ -734,7 +744,7 @@ const METADATA_APIMap = Symbol("APIMap");
 /* eslint-enable @typescript-eslint/camelcase */
 
 export interface Constructable<T extends CommandClass> {
-	new(
+	new (
 		driver: Driver,
 		options:
 			| CommandClassCreationOptions
@@ -790,7 +800,7 @@ export function isCCResponsePredicate(
  * Defines the command class associated with a Z-Wave message
  */
 export function commandClass(cc: CommandClasses): ClassDecorator {
-	return messageClass => {
+	return (messageClass) => {
 		log.reflection.define(
 			messageClass.name,
 			"CommandClass",
@@ -821,8 +831,8 @@ export function getCommandClass<T extends CommandClass | CCAPI>(
 		cc instanceof CommandClass
 			? Reflect.getMetadata(METADATA_commandClass, constr)
 			: cc instanceof CCAPI
-				? Reflect.getMetadata(METADATA_API, constr)
-				: undefined;
+			? Reflect.getMetadata(METADATA_API, constr)
+			: undefined;
 	if (ret == undefined) {
 		throw new ZWaveError(
 			`No command class defined for ${constr.name}!`,
@@ -882,7 +892,7 @@ export function getCCConstructor(
  * Defines the implemented version of a Z-Wave command class
  */
 export function implementedVersion(version: number): ClassDecorator {
-	return ccClass => {
+	return (ccClass) => {
 		log.reflection.define(
 			ccClass.name,
 			"implemented version",
@@ -942,7 +952,7 @@ export function getImplementedVersionStatic<
  * Defines the CC command a subclass of a CC implements
  */
 export function CCCommand(command: number): ClassDecorator {
-	return ccClass => {
+	return (ccClass) => {
 		log.reflection.define(
 			ccClass.name,
 			"CC Command",
@@ -1016,7 +1026,7 @@ export function expectedCCResponse<T extends CommandClass>(
 		| CCResponsePredicate<T>
 		| DynamicCCResponse<T>,
 ): ClassDecorator {
-	return ccClass => {
+	return (ccClass) => {
 		if (staticExtends(ccOrPredicateOrDynamic, CommandClass)) {
 			log.reflection.define(
 				ccClass.name,
@@ -1036,7 +1046,7 @@ export function expectedCCResponse<T extends CommandClass>(
 				ccClass.name,
 				"expected CC response",
 				`Predicate${
-				predicate.name.length > 0 ? " " + predicate.name : ""
+					predicate.name.length > 0 ? " " + predicate.name : ""
 				}`,
 			);
 		}
@@ -1228,7 +1238,7 @@ export function getCCValueMetadata(
  * Defines the simplified API associated with a Z-Wave command class
  */
 export function API(cc: CommandClasses): ClassDecorator {
-	return apiClass => {
+	return (apiClass) => {
 		log.reflection.define(
 			apiClass.name,
 			"API",

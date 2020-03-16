@@ -46,7 +46,7 @@ describe("lib/log/Controller =>", () => {
 
 			log.controller.value("added", { ...baseArgs, newValue: 1 });
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[+]"),
+				predicate: (msg) => msg.includes("[+]"),
 			});
 
 			log.controller.value("updated", {
@@ -55,13 +55,13 @@ describe("lib/log/Controller =>", () => {
 				newValue: 1,
 			});
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[~]"),
+				predicate: (msg) => msg.includes("[~]"),
 				callNumber: 1,
 			});
 
 			log.controller.value("removed", { ...baseArgs, prevValue: 7 });
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[-]"),
+				predicate: (msg) => msg.includes("[-]"),
 				callNumber: 2,
 			});
 		});
@@ -75,7 +75,7 @@ describe("lib/log/Controller =>", () => {
 
 			log.controller.value("added", { ...baseArgs, newValue: 1 });
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[Basic]"),
+				predicate: (msg) => msg.includes("[Basic]"),
 			});
 		});
 
@@ -92,7 +92,7 @@ describe("lib/log/Controller =>", () => {
 				newValue: 1,
 			});
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[Node 005]"),
+				predicate: (msg) => msg.includes("[Node 005]"),
 			});
 		});
 
@@ -105,7 +105,7 @@ describe("lib/log/Controller =>", () => {
 
 			log.controller.value("added", { ...baseArgs, newValue: 1 });
 			assertMessage(spyTransport, {
-				predicate: msg => !msg.includes("[Endpoint"),
+				predicate: (msg) => !msg.includes("[Endpoint"),
 			});
 
 			log.controller.value("added", {
@@ -114,7 +114,7 @@ describe("lib/log/Controller =>", () => {
 				endpoint: 5,
 			});
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[Endpoint 5]"),
+				predicate: (msg) => msg.includes("[Endpoint 5]"),
 				callNumber: 1,
 			});
 		});
@@ -132,7 +132,7 @@ describe("lib/log/Controller =>", () => {
 				internal: true,
 			});
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[internal]"),
+				predicate: (msg) => msg.includes("[internal]"),
 			});
 
 			log.controller.value("added", {
@@ -140,7 +140,7 @@ describe("lib/log/Controller =>", () => {
 				newValue: true,
 			});
 			assertMessage(spyTransport, {
-				predicate: msg => !msg.includes("[internal]"),
+				predicate: (msg) => !msg.includes("[internal]"),
 				callNumber: 1,
 			});
 		});
@@ -161,7 +161,7 @@ describe("lib/log/Controller =>", () => {
 			log.controller.value("removed", { ...baseArgs, prevValue: 7 });
 			for (let callNumber = 0; callNumber < 3; callNumber++) {
 				assertMessage(spyTransport, {
-					predicate: msg => msg.includes("foo"),
+					predicate: (msg) => msg.includes("foo"),
 					callNumber,
 				});
 			}
@@ -184,7 +184,7 @@ describe("lib/log/Controller =>", () => {
 			log.controller.value("removed", { ...baseArgs, prevValue: 7 });
 			for (let callNumber = 0; callNumber < 3; callNumber++) {
 				assertMessage(spyTransport, {
-					predicate: msg => msg.includes("bar[baz]"),
+					predicate: (msg) => msg.includes("bar[baz]"),
 					callNumber,
 				});
 			}
@@ -199,7 +199,7 @@ describe("lib/log/Controller =>", () => {
 
 			log.controller.value("added", { ...baseArgs, newValue: 1 });
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes(": 1"),
+				predicate: (msg) => msg.includes(": 1"),
 			});
 
 			log.controller.value("updated", {
@@ -208,7 +208,7 @@ describe("lib/log/Controller =>", () => {
 				newValue: "asdf",
 			});
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes(`: false => "asdf"`),
+				predicate: (msg) => msg.includes(`: false => "asdf"`),
 				callNumber: 1,
 			});
 
@@ -217,7 +217,7 @@ describe("lib/log/Controller =>", () => {
 				prevValue: 5,
 			});
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("(was 5)"),
+				predicate: (msg) => msg.includes("(was 5)"),
 				callNumber: 2,
 			});
 		});
@@ -233,7 +233,7 @@ describe("lib/log/Controller =>", () => {
 
 			log.controller.metadataUpdated(baseArgs);
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[Basic]"),
+				predicate: (msg) => msg.includes("[Basic]"),
 			});
 		});
 
@@ -249,7 +249,7 @@ describe("lib/log/Controller =>", () => {
 				nodeId: 5,
 			});
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[Node 005]"),
+				predicate: (msg) => msg.includes("[Node 005]"),
 			});
 		});
 
@@ -262,7 +262,7 @@ describe("lib/log/Controller =>", () => {
 
 			log.controller.metadataUpdated(baseArgs);
 			assertMessage(spyTransport, {
-				predicate: msg => !msg.includes("[Endpoint"),
+				predicate: (msg) => !msg.includes("[Endpoint"),
 			});
 
 			log.controller.metadataUpdated({
@@ -270,7 +270,7 @@ describe("lib/log/Controller =>", () => {
 				endpoint: 5,
 			});
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[Endpoint 5]"),
+				predicate: (msg) => msg.includes("[Endpoint 5]"),
 				callNumber: 1,
 			});
 		});
@@ -287,12 +287,12 @@ describe("lib/log/Controller =>", () => {
 				internal: true,
 			});
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[internal]"),
+				predicate: (msg) => msg.includes("[internal]"),
 			});
 
 			log.controller.metadataUpdated(baseArgs);
 			assertMessage(spyTransport, {
-				predicate: msg => !msg.includes("[internal]"),
+				predicate: (msg) => !msg.includes("[internal]"),
 				callNumber: 1,
 			});
 		});
@@ -306,7 +306,7 @@ describe("lib/log/Controller =>", () => {
 
 			log.controller.metadataUpdated(baseArgs);
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("foo"),
+				predicate: (msg) => msg.includes("foo"),
 			});
 		});
 
@@ -319,7 +319,7 @@ describe("lib/log/Controller =>", () => {
 
 			log.controller.metadataUpdated(baseArgs);
 			assertMessage(spyTransport, {
-				predicate: msg => msg.endsWith(": metadata updated"),
+				predicate: (msg) => msg.endsWith(": metadata updated"),
 			});
 		});
 	});
@@ -328,7 +328,7 @@ describe("lib/log/Controller =>", () => {
 		it("includes a tag for the node ID", () => {
 			log.controller.interviewStage({ id: 7 } as any);
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[Node 007]"),
+				predicate: (msg) => msg.includes("[Node 007]"),
 			});
 		});
 
@@ -338,7 +338,7 @@ describe("lib/log/Controller =>", () => {
 				interviewStage: InterviewStage.Configuration,
 			} as any);
 			assertMessage(spyTransport, {
-				predicate: msg =>
+				predicate: (msg) =>
 					msg.includes("Interview stage completed: Configuration"),
 			});
 		});
@@ -358,7 +358,7 @@ describe("lib/log/Controller =>", () => {
 		it("includes a tag for the node ID", () => {
 			log.controller.interviewStart({ id: 7 } as any);
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[Node 007]"),
+				predicate: (msg) => msg.includes("[Node 007]"),
 			});
 		});
 

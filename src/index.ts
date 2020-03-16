@@ -15,7 +15,7 @@ import { stringify } from "./lib/util/strings";
 
 // Parse package.json and init sentry
 fs.readFile(path.join(__dirname, "../package.json"), "utf8").then(
-	fileContents => {
+	(fileContents) => {
 		const packageJson = JSON.parse(fileContents);
 		Sentry.init({
 			release: `${packageJson.name}@${packageJson.version}`,
@@ -46,7 +46,7 @@ export { ZWaveNode } from "./lib/node/Node";
 // Load all CCs to ensure all metadata gets loaded
 const definedCCs = fs
 	.readdirSync(__dirname)
-	.filter(file => /CC\.(js|ts)$/.test(file));
+	.filter((file) => /CC\.(js|ts)$/.test(file));
 log.reflection.print(`loading CCs: ${stringify(definedCCs)}`);
 for (const file of definedCCs) {
 	require(`./${file}`);

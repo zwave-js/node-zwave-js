@@ -6,8 +6,26 @@ import { getEnumMemberName, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
-import { CCAPI, SetValueImplementation, SET_VALUE, throwUnsupportedProperty, throwWrongValueType } from "./API";
-import { API, CCCommand, CCCommandOptions, ccValue, ccValueMetadata, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "./API";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	ccValue,
+	ccValueMetadata,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { SupervisionStatus } from "./SupervisionCC";
 
@@ -45,8 +63,8 @@ function switchTypeToActions(switchType: string): [string, string] {
 	return switchType.split("/", 2) as any;
 }
 const switchTypeProperties = Object.keys(SwitchType)
-	.filter(key => key.indexOf("/") > -1)
-	.map(key => switchTypeToActions(key))
+	.filter((key) => key.indexOf("/") > -1)
+	.map((key) => switchTypeToActions(key))
 	.reduce<string[]>((acc, cur) => acc.concat(...cur), []);
 
 function getCurrentValueValueID(endpoint: number): ValueID {
@@ -118,7 +136,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			cc,
 			{
 				requestStatusUpdates: true,
-				onUpdate: status => {
+				onUpdate: (status) => {
 					if (
 						status === SupervisionStatus.Working ||
 						status === SupervisionStatus.Success
@@ -284,7 +302,7 @@ export class MultilevelSwitchCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-				} interview...`,
+			} interview...`,
 			direction: "none",
 		});
 
@@ -435,15 +453,15 @@ export class MultilevelSwitchCCGet extends MultilevelSwitchCC {
 type MultilevelSwitchCCStartLevelChangeOptions = {
 	direction: keyof typeof LevelChangeDirection;
 } & (
-		| {
+	| {
 			ignoreStartLevel: true;
 			startLevel?: number;
 	  }
 	| {
 			ignoreStartLevel: false;
 			startLevel: number;
-		}
-	) & {
+	  }
+) & {
 		// Version >= 2:
 		duration?: Duration;
 	};

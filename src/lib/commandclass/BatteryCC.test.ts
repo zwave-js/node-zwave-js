@@ -2,7 +2,14 @@ import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertCC } from "../../../test/util";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
-import { BatteryCC, BatteryCCGet, BatteryCCReport, BatteryChargingStatus, BatteryCommand, BatteryReplacementStatus } from "./BatteryCC";
+import {
+	BatteryCC,
+	BatteryCCGet,
+	BatteryCCReport,
+	BatteryChargingStatus,
+	BatteryCommand,
+	BatteryReplacementStatus,
+} from "./BatteryCC";
 import { CommandClasses } from "./CommandClasses";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;

@@ -1,7 +1,13 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import type { Driver } from "../driver/Driver";
 import { Duration } from "../values/Duration";
-import { BinarySwitchCC, BinarySwitchCCGet, BinarySwitchCCReport, BinarySwitchCCSet, BinarySwitchCommand } from "./BinarySwitchCC";
+import {
+	BinarySwitchCC,
+	BinarySwitchCCGet,
+	BinarySwitchCCReport,
+	BinarySwitchCCSet,
+	BinarySwitchCommand,
+} from "./BinarySwitchCC";
 import { CommandClasses } from "./CommandClasses";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;

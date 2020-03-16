@@ -2,7 +2,13 @@ import type { Overwrite } from "alcalzone-shared/types";
 import type { NotificationCCReport } from "../commandclass/NotificationCC";
 import { MAX_NODES } from "../controller/NodeBitMask";
 import type { ZWaveNode } from "./Node";
-import type { MetadataUpdatedArgs, ValueAddedArgs, ValueID, ValueRemovedArgs, ValueUpdatedArgs } from "./ValueDB";
+import type {
+	MetadataUpdatedArgs,
+	ValueAddedArgs,
+	ValueID,
+	ValueRemovedArgs,
+	ValueUpdatedArgs,
+} from "./ValueDB";
 
 /** The broadcast target node id */
 export const NODE_ID_BROADCAST = 0xff;

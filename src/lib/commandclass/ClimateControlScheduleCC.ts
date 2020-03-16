@@ -2,10 +2,30 @@ import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
 import type { Maybe } from "../values/Primitive";
-import { decodeSetbackState, encodeSetbackState, SetbackState } from "../values/SetbackState";
-import { decodeSwitchpoint, encodeSwitchpoint, Switchpoint } from "../values/Switchpoint";
+import {
+	decodeSetbackState,
+	encodeSetbackState,
+	SetbackState,
+} from "../values/SetbackState";
+import {
+	decodeSwitchpoint,
+	encodeSwitchpoint,
+	Switchpoint,
+} from "../values/Switchpoint";
 import { CCAPI } from "./API";
-import { API, CCCommand, CCCommandOptions, ccKeyValuePair, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	ccKeyValuePair,
+	ccValue,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum ClimateControlScheduleCommand {
@@ -185,7 +205,7 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 		}
 		this.payload = Buffer.concat([
 			Buffer.from([this.weekday & 0b111]),
-			...allSwitchPoints.map(sp => encodeSwitchpoint(sp)),
+			...allSwitchPoints.map((sp) => encodeSwitchpoint(sp)),
 		]);
 		return super.serialize();
 	}
@@ -208,7 +228,7 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 			);
 		}
 		const switchPoints = allSwitchpoints.filter(
-			sp => sp.state !== "Unused",
+			(sp) => sp.state !== "Unused",
 		);
 
 		this.schedule = [weekday, switchPoints];

@@ -31,8 +31,8 @@ export function getDirectionPrefix(direction: DataDirection) {
 	return direction === "inbound"
 		? "« "
 		: direction === "outbound"
-			? "» "
-			: "  ";
+		? "» "
+		: "  ";
 }
 /** The space the directional arrows, grouping brackets and padding occupies */
 export const CONTROL_CHAR_WIDTH = 2;
@@ -95,7 +95,7 @@ function calculateFirstLineLength(
 			(info.secondaryTags || "").length,
 		]
 			// filter out empty parts
-			.filter(len => len > 0)
+			.filter((len) => len > 0)
 			// simulate adding spaces between parts
 			.reduce((prev, val) => prev + (prev > 0 ? 1 : 0) + val)
 	);
@@ -142,8 +142,8 @@ export const logMessageFormatter: Format = {
 				// because the message takes all the available space
 				-1,
 				LOG_WIDTH -
-				1 -
-				calculateFirstLineLength(info, firstMessageLineLength),
+					1 -
+					calculateFirstLineLength(info, firstMessageLineLength),
 			);
 		}
 
@@ -191,7 +191,7 @@ export const logMessagePrinter: Format = {
 				? " " + info.secondaryTags
 				: info.secondaryTags,
 		]
-			.filter(item => !!item)
+			.filter((item) => !!item)
 			.join(" ");
 		// The directional arrows and the optional grouping lines must be prepended
 		// without adding spaces
@@ -207,7 +207,7 @@ export const logMessagePrinter: Format = {
 			// Format all message lines but the first
 			lines.push(
 				...messageLines.slice(1).map(
-					line =>
+					(line) =>
 						// Skip the columns for the timestamp and the channel name
 						timestampPadding +
 						channelPadding +
@@ -241,13 +241,13 @@ export function createLoggerFormat(
 
 /** Wraps an array of strings in square brackets and joins them with spaces */
 export function tagify(tags: string[]): string {
-	return tags.map(pfx => `[${pfx}]`).join(" ");
+	return tags.map((pfx) => `[${pfx}]`).join(" ");
 }
 
 /** Unsilences the console transport of a logger and returns the original value */
 export function unsilence(logger: winston.Logger): boolean {
 	const consoleTransport = logger.transports.find(
-		t => (t as any).name === "console",
+		(t) => (t as any).name === "console",
 	);
 	if (consoleTransport) {
 		const ret = !!consoleTransport.silent;
@@ -263,7 +263,7 @@ export function restoreSilence(
 	original: boolean,
 ): void {
 	const consoleTransport = logger.transports.find(
-		t => (t as any).name === "console",
+		(t) => (t as any).name === "console",
 	);
 	if (consoleTransport) {
 		consoleTransport.silent = original;
@@ -317,7 +317,7 @@ export function isLoglevelVisible(loglevel: string): boolean {
 		loglevelVisibleCache.set(
 			loglevel,
 			loglevel in loglevels &&
-			loglevels[loglevel] <= getTransportLoglevelNumeric(),
+				loglevels[loglevel] <= getTransportLoglevelNumeric(),
 		);
 	}
 	return loglevelVisibleCache.get(loglevel)!;

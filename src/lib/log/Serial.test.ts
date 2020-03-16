@@ -93,7 +93,7 @@ describe("lib/log/Serial =>", () => {
 						colors.bgBlue("]"),
 				);
 				assertMessage(spyTransport, {
-					predicate: msg => msg.includes(expected1),
+					predicate: (msg) => msg.includes(expected1),
 					ignoreColor: false,
 				});
 			});

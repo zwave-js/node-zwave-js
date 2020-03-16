@@ -1,4 +1,8 @@
-import { Comparable, compareNumberOrString, CompareResult } from "alcalzone-shared/comparable";
+import {
+	Comparable,
+	compareNumberOrString,
+	CompareResult,
+} from "alcalzone-shared/comparable";
 import type { DeferredPromise } from "alcalzone-shared/deferred-promise";
 import { clamp } from "alcalzone-shared/math";
 import { MessagePriority } from "../message/Constants";

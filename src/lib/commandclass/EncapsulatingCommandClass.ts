@@ -4,7 +4,7 @@ import { CommandClass, CommandClassOptions } from "./CommandClass";
 
 /** Defines the static side of an encapsulating command class */
 export interface EncapsulatingCommandClassStatic {
-	new(
+	new (
 		driver: Driver,
 		options: CommandClassOptions,
 	): EncapsulatingCommandClass;
@@ -48,7 +48,7 @@ export function isEncapsulatingCommandClass(
 
 /** Defines the static side of an encapsulating command class */
 export interface MultiEncapsulatingCommandClassStatic {
-	new(
+	new (
 		driver: Driver,
 		options: CommandClassOptions,
 	): MultiEncapsulatingCommandClass;

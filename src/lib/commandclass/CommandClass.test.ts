@@ -4,12 +4,20 @@ import type { Driver } from "../driver/Driver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { ZWaveNode } from "../node/Node";
 import { BasicCC, BasicCCSet } from "./BasicCC";
-import { CommandClass, commandClass, expectedCCResponse, getExpectedCCResponse, getImplementedVersion, getImplementedVersionStatic, implementedVersion } from "./CommandClass";
+import {
+	CommandClass,
+	commandClass,
+	expectedCCResponse,
+	getExpectedCCResponse,
+	getImplementedVersion,
+	getImplementedVersionStatic,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 @implementedVersion(7)
 @commandClass(0xffff as any)
-class DummyCC extends CommandClass { }
+class DummyCC extends CommandClass {}
 class DummyCCSubClass1 extends DummyCC {
 	private x: any;
 }
@@ -26,10 +34,10 @@ describe("lib/commandclass/CommandClass => ", () => {
 			// TODO: This is a meter CC. Change it when that CC is implemented
 			assertZWaveError(
 				() =>
-					CommandClass.from(
-						fakeDriver,
-						{data: Buffer.from("0b0a32022144000000a30000", "hex"), nodeId: 5},
-					),
+					CommandClass.from(fakeDriver, {
+						data: Buffer.from("0b0a32022144000000a30000", "hex"),
+						nodeId: 5,
+					}),
 				{
 					errorCode: ZWaveErrorCodes.CC_NotImplemented,
 				},
@@ -58,7 +66,7 @@ describe("lib/commandclass/CommandClass => ", () => {
 			expect(getImplementedVersion(cc)).toBe(0);
 		});
 
-		it("should work with inheritance", () => { });
+		it("should work with inheritance", () => {});
 	});
 
 	describe("getImplementedVersionStatic()", () => {

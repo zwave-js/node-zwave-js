@@ -5,7 +5,17 @@ import { JSONObject, validatePayload } from "../util/misc";
 import { enumValuesToMetadataStates, ValueMetadata } from "../values/Metadata";
 import { Maybe, parseFloatWithScale } from "../values/Primitive";
 import { CCAPI } from "./API";
-import { API, CCCommand, ccValue, ccValueMetadata, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, implementedVersion } from "./CommandClass";
+import {
+	API,
+	CCCommand,
+	ccValue,
+	ccValueMetadata,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 // @noSetValueAPI This CC is read-only
@@ -95,7 +105,7 @@ export class BatteryCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-				} interview...`,
+			} interview...`,
 			direction: "none",
 		});
 
@@ -111,19 +121,19 @@ export class BatteryCC extends CommandClass {
 		let logMessage = `received response for battery information:
 level:                           ${batteryStatus.level}${
 			batteryStatus.isLow ? " (low)" : ""
-			}`;
+		}`;
 		if (this.version >= 2) {
 			logMessage += `
 status:                          ${
 				BatteryChargingStatus[batteryStatus.chargingStatus!]
-				}
+			}
 rechargeable:                    ${batteryStatus.rechargeable}
 is backup:                       ${batteryStatus.backup}
 is overheating:                  ${batteryStatus.overheating}
 fluid is low:                    ${batteryStatus.lowFluid}
 needs to be replaced or charged: ${
 				BatteryReplacementStatus[batteryStatus.rechargeOrReplace!]
-				}
+			}
 is disconnected:                 ${batteryStatus.disconnected}`;
 		}
 		log.controller.logNode(node.id, {
@@ -184,8 +194,8 @@ export class BatteryCCReport extends BatteryCC {
 			this._rechargeOrReplace = !!(this.payload[1] & 0b10)
 				? BatteryReplacementStatus.Now
 				: !!(this.payload[1] & 0b1)
-					? BatteryReplacementStatus.Soon
-					: BatteryReplacementStatus.No;
+				? BatteryReplacementStatus.Soon
+				: BatteryReplacementStatus.No;
 			this._disconnected = !!(this.payload[2] & 0b1);
 		}
 
@@ -302,7 +312,7 @@ export class BatteryCCReport extends BatteryCC {
 
 @CCCommand(BatteryCommand.Get)
 @expectedCCResponse(BatteryCCReport)
-export class BatteryCCGet extends BatteryCC { }
+export class BatteryCCGet extends BatteryCC {}
 
 @CCCommand(BatteryCommand.HealthReport)
 export class BatteryCCHealthReport extends BatteryCC {
@@ -356,4 +366,4 @@ export class BatteryCCHealthReport extends BatteryCC {
 
 @CCCommand(BatteryCommand.HealthGet)
 @expectedCCResponse(BatteryCCHealthReport)
-export class BatteryCCHealthGet extends BatteryCC { }
+export class BatteryCCHealthGet extends BatteryCC {}

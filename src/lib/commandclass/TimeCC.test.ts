@@ -1,7 +1,14 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import type { Driver } from "../driver/Driver";
 import { CommandClasses } from "./CommandClasses";
-import { TimeCC, TimeCCDateGet, TimeCCDateReport, TimeCCTimeGet, TimeCCTimeReport, TimeCommand } from "./TimeCC";
+import {
+	TimeCC,
+	TimeCCDateGet,
+	TimeCCDateReport,
+	TimeCCTimeGet,
+	TimeCCTimeReport,
+	TimeCommand,
+} from "./TimeCC";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 

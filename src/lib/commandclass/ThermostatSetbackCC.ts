@@ -4,9 +4,25 @@ import log from "../log";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
 import type { Maybe } from "../values/Primitive";
-import { decodeSetbackState, encodeSetbackState, SetbackState } from "../values/SetbackState";
+import {
+	decodeSetbackState,
+	encodeSetbackState,
+	SetbackState,
+} from "../values/SetbackState";
 import { CCAPI } from "./API";
-import { API, CCCommand, CCCommandOptions, ccValue, ccValueMetadata, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	ccValue,
+	ccValueMetadata,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum ThermostatSetbackCommand {
@@ -88,7 +104,7 @@ export class ThermostatSetbackCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-				} interview...`,
+			} interview...`,
 			direction: "none",
 		});
 

@@ -1,7 +1,17 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import type { Driver } from "../driver/Driver";
 import { FunctionType, MessageType } from "../message/Constants";
-import { getDefaultPriority, getDefaultPriorityStatic, getExpectedResponse, getExpectedResponseStatic, getFunctionType, getFunctionTypeStatic, getMessageType, getMessageTypeStatic, Message } from "../message/Message";
+import {
+	getDefaultPriority,
+	getDefaultPriorityStatic,
+	getExpectedResponse,
+	getExpectedResponseStatic,
+	getFunctionType,
+	getFunctionTypeStatic,
+	getMessageType,
+	getMessageTypeStatic,
+	Message,
+} from "../message/Message";
 import { ApplicationUpdateRequest } from "./ApplicationUpdateRequest";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;

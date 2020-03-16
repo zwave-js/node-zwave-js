@@ -4,7 +4,15 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { validatePayload } from "../util/misc";
 import { CCAPI } from "./API";
-import { API, CCCommandOptions, CommandClass, commandClass, CommandClassDeserializationOptions, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	API,
+	CCCommandOptions,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { MANUFACTURERID_FIBARO } from "./manufacturerProprietary/Constants";
 import { getManufacturerIdValueId } from "./ManufacturerSpecificCC";

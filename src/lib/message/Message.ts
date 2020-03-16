@@ -10,7 +10,12 @@ import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
 import type { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
-import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "./Constants";
+import {
+	FunctionType,
+	MessageHeaders,
+	MessagePriority,
+	MessageType,
+} from "./Constants";
 
 type Constructable<T extends Message> = new (
 	driver: Driver,
@@ -49,10 +54,7 @@ export type MessageOptions =
  * Represents a Z-Wave message for communication with the serial interface
  */
 export class Message {
-	public constructor(
-		protected driver: Driver,
-		options: MessageOptions = {},
-	) {
+	public constructor(protected driver: Driver, options: MessageOptions = {}) {
 		// decide which implementation we follow
 		if (gotDeserializationOptions(options)) {
 			// #1: deserialize from payload
@@ -378,7 +380,7 @@ export function messageTypes(
 	messageType: MessageType,
 	functionType: FunctionType,
 ): ClassDecorator {
-	return messageClass => {
+	return (messageClass) => {
 		log.reflection.define(
 			messageClass.name,
 			"types",
@@ -499,7 +501,7 @@ export function expectedResponse(predicate: ResponsePredicate): ClassDecorator;
 export function expectedResponse(
 	typeOrPredicate: FunctionType | ResponsePredicate,
 ): ClassDecorator {
-	return messageClass => {
+	return (messageClass) => {
 		if (typeof typeOrPredicate === "number") {
 			const type = typeOrPredicate;
 			log.reflection.define(
@@ -513,7 +515,7 @@ export function expectedResponse(
 				messageClass.name,
 				"expected response",
 				`Predicate${
-				predicate.name.length > 0 ? " " + predicate.name : ""
+					predicate.name.length > 0 ? " " + predicate.name : ""
 				}`,
 			);
 		}
@@ -568,9 +570,9 @@ export function getExpectedResponseStatic<T extends Constructable<Message>>(
 		| FunctionType
 		| ResponsePredicate
 		| undefined = Reflect.getMetadata(
-			METADATA_expectedResponse,
-			classConstructor,
-		);
+		METADATA_expectedResponse,
+		classConstructor,
+	);
 	if (typeof ret === "number") {
 		log.reflection.lookup(
 			classConstructor.name,
@@ -597,7 +599,7 @@ export function getExpectedResponseStatic<T extends Constructable<Message>>(
  * Defines the default priority associated with a Z-Wave message
  */
 export function priority(prio: MessagePriority): ClassDecorator {
-	return messageClass => {
+	return (messageClass) => {
 		log.reflection.define(
 			messageClass.name,
 			"default priority",

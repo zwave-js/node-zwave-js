@@ -1,7 +1,17 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
-import { CentralSceneCC, CentralSceneCCConfigurationGet, CentralSceneCCConfigurationReport, CentralSceneCCConfigurationSet, CentralSceneCCNotification, CentralSceneCCSupportedGet, CentralSceneCCSupportedReport, CentralSceneCommand, CentralSceneKeys } from "./CentralSceneCC";
+import {
+	CentralSceneCC,
+	CentralSceneCCConfigurationGet,
+	CentralSceneCCConfigurationReport,
+	CentralSceneCCConfigurationSet,
+	CentralSceneCCNotification,
+	CentralSceneCCSupportedGet,
+	CentralSceneCCSupportedReport,
+	CentralSceneCommand,
+	CentralSceneKeys,
+} from "./CentralSceneCC";
 import { CommandClasses } from "./CommandClasses";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;

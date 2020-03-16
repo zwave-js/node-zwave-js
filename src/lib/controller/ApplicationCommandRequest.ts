@@ -2,8 +2,19 @@ import { CommandClass, SinglecastCC } from "../commandclass/CommandClass";
 import type { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { gotDeserializationOptions, Message, MessageBaseOptions, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	gotDeserializationOptions,
+	Message,
+	MessageBaseOptions,
+	MessageDeserializationOptions,
+	messageTypes,
+	priority,
+} from "../message/Message";
 
 enum StatusFlags {
 	RoutedBusy = 0b1, // A response route is locked by the application

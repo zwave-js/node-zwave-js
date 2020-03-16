@@ -7,8 +7,25 @@ import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, parseBitMask } from "../values/Primitive";
-import { CCAPI, SetValueImplementation, SET_VALUE, throwUnsupportedProperty, throwWrongValueType } from "./API";
-import { API, CCCommand, CCCommandOptions, CommandClass, commandClass, CommandClassDeserializationOptions, CommandClassOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "./API";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	CommandClassOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export function getSupportedIndicatorIDsValueID(
@@ -282,7 +299,7 @@ export class IndicatorCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-				} interview...`,
+			} interview...`,
 			direction: "none",
 		});
 
@@ -385,7 +402,7 @@ export class IndicatorCC extends CommandClass {
 		if (!supportedIndicatorIds?.length) return false;
 		// Then test if there are any property ids defined
 		return supportedIndicatorIds.some(
-			indicatorId =>
+			(indicatorId) =>
 				!!this.getValueDB().getValue<number[]>(
 					getSupportedPropertyIDsValueID(
 						this.endpointIndex,
@@ -404,11 +421,11 @@ export interface IndicatorObject {
 
 type IndicatorCCSetOptions =
 	| {
-		value: number;
-	}
+			value: number;
+	  }
 	| {
-		values: IndicatorObject[];
-	};
+			values: IndicatorObject[];
+	  };
 
 @CCCommand(IndicatorCommand.Set)
 export class IndicatorCCSet extends IndicatorCC {
@@ -462,15 +479,15 @@ export class IndicatorCCSet extends IndicatorCC {
 			const valuesFlat = values
 				.slice(0, objCount + 1)
 				.map(
-					o =>
+					(o) =>
 						[
 							o.indicatorId,
 							o.propertyId,
 							typeof o.value === "number"
 								? o.value
 								: o.value
-									? 0xff
-									: 0x00,
+								? 0xff
+								: 0x00,
 						] as const,
 				)
 				.reduce((acc, cur) => acc.concat(...cur), [] as number[]);
@@ -644,7 +661,7 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 			this.supportedProperties = parseBitMask(
 				this.payload.slice(3, 3 + bitMaskLength),
 				0,
-			).filter(v => v !== 0);
+			).filter((v) => v !== 0);
 		}
 
 		if (this.indicatorId !== 0x00) {

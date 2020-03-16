@@ -3,7 +3,16 @@ import { loadMetersInternal } from "../config/Meters";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { CommandClasses } from "./CommandClasses";
-import { MeterCC, MeterCCGet, MeterCCReport, MeterCCReset, MeterCCSupportedGet, MeterCCSupportedReport, MeterCommand, RateType } from "./MeterCC";
+import {
+	MeterCC,
+	MeterCCGet,
+	MeterCCReport,
+	MeterCCReset,
+	MeterCCSupportedGet,
+	MeterCCSupportedReport,
+	MeterCommand,
+	RateType,
+} from "./MeterCC";
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([

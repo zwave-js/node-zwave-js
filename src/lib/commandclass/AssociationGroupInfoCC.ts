@@ -6,7 +6,21 @@ import { getEnumMemberName, validatePayload } from "../util/misc";
 import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import type { AssociationCC } from "./AssociationCC";
-import { API, CCCommand, CCCommandOptions, ccKeyValuePair, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, CommandClassOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion, parseCCId } from "./CommandClass";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	ccKeyValuePair,
+	ccValue,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	CommandClassOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+	parseCCId,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import type { MultiChannelAssociationCC } from "./MultiChannelAssociationCC";
 
@@ -368,11 +382,15 @@ export class AssociationGroupInfoCC extends CommandClass {
 		// First query the Multi Channel Association CC
 		return (
 			endpoint
-				.createCCInstanceUnsafe<MultiChannelAssociationCC>(CommandClasses["Multi Channel Association"])
+				.createCCInstanceUnsafe<MultiChannelAssociationCC>(
+					CommandClasses["Multi Channel Association"],
+				)
 				?.getGroupCountCached() ||
 			// Then the Association CC
 			endpoint
-				.createCCInstanceUnsafe<AssociationCC>(CommandClasses.Association)
+				.createCCInstanceUnsafe<AssociationCC>(
+					CommandClasses.Association,
+				)
 				?.getGroupCountCached() ||
 			// And fall back to 0
 			0
@@ -388,7 +406,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-				} interview...`,
+			} interview...`,
 			direction: "none",
 		});
 
@@ -567,11 +585,11 @@ type AssociationGroupInfoCCInfoGetOptions = CCCommandOptions & {
 	refreshCache: boolean;
 } & (
 		| {
-			listMode: boolean;
-		}
+				listMode: boolean;
+		  }
 		| {
-			groupId: number;
-		}
+				groupId: number;
+		  }
 	);
 
 @CCCommand(AssociationGroupInfoCommand.InfoGet)

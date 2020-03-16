@@ -1,5 +1,12 @@
 import type { CCAPI, CCAPIs } from "../commandclass/API";
-import { CommandClass, CommandClassInfo, Constructable, getAPI, getCCConstructor, getCommandClassStatic } from "../commandclass/CommandClass";
+import {
+	CommandClass,
+	CommandClassInfo,
+	Constructable,
+	getAPI,
+	getCCConstructor,
+	getCommandClassStatic,
+} from "../commandclass/CommandClass";
 import { actuatorCCs, CommandClasses } from "../commandclass/CommandClasses";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -88,7 +95,7 @@ export class Endpoint {
 		// This behavior is defined in SDS14223
 		if (
 			this.supportsCC(CommandClasses.Basic) &&
-			actuatorCCs.some(cc => this.supportsCC(cc))
+			actuatorCCs.some((cc) => this.supportsCC(cc))
 		) {
 			// We still want to know if BasicCC is controlled, so only mark it as not supported
 			this.addCC(CommandClasses.Basic, { isSupported: false });
@@ -133,7 +140,7 @@ export class Endpoint {
 		if (!this.supportsCC(ccId) && !this.controlsCC(ccId)) {
 			throw new ZWaveError(
 				`Cannot create an instance of the unsupported CC ${
-				CommandClasses[ccId]
+					CommandClasses[ccId]
 				} (${num2hex(ccId)})`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
@@ -175,14 +182,14 @@ export class Endpoint {
 	public getSupportedCCInstances(): readonly CommandClass[] {
 		let supportedCCInstances = [...this.implementedCommandClasses.keys()]
 			// Don't interview CCs the node or endpoint only controls
-			.filter(cc => this.supportsCC(cc))
+			.filter((cc) => this.supportsCC(cc))
 			// Filter out CCs we don't implement
-			.map(cc => this.createCCInstance(cc))
-			.filter(instance => !!instance) as CommandClass[];
+			.map((cc) => this.createCCInstance(cc))
+			.filter((instance) => !!instance) as CommandClass[];
 		// For endpoint interviews, we skip some CCs
 		if (this.index > 0) {
 			supportedCCInstances = supportedCCInstances.filter(
-				instance => !instance.skipEndpointInterview(),
+				(instance) => !instance.skipEndpointInterview(),
 			);
 		}
 		return supportedCCInstances;
@@ -191,16 +198,16 @@ export class Endpoint {
 	/** Builds the dependency graph used to automatically determine the order of CC interviews */
 	public buildCCInterviewGraph(): GraphNode<CommandClasses>[] {
 		const supportedCCs = this.getSupportedCCInstances().map(
-			instance => instance.ccId,
+			(instance) => instance.ccId,
 		);
 		// Create GraphNodes from all supported CCs
-		const ret = supportedCCs.map(cc => new GraphNode(cc));
+		const ret = supportedCCs.map((cc) => new GraphNode(cc));
 		// Create the dependencies
 		for (const node of ret) {
 			const instance = this.createCCInstance(node.value)!;
 			for (const requiredCCId of instance.determineRequiredCCInterviews()) {
 				const requiredCC = ret.find(
-					instance => instance.value === requiredCCId,
+					(instance) => instance.value === requiredCCId,
 				);
 				if (requiredCC) node.edges.add(requiredCC);
 			}
@@ -236,7 +243,7 @@ export class Endpoint {
 				) {
 					throw new ZWaveError(
 						`Node ${this.nodeId}${
-						this.index === 0 ? "" : ` (endpoint ${this.index})`
+							this.index === 0 ? "" : ` (endpoint ${this.index})`
 						} does not support the Command Class ${ccName}!`,
 						ZWaveErrorCodes.CC_NotSupported,
 					);

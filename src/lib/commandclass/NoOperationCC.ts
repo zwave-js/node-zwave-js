@@ -2,7 +2,12 @@ import { SendDataRequest } from "../controller/SendDataMessages";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
 import { CCAPI } from "./API";
-import { API, CommandClass, commandClass, implementedVersion } from "./CommandClass";
+import {
+	API,
+	CommandClass,
+	commandClass,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { isCommandClassContainer } from "./ICommandClassContainer";
 

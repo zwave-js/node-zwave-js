@@ -6,7 +6,19 @@ import { getEnumMemberName, validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
-import { API, CCCommand, CCCommandOptions, CCResponsePredicate, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	CCResponsePredicate,
+	ccValue,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 // All the supported commands
@@ -122,7 +134,7 @@ export class BinarySensorCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-				} interview...`,
+			} interview...`,
 			direction: "none",
 		});
 
@@ -136,8 +148,8 @@ export class BinarySensorCC extends CommandClass {
 			});
 			supportedSensorTypes = await api.getSupportedSensorTypes();
 			const logMessage = `received supported sensor types: ${supportedSensorTypes
-				.map(type => getEnumMemberName(BinarySensorType, type))
-				.map(name => "\n· " + name)}`;
+				.map((type) => getEnumMemberName(BinarySensorType, type))
+				.map((name) => "\n· " + name)}`;
 			log.controller.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
@@ -240,8 +252,8 @@ const testResponseForBinarySensorGet: CCResponsePredicate = (
 			received.type === sent.sensorType)
 		? "final"
 		: isPositiveTransmitReport
-			? "confirmation"
-			: "unexpected";
+		? "confirmation"
+		: "unexpected";
 };
 
 interface BinarySensorCCGetOptions extends CCCommandOptions {

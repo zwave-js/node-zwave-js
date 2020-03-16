@@ -94,11 +94,11 @@ export class Duration {
 			case "minutes":
 				return `[Duration: ${this._value}${
 					this.value === 1 ? "minute" : "minutes"
-					}]`;
+				}]`;
 			case "seconds":
 				return `[Duration: ${this._value}${
 					this.value === 1 ? "second" : "seconds"
-					}]`;
+				}]`;
 			default:
 				return `[Duration: ${this.unit}]`;
 		}

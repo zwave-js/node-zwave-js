@@ -19,14 +19,14 @@ export function topologicalSort<T>(graph: GraphNode<T>[]): T[] {
 	while (graph.length) {
 		// Step 1: Find nodes without dependencies
 		const nodesWithoutDependencies = graph.filter(
-			node => node.edges.size === 0,
+			(node) => node.edges.size === 0,
 		);
 		if (!nodesWithoutDependencies.length) {
 			throw new Error("Circular dependency detected!");
 		}
 		// Step 2: Move them from the input to the output
-		ret.push(...nodesWithoutDependencies.map(node => node.value));
-		graph = graph.filter(node => node.edges.size > 0);
+		ret.push(...nodesWithoutDependencies.map((node) => node.value));
+		graph = graph.filter((node) => node.edges.size > 0);
 		// Step 3: Mark them as visited / remove from other nodes dependencies
 		for (const node of graph) {
 			for (const visited of nodesWithoutDependencies) {

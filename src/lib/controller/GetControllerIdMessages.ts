@@ -1,20 +1,27 @@
 import type { Driver } from "../driver/Driver";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	Message,
+	MessageDeserializationOptions,
+	messageTypes,
+	priority,
+} from "../message/Message";
 import type { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerId)
 @expectedResponse(FunctionType.GetControllerId)
 @priority(MessagePriority.Controller)
-export class GetControllerIdRequest extends Message { }
+export class GetControllerIdRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetControllerId)
 export class GetControllerIdResponse extends Message {
-	public constructor(
-		driver: Driver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		// The payload is 4 bytes home id, followed by the controller node id
 		this._homeId = this.payload.readUInt32BE(0);

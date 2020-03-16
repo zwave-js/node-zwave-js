@@ -4,8 +4,26 @@ import { JSONObject, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
-import { CCAPI, SetValueImplementation, SET_VALUE, throwUnsupportedProperty, throwWrongValueType } from "./API";
-import { API, CCCommand, CCCommandOptions, ccValue, ccValueMetadata, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "./API";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	ccValue,
+	ccValueMetadata,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum BasicCommand {
@@ -85,7 +103,7 @@ export class BasicCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-				} interview...`,
+			} interview...`,
 			direction: "none",
 		});
 
@@ -147,12 +165,12 @@ type BasicCCReportOptions = CCCommandOptions &
 	({
 		currentValue: number;
 	} & (
-			| {}
-			| {
+		| {}
+		| {
 				targetValue: number;
 				duration: Duration;
-			}
-		));
+		  }
+	));
 
 @CCCommand(BasicCommand.Report)
 export class BasicCCReport extends BasicCC {

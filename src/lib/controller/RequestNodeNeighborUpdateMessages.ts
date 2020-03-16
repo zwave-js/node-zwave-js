@@ -1,7 +1,21 @@
 import type { Driver } from "../driver/Driver";
 import type { MessageOrCCLogEntry } from "../log/shared";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, gotDeserializationOptions, Message, MessageBaseOptions, MessageDeserializationOptions, MessageOptions, messageTypes, priority, ResponseRole } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	gotDeserializationOptions,
+	Message,
+	MessageBaseOptions,
+	MessageDeserializationOptions,
+	MessageOptions,
+	messageTypes,
+	priority,
+	ResponseRole,
+} from "../message/Message";
 import { getEnumMemberName } from "../util/misc";
 
 export enum NodeNeighborUpdateStatus {
@@ -68,10 +82,7 @@ export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateR
 }
 
 export class RequestNodeNeighborUpdateReport extends RequestNodeNeighborUpdateRequestBase {
-	public constructor(
-		driver: Driver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
 		this.callbackId = this.payload[0];

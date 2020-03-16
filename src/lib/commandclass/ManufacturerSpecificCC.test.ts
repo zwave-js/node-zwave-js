@@ -5,7 +5,10 @@ import { loadManufacturers } from "../config/Manufacturers";
 import type { Driver } from "../driver/Driver";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
-import { ManufacturerSpecificCC, ManufacturerSpecificCCGet } from "./ManufacturerSpecificCC";
+import {
+	ManufacturerSpecificCC,
+	ManufacturerSpecificCCGet,
+} from "./ManufacturerSpecificCC";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 

@@ -1,6 +1,20 @@
 import type { Driver } from "../driver/Driver";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, gotDeserializationOptions, Message, MessageBaseOptions, MessageDeserializationOptions, MessageOptions, messageTypes, priority, ResponseRole } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	gotDeserializationOptions,
+	Message,
+	MessageBaseOptions,
+	MessageDeserializationOptions,
+	MessageOptions,
+	messageTypes,
+	priority,
+	ResponseRole,
+} from "../message/Message";
 
 export enum RemoveFailedNodeStartFlags {
 	OK = 0,
@@ -76,10 +90,7 @@ export class RemoveFailedNodeRequest extends RemoveFailedNodeRequestBase {
 }
 
 export class RemoveFailedNodeRequestStatusReport extends RemoveFailedNodeRequestBase {
-	public constructor(
-		driver: Driver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
 		this.callbackId = this.payload[0];
@@ -98,10 +109,7 @@ export class RemoveFailedNodeRequestStatusReport extends RemoveFailedNodeRequest
 
 @messageTypes(MessageType.Response, FunctionType.RemoveFailedNode)
 export class RemoveFailedNodeResponse extends Message {
-	public constructor(
-		driver: Driver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._removeStatus = this.payload[0];
 	}

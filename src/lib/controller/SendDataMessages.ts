@@ -1,11 +1,38 @@
-import { CCResponseRole, CommandClass, getExpectedCCResponse, isDynamicCCResponse, MulticastCC, SinglecastCC } from "../commandclass/CommandClass";
-import { EncapsulatingCommandClass, isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
-import { ICommandClassContainer, isCommandClassContainer } from "../commandclass/ICommandClassContainer";
+import {
+	CCResponseRole,
+	CommandClass,
+	getExpectedCCResponse,
+	isDynamicCCResponse,
+	MulticastCC,
+	SinglecastCC,
+} from "../commandclass/CommandClass";
+import {
+	EncapsulatingCommandClass,
+	isEncapsulatingCommandClass,
+} from "../commandclass/EncapsulatingCommandClass";
+import {
+	ICommandClassContainer,
+	isCommandClassContainer,
+} from "../commandclass/ICommandClassContainer";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import type { MessageOrCCLogEntry } from "../log/shared";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, gotDeserializationOptions, Message, MessageBaseOptions, MessageDeserializationOptions, MessageOptions, messageTypes, priority, ResponseRole } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	gotDeserializationOptions,
+	Message,
+	MessageBaseOptions,
+	MessageDeserializationOptions,
+	MessageOptions,
+	messageTypes,
+	priority,
+	ResponseRole,
+} from "../message/Message";
 import { getEnumMemberName, JSONObject, staticExtends } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
@@ -111,7 +138,7 @@ callbackId:      ${this.callbackId}`,
 	/** Include previously received partial responses into a final message */
 	public mergePartialMessages(partials: Message[]): void {
 		this.command.mergePartialCCs(
-			(partials as SendDataRequest[]).map(p => p.command),
+			(partials as SendDataRequest[]).map((p) => p.command),
 		);
 	}
 
@@ -190,8 +217,8 @@ function testResponseForCC(
 			ret = received.expectMoreMessages()
 				? "partial"
 				: isEncapCC
-					? "checkEncapsulated"
-					: "final";
+				? "checkEncapsulated"
+				: "final";
 		} else if (isTransmitReport) {
 			ret = isEncapCC ? "checkEncapsulated" : "confirmation";
 		} else {
@@ -268,10 +295,7 @@ transmitStatus: ${getEnumMemberName(TransmitStatus, this.transmitStatus)}`,
 
 @messageTypes(MessageType.Response, FunctionType.SendData)
 export class SendDataResponse extends Message {
-	public constructor(
-		driver: Driver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._wasSent = this.payload[0] !== 0;
 		// if (!this._wasSent) this._errorCode = this.payload[0];
@@ -342,7 +366,7 @@ export class SendDataMulticastRequest<
 				`At least one node must be targeted`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
-		} else if (options.command.nodeId.some(n => n < 1 || n > MAX_NODES)) {
+		} else if (options.command.nodeId.some((n) => n < 1 || n > MAX_NODES)) {
 			throw new ZWaveError(
 				`All node IDs must be between 1 and ${MAX_NODES}!`,
 				ZWaveErrorCodes.Argument_Invalid,
@@ -398,7 +422,7 @@ callbackId:      ${this.callbackId}`,
 	/** Include previously received partial responses into a final message */
 	public mergePartialMessages(partials: Message[]): void {
 		this.command.mergePartialCCs(
-			(partials as SendDataMulticastRequest[]).map(p => p.command),
+			(partials as SendDataMulticastRequest[]).map((p) => p.command),
 		);
 	}
 }
@@ -471,10 +495,7 @@ transmitStatus: ${getEnumMemberName(TransmitStatus, this.transmitStatus)}`,
 
 @messageTypes(MessageType.Response, FunctionType.SendDataMulticast)
 export class SendDataMulticastResponse extends Message {
-	public constructor(
-		driver: Driver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._wasSent = this.payload[0] !== 0;
 		// if (!this._wasSent) this._errorCode = this.payload[0];

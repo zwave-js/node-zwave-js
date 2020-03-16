@@ -5,12 +5,44 @@ import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { ValueID } from "../node/ValueDB";
-import { getEnumMemberName, getMinimumShiftForBitMask, isConsecutiveArray, stripUndefined, validatePayload } from "../util/misc";
+import {
+	getEnumMemberName,
+	getMinimumShiftForBitMask,
+	isConsecutiveArray,
+	stripUndefined,
+	validatePayload,
+} from "../util/misc";
 import type { CacheMetadata, CacheValue } from "../values/Cache";
 import { ValueMetadata, ValueMetadataBase } from "../values/Metadata";
-import { encodeBitMask, getIntegerLimits, getMinIntegerSize, Maybe, parseBitMask } from "../values/Primitive";
-import { CCAPI, SetValueImplementation, SET_VALUE, throwUnsupportedProperty, throwUnsupportedPropertyKey, throwWrongValueType } from "./API";
-import { API, CCCommand, CCCommandOptions, CCResponsePredicate, CommandClass, commandClass, CommandClassDeserializationOptions, CommandClassOptions, DynamicCCResponse, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	encodeBitMask,
+	getIntegerLimits,
+	getMinIntegerSize,
+	Maybe,
+	parseBitMask,
+} from "../values/Primitive";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwUnsupportedPropertyKey,
+	throwWrongValueType,
+} from "./API";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	CCResponsePredicate,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	CommandClassOptions,
+	DynamicCCResponse,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum ConfigurationCommand {
@@ -409,7 +441,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				if (
 					e instanceof ConfigurationCCError &&
 					e.code ===
-					ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber
+						ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber
 				) {
 					// Continue iterating with the next param
 					if (e.argument - 1 > param) param = e.argument - 1;
@@ -496,7 +528,7 @@ export class ConfigurationCC extends CommandClass {
 				endpoint: this.endpointIndex,
 				message: `${this.constructor.name}: doing a ${
 					complete ? "complete" : "partial"
-					} interview...`,
+				} interview...`,
 				direction: "none",
 			});
 
@@ -642,7 +674,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				propertyKey === valueBitMask
 					? 0
 					: (value as number) <<
-					getMinimumShiftForBitMask(propertyKey as number),
+					  getMinimumShiftForBitMask(propertyKey as number),
 			)
 			.reduce((prev, cur) => prev | cur, 0);
 		return (
@@ -655,7 +687,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		// Leave out the paramInformation if we have loaded it from a config file
 		let values = super.serializeValuesForCache();
 		values = values.filter(
-			v => v.property !== "isParamInformationFromConfig",
+			(v) => v.property !== "isParamInformationFromConfig",
 		);
 		return values;
 	}
@@ -664,7 +696,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		// Leave out the param metadata if we have loaded it from a config file
 		let metadata = super.serializeMetadataForCache();
 		if (this.isParamInformationFromConfig) {
-			metadata = metadata.filter(m => typeof m.property === "number");
+			metadata = metadata.filter((m) => typeof m.property === "number");
 		}
 		return metadata;
 	}
@@ -708,11 +740,11 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				states:
 					!info.allowManualEntry && info.options.length > 0
 						? composeObject(
-							info.options.map(({ label, value }) => [
-								value.toString(),
-								label,
-							]),
-						)
+								info.options.map(({ label, value }) => [
+									value.toString(),
+									label,
+								]),
+						  )
 						: undefined,
 				label: info.label,
 				description: info.description,
@@ -829,7 +861,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 							propertyKey: param.propertyKey,
 						},
 						((this._value as any) & param.propertyKey) >>>
-						getMinimumShiftForBitMask(param.propertyKey),
+							getMinimumShiftForBitMask(param.propertyKey),
 					);
 				}
 			}
@@ -917,15 +949,15 @@ export class ConfigurationCCGet extends ConfigurationCC {
 type ConfigurationCCSetOptions = CCCommandOptions &
 	(
 		| {
-			parameter: number;
-			resetToDefault: true;
-		}
+				parameter: number;
+				resetToDefault: true;
+		  }
 		| {
-			parameter: number;
-			resetToDefault?: false;
-			valueSize: number;
-			value: ConfigValue;
-		}
+				parameter: number;
+				resetToDefault?: false;
+				valueSize: number;
+				value: ConfigValue;
+		  }
 	);
 
 @CCCommand(ConfigurationCommand.Set)
@@ -1004,13 +1036,13 @@ type ConfigurationCCBulkSetOptions = CCCommandOptions & {
 	handshake?: boolean;
 } & (
 		| {
-			resetToDefault: true;
-		}
+				resetToDefault: true;
+		  }
 		| {
-			resetToDefault?: false;
-			valueSize: number;
-			values: number[];
-		}
+				resetToDefault?: false;
+				valueSize: number;
+				values: number[];
+		  }
 	);
 
 const getResponseForBulkSet: DynamicCCResponse = (
@@ -1147,7 +1179,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 					this.payload.slice(5 + i * this.valueSize),
 					this.valueSize,
 					this.getParamInformation(param).format ||
-					ValueFormat.SignedInteger,
+						ValueFormat.SignedInteger,
 				),
 			);
 		}
@@ -1273,7 +1305,7 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 	public mergePartialCCs(partials: ConfigurationCCNameReport[]): void {
 		// Concat the name
 		this._name = [...partials, this]
-			.map(report => report._name)
+			.map((report) => report._name)
 			.reduce((prev, cur) => prev + cur, "");
 		this.extendParamInformation(this.parameter, undefined, {
 			name: this.name,
@@ -1345,7 +1377,7 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 	public mergePartialCCs(partials: ConfigurationCCInfoReport[]): void {
 		// Concat the info
 		this._info = [...partials, this]
-			.map(report => report._info)
+			.map((report) => report._info)
 			.reduce((prev, cur) => prev + cur, "");
 		this.extendParamInformation(this._parameter, undefined, {
 			info: this._info,
@@ -1441,7 +1473,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		if (this._valueSize > 0) {
 			const valueType =
 				this._valueFormat === ValueFormat.SignedInteger ||
-					this._valueFormat === ValueFormat.UnsignedInteger
+				this._valueFormat === ValueFormat.UnsignedInteger
 					? "number"
 					: "number[]";
 			const paramInfo: Partial<ConfigurationMetadata> = stripUndefined({

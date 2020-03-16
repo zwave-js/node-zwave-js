@@ -1,5 +1,9 @@
 import type { Scale } from "../config/Scales";
-import { getSensorTypeName, lookupSensorScale, lookupSensorType } from "../config/SensorTypes";
+import {
+	getSensorTypeName,
+	lookupSensorScale,
+	lookupSensorType,
+} from "../config/SensorTypes";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
@@ -8,7 +12,20 @@ import { validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, parseBitMask, parseFloatWithScale } from "../values/Primitive";
 import { CCAPI } from "./API";
-import { API, CCCommand, CCCommandOptions, ccKeyValuePair, CCResponsePredicate, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	ccKeyValuePair,
+	CCResponsePredicate,
+	ccValue,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum MultilevelSensorCommand {
@@ -122,7 +139,7 @@ export class MultilevelSensorCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-				} interview...`,
+			} interview...`,
 			direction: "none",
 		});
 
@@ -164,7 +181,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 					"received supported sensor types:\n" +
 					sensorTypes
 						.map(getSensorTypeName)
-						.map(name => `· ${name}`)
+						.map((name) => `· ${name}`)
 						.join("\n");
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
@@ -195,8 +212,8 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 					const logMessage =
 						"received supported scales:\n" +
 						sensorScales
-							.map(s => lookupSensorScale(type, s).label)
-							.map(name => `· ${name}`)
+							.map((s) => lookupSensorScale(type, s).label)
+							.map((name) => `· ${name}`)
 							.join("\n");
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
@@ -222,8 +239,9 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 				// TODO: Add some way to select the scale. For now use the first available one
 				const value = await api.get(type, sensorScales[0]);
 				const scale = lookupSensorScale(type, sensorScales[0]);
-				const logMessage = `received current sensor reading: ${value} ${scale.unit ||
-					""}`;
+				const logMessage = `received current sensor reading: ${value} ${
+					scale.unit || ""
+				}`;
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,

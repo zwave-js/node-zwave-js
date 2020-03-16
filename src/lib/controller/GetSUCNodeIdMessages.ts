@@ -1,19 +1,26 @@
 import type { Driver } from "../driver/Driver";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	Message,
+	MessageDeserializationOptions,
+	messageTypes,
+	priority,
+} from "../message/Message";
 import type { JSONObject } from "../util/misc";
 
 @messageTypes(MessageType.Request, FunctionType.GetSUCNodeId)
 @expectedResponse(FunctionType.GetSUCNodeId)
 @priority(MessagePriority.Controller)
-export class GetSUCNodeIdRequest extends Message { }
+export class GetSUCNodeIdRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetSUCNodeId)
 export class GetSUCNodeIdResponse extends Message {
-	public constructor(
-		driver: Driver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._sucNodeId = this.payload[0];
 	}

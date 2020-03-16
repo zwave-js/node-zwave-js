@@ -41,7 +41,7 @@ export const colorizer = format((((
 	if (typeof info.message === "string") {
 		info.message = colorizeTextAndTags(info.message, textColor, bgColor);
 	} else {
-		info.message = info.message.map(msg =>
+		info.message = info.message.map((msg) =>
 			colorizeTextAndTags(msg, textColor, bgColor),
 		);
 	}

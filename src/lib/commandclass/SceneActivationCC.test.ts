@@ -2,7 +2,11 @@ import { createEmptyMockDriver } from "../../../test/mocks";
 import type { Driver } from "../driver/Driver";
 import { Duration } from "../values/Duration";
 import { CommandClasses } from "./CommandClasses";
-import { SceneActivationCC, SceneActivationCCSet, SceneActivationCommand } from "./SceneActivationCC";
+import {
+	SceneActivationCC,
+	SceneActivationCCSet,
+	SceneActivationCommand,
+} from "./SceneActivationCC";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 

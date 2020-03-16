@@ -68,7 +68,7 @@ describe("lib/node/Endpoint", () => {
 			);
 			actual = [...node.commandClasses];
 			expect(actual).toHaveLength(2);
-			expect(actual.map(api => api.constructor)).toIncludeAllMembers([
+			expect(actual.map((api) => api.constructor)).toIncludeAllMembers([
 				BatteryCCAPI,
 				VersionCCAPI,
 				// WakeUpCCAPI is not supported (only controlled), so no API!

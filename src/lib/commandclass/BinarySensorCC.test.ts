@@ -1,7 +1,15 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
-import { BinarySensorCC, BinarySensorCCGet, BinarySensorCCReport, BinarySensorCCSupportedGet, BinarySensorCCSupportedReport, BinarySensorCommand, BinarySensorType } from "./BinarySensorCC";
+import {
+	BinarySensorCC,
+	BinarySensorCCGet,
+	BinarySensorCCReport,
+	BinarySensorCCSupportedGet,
+	BinarySensorCCSupportedReport,
+	BinarySensorCommand,
+	BinarySensorType,
+} from "./BinarySensorCC";
 import { CommandClasses } from "./CommandClasses";
 
 function buildCCBuffer(payload: Buffer): Buffer {

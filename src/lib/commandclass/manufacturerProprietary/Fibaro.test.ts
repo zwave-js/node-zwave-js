@@ -1,7 +1,11 @@
 import { createEmptyMockDriver } from "../../../../test/mocks";
 import { loadDeviceIndex } from "../../config/Devices";
 import { ApplicationCommandRequest } from "../../controller/ApplicationCommandRequest";
-import { SendDataRequest, SendDataRequestTransmitReport, TransmitStatus } from "../../controller/SendDataMessages";
+import {
+	SendDataRequest,
+	SendDataRequestTransmitReport,
+	TransmitStatus,
+} from "../../controller/SendDataMessages";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
 import { CommandClasses } from "../CommandClasses";
@@ -11,7 +15,13 @@ import {
 	getProductTypeValueId,
 } from "../ManufacturerSpecificCC";
 import { MANUFACTURERID_FIBARO } from "./Constants";
-import { FibaroCCIDs, FibaroVenetianBlindCCCommand, FibaroVenetianBlindCCGet, FibaroVenetianBlindCCReport, FibaroVenetianBlindCCSet } from "./Fibaro";
+import {
+	FibaroCCIDs,
+	FibaroVenetianBlindCCCommand,
+	FibaroVenetianBlindCCGet,
+	FibaroVenetianBlindCCReport,
+	FibaroVenetianBlindCCSet,
+} from "./Fibaro";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 const node2 = new ZWaveNode(2, fakeDriver as any);

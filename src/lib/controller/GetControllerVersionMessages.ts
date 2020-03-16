@@ -1,6 +1,16 @@
 import type { Driver } from "../driver/Driver";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	Message,
+	MessageDeserializationOptions,
+	messageTypes,
+	priority,
+} from "../message/Message";
 import type { JSONObject } from "../util/misc";
 import { cpp2js } from "../util/strings";
 import type { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
@@ -8,14 +18,11 @@ import type { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 @messageTypes(MessageType.Request, FunctionType.GetControllerVersion)
 @expectedResponse(FunctionType.GetControllerVersion)
 @priority(MessagePriority.Controller)
-export class GetControllerVersionRequest extends Message { }
+export class GetControllerVersionRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetControllerVersion)
 export class GetControllerVersionResponse extends Message {
-	public constructor(
-		driver: Driver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
 		// The payload consists of a zero-terminated string and a uint8 for the controller type

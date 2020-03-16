@@ -1,6 +1,10 @@
 import type { Driver } from "../driver/Driver";
 import { FunctionType, MessageType } from "../message/Constants";
-import { Message, MessageDeserializationOptions, messageTypes } from "../message/Message";
+import {
+	Message,
+	MessageDeserializationOptions,
+	messageTypes,
+} from "../message/Message";
 import { NodeUpdatePayload, parseNodeUpdatePayload } from "../node/NodeInfo";
 import type { JSONObject } from "../util/misc";
 
@@ -19,10 +23,7 @@ export enum ApplicationUpdateTypes {
 @messageTypes(MessageType.Request, FunctionType.ApplicationUpdateRequest)
 // this is only received, not sent!
 export class ApplicationUpdateRequest extends Message {
-	public constructor(
-		driver: Driver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._updateType = this.payload[0];
 
@@ -36,7 +37,7 @@ export class ApplicationUpdateRequest extends Message {
 			);
 		} else if (
 			this._updateType ===
-			ApplicationUpdateTypes.NodeInfo_RequestFailed &&
+				ApplicationUpdateTypes.NodeInfo_RequestFailed &&
 			new.target !== ApplicationUpdateRequestNodeInfoRequestFailed
 		) {
 			return new ApplicationUpdateRequestNodeInfoRequestFailed(
@@ -53,10 +54,7 @@ export class ApplicationUpdateRequest extends Message {
 }
 
 export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateRequest {
-	public constructor(
-		driver: Driver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._nodeInformation = parseNodeUpdatePayload(this.payload.slice(1));
 		this._nodeId = this._nodeInformation.nodeId;
@@ -81,4 +79,4 @@ export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateR
 	}
 }
 
-export class ApplicationUpdateRequestNodeInfoRequestFailed extends ApplicationUpdateRequest { }
+export class ApplicationUpdateRequestNodeInfoRequestFailed extends ApplicationUpdateRequest {}

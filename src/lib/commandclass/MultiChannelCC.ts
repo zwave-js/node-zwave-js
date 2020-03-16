@@ -4,13 +4,31 @@ import log from "../log";
 import type { MessageOrCCLogEntry } from "../log/shared";
 import { MessagePriority } from "../message/Constants";
 import { GenericDeviceClasses } from "../node/DeviceClass";
-import { NodeInformationFrame, parseNodeInformationFrame } from "../node/NodeInfo";
+import {
+	NodeInformationFrame,
+	parseNodeInformationFrame,
+} from "../node/NodeInfo";
 import type { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
-import { API, CCCommand, CCCommandOptions, ccKeyValuePair, CCResponsePredicate, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, CommandClassOptions, DynamicCCResponse, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	ccKeyValuePair,
+	CCResponsePredicate,
+	ccValue,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	CommandClassOptions,
+	DynamicCCResponse,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum MultiChannelCommand {
@@ -307,7 +325,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				let i = 1;
 				i <=
 				multiResponse.individualEndpointCount +
-				(multiResponse.aggregatedEndpointCount ?? 0);
+					(multiResponse.aggregatedEndpointCount ?? 0);
 				i++
 			) {
 				endpointsToQuery.push(i);
@@ -431,10 +449,10 @@ supported CCs:`;
 			// endpoints they have
 			const supportedCCs = [...node.implementedCommandClasses.keys()]
 				// Don't query CCs the node only controls
-				.filter(cc => node.supportsCC(cc))
+				.filter((cc) => node.supportsCC(cc))
 				// Don't query CCs that want to skip the endpoint interview
 				.filter(
-					cc => !node.createCCInstance(cc)?.skipEndpointInterview(),
+					(cc) => !node.createCCInstance(cc)?.skipEndpointInterview(),
 				);
 			const endpointCounts = new Map<CommandClasses, number>();
 			for (const ccId of supportedCCs) {
@@ -582,7 +600,7 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 		capability.wasRemoved =
 			capability.isDynamic &&
 			capability.generic.key ===
-			GenericDeviceClasses["Non-Interoperable"] &&
+				GenericDeviceClasses["Non-Interoperable"] &&
 			capability.specific.key === 0x00;
 
 		this.capability = capability;
@@ -679,8 +697,8 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 
 		validatePayload(this.payload.length >= 4);
 		this._foundEndpoints = [...this.payload.slice(3)]
-			.map(e => e & 0b01111111)
-			.filter(e => e !== 0);
+			.map((e) => e & 0b01111111)
+			.filter((e) => e !== 0);
 	}
 
 	private _genericClass: GenericDeviceClasses;
@@ -709,7 +727,7 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 	public mergePartialCCs(partials: MultiChannelCCEndPointFindReport[]): void {
 		// Concat the list of end points
 		this._foundEndpoints = [...partials, this]
-			.map(report => report._foundEndpoints)
+			.map((report) => report._foundEndpoints)
 			.reduce((prev, cur) => prev.concat(...cur), []);
 	}
 }
@@ -898,9 +916,9 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		const destination =
 			typeof this.destination === "number"
 				? // The destination is a single number
-				this.destination & 0b0111_1111
+				  this.destination & 0b0111_1111
 				: // The destination is a bit mask
-				encodeBitMask(this.destination, 7)[0] | 0b1000_0000;
+				  encodeBitMask(this.destination, 7)[0] | 0b1000_0000;
 		this.payload = Buffer.concat([
 			Buffer.from([this.endpointIndex & 0b0111_1111, destination]),
 			this.encapsulated.serialize(),
@@ -915,7 +933,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 				typeof this.destination === "number"
 					? this.destination
 					: this.destination.join(", ")
-				}`,
+			}`,
 		};
 	}
 }

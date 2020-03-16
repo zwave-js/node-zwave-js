@@ -5,7 +5,17 @@ import { DSTInfo, getDefaultDSTInfo, getDSTInfo } from "../util/date";
 import { validatePayload } from "../util/misc";
 import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
-import { API, CCCommand, CCCommandOptions, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 // All the supported commands
@@ -115,7 +125,7 @@ export class TimeCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-				} interview...`,
+			} interview...`,
 			direction: "none",
 		});
 
@@ -180,7 +190,7 @@ export class TimeCCTimeReport extends TimeCC {
 
 @CCCommand(TimeCommand.TimeGet)
 @expectedCCResponse(TimeCCTimeReport)
-export class TimeCCTimeGet extends TimeCC { }
+export class TimeCCTimeGet extends TimeCC {}
 
 interface TimeCCDateReportOptions extends CCCommandOptions {
 	year: number;
@@ -226,7 +236,7 @@ export class TimeCCDateReport extends TimeCC {
 
 @CCCommand(TimeCommand.DateGet)
 @expectedCCResponse(TimeCCDateReport)
-export class TimeCCDateGet extends TimeCC { }
+export class TimeCCDateGet extends TimeCC {}
 
 interface TimeCCTimeOffsetSetOptions extends CCCommandOptions {
 	standardOffset: number;
@@ -346,4 +356,4 @@ export class TimeCCTimeOffsetReport extends TimeCC {
 
 @CCCommand(TimeCommand.TimeOffsetGet)
 @expectedCCResponse(TimeCCTimeOffsetReport)
-export class TimeCCTimeOffsetGet extends TimeCC { }
+export class TimeCCTimeOffsetGet extends TimeCC {}

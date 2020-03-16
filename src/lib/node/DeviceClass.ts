@@ -82,7 +82,7 @@ export class SpecificDeviceClass {
 		public readonly mandatorySupportedCCs: CommandClasses[] = [],
 		public readonly mandatoryControlCCs: CommandClasses[] = [],
 		public readonly basicCCForbidden: boolean = false,
-	) { }
+	) {}
 
 	public static readonly NOT_USED = Object.freeze(
 		new SpecificDeviceClass("not used", 0x00),
@@ -122,7 +122,7 @@ function defineGeneric(
 	// All devices have a non-specific version
 	if (
 		!specificDeviceClasses.some(
-			spec => spec.key === SpecificDeviceClass.NOT_USED.key,
+			(spec) => spec.key === SpecificDeviceClass.NOT_USED.key,
 		)
 	) {
 		specificDeviceClasses.unshift(SpecificDeviceClass.NOT_USED);
@@ -186,10 +186,10 @@ export class DeviceClass {
 			generic: this.generic.name,
 			specific: this.specific.name,
 			mandatorySupportedCCs: this._mandatorySupportedCCs.map(
-				cc => CommandClasses[cc],
+				(cc) => CommandClasses[cc],
 			),
 			mandatoryControlCCs: this._mandatoryControlCCs.map(
-				cc => CommandClasses[cc],
+				(cc) => CommandClasses[cc],
 			),
 		};
 	}

@@ -1,7 +1,18 @@
 import type { Driver } from "../driver/Driver";
 import type { MessageOrCCLogEntry } from "../log/shared";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, MessageBaseOptions, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	Message,
+	MessageBaseOptions,
+	MessageDeserializationOptions,
+	messageTypes,
+	priority,
+} from "../message/Message";
 import type { JSONObject } from "../util/misc";
 import { NUM_NODEMASK_BYTES, parseNodeBitMask } from "./NodeBitMask";
 
@@ -55,10 +66,7 @@ removeBadLinks:     ${this.removeBadLinks}`,
 
 @messageTypes(MessageType.Response, FunctionType.GetRoutingInfo)
 export class GetRoutingInfoResponse extends Message {
-	public constructor(
-		driver: Driver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
 		if (this.payload.length === NUM_NODEMASK_BYTES) {

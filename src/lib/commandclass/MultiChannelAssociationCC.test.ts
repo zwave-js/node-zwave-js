@@ -1,7 +1,15 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import type { Driver } from "../driver/Driver";
 import { CommandClasses } from "./CommandClasses";
-import { MultiChannelAssociationCCGet, MultiChannelAssociationCCRemove, MultiChannelAssociationCCReport, MultiChannelAssociationCCSet, MultiChannelAssociationCCSupportedGroupingsGet, MultiChannelAssociationCCSupportedGroupingsReport, MultiChannelAssociationCommand } from "./MultiChannelAssociationCC";
+import {
+	MultiChannelAssociationCCGet,
+	MultiChannelAssociationCCRemove,
+	MultiChannelAssociationCCReport,
+	MultiChannelAssociationCCSet,
+	MultiChannelAssociationCCSupportedGroupingsGet,
+	MultiChannelAssociationCCSupportedGroupingsReport,
+	MultiChannelAssociationCommand,
+} from "./MultiChannelAssociationCC";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 

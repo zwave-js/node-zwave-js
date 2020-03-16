@@ -9,7 +9,19 @@ import { num2hex } from "../util/strings";
 import { ValueMetadata } from "../values/Metadata";
 import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
-import { API, CCCommand, CCCommandOptions, ccValue, ccValueMetadata, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	ccValue,
+	ccValueMetadata,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export function getManufacturerIdValueId(): ValueID {
@@ -143,7 +155,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-				} interview...`,
+			} interview...`,
 			direction: "none",
 		});
 
@@ -162,8 +174,9 @@ export class ManufacturerSpecificCC extends CommandClass {
 				});
 				const mfResp = await api.get();
 				const logMessage = `received response for manufacturer information:
-  manufacturer: ${lookupManufacturer(mfResp.manufacturerId) ||
-					"unknown"} (${num2hex(mfResp.manufacturerId)})
+  manufacturer: ${
+		lookupManufacturer(mfResp.manufacturerId) || "unknown"
+  } (${num2hex(mfResp.manufacturerId)})
   product type: ${num2hex(mfResp.productType)}
   product id:   ${num2hex(mfResp.productId)}`;
 				log.controller.logNode(node.id, {

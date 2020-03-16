@@ -6,7 +6,18 @@ import type { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
-import { API, CCCommand, CCCommandOptions, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	ccValue,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { getEndpointCCsValueId } from "./MultiChannelCC";
 
@@ -68,10 +79,10 @@ function serializeMultiChannelAssociationDestination(
 	const payload = Buffer.allocUnsafe(
 		// node addresses
 		nodeAddressBytes +
-		// endpoint marker
-		(endpointAddressBytes > 0 ? 1 : 0) +
-		// endpoints
-		endpointAddressBytes,
+			// endpoint marker
+			(endpointAddressBytes > 0 ? 1 : 0) +
+			// endpoints
+			endpointAddressBytes,
 	);
 	// write node addresses
 	for (let i = 0; i < nodeIds.length; i++) {
@@ -87,9 +98,9 @@ function serializeMultiChannelAssociationDestination(
 			const destination =
 				typeof endpoint.endpoint === "number"
 					? // The destination is a single number
-					endpoint.endpoint & 0b0111_1111
+					  endpoint.endpoint & 0b0111_1111
 					: // The destination is a bit mask
-					encodeBitMask(endpoint.endpoint, 7)[0] | 0b1000_0000;
+					  encodeBitMask(endpoint.endpoint, 7)[0] | 0b1000_0000;
 
 			payload[offset + 2 * i] = endpoint.nodeId;
 			payload[offset + 2 * i + 1] = destination;
@@ -285,7 +296,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 			const nodes =
 				valueDB.getValue<number[]>(getNodeIdsValueId(i)) ?? [];
 			groupDestinations.push(
-				...nodes.map(nodeId => ({ nodeId, endpoint: 0 })),
+				...nodes.map((nodeId) => ({ nodeId, endpoint: 0 })),
 			);
 			// And all endpoint destinations
 			const endpoints =
@@ -299,7 +310,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 					});
 				} else {
 					groupDestinations.push(
-						...ep.endpoint.map(e => ({
+						...ep.endpoint.map((e) => ({
 							nodeId: ep.nodeId,
 							endpoint: e,
 						})),
@@ -332,7 +343,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-				} interview...`,
+			} interview...`,
 			direction: "none",
 		});
 
@@ -392,7 +403,7 @@ currently assigned endpoints: ${group.endpoints.map(({ nodeId, endpoint }) => {
 			if (
 				!lifelineNodeIds.includes(ownNodeId) &&
 				!lifelineDestinations.some(
-					addr => addr.nodeId === ownNodeId && addr.endpoint === 0,
+					(addr) => addr.nodeId === ownNodeId && addr.endpoint === 0,
 				)
 			) {
 				log.controller.logNode(node.id, {
@@ -424,10 +435,10 @@ currently assigned endpoints: ${group.endpoints.map(({ nodeId, endpoint }) => {
 type MultiChannelAssociationCCSetOptions = {
 	groupId: number;
 } & (
-		| { nodeIds: number[] }
-		| { endpoints: EndpointAddress[] }
-		| { nodeIds: number[]; endpoints: EndpointAddress[] }
-	);
+	| { nodeIds: number[] }
+	| { endpoints: EndpointAddress[] }
+	| { nodeIds: number[]; endpoints: EndpointAddress[] }
+);
 
 @CCCommand(MultiChannelAssociationCommand.Set)
 export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
@@ -453,7 +464,7 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 			}
 			this.groupId = options.groupId;
 			this.nodeIds = ("nodeIds" in options && options.nodeIds) || [];
-			if (this.nodeIds.some(n => n < 1 || n > MAX_NODES)) {
+			if (this.nodeIds.some((n) => n < 1 || n > MAX_NODES)) {
 				throw new ZWaveError(
 					`All node IDs must be between 1 and ${MAX_NODES}!`,
 					ZWaveErrorCodes.Argument_Invalid,
@@ -520,7 +531,7 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 				);
 			}
 
-			if (options.nodeIds?.some(n => n < 1 || n > MAX_NODES)) {
+			if (options.nodeIds?.some((n) => n < 1 || n > MAX_NODES)) {
 				throw new ZWaveError(
 					`All node IDs must be between 1 and ${MAX_NODES}!`,
 					ZWaveErrorCodes.Argument_Invalid,
@@ -603,11 +614,11 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 	public mergePartialCCs(partials: MultiChannelAssociationCCReport[]): void {
 		// Concat the list of nodes
 		this._nodeIds = [...partials, this]
-			.map(report => report._nodeIds)
+			.map((report) => report._nodeIds)
 			.reduce((prev, cur) => prev.concat(...cur), []);
 		// Concat the list of endpoints
 		this._endpoints = [...partials, this]
-			.map(report => report._endpoints)
+			.map((report) => report._endpoints)
 			.reduce((prev, cur) => prev.concat(...cur), []);
 
 		// Persist values
@@ -688,4 +699,4 @@ export class MultiChannelAssociationCCSupportedGroupingsReport extends MultiChan
 
 @CCCommand(MultiChannelAssociationCommand.SupportedGroupingsGet)
 @expectedCCResponse(MultiChannelAssociationCCSupportedGroupingsReport)
-export class MultiChannelAssociationCCSupportedGroupingsGet extends MultiChannelAssociationCC { }
+export class MultiChannelAssociationCCSupportedGroupingsGet extends MultiChannelAssociationCC {}

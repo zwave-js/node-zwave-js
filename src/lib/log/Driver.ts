@@ -4,9 +4,21 @@ import type { CommandClass } from "../commandclass/CommandClass";
 import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import type { Transaction } from "../driver/Transaction";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
 import type { Message, ResponseRole } from "../message/Message";
-import { createLogTransports, DataDirection, getDirectionPrefix, isLoglevelVisible, messageToLines, tagify, ZWaveLogger } from "./shared";
+import {
+	createLogTransports,
+	DataDirection,
+	getDirectionPrefix,
+	isLoglevelVisible,
+	messageToLines,
+	tagify,
+	ZWaveLogger,
+} from "./shared";
 
 export const DRIVER_LABEL = "DRIVER";
 const DRIVER_LOGLEVEL = "verbose";
@@ -93,7 +105,7 @@ function logMessage(
 	if (logEntry.message) {
 		msg.push(
 			...messageToLines(logEntry.message).map(
-				line => (isCCContainer ? "│ " : "  ") + line,
+				(line) => (isCCContainer ? "│ " : "  ") + line,
 			),
 		);
 	}
@@ -101,7 +113,7 @@ function logMessage(
 	// If possible, include information about the CCs
 	if (isCommandClassContainer(message)) {
 		// Remove the default payload message and draw a bracket
-		msg = msg.filter(line => !line.startsWith("│ payload:"));
+		msg = msg.filter((line) => !line.startsWith("│ payload:"));
 
 		let indent = 0;
 		let cc: CommandClass = message.command;
@@ -114,9 +126,9 @@ function logMessage(
 			if (loggedCC.message) {
 				msg.push(
 					...messageToLines(loggedCC.message).map(
-						line =>
+						(line) =>
 							`${" ".repeat(indent * 2)}${
-							isEncapCC ? "│ " : "  "
+								isEncapCC ? "│ " : "  "
 							}${line}`,
 					),
 				);
@@ -157,15 +169,15 @@ export function sendQueue(queue: SortedList<Transaction>): void {
 			const postfix =
 				node != undefined
 					? ` [Node ${node.id}, ${
-					node.isAwake() ? "awake" : "asleep"
-					}]`
+							node.isAwake() ? "awake" : "asleep"
+					  }]`
 					: "";
 			const command = isCommandClassContainer(trns.message)
 				? ` (${trns.message.command.constructor.name})`
 				: "";
 			message += `\n· ${prefix} ${
 				FunctionType[trns.message.functionType]
-				}${command}${postfix}`;
+			}${command}${postfix}`;
 		}
 	} else {
 		message += " (empty)";
@@ -175,7 +187,7 @@ export function sendQueue(queue: SortedList<Transaction>): void {
 		message,
 		secondaryTags: `(${queue.length} message${
 			queue.length === 1 ? "" : "s"
-			})`,
+		})`,
 		direction: getDirectionPrefix("none"),
 	});
 }

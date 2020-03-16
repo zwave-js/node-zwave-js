@@ -1,7 +1,13 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import type { Driver } from "../driver/Driver";
 import { CommandClasses } from "./CommandClasses";
-import { LanguageCC, LanguageCCGet, LanguageCCReport, LanguageCCSet, LanguageCommand } from "./LanguageCC";
+import {
+	LanguageCC,
+	LanguageCCGet,
+	LanguageCCReport,
+	LanguageCCSet,
+	LanguageCommand,
+} from "./LanguageCC";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 

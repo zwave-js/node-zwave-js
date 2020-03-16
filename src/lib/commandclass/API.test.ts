@@ -9,7 +9,7 @@ const node = new ZWaveNode(1, fakeDriver as any);
 (fakeDriver.controller!.nodes as any).set(node.id, node);
 
 @API(0xff)
-export class DummyCCAPI extends CCAPI { }
+export class DummyCCAPI extends CCAPI {}
 
 describe("lib/commandclass/CommandClass => ", () => {
 	describe("supportsCommand()", () => {

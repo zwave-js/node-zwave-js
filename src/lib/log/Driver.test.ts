@@ -4,10 +4,18 @@ import colors from "ansi-colors";
 import MockDate from "mockdate";
 import winston from "winston";
 import { createEmptyMockDriver } from "../../../test/mocks";
-import { assertLogInfo, assertMessage, SpyTransport } from "../../../test/SpyTransport";
+import {
+	assertLogInfo,
+	assertMessage,
+	SpyTransport,
+} from "../../../test/SpyTransport";
 import type { Driver } from "../driver/Driver";
 import { Transaction } from "../driver/Transaction";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
 import { Message } from "../message/Message";
 import { DRIVER_LABEL } from "./Driver";
 import log from "./index";
@@ -117,7 +125,7 @@ describe("lib/log/Driver =>", () => {
 		it("the timestamp is in a dim color", () => {
 			log.driver.print("Whatever");
 			assertMessage(spyTransport, {
-				predicate: msg => msg.startsWith(colors.gray("00:00:00.000")),
+				predicate: (msg) => msg.startsWith(colors.gray("00:00:00.000")),
 				ignoreTimestamp: false,
 				ignoreChannel: false,
 				ignoreColor: false,
@@ -127,7 +135,8 @@ describe("lib/log/Driver =>", () => {
 		it("the channel name is in inverted gray color", () => {
 			log.driver.print("Whatever");
 			assertMessage(spyTransport, {
-				predicate: msg => msg.startsWith(colors.gray.inverse("DRIVER")),
+				predicate: (msg) =>
+					msg.startsWith(colors.gray.inverse("DRIVER")),
 				ignoreChannel: false,
 				ignoreColor: false,
 			});
@@ -138,7 +147,7 @@ describe("lib/log/Driver =>", () => {
 		it("contains the direction", () => {
 			log.driver.transaction(createTransaction({}));
 			assertMessage(spyTransport, {
-				predicate: msg =>
+				predicate: (msg) =>
 					msg.startsWith(getDirectionPrefix("outbound")),
 			});
 		});
@@ -147,14 +156,14 @@ describe("lib/log/Driver =>", () => {
 				createTransaction({ type: MessageType.Request }),
 			);
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[REQ]"),
+				predicate: (msg) => msg.includes("[REQ]"),
 			});
 
 			log.driver.transaction(
 				createTransaction({ type: MessageType.Response }),
 			);
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[RES]"),
+				predicate: (msg) => msg.includes("[RES]"),
 				callNumber: 1,
 			});
 		});
@@ -166,7 +175,7 @@ describe("lib/log/Driver =>", () => {
 				}),
 			);
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[GetSerialApiInitData]"),
+				predicate: (msg) => msg.includes("[GetSerialApiInitData]"),
 			});
 		});
 
@@ -177,7 +186,7 @@ describe("lib/log/Driver =>", () => {
 				}),
 			);
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[P: MultistepController]"),
+				predicate: (msg) => msg.includes("[P: MultistepController]"),
 			});
 		});
 
@@ -188,7 +197,7 @@ describe("lib/log/Driver =>", () => {
 			transaction.sendAttempts = 2;
 			log.driver.transaction(transaction);
 			assertMessage(spyTransport, {
-				predicate: msg => !msg.includes("[P: MultistepController]"),
+				predicate: (msg) => !msg.includes("[P: MultistepController]"),
 			});
 		});
 
@@ -200,7 +209,7 @@ describe("lib/log/Driver =>", () => {
 			transaction.maxSendAttempts = 3;
 			log.driver.transaction(transaction);
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[attempt 2/3]"),
+				predicate: (msg) => msg.includes("[attempt 2/3]"),
 			});
 		});
 	});
@@ -210,7 +219,8 @@ describe("lib/log/Driver =>", () => {
 			const msg = createMessage(fakeDriver, {});
 			log.driver.transactionResponse(msg, null as any);
 			assertMessage(spyTransport, {
-				predicate: msg => msg.startsWith(getDirectionPrefix("inbound")),
+				predicate: (msg) =>
+					msg.startsWith(getDirectionPrefix("inbound")),
 			});
 		});
 
@@ -220,7 +230,7 @@ describe("lib/log/Driver =>", () => {
 			});
 			log.driver.transactionResponse(msg, null as any);
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[REQ]"),
+				predicate: (msg) => msg.includes("[REQ]"),
 			});
 
 			msg = createMessage(fakeDriver, {
@@ -228,7 +238,7 @@ describe("lib/log/Driver =>", () => {
 			});
 			log.driver.transactionResponse(msg, null as any);
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[RES]"),
+				predicate: (msg) => msg.includes("[RES]"),
 				callNumber: 1,
 			});
 		});
@@ -239,7 +249,7 @@ describe("lib/log/Driver =>", () => {
 			});
 			log.driver.transactionResponse(msg, null as any);
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[HardReset]"),
+				predicate: (msg) => msg.includes("[HardReset]"),
 			});
 		});
 
@@ -249,7 +259,7 @@ describe("lib/log/Driver =>", () => {
 			});
 			log.driver.transactionResponse(msg, "fatal_controller");
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("[fatal_controller]"),
+				predicate: (msg) => msg.includes("[fatal_controller]"),
 			});
 		});
 	});
@@ -259,7 +269,7 @@ describe("lib/log/Driver =>", () => {
 			const queue = new SortedList<Transaction>();
 			log.driver.sendQueue(queue);
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("(0 messages)"),
+				predicate: (msg) => msg.includes("(0 messages)"),
 			});
 
 			queue.add(
@@ -267,7 +277,7 @@ describe("lib/log/Driver =>", () => {
 			);
 			log.driver.sendQueue(queue);
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("(1 message)"),
+				predicate: (msg) => msg.includes("(1 message)"),
 				callNumber: 1,
 			});
 
@@ -276,7 +286,7 @@ describe("lib/log/Driver =>", () => {
 			);
 			log.driver.sendQueue(queue);
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("(2 messages)"),
+				predicate: (msg) => msg.includes("(2 messages)"),
 				callNumber: 2,
 			});
 		});
@@ -292,10 +302,10 @@ describe("lib/log/Driver =>", () => {
 			log.driver.sendQueue(queue);
 
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("GetSUCNodeId"),
+				predicate: (msg) => msg.includes("GetSUCNodeId"),
 			});
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("HardReset"),
+				predicate: (msg) => msg.includes("HardReset"),
 			});
 		});
 
@@ -316,10 +326,10 @@ describe("lib/log/Driver =>", () => {
 			log.driver.sendQueue(queue);
 
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("· [REQ] GetSUCNodeId"),
+				predicate: (msg) => msg.includes("· [REQ] GetSUCNodeId"),
 			});
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes("· [RES] HardReset"),
+				predicate: (msg) => msg.includes("· [RES] HardReset"),
 			});
 		});
 	});
@@ -343,7 +353,7 @@ describe("lib/log/Driver =>", () => {
 			);
 
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes(expected1),
+				predicate: (msg) => msg.includes(expected1),
 				ignoreColor: false,
 			});
 		});
@@ -361,7 +371,7 @@ describe("lib/log/Driver =>", () => {
 				colors.bgCyan("]");
 
 			assertMessage(spyTransport, {
-				predicate: msg => msg.includes(expected1),
+				predicate: (msg) => msg.includes(expected1),
 				ignoreColor: false,
 			});
 		});

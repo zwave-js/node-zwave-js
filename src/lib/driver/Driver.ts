@@ -8,14 +8,26 @@ import fsExtra from "fs-extra";
 import path from "path";
 import SerialPort from "serialport";
 import { promisify } from "util";
-import { CommandClass, getImplementedVersion } from "../commandclass/CommandClass";
+import {
+	CommandClass,
+	getImplementedVersion,
+} from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
 import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
-import { ICommandClassContainer, isCommandClassContainer } from "../commandclass/ICommandClassContainer";
+import {
+	ICommandClassContainer,
+	isCommandClassContainer,
+} from "../commandclass/ICommandClassContainer";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { messageIsPing } from "../commandclass/NoOperationCC";
-import { SupervisionCC, SupervisionCCGet, SupervisionCCReport, SupervisionResult, SupervisionStatus } from "../commandclass/SupervisionCC";
+import {
+	SupervisionCC,
+	SupervisionCCGet,
+	SupervisionCCReport,
+	SupervisionResult,
+	SupervisionStatus,
+} from "../commandclass/SupervisionCC";
 import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { loadDeviceIndex } from "../config/Devices";
 import { loadIndicators } from "../config/Indicators";
@@ -25,12 +37,27 @@ import { loadNotifications } from "../config/Notifications";
 import { loadNamedScales } from "../config/Scales";
 import { loadSensorTypes } from "../config/SensorTypes";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
-import { ApplicationUpdateRequest, ApplicationUpdateRequestNodeInfoReceived } from "../controller/ApplicationUpdateRequest";
+import {
+	ApplicationUpdateRequest,
+	ApplicationUpdateRequestNodeInfoReceived,
+} from "../controller/ApplicationUpdateRequest";
 import { ZWaveController } from "../controller/Controller";
-import { isSendReport, isTransmitReport, SendDataMulticastRequest, SendDataRequest, SendDataRequestTransmitReport, TransmitStatus } from "../controller/SendDataMessages";
+import {
+	isSendReport,
+	isTransmitReport,
+	SendDataMulticastRequest,
+	SendDataRequest,
+	SendDataRequestTransmitReport,
+	TransmitStatus,
+} from "../controller/SendDataMessages";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { FunctionType, MessageHeaders, MessagePriority, MessageType } from "../message/Constants";
+import {
+	FunctionType,
+	MessageHeaders,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
@@ -164,12 +191,12 @@ export type SupervisionUpdateHandler = (
 export type SendSupervisedCommandOptions = SendMessageOptions &
 	(
 		| {
-			requestStatusUpdates: false;
-		}
+				requestStatusUpdates: false;
+		  }
 		| {
-			requestStatusUpdates: true;
-			onUpdate: SupervisionUpdateHandler;
-		}
+				requestStatusUpdates: true;
+				onUpdate: SupervisionUpdateHandler;
+		  }
 	);
 
 // Strongly type the event emitter events
@@ -261,7 +288,7 @@ export class Driver extends EventEmitter {
 	/** Enumerates all existing serial ports */
 	public static async enumerateSerialPorts(): Promise<string[]> {
 		const ports = await SerialPort.list();
-		return ports.map(port => port.path);
+		return ports.map((port) => port.path);
 	}
 
 	/** @internal */
@@ -331,7 +358,7 @@ export class Driver extends EventEmitter {
 				});
 			})
 			.on("data", this.serialport_onData.bind(this))
-			.on("error", err => {
+			.on("error", (err) => {
 				log.driver.print("serial port errored: " + err, "error");
 				if (this._isOpen) {
 					this.serialport_onError(err);
@@ -571,7 +598,7 @@ export class Driver extends EventEmitter {
 			"The node was removed from the network",
 		);
 		// Asynchronously remove the node from all possible associations, ignore potential errors
-		this.controller.removeNodeFromAllAssocations(node.id).catch(err => {
+		this.controller.removeNodeFromAllAssocations(node.id).catch((err) => {
 			log.driver.print(
 				`Failed to remove node ${node.id} from all associations: ${err.message}`,
 				"error",
@@ -584,7 +611,7 @@ export class Driver extends EventEmitter {
 
 	/** Checks if there are any pending messages for the given node */
 	private hasPendingMessages(node: ZWaveNode): boolean {
-		return !!this.sendQueue.find(t => t.message.getNodeId() === node.id);
+		return !!this.sendQueue.find((t) => t.message.getNodeId() === node.id);
 	}
 
 	/**
@@ -665,11 +692,11 @@ export class Driver extends EventEmitter {
 
 		// Clean up
 		this.rejectTransactions(() => true, `The controller was hard-reset`);
-		this.nodeAwakeTimeouts.forEach(timeout => clearTimeout(timeout));
+		this.nodeAwakeTimeouts.forEach((timeout) => clearTimeout(timeout));
 		this.nodeAwakeTimeouts.clear();
-		this.sendNodeToSleepTimers.forEach(timeout => clearTimeout(timeout));
+		this.sendNodeToSleepTimers.forEach((timeout) => clearTimeout(timeout));
 		this.sendNodeToSleepTimers.clear();
-		this.retryNodeInterviewTimeouts.forEach(timeout =>
+		this.retryNodeInterviewTimeouts.forEach((timeout) =>
 			clearTimeout(timeout),
 		);
 		this.retryNodeInterviewTimeouts.clear();
@@ -734,7 +761,7 @@ export class Driver extends EventEmitter {
 		}
 
 		// Destroy all nodes
-		this._controller?.nodes.forEach(n => n.destroy());
+		this._controller?.nodes.forEach((n) => n.destroy());
 
 		process.removeListener("exit", this._cleanupHandler);
 		process.removeListener("SIGINT", this._cleanupHandler);
@@ -1132,7 +1159,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 		handlers.push(entry);
 		log.driver.print(
 			`added${oneTime ? " one-time" : ""} request handler for ${
-			FunctionType[fnType]
+				FunctionType[fnType]
 			} (${num2hex(fnType)})...
 ${handlers.length} registered`,
 		);
@@ -1269,7 +1296,7 @@ ${handlers.length} left`,
 			// TODO: This deserves a nicer formatting
 			log.driver.print(
 				`handling request ${FunctionType[msg.functionType]} (${
-				msg.functionType
+					msg.functionType
 				})`,
 			);
 			handlers = this.requestHandlers.get(msg.functionType);
@@ -1278,7 +1305,7 @@ ${handlers.length} left`,
 		if (handlers != undefined && handlers.length > 0) {
 			log.driver.print(
 				`  ${handlers.length} handler${
-				handlers.length !== 1 ? "s" : ""
+					handlers.length !== 1 ? "s" : ""
 				} registered!`,
 			);
 			// loop through all handlers and find the first one that returns true to indicate that it handled the message
@@ -1552,7 +1579,7 @@ ${handlers.length} left`,
 		) {
 			throw new ZWaveError(
 				`Your hardware does not support the ${
-				FunctionType[msg.functionType]
+					FunctionType[msg.functionType]
 				} function`,
 				ZWaveErrorCodes.Driver_NotSupported,
 			);
@@ -1861,7 +1888,7 @@ ${handlers.length} left`,
 		errorMsg: string = `The node is dead`,
 	): void {
 		this.rejectTransactions(
-			t => t.message.getNodeId() === nodeId,
+			(t) => t.message.getNodeId() === nodeId,
 			errorMsg,
 		);
 	}

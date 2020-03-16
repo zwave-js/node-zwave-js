@@ -1,4 +1,9 @@
-import { lookupNotification, NotificationParameterWithCommandClass, NotificationParameterWithDuration, NotificationParameterWithValue } from "../config/Notifications";
+import {
+	lookupNotification,
+	NotificationParameterWithCommandClass,
+	NotificationParameterWithDuration,
+	NotificationParameterWithValue,
+} from "../config/Notifications";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
@@ -9,7 +14,18 @@ import { Duration } from "../values/Duration";
 import { ValueMetadata, ValueMetadataNumeric } from "../values/Metadata";
 import { Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
-import { API, CCCommand, CCCommandOptions, ccValue, CommandClass, commandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	ccValue,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+	implementedVersion,
+} from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 export enum NotificationCommand {
@@ -200,7 +216,7 @@ export class NotificationCC extends CommandClass {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
-				} interview...`,
+			} interview...`,
 			direction: "none",
 		});
 
@@ -210,7 +226,7 @@ export class NotificationCC extends CommandClass {
 
 			function lookupNotificationNames(): string[] {
 				return supportedNotificationTypes
-					.map(n => {
+					.map((n) => {
 						const ret = lookupNotification(n);
 						return [n, ret] as const;
 					})
@@ -231,7 +247,7 @@ export class NotificationCC extends CommandClass {
 
 				const logMessage =
 					"received supported notification types:" +
-					supportedNotificationNames.map(name => "\n· " + name);
+					supportedNotificationNames.map((name) => "\n· " + name);
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
@@ -500,8 +516,8 @@ export class NotificationCCReport extends NotificationCC {
 
 type NotificationCCGetSpecificOptions =
 	| {
-		alarmType: number;
-	}
+			alarmType: number;
+	  }
 	| {
 			notificationType: number;
 			notificationEvent?: number;

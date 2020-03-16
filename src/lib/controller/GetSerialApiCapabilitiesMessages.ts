@@ -1,6 +1,16 @@
 import type { Driver } from "../driver/Driver";
-import { FunctionType, MessagePriority, MessageType } from "../message/Constants";
-import { expectedResponse, Message, MessageDeserializationOptions, messageTypes, priority } from "../message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../message/Constants";
+import {
+	expectedResponse,
+	Message,
+	MessageDeserializationOptions,
+	messageTypes,
+	priority,
+} from "../message/Message";
 import type { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { parseBitMask } from "../values/Primitive";
@@ -11,14 +21,11 @@ const NUM_FUNCTION_BYTES = NUM_FUNCTIONS / 8;
 @messageTypes(MessageType.Request, FunctionType.GetSerialApiCapabilities)
 @expectedResponse(FunctionType.GetSerialApiCapabilities)
 @priority(MessagePriority.Controller)
-export class GetSerialApiCapabilitiesRequest extends Message { }
+export class GetSerialApiCapabilitiesRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiCapabilities)
 export class GetSerialApiCapabilitiesResponse extends Message {
-	public constructor(
-		driver: Driver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
 		// The first 8 bytes are the api version, manufacturer id, product type and product id
@@ -62,7 +69,7 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 			manufacturerId: this.manufacturerId,
 			productType: this.productType,
 			productId: this.productId,
-			supportedFunctionTypes: this.supportedFunctionTypes.map(type =>
+			supportedFunctionTypes: this.supportedFunctionTypes.map((type) =>
 				type in FunctionType ? FunctionType[type] : num2hex(type),
 			),
 		});

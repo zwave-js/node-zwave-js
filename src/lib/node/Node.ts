@@ -3,21 +3,58 @@ import { EventEmitter } from "events";
 import type { CCAPI } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import { BasicCC, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
-import { CentralSceneCCNotification, CentralSceneKeys, getSceneValueId } from "../commandclass/CentralSceneCC";
+import {
+	CentralSceneCCNotification,
+	CentralSceneKeys,
+	getSceneValueId,
+} from "../commandclass/CentralSceneCC";
 import { ClockCCReport } from "../commandclass/ClockCC";
-import { CommandClass, CommandClassInfo, getCCValueMetadata } from "../commandclass/CommandClass";
-import { actuatorCCs, applicationCCs, CommandClasses, getCCName, sensorCCs } from "../commandclass/CommandClasses";
-import { getManufacturerIdValueId, getProductIdValueId, getProductTypeValueId } from "../commandclass/ManufacturerSpecificCC";
+import {
+	CommandClass,
+	CommandClassInfo,
+	getCCValueMetadata,
+} from "../commandclass/CommandClass";
+import {
+	actuatorCCs,
+	applicationCCs,
+	CommandClasses,
+	getCCName,
+	sensorCCs,
+} from "../commandclass/CommandClasses";
+import {
+	getManufacturerIdValueId,
+	getProductIdValueId,
+	getProductTypeValueId,
+} from "../commandclass/ManufacturerSpecificCC";
 import { getEndpointCCsValueId } from "../commandclass/MultiChannelCC";
 import { NotificationCCReport } from "../commandclass/NotificationCC";
-import { getDimmingDurationValueID, getSceneIdValueID, SceneActivationCCSet } from "../commandclass/SceneActivationCC";
+import {
+	getDimmingDurationValueID,
+	getSceneIdValueID,
+	SceneActivationCCSet,
+} from "../commandclass/SceneActivationCC";
 import { getFirmwareVersionsValueId } from "../commandclass/VersionCC";
-import { getWakeUpIntervalValueId, WakeUpCC, WakeUpCCWakeUpNotification } from "../commandclass/WakeUpCC";
+import {
+	getWakeUpIntervalValueId,
+	WakeUpCC,
+	WakeUpCCWakeUpNotification,
+} from "../commandclass/WakeUpCC";
 import { DeviceConfig, lookupDevice } from "../config/Devices";
 import { lookupNotification } from "../config/Notifications";
-import { ApplicationUpdateRequest, ApplicationUpdateRequestNodeInfoReceived, ApplicationUpdateRequestNodeInfoRequestFailed } from "../controller/ApplicationUpdateRequest";
-import { Baudrate, GetNodeProtocolInfoRequest, GetNodeProtocolInfoResponse } from "../controller/GetNodeProtocolInfoMessages";
-import { GetRoutingInfoRequest, GetRoutingInfoResponse } from "../controller/GetRoutingInfoMessages";
+import {
+	ApplicationUpdateRequest,
+	ApplicationUpdateRequestNodeInfoReceived,
+	ApplicationUpdateRequestNodeInfoRequestFailed,
+} from "../controller/ApplicationUpdateRequest";
+import {
+	Baudrate,
+	GetNodeProtocolInfoRequest,
+	GetNodeProtocolInfoResponse,
+} from "../controller/GetNodeProtocolInfoMessages";
+import {
+	GetRoutingInfoRequest,
+	GetRoutingInfoResponse,
+} from "../controller/GetRoutingInfoMessages";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
@@ -27,13 +64,32 @@ import { getEnumMemberName, JSONObject, Mixin } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import type { CacheMetadata, CacheValue } from "../values/Cache";
 import type { ValueMetadata } from "../values/Metadata";
-import { BasicDeviceClasses, DeviceClass, GenericDeviceClass, GenericDeviceClasses, SpecificDeviceClass } from "./DeviceClass";
+import {
+	BasicDeviceClasses,
+	DeviceClass,
+	GenericDeviceClass,
+	GenericDeviceClasses,
+	SpecificDeviceClass,
+} from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
 import type { NodeUpdatePayload } from "./NodeInfo";
-import { RequestNodeInfoRequest, RequestNodeInfoResponse } from "./RequestNodeInfoMessages";
+import {
+	RequestNodeInfoRequest,
+	RequestNodeInfoResponse,
+} from "./RequestNodeInfoMessages";
 import { InterviewStage, NodeStatus } from "./Types";
-import type { TranslatedValueID, ZWaveNodeEventCallbacks, ZWaveNodeEvents, ZWaveNodeValueEventCallbacks } from "./Types";
-import { MetadataUpdatedArgs, ValueDB, ValueID, valueIdToString } from "./ValueDB";
+import type {
+	TranslatedValueID,
+	ZWaveNodeEventCallbacks,
+	ZWaveNodeEvents,
+	ZWaveNodeValueEventCallbacks,
+} from "./Types";
+import {
+	MetadataUpdatedArgs,
+	ValueDB,
+	ValueID,
+	valueIdToString,
+} from "./ValueDB";
 
 export interface ZWaveNode {
 	on<TEvent extends ZWaveNodeEvents>(
@@ -351,7 +407,7 @@ export class ZWaveNode extends Endpoint {
 					ret.push(
 						...ccInstance
 							.getDefinedValueIDs()
-							.map(id => this.translateValueID(id)),
+							.map((id) => this.translateValueID(id)),
 					);
 				}
 			}
@@ -370,14 +426,14 @@ export class ZWaveNode extends Endpoint {
 	private filterRootApplicationCCValueIDs(
 		allValueIds: TranslatedValueID[],
 	): TranslatedValueID[] {
-		return allValueIds.filter(vid => {
+		return allValueIds.filter((vid) => {
 			// Non-root endpoint values don't need to be filtered
 			if (!!vid.endpoint) return true;
 			// Non-application CCs don't need to be filtered
 			if (!applicationCCs.includes(vid.commandClass)) return true;
 			// Filter out root values if an identical value ID exists for another endpoint
 			const valueExistsOnAnotherEndpoint = allValueIds.some(
-				other =>
+				(other) =>
 					// same CC
 					other.commandClass === vid.commandClass &&
 					// non-root endpoint
@@ -1210,9 +1266,9 @@ version:               ${this.version}`;
 	/** Stores information about a currently held down key */
 	private centralSceneKeyHeldDownContext:
 		| {
-			timeout: NodeJS.Timeout;
-			sceneNumber: number;
-		}
+				timeout: NodeJS.Timeout;
+				sceneNumber: number;
+		  }
 		| undefined;
 	private lastCentralSceneNotificationSequenceNumber: number | undefined;
 
@@ -1271,7 +1327,7 @@ version:               ${this.version}`;
 		if (
 			this.centralSceneKeyHeldDownContext &&
 			this.centralSceneKeyHeldDownContext.sceneNumber !==
-			command.sceneNumber
+				command.sceneNumber
 		) {
 			// The user pressed another button, force release
 			forceKeyUp();
@@ -1381,7 +1437,7 @@ version:               ${this.version}`;
 				// Since the node sent us a Basic report, we are sure that it is at least supported
 				// If this is the only supported actuator CC, add it to the support list,
 				// so the information lands in the network cache
-				if (!actuatorCCs.some(cc => sourceEndpoint.supportsCC(cc))) {
+				if (!actuatorCCs.some((cc) => sourceEndpoint.supportsCC(cc))) {
 					sourceEndpoint.addCC(CommandClasses.Basic, {
 						isControlled: true,
 					});
@@ -1504,7 +1560,7 @@ version:               ${this.version}`;
 					const nonIdleValues = this.valueDB
 						.getValues(CommandClasses.Notification)
 						.filter(
-							v =>
+							(v) =>
 								(v.endpoint || 0) === command.endpointIndex &&
 								v.property === property &&
 								typeof v.value === "number" &&
