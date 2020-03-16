@@ -2,7 +2,7 @@ import { isArray } from "alcalzone-shared/typeguards";
 import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { validatePayload } from "../util/misc";
+import { staticExtends, validatePayload } from "../util/misc";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -49,17 +49,20 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			// ManufacturerProprietaryCC has no CC command, so the first byte is stored in ccCommand.
-			this.manufacturerId = (super.ccCommand! << 8) + this.payload[0];
-			// If this is not called from a subclass, shorten the payload for the following subclass deserialization
-			if (new.target === ManufacturerProprietaryCC) {
-				this.payload = this.payload.slice(1);
-			}
+			this.manufacturerId =
+				(((this.ccCommand as unknown) as number) << 8) +
+				this.payload[0];
+			this.payload = this.payload.slice(1);
 
 			// Try to parse the proprietary command
 			const PCConstructor = getProprietaryCCConstructor(
 				this.manufacturerId,
 			);
-			if (PCConstructor && new.target !== PCConstructor) {
+			if (
+				PCConstructor &&
+				new.target !== PCConstructor &&
+				!staticExtends(new.target, PCConstructor)
+			) {
 				return new PCConstructor(driver, options);
 			}
 		} else {
