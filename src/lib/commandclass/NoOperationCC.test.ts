@@ -27,6 +27,6 @@ describe("lib/commandclass/NoOperationCC => ", () => {
 		const ccData = buildCCBuffer(
 			Buffer.from([]), // No command!
 		);
-		void new NoOperationCC(fakeDriver, { data: ccData });
+		void new NoOperationCC(fakeDriver, { nodeId: 2, data: ccData });
 	});
 });

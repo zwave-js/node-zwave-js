@@ -2,7 +2,7 @@ import { padStart } from "alcalzone-shared/strings";
 import path from "path";
 import * as semver from "semver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { DeviceConfigIndexEntry } from "./Devices";
+import type { DeviceConfigIndexEntry } from "./Devices";
 
 export const configDir = path.resolve(__dirname, "../../..", "config");
 export const hexKeyRegexNDigits = /^0x[a-fA-F0-9]+$/;

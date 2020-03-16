@@ -22,7 +22,7 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
-import { Association } from "./MultiChannelAssociationCC";
+import type { Association } from "./MultiChannelAssociationCC";
 
 /** Returns the ValueID used to store the maximum number of nodes of an association group */
 export function getMaxNodesValueId(groupId: number): ValueID {

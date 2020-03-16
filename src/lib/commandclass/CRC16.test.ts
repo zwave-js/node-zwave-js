@@ -30,7 +30,7 @@ describe("lib/commandclass/CRC16 => ", () => {
 			const serialized = crc16.serialize();
 
 			const deserialized = CommandClass.from(fakeDriver, {
-				nodeId: basicCCSet.nodeId,
+				nodeId: basicCCSet.nodeId as number,
 				data: serialized,
 			});
 			expect(deserialized.nodeId).toBe(basicCCSet.nodeId);
@@ -57,7 +57,7 @@ describe("lib/commandclass/CRC16 => ", () => {
 			assertZWaveError(
 				() =>
 					CommandClass.from(fakeDriver, {
-						nodeId: basicCCSet.nodeId,
+						nodeId: basicCCSet.nodeId as number,
 						data: serialized,
 					}),
 				{

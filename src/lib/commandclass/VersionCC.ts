@@ -2,7 +2,7 @@ import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { ValueMetadata } from "../values/Metadata";

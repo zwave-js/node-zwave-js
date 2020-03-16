@@ -43,6 +43,7 @@ describe("lib/commandclass/AssociationCC => ", () => {
 			]),
 		);
 		const cc = new AssociationCCSupportedGroupingsReport(fakeDriver, {
+			nodeId: 2,
 			data: ccData,
 		});
 
@@ -95,6 +96,7 @@ describe("lib/commandclass/AssociationCC => ", () => {
 			]),
 		);
 		const cc = new AssociationCCReport(fakeDriver, {
+			nodeId: 1,
 			data: ccData,
 		});
 
