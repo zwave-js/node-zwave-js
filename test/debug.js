@@ -1,6 +1,6 @@
 require("reflect-metadata");
 // @ts-check
-const data = Buffer.from("010d0004000607600d01012503ff43", "hex");
+const data = Buffer.from("010e000400040891010f260303000040", "hex");
 require("../build/index");
 const { Message } = require("../build/lib/message/Message");
 console.log(Message.getMessageLength(data));
