@@ -5,7 +5,7 @@ import JSON5 from "json5";
 import path from "path";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { JSONObject } from "../util/misc";
+import type { JSONObject } from "../util/misc";
 import { ObjectKeyMap, ReadonlyObjectKeyMap } from "../util/ObjectKeyMap";
 import {
 	configDir,
@@ -140,8 +140,8 @@ function isFirmwareVersion(val: any): val is string {
 		firmwareVersionRegex.test(val) &&
 		val
 			.split(".")
-			.map(str => parseInt(str, 10))
-			.every(num => num >= 0 && num <= 255)
+			.map((str) => parseInt(str, 10))
+			.every((num) => num >= 0 && num <= 255)
 	);
 }
 
@@ -171,7 +171,7 @@ ${prop} is not a string`,
 		if (
 			!isArray(definition.devices) ||
 			!(definition.devices as any[]).every(
-				dev =>
+				(dev) =>
 					isObject(dev) &&
 					isHexKeyWith4Digits((dev as any).productType) &&
 					isHexKeyWith4Digits((dev as any).productId),
@@ -470,7 +470,7 @@ Parameter #${parameterNumber}: allowManualEntry must be a boolean!`,
 		if (
 			isArray(definition.options) &&
 			!definition.options.every(
-				opt =>
+				(opt) =>
 					isObject(opt) &&
 					typeof (opt as any).label === "string" &&
 					typeof (opt as any).value === "number",

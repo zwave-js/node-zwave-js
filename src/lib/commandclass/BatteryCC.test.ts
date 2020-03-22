@@ -1,7 +1,6 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertCC } from "../../../test/util";
-import { Driver } from "../driver/Driver";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import {
 	BatteryCC,
@@ -13,7 +12,7 @@ import {
 } from "./BatteryCC";
 import { CommandClasses } from "./CommandClasses";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 describe("lib/commandclass/BatteryCC => ", () => {
 	it("the Get command should serialize correctly", () => {

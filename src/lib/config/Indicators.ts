@@ -5,9 +5,9 @@ import JSON5 from "json5";
 import path from "path";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { JSONObject } from "../util/misc";
+import type { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
-import { ValueType } from "../values/Metadata";
+import type { ValueType } from "../values/Metadata";
 import { configDir, hexKeyRegexNDigits, throwInvalidConfig } from "./utils";
 
 const configPath = path.join(configDir, "indicators.json");

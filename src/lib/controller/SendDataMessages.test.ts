@@ -8,7 +8,7 @@ import {
 	SupervisionCCReport,
 	SupervisionStatus,
 } from "../commandclass/SupervisionCC";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { FunctionType, MessageType } from "../message/Constants";
 import {
 	getExpectedResponse,
@@ -27,7 +27,7 @@ import {
 	TransmitStatus,
 } from "./SendDataMessages";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 function createSendDataMessage(
 	type: MessageType,
@@ -158,7 +158,7 @@ describe("lib/controller/SendDataRequest => ", () => {
 	// 	expect(srq.command).toBeInstanceOf(NoOperationCC);
 	// });
 
-	const createRequest = (function*() {
+	const createRequest = (function* () {
 		const noOp = new NoOperationCC(fakeDriver, { nodeId: 2 });
 		while (true) yield new SendDataRequest(fakeDriver, { command: noOp });
 	})();

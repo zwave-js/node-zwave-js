@@ -51,7 +51,7 @@ export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
 
 	public entries(): IterableIterator<[TKey, TValue]> {
 		const map = this._map;
-		return (function*() {
+		return (function* () {
 			const _entries = map.entries();
 			let entry = _entries.next();
 			while (!entry.done) {
@@ -64,7 +64,7 @@ export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
 
 	public keys(): IterableIterator<TKey> {
 		const map = this._map;
-		return (function*() {
+		return (function* () {
 			const _keys = map.entries();
 			let key = _keys.next();
 			while (!key.done) {

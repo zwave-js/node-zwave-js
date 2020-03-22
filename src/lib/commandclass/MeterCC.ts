@@ -1,8 +1,8 @@
 import { lookupMeter, lookupMeterScale, MeterScale } from "../config/Meters";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { ValueMetadata } from "../values/Metadata";
@@ -217,11 +217,11 @@ export class MeterCC extends CommandClass {
 				const logMessage = `received meter support:
 type:                 ${getMeterTypeName(type)}
 supported scales:     ${supportedScales
-					.map(s => lookupMeterScale(type, s).label)
-					.map(label => `\n· ${label}`)}
+					.map((s) => lookupMeterScale(type, s).label)
+					.map((label) => `\n· ${label}`)}
 supported rate types: ${supportedRateTypes
-					.map(rt => getEnumMemberName(RateType, rt))
-					.map(label => `\n· ${label}`)}
+					.map((rt) => getEnumMemberName(RateType, rt))
+					.map((label) => `\n· ${label}`)}
 supports reset:       ${supportsReset}`;
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
@@ -313,7 +313,7 @@ supports reset:       ${supportsReset}`;
 @CCCommand(MeterCommand.Report)
 export class MeterCCReport extends MeterCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -482,7 +482,7 @@ interface MeterCCGetOptions {
 @expectedCCResponse(testResponseForMeterGet)
 export class MeterCCGet extends MeterCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| (MeterCCGetOptions & CCCommandOptions),
@@ -541,7 +541,7 @@ export class MeterCCGet extends MeterCC {
 @CCCommand(MeterCommand.SupportedReport)
 export class MeterCCSupportedReport extends MeterCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -562,7 +562,7 @@ export class MeterCCSupportedReport extends MeterCC {
 					this.payload.slice(3, 3 + extraBytes),
 				]),
 				0,
-			).map(scale => (scale >= 8 ? scale - 1 : scale));
+			).map((scale) => (scale >= 8 ? scale - 1 : scale));
 		} else {
 			// only 7 bits in the bitmask. Bit 7 is 0, so no need to mask it out
 			this._supportedScales = parseBitMask(
@@ -619,7 +619,7 @@ type MeterCCResetOptions =
 @CCCommand(MeterCommand.Reset)
 export class MeterCCReset extends MeterCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| (MeterCCResetOptions & CCCommandOptions),

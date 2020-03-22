@@ -1,9 +1,9 @@
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
-import { Maybe } from "../values/Primitive";
+import type { Maybe } from "../values/Primitive";
 import {
 	decodeSetbackState,
 	encodeSetbackState,
@@ -137,7 +137,7 @@ interface ThermostatSetbackCCSetOptions extends CCCommandOptions {
 @CCCommand(ThermostatSetbackCommand.Set)
 export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetbackCCSetOptions,
@@ -171,7 +171,7 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 @CCCommand(ThermostatSetbackCommand.Report)
 export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -213,7 +213,7 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 @expectedCCResponse(ThermostatSetbackCCReport)
 export class ThermostatSetbackCCGet extends ThermostatSetbackCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);

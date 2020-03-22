@@ -1,7 +1,7 @@
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { enumValuesToMetadataStates, ValueMetadata } from "../values/Metadata";
 import { Maybe, parseBitMask } from "../values/Primitive";
@@ -177,7 +177,7 @@ export class ThermostatModeCC extends CommandClass {
 			const logMessage =
 				`received supported thermostat modes:` +
 				supportedModes.map(
-					mode => "\n· " + getEnumMemberName(ThermostatMode, mode),
+					(mode) => "\n· " + getEnumMemberName(ThermostatMode, mode),
 				);
 			log.controller.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -223,7 +223,7 @@ type ThermostatModeCCSetOptions = CCCommandOptions &
 @CCCommand(ThermostatModeCommand.Set)
 export class ThermostatModeCCSet extends ThermostatModeCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatModeCCSetOptions,
@@ -266,7 +266,7 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 @CCCommand(ThermostatModeCommand.Report)
 export class ThermostatModeCCReport extends ThermostatModeCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
@@ -314,7 +314,7 @@ export class ThermostatModeCCGet extends ThermostatModeCC {}
 @CCCommand(ThermostatModeCommand.SupportedReport)
 export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);

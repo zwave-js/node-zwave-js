@@ -1,9 +1,9 @@
 import { padStart } from "alcalzone-shared/strings";
-import { Format, TransformableInfo, TransformFunction } from "logform";
+import type { Format, TransformableInfo, TransformFunction } from "logform";
 import * as path from "path";
 import { configs, MESSAGE } from "triple-beam";
 import winston, { Logger } from "winston";
-import Transport from "winston-transport";
+import type Transport from "winston-transport";
 import { colorizer } from "./Colorizer";
 const { combine, timestamp, label } = winston.format;
 
@@ -95,7 +95,7 @@ function calculateFirstLineLength(
 			(info.secondaryTags || "").length,
 		]
 			// filter out empty parts
-			.filter(len => len > 0)
+			.filter((len) => len > 0)
 			// simulate adding spaces between parts
 			.reduce((prev, val) => prev + (prev > 0 ? 1 : 0) + val)
 	);
@@ -191,7 +191,7 @@ export const logMessagePrinter: Format = {
 				? " " + info.secondaryTags
 				: info.secondaryTags,
 		]
-			.filter(item => !!item)
+			.filter((item) => !!item)
 			.join(" ");
 		// The directional arrows and the optional grouping lines must be prepended
 		// without adding spaces
@@ -207,7 +207,7 @@ export const logMessagePrinter: Format = {
 			// Format all message lines but the first
 			lines.push(
 				...messageLines.slice(1).map(
-					line =>
+					(line) =>
 						// Skip the columns for the timestamp and the channel name
 						timestampPadding +
 						channelPadding +
@@ -241,13 +241,13 @@ export function createLoggerFormat(
 
 /** Wraps an array of strings in square brackets and joins them with spaces */
 export function tagify(tags: string[]): string {
-	return tags.map(pfx => `[${pfx}]`).join(" ");
+	return tags.map((pfx) => `[${pfx}]`).join(" ");
 }
 
 /** Unsilences the console transport of a logger and returns the original value */
 export function unsilence(logger: winston.Logger): boolean {
 	const consoleTransport = logger.transports.find(
-		t => (t as any).name === "console",
+		(t) => (t as any).name === "console",
 	);
 	if (consoleTransport) {
 		const ret = !!consoleTransport.silent;
@@ -263,7 +263,7 @@ export function restoreSilence(
 	original: boolean,
 ): void {
 	const consoleTransport = logger.transports.find(
-		t => (t as any).name === "console",
+		(t) => (t as any).name === "console",
 	);
 	if (consoleTransport) {
 		consoleTransport.silent = original;

@@ -1,5 +1,5 @@
-import { CommandClasses } from "../commandclass/CommandClasses";
-import { IDriver } from "../driver/IDriver";
+import type { CommandClasses } from "../commandclass/CommandClasses";
+import type { Driver } from "../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -13,7 +13,7 @@ import {
 	messageTypes,
 	priority,
 } from "../message/Message";
-import {
+import type {
 	BasicDeviceClasses,
 	GenericDeviceClass,
 	SpecificDeviceClass,
@@ -58,7 +58,7 @@ interface AddNodeToNetworkRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Controller)
 export class AddNodeToNetworkRequest extends Message {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| MessageDeserializationOptions
 			| AddNodeToNetworkRequestOptions = {},

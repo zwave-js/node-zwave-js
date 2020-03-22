@@ -1,5 +1,5 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { Duration } from "../values/Duration";
 import { CommandClasses } from "./CommandClasses";
 import {
@@ -8,7 +8,7 @@ import {
 	SceneActivationCommand,
 } from "./SceneActivationCC";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([

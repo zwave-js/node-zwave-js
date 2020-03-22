@@ -1,4 +1,4 @@
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -18,8 +18,8 @@ import {
 	GenericDeviceClass,
 	SpecificDeviceClass,
 } from "../node/DeviceClass";
-import { INodeQuery } from "../node/INodeQuery";
-import { JSONObject } from "../util/misc";
+import type { INodeQuery } from "../node/INodeQuery";
+import type { JSONObject } from "../util/misc";
 
 /* eslint-disable @typescript-eslint/camelcase */
 enum NodeCapabilityFlags {
@@ -57,7 +57,7 @@ interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Controller)
 export class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: GetNodeProtocolInfoRequestOptions,
 	) {
 		super(driver, options);
@@ -80,10 +80,7 @@ export class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
 
 @messageTypes(MessageType.Response, FunctionType.GetNodeProtocolInfo)
 export class GetNodeProtocolInfoResponse extends Message {
-	public constructor(
-		driver: IDriver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
 		const capabilities = this.payload[0];

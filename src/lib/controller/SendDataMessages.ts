@@ -14,9 +14,9 @@ import {
 	ICommandClassContainer,
 	isCommandClassContainer,
 } from "../commandclass/ICommandClassContainer";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { MessageOrCCLogEntry } from "../log/shared";
+import type { MessageOrCCLogEntry } from "../log/shared";
 import {
 	FunctionType,
 	MessagePriority,
@@ -62,7 +62,7 @@ export enum TransmitStatus {
 @messageTypes(MessageType.Request, FunctionType.SendData)
 @priority(MessagePriority.Normal)
 export class SendDataRequestBase extends Message {
-	public constructor(driver: IDriver, options: MessageOptions) {
+	public constructor(driver: Driver, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== SendDataRequestTransmitReport
@@ -84,7 +84,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	extends SendDataRequestBase
 	implements ICommandClassContainer {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: SendDataRequestOptions<CCType>,
 	) {
 		super(driver, options);
@@ -138,7 +138,7 @@ callbackId:      ${this.callbackId}`,
 	/** Include previously received partial responses into a final message */
 	public mergePartialMessages(partials: Message[]): void {
 		this.command.mergePartialCCs(
-			(partials as SendDataRequest[]).map(p => p.command),
+			(partials as SendDataRequest[]).map((p) => p.command),
 		);
 	}
 
@@ -249,7 +249,7 @@ interface SendDataRequestTransmitReportOptions extends MessageBaseOptions {
 
 export class SendDataRequestTransmitReport extends SendDataRequestBase {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| MessageDeserializationOptions
 			| SendDataRequestTransmitReportOptions,
@@ -295,10 +295,7 @@ transmitStatus: ${getEnumMemberName(TransmitStatus, this.transmitStatus)}`,
 
 @messageTypes(MessageType.Response, FunctionType.SendData)
 export class SendDataResponse extends Message {
-	public constructor(
-		driver: IDriver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._wasSent = this.payload[0] !== 0;
 		// if (!this._wasSent) this._errorCode = this.payload[0];
@@ -332,7 +329,7 @@ export class SendDataResponse extends Message {
 @messageTypes(MessageType.Request, FunctionType.SendDataMulticast)
 @priority(MessagePriority.Normal)
 export class SendDataMulticastRequestBase extends Message {
-	public constructor(driver: IDriver, options: MessageOptions) {
+	public constructor(driver: Driver, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== SendDataMulticastRequestTransmitReport
@@ -354,7 +351,7 @@ export class SendDataMulticastRequest<
 	CCType extends CommandClass = CommandClass
 > extends SendDataMulticastRequestBase implements ICommandClassContainer {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: SendDataMulticastRequestOptions<CCType>,
 	) {
 		super(driver, options);
@@ -369,7 +366,7 @@ export class SendDataMulticastRequest<
 				`At least one node must be targeted`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
-		} else if (options.command.nodeId.some(n => n < 1 || n > MAX_NODES)) {
+		} else if (options.command.nodeId.some((n) => n < 1 || n > MAX_NODES)) {
 			throw new ZWaveError(
 				`All node IDs must be between 1 and ${MAX_NODES}!`,
 				ZWaveErrorCodes.Argument_Invalid,
@@ -425,7 +422,7 @@ callbackId:      ${this.callbackId}`,
 	/** Include previously received partial responses into a final message */
 	public mergePartialMessages(partials: Message[]): void {
 		this.command.mergePartialCCs(
-			(partials as SendDataMulticastRequest[]).map(p => p.command),
+			(partials as SendDataMulticastRequest[]).map((p) => p.command),
 		);
 	}
 }
@@ -452,7 +449,7 @@ interface SendDataMulticastRequestTransmitReportOptions
 
 export class SendDataMulticastRequestTransmitReport extends SendDataMulticastRequestBase {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| MessageDeserializationOptions
 			| SendDataMulticastRequestTransmitReportOptions,
@@ -498,10 +495,7 @@ transmitStatus: ${getEnumMemberName(TransmitStatus, this.transmitStatus)}`,
 
 @messageTypes(MessageType.Response, FunctionType.SendDataMulticast)
 export class SendDataMulticastResponse extends Message {
-	public constructor(
-		driver: IDriver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._wasSent = this.payload[0] !== 0;
 		// if (!this._wasSent) this._errorCode = this.payload[0];

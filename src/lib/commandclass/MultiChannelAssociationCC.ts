@@ -1,8 +1,8 @@
 import { MAX_NODES } from "../controller/NodeBitMask";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
@@ -296,7 +296,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 			const nodes =
 				valueDB.getValue<number[]>(getNodeIdsValueId(i)) ?? [];
 			groupDestinations.push(
-				...nodes.map(nodeId => ({ nodeId, endpoint: 0 })),
+				...nodes.map((nodeId) => ({ nodeId, endpoint: 0 })),
 			);
 			// And all endpoint destinations
 			const endpoints =
@@ -310,7 +310,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 					});
 				} else {
 					groupDestinations.push(
-						...ep.endpoint.map(e => ({
+						...ep.endpoint.map((e) => ({
 							nodeId: ep.nodeId,
 							endpoint: e,
 						})),
@@ -403,7 +403,7 @@ currently assigned endpoints: ${group.endpoints.map(({ nodeId, endpoint }) => {
 			if (
 				!lifelineNodeIds.includes(ownNodeId) &&
 				!lifelineDestinations.some(
-					addr => addr.nodeId === ownNodeId && addr.endpoint === 0,
+					(addr) => addr.nodeId === ownNodeId && addr.endpoint === 0,
 				)
 			) {
 				log.controller.logNode(node.id, {
@@ -443,7 +443,7 @@ type MultiChannelAssociationCCSetOptions = {
 @CCCommand(MultiChannelAssociationCommand.Set)
 export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| (MultiChannelAssociationCCSetOptions & CCCommandOptions),
@@ -464,7 +464,7 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 			}
 			this.groupId = options.groupId;
 			this.nodeIds = ("nodeIds" in options && options.nodeIds) || [];
-			if (this.nodeIds.some(n => n < 1 || n > MAX_NODES)) {
+			if (this.nodeIds.some((n) => n < 1 || n > MAX_NODES)) {
 				throw new ZWaveError(
 					`All node IDs must be between 1 and ${MAX_NODES}!`,
 					ZWaveErrorCodes.Argument_Invalid,
@@ -503,7 +503,7 @@ interface MultiChannelAssociationCCRemoveOptions {
 @CCCommand(MultiChannelAssociationCommand.Remove)
 export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| (MultiChannelAssociationCCRemoveOptions & CCCommandOptions),
@@ -531,7 +531,7 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 				);
 			}
 
-			if (options.nodeIds?.some(n => n < 1 || n > MAX_NODES)) {
+			if (options.nodeIds?.some((n) => n < 1 || n > MAX_NODES)) {
 				throw new ZWaveError(
 					`All node IDs must be between 1 and ${MAX_NODES}!`,
 					ZWaveErrorCodes.Argument_Invalid,
@@ -562,7 +562,7 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 @CCCommand(MultiChannelAssociationCommand.Report)
 export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -614,11 +614,11 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 	public mergePartialCCs(partials: MultiChannelAssociationCCReport[]): void {
 		// Concat the list of nodes
 		this._nodeIds = [...partials, this]
-			.map(report => report._nodeIds)
+			.map((report) => report._nodeIds)
 			.reduce((prev, cur) => prev.concat(...cur), []);
 		// Concat the list of endpoints
 		this._endpoints = [...partials, this]
-			.map(report => report._endpoints)
+			.map((report) => report._endpoints)
 			.reduce((prev, cur) => prev.concat(...cur), []);
 
 		// Persist values
@@ -645,7 +645,7 @@ interface MultiChannelAssociationCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelAssociationCCReport)
 export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelAssociationCCGetOptions,
@@ -679,7 +679,7 @@ export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 @CCCommand(MultiChannelAssociationCommand.SupportedGroupingsReport)
 export class MultiChannelAssociationCCSupportedGroupingsReport extends MultiChannelAssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);

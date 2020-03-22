@@ -1,13 +1,12 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertCC } from "../../../test/util";
-import { Driver } from "../driver/Driver";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { WakeUpCC, WakeUpCCIntervalCapabilitiesGet } from "./WakeUpCC";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 describe("lib/commandclass/WakeUpCC => ", () => {
 	const cc = new WakeUpCC(fakeDriver, { nodeId: 9 });

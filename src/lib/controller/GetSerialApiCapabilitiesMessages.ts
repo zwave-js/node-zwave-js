@@ -1,4 +1,4 @@
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -11,7 +11,7 @@ import {
 	messageTypes,
 	priority,
 } from "../message/Message";
-import { JSONObject } from "../util/misc";
+import type { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { parseBitMask } from "../values/Primitive";
 
@@ -25,10 +25,7 @@ export class GetSerialApiCapabilitiesRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiCapabilities)
 export class GetSerialApiCapabilitiesResponse extends Message {
-	public constructor(
-		driver: IDriver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
 		// The first 8 bytes are the api version, manufacturer id, product type and product id
@@ -72,7 +69,7 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 			manufacturerId: this.manufacturerId,
 			productType: this.productType,
 			productId: this.productId,
-			supportedFunctionTypes: this.supportedFunctionTypes.map(type =>
+			supportedFunctionTypes: this.supportedFunctionTypes.map((type) =>
 				type in FunctionType ? FunctionType[type] : num2hex(type),
 			),
 		});

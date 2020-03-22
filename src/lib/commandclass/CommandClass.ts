@@ -1,12 +1,11 @@
 import { isArray } from "alcalzone-shared/typeguards";
-import fs from "fs";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { MessageOrCCLogEntry } from "../log/shared";
-import { Endpoint } from "../node/Endpoint";
-import { InterviewStage } from "../node/INode";
-import { ZWaveNode } from "../node/Node";
+import type { MessageOrCCLogEntry } from "../log/shared";
+import type { Endpoint } from "../node/Endpoint";
+import type { ZWaveNode } from "../node/Node";
+import { InterviewStage } from "../node/Types";
 import { ValueDB, ValueID, valueIdToString } from "../node/ValueDB";
 import {
 	JSONObject,
@@ -14,7 +13,7 @@ import {
 	stripUndefined,
 	validatePayload,
 } from "../util/misc";
-import { num2hex, stringify } from "../util/strings";
+import { num2hex } from "../util/strings";
 import {
 	CacheMetadata,
 	CacheValue,
@@ -71,7 +70,7 @@ export type CommandClassOptions =
 
 export class CommandClass {
 	// empty constructor to parse messages
-	public constructor(driver: IDriver, options: CommandClassOptions) {
+	public constructor(driver: Driver, options: CommandClassOptions) {
 		this.driver = driver;
 		// Extract the cc from declared metadata if not provided
 		this.ccId = getCommandClass(this);
@@ -155,7 +154,7 @@ export class CommandClass {
 		}
 	}
 
-	protected driver: IDriver;
+	protected driver: Driver;
 
 	/** This CC's identifier */
 	public ccId: CommandClasses;
@@ -297,7 +296,7 @@ export class CommandClass {
 	 * Creates an instance of the CC that is serialized in the given buffer
 	 */
 	public static from(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	): CommandClass {
 		// Fall back to unspecified command class in case we receive one that is not implemented
@@ -452,7 +451,7 @@ export class CommandClass {
 		const registeredCCValueNames = [...this._registeredCCValues]
 			.filter(([, isInternal]) => !isInternal)
 			.map(([key]) => key);
-		registeredCCValueNames.forEach(property => addValueId(property));
+		registeredCCValueNames.forEach((property) => addValueId(property));
 
 		// Return all defined non-internal CC values that are available in the current version of this CC
 		const valueDefinitions = getCCValueDefinitions(this);
@@ -464,7 +463,7 @@ export class CommandClass {
 						options.minVersion <= this.version),
 			)
 			.map(([key]) => key);
-		definedCCValueNames.forEach(property => addValueId(property));
+		definedCCValueNames.forEach((property) => addValueId(property));
 
 		const kvpDefinitions = getCCKeyValuePairDefinitions(this);
 
@@ -473,21 +472,21 @@ export class CommandClass {
 			...this.getValueDB().getValues(this.ccId),
 			...this.getValueDB().getAllMetadata(this.ccId),
 		]
-			.filter(valueId => valueId.endpoint === this.endpointIndex)
+			.filter((valueId) => valueId.endpoint === this.endpointIndex)
 			// allow the value id if it is NOT registered or it is registered as non-internal
 			.filter(
-				valueId =>
+				(valueId) =>
 					!this._registeredCCValues.has(valueId.property) ||
 					this._registeredCCValues.get(valueId.property)! === false,
 			)
 			// allow the value id if it is NOT defined or it is defined as non-internal
 			.filter(
-				valueId =>
+				(valueId) =>
 					!valueDefinitions.has(valueId.property) ||
 					valueDefinitions.get(valueId.property)! === false,
 			)
 			.filter(
-				valueId =>
+				(valueId) =>
 					!kvpDefinitions.has(valueId.property) ||
 					kvpDefinitions.get(valueId.property)! === false,
 			);
@@ -746,13 +745,13 @@ const METADATA_APIMap = Symbol("APIMap");
 
 export interface Constructable<T extends CommandClass> {
 	new (
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassCreationOptions
 			| CommandClassDeserializationOptions,
 	): T;
 }
-type APIConstructor = new (driver: IDriver, endpoint: Endpoint) => CCAPI;
+type APIConstructor = new (driver: Driver, endpoint: Endpoint) => CCAPI;
 
 type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
 type CCCommandMap = Map<string, Constructable<CommandClass>>;
@@ -801,7 +800,7 @@ export function isCCResponsePredicate(
  * Defines the command class associated with a Z-Wave message
  */
 export function commandClass(cc: CommandClasses): ClassDecorator {
-	return messageClass => {
+	return (messageClass) => {
 		log.reflection.define(
 			messageClass.name,
 			"CommandClass",
@@ -893,7 +892,7 @@ export function getCCConstructor(
  * Defines the implemented version of a Z-Wave command class
  */
 export function implementedVersion(version: number): ClassDecorator {
-	return ccClass => {
+	return (ccClass) => {
 		log.reflection.define(
 			ccClass.name,
 			"implemented version",
@@ -953,7 +952,7 @@ export function getImplementedVersionStatic<
  * Defines the CC command a subclass of a CC implements
  */
 export function CCCommand(command: number): ClassDecorator {
-	return ccClass => {
+	return (ccClass) => {
 		log.reflection.define(
 			ccClass.name,
 			"CC Command",
@@ -1027,7 +1026,7 @@ export function expectedCCResponse<T extends CommandClass>(
 		| CCResponsePredicate<T>
 		| DynamicCCResponse<T>,
 ): ClassDecorator {
-	return ccClass => {
+	return (ccClass) => {
 		if (staticExtends(ccOrPredicateOrDynamic, CommandClass)) {
 			log.reflection.define(
 				ccClass.name,
@@ -1239,7 +1238,7 @@ export function getCCValueMetadata(
  * Defines the simplified API associated with a Z-Wave command class
  */
 export function API(cc: CommandClasses): ClassDecorator {
-	return apiClass => {
+	return (apiClass) => {
 		log.reflection.define(
 			apiClass.name,
 			"API",
@@ -1284,13 +1283,4 @@ export function parseCCId(
 	} else {
 		return { ccId: payload.readUInt8(offset), bytesRead: 1 };
 	}
-}
-
-// To be sure all metadata gets loaded, import all command classes
-const definedCCs = fs
-	.readdirSync(__dirname)
-	.filter(file => /CC\.(js|ts)$/.test(file));
-log.reflection.print(`loading CCs: ${stringify(definedCCs)}`);
-for (const file of definedCCs) {
-	require(`./${file}`);
 }

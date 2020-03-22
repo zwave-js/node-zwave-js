@@ -1,4 +1,4 @@
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -22,7 +22,7 @@ export interface IsFailedNodeRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.IsFailedNode)
 @priority(MessagePriority.Controller)
 export class IsFailedNodeRequest extends Message {
-	public constructor(driver: IDriver, options: IsFailedNodeRequestOptions) {
+	public constructor(driver: Driver, options: IsFailedNodeRequestOptions) {
 		super(driver, options);
 		this.failedNodeId = options.failedNodeId;
 	}
@@ -38,10 +38,7 @@ export class IsFailedNodeRequest extends Message {
 
 @messageTypes(MessageType.Response, FunctionType.IsFailedNode)
 export class IsFailedNodeResponse extends Message {
-	public constructor(
-		driver: IDriver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this.result = !!this.payload[0];
 	}

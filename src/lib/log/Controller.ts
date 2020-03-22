@@ -1,7 +1,8 @@
 import winston from "winston";
 import { CommandClasses } from "../commandclass/CommandClasses";
-import { InterviewStage, IZWaveNode } from "../node/INode";
-import {
+import type { ZWaveNode } from "../node/Node";
+import { InterviewStage } from "../node/Types";
+import type {
 	ValueAddedArgs,
 	ValueID,
 	ValueRemovedArgs,
@@ -196,7 +197,7 @@ export function metadataUpdated(args: LogValueArgs<ValueID>): void {
 }
 
 /** Logs the interview progress of a node */
-export function interviewStage(node: IZWaveNode): void {
+export function interviewStage(node: ZWaveNode): void {
 	if (!isControllerLogVisible) return;
 
 	logger.log({
@@ -213,7 +214,7 @@ export function interviewStage(node: IZWaveNode): void {
 }
 
 /** Logs the interview progress of a node */
-export function interviewStart(node: IZWaveNode): void {
+export function interviewStart(node: ZWaveNode): void {
 	if (!isControllerLogVisible) return;
 
 	const message = `Beginning interview - last completed stage: ${

@@ -4,10 +4,10 @@ import {
 	NotificationParameterWithDuration,
 	NotificationParameterWithValue,
 } from "../config/Notifications";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { JSONObject, validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { Duration } from "../values/Duration";
@@ -226,7 +226,7 @@ export class NotificationCC extends CommandClass {
 
 			function lookupNotificationNames(): string[] {
 				return supportedNotificationTypes
-					.map(n => {
+					.map((n) => {
 						const ret = lookupNotification(n);
 						return [n, ret] as const;
 					})
@@ -247,7 +247,7 @@ export class NotificationCC extends CommandClass {
 
 				const logMessage =
 					"received supported notification types:" +
-					supportedNotificationNames.map(name => "\n· " + name);
+					supportedNotificationNames.map((name) => "\n· " + name);
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
@@ -335,7 +335,7 @@ interface NotificationCCSetOptions extends CCCommandOptions {
 @CCCommand(NotificationCommand.Set)
 export class NotificationCCSet extends NotificationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | NotificationCCSetOptions,
 	) {
 		super(driver, options);
@@ -365,7 +365,7 @@ export class NotificationCCSet extends NotificationCC {
 @CCCommand(NotificationCommand.Report)
 export class NotificationCCReport extends NotificationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -529,7 +529,7 @@ type NotificationCCGetOptions = CCCommandOptions &
 @expectedCCResponse(NotificationCCReport)
 export class NotificationCCGet extends NotificationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | NotificationCCGetOptions,
 	) {
 		super(driver, options);
@@ -575,7 +575,7 @@ export class NotificationCCGet extends NotificationCC {
 @CCCommand(NotificationCommand.SupportedReport)
 export class NotificationCCSupportedReport extends NotificationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -612,7 +612,7 @@ export class NotificationCCSupportedReport extends NotificationCC {
 @expectedCCResponse(NotificationCCSupportedReport)
 export class NotificationCCSupportedGet extends NotificationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
@@ -622,7 +622,7 @@ export class NotificationCCSupportedGet extends NotificationCC {
 @CCCommand(NotificationCommand.EventSupportedReport)
 export class NotificationCCEventSupportedReport extends NotificationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -669,7 +669,7 @@ interface NotificationCCEventSupportedGetOptions extends CCCommandOptions {
 @expectedCCResponse(NotificationCCEventSupportedReport)
 export class NotificationCCEventSupportedGet extends NotificationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| NotificationCCEventSupportedGetOptions,

@@ -1,4 +1,4 @@
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -11,7 +11,7 @@ import {
 	messageTypes,
 	priority,
 } from "../message/Message";
-import { JSONObject } from "../util/misc";
+import type { JSONObject } from "../util/misc";
 
 enum ControllerCapabilityFlags {
 	Secondary = 1 << 0, // Controller is a secondary
@@ -28,10 +28,7 @@ export class GetControllerCapabilitiesRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetControllerCapabilities)
 export class GetControllerCapabilitiesResponse extends Message {
-	public constructor(
-		driver: IDriver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._capabilityFlags = this.payload[0];
 	}

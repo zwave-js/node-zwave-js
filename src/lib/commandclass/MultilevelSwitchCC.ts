@@ -1,7 +1,7 @@
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { ValueMetadata } from "../values/Metadata";
@@ -63,8 +63,8 @@ function switchTypeToActions(switchType: string): [string, string] {
 	return switchType.split("/", 2) as any;
 }
 const switchTypeProperties = Object.keys(SwitchType)
-	.filter(key => key.indexOf("/") > -1)
-	.map(key => switchTypeToActions(key))
+	.filter((key) => key.indexOf("/") > -1)
+	.map((key) => switchTypeToActions(key))
 	.reduce<string[]>((acc, cur) => acc.concat(...cur), []);
 
 function getCurrentValueValueID(endpoint: number): ValueID {
@@ -136,7 +136,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			cc,
 			{
 				requestStatusUpdates: true,
-				onUpdate: status => {
+				onUpdate: (status) => {
 					if (
 						status === SupervisionStatus.Working ||
 						status === SupervisionStatus.Success
@@ -357,7 +357,7 @@ interface MultilevelSwitchCCSetOptions extends CCCommandOptions {
 @CCCommand(MultilevelSwitchCommand.Set)
 export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSwitchCCSetOptions,
@@ -391,7 +391,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 @CCCommand(MultilevelSwitchCommand.Report)
 export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -443,7 +443,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 @expectedCCResponse(MultilevelSwitchCCReport)
 export class MultilevelSwitchCCGet extends MultilevelSwitchCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
@@ -469,7 +469,7 @@ type MultilevelSwitchCCStartLevelChangeOptions = {
 @CCCommand(MultilevelSwitchCommand.StartLevelChange)
 export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & MultilevelSwitchCCStartLevelChangeOptions),
@@ -510,7 +510,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 @CCCommand(MultilevelSwitchCommand.StopLevelChange)
 export class MultilevelSwitchCCStopLevelChange extends MultilevelSwitchCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
@@ -520,7 +520,7 @@ export class MultilevelSwitchCCStopLevelChange extends MultilevelSwitchCC {
 @CCCommand(MultilevelSwitchCommand.SupportedReport)
 export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -568,7 +568,7 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 @expectedCCResponse(MultilevelSwitchCCSupportedReport)
 export class MultilevelSwitchCCSupportedGet extends MultilevelSwitchCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);

@@ -3,12 +3,12 @@ import {
 	compareNumberOrString,
 	CompareResult,
 } from "alcalzone-shared/comparable";
-import { DeferredPromise } from "alcalzone-shared/deferred-promise";
+import type { DeferredPromise } from "alcalzone-shared/deferred-promise";
 import { clamp } from "alcalzone-shared/math";
 import { MessagePriority } from "../message/Constants";
-import { Message } from "../message/Message";
+import type { Message } from "../message/Message";
 import { highResTimestamp } from "../util/date";
-import { IDriver } from "./IDriver";
+import type { Driver } from "./Driver";
 
 // The Z-Wave spec declare that maximum 3 send attempts may be performed
 export const MAX_SEND_ATTEMPTS = 3;
@@ -18,7 +18,7 @@ export const MAX_SEND_ATTEMPTS = 3;
  */
 export class Transaction implements Comparable<Transaction> {
 	public constructor(
-		private readonly driver: IDriver,
+		private readonly driver: Driver,
 		public readonly message: Message,
 		public readonly promise: DeferredPromise<Message | void>,
 		public priority: MessagePriority,

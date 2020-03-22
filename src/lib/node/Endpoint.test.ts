@@ -1,10 +1,10 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
-import { BasicCCAPI } from "../commandclass/BasicCC";
+import type { BasicCCAPI } from "../commandclass/BasicCC";
 import { BatteryCCAPI } from "../commandclass/BatteryCC";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { VersionCCAPI } from "../commandclass/VersionCC";
-import { Driver } from "../driver/Driver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { Endpoint } from "./Endpoint";
 import { ZWaveNode } from "./Node";
@@ -68,7 +68,7 @@ describe("lib/node/Endpoint", () => {
 			);
 			actual = [...node.commandClasses];
 			expect(actual).toHaveLength(2);
-			expect(actual.map(api => api.constructor)).toIncludeAllMembers([
+			expect(actual.map((api) => api.constructor)).toIncludeAllMembers([
 				BatteryCCAPI,
 				VersionCCAPI,
 				// WakeUpCCAPI is not supported (only controlled), so no API!

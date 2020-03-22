@@ -2,7 +2,7 @@ import { padStart } from "alcalzone-shared/strings";
 import path from "path";
 import * as semver from "semver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { DeviceConfigIndexEntry } from "./Devices";
+import type { DeviceConfigIndexEntry } from "./Devices";
 
 export const configDir = path.resolve(__dirname, "../../..", "config");
 export const hexKeyRegexNDigits = /^0x[a-fA-F0-9]+$/;
@@ -24,7 +24,7 @@ export function getDeviceEntryPredicate(
 	productId: number,
 	firmwareVersion?: string,
 ): (entry: DeviceConfigIndexEntry) => boolean {
-	return entry =>
+	return (entry) =>
 		entry.manufacturerId === formatId(manufacturerId) &&
 		entry.productType === formatId(productType) &&
 		entry.productId === formatId(productId) &&

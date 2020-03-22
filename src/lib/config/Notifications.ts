@@ -5,7 +5,7 @@ import JSON5 from "json5";
 import path from "path";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { JSONObject } from "../util/misc";
+import type { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { configDir, hexKeyRegexNDigits, throwInvalidConfig } from "./utils";
 
@@ -117,7 +117,7 @@ export class Notification {
 		this.id = id;
 		this.name = definition.name;
 		this.variables = isArray(definition.variables)
-			? definition.variables.map(v => new NotificationVariable(v))
+			? definition.variables.map((v) => new NotificationVariable(v))
 			: [];
 		const events = new Map<number, NotificationEvent>();
 		if (isObject(definition.events)) {
@@ -158,7 +158,7 @@ export class Notification {
 		}
 
 		// Then try to find a variable with a matching state
-		const variable = this.variables.find(v => v.states.has(value));
+		const variable = this.variables.find((v) => v.states.has(value));
 		if (variable) {
 			const state = variable.states.get(value)!;
 			return {

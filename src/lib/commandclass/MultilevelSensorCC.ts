@@ -1,13 +1,13 @@
-import { Scale } from "../config/Scales";
+import type { Scale } from "../config/Scales";
 import {
 	getSensorTypeName,
 	lookupSensorScale,
 	lookupSensorType,
 } from "../config/SensorTypes";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, parseBitMask, parseFloatWithScale } from "../values/Primitive";
@@ -181,7 +181,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 					"received supported sensor types:\n" +
 					sensorTypes
 						.map(getSensorTypeName)
-						.map(name => `· ${name}`)
+						.map((name) => `· ${name}`)
 						.join("\n");
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
@@ -212,8 +212,8 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 					const logMessage =
 						"received supported scales:\n" +
 						sensorScales
-							.map(s => lookupSensorScale(type, s).label)
-							.map(name => `· ${name}`)
+							.map((s) => lookupSensorScale(type, s).label)
+							.map((name) => `· ${name}`)
 							.join("\n");
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
@@ -239,8 +239,9 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 				// TODO: Add some way to select the scale. For now use the first available one
 				const value = await api.get(type, sensorScales[0]);
 				const scale = lookupSensorScale(type, sensorScales[0]);
-				const logMessage = `received current sensor reading: ${value} ${scale.unit ||
-					""}`;
+				const logMessage = `received current sensor reading: ${value} ${
+					scale.unit || ""
+				}`;
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
@@ -269,7 +270,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 @CCCommand(MultilevelSensorCommand.Report)
 export class MultilevelSensorCCReport extends MultilevelSensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -337,7 +338,7 @@ type MultilevelSensorCCGetOptions =
 @expectedCCResponse(testResponseForMultilevelSensorGet)
 export class MultilevelSensorCCGet extends MultilevelSensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCGetOptions,
@@ -378,7 +379,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 @CCCommand(MultilevelSensorCommand.SupportedSensorReport)
 export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -399,7 +400,7 @@ export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC 
 @expectedCCResponse(MultilevelSensorCCSupportedSensorReport)
 export class MultilevelSensorCCGetSupportedSensor extends MultilevelSensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
@@ -409,7 +410,7 @@ export class MultilevelSensorCCGetSupportedSensor extends MultilevelSensorCC {
 @CCCommand(MultilevelSensorCommand.SupportedScaleReport)
 export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -444,7 +445,7 @@ interface MultilevelSensorCCGetSupportedScaleOptions extends CCCommandOptions {
 @expectedCCResponse(MultilevelSensorCCSupportedScaleReport)
 export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCGetSupportedScaleOptions,

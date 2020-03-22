@@ -345,7 +345,7 @@ describe("lib/node/ValueDB => ", () => {
 
 		it("should emit the value removed event for all stored values", () => {
 			expect(onValueRemoved).toBeCalledTimes(2);
-			cbArgs = onValueRemoved.mock.calls.map(args => args[0]);
+			cbArgs = onValueRemoved.mock.calls.map((args) => args[0]);
 		});
 
 		it("The callback should contain the removed values", () => {
@@ -432,7 +432,9 @@ describe("lib/node/ValueDB => ", () => {
 				},
 			];
 			const requestedCC = CommandClasses.Basic;
-			const expected = values.filter(t => t.commandClass === requestedCC);
+			const expected = values.filter(
+				(t) => t.commandClass === requestedCC,
+			);
 
 			for (const { value, ...valueId } of values) {
 				valueDB.setValue(valueId, value);

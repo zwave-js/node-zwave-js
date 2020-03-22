@@ -1,11 +1,11 @@
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
-import { Maybe } from "../values/Primitive";
+import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
-import { AssociationCC } from "./AssociationCC";
+import type { AssociationCC } from "./AssociationCC";
 import {
 	API,
 	CCCommand,
@@ -22,7 +22,7 @@ import {
 	parseCCId,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
-import { MultiChannelAssociationCC } from "./MultiChannelAssociationCC";
+import type { MultiChannelAssociationCC } from "./MultiChannelAssociationCC";
 
 // @noSetValueAPI This CC only has get-type commands
 
@@ -326,7 +326,7 @@ export class AssociationGroupInfoCCAPI extends CCAPI {
 export class AssociationGroupInfoCC extends CommandClass {
 	declare ccCommand: AssociationGroupInfoCommand;
 
-	public constructor(driver: IDriver, options: CommandClassOptions) {
+	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
 		this.registerValue(getGroupNameValueID(0).property, true);
 		this.registerValue(getGroupInfoValueID(0).property, true);
@@ -382,11 +382,15 @@ export class AssociationGroupInfoCC extends CommandClass {
 		// First query the Multi Channel Association CC
 		return (
 			endpoint
-				.createCCInstanceUnsafe(MultiChannelAssociationCC)
+				.createCCInstanceUnsafe<MultiChannelAssociationCC>(
+					CommandClasses["Multi Channel Association"],
+				)
 				?.getGroupCountCached() ||
 			// Then the Association CC
 			endpoint
-				.createCCInstanceUnsafe(AssociationCC)
+				.createCCInstanceUnsafe<AssociationCC>(
+					CommandClasses.Association,
+				)
 				?.getGroupCountCached() ||
 			// And fall back to 0
 			0
@@ -475,7 +479,7 @@ profile:         ${getEnumMemberName(
 @CCCommand(AssociationGroupInfoCommand.NameReport)
 export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -501,7 +505,7 @@ interface AssociationGroupInfoCCNameGetOptions extends CCCommandOptions {
 @expectedCCResponse(AssociationGroupInfoCCNameReport)
 export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCNameGetOptions,
@@ -536,7 +540,7 @@ export interface AssociationGroupInfo {
 @CCCommand(AssociationGroupInfoCommand.InfoReport)
 export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -592,7 +596,7 @@ type AssociationGroupInfoCCInfoGetOptions = CCCommandOptions & {
 @expectedCCResponse(AssociationGroupInfoCCInfoReport)
 export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCInfoGetOptions,
@@ -631,7 +635,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 @CCCommand(AssociationGroupInfoCommand.CommandListReport)
 export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInfoCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -676,7 +680,7 @@ interface AssociationGroupInfoCCCommandListGetOptions extends CCCommandOptions {
 @expectedCCResponse(AssociationGroupInfoCCCommandListReport)
 export class AssociationGroupInfoCCCommandListGet extends AssociationGroupInfoCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCCommandListGetOptions,

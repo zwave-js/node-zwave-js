@@ -1,6 +1,6 @@
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { validatePayload } from "../util/misc";
-import { Maybe } from "../values/Primitive";
+import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -64,14 +64,14 @@ export class MultiCommandCC extends CommandClass {
 
 	/** Encapsulates a command that targets a specific endpoint */
 	public static encapsulate(
-		driver: IDriver,
+		driver: Driver,
 		CCs: CommandClass[],
 	): MultiCommandCCCommandEncapsulation {
 		return new MultiCommandCCCommandEncapsulation(driver, {
 			nodeId: CCs[0].nodeId,
 			encapsulated: CCs,
 			// MultiCommand CC is wrapped inside Supervision CC, so the supervision status must be preserved
-			supervised: CCs.some(cc => cc.supervised),
+			supervised: CCs.some((cc) => cc.supervised),
 		});
 	}
 
@@ -91,7 +91,7 @@ interface MultiCommandCCCommandEncapsulationOptions extends CCCommandOptions {
 // TODO: This probably expects multiple commands in return
 export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiCommandCCCommandEncapsulationOptions,

@@ -3,8 +3,8 @@ import { isMessagePriority, MessagePriority } from "./Constants";
 describe("lib/message/Constants => isMessagePriority() => ", () => {
 	it("should detect numbers in the enum range as a message priority", () => {
 		const numericKeys = Object.keys(MessagePriority)
-			.map(key => parseInt(key, 10))
-			.filter(num => !Number.isNaN(num));
+			.map((key) => parseInt(key, 10))
+			.filter((num) => !Number.isNaN(num));
 		const minKey = Math.min(...numericKeys);
 		const maxKey = Math.max(...numericKeys);
 		for (let num = minKey - 2; num <= maxKey + 2; num++) {

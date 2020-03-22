@@ -1,10 +1,10 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { CCAPI } from "./API";
 import { API } from "./CommandClass";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 const node = new ZWaveNode(1, fakeDriver as any);
 (fakeDriver.controller!.nodes as any).set(node.id, node);
 

@@ -1,6 +1,6 @@
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { MessagePriority } from "../message/Constants";
-import { Message } from "../message/Message";
+import type { Message } from "../message/Message";
 import { CCAPI } from "./API";
 import {
 	API,

@@ -1,7 +1,6 @@
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { Overwrite } from "alcalzone-shared/types";
 import { EventEmitter } from "events";
-import { CCAPI } from "../commandclass/API";
+import type { CCAPI } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import { BasicCC, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
 import {
@@ -56,7 +55,6 @@ import {
 	GetRoutingInfoRequest,
 	GetRoutingInfoResponse,
 } from "../controller/GetRoutingInfoMessages";
-import { MAX_NODES } from "../controller/NodeBitMask";
 import { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
@@ -64,8 +62,8 @@ import { timespan } from "../util/date";
 import { topologicalSort } from "../util/graph";
 import { getEnumMemberName, JSONObject, Mixin } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
-import { CacheMetadata, CacheValue } from "../values/Cache";
-import { ValueMetadata } from "../values/Metadata";
+import type { CacheMetadata, CacheValue } from "../values/Cache";
+import type { ValueMetadata } from "../values/Metadata";
 import {
 	BasicDeviceClasses,
 	DeviceClass,
@@ -74,84 +72,24 @@ import {
 	SpecificDeviceClass,
 } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
-import { InterviewStage, IZWaveNode, NodeStatus } from "./INode";
-import { NodeUpdatePayload } from "./NodeInfo";
+import type { NodeUpdatePayload } from "./NodeInfo";
 import {
 	RequestNodeInfoRequest,
 	RequestNodeInfoResponse,
 } from "./RequestNodeInfoMessages";
+import { InterviewStage, NodeStatus } from "./Types";
+import type {
+	TranslatedValueID,
+	ZWaveNodeEventCallbacks,
+	ZWaveNodeEvents,
+	ZWaveNodeValueEventCallbacks,
+} from "./Types";
 import {
 	MetadataUpdatedArgs,
-	ValueAddedArgs,
 	ValueDB,
 	ValueID,
 	valueIdToString,
-	ValueRemovedArgs,
-	ValueUpdatedArgs,
 } from "./ValueDB";
-
-/** The broadcast target node id */
-export const NODE_ID_BROADCAST = 0xff;
-/** The highest allowed node id */
-export const NODE_ID_MAX = MAX_NODES;
-
-export interface TranslatedValueID extends ValueID {
-	commandClassName: string;
-	propertyName?: string;
-	propertyKeyName?: string;
-}
-
-export type ZWaveNodeValueAddedArgs = ValueAddedArgs & TranslatedValueID;
-export type ZWaveNodeValueUpdatedArgs = ValueUpdatedArgs & TranslatedValueID;
-export type ZWaveNodeValueRemovedArgs = ValueRemovedArgs & TranslatedValueID;
-export type ZWaveNodeMetadataUpdatedArgs = MetadataUpdatedArgs &
-	TranslatedValueID;
-
-export type ZWaveNodeValueAddedCallback = (
-	node: ZWaveNode,
-	args: ZWaveNodeValueAddedArgs,
-) => void;
-export type ZWaveNodeValueUpdatedCallback = (
-	node: ZWaveNode,
-	args: ZWaveNodeValueUpdatedArgs,
-) => void;
-export type ZWaveNodeValueRemovedCallback = (
-	node: ZWaveNode,
-	args: ZWaveNodeValueRemovedArgs,
-) => void;
-export type ZWaveNodeMetadataUpdatedCallback = (
-	node: ZWaveNode,
-	args: ZWaveNodeMetadataUpdatedArgs,
-) => void;
-
-export type ZWaveNotificationCallback = (
-	node: ZWaveNode,
-	notificationLabel: string,
-	parameters?: NotificationCCReport["eventParameters"],
-) => void;
-
-interface ZWaveNodeValueEventCallbacks {
-	"value added": ZWaveNodeValueAddedCallback;
-	"value updated": ZWaveNodeValueUpdatedCallback;
-	"value removed": ZWaveNodeValueRemovedCallback;
-	"metadata updated": ZWaveNodeMetadataUpdatedCallback;
-	notification: ZWaveNotificationCallback;
-}
-
-type ZWaveNodeEventCallbacks = Overwrite<
-	{
-		[K in
-			| "wake up"
-			| "sleep"
-			| "interview completed"
-			| "ready"
-			| "dead"
-			| "alive"]: (node: ZWaveNode) => void;
-	},
-	ZWaveNodeValueEventCallbacks
->;
-
-export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
 
 export interface ZWaveNode {
 	on<TEvent extends ZWaveNodeEvents>(
@@ -183,7 +121,7 @@ export interface ZWaveNode {
  * of its root endpoint (index 0)
  */
 @Mixin([EventEmitter])
-export class ZWaveNode extends Endpoint implements IZWaveNode {
+export class ZWaveNode extends Endpoint {
 	public constructor(
 		public readonly id: number,
 		driver: Driver,
@@ -469,7 +407,7 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 					ret.push(
 						...ccInstance
 							.getDefinedValueIDs()
-							.map(id => this.translateValueID(id)),
+							.map((id) => this.translateValueID(id)),
 					);
 				}
 			}
@@ -488,14 +426,14 @@ export class ZWaveNode extends Endpoint implements IZWaveNode {
 	private filterRootApplicationCCValueIDs(
 		allValueIds: TranslatedValueID[],
 	): TranslatedValueID[] {
-		return allValueIds.filter(vid => {
+		return allValueIds.filter((vid) => {
 			// Non-root endpoint values don't need to be filtered
 			if (!!vid.endpoint) return true;
 			// Non-application CCs don't need to be filtered
 			if (!applicationCCs.includes(vid.commandClass)) return true;
 			// Filter out root values if an identical value ID exists for another endpoint
 			const valueExistsOnAnotherEndpoint = allValueIds.some(
-				other =>
+				(other) =>
 					// same CC
 					other.commandClass === vid.commandClass &&
 					// non-root endpoint
@@ -1499,7 +1437,7 @@ version:               ${this.version}`;
 				// Since the node sent us a Basic report, we are sure that it is at least supported
 				// If this is the only supported actuator CC, add it to the support list,
 				// so the information lands in the network cache
-				if (!actuatorCCs.some(cc => sourceEndpoint.supportsCC(cc))) {
+				if (!actuatorCCs.some((cc) => sourceEndpoint.supportsCC(cc))) {
 					sourceEndpoint.addCC(CommandClasses.Basic, {
 						isControlled: true,
 					});
@@ -1622,7 +1560,7 @@ version:               ${this.version}`;
 					const nonIdleValues = this.valueDB
 						.getValues(CommandClasses.Notification)
 						.filter(
-							v =>
+							(v) =>
 								(v.endpoint || 0) === command.endpointIndex &&
 								v.property === property &&
 								typeof v.value === "number" &&

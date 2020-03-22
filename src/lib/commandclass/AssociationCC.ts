@@ -1,12 +1,12 @@
 import { distinct } from "alcalzone-shared/arrays";
 import { MAX_NODES } from "../controller/NodeBitMask";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { MessageOrCCLogEntry } from "../log/shared";
-import { ValueID } from "../node/ValueDB";
+import type { MessageOrCCLogEntry } from "../log/shared";
+import type { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
-import { Maybe } from "../values/Primitive";
+import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -22,7 +22,7 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
-import { Association } from "./MultiChannelAssociationCC";
+import type { Association } from "./MultiChannelAssociationCC";
 
 /** Returns the ValueID used to store the maximum number of nodes of an association group */
 export function getMaxNodesValueId(groupId: number): ValueID {
@@ -206,7 +206,7 @@ export class AssociationCCAPI extends CCAPI {
 export class AssociationCC extends CommandClass {
 	declare ccCommand: AssociationCommand;
 
-	public constructor(driver: IDriver, options: CommandClassOptions) {
+	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
 		this.registerValue(getHasLifelineValueId().property, true);
 	}
@@ -251,7 +251,7 @@ export class AssociationCC extends CommandClass {
 			ret.set(
 				i,
 				// Filter out duplicates
-				distinct(nodes).map(nodeId => ({ nodeId })),
+				distinct(nodes).map((nodeId) => ({ nodeId })),
 			);
 		}
 		return ret;
@@ -342,8 +342,8 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 		} else if (node.deviceConfig?.associations?.size) {
 			// We have a device config file that tells us which association to assign
 			const lifelineGroups = [...node.deviceConfig.associations.values()]
-				.filter(a => a.isLifeline)
-				.map(a => a.groupId);
+				.filter((a) => a.isLifeline)
+				.map((a) => a.groupId);
 			if (lifelineGroups.length > 0) {
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
@@ -387,7 +387,7 @@ interface AssociationCCSetOptions extends CCCommandOptions {
 @CCCommand(AssociationCommand.Set)
 export class AssociationCCSet extends AssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | AssociationCCSetOptions,
 	) {
 		super(driver, options);
@@ -404,7 +404,7 @@ export class AssociationCCSet extends AssociationCC {
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
-			if (options.nodeIds.some(n => n < 1 || n > MAX_NODES)) {
+			if (options.nodeIds.some((n) => n < 1 || n > MAX_NODES)) {
 				throw new ZWaveError(
 					`All node IDs must be between 1 and ${MAX_NODES}!`,
 					ZWaveErrorCodes.Argument_Invalid,
@@ -434,7 +434,7 @@ interface AssociationCCRemoveOptions {
 @CCCommand(AssociationCommand.Remove)
 export class AssociationCCRemove extends AssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| (AssociationCCRemoveOptions & CCCommandOptions),
@@ -462,7 +462,7 @@ export class AssociationCCRemove extends AssociationCC {
 				);
 			}
 
-			if (options.nodeIds?.some(n => n < 1 || n > MAX_NODES)) {
+			if (options.nodeIds?.some((n) => n < 1 || n > MAX_NODES)) {
 				throw new ZWaveError(
 					`All node IDs must be between 1 and ${MAX_NODES}!`,
 					ZWaveErrorCodes.Argument_Invalid,
@@ -488,7 +488,7 @@ export class AssociationCCRemove extends AssociationCC {
 @CCCommand(AssociationCommand.Report)
 export class AssociationCCReport extends AssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -529,7 +529,7 @@ export class AssociationCCReport extends AssociationCC {
 	public mergePartialCCs(partials: AssociationCCReport[]): void {
 		// Concat the list of nodes
 		this._nodeIds = [...partials, this]
-			.map(report => report._nodeIds)
+			.map((report) => report._nodeIds)
 			.reduce((prev, cur) => prev.concat(...cur), []);
 
 		// Persist values
@@ -563,7 +563,7 @@ interface AssociationCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(AssociationCCReport)
 export class AssociationCCGet extends AssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | AssociationCCGetOptions,
 	) {
 		super(driver, options);
@@ -602,7 +602,7 @@ export class AssociationCCGet extends AssociationCC {
 @CCCommand(AssociationCommand.SupportedGroupingsReport)
 export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);

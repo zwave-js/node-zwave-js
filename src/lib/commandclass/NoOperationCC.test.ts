@@ -1,9 +1,9 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { CommandClasses } from "./CommandClasses";
 import { NoOperationCC } from "./NoOperationCC";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -27,6 +27,6 @@ describe("lib/commandclass/NoOperationCC => ", () => {
 		const ccData = buildCCBuffer(
 			Buffer.from([]), // No command!
 		);
-		void new NoOperationCC(fakeDriver, { data: ccData });
+		void new NoOperationCC(fakeDriver, { nodeId: 2, data: ccData });
 	});
 });

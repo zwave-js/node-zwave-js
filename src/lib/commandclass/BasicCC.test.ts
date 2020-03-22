@@ -1,6 +1,5 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
-import { Driver } from "../driver/Driver";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import {
 	BasicCC,
@@ -12,7 +11,7 @@ import {
 import { getCCValueMetadata } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([

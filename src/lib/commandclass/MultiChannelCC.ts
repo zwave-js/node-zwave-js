@@ -1,14 +1,14 @@
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { MessageOrCCLogEntry } from "../log/shared";
+import type { MessageOrCCLogEntry } from "../log/shared";
 import { MessagePriority } from "../message/Constants";
 import { GenericDeviceClasses } from "../node/DeviceClass";
 import {
 	NodeInformationFrame,
 	parseNodeInformationFrame,
 } from "../node/NodeInfo";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
@@ -259,7 +259,7 @@ export interface EndpointCapability extends NodeInformationFrame {
 export class MultiChannelCC extends CommandClass {
 	declare ccCommand: MultiChannelCommand;
 
-	public constructor(driver: IDriver, options: CommandClassOptions) {
+	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
 		this.registerValue(getEndpointCCsValueId(0).property, true);
 	}
@@ -274,7 +274,7 @@ export class MultiChannelCC extends CommandClass {
 
 	/** Encapsulates a command that targets a specific endpoint */
 	public static encapsulate(
-		driver: IDriver,
+		driver: Driver,
 		cc: CommandClass,
 	): MultiChannelCCCommandEncapsulation {
 		return new MultiChannelCCCommandEncapsulation(driver, {
@@ -449,10 +449,10 @@ supported CCs:`;
 			// endpoints they have
 			const supportedCCs = [...node.implementedCommandClasses.keys()]
 				// Don't query CCs the node only controls
-				.filter(cc => node.supportsCC(cc))
+				.filter((cc) => node.supportsCC(cc))
 				// Don't query CCs that want to skip the endpoint interview
 				.filter(
-					cc => !node.createCCInstance(cc)?.skipEndpointInterview(),
+					(cc) => !node.createCCInstance(cc)?.skipEndpointInterview(),
 				);
 			const endpointCounts = new Map<CommandClasses, number>();
 			for (const ccId of supportedCCs) {
@@ -514,7 +514,7 @@ supported CCs:`;
 @CCCommand(MultiChannelCommand.EndPointReport)
 export class MultiChannelCCEndPointReport extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -571,7 +571,7 @@ identical capabilities:      ${this.identicalCapabilities}`,
 @expectedCCResponse(MultiChannelCCEndPointReport)
 export class MultiChannelCCEndPointGet extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
@@ -581,7 +581,7 @@ export class MultiChannelCCEndPointGet extends MultiChannelCC {
 @CCCommand(MultiChannelCommand.CapabilityReport)
 export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -650,7 +650,7 @@ interface MultiChannelCCCapabilityGetOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelCCCapabilityReport)
 export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCCapabilityGetOptions,
@@ -685,7 +685,7 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 @CCCommand(MultiChannelCommand.EndPointFindReport)
 export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -697,8 +697,8 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 
 		validatePayload(this.payload.length >= 4);
 		this._foundEndpoints = [...this.payload.slice(3)]
-			.map(e => e & 0b01111111)
-			.filter(e => e !== 0);
+			.map((e) => e & 0b01111111)
+			.filter((e) => e !== 0);
 	}
 
 	private _genericClass: GenericDeviceClasses;
@@ -727,7 +727,7 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 	public mergePartialCCs(partials: MultiChannelCCEndPointFindReport[]): void {
 		// Concat the list of end points
 		this._foundEndpoints = [...partials, this]
-			.map(report => report._foundEndpoints)
+			.map((report) => report._foundEndpoints)
 			.reduce((prev, cur) => prev.concat(...cur), []);
 	}
 }
@@ -741,7 +741,7 @@ interface MultiChannelCCEndPointFindOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelCCEndPointFindReport)
 export class MultiChannelCCEndPointFind extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCEndPointFindOptions,
@@ -771,7 +771,7 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 @CCCommand(MultiChannelCommand.AggregatedMembersReport)
 export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -813,7 +813,7 @@ interface MultiChannelCCAggregatedMembersGetOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelCCAggregatedMembersReport)
 export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCAggregatedMembersGetOptions,
@@ -878,7 +878,7 @@ const testResponseForCommandEncapsulation: CCResponsePredicate<MultiChannelCCCom
 @expectedCCResponse(testResponseForCommandEncapsulation)
 export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCCommandEncapsulationOptions,
@@ -941,7 +941,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 @CCCommand(MultiChannelCommand.ReportV1)
 export class MultiChannelCCV1Report extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -963,7 +963,7 @@ interface MultiChannelCCV1GetOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelCCV1Report)
 export class MultiChannelCCV1Get extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCV1GetOptions,
@@ -1000,7 +1000,7 @@ interface MultiChannelCCV1CommandEncapsulationOptions extends CCCommandOptions {
 @expectedCCResponse(getResponseForV1CommandEncapsulation)
 export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCV1CommandEncapsulationOptions,

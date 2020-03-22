@@ -1,7 +1,7 @@
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
-import { Maybe } from "../values/Primitive";
+import type { Maybe } from "../values/Primitive";
 import {
 	decodeSetbackState,
 	encodeSetbackState,
@@ -173,7 +173,7 @@ interface ClimateControlScheduleCCSetOptions extends CCCommandOptions {
 @CCCommand(ClimateControlScheduleCommand.Set)
 export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| ClimateControlScheduleCCSetOptions,
@@ -205,7 +205,7 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 		}
 		this.payload = Buffer.concat([
 			Buffer.from([this.weekday & 0b111]),
-			...allSwitchPoints.map(sp => encodeSwitchpoint(sp)),
+			...allSwitchPoints.map((sp) => encodeSwitchpoint(sp)),
 		]);
 		return super.serialize();
 	}
@@ -214,7 +214,7 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 @CCCommand(ClimateControlScheduleCommand.Report)
 export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -228,7 +228,7 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 			);
 		}
 		const switchPoints = allSwitchpoints.filter(
-			sp => sp.state !== "Unused",
+			(sp) => sp.state !== "Unused",
 		);
 
 		this.schedule = [weekday, switchPoints];
@@ -255,7 +255,7 @@ interface ClimateControlScheduleCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(ClimateControlScheduleCCReport)
 export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| ClimateControlScheduleCCGetOptions,
@@ -282,7 +282,7 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 @CCCommand(ClimateControlScheduleCommand.ChangedReport)
 export class ClimateControlScheduleCCChangedReport extends ClimateControlScheduleCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -302,7 +302,7 @@ export class ClimateControlScheduleCCChangedReport extends ClimateControlSchedul
 @expectedCCResponse(ClimateControlScheduleCCChangedReport)
 export class ClimateControlScheduleCCChangedGet extends ClimateControlScheduleCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
@@ -312,7 +312,7 @@ export class ClimateControlScheduleCCChangedGet extends ClimateControlScheduleCC
 @CCCommand(ClimateControlScheduleCommand.OverrideReport)
 export class ClimateControlScheduleCCOverrideReport extends ClimateControlScheduleCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -339,7 +339,7 @@ export class ClimateControlScheduleCCOverrideReport extends ClimateControlSchedu
 @expectedCCResponse(ClimateControlScheduleCCOverrideReport)
 export class ClimateControlScheduleCCOverrideGet extends ClimateControlScheduleCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
@@ -354,7 +354,7 @@ interface ClimateControlScheduleCCOverrideSetOptions extends CCCommandOptions {
 @CCCommand(ClimateControlScheduleCommand.OverrideSet)
 export class ClimateControlScheduleCCOverrideSet extends ClimateControlScheduleCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| ClimateControlScheduleCCOverrideSetOptions,

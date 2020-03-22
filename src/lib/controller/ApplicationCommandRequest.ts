@@ -1,6 +1,6 @@
 import { CommandClass, SinglecastCC } from "../commandclass/CommandClass";
-import { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
-import { IDriver } from "../driver/IDriver";
+import type { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import {
 	FunctionType,
@@ -43,7 +43,7 @@ interface ApplicationCommandRequestOptions extends MessageBaseOptions {
 export class ApplicationCommandRequest extends Message
 	implements ICommandClassContainer {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| MessageDeserializationOptions
 			| ApplicationCommandRequestOptions,

@@ -1,8 +1,8 @@
 import { lookupIndicator, lookupProperty } from "../config/Indicators";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { ValueMetadata } from "../values/Metadata";
@@ -278,7 +278,7 @@ export class IndicatorCCAPI extends CCAPI {
 export class IndicatorCC extends CommandClass {
 	declare ccCommand: IndicatorCommand;
 
-	public constructor(driver: IDriver, options: CommandClassOptions) {
+	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
 		this.registerValue(
 			getSupportedIndicatorIDsValueID(undefined).property,
@@ -402,7 +402,7 @@ export class IndicatorCC extends CommandClass {
 		if (!supportedIndicatorIds?.length) return false;
 		// Then test if there are any property ids defined
 		return supportedIndicatorIds.some(
-			indicatorId =>
+			(indicatorId) =>
 				!!this.getValueDB().getValue<number[]>(
 					getSupportedPropertyIDsValueID(
 						this.endpointIndex,
@@ -430,7 +430,7 @@ type IndicatorCCSetOptions =
 @CCCommand(IndicatorCommand.Set)
 export class IndicatorCCSet extends IndicatorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| (IndicatorCCSetOptions & CCCommandOptions),
@@ -479,7 +479,7 @@ export class IndicatorCCSet extends IndicatorCC {
 			const valuesFlat = values
 				.slice(0, objCount + 1)
 				.map(
-					o =>
+					(o) =>
 						[
 							o.indicatorId,
 							o.propertyId,
@@ -503,7 +503,7 @@ export class IndicatorCCSet extends IndicatorCC {
 @CCCommand(IndicatorCommand.Report)
 export class IndicatorCCReport extends IndicatorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -616,7 +616,7 @@ interface IndicatorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(IndicatorCCReport)
 export class IndicatorCCGet extends IndicatorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | IndicatorCCGetOptions,
 	) {
 		super(driver, options);
@@ -644,7 +644,7 @@ export class IndicatorCCGet extends IndicatorCC {
 @CCCommand(IndicatorCommand.SupportedReport)
 export class IndicatorCCSupportedReport extends IndicatorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -661,7 +661,7 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 			this.supportedProperties = parseBitMask(
 				this.payload.slice(3, 3 + bitMaskLength),
 				0,
-			).filter(v => v !== 0);
+			).filter((v) => v !== 0);
 		}
 
 		if (this.indicatorId !== 0x00) {
@@ -689,7 +689,7 @@ interface IndicatorCCSupportedGetOptions extends CCCommandOptions {
 @expectedCCResponse(IndicatorCCSupportedReport)
 export class IndicatorCCSupportedGet extends IndicatorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| IndicatorCCSupportedGetOptions,

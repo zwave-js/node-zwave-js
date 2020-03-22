@@ -1,8 +1,8 @@
 import { lookupNamedScale, Scale } from "../config/Scales";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
 import {
@@ -239,7 +239,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 export class ThermostatSetpointCC extends CommandClass {
 	declare ccCommand: ThermostatSetpointCommand;
 
-	public constructor(driver: IDriver, options: CommandClassOptions) {
+	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
 		this.registerValue(
 			getSetpointTypesInterpretationValueID(0).property,
@@ -308,14 +308,14 @@ export class ThermostatSetpointCC extends CommandClass {
 			// --> If setpoints 3,4,5 or 6 are supported, the assumption is wrong ==> A
 			function switchToInterpretationA(): void {
 				setpointTypes = setpointTypes.map(
-					i => thermostatSetpointTypeMap[i],
+					(i) => thermostatSetpointTypeMap[i],
 				);
 				interpretation = "A";
 				interpretationChanged = true;
 			}
 
 			if (!interpretation) {
-				if ([3, 4, 5, 6].some(type => setpointTypes.includes(type))) {
+				if ([3, 4, 5, 6].some((type) => setpointTypes.includes(type))) {
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
@@ -333,7 +333,7 @@ export class ThermostatSetpointCC extends CommandClass {
 				}
 			} else if (interpretation === "A") {
 				setpointTypes = setpointTypes.map(
-					i => thermostatSetpointTypeMap[i],
+					(i) => thermostatSetpointTypeMap[i],
 				);
 			}
 
@@ -439,10 +439,10 @@ export class ThermostatSetpointCC extends CommandClass {
 				const logMessage =
 					"received supported setpoint types:\n" +
 					setpointTypes
-						.map(type =>
+						.map((type) =>
 							getEnumMemberName(ThermostatSetpointType, type),
 						)
-						.map(name => `· ${name}`)
+						.map((name) => `· ${name}`)
 						.join("\n");
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
@@ -525,7 +525,7 @@ interface ThermostatSetpointCCSetOptions extends CCCommandOptions {
 @CCCommand(ThermostatSetpointCommand.Set)
 export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetpointCCSetOptions,
@@ -560,7 +560,7 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 @CCCommand(ThermostatSetpointCommand.Report)
 export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -632,7 +632,7 @@ interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(testResponseForThermostatSetpointGet)
 export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetpointCCGetOptions,
@@ -660,7 +660,7 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 @CCCommand(ThermostatSetpointCommand.CapabilitiesReport)
 export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -732,7 +732,7 @@ interface ThermostatSetpointCCCapabilitiesGetOptions extends CCCommandOptions {
 @expectedCCResponse(ThermostatSetpointCCCapabilitiesReport)
 export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetpointCCCapabilitiesGetOptions,
@@ -760,7 +760,7 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 @CCCommand(ThermostatSetpointCommand.SupportedReport)
 export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -771,7 +771,7 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 		if (this.version >= 3) {
 			// Interpretation A
 			this._supportedSetpointTypes = supported.map(
-				i => thermostatSetpointTypeMap[i],
+				(i) => thermostatSetpointTypeMap[i],
 			);
 		} else {
 			// It is unknown which interpretation the device complies to.
@@ -807,7 +807,7 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
  */
 export class ThermostatSetpointCCSupportedGet extends ThermostatSetpointCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);

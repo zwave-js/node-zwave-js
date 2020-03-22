@@ -1,5 +1,5 @@
 import { isArray } from "alcalzone-shared/typeguards";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { staticExtends, validatePayload } from "../util/misc";
@@ -21,7 +21,7 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { MANUFACTURERID_FIBARO } from "./manufacturerProprietary/Constants";
-import { FibaroVenetianBlindCCReport } from "./manufacturerProprietary/Fibaro";
+import type { FibaroVenetianBlindCCReport } from "./manufacturerProprietary/Fibaro";
 import { getManufacturerIdValueId } from "./ManufacturerSpecificCC";
 
 @API(CommandClasses["Manufacturer Proprietary"])
@@ -129,7 +129,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 	declare ccCommand: undefined;
 
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);

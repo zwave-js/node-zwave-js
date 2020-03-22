@@ -1,6 +1,6 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { ZWaveNode } from "../node/Node";
 import { BasicCC, BasicCCSet } from "./BasicCC";
@@ -26,7 +26,7 @@ class DummyCCSubClass2 extends DummyCC {
 	private y: any;
 }
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 describe("lib/commandclass/CommandClass => ", () => {
 	describe("from()", () => {
@@ -34,10 +34,10 @@ describe("lib/commandclass/CommandClass => ", () => {
 			// TODO: This is a meter CC. Change it when that CC is implemented
 			assertZWaveError(
 				() =>
-					CommandClass.from(
-						fakeDriver,
-						Buffer.from("0b0a32022144000000a30000", "hex"),
-					),
+					CommandClass.from(fakeDriver, {
+						data: Buffer.from("0b0a32022144000000a30000", "hex"),
+						nodeId: 5,
+					}),
 				{
 					errorCode: ZWaveErrorCodes.CC_NotImplemented,
 				},

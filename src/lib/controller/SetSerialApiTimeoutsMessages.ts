@@ -1,4 +1,4 @@
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -12,7 +12,7 @@ import {
 	messageTypes,
 	priority,
 } from "../message/Message";
-import { JSONObject } from "../util/misc";
+import type { JSONObject } from "../util/misc";
 
 interface SetSerialApiTimeoutsRequestOptions extends MessageBaseOptions {
 	ackTimeout: number;
@@ -24,7 +24,7 @@ interface SetSerialApiTimeoutsRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Controller)
 export class SetSerialApiTimeoutsRequest extends Message {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: SetSerialApiTimeoutsRequestOptions,
 	) {
 		super(driver, options);
@@ -53,10 +53,7 @@ export class SetSerialApiTimeoutsRequest extends Message {
 
 @messageTypes(MessageType.Response, FunctionType.SetSerialApiTimeouts)
 export class SetSerialApiTimeoutsResponse extends Message {
-	public constructor(
-		driver: IDriver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._oldAckTimeout = this.payload[0] * 10;
 		this._oldByteTimeout = this.payload[1] * 10;

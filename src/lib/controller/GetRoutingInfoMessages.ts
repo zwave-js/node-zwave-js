@@ -1,5 +1,5 @@
-import { IDriver } from "../driver/IDriver";
-import { MessageOrCCLogEntry } from "../log/shared";
+import type { Driver } from "../driver/Driver";
+import type { MessageOrCCLogEntry } from "../log/shared";
 import {
 	FunctionType,
 	MessagePriority,
@@ -13,7 +13,7 @@ import {
 	messageTypes,
 	priority,
 } from "../message/Message";
-import { JSONObject } from "../util/misc";
+import type { JSONObject } from "../util/misc";
 import { NUM_NODEMASK_BYTES, parseNodeBitMask } from "./NodeBitMask";
 
 interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
@@ -26,7 +26,7 @@ interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.GetRoutingInfo)
 @priority(MessagePriority.Controller)
 export class GetRoutingInfoRequest extends Message {
-	public constructor(driver: IDriver, options: GetRoutingInfoRequestOptions) {
+	public constructor(driver: Driver, options: GetRoutingInfoRequestOptions) {
 		super(driver, options);
 		this.nodeId = options.nodeId;
 		this.removeNonRepeaters = !!options.removeNonRepeaters;
@@ -66,10 +66,7 @@ removeBadLinks:     ${this.removeBadLinks}`,
 
 @messageTypes(MessageType.Response, FunctionType.GetRoutingInfo)
 export class GetRoutingInfoResponse extends Message {
-	public constructor(
-		driver: IDriver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
 		if (this.payload.length === NUM_NODEMASK_BYTES) {

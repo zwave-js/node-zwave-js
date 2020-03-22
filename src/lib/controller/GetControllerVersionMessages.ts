@@ -1,4 +1,4 @@
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -11,9 +11,9 @@ import {
 	messageTypes,
 	priority,
 } from "../message/Message";
-import { JSONObject } from "../util/misc";
+import type { JSONObject } from "../util/misc";
 import { cpp2js } from "../util/strings";
-import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
+import type { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerVersion)
 @expectedResponse(FunctionType.GetControllerVersion)
@@ -22,10 +22,7 @@ export class GetControllerVersionRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetControllerVersion)
 export class GetControllerVersionResponse extends Message {
-	public constructor(
-		driver: IDriver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
 		// The payload consists of a zero-terminated string and a uint8 for the controller type

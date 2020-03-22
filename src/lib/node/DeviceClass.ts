@@ -1,5 +1,5 @@
 import { CommandClasses } from "../commandclass/CommandClasses";
-import { JSONObject } from "../util/misc";
+import type { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
 
 export enum BasicDeviceClasses {
@@ -122,7 +122,7 @@ function defineGeneric(
 	// All devices have a non-specific version
 	if (
 		!specificDeviceClasses.some(
-			spec => spec.key === SpecificDeviceClass.NOT_USED.key,
+			(spec) => spec.key === SpecificDeviceClass.NOT_USED.key,
 		)
 	) {
 		specificDeviceClasses.unshift(SpecificDeviceClass.NOT_USED);
@@ -186,10 +186,10 @@ export class DeviceClass {
 			generic: this.generic.name,
 			specific: this.specific.name,
 			mandatorySupportedCCs: this._mandatorySupportedCCs.map(
-				cc => CommandClasses[cc],
+				(cc) => CommandClasses[cc],
 			),
 			mandatoryControlCCs: this._mandatoryControlCCs.map(
-				cc => CommandClasses[cc],
+				(cc) => CommandClasses[cc],
 			),
 		};
 	}

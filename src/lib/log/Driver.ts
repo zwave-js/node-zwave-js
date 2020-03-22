@@ -1,15 +1,15 @@
-import { SortedList } from "alcalzone-shared/sorted-list";
+import type { SortedList } from "alcalzone-shared/sorted-list";
 import winston from "winston";
-import { CommandClass } from "../commandclass/CommandClass";
+import type { CommandClass } from "../commandclass/CommandClass";
 import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import { Transaction } from "../driver/Transaction";
+import type { Transaction } from "../driver/Transaction";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
 } from "../message/Constants";
-import { Message, ResponseRole } from "../message/Message";
+import type { Message, ResponseRole } from "../message/Message";
 import {
 	createLogTransports,
 	DataDirection,
@@ -105,7 +105,7 @@ function logMessage(
 	if (logEntry.message) {
 		msg.push(
 			...messageToLines(logEntry.message).map(
-				line => (isCCContainer ? "│ " : "  ") + line,
+				(line) => (isCCContainer ? "│ " : "  ") + line,
 			),
 		);
 	}
@@ -113,7 +113,7 @@ function logMessage(
 	// If possible, include information about the CCs
 	if (isCommandClassContainer(message)) {
 		// Remove the default payload message and draw a bracket
-		msg = msg.filter(line => !line.startsWith("│ payload:"));
+		msg = msg.filter((line) => !line.startsWith("│ payload:"));
 
 		let indent = 0;
 		let cc: CommandClass = message.command;
@@ -126,7 +126,7 @@ function logMessage(
 			if (loggedCC.message) {
 				msg.push(
 					...messageToLines(loggedCC.message).map(
-						line =>
+						(line) =>
 							`${" ".repeat(indent * 2)}${
 								isEncapCC ? "│ " : "  "
 							}${line}`,

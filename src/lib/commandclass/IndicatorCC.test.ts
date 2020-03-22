@@ -1,6 +1,6 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { loadIndicatorsInternal } from "../config/Indicators";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { CommandClasses } from "./CommandClasses";
 import {
@@ -23,11 +23,11 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 describe("lib/commandclass/IndicatorCC => ", () => {
-	let fakeDriver: IDriver;
+	let fakeDriver: Driver;
 	let node1: ZWaveNode;
 
 	beforeAll(async () => {
-		fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+		fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 		node1 = new ZWaveNode(1, fakeDriver as any);
 		(fakeDriver.controller.nodes as any).set(1, node1);
 		node1.addCC(CommandClasses.Indicator, {

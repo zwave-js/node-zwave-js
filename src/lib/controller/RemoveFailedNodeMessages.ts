@@ -1,4 +1,4 @@
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -53,7 +53,7 @@ export enum RemoveFailedNodeStatus {
 @messageTypes(MessageType.Request, FunctionType.RemoveFailedNode)
 @priority(MessagePriority.Controller)
 export class RemoveFailedNodeRequestBase extends Message {
-	public constructor(driver: IDriver, options: MessageOptions) {
+	public constructor(driver: Driver, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== RemoveFailedNodeRequestStatusReport
@@ -72,7 +72,7 @@ interface RemoveFailedNodeRequestOptions extends MessageBaseOptions {
 @expectedResponse(testResponseForRemoveFailedNodeRequest)
 export class RemoveFailedNodeRequest extends RemoveFailedNodeRequestBase {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: RemoveFailedNodeRequestOptions,
 	) {
 		super(driver, options);
@@ -90,10 +90,7 @@ export class RemoveFailedNodeRequest extends RemoveFailedNodeRequestBase {
 }
 
 export class RemoveFailedNodeRequestStatusReport extends RemoveFailedNodeRequestBase {
-	public constructor(
-		driver: IDriver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
 		this.callbackId = this.payload[0];
@@ -112,10 +109,7 @@ export class RemoveFailedNodeRequestStatusReport extends RemoveFailedNodeRequest
 
 @messageTypes(MessageType.Response, FunctionType.RemoveFailedNode)
 export class RemoveFailedNodeResponse extends Message {
-	public constructor(
-		driver: IDriver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._removeStatus = this.payload[0];
 	}

@@ -1,7 +1,7 @@
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { ValueID } from "../node/ValueDB";
+import type { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, parseBitMask } from "../values/Primitive";
@@ -148,8 +148,8 @@ export class BinarySensorCC extends CommandClass {
 			});
 			supportedSensorTypes = await api.getSupportedSensorTypes();
 			const logMessage = `received supported sensor types: ${supportedSensorTypes
-				.map(type => getEnumMemberName(BinarySensorType, type))
-				.map(name => "\n· " + name)}`;
+				.map((type) => getEnumMemberName(BinarySensorType, type))
+				.map((name) => "\n· " + name)}`;
 			log.controller.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
@@ -207,7 +207,7 @@ export class BinarySensorCC extends CommandClass {
 @CCCommand(BinarySensorCommand.Report)
 export class BinarySensorCCReport extends BinarySensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -264,7 +264,7 @@ interface BinarySensorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(testResponseForBinarySensorGet)
 export class BinarySensorCCGet extends BinarySensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | BinarySensorCCGetOptions,
 	) {
 		super(driver, options);
@@ -291,7 +291,7 @@ export class BinarySensorCCGet extends BinarySensorCC {
 @CCCommand(BinarySensorCommand.SupportedReport)
 export class BinarySensorCCSupportedReport extends BinarySensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -312,7 +312,7 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 @expectedCCResponse(BinarySensorCCSupportedReport)
 export class BinarySensorCCSupportedGet extends BinarySensorCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);

@@ -1,4 +1,4 @@
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { JSONObject, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
@@ -141,7 +141,7 @@ interface BasicCCSetOptions extends CCCommandOptions {
 @CCCommand(BasicCommand.Set)
 export class BasicCCSet extends BasicCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | BasicCCSetOptions,
 	) {
 		super(driver, options);
@@ -175,7 +175,7 @@ type BasicCCReportOptions = CCCommandOptions &
 @CCCommand(BasicCommand.Report)
 export class BasicCCReport extends BasicCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | BasicCCReportOptions,
 	) {
 		super(driver, options);
@@ -253,7 +253,7 @@ export class BasicCCReport extends BasicCC {
 @expectedCCResponse(BasicCCReport)
 export class BasicCCGet extends BasicCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);

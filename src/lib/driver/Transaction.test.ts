@@ -5,8 +5,8 @@ import { RemoveFailedNodeRequest } from "../controller/RemoveFailedNodeMessages"
 import { SendDataRequest } from "../controller/SendDataMessages";
 import { MessagePriority } from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";
-import { ZWaveNode } from "../node/Node";
-import { Driver } from "./Driver";
+import type { ZWaveNode } from "../node/Node";
+import type { Driver } from "./Driver";
 import { MAX_SEND_ATTEMPTS, Transaction } from "./Transaction";
 
 function createTransactionWithPriority(priority: MessagePriority): Transaction {

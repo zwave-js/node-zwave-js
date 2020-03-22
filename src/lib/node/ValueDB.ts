@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
-import { CommandClasses } from "../commandclass/CommandClasses";
+import type { CommandClasses } from "../commandclass/CommandClasses";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { ValueMetadata } from "../values/Metadata";
+import type { ValueMetadata } from "../values/Metadata";
 
 /** Uniquely identifies to which CC, endpoint and property a value belongs to */
 export interface ValueID {

@@ -1,7 +1,7 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertCC, assertZWaveError } from "../../../test/util";
 import { BasicCC, BasicCommand } from "../commandclass/BasicCC";
-import { CommandClassInfo } from "../commandclass/CommandClass";
+import type { CommandClassInfo } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
@@ -18,7 +18,7 @@ import {
 	GetRoutingInfoResponse,
 } from "../controller/GetRoutingInfoMessages";
 import { SendDataRequest } from "../controller/SendDataMessages";
-import { Driver } from "../driver/Driver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { ValueMetadata } from "../values/Metadata";
 import {
@@ -28,10 +28,11 @@ import {
 	GenericDeviceClasses,
 	SpecificDeviceClass,
 } from "./DeviceClass";
-import { InterviewStage, NodeStatus } from "./INode";
-import { ZWaveNode, ZWaveNodeEvents } from "./Node";
-import { NodeUpdatePayload } from "./NodeInfo";
+import { ZWaveNode } from "./Node";
+import type { NodeUpdatePayload } from "./NodeInfo";
 import { RequestNodeInfoRequest } from "./RequestNodeInfoMessages";
+import { InterviewStage, NodeStatus } from "./Types";
+import type { ZWaveNodeEvents } from "./Types";
 import { ValueDB, ValueID } from "./ValueDB";
 
 /** This is an ugly hack to be able to test the private methods without resorting to @internal */
@@ -75,6 +76,13 @@ class TestNode extends ZWaveNode {
 }
 
 describe("lib/node/Node", () => {
+	beforeAll(async () => {
+		// Load all CCs manually to populate the metadata
+		await import("../commandclass/BatteryCC");
+		await import("../commandclass/ThermostatSetpointCC");
+		await import("../commandclass/VersionCC");
+	});
+
 	describe("constructor", () => {
 		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 		it("stores the given Node ID", () => {

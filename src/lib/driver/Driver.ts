@@ -59,14 +59,13 @@ import {
 	MessageType,
 } from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";
-import { InterviewStage, IZWaveNode, NodeStatus } from "../node/INode";
 import { isNodeQuery } from "../node/INodeQuery";
-import { ZWaveNode } from "../node/Node";
+import type { ZWaveNode } from "../node/Node";
+import { InterviewStage, NodeStatus } from "../node/Types";
 import { DeepPartial, getEnumMemberName, skipBytes } from "../util/misc";
 import { num2hex } from "../util/strings";
-import { Duration } from "../values/Duration";
-import { FileSystem } from "./FileSystem";
-import { DriverEventCallbacks, DriverEvents, IDriver } from "./IDriver";
+import type { Duration } from "../values/Duration";
+import type { FileSystem } from "./FileSystem";
 import { Transaction } from "./Transaction";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -201,6 +200,15 @@ export type SendSupervisedCommandOptions = SendMessageOptions &
 	);
 
 // Strongly type the event emitter events
+
+export interface DriverEventCallbacks {
+	"driver ready": () => void;
+	"all nodes ready": () => void;
+	error: (err: Error) => void;
+}
+
+export type DriverEvents = Extract<keyof DriverEventCallbacks, string>;
+
 export interface Driver {
 	on<TEvent extends DriverEvents>(
 		event: TEvent,
@@ -227,7 +235,7 @@ export interface Driver {
  * Any action you want to perform on the Z-Wave network must go through a driver
  * instance or its associated nodes.
  */
-export class Driver extends EventEmitter implements IDriver {
+export class Driver extends EventEmitter {
 	/** The serial port instance */
 	private serial: SerialPort | undefined;
 	/** A buffer of received but unprocessed data */
@@ -280,7 +288,7 @@ export class Driver extends EventEmitter implements IDriver {
 	/** Enumerates all existing serial ports */
 	public static async enumerateSerialPorts(): Promise<string[]> {
 		const ports = await SerialPort.list();
-		return ports.map(port => port.path);
+		return ports.map((port) => port.path);
 	}
 
 	/** @internal */
@@ -350,7 +358,7 @@ export class Driver extends EventEmitter implements IDriver {
 				});
 			})
 			.on("data", this.serialport_onData.bind(this))
-			.on("error", err => {
+			.on("error", (err) => {
 				log.driver.print("serial port errored: " + err, "error");
 				if (this._isOpen) {
 					this.serialport_onError(err);
@@ -498,7 +506,7 @@ export class Driver extends EventEmitter implements IDriver {
 	}
 
 	/** Is called when a node wakes up */
-	private onNodeWakeUp(node: IZWaveNode): void {
+	private onNodeWakeUp(node: ZWaveNode): void {
 		log.controller.logNode(node.id, "The node is now awake.");
 
 		// Start the timeouts after which the node is assumed asleep
@@ -590,7 +598,7 @@ export class Driver extends EventEmitter implements IDriver {
 			"The node was removed from the network",
 		);
 		// Asynchronously remove the node from all possible associations, ignore potential errors
-		this.controller.removeNodeFromAllAssocations(node.id).catch(err => {
+		this.controller.removeNodeFromAllAssocations(node.id).catch((err) => {
 			log.driver.print(
 				`Failed to remove node ${node.id} from all associations: ${err.message}`,
 				"error",
@@ -603,7 +611,7 @@ export class Driver extends EventEmitter implements IDriver {
 
 	/** Checks if there are any pending messages for the given node */
 	private hasPendingMessages(node: ZWaveNode): boolean {
-		return !!this.sendQueue.find(t => t.message.getNodeId() === node.id);
+		return !!this.sendQueue.find((t) => t.message.getNodeId() === node.id);
 	}
 
 	/**
@@ -684,11 +692,11 @@ export class Driver extends EventEmitter implements IDriver {
 
 		// Clean up
 		this.rejectTransactions(() => true, `The controller was hard-reset`);
-		this.nodeAwakeTimeouts.forEach(timeout => clearTimeout(timeout));
+		this.nodeAwakeTimeouts.forEach((timeout) => clearTimeout(timeout));
 		this.nodeAwakeTimeouts.clear();
-		this.sendNodeToSleepTimers.forEach(timeout => clearTimeout(timeout));
+		this.sendNodeToSleepTimers.forEach((timeout) => clearTimeout(timeout));
 		this.sendNodeToSleepTimers.clear();
-		this.retryNodeInterviewTimeouts.forEach(timeout =>
+		this.retryNodeInterviewTimeouts.forEach((timeout) =>
 			clearTimeout(timeout),
 		);
 		this.retryNodeInterviewTimeouts.clear();
@@ -753,7 +761,7 @@ export class Driver extends EventEmitter implements IDriver {
 		}
 
 		// Destroy all nodes
-		this._controller?.nodes.forEach(n => n.destroy());
+		this._controller?.nodes.forEach((n) => n.destroy());
 
 		process.removeListener("exit", this._cleanupHandler);
 		process.removeListener("SIGINT", this._cleanupHandler);
@@ -1880,7 +1888,7 @@ ${handlers.length} left`,
 		errorMsg: string = `The node is dead`,
 	): void {
 		this.rejectTransactions(
-			t => t.message.getNodeId() === nodeId,
+			(t) => t.message.getNodeId() === nodeId,
 			errorMsg,
 		);
 	}

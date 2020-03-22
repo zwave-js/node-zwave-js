@@ -1,12 +1,12 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
-import { INodeQuery } from "../node/INodeQuery";
+import type { INodeQuery } from "../node/INodeQuery";
 import { FunctionType, MessageType } from "./Constants";
 import { Message, messageTypes, ResponseRole } from "./Message";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 describe("lib/message", () => {
 	describe("Message", () => {
@@ -463,7 +463,7 @@ describe("lib/message", () => {
 			it("returns undefined when the controller is not initialized yet", () => {
 				const fakeDriver = ({
 					getSafeCCVersionForNode() {},
-				} as any) as IDriver;
+				} as any) as Driver;
 				const msg = new Message(fakeDriver, {
 					type: MessageType.Request,
 					functionType: 0xff,
@@ -475,7 +475,7 @@ describe("lib/message", () => {
 				const fakeDriver = ({
 					getSafeCCVersionForNode() {},
 					controller: { nodes: new Map() },
-				} as any) as IDriver;
+				} as any) as Driver;
 				const msg = new Message(fakeDriver, {
 					type: MessageType.Request,
 					functionType: 0xff,
@@ -487,7 +487,7 @@ describe("lib/message", () => {
 				const fakeDriver = ({
 					getSafeCCVersionForNode() {},
 					controller: { nodes: new Map() },
-				} as any) as IDriver;
+				} as any) as Driver;
 				// @ts-ignore We need write access
 				fakeDriver.controller!.nodes.set(1, {} as any);
 

@@ -1,8 +1,8 @@
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { validatePayload } from "../util/misc";
-import { Maybe } from "../values/Primitive";
+import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -132,7 +132,7 @@ interface ClockCCSetOptions extends CCCommandOptions {
 @CCCommand(ClockCommand.Set)
 export class ClockCCSet extends ClockCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | ClockCCSetOptions,
 	) {
 		super(driver, options);
@@ -165,7 +165,7 @@ export class ClockCCSet extends ClockCC {
 @CCCommand(ClockCommand.Report)
 export class ClockCCReport extends ClockCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);

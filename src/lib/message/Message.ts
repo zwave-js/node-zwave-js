@@ -2,13 +2,13 @@
 
 import { entries } from "alcalzone-shared/objects";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { getNodeTag, MessageOrCCLogEntry } from "../log/shared";
 import { isNodeQuery } from "../node/INodeQuery";
-import { ZWaveNode } from "../node/Node";
-import { JSONObject } from "../util/misc";
+import type { ZWaveNode } from "../node/Node";
+import type { JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
 import {
 	FunctionType,
@@ -18,7 +18,7 @@ import {
 } from "./Constants";
 
 type Constructable<T extends Message> = new (
-	driver: IDriver,
+	driver: Driver,
 	options?: MessageOptions,
 ) => T;
 
@@ -54,10 +54,7 @@ export type MessageOptions =
  * Represents a Z-Wave message for communication with the serial interface
  */
 export class Message {
-	public constructor(
-		protected driver: IDriver,
-		options: MessageOptions = {},
-	) {
+	public constructor(protected driver: Driver, options: MessageOptions = {}) {
 		// decide which implementation we follow
 		if (gotDeserializationOptions(options)) {
 			// #1: deserialize from payload
@@ -217,7 +214,7 @@ export class Message {
 	}
 
 	/** Creates an instance of the message that is serialized in the given buffer */
-	public static from(driver: IDriver, data: Buffer): Message {
+	public static from(driver: Driver, data: Buffer): Message {
 		const Constructor = Message.getConstructor(data);
 		const ret = new Constructor(driver, { data });
 		return ret;
@@ -383,7 +380,7 @@ export function messageTypes(
 	messageType: MessageType,
 	functionType: FunctionType,
 ): ClassDecorator {
-	return messageClass => {
+	return (messageClass) => {
 		log.reflection.define(
 			messageClass.name,
 			"types",
@@ -504,7 +501,7 @@ export function expectedResponse(predicate: ResponsePredicate): ClassDecorator;
 export function expectedResponse(
 	typeOrPredicate: FunctionType | ResponsePredicate,
 ): ClassDecorator {
-	return messageClass => {
+	return (messageClass) => {
 		if (typeof typeOrPredicate === "number") {
 			const type = typeOrPredicate;
 			log.reflection.define(
@@ -602,7 +599,7 @@ export function getExpectedResponseStatic<T extends Constructable<Message>>(
  * Defines the default priority associated with a Z-Wave message
  */
 export function priority(prio: MessagePriority): ClassDecorator {
-	return messageClass => {
+	return (messageClass) => {
 		log.reflection.define(
 			messageClass.name,
 			"default priority",

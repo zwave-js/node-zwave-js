@@ -1,9 +1,9 @@
-import { IDriver } from "../driver/IDriver";
-import { ValueID } from "../node/ValueDB";
+import type { Driver } from "../driver/Driver";
+import type { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { ValueMetadata } from "../values/Metadata";
-import { Maybe } from "../values/Primitive";
+import type { Maybe } from "../values/Primitive";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -106,7 +106,7 @@ interface SceneActivationCCSetOptions extends CCCommandOptions {
 @CCCommand(SceneActivationCommand.Set)
 export class SceneActivationCCSet extends SceneActivationCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| SceneActivationCCSetOptions,

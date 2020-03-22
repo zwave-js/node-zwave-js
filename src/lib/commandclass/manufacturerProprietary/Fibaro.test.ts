@@ -6,7 +6,7 @@ import {
 	SendDataRequestTransmitReport,
 	TransmitStatus,
 } from "../../controller/SendDataMessages";
-import { IDriver } from "../../driver/IDriver";
+import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
 import { CommandClass } from "../CommandClass";
 import { CommandClasses } from "../CommandClasses";
@@ -24,7 +24,7 @@ import {
 	FibaroVenetianBlindCCSet,
 } from "./Fibaro";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 const node2 = new ZWaveNode(2, fakeDriver as any);
 (fakeDriver as any).controller.nodes.set(2, node2);
 

@@ -1,22 +1,13 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { EventEmitter } from "events";
-import SerialPort from "serialport";
+import type SerialPort from "serialport";
 import { getImplementedVersion } from "../src/lib/commandclass/CommandClass";
-import { CommandClasses } from "../src/lib/commandclass/CommandClasses";
+import type { CommandClasses } from "../src/lib/commandclass/CommandClasses";
 import { SendDataRequest } from "../src/lib/controller/SendDataMessages";
-import { Driver } from "../src/lib/driver/Driver";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../src/lib/message/Constants";
-import {
-	expectedResponse,
-	Message,
-	messageTypes,
-	priority,
-} from "../src/lib/message/Message";
-import { ZWaveNode } from "../src/lib/node/Node";
+import type { Driver } from "../src/lib/driver/Driver";
+import { FunctionType, MessagePriority, MessageType } from "../src/lib/message/Constants";
+import { expectedResponse, Message, messageTypes, priority } from "../src/lib/message/Message";
+import type { ZWaveNode } from "../src/lib/node/Node";
 
 const instances = new Map<string, MockSerialPort>();
 

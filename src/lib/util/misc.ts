@@ -46,9 +46,9 @@ export function validatePayload(...assertions: unknown[]): void {
 /** Decorator to support multi-inheritance using mixins */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function Mixin(baseCtors: Function[]) {
-	return function(derivedCtor: Function): void {
-		baseCtors.forEach(baseCtor => {
-			Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+	return function (derivedCtor: Function): void {
+		baseCtors.forEach((baseCtor) => {
+			Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
 				// Do not override the constructor
 				if (name !== "constructor") {
 					derivedCtor.prototype[name] = baseCtor.prototype[name];

@@ -8,8 +8,8 @@ export function getNumericEnumValues<T extends Record<string, any>>(
 	enumeration: T,
 ): readonly number[] {
 	return Object.keys(enumeration)
-		.filter(val => isIntegerRegex.test(val))
-		.map(val => parseInt(val, 10));
+		.filter((val) => isIntegerRegex.test(val))
+		.map((val) => parseInt(val, 10));
 }
 
 /** Takes an enumeration and an array of values of this enumeration and returns a states record to be used as metadata */

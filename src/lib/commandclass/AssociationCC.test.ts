@@ -1,5 +1,5 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import {
 	AssociationCCGet,
 	AssociationCCRemove,
@@ -11,7 +11,7 @@ import {
 } from "./AssociationCC";
 import { CommandClasses } from "./CommandClasses";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as IDriver;
+const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -43,6 +43,7 @@ describe("lib/commandclass/AssociationCC => ", () => {
 			]),
 		);
 		const cc = new AssociationCCSupportedGroupingsReport(fakeDriver, {
+			nodeId: 2,
 			data: ccData,
 		});
 
@@ -95,6 +96,7 @@ describe("lib/commandclass/AssociationCC => ", () => {
 			]),
 		);
 		const cc = new AssociationCCReport(fakeDriver, {
+			nodeId: 1,
 			data: ccData,
 		});
 

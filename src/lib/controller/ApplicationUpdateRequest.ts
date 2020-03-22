@@ -1,4 +1,4 @@
-import { IDriver } from "../driver/IDriver";
+import type { Driver } from "../driver/Driver";
 import { FunctionType, MessageType } from "../message/Constants";
 import {
 	Message,
@@ -6,7 +6,7 @@ import {
 	messageTypes,
 } from "../message/Message";
 import { NodeUpdatePayload, parseNodeUpdatePayload } from "../node/NodeInfo";
-import { JSONObject } from "../util/misc";
+import type { JSONObject } from "../util/misc";
 
 /* eslint-disable @typescript-eslint/camelcase */
 export enum ApplicationUpdateTypes {
@@ -23,10 +23,7 @@ export enum ApplicationUpdateTypes {
 @messageTypes(MessageType.Request, FunctionType.ApplicationUpdateRequest)
 // this is only received, not sent!
 export class ApplicationUpdateRequest extends Message {
-	public constructor(
-		driver: IDriver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._updateType = this.payload[0];
 
@@ -57,10 +54,7 @@ export class ApplicationUpdateRequest extends Message {
 }
 
 export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateRequest {
-	public constructor(
-		driver: IDriver,
-		options: MessageDeserializationOptions,
-	) {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._nodeInformation = parseNodeUpdatePayload(this.payload.slice(1));
 		this._nodeId = this._nodeInformation.nodeId;

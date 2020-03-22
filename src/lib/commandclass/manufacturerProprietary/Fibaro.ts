@@ -1,7 +1,7 @@
-import { IDriver } from "../../driver/IDriver";
+import type { Driver } from "../../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../../error/ZWaveError";
 import log from "../../log";
-import { ValueID } from "../../node/ValueDB";
+import type { ValueID } from "../../node/ValueDB";
 import { staticExtends, validatePayload } from "../../util/misc";
 import { ValueMetadata } from "../../values/Metadata";
 import {
@@ -58,7 +58,7 @@ export enum FibaroCCIDs {
 
 export class FibaroCC extends ManufacturerProprietaryCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
@@ -101,7 +101,7 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 	declare fibaroCCCommand: FibaroVenetianBlindCCCommand;
 
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
@@ -168,7 +168,7 @@ export type FibaroVenetianBlindCCSetOptions = CCCommandOptions &
 
 export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
 			| FibaroVenetianBlindCCSetOptions,
@@ -206,7 +206,7 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 
 export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
@@ -248,7 +248,7 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 @expectedCCResponse(FibaroVenetianBlindCCReport)
 export class FibaroVenetianBlindCCGet extends FibaroVenetianBlindCC {
 	public constructor(
-		driver: IDriver,
+		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);

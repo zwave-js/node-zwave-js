@@ -1,6 +1,6 @@
 import { clamp } from "alcalzone-shared/math";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { JSONObject } from "../util/misc";
+import type { JSONObject } from "../util/misc";
 
 export type DurationUnit = "seconds" | "minutes" | "unknown" | "default";
 
