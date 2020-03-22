@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.15.7 (2020-03-22)
 ### Bugfixes
 * Added missing setValue API for `Fibaro Venetian Blind CC`
 
