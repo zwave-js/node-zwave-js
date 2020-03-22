@@ -21,11 +21,7 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { MANUFACTURERID_FIBARO } from "./manufacturerProprietary/Constants";
-import {
-	FibaroVenetianBlindCCGet,
-	FibaroVenetianBlindCCReport,
-	FibaroVenetianBlindCCSet,
-} from "./manufacturerProprietary/Fibaro";
+import { FibaroVenetianBlindCCReport } from "./manufacturerProprietary/Fibaro";
 import { getManufacturerIdValueId } from "./ManufacturerSpecificCC";
 
 @API(CommandClasses["Manufacturer Proprietary"])
@@ -46,6 +42,10 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	public async fibaroVenetianBlindsGet() {
+		const {
+			FibaroVenetianBlindCCGet,
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+		} = require("./manufacturerProprietary/Fibaro");
 		const cc = new FibaroVenetianBlindCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -60,6 +60,10 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 	}
 
 	public async fibaroVenetianBlindsSetPosition(value: number): Promise<void> {
+		const {
+			FibaroVenetianBlindCCSet,
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+		} = require("./manufacturerProprietary/Fibaro");
 		const cc = new FibaroVenetianBlindCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -69,6 +73,10 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 	}
 
 	public async fibaroVenetianBlindsSetTilt(value: number): Promise<void> {
+		const {
+			FibaroVenetianBlindCCSet,
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+		} = require("./manufacturerProprietary/Fibaro");
 		const cc = new FibaroVenetianBlindCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
