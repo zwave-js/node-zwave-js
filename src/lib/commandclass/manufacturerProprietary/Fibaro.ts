@@ -4,7 +4,12 @@ import log from "../../log";
 import type { ValueID } from "../../node/ValueDB";
 import { staticExtends, validatePayload } from "../../util/misc";
 import { ValueMetadata } from "../../values/Metadata";
-import { CCCommandOptions, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions } from "../CommandClass";
+import {
+	CCCommandOptions,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	gotDeserializationOptions,
+} from "../CommandClass";
 import { CommandClasses } from "../CommandClasses";
 import { ManufacturerProprietaryCC } from "../ManufacturerProprietaryCC";
 import { MANUFACTURERID_FIBARO } from "./Constants";
