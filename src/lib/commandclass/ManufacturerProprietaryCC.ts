@@ -21,7 +21,7 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { MANUFACTURERID_FIBARO } from "./manufacturerProprietary/Constants";
-import { FibaroVenetianBlindCCReport } from "./manufacturerProprietary/Fibaro";
+import type { FibaroVenetianBlindCCReport } from "./manufacturerProprietary/Fibaro";
 import { getManufacturerIdValueId } from "./ManufacturerSpecificCC";
 
 @API(CommandClasses["Manufacturer Proprietary"])
