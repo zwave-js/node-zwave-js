@@ -2,7 +2,7 @@ import type { Driver } from "../../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../../error/ZWaveError";
 import log from "../../log";
 import type { ValueID } from "../../node/ValueDB";
-import { validatePayload } from "../../util/misc";
+import { staticExtends, validatePayload } from "../../util/misc";
 import { ValueMetadata } from "../../values/Metadata";
 import {
 	CCCommandOptions,
@@ -66,13 +66,11 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 			validatePayload(this.payload.length >= 2);
 			this.fibaroCCId = this.payload[0];
 			this.fibaroCCCommand = this.payload[1];
-			if (new.target === FibaroCC) {
-				this.payload = this.payload.slice(2);
-			}
+			this.payload = this.payload.slice(2);
 
 			if (
 				this.fibaroCCId === FibaroCCIDs.VenetianBlind &&
-				(new.target as any) !== FibaroVenetianBlindCC
+				!staticExtends(new.target, FibaroVenetianBlindCC)
 			) {
 				return new FibaroVenetianBlindCC(driver, options);
 			}
@@ -108,6 +106,15 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 	) {
 		super(driver, options);
 		this.fibaroCCId = FibaroCCIDs.VenetianBlind;
+
+		if (gotDeserializationOptions(options)) {
+			if (
+				this.fibaroCCCommand === FibaroVenetianBlindCCCommand.Report &&
+				(new.target as any) !== FibaroVenetianBlindCCReport
+			) {
+				return new FibaroVenetianBlindCCReport(driver, options);
+			}
+		}
 	}
 
 	public async interview(complete: boolean = true): Promise<void> {

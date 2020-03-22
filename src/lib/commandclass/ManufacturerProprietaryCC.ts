@@ -2,8 +2,14 @@ import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
-import { validatePayload } from "../util/misc";
-import { CCAPI } from "./API";
+import { staticExtends, validatePayload } from "../util/misc";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "./API";
 import {
 	API,
 	CCCommandOptions,
@@ -15,6 +21,7 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { MANUFACTURERID_FIBARO } from "./manufacturerProprietary/Constants";
+import { FibaroVenetianBlindCCReport } from "./manufacturerProprietary/Fibaro";
 import { getManufacturerIdValueId } from "./ManufacturerSpecificCC";
 
 @API(CommandClasses["Manufacturer Proprietary"])
@@ -32,6 +39,87 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 
 		await this.driver.sendCommand(cc);
 	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async fibaroVenetianBlindsGet() {
+		const {
+			FibaroVenetianBlindCCGet,
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+		} = require("./manufacturerProprietary/Fibaro");
+		const cc = new FibaroVenetianBlindCCGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<
+			FibaroVenetianBlindCCReport
+		>(cc))!;
+		return {
+			position: response.position,
+			tilt: response.tilt,
+		};
+	}
+
+	public async fibaroVenetianBlindsSetPosition(value: number): Promise<void> {
+		const {
+			FibaroVenetianBlindCCSet,
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+		} = require("./manufacturerProprietary/Fibaro");
+		const cc = new FibaroVenetianBlindCCSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			position: value,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
+	public async fibaroVenetianBlindsSetTilt(value: number): Promise<void> {
+		const {
+			FibaroVenetianBlindCCSet,
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+		} = require("./manufacturerProprietary/Fibaro");
+		const cc = new FibaroVenetianBlindCCSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			tilt: value,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ property, propertyKey },
+		value,
+	): Promise<void> => {
+		// TODO: This is pretty hardcoded, can we make this more flexible?
+		if (property !== "fibaro") {
+			throwUnsupportedProperty(this.ccId, property);
+		}
+		if (propertyKey === "venetianBlindsPosition") {
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+			await this.fibaroVenetianBlindsSetPosition(value);
+		} else if (propertyKey === "venetianBlindsTilt") {
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+			await this.fibaroVenetianBlindsSetTilt(value);
+		} else {
+			// unsupported property key, ignore...
+			return;
+		}
+		// Refresh the current value
+		await this.fibaroVenetianBlindsGet();
+	};
 }
 
 @commandClass(CommandClasses["Manufacturer Proprietary"])
@@ -49,17 +137,20 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			// ManufacturerProprietaryCC has no CC command, so the first byte is stored in ccCommand.
-			this.manufacturerId = (super.ccCommand! << 8) + this.payload[0];
-			// If this is not called from a subclass, shorten the payload for the following subclass deserialization
-			if (new.target === ManufacturerProprietaryCC) {
-				this.payload = this.payload.slice(1);
-			}
+			this.manufacturerId =
+				(((this.ccCommand as unknown) as number) << 8) +
+				this.payload[0];
+			this.payload = this.payload.slice(1);
 
 			// Try to parse the proprietary command
 			const PCConstructor = getProprietaryCCConstructor(
 				this.manufacturerId,
 			);
-			if (PCConstructor && new.target !== PCConstructor) {
+			if (
+				PCConstructor &&
+				new.target !== PCConstructor &&
+				!staticExtends(new.target, PCConstructor)
+			) {
 				return new PCConstructor(driver, options);
 			}
 		} else {

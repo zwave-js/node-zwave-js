@@ -8,6 +8,7 @@ import {
 } from "../../controller/SendDataMessages";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
+import { CommandClass } from "../CommandClass";
 import { CommandClasses } from "../CommandClasses";
 import {
 	getManufacturerIdValueId,
@@ -25,7 +26,7 @@ import {
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 const node2 = new ZWaveNode(2, fakeDriver as any);
-(fakeDriver.controller.nodes as any).set(2, node2);
+(fakeDriver as any).controller.nodes.set(2, node2);
 
 describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 	beforeAll(async () => {
@@ -56,6 +57,12 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 			0x63,
 		]);
 		expect(blindCC.serialize()).toEqual(expected);
+	});
+
+	it("FibaroVenetianBlindCCReport should be deserialized correctly", () => {
+		const data = Buffer.from("91010f2603030000", "hex");
+		const cc = CommandClass.from(fakeDriver as any, { nodeId: 2, data });
+		expect(cc).toBeInstanceOf(FibaroVenetianBlindCCReport);
 	});
 
 	describe("testResponse() returns the correct ResponseRole", () => {
@@ -155,7 +162,7 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 
 			await (node2 as any).loadDeviceConfig();
 
-			(fakeDriver as any).sendCommand.mockClear();
+			(fakeDriver.sendCommand as jest.Mock).mockClear();
 		});
 
 		it("loads the correct device config", () => {
@@ -172,9 +179,9 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 				// we expect an error, since there will be no response
 			});
 
-			expect((fakeDriver as any).sendCommand).toHaveBeenCalledTimes(1);
+			expect(fakeDriver.sendCommand).toHaveBeenCalledTimes(1);
 			expect(
-				(fakeDriver as any).sendCommand.mock.calls[0][0],
+				(fakeDriver.sendCommand as jest.Mock).mock.calls[0][0],
 			).toBeInstanceOf(FibaroVenetianBlindCCGet);
 		});
 	});
