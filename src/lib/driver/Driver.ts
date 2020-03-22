@@ -183,6 +183,11 @@ export interface SendMessageOptions {
 	supportCheck?: boolean;
 }
 
+export interface SendCommandOptions extends SendMessageOptions {
+	/** How many times the driver should try to send the message. Defaults to `MAX_SEND_ATTEMPTS` */
+	maxSendAttempts?: number;
+}
+
 export type SupervisionUpdateHandler = (
 	status: SupervisionStatus,
 	remainingDuration?: Duration,
@@ -1629,7 +1634,7 @@ ${handlers.length} left`,
 	// wotan-disable-next-line no-misused-generics
 	public async sendCommand<TResponse extends CommandClass = CommandClass>(
 		command: CommandClass,
-		options: SendMessageOptions = {},
+		options: SendCommandOptions = {},
 	): Promise<TResponse | undefined> {
 		let msg: Message;
 		if (command.isSinglecast()) {
@@ -1642,6 +1647,9 @@ ${handlers.length} left`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
+		// Specify the number of send attempts for the request
+		msg.maxSendAttempts = options.maxSendAttempts;
+
 		const resp = await this.sendMessage(msg, options);
 		if (isCommandClassContainer(resp)) {
 			return resp.command as TResponse;
