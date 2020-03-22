@@ -3,7 +3,13 @@ import { IDriver } from "../driver/IDriver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { staticExtends, validatePayload } from "../util/misc";
-import { CCAPI } from "./API";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "./API";
 import {
 	API,
 	CCCommandOptions,
@@ -15,6 +21,11 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 import { MANUFACTURERID_FIBARO } from "./manufacturerProprietary/Constants";
+import {
+	FibaroVenetianBlindCCGet,
+	FibaroVenetianBlindCCReport,
+	FibaroVenetianBlindCCSet,
+} from "./manufacturerProprietary/Fibaro";
 import { getManufacturerIdValueId } from "./ManufacturerSpecificCC";
 
 @API(CommandClasses["Manufacturer Proprietary"])
@@ -32,6 +43,75 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 
 		await this.driver.sendCommand(cc);
 	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async fibaroVenetianBlindsGet() {
+		const cc = new FibaroVenetianBlindCCGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<
+			FibaroVenetianBlindCCReport
+		>(cc))!;
+		return {
+			position: response.position,
+			tilt: response.tilt,
+		};
+	}
+
+	public async fibaroVenetianBlindsSetPosition(value: number): Promise<void> {
+		const cc = new FibaroVenetianBlindCCSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			position: value,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
+	public async fibaroVenetianBlindsSetTilt(value: number): Promise<void> {
+		const cc = new FibaroVenetianBlindCCSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			tilt: value,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ property, propertyKey },
+		value,
+	): Promise<void> => {
+		// TODO: This is pretty hardcoded, can we make this more flexible?
+		if (property !== "fibaro") {
+			throwUnsupportedProperty(this.ccId, property);
+		}
+		if (propertyKey === "venetianBlindsPosition") {
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+			await this.fibaroVenetianBlindsSetPosition(value);
+		} else if (propertyKey === "venetianBlindsTilt") {
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+			await this.fibaroVenetianBlindsSetTilt(value);
+		} else {
+			// unsupported property key, ignore...
+			return;
+		}
+		// Refresh the current value
+		await this.fibaroVenetianBlindsGet();
+	};
 }
 
 @commandClass(CommandClasses["Manufacturer Proprietary"])
