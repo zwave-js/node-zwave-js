@@ -61,7 +61,7 @@
     "@typescript-eslint/eslint-plugin": "^2.24.0",
     "@typescript-eslint/parser": "^2.24.0",
     "axios": "^0.19.2",
-    "clipboardy": "^2.2.0",
+    "clipboardy": "^2.3.0",
     "commitizen": "^4.0.3",
     "coveralls": "^3.0.11",
     "cz-conventional-changelog": "^3.1.0",
