@@ -829,7 +829,7 @@ export class ZWaveController extends EventEmitter {
 			return cc.getAllDestinationsCached();
 		} else {
 			throw new ZWaveError(
-				`Node ${nodeId} does not support sssociations!`,
+				`Node ${nodeId} does not support associations!`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
