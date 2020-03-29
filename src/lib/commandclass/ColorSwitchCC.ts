@@ -386,6 +386,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 				blue: options.blue,
 				cyan: options.cyan,
 				purple: options.purple,
+				index: options.index,
 			};
 			this.duration = options.duration || 0;
 		}
@@ -404,6 +405,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			blue: value.blue,
 			cyan: value.cyan,
 			purple: value.purple,
+			index: value.index,
 		};
 	}
 
