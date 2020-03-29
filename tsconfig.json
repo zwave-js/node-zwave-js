@@ -23,7 +23,7 @@
 		"outDir": "build/",
 		"removeComments": false,
 		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
+		"emitDecoratorMetadata": false,
 		"importsNotUsedAsValues": "error",
 		"sourceMap": true,
 		"inlineSourceMap": false,
