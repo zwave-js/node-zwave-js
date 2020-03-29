@@ -55,7 +55,7 @@ import {
 	GetRoutingInfoRequest,
 	GetRoutingInfoResponse,
 } from "../controller/GetRoutingInfoMessages";
-import { Driver } from "../driver/Driver";
+import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { timespan } from "../util/date";
