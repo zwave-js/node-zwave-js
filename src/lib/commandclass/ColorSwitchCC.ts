@@ -1,4 +1,6 @@
-import { Driver } from "../driver/Driver";
+import { clamp } from "alcalzone-shared/math";
+import type { Driver } from "../driver/Driver";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { JSONObject, validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
 import type { Maybe } from "../values/Primitive";
@@ -13,6 +15,7 @@ import {
 	CommandClass,
 	CommandClassDeserializationOptions,
 	expectedCCResponse,
+	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
@@ -21,13 +24,54 @@ import { CommandClasses } from "./CommandClasses";
 export enum ColorSwitchCommand {
 	SupportedGet = 0x01,
 	SupportedReport = 0x02,
+	Get = 0x03,
+	Report = 0x04,
+	Set = 0x05,
 }
+
+export enum ColorComponent {
+	WarmWhite = 0,
+	ColdWhite = 1,
+	Red = 2,
+	Green = 3,
+	Blue = 4,
+	Amber = 5,
+	Cyan = 6,
+	Purple = 7,
+	Index = 8,
+}
+
+export interface ColorTable {
+	warmWhite?: number;
+	coldWhite?: number;
+	red?: number;
+	green?: number;
+	blue?: number;
+	amber?: number;
+	cyan?: number;
+	purple?: number;
+	index?: number;
+}
+
+const ColorTableComponentMap: Record<keyof ColorTable, ColorComponent> = {
+	warmWhite: ColorComponent.WarmWhite,
+	coldWhite: ColorComponent.ColdWhite,
+	red: ColorComponent.Red,
+	green: ColorComponent.Green,
+	blue: ColorComponent.Blue,
+	amber: ColorComponent.Amber,
+	cyan: ColorComponent.Cyan,
+	purple: ColorComponent.Purple,
+	index: ColorComponent.Index,
+};
 
 @API(CommandClasses["Color Switch"])
 export class ColorSwitchCCAPI extends CCAPI {
 	public supportsCommand(cmd: ColorSwitchCommand): Maybe<boolean> {
 		switch (cmd) {
 			case ColorSwitchCommand.SupportedGet:
+			case ColorSwitchCommand.Get:
+			case ColorSwitchCommand.Set:
 				return true; // This is mandatory
 		}
 		return super.supportsCommand(cmd);
@@ -39,7 +83,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 			ColorSwitchCommand.SupportedGet,
 		);
 
-		const cc = new BinarySwitchCCGet(this.driver, {
+		const cc = new ColorSwitchCCSupportedGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
@@ -57,6 +101,36 @@ export class ColorSwitchCCAPI extends CCAPI {
 			supportsPurple: response.supportsPurple,
 			supportsIndex: response.supportsIndex,
 		};
+	}
+
+	public async get(colorComponent: ColorComponent) {
+		this.assertSupportsCommand(ColorSwitchCommand, ColorSwitchCommand.Get);
+
+		const cc = new ColorSwitchCCGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			colorComponent: colorComponent,
+		});
+		const response = (await this.driver.sendCommand<ColorSwitchCCReport>(
+			cc,
+		))!;
+		return {
+			colorComponent: response.colorComponent,
+			value: response.value,
+		};
+	}
+
+	public async set(colorTable: ColorTable) {
+		this.assertSupportsCommand(ColorSwitchCommand, ColorSwitchCommand.Set);
+
+		const cc = new ColorSwitchCCSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...colorTable,
+		});
+
+		// TODO: No response from this?
+		await this.driver.sendCommand(cc);
 	}
 }
 
@@ -202,11 +276,153 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 
 @CCCommand(ColorSwitchCommand.SupportedGet)
 @expectedCCResponse(ColorSwitchCCSupportedReport)
-export class BinarySwitchCCGet extends ColorSwitchCC {
+export class ColorSwitchCCSupportedGet extends ColorSwitchCC {
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(driver, options);
+	}
+}
+
+@CCCommand(ColorSwitchCommand.Report)
+export class ColorSwitchCCReport extends ColorSwitchCC {
+	public constructor(
+		driver: Driver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+
+		// Docs say 'variable length', but the table shows 2 bytes.
+		validatePayload(this.payload.length >= 2);
+		this._colorComponent = this.payload[0];
+		this._value = this.payload[1];
+
+		// TODO: We probably want to store each color value
+		//	as a different ccValue.  How do we do that when
+		//	we get each color code separately in a single report?
+	}
+
+	private _colorComponent: ColorComponent;
+	public get colorComponent(): ColorComponent {
+		return this._colorComponent;
+	}
+
+	private _value: number;
+	public get value(): number {
+		return this._value;
+	}
+}
+
+interface ColorSwitchCCGetOptions extends CCCommandOptions {
+	colorComponent: ColorComponent;
+}
+
+@CCCommand(ColorSwitchCommand.Get)
+@expectedCCResponse(ColorSwitchCCReport)
+export class ColorSwitchCCGet extends ColorSwitchCC {
+	public constructor(
+		driver: Driver,
+		options: CommandClassDeserializationOptions | ColorSwitchCCGetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			// Populate properties from options object
+			this._colorComponent = options.colorComponent;
+		}
+	}
+
+	private _colorComponent: ColorComponent;
+	public get colorComponent(): ColorComponent {
+		return this._colorComponent;
+	}
+	public set colorComponent(value: ColorComponent) {
+		if (!ColorComponent[value]) {
+			throw new Error(
+				"colorComponent must be a valid color component index.",
+			);
+		}
+		this._colorComponent = value;
+	}
+
+	public serialize(): Buffer {
+		this.payload = Buffer.allocUnsafe(1);
+		this.payload[0] = this._colorComponent;
+		return super.serialize();
+	}
+}
+
+export type ColorSwitchCCSetOptions = CCCommandOptions & ColorTable;
+
+// TODO: What does this return?  Does it not have an expected response?
+@CCCommand(ColorSwitchCommand.Get)
+export class ColorSwitchCCSet extends ColorSwitchCC {
+	public constructor(
+		driver: Driver,
+		options: CommandClassDeserializationOptions | ColorSwitchCCSetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			// Populate properties from options object
+			this._colorTable = {
+				warmWhite: options.warmWhite,
+				coldWhite: options.coldWhite,
+				red: options.red,
+				green: options.green,
+				blue: options.blue,
+				cyan: options.cyan,
+				purple: options.purple,
+			};
+		}
+	}
+
+	private _colorTable: ColorTable;
+	public get colorTable(): ColorTable {
+		return this._colorTable;
+	}
+
+	public set colorTable(value: ColorTable) {
+		this._colorTable = {
+			warmWhite: value.warmWhite,
+			coldWhite: value.coldWhite,
+			red: value.red,
+			green: value.green,
+			blue: value.blue,
+			cyan: value.cyan,
+			purple: value.purple,
+		};
+	}
+
+	public serialize(): Buffer {
+		let colorComponentKeys = Object.keys(
+			this._colorTable,
+		) as (keyof ColorTable)[];
+		colorComponentKeys = colorComponentKeys.filter(
+			(x) => !isNaN(this._colorTable[x] as any),
+		);
+		const colorComponentCount = colorComponentKeys.length;
+		this.payload = Buffer.allocUnsafe(1 + colorComponentCount * 2);
+		this.payload[0] = colorComponentCount & 31;
+		let i = 1;
+		for (const key of colorComponentKeys) {
+			const value = this._colorTable[key];
+			const component = ColorTableComponentMap[key];
+			this.payload[i] = component;
+			this.payload[i + 1] = clamp(value!, 0, 0xff);
+			i += 2;
+		}
+		return super.serialize();
 	}
 }
