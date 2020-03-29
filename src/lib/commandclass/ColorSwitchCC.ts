@@ -409,7 +409,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 		};
 	}
 
-	private _duration: number;
+	private _duration: number = 0;
 	public get duration(): number {
 		return this._duration;
 	}
