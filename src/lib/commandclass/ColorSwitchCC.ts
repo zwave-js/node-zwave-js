@@ -135,7 +135,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 }
 
 @commandClass(CommandClasses["Color Switch"])
-@implementedVersion(1) // ColorSwitch is at 3, but implementing 1 for now
+@implementedVersion(2)
 export class ColorSwitchCC extends CommandClass {
 	declare ccCommand: ColorSwitchCommand;
 
@@ -358,7 +358,9 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 	}
 }
 
-export type ColorSwitchCCSetOptions = CCCommandOptions & ColorTable;
+export interface ColorSwitchCCSetOptions extends CCCommandOptions, ColorTable {
+	duration?: number;
+}
 
 // TODO: What does this return?  Does it not have an expected response?
 @CCCommand(ColorSwitchCommand.Get)
@@ -385,6 +387,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 				cyan: options.cyan,
 				purple: options.purple,
 			};
+			this.duration = options.duration || 0;
 		}
 	}
 
@@ -392,7 +395,6 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 	public get colorTable(): ColorTable {
 		return this._colorTable;
 	}
-
 	public set colorTable(value: ColorTable) {
 		this._colorTable = {
 			warmWhite: value.warmWhite,
@@ -403,6 +405,17 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			cyan: value.cyan,
 			purple: value.purple,
 		};
+	}
+
+	private _duration: number;
+	public get duration(): number {
+		return this._duration;
+	}
+	public set duration(value: number) {
+		if (value < 0 || value > 255) {
+			throw new Error("duration out of range.");
+		}
+		this._duration = value;
 	}
 
 	public serialize(): Buffer {
@@ -422,6 +435,9 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			this.payload[i] = component;
 			this.payload[i + 1] = clamp(value!, 0, 0xff);
 			i += 2;
+		}
+		if (this.version >= 2) {
+			this.payload[i] = this._duration;
 		}
 		return super.serialize();
 	}
