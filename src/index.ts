@@ -45,9 +45,9 @@ export { ZWaveNode } from "./lib/node/Node";
 
 // Load all CCs to ensure all metadata gets loaded
 const definedCCs = fs
-	.readdirSync(__dirname)
+	.readdirSync(path.join(__dirname, "lib/commandclasses"))
 	.filter((file) => /CC\.(js|ts)$/.test(file));
 log.reflection.print(`loading CCs: ${stringify(definedCCs)}`);
 for (const file of definedCCs) {
-	require(`./${file}`);
+	require(`./lib/commandclasses/${file}`);
 }
