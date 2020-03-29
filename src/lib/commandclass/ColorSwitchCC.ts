@@ -9,6 +9,7 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
+	CCResponsePredicate,
 	ccValue,
 	ccValueMetadata,
 	commandClass,
@@ -129,7 +130,6 @@ export class ColorSwitchCCAPI extends CCAPI {
 			...colorTable,
 		});
 
-		// TODO: No response from this?
 		await this.driver.sendCommand(cc);
 	}
 }
@@ -318,8 +318,22 @@ interface ColorSwitchCCGetOptions extends CCCommandOptions {
 	colorComponent: ColorComponent;
 }
 
+const testResponseForColorSwitchGet: CCResponsePredicate = (
+	sent: ColorSwitchCCGet,
+	received,
+	isPositiveTransmitReport,
+) => {
+	return received instanceof ColorSwitchCCReport &&
+		sent.colorComponent === received.colorComponent
+		? "final"
+		: // TODO: What is isPositiveTransmitReport?  Do I need it?
+		isPositiveTransmitReport
+		? "confirmation"
+		: "unexpected";
+};
+
 @CCCommand(ColorSwitchCommand.Get)
-@expectedCCResponse(ColorSwitchCCReport)
+@expectedCCResponse(testResponseForColorSwitchGet)
 export class ColorSwitchCCGet extends ColorSwitchCC {
 	public constructor(
 		driver: Driver,
@@ -387,7 +401,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 				purple: options.purple,
 				index: options.index,
 			};
-			this.duration = options.duration || 0;
+			this.duration = options.duration ?? 0;
 		}
 	}
 
