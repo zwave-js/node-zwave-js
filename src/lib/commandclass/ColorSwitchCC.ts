@@ -77,7 +77,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	public async supportedGet() {
+	public async getSupported() {
 		this.assertSupportsCommand(
 			ColorSwitchCommand,
 			ColorSwitchCommand.SupportedGet,
@@ -166,7 +166,7 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 		this._supportsPurple = Boolean(this.payload[0] & 128);
 		this._supportsIndex = Boolean(this.payload[2] & 1);
 
-		//this.persistValues();
+		this.persistValues();
 	}
 
 	private _supportsWarmWhite: boolean;
@@ -362,8 +362,7 @@ export interface ColorSwitchCCSetOptions extends CCCommandOptions, ColorTable {
 	duration?: number;
 }
 
-// TODO: What does this return?  Does it not have an expected response?
-@CCCommand(ColorSwitchCommand.Get)
+@CCCommand(ColorSwitchCommand.Set)
 export class ColorSwitchCCSet extends ColorSwitchCC {
 	public constructor(
 		driver: Driver,
@@ -429,7 +428,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 		);
 		const colorComponentCount = colorComponentKeys.length;
 		this.payload = Buffer.allocUnsafe(1 + colorComponentCount * 2);
-		this.payload[0] = colorComponentCount & 31;
+		this.payload[0] = colorComponentCount & 0b11111;
 		let i = 1;
 		for (const key of colorComponentKeys) {
 			const value = this._colorTable[key];
