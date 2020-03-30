@@ -4,7 +4,6 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import { JSONObject, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
-import { ValueMetadata } from "../values/Metadata";
 import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
@@ -12,8 +11,6 @@ import {
 	CCCommand,
 	CCCommandOptions,
 	CCResponsePredicate,
-	ccValue,
-	ccValueMetadata,
 	commandClass,
 	CommandClass,
 	CommandClassDeserializationOptions,
@@ -45,6 +42,10 @@ export enum ColorComponent {
 	Purple = 7,
 	Index = 8,
 }
+// Enums map keys to values AND values to keys, need to filter out the numeric values.
+const ColorComponents = keysOf(ColorComponent).filter(
+	(x) => !isNaN(ColorComponent[x]),
+);
 
 export interface ColorTable {
 	warmWhite?: number;
@@ -69,6 +70,15 @@ const ColorTableComponentMap: Record<keyof ColorTable, ColorComponent> = {
 	purple: ColorComponent.Purple,
 	index: ColorComponent.Index,
 };
+const ColorKeys = keysOf(ColorTableComponentMap);
+function getColorName(component: ColorComponent): keyof ColorTable | null {
+	for (const key of ColorKeys) {
+		if (ColorTableComponentMap[key] === component) {
+			return key;
+		}
+	}
+	return null;
+}
 
 export interface SupportedColorTable {
 	supportsWarmWhite: boolean;
@@ -96,6 +106,7 @@ const SupportedColorTableComponentMap: Record<
 	supportsPurple: ColorComponent.Purple,
 	supportsIndex: ColorComponent.Index,
 };
+const SupportedColorTableKeys = keysOf(SupportedColorTableComponentMap);
 
 export interface ColorSwitchGetResult {
 	colorComponent: ColorComponent;
@@ -206,17 +217,13 @@ export class ColorSwitchCC extends CommandClass {
 
 		const colorsResponse = await api.getSupported();
 
-		const supportedColorKeys = Object.keys(
-			SupportedColorTableComponentMap,
-		) as (keyof typeof SupportedColorTableComponentMap)[];
-
 		log.controller.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying Color Switch CC color states...",
 			direction: "outbound",
 		});
 
-		for (const key of supportedColorKeys) {
+		for (const key of SupportedColorTableKeys) {
 			if (!colorsResponse[key]) {
 				continue;
 			}
@@ -228,7 +235,8 @@ export class ColorSwitchCC extends CommandClass {
 }
 
 @CCCommand(ColorSwitchCommand.SupportedReport)
-export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
+export class ColorSwitchCCSupportedReport extends ColorSwitchCC
+	implements SupportedColorTable {
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions,
@@ -238,123 +246,81 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 		// Docs say 'variable length', but the table shows 2 bytes.
 		validatePayload(this.payload.length >= 2);
 
-		// Don't know what order these come in.
-		//  Blindly assuming its in order of payload,
-		//  but the table seems to be big-endian.
-		this._supportsWarmWhite = Boolean(this.payload[0] & 1);
-		this._supportsColdWhite = Boolean(this.payload[0] & 2);
-		this._supportsRed = Boolean(this.payload[0] & 4);
-		this._supportsGreen = Boolean(this.payload[0] & 8);
-		this._supportsBlue = Boolean(this.payload[0] & 16);
-		this._supportsAmber = Boolean(this.payload[0] & 32);
-		this._supportsCyan = Boolean(this.payload[0] & 64);
-		this._supportsPurple = Boolean(this.payload[0] & 128);
-		this._supportsIndex = Boolean(this.payload[1] & 1);
+		this._supportedColors = {
+			supportsWarmWhite: Boolean(this.payload[0] & 1),
+			supportsColdWhite: Boolean(this.payload[0] & 2),
+			supportsRed: Boolean(this.payload[0] & 4),
+			supportsGreen: Boolean(this.payload[0] & 8),
+			supportsBlue: Boolean(this.payload[0] & 16),
+			supportsAmber: Boolean(this.payload[0] & 32),
+			supportsCyan: Boolean(this.payload[0] & 64),
+			supportsPurple: Boolean(this.payload[0] & 128),
+			supportsIndex: Boolean(this.payload[1] & 1),
+		};
 
-		this.persistValues();
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+
+		for (const key of SupportedColorTableKeys) {
+			const colorComponent = SupportedColorTableComponentMap[key];
+			const colorName = getColorName(colorComponent);
+			if (!colorName) {
+				continue;
+			}
+
+			node.valueDB.setValue(
+				{
+					commandClass: CommandClasses["Color Switch"],
+					endpoint: endpoint.index,
+					property: "supportedColors",
+					propertyKey: colorName,
+				},
+				this._supportedColors[key] ?? false,
+			);
+		}
 	}
 
-	private _supportsWarmWhite: boolean;
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Supports Warm White",
-	})
+	private _supportedColors: SupportedColorTable;
+
 	public get supportsWarmWhite(): boolean {
-		return this._supportsWarmWhite;
+		return this._supportedColors.supportsWarmWhite;
 	}
 
-	private _supportsColdWhite: boolean;
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Supports Cold White",
-	})
 	public get supportsColdWhite(): boolean {
-		return this._supportsColdWhite;
+		return this._supportedColors.supportsColdWhite;
 	}
 
-	private _supportsRed: boolean;
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Supports Red",
-	})
 	public get supportsRed(): boolean {
-		return this._supportsRed;
+		return this._supportedColors.supportsRed;
 	}
 
-	private _supportsGreen: boolean;
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Supports Green",
-	})
 	public get supportsGreen(): boolean {
-		return this._supportsGreen;
+		return this._supportedColors.supportsGreen;
 	}
 
-	private _supportsBlue: boolean;
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Supports Blue",
-	})
 	public get supportsBlue(): boolean {
-		return this._supportsBlue;
+		return this._supportedColors.supportsBlue;
 	}
 
-	private _supportsAmber: boolean;
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Supports Amber",
-	})
 	public get supportsAmber(): boolean {
-		return this._supportsAmber;
+		return this._supportedColors.supportsAmber;
 	}
 
-	private _supportsCyan: boolean;
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Supports Cyan",
-	})
 	public get supportsCyan(): boolean {
-		return this._supportsCyan;
+		return this._supportedColors.supportsCyan;
 	}
 
-	private _supportsPurple: boolean;
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Supports Purple",
-	})
 	public get supportsPurple(): boolean {
-		return this._supportsPurple;
+		return this._supportedColors.supportsPurple;
 	}
 
-	private _supportsIndex: boolean;
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Supports Indexed Color",
-	})
 	public get supportsIndex(): boolean {
-		return this._supportsIndex;
+		return this._supportedColors.supportsIndex;
 	}
 
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({
-			supportsWarmWhite: this._supportsWarmWhite,
-			supportsColdWhite: this._supportsColdWhite,
-			supportsRed: this._supportsRed,
-			supportsGreen: this._supportsGreen,
-			supportsBlue: this._supportsBlue,
-			supportsAmber: this._supportsAmber,
-			supportsCyan: this._supportsCyan,
-			supportsPurple: this._supportsPurple,
-			supportsIndex: this._supportsIndex,
+			...(this._supportedColors || {}),
 		});
 	}
 }
@@ -391,9 +357,30 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 			this._duration = Duration.parseReport(this.payload[3]);
 		}
 
-		// TODO: We probably want to store each color value
-		//	as a different ccValue.  How do we do that when
-		//	we get each color code separately in a single report?
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+
+		node.valueDB.setValue(
+			{
+				commandClass: CommandClasses["Color Switch"],
+				property: "currentColors",
+				endpoint: endpoint.index,
+				propertyKey: ColorComponent[this._colorComponent],
+			},
+			this._currentValue,
+		);
+
+		if (this._targetValue != undefined) {
+			node.valueDB.setValue(
+				{
+					commandClass: CommandClasses["Color Switch"],
+					property: "targetColors",
+					endpoint: endpoint.index,
+					propertyKey: ColorComponent[this._colorComponent],
+				},
+				this._targetValue,
+			);
+		}
 	}
 
 	private _colorComponent: ColorComponent;
@@ -534,19 +521,16 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 	}
 
 	public serialize(): Buffer {
-		let colorComponentKeys = Object.keys(
-			this._colorTable,
-		) as (keyof ColorTable)[];
-		colorComponentKeys = colorComponentKeys.filter(
+		let populatedColorKeys = ColorKeys.filter(
 			(x) => !isNaN(this._colorTable[x] as any),
 		);
-		const colorComponentCount = colorComponentKeys.length;
+		const populatedColorCount = populatedColorKeys.length;
 		this.payload = Buffer.allocUnsafe(
-			1 + colorComponentCount * 2 + (this.version >= 2 ? 1 : 0),
+			1 + populatedColorCount * 2 + (this.version >= 2 ? 1 : 0),
 		);
-		this.payload[0] = colorComponentCount & 0b11111;
+		this.payload[0] = populatedColorCount & 0b11111;
 		let i = 1;
-		for (const key of colorComponentKeys) {
+		for (const key of populatedColorKeys) {
 			const value = this._colorTable[key];
 			const component = ColorTableComponentMap[key];
 			this.payload[i] = component;
@@ -664,4 +648,9 @@ export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 		this.payload[0] = this._colorComponent;
 		return super.serialize();
 	}
+}
+
+// TODO: Move to util library
+function keysOf<T>(obj: T): (keyof T)[] {
+	return (Object.keys(obj) as unknown) as (keyof T)[];
 }
