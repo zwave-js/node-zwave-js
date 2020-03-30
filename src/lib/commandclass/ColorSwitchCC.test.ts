@@ -6,6 +6,8 @@ import {
 	ColorSwitchCCGet,
 	ColorSwitchCCReport,
 	ColorSwitchCCSet,
+	ColorSwitchCCStartLevelChange,
+	ColorSwitchCCStopLevelChange,
 	ColorSwitchCCSupportedGet,
 	ColorSwitchCCSupportedReport,
 	ColorSwitchCommand,
@@ -134,6 +136,75 @@ describe.only("lib/commandclass/ColorSwitchCC => ", () => {
 				0b0000_0011, // color: green
 				0b1111_1111, // value: 255
 				0b0000_0100, // duration: 4
+			]),
+		);
+		expect(cc.serialize()).toEqual(expected);
+	});
+
+	it("the StartLevelChange command should serialize correctly (up)", () => {
+		const cc = new ColorSwitchCCStartLevelChange(fakeDriver, {
+			nodeId: 1,
+			startLevel: 5,
+			colorComponent: ColorComponent.Red,
+		});
+
+		const expected = buildCCBuffer(
+			Buffer.from([
+				ColorSwitchCommand.StartLevelChange,
+				0b0000_0000, // up/down: 0, ignoreStartLevel: 0
+				0b0000_0010, // color: red
+				0b0000_0101, // startLevel: 5
+			]),
+		);
+		expect(cc.serialize()).toEqual(expected);
+	});
+
+	it("the StartLevelChange command should serialize correctly (down)", () => {
+		const cc = new ColorSwitchCCStartLevelChange(fakeDriver, {
+			nodeId: 1,
+			startLevel: 5,
+			down: true,
+			colorComponent: ColorComponent.Red,
+		});
+
+		const expected = buildCCBuffer(
+			Buffer.from([
+				ColorSwitchCommand.StartLevelChange,
+				0b0100_0000, // up/down: 0, ignoreStartLevel: 0
+				0b0000_0010, // color: red
+				0b0000_0101, // startLevel: 5
+			]),
+		);
+		expect(cc.serialize()).toEqual(expected);
+	});
+
+	it("the StartLevelChange command should serialize correctly (ignoreStartLevel)", () => {
+		const cc = new ColorSwitchCCStartLevelChange(fakeDriver, {
+			nodeId: 1,
+			colorComponent: ColorComponent.Red,
+		});
+
+		const expected = buildCCBuffer(
+			Buffer.from([
+				ColorSwitchCommand.StartLevelChange,
+				0b0010_0000, // up/down: 0, ignoreStartLevel: 0
+				0b0000_0010, // color: red
+				0b0000_0000, // startLevel: 0
+			]),
+		);
+		expect(cc.serialize()).toEqual(expected);
+	});
+
+	it("the StopLevelChange command should serialize correctly", () => {
+		const cc = new ColorSwitchCCStopLevelChange(fakeDriver, {
+			nodeId: 1,
+			colorComponent: ColorComponent.Red,
+		});
+
+		const expected = buildCCBuffer(
+			Buffer.from([
+				ColorSwitchCommand.StopLevelChange, // CC Command
+				0b0000_0010, // color: red
 			]),
 		);
 		expect(cc.serialize()).toEqual(expected);

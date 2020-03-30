@@ -28,6 +28,8 @@ export enum ColorSwitchCommand {
 	Get = 0x03,
 	Report = 0x04,
 	Set = 0x05,
+	StartLevelChange = 0x06,
+	StopLevelChange = 0x07,
 }
 
 export enum ColorComponent {
@@ -470,6 +472,102 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 		if (this.version >= 2) {
 			this.payload[i] = this._duration;
 		}
+		return super.serialize();
+	}
+}
+
+export interface ColorSwitchCCStartLevelChangeOptions extends CCCommandOptions {
+	colorComponent: ColorComponent;
+	down?: boolean;
+	startLevel?: number | null;
+}
+
+@CCCommand(ColorSwitchCommand.StartLevelChange)
+export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
+	public constructor(
+		driver: Driver,
+		options:
+			| CommandClassDeserializationOptions
+			| ColorSwitchCCStartLevelChangeOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this._down = options.down ?? false;
+			this._startLevel = options.startLevel ?? null;
+			this._colorComponent = options.colorComponent;
+		}
+	}
+
+	private _down: boolean;
+	public get down(): boolean {
+		return this._down;
+	}
+
+	private _startLevel: number | null;
+	public get startLevel(): number | null {
+		return this._startLevel;
+	}
+
+	private _colorComponent: ColorComponent;
+	public get colorComponent(): ColorComponent {
+		return this._colorComponent;
+	}
+
+	public serialize(): Buffer {
+		this.payload = Buffer.allocUnsafe(3);
+
+		this.payload[0] =
+			// up/down
+			(Number(this._down) << 6) |
+			// ignoreStartLevel
+			(Number(this._startLevel === null) << 5);
+
+		this.payload[1] = this.colorComponent;
+
+		// Spec does not way what this should be in regards to ignoreStartLevel
+		this.payload[2] = this.startLevel ?? 0;
+		return super.serialize();
+	}
+}
+
+export interface ColorSwitchCCStopLevelChangeOptions extends CCCommandOptions {
+	colorComponent: ColorComponent;
+}
+
+@CCCommand(ColorSwitchCommand.StopLevelChange)
+export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
+	public constructor(
+		driver: Driver,
+		options:
+			| CommandClassDeserializationOptions
+			| ColorSwitchCCStopLevelChangeOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this._colorComponent = options.colorComponent;
+		}
+	}
+
+	private _colorComponent: ColorComponent;
+	public get colorComponent(): ColorComponent {
+		return this._colorComponent;
+	}
+
+	public serialize(): Buffer {
+		this.payload = Buffer.allocUnsafe(1);
+		this.payload[0] = this._colorComponent;
 		return super.serialize();
 	}
 }
