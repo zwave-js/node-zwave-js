@@ -52,7 +52,7 @@
     "@types/jest": "^25.1.4",
     "@types/json5": "0.0.30",
     "@types/mockdate": "^2.0.0",
-    "@types/moment-timezone": "^0.5.12",
+    "@types/moment-timezone": "^0.5.13",
     "@types/node": "^13.9.3",
     "@types/semver": "^7.1.0",
     "@types/serialport": "^8.0.0",
