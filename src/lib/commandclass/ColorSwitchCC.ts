@@ -2,6 +2,7 @@ import { clamp } from "alcalzone-shared/math";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { JSONObject, validatePayload } from "../util/misc";
+import { Duration } from "../values/Duration";
 import { ValueMetadata } from "../values/Metadata";
 import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
@@ -133,7 +134,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		))!;
 		return {
 			colorComponent: response.colorComponent,
-			value: response.value,
+			value: response.currentValue,
 		};
 	}
 
@@ -151,7 +152,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 }
 
 @commandClass(CommandClasses["Color Switch"])
-@implementedVersion(2)
+@implementedVersion(3)
 export class ColorSwitchCC extends CommandClass {
 	declare ccCommand: ColorSwitchCommand;
 
@@ -309,10 +310,18 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 	) {
 		super(driver, options);
 
-		// Docs say 'variable length', but the table shows 2 bytes.
-		validatePayload(this.payload.length >= 2);
+		if (this.version >= 3) {
+			validatePayload(this.payload.length >= 4);
+		} else {
+			validatePayload(this.payload.length >= 2);
+		}
 		this._colorComponent = this.payload[0];
-		this._value = this.payload[1];
+		this._currentValue = this.payload[1];
+
+		if (this.version >= 3) {
+			this._targetValue = this.payload[2];
+			this._duration = Duration.parseReport(this.payload[3]);
+		}
 
 		// TODO: We probably want to store each color value
 		//	as a different ccValue.  How do we do that when
@@ -324,9 +333,19 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 		return this._colorComponent;
 	}
 
-	private _value: number;
-	public get value(): number {
-		return this._value;
+	private _currentValue: number;
+	public get currentValue(): number {
+		return this._currentValue;
+	}
+
+	private _targetValue: number | undefined;
+	public get targetValue(): number | undefined {
+		return this._targetValue;
+	}
+
+	private _duration: Duration | undefined;
+	public get duration(): Duration | undefined {
+		return this._duration;
 	}
 }
 
@@ -389,7 +408,7 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 }
 
 export interface ColorSwitchCCSetOptions extends CCCommandOptions, ColorTable {
-	duration?: number;
+	duration?: Duration;
 }
 
 @CCCommand(ColorSwitchCommand.Set)
@@ -417,7 +436,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 				purple: options.purple,
 				index: options.index,
 			};
-			this.duration = options.duration ?? 0;
+			this.duration = options.duration ?? new Duration(1, "seconds");
 		}
 	}
 
@@ -438,14 +457,11 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 		};
 	}
 
-	private _duration: number = 0;
-	public get duration(): number {
+	private _duration: Duration = new Duration(0, "default");
+	public get duration(): Duration {
 		return this._duration;
 	}
-	public set duration(value: number) {
-		if (value < 0 || value > 255) {
-			throw new Error("duration out of range.");
-		}
+	public set duration(value: Duration) {
 		this._duration = value;
 	}
 
@@ -470,7 +486,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			i += 2;
 		}
 		if (this.version >= 2) {
-			this.payload[i] = this._duration;
+			this.payload[i] = this._duration.serializeSet();
 		}
 		return super.serialize();
 	}
@@ -479,7 +495,8 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 export interface ColorSwitchCCStartLevelChangeOptions extends CCCommandOptions {
 	colorComponent: ColorComponent;
 	down?: boolean;
-	startLevel?: number | null;
+	startLevel?: number;
+	duration?: Duration;
 }
 
 @CCCommand(ColorSwitchCommand.StartLevelChange)
@@ -499,8 +516,9 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 			);
 		} else {
 			this._down = options.down ?? false;
-			this._startLevel = options.startLevel ?? null;
+			this._startLevel = options.startLevel;
 			this._colorComponent = options.colorComponent;
+			this._duration = options.duration ?? new Duration(0, "default");
 		}
 	}
 
@@ -509,8 +527,8 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 		return this._down;
 	}
 
-	private _startLevel: number | null;
-	public get startLevel(): number | null {
+	private _startLevel: number | undefined;
+	public get startLevel(): number | undefined {
 		return this._startLevel;
 	}
 
@@ -519,19 +537,27 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 		return this._colorComponent;
 	}
 
-	public serialize(): Buffer {
-		this.payload = Buffer.allocUnsafe(3);
+	private _duration: Duration = new Duration(0, "default");
+	public get duration(): Duration {
+		return this._duration;
+	}
 
-		this.payload[0] =
+	public serialize(): Buffer {
+		const payload: number[] = [
 			// up/down
 			(Number(this._down) << 6) |
-			// ignoreStartLevel
-			(Number(this._startLevel === null) << 5);
+				// ignoreStartLevel
+				(Number(this._startLevel === null) << 5),
+			this.colorComponent,
+			// Spec does not way what this should be in regards to ignoreStartLevel
+			this.startLevel ?? 0,
+		];
 
-		this.payload[1] = this.colorComponent;
+		if (this.version >= 3) {
+			payload.push(this._duration.serializeSet());
+		}
 
-		// Spec does not way what this should be in regards to ignoreStartLevel
-		this.payload[2] = this.startLevel ?? 0;
+		this.payload = Buffer.from(payload);
 		return super.serialize();
 	}
 }
