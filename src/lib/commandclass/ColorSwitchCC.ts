@@ -7,20 +7,7 @@ import { Duration } from "../values/Duration";
 import { ValueMetadata } from "../values/Metadata";
 import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
-import {
-	API,
-	CCCommand,
-	CCCommandOptions,
-	CCResponsePredicate,
-	ccValue,
-	ccValueMetadata,
-	commandClass,
-	CommandClass,
-	CommandClassDeserializationOptions,
-	expectedCCResponse,
-	gotDeserializationOptions,
-	implementedVersion,
-} from "./CommandClass";
+import { API, CCCommand, CCCommandOptions, CCResponsePredicate, ccValue, ccValueMetadata, commandClass, CommandClass, CommandClassDeserializationOptions, expectedCCResponse, gotDeserializationOptions, implementedVersion } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
 // All the supported commands
@@ -604,7 +591,7 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 			// up/down
 			(Number(this._down) << 6) |
 				// ignoreStartLevel
-				(Number(this._startLevel === null) << 5),
+				(Number(this._startLevel == undefined) << 5),
 			this.colorComponent,
 			// Spec does not way what this should be in regards to ignoreStartLevel
 			this.startLevel ?? 0,

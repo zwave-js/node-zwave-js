@@ -219,7 +219,7 @@ describe.only("lib/commandclass/ColorSwitchCC => ", () => {
 		const expected = buildCCBuffer(
 			Buffer.from([
 				ColorSwitchCommand.StartLevelChange,
-				0b0000_0000, // up/down: 0, ignoreStartLevel: 0
+				0b0010_0000, // up/down: 0, ignoreStartLevel: 1
 				0b0000_0010, // color: red
 				0b0000_0000, // startLevel: 0
 			]),
