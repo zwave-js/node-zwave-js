@@ -97,6 +97,13 @@ const SupportedColorTableComponentMap: Record<
 	supportsIndex: ColorComponent.Index,
 };
 
+export interface ColorSwitchGetResult {
+	colorComponent: ColorComponent;
+	currentValue: number;
+	targetValue?: number;
+	duration?: Duration;
+}
+
 @API(CommandClasses["Color Switch"])
 export class ColorSwitchCCAPI extends CCAPI {
 	public supportsCommand(cmd: ColorSwitchCommand): Maybe<boolean> {
@@ -139,7 +146,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 
 	public async get(
 		colorComponent: ColorComponent,
-	): Promise<{ colorComponent: ColorComponent; value: number }> {
+	): Promise<ColorSwitchGetResult> {
 		this.assertSupportsCommand(ColorSwitchCommand, ColorSwitchCommand.Get);
 
 		const cc = new ColorSwitchCCGet(this.driver, {
@@ -152,7 +159,9 @@ export class ColorSwitchCCAPI extends CCAPI {
 		))!;
 		return {
 			colorComponent: response.colorComponent,
-			value: response.currentValue,
+			currentValue: response.currentValue,
+			targetValue: response.targetValue,
+			duration: response.duration,
 		};
 	}
 
