@@ -1,6 +1,7 @@
 import { clamp } from "alcalzone-shared/math";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import log from "../log";
 import { JSONObject, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { ValueMetadata } from "../values/Metadata";
@@ -81,6 +82,21 @@ export interface SupportedColorTable {
 	supportsIndex: boolean;
 }
 
+const SupportedColorTableComponentMap: Record<
+	keyof SupportedColorTable,
+	ColorComponent
+> = {
+	supportsWarmWhite: ColorComponent.WarmWhite,
+	supportsColdWhite: ColorComponent.ColdWhite,
+	supportsRed: ColorComponent.Red,
+	supportsGreen: ColorComponent.Green,
+	supportsBlue: ColorComponent.Blue,
+	supportsAmber: ColorComponent.Amber,
+	supportsCyan: ColorComponent.Cyan,
+	supportsPurple: ColorComponent.Purple,
+	supportsIndex: ColorComponent.Index,
+};
+
 @API(CommandClasses["Color Switch"])
 export class ColorSwitchCCAPI extends CCAPI {
 	public supportsCommand(cmd: ColorSwitchCommand): Maybe<boolean> {
@@ -156,7 +172,48 @@ export class ColorSwitchCCAPI extends CCAPI {
 export class ColorSwitchCC extends CommandClass {
 	declare ccCommand: ColorSwitchCommand;
 
-	// TODO: Interview?
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Color Switch"];
+
+		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		// TODO: Only do this if complete?  Where would we get
+		//	the previously discovered colors?
+		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "querying Color Switch CC supported colors...",
+			direction: "outbound",
+		});
+
+		const colorsResponse = await api.getSupported();
+
+		const supportedColorKeys = Object.keys(
+			SupportedColorTableComponentMap,
+		) as (keyof typeof SupportedColorTableComponentMap)[];
+
+		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "querying Color Switch CC color states...",
+			direction: "outbound",
+		});
+
+		for (const key of supportedColorKeys) {
+			if (!colorsResponse[key]) {
+				continue;
+			}
+
+			const colorComponent = SupportedColorTableComponentMap[key];
+			await api.get(colorComponent);
+		}
+	}
 }
 
 @CCCommand(ColorSwitchCommand.SupportedReport)
