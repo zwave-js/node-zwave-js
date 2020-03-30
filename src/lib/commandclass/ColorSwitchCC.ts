@@ -66,6 +66,18 @@ const ColorTableComponentMap: Record<keyof ColorTable, ColorComponent> = {
 	index: ColorComponent.Index,
 };
 
+export interface SupportedColorTable {
+	supportsWarmWhite: boolean;
+	supportsColdWhite: boolean;
+	supportsRed: boolean;
+	supportsGreen: boolean;
+	supportsBlue: boolean;
+	supportsAmber: boolean;
+	supportsCyan: boolean;
+	supportsPurple: boolean;
+	supportsIndex: boolean;
+}
+
 @API(CommandClasses["Color Switch"])
 export class ColorSwitchCCAPI extends CCAPI {
 	public supportsCommand(cmd: ColorSwitchCommand): Maybe<boolean> {
@@ -78,7 +90,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	public async getSupported() {
+	public async getSupported(): Promise<SupportedColorTable> {
 		this.assertSupportsCommand(
 			ColorSwitchCommand,
 			ColorSwitchCommand.SupportedGet,
@@ -104,7 +116,9 @@ export class ColorSwitchCCAPI extends CCAPI {
 		};
 	}
 
-	public async get(colorComponent: ColorComponent) {
+	public async get(
+		colorComponent: ColorComponent,
+	): Promise<{ colorComponent: ColorComponent; value: number }> {
 		this.assertSupportsCommand(ColorSwitchCommand, ColorSwitchCommand.Get);
 
 		const cc = new ColorSwitchCCGet(this.driver, {
@@ -121,7 +135,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		};
 	}
 
-	public async set(colorTable: ColorTable) {
+	public async set(colorTable: ColorTable): Promise<void> {
 		this.assertSupportsCommand(ColorSwitchCommand, ColorSwitchCommand.Set);
 
 		const cc = new ColorSwitchCCSet(this.driver, {
@@ -164,7 +178,7 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 		this._supportsAmber = Boolean(this.payload[0] & 32);
 		this._supportsCyan = Boolean(this.payload[0] & 64);
 		this._supportsPurple = Boolean(this.payload[0] & 128);
-		this._supportsIndex = Boolean(this.payload[2] & 1);
+		this._supportsIndex = Boolean(this.payload[1] & 1);
 
 		this.persistValues();
 	}
@@ -441,7 +455,9 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			(x) => !isNaN(this._colorTable[x] as any),
 		);
 		const colorComponentCount = colorComponentKeys.length;
-		this.payload = Buffer.allocUnsafe(1 + colorComponentCount * 2);
+		this.payload = Buffer.allocUnsafe(
+			1 + colorComponentCount * 2 + (this.version >= 2 ? 1 : 0),
+		);
 		this.payload[0] = colorComponentCount & 0b11111;
 		let i = 1;
 		for (const key of colorComponentKeys) {
