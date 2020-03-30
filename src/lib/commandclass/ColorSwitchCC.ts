@@ -104,6 +104,8 @@ export class ColorSwitchCCAPI extends CCAPI {
 			case ColorSwitchCommand.SupportedGet:
 			case ColorSwitchCommand.Get:
 			case ColorSwitchCommand.Set:
+			case ColorSwitchCommand.StartLevelChange:
+			case ColorSwitchCommand.StopLevelChange:
 				return true; // This is mandatory
 		}
 		return super.supportsCommand(cmd);
