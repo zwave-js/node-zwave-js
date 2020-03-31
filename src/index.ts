@@ -13,8 +13,21 @@ import { ZWaveError, ZWaveErrorCodes } from "./lib/error/ZWaveError";
 import log from "./lib/log";
 import { stringify } from "./lib/util/strings";
 
+const libraryRootDir = path.join(__dirname, "..");
+
+/** Checks if a filename is part of this library. Paths outside will be excluded from Sentry error reporting */
+function isPartOfThisLib(filename: string): boolean {
+	const relative = path.relative(libraryRootDir, filename);
+	return (
+		!!relative && !relative.startsWith("..") && !path.isAbsolute(relative)
+	);
+}
+
+// Errors in files matching any entry in  this array will always be reported
+const pathWhitelists = ["node_modules/iobroker.zwave2"];
+
 // Parse package.json and init sentry
-fs.readFile(path.join(__dirname, "../package.json"), "utf8").then(
+fs.readFile(path.join(libraryRootDir, "package.json"), "utf8").then(
 	(fileContents) => {
 		const packageJson = JSON.parse(fileContents);
 		Sentry.init({
@@ -22,19 +35,40 @@ fs.readFile(path.join(__dirname, "../package.json"), "utf8").then(
 			dsn: "https://841e902ca32842beadada39343a72479@sentry.io/1839595",
 			integrations: [new Integrations.Dedupe()],
 			beforeSend(event, hint) {
+				let ignore = false;
+				// By default we ignore errors that original outside this library
+				// Look at the last stackframe to figure out the filename
+				const filename = event.exception?.values?.[0]?.stacktrace?.frames?.slice(
+					-1,
+				)[0]?.filename;
+
+				if (filename && !isPartOfThisLib(filename)) {
+					ignore = true;
+				}
+
 				// Filter out specific errors that shouldn't create a report on sentry
 				// because they should be handled by the library user
-
-				// TODO: Should this filter out all ZWaveErrors?
-
-				if (hint?.originalException instanceof ZWaveError) {
+				if (!ignore && hint?.originalException instanceof ZWaveError) {
 					switch (hint.originalException.code) {
 						// we don't care about timeouts
 						case ZWaveErrorCodes.Controller_MessageDropped:
-							return null;
+							ignore = true;
+							break;
 					}
 				}
-				return event;
+
+				// Don't ignore explicitly whitelisted paths
+				if (
+					ignore &&
+					filename &&
+					pathWhitelists.some((w) =>
+						path.normalize(filename).includes(path.normalize(w)),
+					)
+				) {
+					ignore = false;
+				}
+
+				return ignore ? null : event;
 			},
 		});
 	},
