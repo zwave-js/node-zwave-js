@@ -52,6 +52,9 @@ fs.readFile(path.join(libraryRootDir, "package.json"), "utf8").then(
 					switch (hint.originalException.code) {
 						// we don't care about timeouts
 						case ZWaveErrorCodes.Controller_MessageDropped:
+						// We don't care about failed node removal
+						case ZWaveErrorCodes.RemoveFailedNode_Failed:
+						case ZWaveErrorCodes.RemoveFailedNode_NodeOK:
 							ignore = true;
 							break;
 					}
