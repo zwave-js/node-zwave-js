@@ -94,7 +94,9 @@ const ColorComponentMap: Record<ColorKey, ColorComponent> = {
 };
 const ColorKeys = keysOf(ColorComponentMap);
 function isColorKey(key: string): key is ColorKey {
-	return ColorComponentMap[key as ColorKey] != undefined;
+	// Note: indexing ColorComponentMap would be faster, but
+	//	the linter will not allow it.
+	return ColorKeys.includes(key as ColorKey);
 }
 function getColorKeyFromComponent(component: ColorComponent): ColorKey | null {
 	for (const key of ColorKeys) {
@@ -267,7 +269,7 @@ export class ColorSwitchCC extends CommandClass {
 
 @CCCommand(ColorSwitchCommand.SupportedReport)
 export class ColorSwitchCCSupportedReport extends ColorSwitchCC
-	implements SupportedColorTable {
+	implements Partial<SupportedColorTable> {
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions,
@@ -315,47 +317,47 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC
 		}
 	}
 
-	private _supportedColors: SupportedColorTable;
+	private _supportedColors: SupportedColorTable | null;
 
-	public get supportsWarmWhite(): boolean {
-		return this._supportedColors.supportsWarmWhite;
+	public get supportsWarmWhite(): boolean | undefined {
+		return this._supportedColors?.supportsWarmWhite;
 	}
 
-	public get supportsColdWhite(): boolean {
-		return this._supportedColors.supportsColdWhite;
+	public get supportsColdWhite(): boolean | undefined {
+		return this._supportedColors?.supportsColdWhite;
 	}
 
-	public get supportsRed(): boolean {
-		return this._supportedColors.supportsRed;
+	public get supportsRed(): boolean | undefined {
+		return this._supportedColors?.supportsRed;
 	}
 
-	public get supportsGreen(): boolean {
-		return this._supportedColors.supportsGreen;
+	public get supportsGreen(): boolean | undefined {
+		return this._supportedColors?.supportsGreen;
 	}
 
-	public get supportsBlue(): boolean {
-		return this._supportedColors.supportsBlue;
+	public get supportsBlue(): boolean | undefined {
+		return this._supportedColors?.supportsBlue;
 	}
 
-	public get supportsAmber(): boolean {
-		return this._supportedColors.supportsAmber;
+	public get supportsAmber(): boolean | undefined {
+		return this._supportedColors?.supportsAmber;
 	}
 
-	public get supportsCyan(): boolean {
-		return this._supportedColors.supportsCyan;
+	public get supportsCyan(): boolean | undefined {
+		return this._supportedColors?.supportsCyan;
 	}
 
-	public get supportsPurple(): boolean {
-		return this._supportedColors.supportsPurple;
+	public get supportsPurple(): boolean | undefined {
+		return this._supportedColors?.supportsPurple;
 	}
 
-	public get supportsIndex(): boolean {
-		return this._supportedColors.supportsIndex;
+	public get supportsIndex(): boolean | undefined {
+		return this._supportedColors?.supportsIndex;
 	}
 
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({
-			...(this._supportedColors || {}),
+			...this._supportedColors,
 		});
 	}
 }
