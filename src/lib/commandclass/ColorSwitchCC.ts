@@ -146,15 +146,15 @@ export class ColorSwitchCCAPI extends CCAPI {
 			ColorSwitchCCSupportedReport
 		>(cc))!;
 		return {
-			supportsWarmWhite: response.supportsWarmWhite,
-			supportsColdWhite: response.supportsColdWhite,
-			supportsRed: response.supportsRed,
-			supportsGreen: response.supportsGreen,
-			supportsBlue: response.supportsBlue,
-			supportsAmber: response.supportsAmber,
-			supportsCyan: response.supportsCyan,
-			supportsPurple: response.supportsPurple,
-			supportsIndex: response.supportsIndex,
+			supportsWarmWhite: response.supportsWarmWhite!,
+			supportsColdWhite: response.supportsColdWhite!,
+			supportsRed: response.supportsRed!,
+			supportsGreen: response.supportsGreen!,
+			supportsBlue: response.supportsBlue!,
+			supportsAmber: response.supportsAmber!,
+			supportsCyan: response.supportsCyan!,
+			supportsPurple: response.supportsPurple!,
+			supportsIndex: response.supportsIndex!,
 		};
 	}
 
