@@ -2,10 +2,19 @@ import { clamp } from "alcalzone-shared/math";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import type { ValueID } from "../node/ValueDB";
 import { JSONObject, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
+import { ValueMetadata } from "../values/Metadata";
 import type { Maybe } from "../values/Primitive";
-import { CCAPI } from "./API";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwUnsupportedPropertyKey,
+	throwWrongValueType,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -42,10 +51,6 @@ export enum ColorComponent {
 	Purple = 7,
 	Index = 8,
 }
-// Enums map keys to values AND values to keys, need to filter out the numeric values.
-const ColorComponents = keysOf(ColorComponent).filter(
-	(x) => !isNaN(ColorComponent[x]),
-);
 
 export interface ColorTable {
 	warmWhite?: number;
@@ -58,27 +63,7 @@ export interface ColorTable {
 	purple?: number;
 	index?: number;
 }
-
-const ColorTableComponentMap: Record<keyof ColorTable, ColorComponent> = {
-	warmWhite: ColorComponent.WarmWhite,
-	coldWhite: ColorComponent.ColdWhite,
-	red: ColorComponent.Red,
-	green: ColorComponent.Green,
-	blue: ColorComponent.Blue,
-	amber: ColorComponent.Amber,
-	cyan: ColorComponent.Cyan,
-	purple: ColorComponent.Purple,
-	index: ColorComponent.Index,
-};
-const ColorKeys = keysOf(ColorTableComponentMap);
-function getColorName(component: ColorComponent): keyof ColorTable | null {
-	for (const key of ColorKeys) {
-		if (ColorTableComponentMap[key] === component) {
-			return key;
-		}
-	}
-	return null;
-}
+type ColorKey = keyof ColorTable;
 
 export interface SupportedColorTable {
 	supportsWarmWhite: boolean;
@@ -91,22 +76,38 @@ export interface SupportedColorTable {
 	supportsPurple: boolean;
 	supportsIndex: boolean;
 }
+type SupportedColorKey = keyof SupportedColorTable;
+function supportedColorTableKey(key: ColorKey): SupportedColorKey {
+	return `supports${key[0].toUpperCase}${key.slice(1)}` as SupportedColorKey;
+}
 
-const SupportedColorTableComponentMap: Record<
-	keyof SupportedColorTable,
-	ColorComponent
-> = {
-	supportsWarmWhite: ColorComponent.WarmWhite,
-	supportsColdWhite: ColorComponent.ColdWhite,
-	supportsRed: ColorComponent.Red,
-	supportsGreen: ColorComponent.Green,
-	supportsBlue: ColorComponent.Blue,
-	supportsAmber: ColorComponent.Amber,
-	supportsCyan: ColorComponent.Cyan,
-	supportsPurple: ColorComponent.Purple,
-	supportsIndex: ColorComponent.Index,
+const ColorComponentMap: Record<ColorKey, ColorComponent> = {
+	warmWhite: ColorComponent.WarmWhite,
+	coldWhite: ColorComponent.ColdWhite,
+	red: ColorComponent.Red,
+	green: ColorComponent.Green,
+	blue: ColorComponent.Blue,
+	amber: ColorComponent.Amber,
+	cyan: ColorComponent.Cyan,
+	purple: ColorComponent.Purple,
+	index: ColorComponent.Index,
 };
-const SupportedColorTableKeys = keysOf(SupportedColorTableComponentMap);
+const ColorKeys = keysOf(ColorComponentMap);
+function isColorKey(key: string): key is ColorKey {
+	return ColorComponentMap[key as ColorKey] != undefined;
+}
+function getColorKeyFromComponent(component: ColorComponent): ColorKey | null {
+	for (const key of ColorKeys) {
+		if (ColorComponentMap[key] === component) {
+			return key;
+		}
+	}
+	return null;
+}
+function getColorComponentFromKey(key: ColorKey): ColorComponent | null {
+	const component = ColorComponentMap[key];
+	return component ?? null;
+}
 
 export interface ColorSwitchGetResult {
 	colorComponent: ColorComponent;
@@ -155,10 +156,13 @@ export class ColorSwitchCCAPI extends CCAPI {
 		};
 	}
 
-	public async get(
-		colorComponent: ColorComponent,
-	): Promise<ColorSwitchGetResult> {
+	public async get(colorKey: ColorKey): Promise<ColorSwitchGetResult> {
 		this.assertSupportsCommand(ColorSwitchCommand, ColorSwitchCommand.Get);
+
+		const colorComponent = getColorComponentFromKey(colorKey);
+		if (colorComponent == undefined) {
+			throw new Error(`Unsupported color "${colorKey}".`);
+		}
 
 		const cc = new ColorSwitchCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
@@ -187,6 +191,33 @@ export class ColorSwitchCCAPI extends CCAPI {
 
 		await this.driver.sendCommand(cc);
 	}
+
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ property, propertyKey },
+		value,
+	) => {
+		if (property !== "targetColor") {
+			throwUnsupportedProperty(this.ccId, property);
+		}
+		if (typeof value !== "number") {
+			throwWrongValueType(this.ccId, property, "number", typeof value);
+		}
+
+		if (!propertyKey) {
+			// No error throw util for this?
+			// Might want to treat keyless value as hex "#wwccrrggbb"
+			throw new Error("propertyKey required.");
+		}
+
+		if (typeof propertyKey != "string" || !isColorKey(propertyKey)) {
+			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+		}
+
+		await this.set({ [propertyKey]: value });
+
+		// Refresh the current value
+		await this.get(propertyKey);
+	};
 }
 
 @commandClass(CommandClasses["Color Switch"])
@@ -223,13 +254,13 @@ export class ColorSwitchCC extends CommandClass {
 			direction: "outbound",
 		});
 
-		for (const key of SupportedColorTableKeys) {
-			if (!colorsResponse[key]) {
+		for (const key of ColorKeys) {
+			const supportsKey = supportedColorTableKey(key);
+			if (!colorsResponse[supportsKey]) {
 				continue;
 			}
 
-			const colorComponent = SupportedColorTableComponentMap[key];
-			await api.get(colorComponent);
+			await api.get(key);
 		}
 	}
 }
@@ -261,21 +292,25 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 
-		for (const key of SupportedColorTableKeys) {
-			const colorComponent = SupportedColorTableComponentMap[key];
-			const colorName = getColorName(colorComponent);
-			if (!colorName) {
-				continue;
-			}
+		for (const key of ColorKeys) {
+			const supportsColorKey = supportedColorTableKey(key);
 
+			const valueId: ValueID = {
+				commandClass: CommandClasses["Color Switch"],
+				endpoint: endpoint.index,
+				property: "supportedColor",
+				propertyKey: key,
+			};
+
+			// TODO: Should we be setting this every run?
+			node.valueDB.setMetadata(valueId, {
+				...ValueMetadata.ReadOnly,
+				label: `Supports ${key}`,
+				description: `Whether the endpoint supports setting the ${key} color.`,
+			});
 			node.valueDB.setValue(
-				{
-					commandClass: CommandClasses["Color Switch"],
-					endpoint: endpoint.index,
-					property: "supportedColors",
-					propertyKey: colorName,
-				},
-				this._supportedColors[key] ?? false,
+				valueId,
+				this._supportedColors[supportsColorKey] ?? false,
 			);
 		}
 	}
@@ -359,27 +394,43 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
+		const colorName = getColorKeyFromComponent(this._colorComponent);
+		if (!colorName) {
+			return;
+		}
 
-		node.valueDB.setValue(
-			{
-				commandClass: CommandClasses["Color Switch"],
-				property: "currentColors",
-				endpoint: endpoint.index,
-				propertyKey: ColorComponent[this._colorComponent],
-			},
-			this._currentValue,
-		);
+		const valueId: ValueID = {
+			commandClass: CommandClasses["Color Switch"],
+			property: "currentColor",
+			endpoint: endpoint.index,
+			propertyKey: colorName,
+		};
+
+		// TODO: Should we be setting this every run?
+		node.valueDB.setMetadata(valueId, {
+			...ValueMetadata.ReadOnlyNumber,
+			label: `Color ${colorName}`,
+			description: `The current level of the ${colorName} color.`,
+			min: 0,
+			max: 255,
+		});
+		node.valueDB.setValue(valueId, this._currentValue);
 
 		if (this._targetValue != undefined) {
-			node.valueDB.setValue(
-				{
-					commandClass: CommandClasses["Color Switch"],
-					property: "targetColors",
-					endpoint: endpoint.index,
-					propertyKey: ColorComponent[this._colorComponent],
-				},
-				this._targetValue,
-			);
+			const targetValueId: ValueID = {
+				commandClass: CommandClasses["Color Switch"],
+				property: "targetColor",
+				endpoint: endpoint.index,
+				propertyKey: colorName,
+			};
+			node.valueDB.setMetadata(targetValueId, {
+				...ValueMetadata.Number,
+				label: `Color ${colorName}`,
+				description: `The target level of the ${colorName} color.`,
+				min: 0,
+				max: 255,
+			});
+			node.valueDB.setValue(targetValueId, this._targetValue);
 		}
 	}
 
@@ -521,7 +572,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 	}
 
 	public serialize(): Buffer {
-		let populatedColorKeys = ColorKeys.filter(
+		const populatedColorKeys = ColorKeys.filter(
 			(x) => !isNaN(this._colorTable[x] as any),
 		);
 		const populatedColorCount = populatedColorKeys.length;
@@ -532,7 +583,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 		let i = 1;
 		for (const key of populatedColorKeys) {
 			const value = this._colorTable[key];
-			const component = ColorTableComponentMap[key];
+			const component = ColorComponentMap[key];
 			this.payload[i] = component;
 			this.payload[i + 1] = clamp(value!, 0, 0xff);
 			i += 2;
