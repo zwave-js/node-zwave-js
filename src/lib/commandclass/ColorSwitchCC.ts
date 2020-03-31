@@ -137,6 +137,30 @@ function getSupportedColorValueID(
 	};
 }
 
+function getCurrentColorValueID(
+	endpointIndex: number,
+	colorKey: ColorKey,
+): ValueID {
+	return {
+		commandClass: CommandClasses["Color Switch"],
+		property: "currentColor",
+		endpoint: endpointIndex,
+		propertyKey: colorKey,
+	};
+}
+
+function getTargetColorValueID(
+	endpointIndex: number,
+	colorKey: ColorKey,
+): ValueID {
+	return {
+		commandClass: CommandClasses["Color Switch"],
+		property: "targetColor",
+		endpoint: endpointIndex,
+		propertyKey: colorKey,
+	};
+}
+
 export interface ColorSwitchGetResult {
 	colorComponent: ColorComponent;
 	currentValue: number;
@@ -300,6 +324,53 @@ export class ColorSwitchCC extends CommandClass {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Color Switch"];
+		const valueDB = this.getValueDB();
+
+		if (complete) {
+			for (const colorKey of ColorKeys) {
+				const supportsColorKey = supportedColorTableKey(colorKey);
+
+				const currentValueId = getCurrentColorValueID(
+					this.endpointIndex,
+					colorKey,
+				);
+				if (!valueDB.hasMetadata(currentValueId)) {
+					valueDB.setMetadata(currentValueId, {
+						...ValueMetadata.ReadOnlyNumber,
+						label: `Color ${colorKey}`,
+						description: `The current level of the ${colorKey} color.`,
+						min: 0,
+						max: 255,
+					});
+				}
+
+				const targetValueId = getTargetColorValueID(
+					this.endpointIndex,
+					colorKey,
+				);
+				if (!valueDB.hasMetadata(targetValueId)) {
+					valueDB.setMetadata(targetValueId, {
+						...ValueMetadata.Number,
+						label: `Color ${colorKey}`,
+						description: `The target level of the ${colorKey} color.`,
+						min: 0,
+						max: 255,
+					});
+				}
+
+				const supportedValueId = getSupportedColorValueID(
+					this.endpointIndex,
+					supportsColorKey,
+				);
+				if (!valueDB.hasMetadata(supportedValueId)) {
+					valueDB.setMetadata(supportedValueId, {
+						...ValueMetadata.ReadOnly,
+						label: `Supports ${colorKey}`,
+						description: `Whether the endpoint supports setting the ${colorKey} color.`,
+					});
+				}
+			}
+		}
 
 		log.controller.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -324,9 +395,8 @@ export class ColorSwitchCC extends CommandClass {
 			// TODO: Should we be storing supportedColor as a SupportedColorTable
 			//	instead of spreading it out on propertyKey?
 			supportedColors = { ...DefaultSupportedColorTable };
-			const valueDB = this.getValueDB();
 			for (const key of SupportedColorKeys) {
-				const valueId: ValueID = getSupportedColorValueID(
+				const valueId = getSupportedColorValueID(
 					this.endpointIndex,
 					key,
 				);
@@ -379,18 +449,11 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC
 		for (const key of ColorKeys) {
 			const supportsColorKey = supportedColorTableKey(key);
 
-			const valueId: ValueID = getSupportedColorValueID(
+			const valueId = getSupportedColorValueID(
 				this.endpointIndex,
 				supportsColorKey,
 			);
 
-			if (!valueDB.hasMetadata(valueId)) {
-				valueDB.setMetadata(valueId, {
-					...ValueMetadata.ReadOnly,
-					label: `Supports ${key}`,
-					description: `Whether the endpoint supports setting the ${key} color.`,
-				});
-			}
 			valueDB.setValue(
 				valueId,
 				this._supportedColors[supportsColorKey] ?? false,
@@ -472,46 +535,21 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 			this._duration = Duration.parseReport(this.payload[3]);
 		}
 
-		const colorName = getColorKeyFromComponent(this._colorComponent);
-		if (!colorName) {
+		const colorKey = getColorKeyFromComponent(this._colorComponent);
+		if (!colorKey) {
 			return;
 		}
 
-		const valueId: ValueID = {
-			commandClass: CommandClasses["Color Switch"],
-			property: "currentColor",
-			endpoint: this.endpointIndex,
-			propertyKey: colorName,
-		};
-
 		const valueDB = this.getValueDB();
-		if (!valueDB.hasMetadata(valueId)) {
-			valueDB.setMetadata(valueId, {
-				...ValueMetadata.ReadOnlyNumber,
-				label: `Color ${colorName}`,
-				description: `The current level of the ${colorName} color.`,
-				min: 0,
-				max: 255,
-			});
-		}
+
+		const valueId = getCurrentColorValueID(this.endpointIndex, colorKey);
 		valueDB.setValue(valueId, this._currentValue);
 
 		if (this._targetValue != undefined) {
-			const targetValueId: ValueID = {
-				commandClass: CommandClasses["Color Switch"],
-				property: "targetColor",
-				endpoint: this.endpointIndex,
-				propertyKey: colorName,
-			};
-			if (!valueDB.hasMetadata(targetValueId)) {
-				valueDB.setMetadata(targetValueId, {
-					...ValueMetadata.Number,
-					label: `Color ${colorName}`,
-					description: `The target level of the ${colorName} color.`,
-					min: 0,
-					max: 255,
-				});
-			}
+			const targetValueId = getTargetColorValueID(
+				this.endpointIndex,
+				colorKey,
+			);
 			valueDB.setValue(targetValueId, this._targetValue);
 		}
 	}
