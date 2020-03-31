@@ -89,3 +89,18 @@ export function getMinimumShiftForBitMask(mask: number): number {
 	}
 	return i;
 }
+
+export function keysOf<T>(obj: T): (keyof T)[] {
+	return (Object.keys(obj) as unknown) as (keyof T)[];
+}
+
+export function pick<T extends object, K extends keyof T>(
+	obj: T,
+	keys: K[],
+): Pick<T, K> {
+	const o = {} as any;
+	for (const key of keys) {
+		o[key] = obj[key];
+	}
+	return o;
+}

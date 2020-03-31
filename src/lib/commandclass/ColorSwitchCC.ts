@@ -3,7 +3,7 @@ import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { ValueID } from "../node/ValueDB";
-import { JSONObject, validatePayload } from "../util/misc";
+import { JSONObject, keysOf, pick, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { ValueMetadata } from "../values/Metadata";
 import type { Maybe } from "../values/Primitive";
@@ -80,6 +80,19 @@ type SupportedColorKey = keyof SupportedColorTable;
 function supportedColorTableKey(key: ColorKey): SupportedColorKey {
 	return `supports${key[0].toUpperCase}${key.slice(1)}` as SupportedColorKey;
 }
+const DefaultSupportedColorTable: Readonly<SupportedColorTable> = Object.freeze(
+	{
+		supportsWarmWhite: false,
+		supportsColdWhite: false,
+		supportsRed: false,
+		supportsGreen: false,
+		supportsBlue: false,
+		supportsAmber: false,
+		supportsCyan: false,
+		supportsPurple: false,
+		supportsIndex: false,
+	},
+);
 
 const ColorComponentMap: Record<ColorKey, ColorComponent> = {
 	warmWhite: ColorComponent.WarmWhite,
@@ -93,6 +106,7 @@ const ColorComponentMap: Record<ColorKey, ColorComponent> = {
 	index: ColorComponent.Index,
 };
 const ColorKeys = keysOf(ColorComponentMap);
+const SupportedColorKeys = ColorKeys.map(supportedColorTableKey);
 function isColorKey(key: string): key is ColorKey {
 	// Note: indexing ColorComponentMap would be faster, but
 	//	the linter will not allow it.
@@ -109,6 +123,18 @@ function getColorKeyFromComponent(component: ColorComponent): ColorKey | null {
 function getColorComponentFromKey(key: ColorKey): ColorComponent | null {
 	const component = ColorComponentMap[key];
 	return component ?? null;
+}
+
+function getSupportedColorValueID(
+	endpointIndex: number,
+	supportedColorKey: SupportedColorKey,
+): ValueID {
+	return {
+		commandClass: CommandClasses["Color Switch"],
+		endpoint: endpointIndex,
+		property: "supportedColor",
+		propertyKey: supportedColorKey,
+	};
 }
 
 export interface ColorSwitchGetResult {
@@ -152,17 +178,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			ColorSwitchCCSupportedReport
 		>(cc))!;
-		return {
-			supportsWarmWhite: response.supportsWarmWhite!,
-			supportsColdWhite: response.supportsColdWhite!,
-			supportsRed: response.supportsRed!,
-			supportsGreen: response.supportsGreen!,
-			supportsBlue: response.supportsBlue!,
-			supportsAmber: response.supportsAmber!,
-			supportsCyan: response.supportsCyan!,
-			supportsPurple: response.supportsPurple!,
-			supportsIndex: response.supportsIndex!,
-		};
+		return pick(response, SupportedColorKeys);
 	}
 
 	public async get(colorKey: ColorKey): Promise<ColorSwitchGetResult> {
@@ -293,25 +309,40 @@ export class ColorSwitchCC extends CommandClass {
 			direction: "none",
 		});
 
-		// TODO: Only do this if complete?  Where would we get
-		//	the previously discovered colors?
-		log.controller.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: "querying Color Switch CC supported colors...",
-			direction: "outbound",
-		});
+		let supportedColors: SupportedColorTable;
+		if (complete) {
+			//	the previously discovered colors?
+			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "querying Color Switch CC supported colors...",
+				direction: "outbound",
+			});
 
-		const colorsResponse = await api.getSupported();
+			const colorsResponse = await api.getSupported();
+			supportedColors = colorsResponse;
+		} else {
+			// TODO: Should we be storing supportedColor as a SupportedColorTable
+			//	instead of spreading it out on propertyKey?
+			supportedColors = { ...DefaultSupportedColorTable };
+			const valueDB = this.getValueDB();
+			for (const key of SupportedColorKeys) {
+				const valueId: ValueID = getSupportedColorValueID(
+					this.endpointIndex,
+					key,
+				);
+				const isSupported = valueDB.getValue<boolean>(valueId);
+				supportedColors[key] = isSupported ?? false;
+			}
+		}
 
 		log.controller.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying Color Switch CC color states...",
 			direction: "outbound",
 		});
-
 		for (const key of ColorKeys) {
 			const supportsKey = supportedColorTableKey(key);
-			if (!colorsResponse[supportsKey]) {
+			if (!supportedColors[supportsKey]) {
 				continue;
 			}
 
@@ -322,7 +353,7 @@ export class ColorSwitchCC extends CommandClass {
 
 @CCCommand(ColorSwitchCommand.SupportedReport)
 export class ColorSwitchCCSupportedReport extends ColorSwitchCC
-	implements Partial<SupportedColorTable> {
+	implements SupportedColorTable {
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions,
@@ -344,68 +375,65 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC
 			supportsIndex: Boolean(this.payload[1] & 1),
 		};
 
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
-
+		const valueDB = this.getValueDB();
 		for (const key of ColorKeys) {
 			const supportsColorKey = supportedColorTableKey(key);
 
-			const valueId: ValueID = {
-				commandClass: CommandClasses["Color Switch"],
-				endpoint: endpoint.index,
-				property: "supportedColor",
-				propertyKey: key,
-			};
+			const valueId: ValueID = getSupportedColorValueID(
+				this.endpointIndex,
+				supportsColorKey,
+			);
 
-			// TODO: Should we be setting this every run?
-			node.valueDB.setMetadata(valueId, {
-				...ValueMetadata.ReadOnly,
-				label: `Supports ${key}`,
-				description: `Whether the endpoint supports setting the ${key} color.`,
-			});
-			node.valueDB.setValue(
+			if (!valueDB.hasMetadata(valueId)) {
+				valueDB.setMetadata(valueId, {
+					...ValueMetadata.ReadOnly,
+					label: `Supports ${key}`,
+					description: `Whether the endpoint supports setting the ${key} color.`,
+				});
+			}
+			valueDB.setValue(
 				valueId,
 				this._supportedColors[supportsColorKey] ?? false,
 			);
 		}
 	}
 
-	private _supportedColors: SupportedColorTable | null;
+	private _supportedColors: SupportedColorTable;
 
-	public get supportsWarmWhite(): boolean | undefined {
-		return this._supportedColors?.supportsWarmWhite;
+	public get supportsWarmWhite(): boolean {
+		return this._supportedColors.supportsWarmWhite;
 	}
 
-	public get supportsColdWhite(): boolean | undefined {
-		return this._supportedColors?.supportsColdWhite;
+	public get supportsColdWhite(): boolean {
+		return this._supportedColors.supportsColdWhite;
 	}
 
-	public get supportsRed(): boolean | undefined {
-		return this._supportedColors?.supportsRed;
+	public get supportsRed(): boolean {
+		return this._supportedColors.supportsRed;
 	}
 
-	public get supportsGreen(): boolean | undefined {
-		return this._supportedColors?.supportsGreen;
+	public get supportsGreen(): boolean {
+		return this._supportedColors.supportsGreen;
 	}
 
-	public get supportsBlue(): boolean | undefined {
-		return this._supportedColors?.supportsBlue;
+	public get supportsBlue(): boolean {
+		return this._supportedColors.supportsBlue;
 	}
 
-	public get supportsAmber(): boolean | undefined {
-		return this._supportedColors?.supportsAmber;
+	public get supportsAmber(): boolean {
+		return this._supportedColors.supportsAmber;
 	}
 
-	public get supportsCyan(): boolean | undefined {
-		return this._supportedColors?.supportsCyan;
+	public get supportsCyan(): boolean {
+		return this._supportedColors.supportsCyan;
 	}
 
-	public get supportsPurple(): boolean | undefined {
-		return this._supportedColors?.supportsPurple;
+	public get supportsPurple(): boolean {
+		return this._supportedColors.supportsPurple;
 	}
 
-	public get supportsIndex(): boolean | undefined {
-		return this._supportedColors?.supportsIndex;
+	public get supportsIndex(): boolean {
+		return this._supportedColors.supportsIndex;
 	}
 
 	public toJSON(): JSONObject {
@@ -434,21 +462,16 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 	) {
 		super(driver, options);
 
-		if (this.version >= 3) {
-			validatePayload(this.payload.length >= 4);
-		} else {
-			validatePayload(this.payload.length >= 2);
-		}
+		validatePayload(this.payload.length >= 2);
 		this._colorComponent = this.payload[0];
 		this._currentValue = this.payload[1];
 
 		if (this.version >= 3) {
+			validatePayload(this.payload.length >= 4);
 			this._targetValue = this.payload[2];
 			this._duration = Duration.parseReport(this.payload[3]);
 		}
 
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
 		const colorName = getColorKeyFromComponent(this._colorComponent);
 		if (!colorName) {
 			return;
@@ -457,35 +480,39 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 		const valueId: ValueID = {
 			commandClass: CommandClasses["Color Switch"],
 			property: "currentColor",
-			endpoint: endpoint.index,
+			endpoint: this.endpointIndex,
 			propertyKey: colorName,
 		};
 
-		// TODO: Should we be setting this every run?
-		node.valueDB.setMetadata(valueId, {
-			...ValueMetadata.ReadOnlyNumber,
-			label: `Color ${colorName}`,
-			description: `The current level of the ${colorName} color.`,
-			min: 0,
-			max: 255,
-		});
-		node.valueDB.setValue(valueId, this._currentValue);
+		const valueDB = this.getValueDB();
+		if (!valueDB.hasMetadata(valueId)) {
+			valueDB.setMetadata(valueId, {
+				...ValueMetadata.ReadOnlyNumber,
+				label: `Color ${colorName}`,
+				description: `The current level of the ${colorName} color.`,
+				min: 0,
+				max: 255,
+			});
+		}
+		valueDB.setValue(valueId, this._currentValue);
 
 		if (this._targetValue != undefined) {
 			const targetValueId: ValueID = {
 				commandClass: CommandClasses["Color Switch"],
 				property: "targetColor",
-				endpoint: endpoint.index,
+				endpoint: this.endpointIndex,
 				propertyKey: colorName,
 			};
-			node.valueDB.setMetadata(targetValueId, {
-				...ValueMetadata.Number,
-				label: `Color ${colorName}`,
-				description: `The target level of the ${colorName} color.`,
-				min: 0,
-				max: 255,
-			});
-			node.valueDB.setValue(targetValueId, this._targetValue);
+			if (!valueDB.hasMetadata(targetValueId)) {
+				valueDB.setMetadata(targetValueId, {
+					...ValueMetadata.Number,
+					label: `Color ${colorName}`,
+					description: `The target level of the ${colorName} color.`,
+					min: 0,
+					max: 255,
+				});
+			}
+			valueDB.setValue(targetValueId, this._targetValue);
 		}
 	}
 
@@ -587,16 +614,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			);
 		} else {
 			// Populate properties from options object
-			this._colorTable = {
-				warmWhite: options.warmWhite,
-				coldWhite: options.coldWhite,
-				red: options.red,
-				green: options.green,
-				blue: options.blue,
-				cyan: options.cyan,
-				purple: options.purple,
-				index: options.index,
-			};
+			this._colorTable = pick(options, ColorKeys);
 			this.duration = options.duration ?? new Duration(1, "seconds");
 		}
 	}
@@ -754,9 +772,4 @@ export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 		this.payload[0] = this._colorComponent;
 		return super.serialize();
 	}
-}
-
-// TODO: Move to util library
-function keysOf<T>(obj: T): (keyof T)[] {
-	return (Object.keys(obj) as unknown) as (keyof T)[];
 }
