@@ -118,6 +118,13 @@ export interface ColorSwitchGetResult {
 	duration?: Duration;
 }
 
+export interface StartLevelChangeOptions {
+	duration?: Duration;
+	startLevel?: number;
+}
+
+export type StartLevelChangeDirection = "down" | "up";
+
 @API(CommandClasses["Color Switch"])
 export class ColorSwitchCCAPI extends CCAPI {
 	public supportsCommand(cmd: ColorSwitchCommand): Maybe<boolean> {
@@ -189,6 +196,52 @@ export class ColorSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			...colorTable,
+		});
+
+		await this.driver.sendCommand(cc);
+	}
+
+	public async startLevelChange(
+		colorKey: ColorKey,
+		direction: StartLevelChangeDirection,
+		options: StartLevelChangeOptions = {},
+	): Promise<void> {
+		this.assertSupportsCommand(
+			ColorSwitchCommand,
+			ColorSwitchCommand.StartLevelChange,
+		);
+
+		const colorComponent = getColorComponentFromKey(colorKey);
+		if (colorComponent == undefined) {
+			throw new Error(`Unknown color "${colorKey}".`);
+		}
+
+		const cc = new ColorSwitchCCStartLevelChange(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			colorComponent,
+			down: direction === "down",
+			startLevel: options.startLevel,
+		});
+
+		await this.driver.sendCommand(cc);
+	}
+
+	public async stopLevelChange(colorKey: ColorKey): Promise<void> {
+		this.assertSupportsCommand(
+			ColorSwitchCommand,
+			ColorSwitchCommand.StopLevelChange,
+		);
+
+		const colorComponent = getColorComponentFromKey(colorKey);
+		if (colorComponent == undefined) {
+			throw new Error(`Unknown color "${colorKey}".`);
+		}
+
+		const cc = new ColorSwitchCCStopLevelChange(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			colorComponent,
 		});
 
 		await this.driver.sendCommand(cc);
