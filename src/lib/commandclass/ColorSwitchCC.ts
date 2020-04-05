@@ -392,8 +392,6 @@ export class ColorSwitchCC extends CommandClass {
 			const colorsResponse = await api.getSupported();
 			supportedColors = colorsResponse;
 		} else {
-			// TODO: Should we be storing supportedColor as a SupportedColorTable
-			//	instead of spreading it out on propertyKey?
 			supportedColors = { ...DefaultSupportedColorTable };
 			for (const key of SupportedColorKeys) {
 				const valueId = getSupportedColorValueID(
@@ -587,8 +585,7 @@ const testResponseForColorSwitchGet: CCResponsePredicate = (
 	return received instanceof ColorSwitchCCReport &&
 		sent.colorComponent === received.colorComponent
 		? "final"
-		: // TODO: What is isPositiveTransmitReport?  Do I need it?
-		isPositiveTransmitReport
+		: isPositiveTransmitReport
 		? "confirmation"
 		: "unexpected";
 };
