@@ -77,9 +77,6 @@ fs.readFile(path.join(libraryRootDir, "package.json"), "utf8").then(
 	},
 );
 
-export { Driver } from "./lib/driver/Driver";
-export { ZWaveNode } from "./lib/node/Node";
-
 // Load all CCs to ensure all metadata gets loaded
 const definedCCs = fs
 	.readdirSync(path.join(__dirname, "lib/commandclass"))
@@ -88,3 +85,27 @@ log.reflection.print(`loading CCs: ${stringify(definedCCs)}`);
 for (const file of definedCCs) {
 	require(`./lib/commandclass/${file}`);
 }
+
+// Export some frequently-used things and types
+export { CommandClasses } from "./lib/commandclass/CommandClasses";
+export type {
+	HealNodeStatus,
+	ZWaveController,
+} from "./lib/controller/Controller";
+export { Driver } from "./lib/driver/Driver";
+export { BasicDeviceClasses } from "./lib/node/DeviceClass";
+export { ZWaveNode } from "./lib/node/Node";
+export type {
+	TranslatedValueID,
+	ZWaveNodeMetadataUpdatedArgs,
+	ZWaveNodeValueAddedArgs,
+	ZWaveNodeValueRemovedArgs,
+	ZWaveNodeValueUpdatedArgs,
+} from "./lib/node/Types";
+export type { ValueID } from "./lib/node/ValueDB";
+export type {
+	ValueMetadataAny,
+	ValueMetadataBoolean,
+	ValueMetadataNumeric,
+	ValueType,
+} from "./lib/values/Metadata";
