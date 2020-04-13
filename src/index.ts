@@ -88,6 +88,7 @@ for (const file of definedCCs) {
 
 // Export some frequently-used things and types
 export { CommandClasses } from "./lib/commandclass/CommandClasses";
+export * from "./lib/commandclass/index";
 export type {
 	HealNodeStatus,
 	ZWaveController,

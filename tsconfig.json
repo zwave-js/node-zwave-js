@@ -35,7 +35,7 @@
 		"strictBindCallApply": true,
 		"watch": false, // true breaks circleci
 		"pretty": true,
-		"types": ["jest-extended"]
+		"types": ["node", "jest-extended"]
 	},
 	"include": ["src/**/*.ts", "maintenance/**/*.ts", "test/**/*.ts"],
 	"exclude": ["build/**", "node_modules/**"]

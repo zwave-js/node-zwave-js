@@ -26,6 +26,9 @@ export enum ZWavePlusCommand {
 	Report = 0x02,
 }
 
+/**
+ * @publicAPI
+ */
 export enum ZWavePlusRoleType {
 	CentralStaticController = 0x00,
 	SubStaticController = 0x01,
@@ -37,6 +40,9 @@ export enum ZWavePlusRoleType {
 	SleepingListeningSlave = 0x07,
 }
 
+/**
+ * @publicAPI
+ */
 export enum ZWavePlusNodeType {
 	Node = 0x00, // ZWave+ Node
 	IPGateway = 0x02, // ZWave+ for IP Gateway

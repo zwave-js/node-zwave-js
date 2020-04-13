@@ -20,12 +20,18 @@ import { CommandClasses } from "./CommandClasses";
 
 // @noSetValueAPI This CC is read-only
 
+/**
+ * @publicAPI
+ */
 export enum BatteryChargingStatus {
 	Discharging = 0x00,
 	Charging = 0x01,
 	Maintaining = 0x02,
 }
 
+/**
+ * @publicAPI
+ */
 export enum BatteryReplacementStatus {
 	No = 0x00,
 	Soon = 0x01,

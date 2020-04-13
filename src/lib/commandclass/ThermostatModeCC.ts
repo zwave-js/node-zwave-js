@@ -36,6 +36,9 @@ export enum ThermostatModeCommand {
 	SupportedReport = 0x05,
 }
 
+/**
+ * @publicAPI
+ */
 export enum ThermostatMode {
 	"Off" = 0x00,
 	"Heat" = 0x01,

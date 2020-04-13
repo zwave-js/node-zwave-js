@@ -37,6 +37,9 @@ export enum MultilevelSensorCommand {
 	SupportedScaleReport = 0x06,
 }
 
+/**
+ * @publicAPI
+ */
 export interface MultilevelSensorValue {
 	value: number;
 	scale: Scale;

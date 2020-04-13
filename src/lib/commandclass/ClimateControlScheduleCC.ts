@@ -13,6 +13,7 @@ import {
 	Switchpoint,
 } from "../values/Switchpoint";
 import { CCAPI } from "./API";
+import type { Weekday } from "./ClockCC";
 import {
 	API,
 	CCCommand,
@@ -39,16 +40,9 @@ export enum ClimateControlScheduleCommand {
 	OverrideReport = 0x08,
 }
 
-export enum Weekday {
-	Monday = 0x01,
-	Tuesday,
-	Wednesday,
-	Thursday,
-	Friday,
-	Saturday,
-	Sunday,
-}
-
+/**
+ * @publicAPI
+ */
 export enum ScheduleOverrideType {
 	None = 0x00,
 	Temporary = 0x01,

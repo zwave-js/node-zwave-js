@@ -21,6 +21,9 @@ import {
 import { CommandClasses } from "./CommandClasses";
 import { getEndpointCCsValueId } from "./MultiChannelCC";
 
+/**
+ * @publicAPI
+ */
 export interface Association {
 	nodeId: number;
 	endpoint?: number;

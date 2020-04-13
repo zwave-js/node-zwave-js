@@ -31,6 +31,9 @@ export enum ThermostatSetbackCommand {
 	Report = 0x03,
 }
 
+/**
+ * @publicAPI
+ */
 export enum SetbackType {
 	None = 0x00,
 	Temporary = 0x01,

@@ -29,6 +29,9 @@ export enum BinarySensorCommand {
 	SupportedReport = 0x04,
 }
 
+/**
+ * @publicAPI
+ */
 export enum BinarySensorType {
 	"General Purpose" = 0x01,
 	Smoke = 0x02,

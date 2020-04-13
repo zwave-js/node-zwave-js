@@ -39,6 +39,9 @@ export enum MeterCommand {
 	Reset = 0x05,
 }
 
+/**
+ * @publicAPI
+ */
 export enum RateType {
 	Unspecified = 0x00,
 	Consumed = 0x01,

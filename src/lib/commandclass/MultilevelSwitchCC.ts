@@ -39,12 +39,18 @@ export enum MultilevelSwitchCommand {
 	SupportedReport = 0x07,
 }
 
+/**
+ * @publicAPI
+ */
 export enum LevelChangeDirection {
 	"up" = 0b0,
 	"down" = 0b1,
 	// "none" = 0b11,
 }
 
+/**
+ * @publicAPI
+ */
 export enum SwitchType {
 	"not supported" = 0x00,
 	"Off/On" = 0x01,
