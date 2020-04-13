@@ -89,14 +89,27 @@ for (const file of definedCCs) {
 // Export some frequently-used things and types
 export { CommandClasses } from "./lib/commandclass/CommandClasses";
 export * from "./lib/commandclass/index";
+export type { Scale } from "./lib/config/Scales";
+export { lookupSensorScale, lookupSensorType } from "./lib/config/SensorTypes";
+export type { SensorType } from "./lib/config/SensorTypes";
 export type {
 	HealNodeStatus,
 	ZWaveController,
 } from "./lib/controller/Controller";
+export type { ZWaveLibraryTypes } from "./lib/controller/ZWaveLibraryTypes";
 export { Driver } from "./lib/driver/Driver";
-export { BasicDeviceClasses } from "./lib/node/DeviceClass";
+export type { ZWaveOptions } from "./lib/driver/Driver";
+export type { FileSystem } from "./lib/driver/FileSystem";
+export { ZWaveErrorCodes } from "./lib/error/ZWaveError";
+export {
+	BasicDeviceClasses,
+	GenericDeviceClasses,
+} from "./lib/node/DeviceClass";
 export { ZWaveNode } from "./lib/node/Node";
 export type {
+	NodeStatus,
+	NODE_ID_BROADCAST,
+	NODE_ID_MAX,
 	TranslatedValueID,
 	ZWaveNodeMetadataUpdatedArgs,
 	ZWaveNodeValueAddedArgs,
@@ -104,9 +117,13 @@ export type {
 	ZWaveNodeValueUpdatedArgs,
 } from "./lib/node/Types";
 export type { ValueID } from "./lib/node/ValueDB";
+export type { Duration, DurationUnit } from "./lib/values/Duration";
+export { ValueMetadata } from "./lib/values/Metadata";
 export type {
 	ValueMetadataAny,
 	ValueMetadataBoolean,
 	ValueMetadataNumeric,
 	ValueType,
 } from "./lib/values/Metadata";
+export type { SetbackState } from "./lib/values/SetbackState";
+export type { Switchpoint } from "./lib/values/Switchpoint";
