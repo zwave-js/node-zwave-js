@@ -37,6 +37,16 @@ export function throwUnsupportedPropertyKey(
 	);
 }
 
+export function throwMissingPropertyKey(
+	cc: CommandClasses,
+	property: string | number,
+): never {
+	throw new ZWaveError(
+		`${CommandClasses[cc]}: property "${property}" requires a property key, but none was given`,
+		ZWaveErrorCodes.Argument_Invalid,
+	);
+}
+
 export function throwWrongValueType(
 	cc: CommandClasses,
 	property: string | number,
@@ -132,6 +142,7 @@ export interface CCAPIs {
 	"Central Scene": import("./CentralSceneCC").CentralSceneCCAPI;
 	"Climate Control Schedule": import("./ClimateControlScheduleCC").ClimateControlScheduleCCAPI;
 	Clock: import("./ClockCC").ClockCCAPI;
+	"Color Switch": import("./ColorSwitchCC").ColorSwitchCCAPI;
 	Configuration: import("./ConfigurationCC").ConfigurationCCAPI;
 	Indicator: import("./IndicatorCC").IndicatorCCAPI;
 	Language: import("./LanguageCC").LanguageCCAPI;
