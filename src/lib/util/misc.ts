@@ -90,10 +90,12 @@ export function getMinimumShiftForBitMask(mask: number): number {
 	return i;
 }
 
+/** Object.keys, but with `(keyof T)[]` as the return type */
 export function keysOf<T>(obj: T): (keyof T)[] {
 	return (Object.keys(obj) as unknown) as (keyof T)[];
 }
 
+/** Returns a subset of `obj` that contains only the given keys */
 export function pick<T extends object, K extends keyof T>(
 	obj: T,
 	keys: K[],
