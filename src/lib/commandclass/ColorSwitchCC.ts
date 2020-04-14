@@ -187,13 +187,13 @@ export class ColorSwitchCCAPI extends CCAPI {
 		};
 	}
 
-	public async set(colorTable: ColorTable): Promise<void> {
+	public async set(options: ColorSwitchCCSetOptions): Promise<void> {
 		this.assertSupportsCommand(ColorSwitchCommand, ColorSwitchCommand.Set);
 
 		const cc = new ColorSwitchCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			...colorTable,
+			...options,
 		});
 
 		await this.driver.sendCommand(cc);
