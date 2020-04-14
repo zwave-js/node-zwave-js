@@ -7,6 +7,7 @@ export { BinarySensorType } from "./BinarySensorCC";
 export { CentralSceneKeys } from "./CentralSceneCC";
 export { ScheduleOverrideType } from "./ClimateControlScheduleCC";
 export { Weekday } from "./ClockCC";
+export { CommandClasses } from "./CommandClasses";
 export type { ConfigValue } from "./ConfigurationCC";
 export { DeviceIdType } from "./ManufacturerSpecificCC";
 export { RateType } from "./MeterCC";

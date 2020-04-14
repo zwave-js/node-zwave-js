@@ -57,13 +57,21 @@ function findExports() {
 
 	// Scan all source files
 	for (const sourceFile of program.getSourceFiles()) {
-		// Only look at CC files
-		if (!sourceFile.fileName.endsWith("CC.ts")) continue;
+		const relativePath = path
+			.relative(path.join(__dirname, ".."), sourceFile.fileName)
+			.replace(/\\/g, "/");
+		// Only look at the commandclass dir
+		if (!relativePath.includes("/commandclass/")) {
+			continue;
+		}
+		// Ignore test files and the index
+		if (
+			relativePath.endsWith(".test.ts") ||
+			relativePath.endsWith("index.ts")
+		) {
+			continue;
+		}
 		const fileFullText = sourceFile.getFullText();
-		const relativePath = path.relative(
-			path.join(__dirname, ".."),
-			sourceFile.fileName,
-		);
 
 		// Visit each root node to see if it has a `@apiExport` comment
 		ts.forEachChild(sourceFile, (node) => {

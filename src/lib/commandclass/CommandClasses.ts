@@ -1,6 +1,9 @@
 import { num2hex } from "../util/strings";
 
-/* A dictionary of all command classes as of 2018-03-30 */
+/**
+ * @publicAPI
+ * A dictionary of all command classes as of 2018-03-30
+ */
 export enum CommandClasses {
 	// "Alarm" = 0x71, // superseded by Notification
 	"Alarm Sensor" = 0x9c,
