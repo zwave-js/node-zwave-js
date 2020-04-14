@@ -11,6 +11,7 @@ import {
 	CCAPI,
 	SetValueImplementation,
 	SET_VALUE,
+	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
@@ -210,7 +211,10 @@ export class ColorSwitchCCAPI extends CCAPI {
 
 		const colorComponent = getColorComponentFromKey(colorKey);
 		if (colorComponent == undefined) {
-			throw new Error(`Unsupported color "${colorKey}".`);
+			throw new ZWaveError(
+				`Unsupported color "${colorKey}".`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 		}
 
 		const cc = new ColorSwitchCCGet(this.driver, {
@@ -253,7 +257,10 @@ export class ColorSwitchCCAPI extends CCAPI {
 
 		const colorComponent = getColorComponentFromKey(colorKey);
 		if (colorComponent == undefined) {
-			throw new Error(`Unknown color "${colorKey}".`);
+			throw new ZWaveError(
+				`Unknown color "${colorKey}".`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 		}
 
 		const cc = new ColorSwitchCCStartLevelChange(this.driver, {
@@ -275,7 +282,10 @@ export class ColorSwitchCCAPI extends CCAPI {
 
 		const colorComponent = getColorComponentFromKey(colorKey);
 		if (colorComponent == undefined) {
-			throw new Error(`Unknown color "${colorKey}".`);
+			throw new ZWaveError(
+				`Unknown color "${colorKey}".`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 		}
 
 		const cc = new ColorSwitchCCStopLevelChange(this.driver, {
@@ -299,9 +309,8 @@ export class ColorSwitchCCAPI extends CCAPI {
 		}
 
 		if (!propertyKey) {
-			// No error throw util for this?
 			// Might want to treat keyless value as hex "#wwccrrggbb"
-			throw new Error("propertyKey required.");
+			throwMissingPropertyKey(this.ccId, property);
 		}
 
 		if (typeof propertyKey != "string" || !isColorKey(propertyKey)) {
@@ -616,8 +625,9 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 	}
 	public set colorComponent(value: ColorComponent) {
 		if (!ColorComponent[value]) {
-			throw new Error(
+			throw new ZWaveError(
 				"colorComponent must be a valid color component index.",
+				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
 		this._colorComponent = value;

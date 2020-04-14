@@ -37,6 +37,16 @@ export function throwUnsupportedPropertyKey(
 	);
 }
 
+export function throwMissingPropertyKey(
+	cc: CommandClasses,
+	property: string | number,
+): never {
+	throw new ZWaveError(
+		`${CommandClasses[cc]}: property "${property}" requires a property key, but none was given`,
+		ZWaveErrorCodes.Argument_Invalid,
+	);
+}
+
 export function throwWrongValueType(
 	cc: CommandClasses,
 	property: string | number,
