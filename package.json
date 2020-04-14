@@ -13,6 +13,7 @@
     "name": "AlCalzone",
     "email": "d.griesel@gmx.net"
   },
+  "contributors": ["RoboPhred (https://github.com/RoboPhred)"],
   "license": "MIT",
   "homepage": "https://github.com/AlCalzone/node-zwave-js#readme",
   "repository": {

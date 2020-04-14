@@ -4,6 +4,18 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Featues
+* Added support for `Color Switch CC`
+
+### Bugfixes
+* Fixed error text in `getAssociations`
+* `WakeUp CC` is now marked as supported when receiving wake up notification
+
+### Changes under the hood
+* TypeScript 3.8 with all its goodies!
+* Filter out a bunch of user errors before reporting them with Sentry
+
 ## 2.15.7 (2020-03-22)
 ### Bugfixes
 * Added missing setValue API for `Fibaro Venetian Blind CC`
