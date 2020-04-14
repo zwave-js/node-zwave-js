@@ -7,6 +7,8 @@ export { BinarySensorType } from "./BinarySensorCC";
 export { CentralSceneKeys } from "./CentralSceneCC";
 export { ScheduleOverrideType } from "./ClimateControlScheduleCC";
 export { Weekday } from "./ClockCC";
+export type { ColorTable } from "./ColorSwitchCC";
+export { ColorComponent } from "./ColorSwitchCC";
 export { CommandClasses } from "./CommandClasses";
 export type { ConfigValue } from "./ConfigurationCC";
 export { DeviceIdType } from "./ManufacturerSpecificCC";

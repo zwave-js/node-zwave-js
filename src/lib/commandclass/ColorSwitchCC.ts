@@ -50,6 +50,9 @@ export enum ColorSwitchCommand {
 	StopLevelChange = 0x07,
 }
 
+/**
+ * @publicAPI
+ */
 export enum ColorComponent {
 	"Warm White" = 0,
 	"Cold White",
@@ -76,6 +79,9 @@ const ColorComponentMap = {
 type ColorKey = keyof typeof ColorComponentMap;
 
 // Accept both the kebabCase names and numeric components as table keys
+/**
+ * @publicAPI
+ */
 export type ColorTable =
 	| Partial<Record<ColorKey, number>>
 	| Partial<Record<ColorComponent, number>>;
@@ -129,13 +135,6 @@ function getTargetColorValueID(
 		endpoint: endpointIndex,
 		propertyKey: component,
 	};
-}
-
-export interface ColorSwitchGetResult {
-	colorComponent: ColorComponent;
-	currentValue: number;
-	targetValue?: number;
-	duration?: Duration;
 }
 
 @API(CommandClasses["Color Switch"])
