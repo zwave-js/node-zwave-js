@@ -87,25 +87,9 @@ for (const file of definedCCs) {
 }
 
 // Export some frequently-used things and types
-export type { Scale } from "./lib/config/Scales";
-export { lookupSensorScale, lookupSensorType } from "./lib/config/SensorTypes";
-export type { SensorType } from "./lib/config/SensorTypes";
-export type {
-	HealNodeStatus,
-	ZWaveController,
-} from "./lib/controller/Controller";
-export type { ZWaveLibraryTypes } from "./lib/controller/ZWaveLibraryTypes";
-export { Driver } from "./lib/driver/Driver";
-export type { ZWaveOptions } from "./lib/driver/Driver";
-export type { FileSystem } from "./lib/driver/FileSystem";
-export { ZWaveErrorCodes } from "./lib/error/ZWaveError";
-export {
-	BasicDeviceClasses,
-	GenericDeviceClasses,
-} from "./lib/node/DeviceClass";
-export { ZWaveNode } from "./lib/node/Node";
-export type {
-	NodeStatus,
-	NODE_ID_BROADCAST,
-	NODE_ID_MAX,
-} from "./lib/node/Types";
+export * from "./CommandClass";
+export * from "./Controller";
+export * from "./Driver";
+export * from "./Error";
+export * from "./Node";
+export * from "./Values";

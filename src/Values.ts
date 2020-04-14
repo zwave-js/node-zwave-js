@@ -1,5 +1,8 @@
 // TODO: auto-generate this
 
+export type { Scale } from "./lib/config/Scales";
+export { lookupSensorScale, lookupSensorType } from "./lib/config/SensorTypes";
+export type { SensorType } from "./lib/config/SensorTypes";
 export type {
 	TranslatedValueID,
 	ZWaveNodeMetadataUpdatedArgs,
