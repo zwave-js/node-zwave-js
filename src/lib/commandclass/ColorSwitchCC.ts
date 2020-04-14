@@ -334,6 +334,20 @@ export class ColorSwitchCC extends CommandClass {
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
+
+	public translatePropertyKey(
+		property: string | number,
+		propertyKey: string | number,
+	): string | undefined {
+		if (
+			(property === "currentColor" || property === "targetColor") &&
+			typeof propertyKey === "number"
+		) {
+			const translated = ColorComponent[propertyKey];
+			if (translated) return translated;
+		}
+		return super.translatePropertyKey(property, propertyKey);
+	}
 }
 
 @CCCommand(ColorSwitchCommand.SupportedReport)
