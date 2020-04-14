@@ -100,9 +100,9 @@ export function pick<T extends object, K extends keyof T>(
 	obj: T,
 	keys: K[],
 ): Pick<T, K> {
-	const o = {} as any;
+	const ret = {} as any;
 	for (const key of keys) {
-		o[key] = obj[key];
+		if (key in obj) ret[key] = obj[key];
 	}
-	return o;
+	return ret;
 }
