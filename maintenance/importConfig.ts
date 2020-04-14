@@ -8,7 +8,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-process.on("unhandledRejection", r => {
+process.on("unhandledRejection", (r) => {
 	throw r;
 });
 
@@ -22,8 +22,14 @@ import * as fs from "fs-extra";
 import * as JSON5 from "json5";
 import * as path from "path";
 import * as qs from "querystring";
-import { DeviceConfig, DeviceConfigIndexEntry } from "../src/lib/config/Devices";
-import { loadManufacturers, lookupManufacturer } from "../src/lib/config/Manufacturers";
+import {
+	DeviceConfig,
+	DeviceConfigIndexEntry,
+} from "../src/lib/config/Devices";
+import {
+	loadManufacturers,
+	lookupManufacturer,
+} from "../src/lib/config/Manufacturers";
 import { num2hex } from "../src/lib/util/strings";
 
 // Where the files are located
@@ -76,8 +82,8 @@ async function fetchIDs(): Promise<string[]> {
 	const idsString = head.match(databaseIdRegex)![1];
 	const ids = idsString
 		.split(",")
-		.map(str => str.trim())
-		.filter(str => str != "");
+		.map((str) => str.trim())
+		.filter((str) => str != "");
 	return ids;
 }
 
@@ -87,7 +93,7 @@ async function fetchDevice(id: string): Promise<string> {
 	return JSON.stringify(source, null, "\t");
 }
 
-/** 
+/**
  * Downloads all device information
  * @param IDs If given, only these IDs are downloaded
  */
@@ -239,7 +245,7 @@ async function parseConfigFile(filename: string): Promise<Record<string, any>> {
 				const [productType, productId] = ref
 					.trim()
 					.split(":")
-					.map(str => "0x" + padStart(str, 4, "0").toLowerCase());
+					.map((str) => "0x" + padStart(str, 4, "0").toLowerCase());
 				return { productType, productId };
 			}),
 		firmwareVersion: {
@@ -321,7 +327,7 @@ async function parseConfigFile(filename: string): Promise<Record<string, any>> {
 /** Translates all downloaded config files */
 async function importConfigFiles(): Promise<void> {
 	const configFiles = (await fs.readdir(importDir)).filter(
-		file =>
+		(file) =>
 			file.endsWith(".json") &&
 			!file.startsWith("_") &&
 			file !== "manufacturers.json",
@@ -401,7 +407,7 @@ async function enumFilesRecursive(
 async function generateDeviceIndex(): Promise<void> {
 	const configFiles = await enumFilesRecursive(
 		processedDir,
-		file => file.endsWith(".json") && !file.endsWith("index.json"),
+		(file) => file.endsWith(".json") && !file.endsWith("index.json"),
 	);
 
 	const index: DeviceConfigIndexEntry[] = [];
@@ -448,7 +454,7 @@ ${JSON.stringify(index, undefined, 4)}`,
 async function updateManufacturerNames(): Promise<void> {
 	const configFiles = await enumFilesRecursive(
 		processedDir,
-		file => file.endsWith(".json") && !file.endsWith("index.json"),
+		(file) => file.endsWith(".json") && !file.endsWith("index.json"),
 	);
 	await loadManufacturers();
 

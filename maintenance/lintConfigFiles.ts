@@ -46,7 +46,7 @@ async function lintIndicators(): Promise<void> {
 async function lintDevices(): Promise<void> {
 	const index = (await loadDeviceIndexInternal())!;
 	// Device config files are lazy-loaded, so we need to parse them all
-	const uniqueFiles = distinct(index.map(e => e.filename)).sort();
+	const uniqueFiles = distinct(index.map((e) => e.filename)).sort();
 
 	const errors = new Map<string, string[]>();
 	function addError(filename: string, error: string): void {
@@ -79,12 +79,12 @@ async function lintDevices(): Promise<void> {
 			// Real lifeline associations (as per the Z-Wave+ specs) only have a single node
 			// If there is a 2nd lifeline with more nodes, that is most likely wrong
 			const lifelines = [...config.associations.values()].filter(
-				assoc => assoc.isLifeline,
+				(assoc) => assoc.isLifeline,
 			);
 			if (
 				lifelines.length > 1 &&
-				lifelines.find(l => l.maxNodes === 1) &&
-				lifelines.find(l => l.maxNodes > 1)
+				lifelines.find((l) => l.maxNodes === 1) &&
+				lifelines.find((l) => l.maxNodes > 1)
 			) {
 				addWarning(
 					file,
@@ -94,7 +94,7 @@ This is likely an error!`,
 			}
 			if (
 				lifelines.some(
-					l =>
+					(l) =>
 						l.label === "Lifeline" &&
 						l.groupId === 1 &&
 						l.maxNodes > 1,
@@ -235,7 +235,7 @@ Consider converting this parameter to unsigned using ${white(
 					file,
 					`Label "${label}" is duplicated in the following parameters: ${params
 						.map(
-							p =>
+							(p) =>
 								`${p.parameter}${
 									p.valueBitMask
 										? `[${num2hex(p.valueBitMask)}]`
@@ -351,7 +351,7 @@ Did you mean to use ${opt.value >>> shiftAmount}?`,
 			// Check for invalid version parts
 			const [minMajor, minMinor] = config.firmwareVersion.min
 				.split(".", 2)
-				.map(v => parseInt(v, 10));
+				.map((v) => parseInt(v, 10));
 			if (
 				minMajor < 0 ||
 				minMajor > 255 ||
@@ -366,7 +366,7 @@ Did you mean to use ${opt.value >>> shiftAmount}?`,
 
 			const [maxMajor, maxMinor] = config.firmwareVersion.max
 				.split(".", 2)
-				.map(v => parseInt(v, 10));
+				.map((v) => parseInt(v, 10));
 			if (
 				maxMajor < 0 ||
 				maxMajor > 255 ||
@@ -412,7 +412,7 @@ The first occurence of this device is in file config/devices/${index[firstIndex]
 			for (const warning of fileWarnings) {
 				const lines = warning
 					.split("\n")
-					.filter(line => !line.endsWith(filename + ":"));
+					.filter((line) => !line.endsWith(filename + ":"));
 				console.warn(yellow("[WARN] " + lines.join("\n")));
 			}
 			console.warn();
@@ -425,7 +425,7 @@ The first occurence of this device is in file config/devices/${index[firstIndex]
 			for (const error of fileErrors) {
 				const lines = error
 					.split("\n")
-					.filter(line => !line.endsWith(filename + ":"));
+					.filter((line) => !line.endsWith(filename + ":"));
 				console.error("[ERR] " + red(lines.join("\n")));
 			}
 			console.error();
@@ -450,19 +450,18 @@ async function lintSensorTypes(): Promise<void> {
 	// TODO: Validate that all contents are semantically correct
 }
 
-Promise.resolve()
-	.then(lintManufacturers)
-	.then(lintDevices)
-	.then(lintNotifications)
-	.then(lintNamedScales)
-	.then(lintSensorTypes)
-	.then(lintIndicators)
-	.then(() => {
+export async function lintConfigFiles(): Promise<void> {
+	try {
+		await lintManufacturers();
+		await lintDevices();
+		await lintNotifications();
+		await lintNamedScales();
+		await lintSensorTypes();
+		await lintIndicators();
+
 		console.log();
 		console.log(green("The config files are valid!"));
-		return process.exit(0);
-	})
-	.catch(e => {
+	} catch (e) {
 		if (typeof e.stack === "string") {
 			const lines = (e.stack as string).split("\n");
 			if (lines[0].trim().toLowerCase() === "error:") {
@@ -475,4 +474,7 @@ Promise.resolve()
 		}
 		console.error();
 		return process.exit(1);
-	});
+	}
+}
+
+if (!module.parent) lintConfigFiles();
