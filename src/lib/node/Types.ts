@@ -47,6 +47,10 @@ export type ZWaveNotificationCallback = (
 	notificationLabel: string,
 	parameters?: NotificationCCReport["eventParameters"],
 ) => void;
+export type ZWaveInterviewFailedCallback = (
+	node: ZWaveNode,
+	additionalInfo: string,
+) => void;
 
 export interface ZWaveNodeValueEventCallbacks {
 	"value added": ZWaveNodeValueAddedCallback;
@@ -54,6 +58,7 @@ export interface ZWaveNodeValueEventCallbacks {
 	"value removed": ZWaveNodeValueRemovedCallback;
 	"metadata updated": ZWaveNodeMetadataUpdatedCallback;
 	notification: ZWaveNotificationCallback;
+	"interview failed": ZWaveInterviewFailedCallback;
 }
 
 export type ZWaveNodeEventCallbacks = Overwrite<
