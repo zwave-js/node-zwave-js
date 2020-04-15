@@ -452,6 +452,7 @@ export class Driver extends EventEmitter {
 						`Interview attempt (${node.interviewAttempts} / ${this.options.nodeInterviewAttempts}) failed, node is dead.`,
 						"warn",
 					);
+					node.emit("interview failed", node, "The node is dead");
 				} else if (
 					node.interviewAttempts < this.options.nodeInterviewAttempts
 				) {
@@ -464,6 +465,11 @@ export class Driver extends EventEmitter {
 						node.id,
 						`Interview attempt ${node.interviewAttempts}/${this.options.nodeInterviewAttempts} failed, retrying in ${retryTimeout} ms...`,
 						"warn",
+					);
+					node.emit(
+						"interview failed",
+						node,
+						`Attempt ${node.interviewAttempts}/${this.options.nodeInterviewAttempts} failed`,
 					);
 					// Schedule the retry and remember the timeout instance
 					this.retryNodeInterviewTimeouts.set(
@@ -479,11 +485,19 @@ export class Driver extends EventEmitter {
 						`Failed all interview attempts, giving up.`,
 						"warn",
 					);
+					node.emit(
+						"interview failed",
+						node,
+						"Maximum interview attempts reached",
+					);
 				}
 			}
 		} catch (e) {
 			if (e instanceof ZWaveError) {
-				log.controller.print("node interview failed: " + e, "error");
+				log.controller.print(
+					"Error during node interview: " + e,
+					"error",
+				);
 			} else {
 				throw e;
 			}
