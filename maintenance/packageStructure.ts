@@ -92,7 +92,11 @@ export async function clean(): Promise<void> {
 	// if (!rootFiles.length) return;
 
 	// delete them
-	await Promise.all(rootFiles.map((f) => fs.unlink(f)));
+	for (const file of rootFiles) {
+		if (await fs.pathExists(file)) {
+			await fs.unlink(file);
+		}
+	}
 	// delete them from package.json -> files
 	packageJson.files = packageJson.files.filter(
 		(f: string) => !rootFiles.includes(f),

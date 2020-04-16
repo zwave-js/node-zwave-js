@@ -1,19 +1,12 @@
 import { parallel, series } from "gulp";
+import { compile } from "./maintenance/compile";
 import { generateCCAPIInterface } from "./maintenance/generateCCAPIInterface";
 import { generateCCExports } from "./maintenance/generateCCExports";
+import { lintConfigFiles } from "./maintenance/lintConfigFiles";
 import { clean, copyIndexFilesToRoot } from "./maintenance/packageStructure";
 
-export { lintConfigFiles } from "./maintenance/lintConfigFiles";
-export {
-	generateCCAPIInterface,
-	generateCCExports,
-	clean,
-	copyIndexFilesToRoot,
-};
+const prebuild = parallel(generateCCAPIInterface, generateCCExports);
+const postbuild = copyIndexFilesToRoot;
+const build = series(clean, prebuild, compile, postbuild);
 
-export const prebuild = series(
-	clean,
-	parallel(generateCCAPIInterface, generateCCExports),
-);
-export const postbuild = copyIndexFilesToRoot;
-// export const postpack = restorePackageStructure;
+export { clean, prebuild, build, lintConfigFiles };
