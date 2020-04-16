@@ -77,9 +77,6 @@ fs.readFile(path.join(libraryRootDir, "package.json"), "utf8").then(
 	},
 );
 
-export { Driver } from "./lib/driver/Driver";
-export { ZWaveNode } from "./lib/node/Node";
-
 // Load all CCs to ensure all metadata gets loaded
 const definedCCs = fs
 	.readdirSync(path.join(__dirname, "lib/commandclass"))
@@ -88,3 +85,11 @@ log.reflection.print(`loading CCs: ${stringify(definedCCs)}`);
 for (const file of definedCCs) {
 	require(`./lib/commandclass/${file}`);
 }
+
+// Export some frequently-used things and types
+export * from "./CommandClass";
+export * from "./Controller";
+export * from "./Driver";
+export * from "./Error";
+export * from "./Node";
+export * from "./Values";

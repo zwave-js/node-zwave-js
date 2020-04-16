@@ -24,6 +24,9 @@ export enum ClockCommand {
 	Report = 0x06,
 }
 
+/**
+ * @publicAPI
+ */
 export enum Weekday {
 	Unknown = 0x00,
 	Monday = 0x01,

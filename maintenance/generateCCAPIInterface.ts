@@ -14,13 +14,13 @@ const apiFile = path.join(ccDir, "API.ts");
 const startToken = "\t// AUTO GENERATION BELOW";
 const endToken = "}";
 
-process.on("unhandledRejection", r => {
+process.on("unhandledRejection", (r) => {
 	throw r;
 });
 
-(async () => {
+export async function generateCCAPIInterface(): Promise<void> {
 	const ccFiles = (await fs.readdir(ccDir)).filter(
-		file => file.endsWith(".ts") && !file.endsWith("test.ts"),
+		(file) => file.endsWith(".ts") && !file.endsWith("test.ts"),
 	);
 
 	const CCsWithAPI: { name: string; className: string; file: string }[] = [];
@@ -56,4 +56,6 @@ process.on("unhandledRejection", r => {
 		"\n" +
 		apiFileContent.substr(endTokenStart);
 	await fs.writeFile(apiFile, apiFileContent, "utf8");
-})();
+}
+
+if (!module.parent) generateCCAPIInterface();

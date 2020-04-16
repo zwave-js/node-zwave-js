@@ -35,8 +35,13 @@
 		"strictBindCallApply": true,
 		"watch": false, // true breaks circleci
 		"pretty": true,
-		"types": ["jest-extended"]
+		"types": ["node", "jest-extended"]
 	},
-	"include": ["src/**/*.ts", "maintenance/**/*.ts", "test/**/*.ts"],
+	"include": [
+		"src/**/*.ts",
+		"maintenance/**/*.ts",
+		"test/**/*.ts",
+		"gulpfile.ts"
+	],
 	"exclude": ["build/**", "node_modules/**"]
 }

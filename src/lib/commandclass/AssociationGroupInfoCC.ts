@@ -37,6 +37,9 @@ export enum AssociationGroupInfoCommand {
 }
 
 // TODO: Check if this should be in a config file instead
+/**
+ * @publicAPI
+ */
 export enum AssociationGroupInfoProfile {
 	"General: N/A" = 0x00_00,
 	"General: Lifeline" = 0x00_01,

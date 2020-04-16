@@ -51,6 +51,9 @@ export enum CentralSceneCommand {
 	ConfigurationReport = 0x06,
 }
 
+/**
+ * @publicAPI
+ */
 export enum CentralSceneKeys {
 	KeyPressed = 0x00,
 	KeyReleased = 0x01,

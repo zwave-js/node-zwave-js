@@ -28,6 +28,9 @@ export enum ThermostatOperatingStateCommand {
 	// LoggingReport = 0x06,
 }
 
+/**
+ * @publicAPI
+ */
 export enum ThermostatOperatingState {
 	"Idle" = 0x00,
 	"Heating" = 0x01,

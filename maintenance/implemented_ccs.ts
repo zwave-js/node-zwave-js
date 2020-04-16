@@ -36,13 +36,13 @@ interface CCInfo {
 (async () => {
 	const ccDir = path.join(__dirname, "..", "src/lib/commandclass");
 	const ccFiles = (await fs.readdir(ccDir))
-		.filter(file => file.endsWith(".ts") && !file.endsWith("test.ts"))
-		.map(file => path.join(ccDir, file));
+		.filter((file) => file.endsWith(".ts") && !file.endsWith("test.ts"))
+		.map((file) => path.join(ccDir, file));
 
 	const allCCs = new Map<string, CCInfo>(
 		Object.keys(CommandClasses)
-			.filter(cc => Number.isNaN(+cc))
-			.map(name => [
+			.filter((cc) => Number.isNaN(+cc))
+			.map((name) => [
 				name,
 				{ version: 0, API: false, setValue: false, interview: false },
 			]),
@@ -149,11 +149,13 @@ function writeTable(rows: string[][], flavor: "console" | "github"): void {
 		const columnLenghts: number[] = [];
 		for (let col = 0; col < numColumns; col++) {
 			columnLenghts.push(
-				Math.max(...rows.map(row => getSafeLength(row[col]))),
+				Math.max(...rows.map((row) => getSafeLength(row[col]))),
 			);
 		}
 		const HR =
-			"|-" + columnLenghts.map(len => "-".repeat(len)).join("-|-") + "-|";
+			"|-" +
+			columnLenghts.map((len) => "-".repeat(len)).join("-|-") +
+			"-|";
 
 		console.log(HR);
 		for (let i = 0; i < rows.length; i++) {

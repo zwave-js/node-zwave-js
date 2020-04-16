@@ -89,6 +89,9 @@ export interface ConfigurationMetadata extends ValueMetadataBase {
 }
 
 // A configuration value is either a single number or a bit map
+/**
+ * @publicAPI
+ */
 export type ConfigValue = number | Set<number>;
 
 export class ConfigurationCCError extends ZWaveError {

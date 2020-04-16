@@ -45,6 +45,9 @@ export enum ThermostatSetpointCommand {
 }
 
 // TODO: Can we merge this with ThermostatMode?
+/**
+ * @publicAPI
+ */
 export enum ThermostatSetpointType {
 	"N/A" = 0x00,
 	"Heating" = 0x01, // CC v1

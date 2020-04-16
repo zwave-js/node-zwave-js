@@ -73,6 +73,9 @@ export enum ManufacturerSpecificCommand {
 	DeviceSpecificReport = 0x07,
 }
 
+/**
+ * @publicAPI
+ */
 export enum DeviceIdType {
 	FactoryDefault = 0x00,
 	SerialNumber = 0x01,
