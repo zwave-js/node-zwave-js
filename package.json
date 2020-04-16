@@ -6,8 +6,22 @@
   "main": "index.js",
   "types": "index.d.ts",
   "files": [
+    "CommandClass.d.ts",
+    "CommandClass.js",
+    "Controller.d.ts",
+    "Controller.js",
+    "Driver.d.ts",
+    "Driver.js",
+    "Error.d.ts",
+    "Error.js",
+    "Node.d.ts",
+    "Node.js",
+    "Values.d.ts",
+    "Values.js",
     "build/**/*.{js,d.ts,map}",
-    "config/"
+    "config/",
+    "index.d.ts",
+    "index.js"
   ],
   "author": {
     "name": "AlCalzone",
