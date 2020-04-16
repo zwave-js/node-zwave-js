@@ -130,9 +130,10 @@
     "winston": "^3.2.1"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "tsc": "tsc -p tsconfig.build.json",
+    "build": "npm run tsc",
     "watch": "npm run build -- --watch",
-    "check": "npm run build -- --noEmit",
+    "check": "npm run tsc -- --noEmit",
     "check:watch": "npm run check -- --watch",
     "prebuild": "gulp prebuild",
     "prewatch": "gulp prebuild",
