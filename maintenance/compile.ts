@@ -9,3 +9,8 @@ export function compile(settings?: ts.Settings) {
 		.pipe(tsProject())
 		.pipe(gulp.dest(tsProject.options.outDir!));
 }
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export function check() {
+	return compile({ noEmit: true });
+}

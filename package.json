@@ -103,11 +103,8 @@
   },
   "scripts": {
     "tsc": "tsc -p tsconfig.build.json",
-    "prewatch": "gulp prebuild",
-    "watch": "npm run tsc -- --watch",
-    "precheck": "gulp prebuild",
-    "check": "npm run tsc -- --noEmit",
-    "check:watch": "npm run check -- --watch",
+    "watch": "gulp prebuild && npm run tsc -- --watch",
+    "check:watch": "gulp prebuild && npm run tsc -- --noEmit --watch",
     "test:reset": "jest --clear-cache",
     "test:ts": "jest",
     "test:ci": "npm run test:ts -- --runInBand",
