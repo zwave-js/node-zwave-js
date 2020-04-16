@@ -136,10 +136,12 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies
-      run: npm ci
+      run: |
+        npm ci
+        npm i -g gulp-cli
 
     - name: Create a clean build
-      run: npm run build
+      run: gulp build
 
     - name: Publish package to npm
       run: |
