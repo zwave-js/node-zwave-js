@@ -71,6 +71,9 @@ jobs:
 
     - name: Compile TypeScript code
       run: npx gulp build
+    
+    - name: Import main entry point
+      run: node -e 'require("./")'
 
   # ===================
 
