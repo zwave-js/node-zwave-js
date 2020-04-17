@@ -53,7 +53,11 @@ export async function copyIndexFilesToRoot(): Promise<void> {
 		let fileContents = await fs.readFile(sourceFileName, "utf8");
 		fileContents = fileContents
 			.replace(/"\.\/lib\//g, '"./build/lib/')
-			.replace(/"\.\.\/src\//g, '"./src/');
+			.replace(/"\.\.\/src\//g, '"./src/')
+			.replace(
+				/__dirname/g,
+				`require("path").join(__dirname, "./build")`,
+			);
 		const targetFileName = path.join(projectRoot, file);
 		await fs.writeFile(targetFileName, fileContents, "utf8");
 		await fs.unlink(sourceFileName);
