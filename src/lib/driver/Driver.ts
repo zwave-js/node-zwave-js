@@ -1003,7 +1003,11 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 				msg,
 			);
 			if (responseRole !== "unexpected") {
-				log.driver.transactionResponse(msg, responseRole);
+				log.driver.transactionResponse(
+					msg,
+					this.currentTransaction,
+					responseRole,
+				);
 			}
 			// For further actions, we are only interested in the innermost CC
 			if (isCommandClassContainer(msg)) this.unwrapCommands(msg);
@@ -1152,7 +1156,11 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			// This is a request we might have registered handlers for
 			await this.handleRequest(msg);
 		} else {
-			log.driver.transactionResponse(msg, "unexpected");
+			log.driver.transactionResponse(
+				msg,
+				this.currentTransaction,
+				"unexpected",
+			);
 			log.driver.print("unexpected response, discarding...", "warn");
 		}
 	}

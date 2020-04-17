@@ -24,6 +24,16 @@ const logFilename = path.join(
 	`zwave-${process.pid}.log`,
 );
 
+/**
+ * Checks the LOG_NODES env variable whether logs should be written for a given node id
+ */
+export function shouldLogNode(nodeId: number): boolean {
+	const activeFilters = (process.env.LOG_NODES ?? "*").split(",");
+	if (activeFilters.includes("*")) return true;
+	if (activeFilters.includes(nodeId.toString())) return true;
+	return false;
+}
+
 export type DataDirection = "inbound" | "outbound" | "none";
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type

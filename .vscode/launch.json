@@ -36,7 +36,7 @@
 			],
 			"env": {
 				// "NO_CACHE": "true",
-				// "LOGLEVEL": "info"
+				// "LOGLEVEL": "verbose"
 			},
 			"console": "integratedTerminal",
 			"skipFiles": ["<node_internals>/**"],
