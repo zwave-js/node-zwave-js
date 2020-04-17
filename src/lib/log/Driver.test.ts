@@ -217,7 +217,7 @@ describe("lib/log/Driver =>", () => {
 	describe("transactionResponse() (for inbound messages)", () => {
 		it("contains the direction", () => {
 			const msg = createMessage(fakeDriver, {});
-			log.driver.transactionResponse(msg, null as any);
+			log.driver.transactionResponse(msg, undefined, null as any);
 			assertMessage(spyTransport, {
 				predicate: (msg) =>
 					msg.startsWith(getDirectionPrefix("inbound")),
@@ -228,7 +228,7 @@ describe("lib/log/Driver =>", () => {
 			let msg = createMessage(fakeDriver, {
 				type: MessageType.Request,
 			});
-			log.driver.transactionResponse(msg, null as any);
+			log.driver.transactionResponse(msg, undefined, null as any);
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("[REQ]"),
 			});
@@ -236,7 +236,7 @@ describe("lib/log/Driver =>", () => {
 			msg = createMessage(fakeDriver, {
 				type: MessageType.Response,
 			});
-			log.driver.transactionResponse(msg, null as any);
+			log.driver.transactionResponse(msg, undefined, null as any);
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("[RES]"),
 				callNumber: 1,
@@ -247,7 +247,7 @@ describe("lib/log/Driver =>", () => {
 			const msg = createMessage(fakeDriver, {
 				functionType: FunctionType.HardReset,
 			});
-			log.driver.transactionResponse(msg, null as any);
+			log.driver.transactionResponse(msg, undefined, null as any);
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("[HardReset]"),
 			});
@@ -257,7 +257,7 @@ describe("lib/log/Driver =>", () => {
 			const msg = createMessage(fakeDriver, {
 				functionType: FunctionType.HardReset,
 			});
-			log.driver.transactionResponse(msg, "fatal_controller");
+			log.driver.transactionResponse(msg, undefined, "fatal_controller");
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("[fatal_controller]"),
 			});
@@ -340,7 +340,7 @@ describe("lib/log/Driver =>", () => {
 				functionType: FunctionType.HardReset,
 				type: MessageType.Response,
 			});
-			log.driver.transactionResponse(msg, null as any);
+			log.driver.transactionResponse(msg, undefined, null as any);
 
 			const expected1 = colors.cyan(
 				colors.bgCyan("[") +
