@@ -14,6 +14,7 @@ import {
 	getDirectionPrefix,
 	getNodeTag,
 	isLoglevelVisible,
+	shouldLogNode,
 	tagify,
 	ZWaveLogger,
 } from "./shared";
@@ -81,6 +82,7 @@ export function logNode(
 	const { level, message, direction, endpoint } = messageOrOptions;
 	const actualLevel = level || CONTROLLER_LOGLEVEL;
 	if (!isLoglevelVisible(actualLevel)) return;
+	if (!shouldLogNode(nodeId)) return;
 
 	logger.log({
 		level: actualLevel,
@@ -199,6 +201,7 @@ export function metadataUpdated(args: LogValueArgs<ValueID>): void {
 /** Logs the interview progress of a node */
 export function interviewStage(node: ZWaveNode): void {
 	if (!isControllerLogVisible) return;
+	if (!shouldLogNode(node.id)) return;
 
 	logger.log({
 		level: CONTROLLER_LOGLEVEL,
@@ -216,6 +219,7 @@ export function interviewStage(node: ZWaveNode): void {
 /** Logs the interview progress of a node */
 export function interviewStart(node: ZWaveNode): void {
 	if (!isControllerLogVisible) return;
+	if (!shouldLogNode(node.id)) return;
 
 	const message = `Beginning interview - last completed stage: ${
 		InterviewStage[node.interviewStage]

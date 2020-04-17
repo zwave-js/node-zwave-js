@@ -16,6 +16,7 @@ import {
 	getDirectionPrefix,
 	isLoglevelVisible,
 	messageToLines,
+	shouldLogNode,
 	tagify,
 	ZWaveLogger,
 } from "./shared";
@@ -80,23 +81,33 @@ export function transaction(transaction: Transaction): void {
 /** Logs information about a message that is received as a response to a transaction */
 export function transactionResponse(
 	message: Message,
+	originalTransaction: Transaction | undefined,
 	role: ResponseRole,
 ): void {
 	if (!isDriverLogVisible) return;
-	logMessage(message, { secondaryTags: [role], direction: "inbound" });
+	logMessage(message, {
+		nodeId: originalTransaction?.message?.getNodeId(),
+		secondaryTags: [role],
+		direction: "inbound",
+	});
 }
 
 function logMessage(
 	message: Message,
 	{
+		// Used to relate this log message to a node
+		nodeId,
 		secondaryTags,
 		direction = "none",
 	}: {
+		nodeId?: number;
 		secondaryTags?: string[];
 		direction?: DataDirection;
 	},
 ): void {
 	if (!isDriverLogVisible) return;
+	if (nodeId == undefined) nodeId = message.getNodeId();
+	if (nodeId != undefined && !shouldLogNode(nodeId)) return;
 
 	const isCCContainer = isCommandClassContainer(message);
 	const logEntry = message.toLogEntry();
