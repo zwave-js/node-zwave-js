@@ -86,7 +86,7 @@ export function transactionResponse(
 ): void {
 	if (!isDriverLogVisible) return;
 	logMessage(message, {
-		nodeId: originalTransaction?.message.getNodeId(),
+		nodeId: originalTransaction?.message?.getNodeId(),
 		secondaryTags: [role],
 		direction: "inbound",
 	});
