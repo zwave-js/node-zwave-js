@@ -7,6 +7,9 @@
 ## __WORK IN PROGRESS__
 ### Featues
 * Added support for `Color Switch CC`
+* Added exports for all the relevant things needed by consuming applications (https://github.com/AlCalzone/node-zwave-js/pull/762#issuecomment-613614445)
+* Log outputs can now be filtered by nodes using the `LOG_NODES` env variable (#772)
+* Nodes now emit a `"interview failed"` event when the interview fails with some additional info why (#769)
 
 ### Bugfixes
 * Fixed error text in `getAssociations`
@@ -15,6 +18,7 @@
 ### Changes under the hood
 * TypeScript 3.8 with all its goodies!
 * Filter out a bunch of user errors before reporting them with Sentry
+* Use `gulp` for better control over some build tasks
 
 ## 2.15.7 (2020-03-22)
 ### Bugfixes
