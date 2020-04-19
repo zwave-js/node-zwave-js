@@ -20,9 +20,27 @@
 	"files.exclude": {
 		"node_modules/": false,
 		"coverage/": false,
-		".*": false
+		".*": false,
+		"**/node_modules/": true,
+		"**/*.test.js": true,
+		".nyc_output": true,
+		"**/coverage/": true,
+		"**/*.map": true,
+		"**/zwave-js-*.tgz": true,
+		"cache": true,
+		"build": true,
+		"*.d.ts": true,
+		"*.map": true,
+		"CommandClass.js": true,
+		"Controller.js": true,
+		"Driver.js": true,
+		"Error.js": true,
+		"Node.js": true,
+		"Values.js": true,
+		"index.js": true
 	},
 	"files.associations": {
 		"**/config/**/*.json": "jsonc"
-	}
+	},
+	"editor.rulers": [72, 80, 120]
 }

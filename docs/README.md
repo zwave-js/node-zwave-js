@@ -1,11 +1,6 @@
-![node-zwave-js](docs/_images/logo.svg)
+![node-zwave-js](_images/logo.svg)
 
 <h2 align="center">Z-Wave driver written entirely in JavaScript/TypeScript</h2>
-
-![Build Status](https://action-badges.now.sh/AlCalzone/node-zwave-js)
-[![Coverage Status](https://img.shields.io/coveralls/github/AlCalzone/node-zwave-js.svg)](https://coveralls.io/github/AlCalzone/node-zwave-js)
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/AlCalzone/node-zwave-js.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/AlCalzone/node-zwave-js/context:javascript)
-[![node](https://img.shields.io/node/v/zwave-js.svg) ![npm](https://img.shields.io/npm/v/zwave-js.svg)](https://www.npmjs.com/package/zwave-js)
 
 <p align="center">
   📡 Control your <b>Z-Wave</b> network from Node.js<br />
@@ -14,18 +9,14 @@
   🔥 <a href="https://twitter.com/acdlite/status/974390255393505280" target="_blank">blazing</a> fast
 </p>
 
-## Quick Links
+# Introduction
 
--   [License](LICENSE)
--   [Changelog](CHANGELOG.md)
--   [Documentation](https://github.com/AlCalzone/node-zwave-js/wiki)
+`node-zwave-js` was started as an attempt to bring a spec compliant Z-Wave driver to the Node.js world but without the hassle of having to recompile it whenever there is a major version upgrade. The only native dependency is [`node-serialport`](https://serialport.io/). This means that `node-zwave-js` works on every Node.js version that is supported by `node-serialport` (currently `>= 8.6.0`).
+`node-zwave-js` is still under heavy development. If you are looking for a more mature solution, try [OpenZWave](https://github.com/OpenZWave/open-zwave/).
 
-## Roadmap
+For the following explanations it is assumed that you are familiar with `async/await` and `import` syntax. This library may still be used with `Promise` syntax and `require`, but the syntax changes slightly. For method and interface signatures, the [type annotation syntax](https://www.typescriptlang.org/docs/handbook/basic-types.html) from TypeScript is used.
 
-This library is still under heavy development. Thus several features are incomplete or planned:
-
--   [ ] Implementation status of Command Classes see https://github.com/AlCalzone/node-zwave-js/issues/6
--   [ ] Security (S0 / S2)
+It is recommended to either use TypeScript when consuming the library or work in an IDE that understands TypeScript definitions (like VSCode or WebStorm).
 
 <!--
 TODO: Move all this to the documentation
