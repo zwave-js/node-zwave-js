@@ -18,7 +18,7 @@
 
 -   [License](LICENSE)
 -   [Changelog](CHANGELOG.md)
--   [Documentation](./docs)
+-   [Documentation](https://alcalzone.github.io/node-zwave-js/)
 
 ## Roadmap
 
