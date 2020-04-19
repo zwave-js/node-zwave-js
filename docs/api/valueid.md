@@ -18,8 +18,6 @@ It has four properties:
 -   `property` - The name (or a numeric identifier) of the property, for example `targetValue`
 -   `propertyKey` - _(optional)_ Allows sub-addressing properties that contain multiple values (like combined sensors).
 
-# TranslatedValueID {docsify-ignore}
-
 Since both `property` and `propertyKey` can be cryptic, value IDs are exposed to consuming applications in a "translated" form, which contains all properties from `ValueID` plus the following ones:
 
 ```ts

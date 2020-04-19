@@ -1,4 +1,4 @@
-# Quickstart
+# Quick Start
 
 1.  Install this library as a dependency in your project
     ```bash

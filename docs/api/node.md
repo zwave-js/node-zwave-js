@@ -240,11 +240,11 @@ keepAwake: boolean;
 In order to save energy, battery powered devices should go back to sleep after they no longer need to communicate with the controller. This library honors this requirement by sending nodes back to sleep as soon as there are no more pending messages.
 When configuring devices or during longer message exchanges, this behavior may be annoying. You can set the `keepAwake` property of a node to `true` to avoid sending the node back to sleep immediately.
 
-### `Node` events
+## ZWaveNode events
 
 The `Node` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The available events are avaiable:
 
-## `"wake up"` / `"sleep"`
+### `"wake up"` / `"sleep"`
 
 A sleeping node has woken up or gone back to sleep. The node is passed as the single argument to the callback:
 
@@ -252,7 +252,7 @@ A sleeping node has woken up or gone back to sleep. The node is passed as the si
 (node: ZWaveNode) => void
 ```
 
-## `"dead"` / `"alive"`
+### `"dead"` / `"alive"`
 
 A non-sleeping node has stopped responding or just started responding again. The node is passed as the single argument to the callback:
 
@@ -260,7 +260,7 @@ A non-sleeping node has stopped responding or just started responding again. The
 (node: ZWaveNode) => void
 ```
 
-## `"interview completed"`
+### `"interview completed"`
 
 The interview process for this node was completed. The node is passed as the single argument to the callback:
 
@@ -270,7 +270,7 @@ The interview process for this node was completed. The node is passed as the sin
 
 **Note:** Because sleeping nodes may have wake up times of minutes up to days, it may take a very long time until this event is emitted. It might be desirable to wake up nodes manually to speed up this process.
 
-## `"ready"`
+### `"ready"`
 
 This is emitted during the interview process when enough information about the node is known that it can safely be used. The node is passed as the single argument to the callback:
 
@@ -285,7 +285,7 @@ There are two situations when this event is emitted:
 
 **Note:** This event does not imply that the node is currently alive or will respond to requests.
 
-## `"value added"` / `"value updated"` / `"value removed"`
+### `"value added"` / `"value updated"` / `"value removed"`
 
 A value belonging to this node was added, updated or removed. The callback takes the node itself and an argument detailing the change:
 
@@ -318,7 +318,7 @@ which is basically a ValueID augmented with the following properties
 -   `prevValue` - The previous value (before the change). Only present in the `"updated"` and `"removed"` events.
 -   `newValue` - The new value (after the change). Only present in the `"added"` and `"updated"` events.
 
-## `"metadata updated"`
+### `"metadata updated"`
 
 The metadata for one of this node's values was added or updated.
 The callback takes the node itself and an argument detailing the change:
@@ -345,7 +345,7 @@ which is basically a ValueID augmented with the following properties:
 -   `commandClassName` - String representation (name) of the targeted command class
 -   `metadata` - The new metadata or undefined (in case it was removed). See ValueMetadata for a detailed description of the argument.
 
-## `"notification"`
+### `"notification"`
 
 The node has sent a notification event using the `Notification` command class. The callback signature is as follows:
 
