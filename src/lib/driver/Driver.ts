@@ -269,7 +269,6 @@ export class Driver extends EventEmitter {
 
 	public constructor(
 		private port: string,
-		/** @internal */
 		options?: DeepPartial<ZWaveOptions>,
 	) {
 		super();
