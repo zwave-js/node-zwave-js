@@ -2,9 +2,7 @@
 
 The driver is the core of this library. It controls the serial interface, handles transmission and receipt of messages and manages the network cache. Any action you want to perform on the Z-Wave network must go through a driver instance or its associated nodes.
 
-A detailed description of its methods and properties follows below.
-
-## constructor
+## Constructor
 
 ```ts
 new (port: string, options?: ZWaveOptions) => Driver
@@ -93,7 +91,7 @@ sendMessage<TResponse?>(msg: Message, options?: SendMessageOptions): Promise<TRe
 This method sends a message to the Z-Wave controller. It takes two arguments:
 
 -   `message` - An instance of the message class that should be sent
--   `options` _(optional)_ - Additional options to influence the behavior of the method. See [`SendMessageOptions`](#SendMessageOptions-interface) for a detailed description.
+-   `options` _(optional)_ - Additional options to influence the behavior of the method. See [`SendMessageOptions`](#SendMessageOptions) for a detailed description.
 
 If it is known in advance which type the response will have, you can optionally pass the desired return type.
 
@@ -113,7 +111,7 @@ async sendCommand<TResponse?>(command: CommandClass, options?: SendMessageOption
 This method sends a command to a Z-Wave node. It takes two arguments:
 
 -   `command` - An instance of the command class that should be sent
--   `options` _(optional)_ - Additional options to influence the behavior of the method. See [`SendMessageOptions`](#SendMessageOptions-interface) for a detailed description.
+-   `options` _(optional)_ - Additional options to influence the behavior of the method. See [`SendMessageOptions`](#SendMessageOptions) for a detailed description.
 
 If it is known in advance which type the response will have, you can optionally pass the desired return type.
 
@@ -185,6 +183,48 @@ interface FileSystem {
 	): Promise<void>;
 	readFile(file: string, encoding: string): Promise<string>;
 	pathExists(path: string): Promise<boolean>;
+}
+```
+
+### `SendMessageOptions`
+
+Influences the behavior of `driver.sendMessage`.
+
+```ts
+interface SendMessageOptions {
+	/** The priority of the message to send. If none is given, the defined default priority of the message class will be used. */
+	priority?: MessagePriority;
+	/** If an exception should be thrown when the message to send is not supported. Setting this to false is is useful if the capabilities haven't been determined yet. Default: true */
+	supportCheck?: boolean;
+}
+```
+
+The message priority must one of the following enum values. Consuming applications typically don't need to overwrite this.
+
+```ts
+/** The priority of messages, sorted from high (0) to low (>0) */
+enum MessagePriority {
+	// Controller commands are not to be interrupted and usually finish quickly
+	Controller = 0,
+	// The security queue is the highest actual priority because secured messages
+	// require an encryption handshake before sending new messages
+	Security = 1,
+	// Pings (NoOP) are used for device probing at startup and for network diagnostics
+	Ping = 2,
+	// Multistep controller commands typically require user interaction but still
+	// should happen at a higher priority than any node data exchange
+	MultistepController = 3,
+	// Whenever sleeping devices wake up, their queued messages must be handled quickly
+	// because they want to go to sleep soon. So prioritize them over non-sleeping devices
+	WakeUp = 4,
+	// Normal operation and node data exchange
+	Normal = 5,
+	// Node querying is expensive and happens whenever a new node is discovered.
+	// In order to keep the system responsive, give them a lower priority
+	NodeQuery = 6,
+	// Some devices need their state to be polled at regular intervals. Only do that when
+	// nothing else needs to be done
+	Poll = 7,
 }
 ```
 
