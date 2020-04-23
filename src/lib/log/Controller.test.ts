@@ -335,11 +335,11 @@ describe("lib/log/Controller =>", () => {
 		it("logs the name of the interview stage", () => {
 			log.controller.interviewStage({
 				id: 1,
-				interviewStage: InterviewStage.Configuration,
+				interviewStage: InterviewStage.CommandClasses,
 			} as any);
 			assertMessage(spyTransport, {
 				predicate: (msg) =>
-					msg.includes("Interview stage completed: Configuration"),
+					msg.includes("Interview stage completed: CommandClasses"),
 			});
 		});
 
@@ -365,11 +365,11 @@ describe("lib/log/Controller =>", () => {
 		it("logs the name of the last interview stage", () => {
 			log.controller.interviewStart({
 				id: 5,
-				interviewStage: InterviewStage.Configuration,
+				interviewStage: InterviewStage.CommandClasses,
 			} as any);
 			assertMessage(spyTransport, {
 				message:
-					"  [Node 005] Beginning interview - last completed stage: Configuration",
+					"  [Node 005] Beginning interview - last completed stage: CommandClasses",
 			});
 		});
 	});
