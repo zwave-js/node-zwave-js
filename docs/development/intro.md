@@ -1,0 +1,11 @@
+# Development introduction {docsify-ignore-all}
+
+For the best possible development experience, you should use [VSCode](https://code.visualstudio.com/).
+The repository comes with settings and recommended extensions to make your life easier when working on `node-zwave-js`.
+Especially the snippets will save you a ton of typing.
+
+For more details on the different development tasks, check the corresponding pages:
+
+## [Device configuration files](development/config-files.md)
+
+Since older versions of the Z-Wave standard don't allow us to request everything we need from the devices themselves, there is a need for configuration files. If you want to add a new device or edit an existing one, start here!

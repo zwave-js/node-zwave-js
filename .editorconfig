@@ -25,3 +25,8 @@ indent_size = 4
 [*.{yml,md}]
 indent_style = space
 indent_size = 2
+
+# Indent code blocks in the documentation with 4-size tabs
+[docs/**/*.md]
+indent_style = tab
+indent_size = 4
