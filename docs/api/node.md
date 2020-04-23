@@ -11,7 +11,7 @@ Most properties are only defined **after** the node has been interviewed. The ex
 -   `interviewStage`
 -   `keepAwake`
 
-Since a node also represents the root endpoint of a device (see [`getEndpoint`](#getEndpoint-method) for a detailed explanation), the `ZWaveNode` class inherits from the [`Endpoint` class](5.-Endpoint-class). As a result, it also supports all methods and properties of that class.
+Since a node also represents the root endpoint of a device (see [`getEndpoint`](#getEndpoint) for a detailed explanation), the `ZWaveNode` class inherits from the [`Endpoint` class](api/endpoint.md). As a result, it also supports all methods and properties of that class.
 
 ## ZWaveNode methods
 
@@ -21,7 +21,7 @@ Since a node also represents the root endpoint of a device (see [`getEndpoint`](
 getValue<T?>(valueId: ValueID): T | undefined
 ```
 
-Retrieves a stored value from this node's value database. This method takes a single argument specifying which value to retrieve. See the [`ValueID` interface](7.-ValueID-interface) for a detailed description of this argument's type.
+Retrieves a stored value from this node's value database. This method takes a single argument specifying which value to retrieve. See the [`ValueID` interface](api/valueid.md) for a detailed description of this argument's type.
 If the type of the value is known in advance, you may pass an optional type argument to the method.
 
 The method either returns the stored value if it was found, and `undefined` otherwise.
@@ -125,13 +125,48 @@ This property tracks the status a node in the network currently has (or is belie
 
 Changes of a node's status are broadcasted using the corresponding events - see below.
 
-### `interviewStatus`
+### `interviewStage`
 
 ```ts
 readonly interviewStage: InterviewStage
 ```
 
-This property tracks the current status of the node interview. It contains a value representing the last completed step of the interview. You shouldn't need to use this in your application.
+This property tracks the current status of the node interview. It contains a value representing the **last completed step** of the interview. You shouldn't need to use this in your application. If you do, here are the possible values.
+
+```ts
+enum InterviewStage {
+	/** The interview process hasn't started for this node */
+	None,
+	/** The node's protocol information has been queried from the controller */
+	ProtocolInfo,
+	/** The node has been queried for supported and controlled command classes */
+	NodeInfo,
+	/**
+	 * This marks the beginning of re-interviews on application startup.
+	 * RestartFromCache and later stages will be serialized as "Complete" in the cache
+	 */
+	RestartFromCache,
+	/**
+	 * Information for all command classes has been queried.
+	 * This includes static information that is requested once as well as dynamic
+	 * information that is requested on every restart.
+	 */
+	CommandClasses,
+	/**
+	 * Device information for the node has been loaded from a config file.
+	 * If defined, some of the reported information will be overwritten based on the
+	 * config file contents.
+	 */
+	OverwriteConfig,
+	/** The node has been queried for its current neighbor list */
+	Neighbors,
+	/** The interview process has finished */
+	Complete,
+}
+```
+
+**Note:** DO NOT rely on the numeric values of the enum if you're using it in your application.
+The ordinal values are likely to change in future updates. Instead, refer to the enum values directly.
 
 ### `deviceClass`
 
@@ -207,7 +242,7 @@ readonly firmwareVersion: string
 
 The version of this node's firmware.
 
-### `manufacturerId`, `productId` and `productType` properties
+### `manufacturerId`, `productId` and `productType`
 
 ```ts
 readonly manufacturerId: number
@@ -216,12 +251,6 @@ readonly productType: number
 ```
 
 These three properties together identify the actual device this node is.
-
-```ts
-readonly firmwareVersion: string
-```
-
-The version of this node's firmware.
 
 ### `neighbors`
 
@@ -270,6 +299,14 @@ The interview process for this node was completed. The node is passed as the sin
 
 **Note:** Because sleeping nodes may have wake up times of minutes up to days, it may take a very long time until this event is emitted. It might be desirable to wake up nodes manually to speed up this process.
 
+### `"interview failed"`
+
+The interview process for this node or one of the interview attempts has failed. The second argument explains why.
+
+```ts
+(node: ZWaveNode, additionalInfo: string) => void
+```
+
 ### `"ready"`
 
 This is emitted during the interview process when enough information about the node is known that it can safely be used. The node is passed as the single argument to the callback:
@@ -298,23 +335,8 @@ A value belonging to this node was added, updated or removed. The callback takes
 (node: ZWaveNode, args: ZWaveNodeValueRemovedArgs) => void;
 ```
 
-The arguments have the following form:
+The event arguments have the shape of [`TranslatedValueID`](api/valueid.md) with two additional properties:
 
-```ts
-{
-    commandClass: CommandClasses;
-    commandClassName: string;
-    endpoint?: number;
-    propertyName: string;
-    propertyKey?: number | string;
-    prevValue: unknown;
-    newValue: unknown;
-}
-```
-
-which is basically a ValueID augmented with the following properties
-
--   `commandClassName` - String representation (name) of the targeted command class
 -   `prevValue` - The previous value (before the change). Only present in the `"updated"` and `"removed"` events.
 -   `newValue` - The new value (after the change). Only present in the `"added"` and `"updated"` events.
 
@@ -327,22 +349,8 @@ The callback takes the node itself and an argument detailing the change:
 (node: ZWaveNode, args: ZWaveNodeMetadataUpdatedArgs) => void;
 ```
 
-The argument has the following form:
+The event argument has the shape of [`TranslatedValueID`](api/valueid.md) with one additional property:
 
-```ts
-{
-    commandClass: CommandClasses;
-    commandClassName: string;
-    endpoint?: number;
-    propertyName: string;
-    propertyKey?: number | string;
-    metadata: ValueMetadata | undefined;
-}
-```
-
-which is basically a ValueID augmented with the following properties:
-
--   `commandClassName` - String representation (name) of the targeted command class
 -   `metadata` - The new metadata or undefined (in case it was removed). See ValueMetadata for a detailed description of the argument.
 
 ### `"notification"`
@@ -357,4 +365,4 @@ where
 
 -   `node` is the current node instance
 -   `notificationLabel` is a string representing the notification type (e.g. `"Home security"`)
--   `parameters` _(optional)_ is a Buffer containing additional parameters related to the event.
+-   `parameters` _(optional)_ depends on the type of the notification. It may be a `Duration`, additional numeric value, an embedded CC or a raw Buffer. Details can be found in the Z-Wave specifications.

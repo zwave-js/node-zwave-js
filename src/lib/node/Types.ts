@@ -78,25 +78,46 @@ export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
 
 // prettier-ignore
 export enum InterviewStage {
-	None,					// [✓] Query process hasn't started for this node
-	ProtocolInfo,			// [✓] Retrieve protocol information
-	NodeInfo,				// [✓] Retrieve info about supported and controlled command classes
-	// SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
+	/** The interview process hasn't started for this node */
+	None,
+	/** The node's protocol information has been queried from the controller */
+	ProtocolInfo,
+	/** The node has been queried for supported and controlled command classes */
+	NodeInfo,
+
+	// TODO: SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
 
 	// ===== the stuff above should never change =====
-	RestartFromCache,		// This marks the beginning of re-interviews on application startup.
-	// 						   RestartFromCache and later stages will be serialized as "Complete" in the cache
-	// 						   [✓] Ping each device upon restarting with cached config
+
+	/**
+	 * This marks the beginning of re-interviews on application startup.
+	 * RestartFromCache and later stages will be serialized as "Complete" in the cache
+	 */
+	RestartFromCache,
+
 	// ===== the stuff below changes frequently, so it has to be redone on every start =====
-	CommandClasses,			// [ ] Retrieve info about all command classes. This includes static information that is requested once
-	// 						       as well as dynamic information that is requested on every restart
 
-	// TODO: Heal network
+	/**
+	 * Information for all command classes has been queried.
+	 * This includes static information that is requested once as well as dynamic
+	 * information that is requested on every restart.
+	 */
+	CommandClasses,
 
-	OverwriteConfig,		// [ ] Load node configuration from a configuration file
-	Neighbors,				// [✓] Retrieve node neighbor list
-	Configuration,			// [ ] Retrieve configurable parameter information (only done on request)
-	Complete,				// [✓] Query process is completed for this node
+	// TODO: Heal network on startup
+
+	/**
+	 * Device information for the node has been loaded from a config file.
+	 * If defined, some of the reported information will be overwritten based on the
+	 * config file contents.
+	 */
+	OverwriteConfig,
+
+	/** The node has been queried for its current neighbor list */
+	Neighbors,
+
+	/** The interview process has finished */
+	Complete,
 }
 
 export enum NodeStatus {
