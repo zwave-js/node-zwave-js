@@ -14,6 +14,7 @@
 ### Bugfixes
 * Fixed error text in `getAssociations`
 * `WakeUp CC` is now marked as supported when receiving wake up notification
+* The byte length of Configuration values is now validated under more circumstances
 
 ### Changes under the hood
 * TypeScript 3.8 with all its goodies!
