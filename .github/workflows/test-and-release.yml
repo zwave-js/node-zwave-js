@@ -27,30 +27,11 @@ jobs:
         node-version: [12.x]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
+    - uses: actions/checkout@v1
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-
-    # Work around https://github.com/actions/virtual-environments/issues/427
-    - name: Clean npm cache directory
-      run: npm cache clear --force
-
-    - name: Get npm cache directory
-      id: npm-cache
-      run: echo "::set-output name=dir::$(npm config get cache)"
-
-    - name: Restore npm cache
-      uses: actions/cache@v1
-      with:
-        path: ${{ steps.npm-cache.outputs.dir }}
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          ${{ runner.os }}-node-
 
     - name: Install dependencies
       run: npm ci
@@ -79,30 +60,11 @@ jobs:
         node-version: [12.x]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
+    - uses: actions/checkout@v1
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-
-    # Work around https://github.com/actions/virtual-environments/issues/427
-    - name: Clean npm cache directory
-      run: npm cache clear --force
-
-    - name: Get npm cache directory
-      id: npm-cache
-      run: echo "::set-output name=dir::$(npm config get cache)"
-
-    - name: Restore npm cache
-      uses: actions/cache@v1
-      with:
-        path: ${{ steps.npm-cache.outputs.dir }}
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          ${{ runner.os }}-node-
 
     - name: Install dependencies
       run: npm ci
@@ -128,30 +90,11 @@ jobs:
         os: [ubuntu-latest]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
+    - uses: actions/checkout@v1
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-
-    # Work around https://github.com/actions/virtual-environments/issues/427
-    - name: Clean npm cache directory
-      run: npm cache clear --force
-
-    - name: Get npm cache directory
-      id: npm-cache
-      run: echo "::set-output name=dir::$(npm config get cache)"
-
-    - name: Restore npm cache
-      uses: actions/cache@v1
-      with:
-        path: ${{ steps.npm-cache.outputs.dir }}
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          ${{ runner.os }}-node-
 
     - name: Install dependencies
       run: npm ci
@@ -178,30 +121,11 @@ jobs:
         node-version: [12.x]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
+    - uses: actions/checkout@v1
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-
-    # Work around https://github.com/actions/virtual-environments/issues/427
-    - name: Clean npm cache directory
-      run: npm cache clear --force
-
-    - name: Get npm cache directory
-      id: npm-cache
-      run: echo "::set-output name=dir::$(npm config get cache)"
-
-    - name: Restore npm cache
-      uses: actions/cache@v1
-      with:
-        path: ${{ steps.npm-cache.outputs.dir }}
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          ${{ runner.os }}-node-
 
     - name: Install dependencies
       run: npm ci
@@ -234,30 +158,11 @@ jobs:
         node-version: [12.x]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
+    - uses: actions/checkout@v1
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-
-    # Work around https://github.com/actions/virtual-environments/issues/427
-    - name: Clean npm cache directory
-      run: npm cache clear --force
-
-    - name: Get npm cache directory
-      id: npm-cache
-      run: echo "::set-output name=dir::$(npm config get cache)"
-
-    - name: Restore npm cache
-      uses: actions/cache@v1
-      with:
-        path: ${{ steps.npm-cache.outputs.dir }}
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          ${{ runner.os }}-node-
 
     - name: Install dependencies
       run: npm ci
@@ -280,3 +185,13 @@ jobs:
         export SENTRY_ORG=alcalzone
         sentry-cli releases new -p iobroker_zwave zwave-js@$VERSION
         sentry-cli releases set-commits --auto zwave-js@$VERSION
+
+  # ===================
+
+  # Dummy job for skipped builds - without this, github reports the build as failed
+  skip-ci:
+    if: contains(github.event.head_commit.message, '[skip ci]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Skip build
+        run: echo "Build skipped!"
