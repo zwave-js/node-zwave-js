@@ -163,6 +163,9 @@ export class ConfigurationCCAPI extends CCAPI {
 
 		const ccInstance = this.endpoint.createCCInstance(ConfigurationCC)!;
 		let valueSize = ccInstance.getParamInformation(property).valueSize;
+		const valueFormat =
+			ccInstance.getParamInformation(property).format ||
+			ValueFormat.SignedInteger;
 
 		let targetValue: number;
 		if (propertyKey) {
@@ -184,7 +187,28 @@ export class ConfigurationCCAPI extends CCAPI {
 			targetValue = value;
 		}
 
-		await this.set(property, targetValue, (valueSize || 1) as any);
+		if (!valueSize) {
+			// If there's no value size configured, figure out a matching value size
+			valueSize = getMinIntegerSize(
+				targetValue,
+				valueFormat === ValueFormat.SignedInteger,
+			);
+			// Throw if the value is too large or too small
+			if (!valueSize) {
+				throw new ZWaveError(
+					`The value ${targetValue} is not valid for configuration parameters!`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+		}
+
+		// Make sure that the given value fits into the value size
+		if (!isSafeValue(targetValue, valueSize, valueFormat)) {
+			// If there is a value size configured, check that the given value is compatible
+			throwInvalidValueError(value, property, valueSize, valueFormat);
+		}
+
+		await this.set(property, targetValue, valueSize as any);
 
 		// Refresh the current value and ignore potential timeouts
 		void this.get(property).catch(() => {
@@ -1012,6 +1036,21 @@ export class ConfigurationCCSet extends ConfigurationCC {
 			const valueFormat =
 				this.getParamInformation(this.parameter).format ||
 				ValueFormat.SignedInteger;
+
+			// Make sure that the given value fits into the value size
+			if (
+				typeof this.value === "number" &&
+				!isSafeValue(this.value, valueSize, valueFormat)
+			) {
+				// If there is a value size configured, check that the given value is compatible
+				throwInvalidValueError(
+					this.value,
+					this.parameter,
+					valueSize,
+					valueFormat,
+				);
+			}
+
 			try {
 				serializeValue(
 					this.payload,
@@ -1128,22 +1167,35 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 			(valueSize & 0b111);
 		if (!this._resetToDefault) {
 			for (let i = 0; i < this.parameters.length; i++) {
+				const value = this._values[i];
 				const param = this._parameters[i];
 				const valueFormat =
 					this.getParamInformation(param).format ||
 					ValueFormat.SignedInteger;
+
+				// Make sure that the given value fits into the value size
+				if (!isSafeValue(value, valueSize, valueFormat)) {
+					// If there is a value size configured, check that the given value is compatible
+					throwInvalidValueError(
+						value,
+						param,
+						valueSize,
+						valueFormat,
+					);
+				}
+
 				try {
 					serializeValue(
 						this.payload,
 						4 + i * valueSize,
 						valueSize,
 						valueFormat,
-						this._values[i],
+						value,
 					);
 				} catch (e) {
 					tryCatchOutOfBoundsError(
 						e,
-						this._values[i],
+						value,
 						param,
 						valueSize,
 						valueFormat,
@@ -1589,25 +1641,28 @@ export class ConfigurationCCDefaultReset extends ConfigurationCC {
 	}
 }
 
-export function isSafeValue(
+function isSafeValue(
 	value: number,
-	size: 1 | 2 | 4,
+	size: number,
 	format: ValueFormat,
 ): boolean {
-	let minSize: number | undefined;
+	let minValue: number;
+	let maxValue: number;
 	switch (format) {
 		case ValueFormat.SignedInteger:
-			minSize = getMinIntegerSize(value, true);
+			minValue = -Math.pow(2, 8 * size - 1);
+			maxValue = Math.pow(2, 8 * size - 1) - 1;
 			break;
 		case ValueFormat.UnsignedInteger:
 		case ValueFormat.Enumerated:
-			minSize = getMinIntegerSize(value, false);
+			minValue = 0;
+			maxValue = Math.pow(2, 8 * size);
 			break;
 		case ValueFormat.BitField:
 		default:
 			throw new Error("not implemented");
 	}
-	return minSize != undefined && size >= minSize;
+	return minValue <= value && value <= maxValue;
 }
 
 /** Interprets values from the payload depending on the value format */
@@ -1627,6 +1682,21 @@ function parseValue(
 	}
 }
 
+function throwInvalidValueError(
+	value: any,
+	parameter: number,
+	valueSize: number,
+	valueFormat: ValueFormat,
+): never {
+	throw new ZWaveError(
+		`The value ${value} is invalid for configuration parameter ${parameter} (size = ${valueSize}, format = ${getEnumMemberName(
+			ValueFormat,
+			valueFormat,
+		)})!`,
+		ZWaveErrorCodes.Argument_Invalid,
+	);
+}
+
 function tryCatchOutOfBoundsError(
 	e: Error,
 	value: any,
@@ -1635,13 +1705,7 @@ function tryCatchOutOfBoundsError(
 	valueFormat: ValueFormat,
 ): void {
 	if (e.message.includes("out of bounds")) {
-		throw new ZWaveError(
-			`The value ${value} is invalid for configuration parameter ${parameter} (size = ${valueSize}, format = ${getEnumMemberName(
-				ValueFormat,
-				valueFormat,
-			)})!`,
-			ZWaveErrorCodes.Argument_Invalid,
-		);
+		throwInvalidValueError(value, parameter, valueSize, valueFormat);
 	} else {
 		throw e;
 	}
