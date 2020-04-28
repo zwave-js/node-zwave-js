@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 2.16.0 (2020-04-28)
 ### Featues
 * Added support for `Color Switch CC`
 * Added exports for all the relevant things needed by consuming applications (https://github.com/AlCalzone/node-zwave-js/pull/762#issuecomment-613614445)
@@ -20,6 +20,7 @@
 * TypeScript 3.8 with all its goodies!
 * Filter out a bunch of user errors before reporting them with Sentry
 * Use `gulp` for better control over some build tasks
+* Check out the new [Documentation](https://alcalzone.github.io/node-zwave-js)!
 
 ## 2.15.7 (2020-03-22)
 ### Bugfixes
