@@ -1,4 +1,5 @@
 import { deserializeCacheValue, serializeCacheValue } from "./Cache";
+import { Duration } from "./Duration";
 
 describe("lib/values/Cache", () => {
 	describe("serializeCacheValue()", () => {
@@ -42,6 +43,16 @@ describe("lib/values/Cache", () => {
 			const expected = { foo: "bar", 0: 1, $$type$$: "map" };
 			expect(serializeCacheValue(input)).toEqual(expected);
 		});
+
+		it("converts Durations into objects", () => {
+			const input = new Duration(2, "minutes");
+			const expected = {
+				unit: "minutes",
+				value: 2,
+				$$type$$: "duration",
+			};
+			expect(serializeCacheValue(input)).toEqual(expected);
+		});
 	});
 
 	describe("deserializeCacheValue()", () => {
@@ -83,6 +94,15 @@ describe("lib/values/Cache", () => {
 				["foo", "bar"],
 				[0, 1],
 			]);
+			expect(deserializeCacheValue(input)).toEqual(expected);
+		});
+
+		it("restores Durations", () => {
+			const expected = new Duration(1, "default");
+			const input = {
+				unit: "default",
+				$$type$$: "duration",
+			};
 			expect(deserializeCacheValue(input)).toEqual(expected);
 		});
 	});

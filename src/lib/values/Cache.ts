@@ -2,6 +2,7 @@ import { composeObject, entries } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import type { ValueID } from "../node/ValueDB";
 import type { JSONObject } from "../util/misc";
+import { Duration } from "./Duration";
 import type { ValueMetadata } from "./Metadata";
 
 // export type SerializableValue = number | string | boolean | Map<string | number, any> | JSONObject;
@@ -33,6 +34,14 @@ export function serializeCacheValue(value: unknown): SerializedValue {
 			),
 			[SPECIAL_TYPE_KEY]: "map",
 		};
+	} else if (value instanceof Duration) {
+		const valueAsJSON = value.toJSON();
+		return {
+			...(typeof valueAsJSON === "string"
+				? { unit: valueAsJSON }
+				: valueAsJSON),
+			[SPECIAL_TYPE_KEY]: "duration",
+		};
 	} else if (
 		typeof value === "number" ||
 		typeof value === "string" ||
@@ -46,19 +55,24 @@ export function serializeCacheValue(value: unknown): SerializedValue {
 
 /** Deserializes a value that was serialized by serializeCacheValue */
 export function deserializeCacheValue(value: SerializedValue): unknown {
-	// Convert objects which used to be a map back to a Map
-	if (
-		isObject(value) &&
-		(value as Record<any, any>)[SPECIAL_TYPE_KEY] === "map"
-	) {
-		const { [SPECIAL_TYPE_KEY]: _, ...rest } = value as Record<any, any>;
-		return new Map<unknown, unknown>(
-			entries(rest)
-				// We assume that all keys that resemble a number should be a number
-				.map(([k, v]) => [/^\d+$/.test(k) ? parseInt(k, 10) : k, v])
-				// recursively deserialize the value
-				.map(([k, v]) => [k, deserializeCacheValue(v)]),
-		);
+	if (isObject(value)) {
+		const specialType = (value as Record<any, any>)[SPECIAL_TYPE_KEY];
+		// Convert objects which used to be a map back to a Map
+		if (specialType === "map") {
+			const { [SPECIAL_TYPE_KEY]: _, ...rest } = value as Record<
+				any,
+				any
+			>;
+			return new Map<unknown, unknown>(
+				entries(rest)
+					// We assume that all keys that resemble a number should be a number
+					.map(([k, v]) => [/^\d+$/.test(k) ? parseInt(k, 10) : k, v])
+					// recursively deserialize the value
+					.map(([k, v]) => [k, deserializeCacheValue(v)]),
+			);
+		} else if (specialType === "duration") {
+			return new Duration(value.value ?? 1, value.unit);
+		}
 	}
 	return value;
 }
