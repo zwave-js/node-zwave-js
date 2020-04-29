@@ -1,3 +1,4 @@
+import { JsonlDB } from "@alcalzone/jsonl-db/build/lib/db";
 import { wait } from "alcalzone-shared/async";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { entries } from "alcalzone-shared/objects";
@@ -64,7 +65,9 @@ import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
 import { DeepPartial, getEnumMemberName, skipBytes } from "../util/misc";
 import { num2hex } from "../util/strings";
+import { deserializeCacheValue } from "../values/Cache";
 import type { Duration } from "../values/Duration";
+import type { ValueMetadata } from "../values/Metadata";
 import type { FileSystem } from "./FileSystem";
 import { Transaction } from "./Transaction";
 
@@ -255,6 +258,17 @@ export class Driver extends EventEmitter {
 
 	public readonly cacheDir: string;
 
+	private _valueDB: JsonlDB | undefined;
+	/** @internal */
+	public get valueDB(): JsonlDB | undefined {
+		return this._valueDB;
+	}
+	private _metadataDB: JsonlDB<ValueMetadata> | undefined;
+	/** @internal */
+	public get metadataDB(): JsonlDB<ValueMetadata> | undefined {
+		return this._metadataDB;
+	}
+
 	private _controller: ZWaveController | undefined;
 	/** Encapsulates information about the Z-Wave controller and provides access to its nodes */
 	public get controller(): ZWaveController {
@@ -393,19 +407,52 @@ export class Driver extends EventEmitter {
 				.on("node added", this.onNodeAdded.bind(this))
 				.on("node removed", this.onNodeRemoved.bind(this));
 		}
+
+		const initDatabases = async (): Promise<void> => {
+			// Always start the value and metadata databases
+			const valueDBFile = path.join(
+				this.cacheDir,
+				`${this._controller!.homeId!.toString(16)}.values.jsonl`,
+			);
+			this._valueDB = new JsonlDB(valueDBFile, {
+				ignoreReadErrors: true,
+				reviver: (key, value) => deserializeCacheValue(value),
+			});
+			await this._valueDB.open();
+
+			const metadataDBFile = path.join(
+				this.cacheDir,
+				`${this._controller!.homeId!.toString(16)}.metadata.jsonl`,
+			);
+			this._metadataDB = new JsonlDB(metadataDBFile, {
+				ignoreReadErrors: true,
+			});
+			await this._metadataDB.open();
+
+			// Try to restore the network information from the cache
+			if (process.env.NO_CACHE !== "true") {
+				await this.restoreNetworkStructureFromCache();
+			} else {
+				// When ignoring the cache, there's no need to clear the file because
+				// the next save will overwrite it.
+				// Since value/metadata DBs are append-only, we need to clear them
+				// if the cache should be ignored
+				this._valueDB.clear();
+				this._metadataDB.clear();
+			}
+		};
+
 		if (!this.options.skipInterview) {
-			// Interview the controller
-			await this._controller.interview();
+			// Interview the controller.
+			await this._controller.interview(initDatabases);
+			// No need to initialize databases if skipInterview is true, because it is only used in some
+			// Driver unit tests that don't need access to them
 		}
 
 		// in any case we need to emit the driver ready event here
 		this._controllerInterviewed = true;
 		log.driver.print("driver ready");
 		this.emit("driver ready");
-
-		// Try to restore the network information from the cache
-		if (process.env.NO_CACHE !== "true")
-			await this.restoreNetworkFromCache();
 
 		// Add event handlers for the nodes
 		for (const node of this._controller.nodes.values()) {
@@ -1958,6 +2005,7 @@ ${handlers.length} left`,
 	 * For performance reasons, these calls may be throttled.
 	 */
 	public async saveNetworkToCache(): Promise<void> {
+		// TODO: Detect if the network needs to be saved at all
 		if (!this._controller || !this.controller.homeId) return;
 		// Ensure this method isn't being executed too often
 		if (
@@ -1984,14 +2032,15 @@ ${handlers.length} left`,
 	/**
 	 * Restores a previously stored Z-Wave network state from cache to speed up the startup process
 	 */
-	public async restoreNetworkFromCache(): Promise<void> {
+	public async restoreNetworkStructureFromCache(): Promise<void> {
 		if (!this._controller || !this.controller.homeId) return;
 
 		const cacheFile = path.join(
 			this.cacheDir,
-			this.controller.homeId.toString(16) + ".json",
+			`${this.controller.homeId.toString(16)}.json`,
 		);
 		if (!(await this.options.fs.pathExists(cacheFile))) return;
+
 		try {
 			log.driver.print(
 				`Cache file for homeId ${num2hex(

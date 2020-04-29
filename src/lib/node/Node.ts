@@ -132,7 +132,7 @@ export class ZWaveNode extends Endpoint {
 		// Define this node's intrinsic endpoint as the root device (0)
 		super(id, driver, 0);
 
-		this._valueDB = new ValueDB();
+		this._valueDB = new ValueDB(id, driver.valueDB!, driver.metadataDB!);
 		for (const event of [
 			"value added",
 			"value updated",
@@ -365,7 +365,7 @@ export class ZWaveNode extends Endpoint {
 
 	private nodeInfoReceived: boolean = false;
 
-	private _valueDB = new ValueDB();
+	private _valueDB: ValueDB;
 	/**
 	 * Provides access to this node's values
 	 * @internal
@@ -1742,16 +1742,6 @@ version:               ${this.version}`;
 					] = endpoint.implementedCommandClasses.get(cc);
 				}
 			}
-			// If the CC is implemented and has values or value metadata,
-			// store them
-			const ccInstance = this.createCCInstanceUnsafe(cc);
-			if (ccInstance) {
-				// Store values if there ara any
-				const ccValues = ccInstance.serializeValuesForCache();
-				if (ccValues.length > 0) serializedCC.values = ccValues;
-				const ccMetadata = ccInstance.serializeMetadataForCache();
-				if (ccMetadata.length > 0) serializedCC.metadata = ccMetadata;
-			}
 			ret.commandClasses[num2hex(cc)] = serializedCC;
 		}
 		return ret;
@@ -1874,6 +1864,13 @@ version:               ${this.version}`;
 						version: enforceType(version, "number"),
 					});
 				}
+
+				// In pre-3.0 cache files, the metadata and values array must be deserialized before creating endpoints
+				// Post 3.0, the driver takes care of loading them before deserializing nodes
+				// In order to understand pre-3.0 cache files, leave this deserialization code in
+
+				// TODO: Remove this code in the next major version
+
 				// Metadata must be deserialized before values since that may be necessary to correctly translate value IDs
 				if (isArray(metadata) && metadata.length > 0) {
 					// If any exist, deserialize the metadata aswell
