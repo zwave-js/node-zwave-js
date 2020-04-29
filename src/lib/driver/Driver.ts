@@ -1,4 +1,4 @@
-import { JsonlDB } from "@alcalzone/jsonl-db/build/lib/db";
+import { JsonlDB, JsonlDBOptions } from "@alcalzone/jsonl-db";
 import { wait } from "alcalzone-shared/async";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { entries } from "alcalzone-shared/objects";
@@ -410,6 +410,14 @@ export class Driver extends EventEmitter {
 
 		const initDatabases = async (): Promise<void> => {
 			// Always start the value and metadata databases
+			const autoCompress: JsonlDBOptions<any>["autoCompress"] = {
+				onOpen: true,
+				intervalMs: 60000,
+				intervalMinChanges: 5,
+				sizeFactor: 2,
+				sizeFactorMinimumSize: 20,
+			};
+
 			const valueDBFile = path.join(
 				this.cacheDir,
 				`${this._controller!.homeId!.toString(16)}.values.jsonl`,
@@ -417,6 +425,7 @@ export class Driver extends EventEmitter {
 			this._valueDB = new JsonlDB(valueDBFile, {
 				ignoreReadErrors: true,
 				reviver: (key, value) => deserializeCacheValue(value),
+				autoCompress,
 			});
 			await this._valueDB.open();
 
@@ -426,6 +435,7 @@ export class Driver extends EventEmitter {
 			);
 			this._metadataDB = new JsonlDB(metadataDBFile, {
 				ignoreReadErrors: true,
+				autoCompress,
 			});
 			await this._metadataDB.open();
 
