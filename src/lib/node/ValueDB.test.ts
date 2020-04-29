@@ -12,7 +12,7 @@ describe("lib/node/ValueDB => ", () => {
 	const onMetadataUpdated = jest.fn();
 
 	function createValueDB(): void {
-		valueDB = new ValueDB()
+		valueDB = new ValueDB(2, new Map() as any, new Map() as any)
 			.on("value added", onValueAdded)
 			.on("value updated", onValueUpdated)
 			.on("value removed", onValueRemoved)

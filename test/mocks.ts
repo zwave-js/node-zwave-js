@@ -5,8 +5,17 @@ import { getImplementedVersion } from "../src/lib/commandclass/CommandClass";
 import type { CommandClasses } from "../src/lib/commandclass/CommandClasses";
 import { SendDataRequest } from "../src/lib/controller/SendDataMessages";
 import type { Driver } from "../src/lib/driver/Driver";
-import { FunctionType, MessagePriority, MessageType } from "../src/lib/message/Constants";
-import { expectedResponse, Message, messageTypes, priority } from "../src/lib/message/Message";
+import {
+	FunctionType,
+	MessagePriority,
+	MessageType,
+} from "../src/lib/message/Constants";
+import {
+	expectedResponse,
+	Message,
+	messageTypes,
+	priority,
+} from "../src/lib/message/Message";
 import type { ZWaveNode } from "../src/lib/node/Node";
 
 const instances = new Map<string, MockSerialPort>();
@@ -136,6 +145,8 @@ export function createEmptyMockDriver() {
 			nodes: new Map(),
 			ownNodeId: 1,
 		},
+		valueDB: new Map(),
+		metadataDB: new Map(),
 	};
 	ret.sendCommand.mockImplementation(async (command, options) => {
 		const msg = new SendDataRequest((ret as unknown) as Driver, {
