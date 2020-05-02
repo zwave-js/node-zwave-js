@@ -4,8 +4,19 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Breaking changes
+* The `healNetwork` method was removed from the Controller class (deprecated in `v2.4.0`) (#731)
+* The minimum supported Node.js version is now 10
+
+### Features
+* Reduced CPU usage of the network cache (#784)
+
+### Bugfixes
+* `Duration` objects are now correctly deserialized from the cache
+
 ## 2.16.0 (2020-04-28)
-### Featues
+### Features
 * Added support for `Color Switch CC`
 * Added exports for all the relevant things needed by consuming applications (https://github.com/AlCalzone/node-zwave-js/pull/762#issuecomment-613614445)
 * Log outputs can now be filtered by nodes using the `LOG_NODES` env variable (#772)
@@ -52,7 +63,7 @@
 * Send data transmit reports for singlecast messages are detected correctly again
 
 ## 2.15.0 (2020-03-07)
-### Featues
+### Features
 * Config files may now specify manufacturer proprietary parameters. This can be used to enable certain manufacturer proprietary commands
 * Completed support for the `Fibaro Venetian Blind CC`
 * Added support for some legacy devices by implementing `Multi Instance CC` (version 1 of the `Multi Channel CC`)

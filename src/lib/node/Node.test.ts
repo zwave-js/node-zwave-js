@@ -781,10 +781,13 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("getEndpoint()", () => {
-		const fakeDriver = createEmptyMockDriver();
+		let node: ZWaveNode;
+		beforeEach(() => {
+			const fakeDriver = createEmptyMockDriver();
+			node = new ZWaveNode(2, fakeDriver as any);
+		});
 
 		it("throws when a negative endpoint index is requested", () => {
-			const node = new ZWaveNode(2, fakeDriver as any);
 			assertZWaveError(() => node.getEndpoint(-1), {
 				errorCode: ZWaveErrorCodes.Argument_Invalid,
 				messageMatches: "must be positive",
@@ -792,12 +795,10 @@ describe("lib/node/Node", () => {
 		});
 
 		it("returns the node itself when endpoint 0 is requested", () => {
-			const node = new ZWaveNode(2, fakeDriver as any);
 			expect(node.getEndpoint(0)).toBe(node);
 		});
 
 		it("returns a new endpoint with the correct endpoint index otherwise", () => {
-			const node = new ZWaveNode(2, fakeDriver as any);
 			// interviewComplete needs to be true for getEndpoint to work
 			node.valueDB.setValue(
 				{
@@ -819,7 +820,6 @@ describe("lib/node/Node", () => {
 		});
 
 		it("caches the created endpoint instances", () => {
-			const node = new ZWaveNode(2, fakeDriver as any);
 			// interviewComplete needs to be true for getEndpoint to work
 			node.valueDB.setValue(
 				{
@@ -842,7 +842,6 @@ describe("lib/node/Node", () => {
 		});
 
 		it("returns undefined if a non-existent endpoint is requested", () => {
-			const node = new ZWaveNode(2, fakeDriver as any);
 			const actual = node.getEndpoint(5);
 			expect(actual).toBeUndefined();
 		});
@@ -888,19 +887,6 @@ describe("lib/node/Node", () => {
 					},
 				},
 			},
-			// TODO: These should be values
-			// endpointCountIsDynamic: false,
-			// endpointsHaveIdenticalCapabilities: true,
-			// individualEndpointCount: 5,
-			// aggregatedEndpointCount: 2,
-			// endpoints: {
-			// 	1: {
-			// 		isDynamic: false,
-			// 		genericClass: 5,
-			// 		specificClass: 111,
-			// 		supportedCCs: [1, 2, 3, 4],
-			// 	},
-			// },
 		};
 
 		it("serializing a deserialized node should result in the original object", () => {
@@ -920,40 +906,6 @@ describe("lib/node/Node", () => {
 			expect(node.serialize().interviewStage).toEqual(
 				InterviewStage[InterviewStage.Complete],
 			);
-		});
-
-		it("the serialized command classes should include values and metadata", () => {
-			const node = new ZWaveNode(1, fakeDriver, undefined, [
-				CommandClasses.Basic,
-			]);
-			// @ts-ignore We need write access to the map
-			fakeDriver.controller!.nodes.set(1, node);
-
-			const valueId: ValueID = {
-				commandClass: CommandClasses.Basic,
-				property: "targetValue",
-			};
-
-			node.valueDB.setValue(valueId, 10);
-			node.valueDB.setMetadata(valueId, ValueMetadata.WriteOnlyInt16);
-
-			const serialized = node.serialize();
-			// Test that all values are serialized
-			expect(
-				serialized.commandClasses["0x20"].values,
-			).toIncludeAllMembers([
-				{ endpoint: 0, property: "targetValue", value: 10 },
-			]);
-			// Test that all metadata is serialized
-			expect(
-				serialized.commandClasses["0x20"].metadata,
-			).toIncludeAllMembers([
-				{
-					endpoint: 0,
-					property: "targetValue",
-					metadata: ValueMetadata.WriteOnlyInt16,
-				},
-			]);
 		});
 
 		it("deserialize() should correctly read values and metadata", () => {
@@ -1195,6 +1147,8 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("changing the node status", () => {
+		const fakeDriver = createEmptyMockDriver();
+
 		interface TestOptions {
 			initialStatus: NodeStatus;
 			targetStatus: NodeStatus;
@@ -1203,7 +1157,7 @@ describe("lib/node/Node", () => {
 		}
 
 		function performTest(options: TestOptions): void {
-			const node = new ZWaveNode(1, undefined as any);
+			const node = new ZWaveNode(1, (fakeDriver as unknown) as Driver);
 			node.status = options.initialStatus;
 			const spy = jest.fn();
 			node.on(options.expectedEvent, spy);

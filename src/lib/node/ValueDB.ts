@@ -1,3 +1,4 @@
+import type { JsonlDB } from "@alcalzone/jsonl-db";
 import { EventEmitter } from "events";
 import type { CommandClasses } from "../commandclass/CommandClasses";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
@@ -91,7 +92,10 @@ export interface ValueDB {
 	removeAllListeners(event?: ValueDBEvents): this;
 }
 
-export function valueIdToString(valueID: ValueID): string {
+/**
+ * Ensures all Value ID properties are in the same order and there are no extraneous properties.
+ * A normalized value ID can be used as a database key */
+export function normalizeValueID(valueID: ValueID): ValueID {
 	// valueIdToString is used by all other methods of the Value DB.
 	// Since those may be called by unsanitized value IDs, we need
 	// to make sure we have a valid value ID at our hands
@@ -104,7 +108,11 @@ export function valueIdToString(valueID: ValueID): string {
 		property,
 	};
 	if (propertyKey != undefined) jsonKey.propertyKey = propertyKey;
-	return JSON.stringify(jsonKey);
+	return jsonKey as any;
+}
+
+export function valueIdToString(valueID: ValueID): string {
+	return JSON.stringify(normalizeValueID(valueID));
 }
 
 export interface SetValueOptions {
@@ -118,8 +126,35 @@ export interface SetValueOptions {
  * The value store for a single node
  */
 export class ValueDB extends EventEmitter {
-	private _db = new Map<string, unknown>();
-	private _metadata = new Map<string, ValueMetadata>();
+	// This is a wrapper around the driver's on-disk value and metadata key value stores
+	public constructor(
+		nodeId: number,
+		valueDB: JsonlDB,
+		metadataDB: JsonlDB<ValueMetadata>,
+	) {
+		super();
+		this.nodeId = nodeId;
+		this._db = valueDB;
+		this._metadata = metadataDB;
+	}
+
+	private nodeId: number;
+	private _db: JsonlDB<unknown>;
+	private _metadata: JsonlDB<ValueMetadata>;
+
+	private valueIdToDBKey(valueID: ValueID): string {
+		return JSON.stringify({
+			nodeId: this.nodeId,
+			...normalizeValueID(valueID),
+		});
+	}
+
+	private dbKeyToValueId(key: string): ValueID {
+		const { nodeId, ...valueId }: { nodeId: number } & ValueID = JSON.parse(
+			key,
+		);
+		return valueId;
+	}
 
 	/**
 	 * Stores a value for a given value id
@@ -135,7 +170,7 @@ export class ValueDB extends EventEmitter {
 		};
 		let dbKey: string;
 		try {
-			dbKey = valueIdToString(valueId);
+			dbKey = this.valueIdToDBKey(valueId);
 		} catch (e) {
 			if (
 				e instanceof ZWaveError &&
@@ -169,7 +204,7 @@ export class ValueDB extends EventEmitter {
 		valueId: ValueID,
 		options: SetValueOptions = {},
 	): boolean {
-		const dbKey: string = valueIdToString(valueId);
+		const dbKey: string = this.valueIdToDBKey(valueId);
 		if (this._db.has(dbKey)) {
 			const prevValue = this._db.get(dbKey);
 			this._db.delete(dbKey);
@@ -190,7 +225,7 @@ export class ValueDB extends EventEmitter {
 	 */
 	/* wotan-disable-next-line no-misused-generics */
 	public getValue<T = unknown>(valueId: ValueID): T | undefined {
-		const key = valueIdToString(valueId);
+		const key = this.valueIdToDBKey(valueId);
 		return this._db.get(key) as T | undefined;
 	}
 
@@ -198,7 +233,7 @@ export class ValueDB extends EventEmitter {
 	 * Checks if a value for a given value id exists in this ValueDB
 	 */
 	public hasValue(valueId: ValueID): boolean {
-		const key = valueIdToString(valueId);
+		const key = this.valueIdToDBKey(valueId);
 		return this._db.has(key);
 	}
 
@@ -206,7 +241,7 @@ export class ValueDB extends EventEmitter {
 	public getValues(forCC: CommandClasses): (ValueID & { value: unknown })[] {
 		const ret: ReturnType<ValueDB["getValues"]> = [];
 		this._db.forEach((value, key) => {
-			const valueId: ValueID = JSON.parse(key);
+			const valueId = this.dbKeyToValueId(key);
 			if (forCC === valueId.commandClass) ret.push({ ...valueId, value });
 		});
 		return ret;
@@ -214,14 +249,30 @@ export class ValueDB extends EventEmitter {
 
 	/** Clears all values from the value DB */
 	public clear(options: SetValueOptions = {}): void {
-		this._db.forEach((_val, key) => {
-			const valueId: ValueID = JSON.parse(key);
-			this.removeValue(valueId, options);
-		});
-		this._metadata.forEach((_meta, key) => {
-			const valueId = JSON.parse(key);
-			this.setMetadata(valueId, undefined, options);
-		});
+		const oldValues = [...this._db];
+		const oldMetadataKeys = [...this._metadata.keys()];
+
+		this._db.clear();
+		this._metadata.clear();
+
+		if (options.noEvent !== true) {
+			oldValues.forEach(([key, prevValue]) => {
+				const valueId = this.dbKeyToValueId(key);
+				const cbArg: ValueRemovedArgs = {
+					...valueId,
+					prevValue,
+				};
+				this.emit("value removed", cbArg);
+			});
+			oldMetadataKeys.forEach((key) => {
+				const valueId = this.dbKeyToValueId(key);
+				const cbArg: MetadataUpdatedArgs = {
+					...valueId,
+					metadata: undefined,
+				};
+				this.emit("metadata updated", cbArg);
+			});
+		}
 	}
 
 	/**
@@ -234,7 +285,7 @@ export class ValueDB extends EventEmitter {
 	): void {
 		let dbKey: string;
 		try {
-			dbKey = valueIdToString(valueId);
+			dbKey = this.valueIdToDBKey(valueId);
 		} catch (e) {
 			if (
 				e instanceof ZWaveError &&
@@ -266,7 +317,7 @@ export class ValueDB extends EventEmitter {
 	 * Checks if metadata for a given value id exists in this ValueDB
 	 */
 	public hasMetadata(valueId: ValueID): boolean {
-		const key = valueIdToString(valueId);
+		const key = this.valueIdToDBKey(valueId);
 		return this._metadata.has(key);
 	}
 
@@ -274,7 +325,7 @@ export class ValueDB extends EventEmitter {
 	 * Retrieves metadata for a given value id
 	 */
 	public getMetadata(valueId: ValueID): ValueMetadata | undefined {
-		const key = valueIdToString(valueId);
+		const key = this.valueIdToDBKey(valueId);
 		return this._metadata.get(key);
 	}
 

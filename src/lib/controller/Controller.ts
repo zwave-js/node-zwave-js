@@ -251,8 +251,11 @@ export class ZWaveController extends EventEmitter {
 	/**
 	 * @internal
 	 * Interviews the controller for the necessary information.
+	 * @param readyToInitNodes Asynchronous callback for the driver to set everything up before nodes are created
 	 */
-	public async interview(): Promise<void> {
+	public async interview(
+		readyToInitNodes: () => Promise<void>,
+	): Promise<void> {
 		log.controller.print("beginning interview...");
 
 		// get basic controller version info
@@ -353,6 +356,9 @@ export class ZWaveController extends EventEmitter {
 		) {
 			// TODO: send FUNC_ID_ZW_GET_VIRTUAL_NODES message
 		}
+
+		// Give the Driver time to set up the value DBs
+		await readyToInitNodes();
 
 		// Request information about all nodes with the GetInitData message
 		log.controller.print(`querying node information...`);
@@ -664,11 +670,6 @@ export class ZWaveController extends EventEmitter {
 
 	private _healNetworkActive: boolean = false;
 	private _healNetworkProgress = new Map<number, HealNodeStatus>();
-
-	/** @deprecated Use `beginHealNetwork` instead */
-	public healNetwork(): boolean {
-		return this.beginHealingNetwork();
-	}
 
 	/**
 	 * Requests all alive slave nodes to update their neighbor lists
