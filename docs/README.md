@@ -11,8 +11,9 @@
 
 # Introduction
 
-`node-zwave-js` was started as an attempt to bring a spec compliant Z-Wave driver to the Node.js world but without the hassle of having to recompile it whenever there is a major version upgrade. The only native dependency is [`node-serialport`](https://serialport.io/). This means that `node-zwave-js` works on every Node.js version that is supported by `node-serialport` (currently `>= 8.6.0`).
-`node-zwave-js` is still under heavy development. If you are looking for a more mature solution, try [OpenZWave](https://github.com/OpenZWave/open-zwave/).
+`node-zwave-js` was started as an attempt to bring a spec compliant Z-Wave driver to the Node.js world but without the hassle of having to recompile static libraries whenever there is a major version upgrade. The only native dependency is [`node-serialport`](https://serialport.io/), which works flawlessly on all Node.js versions that this library supports (currently `>= 10.0.0`). <!--This means that `node-zwave-js` works on every Node.js version that is supported by `node-serialport` (currently `>= 8.6.0`).-->
+
+Since Z-Wave is a very extensive standard, `node-zwave-js` will be under heavy development for a while. If you are looking for a more mature solution, try [OpenZWave](https://github.com/OpenZWave/open-zwave/).
 
 For the following explanations it is assumed that you are familiar with `async/await` and `import` syntax. This library may still be used with `Promise` syntax and `require`, but the syntax changes slightly. For method and interface signatures, the [type annotation syntax](https://www.typescriptlang.org/docs/handbook/basic-types.html) from TypeScript is used.
 

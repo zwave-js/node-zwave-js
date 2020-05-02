@@ -5,8 +5,15 @@
 -->
 
 ## __WORK IN PROGRESS__
+### Breaking changes
+* The `healNetwork` method was removed from the Controller class (deprecated in `v2.4.0`) (#731)
+* The minimum supported Node.js version is now 10
+
 ### Features
-* Improved performance of the network cache
+* Reduced CPU usage of the network cache (#784)
+
+### Bugfixes
+* `Duration` objects are now correctly deserialized from the cache
 
 ## 2.16.0 (2020-04-28)
 ### Features
