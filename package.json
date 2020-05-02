@@ -102,7 +102,7 @@
     "yargs": "^15.3.1"
   },
   "dependencies": {
-    "@alcalzone/jsonl-db": "^1.0.1",
+    "@alcalzone/jsonl-db": "^1.1.0",
     "@sentry/integrations": "^5.15.5",
     "@sentry/node": "^5.15.5",
     "alcalzone-shared": "^2.2.0",

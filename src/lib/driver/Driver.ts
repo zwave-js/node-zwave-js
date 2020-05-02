@@ -410,12 +410,19 @@ export class Driver extends EventEmitter {
 
 		const initDatabases = async (): Promise<void> => {
 			// Always start the value and metadata databases
-			const autoCompress: JsonlDBOptions<any>["autoCompress"] = {
-				onOpen: true,
-				intervalMs: 60000,
-				intervalMinChanges: 5,
-				sizeFactor: 2,
-				sizeFactorMinimumSize: 20,
+			const options: JsonlDBOptions<any> = {
+				ignoreReadErrors: true,
+				autoCompress: {
+					onOpen: true,
+					intervalMs: 60000,
+					intervalMinChanges: 5,
+					sizeFactor: 2,
+					sizeFactorMinimumSize: 20,
+				},
+				throttleFS: {
+					intervalMs: 1000,
+					maxBufferedCommands: 50,
+				},
 			};
 
 			const valueDBFile = path.join(
@@ -423,9 +430,8 @@ export class Driver extends EventEmitter {
 				`${this._controller!.homeId!.toString(16)}.values.jsonl`,
 			);
 			this._valueDB = new JsonlDB(valueDBFile, {
-				ignoreReadErrors: true,
+				...options,
 				reviver: (key, value) => deserializeCacheValue(value),
-				autoCompress,
 			});
 			await this._valueDB.open();
 
@@ -433,10 +439,7 @@ export class Driver extends EventEmitter {
 				this.cacheDir,
 				`${this._controller!.homeId!.toString(16)}.metadata.jsonl`,
 			);
-			this._metadataDB = new JsonlDB(metadataDBFile, {
-				ignoreReadErrors: true,
-				autoCompress,
-			});
+			this._metadataDB = new JsonlDB(metadataDBFile, options);
 			await this._metadataDB.open();
 
 			// Try to restore the network information from the cache
