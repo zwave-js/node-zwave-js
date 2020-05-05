@@ -1,3 +1,4 @@
+import type { Comparer } from "alcalzone-shared/comparable";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
 import type { CCAPI } from "../commandclass/API";
@@ -887,8 +888,21 @@ version:               ${this.version}`;
 		// We determine the correct interview order by topologically sorting a dependency graph
 		let interviewGraph = this.buildCCInterviewGraph();
 		let interviewOrder: CommandClasses[];
+		// In order to avoid emitting unnecessary value events for the root endpoint,
+		// we defer the application CC interview until after the other endpoints
+		// have been interviewed
+
+		const deferApplicationCCs: Comparer<CommandClasses> = (cc1, cc2) => {
+			const cc1IsApplicationCC = applicationCCs.includes(cc1);
+			const cc2IsApplicationCC = applicationCCs.includes(cc2);
+			return ((cc1IsApplicationCC ? 1 : 0) -
+				(cc2IsApplicationCC ? 1 : 0)) as any;
+		};
 		try {
-			interviewOrder = topologicalSort(interviewGraph);
+			interviewOrder = topologicalSort(
+				interviewGraph,
+				deferApplicationCCs,
+			);
 		} catch (e) {
 			// This interview cannot be done
 			throw new ZWaveError(
@@ -897,8 +911,9 @@ version:               ${this.version}`;
 			);
 		}
 
-		// Now that we know the correct order, do the interview in sequence
-		for (const cc of interviewOrder) {
+		const interviewRootEndpoint = async (
+			cc: CommandClasses,
+		): Promise<"continue" | boolean | void> => {
 			let instance: CommandClass;
 			try {
 				instance = this.createCCInstance(cc)!;
@@ -909,7 +924,7 @@ version:               ${this.version}`;
 				) {
 					// The CC is no longer supported. This can happen if the node tells us
 					// something different in the Version interview than it did in its NIF
-					continue;
+					return "continue";
 				}
 				// we want to pass all other errors through
 				throw e;
@@ -946,6 +961,17 @@ version:               ${this.version}`;
 					"error",
 				);
 			}
+		};
+
+		// Now that we know the correct order, do the interview in sequence
+		let rootCCIndex = 0;
+		for (; rootCCIndex < interviewOrder.length; rootCCIndex++) {
+			const cc = interviewOrder[rootCCIndex];
+			// Once we reach the application CCs, pause the root endpoint interview
+			if (applicationCCs.includes(cc)) break;
+			const action = await interviewRootEndpoint(cc);
+			if (action === "continue") continue;
+			else if (typeof action === "boolean") return action;
 		}
 
 		// Now query ALL endpoints
@@ -1014,6 +1040,14 @@ version:               ${this.version}`;
 					);
 				}
 			}
+		}
+
+		// Continue with the application CCs for the root endpoint
+		for (; rootCCIndex < interviewOrder.length; rootCCIndex++) {
+			const cc = interviewOrder[rootCCIndex];
+			const action = await interviewRootEndpoint(cc);
+			if (action === "continue") continue;
+			else if (typeof action === "boolean") return action;
 		}
 
 		// If a node or endpoint supports any actuator CC, don't offer the Basic CC
