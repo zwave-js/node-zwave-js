@@ -432,9 +432,9 @@ export class ZWaveNode extends Endpoint {
 		allValueIds: ValueID[],
 	): boolean {
 		// Non-root endpoint values don't need to be filtered
-		if (!!valueId.endpoint) return true;
+		if (!!valueId.endpoint) return false;
 		// Non-application CCs don't need to be filtered
-		if (!applicationCCs.includes(valueId.commandClass)) return true;
+		if (!applicationCCs.includes(valueId.commandClass)) return false;
 		// Filter out root values if an identical value ID exists for another endpoint
 		const valueExistsOnAnotherEndpoint = allValueIds.some(
 			(other) =>
