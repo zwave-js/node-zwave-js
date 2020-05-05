@@ -233,7 +233,14 @@ export class ZWaveNode extends Endpoint {
 		} else if (changeTarget === "metadata") {
 			log.controller.metadataUpdated(logArgument);
 		}
-		if (!isInternalValue) {
+		//Don't expose value events for internal value IDs and root values ID that mirrors endpoint functionality
+		if (
+			!isInternalValue &&
+			!this.shouldHideValueID(
+				arg,
+				this._valueDB.getValues(arg.commandClass),
+			)
+		) {
 			// And pass the translated event to our listeners
 			this.emit(eventName, this, outArg as any);
 		}
@@ -420,6 +427,28 @@ export class ZWaveNode extends Endpoint {
 		return this.filterRootApplicationCCValueIDs(ret);
 	}
 
+	private shouldHideValueID(
+		valueId: ValueID,
+		allValueIds: ValueID[],
+	): boolean {
+		// Non-root endpoint values don't need to be filtered
+		if (!!valueId.endpoint) return true;
+		// Non-application CCs don't need to be filtered
+		if (!applicationCCs.includes(valueId.commandClass)) return true;
+		// Filter out root values if an identical value ID exists for another endpoint
+		const valueExistsOnAnotherEndpoint = allValueIds.some(
+			(other) =>
+				// same CC
+				other.commandClass === valueId.commandClass &&
+				// non-root endpoint
+				!!other.endpoint &&
+				// same property and key
+				other.property === valueId.property &&
+				other.propertyKey === valueId.propertyKey,
+		);
+		return valueExistsOnAnotherEndpoint;
+	}
+
 	/**
 	 * Removes all Value IDs from an array that belong to a root endpoint and have a corresponding
 	 * Value ID on a non-root endpoint
@@ -427,24 +456,9 @@ export class ZWaveNode extends Endpoint {
 	private filterRootApplicationCCValueIDs(
 		allValueIds: TranslatedValueID[],
 	): TranslatedValueID[] {
-		return allValueIds.filter((vid) => {
-			// Non-root endpoint values don't need to be filtered
-			if (!!vid.endpoint) return true;
-			// Non-application CCs don't need to be filtered
-			if (!applicationCCs.includes(vid.commandClass)) return true;
-			// Filter out root values if an identical value ID exists for another endpoint
-			const valueExistsOnAnotherEndpoint = allValueIds.some(
-				(other) =>
-					// same CC
-					other.commandClass === vid.commandClass &&
-					// non-root endpoint
-					!!other.endpoint &&
-					// same property and key
-					other.property === vid.property &&
-					other.propertyKey === vid.propertyKey,
-			);
-			return !valueExistsOnAnotherEndpoint;
-		});
+		return allValueIds.filter(
+			(vid) => !this.shouldHideValueID(vid, allValueIds),
+		);
 	}
 
 	/**
