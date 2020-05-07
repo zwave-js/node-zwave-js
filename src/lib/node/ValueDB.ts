@@ -149,11 +149,8 @@ export class ValueDB extends EventEmitter {
 		});
 	}
 
-	private dbKeyToValueId(key: string): ValueID {
-		const { nodeId, ...valueId }: { nodeId: number } & ValueID = JSON.parse(
-			key,
-		);
-		return valueId;
+	private dbKeyToValueId(key: string): { nodeId: number } & ValueID {
+		return JSON.parse(key);
 	}
 
 	/**
@@ -241,39 +238,46 @@ export class ValueDB extends EventEmitter {
 	public getValues(forCC: CommandClasses): (ValueID & { value: unknown })[] {
 		const ret: ReturnType<ValueDB["getValues"]> = [];
 		this._db.forEach((value, key) => {
-			const valueId = this.dbKeyToValueId(key);
+			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+			if (nodeId !== this.nodeId) return;
+
 			if (forCC === valueId.commandClass) ret.push({ ...valueId, value });
 		});
 		return ret;
 	}
 
-	/** Clears all values from the value DB */
-	public clear(options: SetValueOptions = {}): void {
-		const oldValues = [...this._db];
-		const oldMetadataKeys = [...this._metadata.keys()];
+	// /** Clears all values from the value DB */
+	// public clear(options: SetValueOptions = {}): void {
+	// 	const oldValues = [...this._db];
+	// 	const oldMetadataKeys = [...this._metadata.keys()];
 
-		this._db.clear();
-		this._metadata.clear();
+	// 	// TODO: This is buggy - clear should only clear the values for the current node
+	// 	this._db.clear();
+	// 	this._metadata.clear();
 
-		if (options.noEvent !== true) {
-			oldValues.forEach(([key, prevValue]) => {
-				const valueId = this.dbKeyToValueId(key);
-				const cbArg: ValueRemovedArgs = {
-					...valueId,
-					prevValue,
-				};
-				this.emit("value removed", cbArg);
-			});
-			oldMetadataKeys.forEach((key) => {
-				const valueId = this.dbKeyToValueId(key);
-				const cbArg: MetadataUpdatedArgs = {
-					...valueId,
-					metadata: undefined,
-				};
-				this.emit("metadata updated", cbArg);
-			});
-		}
-	}
+	// 	if (options.noEvent !== true) {
+	// 		oldValues.forEach(([key, prevValue]) => {
+	// 			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+	// 			if (nodeId !== this.nodeId) return;
+
+	// 			const cbArg: ValueRemovedArgs = {
+	// 				...valueId,
+	// 				prevValue,
+	// 			};
+	// 			this.emit("value removed", cbArg);
+	// 		});
+	// 		oldMetadataKeys.forEach((key) => {
+	// 			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+	// 			if (nodeId !== this.nodeId) return;
+
+	// 			const cbArg: MetadataUpdatedArgs = {
+	// 				...valueId,
+	// 				metadata: undefined,
+	// 			};
+	// 			this.emit("metadata updated", cbArg);
+	// 		});
+	// 	}
+	// }
 
 	/**
 	 * Stores metadata for a given value id
@@ -337,7 +341,9 @@ export class ValueDB extends EventEmitter {
 	})[] {
 		const ret: ReturnType<ValueDB["getAllMetadata"]> = [];
 		this._metadata.forEach((meta, key) => {
-			const valueId: ValueID = JSON.parse(key);
+			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+			if (nodeId !== this.nodeId) return;
+
 			if (forCC === valueId.commandClass)
 				ret.push({ ...valueId, metadata: meta });
 		});

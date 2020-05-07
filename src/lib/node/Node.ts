@@ -1,3 +1,4 @@
+import type { Comparer } from "alcalzone-shared/comparable";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
 import type { CCAPI } from "../commandclass/API";
@@ -232,7 +233,14 @@ export class ZWaveNode extends Endpoint {
 		} else if (changeTarget === "metadata") {
 			log.controller.metadataUpdated(logArgument);
 		}
-		if (!isInternalValue) {
+		//Don't expose value events for internal value IDs and root values ID that mirrors endpoint functionality
+		if (
+			!isInternalValue &&
+			!this.shouldHideValueID(
+				arg,
+				this._valueDB.getValues(arg.commandClass),
+			)
+		) {
 			// And pass the translated event to our listeners
 			this.emit(eventName, this, outArg as any);
 		}
@@ -419,6 +427,28 @@ export class ZWaveNode extends Endpoint {
 		return this.filterRootApplicationCCValueIDs(ret);
 	}
 
+	private shouldHideValueID(
+		valueId: ValueID,
+		allValueIds: ValueID[],
+	): boolean {
+		// Non-root endpoint values don't need to be filtered
+		if (!!valueId.endpoint) return false;
+		// Non-application CCs don't need to be filtered
+		if (!applicationCCs.includes(valueId.commandClass)) return false;
+		// Filter out root values if an identical value ID exists for another endpoint
+		const valueExistsOnAnotherEndpoint = allValueIds.some(
+			(other) =>
+				// same CC
+				other.commandClass === valueId.commandClass &&
+				// non-root endpoint
+				!!other.endpoint &&
+				// same property and key
+				other.property === valueId.property &&
+				other.propertyKey === valueId.propertyKey,
+		);
+		return valueExistsOnAnotherEndpoint;
+	}
+
 	/**
 	 * Removes all Value IDs from an array that belong to a root endpoint and have a corresponding
 	 * Value ID on a non-root endpoint
@@ -426,24 +456,9 @@ export class ZWaveNode extends Endpoint {
 	private filterRootApplicationCCValueIDs(
 		allValueIds: TranslatedValueID[],
 	): TranslatedValueID[] {
-		return allValueIds.filter((vid) => {
-			// Non-root endpoint values don't need to be filtered
-			if (!!vid.endpoint) return true;
-			// Non-application CCs don't need to be filtered
-			if (!applicationCCs.includes(vid.commandClass)) return true;
-			// Filter out root values if an identical value ID exists for another endpoint
-			const valueExistsOnAnotherEndpoint = allValueIds.some(
-				(other) =>
-					// same CC
-					other.commandClass === vid.commandClass &&
-					// non-root endpoint
-					!!other.endpoint &&
-					// same property and key
-					other.property === vid.property &&
-					other.propertyKey === vid.propertyKey,
-			);
-			return !valueExistsOnAnotherEndpoint;
-		});
+		return allValueIds.filter(
+			(vid) => !this.shouldHideValueID(vid, allValueIds),
+		);
 	}
 
 	/**
@@ -885,10 +900,23 @@ version:               ${this.version}`;
 	/** Step #? of the node interview */
 	protected async interviewCCs(): Promise<boolean> {
 		// We determine the correct interview order by topologically sorting a dependency graph
-		let interviewGraph = this.buildCCInterviewGraph();
-		let interviewOrder: CommandClasses[];
+		const rootInterviewGraph = this.buildCCInterviewGraph();
+		let rootInterviewOrder: CommandClasses[];
+		// In order to avoid emitting unnecessary value events for the root endpoint,
+		// we defer the application CC interview until after the other endpoints
+		// have been interviewed
+
+		const deferApplicationCCs: Comparer<CommandClasses> = (cc1, cc2) => {
+			const cc1IsApplicationCC = applicationCCs.includes(cc1);
+			const cc2IsApplicationCC = applicationCCs.includes(cc2);
+			return ((cc1IsApplicationCC ? 1 : 0) -
+				(cc2IsApplicationCC ? 1 : 0)) as any;
+		};
 		try {
-			interviewOrder = topologicalSort(interviewGraph);
+			rootInterviewOrder = topologicalSort(
+				rootInterviewGraph,
+				deferApplicationCCs,
+			);
 		} catch (e) {
 			// This interview cannot be done
 			throw new ZWaveError(
@@ -897,8 +925,9 @@ version:               ${this.version}`;
 			);
 		}
 
-		// Now that we know the correct order, do the interview in sequence
-		for (const cc of interviewOrder) {
+		const interviewRootEndpoint = async (
+			cc: CommandClasses,
+		): Promise<"continue" | boolean | void> => {
 			let instance: CommandClass;
 			try {
 				instance = this.createCCInstance(cc)!;
@@ -909,7 +938,7 @@ version:               ${this.version}`;
 				) {
 					// The CC is no longer supported. This can happen if the node tells us
 					// something different in the Version interview than it did in its NIF
-					continue;
+					return "continue";
 				}
 				// we want to pass all other errors through
 				throw e;
@@ -946,6 +975,17 @@ version:               ${this.version}`;
 					"error",
 				);
 			}
+		};
+
+		// Now that we know the correct order, do the interview in sequence
+		let rootCCIndex = 0;
+		for (; rootCCIndex < rootInterviewOrder.length; rootCCIndex++) {
+			const cc = rootInterviewOrder[rootCCIndex];
+			// Once we reach the application CCs, pause the root endpoint interview
+			if (applicationCCs.includes(cc)) break;
+			const action = await interviewRootEndpoint(cc);
+			if (action === "continue") continue;
+			else if (typeof action === "boolean") return action;
 		}
 
 		// Now query ALL endpoints
@@ -957,9 +997,12 @@ version:               ${this.version}`;
 			const endpoint = this.getEndpoint(endpointIndex);
 			if (!endpoint) continue;
 
-			interviewGraph = endpoint.buildCCInterviewGraph();
+			const endpointInterviewGraph = endpoint.buildCCInterviewGraph();
+			let endpointInterviewOrder: CommandClasses[];
 			try {
-				interviewOrder = topologicalSort(interviewGraph);
+				endpointInterviewOrder = topologicalSort(
+					endpointInterviewGraph,
+				);
 			} catch (e) {
 				// This interview cannot be done
 				throw new ZWaveError(
@@ -969,7 +1012,7 @@ version:               ${this.version}`;
 			}
 
 			// Now that we know the correct order, do the interview in sequence
-			for (const cc of interviewOrder) {
+			for (const cc of endpointInterviewOrder) {
 				let instance: CommandClass;
 				try {
 					instance = endpoint.createCCInstance(cc)!;
@@ -1014,6 +1057,14 @@ version:               ${this.version}`;
 					);
 				}
 			}
+		}
+
+		// Continue with the application CCs for the root endpoint
+		for (; rootCCIndex < rootInterviewOrder.length; rootCCIndex++) {
+			const cc = rootInterviewOrder[rootCCIndex];
+			const action = await interviewRootEndpoint(cc);
+			if (action === "continue") continue;
+			else if (typeof action === "boolean") return action;
 		}
 
 		// If a node or endpoint supports any actuator CC, don't offer the Basic CC
