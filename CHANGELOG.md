@@ -14,6 +14,7 @@
 
 ### Bugfixes
 * `Duration` objects are now correctly deserialized from the cache
+* During the interview, value events for value IDs of the root endpoint, which mirror functionality of other endpoints, are now correctly suppressed
 
 ## 2.16.0 (2020-04-28)
 ### Features
