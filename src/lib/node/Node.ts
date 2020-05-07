@@ -900,8 +900,8 @@ version:               ${this.version}`;
 	/** Step #? of the node interview */
 	protected async interviewCCs(): Promise<boolean> {
 		// We determine the correct interview order by topologically sorting a dependency graph
-		let interviewGraph = this.buildCCInterviewGraph();
-		let interviewOrder: CommandClasses[];
+		const rootInterviewGraph = this.buildCCInterviewGraph();
+		let rootInterviewOrder: CommandClasses[];
 		// In order to avoid emitting unnecessary value events for the root endpoint,
 		// we defer the application CC interview until after the other endpoints
 		// have been interviewed
@@ -913,8 +913,8 @@ version:               ${this.version}`;
 				(cc2IsApplicationCC ? 1 : 0)) as any;
 		};
 		try {
-			interviewOrder = topologicalSort(
-				interviewGraph,
+			rootInterviewOrder = topologicalSort(
+				rootInterviewGraph,
 				deferApplicationCCs,
 			);
 		} catch (e) {
@@ -979,8 +979,8 @@ version:               ${this.version}`;
 
 		// Now that we know the correct order, do the interview in sequence
 		let rootCCIndex = 0;
-		for (; rootCCIndex < interviewOrder.length; rootCCIndex++) {
-			const cc = interviewOrder[rootCCIndex];
+		for (; rootCCIndex < rootInterviewOrder.length; rootCCIndex++) {
+			const cc = rootInterviewOrder[rootCCIndex];
 			// Once we reach the application CCs, pause the root endpoint interview
 			if (applicationCCs.includes(cc)) break;
 			const action = await interviewRootEndpoint(cc);
@@ -997,9 +997,12 @@ version:               ${this.version}`;
 			const endpoint = this.getEndpoint(endpointIndex);
 			if (!endpoint) continue;
 
-			interviewGraph = endpoint.buildCCInterviewGraph();
+			const endpointInterviewGraph = endpoint.buildCCInterviewGraph();
+			let endpointInterviewOrder: CommandClasses[];
 			try {
-				interviewOrder = topologicalSort(interviewGraph);
+				endpointInterviewOrder = topologicalSort(
+					endpointInterviewGraph,
+				);
 			} catch (e) {
 				// This interview cannot be done
 				throw new ZWaveError(
@@ -1009,7 +1012,7 @@ version:               ${this.version}`;
 			}
 
 			// Now that we know the correct order, do the interview in sequence
-			for (const cc of interviewOrder) {
+			for (const cc of endpointInterviewOrder) {
 				let instance: CommandClass;
 				try {
 					instance = endpoint.createCCInstance(cc)!;
@@ -1057,8 +1060,8 @@ version:               ${this.version}`;
 		}
 
 		// Continue with the application CCs for the root endpoint
-		for (; rootCCIndex < interviewOrder.length; rootCCIndex++) {
-			const cc = interviewOrder[rootCCIndex];
+		for (; rootCCIndex < rootInterviewOrder.length; rootCCIndex++) {
+			const cc = rootInterviewOrder[rootCCIndex];
 			const action = await interviewRootEndpoint(cc);
 			if (action === "continue") continue;
 			else if (typeof action === "boolean") return action;
