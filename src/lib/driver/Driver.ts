@@ -1843,7 +1843,19 @@ ${handlers.length} left`,
 
 		// Before doing anything else, check if this message is for a node that's currently asleep
 		// The automated sorting ensures there's no message for a non-sleeping node after that
-		const targetNode = this.sendQueue.peekStart()!.message.getNodeUnsafe();
+		let targetNode: ZWaveNode | undefined;
+		try {
+			targetNode = this.sendQueue.peekStart()!.message.getNodeUnsafe();
+		} catch (e) {
+			if (e.message.includes(`Cannot read property 'message'`)) {
+				// That is some race condition, ignore it and try again
+				// https://sentry.io/share/issue/693b81a5efc74533b2b06bc8e97063f1/
+				setImmediate(() => this.workOffSendQueue());
+				return;
+			} else {
+				throw e;
+			}
+		}
 		if (!targetNode || targetNode.isAwake()) {
 			// get the next transaction
 			this.currentTransaction = this.sendQueue.shift()!;
