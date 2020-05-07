@@ -26,6 +26,13 @@ function isPartOfThisLib(filename: string): boolean {
 // Errors in files matching any entry in  this array will always be reported
 const pathWhitelists = ["node_modules/iobroker.zwave2"];
 
+function isZWaveError(
+	err: Error | string | null | undefined,
+): err is ZWaveError {
+	if (!err || typeof err === "string") return false;
+	return "code" in err && typeof (err as any).code === "number";
+}
+
 // Parse package.json and init sentry
 fs.readFile(path.join(libraryRootDir, "package.json"), "utf8").then(
 	(fileContents) => {
@@ -33,7 +40,15 @@ fs.readFile(path.join(libraryRootDir, "package.json"), "utf8").then(
 		Sentry.init({
 			release: `${packageJson.name}@${packageJson.version}`,
 			dsn: "https://841e902ca32842beadada39343a72479@sentry.io/1839595",
-			integrations: [new Integrations.Dedupe()],
+			defaultIntegrations: false,
+			integrations: [
+				new Sentry.Integrations.OnUncaughtException(),
+				new Sentry.Integrations.OnUnhandledRejection({
+					mode: "strict",
+				}),
+				new Sentry.Integrations.FunctionToString(),
+				new Integrations.Dedupe(),
+			],
 			beforeSend(event, hint) {
 				let ignore = false;
 				// By default we ignore errors that original outside this library
@@ -48,7 +63,7 @@ fs.readFile(path.join(libraryRootDir, "package.json"), "utf8").then(
 
 				// Filter out specific errors that shouldn't create a report on sentry
 				// because they should be handled by the library user
-				if (!ignore && hint?.originalException instanceof ZWaveError) {
+				if (!ignore && hint && isZWaveError(hint?.originalException)) {
 					switch (hint.originalException.code) {
 						// we don't care about timeouts
 						case ZWaveErrorCodes.Controller_MessageDropped:
