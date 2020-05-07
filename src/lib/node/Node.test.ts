@@ -1107,7 +1107,7 @@ describe("lib/node/Node", () => {
 			expect(onValueAdded).toBeCalled();
 			node.valueDB.setValue(valueId, 3);
 			expect(onValueUpdated).toBeCalled();
-			node.valueDB.clear();
+			node.valueDB.removeValue(valueId);
 			expect(onValueRemoved).toBeCalled();
 
 			for (const method of [
