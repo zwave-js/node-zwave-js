@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.0.0 (2020-05-08)
 ### Breaking changes
 * The `healNetwork` method was removed from the Controller class (deprecated in `v2.4.0`) (#731).  
 If you're still using it, you need to switch to `beginHealingNetwork`.
