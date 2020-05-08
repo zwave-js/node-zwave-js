@@ -111,8 +111,8 @@ export enum FunctionType {
 	FUNC_ID_ZW_NEW_CONTROLLER = 0x43, // Not implemented
 	FUNC_ID_ZW_REPLICATION_COMMAND_COMPLETE = 0x44, // Replication send data complete
 	FUNC_ID_ZW_REPLICATION_SEND_DATA = 0x45, // Replication send data
-	FUNC_ID_ZW_ASSIGN_RETURN_ROUTE = 0x46, // Assign a return route from the specified node to the controller
-	FUNC_ID_ZW_DELETE_RETURN_ROUTE = 0x47, // Delete all return routes from the specified node
+	AssignReturnRoute = 0x46, // Assign a return route from the source node to the destination node
+	DeleteReturnRoute = 0x47, // Delete all return routes from the specified node
 	RequestNodeNeighborUpdate = 0x48, // Ask the specified node to update its neighbors (then read them from the controller)
 	ApplicationUpdateRequest = 0x49, // Get a list of supported (and controller) command classes
 
