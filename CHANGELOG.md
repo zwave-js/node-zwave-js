@@ -6,15 +6,17 @@
 
 ## __WORK IN PROGRESS__
 ### Breaking changes
-* The `healNetwork` method was removed from the Controller class (deprecated in `v2.4.0`) (#731)
+* The `healNetwork` method was removed from the Controller class (deprecated in `v2.4.0`) (#731).  
+If you're still using it, you need to switch to `beginHealingNetwork`.
 * The minimum supported Node.js version is now 10
 
 ### Features
 * Reduced CPU usage of the network cache (#784)
+* During the network heal, the routes from all nodes to the controller and between associated nodes are now updated.
 
 ### Bugfixes
 * `Duration` objects are now correctly deserialized from the cache
-* During the interview, value events for value IDs of the root endpoint, which mirror functionality of other endpoints, are now correctly suppressed
+* During the interview, value events for value IDs of the root endpoint are now correctly suppressed if they mirror functionality of other endpoints.
 
 ## 2.16.0 (2020-04-28)
 ### Features
