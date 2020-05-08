@@ -17,12 +17,13 @@ import {
 	priority,
 	ResponseRole,
 } from "../message/Message";
+import type { INodeQuery } from "../node/INodeQuery";
 import { getEnumMemberName } from "../util/misc";
 import type { JSONObject } from "../util/misc";
 import { TransmitStatus } from "./SendDataMessages";
 
 @messageTypes(MessageType.Request, FunctionType.DeleteReturnRoute)
-@priority(MessagePriority.Normal)
+@priority(MessagePriority.NodeQuery)
 export class DeleteReturnRouteRequestBase extends Message {
 	public constructor(driver: Driver, options: MessageOptions) {
 		if (
@@ -52,9 +53,9 @@ export interface DeleteReturnRouteRequestOptions extends MessageBaseOptions {
 	nodeId: number;
 }
 
-@messageTypes(MessageType.Request, FunctionType.DeleteReturnRoute)
 @expectedResponse(testResponseForDeleteReturnRouteRequest)
-export class DeleteReturnRouteRequest extends Message {
+export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase
+	implements INodeQuery {
 	public constructor(
 		driver: Driver,
 		options:

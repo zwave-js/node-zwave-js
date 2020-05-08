@@ -17,6 +17,7 @@ import {
 	priority,
 	ResponseRole,
 } from "../message/Message";
+import type { INodeQuery } from "../node/INodeQuery";
 import { getEnumMemberName, JSONObject } from "../util/misc";
 import { TransmitStatus } from "./SendDataMessages";
 
@@ -48,13 +49,13 @@ function testResponseForAssignReturnRouteRequest(
 }
 
 export interface AssignReturnRouteRequestOptions extends MessageBaseOptions {
-	sourceNode: number;
-	destinationNode: number;
+	nodeId: number;
+	destinationNodeId: number;
 }
 
-@messageTypes(MessageType.Request, FunctionType.AssignReturnRoute)
 @expectedResponse(testResponseForAssignReturnRouteRequest)
-export class AssignReturnRouteRequest extends Message {
+export class AssignReturnRouteRequest extends AssignReturnRouteRequestBase
+	implements INodeQuery {
 	public constructor(
 		driver: Driver,
 		options:
@@ -68,24 +69,24 @@ export class AssignReturnRouteRequest extends Message {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			if (options.sourceNode === options.destinationNode) {
+			if (options.nodeId === options.destinationNodeId) {
 				throw new ZWaveError(
 					`The source and destination node must not be identical`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
-			this.sourceNode = options.sourceNode;
-			this.destinationNode = options.destinationNode;
+			this.nodeId = options.nodeId;
+			this.destinationNodeId = options.destinationNodeId;
 		}
 	}
 
-	public sourceNode: number;
-	public destinationNode: number;
+	public nodeId: number;
+	public destinationNodeId: number;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
-			this.sourceNode,
-			this.destinationNode,
+			this.nodeId,
+			this.destinationNodeId,
 			this.callbackId,
 		]);
 
