@@ -106,3 +106,12 @@ export function pick<T extends object, K extends keyof T>(
 	}
 	return ret;
 }
+
+/** Calls the map function of the given array and flattens the result by one level */
+export function flatMap<U, T extends any[]>(
+	array: T[],
+	callbackfn: (value: T, index: number, array: T[]) => U[],
+): U[] {
+	const mapped = array.map(callbackfn);
+	return mapped.reduce((acc, cur) => [...acc, ...cur], [] as U[]);
+}

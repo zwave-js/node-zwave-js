@@ -1,3 +1,4 @@
+import { distinct } from "alcalzone-shared/arrays";
 import {
 	createDeferredPromise,
 	DeferredPromise,
@@ -28,13 +29,15 @@ import { FunctionType } from "../message/Constants";
 import { BasicDeviceClasses, DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
-import type { JSONObject } from "../util/misc";
+import { flatMap, JSONObject } from "../util/misc";
 import { num2hex } from "../util/strings";
 import {
 	AddNodeStatus,
 	AddNodeToNetworkRequest,
 	AddNodeType,
 } from "./AddNodeToNetworkRequest";
+import { AssignReturnRouteRequest } from "./AssignReturnRouteMessages";
+import { DeleteReturnRouteRequest } from "./DeleteReturnRouteMessages";
 import {
 	GetControllerCapabilitiesRequest,
 	GetControllerCapabilitiesResponse,
@@ -755,55 +758,192 @@ export class ZWaveController extends EventEmitter {
 		this.driver.rejectTransactions(
 			(t) =>
 				t.message instanceof RequestNodeNeighborUpdateRequest ||
-				t.message instanceof GetRoutingInfoRequest,
+				t.message instanceof GetRoutingInfoRequest ||
+				t.message instanceof DeleteReturnRouteRequest ||
+				t.message instanceof AssignReturnRouteRequest,
 		);
 
 		return true;
 	}
 
 	/**
-	 * Requests a node to update its neighbor list.
+	 * Performs the healing process for a node
 	 */
 	public async healNode(nodeId: number): Promise<boolean> {
-		log.controller.logNode(nodeId, {
-			message: "refreshing neighbor list...",
-			direction: "outbound",
-		});
-		try {
-			const resp = await this.driver.sendMessage<
-				RequestNodeNeighborUpdateReport
-			>(
-				new RequestNodeNeighborUpdateRequest(this.driver, {
-					nodeId,
-				}),
-			);
-			// If the process was stopped before the node could respond, cancel it
+		// The healing process consists of four steps
+		// Each step is tried up to 5 times before the healing process is considered failed
+		const maxAttempts = 5;
+
+		// 1. command the node to refresh its neighbor list
+		for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+			// If the process was stopped in the meantime, cancel
 			if (!this._healNetworkActive) return false;
 
-			if (resp.updateStatus === NodeNeighborUpdateStatus.UpdateDone) {
+			log.controller.logNode(nodeId, {
+				message: `refreshing neighbor list (attempt ${attempt})...`,
+				direction: "outbound",
+			});
+			try {
+				const resp = await this.driver.sendMessage<
+					RequestNodeNeighborUpdateReport
+				>(
+					new RequestNodeNeighborUpdateRequest(this.driver, {
+						nodeId,
+					}),
+				);
+				if (resp.updateStatus === NodeNeighborUpdateStatus.UpdateDone) {
+					log.controller.logNode(nodeId, {
+						message: "neighbor list refreshed...",
+						direction: "inbound",
+					});
+					// this step was successful, continue with the next
+					break;
+				} else {
+					// UpdateFailed
+					log.controller.logNode(nodeId, {
+						message: "refreshing neighbor list failed...",
+						direction: "inbound",
+						level: "warn",
+					});
+				}
+			} catch (e) {
+				log.controller.logNode(
+					nodeId,
+					`refreshing neighbor list failed: ${e.message}`,
+					"warn",
+				);
+			}
+			if (attempt === maxAttempts) {
 				log.controller.logNode(nodeId, {
-					message: "neighbor list refreshed...",
-					direction: "inbound",
-				});
-				await this.nodes.get(nodeId)!.queryNeighborsInternal();
-				return true;
-			} else {
-				// UpdateFailed
-				log.controller.logNode(nodeId, {
-					message: "refreshing neighbor list failed...",
-					direction: "inbound",
+					message: `failed to update the neighbor list after ${maxAttempts} attempts, healing failed`,
 					level: "warn",
+					direction: "none",
 				});
 				return false;
 			}
-		} catch (e) {
-			log.controller.logNode(
-				nodeId,
-				`refreshing neighbor list failed: ${e.message}`,
-				"error",
-			);
-			throw e;
 		}
+
+		// 2. retrieve the updated list
+		for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+			// If the process was stopped in the meantime, cancel
+			if (!this._healNetworkActive) return false;
+
+			log.controller.logNode(nodeId, {
+				message: `retrieving updated neighbor list (attempt ${attempt})...`,
+				direction: "outbound",
+			});
+
+			try {
+				// Retrieve the updated list from the node
+				await this.nodes.get(nodeId)!.queryNeighborsInternal();
+				break;
+			} catch (e) {
+				log.controller.logNode(
+					nodeId,
+					`retrieving the updated neighbor list failed: ${e.message}`,
+					"warn",
+				);
+			}
+			if (attempt === maxAttempts) {
+				log.controller.logNode(nodeId, {
+					message: `failed to retrieve the updated neighbor list after ${maxAttempts} attempts, healing failed`,
+					level: "warn",
+					direction: "none",
+				});
+				return false;
+			}
+		}
+
+		// 3. delete all return routes so we can assign new ones
+		for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+			log.controller.logNode(nodeId, {
+				message: `deleting return routes (attempt ${attempt})...`,
+				direction: "outbound",
+			});
+
+			try {
+				await this.driver.sendMessage(
+					new DeleteReturnRouteRequest(this.driver, { nodeId }),
+				);
+				// this step was successful, continue with the next
+				break;
+			} catch (e) {
+				log.controller.logNode(
+					nodeId,
+					`deleting return routes failed: ${e.message}`,
+					"warn",
+				);
+			}
+			if (attempt === maxAttempts) {
+				log.controller.logNode(nodeId, {
+					message: `failed to delete return routes after ${maxAttempts} attempts, healing failed`,
+					level: "warn",
+					direction: "none",
+				});
+				return false;
+			}
+		}
+
+		// 4. Assign up to 4 return routes for associations, one of which should be the controller
+		let associatedNodes: number[] = [];
+		const maxReturnRoutes = 4;
+		try {
+			associatedNodes = distinct(
+				flatMap<number, Association[]>(
+					[...(this.getAssociations(nodeId).values() as any)],
+					(assocs: Association[]) => assocs.map((a) => a.nodeId),
+				),
+			).sort();
+		} catch {
+			/* ignore */
+		}
+		// Always include ourselves first
+		if (!associatedNodes.includes(this._ownNodeId!)) {
+			associatedNodes.unshift(this._ownNodeId!);
+		}
+		if (associatedNodes.length > maxReturnRoutes) {
+			associatedNodes = associatedNodes.slice(0, maxReturnRoutes);
+		}
+		log.controller.logNode(nodeId, {
+			message: `assigning return routes to the following nodes:
+${associatedNodes.join(", ")}`,
+			direction: "outbound",
+		});
+		for (const destinationNodeId of associatedNodes) {
+			for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+				log.controller.logNode(nodeId, {
+					message: `assigning return route to node ${destinationNodeId} (attempt ${attempt})...`,
+					direction: "outbound",
+				});
+
+				try {
+					await this.driver.sendMessage(
+						new AssignReturnRouteRequest(this.driver, {
+							nodeId,
+							destinationNodeId,
+						}),
+					);
+					// this step was successful, continue with the next
+					break;
+				} catch (e) {
+					log.controller.logNode(
+						nodeId,
+						`assigning return route failed: ${e.message}`,
+						"warn",
+					);
+				}
+				if (attempt === maxAttempts) {
+					log.controller.logNode(nodeId, {
+						message: `failed to assign return route after ${maxAttempts} attempts, healing failed`,
+						level: "warn",
+						direction: "none",
+					});
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	/** Returns all Associations (Multi Channel or normal) that are configured on a node */
