@@ -1450,8 +1450,89 @@ version:               ${this.version}`;
 		}
 		this.lastWakeUp = now;
 
+		// Some devices expect us to query them on wake up in order to function correctly
+		if (this._deviceConfig?.compat?.queryOnWakeup) {
+			// Don't wait
+			void this.compatDoWakeupQueries();
+		}
+
 		// In case there are no messages in the queue, the node may go back to sleep very soon
 		this.driver.debounceSendNodeToSleep(this);
+	}
+
+	private async compatDoWakeupQueries(): Promise<void> {
+		if (!this._deviceConfig?.compat?.queryOnWakeup) return;
+		log.controller.logNode(this.id, {
+			message: `expects some queries after wake up, so it shall receive`,
+			direction: "none",
+		});
+
+		for (const [ccName, apiMethod, ...args] of this._deviceConfig.compat
+			.queryOnWakeup) {
+			log.controller.logNode(this.id, {
+				message: `compat query "${ccName}"::${apiMethod}(${args
+					.map((arg) => JSON.stringify(arg))
+					.join(", ")})`,
+				direction: "none",
+			});
+
+			// Try to access the API - if it doesn't work, skip this option
+			let API: CCAPI;
+			try {
+				API = (this.commandClasses as any)[ccName];
+			} catch {
+				log.controller.logNode(this.id, {
+					message: `could not access API, skipping query`,
+					direction: "none",
+					level: "warn",
+				});
+				continue;
+			}
+			if (!API.isSupported()) {
+				log.controller.logNode(this.id, {
+					message: `API not supported, skipping query`,
+					direction: "none",
+					level: "warn",
+				});
+				continue;
+			} else if (!(API as any)[apiMethod]) {
+				log.controller.logNode(this.id, {
+					message: `method ${apiMethod} not found on API, skipping query`,
+					direction: "none",
+					level: "warn",
+				});
+				continue;
+			}
+
+			// Retrieve the method
+			const method = (API as any)[apiMethod].bind(API) as Function;
+			// And replace "smart" arguments with their corresponding value
+			const methodArgs = args.map<unknown>((arg) => {
+				if (isObject(arg)) {
+					const valueId = {
+						commandClass: API.ccId,
+						...arg,
+					};
+					return this.getValue(valueId);
+				}
+				return arg;
+			});
+
+			// Do the API call and ignore/log any errors
+			try {
+				await method(...methodArgs);
+				log.controller.logNode(this.id, {
+					message: `API call successful`,
+					direction: "none",
+				});
+			} catch (e) {
+				log.controller.logNode(this.id, {
+					message: `error during API call: ${e}`,
+					direction: "none",
+					level: "warn",
+				});
+			}
+		}
 	}
 
 	/** Handles the receipt of a BasicCC Set or Report */

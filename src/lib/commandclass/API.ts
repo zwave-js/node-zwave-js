@@ -68,8 +68,11 @@ export class CCAPI {
 		this.ccId = getCommandClass(this);
 	}
 
-	/** The identifier of the Command Class this API is for */
-	protected readonly ccId: CommandClasses;
+	/**
+	 * @internal
+	 * The identifier of the Command Class this API is for
+	 */
+	public readonly ccId: CommandClasses;
 
 	protected [SET_VALUE]: SetValueImplementation | undefined;
 	/**
