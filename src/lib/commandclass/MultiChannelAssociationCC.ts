@@ -283,6 +283,14 @@ export class MultiChannelAssociationCC extends CommandClass {
 	}
 
 	/**
+	 * Returns the number of nodes an association group supports.
+	 * This only works AFTER the interview process
+	 */
+	public getMaxNodesCached(groupId: number): number {
+		return this.getValueDB().getValue(getMaxNodesValueId(groupId)) || 0;
+	}
+
+	/**
 	 * Returns all the destinations of all association groups reported by the node.
 	 * This only works AFTER the interview process
 	 */
