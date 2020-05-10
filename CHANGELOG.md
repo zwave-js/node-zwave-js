@@ -12,6 +12,7 @@
 * Node information (especially CC versions) are correctly restored from cache again
 * The metadata for the manufacturer info for the Controller is now correctly stored as metadata, not values
 * All handles for the optimized network cache are now closed when destroying the driver
+* Nodes are now sent to sleep 1 second after waking up if there are no pending messages
 
 ## 3.0.0 (2020-05-08)
 ### Breaking changes
