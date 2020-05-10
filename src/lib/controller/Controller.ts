@@ -7,7 +7,10 @@ import { composeObject } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
 import type { AssociationCC } from "../commandclass/AssociationCC";
-import type { AssociationGroupInfoCC } from "../commandclass/AssociationGroupInfoCC";
+import type {
+	AssociationGroup,
+	AssociationGroupInfoCC,
+} from "../commandclass/AssociationGroupInfoCC";
 import { actuatorCCs, CommandClasses } from "../commandclass/CommandClasses";
 import {
 	getManufacturerIdValueId,
@@ -671,6 +674,235 @@ export class ZWaveController extends EventEmitter {
 		return this._stopInclusionPromise!;
 	}
 
+	/**
+	 * Is called when an AddNode request is received from the controller.
+	 * Handles and controls the inclusion process.
+	 */
+	private async handleAddNodeRequest(
+		msg: AddNodeToNetworkRequest,
+	): Promise<boolean> {
+		log.controller.print(
+			`handling add node request (status = ${
+				AddNodeStatus[msg.status!]
+			})`,
+		);
+		if (!this._inclusionActive && msg.status !== AddNodeStatus.Done) {
+			log.controller.print(`  inclusion is NOT active, ignoring it...`);
+			return true; // Don't invoke any more handlers
+		}
+
+		switch (msg.status) {
+			case AddNodeStatus.Ready:
+				// this is called when inclusion was started successfully
+				log.controller.print(
+					`  the controller is now ready to add nodes`,
+				);
+				if (this._beginInclusionPromise != null) {
+					this._beginInclusionPromise.resolve(true);
+					this.emit("inclusion started");
+				}
+				break;
+			case AddNodeStatus.Failed:
+				// this is called when inclusion could not be started...
+				if (this._beginInclusionPromise != null) {
+					log.controller.print(
+						`  starting the inclusion failed`,
+						"error",
+					);
+					this._beginInclusionPromise.reject(
+						new ZWaveError(
+							"The inclusion could not be started.",
+							ZWaveErrorCodes.Controller_InclusionFailed,
+						),
+					);
+				} else {
+					// ...or adding a node failed
+					log.controller.print(`  adding the node failed`, "error");
+					this.emit("inclusion failed");
+				}
+				// in any case, stop the inclusion process so we don't accidentally add another node
+				try {
+					await this.stopInclusionInternal();
+				} catch (e) {
+					/* ok */
+				}
+				break;
+			case AddNodeStatus.AddingSlave: {
+				// this is called when a new node is added
+				this._nodePendingInclusion = new ZWaveNode(
+					msg.statusContext!.nodeId,
+					this.driver,
+					new DeviceClass(
+						msg.statusContext!.basic!,
+						msg.statusContext!.generic!,
+						msg.statusContext!.specific!,
+					),
+					msg.statusContext!.supportedCCs,
+					msg.statusContext!.controlledCCs,
+				);
+				return true; // Don't invoke any more handlers
+			}
+			case AddNodeStatus.ProtocolDone: {
+				// this is called after a new node is added
+				// stop the inclusion process so we don't accidentally add another node
+				try {
+					await this.stopInclusionInternal();
+				} catch (e) {
+					/* ok */
+				}
+				break;
+			}
+			case AddNodeStatus.Done: {
+				// this is called when the inclusion was completed
+				log.controller.print(
+					`done called for ${msg.statusContext!.nodeId}`,
+				);
+				// stopping the inclusion was acknowledged by the controller
+				if (this._stopInclusionPromise != null)
+					this._stopInclusionPromise.resolve();
+
+				if (this._nodePendingInclusion != null) {
+					const newNode = this._nodePendingInclusion;
+					const supportedCommandClasses = [
+						...newNode.implementedCommandClasses.entries(),
+					]
+						.filter(([, info]) => info.isSupported)
+						.map(([cc]) => cc);
+					const controlledCommandClasses = [
+						...newNode.implementedCommandClasses.entries(),
+					]
+						.filter(([, info]) => info.isControlled)
+						.map(([cc]) => cc);
+					log.controller.print(
+						`finished adding node ${newNode.id}:
+  basic device class:    ${
+		BasicDeviceClasses[newNode.deviceClass!.basic]
+  } (${num2hex(newNode.deviceClass!.basic)})
+  generic device class:  ${newNode.deviceClass!.generic.name} (${num2hex(
+							newNode.deviceClass!.generic.key,
+						)})
+  specific device class: ${newNode.deviceClass!.specific.name} (${num2hex(
+							newNode.deviceClass!.specific.key,
+						)})
+  supported CCs: ${supportedCommandClasses
+		.map((cc) => `\n    ${CommandClasses[cc]} (${num2hex(cc)})`)
+		.join("")}
+  controlled CCs: ${controlledCommandClasses
+		.map((cc) => `\n    ${CommandClasses[cc]} (${num2hex(cc)})`)
+		.join("")}`,
+					);
+					// remember the node
+					this._nodes.set(newNode.id, newNode);
+					this._nodePendingInclusion = undefined;
+					// and notify listeners
+					this.emit("node added", newNode);
+				}
+				break;
+			}
+			default:
+				// not sure what to do with this message
+				return false;
+		}
+		return true; // Don't invoke any more handlers
+	}
+
+	/**
+	 * Is called when a RemoveNode request is received from the controller.
+	 * Handles and controls the exclusion process.
+	 */
+	private async handleRemoveNodeRequest(
+		msg: RemoveNodeFromNetworkRequest,
+	): Promise<boolean> {
+		log.controller.print(
+			`handling remove node request (status = ${
+				RemoveNodeStatus[msg.status!]
+			})`,
+		);
+		if (!this._exclusionActive && msg.status !== RemoveNodeStatus.Done) {
+			log.controller.print(`  exclusion is NOT active, ignoring it...`);
+			return true; // Don't invoke any more handlers
+		}
+
+		switch (msg.status) {
+			case RemoveNodeStatus.Ready:
+				// this is called when inclusion was started successfully
+				log.controller.print(
+					`  the controller is now ready to remove nodes`,
+				);
+				if (this._beginInclusionPromise != null) {
+					this._beginInclusionPromise.resolve(true);
+					this.emit("exclusion started");
+				}
+				break;
+
+			case RemoveNodeStatus.Failed:
+				// this is called when inclusion could not be started...
+				if (this._beginInclusionPromise != null) {
+					log.controller.print(
+						`  starting the exclusion failed`,
+						"error",
+					);
+					this._beginInclusionPromise.reject(
+						new ZWaveError(
+							"The exclusion could not be started.",
+							ZWaveErrorCodes.Controller_ExclusionFailed,
+						),
+					);
+				} else {
+					// ...or removing a node failed
+					log.controller.print(`  removing the node failed`, "error");
+					this.emit("exclusion failed");
+				}
+				// in any case, stop the exclusion process so we don't accidentally remove another node
+				try {
+					await this.stopExclusionInternal();
+				} catch (e) {
+					/* ok */
+				}
+				break;
+
+			case RemoveNodeStatus.RemovingSlave:
+			case RemoveNodeStatus.RemovingController: {
+				// this is called when a node is removed
+				this._nodePendingExclusion = this.nodes.get(
+					msg.statusContext!.nodeId,
+				);
+				return true; // Don't invoke any more handlers
+			}
+
+			case RemoveNodeStatus.Done: {
+				// this is called when the exclusion was completed
+				// stop the exclusion process so we don't accidentally remove another node
+				try {
+					await this.stopExclusionInternal();
+				} catch (e) {
+					/* ok */
+				}
+
+				// stopping the inclusion was acknowledged by the controller
+				if (this._stopInclusionPromise != null)
+					this._stopInclusionPromise.resolve();
+
+				if (this._nodePendingExclusion != null) {
+					log.controller.print(
+						`Node ${this._nodePendingExclusion.id} was removed`,
+					);
+
+					// notify listeners
+					this.emit("node removed", this._nodePendingExclusion);
+					// and forget the node
+					this._nodes.delete(this._nodePendingExclusion.id);
+					this._nodePendingInclusion = undefined;
+				}
+				break;
+			}
+			default:
+				// not sure what to do with this message
+				return false;
+		}
+		return true; // Don't invoke any more handlers
+	}
+
 	private _healNetworkActive: boolean = false;
 	private _healNetworkProgress = new Map<number, HealNodeStatus>();
 
@@ -944,6 +1176,80 @@ ${associatedNodes.join(", ")}`,
 		}
 
 		return true;
+	}
+
+	/**
+	 * Returns a dictionary of all association groups of this node and their information.
+	 * This only works AFTER the interview process
+	 */
+	public getAssociationGroups(
+		nodeId: number,
+	): ReadonlyMap<number, AssociationGroup> {
+		const node = this.nodes.get(nodeId);
+		if (!node) {
+			throw new ZWaveError(
+				`Node ${nodeId} was not found!`,
+				ZWaveErrorCodes.Controller_NodeNotFound,
+			);
+		}
+
+		// Check whether we have multi channel support or not
+		let multiChannel: boolean;
+		let assocInstance: MultiChannelAssociationCC | AssociationCC;
+		if (node.supportsCC(CommandClasses["Multi Channel Association"])) {
+			multiChannel = true;
+			assocInstance = node.createCCInstanceUnsafe<
+				MultiChannelAssociationCC
+			>(CommandClasses["Multi Channel Association"])!;
+		} else if (node.supportsCC(CommandClasses.Association)) {
+			multiChannel = false;
+			assocInstance = node.createCCInstanceUnsafe<AssociationCC>(
+				CommandClasses.Association,
+			)!;
+		} else {
+			throw new ZWaveError(
+				`Node ${nodeId} does not support associations!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
+
+		const groupCount = assocInstance.getGroupCountCached();
+		const ret = new Map<number, AssociationGroup>();
+
+		if (node.supportsCC(CommandClasses["Association Group Information"])) {
+			// We can read all information we need from the AGI CC
+			const agiInstance = node.createCCInstance<AssociationGroupInfoCC>(
+				CommandClasses["Association Group Information"],
+			)!;
+			for (let group = 1; group < groupCount; group++) {
+				ret.set(group, {
+					maxNodes: assocInstance.getMaxNodesCached(group) || 1,
+					// AGI implies Z-Wave+ where group 1 is the lifeline
+					isLifeline: group === 1,
+					label:
+						agiInstance.getGroupNameCached(group) ??
+						`Unnamed group ${group}`,
+					multiChannel,
+					profile: agiInstance.getGroupProfileCached(group),
+					issuedCommands: agiInstance.getIssuedCommandsCached(group),
+				});
+			}
+		} else {
+			// we need to consult the device config
+			for (let group = 1; group < groupCount; group++) {
+				const assocConfig = node.deviceConfig?.associations?.get(group);
+				ret.set(group, {
+					maxNodes:
+						assocInstance.getMaxNodesCached(group) ||
+						assocConfig?.maxNodes ||
+						1,
+					isLifeline: assocConfig?.isLifeline ?? group === 1,
+					label: assocConfig?.label ?? `Unnamed group ${group}`,
+					multiChannel,
+				});
+			}
+		}
+		return ret;
 	}
 
 	/** Returns all Associations (Multi Channel or normal) that are configured on a node */
@@ -1256,235 +1562,6 @@ ${associatedNodes.join(", ")}`,
 			})
 			.filter((task) => !!task) as Promise<void>[];
 		await Promise.all(tasks);
-	}
-
-	/**
-	 * Is called when an AddNode request is received from the controller.
-	 * Handles and controls the inclusion process.
-	 */
-	private async handleAddNodeRequest(
-		msg: AddNodeToNetworkRequest,
-	): Promise<boolean> {
-		log.controller.print(
-			`handling add node request (status = ${
-				AddNodeStatus[msg.status!]
-			})`,
-		);
-		if (!this._inclusionActive && msg.status !== AddNodeStatus.Done) {
-			log.controller.print(`  inclusion is NOT active, ignoring it...`);
-			return true; // Don't invoke any more handlers
-		}
-
-		switch (msg.status) {
-			case AddNodeStatus.Ready:
-				// this is called when inclusion was started successfully
-				log.controller.print(
-					`  the controller is now ready to add nodes`,
-				);
-				if (this._beginInclusionPromise != null) {
-					this._beginInclusionPromise.resolve(true);
-					this.emit("inclusion started");
-				}
-				break;
-			case AddNodeStatus.Failed:
-				// this is called when inclusion could not be started...
-				if (this._beginInclusionPromise != null) {
-					log.controller.print(
-						`  starting the inclusion failed`,
-						"error",
-					);
-					this._beginInclusionPromise.reject(
-						new ZWaveError(
-							"The inclusion could not be started.",
-							ZWaveErrorCodes.Controller_InclusionFailed,
-						),
-					);
-				} else {
-					// ...or adding a node failed
-					log.controller.print(`  adding the node failed`, "error");
-					this.emit("inclusion failed");
-				}
-				// in any case, stop the inclusion process so we don't accidentally add another node
-				try {
-					await this.stopInclusionInternal();
-				} catch (e) {
-					/* ok */
-				}
-				break;
-			case AddNodeStatus.AddingSlave: {
-				// this is called when a new node is added
-				this._nodePendingInclusion = new ZWaveNode(
-					msg.statusContext!.nodeId,
-					this.driver,
-					new DeviceClass(
-						msg.statusContext!.basic!,
-						msg.statusContext!.generic!,
-						msg.statusContext!.specific!,
-					),
-					msg.statusContext!.supportedCCs,
-					msg.statusContext!.controlledCCs,
-				);
-				return true; // Don't invoke any more handlers
-			}
-			case AddNodeStatus.ProtocolDone: {
-				// this is called after a new node is added
-				// stop the inclusion process so we don't accidentally add another node
-				try {
-					await this.stopInclusionInternal();
-				} catch (e) {
-					/* ok */
-				}
-				break;
-			}
-			case AddNodeStatus.Done: {
-				// this is called when the inclusion was completed
-				log.controller.print(
-					`done called for ${msg.statusContext!.nodeId}`,
-				);
-				// stopping the inclusion was acknowledged by the controller
-				if (this._stopInclusionPromise != null)
-					this._stopInclusionPromise.resolve();
-
-				if (this._nodePendingInclusion != null) {
-					const newNode = this._nodePendingInclusion;
-					const supportedCommandClasses = [
-						...newNode.implementedCommandClasses.entries(),
-					]
-						.filter(([, info]) => info.isSupported)
-						.map(([cc]) => cc);
-					const controlledCommandClasses = [
-						...newNode.implementedCommandClasses.entries(),
-					]
-						.filter(([, info]) => info.isControlled)
-						.map(([cc]) => cc);
-					log.controller.print(
-						`finished adding node ${newNode.id}:
-  basic device class:    ${
-		BasicDeviceClasses[newNode.deviceClass!.basic]
-  } (${num2hex(newNode.deviceClass!.basic)})
-  generic device class:  ${newNode.deviceClass!.generic.name} (${num2hex(
-							newNode.deviceClass!.generic.key,
-						)})
-  specific device class: ${newNode.deviceClass!.specific.name} (${num2hex(
-							newNode.deviceClass!.specific.key,
-						)})
-  supported CCs: ${supportedCommandClasses
-		.map((cc) => `\n    ${CommandClasses[cc]} (${num2hex(cc)})`)
-		.join("")}
-  controlled CCs: ${controlledCommandClasses
-		.map((cc) => `\n    ${CommandClasses[cc]} (${num2hex(cc)})`)
-		.join("")}`,
-					);
-					// remember the node
-					this._nodes.set(newNode.id, newNode);
-					this._nodePendingInclusion = undefined;
-					// and notify listeners
-					this.emit("node added", newNode);
-				}
-				break;
-			}
-			default:
-				// not sure what to do with this message
-				return false;
-		}
-		return true; // Don't invoke any more handlers
-	}
-
-	/**
-	 * Is called when a RemoveNode request is received from the controller.
-	 * Handles and controls the exclusion process.
-	 */
-	private async handleRemoveNodeRequest(
-		msg: RemoveNodeFromNetworkRequest,
-	): Promise<boolean> {
-		log.controller.print(
-			`handling remove node request (status = ${
-				RemoveNodeStatus[msg.status!]
-			})`,
-		);
-		if (!this._exclusionActive && msg.status !== RemoveNodeStatus.Done) {
-			log.controller.print(`  exclusion is NOT active, ignoring it...`);
-			return true; // Don't invoke any more handlers
-		}
-
-		switch (msg.status) {
-			case RemoveNodeStatus.Ready:
-				// this is called when inclusion was started successfully
-				log.controller.print(
-					`  the controller is now ready to remove nodes`,
-				);
-				if (this._beginInclusionPromise != null) {
-					this._beginInclusionPromise.resolve(true);
-					this.emit("exclusion started");
-				}
-				break;
-
-			case RemoveNodeStatus.Failed:
-				// this is called when inclusion could not be started...
-				if (this._beginInclusionPromise != null) {
-					log.controller.print(
-						`  starting the exclusion failed`,
-						"error",
-					);
-					this._beginInclusionPromise.reject(
-						new ZWaveError(
-							"The exclusion could not be started.",
-							ZWaveErrorCodes.Controller_ExclusionFailed,
-						),
-					);
-				} else {
-					// ...or removing a node failed
-					log.controller.print(`  removing the node failed`, "error");
-					this.emit("exclusion failed");
-				}
-				// in any case, stop the exclusion process so we don't accidentally remove another node
-				try {
-					await this.stopExclusionInternal();
-				} catch (e) {
-					/* ok */
-				}
-				break;
-
-			case RemoveNodeStatus.RemovingSlave:
-			case RemoveNodeStatus.RemovingController: {
-				// this is called when a node is removed
-				this._nodePendingExclusion = this.nodes.get(
-					msg.statusContext!.nodeId,
-				);
-				return true; // Don't invoke any more handlers
-			}
-
-			case RemoveNodeStatus.Done: {
-				// this is called when the exclusion was completed
-				// stop the exclusion process so we don't accidentally remove another node
-				try {
-					await this.stopExclusionInternal();
-				} catch (e) {
-					/* ok */
-				}
-
-				// stopping the inclusion was acknowledged by the controller
-				if (this._stopInclusionPromise != null)
-					this._stopInclusionPromise.resolve();
-
-				if (this._nodePendingExclusion != null) {
-					log.controller.print(
-						`Node ${this._nodePendingExclusion.id} was removed`,
-					);
-
-					// notify listeners
-					this.emit("node removed", this._nodePendingExclusion);
-					// and forget the node
-					this._nodes.delete(this._nodePendingExclusion.id);
-					this._nodePendingInclusion = undefined;
-				}
-				break;
-			}
-			default:
-				// not sure what to do with this message
-				return false;
-		}
-		return true; // Don't invoke any more handlers
 	}
 
 	/**

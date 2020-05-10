@@ -221,6 +221,24 @@ export enum AssociationGroupInfoProfile {
 	"Irrigation: Channel 32",
 }
 
+/**
+ * @publicAPI
+ */
+export interface AssociationGroup {
+	/** How many nodes this association group supports */
+	maxNodes: number;
+	/** Whether this is the lifeline association (where the Controller must not be removed) */
+	isLifeline: boolean;
+	/** Whether multi channel associations are allowed */
+	multiChannel: boolean;
+	/** The name of the group */
+	label: string;
+	/** The association group profile (if known) */
+	profile?: AssociationGroupInfoProfile;
+	/** A map of Command Classes and commands issued by this group (if known) */
+	issuedCommands?: ReadonlyMap<CommandClasses, readonly number[]>;
+}
+
 /** Returns the ValueID used to store the name of an association group */
 function getGroupNameValueID(groupId: number): ValueID {
 	return {
@@ -347,6 +365,20 @@ export class AssociationGroupInfoCC extends CommandClass {
 	public skipEndpointInterview(): boolean {
 		// The associations are managed on the root device
 		return true;
+	}
+
+	/** Returns the name of an association group */
+	public getGroupNameCached(groupId: number): string | undefined {
+		return this.getValueDB().getValue(getGroupNameValueID(groupId));
+	}
+
+	/** Returns the association profile for an association group */
+	public getGroupProfileCached(
+		groupId: number,
+	): AssociationGroupInfoProfile | undefined {
+		return this.getValueDB().getValue<{
+			profile: AssociationGroupInfoProfile;
+		}>(getGroupInfoValueID(groupId))?.profile;
 	}
 
 	/** Returns the dictionary of all commands issued by the given association group */
