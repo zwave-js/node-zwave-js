@@ -26,6 +26,10 @@ indent_size = 4
 indent_style = space
 indent_size = 2
 
+[config/**/*.json]
+indent_style = tab
+indent_size = 4
+
 # Indent code blocks in the documentation with 4-size tabs
 [docs/**/*.md]
 indent_style = tab

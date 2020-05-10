@@ -1440,7 +1440,7 @@ version:               ${this.version}`;
 			// we've already measured the wake up interval, so we can check whether a refresh is necessary
 			const wakeUpInterval =
 				this.getValue<number>(getWakeUpIntervalValueId()) ?? 0;
-			// The wakeup interval is specified in seconds. Also give 5s tolerance to avoid
+			// The wakeup interval is specified in seconds. Also add 5 seconds tolerance to avoid
 			// unnecessary queries since there might be some delay
 			if ((now - this.lastWakeUp) / 1000 > wakeUpInterval + 5) {
 				this.commandClasses["Wake Up"].getInterval().catch(() => {
@@ -1449,6 +1449,9 @@ version:               ${this.version}`;
 			}
 		}
 		this.lastWakeUp = now;
+
+		// In case there are no messages in the queue, the node may go back to sleep very soon
+		this.driver.debounceSendNodeToSleep(this);
 	}
 
 	/** Handles the receipt of a BasicCC Set or Report */

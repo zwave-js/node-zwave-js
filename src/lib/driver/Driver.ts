@@ -2101,9 +2101,10 @@ ${handlers.length} left`,
 
 	private sendNodeToSleepTimers = new Map<number, NodeJS.Timeout>();
 	/**
-	 * Marks a node for a later sleep command. Every call prolongs the period until the node actually goes to sleep
+	 * @internal
+	 * Marks a node for a later sleep command. Every call refreshes the period until the node actually goes to sleep
 	 */
-	private debounceSendNodeToSleep(node: ZWaveNode): void {
+	public debounceSendNodeToSleep(node: ZWaveNode): void {
 		// Delete old timers if any exist
 		if (this.sendNodeToSleepTimers.has(node.id)) {
 			clearTimeout(this.sendNodeToSleepTimers.get(node.id)!);
