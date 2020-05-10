@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* Added `getAssociationGroups` method to `Controller` to retrieve all defined association groups and their information for a node (#794)
+
 ## 3.0.0 (2020-05-08)
 ### Breaking changes
 * The `healNetwork` method was removed from the Controller class (deprecated in `v2.4.0`) (#731).  
