@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.1.0 (2020-05-11)
 ### Features
 * Added `getAssociationGroups` method to `Controller` to retrieve all defined association groups and their information for a node (#794)
 
