@@ -1175,11 +1175,11 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 				case "final": {
 					// this is the expected response!
 					this.currentTransaction.response = msg;
-					if (this.currentTransaction.partialResponses.length > 0) {
-						msg.mergePartialMessages(
-							this.currentTransaction.partialResponses,
-						);
-					}
+					// Always merge partial responses, even if the array is empty.
+					// Some CCs only store their values when this is called
+					msg.mergePartialMessages(
+						this.currentTransaction.partialResponses,
+					);
 
 					// Since the node actively responded to our request, we now know that it must be awake
 					const node = msg.getNodeUnsafe();
