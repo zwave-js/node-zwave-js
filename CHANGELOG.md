@@ -8,6 +8,11 @@
 ### Features
 * Added `getAssociationGroups` method to `Controller` to retrieve all defined association groups and their information for a node (#794)
 
+### Bugfixes
+* Node information (especially CC versions) are correctly restored from cache again
+* The metadata for the manufacturer info for the Controller is now correctly stored as metadata, not values
+* All handles for the optimized network cache are now closed when destroying the driver
+
 ## 3.0.0 (2020-05-08)
 ### Breaking changes
 * The `healNetwork` method was removed from the Controller class (deprecated in `v2.4.0`) (#731).  

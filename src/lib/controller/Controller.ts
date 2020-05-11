@@ -257,10 +257,12 @@ export class ZWaveController extends EventEmitter {
 	/**
 	 * @internal
 	 * Interviews the controller for the necessary information.
-	 * @param readyToInitNodes Asynchronous callback for the driver to set everything up before nodes are created
+	 * @param initValueDBs Asynchronous callback for the driver to initialize the Value DBs before nodes are created
+	 * @param restoreFromCache Asynchronous callback for the driver to restore the network from cache after nodes are created
 	 */
 	public async interview(
-		readyToInitNodes: () => Promise<void>,
+		initValueDBs: () => Promise<void>,
+		restoreFromCache: () => Promise<void>,
 	): Promise<void> {
 		log.controller.print("beginning interview...");
 
@@ -364,7 +366,7 @@ export class ZWaveController extends EventEmitter {
 		}
 
 		// Give the Driver time to set up the value DBs
-		await readyToInitNodes();
+		await initValueDBs();
 
 		// Request information about all nodes with the GetInitData message
 		log.controller.print(`querying node information...`);
@@ -391,17 +393,20 @@ export class ZWaveController extends EventEmitter {
 			this._nodes.set(nodeId, new ZWaveNode(nodeId, this.driver));
 		}
 
+		// Now try to deserialize all nodes from the cache
+		await restoreFromCache();
+
 		// Set manufacturer information for the controller node
 		const controllerValueDB = this._nodes.get(this._ownNodeId)!.valueDB;
-		controllerValueDB.setValue(
+		controllerValueDB.setMetadata(
 			getManufacturerIdValueId(),
 			getManufacturerIdValueMetadata(),
 		);
-		controllerValueDB.setValue(
+		controllerValueDB.setMetadata(
 			getProductTypeValueId(),
 			getProductTypeValueMetadata(),
 		);
-		controllerValueDB.setValue(
+		controllerValueDB.setMetadata(
 			getProductIdValueId(),
 			getProductIdValueMetadata(),
 		);

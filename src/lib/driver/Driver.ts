@@ -408,7 +408,7 @@ export class Driver extends EventEmitter {
 				.on("node removed", this.onNodeRemoved.bind(this));
 		}
 
-		const initDatabases = async (): Promise<void> => {
+		const initValueDBs = async (): Promise<void> => {
 			// Always start the value and metadata databases
 			const options: JsonlDBOptions<any> = {
 				ignoreReadErrors: true,
@@ -442,12 +442,7 @@ export class Driver extends EventEmitter {
 			this._metadataDB = new JsonlDB(metadataDBFile, options);
 			await this._metadataDB.open();
 
-			// Try to restore the network information from the cache
-			if (process.env.NO_CACHE !== "true") {
-				await this.restoreNetworkStructureFromCache();
-			} else {
-				// When ignoring the cache, there's no need to clear the file because
-				// the next save will overwrite it.
+			if (process.env.NO_CACHE === "true") {
 				// Since value/metadata DBs are append-only, we need to clear them
 				// if the cache should be ignored
 				this._valueDB.clear();
@@ -457,7 +452,12 @@ export class Driver extends EventEmitter {
 
 		if (!this.options.skipInterview) {
 			// Interview the controller.
-			await this._controller.interview(initDatabases);
+			await this._controller.interview(initValueDBs, async () => {
+				// Try to restore the network information from the cache
+				if (process.env.NO_CACHE !== "true") {
+					await this.restoreNetworkStructureFromCache();
+				}
+			});
 			// No need to initialize databases if skipInterview is true, because it is only used in some
 			// Driver unit tests that don't need access to them
 		}
@@ -821,6 +821,17 @@ export class Driver extends EventEmitter {
 		} catch (e) {
 			log.driver.print(
 				`Saving the network to cache failed: ${e.message}`,
+				"error",
+			);
+		}
+
+		try {
+			// Attempt to close the value DBs
+			await this._valueDB?.close();
+			await this._metadataDB?.close();
+		} catch (e) {
+			log.driver.print(
+				`Closing the value DBs failed: ${e.message}`,
 				"error",
 			);
 		}
