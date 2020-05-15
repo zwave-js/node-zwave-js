@@ -5,6 +5,7 @@ import JSON5 from "json5";
 import path from "path";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import type { ValueID } from "../node/ValueDB";
 import type { JSONObject } from "../util/misc";
 import { ObjectKeyMap, ReadonlyObjectKeyMap } from "../util/ObjectKeyMap";
 import {
@@ -277,6 +278,17 @@ proprietary is not an object`,
 			}
 			this.proprietary = definition.proprietary;
 		}
+
+		if (definition.compat != undefined) {
+			if (!isObject(definition.compat)) {
+				throwInvalidConfig(
+					`device`,
+					`config/devices/${filename}:
+compat is not an object`,
+				);
+			}
+			this.compat = new CompatConfig(filename, definition.compat);
+		}
 	}
 
 	public readonly manufacturer!: string;
@@ -295,6 +307,8 @@ proprietary is not an object`,
 	 * ManufacturerProprietary CC
 	 */
 	public readonly proprietary?: Record<string, unknown>;
+	/** Contains compatibility options */
+	public readonly compat?: CompatConfig;
 }
 
 export class AssociationConfig {
@@ -356,6 +370,70 @@ isLifeline in association ${groupId} must be either true or left out`,
 	 * While Z-Wave+ defines a single lifeline, older devices may have multiple lifeline associations.
 	 */
 	public readonly isLifeline: boolean;
+}
+
+export class CompatConfig {
+	private valueIdRegex = /^\$value\$\[.+\]$/;
+
+	public constructor(filename: string, definition: JSONObject) {
+		if (definition.queryOnWakeup != undefined) {
+			if (
+				!isArray(definition.queryOnWakeup) ||
+				!definition.queryOnWakeup.every(
+					(cmd) =>
+						isArray(cmd) &&
+						cmd.length >= 2 &&
+						typeof cmd[0] === "string" &&
+						typeof cmd[1] === "string" &&
+						cmd
+							.slice(2)
+							.every(
+								(arg) =>
+									typeof arg === "string" ||
+									typeof arg === "number" ||
+									typeof arg === "boolean",
+							),
+				)
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option queryOnWakeup`,
+				);
+			}
+
+			// Parse "smart" values into partial Value IDs
+			this.queryOnWakeup = (definition.queryOnWakeup as any[][]).map(
+				(cmd) =>
+					cmd.map((arg) => {
+						if (
+							typeof arg === "string" &&
+							this.valueIdRegex.test(arg)
+						) {
+							const tuple = JSON.parse(
+								arg.substr("$value$".length),
+							);
+							return {
+								property: tuple[0],
+								propertyKey: tuple[1],
+							};
+						}
+						return arg;
+					}),
+			) as any;
+		}
+	}
+
+	public readonly queryOnWakeup?: [
+		string,
+		string,
+		...(
+			| string
+			| number
+			| boolean
+			| Pick<ValueID, "property" | "propertyKey">
+		)[]
+	][];
 }
 
 export class ParamInformation {

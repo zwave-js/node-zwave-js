@@ -5,6 +5,9 @@
 -->
 
 ## __WORK IN PROGRESS__
+### Features
+* Added compatibility option `queryOnWakeup` to configure which API methods must be called when a device wakes up. Some devices (like the Danfoss thermostats) expect to be queried after wakeup, even if they send the required information themselves.
+
 ### Bugfixes
 * CCs that can split their information into multiple messages now correctly store that information when only a single message is received
 

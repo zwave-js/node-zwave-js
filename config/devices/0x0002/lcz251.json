@@ -1,26 +1,36 @@
 // Danfoss LCZ251
 // Living Connect Z Thermostat 2.51
 {
-    "_approved": true,
-    "manufacturer": "Danfoss",
-    "manufacturerId": "0x0002",
-    "label": "LCZ251",
-    "description": "Living Connect Z Thermostat 2.51",
-    "devices": [
-        {
-            "productType": "0x0005",
-            "productId": "0x0003"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Target for Wakeup and Override Notifications",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Danfoss",
+	"manufacturerId": "0x0002",
+	"label": "LCZ251",
+	"description": "Living Connect Z Thermostat 2.51",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Target for Wakeup and Override Notifications",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"compat": {
+		// If we don't query specific things on wake up, this device will
+		// think it is not connected and show error E5
+		"queryOnWakeup": [
+			// ["CommandClass", "API method", ...arguments]
+			["Battery", "get"],
+			["Thermostat Setpoint", "set", 1, "$value$[\"setpoint\", 1]", 0],
+			["Thermostat Setpoint", "get"]
+		]
+	}
 }
