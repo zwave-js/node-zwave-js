@@ -88,7 +88,6 @@ const MockResponseMessage_FunctionType = (0xff as unknown) as FunctionType;
 )
 @expectedResponse(MockResponseMessage_FunctionType)
 @priority(MessagePriority.Normal)
-// @ts-ignore decorators are working
 export class MockRequestMessageWithExpectation extends Message {}
 
 @messageTypes(
@@ -96,11 +95,9 @@ export class MockRequestMessageWithExpectation extends Message {}
 	MockRequestMessageWithoutExpectation_FunctionType,
 )
 @priority(MessagePriority.Normal)
-// @ts-ignore decorators are working
 export class MockRequestMessageWithoutExpectation extends Message {}
 
 @messageTypes(MessageType.Response, MockResponseMessage_FunctionType)
-// @ts-ignore decorators are working
 export class MockResponseMessage extends Message {}
 
 export const mockDriverDummyCallbackId = 0xfe;

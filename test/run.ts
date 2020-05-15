@@ -1,7 +1,6 @@
 // import { ThermostatMode } from "../build/lib/commandclass/ThermostatModeCC";
 import { Driver } from "../src/index";
 
-// @ts-ignore
 const driver = new Driver("COM4").once("driver ready", async () => {
 	// console.log(`sending application info...`);
 	// // A list of all CCs the controller will respond to
