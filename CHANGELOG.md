@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.2.0 (2020-05-15)
 ### Features
 * Added compatibility option `queryOnWakeup` to configure which API methods must be called when a device wakes up. Some devices (like the Danfoss thermostats) expect to be queried after wakeup, even if they send the required information themselves.
 
