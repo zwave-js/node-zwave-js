@@ -972,6 +972,19 @@ export class Driver extends EventEmitter {
 							handled = true;
 							break;
 					}
+				} else {
+					if (/database is not open/.test(e.message)) {
+						// The JSONL-DB is not open yet
+						log.driver.print(
+							`Dropping message because the driver is not ready to handle it yet.`,
+							"warn",
+						);
+						handled = true;
+						bytesRead = Message.getMessageLength(
+							this.receiveBuffer,
+						);
+						break;
+					}
 				}
 				// pass it through;
 				if (!handled) throw e;
