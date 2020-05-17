@@ -19,7 +19,6 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
-import { getEndpointCCsValueId } from "./MultiChannelCC";
 
 /**
  * @publicAPI
@@ -311,7 +310,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 			);
 			// And all endpoint destinations
 			const endpoints =
-				valueDB.getValue<EndpointAddress[]>(getEndpointCCsValueId(i)) ??
+				valueDB.getValue<EndpointAddress[]>(getEndpointsValueId(i)) ??
 				[];
 			for (const ep of endpoints) {
 				if (typeof ep.endpoint === "number") {
@@ -429,6 +428,12 @@ currently assigned endpoints: ${group.endpoints.map(({ nodeId, endpoint }) => {
 					groupId: 1,
 					nodeIds: [ownNodeId],
 				});
+				// Remember the new destination
+				const valueId = getNodeIdsValueId(1);
+				this.getValueDB().setValue(valueId, [
+					ownNodeId,
+					...(this.getValueDB().getValue<number[]>(valueId) ?? []),
+				]);
 			} else if (this.version >= 3 && !isAssignedAsEndpointAssociation) {
 				// Starting with V3, the endpoint address must be used
 				log.controller.logNode(node.id, {
@@ -448,6 +453,14 @@ currently assigned endpoints: ${group.endpoints.map(({ nodeId, endpoint }) => {
 					groupId: 1,
 					endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
 				});
+				// Remember the new destination
+				const valueId = getEndpointsValueId(1);
+				this.getValueDB().setValue(valueId, [
+					{ nodeId: ownNodeId, endpoint: 0 },
+					...(this.getValueDB().getValue<EndpointAddress[]>(
+						valueId,
+					) ?? []),
+				]);
 			}
 		}
 
