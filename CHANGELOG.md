@@ -8,6 +8,7 @@
 ### Bugfixes
 * Multi Channel node associations to the controller are converted to endpoint associations if necessary
 * `VersionCCCommandClassGet` now verifies that the response matches the requested CC
+* Removed a duplicate line when logging the protocol information of a node
 
 ## 3.2.0 (2020-05-15)
 ### Features
