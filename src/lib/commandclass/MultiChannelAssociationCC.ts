@@ -6,6 +6,7 @@ import type { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
+import { getHasLifelineValueId } from "./AssociationCC";
 import {
 	API,
 	CCCommand,
@@ -402,66 +403,102 @@ currently assigned endpoints: ${group.endpoints.map(({ nodeId, endpoint }) => {
 			});
 		}
 
+		// Some nodes define multiple lifeline groups, so we need to assign us to
+		// all of them
+		let lifelineGroups: number[] | undefined;
+		const valueDB = this.getValueDB();
+
 		// If the target node supports Z-Wave+ info that means the lifeline MUST be group #1
 		if (node.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
-			// Check if we are already in the lifeline group
-			const lifelineNodeIds: number[] =
-				this.getValueDB().getValue(getNodeIdsValueId(1)) || [];
-			const lifelineDestinations: EndpointAddress[] =
-				this.getValueDB().getValue(getEndpointsValueId(1)) || [];
-			const ownNodeId = this.driver.controller.ownNodeId!;
-			const isAssignedAsNodeAssociation = lifelineNodeIds.includes(
-				ownNodeId,
-			);
-			const isAssignedAsEndpointAssociation = lifelineDestinations.some(
-				(addr) => addr.nodeId === ownNodeId && addr.endpoint === 0,
-			);
+			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message:
+					"supports Z-Wave+, assigning controller to the Lifeline group...",
+				direction: "outbound",
+			});
+			lifelineGroups = [1];
+		} else if (node.deviceConfig?.associations?.size) {
+			// We have a device config file that tells us which association to assign
+			lifelineGroups = [...node.deviceConfig.associations.values()]
+				.filter((a) => a.isLifeline)
+				.map((a) => a.groupId);
+			if (lifelineGroups.length > 0) {
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `has a config file, assigning ourselves to the configured Lifeline group${
+						lifelineGroups.length > 1 ? "s" : ""
+					}: ${lifelineGroups.join(", ")}`,
+					direction: "outbound",
+				});
+			}
+		} else {
+			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message:
+					"No information about Lifeline associations, cannot assign ourselves!",
+				direction: "outbound",
+				level: "warn",
+			});
+			// Remember that we have NO lifeline association
+			valueDB.setValue(getHasLifelineValueId(), false);
+		}
 
-			if (this.version < 3 && !isAssignedAsNodeAssociation) {
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message:
-						"supports Z-Wave+, assigning controller to the Lifeline group...",
-					direction: "outbound",
-				});
-				await api.addDestinations({
-					groupId: 1,
-					nodeIds: [ownNodeId],
-				});
-				// Remember the new destination
-				const valueId = getNodeIdsValueId(1);
-				this.getValueDB().setValue(valueId, [
+		if (lifelineGroups) {
+			for (const lifelineGroup of lifelineGroups) {
+				const nodeIdsValueId = getNodeIdsValueId(lifelineGroup);
+				const endpointsValueId = getEndpointsValueId(lifelineGroup);
+				const lifelineNodeIds: number[] =
+					this.getValueDB().getValue(nodeIdsValueId) || [];
+				const lifelineDestinations: EndpointAddress[] =
+					this.getValueDB().getValue(endpointsValueId) || [];
+				const ownNodeId = this.driver.controller.ownNodeId!;
+				const isAssignedAsNodeAssociation = lifelineNodeIds.includes(
 					ownNodeId,
-					...(this.getValueDB().getValue<number[]>(valueId) ?? []),
-				]);
-			} else if (this.version >= 3 && !isAssignedAsEndpointAssociation) {
-				// Starting with V3, the endpoint address must be used
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message:
-						"supports Z-Wave+, assigning controller as an endpoint destination to the Lifeline group...",
-					direction: "outbound",
-				});
-				// Remove node associations first, we want an endpoint association
-				if (isAssignedAsNodeAssociation) {
-					await api.removeDestinations({
-						groupId: 1,
+				);
+				const isAssignedAsEndpointAssociation = lifelineDestinations.some(
+					(addr) => addr.nodeId === ownNodeId && addr.endpoint === 0,
+				);
+
+				if (this.version < 3 && !isAssignedAsNodeAssociation) {
+					// Use node id associations for V1 and V2
+					await api.addDestinations({
+						groupId: lifelineGroup,
 						nodeIds: [ownNodeId],
 					});
+					// Remember the new destination
+					this.getValueDB().setValue(nodeIdsValueId, [
+						ownNodeId,
+						...(this.getValueDB().getValue<number[]>(
+							nodeIdsValueId,
+						) ?? []),
+					]);
+				} else if (
+					this.version >= 3 &&
+					!isAssignedAsEndpointAssociation
+				) {
+					// Starting with V3, the endpoint address must be used
+					// Remove node associations first, we want an endpoint association
+					if (isAssignedAsNodeAssociation) {
+						await api.removeDestinations({
+							groupId: lifelineGroup,
+							nodeIds: [ownNodeId],
+						});
+					}
+					await api.addDestinations({
+						groupId: lifelineGroup,
+						endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
+					});
+					// Remember the new destination
+					this.getValueDB().setValue(endpointsValueId, [
+						{ nodeId: ownNodeId, endpoint: 0 },
+						...(this.getValueDB().getValue<EndpointAddress[]>(
+							endpointsValueId,
+						) ?? []),
+					]);
 				}
-				await api.addDestinations({
-					groupId: 1,
-					endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
-				});
-				// Remember the new destination
-				const valueId = getEndpointsValueId(1);
-				this.getValueDB().setValue(valueId, [
-					{ nodeId: ownNodeId, endpoint: 0 },
-					...(this.getValueDB().getValue<EndpointAddress[]>(
-						valueId,
-					) ?? []),
-				]);
 			}
+			// Remember that we have a lifeline association
+			valueDB.setValue(getHasLifelineValueId(), true);
 		}
 
 		// Remember that the interview is complete
