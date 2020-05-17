@@ -1226,7 +1226,7 @@ ${associatedNodes.join(", ")}`,
 			const agiInstance = node.createCCInstance<AssociationGroupInfoCC>(
 				CommandClasses["Association Group Information"],
 			)!;
-			for (let group = 1; group < groupCount; group++) {
+			for (let group = 1; group <= groupCount; group++) {
 				ret.set(group, {
 					maxNodes: assocInstance.getMaxNodesCached(group) || 1,
 					// AGI implies Z-Wave+ where group 1 is the lifeline
@@ -1241,7 +1241,7 @@ ${associatedNodes.join(", ")}`,
 			}
 		} else {
 			// we need to consult the device config
-			for (let group = 1; group < groupCount; group++) {
+			for (let group = 1; group <= groupCount; group++) {
 				const assocConfig = node.deviceConfig?.associations?.get(group);
 				ret.set(group, {
 					maxNodes:
@@ -1366,7 +1366,7 @@ ${associatedNodes.join(", ")}`,
 	/**
 	 * Adds associations to a node
 	 */
-	public addAssociations(
+	public async addAssociations(
 		nodeId: number,
 		group: number,
 		associations: Association[],
@@ -1418,13 +1418,18 @@ ${associatedNodes.join(", ")}`,
 				(a) => a.endpoint != undefined,
 			) as EndpointAddress[];
 			// And add them
-			return node.commandClasses[
+			await node.commandClasses[
 				"Multi Channel Association"
 			].addDestinations({
 				groupId: group,
 				nodeIds: nodeAssociations,
 				endpoints: endpointAssociations,
 			});
+			// Refresh the association list
+			await node.commandClasses["Multi Channel Association"].getGroup(
+				group,
+			);
+			return;
 		} else if (node.supportsCC(CommandClasses.Association)) {
 			// Use normal associations as a fallback
 			const cc = node.createCCInstanceUnsafe<AssociationCC>(
@@ -1456,10 +1461,13 @@ ${associatedNodes.join(", ")}`,
 				);
 			}
 
-			return node.commandClasses.Association.addNodeIds(
+			await node.commandClasses.Association.addNodeIds(
 				group,
 				...associations.map((a) => a.nodeId),
 			);
+			// Refresh the association list
+			await node.commandClasses.Association.getGroup(group);
+			return;
 		} else {
 			throw new ZWaveError(
 				`Node ${nodeId} does not support associations!`,
@@ -1471,7 +1479,7 @@ ${associatedNodes.join(", ")}`,
 	/**
 	 * Removes the specific associations from a node
 	 */
-	public removeAssociations(
+	public async removeAssociations(
 		nodeId: number,
 		group: number,
 		associations: Association[],
@@ -1503,13 +1511,18 @@ ${associatedNodes.join(", ")}`,
 				(a) => a.endpoint != undefined,
 			) as EndpointAddress[];
 			// And remove them
-			return node.commandClasses[
+			await node.commandClasses[
 				"Multi Channel Association"
 			].removeDestinations({
 				groupId: group,
 				nodeIds: nodeAssociations,
 				endpoints: endpointAssociations,
 			});
+			// Refresh the association list
+			await node.commandClasses["Multi Channel Association"].getGroup(
+				group,
+			);
+			return;
 		} else if (node.supportsCC(CommandClasses.Association)) {
 			// Use normal associations as a fallback
 			const cc = node.createCCInstanceUnsafe<AssociationCC>(
@@ -1527,10 +1540,14 @@ ${associatedNodes.join(", ")}`,
 					ZWaveErrorCodes.CC_NotSupported,
 				);
 			}
-			return node.commandClasses.Association.removeNodeIds({
+			// Remove the associations
+			await node.commandClasses.Association.removeNodeIds({
 				groupId: group,
 				nodeIds: associations.map((a) => a.nodeId),
 			});
+			// Refresh the association list
+			await node.commandClasses.Association.getGroup(group);
+			return;
 		} else {
 			throw new ZWaveError(
 				`Node ${nodeId} does not support associations!`,
