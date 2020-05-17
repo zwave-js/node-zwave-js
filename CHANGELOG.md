@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.2.1 (2020-05-17)
 ### Bugfixes
 * Multi Channel node associations to the controller are converted to endpoint associations if necessary
 * `VersionCCCommandClassGet` now verifies that the response matches the requested CC
