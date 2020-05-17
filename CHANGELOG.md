@@ -4,6 +4,13 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* `Multi Channel Association CC`: After the controller is assigned to the lifeline in the interview, this association is added to the cached association list
+* `Controller`:
+  * `getAssociationGroups` now includes the last group aswell
+  * adding and removing associations now updates the list of known associations
+
 ## 3.2.2 (2020-05-17)
 ### Bugfixes
 * Fixed a crash that happened when received CCs tried to access the Value DB before it was opened
