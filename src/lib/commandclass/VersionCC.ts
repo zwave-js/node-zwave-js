@@ -12,6 +12,7 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
+	CCResponsePredicate,
 	ccValue,
 	ccValueMetadata,
 	CommandClass,
@@ -408,8 +409,22 @@ interface VersionCCCommandClassGetOptions extends CCCommandOptions {
 	requestedCC: CommandClasses;
 }
 
+const testResponseForVersionCommandClassGet: CCResponsePredicate = (
+	sent: VersionCCCommandClassGet,
+	received,
+	isPositiveTransmitReport,
+) => {
+	// We expect a Version CommandClass Report that matches the requested CC
+	return received instanceof VersionCCCommandClassReport &&
+		sent.requestedCC === received.requestedCC
+		? "final"
+		: isPositiveTransmitReport
+		? "confirmation"
+		: "unexpected";
+};
+
 @CCCommand(VersionCommand.CommandClassGet)
-@expectedCCResponse(VersionCCCommandClassReport)
+@expectedCCResponse(testResponseForVersionCommandClassGet)
 export class VersionCCCommandClassGet extends VersionCC {
 	public constructor(
 		driver: Driver,
