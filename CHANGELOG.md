@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-
+ 
 ## 3.2.3 (2020-05-17)
 ### Bugfixes
 * `Multi Channel Association CC`: After the controller is assigned to the lifeline in the interview, this association is added to the cached association list
