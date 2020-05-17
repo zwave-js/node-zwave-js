@@ -983,7 +983,6 @@ export class Driver extends EventEmitter {
 						bytesRead = Message.getMessageLength(
 							this.receiveBuffer,
 						);
-						break;
 					}
 				}
 				// pass it through;
