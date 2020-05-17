@@ -771,7 +771,6 @@ is frequent listening: ${this.isFrequentListening}
 is a routing device:   ${this.isRouting}
 is a secure device:    ${this.isSecure}
 is a beaming device:   ${this.isBeaming}
-is a listening device: ${this.isListening}
 maximum baud rate:     ${this.maxBaudRate} kbps
 version:               ${this.version}`;
 		log.controller.logNode(this.id, {
