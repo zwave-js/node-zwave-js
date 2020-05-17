@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.2.2 (2020-05-17)
 ### Bugfixes
 * Fixed a crash that happened when received CCs tried to access the Value DB before it was opened
 
