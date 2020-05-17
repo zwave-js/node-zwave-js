@@ -35,8 +35,17 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: Restore npm cache
+      uses: actions/cache@v1
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          ${{ runner.os }}-node${{ matrix.node-version }}-
+
     - name: Install dependencies
-      run: npm ci
+      run: npm i
 
     - name: Perform a type check
       run: npx gulp check
@@ -70,8 +79,17 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: Restore npm cache
+      uses: actions/cache@v1
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          ${{ runner.os }}-node${{ matrix.node-version }}-
+
     - name: Install dependencies
-      run: npm ci
+      run: npm i
 
     - name: Compile TypeScript code
       run: npx gulp build
@@ -102,8 +120,17 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: Restore npm cache
+      uses: actions/cache@v1
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          ${{ runner.os }}-node${{ matrix.node-version }}-
+
     - name: Install dependencies
-      run: npm ci
+      run: npm i
 
     - name: Run component tests
       run: npm run test:ci
@@ -135,8 +162,17 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: Restore npm cache
+      uses: actions/cache@v1
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          ${{ runner.os }}-node${{ matrix.node-version }}-
+
     - name: Install dependencies
-      run: npm ci
+      run: npm i
 
     - name: Generate coverage
       run: npm run coverage:ci
@@ -174,8 +210,17 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: Restore npm cache
+      uses: actions/cache@v1
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+          ${{ runner.os }}-node${{ matrix.node-version }}-
+
     - name: Install dependencies
-      run: npm ci
+      run: npm i
 
     - name: Create a clean build
       run: npx gulp build
