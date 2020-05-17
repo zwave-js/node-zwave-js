@@ -411,30 +411,43 @@ currently assigned endpoints: ${group.endpoints.map(({ nodeId, endpoint }) => {
 			const lifelineDestinations: EndpointAddress[] =
 				this.getValueDB().getValue(getEndpointsValueId(1)) || [];
 			const ownNodeId = this.driver.controller.ownNodeId!;
-			if (
-				!lifelineNodeIds.includes(ownNodeId) &&
-				!lifelineDestinations.some(
-					(addr) => addr.nodeId === ownNodeId && addr.endpoint === 0,
-				)
-			) {
+			const isAssignedAsNodeAssociation = lifelineNodeIds.includes(
+				ownNodeId,
+			);
+			const isAssignedAsEndpointAssociation = lifelineDestinations.some(
+				(addr) => addr.nodeId === ownNodeId && addr.endpoint === 0,
+			);
+
+			if (this.version < 3 && !isAssignedAsNodeAssociation) {
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
-						"supports Z-Wave+, assigning ourselves to the Lifeline group...",
+						"supports Z-Wave+, assigning controller to the Lifeline group...",
 					direction: "outbound",
 				});
-				if (this.version >= 3) {
-					// Starting with V3, the endpoint address must be used
-					await api.addDestinations({
-						groupId: 1,
-						endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
-					});
-				} else {
-					await api.addDestinations({
+				await api.addDestinations({
+					groupId: 1,
+					nodeIds: [ownNodeId],
+				});
+			} else if (this.version >= 3 && !isAssignedAsEndpointAssociation) {
+				// Starting with V3, the endpoint address must be used
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"supports Z-Wave+, assigning controller as an endpoint destination to the Lifeline group...",
+					direction: "outbound",
+				});
+				// Remove node associations first, we want an endpoint association
+				if (isAssignedAsNodeAssociation) {
+					await api.removeDestinations({
 						groupId: 1,
 						nodeIds: [ownNodeId],
 					});
 				}
+				await api.addDestinations({
+					groupId: 1,
+					endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
+				});
 			}
 		}
 
