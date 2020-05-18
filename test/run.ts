@@ -48,10 +48,10 @@ const driver = new Driver("COM4").once("driver ready", async () => {
 	// await driver.controller.beginExclusion();
 	// await require("alcalzone-shared/async").wait(60000);
 	// await driver.controller.stopExclusion();
-	const node = driver.controller.nodes.get(4)!;
-	node.once("ready", async () => {
-		console.log(node.status);
-	});
+	// const node = driver.controller.nodes.get(4)!;
+	// node.once("ready", async () => {
+	// 	console.log(node.status);
+	// });
 	// await driver.controller.healNetwork();
 	// console.error();
 	// 	console.error("GOGOGO");

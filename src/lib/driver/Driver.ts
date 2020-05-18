@@ -1236,6 +1236,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 
 		if (msg.type === MessageType.Request) {
 			// This is a request we might have registered handlers for
+			log.driver.logMessage(msg, { direction: "inbound" });
 			await this.handleRequest(msg);
 		} else {
 			log.driver.transactionResponse(
@@ -1960,6 +1961,16 @@ ${handlers.length} left`,
 				this.sendQueue.add(this.currentTransaction);
 				// Reset send attempts - we might have already used all of them
 				this.currentTransaction.sendAttempts = 0;
+			} else {
+				// Pings must be rejected, so the next message may be queued
+				this.rejectCurrentTransaction(
+					new ZWaveError(
+						`The node is asleep`,
+						ZWaveErrorCodes.Controller_MessageDropped,
+					),
+					// Don't resume send queue, it will be done outside this method call
+					false,
+				);
 			}
 			// "reset" the current transaction to none
 			this.currentTransaction = undefined;

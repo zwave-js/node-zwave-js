@@ -92,7 +92,7 @@ export function transactionResponse(
 	});
 }
 
-function logMessage(
+export function logMessage(
 	message: Message,
 	{
 		// Used to relate this log message to a node
