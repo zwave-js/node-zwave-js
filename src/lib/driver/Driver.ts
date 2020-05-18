@@ -1236,6 +1236,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 
 		if (msg.type === MessageType.Request) {
 			// This is a request we might have registered handlers for
+			log.driver.logMessage(msg, { direction: "inbound" });
 			await this.handleRequest(msg);
 		} else {
 			log.driver.transactionResponse(
