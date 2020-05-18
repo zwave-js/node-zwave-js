@@ -4786,9 +4786,9 @@
         "productId": "0x0082",
         "firmwareVersion": {
             "min": "0.0",
-            "max": "255.255"
+            "max": "1.5"
         },
-        "filename": "0x0086/zw130.json"
+        "filename": "0x0086/zw130_0.0-1.5.json"
     },
     {
         "manufacturerId": "0x0086",
@@ -4796,9 +4796,9 @@
         "productId": "0x0082",
         "firmwareVersion": {
             "min": "0.0",
-            "max": "255.255"
+            "max": "1.5"
         },
-        "filename": "0x0086/zw130.json"
+        "filename": "0x0086/zw130_0.0-1.5.json"
     },
     {
         "manufacturerId": "0x0086",
@@ -4806,9 +4806,39 @@
         "productId": "0x0082",
         "firmwareVersion": {
             "min": "0.0",
+            "max": "1.5"
+        },
+        "filename": "0x0086/zw130_0.0-1.5.json"
+    },
+    {
+        "manufacturerId": "0x0086",
+        "productType": "0x0002",
+        "productId": "0x0082",
+        "firmwareVersion": {
+            "min": "1.6",
             "max": "255.255"
         },
-        "filename": "0x0086/zw130.json"
+        "filename": "0x0086/zw130_1.6.json"
+    },
+    {
+        "manufacturerId": "0x0086",
+        "productType": "0x0102",
+        "productId": "0x0082",
+        "firmwareVersion": {
+            "min": "1.6",
+            "max": "255.255"
+        },
+        "filename": "0x0086/zw130_1.6.json"
+    },
+    {
+        "manufacturerId": "0x0086",
+        "productType": "0x0202",
+        "productId": "0x0082",
+        "firmwareVersion": {
+            "min": "1.6",
+            "max": "255.255"
+        },
+        "filename": "0x0086/zw130_1.6.json"
     },
     {
         "manufacturerId": "0x0086",

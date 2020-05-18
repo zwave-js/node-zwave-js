@@ -22,7 +22,7 @@
 	],
 	"firmwareVersion": {
 		"min": "0.0",
-		"max": "255.255"
+		"max": "1.5"
 	},
 	"supportsZWavePlus": true,
 	"paramInformation": {
@@ -109,18 +109,6 @@
 					"value": 3
 				}
 			]
-		},
-		"5": {
-			"label": "Color",
-			"description": "Configure which color will be displayed when a button is pressed",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 4294967040,
-			"defaultValue": 65280,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
 		},
 		"39": {
 			"label": "Low battery value",
