@@ -175,6 +175,17 @@ export class VersionCC extends CommandClass {
 		return [CommandClasses["Manufacturer Specific"]];
 	}
 
+	public skipEndpointInterview(): boolean {
+		// SDS13782: In a Multi Channel device, the Version Command Class MUST be supported by the Root Device, while
+		// the Version Command Class SHOULD NOT be supported by individual End Points.
+		//
+		// There may be cases where a given Command Class is not implemented by the Root Device of a Multi
+		// Channel device. However, the Root Device MUST respond to Version requests for any Command Class
+		// implemented by the Multi Channel device; also in cases where the actual Command Class is only
+		// provided by an End Point.
+		return true;
+	}
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
