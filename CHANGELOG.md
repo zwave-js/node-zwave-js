@@ -4,6 +4,16 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* The endpoint interview for `Version CC` is now skipped
+* The node status is now determined quicker during the interview
+
+### Bugfixes
+* If the current transaction is a ping, the calling code no longer gets stuck when messages are moved to the wakeup queue
+* Config parameter 5 has been removed from the `WallMote Quad` for firmware versions `<= 1.5`
+* Unsolicited messages are now logged
+
 ## 3.2.4 (2020-05-17)
 * `Multi Channel Association CC`: Fall back to config files during the interview if the node does not support Z-Wave+ (like Association CC does)
 
