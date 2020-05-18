@@ -666,6 +666,9 @@ export class ZWaveNode extends Endpoint {
 		}
 
 		if (this.interviewStage === InterviewStage.ProtocolInfo) {
+			// Ping node to check if it is alive/asleep/...
+			// TODO: #739, point 3 -> Do this automatically for the first message
+			await this.ping();
 			await this.queryNodeInfo();
 		}
 
@@ -678,6 +681,9 @@ export class ZWaveNode extends Endpoint {
 			this.nodeMayBeReady = true;
 			// Sleeping nodes are assumed to be ready immediately. Otherwise the library would wait until 3 messages have timed out, which is weird.
 			if (!this._isListening) this.emitReadyEventOnce();
+			// Ping node to check if it is alive/asleep/...
+			// TODO: #739, point 3 -> Do this automatically for the first message
+			await this.ping();
 		}
 
 		// At this point the basic interview of new nodes is done. Start here when re-interviewing known nodes

@@ -1960,6 +1960,16 @@ ${handlers.length} left`,
 				this.sendQueue.add(this.currentTransaction);
 				// Reset send attempts - we might have already used all of them
 				this.currentTransaction.sendAttempts = 0;
+			} else {
+				// Pings must be rejected, so the next message may be queued
+				this.rejectCurrentTransaction(
+					new ZWaveError(
+						`The node is asleep`,
+						ZWaveErrorCodes.Controller_MessageDropped,
+					),
+					// Don't resume send queue, it will be done outside this method call
+					false,
+				);
 			}
 			// "reset" the current transaction to none
 			this.currentTransaction = undefined;
