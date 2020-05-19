@@ -1036,7 +1036,9 @@ export class Driver extends EventEmitter {
 				`The node did not respond to the current transaction, scheduling attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`,
 				"warn",
 			);
-		} else if (!this.currentTransaction.nodeAckPending) {
+		} else if (this.currentTransaction.nodeAckPending === false) {
+			// ^ explicitly check for false because undefined means no response necessary
+
 			// The node has already confirmed the receipt, but did not respond to our get-type request
 			// This does not mean that the node is asleep or dead!
 			this.rejectCurrentTransaction(
