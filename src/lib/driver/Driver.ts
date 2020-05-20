@@ -69,7 +69,7 @@ import { deserializeCacheValue } from "../values/Cache";
 import type { Duration } from "../values/Duration";
 import type { ValueMetadata } from "../values/Metadata";
 import type { FileSystem } from "./FileSystem";
-import { Transaction } from "./Transaction";
+import { MAX_SEND_ATTEMPTS, Transaction } from "./Transaction";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { version: libVersion } = require("../../../package.json");
@@ -1140,7 +1140,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 
 				case "fatal_controller": {
 					// The message was not sent
-					if (this.mayRetryCurrentTransaction()) {
+					if (this.mayRetryCurrentTransaction(true)) {
 						// The Z-Wave specs define 500ms as the waiting period for SendData messages
 						const timeout = this.retryCurrentTransaction(500);
 						log.driver.print(
@@ -1489,7 +1489,7 @@ ${handlers.length} left`,
 				reason === "timeout"
 					? "Timeout occured waiting for ACK"
 					: `${reason} received`;
-			if (this.mayRetryCurrentTransaction()) {
+			if (this.mayRetryCurrentTransaction(true)) {
 				const timeout = this.retryCurrentTransaction();
 				log.driver.print(
 					`${msg} - scheduling transmission attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`,
@@ -1512,11 +1512,18 @@ ${handlers.length} left`,
 		}
 	}
 
-	/** Checks if the current transaction may still be retried */
-	private mayRetryCurrentTransaction(): boolean {
+	/**
+	 * Checks if the current transaction may still be retried
+	 * @param wasControllerFailure Whether the failure was due to the controller (`true`) or the node not responding (`false`)
+	 */
+	private mayRetryCurrentTransaction(
+		wasControllerFailure: boolean = false,
+	): boolean {
 		return (
 			this.currentTransaction!.sendAttempts <
-			this.currentTransaction!.maxSendAttempts
+			(wasControllerFailure // If the controller failed to send, retry as often as possible
+				? MAX_SEND_ATTEMPTS
+				: this.currentTransaction!.maxSendAttempts)
 		);
 	}
 
