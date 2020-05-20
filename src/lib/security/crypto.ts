@@ -21,7 +21,9 @@ function decrypt(
 }
 
 /** Encrypts a payload using AES-128-ECB (as described in SDS10865) */
-export const encryptAES128ECB = encrypt.bind(undefined, "aes-128-ecb");
+export function encryptAES128ECB(plaintext: Buffer, key: Buffer): Buffer {
+	return encrypt("aes-128-ecb", plaintext, key, Buffer.from([]));
+}
 
 /** Encrypts a payload using AES-OFB (as described in SDS10865) */
 export const encryptAES128OFB = encrypt.bind(undefined, "aes-128-ofb");
