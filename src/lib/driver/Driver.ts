@@ -63,6 +63,7 @@ import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
+import { SecurityManager } from "../security/Manager";
 import { DeepPartial, getEnumMemberName, skipBytes } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { deserializeCacheValue } from "../values/Cache";
@@ -107,6 +108,9 @@ export interface ZWaveOptions {
 	fs: FileSystem;
 	/** Allows you to specify a different cache directory */
 	cacheDir: string;
+
+	/** Specify the network key to use for encryption */
+	networkKey?: Buffer;
 }
 
 const defaultOptions: ZWaveOptions = {
@@ -162,6 +166,12 @@ function checkOptions(options: ZWaveOptions): void {
 	if (options.timeouts.report < 1) {
 		throw new ZWaveError(
 			`The Report timeout must be positive!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (options.networkKey != undefined && options.networkKey.length !== 16) {
+		throw new ZWaveError(
+			`The network key must be a buffer with length 16!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -281,6 +291,9 @@ export class Driver extends EventEmitter {
 		return this._controller;
 	}
 
+	/** @internal */
+	public readonly securityManager: SecurityManager | undefined;
+
 	public constructor(
 		private port: string,
 		options?: DeepPartial<ZWaveOptions>,
@@ -295,6 +308,10 @@ export class Driver extends EventEmitter {
 		// And make sure they contain valid values
 		checkOptions(this.options);
 		this.cacheDir = this.options.cacheDir;
+
+		if (this.options.networkKey) {
+			this.securityManager = new SecurityManager(this.options.networkKey);
+		}
 
 		// register some cleanup handlers in case the program doesn't get closed cleanly
 		this._cleanupHandler = this._cleanupHandler.bind(this);

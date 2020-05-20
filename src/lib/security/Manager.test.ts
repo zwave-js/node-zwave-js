@@ -1,10 +1,15 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { SecurityManager } from "./Manager";
 
+// prettier-ignore
+const networkKey = Buffer.from([
+	1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+]);
+
 describe("lib/security/Manager", () => {
 	describe("generateNonce", () => {
 		it("should return a random Buffer of the given length", () => {
-			const man = new SecurityManager();
+			const man = new SecurityManager(networkKey);
 			// I know, this is not really checking if the value is random
 			const nonce1 = man.generateNonce(8);
 			const nonce2 = man.generateNonce(8);
@@ -27,14 +32,19 @@ describe("lib/security/Manager", () => {
 
 			jest.mock("crypto");
 			const crypto: typeof import("crypto") = require("crypto");
+			const original: typeof import("crypto") = jest.requireActual(
+				"crypto",
+			);
 			(crypto.randomBytes as jest.Mock)
 				.mockReturnValueOnce(buf1a)
 				.mockReturnValueOnce(buf1b)
 				.mockReturnValueOnce(buf2);
+			crypto.createCipheriv = original.createCipheriv;
+			crypto.createDecipheriv = original.createDecipheriv;
 			const SM: typeof SecurityManager = require("./Manager")
 				.SecurityManager;
 
-			const man = new SM!();
+			const man = new SM(networkKey);
 			const nonce1 = man.generateNonce(8);
 			const nonce2 = man.generateNonce(8);
 			expect(nonce1).toEqual(buf1a);
@@ -48,7 +58,7 @@ describe("lib/security/Manager", () => {
 
 	describe("getNonceId", () => {
 		it("should return the first byte of the nonce", () => {
-			const man = new SecurityManager();
+			const man = new SecurityManager(networkKey);
 
 			const nonce1 = man.generateNonce(8);
 			const nonce2 = man.generateNonce(8);
@@ -62,7 +72,7 @@ describe("lib/security/Manager", () => {
 
 	describe("getNonce", () => {
 		it("should return a previously generated nonce with the same id", () => {
-			const man = new SecurityManager();
+			const man = new SecurityManager(networkKey);
 
 			const nonce1 = man.generateNonce(8);
 			const nonce2 = man.generateNonce(8);
