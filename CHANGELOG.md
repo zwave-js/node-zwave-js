@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.4.0 (2020-05-21)
 ### Features
 * `ZWaveNode` class: expose `ready` as a property (instead of only a one-time event), which can be missed
 
