@@ -279,7 +279,7 @@ export class ZWaveNode extends Endpoint {
 				// sleeping nodes are assumed to be ready
 				(!this._isListening && this._status !== NodeStatus.Dead))
 		) {
-			this.emitReadyEventOnce();
+			this.ready = true;
 		}
 	}
 
@@ -287,11 +287,19 @@ export class ZWaveNode extends Endpoint {
 	// to a certain degree
 	private nodeMayBeReady = false;
 	private nodeReadyEmitted = false;
-	/** Emits the ready event if it has not been emitted yet */
-	private emitReadyEventOnce(): void {
-		if (this.nodeReadyEmitted) return;
+
+	private _ready: boolean = false;
+	/**
+	 * Whether the node is ready to be used
+	 */
+	public get ready(): boolean {
+		return this._ready;
+	}
+	public set ready(v: boolean) {
+		this._ready = v;
+		// When the node is marked ready, emit the ready event (max. once)
+		if (!v || this.nodeReadyEmitted) return;
 		this.emit("ready", this);
-		log.controller.logNode(this.id, `node is ready`, "warn");
 		this.nodeReadyEmitted = true;
 	}
 
@@ -700,12 +708,16 @@ export class ZWaveNode extends Endpoint {
 
 		// The node is deemed ready when has been interviewed completely at least once
 		if (this.interviewStage === InterviewStage.RestartFromCache) {
-			// Mark the node as potentially ready. The first message will determine if it is
-			this.nodeMayBeReady = true;
-			// Sleeping nodes are assumed to be ready immediately. Otherwise the library would wait until 3 messages have timed out, which is weird.
-			if (!this._isListening) this.emitReadyEventOnce();
+			// // Sleeping nodes are assumed to be ready immediately. Otherwise the library would wait until 3 messages have timed out, which is weird.
+			// if (!this._isListening) {
+			// 	this.ready = true;
+			// } else {
+			// // Mark listening nodes as potentially ready. The first message will determine if it is
+			// }
+
 			// Ping node to check if it is alive/asleep/...
 			// TODO: #739, point 3 -> Do this automatically for the first message
+			this.nodeMayBeReady = true;
 			await this.ping();
 		}
 
@@ -736,9 +748,7 @@ export class ZWaveNode extends Endpoint {
 		}
 
 		await this.setInterviewStage(InterviewStage.Complete);
-
-		this.nodeMayBeReady = true;
-		this.emitReadyEventOnce();
+		this.ready = true;
 
 		// Regularly query listening nodes for updated values
 		this.scheduleManualValueRefreshesForListeningNodes();
