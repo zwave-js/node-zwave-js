@@ -291,8 +291,11 @@ export class Driver extends EventEmitter {
 		return this._controller;
 	}
 
+	private _securityManager: SecurityManager | undefined;
 	/** @internal */
-	public readonly securityManager: SecurityManager | undefined;
+	public get securityManager(): SecurityManager | undefined {
+		return this._securityManager;
+	}
 
 	public constructor(
 		private port: string,
@@ -308,10 +311,6 @@ export class Driver extends EventEmitter {
 		// And make sure they contain valid values
 		checkOptions(this.options);
 		this.cacheDir = this.options.cacheDir;
-
-		if (this.options.networkKey) {
-			this.securityManager = new SecurityManager(this.options.networkKey);
-		}
 
 		// register some cleanup handlers in case the program doesn't get closed cleanly
 		this._cleanupHandler = this._cleanupHandler.bind(this);
@@ -477,6 +476,14 @@ export class Driver extends EventEmitter {
 			});
 			// No need to initialize databases if skipInterview is true, because it is only used in some
 			// Driver unit tests that don't need access to them
+		}
+
+		// We need to know the controller node id to set up the security manager
+		if (this.options.networkKey) {
+			this._securityManager = new SecurityManager({
+				networkKey: this.options.networkKey,
+				ownNodeId: this._controller.ownNodeId!,
+			});
 		}
 
 		// in any case we need to emit the driver ready event here

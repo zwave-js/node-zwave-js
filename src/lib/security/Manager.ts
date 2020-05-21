@@ -5,10 +5,18 @@ import { encryptAES128ECB } from "./crypto";
 const authKeyBase = Buffer.alloc(16, 0x55);
 const encryptionKeyBase = Buffer.alloc(16, 0xaa);
 
+interface NonceKey {
+	nodeId: number;
+	nonceId: number;
+}
+
 export class SecurityManager {
-	public constructor(networkKey: Buffer) {
-		this.networkKey = networkKey;
+	public constructor(options: { networkKey: Buffer; ownNodeId: number }) {
+		this.networkKey = options.networkKey;
+		this.ownNodeId = options.ownNodeId;
 	}
+
+	private ownNodeId: number;
 
 	private _networkKey!: Buffer;
 	public get networkKey(): Buffer {
@@ -39,17 +47,34 @@ export class SecurityManager {
 		return this._encryptionKey;
 	}
 
-	private _nonceStore = new Map<number, Buffer>();
+	private _nonceStore = new Map<string, Buffer>();
 
+	private normalizeId(id: number | NonceKey): string {
+		let ret: NonceKey;
+		if (typeof id === "number") {
+			ret = {
+				nodeId: this.ownNodeId,
+				nonceId: id,
+			};
+		} else {
+			ret = {
+				nodeId: id.nodeId,
+				nonceId: id.nonceId,
+			};
+		}
+		return JSON.stringify(ret);
+	}
+
+	/** Generates a nonce for the current node */
 	public generateNonce(length: number): Buffer {
 		let ret: Buffer;
 		let nonceId: number;
 		do {
 			ret = randomBytes(length);
 			nonceId = this.getNonceId(ret);
-		} while (this._nonceStore.has(nonceId));
+		} while (this.hasNonce(nonceId));
 
-		this._nonceStore.set(nonceId, ret);
+		this.setNonce(nonceId, ret);
 		return ret;
 	}
 
@@ -57,7 +82,15 @@ export class SecurityManager {
 		return nonce[0];
 	}
 
-	public getNonce(id: number): Buffer | undefined {
-		return this._nonceStore.get(id);
+	public setNonce(id: number | NonceKey, nonce: Buffer): void {
+		this._nonceStore.set(this.normalizeId(id), nonce);
+	}
+
+	public getNonce(id: number | NonceKey): Buffer | undefined {
+		return this._nonceStore.get(this.normalizeId(id));
+	}
+
+	public hasNonce(id: number | NonceKey): boolean {
+		return this._nonceStore.has(this.normalizeId(id));
 	}
 }
