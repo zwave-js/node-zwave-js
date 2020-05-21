@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.3.0 (2020-05-21)
 ### Features
 * The endpoint interview for `Version CC` is now skipped
 * The node status is now determined more quickly during the interview
