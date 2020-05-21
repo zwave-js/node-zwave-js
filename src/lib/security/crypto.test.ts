@@ -1,5 +1,10 @@
 import * as crypto from "crypto";
-import { decryptAES128OFB, encryptAES128OFB } from "./crypto";
+import {
+	computeMAC,
+	decryptAES128OFB,
+	encryptAES128ECB,
+	encryptAES128OFB,
+} from "./crypto";
 
 describe("lib/util/crypto", () => {
 	describe("encryptAES128OFB() / decryptAES128OFB()", () => {
@@ -20,5 +25,69 @@ describe("lib/util/crypto", () => {
 			).toString();
 			expect(plaintextIn).toBe(plaintextOut);
 		});
+	});
+
+	describe("encryptAES128ECB", () => {
+		it("should work correctly", () => {
+			// Test vector taken from https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf
+			const key = Buffer.from("2b7e151628aed2a6abf7158809cf4f3c", "hex");
+			const plaintext = Buffer.from(
+				"6bc1bee22e409f96e93d7e117393172a",
+				"hex",
+			);
+			const expected = Buffer.from(
+				"3ad77bb40d7a3660a89ecaf32466ef97",
+				"hex",
+			);
+
+			expect(encryptAES128ECB(plaintext, key)).toEqual(expected);
+		});
+	});
+
+	describe("encryptAES128OFB", () => {
+		it("should work correctly", () => {
+			// Test vector taken from https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf
+			const key = Buffer.from("2b7e151628aed2a6abf7158809cf4f3c", "hex");
+			const iv = Buffer.from("000102030405060708090a0b0c0d0e0f", "hex");
+			const plaintext = Buffer.from(
+				"6bc1bee22e409f96e93d7e117393172a",
+				"hex",
+			);
+			const expected = Buffer.from(
+				"3b3fd92eb72dad20333449f8e83cfb4a",
+				"hex",
+			);
+
+			expect(encryptAES128OFB(plaintext, key, iv)).toEqual(expected);
+		});
+	});
+
+	describe("computeMAC", () => {
+		it("should work correctly", () => {
+			// Test vector taken from https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf
+			const key = Buffer.from("2b7e151628aed2a6abf7158809cf4f3c", "hex");
+			// The Z-Wave specs use 16 zeros, but we only found test vectors for this
+			const iv = Buffer.from("000102030405060708090a0b0c0d0e0f", "hex");
+			const plaintext = Buffer.from(
+				"6bc1bee22e409f96e93d7e117393172a",
+				"hex",
+			);
+			const expected = Buffer.from("7649abac8119b246", "hex");
+
+			expect(computeMAC(plaintext, key, iv)).toEqual(expected);
+		});
+
+		// TODO: One of these two is correct (depending on the final() call)
+		// it("should work correctly", () => {
+		// 	// Test vector taken from https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf
+		// 	const key = Buffer.from("00000000000000000000000000000000", "hex");
+		// 	const plaintext = Buffer.from(
+		// 		"00000000000000000000000000000000",
+		// 		"hex",
+		// 	);
+		// 	const expected = Buffer.from("8A05FC5E095AF484", "hex");
+
+		// 	expect(computeMAC(plaintext, key)).toEqual(expected);
+		// });
 	});
 });
