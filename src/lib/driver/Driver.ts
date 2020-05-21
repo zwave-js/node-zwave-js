@@ -553,7 +553,8 @@ export class Driver extends EventEmitter {
 			}
 		} catch (e) {
 			if (e instanceof ZWaveError) {
-				log.controller.print(
+				log.controller.logNode(
+					node.id,
 					"Error during node interview: " + e,
 					"error",
 				);
