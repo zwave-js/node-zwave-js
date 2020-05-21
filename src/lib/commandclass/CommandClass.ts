@@ -80,6 +80,7 @@ export class CommandClass {
 		// Default to non-supervised commands
 		this.supervised =
 			("supervised" in options ? options.supervised : undefined) ?? false;
+
 		// We cannot use @ccValue for non-derived classes, so register interviewComplete as an internal value here
 		this.registerValue("interviewComplete", true);
 
@@ -152,6 +153,9 @@ export class CommandClass {
 			// Older nodes will ignore the additional fields
 			this.version = getImplementedVersion(this.ccId);
 		}
+
+		// If the node is included securely, send secure commands
+		this.secure = !!this.getNode()?.isSecure;
 	}
 
 	protected driver: Driver;
