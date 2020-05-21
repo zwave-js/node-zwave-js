@@ -22,6 +22,7 @@ import {
 } from "../commandclass/ICommandClassContainer";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { messageIsPing } from "../commandclass/NoOperationCC";
+import { SecurityCC } from "../commandclass/Security";
 import {
 	SupervisionCC,
 	SupervisionCCGet,
@@ -1661,7 +1662,11 @@ ${handlers.length} left`,
 			msg.command = MultiChannelCC.encapsulate(this, msg.command);
 		}
 
-		// TODO: 5.
+		// 5.
+		if (SecurityCC.requiresEncapsulation(msg.command)) {
+			// TODO: Provide nonce etc...
+			msg.command = SecurityCC.encapsulate(this, msg.command);
+		}
 	}
 
 	private unwrapCommands(msg: Message & ICommandClassContainer): void {
@@ -1901,9 +1906,9 @@ ${handlers.length} left`,
 
 		// Before doing anything else, check if this message is for a node that's currently asleep
 		// The automated sorting ensures there's no message for a non-sleeping node after that
-		let targetNode: ZWaveNode | undefined;
+		let message: Message;
 		try {
-			targetNode = this.sendQueue.peekStart()!.message.getNodeUnsafe();
+			message = this.sendQueue.peekStart()!.message;
 		} catch (e) {
 			if (e.message.includes(`Cannot read property 'message'`)) {
 				// That is some race condition, ignore it and try again
@@ -1914,6 +1919,19 @@ ${handlers.length} left`,
 				throw e;
 			}
 		}
+
+		// Also check if the message contains a CC which requires a pre-transmit handshake
+		if (
+			isCommandClassContainer(message) &&
+			message.command.requiresPreTransmitHandshake()
+		) {
+			// If it does, the handshake must be done before the message will be sent, ...
+			message.command.preTransmitHandshake();
+			// ... so don't continue here!
+			return;
+		}
+
+		const targetNode = message.getNodeUnsafe();
 		if (!targetNode || targetNode.isAwake()) {
 			// get the next transaction
 			this.currentTransaction = this.sendQueue.shift()!;

@@ -181,6 +181,13 @@ export class CommandClass {
 	 */
 	public supervised: boolean;
 
+	/**
+	 * @internal
+	 * Whether the command should be sent encrypted
+	 * This only has an effect if the target node supports Security.
+	 */
+	public secure: boolean = false;
+
 	/** Returns true if this CC is an extended CC (0xF100..0xFFFF) */
 	public isExtended(): boolean {
 		return this.ccId >= 0xf100;
@@ -715,6 +722,17 @@ export class CommandClass {
 	): string | undefined {
 		// Overwrite this in derived classes, by default just return the property key
 		return propertyKey.toString();
+	}
+
+	/** Whether this CC needs to exchange one or more messages before it can be sent */
+	public requiresPreTransmitHandshake(): boolean {
+		return false; // By default it doesn't
+	}
+
+	/** Perform a handshake before the actual message will be transmitted */
+	public preTransmitHandshake(): void | Promise<void> {
+		// By default do nothing
+		// If handshake messages should be sent, they need the highest priority
 	}
 }
 

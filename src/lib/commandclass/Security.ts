@@ -2,6 +2,7 @@ import { randomBytes } from "crypto";
 import type { ZWaveController } from "../controller/Controller";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { MessagePriority } from "../message/Constants";
 import { parseCCList } from "../node/NodeInfo";
 import {
 	computeMAC,
@@ -10,7 +11,10 @@ import {
 } from "../security/crypto";
 import type { SecurityManager } from "../security/Manager";
 import { validatePayload } from "../util/misc";
+import type { Maybe } from "../values/Primitive";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	CommandClass,
@@ -55,11 +59,58 @@ function getAuthenticationData(
 
 const HALF_NONCE_SIZE = 8;
 
-// TODO: SDS10865: Nonces are identified in the table by their first byte.
-// When generating a new nonce, it is ensured that the new nonce does not have a first byte value that is already contained in one of the table entries.
-// If the PRNG returns a nonce whose first byte is already contained in the table, then the process is repeated
-
 // TODO: Ignore commands if received via multicast
+
+@API(CommandClasses.Security)
+export class SecurityCCAPI extends CCAPI {
+	public supportsCommand(_cmd: SecurityCommand): Maybe<boolean> {
+		// All commands are mandatory
+		return true;
+	}
+
+	public async sendEncapsulated(
+		encapsulated: CommandClass,
+		requestNextNonce: boolean = false,
+	): Promise<void> {
+		if (requestNextNonce) {
+			this.assertSupportsCommand(
+				SecurityCommand,
+				SecurityCommand.CommandEncapsulation,
+			);
+		} else {
+			this.assertSupportsCommand(
+				SecurityCommand,
+				SecurityCommand.CommandEncapsulationNonceGet,
+			);
+		}
+
+		const cc = new (requestNextNonce
+			? SecurityCCCommandEncapsulationNonceGet
+			: SecurityCCCommandEncapsulation)(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			encapsulated,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
+	public async getNonce(): Promise<Buffer> {
+		this.assertSupportsCommand(SecurityCommand, SecurityCommand.NonceGet);
+
+		const cc = new SecurityCCNonceGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+		});
+		const response = (await this.driver.sendCommand<SecurityCCNonceReport>(
+			cc,
+			{
+				// Nonce requests must be handled immediately
+				priority: MessagePriority.Handshake,
+			},
+		))!;
+		return response.nonce;
+	}
+
+	// TODO: other commands
+}
 
 @commandClass(CommandClasses.Security)
 @implementedVersion(1)
@@ -88,6 +139,28 @@ export class SecurityCC extends CommandClass {
 				ZWaveErrorCodes.Driver_NoSecurity,
 			);
 		}
+	}
+
+	/** Tests if a command targets a specific endpoint and thus requires encapsulation */
+	public static requiresEncapsulation(cc: CommandClass): boolean {
+		return cc.secure && !(cc instanceof SecurityCCCommandEncapsulation);
+	}
+
+	/** Encapsulates a command that should be sent encrypted */
+	public static encapsulate(
+		driver: Driver,
+		cc: CommandClass,
+	): SecurityCCCommandEncapsulation {
+		// TODO: When to return a SecurityCCCommandEncapsulationNonceGet?
+		return new SecurityCCCommandEncapsulation(driver, {
+			nodeId: cc.nodeId,
+			encapsulated: cc,
+		});
+	}
+
+	/** Unwraps a security encapsulated command */
+	public static unwrap(cc: SecurityCCCommandEncapsulation): CommandClass {
+		return cc.encapsulated;
 	}
 }
 
@@ -132,8 +205,6 @@ export class SecurityCCNonceGet extends SecurityCC {}
 
 interface SecurityCCCommandEncapsulationOptions extends CCCommandOptions {
 	encapsulated: CommandClass;
-	receiverNonce: Buffer;
-	receiverNonceId: number;
 }
 
 @CCCommand(SecurityCommand.CommandEncapsulation)
@@ -151,23 +222,22 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			validatePayload(
 				this.payload.length >= HALF_NONCE_SIZE + 1 + 2 + 1 + 8,
 			);
-			this.iv = this.payload.slice(0, HALF_NONCE_SIZE);
+			const iv = this.payload.slice(0, HALF_NONCE_SIZE);
 			// TODO: frame control
 			const encryptedCC = this.payload.slice(HALF_NONCE_SIZE + 1, -9);
-			this.nonceId = this.payload[this.payload.length - 9];
+			const nonceId = this.payload[this.payload.length - 9];
 			const authCode = this.payload.slice(-8);
 
 			// Retrieve the used nonce from the nonce store
-			const nonce = this.driver.securityManager.getNonce(this.nonceId);
+			const nonce = this.driver.securityManager.getNonce(nonceId);
 			// Only accept the message if the nonce hasn't expired
 			validatePayload(!!nonce);
-			this.nonce = nonce!;
 			// TODO: mark nonce as used
 
 			// Validate the encrypted data
 			const authData = getAuthenticationData(
-				this.iv,
-				this.nonce,
+				iv,
+				nonce!,
 				this.nodeId,
 				this.driver.controller.ownNodeId,
 				encryptedCC,
@@ -183,7 +253,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			const decryptedCC = decryptAES128OFB(
 				encryptedCC,
 				this.driver.securityManager.encryptionKey,
-				Buffer.concat([this.iv, this.nonce]),
+				Buffer.concat([iv, nonce!]),
 			);
 			this.encapsulated = CommandClass.from(this.driver, {
 				data: decryptedCC,
@@ -191,29 +261,51 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 				encapCC: this,
 			});
 		} else {
-			if (options.receiverNonce.length !== HALF_NONCE_SIZE) {
-				throw new ZWaveError(
-					`Nonce must have length ${HALF_NONCE_SIZE}!`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-
-			this.iv = randomBytes(HALF_NONCE_SIZE);
 			this.encapsulated = options.encapsulated;
-			this.nonce = options.receiverNonce;
-			this.nonceId = options.receiverNonceId;
 		}
 	}
 
-	public readonly iv: Buffer;
 	public encapsulated: CommandClass;
-	public nonce: Buffer;
-	public nonceId: number;
+	public nonceId: number | undefined;
+
+	public requiresPreTransmitHandshake(): boolean {
+		return this.nonceId == undefined;
+	}
+
+	public async preTransmitHandshake(): Promise<void> {
+		// Request new nonce and store it
+		const nonce = await this.getNode()!.commandClasses.Security.getNonce();
+		const secMan = this.driver.securityManager;
+		this.nonceId = secMan.getNonceId(nonce);
+		secMan.setNonce(
+			{
+				nodeId: this.nodeId,
+				nonceId: this.nonceId,
+			},
+			nonce,
+		);
+	}
 
 	public serialize(): Buffer {
+		function throwNoNonce(): never {
+			throw new ZWaveError(
+				`Security CC requires a nonce to be sent!`,
+				ZWaveErrorCodes.SecurityCC_NoNonce,
+			);
+		}
+
+		// Try to find an active nonce
+		if (this.nonceId == undefined) throwNoNonce();
+		const receiverNonce = this.driver.securityManager.getNonce({
+			nodeId: this.nodeId,
+			nonceId: this.nonceId,
+		});
+		if (!receiverNonce) throwNoNonce();
+
 		const serializedCC = this.encapsulated.serialize();
 		// Encrypt the payload
-		const iv = Buffer.concat([this.iv, this.nonce]);
+		const senderNonce = randomBytes(HALF_NONCE_SIZE);
+		const iv = Buffer.concat([senderNonce, receiverNonce]);
 		const encryptedCC = encryptAES128OFB(
 			serializedCC,
 			this.driver.securityManager.encryptionKey,
@@ -221,8 +313,8 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		);
 		// And generate the auth code
 		const authData = getAuthenticationData(
-			this.iv,
-			this.nonce,
+			senderNonce,
+			receiverNonce,
 			this.driver.controller.ownNodeId,
 			this.nodeId,
 			encryptedCC,
@@ -233,7 +325,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		);
 
 		this.payload = Buffer.concat([
-			this.iv,
+			senderNonce,
 			Buffer.from([0]), // TODO: frame control
 			encryptedCC,
 			Buffer.from([this.nonceId]),

@@ -84,6 +84,9 @@ export enum ZWaveErrorCodes {
 	AssociationCC_InvalidGroup = 1300,
 	/** Cannot add an association because it is not allowed */
 	AssociationCC_NotAllowed,
+
+	/** Used to report that no nonce exists */
+	SecurityCC_NoNonce = 1400,
 }
 
 /**
