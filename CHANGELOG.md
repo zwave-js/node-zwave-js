@@ -4,6 +4,13 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* `ZWaveNode` class: expose `ready` as a property (instead of only a one-time event), which can be missed
+
+### Bugfixes
+* The `NodeStatus` enum is now exposed as a value (instead of a type-only export)
+
 ## 3.3.0 (2020-05-21)
 ### Features
 * The endpoint interview for `Version CC` is now skipped
