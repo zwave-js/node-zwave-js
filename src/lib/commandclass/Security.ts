@@ -141,9 +141,16 @@ export class SecurityCC extends CommandClass {
 		}
 	}
 
-	/** Tests if a command targets a specific endpoint and thus requires encapsulation */
+	/** Tests if a should be sent secure and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
-		return cc.secure && !(cc instanceof SecurityCCCommandEncapsulation);
+		return (
+			cc.secure &&
+			// Already encapsulated (SecurityCCCommandEncapsulationNonceGet is a subclass)
+			!(cc instanceof SecurityCCCommandEncapsulation) &&
+			// Cannot be sent encapsulated
+			!(cc instanceof SecurityCCNonceGet) &&
+			!(cc instanceof SecurityCCNonceReport)
+		);
 	}
 
 	/** Encapsulates a command that should be sent encrypted */
