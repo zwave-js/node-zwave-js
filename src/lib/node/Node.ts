@@ -652,6 +652,27 @@ export class ZWaveNode extends Endpoint {
 		// Remember that we tried to interview this node
 		this._interviewAttempts++;
 
+		// Wrapper around interview methods to return false in case of a timeout error
+		// This way the single methods don't all need to have the same error handler
+		// TODO: We could do this in `interviewCCs` aswell, but the refactor is too large right now
+		const tryInterviewStage = async (
+			method: () => Promise<void>,
+		): Promise<boolean> => {
+			try {
+				await method();
+				return true;
+			} catch (e) {
+				if (
+					e instanceof ZWaveError &&
+					(e.code === ZWaveErrorCodes.Controller_NodeTimeout ||
+						e.code === ZWaveErrorCodes.Controller_MessageDropped)
+				) {
+					return false;
+				}
+				throw e;
+			}
+		};
+
 		// The interview is done in several stages. At each point, the interview process might be aborted
 		// due to a stage failing. The reached stage is saved, so we can continue it later without
 		// repeating stages unnecessarily
@@ -669,7 +690,9 @@ export class ZWaveNode extends Endpoint {
 			// Ping node to check if it is alive/asleep/...
 			// TODO: #739, point 3 -> Do this automatically for the first message
 			await this.ping();
-			await this.queryNodeInfo();
+			if (!(await tryInterviewStage(() => this.queryNodeInfo()))) {
+				return false;
+			}
 		}
 
 		// // TODO:
@@ -707,7 +730,9 @@ export class ZWaveNode extends Endpoint {
 
 		if (this.interviewStage === InterviewStage.OverwriteConfig) {
 			// Request a list of this node's neighbors
-			await this.queryNeighbors();
+			if (!(await tryInterviewStage(() => this.queryNeighbors()))) {
+				return false;
+			}
 		}
 
 		await this.setInterviewStage(InterviewStage.Complete);
