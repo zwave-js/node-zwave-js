@@ -1904,35 +1904,46 @@ ${handlers.length} left`,
 			return;
 		}
 
-		// Before doing anything else, check if this message is for a node that's currently asleep
-		// The automated sorting ensures there's no message for a non-sleeping node after that
-		let message: Message;
-		try {
-			message = this.sendQueue.peekStart()!.message;
-		} catch (e) {
-			if (e.message.includes(`Cannot read property 'message'`)) {
-				// That is some race condition, ignore it and try again
-				// https://sentry.io/share/issue/693b81a5efc74533b2b06bc8e97063f1/
-				setImmediate(() => this.workOffSendQueue());
-				return;
-			} else {
-				throw e;
-			}
-		}
-
-		// Also check if the message contains a CC which requires a pre-transmit handshake
-		if (
-			isCommandClassContainer(message) &&
-			message.command.requiresPreTransmitHandshake()
-		) {
-			// If it does, the handshake must be done before the message will be sent, ...
-			message.command.preTransmitHandshake();
-			// ... so don't continue here!
+		const transaction = this.sendQueue.peekStart();
+		if (!transaction) {
+			// That is some race condition, ignore it and try again
+			// https://sentry.io/share/issue/693b81a5efc74533b2b06bc8e97063f1/
+			setImmediate(() => this.workOffSendQueue());
 			return;
 		}
+		const message = transaction.message;
 
+		// Before doing anything else, check if this message is for a node that's currently asleep
+		// The automated sorting ensures there's no message for a non-sleeping node after that
 		const targetNode = message.getNodeUnsafe();
 		if (!targetNode || targetNode.isAwake()) {
+			// Also check if the message contains a CC which requires a pre-transmit handshake
+			if (
+				isCommandClassContainer(message) &&
+				message.command.requiresPreTransmitHandshake()
+			) {
+				// If it does, the handshake must be done before the message will be sent
+				const handshakeResult = message.command.preTransmitHandshake();
+				if (handshakeResult === false) {
+					// The handshake failed, discard this transaction
+					this.sendQueue.remove(transaction);
+					transaction.promise.reject(
+						new ZWaveError(
+							`The message could not be sent because the required handshake failed!`,
+							ZWaveErrorCodes.Controller_MessageDropped,
+						),
+					);
+					// and continue with the next
+					setImmediate(() => this.workOffSendQueue());
+					return;
+				} else if (handshakeResult === true) {
+					// The handshake succeeded, just continue sending the transaction
+				} else {
+					// We received a Promise, so defer a decision until later
+					return;
+				}
+			}
+
 			// get the next transaction
 			this.currentTransaction = this.sendQueue.shift()!;
 			const msg = this.currentTransaction.message;

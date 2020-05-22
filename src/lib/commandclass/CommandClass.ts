@@ -748,8 +748,12 @@ export class CommandClass {
 		return false; // By default it doesn't
 	}
 
-	/** Perform a handshake before the actual message will be transmitted */
-	public preTransmitHandshake(): void | Promise<void> {
+	/**
+	 * Perform a handshake before the actual message will be transmitted.
+	 * The return value indicates whether the handshake was successful or the message should be discarded
+	 */
+	public preTransmitHandshake(): boolean | Promise<boolean> {
+		return true;
 		// By default do nothing
 		// If handshake messages should be sent, they need the highest priority
 	}
