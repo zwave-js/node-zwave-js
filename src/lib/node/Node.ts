@@ -34,6 +34,7 @@ import {
 	getSceneIdValueID,
 	SceneActivationCCSet,
 } from "../commandclass/SceneActivationCC";
+import { SecurityCCNonceGet } from "../commandclass/Security";
 import { getFirmwareVersionsValueId } from "../commandclass/VersionCC";
 import {
 	getWakeUpIntervalValueId,
@@ -1338,6 +1339,8 @@ version:               ${this.version}`;
 			return this.handleSceneActivationSet(command);
 		} else if (command instanceof ClockCCReport) {
 			return this.handleClockReport(command);
+		} else if (command instanceof SecurityCCNonceGet) {
+			return this.handleSecurityNonceGet();
 		}
 
 		// Ignore all commands that don't need to be handled
@@ -1352,6 +1355,18 @@ version:               ${this.version}`;
 			message: `TODO: no handler for application command`,
 			direction: "inbound",
 		});
+	}
+
+	/** Handles a nonce request */
+	private async handleSecurityNonceGet(): Promise<void> {
+		try {
+			await this.commandClasses.Security.sendNonce();
+		} catch (e) {
+			log.controller.logNode(this.id, {
+				message: `failed to send nonce: ${e}`,
+				direction: "inbound",
+			});
+		}
 	}
 
 	/** Stores information about a currently held down key */

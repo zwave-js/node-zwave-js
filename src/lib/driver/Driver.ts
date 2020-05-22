@@ -988,6 +988,7 @@ export class Driver extends EventEmitter {
 								this.receiveBuffer,
 							);
 							const invalidData = this.receiveBuffer.slice(
+								0,
 								bytesRead,
 							);
 							log.driver.print(
@@ -996,6 +997,17 @@ export class Driver extends EventEmitter {
 								"warn",
 							);
 							handled = true;
+							break;
+
+						case ZWaveErrorCodes.Driver_NoSecurity:
+							log.driver.print(
+								`Dropping message because network key is not set or the driver is not yet ready to receive secure messages.`,
+								"warn",
+							);
+							handled = true;
+							bytesRead = Message.getMessageLength(
+								this.receiveBuffer,
+							);
 							break;
 					}
 				} else {
@@ -1895,14 +1907,6 @@ ${handlers.length} left`,
 			// } else {
 			// 	log.driver.sendQueue(this.sendQueue);
 		}
-		// we are still waiting for the current transaction to finish
-		if (this.currentTransaction != undefined) {
-			log.driver.print(
-				`workOffSendQueue > skipping because a transaction is pending`,
-				"debug",
-			);
-			return;
-		}
 
 		const transaction = this.sendQueue.peekStart();
 		if (!transaction) {
@@ -1912,6 +1916,19 @@ ${handlers.length} left`,
 			return;
 		}
 		const message = transaction.message;
+
+		// Abort if we are still waiting for the current transaction to finish
+		// but always reply to handshake messages
+		if (
+			this.currentTransaction != undefined &&
+			transaction.priority !== MessagePriority.Handshake
+		) {
+			log.driver.print(
+				`workOffSendQueue > skipping because a transaction is pending`,
+				"debug",
+			);
+			return;
+		}
 
 		// Before doing anything else, check if this message is for a node that's currently asleep
 		// The automated sorting ensures there's no message for a non-sleeping node after that

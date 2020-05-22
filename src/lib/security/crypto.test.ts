@@ -62,6 +62,32 @@ describe("lib/util/crypto", () => {
 		});
 	});
 
+	describe("encryptAES128OFB", () => {
+		it("should correctly decrypt a real packet", () => {
+			// Taken from an OZW log:
+			// Raw: 0x9881 78193fd7b91995ba 47645ec33fcdb3994b104ebd712e8b7fbd9120d049 28 4e39c14a0dc9aee5
+			// Decrypted Packet: 0x009803008685598e60725a845b7170807aef2526ef
+			// Nonce: 0x2866211bff3783d6
+			// Network Key: 0x0102030405060708090a0b0c0d0e0f10
+
+			const key = encryptAES128ECB(
+				Buffer.alloc(16, 0xaa),
+				Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
+			);
+			const iv = Buffer.from("78193fd7b91995ba2866211bff3783d6", "hex");
+			const ciphertext = Buffer.from(
+				"47645ec33fcdb3994b104ebd712e8b7fbd9120d049",
+				"hex",
+			);
+			const plaintext = decryptAES128OFB(ciphertext, key, iv);
+			const expected = Buffer.from(
+				"009803008685598e60725a845b7170807aef2526ef",
+				"hex",
+			);
+			expect(plaintext).toEqual(expected);
+		});
+	});
+
 	describe("computeMAC", () => {
 		it("should work correctly", () => {
 			// Test vector taken from https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf

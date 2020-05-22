@@ -9,7 +9,11 @@ import {
 	decryptAES128OFB,
 	encryptAES128OFB,
 } from "../security/crypto";
-import type { SecurityManager } from "../security/Manager";
+import {
+	generateAuthKey,
+	generateEncryptionKey,
+	SecurityManager,
+} from "../security/Manager";
 import { pick, validatePayload } from "../util/misc";
 import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
@@ -17,6 +21,7 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
+	CCResponsePredicate,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -45,6 +50,7 @@ export enum SecurityCommand {
 function getAuthenticationData(
 	senderNonce: Buffer,
 	receiverNonce: Buffer,
+	ccCommand: SecurityCommand,
 	sendingNodeId: number,
 	receivingNodeId: number,
 	encryptedPayload: Buffer,
@@ -52,7 +58,12 @@ function getAuthenticationData(
 	return Buffer.concat([
 		senderNonce,
 		receiverNonce,
-		Buffer.from([sendingNodeId, receivingNodeId, encryptedPayload.length]),
+		Buffer.from([
+			ccCommand,
+			sendingNodeId,
+			receivingNodeId,
+			encryptedPayload.length,
+		]),
 		encryptedPayload,
 	]);
 }
@@ -167,10 +178,16 @@ export class SecurityCCAPI extends CCAPI {
 			SecurityCommand.NetworkKeySet,
 		);
 
-		const cc = new SecurityCCNetworkKeySet(this.driver, {
+		const keySet = new SecurityCCNetworkKeySet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			networkKey,
+		});
+		const cc = new SecurityCCCommandEncapsulation(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			encapsulated: keySet,
+			alternativeNetworkKey: Buffer.alloc(16, 0),
 		});
 		await this.driver.sendCommand(cc);
 	}
@@ -230,7 +247,9 @@ export class SecurityCC extends CommandClass {
 			!(cc instanceof SecurityCCCommandEncapsulation) &&
 			// Cannot be sent encapsulated
 			!(cc instanceof SecurityCCNonceGet) &&
-			!(cc instanceof SecurityCCNonceReport)
+			!(cc instanceof SecurityCCNonceReport) &&
+			!(cc instanceof SecurityCCSchemeGet) &&
+			!(cc instanceof SecurityCCSchemeReport)
 		);
 	}
 
@@ -291,12 +310,24 @@ export class SecurityCCNonceReport extends SecurityCC {
 @expectedCCResponse(SecurityCCNonceReport)
 export class SecurityCCNonceGet extends SecurityCC {}
 
+const testResponseForCommandEncapsulation: CCResponsePredicate<SecurityCCCommandEncapsulation> = (
+	sent,
+	received,
+	isPositiveTransmitReport,
+) => {
+	return received instanceof SecurityCCCommandEncapsulation ||
+		isPositiveTransmitReport
+		? "checkEncapsulated"
+		: "unexpected";
+};
+
 interface SecurityCCCommandEncapsulationOptions extends CCCommandOptions {
 	encapsulated: CommandClass;
+	alternativeNetworkKey?: Buffer;
 }
 
 @CCCommand(SecurityCommand.CommandEncapsulation)
-// TODO: Implement check for response
+@expectedCCResponse(testResponseForCommandEncapsulation)
 export class SecurityCCCommandEncapsulation extends SecurityCC {
 	public constructor(
 		driver: Driver,
@@ -312,7 +343,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			);
 			const iv = this.payload.slice(0, HALF_NONCE_SIZE);
 			// TODO: frame control
-			const encryptedCC = this.payload.slice(HALF_NONCE_SIZE + 1, -9);
+			const encryptedPayload = this.payload.slice(HALF_NONCE_SIZE, -9);
 			const nonceId = this.payload[this.payload.length - 9];
 			const authCode = this.payload.slice(-8);
 
@@ -322,27 +353,30 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			validatePayload(!!nonce);
 			// TODO: mark nonce as used
 
+			this.authKey = this.driver.securityManager.authKey;
+			this.encryptionKey = this.driver.securityManager.encryptionKey;
+
 			// Validate the encrypted data
 			const authData = getAuthenticationData(
 				iv,
 				nonce!,
+				this.ccCommand,
 				this.nodeId,
 				this.driver.controller.ownNodeId,
-				encryptedCC,
+				encryptedPayload,
 			);
-			const expectedAuthCode = computeMAC(
-				authData,
-				this.driver.securityManager.authKey,
-			);
+			const expectedAuthCode = computeMAC(authData, this.authKey);
 			// Only accept messages with a correct auth code
 			validatePayload(authCode.equals(expectedAuthCode));
 
 			// Decrypt the encapsulated CC
-			const decryptedCC = decryptAES128OFB(
-				encryptedCC,
-				this.driver.securityManager.encryptionKey,
+			const frameControlAndDecryptedCC = decryptAES128OFB(
+				encryptedPayload,
+				this.encryptionKey,
 				Buffer.concat([iv, nonce!]),
 			);
+			// TODO: const frameControl = frameControlAndDecryptedCC[0];
+			const decryptedCC = frameControlAndDecryptedCC.slice(1);
 			this.encapsulated = CommandClass.from(this.driver, {
 				data: decryptedCC,
 				fromEncapsulation: true,
@@ -350,10 +384,22 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			});
 		} else {
 			this.encapsulated = options.encapsulated;
+			if (options.alternativeNetworkKey) {
+				this.authKey = generateAuthKey(options.alternativeNetworkKey);
+				this.encryptionKey = generateEncryptionKey(
+					options.alternativeNetworkKey,
+				);
+			} else {
+				this.authKey = this.driver.securityManager.authKey;
+				this.encryptionKey = this.driver.securityManager.encryptionKey;
+			}
 		}
 	}
 
 	public encapsulated: CommandClass;
+	private authKey: Buffer;
+	private encryptionKey: Buffer;
+
 	public nonceId: number | undefined;
 	private handshakeFailed: boolean = false;
 
@@ -416,31 +462,28 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		if (!receiverNonce) throwNoNonce();
 
 		const serializedCC = this.encapsulated.serialize();
+		const plaintext = Buffer.concat([
+			Buffer.from([0]), // TODO: frame control
+			serializedCC,
+		]);
 		// Encrypt the payload
 		const senderNonce = randomBytes(HALF_NONCE_SIZE);
 		const iv = Buffer.concat([senderNonce, receiverNonce]);
-		const encryptedCC = encryptAES128OFB(
-			serializedCC,
-			this.driver.securityManager.encryptionKey,
-			iv,
-		);
+		const ciphertext = encryptAES128OFB(plaintext, this.encryptionKey, iv);
 		// And generate the auth code
 		const authData = getAuthenticationData(
 			senderNonce,
 			receiverNonce,
+			this.ccCommand,
 			this.driver.controller.ownNodeId,
 			this.nodeId,
-			encryptedCC,
+			ciphertext,
 		);
-		const authCode = computeMAC(
-			authData,
-			this.driver.securityManager.authKey,
-		);
+		const authCode = computeMAC(authData, this.authKey);
 
 		this.payload = Buffer.concat([
 			senderNonce,
-			Buffer.from([0]), // TODO: frame control
-			encryptedCC,
+			ciphertext,
 			Buffer.from([this.nonceId]),
 			authCode,
 		]);

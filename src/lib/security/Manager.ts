@@ -5,6 +5,14 @@ import { encryptAES128ECB } from "./crypto";
 const authKeyBase = Buffer.alloc(16, 0x55);
 const encryptionKeyBase = Buffer.alloc(16, 0xaa);
 
+export function generateAuthKey(networkKey: Buffer): Buffer {
+	return encryptAES128ECB(authKeyBase, networkKey);
+}
+
+export function generateEncryptionKey(networkKey: Buffer): Buffer {
+	return encryptAES128ECB(encryptionKeyBase, networkKey);
+}
+
 interface NonceKey {
 	nodeId: number;
 	nonceId: number;
@@ -30,11 +38,8 @@ export class SecurityManager {
 			);
 		}
 		this._networkKey = v;
-		this._authKey = encryptAES128ECB(authKeyBase, this._networkKey);
-		this._encryptionKey = encryptAES128ECB(
-			encryptionKeyBase,
-			this._networkKey,
-		);
+		this._authKey = generateAuthKey(this._networkKey);
+		this._encryptionKey = generateEncryptionKey(this._networkKey);
 	}
 
 	private _authKey!: Buffer;
