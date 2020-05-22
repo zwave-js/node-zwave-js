@@ -10,7 +10,7 @@ import {
 	encryptAES128OFB,
 } from "../security/crypto";
 import type { SecurityManager } from "../security/Manager";
-import { validatePayload } from "../util/misc";
+import { pick, validatePayload } from "../util/misc";
 import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
@@ -98,6 +98,7 @@ export class SecurityCCAPI extends CCAPI {
 
 		const cc = new SecurityCCNonceGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<SecurityCCNonceReport>(
 			cc,
@@ -109,7 +110,87 @@ export class SecurityCCAPI extends CCAPI {
 		return response.nonce;
 	}
 
-	// TODO: other commands
+	public async sendNonce(): Promise<void> {
+		this.assertSupportsCommand(
+			SecurityCommand,
+			SecurityCommand.NonceReport,
+		);
+
+		const nonce = this.driver.securityManager!.generateNonce(
+			HALF_NONCE_SIZE,
+		);
+
+		const cc = new SecurityCCNonceReport(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			nonce,
+		});
+		await this.driver
+			.sendCommand(cc, {
+				// Nonce requests must be handled immediately
+				priority: MessagePriority.Handshake,
+			})
+			.catch(() => {
+				/* don't throw */
+			});
+	}
+
+	public async getSecurityScheme(): Promise<[0]> {
+		this.assertSupportsCommand(SecurityCommand, SecurityCommand.SchemeGet);
+
+		const cc = new SecurityCCSchemeGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		await this.driver.sendCommand(cc);
+		// There is only one scheme, so we hardcode it
+		return [0];
+	}
+
+	public async inheritSecurityScheme(): Promise<void> {
+		this.assertSupportsCommand(
+			SecurityCommand,
+			SecurityCommand.SchemeInherit,
+		);
+
+		const cc = new SecurityCCSchemeInherit(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		await this.driver.sendCommand(cc);
+		// There is only one scheme, so we don't return anything here
+	}
+
+	public async setNetworkKey(networkKey: Buffer): Promise<void> {
+		this.assertSupportsCommand(
+			SecurityCommand,
+			SecurityCommand.NetworkKeySet,
+		);
+
+		const cc = new SecurityCCNetworkKeySet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			networkKey,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	public async getSupportedCommands() {
+		this.assertSupportsCommand(
+			SecurityCommand,
+			SecurityCommand.CommandsSupportedGet,
+		);
+
+		const cc = new SecurityCCCommandsSupportedGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<
+			SecurityCCCommandsSupportedReport
+		>(cc))!;
+		return pick(response, ["supportedCCs", "controlledCCs"]);
+	}
 }
 
 @commandClass(CommandClasses.Security)
