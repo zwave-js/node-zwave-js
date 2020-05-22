@@ -135,12 +135,7 @@ export class CommandClass {
 			);
 			// If we received a CC from a node, it must support at least version 1
 			// Make sure that the interview is complete or we cannot be sure that the assumption is correct
-			let node: ZWaveNode | undefined;
-			try {
-				node = this.getNode();
-			} catch (e) {
-				/* okay */
-			}
+			const node = this.getNodeUnsafe();
 			if (
 				node?.interviewStage === InterviewStage.Complete &&
 				this.version === 0 &&
@@ -155,7 +150,7 @@ export class CommandClass {
 		}
 
 		// If the node is included securely, send secure commands
-		this.secure = !!this.getNode()?.isSecure;
+		this.secure = !!this.getNodeUnsafe()?.isSecure;
 	}
 
 	protected driver: Driver;
@@ -405,6 +400,26 @@ export class CommandClass {
 	public getNode(): ZWaveNode | undefined {
 		if (this.isSinglecast()) {
 			return this.driver.controller.nodes.get(this.nodeId);
+		}
+	}
+
+	/**
+	 * @internal
+	 * Returns the node this CC is linked to (or undefined if the node doesn't exist)
+	 */
+	public getNodeUnsafe(): ZWaveNode | undefined {
+		try {
+			return this.getNode();
+		} catch (e) {
+			// This was expected
+			if (
+				e instanceof ZWaveError &&
+				e.code === ZWaveErrorCodes.Driver_NotReady
+			) {
+				return undefined;
+			}
+			// Something else happened
+			throw e;
 		}
 	}
 
