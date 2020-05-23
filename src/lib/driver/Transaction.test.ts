@@ -22,6 +22,7 @@ interface MockNode {
 	id: number;
 	isAwake(): boolean;
 	supportsCC: ZWaveNode["supportsCC"];
+	isCCSecure: ZWaveNode["isCCSecure"];
 }
 
 describe("lib/driver/Transaction => ", () => {
@@ -53,19 +54,48 @@ describe("lib/driver/Transaction => ", () => {
 		interface MockNode {
 			isListening: boolean;
 			isFrequentListening: boolean;
+			isCCSecure: ZWaveNode["isCCSecure"];
 		}
 
 		const driverMock = {
 			controller: {
 				nodes: new Map<number, MockNode>([
 					// 1: non-listening
-					[1, { isListening: false, isFrequentListening: false }],
+					[
+						1,
+						{
+							isListening: false,
+							isFrequentListening: false,
+							isCCSecure: () => false,
+						},
+					],
 					// 2: listening, but not frequent
-					[2, { isListening: true, isFrequentListening: false }],
+					[
+						2,
+						{
+							isListening: true,
+							isFrequentListening: false,
+							isCCSecure: () => false,
+						},
+					],
 					// 3: listening, and frequent
-					[3, { isListening: true, isFrequentListening: true }],
+					[
+						3,
+						{
+							isListening: true,
+							isFrequentListening: true,
+							isCCSecure: () => false,
+						},
+					],
 					// 4: not listening, but frequent listening
-					[4, { isListening: false, isFrequentListening: true }],
+					[
+						4,
+						{
+							isListening: false,
+							isFrequentListening: true,
+							isCCSecure: () => false,
+						},
+					],
 				]),
 			},
 			getSafeCCVersionForNode() {},
@@ -167,6 +197,7 @@ describe("lib/driver/Transaction => ", () => {
 								return true;
 							},
 							supportsCC,
+							isCCSecure: () => false,
 						},
 					],
 					// 2: not awake
@@ -178,6 +209,7 @@ describe("lib/driver/Transaction => ", () => {
 								return false;
 							},
 							supportsCC,
+							isCCSecure: () => false,
 						},
 					],
 				]),
@@ -278,6 +310,7 @@ describe("lib/driver/Transaction => ", () => {
 							},
 							// non-sleeping
 							supportsCC: () => false,
+							isCCSecure: () => false,
 						},
 					],
 					// 2: not awake
@@ -291,6 +324,7 @@ describe("lib/driver/Transaction => ", () => {
 							supportsCC(cc: CommandClasses) {
 								return cc === CommandClasses["Wake Up"];
 							},
+							isCCSecure: () => false,
 						},
 					],
 				]),

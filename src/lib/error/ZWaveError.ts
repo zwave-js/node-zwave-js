@@ -10,6 +10,7 @@ export enum ZWaveErrorCodes {
 	// This differs from the above three. It means that the packet has a valid format and checksum,
 	// but the data does not match the expectations. This error does not reset the Z-Wave stack
 	PacketFormat_InvalidPayload,
+	PacketFormat_DecryptionFailed,
 
 	Driver_Reset,
 	Driver_Destroyed,
@@ -19,6 +20,7 @@ export enum ZWaveErrorCodes {
 	Driver_NoPriority,
 	Driver_InvalidCache,
 	Driver_InvalidOptions,
+	Driver_NoSecurity,
 
 	/** The controller has timed out while waiting for a report from the node */
 	Controller_NodeTimeout,
@@ -82,6 +84,9 @@ export enum ZWaveErrorCodes {
 	AssociationCC_InvalidGroup = 1300,
 	/** Cannot add an association because it is not allowed */
 	AssociationCC_NotAllowed,
+
+	/** Used to report that no nonce exists */
+	SecurityCC_NoNonce = 1400,
 }
 
 /**

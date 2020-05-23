@@ -80,6 +80,7 @@ export class Endpoint {
 		let ccInfo = this._implementedCommandClasses.get(cc) ?? {
 			isSupported: false,
 			isControlled: false,
+			secure: false,
 			version: 0,
 		};
 		ccInfo = Object.assign(ccInfo, info);
@@ -94,6 +95,11 @@ export class Endpoint {
 	/** Tests if this endpoint supports the given CommandClass */
 	public supportsCC(cc: CommandClasses): boolean {
 		return !!this._implementedCommandClasses.get(cc)?.isSupported;
+	}
+
+	/** Tests if this endpoint supports or controls the given CC securely */
+	public isCCSecure(cc: CommandClasses): boolean {
+		return !!this._implementedCommandClasses.get(cc)?.secure;
 	}
 
 	/** Tests if this endpoint controls the given CommandClass */

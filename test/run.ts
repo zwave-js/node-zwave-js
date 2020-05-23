@@ -1,7 +1,26 @@
 // import { ThermostatMode } from "../build/lib/commandclass/ThermostatModeCC";
 import { Driver } from "../src/index";
 
-const driver = new Driver("COM4").once("driver ready", async () => {
+const driver = new Driver("COM4", {
+	// prettier-ignore
+	networkKey: Buffer.from([
+		1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+	])
+}).once("driver ready", async () => {
+	// await require("alcalzone-shared/async").wait(5000);
+	// console.error();
+	// console.error("EXCLUSION");
+	// console.error();
+	// await driver.controller.beginExclusion();
+	// await require("alcalzone-shared/async").wait(60000);
+	// await driver.controller.stopExclusion();
+	// await require("alcalzone-shared/async").wait(5000);
+	// console.error();
+	// console.error("INCLUSION");
+	// console.error();
+	// await driver.controller.beginInclusion();
+	// await require("alcalzone-shared/async").wait(60000);
+	// await driver.controller.stopInclusion();
 	// console.log(`sending application info...`);
 	// // A list of all CCs the controller will respond to
 	// const supportedCCs = [CommandClasses.Time];

@@ -872,6 +872,7 @@ describe("lib/node/Node", () => {
 						"0": {
 							isSupported: false,
 							isControlled: true,
+							secure: false,
 							version: 3,
 						},
 					},
@@ -882,6 +883,7 @@ describe("lib/node/Node", () => {
 						"0": {
 							isSupported: false,
 							isControlled: true,
+							secure: false,
 							version: 4,
 						},
 					},

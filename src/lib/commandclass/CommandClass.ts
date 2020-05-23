@@ -29,6 +29,7 @@ export type MulticastDestination = [number, number, ...number[]];
 export interface CommandClassInfo {
 	isSupported: boolean;
 	isControlled: boolean;
+	secure: boolean;
 	version: number;
 }
 
@@ -80,6 +81,7 @@ export class CommandClass {
 		// Default to non-supervised commands
 		this.supervised =
 			("supervised" in options ? options.supervised : undefined) ?? false;
+
 		// We cannot use @ccValue for non-derived classes, so register interviewComplete as an internal value here
 		this.registerValue("interviewComplete", true);
 
@@ -134,12 +136,7 @@ export class CommandClass {
 			);
 			// If we received a CC from a node, it must support at least version 1
 			// Make sure that the interview is complete or we cannot be sure that the assumption is correct
-			let node: ZWaveNode | undefined;
-			try {
-				node = this.getNode();
-			} catch (e) {
-				/* okay */
-			}
+			const node = this.getNodeUnsafe();
 			if (
 				node?.interviewStage === InterviewStage.Complete &&
 				this.version === 0 &&
@@ -147,10 +144,14 @@ export class CommandClass {
 			) {
 				this.version = 1;
 			}
+
+			// If the node is included securely, send secure commands if possible
+			this.secure = !!node?.isCCSecure(this.ccId);
 		} else {
 			// For multicast CCs, we just use the highest implemented version to serialize
 			// Older nodes will ignore the additional fields
 			this.version = getImplementedVersion(this.ccId);
+			// Security does not support multicast
 		}
 	}
 
@@ -180,6 +181,13 @@ export class CommandClass {
 	 * Don't use this directly, but rather use `Driver.sendSupervisedCommand`
 	 */
 	public supervised: boolean;
+
+	/**
+	 * @internal
+	 * Whether the command should be sent encrypted
+	 * This only has an effect if the target node supports Security.
+	 */
+	public secure: boolean = false;
 
 	/** Returns true if this CC is an extended CC (0xF100..0xFFFF) */
 	public isExtended(): boolean {
@@ -394,6 +402,26 @@ export class CommandClass {
 	public getNode(): ZWaveNode | undefined {
 		if (this.isSinglecast()) {
 			return this.driver.controller.nodes.get(this.nodeId);
+		}
+	}
+
+	/**
+	 * @internal
+	 * Returns the node this CC is linked to (or undefined if the node doesn't exist)
+	 */
+	public getNodeUnsafe(): ZWaveNode | undefined {
+		try {
+			return this.getNode();
+		} catch (e) {
+			// This was expected
+			if (
+				e instanceof ZWaveError &&
+				e.code === ZWaveErrorCodes.Driver_NotReady
+			) {
+				return undefined;
+			}
+			// Something else happened
+			throw e;
 		}
 	}
 
@@ -715,6 +743,21 @@ export class CommandClass {
 	): string | undefined {
 		// Overwrite this in derived classes, by default just return the property key
 		return propertyKey.toString();
+	}
+
+	/** Whether this CC needs to exchange one or more messages before it can be sent */
+	public requiresPreTransmitHandshake(): boolean {
+		return false; // By default it doesn't
+	}
+
+	/**
+	 * Perform a handshake before the actual message will be transmitted.
+	 * The return value indicates whether the handshake was successful or the message should be discarded
+	 */
+	public preTransmitHandshake(): boolean | Promise<boolean> {
+		return true;
+		// By default do nothing
+		// If handshake messages should be sent, they need the highest priority
 	}
 }
 

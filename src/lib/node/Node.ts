@@ -34,6 +34,7 @@ import {
 	getSceneIdValueID,
 	SceneActivationCCSet,
 } from "../commandclass/SceneActivationCC";
+import { SecurityCCNonceGet } from "../commandclass/SecurityCC";
 import { getFirmwareVersionsValueId } from "../commandclass/VersionCC";
 import {
 	getWakeUpIntervalValueId,
@@ -703,6 +704,12 @@ export class ZWaveNode extends Endpoint {
 			}
 		}
 
+		if (this.interviewStage === InterviewStage.NodeInfo) {
+			if (!(await tryInterviewStage(() => this.querySecureCCs()))) {
+				return false;
+			}
+		}
+
 		// // TODO:
 		// // SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
 
@@ -725,7 +732,7 @@ export class ZWaveNode extends Endpoint {
 		// to get updated information about command classes
 		if (
 			this.interviewStage === InterviewStage.RestartFromCache ||
-			this.interviewStage === InterviewStage.NodeInfo
+			this.interviewStage === InterviewStage.Security
 		) {
 			// Only advance the interview if it was completed, otherwise abort
 			if (await this.interviewCCs()) {
@@ -768,6 +775,7 @@ export class ZWaveNode extends Endpoint {
 		switch (completedStage) {
 			case InterviewStage.ProtocolInfo:
 			case InterviewStage.NodeInfo:
+			case InterviewStage.Security:
 			case InterviewStage.CommandClasses:
 			case InterviewStage.Complete:
 				await this.driver.saveNetworkToCache();
@@ -905,6 +913,57 @@ version:               ${this.version}`;
 			}
 		}
 		await this.setInterviewStage(InterviewStage.NodeInfo);
+	}
+
+	protected async querySecureCCs(): Promise<void> {
+		if (this.supportsCC(CommandClasses.Security)) {
+			// Security is always supported *securely*
+			this.addCC(CommandClasses.Security, { secure: true });
+
+			const api = this.commandClasses.Security;
+
+			log.controller.logNode(this.id, {
+				message: "querying securely supported commands...",
+				direction: "outbound",
+			});
+
+			const resp = await api.getSupportedCommands();
+			const logLines: string[] = [
+				"received secure commands",
+				"supported CCs:",
+			];
+			for (const cc of resp.supportedCCs) {
+				logLines.push(`· ${getEnumMemberName(CommandClasses, cc)}`);
+			}
+			logLines.push("controlled CCs:");
+			for (const cc of resp.controlledCCs) {
+				logLines.push(`· ${getEnumMemberName(CommandClasses, cc)}`);
+			}
+			log.controller.logNode(this.id, {
+				message: logLines.join("\n"),
+				direction: "inbound",
+			});
+
+			// Remember which commands are supported securely
+			for (const cc of resp.supportedCCs) {
+				this.addCC(cc, {
+					isSupported: true,
+					secure: true,
+				});
+			}
+			for (const cc of resp.controlledCCs) {
+				this.addCC(cc, {
+					isControlled: true,
+					secure: true,
+				});
+			}
+		} else {
+			log.controller.logNode(
+				this.id,
+				"does not support Security, skipping query",
+			);
+		}
+		await this.setInterviewStage(InterviewStage.Security);
 	}
 
 	/**
@@ -1338,6 +1397,8 @@ version:               ${this.version}`;
 			return this.handleSceneActivationSet(command);
 		} else if (command instanceof ClockCCReport) {
 			return this.handleClockReport(command);
+		} else if (command instanceof SecurityCCNonceGet) {
+			return this.handleSecurityNonceGet();
 		}
 
 		// Ignore all commands that don't need to be handled
@@ -1352,6 +1413,18 @@ version:               ${this.version}`;
 			message: `TODO: no handler for application command`,
 			direction: "inbound",
 		});
+	}
+
+	/** Handles a nonce request */
+	private handleSecurityNonceGet(): void {
+		try {
+			this.commandClasses.Security.sendNonce();
+		} catch (e) {
+			log.controller.logNode(this.id, {
+				message: `failed to send nonce: ${e}`,
+				direction: "inbound",
+			});
+		}
 	}
 
 	/** Stores information about a currently held down key */

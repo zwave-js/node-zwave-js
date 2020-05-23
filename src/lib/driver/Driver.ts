@@ -22,6 +22,7 @@ import {
 } from "../commandclass/ICommandClassContainer";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { messageIsPing } from "../commandclass/NoOperationCC";
+import { SecurityCC } from "../commandclass/SecurityCC";
 import {
 	SupervisionCC,
 	SupervisionCCGet,
@@ -63,6 +64,7 @@ import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
+import { SecurityManager } from "../security/Manager";
 import { DeepPartial, getEnumMemberName, skipBytes } from "../util/misc";
 import { num2hex } from "../util/strings";
 import { deserializeCacheValue } from "../values/Cache";
@@ -107,6 +109,9 @@ export interface ZWaveOptions {
 	fs: FileSystem;
 	/** Allows you to specify a different cache directory */
 	cacheDir: string;
+
+	/** Specify the network key to use for encryption */
+	networkKey?: Buffer;
 }
 
 const defaultOptions: ZWaveOptions = {
@@ -162,6 +167,12 @@ function checkOptions(options: ZWaveOptions): void {
 	if (options.timeouts.report < 1) {
 		throw new ZWaveError(
 			`The Report timeout must be positive!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (options.networkKey != undefined && options.networkKey.length !== 16) {
+		throw new ZWaveError(
+			`The network key must be a buffer with length 16!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -281,6 +292,12 @@ export class Driver extends EventEmitter {
 		return this._controller;
 	}
 
+	private _securityManager: SecurityManager | undefined;
+	/** @internal */
+	public get securityManager(): SecurityManager | undefined {
+		return this._securityManager;
+	}
+
 	public constructor(
 		private port: string,
 		options?: DeepPartial<ZWaveOptions>,
@@ -311,6 +328,8 @@ export class Driver extends EventEmitter {
 
 	/** @internal */
 	public options: ZWaveOptions;
+
+	private _sendAndForgetAcks = 0;
 
 	private _wasStarted: boolean = false;
 	private _isOpen: boolean = false;
@@ -460,6 +479,14 @@ export class Driver extends EventEmitter {
 			});
 			// No need to initialize databases if skipInterview is true, because it is only used in some
 			// Driver unit tests that don't need access to them
+		}
+
+		// We need to know the controller node id to set up the security manager
+		if (this.options.networkKey) {
+			this._securityManager = new SecurityManager({
+				networkKey: this.options.networkKey,
+				ownNodeId: this._controller.ownNodeId!,
+			});
 		}
 
 		// in any case we need to emit the driver ready event here
@@ -963,6 +990,7 @@ export class Driver extends EventEmitter {
 								this.receiveBuffer,
 							);
 							const invalidData = this.receiveBuffer.slice(
+								0,
 								bytesRead,
 							);
 							log.driver.print(
@@ -971,6 +999,17 @@ export class Driver extends EventEmitter {
 								"warn",
 							);
 							handled = true;
+							break;
+
+						case ZWaveErrorCodes.Driver_NoSecurity:
+							log.driver.print(
+								`Dropping message because network key is not set or the driver is not yet ready to receive secure messages.`,
+								"warn",
+							);
+							handled = true;
+							bytesRead = Message.getMessageLength(
+								this.receiveBuffer,
+							);
 							break;
 					}
 				} else {
@@ -1087,12 +1126,17 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			const responseRole = this.currentTransaction.message.testResponse(
 				msg,
 			);
-			if (responseRole !== "unexpected") {
+			if (
+				responseRole !== "unexpected" ||
+				msg.type !== MessageType.Request
+			) {
 				log.driver.transactionResponse(
 					msg,
 					this.currentTransaction,
 					responseRole,
 				);
+			} else {
+				log.driver.logMessage(msg, { direction: "inbound" });
 			}
 			// For further actions, we are only interested in the innermost CC
 			if (isCommandClassContainer(msg)) this.unwrapCommands(msg);
@@ -1233,13 +1277,15 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 					break;
 			}
 		} else {
+			if (msg.type === MessageType.Request) {
+				log.driver.logMessage(msg, { direction: "inbound" });
+			}
 			// For further actions, we are only interested in the innermost CC
 			if (isCommandClassContainer(msg)) this.unwrapCommands(msg);
 		}
 
 		if (msg.type === MessageType.Request) {
 			// This is a request we might have registered handlers for
-			log.driver.logMessage(msg, { direction: "inbound" });
 			await this.handleRequest(msg);
 		} else {
 			log.driver.transactionResponse(
@@ -1468,6 +1514,12 @@ ${handlers.length} left`,
 				this.resolveCurrentTransaction(false);
 			}
 			return;
+		} else if (this._sendAndForgetAcks > 0) {
+			this._sendAndForgetAcks--;
+			log.driver.print(
+				`ACK received from controller for fire-and-forget message`,
+			);
+			return;
 		}
 
 		log.driver.print("Unexpected ACK received", "warn");
@@ -1637,7 +1689,11 @@ ${handlers.length} left`,
 			msg.command = MultiChannelCC.encapsulate(this, msg.command);
 		}
 
-		// TODO: 5.
+		// 5.
+		if (SecurityCC.requiresEncapsulation(msg.command)) {
+			// TODO: Provide nonce etc...
+			msg.command = SecurityCC.encapsulate(this, msg.command);
+		}
 	}
 
 	private unwrapCommands(msg: Message & ICommandClassContainer): void {
@@ -1863,10 +1919,18 @@ ${handlers.length} left`,
 		if (this.sendQueue.length === 0) {
 			log.driver.print("The send queue is empty", "debug");
 			return;
-			// } else {
-			// 	log.driver.sendQueue(this.sendQueue);
 		}
-		// we are still waiting for the current transaction to finish
+
+		const transaction = this.sendQueue.peekStart();
+		if (!transaction) {
+			// That is some race condition, ignore it and try again
+			// https://sentry.io/share/issue/693b81a5efc74533b2b06bc8e97063f1/
+			setImmediate(() => this.workOffSendQueue());
+			return;
+		}
+		const message = transaction.message;
+
+		// Abort if we are still waiting for the current transaction to finish
 		if (this.currentTransaction != undefined) {
 			log.driver.print(
 				`workOffSendQueue > skipping because a transaction is pending`,
@@ -1877,28 +1941,43 @@ ${handlers.length} left`,
 
 		// Before doing anything else, check if this message is for a node that's currently asleep
 		// The automated sorting ensures there's no message for a non-sleeping node after that
-		let targetNode: ZWaveNode | undefined;
-		try {
-			targetNode = this.sendQueue.peekStart()!.message.getNodeUnsafe();
-		} catch (e) {
-			if (e.message.includes(`Cannot read property 'message'`)) {
-				// That is some race condition, ignore it and try again
-				// https://sentry.io/share/issue/693b81a5efc74533b2b06bc8e97063f1/
-				setImmediate(() => this.workOffSendQueue());
-				return;
-			} else {
-				throw e;
-			}
-		}
+		const targetNode = message.getNodeUnsafe();
 		if (!targetNode || targetNode.isAwake()) {
-			// get the next transaction
-			this.currentTransaction = this.sendQueue.shift()!;
-			const msg = this.currentTransaction.message;
+			// Also check if the message contains a CC which requires a pre-transmit handshake
+			if (
+				isCommandClassContainer(message) &&
+				message.command.requiresPreTransmitHandshake()
+			) {
+				// If it does, the handshake must be done before the message will be sent
+				const handshakeResult = message.command.preTransmitHandshake();
+				if (handshakeResult === false) {
+					// The handshake failed, discard this transaction
+					this.sendQueue.remove(transaction);
+					transaction.promise.reject(
+						new ZWaveError(
+							`The message could not be sent because the required handshake failed!`,
+							ZWaveErrorCodes.Controller_MessageDropped,
+						),
+					);
+					// and continue with the next
+					setImmediate(() => this.workOffSendQueue());
+					return;
+				} else if (handshakeResult === true) {
+					// The handshake succeeded, just continue sending the transaction
+				} else {
+					// We received a Promise, so defer a decision until later
+					return;
+				}
+			}
+
+			// Set the transaction as the current one
+			this.currentTransaction = transaction;
+			this.sendQueue.remove(transaction);
 
 			// And send it
-			this.currentTransaction.markAsSent();
-			const data = msg.serialize();
-			log.driver.transaction(this.currentTransaction);
+			transaction.markAsSent();
+			const data = message.serialize();
+			log.driver.transaction(transaction);
 			log.serial.data("outbound", data);
 			this.doSend(data);
 
@@ -1914,6 +1993,21 @@ ${handlers.length} left`,
 			);
 			log.driver.sendQueue(this.sendQueue);
 		}
+	}
+
+	/**
+	 * @internal
+	 * Sends a message and forgets about it, so no retransmission or similar happens.
+	 * This is primarily intended for responses to handshake messages.
+	 */
+	public sendAndForget(msg: Message): void {
+		// TODO: A cleaner way to handle this would be a stack of currentTransactions
+		const data = msg.serialize();
+		log.driver.logMessage(msg, { direction: "outbound" });
+		log.serial.data("outbound", data);
+		// Remember that we will receive an ack for this
+		this._sendAndForgetAcks++;
+		this.doSend(data);
 	}
 
 	/** Retransmits the current transaction (if there is any) */

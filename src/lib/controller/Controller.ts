@@ -538,6 +538,7 @@ export class ZWaveController extends EventEmitter {
 
 	private _exclusionActive: boolean = false;
 	private _inclusionActive: boolean = false;
+	private _includeNonSecure: boolean = false;
 	private _nodePendingInclusion: ZWaveNode | undefined;
 	private _nodePendingExclusion: ZWaveNode | undefined;
 	// The following variables are to be used for inclusion AND exclusion
@@ -546,13 +547,17 @@ export class ZWaveController extends EventEmitter {
 
 	/**
 	 * Starts the inclusion process of new nodes.
-	 * Resolves to true when the process was started,
-	 * and false if the inclusion was already active
+	 * Resolves to true when the process was started, and false if the inclusion was already active.
+	 *
+	 * @param includeNonSecure Whether the node should be included non-securely, even if it supports Security. By default, all nodes will be included securely if possible
 	 */
-	public async beginInclusion(): Promise<boolean> {
+	public async beginInclusion(
+		includeNonSecure: boolean = false,
+	): Promise<boolean> {
 		// don't start it twice
 		if (this._inclusionActive || this._exclusionActive) return false;
 		this._inclusionActive = true;
+		this._includeNonSecure = includeNonSecure;
 
 		log.controller.print(`starting inclusion process...`);
 
@@ -799,7 +804,45 @@ export class ZWaveController extends EventEmitter {
 					// remember the node
 					this._nodes.set(newNode.id, newNode);
 					this._nodePendingInclusion = undefined;
-					// and notify listeners
+
+					// If security has been set up and we are allowed to include the node securely, do it
+					if (
+						this.driver.securityManager &&
+						!this._includeNonSecure &&
+						newNode.supportsCC(CommandClasses.Security)
+					) {
+						// Only try once, otherwise the node stays unsecure
+						try {
+							const API = newNode.commandClasses.Security;
+							// Request security scheme, because it is required by the specs
+							await API.getSecurityScheme(); // ignore the result
+
+							// send the network key
+							await API.setNetworkKey(
+								this.driver.securityManager.networkKey,
+							);
+							// TODO: support including controllers (when to do this?)
+							// await API.inheritSecurityScheme();
+						} catch (e) {
+							let errorMessage = `Security bootstrapping failed, the node is included insecurely`;
+							if (
+								!(e instanceof ZWaveError) ||
+								(e.code !==
+									ZWaveErrorCodes.Controller_MessageDropped &&
+									e.code !==
+										ZWaveErrorCodes.Controller_NodeTimeout)
+							) {
+								errorMessage += `: ${e}`;
+							}
+							log.controller.logNode(
+								newNode.id,
+								errorMessage,
+								"warn",
+							);
+						}
+					}
+
+					// We're done adding this node, notify listeners
 					this.emit("node added", newNode);
 				}
 				break;

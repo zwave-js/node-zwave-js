@@ -4,9 +4,9 @@
 export enum MessagePriority {
 	// Controller commands are not to be interrupted and usually finish quickly
 	Controller = 0,
-	// The security queue is the highest actual priority because secured messages
-	// require an encryption handshake before sending new messages
-	Security,
+	// This is the highest actual priority for messages that require a pre-transmit handshake,
+	// for example Security which requires nonces to be exchanged
+	Handshake,
 	// Pings (NoOP) are used for device probing at startup and for network diagnostics
 	Ping,
 	// Multistep controller commands typically require user interaction but still

@@ -37,18 +37,28 @@ function internalParseNodeInformationFrame(
 	nif: Buffer,
 ): ExtendedNodeInformationFrame {
 	validatePayload(nif.length >= 2);
-	const ret = {
+	return {
 		generic: GenericDeviceClass.get(nif[0]),
 		specific: SpecificDeviceClass.get(nif[0], nif[1]),
+		...parseCCList(nif.slice(2)),
+	};
+}
+
+export function parseCCList(
+	payload: Buffer,
+): {
+	supportedCCs: CommandClasses[];
+	controlledCCs: CommandClasses[];
+} {
+	const ret = {
 		supportedCCs: [] as CommandClasses[],
 		controlledCCs: [] as CommandClasses[],
 	};
-	// split the CCs into supported/controlled
-	let offset = 2;
+	let offset = 0;
 	let isAfterMark = false;
-	while (offset < nif.length) {
+	while (offset < payload.length) {
 		// Read either the normal or extended ccId
-		const { ccId: cc, bytesRead } = parseCCId(nif, offset);
+		const { ccId: cc, bytesRead } = parseCCId(payload, offset);
 		offset += bytesRead;
 		// CCs before the support/control mark are supported
 		// CCs after the support/control mark are controlled

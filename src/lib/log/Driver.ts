@@ -103,7 +103,7 @@ export function logMessage(
 		nodeId?: number;
 		secondaryTags?: string[];
 		direction?: DataDirection;
-	},
+	} = {},
 ): void {
 	if (!isDriverLogVisible) return;
 	if (nodeId == undefined) nodeId = message.getNodeId();
