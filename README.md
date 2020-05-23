@@ -20,13 +20,6 @@
 -   [Changelog](CHANGELOG.md)
 -   [Documentation](https://alcalzone.github.io/node-zwave-js/)
 
-## Roadmap
-
-This library is still under heavy development. Thus several features are incomplete or planned:
-
--   [ ] Implementation status of Command Classes see https://github.com/AlCalzone/node-zwave-js/issues/6
--   [ ] Security (S0 / S2)
-
 <!--
 TODO: Move all this to the documentation
 ## Development
