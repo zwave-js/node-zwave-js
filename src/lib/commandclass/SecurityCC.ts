@@ -1,7 +1,12 @@
 import { randomBytes } from "crypto";
 import type { ZWaveController } from "../controller/Controller";
+import {
+	SendDataRequest,
+	TransmitOptions,
+} from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import type { MessageOrCCLogEntry } from "../log/shared";
 import { MessagePriority } from "../message/Constants";
 import { parseCCList } from "../node/NodeInfo";
 import {
@@ -14,7 +19,7 @@ import {
 	generateEncryptionKey,
 	SecurityManager,
 } from "../security/Manager";
-import { pick, validatePayload } from "../util/misc";
+import { getEnumMemberName, pick, validatePayload } from "../util/misc";
 import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
@@ -70,6 +75,8 @@ function getAuthenticationData(
 
 const HALF_NONCE_SIZE = 8;
 
+// @noInterview This CC is "interviewed" externally as part of the node interview
+
 // TODO: Ignore commands if received via multicast
 
 @API(CommandClasses.Security)
@@ -121,7 +128,8 @@ export class SecurityCCAPI extends CCAPI {
 		return response.nonce;
 	}
 
-	public async sendNonce(): Promise<void> {
+	/** Responds to a NonceGet request. The message is sent without any retransmission etc. */
+	public sendNonce(): void {
 		this.assertSupportsCommand(
 			SecurityCommand,
 			SecurityCommand.NonceReport,
@@ -136,14 +144,14 @@ export class SecurityCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			nonce,
 		});
-		await this.driver
-			.sendCommand(cc, {
-				// Nonce requests must be handled immediately
-				priority: MessagePriority.Handshake,
-			})
-			.catch(() => {
-				/* don't throw */
-			});
+		const msg = new SendDataRequest(this.driver, {
+			command: cc,
+			// Don't want a response from the target node
+			transmitOptions: TransmitOptions.DEFAULT & ~TransmitOptions.ACK,
+			// Don't want a response from the controller
+			callbackId: 0,
+		});
+		this.driver.sendAndForget(msg);
 	}
 
 	public async getSecurityScheme(): Promise<[0]> {
@@ -628,16 +636,21 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 		this._controlledCCs = [...partials, this]
 			.map((report) => report._controlledCCs)
 			.reduce((prev, cur) => prev.concat(...cur), []);
+	}
 
-		// TODO: Persist values
-		// this.getValueDB().setValue(
-		// 	getMaxNodesValueId(this._groupId),
-		// 	this._maxNodes,
-		// );
-		// this.getValueDB().setValue(
-		// 	getNodeIdsValueId(this._groupId),
-		// 	this._nodeIds,
-		// );
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `reportsToFollow: ${this.reportsToFollow}
+supportedCCs: ${this._supportedCCs
+				.map((cc) => getEnumMemberName(CommandClasses, cc))
+				.map((cc) => `\n· ${cc}`)
+				.join("")}
+controlledCCs: ${this._controlledCCs
+				.map((cc) => getEnumMemberName(CommandClasses, cc))
+				.map((cc) => `\n· ${cc}`)
+				.join("")}`,
+		};
 	}
 }
 

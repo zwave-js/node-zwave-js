@@ -29,6 +29,7 @@ export type MulticastDestination = [number, number, ...number[]];
 export interface CommandClassInfo {
 	isSupported: boolean;
 	isControlled: boolean;
+	secure: boolean;
 	version: number;
 }
 
@@ -143,14 +144,15 @@ export class CommandClass {
 			) {
 				this.version = 1;
 			}
+
+			// If the node is included securely, send secure commands if possible
+			this.secure = !!node?.isCCSecure(this.ccId);
 		} else {
 			// For multicast CCs, we just use the highest implemented version to serialize
 			// Older nodes will ignore the additional fields
 			this.version = getImplementedVersion(this.ccId);
+			// Security does not support multicast
 		}
-
-		// If the node is included securely, send secure commands
-		this.secure = !!this.getNodeUnsafe()?.isSecure;
 	}
 
 	protected driver: Driver;

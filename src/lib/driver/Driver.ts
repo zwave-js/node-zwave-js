@@ -22,7 +22,7 @@ import {
 } from "../commandclass/ICommandClassContainer";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { messageIsPing } from "../commandclass/NoOperationCC";
-import { SecurityCC } from "../commandclass/Security";
+import { SecurityCC } from "../commandclass/SecurityCC";
 import {
 	SupervisionCC,
 	SupervisionCCGet,
@@ -328,6 +328,8 @@ export class Driver extends EventEmitter {
 
 	/** @internal */
 	public options: ZWaveOptions;
+
+	private _sendAndForgetAcks = 0;
 
 	private _wasStarted: boolean = false;
 	private _isOpen: boolean = false;
@@ -1124,12 +1126,17 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			const responseRole = this.currentTransaction.message.testResponse(
 				msg,
 			);
-			if (responseRole !== "unexpected") {
+			if (
+				responseRole !== "unexpected" ||
+				msg.type !== MessageType.Request
+			) {
 				log.driver.transactionResponse(
 					msg,
 					this.currentTransaction,
 					responseRole,
 				);
+			} else {
+				log.driver.logMessage(msg, { direction: "inbound" });
 			}
 			// For further actions, we are only interested in the innermost CC
 			if (isCommandClassContainer(msg)) this.unwrapCommands(msg);
@@ -1270,13 +1277,15 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 					break;
 			}
 		} else {
+			if (msg.type === MessageType.Request) {
+				log.driver.logMessage(msg, { direction: "inbound" });
+			}
 			// For further actions, we are only interested in the innermost CC
 			if (isCommandClassContainer(msg)) this.unwrapCommands(msg);
 		}
 
 		if (msg.type === MessageType.Request) {
 			// This is a request we might have registered handlers for
-			log.driver.logMessage(msg, { direction: "inbound" });
 			await this.handleRequest(msg);
 		} else {
 			log.driver.transactionResponse(
@@ -1504,6 +1513,12 @@ ${handlers.length} left`,
 				// if no response was expected, also resolve the request
 				this.resolveCurrentTransaction(false);
 			}
+			return;
+		} else if (this._sendAndForgetAcks > 0) {
+			this._sendAndForgetAcks--;
+			log.driver.print(
+				`ACK received from controller for fire-and-forget message`,
+			);
 			return;
 		}
 
@@ -1904,8 +1919,6 @@ ${handlers.length} left`,
 		if (this.sendQueue.length === 0) {
 			log.driver.print("The send queue is empty", "debug");
 			return;
-			// } else {
-			// 	log.driver.sendQueue(this.sendQueue);
 		}
 
 		const transaction = this.sendQueue.peekStart();
@@ -1918,11 +1931,7 @@ ${handlers.length} left`,
 		const message = transaction.message;
 
 		// Abort if we are still waiting for the current transaction to finish
-		// but always reply to handshake messages
-		if (
-			this.currentTransaction != undefined &&
-			transaction.priority !== MessagePriority.Handshake
-		) {
+		if (this.currentTransaction != undefined) {
 			log.driver.print(
 				`workOffSendQueue > skipping because a transaction is pending`,
 				"debug",
@@ -1961,14 +1970,14 @@ ${handlers.length} left`,
 				}
 			}
 
-			// get the next transaction
-			this.currentTransaction = this.sendQueue.shift()!;
-			const msg = this.currentTransaction.message;
+			// Set the transaction as the current one
+			this.currentTransaction = transaction;
+			this.sendQueue.remove(transaction);
 
 			// And send it
-			this.currentTransaction.markAsSent();
-			const data = msg.serialize();
-			log.driver.transaction(this.currentTransaction);
+			transaction.markAsSent();
+			const data = message.serialize();
+			log.driver.transaction(transaction);
 			log.serial.data("outbound", data);
 			this.doSend(data);
 
@@ -1984,6 +1993,21 @@ ${handlers.length} left`,
 			);
 			log.driver.sendQueue(this.sendQueue);
 		}
+	}
+
+	/**
+	 * @internal
+	 * Sends a message and forgets about it, so no retransmission or similar happens.
+	 * This is primarily intended for responses to handshake messages.
+	 */
+	public sendAndForget(msg: Message): void {
+		// TODO: A cleaner way to handle this would be a stack of currentTransactions
+		const data = msg.serialize();
+		log.driver.logMessage(msg, { direction: "outbound" });
+		log.serial.data("outbound", data);
+		// Remember that we will receive an ack for this
+		this._sendAndForgetAcks++;
+		this.doSend(data);
 	}
 
 	/** Retransmits the current transaction (if there is any) */
