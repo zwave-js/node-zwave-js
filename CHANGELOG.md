@@ -4,6 +4,14 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* Added experimental support for Security S0 (#814)
+* The `"inclusion started"` event now includes a boolean parameter to indicate whether the inclusion was started securely
+
+### Bugfixes
+* It is now possible to stop inclusion and exclusion processes again
+
 ## 3.4.0 (2020-05-21)
 ### Features
 * `ZWaveNode` class: expose `ready` as a property (instead of only a one-time event), which can be missed
