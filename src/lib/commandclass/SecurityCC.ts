@@ -38,6 +38,8 @@ import {
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
 
+// @noSetValueAPI This is an encapsulation CC
+
 // All the supported commands
 export enum SecurityCommand {
 	CommandsSupportedGet = 0x02,
