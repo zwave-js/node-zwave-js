@@ -84,8 +84,6 @@ export enum InterviewStage {
 	ProtocolInfo,
 	/** The node has been queried for supported and controlled command classes */
 	NodeInfo,
-	/** The list of CCs the node supports or controls securely is known */
-	Security,
 
 	// ===== the stuff above should never change =====
 

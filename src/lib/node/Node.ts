@@ -704,15 +704,6 @@ export class ZWaveNode extends Endpoint {
 			}
 		}
 
-		if (this.interviewStage === InterviewStage.NodeInfo) {
-			if (!(await tryInterviewStage(() => this.querySecureCCs()))) {
-				return false;
-			}
-		}
-
-		// // TODO:
-		// // SecurityReport,			// [ ] Retrieve a list of Command Classes that require Security
-
 		// The node is deemed ready when has been interviewed completely at least once
 		if (this.interviewStage === InterviewStage.RestartFromCache) {
 			// // Sleeping nodes are assumed to be ready immediately. Otherwise the library would wait until 3 messages have timed out, which is weird.
@@ -732,7 +723,7 @@ export class ZWaveNode extends Endpoint {
 		// to get updated information about command classes
 		if (
 			this.interviewStage === InterviewStage.RestartFromCache ||
-			this.interviewStage === InterviewStage.Security
+			this.interviewStage === InterviewStage.NodeInfo
 		) {
 			// Only advance the interview if it was completed, otherwise abort
 			if (await this.interviewCCs()) {
@@ -775,7 +766,6 @@ export class ZWaveNode extends Endpoint {
 		switch (completedStage) {
 			case InterviewStage.ProtocolInfo:
 			case InterviewStage.NodeInfo:
-			case InterviewStage.Security:
 			case InterviewStage.CommandClasses:
 			case InterviewStage.Complete:
 				await this.driver.saveNetworkToCache();
@@ -915,57 +905,6 @@ version:               ${this.version}`;
 		await this.setInterviewStage(InterviewStage.NodeInfo);
 	}
 
-	protected async querySecureCCs(): Promise<void> {
-		if (this.supportsCC(CommandClasses.Security)) {
-			// Security is always supported *securely*
-			this.addCC(CommandClasses.Security, { secure: true });
-
-			const api = this.commandClasses.Security;
-
-			log.controller.logNode(this.id, {
-				message: "querying securely supported commands...",
-				direction: "outbound",
-			});
-
-			const resp = await api.getSupportedCommands();
-			const logLines: string[] = [
-				"received secure commands",
-				"supported CCs:",
-			];
-			for (const cc of resp.supportedCCs) {
-				logLines.push(`· ${getEnumMemberName(CommandClasses, cc)}`);
-			}
-			logLines.push("controlled CCs:");
-			for (const cc of resp.controlledCCs) {
-				logLines.push(`· ${getEnumMemberName(CommandClasses, cc)}`);
-			}
-			log.controller.logNode(this.id, {
-				message: logLines.join("\n"),
-				direction: "inbound",
-			});
-
-			// Remember which commands are supported securely
-			for (const cc of resp.supportedCCs) {
-				this.addCC(cc, {
-					isSupported: true,
-					secure: true,
-				});
-			}
-			for (const cc of resp.controlledCCs) {
-				this.addCC(cc, {
-					isControlled: true,
-					secure: true,
-				});
-			}
-		} else {
-			log.controller.logNode(
-				this.id,
-				"does not support Security, skipping query",
-			);
-		}
-		await this.setInterviewStage(InterviewStage.Security);
-	}
-
 	/**
 	 * Loads the device configuration for this node from a config file
 	 */
@@ -998,38 +937,13 @@ version:               ${this.version}`;
 
 	/** Step #? of the node interview */
 	protected async interviewCCs(): Promise<boolean> {
-		// We determine the correct interview order by topologically sorting a dependency graph
-		const rootInterviewGraph = this.buildCCInterviewGraph();
-		let rootInterviewOrder: CommandClasses[];
-		// In order to avoid emitting unnecessary value events for the root endpoint,
-		// we defer the application CC interview until after the other endpoints
-		// have been interviewed
-
-		const deferApplicationCCs: Comparer<CommandClasses> = (cc1, cc2) => {
-			const cc1IsApplicationCC = applicationCCs.includes(cc1);
-			const cc2IsApplicationCC = applicationCCs.includes(cc2);
-			return ((cc1IsApplicationCC ? 1 : 0) -
-				(cc2IsApplicationCC ? 1 : 0)) as any;
-		};
-		try {
-			rootInterviewOrder = topologicalSort(
-				rootInterviewGraph,
-				deferApplicationCCs,
-			);
-		} catch (e) {
-			// This interview cannot be done
-			throw new ZWaveError(
-				"The CC interview cannot be completed because there are circular dependencies between CCs!",
-				ZWaveErrorCodes.CC_Invalid,
-			);
-		}
-
-		const interviewRootEndpoint = async (
+		const interviewEndpoint = async (
+			endpoint: Endpoint,
 			cc: CommandClasses,
 		): Promise<"continue" | boolean | void> => {
 			let instance: CommandClass;
 			try {
-				instance = this.createCCInstance(cc)!;
+				instance = endpoint.createCCInstance(cc)!;
 			} catch (e) {
 				if (
 					e instanceof ZWaveError &&
@@ -1060,8 +974,8 @@ version:               ${this.version}`;
 			}
 
 			try {
-				if (cc === CommandClasses.Version) {
-					// After the version CC interview, we have enough info to load the correct device config file
+				if (cc === CommandClasses.Version && endpoint.index === 0) {
+					// After the version CC interview of the root endpoint, we have enough info to load the correct device config file
 					await this.loadDeviceConfig();
 				}
 				await this.driver.saveNetworkToCache();
@@ -1076,13 +990,51 @@ version:               ${this.version}`;
 			}
 		};
 
+		// Always interview Security first because it changes the interview order
+		if (this.supportsCC(CommandClasses.Security)) {
+			// Security is always supported *securely*
+			this.addCC(CommandClasses.Security, { secure: true });
+
+			const action = await interviewEndpoint(
+				this,
+				CommandClasses.Security,
+			);
+			if (typeof action === "boolean") return action;
+		}
+
+		// We determine the correct interview order by topologically sorting a dependency graph
+		const rootInterviewGraph = this.buildCCInterviewGraph();
+		let rootInterviewOrder: CommandClasses[];
+
+		// In order to avoid emitting unnecessary value events for the root endpoint,
+		// we defer the application CC interview until after the other endpoints
+		// have been interviewed
+		const deferApplicationCCs: Comparer<CommandClasses> = (cc1, cc2) => {
+			const cc1IsApplicationCC = applicationCCs.includes(cc1);
+			const cc2IsApplicationCC = applicationCCs.includes(cc2);
+			return ((cc1IsApplicationCC ? 1 : 0) -
+				(cc2IsApplicationCC ? 1 : 0)) as any;
+		};
+		try {
+			rootInterviewOrder = topologicalSort(
+				rootInterviewGraph,
+				deferApplicationCCs,
+			);
+		} catch (e) {
+			// This interview cannot be done
+			throw new ZWaveError(
+				"The CC interview cannot be completed because there are circular dependencies between CCs!",
+				ZWaveErrorCodes.CC_Invalid,
+			);
+		}
+
 		// Now that we know the correct order, do the interview in sequence
 		let rootCCIndex = 0;
 		for (; rootCCIndex < rootInterviewOrder.length; rootCCIndex++) {
 			const cc = rootInterviewOrder[rootCCIndex];
 			// Once we reach the application CCs, pause the root endpoint interview
 			if (applicationCCs.includes(cc)) break;
-			const action = await interviewRootEndpoint(cc);
+			const action = await interviewEndpoint(this, cc);
 			if (action === "continue") continue;
 			else if (typeof action === "boolean") return action;
 		}
@@ -1095,6 +1047,18 @@ version:               ${this.version}`;
 		) {
 			const endpoint = this.getEndpoint(endpointIndex);
 			if (!endpoint) continue;
+
+			// Always interview Security first because it changes the interview order
+			if (endpoint.supportsCC(CommandClasses.Security)) {
+				// Security is always supported *securely*
+				endpoint.addCC(CommandClasses.Security, { secure: true });
+
+				const action = await interviewEndpoint(
+					endpoint,
+					CommandClasses.Security,
+				);
+				if (typeof action === "boolean") return action;
+			}
 
 			const endpointInterviewGraph = endpoint.buildCCInterviewGraph();
 			let endpointInterviewOrder: CommandClasses[];
@@ -1112,56 +1076,16 @@ version:               ${this.version}`;
 
 			// Now that we know the correct order, do the interview in sequence
 			for (const cc of endpointInterviewOrder) {
-				let instance: CommandClass;
-				try {
-					instance = endpoint.createCCInstance(cc)!;
-				} catch (e) {
-					if (
-						e instanceof ZWaveError &&
-						e.code === ZWaveErrorCodes.CC_NotSupported
-					) {
-						// The CC is no longer supported. This can happen if the node tells us
-						// something different in the Version interview than it did in its NIF
-						continue;
-					}
-					// we want to pass all other errors through
-					throw e;
-				}
-
-				try {
-					await instance.interview(!instance.interviewComplete);
-				} catch (e) {
-					if (
-						e instanceof ZWaveError &&
-						(e.code === ZWaveErrorCodes.Controller_MessageDropped ||
-							e.code === ZWaveErrorCodes.Controller_NodeTimeout)
-					) {
-						// We had a CAN or timeout during the interview
-						// or the node is presumed dead. Abort the process
-						return false;
-					}
-					// we want to pass all other errors through
-					throw e;
-				}
-
-				try {
-					await this.driver.saveNetworkToCache();
-				} catch (e) {
-					log.controller.print(
-						`${getEnumMemberName(
-							CommandClasses,
-							cc,
-						)}: Error after interview:\n${e.message}`,
-						"error",
-					);
-				}
+				const action = await interviewEndpoint(endpoint, cc);
+				if (action === "continue") continue;
+				else if (typeof action === "boolean") return action;
 			}
 		}
 
 		// Continue with the application CCs for the root endpoint
 		for (; rootCCIndex < rootInterviewOrder.length; rootCCIndex++) {
 			const cc = rootInterviewOrder[rootCCIndex];
-			const action = await interviewRootEndpoint(cc);
+			const action = await interviewEndpoint(this, cc);
 			if (action === "continue") continue;
 			else if (typeof action === "boolean") return action;
 		}

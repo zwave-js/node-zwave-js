@@ -6,6 +6,7 @@ import {
 } from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import log from "../log";
 import type { MessageOrCCLogEntry } from "../log/shared";
 import { MessagePriority } from "../message/Constants";
 import { parseCCList } from "../node/NodeInfo";
@@ -74,8 +75,6 @@ function getAuthenticationData(
 }
 
 const HALF_NONCE_SIZE = 8;
-
-// @noInterview This CC is "interviewed" externally as part of the node interview
 
 // TODO: Ignore commands if received via multicast
 
@@ -244,6 +243,54 @@ export class SecurityCC extends CommandClass {
 				`Security CC can only be used when the network key for the driver is set`,
 				ZWaveErrorCodes.Driver_NoSecurity,
 			);
+		}
+	}
+
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Security;
+
+		// This only needs to be done once
+		if (complete) {
+			log.controller.logNode(node.id, {
+				message: "querying securely supported commands...",
+				direction: "outbound",
+			});
+
+			const resp = await api.getSupportedCommands();
+			const logLines: string[] = [
+				"received secure commands",
+				"supported CCs:",
+			];
+			for (const cc of resp.supportedCCs) {
+				logLines.push(`· ${getEnumMemberName(CommandClasses, cc)}`);
+			}
+			logLines.push("controlled CCs:");
+			for (const cc of resp.controlledCCs) {
+				logLines.push(`· ${getEnumMemberName(CommandClasses, cc)}`);
+			}
+			log.controller.logNode(node.id, {
+				message: logLines.join("\n"),
+				direction: "inbound",
+			});
+
+			// Remember which commands are supported securely
+			for (const cc of resp.supportedCCs) {
+				endpoint.addCC(cc, {
+					isSupported: true,
+					secure: true,
+				});
+			}
+			for (const cc of resp.controlledCCs) {
+				endpoint.addCC(cc, {
+					isControlled: true,
+					secure: true,
+				});
+			}
+
+			// Remember that the interview is complete
+			this.interviewComplete = true;
 		}
 	}
 

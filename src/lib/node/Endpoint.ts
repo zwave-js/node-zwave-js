@@ -214,9 +214,14 @@ export class Endpoint {
 
 	/** Builds the dependency graph used to automatically determine the order of CC interviews */
 	public buildCCInterviewGraph(): GraphNode<CommandClasses>[] {
-		const supportedCCs = this.getSupportedCCInstances().map(
-			(instance) => instance.ccId,
-		);
+		const supportedCCs = this.getSupportedCCInstances()
+			.map((instance) => instance.ccId)
+			// Security must be interviewed before all others, so we do that outside of the loop
+			.filter(
+				(ccId) =>
+					ccId !== CommandClasses.Security &&
+					ccId !== CommandClasses["Security 2"],
+			);
 		// Create GraphNodes from all supported CCs
 		const ret = supportedCCs.map((cc) => new GraphNode(cc));
 		// Create the dependencies
