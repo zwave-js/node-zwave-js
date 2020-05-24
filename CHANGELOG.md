@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.5.0 (2020-05-24)
 ### Features
 * Added experimental support for Security S0 (#814)
 * The `"inclusion started"` event now includes a boolean parameter to indicate whether the inclusion was started securely
