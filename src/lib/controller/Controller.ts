@@ -610,7 +610,6 @@ export class ZWaveController extends EventEmitter {
 	public async stopInclusion(): Promise<boolean> {
 		// don't stop it twice
 		if (!this._inclusionActive) return false;
-		this._inclusionActive = false;
 
 		await this.stopInclusionInternal();
 
@@ -677,7 +676,6 @@ export class ZWaveController extends EventEmitter {
 	public async stopExclusion(): Promise<boolean> {
 		// don't stop it twice
 		if (!this._exclusionActive) return false;
-		this._exclusionActive = false;
 
 		await this.stopExclusionInternal();
 
