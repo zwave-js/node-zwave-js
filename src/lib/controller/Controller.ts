@@ -100,7 +100,7 @@ export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
 interface ControllerEventCallbacks {
 	"inclusion failed": () => void;
 	"exclusion failed": () => void;
-	"inclusion started": () => void;
+	"inclusion started": (secure: boolean) => void;
 	"exclusion started": () => void;
 	"inclusion stopped": () => void;
 	"exclusion stopped": () => void;
@@ -709,7 +709,7 @@ export class ZWaveController extends EventEmitter {
 				);
 				if (this._beginInclusionPromise != null) {
 					this._beginInclusionPromise.resolve(true);
-					this.emit("inclusion started");
+					this.emit("inclusion started", !this._includeNonSecure);
 				}
 				break;
 			case AddNodeStatus.Failed:
