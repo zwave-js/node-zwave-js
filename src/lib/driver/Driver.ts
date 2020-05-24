@@ -93,6 +93,8 @@ export interface ZWaveOptions {
 		byte: number;
 		/** How much time a node gets to process a request */
 		report: number;
+		/** How long generated nonces are valid */
+		nonce: number;
 	};
 	/**
 	 * @internal
@@ -119,6 +121,7 @@ const defaultOptions: ZWaveOptions = {
 		ack: 1000,
 		byte: 150,
 		report: 1000,
+		nonce: 5000,
 	},
 	skipInterview: false,
 	nodeInterviewAttempts: 5,
@@ -167,6 +170,12 @@ function checkOptions(options: ZWaveOptions): void {
 	if (options.timeouts.report < 1) {
 		throw new ZWaveError(
 			`The Report timeout must be positive!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (options.timeouts.nonce < 3000 || options.timeouts.nonce > 20000) {
+		throw new ZWaveError(
+			`The Nonce timeout must be between 3000 and 20000 milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -486,6 +495,7 @@ export class Driver extends EventEmitter {
 			this._securityManager = new SecurityManager({
 				networkKey: this.options.networkKey,
 				ownNodeId: this._controller.ownNodeId!,
+				nonceTimeout: this.options.timeouts.nonce,
 			});
 		}
 
@@ -1691,7 +1701,6 @@ ${handlers.length} left`,
 
 		// 5.
 		if (SecurityCC.requiresEncapsulation(msg.command)) {
-			// TODO: Provide nonce etc...
 			msg.command = SecurityCC.encapsulate(this, msg.command);
 		}
 	}

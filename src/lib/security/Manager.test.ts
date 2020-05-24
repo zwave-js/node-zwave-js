@@ -7,9 +7,17 @@ const networkKey = Buffer.from([
 	1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
 ]);
 const ownNodeId = 1;
-const options = { networkKey, ownNodeId };
+const options = { networkKey, ownNodeId, nonceTimeout: 500 };
 
 describe("lib/security/Manager", () => {
+	beforeAll(() => {
+		jest.useFakeTimers();
+	});
+
+	afterAll(() => {
+		jest.useRealTimers();
+	});
+
 	describe("constructor()", () => {
 		it("should set the network key, auth key and encryption key", () => {
 			const man = new SecurityManager(options);
@@ -26,6 +34,7 @@ describe("lib/security/Manager", () => {
 					new SecurityManager({
 						networkKey: Buffer.from([]),
 						ownNodeId: 1,
+						nonceTimeout: 500,
 					}),
 			).toThrow("16 bytes");
 		});
@@ -98,6 +107,16 @@ describe("lib/security/Manager", () => {
 				man.getNonce({ nodeId: 2, nonceId: man.getNonceId(nonce3) }),
 			).toBeUndefined();
 		});
+
+		it("the nonces should timeout after the given timeout", () => {
+			const man = new SecurityManager(options);
+			const nonce = man.generateNonce(8);
+			const nonceId = nonce[0];
+			expect(man.getNonce(nonceId)).toEqual(nonce);
+
+			jest.advanceTimersByTime(options.nonceTimeout + 50);
+			expect(man.getNonce(nonceId)).toBeUndefined();
+		});
 	});
 
 	describe("getNonceId", () => {
@@ -142,6 +161,18 @@ describe("lib/security/Manager", () => {
 			nonce[0] = 1;
 			man.setNonce(1, nonce);
 			expect(man.getNonce(1)).toEqual(nonce);
+		});
+
+		it("the nonces should timeout after the given timeout", () => {
+			const man = new SecurityManager(options);
+			const nonce: Buffer = randomBytes(8);
+			const nonceId = nonce[0];
+			man.setNonce(nonceId, nonce);
+			expect(man.getNonce(nonceId)).toEqual(nonce);
+
+			jest.advanceTimersByTime(options.nonceTimeout + 50);
+
+			expect(man.getNonce(nonceId)).toBeUndefined();
 		});
 	});
 

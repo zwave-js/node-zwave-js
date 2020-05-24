@@ -18,13 +18,21 @@ interface NonceKey {
 	nonceId: number;
 }
 
+export interface SecurityManagerOptions {
+	networkKey: Buffer;
+	ownNodeId: number;
+	nonceTimeout: number;
+}
+
 export class SecurityManager {
-	public constructor(options: { networkKey: Buffer; ownNodeId: number }) {
+	public constructor(options: SecurityManagerOptions) {
 		this.networkKey = options.networkKey;
 		this.ownNodeId = options.ownNodeId;
+		this.nonceTimeout = options.nonceTimeout;
 	}
 
 	private ownNodeId: number;
+	private nonceTimeout: number;
 
 	private _networkKey!: Buffer;
 	public get networkKey(): Buffer {
@@ -53,6 +61,7 @@ export class SecurityManager {
 	}
 
 	private _nonceStore = new Map<string, Buffer>();
+	private _nonceTimers = new Map<string, NodeJS.Timeout>();
 
 	private normalizeId(id: number | NonceKey): string {
 		let ret: NonceKey;
@@ -88,7 +97,22 @@ export class SecurityManager {
 	}
 
 	public setNonce(id: number | NonceKey, nonce: Buffer): void {
-		this._nonceStore.set(this.normalizeId(id), nonce);
+		const key = this.normalizeId(id);
+		if (this._nonceTimers.has(key)) {
+			clearTimeout(this._nonceTimers.get(key)!);
+		}
+		this._nonceStore.set(key, nonce);
+		this._nonceTimers.set(
+			key,
+			setTimeout(() => {
+				this.expireNonce(key);
+			}, this.nonceTimeout),
+		);
+	}
+
+	private expireNonce(key: string): void {
+		this._nonceStore.delete(key);
+		this._nonceTimers.delete(key);
 	}
 
 	public getNonce(id: number | NonceKey): Buffer | undefined {
