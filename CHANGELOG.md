@@ -4,6 +4,11 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Cache values that are `Map`s are now correctly serialized. Fixes crash `issuedCommands.has is not a function`
+* Fixed crashes with the message `Security CC can only be used when the network key for the driver is set`.
+
 ## 3.5.0 (2020-05-24)
 ### Features
 * Added experimental support for Security S0 (#814)

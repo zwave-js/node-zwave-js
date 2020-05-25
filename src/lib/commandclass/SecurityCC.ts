@@ -31,7 +31,6 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
-	CommandClassOptions,
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
@@ -136,7 +135,14 @@ export class SecurityCCAPI extends CCAPI {
 			SecurityCommand.NonceReport,
 		);
 
-		const nonce = this.driver.securityManager!.generateNonce(
+		if (!this.driver.securityManager) {
+			throw new ZWaveError(
+				`Nonces can only be sent if secure communication is set up!`,
+				ZWaveErrorCodes.Driver_NoSecurity,
+			);
+		}
+
+		const nonce = this.driver.securityManager.generateNonce(
 			HALF_NONCE_SIZE,
 		);
 
@@ -225,28 +231,13 @@ export class SecurityCC extends CommandClass {
 	declare ccCommand: SecurityCommand;
 	// Force singlecast for the Security CC (for now)
 	declare nodeId: number;
-	// Define the securityManager and controller.ownNodeId as existing - the constructor will throw if it isn't
+	// Define the securityManager and controller.ownNodeId as existing
 	declare driver: Driver & {
 		securityManager: SecurityManager;
 		controller: ZWaveController & {
 			ownNodeId: number;
 		};
 	};
-
-	public constructor(driver: Driver, options: CommandClassOptions) {
-		super(driver, options);
-		if (!(this.driver.controller.ownNodeId as unknown)) {
-			throw new ZWaveError(
-				`Security CC can only be used when the controller's node id is known!`,
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		} else if (!(this.driver.securityManager as unknown)) {
-			throw new ZWaveError(
-				`Security CC can only be used when the network key for the driver is set`,
-				ZWaveErrorCodes.Driver_NoSecurity,
-			);
-		}
-	}
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
@@ -393,6 +384,19 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			| SecurityCCCommandEncapsulationOptions,
 	) {
 		super(driver, options);
+
+		if (!(this.driver.controller.ownNodeId as unknown)) {
+			throw new ZWaveError(
+				`Security CC command encapsulation can only be used when the controller's node id is known!`,
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		} else if (!(this.driver.securityManager as unknown)) {
+			throw new ZWaveError(
+				`Security CC command encapsulation can only be used when the network key for the driver is set`,
+				ZWaveErrorCodes.Driver_NoSecurity,
+			);
+		}
+
 		if (gotDeserializationOptions(options)) {
 			// HALF_NONCE_SIZE bytes iv, 1 byte frame control, 2 bytes CC header, 1 byte nonce id, 8 bytes auth code
 			validatePayload(
