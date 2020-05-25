@@ -67,7 +67,7 @@ import { InterviewStage, NodeStatus } from "../node/Types";
 import { SecurityManager } from "../security/Manager";
 import { DeepPartial, getEnumMemberName, skipBytes } from "../util/misc";
 import { num2hex } from "../util/strings";
-import { deserializeCacheValue } from "../values/Cache";
+import { deserializeCacheValue, serializeCacheValue } from "../values/Cache";
 import type { Duration } from "../values/Duration";
 import type { ValueMetadata } from "../values/Metadata";
 import type { FileSystem } from "./FileSystem";
@@ -460,6 +460,7 @@ export class Driver extends EventEmitter {
 			this._valueDB = new JsonlDB(valueDBFile, {
 				...options,
 				reviver: (key, value) => deserializeCacheValue(value),
+				serializer: (key, value) => serializeCacheValue(value),
 			});
 			await this._valueDB.open();
 
