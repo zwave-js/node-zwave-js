@@ -47,7 +47,9 @@ export class Endpoint {
 			} catch (e) {
 				if (e.message.includes("supportedCCs is not iterable")) {
 					throw new Error(
-						`TypeError: supportedCCs is not iterable. supportedCCs = ${supportedCCs}, typeof supportedCCs = ${typeof supportedCCs}`,
+						`TypeError: supportedCCs is not iterable. supportedCCs = ${JSON.stringify(
+							supportedCCs,
+						)}, typeof supportedCCs = ${typeof supportedCCs}`,
 					);
 				} else {
 					throw e;
