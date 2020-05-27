@@ -1464,6 +1464,20 @@ ${handlers.length} left`,
 						direction: "inbound",
 					});
 					node.updateNodeInfo(msg.nodeInformation);
+
+					// Pings are not retransmitted and won't receive a response if the node wake up after the ping was sent
+					// Therefore resolve pending pings so the communication may proceed immediately
+					if (
+						this.currentTransaction &&
+						messageIsPing(this.currentTransaction.message) &&
+						this.currentTransaction.message.getNodeId() === node.id
+					) {
+						log.controller.logNode(
+							node.id,
+							`Treating the node info as a successful ping...`,
+						);
+						this.resolveCurrentTransaction();
+					}
 					return;
 				}
 			}
