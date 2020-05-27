@@ -596,6 +596,13 @@ export class Driver extends EventEmitter {
 			}
 		} catch (e) {
 			if (e instanceof ZWaveError) {
+				if (
+					e.code === ZWaveErrorCodes.Driver_NotReady ||
+					e.code === ZWaveErrorCodes.Controller_NodeRemoved
+				) {
+					// This only happens when a node is removed during the interview - we don't log this
+					return;
+				}
 				log.controller.logNode(
 					node.id,
 					"Error during node interview: " + e,
@@ -718,7 +725,12 @@ export class Driver extends EventEmitter {
 		this.rejectAllTransactionsForNode(
 			node.id,
 			"The node was removed from the network",
+			ZWaveErrorCodes.Controller_NodeRemoved,
 		);
+		if (this.nodeAwakeTimeouts.has(node.id)) {
+			clearTimeout(this.nodeAwakeTimeouts.get(node.id)!);
+			this.nodeAwakeTimeouts.delete(node.id);
+		}
 		// Asynchronously remove the node from all possible associations, ignore potential errors
 		this.controller.removeNodeFromAllAssocations(node.id).catch((err) => {
 			log.driver.print(
@@ -2117,6 +2129,7 @@ ${handlers.length} left`,
 	public rejectTransactions(
 		predicate: (t: Transaction) => boolean,
 		errorMsg: string = `The message has been removed from the queue`,
+		errorCode: ZWaveErrorCodes = ZWaveErrorCodes.Controller_MessageDropped,
 	): void {
 		const transactionsToRemove: Transaction[] = [];
 
@@ -2124,24 +2137,14 @@ ${handlers.length} left`,
 		for (const transaction of this.sendQueue) {
 			if (predicate(transaction)) {
 				transactionsToRemove.push(transaction);
-				transaction.promise.reject(
-					new ZWaveError(
-						errorMsg,
-						ZWaveErrorCodes.Controller_MessageDropped,
-					),
-				);
+				transaction.promise.reject(new ZWaveError(errorMsg, errorCode));
 			}
 		}
 		this.sendQueue.remove(...transactionsToRemove);
 
 		// Don't forget the current transaction
 		if (this.currentTransaction && predicate(this.currentTransaction)) {
-			this.rejectCurrentTransaction(
-				new ZWaveError(
-					errorMsg,
-					ZWaveErrorCodes.Controller_MessageDropped,
-				),
-			);
+			this.rejectCurrentTransaction(new ZWaveError(errorMsg, errorCode));
 		}
 
 		// log.driver.sendQueue(this.sendQueue);
@@ -2154,10 +2157,12 @@ ${handlers.length} left`,
 	public rejectAllTransactionsForNode(
 		nodeId: number,
 		errorMsg: string = `The node is dead`,
+		errorCode: ZWaveErrorCodes = ZWaveErrorCodes.Controller_MessageDropped,
 	): void {
 		this.rejectTransactions(
 			(t) => t.message.getNodeId() === nodeId,
 			errorMsg,
+			errorCode,
 		);
 	}
 

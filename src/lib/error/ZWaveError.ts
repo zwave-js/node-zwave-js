@@ -32,6 +32,8 @@ export enum ZWaveErrorCodes {
 	Controller_NodeNotFound,
 	/** The endpoint with the given index was not found on the node */
 	Controller_EndpointNotFound,
+	/** The node was removed from the network */
+	Controller_NodeRemoved,
 
 	CC_Invalid,
 	CC_NoNodeID,
