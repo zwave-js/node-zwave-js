@@ -1,4 +1,5 @@
 import type { Comparer } from "alcalzone-shared/comparable";
+import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
 import type { CCAPI } from "../commandclass/API";
@@ -66,6 +67,7 @@ import { getEnumMemberName, JSONObject, Mixin } from "../util/misc";
 import { num2hex, stringify } from "../util/strings";
 import type { CacheMetadata, CacheValue } from "../values/Cache";
 import type { ValueMetadata } from "../values/Metadata";
+import { Maybe, unknownBoolean } from "../values/Primitive";
 import {
 	BasicDeviceClasses,
 	DeviceClass,
@@ -329,8 +331,8 @@ export class ZWaveNode extends Endpoint {
 		return this._maxBaudRate;
 	}
 
-	private _isSecure: boolean | undefined;
-	public get isSecure(): boolean | undefined {
+	private _isSecure: Maybe<boolean> | undefined;
+	public get isSecure(): Maybe<boolean> | undefined {
 		return this._isSecure;
 	}
 
@@ -787,7 +789,9 @@ export class ZWaveNode extends Endpoint {
 		this._isFrequentListening = resp.isFrequentListening;
 		this._isRouting = resp.isRouting;
 		this._maxBaudRate = resp.maxBaudRate;
-		this._isSecure = resp.isSecure;
+		// Many nodes don't have this flag set, even if they are included securely
+		// So we treat false as "unknown"
+		this._isSecure = resp.isSecure || unknownBoolean;
 		this._version = resp.version;
 		this._isBeaming = resp.isBeaming;
 
@@ -940,7 +944,7 @@ version:               ${this.version}`;
 		const interviewEndpoint = async (
 			endpoint: Endpoint,
 			cc: CommandClasses,
-		): Promise<"continue" | boolean | void> => {
+		): Promise<"continue" | false | void> => {
 			let instance: CommandClass;
 			try {
 				instance = endpoint.createCCInstance(cc)!;
@@ -955,6 +959,19 @@ version:               ${this.version}`;
 				}
 				// we want to pass all other errors through
 				throw e;
+			}
+			if (endpoint.isCCSecure(cc) && !this.driver.securityManager) {
+				// The CC is only supported securely, but the network key is not set up
+				// Skip the CC
+				log.controller.logNode(
+					this.id,
+					`Skipping interview for secure CC ${getEnumMemberName(
+						CommandClasses,
+						cc,
+					)} because no network key is configured!`,
+					"error",
+				);
+				return "continue";
 			}
 
 			try {
@@ -991,15 +1008,51 @@ version:               ${this.version}`;
 		};
 
 		// Always interview Security first because it changes the interview order
-		if (this.supportsCC(CommandClasses.Security)) {
+		if (
+			this.supportsCC(CommandClasses.Security) &&
+			// At this point we're not sure if the node is included securely
+			this._isSecure !== false
+		) {
 			// Security is always supported *securely*
 			this.addCC(CommandClasses.Security, { secure: true });
 
-			const action = await interviewEndpoint(
-				this,
-				CommandClasses.Security,
-			);
-			if (typeof action === "boolean") return action;
+			if (!this.driver.securityManager) {
+				// Cannot interview a secure device securely without a network key
+				log.controller.logNode(
+					this.nodeId,
+					`supports Security, but no network key was configured. Continuing interview non-securely.`,
+					"error",
+				);
+				this.driver.emit(
+					"error",
+					`Node ${padStart(
+						this.id.toString(),
+						3,
+						"0",
+					)} supports Security, but no network key was configured. Continuing interview non-securely.`,
+				);
+			} else {
+				try {
+					const action = await interviewEndpoint(
+						this,
+						CommandClasses.Security,
+					);
+					if (typeof action === "boolean") return action;
+					// We got a response, so we know the node is included securely
+					this._isSecure = true;
+				} catch (e) {
+					if (
+						e instanceof ZWaveError &&
+						e.code === ZWaveErrorCodes.Controller_NodeTimeout
+					) {
+						// The node did not respond to the interview - assuming that it is not actually included securely
+						this._isSecure = false;
+					} else {
+						// pass all other errors through
+						throw e;
+					}
+				}
+			}
 		}
 
 		// We determine the correct interview order by topologically sorting a dependency graph
@@ -1049,7 +1102,13 @@ version:               ${this.version}`;
 			if (!endpoint) continue;
 
 			// Always interview Security first because it changes the interview order
-			if (endpoint.supportsCC(CommandClasses.Security)) {
+			if (
+				endpoint.supportsCC(CommandClasses.Security) &&
+				// The root endpoint has been interviewed, so we know it the device supports security
+				this._isSecure === true &&
+				// Only interview SecurityCC if the network key was set
+				this.driver.securityManager
+			) {
 				// Security is always supported *securely*
 				endpoint.addCC(CommandClasses.Security, { secure: true });
 
@@ -1339,8 +1398,23 @@ version:               ${this.version}`;
 		});
 	}
 
+	private hasLoggedNoNetworkKey = false;
+
 	/** Handles a nonce request */
 	private handleSecurityNonceGet(): void {
+		// Only reply if secure communication is set up
+		if (!this.driver.securityManager) {
+			if (!this.hasLoggedNoNetworkKey) {
+				this.hasLoggedNoNetworkKey = true;
+				log.controller.logNode(this.id, {
+					message: `cannot reply to NonceGet because no network key was configured!`,
+					direction: "inbound",
+					level: "warn",
+				});
+			}
+			return;
+		}
+
 		try {
 			this.commandClasses.Security.sendNonce();
 		} catch (e) {
