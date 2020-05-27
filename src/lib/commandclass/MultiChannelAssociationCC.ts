@@ -245,12 +245,35 @@ export class MultiChannelAssociationCCAPI extends CCAPI {
 			MultiChannelAssociationCommand.Remove,
 		);
 
-		const cc = new MultiChannelAssociationCCRemove(this.driver, {
-			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
-			...options,
-		});
-		await this.driver.sendCommand(cc);
+		if (!options.groupId && this.version === 1) {
+			// V1 does not support omitting the group, manually remove the destination from all groups
+			// We don't want to do too much work, so find out which groups the destination is in
+			const currentDestinations = this.endpoint
+				.createCCInstanceInternal(MultiChannelAssociationCC)!
+				.getAllDestinationsCached();
+			for (const [group, destinations] of currentDestinations) {
+				const cc = new MultiChannelAssociationCCRemove(this.driver, {
+					nodeId: this.endpoint.nodeId,
+					endpoint: this.endpoint.index,
+					groupId: group,
+					nodeIds: destinations
+						.filter((d) => !d.endpoint)
+						.map((d) => d.nodeId),
+					endpoints: destinations.filter(
+						(d): d is Association & { endpoint: number } =>
+							!!d.endpoint,
+					),
+				});
+				await this.driver.sendCommand(cc);
+			}
+		} else {
+			const cc = new MultiChannelAssociationCCRemove(this.driver, {
+				nodeId: this.endpoint.nodeId,
+				endpoint: this.endpoint.index,
+				...options,
+			});
+			await this.driver.sendCommand(cc);
+		}
 	}
 }
 
