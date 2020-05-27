@@ -4,6 +4,14 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* All emitted `"error"` events now correctly contain an `Error` instance as the parameter.
+* When a node sends a NIF, pending pings are resolved. This should increase the consistency of manually waking up nodes during the interview.
+* When an interview is cut short due to missing network key, the `"error"` event is only emitted once.
+* When a node is removed, its interview process is canceled and all errors are suppressed.
+* If `Multi Channel Association CC` is V1, removing all destinations from all groups now correctly loops through all groups instead of using `0` as the group id.
+
 ## 3.5.2 (2020-05-27)
 ### Bugfixes
 Various fixes related to `Security CC` when the network key is not configured. This means that the driver will not crash but likely there's no meaningful communication with secure nodes possible:
