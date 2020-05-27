@@ -4,6 +4,13 @@
 	## __WORK IN PROGRESS__
 -->
 
+## 3.5.2 (2020-05-27)
+### Bugfixes
+Various fixes related to `Security CC` when the network key is not configured. This means that the driver will not crash but likely there's no meaningful communication with secure nodes possible:
+* The list of securely supported commands is not requested
+* `Nonce Get` requests are not answered
+* CCs are no longer encapsulated securely. This means that the interview for battery-powered nodes won't complete if `Wake Up CC` is only supported securely.
+
 ## 3.5.1 (2020-05-25)
 ### Bugfixes
 * Cache values that are `Map`s are now correctly serialized. Fixes crash `issuedCommands.has is not a function`
