@@ -21,6 +21,7 @@ import { SendDataRequest } from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { ValueMetadata } from "../values/Metadata";
+import { unknownBoolean } from "../values/Primitive";
 import {
 	BasicDeviceClasses,
 	DeviceClass,
@@ -200,7 +201,14 @@ describe("lib/node/Node", () => {
 				for (const prop of Object.keys(
 					expected,
 				) as (keyof typeof expected)[]) {
-					expect((node as any)[prop]).toBe(expected[prop]);
+					if (prop === "isSecure") {
+						// we special-case false as "unknown" because many secure nodes still report false
+						expect(node.isSecure).toBe(
+							expected.isSecure || unknownBoolean,
+						);
+					} else {
+						expect((node as any)[prop]).toBe(expected[prop]);
+					}
 				}
 			});
 
