@@ -6,110 +6,112 @@ const driver = new Driver("COM4", {
 	networkKey: Buffer.from([
 		1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
 	])
-}).once("driver ready", async () => {
-	// await require("alcalzone-shared/async").wait(5000);
-	// console.error();
-	// console.error("EXCLUSION");
-	// console.error();
-	// await driver.controller.beginExclusion();
-	// await require("alcalzone-shared/async").wait(60000);
-	// await driver.controller.stopExclusion();
-	// await require("alcalzone-shared/async").wait(5000);
-	// console.error();
-	// console.error("INCLUSION");
-	// console.error();
-	// await driver.controller.beginInclusion();
-	// await require("alcalzone-shared/async").wait(60000);
-	// await driver.controller.stopInclusion();
-	// console.log(`sending application info...`);
-	// // A list of all CCs the controller will respond to
-	// const supportedCCs = [CommandClasses.Time];
-	// // Turn the CCs into buffers and concat them
-	// const supportedCCBuffer = Buffer.concat(
-	// 	supportedCCs.map(cc =>
-	// 		cc >= 0xf1
-	// 			? // extended CC
-	// 			  Buffer.from([cc >>> 8, cc & 0xff])
-	// 			: // normal CC
-	// 			  Buffer.from([cc]),
-	// 	),
-	// );
-	// const appInfoMsg = new Message(driver, {
-	// 	type: MessageType.Request,
-	// 	functionType: FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION,
-	// 	payload: Buffer.concat([
-	// 		Buffer.from([
-	// 			0x01, // APPLICATION_NODEINFO_LISTENING
-	// 			GenericDeviceClasses["Static Controller"],
-	// 			0x01, // specific static PC controller
-	// 			supportedCCBuffer.length, // length of supported CC list
-	// 		]),
-	// 		// List of supported CCs
-	// 		supportedCCBuffer,
-	// 	]),
-	// });
-	// await driver.sendMessage(appInfoMsg, {
-	// 	priority: 0, //MessagePriority.Controller,
-	// 	supportCheck: false,
-	// });
-	// await driver.hardReset();
-	// await require("alcalzone-shared/async").wait(25000);
-	// console.error();
-	// console.error("HEAL");
-	// console.error();
-	// driver.controller.beginHealingNetwork();
-	// console.error();
-	// console.error("INCLUSION");
-	// console.error();
-	// await driver.controller.beginInclusion();
-	// await require("alcalzone-shared/async").wait(60000);
-	// await driver.controller.stopInclusion();
-	// await driver.controller.beginExclusion();
-	// await require("alcalzone-shared/async").wait(60000);
-	// await driver.controller.stopExclusion();
-	// const node = driver.controller.nodes.get(4)!;
-	// node.once("ready", async () => {
-	// 	console.log(node.status);
-	// });
-	// await driver.controller.healNetwork();
-	// console.error();
-	// 	console.error("GOGOGO");
-	// 	console.error();
-	// 	await wait(5000);
-	// 	// heat
-	// 	await node.commandClasses["Thermostat Setpoint"].set(0x01, 29, 0);
-	// 	await node.commandClasses["Thermostat Mode"].set(0x1);
-	// 	await wait(5000);
-	// 	await node.commandClasses["Thermostat Setpoint"].set(0x01, 22, 0);
-	// 	await wait(2000);
-	// 	await node.commandClasses["Thermostat Mode"].set(0x0);
-	// });
-	// const node = driver.controller.nodes.get(4)!;
-	// node.keepAwake = true;
-	// node.once("interview completed", async () => {
-	// 	// console.dir(
-	// 	// 	node.getValue(
-	// 	// 		CommandClasses.Configuration,
-	// 	// 		undefined,
-	// 	// 		"paramInformation",
-	// 	// 	),
-	// 	// );
-	// 	const config = node.commandClasses.Configuration;
-	// 	await config.scanParameters();
-	// 	console.log("Scan finished!");
-	// 	await driver.saveNetworkToCache();
-	// });
-	// const node2 = driver.controller.nodes.get(2)!;
-	// node2.on("value added", args =>
-	// 	console.log(`[Node ${2}] value added: ${JSON.stringify(args)}`),
-	// );
-	// node2.on("value updated", args =>
-	// 	console.log(`[Node ${2}] value updated: ${JSON.stringify(args)}`),
-	// );
-	// node2.on("value removed", args =>
-	// 	console.log(`[Node ${2}] value removed: ${JSON.stringify(args)}`),
-	// );
-});
+})
+	.on("error", console.error)
+	.once("driver ready", async () => {
+		// await require("alcalzone-shared/async").wait(5000);
+		// console.error();
+		// console.error("EXCLUSION");
+		// console.error();
+		// await driver.controller.beginExclusion();
+		// await require("alcalzone-shared/async").wait(60000);
+		// await driver.controller.stopExclusion();
+		// await require("alcalzone-shared/async").wait(5000);
+		// console.error();
+		// console.error("INCLUSION");
+		// console.error();
+		// await driver.controller.beginInclusion();
+		// await require("alcalzone-shared/async").wait(60000);
+		// await driver.controller.stopInclusion();
+		// console.log(`sending application info...`);
+		// // A list of all CCs the controller will respond to
+		// const supportedCCs = [CommandClasses.Time];
+		// // Turn the CCs into buffers and concat them
+		// const supportedCCBuffer = Buffer.concat(
+		// 	supportedCCs.map(cc =>
+		// 		cc >= 0xf1
+		// 			? // extended CC
+		// 			  Buffer.from([cc >>> 8, cc & 0xff])
+		// 			: // normal CC
+		// 			  Buffer.from([cc]),
+		// 	),
+		// );
+		// const appInfoMsg = new Message(driver, {
+		// 	type: MessageType.Request,
+		// 	functionType: FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION,
+		// 	payload: Buffer.concat([
+		// 		Buffer.from([
+		// 			0x01, // APPLICATION_NODEINFO_LISTENING
+		// 			GenericDeviceClasses["Static Controller"],
+		// 			0x01, // specific static PC controller
+		// 			supportedCCBuffer.length, // length of supported CC list
+		// 		]),
+		// 		// List of supported CCs
+		// 		supportedCCBuffer,
+		// 	]),
+		// });
+		// await driver.sendMessage(appInfoMsg, {
+		// 	priority: 0, //MessagePriority.Controller,
+		// 	supportCheck: false,
+		// });
+		// await driver.hardReset();
+		// await require("alcalzone-shared/async").wait(25000);
+		// console.error();
+		// console.error("HEAL");
+		// console.error();
+		// driver.controller.beginHealingNetwork();
+		// console.error();
+		// console.error("INCLUSION");
+		// console.error();
+		// await driver.controller.beginInclusion();
+		// await require("alcalzone-shared/async").wait(60000);
+		// await driver.controller.stopInclusion();
+		// await driver.controller.beginExclusion();
+		// await require("alcalzone-shared/async").wait(60000);
+		// await driver.controller.stopExclusion();
+		// const node = driver.controller.nodes.get(4)!;
+		// node.once("ready", async () => {
+		// 	console.log(node.status);
+		// });
+		// await driver.controller.healNetwork();
+		// console.error();
+		// 	console.error("GOGOGO");
+		// 	console.error();
+		// 	await wait(5000);
+		// 	// heat
+		// 	await node.commandClasses["Thermostat Setpoint"].set(0x01, 29, 0);
+		// 	await node.commandClasses["Thermostat Mode"].set(0x1);
+		// 	await wait(5000);
+		// 	await node.commandClasses["Thermostat Setpoint"].set(0x01, 22, 0);
+		// 	await wait(2000);
+		// 	await node.commandClasses["Thermostat Mode"].set(0x0);
+		// });
+		// const node = driver.controller.nodes.get(4)!;
+		// node.keepAwake = true;
+		// node.once("interview completed", async () => {
+		// 	// console.dir(
+		// 	// 	node.getValue(
+		// 	// 		CommandClasses.Configuration,
+		// 	// 		undefined,
+		// 	// 		"paramInformation",
+		// 	// 	),
+		// 	// );
+		// 	const config = node.commandClasses.Configuration;
+		// 	await config.scanParameters();
+		// 	console.log("Scan finished!");
+		// 	await driver.saveNetworkToCache();
+		// });
+		// const node2 = driver.controller.nodes.get(2)!;
+		// node2.on("value added", args =>
+		// 	console.log(`[Node ${2}] value added: ${JSON.stringify(args)}`),
+		// );
+		// node2.on("value updated", args =>
+		// 	console.log(`[Node ${2}] value updated: ${JSON.stringify(args)}`),
+		// );
+		// node2.on("value removed", args =>
+		// 	console.log(`[Node ${2}] value removed: ${JSON.stringify(args)}`),
+		// );
+	});
 driver.start();
 
 // // @ts-check
