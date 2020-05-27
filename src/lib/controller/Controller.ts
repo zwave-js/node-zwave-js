@@ -132,6 +132,11 @@ export interface ZWaveController {
 		callback: ControllerEventCallbacks[TEvent],
 	): this;
 	removeAllListeners(event?: ControllerEvents): this;
+
+	emit<TEvent extends ControllerEvents>(
+		event: TEvent,
+		...args: Parameters<ControllerEventCallbacks[TEvent]>
+	): boolean;
 }
 
 export class ZWaveController extends EventEmitter {
@@ -1702,7 +1707,7 @@ ${associatedNodes.join(", ")}`,
 					// If everything went well, the status is RemoveFailedNodeStatus.NodeRemoved
 
 					// Emit the removed event so the driver and applications can react
-					this.emit("node removed", this.nodes.get(nodeId));
+					this.emit("node removed", this.nodes.get(nodeId)!);
 					// and forget the node
 					this._nodes.delete(nodeId);
 

@@ -117,7 +117,7 @@ export interface ZWaveNode {
 	emit<TEvent extends ZWaveNodeEvents>(
 		event: TEvent,
 		...args: Parameters<ZWaveNodeEventCallbacks[TEvent]>
-	): this;
+	): boolean;
 }
 
 /**
@@ -514,7 +514,7 @@ export class ZWaveNode extends Endpoint {
 						emitErrorEvent = true;
 						break;
 				}
-				if (emitErrorEvent) this.driver.emit("error", e.message);
+				if (emitErrorEvent) this.driver.emit("error", e);
 				if (handled) return false;
 			}
 			throw e;
@@ -1018,18 +1018,17 @@ version:               ${this.version}`;
 
 			if (!this.driver.securityManager) {
 				// Cannot interview a secure device securely without a network key
-				log.controller.logNode(
-					this.nodeId,
-					`supports Security, but no network key was configured. Continuing interview non-securely.`,
-					"error",
-				);
+				const errorMessage = `supports Security, but no network key was configured. Continuing interview non-securely.`;
+				log.controller.logNode(this.nodeId, errorMessage, "error");
 				this.driver.emit(
 					"error",
-					`Node ${padStart(
-						this.id.toString(),
-						3,
-						"0",
-					)} supports Security, but no network key was configured. Continuing interview non-securely.`,
+					new Error(
+						`Node ${padStart(
+							this.id.toString(),
+							3,
+							"0",
+						)} ${errorMessage}`,
+					),
 				);
 			} else {
 				try {

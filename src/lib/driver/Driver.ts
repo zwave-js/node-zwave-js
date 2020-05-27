@@ -255,6 +255,11 @@ export interface Driver {
 		callback: DriverEventCallbacks[TEvent],
 	): this;
 	removeAllListeners(event?: DriverEvents): this;
+
+	emit<TEvent extends DriverEvents>(
+		event: TEvent,
+		...args: Parameters<DriverEventCallbacks[TEvent]>
+	): boolean;
 }
 
 /**
@@ -2231,7 +2236,7 @@ ${handlers.length} left`,
 			);
 		} catch (e) {
 			const message = `Restoring the network from cache failed: ${e}`;
-			this.emit("error", message);
+			this.emit("error", new Error(message));
 			log.driver.print(message, "error");
 		}
 	}

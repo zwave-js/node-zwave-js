@@ -90,6 +90,11 @@ export interface ValueDB {
 		callback: ValueDBEventCallbacks[TEvent],
 	): this;
 	removeAllListeners(event?: ValueDBEvents): this;
+
+	emit<TEvent extends ValueDBEvents>(
+		event: TEvent,
+		...args: Parameters<ValueDBEventCallbacks[TEvent]>
+	): boolean;
 }
 
 /**
@@ -180,7 +185,7 @@ export class ValueDB extends EventEmitter {
 			throw e;
 		}
 
-		let event: string;
+		let event: ValueDBEvents;
 		if (this._db.has(dbKey)) {
 			event = "value updated";
 			(cbArg as ValueUpdatedArgs).prevValue = this._db.get(dbKey);
