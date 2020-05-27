@@ -640,6 +640,8 @@ export class ZWaveNode extends Endpoint {
 		return this._interviewAttempts;
 	}
 
+	private _hasEmittedNoNetworkKeyError: boolean = false;
+
 	/** Utility function to check if this node is the controller */
 	public isControllerNode(): boolean {
 		return this.id === this.driver.controller.ownNodeId;
@@ -1017,20 +1019,23 @@ version:               ${this.version}`;
 			this.addCC(CommandClasses.Security, { secure: true });
 
 			if (!this.driver.securityManager) {
-				// Cannot interview a secure device securely without a network key
-				log.controller.logNode(
-					this.nodeId,
-					`supports Security, but no network key was configured. Continuing interview non-securely.`,
-					"error",
-				);
-				this.driver.emit(
-					"error",
-					`Node ${padStart(
-						this.id.toString(),
-						3,
-						"0",
-					)} supports Security, but no network key was configured. Continuing interview non-securely.`,
-				);
+				if (!this._hasEmittedNoNetworkKeyError) {
+					// Cannot interview a secure device securely without a network key
+					log.controller.logNode(
+						this.nodeId,
+						`supports Security, but no network key was configured. Continuing interview non-securely.`,
+						"error",
+					);
+					this.driver.emit(
+						"error",
+						`Node ${padStart(
+							this.id.toString(),
+							3,
+							"0",
+						)} supports Security, but no network key was configured. Continuing interview non-securely.`,
+					);
+					this._hasEmittedNoNetworkKeyError = true;
+				}
 			} else {
 				try {
 					const action = await interviewEndpoint(
