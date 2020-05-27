@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.5.3 (2020-05-27)
 ### Bugfixes
 * All emitted `"error"` events now correctly contain an `Error` instance as the parameter.
 * When a node sends a NIF, pending pings are resolved. This should increase the consistency of manually waking up nodes during the interview.
