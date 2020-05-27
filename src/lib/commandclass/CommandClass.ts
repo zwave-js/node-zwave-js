@@ -146,7 +146,10 @@ export class CommandClass {
 			}
 
 			// If the node is included securely, send secure commands if possible
-			this.secure = !!node?.isCCSecure(this.ccId);
+			this.secure =
+				node?.isSecure !== false &&
+				!!node?.isCCSecure(this.ccId) &&
+				!!this.driver.securityManager;
 		} else {
 			// For multicast CCs, we just use the highest implemented version to serialize
 			// Older nodes will ignore the additional fields

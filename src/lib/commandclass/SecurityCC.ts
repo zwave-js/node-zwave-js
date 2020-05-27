@@ -387,12 +387,12 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 
 		if (!(this.driver.controller.ownNodeId as unknown)) {
 			throw new ZWaveError(
-				`Security CC command encapsulation can only be used when the controller's node id is known!`,
+				`Secure commands can can only be sent when the controller's node id is known!`,
 				ZWaveErrorCodes.Driver_NotReady,
 			);
 		} else if (!(this.driver.securityManager as unknown)) {
 			throw new ZWaveError(
-				`Security CC command encapsulation can only be used when the network key for the driver is set`,
+				`Secure commands can only be sent when the network key for the driver is set`,
 				ZWaveErrorCodes.Driver_NoSecurity,
 			);
 		}

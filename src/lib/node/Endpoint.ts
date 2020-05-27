@@ -99,7 +99,7 @@ export class Endpoint {
 		return !!this._implementedCommandClasses.get(cc)?.isSupported;
 	}
 
-	/** Tests if this endpoint supports or controls the given CC securely */
+	/** Tests if this endpoint supports or controls the given CC only securely */
 	public isCCSecure(cc: CommandClasses): boolean {
 		return !!this._implementedCommandClasses.get(cc)?.secure;
 	}
