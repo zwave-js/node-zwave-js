@@ -45,9 +45,9 @@ export type CommandClassDeserializationOptions = { data: Buffer } & (
 );
 
 export function gotDeserializationOptions(
-	options: any,
+	options: CommandClassOptions,
 ): options is CommandClassDeserializationOptions {
-	return Buffer.isBuffer(options.data);
+	return "data" in options && Buffer.isBuffer(options.data);
 }
 
 export interface CCCommandOptions {
