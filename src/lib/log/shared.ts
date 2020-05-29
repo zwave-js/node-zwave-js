@@ -36,7 +36,7 @@ export function shouldLogNode(nodeId: number): boolean {
 
 export type DataDirection = "inbound" | "outbound" | "none";
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function getDirectionPrefix(direction: DataDirection) {
 	return direction === "inbound"
 		? "« "

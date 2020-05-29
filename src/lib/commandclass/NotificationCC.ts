@@ -72,7 +72,7 @@ export class NotificationCCAPI extends CCAPI {
 		return (await this.driver.sendCommand<NotificationCCReport>(cc))!;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(options: NotificationCCGetSpecificOptions) {
 		const response = await this.getInternal(options);
 		return {
@@ -103,7 +103,7 @@ export class NotificationCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getSupported() {
 		this.assertSupportsCommand(
 			NotificationCommand,
@@ -123,7 +123,7 @@ export class NotificationCCAPI extends CCAPI {
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getSupportedEvents(notificationType: number) {
 		this.assertSupportsCommand(
 			NotificationCommand,
@@ -287,7 +287,7 @@ export class NotificationCC extends CommandClass {
 							supportedEvents,
 						);
 						for (const [key, metadata] of metadataMap.entries()) {
-							const valueId: ValueID = JSON.parse(key);
+							const valueId = JSON.parse(key) as ValueID;
 							node.valueDB.setMetadata(valueId, metadata);
 						}
 					}

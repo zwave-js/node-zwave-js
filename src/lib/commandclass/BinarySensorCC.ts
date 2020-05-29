@@ -104,7 +104,7 @@ export class BinarySensorCCAPI extends CCAPI {
 		return response.value;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getSupportedSensorTypes() {
 		this.assertSupportsCommand(
 			BinarySensorCommand,

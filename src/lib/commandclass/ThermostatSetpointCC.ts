@@ -145,7 +145,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		await this.get(propertyKey);
 	};
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(setpointType: ThermostatSetpointType) {
 		this.assertSupportsCommand(
 			ThermostatSetpointCommand,
@@ -190,7 +190,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getCapabilities(setpointType: ThermostatSetpointType) {
 		this.assertSupportsCommand(
 			ThermostatSetpointCommand,

@@ -64,11 +64,9 @@ export function getGroupCountValueId(): ValueID {
 	};
 }
 
-export type EndpointBitMask = (1 | 2 | 3 | 4 | 5 | 6 | 7)[];
-
 export interface EndpointAddress {
 	nodeId: number;
-	endpoint: number | EndpointBitMask;
+	endpoint: number | number[];
 }
 
 const MULTI_CHANNEL_ASSOCIATION_MARKER = 0x00;
@@ -131,7 +129,7 @@ function deserializeMultiChannelAssociationDestination(
 		const isBitMask = !!(data[i + 1] & 0b1000_0000);
 		const destination = data[i + 1] & 0b0111_1111;
 		const endpoint = isBitMask
-			? (parseBitMask(Buffer.from([destination])) as any)
+			? parseBitMask(Buffer.from([destination]))
 			: destination;
 
 		endpoints.push({ nodeId, endpoint });
@@ -193,7 +191,7 @@ export class MultiChannelAssociationCCAPI extends CCAPI {
 	/**
 	 * Returns information about an association group.
 	 */
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getGroup(groupId: number) {
 		this.assertSupportsCommand(
 			MultiChannelAssociationCommand,

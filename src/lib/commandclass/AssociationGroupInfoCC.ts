@@ -295,7 +295,7 @@ export class AssociationGroupInfoCCAPI extends CCAPI {
 		return response.name;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getGroupInfo(groupId: number, refreshCache: boolean = false) {
 		this.assertSupportsCommand(
 			AssociationGroupInfoCommand,
@@ -319,7 +319,7 @@ export class AssociationGroupInfoCCAPI extends CCAPI {
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getCommands(
 		groupId: number,
 		allowCache: boolean = true,

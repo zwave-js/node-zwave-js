@@ -179,6 +179,7 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 				// we expect an error, since there will be no response
 			});
 
+			// eslint-disable-next-line @typescript-eslint/unbound-method
 			expect(fakeDriver.sendCommand).toHaveBeenCalledTimes(1);
 			expect(
 				(fakeDriver.sendCommand as jest.Mock).mock.calls[0][0],

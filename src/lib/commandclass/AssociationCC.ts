@@ -122,7 +122,7 @@ export class AssociationCCAPI extends CCAPI {
 	/**
 	 * Returns information about an association group.
 	 */
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getGroup(groupId: number) {
 		this.assertSupportsCommand(AssociationCommand, AssociationCommand.Get);
 

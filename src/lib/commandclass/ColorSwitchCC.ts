@@ -167,7 +167,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		return response.supportedColorComponents;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(component: ColorComponent) {
 		this.assertSupportsCommand(ColorSwitchCommand, ColorSwitchCommand.Get);
 

@@ -46,7 +46,7 @@ export class TimeCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getTime() {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeGet);
 
@@ -62,7 +62,7 @@ export class TimeCCAPI extends CCAPI {
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getDate() {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.DateGet);
 

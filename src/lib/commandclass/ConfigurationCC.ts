@@ -367,7 +367,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getProperties(parameter: number) {
 		const cc = new ConfigurationCCPropertiesGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
@@ -1276,7 +1276,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 		return this._valueSize;
 	}
 
-	private _values: Map<number, ConfigValue> = new Map();
+	private _values = new Map<number, ConfigValue>();
 	public get values(): ReadonlyMap<number, ConfigValue> {
 		return this._values;
 	}

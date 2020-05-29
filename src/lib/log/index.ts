@@ -7,7 +7,7 @@ interface LogIndex {
 	controller: typeof import("./Controller");
 	reflection: typeof import("./Reflection");
 }
-const logger: LogIndex = {} as any;
+const logger = {} as LogIndex;
 Object.defineProperties(logger, {
 	serial: {
 		get() {

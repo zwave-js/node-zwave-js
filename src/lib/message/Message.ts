@@ -394,8 +394,10 @@ export function messageTypes(
 		);
 
 		// also store a map in the Message metadata for lookup.
-		const map: MessageTypeMap =
-			Reflect.getMetadata(METADATA_messageTypeMap, Message) || new Map();
+		const map: MessageTypeMap = (Reflect.getMetadata(
+			METADATA_messageTypeMap,
+			Message,
+		) || new Map()) as MessageTypeMap;
 		map.set(
 			getMessageTypeMapKey(messageType, functionType),
 			(messageClass as any) as Constructable<Message>,
@@ -413,10 +415,9 @@ export function getMessageType<T extends Message>(
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
-	const meta: MessageTypeMapEntry | undefined = Reflect.getMetadata(
-		METADATA_messageTypes,
-		constr,
-	);
+	const meta = Reflect.getMetadata(METADATA_messageTypes, constr) as
+		| MessageTypeMapEntry
+		| undefined;
 	const ret = meta?.messageType;
 	log.reflection.lookup(constr.name, "message type", num2hex(ret));
 	return ret;
@@ -429,10 +430,10 @@ export function getMessageTypeStatic<T extends Constructable<Message>>(
 	classConstructor: T,
 ): MessageType | undefined {
 	// retrieve the current metadata
-	const meta: MessageTypeMapEntry | undefined = Reflect.getMetadata(
+	const meta = Reflect.getMetadata(
 		METADATA_messageTypes,
 		classConstructor,
-	);
+	) as MessageTypeMapEntry | undefined;
 	const ret = meta?.messageType;
 	log.reflection.lookup(classConstructor.name, "message type", num2hex(ret));
 	return ret;
@@ -447,10 +448,9 @@ export function getFunctionType<T extends Message>(
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
-	const meta: MessageTypeMapEntry | undefined = Reflect.getMetadata(
-		METADATA_messageTypes,
-		constr,
-	);
+	const meta = Reflect.getMetadata(METADATA_messageTypes, constr) as
+		| MessageTypeMapEntry
+		| undefined;
 	const ret = meta?.functionType;
 	log.reflection.lookup(constr.name, "function type", num2hex(ret));
 	return ret;
@@ -463,10 +463,10 @@ export function getFunctionTypeStatic<T extends Constructable<Message>>(
 	classConstructor: T,
 ): FunctionType | undefined {
 	// retrieve the current metadata
-	const meta: MessageTypeMapEntry | undefined = Reflect.getMetadata(
+	const meta = Reflect.getMetadata(
 		METADATA_messageTypes,
 		classConstructor,
-	);
+	) as MessageTypeMapEntry | undefined;
 	const ret = meta?.functionType;
 	log.reflection.lookup(classConstructor.name, "function type", num2hex(ret));
 	return ret;
@@ -480,10 +480,10 @@ function getMessageConstructor(
 	functionType: FunctionType,
 ): Constructable<Message> | undefined {
 	// Retrieve the constructor map from the Message class
-	const functionTypeMap: MessageTypeMap | undefined = Reflect.getMetadata(
+	const functionTypeMap = Reflect.getMetadata(
 		METADATA_messageTypeMap,
 		Message,
-	);
+	) as MessageTypeMap | undefined;
 	if (functionTypeMap != null) {
 		return functionTypeMap.get(
 			getMessageTypeMapKey(messageType, functionType),
@@ -535,10 +535,10 @@ export function getExpectedResponse<T extends Message>(
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
-	const ret:
+	const ret = Reflect.getMetadata(METADATA_expectedResponse, constr) as
 		| FunctionType
 		| ResponsePredicate
-		| undefined = Reflect.getMetadata(METADATA_expectedResponse, constr);
+		| undefined;
 	if (typeof ret === "number") {
 		log.reflection.lookup(
 			constr.name,
@@ -564,13 +564,10 @@ export function getExpectedResponseStatic<T extends Constructable<Message>>(
 	classConstructor: T,
 ): FunctionType | ResponsePredicate | undefined {
 	// retrieve the current metadata
-	const ret:
-		| FunctionType
-		| ResponsePredicate
-		| undefined = Reflect.getMetadata(
+	const ret = Reflect.getMetadata(
 		METADATA_expectedResponse,
 		classConstructor,
-	);
+	) as FunctionType | ResponsePredicate | undefined;
 	if (typeof ret === "number") {
 		log.reflection.lookup(
 			classConstructor.name,
@@ -617,10 +614,9 @@ export function getDefaultPriority<T extends Message>(
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
-	const ret: MessagePriority | undefined = Reflect.getMetadata(
-		METADATA_priority,
-		constr,
-	);
+	const ret = Reflect.getMetadata(METADATA_priority, constr) as
+		| MessagePriority
+		| undefined;
 	if (ret) {
 		log.reflection.lookup(
 			constr.name,
@@ -640,10 +636,9 @@ export function getDefaultPriorityStatic<T extends Constructable<Message>>(
 	classConstructor: T,
 ): MessagePriority | undefined {
 	// retrieve the current metadata
-	const ret: MessagePriority | undefined = Reflect.getMetadata(
-		METADATA_priority,
-		classConstructor,
-	);
+	const ret = Reflect.getMetadata(METADATA_priority, classConstructor) as
+		| MessagePriority
+		| undefined;
 	if (ret) {
 		log.reflection.lookup(
 			classConstructor.name,

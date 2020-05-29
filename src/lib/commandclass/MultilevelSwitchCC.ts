@@ -96,7 +96,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
@@ -122,7 +122,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	 * @param targetValue The new target value for the switch
 	 * @param duration The optional duration to reach the target value. Available in V2+
 	 */
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async set(targetValue: number, duration?: Duration) {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,

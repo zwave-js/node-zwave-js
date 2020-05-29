@@ -58,7 +58,7 @@ export class BasicCCAPI extends CCAPI {
 		await this.get();
 	};
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {
 		this.assertSupportsCommand(BasicCommand, BasicCommand.Get);
 

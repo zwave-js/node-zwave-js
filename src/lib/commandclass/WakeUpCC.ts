@@ -76,7 +76,7 @@ export class WakeUpCCAPI extends CCAPI {
 		await this.getInterval();
 	};
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getInterval() {
 		this.assertSupportsCommand(WakeUpCommand, WakeUpCommand.IntervalGet);
 
@@ -93,7 +93,7 @@ export class WakeUpCCAPI extends CCAPI {
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getIntervalCapabilities() {
 		this.assertSupportsCommand(
 			WakeUpCommand,

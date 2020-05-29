@@ -23,7 +23,7 @@ export async function loadMetersInternal(): Promise<void> {
 
 	try {
 		const fileContents = await readFile(configPath, "utf8");
-		const definition = JSON5.parse(fileContents);
+		const definition = JSON5.parse(fileContents) as unknown;
 		if (!isObject(definition)) {
 			throwInvalidConfig("meters", "the database is not an object");
 		}

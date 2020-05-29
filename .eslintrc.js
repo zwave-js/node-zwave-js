@@ -34,13 +34,13 @@ module.exports = {
 				argsIgnorePattern: "^_",
 			},
 		],
-		"@typescript-eslint/explicit-function-return-type": [
-			"warn",
-			{
-				allowExpressions: true,
-				allowTypedFunctionExpressions: true,
-			},
-		],
+		// "@typescript-eslint/explicit-function-return-type": [
+		// 	"warn",
+		// 	{
+		// 		allowExpressions: true,
+		// 		allowTypedFunctionExpressions: true,
+		// 	},
+		// ],
 		"@typescript-eslint/no-object-literal-type-assertion": "off",
 		"@typescript-eslint/interface-name-prefix": "off",
 		"@typescript-eslint/no-non-null-assertion": "off", // This is necessary for Map.has()/get()!
@@ -77,11 +77,12 @@ module.exports = {
 				checksVoidReturn: false,
 			},
 		],
-		// TODO: Make this errors when ESLint has fixed the bugs with inferred types
-		"@typescript-eslint/no-unsafe-assignment": "warn",
-		"@typescript-eslint/no-unsafe-member-access": "warn",
-		"@typescript-eslint/no-unsafe-return": "warn",
-		"@typescript-eslint/no-unsafe-call": "warn",
+		// We can turn this on from time to time but in general these rules
+		// make our lives harder instead of easier
+		"@typescript-eslint/no-unsafe-assignment": "off",
+		"@typescript-eslint/no-unsafe-member-access": "off",
+		"@typescript-eslint/no-unsafe-return": "off",
+		"@typescript-eslint/no-unsafe-call": "off",
 	},
 	overrides: [
 		{

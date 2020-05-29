@@ -28,7 +28,7 @@ export async function loadIndicatorsInternal(): Promise<{
 
 	try {
 		const fileContents = await readFile(configPath, "utf8");
-		const definition = JSON5.parse(fileContents);
+		const definition = JSON5.parse(fileContents) as unknown;
 		if (!isObject(definition)) {
 			throwInvalidConfig("indicators", "the database is not an object");
 		}

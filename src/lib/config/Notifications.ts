@@ -43,7 +43,7 @@ export async function loadNotificationsInternal(): Promise<void> {
 
 	try {
 		const fileContents = await readFile(configPath, "utf8");
-		const definition = JSON5.parse(fileContents);
+		const definition = JSON5.parse(fileContents) as unknown;
 		if (!isObject(definition)) {
 			throwInvalidConfig(
 				"notifications",

@@ -56,12 +56,14 @@ export function serializeCacheValue(value: unknown): SerializedValue {
 /** Deserializes a value that was serialized by serializeCacheValue */
 export function deserializeCacheValue(value: SerializedValue): unknown {
 	if (isObject(value)) {
-		const specialType = (value as Record<any, any>)[SPECIAL_TYPE_KEY];
+		const specialType = (value as Record<any, SerializedValue>)[
+			SPECIAL_TYPE_KEY
+		];
 		// Convert objects which used to be a map back to a Map
 		if (specialType === "map") {
 			const { [SPECIAL_TYPE_KEY]: _, ...rest } = value as Record<
 				any,
-				any
+				SerializedValue
 			>;
 			return new Map<unknown, unknown>(
 				entries(rest)

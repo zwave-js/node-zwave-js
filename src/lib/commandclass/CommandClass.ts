@@ -899,10 +899,9 @@ export function getCommandClassStatic<T extends Constructable<CommandClass>>(
 	classConstructor: T,
 ): CommandClasses {
 	// retrieve the current metadata
-	const ret: CommandClasses | undefined = Reflect.getMetadata(
-		METADATA_commandClass,
-		classConstructor,
-	);
+	const ret = Reflect.getMetadata(METADATA_commandClass, classConstructor) as
+		| CommandClasses
+		| undefined;
 	if (ret == undefined) {
 		throw new ZWaveError(
 			`No command class defined for ${classConstructor.name}!`,
@@ -925,10 +924,9 @@ export function getCCConstructor(
 	cc: CommandClasses,
 ): Constructable<CommandClass> | undefined {
 	// Retrieve the constructor map from the CommandClass class
-	const map: CommandClassMap | undefined = Reflect.getMetadata(
-		METADATA_commandClassMap,
-		CommandClass,
-	);
+	const map = Reflect.getMetadata(METADATA_commandClassMap, CommandClass) as
+		| CommandClassMap
+		| undefined;
 	if (map != undefined) return map.get(cc);
 }
 
@@ -980,8 +978,10 @@ export function getImplementedVersionStatic<
 	T extends Constructable<CommandClass>
 >(classConstructor: T): number {
 	// retrieve the current metadata
-	const ret: number =
-		Reflect.getMetadata(METADATA_version, classConstructor) || 0;
+	const ret =
+		(Reflect.getMetadata(METADATA_version, classConstructor) as
+			| number
+			| undefined) || 0;
 
 	log.reflection.lookup(
 		classConstructor.name,
@@ -1029,10 +1029,9 @@ function getCCCommand<T extends CommandClass>(cc: T): number | undefined {
 	const constrName = constr.name;
 
 	// retrieve the current metadata
-	const ret: number | undefined = Reflect.getMetadata(
-		METADATA_ccCommand,
-		constr,
-	);
+	const ret = Reflect.getMetadata(METADATA_ccCommand, constr) as
+		| number
+		| undefined;
 
 	log.reflection.lookup(constrName, "CC Command", `${ret} (${num2hex(ret)})`);
 	return ret;
@@ -1047,10 +1046,9 @@ function getCCCommandConstructor<TBase extends CommandClass>(
 	ccCommand: number,
 ): Constructable<TBase> | undefined {
 	// Retrieve the constructor map from the CommandClass class
-	const map: CCCommandMap | undefined = Reflect.getMetadata(
-		METADATA_ccCommandMap,
-		CommandClass,
-	);
+	const map = Reflect.getMetadata(METADATA_ccCommandMap, CommandClass) as
+		| CCCommandMap
+		| undefined;
 	if (map != undefined)
 		return (map.get(getCCCommandMapKey(ccId, ccCommand)) as unknown) as
 			| Constructable<TBase>
@@ -1117,11 +1115,11 @@ export function getExpectedCCResponse<T extends CommandClass>(
 	// get the class constructor
 	const constr = ccClass.constructor;
 	// retrieve the current metadata
-	const ret:
+	const ret = Reflect.getMetadata(METADATA_ccResponse, constr) as
 		| typeof CommandClass
 		| DynamicCCResponse<T>
 		| CCResponsePredicate<T>
-		| undefined = Reflect.getMetadata(METADATA_ccResponse, constr);
+		| undefined;
 	if (!ret || staticExtends(ret, CommandClass)) {
 		log.reflection.lookup(
 			constr.name,
@@ -1171,7 +1169,7 @@ export function ccValue(options?: CCValueOptions): PropertyDecorator {
 		const cc = getCommandClassStatic(constr);
 		// retrieve the current metadata
 		const metadata =
-			Reflect.getMetadata(METADATA_ccValues, CommandClass) || {};
+			Reflect.getMetadata(METADATA_ccValues, CommandClass) ?? {};
 		if (!(cc in metadata)) metadata[cc] = new Map();
 		// And add the variable
 		const variables: Map<string | number, CCValueOptions> = metadata[cc];
@@ -1292,8 +1290,8 @@ export function API(cc: CommandClasses): ClassDecorator {
 		Reflect.defineMetadata(METADATA_API, cc, apiClass);
 
 		// also store a map in the CCAPI metadata for lookup.
-		const map: APIMap =
-			Reflect.getMetadata(METADATA_APIMap, CCAPI) || new Map();
+		const map = (Reflect.getMetadata(METADATA_APIMap, CCAPI) ||
+			new Map()) as APIMap;
 		map.set(cc, (apiClass as any) as APIConstructor);
 		Reflect.defineMetadata(METADATA_APIMap, map, CCAPI);
 	};
@@ -1304,7 +1302,9 @@ export function API(cc: CommandClasses): ClassDecorator {
  */
 export function getAPI(cc: CommandClasses): APIConstructor | undefined {
 	// Retrieve the constructor map from the CCAPI class
-	const map: APIMap | undefined = Reflect.getMetadata(METADATA_APIMap, CCAPI);
+	const map = Reflect.getMetadata(METADATA_APIMap, CCAPI) as
+		| APIMap
+		| undefined;
 	const ret = map?.get(cc);
 
 	log.reflection.lookup(

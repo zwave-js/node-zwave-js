@@ -114,7 +114,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		return response.changeCounter;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getOverride() {
 		this.assertSupportsCommand(
 			ClimateControlScheduleCommand,

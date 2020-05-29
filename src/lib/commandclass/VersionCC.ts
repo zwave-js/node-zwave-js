@@ -82,7 +82,7 @@ export class VersionCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {
 		this.assertSupportsCommand(VersionCommand, VersionCommand.Get);
 
@@ -116,7 +116,7 @@ export class VersionCCAPI extends CCAPI {
 		return response.ccVersion;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getCapabilities() {
 		this.assertSupportsCommand(
 			VersionCommand,
@@ -135,7 +135,7 @@ export class VersionCCAPI extends CCAPI {
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getZWaveSoftware() {
 		this.assertSupportsCommand(
 			VersionCommand,

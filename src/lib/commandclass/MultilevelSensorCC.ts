@@ -62,7 +62,7 @@ export class MultilevelSensorCCAPI extends CCAPI {
 
 	public async get(): Promise<MultilevelSensorValue & { type: number }>;
 	public async get(sensorType: number, scale: number): Promise<number>;
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(sensorType?: number, scale?: number) {
 		this.assertSupportsCommand(
 			MultilevelSensorCommand,
