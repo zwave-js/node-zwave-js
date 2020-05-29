@@ -4,6 +4,11 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Changes under the hood
+* Updated TypeScript to v3.9
+* Updated ESLint to v7, some changes to lint rules
+
 ## 3.5.3 (2020-05-27)
 ### Bugfixes
 * All emitted `"error"` events now correctly contain an `Error` instance as the parameter.
