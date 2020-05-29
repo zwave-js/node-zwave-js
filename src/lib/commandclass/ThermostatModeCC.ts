@@ -177,11 +177,9 @@ export class ThermostatModeCC extends CommandClass {
 
 			const supportedModes = await api.getSupportedModes();
 
-			const logMessage =
-				`received supported thermostat modes:` +
-				supportedModes.map(
-					(mode) => "\n· " + getEnumMemberName(ThermostatMode, mode),
-				);
+			const logMessage = `received supported thermostat modes:${supportedModes
+				.map((mode) => `\n· ${getEnumMemberName(ThermostatMode, mode)}`)
+				.join("")}`;
 			log.controller.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,

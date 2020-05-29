@@ -136,7 +136,9 @@ current value:      ${binarySwitchResponse.currentValue}`;
 		if (binarySwitchResponse.targetValue != undefined) {
 			logMessage += `
 target value:       ${binarySwitchResponse.targetValue}
-remaining duration: ${binarySwitchResponse.duration}`;
+remaining duration: ${
+				binarySwitchResponse.duration?.toString() ?? "undefined"
+			}`;
 		}
 		log.controller.logNode(node.id, {
 			endpoint: this.endpointIndex,

@@ -6,9 +6,13 @@ module.exports = {
 		project: "./tsconfig.json",
 	},
 	extends: [
-		"plugin:@typescript-eslint/recommended", // Uses the recommended rules from the @typescript-eslint/eslint-plugin
-		"prettier/@typescript-eslint", // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
-		"plugin:prettier/recommended", // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
+		// Use the recommended rules from the @typescript-eslint/eslint-plugin
+		"plugin:@typescript-eslint/recommended",
+		"plugin:@typescript-eslint/recommended-requiring-type-checking",
+		// Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
+		"prettier/@typescript-eslint",
+		// Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
+		"plugin:prettier/recommended",
 	],
 	plugins: [],
 	rules: {
@@ -43,11 +47,41 @@ module.exports = {
 		"@typescript-eslint/no-inferrable-types": [
 			"error",
 			{
-				"ignoreProperties": true,
-				"ignoreParameters": true
-			}
+				ignoreProperties: true,
+				ignoreParameters: true,
+			},
 		],
-		"@typescript-eslint/ban-ts-ignore": "warn",
+		"@typescript-eslint/ban-ts-comment": [
+			"error",
+			{
+				"ts-expect-error": false,
+				"ts-ignore": true,
+				"ts-nocheck": true,
+				"ts-check": false,
+			},
+		],
+		"@typescript-eslint/restrict-template-expressions": [
+			"error",
+			{
+				allowNumber: true,
+				allowBoolean: true,
+				// This is necessary to log errors
+				// TODO: Consider switching to false when we may annotate catch clauses
+				allowAny: true,
+				allowNullish: true,
+			},
+		],
+		"@typescript-eslint/no-misused-promises": [
+			"error",
+			{
+				checksVoidReturn: false,
+			},
+		],
+		// TODO: Make this errors when ESLint has fixed the bugs with inferred types
+		"@typescript-eslint/no-unsafe-assignment": "warn",
+		"@typescript-eslint/no-unsafe-member-access": "warn",
+		"@typescript-eslint/no-unsafe-return": "warn",
+		"@typescript-eslint/no-unsafe-call": "warn",
 	},
 	overrides: [
 		{
@@ -55,14 +89,22 @@ module.exports = {
 			rules: {
 				"@typescript-eslint/explicit-function-return-type": "off",
 				"@typescript-eslint/no-empty-function": "off",
-				"@typescript-eslint/ban-ts-ignore": "off",
+				"@typescript-eslint/ban-ts-comment": "off",
+				"@typescript-eslint/no-unsafe-assignment": "off",
+				"@typescript-eslint/no-unsafe-member-access": "off",
+				"@typescript-eslint/no-unsafe-member-return": "off",
+				"@typescript-eslint/no-unsafe-return": "off",
+				"@typescript-eslint/no-unsafe-call": "off",
+				"@typescript-eslint/no-floating-promises": "off",
+				"@typescript-eslint/require-await": "off",
+				"@typescript-eslint/unbound-method": "warn",
 			},
 		},
 		{
 			files: ["*.js"],
 			rules: {
-				"@typescript-eslint/*": "off"
-			}
-		}
+				"@typescript-eslint/*": "off",
+			},
+		},
 	],
 };

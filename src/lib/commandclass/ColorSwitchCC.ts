@@ -288,9 +288,9 @@ export class ColorSwitchCC extends CommandClass {
 			supportedColors = await api.getSupported();
 			log.controller.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: `received supported colors:${supportedColors.map(
-					(c) => `\n· ${getEnumMemberName(ColorComponent, c)}`,
-				)}`,
+				message: `received supported colors:${supportedColors
+					.map((c) => `\n· ${getEnumMemberName(ColorComponent, c)}`)
+					.join("")}`,
 				direction: "outbound",
 			});
 

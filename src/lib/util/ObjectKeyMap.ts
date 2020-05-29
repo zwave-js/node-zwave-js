@@ -5,7 +5,6 @@ export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
 		entries?: [TKey, TValue][],
 		defaultKeyProps?: Partial<TKey>,
 	) {
-		this._map = new Map();
 		if (entries?.length) {
 			for (const [key, value] of entries) {
 				this.set(key, value);
@@ -14,7 +13,7 @@ export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
 		this.defaultKeyProps = defaultKeyProps;
 	}
 
-	private _map: Map<string, TValue>;
+	private _map = new Map<string, TValue>();
 	private defaultKeyProps: Partial<TKey> | undefined;
 
 	public has(key: TKey): boolean {
@@ -51,10 +50,12 @@ export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
 
 	public entries(): IterableIterator<[TKey, TValue]> {
 		const map = this._map;
+		// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 		return (function* () {
 			const _entries = map.entries();
 			let entry = _entries.next();
 			while (!entry.done) {
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 				const objKey = JSON.parse(entry.value[0]);
 				yield [objKey, entry.value[1]] as [TKey, TValue];
 				entry = _entries.next();
@@ -64,6 +65,7 @@ export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
 
 	public keys(): IterableIterator<TKey> {
 		const map = this._map;
+		// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 		return (function* () {
 			const _keys = map.entries();
 			let key = _keys.next();
@@ -83,6 +85,7 @@ export class ObjectKeyMap<TKey extends Record<string | number, any>, TValue> {
 		const filledKey = { ...key };
 		if (this.defaultKeyProps) {
 			for (const [required, def] of entries(this.defaultKeyProps)) {
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 				if (!(required in filledKey)) filledKey[required as any] = def;
 			}
 		}

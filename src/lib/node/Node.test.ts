@@ -486,10 +486,10 @@ describe("lib/node/Node", () => {
 					interviewCCs: true,
 				};
 				originalMethods = {
-					queryProtocolInfo: node.queryProtocolInfo,
-					queryNodeInfo: node.queryNodeInfo,
-					interviewCCs: node.interviewCCs,
-					queryNeighbors: node.queryNeighbors,
+					queryProtocolInfo: node.queryProtocolInfo.bind(node),
+					queryNodeInfo: node.queryNodeInfo.bind(node),
+					interviewCCs: node.interviewCCs.bind(node),
+					queryNeighbors: node.queryNeighbors.bind(node),
 				};
 				for (const method of Object.keys(
 					originalMethods,
@@ -902,7 +902,7 @@ describe("lib/node/Node", () => {
 		it("serializing a deserialized node should result in the original object", () => {
 			const node = new ZWaveNode(1, fakeDriver);
 			// @ts-ignore We need write access to the map
-			fakeDriver.controller!.nodes.set(1, node);
+			fakeDriver.controller.nodes.set(1, node);
 			node.deserialize(serializedTestNode);
 			expect(node.serialize()).toEqual(serializedTestNode);
 		});
@@ -910,7 +910,7 @@ describe("lib/node/Node", () => {
 		it("nodes with a completed interview don't get their stage reset when resuming from cache", () => {
 			const node = new ZWaveNode(1, fakeDriver);
 			// @ts-ignore We need write access to the map
-			fakeDriver.controller!.nodes.set(1, node);
+			fakeDriver.controller.nodes.set(1, node);
 			node.deserialize(serializedTestNode);
 			node.interviewStage = InterviewStage.RestartFromCache;
 			expect(node.serialize().interviewStage).toEqual(
@@ -946,7 +946,7 @@ describe("lib/node/Node", () => {
 
 			const node = new ZWaveNode(1, fakeDriver);
 			// @ts-ignore We need write access to the map
-			fakeDriver.controller!.nodes.set(1, node);
+			fakeDriver.controller.nodes.set(1, node);
 			node.deserialize(input);
 
 			expect(
@@ -1351,7 +1351,7 @@ describe("lib/node/Node", () => {
 
 		beforeEach(() => {
 			node = new ZWaveNode(1, (fakeDriver as unknown) as Driver);
-			fakeDriver.controller!.nodes.set(1, node);
+			fakeDriver.controller.nodes.set(1, node);
 		});
 
 		it("returns the defined metadata for the given value", () => {

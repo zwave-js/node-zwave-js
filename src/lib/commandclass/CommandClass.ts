@@ -775,7 +775,6 @@ export type MulticastCC<T extends CommandClass = CommandClass> = T & {
 // =======================
 // use decorators to link command class values to actual command classes
 
-/* eslint-disable @typescript-eslint/camelcase */
 const METADATA_commandClass = Symbol("commandClass");
 const METADATA_commandClassMap = Symbol("commandClassMap");
 const METADATA_ccResponse = Symbol("ccResponse");
@@ -787,7 +786,6 @@ const METADATA_ccValueMeta = Symbol("ccValueMeta");
 const METADATA_version = Symbol("version");
 const METADATA_API = Symbol("API");
 const METADATA_APIMap = Symbol("APIMap");
-/* eslint-enable @typescript-eslint/camelcase */
 
 export interface Constructable<T extends CommandClass> {
 	new (

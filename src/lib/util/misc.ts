@@ -8,15 +8,16 @@ export function isConsecutiveArray(values: number[]): boolean {
 }
 
 export type JSONObject = Record<string, any>;
+type Constructor = new (...args: any[]) => any;
 
 /** Tests if base is in the super chain of `constructor` */
 export function staticExtends<T extends new (...args: any[]) => any>(
-	constructor: any,
+	constructor: unknown,
 	base: T,
 ): constructor is T {
 	while (constructor) {
 		if (constructor === base) return true;
-		constructor = Object.getPrototypeOf(constructor);
+		constructor = Object.getPrototypeOf(constructor) as unknown;
 	}
 	return false;
 }
@@ -45,12 +46,13 @@ export function validatePayload(...assertions: unknown[]): void {
 
 /** Decorator to support multi-inheritance using mixins */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function Mixin(baseCtors: Function[]) {
-	return function (derivedCtor: Function): void {
+export function Mixin(baseCtors: Constructor[]) {
+	return function (derivedCtor: Constructor): void {
 		baseCtors.forEach((baseCtor) => {
 			Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
 				// Do not override the constructor
 				if (name !== "constructor") {
+					// eslint-disable-next-line
 					derivedCtor.prototype[name] = baseCtor.prototype[name];
 				}
 			});
@@ -61,6 +63,7 @@ export function Mixin(baseCtors: Function[]) {
 export type DeepPartial<T> = { [P in keyof T]+?: DeepPartial<T[P]> };
 
 export function getEnumMemberName(enumeration: unknown, value: number): string {
+	// eslint-disable-next-line
 	return (enumeration as any)[value] || `unknown (${num2hex(value)})`;
 }
 
@@ -96,11 +99,11 @@ export function keysOf<T>(obj: T): (keyof T)[] {
 }
 
 /** Returns a subset of `obj` that contains only the given keys */
-export function pick<T extends object, K extends keyof T>(
+export function pick<T extends Record<any, any>, K extends keyof T>(
 	obj: T,
 	keys: K[],
 ): Pick<T, K> {
-	const ret = {} as any;
+	const ret = {} as Pick<T, K>;
 	for (const key of keys) {
 		if (key in obj) ret[key] = obj[key];
 	}

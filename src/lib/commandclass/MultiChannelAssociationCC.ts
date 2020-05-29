@@ -412,13 +412,15 @@ export class MultiChannelAssociationCC extends CommandClass {
 			const logMessage = `received information for association group #${groupId}:
 maximum # of nodes:           ${group.maxNodes}
 currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}
-currently assigned endpoints: ${group.endpoints.map(({ nodeId, endpoint }) => {
-				if (typeof endpoint === "number") {
-					return `${nodeId}:${endpoint}`;
-				} else {
-					return `${nodeId}:[${endpoint.map(String).join(", ")}]`;
-				}
-			})}`;
+currently assigned endpoints: ${group.endpoints
+				.map(({ nodeId, endpoint }) => {
+					if (typeof endpoint === "number") {
+						return `${nodeId}:${endpoint}`;
+					} else {
+						return `${nodeId}:[${endpoint.map(String).join(", ")}]`;
+					}
+				})
+				.join("")}`;
 			log.controller.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
@@ -617,7 +619,9 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 			if (!options.groupId) {
 				if (this.version === 1) {
 					throw new ZWaveError(
-						`Node ${this.nodeId} only supports MultiChannelAssociationCC V1 which requires the group Id to be set`,
+						`Node ${
+							this.nodeId as number
+						} only supports MultiChannelAssociationCC V1 which requires the group Id to be set`,
 						ZWaveErrorCodes.Argument_Invalid,
 					);
 				}

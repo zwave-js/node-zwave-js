@@ -73,7 +73,7 @@ describe("lib/driver/Driver => ", () => {
 			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 			portInstance.doOpen();
 
-			await expect(startPromise);
+			await expect(startPromise).toResolve();
 			driver.destroy();
 		});
 

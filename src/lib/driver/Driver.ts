@@ -73,7 +73,7 @@ import type { ValueMetadata } from "../values/Metadata";
 import type { FileSystem } from "./FileSystem";
 import { MAX_SEND_ATTEMPTS, Transaction } from "./Transaction";
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line
 const { version: libVersion } = require("../../../package.json");
 // This is made with cfonts:
 const libNameString = `
@@ -410,12 +410,12 @@ export class Driver extends EventEmitter {
 			})
 			.on("data", this.serialport_onData.bind(this))
 			.on("error", (err) => {
-				log.driver.print("serial port errored: " + err, "error");
+				log.driver.print(`serial port errored: ${err}`, "error");
 				if (this._isOpen) {
 					this.serialport_onError(err);
 				} else {
 					spOpenPromise.reject(err);
-					this.destroy();
+					void this.destroy();
 				}
 			});
 		this.serial.open();
@@ -578,7 +578,7 @@ export class Driver extends EventEmitter {
 						node.id,
 						setTimeout(() => {
 							this.retryNodeInterviewTimeouts.delete(node.id);
-							this.interviewNode(node);
+							void this.interviewNode(node);
 						}, retryTimeout).unref(),
 					);
 				} else {
@@ -605,7 +605,7 @@ export class Driver extends EventEmitter {
 				}
 				log.controller.logNode(
 					node.id,
-					"Error during node interview: " + e,
+					`Error during node interview: ${e.message}`,
 					"error",
 				);
 			} else {
@@ -687,7 +687,7 @@ export class Driver extends EventEmitter {
 	}
 
 	/** Checks if all nodes are ready and emits the "all nodes ready" event if they are */
-	private async checkAllNodesReady(): Promise<void> {
+	private checkAllNodesReady(): void {
 		// Only emit "all nodes ready" once
 		if (this._nodesReadyEventEmitted) return;
 
@@ -860,7 +860,7 @@ export class Driver extends EventEmitter {
 	}
 
 	private _cleanupHandler = (): void => {
-		this.destroy();
+		void this.destroy();
 	};
 
 	/**
@@ -918,7 +918,6 @@ export class Driver extends EventEmitter {
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/camelcase
 	private serialport_onError(err: Error): void {
 		this.emit("error", err);
 	}
@@ -926,7 +925,6 @@ export class Driver extends EventEmitter {
 	/**
 	 * Is called when the serial port has received any data
 	 */
-	// eslint-disable-next-line @typescript-eslint/camelcase
 	private async serialport_onData(data: Buffer): Promise<void> {
 		// append the new data to our receive buffer
 		this.receiveBuffer =
@@ -1437,7 +1435,7 @@ ${handlers.length} left`,
 					await this.controller.removeFailedNode(msg.command.nodeId);
 				} catch (e) {
 					log.controller.logNode(msg.command.nodeId, {
-						message: "removing the node failed: " + e,
+						message: `removing the node failed: ${e}`,
 						level: "error",
 					});
 				}
@@ -1882,7 +1880,9 @@ ${handlers.length} left`,
 		// Check if the target supports this command
 		if (!command.getNode()?.supportsCC(CommandClasses.Supervision)) {
 			throw new ZWaveError(
-				`Node ${command.nodeId} does not support the Supervision CC!`,
+				`Node ${
+					command.nodeId as number
+				} does not support the Supervision CC!`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
@@ -2248,8 +2248,7 @@ ${handlers.length} left`,
 				cacheFile,
 				"utf8",
 			);
-			const cacheObj = JSON.parse(cacheString);
-			await this.controller.deserialize(cacheObj);
+			await this.controller.deserialize(JSON.parse(cacheString));
 			log.driver.print(
 				`Restoring the network from cache was successful!`,
 			);
@@ -2275,7 +2274,9 @@ ${handlers.length} left`,
 		const sendNodeToSleep = (node: ZWaveNode): void => {
 			this.sendNodeToSleepTimers.delete(node.id);
 			if (!this.hasPendingMessages(node)) {
-				node.sendNoMoreInformation();
+				void node.sendNoMoreInformation().catch(() => {
+					/* ignore errors */
+				});
 			}
 		};
 

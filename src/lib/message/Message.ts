@@ -30,7 +30,7 @@ export interface MessageDeserializationOptions {
  * Tests whether the given message constructor options contain a buffer for deserialization
  */
 export function gotDeserializationOptions(
-	options: any,
+	options: Record<any, any> | undefined,
 ): options is MessageDeserializationOptions {
 	return options != undefined && Buffer.isBuffer(options.data);
 }
@@ -252,7 +252,7 @@ export class Message {
 	}
 
 	private toJSONInternal(): JSONObject {
-		const ret: any = {
+		const ret: JSONObject = {
 			name: this.constructor.name,
 			type: MessageType[this.type],
 			functionType:
@@ -338,12 +338,10 @@ function computeChecksum(message: Buffer): number {
 
 // =======================
 // use decorators to link function types to message classes
-/* eslint-disable @typescript-eslint/camelcase */
 const METADATA_messageTypes = Symbol("messageTypes");
 const METADATA_messageTypeMap = Symbol("messageTypeMap");
 const METADATA_expectedResponse = Symbol("expectedResponse");
 const METADATA_priority = Symbol("priority");
-/* eslint-enable @typescript-eslint/camelcase */
 
 type MessageTypeMap = Map<string, Constructable<Message>>;
 interface MessageTypeMapEntry {

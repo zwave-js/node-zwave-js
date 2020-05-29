@@ -244,7 +244,7 @@ paramInformation is not an object`,
 			for (const [key, paramDefinition] of entries(
 				definition.paramInformation,
 			)) {
-				const match = key.match(/^(\d+)(?:\[0x([0-9a-fA-F]+)\])?$/);
+				const match = /^(\d+)(?:\[0x([0-9a-fA-F]+)\])?$/.exec(key);
 				if (!match) {
 					throwInvalidConfig(
 						`device`,
@@ -457,7 +457,7 @@ Parameter #${parameterNumber} has a non-string label`,
 
 		if (
 			definition.description != undefined &&
-			typeof definition.label !== "string"
+			typeof definition.description !== "string"
 		) {
 			throwInvalidConfig(
 				"devices",

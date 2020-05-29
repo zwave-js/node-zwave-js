@@ -1,4 +1,4 @@
-import type { Comparer } from "alcalzone-shared/comparable";
+import type { Comparer, CompareResult } from "alcalzone-shared/comparable";
 import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
@@ -482,6 +482,7 @@ export class ZWaveNode extends Endpoint {
 			// Access the CC API by name
 			const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
 			if (!endpointInstance) return false;
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 			const api = (endpointInstance.commandClasses as any)[
 				valueId.commandClass
 			] as CCAPI;
@@ -854,7 +855,7 @@ version:               ${this.version}`;
 					direction: "inbound",
 				});
 			} catch (e) {
-				log.controller.logNode(this.id, "ping failed: " + e.message);
+				log.controller.logNode(this.id, `ping failed: ${e.message}`);
 				return false;
 			}
 		}
@@ -1070,7 +1071,7 @@ version:               ${this.version}`;
 			const cc1IsApplicationCC = applicationCCs.includes(cc1);
 			const cc2IsApplicationCC = applicationCCs.includes(cc2);
 			return ((cc1IsApplicationCC ? 1 : 0) -
-				(cc2IsApplicationCC ? 1 : 0)) as any;
+				(cc2IsApplicationCC ? 1 : 0)) as CompareResult;
 		};
 		try {
 			rootInterviewOrder = topologicalSort(
@@ -1189,7 +1190,7 @@ version:               ${this.version}`;
 			log.controller.logNode(this.nodeId, {
 				message: `Node does not send unsolicited updates, refreshing actuator and sensor values...`,
 			});
-			this.refreshValues();
+			void this.refreshValues();
 		}
 	}
 
@@ -1243,7 +1244,7 @@ version:               ${this.version}`;
 		this.manualRefreshTimers.set(
 			cc,
 			setInterval(() => {
-				this.refreshCCValues(cc);
+				void this.refreshCCValues(cc);
 			}, timeout).unref(),
 		);
 	}
@@ -1367,7 +1368,7 @@ version:               ${this.version}`;
 	 * @internal
 	 * Handles a CommandClass that was received from this node
 	 */
-	public async handleCommand(command: CommandClass): Promise<void> {
+	public handleCommand(command: CommandClass): Promise<void> | void {
 		// If the node sent us an unsolicited update, our initial assumption
 		// was wrong. Stop querying it regularly for updates
 		this.cancelManualValueRefresh(command.ccId);
@@ -1439,9 +1440,9 @@ version:               ${this.version}`;
 	private lastCentralSceneNotificationSequenceNumber: number | undefined;
 
 	/** Handles the receipt of a Central Scene notifification */
-	private async handleCentralSceneNotification(
+	private handleCentralSceneNotification(
 		command: CentralSceneCCNotification,
-	): Promise<void> {
+	): void {
 		// Did we already receive this command?
 		if (
 			command.sequenceNumber ===
@@ -1594,6 +1595,7 @@ version:               ${this.version}`;
 			// Try to access the API - if it doesn't work, skip this option
 			let API: CCAPI;
 			try {
+				// eslint-disable-next-line
 				API = (this.commandClasses as any)[ccName];
 			} catch {
 				log.controller.logNode(this.id, {
@@ -1610,6 +1612,7 @@ version:               ${this.version}`;
 					level: "warn",
 				});
 				continue;
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 			} else if (!(API as any)[apiMethod]) {
 				log.controller.logNode(this.id, {
 					message: `method ${apiMethod} not found on API, skipping query`,
@@ -1620,6 +1623,7 @@ version:               ${this.version}`;
 			}
 
 			// Retrieve the method
+			// eslint-disable-next-line
 			const method = (API as any)[apiMethod].bind(API) as Function;
 			// And replace "smart" arguments with their corresponding value
 			const methodArgs = args.map<unknown>((arg) => {
@@ -1651,7 +1655,7 @@ version:               ${this.version}`;
 	}
 
 	/** Handles the receipt of a BasicCC Set or Report */
-	private async handleBasicCommand(command: BasicCC): Promise<void> {
+	private handleBasicCommand(command: BasicCC): void {
 		// Retrieve the endpoint the command is coming from
 		const sourceEndpoint =
 			this.getEndpoint(command.endpointIndex ?? 0) ?? this;
@@ -1981,26 +1985,27 @@ version:               ${this.version}`;
 		for (const cc of sortedCCs) {
 			const serializedCC = {
 				name: CommandClasses[cc],
-				endpoints: {} as JSONObject,
-			} as JSONObject;
+				endpoints: {} as Record<string, CommandClassInfo>,
+			};
 			// We store the support and version information in this location rather than in the version CC
 			// Therefore request the information from all endpoints
 			for (const endpoint of this.getAllEndpoints()) {
 				if (endpoint.implementedCommandClasses.has(cc)) {
 					serializedCC.endpoints[
-						endpoint.index
-					] = endpoint.implementedCommandClasses.get(cc);
+						endpoint.index.toString()
+					] = endpoint.implementedCommandClasses.get(cc)!;
 				}
 			}
-			ret.commandClasses[num2hex(cc)] = serializedCC;
+			ret.commandClasses[num2hex(cc)] = serializedCC as any;
 		}
-		return ret;
+		return (ret as any) as JSONObject;
 	}
 
 	/**
 	 * @internal
 	 * Deserializes the information of this node from a cache.
 	 */
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async deserialize(obj: any): Promise<void> {
 		if (obj.interviewStage in InterviewStage) {
 			this.interviewStage =

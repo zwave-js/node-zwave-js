@@ -459,7 +459,9 @@ export class AssociationCCRemove extends AssociationCC {
 			if (!options.groupId) {
 				if (this.version === 1) {
 					throw new ZWaveError(
-						`Node ${this.nodeId} only supports AssociationCC V1 which requires the group Id to be set`,
+						`Node ${
+							this.nodeId as number
+						} only supports AssociationCC V1 which requires the group Id to be set`,
 						ZWaveErrorCodes.Argument_Invalid,
 					);
 				}

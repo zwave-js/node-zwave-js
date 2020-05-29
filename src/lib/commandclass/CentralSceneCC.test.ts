@@ -16,7 +16,7 @@ import { CommandClasses } from "./CommandClasses";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 const node1 = new ZWaveNode(1, fakeDriver as any);
-(fakeDriver.controller!.nodes as any).set(1, node1);
+(fakeDriver.controller.nodes as any).set(1, node1);
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([

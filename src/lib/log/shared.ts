@@ -205,13 +205,7 @@ export const logMessagePrinter: Format = {
 			.join(" ");
 		// The directional arrows and the optional grouping lines must be prepended
 		// without adding spaces
-		firstLine =
-			info.timestamp +
-			" " +
-			info.label +
-			" " +
-			info.direction +
-			firstLine;
+		firstLine = `${info.timestamp} ${info.label} ${info.direction}${firstLine}`;
 		const lines = [firstLine];
 		if (info.multiline) {
 			// Format all message lines but the first

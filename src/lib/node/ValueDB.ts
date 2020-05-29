@@ -42,7 +42,7 @@ interface ValueDBEventCallbacks {
 
 type ValueDBEvents = Extract<keyof ValueDBEventCallbacks, string>;
 
-export function isValueID(param: any): param is ValueID {
+export function isValueID(param: Record<any, any>): param is ValueID {
 	// commandClass is mandatory and must be numeric
 	if (typeof param.commandClass !== "number") return false;
 	// property is mandatory and must be a number or string
@@ -67,7 +67,9 @@ export function isValueID(param: any): param is ValueID {
 	return true;
 }
 
-export function assertValueID(param: any): asserts param is ValueID {
+export function assertValueID(
+	param: Record<any, any>,
+): asserts param is ValueID {
 	if (!isValueID(param)) {
 		throw new ZWaveError(
 			`Invalid ValueID passed!`,
@@ -107,13 +109,13 @@ export function normalizeValueID(valueID: ValueID): ValueID {
 	assertValueID(valueID);
 	const { commandClass, endpoint, property, propertyKey } = valueID;
 
-	const jsonKey: Record<string, unknown> = {
+	const jsonKey: ValueID = {
 		commandClass,
 		endpoint: endpoint ?? 0,
 		property,
 	};
 	if (propertyKey != undefined) jsonKey.propertyKey = propertyKey;
-	return jsonKey as any;
+	return jsonKey;
 }
 
 export function valueIdToString(valueID: ValueID): string {
@@ -155,6 +157,7 @@ export class ValueDB extends EventEmitter {
 	}
 
 	private dbKeyToValueId(key: string): { nodeId: number } & ValueID {
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 		return JSON.parse(key);
 	}
 

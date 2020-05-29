@@ -203,9 +203,10 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			isArray(proprietaryConfig.fibaroCCs) &&
 			proprietaryConfig.fibaroCCs.includes(0x26 /* Venetian Blinds */)
 		) {
-			const FibaroVenetianBlindCC = require("./manufacturerProprietary/Fibaro")
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			const FibaroVenetianBlindCC = (require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/Fibaro"))
 				.FibaroVenetianBlindCC;
-			return new FibaroVenetianBlindCC(this.driver, {
+			await new FibaroVenetianBlindCC(this.driver, {
 				nodeId: this.nodeId,
 				endpoint: this.endpointIndex,
 			}).interview(complete);

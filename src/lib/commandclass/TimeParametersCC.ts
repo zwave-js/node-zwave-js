@@ -85,12 +85,12 @@ function segmentsToDate(segments: DateSegments, local: boolean): Date {
 
 function dateToSegments(date: Date, local: boolean): DateSegments {
 	return {
-		year: (date as any)[`get${local ? "" : "UTC"}FullYear`](),
-		month: (date as any)[`get${local ? "" : "UTC"}Month`]() + 1,
-		day: (date as any)[`get${local ? "" : "UTC"}Date`](),
-		hour: (date as any)[`get${local ? "" : "UTC"}Hours`](),
-		minute: (date as any)[`get${local ? "" : "UTC"}Minutes`](),
-		second: (date as any)[`get${local ? "" : "UTC"}Seconds`](),
+		year: (date as any)[`get${local ? "" : "UTC"}FullYear`]() as number,
+		month: ((date as any)[`get${local ? "" : "UTC"}Month`]() as number) + 1,
+		day: (date as any)[`get${local ? "" : "UTC"}Date`]() as number,
+		hour: (date as any)[`get${local ? "" : "UTC"}Hours`]() as number,
+		minute: (date as any)[`get${local ? "" : "UTC"}Minutes`]() as number,
+		second: (date as any)[`get${local ? "" : "UTC"}Seconds`]() as number,
 	};
 }
 

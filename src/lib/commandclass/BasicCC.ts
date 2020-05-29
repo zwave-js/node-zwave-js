@@ -121,7 +121,7 @@ current value:      ${basicResponse.currentValue}`;
 		if (basicResponse.targetValue != undefined) {
 			logMessage += `
 target value:       ${basicResponse.targetValue}
-remaining duration: ${basicResponse.duration}`;
+remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 		}
 		log.controller.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -165,7 +165,8 @@ type BasicCCReportOptions = CCCommandOptions &
 	({
 		currentValue: number;
 	} & (
-		| {}
+		| // eslint-disable-next-line @typescript-eslint/ban-types
+		{}
 		| {
 				targetValue: number;
 				duration: Duration;

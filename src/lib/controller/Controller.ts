@@ -991,7 +991,7 @@ export class ZWaveController extends EventEmitter {
 		}
 
 		// Do the heal process in the background
-		(async () => {
+		void (async () => {
 			const tasks = [...this._healNetworkProgress]
 				.filter(([, status]) => status === "pending")
 				.map(async ([nodeId]) => {
@@ -1725,7 +1725,7 @@ ${associatedNodes.join(", ")}`,
 			nodes: composeObject(
 				[...this.nodes.entries()].map(
 					([id, node]) =>
-						[id.toString(), node.serialize()] as [string, object],
+						[id.toString(), node.serialize()] as [string, unknown],
 				),
 			),
 		};

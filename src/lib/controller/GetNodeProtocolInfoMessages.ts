@@ -21,7 +21,6 @@ import {
 import type { INodeQuery } from "../node/INodeQuery";
 import type { JSONObject } from "../util/misc";
 
-/* eslint-disable @typescript-eslint/camelcase */
 enum NodeCapabilityFlags {
 	Listening = 0b10_000_000,
 	Routing = 0b01_000_000,
@@ -33,7 +32,6 @@ enum NodeCapabilityFlags {
 
 	VersionMask = 0b111,
 }
-/* eslint-enable @typescript-eslint/camelcase */
 
 enum SecurityFlags {
 	Security = 1 << 0,

@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
-
 /** The priority of messages, sorted from high (0) to low (>0) */
 export enum MessagePriority {
 	// Controller commands are not to be interrupted and usually finish quickly
@@ -24,7 +22,7 @@ export enum MessagePriority {
 	// nothing else needs to be done
 	Poll,
 }
-export function isMessagePriority(val: any): val is MessagePriority {
+export function isMessagePriority(val: unknown): val is MessagePriority {
 	return typeof val === "number" && val in MessagePriority;
 }
 

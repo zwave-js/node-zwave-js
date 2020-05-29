@@ -30,13 +30,18 @@ function isZWaveError(
 	err: Error | string | null | undefined,
 ): err is ZWaveError {
 	if (!err || typeof err === "string") return false;
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 	return "code" in err && typeof (err as any).code === "number";
 }
 
 // Parse package.json and init sentry
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 fs.readFile(path.join(libraryRootDir, "package.json"), "utf8").then(
 	(fileContents) => {
-		const packageJson = JSON.parse(fileContents);
+		const packageJson = JSON.parse(fileContents) as {
+			name: string;
+			version: string;
+		};
 		Sentry.init({
 			release: `${packageJson.name}@${packageJson.version}`,
 			dsn: "https://841e902ca32842beadada39343a72479@sentry.io/1839595",

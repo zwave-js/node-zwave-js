@@ -446,7 +446,9 @@ export class IndicatorCCSet extends IndicatorCC {
 			if (this.version === 1) {
 				if (!("value" in options)) {
 					throw new ZWaveError(
-						`Node ${this.nodeId} only supports IndicatorCC V1 which requires a single value to be set`,
+						`Node ${
+							this.nodeId as number
+						} only supports IndicatorCC V1 which requires a single value to be set`,
 						ZWaveErrorCodes.Argument_Invalid,
 					);
 				}

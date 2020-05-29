@@ -489,7 +489,7 @@ describe("lib/message", () => {
 					controller: { nodes: new Map() },
 				} as any) as Driver;
 				// @ts-ignore We need write access
-				fakeDriver.controller!.nodes.set(1, {} as any);
+				fakeDriver.controller.nodes.set(1, {} as any);
 
 				const msg = new Message(fakeDriver, {
 					type: MessageType.Request,
@@ -499,7 +499,7 @@ describe("lib/message", () => {
 				// This node exists
 				((msg as any) as INodeQuery).nodeId = 1;
 				expect(msg.getNodeUnsafe()).toBe(
-					fakeDriver.controller!.nodes.get(1),
+					fakeDriver.controller.nodes.get(1),
 				);
 
 				// This one does

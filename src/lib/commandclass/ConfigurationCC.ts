@@ -257,7 +257,9 @@ export class ConfigurationCCAPI extends CCAPI {
 				);
 			}
 			log.controller.logNode(this.endpoint.nodeId, {
-				message: `Received unexpected ConfigurationReport (param = ${response.parameter}, value = ${response.value})`,
+				message: `Received unexpected ConfigurationReport (param = ${
+					response.parameter
+				}, value = ${response.value.toString()})`,
 				direction: "inbound",
 				level: "error",
 			});
@@ -458,7 +460,7 @@ export class ConfigurationCCAPI extends CCAPI {
 					const logMessage = `  Param ${param}:
     readable  = true
     valueSize = ${ccInstance.getParamInformation(param).valueSize}
-    value     = ${originalValue}`;
+    value     = ${originalValue.toString()}`;
 					log.controller.logNode(this.endpoint.nodeId, {
 						message: logMessage,
 						direction: "inbound",
@@ -591,9 +593,9 @@ export class ConfigurationCC extends CommandClass {
 parameter name:      ${name}
 value format:        ${getEnumMemberName(ValueFormat, properties.valueFormat)}
 value size:          ${properties.valueSize} bytes
-min value:           ${properties.minValue}
-max value:           ${properties.maxValue}
-default value:       ${properties.defaultValue}
+min value:           ${properties.minValue?.toString() ?? "undefined"}
+max value:           ${properties.maxValue?.toString() ?? "undefined"}
+default value:       ${properties.defaultValue?.toString() ?? "undefined"}
 is read-only:        ${!!properties.isReadonly}
 is advanced (UI):    ${!!properties.isAdvanced}
 has bulk support:    ${!properties.noBulkSupport}

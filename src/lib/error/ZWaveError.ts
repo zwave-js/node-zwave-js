@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
-
 /**
  * Used to identify errors from this library without relying on the error message
  */

@@ -245,9 +245,9 @@ export class NotificationCC extends CommandClass {
 				({ supportedNotificationTypes } = await api.getSupported());
 				supportedNotificationNames = lookupNotificationNames();
 
-				const logMessage =
-					"received supported notification types:" +
-					supportedNotificationNames.map((name) => "\n· " + name);
+				const logMessage = `received supported notification types:${supportedNotificationNames
+					.map((name) => `\n· ${name}`)
+					.join("")}`;
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,

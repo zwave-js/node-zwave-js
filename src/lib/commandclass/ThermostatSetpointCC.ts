@@ -385,7 +385,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					// The setpoint type is not supported, switch to interpretation A
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
-						message: `the setpoint type ${setpointTypes} is unsupported, switching to interpretation A`,
+						message: `the setpoint type ${type} is unsupported, switching to interpretation A`,
 						direction: "none",
 					});
 					switchToInterpretationA();

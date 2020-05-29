@@ -8,7 +8,6 @@ import {
 import { NodeUpdatePayload, parseNodeUpdatePayload } from "../node/NodeInfo";
 import type { JSONObject } from "../util/misc";
 
-/* eslint-disable @typescript-eslint/camelcase */
 export enum ApplicationUpdateTypes {
 	NodeInfo_Received = 0x84,
 	NodeInfo_RequestDone = 0x82,
@@ -18,7 +17,6 @@ export enum ApplicationUpdateTypes {
 	DeleteDone = 0x20,
 	SUC_IdChanged = 0x10,
 }
-/* eslint-enable @typescript-eslint/camelcase */
 
 @messageTypes(MessageType.Request, FunctionType.ApplicationUpdateRequest)
 // this is only received, not sent!

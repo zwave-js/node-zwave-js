@@ -6,7 +6,7 @@ import { API } from "./CommandClass";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 const node = new ZWaveNode(1, fakeDriver as any);
-(fakeDriver.controller!.nodes as any).set(node.id, node);
+(fakeDriver.controller.nodes as any).set(node.id, node);
 
 @API(0xff)
 export class DummyCCAPI extends CCAPI {}

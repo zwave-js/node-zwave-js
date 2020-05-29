@@ -16,6 +16,6 @@ export function num2hex(
 	return "0x" + ret;
 }
 
-export function stringify(arg: any): string {
+export function stringify(arg: unknown): string {
 	return JSON.stringify(arg, null, 4);
 }
