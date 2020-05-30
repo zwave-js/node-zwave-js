@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.5.4 (2020-05-30)
 ### Bugfixes
 * The driver now correctly handles nested transactions and their retransmission (e.g. for security encapsulated messages)
 
