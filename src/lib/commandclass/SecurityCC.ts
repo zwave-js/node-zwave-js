@@ -123,13 +123,15 @@ export class SecurityCCAPI extends CCAPI {
 			{
 				// Nonce requests must be handled immediately
 				priority: MessagePriority.Handshake,
+				// Only try getting a nonce once
+				maxSendAttempts: 1,
 			},
 		))!;
 		return response.nonce;
 	}
 
 	/** Responds to a NonceGet request. The message is sent without any retransmission etc. */
-	public sendNonce(): void {
+	public async sendNonce(): Promise<void> {
 		this.assertSupportsCommand(
 			SecurityCommand,
 			SecurityCommand.NonceReport,
@@ -158,7 +160,9 @@ export class SecurityCCAPI extends CCAPI {
 			// Don't want a response from the controller
 			callbackId: 0,
 		});
-		this.driver.sendAndForget(msg);
+		await this.driver.sendMessage(msg, {
+			priority: MessagePriority.Handshake,
+		});
 	}
 
 	public async getSecurityScheme(): Promise<[0]> {
@@ -462,48 +466,32 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 	private encryptionKey: Buffer;
 
 	public nonceId: number | undefined;
-	private handshakeFailed: boolean = false;
 
 	public requiresPreTransmitHandshake(): boolean {
-		return this.nonceId == undefined;
+		// We require a new nonce if we don't have one yet
+		// or if the old one has expired
+		return (
+			this.nonceId == undefined ||
+			!this.driver.securityManager.hasNonce({
+				nodeId: this.nodeId,
+				nonceId: this.nonceId,
+			})
+		);
 	}
 
-	public preTransmitHandshake(): boolean | Promise<boolean> {
-		// We only get one chance at a security handshake
-		if (this.handshakeFailed) return false;
-
-		// wotan-disable-next-line async-function-assignability
-		return new Promise<boolean>(async (resolve, reject) => {
-			// Request new nonce and store it
-			let nonce: Buffer;
-			try {
-				nonce = await this.getNode()!.commandClasses.Security.getNonce();
-			} catch (e) {
-				// If requesting a nonce failed, fail the handshake
-				if (
-					e instanceof ZWaveError &&
-					(e.code === ZWaveErrorCodes.Controller_NodeTimeout ||
-						e.code === ZWaveErrorCodes.Controller_MessageDropped)
-				) {
-					// Remember that the handshake failed, so no further attempt is done
-					this.handshakeFailed = false;
-					resolve(false);
-					return;
-				}
-				reject(e);
-				return;
-			}
-			const secMan = this.driver.securityManager;
-			this.nonceId = secMan.getNonceId(nonce);
-			secMan.setNonce(
-				{
-					nodeId: this.nodeId,
-					nonceId: this.nonceId,
-				},
-				nonce,
-			);
-			resolve(true);
-		});
+	public async preTransmitHandshake(): Promise<void> {
+		// Request a nonce
+		const nonce = await this.getNode()!.commandClasses.Security.getNonce();
+		// and store it
+		const secMan = this.driver.securityManager;
+		this.nonceId = secMan.getNonceId(nonce);
+		secMan.setNonce(
+			{
+				nodeId: this.nodeId,
+				nonceId: this.nonceId,
+			},
+			nonce,
+		);
 	}
 
 	public serialize(): Buffer {

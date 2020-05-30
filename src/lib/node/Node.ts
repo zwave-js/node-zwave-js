@@ -1406,7 +1406,7 @@ version:               ${this.version}`;
 	private hasLoggedNoNetworkKey = false;
 
 	/** Handles a nonce request */
-	private handleSecurityNonceGet(): void {
+	private async handleSecurityNonceGet(): Promise<void> {
 		// Only reply if secure communication is set up
 		if (!this.driver.securityManager) {
 			if (!this.hasLoggedNoNetworkKey) {
@@ -1421,7 +1421,7 @@ version:               ${this.version}`;
 		}
 
 		try {
-			this.commandClasses.Security.sendNonce();
+			await this.commandClasses.Security.sendNonce();
 		} catch (e) {
 			log.controller.logNode(this.id, {
 				message: `failed to send nonce: ${e}`,

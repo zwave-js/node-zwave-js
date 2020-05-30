@@ -75,6 +75,11 @@ export class Transaction implements Comparable<Transaction> {
 		this.txTimestamp = highResTimestamp();
 	}
 
+	/** Returns true when the message was sent at least once */
+	public wasSent(): boolean {
+		return this.sendAttempts > 0;
+	}
+
 	/** Compares two transactions in order to plan their transmission sequence */
 	public compareTo(other: Transaction): CompareResult {
 		function compareWakeUpPriority(

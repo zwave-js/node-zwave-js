@@ -165,9 +165,23 @@ function testResponseForSendDataRequest(
 	sent: SendDataRequest,
 	received: Message,
 ): ResponseRole {
+	// callbackId = 0 means we expect no callback
+	if (sent.callbackId === 0) {
+		if (received instanceof SendDataResponse) {
+			return received.wasSent ? "final" : "fatal_controller";
+		} else {
+			return "unexpected";
+		}
+	}
+
+	// For all other callback IDs, check the response data
 	let msgIsPositiveTransmitReport = false;
 	if (received instanceof SendDataResponse) {
-		return received.wasSent ? "confirmation" : "fatal_controller";
+		return received.wasSent
+			? sent.callbackId === 0
+				? "final"
+				: "confirmation"
+			: "fatal_controller";
 	} else if (received instanceof SendDataRequestTransmitReport) {
 		// send data requests are final unless stated otherwise by a CommandClass
 		if (received.isFailed()) return "fatal_node";
