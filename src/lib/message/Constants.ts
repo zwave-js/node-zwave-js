@@ -1,10 +1,10 @@
 /** The priority of messages, sorted from high (0) to low (>0) */
 export enum MessagePriority {
-	// Controller commands are not to be interrupted and usually finish quickly
-	Controller = 0,
-	// This is the highest actual priority for messages that require a pre-transmit handshake,
-	// for example Security which requires nonces to be exchanged
-	Handshake,
+	// Handshake messages have the highest priority because they are part of other transactions
+	// which have already started when the handshakes are needed (e.g. Security Nonce exchange)
+	Handshake = 0,
+	// Controller commands usually finish quickly and should be preferred over node queries
+	Controller,
 	// Pings (NoOP) are used for device probing at startup and for network diagnostics
 	Ping,
 	// Multistep controller commands typically require user interaction but still

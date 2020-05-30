@@ -755,10 +755,9 @@ export class CommandClass {
 
 	/**
 	 * Perform a handshake before the actual message will be transmitted.
-	 * The return value indicates whether the handshake was successful or the message should be discarded
 	 */
-	public preTransmitHandshake(): boolean | Promise<boolean> {
-		return true;
+	public preTransmitHandshake(): Promise<void> {
+		return Promise.resolve();
 		// By default do nothing
 		// If handshake messages should be sent, they need the highest priority
 	}

@@ -273,8 +273,18 @@ export class Driver extends EventEmitter {
 	private serial: SerialPort | undefined;
 	/** A buffer of received but unprocessed data */
 	private receiveBuffer: Buffer | undefined;
+	/**
+	 * The stack of pending (nested) transactions. Usually this will only contain
+	 * one item. Some messages require multiple sets handshakes before the original
+	 * transaction may be completed
+	 */
+	private transactionStack: Transaction[] = [];
+
 	/** The currently pending request */
-	private currentTransaction: Transaction | undefined;
+	private get currentTransaction(): Transaction | undefined {
+		return this.transactionStack[0];
+	}
+
 	private sendQueue = new SortedList<Transaction>();
 	/** A map of handlers for all sorts of requests */
 	private requestHandlers = new Map<FunctionType, RequestHandlerEntry[]>();
@@ -342,8 +352,6 @@ export class Driver extends EventEmitter {
 
 	/** @internal */
 	public options: ZWaveOptions;
-
-	private _sendAndForgetAcks = 0;
 
 	private _wasStarted: boolean = false;
 	private _isOpen: boolean = false;
@@ -1554,12 +1562,6 @@ ${handlers.length} left`,
 				this.resolveCurrentTransaction(false);
 			}
 			return;
-		} else if (this._sendAndForgetAcks > 0) {
-			this._sendAndForgetAcks--;
-			log.driver.print(
-				`ACK received from controller for fire-and-forget message`,
-			);
-			return;
 		}
 
 		log.driver.print("Unexpected ACK received", "warn");
@@ -1632,7 +1634,7 @@ ${handlers.length} left`,
 		// Unref'ing long running timers allows the process to exit mid-timeout
 		this.retryTransactionTimeout = setTimeout(() => {
 			this.retryTransactionTimeout = undefined;
-			this.retransmit();
+			this.transmitCurrentMessage();
 		}, timeout).unref();
 		return timeout;
 	}
@@ -1649,9 +1651,11 @@ ${handlers.length} left`,
 			clearTimeout(timeoutInstance);
 			this.currentTransaction!.timeoutInstance = undefined;
 		}
-		// and resolve the current transaction
+		// and resolve the current transaction. In nested transactions, resolving
+		// only affects the current transaction - the outer transaction will only start afterwards
 		promise.resolve(response);
-		this.currentTransaction = undefined;
+		// this.currentTransaction = undefined;
+		this.transactionStack.shift();
 
 		if (node) {
 			// If the node is not meant to be kept awake, try to send it back to sleep
@@ -1677,15 +1681,20 @@ ${handlers.length} left`,
 		reason: ZWaveError,
 		resumeQueue: boolean = true,
 	): void {
-		const { promise, timeoutInstance } = this.currentTransaction!;
-		// Cancel any running timers
-		if (timeoutInstance) {
-			clearTimeout(timeoutInstance);
-			this.currentTransaction!.timeoutInstance = undefined;
+		// In nested transactions, a rejection means that the entire stack must be rejected
+		// because the transactions depend on each other.
+		while (this.currentTransaction) {
+			const { promise, timeoutInstance } = this.currentTransaction;
+			// Cancel any running timers
+			if (timeoutInstance) {
+				clearTimeout(timeoutInstance);
+				this.currentTransaction.timeoutInstance = undefined;
+			}
+			// and reject the current transaction
+			promise.reject(reason);
+			this.transactionStack.shift();
 		}
-		// and reject the current transaction
-		promise.reject(reason);
-		this.currentTransaction = undefined;
+
 		// and see if there are messages pending
 		if (resumeQueue) {
 			log.driver.print("resuming send queue");
@@ -1814,7 +1823,9 @@ ${handlers.length} left`,
 			msg.getNodeUnsafe()?.isAwake() === false &&
 			// If we move multicasts to the wakeup queue, it is unlikely
 			// that there is ever a points where all targets are awake
-			!(msg instanceof SendDataMulticastRequest)
+			!(msg instanceof SendDataMulticastRequest) &&
+			// Handshake messages are meant to be sent immediately
+			options.priority !== MessagePriority.Handshake
 		) {
 			options.priority = MessagePriority.WakeUp;
 		}
@@ -1956,80 +1967,45 @@ ${handlers.length} left`,
 	}
 
 	private workOffSendQueue(): void {
-		// is there something to send?
-		if (this.sendQueue.length === 0) {
-			log.driver.print("The send queue is empty", "debug");
-			return;
-		}
-
-		const transaction = this.sendQueue.peekStart();
-		if (!transaction) {
-			// That is some race condition, ignore it and try again
-			// https://sentry.io/share/issue/693b81a5efc74533b2b06bc8e97063f1/
-			setImmediate(() => this.workOffSendQueue());
-			return;
-		}
-		const message = transaction.message;
-
-		// Abort if we are still waiting for the current transaction to finish
-		if (this.currentTransaction != undefined) {
-			log.driver.print(
-				`workOffSendQueue > skipping because a transaction is pending`,
-				"debug",
-			);
-			return;
-		}
-
-		// Before doing anything else, check if this message is for a node that's currently asleep
-		// The automated sorting ensures there's no message for a non-sleeping node after that
-		const targetNode = message.getNodeUnsafe();
-		if (!targetNode || targetNode.isAwake()) {
-			// Also check if the message contains a CC which requires a pre-transmit handshake
-			if (
-				isCommandClassContainer(message) &&
-				message.command.requiresPreTransmitHandshake()
-			) {
-				// If it does, the handshake must be done before the message will be sent
-				const handshakeResult = message.command.preTransmitHandshake();
-				if (handshakeResult === false) {
-					// The handshake failed, discard this transaction
-					this.sendQueue.remove(transaction);
-					transaction.promise.reject(
-						new ZWaveError(
-							`The message could not be sent because the required handshake failed!`,
-							ZWaveErrorCodes.Controller_MessageDropped,
-						),
-					);
-					// and continue with the next
-					setImmediate(() => this.workOffSendQueue());
-					return;
-				} else if (handshakeResult === true) {
-					// The handshake succeeded, just continue sending the transaction
-				} else {
-					// We received a Promise, so defer a decision until later
-					return;
-				}
+		// What we do now depends on whether we have pending transactions
+		// or if the next message in the queue is a handshake
+		const nextTransaction = this.sendQueue.peekStart();
+		if (
+			this.currentTransaction == undefined ||
+			nextTransaction?.priority === MessagePriority.Handshake
+		) {
+			// Either we have no pending transaction -> fetch the next message and send it
+			// or this message is a handshake and must be sent immediately
+			if (!nextTransaction) {
+				log.driver.print("The send queue is empty", "debug");
+				return;
 			}
 
-			// Set the transaction as the current one
-			this.currentTransaction = transaction;
-			this.sendQueue.remove(transaction);
+			const message = nextTransaction.message;
+			const targetNode = message.getNodeUnsafe();
 
-			// And send it
-			transaction.markAsSent();
-			const data = message.serialize();
-			log.driver.transaction(transaction);
-			log.serial.data("outbound", data);
-			this.doSend(data);
-
-			// INS12350-14:
-			// A transmitting host or Z-Wave chip may time out waiting for an ACK frame after transmitting a Data frame.
-			// If no ACK frame is received, the Data frame MAY be retransmitted.
-			// The transmitter MUST wait for at least 1600ms before deeming the Data frame lost.
-			this.startAckTimeout();
+			// The send queue is sorted automatically. If the first message is for a sleeping node, all messages in the queue are.
+			if (!targetNode || targetNode.isAwake()) {
+				// Move the transaction from the send queue to the current transaction stack
+				this.transactionStack.unshift(nextTransaction);
+				this.sendQueue.remove(nextTransaction);
+				// and send it
+				this.transmitCurrentMessage();
+			} else {
+				log.driver.print(
+					`The remaining ${this.sendQueue.length} messages are for sleeping nodes, not sending anything!`,
+					"debug",
+				);
+				log.driver.sendQueue(this.sendQueue);
+			}
+		} else if (!this.currentTransaction.wasSent()) {
+			// 2.: We do, but the current one was not sent yet -> send it now
+			// This happens after the handshake of a nested transaction is resolved
+			this.transmitCurrentMessage();
 		} else {
+			// 3.: We do and the current one was sent (is pending) -> do nothing right now
 			log.driver.print(
-				`The remaining ${this.sendQueue.length} messages are for sleeping nodes, not sending anything!`,
+				`workOffSendQueue > skipping because a transaction is pending`,
 				"debug",
 			);
 			log.driver.sendQueue(this.sendQueue);
@@ -2037,34 +2013,39 @@ ${handlers.length} left`,
 	}
 
 	/**
-	 * @internal
-	 * Sends a message and forgets about it, so no retransmission or similar happens.
-	 * This is primarily intended for responses to handshake messages.
+	 * Transmits (or retransmits) the currently pending message (if there is any).
+	 * If the message requires a handshake beforehand (see what I did there?), it will be sent instead of the message
 	 */
-	public sendAndForget(msg: Message): void {
-		// TODO: A cleaner way to handle this would be a stack of currentTransactions
-		const data = msg.serialize();
-		log.driver.logMessage(msg, { direction: "outbound" });
-		log.serial.data("outbound", data);
-		// Remember that we will receive an ack for this
-		this._sendAndForgetAcks++;
-		this.doSend(data);
-	}
-
-	/** Retransmits the current transaction (if there is any) */
-	private retransmit(): void {
+	private transmitCurrentMessage(): void {
 		if (!this.currentTransaction) return;
 
-		// TODO: these 6 lines are duplicated in lines 1714 ff.
-		const msg = this.currentTransaction.message;
+		const transaction = this.currentTransaction;
+		const message = this.currentTransaction.message;
 
-		this.currentTransaction.markAsSent();
-		const data = msg.serialize();
-		log.driver.transaction(this.currentTransaction);
+		// If the message contains a CC which requires a pre-transmit handshake, send that one first
+		if (
+			isCommandClassContainer(message) &&
+			message.command.requiresPreTransmitHandshake()
+		) {
+			// If it does, the handshake must be done before the message will be sent
+			message.command.preTransmitHandshake().catch(() => {
+				// Ignore errors. If the handshake fails, the outer transaction will be rejected aswell,
+				// causing the handshake to be retransmitted
+			});
+			// The actual message will be sent when the handshake is resolved
+			return;
+		}
+
+		transaction.markAsSent();
+		const data = message.serialize();
+		log.driver.transaction(transaction);
 		log.serial.data("outbound", data);
 		this.doSend(data);
 
-		// Retransmissions must also timeout
+		// INS12350-14:
+		// A transmitting host or Z-Wave chip may time out waiting for an ACK frame after transmitting a Data frame.
+		// If no ACK frame is received, the Data frame MAY be retransmitted.
+		// The transmitter MUST wait for at least 1600ms before deeming the Data frame lost.
 		this.startAckTimeout();
 	}
 
@@ -2097,28 +2078,37 @@ ${handlers.length} left`,
 		// This must be done anyways, as removing the items does not change the location of others
 		this.sortSendQueue();
 
-		// The current transaction must also be transferred
-		if (this.currentTransaction?.message.getNodeId() === nodeId) {
-			// But only if it is not a ping, because that will block the send queue until wakeup
-			if (!messageIsPing(this.currentTransaction.message)) {
-				// Change the priority to WakeUp and re-add it to the queue
-				this.currentTransaction.priority = MessagePriority.WakeUp;
-				this.sendQueue.add(this.currentTransaction);
-				// Reset send attempts - we might have already used all of them
-				this.currentTransaction.sendAttempts = 0;
-			} else {
-				// Pings must be rejected, so the next message may be queued
-				this.rejectCurrentTransaction(
-					new ZWaveError(
-						`The node is asleep`,
-						ZWaveErrorCodes.Controller_MessageDropped,
-					),
-					// Don't resume send queue, it will be done outside this method call
-					false,
-				);
+		// The current outermost transaction must also be transferred.
+		// Ignore handshakes because they will be re-attempted
+		if (this.transactionStack.length > 0) {
+			const outerTransaction = this.transactionStack[
+				this.transactionStack.length - 1
+			];
+			if (outerTransaction.message.getNodeId() === nodeId) {
+				// But only if it is not a ping, because that will block the send queue until wakeup
+				if (
+					!messageIsPing(outerTransaction.message) &&
+					outerTransaction.priority === MessagePriority.Handshake
+				) {
+					// Change the priority to WakeUp and re-add it to the queue
+					outerTransaction.priority = MessagePriority.WakeUp;
+					this.sendQueue.add(outerTransaction);
+					// Reset send attempts - we might have already used all of them
+					outerTransaction.sendAttempts = 0;
+				} else {
+					// Pings and active handshakes must be rejected, so the next message may be queued
+					this.rejectCurrentTransaction(
+						new ZWaveError(
+							`The node is asleep`,
+							ZWaveErrorCodes.Controller_MessageDropped,
+						),
+						// Don't resume send queue, it will be done outside this method call
+						false,
+					);
+				}
+				// Clear the current transaction stack
+				this.transactionStack = [];
 			}
-			// "reset" the current transaction to none
-			this.currentTransaction = undefined;
 		}
 	}
 
