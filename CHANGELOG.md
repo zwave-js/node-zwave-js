@@ -5,6 +5,9 @@
 -->
 
 ## __WORK IN PROGRESS__
+### Bugfixes
+* The driver now correctly handles nested transactions and their retransmission (e.g. for security encapsulated messages)
+
 ### Changes under the hood
 * Updated TypeScript to v3.9
 * Updated ESLint to v7, some changes to lint rules
