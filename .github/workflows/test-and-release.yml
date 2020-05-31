@@ -217,3 +217,4 @@ jobs:
         export SENTRY_ORG=alcalzone
         sentry-cli releases new -p iobroker_zwave zwave-js@${{ env.VERSION }}
         sentry-cli releases set-commits --auto zwave-js@${{ env.VERSION }}
+        sentry-cli releases files ${{ env.VERSION }} upload-sourcemaps .
