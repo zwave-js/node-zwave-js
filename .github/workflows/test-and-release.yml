@@ -174,6 +174,18 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: Extract the version and commit body from the tag
+      # The body may be multiline, therefore we need to escape some characters
+      run: |
+        VERSION="${{ github.ref }}"
+        VERSION=${VERSION##*/v}
+        echo "::set-env name=VERSION::$VERSION"
+        BODY=$(git show -s --format=%b)
+        BODY="${BODY//'%'/'%25'}"
+        BODY="${BODY//$'\n'/'%0A'}"
+        BODY="${BODY//$'\r'/'%0D'}"
+        echo "::set-env name=BODY::$BODY"
+
     - name: Install dependencies
       run: npm ci
 
@@ -186,12 +198,22 @@ jobs:
         npm whoami
         npm publish
 
+    - name: Create Github Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release v${{ env.VERSION }}
+        draft: false
+        # Prerelease versions create prereleases on Github
+        prerelease: ${{ contains(env.VERSION, '-') }}
+        body: ${{ env.BODY }}
+
     - name: Notify Sentry.io about the release
       run: |
         npm i -g @sentry/cli
-        export VERSION="${{ github.ref }}" && export VERSION=${VERSION##*/v}
-        echo "$VERSION"
         export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
         export SENTRY_ORG=alcalzone
-        sentry-cli releases new -p iobroker_zwave zwave-js@$VERSION
-        sentry-cli releases set-commits --auto zwave-js@$VERSION
+        sentry-cli releases new -p iobroker_zwave zwave-js@${{ env.VERSION }}
+        sentry-cli releases set-commits --auto zwave-js@${{ env.VERSION }}
