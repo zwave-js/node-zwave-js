@@ -1,7 +1,9 @@
+import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import log from "../log";
 import type { ValueID } from "../node/ValueDB";
-import { validatePayload } from "../util/misc";
+import { getEnumMemberName, validatePayload } from "../util/misc";
 import { enumValuesToMetadataStates, ValueMetadata } from "../values/Metadata";
 import { Maybe, parseBitMask, unknownBoolean } from "../values/Primitive";
 import { Timeout } from "../values/Timeout";
@@ -43,14 +45,14 @@ export enum ProtectionCommand {
 }
 
 // @publicAPI
-export enum LocalProctectionState {
+export enum LocalProtectionState {
 	Unprotected = 0,
 	ProtectedBySequence = 1,
 	NoOperationPossible = 2,
 }
 
 // @publicAPI
-export enum RFProctectionState {
+export enum RFProtectionState {
 	Unprotected = 0,
 	NoControl = 1,
 	NoResponse = 2,
@@ -150,7 +152,7 @@ export class ProtectionCCAPI extends CCAPI {
 				);
 			}
 			// We need to set both values together, so retrieve the other one from the value DB
-			const rf = valueDB.getValue<RFProctectionState>(
+			const rf = valueDB.getValue<RFProtectionState>(
 				getRFStateValueID(this.endpoint.index),
 			);
 			await this.set(value, rf);
@@ -166,10 +168,10 @@ export class ProtectionCCAPI extends CCAPI {
 				);
 			}
 			// We need to set both values together, so retrieve the other one from the value DB
-			const local = valueDB.getValue<LocalProctectionState>(
+			const local = valueDB.getValue<LocalProtectionState>(
 				getLocalStateValueID(this.endpoint.index),
 			);
-			await this.set(local ?? LocalProctectionState.Unprotected, value);
+			await this.set(local ?? LocalProtectionState.Unprotected, value);
 			// Refresh the status
 			await this.get();
 		} else if (property === "exclusiveControlNodeId") {
@@ -207,8 +209,8 @@ export class ProtectionCCAPI extends CCAPI {
 	}
 
 	public async set(
-		local: LocalProctectionState,
-		rf?: RFProctectionState,
+		local: LocalProtectionState,
+		rf?: RFProtectionState,
 	): Promise<void> {
 		this.assertSupportsCommand(ProtectionCommand, ProtectionCommand.Set);
 
@@ -308,11 +310,105 @@ export class ProtectionCCAPI extends CCAPI {
 @implementedVersion(2)
 export class ProtectionCC extends CommandClass {
 	declare ccCommand: ProtectionCommand;
+
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const api = this.getEndpoint()!.commandClasses.Protection;
+
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		const valueDB = this.getValueDB();
+
+		// First find out what the device supports
+		if (complete && this.version >= 2) {
+			log.controller.logNode(node.id, {
+				message: "querying protection capabilities...",
+				direction: "outbound",
+			});
+			const resp = await api.getSupported();
+			const logMessage = `received protection capabilities:
+exclusive control:       ${resp.supportsExclusiveControl}
+timeout:                 ${resp.supportsTimeout}
+local protection states: ${resp.supportedLocalStates
+				.map((local) => getEnumMemberName(LocalProtectionState, local))
+				.map((str) => `\n· ${str}`)
+				.join("")}
+RF protection states:    ${resp.supportedRFStates
+				.map((local) => getEnumMemberName(RFProtectionState, local))
+				.map((str) => `\n· ${str}`)
+				.join("")}`;
+			log.controller.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
+		}
+
+		const supportsExclusiveControl = !!valueDB.getValue<boolean>(
+			getSupportsExclusiveControlValueID(this.endpointIndex),
+		);
+		const supportsTimeout = !!valueDB.getValue<boolean>(
+			getSupportsTimeoutValueID(this.endpointIndex),
+		);
+
+		// Query the current state
+		log.controller.logNode(node.id, {
+			message: "querying protection status...",
+			direction: "outbound",
+		});
+		const protectionResp = await api.get();
+		let logMessage = `received protection status:
+local: ${getEnumMemberName(LocalProtectionState, protectionResp.local)}`;
+		if (protectionResp.rf != undefined) {
+			logMessage += `
+rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
+		}
+		log.controller.logNode(node.id, {
+			message: logMessage,
+			direction: "inbound",
+		});
+
+		if (supportsTimeout) {
+			// Query the current timeout
+			log.controller.logNode(node.id, {
+				message: "querying protection timeout...",
+				direction: "outbound",
+			});
+			const timeout = await api.getTimeout();
+			log.controller.logNode(node.id, {
+				message: `received timeout: ${timeout.toString()}`,
+				direction: "inbound",
+			});
+		}
+
+		if (supportsExclusiveControl) {
+			// Query the current timeout
+			log.controller.logNode(node.id, {
+				message: "querying exclusive control node...",
+				direction: "outbound",
+			});
+			const nodeId = await api.getExclusiveControl();
+			log.controller.logNode(node.id, {
+				message:
+					(nodeId !== 0
+						? `Node ${padStart(nodeId.toString(), 3, "0")}`
+						: `no node`) + ` has exclusive control`,
+				direction: "inbound",
+			});
+		}
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
 }
 
 interface ProtectionCCSetOptions extends CCCommandOptions {
-	local: LocalProctectionState;
-	rf?: RFProctectionState;
+	local: LocalProtectionState;
+	rf?: RFProtectionState;
 }
 
 @CCCommand(ProtectionCommand.Set)
@@ -334,8 +430,8 @@ export class ProtectionCCSet extends ProtectionCC {
 		}
 	}
 
-	public local: LocalProctectionState;
-	public rf?: RFProctectionState;
+	public local: LocalProtectionState;
+	public rf?: RFProtectionState;
 
 	public serialize(): Buffer {
 		const payload = [this.local & 0b1111];
@@ -368,17 +464,17 @@ export class ProtectionCCReport extends ProtectionCC {
 	@ccValueMetadata({
 		...ValueMetadata.Number,
 		label: "Local protection state",
-		states: enumValuesToMetadataStates(LocalProctectionState),
+		states: enumValuesToMetadataStates(LocalProtectionState),
 	})
-	public readonly local: LocalProctectionState;
+	public readonly local: LocalProtectionState;
 
 	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
 		...ValueMetadata.Number,
 		label: "RF protection state",
-		states: enumValuesToMetadataStates(RFProctectionState),
+		states: enumValuesToMetadataStates(RFProtectionState),
 	})
-	public readonly rf?: RFProctectionState;
+	public readonly rf?: RFProtectionState;
 }
 
 @CCCommand(ProtectionCommand.Get)
@@ -399,6 +495,24 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 		this.supportedRFStates = parseBitMask(this.payload.slice(4, 6));
 
 		this.persistValues();
+
+		const valueDb = this.getValueDB();
+		// update metadata (partially) for the local and rf values
+		valueDb.setMetadata(getLocalStateValueID(this.endpointIndex), {
+			...ValueMetadata.Number,
+			states: enumValuesToMetadataStates(
+				LocalProtectionState,
+				this.supportedLocalStates,
+			),
+		});
+		// update metadata (partially) for the local and rf values
+		valueDb.setMetadata(getRFStateValueID(this.endpointIndex), {
+			...ValueMetadata.Number,
+			states: enumValuesToMetadataStates(
+				RFProtectionState,
+				this.supportedRFStates,
+			),
+		});
 	}
 
 	@ccValue({ internal: true })
@@ -408,10 +522,10 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 	public readonly supportsTimeout: boolean;
 
 	@ccValue({ internal: true })
-	public readonly supportedLocalStates: LocalProctectionState[];
+	public readonly supportedLocalStates: LocalProtectionState[];
 
 	@ccValue({ internal: true })
-	public readonly supportedRFStates: RFProctectionState[];
+	public readonly supportedRFStates: RFProtectionState[];
 }
 
 @CCCommand(ProtectionCommand.SupportedGet)
