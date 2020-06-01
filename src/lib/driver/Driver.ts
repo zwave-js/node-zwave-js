@@ -204,6 +204,12 @@ export interface SendMessageOptions {
 	priority?: MessagePriority;
 	/** If an exception should be thrown when the message to send is not supported. Setting this to false is is useful if the capabilities haven't been determined yet. Default: true */
 	supportCheck?: boolean;
+	/**
+	 * Whether the driver should update the node status to asleep or dead when the transactions times out (repeatedly).
+	 * Setting this to false will cause the simply transaction to be rejected on failure.
+	 * Default: true
+	 */
+	changeNodeStatusOnTimeout?: boolean;
 }
 
 export interface SendCommandOptions extends SendMessageOptions {
@@ -1098,6 +1104,14 @@ export class Driver extends EventEmitter {
 	 * Handles the case that a node failed to respond in time
 	 */
 	private handleMissingNodeResponse(transmitStatus?: TransmitStatus): void {
+		// Clear the transaction stack of possible handshakes - they are now invalid
+		this.rejectHandshakes(
+			new ZWaveError(
+				`The transaction timed out`,
+				ZWaveErrorCodes.Controller_NodeTimeout,
+			),
+		);
+
 		if (!this.currentTransaction) return;
 		const node = this.currentTransaction.message.getNodeUnsafe();
 		if (!node) return; // This should never happen, but whatever
@@ -1113,8 +1127,17 @@ export class Driver extends EventEmitter {
 		} else if (this.currentTransaction.nodeAckPending === false) {
 			// ^ explicitly check for false because undefined means no response necessary
 
-			// The node has already confirmed the receipt, but did not respond to our get-type request
+			// False means that the node has already confirmed the receipt, but did not respond to our get-type request
 			// This does not mean that the node is asleep or dead!
+			this.rejectCurrentTransaction(
+				new ZWaveError(
+					`The transaction timed out`,
+					ZWaveErrorCodes.Controller_NodeTimeout,
+				),
+			);
+		} else if (!this.currentTransaction.changeNodeStatusOnTimeout) {
+			// The sender of this transaction doesn't want it to change the status of the node
+			// simply reject it
 			this.rejectCurrentTransaction(
 				new ZWaveError(
 					`The transaction timed out`,
@@ -1630,6 +1653,7 @@ ${handlers.length} left`,
 		if (!timeout) {
 			timeout = 100 + 1000 * (this.currentTransaction!.sendAttempts - 1);
 		}
+		this.currentTransaction!.wasSent = false;
 		this.currentTransaction!.sendAttempts++;
 		// Unref'ing long running timers allows the process to exit mid-timeout
 		this.retryTransactionTimeout = setTimeout(() => {
@@ -1699,6 +1723,24 @@ ${handlers.length} left`,
 		if (resumeQueue) {
 			log.driver.print("resuming send queue");
 			setImmediate(() => this.workOffSendQueue());
+		}
+	}
+
+	/**
+	 * Rejects all pending handshake messages and clears them from the transaction stack so the actual transaction may be retried.
+	 * The actual transaction itself is not rejected.
+	 */
+	private rejectHandshakes(reason: ZWaveError): void {
+		while (this.transactionStack.length > 1 && this.currentTransaction) {
+			const { promise, timeoutInstance } = this.currentTransaction;
+			// Cancel any running timers
+			if (timeoutInstance) {
+				clearTimeout(timeoutInstance);
+				this.currentTransaction.timeoutInstance = undefined;
+			}
+			// and reject the current transaction
+			promise.reject(reason);
+			this.transactionStack.shift();
 		}
 	}
 
@@ -1838,6 +1880,11 @@ ${handlers.length} left`,
 			promise,
 			options.priority,
 		);
+
+		if (options.changeNodeStatusOnTimeout != undefined) {
+			transaction.changeNodeStatusOnTimeout =
+				options.changeNodeStatusOnTimeout;
+		}
 
 		this.sendQueue.add(transaction);
 		// start sending now (maybe)
@@ -1998,7 +2045,7 @@ ${handlers.length} left`,
 				);
 				log.driver.sendQueue(this.sendQueue);
 			}
-		} else if (!this.currentTransaction.wasSent()) {
+		} else if (!this.currentTransaction.wasSent) {
 			// 2.: We do, but the current one was not sent yet -> send it now
 			// This happens after the handshake of a nested transaction is resolved
 			this.transmitCurrentMessage();
@@ -2029,14 +2076,16 @@ ${handlers.length} left`,
 		) {
 			// If it does, the handshake must be done before the message will be sent
 			message.command.preTransmitHandshake().catch(() => {
-				// Ignore errors. If the handshake fails, the outer transaction will be rejected aswell,
+				// Ignore errors. If the handshake fails, the outer transaction will be rejected or retried,
 				// causing the handshake to be retransmitted
 			});
+			// Count this as a send attempt, otherwise we'll retry once too often
+			if (transaction.sendAttempts === 0) transaction.sendAttempts = 1;
 			// The actual message will be sent when the handshake is resolved
 			return;
 		}
 
-		transaction.markAsSent();
+		transaction.prepareForTransmission();
 		const data = message.serialize();
 		log.driver.transaction(transaction);
 		log.serial.data("outbound", data);

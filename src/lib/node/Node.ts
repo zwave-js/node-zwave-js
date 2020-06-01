@@ -1037,25 +1037,27 @@ version:               ${this.version}`;
 					this._hasEmittedNoNetworkKeyError = true;
 				}
 			} else {
-				try {
-					const action = await interviewEndpoint(
-						this,
-						CommandClasses.Security,
+				const action = await interviewEndpoint(
+					this,
+					CommandClasses.Security,
+				);
+				if (action === false || action === "continue") {
+					// Either the CC is not supported or we got no response to the interview question
+					// Assume that the node is not actually included securely
+					log.controller.logNode(
+						this.nodeId,
+						`The node is not included securely. Continuing interview non-securely.`,
 					);
-					if (typeof action === "boolean") return action;
+					this._isSecure = false;
+				} else {
 					// We got a response, so we know the node is included securely
-					this._isSecure = true;
-				} catch (e) {
-					if (
-						e instanceof ZWaveError &&
-						e.code === ZWaveErrorCodes.Controller_NodeTimeout
-					) {
-						// The node did not respond to the interview - assuming that it is not actually included securely
-						this._isSecure = false;
-					} else {
-						// pass all other errors through
-						throw e;
+					if (this._isSecure !== true) {
+						log.controller.logNode(
+							this.nodeId,
+							`The node is included securely.`,
+						);
 					}
+					this._isSecure = true;
 				}
 			}
 		}

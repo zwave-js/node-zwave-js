@@ -218,13 +218,20 @@ export class SecurityCCAPI extends CCAPI {
 			SecurityCommand.CommandsSupportedGet,
 		);
 
+		const nodeIsSecure = this.endpoint.getNodeUnsafe()?.isSecure;
+
 		const cc = new SecurityCCCommandsSupportedGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<
 			SecurityCCCommandsSupportedReport
-		>(cc))!;
+		>(cc, {
+			// This command doubles as a check if the node is actually included securely
+			// If we're unsure, don't change the node status when this times out,
+			// so a missing response can be detected as "not secure"
+			changeNodeStatusOnTimeout: nodeIsSecure !== "unknown",
+		}))!;
 		return pick(response, ["supportedCCs", "controlledCCs"]);
 	}
 }
