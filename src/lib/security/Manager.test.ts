@@ -194,6 +194,19 @@ describe("lib/security/Manager", () => {
 		});
 	});
 
+	describe("deleteNonce", () => {
+		it("should remove a nonce from the database", () => {
+			const man = new SecurityManager(options);
+
+			const nonce = man.generateNonce(8);
+			const nonceId = man.getNonceId(nonce);
+
+			man.deleteNonce(nonceId);
+			expect(man.getNonce(nonceId)).toBeUndefined();
+			expect(man.hasNonce(nonceId)).toBeFalse();
+		});
+	});
+
 	it("nonces should be stored separately for each node", () => {
 		const man = new SecurityManager(options);
 

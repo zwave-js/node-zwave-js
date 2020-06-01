@@ -110,6 +110,15 @@ export class SecurityManager {
 		);
 	}
 
+	public deleteNonce(id: number | NonceKey): void {
+		const key = this.normalizeId(id);
+		if (this._nonceTimers.has(key)) {
+			clearTimeout(this._nonceTimers.get(key)!);
+		}
+		this._nonceStore.delete(key);
+		this._nonceTimers.delete(key);
+	}
+
 	private expireNonce(key: string): void {
 		this._nonceStore.delete(key);
 		this._nonceTimers.delete(key);

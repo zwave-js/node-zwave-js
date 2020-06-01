@@ -130,8 +130,11 @@ export class SecurityCCAPI extends CCAPI {
 		return response.nonce;
 	}
 
-	/** Responds to a NonceGet request. The message is sent without any retransmission etc. */
-	public async sendNonce(): Promise<void> {
+	/**
+	 * Responds to a NonceGet request. The message is sent without any retransmission etc.
+	 * The return value indicates whether a nonce was successfully sent
+	 */
+	public async sendNonce(): Promise<boolean> {
 		this.assertSupportsCommand(
 			SecurityCommand,
 			SecurityCommand.NonceReport,
@@ -157,12 +160,32 @@ export class SecurityCCAPI extends CCAPI {
 			command: cc,
 			// Don't want a response from the target node
 			transmitOptions: TransmitOptions.DEFAULT & ~TransmitOptions.ACK,
-			// Don't want a response from the controller
+			// Don't want a response from the controller whether the message was ACKed
 			callbackId: 0,
 		});
-		await this.driver.sendMessage(msg, {
-			priority: MessagePriority.Handshake,
-		});
+		try {
+			await this.driver.sendMessage(msg, {
+				priority: MessagePriority.Handshake,
+				// We don't want failures causing us to treat the node as asleep
+				changeNodeStatusOnTimeout: false,
+			});
+		} catch (e) {
+			if (
+				e instanceof ZWaveError &&
+				(e.code === ZWaveErrorCodes.Controller_NodeTimeout ||
+					e.code === ZWaveErrorCodes.Controller_MessageDropped)
+			) {
+				// The nonce could not be sent, invalidate it
+				this.driver.securityManager.deleteNonce(
+					this.driver.securityManager.getNonceId(nonce),
+				);
+				return false;
+			} else {
+				// Pass other errors through
+				throw e;
+			}
+		}
+		return true;
 	}
 
 	public async getSecurityScheme(): Promise<[0]> {
