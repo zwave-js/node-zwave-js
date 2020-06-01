@@ -8,6 +8,9 @@
 ### Features
 * Added support for `Protection CC`
 
+### Bugfixes
+* Nodes that ask for a CC are now automatically marked secure
+
 ## 3.5.5 (2020-06-01)
 ### Bugfixes
 * The `Security CC` interview no longer stalls the interview process if the node is not included securely.
