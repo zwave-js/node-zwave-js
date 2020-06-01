@@ -219,5 +219,5 @@ jobs:
         export SENTRY_VERSION=zwave-js@${{ env.VERSION }}
         sentry-cli releases new $SENTRY_VERSION
         sentry-cli releases set-commits $SENTRY_VERSION --auto
-        sentry-cli releases files $SENTRY_VERSION upload-sourcemaps .
+        sentry-cli releases files $SENTRY_VERSION upload-sourcemaps build/
         sentry-cli releases finalize $SENTRY_VERSION
