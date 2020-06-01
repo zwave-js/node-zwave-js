@@ -4,6 +4,11 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* The `Security CC` interview no longer stalls the interview process if the node is not included securely.
+* Nonces that could not be sent are now expired immediately
+
 ## 3.5.4 (2020-05-30)
 ### Bugfixes
 * The driver now correctly handles nested transactions and their retransmission (e.g. for security encapsulated messages)
