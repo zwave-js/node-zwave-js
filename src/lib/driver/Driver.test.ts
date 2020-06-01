@@ -43,6 +43,7 @@ describe("lib/driver/Driver => ", () => {
 	});
 
 	afterEach(() => {
+		jest.clearAllTimers();
 		jest.useRealTimers();
 	});
 
