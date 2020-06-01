@@ -3,9 +3,17 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import type { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { enumValuesToMetadataStates, ValueMetadata } from "../values/Metadata";
-import { parseBitMask } from "../values/Primitive";
+import { Maybe, parseBitMask, unknownBoolean } from "../values/Primitive";
 import { Timeout } from "../values/Timeout";
 import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "./API";
+import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
@@ -48,11 +56,27 @@ export enum RFProctectionState {
 	NoResponse = 2,
 }
 
-export function getExclusiveControlValueID(endpoint: number): ValueID {
+export function getExclusiveControlNodeIdValueID(endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses.Protection,
 		endpoint,
-		property: "exclusiveControl",
+		property: "exclusiveControlNodeId",
+	};
+}
+
+export function getLocalStateValueID(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses.Protection,
+		endpoint,
+		property: "local",
+	};
+}
+
+export function getRFStateValueID(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses.Protection,
+		endpoint,
+		property: "rf",
 	};
 }
 
@@ -62,6 +86,222 @@ export function getTimeoutValueID(endpoint: number): ValueID {
 		endpoint,
 		property: "timeout",
 	};
+}
+
+export function getSupportsExclusiveControlValueID(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses.Protection,
+		endpoint,
+		property: "supportsExclusiveControl",
+	};
+}
+
+export function getSupportsTimeoutValueID(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses.Protection,
+		endpoint,
+		property: "supportsTimeout",
+	};
+}
+
+@API(CommandClasses.Protection)
+export class ProtectionCCAPI extends CCAPI {
+	public supportsCommand(cmd: ProtectionCommand): Maybe<boolean> {
+		switch (cmd) {
+			case ProtectionCommand.Get:
+			case ProtectionCommand.Set:
+				return true; // This is mandatory
+			case ProtectionCommand.SupportedGet:
+				return this.version >= 2;
+			case ProtectionCommand.TimeoutGet:
+			case ProtectionCommand.TimeoutSet: {
+				const node = this.endpoint.getNodeUnsafe()!;
+				return (
+					node.getValue<Maybe<boolean>>(
+						getSupportsTimeoutValueID(this.endpoint.index),
+					) ?? unknownBoolean
+				);
+			}
+			case ProtectionCommand.ExclusiveControlGet:
+			case ProtectionCommand.ExclusiveControlSet: {
+				const node = this.endpoint.getNodeUnsafe()!;
+				return (
+					node.getValue<Maybe<boolean>>(
+						getSupportsExclusiveControlValueID(this.endpoint.index),
+					) ?? unknownBoolean
+				);
+			}
+		}
+		return super.supportsCommand(cmd);
+	}
+
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ property },
+		value,
+	): Promise<void> => {
+		const valueDB = this.endpoint.getNodeUnsafe()!.valueDB;
+		if (property === "local") {
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+			// We need to set both values together, so retrieve the other one from the value DB
+			const rf = valueDB.getValue<RFProctectionState>(
+				getRFStateValueID(this.endpoint.index),
+			);
+			await this.set(value, rf);
+			// Refresh the status
+			await this.get();
+		} else if (property === "rf") {
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+			// We need to set both values together, so retrieve the other one from the value DB
+			const local = valueDB.getValue<LocalProctectionState>(
+				getLocalStateValueID(this.endpoint.index),
+			);
+			await this.set(local ?? LocalProctectionState.Unprotected, value);
+			// Refresh the status
+			await this.get();
+		} else if (property === "exclusiveControlNodeId") {
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+			await this.setExclusiveControl(value);
+			// Refresh the status
+			await this.getExclusiveControl();
+		} else {
+			throwUnsupportedProperty(this.ccId, property);
+		}
+	};
+
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async get() {
+		this.assertSupportsCommand(ProtectionCommand, ProtectionCommand.Get);
+
+		const cc = new ProtectionCCGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<ProtectionCCReport>(
+			cc,
+		))!;
+		return {
+			local: response.local,
+			rf: response.rf,
+		};
+	}
+
+	public async set(
+		local: LocalProctectionState,
+		rf?: RFProctectionState,
+	): Promise<void> {
+		this.assertSupportsCommand(ProtectionCommand, ProtectionCommand.Set);
+
+		const cc = new ProtectionCCSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			local,
+			rf,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async getSupported() {
+		this.assertSupportsCommand(
+			ProtectionCommand,
+			ProtectionCommand.SupportedGet,
+		);
+
+		const cc = new ProtectionCCSupportedGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<
+			ProtectionCCSupportedReport
+		>(cc))!;
+		return {
+			supportsExclusiveControl: response.supportsExclusiveControl,
+			supportsTimeout: response.supportsTimeout,
+			supportedLocalStates: response.supportedLocalStates,
+			supportedRFStates: response.supportedRFStates,
+		};
+	}
+
+	public async getExclusiveControl(): Promise<number> {
+		this.assertSupportsCommand(
+			ProtectionCommand,
+			ProtectionCommand.ExclusiveControlGet,
+		);
+
+		const cc = new ProtectionCCExclusiveControlGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<
+			ProtectionCCExclusiveControlReport
+		>(cc))!;
+		return response.exclusiveControlNodeId;
+	}
+
+	public async setExclusiveControl(nodeId: number): Promise<void> {
+		this.assertSupportsCommand(
+			ProtectionCommand,
+			ProtectionCommand.ExclusiveControlSet,
+		);
+
+		const cc = new ProtectionCCExclusiveControlSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			exclusiveControlNodeId: nodeId,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
+	public async getTimeout(): Promise<Timeout> {
+		this.assertSupportsCommand(
+			ProtectionCommand,
+			ProtectionCommand.TimeoutGet,
+		);
+
+		const cc = new ProtectionCCTimeoutGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<
+			ProtectionCCTimeoutReport
+		>(cc))!;
+		return response.timeout;
+	}
+
+	public async setTimeout(timeout: Timeout): Promise<void> {
+		this.assertSupportsCommand(
+			ProtectionCommand,
+			ProtectionCommand.TimeoutSet,
+		);
+
+		const cc = new ProtectionCCTimeoutSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			timeout,
+		});
+		await this.driver.sendCommand(cc);
+	}
 }
 
 @commandClass(CommandClasses.Protection)
@@ -123,6 +363,7 @@ export class ProtectionCCReport extends ProtectionCC {
 		this.persistValues();
 	}
 
+	// TODO: determine possible states during interview
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.Number,
@@ -152,8 +393,8 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 	) {
 		super(driver, options);
 		validatePayload(this.payload.length >= 5);
-		this.timeout = !!(this.payload[0] & 0b1);
-		this.exclusiveControl = !!(this.payload[0] & 0b10);
+		this.supportsTimeout = !!(this.payload[0] & 0b1);
+		this.supportsExclusiveControl = !!(this.payload[0] & 0b10);
 		this.supportedLocalStates = parseBitMask(this.payload.slice(2, 4));
 		this.supportedRFStates = parseBitMask(this.payload.slice(4, 6));
 
@@ -161,10 +402,10 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 	}
 
 	@ccValue({ internal: true })
-	public readonly exclusiveControl: boolean;
+	public readonly supportsExclusiveControl: boolean;
 
 	@ccValue({ internal: true })
-	public readonly timeout: boolean;
+	public readonly supportsTimeout: boolean;
 
 	@ccValue({ internal: true })
 	public readonly supportedLocalStates: LocalProctectionState[];
@@ -185,13 +426,13 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 	) {
 		super(driver, options);
 		validatePayload(this.payload.length >= 1);
-		this.exclusiveNodeId = this.payload[0];
+		this.exclusiveControlNodeId = this.payload[0];
 
-		const valueId = getExclusiveControlValueID(this.endpointIndex);
-		this.getValueDB().setValue(valueId, this.exclusiveNodeId);
+		const valueId = getExclusiveControlNodeIdValueID(this.endpointIndex);
+		this.getValueDB().setValue(valueId, this.exclusiveControlNodeId);
 	}
 
-	public readonly exclusiveNodeId: number;
+	public readonly exclusiveControlNodeId: number;
 }
 
 @CCCommand(ProtectionCommand.ExclusiveControlGet)
@@ -199,7 +440,7 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 export class ProtectionCCExclusiveControlGet extends ProtectionCC {}
 
 interface ProtectionCCExclusiveControlSetOptions extends CCCommandOptions {
-	exclusiveNodeId: number;
+	exclusiveControlNodeId: number;
 }
 
 @CCCommand(ProtectionCommand.ExclusiveControlSet)
@@ -219,14 +460,14 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			this.exclusiveNodeId = options.exclusiveNodeId;
+			this.exclusiveControlNodeId = options.exclusiveControlNodeId;
 		}
 	}
 
-	public exclusiveNodeId: number;
+	public exclusiveControlNodeId: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.exclusiveNodeId]);
+		this.payload = Buffer.from([this.exclusiveControlNodeId]);
 		return super.serialize();
 	}
 }
