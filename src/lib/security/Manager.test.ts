@@ -15,6 +15,7 @@ describe("lib/security/Manager", () => {
 	});
 
 	afterAll(() => {
+		jest.clearAllTimers();
 		jest.useRealTimers();
 	});
 
