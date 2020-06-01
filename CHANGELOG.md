@@ -8,6 +8,7 @@
 ### Bugfixes
 * The `Security CC` interview no longer stalls the interview process if the node is not included securely.
 * Nonces that could not be sent are now expired immediately
+* The security status of nodes is now stored and updated correctly
 
 ## 3.5.4 (2020-05-30)
 ### Bugfixes
