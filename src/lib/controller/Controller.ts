@@ -826,6 +826,9 @@ export class ZWaveController extends EventEmitter {
 							);
 							// TODO: support including controllers (when to do this?)
 							// await API.inheritSecurityScheme();
+
+							// Remember that the node is secure
+							newNode.isSecure = true;
 						} catch (e) {
 							let errorMessage = `Security bootstrapping failed, the node is included insecurely`;
 							if (
@@ -842,7 +845,12 @@ export class ZWaveController extends EventEmitter {
 								errorMessage,
 								"warn",
 							);
+							// Remember that the node is non-secure
+							newNode.isSecure = false;
 						}
+					} else {
+						// Remember that the node is non-secure
+						newNode.isSecure = false;
 					}
 
 					// We're done adding this node, notify listeners

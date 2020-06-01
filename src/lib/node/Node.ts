@@ -335,6 +335,9 @@ export class ZWaveNode extends Endpoint {
 	public get isSecure(): Maybe<boolean> | undefined {
 		return this._isSecure;
 	}
+	public set isSecure(value: Maybe<boolean> | undefined) {
+		this._isSecure = value;
+	}
 
 	private _version: number | undefined;
 	/** The Z-Wave protocol version this node implements */
@@ -1060,6 +1063,12 @@ version:               ${this.version}`;
 					this._isSecure = true;
 				}
 			}
+		} else if (
+			!this.supportsCC(CommandClasses.Security) &&
+			this._isSecure === unknownBoolean
+		) {
+			// Remember that this node is not secure
+			this._isSecure = false;
 		}
 
 		// We determine the correct interview order by topologically sorting a dependency graph
@@ -1975,7 +1984,7 @@ version:               ${this.version}`;
 			isFrequentListening: this.isFrequentListening,
 			isRouting: this.isRouting,
 			maxBaudRate: this.maxBaudRate,
-			isSecure: this.isSecure,
+			isSecure: this.isSecure ?? unknownBoolean,
 			isBeaming: this.isBeaming,
 			version: this.version,
 			commandClasses: {} as JSONObject,
@@ -2043,6 +2052,8 @@ version:               ${this.version}`;
 		tryParse("isFrequentListening", "boolean");
 		tryParse("isRouting", "boolean");
 		tryParse("maxBaudRate", "number");
+		// isSecure may be boolean or "unknown"
+		tryParse("isSecure", "string");
 		tryParse("isSecure", "boolean");
 		tryParse("isBeaming", "boolean");
 		tryParse("version", "number");
