@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* Added support for `Protection CC`
+
 ## 3.5.5 (2020-06-01)
 ### Bugfixes
 * The `Security CC` interview no longer stalls the interview process if the node is not included securely.
