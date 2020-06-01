@@ -1431,6 +1431,14 @@ version:               ${this.version}`;
 			return;
 		}
 
+		// When a node asks us for a nonce, it must support Security CC
+		this.addCC(CommandClasses.Security, {
+			isSupported: true,
+			version: 1,
+			// Security CC is always secure
+			secure: true,
+		});
+
 		try {
 			await this.commandClasses.Security.sendNonce();
 		} catch (e) {
