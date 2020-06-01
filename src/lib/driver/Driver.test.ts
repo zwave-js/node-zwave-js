@@ -14,7 +14,6 @@ import { Message, messageTypes } from "../message/Message";
 import { Driver } from "./Driver";
 
 jest.mock("serialport", () => MockSerialPort);
-jest.useFakeTimers();
 
 const PORT_ADDRESS = "/tty/FAKE";
 
@@ -39,6 +38,14 @@ async function createAndStartDriver() {
 class TestMessage extends Message {}
 
 describe("lib/driver/Driver => ", () => {
+	beforeEach(() => {
+		jest.useFakeTimers();
+	});
+
+	afterEach(() => {
+		jest.useRealTimers();
+	});
+
 	describe("starting it => ", () => {
 		it("should open a new serialport", () => {
 			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
