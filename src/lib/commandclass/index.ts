@@ -17,6 +17,7 @@ export { RateType } from "./MeterCC";
 export type { Association } from "./MultiChannelAssociationCC";
 export type { MultilevelSensorValue } from "./MultilevelSensorCC";
 export { LevelChangeDirection, SwitchType } from "./MultilevelSwitchCC";
+export { LocalProtectionState, RFProtectionState } from "./ProtectionCC";
 export { ThermostatMode } from "./ThermostatModeCC";
 export { ThermostatOperatingState } from "./ThermostatOperatingStateCC";
 export { SetbackType } from "./ThermostatSetbackCC";
