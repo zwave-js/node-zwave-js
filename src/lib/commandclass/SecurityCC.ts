@@ -471,13 +471,12 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 				this.encryptionKey,
 				Buffer.concat([iv, nonce!]),
 			);
-			// TODO: const frameControl = frameControlAndDecryptedCC[0];
-			const decryptedCC = frameControlAndDecryptedCC.slice(1);
-			this.encapsulated = CommandClass.from(this.driver, {
-				data: decryptedCC,
-				fromEncapsulation: true,
-				encapCC: this,
-			});
+			const frameControl = frameControlAndDecryptedCC[0];
+			this.sequenceCounter = frameControl & 0b1111;
+			this.sequenced = !!(frameControl & 0b1_0000);
+			this.secondFrame = !!(frameControl & 0b10_0000);
+
+			this.decryptedCCBytes = frameControlAndDecryptedCC.slice(1);
 		} else {
 			this.encapsulated = options.encapsulated;
 			if (options.alternativeNetworkKey) {
@@ -492,11 +491,48 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		}
 	}
 
-	public encapsulated: CommandClass;
+	private sequenced: boolean | undefined;
+	private secondFrame: boolean | undefined;
+	private sequenceCounter: number | undefined;
+
+	private decryptedCCBytes: Buffer | undefined;
+	public encapsulated!: CommandClass;
+
 	private authKey: Buffer;
 	private encryptionKey: Buffer;
-
 	public nonceId: number | undefined;
+
+	public getPartialCCSessionId(): Record<string, any> | undefined {
+		if (this.sequenced) {
+			return {
+				// Treat Encapsulation and EncapsulationNonceGet as one
+				ccCommand: undefined,
+				sequence: this.sequenceCounter,
+			};
+		} else {
+			return {
+				// Treat Encapsulation and EncapsulationNonceGet as one
+				ccCommand: undefined,
+			};
+		}
+	}
+
+	public expectMoreMessages(): boolean {
+		return !!this.sequenced && !this.secondFrame;
+	}
+
+	public mergePartialCCs(partials: SecurityCCCommandEncapsulation[]): void {
+		// Concat the CC buffers
+		this.decryptedCCBytes = Buffer.concat(
+			[...partials, this].map((cc) => cc.decryptedCCBytes!),
+		);
+		// and deserialize the CC
+		this.encapsulated = CommandClass.from(this.driver, {
+			data: this.decryptedCCBytes,
+			fromEncapsulation: true,
+			encapCC: this,
+		});
+	}
 
 	public requiresPreTransmitHandshake(): boolean {
 		// We require a new nonce if we don't have one yet
@@ -688,6 +724,11 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 	}
 
 	public readonly reportsToFollow: number;
+
+	public getPartialCCSessionId(): Record<string, any> | undefined {
+		// Nothing special we can distinguish sessions with
+		return {};
+	}
 
 	public expectMoreMessages(): boolean {
 		return this.reportsToFollow > 0;

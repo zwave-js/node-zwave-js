@@ -1171,11 +1171,65 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 		}
 	}
 
+	private partialCCSessions = new Map<string, CommandClass[]>();
+	/**
+	 * Assembles partial CCs of in a message body. Returns `true` when the message is complete and can be handled further.
+	 * If the message expects another partial one, this returns `false`.
+	 */
+	private assemblePartialCCs(msg: Message & ICommandClassContainer): boolean {
+		let command = msg.command;
+		let sessionId: Record<string, any> | undefined;
+		// We search for the outermost CC that provides us with a session ID
+		while (
+			!(sessionId = command.getPartialCCSessionId()) &&
+			isEncapsulatingCommandClass(command)
+		) {
+			// This one doesnt, but contains an encapsulated CC - look deeper
+			command = command.encapsulated;
+		}
+		if (sessionId) {
+			// This CC belongs to a partial session
+			const partialSessionKey = JSON.stringify({
+				nodeId: msg.getNodeId()!,
+				ccId: msg.command.ccId,
+				ccCommand: msg.command.ccCommand!,
+				...sessionId,
+			});
+			if (!this.partialCCSessions.has(partialSessionKey)) {
+				this.partialCCSessions.set(partialSessionKey, []);
+			}
+			const session = this.partialCCSessions.get(partialSessionKey)!;
+			if (command.expectMoreMessages()) {
+				// this is not the final one, store it
+				session.push(command);
+				// and don't handle the command now
+				log.driver.logMessage(msg, {
+					secondaryTags: ["partial"],
+					direction: "inbound",
+				});
+				return false;
+			} else {
+				// this is the final one, merge the previous responses
+				command.mergePartialCCs(session);
+				this.partialCCSessions.delete(partialSessionKey);
+				return true;
+			}
+		} else {
+			// No partial CC, just continue
+			return true;
+		}
+	}
+
 	/**
 	 * Is called when a complete message was decoded from the receive buffer
 	 * @param msg The decoded message
 	 */
 	private async handleMessage(msg: Message): Promise<void> {
+		// Assemble partial CCs on the driver level
+		if (isCommandClassContainer(msg) && !this.assemblePartialCCs(msg)) {
+			return;
+		}
+
 		// if we have a pending request, check if that is waiting for this message
 		if (this.currentTransaction != undefined) {
 			// Use the entire encapsulation stack to test what to do with this response
@@ -1288,25 +1342,9 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 					return;
 				}
 
-				case "partial": {
-					// This is a multi-step response and we just received a part of it, which is not the final one
-					this.currentTransaction.partialResponses.push(msg);
-
-					// Since the node actively responded to our request, we now know that it must be awake
-					const node = msg.getNodeUnsafe();
-					if (node) node.status = NodeStatus.Awake;
-
-					return;
-				}
-
 				case "final": {
 					// this is the expected response!
 					this.currentTransaction.response = msg;
-					// Always merge partial responses, even if the array is empty.
-					// Some CCs only store their values when this is called
-					msg.mergePartialMessages(
-						this.currentTransaction.partialResponses,
-					);
 
 					// Since the node actively responded to our request, we now know that it must be awake
 					const node = msg.getNodeUnsafe();

@@ -228,11 +228,7 @@ function testResponseForCC(
 	} else if (staticExtends(expected, CommandClass)) {
 		// The CC always expects the same response, check if this is the one
 		if (received && received instanceof expected) {
-			ret = received.expectMoreMessages()
-				? "partial"
-				: isEncapCC
-				? "checkEncapsulated"
-				: "final";
+			ret = isEncapCC ? "checkEncapsulated" : "final";
 		} else if (isTransmitReport) {
 			ret = isEncapCC ? "checkEncapsulated" : "confirmation";
 		} else {

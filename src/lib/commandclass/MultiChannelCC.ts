@@ -720,6 +720,14 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 		return this._reportsToFollow;
 	}
 
+	public getPartialCCSessionId(): Record<string, any> | undefined {
+		// Distinguish sessions by the requested device classes
+		return {
+			genericClass: this.genericClass,
+			specificClass: this.specificClass,
+		};
+	}
+
 	public expectMoreMessages(): boolean {
 		return this._reportsToFollow > 0;
 	}

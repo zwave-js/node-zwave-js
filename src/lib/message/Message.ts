@@ -359,7 +359,6 @@ function getMessageTypeMapKey(
 export type ResponseRole =
 	| "unexpected" // a message that does not belong to this transaction
 	| "confirmation" // a confirmation response, e.g. controller reporting that a message was sent
-	| "partial" // a partial response, that (once assembled) will become final. E.g. a multi-report CC container
 	| "final" // a final response (leading to a resolved transaction)
 	| "fatal_controller" // a response from the controller that leads to a rejected transaction
 	| "fatal_node"; // a response or (lack thereof) from the node that leads to a rejected transaction

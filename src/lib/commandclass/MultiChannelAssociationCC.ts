@@ -706,6 +706,11 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 		return this._reportsToFollow;
 	}
 
+	public getPartialCCSessionId(): Record<string, any> | undefined {
+		// Distinguish sessions by the association group ID
+		return { groupId: this._groupId };
+	}
+
 	public expectMoreMessages(): boolean {
 		return this._reportsToFollow > 0;
 	}

@@ -43,11 +43,6 @@ export class Transaction implements Comparable<Transaction> {
 	 */
 	public timeoutInstance?: NodeJS.Timeout;
 
-	/**
-	 * The previously received partial responses of a multistep command
-	 */
-	public readonly partialResponses: Message[] = [];
-
 	/** Whether we're still waiting for an ACK from the controller */
 	public controllerAckPending: boolean = true;
 	/** Whether we're still waiting for an ACK from the node */

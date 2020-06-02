@@ -1257,6 +1257,11 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 		return this._reportsToFollow;
 	}
 
+	public getPartialCCSessionId(): Record<string, any> | undefined {
+		// We don't expect the driver to merge CCs but we want to wait until all reports have been received
+		return {};
+	}
+
 	public expectMoreMessages(): boolean {
 		return this._reportsToFollow > 0;
 	}
@@ -1355,6 +1360,11 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		return this._reportsToFollow;
 	}
 
+	public getPartialCCSessionId(): Record<string, any> | undefined {
+		// Distinguish sessions by the parameter number
+		return { parameter: this._parameter };
+	}
+
 	public expectMoreMessages(): boolean {
 		return this._reportsToFollow > 0;
 	}
@@ -1425,6 +1435,11 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 	private _reportsToFollow: number;
 	public get reportsToFollow(): number {
 		return this._reportsToFollow;
+	}
+
+	public getPartialCCSessionId(): Record<string, any> | undefined {
+		// Distinguish sessions by the parameter number
+		return { parameter: this._parameter };
 	}
 
 	public expectMoreMessages(): boolean {
