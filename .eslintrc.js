@@ -34,13 +34,6 @@ module.exports = {
 				argsIgnorePattern: "^_",
 			},
 		],
-		// "@typescript-eslint/explicit-function-return-type": [
-		// 	"warn",
-		// 	{
-		// 		allowExpressions: true,
-		// 		allowTypedFunctionExpressions: true,
-		// 	},
-		// ],
 		"@typescript-eslint/no-object-literal-type-assertion": "off",
 		"@typescript-eslint/interface-name-prefix": "off",
 		"@typescript-eslint/no-non-null-assertion": "off", // This is necessary for Map.has()/get()!
@@ -83,6 +76,11 @@ module.exports = {
 		"@typescript-eslint/no-unsafe-member-access": "off",
 		"@typescript-eslint/no-unsafe-return": "off",
 		"@typescript-eslint/no-unsafe-call": "off",
+
+		"@typescript-eslint/explicit-module-boundary-types": [
+			"warn",
+			{ allowArgumentsExplicitlyTypedAsAny: true },
+		],
 	},
 	overrides: [
 		{

@@ -117,10 +117,9 @@ export class ThermostatModeCCAPI extends CCAPI {
 		manufacturerData: Buffer,
 	): Promise<void>;
 
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async set(
 		mode: ThermostatMode,
-		manufacturerData?: any,
+		manufacturerData?: Buffer,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			ThermostatModeCommand,
@@ -131,8 +130,7 @@ export class ThermostatModeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			mode,
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			manufacturerData,
+			manufacturerData: manufacturerData as any,
 		});
 		await this.driver.sendCommand(cc);
 	}

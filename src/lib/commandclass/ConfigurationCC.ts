@@ -98,7 +98,7 @@ export class ConfigurationCCError extends ZWaveError {
 	public constructor(
 		public readonly message: string,
 		public readonly code: ZWaveErrorCodes,
-		public readonly argument: any,
+		public readonly argument: number,
 	) {
 		super(message, code);
 
