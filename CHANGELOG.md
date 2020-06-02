@@ -10,6 +10,7 @@
 
 ### Bugfixes
 * Nodes that ask for a CC are now automatically marked secure
+* Fixed the computation of the authentication code when secure auth data length was a multiple of 16 bytes.
 
 ## 3.5.5 (2020-06-01)
 ### Bugfixes
