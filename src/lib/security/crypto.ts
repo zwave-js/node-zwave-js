@@ -5,7 +5,7 @@ function zeroPad(
 	blockSize: number,
 ): { output: Buffer; paddingLength: number } {
 	const padding =
-		input.length === blockSize
+		input.length % blockSize === 0
 			? Buffer.from([])
 			: Buffer.alloc(blockSize - (input.length % blockSize), 0);
 	return {
@@ -17,7 +17,7 @@ function zeroPad(
 function encrypt(
 	algorithm: string,
 	blockSize: number,
-	trimFinal: boolean,
+	trimToInputLength: boolean,
 	input: Buffer,
 	key: Buffer,
 	iv: Buffer,
@@ -28,7 +28,7 @@ function encrypt(
 	const { output: plaintext, paddingLength } = zeroPad(input, blockSize);
 	const ret = Buffer.concat([cipher.update(plaintext), cipher.final()]);
 
-	if (trimFinal && paddingLength > 0) {
+	if (trimToInputLength && paddingLength > 0) {
 		return ret.slice(0, -paddingLength);
 	} else {
 		return ret;
@@ -38,7 +38,7 @@ function encrypt(
 function decrypt(
 	algorithm: string,
 	blockSize: number,
-	trimFinal: boolean,
+	trimToInputLength: boolean,
 	input: Buffer,
 	key: Buffer,
 	iv: Buffer,
@@ -49,7 +49,7 @@ function decrypt(
 	const { output: ciphertext, paddingLength } = zeroPad(input, blockSize);
 	const ret = Buffer.concat([cipher.update(ciphertext), cipher.final()]);
 
-	if (trimFinal && paddingLength > 0) {
+	if (trimToInputLength && paddingLength > 0) {
 		return ret.slice(0, -paddingLength);
 	} else {
 		return ret;
