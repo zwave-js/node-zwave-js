@@ -11,6 +11,8 @@
 ### Bugfixes
 * Nodes that ask for a CC are now automatically marked secure
 * Fixed the computation of the authentication code when secure auth data length was a multiple of 16 bytes.
+* Nonces are now marked as used immediately after (de)serialization
+* If a message fails to serialize, the corresponding transaction is now rejected instead of crashing the driver
 
 ## 3.5.5 (2020-06-01)
 ### Bugfixes
