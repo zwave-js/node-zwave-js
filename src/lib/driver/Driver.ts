@@ -22,7 +22,10 @@ import {
 } from "../commandclass/ICommandClassContainer";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { messageIsPing } from "../commandclass/NoOperationCC";
-import { SecurityCC } from "../commandclass/SecurityCC";
+import {
+	SecurityCC,
+	SecurityCCCommandEncapsulationNonceGet,
+} from "../commandclass/SecurityCC";
 import {
 	SupervisionCC,
 	SupervisionCCGet,
@@ -1225,9 +1228,16 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 	 * @param msg The decoded message
 	 */
 	private async handleMessage(msg: Message): Promise<void> {
-		// Assemble partial CCs on the driver level
-		if (isCommandClassContainer(msg) && !this.assemblePartialCCs(msg)) {
-			return;
+		if (isCommandClassContainer(msg)) {
+			// SecurityCCCommandEncapsulationNonceGet is two commands in one, but
+			// we're not set up to handle things like this. Reply to the nonce get
+			// and handle the encapsulation part normally
+			if (msg.command instanceof SecurityCCCommandEncapsulationNonceGet) {
+				void msg.getNodeUnsafe()?.handleSecurityNonceGet();
+			}
+
+			// Assemble partial CCs on the driver level
+			if (!this.assemblePartialCCs(msg)) return;
 		}
 
 		// if we have a pending request, check if that is waiting for this message

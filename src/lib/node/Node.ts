@@ -1416,8 +1416,11 @@ version:               ${this.version}`;
 
 	private hasLoggedNoNetworkKey = false;
 
-	/** Handles a nonce request */
-	private async handleSecurityNonceGet(): Promise<void> {
+	/**
+	 * @internal
+	 * Handles a nonce request
+	 */
+	public async handleSecurityNonceGet(): Promise<void> {
 		// Only reply if secure communication is set up
 		if (!this.driver.securityManager) {
 			if (!this.hasLoggedNoNetworkKey) {

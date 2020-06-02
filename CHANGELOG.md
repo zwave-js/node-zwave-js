@@ -7,6 +7,7 @@
 ## __WORK IN PROGRESS__
 ### Features
 * Added support for `Protection CC`
+* The driver now sends a nonce in reply to `SecurityCCCommandEncapsulationNonceGet` commands
 
 ### Bugfixes
 * Nodes that ask for a CC are now automatically marked secure
