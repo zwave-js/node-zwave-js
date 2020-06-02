@@ -2086,8 +2086,20 @@ ${handlers.length} left`,
 		}
 
 		transaction.prepareForTransmission();
-		const data = message.serialize();
+		let data: Buffer;
 		log.driver.transaction(transaction);
+		try {
+			data = message.serialize();
+		} catch (e) {
+			// Translate errors during serialization into a rejection
+			// This should cause less crashes if the calling code handles errors
+			if (e instanceof ZWaveError) {
+				this.rejectCurrentTransaction(e);
+				return;
+			} else {
+				throw e;
+			}
+		}
 		log.serial.data("outbound", data);
 		this.doSend(data);
 
