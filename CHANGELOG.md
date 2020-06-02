@@ -13,6 +13,8 @@
 * Fixed the computation of the authentication code when secure auth data length was a multiple of 16 bytes.
 * Nonces are now marked as used immediately after (de)serialization
 * If a message fails to serialize, the corresponding transaction is now rejected instead of crashing the driver
+* Sequenced S0 encapsulated commands can now be received
+* Unsolicited commands are now correctly decoded if they are split across multiple messages
 
 ## 3.5.5 (2020-06-01)
 ### Bugfixes
