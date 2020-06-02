@@ -10,7 +10,7 @@
 * The driver now sends a nonce in reply to `SecurityCCCommandEncapsulationNonceGet` commands
 
 ### Bugfixes
-* Nodes that ask for a CC are now automatically marked secure
+* Nodes that ask for a nonce are now automatically marked secure
 * Fixed the computation of the authentication code when secure auth data length was a multiple of 16 bytes.
 * Nonces are now marked as used immediately after (de)serialization
 * If a message fails to serialize, the corresponding transaction is now rejected instead of crashing the driver
