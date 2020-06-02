@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.6.0 (2020-06-02)
 ### Features
 * Added support for `Protection CC`
 * The driver now sends a nonce in reply to `SecurityCCCommandEncapsulationNonceGet` commands
