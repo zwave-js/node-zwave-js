@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 require("reflect-metadata");
 import * as c from "ansi-colors";
 import * as clipboard from "clipboardy";

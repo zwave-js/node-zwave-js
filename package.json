@@ -114,7 +114,7 @@
     "semver": "^7.3.2",
     "supports-color": "^7.1.0",
     "ts-node": "^8.9.1",
-    "typescript": "^3.9.3",
+    "typescript": "^3.9.4",
     "yargs": "^15.3.1"
   },
   "dependencies": {
