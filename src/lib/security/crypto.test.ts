@@ -103,17 +103,16 @@ describe("lib/util/crypto", () => {
 			expect(computeMAC(plaintext, key, iv)).toEqual(expected);
 		});
 
-		// TODO: One of these two is correct (depending on the final() call)
-		// it("should work correctly", () => {
-		// 	// Test vector taken from https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf
-		// 	const key = Buffer.from("00000000000000000000000000000000", "hex");
-		// 	const plaintext = Buffer.from(
-		// 		"00000000000000000000000000000000",
-		// 		"hex",
-		// 	);
-		// 	const expected = Buffer.from("8A05FC5E095AF484", "hex");
+		it("should work correctly (part 2)", () => {
+			// Taken from real Z-Wave communication - if anything must be changed, this is the test case to keep!
+			const key = Buffer.from("c5fe1ca17d36c992731a0c0c468c1ef9", "hex");
+			const plaintext = Buffer.from(
+				"ddd360c382a437514392826cbba0b3128114010cf3fb762d6e82126681c18597",
+				"hex",
+			);
+			const expected = Buffer.from("2bc20a8aa9bbb371", "hex");
 
-		// 	expect(computeMAC(plaintext, key)).toEqual(expected);
-		// });
+			expect(computeMAC(plaintext, key)).toEqual(expected);
+		});
 	});
 });
