@@ -446,7 +446,8 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			const nonce = this.driver.securityManager.getNonce(nonceId);
 			// Only accept the message if the nonce hasn't expired
 			validatePayload(!!nonce);
-			// TODO: mark nonce as used
+			// and mark the nonce as used
+			this.driver.securityManager.deleteNonce(nonceId);
 
 			this.authKey = this.driver.securityManager.authKey;
 			this.encryptionKey = this.driver.securityManager.encryptionKey;
@@ -539,6 +540,11 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			nonceId: this.nonceId,
 		});
 		if (!receiverNonce) throwNoNonce();
+		// and mark it as used
+		this.driver.securityManager.deleteNonce({
+			nodeId: this.nodeId,
+			nonceId: this.nonceId,
+		});
 
 		const serializedCC = this.encapsulated.serialize();
 		const plaintext = Buffer.concat([
