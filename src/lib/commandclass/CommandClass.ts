@@ -709,9 +709,18 @@ export class CommandClass {
 		}
 	}
 
-	/** Whether this CC spans multiple messages and the last report hasn't been received */
+	/**
+	 * When a CC supports to be split into multiple partial CCs, this can be used to identify the
+	 * session the partial CCs belong to.
+	 * If a CC expects `mergePartialCCs` to be always called, you should return an empty object here.
+	 */
+	public getPartialCCSessionId(): Record<string, any> | undefined {
+		return undefined; // Only select CCs support to be split
+	}
+
+	/** When a CC supports to be split into multiple partial CCs, this indicates that the last report hasn't been received yet */
 	public expectMoreMessages(): boolean {
-		return false; // By default it doesn't
+		return false; // By default, all CCs are monolithic
 	}
 
 	/** Include previously received partial responses into a final CC */
