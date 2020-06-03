@@ -2174,6 +2174,13 @@ ${handlers.length} left`,
 			if (targetNodeId === nodeId) {
 				if (messageIsPing(msg)) {
 					pingsToRemove.push(transaction);
+					// Pings must be rejected, so the next message may be queued
+					transaction.promise.reject(
+						new ZWaveError(
+							`The node is asleep`,
+							ZWaveErrorCodes.Controller_MessageDropped,
+						),
+					);
 				} else {
 					// Change the priority to WakeUp
 					transaction.priority = MessagePriority.WakeUp;
