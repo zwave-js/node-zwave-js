@@ -1213,8 +1213,32 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 				return false;
 			} else {
 				// this is the final one, merge the previous responses
-				command.mergePartialCCs(session);
 				this.partialCCSessions.delete(partialSessionKey);
+				try {
+					command.mergePartialCCs(session);
+				} catch (e) {
+					if (e instanceof ZWaveError) {
+						switch (e.code) {
+							case ZWaveErrorCodes.Deserialization_NotImplemented:
+							case ZWaveErrorCodes.CC_NotImplemented:
+								log.driver.print(
+									`Dropping message because it could not be deserialized: ${e.message}`,
+									"warn",
+								);
+								// Don't continue handling this message
+								return false;
+
+							case ZWaveErrorCodes.PacketFormat_InvalidPayload:
+								log.driver.print(
+									`Could not assemble partial CCs because the payload is invalid. Dropping them.`,
+									"warn",
+								);
+								// Don't continue handling this message
+								return false;
+						}
+					}
+					throw e;
+				}
 				return true;
 			}
 		} else {
