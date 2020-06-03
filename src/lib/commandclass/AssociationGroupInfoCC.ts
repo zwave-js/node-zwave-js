@@ -319,7 +319,6 @@ export class AssociationGroupInfoCCAPI extends CCAPI {
 		};
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getCommands(
 		groupId: number,
 		allowCache: boolean = true,

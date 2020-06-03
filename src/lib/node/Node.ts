@@ -485,7 +485,6 @@ export class ZWaveNode extends Endpoint {
 			// Access the CC API by name
 			const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
 			if (!endpointInstance) return false;
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 			const api = (endpointInstance.commandClasses as any)[
 				valueId.commandClass
 			] as CCAPI;
@@ -1619,7 +1618,6 @@ version:               ${this.version}`;
 			// Try to access the API - if it doesn't work, skip this option
 			let API: CCAPI;
 			try {
-				// eslint-disable-next-line
 				API = (this.commandClasses as any)[ccName];
 			} catch {
 				log.controller.logNode(this.id, {
@@ -1636,7 +1634,6 @@ version:               ${this.version}`;
 					level: "warn",
 				});
 				continue;
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 			} else if (!(API as any)[apiMethod]) {
 				log.controller.logNode(this.id, {
 					message: `method ${apiMethod} not found on API, skipping query`,
@@ -2029,7 +2026,6 @@ version:               ${this.version}`;
 	 * @internal
 	 * Deserializes the information of this node from a cache.
 	 */
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async deserialize(obj: any): Promise<void> {
 		if (obj.interviewStage in InterviewStage) {
 			this.interviewStage =

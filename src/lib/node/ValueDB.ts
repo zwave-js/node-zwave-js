@@ -157,7 +157,6 @@ export class ValueDB extends EventEmitter {
 	}
 
 	private dbKeyToValueId(key: string): { nodeId: number } & ValueID {
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 		return JSON.parse(key);
 	}
 

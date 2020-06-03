@@ -45,14 +45,12 @@ export function validatePayload(...assertions: unknown[]): void {
 }
 
 /** Decorator to support multi-inheritance using mixins */
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function Mixin(baseCtors: Constructor[]) {
 	return function (derivedCtor: Constructor): void {
 		baseCtors.forEach((baseCtor) => {
 			Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
 				// Do not override the constructor
 				if (name !== "constructor") {
-					// eslint-disable-next-line
 					derivedCtor.prototype[name] = baseCtor.prototype[name];
 				}
 			});
@@ -63,7 +61,6 @@ export function Mixin(baseCtors: Constructor[]) {
 export type DeepPartial<T> = { [P in keyof T]+?: DeepPartial<T[P]> };
 
 export function getEnumMemberName(enumeration: unknown, value: number): string {
-	// eslint-disable-next-line
 	return (enumeration as any)[value] || `unknown (${num2hex(value)})`;
 }
 

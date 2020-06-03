@@ -94,7 +94,6 @@ export function getIntegerLimits(
 	size: 1 | 2 | 3 | 4,
 	signed: boolean,
 ): { min: number; max: number } {
-	// eslint-disable-next-line
 	return (IntegerLimits as any)[`${signed ? "" : "U"}Int${size * 8}`];
 }
 

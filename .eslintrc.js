@@ -15,6 +15,7 @@ module.exports = {
 		"plugin:prettier/recommended",
 	],
 	plugins: [],
+	reportUnusedDisableDirectives: true,
 	rules: {
 		// Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
 		"@typescript-eslint/no-parameter-properties": "off",

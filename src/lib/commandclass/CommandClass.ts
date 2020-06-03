@@ -228,7 +228,6 @@ export class CommandClass {
 	/**
 	 * Deserializes a CC from a buffer that contains a serialized CC
 	 */
-	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	private deserialize(data: Buffer) {
 		const ccId = CommandClass.getCommandClass(data);
 		const ccIdLength = this.isExtended() ? 2 : 1;

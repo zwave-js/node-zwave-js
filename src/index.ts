@@ -30,7 +30,6 @@ function isZWaveError(
 	err: Error | string | null | undefined,
 ): err is ZWaveError {
 	if (!err || typeof err === "string") return false;
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 	return "code" in err && typeof (err as any).code === "number";
 }
 
