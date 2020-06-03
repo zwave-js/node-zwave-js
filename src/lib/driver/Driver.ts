@@ -2104,7 +2104,13 @@ ${handlers.length} left`,
 			const targetNode = message.getNodeUnsafe();
 
 			// The send queue is sorted automatically. If the first message is for a sleeping node, all messages in the queue are.
-			if (!targetNode || targetNode.isAwake()) {
+			// The only exception are handshakes. We need to always send them, because some sleeping nodes may try to send us encrypted messages
+			// If we don't they block the send queue
+			if (
+				!targetNode ||
+				targetNode.isAwake() ||
+				nextTransaction.priority === MessagePriority.Handshake
+			) {
 				// Move the transaction from the send queue to the current transaction stack
 				this.transactionStack.unshift(nextTransaction);
 				this.sendQueue.remove(nextTransaction);
@@ -2127,7 +2133,7 @@ ${handlers.length} left`,
 				`workOffSendQueue > skipping because a transaction is pending`,
 				"debug",
 			);
-			log.driver.sendQueue(this.sendQueue);
+			// log.driver.sendQueue(this.sendQueue);
 		}
 	}
 

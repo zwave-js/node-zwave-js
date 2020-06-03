@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Always send handshakes replies, even if the target node is asleep
+
 ## 3.6.2 (2020-06-03)
 ### Bugfixes
 * "Not implemented" or "Invalid payload" errors that happen while merging partial CCs are now correctly handled
