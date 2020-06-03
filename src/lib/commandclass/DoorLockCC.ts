@@ -122,7 +122,7 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 		const lockTimeoutMinutes = this.payload[3];
 		const lockTimeoutSeconds = this.payload[4];
 		if (lockTimeoutMinutes <= 253 && lockTimeoutSeconds <= 59) {
-			this.lockTimeout = lockTimeoutSeconds * 60 + lockTimeoutMinutes;
+			this.lockTimeout = lockTimeoutSeconds + lockTimeoutMinutes * 60;
 		}
 
 		if (this.version >= 3 && this.payload.length >= 7) {
@@ -186,11 +186,13 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 			!!(this.payload[1] & 0b0100),
 			!!(this.payload[1] & 0b1000),
 		];
-		const lockTimeoutMinutes = this.payload[2];
-		const lockTimeoutSeconds = this.payload[3];
-		if (lockTimeoutMinutes <= 0xfd && lockTimeoutSeconds <= 59) {
-			this.lockTimeoutConfiguration =
-				lockTimeoutSeconds * 60 + lockTimeoutMinutes;
+		if (this.operationType === DoorLockOperationType.Timed) {
+			const lockTimeoutMinutes = this.payload[2];
+			const lockTimeoutSeconds = this.payload[3];
+			if (lockTimeoutMinutes <= 0xfd && lockTimeoutSeconds <= 59) {
+				this.lockTimeoutConfiguration =
+					lockTimeoutSeconds + lockTimeoutMinutes * 60;
+			}
 		}
 		if (this.version >= 4 && this.payload.length >= 5) {
 			this.autoRelockTime = this.payload.readUInt16BE(4);
@@ -238,26 +240,17 @@ type DoorLockCCConfigurationSetOptions = (
 	  }
 	| {
 			operationType: DoorLockOperationType.Constant;
-			lockTimeoutConfiguration: undefined;
+			lockTimeoutConfiguration?: undefined;
 	  }
 ) & {
 	outsideHandlesCanOpenDoorConfiguration: DoorHandleStatus;
 	insideHandlesCanOpenDoorConfiguration: DoorHandleStatus;
-} & (
-		| {
-				// V4+
-				autoRelockTime: number;
-				holdAndReleaseTime: number;
-				twistAssist: boolean;
-				blockToBlock: boolean;
-		  }
-		| {
-				autoRelockTime?: undefined;
-				holdAndReleaseTime?: undefined;
-				twistAssist?: undefined;
-				blockToBlock?: undefined;
-		  }
-	);
+	// V4+
+	autoRelockTime?: number;
+	holdAndReleaseTime?: number;
+	twistAssist?: boolean;
+	blockToBlock?: boolean;
+};
 
 @CCCommand(DoorLockCommand.ConfigurationSet)
 export class DoorLockCCConfigurationSet extends DoorLockCC {
