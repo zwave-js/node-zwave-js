@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.6.3 (2020-06-03)
 ### Bugfixes
 * Always send handshakes replies, even if the target node is asleep
 
