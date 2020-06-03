@@ -1,6 +1,7 @@
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { pick, validatePayload } from "../util/misc";
+import log from "../log";
+import { getEnumMemberName, pick, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { Maybe, parseBitMask } from "../values/Primitive";
 import {
@@ -146,6 +147,7 @@ export class DoorLockCCAPI extends CCAPI {
 			"doorSupported",
 			"holdAndReleaseSupported",
 			"latchSupported",
+			"twistAssistSupported",
 			"supportedDoorLockModes",
 			"supportedInsideHandles",
 			"supportedOperationTypes",
@@ -247,6 +249,116 @@ export class DoorLockCCAPI extends CCAPI {
 @implementedVersion(4)
 export class DoorLockCC extends CommandClass {
 	declare ccCommand: DoorLockCommand;
+
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const api = this.getEndpoint()!.commandClasses["Door Lock"];
+
+		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		if (complete && this.version >= 4) {
+			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "requesting lock capabilities...",
+				direction: "outbound",
+			});
+			const resp = await api.getCapabilities();
+			const logMessage = `received lock capabilities:
+supported operation types: ${resp.supportedOperationTypes
+				.map((t) => getEnumMemberName(DoorLockOperationType, t))
+				.join(", ")}
+supported door lock modes: ${resp.supportedDoorLockModes
+				.map((t) => getEnumMemberName(DoorLockMode, t))
+				.map((str) => `\n· ${str}`)
+				.join(", ")}
+supported outside handles: ${resp.supportedOutsideHandles
+				.map(String)
+				.join(", ")}
+supported inside handles:  ${resp.supportedInsideHandles.map(String).join(", ")}
+supports auto-relock:      ${resp.autoRelockSupported}
+supports hold-and-release: ${resp.holdAndReleaseSupported}
+supports twist assist:     ${resp.twistAssistSupported}
+supports block to block:   ${resp.blockToBlockSupported}`;
+			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: logMessage,
+				direction: "inbound",
+			});
+		}
+
+		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "requesting lock configuration...",
+			direction: "outbound",
+		});
+		const config = await api.getConfiguration();
+		let logMessage = `received lock configuration:
+operation type:                ${getEnumMemberName(
+			DoorLockOperationType,
+			config.operationType,
+		)}`;
+		if (config.operationType === DoorLockOperationType.Timed) {
+			logMessage += `
+lock timeout:                  ${config.lockTimeoutConfiguration} seconds
+`;
+		}
+		logMessage += `
+outside handles can open door: ${config.outsideHandlesCanOpenDoorConfiguration
+			.map(String)
+			.join(", ")}
+inside handles can open door:  ${config.insideHandlesCanOpenDoorConfiguration
+			.map(String)
+			.join(", ")}`;
+		if (this.version >= 4) {
+			logMessage += `
+auto-relock time               ${config.autoRelockTime ?? "-"} seconds
+hold-and-release time          ${config.holdAndReleaseTime ?? "-"} seconds
+twist assist                   ${!!config.twistAssist}
+block to block                 ${!!config.blockToBlock}`;
+		}
+
+		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: logMessage,
+			direction: "inbound",
+		});
+
+		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "requesting current lock status...",
+			direction: "outbound",
+		});
+		const status = await api.get();
+		logMessage = `received lock status:
+current mode:       ${getEnumMemberName(DoorLockMode, status.currentMode)}`;
+		if (status.targetMode != undefined) {
+			logMessage += `
+target mode:        ${getEnumMemberName(DoorLockMode, status.targetMode)}
+remaining duration: ${status.duration?.toString() ?? "undefined"}`;
+		}
+		if (status.lockTimeout != undefined) {
+			logMessage += `
+lock timeout:       ${status.lockTimeout} seconds`;
+		}
+		logMessage += `
+door status:        ${status.doorStatus}
+bolt status:        ${status.boltStatus}
+latch status:       ${status.latchStatus}`;
+		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: logMessage,
+			direction: "inbound",
+		});
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
 }
 
 interface DoorLockCCOperationSetOptions extends CCCommandOptions {
@@ -410,16 +522,16 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 	@ccValue()
 	public readonly lockTimeoutConfiguration?: number;
 
-	@ccValue()
+	@ccValue({ minVersion: 4 })
 	public readonly autoRelockTime?: number;
 
-	@ccValue()
+	@ccValue({ minVersion: 4 })
 	public readonly holdAndReleaseTime?: number;
 
-	@ccValue()
+	@ccValue({ minVersion: 4 })
 	public readonly twistAssist?: boolean;
 
-	@ccValue()
+	@ccValue({ minVersion: 4 })
 	public readonly blockToBlock?: boolean;
 }
 
