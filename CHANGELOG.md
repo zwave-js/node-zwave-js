@@ -4,6 +4,11 @@
 	## __WORK IN PROGRESS__
 -->
 
+## 3.6.1 (2020-06-03)
+### Bugfixes
+* `GetNodeProtocolInfoRequest` is no longer treated as a message to a node
+* When moving messages to the wakeup queue, all pings are now rejected instead of only the pending ones. This avoids interviews getting stuck on a ping.
+
 ## 3.6.0 (2020-06-02)
 ### Features
 * Added support for `Protection CC`
