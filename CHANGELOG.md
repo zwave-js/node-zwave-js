@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## 3.6.2 (2020-06-03)
+### Bugfixes
+* "Not implemented" or "Invalid payload" errors that happen while merging partial CCs are now correctly handled
+
 ## 3.6.1 (2020-06-03)
 ### Bugfixes
 * `GetNodeProtocolInfoRequest` is no longer treated as a message to a node
