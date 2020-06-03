@@ -3,7 +3,13 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { pick, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { Maybe, parseBitMask } from "../values/Primitive";
-import { CCAPI } from "./API";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -51,6 +57,17 @@ export enum DoorLockOperationType {
 // @publicAPI
 export type DoorHandleStatus = [boolean, boolean, boolean, boolean];
 
+const configurationSetParameters = [
+	"operationType",
+	"outsideHandlesCanOpenDoorConfiguration",
+	"insideHandlesCanOpenDoorConfiguration",
+	"lockTimeoutConfiguration",
+	"autoRelockTime",
+	"holdAndReleaseTime",
+	"twistAssist",
+	"blockToBlock",
+] as const;
+
 @API(CommandClasses["Door Lock"])
 export class DoorLockCCAPI extends CCAPI {
 	public supportsCommand(cmd: DoorLockCommand): Maybe<boolean> {
@@ -65,6 +82,48 @@ export class DoorLockCCAPI extends CCAPI {
 		}
 		return super.supportsCommand(cmd);
 	}
+
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ property },
+		value,
+	): Promise<void> => {
+		if (property === "targetMode") {
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+			await this.set(value);
+		} else if (
+			typeof property === "string" &&
+			configurationSetParameters.includes(property as any)
+		) {
+			// checking every type here would create a LOT of duplicate code, so we don't
+
+			// ConfigurationSet expects all parameters --> read the others from cache
+			const config = {
+				[property]: value,
+			} as DoorLockCCConfigurationSetOptions;
+			for (const param of configurationSetParameters) {
+				if (param !== property) {
+					(config as any)[
+						param
+					] = this.endpoint.getNodeUnsafe()?.valueDB.getValue({
+						commandClass: this.ccId,
+						endpoint: this.endpoint.index,
+						property: param,
+					});
+				}
+			}
+
+			await this.setConfiguration(config);
+		} else {
+			throwUnsupportedProperty(this.ccId, property);
+		}
+	};
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getCapabilities() {
@@ -133,6 +192,9 @@ export class DoorLockCCAPI extends CCAPI {
 			mode,
 		});
 		await this.driver.sendCommand(cc);
+
+		// Refresh the current value
+		await this.get();
 	}
 
 	public async setConfiguration(
@@ -149,6 +211,9 @@ export class DoorLockCCAPI extends CCAPI {
 			...configuration,
 		});
 		await this.driver.sendCommand(cc);
+
+		// Refresh the current value
+		await this.getConfiguration();
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
