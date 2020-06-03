@@ -1,9 +1,11 @@
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { validatePayload } from "../util/misc";
+import { pick, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
-import { parseBitMask } from "../values/Primitive";
+import { Maybe, parseBitMask } from "../values/Primitive";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
@@ -48,6 +50,133 @@ export enum DoorLockOperationType {
 
 // @publicAPI
 export type DoorHandleStatus = [boolean, boolean, boolean, boolean];
+
+@API(CommandClasses["Door Lock"])
+export class DoorLockCCAPI extends CCAPI {
+	public supportsCommand(cmd: DoorLockCommand): Maybe<boolean> {
+		switch (cmd) {
+			case DoorLockCommand.OperationSet:
+			case DoorLockCommand.OperationGet:
+			case DoorLockCommand.ConfigurationSet:
+			case DoorLockCommand.ConfigurationGet:
+				return true; // This is mandatory
+			case DoorLockCommand.CapabilitiesGet:
+				return this.version >= 4;
+		}
+		return super.supportsCommand(cmd);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async getCapabilities() {
+		this.assertSupportsCommand(
+			DoorLockCommand,
+			DoorLockCommand.CapabilitiesGet,
+		);
+
+		const cc = new DoorLockCCCapabilitiesGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<
+			DoorLockCCCapabilitiesReport
+		>(cc))!;
+		return pick(response, [
+			"autoRelockSupported",
+			"blockToBlockSupported",
+			"boltSupported",
+			"doorSupported",
+			"holdAndReleaseSupported",
+			"latchSupported",
+			"supportedDoorLockModes",
+			"supportedInsideHandles",
+			"supportedOperationTypes",
+			"supportedOutsideHandles",
+		]);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async get() {
+		this.assertSupportsCommand(
+			DoorLockCommand,
+			DoorLockCommand.OperationGet,
+		);
+
+		const cc = new DoorLockCCOperationGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<
+			DoorLockCCOperationReport
+		>(cc))!;
+		return pick(response, [
+			"currentMode",
+			"targetMode",
+			"duration",
+			"outsideHandlesCanOpenDoor",
+			"insideHandlesCanOpenDoor",
+			"latchStatus",
+			"boltStatus",
+			"doorStatus",
+			"lockTimeout",
+		]);
+	}
+
+	public async set(mode: DoorLockMode): Promise<void> {
+		this.assertSupportsCommand(
+			DoorLockCommand,
+			DoorLockCommand.OperationSet,
+		);
+
+		const cc = new DoorLockCCOperationSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			mode,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
+	public async setConfiguration(
+		configuration: DoorLockCCConfigurationSetOptions,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			DoorLockCommand,
+			DoorLockCommand.ConfigurationSet,
+		);
+
+		const cc = new DoorLockCCConfigurationSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...configuration,
+		});
+		await this.driver.sendCommand(cc);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async getConfiguration() {
+		this.assertSupportsCommand(
+			DoorLockCommand,
+			DoorLockCommand.ConfigurationGet,
+		);
+
+		const cc = new DoorLockCCConfigurationGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<
+			DoorLockCCConfigurationReport
+		>(cc))!;
+		return pick(response, [
+			"operationType",
+			"outsideHandlesCanOpenDoorConfiguration",
+			"insideHandlesCanOpenDoorConfiguration",
+			"lockTimeoutConfiguration",
+			"autoRelockTime",
+			"holdAndReleaseTime",
+			"twistAssist",
+			"blockToBlock",
+		]);
+	}
+}
 
 @commandClass(CommandClasses["Door Lock"])
 @implementedVersion(4)
