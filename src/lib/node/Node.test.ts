@@ -194,7 +194,7 @@ describe("lib/node/Node", () => {
 				const request: GetNodeProtocolInfoRequest =
 					fakeDriver.sendMessage.mock.calls[0][0];
 				expect(request).toBeInstanceOf(GetNodeProtocolInfoRequest);
-				expect(request.nodeId).toBe(node.id);
+				expect(request.requestedNodeId).toBe(node.id);
 			});
 
 			it("should remember all received information", () => {

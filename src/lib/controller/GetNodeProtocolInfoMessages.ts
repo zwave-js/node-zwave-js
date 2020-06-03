@@ -18,7 +18,6 @@ import {
 	GenericDeviceClass,
 	SpecificDeviceClass,
 } from "../node/DeviceClass";
-import type { INodeQuery } from "../node/INodeQuery";
 import type { JSONObject } from "../util/misc";
 
 enum NodeCapabilityFlags {
@@ -47,31 +46,33 @@ enum SecurityFlags {
 export type Baudrate = 9600 | 40000 | 100000;
 
 interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
-	nodeId: number;
+	requestedNodeId: number;
 }
 
 @messageTypes(MessageType.Request, FunctionType.GetNodeProtocolInfo)
 @expectedResponse(FunctionType.GetNodeProtocolInfo)
 @priority(MessagePriority.Controller)
-export class GetNodeProtocolInfoRequest extends Message implements INodeQuery {
+export class GetNodeProtocolInfoRequest extends Message {
 	public constructor(
 		driver: Driver,
 		options: GetNodeProtocolInfoRequestOptions,
 	) {
 		super(driver, options);
-		this.nodeId = options.nodeId;
+		this.requestedNodeId = options.requestedNodeId;
 	}
 
-	public nodeId: number;
+	// This must not be called nodeId or the message will be treated as a node query
+	// but this is a message to the controller
+	public requestedNodeId: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.nodeId]);
+		this.payload = Buffer.from([this.requestedNodeId]);
 		return super.serialize();
 	}
 
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({
-			nodeId: this.nodeId,
+			nodeId: this.requestedNodeId,
 		});
 	}
 }

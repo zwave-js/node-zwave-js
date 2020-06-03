@@ -788,7 +788,9 @@ export class ZWaveNode extends Endpoint {
 			direction: "outbound",
 		});
 		const resp = await this.driver.sendMessage<GetNodeProtocolInfoResponse>(
-			new GetNodeProtocolInfoRequest(this.driver, { nodeId: this.id }),
+			new GetNodeProtocolInfoRequest(this.driver, {
+				requestedNodeId: this.id,
+			}),
 		);
 		this._deviceClass = resp.deviceClass;
 		this._isListening = resp.isListening;
