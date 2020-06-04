@@ -32,9 +32,14 @@
 		// think it is not connected and show error E5
 		"queryOnWakeup": [
 			// ["CommandClass", "API method", ...arguments]
-			["Battery", "get"],
-			["Thermostat Setpoint", "set", 1, "$value$[\"setpoint\", 1]", 0],
-			["Thermostat Setpoint", "get"]
+			[
+				"Battery",
+				"get"
+			],
+			[
+				"Thermostat Setpoint",
+				"get"
+			]
 		]
 	}
 }
