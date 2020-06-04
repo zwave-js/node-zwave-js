@@ -149,6 +149,7 @@ export interface CCAPIs {
 	Configuration: import("./ConfigurationCC").ConfigurationCCAPI;
 	Indicator: import("./IndicatorCC").IndicatorCCAPI;
 	Language: import("./LanguageCC").LanguageCCAPI;
+	Lock: import("./LockCC").LockCCAPI;
 	"Manufacturer Proprietary": import("./ManufacturerProprietaryCC").ManufacturerProprietaryCCAPI;
 	"Manufacturer Specific": import("./ManufacturerSpecificCC").ManufacturerSpecificCCAPI;
 	Meter: import("./MeterCC").MeterCCAPI;
