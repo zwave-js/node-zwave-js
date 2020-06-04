@@ -1,5 +1,6 @@
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import { CRC16_CCITT } from "../util/crc";
 import { validatePayload } from "../util/misc";
 import {
 	CCCommand,
@@ -158,9 +159,9 @@ export class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
 }
 
 interface FirmwareUpdateMetaDataCCReportOptions extends CCCommandOptions {
+	isLast: boolean;
 	reportNumber: number;
 	firmwareData: Buffer;
-	isLast: boolean;
 }
 
 @CCCommand(FirmwareUpdateMetaDataCommand.Report)
@@ -186,19 +187,34 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 		}
 	}
 
+	public isLast: boolean;
 	public reportNumber: number;
 	public firmwareData: Buffer;
-	public isLast: boolean;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.concat([
+		const commandBuffer = Buffer.concat([
 			Buffer.allocUnsafe(2), // placeholder for report number
 			this.firmwareData,
 		]);
-		this.payload.writeUInt16BE(
+		commandBuffer.writeUInt16BE(
 			(this.reportNumber & 0x7fff) | (this.isLast ? 0x8000 : 0),
 			0,
 		);
+
+		if (this.version >= 2) {
+			// Compute and save the CRC16 in the payload
+			// The CC header is included in the CRC computation
+			let crc = CRC16_CCITT(Buffer.from([this.ccId, this.ccCommand]));
+			crc = CRC16_CCITT(commandBuffer, crc);
+			this.payload = Buffer.concat([
+				commandBuffer,
+				Buffer.allocUnsafe(2),
+			]);
+			this.payload.writeUInt16BE(crc, this.payload.length - 2);
+		} else {
+			this.payload = commandBuffer;
+		}
+
 		return super.serialize();
 	}
 }
