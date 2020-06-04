@@ -74,11 +74,32 @@ export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDa
 		this.manufacturerId = this.payload.readUInt16BE(0);
 		this.firmwareId = this.payload.readUInt16BE(2);
 		this.checksum = this.payload.readUInt16BE(4);
+		// V1/V2 only have a single firmware which must be upgradable
+		this.firmwareUpgradable =
+			this.payload[6] === 0xff || this.payload[6] == undefined;
+
+		if (this.version >= 3 && this.payload.length >= 10) {
+			this.maxFragmentSize = this.payload.readUInt16BE(8);
+			const numAdditionalFirmwares = this.payload[7];
+			const additionalFirmwareIDs = [];
+			validatePayload(
+				this.payload.length >= 10 + 2 * numAdditionalFirmwares,
+			);
+			for (let i = 0; i < numAdditionalFirmwares; i++) {
+				additionalFirmwareIDs.push(
+					this.payload.readUInt16BE(10 + 2 * i),
+				);
+			}
+			this.additionalFirmwareIDs = additionalFirmwareIDs;
+		}
 	}
 
 	public readonly manufacturerId: number;
 	public readonly firmwareId: number;
 	public readonly checksum: number;
+	public readonly firmwareUpgradable: boolean;
+	public readonly maxFragmentSize?: number;
+	public readonly additionalFirmwareIDs: readonly number[] = [];
 }
 
 @CCCommand(FirmwareUpdateMetaDataCommand.MetaDataGet)
@@ -99,11 +120,18 @@ export class FirmwareUpdateMetaDataCCRequestReport extends FirmwareUpdateMetaDat
 	public readonly status: FirmwareUpdateMetadataRequestStatus;
 }
 
-interface FirmwareUpdateMetaDataCCRequestGetOptions extends CCCommandOptions {
+type FirmwareUpdateMetaDataCCRequestGetOptions = {
 	manufacturerId: number;
 	firmwareId: number;
 	checksum: number;
-}
+} & (
+	| {
+			firmwareTarget: number;
+			fragmentSize: number;
+	  }
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	| {}
+);
 
 @CCCommand(FirmwareUpdateMetaDataCommand.RequestGet)
 @expectedCCResponse(FirmwareUpdateMetaDataCCRequestReport)
@@ -112,7 +140,7 @@ export class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC
 		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
-			| FirmwareUpdateMetaDataCCRequestGetOptions,
+			| (FirmwareUpdateMetaDataCCRequestGetOptions & CCCommandOptions),
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
@@ -125,18 +153,32 @@ export class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC
 			this.manufacturerId = options.manufacturerId;
 			this.firmwareId = options.firmwareId;
 			this.checksum = options.checksum;
+			if ("firmwareTarget" in options) {
+				this.firmwareTarget = options.firmwareTarget;
+				this.fragmentSize = options.fragmentSize;
+			}
 		}
 	}
 
 	public manufacturerId: number;
 	public firmwareId: number;
 	public checksum: number;
+	public firmwareTarget?: number;
+	public fragmentSize?: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.allocUnsafe(6);
+		const isV3 =
+			this.version >= 3 &&
+			this.firmwareTarget != undefined &&
+			this.fragmentSize != undefined;
+		this.payload = Buffer.allocUnsafe(6 + (isV3 ? 3 : 0));
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.firmwareId, 2);
 		this.payload.writeUInt16BE(this.checksum, 4);
+		if (isV3) {
+			this.payload[6] = this.firmwareTarget!;
+			this.payload.writeUInt16BE(this.fragmentSize!, 7);
+		}
 		return super.serialize();
 	}
 }
@@ -228,7 +270,11 @@ export class FirmwareUpdateMetaDataCCStatusReport extends FirmwareUpdateMetaData
 		super(driver, options);
 		validatePayload(this.payload.length >= 1);
 		this.status = this.payload[0];
+		if (this.payload.length >= 3) {
+			this.waitTime = this.payload.readUInt16BE(1);
+		}
 	}
 
 	public readonly status: FirmwareUpdateStatus;
+	public readonly waitTime?: number;
 }
