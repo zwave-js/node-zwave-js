@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## 3.6.4 (2020-06-04)
+### Bugfixes
+* `Thermostat Setpoint Set` has been removed from the compat queries for Danfoss thermostats, because it overwrites queued commands
+
 ## 3.6.3 (2020-06-03)
 ### Bugfixes
 * Always send handshakes replies, even if the target node is asleep
