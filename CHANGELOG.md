@@ -4,6 +4,12 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* Added support for `Door Lock CC V4`
+* Added support for `Lock CC`
+* Added interview for `Language CC`
+
 ## 3.6.4 (2020-06-04)
 ### Bugfixes
 * `Thermostat Setpoint Set` has been removed from the compat queries for Danfoss thermostats, because it overwrites queued commands
