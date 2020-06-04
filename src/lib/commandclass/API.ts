@@ -147,8 +147,10 @@ export interface CCAPIs {
 	Clock: import("./ClockCC").ClockCCAPI;
 	"Color Switch": import("./ColorSwitchCC").ColorSwitchCCAPI;
 	Configuration: import("./ConfigurationCC").ConfigurationCCAPI;
+	"Door Lock": import("./DoorLockCC").DoorLockCCAPI;
 	Indicator: import("./IndicatorCC").IndicatorCCAPI;
 	Language: import("./LanguageCC").LanguageCCAPI;
+	Lock: import("./LockCC").LockCCAPI;
 	"Manufacturer Proprietary": import("./ManufacturerProprietaryCC").ManufacturerProprietaryCCAPI;
 	"Manufacturer Specific": import("./ManufacturerSpecificCC").ManufacturerSpecificCCAPI;
 	Meter: import("./MeterCC").MeterCCAPI;

@@ -17,7 +17,7 @@ const context = github.context;
 		},
 	};
 
-	await exec.exec("npm", ["run", "gh-cc-table"], options);
+	await exec.exec("npm", ["run", "implemented_ccs", "--", "--flavor=github"], options);
 
 	ccTable = ccTable
 		.split("\n")
@@ -30,16 +30,7 @@ const context = github.context;
 		issue_number: 6,
 	});
 
-	const newBody = `
-The following command classes are not implemented or incomplete:
-
-${ccTable}
-
-*this file was generated with* 
-\`\`\`bash
-npm run gh-cc-table
-\`\`\`
-`;
+	const newBody = ccTable;
 
 	if (oldBody !== newBody) {
 		await octokit.issues.update({

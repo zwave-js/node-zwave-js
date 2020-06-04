@@ -12,6 +12,8 @@ export type { ColorTable } from "./ColorSwitchCC";
 export { ColorComponent } from "./ColorSwitchCC";
 export { CommandClasses } from "./CommandClasses";
 export type { ConfigValue } from "./ConfigurationCC";
+export type { DoorHandleStatus } from "./DoorLockCC";
+export { DoorLockMode, DoorLockOperationType } from "./DoorLockCC";
 export { DeviceIdType } from "./ManufacturerSpecificCC";
 export { RateType } from "./MeterCC";
 export type { Association } from "./MultiChannelAssociationCC";
