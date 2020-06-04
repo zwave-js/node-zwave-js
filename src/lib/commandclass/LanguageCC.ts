@@ -1,5 +1,6 @@
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import log from "../log";
 import { validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
 import type { Maybe } from "../values/Primitive";
@@ -24,6 +25,8 @@ export enum LanguageCommand {
 	Get = 0x02,
 	Report = 0x03,
 }
+
+// @noSetValueAPI It doesn't make sense
 
 @API(CommandClasses.Language)
 export class LanguageCCAPI extends CCAPI {
@@ -68,6 +71,34 @@ export class LanguageCCAPI extends CCAPI {
 @implementedVersion(1)
 export class LanguageCC extends CommandClass {
 	declare ccCommand: LanguageCommand;
+
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const api = this.getEndpoint()!.commandClasses.Language;
+
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		log.controller.logNode(node.id, {
+			message: "requesting language setting...",
+			direction: "outbound",
+		});
+		const { language, country } = await api.get();
+		const logMessage = `received current language setting: ${language}${
+			country != undefined ? "-" + country : ""
+		}`;
+		log.controller.logNode(node.id, {
+			message: logMessage,
+			direction: "inbound",
+		});
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
 }
 
 interface LanguageCCSetOptions extends CCCommandOptions {
