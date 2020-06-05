@@ -1,6 +1,9 @@
 import { JsonlDB, JsonlDBOptions } from "@alcalzone/jsonl-db";
 import { wait } from "alcalzone-shared/async";
-import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
+import {
+	createDeferredPromise,
+	DeferredPromise,
+} from "alcalzone-shared/deferred-promise";
 import { entries } from "alcalzone-shared/objects";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import { isArray } from "alcalzone-shared/typeguards";
@@ -202,6 +205,12 @@ interface RequestHandlerEntry<T extends Message = Message> {
 	oneTime: boolean;
 }
 
+interface AwaitedCommandEntry {
+	promise: DeferredPromise<CommandClass>;
+	timeout?: NodeJS.Timeout;
+	predicate: (cc: CommandClass) => boolean;
+}
+
 export interface SendMessageOptions {
 	/** The priority of the message to send. If none is given, the defined default priority of the message class will be used. */
 	priority?: MessagePriority;
@@ -297,6 +306,9 @@ export class Driver extends EventEmitter {
 	private sendQueue = new SortedList<Transaction>();
 	/** A map of handlers for all sorts of requests */
 	private requestHandlers = new Map<FunctionType, RequestHandlerEntry[]>();
+	/** A map of awaited commands */
+	private awaitedCommands: AwaitedCommandEntry[] = [];
+
 	/** A map of all current supervision sessions that may still receive updates */
 	private supervisionSessions = new Map<number, SupervisionUpdateHandler>();
 
@@ -1563,7 +1575,15 @@ ${handlers.length} left`,
 					this.supervisionSessions.delete(msg.command.sessionId);
 				}
 			} else {
-				// dispatch the command to the node itself
+				// check if someone is waiting for this command
+				for (const entry of this.awaitedCommands) {
+					if (entry.predicate(msg.command)) {
+						// resolve the promise - this will remove the entry from the list
+						entry.promise.resolve(msg.command);
+						return;
+					}
+				}
+				// noone is waiting, dispatch the command to the node itself
 				await node.handleCommand(msg.command);
 			}
 
@@ -2193,6 +2213,46 @@ ${handlers.length} left`,
 		if (this.serial) {
 			this.serial.write(data);
 		}
+	}
+
+	/**
+	 * Waits until a command is received or a timeout has elapsed. Returns the received command.
+	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
+	 * @param predicate A predicate function to test all incoming command classes
+	 */
+	// wotan-disable-next-line no-misused-generics
+	public waitForCommand<T extends CommandClass>(
+		predicate: (cc: CommandClass) => boolean,
+		timeout: number,
+	): Promise<T> {
+		return new Promise<T>((resolve, reject) => {
+			const entry: AwaitedCommandEntry = {
+				predicate,
+				promise: createDeferredPromise<CommandClass>(),
+				timeout: undefined,
+			};
+			this.awaitedCommands.push(entry);
+			const removeEntry = () => {
+				if (entry.timeout) clearTimeout(entry.timeout);
+				const index = this.awaitedCommands.indexOf(entry);
+				if (index !== -1) this.awaitedCommands.splice(index, 1);
+			};
+			// When the timeout elapses, remove the wait entry and reject the returned Promise
+			entry.timeout = setTimeout(() => {
+				removeEntry();
+				reject(
+					new ZWaveError(
+						`Received no matching command within the provided timeout!`,
+						ZWaveErrorCodes.Controller_NodeTimeout,
+					),
+				);
+			}, timeout).unref();
+			// When the promise is resolved, remove the wait entry and resolve the returned Promise
+			void entry.promise.then((cc) => {
+				removeEntry();
+				resolve(cc as T);
+			});
+		});
 	}
 
 	/** Moves all messages for a given node into the wakeup queue */
