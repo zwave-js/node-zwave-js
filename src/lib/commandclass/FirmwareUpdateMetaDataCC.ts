@@ -2,6 +2,7 @@ import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { CRC16_CCITT } from "../util/crc";
 import { validatePayload } from "../util/misc";
+import { Maybe, unknownBoolean } from "../values/Primitive";
 import {
 	CCCommand,
 	CCCommandOptions,
@@ -110,9 +111,18 @@ export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDa
 			}
 			this.additionalFirmwareIDs = additionalFirmwareIDs;
 			// Read hardware version (if it exists)
-			const offset = 10 + 2 * numAdditionalFirmwares;
+			let offset = 10 + 2 * numAdditionalFirmwares;
 			if (this.version >= 5 && this.payload.length >= offset + 1) {
 				this.hardwareVersion = this.payload[offset];
+				offset++;
+				if (this.version >= 6 && this.payload.length >= offset + 1) {
+					const capabilities = this.payload[offset];
+					offset++;
+
+					this.continuesToFunction = !!(capabilities & 0b1);
+					if (this.version >= 7)
+						this.supportsActivation = !!(capabilities & 0b10);
+				}
 			}
 		}
 	}
@@ -124,6 +134,8 @@ export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDa
 	public readonly maxFragmentSize?: number;
 	public readonly additionalFirmwareIDs: readonly number[] = [];
 	public readonly hardwareVersion?: number;
+	public readonly continuesToFunction: Maybe<boolean> = unknownBoolean;
+	public readonly supportsActivation: Maybe<boolean> = unknownBoolean;
 }
 
 @CCCommand(FirmwareUpdateMetaDataCommand.MetaDataGet)
