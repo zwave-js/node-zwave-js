@@ -57,6 +57,13 @@ export enum FirmwareUpdateStatus {
 	OK_RestartPending = 0xff,
 }
 
+// @publicAPI
+export enum FirmwareUpdateActivationStatus {
+	Error_InvalidFirmware = 0,
+	Error_ActivationFailed = 1,
+	OK = 0xff,
+}
+
 @commandClass(CommandClasses["Firmware Update Meta Data"])
 @implementedVersion(1)
 export class FirmwareUpdateMetaDataCC extends CommandClass {
@@ -128,6 +135,7 @@ type FirmwareUpdateMetaDataCCRequestGetOptions = {
 	| {
 			firmwareTarget: number;
 			fragmentSize: number;
+			activation?: boolean;
 	  }
 	// eslint-disable-next-line @typescript-eslint/ban-types
 	| {}
@@ -156,6 +164,7 @@ export class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC
 			if ("firmwareTarget" in options) {
 				this.firmwareTarget = options.firmwareTarget;
 				this.fragmentSize = options.fragmentSize;
+				this.activation = options.activation;
 			}
 		}
 	}
@@ -165,19 +174,24 @@ export class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC
 	public checksum: number;
 	public firmwareTarget?: number;
 	public fragmentSize?: number;
+	public activation?: boolean;
 
 	public serialize(): Buffer {
 		const isV3 =
 			this.version >= 3 &&
 			this.firmwareTarget != undefined &&
 			this.fragmentSize != undefined;
-		this.payload = Buffer.allocUnsafe(6 + (isV3 ? 3 : 0));
+		const isV4 = isV3 && this.version >= 4 && this.activation != undefined;
+		this.payload = Buffer.allocUnsafe(6 + (isV3 ? 3 : 0) + (isV4 ? 1 : 0));
 		this.payload.writeUInt16BE(this.manufacturerId, 0);
 		this.payload.writeUInt16BE(this.firmwareId, 2);
 		this.payload.writeUInt16BE(this.checksum, 4);
 		if (isV3) {
 			this.payload[6] = this.firmwareTarget!;
 			this.payload.writeUInt16BE(this.fragmentSize!, 7);
+		}
+		if (isV4) {
+			this.payload[9] = this.activation ? 1 : 0;
 		}
 		return super.serialize();
 	}
@@ -276,5 +290,75 @@ export class FirmwareUpdateMetaDataCCStatusReport extends FirmwareUpdateMetaData
 	}
 
 	public readonly status: FirmwareUpdateStatus;
+	/** The wait time in seconds before the node becomes available for communication after the update */
 	public readonly waitTime?: number;
+}
+
+@CCCommand(FirmwareUpdateMetaDataCommand.ActivationReport)
+export class FirmwareUpdateMetaDataCCActivationReport extends FirmwareUpdateMetaDataCC {
+	public constructor(
+		driver: Driver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		validatePayload(this.payload.length >= 8);
+		this.manufacturerId = this.payload.readUInt16BE(0);
+		this.firmwareId = this.payload.readUInt16BE(2);
+		this.checksum = this.payload.readUInt16BE(4);
+		this.firmwareTarget = this.payload[6];
+		this.activationStatus = this.payload[7];
+	}
+
+	public readonly manufacturerId: number;
+	public readonly firmwareId: number;
+	public readonly checksum: number;
+	public readonly firmwareTarget: number;
+	public readonly activationStatus: FirmwareUpdateActivationStatus;
+}
+
+interface FirmwareUpdateMetaDataCCActivationSetOptions
+	extends CCCommandOptions {
+	manufacturerId: number;
+	firmwareId: number;
+	checksum: number;
+	firmwareTarget: number;
+}
+
+@CCCommand(FirmwareUpdateMetaDataCommand.ActivationSet)
+@expectedCCResponse(FirmwareUpdateMetaDataCCActivationReport)
+export class FirmwareUpdateMetaDataCCActivationSet extends FirmwareUpdateMetaDataCC {
+	public constructor(
+		driver: Driver,
+		options:
+			| CommandClassDeserializationOptions
+			| FirmwareUpdateMetaDataCCActivationSetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this.manufacturerId = options.manufacturerId;
+			this.firmwareId = options.firmwareId;
+			this.checksum = options.checksum;
+			this.firmwareTarget = options.firmwareTarget;
+		}
+	}
+
+	public manufacturerId: number;
+	public firmwareId: number;
+	public checksum: number;
+	public firmwareTarget: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.allocUnsafe(7);
+		this.payload.writeUInt16BE(this.manufacturerId, 0);
+		this.payload.writeUInt16BE(this.firmwareId, 2);
+		this.payload.writeUInt16BE(this.checksum, 4);
+		this.payload[6] = this.firmwareTarget;
+		return super.serialize();
+	}
 }
