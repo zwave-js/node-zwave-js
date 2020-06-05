@@ -1,11 +1,15 @@
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import type { ValueID } from "../node/ValueDB";
 import { CRC16_CCITT } from "../util/crc";
-import { validatePayload } from "../util/misc";
+import { pick, validatePayload } from "../util/misc";
 import { Maybe, unknownBoolean } from "../values/Primitive";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
+	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -30,8 +34,11 @@ export enum FirmwareUpdateMetaDataCommand {
 	PrepareReport = 0x0b,
 }
 
+// @noSetValueAPI There are no values to set here
+// @noInterview   The "interview" is part of the update process
+
 // @publicAPI
-export enum FirmwareUpdateMetadataRequestStatus {
+export enum FirmwareUpdateRequestStatus {
 	Error_InvalidManufacturerOrFirmwareID = 0,
 	Error_AuthenticationExpected = 1,
 	Error_FragmentSizeTooLarge = 2,
@@ -75,8 +82,126 @@ export enum FirmwareDownloadStatus {
 	OK = 0xff,
 }
 
+function getSupportsActivationValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Firmware Update Meta Data"],
+		property: "supportsActivation",
+	};
+}
+
+@API(CommandClasses["Firmware Update Meta Data"])
+export class FirmwareUpdateMetaDataCCAPI extends CCAPI {
+	public supportsCommand(cmd: FirmwareUpdateMetaDataCommand): Maybe<boolean> {
+		switch (cmd) {
+			case FirmwareUpdateMetaDataCommand.MetaDataGet:
+			case FirmwareUpdateMetaDataCommand.RequestGet:
+			case FirmwareUpdateMetaDataCommand.Report:
+			case FirmwareUpdateMetaDataCommand.StatusReport:
+				return true;
+
+			case FirmwareUpdateMetaDataCommand.ActivationSet:
+				return (
+					this.version >= 4 &&
+					(this.version < 7 ||
+						this.endpoint
+							.getNodeUnsafe()
+							?.getValue(getSupportsActivationValueId()) === true)
+				);
+
+			case FirmwareUpdateMetaDataCommand.PrepareGet:
+				return this.version >= 5;
+		}
+		return super.supportsCommand(cmd);
+	}
+
+	/**
+	 * Requests information about the current firmware on the device
+	 */
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async getMetaData() {
+		this.assertSupportsCommand(
+			FirmwareUpdateMetaDataCommand,
+			FirmwareUpdateMetaDataCommand.MetaDataGet,
+		);
+
+		const cc = new FirmwareUpdateMetaDataCCMetaDataGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<
+			FirmwareUpdateMetaDataCCMetaDataReport
+		>(cc))!;
+		return pick(response, [
+			"manufacturerId",
+			"firmwareId",
+			"checksum",
+			"firmwareUpgradable",
+			"maxFragmentSize",
+			"additionalFirmwareIDs",
+			"hardwareVersion",
+			"continuesToFunction",
+			"supportsActivation",
+		]);
+	}
+
+	/**
+	 * Requests the device to start the firmware update process.
+	 * WARNING: This method may wait up to 60 seconds for a reply.
+	 */
+	public async requestUpdate(
+		options: FirmwareUpdateMetaDataCCRequestGetOptions,
+	): Promise<FirmwareUpdateRequestStatus> {
+		this.assertSupportsCommand(
+			FirmwareUpdateMetaDataCommand,
+			FirmwareUpdateMetaDataCommand.RequestGet,
+		);
+
+		const cc = new FirmwareUpdateMetaDataCCRequestGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...options,
+		});
+		// Since the response may take longer than with other commands,
+		// we do not use the built-in waiting functionality, which would block
+		// all other communication
+		await this.driver.sendCommand(cc);
+		const { status } = await this.driver.waitForCommand<
+			FirmwareUpdateMetaDataCCRequestReport
+		>(
+			(cc) =>
+				cc instanceof FirmwareUpdateMetaDataCCRequestReport &&
+				cc.nodeId === this.endpoint.nodeId,
+			60000,
+		);
+		return status;
+	}
+
+	/**
+	 * Sends a fragment of the new firmware to the device
+	 */
+	public async sendFirmwareFragment(
+		fragmentNumber: number,
+		isLastFragment: boolean,
+		data: Buffer,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			FirmwareUpdateMetaDataCommand,
+			FirmwareUpdateMetaDataCommand.Report,
+		);
+
+		const cc = new FirmwareUpdateMetaDataCCReport(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			reportNumber: fragmentNumber,
+			isLast: isLastFragment,
+			firmwareData: data,
+		});
+		await this.driver.sendCommand(cc);
+	}
+}
+
 @commandClass(CommandClasses["Firmware Update Meta Data"])
-@implementedVersion(1)
+@implementedVersion(7)
 export class FirmwareUpdateMetaDataCC extends CommandClass {
 	declare ccCommand: FirmwareUpdateMetaDataCommand;
 }
@@ -125,6 +250,8 @@ export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDa
 				}
 			}
 		}
+
+		this.persistValues();
 	}
 
 	public readonly manufacturerId: number;
@@ -134,7 +261,11 @@ export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDa
 	public readonly maxFragmentSize?: number;
 	public readonly additionalFirmwareIDs: readonly number[] = [];
 	public readonly hardwareVersion?: number;
+
+	@ccValue({ internal: true })
 	public readonly continuesToFunction: Maybe<boolean> = unknownBoolean;
+
+	@ccValue({ internal: true })
 	public readonly supportsActivation: Maybe<boolean> = unknownBoolean;
 }
 
@@ -153,7 +284,7 @@ export class FirmwareUpdateMetaDataCCRequestReport extends FirmwareUpdateMetaDat
 		this.status = this.payload[0];
 	}
 
-	public readonly status: FirmwareUpdateMetadataRequestStatus;
+	public readonly status: FirmwareUpdateRequestStatus;
 }
 
 type FirmwareUpdateMetaDataCCRequestGetOptions = {
@@ -175,7 +306,8 @@ type FirmwareUpdateMetaDataCCRequestGetOptions = {
 );
 
 @CCCommand(FirmwareUpdateMetaDataCommand.RequestGet)
-@expectedCCResponse(FirmwareUpdateMetaDataCCRequestReport)
+// This would expect a FirmwareUpdateMetaDataCCRequestReport, but the response may take
+// a while to come. We don't want to block communication, so we don't expect a response here
 export class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC {
 	public constructor(
 		driver: Driver,
