@@ -129,4 +129,9 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 
 		return super.serialize();
 	}
+
+	protected computeEncapsulationOverhead(): number {
+		// CRC16 adds two bytes CRC to the default overhead
+		return super.computeEncapsulationOverhead() + 2;
+	}
 }

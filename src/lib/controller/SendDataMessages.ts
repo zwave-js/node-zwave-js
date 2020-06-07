@@ -158,6 +158,14 @@ callbackId:      ${this.callbackId}`,
 		}
 		return ret;
 	}
+
+	/** Computes the maximum payload size that can be transmitted with this message */
+	public getMaxPayloadLength(): number {
+		// From INS13954-7, chapter 4.3.3.1.5
+		if (this.transmitOptions & TransmitOptions.Explore) return 46;
+		if (this.transmitOptions & TransmitOptions.AutoRoute) return 48;
+		return 54;
+	}
 }
 
 // Generic handler for all potential responses to SendDataRequests

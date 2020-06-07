@@ -82,6 +82,7 @@ module.exports = {
 			"warn",
 			{ allowArgumentsExplicitlyTypedAsAny: true },
 		],
+		"@typescript-eslint/no-this-alias": "off",
 	},
 	overrides: [
 		{

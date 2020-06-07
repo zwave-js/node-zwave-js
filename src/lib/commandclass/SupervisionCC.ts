@@ -217,4 +217,9 @@ export class SupervisionCCGet extends SupervisionCC {
 		]);
 		return super.serialize();
 	}
+
+	protected computeEncapsulationOverhead(): number {
+		// Supervision CC adds two bytes (control byte + cc length)
+		return super.computeEncapsulationOverhead() + 2;
+	}
 }

@@ -2519,4 +2519,17 @@ ${handlers.length} left`,
 			);
 		}
 	}
+
+	/** Computes the maximum net CC payload size for the given CC or SendDataRequest */
+	public computeNetCCPayloadSize(
+		commandOrMsg: CommandClass | SendDataRequest,
+	): number {
+		// Recreate the correct encapsulation structure
+		const msg =
+			commandOrMsg instanceof SendDataRequest
+				? commandOrMsg
+				: new SendDataRequest(this, { command: commandOrMsg });
+		this.encapsulateCommands(msg);
+		return msg.command.getMaxPayloadLength(msg.getMaxPayloadLength());
+	}
 }

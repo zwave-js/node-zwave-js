@@ -6,11 +6,19 @@ import {
 	MockSerialPort,
 } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
+import { FirmwareUpdateMetaDataCC } from "../commandclass/FirmwareUpdateMetaDataCC";
+import { MultiChannelCCCommandEncapsulation } from "../commandclass/MultiChannelCC";
+import { SecurityCCCommandEncapsulation } from "../commandclass/SecurityCC";
 import { WakeUpCCIntervalSet } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
+import {
+	SendDataRequest,
+	TransmitOptions,
+} from "../controller/SendDataMessages";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { MessageHeaders, MessageType } from "../message/Constants";
 import { Message, messageTypes } from "../message/Message";
+import { ZWaveNode } from "../node/Node";
 import { Driver } from "./Driver";
 
 jest.mock("serialport", () => MockSerialPort);
@@ -502,6 +510,63 @@ describe("lib/driver/Driver => ", () => {
 				}
 				lastCallbackId = nextCallbackId;
 			}
+		});
+	});
+
+	describe("computeNetCCPayloadSize() => ", () => {
+		let driver: Driver;
+		let node2: ZWaveNode;
+
+		beforeEach(async () => {
+			({ driver } = await createAndStartDriver());
+			node2 = new ZWaveNode(2, driver);
+			(driver as any)._securityManager = {};
+			(driver as any)._controller = {
+				ownNodeId: 1,
+				nodes: {
+					has: () => true,
+					get: () => node2,
+					forEach: () => {},
+				},
+			};
+		});
+
+		afterEach(() => {
+			driver.destroy();
+			driver.removeAllListeners();
+		});
+
+		it("should compute the correct net payload sizes", () => {
+			const testMsg1 = new SendDataRequest(driver, {
+				command: new SecurityCCCommandEncapsulation(driver, {
+					nodeId: 2,
+					encapsulated: undefined as any,
+				}),
+				transmitOptions: TransmitOptions.DEFAULT,
+			});
+			expect(driver.computeNetCCPayloadSize(testMsg1)).toBe(26);
+
+			const testMsg2 = new SendDataRequest(driver, {
+				command: new SecurityCCCommandEncapsulation(driver, {
+					nodeId: 2,
+					encapsulated: new MultiChannelCCCommandEncapsulation(
+						driver,
+						{
+							nodeId: 2,
+							destination: 1,
+							encapsulated: undefined as any,
+						},
+					),
+				}),
+				transmitOptions: TransmitOptions.NoRoute,
+			});
+			expect(driver.computeNetCCPayloadSize(testMsg2)).toBe(54 - 20 - 4);
+
+			const testMsg3 = new FirmwareUpdateMetaDataCC(driver, {
+				nodeId: 2,
+			});
+			testMsg3.secure = true;
+			expect(driver.computeNetCCPayloadSize(testMsg3)).toBe(46 - 20 - 2);
 		});
 	});
 

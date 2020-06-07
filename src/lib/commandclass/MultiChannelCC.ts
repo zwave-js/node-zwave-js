@@ -944,6 +944,11 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			}`,
 		};
 	}
+
+	protected computeEncapsulationOverhead(): number {
+		// Multi Channel CC adds two bytes for the source and destination endpoint
+		return super.computeEncapsulationOverhead() + 2;
+	}
 }
 
 @CCCommand(MultiChannelCommand.ReportV1)
@@ -1020,7 +1025,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 
 			// No need to validate further, each CC does it for itself
 			this.encapsulated = CommandClass.from(this.driver, {
-				data: this.payload.slice(2),
+				data: this.payload.slice(1),
 				fromEncapsulation: true,
 				encapCC: this,
 			});
@@ -1039,5 +1044,10 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 			this.encapsulated.serialize(),
 		]);
 		return super.serialize();
+	}
+
+	protected computeEncapsulationOverhead(): number {
+		// Multi Channel CC V1 adds one byte for the endpoint index
+		return super.computeEncapsulationOverhead() + 1;
 	}
 }

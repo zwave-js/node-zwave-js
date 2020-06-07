@@ -23,6 +23,7 @@ import {
 import { ValueMetadata } from "../values/Metadata";
 import { CCAPI } from "./API";
 import { CommandClasses, getCCName } from "./CommandClasses";
+import { isEncapsulatingCommandClass } from "./EncapsulatingCommandClass";
 
 export type MulticastDestination = [number, number, ...number[]];
 
@@ -162,10 +163,11 @@ export class CommandClass {
 
 	/** This CC's identifier */
 	public ccId: CommandClasses;
+	public ccCommand?: number;
+
 	/** The ID of the target node(s) */
 	public nodeId!: number | MulticastDestination;
 
-	public ccCommand?: number;
 	// Work around https://github.com/Microsoft/TypeScript/issues/27555
 	public payload!: Buffer;
 
@@ -768,6 +770,25 @@ export class CommandClass {
 		return Promise.resolve();
 		// By default do nothing
 		// If handshake messages should be sent, they need the highest priority
+	}
+
+	/** Returns the number of bytes that are added to the payload by this CC */
+	protected computeEncapsulationOverhead(): number {
+		// Default is ccId (+ ccCommand):
+		return (this.isExtended() ? 2 : 1) + 1;
+	}
+
+	/** Computes the maximum net payload size that can be transmitted inside this CC */
+	public getMaxPayloadLength(baseLength: number): number {
+		let ret = baseLength;
+		let cur: CommandClass | undefined = this;
+		while (cur) {
+			ret -= cur.computeEncapsulationOverhead();
+			cur = isEncapsulatingCommandClass(cur)
+				? cur.encapsulated
+				: undefined;
+		}
+		return ret;
 	}
 }
 
