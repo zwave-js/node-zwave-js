@@ -24,6 +24,13 @@ import {
 	sensorCCs,
 } from "../commandclass/CommandClasses";
 import {
+	FirmwareUpdateMetaDataCC,
+	FirmwareUpdateMetaDataCCGet,
+	FirmwareUpdateMetaDataCCStatusReport,
+	FirmwareUpdateRequestStatus,
+	FirmwareUpdateStatus,
+} from "../commandclass/FirmwareUpdateMetaDataCC";
+import {
 	getManufacturerIdValueId,
 	getProductIdValueId,
 	getProductTypeValueId,
@@ -61,6 +68,7 @@ import {
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import { CRC16_CCITT } from "../util/crc";
 import { timespan } from "../util/date";
 import { topologicalSort } from "../util/graph";
 import { getEnumMemberName, JSONObject, Mixin } from "../util/misc";
@@ -1399,6 +1407,8 @@ version:               ${this.version}`;
 			return this.handleClockReport(command);
 		} else if (command instanceof SecurityCCNonceGet) {
 			return this.handleSecurityNonceGet();
+		} else if (command instanceof FirmwareUpdateMetaDataCCGet) {
+			return this.handleFirmwareUpdateGet(command);
 		}
 
 		// Ignore all commands that don't need to be handled
@@ -1972,6 +1982,253 @@ version:               ${this.version}`;
 				},
 			);
 		}
+	}
+
+	private _firmwareUpdateStatus:
+		| {
+				progress: number;
+				fragmentSize: number;
+				numFragments: number;
+				data: Buffer;
+				abort: boolean;
+		  }
+		| undefined;
+
+	/**
+	 * Starts an OTA firmware update process for this node
+	 * @param data The firmware image
+	 * @param target The firmware target (i.e. chip) to upgrade. 0 updates the Z-Wave chip, >=1 updates others if they exist
+	 */
+	public async beginFirmwareUpdate(
+		data: Buffer,
+		target: number = 0,
+	): Promise<void> {
+		// Don't start the process twice
+		if (this._firmwareUpdateStatus) {
+			throw new ZWaveError(
+				`Failed to start the update: A firmware upgrade is already in progress!`,
+				ZWaveErrorCodes.FirmwareUpdateCC_Busy,
+			);
+		}
+		this._firmwareUpdateStatus = {
+			data,
+			fragmentSize: 0,
+			numFragments: 0,
+			progress: 0,
+			abort: false,
+		};
+
+		const version = this.getCCVersion(
+			CommandClasses["Firmware Update Meta Data"],
+		);
+		const api = this.commandClasses["Firmware Update Meta Data"];
+
+		// Check if this update is possible
+		const meta = await api.getMetaData();
+		if (target === 0 && !meta.firmwareUpgradable) {
+			throw new ZWaveError(
+				`The Z-Wave chip firmware is not upgradable`,
+				ZWaveErrorCodes.FirmwareUpdateCC_NotUpgradable,
+			);
+		} else if (version < 3 && target !== 0) {
+			throw new ZWaveError(
+				`Upgrading different firmware targets requires version 3+`,
+				ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
+			);
+		} else if (
+			target < 0 ||
+			(target > 0 && meta.additionalFirmwareIDs.length < target)
+		) {
+			throw new ZWaveError(
+				`Firmware target #${target} not found!`,
+				ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
+			);
+		}
+
+		// Determine the fragment size
+		const fcc = new FirmwareUpdateMetaDataCC(this.driver, {
+			nodeId: this.id,
+		});
+		const maxNetPayloadSize =
+			this.driver.computeNetCCPayloadSize(fcc) -
+			2 - // report number
+			(version >= 2 ? 2 : 0); // checksum
+		// Use the smallest allowed payload
+		this._firmwareUpdateStatus.fragmentSize = Math.min(
+			maxNetPayloadSize,
+			meta.maxFragmentSize ?? Number.POSITIVE_INFINITY,
+		);
+		this._firmwareUpdateStatus.numFragments = Math.ceil(
+			data.length / this._firmwareUpdateStatus.fragmentSize,
+		);
+
+		log.controller.logNode(this.id, {
+			message: `Starting firmware update...`,
+			direction: "outbound",
+		});
+
+		// Request the node to start the upgrade
+		// TODO: Should manufacturer id and firmware id be provided externally?
+		const status = await api.requestUpdate({
+			manufacturerId: meta.manufacturerId,
+			firmwareId: meta.firmwareId,
+			firmwareTarget: target,
+			fragmentSize: this._firmwareUpdateStatus.fragmentSize,
+			checksum: CRC16_CCITT(data),
+		});
+		switch (status) {
+			case FirmwareUpdateRequestStatus.Error_AuthenticationExpected:
+				throw new ZWaveError(
+					`Failed to start the update: A manual authentication event (e.g. button push) was expected!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
+				);
+			case FirmwareUpdateRequestStatus.Error_BatteryLow:
+				throw new ZWaveError(
+					`Failed to start the update: The battery level is too low!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
+				);
+			case FirmwareUpdateRequestStatus.Error_FirmwareUpgradeInProgress:
+				throw new ZWaveError(
+					`Failed to start the update: A firmware upgrade is already in progress!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_Busy,
+				);
+			case FirmwareUpdateRequestStatus.Error_InvalidManufacturerOrFirmwareID:
+				throw new ZWaveError(
+					`Failed to start the update: Invalid manufacturer or firmware id!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
+				);
+			case FirmwareUpdateRequestStatus.Error_InvalidHardwareVersion:
+				throw new ZWaveError(
+					`Failed to start the update: Invalid hardware version!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
+				);
+			case FirmwareUpdateRequestStatus.Error_NotUpgradable:
+				throw new ZWaveError(
+					`Failed to start the update: Firmware target #${target} is not upgradable!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_NotUpgradable,
+				);
+			case FirmwareUpdateRequestStatus.Error_FragmentSizeTooLarge:
+				throw new ZWaveError(
+					`Failed to start the update: The chosen fragment size is too large!`,
+					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
+				);
+			case FirmwareUpdateRequestStatus.OK:
+				// All good, we have started!
+				return;
+		}
+	}
+
+	/**
+	 * Aborts an active firmware update process
+	 */
+	public async abortFirmwareUpdate(): Promise<void> {
+		// Don't stop the process twice
+		if (!this._firmwareUpdateStatus || this._firmwareUpdateStatus.abort) {
+			return;
+		}
+		log.controller.logNode(this.id, {
+			message: `Aborting firmware update...`,
+			direction: "outbound",
+		});
+
+		this._firmwareUpdateStatus.abort = true;
+
+		try {
+			await this.driver.waitForCommand(
+				(cc) =>
+					cc instanceof FirmwareUpdateMetaDataCCStatusReport &&
+					cc.status === FirmwareUpdateStatus.Error_TransmissionFailed,
+				5000,
+			);
+			log.controller.logNode(this.id, {
+				message: `Firmware update aborted`,
+				direction: "inbound",
+			});
+		} catch (e) {
+			if (
+				e instanceof ZWaveError &&
+				e.code === ZWaveErrorCodes.Controller_NodeTimeout
+			) {
+				throw new ZWaveError(
+					`The node did not acknowledge the aborted update`,
+					ZWaveErrorCodes.FirmwareUpdateCC_FailedToAbort,
+				);
+			}
+			throw e;
+		}
+	}
+
+	private handleFirmwareUpdateGet(
+		command: FirmwareUpdateMetaDataCCGet,
+	): void {
+		if (this._firmwareUpdateStatus == undefined) {
+			log.controller.logNode(this.id, {
+				message: `Received Firmware Update Get, but no firmware update is in progress, ignoring...`,
+				direction: "inbound",
+			});
+			return;
+		} else if (
+			command.reportNumber > this._firmwareUpdateStatus.numFragments
+		) {
+			log.controller.logNode(this.id, {
+				message: `Received Firmware Update Get for an out-of-bounds fragment, ignoring...`,
+				direction: "inbound",
+			});
+		}
+
+		// Send the response(s) in the background
+		void (async () => {
+			const {
+				numFragments,
+				data,
+				fragmentSize,
+				abort,
+			} = this._firmwareUpdateStatus!;
+			for (
+				let num = command.reportNumber;
+				num < command.reportNumber + command.numReports;
+				num++
+			) {
+				// Check if the node requested more fragments than are left
+				if (num > numFragments) {
+					break;
+				}
+				const fragment = data.slice(
+					(num - 1) * fragmentSize,
+					num * fragmentSize,
+				);
+
+				if (abort) {
+					// Send an intentionally corrupted frame
+					for (let i = 0; i < fragment.length; i++) {
+						fragment[i] = fragment[i] ^ 0xff;
+					}
+					await this.commandClasses[
+						"Firmware Update Meta Data"
+					].sendFirmwareFragment(num, true, fragment);
+					// and nothing else
+					return;
+				} else {
+					log.controller.logNode(this.id, {
+						message: `Sending firmware fragment ${num} / ${numFragments}`,
+						direction: "outbound",
+					});
+					const isLast = num === numFragments;
+					await this.commandClasses[
+						"Firmware Update Meta Data"
+					].sendFirmwareFragment(num, isLast, fragment);
+					// Remember the progress
+					this._firmwareUpdateStatus!.progress = num;
+					// And notify listeners
+					this.emit(
+						"firmware update progress",
+						this,
+						num,
+						numFragments,
+					);
+				}
+			}
+		})();
 	}
 
 	/**

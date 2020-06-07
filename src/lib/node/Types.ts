@@ -51,6 +51,11 @@ export type ZWaveInterviewFailedCallback = (
 	node: ZWaveNode,
 	additionalInfo: string,
 ) => void;
+export type ZWaveNodeFirmwareUpdateProgressCallback = (
+	node: ZWaveNode,
+	sentFragments: number,
+	totalFragments: number,
+) => void;
 
 export interface ZWaveNodeValueEventCallbacks {
 	"value added": ZWaveNodeValueAddedCallback;
@@ -59,6 +64,7 @@ export interface ZWaveNodeValueEventCallbacks {
 	"metadata updated": ZWaveNodeMetadataUpdatedCallback;
 	notification: ZWaveNotificationCallback;
 	"interview failed": ZWaveInterviewFailedCallback;
+	"firmware update progress": ZWaveNodeFirmwareUpdateProgressCallback;
 }
 
 export type ZWaveNodeEventCallbacks = Overwrite<

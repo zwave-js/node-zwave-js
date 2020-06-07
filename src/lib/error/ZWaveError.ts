@@ -87,6 +87,17 @@ export enum ZWaveErrorCodes {
 
 	/** Used to report that no nonce exists */
 	SecurityCC_NoNonce = 1400,
+
+	/** The firmware update process is already active */
+	FirmwareUpdateCC_Busy = 1500,
+	/** The selected firmware target is not upgradable */
+	FirmwareUpdateCC_NotUpgradable,
+	/** The selected firmware target does not exist */
+	FirmwareUpdateCC_TargetNotFound,
+	/** The node reported that it could not start the update */
+	FirmwareUpdateCC_FailedToStart,
+	/** The node did not confirm the aborted update */
+	FirmwareUpdateCC_FailedToAbort,
 }
 
 /**
