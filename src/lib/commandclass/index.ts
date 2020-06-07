@@ -14,6 +14,12 @@ export { CommandClasses } from "./CommandClasses";
 export type { ConfigValue } from "./ConfigurationCC";
 export type { DoorHandleStatus } from "./DoorLockCC";
 export { DoorLockMode, DoorLockOperationType } from "./DoorLockCC";
+export {
+	FirmwareUpdateRequestStatus,
+	FirmwareUpdateStatus,
+	FirmwareUpdateActivationStatus,
+	FirmwareDownloadStatus,
+} from "./FirmwareUpdateMetaDataCC";
 export { DeviceIdType } from "./ManufacturerSpecificCC";
 export { RateType } from "./MeterCC";
 export type { Association } from "./MultiChannelAssociationCC";

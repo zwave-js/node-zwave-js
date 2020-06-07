@@ -1,8 +1,10 @@
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import type { MessageOrCCLogEntry } from "../log/shared";
 import type { ValueID } from "../node/ValueDB";
 import { CRC16_CCITT } from "../util/crc";
-import { pick, validatePayload } from "../util/misc";
+import { getEnumMemberName, pick, validatePayload } from "../util/misc";
+import { num2hex } from "../util/strings";
 import { Maybe, unknownBoolean } from "../values/Primitive";
 import { CCAPI } from "./API";
 import {
@@ -267,6 +269,25 @@ export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDa
 
 	@ccValue({ internal: true })
 	public readonly supportsActivation: Maybe<boolean> = unknownBoolean;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`manufacturerId:        ${this.manufacturerId}`,
+				`firmwareId:            ${this.firmwareId}`,
+				`checksum:              ${this.checksum}`,
+				`firmwareUpgradable:    ${this.firmwareUpgradable}`,
+				`maxFragmentSize:       ${this.maxFragmentSize}`,
+				`additionalFirmwareIDs: ${JSON.stringify(
+					this.additionalFirmwareIDs,
+				)}`,
+				`hardwareVersion:       ${this.hardwareVersion}`,
+				`continuesToFunction:   ${this.continuesToFunction}`,
+				`supportsActivation:    ${this.supportsActivation}`,
+			],
+		};
+	}
 }
 
 @CCCommand(FirmwareUpdateMetaDataCommand.MetaDataGet)
@@ -285,6 +306,16 @@ export class FirmwareUpdateMetaDataCCRequestReport extends FirmwareUpdateMetaDat
 	}
 
 	public readonly status: FirmwareUpdateRequestStatus;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `status: ${getEnumMemberName(
+				FirmwareUpdateRequestStatus,
+				this.status,
+			)}`,
+		};
+	}
 }
 
 type FirmwareUpdateMetaDataCCRequestGetOptions = {
@@ -369,6 +400,30 @@ export class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC
 		}
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [
+			`manufacturerId:  ${num2hex(this.manufacturerId)}`,
+			`firmwareId:      ${num2hex(this.firmwareId)}`,
+			`checksum:        ${num2hex(this.checksum)}`,
+		];
+		if (this.firmwareTarget != undefined) {
+			messages.push(`firmwareTarget:  ${this.firmwareTarget}`);
+		}
+		if (this.fragmentSize != undefined) {
+			messages.push(`fragmentSize:    ${this.fragmentSize}`);
+		}
+		if (this.activation != undefined) {
+			messages.push(`activation:      ${this.activation}`);
+		}
+		if (this.hardwareVersion != undefined) {
+			messages.push(`hardwareVersion: ${this.hardwareVersion}`);
+		}
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
+	}
 }
 
 @CCCommand(FirmwareUpdateMetaDataCommand.Get)
@@ -386,6 +441,16 @@ export class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
 
 	public readonly numReports: number;
 	public readonly reportNumber: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`numReports:   ${this.numReports}`,
+				`reportNumber: ${this.reportNumber}`,
+			],
+		};
+	}
 }
 
 interface FirmwareUpdateMetaDataCCReportOptions extends CCCommandOptions {
@@ -447,6 +512,16 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`reportNumber: ${this.reportNumber}`,
+				`isLast:       ${this.isLast}`,
+			],
+		};
+	}
 }
 
 @CCCommand(FirmwareUpdateMetaDataCommand.StatusReport)
@@ -466,6 +541,19 @@ export class FirmwareUpdateMetaDataCCStatusReport extends FirmwareUpdateMetaData
 	public readonly status: FirmwareUpdateStatus;
 	/** The wait time in seconds before the node becomes available for communication after the update */
 	public readonly waitTime?: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: string[] = [
+			`status:   ${getEnumMemberName(FirmwareUpdateStatus, this.status)}`,
+		];
+		if (this.waitTime != undefined) {
+			message.push(`waitTime: ${this.waitTime} seconds`);
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(FirmwareUpdateMetaDataCommand.ActivationReport)
@@ -492,6 +580,26 @@ export class FirmwareUpdateMetaDataCCActivationReport extends FirmwareUpdateMeta
 	public readonly firmwareTarget: number;
 	public readonly activationStatus: FirmwareUpdateActivationStatus;
 	public readonly hardwareVersion?: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: string[] = [
+			`manufacturerId:   ${num2hex(this.manufacturerId)}`,
+			`firmwareId:       ${num2hex(this.firmwareId)}`,
+			`checksum:         ${num2hex(this.checksum)}`,
+			`firmwareTarget:   ${this.firmwareTarget}`,
+			`activationStatus: ${getEnumMemberName(
+				FirmwareUpdateActivationStatus,
+				this.activationStatus,
+			)}`,
+		];
+		if (this.hardwareVersion != undefined) {
+			message.push(`hardwareVersion:  ${this.hardwareVersion}`);
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 interface FirmwareUpdateMetaDataCCActivationSetOptions
@@ -547,6 +655,22 @@ export class FirmwareUpdateMetaDataCCActivationSet extends FirmwareUpdateMetaDat
 		}
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: string[] = [
+			`manufacturerId:   ${num2hex(this.manufacturerId)}`,
+			`firmwareId:       ${num2hex(this.firmwareId)}`,
+			`checksum:         ${num2hex(this.checksum)}`,
+			`firmwareTarget:   ${this.firmwareTarget}`,
+		];
+		if (this.hardwareVersion != undefined) {
+			message.push(`hardwareVersion:  ${this.hardwareVersion}`);
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(FirmwareUpdateMetaDataCommand.PrepareReport)
@@ -563,6 +687,19 @@ export class FirmwareUpdateMetaDataCCPrepareReport extends FirmwareUpdateMetaDat
 
 	public readonly status: FirmwareDownloadStatus;
 	public readonly checksum: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`status:   ${getEnumMemberName(
+					FirmwareDownloadStatus,
+					this.status,
+				)}`,
+				`checksum: ${num2hex(this.checksum)}`,
+			],
+		};
+	}
 }
 
 interface FirmwareUpdateMetaDataCCPrepareGetOptions extends CCCommandOptions {
@@ -612,5 +749,18 @@ export class FirmwareUpdateMetaDataCCPrepareGet extends FirmwareUpdateMetaDataCC
 		this.payload.writeUInt16BE(this.fragmentSize, 5);
 		this.payload[7] = this.hardwareVersion;
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`manufacturerId:  ${num2hex(this.manufacturerId)}`,
+				`firmwareId:      ${num2hex(this.firmwareId)}`,
+				`firmwareTarget:  ${this.firmwareTarget}`,
+				`fragmentSize:    ${this.fragmentSize}`,
+				`hardwareVersion: ${this.hardwareVersion}`,
+			],
+		};
 	}
 }
