@@ -591,7 +591,7 @@ export class Driver extends EventEmitter {
 				if (node.status === NodeStatus.Dead) {
 					log.controller.logNode(
 						node.id,
-						`Interview attempt (${node.interviewAttempts} / ${this.options.nodeInterviewAttempts}) failed, node is dead.`,
+						`Interview attempt (${node.interviewAttempts}/${this.options.nodeInterviewAttempts}) failed, node is dead.`,
 						"warn",
 					);
 					node.emit("interview failed", node, "The node is dead");
@@ -2335,13 +2335,14 @@ ${handlers.length} left`,
 				// But only if it is not a ping, because that will block the send queue until wakeup
 				if (
 					!messageIsPing(outerTransaction.message) &&
-					outerTransaction.priority === MessagePriority.Handshake
+					outerTransaction.priority !== MessagePriority.Handshake
 				) {
 					// Change the priority to WakeUp and re-add it to the queue
 					outerTransaction.priority = MessagePriority.WakeUp;
 					this.sendQueue.add(outerTransaction);
-					// Reset send attempts - we might have already used all of them
+					// Reset send attempts - we might have already used all of them and mark it as not sent
 					outerTransaction.sendAttempts = 0;
+					outerTransaction.wasSent = false;
 				} else {
 					// Pings and active handshakes must be rejected, so the next message may be queued
 					this.rejectCurrentTransaction(
