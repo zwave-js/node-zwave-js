@@ -3,7 +3,12 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import type { MessageOrCCLogEntry } from "../log/shared";
 import type { ValueID } from "../node/ValueDB";
 import { CRC16_CCITT } from "../util/crc";
-import { getEnumMemberName, pick, validatePayload } from "../util/misc";
+import {
+	AllOrNone,
+	getEnumMemberName,
+	pick,
+	validatePayload,
+} from "../util/misc";
 import { num2hex } from "../util/strings";
 import { Maybe, unknownBoolean } from "../values/Primitive";
 import { CCAPI } from "./API";
@@ -328,19 +333,15 @@ type FirmwareUpdateMetaDataCCRequestGetOptions = {
 	manufacturerId: number;
 	firmwareId: number;
 	checksum: number;
-} & (
-	| {
-			// V3+
-			firmwareTarget: number;
-			fragmentSize: number;
-			// V4+
-			activation?: boolean;
-			// V5+
-			hardwareVersion?: number;
-	  }
-	// eslint-disable-next-line @typescript-eslint/ban-types
-	| {}
-);
+} & AllOrNone<{
+	// V3+
+	firmwareTarget: number;
+	fragmentSize: number;
+	// V4+
+	activation?: boolean;
+	// V5+
+	hardwareVersion?: number;
+}>;
 
 @CCCommand(FirmwareUpdateMetaDataCommand.RequestGet)
 // This would expect a FirmwareUpdateMetaDataCCRequestReport, but the response may take

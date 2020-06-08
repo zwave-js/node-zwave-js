@@ -1,6 +1,6 @@
 import type { Driver } from "../driver/Driver";
 import log from "../log";
-import { JSONObject, validatePayload } from "../util/misc";
+import { AllOrNone, JSONObject, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, parseMaybeNumber, parseNumber } from "../values/Primitive";
@@ -161,17 +161,12 @@ export class BasicCCSet extends BasicCC {
 	}
 }
 
-type BasicCCReportOptions = CCCommandOptions &
-	({
-		currentValue: number;
-	} & (
-		| // eslint-disable-next-line @typescript-eslint/ban-types
-		{}
-		| {
-				targetValue: number;
-				duration: Duration;
-		  }
-	));
+type BasicCCReportOptions = CCCommandOptions & {
+	currentValue: number;
+} & AllOrNone<{
+		targetValue: number;
+		duration: Duration;
+	}>;
 
 @CCCommand(BasicCommand.Report)
 export class BasicCCReport extends BasicCC {
