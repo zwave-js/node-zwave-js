@@ -2153,6 +2153,8 @@ version:               ${this.version}`;
 				);
 			case FirmwareUpdateRequestStatus.OK:
 				// All good, we have started!
+				// Keep the node awake until the update is done.
+				this.keepAwake = true;
 				return;
 		}
 	}
@@ -2183,7 +2185,9 @@ version:               ${this.version}`;
 		this._firmwareUpdateStatus.abort = true;
 
 		try {
-			await this.driver.waitForCommand(
+			await this.driver.waitForCommand<
+				FirmwareUpdateMetaDataCCStatusReport
+			>(
 				(cc) =>
 					cc.nodeId === this.nodeId &&
 					cc instanceof FirmwareUpdateMetaDataCCStatusReport &&
@@ -2197,6 +2201,7 @@ version:               ${this.version}`;
 
 			// Clean up
 			this._firmwareUpdateStatus = undefined;
+			this.keepAwake = false;
 		} catch (e) {
 			if (
 				e instanceof ZWaveError &&
@@ -2325,6 +2330,7 @@ version:               ${this.version}`;
 
 			// clean up
 			this._firmwareUpdateStatus = undefined;
+			this.keepAwake = false;
 
 			// Notify listeners
 			this.emit(
@@ -2345,6 +2351,7 @@ version:               ${this.version}`;
 				);
 				// clean up
 				this._firmwareUpdateStatus = undefined;
+				this.keepAwake = false;
 
 				// Notify listeners
 				this.emit(
