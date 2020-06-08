@@ -253,38 +253,41 @@ export class ValueDB extends EventEmitter {
 		return ret;
 	}
 
-	// /** Clears all values from the value DB */
-	// public clear(options: SetValueOptions = {}): void {
-	// 	const oldValues = [...this._db];
-	// 	const oldMetadataKeys = [...this._metadata.keys()];
+	/** Clears all values from the value DB */
+	public clear(options: SetValueOptions = {}): void {
+		const oldValues = [...this._db].filter(([key]) => {
+			const { nodeId } = this.dbKeyToValueId(key);
+			return nodeId === this.nodeId;
+		});
+		const oldMetadataKeys = [...this._metadata.keys()].filter((key) => {
+			const { nodeId } = this.dbKeyToValueId(key);
+			return nodeId === this.nodeId;
+		});
 
-	// 	// TODO: This is buggy - clear should only clear the values for the current node
-	// 	this._db.clear();
-	// 	this._metadata.clear();
+		oldValues.forEach(([key, prevValue]) => {
+			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+			this._db.delete(key);
+			if (options.noEvent !== true) {
+				const cbArg: ValueRemovedArgs = {
+					...valueId,
+					prevValue,
+				};
+				this.emit("value removed", cbArg);
+			}
+		});
+		oldMetadataKeys.forEach((key) => {
+			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+			this._metadata.delete(key);
 
-	// 	if (options.noEvent !== true) {
-	// 		oldValues.forEach(([key, prevValue]) => {
-	// 			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
-	// 			if (nodeId !== this.nodeId) return;
-
-	// 			const cbArg: ValueRemovedArgs = {
-	// 				...valueId,
-	// 				prevValue,
-	// 			};
-	// 			this.emit("value removed", cbArg);
-	// 		});
-	// 		oldMetadataKeys.forEach((key) => {
-	// 			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
-	// 			if (nodeId !== this.nodeId) return;
-
-	// 			const cbArg: MetadataUpdatedArgs = {
-	// 				...valueId,
-	// 				metadata: undefined,
-	// 			};
-	// 			this.emit("metadata updated", cbArg);
-	// 		});
-	// 	}
-	// }
+			if (options.noEvent !== true) {
+				const cbArg: MetadataUpdatedArgs = {
+					...valueId,
+					metadata: undefined,
+				};
+				this.emit("metadata updated", cbArg);
+			}
+		});
+	}
 
 	/**
 	 * Stores metadata for a given value id

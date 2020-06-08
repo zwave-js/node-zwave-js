@@ -207,25 +207,25 @@ describe("lib/node/ValueDB => ", () => {
 			expect(getArg(1).propertyKey).toBe("bar");
 		});
 
-		// 	it("after clearing the value DB, the values should all be removed", () => {
-		// 		valueDB.clear();
-		// 		expect(
-		// 			valueDB.getValue({
-		// 				commandClass: cc,
-		// 				endpoint: 0,
-		// 				property: "prop",
-		// 				propertyKey: "foo",
-		// 			}),
-		// 		).toBeUndefined();
-		// 		expect(
-		// 			valueDB.getValue({
-		// 				commandClass: cc,
-		// 				endpoint: 0,
-		// 				property: "prop",
-		// 				propertyKey: "bar",
-		// 			}),
-		// 		).toBeUndefined();
-		// 	});
+		it("after clearing the value DB, the values should all be removed", () => {
+			valueDB.clear();
+			expect(
+				valueDB.getValue({
+					commandClass: cc,
+					endpoint: 0,
+					property: "prop",
+					propertyKey: "foo",
+				}),
+			).toBeUndefined();
+			expect(
+				valueDB.getValue({
+					commandClass: cc,
+					endpoint: 0,
+					property: "prop",
+					propertyKey: "bar",
+				}),
+			).toBeUndefined();
+		});
 	});
 
 	describe("removeValue()", () => {
@@ -318,52 +318,52 @@ describe("lib/node/ValueDB => ", () => {
 		});
 	});
 
-	// describe("clear()", () => {
-	// 	let cbArgs: any[];
-	// 	const valueId1 = {
-	// 		commandClass: CommandClasses["Alarm Sensor"],
-	// 		endpoint: 1,
-	// 		property: "bar",
-	// 	};
-	// 	const valueId2 = {
-	// 		commandClass: CommandClasses.Battery,
-	// 		endpoint: 2,
-	// 		property: "prop",
-	// 	};
-	// 	beforeAll(() => {
-	// 		createValueDB();
-	// 		valueDB.setValue(valueId1, "foo");
-	// 		valueDB.setValue(valueId2, "bar");
-	// 		valueDB.clear();
-	// 	});
+	describe("clear()", () => {
+		let cbArgs: any[];
+		const valueId1 = {
+			commandClass: CommandClasses["Alarm Sensor"],
+			endpoint: 1,
+			property: "bar",
+		};
+		const valueId2 = {
+			commandClass: CommandClasses.Battery,
+			endpoint: 2,
+			property: "prop",
+		};
+		beforeAll(() => {
+			createValueDB();
+			valueDB.setValue(valueId1, "foo");
+			valueDB.setValue(valueId2, "bar");
+			valueDB.clear();
+		});
 
-	// 	afterAll(() => {
-	// 		onValueAdded.mockClear();
-	// 		onValueUpdated.mockClear();
-	// 		onValueRemoved.mockClear();
-	// 	});
+		afterAll(() => {
+			onValueAdded.mockClear();
+			onValueUpdated.mockClear();
+			onValueRemoved.mockClear();
+		});
 
-	// 	it("should emit the value removed event for all stored values", () => {
-	// 		expect(onValueRemoved).toBeCalledTimes(2);
-	// 		cbArgs = onValueRemoved.mock.calls.map((args) => args[0]);
-	// 	});
+		it("should emit the value removed event for all stored values", () => {
+			expect(onValueRemoved).toBeCalledTimes(2);
+			cbArgs = onValueRemoved.mock.calls.map((args) => args[0]);
+		});
 
-	// 	it("The callback should contain the removed values", () => {
-	// 		expect(cbArgs[0]).toBeObject();
-	// 		expect(cbArgs[0].prevValue).toBe("foo");
-	// 		expect(cbArgs[1]).toBeObject();
-	// 		expect(cbArgs[1].prevValue).toBe("bar");
-	// 	});
+		it("The callback should contain the removed values", () => {
+			expect(cbArgs[0]).toBeObject();
+			expect(cbArgs[0].prevValue).toBe("foo");
+			expect(cbArgs[1]).toBeObject();
+			expect(cbArgs[1].prevValue).toBe("bar");
+		});
 
-	// 	it("After clearing, getValue should return undefined", () => {
-	// 		let actual: unknown;
-	// 		actual = valueDB.getValue(valueId1);
-	// 		expect(actual).toBeUndefined();
+		it("After clearing, getValue should return undefined", () => {
+			let actual: unknown;
+			actual = valueDB.getValue(valueId1);
+			expect(actual).toBeUndefined();
 
-	// 		actual = valueDB.setValue(valueId2, "bar");
-	// 		expect(actual).toBeUndefined();
-	// 	});
-	// });
+			actual = valueDB.setValue(valueId2, "bar");
+			expect(actual).toBeUndefined();
+		});
+	});
 
 	describe("getValue() / getValues()", () => {
 		beforeEach(() => createValueDB());
@@ -550,16 +550,16 @@ describe("lib/node/ValueDB => ", () => {
 			).toBeUndefined();
 		});
 
-		// it("is cleared together with the values", () => {
-		// 	const valueId: ValueID = {
-		// 		commandClass: 1,
-		// 		endpoint: 2,
-		// 		property: "3",
-		// 	};
-		// 	valueDB.setMetadata(valueId, ValueMetadata.Any);
-		// 	valueDB.clear();
-		// 	expect(valueDB.hasMetadata(valueId)).toBeFalse();
-		// });
+		it("is cleared together with the values", () => {
+			const valueId: ValueID = {
+				commandClass: 1,
+				endpoint: 2,
+				property: "3",
+			};
+			valueDB.setMetadata(valueId, ValueMetadata.Any);
+			valueDB.clear();
+			expect(valueDB.hasMetadata(valueId)).toBeFalse();
+		});
 
 		describe("getAllMetadata()", () => {
 			it("returns all metadata for a given CC", () => {
