@@ -1,4 +1,4 @@
-// import { ThermostatMode } from "../build/lib/commandclass/ThermostatModeCC";
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { Driver } from "../src/index";
 
 const driver = new Driver("COM4", {
@@ -9,6 +9,67 @@ const driver = new Driver("COM4", {
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
+		const node = driver.controller.nodes.get(14)!;
+		// node.keepAwake = true;
+		node.once("interview completed", async () => {
+			console.dir("14 ready");
+
+			// await require("alcalzone-shared/async").wait(5000);
+
+			// const updater = await fs.readFile(
+			// 	"C:\\Repositories\\node-zwave-js\\firmwares\\MultiSensor_OTA_Security_ZW050x_EU_V1_11_hex__TargetZwave__.hex",
+			// );
+			// const firmware = extractFirmware(updater, "hex");
+			// // const firmware = {
+			// // 	data: updater,
+			// // 	firmwareTarget: undefined,
+			// // };
+
+			// node.on("firmware update progress", (node, sent, total) => {
+			// 	console.warn(`Firmware update progress: ${sent}/${total}`);
+			// });
+			// node.on("firmware update finished", (node, status, waitTime) => {
+			// 	console.warn(
+			// 		`Firmware update done with status ${getEnumMemberName(
+			// 			FirmwareUpdateStatus,
+			// 			status,
+			// 		)}`,
+			// 	);
+			// 	console.warn(`wait time: ${waitTime ?? "undefined"}`);
+			// });
+
+			// await node.beginFirmwareUpdate(
+			// 	firmware.data,
+			// 	firmware.firmwareTarget,
+			// );
+
+			// await require("alcalzone-shared/async").wait(5000);
+
+			// await node.abortFirmwareUpdate();
+
+			// const test = new FirmwareUpdateMetaDataCC(driver, {
+			// 	nodeId: 12,
+			// });
+			// console.log(`max payload: ${driver.computeNetCCPayloadSize(test)}`);
+
+			// // await require("alcalzone-shared/async").wait(5000);
+
+			// const firmware = await node.commandClasses[
+			// 	"Firmware Update Meta Data"
+			// ].getMetaData();
+			// console.dir(firmware);
+
+			// // await require("alcalzone-shared/async").wait(5000);
+
+			// await node.commandClasses[
+			// 	"Firmware Update Meta Data"
+			// ].requestUpdate({
+			// 	manufacturerId: firmware.manufacturerId,
+			// 	firmwareId: 0,
+			// 	checksum: 0x0815,
+			// });
+		});
+
 		// await require("alcalzone-shared/async").wait(5000);
 		// console.error();
 		// console.error("EXCLUSION");
