@@ -1,7 +1,7 @@
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import type { ValueID } from "../node/ValueDB";
-import { JSONObject, validatePayload } from "../util/misc";
+import { ignoreTimeout, JSONObject, validatePayload } from "../util/misc";
 import { enumValuesToMetadataStates, ValueMetadata } from "../values/Metadata";
 import { Maybe, parseFloatWithScale } from "../values/Primitive";
 import { CCAPI } from "./API";
@@ -115,57 +115,83 @@ export class BatteryCC extends CommandClass {
 			direction: "none",
 		});
 
-		// always query the status
-		log.controller.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: "querying battery status...",
-			direction: "outbound",
-		});
+		await ignoreTimeout(
+			async () => {
+				// always query the status
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: "querying battery status...",
+					direction: "outbound",
+				});
 
-		const batteryStatus = await api.get();
+				const batteryStatus = await api.get();
 
-		let logMessage = `received response for battery information:
+				let logMessage = `received response for battery information:
 level:                           ${batteryStatus.level}${
-			batteryStatus.isLow ? " (low)" : ""
-		}`;
-		if (this.version >= 2) {
-			logMessage += `
+					batteryStatus.isLow ? " (low)" : ""
+				}`;
+				if (this.version >= 2) {
+					logMessage += `
 status:                          ${
-				BatteryChargingStatus[batteryStatus.chargingStatus!]
-			}
+						BatteryChargingStatus[batteryStatus.chargingStatus!]
+					}
 rechargeable:                    ${batteryStatus.rechargeable}
 is backup:                       ${batteryStatus.backup}
 is overheating:                  ${batteryStatus.overheating}
 fluid is low:                    ${batteryStatus.lowFluid}
 needs to be replaced or charged: ${
-				BatteryReplacementStatus[batteryStatus.rechargeOrReplace!]
-			}
+						BatteryReplacementStatus[
+							batteryStatus.rechargeOrReplace!
+						]
+					}
 is disconnected:                 ${batteryStatus.disconnected}`;
-		}
-		log.controller.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: logMessage,
-			direction: "inbound",
-		});
+				}
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
+			},
+			() => {
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Battery status query timed out - skipping because it is not critical...",
+					level: "warn",
+				});
+			},
+		);
 
 		if (this.version >= 2) {
-			// always query the health
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: "querying battery health...",
-				direction: "outbound",
-			});
+			await ignoreTimeout(
+				async () => {
+					// always query the health
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: "querying battery health...",
+						direction: "outbound",
+					});
 
-			const batteryHealth = await api.getHealth();
+					const batteryHealth = await api.getHealth();
 
-			const logMessage = `received response for battery health:
+					const logMessage = `received response for battery health:
 max. capacity: ${batteryHealth.maximumCapacity} %
 temperature:   ${batteryHealth.temperature} °C`;
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: logMessage,
-				direction: "inbound",
-			});
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: logMessage,
+						direction: "inbound",
+					});
+				},
+				() => {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"Battery health query timed out - skipping because it is not critical...",
+						level: "warn",
+					});
+				},
+			);
 		}
 
 		// Remember that the interview is complete

@@ -8,7 +8,7 @@ import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { ValueID } from "../node/ValueDB";
-import { validatePayload } from "../util/misc";
+import { ignoreTimeout, validatePayload } from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, parseBitMask, parseFloatWithScale } from "../values/Primitive";
 import { CCAPI } from "./API";
@@ -234,22 +234,37 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 				}
 
 				// Always query the current sensor reading
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: "querying current sensor reading...",
-					direction: "outbound",
-				});
-				// TODO: Add some way to select the scale. For now use the first available one
-				const value = await api.get(type, sensorScales[0]);
-				const scale = lookupSensorScale(type, sensorScales[0]);
-				const logMessage = `received current sensor reading: ${value} ${
-					scale.unit || ""
-				}`;
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: logMessage,
-					direction: "inbound",
-				});
+				await ignoreTimeout(
+					async () => {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `querying ${getSensorTypeName(
+								type,
+							)} sensor reading...`,
+							direction: "outbound",
+						});
+						// TODO: Add some way to select the scale. For now use the first available one
+						const value = await api.get(type, sensorScales[0]);
+						const scale = lookupSensorScale(type, sensorScales[0]);
+						const logMessage = `received current ${getSensorTypeName(
+							type,
+						)} sensor reading: ${value} ${scale.unit || ""}`;
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: logMessage,
+							direction: "inbound",
+						});
+					},
+					() => {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `Query of ${getSensorTypeName(
+								type,
+							)} sensor timed out - skipping because it is not critical...`,
+							level: "warn",
+						});
+					},
+				);
 			}
 		}
 
