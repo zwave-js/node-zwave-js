@@ -2031,7 +2031,10 @@ version:               ${this.version}`;
 		| undefined;
 
 	/**
-	 * Starts an OTA firmware update process for this node
+	 * Starts an OTA firmware update process for this node.
+	 *
+	 * **WARNING: Use at your own risk! We don't take any responsibility if your devices don't work after an update.**
+	 *
 	 * @param data The firmware image
 	 * @param target The firmware target (i.e. chip) to upgrade. 0 updates the Z-Wave chip, >=1 updates others if they exist
 	 */
