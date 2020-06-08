@@ -22,6 +22,7 @@ zwave-js-*.tgz
 /Driver.js
 /Error.js
 /Node.js
+/Utils.js
 /Values.js
 /index.js
 

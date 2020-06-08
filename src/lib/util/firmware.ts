@@ -11,9 +11,11 @@ export interface Firmware {
 
 /**
  * Extracts the firmware data from a file. The following formats are available:
- * - `"aeotec"` - A Windows executable (.exe or .ex_) for Aeotec's upload tool
+ * - `"aeotec"` - A Windows executable (.exe or .ex_) that contains Aeotec's upload tool
  * - `"otz"` - A compressed firmware file in Intel HEX format
  * - `"ota"` or `"hex"` - An uncompressed firmware file in Intel HEX format
+ *
+ * The returned firmware data and target can be used to start a firmware update process with `node.beginFirmwareUpdate`
  */
 export function extractFirmware(
 	data: Buffer,
@@ -30,10 +32,24 @@ export function extractFirmware(
 }
 
 function extractFirmwareAeotec(data: Buffer): Firmware {
+	// Check if this is an EXE file
+	if (data.readUInt16BE(0) !== 0x4d5a) {
+		throw new ZWaveError(
+			"This does not appear to be a valid Aeotec updater (not an executable)!",
+			ZWaveErrorCodes.Argument_Invalid,
+		);
+	}
+
 	// The exe file contains the firmware data and filename at the end
-	// The filename also includes which chip is being targeted
 	const firmwareStart = data.readUInt32BE(data.length - 8);
 	const firmwareLength = data.readUInt32BE(data.length - 4);
+	if (firmwareStart + firmwareLength > data.length - 256 - 8) {
+		throw new ZWaveError(
+			"This does not appear to be a valid Aeotec updater (invalid firmware length)!",
+			ZWaveErrorCodes.Argument_Invalid,
+		);
+	}
+
 	const firmwareData = data.slice(
 		firmwareStart,
 		firmwareStart + firmwareLength,
@@ -42,7 +58,14 @@ function extractFirmwareAeotec(data: Buffer): Firmware {
 	const firmwareName = firmwareNameBytes
 		.slice(0, firmwareNameBytes.indexOf(0))
 		.toString("utf8");
+	if (!/^[a-zA-Z0-9_]+$/.test(firmwareName)) {
+		throw new ZWaveError(
+			"This does not appear to be a valid Aeotec updater (invalid firmware name)!",
+			ZWaveErrorCodes.Argument_Invalid,
+		);
+	}
 
+	// The filename includes which chip is being targeted
 	const ret: Firmware = {
 		data: firmwareData,
 	};
