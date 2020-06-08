@@ -9,6 +9,11 @@
 * Added support for `Door Lock CC V4`
 * Added support for `Lock CC`
 * Added interview for `Language CC`
+* Added support for over-the-air (OTA) firmware updates
+
+### Changes under the hood
+* Added `driver.waitForCommand` method to expect receipt of a command that matches a given predicate
+* Added `driver.computeNetCCPayloadSize` method to compute how many payload bytes can be transmitted with a given CC (taking encapsulation into account).
 
 ## 3.6.4 (2020-06-04)
 ### Bugfixes
