@@ -115,3 +115,8 @@ export function flatMap<U, T extends any[]>(
 	const mapped = array.map(callbackfn);
 	return mapped.reduce((acc, cur) => [...acc, ...cur], [] as U[]);
 }
+
+/** Enforces that all of the required properties (optional properties may be omitted) or none of the properties exist */
+export type AllOrNone<T extends Record<string, any>> =
+	| T
+	| { [key in keyof T]?: undefined };
