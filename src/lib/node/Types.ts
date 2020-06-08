@@ -1,4 +1,5 @@
 import type { Overwrite } from "alcalzone-shared/types";
+import type { FirmwareUpdateStatus } from "../commandclass";
 import type { NotificationCCReport } from "../commandclass/NotificationCC";
 import { MAX_NODES } from "../controller/NodeBitMask";
 import type { ZWaveNode } from "./Node";
@@ -56,6 +57,11 @@ export type ZWaveNodeFirmwareUpdateProgressCallback = (
 	sentFragments: number,
 	totalFragments: number,
 ) => void;
+export type ZWaveNodeFirmwareUpdateFinishedCallback = (
+	node: ZWaveNode,
+	status: FirmwareUpdateStatus,
+	waitTime?: number,
+) => void;
 
 export interface ZWaveNodeValueEventCallbacks {
 	"value added": ZWaveNodeValueAddedCallback;
@@ -65,6 +71,7 @@ export interface ZWaveNodeValueEventCallbacks {
 	notification: ZWaveNotificationCallback;
 	"interview failed": ZWaveInterviewFailedCallback;
 	"firmware update progress": ZWaveNodeFirmwareUpdateProgressCallback;
+	"firmware update finished": ZWaveNodeFirmwareUpdateFinishedCallback;
 }
 
 export type ZWaveNodeEventCallbacks = Overwrite<

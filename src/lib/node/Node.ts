@@ -659,8 +659,42 @@ export class ZWaveNode extends Endpoint {
 	}
 
 	/**
+	 * Resets all information about this node and forces a fresh interview.
+	 *
+	 * WARNING: Take care NOT to call this method when the node is already being interviewed.
+	 * Otherwise the node information may become inconsistent.
+	 */
+	public refreshInfo(): void {
+		this._interviewAttempts = 0;
+		this.interviewStage = InterviewStage.None;
+		this._status = NodeStatus.Unknown;
+		this._ready = false;
+		this._deviceClass = undefined;
+		this._isListening = undefined;
+		this._isFrequentListening = undefined;
+		this._isRouting = undefined;
+		this._maxBaudRate = undefined;
+		this._isSecure = undefined;
+		this._version = undefined;
+		this._isBeaming = undefined;
+		this._deviceConfig = undefined;
+		this._neighbors = [];
+		this._hasEmittedNoNetworkKeyError = false;
+		this._valueDB.clear();
+		this._endpointInstances.clear();
+
+		// Don't keep the node awake after the interview
+		this.keepAwake = false;
+
+		void this.driver.interviewNode(this);
+	}
+
+	/**
 	 * @internal
 	 * Interviews this node. Returns true when it succeeded, false otherwise
+	 *
+	 * WARNING: Do not call this method from application code. To refresh the information
+	 * for a specific node, use `node.refreshInfo()` instead
 	 */
 	public async interview(): Promise<boolean> {
 		if (this.interviewStage === InterviewStage.Complete) {
@@ -1991,6 +2025,8 @@ version:               ${this.version}`;
 				numFragments: number;
 				data: Buffer;
 				abort: boolean;
+				/** This is set when waiting for the update status */
+				statusTimeout?: NodeJS.Timeout;
 		  }
 		| undefined;
 
@@ -2125,7 +2161,17 @@ version:               ${this.version}`;
 		// Don't stop the process twice
 		if (!this._firmwareUpdateStatus || this._firmwareUpdateStatus.abort) {
 			return;
+		} else if (
+			this._firmwareUpdateStatus.numFragments > 0 &&
+			this._firmwareUpdateStatus.progress ===
+				this._firmwareUpdateStatus.numFragments
+		) {
+			throw new ZWaveError(
+				`The firmware update was transmitted completely, cannot abort anymore.`,
+				ZWaveErrorCodes.FirmwareUpdateCC_FailedToAbort,
+			);
 		}
+
 		log.controller.logNode(this.id, {
 			message: `Aborting firmware update...`,
 			direction: "outbound",
@@ -2136,6 +2182,7 @@ version:               ${this.version}`;
 		try {
 			await this.driver.waitForCommand(
 				(cc) =>
+					cc.nodeId === this.nodeId &&
 					cc instanceof FirmwareUpdateMetaDataCCStatusReport &&
 					cc.status === FirmwareUpdateStatus.Error_TransmissionFailed,
 				5000,
@@ -2144,6 +2191,9 @@ version:               ${this.version}`;
 				message: `Firmware update aborted`,
 				direction: "inbound",
 			});
+
+			// Clean up
+			this._firmwareUpdateStatus = undefined;
 		} catch (e) {
 			if (
 				e instanceof ZWaveError &&
@@ -2214,6 +2264,10 @@ version:               ${this.version}`;
 						direction: "outbound",
 					});
 					const isLast = num === numFragments;
+					if (isLast) {
+						// Don't send the node to sleep now
+						this.keepAwake = true;
+					}
 					await this.commandClasses[
 						"Firmware Update Meta Data"
 					].sendFirmwareFragment(num, isLast, fragment);
@@ -2226,9 +2280,78 @@ version:               ${this.version}`;
 						num,
 						numFragments,
 					);
+
+					// If that was the last one wait for status report from the node and restart interview
+					if (isLast) {
+						void this.finishFirmwareUpdate().catch(() => {
+							/* ignore */
+						});
+					}
 				}
 			}
 		})();
+	}
+
+	private async finishFirmwareUpdate(): Promise<void> {
+		try {
+			const { status, waitTime } = await this.driver.waitForCommand<
+				FirmwareUpdateMetaDataCCStatusReport
+			>(
+				(cc) =>
+					cc.nodeId === this.nodeId &&
+					cc instanceof FirmwareUpdateMetaDataCCStatusReport,
+				// Wait up to 5 minutes. It should never take that long, but the specs
+				// don't say anything specific
+				5 * 60000,
+			);
+			const success =
+				status >= FirmwareUpdateStatus.OK_WaitingForActivation;
+
+			// Actually, OK_WaitingForActivation should never happen since we don't allow
+			// delayed activation in the RequestGet command
+
+			log.controller.logNode(this.id, {
+				message: `Firmware update ${
+					success ? "completed" : "failed"
+				} with status ${getEnumMemberName(
+					FirmwareUpdateStatus,
+					status,
+				)}`,
+				direction: "inbound",
+			});
+
+			// clean up
+			this._firmwareUpdateStatus = undefined;
+
+			// Notify listeners
+			this.emit(
+				"firmware update finished",
+				this,
+				status,
+				success ? waitTime : undefined,
+			);
+		} catch (e) {
+			if (
+				e instanceof ZWaveError &&
+				e.code === ZWaveErrorCodes.Controller_NodeTimeout
+			) {
+				log.controller.logNode(
+					this.id,
+					`The node did not acknowledge the completed update`,
+					"warn",
+				);
+				// clean up
+				this._firmwareUpdateStatus = undefined;
+
+				// Notify listeners
+				this.emit(
+					"firmware update finished",
+					this,
+					FirmwareUpdateStatus.Error_Timeout,
+				);
+			}
+			throw e;
+		}
 	}
 
 	/**

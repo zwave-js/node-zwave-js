@@ -53,6 +53,10 @@ export enum FirmwareUpdateRequestStatus {
 
 // @publicAPI
 export enum FirmwareUpdateStatus {
+	// Error_Timeout is not part of the Z-Wave standard, but we use it to report
+	// that no status report was received
+	Error_Timeout = -1,
+
 	Error_Checksum = 0,
 	Error_TransmissionFailed = 1,
 	Error_InvalidManufacturerID = 2,
@@ -62,6 +66,8 @@ export enum FirmwareUpdateStatus {
 	Error_InvalidHeaderFormat = 6,
 	Error_InsufficientMemory = 7,
 	Error_InvalidHardwareVersion = 8,
+
+	// When adding more OK statuses, change the check in Node::finishFirmwareUpdate
 	OK_WaitingForActivation = 0xfd,
 	OK_NoRestart = 0xfe,
 	OK_RestartPending = 0xff,

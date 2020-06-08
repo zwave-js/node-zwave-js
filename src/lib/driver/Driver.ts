@@ -12,6 +12,7 @@ import fsExtra from "fs-extra";
 import path from "path";
 import SerialPort from "serialport";
 import { promisify } from "util";
+import { FirmwareUpdateStatus } from "../commandclass";
 import {
 	CommandClass,
 	getImplementedVersion,
@@ -566,12 +567,22 @@ export class Driver extends EventEmitter {
 
 	private retryNodeInterviewTimeouts = new Map<number, NodeJS.Timeout>();
 	/**
+	 * @internal
 	 * Starts or resumes the interview of a Z-Wave node. It is advised to NOT
 	 * await this method as it can take a very long time (minutes to hours)!
+	 *
+	 * WARNING: Do not call this method from application code. To refresh the information
+	 * for a specific node, use `node.refreshInfo()` instead
 	 */
-	private async interviewNode(node: ZWaveNode): Promise<void> {
+	public async interviewNode(node: ZWaveNode): Promise<void> {
 		if (node.interviewStage === InterviewStage.Complete) {
 			node.interviewStage = InterviewStage.RestartFromCache;
+		}
+
+		// Avoid having multiple restart timeouts active
+		if (this.retryNodeInterviewTimeouts.has(node.id)) {
+			clearTimeout(this.retryNodeInterviewTimeouts.get(node.id)!);
+			this.retryNodeInterviewTimeouts.delete(node.id);
 		}
 
 		try {
@@ -650,7 +661,11 @@ export class Driver extends EventEmitter {
 			.on("alive", this.onNodeAlive.bind(this))
 			.on("dead", this.onNodeDead.bind(this))
 			.on("interview completed", this.onNodeInterviewCompleted.bind(this))
-			.on("ready", this.onNodeReady.bind(this));
+			.on("ready", this.onNodeReady.bind(this))
+			.on(
+				"firmware update finished",
+				this.onNodeFirmwareUpdated.bind(this),
+			);
 	}
 
 	/** Removes a node's event handlers that were added with addNodeEventHandlers */
@@ -660,7 +675,8 @@ export class Driver extends EventEmitter {
 			.removeAllListeners("alive")
 			.removeAllListeners("dead")
 			.removeAllListeners("interview completed")
-			.removeAllListeners("ready");
+			.removeAllListeners("ready")
+			.removeAllListeners("firmware update finished");
 	}
 
 	/** Is called when a node wakes up */
@@ -770,6 +786,31 @@ export class Driver extends EventEmitter {
 
 		// If this was a failed node it could mean that all nodes are now ready
 		this.checkAllNodesReady();
+	}
+
+	/** This is called when a node's firmware was updated */
+	private onNodeFirmwareUpdated(
+		node: ZWaveNode,
+		status: FirmwareUpdateStatus,
+		waitTime?: number,
+	): void {
+		// Don't do this for non-successful updates
+		if (status < FirmwareUpdateStatus.OK_WaitingForActivation) return;
+
+		// Wait at least 5 seconds
+		if (!waitTime) waitTime = 5000;
+		log.controller.logNode(
+			node.id,
+			`Firmware updated, scheduling interview in ${waitTime} ms...`,
+		);
+		// We reuse the retryNodeInterviewTimeouts here because they serve a similar purpose
+		this.retryNodeInterviewTimeouts.set(
+			node.id,
+			setTimeout(() => {
+				this.retryNodeInterviewTimeouts.delete(node.id);
+				node.refreshInfo();
+			}, waitTime).unref(),
+		);
 	}
 
 	/** Checks if there are any pending messages for the given node */
