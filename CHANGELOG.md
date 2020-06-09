@@ -5,6 +5,9 @@
 -->
 
 ## __WORK IN PROGRESS__
+### Bugfixes
+* The compat queries for Danfoss thermostats now query setpoint 1
+
 ### Features
 * Added support for `Door Lock CC V4`
 * Added support for `Lock CC`
@@ -14,6 +17,7 @@
 ### Changes under the hood
 * Added `driver.waitForCommand` method to expect receipt of a command that matches a given predicate
 * Added `driver.computeNetCCPayloadSize` method to compute how many payload bytes can be transmitted with a given CC (taking encapsulation into account).
+* Added debug logging for `sendNodeToSleep`
 
 ## 3.6.4 (2020-06-04)
 ### Bugfixes
