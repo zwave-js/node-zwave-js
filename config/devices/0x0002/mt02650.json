@@ -38,7 +38,8 @@
 			],
 			[
 				"Thermostat Setpoint",
-				"get"
+				"get",
+				1
 			]
 		]
 	}
