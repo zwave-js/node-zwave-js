@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.6.5-beta.0 (2020-06-09)
 ### Bugfixes
 * The compat queries for Danfoss thermostats now query setpoint 1
 
