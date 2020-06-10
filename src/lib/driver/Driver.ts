@@ -2513,30 +2513,15 @@ ${handlers.length} left`,
 
 		// Sends a node to sleep if it has no more messages.
 		const sendNodeToSleep = (node: ZWaveNode): void => {
-			log.controller.logNode(
-				node.id,
-				`debounceSendNodeToSleep > sendNodeToSleep
-has pending msgs: ${this.hasPendingMessages(node)}`,
-			);
 			this.sendNodeToSleepTimers.delete(node.id);
 			if (!this.hasPendingMessages(node)) {
-				void node.sendNoMoreInformation().catch((e) => {
-					log.controller.logNode(
-						node.id,
-						`debounceSendNodeToSleep > error in sendNoMoreInformation: ${e}`,
-					);
+				void node.sendNoMoreInformation().catch(() => {
 					/* ignore errors */
 				});
 			}
 		};
 
 		// If a sleeping node has no messages pending, we may send it back to sleep
-		log.controller.logNode(
-			node.id,
-			`debounceSendNodeToSleep
-supports wake up: ${node.supportsCC(CommandClasses["Wake Up"])}
-has pending msgs: ${this.hasPendingMessages(node)}`,
-		);
 		if (
 			node.supportsCC(CommandClasses["Wake Up"]) &&
 			!this.hasPendingMessages(node)

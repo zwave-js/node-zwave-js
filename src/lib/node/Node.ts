@@ -2630,18 +2630,6 @@ version:               ${this.version}`;
 	 * Sends the node a WakeUpCCNoMoreInformation so it can go back to sleep
 	 */
 	public async sendNoMoreInformation(): Promise<boolean> {
-		log.controller.logNode(
-			this.id,
-			`sendNoMoreInformation
-keepAwake:                  ${this.keepAwake}
-is awake:                   ${this.isAwake()}
-interview stage:            ${getEnumMemberName(
-				InterviewStage,
-				this.interviewStage,
-			)}
-isSendingNoMoreInformation: ${this.isSendingNoMoreInformation}
-`,
-		);
 		// Don't send the node back to sleep if it should be kept awake
 		if (this.keepAwake) return false;
 
