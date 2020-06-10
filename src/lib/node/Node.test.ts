@@ -1,6 +1,10 @@
 import { createEmptyMockDriver } from "../../../test/mocks";
 import { assertCC, assertZWaveError } from "../../../test/util";
 import { BasicCC, BasicCommand } from "../commandclass/BasicCC";
+import {
+	BinarySwitchCCReport,
+	BinarySwitchCommand,
+} from "../commandclass/BinarySwitchCC";
 import type { CommandClassInfo } from "../commandclass/CommandClass";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
@@ -1386,6 +1390,62 @@ describe("lib/node/Node", () => {
 			expect(currentValueMeta).toMatchObject(
 				ValueMetadata.WriteOnlyInt32,
 			);
+		});
+	});
+
+	describe(`handleCommand()`, () => {
+		const fakeDriver = createEmptyMockDriver();
+
+		function makeNode(
+			ccs: [CommandClasses, Partial<CommandClassInfo>][] = [],
+		): ZWaveNode {
+			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+			fakeDriver.controller.nodes.set(node.id, node);
+			for (const [cc, info] of ccs) {
+				node.addCC(cc, info);
+			}
+			return node;
+		}
+
+		beforeEach(() => fakeDriver.sendMessage.mockClear());
+
+		it("should map commands from the root endpoint to endpoint 1 if MultiChannelAssociationCC is V1/V2", async () => {
+			const node = makeNode([
+				[
+					CommandClasses["Multi Channel Association"],
+					{ isSupported: true, version: 2 },
+				],
+			]);
+			// We have two endpoints
+			node.valueDB.setValue(
+				{
+					commandClass: CommandClasses["Multi Channel"],
+					property: "individualCount",
+				},
+				2,
+			);
+
+			// Handle a command for the root endpoint
+			const command = new BinarySwitchCCReport(
+				(fakeDriver as unknown) as Driver,
+				{
+					nodeId: 2,
+					data: Buffer.from([
+						CommandClasses["Binary Switch"],
+						BinarySwitchCommand.Report,
+						0xff,
+					]),
+				},
+			);
+			await node.handleCommand(command);
+
+			expect(
+				node.getValue({
+					commandClass: CommandClasses["Binary Switch"],
+					endpoint: 1,
+					property: "currentValue",
+				}),
+			).toBe(true);
 		});
 	});
 });
