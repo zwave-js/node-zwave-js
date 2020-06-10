@@ -1993,7 +1993,7 @@ ${handlers.length} left`,
 		// However there are a few exceptions...
 		if (
 			(isNodeQuery(msg) || isCommandClassContainer(msg)) &&
-			// We don't want pings in the wakeup queue
+			// Pings can be used to check if a node is really asleep, so they should be sent regardless
 			!messageIsPing(msg) &&
 			msg.getNodeUnsafe()?.isAwake() === false &&
 			// If we move multicasts to the wakeup queue, it is unlikely
@@ -2165,11 +2165,14 @@ ${handlers.length} left`,
 			const targetNode = message.getNodeUnsafe();
 
 			// The send queue is sorted automatically. If the first message is for a sleeping node, all messages in the queue are.
-			// The only exception are handshakes. We need to always send them, because some sleeping nodes may try to send us encrypted messages
-			// If we don't they block the send queue
+			// There are two exceptions:
+			// 1. Pings may be used to determine whether a node is really asleep.
+			// 2. Handshakes must always be sent, because some sleeping nodes may try to send us encrypted messages.
+			//    If we don't send them, they block the send queue
 			if (
 				!targetNode ||
 				targetNode.isAwake() ||
+				messageIsPing(message) ||
 				nextTransaction.priority === MessagePriority.Handshake
 			) {
 				// Move the transaction from the send queue to the current transaction stack
