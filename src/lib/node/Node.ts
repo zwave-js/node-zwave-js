@@ -1449,7 +1449,20 @@ version:               ${this.version}`;
 		if (command.constructor.name.endsWith("Report")) {
 			// Reports are either a response to a Get command or
 			// automatically store their values in the Value DB.
-			// No need to manually handle them
+			// No need to manually handle them - except if it is a report for endpoint 1
+			// and the node does not support Multi Channel Association CC V3+
+			if (
+				command.endpointIndex === 0 &&
+				this.getEndpointCount() >= 1 &&
+				this.supportsCC(CommandClasses["Multi Channel Association"]) &&
+				this.getCCVersion(CommandClasses["Multi Channel Association"]) <
+					3
+			) {
+				// Force the CC to store its values again under endpoint 1
+				command.endpointIndex = 1;
+				command.persistValues();
+			}
+
 			return;
 		}
 
