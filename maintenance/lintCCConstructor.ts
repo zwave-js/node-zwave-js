@@ -17,6 +17,14 @@ import {
 	projectRoot,
 } from "./shared";
 
+// Configure which CCs are excluded from this check
+const whitelistedCCs: CommandClasses[] = [
+	// Configuration CC has a different way of storing its values
+	CommandClasses.Configuration,
+	// Firmware Update CC is handled entirely on a request base
+	CommandClasses["Firmware Update Meta Data"],
+];
+
 function isCallToPersistValues(node: ts.Node): node is ts.CallExpression {
 	if (
 		ts.isExpressionStatement(node) &&
@@ -149,12 +157,14 @@ export function lintCCConstructors(): Promise<void> {
 					return;
 				}
 
-				// Error only for Application CCs
 				const ccId = getCommandClassFromClassOrParent(
 					program.getTypeChecker(),
 					sourceFile,
 					node,
 				);
+				// Ignore whitelisted CCs
+				if (ccId != undefined && whitelistedCCs.includes(ccId)) return;
+				// Error only for Application CCs
 				const isApplicationCC =
 					ccId != undefined && applicationCCs.includes(ccId);
 				const severity = isApplicationCC ? "error" : "warn";
