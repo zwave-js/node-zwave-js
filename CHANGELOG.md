@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.7.0 (2020-06-11)
 ### Bugfixes
 * The compat queries for Danfoss thermostats now query setpoint 1
 * Always send pings, even if the target node is asleep
