@@ -11,6 +11,7 @@
 * Several report-type commands now correctly store their values in the value DB when received
 * `MultiChannelCCV1Get` now checks whether the returned `MultiChannelCCV1Report` is for the correct endpoint
 * A node's neighbors are now persisted in the cache so they can be used to visualize the network until a repeat interview is complete
+* Added labels to metadata of `Language CC` values
 
 ### Features
 * Added support for `Door Lock CC V4`
