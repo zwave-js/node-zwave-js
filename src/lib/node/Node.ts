@@ -65,6 +65,7 @@ import {
 	GetRoutingInfoRequest,
 	GetRoutingInfoResponse,
 } from "../controller/GetRoutingInfoMessages";
+import { MAX_NODES } from "../controller/NodeBitMask";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
@@ -2394,6 +2395,7 @@ version:               ${this.version}`;
 				generic: this.deviceClass.generic.key,
 				specific: this.deviceClass.specific.key,
 			},
+			neighbors: [...this._neighbors].sort(),
 			isListening: this.isListening,
 			isFrequentListening: this.isFrequentListening,
 			isRouting: this.isRouting,
@@ -2470,6 +2472,13 @@ version:               ${this.version}`;
 		tryParse("isSecure", "boolean");
 		tryParse("isBeaming", "boolean");
 		tryParse("version", "number");
+
+		if (isArray(obj.neighbors)) {
+			// parse only valid node IDs
+			this._neighbors = obj.neighbors.filter(
+				(n: any) => typeof n === "number" && n > 0 && n <= MAX_NODES,
+			);
+		}
 
 		function enforceType(
 			val: any,

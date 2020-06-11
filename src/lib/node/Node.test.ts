@@ -877,6 +877,7 @@ describe("lib/node/Node", () => {
 			isSecure: false,
 			isBeaming: true,
 			version: 4,
+			neighbors: [2, 3, 4],
 			commandClasses: {
 				"0x25": {
 					name: "Binary Switch",
