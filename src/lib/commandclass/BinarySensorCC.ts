@@ -2,7 +2,11 @@ import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { ValueID } from "../node/ValueDB";
-import { getEnumMemberName, validatePayload } from "../util/misc";
+import {
+	getEnumMemberName,
+	ignoreTimeout,
+	validatePayload,
+} from "../util/misc";
 import { ValueMetadata } from "../values/Metadata";
 import { Maybe, parseBitMask } from "../values/Primitive";
 import { CCAPI } from "./API";
@@ -167,31 +171,55 @@ export class BinarySensorCC extends CommandClass {
 
 		// Always query (all of) the sensor's current value(s)
 		if (this.version === 1) {
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: "querying current value...",
-				direction: "outbound",
-			});
-			const currentValue = await api.get();
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: `received current value: ${currentValue}`,
-				direction: "inbound",
-			});
+			await ignoreTimeout(
+				async () => {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: "querying current value...",
+						direction: "outbound",
+					});
+					const currentValue = await api.get();
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `received current value: ${currentValue}`,
+						direction: "inbound",
+					});
+				},
+				() => {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"Current value query timed out - skipping because it is not critical...",
+						level: "warn",
+					});
+				},
+			);
 		} else if (supportedSensorTypes) {
 			for (const type of supportedSensorTypes) {
 				const sensorName = getEnumMemberName(BinarySensorType, type);
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `querying current value for ${sensorName}...`,
-					direction: "outbound",
-				});
-				const currentValue = await api.get(type);
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `received current value for ${sensorName}: ${currentValue}`,
-					direction: "inbound",
-				});
+				await ignoreTimeout(
+					async () => {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `querying current value for ${sensorName}...`,
+							direction: "outbound",
+						});
+						const currentValue = await api.get(type);
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `received current value for ${sensorName}: ${currentValue}`,
+							direction: "inbound",
+						});
+					},
+					() => {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message:
+								"Current value query for ${sensorName} timed out - skipping because it is not critical...",
+							level: "warn",
+						});
+					},
+				);
 			}
 		}
 
