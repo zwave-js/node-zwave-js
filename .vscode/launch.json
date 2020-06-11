@@ -12,14 +12,19 @@
 			"port": 9229,
 			"localRoot": "${workspaceFolder}",
 			"remoteRoot": "/opt/iobroker/node_modules/zwave-js",
-			"skipFiles": ["<node_internals>/**"]
+			"skipFiles": [
+				"<node_internals>/**"
+			]
 		},
 		{
 			"type": "node",
 			"request": "attach",
 			"name": "Attach (localhost)",
 			"port": 9229,
-			"skipFiles": ["<node_internals>/**"],
+			"skipFiles": [
+				"<node_internals>/**",
+				"**/typescript.js"
+			],
 			"sourceMaps": true
 		},
 		{
@@ -39,7 +44,9 @@
 				// "LOGLEVEL": "verbose"
 			},
 			"console": "integratedTerminal",
-			"skipFiles": ["<node_internals>/**"],
+			"skipFiles": [
+				"<node_internals>/**"
+			],
 			"sourceMaps": true
 		},
 		{
@@ -53,7 +60,9 @@
 				"${workspaceFolder}/test/debug.js"
 			],
 			"console": "integratedTerminal",
-			"skipFiles": ["<node_internals>/**"],
+			"skipFiles": [
+				"<node_internals>/**"
+			],
 			"sourceMaps": true
 		}
 	]

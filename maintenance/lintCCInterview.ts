@@ -12,51 +12,12 @@ import {
 	CommandClasses,
 } from "../src/lib/commandclass/CommandClasses";
 import { getEnumMemberName } from "../src/lib/util/misc";
-import { loadTSConfig, projectRoot } from "./shared";
-
-function expressionToCommandClass(
-	sourceFile: ts.SourceFile,
-	enumExpr: ts.Node,
-): CommandClasses | undefined {
-	if (
-		(!ts.isPropertyAccessExpression(enumExpr) &&
-			!ts.isElementAccessExpression(enumExpr)) ||
-		enumExpr.expression.getText(sourceFile) !== "CommandClasses"
-	)
-		return;
-	if (ts.isPropertyAccessExpression(enumExpr)) {
-		return CommandClasses[
-			(enumExpr.name.getText(
-				sourceFile,
-			) as unknown) as keyof typeof CommandClasses
-		];
-	} else if (
-		ts.isElementAccessExpression(enumExpr) &&
-		ts.isStringLiteral(enumExpr.argumentExpression)
-	) {
-		return CommandClasses[
-			(enumExpr.argumentExpression
-				.text as unknown) as keyof typeof CommandClasses
-		];
-	}
-}
-
-function getCommandClassFromDecorator(
-	sourceFile: ts.SourceFile,
-	decorator: ts.Decorator,
-): CommandClasses | undefined {
-	if (!ts.isCallExpression(decorator.expression)) return;
-	if (
-		decorator.expression.expression.getText(sourceFile) !==
-			"commandClass" ||
-		decorator.expression.arguments.length !== 1
-	)
-		return;
-	return expressionToCommandClass(
-		sourceFile,
-		decorator.expression.arguments[0],
-	);
-}
+import {
+	expressionToCommandClass,
+	getCommandClassFromDecorator,
+	loadTSConfig,
+	projectRoot,
+} from "./shared";
 
 function getRequiredInterviewCCsFromMethod(
 	sourceFile: ts.SourceFile,
@@ -78,7 +39,6 @@ function getRequiredInterviewCCsFromMethod(
 	return ret;
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function lintCCInterview(): Promise<void> {
 	// Create a Program to represent the project, then pull out the
 	// source file to parse its AST.
@@ -189,7 +149,7 @@ export function lintCCInterview(): Promise<void> {
 							}
 						} catch (e) {
 							hasError = true;
-							console.warn(
+							console.error(
 								red(
 									`[ERROR] ${relativePath}:${
 										location.line + 1
