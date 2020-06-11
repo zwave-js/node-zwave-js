@@ -8,8 +8,7 @@ import { lintConfigFiles } from "./maintenance/lintConfigFiles";
 import { clean, copyIndexFilesToRoot } from "./maintenance/packageStructure";
 
 const prebuild = series(
-	lintCCInterview,
-	lintCCConstructors,
+	parallel(lintCCInterview, lintCCConstructors),
 	parallel(generateCCAPIInterface, generateCCExports),
 );
 const postbuild = copyIndexFilesToRoot;
