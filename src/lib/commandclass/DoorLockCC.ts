@@ -1,8 +1,10 @@
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import type { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, pick, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
+import { enumValuesToMetadataStates, ValueMetadata } from "../values/Metadata";
 import { Maybe, parseBitMask } from "../values/Primitive";
 import {
 	CCAPI,
@@ -16,6 +18,7 @@ import {
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
+	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -57,6 +60,22 @@ export enum DoorLockOperationType {
 
 // @publicAPI
 export type DoorHandleStatus = [boolean, boolean, boolean, boolean];
+
+function getTargetModeValueId(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Door Lock"],
+		endpoint,
+		property: "targetMode",
+	};
+}
+
+function getOperationTypeValueId(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Door Lock"],
+		endpoint,
+		property: "operationType",
+	};
+}
 
 const configurationSetParameters = [
 	"operationType",
@@ -290,6 +309,23 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 				message: logMessage,
 				direction: "inbound",
 			});
+
+			// Update metadata of settable states
+			const valueDB = this.getValueDB();
+			valueDB.setMetadata(getTargetModeValueId(this.endpointIndex), {
+				...ValueMetadata.UInt8,
+				states: enumValuesToMetadataStates(
+					DoorLockMode,
+					resp.supportedDoorLockModes,
+				),
+			});
+			valueDB.setMetadata(getOperationTypeValueId(this.endpointIndex), {
+				...ValueMetadata.UInt8,
+				states: enumValuesToMetadataStates(
+					DoorLockOperationType,
+					resp.supportedOperationTypes,
+				),
+			});
 		}
 
 		log.controller.logNode(node.id, {
@@ -440,29 +476,67 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 	}
 
 	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyUInt8,
+		label: "Current lock mode",
+		states: enumValuesToMetadataStates(DoorLockMode),
+	})
 	public readonly currentMode: DoorLockMode;
 
-	@ccValue({ minVersion: 3 })
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.UInt8,
+		label: "Target lock mode",
+		states: enumValuesToMetadataStates(DoorLockMode),
+	})
 	public readonly targetMode?: DoorLockMode;
 
 	@ccValue({ minVersion: 3 })
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnly,
+		label: "Remaining duration until target lock mode",
+	})
 	public readonly duration?: Duration;
 
 	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnly,
+		label: "Which outside handles can open the door (actual status)",
+	})
 	public readonly outsideHandlesCanOpenDoor: DoorHandleStatus;
 	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnly,
+		label: "Which inside handles can open the door (actual status)",
+	})
 	public readonly insideHandlesCanOpenDoor: DoorHandleStatus;
 
 	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnly,
+		label: "The current status of the latch",
+	})
 	public readonly latchStatus: "open" | "closed";
 
 	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnly,
+		label: "The current status of the bolt",
+	})
 	public readonly boltStatus: "locked" | "unlocked";
 
 	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnly,
+		label: "The current status of the door",
+	})
 	public readonly doorStatus: "open" | "closed";
 
 	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyNumber,
+		label: "Seconds until lock mode times out",
+	})
 	public readonly lockTimeout?: number; // in seconds
 }
 
@@ -513,27 +587,60 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 	}
 
 	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.UInt8,
+		label: "Lock operation type",
+		states: enumValuesToMetadataStates(DoorLockOperationType),
+	})
 	public readonly operationType: DoorLockOperationType;
 
 	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.Any,
+		label: "Which outside handles can open the door (configuration)",
+	})
 	public readonly outsideHandlesCanOpenDoorConfiguration: DoorHandleStatus;
 
 	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.Any,
+		label: "Which inside handles can open the door (configuration)",
+	})
 	public readonly insideHandlesCanOpenDoorConfiguration: DoorHandleStatus;
 
 	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.UInt16,
+		label: "Duration of timed mode in seconds",
+	})
 	public readonly lockTimeoutConfiguration?: number;
 
 	@ccValue({ minVersion: 4 })
+	@ccValueMetadata({
+		...ValueMetadata.UInt16,
+		label: "Duration in seconds until lock returns to secure state",
+	})
 	public readonly autoRelockTime?: number;
 
 	@ccValue({ minVersion: 4 })
+	@ccValueMetadata({
+		...ValueMetadata.UInt16,
+		label: "Duration in seconds the latch stays retracted",
+	})
 	public readonly holdAndReleaseTime?: number;
 
 	@ccValue({ minVersion: 4 })
+	@ccValueMetadata({
+		...ValueMetadata.Boolean,
+		label: "Twist Assist enabled",
+	})
 	public readonly twistAssist?: boolean;
 
 	@ccValue({ minVersion: 4 })
+	@ccValueMetadata({
+		...ValueMetadata.Boolean,
+		label: "Block-to-block functionality enabled",
+	})
 	public readonly blockToBlock?: boolean;
 }
 
