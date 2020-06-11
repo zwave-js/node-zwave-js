@@ -184,12 +184,14 @@ export class LanguageCCReport extends LanguageCC {
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnly,
+		label: "Language code",
 	})
 	public readonly language: string;
 
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnly,
+		label: "Country code",
 	})
 	public readonly country: string | undefined;
 }
