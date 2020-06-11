@@ -495,7 +495,10 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 		this.supportedRFStates = parseBitMask(this.payload.slice(2, 5));
 
 		this.persistValues();
+	}
 
+	public persistValues(): boolean {
+		if (!super.persistValues()) return false;
 		const valueDb = this.getValueDB();
 		// update metadata (partially) for the local and rf values
 		valueDb.setMetadata(getLocalStateValueID(this.endpointIndex), {
@@ -513,6 +516,7 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 				this.supportedRFStates,
 			),
 		});
+		return true;
 	}
 
 	@ccValue({ internal: true })
