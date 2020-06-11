@@ -394,6 +394,8 @@ export class VersionCCGet extends VersionCC {
 
 @CCCommand(VersionCommand.CommandClassReport)
 export class VersionCCCommandClassReport extends VersionCC {
+	// @noCCValues see constructor comment
+
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions,

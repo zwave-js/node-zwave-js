@@ -606,8 +606,12 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 		this.capability = capability;
 
 		// Remember the supported CCs
+		this.persistValues();
+	}
+
+	public persistValues(): boolean {
 		const ccsValueId = getEndpointCCsValueId(this.endpointIndex);
-		if (capability.wasRemoved) {
+		if (this.capability.wasRemoved) {
 			this.getValueDB().removeValue(ccsValueId);
 		} else {
 			this.getValueDB().setValue(
@@ -615,6 +619,7 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 				this.capability.supportedCCs,
 			);
 		}
+		return true;
 	}
 
 	public readonly endpointIndex: number;
@@ -791,6 +796,7 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 		const bitMask = this.payload.slice(2, 2 + bitMaskLength);
 		const members = parseBitMask(bitMask);
 		this.aggregatedEndpointMembers = [endpoint, members];
+		this.persistValues();
 	}
 
 	@ccKeyValuePair({ internal: true })
@@ -953,6 +959,8 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 
 @CCCommand(MultiChannelCommand.ReportV1)
 export class MultiChannelCCV1Report extends MultiChannelCC {
+	// @noCCValues This information is stored during the interview
+
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions,
@@ -968,12 +976,25 @@ export class MultiChannelCCV1Report extends MultiChannelCC {
 	public readonly endpointCount: number;
 }
 
+const testResponseForMultiChannelV1Get: CCResponsePredicate = (
+	sent: MultiChannelCCV1Get,
+	received,
+	isPositiveTransmitReport,
+) => {
+	return received instanceof MultiChannelCCV1Report &&
+		sent.requestedCC === received.requestedCC
+		? "final"
+		: isPositiveTransmitReport
+		? "confirmation"
+		: "unexpected";
+};
+
 interface MultiChannelCCV1GetOptions extends CCCommandOptions {
 	requestedCC: CommandClasses;
 }
 
 @CCCommand(MultiChannelCommand.GetV1)
-@expectedCCResponse(MultiChannelCCV1Report)
+@expectedCCResponse(testResponseForMultiChannelV1Get)
 export class MultiChannelCCV1Get extends MultiChannelCC {
 	public constructor(
 		driver: Driver,

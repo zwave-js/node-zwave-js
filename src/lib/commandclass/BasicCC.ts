@@ -170,6 +170,7 @@ type BasicCCReportOptions = CCCommandOptions & {
 
 @CCCommand(BasicCommand.Report)
 export class BasicCCReport extends BasicCC {
+	// @noCCValues See comment in the constructor
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions | BasicCCReportOptions,

@@ -167,6 +167,8 @@ export class ClockCCSet extends ClockCC {
 
 @CCCommand(ClockCommand.Report)
 export class ClockCCReport extends ClockCC {
+	// @noCCValues Setting the clock is done automatically and needs no values to be stored
+
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions,

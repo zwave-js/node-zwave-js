@@ -177,6 +177,8 @@ export class LanguageCCReport extends LanguageCC {
 			this.country = this.payload.toString("ascii", 3, 5);
 		}
 		// }
+
+		this.persistValues();
 	}
 
 	@ccValue()

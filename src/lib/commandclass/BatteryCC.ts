@@ -371,6 +371,8 @@ export class BatteryCCHealthReport extends BatteryCC {
 			label: "Temperature",
 			unit: scale === 0x00 ? "°C" : undefined,
 		});
+
+		this.persistValues();
 	}
 
 	private _maximumCapacity: number;

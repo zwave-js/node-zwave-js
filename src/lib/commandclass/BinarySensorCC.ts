@@ -222,7 +222,10 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		if (this.version >= 2 && this.payload.length >= 2) {
 			this._type = this.payload[1];
 		}
+		this.persistValues();
+	}
 
+	public persistValues(): boolean {
 		const valueId: ValueID = getBinarySensorValueId(
 			this.endpointIndex,
 			this._type,
@@ -231,6 +234,7 @@ export class BinarySensorCCReport extends BinarySensorCC {
 			...ValueMetadata.ReadOnlyBoolean,
 		});
 		this.getValueDB().setValue(valueId, this._value);
+		return true;
 	}
 
 	private _type: BinarySensorType;

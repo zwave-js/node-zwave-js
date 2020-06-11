@@ -522,9 +522,13 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 		const nameLength = this.payload[1];
 		validatePayload(this.payload.length >= 2 + nameLength);
 		this.name = this.payload.slice(2, 2 + nameLength).toString("utf8");
+		this.persistValues();
+	}
 
+	public persistValues(): boolean {
 		const valueId = getGroupNameValueID(this.groupId);
 		this.getValueDB().setValue(valueId, this.name);
+		return true;
 	}
 
 	public readonly groupId: number;
@@ -595,8 +599,15 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 			const profile = groupBytes.readUInt16BE(2);
 			const eventCode = 0; // groupBytes.readUInt16BE(5);
 			_groups.push({ groupId, mode, profile, eventCode });
+		}
+		this.groups = _groups;
+		this.persistValues();
+	}
 
-			// And persist the information in the value DB
+	public persistValues(): boolean {
+		if (!super.persistValues()) return false;
+		for (const group of this.groups) {
+			const { groupId, mode, profile, eventCode } = group;
 			const valueId = getGroupInfoValueID(groupId);
 			this.getValueDB().setValue(valueId, {
 				mode,
@@ -604,7 +615,7 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 				eventCode,
 			});
 		}
-		this.groups = _groups;
+		return true;
 	}
 
 	public readonly isListMode: boolean;

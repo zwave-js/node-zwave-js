@@ -541,11 +541,10 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 		super(driver, options);
 		validatePayload(this.payload.length >= 1);
 		this.exclusiveControlNodeId = this.payload[0];
-
-		const valueId = getExclusiveControlNodeIdValueID(this.endpointIndex);
-		this.getValueDB().setValue(valueId, this.exclusiveControlNodeId);
+		this.persistValues();
 	}
 
+	@ccValue({ minVersion: 2 })
 	public readonly exclusiveControlNodeId: number;
 }
 
@@ -595,11 +594,10 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
 		super(driver, options);
 		validatePayload(this.payload.length >= 1);
 		this.timeout = Timeout.parse(this.payload[0]);
-
-		const valueId = getTimeoutValueID(this.endpointIndex);
-		this.getValueDB().setValue(valueId, this.timeout);
+		this.persistValues();
 	}
 
+	@ccValue({ minVersion: 2 })
 	public readonly timeout: Timeout;
 }
 

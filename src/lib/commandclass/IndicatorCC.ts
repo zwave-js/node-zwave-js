@@ -503,6 +503,8 @@ export class IndicatorCCSet extends IndicatorCC {
 
 @CCCommand(IndicatorCommand.Report)
 export class IndicatorCCReport extends IndicatorCC {
+	// @noCCValues This CC stores its values diffently
+
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions,
@@ -665,6 +667,10 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 			).filter((v) => v !== 0);
 		}
 
+		this.persistValues();
+	}
+
+	public persistValues(): boolean {
 		if (this.indicatorId !== 0x00) {
 			// Remember which property IDs are supported
 			this.getValueDB().setValue(
@@ -675,6 +681,7 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 				this.supportedProperties,
 			);
 		}
+		return true;
 	}
 
 	public readonly indicatorId: number;

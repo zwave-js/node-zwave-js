@@ -359,7 +359,7 @@ interface SecurityCCNonceReportOptions extends CCCommandOptions {
 
 @CCCommand(SecurityCommand.NonceReport)
 export class SecurityCCNonceReport extends SecurityCC {
-	public constructor(
+	constructor(
 		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
@@ -380,6 +380,7 @@ export class SecurityCCNonceReport extends SecurityCC {
 		}
 	}
 
+	// @noCCValues The nonce is only used temporary
 	public nonce: Buffer;
 
 	public serialize(): Buffer {
@@ -623,6 +624,8 @@ export class SecurityCCCommandEncapsulationNonceGet extends SecurityCCCommandEnc
 
 @CCCommand(SecurityCommand.SchemeReport)
 export class SecurityCCSchemeReport extends SecurityCC {
+	// @noCCValues This CC has no values
+
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions,

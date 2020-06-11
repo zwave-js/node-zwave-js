@@ -298,8 +298,12 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		const { value, scale } = parseFloatWithScale(this.payload.slice(1));
 		this._value = value;
 		this._scale = lookupSensorScale(this._type, scale);
-		const typeName = getSensorTypeName(this._type);
 
+		this.persistValues();
+	}
+
+	public persistValues(): boolean {
+		const typeName = getSensorTypeName(this._type);
 		const valueId: ValueID = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
@@ -310,7 +314,8 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 			unit: this._scale.unit,
 			label: typeName,
 		});
-		this.getValueDB().setValue(valueId, value);
+		this.getValueDB().setValue(valueId, this._value);
+		return true;
 	}
 
 	private _type: number;

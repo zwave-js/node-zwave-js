@@ -373,7 +373,10 @@ export class MeterCCReport extends MeterCC {
 		const scale = scale1 === 7 ? scale1 + scale2 : scale1;
 		this._scale = lookupMeterScale(this._type, scale);
 
-		// Store values
+		this.persistValues();
+	}
+
+	public persistValues(): boolean {
 		const valueIdBase: Omit<ValueID, "property"> = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
@@ -429,6 +432,7 @@ export class MeterCCReport extends MeterCC {
 				this._deltaTime,
 			);
 		}
+		return true;
 	}
 
 	private _type: number;
@@ -580,6 +584,8 @@ export class MeterCCSupportedReport extends MeterCC {
 			Buffer.from([(this.payload[0] & 0b0_11_00000) >>> 5]),
 			1,
 		);
+
+		this.persistValues();
 	}
 
 	private _type: number;

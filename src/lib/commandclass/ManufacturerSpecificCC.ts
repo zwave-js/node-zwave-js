@@ -252,39 +252,36 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
 		super(driver, options);
 
 		validatePayload(this.payload.length >= 2);
-		this._type = this.payload[0] & 0b111;
+		this.type = this.payload[0] & 0b111;
 		const dataFormat = this.payload[1] >>> 5;
 		const dataLength = this.payload[1] & 0b11111;
 
 		validatePayload(dataLength > 0, this.payload.length >= 2 + dataLength);
 		const deviceIdData = this.payload.slice(2, 2 + dataLength);
-		this._deviceId =
+		this.deviceId =
 			dataFormat === 0
 				? deviceIdData.toString("utf8")
 				: "0x" + deviceIdData.toString("hex");
+		this.persistValues();
+	}
 
+	public persistValues(): boolean {
 		const valueId: ValueID = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
 			property: "deviceId",
-			propertyKey: DeviceIdType[this._type],
+			propertyKey: DeviceIdType[this.type],
 		};
 		this.getValueDB().setMetadata(valueId, {
 			...ValueMetadata.ReadOnly,
 			label: `Device ID (${valueId.propertyKey})`,
 		});
-		this.getValueDB().setValue(valueId, this._deviceId);
+		this.getValueDB().setValue(valueId, this.deviceId);
+		return true;
 	}
 
-	private _type: DeviceIdType;
-	public get type(): DeviceIdType {
-		return this._type;
-	}
-
-	private _deviceId: string;
-	public get deviceId(): string {
-		return this._deviceId;
-	}
+	private readonly type: DeviceIdType;
+	private readonly deviceId: string;
 }
 
 interface ManufacturerSpecificCCDeviceSpecificGetOptions

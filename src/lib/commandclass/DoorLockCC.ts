@@ -508,6 +508,8 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 			this.twistAssist = !!(flags & 0b1);
 			this.blockToBlock = !!(flags & 0b10);
 		}
+
+		this.persistValues();
 	}
 
 	@ccValue()
@@ -700,6 +702,8 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 		this.twistAssistSupported = !!(this.payload[offset + 2] & 0b10);
 		this.holdAndReleaseSupported = !!(this.payload[offset + 2] & 0b100);
 		this.autoRelockSupported = !!(this.payload[offset + 2] & 0b1000);
+
+		this.persistValues();
 	}
 
 	@ccValue({ internal: true, minVersion: 4 })

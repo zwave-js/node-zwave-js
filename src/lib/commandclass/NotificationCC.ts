@@ -403,7 +403,8 @@ export class NotificationCCReport extends NotificationCC {
 		}
 	}
 
-	// TODO: Is this a huge key value pair?
+	// @noCCValues TODO: This should actually be a huge key value pair
+	// Disable the lint error temporarily
 
 	private _alarmType: number;
 	public get alarmType(): number {
@@ -645,10 +646,9 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 			// bit 0 is ignored, but counting still starts at 1, so the first bit must have the value 0
 			0,
 		);
-
-		// We store the supported events in the form of value metadata
-		// This happens during the node interview
 	}
+
+	// @noCCValues We store the supported events in the form of value metadata during the node interview
 
 	private _notificationType: number;
 	public get notificationType(): number {

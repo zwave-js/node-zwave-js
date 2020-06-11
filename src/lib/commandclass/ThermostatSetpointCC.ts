@@ -582,6 +582,10 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		this._value = value;
 		this._scale = getScale(scale);
 
+		this.persistValues();
+	}
+
+	public persistValues(): boolean {
 		const valueId: ValueID = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
@@ -594,7 +598,8 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 				unit: this._scale.unit,
 			});
 		}
-		this.getValueDB().setValue(valueId, value);
+		this.getValueDB().setValue(valueId, this._value);
+		return true;
 	}
 
 	private _type: ThermostatSetpointType;

@@ -14,6 +14,7 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
+	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -205,8 +206,11 @@ export class TimeParametersCCReport extends TimeParametersCC {
 				this.getNode()!.getEndpoint(this.endpointIndex)!,
 			),
 		);
+
+		this.persistValues();
 	}
 
+	@ccValue()
 	public readonly dateAndTime: Date;
 }
 

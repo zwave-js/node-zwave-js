@@ -375,6 +375,8 @@ export class WakeUpCCNoMoreInformation extends WakeUpCC {
 
 @CCCommand(WakeUpCommand.IntervalCapabilitiesReport)
 export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
+	// @noCCValues The values are stored as part of the metadata
+
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions,

@@ -127,6 +127,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 // TODO: Add a way to specify the expected response
 export class ManufacturerProprietaryCC extends CommandClass {
 	declare ccCommand: undefined;
+	// @noCCValues
 
 	public constructor(
 		driver: Driver,

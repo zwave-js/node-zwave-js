@@ -132,6 +132,8 @@ type SupervisionCCReportOptions = CCCommandOptions & {
 
 @CCCommand(SupervisionCommand.Report)
 export class SupervisionCCReport extends SupervisionCC {
+	// @noCCValues
+
 	public constructor(
 		driver: Driver,
 		options:

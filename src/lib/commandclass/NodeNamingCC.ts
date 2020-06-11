@@ -201,18 +201,16 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 			// Z-Wave expects UTF16 BE
 			nameBuffer = nameBuffer.swap16();
 		}
-		this._name = nameBuffer.toString(encoding);
+		this.name = nameBuffer.toString(encoding);
+		this.persistValues();
 	}
 
-	private _name: string;
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.Any,
 		label: "Node name",
 	})
-	public get name(): string {
-		return this._name;
-	}
+	public readonly name: string;
 }
 
 @CCCommand(NodeNamingAndLocationCommand.NameGet)
@@ -287,18 +285,16 @@ export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocation
 			// Z-Wave expects UTF16 BE
 			locationBuffer = locationBuffer.swap16();
 		}
-		this._location = locationBuffer.toString(encoding);
+		this.location = locationBuffer.toString(encoding);
+		this.persistValues();
 	}
 
-	private _location: string;
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.Any,
 		label: "Node location",
 	})
-	public get location(): string {
-		return this._location;
-	}
+	public readonly location: string;
 }
 
 @CCCommand(NodeNamingAndLocationCommand.LocationGet)
