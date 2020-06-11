@@ -4,20 +4,25 @@
 	## __WORK IN PROGRESS__
 -->
 
-## 3.7.0-beta.0 (2020-06-10)
+## __WORK IN PROGRESS__
 ### Bugfixes
 * The compat queries for Danfoss thermostats now query setpoint 1
 * Always send pings, even if the target node is asleep
+* Several report-type commands now correctly store their values in the value DB when received
+* `MultiChannelCCV1Get` now checks whether the returned `MultiChannelCCV1Report` is for the correct endpoint
+* A node's neighbors are now persisted in the cache so they can be used to visualize the network until a repeat interview is complete
 
 ### Features
 * Added support for `Door Lock CC V4`
 * Added support for `Lock CC`
 * Added interview for `Language CC`
-* Added support for over-the-air (OTA) firmware updates
+* Added support for over-the-air (OTA) firmware updates with `Firmware Update Meta Data CC`
+* Lifeline reports for the root endpoint are now mapped to Endpoint 1 if the node supports Multi Channel Association CC in V1 or V2
 
 ### Changes under the hood
 * Added `driver.waitForCommand` method to expect receipt of a command that matches a given predicate
 * Added `driver.computeNetCCPayloadSize` method to compute how many payload bytes can be transmitted with a given CC (taking encapsulation into account).
+* During build, CCs constructors for report-type commands are now checked if they call `persistValues`. Application CCs that don't will cause an error, all others a warning.
 
 ## 3.6.4 (2020-06-04)
 ### Bugfixes
