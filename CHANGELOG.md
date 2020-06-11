@@ -19,6 +19,11 @@
 * Added interview for `Language CC`
 * Added support for over-the-air (OTA) firmware updates with `Firmware Update Meta Data CC`
 * Lifeline reports for the root endpoint are now mapped to Endpoint 1 if the node supports Multi Channel Association CC in V1 or V2
+* The node interview is no longer aborted if a response for the following requests times out:
+  * Battery status
+  * Battery health
+  * Binary Sensor status
+  * Multilevel Sensor status
 
 ### Changes under the hood
 * Added `driver.waitForCommand` method to expect receipt of a command that matches a given predicate
