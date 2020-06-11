@@ -280,8 +280,8 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
 		return true;
 	}
 
-	private readonly type: DeviceIdType;
-	private readonly deviceId: string;
+	public readonly type: DeviceIdType;
+	public readonly deviceId: string;
 }
 
 interface ManufacturerSpecificCCDeviceSpecificGetOptions
