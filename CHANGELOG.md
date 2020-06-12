@@ -4,6 +4,11 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* `node.refreshInfo` no longer causes an event to be emitted for every cleared value
+* `node.refreshInfo` resets the state of the `ready` event and all cached CCs and API instances
+
 ## 3.7.0 (2020-06-11)
 ### Bugfixes
 * The compat queries for Danfoss thermostats now query setpoint 1
@@ -19,6 +24,7 @@
 * Added interview for `Language CC`
 * Added support for over-the-air (OTA) firmware updates with `Firmware Update Meta Data CC`
 * Lifeline reports for the root endpoint are now mapped to Endpoint 1 if the node supports Multi Channel Association CC in V1 or V2
+* `ZWaveNode`s now have a `refreshInfo` method which resets all known information and restarts the node interview
 * The node interview is no longer aborted if a response for the following requests times out:
   * Battery status
   * Battery health
