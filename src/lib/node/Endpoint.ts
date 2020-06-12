@@ -58,6 +58,12 @@ export class Endpoint {
 		}
 	}
 
+	/** Resets all stored information of this endpoint */
+	protected reset(): void {
+		this._implementedCommandClasses.clear();
+		this._commandClassAPIs.clear();
+	}
+
 	private _implementedCommandClasses = new Map<
 		CommandClasses,
 		CommandClassInfo

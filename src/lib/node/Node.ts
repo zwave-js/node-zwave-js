@@ -665,10 +665,12 @@ export class ZWaveNode extends Endpoint {
 	 * WARNING: Take care NOT to call this method when the node is already being interviewed.
 	 * Otherwise the node information may become inconsistent.
 	 */
-	public refreshInfo(): void {
+	public async refreshInfo(): Promise<void> {
 		this._interviewAttempts = 0;
 		this.interviewStage = InterviewStage.None;
 		this._status = NodeStatus.Unknown;
+		this.nodeMayBeReady = false;
+		this.nodeReadyEmitted = false;
 		this._ready = false;
 		this._deviceClass = undefined;
 		this._isListening = undefined;
@@ -683,10 +685,13 @@ export class ZWaveNode extends Endpoint {
 		this._hasEmittedNoNetworkKeyError = false;
 		this._valueDB.clear();
 		this._endpointInstances.clear();
+		super.reset();
+
+		// Also remove the information from the cache
+		await this.driver.saveNetworkToCache();
 
 		// Don't keep the node awake after the interview
 		this.keepAwake = false;
-
 		void this.driver.interviewNode(this);
 	}
 
