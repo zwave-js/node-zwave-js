@@ -471,9 +471,9 @@ currently assigned endpoints: ${group.endpoints
 				const nodeIdsValueId = getNodeIdsValueId(lifelineGroup);
 				const endpointsValueId = getEndpointsValueId(lifelineGroup);
 				const lifelineNodeIds: number[] =
-					this.getValueDB().getValue(nodeIdsValueId) || [];
+					this.getValueDB().getValue(nodeIdsValueId) ?? [];
 				const lifelineDestinations: EndpointAddress[] =
-					this.getValueDB().getValue(endpointsValueId) || [];
+					this.getValueDB().getValue(endpointsValueId) ?? [];
 				const ownNodeId = this.driver.controller.ownNodeId!;
 				const isAssignedAsNodeAssociation = lifelineNodeIds.includes(
 					ownNodeId,
@@ -491,9 +491,7 @@ currently assigned endpoints: ${group.endpoints
 					// Remember the new destination
 					this.getValueDB().setValue(nodeIdsValueId, [
 						ownNodeId,
-						...(this.getValueDB().getValue<number[]>(
-							nodeIdsValueId,
-						) ?? []),
+						...lifelineNodeIds,
 					]);
 				} else if (
 					this.version >= 3 &&
@@ -506,6 +504,12 @@ currently assigned endpoints: ${group.endpoints
 							groupId: lifelineGroup,
 							nodeIds: [ownNodeId],
 						});
+						this.getValueDB().setValue(
+							nodeIdsValueId,
+							lifelineNodeIds.filter(
+								(nodeId) => nodeId !== ownNodeId,
+							),
+						);
 					}
 					await api.addDestinations({
 						groupId: lifelineGroup,
@@ -514,9 +518,7 @@ currently assigned endpoints: ${group.endpoints
 					// Remember the new destination
 					this.getValueDB().setValue(endpointsValueId, [
 						{ nodeId: ownNodeId, endpoint: 0 },
-						...(this.getValueDB().getValue<EndpointAddress[]>(
-							endpointsValueId,
-						) ?? []),
+						...lifelineDestinations,
 					]);
 				}
 			}

@@ -334,8 +334,9 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 		// If the target node supports Z-Wave+ info that means the lifeline MUST be group #1
 		if (node.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
 			// Check if we are already in the lifeline group
+			const lifelineValueId = getNodeIdsValueId(1);
 			const lifelineNodeIds: number[] =
-				valueDB.getValue(getNodeIdsValueId(1)) || [];
+				valueDB.getValue(lifelineValueId) || [];
 			if (!lifelineNodeIds.includes(ownNodeId)) {
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
@@ -344,6 +345,11 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 					direction: "outbound",
 				});
 				await api.addNodeIds(1, ownNodeId);
+				// Remember the new destination
+				this.getValueDB().setValue(lifelineValueId, [
+					ownNodeId,
+					...lifelineNodeIds,
+				]);
 			}
 			// Remember that we have a lifeline association
 			valueDB.setValue(getHasLifelineValueId(), true);
@@ -362,10 +368,17 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 				});
 				for (const group of lifelineGroups) {
 					// Check if we are already in the lifeline group
+					const lifelineValueId = getNodeIdsValueId(group);
 					const lifelineNodeIds: number[] =
-						valueDB.getValue(getNodeIdsValueId(group)) || [];
-					if (!lifelineNodeIds.includes(ownNodeId))
+						valueDB.getValue(lifelineValueId) ?? [];
+					if (!lifelineNodeIds.includes(ownNodeId)) {
 						await api.addNodeIds(group, ownNodeId);
+						// Remember the new destination
+						this.getValueDB().setValue(lifelineValueId, [
+							ownNodeId,
+							...lifelineNodeIds,
+						]);
+					}
 				}
 				// Remember that we have a lifeline association
 				valueDB.setValue(getHasLifelineValueId(), true);
