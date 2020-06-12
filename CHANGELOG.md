@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.7.1 (2020-06-12)
 ### Bugfixes
 * `node.refreshInfo` no longer causes an event to be emitted for every cleared value
 * `node.refreshInfo` resets the state of the `ready` event and all cached CCs and API instances
