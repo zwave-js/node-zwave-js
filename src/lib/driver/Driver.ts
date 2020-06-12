@@ -808,7 +808,7 @@ export class Driver extends EventEmitter {
 			node.id,
 			setTimeout(() => {
 				this.retryNodeInterviewTimeouts.delete(node.id);
-				node.refreshInfo();
+				void node.refreshInfo();
 			}, waitTime).unref(),
 		);
 	}
