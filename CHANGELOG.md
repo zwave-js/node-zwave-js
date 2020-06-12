@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## 3.7.2 (2020-06-12)
+### Bugfixes
+* During the interview, the cached lifeline destinations for `Multi Channel Association` and `Association` CCs are now updated.
+
 ## 3.7.1 (2020-06-12)
 ### Bugfixes
 * `node.refreshInfo` no longer causes an event to be emitted for every cleared value
