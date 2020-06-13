@@ -943,7 +943,9 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `destination: ${
+			message: `
+source:      ${this.endpointIndex}
+destination: ${
 				typeof this.destination === "number"
 					? this.destination
 					: this.destination.join(", ")
