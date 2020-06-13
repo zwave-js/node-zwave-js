@@ -4,6 +4,12 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+* Logging for the following CCs has been improved:
+  * `MultiChannelCCCommandEncapsulation` - The source endpoint was added
+  * `SupervisionCCGet` and `SupervisionCCReport` - Added parameter logging
+  * `MultilevelSwitchCCSet`, `MultilevelSwitchCCReport` and `MultilevelSwitchCCStartLevelChange` - Added parameter logging
+
 ## 3.7.2 (2020-06-12)
 ### Bugfixes
 * During the interview, the cached lifeline destinations for `Multi Channel Association` and `Association` CCs are now updated.
