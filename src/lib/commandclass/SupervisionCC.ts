@@ -1,6 +1,7 @@
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { validatePayload } from "../util/misc";
+import type { MessageOrCCLogEntry } from "../log/shared";
+import { getEnumMemberName, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
 import type { Maybe } from "../values/Primitive";
 import { CCAPI } from "./API";
@@ -162,6 +163,21 @@ export class SupervisionCCReport extends SupervisionCC {
 	public readonly sessionId: number;
 	public readonly status: SupervisionStatus;
 	public readonly duration: Duration | undefined;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		let message = `
+session id:          ${this.sessionId}
+more updates follow: ${this.moreUpdatesFollow}
+status:              ${getEnumMemberName(SupervisionStatus, this.status)}`;
+		if (this.duration) {
+			message += `
+duration:            ${this.duration.toString()}`;
+		}
+		return {
+			...super.toLogEntry(),
+			message: message.trim(),
+		};
+	}
 }
 
 interface SupervisionCCGetOptions extends CCCommandOptions {
@@ -223,5 +239,16 @@ export class SupervisionCCGet extends SupervisionCC {
 	protected computeEncapsulationOverhead(): number {
 		// Supervision CC adds two bytes (control byte + cc length)
 		return super.computeEncapsulationOverhead() + 2;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message = [
+			`session id:      ${this.sessionId}`,
+			`request updates: ${this.requestStatusUpdates}`,
+		];
+		return {
+			...super.toLogEntry(),
+			message,
+		};
 	}
 }

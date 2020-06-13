@@ -1,6 +1,7 @@
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import type { MessageOrCCLogEntry } from "../log/shared";
 import type { ValueID } from "../node/ValueDB";
 import { getEnumMemberName, validatePayload } from "../util/misc";
 import { Duration } from "../values/Duration";
@@ -392,6 +393,17 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 		this.payload = Buffer.from(payload);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message = [`target value: ${this.targetValue}`];
+		if (this.duration) {
+			message.push(`duration:     ${this.duration.toString()}`);
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(MultilevelSwitchCommand.Report)
@@ -442,6 +454,20 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	})
 	public get currentValue(): Maybe<number> {
 		return this._currentValue;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message = [`current value: ${this._currentValue}`];
+		if (this._targetValue != undefined && this._duration) {
+			message.push(
+				`target value:  ${this._targetValue}`,
+				`duration:      ${this._duration.toString()}`,
+			);
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
 	}
 }
 
@@ -510,6 +536,22 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 		}
 		this.payload = Buffer.from(payload);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message = [
+			`startLevel: ${this.startLevel}${
+				this.ignoreStartLevel ? " (ignored)" : ""
+			}`,
+			`direction:  ${this.direction}`,
+		];
+		if (this.duration) {
+			message.push(`duration:   ${this.duration.toString()}`);
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
 	}
 }
 
