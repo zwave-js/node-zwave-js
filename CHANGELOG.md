@@ -4,11 +4,13 @@
 	## __WORK IN PROGRESS__
 -->
 
-## 3.7.3-beta.0 (2020-06-13)
+## __WORK IN PROGRESS__
 * Logging for the following CCs has been improved:
   * `MultiChannelCCCommandEncapsulation` - The source endpoint was added
   * `SupervisionCCGet` and `SupervisionCCReport` - Added parameter logging
   * `MultilevelSwitchCCSet`, `MultilevelSwitchCCReport` and `MultilevelSwitchCCStartLevelChange` - Added parameter logging
+* `ZWaveError` is now exported as a value
+* The `Firmware` type is now exported
 
 ## 3.7.2 (2020-06-12)
 ### Bugfixes
