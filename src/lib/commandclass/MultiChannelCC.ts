@@ -949,7 +949,7 @@ destination: ${
 				typeof this.destination === "number"
 					? this.destination
 					: this.destination.join(", ")
-			}`,
+			}`.trim(),
 		};
 	}
 
