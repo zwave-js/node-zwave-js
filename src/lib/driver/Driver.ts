@@ -2194,9 +2194,10 @@ ${handlers.length} left`,
 		} else {
 			// 3.: We do and the current one was sent (is pending) -> do nothing right now
 			log.driver.print(
-				`workOffSendQueue > skipping because a transaction is pending`,
+				`workOffSendQueue > skipping because a transaction is pending:`,
 				"debug",
 			);
+			// log.driver.transaction(this.currentTransaction);
 			// log.driver.sendQueue(this.sendQueue);
 		}
 	}

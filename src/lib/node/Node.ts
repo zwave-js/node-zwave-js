@@ -2408,6 +2408,9 @@ version:               ${this.version}`;
 	private handleFirmwareUpdateStatusReport(
 		report: FirmwareUpdateMetaDataCCStatusReport,
 	): void {
+		// If no firmware update is in progress, we don't care
+		if (!this._firmwareUpdateStatus) return;
+
 		const { status, waitTime } = report;
 
 		// Actually, OK_WaitingForActivation should never happen since we don't allow
