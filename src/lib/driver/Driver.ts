@@ -1233,71 +1233,73 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 	 * If the message expects another partial one, this returns `false`.
 	 */
 	private assemblePartialCCs(msg: Message & ICommandClassContainer): boolean {
-		let command = msg.command;
+		let command: CommandClass | undefined = msg.command;
 		let sessionId: Record<string, any> | undefined;
-		// We search for the outermost CC that provides us with a session ID
-		while (
-			!(sessionId = command.getPartialCCSessionId()) &&
-			isEncapsulatingCommandClass(command)
-		) {
-			// This one doesnt, but contains an encapsulated CC - look deeper
-			command = command.encapsulated;
-		}
-		if (sessionId) {
-			// This CC belongs to a partial session
-			const partialSessionKey = JSON.stringify({
-				nodeId: msg.getNodeId()!,
-				ccId: msg.command.ccId,
-				ccCommand: msg.command.ccCommand!,
-				...sessionId,
-			});
-			if (!this.partialCCSessions.has(partialSessionKey)) {
-				this.partialCCSessions.set(partialSessionKey, []);
-			}
-			const session = this.partialCCSessions.get(partialSessionKey)!;
-			if (command.expectMoreMessages()) {
-				// this is not the final one, store it
-				session.push(command);
-				// and don't handle the command now
-				log.driver.logMessage(msg, {
-					secondaryTags: ["partial"],
-					direction: "inbound",
-				});
-				return false;
-			} else {
-				// this is the final one, merge the previous responses
-				this.partialCCSessions.delete(partialSessionKey);
-				try {
-					command.mergePartialCCs(session);
-				} catch (e) {
-					if (e instanceof ZWaveError) {
-						switch (e.code) {
-							case ZWaveErrorCodes.Deserialization_NotImplemented:
-							case ZWaveErrorCodes.CC_NotImplemented:
-								log.driver.print(
-									`Dropping message because it could not be deserialized: ${e.message}`,
-									"warn",
-								);
-								// Don't continue handling this message
-								return false;
+		// We search for the every CC that provides us with a session ID
+		// There might be newly-completed CCs that contain a partial CC,
+		// so investigate the entire CC encapsulation stack.
+		while (command) {
+			sessionId = command.getPartialCCSessionId();
 
-							case ZWaveErrorCodes.PacketFormat_InvalidPayload:
-								log.driver.print(
-									`Could not assemble partial CCs because the payload is invalid. Dropping them.`,
-									"warn",
-								);
-								// Don't continue handling this message
-								return false;
-						}
-					}
-					throw e;
+			if (sessionId) {
+				// This CC belongs to a partial session
+				const partialSessionKey = JSON.stringify({
+					nodeId: msg.getNodeId()!,
+					ccId: msg.command.ccId,
+					ccCommand: msg.command.ccCommand!,
+					...sessionId,
+				});
+				if (!this.partialCCSessions.has(partialSessionKey)) {
+					this.partialCCSessions.set(partialSessionKey, []);
 				}
-				return true;
+				const session = this.partialCCSessions.get(partialSessionKey)!;
+				if (command.expectMoreMessages()) {
+					// this is not the final one, store it
+					session.push(command);
+					// and don't handle the command now
+					log.driver.logMessage(msg, {
+						secondaryTags: ["partial"],
+						direction: "inbound",
+					});
+					return false;
+				} else {
+					// this is the final one, merge the previous responses
+					this.partialCCSessions.delete(partialSessionKey);
+					try {
+						command.mergePartialCCs(session);
+					} catch (e) {
+						if (e instanceof ZWaveError) {
+							switch (e.code) {
+								case ZWaveErrorCodes.Deserialization_NotImplemented:
+								case ZWaveErrorCodes.CC_NotImplemented:
+									log.driver.print(
+										`Dropping message because it could not be deserialized: ${e.message}`,
+										"warn",
+									);
+									// Don't continue handling this message
+									return false;
+
+								case ZWaveErrorCodes.PacketFormat_InvalidPayload:
+									log.driver.print(
+										`Could not assemble partial CCs because the payload is invalid. Dropping them.`,
+										"warn",
+									);
+									// Don't continue handling this message
+									return false;
+							}
+						}
+						throw e;
+					}
+					// Assembling this CC was successful - but it might contain another partial CC
+				}
+			} else {
+				// No partial CC, just continue
 			}
-		} else {
-			// No partial CC, just continue
-			return true;
+
+			// If this is an encapsulating CC, we need to look one level deeper
+			command = (command as any).encapsulated;
 		}
+		return true;
 	}
 
 	/**
