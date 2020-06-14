@@ -46,12 +46,14 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Device Status",
-			"maxNodes": 16
+			"label": "Motion Sensor Status",
+			"maxNodes": 16,
+			"isLifeline": true
 		},
 		"2": {
 			"label": "Tamper Alarm",
-			"maxNodes": 16
+			"maxNodes": 16,
+			"isLifeline": true
 		},
 		"3": {
 			"label": "Controller Updates",
