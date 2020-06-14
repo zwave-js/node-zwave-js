@@ -5,12 +5,17 @@
 -->
 
 ## __WORK IN PROGRESS__
+### Bugfixes
 * Logging for the following CCs has been improved:
   * `MultiChannelCCCommandEncapsulation` - The source endpoint was added
   * `SupervisionCCGet` and `SupervisionCCReport` - Added parameter logging
   * `MultilevelSwitchCCSet`, `MultilevelSwitchCCReport` and `MultilevelSwitchCCStartLevelChange` - Added parameter logging
 * `ZWaveError` is now exported as a value
 * The `Firmware` type is now exported
+* Node information frames after `node.refreshInfo` are no longer discarded
+* Firmware updates we don't know about are now aborted without emitting an event
+* Failed firmware updates are now handled correctly
+* All associations of the Fibareo FGMS-001 motion sensor are now configured to point to the controller
 
 ## 3.7.2 (2020-06-12)
 ### Bugfixes
