@@ -285,7 +285,7 @@ export class ZWaveNode extends Endpoint {
 
 		// To be marked ready, a node must be known to be not dead
 		if (
-			this.nodeMayBeReady &&
+			this._nodeMayBeReady &&
 			// listening nodes must have communicated with us
 			((this._isListening && this._status === NodeStatus.Awake) ||
 				// sleeping nodes are assumed to be ready
@@ -297,8 +297,8 @@ export class ZWaveNode extends Endpoint {
 
 	// The node is only ready when the interview has been completed
 	// to a certain degree
-	private nodeMayBeReady = false;
-	private nodeReadyEmitted = false;
+	private _nodeMayBeReady = false;
+	private _nodeReadyEmitted = false;
 
 	private _ready: boolean = false;
 	/**
@@ -310,9 +310,9 @@ export class ZWaveNode extends Endpoint {
 	public set ready(v: boolean) {
 		this._ready = v;
 		// When the node is marked ready, emit the ready event (max. once)
-		if (!v || this.nodeReadyEmitted) return;
+		if (!v || this._nodeReadyEmitted) return;
 		this.emit("ready", this);
-		this.nodeReadyEmitted = true;
+		this._nodeReadyEmitted = true;
 	}
 
 	private _deviceClass: DeviceClass | undefined;
@@ -394,7 +394,7 @@ export class ZWaveNode extends Endpoint {
 		return this._neighbors;
 	}
 
-	private nodeInfoReceived: boolean = false;
+	private _nodeInfoReceived: boolean = false;
 
 	private _valueDB: ValueDB;
 	/**
@@ -669,8 +669,9 @@ export class ZWaveNode extends Endpoint {
 		this._interviewAttempts = 0;
 		this.interviewStage = InterviewStage.None;
 		this._status = NodeStatus.Unknown;
-		this.nodeMayBeReady = false;
-		this.nodeReadyEmitted = false;
+		this._nodeMayBeReady = false;
+		this._nodeReadyEmitted = false;
+		this._nodeInfoReceived = false;
 		this._ready = false;
 		this._deviceClass = undefined;
 		this._isListening = undefined;
@@ -770,7 +771,7 @@ export class ZWaveNode extends Endpoint {
 
 			// Ping node to check if it is alive/asleep/...
 			// TODO: #739, point 3 -> Do this automatically for the first message
-			this.nodeMayBeReady = true;
+			this._nodeMayBeReady = true;
 			await this.ping();
 		}
 
@@ -1229,12 +1230,12 @@ version:               ${this.version}`;
 	 * Handles the receipt of a NIF / NodeUpdatePayload
 	 */
 	public updateNodeInfo(nodeInfo: NodeUpdatePayload): void {
-		if (!this.nodeInfoReceived) {
+		if (!this._nodeInfoReceived) {
 			for (const cc of nodeInfo.supportedCCs)
 				this.addCC(cc, { isSupported: true });
 			for (const cc of nodeInfo.controlledCCs)
 				this.addCC(cc, { isControlled: true });
-			this.nodeInfoReceived = true;
+			this._nodeInfoReceived = true;
 		}
 
 		// As the NIF is sent on wakeup, treat this as a sign that the node is awake
