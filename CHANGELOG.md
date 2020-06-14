@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.7.3 (2020-06-14)
 ### Bugfixes
 * Logging for the following CCs has been improved:
   * `MultiChannelCCCommandEncapsulation` - The source endpoint was added
