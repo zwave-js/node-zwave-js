@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## 3.7.5 (2020-06-14)
+### Bugfixes
+* Removing a multi channel endpoint association to the root endpoint now also removes the equivalent node association
+
 ## 3.7.4 (2020-06-14)
 ### Bugfixes
 * Improved logging for `Multi Channel Association CC`
