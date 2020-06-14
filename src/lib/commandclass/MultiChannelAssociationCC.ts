@@ -2,6 +2,7 @@ import { MAX_NODES } from "../controller/NodeBitMask";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
+import type { MessageOrCCLogEntry } from "../log/shared";
 import type { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import { encodeBitMask, Maybe, parseBitMask } from "../values/Primitive";
@@ -67,6 +68,20 @@ export function getGroupCountValueId(): ValueID {
 export interface EndpointAddress {
 	nodeId: number;
 	endpoint: number | number[];
+}
+
+function endpointAddressesToString(
+	endpoints: readonly EndpointAddress[],
+): string {
+	return endpoints
+		.map(({ nodeId, endpoint }) => {
+			if (typeof endpoint === "number") {
+				return `${nodeId}:${endpoint}`;
+			} else {
+				return `${nodeId}:[${endpoint.map(String).join(", ")}]`;
+			}
+		})
+		.join(", ");
 }
 
 const MULTI_CHANNEL_ASSOCIATION_MARKER = 0x00;
@@ -588,6 +603,17 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`group id:  ${this.groupId}`,
+				`node ids:  ${this.nodeIds.join(", ")}`,
+				`endpoints: ${endpointAddressesToString(this.endpoints)}`,
+			],
+		};
+	}
 }
 
 interface MultiChannelAssociationCCRemoveOptions {
@@ -658,6 +684,22 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: string[] = [`group id:  ${this.groupId}`];
+		if (this.nodeIds) {
+			message.push(`node ids:  ${this.nodeIds.join(", ")}`);
+		}
+		if (this.endpoints) {
+			message.push(
+				`endpoints: ${endpointAddressesToString(this.endpoints)}`,
+			);
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(MultiChannelAssociationCommand.Report)
@@ -727,6 +769,8 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 			.map((report) => report._endpoints)
 			.reduce((prev, cur) => prev.concat(...cur), []);
 
+		console.error("I've persisted stuff");
+
 		// Persist values
 		this.getValueDB().setValue(
 			getMaxNodesValueId(this._groupId),
@@ -740,6 +784,20 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 			getEndpointsValueId(this._groupId),
 			this._endpoints,
 		);
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`group id:           ${this.groupId}`,
+				`maximum # of nodes: ${this.maxNodes}`,
+				`node ids:           ${this.nodeIds.join(", ")}`,
+				`endpoints:          ${endpointAddressesToString(
+					this.endpoints,
+				)}`,
+			],
+		};
 	}
 }
 
@@ -780,6 +838,13 @@ export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 		this.payload = Buffer.from([this.groupId]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `group id: ${this.groupId}`,
+		};
+	}
 }
 
 @CCCommand(MultiChannelAssociationCommand.SupportedGroupingsReport)
@@ -800,6 +865,13 @@ export class MultiChannelAssociationCCSupportedGroupingsReport extends MultiChan
 	@ccValue({ internal: true })
 	public get groupCount(): number {
 		return this._groupCount;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `group count: ${this.groupCount}`,
+		};
 	}
 }
 
