@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.7.4 (2020-06-14)
 ### Bugfixes
 * Improved logging for `Multi Channel Association CC`
 * Assembling partial CCs now works if there are multiple levels (e.g. Security CC -> Multi Channel Association Report)
