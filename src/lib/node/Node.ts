@@ -1,6 +1,7 @@
 import type { Comparer, CompareResult } from "alcalzone-shared/comparable";
 import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
+import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
 import type { CCAPI } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
@@ -1464,6 +1465,8 @@ version:               ${this.version}`;
 			return this.handleSecurityNonceGet();
 		} else if (command instanceof FirmwareUpdateMetaDataCCGet) {
 			return this.handleFirmwareUpdateGet(command);
+		} else if (command instanceof FirmwareUpdateMetaDataCCStatusReport) {
+			return this.handleFirmwareUpdateStatusReport(command);
 		}
 
 		// Ignore all commands that don't need to be handled
@@ -2048,6 +2051,8 @@ version:               ${this.version}`;
 				abort: boolean;
 				/** This is set when waiting for the update status */
 				statusTimeout?: NodeJS.Timeout;
+				/** This is set when waiting for a get request */
+				getTimeout?: NodeJS.Timeout;
 		  }
 		| undefined;
 
@@ -2176,6 +2181,11 @@ version:               ${this.version}`;
 				// All good, we have started!
 				// Keep the node awake until the update is done.
 				this.keepAwake = true;
+				// Timeout the update when no get request has been received for a while
+				this._firmwareUpdateStatus.getTimeout = setTimeout(
+					() => this.timeoutFirmwareUpdate(),
+					30000,
+				).unref();
 				return;
 		}
 	}
@@ -2237,22 +2247,76 @@ version:               ${this.version}`;
 		}
 	}
 
+	private async sendCorruptedFirmwareUpdateReport(
+		reportNum: number,
+		fragment?: Buffer,
+	): Promise<void> {
+		if (!fragment) {
+			let fragmentSize = this._firmwareUpdateStatus?.fragmentSize;
+			if (!fragmentSize) {
+				// We don't know the fragment size, so we send a fragment with the maximum possible size
+				const fcc = new FirmwareUpdateMetaDataCC(this.driver, {
+					nodeId: this.id,
+				});
+				fragmentSize =
+					this.driver.computeNetCCPayloadSize(fcc) -
+					2 - // report number
+					(fcc.version >= 2 ? 2 : 0); // checksum
+			}
+			fragment = randomBytes(fragmentSize);
+		} else {
+			// If we already have data, corrupt it
+			for (let i = 0; i < fragment.length; i++) {
+				fragment[i] = fragment[i] ^ 0xff;
+			}
+		}
+		await this.commandClasses[
+			"Firmware Update Meta Data"
+		].sendFirmwareFragment(reportNum, true, fragment);
+	}
+
 	private handleFirmwareUpdateGet(
 		command: FirmwareUpdateMetaDataCCGet,
 	): void {
 		if (this._firmwareUpdateStatus == undefined) {
 			log.controller.logNode(this.id, {
-				message: `Received Firmware Update Get, but no firmware update is in progress, ignoring...`,
+				message: `Received Firmware Update Get, but no firmware update is in progress. Forcing the node to abort...`,
 				direction: "inbound",
 			});
+			this.sendCorruptedFirmwareUpdateReport(command.reportNumber).catch(
+				() => {
+					/* ignore */
+				},
+			);
 			return;
 		} else if (
 			command.reportNumber > this._firmwareUpdateStatus.numFragments
 		) {
 			log.controller.logNode(this.id, {
-				message: `Received Firmware Update Get for an out-of-bounds fragment, ignoring...`,
+				message: `Received Firmware Update Get for an out-of-bounds fragment. Forcing the node to abort...`,
 				direction: "inbound",
 			});
+			this.sendCorruptedFirmwareUpdateReport(command.reportNumber).catch(
+				() => {
+					/* ignore */
+				},
+			);
+			return;
+		}
+
+		// Refresh the get timeout
+		if (this._firmwareUpdateStatus.getTimeout) {
+			console.warn("refreshed get timeout");
+			this._firmwareUpdateStatus.getTimeout = this._firmwareUpdateStatus.getTimeout
+				.refresh()
+				.unref();
+		}
+
+		// When a node requests a firmware update fragment, it must be awake
+		try {
+			this.setAwake(true);
+		} catch {
+			/* ignore */
 		}
 
 		// Send the response(s) in the background
@@ -2278,14 +2342,7 @@ version:               ${this.version}`;
 				);
 
 				if (abort) {
-					// Send an intentionally corrupted frame
-					for (let i = 0; i < fragment.length; i++) {
-						fragment[i] = fragment[i] ^ 0xff;
-					}
-					await this.commandClasses[
-						"Firmware Update Meta Data"
-					].sendFirmwareFragment(num, true, fragment);
-					// and nothing else
+					await this.sendCorruptedFirmwareUpdateReport(num, fragment);
 					return;
 				} else {
 					log.controller.logNode(this.id, {
@@ -2312,6 +2369,11 @@ version:               ${this.version}`;
 
 					// If that was the last one wait for status report from the node and restart interview
 					if (isLast) {
+						// The update was completed, we don't need to timeout get requests anymore
+						if (this._firmwareUpdateStatus?.getTimeout) {
+							clearTimeout(this._firmwareUpdateStatus.getTimeout);
+							this._firmwareUpdateStatus.getTimeout = undefined;
+						}
 						void this.finishFirmwareUpdate().catch(() => {
 							/* ignore */
 						});
@@ -2321,9 +2383,60 @@ version:               ${this.version}`;
 		})();
 	}
 
+	private timeoutFirmwareUpdate(): void {
+		// In some cases it can happen that the device stops requesting update frames
+		// We need to timeout the update in this case so it can be restarted
+
+		log.controller.logNode(this.id, {
+			message: `Firmware update timed out`,
+			direction: "none",
+			level: "warn",
+		});
+
+		// clean up
+		this._firmwareUpdateStatus = undefined;
+		this.keepAwake = false;
+
+		// Notify listeners
+		this.emit(
+			"firmware update finished",
+			this,
+			FirmwareUpdateStatus.Error_Timeout,
+		);
+	}
+
+	private handleFirmwareUpdateStatusReport(
+		report: FirmwareUpdateMetaDataCCStatusReport,
+	): void {
+		const { status, waitTime } = report;
+
+		// Actually, OK_WaitingForActivation should never happen since we don't allow
+		// delayed activation in the RequestGet command
+		const success = status >= FirmwareUpdateStatus.OK_WaitingForActivation;
+
+		log.controller.logNode(this.id, {
+			message: `Firmware update ${
+				success ? "completed" : "failed"
+			} with status ${getEnumMemberName(FirmwareUpdateStatus, status)}`,
+			direction: "inbound",
+		});
+
+		// clean up
+		this._firmwareUpdateStatus = undefined;
+		this.keepAwake = false;
+
+		// Notify listeners
+		this.emit(
+			"firmware update finished",
+			this,
+			status,
+			success ? waitTime : undefined,
+		);
+	}
+
 	private async finishFirmwareUpdate(): Promise<void> {
 		try {
-			const { status, waitTime } = await this.driver.waitForCommand<
+			const report = await this.driver.waitForCommand<
 				FirmwareUpdateMetaDataCCStatusReport
 			>(
 				(cc) =>
@@ -2333,33 +2446,8 @@ version:               ${this.version}`;
 				// don't say anything specific
 				5 * 60000,
 			);
-			const success =
-				status >= FirmwareUpdateStatus.OK_WaitingForActivation;
 
-			// Actually, OK_WaitingForActivation should never happen since we don't allow
-			// delayed activation in the RequestGet command
-
-			log.controller.logNode(this.id, {
-				message: `Firmware update ${
-					success ? "completed" : "failed"
-				} with status ${getEnumMemberName(
-					FirmwareUpdateStatus,
-					status,
-				)}`,
-				direction: "inbound",
-			});
-
-			// clean up
-			this._firmwareUpdateStatus = undefined;
-			this.keepAwake = false;
-
-			// Notify listeners
-			this.emit(
-				"firmware update finished",
-				this,
-				status,
-				success ? waitTime : undefined,
-			);
+			this.handleFirmwareUpdateStatusReport(report);
 		} catch (e) {
 			if (
 				e instanceof ZWaveError &&
