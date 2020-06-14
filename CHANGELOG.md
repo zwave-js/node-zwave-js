@@ -4,6 +4,11 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Improved logging for `Multi Channel Association CC`
+* Assembling partial CCs now works if there are multiple levels (e.g. Security CC -> Multi Channel Association Report)
+
 ## 3.7.3 (2020-06-14)
 ### Bugfixes
 * Logging for the following CCs has been improved:
@@ -15,7 +20,7 @@
 * Node information frames after `node.refreshInfo` are no longer discarded
 * Firmware updates we don't know about are now aborted without emitting an event
 * Failed firmware updates are now handled correctly
-* All associations of the Fibareo FGMS-001 motion sensor are now configured to point to the controller
+* All associations of the Fibaro FGMS-001 motion sensor are now configured to point to the controller
 
 ## 3.7.2 (2020-06-12)
 ### Bugfixes
