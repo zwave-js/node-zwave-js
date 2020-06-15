@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.7.6 (2020-06-15)
 ### Bugfixes
 * Fixed a crash that happens when receiving a `Multi Command CC`
 
