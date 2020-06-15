@@ -7,6 +7,12 @@
 ## __WORK IN PROGRESS__
 ### Bugfixes
 * Logfiles now contain all logs in the correct order
+* Fixed an error when using the DoorLockCC setValue API when not all configuration values have been received
+* Errors in the async part of handleFirmwareUpdateGet are now caught and logged
+* When a non Z-Wave serialport is configured or loading the configuration files, the `"error"` event is now emitted and the driver is destroyed instead of crashing
+
+### Changes under the hood
+* Removed some unnecessary logging
 
 ## 3.7.6 (2020-06-15)
 ### Bugfixes
