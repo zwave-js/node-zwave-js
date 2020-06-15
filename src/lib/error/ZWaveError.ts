@@ -10,6 +10,8 @@ export enum ZWaveErrorCodes {
 	PacketFormat_InvalidPayload,
 	PacketFormat_DecryptionFailed,
 
+	/** The driver failed to start */
+	Driver_Failed,
 	Driver_Reset,
 	Driver_Destroyed,
 	Driver_NotReady,

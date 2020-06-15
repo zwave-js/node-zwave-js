@@ -426,16 +426,52 @@ export class Driver extends EventEmitter {
 				setImmediate(async () => {
 					// Load the necessary configuration
 					log.driver.print("loading configuration...");
-					await loadManufacturers();
-					await loadDeviceIndex();
-					await loadNotifications();
-					await loadNamedScales();
-					await loadSensorTypes();
-					await loadMeters();
-					await loadIndicators();
+					try {
+						await loadManufacturers();
+						await loadDeviceIndex();
+						await loadNotifications();
+						await loadNamedScales();
+						await loadSensorTypes();
+						await loadMeters();
+						await loadIndicators();
+					} catch (e) {
+						const message = `Failed to load the configuration: ${e.message}`;
+						log.driver.print(message, "error");
+						this.emit(
+							"error",
+							new ZWaveError(
+								message,
+								ZWaveErrorCodes.Driver_Failed,
+							),
+						);
+						void this.destroy();
+						return;
+					}
 
 					log.driver.print("beginning interview...");
-					await this.initializeControllerAndNodes();
+					try {
+						await this.initializeControllerAndNodes();
+					} catch (e) {
+						let message: string;
+						if (
+							e instanceof ZWaveError &&
+							e.code === ZWaveErrorCodes.Controller_MessageDropped
+						) {
+							message = `Failed to initialize the driver, no response from the controller. Are you sure this is a Z-Wave controller?`;
+						} else {
+							message = `Failed to initialize the driver: ${e.message}`;
+						}
+						log.driver.print(message, "error");
+						this.emit(
+							"error",
+							new ZWaveError(
+								message,
+								ZWaveErrorCodes.Driver_Failed,
+							),
+						);
+						void this.destroy();
+						return;
+					}
 				});
 			})
 			.on("data", this.serialport_onData.bind(this))
