@@ -10,6 +10,7 @@
 * Fixed an error when using the DoorLockCC setValue API when not all configuration values have been received
 * Errors in the async part of handleFirmwareUpdateGet are now caught and logged
 * When a non Z-Wave serialport is configured or loading the configuration files, the `"error"` event is now emitted and the driver is destroyed instead of crashing
+* If a `MultiChannelCCEndpointFindReport` does not contain any bytes for the found endpoints, the CC is no longer discarded. This should improve compatibility with some devices, e.g. _TKB Home TZ74 Dual Switch_.
 
 ### Changes under the hood
 * Removed some unnecessary logging
