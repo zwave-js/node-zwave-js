@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.7.7 (2020-06-15)
 ### Bugfixes
 * Logfiles now contain all logs in the correct order
 * Fixed an error when using the DoorLockCC setValue API when not all configuration values have been received
