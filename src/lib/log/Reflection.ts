@@ -1,5 +1,6 @@
 import winston from "winston";
 import {
+	createLoggerFormat,
 	createLogTransports,
 	getDirectionPrefix,
 	isLoglevelVisible,
@@ -12,7 +13,8 @@ const REFLECTION_LOGLEVEL = "silly";
 
 if (!winston.loggers.has("reflection")) {
 	winston.loggers.add("reflection", {
-		transports: createLogTransports(REFLECTION_LABEL),
+		transports: createLogTransports(),
+		format: createLoggerFormat(REFLECTION_LABEL),
 	});
 }
 const logger = (winston.loggers.get("reflection") as unknown) as ZWaveLogger;

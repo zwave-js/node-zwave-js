@@ -1,7 +1,7 @@
 import { ansiRegex, stripColor } from "ansi-colors";
 import { MESSAGE } from "triple-beam";
 import Transport from "winston-transport";
-import { createLoggerFormat, ZWaveLogInfo } from "../src/lib/log/shared";
+import { ZWaveLogInfo } from "../src/lib/log/shared";
 
 const timestampRegex = /\d{2}\:\d{2}\:\d{2}\.\d{3}/g;
 const timestampPrefixRegex = new RegExp(
@@ -16,10 +16,9 @@ const channelPrefixRegex = new RegExp(
 
 /** Log to a jest.fn() in order to perform assertions during unit tests */
 export class SpyTransport extends Transport {
-	public constructor(channel: string) {
+	public constructor() {
 		super({
 			level: "silly",
-			format: createLoggerFormat(channel),
 		});
 		this._spy = jest.fn();
 	}

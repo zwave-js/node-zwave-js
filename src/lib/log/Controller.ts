@@ -9,6 +9,7 @@ import type {
 	ValueUpdatedArgs,
 } from "../node/ValueDB";
 import {
+	createLoggerFormat,
 	createLogTransports,
 	DataDirection,
 	getDirectionPrefix,
@@ -25,7 +26,8 @@ const VALUE_LOGLEVEL = "debug";
 
 if (!winston.loggers.has("controller")) {
 	winston.loggers.add("controller", {
-		transports: createLogTransports(CONTROLLER_LABEL),
+		transports: createLogTransports(),
+		format: createLoggerFormat(CONTROLLER_LABEL),
 	});
 }
 const logger = (winston.loggers.get("controller") as unknown) as ZWaveLogger;

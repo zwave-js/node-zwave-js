@@ -229,8 +229,9 @@ export const logMessagePrinter: Format = {
 /** The common logger format for all channels */
 export function createLoggerFormat(
 	channel: string,
-	colorize: boolean = true,
+	// colorize: boolean = true,
 ): Format {
+	const colorize = !shouldLogToFile();
 	const formats: Format[] = [];
 	formats.push(
 		label({ label: channel }),
@@ -274,36 +275,34 @@ export function restoreSilence(
 	}
 }
 
-let hasLoggedTargetFilename = false;
+let fileTransport: Transport | undefined;
 
-export function createLogTransports(channel: string): Transport[] {
+export function createLogTransports(): Transport[] {
 	const ret: Transport[] = [];
 	if (shouldLogToFile()) {
-		ret.push(createFileTransport(createLoggerFormat(channel, false)));
-		if (!hasLoggedTargetFilename) {
-			hasLoggedTargetFilename = true;
+		if (!fileTransport) {
 			console.log(`Logging to file:
 ${logFilename}`);
+			fileTransport = createFileTransport();
 		}
+		ret.push(fileTransport);
 	} else {
-		ret.push(createConsoleTransport(createLoggerFormat(channel)));
+		ret.push(createConsoleTransport());
 	}
 	return ret;
 }
 
-export function createConsoleTransport(format?: Format): Transport {
+export function createConsoleTransport(): Transport {
 	return new winston.transports.Console({
 		level: getTransportLoglevel(),
 		silent: process.env.NODE_ENV === "test",
-		format,
 	});
 }
 
-export function createFileTransport(format?: Format): Transport {
+export function createFileTransport(): Transport {
 	return new winston.transports.File({
 		filename: logFilename,
 		level: getTransportLoglevel(),
-		format,
 	});
 }
 

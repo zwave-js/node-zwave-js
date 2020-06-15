@@ -17,7 +17,6 @@ import {
 	MessageType,
 } from "../message/Constants";
 import { Message } from "../message/Message";
-import { DRIVER_LABEL } from "./Driver";
 import log from "./index";
 import { getDirectionPrefix, restoreSilence } from "./shared";
 
@@ -66,7 +65,7 @@ describe("lib/log/Driver =>", () => {
 		// the loggers are lazy-loaded, so force loading
 		void log.driver;
 		driverLogger = winston.loggers.get("driver");
-		spyTransport = new SpyTransport(DRIVER_LABEL);
+		spyTransport = new SpyTransport();
 		// Uncomment this to debug the log outputs manually
 		// wasSilenced = unsilence(driverLogger);
 		driverLogger.add(spyTransport);

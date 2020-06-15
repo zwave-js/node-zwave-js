@@ -6,7 +6,6 @@ import {
 } from "../../../test/SpyTransport";
 import { CommandClasses } from "../commandclass/CommandClasses";
 import { InterviewStage } from "../node/Types";
-import { CONTROLLER_LABEL } from "./Controller";
 import log from "./index";
 import { restoreSilence } from "./shared";
 
@@ -20,7 +19,7 @@ describe("lib/log/Controller =>", () => {
 		// the loggers are lazy-loaded, so force loading
 		void log.controller;
 		controllerLogger = winston.loggers.get("controller");
-		spyTransport = new SpyTransport(CONTROLLER_LABEL);
+		spyTransport = new SpyTransport();
 		// Uncomment this to debug the log outputs manually
 		// wasSilenced = unsilence(controllerLogger);
 		controllerLogger.add(spyTransport);

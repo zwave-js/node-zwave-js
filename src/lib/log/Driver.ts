@@ -11,6 +11,7 @@ import {
 } from "../message/Constants";
 import type { Message, ResponseRole } from "../message/Message";
 import {
+	createLoggerFormat,
 	createLogTransports,
 	DataDirection,
 	getDirectionPrefix,
@@ -27,7 +28,8 @@ const SENDQUEUE_LOGLEVEL = "debug";
 
 if (!winston.loggers.has("driver")) {
 	winston.loggers.add("driver", {
-		transports: createLogTransports(DRIVER_LABEL),
+		transports: createLogTransports(),
+		format: createLoggerFormat(DRIVER_LABEL),
 	});
 }
 const logger = (winston.loggers.get("driver") as unknown) as ZWaveLogger;
