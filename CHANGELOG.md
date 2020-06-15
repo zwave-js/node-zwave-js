@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed a crash that happens when receiving a `Multi Command CC`
+
 ## 3.7.5 (2020-06-14)
 ### Bugfixes
 * Removing a multi channel endpoint association to the root endpoint now also removes the equivalent node association
