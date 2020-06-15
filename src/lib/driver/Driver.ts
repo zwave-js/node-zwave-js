@@ -1238,7 +1238,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 		// We search for the every CC that provides us with a session ID
 		// There might be newly-completed CCs that contain a partial CC,
 		// so investigate the entire CC encapsulation stack.
-		while (command) {
+		while (true) {
 			sessionId = command.getPartialCCSessionId();
 
 			if (sessionId) {
