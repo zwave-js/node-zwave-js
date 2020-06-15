@@ -2380,7 +2380,13 @@ version:               ${this.version}`;
 					}
 				}
 			}
-		})();
+		})().catch((e) => {
+			log.controller.logNode(
+				this.nodeId,
+				`Error while sending firmware fragment: ${e.message}`,
+				"error",
+			);
+		});
 	}
 
 	private timeoutFirmwareUpdate(): void {
