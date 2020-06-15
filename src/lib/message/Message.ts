@@ -4,7 +4,6 @@ import { entries } from "alcalzone-shared/objects";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import log from "../log";
 import { getNodeTag, MessageOrCCLogEntry } from "../log/shared";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
@@ -378,14 +377,6 @@ export function messageTypes(
 	functionType: FunctionType,
 ): ClassDecorator {
 	return (messageClass) => {
-		log.reflection.define(
-			messageClass.name,
-			"types",
-			`message type ${num2hex(messageType)}, function type ${num2hex(
-				functionType,
-			)}`,
-		);
-		// and store the metadata
 		Reflect.defineMetadata(
 			METADATA_messageTypes,
 			{ messageType, functionType },
@@ -417,9 +408,7 @@ export function getMessageType<T extends Message>(
 	const meta = Reflect.getMetadata(METADATA_messageTypes, constr) as
 		| MessageTypeMapEntry
 		| undefined;
-	const ret = meta?.messageType;
-	log.reflection.lookup(constr.name, "message type", num2hex(ret));
-	return ret;
+	return meta?.messageType;
 }
 
 /**
@@ -433,9 +422,7 @@ export function getMessageTypeStatic<T extends Constructable<Message>>(
 		METADATA_messageTypes,
 		classConstructor,
 	) as MessageTypeMapEntry | undefined;
-	const ret = meta?.messageType;
-	log.reflection.lookup(classConstructor.name, "message type", num2hex(ret));
-	return ret;
+	return meta?.messageType;
 }
 
 /**
@@ -450,9 +437,7 @@ export function getFunctionType<T extends Message>(
 	const meta = Reflect.getMetadata(METADATA_messageTypes, constr) as
 		| MessageTypeMapEntry
 		| undefined;
-	const ret = meta?.functionType;
-	log.reflection.lookup(constr.name, "function type", num2hex(ret));
-	return ret;
+	return meta?.functionType;
 }
 
 /**
@@ -466,9 +451,7 @@ export function getFunctionTypeStatic<T extends Constructable<Message>>(
 		METADATA_messageTypes,
 		classConstructor,
 	) as MessageTypeMapEntry | undefined;
-	const ret = meta?.functionType;
-	log.reflection.lookup(classConstructor.name, "function type", num2hex(ret));
-	return ret;
+	return meta?.functionType;
 }
 
 /**
@@ -499,24 +482,6 @@ export function expectedResponse(
 	typeOrPredicate: FunctionType | ResponsePredicate,
 ): ClassDecorator {
 	return (messageClass) => {
-		if (typeof typeOrPredicate === "number") {
-			const type = typeOrPredicate;
-			log.reflection.define(
-				messageClass.name,
-				"expected response",
-				`${FunctionType[type]} (${num2hex(type)})`,
-			);
-		} else {
-			const predicate = typeOrPredicate;
-			log.reflection.define(
-				messageClass.name,
-				"expected response",
-				`Predicate${
-					predicate.name.length > 0 ? " " + predicate.name : ""
-				}`,
-			);
-		}
-		// and store the metadata
 		Reflect.defineMetadata(
 			METADATA_expectedResponse,
 			typeOrPredicate,
@@ -538,21 +503,6 @@ export function getExpectedResponse<T extends Message>(
 		| FunctionType
 		| ResponsePredicate
 		| undefined;
-	if (typeof ret === "number") {
-		log.reflection.lookup(
-			constr.name,
-			"expected response",
-			`${FunctionType[ret]} (${num2hex(ret)})`,
-		);
-	} else if (typeof ret === "function") {
-		log.reflection.lookup(
-			constr.name,
-			"expected response",
-			`Predicate${ret.name.length > 0 ? " " + ret.name : ""}`,
-		);
-	} else {
-		log.reflection.lookup(constr.name, "expected response", "undefined");
-	}
 	return ret;
 }
 
@@ -567,25 +517,6 @@ export function getExpectedResponseStatic<T extends Constructable<Message>>(
 		METADATA_expectedResponse,
 		classConstructor,
 	) as FunctionType | ResponsePredicate | undefined;
-	if (typeof ret === "number") {
-		log.reflection.lookup(
-			classConstructor.name,
-			"expected response",
-			`${FunctionType[ret]} (${num2hex(ret)})`,
-		);
-	} else if (typeof ret === "function") {
-		log.reflection.lookup(
-			classConstructor.name,
-			"expected response",
-			`Predicate${ret.name.length > 0 ? " " + ret.name : ""}`,
-		);
-	} else {
-		log.reflection.lookup(
-			classConstructor.name,
-			"expected response",
-			"undefined",
-		);
-	}
 	return ret;
 }
 
@@ -594,12 +525,6 @@ export function getExpectedResponseStatic<T extends Constructable<Message>>(
  */
 export function priority(prio: MessagePriority): ClassDecorator {
 	return (messageClass) => {
-		log.reflection.define(
-			messageClass.name,
-			"default priority",
-			`${MessagePriority[prio]} (${prio})`,
-		);
-		// and store the metadata
 		Reflect.defineMetadata(METADATA_priority, prio, messageClass);
 	};
 }
@@ -616,15 +541,6 @@ export function getDefaultPriority<T extends Message>(
 	const ret = Reflect.getMetadata(METADATA_priority, constr) as
 		| MessagePriority
 		| undefined;
-	if (ret) {
-		log.reflection.lookup(
-			constr.name,
-			"default priority",
-			`${MessagePriority[ret]} (${ret})`,
-		);
-	} else {
-		log.reflection.lookup(constr.name, "default priority", "undefined");
-	}
 	return ret;
 }
 
@@ -638,18 +554,5 @@ export function getDefaultPriorityStatic<T extends Constructable<Message>>(
 	const ret = Reflect.getMetadata(METADATA_priority, classConstructor) as
 		| MessagePriority
 		| undefined;
-	if (ret) {
-		log.reflection.lookup(
-			classConstructor.name,
-			"default priority",
-			`${MessagePriority[ret]} (${ret})`,
-		);
-	} else {
-		log.reflection.lookup(
-			classConstructor.name,
-			"default priority",
-			"undefined",
-		);
-	}
 	return ret;
 }

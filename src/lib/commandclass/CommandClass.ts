@@ -1,18 +1,12 @@
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import log from "../log";
 import type { MessageOrCCLogEntry } from "../log/shared";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage } from "../node/Types";
 import { ValueDB, ValueID, valueIdToString } from "../node/ValueDB";
-import {
-	JSONObject,
-	staticExtends,
-	stripUndefined,
-	validatePayload,
-} from "../util/misc";
+import { JSONObject, stripUndefined, validatePayload } from "../util/misc";
 import { num2hex } from "../util/strings";
 import {
 	CacheMetadata,
@@ -872,12 +866,6 @@ export function isCCResponsePredicate(
  */
 export function commandClass(cc: CommandClasses): ClassDecorator {
 	return (messageClass) => {
-		log.reflection.define(
-			messageClass.name,
-			"CommandClass",
-			`${CommandClasses[cc]} (${num2hex(cc)})`,
-		);
-		// and store the metadata
 		Reflect.defineMetadata(METADATA_commandClass, cc, messageClass);
 
 		// also store a map in the Message metadata for lookup.
@@ -910,12 +898,6 @@ export function getCommandClass<T extends CommandClass | CCAPI>(
 			ZWaveErrorCodes.CC_Invalid,
 		);
 	}
-
-	log.reflection.lookup(
-		constr.name,
-		"CommandClass",
-		`${CommandClasses[ret]} (${num2hex(ret)})`,
-	);
 	return ret;
 }
 
@@ -935,12 +917,6 @@ export function getCommandClassStatic<T extends Constructable<CommandClass>>(
 			ZWaveErrorCodes.CC_Invalid,
 		);
 	}
-
-	log.reflection.lookup(
-		classConstructor.name,
-		"CommandClass",
-		`${CommandClasses[ret]} (${num2hex(ret)})`,
-	);
 	return ret;
 }
 
@@ -962,12 +938,6 @@ export function getCCConstructor(
  */
 export function implementedVersion(version: number): ClassDecorator {
 	return (ccClass) => {
-		log.reflection.define(
-			ccClass.name,
-			"implemented version",
-			`version ${version}`,
-		);
-		// and store the metadata
 		Reflect.defineMetadata(METADATA_version, version, ccClass);
 	};
 }
@@ -980,13 +950,10 @@ export function getImplementedVersion<T extends CommandClass>(
 ): number {
 	// get the class constructor
 	let constr: Constructable<CommandClass> | undefined;
-	let constrName: string;
 	if (typeof cc === "number") {
 		constr = getCCConstructor(cc);
-		constrName = constr != undefined ? constr.name : CommandClasses[cc];
 	} else {
 		constr = cc.constructor as Constructable<CommandClass>;
-		constrName = constr.name;
 	}
 	// retrieve the current metadata
 	let ret: number | undefined;
@@ -994,7 +961,6 @@ export function getImplementedVersion<T extends CommandClass>(
 		ret = Reflect.getMetadata(METADATA_version, constr);
 	if (ret == undefined) ret = 0;
 
-	log.reflection.lookup(constrName, "implemented version", `version ${ret}`);
 	return ret;
 }
 
@@ -1009,13 +975,6 @@ export function getImplementedVersionStatic<
 		(Reflect.getMetadata(METADATA_version, classConstructor) as
 			| number
 			| undefined) || 0;
-
-	log.reflection.lookup(
-		classConstructor.name,
-		"implemented version",
-		`version ${ret}`,
-	);
-
 	return ret;
 }
 
@@ -1024,12 +983,6 @@ export function getImplementedVersionStatic<
  */
 export function CCCommand(command: number): ClassDecorator {
 	return (ccClass) => {
-		log.reflection.define(
-			ccClass.name,
-			"CC Command",
-			`${command} (${num2hex(command)})`,
-		);
-		// and store the metadata
 		Reflect.defineMetadata(METADATA_ccCommand, command, ccClass);
 
 		// also store a map in the Message metadata for lookup.
@@ -1053,14 +1006,12 @@ export function CCCommand(command: number): ClassDecorator {
 function getCCCommand<T extends CommandClass>(cc: T): number | undefined {
 	// get the class constructor
 	const constr = cc.constructor as Constructable<CommandClass>;
-	const constrName = constr.name;
 
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_ccCommand, constr) as
 		| number
 		| undefined;
 
-	log.reflection.lookup(constrName, "CC Command", `${ret} (${num2hex(ret)})`);
 	return ret;
 }
 
@@ -1096,31 +1047,6 @@ export function expectedCCResponse<T extends CommandClass>(
 		| DynamicCCResponse<T>,
 ): ClassDecorator {
 	return (ccClass) => {
-		if (staticExtends(ccOrPredicateOrDynamic, CommandClass)) {
-			log.reflection.define(
-				ccClass.name,
-				"expected CC response",
-				ccOrPredicateOrDynamic.name,
-			);
-		} else if (ccOrPredicateOrDynamic.length <= 1) {
-			const dynamic = ccOrPredicateOrDynamic;
-			log.reflection.define(
-				ccClass.name,
-				"expected CC response",
-				`Dynamic${dynamic.name.length > 0 ? " " + dynamic.name : ""}`,
-			);
-		} else if (ccOrPredicateOrDynamic.length === 2) {
-			const predicate = ccOrPredicateOrDynamic;
-			log.reflection.define(
-				ccClass.name,
-				"expected CC response",
-				`Predicate${
-					predicate.name.length > 0 ? " " + predicate.name : ""
-				}`,
-			);
-		}
-
-		// and store the metadata
 		Reflect.defineMetadata(
 			METADATA_ccResponse,
 			ccOrPredicateOrDynamic,
@@ -1147,25 +1073,6 @@ export function getExpectedCCResponse<T extends CommandClass>(
 		| DynamicCCResponse<T>
 		| CCResponsePredicate<T>
 		| undefined;
-	if (!ret || staticExtends(ret, CommandClass)) {
-		log.reflection.lookup(
-			constr.name,
-			"expected CC response",
-			`${ret ? ret.constructor.name : "none"}`,
-		);
-	} else if (ret.length <= 1) {
-		log.reflection.lookup(
-			constr.name,
-			"expected CC response",
-			`Dynamic${ret.name.length > 0 ? " " + ret.name : ""}`,
-		);
-	} else if (ret.length === 2) {
-		log.reflection.lookup(
-			constr.name,
-			"expected CC response",
-			`Predicate${ret.name.length > 0 ? " " + ret.name : ""}`,
-		);
-	}
 	return ret;
 }
 
@@ -1308,11 +1215,6 @@ export function getCCValueMetadata(
  */
 export function API(cc: CommandClasses): ClassDecorator {
 	return (apiClass) => {
-		log.reflection.define(
-			apiClass.name,
-			"API",
-			`CommandClasses.${CommandClasses[cc]} (${num2hex(cc)})`,
-		);
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_API, cc, apiClass);
 
@@ -1334,11 +1236,6 @@ export function getAPI(cc: CommandClasses): APIConstructor | undefined {
 		| undefined;
 	const ret = map?.get(cc);
 
-	log.reflection.lookup(
-		CommandClasses[cc],
-		"API",
-		`${ret?.name ?? "undefined"}`,
-	);
 	return ret;
 }
 

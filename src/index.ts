@@ -10,8 +10,6 @@ import * as path from "path";
 // locations in error messages
 import "source-map-support/register";
 import { ZWaveError, ZWaveErrorCodes } from "./lib/error/ZWaveError";
-import log from "./lib/log";
-import { stringify } from "./lib/util/strings";
 
 const libraryRootDir = path.join(__dirname, "..");
 
@@ -101,7 +99,6 @@ const ccDirectory = path.join(__dirname, "lib/commandclass");
 const definedCCs = fs
 	.readdirSync(ccDirectory)
 	.filter((file) => /CC\.(js|ts)$/.test(file));
-log.reflection.print(`loading CCs: ${stringify(definedCCs)}`);
 for (const file of definedCCs) {
 	require(path.join(ccDirectory, file));
 }

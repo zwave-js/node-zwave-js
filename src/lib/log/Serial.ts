@@ -82,7 +82,7 @@ export function data(direction: DataDirection, data: Buffer): void {
 export function receiveBuffer(data: Buffer, isComplete: boolean): void {
 	if (isVisible) {
 		logger.log({
-			level: SERIAL_LOGLEVEL,
+			level: isComplete ? SERIAL_LOGLEVEL : "silly",
 			primaryTags: isComplete ? undefined : "[incomplete]",
 			message: `Buffer := 0x${data.toString("hex")}`,
 			secondaryTags: `(${data.length} bytes)`,
