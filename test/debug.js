@@ -10,7 +10,7 @@ const {
 
 // The data to decode
 const data = Buffer.from(
-	"0125000400141f9881ddd360c382a43751f3fb762d6e82126681c18597432bc20a8aa9bbb37142",
+	"012d00040039278f0106055b03ac0005055b03ad0205055b03ae0205055b03af0105055b03b00002055b03b1000143",
 	"hex",
 );
 // The nonce needed to decode it
@@ -28,6 +28,7 @@ const msg = Message.from(
 				get() {
 					return {
 						valueDB: {
+							hasMetadata: () => false,
 							setMetadata() {},
 							setValue() {},
 						},

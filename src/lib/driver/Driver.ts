@@ -1297,7 +1297,11 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			}
 
 			// If this is an encapsulating CC, we need to look one level deeper
-			command = (command as any).encapsulated;
+			if (isEncapsulatingCommandClass(command)) {
+				command = command.encapsulated;
+			} else {
+				break;
+			}
 		}
 		return true;
 	}
