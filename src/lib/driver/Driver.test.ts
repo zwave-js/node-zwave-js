@@ -6,8 +6,15 @@ import {
 	MockSerialPort,
 } from "../../../test/mocks";
 import { assertZWaveError } from "../../../test/util";
+import {
+	AssociationCCReport,
+	AssociationCommand,
+} from "../commandclass/AssociationCC";
+import { BasicCCSet } from "../commandclass/BasicCC";
+import { CommandClasses } from "../commandclass/CommandClasses";
 import { FirmwareUpdateMetaDataCC } from "../commandclass/FirmwareUpdateMetaDataCC";
 import { MultiChannelCCCommandEncapsulation } from "../commandclass/MultiChannelCC";
+import { MultiCommandCCCommandEncapsulation } from "../commandclass/MultiCommandCC";
 import { SecurityCCCommandEncapsulation } from "../commandclass/SecurityCC";
 import { WakeUpCCIntervalSet } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
@@ -15,10 +22,11 @@ import {
 	SendDataRequest,
 	TransmitOptions,
 } from "../controller/SendDataMessages";
-import { ZWaveErrorCodes } from "../error/ZWaveError";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { MessageHeaders, MessageType } from "../message/Constants";
 import { Message, messageTypes } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
+import { SecurityManager } from "../security/Manager";
 import { Driver } from "./Driver";
 
 jest.mock("serialport", () => MockSerialPort);
@@ -35,6 +43,10 @@ async function createAndStartDriver() {
 	portInstance.closeStub.mockClear();
 	portInstance.openStub.mockClear();
 	portInstance.writeStub.mockClear();
+
+	// Mock the value DB, because the original one will not be initialized
+	// with skipInterview: true
+	driver["_valueDB"] = new Map() as any;
 
 	return {
 		driver,
@@ -464,7 +476,7 @@ describe("lib/driver/Driver => ", () => {
 
 			// swallow the error
 			driver.on("error", () => {});
-			await (driver as any).serialport_onData(data).catch(() => {});
+			await driver["serialport_onData"](data).catch(() => {});
 
 			// Ensure the driver ACKed two messages
 			expect(serialport.writeStub).toBeCalledTimes(2);
@@ -520,15 +532,15 @@ describe("lib/driver/Driver => ", () => {
 		beforeEach(async () => {
 			({ driver } = await createAndStartDriver());
 			node2 = new ZWaveNode(2, driver);
-			(driver as any)._securityManager = {};
-			(driver as any)._controller = {
+			driver["_securityManager"] = {} as any;
+			driver["_controller"] = {
 				ownNodeId: 1,
 				nodes: {
 					has: () => true,
 					get: () => node2,
 					forEach: () => {},
 				},
-			};
+			} as any;
 		});
 
 		afterEach(() => {
@@ -577,5 +589,299 @@ describe("lib/driver/Driver => ", () => {
 		serialport.emit("error", new Error("foo"));
 		expect(errorSpy).toBeCalledTimes(1);
 		expect(errorSpy.mock.calls[0][0].message).toMatch("foo");
+	});
+
+	describe("assemblePartialCCs()", () => {
+		let driver: Driver;
+		let node2: ZWaveNode;
+
+		beforeEach(async () => {
+			({ driver } = await createAndStartDriver());
+			node2 = new ZWaveNode(2, driver);
+			driver["_securityManager"] = new SecurityManager({
+				ownNodeId: 1,
+				nonceTimeout: 500,
+				networkKey: Buffer.alloc(16, 1),
+			});
+			driver["_controller"] = {
+				ownNodeId: 1,
+				nodes: {
+					has: () => true,
+					get: () => node2,
+					forEach: () => {},
+				},
+			} as any;
+		});
+
+		afterEach(() => {
+			driver.destroy();
+		});
+
+		it("returns true when a non-partial CC is received", async () => {
+			const cc = new BasicCCSet(driver, { nodeId: 2, targetValue: 50 });
+			const msg = new ApplicationCommandRequest(driver, {
+				command: cc,
+			});
+			expect(driver["assemblePartialCCs"](msg)).toBeTrue();
+		});
+
+		it("returns true when a partial CC is received that expects no more reports", async () => {
+			const cc = new AssociationCCReport(driver, {
+				nodeId: 2,
+				data: Buffer.from([
+					CommandClasses.Association,
+					AssociationCommand.Report,
+					1,
+					2,
+					0, // reportsFollow
+					1,
+					2,
+					3,
+				]),
+			});
+			const msg = new ApplicationCommandRequest(driver, {
+				command: cc,
+			});
+			expect(driver["assemblePartialCCs"](msg)).toBeTrue();
+		});
+
+		it("returns false when a partial CC is received that expects more reports", async () => {
+			const cc = new AssociationCCReport(driver, {
+				nodeId: 2,
+				data: Buffer.from([
+					CommandClasses.Association,
+					AssociationCommand.Report,
+					1,
+					2,
+					1, // reportsFollow
+					1,
+					2,
+					3,
+				]),
+			});
+			const msg = new ApplicationCommandRequest(driver, {
+				command: cc,
+			});
+			expect(driver["assemblePartialCCs"](msg)).toBeFalse();
+		});
+
+		it("returns true when the final partial CC is received and merges its data", async () => {
+			const cc1 = new AssociationCCReport(driver, {
+				nodeId: 2,
+				data: Buffer.from([
+					CommandClasses.Association,
+					AssociationCommand.Report,
+					1,
+					2,
+					1, // reportsFollow
+					1,
+					2,
+					3,
+				]),
+			});
+			const cc2 = new AssociationCCReport(driver, {
+				nodeId: 2,
+				data: Buffer.from([
+					CommandClasses.Association,
+					AssociationCommand.Report,
+					1,
+					2,
+					0, // reportsFollow
+					4,
+					5,
+					6,
+				]),
+			});
+			const msg1 = new ApplicationCommandRequest(driver, {
+				command: cc1,
+			});
+			expect(driver["assemblePartialCCs"](msg1)).toBeFalse();
+
+			const msg2 = new ApplicationCommandRequest(driver, {
+				command: cc2,
+			});
+			expect(driver["assemblePartialCCs"](msg2)).toBeTrue();
+
+			expect((msg2.command as AssociationCCReport).nodeIds).toEqual([
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+			]);
+		});
+
+		it("does not crash when receiving a Multi Command CC", async () => {
+			const cc1 = new BasicCCSet(driver, { nodeId: 2, targetValue: 25 });
+			const cc2 = new BasicCCSet(driver, { nodeId: 2, targetValue: 50 });
+			const cc = new MultiCommandCCCommandEncapsulation(driver, {
+				nodeId: 2,
+				encapsulated: [cc1, cc2],
+			});
+			const msg = new ApplicationCommandRequest(driver, {
+				command: cc,
+			});
+			expect(driver["assemblePartialCCs"](msg)).toBeTrue();
+		});
+
+		it("supports nested partial/non-partial CCs", async () => {
+			const cc1 = new BasicCCSet(driver, { nodeId: 2, targetValue: 25 });
+			const cc = new SecurityCCCommandEncapsulation(driver, {
+				nodeId: 2,
+				encapsulated: undefined as any,
+			});
+			cc["decryptedCCBytes"] = cc1.serialize();
+			const msg = new ApplicationCommandRequest(driver, {
+				command: cc,
+			});
+			expect(driver["assemblePartialCCs"](msg)).toBeTrue();
+		});
+
+		it("supports nested partial/partial CCs (part 1)", async () => {
+			const cc = new SecurityCCCommandEncapsulation(driver, {
+				nodeId: 2,
+				encapsulated: undefined as any,
+			});
+			cc["decryptedCCBytes"] = Buffer.from([
+				CommandClasses.Association,
+				AssociationCommand.Report,
+				1,
+				2,
+				1, // reportsFollow
+				1,
+				2,
+				3,
+			]);
+			const msg = new ApplicationCommandRequest(driver, {
+				command: cc,
+			});
+			expect(driver["assemblePartialCCs"](msg)).toBeFalse();
+		});
+
+		it("supports nested partial/partial CCs (part 2)", async () => {
+			const cc = new SecurityCCCommandEncapsulation(driver, {
+				nodeId: 2,
+				encapsulated: undefined as any,
+			});
+			cc["decryptedCCBytes"] = Buffer.from([
+				CommandClasses.Association,
+				AssociationCommand.Report,
+				1,
+				2,
+				0, // reportsFollow
+				1,
+				2,
+				3,
+			]);
+			const msg = new ApplicationCommandRequest(driver, {
+				command: cc,
+			});
+			expect(driver["assemblePartialCCs"](msg)).toBeTrue();
+		});
+
+		it("returns false when a partial CC throws Deserialization_NotImplemented during merging", async () => {
+			const cc = new AssociationCCReport(driver, {
+				nodeId: 2,
+				data: Buffer.from([
+					CommandClasses.Association,
+					AssociationCommand.Report,
+					1,
+					2,
+					0, // reportsFollow
+					1,
+					2,
+					3,
+				]),
+			});
+			cc["mergePartialCCs"] = () => {
+				throw new ZWaveError(
+					"not implemented",
+					ZWaveErrorCodes.Deserialization_NotImplemented,
+				);
+			};
+			const msg = new ApplicationCommandRequest(driver, {
+				command: cc,
+			});
+			expect(driver["assemblePartialCCs"](msg)).toBeFalse();
+		});
+
+		it("returns false when a partial CC throws CC_NotImplemented during merging", async () => {
+			const cc = new AssociationCCReport(driver, {
+				nodeId: 2,
+				data: Buffer.from([
+					CommandClasses.Association,
+					AssociationCommand.Report,
+					1,
+					2,
+					0, // reportsFollow
+					1,
+					2,
+					3,
+				]),
+			});
+			cc["mergePartialCCs"] = () => {
+				throw new ZWaveError(
+					"not implemented",
+					ZWaveErrorCodes.CC_NotImplemented,
+				);
+			};
+			const msg = new ApplicationCommandRequest(driver, {
+				command: cc,
+			});
+			expect(driver["assemblePartialCCs"](msg)).toBeFalse();
+		});
+
+		it("returns false when a partial CC throws PacketFormat_InvalidPayload during merging", async () => {
+			const cc = new AssociationCCReport(driver, {
+				nodeId: 2,
+				data: Buffer.from([
+					CommandClasses.Association,
+					AssociationCommand.Report,
+					1,
+					2,
+					0, // reportsFollow
+					1,
+					2,
+					3,
+				]),
+			});
+			cc["mergePartialCCs"] = () => {
+				throw new ZWaveError(
+					"not implemented",
+					ZWaveErrorCodes.PacketFormat_InvalidPayload,
+				);
+			};
+			const msg = new ApplicationCommandRequest(driver, {
+				command: cc,
+			});
+			expect(driver["assemblePartialCCs"](msg)).toBeFalse();
+		});
+
+		it("passes other errors during merging through", async () => {
+			const cc = new AssociationCCReport(driver, {
+				nodeId: 2,
+				data: Buffer.from([
+					CommandClasses.Association,
+					AssociationCommand.Report,
+					1,
+					2,
+					0, // reportsFollow
+					1,
+					2,
+					3,
+				]),
+			});
+			cc["mergePartialCCs"] = () => {
+				throw new ZWaveError(
+					"invalid",
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			};
+			const msg = new ApplicationCommandRequest(driver, {
+				command: cc,
+			});
+			expect(() => driver["assemblePartialCCs"](msg)).toThrow("invalid");
+		});
 	});
 });
