@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Logfiles are created again when the `LOGTOFILE` env variable is set after the library was imported
+
 ## 3.7.8 (2020-06-16)
 ### Bugfixes
 * If a configured lifeline association is outside the range of multi channel associations, a normal association is now used instead
