@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.7.9 (2020-06-16)
 ### Bugfixes
 * Logfiles are created again when the `LOGTOFILE` env variable is set after the library was imported
 
