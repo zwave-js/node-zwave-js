@@ -1433,6 +1433,9 @@ ${associatedNodes.join(", ")}`,
 			return true;
 		}
 
+		// The following checks don't apply to Lifeline associations
+		if (association.nodeId === this._ownNodeId) return true;
+
 		const groupCommandList = node
 			.createCCInstanceInternal<AssociationGroupInfoCC>(
 				CommandClasses["Association Group Information"],
