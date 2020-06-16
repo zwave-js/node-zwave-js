@@ -4,6 +4,15 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* Added a possibility to force lifeline associations to use node id associations
+* The `Multi Channel Association CC` interview now falls back to setting associations with `Association CC` if the node does not accept the added associations
+
+### Config changes
+* Changed `AEON Labs ZW095` lifeline to a node id association
+* (nicoh88) Added config files for Devolo Dimmer (MT2760) and Shutter (MT2761)
+
 ## 3.7.9 (2020-06-16)
 ### Bugfixes
 * Logfiles are created again when the `LOGTOFILE` env variable is set after the library was imported
