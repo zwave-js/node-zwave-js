@@ -344,12 +344,10 @@ export class MultiChannelAssociationCC extends CommandClass {
 		const valueDB = this.getValueDB();
 		for (let i = 1; i <= groupCount; i++) {
 			const groupDestinations: Association[] = [];
-			// Add all root destinations
+			// Add all node destinations
 			const nodes =
 				valueDB.getValue<number[]>(getNodeIdsValueId(i)) ?? [];
-			groupDestinations.push(
-				...nodes.map((nodeId) => ({ nodeId, endpoint: 0 })),
-			);
+			groupDestinations.push(...nodes.map((nodeId) => ({ nodeId })));
 			// And all endpoint destinations
 			const endpoints =
 				valueDB.getValue<EndpointAddress[]>(getEndpointsValueId(i)) ??
@@ -771,19 +769,16 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 	}
 
 	private _maxNodes: number;
-	@ccValue({ internal: true })
 	public get maxNodes(): number {
 		return this._maxNodes;
 	}
 
 	private _nodeIds: number[];
-	@ccValue({ internal: true })
 	public get nodeIds(): readonly number[] {
 		return this._nodeIds;
 	}
 
 	private _endpoints: EndpointAddress[];
-	@ccValue({ internal: true })
 	public get endpoints(): readonly EndpointAddress[] {
 		return this._endpoints;
 	}
@@ -811,8 +806,6 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 		this._endpoints = [...partials, this]
 			.map((report) => report._endpoints)
 			.reduce((prev, cur) => prev.concat(...cur), []);
-
-		console.error("I've persisted stuff");
 
 		// Persist values
 		this.getValueDB().setValue(
