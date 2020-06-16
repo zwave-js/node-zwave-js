@@ -1601,10 +1601,8 @@ ${associatedNodes.join(", ")}`,
 				);
 			}
 			// Split associations into conventional and endpoint associations
-			// For compatibility reasons, treat endpoint 0 as a node association in addition to
-			// an endpoint association
 			const nodeAssociations = associations
-				.filter((a) => a.endpoint == undefined || a.endpoint === 0)
+				.filter((a) => a.endpoint == undefined)
 				.map((a) => a.nodeId);
 			const endpointAssociations = associations.filter(
 				(a) => a.endpoint != undefined,
