@@ -359,6 +359,18 @@ isLifeline in association ${groupId} must be either true or left out`,
 			);
 		}
 		this.isLifeline = !!definition.isLifeline;
+
+		if (
+			definition.noEndpoint != undefined &&
+			definition.noEndpoint !== true
+		) {
+			throwInvalidConfig(
+				"devices",
+				`config/devices/${filename}:
+noEndpoint in association ${groupId} must be either true or left out`,
+			);
+		}
+		this.noEndpoint = !!definition.noEndpoint;
 	}
 
 	public readonly groupId: number;
@@ -370,6 +382,8 @@ isLifeline in association ${groupId} must be either true or left out`,
 	 * While Z-Wave+ defines a single lifeline, older devices may have multiple lifeline associations.
 	 */
 	public readonly isLifeline: boolean;
+	/** Some devices support multi channel associations but require some of its groups to use node id associations */
+	public readonly noEndpoint: boolean;
 }
 
 export class CompatConfig {
