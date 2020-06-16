@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.8.1 (2020-06-16)
 ### Bugfixes
 * Associations to the controller are not checked for supported CCs anymore
 * `addAssociations` now respects the `noEndpoint` flag
