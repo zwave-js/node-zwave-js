@@ -16,8 +16,56 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	// TODO: Define Association Group 2 and 9 as additional lifelines
-	// TODO: Force node ID associations
+	"associations": {
+		"1": {
+			"label": "Z-Wave Plus Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true,
+			"noEndpoint": true
+		},
+		"2": {
+			"label": "Basic on/off - triggered at change of the input I1 state and reflecting its state.",
+			"maxNodes": 16,
+			"isLifeline": true,
+			"noEndpoint": true
+		},
+		"3": {
+			"label": "Basic on/off - triggered at change of the input I2 state and reflecting its state.",
+			"maxNodes": 16,
+			"isLifeline": true,
+			"noEndpoint": true
+		},
+		"4": {
+			"label": "Basic on/off - triggered at sensing moving direction of roller: up=FF, down=0.",
+			"maxNodes": 16
+		},
+		"5": {
+			"label": "Basic on/off - triggered at reaching roller position: bottom=FF, top=0.",
+			"maxNodes": 16
+		},
+		"6": {
+			"label": "Basic on/off - triggered at reaching roller position: bottom=FF, not bottom=0.",
+			"maxNodes": 16
+		},
+		"7": {
+			"label": "Multilevel set - triggered at changes of value of the Flush Shutter DC position.",
+			"maxNodes": 16,
+			"isLifeline": true,
+			"noEndpoint": true
+		},
+		"8": {
+			"label": "Multilevel set - triggered at changes of value of slats tilting position.",
+			"maxNodes": 16,
+			"isLifeline": true,
+			"noEndpoint": true
+		},
+		"9": {
+			"label": "Multilevel sensor report - triggered at change of temperature sensor.",
+			"maxNodes": 16,
+			"isLifeline": true,
+			"noEndpoint": true
+		}
+	},
 	"paramInformation": {
 		"10": {
 			"label": "ALL ON/ALL OFF",
