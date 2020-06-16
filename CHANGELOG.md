@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.8.0 (2020-06-16)
 ### Features
 * Added a possibility to force lifeline associations to use node id associations
 * The `Multi Channel Association CC` interview now falls back to setting associations with `Association CC` if the node does not accept the added associations
