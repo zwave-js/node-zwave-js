@@ -270,19 +270,6 @@ export class AssociationCC extends CommandClass {
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Association;
 
-		// Skip Association CC in favor of Multi Channel Association if possible
-		if (
-			endpoint.commandClasses["Multi Channel Association"].isSupported()
-		) {
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: `${this.constructor.name}: skipping interview because Multi Channel Association is supported...`,
-				direction: "none",
-			});
-			this.interviewComplete = true;
-			return;
-		}
-
 		log.controller.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
@@ -291,6 +278,9 @@ export class AssociationCC extends CommandClass {
 			direction: "none",
 		});
 
+		// Even if Multi Channel Association is supported, we still need to query the number of
+		// normal association groups since some devices report more association groups than
+		// multi channel association groups
 		let groupCount: number;
 		if (complete) {
 			// First find out how many groups are supported
@@ -308,6 +298,19 @@ export class AssociationCC extends CommandClass {
 		} else {
 			// Partial interview, read the information from cache
 			groupCount = this.getGroupCountCached();
+		}
+
+		// Skip the remaining quer Association CC in favor of Multi Channel Association if possible
+		if (
+			endpoint.commandClasses["Multi Channel Association"].isSupported()
+		) {
+			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `${this.constructor.name}: skipping remaining interview because Multi Channel Association is supported...`,
+				direction: "none",
+			});
+			this.interviewComplete = true;
+			return;
 		}
 
 		// Then query each association group
