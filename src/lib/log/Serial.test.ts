@@ -12,8 +12,8 @@ describe("lib/log/Serial =>", () => {
 
 	// Replace all defined transports with a spy transport
 	beforeAll(() => {
-		// the loggers are lazy-loaded, so force loading
-		void log.serial;
+		// the loggers are lazily created, so force loading by logging once
+		log.serial.ACK("none");
 		serialLogger = winston.loggers.get("serial");
 		spyTransport = new SpyTransport();
 		// Uncomment this to debug the log outputs manually

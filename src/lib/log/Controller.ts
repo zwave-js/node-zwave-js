@@ -24,13 +24,20 @@ export const CONTROLLER_LABEL = "CNTRLR";
 const CONTROLLER_LOGLEVEL = "info";
 const VALUE_LOGLEVEL = "debug";
 
-if (!winston.loggers.has("controller")) {
-	winston.loggers.add("controller", {
-		transports: createLogTransports(),
-		format: createLoggerFormat(CONTROLLER_LABEL),
-	});
+let _logger: ZWaveLogger | undefined;
+function getLogger(): ZWaveLogger {
+	if (!_logger) {
+		if (!winston.loggers.has("controller")) {
+			winston.loggers.add("controller", {
+				transports: createLogTransports(),
+				format: createLoggerFormat(CONTROLLER_LABEL),
+			});
+		}
+		_logger = (winston.loggers.get("controller") as unknown) as ZWaveLogger;
+	}
+	return _logger;
 }
-const logger = (winston.loggers.get("controller") as unknown) as ZWaveLogger;
+
 const isValueLogVisible = isLoglevelVisible(VALUE_LOGLEVEL);
 const isControllerLogVisible = isLoglevelVisible(CONTROLLER_LOGLEVEL);
 
@@ -42,7 +49,7 @@ export function print(message: string, level?: "warn" | "error"): void {
 	const actualLevel = level || CONTROLLER_LOGLEVEL;
 	if (!isLoglevelVisible(actualLevel)) return;
 
-	logger.log({
+	getLogger().log({
 		level: actualLevel,
 		message,
 		direction: getDirectionPrefix("none"),
@@ -86,7 +93,7 @@ export function logNode(
 	if (!isLoglevelVisible(actualLevel)) return;
 	if (!shouldLogNode(nodeId)) return;
 
-	logger.log({
+	getLogger().log({
 		level: actualLevel,
 		primaryTags: tagify([getNodeTag(nodeId)]),
 		message,
@@ -162,7 +169,7 @@ export function value(
 			)})`;
 			break;
 	}
-	logger.log({
+	getLogger().log({
 		level: VALUE_LOGLEVEL,
 		primaryTags: tagify(primaryTags),
 		secondaryTags: tagify(secondaryTags),
@@ -191,7 +198,7 @@ export function metadataUpdated(args: LogValueArgs<ValueID>): void {
 		message += `[${args.propertyKey}]`;
 	}
 	message += ": metadata updated";
-	logger.log({
+	getLogger().log({
 		level: VALUE_LOGLEVEL,
 		primaryTags: tagify(primaryTags),
 		secondaryTags: tagify(secondaryTags),
@@ -205,7 +212,7 @@ export function interviewStage(node: ZWaveNode): void {
 	if (!isControllerLogVisible) return;
 	if (!shouldLogNode(node.id)) return;
 
-	logger.log({
+	getLogger().log({
 		level: CONTROLLER_LOGLEVEL,
 		primaryTags: tagify([getNodeTag(node.id)]),
 		message:
@@ -226,7 +233,7 @@ export function interviewStart(node: ZWaveNode): void {
 	const message = `Beginning interview - last completed stage: ${
 		InterviewStage[node.interviewStage]
 	}`;
-	logger.log({
+	getLogger().log({
 		level: CONTROLLER_LOGLEVEL,
 		primaryTags: tagify([getNodeTag(node.id)]),
 		message,

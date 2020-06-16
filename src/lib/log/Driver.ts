@@ -26,13 +26,20 @@ export const DRIVER_LABEL = "DRIVER";
 const DRIVER_LOGLEVEL = "verbose";
 const SENDQUEUE_LOGLEVEL = "debug";
 
-if (!winston.loggers.has("driver")) {
-	winston.loggers.add("driver", {
-		transports: createLogTransports(),
-		format: createLoggerFormat(DRIVER_LABEL),
-	});
+let _logger: ZWaveLogger | undefined;
+function getLogger(): ZWaveLogger {
+	if (!_logger) {
+		if (!winston.loggers.has("driver")) {
+			winston.loggers.add("driver", {
+				transports: createLogTransports(),
+				format: createLoggerFormat(DRIVER_LABEL),
+			});
+		}
+		_logger = (winston.loggers.get("driver") as unknown) as ZWaveLogger;
+	}
+	return _logger;
 }
-const logger = (winston.loggers.get("driver") as unknown) as ZWaveLogger;
+
 const isDriverLogVisible = isLoglevelVisible(DRIVER_LOGLEVEL);
 const isSendQueueLogVisible = isLoglevelVisible(SENDQUEUE_LOGLEVEL);
 
@@ -47,7 +54,7 @@ export function print(
 	const actualLevel = level || DRIVER_LOGLEVEL;
 	if (!isLoglevelVisible(actualLevel)) return;
 
-	logger.log({
+	getLogger().log({
 		level: actualLevel,
 		message,
 		direction: getDirectionPrefix("none"),
@@ -155,7 +162,7 @@ export function logMessage(
 		}
 	}
 
-	logger.log({
+	getLogger().log({
 		level: DRIVER_LOGLEVEL,
 		secondaryTags:
 			secondaryTags && secondaryTags.length > 0
@@ -195,7 +202,7 @@ export function sendQueue(queue: SortedList<Transaction>): void {
 	} else {
 		message += " (empty)";
 	}
-	logger.log({
+	getLogger().log({
 		level: SENDQUEUE_LOGLEVEL,
 		message,
 		secondaryTags: `(${queue.length} message${

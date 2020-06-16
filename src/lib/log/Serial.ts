@@ -13,13 +13,19 @@ import {
 export const SERIAL_LABEL = "SERIAL";
 const SERIAL_LOGLEVEL = "debug";
 
-if (!winston.loggers.has("serial")) {
-	winston.loggers.add("serial", {
-		transports: createLogTransports(),
-		format: createLoggerFormat(SERIAL_LABEL),
-	});
+let _logger: ZWaveLogger | undefined;
+function getLogger(): ZWaveLogger {
+	if (!_logger) {
+		if (!winston.loggers.has("serial")) {
+			winston.loggers.add("serial", {
+				transports: createLogTransports(),
+				format: createLoggerFormat(SERIAL_LABEL),
+			});
+		}
+		_logger = (winston.loggers.get("serial") as unknown) as ZWaveLogger;
+	}
+	return _logger;
 }
-const logger = (winston.loggers.get("serial") as unknown) as ZWaveLogger;
 const isVisible = isLoglevelVisible(SERIAL_LOGLEVEL);
 
 /**
@@ -50,7 +56,7 @@ function logMessageHeader(
 	direction: DataDirection,
 	header: MessageHeaders,
 ): void {
-	logger.log({
+	getLogger().log({
 		level: SERIAL_LOGLEVEL,
 		primaryTags: `[${MessageHeaders[header]}]`,
 		message: "",
@@ -66,7 +72,7 @@ function logMessageHeader(
  */
 export function data(direction: DataDirection, data: Buffer): void {
 	if (isVisible) {
-		logger.log({
+		getLogger().log({
 			level: SERIAL_LOGLEVEL,
 			message: `0x${data.toString("hex")}`,
 			secondaryTags: `(${data.length} bytes)`,
@@ -81,7 +87,7 @@ export function data(direction: DataDirection, data: Buffer): void {
  */
 export function receiveBuffer(data: Buffer, isComplete: boolean): void {
 	if (isVisible) {
-		logger.log({
+		getLogger().log({
 			level: isComplete ? SERIAL_LOGLEVEL : "silly",
 			primaryTags: isComplete ? undefined : "[incomplete]",
 			message: `Buffer := 0x${data.toString("hex")}`,
@@ -97,7 +103,7 @@ export function receiveBuffer(data: Buffer, isComplete: boolean): void {
  */
 export function message(message: string): void {
 	if (isVisible) {
-		logger.log({
+		getLogger().log({
 			level: SERIAL_LOGLEVEL,
 			message,
 			direction: getDirectionPrefix("none"),

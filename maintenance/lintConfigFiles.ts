@@ -74,38 +74,39 @@ async function lintDevices(): Promise<void> {
 
 		// Validate that the file is semantically correct
 
-		// Validate associations
-		if (config.associations?.size) {
-			// Real lifeline associations (as per the Z-Wave+ specs) only have a single node
-			// If there is a 2nd lifeline with more nodes, that is most likely wrong
-			const lifelines = [...config.associations.values()].filter(
-				(assoc) => assoc.isLifeline,
-			);
-			if (
-				lifelines.length > 1 &&
-				lifelines.find((l) => l.maxNodes === 1) &&
-				lifelines.find((l) => l.maxNodes > 1)
-			) {
-				addWarning(
-					file,
-					`A lifeline with 1 node plus another one with more nodes found!
-This is likely an error!`,
-				);
-			}
-			if (
-				lifelines.some(
-					(l) =>
-						l.label === "Lifeline" &&
-						l.groupId === 1 &&
-						l.maxNodes > 1,
-				)
-			) {
-				addWarning(
-					file,
-					`Found an association that looks like a Z-Wave+ lifeline but has more than 1 max nodes!`,
-				);
-			}
-		}
+		// These checks seem to be wrong
+		// 		// Validate associations
+		// 		if (config.associations?.size) {
+		// 			// Real lifeline associations (as per the Z-Wave+ specs) only have a single node
+		// 			// If there is a 2nd lifeline with more nodes, that is most likely wrong
+		// 			const lifelines = [...config.associations.values()].filter(
+		// 				(assoc) => assoc.isLifeline,
+		// 			);
+		// 			if (
+		// 				lifelines.length > 1 &&
+		// 				lifelines.find((l) => l.maxNodes === 1) &&
+		// 				lifelines.find((l) => l.maxNodes > 1)
+		// 			) {
+		// 				addWarning(
+		// 					file,
+		// 					`A lifeline with 1 node plus another one with more nodes found!
+		// This is likely an error!`,
+		// 				);
+		// 			}
+		// 			if (
+		// 				lifelines.some(
+		// 					(l) =>
+		// 						l.label === "Lifeline" &&
+		// 						l.groupId === 1 &&
+		// 						l.maxNodes > 1,
+		// 				)
+		// 			) {
+		// 				addWarning(
+		// 					file,
+		// 					`Found an association that looks like a Z-Wave+ lifeline but has more than 1 max nodes!`,
+		// 				);
+		// 			}
+		// 		}
 
 		if (config.paramInformation?.size) {
 			// Check if there are options when manual entry is forbidden

@@ -1,7 +1,7 @@
 import { ansiRegex, stripColor } from "ansi-colors";
 import { MESSAGE } from "triple-beam";
 import Transport from "winston-transport";
-import { ZWaveLogInfo } from "../src/lib/log/shared";
+import type { ZWaveLogInfo } from "../src/lib/log/shared";
 
 const timestampRegex = /\d{2}\:\d{2}\:\d{2}\.\d{3}/g;
 const timestampPrefixRegex = new RegExp(

@@ -64,8 +64,9 @@ For devices that don't support the Z-Wave+ standard, the associations must be de
 	"2": {
 		"label": "Label for group #2",
 		"description": "A description what group #2 does", // optional
-		"maxNodes": 1, // Must be 1 for the lifeline
-		"isLifeline": true // Whether this is the Lifeline group, required exactly once
+		"maxNodes": 1, // SHOULD be 1 for the lifeline, some devices support more nodes
+		"isLifeline": true, // Whether this is the Lifeline group. SHOULD exist exactly once, some nodes require more groups to report everything
+		"noEndpoint": true, // Whether node id associations must be used for this group, even if the device supports endpoint associations, (optional)
 	},
 	// ... more groups ...
 }

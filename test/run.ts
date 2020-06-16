@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Driver } from "../src/index";
 
-const driver = new Driver("COM5", {
+const driver = new Driver("COM4", {
 	// prettier-ignore
 	networkKey: Buffer.from([
 		1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
