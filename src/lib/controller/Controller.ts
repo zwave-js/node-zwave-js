@@ -1253,15 +1253,9 @@ ${associatedNodes.join(", ")}`,
 		}
 
 		// Check whether we have multi channel support or not
-		let multiChannel: boolean;
-		let assocInstance: MultiChannelAssociationCC | AssociationCC;
-		if (node.supportsCC(CommandClasses["Multi Channel Association"])) {
-			multiChannel = true;
-			assocInstance = node.createCCInstanceUnsafe<
-				MultiChannelAssociationCC
-			>(CommandClasses["Multi Channel Association"])!;
-		} else if (node.supportsCC(CommandClasses.Association)) {
-			multiChannel = false;
+		let assocInstance: AssociationCC;
+		let mcInstance: MultiChannelAssociationCC | undefined;
+		if (node.supportsCC(CommandClasses.Association)) {
 			assocInstance = node.createCCInstanceUnsafe<AssociationCC>(
 				CommandClasses.Association,
 			)!;
@@ -1271,8 +1265,16 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
+		if (node.supportsCC(CommandClasses["Multi Channel Association"])) {
+			mcInstance = node.createCCInstanceUnsafe<MultiChannelAssociationCC>(
+				CommandClasses["Multi Channel Association"],
+			)!;
+		}
 
-		const groupCount = assocInstance.getGroupCountCached();
+		const assocGroupCount = assocInstance.getGroupCountCached() ?? 0;
+		const mcGroupCount = mcInstance?.getGroupCountCached() ?? 0;
+		const groupCount = Math.max(assocGroupCount, mcGroupCount);
+
 		const ret = new Map<number, AssociationGroup>();
 
 		if (node.supportsCC(CommandClasses["Association Group Information"])) {
@@ -1281,8 +1283,13 @@ ${associatedNodes.join(", ")}`,
 				CommandClasses["Association Group Information"],
 			)!;
 			for (let group = 1; group <= groupCount; group++) {
+				const multiChannel = !!mcInstance && group <= mcGroupCount;
 				ret.set(group, {
-					maxNodes: assocInstance.getMaxNodesCached(group) || 1,
+					maxNodes:
+						(multiChannel
+							? mcInstance!
+							: assocInstance
+						).getMaxNodesCached(group) || 1,
 					// AGI implies Z-Wave+ where group 1 is the lifeline
 					isLifeline: group === 1,
 					label:
@@ -1297,9 +1304,13 @@ ${associatedNodes.join(", ")}`,
 			// we need to consult the device config
 			for (let group = 1; group <= groupCount; group++) {
 				const assocConfig = node.deviceConfig?.associations?.get(group);
+				const multiChannel = !!mcInstance && group <= mcGroupCount;
 				ret.set(group, {
 					maxNodes:
-						assocInstance.getMaxNodesCached(group) ||
+						(multiChannel
+							? mcInstance!
+							: assocInstance
+						).getMaxNodesCached(group) ||
 						assocConfig?.maxNodes ||
 						1,
 					isLifeline: assocConfig?.isLifeline ?? group === 1,
@@ -1323,22 +1334,51 @@ ${associatedNodes.join(", ")}`,
 			);
 		}
 
-		if (node.supportsCC(CommandClasses["Multi Channel Association"])) {
-			const cc = node.createCCInstanceUnsafe<MultiChannelAssociationCC>(
-				CommandClasses["Multi Channel Association"],
-			)!;
-			return cc.getAllDestinationsCached();
-		} else if (node.supportsCC(CommandClasses.Association)) {
+		const ret = new Map<number, readonly Association[]>();
+
+		if (node.supportsCC(CommandClasses.Association)) {
 			const cc = node.createCCInstanceUnsafe<AssociationCC>(
 				CommandClasses.Association,
 			)!;
-			return cc.getAllDestinationsCached();
+			const destinations = cc.getAllDestinationsCached();
+			for (const [groupId, assocs] of destinations) {
+				ret.set(groupId, assocs);
+			}
 		} else {
 			throw new ZWaveError(
 				`Node ${nodeId} does not support associations!`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
+
+		// Merge the "normal" destinations with multi channel destinations
+		if (node.supportsCC(CommandClasses["Multi Channel Association"])) {
+			const cc = node.createCCInstanceUnsafe<MultiChannelAssociationCC>(
+				CommandClasses["Multi Channel Association"],
+			)!;
+			const destinations = cc.getAllDestinationsCached();
+			for (const [groupId, assocs] of destinations) {
+				if (ret.has(groupId)) {
+					const normalAssociations = ret.get(groupId)!;
+					ret.set(groupId, [
+						...normalAssociations,
+						// Eliminate potential duplicates
+						...assocs.filter(
+							(a1) =>
+								normalAssociations.findIndex(
+									(a2) =>
+										a1.nodeId === a2.nodeId &&
+										a1.endpoint === a2.endpoint,
+								) === -1,
+						),
+					]);
+				} else {
+					ret.set(groupId, assocs);
+				}
+			}
+		}
+
+		return ret;
 	}
 
 	/** Checks if a given association is allowed */
