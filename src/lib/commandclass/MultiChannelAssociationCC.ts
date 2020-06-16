@@ -511,17 +511,14 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 					(addr) => addr.nodeId === ownNodeId && addr.endpoint === 0,
 				);
 
+				let didMCAssignmentWork = true;
+
 				if (
 					!groupSupportsMultiChannel &&
 					!isAssignedAsNodeAssociation
 				) {
 					// Use normal association if this is not a multi channel association group
 					await assocAPI.addNodeIds(group, ownNodeId);
-					// Remember the new destination
-					this.getValueDB().setValue(nodeIdsValueId, [
-						ownNodeId,
-						...lifelineNodeIds,
-					]);
 					// and refresh the associations - don't trust that it worked
 					await assocAPI.getGroup(group);
 				} else if (
@@ -534,7 +531,8 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 						nodeIds: [ownNodeId],
 					});
 					// and refresh the associations - don't trust that it worked
-					await mcAPI.getGroup(group);
+					const { nodeIds } = await mcAPI.getGroup(group);
+					didMCAssignmentWork = nodeIds.includes(ownNodeId);
 				} else if (
 					this.version >= 3 &&
 					!isAssignedAsEndpointAssociation
@@ -552,7 +550,24 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 						endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
 					});
 					// and refresh the associations - don't trust that it worked
-					await mcAPI.getGroup(group);
+					const { endpoints } = await mcAPI.getGroup(group);
+					didMCAssignmentWork = !!endpoints.find(
+						(a) => a.nodeId === ownNodeId && a.endpoint === 0,
+					);
+				}
+
+				// Fallback to Association CC if endpoint association didn't work
+				if (!didMCAssignmentWork) {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"Multi Channel Association assignment failed, falling back to Association CC",
+						direction: "none",
+						level: "warn",
+					});
+					await assocAPI.addNodeIds(group, ownNodeId);
+					// and refresh the associations - don't trust that it worked
+					await assocAPI.getGroup(group);
 				}
 			}
 			// Remember that we have a lifeline association
