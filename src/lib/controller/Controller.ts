@@ -1476,17 +1476,41 @@ ${associatedNodes.join(", ")}`,
 			);
 		}
 
+		// Check whether we have multi channel support or not
+		let assocInstance: AssociationCC;
+		let mcInstance: MultiChannelAssociationCC | undefined;
+		if (node.supportsCC(CommandClasses.Association)) {
+			assocInstance = node.createCCInstanceUnsafe<AssociationCC>(
+				CommandClasses.Association,
+			)!;
+		} else {
+			throw new ZWaveError(
+				`Node ${nodeId} does not support associations!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
 		if (node.supportsCC(CommandClasses["Multi Channel Association"])) {
-			// Prefer multi channel associations
-			const cc = node.createCCInstanceUnsafe<MultiChannelAssociationCC>(
+			mcInstance = node.createCCInstanceUnsafe<MultiChannelAssociationCC>(
 				CommandClasses["Multi Channel Association"],
 			)!;
-			if (group > cc.getGroupCountCached()) {
-				throw new ZWaveError(
-					`Group ${group} does not exist on node ${nodeId}`,
-					ZWaveErrorCodes.AssociationCC_InvalidGroup,
-				);
-			}
+		}
+
+		const assocGroupCount = assocInstance.getGroupCountCached() ?? 0;
+		const mcGroupCount = mcInstance?.getGroupCountCached() ?? 0;
+		const groupCount = Math.max(assocGroupCount, mcGroupCount);
+		if (group > groupCount) {
+			throw new ZWaveError(
+				`Group ${group} does not exist on node ${nodeId}`,
+				ZWaveErrorCodes.AssociationCC_InvalidGroup,
+			);
+		}
+
+		const groupIsMultiChannel =
+			!!mcInstance &&
+			group <= mcGroupCount &&
+			!node.deviceConfig?.associations?.get(group)?.noEndpoint;
+
+		if (groupIsMultiChannel) {
 			// Check that all associations are allowed
 			const disallowedAssociations = associations.filter(
 				(a) => !this.isAssociationAllowed(nodeId, group, a),
@@ -1526,21 +1550,11 @@ ${associatedNodes.join(", ")}`,
 			await node.commandClasses["Multi Channel Association"].getGroup(
 				group,
 			);
-			return;
-		} else if (node.supportsCC(CommandClasses.Association)) {
-			// Use normal associations as a fallback
-			const cc = node.createCCInstanceUnsafe<AssociationCC>(
-				CommandClasses.Association,
-			)!;
-			if (group > cc.getGroupCountCached()) {
-				throw new ZWaveError(
-					`Group ${group} does not exist on node ${nodeId}`,
-					ZWaveErrorCodes.AssociationCC_InvalidGroup,
-				);
-			}
+		} else {
+			// The group only supports "normal" associations
 			if (associations.some((a) => a.endpoint != undefined)) {
 				throw new ZWaveError(
-					`Node ${nodeId} does not support multi channel associations!`,
+					`Node ${nodeId}, group ${group} does not support multi channel associations!`,
 					ZWaveErrorCodes.CC_NotSupported,
 				);
 			}
@@ -1564,12 +1578,6 @@ ${associatedNodes.join(", ")}`,
 			);
 			// Refresh the association list
 			await node.commandClasses.Association.getGroup(group);
-			return;
-		} else {
-			throw new ZWaveError(
-				`Node ${nodeId} does not support associations!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
 		}
 	}
 
