@@ -4,6 +4,12 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* If a configured lifeline association is outside the range of multi channel associations, a normal association is now used instead
+* The `Association CC` interview now always requests the group count, even if `Multi Channel Association CC` is supported
+* `getAssociations` and `getAssociationGroups` now respect all associations (the ones done with `Multi Channel Association CC` and the ones done with `Association CC`).
+
 ## 3.7.7 (2020-06-15)
 ### Bugfixes
 * Logfiles now contain all logs in the correct order
