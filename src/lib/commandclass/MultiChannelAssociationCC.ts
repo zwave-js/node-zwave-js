@@ -10,6 +10,7 @@ import { CCAPI } from "./API";
 import {
 	getGroupCountValueId as getAssociationGroupCountValueId,
 	getHasLifelineValueId,
+	getLifelineGroupIds,
 	getNodeIdsValueId as getAssociationNodeIdsValueId,
 } from "./AssociationCC";
 import {
@@ -481,34 +482,81 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 			}
 		}
 
-		// Some nodes define multiple lifeline groups, so we need to assign us to
-		// all of them
-		let lifelineGroups: number[] | undefined;
+		// Assign the controller to all lifeline groups
+		const lifelineGroups = getLifelineGroupIds(node);
+		const ownNodeId = this.driver.controller.ownNodeId!;
 		const valueDB = this.getValueDB();
 
-		// If the target node supports Z-Wave+ info that means the lifeline MUST be group #1
-		if (node.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message:
-					"supports Z-Wave+, assigning controller to the Lifeline group...",
-				direction: "outbound",
-			});
-			lifelineGroups = [1];
-		} else if (node.deviceConfig?.associations?.size) {
-			// We have a device config file that tells us which association to assign
-			lifelineGroups = [...node.deviceConfig.associations.values()]
-				.filter((a) => a.isLifeline)
-				.map((a) => a.groupId);
-			if (lifelineGroups.length > 0) {
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `has a config file, assigning ourselves to the configured Lifeline group${
-						lifelineGroups.length > 1 ? "s" : ""
-					}: ${lifelineGroups.join(", ")}`,
-					direction: "outbound",
-				});
+		if (lifelineGroups.length) {
+			for (const group of lifelineGroups) {
+				const groupSupportsMultiChannel = group <= mcGroupCount;
+				const mustUseNodeAssociation = node.deviceConfig?.associations?.get(
+					group,
+				)?.noEndpoint;
+
+				const nodeIdsValueId = groupSupportsMultiChannel
+					? getNodeIdsValueId(group)
+					: getAssociationNodeIdsValueId(group);
+				const endpointsValueId = getEndpointsValueId(group);
+
+				const lifelineNodeIds: number[] =
+					this.getValueDB().getValue(nodeIdsValueId) ?? [];
+				const lifelineDestinations: EndpointAddress[] =
+					this.getValueDB().getValue(endpointsValueId) ?? [];
+
+				const isAssignedAsNodeAssociation = lifelineNodeIds.includes(
+					ownNodeId,
+				);
+				const isAssignedAsEndpointAssociation = lifelineDestinations.some(
+					(addr) => addr.nodeId === ownNodeId && addr.endpoint === 0,
+				);
+
+				if (
+					!groupSupportsMultiChannel &&
+					!isAssignedAsNodeAssociation
+				) {
+					// Use normal association if this is not a multi channel association group
+					await assocAPI.addNodeIds(group, ownNodeId);
+					// Remember the new destination
+					this.getValueDB().setValue(nodeIdsValueId, [
+						ownNodeId,
+						...lifelineNodeIds,
+					]);
+					// and refresh the associations - don't trust that it worked
+					await assocAPI.getGroup(group);
+				} else if (
+					(this.version < 3 || mustUseNodeAssociation) &&
+					!isAssignedAsNodeAssociation
+				) {
+					// Use node id associations for V1 and V2 and if a multi channel lifeline is forbidden
+					await mcAPI.addDestinations({
+						groupId: group,
+						nodeIds: [ownNodeId],
+					});
+					// and refresh the associations - don't trust that it worked
+					await mcAPI.getGroup(group);
+				} else if (
+					this.version >= 3 &&
+					!isAssignedAsEndpointAssociation
+				) {
+					// Starting with V3, the endpoint address must be used
+					// Remove node associations first, we want an endpoint association
+					if (isAssignedAsNodeAssociation) {
+						await mcAPI.removeDestinations({
+							groupId: group,
+							nodeIds: [ownNodeId],
+						});
+					}
+					await mcAPI.addDestinations({
+						groupId: group,
+						endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
+					});
+					// and refresh the associations - don't trust that it worked
+					await mcAPI.getGroup(group);
+				}
 			}
+			// Remember that we have a lifeline association
+			valueDB.setValue(getHasLifelineValueId(), true);
 		} else {
 			log.controller.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -519,77 +567,6 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 			});
 			// Remember that we have NO lifeline association
 			valueDB.setValue(getHasLifelineValueId(), false);
-		}
-
-		if (lifelineGroups) {
-			for (const lifelineGroup of lifelineGroups) {
-				const isMultiChannel = lifelineGroup <= mcGroupCount;
-				const nodeIdsValueId = isMultiChannel
-					? getNodeIdsValueId(lifelineGroup)
-					: getAssociationNodeIdsValueId(lifelineGroup);
-				const endpointsValueId = getEndpointsValueId(lifelineGroup);
-				const lifelineNodeIds: number[] =
-					this.getValueDB().getValue(nodeIdsValueId) ?? [];
-				const lifelineDestinations: EndpointAddress[] =
-					this.getValueDB().getValue(endpointsValueId) ?? [];
-				const ownNodeId = this.driver.controller.ownNodeId!;
-				const isAssignedAsNodeAssociation = lifelineNodeIds.includes(
-					ownNodeId,
-				);
-				const isAssignedAsEndpointAssociation = lifelineDestinations.some(
-					(addr) => addr.nodeId === ownNodeId && addr.endpoint === 0,
-				);
-
-				if (!isMultiChannel && !isAssignedAsNodeAssociation) {
-					// Use normal association if this is not a multi channel association group
-					await assocAPI.addNodeIds(lifelineGroup, ownNodeId);
-					// Remember the new destination
-					this.getValueDB().setValue(nodeIdsValueId, [
-						ownNodeId,
-						...lifelineNodeIds,
-					]);
-				} else if (this.version < 3 && !isAssignedAsNodeAssociation) {
-					// Use node id associations for V1 and V2
-					await mcAPI.addDestinations({
-						groupId: lifelineGroup,
-						nodeIds: [ownNodeId],
-					});
-					// Remember the new destination
-					this.getValueDB().setValue(nodeIdsValueId, [
-						ownNodeId,
-						...lifelineNodeIds,
-					]);
-				} else if (
-					this.version >= 3 &&
-					!isAssignedAsEndpointAssociation
-				) {
-					// Starting with V3, the endpoint address must be used
-					// Remove node associations first, we want an endpoint association
-					if (isAssignedAsNodeAssociation) {
-						await mcAPI.removeDestinations({
-							groupId: lifelineGroup,
-							nodeIds: [ownNodeId],
-						});
-						this.getValueDB().setValue(
-							nodeIdsValueId,
-							lifelineNodeIds.filter(
-								(nodeId) => nodeId !== ownNodeId,
-							),
-						);
-					}
-					await mcAPI.addDestinations({
-						groupId: lifelineGroup,
-						endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
-					});
-					// Remember the new destination
-					this.getValueDB().setValue(endpointsValueId, [
-						{ nodeId: ownNodeId, endpoint: 0 },
-						...lifelineDestinations,
-					]);
-				}
-			}
-			// Remember that we have a lifeline association
-			valueDB.setValue(getHasLifelineValueId(), true);
 		}
 
 		// Remember that the interview is complete

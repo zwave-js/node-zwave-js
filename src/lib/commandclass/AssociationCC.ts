@@ -4,6 +4,7 @@ import type { Driver } from "../driver/Driver";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import log from "../log";
 import type { MessageOrCCLogEntry } from "../log/shared";
+import type { ZWaveNode } from "../node/Node";
 import type { ValueID } from "../node/ValueDB";
 import { validatePayload } from "../util/misc";
 import type { Maybe } from "../values/Primitive";
@@ -56,6 +57,28 @@ export function getHasLifelineValueId(): ValueID {
 		commandClass: CommandClasses.Association,
 		property: "hasLifeline",
 	};
+}
+
+export function getLifelineGroupIds(node: ZWaveNode): number[] {
+	// Some nodes define multiple lifeline groups, so we need to assign us to
+	// all of them
+	const lifelineGroups: number[] = [];
+
+	// If the target node supports Z-Wave+ info that means the lifeline MUST be group #1
+	if (node.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
+		lifelineGroups.push(1);
+	}
+
+	// We have a device config file that tells us which (additional) association to assign
+	if (node.deviceConfig?.associations?.size) {
+		lifelineGroups.push(
+			...[...node.deviceConfig.associations.values()]
+				.filter((a) => a.isLifeline)
+				.map((a) => a.groupId),
+		);
+	}
+
+	return distinct(lifelineGroups).sort();
 }
 
 // All the supported commands
@@ -331,61 +354,33 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 			});
 		}
 
+		// Assign the controller to all lifeline groups
+		const lifelineGroups = getLifelineGroupIds(node);
 		const ownNodeId = this.driver.controller.ownNodeId!;
 		const valueDB = this.getValueDB();
 
-		// If the target node supports Z-Wave+ info that means the lifeline MUST be group #1
-		if (node.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
-			// Check if we are already in the lifeline group
-			const lifelineValueId = getNodeIdsValueId(1);
-			const lifelineNodeIds: number[] =
-				valueDB.getValue(lifelineValueId) || [];
-			if (!lifelineNodeIds.includes(ownNodeId)) {
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message:
-						"supports Z-Wave+, assigning ourselves to the Lifeline group...",
-					direction: "outbound",
-				});
-				await api.addNodeIds(1, ownNodeId);
-				// Remember the new destination
-				this.getValueDB().setValue(lifelineValueId, [
-					ownNodeId,
-					...lifelineNodeIds,
-				]);
+		if (lifelineGroups.length) {
+			for (const group of lifelineGroups) {
+				// Check if we are already in the lifeline group
+				const lifelineValueId = getNodeIdsValueId(group);
+				const lifelineNodeIds: number[] =
+					valueDB.getValue(lifelineValueId) ?? [];
+				if (!lifelineNodeIds.includes(ownNodeId)) {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `Controller missing from lifeline group #${group}, assinging ourselves...`,
+						direction: "outbound",
+					});
+					// Add a new destination
+					await api.addNodeIds(group, ownNodeId);
+					// and refresh it - don't trust that it worked
+					await api.getGroup(group);
+					// TODO: check if it worked
+				}
 			}
+
 			// Remember that we have a lifeline association
 			valueDB.setValue(getHasLifelineValueId(), true);
-		} else if (node.deviceConfig?.associations?.size) {
-			// We have a device config file that tells us which association to assign
-			const lifelineGroups = [...node.deviceConfig.associations.values()]
-				.filter((a) => a.isLifeline)
-				.map((a) => a.groupId);
-			if (lifelineGroups.length > 0) {
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `has a config file, assigning ourselves to the configured Lifeline group${
-						lifelineGroups.length > 1 ? "s" : ""
-					}: ${lifelineGroups.join(", ")}`,
-					direction: "outbound",
-				});
-				for (const group of lifelineGroups) {
-					// Check if we are already in the lifeline group
-					const lifelineValueId = getNodeIdsValueId(group);
-					const lifelineNodeIds: number[] =
-						valueDB.getValue(lifelineValueId) ?? [];
-					if (!lifelineNodeIds.includes(ownNodeId)) {
-						await api.addNodeIds(group, ownNodeId);
-						// Remember the new destination
-						this.getValueDB().setValue(lifelineValueId, [
-							ownNodeId,
-							...lifelineNodeIds,
-						]);
-					}
-				}
-				// Remember that we have a lifeline association
-				valueDB.setValue(getHasLifelineValueId(), true);
-			}
 		} else {
 			log.controller.logNode(node.id, {
 				endpoint: this.endpointIndex,
