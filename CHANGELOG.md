@@ -4,9 +4,16 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Associations to the controller are not checked for supported CCs anymore
+* `addAssociations` now respects the `noEndpoint` flag
+* Removing multi channel endpoint association to the root endpoint no longer removes the equivalent node association
+* `getAllDestinationsCached` no longer treats node id associations like multi channel associations to endpoint 0
+
 ## 3.8.0 (2020-06-16)
 ### Features
-* Added a possibility to force lifeline associations to use node id associations
+* Added the `noEndpoint` flag to force lifeline associations to use node id associations
 * The `Multi Channel Association CC` interview now falls back to setting associations with `Association CC` if the node does not accept the added associations
 
 ### Config changes
@@ -40,7 +47,7 @@
 
 ## 3.7.5 (2020-06-14)
 ### Bugfixes
-* Removing a multi channel endpoint association to the root endpoint now also removes the equivalent node association
+* Removing a multi channel endpoint association to the root endpoint now also removes the equivalent node association (REVERTED in v3.8.1)
 
 ## 3.7.4 (2020-06-14)
 ### Bugfixes
