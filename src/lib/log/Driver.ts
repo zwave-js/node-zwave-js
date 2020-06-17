@@ -39,9 +39,20 @@ function getLogger(): ZWaveLogger {
 	}
 	return _logger;
 }
-
-const isDriverLogVisible = isLoglevelVisible(DRIVER_LOGLEVEL);
-const isSendQueueLogVisible = isLoglevelVisible(SENDQUEUE_LOGLEVEL);
+let _isDriverLogVisible: boolean | undefined;
+function isDriverLogVisible(): boolean {
+	if (_isDriverLogVisible === undefined) {
+		_isDriverLogVisible = isLoglevelVisible(DRIVER_LOGLEVEL);
+	}
+	return _isDriverLogVisible;
+}
+let _isSendQueueLogVisible: boolean | undefined;
+function isSendQueueLogVisible(): boolean {
+	if (_isSendQueueLogVisible === undefined) {
+		_isSendQueueLogVisible = isLoglevelVisible(SENDQUEUE_LOGLEVEL);
+	}
+	return _isSendQueueLogVisible;
+}
 
 /**
  * Logs a message
@@ -65,7 +76,7 @@ export function print(
  * Serializes a message that starts a transaction, i.e. a message that is sent and may expect a response
  */
 export function transaction(transaction: Transaction): void {
-	if (!isDriverLogVisible) return;
+	if (!isDriverLogVisible()) return;
 
 	const { message } = transaction;
 	// On the first attempt, we print the basic information about the transaction
@@ -93,7 +104,7 @@ export function transactionResponse(
 	originalTransaction: Transaction | undefined,
 	role: ResponseRole,
 ): void {
-	if (!isDriverLogVisible) return;
+	if (!isDriverLogVisible()) return;
 	logMessage(message, {
 		nodeId: originalTransaction?.message?.getNodeId(),
 		secondaryTags: [role],
@@ -114,7 +125,7 @@ export function logMessage(
 		direction?: DataDirection;
 	} = {},
 ): void {
-	if (!isDriverLogVisible) return;
+	if (!isDriverLogVisible()) return;
 	if (nodeId == undefined) nodeId = message.getNodeId();
 	if (nodeId != undefined && !shouldLogNode(nodeId)) return;
 
@@ -177,7 +188,7 @@ export function logMessage(
 
 /** Logs whats currently in the driver's send queue */
 export function sendQueue(queue: SortedList<Transaction>): void {
-	if (!isSendQueueLogVisible) return;
+	if (!isSendQueueLogVisible()) return;
 
 	let message = "Send queue:";
 	if (queue.length > 0) {

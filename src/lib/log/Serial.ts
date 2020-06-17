@@ -26,14 +26,20 @@ function getLogger(): ZWaveLogger {
 	}
 	return _logger;
 }
-const isVisible = isLoglevelVisible(SERIAL_LOGLEVEL);
+let _isVisible: boolean | undefined;
+function isVisible(): boolean {
+	if (_isVisible === undefined) {
+		_isVisible = isLoglevelVisible(SERIAL_LOGLEVEL);
+	}
+	return _isVisible;
+}
 
 /**
  * Logs transmission or receipt of an ACK frame
  * @param direction The direction this ACK was sent
  */
 export function ACK(direction: DataDirection): void {
-	if (isVisible) logMessageHeader(direction, MessageHeaders.ACK);
+	if (isVisible()) logMessageHeader(direction, MessageHeaders.ACK);
 }
 
 /**
@@ -41,7 +47,7 @@ export function ACK(direction: DataDirection): void {
  * @param direction The direction this NAK was sent
  */
 export function NAK(direction: DataDirection): void {
-	if (isVisible) logMessageHeader(direction, MessageHeaders.NAK);
+	if (isVisible()) logMessageHeader(direction, MessageHeaders.NAK);
 }
 
 /**
@@ -49,7 +55,7 @@ export function NAK(direction: DataDirection): void {
  * @param direction The direction this CAN was sent
  */
 export function CAN(direction: DataDirection): void {
-	if (isVisible) logMessageHeader(direction, MessageHeaders.CAN);
+	if (isVisible()) logMessageHeader(direction, MessageHeaders.CAN);
 }
 
 function logMessageHeader(
@@ -71,7 +77,7 @@ function logMessageHeader(
  * @param data The data that was transmitted or received
  */
 export function data(direction: DataDirection, data: Buffer): void {
-	if (isVisible) {
+	if (isVisible()) {
 		getLogger().log({
 			level: SERIAL_LOGLEVEL,
 			message: `0x${data.toString("hex")}`,
@@ -86,7 +92,7 @@ export function data(direction: DataDirection, data: Buffer): void {
  * @param data The data that is currently in the receive buffer
  */
 export function receiveBuffer(data: Buffer, isComplete: boolean): void {
-	if (isVisible) {
+	if (isVisible()) {
 		getLogger().log({
 			level: isComplete ? SERIAL_LOGLEVEL : "silly",
 			primaryTags: isComplete ? undefined : "[incomplete]",
@@ -102,7 +108,7 @@ export function receiveBuffer(data: Buffer, isComplete: boolean): void {
  * @param msg The message to output
  */
 export function message(message: string): void {
-	if (isVisible) {
+	if (isVisible()) {
 		getLogger().log({
 			level: SERIAL_LOGLEVEL,
 			message,

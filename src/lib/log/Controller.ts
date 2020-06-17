@@ -38,8 +38,20 @@ function getLogger(): ZWaveLogger {
 	return _logger;
 }
 
-const isValueLogVisible = isLoglevelVisible(VALUE_LOGLEVEL);
-const isControllerLogVisible = isLoglevelVisible(CONTROLLER_LOGLEVEL);
+let _isValueLogVisible: boolean | undefined;
+function isValueLogVisible(): boolean {
+	if (_isValueLogVisible === undefined) {
+		_isValueLogVisible = isLoglevelVisible(VALUE_LOGLEVEL);
+	}
+	return _isValueLogVisible;
+}
+let _isControllerLogVisible: boolean | undefined;
+function isControllerLogVisible(): boolean {
+	if (_isControllerLogVisible === undefined) {
+		_isControllerLogVisible = isLoglevelVisible(CONTROLLER_LOGLEVEL);
+	}
+	return _isControllerLogVisible;
+}
 
 /**
  * Logs a message
@@ -132,7 +144,7 @@ export function value(
 	change: "added" | "updated" | "removed",
 	args: LogValueArgs<ValueID>,
 ): void {
-	if (!isValueLogVisible) return;
+	if (!isValueLogVisible()) return;
 
 	const primaryTags: string[] = [
 		getNodeTag(args.nodeId),
@@ -180,7 +192,7 @@ export function value(
 
 /** Prints a log message for updated metadata of a value id */
 export function metadataUpdated(args: LogValueArgs<ValueID>): void {
-	if (!isValueLogVisible) return;
+	if (!isValueLogVisible()) return;
 
 	const primaryTags: string[] = [
 		getNodeTag(args.nodeId),
@@ -209,7 +221,7 @@ export function metadataUpdated(args: LogValueArgs<ValueID>): void {
 
 /** Logs the interview progress of a node */
 export function interviewStage(node: ZWaveNode): void {
-	if (!isControllerLogVisible) return;
+	if (!isControllerLogVisible()) return;
 	if (!shouldLogNode(node.id)) return;
 
 	getLogger().log({
@@ -227,7 +239,7 @@ export function interviewStage(node: ZWaveNode): void {
 
 /** Logs the interview progress of a node */
 export function interviewStart(node: ZWaveNode): void {
-	if (!isControllerLogVisible) return;
+	if (!isControllerLogVisible()) return;
 	if (!shouldLogNode(node.id)) return;
 
 	const message = `Beginning interview - last completed stage: ${

@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Missing information is included in logfiles again when the `LOGTOFILE` env variable is set after the library was imported
+
 ## 3.8.1 (2020-06-16)
 ### Bugfixes
 * Associations to the controller are not checked for supported CCs anymore
