@@ -30,18 +30,28 @@ const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 describe("lib/commandclass/CommandClass => ", () => {
 	describe("from()", () => {
-		it.skip("throws CC_NotImplemented when receiving a non-implemented CC", () => {
-			// TODO: This is a meter CC. Change it when that CC is implemented
+		it("throws CC_NotImplemented when receiving a non-implemented CC", () => {
+			// This is a Node Provisioning CC. Change it when that CC is implemented
 			assertZWaveError(
 				() =>
 					CommandClass.from(fakeDriver, {
-						data: Buffer.from("0b0a32022144000000a30000", "hex"),
+						data: Buffer.from("78030100", "hex"),
 						nodeId: 5,
 					}),
 				{
 					errorCode: ZWaveErrorCodes.CC_NotImplemented,
 				},
 			);
+		});
+
+		it("does not throw when the CC is implemented", () => {
+			expect(() =>
+				CommandClass.from(fakeDriver, {
+					// CRC-16 with BasicCC
+					data: Buffer.from("560120024d26", "hex"),
+					nodeId: 5,
+				}),
+			).not.toThrow();
 		});
 	});
 
