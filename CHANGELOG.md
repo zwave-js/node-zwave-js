@@ -7,6 +7,11 @@
 ## __WORK IN PROGRESS__
 ### Bugfixes
 * Missing information is included in logfiles again when the `LOGTOFILE` env variable is set after the library was imported
+* The `CRC-16 Command Encapsulation CC` is now correctly detected as implemented
+* If an association group is configured to use node associations, the `Multi Channel Association CC` version heuristic is now ignored
+
+### Changes under the hood
+* Added some details to the `Multi Channel Association CC` interview logging
 
 ## 3.8.1 (2020-06-16)
 ### Bugfixes
