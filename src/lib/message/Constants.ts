@@ -62,6 +62,8 @@ export enum FunctionType {
 	UNKNOWN_FUNC_UNKNOWN_0x09 = 0x09, // ??
 	UNKNOWN_FUNC_UNKNOWN_0x0a = 0x0a, // ??
 
+	UNKNOWN_FUNC_SerialAPISetup = 0x0b,
+
 	UNKNOWN_FUNC_RF_RECEIVE_MODE = 0x10, // Power down the RF section of the stick
 	UNKNOWN_FUNC_SET_SLEEP_MODE = 0x11, // Set the CPU into sleep mode
 
@@ -85,13 +87,14 @@ export enum FunctionType {
 	UNKNOWN_FUNC_MEMORY_GET_BUFFER = 0x23,
 	UNKNOWN_FUNC_MEMORY_PUT_BUFFER = 0x24,
 
-	UNKNOWN_FUNC_UNKNOWN_0x27 = 0x27, // ??
+	UNKNOWN_FUNC_FlashAutoProgSet = 0x27, // ??
 	UNKNOWN_FUNC_UNKNOWN_0x28 = 0x28, // ??
-	UNKNOWN_FUNC_UNKNOWN_0x29 = 0x29, // ??
-	UNKNOWN_FUNC_UNKNOWN_0x2a = 0x2a, // ??
-	UNKNOWN_FUNC_UNKNOWN_0x2b = 0x2b, // ??
-	UNKNOWN_FUNC_UNKNOWN_0x2c = 0x2c, // ??
-	UNKNOWN_FUNC_UNKNOWN_0x2d = 0x2d, // ??
+
+	UNKNOWN_FUNC_NVMGetId = 0x29,
+	UNKNOWN_FUNC_NVMExtReadLongBuffer = 0x2a,
+	UNKNOWN_FUNC_NVMExtWriteLongBuffer = 0x2b,
+	UNKNOWN_FUNC_NVMExtReadLongByte = 0x2c,
+	UNKNOWN_FUNC_NVMExtWriteLongByte = 0x2d,
 
 	UNKNOWN_FUNC_CLOCK_SET = 0x30, // ??
 	UNKNOWN_FUNC_CLOCK_GET = 0x31, // ??
@@ -100,6 +103,11 @@ export enum FunctionType {
 	UNKNOWN_FUNC_RTC_TIMER_READ = 0x34, // ??
 	UNKNOWN_FUNC_RTC_TIMER_DELETE = 0x35, // ??
 	UNKNOWN_FUNC_RTC_TIMER_CALL = 0x36, // ??
+
+	UNKNOWN_FUNC_ClearNetworkStats = 0x39,
+	UNKNOWN_FUNC_GetNetworkStats = 0x3a,
+	UNKNOWN_FUNC_GetBackgroundRSSI = 0x3b,
+	UNKNOWN_FUNC_RemoveNodeIdFromNetwork = 0x3f,
 
 	FUNC_ID_ZW_SET_LEARN_NODE_STATE = 0x40, // Not implemented
 
@@ -129,6 +137,7 @@ export enum FunctionType {
 	GetSUCNodeId = 0x56, // Try to retrieve a Static Update Controller node id (zero if no SUC present)
 
 	UNKNOWN_FUNC_SEND_SUC_ID = 0x57,
+	UNKNOWN_FUNC_AssignPrioritySUCReturnRoute = 0x58,
 	UNKNOWN_FUNC_REDISCOVERY_NEEDED = 0x59,
 
 	FUNC_ID_ZW_REQUEST_NODE_NEIGHBOR_UPDATE_OPTIONS = 0x5a, // Allow options for request node neighbor update
@@ -159,8 +168,8 @@ export enum FunctionType {
 
 	UNKNOWN_FUNC_LOCK_ROUTE_RESPONSE = 0x90, // ??
 	UNKNOWN_FUNC_SEND_DATA_ROUTE_DEMO = 0x91, // ??
-	UNKNOWN_FUNC_UNKNOWN_0x92 = 0x92, // ??
-	UNKNOWN_FUNC_UNKNOWN_0x93 = 0x93, // ??
+	UNKNOWN_FUNC_GET_PRIORITY_ROUTE = 0x92, // ??
+	UNKNOWN_FUNC_SET_PRIORITY_ROUTE = 0x93, // ??
 	UNKNOWN_FUNC_SERIAL_API_TEST = 0x95, // ??
 	UNKNOWN_FUNC_UNKNOWN_0x98 = 0x98, // ??
 
@@ -191,7 +200,11 @@ export enum FunctionType {
 	UNKNOWN_FUNC_UNKNOWN_0xD3 = 0xd3, // ??
 	UNKNOWN_FUNC_UNKNOWN_0xD4 = 0xd4, // ??
 	UNKNOWN_FUNC_UNKNOWN_0xEF = 0xef, // ??
-	UNKNOWN_FUNC_UNKNOWN_0xF2 = 0xf2, // ??
-	UNKNOWN_FUNC_UNKNOWN_0xF4 = 0xf4, // ??
-	UNKNOWN_FUNC_UNKNOWN_0xF5 = 0xf5, // ??
+
+	// Special commands for Z-Wave.me sticks
+	UNKNOWN_FUNC_ZMEFreqChange = 0xf2,
+	UNKNOWN_FUNC_ZMERestore = 0xf3,
+	UNKNOWN_FUNC_ZMEBootloaderFlash = 0xf4,
+	UNKNOWN_FUNC_ZMECapabilities = 0xf5,
+	UNKNOWN_FUNC_ZMESerialAPIOptions = 0xf8,
 }
