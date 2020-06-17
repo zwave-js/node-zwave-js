@@ -515,6 +515,12 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 					!groupSupportsMultiChannel &&
 					!isAssignedAsNodeAssociation
 				) {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `Lifeline group #${group} does not support multi channel - assigning controller with Association CC...`,
+						direction: "outbound",
+					});
+
 					// Use normal association if this is not a multi channel association group
 					await assocAPI.addNodeIds(group, ownNodeId);
 					// and refresh the associations - don't trust that it worked
@@ -523,6 +529,12 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 					(this.version < 3 || mustUseNodeAssociation) &&
 					!isAssignedAsNodeAssociation
 				) {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `Lifeline group #${group} is configured to use node association - assigning controller...`,
+						direction: "outbound",
+					});
+
 					// Use node id associations for V1 and V2 and if a multi channel lifeline is forbidden
 					await mcAPI.addDestinations({
 						groupId: group,
@@ -535,6 +547,12 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 					this.version >= 3 &&
 					!isAssignedAsEndpointAssociation
 				) {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `Lifeline group #${group}: assigning controller with multi channel association...`,
+						direction: "outbound",
+					});
+
 					// Starting with V3, the endpoint address must be used
 					// Remove node associations first, we want an endpoint association
 					if (isAssignedAsNodeAssociation) {
@@ -558,8 +576,7 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 				if (!didMCAssignmentWork) {
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
-						message:
-							"Multi Channel Association assignment failed, falling back to Association CC",
+						message: `Lifeline group #${group}: Multi Channel Association assignment failed, falling back to Association CC`,
 						direction: "none",
 						level: "warn",
 					});
