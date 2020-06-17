@@ -526,8 +526,8 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 					// and refresh the associations - don't trust that it worked
 					await assocAPI.getGroup(group);
 				} else if (
-					(this.version < 3 || mustUseNodeAssociation) &&
-					!isAssignedAsNodeAssociation
+					mustUseNodeAssociation ||
+					(this.version < 3 && !isAssignedAsNodeAssociation)
 				) {
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
