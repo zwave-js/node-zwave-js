@@ -101,6 +101,16 @@ export function lintCCInterview(): Promise<void> {
 					}
 					return;
 				}
+				// Ensure the filename ends with CC.ts - otherwise CommandClass.from won't find it
+				if (!relativePath.endsWith("CC.ts")) {
+					hasError = true;
+					console.error(
+						red(
+							`[ERROR] ${relativePath}: Files containing CC implementations MUST end with "CC.ts"\n`,
+						),
+					);
+				}
+
 				// Only look at implementations of determineRequiredCCInterviews
 				for (const member of node.members) {
 					if (
