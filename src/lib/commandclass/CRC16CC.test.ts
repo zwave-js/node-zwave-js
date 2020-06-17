@@ -4,7 +4,7 @@ import type { Driver } from "../driver/Driver";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { BasicCCGet, BasicCCSet } from "./BasicCC";
 import { CommandClass } from "./CommandClass";
-import { CRC16CC, CRC16CCCommandEncapsulation } from "./CRC16";
+import { CRC16CC, CRC16CCCommandEncapsulation } from "./CRC16CC";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 

@@ -141,7 +141,7 @@ export interface CCAPIs {
 	Battery: import("./BatteryCC").BatteryCCAPI;
 	"Binary Sensor": import("./BinarySensorCC").BinarySensorCCAPI;
 	"Binary Switch": import("./BinarySwitchCC").BinarySwitchCCAPI;
-	"CRC-16 Encapsulation": import("./CRC16").CRC16CCAPI;
+	"CRC-16 Encapsulation": import("./CRC16CC").CRC16CCAPI;
 	"Central Scene": import("./CentralSceneCC").CentralSceneCCAPI;
 	"Climate Control Schedule": import("./ClimateControlScheduleCC").ClimateControlScheduleCCAPI;
 	Clock: import("./ClockCC").ClockCCAPI;
