@@ -94,16 +94,7 @@ fs.readFile(path.join(libraryRootDir, "package.json"), "utf8").then(
 	},
 );
 
-// Load all CCs to ensure all metadata gets loaded
-const ccDirectory = path.join(__dirname, "lib/commandclass");
-const definedCCs = fs
-	.readdirSync(ccDirectory)
-	.filter((file) => /CC\.(js|ts)$/.test(file));
-for (const file of definedCCs) {
-	require(path.join(ccDirectory, file));
-}
-
-// Export some frequently-used things and types
+// Export some frequently-used things and types - this also loads all CC files including metadata
 export * from "./CommandClass";
 export * from "./Controller";
 export * from "./Driver";

@@ -14,6 +14,7 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { CommandClasses } from "./CommandClasses";
+import "./index";
 
 @implementedVersion(7)
 @commandClass(0xffff as any)
