@@ -44,7 +44,7 @@ export class CRC16CCAPI extends CCAPI {
 		const cc = new CRC16CCCommandEncapsulation(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			encapsulatedCC,
+			encapsulated: encapsulatedCC,
 		});
 		await this.driver.sendCommand(cc);
 	}
@@ -62,7 +62,7 @@ export class CRC16CC extends CommandClass {
 	): CRC16CCCommandEncapsulation {
 		return new CRC16CCCommandEncapsulation(driver, {
 			nodeId: cc.nodeId,
-			encapsulatedCC: cc,
+			encapsulated: cc,
 		});
 	}
 
@@ -73,7 +73,7 @@ export class CRC16CC extends CommandClass {
 }
 
 interface CRC16CCCommandEncapsulationOptions extends CCCommandOptions {
-	encapsulatedCC: CommandClass;
+	encapsulated: CommandClass;
 }
 
 // This indirection is necessary to be able to define the same CC as the response
@@ -103,21 +103,21 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 			);
 			validatePayload(expectedCRC === actualCRC);
 
-			this.encapsulatedCC = CommandClass.from(this.driver, {
+			this.encapsulated = CommandClass.from(this.driver, {
 				data: ccBuffer,
 				fromEncapsulation: true,
 				encapCC: this,
 			});
 		} else {
-			this.encapsulatedCC = options.encapsulatedCC;
+			this.encapsulated = options.encapsulated;
 		}
 	}
 
-	public encapsulatedCC: CommandClass;
+	public encapsulated: CommandClass;
 	private readonly headerBuffer = Buffer.from([this.ccId, this.ccCommand]);
 
 	public serialize(): Buffer {
-		const commandBuffer = this.encapsulatedCC.serialize();
+		const commandBuffer = this.encapsulated.serialize();
 		// Reserve 2 bytes for the CRC
 		this.payload = Buffer.concat([commandBuffer, Buffer.allocUnsafe(2)]);
 
