@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 3.8.2 (2020-06-17)
 ### Bugfixes
 * Missing information is included in logfiles again when the `LOGTOFILE` env variable is set after the library was imported
 * The `CRC-16 Command Encapsulation CC` is now correctly detected as implemented
