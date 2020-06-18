@@ -387,9 +387,17 @@ export class MeterCCReport extends MeterCC {
 			),
 		};
 		const valueDB = this.getValueDB();
-		valueDB.setMetadata(
-			{ ...valueIdBase, property: "value" },
-			{
+
+		const valueValueId = { ...valueIdBase, property: "value" };
+		const previousValueValueID = {
+			...valueIdBase,
+			property: "previousValue",
+		};
+		const deltaTimeValueId = { ...valueIdBase, property: "deltaTime" };
+
+		// Always create metadata if it does not exist
+		if (!valueDB.hasMetadata(valueValueId)) {
+			valueDB.setMetadata(valueValueId, {
 				...ValueMetadata.ReadOnlyNumber,
 				label: `Value (${getMeterTypeName(this._type)}${
 					this._rateType
@@ -397,28 +405,20 @@ export class MeterCCReport extends MeterCC {
 						: ""
 				})`,
 				unit: this._scale.label,
-			},
-		);
-		valueDB.setValue({ ...valueIdBase, property: "value" }, this._value);
-		if (this._previousValue != undefined) {
-			valueDB.setMetadata(
-				{ ...valueIdBase, property: "previousValue" },
-				{
-					...ValueMetadata.ReadOnlyNumber,
-					label: `Previous value (${getMeterTypeName(this._type)}${
-						this._rateType
-							? `, ${getEnumMemberName(RateType, this._rateType)}`
-							: ""
-					})`,
-					unit: this._scale.label,
-				},
-			);
-			valueDB.setValue(
-				{ ...valueIdBase, property: "previousValue" },
-				this._previousValue,
-			);
+			});
 		}
-		if (this._deltaTime != "unknown") {
+		if (this.version >= 2 && !valueDB.hasMetadata(previousValueValueID)) {
+			valueDB.setMetadata(previousValueValueID, {
+				...ValueMetadata.ReadOnlyNumber,
+				label: `Previous value (${getMeterTypeName(this._type)}${
+					this._rateType
+						? `, ${getEnumMemberName(RateType, this._rateType)}`
+						: ""
+				})`,
+				unit: this._scale.label,
+			});
+		}
+		if (this.version >= 2 && !valueDB.hasMetadata(deltaTimeValueId)) {
 			valueDB.setMetadata(
 				{ ...valueIdBase, property: "deltaTime" },
 				{
@@ -427,6 +427,12 @@ export class MeterCCReport extends MeterCC {
 					unit: "s",
 				},
 			);
+		}
+		valueDB.setValue(valueValueId, this._value);
+		if (this._previousValue != undefined) {
+			valueDB.setValue(previousValueValueID, this._previousValue);
+		}
+		if (this._deltaTime != "unknown") {
 			valueDB.setValue(
 				{ ...valueIdBase, property: "deltaTime" },
 				this._deltaTime,
