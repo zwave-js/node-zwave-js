@@ -54,6 +54,7 @@ import { ZWaveController } from "../controller/Controller";
 import {
 	isSendReport,
 	isTransmitReport,
+	SendDataAbort,
 	SendDataMulticastRequest,
 	SendDataRequest,
 	SendDataRequestTransmitReport,
@@ -102,6 +103,8 @@ export interface ZWaveOptions {
 		report: number;
 		/** How long generated nonces are valid */
 		nonce: number;
+		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
+		sendDataCallback: number;
 	};
 	/**
 	 * @internal
@@ -129,6 +132,7 @@ const defaultOptions: ZWaveOptions = {
 		byte: 150,
 		report: 1000,
 		nonce: 5000,
+		sendDataCallback: 65000, // as defined in INS13954
 	},
 	skipInterview: false,
 	nodeInterviewAttempts: 5,
@@ -183,6 +187,12 @@ function checkOptions(options: ZWaveOptions): void {
 	if (options.timeouts.nonce < 3000 || options.timeouts.nonce > 20000) {
 		throw new ZWaveError(
 			`The Nonce timeout must be between 3000 and 20000 milliseconds!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (options.timeouts.sendDataCallback < 10000) {
+		throw new ZWaveError(
+			`The Send Data Callback timeout must be at least 10 seconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -304,7 +314,9 @@ export class Driver extends EventEmitter {
 		return this.transactionStack[0];
 	}
 
+	/** The queue of messages to send */
 	private sendQueue = new SortedList<Transaction>();
+
 	/** A map of handlers for all sorts of requests */
 	private requestHandlers = new Map<FunctionType, RequestHandlerEntry[]>();
 	/** A map of awaited commands */
@@ -1385,6 +1397,10 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 				case "confirmation": {
 					// When a node has received the message, it confirms the receipt with a SendDataRequest
 					if (msg instanceof SendDataRequestTransmitReport) {
+						// We have received the callback and may send new messages again
+						this.clearSendDataCallbackTimeout();
+						this.isWaitingForSendDataCallback = false;
+
 						// As per SDS11846, start a timeout for the expected response
 						this.currentTransaction.computeRTT();
 						const msRTT = this.currentTransaction.rtt / 1e6;
@@ -1418,6 +1434,11 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 					} else if (isSendReport(msg)) {
 						// The message was sent to the node(s)
 						this.currentTransaction.nodeAckPending = true;
+						if (msg.hasCallbackId() && msg.callbackId !== 0) {
+							// Block further SendData[Multicast]Requests until we have a callback from the controller
+							this.isWaitingForSendDataCallback = true;
+							this.startSendDataCallbackTimeout();
+						}
 					}
 					// no need to further process intermediate responses, as they only tell us things are good
 					return;
@@ -2188,10 +2209,61 @@ ${handlers.length} left`,
 		}
 	}
 
+	/** Whether we're waiting for a SendData callback from the stick */
+	private isWaitingForSendDataCallback = false;
+	private sendDataCallbackTimeout: NodeJS.Timer | undefined;
+	private startSendDataCallbackTimeout(): void {
+		this.clearSendDataCallbackTimeout();
+		this.sendDataCallbackTimeout = setTimeout(() => {
+			// The controller messed up and did not call us back
+
+			// TODO: Investigate if we want to reject the failed transaction
+			// If not, the callback will be forced with status NO_ACK
+
+			// // Since the message may be invalid (because the timeout is long)
+			// // we cannot just send it again.
+			// this.rejectCurrentTransaction(
+			// 	new ZWaveError(
+			// 		`Timeout while waiting for a response from the controller`,
+			// 		ZWaveErrorCodes.Controller_MessageDropped,
+			// 	),
+			// 	false,
+			// );
+			// this.isWaitingForSendDataCallback = false;
+
+			// Try to abort sending the message
+			void this.sendMessage(new SendDataAbort(this)).catch((e) => {
+				log.driver.print(
+					`Failed to abort sending: ${e.message}`,
+					"error",
+				);
+			});
+		}, this.options.timeouts.sendDataCallback).unref();
+	}
+	private clearSendDataCallbackTimeout(): void {
+		if (this.sendDataCallbackTimeout) {
+			clearTimeout(this.sendDataCallbackTimeout);
+			this.sendDataCallbackTimeout = undefined;
+		}
+	}
+
 	private workOffSendQueue(): void {
+		// We MUST not send a message to a node if the callback from the controller is still missing
+		const nextTransaction = this.sendQueue.peekStart();
+		if (
+			(nextTransaction?.message instanceof SendDataRequest ||
+				nextTransaction?.message instanceof SendDataMulticastRequest) &&
+			this.isWaitingForSendDataCallback
+		) {
+			log.driver.print(
+				`workOffSendQueue > waiting for callback from controller - cannot send ${nextTransaction.message.constructor.name} yet`,
+				"debug",
+			);
+			return;
+		}
+
 		// What we do now depends on whether we have pending transactions
 		// or if the next message in the queue is a handshake
-		const nextTransaction = this.sendQueue.peekStart();
 		if (
 			this.currentTransaction == undefined ||
 			nextTransaction?.priority === MessagePriority.Handshake
@@ -2236,7 +2308,7 @@ ${handlers.length} left`,
 		} else {
 			// 3.: We do and the current one was sent (is pending) -> do nothing right now
 			log.driver.print(
-				`workOffSendQueue > skipping because a transaction is pending:`,
+				`workOffSendQueue > skipping because a transaction is pending`,
 				"debug",
 			);
 			// log.driver.transaction(this.currentTransaction);
