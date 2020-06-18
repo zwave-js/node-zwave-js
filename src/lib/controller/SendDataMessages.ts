@@ -538,7 +538,7 @@ export class SendDataMulticastResponse extends Message {
 	}
 }
 
-@messageTypes(MessageType.Request, FunctionType.SendData)
+@messageTypes(MessageType.Request, FunctionType.SendDataAbort)
 @priority(MessagePriority.Controller)
 export class SendDataAbort extends Message {}
 
