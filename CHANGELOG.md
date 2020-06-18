@@ -4,6 +4,11 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Overlapping `SendData(Multicast)` commands are now avoided
+* `SendData(Multicast)` commands without a callback are now aborted after a while
+
 ## 3.8.3 (2020-06-17)
 ### Bugfixes
 * The `CRC-16 Command Encapsulation CC` is now correctly detected as an encapsulating CC
