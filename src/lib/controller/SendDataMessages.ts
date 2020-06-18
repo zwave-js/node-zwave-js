@@ -538,6 +538,10 @@ export class SendDataMulticastResponse extends Message {
 	}
 }
 
+@messageTypes(MessageType.Request, FunctionType.SendData)
+@priority(MessagePriority.Controller)
+export class SendDataAbort extends Message {}
+
 /** Checks whether the message is a report that tells us that a message was sent */
 export function isSendReport(
 	msg: Message,

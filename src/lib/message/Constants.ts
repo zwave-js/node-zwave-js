@@ -74,7 +74,7 @@ export enum FunctionType {
 
 	GetControllerVersion = 0x15,
 
-	UNKNOWN_FUNC_SEND_DATA_ABORT = 0x16, // Abort sending data
+	SendDataAbort = 0x16, // Abort sending data
 
 	FUNC_ID_ZW_R_F_POWER_LEVEL_SET = 0x17, // Set RF Power level
 	UNKNOWN_FUNC_SEND_DATA_META = 0x18, // ??
