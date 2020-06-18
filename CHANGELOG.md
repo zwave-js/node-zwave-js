@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## 3.8.4 (2020-06-18)
+## 3.8.5 (2020-06-18)
 ### Bugfixes
 * Overlapping `SendData(Multicast)` commands are now avoided
 * `SendData(Multicast)` commands without a callback are now aborted after a while
