@@ -22,7 +22,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install dependencies
-      run: npm ci
+      run: npm install
     # The script will check if there are changes before updating the issue
     - name: Update CC table
       uses: ./.github/actions/gh-cc-table
