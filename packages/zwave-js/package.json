@@ -80,7 +80,7 @@
   "scripts": {
     "tsc": "tsc -p tsconfig.build.json",
     "build": "gulp build",
-    "clean": "npm run tsc -- --clean",
+    "clean": "tsc -b tsconfig.build.json --clean",
     "watch": "gulp prebuild && npm run tsc -- --watch"
   }
 }

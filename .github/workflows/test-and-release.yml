@@ -76,6 +76,10 @@ jobs:
     - name: Install dependencies
       run: npm install
 
+    # Compilation is necessary, or the tests won't run
+    - name: Compile TypeScript code
+      run: npx lerna run build
+
     - name: Run component tests
       run: npm run test:ci
       env:
@@ -108,6 +112,10 @@ jobs:
 
     - name: Install dependencies
       run: npm install
+
+    # Compilation is necessary, or the tests won't run
+    - name: Compile TypeScript code
+      run: npx lerna run build
 
     - name: Generate coverage
       run: npm run coverage:ci
