@@ -13,7 +13,8 @@ zwave-js-*.tgz
 /cache
 
 # Compiled source files
-/build
+**/build
+**/*.tsbuildinfo
 /*.d.ts
 /*.map
 # AUTO-GENERATED: secondary module exports

@@ -8,7 +8,7 @@ import * as fs from "fs-extra";
 import * as path from "path";
 
 // Find this project's root dir
-const projectRoot = path.join(__dirname, "..");
+const projectRoot = process.cwd();
 const packageJsonPath = path.join(projectRoot, "package.json");
 const gitIgnorePath = path.join(projectRoot, ".gitignore");
 // Define where the CC index file is located
@@ -52,7 +52,7 @@ export async function copyIndexFilesToRoot(): Promise<void> {
 		// Update relative paths
 		let fileContents = await fs.readFile(sourceFileName, "utf8");
 		fileContents = fileContents
-			.replace(/"\.\/lib\//g, '"./build/lib/')
+			.replace(/"\.\//g, '"./build/')
 			.replace(/"\.\.\/src\//g, '"./src/')
 			.replace(/"\.\.\/src"/g, '"./src"')
 			.replace(
@@ -90,7 +90,11 @@ export async function copyIndexFilesToRoot(): Promise<void> {
 	}
 
 	// Make sure the generated .js files are excluded in .gitignore
-	await ignoreFiles(filesInBuildDir.filter((file) => file.endsWith(".js")));
+	await ignoreFiles(
+		filesInBuildDir.filter(
+			(file) => file.endsWith(".js") || file.endsWith(".d.ts"),
+		),
+	);
 }
 
 export async function clean(): Promise<void> {
@@ -99,7 +103,7 @@ export async function clean(): Promise<void> {
 
 	// Find all files that we copied to the root
 	const packageJson = await fs.readJSON(packageJsonPath);
-	const rootFiles: string[] = packageJson.files.filter((f: string) =>
+	const rootFiles: string[] = (packageJson.files ?? []).filter((f: string) =>
 		/(\.d)?(\.[jt]s)(\.map)?$/.test(f),
 	);
 	// if (!rootFiles.length) return;
@@ -111,7 +115,7 @@ export async function clean(): Promise<void> {
 		}
 	}
 	// delete them from package.json -> files
-	packageJson.files = packageJson.files.filter(
+	packageJson.files = (packageJson.files ?? []).filter(
 		(f: string) => !rootFiles.includes(f),
 	);
 	await fs.writeJSON(packageJsonPath, packageJson, { spaces: 2 });

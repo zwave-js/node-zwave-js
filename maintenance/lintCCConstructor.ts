@@ -11,11 +11,8 @@ import {
 	applicationCCs,
 	CommandClasses,
 } from "../src/lib/commandclass/CommandClasses";
-import {
-	getCommandClassFromDecorator,
-	loadTSConfig,
-	projectRoot,
-} from "./shared";
+import { getCommandClassFromDecorator } from "./linterShared";
+import { loadTSConfig, projectRoot } from "./shared";
 
 // Configure which CCs are excluded from this check
 const whitelistedCCs: CommandClasses[] = [

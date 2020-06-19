@@ -6,16 +6,19 @@ import * as path from "path";
 import {
 	DeviceConfig,
 	loadDeviceIndexInternal,
-} from "../src/lib/config/Devices";
-import { loadIndicatorsInternal } from "../src/lib/config/Indicators";
-import { loadManufacturersInternal } from "../src/lib/config/Manufacturers";
-import { loadNotificationsInternal } from "../src/lib/config/Notifications";
+} from "../packages/config/src/Devices";
+import { loadIndicatorsInternal } from "../packages/config/src/Indicators";
+import { loadManufacturersInternal } from "../packages/config/src/Manufacturers";
+import { loadNotificationsInternal } from "../packages/config/src/Notifications";
 import {
 	loadNamedScales,
 	loadNamedScalesInternal,
-} from "../src/lib/config/Scales";
-import { loadSensorTypesInternal } from "../src/lib/config/SensorTypes";
-import { configDir, getDeviceEntryPredicate } from "../src/lib/config/utils";
+} from "../packages/config/src/Scales";
+import { loadSensorTypesInternal } from "../packages/config/src/SensorTypes";
+import {
+	configDir,
+	getDeviceEntryPredicate,
+} from "../packages/config/src/utils";
 import { getMinimumShiftForBitMask } from "../src/lib/util/misc";
 import { num2hex } from "../src/lib/util/strings";
 import { getIntegerLimits } from "../src/lib/values/Primitive";

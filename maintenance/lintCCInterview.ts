@@ -12,12 +12,8 @@ import {
 	CommandClasses,
 } from "../src/lib/commandclass/CommandClasses";
 import { getEnumMemberName } from "../src/lib/util/misc";
-import {
-	expressionToCommandClass,
-	getCommandClassFromDecorator,
-	loadTSConfig,
-	projectRoot,
-} from "./shared";
+import { expressionToCommandClass } from "./linterShared";
+import { loadTSConfig, projectRoot } from "./shared";
 
 function getRequiredInterviewCCsFromMethod(
 	sourceFile: ts.SourceFile,

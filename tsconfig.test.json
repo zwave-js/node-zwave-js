@@ -5,5 +5,8 @@
 		"target": "esnext",
 		"isolatedModules": true
 	},
-	"include": ["./**/*.test.ts", "./test/*.ts"]
+	"include": [
+		"packages/**/*.test.ts",
+		"./test/*.ts"
+	]
 }

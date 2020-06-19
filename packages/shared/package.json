@@ -1,0 +1,45 @@
+{
+  "name": "@zwave-js/shared",
+  "version": "3.8.5",
+  "description": "zwave-js: shared utilities",
+  "keywords": [],
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "author": {
+    "name": "AlCalzone",
+    "email": "d.griesel@gmx.net"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/AlCalzone/node-zwave-js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlCalzone/node-zwave-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AlCalzone/node-zwave-js/issues"
+  },
+  "funding": {
+    "url": "https://github.com/sponsors/AlCalzone/"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "devDependencies": {
+    "@fimbul/mithotyn": "^0.21.0",
+    "@fimbul/wotan": "^0.21.1",
+    "ts-node": "^8.9.1",
+    "typescript": "^3.9.4"
+  },
+  "dependencies": {
+    "alcalzone-shared": "^2.2.0"
+  },
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "watch": "npm run build -- --watch",
+    "check": "tsc -p tsconfig.build.json --composite false --noEmit",
+    "check:watch": "npm run check -- --watch",
+    "lint:ts": "eslint --ext .ts src",
+    "lint:wotan": "wotan",
+    "lint": "npm run lint:ts && npm run lint:wotan"
+  }
+}

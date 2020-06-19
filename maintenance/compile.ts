@@ -19,5 +19,5 @@ export function compile(settings?: ts.Settings) {
 }
 
 export function check() {
-	return compile({ noEmit: true });
+	return compile({ composite: false, noEmit: true });
 }

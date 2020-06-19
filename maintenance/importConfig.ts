@@ -25,11 +25,11 @@ import * as qs from "querystring";
 import {
 	DeviceConfig,
 	DeviceConfigIndexEntry,
-} from "../src/lib/config/Devices";
+} from "../packages/config/src/Devices";
 import {
 	loadManufacturers,
 	lookupManufacturer,
-} from "../src/lib/config/Manufacturers";
+} from "../packages/config/src/Manufacturers";
 import { num2hex } from "../src/lib/util/strings";
 
 // Where the files are located

@@ -1,5 +1,6 @@
 {
-  "name": "zwave-js",
+  "name": "@zwave-js/repo",
+  "private": true,
   "version": "3.8.5",
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
@@ -113,6 +114,7 @@
     "jest": "^26.0.1",
     "jest-circus": "^25.4.0",
     "jest-extended": "^0.11.5",
+    "lerna": "^3.3.0",
     "mockdate": "2.0.5",
     "prettier": "^2.0.5",
     "semver": "^7.3.2",
