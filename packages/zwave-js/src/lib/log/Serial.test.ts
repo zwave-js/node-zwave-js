@@ -1,7 +1,7 @@
+import { assertMessage, SpyTransport } from "@zwave-js/core";
 import colors from "ansi-colors";
 import { pseudoRandomBytes } from "crypto";
 import winston from "winston";
-import { assertMessage, SpyTransport } from "../../../test/SpyTransport";
 import log from "./index";
 import { restoreSilence } from "./shared";
 

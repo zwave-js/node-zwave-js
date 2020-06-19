@@ -4,7 +4,7 @@ import path from "path";
 import * as semver from "semver";
 import type { DeviceConfigIndexEntry } from "./Devices";
 
-export const configDir = path.resolve(__dirname, "../../..", "config");
+export const configDir = path.resolve(__dirname, "../config");
 export const hexKeyRegexNDigits = /^0x[a-fA-F0-9]+$/;
 export const hexKeyRegex4Digits = /^0x[a-fA-F0-9]{4}$/;
 export const hexKeyRegex2Digits = /^0x[a-fA-F0-9]{2}$/;

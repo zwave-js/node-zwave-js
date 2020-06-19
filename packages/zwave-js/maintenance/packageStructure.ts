@@ -52,7 +52,7 @@ export async function copyIndexFilesToRoot(): Promise<void> {
 		// Update relative paths
 		let fileContents = await fs.readFile(sourceFileName, "utf8");
 		fileContents = fileContents
-			.replace(/"\.\//g, '"./build/')
+			.replace(/"\.\/lib\//g, '"./build/lib/')
 			.replace(/"\.\.\/src\//g, '"./src/')
 			.replace(/"\.\.\/src"/g, '"./src"')
 			.replace(

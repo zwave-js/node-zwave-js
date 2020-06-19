@@ -1,4 +1,4 @@
-import { assertZWaveError } from "../../../test/util";
+import { assertZWaveError } from "@zwave-js/core";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { Duration } from "./Duration";
 

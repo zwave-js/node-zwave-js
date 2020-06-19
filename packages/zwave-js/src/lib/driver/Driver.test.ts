@@ -1,12 +1,17 @@
 // load the driver with stubbed out Serialport
-import { CommandClasses, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import {
+	assertZWaveError,
+	CommandClasses,
+	SecurityManager,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
 import {
 	MockRequestMessageWithExpectation,
 	MockRequestMessageWithoutExpectation,
 	MockResponseMessage,
 	MockSerialPort,
-} from "../../../test/mocks";
-import { assertZWaveError } from "../../../test/util";
+} from "../../../../../test/mocks";
 import {
 	AssociationCCReport,
 	AssociationCommand,
@@ -25,7 +30,6 @@ import {
 import { MessageHeaders, MessageType } from "../message/Constants";
 import { Message, messageTypes } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
-import { SecurityManager } from "../security/Manager";
 import { Driver } from "./Driver";
 
 jest.mock("serialport", () => MockSerialPort);

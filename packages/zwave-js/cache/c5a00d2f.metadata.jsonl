@@ -1,0 +1,6 @@
+{"k":"{\"nodeId\":1,\"commandClass\":114,\"endpoint\":0,\"property\":\"manufacturerId\"}","v":{"type":"number","readable":true,"writeable":false,"min":0,"max":65535,"label":"Manufacturer ID"}}
+{"k":"{\"nodeId\":1,\"commandClass\":114,\"endpoint\":0,\"property\":\"productType\"}","v":{"type":"number","readable":true,"writeable":false,"min":0,"max":65535,"label":"Product type"}}
+{"k":"{\"nodeId\":1,\"commandClass\":114,\"endpoint\":0,\"property\":\"productId\"}","v":{"type":"number","readable":true,"writeable":false,"min":0,"max":65535,"label":"Product ID"}}
+{"k":"{\"nodeId\":19,\"commandClass\":132,\"endpoint\":0,\"property\":\"wakeUpInterval\"}","v":{"type":"number","readable":false,"writeable":true,"min":240,"max":3600,"steps":60,"default":3600}}
+{"k":"{\"nodeId\":19,\"commandClass\":48,\"endpoint\":0,\"property\":\"Any\"}","v":{"type":"boolean","readable":true,"writeable":false}}
+{"k":"{\"nodeId\":19,\"commandClass\":49,\"endpoint\":0,\"property\":\"Air temperature\"}","v":{"type":"number","readable":true,"writeable":false,"unit":"°C","label":"Air temperature"}}

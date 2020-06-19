@@ -38,6 +38,10 @@ function findExports() {
 		const relativePath = path
 			.relative(projectRoot, sourceFile.fileName)
 			.replace(/\\/g, "/");
+
+		// Only look at files in this package
+		if (relativePath.startsWith("..")) continue;
+
 		// Only look at the commandclass dir
 		if (!relativePath.includes("/commandclass/")) {
 			continue;

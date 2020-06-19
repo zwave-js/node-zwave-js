@@ -4,15 +4,15 @@
  * so values can be mapped from the root endpoint to endpoint 1.
  */
 
+import { applicationCCs, CommandClasses } from "@zwave-js/core";
 import { blue, green, red, yellow } from "ansi-colors";
 import * as path from "path";
 import ts from "typescript";
 import {
-	applicationCCs,
-	CommandClasses,
-} from "../src/lib/commandclass/CommandClasses";
-import { getCommandClassFromDecorator } from "./linterShared";
-import { loadTSConfig, projectRoot } from "./shared";
+	getCommandClassFromDecorator,
+	loadTSConfig,
+	projectRoot,
+} from "./shared";
 
 // Configure which CCs are excluded from this check
 const whitelistedCCs: CommandClasses[] = [
@@ -99,11 +99,15 @@ export function lintCCConstructors(): Promise<void> {
 		const relativePath = path
 			.relative(projectRoot, sourceFile.fileName)
 			.replace(/\\/g, "/");
+
+		// Only look at files in this package
+		if (relativePath.startsWith("..")) continue;
+
 		// Only look at the commandclass dir
 		if (!relativePath.includes("/commandclass/")) {
 			continue;
 		}
-		// Ignore test files and the index
+		// Ignore test files, compiled files and the index
 		if (
 			relativePath.endsWith(".test.ts") ||
 			relativePath.endsWith("index.ts") ||

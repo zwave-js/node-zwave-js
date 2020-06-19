@@ -1,27 +1,16 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { getIntegerLimits, getMinimumShiftForBitMask } from "@zwave-js/core";
+import { num2hex } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
 import { green, red, white, yellow } from "ansi-colors";
 import { readFile } from "fs-extra";
 import * as path from "path";
-import {
-	DeviceConfig,
-	loadDeviceIndexInternal,
-} from "../packages/config/src/Devices";
-import { loadIndicatorsInternal } from "../packages/config/src/Indicators";
-import { loadManufacturersInternal } from "../packages/config/src/Manufacturers";
-import { loadNotificationsInternal } from "../packages/config/src/Notifications";
-import {
-	loadNamedScales,
-	loadNamedScalesInternal,
-} from "../packages/config/src/Scales";
-import { loadSensorTypesInternal } from "../packages/config/src/SensorTypes";
-import {
-	configDir,
-	getDeviceEntryPredicate,
-} from "../packages/config/src/utils";
-import { getMinimumShiftForBitMask } from "../src/lib/util/misc";
-import { num2hex } from "../src/lib/util/strings";
-import { getIntegerLimits } from "../src/lib/values/Primitive";
+import { DeviceConfig, loadDeviceIndexInternal } from "../src/Devices";
+import { loadIndicatorsInternal } from "../src/Indicators";
+import { loadManufacturersInternal } from "../src/Manufacturers";
+import { loadNotificationsInternal } from "../src/Notifications";
+import { loadNamedScales, loadNamedScalesInternal } from "../src/Scales";
+import { loadSensorTypesInternal } from "../src/SensorTypes";
+import { configDir, getDeviceEntryPredicate } from "../src/utils";
 
 async function lintNotifications(): Promise<void> {
 	await loadNotificationsInternal();
@@ -481,4 +470,4 @@ export async function lintConfigFiles(): Promise<void> {
 	}
 }
 
-if (!module.parent) lintConfigFiles();
+if (!module.parent) void lintConfigFiles();

@@ -17,14 +17,3 @@ zwave-js-*.tgz
 **/*.tsbuildinfo
 /*.d.ts
 /*.map
-# AUTO-GENERATED: secondary module exports
-/CommandClass.js
-/Controller.js
-/Driver.js
-/Error.js
-/Node.js
-/Utils.js
-/Values.js
-/index.js
-
-# Some other stuff

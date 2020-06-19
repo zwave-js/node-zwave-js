@@ -1,9 +1,9 @@
+import { loadManufacturers } from "@zwave-js/config";
 import { CommandClasses } from "@zwave-js/core";
-import { createEmptyMockDriver } from "../../../test/mocks";
-import { assertCC } from "../../../test/util";
+import { createEmptyMockDriver } from "../../../../../test/mocks";
 import { ZWaveNode } from "../../lib/node/Node";
-import { loadManufacturers } from "../config/Manufacturers";
 import type { Driver } from "../driver/Driver";
+import { assertCC } from "../test/assertCC";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import {
 	ManufacturerSpecificCC,

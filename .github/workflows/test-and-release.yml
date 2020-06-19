@@ -39,14 +39,14 @@ jobs:
       run: npm ci
 
     - name: Perform a type check
-      run: npx gulp check
+      run: npx lerna run check
       env:
         CI: true
 
     - name: Lint TypeScript code
-      run: npm run lint
+      run: npx lerna run lint
     - name: Lint config files
-      run: npm run lint:config
+      run: npx lerna run lint:config
 
   # ===================
 
@@ -74,10 +74,10 @@ jobs:
       run: npm ci
 
     - name: Compile TypeScript code
-      run: npx gulp build
+      run: npx lerna run build
     
     - name: Import main entry point
-      run: node -e 'require("./")'
+      run: node -e 'require("./packages/zwave-js")'
 
   # ===================
 
@@ -190,7 +190,7 @@ jobs:
       run: npm ci
 
     - name: Create a clean build
-      run: npx gulp build
+      run: npx lerna gulp build
 
     - name: Publish package to npm
       run: |

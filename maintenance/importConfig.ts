@@ -5,13 +5,18 @@
  */
 
 /* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable @typescript-eslint/camelcase */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 process.on("unhandledRejection", (r) => {
 	throw r;
 });
 
+import {
+	DeviceConfig,
+	DeviceConfigIndexEntry,
+	loadManufacturers,
+	lookupManufacturer,
+} from "@zwave-js/config";
+import { num2hex } from "@zwave-js/shared";
 import { composeObject, entries } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
 import { isArray } from "alcalzone-shared/typeguards";
@@ -22,19 +27,14 @@ import * as fs from "fs-extra";
 import * as JSON5 from "json5";
 import * as path from "path";
 import * as qs from "querystring";
-import {
-	DeviceConfig,
-	DeviceConfigIndexEntry,
-} from "../packages/config/src/Devices";
-import {
-	loadManufacturers,
-	lookupManufacturer,
-} from "../packages/config/src/Manufacturers";
-import { num2hex } from "../src/lib/util/strings";
 
 // Where the files are located
-const importDir = path.join(__dirname, "..", "config/import");
-const processedDir = path.join(__dirname, "..", "config/devices");
+const importDir = path.join(__dirname, "../packages/config", "config/import");
+const processedDir = path.join(
+	__dirname,
+	"../packages/config",
+	"config/devices",
+);
 const importedManufacturersPath = path.join(importDir, "manufacturers.json");
 const ownManufacturersPath = path.join(importDir, "../manufacturers.json");
 const ownManufacturers = JSON5.parse(
@@ -434,7 +434,7 @@ async function generateDeviceIndex(): Promise<void> {
 				})),
 			);
 		} catch (e) {
-			console.error(`config/devices/${relativePath}:`);
+			console.error(`packages/config/config/devices/${relativePath}:`);
 			console.error(
 				red(`[ERROR] invalid device config file: ${e.message}`),
 			);
@@ -480,7 +480,7 @@ async function updateManufacturerNames(): Promise<void> {
 	}
 }
 
-(async () => {
+void (async () => {
 	if (process.argv.includes("manufacturers")) {
 		await downloadManufacturers();
 	} else if (process.argv.includes("manufacturerNames")) {

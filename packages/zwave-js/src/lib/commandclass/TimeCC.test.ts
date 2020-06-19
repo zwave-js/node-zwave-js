@@ -1,5 +1,5 @@
 import { CommandClasses } from "@zwave-js/core";
-import { createEmptyMockDriver } from "../../../test/mocks";
+import { createEmptyMockDriver } from "../../../../../test/mocks";
 import type { Driver } from "../driver/Driver";
 import {
 	TimeCC,

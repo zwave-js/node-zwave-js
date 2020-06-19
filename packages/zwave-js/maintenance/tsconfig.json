@@ -9,6 +9,6 @@
 		"rootDir": "../"
 	},
 	"include": [
-		"*.ts",
+		"*.ts"
 	]
 }

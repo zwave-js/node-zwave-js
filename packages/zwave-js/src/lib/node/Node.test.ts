@@ -1,16 +1,19 @@
 import {
+	assertZWaveError,
 	BasicDeviceClasses,
 	CommandClasses,
 	DeviceClass,
 	GenericDeviceClass,
 	GenericDeviceClasses,
+	NodeUpdatePayload,
 	SpecificDeviceClass,
 	unknownBoolean,
+	ValueDB,
+	ValueID,
 	ValueMetadata,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { createEmptyMockDriver } from "../../../test/mocks";
-import { assertCC, assertZWaveError } from "../../../test/util";
+import { createEmptyMockDriver } from "../../../../../test/mocks";
 import { BasicCC, BasicCommand } from "../commandclass/BasicCC";
 import {
 	BinarySwitchCCReport,
@@ -33,12 +36,11 @@ import {
 } from "../controller/GetRoutingInfoMessages";
 import { SendDataRequest } from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
+import { assertCC } from "../test/assertCC";
 import { ZWaveNode } from "./Node";
-import type { NodeUpdatePayload } from "./NodeInfo";
 import { RequestNodeInfoRequest } from "./RequestNodeInfoMessages";
 import { InterviewStage, NodeStatus } from "./Types";
 import type { ZWaveNodeEvents } from "./Types";
-import { ValueDB, ValueID } from "./ValueDB";
 
 /** This is an ugly hack to be able to test the private methods without resorting to @internal */
 class TestNode extends ZWaveNode {

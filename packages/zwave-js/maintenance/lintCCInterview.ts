@@ -4,16 +4,17 @@
  * the interview for application CCs on the root endpoint is deferred
  */
 
+import { applicationCCs, CommandClasses } from "@zwave-js/core";
+import { getEnumMemberName } from "@zwave-js/shared";
 import { red, yellow } from "ansi-colors";
 import * as path from "path";
 import ts from "typescript";
 import {
-	applicationCCs,
-	CommandClasses,
-} from "../src/lib/commandclass/CommandClasses";
-import { getEnumMemberName } from "../src/lib/util/misc";
-import { expressionToCommandClass } from "./linterShared";
-import { loadTSConfig, projectRoot } from "./shared";
+	expressionToCommandClass,
+	getCommandClassFromDecorator,
+	loadTSConfig,
+	projectRoot,
+} from "./shared";
 
 function getRequiredInterviewCCsFromMethod(
 	sourceFile: ts.SourceFile,
@@ -49,6 +50,10 @@ export function lintCCInterview(): Promise<void> {
 		const relativePath = path
 			.relative(projectRoot, sourceFile.fileName)
 			.replace(/\\/g, "/");
+
+		// Only look at files in this package
+		if (relativePath.startsWith("..")) continue;
+
 		// Only look at the commandclass dir
 		if (!relativePath.includes("/commandclass/")) {
 			continue;

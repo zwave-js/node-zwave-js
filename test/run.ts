@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Driver } from "../src/index";
+import { Driver } from "zwave-js";
 
 const driver = new Driver("COM4", {
 	// prettier-ignore

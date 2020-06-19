@@ -7,7 +7,6 @@
 			}
 		],
 		// Monorepo setup
-		"composite": true,
 		"baseUrl": "./packages",
 		"paths": {
 			"@zwave-js/config": [
@@ -20,6 +19,8 @@
 				"shared/src"
 			],
 		},
+		"noEmit": true,
+		"declaration": false,
 		// To enable Babel support
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
@@ -49,24 +50,22 @@
 		]
 	},
 	"include": [
-		"packages/**/*.ts",
-		"src/**/*.ts",
 		"maintenance/**/*.ts",
 		"test/**/*.ts",
 	],
 	"exclude": [
-		"**/build/**",
-		"**/node_modules/**"
+		"node_modules/**",
+		"packages/**/node_modules"
+	],
+	"references": [
+		{
+			"path": "packages/config/tsconfig.build.json"
+		},
+		{
+			"path": "packages/core/tsconfig.build.json"
+		},
+		{
+			"path": "packages/shared/tsconfig.build.json"
+		},
 	]
-	// "references": [
-	// 	{
-	// 		"path": "packages/config"
-	// 	},
-	// 	{
-	// 		"path": "packages/core"
-	// 	},
-	// 	{
-	// 		"path": "packages/shared"
-	// 	},
-	// ]
 }

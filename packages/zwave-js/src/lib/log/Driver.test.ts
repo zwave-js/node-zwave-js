@@ -1,14 +1,10 @@
+import { assertLogInfo, assertMessage, SpyTransport } from "@zwave-js/core";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import colors from "ansi-colors";
 import MockDate from "mockdate";
 import winston from "winston";
-import { createEmptyMockDriver } from "../../../test/mocks";
-import {
-	assertLogInfo,
-	assertMessage,
-	SpyTransport,
-} from "../../../test/SpyTransport";
+import { createEmptyMockDriver } from "../../../../../test/mocks";
 import type { Driver } from "../driver/Driver";
 import { Transaction } from "../driver/Transaction";
 import {

@@ -1,4 +1,4 @@
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
+import type { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 
 export interface AssertZWaveErrorOptions {
 	messageMatches?: string | RegExp;
@@ -16,12 +16,16 @@ export function assertZWaveError<T>(
 ): T extends () => PromiseLike<any> ? Promise<void> : void {
 	const { messageMatches, errorCode } = options;
 
+	function _assertZWaveError(e: any): asserts e is ZWaveError {
+		expect(e.constructor.name).toBe("ZWaveError");
+		expect(e.code).toBeNumber();
+	}
+
 	function handleError(e: any): void {
-		expect(e).toBeInstanceOf(ZWaveError);
+		_assertZWaveError(e);
 		if (messageMatches != undefined)
-			expect((e as ZWaveError).message).toMatch(messageMatches);
-		if (errorCode != undefined)
-			expect((e as ZWaveError).code).toBe(errorCode);
+			expect(e.message).toMatch(messageMatches);
+		if (errorCode != undefined) expect(e.code).toBe(errorCode);
 	}
 	function fail(): never {
 		// We should not be here

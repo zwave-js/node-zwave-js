@@ -1,4 +1,4 @@
-import { createEmptyMockDriver } from "../../../test/mocks";
+import { createEmptyMockDriver } from "../../../../../test/mocks";
 import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { MultiCommandCC } from "../commandclass/MultiCommandCC";

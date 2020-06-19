@@ -1,6 +1,6 @@
 import { loadMetersInternal } from "@zwave-js/config";
 import { CommandClasses } from "@zwave-js/core";
-import { createEmptyMockDriver } from "../../../test/mocks";
+import { createEmptyMockDriver } from "../../../../../test/mocks";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import {

@@ -1,4 +1,4 @@
-import { createEmptyMockDriver } from "../../../test/mocks";
+import { createEmptyMockDriver } from "../../../../../test/mocks";
 import type { Driver } from "../driver/Driver";
 import { BasicCCSet } from "./BasicCC";
 import type { CommandClass } from "./CommandClass";
