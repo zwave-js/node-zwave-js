@@ -37,6 +37,8 @@
 				"--inspect-brk=9229",
 				"-r",
 				"ts-node/register/transpile-only.js",
+				"-r",
+				"tsconfig-paths/register",
 				"${workspaceFolder}/test/run.ts"
 			],
 			"env": {
