@@ -1,22 +1,19 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { EventEmitter } from "events";
 import type SerialPort from "serialport";
-import { getImplementedVersion } from "../src/lib/commandclass/CommandClass";
-import type { CommandClasses } from "../src/lib/commandclass/CommandClasses";
-import { SendDataRequest } from "../src/lib/controller/SendDataMessages";
-import type { Driver } from "../src/lib/driver/Driver";
+import type { CommandClasses, Driver, ZWaveNode } from "zwave-js/src";
+import { getImplementedVersion } from "zwave-js/src/lib/commandclass/CommandClass";
+import { SendDataRequest } from "zwave-js/src/lib/controller/SendDataMessages";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "../src/lib/message/Constants";
+} from "zwave-js/src/lib/message/Constants";
 import {
 	expectedResponse,
 	Message,
 	messageTypes,
 	priority,
-} from "../src/lib/message/Message";
-import type { ZWaveNode } from "../src/lib/node/Node";
+} from "zwave-js/src/lib/message/Message";
 
 const instances = new Map<string, MockSerialPort>();
 
@@ -102,7 +99,7 @@ export class MockResponseMessage extends Message {}
 
 export const mockDriverDummyCallbackId = 0xfe;
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function createEmptyMockDriver() {
 	const ret = {
 		sendMessage: jest.fn().mockImplementation(() => Promise.resolve()),

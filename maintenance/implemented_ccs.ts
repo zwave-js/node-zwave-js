@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 require("reflect-metadata");
+import { CommandClasses } from "@zwave-js/core";
+import { num2hex } from "@zwave-js/shared";
 import * as c from "ansi-colors";
 import * as clipboard from "clipboardy";
 import * as fs from "fs-extra";
 import * as path from "path";
 import * as yargs from "yargs";
-import { CommandClasses } from "../src/lib/commandclass/CommandClasses";
-import { num2hex } from "../src/lib/util/strings";
 
 const ccRegex = /^@commandClass\(CommandClasses(?:\.|\[")(.+?)(?:"\])?\)/m;
 const versionRegex = /^@implementedVersion\((\d+)\)/m;
@@ -35,7 +35,11 @@ interface CCInfo {
 }
 
 (async () => {
-	const ccDir = path.join(__dirname, "..", "src/lib/commandclass");
+	const ccDir = path.join(
+		__dirname,
+		"..",
+		"packages/zwave-js/src/lib/commandclass",
+	);
 	const ccFiles = (await fs.readdir(ccDir))
 		.filter((file) => file.endsWith(".ts") && !file.endsWith("test.ts"))
 		.map((file) => path.join(ccDir, file));
@@ -305,10 +309,8 @@ const ccVersions: Record<
 	"0x5E": { version: 2 },
 };
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function getLatestVersion(ccName: string) {
 	const cc = (CommandClasses[ccName as any] as any) as number;
-	// eslint-disable-next-line @typescript-eslint/no-use-before-define
 	const version = ccVersions[num2hex(cc, true)];
 	if (version == undefined) {
 		return { version: 0, obsolete: true };

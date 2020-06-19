@@ -4,26 +4,15 @@ node_modules/
 *.test.js
 /.nyc_output
 coverage/
-*.map
 
 # npm packet files
 zwave-js-*.tgz
 
 # ZWave cache
-/cache
+**/cache
 
 # Compiled source files
-/build
-/*.d.ts
-/*.map
-# AUTO-GENERATED: secondary module exports
-/CommandClass.js
-/Controller.js
-/Driver.js
-/Error.js
-/Node.js
-/Utils.js
-/Values.js
-/index.js
-
-# Some other stuff
+**/build
+**/*.tsbuildinfo
+*.d.ts
+*.map

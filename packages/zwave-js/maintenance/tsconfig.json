@@ -1,0 +1,14 @@
+{
+	"extends": "../tsconfig.json",
+	"compileOnSave": true,
+	"compilerOptions": {
+		"module": "commonjs",
+		"moduleResolution": "node",
+		// "noImplicitAny": true,
+		"target": "es2015",
+		"rootDir": "../"
+	},
+	"include": [
+		"*.ts"
+	]
+}

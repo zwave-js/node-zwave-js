@@ -17,45 +17,10 @@ on:
     pull_request: {}
 
 jobs:
-  # Performs quick checks before the expensive test runs
-  check-and-lint:
-    if: contains(github.event.head_commit.message, '[skip ci]') == false
-
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.x]
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-
-    - name: Install dependencies
-      run: npm ci
-
-    - name: Perform a type check
-      run: npx gulp check
-      env:
-        CI: true
-
-    - name: Lint TypeScript code
-      run: npm run lint
-    - name: Lint config files
-      run: npm run lint:config
-
-  # ===================
-
   # Tests if the library compiles
   build:
     if: contains(github.event.head_commit.message, '[skip ci]') == false
 
-    needs: [check-and-lint]
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -71,13 +36,19 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies
-      run: npm ci
+      run: npm install
 
     - name: Compile TypeScript code
-      run: npx gulp build
+      run: npx lerna run build
     
+    - name: Lint TypeScript code
+      run: npx lerna run lint
+
+    - name: Lint config files
+      run: npx lerna run lint:config
+
     - name: Import main entry point
-      run: node -e 'require("./")'
+      run: node -e 'require("./packages/zwave-js")'
 
   # ===================
 
@@ -85,7 +56,7 @@ jobs:
   unit-tests:
     if: contains(github.event.head_commit.message, '[skip ci]') == false
 
-    needs: [check-and-lint, build]
+    needs: [build]
 
     runs-on: ${{ matrix.os }}
     strategy:
@@ -103,7 +74,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies
-      run: npm ci
+      run: npm install
+
+    # Compilation is necessary, or the tests won't run
+    - name: Compile TypeScript code
+      run: npx lerna run build
 
     - name: Run component tests
       run: npm run test:ci
@@ -136,7 +111,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies
-      run: npm ci
+      run: npm install
+
+    # Compilation is necessary, or the tests won't run
+    - name: Compile TypeScript code
+      run: npx lerna run build
 
     - name: Generate coverage
       run: npm run coverage:ci
@@ -187,10 +166,10 @@ jobs:
         echo "::set-env name=BODY::$BODY"
 
     - name: Install dependencies
-      run: npm ci
+      run: npm install
 
     - name: Create a clean build
-      run: npx gulp build
+      run: npx lerna gulp build
 
     - name: Publish package to npm
       run: |

@@ -1,5 +1,4 @@
 {
-	"compileOnSave": true,
 	"compilerOptions": {
 		"plugins": [
 			{
@@ -7,20 +6,30 @@
 				"displayErrorsAsWarnings": true
 			}
 		],
-
+		// Monorepo setup
+		"baseUrl": "./packages",
+		"paths": {
+			"@zwave-js/config": [
+				"config/src"
+			],
+			"@zwave-js/core": [
+				"core/src"
+			],
+			"@zwave-js/shared": [
+				"shared/src"
+			],
+		},
+		"noEmit": true,
+		"declaration": false,
 		// To enable Babel support
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
 		"isolatedModules": true,
-
-		"noEmit": true,
-		"declaration": false,
 		"module": "commonjs",
 		"moduleResolution": "node",
 		"noEmitOnError": true,
 		"noImplicitAny": true,
 		"noImplicitThis": true,
-		"outDir": "build/",
 		"removeComments": false,
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": false,
@@ -33,15 +42,30 @@
 		"strictNullChecks": true,
 		"strictPropertyInitialization": true,
 		"strictBindCallApply": true,
-		"watch": false, // true breaks circleci
+		"watch": false, // true breaks CI scripts
 		"pretty": true,
-		"types": ["node", "jest-extended"]
+		"types": [
+			"node",
+			"jest-extended"
+		]
 	},
 	"include": [
-		"src/**/*.ts",
 		"maintenance/**/*.ts",
 		"test/**/*.ts",
-		"gulpfile.ts"
 	],
-	"exclude": ["build/**", "node_modules/**"]
+	"exclude": [
+		"node_modules/**",
+		"packages/**/node_modules"
+	],
+	"references": [
+		{
+			"path": "packages/config/tsconfig.build.json"
+		},
+		{
+			"path": "packages/core/tsconfig.build.json"
+		},
+		{
+			"path": "packages/shared/tsconfig.build.json"
+		},
+	]
 }
