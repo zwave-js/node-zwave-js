@@ -17,39 +17,9 @@ on:
     pull_request: {}
 
 jobs:
-  # Performs quick checks before the expensive test runs
-  check-and-lint:
-    if: contains(github.event.head_commit.message, '[skip ci]') == false
-
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.x]
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-
-    - name: Install dependencies
-      run: npm install
-
-    - name: Lint TypeScript code
-      run: npx lerna run lint
-    - name: Lint config files
-      run: npx lerna run lint:config
-
-  # ===================
-
   # Tests if the library compiles
   build:
     if: contains(github.event.head_commit.message, '[skip ci]') == false
-
-    needs: [check-and-lint]
 
     runs-on: ubuntu-latest
     strategy:
@@ -71,6 +41,12 @@ jobs:
     - name: Compile TypeScript code
       run: npx lerna run build
     
+    - name: Lint TypeScript code
+      run: npx lerna run lint
+
+    - name: Lint config files
+      run: npx lerna run lint:config
+
     - name: Import main entry point
       run: node -e 'require("./packages/zwave-js")'
 
