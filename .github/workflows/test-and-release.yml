@@ -56,7 +56,7 @@ jobs:
   unit-tests:
     if: contains(github.event.head_commit.message, '[skip ci]') == false
 
-    needs: [check-and-lint, build]
+    needs: [build]
 
     runs-on: ${{ matrix.os }}
     strategy:
