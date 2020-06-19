@@ -38,11 +38,6 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Perform a type check
-      run: npx lerna run check
-      env:
-        CI: true
-
     - name: Lint TypeScript code
       run: npx lerna run lint
     - name: Lint config files

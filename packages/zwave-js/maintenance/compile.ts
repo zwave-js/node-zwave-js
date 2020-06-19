@@ -17,7 +17,3 @@ export function compile(settings?: ts.Settings) {
 		)
 		.pipe(gulp.dest(tsProject.options.outDir!));
 }
-
-export function check() {
-	return compile({ composite: false, noEmit: true });
-}

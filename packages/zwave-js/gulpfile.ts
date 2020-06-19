@@ -1,5 +1,5 @@
 import { parallel, series } from "gulp";
-import { check as tscCheck, compile } from "./maintenance/compile";
+import { compile } from "./maintenance/compile";
 import { generateCCAPIInterface } from "./maintenance/generateCCAPIInterface";
 import { generateCCExports } from "./maintenance/generateCCExports";
 import { lintCCConstructors } from "./maintenance/lintCCConstructor";
@@ -11,7 +11,6 @@ const prebuild = series(
 	parallel(generateCCAPIInterface, generateCCExports),
 );
 
-const check = series(prebuild, tscCheck);
 const build = series(clean, prebuild, compile, copyIndexFilesToRoot);
 
-export { clean, check, prebuild, build, lintCCConstructors, lintCCInterview };
+export { clean, prebuild, build, lintCCConstructors, lintCCInterview };

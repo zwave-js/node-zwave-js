@@ -42,23 +42,10 @@
     "source-map-support": "^0.5.19",
     "winston": "^3.2.1"
   },
-  "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.9.0",
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/plugin-proposal-decorators": "^7.8.3",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
-    "@babel/plugin-proposal-numeric-separator": "^7.8.3",
-    "@babel/plugin-proposal-object-rest-spread": "^7.9.5",
-    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
-    "@babel/preset-env": "^7.10.2",
-    "@babel/preset-typescript": "^7.10.1"
-  },
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
+    "clean": "npm run build -- --clean",
     "watch": "npm run build -- --watch",
-    "check": "tsc -p tsconfig.build.json --composite false --noEmit",
-    "check:watch": "npm run check -- --watch",
     "lint:config": "gulp lintConfigFiles",
     "config": "ts-node maintenance/importConfig.ts"
   }
