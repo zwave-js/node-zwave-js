@@ -4,16 +4,15 @@ node_modules/
 *.test.js
 /.nyc_output
 coverage/
-*.map
 
 # npm packet files
 zwave-js-*.tgz
 
 # ZWave cache
-/cache
+**/cache
 
 # Compiled source files
 **/build
 **/*.tsbuildinfo
-/*.d.ts
-/*.map
+*.d.ts
+*.map
