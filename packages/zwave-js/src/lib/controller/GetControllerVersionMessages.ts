@@ -1,5 +1,4 @@
-import type { JSONObject } from "@zwave-js/shared";
-import { cpp2js } from "../../../../shared/src/strings";
+import { cpp2js, JSONObject } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import {
 	FunctionType,
