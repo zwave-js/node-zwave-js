@@ -78,9 +78,9 @@
     "winston": "^3.2.1"
   },
   "scripts": {
-    "tsc": "tsc -p tsconfig.build.json",
     "build": "gulp build",
     "clean": "tsc -b tsconfig.build.json --clean",
-    "watch": "gulp prebuild && npm run tsc -- --watch"
+    "prewatch": "gulp prebuild",
+    "watch": "tsc -b tsconfig.build.json --watch --pretty"
   }
 }
