@@ -4,6 +4,13 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+This project has been converted to a monorepo and split into the following packages:
+* `zwave-js`: As before, this is the main entry point for consumers
+* `@zwave-js/config`: The configuration files and methods to access them
+* `@zwave-js/core`: The core modules, which are shared between `zwave-js` and `@zwave-js/config`
+* `@zwave-js/shared`: Utility methods that are shared between all other packages.
+
 ## 3.8.5 (2020-06-18)
 ### Bugfixes
 * Overlapping `SendData(Multicast)` commands are now avoided

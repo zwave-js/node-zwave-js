@@ -1,9 +1,15 @@
 {
 	"packages": ["packages/*"],
-	"version": "independent",
+	"version": "3.8.5",
 	"command": {
 		"run": {
 			"stream": true
+		},
+		"version": {
+			"allowBranch": "master",
+			"ignoreChanges": ["*.md"],
+			"amend": true,
+			"push": false
 		}
 	}
 }

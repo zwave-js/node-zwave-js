@@ -1,47 +1,8 @@
 {
   "name": "@zwave-js/repo",
   "private": true,
-  "version": "3.8.5",
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
-  "main": "index.js",
-  "types": "index.d.ts",
-  "files": [
-    "CommandClass.d.ts",
-    "CommandClass.d.ts.map",
-    "CommandClass.js",
-    "CommandClass.js.map",
-    "Controller.d.ts",
-    "Controller.d.ts.map",
-    "Controller.js",
-    "Controller.js.map",
-    "Driver.d.ts",
-    "Driver.d.ts.map",
-    "Driver.js",
-    "Driver.js.map",
-    "Error.d.ts",
-    "Error.d.ts.map",
-    "Error.js",
-    "Error.js.map",
-    "Node.d.ts",
-    "Node.d.ts.map",
-    "Node.js",
-    "Node.js.map",
-    "Utils.d.ts",
-    "Utils.d.ts.map",
-    "Utils.js",
-    "Utils.js.map",
-    "Values.d.ts",
-    "Values.d.ts.map",
-    "Values.js",
-    "Values.js.map",
-    "build/**/*.{js,d.ts,map}",
-    "config/",
-    "index.d.ts",
-    "index.d.ts.map",
-    "index.js",
-    "index.js.map"
-  ],
   "author": {
     "name": "AlCalzone",
     "email": "d.griesel@gmx.net"
@@ -60,9 +21,6 @@
   },
   "funding": {
     "url": "https://github.com/sponsors/AlCalzone/"
-  },
-  "engines": {
-    "node": ">=10.0.0"
   },
   "devDependencies": {
     "@actions/core": "^1.2.3",
@@ -117,7 +75,7 @@
     "jest": "^26.0.1",
     "jest-circus": "^25.4.0",
     "jest-extended": "^0.11.5",
-    "lerna": "^3.3.0",
+    "lerna": "^3.22.1",
     "mockdate": "2.0.5",
     "prettier": "^2.0.5",
     "semver": "^7.3.2",
@@ -145,11 +103,14 @@
     "lint:ts": "eslint --ext .ts \"packages/**/src/**\"",
     "lint:wotan": "wotan",
     "lint": "npm run lint:ts && npm run lint:wotan",
-    "release": "release-script",
     "implemented_ccs": "ts-node maintenance/implemented_ccs.ts",
     "gh-cc-table": "npm run implemented_ccs -- --flavor=github --only-incomplete",
     "usbdebug": "cmd.exe /c \"test\\usbdebug.bat\"",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "release": "lerna version",
+    "preversion": "release-script --lerna-check",
+    "version": "release-script --lerna",
+    "__postversion": "git push && git push --tags"
   },
   "readme": "README.md",
   "husky": {

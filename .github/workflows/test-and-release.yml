@@ -175,7 +175,7 @@ jobs:
       run: |
         npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
         npm whoami
-        npm publish
+        npx lerna publish from-git
 
     - name: Create Github Release
       uses: actions/create-release@v1
@@ -198,5 +198,5 @@ jobs:
         export SENTRY_VERSION=zwave-js@${{ env.VERSION }}
         sentry-cli releases new $SENTRY_VERSION
         sentry-cli releases set-commits $SENTRY_VERSION --auto
-        sentry-cli releases files $SENTRY_VERSION upload-sourcemaps build/
+        sentry-cli releases files $SENTRY_VERSION upload-sourcemaps ./packages/*/build
         sentry-cli releases finalize $SENTRY_VERSION
