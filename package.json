@@ -92,7 +92,7 @@
     "zwave-js": "file:packages\\zwave-js"
   },
   "scripts": {
-    "watch": "cd packages/zwave-js && lerna run watch --scope=zwave-js",
+    "watch": "lerna run watch --parallel",
     "test:reset": "jest --clear-cache",
     "test:ts": "jest",
     "test:ci": "npm run test:ts -- --runInBand",
