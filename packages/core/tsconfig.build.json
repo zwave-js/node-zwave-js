@@ -1,8 +1,9 @@
+// tsconfig for building - only applies to the src directory
 {
-	"extends": "../../tsconfig.build.json",
+	"extends": "./tsconfig.json",
 	"compilerOptions": {
-		"rootDir": "./src",
-		"outDir": "./build",
+		"rootDir": "src",
+		"outDir": "build",
 	},
 	"references": [
 		{
@@ -13,6 +14,6 @@
 		"src/**/*.ts"
 	],
 	"exclude": [
-		"src/**/*.test.ts"
+		"src/**/*.test.ts",
 	]
 }

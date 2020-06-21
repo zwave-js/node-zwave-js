@@ -1,14 +1,15 @@
 {
 	"extends": "../tsconfig.json",
-	"compileOnSave": true,
-	"compilerOptions": {
-		"module": "commonjs",
-		"moduleResolution": "node",
-		// "noImplicitAny": true,
-		"target": "es2015",
-		"rootDir": "../"
-	},
+	"compilerOptions": {},
+	"references": [
+		{
+			"path": "../../shared/tsconfig.build.json"
+		},
+		{
+			"path": "../../core/tsconfig.build.json"
+		}
+	],
 	"include": [
-		"*.ts"
+		"**/*.ts"
 	]
 }
