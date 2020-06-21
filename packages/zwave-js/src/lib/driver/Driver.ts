@@ -1,5 +1,6 @@
 import { JsonlDB, JsonlDBOptions } from "@alcalzone/jsonl-db";
 import {
+	loadDeviceClasses,
 	loadDeviceIndex,
 	loadIndicators,
 	loadManufacturers,
@@ -449,6 +450,7 @@ export class Driver extends EventEmitter {
 					// Load the necessary configuration
 					log.driver.print("loading configuration...");
 					try {
+						await loadDeviceClasses();
 						await loadManufacturers();
 						await loadDeviceIndex();
 						await loadNotifications();
