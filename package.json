@@ -110,7 +110,7 @@
     "release": "lerna version",
     "preversion": "release-script --lerna-check",
     "version": "release-script --lerna",
-    "__postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags"
   },
   "readme": "README.md",
   "husky": {
