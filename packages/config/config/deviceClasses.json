@@ -1,5 +1,6 @@
+// This file defines the basic, generic and specific device classes of the
+// legacy Z-Wave standard (SDS10242)
 {
-	// Define the basic device classes
 	"basic": {
 		"0x01": "Controller",
 		"0x02": "Routing Slave",
@@ -9,11 +10,11 @@
 	"generic": {
 		"0x01": {
 			"label": "Remote Controller",
-			"controlledCCs": [
-				"0x20" // Basic
-			],
+			"controlledCCs": ["Basic"],
 			"specific": {
-				"0x01": { "label": "Portable Remote Controller" },
+				"0x01": {
+					"label": "Portable Remote Controller"
+				},
 				"0x02": {
 					"label": "Portable Scene Controller",
 					"supportedCCs": [
@@ -21,7 +22,7 @@
 						"Scene Controller Configuration",
 						"Manufacturer Specific"
 					],
-					"controlledCCs": ["Basic", "Scene Activation"]
+					"controlledCCs": ["Scene Activation"]
 				},
 				"0x03": {
 					"label": "Portable Installer Tool",
@@ -46,99 +47,586 @@
 		},
 		"0x02": {
 			"label": "Static Controller",
-			"specific": {}
+			"controlledCCs": ["Basic"],
+			"specific": {
+				"0x01": {
+					"label": "PC Controller"
+				},
+				"0x02": {
+					"label": "Scene Controller",
+					"supportedCCs": [
+						"Association",
+						"Basic",
+						"Manufacturer Specific",
+						"Scene Controller Configuration"
+					],
+					"controlledCCs": ["Scene Activation"]
+				},
+				"0x03": {
+					"label": "Static Installer Tool",
+					"supportedCCs": [
+						"Controller Replication",
+						"Multi Command",
+						"Manufacturer Specific",
+						"Version"
+					],
+					"controlledCCs": [
+						"Association",
+						"Configuration",
+						"Controller Replication",
+						"Multi Channel",
+						"Multi Channel Association",
+						"Manufacturer Specific",
+						"Version",
+						"Wake Up"
+					]
+				},
+				"0x07": {
+					"label": "Gateway",
+					"supportedCCs": [
+						"Manufacturer Specific",
+						"Security",
+						"Version"
+					],
+					"controlledCCs": ["Security", "Multi Channel"]
+				}
+			}
 		},
 		"0x03": {
 			"label": "AV Control Point",
-			"specific": {}
+			"supportedCCs": ["Basic"],
+			"specific": {
+				"0x04": {
+					"label": "Satellite Receiver",
+					"supportedCCs": [
+						"Simple AV Control",
+						"Manufacturer Specific",
+						"Version"
+					]
+				},
+				"0x11": {
+					"label": "Satellite Receiver V2",
+					"supportedCCs": [
+						"Simple AV Control",
+						"Manufacturer Specific",
+						"Version"
+					]
+				},
+				"0x12": {
+					"label": "Doorbell",
+					"supportedCCs": [
+						"Binary Sensor",
+						"Association",
+						"Manufacturer Specific",
+						"Version"
+					]
+				}
+			}
 		},
 		"0x04": {
 			"label": "Display",
-			"specific": {}
+			"supportedCCs": ["Basic"],
+			"specific": {
+				"0x01": {
+					"label": "Simple Display",
+					"supportedCCs": [
+						"Screen Attributes",
+						"Screen Meta Data",
+						"Manufacturer Specific",
+						"Version"
+					]
+				}
+			}
 		},
 		"0x05": {
 			"label": "Network Extender",
-			"specific": {}
+			"specific": {
+				"0x01": {
+					"label": "Secure Extender"
+				}
+			}
 		},
 		"0x06": {
 			"label": "Appliance",
-			"specific": {}
+			"specific": {
+				"0x01": {
+					"label": "General Appliance"
+				},
+				"0x02": {
+					"label": "Kitchen Appliance"
+				},
+				"0x03": {
+					"label": "Laundry Appliance"
+				}
+			}
 		},
 		"0x07": {
 			"label": "Notification Sensor",
-			"specific": {}
+			"specific": {
+				"0x01": {
+					"label": "Notification Sensor"
+				}
+			}
 		},
 		"0x08": {
 			"label": "Thermostat",
-			"specific": {}
+			"specific": {
+				"0x01": {
+					"label": "Thermostat Heating"
+				},
+				"0x02": {
+					"label": "Thermostat General",
+					"supportedCCs": [
+						"Manufacturer Specific",
+						"Thermostat Mode",
+						"Thermostat Setpoint"
+					]
+				},
+				"0x03": {
+					"label": "Setback Schedule Thermostat",
+					"supportedCCs": [
+						"Climate Control Schedule",
+						"Manufacturer Specific",
+						"Multi Command",
+						"Version"
+						// TODO: If battery-powered: Basic, Wake Up
+					],
+					"controlledCCs": [
+						"Climate Control Schedule",
+						"Multi Command",
+						"Clock"
+					]
+				},
+				"0x04": {
+					"label": "Setpoint Thermostat",
+					"supportedCCs": [
+						"Manufacturer Specific",
+						"Multi Command",
+						"Thermostat Setpoint",
+						"Version"
+						// TODO: If battery-powered: Basic, Wake Up V2
+					]
+				},
+				"0x05": {
+					"label": "Setback Thermostat",
+					"supportedCCs": [
+						"Manufacturer Specific",
+						"Thermostat Mode",
+						"Thermostat Setpoint",
+						"Thermostat Setback",
+						"Version"
+						// TODO: If battery-powered: Basic, Wake Up V2, Multi Command
+					]
+				},
+				"0x06": {
+					"label": "Thermostat General V2",
+					"supportedCCs": [
+						"Basic",
+						"Manufacturer Specific",
+						"Thermostat Mode",
+						"Thermostat Setpoint",
+						"Version"
+					]
+				}
+			}
 		},
 		"0x09": {
 			"label": "Window Covering",
-			"specific": {}
+			"specific": {
+				"0x01": {
+					"label": "Simple Window Covering Control",
+					"supportedCCs": ["Basic Window Covering"]
+				}
+			}
 		},
 		"0x0f": {
 			"label": "Repeater Slave",
-			"specific": {}
+			"supportedCCs": ["Basic"],
+			"specific": {
+				"0x01": {
+					"label": "Basic Repeater Slave"
+				}
+			}
 		},
 		"0x10": {
 			"label": "Binary Switch",
-			"specific": {}
+			"supportedCCs": ["Basic", "Binary Switch"],
+			"specific": {
+				"0x01": {
+					"label": "Binary Power Switch",
+					"supportedCCs": ["All Switch"]
+				},
+				"0x02": {
+					"label": "Binary Tunable Color Light",
+					"supportedCCs": [
+						"All Switch",
+						"Manufacturer Specific",
+						"Color Switch"
+					]
+				},
+				"0x03": {
+					"label": "Binary Scene Switch",
+					"supportedCCs": [
+						"All Switch",
+						"Manufacturer Specific",
+						"Scene Activation",
+						"Scene Actuator Configuration"
+					]
+				},
+				"0x07": {
+					"label": "Irrigation Control"
+				}
+			}
 		},
 		"0x11": {
 			"label": "Multilevel Switch",
-			"specific": {}
+			"supportedCCs": ["Basic", "Multilevel Switch"],
+			"specific": {
+				"0x01": {
+					"label": "Multilevel Power Switch",
+					"supportedCCs": ["All Switch"]
+				},
+				"0x03": {
+					"label": "Multiposition Motor",
+					"supportedCCs": ["Manufacturer Specific", "Version"]
+				},
+				"0x04": {
+					"label": "Multilevel Scene Switch",
+					"supportedCCs": [
+						"All Switch",
+						"Scene Activation",
+						"Scene Actuator Configuration",
+						"Manufacturer Specific"
+					]
+				},
+				"0x05": {
+					"label": "Motor Control Class A",
+					"supportedCCs": [
+						"Binary Switch",
+						"Multilevel Switch", // V3
+						"Manufacturer Specific",
+						"Version"
+					]
+				},
+				"0x06": {
+					"label": "Motor Control Class B",
+					"supportedCCs": [
+						"Binary Switch",
+						"Multilevel Switch", // V3
+						"Manufacturer Specific",
+						"Version"
+					]
+				},
+				"0x07": {
+					"label": "Motor Control Class C",
+					"supportedCCs": [
+						"Binary Switch",
+						"Multilevel Switch", // V3
+						"Manufacturer Specific",
+						"Version"
+					]
+				}
+			}
 		},
 		"0x12": {
 			"label": "Remote Switch",
-			"specific": {}
+			"controlledCCs": ["Basic"],
+			"specific": {
+				"0x01": {
+					"label": "Binary Remote Switch",
+					"controlledCCs": ["Binary Switch"]
+				},
+				"0x02": {
+					"label": "Multilevel Remote Switch",
+					"controlledCCs": ["Multilevel Switch"]
+				},
+				"0x03": {
+					"label": "Binary Toggle Remote Switch",
+					"controlledCCs": ["Binary Toggle Switch"]
+				},
+				"0x04": {
+					"label": "Multilevel Toggle Remote Switch",
+					"controlledCCs": ["Multilevel Toggle Switch"]
+				}
+			}
 		},
 		"0x13": {
 			"label": "Toggle Switch",
-			"specific": {}
+			"supportedCCs": ["Basic"],
+			"specific": {
+				"0x01": {
+					"label": "Binary Toggle Switch",
+					"supportedCCs": ["Binary Switch", "Binary Toggle Switch"]
+				},
+				"0x02": {
+					"label": "Multilevel Toggle Switch",
+					"supportedCCs": [
+						"Multilevel Switch",
+						"Multilevel Toggle Switch"
+					]
+				}
+			}
 		},
 		"0x15": {
-			"label": "ZIP Node",
-			"specific": {}
+			"label": "Z/IP Node",
+			"specific": {
+				"0x01": {
+					"label": "Z/IP TUN Node"
+				},
+				"0x02": {
+					"label": "Z/IP ADV Node"
+				}
+			}
 		},
 		"0x16": {
 			"label": "Ventilation",
-			"specific": {}
+			"supportedCCs": ["Basic"],
+			"specific": {
+				"0x01": {
+					"label": "Residential Heat Recovery Ventilation",
+					"supportedCCs": [
+						"HRV Control",
+						"HRV Status",
+						"Manufacturer Specific",
+						"Version"
+					]
+				}
+			}
 		},
 		"0x17": {
 			"label": "Security Panel",
-			"specific": {}
+			"specific": {
+				"0x01": {
+					"label": "Zoned Security Panel"
+				}
+			}
 		},
 		"0x18": {
 			"label": "Wall Controller",
-			"specific": {}
+			"specific": {
+				"0x01": {
+					"label": "Basic Wall Controller"
+				}
+			}
 		},
 		"0x20": {
 			"label": "Binary Sensor",
-			"specific": {}
+			"supportedCCs": ["Basic", "Binary Sensor"],
+			"specific": {
+				"0x01": {
+					"label": "Routing Binary Sensor"
+				}
+			}
 		},
 		"0x21": {
 			"label": "Multilevel Sensor",
-			"specific": {}
+			"supportedCCs": ["Basic", "Multilevel Sensor"],
+			"specific": {
+				"0x01": {
+					"label": "Routing Multilevel Sensor"
+				}
+			}
 		},
 		"0x30": {
 			"label": "Pulse Meter",
-			"specific": {}
+			"supportedCCs": ["Basic", "Pulse Meter"]
 		},
 		"0x31": {
 			"label": "Meter",
-			"specific": {}
+			"supportedCCs": ["Basic"],
+			"specific": {
+				"0x01": {
+					"label": "Simple Meter",
+					"supportedCCs": [
+						"Meter",
+						"Manufacturer Specific",
+						"Version"
+					]
+				},
+				"0x02": {
+					"label": "Advanced Energy Control",
+					"supportedCCs": [
+						"Meter Table Monitor",
+						"Meter Table Configuration",
+						"Manufacturer Specific",
+						"Version"
+					]
+				}
+			}
 		},
 		"0x40": {
 			"label": "Entry Control",
-			"specific": {}
+			"specific": {
+				"0x01": {
+					"label": "Door Lock",
+					"supportedCCs": ["Basic", "Lock"]
+				},
+				"0x02": {
+					"label": "Advanced Door Lock",
+					"supportedCCs": [
+						"Basic",
+						"Door Lock",
+						"Manufacturer Specific",
+						"Version"
+					]
+				},
+				"0x03": {
+					"label": "Secure Keypad Door Lock",
+					"supportedCCs": [
+						"Basic",
+						"Door Lock",
+						"User Code",
+						"Manufacturer Specific",
+						"Security",
+						"Version"
+					]
+				},
+				"0x0a": {
+					"label": "Secure Lockbox",
+					"supportedCCs": [
+						// MUST NOT support Basic
+						"Notification",
+						"Association",
+						"Door Lock",
+						"Manufacturer Specific",
+						"Security",
+						"Version"
+					]
+				},
+				"0x0b": {
+					"label": "Secure Keypad",
+					"supportedCCs": [
+						"Device Reset Locally",
+						"Entry Control",
+						"Manufacturer Specific",
+						"Security",
+						"Version"
+					]
+				}
+			}
 		},
 		"0x50": {
 			"label": "Semi-Interoperable",
-			"specific": {}
+			"supportedCCs": [
+				"Basic",
+				"Manufacturer Specific",
+				"Version",
+				"Proprietary"
+			],
+			"specific": {
+				"0x01": {
+					"label": "Energy Production",
+					"supportedCCs": ["Energy Production"]
+				}
+			}
 		},
 		"0xa1": {
 			"label": "Alarm Sensor",
-			"specific": {}
+			"supportedCCs": ["Basic"],
+			"specific": {
+				"0x01": {
+					"label": "Basic Routing Alarm Sensor",
+					"supportedCCs": [
+						"Alarm Sensor",
+						"Association",
+						"Manufacturer Specific",
+						"Version"
+					],
+					"controlledCCs": ["Alarm Sensor"]
+				},
+				"0x02": {
+					"label": "Routing Alarm Sensor",
+					"supportedCCs": [
+						"Alarm Sensor",
+						"Association",
+						"Battery",
+						"Manufacturer Specific",
+						"Version"
+					],
+					"controlledCCs": ["Alarm Sensor"]
+				},
+				"0x03": {
+					"label": "Basic Zensor Net Alarm Sensor",
+					"supportedCCs": [
+						"Alarm Sensor",
+						"Manufacturer Specific",
+						"Version"
+					],
+					"controlledCCs": ["Alarm Sensor"]
+				},
+				"0x04": {
+					"label": "Zensor Net Alarm Sensor",
+					"supportedCCs": [
+						"Alarm Sensor",
+						"Battery",
+						"Manufacturer Specific",
+						"Version"
+					],
+					"controlledCCs": ["Alarm Sensor"]
+				},
+				"0x05": {
+					"label": "Advanced Zensor Net Alarm Sensor",
+					"supportedCCs": [
+						"Alarm Sensor",
+						"Association",
+						"Battery",
+						"Manufacturer Specific",
+						"Version"
+					],
+					"controlledCCs": ["Alarm Sensor"]
+				},
+				"0x06": {
+					"label": "Basic Routing Smoke Sensor",
+					"supportedCCs": [
+						"Alarm Sensor",
+						"Association",
+						"Manufacturer Specific",
+						"Version"
+					],
+					"controlledCCs": ["Alarm Sensor"]
+				},
+				"0x07": {
+					"label": "Routing Smoke Sensor",
+					"supportedCCs": [
+						"Alarm Sensor",
+						"Association",
+						"Battery",
+						"Manufacturer Specific",
+						"Version"
+					],
+					"controlledCCs": ["Alarm Sensor"]
+				},
+				"0x08": {
+					"label": "Basic Zensor Net Smoke Sensor",
+					"supportedCCs": [
+						"Alarm Sensor",
+						"Manufacturer Specific",
+						"Version"
+					],
+					"controlledCCs": ["Alarm Sensor"]
+				},
+				"0x09": {
+					"label": "Zensor Net Smoke Sensor",
+					"supportedCCs": [
+						"Alarm Sensor",
+						"Battery",
+						"Manufacturer Specific",
+						"Version"
+					],
+					"controlledCCs": ["Alarm Sensor"]
+				},
+				"0x0a": {
+					"label": "Advanced Zensor Net Smoke Sensor",
+					"supportedCCs": [
+						"Alarm Sensor",
+						"Association",
+						"Battery",
+						"Manufacturer Specific",
+						"Version"
+					],
+					"controlledCCs": ["Alarm Sensor"]
+				}
+			}
 		},
 		"0xff": {
 			"label": "Non-Interoperable",

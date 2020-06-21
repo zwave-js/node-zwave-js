@@ -1,11 +1,10 @@
 import { CommandClasses } from "./CommandClasses";
-import { BasicDeviceClasses, GenericDeviceClasses } from "./DeviceClass";
 import { parseNodeInformationFrame, parseNodeUpdatePayload } from "./NodeInfo";
 
 describe("lib/node/NodeInfo", () => {
 	describe("parseNodeInformationFrame()", () => {
 		const payload = Buffer.from([
-			GenericDeviceClasses["Remote Controller"],
+			0x01, // Remote Controller
 			0x02, // Portable Scene Controller
 			// Supported CCs
 			CommandClasses["Multi Channel"],
@@ -17,11 +16,11 @@ describe("lib/node/NodeInfo", () => {
 		const eif = parseNodeInformationFrame(payload);
 
 		it("should extract the correct GenericDeviceClass", () => {
-			expect(eif.generic.name).toBe("Remote Controller");
+			expect(eif.generic).toBe(0x01);
 		});
 
 		it("should extract the correct SpecificDeviceClass", () => {
-			expect(eif.specific.name).toBe("Portable Scene Controller");
+			expect(eif.specific).toBe(0x02);
 		});
 
 		it("should report the correct CCs as supported", () => {
@@ -36,8 +35,8 @@ describe("lib/node/NodeInfo", () => {
 		const payload = Buffer.from([
 			5, // NodeID
 			7, // Length (is ignored)
-			BasicDeviceClasses.Slave,
-			GenericDeviceClasses["Remote Controller"],
+			0x03, // Slave
+			0x01, // Remote Controller
 			0x02, // Portable Scene Controller
 			// Supported CCs
 			CommandClasses["Multi Channel"],
@@ -53,15 +52,15 @@ describe("lib/node/NodeInfo", () => {
 		});
 
 		it("should extract the correct BasicDeviceClass", () => {
-			expect(nup.basic).toBe(BasicDeviceClasses.Slave);
+			expect(nup.basic).toBe(3);
 		});
 
 		it("should extract the correct GenericDeviceClass", () => {
-			expect(nup.generic.name).toBe("Remote Controller");
+			expect(nup.generic).toBe(1);
 		});
 
 		it("should extract the correct SpecificDeviceClass", () => {
-			expect(nup.specific.name).toBe("Portable Scene Controller");
+			expect(nup.specific).toBe(2);
 		});
 
 		it("should report the correct CCs as supported", () => {
@@ -81,8 +80,8 @@ describe("lib/node/NodeInfo", () => {
 			const payload = Buffer.from([
 				5, // NodeID
 				7, // Length (is ignored)
-				BasicDeviceClasses.Slave,
-				GenericDeviceClasses["Remote Controller"],
+				0x03,
+				0x01,
 				0x02, // Portable Scene Controller
 				// Supported CCs
 				// --> Security Mark

@@ -1,14 +1,9 @@
 import { validatePayload } from "../util/misc";
 import { CommandClasses } from "./CommandClasses";
-import {
-	BasicDeviceClasses,
-	GenericDeviceClass,
-	SpecificDeviceClass,
-} from "./DeviceClass";
 
 export interface NodeInformationFrame {
-	generic: GenericDeviceClass;
-	specific: SpecificDeviceClass;
+	generic: number;
+	specific: number;
 	supportedCCs: CommandClasses[];
 }
 
@@ -20,7 +15,7 @@ interface ExtendedNodeInformationFrame extends NodeInformationFrame {
 // This is sometimes used interchangeably with the NIF
 export interface NodeUpdatePayload extends ExtendedNodeInformationFrame {
 	nodeId: number;
-	basic: BasicDeviceClasses;
+	basic: number;
 }
 
 export function parseNodeUpdatePayload(nif: Buffer): NodeUpdatePayload {
@@ -37,8 +32,8 @@ function internalParseNodeInformationFrame(
 ): ExtendedNodeInformationFrame {
 	validatePayload(nif.length >= 2);
 	return {
-		generic: GenericDeviceClass.get(nif[0]),
-		specific: SpecificDeviceClass.get(nif[0], nif[1]),
+		generic: nif[0],
+		specific: nif[1],
 		...parseCCList(nif.slice(2)),
 	};
 }

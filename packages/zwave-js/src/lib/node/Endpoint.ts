@@ -5,7 +5,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { GenericDeviceClass, SpecificDeviceClass } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import type { CCAPI, CCAPIs } from "../commandclass/API";
 import {
@@ -21,8 +20,8 @@ import type { ZWaveNode } from "./Node";
 
 export interface EndpointCapabilities {
 	isDynamic: boolean;
-	genericClass: GenericDeviceClass;
-	specificClass: SpecificDeviceClass;
+	genericClass: number;
+	specificClass: number;
 	supportedCCs: CommandClasses[];
 }
 
