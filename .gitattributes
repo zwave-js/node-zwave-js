@@ -2,4 +2,4 @@
 specs/** linguist-vendored
 
 # Use JSONC for syntax highlighting in config files
-config/**/*.json linguist-language=jsonc
+packages/config/config/**/*.json linguist-language=jsonc
