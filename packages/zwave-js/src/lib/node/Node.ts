@@ -855,6 +855,12 @@ export class ZWaveNode extends Endpoint {
 			}),
 		);
 		this._deviceClass = resp.deviceClass;
+		for (const cc of this._deviceClass.mandatorySupportedCCs) {
+			this.addCC(cc, { isSupported: true });
+		}
+		for (const cc of this._deviceClass.mandatoryControlledCCs) {
+			this.addCC(cc, { isControlled: true });
+		}
 		this._isListening = resp.isListening;
 		this._isFrequentListening = resp.isFrequentListening;
 		this._isRouting = resp.isRouting;
@@ -865,14 +871,10 @@ export class ZWaveNode extends Endpoint {
 		this._version = resp.version;
 		this._isBeaming = resp.isBeaming;
 
-		let logMessage = "received response for protocol info:";
-		if (this.deviceClass) {
-			logMessage += `
-basic device class:    ${this.deviceClass.basic}
-generic device class:  ${this.deviceClass.generic.label}
-specific device class: ${this.deviceClass.specific.label}`;
-		}
-		logMessage += `
+		const logMessage = `received response for protocol info:
+basic device class:    ${this._deviceClass.basic}
+generic device class:  ${this._deviceClass.generic.label}
+specific device class: ${this._deviceClass.specific.label}
 is a listening device: ${this.isListening}
 is frequent listening: ${this.isFrequentListening}
 is a routing device:   ${this.isRouting}
