@@ -26,13 +26,6 @@ export function isMessagePriority(val: unknown): val is MessagePriority {
 	return typeof val === "number" && val in MessagePriority;
 }
 
-export enum MessageHeaders {
-	SOF = 0x01,
-	ACK = 0x06,
-	NAK = 0x15,
-	CAN = 0x18,
-}
-
 /** Indicates the type of a data message */
 export enum MessageType {
 	Request = 0x0,
