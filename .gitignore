@@ -14,5 +14,4 @@ zwave-js-*.tgz
 # Compiled source files
 **/build
 **/*.tsbuildinfo
-*.d.ts
 *.map

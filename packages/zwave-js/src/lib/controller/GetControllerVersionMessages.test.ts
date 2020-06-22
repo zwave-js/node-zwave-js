@@ -1,4 +1,3 @@
-import { createEmptyMockDriver } from "../../../../../test/mocks";
 import type { Driver } from "../driver/Driver";
 import { FunctionType, MessageType } from "../message/Constants";
 import {
@@ -7,6 +6,7 @@ import {
 	getMessageType,
 	Message,
 } from "../message/Message";
+import { createEmptyMockDriver } from "../test/mocks";
 import { GetControllerVersionRequest } from "./GetControllerVersionMessages";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;

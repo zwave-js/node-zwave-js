@@ -1,4 +1,3 @@
-import { createEmptyMockDriver } from "../../../../../test/mocks";
 import type { Driver } from "../driver/Driver";
 import {
 	FunctionType,
@@ -16,6 +15,7 @@ import {
 	getMessageTypeStatic,
 	Message,
 } from "../message/Message";
+import { createEmptyMockDriver } from "../test/mocks";
 import { GetSerialApiInitDataRequest } from "./GetSerialApiInitDataMessages";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;

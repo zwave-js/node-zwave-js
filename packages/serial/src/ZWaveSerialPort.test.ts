@@ -5,7 +5,9 @@ import { ZWaveSerialPort } from "./ZWaveSerialPort";
 
 SerialPort.Binding = MockBinding as any;
 
-async function createAndOpenMockedZWaveSerialPort(): Promise<{
+async function createAndOpenMockedZWaveSerialPort(
+	open: boolean = true,
+): Promise<{
 	port: ZWaveSerialPort;
 	binding: MockBinding;
 }> {
@@ -16,7 +18,7 @@ async function createAndOpenMockedZWaveSerialPort(): Promise<{
 	});
 	const port = new ZWaveSerialPort("/dev/ZWaveTest");
 	const binding = port["serial"].binding as any;
-	await port.open();
+	if (open) await port.open();
 	return { port, binding };
 }
 
@@ -38,7 +40,16 @@ describe("ZWaveSerialPort", () => {
 	});
 	afterEach(async () => {
 		port.removeAllListeners();
+		if (port.isOpen) await port.close();
+	});
+
+	it("isOpen returns true after opening", () => {
+		expect(port.isOpen).toBeTrue();
+	});
+
+	it("isOpen returns false after closing", async () => {
 		await port.close();
+		expect(port.isOpen).toBeFalse();
 	});
 
 	it("passes written data through unchanged", async () => {
@@ -50,6 +61,13 @@ describe("ZWaveSerialPort", () => {
 			await port.writeAsync(buffer);
 			expect(binding.lastWrite).toEqual(buffer);
 		}
+	});
+
+	it("writeAsync rejects if the port is not open", async () => {
+		await port.close();
+		await expect(
+			port.writeAsync(Buffer.from([MessageHeaders.ACK])),
+		).toReject();
 	});
 
 	it("emit an event for each single-byte message that was read", async () => {
@@ -66,7 +84,7 @@ describe("ZWaveSerialPort", () => {
 		expect(data).toEqual(MessageHeaders.NAK);
 	});
 
-	it("emits a series of events if multiple single-byte messages are received", (done) => {
+	it("emits a series of events when multiple single-byte messages are received", (done) => {
 		binding.emitData(
 			Buffer.from([
 				MessageHeaders.ACK,
@@ -84,5 +102,44 @@ describe("ZWaveSerialPort", () => {
 
 			if (count === 3) done();
 		});
+	});
+
+	it("skips all useless data", (done) => {
+		const data = Buffer.from([
+			MessageHeaders.ACK,
+			MessageHeaders.CAN,
+			0xff,
+			0xfe,
+			0xfd,
+			0xfa,
+			MessageHeaders.ACK,
+		]);
+		binding.emitData(data);
+
+		let count = 0;
+		port.on("data", (data) => {
+			count++;
+			if (count === 1) expect(data).toBe(MessageHeaders.ACK);
+			if (count === 2) expect(data).toBe(MessageHeaders.CAN);
+			if (count === 3) expect(data).toBe(MessageHeaders.ACK);
+
+			if (count === 3) done();
+		});
+	});
+
+	it("emits a buffer when a message is received", async () => {
+		const data = Buffer.from([
+			MessageHeaders.SOF,
+			0x05, // remaining length
+			0xff,
+			0xff,
+			0xff,
+			0xff,
+			0xff,
+		]);
+		binding.emitData(data);
+
+		const received = await waitForData(port);
+		expect(received).toEqual(data);
 	});
 });

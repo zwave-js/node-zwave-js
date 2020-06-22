@@ -1,12 +1,10 @@
 import { EventEmitter } from "events";
 import SerialPort from "serialport";
 import { PassThrough, Transform, Writable } from "stream";
-import { promisify } from "util";
 import type { MessageHeaders } from "./MessageHeaders";
 import { SerialAPIParser } from "./SerialAPIParser";
 
 interface ZWaveSerialPortEventCallbacks {
-	open: () => void;
 	error: (e: Error) => void;
 	data: (
 		data:
@@ -60,8 +58,29 @@ export class ZWaveSerialPort extends EventEmitter {
 
 	constructor(port: string) {
 		super();
-		this.addListener = this.on.bind(this);
-		this.removeListener = this.off.bind(this);
+
+		// Route the data event to the receive stream
+		for (const method of [
+			"on",
+			"once",
+			"off",
+			"addListener",
+			"removeListener",
+			"removeAllListeners",
+		] as const) {
+			this[method] = (event: any, ...args: any[]) => {
+				if (event === "data") {
+					// @ts-expect-error
+					this.receiveStream[method]("data", ...args);
+				} else {
+					// wotan-disable no-restricted-property-access
+					// @ts-expect-error
+					super[method](event, ...args);
+					// wotan-enable no-restricted-property-access
+				}
+				return this;
+			};
+		}
 
 		this.serial = new SerialPort(port, {
 			autoOpen: false,
@@ -78,21 +97,21 @@ export class ZWaveSerialPort extends EventEmitter {
 		this.transmitStream = new PassThrough();
 		this.transmitStream.pipe((this.serial as unknown) as Writable);
 
-		this.serial
-			.on("open", () => {
-				this.emit("open");
-			})
-			.on("error", (e) => {
-				this.emit("error", e);
-			});
+		this.serial.on("error", (e) => {
+			this.emit("error", e);
+		});
 	}
 
 	public open(): Promise<void> {
-		return promisify(this.serial.open.bind(this.serial))();
+		return new Promise((resolve) => {
+			this.serial.once("open", resolve).open();
+		});
 	}
 
 	public async close(): Promise<void> {
-		return promisify(this.serial.close.bind(this.serial))();
+		return new Promise((resolve) => {
+			this.serial.once("close", resolve).close();
+		});
 	}
 
 	public get isOpen(): boolean {
@@ -100,55 +119,14 @@ export class ZWaveSerialPort extends EventEmitter {
 	}
 
 	public async writeAsync(data: Buffer): Promise<void> {
+		if (!this.isOpen) {
+			throw new Error("The serial port is not open!");
+		}
 		return new Promise((resolve, reject) => {
 			this.transmitStream.write(data, (err) => {
 				if (err) reject(err);
 				else resolve();
 			});
 		});
-	}
-
-	public on<TEvent extends ZWaveSerialPortEvents>(
-		event: TEvent,
-		callback: ZWaveSerialPortEventCallbacks[TEvent],
-	): this {
-		if (event === "data") {
-			this.receiveStream.on("data", callback);
-		} else {
-			super.on(event, callback);
-		}
-		return this;
-	}
-
-	public once<TEvent extends ZWaveSerialPortEvents>(
-		event: TEvent,
-		callback: ZWaveSerialPortEventCallbacks[TEvent],
-	): this {
-		if (event === "data") {
-			this.receiveStream.once("data", callback);
-		} else {
-			super.once(event, callback);
-		}
-		return this;
-	}
-
-	public off<TEvent extends ZWaveSerialPortEvents>(
-		event: TEvent,
-		callback: ZWaveSerialPortEventCallbacks[TEvent],
-	): this {
-		if (event === "data") {
-			this.receiveStream.off("data", callback);
-		} else {
-			super.off(event, callback);
-		}
-		return this;
-	}
-
-	public removeAllListeners(event?: ZWaveSerialPortEvents): this {
-		if (event === "data") {
-			this.receiveStream.removeAllListeners("data");
-		}
-		super.removeAllListeners(event);
-		return this;
 	}
 }

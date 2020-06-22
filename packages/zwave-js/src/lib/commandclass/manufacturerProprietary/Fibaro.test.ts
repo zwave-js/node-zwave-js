@@ -1,6 +1,5 @@
 import { loadDeviceIndex } from "@zwave-js/config";
 import { CommandClasses } from "@zwave-js/core";
-import { createEmptyMockDriver } from "../../../../../../test/mocks";
 import { ApplicationCommandRequest } from "../../controller/ApplicationCommandRequest";
 import {
 	SendDataRequest,
@@ -9,6 +8,7 @@ import {
 } from "../../controller/SendDataMessages";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
+import { createEmptyMockDriver } from "../../test/mocks";
 import { CommandClass } from "../CommandClass";
 import {
 	getManufacturerIdValueId,

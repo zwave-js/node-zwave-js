@@ -18,7 +18,7 @@ module.exports = {
 	setupFilesAfterEnv: ["jest-extended"],
 	setupFiles: ["reflect-metadata"],
 	extraGlobals: ["Reflect"],
-	collectCoverage: false,
+	collectCoverage: true,
 	collectCoverageFrom: [
 		"packages/**/src/**/*.ts",
 		"!packages/**/src/**/*.test.ts",

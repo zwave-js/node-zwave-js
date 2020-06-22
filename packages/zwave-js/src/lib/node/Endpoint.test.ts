@@ -3,11 +3,11 @@ import {
 	CommandClasses,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { createEmptyMockDriver } from "../../../../../test/mocks";
 import type { BasicCCAPI } from "../commandclass/BasicCC";
 import { BatteryCCAPI } from "../commandclass/BatteryCC";
 import { VersionCCAPI } from "../commandclass/VersionCC";
 import type { Driver } from "../driver/Driver";
+import { createEmptyMockDriver } from "../test/mocks";
 import { Endpoint } from "./Endpoint";
 import { ZWaveNode } from "./Node";
 

@@ -6,12 +6,8 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import {
-	MockRequestMessageWithExpectation,
-	MockRequestMessageWithoutExpectation,
-	MockResponseMessage,
-	MockSerialPort,
-} from "../../../../../test/mocks";
+import { MessageHeaders } from "@zwave-js/serial";
+import { MockSerialPort } from "@zwave-js/serial/src/MockSerialPort";
 import {
 	AssociationCCReport,
 	AssociationCommand,
@@ -27,17 +23,28 @@ import {
 	SendDataRequest,
 	TransmitOptions,
 } from "../controller/SendDataMessages";
-import { MessageHeaders, MessageType } from "../message/Constants";
+import { MessageType } from "../message/Constants";
 import { Message, messageTypes } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
-import { Driver } from "./Driver";
+import {
+	MockRequestMessageWithExpectation,
+	MockRequestMessageWithoutExpectation,
+	MockResponseMessage,
+} from "../test/mocks";
+import type { Driver } from "./Driver";
 
 jest.mock("serialport", () => MockSerialPort);
+let Drvr: typeof Driver;
+jest.resetModules();
+jest.isolateModules(() => {
+	// eslint-disable-next-line @typescript-eslint/no-var-requires
+	Drvr = require("./Driver").Driver;
+});
 
 const PORT_ADDRESS = "/tty/FAKE";
 
 async function createAndStartDriver() {
-	const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
+	const driver = new Drvr(PORT_ADDRESS, { skipInterview: true });
 	const startPromise = driver.start();
 	const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 	portInstance.doOpen();
@@ -72,7 +79,7 @@ describe("lib/driver/Driver => ", () => {
 
 	describe("starting it => ", () => {
 		it("should open a new serialport", () => {
-			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
+			const driver = new Drvr(PORT_ADDRESS, { skipInterview: true });
 			// start the driver
 			driver.start();
 
@@ -82,7 +89,7 @@ describe("lib/driver/Driver => ", () => {
 		});
 
 		it("should only work once", () => {
-			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
+			const driver = new Drvr(PORT_ADDRESS, { skipInterview: true });
 			// start the driver twice
 			driver.start();
 			driver.start();
@@ -93,7 +100,7 @@ describe("lib/driver/Driver => ", () => {
 		});
 
 		it("the start promise should only be fulfilled after the port was opened", async () => {
-			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
+			const driver = new Drvr(PORT_ADDRESS, { skipInterview: true });
 
 			// start the driver
 			const fulfilledSpy = jest.fn();
@@ -109,7 +116,7 @@ describe("lib/driver/Driver => ", () => {
 		});
 
 		it("the start promise should be rejected if the port opening fails", async () => {
-			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
+			const driver = new Drvr(PORT_ADDRESS, { skipInterview: true });
 
 			// start the driver
 			const startPromise = driver.start();
@@ -123,7 +130,7 @@ describe("lib/driver/Driver => ", () => {
 		});
 
 		it("after a failed start, starting again should not be possible", async () => {
-			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
+			const driver = new Drvr(PORT_ADDRESS, { skipInterview: true });
 
 			// start the driver
 			const startPromise = driver.start();
@@ -144,7 +151,7 @@ describe("lib/driver/Driver => ", () => {
 
 	describe("sending messages => ", () => {
 		it("should not be possible if the driver wasn't started", async () => {
-			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
+			const driver = new Drvr(PORT_ADDRESS, { skipInterview: true });
 
 			const msg = new TestMessage(driver);
 			await assertZWaveError(() => driver.sendMessage(msg), {
@@ -155,7 +162,7 @@ describe("lib/driver/Driver => ", () => {
 		});
 
 		it("should not be possible if the driver hasn't completed starting", async () => {
-			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
+			const driver = new Drvr(PORT_ADDRESS, { skipInterview: true });
 
 			// start the driver, but don't open the serial port yet
 			driver.start();
@@ -169,7 +176,7 @@ describe("lib/driver/Driver => ", () => {
 		});
 
 		it("should not be possible if the driver failed to start", async () => {
-			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
+			const driver = new Drvr(PORT_ADDRESS, { skipInterview: true });
 
 			// start the driver
 			const startPromise = driver.start();

@@ -1,7 +1,3 @@
-import {
-	createEmptyMockDriver,
-	mockDriverDummyCallbackId,
-} from "../../../../../test/mocks";
 import type { Driver } from "../driver/Driver";
 import {
 	FunctionType,
@@ -19,6 +15,10 @@ import {
 	getMessageTypeStatic,
 	Message,
 } from "../message/Message";
+import {
+	createEmptyMockDriver,
+	mockDriverDummyCallbackId,
+} from "../test/mocks";
 import {
 	AddNodeToNetworkRequest,
 	AddNodeType,

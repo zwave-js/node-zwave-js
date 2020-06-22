@@ -9,7 +9,6 @@ import {
 	ValueMetadata,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { createEmptyMockDriver } from "../../../../../test/mocks";
 import { BasicCC, BasicCommand } from "../commandclass/BasicCC";
 import {
 	BinarySwitchCCReport,
@@ -33,6 +32,7 @@ import {
 import { SendDataRequest } from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
 import { assertCC } from "../test/assertCC";
+import { createEmptyMockDriver } from "../test/mocks";
 import { DeviceClass } from "./DeviceClass";
 import { ZWaveNode } from "./Node";
 import { RequestNodeInfoRequest } from "./RequestNodeInfoMessages";

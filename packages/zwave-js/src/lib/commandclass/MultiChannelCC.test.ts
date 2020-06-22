@@ -1,5 +1,5 @@
-import { createEmptyMockDriver } from "../../../../../test/mocks";
 import type { Driver } from "../driver/Driver";
+import { createEmptyMockDriver } from "../test/mocks";
 import { BasicCCSet } from "./BasicCC";
 import type { CommandClass } from "./CommandClass";
 import { isEncapsulatingCommandClass } from "./EncapsulatingCommandClass";

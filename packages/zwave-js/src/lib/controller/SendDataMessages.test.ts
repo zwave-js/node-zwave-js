@@ -1,4 +1,3 @@
-import { createEmptyMockDriver } from "../../../../../test/mocks";
 import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { MultiCommandCC } from "../commandclass/MultiCommandCC";
@@ -17,6 +16,7 @@ import {
 	Message,
 	ResponsePredicate,
 } from "../message/Message";
+import { createEmptyMockDriver } from "../test/mocks";
 import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
 import {
 	SendDataRequest,
