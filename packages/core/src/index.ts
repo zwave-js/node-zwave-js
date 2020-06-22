@@ -1,5 +1,4 @@
 export * from "./capabilities/CommandClasses";
-export * from "./capabilities/DeviceClass";
 export * from "./capabilities/NodeInfo";
 export * from "./consts";
 export * from "./error/ZWaveError";

@@ -6,21 +6,16 @@ import {
 import {
 	actuatorCCs,
 	applicationCCs,
-	BasicDeviceClasses,
 	CacheMetadata,
 	CacheValue,
 	CommandClasses,
 	CRC16_CCITT,
-	DeviceClass,
-	GenericDeviceClass,
-	GenericDeviceClasses,
 	getCCName,
 	MAX_NODES,
 	Maybe,
 	MetadataUpdatedArgs,
 	NodeUpdatePayload,
 	sensorCCs,
-	SpecificDeviceClass,
 	timespan,
 	topologicalSort,
 	unknownBoolean,
@@ -99,6 +94,7 @@ import {
 } from "../controller/GetRoutingInfoMessages";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
+import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
 import {
 	RequestNodeInfoRequest,
@@ -164,6 +160,16 @@ export class ZWaveNode extends Endpoint {
 		}
 
 		this._deviceClass = deviceClass;
+		// Add mandatory CCs
+		if (deviceClass) {
+			for (const cc of deviceClass.mandatorySupportedCCs) {
+				this.addCC(cc, { isSupported: true });
+			}
+			for (const cc of deviceClass.mandatoryControlledCCs) {
+				this.addCC(cc, { isControlled: true });
+			}
+		}
+		// Add optional CCs
 		for (const cc of supportedCCs) this.addCC(cc, { isSupported: true });
 		for (const cc of controlledCCs) this.addCC(cc, { isControlled: true });
 	}
@@ -849,6 +855,12 @@ export class ZWaveNode extends Endpoint {
 			}),
 		);
 		this._deviceClass = resp.deviceClass;
+		for (const cc of this._deviceClass.mandatorySupportedCCs) {
+			this.addCC(cc, { isSupported: true });
+		}
+		for (const cc of this._deviceClass.mandatoryControlledCCs) {
+			this.addCC(cc, { isControlled: true });
+		}
 		this._isListening = resp.isListening;
 		this._isFrequentListening = resp.isFrequentListening;
 		this._isRouting = resp.isRouting;
@@ -859,20 +871,10 @@ export class ZWaveNode extends Endpoint {
 		this._version = resp.version;
 		this._isBeaming = resp.isBeaming;
 
-		let logMessage = "received response for protocol info:";
-		if (this.deviceClass) {
-			logMessage += `
-basic device class:    ${BasicDeviceClasses[this.deviceClass.basic]} (${num2hex(
-				this.deviceClass.basic,
-			)})
-generic device class:  ${this.deviceClass.generic.name} (${num2hex(
-				this.deviceClass.generic.key,
-			)})
-specific device class: ${this.deviceClass.specific.name} (${num2hex(
-				this.deviceClass.specific.key,
-			)})`;
-		}
-		logMessage += `
+		const logMessage = `received response for protocol info:
+basic device class:    ${this._deviceClass.basic.label}
+generic device class:  ${this._deviceClass.generic.label}
+specific device class: ${this._deviceClass.specific.label}
 is a listening device: ${this.isListening}
 is frequent listening: ${this.isFrequentListening}
 is a routing device:   ${this.isRouting}
@@ -1759,7 +1761,7 @@ version:               ${this.version}`;
 		// Depending on the generic device class, we may need to map the basic command to other CCs
 		let mappedTargetCC: CommandClass | undefined;
 		switch (this.deviceClass?.generic.key) {
-			case GenericDeviceClasses["Binary Sensor"]:
+			case 0x20: // Binary Sensor
 				mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
 					CommandClasses["Binary Sensor"],
 				);
@@ -1770,12 +1772,12 @@ version:               ${this.version}`;
 			// 		CommandClasses["Multilevel Sensor"],
 			// 	);
 			// 	break;
-			case GenericDeviceClasses["Binary Switch"]:
+			case 0x10: // Binary Switch
 				mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
 					CommandClasses["Binary Switch"],
 				);
 				break;
-			case GenericDeviceClasses["Multilevel Switch"]:
+			case 0x11: // Multilevel Switch
 				mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
 					CommandClasses["Multilevel Switch"],
 				);
@@ -2501,7 +2503,7 @@ version:               ${this.version}`;
 					? InterviewStage[InterviewStage.Complete]
 					: InterviewStage[this.interviewStage],
 			deviceClass: this.deviceClass && {
-				basic: this.deviceClass.basic,
+				basic: this.deviceClass.basic.key,
 				generic: this.deviceClass.generic.key,
 				specific: this.deviceClass.specific.key,
 			},
@@ -2556,12 +2558,7 @@ version:               ${this.version}`;
 				typeof generic === "number" &&
 				typeof specific === "number"
 			) {
-				const genericDC = GenericDeviceClass.get(generic);
-				this._deviceClass = new DeviceClass(
-					basic,
-					genericDC,
-					SpecificDeviceClass.get(genericDC.key, specific),
-				);
+				this._deviceClass = new DeviceClass(basic, generic, specific);
 			}
 		}
 

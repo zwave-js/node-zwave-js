@@ -5,13 +5,21 @@
 -->
 
 ## __WORK IN PROGRESS__
-This project has been converted to a monorepo and split into the following packages:
-* `zwave-js`: As before, this is the main entry point for consumers
-* `@zwave-js/config`: The configuration files and methods to access them
-* `@zwave-js/core`: The core modules, which are shared between `zwave-js` and `@zwave-js/config`
-* `@zwave-js/shared`: Utility methods that are shared between all other packages
+### Breaking changes
+See "Changes under the hood". I don't expect anything to break, but to be safe, I'll declare this as a major version.
 
-It is likely that other packages will be added in the future.
+### Features
+* Mandatory supported CCs that are defined in the device class config are now respected. This should improve support for legacy devices that don't include all CCs in the NIF.
+
+### Changes under the hood
+* Moved the definition of legacy Z-Wave device classes to a config file.
+* This project has been converted to a monorepo and split into the following packages:
+  * `zwave-js`: As before, this is the main entry point for consumers
+  * `@zwave-js/config`: The configuration files and methods to access them
+  * `@zwave-js/core`: The core modules, which are shared between `zwave-js` and `@zwave-js/config`
+  * `@zwave-js/shared`: Utility methods that are shared between all other packages
+  
+  It is likely that other packages will be added in the future.
 
 ## 3.8.5 (2020-06-18)
 ### Bugfixes

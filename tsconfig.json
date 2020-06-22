@@ -17,14 +17,14 @@
 			],
 			"@zwave-js/shared": [
 				"shared/src"
-			],
+			]
 		},
-		"noEmit": true,
-		"declaration": false,
+		"composite": true,
+		"declaration": true,
+		"declarationMap": true,
 		// To enable Babel support
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
-		"isolatedModules": true,
 		"module": "commonjs",
 		"moduleResolution": "node",
 		"noEmitOnError": true,
@@ -50,22 +50,13 @@
 		]
 	},
 	"include": [
+		"packages/**/*.ts",
 		"maintenance/**/*.ts",
-		"test/**/*.ts",
+		"test/**/*.ts"
 	],
 	"exclude": [
+		"**/build/**",
 		"node_modules/**",
 		"packages/**/node_modules"
-	],
-	"references": [
-		{
-			"path": "packages/config/tsconfig.build.json"
-		},
-		{
-			"path": "packages/core/tsconfig.build.json"
-		},
-		{
-			"path": "packages/shared/tsconfig.build.json"
-		},
 	]
 }

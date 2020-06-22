@@ -1,6 +1,7 @@
+import type { CommandClasses } from "@zwave-js/core";
 import { EventEmitter } from "events";
 import type SerialPort from "serialport";
-import type { CommandClasses, Driver, ZWaveNode } from "zwave-js/src";
+import type { Driver, ZWaveNode } from "zwave-js/src";
 import { getImplementedVersion } from "zwave-js/src/lib/commandclass/CommandClass";
 import { SendDataRequest } from "zwave-js/src/lib/controller/SendDataMessages";
 import {

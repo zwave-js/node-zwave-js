@@ -1,9 +1,13 @@
 import {
+	GenericDeviceClass,
+	lookupGenericDeviceClass,
+	lookupSpecificDeviceClass,
+	SpecificDeviceClass,
+} from "@zwave-js/config";
+import {
 	CommandClasses,
 	encodeBitMask,
-	GenericDeviceClasses,
 	Maybe,
-	NodeInformationFrame,
 	parseBitMask,
 	parseNodeInformationFrame,
 	validatePayload,
@@ -158,7 +162,7 @@ export class MultiChannelCCAPI extends CCAPI {
 	}
 
 	public async findEndpoints(
-		genericClass: GenericDeviceClasses,
+		genericClass: number,
 		specificClass: number,
 	): Promise<readonly number[]> {
 		this.assertSupportsCommand(
@@ -252,7 +256,10 @@ export class MultiChannelCCAPI extends CCAPI {
 	}
 }
 
-export interface EndpointCapability extends NodeInformationFrame {
+export interface EndpointCapability {
+	generic: GenericDeviceClass;
+	specific: SpecificDeviceClass;
+	supportedCCs: CommandClasses[];
 	isDynamic: boolean;
 	wasRemoved: boolean;
 }
@@ -421,8 +428,8 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			const caps = await api.getEndpointCapabilities(endpoint);
 			hasQueriedCapabilities = true;
 			logMessage = `received response for endpoint capabilities (#${endpoint}):
-generic device class:  ${caps.generic.name} (${num2hex(caps.generic.key)})
-specific device class: ${caps.specific.name} (${num2hex(caps.specific.key)})
+generic device class:  ${caps.generic.label}
+specific device class: ${caps.specific.label}
 is dynamic end point:  ${caps.isDynamic}
 supported CCs:`;
 			for (const cc of caps.supportedCCs) {
@@ -593,17 +600,19 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 		// parseNodeInformationFrame does its own validation
 		validatePayload(this.payload.length >= 1);
 		this.endpointIndex = this.payload[0] & 0b01111111;
-		const capability = {
+		const NIF = parseNodeInformationFrame(this.payload.slice(1));
+		const capability: EndpointCapability = {
 			isDynamic: !!(this.payload[0] & 0b10000000),
 			wasRemoved: false,
+			generic: lookupGenericDeviceClass(NIF.generic),
+			specific: lookupSpecificDeviceClass(NIF.generic, NIF.specific),
+			supportedCCs: NIF.supportedCCs,
 			// TODO: does this include controlledCCs aswell?
-			...parseNodeInformationFrame(this.payload.slice(1)),
 		};
 		// Removal reports have very specific information
 		capability.wasRemoved =
 			capability.isDynamic &&
-			capability.generic.key ===
-				GenericDeviceClasses["Non-Interoperable"] &&
+			capability.generic.key === 0xff && // "Non-Interoperable"
 			capability.specific.key === 0x00;
 
 		this.capability = capability;
@@ -630,12 +639,8 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		let message = `endpoint index:        ${this.endpointIndex}
-generic device class:  ${this.capability.generic.name} (${num2hex(
-			this.capability.generic.key,
-		)})
-specific device class: ${this.capability.specific.name} (${num2hex(
-			this.capability.specific.key,
-		)})
+generic device class:  ${this.capability.generic.label}
+specific device class: ${this.capability.specific.label}
 is dynamic end point:  ${this.capability.isDynamic}
 supported CCs:`;
 		for (const cc of this.capability.supportedCCs) {
@@ -710,8 +715,8 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 			.filter((e) => e !== 0);
 	}
 
-	private _genericClass: GenericDeviceClasses;
-	public get genericClass(): GenericDeviceClasses {
+	private _genericClass: number;
+	public get genericClass(): number {
 		return this._genericClass;
 	}
 	private _specificClass: number;
@@ -750,7 +755,7 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 }
 
 interface MultiChannelCCEndPointFindOptions extends CCCommandOptions {
-	genericClass: GenericDeviceClasses;
+	genericClass: number;
 	specificClass: number;
 }
 
@@ -776,7 +781,7 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 		}
 	}
 
-	public genericClass: GenericDeviceClasses;
+	public genericClass: number;
 	public specificClass: number;
 
 	public serialize(): Buffer {

@@ -1,9 +1,3 @@
-import {
-	BasicDeviceClasses,
-	DeviceClass,
-	GenericDeviceClass,
-	SpecificDeviceClass,
-} from "@zwave-js/core";
 import type { JSONObject } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import {
@@ -19,6 +13,7 @@ import {
 	messageTypes,
 	priority,
 } from "../message/Message";
+import { DeviceClass } from "../node/DeviceClass";
 
 enum NodeCapabilityFlags {
 	Listening = 0b10_000_000,
@@ -114,9 +109,9 @@ export class GetNodeProtocolInfoResponse extends Message {
 		this._isBeaming = (security & SecurityFlags.BeamCapability) !== 0;
 
 		// parse the device class
-		const basic = this.payload[3] as BasicDeviceClasses;
-		const generic = GenericDeviceClass.get(this.payload[4]);
-		const specific = SpecificDeviceClass.get(generic.key, this.payload[5]);
+		const basic = this.payload[3];
+		const generic = this.payload[4];
+		const specific = this.payload[5];
 		this._deviceClass = new DeviceClass(basic, generic, specific);
 	}
 

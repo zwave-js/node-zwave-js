@@ -1,10 +1,4 @@
-import {
-	BasicDeviceClasses,
-	CommandClasses,
-	GenericDeviceClass,
-	parseNodeUpdatePayload,
-	SpecificDeviceClass,
-} from "@zwave-js/core";
+import { CommandClasses, parseNodeUpdatePayload } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import {
 	FunctionType,
@@ -136,9 +130,9 @@ export class AddNodeToNetworkRequest extends Message {
 
 interface AddNodeStatusContext {
 	nodeId: number;
-	basic?: BasicDeviceClasses;
-	generic?: GenericDeviceClass;
-	specific?: SpecificDeviceClass;
+	basic?: number;
+	generic?: number;
+	specific?: number;
 	supportedCCs?: CommandClasses[];
 	controlledCCs?: CommandClasses[];
 }

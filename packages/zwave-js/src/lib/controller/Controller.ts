@@ -1,8 +1,6 @@
 import {
 	actuatorCCs,
-	BasicDeviceClasses,
 	CommandClasses,
-	DeviceClass,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -36,6 +34,7 @@ import type {
 import type { Driver, RequestHandler } from "../driver/Driver";
 import log from "../log";
 import { FunctionType } from "../message/Constants";
+import { DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
 import {
@@ -792,20 +791,14 @@ export class ZWaveController extends EventEmitter {
 						.map(([cc]) => cc);
 					log.controller.print(
 						`finished adding node ${newNode.id}:
-  basic device class:    ${
-		BasicDeviceClasses[newNode.deviceClass!.basic]
-  } (${num2hex(newNode.deviceClass!.basic)})
-  generic device class:  ${newNode.deviceClass!.generic.name} (${num2hex(
-							newNode.deviceClass!.generic.key,
-						)})
-  specific device class: ${newNode.deviceClass!.specific.name} (${num2hex(
-							newNode.deviceClass!.specific.key,
-						)})
+  basic device class:    ${newNode.deviceClass?.basic.label}
+  generic device class:  ${newNode.deviceClass?.generic.label}
+  specific device class: ${newNode.deviceClass?.specific.label}
   supported CCs: ${supportedCommandClasses
-		.map((cc) => `\n    ${CommandClasses[cc]} (${num2hex(cc)})`)
+		.map((cc) => `\n  · ${CommandClasses[cc]} (${num2hex(cc)})`)
 		.join("")}
   controlled CCs: ${controlledCommandClasses
-		.map((cc) => `\n    ${CommandClasses[cc]} (${num2hex(cc)})`)
+		.map((cc) => `\n  · ${CommandClasses[cc]} (${num2hex(cc)})`)
 		.join("")}`,
 					);
 					// remember the node

@@ -1,6 +1,15 @@
 {
 	"extends": "../tsconfig.json",
-	"compilerOptions": {
-		"rootDir": "../../../"
-	}
+	"compilerOptions": {},
+	"references": [
+		{
+			"path": "../../core/tsconfig.build.json"
+		},
+		{
+			"path": "../../shared/tsconfig.build.json"
+		},
+	],
+	"include": [
+		"**/*.ts"
+	]
 }

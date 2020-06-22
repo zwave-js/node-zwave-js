@@ -4,11 +4,11 @@ import {
 	Maybe,
 	parseBitMask,
 	validatePayload,
+	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
