@@ -97,8 +97,10 @@ export class CCAPI {
 	public isSupported(): boolean {
 		return (
 			// NoOperation is always supported
-			// TODO: find out if there are other CCs always supported
 			this.ccId === CommandClasses["No Operation"] ||
+			// Basic should always be supported. Since we are trying to hide it from library consumers
+			// we cannot trust supportsCC to test it
+			this.ccId === CommandClasses.Basic ||
 			this.endpoint.supportsCC(this.ccId)
 		);
 	}

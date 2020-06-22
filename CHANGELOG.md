@@ -8,6 +8,9 @@
 ### Breaking changes
 See "Changes under the hood". I don't expect anything to break, but to be safe, I'll declare this as a major version.
 
+### Bugfixes
+* It is now assumed that the Basic CC API is always supported
+
 ### Features
 * Mandatory supported CCs that are defined in the device class config are now respected. This should improve support for legacy devices that don't include all CCs in the NIF.
 
