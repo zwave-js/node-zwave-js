@@ -791,7 +791,7 @@ export class ZWaveController extends EventEmitter {
 						.map(([cc]) => cc);
 					log.controller.print(
 						`finished adding node ${newNode.id}:
-  basic device class:    ${newNode.deviceClass?.basic}
+  basic device class:    ${newNode.deviceClass?.basic.label}
   generic device class:  ${newNode.deviceClass?.generic.label}
   specific device class: ${newNode.deviceClass?.specific.label}
   supported CCs: ${supportedCommandClasses

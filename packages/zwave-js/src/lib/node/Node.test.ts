@@ -1,12 +1,8 @@
+import { loadDeviceClasses } from "@zwave-js/config";
 import {
 	assertZWaveError,
-	BasicDeviceClasses,
 	CommandClasses,
-	DeviceClass,
-	GenericDeviceClass,
-	GenericDeviceClasses,
 	NodeUpdatePayload,
-	SpecificDeviceClass,
 	unknownBoolean,
 	ValueDB,
 	ValueID,
@@ -37,6 +33,7 @@ import {
 import { SendDataRequest } from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
 import { assertCC } from "../test/assertCC";
+import { DeviceClass } from "./DeviceClass";
 import { ZWaveNode } from "./Node";
 import { RequestNodeInfoRequest } from "./RequestNodeInfoMessages";
 import { InterviewStage, NodeStatus } from "./Types";
@@ -88,6 +85,9 @@ describe("lib/node/Node", () => {
 		await import("../commandclass/BatteryCC");
 		await import("../commandclass/ThermostatSetpointCC");
 		await import("../commandclass/VersionCC");
+
+		// And load the device classes config - we need it for the node tests
+		await loadDeviceClasses();
 	});
 
 	describe("constructor", () => {
@@ -104,14 +104,7 @@ describe("lib/node/Node", () => {
 
 			expect(makeNode(undefined as any).deviceClass).toBeUndefined();
 
-			const devCls = new DeviceClass(
-				BasicDeviceClasses.Controller,
-				GenericDeviceClass.get(GenericDeviceClasses["Alarm Sensor"]),
-				SpecificDeviceClass.get(
-					GenericDeviceClasses["Alarm Sensor"],
-					0x02,
-				),
-			);
+			const devCls = new DeviceClass(0x02, 0x01, 0x03);
 			expect(makeNode(devCls).deviceClass).toBe(devCls);
 		});
 
@@ -178,16 +171,7 @@ describe("lib/node/Node", () => {
 					isSecure: false,
 					version: 3,
 					isBeaming: false,
-					deviceClass: new DeviceClass(
-						BasicDeviceClasses.Controller,
-						GenericDeviceClass.get(
-							GenericDeviceClasses["Alarm Sensor"],
-						),
-						SpecificDeviceClass.get(
-							GenericDeviceClasses["Alarm Sensor"],
-							0x02,
-						),
-					),
+					deviceClass: new DeviceClass(0x01, 0x03, 0x02),
 				} as GetNodeProtocolInfoResponse;
 
 				fakeDriver.sendMessage.mockResolvedValue(expected);
@@ -336,14 +320,9 @@ describe("lib/node/Node", () => {
 			// TODO: We need a real payload for this test
 			it.skip("should update its node information with the received data and mark the node as awake", async () => {
 				const nodeUpdate: NodeUpdatePayload = {
-					basic: BasicDeviceClasses.Controller,
-					generic: GenericDeviceClass.get(
-						GenericDeviceClasses["Multilevel Sensor"],
-					),
-					specific: SpecificDeviceClass.get(
-						GenericDeviceClasses["Multilevel Sensor"],
-						0x02,
-					),
+					basic: 0x01,
+					generic: 0x03,
+					specific: 0x01,
 					supportedCCs: [CommandClasses["User Code"]],
 					controlledCCs: [CommandClasses["Window Covering"]],
 					nodeId: 2,

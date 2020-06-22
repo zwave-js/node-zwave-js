@@ -872,7 +872,7 @@ export class ZWaveNode extends Endpoint {
 		this._isBeaming = resp.isBeaming;
 
 		const logMessage = `received response for protocol info:
-basic device class:    ${this._deviceClass.basic}
+basic device class:    ${this._deviceClass.basic.label}
 generic device class:  ${this._deviceClass.generic.label}
 specific device class: ${this._deviceClass.specific.label}
 is a listening device: ${this.isListening}
@@ -2503,7 +2503,7 @@ version:               ${this.version}`;
 					? InterviewStage[InterviewStage.Complete]
 					: InterviewStage[this.interviewStage],
 			deviceClass: this.deviceClass && {
-				basic: this.deviceClass.basic,
+				basic: this.deviceClass.basic.key,
 				generic: this.deviceClass.generic.key,
 				specific: this.deviceClass.specific.key,
 			},

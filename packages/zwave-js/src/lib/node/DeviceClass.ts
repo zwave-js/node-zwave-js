@@ -1,4 +1,5 @@
 import {
+	BasicDeviceClass,
 	GenericDeviceClass,
 	lookupBasicDeviceClass,
 	lookupGenericDeviceClass,
@@ -19,7 +20,7 @@ export class DeviceClass {
 		this._mandatoryControlledCCs = this.specific.controlledCCs;
 	}
 
-	public readonly basic: string;
+	public readonly basic: BasicDeviceClass;
 	public readonly generic: GenericDeviceClass;
 	public readonly specific: SpecificDeviceClass;
 
@@ -35,7 +36,7 @@ export class DeviceClass {
 
 	public toJSON(): JSONObject {
 		return {
-			basic: this.basic,
+			basic: this.basic.label,
 			generic: this.generic.label,
 			specific: this.specific.label,
 			mandatorySupportedCCs: this._mandatorySupportedCCs.map(

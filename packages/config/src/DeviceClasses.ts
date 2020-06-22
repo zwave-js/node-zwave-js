@@ -142,7 +142,7 @@ export function getDefaultSpecificDeviceClass(
 	);
 }
 
-export function lookupBasicDeviceClass(basic: number): string {
+export function lookupBasicDeviceClass(basic: number): BasicDeviceClass {
 	if (!basicDeviceClasses) {
 		throw new ZWaveError(
 			"The config has not been loaded yet!",
@@ -150,7 +150,10 @@ export function lookupBasicDeviceClass(basic: number): string {
 		);
 	}
 
-	return basicDeviceClasses.get(basic) ?? `UNKNOWN (${num2hex(basic)})`;
+	return {
+		key: basic,
+		label: basicDeviceClasses.get(basic) ?? `UNKNOWN (${num2hex(basic)})`,
+	};
 }
 
 export function lookupGenericDeviceClass(generic: number): GenericDeviceClass {
@@ -176,6 +179,11 @@ export function lookupSpecificDeviceClass(
 		genericClass.specific.get(specific) ??
 		getDefaultSpecificDeviceClass(genericClass, specific)
 	);
+}
+
+export interface BasicDeviceClass {
+	key: number;
+	label: string;
 }
 
 export class GenericDeviceClass {
