@@ -147,6 +147,22 @@ describe("lib/node/Node", () => {
 			const node = new ZWaveNode(1, fakeDriver);
 			expect(node.valueDB).toBeInstanceOf(ValueDB);
 		});
+
+		it("marks the mandatory CCs as supported/controlled", () => {
+			// Portable Scene Controller
+			const deviceClass = new DeviceClass(0x01, 0x01, 0x02);
+			const node = new ZWaveNode(1, fakeDriver, deviceClass);
+			expect(node.supportsCC(CommandClasses.Association)).toBeTrue();
+			expect(
+				node.supportsCC(
+					CommandClasses["Scene Controller Configuration"],
+				),
+			).toBeTrue();
+			expect(
+				node.supportsCC(CommandClasses["Manufacturer Specific"]),
+			).toBeTrue();
+			expect(node.controlsCC(CommandClasses["Scene Activation"]));
+		});
 	});
 
 	describe("interview()", () => {
