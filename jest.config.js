@@ -8,6 +8,11 @@ module.exports = {
 	],
 	testRegex: "(\\.|/)test\\.tsx?$",
 	moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+	moduleNameMapper: {
+		"^@zwave-js/config(.*)": "<rootDir>/packages/config/src$1",
+		"^@zwave-js/core(.*)": "<rootDir>/packages/core/src$1",
+		"^@zwave-js/shared(.*)": "<rootDir>/packages/shared/src$1",
+	},
 	setupFilesAfterEnv: ["jest-extended"],
 	setupFiles: ["reflect-metadata"],
 	extraGlobals: ["Reflect"],

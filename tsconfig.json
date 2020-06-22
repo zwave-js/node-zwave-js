@@ -17,7 +17,7 @@
 			],
 			"@zwave-js/shared": [
 				"shared/src"
-			],
+			]
 		},
 		"composite": true,
 		"declaration": true,
@@ -52,22 +52,11 @@
 	"include": [
 		"packages/**/*.ts",
 		"maintenance/**/*.ts",
-		"test/**/*.ts",
+		"test/**/*.ts"
 	],
 	"exclude": [
 		"**/build/**",
 		"node_modules/**",
 		"packages/**/node_modules"
-	],
-	// "references": [
-	// 	{
-	// 		"path": "./packages/config/src/"
-	// 	},
-	// 	{
-	// 		"path": "./packages/core/src/"
-	// 	},
-	// 	{
-	// 		"path": "./packages/shared/src/"
-	// 	},
-	// ]
+	]
 }
