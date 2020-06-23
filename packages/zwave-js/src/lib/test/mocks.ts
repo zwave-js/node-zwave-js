@@ -1,18 +1,19 @@
 import type { CommandClasses } from "@zwave-js/core";
-import type { Driver, ZWaveNode } from "zwave-js/src";
-import { getImplementedVersion } from "zwave-js/src/lib/commandclass/CommandClass";
-import { SendDataRequest } from "zwave-js/src/lib/controller/SendDataMessages";
+import { getImplementedVersion } from "../commandclass/CommandClass";
+import { SendDataRequest } from "../controller/SendDataMessages";
+import type { Driver } from "../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "zwave-js/src/lib/message/Constants";
+} from "../message/Constants";
 import {
 	expectedResponse,
 	Message,
 	messageTypes,
 	priority,
-} from "zwave-js/src/lib/message/Message";
+} from "../message/Message";
+import type { ZWaveNode } from "../node/Node";
 
 const MockRequestMessageWithExpectation_FunctionType = (0xfa as unknown) as FunctionType;
 const MockRequestMessageWithoutExpectation_FunctionType = (0xfb as unknown) as FunctionType;

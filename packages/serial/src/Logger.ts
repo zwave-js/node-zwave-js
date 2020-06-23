@@ -6,9 +6,9 @@ import {
 	isLoglevelVisible,
 	ZWaveLogger,
 } from "@zwave-js/core";
-import { MessageHeaders } from "@zwave-js/serial";
 import { num2hex } from "@zwave-js/shared";
 import winston from "winston";
+import { MessageHeaders } from "./MessageHeaders";
 
 export const SERIAL_LABEL = "SERIAL";
 const SERIAL_LOGLEVEL = "debug";

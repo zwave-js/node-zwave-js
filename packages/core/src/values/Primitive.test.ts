@@ -1,5 +1,5 @@
-import { assertZWaveError } from "@zwave-js/core";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
+import { assertZWaveError } from "../test/assertZWaveError";
 import {
 	encodeBitMask,
 	encodeFloatWithScale,
