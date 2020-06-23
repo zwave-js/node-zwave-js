@@ -58,16 +58,14 @@ describe("ZWaveSerialPort", () => {
 			Buffer.from("abcdef1234567890", "hex"),
 		];
 		for (const buffer of buffers) {
-			await port.writeAsync(buffer);
+			await port.write(buffer);
 			expect(binding.lastWrite).toEqual(buffer);
 		}
 	});
 
-	it("writeAsync rejects if the port is not open", async () => {
+	it("write rejects if the port is not open", async () => {
 		await port.close();
-		await expect(
-			port.writeAsync(Buffer.from([MessageHeaders.ACK])),
-		).toReject();
+		await expect(port.write(Buffer.from([MessageHeaders.ACK]))).toReject();
 	});
 
 	it("emit an event for each single-byte message that was read", async () => {
@@ -141,5 +139,27 @@ describe("ZWaveSerialPort", () => {
 
 		const received = await waitForData(port);
 		expect(received).toEqual(data);
+	});
+
+	it("may be consumed with an async iterator", async () => {
+		const data = Buffer.from([
+			MessageHeaders.ACK,
+			MessageHeaders.CAN,
+			0xff,
+			0xfe,
+			0xfd,
+			0xfa,
+			MessageHeaders.ACK,
+		]);
+		binding.emitData(data);
+
+		let count = 0;
+		for await (const msg of port) {
+			count++;
+			if (count === 1) expect(msg).toBe(MessageHeaders.ACK);
+			if (count === 2) expect(msg).toBe(MessageHeaders.CAN);
+			if (count === 3) expect(msg).toBe(MessageHeaders.ACK);
+			if (count === 3) break;
+		}
 	});
 });

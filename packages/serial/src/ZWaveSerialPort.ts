@@ -1,19 +1,19 @@
 import { EventEmitter } from "events";
 import SerialPort from "serialport";
-import { PassThrough, Transform, Writable } from "stream";
+import { PassThrough, Readable, Transform, Writable } from "stream";
 import log from "./Logger";
 import { MessageHeaders } from "./MessageHeaders";
 import { SerialAPIParser } from "./SerialAPIParser";
 
+export type ZWaveSerialChunk =
+	| MessageHeaders.ACK
+	| MessageHeaders.NAK
+	| MessageHeaders.CAN
+	| Buffer;
+
 interface ZWaveSerialPortEventCallbacks {
 	error: (e: Error) => void;
-	data: (
-		data:
-			| MessageHeaders.ACK
-			| MessageHeaders.NAK
-			| MessageHeaders.CAN
-			| Buffer,
-	) => void;
+	data: (data: ZWaveSerialChunk) => void;
 }
 
 type ZWaveSerialPortEvents = Extract<
@@ -54,8 +54,14 @@ export class ZWaveSerialPort extends EventEmitter {
 	private serial: SerialPort;
 	private parser: SerialAPIParser;
 
-	public readonly receiveStream: Transform;
-	public readonly transmitStream: Transform;
+	private readonly receiveStream: Transform;
+	private readonly transmitStream: Transform;
+
+	// Allow async iteration and piping
+	public declare [Symbol.asyncIterator]: () => AsyncIterator<
+		ZWaveSerialChunk
+	>;
+	public declare pipe: Readable["pipe"];
 
 	constructor(port: string) {
 		super();
@@ -94,7 +100,11 @@ export class ZWaveSerialPort extends EventEmitter {
 		// Hook up a parser to the serial port
 		this.receiveStream = this.parser = new SerialAPIParser();
 		this.serial.pipe(this.parser);
-		// Just pass all written data to the serialport unchanged
+		// Allow iterating and piping the receive stream
+		this[Symbol.asyncIterator] = () => this.parser[Symbol.asyncIterator]();
+		this.pipe = this.parser.pipe.bind(this.parser);
+
+		// Pass all written data to the serialport unchanged
 		this.transmitStream = new PassThrough();
 		this.transmitStream.pipe((this.serial as unknown) as Writable);
 
@@ -119,7 +129,7 @@ export class ZWaveSerialPort extends EventEmitter {
 		return this.serial.isOpen;
 	}
 
-	public async writeAsync(data: Buffer): Promise<void> {
+	public async write(data: Buffer): Promise<void> {
 		if (!this.isOpen) {
 			throw new Error("The serial port is not open!");
 		}

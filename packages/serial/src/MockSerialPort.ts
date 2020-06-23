@@ -17,7 +17,7 @@ export class MockSerialPort extends EventEmitter {
 		this.receiveStream.on("data", (data) => this.emit("data", data));
 		// And pass everything through that was written
 		this.transmitStream = new PassThrough();
-		this.transmitStream.on("data", (data) => void this.writeAsync(data));
+		this.transmitStream.on("data", (data) => void this.write(data));
 	}
 
 	public static getInstance(port: string): MockSerialPort | undefined {
@@ -51,7 +51,7 @@ export class MockSerialPort extends EventEmitter {
 		this.emit("error", err);
 	}
 
-	public writeAsync(data: Buffer): Promise<void> {
+	public write(data: Buffer): Promise<void> {
 		this._lastWrite = data;
 		return this.writeStub(data);
 	}

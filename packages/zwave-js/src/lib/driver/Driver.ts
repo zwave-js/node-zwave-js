@@ -2321,7 +2321,7 @@ ${handlers.length} left`,
 
 	/** Sends a raw datagram to the serialport (if that is open) */
 	private doSend(data: Buffer): void {
-		void this.serial?.writeAsync(data);
+		void this.serial?.write(data);
 	}
 
 	/**
