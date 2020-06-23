@@ -4,12 +4,50 @@
 import { Mixin } from "@zwave-js/shared";
 import { EventEmitter } from "events";
 import { PassThrough } from "stream";
-import { ZWaveSerialPort } from "./ZWaveSerialPort";
+import {
+	ZWaveSerialPort,
+	ZWaveSerialPortEventCallbacks,
+} from "./ZWaveSerialPort";
 
 const instances = new Map<string, MockSerialPort>();
 
 @Mixin([EventEmitter])
 class MockBinding extends PassThrough {}
+
+interface MockSerialPortEventCallbacks extends ZWaveSerialPortEventCallbacks {
+	write: (data: Buffer) => void;
+}
+
+type MockSerialPortEvents = Extract<keyof MockSerialPortEventCallbacks, string>;
+
+export interface MockSerialPort {
+	on<TEvent extends MockSerialPortEvents>(
+		event: TEvent,
+		callback: MockSerialPortEventCallbacks[TEvent],
+	): this;
+	addListener<TEvent extends MockSerialPortEvents>(
+		event: TEvent,
+		callback: MockSerialPortEventCallbacks[TEvent],
+	): this;
+	once<TEvent extends MockSerialPortEvents>(
+		event: TEvent,
+		callback: MockSerialPortEventCallbacks[TEvent],
+	): this;
+	off<TEvent extends MockSerialPortEvents>(
+		event: TEvent,
+		callback: MockSerialPortEventCallbacks[TEvent],
+	): this;
+	removeListener<TEvent extends MockSerialPortEvents>(
+		event: TEvent,
+		callback: MockSerialPortEventCallbacks[TEvent],
+	): this;
+	removeAllListeners(event?: MockSerialPortEvents): this;
+
+	emit<TEvent extends MockSerialPortEvents>(
+		event: TEvent,
+		...args: Parameters<MockSerialPortEventCallbacks[TEvent]>
+	): boolean;
+}
 
 export class MockSerialPort extends ZWaveSerialPort {
 	constructor(port: string) {
@@ -55,6 +93,7 @@ export class MockSerialPort extends ZWaveSerialPort {
 
 	public writeAsync(data: Buffer): Promise<void> {
 		this._lastWrite = data;
+		this.emit("write", data);
 		return this.writeStub(data);
 	}
 	public readonly writeStub: jest.Mock = jest.fn();

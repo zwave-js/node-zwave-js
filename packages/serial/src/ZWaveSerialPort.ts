@@ -12,7 +12,7 @@ export type ZWaveSerialChunk =
 	| MessageHeaders.CAN
 	| Buffer;
 
-interface ZWaveSerialPortEventCallbacks {
+export interface ZWaveSerialPortEventCallbacks {
 	error: (e: Error) => void;
 	data: (data: ZWaveSerialChunk) => void;
 }
