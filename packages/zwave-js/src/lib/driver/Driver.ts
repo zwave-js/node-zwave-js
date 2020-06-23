@@ -1057,25 +1057,19 @@ export class Driver extends EventEmitter {
 			switch (data) {
 				// single-byte messages - we have a handler for each one
 				case MessageHeaders.ACK: {
-					log.serial.ACK("inbound");
 					this.handleACK();
 					return;
 				}
 				case MessageHeaders.NAK: {
-					log.serial.NAK("inbound");
 					this.handleNAK();
 					return;
 				}
 				case MessageHeaders.CAN: {
-					log.serial.CAN("inbound");
 					this.handleCAN();
 					return;
 				}
 			}
 		}
-
-		// Log the received message buffer
-		log.serial.data("inbound", data);
 
 		let msg: Message | undefined;
 		try {
@@ -2150,7 +2144,6 @@ ${handlers.length} left`,
 	 */
 	private send(header: MessageHeaders): void {
 		// ACK, CAN, NAK
-		log.serial[MessageHeaders[header] as "ACK" | "NAK" | "CAN"]("outbound");
 		this.doSend(Buffer.from([header]));
 		return;
 	}
@@ -2317,7 +2310,6 @@ ${handlers.length} left`,
 				throw e;
 			}
 		}
-		log.serial.data("outbound", data);
 		this.doSend(data);
 
 		// INS12350-14:

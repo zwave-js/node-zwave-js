@@ -2,11 +2,11 @@
 {
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {},
-	"include": [
-		"**/*.ts"
+	"references": [
+		{
+			"path": "../core/tsconfig.build.json"
+		}
 	],
-	"exclude": [
-		"build/**",
-		"node_modules/**"
-	]
+	"include": ["**/*.ts"],
+	"exclude": ["build/**", "node_modules/**"]
 }

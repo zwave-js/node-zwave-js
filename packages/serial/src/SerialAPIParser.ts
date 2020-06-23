@@ -1,4 +1,5 @@
 import { Transform, TransformCallback } from "stream";
+import log from "./Logger";
 import { MessageHeaders } from "./MessageHeaders";
 
 /**
@@ -34,14 +35,17 @@ export class SerialAPIParser extends Transform {
 				switch (this.receiveBuffer[0]) {
 					// Emit the single-byte messages directly
 					case MessageHeaders.ACK: {
+						log.serial.ACK("inbound");
 						this.push(MessageHeaders.ACK);
 						break;
 					}
 					case MessageHeaders.NAK: {
+						log.serial.NAK("inbound");
 						this.push(MessageHeaders.NAK);
 						break;
 					}
 					case MessageHeaders.CAN: {
+						log.serial.CAN("inbound");
 						this.push(MessageHeaders.CAN);
 						break;
 					}
@@ -63,8 +67,11 @@ export class SerialAPIParser extends Transform {
 				// We have at least one complete message
 				const msgLength = getMessageLength(this.receiveBuffer);
 				// emit it and slice the read bytes from the buffer
-				this.push(this.receiveBuffer.slice(0, msgLength));
+				const msg = this.receiveBuffer.slice(0, msgLength);
 				this.receiveBuffer = skipBytes(this.receiveBuffer, msgLength);
+
+				log.serial.data("inbound", msg);
+				this.push(msg);
 			}
 		}
 		callback();

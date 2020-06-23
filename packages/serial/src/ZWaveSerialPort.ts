@@ -1,7 +1,8 @@
 import { EventEmitter } from "events";
 import SerialPort from "serialport";
 import { PassThrough, Transform, Writable } from "stream";
-import type { MessageHeaders } from "./MessageHeaders";
+import log from "./Logger";
+import { MessageHeaders } from "./MessageHeaders";
 import { SerialAPIParser } from "./SerialAPIParser";
 
 interface ZWaveSerialPortEventCallbacks {
@@ -122,6 +123,22 @@ export class ZWaveSerialPort extends EventEmitter {
 		if (!this.isOpen) {
 			throw new Error("The serial port is not open!");
 		}
+		if (data.length === 1) {
+			switch (data[0]) {
+				case MessageHeaders.ACK:
+					log.serial.ACK("outbound");
+					break;
+				case MessageHeaders.CAN:
+					log.serial.CAN("outbound");
+					break;
+				case MessageHeaders.NAK:
+					log.serial.NAK("outbound");
+					break;
+			}
+		} else {
+			log.serial.data("outbound", data);
+		}
+
 		return new Promise((resolve, reject) => {
 			this.transmitStream.write(data, (err) => {
 				if (err) reject(err);
