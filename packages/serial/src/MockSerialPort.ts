@@ -5,19 +5,19 @@ import { SerialAPIParser } from "./SerialAPIParser";
 const instances = new Map<string, MockSerialPort>();
 
 export class MockSerialPort extends EventEmitter {
-	public readonly receiveStream: PassThrough;
-	public readonly transmitStream: PassThrough;
+	private readonly parser: SerialAPIParser;
+	private readonly transmitStream: PassThrough;
 
 	constructor(port: string) {
 		super();
 		instances.set(port, this);
 
 		// Hook up a the parser when reading from the serial port
-		this.receiveStream = new SerialAPIParser();
-		this.receiveStream.on("data", (data) => this.emit("data", data));
+		this.parser = new SerialAPIParser();
+		this.parser.on("data", (data) => this.emit("data", data));
 		// And pass everything through that was written
 		this.transmitStream = new PassThrough();
-		this.transmitStream.on("data", (data) => void this.write(data));
+		this.transmitStream.on("data", (data) => void this.writeAsync(data));
 	}
 
 	public static getInstance(port: string): MockSerialPort | undefined {
@@ -44,14 +44,14 @@ export class MockSerialPort extends EventEmitter {
 	public readonly closeStub: jest.Mock = jest.fn(() => Promise.resolve());
 
 	public receiveData(data: Buffer): void {
-		this.receiveStream.write(data);
+		this.parser.write(data);
 	}
 
 	public raiseError(err: Error): void {
 		this.emit("error", err);
 	}
 
-	public write(data: Buffer): Promise<void> {
+	public writeAsync(data: Buffer): Promise<void> {
 		this._lastWrite = data;
 		return this.writeStub(data);
 	}

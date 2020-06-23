@@ -1,3 +1,4 @@
+import { Mixin } from "@zwave-js/shared";
 import { EventEmitter } from "events";
 import SerialPort from "serialport";
 import { PassThrough, Readable, Transform, Writable } from "stream";
@@ -50,23 +51,30 @@ export interface ZWaveSerialPort {
 	): boolean;
 }
 
-export class ZWaveSerialPort extends EventEmitter {
+// This serial port wrapper is basically a double-transform (duplex) stream
+// ┌─────────────────┐ ┌─────────────────┐ ┌──
+// │                 <--   PassThrough   <-- write
+// │ node-serialport │ │ ZWaveSerialPort │ │
+// │                 --> SerialAPIParser --> read
+// └─────────────────┘ └─────────────────┘ └──
+// The implementation idea is based on https://stackoverflow.com/a/17476600/10179833
+
+@Mixin([EventEmitter])
+export class ZWaveSerialPort extends PassThrough {
 	private serial: SerialPort;
 	private parser: SerialAPIParser;
 
-	private readonly receiveStream: Transform;
 	private readonly transmitStream: Transform;
 
-	// Allow async iteration and piping
-	public declare [Symbol.asyncIterator]: () => AsyncIterator<
+	// Allow strongly-typed async iteration
+	public declare [Symbol.asyncIterator]: () => AsyncIterableIterator<
 		ZWaveSerialChunk
 	>;
-	public declare pipe: Readable["pipe"];
 
 	constructor(port: string) {
-		super();
+		super({ readableObjectMode: true });
 
-		// Route the data event to the receive stream
+		// Route the data event handlers to the parser and handle everything else ourselves
 		for (const method of [
 			"on",
 			"once",
@@ -75,15 +83,13 @@ export class ZWaveSerialPort extends EventEmitter {
 			"removeListener",
 			"removeAllListeners",
 		] as const) {
+			const original = this[method].bind(this);
 			this[method] = (event: any, ...args: any[]) => {
 				if (event === "data") {
 					// @ts-expect-error
-					this.receiveStream[method]("data", ...args);
+					this.parser[method]("data", ...args);
 				} else {
-					// wotan-disable no-restricted-property-access
-					// @ts-expect-error
-					super[method](event, ...args);
-					// wotan-enable no-restricted-property-access
+					(original as any)(event, ...args);
 				}
 				return this;
 			};
@@ -95,22 +101,33 @@ export class ZWaveSerialPort extends EventEmitter {
 			dataBits: 8,
 			stopBits: 1,
 			parity: "none",
+		}).on("error", (e) => {
+			// Pass errors through
+			this.emit("error", e);
 		});
 
 		// Hook up a parser to the serial port
-		this.receiveStream = this.parser = new SerialAPIParser();
+		this.parser = new SerialAPIParser();
 		this.serial.pipe(this.parser);
-		// Allow iterating and piping the receive stream
-		this[Symbol.asyncIterator] = () => this.parser[Symbol.asyncIterator]();
+		// When the wrapper is piped to a stream, pipe the parser instead
 		this.pipe = this.parser.pipe.bind(this.parser);
+		this.unpipe = (destination) => {
+			this.parser.unpipe(destination);
+			return this;
+		};
+		// When something is piped to us, pipe it to the transmit stream instead
+		// wotan-disable-next-line
+		this.on("pipe" as any, (source: Readable) => {
+			source.unpipe(this as any);
+			source.pipe(this.transmitStream, { end: false });
+		});
+
+		// Delegate iterating to the parser stream
+		this[Symbol.asyncIterator] = () => this.parser[Symbol.asyncIterator]();
 
 		// Pass all written data to the serialport unchanged
 		this.transmitStream = new PassThrough();
 		this.transmitStream.pipe((this.serial as unknown) as Writable);
-
-		this.serial.on("error", (e) => {
-			this.emit("error", e);
-		});
 	}
 
 	public open(): Promise<void> {
@@ -129,7 +146,7 @@ export class ZWaveSerialPort extends EventEmitter {
 		return this.serial.isOpen;
 	}
 
-	public async write(data: Buffer): Promise<void> {
+	public async writeAsync(data: Buffer): Promise<void> {
 		if (!this.isOpen) {
 			throw new Error("The serial port is not open!");
 		}
