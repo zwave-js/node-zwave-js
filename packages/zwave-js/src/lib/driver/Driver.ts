@@ -19,12 +19,8 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import {
-	DeepPartial,
-	getEnumMemberName,
-	num2hex,
-	skipBytes,
-} from "@zwave-js/shared";
+import { MessageHeaders, ZWaveSerialPort } from "@zwave-js/serial";
+import { DeepPartial, getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
@@ -37,7 +33,6 @@ import { EventEmitter } from "events";
 import fsExtra from "fs-extra";
 import path from "path";
 import SerialPort from "serialport";
-import { promisify } from "util";
 import { FirmwareUpdateStatus } from "../commandclass";
 import {
 	CommandClass,
@@ -81,7 +76,6 @@ import {
 import log from "../log";
 import {
 	FunctionType,
-	MessageHeaders,
 	MessagePriority,
 	MessageType,
 } from "../message/Constants";
@@ -310,9 +304,7 @@ export interface Driver {
  */
 export class Driver extends EventEmitter {
 	/** The serial port instance */
-	private serial: SerialPort | undefined;
-	/** A buffer of received but unprocessed data */
-	private receiveBuffer: Buffer | undefined;
+	private serial: ZWaveSerialPort | undefined;
 	/**
 	 * The stack of pending (nested) transactions. Usually this will only contain
 	 * one item. Some messages require multiple sets handshakes before the original
@@ -426,81 +418,13 @@ export class Driver extends EventEmitter {
 		log.driver.print("starting driver...");
 		// Open the serial port
 		log.driver.print(`opening serial port ${this.port}`);
-		this.serial = new SerialPort(this.port, {
-			autoOpen: false,
-			baudRate: 115200,
-			dataBits: 8,
-			stopBits: 1,
-			parity: "none",
-		});
-		// If the port is already open, close it first. We will reopen it later
-		if (this.serial.isOpen) {
-			await promisify(this.serial.close.bind(this.serial))();
-		}
-		this.serial
-			.on("open", async () => {
-				log.driver.print("serial port opened");
-				this._isOpen = true;
-				spOpenPromise.resolve();
-
-				this.send(MessageHeaders.NAK);
-				await wait(1500);
-
-				setImmediate(async () => {
-					// Load the necessary configuration
-					log.driver.print("loading configuration...");
-					try {
-						await loadDeviceClasses();
-						await loadManufacturers();
-						await loadDeviceIndex();
-						await loadNotifications();
-						await loadNamedScales();
-						await loadSensorTypes();
-						await loadMeters();
-						await loadIndicators();
-					} catch (e) {
-						const message = `Failed to load the configuration: ${e.message}`;
-						log.driver.print(message, "error");
-						this.emit(
-							"error",
-							new ZWaveError(
-								message,
-								ZWaveErrorCodes.Driver_Failed,
-							),
-						);
-						void this.destroy();
-						return;
-					}
-
-					log.driver.print("beginning interview...");
-					try {
-						await this.initializeControllerAndNodes();
-					} catch (e) {
-						let message: string;
-						if (
-							e instanceof ZWaveError &&
-							e.code === ZWaveErrorCodes.Controller_MessageDropped
-						) {
-							message = `Failed to initialize the driver, no response from the controller. Are you sure this is a Z-Wave controller?`;
-						} else {
-							message = `Failed to initialize the driver: ${e.message}`;
-						}
-						log.driver.print(message, "error");
-						this.emit(
-							"error",
-							new ZWaveError(
-								message,
-								ZWaveErrorCodes.Driver_Failed,
-							),
-						);
-						void this.destroy();
-						return;
-					}
-				});
-			})
+		this.serial = new ZWaveSerialPort(this.port)
 			.on("data", this.serialport_onData.bind(this))
 			.on("error", (err) => {
-				log.driver.print(`serial port errored: ${err}`, "error");
+				log.driver.print(
+					`serial port errored: ${err.message}`,
+					"error",
+				);
 				if (this._isOpen) {
 					this.serialport_onError(err);
 				} else {
@@ -508,10 +432,77 @@ export class Driver extends EventEmitter {
 					void this.destroy();
 				}
 			});
-		this.serial.open();
+		// If the port is already open, close it first
+		if (this.serial.isOpen) await this.serial.close();
 
-		// IMPORTANT: Test code expects this to be created and returned synchronously
-		// Everything async must happen in the setImmediate callback
+		// IMPORTANT: Test code expects the open promise to be created and returned synchronously
+		// Everything async (inluding opening the serial port) must happen in the setImmediate callback
+
+		setImmediate(async () => {
+			try {
+				await this.serial!.open();
+			} catch (e) {
+				const message = `Failed to open the serial port: ${e.message}`;
+				log.driver.print(message, "error");
+
+				spOpenPromise.reject(
+					new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
+				);
+				void this.destroy();
+				return;
+			}
+			log.driver.print("serial port opened");
+			this._isOpen = true;
+			spOpenPromise.resolve();
+
+			this.send(MessageHeaders.NAK);
+			await wait(1500);
+
+			// Load the necessary configuration
+			log.driver.print("loading configuration...");
+			try {
+				await loadDeviceClasses();
+				await loadManufacturers();
+				await loadDeviceIndex();
+				await loadNotifications();
+				await loadNamedScales();
+				await loadSensorTypes();
+				await loadMeters();
+				await loadIndicators();
+			} catch (e) {
+				const message = `Failed to load the configuration: ${e.message}`;
+				log.driver.print(message, "error");
+				this.emit(
+					"error",
+					new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
+				);
+				void this.destroy();
+				return;
+			}
+
+			log.driver.print("beginning interview...");
+			try {
+				await this.initializeControllerAndNodes();
+			} catch (e) {
+				let message: string;
+				if (
+					e instanceof ZWaveError &&
+					e.code === ZWaveErrorCodes.Controller_MessageDropped
+				) {
+					message = `Failed to initialize the driver, no response from the controller. Are you sure this is a Z-Wave controller?`;
+				} else {
+					message = `Failed to initialize the driver: ${e.message}`;
+				}
+				log.driver.print(message, "error");
+				this.emit(
+					"error",
+					new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
+				);
+				void this.destroy();
+				return;
+			}
+		});
+
 		return spOpenPromise;
 	}
 	// wotan-enable async-function-assignability
@@ -1043,7 +1034,7 @@ export class Driver extends EventEmitter {
 		process.removeListener("uncaughtException", this._cleanupHandler);
 		// the serialport must be closed in any case
 		if (this.serial != undefined) {
-			if (this.serial.isOpen) this.serial.close();
+			if (this.serial.isOpen) await this.serial.close();
 			this.serial = undefined;
 		}
 	}
@@ -1053,167 +1044,118 @@ export class Driver extends EventEmitter {
 	}
 
 	/**
-	 * Is called when the serial port has received any data
+	 * Is called when the serial port has received a single-byte message or a complete message buffer
 	 */
-	private async serialport_onData(data: Buffer): Promise<void> {
-		// append the new data to our receive buffer
-		this.receiveBuffer =
-			this.receiveBuffer != undefined
-				? Buffer.concat([this.receiveBuffer, data])
-				: data;
-
-		while (this.receiveBuffer.length > 0) {
-			if (this.receiveBuffer[0] !== MessageHeaders.SOF) {
-				switch (this.receiveBuffer[0]) {
-					// single-byte messages - we have a handler for each one
-					case MessageHeaders.ACK: {
-						log.serial.ACK("inbound");
-						this.handleACK();
-						break;
-					}
-					case MessageHeaders.NAK: {
-						log.serial.NAK("inbound");
-						this.handleNAK();
-						break;
-					}
-					case MessageHeaders.CAN: {
-						log.serial.CAN("inbound");
-						this.handleCAN();
-						break;
-					}
-					default: {
-						// INS12350: A host or a Z-Wave chip waiting for new traffic MUST ignore all other
-						// byte values than 0x06 (ACK), 0x15 (NAK), 0x18 (CAN) or 0x01 (Data frame).
-						// Just skip this byte
-					}
+	private async serialport_onData(
+		data:
+			| Buffer
+			| MessageHeaders.ACK
+			| MessageHeaders.CAN
+			| MessageHeaders.NAK,
+	): Promise<void> {
+		if (typeof data === "number") {
+			switch (data) {
+				// single-byte messages - we have a handler for each one
+				case MessageHeaders.ACK: {
+					this.handleACK();
+					return;
 				}
-				// Continue with the next byte
-				this.receiveBuffer = skipBytes(this.receiveBuffer, 1);
-				continue;
+				case MessageHeaders.NAK: {
+					this.handleNAK();
+					return;
+				}
+				case MessageHeaders.CAN: {
+					this.handleCAN();
+					return;
+				}
 			}
+		}
 
-			// Log the received chunk
-			log.serial.data("inbound", data);
-			// Log the current receive buffer
-			const msgComplete = Message.isComplete(this.receiveBuffer);
-			log.serial.receiveBuffer(this.receiveBuffer, msgComplete);
-			// nothing to do yet, wait for the next data
-			if (!msgComplete) return;
+		let msg: Message | undefined;
+		try {
+			msg = Message.from(this, data);
+		} catch (e) {
+			let handled = false;
+			if (e instanceof ZWaveError) {
+				switch (e.code) {
+					case ZWaveErrorCodes.PacketFormat_Invalid:
+					case ZWaveErrorCodes.PacketFormat_Checksum:
+						log.driver.print(
+							`Dropping message because it contains invalid data`,
+							"warn",
+						);
+						this.send(MessageHeaders.NAK);
+						return;
 
-			let msg: Message | undefined;
-			let bytesRead: number;
-			try {
-				msg = Message.from(this, this.receiveBuffer);
-				bytesRead = msg.bytesRead;
-			} catch (e) {
-				let handled = false;
-				if (e instanceof ZWaveError) {
-					switch (e.code) {
-						case ZWaveErrorCodes.PacketFormat_Invalid:
-						case ZWaveErrorCodes.PacketFormat_Checksum:
-							log.driver.print(
-								`Dropping message because it contains invalid data`,
-								"warn",
-							);
-							this.send(MessageHeaders.NAK);
-							return;
+					case ZWaveErrorCodes.Deserialization_NotImplemented:
+					case ZWaveErrorCodes.CC_NotImplemented:
+						log.driver.print(
+							`Dropping message because it could not be deserialized: ${e.message}`,
+							"warn",
+						);
+						handled = true;
+						break;
 
-						case ZWaveErrorCodes.Deserialization_NotImplemented:
-						case ZWaveErrorCodes.CC_NotImplemented:
-							log.driver.print(
-								`Dropping message because it could not be deserialized: ${e.message}`,
-								"warn",
-							);
-							handled = true;
-							bytesRead = Message.getMessageLength(
-								this.receiveBuffer,
-							);
-							break;
-
-						case ZWaveErrorCodes.Driver_NotReady:
-							log.driver.print(
-								`Dropping message because the driver is not ready to handle it yet.`,
-								"warn",
-							);
-							handled = true;
-							bytesRead = Message.getMessageLength(
-								this.receiveBuffer,
-							);
-							break;
-
-						case ZWaveErrorCodes.PacketFormat_InvalidPayload:
-							bytesRead = Message.getMessageLength(
-								this.receiveBuffer,
-							);
-							const invalidData = this.receiveBuffer.slice(
-								0,
-								bytesRead,
-							);
-							log.driver.print(
-								`Message with invalid data received. Dropping it:
-0x${invalidData.toString("hex")}`,
-								"warn",
-							);
-							handled = true;
-							break;
-
-						case ZWaveErrorCodes.Driver_NoSecurity:
-							log.driver.print(
-								`Dropping message because network key is not set or the driver is not yet ready to receive secure messages.`,
-								"warn",
-							);
-							handled = true;
-							bytesRead = Message.getMessageLength(
-								this.receiveBuffer,
-							);
-							break;
-					}
-				} else {
-					if (/database is not open/.test(e.message)) {
-						// The JSONL-DB is not open yet
+					case ZWaveErrorCodes.Driver_NotReady:
 						log.driver.print(
 							`Dropping message because the driver is not ready to handle it yet.`,
 							"warn",
 						);
 						handled = true;
-						bytesRead = Message.getMessageLength(
-							this.receiveBuffer,
-						);
-					}
-				}
-				// pass it through;
-				if (!handled) throw e;
-			}
-			// and cut the read bytes from our buffer
-			this.receiveBuffer = Buffer.from(
-				this.receiveBuffer.slice(bytesRead!),
-			);
+						break;
 
-			// all good, send ACK
-			this.send(MessageHeaders.ACK);
-			// and handle the response (if it could be decoded)
-			if (msg) {
-				try {
-					await this.handleMessage(msg);
-				} catch (e) {
-					if (
-						e instanceof ZWaveError &&
-						e.code === ZWaveErrorCodes.Driver_NotReady
-					) {
+					case ZWaveErrorCodes.PacketFormat_InvalidPayload:
 						log.driver.print(
-							`Cannot handle message because the driver is not ready to handle it yet.`,
+							`Message with invalid data received. Dropping it:
+0x${data.toString("hex")}`,
 							"warn",
 						);
-					} else {
-						throw e;
-					}
+						handled = true;
+						break;
+
+					case ZWaveErrorCodes.Driver_NoSecurity:
+						log.driver.print(
+							`Dropping message because network key is not set or the driver is not yet ready to receive secure messages.`,
+							"warn",
+						);
+						handled = true;
+						break;
+				}
+			} else {
+				if (/database is not open/.test(e.message)) {
+					// The JSONL-DB is not open yet
+					log.driver.print(
+						`Dropping message because the driver is not ready to handle it yet.`,
+						"warn",
+					);
+					handled = true;
+				}
+			}
+			// pass it through;
+			if (!handled) throw e;
+		}
+
+		// all good, send ACK
+		this.send(MessageHeaders.ACK);
+
+		// and handle the response (if it could be decoded)
+		if (msg) {
+			try {
+				await this.handleMessage(msg);
+			} catch (e) {
+				if (
+					e instanceof ZWaveError &&
+					e.code === ZWaveErrorCodes.Driver_NotReady
+				) {
+					log.driver.print(
+						`Cannot handle message because the driver is not ready to handle it yet.`,
+						"warn",
+					);
+				} else {
+					throw e;
 				}
 			}
 		}
-
-		log.serial.message(
-			`The receive buffer is empty, waiting for the next chunk...`,
-		);
 	}
 
 	/**
@@ -2202,7 +2144,6 @@ ${handlers.length} left`,
 	 */
 	private send(header: MessageHeaders): void {
 		// ACK, CAN, NAK
-		log.serial[MessageHeaders[header] as "ACK" | "NAK" | "CAN"]("outbound");
 		this.doSend(Buffer.from([header]));
 		return;
 	}
@@ -2369,7 +2310,6 @@ ${handlers.length} left`,
 				throw e;
 			}
 		}
-		log.serial.data("outbound", data);
 		this.doSend(data);
 
 		// INS12350-14:
@@ -2381,9 +2321,7 @@ ${handlers.length} left`,
 
 	/** Sends a raw datagram to the serialport (if that is open) */
 	private doSend(data: Buffer): void {
-		if (this.serial) {
-			this.serial.write(data);
-		}
+		void this.serial?.writeAsync(data);
 	}
 
 	/**

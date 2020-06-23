@@ -15,6 +15,9 @@
 			"@zwave-js/core": [
 				"core/src"
 			],
+			"@zwave-js/serial": [
+				"serial/src"
+			],
 			"@zwave-js/shared": [
 				"shared/src"
 			]

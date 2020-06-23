@@ -1,6 +1,7 @@
 /// <reference types="reflect-metadata" />
 
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { MessageHeaders } from "@zwave-js/serial";
 import { num2hex } from "@zwave-js/shared";
 import type { JSONObject } from "@zwave-js/shared";
 import { entries } from "alcalzone-shared/objects";
@@ -9,12 +10,7 @@ import type { Driver } from "../driver/Driver";
 import { getNodeTag, MessageOrCCLogEntry } from "../log/shared";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
-import {
-	FunctionType,
-	MessageHeaders,
-	MessagePriority,
-	MessageType,
-} from "./Constants";
+import { FunctionType, MessagePriority, MessageType } from "./Constants";
 
 type Constructable<T extends Message> = new (
 	driver: Driver,

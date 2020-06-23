@@ -1,5 +1,4 @@
 import { CommandClasses } from "@zwave-js/core";
-import { createEmptyMockDriver } from "../../../../../test/mocks";
 import {
 	SendDataRequest,
 	TransmitOptions,
@@ -7,6 +6,7 @@ import {
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { assertCC } from "../test/assertCC";
+import { createEmptyMockDriver } from "../test/mocks";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { ZWavePlusCC, ZWavePlusCommand } from "./ZWavePlusCC";
 

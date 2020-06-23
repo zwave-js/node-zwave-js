@@ -1,6 +1,6 @@
 import { CommandClasses, Duration } from "@zwave-js/core";
-import { createEmptyMockDriver } from "../../../../../test/mocks";
 import type { Driver } from "../driver/Driver";
+import { createEmptyMockDriver } from "../test/mocks";
 import {
 	SceneActivationCC,
 	SceneActivationCCSet,

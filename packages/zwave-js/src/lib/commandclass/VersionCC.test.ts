@@ -1,9 +1,9 @@
 import { CommandClasses } from "@zwave-js/core";
-import { createEmptyMockDriver } from "../../../../../test/mocks";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { assertCC } from "../test/assertCC";
+import { createEmptyMockDriver } from "../test/mocks";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import {
 	VersionCC,

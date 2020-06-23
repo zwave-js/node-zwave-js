@@ -3,11 +3,12 @@ import {
 	CommandClasses,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { createEmptyMockDriver } from "../../../../../test/mocks";
-import type { BasicCCAPI } from "../commandclass/BasicCC";
 import { BatteryCCAPI } from "../commandclass/BatteryCC";
+import type { BinarySensorCCAPI } from "../commandclass/BinarySensorCC";
+import "../commandclass/index";
 import { VersionCCAPI } from "../commandclass/VersionCC";
 import type { Driver } from "../driver/Driver";
+import { createEmptyMockDriver } from "../test/mocks";
 import { Endpoint } from "./Endpoint";
 import { ZWaveNode } from "./Node";
 
@@ -23,21 +24,24 @@ describe("lib/node/Endpoint", () => {
 			});
 		});
 
-		it("the returned API throws when trying to access a non-supported CC", () => {
+		it("the returned API throws when trying to access a non-supported CC", async () => {
 			const endpoint = new Endpoint(1, fakeDriver, 1);
-			const api = endpoint.createAPI(CommandClasses.Basic) as BasicCCAPI;
+			// We must not use Basic CC here, because that is assumed to be always supported
+			const api = endpoint.createAPI(
+				CommandClasses["Binary Sensor"],
+			) as BinarySensorCCAPI;
 
 			// this does not throw
 			api.isSupported();
 			// this does
-			assertZWaveError(() => api.get(), {
+			await assertZWaveError(() => api.get(), {
 				errorCode: ZWaveErrorCodes.CC_NotSupported,
 				messageMatches: "Node 1 (endpoint 1) does not support",
 			});
 
 			// It only includes the endpoint number for non-root endpoints
 			(endpoint as any).index = 0;
-			assertZWaveError(() => api.get(), {
+			await assertZWaveError(() => api.get(), {
 				errorCode: ZWaveErrorCodes.CC_NotSupported,
 				messageMatches: "Node 1 does not support",
 			});

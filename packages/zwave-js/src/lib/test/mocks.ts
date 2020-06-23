@@ -1,80 +1,19 @@
 import type { CommandClasses } from "@zwave-js/core";
-import { EventEmitter } from "events";
-import type SerialPort from "serialport";
-import type { Driver, ZWaveNode } from "zwave-js/src";
-import { getImplementedVersion } from "zwave-js/src/lib/commandclass/CommandClass";
-import { SendDataRequest } from "zwave-js/src/lib/controller/SendDataMessages";
+import { getImplementedVersion } from "../commandclass/CommandClass";
+import { SendDataRequest } from "../controller/SendDataMessages";
+import type { Driver } from "../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "zwave-js/src/lib/message/Constants";
+} from "../message/Constants";
 import {
 	expectedResponse,
 	Message,
 	messageTypes,
 	priority,
-} from "zwave-js/src/lib/message/Message";
-
-const instances = new Map<string, MockSerialPort>();
-
-export interface MockSerialPort {
-	// default events
-	on(event: "open", callback: () => void): this;
-	on(event: "close", callback: () => void): this;
-	on(event: "error", callback: SerialPort.ErrorCallback): this;
-	on(event: "data", callback: (data: Buffer) => void): this;
-}
-
-export class MockSerialPort extends EventEmitter {
-	public constructor(
-		private readonly port: string,
-		private readonly options?: SerialPort.OpenOptions,
-		errorCallback?: SerialPort.ErrorCallback,
-	) {
-		super();
-		instances.set(port, this);
-
-		if (errorCallback != null) this.on("error", errorCallback);
-		if (options == null || options.autoOpen === true) {
-			this.open();
-		}
-	}
-
-	public static getInstance(port: string): MockSerialPort | undefined {
-		return instances.get(port);
-	}
-
-	public open(): void {
-		this.openStub();
-	}
-	public readonly openStub: jest.Mock = jest.fn();
-	public doOpen(): void {
-		this.emit("open");
-	}
-	public failOpen(err: Error): void {
-		this.emit("error", err);
-	}
-
-	public close(): void {
-		this.closeStub();
-		this.emit("close");
-	}
-	public readonly closeStub: jest.Mock = jest.fn();
-
-	public receiveData(data: Buffer): void {
-		this.emit("data", data);
-	}
-
-	public raiseError(err: Error): void {
-		this.emit("error", err);
-	}
-
-	public write(data: string | number[] | Buffer): void {
-		this.writeStub(data);
-	}
-	public readonly writeStub: jest.Mock = jest.fn();
-}
+} from "../message/Message";
+import type { ZWaveNode } from "../node/Node";
 
 const MockRequestMessageWithExpectation_FunctionType = (0xfa as unknown) as FunctionType;
 const MockRequestMessageWithoutExpectation_FunctionType = (0xfb as unknown) as FunctionType;

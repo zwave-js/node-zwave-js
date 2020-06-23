@@ -4,7 +4,6 @@ import { SortedList } from "alcalzone-shared/sorted-list";
 import colors from "ansi-colors";
 import MockDate from "mockdate";
 import winston from "winston";
-import { createEmptyMockDriver } from "../../../../../test/mocks";
 import type { Driver } from "../driver/Driver";
 import { Transaction } from "../driver/Transaction";
 import {
@@ -13,6 +12,7 @@ import {
 	MessageType,
 } from "../message/Constants";
 import { Message } from "../message/Message";
+import { createEmptyMockDriver } from "../test/mocks";
 import log from "./index";
 import { getDirectionPrefix, restoreSilence } from "./shared";
 

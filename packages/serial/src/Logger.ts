@@ -1,6 +1,3 @@
-import { num2hex } from "@zwave-js/shared";
-import winston from "winston";
-import { MessageHeaders } from "../message/Constants";
 import {
 	createLoggerFormat,
 	createLogTransports,
@@ -8,7 +5,10 @@ import {
 	getDirectionPrefix,
 	isLoglevelVisible,
 	ZWaveLogger,
-} from "./shared";
+} from "@zwave-js/core";
+import { num2hex } from "@zwave-js/shared";
+import winston from "winston";
+import { MessageHeaders } from "./MessageHeaders";
 
 export const SERIAL_LABEL = "SERIAL";
 const SERIAL_LOGLEVEL = "debug";
@@ -87,21 +87,21 @@ export function data(direction: DataDirection, data: Buffer): void {
 	}
 }
 
-/**
- * Logs the current content of the receive buffer
- * @param data The data that is currently in the receive buffer
- */
-export function receiveBuffer(data: Buffer, isComplete: boolean): void {
-	if (isVisible()) {
-		getLogger().log({
-			level: isComplete ? SERIAL_LOGLEVEL : "silly",
-			primaryTags: isComplete ? undefined : "[incomplete]",
-			message: `Buffer := 0x${data.toString("hex")}`,
-			secondaryTags: `(${data.length} bytes)`,
-			direction: getDirectionPrefix("none"),
-		});
-	}
-}
+// /**
+//  * Logs the current content of the receive buffer
+//  * @param data The data that is currently in the receive buffer
+//  */
+// export function receiveBuffer(data: Buffer, isComplete: boolean): void {
+// 	if (isVisible()) {
+// 		getLogger().log({
+// 			level: isComplete ? SERIAL_LOGLEVEL : "silly",
+// 			primaryTags: isComplete ? undefined : "[incomplete]",
+// 			message: `Buffer := 0x${data.toString("hex")}`,
+// 			secondaryTags: `(${data.length} bytes)`,
+// 			direction: getDirectionPrefix("none"),
+// 		});
+// 	}
+// }
 
 /**
  * Logs a message
@@ -116,3 +116,6 @@ export function message(message: string): void {
 		});
 	}
 }
+
+const log = { serial: { ACK, NAK, CAN, data, message } };
+export default log;
