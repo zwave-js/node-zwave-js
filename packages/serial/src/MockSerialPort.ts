@@ -1,63 +1,59 @@
 import { EventEmitter } from "events";
-import type SerialPort from "serialport";
+import { PassThrough } from "stream";
+import { SerialAPIParser } from "./SerialAPIParser";
 
 const instances = new Map<string, MockSerialPort>();
 
-export interface MockSerialPort {
-	// default events
-	on(event: "open", callback: () => void): this;
-	on(event: "close", callback: () => void): this;
-	on(event: "error", callback: SerialPort.ErrorCallback): this;
-	on(event: "data", callback: (data: Buffer) => void): this;
-}
-
 export class MockSerialPort extends EventEmitter {
-	public constructor(
-		private readonly port: string,
-		private readonly options?: SerialPort.OpenOptions,
-		errorCallback?: SerialPort.ErrorCallback,
-	) {
+	public readonly receiveStream: PassThrough;
+	public readonly transmitStream: PassThrough;
+
+	constructor(port: string) {
 		super();
 		instances.set(port, this);
 
-		if (errorCallback != null) this.on("error", errorCallback);
-		if (options == null || options.autoOpen === true) {
-			this.open();
-		}
+		// Hook up a the parser when reading from the serial port
+		this.receiveStream = new SerialAPIParser();
+		this.receiveStream.on("data", (data) => this.emit("data", data));
+		// And pass everything through that was written
+		this.transmitStream = new PassThrough();
+		this.transmitStream.on("data", (data) => void this.writeAsync(data));
 	}
 
 	public static getInstance(port: string): MockSerialPort | undefined {
 		return instances.get(port);
 	}
 
-	public open(): void {
-		this.openStub();
-	}
-	public readonly openStub: jest.Mock = jest.fn();
-	public doOpen(): void {
-		this.emit("open");
-	}
-	public failOpen(err: Error): void {
-		this.emit("error", err);
+	private _isOpen: boolean = false;
+	public get isOpen(): boolean {
+		return this._isOpen;
 	}
 
-	public close(): void {
-		this.closeStub();
-		this.emit("close");
+	public open(): Promise<void> {
+		return this.openStub().then(() => {
+			this._isOpen = true;
+		});
 	}
-	public readonly closeStub: jest.Mock = jest.fn();
+	public readonly openStub: jest.Mock = jest.fn(() => Promise.resolve());
+
+	public close(): Promise<void> {
+		return this.closeStub().then(() => {
+			this._isOpen = false;
+		});
+	}
+	public readonly closeStub: jest.Mock = jest.fn(() => Promise.resolve());
 
 	public receiveData(data: Buffer): void {
-		this.emit("data", data);
+		this.receiveStream.write(data);
 	}
 
 	public raiseError(err: Error): void {
 		this.emit("error", err);
 	}
 
-	public write(data: string | number[] | Buffer): void {
+	public writeAsync(data: Buffer): Promise<void> {
 		this._lastWrite = data;
-		this.writeStub(data);
+		return this.writeStub(data);
 	}
 	public readonly writeStub: jest.Mock = jest.fn();
 

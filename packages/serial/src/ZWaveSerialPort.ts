@@ -90,10 +90,10 @@ export class ZWaveSerialPort extends EventEmitter {
 			parity: "none",
 		});
 
-		// Hook up a the parser when reading from the serial port
+		// Hook up a parser to the serial port
 		this.receiveStream = this.parser = new SerialAPIParser();
 		this.serial.pipe(this.parser);
-		// And pass everything through that was written
+		// Just pass all written data to the serialport unchanged
 		this.transmitStream = new PassThrough();
 		this.transmitStream.pipe((this.serial as unknown) as Writable);
 
@@ -108,7 +108,7 @@ export class ZWaveSerialPort extends EventEmitter {
 		});
 	}
 
-	public async close(): Promise<void> {
+	public close(): Promise<void> {
 		return new Promise((resolve) => {
 			this.serial.once("close", resolve).close();
 		});
