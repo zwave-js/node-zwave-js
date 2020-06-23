@@ -1,7 +1,7 @@
 import { Mixin } from "@zwave-js/shared";
 import { EventEmitter } from "events";
 import type SerialPort from "serialport";
-import { PassThrough, Readable, Transform, Writable } from "stream";
+import { PassThrough, Readable, Writable } from "stream";
 import log from "./Logger";
 import { MessageHeaders } from "./MessageHeaders";
 import { SerialAPIParser } from "./SerialAPIParser";
@@ -51,29 +51,30 @@ export interface ZWaveSerialPort {
 	): boolean;
 }
 
-// This serial port wrapper is basically a double-transform (duplex) stream
-// ┌─────────────────┐ ┌─────────────────┐ ┌──
-// │                 <--   PassThrough   <-- write
-// │ node-serialport │ │ ZWaveSerialPort │ │
-// │                 --> SerialAPIParser --> read
-// └─────────────────┘ └─────────────────┘ └──
+// This serial port wrapper is basically a duplex transform stream
+// 0 ┌─────────────────┐ ┌─────────────────┐ ┌──
+// 1 <--               <--   PassThrough   <-- write
+// 1 │ node-serialport │ │ ZWaveSerialPort │ │
+// 0 -->               --> SerialAPIParser --> read
+// 1 └─────────────────┘ └─────────────────┘ └──
 // The implementation idea is based on https://stackoverflow.com/a/17476600/10179833
 
 @Mixin([EventEmitter])
 export class ZWaveSerialPort extends PassThrough {
-	public static Binding: typeof SerialPort = require("serialport");
-
 	private serial: SerialPort;
 	private parser: SerialAPIParser;
-
-	private readonly transmitStream: Transform;
 
 	// Allow strongly-typed async iteration
 	public declare [Symbol.asyncIterator]: () => AsyncIterableIterator<
 		ZWaveSerialChunk
 	>;
 
-	constructor(port: string) {
+	constructor(port: string);
+	/** @internal */ constructor(port: string, Binding: typeof SerialPort);
+	constructor(
+		port: string,
+		Binding: typeof SerialPort = require("serialport"),
+	) {
 		super({ readableObjectMode: true });
 
 		// Route the data event handlers to the parser and handle everything else ourselves
@@ -97,7 +98,7 @@ export class ZWaveSerialPort extends PassThrough {
 			};
 		}
 
-		this.serial = new ZWaveSerialPort.Binding(port, {
+		this.serial = new Binding(port, {
 			autoOpen: false,
 			baudRate: 115200,
 			dataBits: 8,
@@ -117,19 +118,18 @@ export class ZWaveSerialPort extends PassThrough {
 			this.parser.unpipe(destination);
 			return this;
 		};
-		// When something is piped to us, pipe it to the transmit stream instead
+
+		// When something is piped to us, pipe it to the serial port instead
+		// Also pass all written data to the serialport unchanged
 		// wotan-disable-next-line
 		this.on("pipe" as any, (source: Readable) => {
 			source.unpipe(this as any);
-			source.pipe(this.transmitStream, { end: false });
+			// Pass all written data to the serialport unchanged
+			source.pipe((this.serial as unknown) as Writable, { end: false });
 		});
 
 		// Delegate iterating to the parser stream
 		this[Symbol.asyncIterator] = () => this.parser[Symbol.asyncIterator]();
-
-		// Pass all written data to the serialport unchanged
-		this.transmitStream = new PassThrough();
-		this.transmitStream.pipe((this.serial as unknown) as Writable);
 	}
 
 	public open(): Promise<void> {
@@ -169,7 +169,7 @@ export class ZWaveSerialPort extends PassThrough {
 		}
 
 		return new Promise((resolve, reject) => {
-			this.transmitStream.write(data, (err) => {
+			this.serial.write(data, (err) => {
 				if (err) reject(err);
 				else resolve();
 			});

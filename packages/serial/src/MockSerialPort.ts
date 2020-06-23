@@ -11,11 +11,9 @@ const instances = new Map<string, MockSerialPort>();
 @Mixin([EventEmitter])
 class MockBinding extends PassThrough {}
 
-ZWaveSerialPort.Binding = MockBinding as any;
-
 export class MockSerialPort extends ZWaveSerialPort {
 	constructor(port: string) {
-		super(port);
+		super(port, MockBinding as any);
 		instances.set(port, this);
 	}
 
