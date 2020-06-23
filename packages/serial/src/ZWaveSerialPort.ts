@@ -1,6 +1,6 @@
 import { Mixin } from "@zwave-js/shared";
 import { EventEmitter } from "events";
-import SerialPort from "serialport";
+import type SerialPort from "serialport";
 import { PassThrough, Readable, Transform, Writable } from "stream";
 import log from "./Logger";
 import { MessageHeaders } from "./MessageHeaders";
@@ -61,6 +61,8 @@ export interface ZWaveSerialPort {
 
 @Mixin([EventEmitter])
 export class ZWaveSerialPort extends PassThrough {
+	public static Binding: typeof SerialPort = require("serialport");
+
 	private serial: SerialPort;
 	private parser: SerialAPIParser;
 
@@ -95,7 +97,7 @@ export class ZWaveSerialPort extends PassThrough {
 			};
 		}
 
-		this.serial = new SerialPort(port, {
+		this.serial = new ZWaveSerialPort.Binding(port, {
 			autoOpen: false,
 			baudRate: 115200,
 			dataBits: 8,

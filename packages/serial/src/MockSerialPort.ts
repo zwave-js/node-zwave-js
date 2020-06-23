@@ -1,23 +1,22 @@
+// wotan-disable no-restricted-property-access
+// wotan-disable prefer-dot-notation
+
+import { Mixin } from "@zwave-js/shared";
 import { EventEmitter } from "events";
 import { PassThrough } from "stream";
-import { SerialAPIParser } from "./SerialAPIParser";
+import { ZWaveSerialPort } from "./ZWaveSerialPort";
 
 const instances = new Map<string, MockSerialPort>();
 
-export class MockSerialPort extends EventEmitter {
-	private readonly parser: SerialAPIParser;
-	private readonly transmitStream: PassThrough;
+@Mixin([EventEmitter])
+class MockBinding extends PassThrough {}
 
+ZWaveSerialPort.Binding = MockBinding as any;
+
+export class MockSerialPort extends ZWaveSerialPort {
 	constructor(port: string) {
-		super();
+		super(port);
 		instances.set(port, this);
-
-		// Hook up a the parser when reading from the serial port
-		this.parser = new SerialAPIParser();
-		this.parser.on("data", (data) => this.emit("data", data));
-		// And pass everything through that was written
-		this.transmitStream = new PassThrough();
-		this.transmitStream.on("data", (data) => void this.writeAsync(data));
 	}
 
 	public static getInstance(port: string): MockSerialPort | undefined {
@@ -43,8 +42,13 @@ export class MockSerialPort extends EventEmitter {
 	}
 	public readonly closeStub: jest.Mock = jest.fn(() => Promise.resolve());
 
-	public receiveData(data: Buffer): void {
-		this.parser.write(data);
+	public async receiveData(data: Buffer): Promise<void> {
+		return new Promise((resolve, reject) => {
+			this["serial"].write(data, (err) => {
+				if (err) reject(err);
+				else resolve();
+			});
+		});
 	}
 
 	public raiseError(err: Error): void {
