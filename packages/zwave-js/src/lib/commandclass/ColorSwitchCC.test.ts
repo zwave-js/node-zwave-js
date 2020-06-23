@@ -27,7 +27,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 	]);
 }
 
-describe.only("lib/commandclass/ColorSwitchCC => ", () => {
+describe("lib/commandclass/ColorSwitchCC => ", () => {
 	it("the SupportedGet command should serialize correctly", () => {
 		const cc = new ColorSwitchCCSupportedGet(fakeDriver, {
 			nodeId: 1,
