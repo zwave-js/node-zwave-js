@@ -64,26 +64,6 @@ async function createAndStartDriver() {
 	};
 }
 
-async function waitForData(port: {
-	once: (event: "data", callback: (data: any) => void) => any;
-}): Promise<
-	MessageHeaders.ACK | MessageHeaders.NAK | MessageHeaders.CAN | Buffer
-> {
-	return new Promise((resolve) => {
-		port.once("data", resolve);
-	});
-}
-
-async function waitForWrite(port: {
-	once: (event: "write", callback: (data: any) => void) => any;
-}): Promise<
-	MessageHeaders.ACK | MessageHeaders.NAK | MessageHeaders.CAN | Buffer
-> {
-	return new Promise((resolve) => {
-		port.once("write", resolve);
-	});
-}
-
 @messageTypes(MessageType.Request, 0xff)
 class TestMessage extends Message {}
 
