@@ -1,6 +1,6 @@
+import { MessageHeaders } from "@zwave-js/serial";
 import { num2hex } from "@zwave-js/shared";
 import winston from "winston";
-import { MessageHeaders } from "../message/Constants";
 import {
 	createLoggerFormat,
 	createLogTransports,
