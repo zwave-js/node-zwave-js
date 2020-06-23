@@ -215,7 +215,7 @@ function testResponseForSendDataRequest(
 	return ret;
 }
 
-function testResponseForCC(
+export function testResponseForCC(
 	sent: CommandClass,
 	received: CommandClass | undefined,
 	isTransmitReport: boolean,
