@@ -6,8 +6,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { MessageHeaders } from "@zwave-js/serial";
-import { MockSerialPort } from "@zwave-js/serial/src/MockSerialPort";
+import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
 import {
 	AssociationCCReport,
 	AssociationCommand,
@@ -31,28 +30,29 @@ import {
 	MockRequestMessageWithoutExpectation,
 	MockResponseMessage,
 } from "../test/mocks";
-import type { Driver } from "./Driver";
+import { Driver } from "./Driver";
 
-jest.mock("serialport", () => MockSerialPort);
-let Drvr: typeof Driver;
-jest.resetModules();
-jest.isolateModules(() => {
-	// eslint-disable-next-line @typescript-eslint/no-var-requires
-	Drvr = require("./Driver").Driver;
+jest.mock("@zwave-js/serial", () => {
+	const mdl: typeof import("@zwave-js/serial") = jest.requireActual(
+		"@zwave-js/serial",
+	);
+	return {
+		...mdl,
+		ZWaveSerialPort: mdl.MockSerialPort,
+	};
 });
 
 const PORT_ADDRESS = "/tty/FAKE";
 
 async function createAndStartDriver() {
-	const driver = new Drvr(PORT_ADDRESS, { skipInterview: true });
-	const startPromise = driver.start();
+	const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
+	await driver.start();
 	const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
-	portInstance.doOpen();
-	await startPromise;
 
-	portInstance.closeStub.mockClear();
 	portInstance.openStub.mockClear();
+	portInstance.closeStub.mockClear();
 	portInstance.writeStub.mockClear();
+	portInstance["_lastWrite"] = undefined;
 
 	// Mock the value DB, because the original one will not be initialized
 	// with skipInterview: true
@@ -78,21 +78,21 @@ describe("lib/driver/Driver => ", () => {
 	});
 
 	describe("starting it => ", () => {
-		it("should open a new serialport", () => {
-			const driver = new Drvr(PORT_ADDRESS, { skipInterview: true });
+		it("should open a new serialport", async () => {
+			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
 			// start the driver
-			driver.start();
+			await driver.start();
 
 			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 			expect(portInstance.openStub).toBeCalledTimes(1);
 			driver.destroy();
 		});
 
-		it("should only work once", () => {
-			const driver = new Drvr(PORT_ADDRESS, { skipInterview: true });
+		it("should only work once", async () => {
+			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
 			// start the driver twice
-			driver.start();
-			driver.start();
+			await driver.start();
+			await driver.start();
 
 			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 			expect(portInstance.openStub).toBeCalledTimes(1);
@@ -100,44 +100,40 @@ describe("lib/driver/Driver => ", () => {
 		});
 
 		it("the start promise should only be fulfilled after the port was opened", async () => {
-			const driver = new Drvr(PORT_ADDRESS, { skipInterview: true });
+			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
 
 			// start the driver
 			const fulfilledSpy = jest.fn();
 			const startPromise = driver.start().then(fulfilledSpy);
 			expect(fulfilledSpy).not.toBeCalled();
-
-			// confirm opening of the serialport
-			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
-			portInstance.doOpen();
-
+			// Opening the mock port succeeds by default
 			await expect(startPromise).toResolve();
 			driver.destroy();
 		});
 
 		it("the start promise should be rejected if the port opening fails", async () => {
-			const driver = new Drvr(PORT_ADDRESS, { skipInterview: true });
+			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
 
 			// start the driver
 			const startPromise = driver.start();
 
 			// fail opening of the serialport
 			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
-			portInstance.failOpen(new Error("NOPE"));
+			portInstance.openStub.mockRejectedValue(new Error("NOPE"));
 
 			await expect(startPromise).rejects.toThrow("NOPE");
 			driver.destroy();
 		});
 
 		it("after a failed start, starting again should not be possible", async () => {
-			const driver = new Drvr(PORT_ADDRESS, { skipInterview: true });
+			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
 
 			// start the driver
 			const startPromise = driver.start();
 
 			// fail opening of the serialport
 			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
-			portInstance.failOpen(new Error("NOPE"));
+			portInstance.openStub.mockRejectedValue(new Error("NOPE"));
 			await expect(startPromise).rejects.toThrow("NOPE");
 
 			// try to start again
@@ -151,7 +147,7 @@ describe("lib/driver/Driver => ", () => {
 
 	describe("sending messages => ", () => {
 		it("should not be possible if the driver wasn't started", async () => {
-			const driver = new Drvr(PORT_ADDRESS, { skipInterview: true });
+			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
 
 			const msg = new TestMessage(driver);
 			await assertZWaveError(() => driver.sendMessage(msg), {
@@ -162,7 +158,7 @@ describe("lib/driver/Driver => ", () => {
 		});
 
 		it("should not be possible if the driver hasn't completed starting", async () => {
-			const driver = new Drvr(PORT_ADDRESS, { skipInterview: true });
+			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
 
 			// start the driver, but don't open the serial port yet
 			driver.start();
@@ -176,14 +172,14 @@ describe("lib/driver/Driver => ", () => {
 		});
 
 		it("should not be possible if the driver failed to start", async () => {
-			const driver = new Drvr(PORT_ADDRESS, { skipInterview: true });
+			const driver = new Driver(PORT_ADDRESS, { skipInterview: true });
 
 			// start the driver
 			const startPromise = driver.start();
 
 			// fail opening of the serialport
 			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
-			portInstance.failOpen(new Error("NOPE"));
+			portInstance.openStub.mockRejectedValue(new Error("NOPE"));
 			await expect(startPromise).rejects.toThrow("NOPE");
 
 			const msg = new TestMessage(driver);
@@ -437,11 +433,9 @@ describe("lib/driver/Driver => ", () => {
 			expect(errorSpy).not.toBeCalled();
 			// And make sure the serialport wrote the same data twice
 			expect(serialport.writeStub).toBeCalledTimes(2);
-			expect(
-				(serialport.writeStub.mock.calls[0][0] as Buffer).equals(
-					serialport.writeStub.mock.calls[1][0],
-				),
-			).toBeTrue();
+			expect(serialport.writeStub.mock.calls[0][0]).toEqual(
+				serialport.writeStub.mock.calls[1][0],
+			);
 		});
 	});
 
@@ -483,23 +477,16 @@ describe("lib/driver/Driver => ", () => {
 				"010700130f000002e6010e000400020872050086000200828e",
 				"hex",
 			);
-
-			// swallow the error
-			driver.on("error", () => {});
-			await driver["serialport_onData"](data).catch(() => {});
+			serialport.receiveData(data);
 
 			// Ensure the driver ACKed two messages
 			expect(serialport.writeStub).toBeCalledTimes(2);
-			expect(
-				(serialport.writeStub.mock.calls[0][0] as Buffer).equals(
-					Buffer.from([MessageHeaders.ACK]),
-				),
-			).toBeTrue();
-			expect(
-				(serialport.writeStub.mock.calls[1][0] as Buffer).equals(
-					Buffer.from([MessageHeaders.ACK]),
-				),
-			).toBeTrue();
+			expect(serialport.writeStub.mock.calls[0][0]).toEqual(
+				Buffer.from([MessageHeaders.ACK]),
+			);
+			expect(serialport.writeStub.mock.calls[1][0]).toEqual(
+				Buffer.from([MessageHeaders.ACK]),
+			);
 		});
 	});
 

@@ -435,7 +435,22 @@ export class Driver extends EventEmitter {
 		// If the port is already open, close it first
 		if (this.serial.isOpen) await this.serial.close();
 
-		void this.serial.open().then(async () => {
+		// IMPORTANT: Test code expects the open promise to be created and returned synchronously
+		// Everything async (inluding opening the serial port) must happen in the setImmediate callback
+
+		setImmediate(async () => {
+			try {
+				await this.serial!.open();
+			} catch (e) {
+				const message = `Failed to open the serial port: ${e.message}`;
+				log.driver.print(message, "error");
+
+				spOpenPromise.reject(
+					new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
+				);
+				void this.destroy();
+				return;
+			}
 			log.driver.print("serial port opened");
 			this._isOpen = true;
 			spOpenPromise.resolve();
@@ -443,55 +458,51 @@ export class Driver extends EventEmitter {
 			this.send(MessageHeaders.NAK);
 			await wait(1500);
 
-			setImmediate(async () => {
-				// Load the necessary configuration
-				log.driver.print("loading configuration...");
-				try {
-					await loadDeviceClasses();
-					await loadManufacturers();
-					await loadDeviceIndex();
-					await loadNotifications();
-					await loadNamedScales();
-					await loadSensorTypes();
-					await loadMeters();
-					await loadIndicators();
-				} catch (e) {
-					const message = `Failed to load the configuration: ${e.message}`;
-					log.driver.print(message, "error");
-					this.emit(
-						"error",
-						new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
-					);
-					void this.destroy();
-					return;
-				}
+			// Load the necessary configuration
+			log.driver.print("loading configuration...");
+			try {
+				await loadDeviceClasses();
+				await loadManufacturers();
+				await loadDeviceIndex();
+				await loadNotifications();
+				await loadNamedScales();
+				await loadSensorTypes();
+				await loadMeters();
+				await loadIndicators();
+			} catch (e) {
+				const message = `Failed to load the configuration: ${e.message}`;
+				log.driver.print(message, "error");
+				this.emit(
+					"error",
+					new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
+				);
+				void this.destroy();
+				return;
+			}
 
-				log.driver.print("beginning interview...");
-				try {
-					await this.initializeControllerAndNodes();
-				} catch (e) {
-					let message: string;
-					if (
-						e instanceof ZWaveError &&
-						e.code === ZWaveErrorCodes.Controller_MessageDropped
-					) {
-						message = `Failed to initialize the driver, no response from the controller. Are you sure this is a Z-Wave controller?`;
-					} else {
-						message = `Failed to initialize the driver: ${e.message}`;
-					}
-					log.driver.print(message, "error");
-					this.emit(
-						"error",
-						new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
-					);
-					void this.destroy();
-					return;
+			log.driver.print("beginning interview...");
+			try {
+				await this.initializeControllerAndNodes();
+			} catch (e) {
+				let message: string;
+				if (
+					e instanceof ZWaveError &&
+					e.code === ZWaveErrorCodes.Controller_MessageDropped
+				) {
+					message = `Failed to initialize the driver, no response from the controller. Are you sure this is a Z-Wave controller?`;
+				} else {
+					message = `Failed to initialize the driver: ${e.message}`;
 				}
-			});
+				log.driver.print(message, "error");
+				this.emit(
+					"error",
+					new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
+				);
+				void this.destroy();
+				return;
+			}
 		});
 
-		// IMPORTANT: Test code expects the promise to be created and returned synchronously
-		// Everything async must happen in the setImmediate callback
 		return spOpenPromise;
 	}
 	// wotan-enable async-function-assignability
