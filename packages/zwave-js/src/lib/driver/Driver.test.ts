@@ -205,7 +205,7 @@ describe("lib/driver/Driver => ", () => {
 			expect(resolvedSpy).not.toBeCalled();
 
 			// receive the ACK
-			serialport.receiveData(Buffer.from([MessageHeaders.ACK]));
+			await serialport.receiveData(Buffer.from([MessageHeaders.ACK]));
 			await expect(promise).resolves.toBe(undefined);
 
 			driver.destroy();
@@ -226,12 +226,12 @@ describe("lib/driver/Driver => ", () => {
 			expect(resolvedSpy).not.toBeCalled();
 
 			// receive the ACK
-			serialport.receiveData(Buffer.from([MessageHeaders.ACK]));
+			await serialport.receiveData(Buffer.from([MessageHeaders.ACK]));
 			expect(resolvedSpy).not.toBeCalled();
 
 			// receive the message
 			const resp = new MockResponseMessage(driver);
-			serialport.receiveData(resp.serialize());
+			await serialport.receiveData(resp.serialize());
 			const msg = await promise;
 			expect(msg).toBeInstanceOf(MockResponseMessage);
 
@@ -254,10 +254,10 @@ describe("lib/driver/Driver => ", () => {
 
 			// receive the message
 			const resp = new MockResponseMessage(driver);
-			serialport.receiveData(resp.serialize());
+			await serialport.receiveData(resp.serialize());
 			expect(resolvedSpy).not.toBeCalled();
 			// receive the ACK
-			serialport.receiveData(Buffer.from([MessageHeaders.ACK]));
+			await serialport.receiveData(Buffer.from([MessageHeaders.ACK]));
 
 			const msg = await promise;
 			expect(msg).toBeInstanceOf(MockResponseMessage);
@@ -281,12 +281,12 @@ describe("lib/driver/Driver => ", () => {
 
 			// receive the message (with some noise ahead of it)
 			const resp = new MockResponseMessage(driver);
-			serialport.receiveData(
+			await serialport.receiveData(
 				Buffer.concat([Buffer.from([0xff]), resp.serialize()]),
 			);
 			expect(resolvedSpy).not.toBeCalled();
 			// receive the ACK
-			serialport.receiveData(Buffer.from([MessageHeaders.ACK]));
+			await serialport.receiveData(Buffer.from([MessageHeaders.ACK]));
 
 			const msg = await promise;
 			expect(msg).toBeInstanceOf(MockResponseMessage);
@@ -313,7 +313,7 @@ describe("lib/driver/Driver => ", () => {
 	// 		driver.on("error", errorSpy);
 
 	// 		// receive something that's not a message header
-	// 		serialport.receiveData(Buffer.from([0xff]));
+	// 		await serialport.receiveData(Buffer.from([0xff]));
 	// 		expect(errorSpy).toBeCalledTimes(1);
 	// 		assertZWaveError(errorSpy.mock.calls[0][0] as unknown, {
 	// 			errorCode: ZWaveErrorCodes.Driver_InvalidDataReceived,
@@ -330,7 +330,7 @@ describe("lib/driver/Driver => ", () => {
 	// 		// swallow the error
 	// 		driver.on("error", () => {});
 	// 		// receive an invalid message
-	// 		serialport.receiveData(Buffer.from([0x01, 0x03, 0x00, 0x00, 0x00]));
+	// 		await serialport.receiveData(Buffer.from([0x01, 0x03, 0x00, 0x00, 0x00]));
 	// 		// trigger the send queue
 	// 		jest.runAllTimers();
 	// 		expect(serialport.writeStub).toHaveBeenCalledWith(
@@ -352,7 +352,7 @@ describe("lib/driver/Driver => ", () => {
 	// 		jest.runAllTimers();
 
 	// 		// receive something that's not a message header
-	// 		serialport.receiveData(Buffer.from([0xff]));
+	// 		await serialport.receiveData(Buffer.from([0xff]));
 
 	// 		// This is necessary or the test will finish too early and fail
 	// 		await promise;
@@ -391,7 +391,7 @@ describe("lib/driver/Driver => ", () => {
 			jest.runAllTimers();
 
 			// Receive a CAN to trigger the resend check
-			serialport.receiveData(Buffer.from([MessageHeaders.CAN]));
+			await serialport.receiveData(Buffer.from([MessageHeaders.CAN]));
 
 			await promise;
 			expect(errorSpy).toBeCalledTimes(1);
@@ -418,7 +418,7 @@ describe("lib/driver/Driver => ", () => {
 			// jest.runAllImmediates();
 
 			// Receive a CAN to trigger the resend check
-			serialport.receiveData(Buffer.from([MessageHeaders.CAN]));
+			await serialport.receiveData(Buffer.from([MessageHeaders.CAN]));
 
 			// trigger the send queue again
 			// jest.advanceTimersToNextTimer();
@@ -426,7 +426,7 @@ describe("lib/driver/Driver => ", () => {
 			// jest.runAllImmediates();
 
 			// Confirm the transmission with an ACK
-			serialport.receiveData(Buffer.from([MessageHeaders.ACK]));
+			await serialport.receiveData(Buffer.from([MessageHeaders.ACK]));
 
 			await promise;
 			// Assert we had no error
@@ -465,8 +465,8 @@ describe("lib/driver/Driver => ", () => {
 			});
 
 			// Receive a CAN to trigger the resend check
-			expect(() => {
-				serialport.receiveData(req.serialize());
+			expect(async () => {
+				await serialport.receiveData(req.serialize());
 				jest.runAllTimers();
 			}).not.toThrow();
 		});
@@ -477,7 +477,7 @@ describe("lib/driver/Driver => ", () => {
 				"010700130f000002e6010e000400020872050086000200828e",
 				"hex",
 			);
-			serialport.receiveData(data);
+			await serialport.receiveData(data);
 
 			// Ensure the driver ACKed two messages
 			expect(serialport.writeStub).toBeCalledTimes(2);

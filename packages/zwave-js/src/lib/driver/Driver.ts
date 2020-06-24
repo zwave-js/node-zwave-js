@@ -438,6 +438,7 @@ export class Driver extends EventEmitter {
 		// IMPORTANT: Test code expects the open promise to be created and returned synchronously
 		// Everything async (inluding opening the serial port) must happen in the setImmediate callback
 
+		// asynchronously open the serial port
 		setImmediate(async () => {
 			try {
 				await this.serial!.open();
@@ -1074,71 +1075,14 @@ export class Driver extends EventEmitter {
 		let msg: Message | undefined;
 		try {
 			msg = Message.from(this, data);
+			// all good, send ACK
+			this.send(MessageHeaders.ACK);
 		} catch (e) {
-			let handled = false;
-			if (e instanceof ZWaveError) {
-				switch (e.code) {
-					case ZWaveErrorCodes.PacketFormat_Invalid:
-					case ZWaveErrorCodes.PacketFormat_Checksum:
-						log.driver.print(
-							`Dropping message because it contains invalid data`,
-							"warn",
-						);
-						this.send(MessageHeaders.NAK);
-						return;
-
-					case ZWaveErrorCodes.Deserialization_NotImplemented:
-					case ZWaveErrorCodes.CC_NotImplemented:
-						log.driver.print(
-							`Dropping message because it could not be deserialized: ${e.message}`,
-							"warn",
-						);
-						handled = true;
-						break;
-
-					case ZWaveErrorCodes.Driver_NotReady:
-						log.driver.print(
-							`Dropping message because the driver is not ready to handle it yet.`,
-							"warn",
-						);
-						handled = true;
-						break;
-
-					case ZWaveErrorCodes.PacketFormat_InvalidPayload:
-						log.driver.print(
-							`Message with invalid data received. Dropping it:
-0x${data.toString("hex")}`,
-							"warn",
-						);
-						handled = true;
-						break;
-
-					case ZWaveErrorCodes.Driver_NoSecurity:
-						log.driver.print(
-							`Dropping message because network key is not set or the driver is not yet ready to receive secure messages.`,
-							"warn",
-						);
-						handled = true;
-						break;
-				}
-			} else {
-				if (/database is not open/.test(e.message)) {
-					// The JSONL-DB is not open yet
-					log.driver.print(
-						`Dropping message because the driver is not ready to handle it yet.`,
-						"warn",
-					);
-					handled = true;
-				}
-			}
-			// pass it through;
-			if (!handled) throw e;
+			const response = this.handleDecodeError(e, data);
+			if (response) this.send(response);
 		}
 
-		// all good, send ACK
-		this.send(MessageHeaders.ACK);
-
-		// and handle the response (if it could be decoded)
+		// If the message could not be decoded, handle it
 		if (msg) {
 			try {
 				await this.handleMessage(msg);
@@ -1156,6 +1100,65 @@ export class Driver extends EventEmitter {
 				}
 			}
 		}
+	}
+
+	/** Handles a decoding error and returns the desired reply to the stick */
+	private handleDecodeError(
+		e: Error,
+		data: Buffer,
+	): MessageHeaders | undefined {
+		if (e instanceof ZWaveError) {
+			switch (e.code) {
+				case ZWaveErrorCodes.PacketFormat_Invalid:
+				case ZWaveErrorCodes.PacketFormat_Checksum:
+					log.driver.print(
+						`Dropping message because it contains invalid data`,
+						"warn",
+					);
+					return MessageHeaders.NAK;
+
+				case ZWaveErrorCodes.Deserialization_NotImplemented:
+				case ZWaveErrorCodes.CC_NotImplemented:
+					log.driver.print(
+						`Dropping message because it could not be deserialized: ${e.message}`,
+						"warn",
+					);
+					return MessageHeaders.ACK;
+
+				case ZWaveErrorCodes.Driver_NotReady:
+					log.driver.print(
+						`Dropping message because the driver is not ready to handle it yet.`,
+						"warn",
+					);
+					return MessageHeaders.ACK;
+
+				case ZWaveErrorCodes.PacketFormat_InvalidPayload:
+					log.driver.print(
+						`Message with invalid data received. Dropping it:
+0x${data.toString("hex")}`,
+						"warn",
+					);
+					return MessageHeaders.ACK;
+
+				case ZWaveErrorCodes.Driver_NoSecurity:
+					log.driver.print(
+						`Dropping message because network key is not set or the driver is not yet ready to receive secure messages.`,
+						"warn",
+					);
+					return MessageHeaders.ACK;
+			}
+		} else {
+			if (/database is not open/.test(e.message)) {
+				// The JSONL-DB is not open yet
+				log.driver.print(
+					`Dropping message because the driver is not ready to handle it yet.`,
+					"warn",
+				);
+				return MessageHeaders.ACK;
+			}
+		}
+		// Pass all other errors through
+		throw e;
 	}
 
 	/**

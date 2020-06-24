@@ -1,5 +1,7 @@
 import MockBinding from "@serialport/binding-mock";
+import { wait } from "alcalzone-shared/async";
 import SerialPort from "serialport";
+import { PassThrough } from "stream";
 import { MessageHeaders } from "./MessageHeaders";
 import { ZWaveSerialPort } from "./ZWaveSerialPort";
 
@@ -22,9 +24,9 @@ async function createAndOpenMockedZWaveSerialPort(
 	return { port, binding };
 }
 
-async function waitForData(
-	port: ZWaveSerialPort,
-): Promise<
+async function waitForData(port: {
+	once: (event: "data", callback: (data: any) => void) => any;
+}): Promise<
 	MessageHeaders.ACK | MessageHeaders.NAK | MessageHeaders.CAN | Buffer
 > {
 	return new Promise((resolve) => {
@@ -63,7 +65,7 @@ describe("ZWaveSerialPort", () => {
 		}
 	});
 
-	it("writeAsync rejects if the port is not open", async () => {
+	it("write rejects if the port is not open", async () => {
 		await port.close();
 		await expect(
 			port.writeAsync(Buffer.from([MessageHeaders.ACK])),
@@ -141,5 +143,69 @@ describe("ZWaveSerialPort", () => {
 
 		const received = await waitForData(port);
 		expect(received).toEqual(data);
+	});
+
+	it("may be consumed with an async iterator", async () => {
+		const data = Buffer.from([
+			MessageHeaders.ACK,
+			MessageHeaders.CAN,
+			0xff,
+			0xfe,
+			0xfd,
+			0xfa,
+			MessageHeaders.ACK,
+		]);
+		binding.emitData(data);
+
+		let count = 0;
+		for await (const msg of port) {
+			count++;
+			if (count === 1) expect(msg).toBe(MessageHeaders.ACK);
+			if (count === 2) expect(msg).toBe(MessageHeaders.CAN);
+			if (count === 3) expect(msg).toBe(MessageHeaders.ACK);
+			if (count === 3) break;
+		}
+	});
+
+	it("can be piped into", (done) => {
+		const passThrough = new PassThrough();
+		passThrough.pipe(port);
+
+		const data = Buffer.from([1, 2, 3, 4, 5]);
+		passThrough.write(data, (err) => {
+			expect(err).toBeFalsy();
+			// I see no better way of forcing the write to bubble through the streams
+			setTimeout(() => {
+				expect(binding.lastWrite).toEqual(data);
+				done();
+			}, 1);
+		});
+	});
+
+	it("can be piped to a reader", async () => {
+		const stream = new PassThrough();
+		port.pipe(stream);
+
+		const expected = Buffer.from([0x01, 0x03, 0xff, 0xff, 0xff]);
+		binding.emitData(expected);
+
+		const data = await waitForData(stream);
+		expect(data).toEqual(expected);
+	});
+
+	it("can be unpiped again", async () => {
+		const stream = new PassThrough();
+		const spy = jest.fn();
+		stream.on("data", spy);
+
+		port.pipe(stream);
+		port.unpipe();
+
+		const expected = Buffer.from([0x01, 0x03, 0xff, 0xff, 0xff]);
+		binding.emitData(expected);
+
+		await wait(1);
+
+		expect(spy).not.toBeCalled();
 	});
 });

@@ -1,23 +1,58 @@
+// wotan-disable no-restricted-property-access
+// wotan-disable prefer-dot-notation
+
+import { Mixin } from "@zwave-js/shared";
 import { EventEmitter } from "events";
 import { PassThrough } from "stream";
-import { SerialAPIParser } from "./SerialAPIParser";
+import {
+	ZWaveSerialPort,
+	ZWaveSerialPortEventCallbacks,
+} from "./ZWaveSerialPort";
 
 const instances = new Map<string, MockSerialPort>();
 
-export class MockSerialPort extends EventEmitter {
-	public readonly receiveStream: PassThrough;
-	public readonly transmitStream: PassThrough;
+@Mixin([EventEmitter])
+class MockBinding extends PassThrough {}
 
+interface MockSerialPortEventCallbacks extends ZWaveSerialPortEventCallbacks {
+	write: (data: Buffer) => void;
+}
+
+type MockSerialPortEvents = Extract<keyof MockSerialPortEventCallbacks, string>;
+
+export interface MockSerialPort {
+	on<TEvent extends MockSerialPortEvents>(
+		event: TEvent,
+		callback: MockSerialPortEventCallbacks[TEvent],
+	): this;
+	addListener<TEvent extends MockSerialPortEvents>(
+		event: TEvent,
+		callback: MockSerialPortEventCallbacks[TEvent],
+	): this;
+	once<TEvent extends MockSerialPortEvents>(
+		event: TEvent,
+		callback: MockSerialPortEventCallbacks[TEvent],
+	): this;
+	off<TEvent extends MockSerialPortEvents>(
+		event: TEvent,
+		callback: MockSerialPortEventCallbacks[TEvent],
+	): this;
+	removeListener<TEvent extends MockSerialPortEvents>(
+		event: TEvent,
+		callback: MockSerialPortEventCallbacks[TEvent],
+	): this;
+	removeAllListeners(event?: MockSerialPortEvents): this;
+
+	emit<TEvent extends MockSerialPortEvents>(
+		event: TEvent,
+		...args: Parameters<MockSerialPortEventCallbacks[TEvent]>
+	): boolean;
+}
+
+export class MockSerialPort extends ZWaveSerialPort {
 	constructor(port: string) {
-		super();
+		super(port, MockBinding as any);
 		instances.set(port, this);
-
-		// Hook up a the parser when reading from the serial port
-		this.receiveStream = new SerialAPIParser();
-		this.receiveStream.on("data", (data) => this.emit("data", data));
-		// And pass everything through that was written
-		this.transmitStream = new PassThrough();
-		this.transmitStream.on("data", (data) => void this.writeAsync(data));
 	}
 
 	public static getInstance(port: string): MockSerialPort | undefined {
@@ -43,8 +78,13 @@ export class MockSerialPort extends EventEmitter {
 	}
 	public readonly closeStub: jest.Mock = jest.fn(() => Promise.resolve());
 
-	public receiveData(data: Buffer): void {
-		this.receiveStream.write(data);
+	public async receiveData(data: Buffer): Promise<void> {
+		return new Promise((resolve, reject) => {
+			this["serial"].write(data, (err) => {
+				if (err) reject(err);
+				else resolve();
+			});
+		});
 	}
 
 	public raiseError(err: Error): void {
@@ -53,6 +93,7 @@ export class MockSerialPort extends EventEmitter {
 
 	public writeAsync(data: Buffer): Promise<void> {
 		this._lastWrite = data;
+		this.emit("write", data);
 		return this.writeStub(data);
 	}
 	public readonly writeStub: jest.Mock = jest.fn();
