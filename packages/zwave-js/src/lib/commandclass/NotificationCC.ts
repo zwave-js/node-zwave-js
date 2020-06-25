@@ -48,7 +48,9 @@ export enum NotificationCommand {
 export class NotificationCCAPI extends CCAPI {
 	public supportsCommand(cmd: NotificationCommand): Maybe<boolean> {
 		switch (cmd) {
-			// We don't know whats supported in V1/V2
+			case NotificationCommand.Report:
+				return true;
+			// TODO: Look at Alarm CC to know what's supported in V1/V2
 			case NotificationCommand.Get:
 			case NotificationCommand.Set:
 			case NotificationCommand.SupportedGet:
@@ -75,6 +77,22 @@ export class NotificationCCAPI extends CCAPI {
 			...options,
 		});
 		return (await this.driver.sendCommand<NotificationCCReport>(cc))!;
+	}
+
+	public async sendReport(
+		options: NotificationCCReportOptions,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			NotificationCommand,
+			NotificationCommand.Report,
+		);
+
+		const cc = new NotificationCCReport(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...options,
+		});
+		await this.driver.sendCommand(cc);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -367,93 +385,96 @@ export class NotificationCCSet extends NotificationCC {
 	}
 }
 
+export type NotificationCCReportOptions =
+	| {
+			alarmType: number;
+			alarmLevel: number;
+	  }
+	| {
+			notificationType: number;
+			notificationEvent: number;
+			eventParameters?: Buffer;
+			sequenceNumber?: number;
+	  };
+
 @CCCommand(NotificationCommand.Report)
 export class NotificationCCReport extends NotificationCC {
 	public constructor(
 		driver: Driver,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| (NotificationCCReportOptions & CCCommandOptions),
 	) {
 		super(driver, options);
 
-		validatePayload(this.payload.length >= 2);
-		this._alarmType = this.payload[0];
-		this._alarmLevel = this.payload[1];
-		// V2..V3, reserved in V4+
-		if (
-			(this.version === 2 || this.version === 3) &&
-			this.payload.length >= 3
-		) {
-			this._zensorNetSourceNodeId = this.payload[2];
-		}
-		// V2+
-		if (this.version > 1 && this.payload.length >= 7) {
-			this._notificationStatus = this.payload[3] === 0xff;
-			this._notificationType = this.payload[4];
-			this._notificationEvent = this.payload[5];
-			const containsSeqNum = !!(this.payload[6] & 0b1000_0000);
-			const numEventParams = this.payload[6] & 0b11111;
-			if (numEventParams > 0) {
-				validatePayload(this.payload.length >= 7 + numEventParams);
-				this._eventParameters = Buffer.from(
-					this.payload.slice(7, 7 + numEventParams),
-				);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.alarmType = this.payload[0];
+			this.alarmLevel = this.payload[1];
+			// V2..V3, reserved in V4+
+			if (
+				(this.version === 2 || this.version === 3) &&
+				this.payload.length >= 3
+			) {
+				this.zensorNetSourceNodeId = this.payload[2];
 			}
-			if (containsSeqNum) {
-				validatePayload(this.payload.length >= 7 + numEventParams + 1);
-				this._sequenceNumber = this.payload[7 + numEventParams];
-			}
+			// V2+
+			if (this.version > 1 && this.payload.length >= 7) {
+				this.notificationStatus = this.payload[3] === 0xff;
+				this.notificationType = this.payload[4];
+				this.notificationEvent = this.payload[5];
+				const containsSeqNum = !!(this.payload[6] & 0b1000_0000);
+				const numEventParams = this.payload[6] & 0b11111;
+				if (numEventParams > 0) {
+					validatePayload(this.payload.length >= 7 + numEventParams);
+					this.eventParameters = Buffer.from(
+						this.payload.slice(7, 7 + numEventParams),
+					);
+				}
+				if (containsSeqNum) {
+					validatePayload(
+						this.payload.length >= 7 + numEventParams + 1,
+					);
+					this.sequenceNumber = this.payload[7 + numEventParams];
+				}
 
-			// Turn the event parameters into something useful
-			this.parseEventParameters();
+				// Turn the event parameters into something useful
+				this.parseEventParameters();
+			}
+		} else {
+			if ("alarmType" in options) {
+				this.alarmType = options.alarmType;
+				this.alarmLevel = options.alarmLevel;
+				// Send a V1 command
+				this.version = 1;
+			} else {
+				this.notificationType = options.notificationType;
+				this.notificationStatus = true;
+				this.notificationEvent = options.notificationEvent;
+				this.eventParameters = options.eventParameters;
+				this.sequenceNumber = options.sequenceNumber;
+			}
 		}
 	}
 
 	// @noCCValues TODO: This should actually be a huge key value pair
 	// Disable the lint error temporarily
 
-	private _alarmType: number;
-	public get alarmType(): number {
-		return this._alarmType;
-	}
+	public alarmType: number | undefined;
+	public alarmLevel: number | undefined;
+	public notificationType: number | undefined;
+	public notificationStatus: boolean | undefined;
+	public notificationEvent: number | undefined;
 
-	private _notificationType: number | undefined;
-	public get notificationType(): number | undefined {
-		return this._notificationType;
-	}
-	private _notificationStatus: boolean | undefined;
-	public get notificationStatus(): boolean | undefined {
-		return this._notificationStatus;
-	}
-
-	private _notificationEvent: number | undefined;
-	public get notificationEvent(): number | undefined {
-		return this._notificationEvent;
-	}
-
-	private _alarmLevel: number;
-	public get alarmLevel(): number {
-		return this._alarmLevel;
-	}
-
-	private _zensorNetSourceNodeId: number | undefined;
-	public get zensorNetSourceNodeId(): number | undefined {
-		return this._zensorNetSourceNodeId;
-	}
-
-	private _eventParameters: NotificationCCReport["eventParameters"];
-	public get eventParameters():
+	public readonly zensorNetSourceNodeId: number | undefined;
+	public eventParameters:
 		| Buffer
 		| Duration
 		| CommandClass
 		| Record<string, number>
-		| undefined {
-		return this._eventParameters;
-	}
+		| undefined;
 
-	private _sequenceNumber: number | undefined;
-	public get sequenceNumber(): number | undefined {
-		return this._sequenceNumber;
-	}
+	public sequenceNumber: number | undefined;
 
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({
@@ -475,7 +496,7 @@ export class NotificationCCReport extends NotificationCC {
 		if (
 			this.notificationType == undefined ||
 			this.notificationEvent == undefined ||
-			!Buffer.isBuffer(this._eventParameters)
+			!Buffer.isBuffer(this.eventParameters)
 		) {
 			return;
 		}
@@ -492,16 +513,16 @@ export class NotificationCCReport extends NotificationCC {
 			valueConfig.parameter instanceof NotificationParameterWithDuration
 		) {
 			// The parameters contain a Duration
-			this._eventParameters = Duration.parseReport(
-				this._eventParameters[0],
+			this.eventParameters = Duration.parseReport(
+				this.eventParameters[0],
 			);
 		} else if (
 			valueConfig.parameter instanceof
 			NotificationParameterWithCommandClass
 		) {
 			// The parameters contain a CC
-			this._eventParameters = CommandClass.from(this.driver, {
-				data: this._eventParameters,
+			this.eventParameters = CommandClass.from(this.driver, {
+				data: this.eventParameters,
 				fromEncapsulation: true,
 				encapCC: this,
 			});
@@ -509,14 +530,69 @@ export class NotificationCCReport extends NotificationCC {
 			valueConfig.parameter instanceof NotificationParameterWithValue
 		) {
 			// The parameters contain a named value
-			this._eventParameters = {
+			this.eventParameters = {
 				[valueConfig.parameter
-					.propertyName]: this._eventParameters.readUIntBE(
+					.propertyName]: this.eventParameters.readUIntBE(
 					0,
-					this._eventParameters.length,
+					this.eventParameters.length,
 				),
 			};
 		}
+	}
+
+	public serialize(): Buffer {
+		if (this.version === 1) {
+			if (this.alarmLevel == undefined || this.alarmType == undefined) {
+				throw new ZWaveError(
+					`Notification CC V1 (Alarm CC) reports requires the alarm type and level to be set!`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			this.payload = Buffer.from([this.alarmType, this.alarmLevel]);
+		} else {
+			if (
+				this.notificationType == undefined ||
+				this.notificationEvent == undefined
+			) {
+				throw new ZWaveError(
+					`Notification CC reports requires the notification type and event to be set!`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			} else if (
+				this.eventParameters != undefined &&
+				!Buffer.isBuffer(this.eventParameters)
+			) {
+				throw new ZWaveError(
+					`When sending Notification CC reports, the event parameters can only be buffers!`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			const controlByte =
+				(this.sequenceNumber != undefined ? 0b1000_0000 : 0) |
+				((this.eventParameters?.length ?? 0) & 0b11111);
+			this.payload = Buffer.from([
+				0,
+				0,
+				0,
+				0xff,
+				this.notificationType,
+				this.notificationEvent,
+				controlByte,
+			]);
+			if (this.eventParameters) {
+				this.payload = Buffer.concat([
+					this.payload,
+					this.eventParameters,
+				]);
+			}
+			if (this.sequenceNumber != undefined) {
+				this.payload = Buffer.concat([
+					this.payload,
+					Buffer.from([this.sequenceNumber]),
+				]);
+			}
+		}
+		return super.serialize();
 	}
 }
 
