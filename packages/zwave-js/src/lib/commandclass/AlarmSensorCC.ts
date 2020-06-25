@@ -146,6 +146,18 @@ export class AlarmSensorCC extends CommandClass {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
+
+		// Skip the interview in favor of Notification CC if possible
+		if (endpoint.commandClasses.Notification.isSupported()) {
+			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `${this.constructor.name}: skipping interview because Notification CC is supported...`,
+				direction: "none",
+			});
+			this.interviewComplete = true;
+			return;
+		}
+
 		const api = endpoint.commandClasses["Alarm Sensor"];
 
 		log.controller.logNode(node.id, {
