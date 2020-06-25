@@ -13,6 +13,9 @@ See "Changes under the hood". I don't expect anything to break, but to be safe, 
 
 ### Features
 * Mandatory supported CCs that are defined in the device class config are now respected. This should improve support for legacy devices that don't include all CCs in the NIF.
+* Added support for `Sound Switch CC`
+* Added support for `Alarm Sensor CC`. This CC will only be interviewed if `Notification CC` is not supported.
+* Added a `sendReport` command to the `Notification CC` API, which can be used to send custom `NotificationCCReport`s.
 
 ### Changes under the hood
 * Moved the definition of legacy Z-Wave device classes to a config file.
