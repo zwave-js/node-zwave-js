@@ -36,6 +36,7 @@ export type { Association } from "./MultiChannelAssociationCC";
 export type { MultilevelSensorValue } from "./MultilevelSensorCC";
 export { LevelChangeDirection, SwitchType } from "./MultilevelSwitchCC";
 export { LocalProtectionState, RFProtectionState } from "./ProtectionCC";
+export { ToneId } from "./SoundSwitchCC";
 export { ThermostatMode } from "./ThermostatModeCC";
 export { ThermostatOperatingState } from "./ThermostatOperatingStateCC";
 export { SetbackType } from "./ThermostatSetbackCC";
