@@ -238,7 +238,7 @@
 			"\tCommandClassDeserializationOptions,",
 			"\tgotDeserializationOptions,",
 			"} from \"./CommandClass\";",
-			"import { CommandClasses } from \"./CommandClasses\";",
+			"import { CommandClasses } from \"@zwave-js/core\";",
 			"import type { Driver } from \"../driver/Driver\";",
 			"",
 			"// All the supported commands",
@@ -336,7 +336,9 @@
 	},
 	"Z-Wave CC property": {
 		"prefix": "zwccprop",
-		"body": ["@ccValue() public ${1:property}: ${2:number};${0}"]
+		"body": [
+			"@ccValue() public ${1:property}: ${2:number};${0}"
+		]
 	},
 	"Z-Wave CC API": {
 		"prefix": "zwccapi",
@@ -434,7 +436,7 @@
 	"Z-Wave CC Test": {
 		"prefix": "zwcctest",
 		"body": [
-			"import { createEmptyMockDriver } from \"../../../test/mocks\";",
+			"import { createEmptyMockDriver } from \"../test/mocks\";",
 			"import type { Driver } from \"../driver/Driver\";",
 			"import {",
 			"\t${1}CC,",
@@ -444,7 +446,7 @@
 			"\t${1}Command,",
 			"} from \"./${1}CC\";",
 			"import { getCCValueMetadata } from \"./CommandClass\";",
-			"import { CommandClasses } from \"./CommandClasses\";",
+			"import { CommandClasses } from \"@zwave-js/core\";",
 			"",
 			"const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;",
 			"",
