@@ -216,8 +216,7 @@ export class BinarySensorCC extends CommandClass {
 					() => {
 						log.controller.logNode(node.id, {
 							endpoint: this.endpointIndex,
-							message:
-								"Current value query for ${sensorName} timed out - skipping because it is not critical...",
+							message: `Current value query for ${sensorName} timed out - skipping because it is not critical...`,
 							level: "warn",
 						});
 					},
