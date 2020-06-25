@@ -107,6 +107,8 @@ export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 		this.name = this.payload.slice(4, 4 + nameLength).toString("utf8");
 	}
 
+	// @noCCValues These values are manually persisted during the interview
+
 	public readonly toneId: number;
 	public readonly duration: number;
 	public readonly name: string;
@@ -159,7 +161,7 @@ export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 }
 
 interface SoundSwitchCCConfigurationSetOptions extends CCCommandOptions {
-	volume: number;
+	defaultVolume: number;
 	defaultToneId: number;
 }
 
@@ -179,16 +181,16 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			this.volume = options.volume;
+			this.defaultVolume = options.defaultVolume;
 			this.defaultToneId = options.defaultToneId;
 		}
 	}
 
-	public volume: number;
+	public defaultVolume: number;
 	public defaultToneId: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.volume, this.defaultToneId]);
+		this.payload = Buffer.from([this.defaultVolume, this.defaultToneId]);
 		return super.serialize();
 	}
 }
@@ -201,7 +203,7 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 	) {
 		super(driver, options);
 		validatePayload(this.payload.length >= 2);
-		this.volume = clamp(this.payload[0], 0, 100);
+		this.defaultVolume = clamp(this.payload[0], 0, 100);
 		this.defaultToneId = this.payload[1];
 
 		this.persistValues();
@@ -213,16 +215,16 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 		min: 0,
 		max: 100,
 		unit: "%",
-		label: "Volume",
+		label: "Default volume",
 	})
-	public readonly volume: number;
+	public readonly defaultVolume: number;
 
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.Number,
 		min: 0,
 		max: 254,
-		label: "Default Tone ID",
+		label: "Default tone ID",
 	})
 	public readonly defaultToneId: number;
 }
@@ -233,6 +235,8 @@ export class SoundSwitchCCConfigurationGet extends SoundSwitchCC {}
 
 interface SoundSwitchCCTonePlaySetOptions extends CCCommandOptions {
 	toneId: ToneId | number;
+	// V2+
+	volume?: number;
 }
 
 @CCCommand(SoundSwitchCommand.TonePlaySet)
@@ -252,13 +256,21 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 			);
 		} else {
 			this.toneId = options.toneId;
+			this.volume = options.volume;
 		}
 	}
 
 	public toneId: ToneId | number;
+	public volume?: number;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.toneId]);
+		if (this.version >= 2 && this.volume != undefined) {
+			this.payload = Buffer.concat([
+				this.payload,
+				Buffer.from([this.volume]),
+			]);
+		}
 		return super.serialize();
 	}
 }
@@ -272,6 +284,7 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 		super(driver, options);
 		validatePayload(this.payload.length >= 1);
 		this.toneId = this.payload[0];
+
 		this.persistValues();
 	}
 
@@ -279,9 +292,21 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 	@ccValueMetadata({
 		...ValueMetadata.UInt8,
 		label: "Tone ID",
-		description: "The currently played tone",
 	})
 	public readonly toneId: ToneId | number;
+
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.UInt8,
+		min: 0,
+		max: 100,
+		unit: "%",
+		label: "Volume",
+		states: {
+			0: "default",
+		},
+	})
+	public volume?: number;
 }
 
 @CCCommand(SoundSwitchCommand.TonePlayGet)
