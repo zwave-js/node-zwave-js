@@ -325,6 +325,33 @@
 		],
 		"description": "Specific implementation of CC command that is sent and expects no parameters"
 	},
+	"ZWave CC Get Command (empty)": {
+		"prefix": "zwccemptyget",
+		"body": [
+			"@CCCommand(${1:Basic}Command.${2}Get)",
+			"@expectedCCResponse(${1}CC${2}Report)",
+			"export class ${1}CC${2}Get extends ${1}CC {}"
+		],
+		"description": "Specific implementation of a CC Get command that expects no parameters"
+	},
+	"ZWave test CC response implementation": {
+		"prefix": "zwcctestresponse",
+		"body": [
+			"const testResponseFor${1:Basic}${2}Get: CCResponsePredicate = (",
+			"\tsent: ${1}CC${2}Get,",
+			"\treceived,",
+			"\tisPositiveTransmitReport,",
+			") => {",
+			"\treturn received instanceof ${1}CC${2}Report &&",
+			"\t\treceived.${3:type} === sent.${3}",
+			"\t\t? \"final\"",
+			"\t\t: isPositiveTransmitReport",
+			"\t\t? \"confirmation\"",
+			"\t\t: \"unexpected\";",
+			"};"
+		],
+		"description": "Returns the CC response role of a received message"
+	},
 	"Readonly property": {
 		"prefix": "propread",
 		"body": [
