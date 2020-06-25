@@ -141,6 +141,7 @@ export interface CCAPIs {
 	[Symbol.iterator](): Iterator<CCAPI>;
 
 	// AUTO GENERATION BELOW
+	"Alarm Sensor": import("./AlarmSensorCC").AlarmSensorCCAPI;
 	Association: import("./AssociationCC").AssociationCCAPI;
 	"Association Group Information": import("./AssociationGroupInfoCC").AssociationGroupInfoCCAPI;
 	Basic: import("./BasicCC").BasicCCAPI;
