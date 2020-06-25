@@ -20,6 +20,7 @@ See "Changes under the hood". I don't expect anything to break, but to be safe, 
   * `zwave-js`: As before, this is the main entry point for consumers
   * `@zwave-js/config`: The configuration files and methods to access them
   * `@zwave-js/core`: The core modules, which are shared between `zwave-js` and `@zwave-js/config`
+  * `@zwave-js/serial`: A lightweight wrapper around `node-serialport` with a built-in parser for received serial API messages
   * `@zwave-js/shared`: Utility methods that are shared between all other packages
   
   It is likely that other packages will be added in the future.
