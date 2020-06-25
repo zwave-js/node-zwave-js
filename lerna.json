@@ -1,13 +1,17 @@
 {
-	"packages": ["packages/*"],
-	"version": "3.8.5",
+	"packages": [
+		"packages/*"
+	],
+	"version": "4.0.0",
 	"command": {
 		"run": {
 			"stream": true
 		},
 		"version": {
 			"allowBranch": "master",
-			"ignoreChanges": ["*.md"],
+			"ignoreChanges": [
+				"*.md"
+			],
 			"amend": true,
 			"push": false
 		}

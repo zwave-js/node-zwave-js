@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/core",
-  "version": "3.8.5",
+  "version": "4.0.0",
   "description": "zwave-js: core components",
   "keywords": [],
   "main": "build/index.js",
