@@ -2,6 +2,9 @@
   "name": "@zwave-js/shared",
   "version": "4.0.0",
   "description": "zwave-js: shared utilities",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [],
   "main": "build/index.js",
   "types": "build/index.d.ts",

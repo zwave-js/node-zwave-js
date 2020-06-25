@@ -2,6 +2,9 @@
   "name": "@zwave-js/config",
   "version": "4.0.0",
   "description": "zwave-js: configuration files",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [],
   "main": "build/index.js",
   "types": "build/index.d.ts",
