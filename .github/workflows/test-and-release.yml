@@ -17,7 +17,32 @@ on:
     pull_request: {}
 
 jobs:
-  # Tests if the library compiles
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: debug deploy step
+        env:
+          MESSAGE: ${{ github.event.head_commit.message }}
+          CONTAINS_SKIP: ${{ contains(github.event.head_commit.message, '[skip ci]') }}
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_NAME_IS_PUSH: ${{ github.event_name == 'push' }}
+          BASE_REF: ${{ github.event.base_ref }}
+          BASE_REF_IS_MASTER: ${{ github.event.base_ref == 'refs/heads/master' }}
+          REF: ${{ github.ref }}
+          REF_IS_TAG: ${{ startsWith(github.ref, 'refs/tags/v') }}
+          DEPLOY_CONDITION: ${{ contains(github.event.head_commit.message, '[skip ci]') == false && github.event_name == 'push' && github.event.base_ref == 'refs/heads/master' && startsWith(github.ref, 'refs/tags/v') }}
+        run: |
+          echo "message:          $MESSAGE"
+          echo "contains skip ci: $CONTAINS_SKIP"
+          echo "event name:       $EVENT_NAME"
+          echo "is push event:    $EVENT_NAME_IS_PUSH"
+          echo "base ref:         $BASE_REF"
+          echo "is master branch: $BASE_REF_IS_MASTER"
+          echo "ref:              $REF"
+          echo "is versioned tag: $REF_IS_TAG"
+          echo "---------------------------------------------"
+          echo "deploy condition: $DEPLOY_CONDITION"
+    
   build:
     if: contains(github.event.head_commit.message, '[skip ci]') == false
 
