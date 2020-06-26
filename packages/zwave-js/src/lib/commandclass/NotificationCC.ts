@@ -418,8 +418,14 @@ export class NotificationCCReport extends NotificationCC {
 			) {
 				this.zensorNetSourceNodeId = this.payload[2];
 			}
-			// V2+
-			if (this.version > 1 && this.payload.length >= 7) {
+			// V2+ requires the alarm bytes to be zero
+			// Don't use the version to decide because we might discard notifications
+			// before the interview is complete
+			if (
+				this.alarmType === 0 &&
+				this.alarmLevel === 0 &&
+				this.payload.length >= 7
+			) {
 				this.notificationStatus = this.payload[3] === 0xff;
 				this.notificationType = this.payload[4];
 				this.notificationEvent = this.payload[5];
