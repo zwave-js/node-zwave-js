@@ -6,7 +6,6 @@
   "main": "index.js",
   "types": "index.d.ts",
   "files": [
-    "build/**/*.{js,d.ts,map}",
     "CommandClass.d.ts",
     "CommandClass.d.ts.map",
     "CommandClass.js",
@@ -35,6 +34,7 @@
     "Values.d.ts.map",
     "Values.js",
     "Values.js.map",
+    "build/**/*.{js,d.ts,map}",
     "index.d.ts",
     "index.d.ts.map",
     "index.js",
