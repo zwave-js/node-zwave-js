@@ -72,6 +72,9 @@ fs.readFile(path.join(libraryRootDir, "package.json"), "utf8").then(
 						// We don't care about failed node removal
 						case ZWaveErrorCodes.RemoveFailedNode_Failed:
 						case ZWaveErrorCodes.RemoveFailedNode_NodeOK:
+						// Or failed inclusion processes:
+						case ZWaveErrorCodes.Controller_InclusionFailed:
+						case ZWaveErrorCodes.Controller_ExclusionFailed:
 							ignore = true;
 							break;
 					}
