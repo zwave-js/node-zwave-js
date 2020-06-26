@@ -8,6 +8,10 @@
   "keywords": [],
   "main": "build/index.js",
   "types": "build/index.d.ts",
+  "files":[
+    "build/**/*.{js,d.ts,map}",
+    "config/"
+  ],
   "author": {
     "name": "AlCalzone",
     "email": "d.griesel@gmx.net"
