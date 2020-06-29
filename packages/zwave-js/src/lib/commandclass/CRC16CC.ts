@@ -66,7 +66,7 @@ export class CRC16CC extends CommandClass {
 
 	/** Unwraps a CRC-16 encapsulated command */
 	public static unwrap(cc: CRC16CCCommandEncapsulation): CommandClass {
-		return cc;
+		return cc.encapsulated;
 	}
 }
 
