@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* The driver no longer goes into an infinite loop when receiving a `CRC-16 Command Encapsulation CC` (#888)
+
 ## 4.0.1 (2020-06-26)
 ### Breaking changes
 See "Changes under the hood". I don't expect anything to break, but to be safe, I'll declare this as a major version.
