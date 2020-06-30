@@ -358,7 +358,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 	});
 
 	describe("while waiting for a callback, ...", () => {
-		it("should go into retry state if the callback is NOK", () => {
+		it("should go into failure state if the callback is NOK", () => {
 			const testMachine = createSerialAPICommandMachine({} as any, {
 				expectsCallback: true,
 			});
@@ -370,7 +370,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 				ok: false,
 			});
 
-			expect(service.state.value).toBe("retryWait");
+			expect(service.state.value).toBe("failure");
 		});
 
 		it("should set the lastError context if the callback is NOK", () => {
@@ -401,6 +401,29 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 			});
 
 			expect(service.state.value).toBe("success");
+		});
+
+		it("should go back to waiting if callback is OK but not final", (done) => {
+			const testMachine = createSerialAPICommandMachine({} as any, {
+				expectsCallback: true,
+			});
+			testMachine.initial = "waitForCallback";
+
+			service = interpret(testMachine).start();
+			let isInitialTransition = true;
+			service.onTransition((state) => {
+				expect(state.value).toBe("waitForCallback");
+				if (isInitialTransition) {
+					isInitialTransition = false;
+				} else {
+					done();
+				}
+			});
+			service.send({
+				type: "callback",
+				ok: true,
+				final: false,
+			});
 		});
 
 		it("should go into abort state if the timeout elapses", (done) => {

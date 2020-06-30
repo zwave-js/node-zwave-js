@@ -41,7 +41,15 @@ export interface SerialAPICommandContext {
 export type SerialAPICommandEvent =
 	| { type: "ACK" }
 	| { type: "CAN" }
-	| { type: "response" | "callback"; ok: boolean };
+	| {
+			type: "response";
+			ok: boolean;
+	  }
+	| {
+			type: "response" | "callback";
+			ok: boolean;
+			final?: boolean;
+	  };
 
 export type SerialAPICommandDoneEvent = { reason: SerialAPICommandError };
 
@@ -165,13 +173,14 @@ export function createSerialAPICommandMachine(
 						"": [{ target: "success", cond: "expectsNoCallback" }],
 						callback: [
 							{
-								target: "retry",
+								target: "failure",
 								cond: "callbackIsNOK",
 								actions: assign<SerialAPICommandContext>({
 									lastError: (_) => "callback NOK",
 								}),
 							},
-							{ target: "success" },
+							{ target: "success", cond: "callbackIsFinal" },
+							{ target: "waitForCallback" },
 						],
 					},
 					after: {
@@ -235,6 +244,8 @@ export function createSerialAPICommandMachine(
 				expectsNoCallback: (ctx) => !ctx.expectsCallback,
 				responseIsNOK: (ctx, evt) => evt.type === "response" && !evt.ok,
 				callbackIsNOK: (ctx, evt) => evt.type === "callback" && !evt.ok,
+				callbackIsFinal: (ctx, evt) =>
+					evt.type === "callback" && evt.ok && evt.final !== false,
 			},
 			delays: {
 				RETRY_DELAY: (ctx) => computeRetryDelay(ctx),
