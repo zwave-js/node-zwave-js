@@ -7,6 +7,7 @@ import {
 import {
 	CommandClasses,
 	encodeBitMask,
+	ignoreTimeout,
 	Maybe,
 	parseBitMask,
 	parseNodeInformationFrame,
@@ -343,29 +344,44 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 		};
 		if (api.supportsCommand(MultiChannelCommand.EndPointFind)) {
 			// Step 2a: Find all endpoints
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: "querying all endpoints...",
-				direction: "outbound",
-			});
-			endpointsToQuery.push(...(await api.findEndpoints(0xff, 0xff)));
-			if (!endpointsToQuery.length) {
-				// Create a sequential list of endpoints
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `Endpoint query returned no results, assuming that endpoints are sequential`,
-					direction: "inbound",
-				});
-				addSequentialEndpoints();
-			} else {
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `received endpoints: ${endpointsToQuery
-						.map(String)
-						.join(", ")}`,
-					direction: "inbound",
-				});
-			}
+			await ignoreTimeout(
+				async () => {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: "querying all endpoints...",
+						direction: "outbound",
+					});
+
+					endpointsToQuery.push(
+						...(await api.findEndpoints(0xff, 0xff)),
+					);
+					if (!endpointsToQuery.length) {
+						// Create a sequential list of endpoints
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `Endpoint query returned no results, assuming that endpoints are sequential`,
+							direction: "inbound",
+						});
+						addSequentialEndpoints();
+					} else {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `received endpoints: ${endpointsToQuery
+								.map(String)
+								.join(", ")}`,
+							direction: "inbound",
+						});
+					}
+				},
+				() => {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `Did not respond to endpoint query, assuming that endpoints are sequential`,
+						level: "warn",
+					});
+					addSequentialEndpoints();
+				},
+			);
 		} else {
 			// Step 2b: Assume that the endpoints are in sequential order
 			log.controller.logNode(node.id, {
