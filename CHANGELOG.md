@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* If a node fails to respond to `Multi Channel Endpoint Find`, the interview is no longer aborted and sequential endpoints are assumed instead
+
 ## 4.0.2 (2020-06-29)
 ### Bugfixes
 * The driver no longer goes into an infinite loop when receiving a `CRC-16 Command Encapsulation CC` (#888)
