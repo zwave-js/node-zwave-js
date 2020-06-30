@@ -426,6 +426,33 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 			});
 		});
 
+		it("should reset the timeout when the intermediate callback is received", () => {
+			const testMachine = createSerialAPICommandMachine({} as any, {
+				expectsCallback: true,
+			});
+			testMachine.initial = "waitForCallback";
+
+			const clock = new SimulatedClock();
+			service = interpret(testMachine, { clock }).start();
+			clock.increment(64999);
+			service.send({
+				type: "callback",
+				ok: true,
+				final: false,
+			});
+			expect(service.state.value).toBe("waitForCallback");
+
+			// Now a full timeout has elapsed, but we shouldn't be in the abort state yet
+			clock.increment(1);
+			expect(service.state.value).toBe("waitForCallback");
+			// still...
+			clock.increment(64998);
+			expect(service.state.value).toBe("waitForCallback");
+			// now!
+			clock.increment(1);
+			expect(service.state.value).toBe("abort");
+		});
+
 		it("should go into abort state if the timeout elapses", (done) => {
 			const testMachine = createSerialAPICommandMachine({} as any, {
 				expectsCallback: true,

@@ -35,7 +35,7 @@ export interface SerialAPICommandContext {
 	expectsCallback: boolean;
 	attempts: number;
 	maxAttempts: number;
-	lastError: SerialAPICommandError | undefined;
+	lastError?: SerialAPICommandError;
 }
 
 export type SerialAPICommandEvent =
@@ -96,7 +96,6 @@ export function createSerialAPICommandMachine(
 				expectsCallback: false,
 				attempts: 0,
 				maxAttempts: 3,
-				lastError: undefined,
 				...initialContext,
 			},
 			states: {
