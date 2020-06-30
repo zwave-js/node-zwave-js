@@ -10,11 +10,11 @@ import {
 import type { Driver } from "../driver/Driver";
 import { FunctionType, MessageType } from "../message/Constants";
 import {
+	getExpectedCallback,
 	getExpectedResponse,
 	getFunctionType,
 	getMessageType,
 	Message,
-	ResponsePredicate,
 } from "../message/Message";
 import { createEmptyMockDriver } from "../test/mocks";
 import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
@@ -60,81 +60,11 @@ describe("lib/controller/SendDataRequest => ", () => {
 	it("and a function type SendData", () => {
 		expect(getFunctionType(req)).toBe(FunctionType.SendData);
 	});
-	it("that expects a SendDataRequest or SendDataResponse in return", () => {
-		const predicate = getExpectedResponse(req) as ResponsePredicate;
-		expect(predicate).toBeInstanceOf(Function);
-
-		const controllerFail = createSendDataMessage(
-			MessageType.Response,
-			Buffer.from([0]),
-		);
-		// "A SendDataResponse with wasSent=false was not detected as fatal_controller!"
-		expect(predicate(req, controllerFail)).toBe("fatal_controller");
-
-		const controllerSuccess = createSendDataMessage(
-			MessageType.Response,
-			Buffer.from([1]),
-		);
-		// "A SendDataResponse with wasSent=true was not detected as confirmation!"
-		expect(predicate(req, controllerSuccess)).toBe("confirmation");
-
-		const nodeFail = createSendDataMessage(
-			MessageType.Request,
-			Buffer.from([req.callbackId, 1]),
-		);
-		// "A SendDataRequest with isFailed=true was not detected as fatal_node!"
-		expect(predicate(req, nodeFail)).toBe("fatal_node");
-
-		const nodeSuccess = createSendDataMessage(
-			MessageType.Request,
-			Buffer.from([req.callbackId, 0]),
-		);
-		// "A SendDataRequest with isFailed=false was not detected as final!"
-		expect(predicate(req, nodeSuccess)).toBe("final");
-
-		const somethingElse = new Message(fakeDriver, {
-			type: MessageType.Request,
-			functionType: FunctionType.ApplicationCommand,
-		});
-		// "An unrelated message was not detected as unexpected!"
-		expect(predicate(req, somethingElse)).toBe("unexpected");
-	});
-
-	it("if the callbackId is 0, the SendDataResponse is detected as the final message", () => {
-		const req = new SendDataRequest(fakeDriver, {
-			command: new NoOperationCC(fakeDriver, { nodeId: 1 }),
-			callbackId: 0,
-		});
-		const predicate = getExpectedResponse(req) as ResponsePredicate;
-		expect(predicate).toBeInstanceOf(Function);
-
-		const controllerFail = createSendDataMessage(
-			MessageType.Response,
-			Buffer.from([0]),
-		);
-		// "A SendDataResponse with wasSent=false was not detected as fatal_controller!"
-		expect(predicate(req, controllerFail)).toBe("fatal_controller");
-
-		const controllerSuccess = createSendDataMessage(
-			MessageType.Response,
-			Buffer.from([1]),
-		);
-		// "A SendDataResponse with wasSent=true was not detected as final!"
-		expect(predicate(req, controllerSuccess)).toBe("final");
-
-		const nodeFail = createSendDataMessage(
-			MessageType.Request,
-			Buffer.from([0, 1]),
-		);
-		// "A SendDataRequest was not detected as unexpected!"
-		expect(predicate(req, nodeFail)).toBe("unexpected");
-
-		const nodeSuccess = createSendDataMessage(
-			MessageType.Request,
-			Buffer.from([0, 0]),
-		);
-		// "A SendDataRequest was not detected as unexpected!"
-		expect(predicate(req, nodeSuccess)).toBe("unexpected");
+	it("that expects a SendDataRequest and SendDataResponse in return", () => {
+		const resp = getExpectedResponse(req);
+		const cb = getExpectedCallback(req);
+		expect(resp).toBe(FunctionType.SendData);
+		expect(cb).toBe(FunctionType.SendData);
 	});
 
 	// We cannot parse these kinds of messages atm.

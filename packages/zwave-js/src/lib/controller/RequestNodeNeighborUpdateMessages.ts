@@ -7,7 +7,7 @@ import {
 	MessageType,
 } from "../message/Constants";
 import {
-	expectedResponse,
+	expectedCallback,
 	gotDeserializationOptions,
 	Message,
 	MessageBaseOptions,
@@ -15,7 +15,6 @@ import {
 	MessageOptions,
 	messageTypes,
 	priority,
-	ResponseRole,
 } from "../message/Message";
 
 export enum NodeNeighborUpdateStatus {
@@ -27,19 +26,6 @@ export enum NodeNeighborUpdateStatus {
 export interface RequestNodeNeighborUpdateRequestOptions
 	extends MessageBaseOptions {
 	nodeId: number;
-}
-
-// Generic handler for all potential responses to SendDataRequests
-function testResponseForNodeNeighborUpdateRequest(
-	sent: RequestNodeNeighborUpdateRequest,
-	received: Message,
-): ResponseRole {
-	if (received instanceof RequestNodeNeighborUpdateReport) {
-		return received.updateStatus === NodeNeighborUpdateStatus.UpdateStarted
-			? "confirmation"
-			: "final";
-	}
-	return "unexpected";
 }
 
 @messageTypes(MessageType.Request, FunctionType.RequestNodeNeighborUpdate)
@@ -56,7 +42,7 @@ export class RequestNodeNeighborUpdateRequestBase extends Message {
 	}
 }
 
-@expectedResponse(testResponseForNodeNeighborUpdateRequest)
+@expectedCallback(FunctionType.RequestNodeNeighborUpdate)
 export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateRequestBase {
 	public constructor(
 		driver: Driver,

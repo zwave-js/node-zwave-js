@@ -37,7 +37,8 @@ export interface MessageBaseOptions {
 interface MessageCreationOptions extends MessageBaseOptions {
 	type?: MessageType;
 	functionType?: FunctionType;
-	expectedResponse?: FunctionType | ResponsePredicate;
+	expectedResponse?: FunctionType | typeof Message | ResponsePredicate;
+	expectedCallback?: FunctionType | typeof Message | ResponsePredicate;
 	payload?: Buffer;
 }
 
@@ -116,11 +117,11 @@ export class Message {
 			}
 			this.functionType = options.functionType;
 
-			// The expected response may be undefined
+			// Fall back to decorated response/callback types if none is given
 			this.expectedResponse =
-				options.expectedResponse != undefined
-					? options.expectedResponse
-					: getExpectedResponse(this);
+				options.expectedResponse ?? getExpectedResponse(this);
+			this.expectedCallback =
+				options.expectedCallback ?? getExpectedCallback(this);
 
 			this._callbackId = options.callbackId;
 
@@ -130,7 +131,16 @@ export class Message {
 
 	public type: MessageType;
 	public functionType: FunctionType;
-	public expectedResponse: FunctionType | ResponsePredicate | undefined;
+	public expectedResponse:
+		| FunctionType
+		| typeof Message
+		| ResponsePredicate
+		| undefined;
+	public expectedCallback:
+		| FunctionType
+		| typeof Message
+		| ResponsePredicate
+		| undefined;
 	public payload: Buffer; // TODO: Length limit 255
 	public maxSendAttempts: number | undefined;
 
@@ -336,6 +346,7 @@ function computeChecksum(message: Buffer): number {
 const METADATA_messageTypes = Symbol("messageTypes");
 const METADATA_messageTypeMap = Symbol("messageTypeMap");
 const METADATA_expectedResponse = Symbol("expectedResponse");
+const METADATA_expectedCallback = Symbol("expectedCallback");
 const METADATA_priority = Symbol("priority");
 
 type MessageTypeMap = Map<string, Constructable<Message>>;
@@ -356,14 +367,15 @@ export type ResponseRole =
 	| "confirmation" // a confirmation response, e.g. controller reporting that a message was sent
 	| "final" // a final response (leading to a resolved transaction)
 	| "fatal_controller" // a response from the controller that leads to a rejected transaction
-	| "fatal_node"; // a response or (lack thereof) from the node that leads to a rejected transaction
+	| "fatal_node"; // a response or (lack thereof) from the node that leads to a rejected transaction/**
+
 /**
  * A predicate function to test if a received message matches to the sent message
  */
 export type ResponsePredicate = (
 	sentMessage: Message,
 	receivedMessage: Message,
-) => ResponseRole;
+) => boolean;
 
 /**
  * Defines the message and function type associated with a Z-Wave message
@@ -468,14 +480,11 @@ function getMessageConstructor(
 		);
 	}
 }
-
 /**
- * Defines the expected response associated with a Z-Wave message
+ * Defines the expected response function type or message class for a Z-Wave message
  */
-export function expectedResponse(type: FunctionType): ClassDecorator;
-export function expectedResponse(predicate: ResponsePredicate): ClassDecorator;
 export function expectedResponse(
-	typeOrPredicate: FunctionType | ResponsePredicate,
+	typeOrPredicate: FunctionType | typeof Message | ResponsePredicate,
 ): ClassDecorator {
 	return (messageClass) => {
 		Reflect.defineMetadata(
@@ -487,16 +496,17 @@ export function expectedResponse(
 }
 
 /**
- * Retrieves the expected response defined for a Z-Wave message class
+ * Retrieves the expected response function type or message class defined for a Z-Wave message class
  */
 export function getExpectedResponse<T extends Message>(
 	messageClass: T,
-): FunctionType | ResponsePredicate | undefined {
+): FunctionType | typeof Message | ResponsePredicate | undefined {
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_expectedResponse, constr) as
 		| FunctionType
+		| typeof Message
 		| ResponsePredicate
 		| undefined;
 	return ret;
@@ -507,12 +517,58 @@ export function getExpectedResponse<T extends Message>(
  */
 export function getExpectedResponseStatic<T extends Constructable<Message>>(
 	classConstructor: T,
-): FunctionType | ResponsePredicate | undefined {
+): FunctionType | typeof Message | ResponsePredicate | undefined {
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(
 		METADATA_expectedResponse,
 		classConstructor,
-	) as FunctionType | ResponsePredicate | undefined;
+	) as FunctionType | typeof Message | ResponsePredicate | undefined;
+	return ret;
+}
+
+/**
+ * Defines the expected callback function type or message class for a Z-Wave message
+ */
+export function expectedCallback(
+	typeOrPredicate: FunctionType | typeof Message | ResponsePredicate,
+): ClassDecorator {
+	return (messageClass) => {
+		Reflect.defineMetadata(
+			METADATA_expectedCallback,
+			typeOrPredicate,
+			messageClass,
+		);
+	};
+}
+
+/**
+ * Retrieves the expected callback function type or message class defined for a Z-Wave message class
+ */
+export function getExpectedCallback<T extends Message>(
+	messageClass: T,
+): FunctionType | typeof Message | ResponsePredicate | undefined {
+	// get the class constructor
+	const constr = messageClass.constructor;
+	// retrieve the current metadata
+	const ret = Reflect.getMetadata(METADATA_expectedCallback, constr) as
+		| FunctionType
+		| typeof Message
+		| ResponsePredicate
+		| undefined;
+	return ret;
+}
+
+/**
+ * Retrieves the function type defined for a Z-Wave message class
+ */
+export function getExpectedCallbackStatic<T extends Constructable<Message>>(
+	classConstructor: T,
+): FunctionType | typeof Message | ResponsePredicate | undefined {
+	// retrieve the current metadata
+	const ret = Reflect.getMetadata(
+		METADATA_expectedCallback,
+		classConstructor,
+	) as FunctionType | typeof Message | ResponsePredicate | undefined;
 	return ret;
 }
 

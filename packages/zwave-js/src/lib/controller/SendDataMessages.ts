@@ -29,6 +29,7 @@ import {
 	MessageType,
 } from "../message/Constants";
 import {
+	expectedCallback,
 	expectedResponse,
 	gotDeserializationOptions,
 	Message,
@@ -39,6 +40,7 @@ import {
 	priority,
 	ResponseRole,
 } from "../message/Message";
+import type { SuccessIndicator } from "../message/SuccessIndicator";
 import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
 
 export enum TransmitOptions {
@@ -82,7 +84,8 @@ interface SendDataRequestOptions<CCType extends CommandClass = CommandClass>
 	transmitOptions?: TransmitOptions;
 }
 
-@expectedResponse(testResponseForSendDataRequest)
+@expectedResponse(FunctionType.SendData)
+@expectedCallback(FunctionType.SendData)
 export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	extends SendDataRequestBase
 	implements ICommandClassContainer {
@@ -268,7 +271,8 @@ interface SendDataRequestTransmitReportOptions extends MessageBaseOptions {
 	callbackId: number;
 }
 
-export class SendDataRequestTransmitReport extends SendDataRequestBase {
+export class SendDataRequestTransmitReport extends SendDataRequestBase
+	implements SuccessIndicator {
 	public constructor(
 		driver: Driver,
 		options:
@@ -293,9 +297,8 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase {
 		return this._transmitStatus;
 	}
 
-	/** Checks if a received SendDataRequest indicates that sending failed */
-	public isFailed(): boolean {
-		return this._transmitStatus !== TransmitStatus.OK;
+	public isOK(): boolean {
+		return this._transmitStatus === TransmitStatus.OK;
 	}
 
 	public toJSON(): JSONObject {
@@ -315,11 +318,15 @@ transmitStatus: ${getEnumMemberName(TransmitStatus, this.transmitStatus)}`,
 }
 
 @messageTypes(MessageType.Response, FunctionType.SendData)
-export class SendDataResponse extends Message {
+export class SendDataResponse extends Message implements SuccessIndicator {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._wasSent = this.payload[0] !== 0;
 		// if (!this._wasSent) this._errorCode = this.payload[0];
+	}
+
+	isOK(): boolean {
+		return this._wasSent;
 	}
 
 	private _wasSent: boolean;
@@ -367,7 +374,8 @@ interface SendDataMulticastRequestOptions<CCType extends CommandClass>
 	transmitOptions?: TransmitOptions;
 }
 
-@expectedResponse(testResponseForSendDataMulticastRequest)
+@expectedResponse(FunctionType.SendDataMulticast)
+@expectedCallback(FunctionType.SendDataMulticast)
 export class SendDataMulticastRequest<
 	CCType extends CommandClass = CommandClass
 > extends SendDataMulticastRequestBase implements ICommandClassContainer {
@@ -448,27 +456,15 @@ callbackId:      ${this.callbackId}`,
 	}
 }
 
-// Generic handler for all potential responses to SendDataMulticastRequests
-function testResponseForSendDataMulticastRequest(
-	sent: SendDataMulticastRequest,
-	received: Message,
-): ResponseRole {
-	if (received instanceof SendDataMulticastResponse) {
-		return received.wasSent ? "confirmation" : "fatal_controller";
-	} else if (received instanceof SendDataMulticastRequestTransmitReport) {
-		return received.isFailed() ? "fatal_node" : "final";
-	}
-	// Multicast messages cannot expect a response from the nodes
-	return "unexpected";
-}
-
 interface SendDataMulticastRequestTransmitReportOptions
 	extends MessageBaseOptions {
 	transmitStatus: TransmitStatus;
 	callbackId: number;
 }
 
-export class SendDataMulticastRequestTransmitReport extends SendDataMulticastRequestBase {
+export class SendDataMulticastRequestTransmitReport
+	extends SendDataMulticastRequestBase
+	implements SuccessIndicator {
 	public constructor(
 		driver: Driver,
 		options:
@@ -493,9 +489,8 @@ export class SendDataMulticastRequestTransmitReport extends SendDataMulticastReq
 		return this._transmitStatus;
 	}
 
-	/** Checks if a received SendDataMulticastRequest indicates that sending failed */
-	public isFailed(): boolean {
-		return this._transmitStatus !== TransmitStatus.OK;
+	public isOK(): boolean {
+		return this._transmitStatus === TransmitStatus.OK;
 	}
 
 	public toJSON(): JSONObject {
@@ -515,11 +510,16 @@ transmitStatus: ${getEnumMemberName(TransmitStatus, this.transmitStatus)}`,
 }
 
 @messageTypes(MessageType.Response, FunctionType.SendDataMulticast)
-export class SendDataMulticastResponse extends Message {
+export class SendDataMulticastResponse extends Message
+	implements SuccessIndicator {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._wasSent = this.payload[0] !== 0;
 		// if (!this._wasSent) this._errorCode = this.payload[0];
+	}
+
+	public isOK(): boolean {
+		return this._wasSent;
 	}
 
 	private _wasSent: boolean;

@@ -3,7 +3,7 @@ import type { Driver } from "../driver/Driver";
 import type { INodeQuery } from "../node/INodeQuery";
 import { createEmptyMockDriver } from "../test/mocks";
 import { FunctionType, MessageType } from "./Constants";
-import { Message, messageTypes, ResponseRole } from "./Message";
+import { Message, messageTypes } from "./Message";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
@@ -320,7 +320,7 @@ describe("lib/message", () => {
 			expect(Message.getConstructor(unknown)).toBe(Message);
 		});
 
-		it(`when expectedResponse is a FunctionType, testResponse() should return "final" or "unexpected"`, () => {
+		it(`when the expectedResponse is defined, testResponse() should return "final" or "unexpected"`, () => {
 			const msg = new Message(fakeDriver, {
 				type: MessageType.Request,
 				functionType: 0xff,
@@ -347,42 +347,11 @@ describe("lib/message", () => {
 			expect(msg.testResponse(unexpected2)).toBe("unexpected");
 		});
 
-		it(`when expectedResponse is a predicate, testResponse() should pass its return value through`, () => {
-			const predicate = jest.fn();
-			const msg = new Message(fakeDriver, {
-				type: MessageType.Request,
-				functionType: 0xff,
-				expectedResponse: predicate,
-			});
-			const test = new Message(fakeDriver, {
-				type: MessageType.Response,
-				functionType: 0xff,
-			});
-
-			const results: ResponseRole[] = [
-				"fatal_controller",
-				"fatal_node",
-				"final",
-				"confirmation",
-				"unexpected",
-			];
-			for (const result of results) {
-				predicate.mockReset();
-				predicate.mockReturnValue(result);
-
-				expect(msg.testResponse(test)).toBe(result);
-				expect(predicate).toHaveBeenCalledWith(msg, test);
-			}
-		});
-
 		it(`when the message has a callbackId, testResponse() should return "unexpected" for requests that don't match it`, () => {
 			const msg = new Message(fakeDriver, {
 				type: MessageType.Request,
 				functionType: 0xff,
-				expectedResponse: (sent, received) =>
-					received.functionType === FunctionType.GetSUCNodeId
-						? "final"
-						: "unexpected",
+				expectedCallback: FunctionType.GetSUCNodeId,
 				callbackId: 5,
 			});
 			const final = new Message(fakeDriver, {
