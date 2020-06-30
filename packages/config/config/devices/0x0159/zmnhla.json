@@ -1,520 +1,521 @@
-// Goap ZMNHLA
+// Qubino ZMNHLA
 // Flush PWM thermostat
 {
-    "_approved": true,
-    "manufacturer": "Goap",
-    "manufacturerId": "0x0159",
-    "label": "ZMNHLA",
-    "description": "Flush PWM thermostat",
-    "devices": [
-        {
-            "productType": "0x0005",
-            "productId": "0x0003"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "On/Off Triggered by Q State",
-            "maxNodes": 16
-        },
-        "2": {
-            "label": "On/Off Triggered by I2",
-            "maxNodes": 16
-        },
-        "3": {
-            "label": "On/Off Triggered by I3",
-            "maxNodes": 16
-        },
-        "4": {
-            "label": "On/Off Triggerd by High Temp",
-            "maxNodes": 16
-        },
-        "5": {
-            "label": "On/Off Trigger by Low Temp",
-            "maxNodes": 16
-        },
-        "6": {
-            "label": "Controller Updates",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Input 1 switch type",
-            "description": "Input 1 switch type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "mono-stable switch type (push button)",
-                    "value": 0
-                },
-                {
-                    "label": "bi-stable switch type",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Input 2 switch type",
-            "description": "Input 2 switch type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "mono-stable switch type (push button)",
-                    "value": 0
-                },
-                {
-                    "label": "bi-stable switch type",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Input 3 switch type",
-            "description": "Input 3 switch type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "mono-stable switch type (push button)",
-                    "value": 0
-                },
-                {
-                    "label": "bi-stable switch type",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Input 1 contact type",
-            "description": "Input 1 contact type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "NO (normally open) input type",
-                    "value": 0
-                },
-                {
-                    "label": "NC (normally close) input type",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "Input 2 contact type",
-            "description": "Input 2 contact type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "NO (normally open) input type",
-                    "value": 0
-                },
-                {
-                    "label": "NC (normally close) input type",
-                    "value": 1
-                }
-            ]
-        },
-        "6": {
-            "label": "Input 3 contact type",
-            "description": "Input 3 contact type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "NO (normally open) input type",
-                    "value": 0
-                },
-                {
-                    "label": "NC (normally close) input type",
-                    "value": 1
-                }
-            ]
-        },
-        "10": {
-            "label": "Activate / deactivate functions ALL ON/ALL OFF",
-            "description": "Respond to ALL ON/ALL OFF",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "ALL ON is not active ALL OFF is not active",
-                    "value": 0
-                },
-                {
-                    "label": "ALL ON is not active ALL OFF active",
-                    "value": 1
-                },
-                {
-                    "label": "ALL ON active ALL OFF is not active",
-                    "value": 2
-                },
-                {
-                    "label": "ALL ON active, ALL OFF active",
-                    "value": 255
-                }
-            ]
-        },
-        "11": {
-            "label": "I1 Functionality Selection",
-            "description": "I1 Functionality Selection",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "I2 Functionality Selection",
-            "description": "I2 Functionality Selection",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 65535,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "I3 Functionality Selection",
-            "description": "I3 Functionality Selection",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 65535,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "40": {
-            "label": "Power reporting in Watts on power change",
-            "description": "Power reporting in Watts on power change",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "42": {
-            "label": "Power reporting in Watts by timer interval",
-            "description": "Power reporting in Watts by timer interval",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "45": {
-            "label": "Antifreeze",
-            "description": "Antifreeze",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 50,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "50": {
-            "label": "PWM Maximum Value",
-            "description": "PWM Maximum Value",
-            "valueSize": 1,
-            "minValue": 2,
-            "maxValue": 100,
-            "defaultValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "51": {
-            "label": "PWM Minimum Value",
-            "description": "PWM Minimum Value",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "52": {
-            "label": "PWM Cycle Duration",
-            "description": "PWM Cycle Duration",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 127,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "53": {
-            "label": "PID Value Inside Deadband",
-            "description": "PID Value Inside Deadband",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "PID value equals ZERO",
-                    "value": 0
-                },
-                {
-                    "label": "PID value set to LAST VALUE",
-                    "value": 1
-                }
-            ]
-        },
-        "54": {
-            "label": "PID Deadband",
-            "description": "PID Deadband",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "55": {
-            "label": "Integral Sampling Time",
-            "description": "Integral Sampling Time",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "56": {
-            "label": "P Parameter",
-            "description": "0 - 1000 P value step is 1. Default = 100",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1000,
-            "defaultValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "57": {
-            "label": "I Parameter",
-            "description": "0 - 1000 - 0s I value step is 1. Default = 1",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1000,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "58": {
-            "label": "D Parameter",
-            "description": "0 - 1000 - 0s D value step is 1. Default = 1",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1000,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "59": {
-            "label": "Thermostat Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Heat Mode",
-                    "value": 0
-                },
-                {
-                    "label": "Cool Mode",
-                    "value": 1
-                }
-            ]
-        },
-        "60": {
-            "label": "Too low temperature limit",
-            "description": "Too low temperature limit",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 1000,
-            "defaultValue": 50,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "61": {
-            "label": "Too high temperature limit",
-            "description": "Too high temperature limit",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 1000,
-            "defaultValue": 700,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "63": {
-            "label": "Output Switch Selection",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "System OFF the output is 0V (NC)",
-                    "value": 0
-                },
-                {
-                    "label": "System OFF the output is 230V (NO)",
-                    "value": 1
-                }
-            ]
-        },
-        "70": {
-            "label": "Input 1 Status on delay",
-            "description": "Input 1 Status on delay",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "71": {
-            "label": "Input 1 Status off delay",
-            "description": "Input 1 Status off delay",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "72": {
-            "label": "Input 2 Status on delay",
-            "description": "Input 2 Status on delay",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "73": {
-            "label": "Input 2 Status off delay",
-            "description": "Input 2 Status off delay",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "74": {
-            "label": "Input 3 Status on delay",
-            "description": "Input 3 Status on delay",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "75": {
-            "label": "Input 3 Status off delay",
-            "description": "Input 3 Status off delay",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Qubino",
+	"manufacturerId": "0x0159",
+	"label": "ZMNHLA",
+	"description": "Flush PWM thermostat",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "On/Off Triggered by Q State",
+			"maxNodes": 16
+		},
+		"2": {
+			"label": "On/Off Triggered by I2",
+			"maxNodes": 16
+		},
+		"3": {
+			"label": "On/Off Triggered by I3",
+			"maxNodes": 16
+		},
+		"4": {
+			"label": "On/Off Triggerd by High Temp",
+			"maxNodes": 16
+		},
+		"5": {
+			"label": "On/Off Trigger by Low Temp",
+			"maxNodes": 16
+		},
+		"6": {
+			"label": "Controller Updates",
+			"maxNodes": 1,
+			"isLifeline": true,
+			"noEndpoint": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Input 1 switch type",
+			"description": "Input 1 switch type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "mono-stable switch type (push button)",
+					"value": 0
+				},
+				{
+					"label": "bi-stable switch type",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Input 2 switch type",
+			"description": "Input 2 switch type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "mono-stable switch type (push button)",
+					"value": 0
+				},
+				{
+					"label": "bi-stable switch type",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Input 3 switch type",
+			"description": "Input 3 switch type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "mono-stable switch type (push button)",
+					"value": 0
+				},
+				{
+					"label": "bi-stable switch type",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Input 1 contact type",
+			"description": "Input 1 contact type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO (normally open) input type",
+					"value": 0
+				},
+				{
+					"label": "NC (normally close) input type",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Input 2 contact type",
+			"description": "Input 2 contact type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO (normally open) input type",
+					"value": 0
+				},
+				{
+					"label": "NC (normally close) input type",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Input 3 contact type",
+			"description": "Input 3 contact type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO (normally open) input type",
+					"value": 0
+				},
+				{
+					"label": "NC (normally close) input type",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "Activate / deactivate functions ALL ON/ALL OFF",
+			"description": "Respond to ALL ON/ALL OFF",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "ALL ON is not active ALL OFF is not active",
+					"value": 0
+				},
+				{
+					"label": "ALL ON is not active ALL OFF active",
+					"value": 1
+				},
+				{
+					"label": "ALL ON active ALL OFF is not active",
+					"value": 2
+				},
+				{
+					"label": "ALL ON active, ALL OFF active",
+					"value": 255
+				}
+			]
+		},
+		"11": {
+			"label": "I1 Functionality Selection",
+			"description": "I1 Functionality Selection",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "I2 Functionality Selection",
+			"description": "I2 Functionality Selection",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 65535,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "I3 Functionality Selection",
+			"description": "I3 Functionality Selection",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 65535,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40": {
+			"label": "Power reporting in Watts on power change",
+			"description": "Power reporting in Watts on power change",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"42": {
+			"label": "Power reporting in Watts by timer interval",
+			"description": "Power reporting in Watts by timer interval",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"45": {
+			"label": "Antifreeze",
+			"description": "Antifreeze",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"50": {
+			"label": "PWM Maximum Value",
+			"description": "PWM Maximum Value",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"51": {
+			"label": "PWM Minimum Value",
+			"description": "PWM Minimum Value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"52": {
+			"label": "PWM Cycle Duration",
+			"description": "PWM Cycle Duration",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"53": {
+			"label": "PID Value Inside Deadband",
+			"description": "PID Value Inside Deadband",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "PID value equals ZERO",
+					"value": 0
+				},
+				{
+					"label": "PID value set to LAST VALUE",
+					"value": 1
+				}
+			]
+		},
+		"54": {
+			"label": "PID Deadband",
+			"description": "PID Deadband",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"55": {
+			"label": "Integral Sampling Time",
+			"description": "Integral Sampling Time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"56": {
+			"label": "P Parameter",
+			"description": "0 - 1000 P value step is 1. Default = 100",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"57": {
+			"label": "I Parameter",
+			"description": "0 - 1000 - 0s I value step is 1. Default = 1",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"58": {
+			"label": "D Parameter",
+			"description": "0 - 1000 - 0s D value step is 1. Default = 1",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"59": {
+			"label": "Thermostat Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Heat Mode",
+					"value": 0
+				},
+				{
+					"label": "Cool Mode",
+					"value": 1
+				}
+			]
+		},
+		"60": {
+			"label": "Too low temperature limit",
+			"description": "Too low temperature limit",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1000,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"61": {
+			"label": "Too high temperature limit",
+			"description": "Too high temperature limit",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1000,
+			"defaultValue": 700,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"63": {
+			"label": "Output Switch Selection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "System OFF the output is 0V (NC)",
+					"value": 0
+				},
+				{
+					"label": "System OFF the output is 230V (NO)",
+					"value": 1
+				}
+			]
+		},
+		"70": {
+			"label": "Input 1 Status on delay",
+			"description": "Input 1 Status on delay",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"71": {
+			"label": "Input 1 Status off delay",
+			"description": "Input 1 Status off delay",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"72": {
+			"label": "Input 2 Status on delay",
+			"description": "Input 2 Status on delay",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"73": {
+			"label": "Input 2 Status off delay",
+			"description": "Input 2 Status off delay",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"74": {
+			"label": "Input 3 Status on delay",
+			"description": "Input 3 Status on delay",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"75": {
+			"label": "Input 3 Status off delay",
+			"description": "Input 3 Status off delay",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

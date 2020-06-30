@@ -1,8 +1,8 @@
-// Goap ZMNHOD
+// Qubino ZMNHOD
 // Flush Shutter DC
 {
     "_approved": true,
-    "manufacturer": "Goap",
+    "manufacturer": "Qubino",
     "manufacturerId": "0x0159",
     "label": "ZMNHOD",
     "description": "Flush Shutter DC",

@@ -1,8 +1,8 @@
-// Goap ZMNHLD
+// Qubino ZMNHLD
 // Flush PWM Thermostat
 {
 	"_approved": true,
-	"manufacturer": "Goap",
+	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
 	"label": "ZMNHLD",
 	"description": "Flush PWM Thermostat",

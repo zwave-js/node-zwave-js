@@ -1,8 +1,8 @@
-// Goap ZMNHKD
+// Qubino ZMNHKD
 // Flush Heat & Cool Thermostat
 {
 	"_approved": true,
-	"manufacturer": "Goap",
+	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
 	"label": "ZMNHKD",
 	"description": "Flush Heat & Cool Thermostat",

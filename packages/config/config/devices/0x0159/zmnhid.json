@@ -1,8 +1,8 @@
-// Goap ZMNHID
+// Qubino ZMNHID
 // Flush on/off thermostat
 {
 	"_approved": true,
-	"manufacturer": "Goap",
+	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
 	"label": "ZMNHID",
 	"description": "Flush on/off thermostat",
@@ -40,7 +40,8 @@
 		"6": {
 			"label": "Default Reporting Group",
 			"maxNodes": 1,
-			"isLifeline": true
+			"isLifeline": true,
+			"noEndpoint": true
 		}
 	},
 	"paramInformation": {

@@ -1,8 +1,8 @@
-// Goap ZMNHAD
+// Qubino ZMNHAD
 // Flush 1 relay
 {
     "_approved": true,
-    "manufacturer": "Goap",
+    "manufacturer": "Qubino",
     "manufacturerId": "0x0159",
     "label": "ZMNHAD",
     "description": "Flush 1 relay",

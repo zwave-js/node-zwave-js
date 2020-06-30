@@ -1,11 +1,11 @@
-// Goap ZMNHWD
+// Qubino ZMNHWD
 // Qubino Flush RGBW Dimmer
 {
     "_approved": true,
     "_warnings": [
         "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
     ],
-    "manufacturer": "Goap",
+    "manufacturer": "Qubino",
     "manufacturerId": "0x0159",
     "label": "ZMNHWD",
     "description": "Qubino Flush RGBW Dimmer",

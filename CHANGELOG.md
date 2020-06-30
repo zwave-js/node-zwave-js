@@ -7,6 +7,8 @@
 ## __WORK IN PROGRESS__
 ### Bugfixes
 * If a node fails to respond to `Multi Channel Endpoint Find`, the interview is no longer aborted and sequential endpoints are assumed instead
+* Renamed the manufacturer `Goap` to Qubino
+* For many Qubino devices, the lifeline now uses a node association
 
 ## 4.0.2 (2020-06-29)
 ### Bugfixes

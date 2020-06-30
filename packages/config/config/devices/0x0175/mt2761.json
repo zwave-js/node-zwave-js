@@ -25,15 +25,11 @@
 		},
 		"2": {
 			"label": "Basic on/off - triggered at change of the input I1 state and reflecting its state.",
-			"maxNodes": 16,
-			"isLifeline": true,
-			"noEndpoint": true
+			"maxNodes": 16
 		},
 		"3": {
 			"label": "Basic on/off - triggered at change of the input I2 state and reflecting its state.",
-			"maxNodes": 16,
-			"isLifeline": true,
-			"noEndpoint": true
+			"maxNodes": 16
 		},
 		"4": {
 			"label": "Basic on/off - triggered at sensing moving direction of roller: up=FF, down=0.",
@@ -49,15 +45,11 @@
 		},
 		"7": {
 			"label": "Multilevel set - triggered at changes of value of the Flush Shutter DC position.",
-			"maxNodes": 16,
-			"isLifeline": true,
-			"noEndpoint": true
+			"maxNodes": 16
 		},
 		"8": {
 			"label": "Multilevel set - triggered at changes of value of slats tilting position.",
-			"maxNodes": 16,
-			"isLifeline": true,
-			"noEndpoint": true
+			"maxNodes": 16
 		},
 		"9": {
 			"label": "Multilevel sensor report - triggered at change of temperature sensor.",
