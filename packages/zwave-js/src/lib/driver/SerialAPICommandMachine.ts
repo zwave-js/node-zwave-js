@@ -20,18 +20,30 @@ export interface SerialAPICommandStateSchema {
 	};
 }
 
+export type SerialAPICommandError =
+	| "send failure"
+	| "CAN"
+	| "ACK timeout"
+	| "response timeout"
+	| "callback timeout"
+	| "response NOK"
+	| "callback NOK";
+
 export interface SerialAPICommandContext {
 	msg: Buffer;
 	expectsResponse: boolean;
 	expectsCallback: boolean;
 	attempts: number;
 	maxAttempts: number;
+	lastError: SerialAPICommandError | undefined;
 }
 
 export type SerialAPICommandEvent =
 	| { type: "ACK" }
 	| { type: "CAN" }
 	| { type: "response" | "callback"; ok: boolean };
+
+export type SerialAPICommandDoneEvent = { reason: SerialAPICommandError };
 
 export interface ServiceImplementations {
 	sendData: (data: Buffer) => Promise<void>;
@@ -76,6 +88,7 @@ export function createSerialAPICommandMachine(
 				expectsCallback: false,
 				attempts: 0,
 				maxAttempts: 3,
+				lastError: undefined,
 				...initialContext,
 			},
 			states: {
@@ -88,12 +101,22 @@ export function createSerialAPICommandMachine(
 						id: "sendMessage",
 						src: "send",
 						onDone: "waitForACK",
-						onError: "retry",
+						onError: {
+							target: "retry",
+							actions: assign({
+								lastError: (_) => "send failure",
+							}),
+						},
 					},
 				},
 				waitForACK: {
 					on: {
-						CAN: "retry",
+						CAN: {
+							target: "retry",
+							actions: assign<SerialAPICommandContext>({
+								lastError: (_) => "CAN",
+							}),
+						},
 						ACK: [
 							{
 								target: "waitForResponse",
@@ -101,7 +124,12 @@ export function createSerialAPICommandMachine(
 						],
 					},
 					after: {
-						1600: "retry",
+						1600: {
+							target: "retry",
+							actions: assign({
+								lastError: (_) => "ACK timeout",
+							}),
+						},
 					},
 				},
 				waitForResponse: {
@@ -116,12 +144,20 @@ export function createSerialAPICommandMachine(
 							{
 								target: "retry",
 								cond: "responseIsNOK",
+								actions: assign<SerialAPICommandContext>({
+									lastError: (_) => "response NOK",
+								}),
 							},
 							{ target: "waitForCallback" },
 						],
 					},
 					after: {
-						1600: "retry",
+						1600: {
+							target: "retry",
+							actions: assign({
+								lastError: (_) => "response timeout",
+							}),
+						},
 					},
 				},
 				waitForCallback: {
@@ -131,12 +167,20 @@ export function createSerialAPICommandMachine(
 							{
 								target: "retry",
 								cond: "callbackIsNOK",
+								actions: assign<SerialAPICommandContext>({
+									lastError: (_) => "callback NOK",
+								}),
 							},
 							{ target: "success" },
 						],
 					},
 					after: {
-						65000: "abort",
+						65000: {
+							target: "abort",
+							actions: assign({
+								lastError: (_) => "callback timeout",
+							}),
+						},
 					},
 				},
 				retry: {
@@ -161,9 +205,15 @@ export function createSerialAPICommandMachine(
 				},
 				failure: {
 					type: "final",
+					data: {
+						reason: (ctx: SerialAPICommandContext) => ctx.lastError,
+					},
 				},
 				abort: {
 					type: "final",
+					data: {
+						reason: (ctx: SerialAPICommandContext) => ctx.lastError,
+					},
 				},
 			},
 		},
