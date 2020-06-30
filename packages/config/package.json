@@ -45,6 +45,6 @@
     "clean": "npm run build -- --clean",
     "watch": "npm run build -- --watch --pretty",
     "lint:config": "gulp lintConfigFiles",
-    "config": "ts-node maintenance/importConfig.ts"
+    "config": "ts-node ../../maintenance/importConfig.ts"
   }
 }
