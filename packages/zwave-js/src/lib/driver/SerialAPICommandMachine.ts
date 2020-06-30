@@ -1,4 +1,10 @@
-import { assign, Machine, StateMachine, StatesConfig } from "xstate";
+import {
+	assign,
+	Interpreter,
+	Machine,
+	StateMachine,
+	StatesConfig,
+} from "xstate";
 
 export interface SerialAPICommandStateSchema {
 	states: {
@@ -40,6 +46,17 @@ function computeRetryDelay(ctx: SerialAPICommandContext): number {
 	return 100 + 1000 * (ctx.attempts - 1);
 }
 
+export type SerialAPICommandMachine = StateMachine<
+	SerialAPICommandContext,
+	SerialAPICommandStateSchema,
+	SerialAPICommandEvent
+>;
+export type SerialAPICommandInterpreter = Interpreter<
+	SerialAPICommandContext,
+	SerialAPICommandStateSchema,
+	SerialAPICommandEvent
+>;
+
 export function createSerialAPICommandMachine(
 	{ sendData, notifyRetry }: ServiceImplementations,
 	initialContext: Partial<SerialAPICommandContext> = {},
@@ -48,11 +65,7 @@ export function createSerialAPICommandMachine(
 		any,
 		SerialAPICommandEvent
 	> = {},
-): StateMachine<
-	SerialAPICommandContext,
-	SerialAPICommandStateSchema,
-	SerialAPICommandEvent
-> {
+): SerialAPICommandMachine {
 	return Machine(
 		{
 			id: "serialAPICommand",
