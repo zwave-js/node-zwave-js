@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 4.0.3 (2020-06-30)
 ### Bugfixes
 * If a node fails to respond to `Multi Channel Endpoint Find`, the interview is no longer aborted and sequential endpoints are assumed instead
 * Renamed the manufacturer `Goap` to Qubino
