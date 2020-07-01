@@ -1,5 +1,8 @@
+import { highResTimestamp } from "@zwave-js/core";
 import { interpret, Interpreter } from "xstate";
 import { SimulatedClock } from "xstate/lib/SimulatedClock";
+import { MessageType } from "../message/Constants";
+import type { Message } from "../message/Message";
 import {
 	createSerialAPICommandMachine,
 	SerialAPICommandContext,
@@ -13,6 +16,29 @@ const createSendDataResolvesImmediately = () =>
 	jest.fn().mockResolvedValue(undefined);
 const createSendDataRejectsImmediately = () =>
 	jest.fn().mockRejectedValue(new Error("nope"));
+
+const dummyMessageNoResponseNoCallback = ({
+	serialize: () => Buffer.from([1, 2, 3]),
+	expectedResponse: undefined,
+	expectedCallback: undefined,
+} as any) as Message;
+const dummyMessageWithResponseNoCallback = ({
+	serialize: () => Buffer.from([1, 2, 3]),
+	expectedResponse: 0xff,
+	expectedCallback: undefined,
+} as any) as Message;
+// const dummyMessageNoResponseWithCallback = ({
+// 	serialize: () => Buffer.from([1, 2, 3]),
+// 	expectedResponse: undefined,
+// 	expectedCallback: true,
+// } as any) as Message;
+// const dummyMessageWithResponseWithCallback = ({
+// 	serialize: () => Buffer.from([1, 2, 3]),
+// 	expectedResponse: true,
+// 	expectedCallback: true,
+// } as any) as Message;
+
+jest.mock("@zwave-js/core");
 
 describe("lib/driver/SerialAPICommandMachine", () => {
 	jest.setTimeout(100);
@@ -37,10 +63,8 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 			const msg = Buffer.from([1, 2, 3]);
 
 			const testMachine = createSerialAPICommandMachine(
+				dummyMessageNoResponseNoCallback,
 				{ sendData },
-				{
-					msg,
-				},
 			);
 
 			service = interpret(testMachine).start();
@@ -53,6 +77,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 			const sendData = createSendDataResolvesNever();
 
 			const testMachine = createSerialAPICommandMachine(
+				dummyMessageNoResponseNoCallback,
 				{ sendData },
 				{
 					attempts: 1,
@@ -64,13 +89,10 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 		});
 		it("should go into waitForACK state when successful", (done) => {
 			const sendData = createSendDataResolvesImmediately();
-			const msg = Buffer.from([1, 2, 3]);
 
 			const testMachine = createSerialAPICommandMachine(
+				dummyMessageNoResponseNoCallback,
 				{ sendData },
-				{
-					msg,
-				},
 			);
 
 			service = interpret(testMachine)
@@ -83,7 +105,10 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 		it("should go into retryWait state when it fails", (done) => {
 			const sendData = createSendDataRejectsImmediately();
 
-			const testMachine = createSerialAPICommandMachine({ sendData });
+			const testMachine = createSerialAPICommandMachine(
+				dummyMessageNoResponseNoCallback,
+				{ sendData },
+			);
 
 			service = interpret(testMachine)
 				.onTransition((state) => {
@@ -95,7 +120,10 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 		it("should set the lastError context when it fails", (done) => {
 			const sendData = createSendDataRejectsImmediately();
 
-			const testMachine = createSerialAPICommandMachine({ sendData });
+			const testMachine = createSerialAPICommandMachine(
+				dummyMessageNoResponseNoCallback,
+				{ sendData },
+			);
 
 			service = interpret(testMachine)
 				.onTransition((state) => {
@@ -110,21 +138,50 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 
 	describe("waiting for an ACK...", () => {
 		it("should go into retryWait state when a CAN is received instead of an ACK", () => {
-			const testMachine = createSerialAPICommandMachine({} as any);
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+			);
 			service = interpret(testMachine).start("waitForACK");
 			service.send("CAN");
 			expect(service.state.value).toBe("retryWait");
 		});
 
 		it("should set the lastError context when a CAN is received instead of an ACK", () => {
-			const testMachine = createSerialAPICommandMachine({} as any);
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+			);
 			service = interpret(testMachine).start("waitForACK");
 			service.send("CAN");
 			expect(service.state.context.lastError).toBe("CAN");
 		});
 
+		it("should go into retryWait state when a NAK is received instead of an ACK", () => {
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+			);
+			service = interpret(testMachine).start("waitForACK");
+			service.send("NAK");
+			expect(service.state.value).toBe("retryWait");
+		});
+
+		it("should set the lastError context when a NAK is received instead of an ACK", () => {
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+			);
+			service = interpret(testMachine).start("waitForACK");
+			service.send("NAK");
+			expect(service.state.context.lastError).toBe("NAK");
+		});
+
 		it("should go into retryWait state when waiting for ACK times out", () => {
-			const testMachine = createSerialAPICommandMachine({} as any);
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+			);
 			testMachine.initial = "waitForACK";
 
 			const clock = new SimulatedClock();
@@ -134,7 +191,10 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 		});
 
 		it("should set the lastError context when it fails", () => {
-			const testMachine = createSerialAPICommandMachine({} as any);
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+			);
 			testMachine.initial = "waitForACK";
 
 			const clock = new SimulatedClock();
@@ -147,6 +207,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 	describe("retrying...", () => {
 		it("should immediately transition to failure if there are no attempts left", (done) => {
 			const testMachine = createSerialAPICommandMachine(
+				{} as any,
 				{
 					sendData: createSendDataResolvesNever(),
 				},
@@ -163,6 +224,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 
 		it("should wait until sending again", () => {
 			const testMachine = createSerialAPICommandMachine(
+				{} as any,
 				{
 					sendData: createSendDataResolvesNever(),
 				},
@@ -181,6 +243,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 
 		it("after each attempt, the wait time should be longer", () => {
 			const testMachine = createSerialAPICommandMachine(
+				{} as any,
 				{
 					sendData: createSendDataResolvesNever(),
 				},
@@ -200,6 +263,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 		it("should notify us about the retry attempt", () => {
 			const onRetry = jest.fn();
 			const testMachine = createSerialAPICommandMachine(
+				{} as any,
 				{
 					sendData: createSendDataResolvesNever(),
 					notifyRetry: onRetry,
@@ -217,9 +281,13 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 
 	describe("when the ACK is received in time, ...", () => {
 		it("should go into waitForResponse state a response is expected", () => {
-			const testMachine = createSerialAPICommandMachine({} as any, {
-				expectsResponse: true,
-			});
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsResponse: true,
+				},
+			);
 			testMachine.initial = "waitForACK";
 			service = interpret(testMachine).start();
 			service.send("ACK");
@@ -227,10 +295,14 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 		});
 
 		it("should go into waitForCallback state if no response but a callback is expected", () => {
-			const testMachine = createSerialAPICommandMachine({} as any, {
-				expectsResponse: false,
-				expectsCallback: true,
-			});
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsResponse: false,
+					expectsCallback: true,
+				},
+			);
 			testMachine.initial = "waitForACK";
 			service = interpret(testMachine).start();
 			service.send("ACK");
@@ -238,10 +310,14 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 		});
 
 		it("should go into success state if no response and no callback is expected", () => {
-			const testMachine = createSerialAPICommandMachine({} as any, {
-				expectsResponse: false,
-				expectsCallback: false,
-			});
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsResponse: false,
+					expectsCallback: false,
+				},
+			);
 			testMachine.initial = "waitForACK";
 			service = interpret(testMachine).start();
 			service.send("ACK");
@@ -251,9 +327,13 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 
 	describe("while waiting for a response, ...", () => {
 		it("should go into retry state when the timeout elapses", () => {
-			const testMachine = createSerialAPICommandMachine({} as any, {
-				expectsResponse: true,
-			});
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsResponse: true,
+				},
+			);
 			testMachine.initial = "waitForResponse";
 
 			const clock = new SimulatedClock();
@@ -263,9 +343,13 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 		});
 
 		it("should set the lastError context when the timeout elapses", () => {
-			const testMachine = createSerialAPICommandMachine({} as any, {
-				expectsResponse: true,
-			});
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsResponse: true,
+				},
+			);
 			testMachine.initial = "waitForResponse";
 
 			const clock = new SimulatedClock();
@@ -274,42 +358,88 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 			expect(service.state.context.lastError).toBe("response timeout");
 		});
 
-		it("should go into retry state if the response is NOK", () => {
-			const testMachine = createSerialAPICommandMachine({} as any, {
-				expectsResponse: true,
+		it("should respond with an UNSOLICITED event and keep waiting if the message is not expected", (done) => {
+			const testMachine = createSerialAPICommandMachine(
+				{
+					...dummyMessageWithResponseNoCallback,
+					isExpectedResponse: () => false,
+				} as any,
+				{} as any,
+				{
+					expectsResponse: true,
+				},
+			);
+			testMachine.initial = "waitForResponse";
+
+			const message = {
+				type: MessageType.Response,
+				functionType: 0xfe,
+			} as any;
+
+			service = interpret(testMachine)
+				.onEvent((evt) => {
+					if (evt.type === "unsolicited") {
+						expect((evt as any).message).toBe(message);
+						expect(service?.state.value).toBe("waitForResponse");
+						done();
+					}
+				})
+				.start();
+
+			service.send({
+				type: "message",
+				message,
 			});
+		});
+
+		it("should go into retry state if the response is NOK", () => {
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsResponse: true,
+				},
+			);
 			testMachine.initial = "waitForResponse";
 
 			service = interpret(testMachine).start();
 			service.send({
 				type: "response",
-				ok: false,
+				message: { isOK: () => false } as any,
 			});
 
 			expect(service.state.value).toBe("retryWait");
 		});
 
 		it("should set the lastError context if the response is NOK", () => {
-			const testMachine = createSerialAPICommandMachine({} as any, {
-				expectsResponse: true,
-			});
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsResponse: true,
+				},
+			);
 			testMachine.initial = "waitForResponse";
 
 			service = interpret(testMachine).start();
 			service.send({
 				type: "response",
-				ok: false,
+				message: { isOK: () => false } as any,
 			});
 
 			expect(service.state.context.lastError).toBe("response NOK");
 		});
 
 		it("if the last retry failed, the failure reason should be set", (done) => {
-			const testMachine = createSerialAPICommandMachine({} as any, {
-				expectsResponse: true,
-				attempts: 3,
-				maxAttempts: 3,
-			});
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsResponse: true,
+					attempts: 3,
+					maxAttempts: 3,
+				},
+			);
 			testMachine.initial = "waitForResponse";
 
 			service = interpret(testMachine)
@@ -320,93 +450,143 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 				.start();
 			service.send({
 				type: "response",
-				ok: false,
+				message: { isOK: () => false } as any,
 			});
 		});
 
 		it("should go into waitForCallback state if response is OK and a callback is expected", () => {
-			const testMachine = createSerialAPICommandMachine({} as any, {
-				expectsResponse: true,
-				expectsCallback: true,
-			});
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsResponse: true,
+					expectsCallback: true,
+				},
+			);
 			testMachine.initial = "waitForResponse";
 
 			service = interpret(testMachine).start();
 			service.send({
 				type: "response",
-				ok: true,
+				message: { isOK: () => true } as any,
 			});
 
 			expect(service.state.value).toBe("waitForCallback");
 		});
 
 		it("should go into success state if response is OK and no callback is expected", () => {
-			const testMachine = createSerialAPICommandMachine({} as any, {
-				expectsResponse: true,
-				expectsCallback: false,
-			});
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsResponse: true,
+					expectsCallback: false,
+				},
+			);
 			testMachine.initial = "waitForResponse";
 
 			service = interpret(testMachine).start();
 			service.send({
 				type: "response",
-				ok: true,
+				message: { isOK: () => true } as any,
 			});
 
 			expect(service.state.value).toBe("success");
+		});
+
+		it("on success, the last received message (response) should be returned", (done) => {
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsResponse: true,
+					expectsCallback: false,
+				},
+			);
+			testMachine.initial = "waitForResponse";
+
+			const message = { isOK: () => true } as any;
+
+			service = interpret(testMachine)
+				.onDone((evt) => {
+					expect(evt.data?.result).toBe(message);
+					done();
+				})
+				.start();
+
+			service.send({
+				type: "response",
+				message,
+			});
 		});
 	});
 
 	describe("while waiting for a callback, ...", () => {
 		it("should go into failure state if the callback is NOK", () => {
-			const testMachine = createSerialAPICommandMachine({} as any, {
-				expectsCallback: true,
-			});
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsCallback: true,
+				},
+			);
 			testMachine.initial = "waitForCallback";
 
 			service = interpret(testMachine).start();
 			service.send({
 				type: "callback",
-				ok: false,
+				message: { isOK: () => false } as any,
 			});
 
 			expect(service.state.value).toBe("failure");
 		});
 
 		it("should set the lastError context if the callback is NOK", () => {
-			const testMachine = createSerialAPICommandMachine({} as any, {
-				expectsCallback: true,
-			});
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsCallback: true,
+				},
+			);
 			testMachine.initial = "waitForCallback";
 
 			service = interpret(testMachine).start();
 			service.send({
 				type: "callback",
-				ok: false,
+				message: { isOK: () => false } as any,
 			});
 
 			expect(service.state.context.lastError).toBe("callback NOK");
 		});
 
 		it("should go into success state if callback is OK", () => {
-			const testMachine = createSerialAPICommandMachine({} as any, {
-				expectsCallback: true,
-			});
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsCallback: true,
+				},
+			);
 			testMachine.initial = "waitForCallback";
 
 			service = interpret(testMachine).start();
 			service.send({
 				type: "callback",
-				ok: true,
+				message: { isOK: () => true } as any,
 			});
 
 			expect(service.state.value).toBe("success");
 		});
 
 		it("should go back to waiting if callback is OK but not final", (done) => {
-			const testMachine = createSerialAPICommandMachine({} as any, {
-				expectsCallback: true,
-			});
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsCallback: true,
+				},
+			);
 			testMachine.initial = "waitForCallback";
 
 			service = interpret(testMachine).start();
@@ -421,15 +601,43 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 			});
 			service.send({
 				type: "callback",
-				ok: true,
-				final: false,
+				message: { isOK: () => true, isFinal: () => false } as any,
+			});
+		});
+
+		it("on success, the last received message (callback) should be returned", (done) => {
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsCallback: true,
+				},
+			);
+			testMachine.initial = "waitForCallback";
+
+			const message = { isOK: () => true } as any;
+
+			service = interpret(testMachine)
+				.onDone((evt) => {
+					expect(evt.data?.result).toBe(message);
+					done();
+				})
+				.start();
+
+			service.send({
+				type: "callback",
+				message,
 			});
 		});
 
 		it("should reset the timeout when the intermediate callback is received", () => {
-			const testMachine = createSerialAPICommandMachine({} as any, {
-				expectsCallback: true,
-			});
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsCallback: true,
+				},
+			);
 			testMachine.initial = "waitForCallback";
 
 			const clock = new SimulatedClock();
@@ -437,8 +645,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 			clock.increment(64999);
 			service.send({
 				type: "callback",
-				ok: true,
-				final: false,
+				message: { isOK: () => true, isFinal: () => false } as any,
 			});
 			expect(service.state.value).toBe("waitForCallback");
 
@@ -454,9 +661,13 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 		});
 
 		it("should go into abort state if the timeout elapses", (done) => {
-			const testMachine = createSerialAPICommandMachine({} as any, {
-				expectsCallback: true,
-			});
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsCallback: true,
+				},
+			);
 			testMachine.initial = "waitForCallback";
 
 			const clock = new SimulatedClock();
@@ -471,9 +682,13 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 		});
 
 		it("should set the lastError context when the timeout elapses", () => {
-			const testMachine = createSerialAPICommandMachine({} as any, {
-				expectsCallback: true,
-			});
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsCallback: true,
+				},
+			);
 			testMachine.initial = "waitForCallback";
 
 			const clock = new SimulatedClock();
@@ -481,5 +696,29 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 			clock.increment(65000);
 			expect(service.state.context.lastError).toBe("callback timeout");
 		});
+	});
+
+	it("on success, the TX timestamp should be returned", (done) => {
+		(highResTimestamp as jest.Mock)
+			.mockReturnValueOnce(10)
+			.mockReturnValueOnce(30);
+		const testMachine = createSerialAPICommandMachine(
+			dummyMessageNoResponseNoCallback,
+			{
+				sendData: createSendDataResolvesImmediately(),
+			} as any,
+		);
+
+		service = interpret(testMachine)
+			.onTransition((state) => {
+				if (state.value === "waitForACK") {
+					service!.send("ACK");
+				}
+			})
+			.onDone((evt) => {
+				expect(evt.data?.txTimestamp).toBe(10);
+				done();
+			})
+			.start();
 	});
 });

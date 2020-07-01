@@ -1,13 +1,19 @@
-import {
-	assign,
-	Interpreter,
-	Machine,
-	StateMachine,
-	StatesConfig,
-} from "xstate";
+// wotan-disable no-uninferred-type-parameter
 
+import { highResTimestamp } from "@zwave-js/core";
+import { assign, Interpreter, Machine, StateMachine } from "xstate";
+import { respond, send } from "xstate/lib/actions";
+import { MessageType } from "../message/Constants";
+import type { Message } from "../message/Message";
+import {
+	isMultiStageCallback,
+	isSuccessIndicator,
+} from "../message/SuccessIndicator";
+
+/* eslint-disable @typescript-eslint/ban-types */
 export interface SerialAPICommandStateSchema {
 	states: {
+		init: {};
 		sending: {};
 		waitForACK: {};
 		waitForResponse: {};
@@ -19,10 +25,12 @@ export interface SerialAPICommandStateSchema {
 		abort: {};
 	};
 }
+/* eslint-enable @typescript-eslint/ban-types */
 
 export type SerialAPICommandError =
 	| "send failure"
 	| "CAN"
+	| "NAK"
 	| "ACK timeout"
 	| "response timeout"
 	| "callback timeout"
@@ -30,28 +38,32 @@ export type SerialAPICommandError =
 	| "callback NOK";
 
 export interface SerialAPICommandContext {
-	msg: Buffer;
+	msg: Message;
+	data: Buffer;
+	// msg: Buffer;
 	expectsResponse: boolean;
 	expectsCallback: boolean;
 	attempts: number;
 	maxAttempts: number;
 	lastError?: SerialAPICommandError;
+	result?: Message;
+	txTimestamp?: number;
 }
 
 export type SerialAPICommandEvent =
 	| { type: "ACK" }
 	| { type: "CAN" }
+	| { type: "NAK" }
 	| {
-			type: "response";
-			ok: boolean;
-	  }
-	| {
-			type: "response" | "callback";
-			ok: boolean;
-			final?: boolean;
+			type:
+				| "response" // A message that has been determined to be expected
+				| "callback"
+				// A message that might be unsolicited
+				| "message"
+				// A message that IS unsolicited
+				| "unsolicited";
+			message: Message;
 	  };
-
-export type SerialAPICommandDoneEvent = { reason: SerialAPICommandError };
 
 export interface ServiceImplementations {
 	sendData: (data: Buffer) => Promise<void>;
@@ -66,6 +78,20 @@ function computeRetryDelay(ctx: SerialAPICommandContext): number {
 	return 100 + 1000 * (ctx.attempts - 1);
 }
 
+const forwardMessage = send(
+	(_, evt: SerialAPICommandEvent & { type: "message" }) => ({
+		type:
+			evt.message.type === MessageType.Response ? "response" : "callback",
+		message: evt.message,
+	}),
+);
+const respondUnsolicited = respond(
+	(_, evt: SerialAPICommandEvent & { type: "message" }) => ({
+		type: "unsolicited",
+		message: evt.message,
+	}),
+);
+
 export type SerialAPICommandMachine = StateMachine<
 	SerialAPICommandContext,
 	SerialAPICommandStateSchema,
@@ -78,31 +104,60 @@ export type SerialAPICommandInterpreter = Interpreter<
 >;
 
 export function createSerialAPICommandMachine(
+	message: Message,
 	{ sendData, notifyRetry }: ServiceImplementations,
 	initialContext: Partial<SerialAPICommandContext> = {},
-	additionalStates: StatesConfig<
-		SerialAPICommandContext,
-		any,
-		SerialAPICommandEvent
-	> = {},
 ): SerialAPICommandMachine {
-	return Machine(
+	return Machine<
+		SerialAPICommandContext,
+		SerialAPICommandStateSchema,
+		SerialAPICommandEvent
+	>(
 		{
 			id: "serialAPICommand",
-			initial: "sending",
+			initial: "init",
 			context: {
-				msg: Buffer.from([]),
+				msg: message,
+				data: Buffer.from([]),
 				expectsResponse: false,
 				expectsCallback: false,
 				attempts: 0,
 				maxAttempts: 3,
 				...initialContext,
 			},
+			on: {
+				// The state machine accepts any message. If it is expected
+				// it will be forwarded to the correct states. If not, it
+				// will be returned with the "unsolicited" event.
+				message: [
+					{
+						cond: "isExpectedMessage",
+						actions: forwardMessage,
+					},
+					{
+						actions: respondUnsolicited,
+					},
+				],
+			},
 			states: {
-				...additionalStates,
+				// Extract the necessary data from the message instance and
+				// start sending
+				init: {
+					entry: assign({
+						data: (ctx) => ctx.msg.serialize(),
+						expectsResponse: (ctx) => !!ctx.msg.expectedResponse,
+						expectsCallback: (ctx) => !!ctx.msg.expectedCallback,
+					}),
+					on: {
+						"": "sending",
+					},
+				},
 				sending: {
+					// Every send attempt should increase the attempts by one
+					// and remember the timestamp of transmission
 					entry: assign({
 						attempts: (ctx) => ctx.attempts + 1,
+						txTimestamp: (_) => highResTimestamp(),
 					}),
 					invoke: {
 						id: "sendMessage",
@@ -120,8 +175,14 @@ export function createSerialAPICommandMachine(
 					on: {
 						CAN: {
 							target: "retry",
-							actions: assign<SerialAPICommandContext>({
+							actions: assign({
 								lastError: (_) => "CAN",
+							}),
+						},
+						NAK: {
+							target: "retry",
+							actions: assign({
+								lastError: (_) => "NAK",
 							}),
 						},
 						ACK: [
@@ -151,11 +212,16 @@ export function createSerialAPICommandMachine(
 							{
 								target: "retry",
 								cond: "responseIsNOK",
-								actions: assign<SerialAPICommandContext>({
+								actions: assign({
 									lastError: (_) => "response NOK",
 								}),
 							},
-							{ target: "waitForCallback" },
+							{
+								target: "waitForCallback",
+								actions: assign({
+									result: (_, evt) => (evt as any).message,
+								}),
+							},
 						],
 					},
 					after: {
@@ -174,11 +240,17 @@ export function createSerialAPICommandMachine(
 							{
 								target: "failure",
 								cond: "callbackIsNOK",
-								actions: assign<SerialAPICommandContext>({
+								actions: assign({
 									lastError: (_) => "callback NOK",
 								}),
 							},
-							{ target: "success", cond: "callbackIsFinal" },
+							{
+								target: "success",
+								cond: "callbackIsFinal",
+								actions: assign({
+									result: (_, evt) => (evt as any).message,
+								}),
+							},
 							{ target: "waitForCallback" },
 						],
 					},
@@ -210,6 +282,11 @@ export function createSerialAPICommandMachine(
 				},
 				success: {
 					type: "final",
+					data: {
+						txTimestamp: (ctx: SerialAPICommandContext) =>
+							ctx.txTimestamp!,
+						result: (ctx: SerialAPICommandContext) => ctx.result!,
+					},
 				},
 				failure: {
 					type: "final",
@@ -227,7 +304,7 @@ export function createSerialAPICommandMachine(
 		},
 		{
 			services: {
-				send: (ctx) => sendData(ctx.msg),
+				send: (ctx) => sendData(ctx.data),
 				notifyRetry: (ctx) => {
 					notifyRetry?.(
 						ctx.attempts,
@@ -241,10 +318,29 @@ export function createSerialAPICommandMachine(
 				mayRetry: (ctx) => ctx.attempts < ctx.maxAttempts,
 				expectsNoResponse: (ctx) => !ctx.expectsResponse,
 				expectsNoCallback: (ctx) => !ctx.expectsCallback,
-				responseIsNOK: (ctx, evt) => evt.type === "response" && !evt.ok,
-				callbackIsNOK: (ctx, evt) => evt.type === "callback" && !evt.ok,
+				isExpectedMessage: (ctx, evt, meta) =>
+					meta.state.matches("waitForResponse")
+						? ctx.msg.isExpectedResponse((evt as any).message)
+						: meta.state.matches("waitForCallback")
+						? ctx.msg.isExpectedCallback((evt as any).message)
+						: false,
+				responseIsNOK: (ctx, evt) =>
+					evt.type === "response" &&
+					// assume responses without success indication to be OK
+					isSuccessIndicator(evt.message) &&
+					!evt.message.isOK(),
+				callbackIsNOK: (ctx, evt) =>
+					evt.type === "callback" &&
+					// assume callbacks without success indication to be OK
+					isSuccessIndicator(evt.message) &&
+					!evt.message.isOK(),
 				callbackIsFinal: (ctx, evt) =>
-					evt.type === "callback" && evt.ok && evt.final !== false,
+					evt.type === "callback" &&
+					// assume callbacks without success indication to be OK
+					(!isSuccessIndicator(evt.message) || evt.message.isOK()) &&
+					// assume callbacks without isFinal method to be final
+					(!isMultiStageCallback(evt.message) ||
+						evt.message.isFinal()),
 			},
 			delays: {
 				RETRY_DELAY: (ctx) => computeRetryDelay(ctx),
