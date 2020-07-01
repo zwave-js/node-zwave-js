@@ -30,23 +30,7 @@ export class Transaction implements Comparable<Transaction> {
 
 	/** The timestamp at which the transaction was created */
 	public creationTimestamp: number = highResTimestamp();
-	/** The timestamp at which the message was sent */
-	public txTimestamp?: number;
-	/** The round-trip time from transmission of the message to receipt of the ACK */
-	public rtt: number = Number.POSITIVE_INFINITY;
-	public computeRTT(): void {
-		this.rtt = highResTimestamp() - this.txTimestamp!;
-	}
-	/**
-	 * @internal
-	 * The timeout which causes the promise to be rejected when it elapses
-	 */
-	public timeoutInstance?: NodeJS.Timeout;
 
-	/** Whether we're still waiting for an ACK from the controller */
-	public controllerAckPending: boolean = true;
-	/** Whether we're still waiting for an ACK from the node */
-	public nodeAckPending: boolean | undefined;
 	/** Whether the node status should be updated when this transaction times out */
 	public changeNodeStatusOnTimeout: boolean = true;
 
@@ -59,31 +43,6 @@ export class Transaction implements Comparable<Transaction> {
 	}
 	public set maxSendAttempts(value: number) {
 		this._maxSendAttempts = clamp(value, 1, MAX_SEND_ATTEMPTS);
-	}
-
-	/** The number of times the driver has tried to send this message */
-	public sendAttempts: number = 0;
-
-	/** Changes the internal state of this transaction so it can be sent */
-	public prepareForTransmission(): void {
-		if (this.sendAttempts === 0) this.sendAttempts = 1;
-		this._wasSent = true;
-		// If this is a retransmit, reset ack and timestamp
-		this.controllerAckPending = true;
-		this.nodeAckPending = undefined;
-		this.txTimestamp = highResTimestamp();
-	}
-
-	private _wasSent: boolean = false;
-	/**
-	 * @internal
-	 * Returns true when the driver tried to send this message at least once
-	 */
-	public get wasSent(): boolean {
-		return this._wasSent;
-	}
-	public set wasSent(value: boolean) {
-		this._wasSent = value;
 	}
 
 	/** Compares two transactions in order to plan their transmission sequence */

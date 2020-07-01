@@ -5,6 +5,7 @@ import {
 	num2hex,
 	staticExtends,
 } from "@zwave-js/shared";
+import { clamp } from "alcalzone-shared/math";
 import {
 	CCResponseRole,
 	CommandClass,
@@ -22,6 +23,7 @@ import {
 	isCommandClassContainer,
 } from "../commandclass/ICommandClassContainer";
 import type { Driver } from "../driver/Driver";
+import { MAX_SEND_ATTEMPTS } from "../driver/Transaction";
 import type { MessageOrCCLogEntry } from "../log/shared";
 import {
 	FunctionType,
@@ -82,6 +84,7 @@ interface SendDataRequestOptions<CCType extends CommandClass = CommandClass>
 	extends MessageBaseOptions {
 	command: CCType;
 	transmitOptions?: TransmitOptions;
+	maxSendAttempts?: number;
 }
 
 @expectedResponse(FunctionType.SendData)
@@ -104,15 +107,23 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 
 		this.command = options.command;
 		this.transmitOptions =
-			options.transmitOptions != undefined
-				? options.transmitOptions
-				: TransmitOptions.DEFAULT;
+			options.transmitOptions ?? TransmitOptions.DEFAULT;
+		this._maxSendAttempts = options.maxSendAttempts ?? MAX_SEND_ATTEMPTS;
 	}
 
 	/** The command this message contains */
 	public command: SinglecastCC<CCType>;
 	/** Options regarding the transmission of the message */
 	public transmitOptions: TransmitOptions;
+
+	private _maxSendAttempts: number = MAX_SEND_ATTEMPTS;
+	/** The number of times the driver may try to send this message */
+	public get maxSendAttempts(): number {
+		return this._maxSendAttempts;
+	}
+	public set maxSendAttempts(value: number) {
+		this._maxSendAttempts = clamp(value, 1, MAX_SEND_ATTEMPTS);
+	}
 
 	public serialize(): Buffer {
 		const serializedCC = this.command.serialize();
@@ -372,6 +383,7 @@ interface SendDataMulticastRequestOptions<CCType extends CommandClass>
 	extends MessageBaseOptions {
 	command: CCType;
 	transmitOptions?: TransmitOptions;
+	maxSendAttempts?: number;
 }
 
 @expectedResponse(FunctionType.SendDataMulticast)
@@ -404,15 +416,23 @@ export class SendDataMulticastRequest<
 
 		this.command = options.command;
 		this.transmitOptions =
-			options.transmitOptions != undefined
-				? options.transmitOptions
-				: TransmitOptions.DEFAULT;
+			options.transmitOptions ?? TransmitOptions.DEFAULT;
+		this._maxSendAttempts = options.maxSendAttempts ?? MAX_SEND_ATTEMPTS;
 	}
 
 	/** The command this message contains */
 	public command: MulticastCC<CCType>;
 	/** Options regarding the transmission of the message */
 	public transmitOptions: TransmitOptions;
+
+	private _maxSendAttempts: number;
+	/** The number of times the driver may try to send this message */
+	public get maxSendAttempts(): number {
+		return this._maxSendAttempts;
+	}
+	public set maxSendAttempts(value: number) {
+		this._maxSendAttempts = clamp(value, 1, MAX_SEND_ATTEMPTS);
+	}
 
 	public serialize(): Buffer {
 		// The payload CC must not include the target node ids, so strip the header out

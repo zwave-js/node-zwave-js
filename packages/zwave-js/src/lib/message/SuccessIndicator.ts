@@ -9,7 +9,7 @@ export interface SuccessIndicator {
 export function isSuccessIndicator<T extends Message>(
 	msg: T,
 ): msg is T & SuccessIndicator {
-	return "isOK" in msg && typeof (msg as any).isOK === "function";
+	return typeof (msg as any).isOK === "function";
 }
 
 /**
@@ -23,5 +23,5 @@ export interface MultiStageCallback {
 export function isMultiStageCallback<T extends Message>(
 	msg: T,
 ): msg is T & MultiStageCallback {
-	return "isFinal" in msg && typeof (msg as any).isFinal === "function";
+	return typeof (msg as any).isFinal === "function";
 }
