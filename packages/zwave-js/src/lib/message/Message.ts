@@ -2,7 +2,7 @@
 
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { MessageHeaders } from "@zwave-js/serial";
-import { num2hex } from "@zwave-js/shared";
+import { num2hex, staticExtends } from "@zwave-js/shared";
 import type { JSONObject } from "@zwave-js/shared";
 import { entries } from "alcalzone-shared/objects";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
@@ -142,7 +142,6 @@ export class Message {
 		| ResponsePredicate
 		| undefined;
 	public payload: Buffer; // TODO: Length limit 255
-	public maxSendAttempts: number | undefined;
 
 	private _callbackId: number | undefined;
 	/**
@@ -278,30 +277,43 @@ export class Message {
 		return ret;
 	}
 
+	private testMessage(
+		msg: Message,
+		predicate: Message["expectedResponse"],
+	): boolean {
+		if (predicate == undefined) return false;
+		if (typeof predicate === "number") {
+			return msg.functionType === predicate;
+		}
+		if (staticExtends(predicate, Message)) {
+			// predicate is a Message constructor
+			return staticExtends(msg, predicate);
+		} else {
+			// predicate is a ResponsePredicate
+			return predicate(this, msg);
+		}
+	}
+
 	/** Checks if a message is an expected response for this message */
-	public testResponse(msg: Message): ResponseRole {
+	public isExpectedResponse(msg: Message): boolean {
+		return (
+			msg.type === MessageType.Response &&
+			this.testMessage(msg, this.expectedResponse)
+		);
+	}
+
+	/** Checks if a message is an expected callback for this message */
+	public isExpectedCallback(msg: Message): boolean {
+		if (msg.type !== MessageType.Request) return false;
 		// If a received request included a callback id, enforce that the response contains the same
 		if (
 			this.hasCallbackId() &&
-			msg.type === MessageType.Request &&
 			(!msg.hasCallbackId() || this._callbackId !== msg._callbackId)
 		) {
-			return "unexpected";
+			return false;
 		}
-		const expected = this.expectedResponse;
-		// log("driver", `Message: testing response`, "debug");
-		if (typeof expected === "number" && msg.type === MessageType.Response) {
-			// if only a functionType was configured as expected,
-			// any message with this function type is expected,
-			// every other message is unexpected
-			// log("driver", `  received response with fT ${msg.functionType}`, "debug");
-			return expected === msg.functionType ? "final" : "unexpected";
-		} else if (typeof expected === "function") {
-			// If a predicate was configured, use it to test the message
-			return expected(this, msg);
-		}
-		// nothing was configured, this expects no response
-		return "unexpected";
+
+		return this.testMessage(msg, this.expectedCallback);
 	}
 
 	/** Finds the ID of the target or source node in a message, if it contains that information */

@@ -16,6 +16,10 @@ import {
 	messageTypes,
 	priority,
 } from "../message/Message";
+import type {
+	MultiStageCallback,
+	SuccessIndicator,
+} from "../message/SuccessIndicator";
 
 export enum NodeNeighborUpdateStatus {
 	UpdateStarted = 0x21,
@@ -67,12 +71,22 @@ export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateR
 	}
 }
 
-export class RequestNodeNeighborUpdateReport extends RequestNodeNeighborUpdateRequestBase {
+export class RequestNodeNeighborUpdateReport
+	extends RequestNodeNeighborUpdateRequestBase
+	implements SuccessIndicator, MultiStageCallback {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
 		this.callbackId = this.payload[0];
 		this._updateStatus = this.payload[1];
+	}
+
+	isOK(): boolean {
+		return this._updateStatus !== NodeNeighborUpdateStatus.UpdateFailed;
+	}
+
+	isFinal(): boolean {
+		return this._updateStatus === NodeNeighborUpdateStatus.UpdateDone;
 	}
 
 	private _updateStatus: NodeNeighborUpdateStatus;
