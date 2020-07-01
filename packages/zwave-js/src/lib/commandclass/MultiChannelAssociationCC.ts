@@ -531,14 +531,22 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 					// and refresh the associations - don't trust that it worked
 					await assocAPI.getGroup(group);
 				} else if (
-					mustUseNodeAssociation ||
-					(this.version < 3 && !isAssignedAsNodeAssociation)
+					(this.version < 3 || mustUseNodeAssociation) &&
+					!isAssignedAsNodeAssociation
 				) {
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `Lifeline group #${group} is configured to use node association - assigning controller...`,
 						direction: "outbound",
 					});
+
+					// Remove endpoint associations first, we want a node association
+					if (isAssignedAsEndpointAssociation) {
+						await mcAPI.removeDestinations({
+							groupId: group,
+							endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
+						});
+					}
 
 					// Use node id associations for V1 and V2 and if a multi channel lifeline is forbidden
 					await mcAPI.addDestinations({
@@ -550,6 +558,7 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 					didMCAssignmentWork = nodeIds.includes(ownNodeId);
 				} else if (
 					this.version >= 3 &&
+					!mustUseNodeAssociation &&
 					!isAssignedAsEndpointAssociation
 				) {
 					log.controller.logNode(node.id, {
