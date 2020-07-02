@@ -5,7 +5,6 @@ import {
 	CompareResult,
 } from "alcalzone-shared/comparable";
 import type { DeferredPromise } from "alcalzone-shared/deferred-promise";
-import { clamp } from "alcalzone-shared/math";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
 import type { Driver } from "./Driver";
@@ -22,11 +21,7 @@ export class Transaction implements Comparable<Transaction> {
 		public readonly message: Message,
 		public readonly promise: DeferredPromise<Message | void>,
 		public priority: MessagePriority,
-	) {
-		if (message.maxSendAttempts) {
-			this.maxSendAttempts = message.maxSendAttempts;
-		}
-	}
+	) {}
 
 	/** The timestamp at which the transaction was created */
 	public creationTimestamp: number = highResTimestamp();
@@ -35,15 +30,6 @@ export class Transaction implements Comparable<Transaction> {
 	public changeNodeStatusOnTimeout: boolean = true;
 
 	public response?: Message;
-
-	private _maxSendAttempts: number = MAX_SEND_ATTEMPTS;
-	/** The number of times the driver may try to send this message */
-	public get maxSendAttempts(): number {
-		return this._maxSendAttempts;
-	}
-	public set maxSendAttempts(value: number) {
-		this._maxSendAttempts = clamp(value, 1, MAX_SEND_ATTEMPTS);
-	}
 
 	/** Compares two transactions in order to plan their transmission sequence */
 	public compareTo(other: Transaction): CompareResult {
