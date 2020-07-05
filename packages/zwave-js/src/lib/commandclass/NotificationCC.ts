@@ -49,11 +49,13 @@ export class NotificationCCAPI extends CCAPI {
 	public supportsCommand(cmd: NotificationCommand): Maybe<boolean> {
 		switch (cmd) {
 			case NotificationCommand.Report:
-				return true;
-			// TODO: Look at Alarm CC to know what's supported in V1/V2
 			case NotificationCommand.Get:
+				return true; // These exist starting with V1
+
 			case NotificationCommand.Set:
 			case NotificationCommand.SupportedGet:
+				return this.version >= 2;
+
 			case NotificationCommand.EventSupportedGet:
 				return this.version >= 3;
 		}
