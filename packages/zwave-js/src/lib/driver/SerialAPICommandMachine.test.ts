@@ -2,41 +2,19 @@ import { highResTimestamp } from "@zwave-js/core";
 import { interpret, Interpreter } from "xstate";
 import { SimulatedClock } from "xstate/lib/SimulatedClock";
 import { MessageType } from "../message/Constants";
-import type { Message } from "../message/Message";
 import {
 	createSerialAPICommandMachine,
 	SerialAPICommandContext,
 	SerialAPICommandEvent,
 	SerialAPICommandStateSchema,
 } from "./SerialAPICommandMachine";
-
-const createSendDataResolvesNever = () =>
-	jest.fn().mockImplementation(() => new Promise(() => {}));
-const createSendDataResolvesImmediately = () =>
-	jest.fn().mockResolvedValue(undefined);
-const createSendDataRejectsImmediately = () =>
-	jest.fn().mockRejectedValue(new Error("nope"));
-
-const dummyMessageNoResponseNoCallback = ({
-	serialize: () => Buffer.from([1, 2, 3]),
-	expectedResponse: undefined,
-	expectedCallback: undefined,
-} as any) as Message;
-const dummyMessageWithResponseNoCallback = ({
-	serialize: () => Buffer.from([1, 2, 3]),
-	expectedResponse: 0xff,
-	expectedCallback: undefined,
-} as any) as Message;
-// const dummyMessageNoResponseWithCallback = ({
-// 	serialize: () => Buffer.from([1, 2, 3]),
-// 	expectedResponse: undefined,
-// 	expectedCallback: true,
-// } as any) as Message;
-// const dummyMessageWithResponseWithCallback = ({
-// 	serialize: () => Buffer.from([1, 2, 3]),
-// 	expectedResponse: true,
-// 	expectedCallback: true,
-// } as any) as Message;
+import {
+	createSendDataRejectsImmediately,
+	createSendDataResolvesImmediately,
+	createSendDataResolvesNever,
+	dummyMessageNoResponseNoCallback,
+	dummyMessageWithResponseNoCallback,
+} from "./testUtils";
 
 jest.mock("@zwave-js/core");
 
@@ -649,7 +627,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 			});
 			expect(service.state.value).toBe("waitForCallback");
 
-			// Now a full timeout has elapsed, but we shouldn't be in the abort state yet
+			// Now a full timeout has elapsed, but we shouldn't be in the failure state yet
 			clock.increment(1);
 			expect(service.state.value).toBe("waitForCallback");
 			// still...
@@ -657,10 +635,10 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 			expect(service.state.value).toBe("waitForCallback");
 			// now!
 			clock.increment(1);
-			expect(service.state.value).toBe("abort");
+			expect(service.state.value).toBe("failure");
 		});
 
-		it("should go into abort state if the timeout elapses", (done) => {
+		it("should go into failure state if the timeout elapses", (done) => {
 			const testMachine = createSerialAPICommandMachine(
 				{} as any,
 				{} as any,
@@ -673,7 +651,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 			const clock = new SimulatedClock();
 			service = interpret(testMachine, { clock })
 				.onDone((evt) => {
-					expect(service!.state.value).toBe("abort");
+					expect(service!.state.value).toBe("failure");
 					expect(evt.data.reason).toBe("callback timeout");
 					done();
 				})

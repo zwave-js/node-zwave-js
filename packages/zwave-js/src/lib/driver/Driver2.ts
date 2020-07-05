@@ -1,14 +1,13 @@
 import { MessageHeaders, ZWaveSerialPort } from "@zwave-js/serial";
+import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { interpret } from "xstate";
+import { MessagePriority } from "../message/Constants";
 import { Message } from "../message/Message";
 import {
-	createSerialAPICommandMachine,
-	SerialAPICommandContext,
-	SerialAPICommandEvent,
-	SerialAPICommandInterpreter,
-	SerialAPICommandMachine,
-	SerialAPICommandStateSchema,
-} from "./SerialAPICommandMachine";
+	createSendThreadMachine,
+	SendThreadInterpreter,
+} from "./SendThreadMachine";
+import { Transaction } from "./Transaction";
 
 export class Driver2 {
 	public constructor(port: string) {
@@ -18,12 +17,17 @@ export class Driver2 {
 		process.on("exit", this.destroy);
 		process.on("SIGINT", this.destroy);
 		process.on("uncaughtException", this.destroy);
+
+		const sendThreadMachine = createSendThreadMachine({
+			sendData: this.sendMessage.bind(this),
+		});
+		this.sendThread = interpret(sendThreadMachine).start();
+		this.sendThread.send("ACK");
 	}
 
 	private port: string;
 	private serial: ZWaveSerialPort | undefined;
-	private apiMachine!: SerialAPICommandMachine;
-	private apiInterpreter: SerialAPICommandInterpreter | undefined;
+	private sendThread: SendThreadInterpreter;
 
 	public async start(): Promise<void> {
 		this.serial = new ZWaveSerialPort(this.port)
@@ -51,15 +55,15 @@ export class Driver2 {
 			switch (data) {
 				// single-byte messages - we have a handler for each one
 				case MessageHeaders.ACK: {
-					this.apiInterpreter?.send("ACK");
+					this.sendThread?.send("ACK");
 					return;
 				}
 				case MessageHeaders.NAK: {
-					this.apiInterpreter?.send("NAK");
+					this.sendThread?.send("NAK");
 					return;
 				}
 				case MessageHeaders.CAN: {
-					this.apiInterpreter?.send("CAN");
+					this.sendThread?.send("CAN");
 					return;
 				}
 			}
@@ -69,7 +73,7 @@ export class Driver2 {
 		// all good, send ACK
 		await this.sendMessage(Buffer.from([MessageHeaders.ACK]));
 		// And handle it
-		this.apiInterpreter?.send({ type: "response", message: msg });
+		this.sendThread?.send({ type: "message", message: msg });
 	}
 
 	/** Sends a raw datagram to the serialport (if that is open) */
@@ -77,36 +81,19 @@ export class Driver2 {
 		return this.serial?.writeAsync(data);
 	}
 
-	public async executeAPICommand(
-		message: Message,
-	): Promise<Message | undefined> {
-		return new Promise((resolve, reject) => {
-			const machine = createSerialAPICommandMachine(message, {
-				sendData: this.sendMessage.bind(this),
-			});
-			this.apiInterpreter = interpret<
-				SerialAPICommandContext,
-				SerialAPICommandStateSchema,
-				SerialAPICommandEvent
-			>(machine)
-				.onTransition((state) => {
-					console.log(state.value);
-				})
-				.onDone((evt) => {
-					const state = this.apiInterpreter!.state;
-					if (state.matches("success")) {
-						resolve(evt.data?.result);
-					} else if (state.matches("failure")) {
-						console.error(evt.data?.reason);
-						reject();
-					} else if (state.matches("abort")) {
-						console.error(evt.data?.reason);
-						reject();
-					}
-				});
-
-			this.apiInterpreter.start();
+	public executeAPICommand(message: Message): Promise<Message | undefined> {
+		const promise = createDeferredPromise<Message>();
+		const transaction = new Transaction(
+			this as any,
+			message,
+			promise,
+			MessagePriority.Normal,
+		);
+		this.sendThread.send({
+			type: "add",
+			transaction,
 		});
+		return promise;
 	}
 
 	public async destroy(): Promise<void> {

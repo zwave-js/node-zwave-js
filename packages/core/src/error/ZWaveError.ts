@@ -23,8 +23,11 @@ export enum ZWaveErrorCodes {
 	Driver_NoSecurity,
 
 	/** The controller has timed out while waiting for a report from the node */
+	Controller_Timeout,
 	Controller_NodeTimeout,
 	Controller_MessageDropped,
+	Controller_ResponseNOK,
+	Controller_CallbackNOK,
 	Controller_InclusionFailed,
 	Controller_ExclusionFailed,
 

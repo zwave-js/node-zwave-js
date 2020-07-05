@@ -1,21 +1,24 @@
 require("reflect-metadata");
 
-import { GetControllerVersionRequest } from "zwave-js/src/lib/controller/GetControllerVersionMessages";
+import { RequestNodeNeighborUpdateRequest } from "zwave-js/src/lib/controller/RequestNodeNeighborUpdateMessages";
 import { Driver2 } from "../packages/zwave-js/src/lib/driver/Driver2";
 
 void (async () => {
 	const driver = new Driver2("COM4");
 	await driver.start();
 
-	const response = await driver.executeAPICommand(
-		new GetControllerVersionRequest(driver as any),
-	);
-	console.dir(response?.toLogEntry());
+	(driver as any).getNextCallbackId = () => 5;
 
-	await driver.executeAPICommand(
-		new GetControllerVersionRequest(driver as any),
-	);
-	console.dir(response?.toLogEntry());
+	try {
+		const response = await driver.executeAPICommand(
+			new RequestNodeNeighborUpdateRequest(driver as any, {
+				nodeId: 16,
+			}),
+		);
+		console.dir(response?.toLogEntry());
+	} catch (e) {
+		console.dir(e);
+	}
 	console.log("done!");
 	await driver.destroy();
 })();

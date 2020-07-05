@@ -9,6 +9,7 @@ import {
 	isMultiStageCallback,
 	isSuccessIndicator,
 } from "../message/SuccessIndicator";
+import type { ServiceImplementations } from "./StateMachineShared";
 
 /* eslint-disable @typescript-eslint/ban-types */
 export interface SerialAPICommandStateSchema {
@@ -22,7 +23,6 @@ export interface SerialAPICommandStateSchema {
 		retryWait: {};
 		failure: {};
 		success: {};
-		abort: {};
 	};
 }
 /* eslint-enable @typescript-eslint/ban-types */
@@ -65,14 +65,16 @@ export type SerialAPICommandEvent =
 			message: Message;
 	  };
 
-export interface ServiceImplementations {
-	sendData: (data: Buffer) => Promise<void>;
-	notifyRetry?: (
-		attempts: number,
-		maxAttempts: number,
-		delay: number,
-	) => void;
-}
+export type SerialAPICommandDoneData =
+	| {
+			type: "success";
+			txTimestamp: number;
+			result: Message;
+	  }
+	| {
+			type: "failure";
+			reason: SerialAPICommandError;
+	  };
 
 function computeRetryDelay(ctx: SerialAPICommandContext): number {
 	return 100 + 1000 * (ctx.attempts - 1);
@@ -256,7 +258,7 @@ export function createSerialAPICommandMachine(
 					},
 					after: {
 						65000: {
-							target: "abort",
+							target: "failure",
 							actions: assign({
 								lastError: (_) => "callback timeout",
 							}),
@@ -283,6 +285,7 @@ export function createSerialAPICommandMachine(
 				success: {
 					type: "final",
 					data: {
+						type: "success",
 						txTimestamp: (ctx: SerialAPICommandContext) =>
 							ctx.txTimestamp!,
 						result: (ctx: SerialAPICommandContext) => ctx.result!,
@@ -291,12 +294,7 @@ export function createSerialAPICommandMachine(
 				failure: {
 					type: "final",
 					data: {
-						reason: (ctx: SerialAPICommandContext) => ctx.lastError,
-					},
-				},
-				abort: {
-					type: "final",
-					data: {
+						type: "failure",
 						reason: (ctx: SerialAPICommandContext) => ctx.lastError,
 					},
 				},
