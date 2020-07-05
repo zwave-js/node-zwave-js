@@ -105,7 +105,7 @@
     "gh-cc-table": "npm run implemented_ccs -- --flavor=github --only-incomplete",
     "usbdebug": "cmd.exe /c \"test\\usbdebug.bat\"",
     "commit": "git-cz",
-    "prerelease": "lerna run build",
+    "prerelease": "npm install && lerna run build",
     "release": "lerna version",
     "preversion": "release-script --lerna-check",
     "version": "release-script --lerna",
