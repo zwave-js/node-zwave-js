@@ -35,7 +35,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies
-      run: npm install
+      run: npm ci
 
     - name: Compile TypeScript code
       run: npx lerna run build
@@ -73,7 +73,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies
-      run: npm install
+      run: npm ci
 
     # Compilation is necessary, or the tests won't run
     - name: Compile TypeScript code
@@ -110,7 +110,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies
-      run: npm install
+      run: npm ci
 
     # Compilation is necessary, or the tests won't run
     - name: Compile TypeScript code
@@ -166,7 +166,7 @@ jobs:
         echo "::set-env name=BODY::$BODY"
 
     - name: Install dependencies
-      run: npm install
+      run: npm ci
 
     - name: Create a clean build
       run: npx lerna run build
