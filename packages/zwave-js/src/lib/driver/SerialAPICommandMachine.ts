@@ -71,10 +71,24 @@ export type SerialAPICommandDoneData =
 			txTimestamp: number;
 			result: Message;
 	  }
-	| {
+	| ({
 			type: "failure";
-			reason: SerialAPICommandError;
-	  };
+	  } & (
+			| {
+					reason:
+						| "send failure"
+						| "CAN"
+						| "NAK"
+						| "ACK timeout"
+						| "response timeout"
+						| "callback timeout";
+					result?: undefined;
+			  }
+			| {
+					reason: "response NOK" | "callback NOK";
+					result: Message;
+			  }
+	  ));
 
 function computeRetryDelay(ctx: SerialAPICommandContext): number {
 	return 100 + 1000 * (ctx.attempts - 1);
@@ -216,6 +230,7 @@ export function createSerialAPICommandMachine(
 								cond: "responseIsNOK",
 								actions: assign({
 									lastError: (_) => "response NOK",
+									result: (_, evt) => (evt as any).message,
 								}),
 							},
 							{
@@ -244,6 +259,7 @@ export function createSerialAPICommandMachine(
 								cond: "callbackIsNOK",
 								actions: assign({
 									lastError: (_) => "callback NOK",
+									result: (_, evt) => (evt as any).message,
 								}),
 							},
 							{

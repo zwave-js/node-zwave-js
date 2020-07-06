@@ -14,7 +14,6 @@ import type { Transaction } from "./Transaction";
 export interface SendThreadStateSchema {
 	states: {
 		idle: {};
-		empty: {};
 		execute: {};
 	};
 }
@@ -68,11 +67,7 @@ export function createSendThreadMachine(
 			states: {
 				idle: {
 					on: {
-						"": [{ cond: "queueEmpty", target: "empty" }],
-					},
-				},
-				empty: {
-					on: {
+						"": { cond: "queueNotEmpty", target: "execute" },
 						trigger: "execute",
 					},
 				},
@@ -102,6 +97,7 @@ export function createSendThreadMachine(
 										transaction.promise.reject(
 											serialAPICommandErrorToZWaveError(
 												evt.data.reason,
+												evt.data.message,
 											),
 										);
 										return ctx.queue;
@@ -123,7 +119,7 @@ export function createSendThreadMachine(
 					),
 			},
 			guards: {
-				queueEmpty: (ctx) => ctx.queue.length === 0,
+				queueNotEmpty: (ctx) => ctx.queue.length > 0,
 				executeSuccessful: (_, evt: any) => evt.data.type === "success",
 			},
 			delays: {},

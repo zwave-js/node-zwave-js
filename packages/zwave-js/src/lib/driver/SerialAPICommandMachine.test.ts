@@ -400,12 +400,14 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 			testMachine.initial = "waitForResponse";
 
 			service = interpret(testMachine).start();
+			const message = { isOK: () => false } as any;
 			service.send({
 				type: "response",
-				message: { isOK: () => false } as any,
+				message,
 			});
 
 			expect(service.state.context.lastError).toBe("response NOK");
+			expect(service.state.context.result).toBe(message);
 		});
 
 		it("if the last retry failed, the failure reason should be set", (done) => {
@@ -519,7 +521,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 			expect(service.state.value).toBe("failure");
 		});
 
-		it("should set the lastError context if the callback is NOK", () => {
+		it("should set the lastError and result context if the callback is NOK", () => {
 			const testMachine = createSerialAPICommandMachine(
 				{} as any,
 				{} as any,
@@ -530,12 +532,14 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 			testMachine.initial = "waitForCallback";
 
 			service = interpret(testMachine).start();
+			const message = { isOK: () => false } as any;
 			service.send({
 				type: "callback",
-				message: { isOK: () => false } as any,
+				message,
 			});
 
 			expect(service.state.context.lastError).toBe("callback NOK");
+			expect(service.state.context.result).toBe(message);
 		});
 
 		it("should go into success state if callback is OK", () => {
