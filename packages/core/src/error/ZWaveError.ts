@@ -114,6 +114,7 @@ export class ZWaveError extends Error {
 	public constructor(
 		public readonly message: string,
 		public readonly code: ZWaveErrorCodes,
+		public readonly context?: unknown,
 	) {
 		super(message);
 
