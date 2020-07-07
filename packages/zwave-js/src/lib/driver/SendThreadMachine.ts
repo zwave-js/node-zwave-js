@@ -1,7 +1,15 @@
 import { SortedList } from "alcalzone-shared/sorted-list";
-import { assign, Interpreter, Machine, send, StateMachine } from "xstate";
+import {
+	assign,
+	EventObject,
+	Interpreter,
+	Machine,
+	send,
+	StateMachine,
+} from "xstate";
 import {
 	createSerialAPICommandMachine,
+	SerialAPICommandDoneData,
 	SerialAPICommandEvent,
 } from "./SerialAPICommandMachine";
 import {
@@ -21,6 +29,7 @@ export interface SendThreadStateSchema {
 
 export interface SendThreadContext {
 	queue: SortedList<Transaction>;
+	currentTransaction?: Transaction;
 }
 
 export type SendThreadEvent =
@@ -39,6 +48,48 @@ export type SendThreadInterpreter = Interpreter<
 	SendThreadEvent
 >;
 
+// These actions must be assign actions or they will be executed
+// out of order
+const resolveCurrentTransaction = assign(
+	(
+		ctx: SendThreadContext,
+		evt: EventObject & {
+			data: SerialAPICommandDoneData & {
+				type: "success";
+			};
+		},
+	) => {
+		ctx.currentTransaction!.promise.resolve(evt.data.result);
+		return ctx;
+	},
+);
+
+const rejectCurrentTransaction = assign(
+	(
+		ctx: SendThreadContext,
+		evt: EventObject & {
+			data: SerialAPICommandDoneData & {
+				type: "failure";
+			};
+		},
+	) => {
+		ctx.currentTransaction!.promise.reject(
+			serialAPICommandErrorToZWaveError(evt.data.reason, evt.data.result),
+		);
+		return ctx;
+	},
+);
+
+const setCurrentTransaction = assign((ctx: SendThreadContext) => ({
+	...ctx,
+	currentTransaction: ctx.queue.shift()!,
+}));
+
+const deleteCurrentTransaction = assign((ctx: SendThreadContext) => ({
+	...ctx,
+	currentTransaction: undefined,
+}));
+
 export function createSendThreadMachine(
 	implementations: ServiceImplementations,
 	initialContext: Partial<SendThreadContext> = {},
@@ -49,6 +100,7 @@ export function createSendThreadMachine(
 			initial: "idle",
 			context: {
 				queue: new SortedList(),
+				// currentTransaction: undefined,
 				...initialContext,
 			},
 			on: {
@@ -66,43 +118,31 @@ export function createSendThreadMachine(
 			},
 			states: {
 				idle: {
+					// There is no current transaction in idle state, so
+					// reset it
+					onEntry: deleteCurrentTransaction,
 					on: {
 						"": { cond: "queueNotEmpty", target: "execute" },
 						trigger: "execute",
 					},
 				},
 				execute: {
+					// Use the first transaction in the queue as the current one
+					onEntry: setCurrentTransaction,
 					invoke: {
 						id: "execute",
 						src: "execute",
 						autoForward: true,
 						onDone: [
+							// On success, resolve the current transaction
 							{
 								cond: "executeSuccessful",
-								actions: assign({
-									queue: (ctx, evt) => {
-										const transaction = ctx.queue.shift()!;
-										transaction.promise.resolve(
-											evt.data.result,
-										);
-										return ctx.queue;
-									},
-								}),
+								actions: resolveCurrentTransaction,
 								target: "idle",
 							},
+							// On failure, reject it with a matching error
 							{
-								actions: assign({
-									queue: (ctx, evt) => {
-										const transaction = ctx.queue.shift()!;
-										transaction.promise.reject(
-											serialAPICommandErrorToZWaveError(
-												evt.data.reason,
-												evt.data.message,
-											),
-										);
-										return ctx.queue;
-									},
-								}),
+								actions: rejectCurrentTransaction,
 								target: "idle",
 							},
 						],
@@ -114,7 +154,7 @@ export function createSendThreadMachine(
 			services: {
 				execute: (ctx) =>
 					createSerialAPICommandMachine(
-						ctx.queue.peekStart()!.message,
+						ctx.currentTransaction!.message,
 						implementations,
 					),
 			},

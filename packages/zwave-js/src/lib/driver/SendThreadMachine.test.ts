@@ -176,19 +176,19 @@ describe("lib/driver/SendThreadMachine", () => {
 			testMachine.initial = "execute";
 			service = interpret(testMachine).start();
 
-			const message = { isOK: () => false };
+			const result = { isOK: () => false };
 			service.send({
 				type: "done.invoke.execute",
 				data: {
 					type: "failure",
 					reason: "response NOK",
-					message,
+					result,
 				},
 			} as any);
 
 			await assertZWaveError(() => transaction.promise, {
 				errorCode: ZWaveErrorCodes.Controller_ResponseNOK,
-				context: message,
+				context: result,
 			});
 		});
 
@@ -208,23 +208,23 @@ describe("lib/driver/SendThreadMachine", () => {
 			testMachine.initial = "execute";
 			service = interpret(testMachine).start();
 
-			const message = { isOK: () => false };
+			const result = { isOK: () => false };
 			service.send({
 				type: "done.invoke.execute",
 				data: {
 					type: "failure",
 					reason: "callback NOK",
-					message,
+					result,
 				},
 			} as any);
 
 			await assertZWaveError(() => transaction.promise, {
 				errorCode: ZWaveErrorCodes.Controller_CallbackNOK,
-				context: message,
+				context: result,
 			});
 		});
 
-		it("should only execute the subsequent commands once the previous one was completed", async () => {
+		it("should only execute subsequent commands once the previous one was completed", async () => {
 			const t1 = createTransaction(dummyMessageNoResponseNoCallback);
 			const t2 = createTransaction(dummyMessageNoResponseNoCallback);
 			const testMachine = createSendThreadMachine({
