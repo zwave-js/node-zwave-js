@@ -2057,7 +2057,7 @@ ${handlers.length} left`,
 		command: CommandClass,
 		options: SendCommandOptions = {},
 	): Promise<TResponse | undefined> {
-		let msg: Message;
+		let msg: SendDataRequest | SendDataMulticastRequest;
 		if (command.isSinglecast()) {
 			msg = new SendDataRequest(this, { command });
 		} else if (command.isMulticast()) {
@@ -2069,7 +2069,9 @@ ${handlers.length} left`,
 			);
 		}
 		// Specify the number of send attempts for the request
-		msg.maxSendAttempts = options.maxSendAttempts;
+		if (options.maxSendAttempts != undefined) {
+			msg.maxSendAttempts = options.maxSendAttempts;
+		}
 
 		const resp = await this.sendMessage(msg, options);
 		if (isCommandClassContainer(resp)) {

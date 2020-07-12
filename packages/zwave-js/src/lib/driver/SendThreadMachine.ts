@@ -8,6 +8,10 @@ import {
 	StateMachine,
 } from "xstate";
 import {
+	SendDataMulticastRequest,
+	SendDataRequest,
+} from "../controller/SendDataMessages";
+import {
 	createSerialAPICommandMachine,
 	SerialAPICommandDoneData,
 	SerialAPICommandEvent,
@@ -22,7 +26,32 @@ import type { Transaction } from "./Transaction";
 export interface SendThreadStateSchema {
 	states: {
 		idle: {};
-		execute: {};
+		sending: {
+			states: {
+				init: {};
+				execute: {};
+				waitForUpdate: {
+					states: {
+						waitThread: {
+							states: {
+								waiting: {};
+								done: {};
+							};
+						};
+						handshakeServer: {
+							states: {
+								idle: {};
+								responding: {};
+							};
+						};
+					};
+				};
+				abortSendData: {};
+				retry: {};
+				retryWait: {};
+				done: {};
+			};
+		};
 	};
 }
 /* eslint-enable @typescript-eslint/ban-types */
@@ -30,6 +59,10 @@ export interface SendThreadStateSchema {
 export interface SendThreadContext {
 	queue: SortedList<Transaction>;
 	currentTransaction?: Transaction;
+	sendDataAttempts: number;
+	sendDataErrorData?: SerialAPICommandDoneData & {
+		type: "failure";
+	};
 }
 
 export type SendThreadEvent =
@@ -73,8 +106,9 @@ const rejectCurrentTransaction = assign(
 			};
 		},
 	) => {
+		const data = evt.data ?? ctx.sendDataErrorData;
 		ctx.currentTransaction!.promise.reject(
-			serialAPICommandErrorToZWaveError(evt.data.reason, evt.data.result),
+			serialAPICommandErrorToZWaveError(data.reason, data.result),
 		);
 		return ctx;
 	},
@@ -90,6 +124,14 @@ const deleteCurrentTransaction = assign((ctx: SendThreadContext) => ({
 	currentTransaction: undefined,
 }));
 
+const resetSendDataAttempts = assign({
+	sendDataAttempts: (_: any) => 0,
+});
+
+const incrementSendDataAttempts = assign({
+	sendDataAttempts: (ctx: SendThreadContext) => ctx.sendDataAttempts + 1,
+});
+
 export function createSendThreadMachine(
 	implementations: ServiceImplementations,
 	initialContext: Partial<SendThreadContext> = {},
@@ -101,6 +143,7 @@ export function createSendThreadMachine(
 			context: {
 				queue: new SortedList(),
 				// currentTransaction: undefined,
+				sendDataAttempts: 0,
 				...initialContext,
 			},
 			on: {
@@ -118,35 +161,127 @@ export function createSendThreadMachine(
 			},
 			states: {
 				idle: {
-					// There is no current transaction in idle state, so
-					// reset it
-					onEntry: deleteCurrentTransaction,
 					on: {
-						"": { cond: "queueNotEmpty", target: "execute" },
-						trigger: "execute",
+						"": { cond: "queueNotEmpty", target: "sending" },
+						trigger: "sending",
 					},
 				},
-				execute: {
+				sending: {
+					initial: "init",
 					// Use the first transaction in the queue as the current one
 					onEntry: setCurrentTransaction,
-					invoke: {
-						id: "execute",
-						src: "execute",
-						autoForward: true,
-						onDone: [
-							// On success, resolve the current transaction
-							{
-								cond: "executeSuccessful",
-								actions: resolveCurrentTransaction,
-								target: "idle",
+					// And delete it after we're done
+					onExit: [deleteCurrentTransaction, resetSendDataAttempts],
+					states: {
+						init: {
+							on: {
+								"": [
+									{
+										cond: "isSendData",
+										actions: incrementSendDataAttempts,
+										target: "execute",
+									},
+									{ target: "execute" },
+								],
 							},
-							// On failure, reject it with a matching error
-							{
-								actions: rejectCurrentTransaction,
-								target: "idle",
+						},
+						execute: {
+							invoke: {
+								id: "execute",
+								src: "execute",
+								autoForward: true,
+								onDone: [
+									// On success, start waiting for an update
+									{
+										cond: "executeSuccessfulExpectsUpdate",
+										target: "waitForUpdate",
+									},
+									// or resolve the current transaction if none is required
+									{
+										cond: "executeSuccessful",
+										actions: resolveCurrentTransaction,
+										target: "done",
+									},
+									// On failure, retry SendData commands if possible
+									// but timed out send attempts must be aborted first
+									{
+										cond: "isSendDataWithCallbackTimeout",
+										target: "abortSendData",
+										actions: assign({
+											sendDataErrorData: (_, evt) =>
+												evt.data,
+										}),
+									},
+									{
+										cond: "isSendData",
+										target: "retry",
+										actions: assign({
+											sendDataErrorData: (_, evt) =>
+												evt.data,
+										}),
+									},
+									// Reject simple API commands immediately with a matching error
+									{
+										actions: rejectCurrentTransaction,
+										target: "done",
+									},
+								],
 							},
-						],
+						},
+						abortSendData: {
+							invoke: {
+								id: "executeSendDataAbort",
+								src: "executeSendDataAbort",
+								autoForward: true,
+								onDone: "retry",
+							},
+						},
+						retry: {
+							on: {
+								"": [
+									// If we may retry, wait a bit first
+									{ target: "retryWait", cond: "mayRetry" },
+									// On failure, reject it with a matching error
+									{
+										actions: rejectCurrentTransaction as any,
+										target: "done",
+									},
+								],
+							},
+						},
+						retryWait: {
+							// invoke: {
+							// 	id: "notify",
+							// 	src: "notifyRetry",
+							// },
+							after: {
+								500: "init",
+							},
+						},
+						waitForUpdate: {
+							type: "parallel",
+							states: {
+								waitThread: {
+									initial: "waiting",
+									states: {
+										waiting: {},
+										done: {},
+									},
+								},
+								handshakeServer: {
+									initial: "idle",
+									states: {
+										idle: {},
+										responding: {},
+									},
+								},
+							},
+						},
+						done: {
+							type: "final",
+						},
 					},
+					onDone: "idle",
 				},
 			},
 		},
@@ -157,10 +292,42 @@ export function createSendThreadMachine(
 						ctx.currentTransaction!.message,
 						implementations,
 					),
+				executeSendDataAbort: (_) =>
+					createSerialAPICommandMachine(
+						implementations.createSendDataAbort(),
+						implementations,
+					),
 			},
 			guards: {
 				queueNotEmpty: (ctx) => ctx.queue.length > 0,
 				executeSuccessful: (_, evt: any) => evt.data.type === "success",
+				executeSuccessfulExpectsUpdate: (ctx, evt: any) =>
+					evt.data.type === "success" &&
+					ctx.currentTransaction?.message instanceof
+						SendDataRequest &&
+					ctx.currentTransaction.message.expectsNodeUpdate(),
+				isSendData: (ctx) => {
+					const msg = ctx.currentTransaction?.message;
+					return (
+						msg instanceof SendDataRequest ||
+						msg instanceof SendDataMulticastRequest
+					);
+				},
+				isSendDataWithCallbackTimeout: (ctx, evt: any) => {
+					const msg = ctx.currentTransaction?.message;
+					return (
+						(msg instanceof SendDataRequest ||
+							msg instanceof SendDataMulticastRequest) &&
+						evt.data?.type === "failure" &&
+						evt.data?.reason === "callback timeout"
+					);
+				},
+				mayRetry: (ctx) => {
+					const msg = ctx.currentTransaction?.message as
+						| SendDataRequest
+						| undefined;
+					return !!msg && msg.maxSendAttempts > ctx.sendDataAttempts;
+				},
 			},
 			delays: {},
 		},

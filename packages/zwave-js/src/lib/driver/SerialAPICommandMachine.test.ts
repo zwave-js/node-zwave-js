@@ -2,6 +2,7 @@ import { highResTimestamp } from "@zwave-js/core";
 import { interpret, Interpreter } from "xstate";
 import { SimulatedClock } from "xstate/lib/SimulatedClock";
 import { MessageType } from "../message/Constants";
+import type { Message } from "../message/Message";
 import {
 	createSerialAPICommandMachine,
 	SerialAPICommandContext,
@@ -13,10 +14,16 @@ import {
 	createSendDataResolvesImmediately,
 	createSendDataResolvesNever,
 	dummyMessageNoResponseNoCallback,
+	dummyMessageNoResponseWithCallback,
 	dummyMessageWithResponseNoCallback,
 } from "./testUtils";
 
 jest.mock("@zwave-js/core");
+
+const defaultImplementations = {
+	sendData: createSendDataResolvesNever(),
+	createSendDataAbort: () => undefined as any,
+};
 
 describe("lib/driver/SerialAPICommandMachine", () => {
 	jest.setTimeout(100);
@@ -42,7 +49,10 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 
 			const testMachine = createSerialAPICommandMachine(
 				dummyMessageNoResponseNoCallback,
-				{ sendData },
+				{
+					...defaultImplementations,
+					sendData,
+				},
 			);
 
 			service = interpret(testMachine).start();
@@ -56,7 +66,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 
 			const testMachine = createSerialAPICommandMachine(
 				dummyMessageNoResponseNoCallback,
-				{ sendData },
+				{ ...defaultImplementations, sendData },
 				{
 					attempts: 1,
 				},
@@ -70,7 +80,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 
 			const testMachine = createSerialAPICommandMachine(
 				dummyMessageNoResponseNoCallback,
-				{ sendData },
+				{ ...defaultImplementations, sendData },
 			);
 
 			service = interpret(testMachine)
@@ -85,7 +95,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 
 			const testMachine = createSerialAPICommandMachine(
 				dummyMessageNoResponseNoCallback,
-				{ sendData },
+				{ ...defaultImplementations, sendData },
 			);
 
 			service = interpret(testMachine)
@@ -100,7 +110,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 
 			const testMachine = createSerialAPICommandMachine(
 				dummyMessageNoResponseNoCallback,
-				{ sendData },
+				{ ...defaultImplementations, sendData },
 			);
 
 			service = interpret(testMachine)
@@ -186,9 +196,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 		it("should immediately transition to failure if there are no attempts left", (done) => {
 			const testMachine = createSerialAPICommandMachine(
 				{} as any,
-				{
-					sendData: createSendDataResolvesNever(),
-				},
+				defaultImplementations,
 				{ attempts: 3 },
 			);
 			testMachine.initial = "retry";
@@ -203,9 +211,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 		it("should wait until sending again", () => {
 			const testMachine = createSerialAPICommandMachine(
 				{} as any,
-				{
-					sendData: createSendDataResolvesNever(),
-				},
+				defaultImplementations,
 				{ attempts: 1 },
 			);
 			testMachine.initial = "retry";
@@ -222,9 +228,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 		it("after each attempt, the wait time should be longer", () => {
 			const testMachine = createSerialAPICommandMachine(
 				{} as any,
-				{
-					sendData: createSendDataResolvesNever(),
-				},
+				defaultImplementations,
 				{ attempts: 2 },
 			);
 			testMachine.initial = "retry";
@@ -243,7 +247,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 			const testMachine = createSerialAPICommandMachine(
 				{} as any,
 				{
-					sendData: createSendDataResolvesNever(),
+					...defaultImplementations,
 					notifyRetry: onRetry,
 				},
 				{ attempts: 2 },
@@ -502,6 +506,22 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 	});
 
 	describe("while waiting for a callback, ...", () => {
+		it("should expect no callback if the callback id is 0", () => {
+			const msg = {
+				...dummyMessageNoResponseWithCallback,
+				hasCallbackId: () => true,
+				callbackId: 0,
+			} as Message;
+
+			const testMachine = createSerialAPICommandMachine(
+				msg,
+				defaultImplementations,
+			);
+
+			service = interpret(testMachine).start();
+			expect(service.state.context.expectsCallback).toBeFalse();
+		});
+
 		it("should go into failure state if the callback is NOK", () => {
 			const testMachine = createSerialAPICommandMachine(
 				{} as any,

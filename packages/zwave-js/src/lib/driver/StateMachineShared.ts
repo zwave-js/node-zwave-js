@@ -1,9 +1,11 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import type { SendDataAbort } from "../controller/SendDataMessages";
 import type { Message } from "../message/Message";
 import type { SerialAPICommandError } from "./SerialAPICommandMachine";
 
 export interface ServiceImplementations {
 	sendData: (data: Buffer) => Promise<void>;
+	createSendDataAbort: () => SendDataAbort;
 	notifyRetry?: (
 		attempts: number,
 		maxAttempts: number,

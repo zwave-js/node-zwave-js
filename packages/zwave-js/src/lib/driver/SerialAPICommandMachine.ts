@@ -162,7 +162,10 @@ export function createSerialAPICommandMachine(
 					entry: assign({
 						data: (ctx) => ctx.msg.serialize(),
 						expectsResponse: (ctx) => !!ctx.msg.expectedResponse,
-						expectsCallback: (ctx) => !!ctx.msg.expectedCallback,
+						expectsCallback: (ctx) =>
+							ctx.msg.hasCallbackId() &&
+							ctx.msg.callbackId !== 0 &&
+							!!ctx.msg.expectedCallback,
 					}),
 					on: {
 						"": "sending",

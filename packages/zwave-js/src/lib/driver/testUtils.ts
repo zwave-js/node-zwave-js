@@ -15,17 +15,21 @@ export const dummyMessageNoResponseNoCallback = ({
 	serialize: () => Buffer.from([1, 2, 3]),
 	expectedResponse: undefined,
 	expectedCallback: undefined,
+	hasCallbackId: () => false,
 } as any) as Message;
 export const dummyMessageWithResponseNoCallback = ({
 	serialize: () => Buffer.from([1, 2, 3]),
 	expectedResponse: 0xff,
 	expectedCallback: undefined,
+	hasCallbackId: () => false,
 } as any) as Message;
-// export const dummyMessageNoResponseWithCallback = ({
-// 	serialize: () => Buffer.from([1, 2, 3]),
-// 	expectedResponse: undefined,
-// 	expectedCallback: true,
-// } as any) as Message;
+export const dummyMessageNoResponseWithCallback = ({
+	serialize: () => Buffer.from([1, 2, 3]),
+	expectedResponse: undefined,
+	expectedCallback: true,
+	hasCallbackId: () => true,
+	callbackId: 1,
+} as any) as Message;
 // export const dummyMessageWithResponseWithCallback = ({
 // 	serialize: () => Buffer.from([1, 2, 3]),
 // 	expectedResponse: true,

@@ -176,6 +176,18 @@ callbackId:      ${this.callbackId}`,
 		return ret;
 	}
 
+	/** Tests whether one or more updates from the node are expected for this message */
+	public expectsNodeUpdate(): boolean {
+		// TODO: really dumb test, enhance this later
+		return !!getExpectedCCResponse(this.command);
+	}
+
+	public isExpectedNodeUpdate(command: CommandClass): boolean {
+		// TODO: really dumb test, enhance this later
+		// @ts-expect-error
+		return command instanceof getExpectedCCResponse(this.command);
+	}
+
 	/** Computes the maximum payload size that can be transmitted with this message */
 	public getMaxPayloadLength(): number {
 		// From INS13954-7, chapter 4.3.3.1.5
