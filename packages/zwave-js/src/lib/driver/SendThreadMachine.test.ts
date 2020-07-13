@@ -3,8 +3,13 @@ import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import { interpret, Interpreter } from "xstate";
 import { SimulatedClock } from "xstate/lib/SimulatedClock";
-import { BasicCCGet, BasicCCSet } from "../commandclass/BasicCC";
-import { SendDataAbort, SendDataRequest } from "../controller/SendDataMessages";
+import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
+import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
+import {
+	SendDataAbort,
+	SendDataMulticastRequest,
+	SendDataRequest,
+} from "../controller/SendDataMessages";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
 import { createEmptyMockDriver } from "../test/mocks";
@@ -36,6 +41,13 @@ const sendDataBasicSet = new SendDataRequest(fakeDriver, {
 });
 const sendDataBasicGet = new SendDataRequest(fakeDriver, {
 	command: new BasicCCGet(fakeDriver, { nodeId: 2 }),
+});
+
+const sendDataMulticastBasicSet = new SendDataMulticastRequest(fakeDriver, {
+	command: new BasicCCSet(fakeDriver, {
+		nodeId: [1, 2, 3],
+		targetValue: 1,
+	}),
 });
 
 const defaultImplementations = {
@@ -281,7 +293,7 @@ describe("lib/driver/SendThreadMachine", () => {
 	});
 
 	describe(`executing a SendData command`, () => {
-		it("should go into retryWait state if it fails", async () => {
+		it("should go into retryWait state if it fails (singlecast)", async () => {
 			const transaction = createTransaction(sendDataBasicSet);
 			const testMachine = createSendThreadMachine(
 				defaultImplementations,
@@ -303,6 +315,54 @@ describe("lib/driver/SendThreadMachine", () => {
 			} as any);
 
 			expect(service.state.value).toEqual({ sending: "retryWait" });
+		});
+
+		it("should go into retryWait state if it fails (multicast)", async () => {
+			const transaction = createTransaction(sendDataMulticastBasicSet);
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+					sendDataAttempts: 0,
+				},
+			);
+
+			testMachine.initial = "sending";
+			service = interpret(testMachine).start();
+
+			service.send({
+				type: "done.invoke.execute",
+				data: {
+					type: "failure",
+					reason: "response NOK",
+				},
+			} as any);
+
+			expect(service.state.value).toEqual({ sending: "retryWait" });
+		});
+
+		it("Multicast commands should not be retried if one or more nodes did not respond", async () => {
+			const transaction = createTransaction(sendDataMulticastBasicSet);
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+					sendDataAttempts: 0,
+				},
+			);
+
+			testMachine.initial = "sending";
+			service = interpret(testMachine).start();
+
+			service.send({
+				type: "done.invoke.execute",
+				data: {
+					type: "failure",
+					reason: "callback NOK",
+				},
+			} as any);
+
+			expect(service.state.value).toEqual("idle");
 		});
 
 		it("should abort sending if the callback times out", async () => {
@@ -463,5 +523,69 @@ describe("lib/driver/SendThreadMachine", () => {
 		// 	clock.increment(1100);
 		// 	expect(onRetry).toBeCalledWith(2, 3, 1100);
 		// });
+	});
+
+	describe("waiting for a node update", () => {
+		it("when the expected update is received, it should go back to idle state and the transaction should be resolved with the result", async () => {
+			const transaction = createTransaction(sendDataBasicGet);
+
+			const message = new ApplicationCommandRequest(fakeDriver, {
+				command: new BasicCCReport(fakeDriver, {
+					nodeId: 2,
+					currentValue: 50,
+				}),
+			});
+
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+				},
+			);
+
+			testMachine.initial = "sending";
+			testMachine.states.sending.initial = "waitForUpdate";
+			service = interpret(testMachine).start();
+
+			service.onTransition((state) => {
+				if (state.matches("sending.waitForUpdate.waitThread.waiting")) {
+					service!.send({ type: "message", message } as any);
+				}
+			});
+
+			const result = await transaction.promise;
+			expect(result).toBe(message);
+
+			// no more messages
+			expect(service.state.value).toBe("idle");
+		});
+
+		it("when waiting times out, it should go into retry state", async () => {
+			const transaction = createTransaction(sendDataBasicGet);
+
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+				},
+			);
+
+			testMachine.initial = "sending";
+			testMachine.states.sending.initial = "waitForUpdate";
+
+			const clock = new SimulatedClock();
+			service = interpret(testMachine, { clock }).start();
+
+			// Timeout is 1600
+			clock.increment(1500);
+			expect(
+				service.state.matches(
+					"sending.waitForUpdate.waitThread.waiting",
+				),
+			).toBeTrue();
+
+			clock.increment(100);
+			expect(service.state.value).toEqual({ sending: "retryWait" });
+		});
 	});
 });

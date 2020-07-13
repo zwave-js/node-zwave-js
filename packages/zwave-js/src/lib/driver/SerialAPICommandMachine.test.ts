@@ -340,7 +340,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 			expect(service.state.context.lastError).toBe("response timeout");
 		});
 
-		it("should respond with an UNSOLICITED event and keep waiting if the message is not expected", (done) => {
+		it(`should respond with a "serialAPIUnexpected" event and keep waiting if the message is not expected`, (done) => {
 			const testMachine = createSerialAPICommandMachine(
 				{
 					...dummyMessageWithResponseNoCallback,
@@ -360,7 +360,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 
 			service = interpret(testMachine)
 				.onEvent((evt) => {
-					if (evt.type === "unsolicited") {
+					if (evt.type === "serialAPIUnexpected") {
 						expect((evt as any).message).toBe(message);
 						expect(service?.state.value).toBe("waitForResponse");
 						done();
@@ -503,6 +503,33 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 				message,
 			});
 		});
+
+		it("if the response is NOK and this is the last attempt, the last received message should be returned", (done) => {
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsResponse: true,
+					expectsCallback: false,
+					maxAttempts: 0,
+				},
+			);
+			testMachine.initial = "waitForResponse";
+
+			const message = { isOK: () => false } as any;
+
+			service = interpret(testMachine)
+				.onDone((evt) => {
+					expect(evt.data?.result).toBe(message);
+					done();
+				})
+				.start();
+
+			service.send({
+				type: "response",
+				message,
+			});
+		});
 	});
 
 	describe("while waiting for a callback, ...", () => {
@@ -618,6 +645,31 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 			testMachine.initial = "waitForCallback";
 
 			const message = { isOK: () => true } as any;
+
+			service = interpret(testMachine)
+				.onDone((evt) => {
+					expect(evt.data?.result).toBe(message);
+					done();
+				})
+				.start();
+
+			service.send({
+				type: "callback",
+				message,
+			});
+		});
+
+		it("if the callback is NOK, the last received message should be returned", (done) => {
+			const testMachine = createSerialAPICommandMachine(
+				{} as any,
+				{} as any,
+				{
+					expectsCallback: true,
+				},
+			);
+			testMachine.initial = "waitForCallback";
+
+			const message = { isOK: () => false } as any;
 
 			service = interpret(testMachine)
 				.onDone((evt) => {

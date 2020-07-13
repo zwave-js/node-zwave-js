@@ -2,14 +2,17 @@
 
 import { highResTimestamp } from "@zwave-js/core";
 import { assign, Interpreter, Machine, StateMachine } from "xstate";
-import { respond, send } from "xstate/lib/actions";
+import { send } from "xstate/lib/actions";
 import { MessageType } from "../message/Constants";
 import type { Message } from "../message/Message";
 import {
 	isMultiStageCallback,
 	isSuccessIndicator,
 } from "../message/SuccessIndicator";
-import type { ServiceImplementations } from "./StateMachineShared";
+import {
+	respondUnexpected,
+	ServiceImplementations,
+} from "./StateMachineShared";
 
 /* eslint-disable @typescript-eslint/ban-types */
 export interface SerialAPICommandStateSchema {
@@ -58,10 +61,10 @@ export type SerialAPICommandEvent =
 			type:
 				| "response" // A message that has been determined to be expected
 				| "callback"
-				// A message that might be unsolicited
+				// A message that might be unexpected
 				| "message"
-				// A message that IS unsolicited
-				| "unsolicited";
+				// A message that IS unexpected
+				| "serialAPIUnexpected";
 			message: Message;
 	  };
 
@@ -98,12 +101,6 @@ const forwardMessage = send(
 	(_, evt: SerialAPICommandEvent & { type: "message" }) => ({
 		type:
 			evt.message.type === MessageType.Response ? "response" : "callback",
-		message: evt.message,
-	}),
-);
-const respondUnsolicited = respond(
-	(_, evt: SerialAPICommandEvent & { type: "message" }) => ({
-		type: "unsolicited",
 		message: evt.message,
 	}),
 );
@@ -144,14 +141,14 @@ export function createSerialAPICommandMachine(
 			on: {
 				// The state machine accepts any message. If it is expected
 				// it will be forwarded to the correct states. If not, it
-				// will be returned with the "unsolicited" event.
+				// will be returned with the "serialAPIUnexpected" event.
 				message: [
 					{
 						cond: "isExpectedMessage",
 						actions: forwardMessage,
 					},
 					{
-						actions: respondUnsolicited,
+						actions: respondUnexpected("serialAPIUnexpected"),
 					},
 				],
 			},
@@ -315,6 +312,7 @@ export function createSerialAPICommandMachine(
 					data: {
 						type: "failure",
 						reason: (ctx: SerialAPICommandContext) => ctx.lastError,
+						result: (ctx: SerialAPICommandContext) => ctx.result!,
 					},
 				},
 			},

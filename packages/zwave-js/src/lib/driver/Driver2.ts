@@ -1,6 +1,14 @@
+import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { MessageHeaders, ZWaveSerialPort } from "@zwave-js/serial";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { interpret } from "xstate";
+import type { CommandClass } from "../commandclass/CommandClass";
+import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
+import {
+	SendDataMulticastRequest,
+	SendDataRequest,
+} from "../controller/SendDataMessages";
+import type { SendCommandOptions } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { Message } from "../message/Message";
 import {
@@ -94,6 +102,32 @@ export class Driver2 {
 			transaction,
 		});
 		return promise;
+	}
+
+	public async sendCommand<TResponse extends CommandClass = CommandClass>(
+		command: CommandClass,
+		options: SendCommandOptions = {},
+	): Promise<TResponse | undefined> {
+		let msg: SendDataRequest | SendDataMulticastRequest;
+		if (command.isSinglecast()) {
+			msg = new SendDataRequest(this as any, { command });
+		} else if (command.isMulticast()) {
+			msg = new SendDataMulticastRequest(this as any, { command });
+		} else {
+			throw new ZWaveError(
+				`A CC must either be singlecast or multicast`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+		// Specify the number of send attempts for the request
+		if (options.maxSendAttempts != undefined) {
+			msg.maxSendAttempts = options.maxSendAttempts;
+		}
+
+		const resp = await this.executeAPICommand(msg);
+		if (isCommandClassContainer(resp)) {
+			return resp.command as TResponse;
+		}
 	}
 
 	public async destroy(): Promise<void> {

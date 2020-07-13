@@ -4,19 +4,22 @@ import {
 	EventObject,
 	Interpreter,
 	Machine,
-	send,
 	StateMachine,
 } from "xstate";
+import { raise, send } from "xstate/lib/actions";
+import type { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import {
 	SendDataMulticastRequest,
 	SendDataRequest,
 } from "../controller/SendDataMessages";
+import type { Message } from "../message/Message";
 import {
 	createSerialAPICommandMachine,
 	SerialAPICommandDoneData,
 	SerialAPICommandEvent,
 } from "./SerialAPICommandMachine";
 import {
+	respondUnexpected,
 	serialAPICommandErrorToZWaveError,
 	ServiceImplementations,
 } from "./StateMachineShared";
@@ -68,6 +71,8 @@ export interface SendThreadContext {
 export type SendThreadEvent =
 	| { type: "add"; transaction: Transaction }
 	| { type: "trigger" }
+	| { type: "nodeUpdate"; message: ApplicationCommandRequest }
+	| { type: "unsolicited"; message: Message }
 	| SerialAPICommandEvent;
 
 export type SendThreadMachine = StateMachine<
@@ -97,6 +102,13 @@ const resolveCurrentTransaction = assign(
 	},
 );
 
+const resolveCurrentTransactionWithMessage = assign(
+	(ctx: SendThreadContext, evt: SendThreadEvent & { type: "nodeUpdate" }) => {
+		ctx.currentTransaction!.promise.resolve(evt.message);
+		return ctx;
+	},
+);
+
 const rejectCurrentTransaction = assign(
 	(
 		ctx: SendThreadContext,
@@ -108,7 +120,11 @@ const rejectCurrentTransaction = assign(
 	) => {
 		const data = evt.data ?? ctx.sendDataErrorData;
 		ctx.currentTransaction!.promise.reject(
-			serialAPICommandErrorToZWaveError(data.reason, data.result),
+			serialAPICommandErrorToZWaveError(
+				data.reason,
+				ctx.currentTransaction!.message,
+				data.result,
+			),
 		);
 		return ctx;
 	},
@@ -131,6 +147,13 @@ const resetSendDataAttempts = assign({
 const incrementSendDataAttempts = assign({
 	sendDataAttempts: (ctx: SendThreadContext) => ctx.sendDataAttempts + 1,
 });
+
+const forwardNodeUpdate = send(
+	(_: any, evt: SerialAPICommandEvent & { type: "message" }) => ({
+		type: "nodeUpdate",
+		message: evt.message,
+	}),
+);
 
 export function createSendThreadMachine(
 	implementations: ServiceImplementations,
@@ -155,9 +178,31 @@ export function createSendThreadMachine(
 								return ctx.queue;
 							},
 						}),
-						send("trigger"),
+						raise("trigger"),
 					],
 				},
+				// The send thread accepts any message as long as the serial API machine is not active.
+				// If it is expected it will be forwarded to the correct states. If not, it
+				// will be returned with the "unsolicited" event.
+				message: [
+					{
+						cond: "isExpectedUpdate",
+						actions: forwardNodeUpdate,
+					},
+					{
+						actions: respondUnexpected("unsolicited"),
+					},
+				],
+				// Do the same if the serial API did not handle a message
+				serialAPIUnexpected: [
+					{
+						cond: "isExpectedUpdate",
+						actions: forwardNodeUpdate,
+					},
+					{
+						actions: respondUnexpected("unsolicited"),
+					},
+				],
 			},
 			states: {
 				idle: {
@@ -237,6 +282,7 @@ export function createSendThreadMachine(
 							},
 						},
 						retry: {
+							id: "retry",
 							on: {
 								"": [
 									// If we may retry, wait a bit first
@@ -264,18 +310,31 @@ export function createSendThreadMachine(
 								waitThread: {
 									initial: "waiting",
 									states: {
-										waiting: {},
-										done: {},
+										waiting: {
+											// When the expected update is received, resolve the transaction and stop waiting
+											on: {
+												nodeUpdate: {
+													actions: resolveCurrentTransactionWithMessage,
+													target: "done",
+												},
+											},
+											after: {
+												1600: "#retry",
+											},
+										},
+										done: { type: "final" },
 									},
 								},
 								handshakeServer: {
 									initial: "idle",
 									states: {
-										idle: {},
+										// As long as we're not replying, the handshake server is done
+										idle: { type: "final" },
 										responding: {},
 									},
 								},
 							},
+							onDone: "done",
 						},
 						done: {
 							type: "final",
@@ -313,6 +372,17 @@ export function createSendThreadMachine(
 						msg instanceof SendDataMulticastRequest
 					);
 				},
+				isExpectedUpdate: (ctx, evt, meta) =>
+					meta.state.matches(
+						"sending.waitForUpdate.waitThread.waiting",
+					)
+						? (ctx.currentTransaction!
+								.message as SendDataRequest).isExpectedNodeUpdate(
+								((evt as any)
+									.message as ApplicationCommandRequest)
+									.command,
+						  )
+						: false,
 				isSendDataWithCallbackTimeout: (ctx, evt: any) => {
 					const msg = ctx.currentTransaction?.message;
 					return (
@@ -323,10 +393,18 @@ export function createSendThreadMachine(
 					);
 				},
 				mayRetry: (ctx) => {
-					const msg = ctx.currentTransaction?.message as
-						| SendDataRequest
-						| undefined;
-					return !!msg && msg.maxSendAttempts > ctx.sendDataAttempts;
+					const msg = ctx.currentTransaction!.message;
+					if (msg instanceof SendDataMulticastRequest) {
+						// Don't try to resend multicast messages if they were already transmitted.
+						// One or more nodes might have already reacted
+						if (ctx.sendDataErrorData!.reason === "callback NOK") {
+							return false;
+						}
+					}
+					return (
+						(msg as SendDataRequest | SendDataMulticastRequest)
+							.maxSendAttempts > ctx.sendDataAttempts
+					);
 				},
 			},
 			delays: {},

@@ -63,7 +63,7 @@ export enum TransmitStatus {
 	NoAck = 0x01, // Transmission complete, no ACK received
 	Fail = 0x02, // Transmission failed
 	NotIdle = 0x03, // Transmission failed, network busy
-	NoRoute = 0x04, // Tranmission complete, no return route
+	NoRoute = 0x04, // Transmission complete, no return route
 }
 
 @messageTypes(MessageType.Request, FunctionType.SendData)

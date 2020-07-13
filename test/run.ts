@@ -1,7 +1,10 @@
 require("reflect-metadata");
 
-import { GetControllerIdRequest } from "zwave-js/src/lib/controller/GetControllerIdMessages";
-import { GetControllerVersionRequest } from "zwave-js/src/lib/controller/GetControllerVersionMessages";
+import {
+	BinarySwitchCCGet,
+	BinarySwitchCCReport,
+} from "zwave-js/src/lib/commandclass/BinarySwitchCC";
+import { InterviewStage } from "zwave-js/src/lib/node/Types";
 import { Driver2 } from "../packages/zwave-js/src/lib/driver/Driver2";
 
 void (async () => {
@@ -9,17 +12,23 @@ void (async () => {
 	await driver.start();
 
 	(driver as any).getNextCallbackId = () => 5;
+	(driver as any).getSafeCCVersionForNode = () => 100;
+	(driver as any).controller = {
+		nodes: new Map([
+			{
+				interviewStage: InterviewStage.Complete,
+			},
+		]),
+		ownNodeId: 1,
+	};
 
-	const p1 = driver.executeAPICommand(
-		new GetControllerVersionRequest(driver as any),
-	);
+	const command = new BinarySwitchCCGet(driver as any, {
+		nodeId: 18,
+		// targetValue: false,
+	});
 
-	const p2 = driver.executeAPICommand(
-		new GetControllerIdRequest(driver as any),
-	);
-
-	await p1;
-	await p2;
+	const ret = await driver.sendCommand(command);
+	console.dir((ret as BinarySwitchCCReport).currentValue);
 
 	console.log("done!");
 	await driver.destroy();
