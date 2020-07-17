@@ -164,9 +164,7 @@ export function createSerialAPICommandMachine(
 							ctx.msg.callbackId !== 0 &&
 							!!ctx.msg.expectedCallback,
 					}),
-					on: {
-						"": "sending",
-					},
+					always: "sending",
 				},
 				sending: {
 					// Every send attempt should increase the attempts by one
@@ -217,13 +215,13 @@ export function createSerialAPICommandMachine(
 					},
 				},
 				waitForResponse: {
+					always: [
+						{
+							target: "waitForCallback",
+							cond: "expectsNoResponse",
+						},
+					],
 					on: {
-						"": [
-							{
-								target: "waitForCallback",
-								cond: "expectsNoResponse",
-							},
-						],
 						response: [
 							{
 								target: "retry",
@@ -251,8 +249,8 @@ export function createSerialAPICommandMachine(
 					},
 				},
 				waitForCallback: {
+					always: [{ target: "success", cond: "expectsNoCallback" }],
 					on: {
-						"": [{ target: "success", cond: "expectsNoCallback" }],
 						callback: [
 							{
 								target: "failure",
@@ -282,12 +280,10 @@ export function createSerialAPICommandMachine(
 					},
 				},
 				retry: {
-					on: {
-						"": [
-							{ target: "retryWait", cond: "mayRetry" },
-							{ target: "failure" },
-						],
-					},
+					always: [
+						{ target: "retryWait", cond: "mayRetry" },
+						{ target: "failure" },
+					],
 				},
 				retryWait: {
 					invoke: {

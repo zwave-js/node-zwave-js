@@ -122,7 +122,7 @@ export class SecurityCCAPI extends CCAPI {
 			cc,
 			{
 				// Nonce requests must be handled immediately
-				priority: MessagePriority.Handshake,
+				priority: MessagePriority.PreTransmitHandshake,
 				// Only try getting a nonce once
 				maxSendAttempts: 1,
 			},

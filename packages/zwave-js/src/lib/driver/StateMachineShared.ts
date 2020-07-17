@@ -95,9 +95,7 @@ export function serialAPICommandErrorToZWaveError(
 				);
 			} else if (sentMessage instanceof SendDataMulticastRequest) {
 				return new ZWaveError(
-					`Failed to send the command after ${
-						sentMessage.maxSendAttempts
-					} attempts (Status ${getEnumMemberName(
+					`One or more nodes did not respond to the multicast request (Status ${getEnumMemberName(
 						TransmitStatus,
 						(receivedMessage as SendDataMulticastRequestTransmitReport)
 							.transmitStatus,
@@ -113,4 +111,17 @@ export function serialAPICommandErrorToZWaveError(
 				);
 			}
 	}
+}
+
+/** Tests whether the given error is one that was caused by the serial API execution */
+export function isSerialCommandError(error: unknown): boolean {
+	if (!(error instanceof ZWaveError)) return false;
+	switch (error.code) {
+		case ZWaveErrorCodes.Controller_Timeout:
+		case ZWaveErrorCodes.Controller_ResponseNOK:
+		case ZWaveErrorCodes.Controller_CallbackNOK:
+		case ZWaveErrorCodes.Controller_MessageDropped:
+			return true;
+	}
+	return false;
 }

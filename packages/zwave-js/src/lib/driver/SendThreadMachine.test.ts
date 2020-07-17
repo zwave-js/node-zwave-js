@@ -1,9 +1,18 @@
-import { assertZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import {
+	assertZWaveError,
+	SecurityManager,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import { interpret, Interpreter } from "xstate";
 import { SimulatedClock } from "xstate/lib/SimulatedClock";
 import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
+import {
+	SecurityCCCommandEncapsulation,
+	SecurityCCNonceGet,
+	SecurityCCNonceReport,
+} from "../commandclass/SecurityCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import {
 	SendDataAbort,
@@ -32,6 +41,22 @@ const mockSerialAPIMachine = jest.requireMock("./SerialAPICommandMachine")
 	.createSerialAPICommandMachine as jest.Mock;
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+const sm = new SecurityManager({ networkKey: Buffer.alloc(16, 1) });
+fakeDriver.securityManager = sm;
+
+// // We need to add a fake node 2 in order to test handshakes
+// const node2 = new ZWaveNode(2, fakeDriver);
+// node2.addCC(CommandClasses.Security, {
+// 	isSupported: true,
+// 	secure: true,
+// 	version: 1,
+// });
+// (fakeDriver.controller.nodes as any).set(node2.id, node2);
+
+// // We need control over what the driver sends
+// (fakeDriver.sendCommand as jest.Mock).mockReset().mockImplementation(() => {
+// 	return new Promise(() => {});
+// });
 
 const sendDataBasicSet = new SendDataRequest(fakeDriver, {
 	command: new BasicCCSet(fakeDriver, {
@@ -47,6 +72,25 @@ const sendDataMulticastBasicSet = new SendDataMulticastRequest(fakeDriver, {
 	command: new BasicCCSet(fakeDriver, {
 		nodeId: [1, 2, 3],
 		targetValue: 1,
+	}),
+});
+
+const sendDataBasicSetSecure = new SendDataRequest(fakeDriver, {
+	command: new SecurityCCCommandEncapsulation(fakeDriver, {
+		nodeId: 2,
+		encapsulated: new BasicCCSet(fakeDriver, {
+			nodeId: 2,
+			targetValue: 1,
+		}),
+	}),
+});
+sendDataBasicSetSecure.command.preTransmitHandshake = jest
+	.fn()
+	.mockResolvedValue(undefined);
+
+const sendDataNonceRequest = new SendDataRequest(fakeDriver, {
+	command: new SecurityCCNonceGet(fakeDriver, {
+		nodeId: 2,
 	}),
 });
 
@@ -78,6 +122,8 @@ describe("lib/driver/SendThreadMachine", () => {
 
 	beforeEach(() => {
 		mockSerialAPIMachine.mockReset();
+		(sendDataBasicSetSecure.command
+			.preTransmitHandshake as jest.Mock).mockClear();
 	});
 
 	afterEach(() => {
@@ -317,7 +363,7 @@ describe("lib/driver/SendThreadMachine", () => {
 			expect(service.state.value).toEqual({ sending: "retryWait" });
 		});
 
-		it("should go into retryWait state if it fails (multicast)", async () => {
+		it("should go into retryWait state if sending fails (multicast)", async () => {
 			const transaction = createTransaction(sendDataMulticastBasicSet);
 			const testMachine = createSendThreadMachine(
 				defaultImplementations,
@@ -359,8 +405,13 @@ describe("lib/driver/SendThreadMachine", () => {
 				data: {
 					type: "failure",
 					reason: "callback NOK",
+					result: { transmitStatus: 1 },
 				},
 			} as any);
+
+			await assertZWaveError(() => transaction.promise, {
+				errorCode: ZWaveErrorCodes.Controller_MessageDropped,
+			});
 
 			expect(service.state.value).toEqual("idle");
 		});
@@ -451,6 +502,32 @@ describe("lib/driver/SendThreadMachine", () => {
 			expect(
 				(service.state.value as any).sending.waitForUpdate,
 			).toBeObject();
+		});
+
+		it("should go into idle state if it succeeds and expects NO update", async () => {
+			const transaction = createTransaction(sendDataBasicSet);
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+					sendDataAttempts: 0,
+				},
+			);
+
+			testMachine.initial = "sending";
+			service = interpret(testMachine).start();
+
+			service.send({
+				type: "done.invoke.execute",
+				data: {
+					type: "success",
+					result: 1,
+				},
+			} as any);
+
+			await expect(transaction.promise).toResolve();
+
+			expect(service.state.value).toEqual("idle");
 		});
 	});
 
@@ -587,5 +664,330 @@ describe("lib/driver/SendThreadMachine", () => {
 			clock.increment(100);
 			expect(service.state.value).toEqual({ sending: "retryWait" });
 		});
+	});
+
+	describe("executing a SendData command with handshake", () => {
+		it(`should immediately execute the handshake transaction`, async () => {
+			const transaction = createTransaction(sendDataBasicSetSecure);
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+					sendDataAttempts: 0,
+				},
+			);
+
+			testMachine.initial = "sending";
+			service = interpret(testMachine).start();
+
+			expect(
+				sendDataBasicSetSecure.command.preTransmitHandshake,
+			).toBeCalledTimes(1);
+
+			expect(service.state.value).toMatchObject({
+				sending: { handshake: "waitForTrigger" },
+			});
+
+			// We've intercepted the sendCommand call, so create the transaction ourselves
+			const nonceGet = new Transaction(
+				fakeDriver,
+				sendDataNonceRequest,
+				createDeferredPromise(),
+				MessagePriority.PreTransmitHandshake,
+			);
+			service.send({
+				type: "add",
+				transaction: nonceGet,
+			});
+
+			expect(service.state.value).toMatchObject({
+				sending: { handshake: "executeHandshake" },
+			});
+		});
+
+		describe(`while waiting for a handshake trigger, all other messages should be ignored`, () => {
+			it("wrong priority", () => {
+				const transaction = createTransaction(sendDataBasicSetSecure);
+				const testMachine = createSendThreadMachine(
+					defaultImplementations,
+					{
+						queue: new SortedList([transaction]),
+						sendDataAttempts: 0,
+					},
+				);
+
+				testMachine.initial = "sending";
+				service = interpret(testMachine).start();
+
+				expect(
+					sendDataBasicSetSecure.command.preTransmitHandshake,
+				).toBeCalledTimes(1);
+
+				expect(service.state.value).toMatchObject({
+					sending: { handshake: "waitForTrigger" },
+				});
+
+				const transaction2 = new Transaction(
+					fakeDriver,
+					sendDataBasicSet,
+					createDeferredPromise(),
+					MessagePriority.Normal,
+				);
+				service.send({
+					type: "add",
+					transaction: transaction2,
+				});
+
+				expect(service.state.value).toMatchObject({
+					sending: { handshake: "waitForTrigger" },
+				});
+			});
+
+			it("wrong message type", () => {
+				const transaction = createTransaction(sendDataBasicSetSecure);
+				const testMachine = createSendThreadMachine(
+					defaultImplementations,
+					{
+						queue: new SortedList([transaction]),
+						sendDataAttempts: 0,
+					},
+				);
+
+				testMachine.initial = "sending";
+				service = interpret(testMachine).start();
+
+				expect(
+					sendDataBasicSetSecure.command.preTransmitHandshake,
+				).toBeCalledTimes(1);
+
+				expect(service.state.value).toMatchObject({
+					sending: { handshake: "waitForTrigger" },
+				});
+
+				const transaction2 = new Transaction(
+					fakeDriver,
+					sendDataMulticastBasicSet,
+					createDeferredPromise(),
+					MessagePriority.PreTransmitHandshake,
+				);
+				service.send({
+					type: "add",
+					transaction: transaction2,
+				});
+
+				expect(service.state.value).toMatchObject({
+					sending: { handshake: "waitForTrigger" },
+				});
+			});
+
+			it("wrong node id", () => {
+				const transaction = createTransaction(sendDataBasicSetSecure);
+				const testMachine = createSendThreadMachine(
+					defaultImplementations,
+					{
+						queue: new SortedList([transaction]),
+						sendDataAttempts: 0,
+					},
+				);
+
+				testMachine.initial = "sending";
+				service = interpret(testMachine).start();
+
+				expect(
+					sendDataBasicSetSecure.command.preTransmitHandshake,
+				).toBeCalledTimes(1);
+
+				expect(service.state.value).toMatchObject({
+					sending: { handshake: "waitForTrigger" },
+				});
+
+				const sendDataWrongNodeId = new SendDataRequest(fakeDriver, {
+					command: new BasicCCSet(fakeDriver, {
+						nodeId: 8,
+						targetValue: 1,
+					}),
+				});
+
+				const transaction2 = new Transaction(
+					fakeDriver,
+					sendDataWrongNodeId,
+					createDeferredPromise(),
+					MessagePriority.PreTransmitHandshake,
+				);
+				service.send({
+					type: "add",
+					transaction: transaction2,
+				});
+
+				expect(service.state.value).toMatchObject({
+					sending: { handshake: "waitForTrigger" },
+				});
+			});
+		});
+
+		it("when the handshake API call fails, it should go into retry state", () => {
+			const transaction = createTransaction(sendDataBasicSetSecure);
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+					sendDataAttempts: 0,
+					preTransmitHandshakeTransaction: new Transaction(
+						fakeDriver,
+						sendDataNonceRequest,
+						createDeferredPromise(),
+						MessagePriority.PreTransmitHandshake,
+					),
+				},
+			);
+
+			testMachine.initial = "sending";
+			testMachine.states.sending.initial = "handshake";
+			testMachine.states.sending.states.handshake.initial =
+				"executeHandshake";
+			service = interpret(testMachine).start();
+
+			service.send({
+				type: "done.invoke.executeHandshake",
+				data: {
+					type: "failure",
+					reason: "ACK timeout",
+				},
+			} as any);
+
+			expect(service.state.value).toMatchObject({ sending: "retryWait" });
+		});
+
+		it("when the handshake API call succeeds, it should go into waitForHandshakeResponse state", () => {
+			const transaction = createTransaction(sendDataBasicSetSecure);
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+					sendDataAttempts: 0,
+					preTransmitHandshakeTransaction: new Transaction(
+						fakeDriver,
+						sendDataNonceRequest,
+						createDeferredPromise(),
+						MessagePriority.PreTransmitHandshake,
+					),
+				},
+			);
+
+			testMachine.initial = "sending";
+			testMachine.states.sending.initial = "handshake";
+			testMachine.states.sending.states.handshake.initial =
+				"executeHandshake";
+			service = interpret(testMachine).start();
+
+			service.send({
+				type: "done.invoke.executeHandshake",
+				data: {
+					type: "success",
+					result: "foo",
+				},
+			} as any);
+
+			expect(service.state.value).toMatchObject({
+				sending: { handshake: "waitForHandshakeResponse" },
+			});
+		});
+
+		it("when the expected handshake response is received, it should go into execute state", () => {
+			const transaction = createTransaction(sendDataBasicSetSecure);
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+					sendDataAttempts: 0,
+					preTransmitHandshakeTransaction: new Transaction(
+						fakeDriver,
+						sendDataNonceRequest,
+						createDeferredPromise(),
+						MessagePriority.PreTransmitHandshake,
+					),
+				},
+			);
+
+			testMachine.initial = "sending";
+			testMachine.states.sending.initial = "handshake";
+			testMachine.states.sending.states.handshake.initial =
+				"waitForHandshakeResponse";
+			service = interpret(testMachine).start();
+
+			const response = new ApplicationCommandRequest(fakeDriver, {
+				command: new SecurityCCNonceReport(fakeDriver, {
+					nodeId: 2,
+					nonce: Buffer.allocUnsafe(8),
+				}),
+			});
+
+			service.send({
+				type: "message",
+				message: response,
+			} as any);
+
+			expect(service.state.value).toMatchObject({
+				sending: "execute",
+			});
+		});
+
+		it("when the expected handshake response is not received in time, it should go into retry state", () => {
+			const transaction = createTransaction(sendDataBasicSetSecure);
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+					sendDataAttempts: 0,
+					preTransmitHandshakeTransaction: new Transaction(
+						fakeDriver,
+						sendDataNonceRequest,
+						createDeferredPromise(),
+						MessagePriority.PreTransmitHandshake,
+					),
+				},
+			);
+
+			testMachine.initial = "sending";
+			testMachine.states.sending.initial = "handshake";
+			testMachine.states.sending.states.handshake.initial =
+				"waitForHandshakeResponse";
+
+			const clock = new SimulatedClock();
+			service = interpret(testMachine, { clock }).start();
+
+			clock.increment(1500);
+			expect(service.state.value).toMatchObject({
+				sending: { handshake: "waitForHandshakeResponse" },
+			});
+
+			clock.increment(100);
+			expect(service.state.value).toMatchObject({
+				sending: "retryWait",
+			});
+		});
+
+		// it("when the handshake transaction is created, ", async () => {
+		// 	const transaction = createTransaction(sendDataBasicSetSecure);
+		// 	const testMachine = createSendThreadMachine(
+		// 		defaultImplementations,
+		// 		{
+		// 			queue: new SortedList([transaction]),
+		// 			sendDataAttempts: 0,
+		// 		},
+		// 	);
+
+		// 	testMachine.initial = "sending";
+		// 	service = interpret(testMachine).start();
+
+		// 	expect(fakeDriver.sendCommand).toBeCalledTimes(1);
+		// 	expect(
+		// 		(fakeDriver.sendCommand as jest.Mock).mock.calls[0][0],
+		// 	).toBeInstanceOf(SecurityCCNonceGet);
+
+		// 	expect(service.state.value).toMatchObject({
+		// 		sending: { handshake: "waitForTrigger" },
+		// 	});
+		// });
 	});
 });
