@@ -184,8 +184,8 @@ callbackId:      ${this.callbackId}`,
 
 	public isExpectedNodeUpdate(command: CommandClass): boolean {
 		// TODO: really dumb test, enhance this later
-		// @ts-expect-error
-		return command instanceof getExpectedCCResponse(this.command);
+		const expected = getExpectedCCResponse(this.command);
+		return !!expected && command instanceof expected;
 	}
 
 	/** Computes the maximum payload size that can be transmitted with this message */

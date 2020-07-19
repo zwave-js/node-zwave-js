@@ -257,7 +257,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 			const clock = new SimulatedClock();
 			service = interpret(testMachine, { clock }).start();
 			clock.increment(1100);
-			expect(onRetry).toBeCalledWith(2, 3, 1100);
+			expect(onRetry).toBeCalledWith("SerialAPI", 2, 3, 1100);
 		});
 	});
 

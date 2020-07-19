@@ -318,6 +318,7 @@ export function createSerialAPICommandMachine(
 				send: (ctx) => sendData(ctx.data),
 				notifyRetry: (ctx) => {
 					notifyRetry?.(
+						"SerialAPI",
 						ctx.attempts,
 						ctx.maxAttempts,
 						computeRetryDelay(ctx),

@@ -20,6 +20,7 @@ export interface ServiceImplementations {
 	sendData: (data: Buffer) => Promise<void>;
 	createSendDataAbort: () => SendDataAbort;
 	notifyRetry?: (
+		command: "SendData" | "SerialAPI",
 		attempts: number,
 		maxAttempts: number,
 		delay: number,

@@ -94,6 +94,13 @@ const sendDataNonceRequest = new SendDataRequest(fakeDriver, {
 	}),
 });
 
+const sendDataNonceResponse = new SendDataRequest(fakeDriver, {
+	command: new SecurityCCNonceReport(fakeDriver, {
+		nodeId: 2,
+		nonce: Buffer.allocUnsafe(8),
+	}),
+});
+
 const defaultImplementations = {
 	sendData: createSendDataResolvesNever(),
 	createSendDataAbort: () => new SendDataAbort(fakeDriver),
@@ -583,23 +590,26 @@ describe("lib/driver/SendThreadMachine", () => {
 			expect(service.state.value).toEqual({ sending: "execute" });
 		});
 
-		// it("should notify us about the retry attempt", () => {
-		// 	const onRetry = jest.fn();
-		// 	const testMachine = createSerialAPICommandMachine(
-		// 		{} as any,
-		// 		{
-		// 			sendData: createSendDataResolvesNever(),
-		// 			notifyRetry: onRetry,
-		// 		},
-		// 		{ attempts: 2 },
-		// 	);
-		// 	testMachine.initial = "retry";
+		it("should notify us about the retry attempt", () => {
+			const onRetry = jest.fn();
+			const transaction = createTransaction(sendDataBasicSet);
+			const testMachine = createSendThreadMachine(
+				{ ...defaultImplementations, notifyRetry: onRetry },
+				{
+					queue: new SortedList([transaction]),
+					sendDataAttempts: 2,
+				},
+			);
 
-		// 	const clock = new SimulatedClock();
-		// 	service = interpret(testMachine, { clock }).start();
-		// 	clock.increment(1100);
-		// 	expect(onRetry).toBeCalledWith(2, 3, 1100);
-		// });
+			const clock = new SimulatedClock();
+
+			testMachine.initial = "sending";
+			testMachine.states.sending.initial = "retry";
+			service = interpret(testMachine, { clock }).start();
+
+			clock.increment(500);
+			expect(onRetry).toBeCalledWith("SendData", 2, 3, 500);
+		});
 	});
 
 	describe("waiting for a node update", () => {
@@ -637,6 +647,158 @@ describe("lib/driver/SendThreadMachine", () => {
 			expect(service.state.value).toBe("idle");
 		});
 
+		it("... but only after a pending handshake request was answered", (done) => {
+			const transaction = createTransaction(sendDataBasicGet);
+
+			const message = new ApplicationCommandRequest(fakeDriver, {
+				command: new BasicCCReport(fakeDriver, {
+					nodeId: 2,
+					currentValue: 50,
+				}),
+			});
+
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+				},
+			);
+
+			testMachine.initial = "sending";
+			testMachine.states.sending.initial = "waitForUpdate";
+			service = interpret(testMachine).start();
+
+			let step = 0;
+			service.onTransition((state) => {
+				if (
+					step === 0 &&
+					state.matches("sending.waitForUpdate.waitThread.waiting")
+				) {
+					step = 1;
+
+					// First, make the service respond to a handshake
+					service!.send({
+						type: "add",
+						transaction: new Transaction(
+							fakeDriver,
+							sendDataNonceResponse,
+							createDeferredPromise(),
+							MessagePriority.Handshake,
+						),
+					});
+
+					// Then send it the reply
+					service!.send({ type: "message", message } as any);
+				} else if (
+					step === 1 &&
+					state.matches(
+						"sending.waitForUpdate.handshakeServer.responding",
+					)
+				) {
+					step = 2;
+					service!.send({
+						type: "done.invoke.executeHandshakeResponse",
+						data: {
+							type: "success",
+							result: 1,
+						},
+					} as any);
+				} else if (state.matches("idle")) {
+					expect(step).toBe(2);
+					done();
+				}
+			});
+		});
+
+		it("when replying to a handshake fails with a callback timeout, it should abort sending", () => {
+			const transaction = createTransaction(sendDataBasicGet);
+
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+				},
+			);
+
+			testMachine.initial = "sending";
+			testMachine.states.sending.initial = "waitForUpdate";
+			service = interpret(testMachine).start();
+
+			// Make the service respond to a handshake
+			service.send({
+				type: "add",
+				transaction: new Transaction(
+					fakeDriver,
+					sendDataNonceResponse,
+					createDeferredPromise(),
+					MessagePriority.Handshake,
+				),
+			});
+			expect(service.state.value).toMatchObject({
+				sending: { waitForUpdate: { handshakeServer: "responding" } },
+			});
+
+			service.send({
+				type: "done.invoke.executeHandshakeResponse",
+				data: {
+					type: "failure",
+					reason: "callback timeout",
+				},
+			} as any);
+			expect(service.state.value).toMatchObject({
+				sending: {
+					waitForUpdate: { handshakeServer: "abortResponding" },
+				},
+			});
+		});
+
+		it("when replying to a handshake fails with different error, it should go back to idle", () => {
+			const transaction = createTransaction(sendDataBasicGet);
+
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+				},
+			);
+
+			testMachine.initial = "sending";
+			testMachine.states.sending.initial = "waitForUpdate";
+			service = interpret(testMachine).start();
+
+			const handshakeResponse = new Transaction(
+				fakeDriver,
+				sendDataNonceResponse,
+				createDeferredPromise(),
+				MessagePriority.Handshake,
+			);
+			handshakeResponse.promise.catch(() => {
+				/* ignore */
+			});
+
+			// Make the service respond to a handshake
+			service.send({
+				type: "add",
+				transaction: handshakeResponse,
+			});
+			expect(service.state.value).toMatchObject({
+				sending: { waitForUpdate: { handshakeServer: "responding" } },
+			});
+
+			service.send({
+				type: "done.invoke.executeHandshakeResponse",
+				data: {
+					type: "failure",
+					reason: "ACK timeout",
+				},
+			} as any);
+			expect(service.state.value).toMatchObject({
+				sending: {
+					waitForUpdate: { handshakeServer: "idle" },
+				},
+			});
+		});
+
 		it("when waiting times out, it should go into retry state", async () => {
 			const transaction = createTransaction(sendDataBasicGet);
 
@@ -663,6 +825,78 @@ describe("lib/driver/SendThreadMachine", () => {
 
 			clock.increment(100);
 			expect(service.state.value).toEqual({ sending: "retryWait" });
+		});
+
+		it("when aborting the handshake response fails, it should go back to idle", (done) => {
+			const transaction = createTransaction(sendDataBasicGet);
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+				},
+			);
+
+			testMachine.initial = "sending";
+			testMachine.states.sending.initial = "waitForUpdate";
+			testMachine.states.sending.states.waitForUpdate.states.waitThread.initial =
+				"done";
+			testMachine.states.sending.states.waitForUpdate.states.handshakeServer.initial =
+				"abortResponding";
+			service = interpret(testMachine).start();
+
+			service.onTransition((state) => {
+				if (
+					state.matches(
+						"sending.waitForUpdate.handshakeServer.abortResponding",
+					)
+				) {
+					service!.send({
+						type: "done.invoke.executeSendDataAbort",
+						data: {
+							type: "failure",
+							reason: "ACK timeout",
+						},
+					} as any);
+				} else if (state.matches("idle")) {
+					done();
+				}
+			});
+		});
+
+		it("when aborting the handshake response succeeds, it should go back to idle", (done) => {
+			const transaction = createTransaction(sendDataBasicGet);
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+				},
+			);
+
+			testMachine.initial = "sending";
+			testMachine.states.sending.initial = "waitForUpdate";
+			testMachine.states.sending.states.waitForUpdate.states.waitThread.initial =
+				"done";
+			testMachine.states.sending.states.waitForUpdate.states.handshakeServer.initial =
+				"abortResponding";
+			service = interpret(testMachine).start();
+
+			service.onTransition((state) => {
+				if (
+					state.matches(
+						"sending.waitForUpdate.handshakeServer.abortResponding",
+					)
+				) {
+					service!.send({
+						type: "done.invoke.executeSendDataAbort",
+						data: {
+							type: "success",
+							result: 1,
+						},
+					} as any);
+				} else if (state.matches("idle")) {
+					done();
+				}
+			});
 		});
 	});
 

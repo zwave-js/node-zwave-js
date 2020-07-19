@@ -56,6 +56,7 @@ export interface SendThreadStateSchema {
 							states: {
 								idle: {};
 								responding: {};
+								abortResponding: {};
 							};
 						};
 					};
@@ -74,6 +75,7 @@ export interface SendThreadContext {
 	queue: SortedList<Transaction>;
 	currentTransaction?: Transaction;
 	preTransmitHandshakeTransaction?: Transaction;
+	handshakeResponseTransaction?: Transaction;
 	sendDataAttempts: number;
 	sendDataErrorData?: SerialAPICommandDoneData & {
 		type: "failure";
@@ -124,6 +126,20 @@ const resolveCurrentTransactionWithMessage = assign(
 	},
 );
 
+const resolveHandshakeResponseTransaction = assign(
+	(
+		ctx: SendThreadContext,
+		evt: EventObject & {
+			data: SerialAPICommandDoneData & {
+				type: "success";
+			};
+		},
+	) => {
+		ctx.handshakeResponseTransaction!.promise.resolve(evt.data.result);
+		return ctx;
+	},
+);
+
 const rejectCurrentTransaction = assign(
 	(
 		ctx: SendThreadContext,
@@ -145,6 +161,27 @@ const rejectCurrentTransaction = assign(
 	},
 );
 
+const rejectHandshakeResponseTransaction = assign(
+	(
+		ctx: SendThreadContext,
+		evt: EventObject & {
+			data: SerialAPICommandDoneData & {
+				type: "failure";
+			};
+		},
+	) => {
+		const data = evt.data ?? ctx.sendDataErrorData;
+		ctx.handshakeResponseTransaction!.promise.reject(
+			serialAPICommandErrorToZWaveError(
+				data.reason,
+				ctx.currentTransaction!.message,
+				data.result,
+			),
+		);
+		return ctx;
+	},
+);
+
 const setCurrentTransaction = assign((ctx: SendThreadContext) => ({
 	...ctx,
 	currentTransaction: ctx.queue.shift()!,
@@ -153,6 +190,16 @@ const setCurrentTransaction = assign((ctx: SendThreadContext) => ({
 const deleteCurrentTransaction = assign((ctx: SendThreadContext) => ({
 	...ctx,
 	currentTransaction: undefined,
+}));
+
+const setHandshakeResponseTransaction = assign((ctx: SendThreadContext) => ({
+	...ctx,
+	handshakeResponseTransaction: ctx.queue.shift()!,
+}));
+
+const deleteHandshakeResponseTransaction = assign((ctx: SendThreadContext) => ({
+	...ctx,
+	handshakeResponseTransaction: undefined,
 }));
 
 const executePreTransmitHandshake = (ctx: SendThreadContext) => {
@@ -423,10 +470,10 @@ export function createSendThreadMachine(
 							],
 						},
 						retryWait: {
-							// invoke: {
-							// 	id: "notify",
-							// 	src: "notifyRetry",
-							// },
+							invoke: {
+								id: "notify",
+								src: "notifyRetry",
+							},
 							after: {
 								500: "init",
 							},
@@ -456,8 +503,69 @@ export function createSendThreadMachine(
 									initial: "idle",
 									states: {
 										// As long as we're not replying, the handshake server is done
-										idle: { type: "final" },
-										responding: {},
+										idle: {
+											onEntry: deleteHandshakeResponseTransaction,
+											type: "final",
+											always: [
+												{
+													cond:
+														"queueContainsResponseToHandshakeRequest",
+													target: "responding",
+												},
+											],
+											on: {
+												trigger: [
+													{
+														cond:
+															"queueContainsResponseToHandshakeRequest",
+														target: "responding",
+													},
+												],
+											},
+										},
+										responding: {
+											onEntry: setHandshakeResponseTransaction,
+											invoke: {
+												id: "executeHandshakeResponse",
+												src: "executeHandshakeResponse",
+												autoForward: true,
+												onDone: [
+													// On success, don't do anything else
+													{
+														cond:
+															"executeSuccessful",
+														actions: resolveHandshakeResponseTransaction,
+														target: "idle",
+													},
+													// On failure, abort timed out send attempts and do nothing else
+													{
+														cond:
+															"isSendDataWithCallbackTimeout",
+														target:
+															"abortResponding",
+														actions: assign({
+															sendDataErrorData: (
+																_,
+																evt,
+															) => evt.data,
+														}),
+													},
+													// Reject it otherwise with a matching error
+													{
+														actions: rejectHandshakeResponseTransaction,
+														target: "idle",
+													},
+												],
+											},
+										},
+										abortResponding: {
+											invoke: {
+												id: "executeSendDataAbort",
+												src: "executeSendDataAbort",
+												autoForward: true,
+												onDone: "idle",
+											},
+										},
 									},
 								},
 							},
@@ -483,11 +591,26 @@ export function createSendThreadMachine(
 						ctx.preTransmitHandshakeTransaction!.message,
 						implementations,
 					),
+				executeHandshakeResponse: (ctx) =>
+					createSerialAPICommandMachine(
+						ctx.handshakeResponseTransaction!.message,
+						implementations,
+					),
 				executeSendDataAbort: (_) =>
 					createSerialAPICommandMachine(
 						implementations.createSendDataAbort(),
 						implementations,
 					),
+				notifyRetry: (ctx) => {
+					implementations.notifyRetry?.(
+						"SendData",
+						ctx.sendDataAttempts,
+						(ctx.currentTransaction!.message as SendDataRequest)
+							.maxSendAttempts,
+						500,
+					);
+					return Promise.resolve();
+				},
 			},
 			guards: {
 				queueNotEmpty: (ctx) => ctx.queue.length > 0,
@@ -549,6 +672,10 @@ export function createSendThreadMachine(
 						((evt as any).message as ApplicationCommandRequest)
 							.command,
 					),
+				queueContainsResponseToHandshakeRequest: (ctx) => {
+					const next = ctx.queue.peekStart();
+					return next?.priority === MessagePriority.Handshake;
+				},
 				isSendDataWithCallbackTimeout: (ctx, evt: any) => {
 					const msg = ctx.currentTransaction?.message;
 					return (
