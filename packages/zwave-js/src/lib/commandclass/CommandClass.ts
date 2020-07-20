@@ -760,7 +760,8 @@ export class CommandClass {
 		}
 
 		if (expected == undefined) {
-			throw new Error("this should not happen!");
+			// Fallback, should not happen if the expected response is defined correctly
+			return false;
 		} else if (staticExtends(expected, CommandClass)) {
 			// The CC always expects the same response, check if this is the one
 			if (!(received instanceof expected)) return false;

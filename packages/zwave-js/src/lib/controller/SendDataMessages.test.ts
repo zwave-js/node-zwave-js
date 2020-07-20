@@ -1,6 +1,7 @@
 import { BasicCCGet } from "../commandclass/BasicCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import type { Driver } from "../driver/Driver";
+import { MAX_SEND_ATTEMPTS } from "../driver/Transaction";
 import { FunctionType, MessageType } from "../message/Constants";
 import {
 	getExpectedCallback,
@@ -37,6 +38,30 @@ describe("lib/controller/SendDataRequest => ", () => {
 		const cb = getExpectedCallback(req);
 		expect(resp).toBe(FunctionType.SendData);
 		expect(cb).toBe(FunctionType.SendData);
+	});
+
+	describe("the number of send attempts", () => {
+		let test: SendDataRequest;
+
+		beforeAll(() => {
+			test = new SendDataRequest(fakeDriver, {
+				command: new NoOperationCC(fakeDriver, { nodeId: 1 }),
+			});
+		});
+
+		it("should default to the maximum", () => {
+			expect(test.maxSendAttempts).toBe(MAX_SEND_ATTEMPTS);
+		});
+
+		it("should not exceed the defined maximum", () => {
+			test.maxSendAttempts = MAX_SEND_ATTEMPTS + 1;
+			expect(test.maxSendAttempts).toBe(MAX_SEND_ATTEMPTS);
+		});
+
+		it("may not be less than 1", () => {
+			test.maxSendAttempts = -1;
+			expect(test.maxSendAttempts).toBe(1);
+		});
 	});
 
 	// We cannot parse these kinds of messages atm.

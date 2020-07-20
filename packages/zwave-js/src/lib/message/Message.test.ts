@@ -320,70 +320,70 @@ describe("lib/message", () => {
 			expect(Message.getConstructor(unknown)).toBe(Message);
 		});
 
-		it(`when the expectedResponse is defined, testResponse() should return "final" or "unexpected"`, () => {
-			const msg = new Message(fakeDriver, {
-				type: MessageType.Request,
-				functionType: 0xff,
-				expectedResponse: FunctionType.ApplicationCommand,
-			});
-			const final = new Message(fakeDriver, {
-				type: MessageType.Response,
-				functionType: FunctionType.ApplicationCommand,
-			});
-			expect(msg.testResponse(final)).toBe("final");
+		// it(`when the expectedResponse is defined, testResponse() should return "final" or "unexpected"`, () => {
+		// 	const msg = new Message(fakeDriver, {
+		// 		type: MessageType.Request,
+		// 		functionType: 0xff,
+		// 		expectedResponse: FunctionType.ApplicationCommand,
+		// 	});
+		// 	const final = new Message(fakeDriver, {
+		// 		type: MessageType.Response,
+		// 		functionType: FunctionType.ApplicationCommand,
+		// 	});
+		// 	expect(msg.testResponse(final)).toBe("final");
 
-			// wrong function type
-			const unexpected1 = new Message(fakeDriver, {
-				type: MessageType.Response,
-				functionType: FunctionType.SendData,
-			});
-			expect(msg.testResponse(unexpected1)).toBe("unexpected");
+		// 	// wrong function type
+		// 	const unexpected1 = new Message(fakeDriver, {
+		// 		type: MessageType.Response,
+		// 		functionType: FunctionType.SendData,
+		// 	});
+		// 	expect(msg.testResponse(unexpected1)).toBe("unexpected");
 
-			// not a response
-			const unexpected2 = new Message(fakeDriver, {
-				type: MessageType.Request,
-				functionType: 0xff,
-			});
-			expect(msg.testResponse(unexpected2)).toBe("unexpected");
-		});
+		// 	// not a response
+		// 	const unexpected2 = new Message(fakeDriver, {
+		// 		type: MessageType.Request,
+		// 		functionType: 0xff,
+		// 	});
+		// 	expect(msg.testResponse(unexpected2)).toBe("unexpected");
+		// });
 
-		it(`when the message has a callbackId, testResponse() should return "unexpected" for requests that don't match it`, () => {
-			const msg = new Message(fakeDriver, {
-				type: MessageType.Request,
-				functionType: 0xff,
-				expectedCallback: FunctionType.GetSUCNodeId,
-				callbackId: 5,
-			});
-			const final = new Message(fakeDriver, {
-				type: MessageType.Request,
-				functionType: FunctionType.GetSUCNodeId,
-				callbackId: 5,
-			});
-			expect(msg.testResponse(final)).toBe("final");
+		// it(`when the message has a callbackId, testResponse() should return "unexpected" for requests that don't match it`, () => {
+		// 	const msg = new Message(fakeDriver, {
+		// 		type: MessageType.Request,
+		// 		functionType: 0xff,
+		// 		expectedCallback: FunctionType.GetSUCNodeId,
+		// 		callbackId: 5,
+		// 	});
+		// 	const final = new Message(fakeDriver, {
+		// 		type: MessageType.Request,
+		// 		functionType: FunctionType.GetSUCNodeId,
+		// 		callbackId: 5,
+		// 	});
+		// 	expect(msg.testResponse(final)).toBe("final");
 
-			// wrong callback id
-			const unexpected1 = new Message(fakeDriver, {
-				type: MessageType.Request,
-				functionType: FunctionType.GetSUCNodeId,
-				callbackId: 4,
-			});
-			expect(msg.testResponse(unexpected1)).toBe("unexpected");
+		// 	// wrong callback id
+		// 	const unexpected1 = new Message(fakeDriver, {
+		// 		type: MessageType.Request,
+		// 		functionType: FunctionType.GetSUCNodeId,
+		// 		callbackId: 4,
+		// 	});
+		// 	expect(msg.testResponse(unexpected1)).toBe("unexpected");
 
-			// missing callback id
-			const unexpected2 = new Message(fakeDriver, {
-				type: MessageType.Request,
-				functionType: FunctionType.GetSUCNodeId,
-			});
-			expect(msg.testResponse(unexpected2)).toBe("unexpected");
+		// 	// missing callback id
+		// 	const unexpected2 = new Message(fakeDriver, {
+		// 		type: MessageType.Request,
+		// 		functionType: FunctionType.GetSUCNodeId,
+		// 	});
+		// 	expect(msg.testResponse(unexpected2)).toBe("unexpected");
 
-			// sanity check: the function type should still be checked
-			const unexpected3 = new Message(fakeDriver, {
-				type: MessageType.Request,
-				functionType: FunctionType.RequestNodeInfo, // does not match
-				callbackId: 5, // matches
-			});
-			expect(msg.testResponse(unexpected3)).toBe("unexpected");
-		});
+		// 	// sanity check: the function type should still be checked
+		// 	const unexpected3 = new Message(fakeDriver, {
+		// 		type: MessageType.Request,
+		// 		functionType: FunctionType.RequestNodeInfo, // does not match
+		// 		callbackId: 5, // matches
+		// 	});
+		// 	expect(msg.testResponse(unexpected3)).toBe("unexpected");
+		// });
 
 		it(`the constructor should throw when no message type is specified`, () => {
 			assertZWaveError(
