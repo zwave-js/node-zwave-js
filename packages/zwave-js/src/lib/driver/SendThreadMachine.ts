@@ -394,7 +394,7 @@ export function createSendThreadMachine(
 								waitForHandshakeResponse: {
 									on: {
 										handshakeResponse: {
-											actions: resolveCurrentTransactionWithMessage,
+											actions: resolveCurrentTransactionWithMessage as any,
 											target: "#execute",
 										},
 									},
@@ -488,7 +488,7 @@ export function createSendThreadMachine(
 											// When the expected update is received, resolve the transaction and stop waiting
 											on: {
 												nodeUpdate: {
-													actions: resolveCurrentTransactionWithMessage,
+													actions: resolveCurrentTransactionWithMessage as any,
 													target: "done",
 												},
 											},
@@ -619,7 +619,8 @@ export function createSendThreadMachine(
 					evt.data.type === "success" &&
 					ctx.currentTransaction?.message instanceof
 						SendDataRequest &&
-					ctx.currentTransaction.message.expectsNodeUpdate(),
+					(ctx.currentTransaction
+						.message as SendDataRequest).command.expectsCCResponse(),
 				isSendData: (ctx) => {
 					const msg = ctx.currentTransaction?.message;
 					return (
@@ -636,7 +637,7 @@ export function createSendThreadMachine(
 						"sending.waitForUpdate.waitThread.waiting",
 					) &&
 					(ctx.currentTransaction!
-						.message as SendDataRequest).isExpectedNodeUpdate(
+						.message as SendDataRequest).command.isExpectedCCResponse(
 						((evt as any).message as ApplicationCommandRequest)
 							.command,
 					),
@@ -668,7 +669,7 @@ export function createSendThreadMachine(
 						"sending.handshake.waitForHandshakeResponse",
 					) &&
 					(ctx.preTransmitHandshakeTransaction!
-						.message as SendDataRequest).isExpectedNodeUpdate(
+						.message as SendDataRequest).command.isExpectedCCResponse(
 						((evt as any).message as ApplicationCommandRequest)
 							.command,
 					),

@@ -1,27 +1,12 @@
 import { MAX_NODES, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import {
-	getEnumMemberName,
-	JSONObject,
-	num2hex,
-	staticExtends,
-} from "@zwave-js/shared";
+import { getEnumMemberName, JSONObject, num2hex } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
-import {
-	CCResponseRole,
+import type {
 	CommandClass,
-	getExpectedCCResponse,
-	isDynamicCCResponse,
 	MulticastCC,
 	SinglecastCC,
 } from "../commandclass/CommandClass";
-import {
-	EncapsulatingCommandClass,
-	isEncapsulatingCommandClass,
-} from "../commandclass/EncapsulatingCommandClass";
-import {
-	ICommandClassContainer,
-	isCommandClassContainer,
-} from "../commandclass/ICommandClassContainer";
+import type { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
 import type { Driver } from "../driver/Driver";
 import { MAX_SEND_ATTEMPTS } from "../driver/Transaction";
 import type { MessageOrCCLogEntry } from "../log/shared";
@@ -40,10 +25,8 @@ import {
 	MessageOptions,
 	messageTypes,
 	priority,
-	ResponseRole,
 } from "../message/Message";
 import type { SuccessIndicator } from "../message/SuccessIndicator";
-import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
 
 export enum TransmitOptions {
 	NotSet = 0,
@@ -159,35 +142,6 @@ callbackId:      ${this.callbackId}`,
 		);
 	}
 
-	/** @inheritDoc */
-	public testResponse(msg: Message): ResponseRole {
-		const ret = super.testResponse(msg);
-		// We handle a special case here: A node's response to a SendDataRequest comes in an
-		// ApplicationCommandRequest which does not have a callback id, so it is classified as
-		// "unexpected". Test those again with the predicate for SendDataRequests
-		if (
-			ret === "unexpected" &&
-			msg instanceof ApplicationCommandRequest &&
-			// Ensure the nodeId matches (GH #623)
-			msg.command.nodeId === this.command.nodeId
-		) {
-			return testResponseForSendDataRequest(this, msg);
-		}
-		return ret;
-	}
-
-	/** Tests whether one or more updates from the node are expected for this message */
-	public expectsNodeUpdate(): boolean {
-		// TODO: really dumb test, enhance this later
-		return !!getExpectedCCResponse(this.command);
-	}
-
-	public isExpectedNodeUpdate(command: CommandClass): boolean {
-		// TODO: really dumb test, enhance this later
-		const expected = getExpectedCCResponse(this.command);
-		return !!expected && command instanceof expected;
-	}
-
 	/** Computes the maximum payload size that can be transmitted with this message */
 	public getMaxPayloadLength(): number {
 		// From INS13954-7, chapter 4.3.3.1.5
@@ -195,98 +149,6 @@ callbackId:      ${this.callbackId}`,
 		if (this.transmitOptions & TransmitOptions.AutoRoute) return 48;
 		return 54;
 	}
-}
-
-// Generic handler for all potential responses to SendDataRequests
-function testResponseForSendDataRequest(
-	sent: SendDataRequest,
-	received: Message,
-): ResponseRole {
-	// callbackId = 0 means we expect no callback
-	if (sent.callbackId === 0) {
-		if (received instanceof SendDataResponse) {
-			return received.wasSent ? "final" : "fatal_controller";
-		} else {
-			return "unexpected";
-		}
-	}
-
-	// For all other callback IDs, check the response data
-	let msgIsPositiveTransmitReport = false;
-	if (received instanceof SendDataResponse) {
-		return received.wasSent
-			? sent.callbackId === 0
-				? "final"
-				: "confirmation"
-			: "fatal_controller";
-	} else if (received instanceof SendDataRequestTransmitReport) {
-		// send data requests are final unless stated otherwise by a CommandClass
-		if (received.isFailed()) return "fatal_node";
-		msgIsPositiveTransmitReport = true;
-	} else if (!(received instanceof ApplicationCommandRequest)) {
-		return "unexpected";
-	}
-
-	const sentCommand = sent.command;
-	const receivedCommand = isCommandClassContainer(received)
-		? received.command
-		: undefined;
-
-	// Check the sent command if it expects this response
-	const ret = testResponseForCC(
-		sentCommand,
-		receivedCommand,
-		msgIsPositiveTransmitReport,
-	);
-	return ret;
-}
-
-export function testResponseForCC(
-	sent: CommandClass,
-	received: CommandClass | undefined,
-	isTransmitReport: boolean,
-): Exclude<CCResponseRole, "checkEncapsulated"> {
-	let ret: CCResponseRole | undefined;
-	const isEncapCC = isEncapsulatingCommandClass(sent);
-
-	let expected = getExpectedCCResponse(sent);
-	// Evaluate dynamic CC responses
-	if (
-		typeof expected === "function" &&
-		!staticExtends(expected, CommandClass) &&
-		isDynamicCCResponse(expected)
-	) {
-		expected = expected(sent);
-	}
-
-	if (expected == undefined) {
-		// The CC expects no CC response, a transmit report is the final message
-		ret = isTransmitReport ? "final" : "unexpected";
-	} else if (staticExtends(expected, CommandClass)) {
-		// The CC always expects the same response, check if this is the one
-		if (received && received instanceof expected) {
-			ret = isEncapCC ? "checkEncapsulated" : "final";
-		} else if (isTransmitReport) {
-			ret = isEncapCC ? "checkEncapsulated" : "confirmation";
-		} else {
-			ret = "unexpected";
-		}
-	} else {
-		// The CC wants to test the response itself, let it do so
-		ret = expected(sent, received, isTransmitReport);
-	}
-
-	if (ret === "checkEncapsulated") {
-		ret = testResponseForCC(
-			((sent as unknown) as EncapsulatingCommandClass).encapsulated,
-			isEncapsulatingCommandClass(received)
-				? received.encapsulated
-				: undefined,
-			isTransmitReport,
-		);
-	}
-
-	return ret;
 }
 
 interface SendDataRequestTransmitReportOptions extends MessageBaseOptions {
