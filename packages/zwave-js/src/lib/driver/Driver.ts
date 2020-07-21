@@ -742,7 +742,6 @@ export class Driver extends EventEmitter {
 
 		// Make sure to handle the pending messages as quickly as possible
 		this.sortSendQueue();
-		setImmediate(() => this.workOffSendQueue());
 	}
 
 	/** Is called when a node goes to sleep */
@@ -750,10 +749,8 @@ export class Driver extends EventEmitter {
 		log.controller.logNode(node.id, "The node is now asleep.");
 
 		// Move all its pending messages to the WakeupQueue
-		// This clears the current transaction
+		// This clears the current transaction and continues sending the next messages
 		this.moveMessagesToWakeupQueue(node.id);
-		// And continue with the next messages
-		setImmediate(() => this.workOffSendQueue());
 	}
 
 	/** Is called when a previously dead node starts communicating again */
@@ -1165,77 +1162,40 @@ export class Driver extends EventEmitter {
 		throw e;
 	}
 
-	// TODO: Log this stuff
-	// 	/**
-	// 	 * Handles the case that a node failed to respond in time
-	// 	 */
-	// 	private handleMissingNodeResponse(transmitStatus?: TransmitStatus): void {
-	// 		// Clear the transaction stack of possible handshakes - they are now invalid
-	// 		this.rejectHandshakes(
-	// 			new ZWaveError(
-	// 				`The transaction timed out`,
-	// 				ZWaveErrorCodes.Controller_NodeTimeout,
-	// 			),
-	// 		);
+	/**
+	 * Handles the case that a node failed to respond in time
+	 */
+	private handleNodeTimeout(
+		transaction: Transaction & {
+			message: SendDataRequest;
+		},
+	): void {
+		const node = transaction.message.getNodeUnsafe();
+		if (!node) return; // This should never happen, but whatever
 
-	// 		if (!this.currentTransaction) return;
-	// 		const node = this.currentTransaction.message.getNodeUnsafe();
-	// 		if (!node) return; // This should never happen, but whatever
+		if (!transaction.changeNodeStatusOnTimeout) {
+			// The sender of this transaction doesn't want it to change the status of the node
+			return;
+		} else if (node.supportsCC(CommandClasses["Wake Up"])) {
+			log.controller.logNode(
+				node.id,
+				`The node did not respond after ${transaction.message.maxSendAttempts} attempts.
+It is probably asleep, moving its messages to the wakeup queue.`,
+				"warn",
+			);
+			// Mark the node as asleep
+			// The handler for the asleep status will move the messages to the wakeup queue
+			WakeUpCC.setAwake(node, false);
+		} else {
+			const errorMsg = `Node ${node.id} did not respond  after ${transaction.message.maxSendAttempts} attempts, it is presumed dead`;
+			log.controller.logNode(node.id, errorMsg, "warn");
 
-	// 		if (this.mayRetryCurrentTransaction()) {
-	// 			// The Z-Wave specs define 500ms as the waiting period for SendData messages
-	// 			const timeout = this.retryCurrentTransaction(500);
-	// 			log.controller.logNode(
-	// 				node.id,
-	// 				`The node did not respond to the current transaction, scheduling attempt (${this.currentTransaction.sendAttempts}/${this.currentTransaction.maxSendAttempts}) in ${timeout} ms...`,
-	// 				"warn",
-	// 			);
-	// 		} else if (this.currentTransaction.nodeAckPending === false) {
-	// 			// ^ explicitly check for false because undefined means no response necessary
-
-	// 			// False means that the node has already confirmed the receipt, but did not respond to our get-type request
-	// 			// This does not mean that the node is asleep or dead!
-	// 			this.rejectCurrentTransaction(
-	// 				new ZWaveError(
-	// 					`The transaction timed out`,
-	// 					ZWaveErrorCodes.Controller_NodeTimeout,
-	// 				),
-	// 			);
-	// 		} else if (!this.currentTransaction.changeNodeStatusOnTimeout) {
-	// 			// The sender of this transaction doesn't want it to change the status of the node
-	// 			// simply reject it
-	// 			this.rejectCurrentTransaction(
-	// 				new ZWaveError(
-	// 					`The transaction timed out`,
-	// 					ZWaveErrorCodes.Controller_NodeTimeout,
-	// 				),
-	// 			);
-	// 		} else if (node.supportsCC(CommandClasses["Wake Up"])) {
-	// 			log.controller.logNode(
-	// 				node.id,
-	// 				`The node did not respond to the current transaction after ${this.currentTransaction.maxSendAttempts} attempts.
-	// It is probably asleep, moving its messages to the wakeup queue.`,
-	// 				"warn",
-	// 			);
-	// 			// The node is asleep
-	// 			WakeUpCC.setAwake(node, false);
-	// 			// The handler for the asleep status will move the messages to the wakeup queue
-	// 		} else {
-	// 			let errorMsg = `Node ${node.id} did not respond to the current transaction after ${this.currentTransaction.maxSendAttempts} attempts, it is presumed dead`;
-	// 			if (transmitStatus != undefined) {
-	// 				errorMsg += ` (Status ${getEnumMemberName(
-	// 					TransmitStatus,
-	// 					transmitStatus,
-	// 				)})`;
-	// 			}
-	// 			log.controller.logNode(node.id, `${errorMsg}`, "warn");
-
-	// 			node.status = NodeStatus.Dead;
-	// 			this.rejectAllTransactionsForNode(node.id, errorMsg);
-	// 			// And continue with the next messages
-	// 			setImmediate(() => this.workOffSendQueue());
-	// 		}
-	// 	}
+			node.status = NodeStatus.Dead;
+			this.rejectAllTransactionsForNode(node.id, errorMsg);
+			// And continue with the next messages
+			setImmediate(() => this.workOffSendQueue());
+		}
+	}
 
 	private partialCCSessions = new Map<string, CommandClass[]>();
 	/**
@@ -1705,7 +1665,20 @@ ${handlers.length} left`,
 		// start sending now (maybe)
 		this.sendThread.send({ type: "add", transaction });
 
-		return promise;
+		try {
+			return await promise;
+		} catch (e) {
+			// If the node does not respond, it is either asleep or dead
+			if (
+				e instanceof ZWaveError &&
+				e.code === ZWaveErrorCodes.Controller_NodeTimeout &&
+				transaction instanceof SendDataRequest
+			) {
+				// TODO: Handle callback NOK
+				this.handleNodeTimeout(transaction);
+			}
+			throw e;
+		}
 	}
 	// wotan-enable no-misused-generics
 
@@ -1975,10 +1948,7 @@ ${handlers.length} left`,
 
 	/** Re-sorts the send queue */
 	private sortSendQueue(): void {
-		const items = [...this.sendQueue];
-		this.sendQueue.clear();
-		// Since the send queue is a sorted list, sorting is done on insert/add
-		this.sendQueue.add(...items);
+		this.sendThread.send("sortQueue");
 	}
 
 	private lastSaveToCache: number = 0;
