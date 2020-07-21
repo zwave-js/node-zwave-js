@@ -23,6 +23,7 @@ jest.mock("@zwave-js/core");
 const defaultImplementations = {
 	sendData: createSendDataResolvesNever(),
 	createSendDataAbort: () => undefined as any,
+	notifyUnsolicited: () => {},
 };
 
 describe("lib/driver/SerialAPICommandMachine", () => {

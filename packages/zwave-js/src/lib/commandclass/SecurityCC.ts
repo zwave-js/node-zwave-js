@@ -398,7 +398,11 @@ interface SecurityCCCommandEncapsulationOptions extends CCCommandOptions {
 }
 
 @CCCommand(SecurityCommand.CommandEncapsulation)
-@expectedCCResponse(SecurityCCCommandEncapsulation, () => "checkEncapsulated")
+@expectedCCResponse(
+	// In order to expect itself in return, we need to use a dynamic CC response
+	() => SecurityCCCommandEncapsulation,
+	() => "checkEncapsulated",
+)
 export class SecurityCCCommandEncapsulation extends SecurityCC {
 	public constructor(
 		driver: Driver,

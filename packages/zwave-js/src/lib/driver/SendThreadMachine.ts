@@ -8,6 +8,7 @@ import {
 } from "xstate";
 import { raise, send } from "xstate/lib/actions";
 import type { CommandClass } from "../commandclass/CommandClass";
+import { messageIsPing } from "../commandclass/NoOperationCC";
 import type { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import {
 	SendDataMulticastRequest,
@@ -22,8 +23,7 @@ import {
 } from "./SerialAPICommandMachine";
 import {
 	isSerialCommandError,
-	respondUnexpected,
-	serialAPICommandErrorToZWaveError,
+	serialAPIOrSendDataErrorToZWaveError,
 	ServiceImplementations,
 } from "./StateMachineShared";
 import type { Transaction } from "./Transaction";
@@ -71,15 +71,23 @@ export interface SendThreadStateSchema {
 }
 /* eslint-enable @typescript-eslint/ban-types */
 
+export type SendDataErrorData =
+	| (SerialAPICommandDoneData & {
+			type: "failure";
+	  })
+	| {
+			type: "failure";
+			reason: "node timeout";
+			result?: undefined;
+	  };
+
 export interface SendThreadContext {
 	queue: SortedList<Transaction>;
 	currentTransaction?: Transaction;
 	preTransmitHandshakeTransaction?: Transaction;
 	handshakeResponseTransaction?: Transaction;
 	sendDataAttempts: number;
-	sendDataErrorData?: SerialAPICommandDoneData & {
-		type: "failure";
-	};
+	sendDataErrorData?: SendDataErrorData;
 }
 
 export type SendThreadEvent =
@@ -90,6 +98,7 @@ export type SendThreadEvent =
 			message: ApplicationCommandRequest;
 	  }
 	| { type: "unsolicited"; message: Message }
+	| { type: "sortQueue" }
 	| SerialAPICommandEvent;
 
 export type SendThreadMachine = StateMachine<
@@ -144,14 +153,12 @@ const rejectCurrentTransaction = assign(
 	(
 		ctx: SendThreadContext,
 		evt: EventObject & {
-			data: SerialAPICommandDoneData & {
-				type: "failure";
-			};
+			data: SendDataErrorData;
 		},
 	) => {
 		const data = evt.data ?? ctx.sendDataErrorData;
 		ctx.currentTransaction!.promise.reject(
-			serialAPICommandErrorToZWaveError(
+			serialAPIOrSendDataErrorToZWaveError(
 				data.reason,
 				ctx.currentTransaction!.message,
 				data.result,
@@ -172,7 +179,7 @@ const rejectHandshakeResponseTransaction = assign(
 	) => {
 		const data = evt.data ?? ctx.sendDataErrorData;
 		ctx.handshakeResponseTransaction!.promise.reject(
-			serialAPICommandErrorToZWaveError(
+			serialAPIOrSendDataErrorToZWaveError(
 				data.reason,
 				ctx.currentTransaction!.message,
 				data.result,
@@ -235,6 +242,24 @@ const forwardHandshakeResponse = send(
 	}),
 );
 
+const sortQueue = assign({
+	queue: (ctx: SendThreadContext) => {
+		const queue = ctx.queue;
+		const items = [...queue];
+		queue.clear();
+		// Since the send queue is a sorted list, sorting is done on insert/add
+		queue.add(...items);
+		return queue;
+	},
+});
+
+const rememberNodeTimeoutError = assign<SendThreadContext>({
+	sendDataErrorData: (_) => ({
+		type: "failure",
+		reason: "node timeout",
+	}),
+});
+
 export function createSendThreadMachine(
 	implementations: ServiceImplementations,
 	initialContext: Partial<SendThreadContext> = {},
@@ -288,7 +313,12 @@ export function createSendThreadMachine(
 						actions: forwardHandshakeResponse,
 					},
 					{
-						actions: respondUnexpected("unsolicited"),
+						actions: (
+							_: any,
+							evt: SerialAPICommandEvent & { type: "message" },
+						) => {
+							implementations.notifyUnsolicited(evt.message);
+						},
 					},
 				],
 				// Do the same if the serial API did not handle a message
@@ -302,15 +332,28 @@ export function createSendThreadMachine(
 						actions: forwardHandshakeResponse,
 					},
 					{
-						actions: respondUnexpected("unsolicited"),
+						actions: (
+							_: any,
+							evt: SerialAPICommandEvent & { type: "message" },
+						) => {
+							implementations.notifyUnsolicited(evt.message);
+						},
 					},
 				],
+				// Accept external commands to sort the queue
+				sortQueue: {
+					actions: [sortQueue, raise("trigger")],
+				},
 			},
 			states: {
 				idle: {
-					always: [{ cond: "queueNotEmpty", target: "sending" }],
+					always: [
+						{ cond: "maySendFirstMessage", target: "sending" },
+					],
 					on: {
-						trigger: "sending",
+						trigger: [
+							{ cond: "maySendFirstMessage", target: "sending" },
+						],
 					},
 				},
 				sending: {
@@ -399,7 +442,10 @@ export function createSendThreadMachine(
 										},
 									},
 									after: {
-										1600: "#retry",
+										1600: {
+											actions: rememberNodeTimeoutError,
+											target: "#retry",
+										},
 									},
 								},
 							},
@@ -493,7 +539,10 @@ export function createSendThreadMachine(
 												},
 											},
 											after: {
-												1600: "#retry",
+												1600: {
+													actions: rememberNodeTimeoutError,
+													target: "#retry",
+												},
 											},
 										},
 										done: { type: "final" },
@@ -613,7 +662,27 @@ export function createSendThreadMachine(
 				},
 			},
 			guards: {
-				queueNotEmpty: (ctx) => ctx.queue.length > 0,
+				maySendFirstMessage: (ctx) => {
+					// We can't send anything if the queue is empty
+					if (ctx.queue.length === 0) return false;
+					const nextTransaction = ctx.queue.peekStart()!;
+
+					const message = nextTransaction.message;
+					const targetNode = message.getNodeUnsafe();
+
+					// The send queue is sorted automatically. If the first message is for a sleeping node, all messages in the queue are.
+					// There are two exceptions:
+					// 1. Pings may be used to determine whether a node is really asleep.
+					// 2. Responses to handshake requests must always be sent, because some sleeping nodes may try to send us encrypted messages.
+					//    If we don't send them, they block the send queue
+
+					return (
+						!targetNode ||
+						targetNode.isAwake() ||
+						messageIsPing(message) ||
+						nextTransaction.priority === MessagePriority.Handshake
+					);
+				},
 				executeSuccessful: (_, evt: any) => evt.data.type === "success",
 				executeSuccessfulExpectsUpdate: (ctx, evt: any) =>
 					evt.data.type === "success" &&

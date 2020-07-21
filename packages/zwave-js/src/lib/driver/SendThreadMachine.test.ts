@@ -1,5 +1,6 @@
 import {
 	assertZWaveError,
+	CommandClasses,
 	SecurityManager,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -8,6 +9,7 @@ import { SortedList } from "alcalzone-shared/sorted-list";
 import { interpret, Interpreter } from "xstate";
 import { SimulatedClock } from "xstate/lib/SimulatedClock";
 import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
+import { NoOperationCC } from "../commandclass/NoOperationCC";
 import {
 	SecurityCCCommandEncapsulation,
 	SecurityCCNonceGet,
@@ -21,6 +23,7 @@ import {
 } from "../controller/SendDataMessages";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
+import { ZWaveNode } from "../node/Node";
 import { createEmptyMockDriver } from "../test/mocks";
 import type { Driver } from "./Driver";
 import {
@@ -33,6 +36,7 @@ import {
 	createSendDataResolvesImmediately,
 	createSendDataResolvesNever,
 	dummyMessageNoResponseNoCallback,
+	dummyMessageWithResponseNoCallback,
 } from "./testUtils";
 import { Transaction } from "./Transaction";
 
@@ -41,22 +45,27 @@ const mockSerialAPIMachine = jest.requireMock("./SerialAPICommandMachine")
 	.createSerialAPICommandMachine as jest.Mock;
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
-const sm = new SecurityManager({ networkKey: Buffer.alloc(16, 1) });
-fakeDriver.securityManager = sm;
+const sm = new SecurityManager({
+	ownNodeId: 1,
+	nonceTimeout: 500,
+	networkKey: Buffer.alloc(16, 1),
+});
+(fakeDriver as any).securityManager = sm;
 
-// // We need to add a fake node 2 in order to test handshakes
-// const node2 = new ZWaveNode(2, fakeDriver);
-// node2.addCC(CommandClasses.Security, {
-// 	isSupported: true,
-// 	secure: true,
-// 	version: 1,
-// });
-// (fakeDriver.controller.nodes as any).set(node2.id, node2);
-
-// // We need control over what the driver sends
-// (fakeDriver.sendCommand as jest.Mock).mockReset().mockImplementation(() => {
-// 	return new Promise(() => {});
-// });
+// We need to add a fake node 3 in order to test whether the queue should stay idle
+const node3 = new ZWaveNode(3, fakeDriver);
+node3.addCC(CommandClasses["Wake Up"], {
+	isSupported: true,
+	version: 1,
+});
+(fakeDriver.controller.nodes as any).set(node3.id, node3);
+// And one more to test the send queue sorting (two different sleeping nodes)
+const node4 = new ZWaveNode(4, fakeDriver);
+node4.addCC(CommandClasses["Wake Up"], {
+	isSupported: true,
+	version: 1,
+});
+(fakeDriver.controller.nodes as any).set(node4.id, node4);
 
 const sendDataBasicSet = new SendDataRequest(fakeDriver, {
 	command: new BasicCCSet(fakeDriver, {
@@ -104,6 +113,7 @@ const sendDataNonceResponse = new SendDataRequest(fakeDriver, {
 const defaultImplementations = {
 	sendData: createSendDataResolvesNever(),
 	createSendDataAbort: () => new SendDataAbort(fakeDriver),
+	notifyUnsolicited: () => {},
 };
 
 describe("lib/driver/SendThreadMachine", () => {
@@ -157,6 +167,49 @@ describe("lib/driver/SendThreadMachine", () => {
 			});
 			expect(service.state.value).toEqual({ sending: "execute" });
 			expect(mockSerialAPIMachine).toBeCalledTimes(1);
+		});
+
+		it("...but only if the node is awake", () => {
+			const testMachine = createSendThreadMachine(defaultImplementations);
+			service = interpret(testMachine).start();
+
+			const sendDataBasicGet3 = new SendDataRequest(fakeDriver, {
+				command: new BasicCCGet(fakeDriver, { nodeId: 3 }),
+			});
+			const transaction = createTransaction(sendDataBasicGet3);
+			node3.setAwake(false);
+
+			service.send({ type: "add", transaction });
+			expect(service.state.value).toEqual("idle");
+		});
+
+		it("...or if the message is a ping", () => {
+			const testMachine = createSendThreadMachine(defaultImplementations);
+			service = interpret(testMachine).start();
+
+			const sendDataPing = new SendDataRequest(fakeDriver, {
+				command: new NoOperationCC(fakeDriver, { nodeId: 3 }),
+			});
+			const transaction = createTransaction(sendDataPing);
+			node3.setAwake(false); // still asleep, but we may send this
+
+			service.send({ type: "add", transaction });
+			expect(service.state.value).toEqual({ sending: "execute" });
+		});
+
+		it("...or if the message is a response to a handshake request from a node", () => {
+			const testMachine = createSendThreadMachine(defaultImplementations);
+			service = interpret(testMachine).start();
+
+			const sendDataBasicGet3 = new SendDataRequest(fakeDriver, {
+				command: new BasicCCGet(fakeDriver, { nodeId: 3 }),
+			});
+			const transaction = createTransaction(sendDataBasicGet3);
+			transaction.priority = MessagePriority.Handshake;
+			node3.setAwake(false); // still asleep, but we may send this
+
+			service.send({ type: "add", transaction });
+			expect(service.state.value).toEqual({ sending: "execute" });
 		});
 
 		it(`if multiple messages are queued, it should only start the serial API machine once`, () => {
@@ -342,6 +395,37 @@ describe("lib/driver/SendThreadMachine", () => {
 
 			expect(mockSerialAPIMachine).toBeCalledTimes(2);
 			await expect(t2.promise).resolves.toBe(2);
+		});
+
+		it(`if an unexpected message is received while waiting, it should call the notifyUnsolicited service`, (done) => {
+			const transaction = createTransaction(
+				dummyMessageNoResponseNoCallback,
+			);
+			const notifyUnsolicited = jest.fn();
+			const testMachine = createSendThreadMachine(
+				{ ...defaultImplementations, notifyUnsolicited },
+				{
+					queue: new SortedList([transaction]),
+				},
+			);
+
+			testMachine.initial = "sending";
+			service = interpret(testMachine).start();
+
+			let didSend = false;
+			service.onTransition((state) => {
+				if (state.matches("sending.execute") && !didSend) {
+					didSend = true;
+					service!.send({
+						type: "message",
+						message: dummyMessageWithResponseNoCallback,
+					});
+					expect(notifyUnsolicited).toBeCalledWith(
+						dummyMessageWithResponseNoCallback,
+					);
+					done();
+				}
+			});
 		});
 	});
 
@@ -710,6 +794,37 @@ describe("lib/driver/SendThreadMachine", () => {
 			});
 		});
 
+		it(`if an unexpected message is received while waiting, it should call the notifyUnsolicited service`, (done) => {
+			const transaction = createTransaction(sendDataBasicSet);
+			const notifyUnsolicited = jest.fn();
+			const testMachine = createSendThreadMachine(
+				{ ...defaultImplementations, notifyUnsolicited },
+				{
+					queue: new SortedList([transaction]),
+				},
+			);
+
+			testMachine.initial = "sending";
+			testMachine.states.sending.initial = "waitForUpdate";
+			service = interpret(testMachine).start();
+
+			let didSend = false;
+			service.onTransition((state) => {
+				if (
+					state.matches("sending.waitForUpdate.waitThread.waiting") &&
+					!didSend
+				) {
+					didSend = true;
+					service!.send({
+						type: "message",
+						message: sendDataBasicGet,
+					});
+					expect(notifyUnsolicited).toBeCalledWith(sendDataBasicGet);
+					done();
+				}
+			});
+		});
+
 		it("when replying to a handshake fails with a callback timeout, it should abort sending", () => {
 			const transaction = createTransaction(sendDataBasicGet);
 
@@ -825,6 +940,35 @@ describe("lib/driver/SendThreadMachine", () => {
 
 			clock.increment(100);
 			expect(service.state.value).toEqual({ sending: "retryWait" });
+		});
+
+		it("if all attempts have been exhausted, the current transaction should be rejected", (done) => {
+			const transaction = createTransaction(sendDataBasicGet);
+
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+					sendDataAttempts: 3,
+				},
+			);
+
+			testMachine.initial = "sending";
+			testMachine.states.sending.initial = "waitForUpdate";
+
+			const clock = new SimulatedClock();
+			service = interpret(testMachine, { clock }).start();
+
+			assertZWaveError(() => transaction.promise, {
+				errorCode: ZWaveErrorCodes.Controller_NodeTimeout,
+				messageMatches: "Timed out",
+			}).then(() => {
+				expect(service!.state.value).toEqual("idle");
+				done();
+			});
+
+			// Timeout is 1600
+			clock.increment(1700);
 		});
 
 		it("when aborting the handshake response fails, it should go back to idle", (done) => {
@@ -1201,27 +1345,87 @@ describe("lib/driver/SendThreadMachine", () => {
 			});
 		});
 
-		// it("when the handshake transaction is created, ", async () => {
-		// 	const transaction = createTransaction(sendDataBasicSetSecure);
-		// 	const testMachine = createSendThreadMachine(
-		// 		defaultImplementations,
-		// 		{
-		// 			queue: new SortedList([transaction]),
-		// 			sendDataAttempts: 0,
-		// 		},
-		// 	);
+		it("if all attempts have been exhausted, the current transaction should be rejected", (done) => {
+			const transaction = createTransaction(sendDataBasicSetSecure);
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+					sendDataAttempts: 3,
+					preTransmitHandshakeTransaction: new Transaction(
+						fakeDriver,
+						sendDataNonceRequest,
+						createDeferredPromise(),
+						MessagePriority.PreTransmitHandshake,
+					),
+				},
+			);
 
-		// 	testMachine.initial = "sending";
-		// 	service = interpret(testMachine).start();
+			testMachine.initial = "sending";
+			testMachine.states.sending.initial = "handshake";
+			testMachine.states.sending.states.handshake.initial =
+				"waitForHandshakeResponse";
 
-		// 	expect(fakeDriver.sendCommand).toBeCalledTimes(1);
-		// 	expect(
-		// 		(fakeDriver.sendCommand as jest.Mock).mock.calls[0][0],
-		// 	).toBeInstanceOf(SecurityCCNonceGet);
+			const clock = new SimulatedClock();
+			service = interpret(testMachine, { clock }).start();
 
-		// 	expect(service.state.value).toMatchObject({
-		// 		sending: { handshake: "waitForTrigger" },
-		// 	});
-		// });
+			assertZWaveError(() => transaction.promise, {
+				errorCode: ZWaveErrorCodes.Controller_NodeTimeout,
+				messageMatches: "Timed out",
+			}).then(() => {
+				expect(service!.state.value).toEqual("idle");
+				done();
+			});
+
+			// Timeout is 1600
+			clock.increment(1700);
+		});
+	});
+
+	describe("queue events", () => {
+		it(`the "sortQueue" event should cause the send queue to get sorted and trigger sending`, async () => {
+			// This one is tricky. We start with two sleeping nodes, then set node the
+			// latter message is for to be awake and trigger a sorting.
+			// This should cause the latter message to be sent
+
+			const sendDataBasicGet3 = new SendDataRequest(fakeDriver, {
+				command: new BasicCCGet(fakeDriver, { nodeId: 3 }),
+			});
+			const sendDataBasicGet4 = new SendDataRequest(fakeDriver, {
+				command: new BasicCCGet(fakeDriver, { nodeId: 4 }),
+			});
+
+			node3.setAwake(false);
+			node4.setAwake(false);
+
+			const transaction3 = createTransaction(sendDataBasicGet3);
+			const transaction4 = createTransaction(sendDataBasicGet4);
+			transaction3.priority = MessagePriority.WakeUp;
+			transaction4.priority = MessagePriority.WakeUp;
+
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction3, transaction4]),
+					sendDataAttempts: 0,
+				},
+			);
+
+			service = interpret(testMachine).start();
+
+			expect(service.state.context.queue.toArray()).toEqual([
+				transaction3,
+				transaction4,
+			]);
+
+			node4.setAwake(true);
+
+			service.send("sortQueue");
+
+			expect(service.state.value).toEqual({ sending: "execute" });
+			expect(service.state.context.queue.toArray()).toEqual([
+				transaction3,
+			]);
+		});
 	});
 });

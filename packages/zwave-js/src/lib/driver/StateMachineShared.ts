@@ -11,10 +11,8 @@ import {
 	TransmitStatus,
 } from "../controller/SendDataMessages";
 import type { Message } from "../message/Message";
-import type {
-	SerialAPICommandError,
-	SerialAPICommandEvent,
-} from "./SerialAPICommandMachine";
+import type { SendDataErrorData } from "./SendThreadMachine";
+import type { SerialAPICommandEvent } from "./SerialAPICommandMachine";
 
 export interface ServiceImplementations {
 	sendData: (data: Buffer) => Promise<void>;
@@ -25,6 +23,7 @@ export interface ServiceImplementations {
 		maxAttempts: number,
 		delay: number,
 	) => void;
+	notifyUnsolicited: (message: Message) => void;
 }
 
 export function respondUnexpected(type: string): SendAction<any, any, any> {
@@ -36,8 +35,8 @@ export function respondUnexpected(type: string): SendAction<any, any, any> {
 	);
 }
 
-export function serialAPICommandErrorToZWaveError(
-	error: SerialAPICommandError,
+export function serialAPIOrSendDataErrorToZWaveError(
+	error: SendDataErrorData["reason"],
 	sentMessage: Message,
 	receivedMessage: Message | undefined,
 ): ZWaveError {
@@ -111,6 +110,12 @@ export function serialAPICommandErrorToZWaveError(
 					receivedMessage,
 				);
 			}
+		case "node timeout":
+			return new ZWaveError(
+				`Timed out while waiting for a response from the node`,
+				ZWaveErrorCodes.Controller_NodeTimeout,
+				receivedMessage,
+			);
 	}
 }
 
