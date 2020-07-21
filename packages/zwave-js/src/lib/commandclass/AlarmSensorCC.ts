@@ -294,17 +294,13 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 
 const testResponseForAlarmSensorGet: CCResponsePredicate = (
 	sent: AlarmSensorCCGet,
-	received,
-	isPositiveTransmitReport,
+	received: AlarmSensorCCReport,
 ) => {
 	// We expect a Alarm Sensor Report that matches the requested sensor type (if a type was requested)
-	return received instanceof AlarmSensorCCReport &&
-		(sent.sensorType === AlarmSensorType.Any ||
-			received.sensorType === sent.sensorType)
-		? "final"
-		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
+	return (
+		sent.sensorType === AlarmSensorType.Any ||
+		received.sensorType === sent.sensorType
+	);
 };
 
 interface AlarmSensorCCGetOptions extends CCCommandOptions {
@@ -312,7 +308,7 @@ interface AlarmSensorCCGetOptions extends CCCommandOptions {
 }
 
 @CCCommand(AlarmSensorCommand.Get)
-@expectedCCResponse(testResponseForAlarmSensorGet)
+@expectedCCResponse(AlarmSensorCCReport, testResponseForAlarmSensorGet)
 export class AlarmSensorCCGet extends AlarmSensorCC {
 	public constructor(
 		driver: Driver,

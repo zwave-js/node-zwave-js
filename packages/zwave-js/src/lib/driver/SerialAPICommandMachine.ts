@@ -145,7 +145,7 @@ export function createSerialAPICommandMachine(
 				message: [
 					{
 						cond: "isExpectedMessage",
-						actions: forwardMessage,
+						actions: forwardMessage as any,
 					},
 					{
 						actions: respondUnexpected("serialAPIUnexpected"),

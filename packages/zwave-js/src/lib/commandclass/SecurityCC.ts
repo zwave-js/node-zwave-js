@@ -28,7 +28,6 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	CCResponsePredicate,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -393,24 +392,13 @@ export class SecurityCCNonceReport extends SecurityCC {
 @expectedCCResponse(SecurityCCNonceReport)
 export class SecurityCCNonceGet extends SecurityCC {}
 
-const testResponseForCommandEncapsulation: CCResponsePredicate<SecurityCCCommandEncapsulation> = (
-	sent,
-	received,
-	isPositiveTransmitReport,
-) => {
-	return received instanceof SecurityCCCommandEncapsulation ||
-		isPositiveTransmitReport
-		? "checkEncapsulated"
-		: "unexpected";
-};
-
 interface SecurityCCCommandEncapsulationOptions extends CCCommandOptions {
 	encapsulated: CommandClass;
 	alternativeNetworkKey?: Buffer;
 }
 
 @CCCommand(SecurityCommand.CommandEncapsulation)
-@expectedCCResponse(testResponseForCommandEncapsulation)
+@expectedCCResponse(SecurityCCCommandEncapsulation, () => "checkEncapsulated")
 export class SecurityCCCommandEncapsulation extends SecurityCC {
 	public constructor(
 		driver: Driver,

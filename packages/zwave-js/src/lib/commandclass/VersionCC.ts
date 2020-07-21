@@ -428,20 +428,17 @@ interface VersionCCCommandClassGetOptions extends CCCommandOptions {
 
 const testResponseForVersionCommandClassGet: CCResponsePredicate = (
 	sent: VersionCCCommandClassGet,
-	received,
-	isPositiveTransmitReport,
+	received: VersionCCCommandClassReport,
 ) => {
 	// We expect a Version CommandClass Report that matches the requested CC
-	return received instanceof VersionCCCommandClassReport &&
-		sent.requestedCC === received.requestedCC
-		? "final"
-		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
+	return sent.requestedCC === received.requestedCC;
 };
 
 @CCCommand(VersionCommand.CommandClassGet)
-@expectedCCResponse(testResponseForVersionCommandClassGet)
+@expectedCCResponse(
+	VersionCCCommandClassReport,
+	testResponseForVersionCommandClassGet,
+)
 export class VersionCCCommandClassGet extends VersionCC {
 	public constructor(
 		driver: Driver,

@@ -1016,15 +1016,9 @@ export class MultiChannelCCV1Report extends MultiChannelCC {
 
 const testResponseForMultiChannelV1Get: CCResponsePredicate = (
 	sent: MultiChannelCCV1Get,
-	received,
-	isPositiveTransmitReport,
+	received: MultiChannelCCV1Report,
 ) => {
-	return received instanceof MultiChannelCCV1Report &&
-		sent.requestedCC === received.requestedCC
-		? "final"
-		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
+	return sent.requestedCC === received.requestedCC;
 };
 
 interface MultiChannelCCV1GetOptions extends CCCommandOptions {
@@ -1032,7 +1026,7 @@ interface MultiChannelCCV1GetOptions extends CCCommandOptions {
 }
 
 @CCCommand(MultiChannelCommand.GetV1)
-@expectedCCResponse(testResponseForMultiChannelV1Get)
+@expectedCCResponse(MultiChannelCCV1Report, testResponseForMultiChannelV1Get)
 export class MultiChannelCCV1Get extends MultiChannelCC {
 	public constructor(
 		driver: Driver,

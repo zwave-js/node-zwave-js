@@ -279,18 +279,14 @@ export class BinarySensorCCReport extends BinarySensorCC {
 
 const testResponseForBinarySensorGet: CCResponsePredicate = (
 	sent: BinarySensorCCGet,
-	received,
-	isPositiveTransmitReport,
+	received: BinarySensorCCReport,
 ) => {
 	// We expect a Binary Sensor Report that matches the requested sensor type (if a type was requested)
-	return received instanceof BinarySensorCCReport &&
-		(sent.sensorType == undefined ||
-			sent.sensorType === BinarySensorType.Any ||
-			received.type === sent.sensorType)
-		? "final"
-		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
+	return (
+		sent.sensorType == undefined ||
+		sent.sensorType === BinarySensorType.Any ||
+		received.type === sent.sensorType
+	);
 };
 
 interface BinarySensorCCGetOptions extends CCCommandOptions {
@@ -298,7 +294,7 @@ interface BinarySensorCCGetOptions extends CCCommandOptions {
 }
 
 @CCCommand(BinarySensorCommand.Get)
-@expectedCCResponse(testResponseForBinarySensorGet)
+@expectedCCResponse(BinarySensorCCReport, testResponseForBinarySensorGet)
 export class BinarySensorCCGet extends BinarySensorCC {
 	public constructor(
 		driver: Driver,
