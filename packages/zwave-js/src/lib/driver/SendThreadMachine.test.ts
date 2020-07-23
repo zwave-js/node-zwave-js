@@ -620,6 +620,34 @@ describe("lib/driver/SendThreadMachine", () => {
 
 			expect(service.state.value).toEqual("idle");
 		});
+
+		it("should resolve the current transaction if it is a ping and a NIF was received from the target node", async () => {
+			const sendDataPing = new SendDataRequest(fakeDriver, {
+				command: new NoOperationCC(fakeDriver, {
+					nodeId: 2,
+				}),
+			});
+
+			const transaction = createTransaction(sendDataPing);
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+					sendDataAttempts: 0,
+				},
+			);
+
+			testMachine.initial = "sending";
+			service = interpret(testMachine).start();
+			service.onTransition((state) => {
+				if (state.matches("sending.execute")) {
+					service!.send({ type: "NIF", nodeId: 2 });
+				}
+			});
+
+			await expect(transaction.promise).toResolve();
+			expect(service.state.value).toEqual("idle");
+		});
 	});
 
 	describe("retrying a SendData command...", () => {

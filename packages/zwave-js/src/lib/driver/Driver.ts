@@ -862,7 +862,11 @@ export class Driver extends EventEmitter {
 
 	/** Checks if there are any pending messages for the given node */
 	private hasPendingMessages(node: ZWaveNode): boolean {
-		return !!this.sendQueue.find((t) => t.message.getNodeId() === node.id);
+		const { queue, currentTransaction } = this.sendThread.state.context;
+		return (
+			!!queue.find((t) => t.message.getNodeId() === node.id) ||
+			currentTransaction?.message.getNodeId() === node.id
+		);
 	}
 
 	/**
@@ -1464,19 +1468,8 @@ ${handlers.length} left`,
 					});
 					node.updateNodeInfo(msg.nodeInformation);
 
-					// Pings are not retransmitted and won't receive a response if the node wake up after the ping was sent
-					// Therefore resolve pending pings so the communication may proceed immediately
-					if (
-						this.currentTransaction &&
-						messageIsPing(this.currentTransaction.message) &&
-						this.currentTransaction.message.getNodeId() === node.id
-					) {
-						log.controller.logNode(
-							node.id,
-							`Treating the node info as a successful ping...`,
-						);
-						this.resolveCurrentTransaction();
-					}
+					// Tell the send thread that we received a NIF from the node
+					this.sendThread.send({ type: "NIF", nodeId: node.id });
 					return;
 				}
 			}
@@ -2042,6 +2035,7 @@ ${handlers.length} left`,
 	 * Marks a node for a later sleep command. Every call refreshes the period until the node actually goes to sleep
 	 */
 	public debounceSendNodeToSleep(node: ZWaveNode): void {
+		// TODO: This should be a single command to the send thread
 		// Delete old timers if any exist
 		if (this.sendNodeToSleepTimers.has(node.id)) {
 			clearTimeout(this.sendNodeToSleepTimers.get(node.id)!);

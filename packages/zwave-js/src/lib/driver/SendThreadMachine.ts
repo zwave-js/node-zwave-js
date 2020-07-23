@@ -99,6 +99,7 @@ export type SendThreadEvent =
 	  }
 	| { type: "unsolicited"; message: Message }
 	| { type: "sortQueue" }
+	| { type: "NIF"; nodeId: number }
 	| SerialAPICommandEvent;
 
 export type SendThreadMachine = StateMachine<
@@ -131,6 +132,13 @@ const resolveCurrentTransaction = assign(
 const resolveCurrentTransactionWithMessage = assign(
 	(ctx: SendThreadContext, evt: SendThreadEvent & { type: "nodeUpdate" }) => {
 		ctx.currentTransaction!.promise.resolve(evt.message);
+		return ctx;
+	},
+);
+
+const resolveCurrentTransactionWithoutMessage = assign(
+	(ctx: SendThreadContext) => {
+		ctx.currentTransaction!.promise.resolve();
 		return ctx;
 	},
 );
@@ -360,8 +368,22 @@ export function createSendThreadMachine(
 					initial: "init",
 					// Use the first transaction in the queue as the current one
 					onEntry: setCurrentTransaction,
-					// And delete it after we're done
-					onExit: [deleteCurrentTransaction, resetSendDataAttempts],
+					on: {
+						NIF: {
+							// Pings are not retransmitted and won't receive a response if the node wake up after the ping was sent
+							// Therefore resolve pending pings so the communication may proceed immediately
+							cond: "currentTransactionIsPingForNode",
+							actions: [
+								resolveCurrentTransactionWithoutMessage,
+								// TODO:
+								// log.controller.logNode(
+								// 	node.id,
+								// 	`Treating the node info as a successful ping...`,
+								// );
+							],
+							target: ".done",
+						},
+					},
 					states: {
 						init: {
 							always: [
@@ -624,7 +646,14 @@ export function createSendThreadMachine(
 							type: "final",
 						},
 					},
-					onDone: "idle",
+					onDone: {
+						target: "idle",
+						actions: [
+							// Delete the current transaction after we're done
+							deleteCurrentTransaction,
+							resetSendDataAttempts,
+						],
+					},
 				},
 			},
 		},
@@ -775,6 +804,14 @@ export function createSendThreadMachine(
 						return true;
 					}
 					return !(msg.command as CommandClass).requiresPreTransmitHandshake();
+				},
+				currentTransactionIsPingForNode: (ctx, evt) => {
+					const msg = ctx.currentTransaction?.message;
+					return (
+						!!msg &&
+						messageIsPing(msg) &&
+						msg.getNodeId() === (evt as any).nodeId
+					);
 				},
 			},
 			delays: {},
