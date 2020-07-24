@@ -82,25 +82,31 @@ export function serialAPIOrSendDataErrorToZWaveError(
 			}
 		case "callback NOK":
 			if (sentMessage instanceof SendDataRequest) {
+				const status = (receivedMessage as SendDataRequestTransmitReport)
+					.transmitStatus;
 				return new ZWaveError(
 					`Failed to send the command after ${
 						sentMessage.maxSendAttempts
 					} attempts (Status ${getEnumMemberName(
 						TransmitStatus,
-						(receivedMessage as SendDataRequestTransmitReport)
-							.transmitStatus,
+						status,
 					)})`,
-					ZWaveErrorCodes.Controller_MessageDropped,
+					status === TransmitStatus.NoAck
+						? ZWaveErrorCodes.Controller_NodeTimeout
+						: ZWaveErrorCodes.Controller_MessageDropped,
 					receivedMessage,
 				);
 			} else if (sentMessage instanceof SendDataMulticastRequest) {
+				const status = (receivedMessage as SendDataMulticastRequestTransmitReport)
+					.transmitStatus;
 				return new ZWaveError(
 					`One or more nodes did not respond to the multicast request (Status ${getEnumMemberName(
 						TransmitStatus,
-						(receivedMessage as SendDataMulticastRequestTransmitReport)
-							.transmitStatus,
+						status,
 					)})`,
-					ZWaveErrorCodes.Controller_MessageDropped,
+					status === TransmitStatus.NoAck
+						? ZWaveErrorCodes.Controller_NodeTimeout
+						: ZWaveErrorCodes.Controller_MessageDropped,
 					receivedMessage,
 				);
 			} else {

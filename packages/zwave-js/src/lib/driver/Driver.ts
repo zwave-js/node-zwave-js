@@ -1086,6 +1086,7 @@ export class Driver extends EventEmitter {
 		// If the message could be decoded, forward it to the send thread
 		if (msg) {
 			// TODO: Log received messages
+			log.driver.logMessage(msg, { direction: "inbound" });
 
 			if (isCommandClassContainer(msg)) {
 				// SecurityCCCommandEncapsulationNonceGet is two commands in one, but
@@ -1102,6 +1103,7 @@ export class Driver extends EventEmitter {
 				if (!this.assemblePartialCCs(msg)) return;
 			}
 
+			// TODO:
 			// 					// Since the node actively responded to our request, we now know that it must be awake
 			// 					const node = msg.getNodeUnsafe();
 			// 					if (node) node.status = NodeStatus.Awake;
@@ -1194,7 +1196,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			// The handler for the asleep status will move the messages to the wakeup queue
 			WakeUpCC.setAwake(node, false);
 		} else {
-			const errorMsg = `Node ${node.id} did not respond  after ${transaction.message.maxSendAttempts} attempts, it is presumed dead`;
+			const errorMsg = `Node ${node.id} did not respond after ${transaction.message.maxSendAttempts} attempts, it is presumed dead`;
 			log.controller.logNode(node.id, errorMsg, "warn");
 
 			node.status = NodeStatus.Dead;
@@ -1666,10 +1668,12 @@ ${handlers.length} left`,
 			if (
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout &&
-				transaction instanceof SendDataRequest
+				transaction.message instanceof SendDataRequest
 			) {
 				// TODO: Handle callback NOK
-				this.handleNodeTimeout(transaction);
+				this.handleNodeTimeout(
+					transaction as Transaction & { message: CommandClass },
+				);
 			}
 			throw e;
 		}
@@ -1887,7 +1891,7 @@ ${handlers.length} left`,
 		errorMsg: string = `The message has been removed from the queue`,
 		errorCode: ZWaveErrorCodes = ZWaveErrorCodes.Controller_MessageDropped,
 	): void {
-		const reducer: TransactionReducer = (transaction, source) => {
+		const reducer: TransactionReducer = (transaction) => {
 			if (predicate(transaction)) {
 				return {
 					type: "reject",

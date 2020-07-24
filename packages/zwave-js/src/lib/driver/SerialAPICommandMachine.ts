@@ -3,6 +3,7 @@
 import { highResTimestamp } from "@zwave-js/core";
 import { assign, Interpreter, Machine, StateMachine } from "xstate";
 import { send } from "xstate/lib/actions";
+import log from "../log";
 import { MessageType } from "../message/Constants";
 import type { Message } from "../message/Message";
 import {
@@ -105,6 +106,12 @@ const forwardMessage = send(
 	}),
 );
 
+function logOutgoingMessage(ctx: SerialAPICommandContext) {
+	log.driver.logMessage(ctx.msg, {
+		direction: "outbound",
+	});
+}
+
 export type SerialAPICommandMachine = StateMachine<
 	SerialAPICommandContext,
 	SerialAPICommandStateSchema,
@@ -169,10 +176,13 @@ export function createSerialAPICommandMachine(
 				sending: {
 					// Every send attempt should increase the attempts by one
 					// and remember the timestamp of transmission
-					entry: assign({
-						attempts: (ctx) => ctx.attempts + 1,
-						txTimestamp: (_) => highResTimestamp(),
-					}),
+					entry: [
+						assign({
+							attempts: (ctx) => ctx.attempts + 1,
+							txTimestamp: (_) => highResTimestamp(),
+						}),
+						logOutgoingMessage,
+					],
 					invoke: {
 						id: "sendMessage",
 						src: "send",

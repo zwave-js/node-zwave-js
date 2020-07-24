@@ -287,7 +287,7 @@ export class Message {
 		}
 		if (staticExtends(predicate, Message)) {
 			// predicate is a Message constructor
-			return staticExtends(msg, predicate);
+			return msg instanceof predicate;
 		} else {
 			// predicate is a ResponsePredicate
 			return predicate(this, msg);

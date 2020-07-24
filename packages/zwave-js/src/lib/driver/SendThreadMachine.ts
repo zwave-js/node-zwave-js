@@ -484,6 +484,8 @@ export function createSendThreadMachine(
 									},
 								},
 								executeHandshake: {
+									// Swallow the message event while executing
+									on: { message: undefined },
 									invoke: {
 										id: "executeHandshake",
 										src: "executePreTransmitHandshake",
@@ -539,6 +541,8 @@ export function createSendThreadMachine(
 						},
 						execute: {
 							id: "execute",
+							// Swallow the message event while executing
+							on: { message: undefined },
 							invoke: {
 								id: "execute",
 								src: "execute",
@@ -661,6 +665,8 @@ export function createSendThreadMachine(
 										},
 										responding: {
 											onEntry: setHandshakeResponseTransaction,
+											// Swallow the message event while executing
+											on: { message: undefined },
 											invoke: {
 												id: "executeHandshakeResponse",
 												src: "executeHandshakeResponse",
@@ -695,6 +701,8 @@ export function createSendThreadMachine(
 											},
 										},
 										abortResponding: {
+											// Swallow the message event while executing
+											on: { message: undefined },
 											invoke: {
 												id: "executeSendDataAbort",
 												src: "executeSendDataAbort",
