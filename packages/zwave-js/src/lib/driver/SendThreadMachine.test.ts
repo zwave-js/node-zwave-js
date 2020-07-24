@@ -1410,12 +1410,48 @@ describe("lib/driver/SendThreadMachine", () => {
 		});
 	});
 
-	describe("queue events", () => {
-		it(`the "sortQueue" event should cause the send queue to get sorted and trigger sending`, async () => {
-			// This one is tricky. We start with two sleeping nodes, then set node the
-			// latter message is for to be awake and trigger a sorting.
-			// This should cause the latter message to be sent
+	it(`the "sortQueue" event should cause the send queue to get sorted and trigger sending`, async () => {
+		// This one is tricky. We start with two sleeping nodes, then set node the
+		// latter message is for to be awake and trigger a sorting.
+		// This should cause the latter message to be sent
 
+		const sendDataBasicGet3 = new SendDataRequest(fakeDriver, {
+			command: new BasicCCGet(fakeDriver, { nodeId: 3 }),
+		});
+		const sendDataBasicGet4 = new SendDataRequest(fakeDriver, {
+			command: new BasicCCGet(fakeDriver, { nodeId: 4 }),
+		});
+
+		node3.setAwake(false);
+		node4.setAwake(false);
+
+		const transaction3 = createTransaction(sendDataBasicGet3);
+		const transaction4 = createTransaction(sendDataBasicGet4);
+		transaction3.priority = MessagePriority.WakeUp;
+		transaction4.priority = MessagePriority.WakeUp;
+
+		const testMachine = createSendThreadMachine(defaultImplementations, {
+			queue: new SortedList([transaction3, transaction4]),
+			sendDataAttempts: 0,
+		});
+
+		service = interpret(testMachine).start();
+
+		expect(service.state.context.queue.toArray()).toEqual([
+			transaction3,
+			transaction4,
+		]);
+
+		node4.setAwake(true);
+
+		service.send("sortQueue");
+
+		expect(service.state.value).toEqual({ sending: "execute" });
+		expect(service.state.context.queue.toArray()).toEqual([transaction3]);
+	});
+
+	describe(`"reduce" event`, () => {
+		it("should call the given reducer function for each transaction in the queue and the current one", () => {
 			const sendDataBasicGet3 = new SendDataRequest(fakeDriver, {
 				command: new BasicCCGet(fakeDriver, { nodeId: 3 }),
 			});
@@ -1426,6 +1462,8 @@ describe("lib/driver/SendThreadMachine", () => {
 			node3.setAwake(false);
 			node4.setAwake(false);
 
+			const transaction1 = createTransaction(sendDataBasicGet);
+			const transaction2 = createTransaction(sendDataBasicGet);
 			const transaction3 = createTransaction(sendDataBasicGet3);
 			const transaction4 = createTransaction(sendDataBasicGet4);
 			transaction3.priority = MessagePriority.WakeUp;
@@ -1434,26 +1472,143 @@ describe("lib/driver/SendThreadMachine", () => {
 			const testMachine = createSendThreadMachine(
 				defaultImplementations,
 				{
-					queue: new SortedList([transaction3, transaction4]),
+					queue: new SortedList([
+						transaction1,
+						transaction2,
+						transaction3,
+						transaction4,
+					]),
 					sendDataAttempts: 0,
 				},
 			);
 
 			service = interpret(testMachine).start();
 
-			expect(service.state.context.queue.toArray()).toEqual([
-				transaction3,
-				transaction4,
-			]);
+			const reducer = jest.fn().mockReturnValue({ type: "keep" });
+			service.send({ type: "reduce", reducer });
 
-			node4.setAwake(true);
+			expect(reducer).toBeCalledWith(transaction1, "current");
+			expect(reducer).toBeCalledWith(transaction2, "queue");
+			expect(reducer).toBeCalledWith(transaction3, "queue");
+			expect(reducer).toBeCalledWith(transaction4, "queue");
+		});
 
-			service.send("sortQueue");
+		it("should stop sending if the current transaction should not be kept (drop)", () => {
+			const transaction = createTransaction(sendDataBasicGet);
 
-			expect(service.state.value).toEqual({ sending: "execute" });
-			expect(service.state.context.queue.toArray()).toEqual([
-				transaction3,
-			]);
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+					sendDataAttempts: 0,
+				},
+			);
+
+			service = interpret(testMachine).start();
+
+			const reducer = jest.fn().mockReturnValue({ type: "drop" });
+			service.send({ type: "reduce", reducer });
+
+			expect(service.state.value).toEqual("idle");
+		});
+
+		it("should stop sending if the current transaction should not be kept (reject)", async () => {
+			const transaction = createTransaction(sendDataBasicGet);
+
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([transaction]),
+					sendDataAttempts: 0,
+				},
+			);
+
+			service = interpret(testMachine).start();
+
+			const message = "error message";
+			const code = ZWaveErrorCodes.Controller_MessageDropped;
+
+			// This test will reject the promise, so catch the error
+			transaction.promise.catch(() => {});
+
+			const reducer = jest
+				.fn()
+				.mockReturnValue({ type: "reject", message, code });
+			service.send({ type: "reduce", reducer });
+
+			expect(service.state.value).toEqual("idle");
+		});
+
+		// Need to find out how to test this, since requeuing will cause the sending to restart immediately
+		it.todo(
+			"should stop sending if the current transaction should not be kept (requeue)",
+		);
+
+		it("should perform the correct actions", async () => {
+			const sendDataBasicGet3 = new SendDataRequest(fakeDriver, {
+				command: new BasicCCGet(fakeDriver, { nodeId: 3 }),
+			});
+			const sendDataBasicGet4 = new SendDataRequest(fakeDriver, {
+				command: new BasicCCGet(fakeDriver, { nodeId: 4 }),
+			});
+
+			node3.setAwake(false);
+			node4.setAwake(false);
+
+			const t1 = createTransaction(sendDataBasicGet);
+			const t2 = createTransaction(sendDataBasicGet);
+			const t3 = createTransaction(sendDataBasicGet3);
+			const t4 = createTransaction(sendDataBasicGet4);
+			const t5 = createTransaction(sendDataBasicSet);
+			t3.priority = MessagePriority.WakeUp;
+			t4.priority = MessagePriority.WakeUp;
+
+			// Give the transactions IDs so test errors are easier to understand
+			(t1 as any).id = "t1";
+			(t2 as any).id = "t2";
+			(t3 as any).id = "t3";
+			(t4 as any).id = "t4";
+			(t5 as any).id = "t5";
+
+			const testMachine = createSendThreadMachine(
+				defaultImplementations,
+				{
+					queue: new SortedList([t1, t2, t3, t4, t5]),
+					sendDataAttempts: 0,
+				},
+			);
+
+			service = interpret(testMachine).start();
+
+			const reducer = jest.fn().mockImplementation((t, source) => {
+				if (t === t1) return { type: "requeue" };
+				if (t === t2)
+					return { type: "requeue", priority: MessagePriority.Ping };
+				if (t === t3) return { type: "keep" };
+				if (t === t4) return { type: "drop" };
+				if (t === t5)
+					return {
+						type: "reject",
+						message: "foo",
+						code: ZWaveErrorCodes.SupervisionCC_CommandFailed,
+					};
+			});
+
+			service.send({ type: "reduce", reducer });
+
+			await assertZWaveError(() => t5.promise, {
+				messageMatches: "foo",
+				errorCode: ZWaveErrorCodes.SupervisionCC_CommandFailed,
+			});
+
+			// Requeuing t1 puts it behind t2 due to the lower priority
+			const newTransactions = [
+				service.state.context.currentTransaction!,
+				...service.state.context.queue.toArray(),
+			].map((t: any) => t.id);
+			expect(newTransactions).toEqual(["t2", "t1", "t3"]);
+
+			expect(t2.priority).toBe(MessagePriority.Ping);
 		});
 	});
 });

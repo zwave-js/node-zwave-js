@@ -1,3 +1,4 @@
+import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import {
 	assign,
@@ -90,6 +91,33 @@ export interface SendThreadContext {
 	sendDataErrorData?: SendDataErrorData;
 }
 
+export type TransactionReducerResult =
+	| {
+			// Silently drop the transaction
+			type: "drop";
+	  }
+	| {
+			// Do nothing (useful especially for the current transaction)
+			type: "keep";
+	  }
+	| {
+			// Reject the transaction with the given error
+			type: "reject";
+			message: string;
+			code: ZWaveErrorCodes;
+	  }
+	| {
+			// Changes the priority of the transaction if a new one is given,
+			// and moves the current transaction back to the queue
+			type: "requeue";
+			priority?: MessagePriority;
+	  };
+
+export type TransactionReducer = (
+	transaction: Transaction,
+	source: "queue" | "current",
+) => TransactionReducerResult;
+
 export type SendThreadEvent =
 	| { type: "add"; transaction: Transaction }
 	| { type: "trigger" | "preTransmitHandshake" }
@@ -100,6 +128,10 @@ export type SendThreadEvent =
 	| { type: "unsolicited"; message: Message }
 	| { type: "sortQueue" }
 	| { type: "NIF"; nodeId: number }
+	// Execute the given reducer function for each transaction in the queue
+	// and the current transaction and react accordingly. The reducer must not have
+	// side-effects because it may be executed multiple times for each transaction
+	| { type: "reduce"; reducer: TransactionReducer }
 	| SerialAPICommandEvent;
 
 export type SendThreadMachine = StateMachine<
@@ -268,6 +300,57 @@ const rememberNodeTimeoutError = assign<SendThreadContext>({
 	}),
 });
 
+const reduce = assign({
+	queue: (
+		ctx: SendThreadContext,
+		evt: SendThreadEvent & { type: "reduce" },
+	) => {
+		const { queue, currentTransaction } = ctx;
+
+		const drop: Transaction[] = [];
+		const requeue: Transaction[] = [];
+
+		const reduceTransaction: (
+			...args: Parameters<TransactionReducer>
+		) => void = (transaction, source) => {
+			const reducerResult = evt.reducer(transaction, source);
+			switch (reducerResult.type) {
+				case "drop":
+					drop.push(transaction);
+					break;
+				case "requeue":
+					if (reducerResult.priority != undefined) {
+						transaction.priority = reducerResult.priority;
+					}
+					requeue.push(transaction);
+					break;
+				case "reject":
+					transaction.promise.reject(
+						new ZWaveError(
+							reducerResult.message,
+							reducerResult.code,
+						),
+					);
+					drop.push(transaction);
+					break;
+			}
+		};
+
+		for (const transaction of queue) {
+			reduceTransaction(transaction, "queue");
+		}
+		if (currentTransaction) {
+			reduceTransaction(currentTransaction, "current");
+		}
+
+		// Now we know what to do with the transactions
+		queue.remove(...drop, ...requeue);
+		queue.add(...requeue);
+
+		return queue;
+	},
+});
+
 export function createSendThreadMachine(
 	implementations: ServiceImplementations,
 	initialContext: Partial<SendThreadContext> = {},
@@ -362,6 +445,10 @@ export function createSendThreadMachine(
 						trigger: [
 							{ cond: "maySendFirstMessage", target: "sending" },
 						],
+						reduce: {
+							// Reducing may reorder the queue, so raise a trigger afterwards
+							actions: [reduce, raise("trigger")],
+						},
 					},
 				},
 				sending: {
@@ -383,6 +470,15 @@ export function createSendThreadMachine(
 							],
 							target: ".done",
 						},
+						reduce: [
+							// If the current transaction should not be kept, go back to idle
+							{
+								cond: "shouldNotKeepCurrentTransaction",
+								actions: reduce,
+								target: ".done",
+							},
+							{ actions: reduce },
+						],
 					},
 					states: {
 						init: {
@@ -811,6 +907,15 @@ export function createSendThreadMachine(
 						!!msg &&
 						messageIsPing(msg) &&
 						msg.getNodeId() === (evt as any).nodeId
+					);
+				},
+				shouldNotKeepCurrentTransaction: (ctx, evt) => {
+					const reducer = (evt as SendThreadEvent & {
+						type: "reduce";
+					}).reducer;
+					return (
+						reducer(ctx.currentTransaction!, "current").type !==
+						"keep"
 					);
 				},
 			},
