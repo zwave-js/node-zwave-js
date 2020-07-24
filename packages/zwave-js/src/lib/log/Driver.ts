@@ -81,14 +81,15 @@ export function transaction(transaction: Transaction): void {
 	const { message } = transaction;
 	// On the first attempt, we print the basic information about the transaction
 	const secondaryTags: string[] = [];
-	if (transaction.sendAttempts === 1) {
-		secondaryTags.push(`P: ${MessagePriority[transaction.priority]}`);
-	} else {
-		// On later attempts, we print the send attempts
-		secondaryTags.push(
-			`attempt ${transaction.sendAttempts}/${transaction.maxSendAttempts}`,
-		);
-	}
+	// TODO: restore logging
+	// if (transaction.sendAttempts === 1) {
+	secondaryTags.push(`P: ${MessagePriority[transaction.priority]}`);
+	// } else {
+	// 	// On later attempts, we print the send attempts
+	// 	secondaryTags.push(
+	// 		`attempt ${transaction.sendAttempts}/${transaction.maxSendAttempts}`,
+	// 	);
+	// }
 
 	logMessage(message, {
 		secondaryTags,

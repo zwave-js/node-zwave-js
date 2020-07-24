@@ -910,11 +910,9 @@ export function createSendThreadMachine(
 					);
 				},
 				shouldNotKeepCurrentTransaction: (ctx, evt) => {
-					const reducer = (evt as SendThreadEvent & {
-						type: "reduce";
-					}).reducer;
+					const reducer = (evt as any).reducer;
 					return (
-						reducer(ctx.currentTransaction!, "current").type !==
+						reducer(ctx.currentTransaction, "current").type !==
 						"keep"
 					);
 				},

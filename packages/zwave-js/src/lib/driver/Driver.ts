@@ -83,6 +83,7 @@ import type { FileSystem } from "./FileSystem";
 import {
 	createSendThreadMachine,
 	SendThreadInterpreter,
+	TransactionReducer,
 } from "./SendThreadMachine";
 import { Transaction } from "./Transaction";
 
@@ -414,6 +415,8 @@ export class Driver extends EventEmitter {
 		log.driver.print("", "info");
 
 		log.driver.print("starting driver...");
+		this.sendThread.start();
+
 		// Open the serial port
 		log.driver.print(`opening serial port ${this.port}`);
 		this.serial = new ZWaveSerialPort(this.port)
@@ -1196,8 +1199,6 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 
 			node.status = NodeStatus.Dead;
 			this.rejectAllTransactionsForNode(node.id, errorMsg);
-			// And continue with the next messages
-			setImmediate(() => this.workOffSendQueue());
 		}
 	}
 
@@ -1833,66 +1834,48 @@ ${handlers.length} left`,
 
 	/** Moves all messages for a given node into the wakeup queue */
 	private moveMessagesToWakeupQueue(nodeId: number): void {
-		const pingsToRemove: Transaction[] = [];
-		for (const transaction of this.sendQueue) {
+		const reducer: TransactionReducer = (transaction, source) => {
 			const msg = transaction.message;
-			const targetNodeId = msg.getNodeId();
-			if (targetNodeId === nodeId) {
+			if (msg.getNodeId() !== nodeId) return { type: "keep" };
+			if (source === "queue") {
 				if (messageIsPing(msg)) {
-					pingsToRemove.push(transaction);
 					// Pings must be rejected, so the next message may be queued
-					transaction.promise.reject(
-						new ZWaveError(
-							`The node is asleep`,
-							ZWaveErrorCodes.Controller_MessageDropped,
-						),
-					);
+					return {
+						type: "reject",
+						message: `The node is asleep`,
+						code: ZWaveErrorCodes.Controller_MessageDropped,
+					};
 				} else {
-					// Change the priority to WakeUp
-					transaction.priority = MessagePriority.WakeUp;
+					// For all other messages, change the priority to wakeup
+					return {
+						type: "requeue",
+						priority: MessagePriority.WakeUp,
+					};
 				}
-			}
-		}
-		// Remove all pings that would clutter the send queue
-		this.sendQueue.remove(...pingsToRemove);
-
-		// Changing the priority has an effect on the order, so re-sort the send queue
-		// This must be done anyways, as removing the items does not change the location of others
-		this.sortSendQueue();
-
-		// The current outermost transaction must also be transferred.
-		// Ignore handshakes because they will be re-attempted
-		if (this.transactionStack.length > 0) {
-			const outerTransaction = this.transactionStack[
-				this.transactionStack.length - 1
-			];
-			if (outerTransaction.message.getNodeId() === nodeId) {
-				// But only if it is not a ping, because that will block the send queue until wakeup
+			} else {
+				// The current outermost transaction must also be transferred,
+				// but only if it is not a ping or a handshake response,
+				// because that will block the send queue until wakeup
 				if (
-					!messageIsPing(outerTransaction.message) &&
-					outerTransaction.priority !== MessagePriority.Handshake
+					messageIsPing(msg) ||
+					transaction.priority === MessagePriority.Handshake
 				) {
-					// Change the priority to WakeUp and re-add it to the queue
-					outerTransaction.priority = MessagePriority.WakeUp;
-					this.sendQueue.add(outerTransaction);
-					// Reset send attempts - we might have already used all of them and mark it as not sent
-					outerTransaction.sendAttempts = 0;
-					outerTransaction.wasSent = false;
+					return {
+						type: "reject",
+						message: `The node is asleep`,
+						code: ZWaveErrorCodes.Controller_MessageDropped,
+					};
 				} else {
-					// Pings and active handshakes must be rejected, so the next message may be queued
-					this.rejectCurrentTransaction(
-						new ZWaveError(
-							`The node is asleep`,
-							ZWaveErrorCodes.Controller_MessageDropped,
-						),
-						// Don't resume send queue, it will be done outside this method call
-						false,
-					);
+					return {
+						type: "requeue",
+						priority: MessagePriority.WakeUp,
+					};
 				}
-				// Clear the current transaction stack
-				this.transactionStack = [];
 			}
-		}
+		};
+
+		// Apply the reducer to the send thread
+		this.sendThread.send({ type: "reduce", reducer });
 	}
 
 	/**
@@ -1904,23 +1887,19 @@ ${handlers.length} left`,
 		errorMsg: string = `The message has been removed from the queue`,
 		errorCode: ZWaveErrorCodes = ZWaveErrorCodes.Controller_MessageDropped,
 	): void {
-		const transactionsToRemove: Transaction[] = [];
-
-		// Find all transactions that match the predicate and reject them
-		for (const transaction of this.sendQueue) {
+		const reducer: TransactionReducer = (transaction, source) => {
 			if (predicate(transaction)) {
-				transactionsToRemove.push(transaction);
-				transaction.promise.reject(new ZWaveError(errorMsg, errorCode));
+				return {
+					type: "reject",
+					message: errorMsg,
+					code: errorCode,
+				};
+			} else {
+				return { type: "keep" };
 			}
-		}
-		this.sendQueue.remove(...transactionsToRemove);
-
-		// Don't forget the current transaction
-		if (this.currentTransaction && predicate(this.currentTransaction)) {
-			this.rejectCurrentTransaction(new ZWaveError(errorMsg, errorCode));
-		}
-
-		// log.driver.sendQueue(this.sendQueue);
+		};
+		// Apply the reducer to the send thread
+		this.sendThread.send({ type: "reduce", reducer });
 	}
 
 	/**
