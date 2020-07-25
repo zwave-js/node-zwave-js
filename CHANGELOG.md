@@ -4,6 +4,11 @@
 	## __WORK IN PROGRESS__
 -->
 
+## 4.0.4 (2020-07-05)
+### Bugfixes
+* During the interview, endpoint associations are now converted to node associations if required
+* Allow `Set` and `SupportedSet` commands in `Alarm CC` V2
+
 ## 4.0.3 (2020-06-30)
 ### Bugfixes
 * If a node fails to respond to `Multi Channel Endpoint Find`, the interview is no longer aborted and sequential endpoints are assumed instead

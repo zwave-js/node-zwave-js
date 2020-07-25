@@ -49,7 +49,7 @@ fs.readFile(path.join(libraryRootDir, "package.json"), "utf8").then(
 					mode: "strict",
 				}),
 				new Sentry.Integrations.FunctionToString(),
-				new Integrations.Dedupe(),
+				new Integrations.Dedupe() as any,
 			],
 			beforeSend(event, hint) {
 				let ignore = false;
