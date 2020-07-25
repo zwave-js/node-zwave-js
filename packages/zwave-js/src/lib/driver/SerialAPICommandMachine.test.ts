@@ -196,7 +196,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 	describe("retrying...", () => {
 		it("should immediately transition to failure if there are no attempts left", (done) => {
 			const testMachine = createSerialAPICommandMachine(
-				{} as any,
+				dummyMessageNoResponseNoCallback,
 				defaultImplementations,
 				{ attempts: 3 },
 			);
@@ -211,7 +211,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 
 		it("should wait until sending again", () => {
 			const testMachine = createSerialAPICommandMachine(
-				{} as any,
+				dummyMessageNoResponseNoCallback,
 				defaultImplementations,
 				{ attempts: 1 },
 			);
@@ -228,7 +228,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 
 		it("after each attempt, the wait time should be longer", () => {
 			const testMachine = createSerialAPICommandMachine(
-				{} as any,
+				dummyMessageNoResponseNoCallback,
 				defaultImplementations,
 				{ attempts: 2 },
 			);
@@ -246,7 +246,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 		it("should notify us about the retry attempt", () => {
 			const onRetry = jest.fn();
 			const testMachine = createSerialAPICommandMachine(
-				{} as any,
+				dummyMessageNoResponseNoCallback,
 				{
 					...defaultImplementations,
 					notifyRetry: onRetry,
@@ -753,7 +753,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 		});
 	});
 
-	it("on success, the TX timestamp should be returned", (done) => {
+	it.skip("on success, the TX timestamp should be returned", (done) => {
 		(highResTimestamp as jest.Mock)
 			.mockReturnValueOnce(10)
 			.mockReturnValueOnce(30);

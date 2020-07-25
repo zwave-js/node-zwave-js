@@ -11,27 +11,31 @@ export const createSendDataResolvesImmediately = () =>
 export const createSendDataRejectsImmediately = () =>
 	jest.fn().mockRejectedValue(new Error("nope"));
 
-export const dummyMessageNoResponseNoCallback = ({
+const defaultImplementations = {
 	serialize: () => Buffer.from([1, 2, 3]),
+	getNodeUnsafe: () => undefined,
+	getNodeId: () => undefined,
+	toLogEntry: () => ({ tags: [] }),
+};
+
+export const dummyMessageNoResponseNoCallback = ({
 	expectedResponse: undefined,
 	expectedCallback: undefined,
 	hasCallbackId: () => false,
-	getNodeUnsafe: () => undefined,
+	...defaultImplementations,
 } as any) as Message;
 export const dummyMessageWithResponseNoCallback = ({
-	serialize: () => Buffer.from([1, 2, 3]),
 	expectedResponse: 0xff,
 	expectedCallback: undefined,
 	hasCallbackId: () => false,
-	getNodeUnsafe: () => undefined,
+	...defaultImplementations,
 } as any) as Message;
 export const dummyMessageNoResponseWithCallback = ({
-	serialize: () => Buffer.from([1, 2, 3]),
 	expectedResponse: undefined,
 	expectedCallback: true,
 	hasCallbackId: () => true,
-	getNodeUnsafe: () => undefined,
 	callbackId: 1,
+	...defaultImplementations,
 } as any) as Message;
 // export const dummyMessageWithResponseWithCallback = ({
 // 	serialize: () => Buffer.from([1, 2, 3]),

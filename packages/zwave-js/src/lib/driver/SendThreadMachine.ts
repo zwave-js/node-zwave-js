@@ -272,6 +272,19 @@ const rememberNodeTimeoutError = assign<SendThreadContext>({
 	}),
 });
 
+// function forwardEvents<T extends any[]>(
+// 	to: string,
+// 	events: T,
+// ): TransitionsConfig<SendThreadContext, SendThreadEvent> {
+// 	const ret = {} as any;
+// 	for (const event of events) {
+// 		ret[event] = {
+// 			actions: forwardTo<SendThreadContext, SendThreadEvent>(to),
+// 		};
+// 	}
+// 	return ret;
+// }
+
 const reduce = assign({
 	queue: (ctx: SendThreadContext, evt: SendThreadEvent) => {
 		const { queue, currentTransaction } = ctx;
