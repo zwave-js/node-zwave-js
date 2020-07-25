@@ -10,7 +10,7 @@ import {
 import { raise, send } from "xstate/lib/actions";
 import type { CommandClass } from "../commandclass/CommandClass";
 import { messageIsPing } from "../commandclass/NoOperationCC";
-import type { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
+import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import {
 	SendDataMulticastRequest,
 	SendDataRequest,
@@ -803,15 +803,23 @@ export function createSendThreadMachine(
 					const msg = ctx.currentTransaction?.message;
 					return msg instanceof SendDataRequest;
 				},
-				isExpectedUpdate: (ctx, evt, meta) =>
-					meta.state.matches(
-						"sending.waitForUpdate.waitThread.waiting",
-					) &&
-					(ctx.currentTransaction!
-						.message as SendDataRequest).command.isExpectedCCResponse(
-						((evt as any).message as ApplicationCommandRequest)
-							.command,
-					),
+				isExpectedUpdate: (ctx, evt, meta) => {
+					if (
+						!meta.state.matches(
+							"sending.waitForUpdate.waitThread.waiting",
+						)
+					)
+						return false;
+					const sentMsg = ctx.currentTransaction!
+						.message as SendDataRequest;
+					const receivedMsg = (evt as any).message;
+					return (
+						receivedMsg instanceof ApplicationCommandRequest &&
+						sentMsg.command.isExpectedCCResponse(
+							receivedMsg.command,
+						)
+					);
+				},
 				isPreTransmitHandshakeForCurrentTransaction: (
 					ctx,
 					evt,
@@ -835,15 +843,23 @@ export function createSendThreadMachine(
 					// require the handshake to be for the same node
 					return newCommand.nodeId === curCommand.nodeId;
 				},
-				isExpectedHandshakeResponse: (ctx, evt, meta) =>
-					meta.state.matches(
-						"sending.handshake.waitForHandshakeResponse",
-					) &&
-					(ctx.preTransmitHandshakeTransaction!
-						.message as SendDataRequest).command.isExpectedCCResponse(
-						((evt as any).message as ApplicationCommandRequest)
-							.command,
-					),
+				isExpectedHandshakeResponse: (ctx, evt, meta) => {
+					if (
+						!meta.state.matches(
+							"sending.handshake.waitForHandshakeResponse",
+						)
+					)
+						return false;
+					const sentMsg = ctx.preTransmitHandshakeTransaction!
+						.message as SendDataRequest;
+					const receivedMsg = (evt as any).message;
+					return (
+						receivedMsg instanceof ApplicationCommandRequest &&
+						sentMsg.command.isExpectedCCResponse(
+							receivedMsg.command,
+						)
+					);
+				},
 				queueContainsResponseToHandshakeRequest: (ctx) => {
 					const next = ctx.queue.peekStart();
 					return next?.priority === MessagePriority.Handshake;
