@@ -122,7 +122,11 @@ export type SendThreadEvent =
 	| { type: "add"; transaction: Transaction }
 	| { type: "trigger" | "preTransmitHandshake" }
 	| {
-			type: "nodeUpdate" | "handshakeResponse";
+			type: "nodeUpdate";
+			message: ApplicationCommandRequest;
+	  }
+	| {
+			type: "handshakeResponse";
 			message: ApplicationCommandRequest;
 	  }
 	| { type: "unsolicited"; message: Message }
@@ -244,15 +248,21 @@ const incrementSendDataAttempts = assign({
 	sendDataAttempts: (ctx: SendThreadContext) => ctx.sendDataAttempts + 1,
 });
 
-const forwardNodeUpdate = send((_: any, evt: SerialAPICommandEvent) => ({
-	type: "nodeUpdate",
-	message: (evt as any).message,
-}));
+const forwardNodeUpdate = send(
+	(_: any, evt: SerialAPICommandEvent) =>
+		({
+			type: "nodeUpdate",
+			message: (evt as any).message,
+		} as SendThreadEvent),
+);
 
-const forwardHandshakeResponse = send((_: any, evt: SerialAPICommandEvent) => ({
-	type: "handshakeResponse",
-	message: (evt as any).message,
-}));
+const forwardHandshakeResponse = send(
+	(_: any, evt: SerialAPICommandEvent) =>
+		({
+			type: "handshakeResponse",
+			message: (evt as any).message,
+		} as SendThreadEvent),
+);
 
 const sortQueue = assign({
 	queue: (ctx: SendThreadContext) => {
@@ -443,7 +453,7 @@ export function createSendThreadMachine(
 							// Therefore resolve pending pings so the communication may proceed immediately
 							cond: "currentTransactionIsPingForNode",
 							actions: [
-								resolveCurrentTransactionWithoutMessage as any,
+								resolveCurrentTransactionWithoutMessage,
 								// TODO:
 								// log.controller.logNode(
 								// 	node.id,
@@ -467,7 +477,7 @@ export function createSendThreadMachine(
 							always: [
 								{
 									cond: "isSendData",
-									actions: incrementSendDataAttempts as any,
+									actions: incrementSendDataAttempts,
 									target: "handshake",
 								},
 								{ target: "execute" },
@@ -539,13 +549,13 @@ export function createSendThreadMachine(
 								waitForHandshakeResponse: {
 									on: {
 										handshakeResponse: {
-											actions: resolveCurrentTransactionWithMessage as any,
+											actions: resolveCurrentTransactionWithMessage,
 											target: "#execute",
 										},
 									},
 									after: {
 										1600: {
-											actions: rememberNodeTimeoutError as any,
+											actions: rememberNodeTimeoutError,
 											target: "#retry",
 										},
 									},
@@ -569,7 +579,7 @@ export function createSendThreadMachine(
 									// or resolve the current transaction if none is required
 									{
 										cond: "executeSuccessful",
-										actions: resolveCurrentTransaction as any,
+										actions: resolveCurrentTransaction,
 										target: "done",
 									},
 									// On failure, retry SendData commands if possible
@@ -592,7 +602,7 @@ export function createSendThreadMachine(
 									},
 									// Reject simple API commands immediately with a matching error
 									{
-										actions: rejectCurrentTransaction as any,
+										actions: rejectCurrentTransaction,
 										target: "done",
 									},
 								],
@@ -614,7 +624,7 @@ export function createSendThreadMachine(
 								{ target: "retryWait", cond: "mayRetry" },
 								// On failure, reject it with a matching error
 								{
-									actions: rejectCurrentTransaction as any,
+									actions: rejectCurrentTransaction,
 									target: "done",
 								},
 							],
@@ -638,13 +648,13 @@ export function createSendThreadMachine(
 											// When the expected update is received, resolve the transaction and stop waiting
 											on: {
 												nodeUpdate: {
-													actions: resolveCurrentTransactionWithMessage as any,
+													actions: resolveCurrentTransactionWithMessage,
 													target: "done",
 												},
 											},
 											after: {
 												1600: {
-													actions: rememberNodeTimeoutError as any,
+													actions: rememberNodeTimeoutError,
 													target: "#retry",
 												},
 											},
@@ -657,7 +667,7 @@ export function createSendThreadMachine(
 									states: {
 										// As long as we're not replying, the handshake server is done
 										idle: {
-											onEntry: deleteHandshakeResponseTransaction as any,
+											onEntry: deleteHandshakeResponseTransaction,
 											type: "final",
 											always: [
 												{
@@ -689,7 +699,7 @@ export function createSendThreadMachine(
 													{
 														cond:
 															"executeSuccessful",
-														actions: resolveHandshakeResponseTransaction as any,
+														actions: resolveHandshakeResponseTransaction,
 														target: "idle",
 													},
 													// On failure, abort timed out send attempts and do nothing else
@@ -707,7 +717,7 @@ export function createSendThreadMachine(
 													},
 													// Reject it otherwise with a matching error
 													{
-														actions: rejectHandshakeResponseTransaction as any,
+														actions: rejectHandshakeResponseTransaction,
 														target: "idle",
 													},
 												],
@@ -736,8 +746,8 @@ export function createSendThreadMachine(
 						target: "idle",
 						actions: [
 							// Delete the current transaction after we're done
-							deleteCurrentTransaction as any,
-							resetSendDataAttempts as any,
+							deleteCurrentTransaction,
+							resetSendDataAttempts,
 						],
 					},
 				},

@@ -58,16 +58,10 @@ export type SerialAPICommandEvent =
 	| { type: "ACK" }
 	| { type: "CAN" }
 	| { type: "NAK" }
-	| {
-			type:
-				| "response" // A message that has been determined to be expected
-				| "callback"
-				// A message that might be unexpected
-				| "message"
-				// A message that IS unexpected
-				| "serialAPIUnexpected";
-			message: Message;
-	  };
+	| { type: "message"; message: Message } // A message that might or might not be expected
+	| { type: "response"; message: Message } // Gets forwarded when a response-type message is expected
+	| { type: "callback"; message: Message } // Gets forwarded when a callback-type message is expected
+	| { type: "serialAPIUnexpected"; message: Message }; // A message that IS unexpected on the Serial API level
 
 export type SerialAPICommandDoneData =
 	| {
@@ -98,13 +92,13 @@ function computeRetryDelay(ctx: SerialAPICommandContext): number {
 	return 100 + 1000 * (ctx.attempts - 1);
 }
 
-const forwardMessage = send(
-	(_, evt: SerialAPICommandEvent & { type: "message" }) => ({
-		type:
-			evt.message.type === MessageType.Response ? "response" : "callback",
-		message: evt.message,
-	}),
-);
+const forwardMessage = send((_, evt: SerialAPICommandEvent) => {
+	const msg = (evt as any).message as Message;
+	return {
+		type: msg.type === MessageType.Response ? "response" : "callback",
+		message: msg,
+	} as SerialAPICommandEvent;
+});
 
 function logOutgoingMessage(ctx: SerialAPICommandContext) {
 	log.driver.logMessage(ctx.msg, {
