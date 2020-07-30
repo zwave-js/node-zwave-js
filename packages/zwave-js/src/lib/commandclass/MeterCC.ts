@@ -1,5 +1,4 @@
 import { lookupMeter, lookupMeterScale, MeterScale } from "@zwave-js/config";
-import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	getMinIntegerSize,
@@ -12,6 +11,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
@@ -161,6 +161,41 @@ export class MeterCCAPI extends CCAPI {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async getAll() {
+		const node = this.endpoint.getNodeUnsafe()!;
+
+		if (this.version >= 2) {
+			const supportedScales =
+				node.getValue<number[]>(
+					getSupportedScalesValueId(this.endpoint.index),
+				) ?? [];
+			const supportedRateTypes =
+				node.getValue<RateType[]>(
+					getSupportedRateTypesValueId(this.endpoint.index),
+				) ?? [];
+
+			const rateTypes = supportedRateTypes.length
+				? supportedRateTypes
+				: [undefined];
+
+			const ret = [];
+			for (const rateType of rateTypes) {
+				for (const scale of supportedScales) {
+					ret.push(
+						await this.get({
+							scale,
+							rateType,
+						}),
+					);
+				}
+			}
+			return ret;
+		} else {
+			return [await this.get()];
+		}
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getSupported() {
 		this.assertSupportsCommand(MeterCommand, MeterCommand.SupportedGet);
 
@@ -220,7 +255,7 @@ export class MeterCCAPI extends CCAPI {
 		await this.reset(resetOptions);
 
 		// Refresh values
-		await this.get();
+		await this.getAll();
 	};
 }
 
@@ -358,6 +393,8 @@ supports reset:       ${supportsReset}`;
 				ret += "_" + getEnumMemberName(RateType, rateType);
 			}
 			return ret;
+		} else if (property === "reset" && typeof propertyKey === "number") {
+			return getMeterTypeName(propertyKey);
 		}
 		return super.translatePropertyKey(property, propertyKey);
 	}
@@ -672,23 +709,27 @@ export class MeterCCSupportedReport extends MeterCC {
 
 		const valueDb = this.getValueDB();
 		// Create reset values
-		const resetAllValueId: ValueID = getResetValueId(this.endpointIndex);
-		const resetSingle: ValueID = getResetValueId(
-			this.endpointIndex,
-			this._type,
-		);
-
-		if (!valueDb.hasMetadata(resetAllValueId)) {
-			this.getValueDB().setMetadata(resetAllValueId, {
-				...ValueMetadata.WriteOnlyBoolean,
-				label: `Reset (all)`,
-			});
-		}
-		if (!valueDb.hasMetadata(resetSingle)) {
-			this.getValueDB().setMetadata(resetSingle, {
-				...ValueMetadata.WriteOnlyBoolean,
-				label: `Reset (${getMeterTypeName(this._type)})`,
-			});
+		if (this.version < 6) {
+			const resetAllValueId: ValueID = getResetValueId(
+				this.endpointIndex,
+			);
+			if (!valueDb.hasMetadata(resetAllValueId)) {
+				this.getValueDB().setMetadata(resetAllValueId, {
+					...ValueMetadata.WriteOnlyBoolean,
+					label: `Reset accumulated values`,
+				});
+			}
+		} else {
+			const resetSingle: ValueID = getResetValueId(
+				this.endpointIndex,
+				this._type,
+			);
+			if (!valueDb.hasMetadata(resetSingle)) {
+				this.getValueDB().setMetadata(resetSingle, {
+					...ValueMetadata.WriteOnlyBoolean,
+					label: `Reset (${getMeterTypeName(this._type)})`,
+				});
+			}
 		}
 		return true;
 	}
