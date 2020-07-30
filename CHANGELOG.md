@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Made `Meter CC::Reset` accessible through the `SET_VALUE` API.
+
 ## 4.0.4 (2020-07-05)
 ### Bugfixes
 * During the interview, endpoint associations are now converted to node associations if required
