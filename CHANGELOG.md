@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 4.0.5 (2020-07-30)
 ### Bugfixes
 * Made `Meter CC::Reset` accessible through the `SET_VALUE` API.
 
