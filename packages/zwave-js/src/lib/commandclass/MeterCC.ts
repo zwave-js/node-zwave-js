@@ -1,4 +1,5 @@
 import { lookupMeter, lookupMeterScale, MeterScale } from "@zwave-js/config";
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	getMinIntegerSize,
@@ -11,11 +12,17 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
-import { CCAPI } from "./API";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwUnsupportedPropertyKey,
+	throwWrongValueType,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -103,7 +110,14 @@ export function getSupportedRateTypesValueId(endpoint: number): ValueID {
 	};
 }
 
-// @noSetValueAPI This CC is read-only
+export function getResetValueId(endpoint: number, type?: number): ValueID {
+	return {
+		commandClass: CommandClasses.Meter,
+		endpoint,
+		property: "reset",
+		propertyKey: type,
+	};
+}
 
 @API(CommandClasses.Meter)
 export class MeterCCAPI extends CCAPI {
@@ -175,6 +189,39 @@ export class MeterCCAPI extends CCAPI {
 		});
 		await this.driver.sendCommand(cc);
 	}
+
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ property, propertyKey },
+		value,
+	): Promise<void> => {
+		if (property !== "reset") {
+			throwUnsupportedProperty(this.ccId, property);
+		} else if (
+			propertyKey != undefined &&
+			typeof propertyKey !== "number"
+		) {
+			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+		} else if (value !== true) {
+			throwWrongValueType(
+				this.ccId,
+				property,
+				"true",
+				value === false ? "false" : typeof value,
+			);
+		}
+
+		const resetOptions: MeterCCResetOptions =
+			propertyKey != undefined
+				? {
+						type: propertyKey,
+						targetValue: 0,
+				  }
+				: {};
+		await this.reset(resetOptions);
+
+		// Refresh values
+		await this.get();
+	};
 }
 
 @commandClass(CommandClasses.Meter)
@@ -617,6 +664,33 @@ export class MeterCCSupportedReport extends MeterCC {
 	@ccValue({ internal: true })
 	public get supportedRateTypes(): readonly RateType[] {
 		return this._supportedRateTypes;
+	}
+
+	public persistValues(): boolean {
+		if (!super.persistValues()) return false;
+		if (!this._supportsReset) return true;
+
+		const valueDb = this.getValueDB();
+		// Create reset values
+		const resetAllValueId: ValueID = getResetValueId(this.endpointIndex);
+		const resetSingle: ValueID = getResetValueId(
+			this.endpointIndex,
+			this._type,
+		);
+
+		if (!valueDb.hasMetadata(resetAllValueId)) {
+			this.getValueDB().setMetadata(resetAllValueId, {
+				...ValueMetadata.WriteOnlyBoolean,
+				label: `Reset (all)`,
+			});
+		}
+		if (!valueDb.hasMetadata(resetSingle)) {
+			this.getValueDB().setMetadata(resetSingle, {
+				...ValueMetadata.WriteOnlyBoolean,
+				label: `Reset (${getMeterTypeName(this._type)})`,
+			});
+		}
+		return true;
 	}
 }
 
