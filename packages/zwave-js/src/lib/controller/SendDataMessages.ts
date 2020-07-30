@@ -1,4 +1,9 @@
-import { MAX_NODES, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import {
+	MAX_NODES,
+	MessageOrCCLogEntry,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
 import {
 	getEnumMemberName,
 	JSONObject,
@@ -22,7 +27,6 @@ import {
 	isCommandClassContainer,
 } from "../commandclass/ICommandClassContainer";
 import type { Driver } from "../driver/Driver";
-import type { MessageOrCCLogEntry } from "../log/shared";
 import {
 	FunctionType,
 	MessagePriority,

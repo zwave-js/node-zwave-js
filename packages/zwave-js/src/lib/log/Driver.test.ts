@@ -1,4 +1,10 @@
-import { assertLogInfo, assertMessage, SpyTransport } from "@zwave-js/core";
+import {
+	assertLogInfo,
+	assertMessage,
+	getDirectionPrefix,
+	restoreSilence,
+	SpyTransport,
+} from "@zwave-js/core";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import colors from "ansi-colors";
@@ -14,7 +20,6 @@ import {
 import { Message } from "../message/Message";
 import { createEmptyMockDriver } from "../test/mocks";
 import log from "./index";
-import { getDirectionPrefix, restoreSilence } from "./shared";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 

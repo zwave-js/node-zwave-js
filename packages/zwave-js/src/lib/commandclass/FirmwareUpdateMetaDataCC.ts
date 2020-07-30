@@ -2,6 +2,7 @@ import {
 	CommandClasses,
 	CRC16_CCITT,
 	Maybe,
+	MessageOrCCLogEntry,
 	unknownBoolean,
 	validatePayload,
 	ZWaveError,
@@ -10,7 +11,6 @@ import {
 import type { ValueID } from "@zwave-js/core";
 import { AllOrNone, getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import type { MessageOrCCLogEntry } from "../log/shared";
 import { CCAPI } from "./API";
 import {
 	API,

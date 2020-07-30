@@ -3,6 +3,7 @@ import {
 	encodeBitMask,
 	MAX_NODES,
 	Maybe,
+	MessageOrCCLogEntry,
 	parseBitMask,
 	validatePayload,
 	ZWaveError,
@@ -11,7 +12,6 @@ import {
 import type { ValueID } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
-import type { MessageOrCCLogEntry } from "../log/shared";
 import { CCAPI } from "./API";
 import {
 	getGroupCountValueId as getAssociationGroupCountValueId,

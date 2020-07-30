@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	Duration,
+	MessageOrCCLogEntry,
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -8,7 +9,6 @@ import {
 import type { Maybe } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import type { MessageOrCCLogEntry } from "../log/shared";
 import { CCAPI } from "./API";
 import {
 	API,

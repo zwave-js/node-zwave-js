@@ -4,6 +4,7 @@ import {
 	CommandClasses,
 	deserializeCacheValue,
 	getCCName,
+	MessageOrCCLogEntry,
 	parseCCId,
 	serializeCacheValue,
 	stripUndefined,
@@ -17,7 +18,6 @@ import {
 import { JSONObject, num2hex } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
-import type { MessageOrCCLogEntry } from "../log/shared";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage } from "../node/Types";

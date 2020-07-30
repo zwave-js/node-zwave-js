@@ -2,12 +2,12 @@ import {
 	assertLogInfo,
 	assertMessage,
 	CommandClasses,
+	restoreSilence,
 	SpyTransport,
 } from "@zwave-js/core";
 import winston from "winston";
 import { InterviewStage } from "../node/Types";
 import log from "./index";
-import { restoreSilence } from "./shared";
 
 describe("lib/log/Controller =>", () => {
 	let controllerLogger: winston.Logger;

@@ -1,3 +1,14 @@
+import {
+	createLoggerFormat,
+	createLogTransports,
+	DataDirection,
+	getDirectionPrefix,
+	isLoglevelVisible,
+	messageToLines,
+	shouldLogNode,
+	tagify,
+	ZWaveLogger,
+} from "@zwave-js/core";
 import type { SortedList } from "alcalzone-shared/sorted-list";
 import winston from "winston";
 import type { CommandClass } from "../commandclass/CommandClass";
@@ -10,17 +21,6 @@ import {
 	MessageType,
 } from "../message/Constants";
 import type { Message, ResponseRole } from "../message/Message";
-import {
-	createLoggerFormat,
-	createLogTransports,
-	DataDirection,
-	getDirectionPrefix,
-	isLoglevelVisible,
-	messageToLines,
-	shouldLogNode,
-	tagify,
-	ZWaveLogger,
-} from "./shared";
 
 export const DRIVER_LABEL = "DRIVER";
 const DRIVER_LOGLEVEL = "verbose";

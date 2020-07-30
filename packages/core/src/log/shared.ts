@@ -18,11 +18,13 @@ function getTransportLoglevelNumeric(): number {
 function shouldLogToFile(): boolean {
 	return !!process.env.LOGTOFILE;
 }
-const logFilename = path.join(
-	__dirname,
-	"../../..",
-	`zwave-${process.pid}.log`,
-);
+
+const logFilename = process.mainModule
+	? path.join(
+			path.dirname(process.mainModule.filename),
+			`zwave-${process.pid}.log`,
+	  )
+	: path.join(__dirname, "../../..", `zwave-${process.pid}.log`);
 
 /**
  * Checks the LOG_NODES env variable whether logs should be written for a given node id

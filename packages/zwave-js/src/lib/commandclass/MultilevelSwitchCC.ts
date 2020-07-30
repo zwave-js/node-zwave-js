@@ -1,8 +1,8 @@
-import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
 	Maybe,
+	MessageOrCCLogEntry,
 	parseMaybeNumber,
 	parseNumber,
 	validatePayload,
@@ -10,10 +10,10 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
-import type { MessageOrCCLogEntry } from "../log/shared";
 import {
 	CCAPI,
 	SetValueImplementation,
