@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 4.0.6 (2020-07-30)
 ### Bugfixes
 * Logs are no longer split across two logfiles.
 
