@@ -598,6 +598,7 @@ describe("lib/driver/SendThreadMachine", () => {
 			} as any);
 
 			expect(
+				// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 				(service.state.value as any).sending.waitForUpdate,
 			).toBeObject();
 		});
@@ -1097,9 +1098,9 @@ describe("lib/driver/SendThreadMachine", () => {
 				sendDataBasicSetSecure.command.preTransmitHandshake,
 			).toBeCalledTimes(1);
 
-			expect(service.state.value).toMatchObject({
-				sending: { handshake: "waitForTrigger" },
-			});
+			expect(service.state.toStrings()).toInclude(
+				"sending.handshake.working.executeThread.waitForTrigger",
+			);
 
 			// We've intercepted the sendCommand call, so create the transaction ourselves
 			const nonceGet = new Transaction(
@@ -1113,9 +1114,9 @@ describe("lib/driver/SendThreadMachine", () => {
 				transaction: nonceGet,
 			});
 
-			expect(service.state.value).toMatchObject({
-				sending: { handshake: "executeHandshake" },
-			});
+			expect(service.state.toStrings()).toInclude(
+				"sending.handshake.working.executeThread.executeHandshake",
+			);
 		});
 
 		describe(`while waiting for a handshake trigger, all other messages should be ignored`, () => {
@@ -1136,9 +1137,9 @@ describe("lib/driver/SendThreadMachine", () => {
 					sendDataBasicSetSecure.command.preTransmitHandshake,
 				).toBeCalledTimes(1);
 
-				expect(service.state.value).toMatchObject({
-					sending: { handshake: "waitForTrigger" },
-				});
+				expect(service.state.toStrings()).toInclude(
+					"sending.handshake.working.executeThread.waitForTrigger",
+				);
 
 				const transaction2 = new Transaction(
 					fakeDriver,
@@ -1151,9 +1152,9 @@ describe("lib/driver/SendThreadMachine", () => {
 					transaction: transaction2,
 				});
 
-				expect(service.state.value).toMatchObject({
-					sending: { handshake: "waitForTrigger" },
-				});
+				expect(service.state.toStrings()).toInclude(
+					"sending.handshake.working.executeThread.waitForTrigger",
+				);
 			});
 
 			it("wrong message type", () => {
@@ -1173,9 +1174,9 @@ describe("lib/driver/SendThreadMachine", () => {
 					sendDataBasicSetSecure.command.preTransmitHandshake,
 				).toBeCalledTimes(1);
 
-				expect(service.state.value).toMatchObject({
-					sending: { handshake: "waitForTrigger" },
-				});
+				expect(service.state.toStrings()).toInclude(
+					"sending.handshake.working.executeThread.waitForTrigger",
+				);
 
 				const transaction2 = new Transaction(
 					fakeDriver,
@@ -1188,9 +1189,9 @@ describe("lib/driver/SendThreadMachine", () => {
 					transaction: transaction2,
 				});
 
-				expect(service.state.value).toMatchObject({
-					sending: { handshake: "waitForTrigger" },
-				});
+				expect(service.state.toStrings()).toInclude(
+					"sending.handshake.working.executeThread.waitForTrigger",
+				);
 			});
 
 			it("wrong node id", () => {
@@ -1210,9 +1211,9 @@ describe("lib/driver/SendThreadMachine", () => {
 					sendDataBasicSetSecure.command.preTransmitHandshake,
 				).toBeCalledTimes(1);
 
-				expect(service.state.value).toMatchObject({
-					sending: { handshake: "waitForTrigger" },
-				});
+				expect(service.state.toStrings()).toInclude(
+					"sending.handshake.working.executeThread.waitForTrigger",
+				);
 
 				const sendDataWrongNodeId = new SendDataRequest(fakeDriver, {
 					command: new BasicCCSet(fakeDriver, {
@@ -1232,9 +1233,9 @@ describe("lib/driver/SendThreadMachine", () => {
 					transaction: transaction2,
 				});
 
-				expect(service.state.value).toMatchObject({
-					sending: { handshake: "waitForTrigger" },
-				});
+				expect(service.state.toStrings()).toInclude(
+					"sending.handshake.working.executeThread.waitForTrigger",
+				);
 			});
 		});
 
@@ -1256,7 +1257,7 @@ describe("lib/driver/SendThreadMachine", () => {
 
 			testMachine.initial = "sending";
 			testMachine.states.sending.initial = "handshake";
-			testMachine.states.sending.states.handshake.initial =
+			testMachine.states.sending.states.handshake.states.working.states.executeThread.initial =
 				"executeHandshake";
 			service = interpret(testMachine).start();
 
@@ -1289,7 +1290,7 @@ describe("lib/driver/SendThreadMachine", () => {
 
 			testMachine.initial = "sending";
 			testMachine.states.sending.initial = "handshake";
-			testMachine.states.sending.states.handshake.initial =
+			testMachine.states.sending.states.handshake.states.working.states.executeThread.initial =
 				"executeHandshake";
 			service = interpret(testMachine).start();
 
@@ -1302,11 +1303,15 @@ describe("lib/driver/SendThreadMachine", () => {
 			} as any);
 
 			expect(service.state.value).toMatchObject({
-				sending: { handshake: "waitForHandshakeResponse" },
+				sending: {
+					handshake: {
+						working: { executeThread: "waitForHandshakeResponse" },
+					},
+				},
 			});
 		});
 
-		it("when the expected handshake response is received, it should go into execute state", () => {
+		it("when the expected handshake response is received AND the preTransmit handshake call is resolved, it should go into execute state", () => {
 			const transaction = createTransaction(sendDataBasicSetSecure);
 			const testMachine = createSendThreadMachine(
 				defaultImplementations,
@@ -1324,7 +1329,7 @@ describe("lib/driver/SendThreadMachine", () => {
 
 			testMachine.initial = "sending";
 			testMachine.states.sending.initial = "handshake";
-			testMachine.states.sending.states.handshake.initial =
+			testMachine.states.sending.states.handshake.states.working.states.executeThread.initial =
 				"waitForHandshakeResponse";
 			service = interpret(testMachine).start();
 
@@ -1338,6 +1343,14 @@ describe("lib/driver/SendThreadMachine", () => {
 			service.send({
 				type: "message",
 				message: response,
+			} as any);
+
+			expect(service.state.value).toMatchObject({
+				sending: { handshake: {} },
+			});
+
+			service.send({
+				type: "done.invoke.kickOffPreTransmitHandshake",
 			} as any);
 
 			expect(service.state.value).toMatchObject({
@@ -1363,7 +1376,7 @@ describe("lib/driver/SendThreadMachine", () => {
 
 			testMachine.initial = "sending";
 			testMachine.states.sending.initial = "handshake";
-			testMachine.states.sending.states.handshake.initial =
+			testMachine.states.sending.states.handshake.states.working.states.executeThread.initial =
 				"waitForHandshakeResponse";
 
 			const clock = new SimulatedClock();
@@ -1371,7 +1384,11 @@ describe("lib/driver/SendThreadMachine", () => {
 
 			clock.increment(1500);
 			expect(service.state.value).toMatchObject({
-				sending: { handshake: "waitForHandshakeResponse" },
+				sending: {
+					handshake: {
+						working: { executeThread: "waitForHandshakeResponse" },
+					},
+				},
 			});
 
 			clock.increment(100);
@@ -1398,7 +1415,7 @@ describe("lib/driver/SendThreadMachine", () => {
 
 			testMachine.initial = "sending";
 			testMachine.states.sending.initial = "handshake";
-			testMachine.states.sending.states.handshake.initial =
+			testMachine.states.sending.states.handshake.states.working.states.executeThread.initial =
 				"waitForHandshakeResponse";
 
 			const clock = new SimulatedClock();

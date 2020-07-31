@@ -29,6 +29,11 @@ import {
 } from "./StateMachineShared";
 import type { Transaction } from "./Transaction";
 
+export const waitForTriggerStateId =
+	"sending.handshake.working.executeThread.waitForTrigger";
+export const waitForHandshakeResponseStateId =
+	"sending.handshake.working.executeThread.waitForHandshakeResponse";
+
 /* eslint-disable @typescript-eslint/ban-types */
 export interface SendThreadStateSchema {
 	states: {
@@ -36,12 +41,28 @@ export interface SendThreadStateSchema {
 		sending: {
 			states: {
 				init: {};
+				// TODO: I think handshake deserves to be a sub-machine
 				handshake: {
 					states: {
-						init: {};
-						executeHandshake: {};
-						waitForTrigger: {};
-						waitForHandshakeResponse: {};
+						check: {};
+						working: {
+							states: {
+								invokeThread: {
+									states: {
+										invoking: {};
+										invokeDone: {};
+									};
+								};
+								executeThread: {
+									states: {
+										waitForTrigger: {};
+										executeHandshake: {};
+										waitForHandshakeResponse: {};
+										executeDone: {};
+									};
+								};
+							};
+						};
 					};
 				};
 				execute: {};
@@ -228,17 +249,6 @@ const deleteHandshakeResponseTransaction = assign((ctx: SendThreadContext) => ({
 	...ctx,
 	handshakeResponseTransaction: undefined,
 }));
-
-const executePreTransmitHandshake = (ctx: SendThreadContext) => {
-	// Execute the pre transmit handshake and swallow all errors caused by
-	// not being able to send the message
-	(ctx.currentTransaction!.message as SendDataRequest).command
-		.preTransmitHandshake()
-		.catch((e) => {
-			if (isSerialCommandError(e)) return;
-			throw e;
-		});
-};
 
 const resetSendDataAttempts = assign({
 	sendDataAttempts: (_: any) => 0,
@@ -484,81 +494,119 @@ export function createSendThreadMachine(
 							],
 						},
 						handshake: {
-							initial: "init",
+							initial: "check",
 							states: {
-								init: {
+								check: {
 									always: [
 										// Skip this step if no handshake is required
 										{
 											cond: "requiresNoHandshake",
 											target: "#execute",
 										},
-										// else kick it off
+										// else begin the handshake process
 										{
-											actions: executePreTransmitHandshake,
-											target: "waitForTrigger",
+											target: "working",
 										},
 									],
 								},
-								waitForTrigger: {
-									on: {
-										preTransmitHandshake:
-											"executeHandshake",
-									},
-								},
-								executeHandshake: {
-									// Swallow the message event while executing
-									on: { message: undefined },
-									invoke: {
-										id: "executeHandshake",
-										src: "executePreTransmitHandshake",
-										autoForward: true,
-										onDone: [
-											// On success, start waiting for an update
-											{
-												cond: "executeSuccessful",
-												target:
-													"waitForHandshakeResponse",
+								working: {
+									type: "parallel",
+									states: {
+										invokeThread: {
+											initial: "invoking",
+											states: {
+												invoking: {
+													invoke: {
+														id:
+															"kickOffPreTransmitHandshake",
+														src:
+															"kickOffPreTransmitHandshake",
+														onDone: "invokeDone",
+													},
+												},
+												invokeDone: { type: "final" },
 											},
-											// On failure, abort timed out send attempts
-											{
-												cond:
-													"isSendDataWithCallbackTimeout",
-												target: "#abortSendData",
-												actions: assign({
-													sendDataErrorData: (
-														_,
-														evt,
-													) => evt.data,
-												}),
+										},
+										executeThread: {
+											initial: "waitForTrigger",
+											states: {
+												waitForTrigger: {
+													on: {
+														preTransmitHandshake:
+															"executeHandshake",
+													},
+												},
+												executeHandshake: {
+													// Swallow the message event while executing
+													on: { message: undefined },
+													invoke: {
+														id: "executeHandshake",
+														src:
+															"executePreTransmitHandshake",
+														autoForward: true,
+														onDone: [
+															// On success, start waiting for an update
+															{
+																cond:
+																	"executeSuccessful",
+																target:
+																	"waitForHandshakeResponse",
+															},
+															// On failure, abort timed out send attempts
+															{
+																cond:
+																	"isSendDataWithCallbackTimeout",
+																target:
+																	"#abortSendData",
+																actions: assign(
+																	{
+																		sendDataErrorData: (
+																			_,
+																			evt,
+																		) =>
+																			evt.data,
+																	},
+																),
+															},
+															// And try to retry the entire transaction
+															{
+																cond:
+																	"isSendData",
+																target:
+																	"#retry",
+																actions: assign(
+																	{
+																		sendDataErrorData: (
+																			_,
+																			evt,
+																		) =>
+																			evt.data,
+																	},
+																),
+															},
+														],
+													},
+												},
+												waitForHandshakeResponse: {
+													on: {
+														handshakeResponse: {
+															actions: resolveCurrentTransactionWithMessage,
+															target:
+																"executeDone",
+														},
+													},
+													after: {
+														1600: {
+															actions: rememberNodeTimeoutError,
+															target: "#retry",
+														},
+													},
+												},
+												executeDone: { type: "final" },
 											},
-											// And try to retry the entire transaction
-											{
-												cond: "isSendData",
-												target: "#retry",
-												actions: assign({
-													sendDataErrorData: (
-														_,
-														evt,
-													) => evt.data,
-												}),
-											},
-										],
-									},
-								},
-								waitForHandshakeResponse: {
-									on: {
-										handshakeResponse: {
-											actions: resolveCurrentTransactionWithMessage,
-											target: "#execute",
 										},
 									},
-									after: {
-										1600: {
-											actions: rememberNodeTimeoutError,
-											target: "#retry",
-										},
-									},
+									onDone: "#execute",
 								},
 							},
 						},
@@ -760,6 +808,17 @@ export function createSendThreadMachine(
 						ctx.currentTransaction!.message,
 						implementations,
 					),
+				kickOffPreTransmitHandshake: async (ctx) => {
+					// Execute the pre transmit handshake and swallow all errors caused by
+					// not being able to send the message
+					try {
+						await (ctx.currentTransaction!
+							.message as SendDataRequest).command.preTransmitHandshake();
+					} catch (e) {
+						if (isSerialCommandError(e)) return;
+						throw e;
+					}
+				},
 				executePreTransmitHandshake: (ctx) =>
 					createSerialAPICommandMachine(
 						ctx.preTransmitHandshakeTransaction!.message,
@@ -835,6 +894,7 @@ export function createSendThreadMachine(
 						return false;
 					const sentMsg = ctx.currentTransaction!
 						.message as SendDataRequest;
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 					const receivedMsg = (evt as any).message;
 					return (
 						receivedMsg instanceof ApplicationCommandRequest &&
@@ -848,9 +908,10 @@ export function createSendThreadMachine(
 					evt,
 					meta,
 				) => {
-					if (!meta.state.matches("sending.handshake.waitForTrigger"))
+					if (!meta.state.matches(waitForTriggerStateId))
 						return false;
 
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 					const transaction = (evt as any).transaction as Transaction;
 					if (
 						transaction.priority !==
@@ -867,14 +928,11 @@ export function createSendThreadMachine(
 					return newCommand.nodeId === curCommand.nodeId;
 				},
 				isExpectedHandshakeResponse: (ctx, evt, meta) => {
-					if (
-						!meta.state.matches(
-							"sending.handshake.waitForHandshakeResponse",
-						)
-					)
+					if (!meta.state.matches(waitForHandshakeResponseStateId))
 						return false;
 					const sentMsg = ctx.preTransmitHandshakeTransaction!
 						.message as SendDataRequest;
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 					const receivedMsg = (evt as any).message;
 					return (
 						receivedMsg instanceof ApplicationCommandRequest &&
@@ -922,10 +980,12 @@ export function createSendThreadMachine(
 					return (
 						!!msg &&
 						messageIsPing(msg) &&
+						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 						msg.getNodeId() === (evt as any).nodeId
 					);
 				},
 				shouldNotKeepCurrentTransaction: (ctx, evt) => {
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 					const reducer = (evt as any).reducer;
 					return (
 						reducer(ctx.currentTransaction, "current").type !==
