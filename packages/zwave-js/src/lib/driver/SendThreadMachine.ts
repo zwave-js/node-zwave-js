@@ -193,15 +193,6 @@ const resolveCurrentTransactionWithoutMessage = assign(
 	},
 );
 
-const resolveHandshakeResponseTransaction = assign(
-	(ctx: SendThreadContext, evt: EventObject) => {
-		ctx.handshakeResponseTransaction!.promise.resolve(
-			(evt as any).data.result,
-		);
-		return ctx;
-	},
-);
-
 const rejectCurrentTransaction = assign(
 	(ctx: SendThreadContext, evt: EventObject) => {
 		const data = (evt as any).data ?? ctx.sendDataErrorData;
@@ -216,6 +207,15 @@ const rejectCurrentTransaction = assign(
 	},
 );
 
+const resolveHandshakeResponseTransaction = assign(
+	(ctx: SendThreadContext, evt: EventObject) => {
+		ctx.handshakeResponseTransaction!.promise.resolve(
+			(evt as any).data.result,
+		);
+		return ctx;
+	},
+);
+
 const rejectHandshakeResponseTransaction = assign(
 	(ctx: SendThreadContext, evt: EventObject) => {
 		const data = (evt as any).data ?? ctx.sendDataErrorData;
@@ -225,6 +225,15 @@ const rejectHandshakeResponseTransaction = assign(
 				ctx.currentTransaction!.message,
 				data.result,
 			),
+		);
+		return ctx;
+	},
+);
+
+const resolvePreTransmitHandshakeTransaction = assign(
+	(ctx: SendThreadContext, evt: EventObject) => {
+		ctx.preTransmitHandshakeTransaction!.promise.resolve(
+			(evt as any).message,
 		);
 		return ctx;
 	},
@@ -590,7 +599,7 @@ export function createSendThreadMachine(
 												waitForHandshakeResponse: {
 													on: {
 														handshakeResponse: {
-															actions: resolveCurrentTransactionWithMessage,
+															actions: resolvePreTransmitHandshakeTransaction,
 															target:
 																"executeDone",
 														},
