@@ -4,6 +4,14 @@
 	## __WORK IN PROGRESS__
 -->
 
+## 4.0.6 (2020-07-30)
+### Bugfixes
+* Logs are no longer split across two logfiles.
+
+## 4.0.5 (2020-07-30)
+### Bugfixes
+* Made `Meter CC::Reset` accessible through the `SET_VALUE` API.
+
 ## 4.0.4 (2020-07-05)
 ### Bugfixes
 * During the interview, endpoint associations are now converted to node associations if required

@@ -1,14 +1,5 @@
 import {
 	CommandClasses,
-	ValueAddedArgs,
-	ValueID,
-	ValueRemovedArgs,
-	ValueUpdatedArgs,
-} from "@zwave-js/core";
-import winston from "winston";
-import type { ZWaveNode } from "../node/Node";
-import { InterviewStage } from "../node/Types";
-import {
 	createLoggerFormat,
 	createLogTransports,
 	DataDirection,
@@ -17,8 +8,15 @@ import {
 	isLoglevelVisible,
 	shouldLogNode,
 	tagify,
+	ValueAddedArgs,
+	ValueID,
+	ValueRemovedArgs,
+	ValueUpdatedArgs,
 	ZWaveLogger,
-} from "./shared";
+} from "@zwave-js/core";
+import winston from "winston";
+import type { ZWaveNode } from "../node/Node";
+import { InterviewStage } from "../node/Types";
 
 export const CONTROLLER_LABEL = "CNTRLR";
 const CONTROLLER_LOGLEVEL = "info";

@@ -5,6 +5,7 @@ import {
 	encryptAES128OFB,
 	generateAuthKey,
 	generateEncryptionKey,
+	MessageOrCCLogEntry,
 	parseCCList,
 	SecurityManager,
 	validatePayload,
@@ -21,7 +22,6 @@ import {
 } from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
-import type { MessageOrCCLogEntry } from "../log/shared";
 import { MessagePriority } from "../message/Constants";
 import { CCAPI } from "./API";
 import {

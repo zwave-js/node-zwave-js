@@ -2,6 +2,7 @@ import {
 	CommandClasses,
 	Duration,
 	Maybe,
+	MessageOrCCLogEntry,
 	parseMaybeNumber,
 	parseNumber,
 	validatePayload,
@@ -13,7 +14,6 @@ import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
-import type { MessageOrCCLogEntry } from "../log/shared";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -582,32 +582,6 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 		validatePayload(this.payload.length >= 2);
 		this._switchType = this.payload[0] & 0b11111;
 		this.persistValues();
-
-		// Create metadata for the control values
-		const switchTypeName = getEnumMemberName(SwitchType, this._switchType);
-		const [up, down] = switchTypeToActions(switchTypeName);
-		this.getValueDB().setMetadata(
-			{
-				commandClass: this.ccId,
-				endpoint: this.endpointIndex,
-				property: up,
-			},
-			{
-				...ValueMetadata.Boolean,
-				label: `Perform a level change (${up})`,
-			},
-		);
-		this.getValueDB().setMetadata(
-			{
-				commandClass: this.ccId,
-				endpoint: this.endpointIndex,
-				property: down,
-			},
-			{
-				...ValueMetadata.Boolean,
-				label: `Perform a level change (${down})`,
-			},
-		);
 	}
 
 	// This is the primary switch type. We're not supporting secondary switch types
@@ -615,6 +589,39 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 	@ccValue({ internal: true })
 	public get switchType(): SwitchType {
 		return this._switchType;
+	}
+
+	public persistValues(): boolean {
+		if (!super.persistValues()) return false;
+
+		const valueDb = this.getValueDB();
+		// Create metadata for the control values if necessary
+		const switchTypeName = getEnumMemberName(SwitchType, this._switchType);
+		const [up, down] = switchTypeToActions(switchTypeName);
+		const upValueId: ValueID = {
+			commandClass: this.ccId,
+			endpoint: this.endpointIndex,
+			property: up,
+		};
+		const downValueId: ValueID = {
+			commandClass: this.ccId,
+			endpoint: this.endpointIndex,
+			property: down,
+		};
+
+		if (!valueDb.hasMetadata(upValueId)) {
+			this.getValueDB().setMetadata(upValueId, {
+				...ValueMetadata.Boolean,
+				label: `Perform a level change (${up})`,
+			});
+		}
+		if (!valueDb.hasMetadata(downValueId)) {
+			this.getValueDB().setMetadata(downValueId, {
+				...ValueMetadata.Boolean,
+				label: `Perform a level change (${down})`,
+			});
+		}
+		return true;
 	}
 }
 

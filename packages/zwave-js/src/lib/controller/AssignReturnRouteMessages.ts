@@ -1,7 +1,10 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import {
+	MessageOrCCLogEntry,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
 import { getEnumMemberName, JSONObject } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import type { MessageOrCCLogEntry } from "../log/shared";
 import {
 	FunctionType,
 	MessagePriority,

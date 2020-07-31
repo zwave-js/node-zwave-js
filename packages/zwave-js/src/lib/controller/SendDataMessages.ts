@@ -1,4 +1,9 @@
-import { MAX_NODES, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import {
+	MAX_NODES,
+	MessageOrCCLogEntry,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
 import { getEnumMemberName, JSONObject, num2hex } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
 import type {
@@ -9,7 +14,6 @@ import type {
 import type { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
 import type { Driver } from "../driver/Driver";
 import { MAX_SEND_ATTEMPTS } from "../driver/Transaction";
-import type { MessageOrCCLogEntry } from "../log/shared";
 import {
 	FunctionType,
 	MessagePriority,

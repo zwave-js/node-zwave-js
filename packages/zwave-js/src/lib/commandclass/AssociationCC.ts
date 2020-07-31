@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	MAX_NODES,
+	MessageOrCCLogEntry,
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -9,7 +10,6 @@ import type { Maybe, ValueID } from "@zwave-js/core";
 import { distinct } from "alcalzone-shared/arrays";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
-import type { MessageOrCCLogEntry } from "../log/shared";
 import type { ZWaveNode } from "../node/Node";
 import { CCAPI } from "./API";
 import {

@@ -9,6 +9,7 @@ import {
 	encodeBitMask,
 	ignoreTimeout,
 	Maybe,
+	MessageOrCCLogEntry,
 	parseBitMask,
 	parseNodeInformationFrame,
 	validatePayload,
@@ -19,7 +20,6 @@ import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
-import type { MessageOrCCLogEntry } from "../log/shared";
 import { MessagePriority } from "../message/Constants";
 import { CCAPI } from "./API";
 import {
