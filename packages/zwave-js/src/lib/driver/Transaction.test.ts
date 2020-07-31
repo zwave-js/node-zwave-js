@@ -7,7 +7,7 @@ import { MessagePriority } from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";
 import type { ZWaveNode } from "../node/Node";
 import type { Driver } from "./Driver";
-import { MAX_SEND_ATTEMPTS, Transaction } from "./Transaction";
+import { Transaction } from "./Transaction";
 
 function createTransactionWithPriority(priority: MessagePriority): Transaction {
 	return new Transaction(
@@ -271,28 +271,6 @@ describe("lib/driver/Transaction => ", () => {
 		expect(tAwakeHigh.compareTo(tAsleepWU)).toBe(-1);
 		expect(tAwakeWU.compareTo(tAsleepWU)).toBe(-1);
 		expect(tAwakeLow.compareTo(tAsleepWU)).toBe(-1);
-	});
-
-	describe("the number of send attempts", () => {
-		let test: Transaction;
-
-		beforeAll(() => {
-			test = createTransactionWithPriority(MessagePriority.Normal);
-		});
-
-		it("should default to the maximum", () => {
-			expect(test.maxSendAttempts).toBe(MAX_SEND_ATTEMPTS);
-		});
-
-		it("should not exceed the defined maximum", () => {
-			test.maxSendAttempts = MAX_SEND_ATTEMPTS + 1;
-			expect(test.maxSendAttempts).toBe(MAX_SEND_ATTEMPTS);
-		});
-
-		it("may not be less than 1", () => {
-			test.maxSendAttempts = -1;
-			expect(test.maxSendAttempts).toBe(1);
-		});
 	});
 
 	// Repro for #550

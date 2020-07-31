@@ -5,6 +5,7 @@ import {
 	MessageType,
 } from "../message/Constants";
 import {
+	expectedCallback,
 	expectedResponse,
 	gotDeserializationOptions,
 	Message,
@@ -13,8 +14,8 @@ import {
 	MessageOptions,
 	messageTypes,
 	priority,
-	ResponseRole,
 } from "../message/Message";
+import type { SuccessIndicator } from "../message/SuccessIndicator";
 
 export enum RemoveFailedNodeStartFlags {
 	OK = 0,
@@ -69,7 +70,8 @@ interface RemoveFailedNodeRequestOptions extends MessageBaseOptions {
 	failedNodeId: number;
 }
 
-@expectedResponse(testResponseForRemoveFailedNodeRequest)
+@expectedResponse(FunctionType.RemoveFailedNode)
+@expectedCallback(FunctionType.RemoveFailedNode)
 export class RemoveFailedNodeRequest extends RemoveFailedNodeRequestBase {
 	public constructor(
 		driver: Driver,
@@ -89,7 +91,9 @@ export class RemoveFailedNodeRequest extends RemoveFailedNodeRequestBase {
 	}
 }
 
-export class RemoveFailedNodeRequestStatusReport extends RemoveFailedNodeRequestBase {
+export class RemoveFailedNodeRequestStatusReport
+	extends RemoveFailedNodeRequestBase
+	implements SuccessIndicator {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
@@ -102,13 +106,14 @@ export class RemoveFailedNodeRequestStatusReport extends RemoveFailedNodeRequest
 		return this._removeStatus;
 	}
 
-	public isFailed(): boolean {
-		return this._removeStatus !== RemoveFailedNodeStatus.NodeRemoved;
+	public isOK(): boolean {
+		return this._removeStatus === RemoveFailedNodeStatus.NodeRemoved;
 	}
 }
 
 @messageTypes(MessageType.Response, FunctionType.RemoveFailedNode)
-export class RemoveFailedNodeResponse extends Message {
+export class RemoveFailedNodeResponse extends Message
+	implements SuccessIndicator {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._removeStatus = this.payload[0];
@@ -119,21 +124,7 @@ export class RemoveFailedNodeResponse extends Message {
 		return this._removeStatus;
 	}
 
-	public get isFailed(): boolean {
-		return this._removeStatus !== RemoveFailedNodeStartFlags.OK;
+	public isOK(): boolean {
+		return this._removeStatus === RemoveFailedNodeStartFlags.OK;
 	}
-}
-
-// Generic handler for all potential responses to RemoveFailedNodeRequests
-function testResponseForRemoveFailedNodeRequest(
-	sent: RemoveFailedNodeRequest,
-	received: Message,
-): ResponseRole {
-	// Any error responses are final, because they contain the reason that the node could not be removed
-	if (received instanceof RemoveFailedNodeResponse) {
-		return !received.isFailed ? "confirmation" : "final";
-	} else if (received instanceof RemoveFailedNodeRequestStatusReport) {
-		return "final";
-	}
-	return "unexpected";
 }

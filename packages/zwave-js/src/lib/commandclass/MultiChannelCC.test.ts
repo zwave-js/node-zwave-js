@@ -1,7 +1,7 @@
 import { CommandClasses } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { createEmptyMockDriver } from "../test/mocks";
-import { BasicCCSet, BasicCommand } from "./BasicCC";
+import { BasicCCGet, BasicCCReport, BasicCCSet, BasicCommand } from "./BasicCC";
 import type { CommandClass } from "./CommandClass";
 import { isEncapsulatingCommandClass } from "./EncapsulatingCommandClass";
 import {
@@ -12,6 +12,7 @@ import {
 	MultiChannelCCEndPointGet,
 	MultiChannelCommand,
 } from "./MultiChannelCC";
+import { MultiCommandCC } from "./MultiCommandCC";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
@@ -164,4 +165,101 @@ describe("lib/commandclass/MultiChannelCC", () => {
 	// 		max: 99,
 	// 	});
 	// });
+
+	describe("responses should be detected correctly", () => {
+		it("MultiChannelCC/BasicCCGet should expect a response", () => {
+			const ccRequest = MultiChannelCC.encapsulate(
+				fakeDriver,
+				new BasicCCGet(fakeDriver, {
+					nodeId: 2,
+					endpoint: 2,
+				}),
+			);
+			expect(ccRequest.expectsCCResponse()).toBeTrue();
+		});
+
+		it("MultiChannelCC/BasicCCGet (multicast) should expect NO response", () => {
+			const ccRequest = MultiChannelCC.encapsulate(
+				fakeDriver,
+				new BasicCCGet(fakeDriver, {
+					nodeId: 2,
+					endpoint: 2,
+				}),
+			);
+			// A multicast request never expects a response
+			ccRequest.destination = [1, 2, 3];
+			expect(ccRequest.expectsCCResponse()).toBeFalse();
+		});
+
+		it("MultiChannelCC/BasicCCSet should expect NO response", () => {
+			const ccRequest = MultiChannelCC.encapsulate(
+				fakeDriver,
+				new BasicCCSet(fakeDriver, {
+					nodeId: 2,
+					endpoint: 2,
+					targetValue: 7,
+				}),
+			);
+			expect(ccRequest.expectsCCResponse()).toBeFalse();
+		});
+
+		it("MultiChannelCC/BasicCCGet => MultiChannelCC/BasicCCReport = expected", () => {
+			const ccRequest = MultiChannelCC.encapsulate(
+				fakeDriver,
+				new BasicCCGet(fakeDriver, {
+					nodeId: 2,
+					endpoint: 2,
+				}),
+			);
+			const ccResponse = MultiChannelCC.encapsulate(
+				fakeDriver,
+				new BasicCCReport(fakeDriver, {
+					nodeId: ccRequest.nodeId,
+					currentValue: 7,
+				}),
+			);
+			ccResponse.endpointIndex = 2;
+
+			expect(ccRequest.isExpectedCCResponse(ccResponse)).toBeTrue();
+		});
+
+		it("MultiChannelCC/BasicCCGet => MultiChannelCC/BasicCCGet = unexpected", () => {
+			const ccRequest = MultiChannelCC.encapsulate(
+				fakeDriver,
+				new BasicCCGet(fakeDriver, {
+					nodeId: 2,
+					endpoint: 2,
+				}),
+			);
+			const ccResponse = MultiChannelCC.encapsulate(
+				fakeDriver,
+				new BasicCCGet(fakeDriver, {
+					nodeId: ccRequest.nodeId,
+					endpoint: 2,
+				}),
+			);
+			ccResponse.endpointIndex = 2;
+
+			expect(ccRequest.isExpectedCCResponse(ccResponse)).toBeFalse();
+		});
+
+		it("MultiChannelCC/BasicCCGet => MultiCommandCC/BasicCCReport = unexpected", () => {
+			const ccRequest = MultiChannelCC.encapsulate(
+				fakeDriver,
+				new BasicCCGet(fakeDriver, {
+					nodeId: 2,
+					endpoint: 2,
+				}),
+			);
+			const ccResponse = MultiCommandCC.encapsulate(fakeDriver, [
+				new BasicCCReport(fakeDriver, {
+					nodeId: ccRequest.nodeId,
+					currentValue: 7,
+				}),
+			]);
+			ccResponse.endpointIndex = 2;
+
+			expect(ccRequest.isExpectedCCResponse(ccResponse)).toBeFalse();
+		});
+	});
 });

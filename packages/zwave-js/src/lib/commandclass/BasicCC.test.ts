@@ -162,4 +162,72 @@ describe("lib/commandclass/BasicCC => ", () => {
 			expect(endpoints).toEqual([1, 2]);
 		});
 	});
+
+	describe("responses should be detected correctly", () => {
+		it("BasicCCSet should expect no response", () => {
+			const cc = new BasicCCSet(fakeDriver, {
+				nodeId: 2,
+				endpoint: 2,
+				targetValue: 7,
+			});
+			expect(cc.expectsCCResponse()).toBeFalse();
+		});
+
+		it("BasicCCSet => BasicCCReport = unexpected", () => {
+			const ccRequest = new BasicCCSet(fakeDriver, {
+				nodeId: 2,
+				endpoint: 2,
+				targetValue: 7,
+			});
+			const ccResponse = new BasicCCReport(fakeDriver, {
+				nodeId: ccRequest.nodeId,
+				currentValue: 7,
+			});
+
+			expect(ccRequest.isExpectedCCResponse(ccResponse)).toBeFalse();
+		});
+
+		it("BasicCCGet should expect a response", () => {
+			const cc = new BasicCCGet(fakeDriver, {
+				nodeId: 2,
+			});
+			expect(cc.expectsCCResponse()).toBeTrue();
+		});
+
+		it("BasicCCGet => BasicCCReport = expected", () => {
+			const ccRequest = new BasicCCGet(fakeDriver, {
+				nodeId: 2,
+			});
+			const ccResponse = new BasicCCReport(fakeDriver, {
+				nodeId: ccRequest.nodeId,
+				currentValue: 7,
+			});
+
+			expect(ccRequest.isExpectedCCResponse(ccResponse)).toBeTrue();
+		});
+
+		it("BasicCCGet => BasicCCReport (wrong node) = unexpected", () => {
+			const ccRequest = new BasicCCGet(fakeDriver, {
+				nodeId: 2,
+			});
+			const ccResponse = new BasicCCReport(fakeDriver, {
+				nodeId: (ccRequest.nodeId as number) + 1,
+				currentValue: 7,
+			});
+
+			expect(ccRequest.isExpectedCCResponse(ccResponse)).toBeFalse();
+		});
+
+		it("BasicCCGet => BasicCCSet = unexpected", () => {
+			const ccRequest = new BasicCCGet(fakeDriver, {
+				nodeId: 2,
+			});
+			const ccResponse = new BasicCCSet(fakeDriver, {
+				nodeId: ccRequest.nodeId,
+				targetValue: 7,
+			});
+
+			expect(ccRequest.isExpectedCCResponse(ccResponse)).toBeFalse();
+		});
+	});
 });

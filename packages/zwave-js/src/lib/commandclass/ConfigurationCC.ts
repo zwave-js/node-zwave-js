@@ -923,18 +923,14 @@ export class ConfigurationCCReport extends ConfigurationCC {
 	}
 }
 
-const testResponseForConfigurationGet: CCResponsePredicate<ConfigurationCCGet> = (
-	sent,
-	received,
-	isPositiveTransmitReport,
+const testResponseForConfigurationGet: CCResponsePredicate = (
+	sent: ConfigurationCCGet,
+	received: ConfigurationCCReport,
 ) => {
 	// We expect a Configuration Report that matches the requested parameter
-	return received instanceof ConfigurationCCReport &&
-		(sent.parameter === received.parameter || sent.allowUnexpectedResponse)
-		? "final"
-		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
+	return (
+		sent.parameter === received.parameter || sent.allowUnexpectedResponse
+	);
 };
 
 interface ConfigurationCCGetOptions extends CCCommandOptions {
@@ -947,7 +943,7 @@ interface ConfigurationCCGetOptions extends CCCommandOptions {
 }
 
 @CCCommand(ConfigurationCommand.Get)
-@expectedCCResponse(testResponseForConfigurationGet)
+@expectedCCResponse(ConfigurationCCReport, testResponseForConfigurationGet)
 export class ConfigurationCCGet extends ConfigurationCC {
 	public constructor(
 		driver: Driver,

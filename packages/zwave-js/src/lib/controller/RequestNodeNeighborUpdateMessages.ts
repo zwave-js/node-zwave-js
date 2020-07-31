@@ -7,7 +7,7 @@ import {
 	MessageType,
 } from "../message/Constants";
 import {
-	expectedResponse,
+	expectedCallback,
 	gotDeserializationOptions,
 	Message,
 	MessageBaseOptions,
@@ -15,8 +15,11 @@ import {
 	MessageOptions,
 	messageTypes,
 	priority,
-	ResponseRole,
 } from "../message/Message";
+import type {
+	MultiStageCallback,
+	SuccessIndicator,
+} from "../message/SuccessIndicator";
 
 export enum NodeNeighborUpdateStatus {
 	UpdateStarted = 0x21,
@@ -27,19 +30,6 @@ export enum NodeNeighborUpdateStatus {
 export interface RequestNodeNeighborUpdateRequestOptions
 	extends MessageBaseOptions {
 	nodeId: number;
-}
-
-// Generic handler for all potential responses to SendDataRequests
-function testResponseForNodeNeighborUpdateRequest(
-	sent: RequestNodeNeighborUpdateRequest,
-	received: Message,
-): ResponseRole {
-	if (received instanceof RequestNodeNeighborUpdateReport) {
-		return received.updateStatus === NodeNeighborUpdateStatus.UpdateStarted
-			? "confirmation"
-			: "final";
-	}
-	return "unexpected";
 }
 
 @messageTypes(MessageType.Request, FunctionType.RequestNodeNeighborUpdate)
@@ -56,7 +46,7 @@ export class RequestNodeNeighborUpdateRequestBase extends Message {
 	}
 }
 
-@expectedResponse(testResponseForNodeNeighborUpdateRequest)
+@expectedCallback(FunctionType.RequestNodeNeighborUpdate)
 export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateRequestBase {
 	public constructor(
 		driver: Driver,
@@ -81,12 +71,22 @@ export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateR
 	}
 }
 
-export class RequestNodeNeighborUpdateReport extends RequestNodeNeighborUpdateRequestBase {
+export class RequestNodeNeighborUpdateReport
+	extends RequestNodeNeighborUpdateRequestBase
+	implements SuccessIndicator, MultiStageCallback {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
 		this.callbackId = this.payload[0];
 		this._updateStatus = this.payload[1];
+	}
+
+	isOK(): boolean {
+		return this._updateStatus !== NodeNeighborUpdateStatus.UpdateFailed;
+	}
+
+	isFinal(): boolean {
+		return this._updateStatus === NodeNeighborUpdateStatus.UpdateDone;
 	}
 
 	private _updateStatus: NodeNeighborUpdateStatus;

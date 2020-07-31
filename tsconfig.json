@@ -50,7 +50,8 @@
 		"types": [
 			"node",
 			"jest-extended"
-		]
+		],
+		"noErrorTruncation": true
 	},
 	"include": [
 		"packages/**/*.ts",

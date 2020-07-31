@@ -14,7 +14,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { JSONObject, num2hex } from "@zwave-js/shared";
+import { JSONObject, num2hex, staticExtends } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import type { MessageOrCCLogEntry } from "../log/shared";
@@ -731,6 +731,63 @@ export class CommandClass {
 		// Overwrite this in derived classes, by default do nothing
 	}
 
+	/** Tests whether this CC expects at least one command in return */
+	public expectsCCResponse(): boolean {
+		let expected = getExpectedCCResponse(this);
+
+		// Evaluate dynamic CC responses
+		if (
+			typeof expected === "function" &&
+			!staticExtends(expected, CommandClass)
+		) {
+			expected = expected(this);
+		}
+		if (expected === undefined) return false;
+		return staticExtends(expected, CommandClass);
+	}
+
+	public isExpectedCCResponse(received: CommandClass): boolean {
+		if (received.nodeId !== this.nodeId) return false;
+
+		let expected = getExpectedCCResponse(this);
+
+		// Evaluate dynamic CC responses
+		if (
+			typeof expected === "function" &&
+			!staticExtends(expected, CommandClass)
+		) {
+			expected = expected(this);
+		}
+
+		if (expected == undefined) {
+			// Fallback, should not happen if the expected response is defined correctly
+			return false;
+		} else if (staticExtends(expected, CommandClass)) {
+			// The CC always expects the same response, check if this is the one
+			if (!(received instanceof expected)) return false;
+		}
+
+		// If the CC wants to test the response, let it
+		const predicate = getCCResponsePredicate(this);
+		const ret = predicate?.(this, received) ?? true;
+
+		if (ret === "checkEncapsulated") {
+			if (
+				isEncapsulatingCommandClass(this) &&
+				isEncapsulatingCommandClass(received)
+			) {
+				return this.encapsulated.isExpectedCCResponse(
+					received.encapsulated,
+				);
+			} else {
+				// Fallback, should not happen if the expected response is defined correctly
+				return false;
+			}
+		}
+
+		return ret;
+	}
+
 	/**
 	 * Translates a property identifier into a speaking name for use in an external API
 	 * @param property The property identifier that should be translated
@@ -836,35 +893,20 @@ function getCCCommandMapKey(ccId: CommandClasses, ccCommand: number): string {
  * May be used to define different expected CC responses depending on the sent CC
  */
 export type DynamicCCResponse<T extends CommandClass = CommandClass> = (
-	sentCC?: T,
+	sentCC: T,
 ) => typeof CommandClass | undefined;
 
 export type CCResponseRole =
-	| "unexpected" // a CC that does not belong to this transaction
-	| "confirmation" // a confirmation response, e.g. report that a process has started
-	| "checkEncapsulated" // The response role depends on the encapsulated CC
-	| "final"; // a final response (leading to a resolved transaction)
+	| boolean // The response was either expected or unexpected
+	| "checkEncapsulated"; // The response role depends on the encapsulated CC
 
 /**
  * A predicate function to test if a received CC matches the sent CC
  */
-export type CCResponsePredicate<T extends CommandClass = CommandClass> = (
-	sentCommand: T,
-	receivedCommand: CommandClass | undefined,
-	isPositiveTransmitReport: boolean,
-) => CCResponseRole;
-
-export function isDynamicCCResponse(
-	fn: DynamicCCResponse | CCResponsePredicate,
-): fn is DynamicCCResponse {
-	return fn.length <= 1;
-}
-
-export function isCCResponsePredicate(
-	fn: DynamicCCResponse | CCResponsePredicate,
-): fn is CCResponsePredicate {
-	return fn.length === 3;
-}
+export type CCResponsePredicate<
+	TSent extends CommandClass = CommandClass,
+	TReceived extends CommandClass = CommandClass
+> = (sentCommand: TSent, receivedCommand: TReceived) => CCResponseRole;
 
 /**
  * Defines the command class associated with a Z-Wave message
@@ -1041,44 +1083,43 @@ function getCCCommandConstructor<TBase extends CommandClass>(
 /**
  * Defines the expected response associated with a Z-Wave message
  */
-export function expectedCCResponse(cc: typeof CommandClass): ClassDecorator;
 export function expectedCCResponse(
-	predicateOrDynamic: CCResponsePredicate | DynamicCCResponse,
-): ClassDecorator;
-export function expectedCCResponse<T extends CommandClass>(
-	ccOrPredicateOrDynamic:
-		| typeof CommandClass
-		| CCResponsePredicate<T>
-		| DynamicCCResponse<T>,
+	cc: typeof CommandClass | DynamicCCResponse,
+	predicate?: CCResponsePredicate,
 ): ClassDecorator {
 	return (ccClass) => {
-		Reflect.defineMetadata(
-			METADATA_ccResponse,
-			ccOrPredicateOrDynamic,
-			ccClass,
-		);
+		Reflect.defineMetadata(METADATA_ccResponse, { cc, predicate }, ccClass);
 	};
 }
 
 /**
- * Retrieves the expected response defined for a Z-Wave message class
+ * Retrieves the expected response (static or dynamic) defined for a Z-Wave message class
  */
 export function getExpectedCCResponse<T extends CommandClass>(
 	ccClass: T,
-):
-	| typeof CommandClass
-	| DynamicCCResponse<T>
-	| CCResponsePredicate<T>
-	| undefined {
+): typeof CommandClass | DynamicCCResponse<T> | undefined {
 	// get the class constructor
 	const constr = ccClass.constructor;
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_ccResponse, constr) as
-		| typeof CommandClass
-		| DynamicCCResponse<T>
-		| CCResponsePredicate<T>
+		| { cc: typeof CommandClass | DynamicCCResponse<T> }
 		| undefined;
-	return ret;
+	return ret?.cc;
+}
+
+/**
+ * Retrieves the CC response predicate defined for a Z-Wave message class
+ */
+export function getCCResponsePredicate<T extends CommandClass>(
+	ccClass: T,
+): CCResponsePredicate<T> | undefined {
+	// get the class constructor
+	const constr = ccClass.constructor;
+	// retrieve the current metadata
+	const ret = Reflect.getMetadata(METADATA_ccResponse, constr) as
+		| { predicate: CCResponsePredicate<T> | undefined }
+		| undefined;
+	return ret?.predicate;
 }
 
 export interface CCValueOptions {

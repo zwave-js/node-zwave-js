@@ -386,15 +386,9 @@ export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 
 const testResponseForSoundSwitchToneInfoGet: CCResponsePredicate = (
 	sent: SoundSwitchCCToneInfoGet,
-	received,
-	isPositiveTransmitReport,
+	received: SoundSwitchCCToneInfoReport,
 ) => {
-	return received instanceof SoundSwitchCCToneInfoReport &&
-		received.toneId === sent.toneId
-		? "final"
-		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
+	return received.toneId === sent.toneId;
 };
 
 interface SoundSwitchCCToneInfoGetOptions extends CCCommandOptions {
@@ -402,7 +396,10 @@ interface SoundSwitchCCToneInfoGetOptions extends CCCommandOptions {
 }
 
 @CCCommand(SoundSwitchCommand.ToneInfoGet)
-@expectedCCResponse(testResponseForSoundSwitchToneInfoGet)
+@expectedCCResponse(
+	SoundSwitchCCToneInfoReport,
+	testResponseForSoundSwitchToneInfoGet,
+)
 export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 	public constructor(
 		driver: Driver,

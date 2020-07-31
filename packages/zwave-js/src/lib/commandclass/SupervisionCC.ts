@@ -191,19 +191,13 @@ interface SupervisionCCGetOptions extends CCCommandOptions {
 
 const testResponseForSupervisionCCGet: CCResponsePredicate = (
 	sent: SupervisionCCGet,
-	received,
-	isPositiveTransmitReport,
+	received: SupervisionCCReport,
 ) => {
-	return received instanceof SupervisionCCReport &&
-		received.sessionId === sent.sessionId
-		? "final"
-		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
+	return received.sessionId === sent.sessionId;
 };
 
 @CCCommand(SupervisionCommand.Get)
-@expectedCCResponse(testResponseForSupervisionCCGet)
+@expectedCCResponse(SupervisionCCReport, testResponseForSupervisionCCGet)
 export class SupervisionCCGet extends SupervisionCC {
 	public constructor(
 		driver: Driver,

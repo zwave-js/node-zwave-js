@@ -434,19 +434,13 @@ interface ColorSwitchCCGetOptions extends CCCommandOptions {
 
 const testResponseForColorSwitchGet: CCResponsePredicate = (
 	sent: ColorSwitchCCGet,
-	received,
-	isPositiveTransmitReport,
+	received: ColorSwitchCCReport,
 ) => {
-	return received instanceof ColorSwitchCCReport &&
-		sent.colorComponent === received.colorComponent
-		? "final"
-		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
+	return sent.colorComponent === received.colorComponent;
 };
 
 @CCCommand(ColorSwitchCommand.Get)
-@expectedCCResponse(testResponseForColorSwitchGet)
+@expectedCCResponse(ColorSwitchCCReport, testResponseForColorSwitchGet)
 export class ColorSwitchCCGet extends ColorSwitchCC {
 	public constructor(
 		driver: Driver,

@@ -28,7 +28,6 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	CCResponsePredicate,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -122,7 +121,7 @@ export class SecurityCCAPI extends CCAPI {
 			cc,
 			{
 				// Nonce requests must be handled immediately
-				priority: MessagePriority.Handshake,
+				priority: MessagePriority.PreTransmitHandshake,
 				// Only try getting a nonce once
 				maxSendAttempts: 1,
 			},
@@ -393,24 +392,17 @@ export class SecurityCCNonceReport extends SecurityCC {
 @expectedCCResponse(SecurityCCNonceReport)
 export class SecurityCCNonceGet extends SecurityCC {}
 
-const testResponseForCommandEncapsulation: CCResponsePredicate<SecurityCCCommandEncapsulation> = (
-	sent,
-	received,
-	isPositiveTransmitReport,
-) => {
-	return received instanceof SecurityCCCommandEncapsulation ||
-		isPositiveTransmitReport
-		? "checkEncapsulated"
-		: "unexpected";
-};
-
 interface SecurityCCCommandEncapsulationOptions extends CCCommandOptions {
 	encapsulated: CommandClass;
 	alternativeNetworkKey?: Buffer;
 }
 
 @CCCommand(SecurityCommand.CommandEncapsulation)
-@expectedCCResponse(testResponseForCommandEncapsulation)
+@expectedCCResponse(
+	// In order to expect itself in return, we need to use a dynamic CC response
+	() => SecurityCCCommandEncapsulation,
+	() => "checkEncapsulated",
+)
 export class SecurityCCCommandEncapsulation extends SecurityCC {
 	public constructor(
 		driver: Driver,

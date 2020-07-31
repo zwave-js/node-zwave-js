@@ -174,7 +174,7 @@ describe("lib/log/Driver =>", () => {
 			});
 		});
 
-		it("contains the message priority on the first attempt", () => {
+		it("contains the message priority", () => {
 			log.driver.transaction(
 				createTransaction({
 					priority: MessagePriority.MultistepController,
@@ -185,28 +185,28 @@ describe("lib/log/Driver =>", () => {
 			});
 		});
 
-		it("contains no message priority on further attempts", () => {
-			const transaction = createTransaction({
-				priority: MessagePriority.MultistepController,
-			});
-			transaction.sendAttempts = 2;
-			log.driver.transaction(transaction);
-			assertMessage(spyTransport, {
-				predicate: (msg) => !msg.includes("[P: MultistepController]"),
-			});
-		});
+		// it("contains no message priority on further attempts", () => {
+		// 	const transaction = createTransaction({
+		// 		priority: MessagePriority.MultistepController,
+		// 	});
+		// 	transaction.sendAttempts = 2;
+		// 	log.driver.transaction(transaction);
+		// 	assertMessage(spyTransport, {
+		// 		predicate: (msg) => !msg.includes("[P: MultistepController]"),
+		// 	});
+		// });
 
-		it("contains the number of send attempts after the first try", () => {
-			const transaction = createTransaction({
-				priority: MessagePriority.MultistepController,
-			});
-			transaction.sendAttempts = 2;
-			transaction.maxSendAttempts = 3;
-			log.driver.transaction(transaction);
-			assertMessage(spyTransport, {
-				predicate: (msg) => msg.includes("[attempt 2/3]"),
-			});
-		});
+		// it("contains the number of send attempts after the first try", () => {
+		// 	const transaction = createTransaction({
+		// 		priority: MessagePriority.MultistepController,
+		// 	});
+		// 	transaction.sendAttempts = 2;
+		// 	transaction.maxSendAttempts = 3;
+		// 	log.driver.transaction(transaction);
+		// 	assertMessage(spyTransport, {
+		// 		predicate: (msg) => msg.includes("[attempt 2/3]"),
+		// 	});
+		// });
 	});
 
 	describe("transactionResponse() (for inbound messages)", () => {

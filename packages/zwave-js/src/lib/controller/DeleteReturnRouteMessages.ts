@@ -8,6 +8,7 @@ import {
 	MessageType,
 } from "../message/Constants";
 import {
+	expectedCallback,
 	expectedResponse,
 	gotDeserializationOptions,
 	Message,
@@ -16,8 +17,8 @@ import {
 	MessageOptions,
 	messageTypes,
 	priority,
-	ResponseRole,
 } from "../message/Message";
+import type { SuccessIndicator } from "../message/SuccessIndicator";
 import type { INodeQuery } from "../node/INodeQuery";
 import { TransmitStatus } from "./SendDataMessages";
 
@@ -35,24 +36,12 @@ export class DeleteReturnRouteRequestBase extends Message {
 	}
 }
 
-// Generic handler for all potential responses to DeleteReturnRouteRequests
-function testResponseForDeleteReturnRouteRequest(
-	sent: DeleteReturnRouteRequest,
-	received: Message,
-): ResponseRole {
-	if (received instanceof DeleteReturnRouteResponse) {
-		return received.hasStarted ? "confirmation" : "fatal_controller";
-	} else if (received instanceof DeleteReturnRouteRequestTransmitReport) {
-		return received.isFailed() ? "fatal_node" : "final";
-	}
-	return "unexpected";
-}
-
 export interface DeleteReturnRouteRequestOptions extends MessageBaseOptions {
 	nodeId: number;
 }
 
-@expectedResponse(testResponseForDeleteReturnRouteRequest)
+@expectedResponse(FunctionType.DeleteReturnRoute)
+@expectedCallback(FunctionType.DeleteReturnRoute)
 export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase
 	implements INodeQuery {
 	public constructor(
@@ -82,10 +71,15 @@ export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase
 }
 
 @messageTypes(MessageType.Response, FunctionType.DeleteReturnRoute)
-export class DeleteReturnRouteResponse extends Message {
+export class DeleteReturnRouteResponse extends Message
+	implements SuccessIndicator {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this.hasStarted = this.payload[0] !== 0;
+	}
+
+	public isOK(): boolean {
+		return this.hasStarted;
 	}
 
 	public readonly hasStarted: boolean;
@@ -104,7 +98,9 @@ export class DeleteReturnRouteResponse extends Message {
 	}
 }
 
-export class DeleteReturnRouteRequestTransmitReport extends DeleteReturnRouteRequestBase {
+export class DeleteReturnRouteRequestTransmitReport
+	extends DeleteReturnRouteRequestBase
+	implements SuccessIndicator {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
@@ -117,9 +113,8 @@ export class DeleteReturnRouteRequestTransmitReport extends DeleteReturnRouteReq
 		return this._transmitStatus;
 	}
 
-	/** Checks if a received DeleteReturnRouteRequest indicates that sending failed */
-	public isFailed(): boolean {
-		return this._transmitStatus !== TransmitStatus.OK;
+	public isOK(): boolean {
+		return this._transmitStatus === TransmitStatus.OK;
 	}
 
 	public toJSON(): JSONObject {

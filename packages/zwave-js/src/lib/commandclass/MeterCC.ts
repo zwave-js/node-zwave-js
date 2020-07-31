@@ -475,18 +475,14 @@ export class MeterCCReport extends MeterCC {
 
 const testResponseForMeterGet: CCResponsePredicate = (
 	sent: MeterCCGet,
-	received,
-	isPositiveTransmitReport,
+	received: MeterCCReport,
 ) => {
 	// We expect a Meter Report that matches the requested scale and rate type
 	// (if they were requested)
-	return received instanceof MeterCCReport &&
+	return (
 		(sent.scale == undefined || sent.scale === received.scale.key) &&
 		(sent.rateType == undefined || sent.rateType == received.rateType)
-		? "final"
-		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
+	);
 };
 
 interface MeterCCGetOptions {
@@ -495,7 +491,7 @@ interface MeterCCGetOptions {
 }
 
 @CCCommand(MeterCommand.Get)
-@expectedCCResponse(testResponseForMeterGet)
+@expectedCCResponse(MeterCCReport, testResponseForMeterGet)
 export class MeterCCGet extends MeterCC {
 	public constructor(
 		driver: Driver,

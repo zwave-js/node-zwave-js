@@ -42,7 +42,7 @@
 				"${workspaceFolder}/test/run.ts"
 			],
 			"env": {
-				// "NO_CACHE": "true",
+				"NO_CACHE": "true",
 				// "LOGLEVEL": "verbose"
 			},
 			"console": "integratedTerminal",

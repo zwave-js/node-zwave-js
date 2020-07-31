@@ -1,27 +1,14 @@
 import { MAX_NODES, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import {
-	getEnumMemberName,
-	JSONObject,
-	num2hex,
-	staticExtends,
-} from "@zwave-js/shared";
-import {
-	CCResponseRole,
+import { getEnumMemberName, JSONObject, num2hex } from "@zwave-js/shared";
+import { clamp } from "alcalzone-shared/math";
+import type {
 	CommandClass,
-	getExpectedCCResponse,
-	isDynamicCCResponse,
 	MulticastCC,
 	SinglecastCC,
 } from "../commandclass/CommandClass";
-import {
-	EncapsulatingCommandClass,
-	isEncapsulatingCommandClass,
-} from "../commandclass/EncapsulatingCommandClass";
-import {
-	ICommandClassContainer,
-	isCommandClassContainer,
-} from "../commandclass/ICommandClassContainer";
+import type { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
 import type { Driver } from "../driver/Driver";
+import { MAX_SEND_ATTEMPTS } from "../driver/Transaction";
 import type { MessageOrCCLogEntry } from "../log/shared";
 import {
 	FunctionType,
@@ -29,6 +16,7 @@ import {
 	MessageType,
 } from "../message/Constants";
 import {
+	expectedCallback,
 	expectedResponse,
 	gotDeserializationOptions,
 	Message,
@@ -37,9 +25,8 @@ import {
 	MessageOptions,
 	messageTypes,
 	priority,
-	ResponseRole,
 } from "../message/Message";
-import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
+import type { SuccessIndicator } from "../message/SuccessIndicator";
 
 export enum TransmitOptions {
 	NotSet = 0,
@@ -59,7 +46,7 @@ export enum TransmitStatus {
 	NoAck = 0x01, // Transmission complete, no ACK received
 	Fail = 0x02, // Transmission failed
 	NotIdle = 0x03, // Transmission failed, network busy
-	NoRoute = 0x04, // Tranmission complete, no return route
+	NoRoute = 0x04, // Transmission complete, no return route
 }
 
 @messageTypes(MessageType.Request, FunctionType.SendData)
@@ -80,9 +67,11 @@ interface SendDataRequestOptions<CCType extends CommandClass = CommandClass>
 	extends MessageBaseOptions {
 	command: CCType;
 	transmitOptions?: TransmitOptions;
+	maxSendAttempts?: number;
 }
 
-@expectedResponse(testResponseForSendDataRequest)
+@expectedResponse(FunctionType.SendData)
+@expectedCallback(FunctionType.SendData)
 export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	extends SendDataRequestBase
 	implements ICommandClassContainer {
@@ -101,15 +90,23 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 
 		this.command = options.command;
 		this.transmitOptions =
-			options.transmitOptions != undefined
-				? options.transmitOptions
-				: TransmitOptions.DEFAULT;
+			options.transmitOptions ?? TransmitOptions.DEFAULT;
+		this._maxSendAttempts = options.maxSendAttempts ?? MAX_SEND_ATTEMPTS;
 	}
 
 	/** The command this message contains */
 	public command: SinglecastCC<CCType>;
 	/** Options regarding the transmission of the message */
 	public transmitOptions: TransmitOptions;
+
+	private _maxSendAttempts: number = MAX_SEND_ATTEMPTS;
+	/** The number of times the driver may try to send this message */
+	public get maxSendAttempts(): number {
+		return this._maxSendAttempts;
+	}
+	public set maxSendAttempts(value: number) {
+		this._maxSendAttempts = clamp(value, 1, MAX_SEND_ATTEMPTS);
+	}
 
 	public serialize(): Buffer {
 		const serializedCC = this.command.serialize();
@@ -145,23 +142,6 @@ callbackId:      ${this.callbackId}`,
 		);
 	}
 
-	/** @inheritDoc */
-	public testResponse(msg: Message): ResponseRole {
-		const ret = super.testResponse(msg);
-		// We handle a special case here: A node's response to a SendDataRequest comes in an
-		// ApplicationCommandRequest which does not have a callback id, so it is classified as
-		// "unexpected". Test those again with the predicate for SendDataRequests
-		if (
-			ret === "unexpected" &&
-			msg instanceof ApplicationCommandRequest &&
-			// Ensure the nodeId matches (GH #623)
-			msg.command.nodeId === this.command.nodeId
-		) {
-			return testResponseForSendDataRequest(this, msg);
-		}
-		return ret;
-	}
-
 	/** Computes the maximum payload size that can be transmitted with this message */
 	public getMaxPayloadLength(): number {
 		// From INS13954-7, chapter 4.3.3.1.5
@@ -171,104 +151,13 @@ callbackId:      ${this.callbackId}`,
 	}
 }
 
-// Generic handler for all potential responses to SendDataRequests
-function testResponseForSendDataRequest(
-	sent: SendDataRequest,
-	received: Message,
-): ResponseRole {
-	// callbackId = 0 means we expect no callback
-	if (sent.callbackId === 0) {
-		if (received instanceof SendDataResponse) {
-			return received.wasSent ? "final" : "fatal_controller";
-		} else {
-			return "unexpected";
-		}
-	}
-
-	// For all other callback IDs, check the response data
-	let msgIsPositiveTransmitReport = false;
-	if (received instanceof SendDataResponse) {
-		return received.wasSent
-			? sent.callbackId === 0
-				? "final"
-				: "confirmation"
-			: "fatal_controller";
-	} else if (received instanceof SendDataRequestTransmitReport) {
-		// send data requests are final unless stated otherwise by a CommandClass
-		if (received.isFailed()) return "fatal_node";
-		msgIsPositiveTransmitReport = true;
-	} else if (!(received instanceof ApplicationCommandRequest)) {
-		return "unexpected";
-	}
-
-	const sentCommand = sent.command;
-	const receivedCommand = isCommandClassContainer(received)
-		? received.command
-		: undefined;
-
-	// Check the sent command if it expects this response
-	const ret = testResponseForCC(
-		sentCommand,
-		receivedCommand,
-		msgIsPositiveTransmitReport,
-	);
-	return ret;
-}
-
-export function testResponseForCC(
-	sent: CommandClass,
-	received: CommandClass | undefined,
-	isTransmitReport: boolean,
-): Exclude<CCResponseRole, "checkEncapsulated"> {
-	let ret: CCResponseRole | undefined;
-	const isEncapCC = isEncapsulatingCommandClass(sent);
-
-	let expected = getExpectedCCResponse(sent);
-	// Evaluate dynamic CC responses
-	if (
-		typeof expected === "function" &&
-		!staticExtends(expected, CommandClass) &&
-		isDynamicCCResponse(expected)
-	) {
-		expected = expected(sent);
-	}
-
-	if (expected == undefined) {
-		// The CC expects no CC response, a transmit report is the final message
-		ret = isTransmitReport ? "final" : "unexpected";
-	} else if (staticExtends(expected, CommandClass)) {
-		// The CC always expects the same response, check if this is the one
-		if (received && received instanceof expected) {
-			ret = isEncapCC ? "checkEncapsulated" : "final";
-		} else if (isTransmitReport) {
-			ret = isEncapCC ? "checkEncapsulated" : "confirmation";
-		} else {
-			ret = "unexpected";
-		}
-	} else {
-		// The CC wants to test the response itself, let it do so
-		ret = expected(sent, received, isTransmitReport);
-	}
-
-	if (ret === "checkEncapsulated") {
-		ret = testResponseForCC(
-			((sent as unknown) as EncapsulatingCommandClass).encapsulated,
-			isEncapsulatingCommandClass(received)
-				? received.encapsulated
-				: undefined,
-			isTransmitReport,
-		);
-	}
-
-	return ret;
-}
-
 interface SendDataRequestTransmitReportOptions extends MessageBaseOptions {
 	transmitStatus: TransmitStatus;
 	callbackId: number;
 }
 
-export class SendDataRequestTransmitReport extends SendDataRequestBase {
+export class SendDataRequestTransmitReport extends SendDataRequestBase
+	implements SuccessIndicator {
 	public constructor(
 		driver: Driver,
 		options:
@@ -293,9 +182,8 @@ export class SendDataRequestTransmitReport extends SendDataRequestBase {
 		return this._transmitStatus;
 	}
 
-	/** Checks if a received SendDataRequest indicates that sending failed */
-	public isFailed(): boolean {
-		return this._transmitStatus !== TransmitStatus.OK;
+	public isOK(): boolean {
+		return this._transmitStatus === TransmitStatus.OK;
 	}
 
 	public toJSON(): JSONObject {
@@ -315,11 +203,15 @@ transmitStatus: ${getEnumMemberName(TransmitStatus, this.transmitStatus)}`,
 }
 
 @messageTypes(MessageType.Response, FunctionType.SendData)
-export class SendDataResponse extends Message {
+export class SendDataResponse extends Message implements SuccessIndicator {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._wasSent = this.payload[0] !== 0;
 		// if (!this._wasSent) this._errorCode = this.payload[0];
+	}
+
+	isOK(): boolean {
+		return this._wasSent;
 	}
 
 	private _wasSent: boolean;
@@ -365,9 +257,11 @@ interface SendDataMulticastRequestOptions<CCType extends CommandClass>
 	extends MessageBaseOptions {
 	command: CCType;
 	transmitOptions?: TransmitOptions;
+	maxSendAttempts?: number;
 }
 
-@expectedResponse(testResponseForSendDataMulticastRequest)
+@expectedResponse(FunctionType.SendDataMulticast)
+@expectedCallback(FunctionType.SendDataMulticast)
 export class SendDataMulticastRequest<
 	CCType extends CommandClass = CommandClass
 > extends SendDataMulticastRequestBase implements ICommandClassContainer {
@@ -396,15 +290,23 @@ export class SendDataMulticastRequest<
 
 		this.command = options.command;
 		this.transmitOptions =
-			options.transmitOptions != undefined
-				? options.transmitOptions
-				: TransmitOptions.DEFAULT;
+			options.transmitOptions ?? TransmitOptions.DEFAULT;
+		this._maxSendAttempts = options.maxSendAttempts ?? MAX_SEND_ATTEMPTS;
 	}
 
 	/** The command this message contains */
 	public command: MulticastCC<CCType>;
 	/** Options regarding the transmission of the message */
 	public transmitOptions: TransmitOptions;
+
+	private _maxSendAttempts: number;
+	/** The number of times the driver may try to send this message */
+	public get maxSendAttempts(): number {
+		return this._maxSendAttempts;
+	}
+	public set maxSendAttempts(value: number) {
+		this._maxSendAttempts = clamp(value, 1, MAX_SEND_ATTEMPTS);
+	}
 
 	public serialize(): Buffer {
 		// The payload CC must not include the target node ids, so strip the header out
@@ -448,27 +350,15 @@ callbackId:      ${this.callbackId}`,
 	}
 }
 
-// Generic handler for all potential responses to SendDataMulticastRequests
-function testResponseForSendDataMulticastRequest(
-	sent: SendDataMulticastRequest,
-	received: Message,
-): ResponseRole {
-	if (received instanceof SendDataMulticastResponse) {
-		return received.wasSent ? "confirmation" : "fatal_controller";
-	} else if (received instanceof SendDataMulticastRequestTransmitReport) {
-		return received.isFailed() ? "fatal_node" : "final";
-	}
-	// Multicast messages cannot expect a response from the nodes
-	return "unexpected";
-}
-
 interface SendDataMulticastRequestTransmitReportOptions
 	extends MessageBaseOptions {
 	transmitStatus: TransmitStatus;
 	callbackId: number;
 }
 
-export class SendDataMulticastRequestTransmitReport extends SendDataMulticastRequestBase {
+export class SendDataMulticastRequestTransmitReport
+	extends SendDataMulticastRequestBase
+	implements SuccessIndicator {
 	public constructor(
 		driver: Driver,
 		options:
@@ -493,9 +383,8 @@ export class SendDataMulticastRequestTransmitReport extends SendDataMulticastReq
 		return this._transmitStatus;
 	}
 
-	/** Checks if a received SendDataMulticastRequest indicates that sending failed */
-	public isFailed(): boolean {
-		return this._transmitStatus !== TransmitStatus.OK;
+	public isOK(): boolean {
+		return this._transmitStatus === TransmitStatus.OK;
 	}
 
 	public toJSON(): JSONObject {
@@ -515,11 +404,16 @@ transmitStatus: ${getEnumMemberName(TransmitStatus, this.transmitStatus)}`,
 }
 
 @messageTypes(MessageType.Response, FunctionType.SendDataMulticast)
-export class SendDataMulticastResponse extends Message {
+export class SendDataMulticastResponse extends Message
+	implements SuccessIndicator {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._wasSent = this.payload[0] !== 0;
 		// if (!this._wasSent) this._errorCode = this.payload[0];
+	}
+
+	public isOK(): boolean {
+		return this._wasSent;
 	}
 
 	private _wasSent: boolean;
