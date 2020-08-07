@@ -74,7 +74,7 @@
     "serialport": "^8.0.7",
     "source-map-support": "^0.5.19",
     "winston": "^3.2.1",
-    "xstate": "^4.11.0"
+    "xstate": "https://pkg.csb.dev/davidkpiano/xstate/commit/53d0dd5b/xstate"
   },
   "scripts": {
     "build": "gulp build",
