@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 4.0.7 (2020-08-16)
 ### Bugfixes
 * Replaced Sentry.io DSN
 * Each installation now generates a random ID that is can be used to suppress error reports on a per-user basis
