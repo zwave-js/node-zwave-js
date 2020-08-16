@@ -36,7 +36,7 @@
     "@babel/plugin-proposal-optional-chaining": "^7.10.4",
     "@babel/preset-env": "^7.10.4",
     "@babel/preset-typescript": "^7.10.1",
-    "@commitlint/cli": "^8.3.5",
+    "@commitlint/cli": "^9.1.1",
     "@commitlint/config-conventional": "^8.3.4",
     "@fimbul/mithotyn": "^0.21.0",
     "@fimbul/wotan": "^0.21.1",
