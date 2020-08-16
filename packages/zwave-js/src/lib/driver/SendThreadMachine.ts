@@ -2,6 +2,7 @@ import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import {
 	assign,
+	AssignAction,
 	EventObject,
 	Interpreter,
 	Machine,
@@ -259,12 +260,18 @@ const deleteHandshakeResponseTransaction = assign((ctx: SendThreadContext) => ({
 	handshakeResponseTransaction: undefined,
 }));
 
-const resetSendDataAttempts = assign({
-	sendDataAttempts: (_: any) => 0,
+const resetSendDataAttempts: AssignAction<
+	SendThreadContext,
+	SendThreadEvent
+> = assign({
+	sendDataAttempts: (_) => 0,
 });
 
-const incrementSendDataAttempts = assign({
-	sendDataAttempts: (ctx: SendThreadContext) => ctx.sendDataAttempts + 1,
+const incrementSendDataAttempts: AssignAction<
+	SendThreadContext,
+	SendThreadEvent
+> = assign({
+	sendDataAttempts: (ctx) => ctx.sendDataAttempts + 1,
 });
 
 const forwardNodeUpdate = send(
