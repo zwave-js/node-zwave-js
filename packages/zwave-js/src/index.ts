@@ -5,6 +5,7 @@ require("reflect-metadata");
 import * as Integrations from "@sentry/integrations";
 import * as Sentry from "@sentry/node";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { randomBytes } from "crypto";
 import * as fs from "fs-extra";
 import * as path from "path";
 // By installing source map support, we get the original source
@@ -21,7 +22,7 @@ function isPartOfThisLib(filename: string): boolean {
 	);
 }
 
-// Errors in files matching any entry in  this array will always be reported
+// Errors in files matching any entry in this array will always be reported
 const pathWhitelists = ["node_modules/iobroker.zwave2"];
 
 function isZWaveError(
@@ -29,6 +30,24 @@ function isZWaveError(
 ): err is ZWaveError {
 	if (!err || typeof err === "string") return false;
 	return "code" in err && typeof (err as any).code === "number";
+}
+
+/** Creates a new fingerprint or retrieves a previously-generated one */
+async function getFingerprint(): Promise<string> {
+	const fingerprintPath = path.join(__dirname, "fingerprint.txt");
+	let fingerprint: string | undefined;
+	if (await fs.pathExists(fingerprintPath)) {
+		fingerprint = await fs.readFile(fingerprintPath, "utf8");
+	}
+	if (!fingerprint || fingerprint.length < 8) {
+		fingerprint = randomBytes(8).toString("hex");
+		try {
+			await fs.writeFile(fingerprintPath, fingerprint, "utf8");
+		} catch {
+			/* ignore */
+		}
+	}
+	return fingerprint;
 }
 
 // Parse package.json and init sentry
@@ -41,7 +60,8 @@ fs.readFile(path.join(libraryRootDir, "package.json"), "utf8").then(
 		};
 		Sentry.init({
 			release: `${packageJson.name}@${packageJson.version}`,
-			dsn: "https://841e902ca32842beadada39343a72479@sentry.io/1839595",
+			dsn:
+				"https://3ac1c1077df6496b89d797b331a8ec4a@o327859.ingest.sentry.io/1839595",
 			defaultIntegrations: false,
 			integrations: [
 				new Sentry.Integrations.OnUncaughtException(),
@@ -94,6 +114,16 @@ fs.readFile(path.join(libraryRootDir, "package.json"), "utf8").then(
 				return ignore ? null : event;
 			},
 		});
+		// Try to group events by user (anonymously)
+		getFingerprint()
+			.then((fingerprint) => {
+				Sentry.configureScope((scope) => {
+					scope.setUser({ id: fingerprint });
+				});
+			})
+			.catch(() => {
+				/* ignore */
+			});
 	},
 );
 
