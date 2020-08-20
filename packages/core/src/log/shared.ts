@@ -19,11 +19,8 @@ function shouldLogToFile(): boolean {
 	return !!process.env.LOGTOFILE;
 }
 
-const logFilename = process.mainModule
-	? path.join(
-			path.dirname(process.mainModule.filename),
-			`zwave-${process.pid}.log`,
-	  )
+const logFilename = require.main
+	? path.join(path.dirname(require.main.filename), `zwave-${process.pid}.log`)
 	: path.join(__dirname, "../../..", `zwave-${process.pid}.log`);
 
 /**
