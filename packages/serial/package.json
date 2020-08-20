@@ -33,8 +33,8 @@
   "dependencies": {
     "@zwave-js/core": "file:../core",
     "alcalzone-shared": "^2.2.0",
-    "serialport": "^9.0.0",
-    "winston": "^3.2.1"
+    "serialport": "^9.0.1",
+    "winston": "^3.3.3"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
