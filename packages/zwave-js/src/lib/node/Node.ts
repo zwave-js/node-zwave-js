@@ -100,13 +100,13 @@ import {
 	RequestNodeInfoRequest,
 	RequestNodeInfoResponse,
 } from "./RequestNodeInfoMessages";
-import { InterviewStage, NodeStatus } from "./Types";
 import type {
 	TranslatedValueID,
 	ZWaveNodeEventCallbacks,
 	ZWaveNodeEvents,
 	ZWaveNodeValueEventCallbacks,
 } from "./Types";
+import { InterviewStage, NodeStatus } from "./Types";
 
 export interface ZWaveNode {
 	on<TEvent extends ZWaveNodeEvents>(
@@ -522,7 +522,7 @@ export class ZWaveNode extends Endpoint {
 				value,
 			);
 			return true;
-		} catch (e) {
+		} catch (e: unknown) {
 			// Define which errors during setValue are expected and won't crash
 			// the driver:
 			if (e instanceof ZWaveError) {
@@ -740,7 +740,7 @@ export class ZWaveNode extends Endpoint {
 			try {
 				await method();
 				return true;
-			} catch (e) {
+			} catch (e: unknown) {
 				if (
 					e instanceof ZWaveError &&
 					(e.code === ZWaveErrorCodes.Controller_NodeTimeout ||
@@ -1014,7 +1014,7 @@ version:               ${this.version}`;
 			let instance: CommandClass;
 			try {
 				instance = endpoint.createCCInstance(cc)!;
-			} catch (e) {
+			} catch (e: unknown) {
 				if (
 					e instanceof ZWaveError &&
 					e.code === ZWaveErrorCodes.CC_NotSupported
@@ -1042,7 +1042,7 @@ version:               ${this.version}`;
 
 			try {
 				await instance.interview(!instance.interviewComplete);
-			} catch (e) {
+			} catch (e: unknown) {
 				if (
 					e instanceof ZWaveError &&
 					(e.code === ZWaveErrorCodes.Controller_MessageDropped ||
@@ -2242,7 +2242,7 @@ version:               ${this.version}`;
 			// Clean up
 			this._firmwareUpdateStatus = undefined;
 			this.keepAwake = false;
-		} catch (e) {
+		} catch (e: unknown) {
 			if (
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
@@ -2466,7 +2466,7 @@ version:               ${this.version}`;
 			);
 
 			this.handleFirmwareUpdateStatusReport(report);
-		} catch (e) {
+		} catch (e: unknown) {
 			if (
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout

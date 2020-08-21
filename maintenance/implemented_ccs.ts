@@ -73,7 +73,7 @@ interface CCInfo {
 				setValue,
 				interview,
 			});
-		} catch (e) {
+		} catch {
 			/* ok */
 		}
 	}

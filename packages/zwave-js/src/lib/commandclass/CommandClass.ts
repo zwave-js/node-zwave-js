@@ -415,7 +415,7 @@ export class CommandClass {
 	public getNodeUnsafe(): ZWaveNode | undefined {
 		try {
 			return this.getNode();
-		} catch (e) {
+		} catch (e: unknown) {
 			// This was expected
 			if (
 				e instanceof ZWaveError &&
@@ -572,7 +572,7 @@ export class CommandClass {
 		let db: ValueDB;
 		try {
 			db = this.getValueDB();
-		} catch (e) {
+		} catch {
 			return false;
 		}
 

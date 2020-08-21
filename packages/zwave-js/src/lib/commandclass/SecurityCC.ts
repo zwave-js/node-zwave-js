@@ -1,3 +1,4 @@
+import type { Maybe } from "@zwave-js/core";
 import {
 	CommandClasses,
 	computeMAC,
@@ -12,7 +13,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { Maybe } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { randomBytes } from "crypto";
 import type { ZWaveController } from "../controller/Controller";
@@ -169,7 +169,7 @@ export class SecurityCCAPI extends CCAPI {
 				// We don't want failures causing us to treat the node as asleep
 				changeNodeStatusOnTimeout: false,
 			});
-		} catch (e) {
+		} catch (e: unknown) {
 			if (
 				e instanceof ZWaveError &&
 				(e.code === ZWaveErrorCodes.Controller_NodeTimeout ||

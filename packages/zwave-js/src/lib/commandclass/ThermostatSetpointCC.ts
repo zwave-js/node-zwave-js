@@ -1,4 +1,5 @@
 import { lookupNamedScale, Scale } from "@zwave-js/config";
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	encodeFloatWithScale,
@@ -10,7 +11,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
@@ -365,7 +365,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					| undefined;
 				try {
 					setpoint = await api.get(type);
-				} catch (e) {
+				} catch (e: unknown) {
 					if (
 						e instanceof ZWaveError &&
 						e.code === ZWaveErrorCodes.Controller_NodeTimeout

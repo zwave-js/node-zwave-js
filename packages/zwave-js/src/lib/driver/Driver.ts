@@ -484,7 +484,7 @@ export class Driver extends EventEmitter {
 			log.driver.print("beginning interview...");
 			try {
 				await this.initializeControllerAndNodes();
-			} catch (e) {
+			} catch (e: unknown) {
 				let message: string;
 				if (
 					e instanceof ZWaveError &&
@@ -492,7 +492,9 @@ export class Driver extends EventEmitter {
 				) {
 					message = `Failed to initialize the driver, no response from the controller. Are you sure this is a Z-Wave controller?`;
 				} else {
-					message = `Failed to initialize the driver: ${e.message}`;
+					message = `Failed to initialize the driver: ${
+						e instanceof Error ? e.message : String(e)
+					}`;
 				}
 				log.driver.print(message, "error");
 				this.emit(
@@ -686,7 +688,7 @@ export class Driver extends EventEmitter {
 					);
 				}
 			}
-		} catch (e) {
+		} catch (e: unknown) {
 			if (e instanceof ZWaveError) {
 				if (
 					e.code === ZWaveErrorCodes.Driver_NotReady ||
@@ -1086,7 +1088,7 @@ export class Driver extends EventEmitter {
 		if (msg) {
 			try {
 				await this.handleMessage(msg);
-			} catch (e) {
+			} catch (e: unknown) {
 				if (
 					e instanceof ZWaveError &&
 					e.code === ZWaveErrorCodes.Driver_NotReady
@@ -1272,7 +1274,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 					this.partialCCSessions.delete(partialSessionKey);
 					try {
 						command.mergePartialCCs(session);
-					} catch (e) {
+					} catch (e: unknown) {
 						if (e instanceof ZWaveError) {
 							switch (e.code) {
 								case ZWaveErrorCodes.Deserialization_NotImplemented:
@@ -1601,7 +1603,7 @@ ${handlers.length} left`,
 						// Force a ping of the node, so it gets added to the failed nodes list
 						node.setAwake(true);
 						await node.commandClasses["No Operation"].send();
-					} catch (e) {
+					} catch {
 						// this is expected
 					}
 				}
@@ -2303,7 +2305,7 @@ ${handlers.length} left`,
 		log.driver.transaction(transaction);
 		try {
 			data = message.serialize();
-		} catch (e) {
+		} catch (e: unknown) {
 			// Translate errors during serialization into a rejection
 			// This should cause less crashes if the calling code handles errors
 			if (e instanceof ZWaveError) {
