@@ -34,7 +34,10 @@ export {
 export { DeviceIdType } from "./ManufacturerSpecificCC";
 export { RateType } from "./MeterCC";
 export type { Association } from "./MultiChannelAssociationCC";
-export type { MultilevelSensorValue } from "./MultilevelSensorCC";
+export type {
+	MultilevelSensorValue,
+	MultilevelSensorCCReportOptions,
+} from "./MultilevelSensorCC";
 export { LevelChangeDirection, SwitchType } from "./MultilevelSwitchCC";
 export { LocalProtectionState, RFProtectionState } from "./ProtectionCC";
 export { ToneId } from "./SoundSwitchCC";
