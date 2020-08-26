@@ -3,7 +3,6 @@ import { SortedList } from "alcalzone-shared/sorted-list";
 import {
 	assign,
 	AssignAction,
-	EventObject,
 	Interpreter,
 	Machine,
 	StateMachine,
@@ -173,30 +172,32 @@ export type SendThreadInterpreter = Interpreter<
 
 // These actions must be assign actions or they will be executed
 // out of order
-const resolveCurrentTransaction = assign(
-	(ctx: SendThreadContext, evt: EventObject) => {
-		ctx.currentTransaction!.promise.resolve((evt as any).data.result);
+const resolveCurrentTransaction: AssignAction<SendThreadContext, any> = assign(
+	(ctx, evt) => {
+		ctx.currentTransaction!.promise.resolve(evt.data.result);
 		return ctx;
 	},
 );
 
-const resolveCurrentTransactionWithMessage = assign(
-	(ctx: SendThreadContext, evt: EventObject) => {
-		ctx.currentTransaction!.promise.resolve((evt as any).message);
-		return ctx;
-	},
-);
+const resolveCurrentTransactionWithMessage: AssignAction<
+	SendThreadContext,
+	any
+> = assign((ctx, evt) => {
+	ctx.currentTransaction!.promise.resolve(evt.message);
+	return ctx;
+});
 
-const resolveCurrentTransactionWithoutMessage = assign(
-	(ctx: SendThreadContext) => {
-		ctx.currentTransaction!.promise.resolve();
-		return ctx;
-	},
-);
+const resolveCurrentTransactionWithoutMessage: AssignAction<
+	SendThreadContext,
+	any
+> = assign((ctx) => {
+	ctx.currentTransaction!.promise.resolve();
+	return ctx;
+});
 
-const rejectCurrentTransaction = assign(
-	(ctx: SendThreadContext, evt: EventObject) => {
-		const data = (evt as any).data ?? ctx.sendDataErrorData;
+const rejectCurrentTransaction: AssignAction<SendThreadContext, any> = assign(
+	(ctx, evt) => {
+		const data = evt.data ?? ctx.sendDataErrorData;
 		ctx.currentTransaction!.promise.reject(
 			serialAPIOrSendDataErrorToZWaveError(
 				data.reason,
@@ -208,69 +209,72 @@ const rejectCurrentTransaction = assign(
 	},
 );
 
-const resolveHandshakeResponseTransaction = assign(
-	(ctx: SendThreadContext, evt: EventObject) => {
-		ctx.handshakeResponseTransaction!.promise.resolve(
-			(evt as any).data.result,
-		);
-		return ctx;
-	},
+const resolveHandshakeResponseTransaction: AssignAction<
+	SendThreadContext,
+	any
+> = assign((ctx, evt) => {
+	ctx.handshakeResponseTransaction!.promise.resolve(evt.data.result);
+	return ctx;
+});
+
+const rejectHandshakeResponseTransaction: AssignAction<
+	SendThreadContext,
+	any
+> = assign((ctx, evt) => {
+	const data = evt.data ?? ctx.sendDataErrorData;
+	ctx.handshakeResponseTransaction!.promise.reject(
+		serialAPIOrSendDataErrorToZWaveError(
+			data.reason,
+			ctx.currentTransaction!.message,
+			data.result,
+		),
+	);
+	return ctx;
+});
+
+const resolvePreTransmitHandshakeTransaction: AssignAction<
+	SendThreadContext,
+	any
+> = assign((ctx, evt) => {
+	ctx.preTransmitHandshakeTransaction!.promise.resolve(evt.message);
+	return ctx;
+});
+
+const setCurrentTransaction: AssignAction<SendThreadContext, any> = assign(
+	(ctx) => ({
+		...ctx,
+		currentTransaction: ctx.queue.shift()!,
+	}),
 );
 
-const rejectHandshakeResponseTransaction = assign(
-	(ctx: SendThreadContext, evt: EventObject) => {
-		const data = (evt as any).data ?? ctx.sendDataErrorData;
-		ctx.handshakeResponseTransaction!.promise.reject(
-			serialAPIOrSendDataErrorToZWaveError(
-				data.reason,
-				ctx.currentTransaction!.message,
-				data.result,
-			),
-		);
-		return ctx;
-	},
+const deleteCurrentTransaction: AssignAction<SendThreadContext, any> = assign(
+	(ctx) => ({
+		...ctx,
+		currentTransaction: undefined,
+	}),
 );
 
-const resolvePreTransmitHandshakeTransaction = assign(
-	(ctx: SendThreadContext, evt: EventObject) => {
-		ctx.preTransmitHandshakeTransaction!.promise.resolve(
-			(evt as any).message,
-		);
-		return ctx;
-	},
-);
-
-const setCurrentTransaction = assign((ctx: SendThreadContext) => ({
-	...ctx,
-	currentTransaction: ctx.queue.shift()!,
-}));
-
-const deleteCurrentTransaction = assign((ctx: SendThreadContext) => ({
-	...ctx,
-	currentTransaction: undefined,
-}));
-
-const setHandshakeResponseTransaction = assign((ctx: SendThreadContext) => ({
+const setHandshakeResponseTransaction: AssignAction<
+	SendThreadContext,
+	any
+> = assign((ctx) => ({
 	...ctx,
 	handshakeResponseTransaction: ctx.queue.shift()!,
 }));
 
-const deleteHandshakeResponseTransaction = assign((ctx: SendThreadContext) => ({
+const deleteHandshakeResponseTransaction: AssignAction<
+	SendThreadContext,
+	any
+> = assign((ctx) => ({
 	...ctx,
 	handshakeResponseTransaction: undefined,
 }));
 
-const resetSendDataAttempts: AssignAction<
-	SendThreadContext,
-	SendThreadEvent
-> = assign({
+const resetSendDataAttempts: AssignAction<SendThreadContext, any> = assign({
 	sendDataAttempts: (_) => 0,
 });
 
-const incrementSendDataAttempts: AssignAction<
-	SendThreadContext,
-	SendThreadEvent
-> = assign({
+const incrementSendDataAttempts: AssignAction<SendThreadContext, any> = assign({
 	sendDataAttempts: (ctx) => ctx.sendDataAttempts + 1,
 });
 
@@ -290,8 +294,8 @@ const forwardHandshakeResponse = send(
 		} as SendThreadEvent),
 );
 
-const sortQueue = assign({
-	queue: (ctx: SendThreadContext) => {
+const sortQueue: AssignAction<SendThreadContext, any> = assign({
+	queue: (ctx) => {
 		const queue = ctx.queue;
 		const items = [...queue];
 		queue.clear();
@@ -301,28 +305,15 @@ const sortQueue = assign({
 	},
 });
 
-const rememberNodeTimeoutError = assign<SendThreadContext>({
+const rememberNodeTimeoutError: AssignAction<SendThreadContext, any> = assign({
 	sendDataErrorData: (_) => ({
 		type: "failure",
 		reason: "node timeout",
 	}),
 });
 
-// function forwardEvents<T extends any[]>(
-// 	to: string,
-// 	events: T,
-// ): TransitionsConfig<SendThreadContext, SendThreadEvent> {
-// 	const ret = {} as any;
-// 	for (const event of events) {
-// 		ret[event] = {
-// 			actions: forwardTo<SendThreadContext, SendThreadEvent>(to),
-// 		};
-// 	}
-// 	return ret;
-// }
-
-const reduce = assign({
-	queue: (ctx: SendThreadContext, evt: SendThreadEvent) => {
+const reduce: AssignAction<SendThreadContext, any> = assign({
+	queue: (ctx, evt) => {
 		const { queue, currentTransaction } = ctx;
 
 		const drop: Transaction[] = [];
@@ -331,7 +322,7 @@ const reduce = assign({
 		const reduceTransaction: (
 			...args: Parameters<TransactionReducer>
 		) => void = (transaction, source) => {
-			const reducerResult = ((evt as any) as SendThreadEvent & {
+			const reducerResult = (evt as SendThreadEvent & {
 				type: "reduce";
 			}).reducer(transaction, source);
 			switch (reducerResult.type) {
@@ -400,7 +391,7 @@ export function createSendThreadMachine(
 								preTransmitHandshakeTransaction: (_, evt) =>
 									evt.transaction,
 							}),
-							raise("preTransmitHandshake"),
+							raise("preTransmitHandshake") as any,
 						],
 					},
 					{
@@ -411,7 +402,7 @@ export function createSendThreadMachine(
 									return ctx.queue;
 								},
 							}),
-							raise("trigger"),
+							raise("trigger") as any,
 						],
 					},
 				],
@@ -451,7 +442,7 @@ export function createSendThreadMachine(
 				],
 				// Accept external commands to sort the queue
 				sortQueue: {
-					actions: [sortQueue, raise("trigger")],
+					actions: [sortQueue, raise("trigger") as any],
 				},
 			},
 			states: {
@@ -465,7 +456,7 @@ export function createSendThreadMachine(
 						],
 						reduce: {
 							// Reducing may reorder the queue, so raise a trigger afterwards
-							actions: [reduce, raise("trigger")],
+							actions: [reduce, raise("trigger") as any],
 						},
 					},
 				},
