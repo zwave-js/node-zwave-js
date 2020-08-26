@@ -1083,9 +1083,12 @@ function getCCCommandConstructor<TBase extends CommandClass>(
 /**
  * Defines the expected response associated with a Z-Wave message
  */
-export function expectedCCResponse(
-	cc: typeof CommandClass | DynamicCCResponse,
-	predicate?: CCResponsePredicate,
+export function expectedCCResponse<
+	TSent extends CommandClass,
+	TReceived extends CommandClass
+>(
+	cc: typeof CommandClass | DynamicCCResponse<TSent>,
+	predicate?: CCResponsePredicate<TSent, TReceived>,
 ): ClassDecorator {
 	return (ccClass) => {
 		Reflect.defineMetadata(METADATA_ccResponse, { cc, predicate }, ccClass);
@@ -1139,7 +1142,8 @@ export interface CCValueOptions {
  * @param internal Whether the value should be exposed to library users
  */
 export function ccValue(options?: CCValueOptions): PropertyDecorator {
-	return (target: CommandClass, property: string | number | symbol) => {
+	return (target: unknown, property: string | number | symbol) => {
+		if (!target || !(target instanceof CommandClass)) return;
 		// Set default arguments
 		if (!options) options = {};
 		if (options.internal == undefined) options.internal = false;
@@ -1180,7 +1184,8 @@ function getCCValueDefinitions(
  * @param internal Whether the key value pair should be exposed to library users
  */
 export function ccKeyValuePair(options?: CCValueOptions): PropertyDecorator {
-	return (target: CommandClass, property: string | number | symbol) => {
+	return (target: unknown, property: string | number | symbol) => {
+		if (!target || !(target instanceof CommandClass)) return;
 		// Set default arguments
 		if (!options) options = {};
 		if (options.internal == undefined) options.internal = false;
@@ -1224,7 +1229,8 @@ function getCCKeyValuePairDefinitions(
  * Defines additional metadata for the given CC value
  */
 export function ccValueMetadata(meta: ValueMetadata): PropertyDecorator {
-	return (target: CommandClass, property: string | number | symbol) => {
+	return (target: unknown, property: string | number | symbol) => {
+		if (!target || !(target instanceof CommandClass)) return;
 		// get the class constructor
 		const constr = target.constructor as typeof CommandClass;
 		const cc = getCommandClassStatic(constr);

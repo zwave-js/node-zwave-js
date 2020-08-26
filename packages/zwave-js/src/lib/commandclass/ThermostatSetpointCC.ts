@@ -1,4 +1,5 @@
 import { lookupNamedScale, Scale } from "@zwave-js/config";
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	encodeFloatWithScale,
@@ -10,7 +11,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
@@ -25,7 +25,6 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	CCResponsePredicate,
 	ccValue,
 	CommandClass,
 	commandClass,
@@ -620,13 +619,13 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	}
 }
 
-const testResponseForThermostatSetpointGet: CCResponsePredicate = (
+function testResponseForThermostatSetpointGet(
 	sent: ThermostatSetpointCCGet,
 	received: ThermostatSetpointCCReport,
-) => {
+) {
 	// We expect a Thermostat Setpoint Report that matches the requested setpoint type
 	return received.type === sent.setpointType;
-};
+}
 
 interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
 	setpointType: ThermostatSetpointType;
