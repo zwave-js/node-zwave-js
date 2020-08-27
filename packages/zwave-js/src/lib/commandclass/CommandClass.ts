@@ -871,14 +871,10 @@ const METADATA_version = Symbol("version");
 const METADATA_API = Symbol("API");
 const METADATA_APIMap = Symbol("APIMap");
 
-export interface Constructable<T extends CommandClass> {
-	new (
-		driver: Driver,
-		options:
-			| CommandClassCreationOptions
-			| CommandClassDeserializationOptions,
-	): T;
-}
+export type Constructable<T extends CommandClass> = typeof CommandClass & {
+	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
+	new (driver: Driver, options: any): T;
+};
 type APIConstructor = new (driver: Driver, endpoint: Endpoint) => CCAPI;
 
 type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
@@ -892,9 +888,10 @@ function getCCCommandMapKey(ccId: CommandClasses, ccCommand: number): string {
 /**
  * May be used to define different expected CC responses depending on the sent CC
  */
-export type DynamicCCResponse<T extends CommandClass = CommandClass> = (
-	sentCC: T,
-) => typeof CommandClass | undefined;
+export type DynamicCCResponse<
+	TSent extends CommandClass,
+	TReceived extends CommandClass = CommandClass
+> = (sentCC: TSent) => Constructable<TReceived> | undefined;
 
 export type CCResponseRole =
 	| boolean // The response was either expected or unexpected
@@ -904,7 +901,7 @@ export type CCResponseRole =
  * A predicate function to test if a received CC matches the sent CC
  */
 export type CCResponsePredicate<
-	TSent extends CommandClass = CommandClass,
+	TSent extends CommandClass,
 	TReceived extends CommandClass = CommandClass
 > = (sentCommand: TSent, receivedCommand: TReceived) => CCResponseRole;
 
@@ -1087,10 +1084,12 @@ export function expectedCCResponse<
 	TSent extends CommandClass,
 	TReceived extends CommandClass
 >(
-	cc: typeof CommandClass | DynamicCCResponse<TSent>,
+	cc: Constructable<TReceived> | DynamicCCResponse<TSent, TReceived>,
 	predicate?: CCResponsePredicate<TSent, TReceived>,
-): ClassDecorator {
-	return (ccClass) => {
+) {
+	return <T extends TSent, TConstructor extends new (...args: any[]) => T>(
+		ccClass: TConstructor,
+	): TConstructor | void => {
 		Reflect.defineMetadata(METADATA_ccResponse, { cc, predicate }, ccClass);
 	};
 }

@@ -1054,8 +1054,9 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 }
 
 // This indirection is necessary to be able to define the same CC as the response
-const getResponseForV1CommandEncapsulation: DynamicCCResponse = () =>
-	MultiChannelCCV1CommandEncapsulation;
+function getResponseForV1CommandEncapsulation() {
+	return MultiChannelCCV1CommandEncapsulation;
+}
 
 interface MultiChannelCCV1CommandEncapsulationOptions extends CCCommandOptions {
 	encapsulated: CommandClass;
