@@ -1025,8 +1025,13 @@ export function getImplementedVersionStatic<
 /**
  * Defines the CC command a subclass of a CC implements
  */
-export function CCCommand(command: number): ClassDecorator {
-	return (ccClass) => {
+export function CCCommand(command: number) {
+	return <
+		T extends CommandClass,
+		TConstructor extends new (...args: any[]) => T
+	>(
+		ccClass: TConstructor,
+	): TConstructor | void => {
 		Reflect.defineMetadata(METADATA_ccCommand, command, ccClass);
 
 		// also store a map in the Message metadata for lookup.
