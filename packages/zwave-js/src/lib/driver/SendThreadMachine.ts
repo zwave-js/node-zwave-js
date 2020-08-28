@@ -901,7 +901,6 @@ export function createSendThreadMachine(
 						return false;
 					const sentMsg = ctx.currentTransaction!
 						.message as SendDataRequest;
-					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 					const receivedMsg = (evt as any).message;
 					return (
 						receivedMsg instanceof ApplicationCommandRequest &&
@@ -918,7 +917,6 @@ export function createSendThreadMachine(
 					if (!meta.state.matches(waitForTriggerStateId))
 						return false;
 
-					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 					const transaction = (evt as any).transaction as Transaction;
 					if (
 						transaction.priority !==
@@ -939,7 +937,7 @@ export function createSendThreadMachine(
 						return false;
 					const sentMsg = ctx.preTransmitHandshakeTransaction!
 						.message as SendDataRequest;
-					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+
 					const receivedMsg = (evt as any).message;
 					return (
 						receivedMsg instanceof ApplicationCommandRequest &&
@@ -987,12 +985,10 @@ export function createSendThreadMachine(
 					return (
 						!!msg &&
 						messageIsPing(msg) &&
-						// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 						msg.getNodeId() === (evt as any).nodeId
 					);
 				},
 				shouldNotKeepCurrentTransaction: (ctx, evt) => {
-					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 					const reducer = (evt as any).reducer;
 					return (
 						reducer(ctx.currentTransaction, "current").type !==

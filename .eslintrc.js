@@ -1,3 +1,17 @@
+/*
+	Note to future self:
+	
+	If ESLint is ever extremely slow again, check if there are .js and/or .map files in the source directories
+	and delete them:
+
+	```bash
+	find . -type f -name "*.map" | grep ./packages | grep /src/ | xargs -n1 rm
+	find . -type f -name "*.js" | grep ./packages | grep /src/ | xargs -n1 rm
+	```
+
+	Running `TIMING=1 DEBUG=eslint:cli-engine npm run lint:ts` helps detect the problem
+*/
+
 module.exports = {
 	parser: "@typescript-eslint/parser", // Specifies the ESLint parser
 	parserOptions: {
@@ -77,6 +91,9 @@ module.exports = {
 		"@typescript-eslint/no-unsafe-member-access": "off",
 		"@typescript-eslint/no-unsafe-return": "off",
 		"@typescript-eslint/no-unsafe-call": "off",
+
+		// Although this rule makes sense, it takes about a second to execute (and we don't need it)
+		"@typescript-eslint/no-implied-eval": "off",
 
 		"@typescript-eslint/explicit-module-boundary-types": [
 			"warn",

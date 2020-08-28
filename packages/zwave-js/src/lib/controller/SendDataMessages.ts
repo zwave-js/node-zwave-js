@@ -160,7 +160,8 @@ interface SendDataRequestTransmitReportOptions extends MessageBaseOptions {
 	callbackId: number;
 }
 
-export class SendDataRequestTransmitReport extends SendDataRequestBase
+export class SendDataRequestTransmitReport
+	extends SendDataRequestBase
 	implements SuccessIndicator {
 	public constructor(
 		driver: Driver,
@@ -267,8 +268,10 @@ interface SendDataMulticastRequestOptions<CCType extends CommandClass>
 @expectedResponse(FunctionType.SendDataMulticast)
 @expectedCallback(FunctionType.SendDataMulticast)
 export class SendDataMulticastRequest<
-	CCType extends CommandClass = CommandClass
-> extends SendDataMulticastRequestBase implements ICommandClassContainer {
+		CCType extends CommandClass = CommandClass
+	>
+	extends SendDataMulticastRequestBase
+	implements ICommandClassContainer {
 	public constructor(
 		driver: Driver,
 		options: SendDataMulticastRequestOptions<CCType>,
@@ -408,7 +411,8 @@ transmitStatus: ${getEnumMemberName(TransmitStatus, this.transmitStatus)}`,
 }
 
 @messageTypes(MessageType.Response, FunctionType.SendDataMulticast)
-export class SendDataMulticastResponse extends Message
+export class SendDataMulticastResponse
+	extends Message
 	implements SuccessIndicator {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);

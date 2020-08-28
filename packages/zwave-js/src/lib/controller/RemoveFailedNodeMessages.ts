@@ -112,7 +112,8 @@ export class RemoveFailedNodeRequestStatusReport
 }
 
 @messageTypes(MessageType.Response, FunctionType.RemoveFailedNode)
-export class RemoveFailedNodeResponse extends Message
+export class RemoveFailedNodeResponse
+	extends Message
 	implements SuccessIndicator {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);

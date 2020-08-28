@@ -45,7 +45,8 @@ export interface DeleteReturnRouteRequestOptions extends MessageBaseOptions {
 
 @expectedResponse(FunctionType.DeleteReturnRoute)
 @expectedCallback(FunctionType.DeleteReturnRoute)
-export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase
+export class DeleteReturnRouteRequest
+	extends DeleteReturnRouteRequestBase
 	implements INodeQuery {
 	public constructor(
 		driver: Driver,
@@ -74,7 +75,8 @@ export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase
 }
 
 @messageTypes(MessageType.Response, FunctionType.DeleteReturnRoute)
-export class DeleteReturnRouteResponse extends Message
+export class DeleteReturnRouteResponse
+	extends Message
 	implements SuccessIndicator {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
