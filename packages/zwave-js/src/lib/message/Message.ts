@@ -7,8 +7,8 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { MessageHeaders } from "@zwave-js/serial";
-import { num2hex, staticExtends } from "@zwave-js/shared";
 import type { JSONObject } from "@zwave-js/shared";
+import { num2hex, staticExtends } from "@zwave-js/shared";
 import { entries } from "alcalzone-shared/objects";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import type { Driver } from "../driver/Driver";
@@ -388,8 +388,8 @@ export type ResponseRole =
 /**
  * A predicate function to test if a received message matches to the sent message
  */
-export type ResponsePredicate = (
-	sentMessage: Message,
+export type ResponsePredicate<TSent extends Message = Message> = (
+	sentMessage: TSent,
 	receivedMessage: Message,
 ) => boolean;
 
@@ -545,8 +545,8 @@ export function getExpectedResponseStatic<T extends Constructable<Message>>(
 /**
  * Defines the expected callback function type or message class for a Z-Wave message
  */
-export function expectedCallback(
-	typeOrPredicate: FunctionType | typeof Message | ResponsePredicate,
+export function expectedCallback<TSent extends Message>(
+	typeOrPredicate: FunctionType | typeof Message | ResponsePredicate<TSent>,
 ): ClassDecorator {
 	return (messageClass) => {
 		Reflect.defineMetadata(

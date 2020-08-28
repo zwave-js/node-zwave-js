@@ -1,4 +1,5 @@
 import type { ParamInfoMap } from "@zwave-js/config";
+import type { ValueID } from "@zwave-js/core";
 import {
 	CacheMetadata,
 	CacheValue,
@@ -17,7 +18,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
@@ -35,12 +35,10 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	CCResponsePredicate,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
 	CommandClassOptions,
-	DynamicCCResponse,
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
@@ -923,15 +921,15 @@ export class ConfigurationCCReport extends ConfigurationCC {
 	}
 }
 
-const testResponseForConfigurationGet: CCResponsePredicate = (
+function testResponseForConfigurationGet(
 	sent: ConfigurationCCGet,
 	received: ConfigurationCCReport,
-) => {
+) {
 	// We expect a Configuration Report that matches the requested parameter
 	return (
 		sent.parameter === received.parameter || sent.allowUnexpectedResponse
 	);
-};
+}
 
 interface ConfigurationCCGetOptions extends CCCommandOptions {
 	parameter: number;
@@ -1086,11 +1084,9 @@ type ConfigurationCCBulkSetOptions = CCCommandOptions & {
 		  }
 	);
 
-const getResponseForBulkSet: DynamicCCResponse = (
-	cc: ConfigurationCCBulkSet,
-) => {
+function getResponseForBulkSet(cc: ConfigurationCCBulkSet) {
 	return cc.handshake ? ConfigurationCCBulkReport : undefined;
-};
+}
 
 @CCCommand(ConfigurationCommand.BulkSet)
 @expectedCCResponse(getResponseForBulkSet)

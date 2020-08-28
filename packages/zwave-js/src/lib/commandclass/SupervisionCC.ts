@@ -1,3 +1,4 @@
+import type { Maybe } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
@@ -6,7 +7,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { Maybe } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { CCAPI } from "./API";
@@ -14,7 +14,6 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	CCResponsePredicate,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -189,12 +188,12 @@ interface SupervisionCCGetOptions extends CCCommandOptions {
 	encapsulated: CommandClass;
 }
 
-const testResponseForSupervisionCCGet: CCResponsePredicate = (
+function testResponseForSupervisionCCGet(
 	sent: SupervisionCCGet,
 	received: SupervisionCCReport,
-) => {
+) {
 	return received.sessionId === sent.sessionId;
-};
+}
 
 @CCCommand(SupervisionCommand.Get)
 @expectedCCResponse(SupervisionCCReport, testResponseForSupervisionCCGet)

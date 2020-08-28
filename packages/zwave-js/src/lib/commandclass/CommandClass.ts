@@ -871,15 +871,19 @@ const METADATA_version = Symbol("version");
 const METADATA_API = Symbol("API");
 const METADATA_APIMap = Symbol("APIMap");
 
-export interface Constructable<T extends CommandClass> {
-	new (
-		driver: Driver,
-		options:
-			| CommandClassCreationOptions
-			| CommandClassDeserializationOptions,
-	): T;
-}
+export type Constructable<T extends CommandClass> = typeof CommandClass & {
+	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
+	new (driver: Driver, options: any): T;
+};
 type APIConstructor = new (driver: Driver, endpoint: Endpoint) => CCAPI;
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+type TypedClassDecorator<TTarget extends Object> = <
+	T extends TTarget,
+	TConstructor extends new (...args: any[]) => T
+>(
+	apiClass: TConstructor,
+) => TConstructor | void;
 
 type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
 type CCCommandMap = Map<string, Constructable<CommandClass>>;
@@ -892,9 +896,10 @@ function getCCCommandMapKey(ccId: CommandClasses, ccCommand: number): string {
 /**
  * May be used to define different expected CC responses depending on the sent CC
  */
-export type DynamicCCResponse<T extends CommandClass = CommandClass> = (
-	sentCC: T,
-) => typeof CommandClass | undefined;
+export type DynamicCCResponse<
+	TSent extends CommandClass,
+	TReceived extends CommandClass = CommandClass
+> = (sentCC: TSent) => Constructable<TReceived> | undefined;
 
 export type CCResponseRole =
 	| boolean // The response was either expected or unexpected
@@ -904,14 +909,16 @@ export type CCResponseRole =
  * A predicate function to test if a received CC matches the sent CC
  */
 export type CCResponsePredicate<
-	TSent extends CommandClass = CommandClass,
+	TSent extends CommandClass,
 	TReceived extends CommandClass = CommandClass
 > = (sentCommand: TSent, receivedCommand: TReceived) => CCResponseRole;
 
 /**
  * Defines the command class associated with a Z-Wave message
  */
-export function commandClass(cc: CommandClasses): ClassDecorator {
+export function commandClass(
+	cc: CommandClasses,
+): TypedClassDecorator<CommandClass> {
 	return (messageClass) => {
 		Reflect.defineMetadata(METADATA_commandClass, cc, messageClass);
 
@@ -983,7 +990,9 @@ export function getCCConstructor(
 /**
  * Defines the implemented version of a Z-Wave command class
  */
-export function implementedVersion(version: number): ClassDecorator {
+export function implementedVersion(
+	version: number,
+): TypedClassDecorator<CommandClass> {
 	return (ccClass) => {
 		Reflect.defineMetadata(METADATA_version, version, ccClass);
 	};
@@ -1028,7 +1037,7 @@ export function getImplementedVersionStatic<
 /**
  * Defines the CC command a subclass of a CC implements
  */
-export function CCCommand(command: number): ClassDecorator {
+export function CCCommand(command: number): TypedClassDecorator<CommandClass> {
 	return (ccClass) => {
 		Reflect.defineMetadata(METADATA_ccCommand, command, ccClass);
 
@@ -1083,10 +1092,13 @@ function getCCCommandConstructor<TBase extends CommandClass>(
 /**
  * Defines the expected response associated with a Z-Wave message
  */
-export function expectedCCResponse(
-	cc: typeof CommandClass | DynamicCCResponse,
-	predicate?: CCResponsePredicate,
-): ClassDecorator {
+export function expectedCCResponse<
+	TSent extends CommandClass,
+	TReceived extends CommandClass
+>(
+	cc: Constructable<TReceived> | DynamicCCResponse<TSent, TReceived>,
+	predicate?: CCResponsePredicate<TSent, TReceived>,
+): TypedClassDecorator<CommandClass> {
 	return (ccClass) => {
 		Reflect.defineMetadata(METADATA_ccResponse, { cc, predicate }, ccClass);
 	};
@@ -1139,7 +1151,8 @@ export interface CCValueOptions {
  * @param internal Whether the value should be exposed to library users
  */
 export function ccValue(options?: CCValueOptions): PropertyDecorator {
-	return (target: CommandClass, property: string | number | symbol) => {
+	return (target: unknown, property: string | number | symbol) => {
+		if (!target || !(target instanceof CommandClass)) return;
 		// Set default arguments
 		if (!options) options = {};
 		if (options.internal == undefined) options.internal = false;
@@ -1180,7 +1193,8 @@ function getCCValueDefinitions(
  * @param internal Whether the key value pair should be exposed to library users
  */
 export function ccKeyValuePair(options?: CCValueOptions): PropertyDecorator {
-	return (target: CommandClass, property: string | number | symbol) => {
+	return (target: unknown, property: string | number | symbol) => {
+		if (!target || !(target instanceof CommandClass)) return;
 		// Set default arguments
 		if (!options) options = {};
 		if (options.internal == undefined) options.internal = false;
@@ -1224,7 +1238,8 @@ function getCCKeyValuePairDefinitions(
  * Defines additional metadata for the given CC value
  */
 export function ccValueMetadata(meta: ValueMetadata): PropertyDecorator {
-	return (target: CommandClass, property: string | number | symbol) => {
+	return (target: unknown, property: string | number | symbol) => {
+		if (!target || !(target instanceof CommandClass)) return;
 		// get the class constructor
 		const constr = target.constructor as typeof CommandClass;
 		const cc = getCommandClassStatic(constr);
@@ -1259,7 +1274,7 @@ export function getCCValueMetadata(
 /**
  * Defines the simplified API associated with a Z-Wave command class
  */
-export function API(cc: CommandClasses): ClassDecorator {
+export function API(cc: CommandClasses): TypedClassDecorator<CCAPI> {
 	return (apiClass) => {
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_API, cc, apiClass);

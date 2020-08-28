@@ -4,6 +4,7 @@ import {
 	lookupSensorType,
 	Scale,
 } from "@zwave-js/config";
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	ignoreTimeout,
@@ -15,7 +16,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { CCAPI } from "./API";
@@ -340,10 +340,10 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 	}
 }
 
-const testResponseForMultilevelSensorGet: CCResponsePredicate = (
-	sent: MultilevelSensorCCGet,
-	received: MultilevelSensorCCReport,
-) => {
+const testResponseForMultilevelSensorGet: CCResponsePredicate<
+	MultilevelSensorCCGet,
+	MultilevelSensorCCReport
+> = (sent, received) => {
 	// We expect a Multilevel Sensor Report that matches the requested sensor type (if a type was requested)
 	return sent.sensorType == undefined || received.type === sent.sensorType;
 };

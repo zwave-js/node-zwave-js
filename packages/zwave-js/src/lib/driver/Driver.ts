@@ -1320,15 +1320,17 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 	 * @param handler The request handler callback
 	 * @param oneTime Whether the handler should be removed after its first successful invocation
 	 */
-	public registerRequestHandler(
+	public registerRequestHandler<T extends Message>(
 		fnType: FunctionType,
-		handler: RequestHandler,
+		handler: RequestHandler<T>,
 		oneTime: boolean = false,
 	): void {
-		const handlers = this.requestHandlers.has(fnType)
+		const handlers: RequestHandlerEntry<T>[] = this.requestHandlers.has(
+			fnType,
+		)
 			? this.requestHandlers.get(fnType)!
 			: [];
-		const entry: RequestHandlerEntry = { invoke: handler, oneTime };
+		const entry: RequestHandlerEntry<T> = { invoke: handler, oneTime };
 		handlers.push(entry);
 		log.driver.print(
 			`added${oneTime ? " one-time" : ""} request handler for ${
@@ -1336,7 +1338,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			} (${num2hex(fnType)})...
 ${handlers.length} registered`,
 		);
-		this.requestHandlers.set(fnType, handlers);
+		this.requestHandlers.set(fnType, handlers as RequestHandlerEntry[]);
 	}
 
 	/**

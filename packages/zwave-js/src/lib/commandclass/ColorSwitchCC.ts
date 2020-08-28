@@ -1,3 +1,4 @@
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
@@ -8,7 +9,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName, JSONObject, keysOf, pick } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
 import { entries } from "alcalzone-shared/objects";
@@ -27,7 +27,6 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	CCResponsePredicate,
 	ccValue,
 	commandClass,
 	CommandClass,
@@ -432,12 +431,12 @@ interface ColorSwitchCCGetOptions extends CCCommandOptions {
 	colorComponent: ColorComponent;
 }
 
-const testResponseForColorSwitchGet: CCResponsePredicate = (
+function testResponseForColorSwitchGet(
 	sent: ColorSwitchCCGet,
 	received: ColorSwitchCCReport,
-) => {
+) {
 	return sent.colorComponent === received.colorComponent;
-};
+}
 
 @CCCommand(ColorSwitchCommand.Get)
 @expectedCCResponse(ColorSwitchCCReport, testResponseForColorSwitchGet)

@@ -4,6 +4,7 @@ import {
 	lookupSpecificDeviceClass,
 	SpecificDeviceClass,
 } from "@zwave-js/config";
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	encodeBitMask,
@@ -16,7 +17,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
@@ -27,13 +27,11 @@ import {
 	CCCommand,
 	CCCommandOptions,
 	ccKeyValuePair,
-	CCResponsePredicate,
 	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
 	CommandClassOptions,
-	DynamicCCResponse,
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
@@ -897,21 +895,21 @@ interface MultiChannelCCCommandEncapsulationOptions extends CCCommandOptions {
 // A receiving node MUST NOT respond to a Multi Channel encapsulated command if the
 // Destination End Point field specifies multiple End Points via bit mask addressing.
 
-const getCCResponseForCommandEncapsulation: DynamicCCResponse = (
+function getCCResponseForCommandEncapsulation(
 	sent: MultiChannelCCCommandEncapsulation,
-) => {
+) {
 	if (
 		typeof sent.destination === "number" &&
 		sent.encapsulated.expectsCCResponse()
 	) {
 		return MultiChannelCCCommandEncapsulation;
 	}
-};
+}
 
-const testResponseForCommandEncapsulation: CCResponsePredicate = (
+function testResponseForCommandEncapsulation(
 	sent: MultiChannelCCCommandEncapsulation,
 	received: MultiChannelCCCommandEncapsulation,
-) => {
+) {
 	if (
 		typeof sent.destination === "number" &&
 		sent.destination === received.endpointIndex
@@ -919,7 +917,7 @@ const testResponseForCommandEncapsulation: CCResponsePredicate = (
 		return "checkEncapsulated";
 	}
 	return false;
-};
+}
 
 @CCCommand(MultiChannelCommand.CommandEncapsulation)
 @expectedCCResponse(
@@ -1014,12 +1012,12 @@ export class MultiChannelCCV1Report extends MultiChannelCC {
 	public readonly endpointCount: number;
 }
 
-const testResponseForMultiChannelV1Get: CCResponsePredicate = (
+function testResponseForMultiChannelV1Get(
 	sent: MultiChannelCCV1Get,
 	received: MultiChannelCCV1Report,
-) => {
+) {
 	return sent.requestedCC === received.requestedCC;
-};
+}
 
 interface MultiChannelCCV1GetOptions extends CCCommandOptions {
 	requestedCC: CommandClasses;
@@ -1055,8 +1053,9 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 }
 
 // This indirection is necessary to be able to define the same CC as the response
-const getResponseForV1CommandEncapsulation: DynamicCCResponse = () =>
-	MultiChannelCCV1CommandEncapsulation;
+function getResponseForV1CommandEncapsulation() {
+	return MultiChannelCCV1CommandEncapsulation;
+}
 
 interface MultiChannelCCV1CommandEncapsulationOptions extends CCCommandOptions {
 	encapsulated: CommandClass;

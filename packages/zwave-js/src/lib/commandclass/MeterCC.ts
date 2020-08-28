@@ -1,4 +1,5 @@
 import { lookupMeter, lookupMeterScale, MeterScale } from "@zwave-js/config";
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	getMinIntegerSize,
@@ -11,7 +12,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
@@ -27,7 +27,6 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	CCResponsePredicate,
 	ccValue,
 	CommandClass,
 	commandClass,
@@ -557,17 +556,14 @@ export class MeterCCReport extends MeterCC {
 	}
 }
 
-const testResponseForMeterGet: CCResponsePredicate = (
-	sent: MeterCCGet,
-	received: MeterCCReport,
-) => {
+function testResponseForMeterGet(sent: MeterCCGet, received: MeterCCReport) {
 	// We expect a Meter Report that matches the requested scale and rate type
 	// (if they were requested)
 	return (
 		(sent.scale == undefined || sent.scale === received.scale.key) &&
 		(sent.rateType == undefined || sent.rateType == received.rateType)
 	);
-};
+}
 
 interface MeterCCGetOptions {
 	scale?: number;

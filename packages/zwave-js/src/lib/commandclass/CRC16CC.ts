@@ -1,5 +1,5 @@
-import { CommandClasses, CRC16_CCITT, validatePayload } from "@zwave-js/core";
 import type { Maybe } from "@zwave-js/core";
+import { CommandClasses, CRC16_CCITT, validatePayload } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { CCAPI } from "./API";
 import {
@@ -9,7 +9,6 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
-	DynamicCCResponse,
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
@@ -75,8 +74,9 @@ interface CRC16CCCommandEncapsulationOptions extends CCCommandOptions {
 }
 
 // This indirection is necessary to be able to define the same CC as the response
-const getResponseForCommandEncapsulation: DynamicCCResponse = () =>
-	CRC16CCCommandEncapsulation;
+function getResponseForCommandEncapsulation() {
+	return CRC16CCCommandEncapsulation;
+}
 
 @CCCommand(CRC16Command.CommandEncapsulation)
 @expectedCCResponse(getResponseForCommandEncapsulation)

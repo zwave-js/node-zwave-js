@@ -17,7 +17,6 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	CCResponsePredicate,
 	ccValue,
 	CommandClass,
 	commandClass,
@@ -277,17 +276,17 @@ export class BinarySensorCCReport extends BinarySensorCC {
 	}
 }
 
-const testResponseForBinarySensorGet: CCResponsePredicate = (
+function testResponseForBinarySensorGet(
 	sent: BinarySensorCCGet,
 	received: BinarySensorCCReport,
-) => {
+) {
 	// We expect a Binary Sensor Report that matches the requested sensor type (if a type was requested)
 	return (
 		sent.sensorType == undefined ||
 		sent.sensorType === BinarySensorType.Any ||
 		received.type === sent.sensorType
 	);
-};
+}
 
 interface BinarySensorCCGetOptions extends CCCommandOptions {
 	sensorType?: BinarySensorType;
