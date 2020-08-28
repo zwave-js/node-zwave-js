@@ -980,8 +980,13 @@ export function getCCConstructor(
 /**
  * Defines the implemented version of a Z-Wave command class
  */
-export function implementedVersion(version: number): ClassDecorator {
-	return (ccClass) => {
+export function implementedVersion(version: number) {
+	return <
+		T extends CommandClass,
+		TConstructor extends new (...args: any[]) => T
+	>(
+		ccClass: TConstructor,
+	): TConstructor | void => {
 		Reflect.defineMetadata(METADATA_version, version, ccClass);
 	};
 }
