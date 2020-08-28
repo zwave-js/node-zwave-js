@@ -220,7 +220,7 @@ export const logMessagePrinter: Format = {
 				),
 			);
 		}
-		info[MESSAGE] = lines.join("\n");
+		info[MESSAGE as any] = lines.join("\n");
 		return info;
 	}) as unknown) as TransformFunction,
 };
