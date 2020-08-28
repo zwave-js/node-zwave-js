@@ -99,7 +99,7 @@
     "show-coverage": "npm run coverage && start ./coverage/index.html",
     "lint:ts": "eslint --ext .ts \"packages/*/src/**\"",
     "lint:wotan": "wotan",
-    "lint": "npm run lint:ts && npm run lint:wotan",
+    "lint": "npm run lint:ts",
     "implemented_ccs": "ts-node maintenance/implemented_ccs.ts",
     "gh-cc-table": "npm run implemented_ccs -- --flavor=github --only-incomplete",
     "usbdebug": "cmd.exe /c \"test\\usbdebug.bat\"",
