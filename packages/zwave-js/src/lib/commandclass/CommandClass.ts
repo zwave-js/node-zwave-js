@@ -1279,8 +1279,10 @@ export function getCCValueMetadata(
 /**
  * Defines the simplified API associated with a Z-Wave command class
  */
-export function API(cc: CommandClasses): ClassDecorator {
-	return (apiClass) => {
+export function API(cc: CommandClasses) {
+	return <T extends CCAPI, TConstructor extends new (...args: any[]) => T>(
+		apiClass: TConstructor,
+	): TConstructor | void => {
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_API, cc, apiClass);
 
