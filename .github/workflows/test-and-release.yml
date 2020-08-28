@@ -41,7 +41,7 @@ jobs:
       run: npx lerna run build
     
     - name: Lint TypeScript code
-      run: npx lerna run lint
+      run: npm run lint
 
     - name: Lint config files
       run: npx lerna run lint:config
