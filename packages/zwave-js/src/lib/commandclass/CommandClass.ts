@@ -908,8 +908,13 @@ export type CCResponsePredicate<
 /**
  * Defines the command class associated with a Z-Wave message
  */
-export function commandClass(cc: CommandClasses): ClassDecorator {
-	return (messageClass) => {
+export function commandClass(cc: CommandClasses) {
+	return <
+		T extends CommandClass,
+		TConstructor extends new (...args: any[]) => T
+	>(
+		messageClass: TConstructor,
+	): TConstructor | void => {
 		Reflect.defineMetadata(METADATA_commandClass, cc, messageClass);
 
 		// also store a map in the Message metadata for lookup.
