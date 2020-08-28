@@ -877,6 +877,14 @@ export type Constructable<T extends CommandClass> = typeof CommandClass & {
 };
 type APIConstructor = new (driver: Driver, endpoint: Endpoint) => CCAPI;
 
+// eslint-disable-next-line @typescript-eslint/ban-types
+type TypedClassDecorator<TTarget extends Object> = <
+	T extends TTarget,
+	TConstructor extends new (...args: any[]) => T
+>(
+	apiClass: TConstructor,
+) => TConstructor | void;
+
 type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
 type CCCommandMap = Map<string, Constructable<CommandClass>>;
 type APIMap = Map<CommandClasses, APIConstructor>;
@@ -908,13 +916,10 @@ export type CCResponsePredicate<
 /**
  * Defines the command class associated with a Z-Wave message
  */
-export function commandClass(cc: CommandClasses) {
-	return <
-		T extends CommandClass,
-		TConstructor extends new (...args: any[]) => T
-	>(
-		messageClass: TConstructor,
-	): TConstructor | void => {
+export function commandClass(
+	cc: CommandClasses,
+): TypedClassDecorator<CommandClass> {
+	return (messageClass) => {
 		Reflect.defineMetadata(METADATA_commandClass, cc, messageClass);
 
 		// also store a map in the Message metadata for lookup.
@@ -985,13 +990,10 @@ export function getCCConstructor(
 /**
  * Defines the implemented version of a Z-Wave command class
  */
-export function implementedVersion(version: number) {
-	return <
-		T extends CommandClass,
-		TConstructor extends new (...args: any[]) => T
-	>(
-		ccClass: TConstructor,
-	): TConstructor | void => {
+export function implementedVersion(
+	version: number,
+): TypedClassDecorator<CommandClass> {
+	return (ccClass) => {
 		Reflect.defineMetadata(METADATA_version, version, ccClass);
 	};
 }
@@ -1035,13 +1037,8 @@ export function getImplementedVersionStatic<
 /**
  * Defines the CC command a subclass of a CC implements
  */
-export function CCCommand(command: number) {
-	return <
-		T extends CommandClass,
-		TConstructor extends new (...args: any[]) => T
-	>(
-		ccClass: TConstructor,
-	): TConstructor | void => {
+export function CCCommand(command: number): TypedClassDecorator<CommandClass> {
+	return (ccClass) => {
 		Reflect.defineMetadata(METADATA_ccCommand, command, ccClass);
 
 		// also store a map in the Message metadata for lookup.
@@ -1101,10 +1098,8 @@ export function expectedCCResponse<
 >(
 	cc: Constructable<TReceived> | DynamicCCResponse<TSent, TReceived>,
 	predicate?: CCResponsePredicate<TSent, TReceived>,
-) {
-	return <T extends TSent, TConstructor extends new (...args: any[]) => T>(
-		ccClass: TConstructor,
-	): TConstructor | void => {
+): TypedClassDecorator<CommandClass> {
+	return (ccClass) => {
 		Reflect.defineMetadata(METADATA_ccResponse, { cc, predicate }, ccClass);
 	};
 }
@@ -1279,10 +1274,8 @@ export function getCCValueMetadata(
 /**
  * Defines the simplified API associated with a Z-Wave command class
  */
-export function API(cc: CommandClasses) {
-	return <T extends CCAPI, TConstructor extends new (...args: any[]) => T>(
-		apiClass: TConstructor,
-	): TConstructor | void => {
+export function API(cc: CommandClasses): TypedClassDecorator<CCAPI> {
+	return (apiClass) => {
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_API, cc, apiClass);
 
