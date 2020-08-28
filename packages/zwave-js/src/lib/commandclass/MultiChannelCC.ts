@@ -32,7 +32,6 @@ import {
 	commandClass,
 	CommandClassDeserializationOptions,
 	CommandClassOptions,
-	DynamicCCResponse,
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
