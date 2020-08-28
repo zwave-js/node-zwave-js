@@ -46,7 +46,7 @@ export async function loadManufacturersInternal(): Promise<void> {
 			ret.set(idNum, name);
 		}
 		manufacturers = ret;
-	} catch (e) {
+	} catch (e: unknown) {
 		if (e instanceof ZWaveError) {
 			throw e;
 		} else {
@@ -58,7 +58,7 @@ export async function loadManufacturersInternal(): Promise<void> {
 export async function loadManufacturers(): Promise<void> {
 	try {
 		await loadManufacturersInternal();
-	} catch (e) {
+	} catch (e: unknown) {
 		// If the config file is missing or invalid, don't try to find it again
 		if (
 			e instanceof ZWaveError &&

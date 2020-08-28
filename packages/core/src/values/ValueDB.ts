@@ -182,7 +182,7 @@ export class ValueDB extends EventEmitter {
 		let dbKey: string;
 		try {
 			dbKey = this.valueIdToDBKey(valueId);
-		} catch (e) {
+		} catch (e: unknown) {
 			if (
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Argument_Invalid &&
@@ -307,7 +307,7 @@ export class ValueDB extends EventEmitter {
 		let dbKey: string;
 		try {
 			dbKey = this.valueIdToDBKey(valueId);
-		} catch (e) {
+		} catch (e: unknown) {
 			if (
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Argument_Invalid &&

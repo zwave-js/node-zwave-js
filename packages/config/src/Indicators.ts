@@ -1,5 +1,5 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import type { ValueType } from "@zwave-js/core";
+import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { JSONObject, num2hex } from "@zwave-js/shared";
 import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
@@ -76,7 +76,7 @@ export async function loadIndicatorsInternal(): Promise<{
 		properties = _properties;
 
 		return { indicators, properties };
-	} catch (e) {
+	} catch (e: unknown) {
 		if (e instanceof ZWaveError) {
 			throw e;
 		} else {
@@ -88,7 +88,7 @@ export async function loadIndicatorsInternal(): Promise<{
 export async function loadIndicators(): Promise<void> {
 	try {
 		await loadIndicatorsInternal();
-	} catch (e) {
+	} catch (e: unknown) {
 		// If the config file is missing or invalid, don't try to find it again
 		if (
 			e instanceof ZWaveError &&
