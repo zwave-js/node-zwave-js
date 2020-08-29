@@ -267,7 +267,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber,
 				response.parameter,
 			);
-		} catch (e) {
+		} catch (e: unknown) {
 			if (
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
@@ -305,7 +305,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		try {
 			await this.driver.sendCommand(cc);
 			return true;
-		} catch (e) {
+		} catch (e: unknown) {
 			if (
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
@@ -339,7 +339,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		try {
 			await this.driver.sendCommand(cc);
 			return true;
-		} catch (e) {
+		} catch (e: unknown) {
 			if (
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
@@ -465,7 +465,7 @@ export class ConfigurationCCAPI extends CCAPI {
 						direction: "inbound",
 					});
 				}
-			} catch (e) {
+			} catch (e: unknown) {
 				if (
 					e instanceof ConfigurationCCError &&
 					e.code ===

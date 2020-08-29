@@ -739,7 +739,7 @@ export class ZWaveController extends EventEmitter {
 				// in any case, stop the inclusion process so we don't accidentally add another node
 				try {
 					await this.stopInclusionInternal();
-				} catch (e) {
+				} catch {
 					/* ok */
 				}
 				break;
@@ -763,7 +763,7 @@ export class ZWaveController extends EventEmitter {
 				// stop the inclusion process so we don't accidentally add another node
 				try {
 					await this.stopInclusionInternal();
-				} catch (e) {
+				} catch {
 					/* ok */
 				}
 				break;
@@ -826,16 +826,17 @@ export class ZWaveController extends EventEmitter {
 
 							// Remember that the node is secure
 							newNode.isSecure = true;
-						} catch (e) {
+						} catch (e: unknown) {
 							let errorMessage = `Security bootstrapping failed, the node is included insecurely`;
-							if (
-								!(e instanceof ZWaveError) ||
-								(e.code !==
+							if (!(e instanceof ZWaveError)) {
+								errorMessage += `: ${e as any}`;
+							} else if (
+								e.code !==
 									ZWaveErrorCodes.Controller_MessageDropped &&
-									e.code !==
-										ZWaveErrorCodes.Controller_NodeTimeout)
+								e.code !==
+									ZWaveErrorCodes.Controller_NodeTimeout
 							) {
-								errorMessage += `: ${e}`;
+								errorMessage += `: ${e.message}`;
 							}
 							log.controller.logNode(
 								newNode.id,
@@ -912,7 +913,7 @@ export class ZWaveController extends EventEmitter {
 				// in any case, stop the exclusion process so we don't accidentally remove another node
 				try {
 					await this.stopExclusionInternal();
-				} catch (e) {
+				} catch {
 					/* ok */
 				}
 				break;
@@ -931,7 +932,7 @@ export class ZWaveController extends EventEmitter {
 				// stop the exclusion process so we don't accidentally remove another node
 				try {
 					await this.stopExclusionInternal();
-				} catch (e) {
+				} catch {
 					/* ok */
 				}
 

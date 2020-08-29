@@ -7,6 +7,7 @@ import {
 import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
+	encodeFloatWithScale,
 	ignoreTimeout,
 	Maybe,
 	parseBitMask,
@@ -58,6 +59,7 @@ export class MultilevelSensorCCAPI extends CCAPI {
 	public supportsCommand(cmd: MultilevelSensorCommand): Maybe<boolean> {
 		switch (cmd) {
 			case MultilevelSensorCommand.Get:
+			case MultilevelSensorCommand.Report:
 				return true; // This is mandatory
 			case MultilevelSensorCommand.GetSupportedSensor:
 			case MultilevelSensorCommand.GetSupportedScale:
@@ -131,6 +133,26 @@ export class MultilevelSensorCCAPI extends CCAPI {
 			MultilevelSensorCCSupportedScaleReport
 		>(cc))!;
 		return response.sensorSupportedScales;
+	}
+
+	public async sendReport(
+		sensorType: number,
+		scale: number | Scale,
+		value: number,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			MultilevelSensorCommand,
+			MultilevelSensorCommand.Report,
+		);
+
+		const cc = new MultilevelSensorCCReport(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			type: sensorType,
+			scale,
+			value,
+		});
+		await this.driver.sendCommand(cc);
 	}
 }
 
@@ -291,25 +313,44 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 	}
 }
 
+// @publicAPI
+export interface MultilevelSensorCCReportOptions extends CCCommandOptions {
+	type: number;
+	scale: number | Scale;
+	value: number;
+}
+
 @CCCommand(MultilevelSensorCommand.Report)
 export class MultilevelSensorCCReport extends MultilevelSensorCC {
 	public constructor(
 		driver: Driver,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| MultilevelSensorCCReportOptions,
 	) {
 		super(driver, options);
-		validatePayload(this.payload.length >= 1);
-		this._type = this.payload[0];
-		// parseFloatWithScale does its own validation
-		const { value, scale } = parseFloatWithScale(this.payload.slice(1));
-		this._value = value;
-		this._scale = lookupSensorScale(this._type, scale);
 
-		this.persistValues();
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.type = this.payload[0];
+			// parseFloatWithScale does its own validation
+			const { value, scale } = parseFloatWithScale(this.payload.slice(1));
+			this.value = value;
+			this.scale = lookupSensorScale(this.type, scale);
+
+			this.persistValues();
+		} else {
+			this.type = options.type;
+			this.value = options.value;
+			this.scale =
+				options.scale instanceof Scale
+					? options.scale
+					: lookupSensorScale(this.type, options.scale);
+		}
 	}
 
 	public persistValues(): boolean {
-		const typeName = getSensorTypeName(this._type);
+		const typeName = getSensorTypeName(this.type);
 		const valueId: ValueID = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
@@ -317,26 +358,23 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		};
 		this.getValueDB().setMetadata(valueId, {
 			...ValueMetadata.ReadOnlyNumber,
-			unit: this._scale.unit,
+			unit: this.scale.unit,
 			label: typeName,
 		});
-		this.getValueDB().setValue(valueId, this._value);
+		this.getValueDB().setValue(valueId, this.value);
 		return true;
 	}
 
-	private _type: number;
-	public get type(): number {
-		return this._type;
-	}
+	public type: number;
+	public scale: Scale;
+	public value: number;
 
-	private _scale: Scale;
-	public get scale(): Scale {
-		return this._scale;
-	}
-
-	private _value: number;
-	public get value(): number {
-		return this._value;
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([this.type]),
+			encodeFloatWithScale(this.value, this.scale.key),
+		]);
+		return super.serialize();
 	}
 }
 

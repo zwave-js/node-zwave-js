@@ -364,7 +364,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					| undefined;
 				try {
 					setpoint = await api.get(type);
-				} catch (e) {
+				} catch (e: unknown) {
 					if (
 						e instanceof ZWaveError &&
 						e.code === ZWaveErrorCodes.Controller_NodeTimeout

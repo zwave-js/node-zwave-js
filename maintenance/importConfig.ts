@@ -345,7 +345,7 @@ async function importConfigFiles(): Promise<void> {
 				console.error(`${file} has no label, ignoring it!`);
 				continue;
 			}
-		} catch (e) {
+		} catch (e: unknown) {
 			if (e instanceof AssertionError) {
 				console.error(`${file} is not valid, ignoring!`);
 				continue;

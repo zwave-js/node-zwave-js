@@ -1,5 +1,5 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import type { ValueID } from "@zwave-js/core";
+import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
 	JSONObject,
 	ObjectKeyMap,
@@ -51,7 +51,7 @@ export async function loadDeviceIndexInternal(): Promise<typeof index> {
 		const fileContents = await readFile(indexPath, "utf8");
 		index = JSON5.parse(fileContents);
 		return index;
-	} catch (e) {
+	} catch (e: unknown) {
 		if (e instanceof ZWaveError) {
 			throw e;
 		} else {
@@ -63,7 +63,7 @@ export async function loadDeviceIndexInternal(): Promise<typeof index> {
 export async function loadDeviceIndex(): Promise<void> {
 	try {
 		await loadDeviceIndexInternal();
-	} catch (e) {
+	} catch (e: unknown) {
 		// If the index file is missing or invalid, don't try to find it again
 		if (
 			e instanceof ZWaveError &&
