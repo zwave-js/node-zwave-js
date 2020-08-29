@@ -40,7 +40,8 @@ interface ApplicationCommandRequestOptions extends MessageBaseOptions {
 @messageTypes(MessageType.Request, FunctionType.ApplicationCommand)
 // This does not expect a response. The controller sends us this when a node sends a command
 @priority(MessagePriority.Normal)
-export class ApplicationCommandRequest extends Message
+export class ApplicationCommandRequest
+	extends Message
 	implements ICommandClassContainer {
 	public constructor(
 		driver: Driver,

@@ -828,14 +828,15 @@ export class ZWaveController extends EventEmitter {
 							newNode.isSecure = true;
 						} catch (e: unknown) {
 							let errorMessage = `Security bootstrapping failed, the node is included insecurely`;
-							if (
-								!(e instanceof ZWaveError) ||
-								(e.code !==
+							if (!(e instanceof ZWaveError)) {
+								errorMessage += `: ${e as any}`;
+							} else if (
+								e.code !==
 									ZWaveErrorCodes.Controller_MessageDropped &&
-									e.code !==
-										ZWaveErrorCodes.Controller_NodeTimeout)
+								e.code !==
+									ZWaveErrorCodes.Controller_NodeTimeout
 							) {
-								errorMessage += `: ${e}`;
+								errorMessage += `: ${e.message}`;
 							}
 							log.controller.logNode(
 								newNode.id,

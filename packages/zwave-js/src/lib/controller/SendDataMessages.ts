@@ -373,8 +373,10 @@ interface SendDataMulticastRequestOptions<CCType extends CommandClass>
 
 @expectedResponse(testResponseForSendDataMulticastRequest)
 export class SendDataMulticastRequest<
-	CCType extends CommandClass = CommandClass
-> extends SendDataMulticastRequestBase implements ICommandClassContainer {
+		CCType extends CommandClass = CommandClass
+	>
+	extends SendDataMulticastRequestBase
+	implements ICommandClassContainer {
 	public constructor(
 		driver: Driver,
 		options: SendDataMulticastRequestOptions<CCType>,

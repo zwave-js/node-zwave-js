@@ -4,6 +4,7 @@ import {
 	lookupSpecificDeviceClass,
 	SpecificDeviceClass,
 } from "@zwave-js/config";
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	encodeBitMask,
@@ -16,7 +17,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";

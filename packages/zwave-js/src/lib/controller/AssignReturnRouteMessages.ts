@@ -57,7 +57,8 @@ export interface AssignReturnRouteRequestOptions extends MessageBaseOptions {
 }
 
 @expectedResponse(testResponseForAssignReturnRouteRequest)
-export class AssignReturnRouteRequest extends AssignReturnRouteRequestBase
+export class AssignReturnRouteRequest
+	extends AssignReturnRouteRequestBase
 	implements INodeQuery {
 	public constructor(
 		driver: Driver,

@@ -56,7 +56,8 @@ export interface DeleteReturnRouteRequestOptions extends MessageBaseOptions {
 }
 
 @expectedResponse(testResponseForDeleteReturnRouteRequest)
-export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase
+export class DeleteReturnRouteRequest
+	extends DeleteReturnRouteRequestBase
 	implements INodeQuery {
 	public constructor(
 		driver: Driver,

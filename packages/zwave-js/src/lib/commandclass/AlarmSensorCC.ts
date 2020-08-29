@@ -106,6 +106,7 @@ export class AlarmSensorCCAPI extends CCAPI {
 	 * Retrieves the current value from this sensor
 	 * @param sensorType The (optional) sensor type to retrieve the value for
 	 */
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(sensorType?: AlarmSensorType) {
 		this.assertSupportsCommand(AlarmSensorCommand, AlarmSensorCommand.Get);
 
@@ -203,9 +204,19 @@ export class AlarmSensorCC extends CommandClass {
 				direction: "outbound",
 			});
 			const currentValue = await api.get(type);
+			let message = `received current value for ${sensorName}: 
+state:   ${currentValue.state}`;
+			if (currentValue.severity != undefined) {
+				message += `
+severity: ${currentValue.severity}`;
+			}
+			if (currentValue.duration != undefined) {
+				message += `
+duration: ${currentValue.duration}`;
+			}
 			log.controller.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: `received current value for ${sensorName}: ${currentValue}`,
+				message,
 				direction: "inbound",
 			});
 		}
