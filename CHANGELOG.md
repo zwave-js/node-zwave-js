@@ -4,6 +4,13 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* Added the ability to send `Multilevel Sensor Reports` using the new `sendReport` method
+
+### Misc
+* Updated dependencies including bugfixes and security patches
+
 ## 4.0.7 (2020-08-16)
 ### Bugfixes
 * Replaced Sentry.io DSN
