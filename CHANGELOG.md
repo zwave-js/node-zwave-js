@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 4.1.1 (2020-09-01)
 ### Bugfixes
 * The `Basic CC` interview is no longer performed if any actuator CC is supported
 * If a node does not respond to a `Basic CC::Get`, the interview is no longer aborted. Instead the `Basic CC` is marked as unsupported.
