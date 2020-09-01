@@ -4,6 +4,11 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* The `Basic CC` interview is no longer performed if any actuator CC is supported
+* If a node does not respond to a `Basic CC::Get`, the interview is no longer aborted. Instead the `Basic CC` is marked as unsupported.
+
 ## 4.1.0 (2020-08-29)
 ### Features
 * Added the ability to send `Multilevel Sensor Reports` using the new `sendReport` method
