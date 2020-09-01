@@ -1131,6 +1131,9 @@ version:               ${this.version}`;
 			this._isSecure = false;
 		}
 
+		// Don't offer or interview the Basic CC if any actuator CC is supported
+		this.hideBasicCCInFavorOfActuatorCCs();
+
 		// We determine the correct interview order by topologically sorting a dependency graph
 		const rootInterviewGraph = this.buildCCInterviewGraph();
 		let rootInterviewOrder: CommandClasses[];
@@ -1195,6 +1198,9 @@ version:               ${this.version}`;
 				if (typeof action === "boolean") return action;
 			}
 
+			// Don't offer or interview the Basic CC if any actuator CC is supported
+			endpoint.hideBasicCCInFavorOfActuatorCCs();
+
 			const endpointInterviewGraph = endpoint.buildCCInterviewGraph();
 			let endpointInterviewOrder: CommandClasses[];
 			try {
@@ -1223,11 +1229,6 @@ version:               ${this.version}`;
 			const action = await interviewEndpoint(this, cc);
 			if (action === "continue") continue;
 			else if (typeof action === "boolean") return action;
-		}
-
-		// If a node or endpoint supports any actuator CC, don't offer the Basic CC
-		for (const endpoint of this.getAllEndpoints()) {
-			endpoint.hideBasicCCInFavorOfActuatorCCs();
 		}
 
 		// TODO: Overwrite the reported config with configuration files (like OZW does)
