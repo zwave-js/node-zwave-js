@@ -1,3 +1,4 @@
+import { pick } from "@zwave-js/shared";
 import { CommandClasses } from "../capabilities/CommandClasses";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { assertZWaveError } from "../test/assertZWaveError";
@@ -530,6 +531,88 @@ describe("lib/node/ValueDB => ", () => {
 		});
 	});
 
+	describe("findValues()", () => {
+		beforeEach(() => createValueDB());
+
+		it("should return all values whose id matches the given predicate", () => {
+			const values = [
+				{
+					commandClass: CommandClasses.Basic,
+					endpoint: 0,
+					property: "foo",
+					value: "1",
+				},
+				{
+					commandClass: CommandClasses.Basic,
+					endpoint: 2,
+					property: "foo",
+					value: "2",
+				},
+				{
+					commandClass: CommandClasses.Basic,
+					endpoint: 0,
+					property: "FOO",
+					value: "3",
+				},
+				{
+					commandClass: CommandClasses.Basic,
+					endpoint: 2,
+					property: "FOO",
+					value: "4",
+				},
+			];
+
+			for (const { value, ...valueId } of values) {
+				valueDB.setValue(valueId, value);
+			}
+			expect(valueDB.findValues((id) => id.endpoint === 2)).toEqual(
+				values.filter((v) => v.endpoint === 2),
+			);
+		});
+
+		it("should ignore values from another node", () => {
+			const values = [
+				{
+					nodeId: 2,
+					commandClass: CommandClasses.Basic,
+					endpoint: 0,
+					property: "foo",
+					value: "1",
+				},
+				{
+					nodeId: 2,
+					commandClass: CommandClasses.Battery,
+					endpoint: 2,
+					property: "foo",
+					value: "2",
+				},
+				{
+					nodeId: 1,
+					commandClass: CommandClasses.Basic,
+					endpoint: 0,
+					property: "FOO",
+					value: "3",
+				},
+				{
+					nodeId: 1,
+					commandClass: CommandClasses.Battery,
+					endpoint: 2,
+					property: "FOO",
+					value: "4",
+				},
+			];
+			for (const { value, ...valueId } of values) {
+				(valueDB as any)._db.set(JSON.stringify(valueId), value);
+			}
+
+			// The node has nodeID 2
+			const { nodeId, ...expected } = values[1];
+			expect(valueDB.findValues((id) => id.endpoint === 2)).toEqual([
+				expected,
+			]);
+		});
+	});
+
 	describe("Metadata", () => {
 		beforeEach(() => createValueDB());
 
@@ -690,6 +773,100 @@ describe("lib/node/ValueDB => ", () => {
 			it("The callback arg should contain the new metadata", () => {
 				expect(cbArg.metadata).toBe(ValueMetadata.Any);
 			});
+		});
+	});
+
+	describe("findMetadata()", () => {
+		beforeEach(() => createValueDB());
+
+		it("should return all metadata whose id matches the given predicate", () => {
+			const metadata = [
+				{
+					commandClass: CommandClasses.Basic,
+					endpoint: 0,
+					property: "foo",
+					meta: ValueMetadata.Any,
+				},
+				{
+					commandClass: CommandClasses.Battery,
+					endpoint: 2,
+					property: "foo",
+					meta: ValueMetadata.Any,
+				},
+				{
+					commandClass: CommandClasses.Basic,
+					endpoint: 0,
+					property: "FOO",
+					meta: ValueMetadata.Any,
+				},
+				{
+					commandClass: CommandClasses.Battery,
+					endpoint: 2,
+					property: "FOO",
+					meta: ValueMetadata.Any,
+				},
+			];
+
+			for (const { meta, ...valueId } of metadata) {
+				valueDB.setMetadata(valueId, meta);
+			}
+
+			const expected = metadata
+				.filter((v) => v.endpoint === 2)
+				.map(({ meta, ...rest }) => ({
+					...rest,
+					metadata: meta,
+				}));
+
+			expect(valueDB.findMetadata((id) => id.endpoint === 2)).toEqual(
+				expected,
+			);
+		});
+
+		it("should ignore metadata from another node", () => {
+			const metadata = [
+				{
+					nodeId: 2,
+					commandClass: CommandClasses.Basic,
+					endpoint: 0,
+					property: "foo",
+					meta: ValueMetadata.Any,
+				},
+				{
+					nodeId: 2,
+					commandClass: CommandClasses.Battery,
+					endpoint: 2,
+					property: "foo",
+					meta: ValueMetadata.Any,
+				},
+				{
+					nodeId: 1,
+					commandClass: CommandClasses.Basic,
+					endpoint: 0,
+					property: "FOO",
+					meta: ValueMetadata.Any,
+				},
+				{
+					nodeId: 1,
+					commandClass: CommandClasses.Battery,
+					endpoint: 2,
+					property: "FOO",
+					meta: ValueMetadata.Any,
+				},
+			];
+			for (const { meta, ...valueId } of metadata) {
+				(valueDB as any)._metadata.set(JSON.stringify(valueId), meta);
+			}
+
+			// The node has nodeID 2
+			const expectedMeta = metadata[1];
+			const expected = {
+				...pick(expectedMeta, ["commandClass", "endpoint", "property"]),
+				metadata: expectedMeta.meta,
+			};
+			expect(valueDB.findMetadata((id) => id.endpoint === 2)).toEqual([
+				expected,
+			]);
 		});
 	});
 

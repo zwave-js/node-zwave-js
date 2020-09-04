@@ -248,6 +248,22 @@ export class ValueDB extends EventEmitter {
 		return this._db.has(key);
 	}
 
+	/** Returns all values whose id matches the given predicate */
+	public findValues(
+		predicate: (id: ValueID) => boolean,
+	): (ValueID & { value: unknown })[] {
+		const ret: ReturnType<ValueDB["findValues"]> = [];
+		for (const key of this._db.keys()) {
+			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+			if (nodeId !== this.nodeId) continue;
+
+			if (predicate(valueId)) {
+				ret.push({ ...valueId, value: this._db.get(key) });
+			}
+		}
+		return ret;
+	}
+
 	/** Returns all values that are stored for a given CC */
 	public getValues(forCC: CommandClasses): (ValueID & { value: unknown })[] {
 		const ret: ReturnType<ValueDB["getValues"]> = [];
@@ -364,6 +380,24 @@ export class ValueDB extends EventEmitter {
 			if (forCC === valueId.commandClass)
 				ret.push({ ...valueId, metadata: meta });
 		});
+		return ret;
+	}
+
+	/** Returns all values whose id matches the given predicate */
+	public findMetadata(
+		predicate: (id: ValueID) => boolean,
+	): (ValueID & {
+		metadata: ValueMetadata;
+	})[] {
+		const ret: ReturnType<ValueDB["findMetadata"]> = [];
+		for (const key of this._metadata.keys()) {
+			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+			if (nodeId !== this.nodeId) continue;
+
+			if (predicate(valueId)) {
+				ret.push({ ...valueId, metadata: this._metadata.get(key)! });
+			}
+		}
 		return ret;
 	}
 }
