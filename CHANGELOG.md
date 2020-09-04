@@ -4,6 +4,13 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* Invalid `Multi Channel CC::Command Encapsulation` which follow the V2+ format but use a V1 header are now treated like valid commands
+
+### Bugfixes
+* Further performance improvements while decoding `Configuration CC::Report`s
+
 ## 4.1.2 (2020-09-04)
 ### Bugfixes
 * Reduced CPU usage in networks with a lot of values
