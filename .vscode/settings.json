@@ -21,7 +21,7 @@
 	"files.exclude": {
 		"node_modules/": true,
 		"coverage/": true,
-		".*": true,
+		".*": false,
 		"**/node_modules/": true,
 		"**/*.test.js": true,
 		".nyc_output": true,
