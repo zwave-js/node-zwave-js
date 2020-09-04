@@ -902,7 +902,10 @@ const testResponseForCommandEncapsulation: CCResponsePredicate<MultiChannelCCCom
 	// A receiving node MUST NOT respond to a Multi Channel encapsulated command if the
 	// Destination End Point field specifies multiple End Points via bit mask addressing.
 	if (typeof sent.destination === "number") {
-		return received instanceof MultiChannelCCCommandEncapsulation &&
+		return (received instanceof MultiChannelCCCommandEncapsulation ||
+			// Some devices send MultiChannelCCCommandEncapsulation but with V1 CCCommand,
+			// so we need to allow those too
+			received instanceof MultiChannelCCV1CommandEncapsulation) &&
 			sent.destination === received.endpointIndex
 			? "checkEncapsulated"
 			: isPositiveTransmitReport
@@ -1071,9 +1074,14 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 			validatePayload(this.payload.length >= 1);
 			this.endpointIndex = this.payload[0];
 
+			// Some devices send invalid reports, i.e. MultiChannelCCV1CommandEncapsulation, but with V2+ binary format
+			// This would be a NoOp CC, but it makes no sense to encapsulate that.
+			const isV2withV1Header =
+				this.payload.length >= 2 && this.payload[1] === 0x00;
+
 			// No need to validate further, each CC does it for itself
 			this.encapsulated = CommandClass.from(this.driver, {
-				data: this.payload.slice(1),
+				data: this.payload.slice(isV2withV1Header ? 2 : 1),
 				fromEncapsulation: true,
 				encapCC: this,
 			});
@@ -1084,7 +1092,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 		}
 	}
 
-	public encapsulated: CommandClass;
+	public encapsulated!: CommandClass;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.concat([
