@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 4.1.2 (2020-09-04)
 ### Bugfixes
 * Reduced CPU usage in networks with a lot of values
 
