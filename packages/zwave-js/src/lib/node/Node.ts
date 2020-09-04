@@ -461,16 +461,12 @@ export class ZWaveNode extends Endpoint {
 
 	/** Returns a list of all value names that are defined on all endpoints of this node */
 	public getDefinedValueIDs(): TranslatedValueID[] {
-		const ret: TranslatedValueID[] = [];
+		const ret: ValueID[] = [];
 		for (const endpoint of this.getAllEndpoints()) {
 			for (const cc of endpoint.implementedCommandClasses.keys()) {
 				const ccInstance = endpoint.createCCInstanceUnsafe(cc);
 				if (ccInstance) {
-					ret.push(
-						...ccInstance
-							.getDefinedValueIDs()
-							.map((id) => this.translateValueID(id)),
-					);
+					ret.push(...ccInstance.getDefinedValueIDs());
 				}
 			}
 		}
@@ -478,7 +474,11 @@ export class ZWaveNode extends Endpoint {
 		// Application command classes of the Root Device capabilities that are also advertised by at
 		// least one End Point SHOULD be filtered out by controlling nodes before presenting the functionalities
 		// via service discovery mechanisms like mDNS or to users in a GUI.
-		return this.filterRootApplicationCCValueIDs(ret);
+		return (
+			this.filterRootApplicationCCValueIDs(ret)
+				// Filter first, then translate to reduce the amount of work we need to do
+				.map((id) => this.translateValueID(id))
+		);
 	}
 
 	private shouldHideValueID(
@@ -507,9 +507,7 @@ export class ZWaveNode extends Endpoint {
 	 * Removes all Value IDs from an array that belong to a root endpoint and have a corresponding
 	 * Value ID on a non-root endpoint
 	 */
-	private filterRootApplicationCCValueIDs(
-		allValueIds: TranslatedValueID[],
-	): TranslatedValueID[] {
+	private filterRootApplicationCCValueIDs(allValueIds: ValueID[]): ValueID[] {
 		return allValueIds.filter(
 			(vid) => !this.shouldHideValueID(vid, allValueIds),
 		);
