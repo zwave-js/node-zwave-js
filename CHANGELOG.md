@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Reduced CPU usage in networks with a lot of values
+
 ## 4.1.1 (2020-09-01)
 ### Bugfixes
 * The `Basic CC` interview is no longer performed if any actuator CC is supported
