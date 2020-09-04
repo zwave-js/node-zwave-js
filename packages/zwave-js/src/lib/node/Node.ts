@@ -31,6 +31,7 @@ import {
 	JSONObject,
 	Mixin,
 	num2hex,
+	pick,
 	stringify,
 } from "@zwave-js/shared";
 import type { Comparer, CompareResult } from "alcalzone-shared/comparable";
@@ -259,17 +260,33 @@ export class ZWaveNode extends Endpoint {
 		} else if (changeTarget === "metadata") {
 			log.controller.metadataUpdated(logArgument);
 		}
-		//Don't expose value events for internal value IDs and root values ID that mirrors endpoint functionality
+		//Don't expose value events for internal value IDs...
+		if (isInternalValue) return;
+		// ... and root values ID that mirrors endpoint functionality
 		if (
-			!isInternalValue &&
-			!this.shouldHideValueID(
-				arg,
-				this._valueDB.getValues(arg.commandClass),
-			)
+			// Only root endpoint values need to be filtered
+			!arg.endpoint &&
+			// Only application CCs need to be filtered
+			applicationCCs.includes(arg.commandClass)
 		) {
-			// And pass the translated event to our listeners
-			this.emit(eventName, this, outArg as any);
+			// Iterate through all possible non-root endpoints of this node and
+			// check if there is a value ID that mirrors root endpoint functionality
+			for (
+				let endpoint = 1;
+				endpoint <= this.getEndpointCount();
+				endpoint++
+			) {
+				const possiblyMirroredValueID: ValueID = {
+					// same CC, property and key
+					...pick(arg, ["commandClass", "property", "propertyKey"]),
+					// but different endpoint
+					endpoint,
+				};
+				if (this.valueDB.hasValue(possiblyMirroredValueID)) return;
+			}
 		}
+		// And pass the translated event to our listeners
+		this.emit(eventName, this, outArg as any);
 	}
 
 	private _status: NodeStatus = NodeStatus.Unknown;
