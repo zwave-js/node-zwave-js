@@ -3,7 +3,7 @@ import { CommandClasses } from "../capabilities/CommandClasses";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { assertZWaveError } from "../test/assertZWaveError";
 import { ValueMetadata } from "../values/Metadata";
-import { ValueDB, ValueID } from "./ValueDB";
+import { dbKeyToValueIdFast, ValueDB, ValueID } from "./ValueDB";
 
 describe("lib/node/ValueDB => ", () => {
 	let valueDB: ValueDB;
@@ -968,6 +968,46 @@ describe("lib/node/ValueDB => ", () => {
 						noThrow: true,
 					}),
 				).not.toThrow();
+			}
+		});
+	});
+
+	describe("dbKeyToValueIdFast()", () => {
+		it("should work correctly", () => {
+			const tests: ({ nodeId: number } & ValueID)[] = [
+				{
+					nodeId: 1,
+					commandClass: 2,
+					endpoint: 3,
+					property: "4",
+					propertyKey: "5",
+				},
+				{
+					nodeId: 2,
+					commandClass: 4,
+					endpoint: 7,
+					property: "44",
+					propertyKey: 6,
+				},
+				{
+					nodeId: 3,
+					commandClass: 6,
+					endpoint: 11,
+					property: 48,
+					propertyKey: "8",
+				},
+				{
+					nodeId: 4,
+					commandClass: 9,
+					endpoint: 17,
+					property: 48,
+					propertyKey: 9,
+				},
+				{ nodeId: 6, commandClass: 13, endpoint: 0, property: "c" },
+			];
+
+			for (const test of tests) {
+				expect(dbKeyToValueIdFast(JSON.stringify(test))).toEqual(test);
 			}
 		});
 	});
