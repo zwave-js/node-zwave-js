@@ -903,10 +903,11 @@ function getCCResponseForCommandEncapsulation(
 		sent.encapsulated.expectsCCResponse()
 	) {
 		// Allow both versions of the encapsulation command
-		return [
+		// Our implementation check is a bit too strict, so change the return type
+		return ([
 			MultiChannelCCCommandEncapsulation,
 			MultiChannelCCV1CommandEncapsulation,
-		];
+		] as any) as typeof MultiChannelCCCommandEncapsulation[];
 	}
 }
 

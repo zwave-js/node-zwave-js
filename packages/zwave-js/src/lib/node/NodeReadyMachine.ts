@@ -44,19 +44,19 @@ export function createNodeReadyMachine(
 			},
 			on: {
 				MAYBE_DEAD: {
-					actions: assign({ isMaybeDead: true }),
+					actions: assign({ isMaybeDead: true }) as any,
 				},
 				NOT_DEAD: {
-					actions: assign({ isMaybeDead: false }),
+					actions: assign({ isMaybeDead: false }) as any,
 				},
 				INTERVIEW_DONE: {
 					target: "ready",
-					actions: assign({ isMaybeDead: false }),
+					actions: assign({ isMaybeDead: false }) as any,
 				},
 			},
 			states: {
 				notReady: {
-					entry: assign({ isMaybeDead: true }),
+					entry: assign({ isMaybeDead: true }) as any,
 					on: {
 						RESTART_INTERVIEW_FROM_CACHE: [
 							{ target: "readyIfNotDead" },
@@ -68,7 +68,7 @@ export function createNodeReadyMachine(
 					on: {
 						NOT_DEAD: {
 							target: "ready",
-							actions: assign({ isMaybeDead: false }),
+							actions: assign({ isMaybeDead: false }) as any,
 						},
 					},
 				},
