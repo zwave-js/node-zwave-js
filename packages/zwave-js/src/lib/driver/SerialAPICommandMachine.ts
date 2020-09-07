@@ -161,8 +161,9 @@ export function createSerialAPICommandMachine(
 						data: (ctx) => ctx.msg.serialize(),
 						expectsResponse: (ctx) => !!ctx.msg.expectedResponse,
 						expectsCallback: (ctx) =>
-							ctx.msg.hasCallbackId() &&
-							ctx.msg.callbackId !== 0 &&
+							((ctx.msg.hasCallbackId() &&
+								ctx.msg.callbackId !== 0) ||
+								!ctx.msg.needsCallbackId()) &&
 							!!ctx.msg.expectedCallback,
 					}),
 					always: "sending",

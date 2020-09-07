@@ -37,7 +37,8 @@ interface RequestNodeInfoRequestOptions extends MessageBaseOptions {
 }
 
 @messageTypes(MessageType.Response, FunctionType.RequestNodeInfo)
-export class RequestNodeInfoResponse extends Message
+export class RequestNodeInfoResponse
+	extends Message
 	implements SuccessIndicator {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
@@ -78,6 +79,11 @@ export class RequestNodeInfoRequest extends Message implements INodeQuery {
 	}
 
 	public nodeId: number;
+
+	public needsCallbackId(): boolean {
+		// Not sure why it is this way, but this message contains no callback id
+		return false;
+	}
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.nodeId]);

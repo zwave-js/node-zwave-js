@@ -7,8 +7,8 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { MessageHeaders } from "@zwave-js/serial";
-import { num2hex, staticExtends } from "@zwave-js/shared";
 import type { JSONObject } from "@zwave-js/shared";
+import { num2hex, staticExtends } from "@zwave-js/shared";
 import { entries } from "alcalzone-shared/objects";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import type { Driver } from "../driver/Driver";
@@ -169,6 +169,13 @@ export class Message {
 	 */
 	public hasCallbackId(): boolean {
 		return this._callbackId != undefined;
+	}
+
+	/**
+	 * Tests whether this message needs a callback ID to match its response
+	 */
+	public needsCallbackId(): boolean {
+		return true;
 	}
 
 	protected _bytesRead: number = 0;

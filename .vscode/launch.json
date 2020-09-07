@@ -36,7 +36,7 @@
 				"--async-stack-traces",
 				"--inspect-brk=9229",
 				"-r",
-				"ts-node/register/transpile-only.js",
+				"ts-node/register/transpile-only",
 				"-r",
 				"tsconfig-paths/register",
 				"${workspaceFolder}/test/run.ts"
