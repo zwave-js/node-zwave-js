@@ -41,7 +41,9 @@ export interface MessageBaseOptions {
 interface MessageCreationOptions extends MessageBaseOptions {
 	type?: MessageType;
 	functionType?: FunctionType;
+	// eslint-disable-next-line @typescript-eslint/no-use-before-define
 	expectedResponse?: FunctionType | typeof Message | ResponsePredicate;
+	// eslint-disable-next-line @typescript-eslint/no-use-before-define
 	expectedCallback?: FunctionType | typeof Message | ResponsePredicate;
 	payload?: Buffer;
 }

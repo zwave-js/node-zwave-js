@@ -97,7 +97,7 @@
     "coverage": "npm run test:ts -- --collect-coverage",
     "coverage:ci": "npm run test:ci -- --collect-coverage",
     "show-coverage": "npm run coverage && start ./coverage/index.html",
-    "lint:ts": "eslint --ext .ts \"packages/*/src/**\"",
+    "lint:ts": "eslint --ext .ts \"packages/*/src/**/*.ts\"",
     "lint:wotan": "wotan",
     "lint": "npm run lint:ts",
     "implemented_ccs": "ts-node maintenance/implemented_ccs.ts",
