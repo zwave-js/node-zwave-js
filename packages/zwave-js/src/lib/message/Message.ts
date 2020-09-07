@@ -395,8 +395,8 @@ export type ResponseRole =
 /**
  * A predicate function to test if a received message matches to the sent message
  */
-export type ResponsePredicate = (
-	sentMessage: Message,
+export type ResponsePredicate<TSent extends Message = Message> = (
+	sentMessage: TSent,
 	receivedMessage: Message,
 ) => boolean;
 
@@ -552,8 +552,8 @@ export function getExpectedResponseStatic<T extends Constructable<Message>>(
 /**
  * Defines the expected callback function type or message class for a Z-Wave message
  */
-export function expectedCallback(
-	typeOrPredicate: FunctionType | typeof Message | ResponsePredicate,
+export function expectedCallback<TSent extends Message>(
+	typeOrPredicate: FunctionType | typeof Message | ResponsePredicate<TSent>,
 ): ClassDecorator {
 	return (messageClass) => {
 		Reflect.defineMetadata(

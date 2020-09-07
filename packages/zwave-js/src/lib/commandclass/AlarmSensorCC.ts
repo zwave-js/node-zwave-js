@@ -16,7 +16,6 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	CCResponsePredicate,
 	ccValue,
 	CommandClass,
 	commandClass,
@@ -303,16 +302,16 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 	}
 }
 
-const testResponseForAlarmSensorGet: CCResponsePredicate = (
+function testResponseForAlarmSensorGet(
 	sent: AlarmSensorCCGet,
 	received: AlarmSensorCCReport,
-) => {
+) {
 	// We expect a Alarm Sensor Report that matches the requested sensor type (if a type was requested)
 	return (
 		sent.sensorType === AlarmSensorType.Any ||
 		received.sensorType === sent.sensorType
 	);
-};
+}
 
 interface AlarmSensorCCGetOptions extends CCCommandOptions {
 	sensorType?: AlarmSensorType;

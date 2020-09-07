@@ -7,7 +7,7 @@ import {
 	loadMeters,
 	loadNamedScales,
 	loadNotifications,
-	loadSensorTypes
+	loadSensorTypes,
 } from "@zwave-js/config";
 import {
 	CommandClasses,
@@ -17,14 +17,14 @@ import {
 	serializeCacheValue,
 	ValueMetadata,
 	ZWaveError,
-	ZWaveErrorCodes
+	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { MessageHeaders, ZWaveSerialPort } from "@zwave-js/serial";
 import { DeepPartial, num2hex } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
-	DeferredPromise
+	DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { entries } from "alcalzone-shared/objects";
 import { isArray } from "alcalzone-shared/typeguards";
@@ -36,43 +36,43 @@ import { interpret } from "xstate";
 import { FirmwareUpdateStatus } from "../commandclass";
 import {
 	CommandClass,
-	getImplementedVersion
+	getImplementedVersion,
 } from "../commandclass/CommandClass";
 import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
 import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
 import {
 	ICommandClassContainer,
-	isCommandClassContainer
+	isCommandClassContainer,
 } from "../commandclass/ICommandClassContainer";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { messageIsPing } from "../commandclass/NoOperationCC";
 import {
 	SecurityCC,
-	SecurityCCCommandEncapsulationNonceGet
+	SecurityCCCommandEncapsulationNonceGet,
 } from "../commandclass/SecurityCC";
 import {
 	SupervisionCC,
 	SupervisionCCGet,
 	SupervisionCCReport,
 	SupervisionResult,
-	SupervisionStatus
+	SupervisionStatus,
 } from "../commandclass/SupervisionCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import {
 	ApplicationUpdateRequest,
-	ApplicationUpdateRequestNodeInfoReceived
+	ApplicationUpdateRequestNodeInfoReceived,
 } from "../controller/ApplicationUpdateRequest";
 import { ZWaveController } from "../controller/Controller";
 import {
 	SendDataAbort,
 	SendDataMulticastRequest,
-	SendDataRequest
+	SendDataRequest,
 } from "../controller/SendDataMessages";
 import log from "../log";
 import {
 	FunctionType,
 	MessagePriority,
-	MessageType
+	MessageType,
 } from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
@@ -82,7 +82,7 @@ import type { FileSystem } from "./FileSystem";
 import {
 	createSendThreadMachine,
 	SendThreadInterpreter,
-	TransactionReducer
+	TransactionReducer,
 } from "./SendThreadMachine";
 import { Transaction } from "./Transaction";
 
@@ -1316,15 +1316,17 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 	 * @param handler The request handler callback
 	 * @param oneTime Whether the handler should be removed after its first successful invocation
 	 */
-	public registerRequestHandler(
+	public registerRequestHandler<T extends Message>(
 		fnType: FunctionType,
-		handler: RequestHandler,
+		handler: RequestHandler<T>,
 		oneTime: boolean = false,
 	): void {
-		const handlers = this.requestHandlers.has(fnType)
+		const handlers: RequestHandlerEntry<T>[] = this.requestHandlers.has(
+			fnType,
+		)
 			? this.requestHandlers.get(fnType)!
 			: [];
-		const entry: RequestHandlerEntry = { invoke: handler, oneTime };
+		const entry: RequestHandlerEntry<T> = { invoke: handler, oneTime };
 		handlers.push(entry);
 		log.driver.print(
 			`added${oneTime ? " one-time" : ""} request handler for ${
@@ -1332,7 +1334,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			} (${num2hex(fnType)})...
 ${handlers.length} registered`,
 		);
-		this.requestHandlers.set(fnType, handlers);
+		this.requestHandlers.set(fnType, handlers as RequestHandlerEntry[]);
 	}
 
 	/**

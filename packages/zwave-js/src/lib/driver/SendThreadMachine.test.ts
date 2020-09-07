@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import {
 	assertZWaveError,
 	CommandClasses,
@@ -598,7 +599,6 @@ describe("lib/driver/SendThreadMachine", () => {
 			} as any);
 
 			expect(
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 				(service.state.value as any).sending.waitForUpdate,
 			).toBeObject();
 		});
@@ -1610,7 +1610,7 @@ describe("lib/driver/SendThreadMachine", () => {
 
 			service = interpret(testMachine).start();
 
-			const reducer = jest.fn().mockImplementation((t, source) => {
+			const reducer = jest.fn().mockImplementation((t, _source) => {
 				if (t === t1) return { type: "requeue" };
 				if (t === t2)
 					return { type: "requeue", priority: MessagePriority.Ping };

@@ -25,7 +25,6 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	CCResponsePredicate,
 	ccValue,
 	CommandClass,
 	commandClass,
@@ -620,13 +619,13 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	}
 }
 
-const testResponseForThermostatSetpointGet: CCResponsePredicate = (
+function testResponseForThermostatSetpointGet(
 	sent: ThermostatSetpointCCGet,
 	received: ThermostatSetpointCCReport,
-) => {
+) {
 	// We expect a Thermostat Setpoint Report that matches the requested setpoint type
 	return received.type === sent.setpointType;
-};
+}
 
 interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
 	setpointType: ThermostatSetpointType;

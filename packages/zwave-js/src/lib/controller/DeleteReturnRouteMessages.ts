@@ -1,14 +1,14 @@
 import {
 	MessageOrCCLogEntry,
 	ZWaveError,
-	ZWaveErrorCodes
+	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, JSONObject } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
-	MessageType
+	MessageType,
 } from "../message/Constants";
 import {
 	expectedCallback,
@@ -19,7 +19,7 @@ import {
 	MessageDeserializationOptions,
 	MessageOptions,
 	messageTypes,
-	priority
+	priority,
 } from "../message/Message";
 import type { SuccessIndicator } from "../message/SuccessIndicator";
 import type { INodeQuery } from "../node/INodeQuery";
@@ -45,7 +45,8 @@ export interface DeleteReturnRouteRequestOptions extends MessageBaseOptions {
 
 @expectedResponse(FunctionType.DeleteReturnRoute)
 @expectedCallback(FunctionType.DeleteReturnRoute)
-export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase
+export class DeleteReturnRouteRequest
+	extends DeleteReturnRouteRequestBase
 	implements INodeQuery {
 	public constructor(
 		driver: Driver,
@@ -74,7 +75,8 @@ export class DeleteReturnRouteRequest extends DeleteReturnRouteRequestBase
 }
 
 @messageTypes(MessageType.Response, FunctionType.DeleteReturnRoute)
-export class DeleteReturnRouteResponse extends Message
+export class DeleteReturnRouteResponse
+	extends Message
 	implements SuccessIndicator {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);

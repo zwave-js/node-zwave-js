@@ -1,3 +1,4 @@
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Maybe,
@@ -7,7 +8,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import type { Driver } from "../driver/Driver";
@@ -17,7 +17,6 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	CCResponsePredicate,
 	ccValue,
 	ccValueMetadata,
 	CommandClass,
@@ -426,13 +425,13 @@ interface VersionCCCommandClassGetOptions extends CCCommandOptions {
 	requestedCC: CommandClasses;
 }
 
-const testResponseForVersionCommandClassGet: CCResponsePredicate = (
+function testResponseForVersionCommandClassGet(
 	sent: VersionCCCommandClassGet,
 	received: VersionCCCommandClassReport,
-) => {
+) {
 	// We expect a Version CommandClass Report that matches the requested CC
 	return sent.requestedCC === received.requestedCC;
-};
+}
 
 @CCCommand(VersionCommand.CommandClassGet)
 @expectedCCResponse(

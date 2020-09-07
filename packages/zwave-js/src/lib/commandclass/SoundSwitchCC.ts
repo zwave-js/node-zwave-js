@@ -384,10 +384,10 @@ export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 	public readonly name: string;
 }
 
-const testResponseForSoundSwitchToneInfoGet: CCResponsePredicate = (
-	sent: SoundSwitchCCToneInfoGet,
-	received: SoundSwitchCCToneInfoReport,
-) => {
+const testResponseForSoundSwitchToneInfoGet: CCResponsePredicate<
+	SoundSwitchCCToneInfoGet,
+	SoundSwitchCCToneInfoReport
+> = (sent, received) => {
 	return received.toneId === sent.toneId;
 };
 
