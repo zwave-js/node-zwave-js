@@ -1,8 +1,9 @@
+import { pick } from "@zwave-js/shared";
 import { CommandClasses } from "../capabilities/CommandClasses";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { assertZWaveError } from "../test/assertZWaveError";
 import { ValueMetadata } from "../values/Metadata";
-import { ValueDB, ValueID } from "./ValueDB";
+import { dbKeyToValueIdFast, ValueDB, ValueID } from "./ValueDB";
 
 describe("lib/node/ValueDB => ", () => {
 	let valueDB: ValueDB;
@@ -530,6 +531,88 @@ describe("lib/node/ValueDB => ", () => {
 		});
 	});
 
+	describe("findValues()", () => {
+		beforeEach(() => createValueDB());
+
+		it("should return all values whose id matches the given predicate", () => {
+			const values = [
+				{
+					commandClass: CommandClasses.Basic,
+					endpoint: 0,
+					property: "foo",
+					value: "1",
+				},
+				{
+					commandClass: CommandClasses.Basic,
+					endpoint: 2,
+					property: "foo",
+					value: "2",
+				},
+				{
+					commandClass: CommandClasses.Basic,
+					endpoint: 0,
+					property: "FOO",
+					value: "3",
+				},
+				{
+					commandClass: CommandClasses.Basic,
+					endpoint: 2,
+					property: "FOO",
+					value: "4",
+				},
+			];
+
+			for (const { value, ...valueId } of values) {
+				valueDB.setValue(valueId, value);
+			}
+			expect(valueDB.findValues((id) => id.endpoint === 2)).toEqual(
+				values.filter((v) => v.endpoint === 2),
+			);
+		});
+
+		it("should ignore values from another node", () => {
+			const values = [
+				{
+					nodeId: 2,
+					commandClass: CommandClasses.Basic,
+					endpoint: 0,
+					property: "foo",
+					value: "1",
+				},
+				{
+					nodeId: 2,
+					commandClass: CommandClasses.Battery,
+					endpoint: 2,
+					property: "foo",
+					value: "2",
+				},
+				{
+					nodeId: 1,
+					commandClass: CommandClasses.Basic,
+					endpoint: 0,
+					property: "FOO",
+					value: "3",
+				},
+				{
+					nodeId: 1,
+					commandClass: CommandClasses.Battery,
+					endpoint: 2,
+					property: "FOO",
+					value: "4",
+				},
+			];
+			for (const { value, ...valueId } of values) {
+				(valueDB as any)._db.set(JSON.stringify(valueId), value);
+			}
+
+			// The node has nodeID 2
+			const { nodeId, ...expected } = values[1];
+			expect(valueDB.findValues((id) => id.endpoint === 2)).toEqual([
+				expected,
+			]);
+		});
+	});
+
 	describe("Metadata", () => {
 		beforeEach(() => createValueDB());
 
@@ -693,6 +776,100 @@ describe("lib/node/ValueDB => ", () => {
 		});
 	});
 
+	describe("findMetadata()", () => {
+		beforeEach(() => createValueDB());
+
+		it("should return all metadata whose id matches the given predicate", () => {
+			const metadata = [
+				{
+					commandClass: CommandClasses.Basic,
+					endpoint: 0,
+					property: "foo",
+					meta: ValueMetadata.Any,
+				},
+				{
+					commandClass: CommandClasses.Battery,
+					endpoint: 2,
+					property: "foo",
+					meta: ValueMetadata.Any,
+				},
+				{
+					commandClass: CommandClasses.Basic,
+					endpoint: 0,
+					property: "FOO",
+					meta: ValueMetadata.Any,
+				},
+				{
+					commandClass: CommandClasses.Battery,
+					endpoint: 2,
+					property: "FOO",
+					meta: ValueMetadata.Any,
+				},
+			];
+
+			for (const { meta, ...valueId } of metadata) {
+				valueDB.setMetadata(valueId, meta);
+			}
+
+			const expected = metadata
+				.filter((v) => v.endpoint === 2)
+				.map(({ meta, ...rest }) => ({
+					...rest,
+					metadata: meta,
+				}));
+
+			expect(valueDB.findMetadata((id) => id.endpoint === 2)).toEqual(
+				expected,
+			);
+		});
+
+		it("should ignore metadata from another node", () => {
+			const metadata = [
+				{
+					nodeId: 2,
+					commandClass: CommandClasses.Basic,
+					endpoint: 0,
+					property: "foo",
+					meta: ValueMetadata.Any,
+				},
+				{
+					nodeId: 2,
+					commandClass: CommandClasses.Battery,
+					endpoint: 2,
+					property: "foo",
+					meta: ValueMetadata.Any,
+				},
+				{
+					nodeId: 1,
+					commandClass: CommandClasses.Basic,
+					endpoint: 0,
+					property: "FOO",
+					meta: ValueMetadata.Any,
+				},
+				{
+					nodeId: 1,
+					commandClass: CommandClasses.Battery,
+					endpoint: 2,
+					property: "FOO",
+					meta: ValueMetadata.Any,
+				},
+			];
+			for (const { meta, ...valueId } of metadata) {
+				(valueDB as any)._metadata.set(JSON.stringify(valueId), meta);
+			}
+
+			// The node has nodeID 2
+			const expectedMeta = metadata[1];
+			const expected = {
+				...pick(expectedMeta, ["commandClass", "endpoint", "property"]),
+				metadata: expectedMeta.meta,
+			};
+			expect(valueDB.findMetadata((id) => id.endpoint === 2)).toEqual([
+				expected,
+			]);
+		});
+	});
+
 	describe("invalid value IDs should cause an error to be thrown", () => {
 		const invalidValueIDs = [
 			// missing required properties
@@ -791,6 +968,46 @@ describe("lib/node/ValueDB => ", () => {
 						noThrow: true,
 					}),
 				).not.toThrow();
+			}
+		});
+	});
+
+	describe("dbKeyToValueIdFast()", () => {
+		it("should work correctly", () => {
+			const tests: ({ nodeId: number } & ValueID)[] = [
+				{
+					nodeId: 1,
+					commandClass: 2,
+					endpoint: 3,
+					property: "4",
+					propertyKey: "5",
+				},
+				{
+					nodeId: 2,
+					commandClass: 4,
+					endpoint: 7,
+					property: "44",
+					propertyKey: 6,
+				},
+				{
+					nodeId: 3,
+					commandClass: 6,
+					endpoint: 11,
+					property: 48,
+					propertyKey: "8",
+				},
+				{
+					nodeId: 4,
+					commandClass: 9,
+					endpoint: 17,
+					property: 48,
+					propertyKey: 9,
+				},
+				{ nodeId: 6, commandClass: 13, endpoint: 0, property: "c" },
+			];
+
+			for (const test of tests) {
+				expect(dbKeyToValueIdFast(JSON.stringify(test))).toEqual(test);
 			}
 		});
 	});

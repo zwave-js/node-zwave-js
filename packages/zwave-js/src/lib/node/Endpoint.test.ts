@@ -79,6 +79,7 @@ describe("lib/node/Endpoint", () => {
 				VersionCCAPI,
 				// WakeUpCCAPI is not supported (only controlled), so no API!
 			]);
+			node.destroy();
 		});
 
 		it("returns [object Object] when turned into a string", () => {
@@ -86,6 +87,7 @@ describe("lib/node/Endpoint", () => {
 			expect((node.commandClasses as any)[Symbol.toStringTag]).toBe(
 				"[object Object]",
 			);
+			node.destroy();
 		});
 
 		it("returns undefined for other symbol properties", () => {
@@ -93,6 +95,7 @@ describe("lib/node/Endpoint", () => {
 			expect(
 				(node.commandClasses as any)[Symbol.unscopables],
 			).toBeUndefined();
+			node.destroy();
 		});
 	});
 

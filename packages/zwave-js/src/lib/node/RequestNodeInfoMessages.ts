@@ -80,6 +80,11 @@ export class RequestNodeInfoRequest extends Message implements INodeQuery {
 
 	public nodeId: number;
 
+	public needsCallbackId(): boolean {
+		// Not sure why it is this way, but this message contains no callback id
+		return false;
+	}
+
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.nodeId]);
 		return super.serialize();

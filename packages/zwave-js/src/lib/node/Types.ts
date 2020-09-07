@@ -130,4 +130,5 @@ export enum NodeStatus {
 	Asleep,
 	Awake,
 	Dead,
+	Alive,
 }

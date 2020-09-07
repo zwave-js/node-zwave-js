@@ -57,7 +57,6 @@ import {
 	SupervisionResult,
 	SupervisionStatus,
 } from "../commandclass/SupervisionCC";
-import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import {
 	ApplicationUpdateRequest,
@@ -375,6 +374,20 @@ export class Driver extends EventEmitter {
 			createSendDataAbort: () => new SendDataAbort(this),
 			notifyUnsolicited: (msg) => {
 				void this.handleUnsolicitedMessage(msg);
+			},
+			notifyRetry: (command, message, attempts, maxAttempts, delay) => {
+				if (command === "SendData") {
+					log.controller.logNode(
+						message.getNodeId() ?? 255,
+						`did not respond after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
+						"warn",
+					);
+				} else {
+					log.controller.print(
+						`No response from controller after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
+						"warn",
+					);
+				}
 			},
 		});
 		this.sendThread = interpret(sendThreadMachine);
@@ -738,13 +751,6 @@ export class Driver extends EventEmitter {
 	private onNodeWakeUp(node: ZWaveNode): void {
 		log.controller.logNode(node.id, "The node is now awake.");
 
-		// Start the timeouts after which the node is assumed asleep
-		this.resetNodeAwakeTimeout(this.controller.nodes.get(node.id)!);
-
-		// It *should* not be necessary to restart the node interview here.
-		// When a node that supports wakeup does not respond, pending promises
-		// are not rejected.
-
 		// Make sure to handle the pending messages as quickly as possible
 		this.sortSendQueue();
 	}
@@ -824,10 +830,7 @@ export class Driver extends EventEmitter {
 			"The node was removed from the network",
 			ZWaveErrorCodes.Controller_NodeRemoved,
 		);
-		if (this.nodeAwakeTimeouts.has(node.id)) {
-			clearTimeout(this.nodeAwakeTimeouts.get(node.id)!);
-			this.nodeAwakeTimeouts.delete(node.id);
-		}
+
 		// Asynchronously remove the node from all possible associations, ignore potential errors
 		this.controller.removeNodeFromAllAssocations(node.id).catch((err) => {
 			log.driver.print(
@@ -952,8 +955,6 @@ export class Driver extends EventEmitter {
 
 		// Clean up
 		this.rejectTransactions(() => true, `The controller was hard-reset`);
-		this.nodeAwakeTimeouts.forEach((timeout) => clearTimeout(timeout));
-		this.nodeAwakeTimeouts.clear();
 		this.sendNodeToSleepTimers.forEach((timeout) => clearTimeout(timeout));
 		this.sendNodeToSleepTimers.clear();
 		this.retryNodeInterviewTimeouts.forEach((timeout) =>
@@ -1029,7 +1030,6 @@ export class Driver extends EventEmitter {
 		for (const timeout of [
 			this.saveToCacheTimer,
 			...this.sendNodeToSleepTimers.values(),
-			...this.nodeAwakeTimeouts.values(),
 			...this.retryNodeInterviewTimeouts.values(),
 		]) {
 			if (timeout) clearTimeout(timeout);
@@ -1087,7 +1087,6 @@ export class Driver extends EventEmitter {
 
 		// If the message could be decoded, forward it to the send thread
 		if (msg) {
-			// TODO: Log received messages
 			log.driver.logMessage(msg, { direction: "inbound" });
 
 			if (isCommandClassContainer(msg)) {
@@ -1104,11 +1103,6 @@ export class Driver extends EventEmitter {
 				// Assemble partial CCs on the driver level. Only forward complete messages to the send thread machine
 				if (!this.assemblePartialCCs(msg)) return;
 			}
-
-			// TODO:
-			// 					// Since the node actively responded to our request, we now know that it must be awake
-			// 					const node = msg.getNodeUnsafe();
-			// 					if (node) node.status = NodeStatus.Awake;
 
 			this.sendThread.send({ type: "message", message: msg });
 		}
@@ -1196,12 +1190,12 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			);
 			// Mark the node as asleep
 			// The handler for the asleep status will move the messages to the wakeup queue
-			WakeUpCC.setAwake(node, false);
+			node.markAsAsleep();
 		} else {
 			const errorMsg = `Node ${node.id} did not respond after ${transaction.message.maxSendAttempts} attempts, it is presumed dead`;
 			log.controller.logNode(node.id, errorMsg, "warn");
 
-			node.status = NodeStatus.Dead;
+			node.markAsDead();
 			this.rejectAllTransactionsForNode(node.id, errorMsg);
 		}
 	}
@@ -1379,8 +1373,7 @@ ${handlers.length} left`,
 			const node = msg.getNodeUnsafe();
 			if (node?.status === NodeStatus.Dead) {
 				// We have received a message from a dead node, bring it back to life
-				// We do not know if the node is actually awake, so mark it as unknown for now
-				node.status = NodeStatus.Unknown;
+				node.markAsAlive();
 			}
 		}
 
@@ -1415,7 +1408,7 @@ ${handlers.length} left`,
 				if (!(await this.controller.isFailedNode(msg.command.nodeId))) {
 					try {
 						// Force a ping of the node, so it gets added to the failed nodes list
-						node.setAwake(true);
+						node.markAsAwake();
 						await node.commandClasses["No Operation"].send();
 					} catch {
 						// this is expected
@@ -1593,9 +1586,11 @@ ${handlers.length} left`,
 	): Promise<TResponse> {
 		this.ensureReady();
 
+		let node: ZWaveNode | undefined;
+
 		// Don't send messages to dead nodes
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
-			const node = msg.getNodeUnsafe();
+			node = msg.getNodeUnsafe();
 			if (node?.status === NodeStatus.Dead) {
 				throw new ZWaveError(
 					`The message will not be sent because node ${node.id} is presumed dead`,
@@ -1634,10 +1629,10 @@ ${handlers.length} left`,
 		// in comparison with messages to awake nodes.
 		// However there are a few exceptions...
 		if (
-			(isNodeQuery(msg) || isCommandClassContainer(msg)) &&
+			!!node &&
 			// Pings can be used to check if a node is really asleep, so they should be sent regardless
 			!messageIsPing(msg) &&
-			msg.getNodeUnsafe()?.isAwake() === false &&
+			!node.isAwake() &&
 			// If we move multicasts to the wakeup queue, it is unlikely
 			// that there is ever a points where all targets are awake
 			!(msg instanceof SendDataMulticastRequest) &&
@@ -1666,7 +1661,10 @@ ${handlers.length} left`,
 		this.sendThread.send({ type: "add", transaction });
 
 		try {
-			return await promise;
+			const ret = await promise;
+			// If a node responded refresh its awake timer
+			node?.refreshAwakeTimer();
+			return ret;
 		} catch (e) {
 			// If the node does not respond, it is either asleep or dead
 			if (
@@ -2046,38 +2044,6 @@ ${handlers.length} left`,
 			this.sendNodeToSleepTimers.set(
 				node.id,
 				setTimeout(() => sendNodeToSleep(node), 1000).unref(),
-			);
-		}
-	}
-
-	private nodeAwakeTimeouts = new Map<number, NodeJS.Timeout>();
-	/**
-	 * A sleeping node will go to sleep 10s after the wake up notification or after the last message has been answered.
-	 * Every call to this method prolongs the period after which the node is assumed asleep
-	 */
-	private resetNodeAwakeTimeout(node: ZWaveNode): void {
-		// Delete old timers if any exist
-		if (this.nodeAwakeTimeouts.has(node.id)) {
-			clearTimeout(this.nodeAwakeTimeouts.get(node.id)!);
-		}
-
-		// Marks a node as (most likely) asleep
-		const markNodeAsAsleep = (node: ZWaveNode): void => {
-			this.nodeAwakeTimeouts.delete(node.id);
-			if (node.isAwake()) {
-				log.driver.print(
-					`The awake timeout for node ${node.id} has elapsed. Assuming it is asleep.`,
-					"verbose",
-				);
-				WakeUpCC.setAwake(node, false);
-			}
-		};
-
-		// If a sleeping node has no messages pending, we may send it back to sleep
-		if (node.supportsCC(CommandClasses["Wake Up"]) && node.isAwake()) {
-			this.nodeAwakeTimeouts.set(
-				node.id,
-				setTimeout(() => markNodeAsAsleep(node), 10000).unref(),
 			);
 		}
 	}

@@ -844,6 +844,7 @@ export function createSendThreadMachine(
 				notifyRetry: (ctx) => {
 					implementations.notifyRetry?.(
 						"SendData",
+						ctx.currentTransaction!.message,
 						ctx.sendDataAttempts,
 						(ctx.currentTransaction!.message as SendDataRequest)
 							.maxSendAttempts,

@@ -674,12 +674,12 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		parameter: number,
 	): (ValueID & { metadata: ConfigurationMetadata })[] {
 		const valueDB = this.getValueDB();
-		return valueDB
-			.getAllMetadata(this.ccId)
-			.filter(
-				({ property, propertyKey }) =>
-					property === parameter && propertyKey != undefined,
-			) as (ValueID & { metadata: ConfigurationMetadata })[];
+		return valueDB.findMetadata(
+			(id) =>
+				id.commandClass === this.ccId &&
+				id.property === parameter &&
+				id.propertyKey != undefined,
+		) as (ValueID & { metadata: ConfigurationMetadata })[];
 	}
 
 	/**
@@ -693,10 +693,11 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		const valueDB = this.getValueDB();
 		// Add the other values
 		const otherValues = valueDB
-			.getValues(this.ccId)
-			.filter(
-				({ property, propertyKey }) =>
-					property === parameter && propertyKey != undefined,
+			.findValues(
+				(id) =>
+					id.commandClass === this.ccId &&
+					id.property === parameter &&
+					id.propertyKey != undefined,
 			)
 			.map(({ propertyKey, value }) =>
 				propertyKey === valueBitMask

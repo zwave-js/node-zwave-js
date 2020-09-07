@@ -31,6 +31,7 @@ import {
 	JSONObject,
 	Mixin,
 	num2hex,
+	pick,
 	stringify,
 } from "@zwave-js/shared";
 import type { Comparer, CompareResult } from "alcalzone-shared/comparable";
@@ -38,6 +39,7 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
+import { interpret } from "xstate";
 import type { CCAPI } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import { BasicCC, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
@@ -96,6 +98,15 @@ import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
+import {
+	createNodeReadyMachine,
+	NodeReadyInterpreter,
+} from "./NodeReadyMachine";
+import {
+	createNodeStatusMachine,
+	NodeStatusInterpreter,
+	nodeStatusMachineStateToNodeStatus,
+} from "./NodeStatusMachine";
 import {
 	RequestNodeInfoRequest,
 	RequestNodeInfoResponse,
@@ -172,12 +183,48 @@ export class ZWaveNode extends Endpoint {
 		// Add optional CCs
 		for (const cc of supportedCCs) this.addCC(cc, { isSupported: true });
 		for (const cc of controlledCCs) this.addCC(cc, { isControlled: true });
+
+		// Create and hook up the status machine
+		this.statusMachine = interpret(
+			createNodeStatusMachine(
+				{
+					notifyAwakeTimeoutElapsed: () => {
+						log.driver.print(
+							`The awake timeout for node ${this.id} has elapsed. Assuming it is asleep.`,
+							"verbose",
+						);
+					},
+				},
+				this,
+			),
+		);
+		this.statusMachine.onTransition((state) => {
+			if (state.changed) {
+				this.onStatusChange(
+					nodeStatusMachineStateToNodeStatus(state.value as any),
+				);
+			}
+		});
+		this.statusMachine.start();
+
+		// Create and hook up the ready machine
+		this.readyMachine = interpret(createNodeReadyMachine());
+		this.readyMachine.onTransition((state) => {
+			if (state.changed) {
+				this.onReadyChange(state.value === "ready");
+			}
+		});
+		this.readyMachine.start();
 	}
 
 	/**
 	 * Cleans up all resources used by this node
 	 */
 	public destroy(): void {
+		// Stop all state machines
+		this.statusMachine.stop();
+		this.readyMachine.stop();
+
 		// Remove all timeouts
 		for (const timeout of [
 			this.sceneActivationResetTimeout,
@@ -259,74 +306,130 @@ export class ZWaveNode extends Endpoint {
 		} else if (changeTarget === "metadata") {
 			log.controller.metadataUpdated(logArgument);
 		}
-		//Don't expose value events for internal value IDs and root values ID that mirrors endpoint functionality
+		//Don't expose value events for internal value IDs...
+		if (isInternalValue) return;
+		// ... and root values ID that mirrors endpoint functionality
 		if (
-			!isInternalValue &&
-			!this.shouldHideValueID(
-				arg,
-				this._valueDB.getValues(arg.commandClass),
-			)
+			// Only root endpoint values need to be filtered
+			!arg.endpoint &&
+			// Only application CCs need to be filtered
+			applicationCCs.includes(arg.commandClass)
 		) {
-			// And pass the translated event to our listeners
-			this.emit(eventName, this, outArg as any);
+			// Iterate through all possible non-root endpoints of this node and
+			// check if there is a value ID that mirrors root endpoint functionality
+			for (
+				let endpoint = 1;
+				endpoint <= this.getEndpointCount();
+				endpoint++
+			) {
+				const possiblyMirroredValueID: ValueID = {
+					// same CC, property and key
+					...pick(arg, ["commandClass", "property", "propertyKey"]),
+					// but different endpoint
+					endpoint,
+				};
+				if (this.valueDB.hasValue(possiblyMirroredValueID)) return;
+			}
 		}
+		// And pass the translated event to our listeners
+		this.emit(eventName, this, outArg as any);
 	}
 
+	private statusMachine: NodeStatusInterpreter;
 	private _status: NodeStatus = NodeStatus.Unknown;
+
+	private onStatusChange(newStatus: NodeStatus) {
+		// Ignore duplicate events
+		if (newStatus === this._status) return;
+
+		this._status = newStatus;
+		if (this._status === NodeStatus.Asleep) {
+			this.emit("sleep", this);
+		} else if (this._status === NodeStatus.Awake) {
+			this.emit("wake up", this);
+		} else if (this._status === NodeStatus.Dead) {
+			this.emit("dead", this);
+		} else if (this._status === NodeStatus.Alive) {
+			this.emit("alive", this);
+		}
+
+		// To be marked ready, a node must be known to be not dead.
+		// This means that listening nodes must have communicated with us and
+		// sleeping nodes are assumed to be ready
+		this.readyMachine.send(
+			this._status !== NodeStatus.Unknown &&
+				this._status !== NodeStatus.Dead
+				? "NOT_DEAD"
+				: "MAYBE_DEAD",
+		);
+	}
+
 	/**
-	 * Which status the node is believed to be in. Changing this emits the corresponding events.
-	 * There should be no need to set this property from outside this library.
+	 * Which status the node is believed to be in
 	 */
 	public get status(): NodeStatus {
 		return this._status;
 	}
-	public set status(value: NodeStatus) {
-		const oldStatus = this._status;
-		this._status = value;
 
-		if (oldStatus !== this._status) {
-			if (oldStatus === NodeStatus.Dead) {
-				this.emit("alive", this);
-			}
-			if (this._status === NodeStatus.Asleep) {
-				this.emit("sleep", this);
-			} else if (this._status === NodeStatus.Awake) {
-				this.emit("wake up", this);
-			} else if (this._status === NodeStatus.Dead) {
-				this.emit("dead", this);
-			}
-		}
+	/**
+	 * @internal
+	 * Marks this node as dead (if applicable)
+	 */
+	public markAsDead(): void {
+		this.statusMachine.send("DEAD");
+	}
 
-		// To be marked ready, a node must be known to be not dead
-		if (
-			this._nodeMayBeReady &&
-			// listening nodes must have communicated with us
-			((this._isListening && this._status === NodeStatus.Awake) ||
-				// sleeping nodes are assumed to be ready
-				(!this._isListening && this._status !== NodeStatus.Dead))
-		) {
-			this.ready = true;
-		}
+	/**
+	 * @internal
+	 * Marks this node as alive (if applicable)
+	 */
+	public markAsAlive(): void {
+		this.statusMachine.send("ALIVE");
+	}
+
+	/**
+	 * @internal
+	 * Marks this node as asleep (if applicable)
+	 */
+	public markAsAsleep(): void {
+		this.statusMachine.send("ASLEEP");
+	}
+
+	/**
+	 * @internal
+	 * Marks this node as awake (if applicable)
+	 */
+	public markAsAwake(): void {
+		this.statusMachine.send("AWAKE");
+	}
+
+	/**
+	 * @internal
+	 * Call this whenever a node responds to an active request to refresh the time it is assumed awake
+	 */
+	public refreshAwakeTimer(): void {
+		this.statusMachine.send("TRANSACTION_COMPLETE");
 	}
 
 	// The node is only ready when the interview has been completed
 	// to a certain degree
-	private _nodeMayBeReady = false;
-	private _nodeReadyEmitted = false;
 
+	private readyMachine: NodeReadyInterpreter;
 	private _ready: boolean = false;
+
+	private onReadyChange(ready: boolean) {
+		// Ignore duplicate events
+		if (ready === this._ready) return;
+
+		this._ready = ready;
+		if (ready) this.emit("ready", this);
+	}
+
 	/**
 	 * Whether the node is ready to be used
 	 */
 	public get ready(): boolean {
 		return this._ready;
-	}
-	public set ready(v: boolean) {
-		this._ready = v;
-		// When the node is marked ready, emit the ready event (max. once)
-		if (!v || this._nodeReadyEmitted) return;
-		this.emit("ready", this);
-		this._nodeReadyEmitted = true;
 	}
 
 	private _deviceClass: DeviceClass | undefined;
@@ -444,16 +547,12 @@ export class ZWaveNode extends Endpoint {
 
 	/** Returns a list of all value names that are defined on all endpoints of this node */
 	public getDefinedValueIDs(): TranslatedValueID[] {
-		const ret: TranslatedValueID[] = [];
+		const ret: ValueID[] = [];
 		for (const endpoint of this.getAllEndpoints()) {
 			for (const cc of endpoint.implementedCommandClasses.keys()) {
 				const ccInstance = endpoint.createCCInstanceUnsafe(cc);
 				if (ccInstance) {
-					ret.push(
-						...ccInstance
-							.getDefinedValueIDs()
-							.map((id) => this.translateValueID(id)),
-					);
+					ret.push(...ccInstance.getDefinedValueIDs());
 				}
 			}
 		}
@@ -461,7 +560,11 @@ export class ZWaveNode extends Endpoint {
 		// Application command classes of the Root Device capabilities that are also advertised by at
 		// least one End Point SHOULD be filtered out by controlling nodes before presenting the functionalities
 		// via service discovery mechanisms like mDNS or to users in a GUI.
-		return this.filterRootApplicationCCValueIDs(ret);
+		return (
+			this.filterRootApplicationCCValueIDs(ret)
+				// Filter first, then translate to reduce the amount of work we need to do
+				.map((id) => this.translateValueID(id))
+		);
 	}
 
 	private shouldHideValueID(
@@ -490,9 +593,7 @@ export class ZWaveNode extends Endpoint {
 	 * Removes all Value IDs from an array that belong to a root endpoint and have a corresponding
 	 * Value ID on a non-root endpoint
 	 */
-	private filterRootApplicationCCValueIDs(
-		allValueIds: TranslatedValueID[],
-	): TranslatedValueID[] {
+	private filterRootApplicationCCValueIDs(allValueIds: ValueID[]): ValueID[] {
 		return allValueIds.filter(
 			(vid) => !this.shouldHideValueID(vid, allValueIds),
 		);
@@ -682,9 +783,6 @@ export class ZWaveNode extends Endpoint {
 	public async refreshInfo(): Promise<void> {
 		this._interviewAttempts = 0;
 		this.interviewStage = InterviewStage.None;
-		this._status = NodeStatus.Unknown;
-		this._nodeMayBeReady = false;
-		this._nodeReadyEmitted = false;
 		this._nodeInfoReceived = false;
 		this._ready = false;
 		this._deviceClass = undefined;
@@ -701,6 +799,10 @@ export class ZWaveNode extends Endpoint {
 		this._valueDB.clear({ noEvent: true });
 		this._endpointInstances.clear();
 		super.reset();
+
+		// Restart all state machines
+		this.statusMachine.start();
+		this.readyMachine.start();
 
 		// Also remove the information from the cache
 		await this.driver.saveNetworkToCache();
@@ -776,16 +878,11 @@ export class ZWaveNode extends Endpoint {
 
 		// The node is deemed ready when has been interviewed completely at least once
 		if (this.interviewStage === InterviewStage.RestartFromCache) {
-			// // Sleeping nodes are assumed to be ready immediately. Otherwise the library would wait until 3 messages have timed out, which is weird.
-			// if (!this._isListening) {
-			// 	this.ready = true;
-			// } else {
-			// // Mark listening nodes as potentially ready. The first message will determine if it is
-			// }
+			// Mark listening nodes as potentially ready. The first message will determine if it is
+			this.readyMachine.send("RESTART_INTERVIEW_FROM_CACHE");
 
 			// Ping node to check if it is alive/asleep/...
 			// TODO: #739, point 3 -> Do this automatically for the first message
-			this._nodeMayBeReady = true;
 			await this.ping();
 		}
 
@@ -816,7 +913,7 @@ export class ZWaveNode extends Endpoint {
 		}
 
 		await this.setInterviewStage(InterviewStage.Complete);
-		this.ready = true;
+		this.readyMachine.send("INTERVIEW_DONE");
 
 		// Regularly query listening nodes for updated values
 		this.scheduleManualValueRefreshesForListeningNodes();
@@ -895,7 +992,7 @@ version:               ${this.version}`;
 				isSupported: true,
 			});
 			// Assume the node is awake, after all we're communicating with it.
-			this.setAwake(true);
+			this.markAsAwake();
 		}
 
 		await this.setInterviewStage(InterviewStage.ProtocolInfo);
@@ -1131,6 +1228,9 @@ version:               ${this.version}`;
 			this._isSecure = false;
 		}
 
+		// Don't offer or interview the Basic CC if any actuator CC is supported
+		this.hideBasicCCInFavorOfActuatorCCs();
+
 		// We determine the correct interview order by topologically sorting a dependency graph
 		const rootInterviewGraph = this.buildCCInterviewGraph();
 		let rootInterviewOrder: CommandClasses[];
@@ -1195,6 +1295,9 @@ version:               ${this.version}`;
 				if (typeof action === "boolean") return action;
 			}
 
+			// Don't offer or interview the Basic CC if any actuator CC is supported
+			endpoint.hideBasicCCInFavorOfActuatorCCs();
+
 			const endpointInterviewGraph = endpoint.buildCCInterviewGraph();
 			let endpointInterviewOrder: CommandClasses[];
 			try {
@@ -1225,11 +1328,6 @@ version:               ${this.version}`;
 			else if (typeof action === "boolean") return action;
 		}
 
-		// If a node or endpoint supports any actuator CC, don't offer the Basic CC
-		for (const endpoint of this.getAllEndpoints()) {
-			endpoint.hideBasicCCInFavorOfActuatorCCs();
-		}
-
 		// TODO: Overwrite the reported config with configuration files (like OZW does)
 
 		return true;
@@ -1249,7 +1347,7 @@ version:               ${this.version}`;
 		}
 
 		// As the NIF is sent on wakeup, treat this as a sign that the node is awake
-		if (!this.isAwake()) this.setAwake(true);
+		this.markAsAwake();
 
 		// SDS14223 Unless unsolicited <XYZ> Report Commands are received,
 		// a controlling node MUST probe the current values when the
@@ -1646,7 +1744,7 @@ version:               ${this.version}`;
 			version: 1,
 		});
 
-		this.setAwake(true);
+		this.markAsAwake();
 
 		// From the specs:
 		// A controlling node SHOULD read the Wake Up Interval of a supporting node when the delays between
@@ -2323,7 +2421,7 @@ version:               ${this.version}`;
 
 		// When a node requests a firmware update fragment, it must be awake
 		try {
-			this.setAwake(true);
+			this.markAsAwake();
 		} catch {
 			/* ignore */
 		}
@@ -2731,16 +2829,6 @@ version:               ${this.version}`;
 		await this.loadDeviceConfig();
 	}
 
-	/**
-	 * @internal
-	 * Changes the assumed sleep state of the node
-	 * @param awake Whether the node should be assumed awake
-	 */
-	public setAwake(awake: boolean): void {
-		if (!this.supportsCC(CommandClasses["Wake Up"])) return;
-		WakeUpCC.setAwake(this, awake);
-	}
-
 	/** Returns whether the node is currently assumed awake */
 	public isAwake(): boolean {
 		const isAsleep =
@@ -2774,7 +2862,7 @@ version:               ${this.version}`;
 				direction: "outbound",
 			});
 			await this.commandClasses["Wake Up"].sendNoMoreInformation();
-			this.setAwake(false);
+			this.markAsAsleep();
 			log.controller.logNode(this.id, "  Node asleep");
 
 			msgSent = true;

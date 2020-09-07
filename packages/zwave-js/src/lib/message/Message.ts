@@ -41,7 +41,9 @@ export interface MessageBaseOptions {
 interface MessageCreationOptions extends MessageBaseOptions {
 	type?: MessageType;
 	functionType?: FunctionType;
+	// eslint-disable-next-line @typescript-eslint/no-use-before-define
 	expectedResponse?: FunctionType | typeof Message | ResponsePredicate;
+	// eslint-disable-next-line @typescript-eslint/no-use-before-define
 	expectedCallback?: FunctionType | typeof Message | ResponsePredicate;
 	payload?: Buffer;
 }
@@ -169,6 +171,13 @@ export class Message {
 	 */
 	public hasCallbackId(): boolean {
 		return this._callbackId != undefined;
+	}
+
+	/**
+	 * Tests whether this message needs a callback ID to match its response
+	 */
+	public needsCallbackId(): boolean {
+		return true;
 	}
 
 	protected _bytesRead: number = 0;

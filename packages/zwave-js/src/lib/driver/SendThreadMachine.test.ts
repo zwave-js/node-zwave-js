@@ -44,80 +44,80 @@ jest.mock("./SerialAPICommandMachine");
 const mockSerialAPIMachine = jest.requireMock("./SerialAPICommandMachine")
 	.createSerialAPICommandMachine as jest.Mock;
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
-const sm = new SecurityManager({
-	ownNodeId: 1,
-	nonceTimeout: 500,
-	networkKey: Buffer.alloc(16, 1),
-});
-(fakeDriver as any).securityManager = sm;
+describe("lib/driver/SendThreadMachine", () => {
+	jest.setTimeout(100);
 
-// We need to add a fake node 3 in order to test whether the queue should stay idle
-const node3 = new ZWaveNode(3, fakeDriver);
-node3.addCC(CommandClasses["Wake Up"], {
-	isSupported: true,
-	version: 1,
-});
-(fakeDriver.controller.nodes as any).set(node3.id, node3);
-// And one more to test the send queue sorting (two different sleeping nodes)
-const node4 = new ZWaveNode(4, fakeDriver);
-node4.addCC(CommandClasses["Wake Up"], {
-	isSupported: true,
-	version: 1,
-});
-(fakeDriver.controller.nodes as any).set(node4.id, node4);
+	const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+	const sm = new SecurityManager({
+		ownNodeId: 1,
+		nonceTimeout: 500,
+		networkKey: Buffer.alloc(16, 1),
+	});
+	(fakeDriver as any).securityManager = sm;
 
-const sendDataBasicSet = new SendDataRequest(fakeDriver, {
-	command: new BasicCCSet(fakeDriver, {
-		nodeId: 2,
-		targetValue: 1,
-	}),
-});
-const sendDataBasicGet = new SendDataRequest(fakeDriver, {
-	command: new BasicCCGet(fakeDriver, { nodeId: 2 }),
-});
+	// We need to add a fake node 3 in order to test whether the queue should stay idle
+	const node3 = new ZWaveNode(3, fakeDriver);
+	node3.addCC(CommandClasses["Wake Up"], {
+		isSupported: true,
+		version: 1,
+	});
+	(fakeDriver.controller.nodes as any).set(node3.id, node3);
+	// And one more to test the send queue sorting (two different sleeping nodes)
+	const node4 = new ZWaveNode(4, fakeDriver);
+	node4.addCC(CommandClasses["Wake Up"], {
+		isSupported: true,
+		version: 1,
+	});
+	(fakeDriver.controller.nodes as any).set(node4.id, node4);
 
-const sendDataMulticastBasicSet = new SendDataMulticastRequest(fakeDriver, {
-	command: new BasicCCSet(fakeDriver, {
-		nodeId: [1, 2, 3],
-		targetValue: 1,
-	}),
-});
-
-const sendDataBasicSetSecure = new SendDataRequest(fakeDriver, {
-	command: new SecurityCCCommandEncapsulation(fakeDriver, {
-		nodeId: 2,
-		encapsulated: new BasicCCSet(fakeDriver, {
+	const sendDataBasicSet = new SendDataRequest(fakeDriver, {
+		command: new BasicCCSet(fakeDriver, {
 			nodeId: 2,
 			targetValue: 1,
 		}),
-	}),
-});
-sendDataBasicSetSecure.command.preTransmitHandshake = jest
-	.fn()
-	.mockResolvedValue(undefined);
+	});
+	const sendDataBasicGet = new SendDataRequest(fakeDriver, {
+		command: new BasicCCGet(fakeDriver, { nodeId: 2 }),
+	});
 
-const sendDataNonceRequest = new SendDataRequest(fakeDriver, {
-	command: new SecurityCCNonceGet(fakeDriver, {
-		nodeId: 2,
-	}),
-});
+	const sendDataMulticastBasicSet = new SendDataMulticastRequest(fakeDriver, {
+		command: new BasicCCSet(fakeDriver, {
+			nodeId: [1, 2, 3],
+			targetValue: 1,
+		}),
+	});
 
-const sendDataNonceResponse = new SendDataRequest(fakeDriver, {
-	command: new SecurityCCNonceReport(fakeDriver, {
-		nodeId: 2,
-		nonce: Buffer.allocUnsafe(8),
-	}),
-});
+	const sendDataBasicSetSecure = new SendDataRequest(fakeDriver, {
+		command: new SecurityCCCommandEncapsulation(fakeDriver, {
+			nodeId: 2,
+			encapsulated: new BasicCCSet(fakeDriver, {
+				nodeId: 2,
+				targetValue: 1,
+			}),
+		}),
+	});
+	sendDataBasicSetSecure.command.preTransmitHandshake = jest
+		.fn()
+		.mockResolvedValue(undefined);
 
-const defaultImplementations = {
-	sendData: createSendDataResolvesNever(),
-	createSendDataAbort: () => new SendDataAbort(fakeDriver),
-	notifyUnsolicited: () => {},
-};
+	const sendDataNonceRequest = new SendDataRequest(fakeDriver, {
+		command: new SecurityCCNonceGet(fakeDriver, {
+			nodeId: 2,
+		}),
+	});
 
-describe("lib/driver/SendThreadMachine", () => {
-	jest.setTimeout(100);
+	const sendDataNonceResponse = new SendDataRequest(fakeDriver, {
+		command: new SecurityCCNonceReport(fakeDriver, {
+			nodeId: 2,
+			nonce: Buffer.allocUnsafe(8),
+		}),
+	});
+
+	const defaultImplementations = {
+		sendData: createSendDataResolvesNever(),
+		createSendDataAbort: () => new SendDataAbort(fakeDriver),
+		notifyUnsolicited: () => {},
+	};
 
 	let service:
 		| undefined
@@ -143,9 +143,11 @@ describe("lib/driver/SendThreadMachine", () => {
 			.preTransmitHandshake as jest.Mock).mockClear();
 	});
 
-	afterEach(() => {
+	afterAll(() => {
 		service?.stop();
 		service = undefined;
+		node3.destroy();
+		node4.destroy();
 	});
 
 	it(`should start in the idle state`, () => {
@@ -177,7 +179,7 @@ describe("lib/driver/SendThreadMachine", () => {
 				command: new BasicCCGet(fakeDriver, { nodeId: 3 }),
 			});
 			const transaction = createTransaction(sendDataBasicGet3);
-			node3.setAwake(false);
+			node3.markAsAsleep();
 
 			service.send({ type: "add", transaction });
 			expect(service.state.value).toEqual("idle");
@@ -191,7 +193,7 @@ describe("lib/driver/SendThreadMachine", () => {
 				command: new NoOperationCC(fakeDriver, { nodeId: 3 }),
 			});
 			const transaction = createTransaction(sendDataPing);
-			node3.setAwake(false); // still asleep, but we may send this
+			node3.markAsAsleep(); // still asleep, but we may send this
 
 			service.send({ type: "add", transaction });
 			expect(service.state.value).toEqual({ sending: "execute" });
@@ -206,7 +208,7 @@ describe("lib/driver/SendThreadMachine", () => {
 			});
 			const transaction = createTransaction(sendDataBasicGet3);
 			transaction.priority = MessagePriority.Handshake;
-			node3.setAwake(false); // still asleep, but we may send this
+			node3.markAsAsleep(); // still asleep, but we may send this
 
 			service.send({ type: "add", transaction });
 			expect(service.state.value).toEqual({ sending: "execute" });
@@ -728,7 +730,13 @@ describe("lib/driver/SendThreadMachine", () => {
 			service = interpret(testMachine, { clock }).start();
 
 			clock.increment(500);
-			expect(onRetry).toBeCalledWith("SendData", 2, 3, 500);
+			expect(onRetry).toBeCalledWith(
+				"SendData",
+				transaction.message,
+				2,
+				3,
+				500,
+			);
 		});
 	});
 
@@ -1446,8 +1454,8 @@ describe("lib/driver/SendThreadMachine", () => {
 			command: new BasicCCGet(fakeDriver, { nodeId: 4 }),
 		});
 
-		node3.setAwake(false);
-		node4.setAwake(false);
+		node3.markAsAsleep();
+		node4.markAsAsleep();
 
 		const transaction3 = createTransaction(sendDataBasicGet3);
 		const transaction4 = createTransaction(sendDataBasicGet4);
@@ -1466,7 +1474,7 @@ describe("lib/driver/SendThreadMachine", () => {
 			transaction4,
 		]);
 
-		node4.setAwake(true);
+		node4.markAsAwake();
 
 		service.send("sortQueue");
 
@@ -1483,8 +1491,8 @@ describe("lib/driver/SendThreadMachine", () => {
 				command: new BasicCCGet(fakeDriver, { nodeId: 4 }),
 			});
 
-			node3.setAwake(false);
-			node4.setAwake(false);
+			node3.markAsAsleep();
+			node4.markAsAsleep();
 
 			const transaction1 = createTransaction(sendDataBasicGet);
 			const transaction2 = createTransaction(sendDataBasicGet);
@@ -1576,8 +1584,8 @@ describe("lib/driver/SendThreadMachine", () => {
 				command: new BasicCCGet(fakeDriver, { nodeId: 4 }),
 			});
 
-			node3.setAwake(false);
-			node4.setAwake(false);
+			node3.markAsAsleep();
+			node4.markAsAsleep();
 
 			const t1 = createTransaction(sendDataBasicGet);
 			const t2 = createTransaction(sendDataBasicGet);

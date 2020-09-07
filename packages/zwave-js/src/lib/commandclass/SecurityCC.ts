@@ -397,10 +397,17 @@ interface SecurityCCCommandEncapsulationOptions extends CCCommandOptions {
 	alternativeNetworkKey?: Buffer;
 }
 
+function getCCResponseForCommandEncapsulation(
+	sent: SecurityCCCommandEncapsulation,
+) {
+	if (sent.encapsulated.expectsCCResponse()) {
+		return SecurityCCCommandEncapsulation;
+	}
+}
+
 @CCCommand(SecurityCommand.CommandEncapsulation)
 @expectedCCResponse(
-	// In order to expect itself in return, we need to use a dynamic CC response
-	() => SecurityCCCommandEncapsulation,
+	getCCResponseForCommandEncapsulation,
 	() => "checkEncapsulated",
 )
 export class SecurityCCCommandEncapsulation extends SecurityCC {

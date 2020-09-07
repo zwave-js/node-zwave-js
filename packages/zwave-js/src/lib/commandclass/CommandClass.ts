@@ -733,7 +733,9 @@ export class CommandClass {
 
 	/** Tests whether this CC expects at least one command in return */
 	public expectsCCResponse(): boolean {
-		let expected = getExpectedCCResponse(this);
+		let expected:
+			| DynamicCCResponse<this>
+			| ReturnType<DynamicCCResponse<this>> = getExpectedCCResponse(this);
 
 		// Evaluate dynamic CC responses
 		if (
@@ -743,13 +745,19 @@ export class CommandClass {
 			expected = expected(this);
 		}
 		if (expected === undefined) return false;
-		return staticExtends(expected, CommandClass);
+		if (isArray(expected)) {
+			return expected.every((cc) => staticExtends(cc, CommandClass));
+		} else {
+			return staticExtends(expected, CommandClass);
+		}
 	}
 
 	public isExpectedCCResponse(received: CommandClass): boolean {
 		if (received.nodeId !== this.nodeId) return false;
 
-		let expected = getExpectedCCResponse(this);
+		let expected:
+			| DynamicCCResponse<this>
+			| ReturnType<DynamicCCResponse<this>> = getExpectedCCResponse(this);
 
 		// Evaluate dynamic CC responses
 		if (
@@ -762,8 +770,17 @@ export class CommandClass {
 		if (expected == undefined) {
 			// Fallback, should not happen if the expected response is defined correctly
 			return false;
+		} else if (
+			isArray(expected) &&
+			expected.every((cc) => staticExtends(cc, CommandClass))
+		) {
+			// The CC always expects a response from the given list, check if the received
+			// message is in that list
+			if (expected.every((base) => !(received instanceof base))) {
+				return false;
+			}
 		} else if (staticExtends(expected, CommandClass)) {
-			// The CC always expects the same response, check if this is the one
+			// The CC always expects the same single response, check if this is the one
 			if (!(received instanceof expected)) return false;
 		}
 
@@ -899,7 +916,9 @@ function getCCCommandMapKey(ccId: CommandClasses, ccCommand: number): string {
 export type DynamicCCResponse<
 	TSent extends CommandClass,
 	TReceived extends CommandClass = CommandClass
-> = (sentCC: TSent) => Constructable<TReceived> | undefined;
+> = (
+	sentCC: TSent,
+) => Constructable<TReceived> | Constructable<TReceived>[] | undefined;
 
 export type CCResponseRole =
 	| boolean // The response was either expected or unexpected
