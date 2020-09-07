@@ -1,5 +1,4 @@
 import { CommandClasses } from "@zwave-js/core";
-import { testResponseForCC } from "zwave-js/src/lib/controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
 import { createEmptyMockDriver } from "../test/mocks";
 import { BasicCCGet, BasicCCReport, BasicCCSet, BasicCommand } from "./BasicCC";
@@ -129,7 +128,7 @@ describe("lib/commandclass/MultiChannelCC", () => {
 			}),
 		});
 		received.endpointIndex = sent.destination as any;
-		expect(testResponseForCC(sent, received, false)).toBe("final");
+		expect(sent.isExpectedCCResponse(received)).toBeTrue();
 	});
 
 	// it("the Report command (v2) should be deserialized correctly", () => {

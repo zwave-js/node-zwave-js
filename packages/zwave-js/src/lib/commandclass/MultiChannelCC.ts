@@ -2,7 +2,7 @@ import {
 	GenericDeviceClass,
 	lookupGenericDeviceClass,
 	lookupSpecificDeviceClass,
-	SpecificDeviceClass
+	SpecificDeviceClass,
 } from "@zwave-js/config";
 import type { ValueID } from "@zwave-js/core";
 import {
@@ -15,7 +15,7 @@ import {
 	parseNodeInformationFrame,
 	validatePayload,
 	ZWaveError,
-	ZWaveErrorCodes
+	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
@@ -36,7 +36,7 @@ import {
 	DynamicCCResponse,
 	expectedCCResponse,
 	gotDeserializationOptions,
-	implementedVersion
+	implementedVersion,
 } from "./CommandClass";
 
 export enum MultiChannelCommand {
@@ -904,13 +904,19 @@ const getCCResponseForCommandEncapsulation: DynamicCCResponse = (
 		typeof sent.destination === "number" &&
 		sent.encapsulated.expectsCCResponse()
 	) {
-		return MultiChannelCCCommandEncapsulation;
+		// Allow both versions of the encapsulation command
+		return [
+			MultiChannelCCCommandEncapsulation,
+			MultiChannelCCV1CommandEncapsulation,
+		];
 	}
 };
 
 const testResponseForCommandEncapsulation: CCResponsePredicate = (
 	sent: MultiChannelCCCommandEncapsulation,
-	received: MultiChannelCCCommandEncapsulation,
+	received:
+		| MultiChannelCCCommandEncapsulation
+		| MultiChannelCCV1CommandEncapsulation,
 ) => {
 	if (
 		typeof sent.destination === "number" &&
