@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	Duration,
+	ignoreTimeout,
 	Maybe,
 	parseMaybeNumber,
 	parseNumber,
@@ -112,27 +113,41 @@ export class BasicCC extends CommandClass {
 			direction: "none",
 		});
 
-		// always query the current state
-		log.controller.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: "querying Basic CC state...",
-			direction: "outbound",
-		});
+		// try to query the current state - the node might not respond to BasicGet
+		await ignoreTimeout(
+			async () => {
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: "querying Basic CC state...",
+					direction: "outbound",
+				});
 
-		const basicResponse = await api.get();
+				const basicResponse = await api.get();
 
-		let logMessage = `received Basic CC state:
+				let logMessage = `received Basic CC state:
 current value:      ${basicResponse.currentValue}`;
-		if (basicResponse.targetValue != undefined) {
-			logMessage += `
+				if (basicResponse.targetValue != undefined) {
+					logMessage += `
 target value:       ${basicResponse.targetValue}
 remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
-		}
-		log.controller.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: logMessage,
-			direction: "inbound",
-		});
+				}
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
+			},
+			() => {
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"No response to Basic Get command, assuming the node does not support Basic CC...",
+				});
+				// SDS14223: A controlling node MUST conclude that the Basic Command Class is not supported by a node (or
+				// endpoint) if no Basic Report is returned.
+				endpoint.removeCC(CommandClasses.Basic);
+			},
+		);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;

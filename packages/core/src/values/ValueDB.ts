@@ -164,7 +164,13 @@ export class ValueDB extends EventEmitter {
 	}
 
 	private dbKeyToValueId(key: string): { nodeId: number } & ValueID {
-		return JSON.parse(key);
+		try {
+			// Try the dumb but fast way first
+			return dbKeyToValueIdFast(key);
+		} catch {
+			// Fall back to JSON.parse if anything went wrong
+			return JSON.parse(key);
+		}
 	}
 
 	/**
@@ -246,6 +252,22 @@ export class ValueDB extends EventEmitter {
 	public hasValue(valueId: ValueID): boolean {
 		const key = this.valueIdToDBKey(valueId);
 		return this._db.has(key);
+	}
+
+	/** Returns all values whose id matches the given predicate */
+	public findValues(
+		predicate: (id: ValueID) => boolean,
+	): (ValueID & { value: unknown })[] {
+		const ret: ReturnType<ValueDB["findValues"]> = [];
+		for (const key of this._db.keys()) {
+			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+			if (nodeId !== this.nodeId) continue;
+
+			if (predicate(valueId)) {
+				ret.push({ ...valueId, value: this._db.get(key) });
+			}
+		}
+		return ret;
 	}
 
 	/** Returns all values that are stored for a given CC */
@@ -365,5 +387,121 @@ export class ValueDB extends EventEmitter {
 				ret.push({ ...valueId, metadata: meta });
 		});
 		return ret;
+	}
+
+	/** Returns all values whose id matches the given predicate */
+	public findMetadata(
+		predicate: (id: ValueID) => boolean,
+	): (ValueID & {
+		metadata: ValueMetadata;
+	})[] {
+		const ret: ReturnType<ValueDB["findMetadata"]> = [];
+		for (const key of this._metadata.keys()) {
+			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+			if (nodeId !== this.nodeId) continue;
+
+			if (predicate(valueId)) {
+				ret.push({ ...valueId, metadata: this._metadata.get(key)! });
+			}
+		}
+		return ret;
+	}
+}
+
+/**
+ * Really dumb but very fast way to parse one-lined JSON strings of the following schema
+ * {
+ *     nodeId: number,
+ *     commandClass: number,
+ *     endpoint: number,
+ *     property: string | number,
+ *     propertyKey: string | number,
+ * }
+ *
+ * In benchmarks this was about 58% faster than JSON.parse
+ */
+export function dbKeyToValueIdFast(key: string): { nodeId: number } & ValueID {
+	let start = 10; // {"nodeId":
+	if (key.charCodeAt(start - 1) !== 58) {
+		console.error(key.slice(start - 1));
+		throw new Error("Invalid input format!");
+	}
+	let end = start + 1;
+	const len = key.length;
+
+	while (end < len && key.charCodeAt(end) !== 44) end++;
+	const nodeId = parseInt(key.slice(start, end));
+
+	start = end + 16; // ,"commandClass":
+	if (key.charCodeAt(start - 1) !== 58)
+		throw new Error("Invalid input format!");
+	end = start + 1;
+	while (end < len && key.charCodeAt(end) !== 44) end++;
+	const commandClass = parseInt(key.slice(start, end));
+
+	start = end + 12; // ,"endpoint":
+	if (key.charCodeAt(start - 1) !== 58)
+		throw new Error("Invalid input format!");
+	end = start + 1;
+	while (end < len && key.charCodeAt(end) !== 44) end++;
+	const endpoint = parseInt(key.slice(start, end));
+
+	start = end + 12; // ,"property":
+	if (key.charCodeAt(start - 1) !== 58)
+		throw new Error("Invalid input format!");
+
+	let property;
+	if (key.charCodeAt(start) === 34) {
+		start++; // skip leading "
+		end = start + 1;
+		while (end < len && key.charCodeAt(end) !== 34) end++;
+		property = key.slice(start, end);
+		end++; // skip trailing "
+	} else {
+		end = start + 1;
+		while (
+			end < len &&
+			key.charCodeAt(end) !== 44 &&
+			key.charCodeAt(end) !== 125
+		)
+			end++;
+		property = parseInt(key.slice(start, end));
+	}
+
+	if (key.charCodeAt(end) !== 125) {
+		let propertyKey;
+		start = end + 15; // ,"propertyKey":
+		if (key.charCodeAt(start - 1) !== 58)
+			throw new Error("Invalid input format!");
+		if (key.charCodeAt(start) === 34) {
+			start++; // skip leading "
+			end = start + 1;
+			while (end < len && key.charCodeAt(end) !== 34) end++;
+			propertyKey = key.slice(start, end);
+			end++; // skip trailing "
+		} else {
+			end = start + 1;
+			while (
+				end < len &&
+				key.charCodeAt(end) !== 44 &&
+				key.charCodeAt(end) !== 125
+			)
+				end++;
+			propertyKey = parseInt(key.slice(start, end));
+		}
+		return {
+			nodeId,
+			commandClass,
+			endpoint,
+			property,
+			propertyKey,
+		};
+	} else {
+		return {
+			nodeId,
+			commandClass,
+			endpoint,
+			property,
+		};
 	}
 }

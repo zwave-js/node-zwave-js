@@ -267,8 +267,10 @@ interface SendDataMulticastRequestOptions<CCType extends CommandClass>
 @expectedResponse(FunctionType.SendDataMulticast)
 @expectedCallback(FunctionType.SendDataMulticast)
 export class SendDataMulticastRequest<
-	CCType extends CommandClass = CommandClass
-> extends SendDataMulticastRequestBase implements ICommandClassContainer {
+		CCType extends CommandClass = CommandClass
+	>
+	extends SendDataMulticastRequestBase
+	implements ICommandClassContainer {
 	public constructor(
 		driver: Driver,
 		options: SendDataMulticastRequestOptions<CCType>,

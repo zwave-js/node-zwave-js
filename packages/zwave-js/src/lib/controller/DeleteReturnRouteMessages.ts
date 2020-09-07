@@ -1,14 +1,14 @@
 import {
 	MessageOrCCLogEntry,
 	ZWaveError,
-	ZWaveErrorCodes,
+	ZWaveErrorCodes
 } from "@zwave-js/core";
 import { getEnumMemberName, JSONObject } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
-	MessageType,
+	MessageType
 } from "../message/Constants";
 import {
 	expectedCallback,
@@ -19,7 +19,7 @@ import {
 	MessageDeserializationOptions,
 	MessageOptions,
 	messageTypes,
-	priority,
+	priority
 } from "../message/Message";
 import type { SuccessIndicator } from "../message/SuccessIndicator";
 import type { INodeQuery } from "../node/INodeQuery";

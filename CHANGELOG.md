@@ -4,6 +4,29 @@
 	## __WORK IN PROGRESS__
 -->
 
+## 4.2.0 (2020-09-04)
+### Features
+* Invalid `Multi Channel CC::Command Encapsulation` which follow the V2+ format but use a V1 header are now treated like valid commands
+
+### Bugfixes
+* Further performance improvements while decoding `Configuration CC::Report`s
+
+## 4.1.2 (2020-09-04)
+### Bugfixes
+* Reduced CPU usage in networks with a lot of values
+
+## 4.1.1 (2020-09-01)
+### Bugfixes
+* The `Basic CC` interview is no longer performed if any actuator CC is supported
+* If a node does not respond to a `Basic CC::Get`, the interview is no longer aborted. Instead the `Basic CC` is marked as unsupported.
+
+## 4.1.0 (2020-08-29)
+### Features
+* Added the ability to send `Multilevel Sensor Reports` using the new `sendReport` method
+
+### Misc
+* Updated dependencies including bugfixes and security patches
+
 ## 4.0.7 (2020-08-16)
 ### Bugfixes
 * Replaced Sentry.io DSN

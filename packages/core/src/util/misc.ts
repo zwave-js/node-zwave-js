@@ -60,7 +60,7 @@ export async function ignoreTimeout(
 	try {
 		await action();
 		return true;
-	} catch (e) {
+	} catch (e: unknown) {
 		if (
 			e instanceof ZWaveError &&
 			e.code === ZWaveErrorCodes.Controller_NodeTimeout

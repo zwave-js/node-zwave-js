@@ -1,4 +1,5 @@
 import { CommandClasses } from "@zwave-js/core";
+import { testResponseForCC } from "zwave-js/src/lib/controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
 import { createEmptyMockDriver } from "../test/mocks";
 import { BasicCCGet, BasicCCReport, BasicCCSet, BasicCommand } from "./BasicCC";
@@ -8,8 +9,10 @@ import {
 	MultiChannelCC,
 	MultiChannelCCAggregatedMembersGet,
 	MultiChannelCCCapabilityGet,
+	MultiChannelCCCommandEncapsulation,
 	MultiChannelCCEndPointFind,
 	MultiChannelCCEndPointGet,
+	MultiChannelCCV1CommandEncapsulation,
 	MultiChannelCommand,
 } from "./MultiChannelCC";
 import { MultiCommandCC } from "./MultiCommandCC";
@@ -109,6 +112,24 @@ describe("lib/commandclass/MultiChannelCC", () => {
 			]),
 		);
 		expect(cc.serialize()).toEqual(expected);
+	});
+
+	it("the CommandEncapsulation command should also accept V1CommandEncapsulation as a response", () => {
+		// GH#938
+		const sent = new MultiChannelCCCommandEncapsulation(fakeDriver, {
+			nodeId: 2,
+			destination: 2,
+			encapsulated: new BasicCCGet(fakeDriver, { nodeId: 2 }),
+		});
+		const received = new MultiChannelCCV1CommandEncapsulation(fakeDriver, {
+			nodeId: 2,
+			encapsulated: new BasicCCReport(fakeDriver, {
+				nodeId: 2,
+				currentValue: 50,
+			}),
+		});
+		received.endpointIndex = sent.destination as any;
+		expect(testResponseForCC(sent, received, false)).toBe("final");
 	});
 
 	// it("the Report command (v2) should be deserialized correctly", () => {

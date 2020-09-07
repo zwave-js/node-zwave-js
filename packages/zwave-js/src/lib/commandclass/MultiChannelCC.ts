@@ -2,8 +2,9 @@ import {
 	GenericDeviceClass,
 	lookupGenericDeviceClass,
 	lookupSpecificDeviceClass,
-	SpecificDeviceClass,
+	SpecificDeviceClass
 } from "@zwave-js/config";
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	encodeBitMask,
@@ -14,9 +15,8 @@ import {
 	parseNodeInformationFrame,
 	validatePayload,
 	ZWaveError,
-	ZWaveErrorCodes,
+	ZWaveErrorCodes
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
@@ -36,7 +36,7 @@ import {
 	DynamicCCResponse,
 	expectedCCResponse,
 	gotDeserializationOptions,
-	implementedVersion,
+	implementedVersion
 } from "./CommandClass";
 
 export enum MultiChannelCommand {
@@ -1076,9 +1076,14 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 			validatePayload(this.payload.length >= 1);
 			this.endpointIndex = this.payload[0];
 
+			// Some devices send invalid reports, i.e. MultiChannelCCV1CommandEncapsulation, but with V2+ binary format
+			// This would be a NoOp CC, but it makes no sense to encapsulate that.
+			const isV2withV1Header =
+				this.payload.length >= 2 && this.payload[1] === 0x00;
+
 			// No need to validate further, each CC does it for itself
 			this.encapsulated = CommandClass.from(this.driver, {
-				data: this.payload.slice(1),
+				data: this.payload.slice(isV2withV1Header ? 2 : 1),
 				fromEncapsulation: true,
 				encapCC: this,
 			});
@@ -1089,7 +1094,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 		}
 	}
 
-	public encapsulated: CommandClass;
+	public encapsulated!: CommandClass;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.concat([

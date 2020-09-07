@@ -81,7 +81,7 @@ export async function loadDeviceClassesInternal(): Promise<{
 		genericDeviceClasses = generic;
 
 		return { basic, generic };
-	} catch (e) {
+	} catch (e: unknown) {
 		if (e instanceof ZWaveError) {
 			throw e;
 		} else {
@@ -93,7 +93,7 @@ export async function loadDeviceClassesInternal(): Promise<{
 export async function loadDeviceClasses(): Promise<void> {
 	try {
 		await loadDeviceClassesInternal();
-	} catch (e) {
+	} catch (e: unknown) {
 		// If the config file is missing or invalid, don't try to find it again
 		if (
 			e instanceof ZWaveError &&

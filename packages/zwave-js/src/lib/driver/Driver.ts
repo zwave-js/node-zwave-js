@@ -7,7 +7,7 @@ import {
 	loadMeters,
 	loadNamedScales,
 	loadNotifications,
-	loadSensorTypes,
+	loadSensorTypes
 } from "@zwave-js/config";
 import {
 	CommandClasses,
@@ -17,14 +17,14 @@ import {
 	serializeCacheValue,
 	ValueMetadata,
 	ZWaveError,
-	ZWaveErrorCodes,
+	ZWaveErrorCodes
 } from "@zwave-js/core";
 import { MessageHeaders, ZWaveSerialPort } from "@zwave-js/serial";
 import { DeepPartial, num2hex } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
-	DeferredPromise,
+	DeferredPromise
 } from "alcalzone-shared/deferred-promise";
 import { entries } from "alcalzone-shared/objects";
 import { isArray } from "alcalzone-shared/typeguards";
@@ -36,43 +36,43 @@ import { interpret } from "xstate";
 import { FirmwareUpdateStatus } from "../commandclass";
 import {
 	CommandClass,
-	getImplementedVersion,
+	getImplementedVersion
 } from "../commandclass/CommandClass";
 import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
 import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
 import {
 	ICommandClassContainer,
-	isCommandClassContainer,
+	isCommandClassContainer
 } from "../commandclass/ICommandClassContainer";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { messageIsPing } from "../commandclass/NoOperationCC";
 import {
 	SecurityCC,
-	SecurityCCCommandEncapsulationNonceGet,
+	SecurityCCCommandEncapsulationNonceGet
 } from "../commandclass/SecurityCC";
 import {
 	SupervisionCC,
 	SupervisionCCGet,
 	SupervisionCCReport,
 	SupervisionResult,
-	SupervisionStatus,
+	SupervisionStatus
 } from "../commandclass/SupervisionCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import {
 	ApplicationUpdateRequest,
-	ApplicationUpdateRequestNodeInfoReceived,
+	ApplicationUpdateRequestNodeInfoReceived
 } from "../controller/ApplicationUpdateRequest";
 import { ZWaveController } from "../controller/Controller";
 import {
 	SendDataAbort,
 	SendDataMulticastRequest,
-	SendDataRequest,
+	SendDataRequest
 } from "../controller/SendDataMessages";
 import log from "../log";
 import {
 	FunctionType,
 	MessagePriority,
-	MessageType,
+	MessageType
 } from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
@@ -82,7 +82,7 @@ import type { FileSystem } from "./FileSystem";
 import {
 	createSendThreadMachine,
 	SendThreadInterpreter,
-	TransactionReducer,
+	TransactionReducer
 } from "./SendThreadMachine";
 import { Transaction } from "./Transaction";
 
@@ -498,7 +498,7 @@ export class Driver extends EventEmitter {
 			log.driver.print("beginning interview...");
 			try {
 				await this.initializeControllerAndNodes();
-			} catch (e) {
+			} catch (e: unknown) {
 				let message: string;
 				if (
 					e instanceof ZWaveError &&
@@ -506,7 +506,9 @@ export class Driver extends EventEmitter {
 				) {
 					message = `Failed to initialize the driver, no response from the controller. Are you sure this is a Z-Wave controller?`;
 				} else {
-					message = `Failed to initialize the driver: ${e.message}`;
+					message = `Failed to initialize the driver: ${
+						e instanceof Error ? e.message : String(e)
+					}`;
 				}
 				log.driver.print(message, "error");
 				this.emit(
@@ -700,7 +702,7 @@ export class Driver extends EventEmitter {
 					);
 				}
 			}
-		} catch (e) {
+		} catch (e: unknown) {
 			if (e instanceof ZWaveError) {
 				if (
 					e.code === ZWaveErrorCodes.Driver_NotReady ||
@@ -1085,7 +1087,6 @@ export class Driver extends EventEmitter {
 
 		// If the message could be decoded, forward it to the send thread
 		if (msg) {
-			// TODO: Log received messages
 			log.driver.logMessage(msg, { direction: "inbound" });
 
 			if (isCommandClassContainer(msg)) {
@@ -1102,11 +1103,6 @@ export class Driver extends EventEmitter {
 				// Assemble partial CCs on the driver level. Only forward complete messages to the send thread machine
 				if (!this.assemblePartialCCs(msg)) return;
 			}
-
-			// TODO:
-			// 					// Since the node actively responded to our request, we now know that it must be awake
-			// 					const node = msg.getNodeUnsafe();
-			// 					if (node) node.status = NodeStatus.Awake;
 
 			this.sendThread.send({ type: "message", message: msg });
 		}
@@ -1244,7 +1240,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 					this.partialCCSessions.delete(partialSessionKey);
 					try {
 						command.mergePartialCCs(session);
-					} catch (e) {
+					} catch (e: unknown) {
 						if (e instanceof ZWaveError) {
 							switch (e.code) {
 								case ZWaveErrorCodes.Deserialization_NotImplemented:
@@ -1412,7 +1408,7 @@ ${handlers.length} left`,
 						// Force a ping of the node, so it gets added to the failed nodes list
 						node.markAsAwake();
 						await node.commandClasses["No Operation"].send();
-					} catch (e) {
+					} catch {
 						// this is expected
 					}
 				}

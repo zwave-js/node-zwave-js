@@ -1,4 +1,5 @@
 import type { ParamInfoMap } from "@zwave-js/config";
+import type { ValueID } from "@zwave-js/core";
 import {
 	CacheMetadata,
 	CacheValue,
@@ -17,7 +18,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
@@ -269,7 +269,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber,
 				response.parameter,
 			);
-		} catch (e) {
+		} catch (e: unknown) {
 			if (
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
@@ -307,7 +307,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		try {
 			await this.driver.sendCommand(cc);
 			return true;
-		} catch (e) {
+		} catch (e: unknown) {
 			if (
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
@@ -341,7 +341,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		try {
 			await this.driver.sendCommand(cc);
 			return true;
-		} catch (e) {
+		} catch (e: unknown) {
 			if (
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
@@ -467,7 +467,7 @@ export class ConfigurationCCAPI extends CCAPI {
 						direction: "inbound",
 					});
 				}
-			} catch (e) {
+			} catch (e: unknown) {
 				if (
 					e instanceof ConfigurationCCError &&
 					e.code ===
@@ -676,12 +676,12 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		parameter: number,
 	): (ValueID & { metadata: ConfigurationMetadata })[] {
 		const valueDB = this.getValueDB();
-		return valueDB
-			.getAllMetadata(this.ccId)
-			.filter(
-				({ property, propertyKey }) =>
-					property === parameter && propertyKey != undefined,
-			) as (ValueID & { metadata: ConfigurationMetadata })[];
+		return valueDB.findMetadata(
+			(id) =>
+				id.commandClass === this.ccId &&
+				id.property === parameter &&
+				id.propertyKey != undefined,
+		) as (ValueID & { metadata: ConfigurationMetadata })[];
 	}
 
 	/**
@@ -695,10 +695,11 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		const valueDB = this.getValueDB();
 		// Add the other values
 		const otherValues = valueDB
-			.getValues(this.ccId)
-			.filter(
-				({ property, propertyKey }) =>
-					property === parameter && propertyKey != undefined,
+			.findValues(
+				(id) =>
+					id.commandClass === this.ccId &&
+					id.property === parameter &&
+					id.propertyKey != undefined,
 			)
 			.map(({ propertyKey, value }) =>
 				propertyKey === valueBitMask

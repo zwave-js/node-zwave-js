@@ -39,7 +39,7 @@ export async function loadMetersInternal(): Promise<void> {
 			ret.set(idNum, new Meter(idNum, meterDefinition));
 		}
 		meters = ret;
-	} catch (e) {
+	} catch (e: unknown) {
 		if (e instanceof ZWaveError) {
 			throw e;
 		} else {
@@ -51,7 +51,7 @@ export async function loadMetersInternal(): Promise<void> {
 export async function loadMeters(): Promise<void> {
 	try {
 		await loadMetersInternal();
-	} catch (e) {
+	} catch (e: unknown) {
 		// If the config file is missing or invalid, don't try to find it again
 		if (
 			e instanceof ZWaveError &&

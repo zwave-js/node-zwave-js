@@ -31,6 +31,7 @@ import {
 	JSONObject,
 	Mixin,
 	num2hex,
+	pick,
 	stringify,
 } from "@zwave-js/shared";
 import type { Comparer, CompareResult } from "alcalzone-shared/comparable";
@@ -305,17 +306,33 @@ export class ZWaveNode extends Endpoint {
 		} else if (changeTarget === "metadata") {
 			log.controller.metadataUpdated(logArgument);
 		}
-		//Don't expose value events for internal value IDs and root values ID that mirrors endpoint functionality
+		//Don't expose value events for internal value IDs...
+		if (isInternalValue) return;
+		// ... and root values ID that mirrors endpoint functionality
 		if (
-			!isInternalValue &&
-			!this.shouldHideValueID(
-				arg,
-				this._valueDB.getValues(arg.commandClass),
-			)
+			// Only root endpoint values need to be filtered
+			!arg.endpoint &&
+			// Only application CCs need to be filtered
+			applicationCCs.includes(arg.commandClass)
 		) {
-			// And pass the translated event to our listeners
-			this.emit(eventName, this, outArg as any);
+			// Iterate through all possible non-root endpoints of this node and
+			// check if there is a value ID that mirrors root endpoint functionality
+			for (
+				let endpoint = 1;
+				endpoint <= this.getEndpointCount();
+				endpoint++
+			) {
+				const possiblyMirroredValueID: ValueID = {
+					// same CC, property and key
+					...pick(arg, ["commandClass", "property", "propertyKey"]),
+					// but different endpoint
+					endpoint,
+				};
+				if (this.valueDB.hasValue(possiblyMirroredValueID)) return;
+			}
 		}
+		// And pass the translated event to our listeners
+		this.emit(eventName, this, outArg as any);
 	}
 
 	private statusMachine: NodeStatusInterpreter;
@@ -530,16 +547,12 @@ export class ZWaveNode extends Endpoint {
 
 	/** Returns a list of all value names that are defined on all endpoints of this node */
 	public getDefinedValueIDs(): TranslatedValueID[] {
-		const ret: TranslatedValueID[] = [];
+		const ret: ValueID[] = [];
 		for (const endpoint of this.getAllEndpoints()) {
 			for (const cc of endpoint.implementedCommandClasses.keys()) {
 				const ccInstance = endpoint.createCCInstanceUnsafe(cc);
 				if (ccInstance) {
-					ret.push(
-						...ccInstance
-							.getDefinedValueIDs()
-							.map((id) => this.translateValueID(id)),
-					);
+					ret.push(...ccInstance.getDefinedValueIDs());
 				}
 			}
 		}
@@ -547,7 +560,11 @@ export class ZWaveNode extends Endpoint {
 		// Application command classes of the Root Device capabilities that are also advertised by at
 		// least one End Point SHOULD be filtered out by controlling nodes before presenting the functionalities
 		// via service discovery mechanisms like mDNS or to users in a GUI.
-		return this.filterRootApplicationCCValueIDs(ret);
+		return (
+			this.filterRootApplicationCCValueIDs(ret)
+				// Filter first, then translate to reduce the amount of work we need to do
+				.map((id) => this.translateValueID(id))
+		);
 	}
 
 	private shouldHideValueID(
@@ -576,9 +593,7 @@ export class ZWaveNode extends Endpoint {
 	 * Removes all Value IDs from an array that belong to a root endpoint and have a corresponding
 	 * Value ID on a non-root endpoint
 	 */
-	private filterRootApplicationCCValueIDs(
-		allValueIds: TranslatedValueID[],
-	): TranslatedValueID[] {
+	private filterRootApplicationCCValueIDs(allValueIds: ValueID[]): ValueID[] {
 		return allValueIds.filter(
 			(vid) => !this.shouldHideValueID(vid, allValueIds),
 		);
@@ -608,7 +623,7 @@ export class ZWaveNode extends Endpoint {
 				value,
 			);
 			return true;
-		} catch (e) {
+		} catch (e: unknown) {
 			// Define which errors during setValue are expected and won't crash
 			// the driver:
 			if (e instanceof ZWaveError) {
@@ -827,7 +842,7 @@ export class ZWaveNode extends Endpoint {
 			try {
 				await method();
 				return true;
-			} catch (e) {
+			} catch (e: unknown) {
 				if (
 					e instanceof ZWaveError &&
 					(e.code === ZWaveErrorCodes.Controller_NodeTimeout ||
@@ -1096,7 +1111,7 @@ version:               ${this.version}`;
 			let instance: CommandClass;
 			try {
 				instance = endpoint.createCCInstance(cc)!;
-			} catch (e) {
+			} catch (e: unknown) {
 				if (
 					e instanceof ZWaveError &&
 					e.code === ZWaveErrorCodes.CC_NotSupported
@@ -1124,7 +1139,7 @@ version:               ${this.version}`;
 
 			try {
 				await instance.interview(!instance.interviewComplete);
-			} catch (e) {
+			} catch (e: unknown) {
 				if (
 					e instanceof ZWaveError &&
 					(e.code === ZWaveErrorCodes.Controller_MessageDropped ||
@@ -1213,6 +1228,9 @@ version:               ${this.version}`;
 			this._isSecure = false;
 		}
 
+		// Don't offer or interview the Basic CC if any actuator CC is supported
+		this.hideBasicCCInFavorOfActuatorCCs();
+
 		// We determine the correct interview order by topologically sorting a dependency graph
 		const rootInterviewGraph = this.buildCCInterviewGraph();
 		let rootInterviewOrder: CommandClasses[];
@@ -1277,6 +1295,9 @@ version:               ${this.version}`;
 				if (typeof action === "boolean") return action;
 			}
 
+			// Don't offer or interview the Basic CC if any actuator CC is supported
+			endpoint.hideBasicCCInFavorOfActuatorCCs();
+
 			const endpointInterviewGraph = endpoint.buildCCInterviewGraph();
 			let endpointInterviewOrder: CommandClasses[];
 			try {
@@ -1305,11 +1326,6 @@ version:               ${this.version}`;
 			const action = await interviewEndpoint(this, cc);
 			if (action === "continue") continue;
 			else if (typeof action === "boolean") return action;
-		}
-
-		// If a node or endpoint supports any actuator CC, don't offer the Basic CC
-		for (const endpoint of this.getAllEndpoints()) {
-			endpoint.hideBasicCCInFavorOfActuatorCCs();
 		}
 
 		// TODO: Overwrite the reported config with configuration files (like OZW does)
@@ -2324,7 +2340,7 @@ version:               ${this.version}`;
 			// Clean up
 			this._firmwareUpdateStatus = undefined;
 			this.keepAwake = false;
-		} catch (e) {
+		} catch (e: unknown) {
 			if (
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
@@ -2548,7 +2564,7 @@ version:               ${this.version}`;
 			);
 
 			this.handleFirmwareUpdateStatusReport(report);
-		} catch (e) {
+		} catch (e: unknown) {
 			if (
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
