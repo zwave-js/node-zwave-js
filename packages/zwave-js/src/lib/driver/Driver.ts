@@ -57,7 +57,6 @@ import {
 	SupervisionResult,
 	SupervisionStatus,
 } from "../commandclass/SupervisionCC";
-import { WakeUpCC } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import {
 	ApplicationUpdateRequest,
@@ -1194,12 +1193,12 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			);
 			// Mark the node as asleep
 			// The handler for the asleep status will move the messages to the wakeup queue
-			WakeUpCC.setAwake(node, false);
+			node.markAsAsleep();
 		} else {
 			const errorMsg = `Node ${node.id} did not respond after ${transaction.message.maxSendAttempts} attempts, it is presumed dead`;
 			log.controller.logNode(node.id, errorMsg, "warn");
 
-			node.status = NodeStatus.Dead;
+			node.markAsDead();
 			this.rejectAllTransactionsForNode(node.id, errorMsg);
 		}
 	}
@@ -1375,8 +1374,7 @@ ${handlers.length} left`,
 			const node = msg.getNodeUnsafe();
 			if (node?.status === NodeStatus.Dead) {
 				// We have received a message from a dead node, bring it back to life
-				// We do not know if the node is actually awake, so mark it as unknown for now
-				node.status = NodeStatus.Unknown;
+				node.markAsAlive();
 			}
 		}
 
@@ -1411,7 +1409,7 @@ ${handlers.length} left`,
 				if (!(await this.controller.isFailedNode(msg.command.nodeId))) {
 					try {
 						// Force a ping of the node, so it gets added to the failed nodes list
-						node.setAwake(true);
+						node.markAsAwake();
 						await node.commandClasses["No Operation"].send();
 					} catch (e) {
 						// this is expected
@@ -2065,7 +2063,7 @@ ${handlers.length} left`,
 					`The awake timeout for node ${node.id} has elapsed. Assuming it is asleep.`,
 					"verbose",
 				);
-				WakeUpCC.setAwake(node, false);
+				node.markAsAsleep();
 			}
 		};
 

@@ -1,5 +1,7 @@
+import { CommandClasses } from "@zwave-js/core";
 import { Interpreter, Machine, StateMachine } from "xstate";
-import type { ZWaveNode } from "zwave-js/src/lib/node/Node";
+import type { ZWaveNode } from "./Node";
+import { NodeStatus } from "./Types";
 
 /* eslint-disable @typescript-eslint/ban-types */
 export interface NodeStatusStateSchema {
@@ -15,8 +17,17 @@ export interface NodeStatusStateSchema {
 }
 /* eslint-enable @typescript-eslint/ban-types */
 
-export interface NodeStatusContext {
-	// txTimestamp?: number;
+const statusDict: Record<keyof NodeStatusStateSchema["states"], NodeStatus> = {
+	unknown: NodeStatus.Unknown,
+	dead: NodeStatus.Dead,
+	alive: NodeStatus.Alive,
+	asleep: NodeStatus.Asleep,
+	awake: NodeStatus.Awake,
+};
+export function nodeStatusMachineStateToNodeStatus(
+	state: keyof NodeStatusStateSchema["states"],
+): NodeStatus {
+	return statusDict[state] ?? NodeStatus.Unknown;
 }
 
 export type NodeStatusEvent =
@@ -27,36 +38,40 @@ export type NodeStatusEvent =
 	| { type: "TRANSACTION_COMPLETE" };
 
 export type NodeStatusMachine = StateMachine<
-	NodeStatusContext,
+	any,
 	NodeStatusStateSchema,
 	NodeStatusEvent
 >;
 export type NodeStatusInterpreter = Interpreter<
-	NodeStatusContext,
+	any,
 	NodeStatusStateSchema,
 	NodeStatusEvent
 >;
 
-export function createNodeStatusMachine(
-	node: ZWaveNode,
-	initialContext: Partial<NodeStatusContext> = {},
-): NodeStatusMachine {
-	return Machine<NodeStatusContext, NodeStatusStateSchema, NodeStatusEvent>(
+export function createNodeStatusMachine(node: ZWaveNode): NodeStatusMachine {
+	return Machine<any, NodeStatusStateSchema, NodeStatusEvent>(
 		{
-			id: "serialAPI",
+			id: "nodeStatus",
 			initial: "unknown",
-			context: {
-				// maxAttempts: 3,
-				...initialContext,
-			},
-			on: {},
 			states: {
 				unknown: {
 					on: {
-						DEAD: "dead",
-						ALIVE: "alive",
-						ASLEEP: "asleep",
-						AWAKE: "awake",
+						DEAD: {
+							target: "dead",
+							cond: "notSupportsWakeup",
+						},
+						ALIVE: {
+							target: "alive",
+							cond: "notSupportsWakeup",
+						},
+						ASLEEP: {
+							target: "asleep",
+							cond: "supportsWakeup",
+						},
+						AWAKE: {
+							target: "awake",
+							cond: "supportsWakeup",
+						},
 					},
 				},
 				dead: {
@@ -90,6 +105,10 @@ export function createNodeStatusMachine(
 				// send: (ctx) => sendData(ctx.data),
 			},
 			guards: {
+				supportsWakeup: () =>
+					node.supportsCC(CommandClasses["Wake Up"]),
+				notSupportsWakeup: () =>
+					!node.supportsCC(CommandClasses["Wake Up"]),
 				// mayRetry: (ctx) => ctx.attempts < ctx.maxAttempts,
 			},
 			delays: {

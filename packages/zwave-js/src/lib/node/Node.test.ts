@@ -36,8 +36,8 @@ import { createEmptyMockDriver } from "../test/mocks";
 import { DeviceClass } from "./DeviceClass";
 import { ZWaveNode } from "./Node";
 import { RequestNodeInfoRequest } from "./RequestNodeInfoMessages";
-import { InterviewStage, NodeStatus } from "./Types";
 import type { ZWaveNodeEvents } from "./Types";
+import { InterviewStage, NodeStatus } from "./Types";
 
 /** This is an ugly hack to be able to test the private methods without resorting to @internal */
 class TestNode extends ZWaveNode {
@@ -584,14 +584,14 @@ describe("lib/node/Node", () => {
 
 		it("setAwake() should NOT throw if the node does not support Wake Up", () => {
 			const node = makeNode();
-			expect(() => node.setAwake(true)).not.toThrow();
+			expect(() => node.markAsAwake()).not.toThrow();
 		});
 
 		it("isAwake() should return the status set by setAwake()", () => {
 			const node = makeNode(true);
-			node.setAwake(false);
+			node.markAsAsleep();
 			expect(node.isAwake()).toBeFalse();
-			node.setAwake(true);
+			node.markAsAwake();
 			expect(node.isAwake()).toBeTrue();
 		});
 
@@ -608,7 +608,7 @@ describe("lib/node/Node", () => {
 			]) {
 				wakeupSpy.mockClear();
 				sleepSpy.mockClear();
-				node.setAwake(state);
+				state ? node.markAsAwake() : node.markAsAsleep();
 				expect(wakeupSpy).toBeCalledTimes(expectWakeup ? 1 : 0);
 				expect(sleepSpy).toBeCalledTimes(expectSleep ? 1 : 0);
 			}
@@ -633,7 +633,7 @@ describe("lib/node/Node", () => {
 
 		it("marks a sleeping node as awake", () => {
 			const node = makeNode(true);
-			node.setAwake(false);
+			node.markAsAsleep();
 
 			node.updateNodeInfo(emptyNodeInfo as any);
 			expect(node.isAwake()).toBeTrue();
@@ -690,7 +690,7 @@ describe("lib/node/Node", () => {
 
 		it("should not do anything and return false if the node is asleep", async () => {
 			const node = makeNode();
-			node.setAwake(false);
+			node.markAsAsleep();
 
 			expect(await node.sendNoMoreInformation()).toBeFalse();
 			expect(fakeDriver.sendMessage).not.toBeCalled();
@@ -705,7 +705,7 @@ describe("lib/node/Node", () => {
 
 		it("should not send anything if the node should be kept awake", async () => {
 			const node = makeNode();
-			node.setAwake(true);
+			node.markAsAwake();
 			node.keepAwake = true;
 
 			expect(await node.sendNoMoreInformation()).toBeFalse();
@@ -1162,7 +1162,6 @@ describe("lib/node/Node", () => {
 		const fakeDriver = createEmptyMockDriver();
 
 		interface TestOptions {
-			initialStatus: NodeStatus;
 			targetStatus: NodeStatus;
 			expectedEvent: ZWaveNodeEvents;
 			expectCall?: boolean; // default true
@@ -1170,113 +1169,42 @@ describe("lib/node/Node", () => {
 
 		function performTest(options: TestOptions): void {
 			const node = new ZWaveNode(1, (fakeDriver as unknown) as Driver);
-			node.status = options.initialStatus;
+			node["_status"] = undefined as any;
 			const spy = jest.fn();
 			node.on(options.expectedEvent, spy);
-			node.status = options.targetStatus;
+			node["onStatusChange"](options.targetStatus);
+			node.destroy();
+
 			if (options.expectCall !== false) {
 				expect(spy).toBeCalled();
 			} else {
 				expect(spy).not.toBeCalled();
 			}
 		}
-		it("from asleep to dead should raise the dead event", () => {
+		it("Changing the status to awake should raise the wake up event", () => {
 			performTest({
-				initialStatus: NodeStatus.Asleep,
-				targetStatus: NodeStatus.Dead,
-				expectedEvent: "dead",
-			});
-		});
-
-		it("from asleep to awake should raise the wake up event", () => {
-			performTest({
-				initialStatus: NodeStatus.Asleep,
 				targetStatus: NodeStatus.Awake,
 				expectedEvent: "wake up",
 			});
 		});
-
-		it("from asleep to asleep should raise NO event", () => {
+		it("Changing the status to asleep should raise the sleep event", () => {
 			performTest({
-				initialStatus: NodeStatus.Asleep,
-				targetStatus: NodeStatus.Asleep,
-				expectedEvent: "sleep",
-				expectCall: false,
-			});
-		});
-
-		it("from awake to dead should raise the dead event", () => {
-			performTest({
-				initialStatus: NodeStatus.Awake,
-				targetStatus: NodeStatus.Dead,
-				expectedEvent: "dead",
-			});
-		});
-
-		it("from awake to asleep should raise the sleep event", () => {
-			performTest({
-				initialStatus: NodeStatus.Awake,
 				targetStatus: NodeStatus.Asleep,
 				expectedEvent: "sleep",
 			});
 		});
 
-		it("from awake to awake should raise NO event", () => {
+		it("Changing the status to dead should raise the dead event", () => {
 			performTest({
-				initialStatus: NodeStatus.Awake,
-				targetStatus: NodeStatus.Awake,
-				expectedEvent: "wake up",
-				expectCall: false,
-			});
-		});
-
-		it("from unknown to dead should raise the dead event", () => {
-			performTest({
-				initialStatus: NodeStatus.Unknown,
 				targetStatus: NodeStatus.Dead,
 				expectedEvent: "dead",
 			});
 		});
 
-		it("from unknown to awake should raise the wake up event", () => {
+		it("Changing the status to alive should raise the alive event", () => {
 			performTest({
-				initialStatus: NodeStatus.Unknown,
-				targetStatus: NodeStatus.Awake,
-				expectedEvent: "wake up",
-			});
-		});
-
-		it("from unknown to asleep should raise the sleep event", () => {
-			performTest({
-				initialStatus: NodeStatus.Unknown,
-				targetStatus: NodeStatus.Asleep,
-				expectedEvent: "sleep",
-			});
-		});
-
-		it("from dead to asleep should raise the alive event AND the sleep event", () => {
-			performTest({
-				initialStatus: NodeStatus.Dead,
-				targetStatus: NodeStatus.Asleep,
+				targetStatus: NodeStatus.Alive,
 				expectedEvent: "alive",
-			});
-			performTest({
-				initialStatus: NodeStatus.Dead,
-				targetStatus: NodeStatus.Asleep,
-				expectedEvent: "sleep",
-			});
-		});
-
-		it("from dead to awake should raise the alive event AND the wake up event", () => {
-			performTest({
-				initialStatus: NodeStatus.Dead,
-				targetStatus: NodeStatus.Awake,
-				expectedEvent: "alive",
-			});
-			performTest({
-				initialStatus: NodeStatus.Dead,
-				targetStatus: NodeStatus.Awake,
-				expectedEvent: "wake up",
 			});
 		});
 	});
@@ -1294,6 +1222,8 @@ describe("lib/node/Node", () => {
 			node.valueDB.setValue(valueId, 4);
 
 			expect(node.getValue(valueId)).toBe(4);
+
+			node.destroy();
 		});
 	});
 
@@ -1328,6 +1258,7 @@ describe("lib/node/Node", () => {
 					ccCommand: BasicCommand.Set,
 				},
 			});
+			node.destroy();
 		});
 
 		it("returns false if the CC is not implemented", async () => {
@@ -1340,6 +1271,7 @@ describe("lib/node/Node", () => {
 				1,
 			);
 			expect(result).toBeFalse();
+			node.destroy();
 		});
 	});
 
@@ -1354,6 +1286,10 @@ describe("lib/node/Node", () => {
 		beforeEach(() => {
 			node = new ZWaveNode(1, (fakeDriver as unknown) as Driver);
 			fakeDriver.controller.nodes.set(1, node);
+		});
+
+		afterEach(() => {
+			node?.destroy();
 		});
 
 		it("returns the defined metadata for the given value", () => {
@@ -1444,6 +1380,8 @@ describe("lib/node/Node", () => {
 					property: "currentValue",
 				}),
 			).toBe(true);
+
+			node.destroy();
 		});
 	});
 });

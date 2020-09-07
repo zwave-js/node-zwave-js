@@ -1,3 +1,4 @@
+import { CommandClasses } from "@zwave-js/core";
 import { interpret, Interpreter } from "xstate";
 import { SimulatedClock } from "xstate/lib/SimulatedClock";
 // import { SimulatedClock } from "xstate/lib/SimulatedClock";
@@ -7,6 +8,20 @@ import {
 	NodeStatusEvent,
 	NodeStatusStateSchema,
 } from "./NodeStatusMachine";
+
+const testNodeNoWakeup = {
+	supportsCC(cc: CommandClasses) {
+		if (cc === CommandClasses["Wake Up"]) return false;
+		return false;
+	},
+} as any;
+
+const testNodeWakeup = {
+	supportsCC(cc: CommandClasses) {
+		if (cc === CommandClasses["Wake Up"]) return true;
+		return false;
+	},
+} as any;
 
 describe("lib/driver/NodeStatusMachine", () => {
 	let service:
@@ -144,7 +159,13 @@ describe("lib/driver/NodeStatusMachine", () => {
 					: `When the ${test.event} event is received, it should transition from "${test.start}" to "${test.target}"`;
 
 			it(name, () => {
-				const testMachine = createNodeStatusMachine(undefined as any);
+				// For these tests, assume that the node does or does not support Wakeup, whatever fits
+				const testNode =
+					test.event === "ASLEEP" || test.event === "AWAKE"
+						? testNodeWakeup
+						: testNodeNoWakeup;
+
+				const testMachine = createNodeStatusMachine(testNode);
 				testMachine.initial = test.start;
 
 				service = interpret(testMachine).start();
@@ -156,7 +177,7 @@ describe("lib/driver/NodeStatusMachine", () => {
 
 	describe("Asleep timeouts", () => {
 		it(`The node should go into the asleep state when the awake timer elapses`, () => {
-			const testMachine = createNodeStatusMachine(undefined as any);
+			const testMachine = createNodeStatusMachine(testNodeWakeup);
 			const clock = new SimulatedClock();
 			service = interpret(testMachine, { clock }).start();
 
@@ -166,7 +187,7 @@ describe("lib/driver/NodeStatusMachine", () => {
 		});
 
 		it(`The awake timer should be refreshed when a transaction is completed`, () => {
-			const testMachine = createNodeStatusMachine(undefined as any);
+			const testMachine = createNodeStatusMachine(testNodeWakeup);
 			const clock = new SimulatedClock();
 			service = interpret(testMachine, { clock }).start();
 
@@ -178,6 +199,40 @@ describe("lib/driver/NodeStatusMachine", () => {
 			expect(service.state.value).toBe("awake");
 			clock.increment(9999);
 			expect(service.state.value).toBe("asleep");
+		});
+	});
+
+	describe("WakeUp CC support", () => {
+		it("A transition from unknown to awake should not happen if the node does not support the Wake Up CC", () => {
+			const testMachine = createNodeStatusMachine(testNodeNoWakeup);
+
+			service = interpret(testMachine).start();
+			service.send("AWAKE");
+			expect(service.state.value).toBe("unknown");
+		});
+
+		it("A transition from unknown to asleep should not happen if the node does not support the Wake Up CC", () => {
+			const testMachine = createNodeStatusMachine(testNodeNoWakeup);
+
+			service = interpret(testMachine).start();
+			service.send("ASLEEP");
+			expect(service.state.value).toBe("unknown");
+		});
+
+		it("A transition from unknown to alive should not happen if the node supports the Wake Up CC", () => {
+			const testMachine = createNodeStatusMachine(testNodeWakeup);
+
+			service = interpret(testMachine).start();
+			service.send("ALIVE");
+			expect(service.state.value).toBe("unknown");
+		});
+
+		it("A transition from unknown to dead should not happen if the node supports the Wake Up CC", () => {
+			const testMachine = createNodeStatusMachine(testNodeWakeup);
+
+			service = interpret(testMachine).start();
+			service.send("DEAD");
+			expect(service.state.value).toBe("unknown");
 		});
 	});
 });

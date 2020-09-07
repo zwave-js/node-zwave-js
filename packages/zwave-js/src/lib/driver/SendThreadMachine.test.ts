@@ -176,7 +176,7 @@ describe("lib/driver/SendThreadMachine", () => {
 				command: new BasicCCGet(fakeDriver, { nodeId: 3 }),
 			});
 			const transaction = createTransaction(sendDataBasicGet3);
-			node3.setAwake(false);
+			node3.markAsAsleep();
 
 			service.send({ type: "add", transaction });
 			expect(service.state.value).toEqual("idle");
@@ -190,7 +190,7 @@ describe("lib/driver/SendThreadMachine", () => {
 				command: new NoOperationCC(fakeDriver, { nodeId: 3 }),
 			});
 			const transaction = createTransaction(sendDataPing);
-			node3.setAwake(false); // still asleep, but we may send this
+			node3.markAsAsleep(); // still asleep, but we may send this
 
 			service.send({ type: "add", transaction });
 			expect(service.state.value).toEqual({ sending: "execute" });
@@ -205,7 +205,7 @@ describe("lib/driver/SendThreadMachine", () => {
 			});
 			const transaction = createTransaction(sendDataBasicGet3);
 			transaction.priority = MessagePriority.Handshake;
-			node3.setAwake(false); // still asleep, but we may send this
+			node3.markAsAsleep(); // still asleep, but we may send this
 
 			service.send({ type: "add", transaction });
 			expect(service.state.value).toEqual({ sending: "execute" });
@@ -1446,8 +1446,8 @@ describe("lib/driver/SendThreadMachine", () => {
 			command: new BasicCCGet(fakeDriver, { nodeId: 4 }),
 		});
 
-		node3.setAwake(false);
-		node4.setAwake(false);
+		node3.markAsAsleep();
+		node4.markAsAsleep();
 
 		const transaction3 = createTransaction(sendDataBasicGet3);
 		const transaction4 = createTransaction(sendDataBasicGet4);
@@ -1466,7 +1466,7 @@ describe("lib/driver/SendThreadMachine", () => {
 			transaction4,
 		]);
 
-		node4.setAwake(true);
+		node4.markAsAwake();
 
 		service.send("sortQueue");
 
@@ -1483,8 +1483,8 @@ describe("lib/driver/SendThreadMachine", () => {
 				command: new BasicCCGet(fakeDriver, { nodeId: 4 }),
 			});
 
-			node3.setAwake(false);
-			node4.setAwake(false);
+			node3.markAsAsleep();
+			node4.markAsAsleep();
 
 			const transaction1 = createTransaction(sendDataBasicGet);
 			const transaction2 = createTransaction(sendDataBasicGet);
@@ -1576,8 +1576,8 @@ describe("lib/driver/SendThreadMachine", () => {
 				command: new BasicCCGet(fakeDriver, { nodeId: 4 }),
 			});
 
-			node3.setAwake(false);
-			node4.setAwake(false);
+			node3.markAsAsleep();
+			node4.markAsAsleep();
 
 			const t1 = createTransaction(sendDataBasicGet);
 			const t2 = createTransaction(sendDataBasicGet);
