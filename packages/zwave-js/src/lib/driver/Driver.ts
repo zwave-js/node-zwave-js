@@ -1587,9 +1587,11 @@ ${handlers.length} left`,
 	): Promise<TResponse> {
 		this.ensureReady();
 
+		let node: ZWaveNode | undefined;
+
 		// Don't send messages to dead nodes
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
-			const node = msg.getNodeUnsafe();
+			node = msg.getNodeUnsafe();
 			if (node?.status === NodeStatus.Dead) {
 				throw new ZWaveError(
 					`The message will not be sent because node ${node.id} is presumed dead`,
@@ -1628,10 +1630,10 @@ ${handlers.length} left`,
 		// in comparison with messages to awake nodes.
 		// However there are a few exceptions...
 		if (
-			(isNodeQuery(msg) || isCommandClassContainer(msg)) &&
+			!!node &&
 			// Pings can be used to check if a node is really asleep, so they should be sent regardless
 			!messageIsPing(msg) &&
-			msg.getNodeUnsafe()?.isAwake() === false &&
+			!node.isAwake() &&
 			// If we move multicasts to the wakeup queue, it is unlikely
 			// that there is ever a points where all targets are awake
 			!(msg instanceof SendDataMulticastRequest) &&
@@ -1660,7 +1662,10 @@ ${handlers.length} left`,
 		this.sendThread.send({ type: "add", transaction });
 
 		try {
-			return await promise;
+			const ret = await promise;
+			// If a node responded refresh its awake timer
+			node?.refreshAwakeTimer();
+			return ret;
 		} catch (e) {
 			// If the node does not respond, it is either asleep or dead
 			if (

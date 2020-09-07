@@ -339,24 +339,44 @@ export class ZWaveNode extends Endpoint {
 		return this._status;
 	}
 
-	/** Marks this node as dead (if applicable) */
+	/**
+	 * @internal
+	 * Marks this node as dead (if applicable)
+	 */
 	public markAsDead(): void {
 		this.statusMachine.send("DEAD");
 	}
 
-	/** Marks this node as alive (if applicable) */
+	/**
+	 * @internal
+	 * Marks this node as alive (if applicable)
+	 */
 	public markAsAlive(): void {
 		this.statusMachine.send("ALIVE");
 	}
 
-	/** Marks this node as asleep (if applicable) */
+	/**
+	 * @internal
+	 * Marks this node as asleep (if applicable)
+	 */
 	public markAsAsleep(): void {
 		this.statusMachine.send("ASLEEP");
 	}
 
-	/** Marks this node as awake (if applicable) */
+	/**
+	 * @internal
+	 * Marks this node as awake (if applicable)
+	 */
 	public markAsAwake(): void {
 		this.statusMachine.send("AWAKE");
+	}
+
+	/**
+	 * @internal
+	 * Call this whenever a node responds to an active request to refresh the time it is assumed awake
+	 */
+	public refreshAwakeTimer(): void {
+		this.statusMachine.send("TRANSACTION_COMPLETE");
 	}
 
 	// The node is only ready when the interview has been completed
