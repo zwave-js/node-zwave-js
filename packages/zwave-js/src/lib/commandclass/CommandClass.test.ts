@@ -126,6 +126,10 @@ describe("lib/commandclass/CommandClass => ", () => {
 			(fakeDriver.controller.nodes as any).set(2, node2);
 		});
 
+		afterAll(() => {
+			node2.destroy();
+		});
+
 		it(`should not update "interviewComplete" in the value DB`, () => {
 			// Repro for #383
 			const cc = new BasicCCSet(fakeDriver, {

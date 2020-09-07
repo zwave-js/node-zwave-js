@@ -143,6 +143,7 @@ describe("lib/commandclass/BatteryCC => ", () => {
 		beforeEach(() => fakeDriver.sendMessage.mockClear());
 		afterAll(() => {
 			fakeDriver.sendMessage.mockImplementation(() => Promise.resolve());
+			node.destroy();
 		});
 
 		it("should send a BatteryCC.Get", async () => {

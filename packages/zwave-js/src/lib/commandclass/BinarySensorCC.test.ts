@@ -30,6 +30,10 @@ describe("lib/commandclass/BinarySensorCC => ", () => {
 		(fakeDriver.controller.nodes as Map<any, any>).set(node1.id, node1);
 	});
 
+	afterAll(() => {
+		node1.destroy();
+	});
+
 	it("the Get command (v1) should serialize correctly", () => {
 		const cc = new BinarySensorCCGet(fakeDriver, { nodeId: 1 });
 		const expected = buildCCBuffer(

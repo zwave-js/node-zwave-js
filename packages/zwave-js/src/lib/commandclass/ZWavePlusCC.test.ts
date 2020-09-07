@@ -50,6 +50,7 @@ describe("lib/commandclass/ZWavePlusCC => ", () => {
 		beforeEach(() => fakeDriver.sendMessage.mockClear());
 		afterAll(() => {
 			fakeDriver.sendMessage.mockImplementation(() => Promise.resolve());
+			node.destroy();
 		});
 
 		it("should send a ZWavePlusCC.Get", async () => {

@@ -40,8 +40,17 @@ describe("lib/commandclass/VersionCC => ", () => {
 	// });
 
 	describe(`interview()`, () => {
-		const fakeDriver = createEmptyMockDriver();
-		const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+		let node: ZWaveNode;
+
+		beforeAll(() => {
+			node = new ZWaveNode(2, fakeDriver as any);
+			(fakeDriver.controller.nodes as any).set(node.id, node);
+		});
+
+		afterAll(() => {
+			node.destroy();
+		});
+
 		let cc: VersionCC;
 
 		function doInterview() {

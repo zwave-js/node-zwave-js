@@ -15,10 +15,6 @@ import {
 } from "./AssociationGroupInfoCC";
 import { BasicCommand } from "./BasicCC";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
-const node1 = new ZWaveNode(1, fakeDriver as any);
-(fakeDriver.controller.nodes as any).set(1, node1);
-
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
 		Buffer.from([
@@ -29,6 +25,19 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
+	let fakeDriver: Driver;
+	let node1: ZWaveNode;
+
+	beforeAll(() => {
+		fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		node1 = new ZWaveNode(1, fakeDriver as any);
+		(fakeDriver.controller.nodes as any).set(node1.id, node1);
+	});
+
+	afterAll(() => {
+		node1.destroy();
+	});
+
 	it("the NameGet command should serialize correctly", () => {
 		const cc = new AssociationGroupInfoCCNameGet(fakeDriver, {
 			nodeId: 1,

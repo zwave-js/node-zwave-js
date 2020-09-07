@@ -158,6 +158,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 						property === "targetValue",
 				);
 			const endpoints = valueIDs.map(({ endpoint }) => endpoint);
+			node.destroy();
 
 			expect(endpoints).toEqual([1, 2]);
 		});

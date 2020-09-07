@@ -63,6 +63,7 @@ describe("lib/commandclass/WakeUpCC => ", () => {
 		beforeEach(() => fakeDriver.sendMessage.mockClear());
 		afterAll(() => {
 			fakeDriver.sendMessage.mockImplementation(() => Promise.resolve());
+			node.destroy();
 		});
 
 		it("should not send anything if the node is the controller", async () => {

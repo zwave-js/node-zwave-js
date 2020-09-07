@@ -18,11 +18,20 @@ import {
 	FibaroVenetianBlindCCSet,
 } from "./Fibaro";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
-const node2 = new ZWaveNode(2, fakeDriver as any);
-(fakeDriver as any).controller.nodes.set(2, node2);
-
 describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
+	let fakeDriver: Driver;
+	let node2: ZWaveNode;
+
+	beforeAll(() => {
+		fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		node2 = new ZWaveNode(2, fakeDriver as any);
+		(fakeDriver.controller.nodes as any).set(node2.id, node2);
+	});
+
+	afterAll(() => {
+		node2.destroy();
+	});
+
 	beforeAll(async () => {
 		const manufacturerId = 0x10f;
 		node2.valueDB.setValue(getManufacturerIdValueId(), manufacturerId);
