@@ -4,7 +4,6 @@ import { SimulatedClock } from "xstate/lib/SimulatedClock";
 // import { SimulatedClock } from "xstate/lib/SimulatedClock";
 import {
 	createNodeStatusMachine,
-	NodeStatusContext,
 	NodeStatusEvent,
 	NodeStatusStateSchema,
 } from "./NodeStatusMachine";
@@ -23,15 +22,14 @@ const testNodeWakeup = {
 	},
 } as any;
 
+const defaultImplementations = {
+	notifyAwakeTimeoutElapsed() {},
+};
+
 describe("lib/driver/NodeStatusMachine", () => {
 	let service:
 		| undefined
-		| Interpreter<
-				NodeStatusContext,
-				NodeStatusStateSchema,
-				NodeStatusEvent,
-				any
-		  >;
+		| Interpreter<any, NodeStatusStateSchema, NodeStatusEvent, any>;
 	afterEach(() => {
 		service?.stop();
 		service = undefined;
@@ -39,7 +37,10 @@ describe("lib/driver/NodeStatusMachine", () => {
 
 	describe("default status changes", () => {
 		it(`The node should start in the unknown state`, () => {
-			const testMachine = createNodeStatusMachine(undefined as any);
+			const testMachine = createNodeStatusMachine(
+				defaultImplementations,
+				undefined as any,
+			);
 
 			service = interpret(testMachine).start();
 			expect(service.state.value).toBe("unknown");
@@ -165,7 +166,10 @@ describe("lib/driver/NodeStatusMachine", () => {
 						? testNodeWakeup
 						: testNodeNoWakeup;
 
-				const testMachine = createNodeStatusMachine(testNode);
+				const testMachine = createNodeStatusMachine(
+					defaultImplementations,
+					testNode,
+				);
 				testMachine.initial = test.start;
 
 				service = interpret(testMachine).start();
@@ -177,7 +181,10 @@ describe("lib/driver/NodeStatusMachine", () => {
 
 	describe("Asleep timeouts", () => {
 		it(`The node should go into the asleep state when the awake timer elapses`, () => {
-			const testMachine = createNodeStatusMachine(testNodeWakeup);
+			const testMachine = createNodeStatusMachine(
+				defaultImplementations,
+				testNodeWakeup,
+			);
 			const clock = new SimulatedClock();
 			service = interpret(testMachine, { clock }).start();
 
@@ -187,7 +194,10 @@ describe("lib/driver/NodeStatusMachine", () => {
 		});
 
 		it(`The awake timer should be refreshed when a transaction is completed`, () => {
-			const testMachine = createNodeStatusMachine(testNodeWakeup);
+			const testMachine = createNodeStatusMachine(
+				defaultImplementations,
+				testNodeWakeup,
+			);
 			const clock = new SimulatedClock();
 			service = interpret(testMachine, { clock }).start();
 
@@ -204,7 +214,10 @@ describe("lib/driver/NodeStatusMachine", () => {
 
 	describe("WakeUp CC support", () => {
 		it("A transition from unknown to awake should not happen if the node does not support the Wake Up CC", () => {
-			const testMachine = createNodeStatusMachine(testNodeNoWakeup);
+			const testMachine = createNodeStatusMachine(
+				defaultImplementations,
+				testNodeNoWakeup,
+			);
 
 			service = interpret(testMachine).start();
 			service.send("AWAKE");
@@ -212,7 +225,10 @@ describe("lib/driver/NodeStatusMachine", () => {
 		});
 
 		it("A transition from unknown to asleep should not happen if the node does not support the Wake Up CC", () => {
-			const testMachine = createNodeStatusMachine(testNodeNoWakeup);
+			const testMachine = createNodeStatusMachine(
+				defaultImplementations,
+				testNodeNoWakeup,
+			);
 
 			service = interpret(testMachine).start();
 			service.send("ASLEEP");
@@ -220,7 +236,10 @@ describe("lib/driver/NodeStatusMachine", () => {
 		});
 
 		it("A transition from unknown to alive should not happen if the node supports the Wake Up CC", () => {
-			const testMachine = createNodeStatusMachine(testNodeWakeup);
+			const testMachine = createNodeStatusMachine(
+				defaultImplementations,
+				testNodeWakeup,
+			);
 
 			service = interpret(testMachine).start();
 			service.send("ALIVE");
@@ -228,7 +247,10 @@ describe("lib/driver/NodeStatusMachine", () => {
 		});
 
 		it("A transition from unknown to dead should not happen if the node supports the Wake Up CC", () => {
-			const testMachine = createNodeStatusMachine(testNodeWakeup);
+			const testMachine = createNodeStatusMachine(
+				defaultImplementations,
+				testNodeWakeup,
+			);
 
 			service = interpret(testMachine).start();
 			service.send("DEAD");

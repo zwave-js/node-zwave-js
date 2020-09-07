@@ -323,6 +323,7 @@ export function createSerialAPICommandMachine(
 				notifyRetry: (ctx) => {
 					notifyRetry?.(
 						"SerialAPI",
+						ctx.msg,
 						ctx.attempts,
 						ctx.maxAttempts,
 						computeRetryDelay(ctx),

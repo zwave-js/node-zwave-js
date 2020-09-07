@@ -19,6 +19,7 @@ export interface ServiceImplementations {
 	createSendDataAbort: () => SendDataAbort;
 	notifyRetry?: (
 		command: "SendData" | "SerialAPI",
+		message: Message,
 		attempts: number,
 		maxAttempts: number,
 		delay: number,

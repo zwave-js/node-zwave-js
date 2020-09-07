@@ -73,7 +73,8 @@ export function createNodeReadyMachine(
 					},
 				},
 				ready: {
-					type: "final",
+					// If this is final, we will get warnings in the log
+					// So don't :)
 				},
 			},
 		},

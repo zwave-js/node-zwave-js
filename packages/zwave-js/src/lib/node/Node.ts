@@ -39,10 +39,6 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
 import { interpret } from "xstate";
-import {
-	createNodeReadyMachine,
-	NodeReadyInterpreter,
-} from "zwave-js/src/lib/node/NodeReadyMachine";
 import type { CCAPI } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import { BasicCC, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
@@ -101,6 +97,10 @@ import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
+import {
+	createNodeReadyMachine,
+	NodeReadyInterpreter,
+} from "./NodeReadyMachine";
 import {
 	createNodeStatusMachine,
 	NodeStatusInterpreter,
@@ -184,7 +184,19 @@ export class ZWaveNode extends Endpoint {
 		for (const cc of controlledCCs) this.addCC(cc, { isControlled: true });
 
 		// Create and hook up the status machine
-		this.statusMachine = interpret(createNodeStatusMachine(this));
+		this.statusMachine = interpret(
+			createNodeStatusMachine(
+				{
+					notifyAwakeTimeoutElapsed: () => {
+						log.driver.print(
+							`The awake timeout for node ${this.id} has elapsed. Assuming it is asleep.`,
+							"verbose",
+						);
+					},
+				},
+				this,
+			),
+		);
 		this.statusMachine.onTransition((state) => {
 			if (state.changed) {
 				this.onStatusChange(
@@ -310,6 +322,9 @@ export class ZWaveNode extends Endpoint {
 	private _status: NodeStatus = NodeStatus.Unknown;
 
 	private onStatusChange(newStatus: NodeStatus) {
+		// Ignore duplicate events
+		if (newStatus === this._status) return;
+
 		this._status = newStatus;
 		if (this._status === NodeStatus.Asleep) {
 			this.emit("sleep", this);
@@ -386,6 +401,9 @@ export class ZWaveNode extends Endpoint {
 	private _ready: boolean = false;
 
 	private onReadyChange(ready: boolean) {
+		// Ignore duplicate events
+		if (ready === this._ready) return;
+
 		this._ready = ready;
 		if (ready) this.emit("ready", this);
 	}

@@ -728,7 +728,13 @@ describe("lib/driver/SendThreadMachine", () => {
 			service = interpret(testMachine, { clock }).start();
 
 			clock.increment(500);
-			expect(onRetry).toBeCalledWith("SendData", 2, 3, 500);
+			expect(onRetry).toBeCalledWith(
+				"SendData",
+				transaction.message,
+				2,
+				3,
+				500,
+			);
 		});
 	});
 

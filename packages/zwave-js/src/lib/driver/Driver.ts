@@ -375,6 +375,20 @@ export class Driver extends EventEmitter {
 			notifyUnsolicited: (msg) => {
 				void this.handleUnsolicitedMessage(msg);
 			},
+			notifyRetry: (command, message, attempts, maxAttempts, delay) => {
+				if (command === "SendData") {
+					log.controller.logNode(
+						message.getNodeId() ?? 255,
+						`did not respond after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
+						"warn",
+					);
+				} else {
+					log.controller.print(
+						`No response from controller after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
+						"warn",
+					);
+				}
+			},
 		});
 		this.sendThread = interpret(sendThreadMachine);
 	}
@@ -735,13 +749,6 @@ export class Driver extends EventEmitter {
 	private onNodeWakeUp(node: ZWaveNode): void {
 		log.controller.logNode(node.id, "The node is now awake.");
 
-		// Start the timeouts after which the node is assumed asleep
-		this.resetNodeAwakeTimeout(this.controller.nodes.get(node.id)!);
-
-		// It *should* not be necessary to restart the node interview here.
-		// When a node that supports wakeup does not respond, pending promises
-		// are not rejected.
-
 		// Make sure to handle the pending messages as quickly as possible
 		this.sortSendQueue();
 	}
@@ -821,10 +828,7 @@ export class Driver extends EventEmitter {
 			"The node was removed from the network",
 			ZWaveErrorCodes.Controller_NodeRemoved,
 		);
-		if (this.nodeAwakeTimeouts.has(node.id)) {
-			clearTimeout(this.nodeAwakeTimeouts.get(node.id)!);
-			this.nodeAwakeTimeouts.delete(node.id);
-		}
+
 		// Asynchronously remove the node from all possible associations, ignore potential errors
 		this.controller.removeNodeFromAllAssocations(node.id).catch((err) => {
 			log.driver.print(
@@ -949,8 +953,6 @@ export class Driver extends EventEmitter {
 
 		// Clean up
 		this.rejectTransactions(() => true, `The controller was hard-reset`);
-		this.nodeAwakeTimeouts.forEach((timeout) => clearTimeout(timeout));
-		this.nodeAwakeTimeouts.clear();
 		this.sendNodeToSleepTimers.forEach((timeout) => clearTimeout(timeout));
 		this.sendNodeToSleepTimers.clear();
 		this.retryNodeInterviewTimeouts.forEach((timeout) =>
@@ -1026,7 +1028,6 @@ export class Driver extends EventEmitter {
 		for (const timeout of [
 			this.saveToCacheTimer,
 			...this.sendNodeToSleepTimers.values(),
-			...this.nodeAwakeTimeouts.values(),
 			...this.retryNodeInterviewTimeouts.values(),
 		]) {
 			if (timeout) clearTimeout(timeout);
@@ -2045,38 +2046,6 @@ ${handlers.length} left`,
 			this.sendNodeToSleepTimers.set(
 				node.id,
 				setTimeout(() => sendNodeToSleep(node), 1000).unref(),
-			);
-		}
-	}
-
-	private nodeAwakeTimeouts = new Map<number, NodeJS.Timeout>();
-	/**
-	 * A sleeping node will go to sleep 10s after the wake up notification or after the last message has been answered.
-	 * Every call to this method prolongs the period after which the node is assumed asleep
-	 */
-	private resetNodeAwakeTimeout(node: ZWaveNode): void {
-		// Delete old timers if any exist
-		if (this.nodeAwakeTimeouts.has(node.id)) {
-			clearTimeout(this.nodeAwakeTimeouts.get(node.id)!);
-		}
-
-		// Marks a node as (most likely) asleep
-		const markNodeAsAsleep = (node: ZWaveNode): void => {
-			this.nodeAwakeTimeouts.delete(node.id);
-			if (node.isAwake()) {
-				log.driver.print(
-					`The awake timeout for node ${node.id} has elapsed. Assuming it is asleep.`,
-					"verbose",
-				);
-				node.markAsAsleep();
-			}
-		};
-
-		// If a sleeping node has no messages pending, we may send it back to sleep
-		if (node.supportsCC(CommandClasses["Wake Up"]) && node.isAwake()) {
-			this.nodeAwakeTimeouts.set(
-				node.id,
-				setTimeout(() => markNodeAsAsleep(node), 10000).unref(),
 			);
 		}
 	}

@@ -48,7 +48,14 @@ export type NodeStatusInterpreter = Interpreter<
 	NodeStatusEvent
 >;
 
-export function createNodeStatusMachine(node: ZWaveNode): NodeStatusMachine {
+export interface NodeStatusServiceImplementations {
+	notifyAwakeTimeoutElapsed: () => void;
+}
+
+export function createNodeStatusMachine(
+	implementations: NodeStatusServiceImplementations,
+	node: ZWaveNode,
+): NodeStatusMachine {
 	return Machine<any, NodeStatusStateSchema, NodeStatusEvent>(
 		{
 			id: "nodeStatus",
@@ -95,7 +102,12 @@ export function createNodeStatusMachine(node: ZWaveNode): NodeStatusMachine {
 						TRANSACTION_COMPLETE: "awake",
 					},
 					after: {
-						10000: "asleep",
+						10000: {
+							target: "asleep",
+							actions: () => {
+								implementations.notifyAwakeTimeoutElapsed();
+							},
+						},
 					},
 				},
 			},
