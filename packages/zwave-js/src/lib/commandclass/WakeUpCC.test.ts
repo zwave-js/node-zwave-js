@@ -1,10 +1,21 @@
-import { CommandClasses } from "@zwave-js/core";
+import {
+	CommandClasses,
+	generateAuthKey,
+	generateEncryptionKey,
+} from "@zwave-js/core";
+import { randomBytes } from "crypto";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { assertCC } from "../test/assertCC";
 import { createEmptyMockDriver } from "../test/mocks";
 import { CommandClass, getCommandClass } from "./CommandClass";
-import { WakeUpCC, WakeUpCCIntervalCapabilitiesGet } from "./WakeUpCC";
+import { MultiChannelCC } from "./MultiChannelCC";
+import { SecurityCC } from "./SecurityCC";
+import {
+	WakeUpCC,
+	WakeUpCCIntervalCapabilitiesGet,
+	WakeUpCCNoMoreInformation,
+} from "./WakeUpCC";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
@@ -83,5 +94,54 @@ describe("lib/commandclass/WakeUpCC => ", () => {
 		it.todo(
 			"it should send a WakeUpCCIntervalGet, followed by a WakeUpCCIntervalSet with the controller ID",
 		);
+	});
+
+	describe("responses should be detected correctly", () => {
+		it("WakeUpCCNoMoreInformation should expect no response", () => {
+			const cc = new WakeUpCCNoMoreInformation(fakeDriver, {
+				nodeId: 2,
+				endpoint: 2,
+			});
+			expect(cc.expectsCCResponse()).toBeFalse();
+		});
+
+		it("MultiChannelCC/WakeUpCCNoMoreInformation should expect NO response", () => {
+			const ccRequest = MultiChannelCC.encapsulate(
+				fakeDriver,
+				new WakeUpCCNoMoreInformation(fakeDriver, {
+					nodeId: 2,
+					endpoint: 2,
+				}),
+			);
+			expect(ccRequest.expectsCCResponse()).toBeFalse();
+		});
+
+		it("SecurityCC/WakeUpCCNoMoreInformation should expect NO response", () => {
+			// The nonce needed to decode it
+			const nonce = randomBytes(8);
+			// The network key needed to decode it
+			const networkKey = Buffer.from(
+				"0102030405060708090a0b0c0d0e0f10",
+				"hex",
+			);
+
+			const securityManager = {
+				getNonce: () => nonce,
+				authKey: generateAuthKey(networkKey),
+				encryptionKey: generateEncryptionKey(networkKey),
+			};
+
+			const ccRequest = SecurityCC.encapsulate(
+				{
+					...fakeDriver,
+					securityManager,
+				} as any,
+				new WakeUpCCNoMoreInformation(fakeDriver, {
+					nodeId: 2,
+					endpoint: 2,
+				}),
+			);
+			expect(ccRequest.expectsCCResponse()).toBeFalse();
+		});
 	});
 });

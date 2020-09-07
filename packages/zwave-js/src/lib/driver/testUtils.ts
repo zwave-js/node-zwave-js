@@ -16,6 +16,7 @@ const defaultImplementations = {
 	getNodeUnsafe: () => undefined,
 	getNodeId: () => undefined,
 	toLogEntry: () => ({ tags: [] }),
+	needsCallbackId: () => true,
 };
 
 export const dummyMessageNoResponseNoCallback = ({
