@@ -10,6 +10,7 @@
 
 ### Features
 * A new method `withOptions` was added to `CCAPI`, which controls the used `SendCommandOptions`. For example, this allows changing the priority of each API call for that instance.
+* All interview messages now automatically have a lower priority than most other messages, e.g. the ones created by user interaction. This should make the network feel much more responsive while an interview process is active.
 
 ### Bugfixes
 * Improved performance of reading from the Value DB
