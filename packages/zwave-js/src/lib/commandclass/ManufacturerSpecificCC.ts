@@ -111,10 +111,7 @@ export class ManufacturerSpecificCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ManufacturerSpecificCCReport
-		>(cc, {
-			...this.commandOptions,
-			priority: MessagePriority.NodeQuery,
-		}))!;
+		>(cc, this.commandOptions))!;
 		return {
 			manufacturerId: response.manufacturerId,
 			productType: response.productType,
@@ -155,7 +152,9 @@ export class ManufacturerSpecificCC extends CommandClass {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
-		const api = endpoint.commandClasses["Manufacturer Specific"];
+		const api = endpoint.commandClasses[
+			"Manufacturer Specific"
+		].withOptions({ priority: MessagePriority.NodeQuery });
 
 		log.controller.logNode(node.id, {
 			endpoint: this.endpointIndex,

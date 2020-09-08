@@ -25,8 +25,9 @@ export class NoOperationCCAPI extends CCAPI {
 				...this.commandOptions,
 				// Don't retry sending ping packets
 				maxSendAttempts: 1,
-				// set the priority manually, as SendData can be Application level too
-				priority: MessagePriority.NodeQuery,
+				// Pings have their own dedicated priority, since they
+				// are used to test whether a node is awake/alive
+				priority: MessagePriority.Ping,
 			},
 		);
 	}

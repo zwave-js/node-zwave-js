@@ -6,6 +6,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { MessagePriority } from "../message/Constants";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { CCAPI } from "./API";
@@ -80,7 +81,10 @@ export class LanguageCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses.Language;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Language.withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${

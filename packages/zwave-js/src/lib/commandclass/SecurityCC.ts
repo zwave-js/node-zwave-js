@@ -165,11 +165,12 @@ export class SecurityCCAPI extends CCAPI {
 		});
 		try {
 			await this.driver.sendMessage(msg, {
+				...this.commandOptions,
 				priority: MessagePriority.Handshake,
 				// We don't want failures causing us to treat the node as asleep
 				changeNodeStatusOnTimeout: false,
 			});
-		} catch (e: unknown) {
+		} catch (e) {
 			if (
 				e instanceof ZWaveError &&
 				(e.code === ZWaveErrorCodes.Controller_NodeTimeout ||
@@ -277,7 +278,9 @@ export class SecurityCC extends CommandClass {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
-		const api = endpoint.commandClasses.Security;
+		const api = endpoint.commandClasses.Security.withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
 
 		// This only needs to be done once
 		if (complete) {

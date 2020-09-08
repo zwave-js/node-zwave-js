@@ -12,6 +12,7 @@ import { num2hex } from "@zwave-js/shared";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
+import { MessagePriority } from "../message/Constants";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -195,7 +196,9 @@ export class VersionCC extends CommandClass {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
-		const api = endpoint.commandClasses.Version;
+		const api = endpoint.commandClasses.Version.withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
 
 		log.controller.logNode(node.id, {
 			endpoint: this.endpointIndex,

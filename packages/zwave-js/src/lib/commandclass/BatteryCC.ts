@@ -10,6 +10,7 @@ import {
 import type { JSONObject } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
+import { MessagePriority } from "../message/Constants";
 import { CCAPI, ignoreTimeout } from "./API";
 import {
 	API,
@@ -114,7 +115,9 @@ export class BatteryCC extends CommandClass {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
-		const api = endpoint.commandClasses.Battery;
+		const api = endpoint.commandClasses.Battery.withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
 
 		log.controller.logNode(node.id, {
 			endpoint: this.endpointIndex,

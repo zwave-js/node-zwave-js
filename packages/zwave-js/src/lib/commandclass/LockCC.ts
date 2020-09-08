@@ -8,6 +8,7 @@ import {
 } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
+import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -100,7 +101,10 @@ export class LockCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses.Lock;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Lock.withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
