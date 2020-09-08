@@ -1,3 +1,4 @@
+import type { Maybe } from "@zwave-js/core";
 import {
 	CommandClasses,
 	validatePayload,
@@ -5,7 +6,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { Maybe } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
@@ -71,7 +71,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ThermostatSetbackCCReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return {
 			setbackType: response.setbackType,
 			setbackState: response.setbackState,
@@ -93,7 +93,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 			setbackType,
 			setbackState,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 }
 

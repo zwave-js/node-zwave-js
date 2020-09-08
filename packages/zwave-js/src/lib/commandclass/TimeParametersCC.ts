@@ -1,5 +1,5 @@
-import { CommandClasses, validatePayload } from "@zwave-js/core";
 import type { Maybe } from "@zwave-js/core";
+import { CommandClasses, validatePayload } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import type { Endpoint } from "../node/Endpoint";
@@ -133,6 +133,7 @@ export class TimeParametersCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<TimeParametersCCReport>(
 			cc,
+			this.commandOptions,
 		))!;
 		return response.dateAndTime;
 	}
@@ -148,7 +149,7 @@ export class TimeParametersCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			dateAndTime,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 }
 

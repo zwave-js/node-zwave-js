@@ -1,4 +1,5 @@
 import { lookupManufacturer } from "@zwave-js/config";
+import type { Maybe, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	validatePayload,
@@ -6,7 +7,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { Maybe, ValueID } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
@@ -112,6 +112,7 @@ export class ManufacturerSpecificCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			ManufacturerSpecificCCReport
 		>(cc, {
+			...this.commandOptions,
 			priority: MessagePriority.NodeQuery,
 		}))!;
 		return {
@@ -136,7 +137,7 @@ export class ManufacturerSpecificCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ManufacturerSpecificCCDeviceSpecificReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.deviceId;
 	}
 }

@@ -85,7 +85,7 @@ export class MultilevelSensorCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultilevelSensorCCReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 
 		if (sensorType === undefined) {
 			// Overload #1: return the full response
@@ -112,7 +112,7 @@ export class MultilevelSensorCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultilevelSensorCCSupportedSensorReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.supportedSensorTypes;
 	}
 
@@ -131,7 +131,7 @@ export class MultilevelSensorCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultilevelSensorCCSupportedScaleReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.sensorSupportedScales;
 	}
 
@@ -152,7 +152,7 @@ export class MultilevelSensorCCAPI extends CCAPI {
 			scale,
 			value,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 }
 

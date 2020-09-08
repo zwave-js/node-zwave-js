@@ -88,6 +88,7 @@ export class WakeUpCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<WakeUpCCIntervalReport>(
 			cc,
+			this.commandOptions,
 		))!;
 		return {
 			wakeUpInterval: response.wakeUpInterval,
@@ -108,7 +109,7 @@ export class WakeUpCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			WakeUpCCIntervalCapabilitiesReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return {
 			defaultWakeUpInterval: response.defaultWakeUpInterval,
 			minWakeUpInterval: response.minWakeUpInterval,
@@ -129,7 +130,7 @@ export class WakeUpCCAPI extends CCAPI {
 			wakeUpInterval,
 			controllerNodeId,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	public async sendNoMoreInformation(): Promise<void> {
@@ -143,6 +144,7 @@ export class WakeUpCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 		});
 		await this.driver.sendCommand(cc, {
+			...this.commandOptions,
 			// This command must be sent as part of the wake up queue
 			priority: MessagePriority.WakeUp,
 		});

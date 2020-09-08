@@ -1,10 +1,10 @@
+import type { Maybe, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core";
-import type { Maybe, ValueID } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import {
 	CCAPI,
@@ -89,7 +89,7 @@ export class SceneActivationCCAPI extends CCAPI {
 			sceneId,
 			dimmingDuration,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 }
 

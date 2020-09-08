@@ -22,6 +22,7 @@ export class NoOperationCCAPI extends CCAPI {
 				endpoint: this.endpoint.index,
 			}),
 			{
+				...this.commandOptions,
 				// Don't retry sending ping packets
 				maxSendAttempts: 1,
 				// set the priority manually, as SendData can be Application level too

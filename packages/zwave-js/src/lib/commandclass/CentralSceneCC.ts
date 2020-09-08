@@ -1,3 +1,4 @@
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -8,7 +9,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import type { JSONObject } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
@@ -96,7 +96,7 @@ export class CentralSceneCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			CentralSceneCCSupportedReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return {
 			sceneCount: response.sceneCount,
 			supportsSlowRefresh: response.supportsSlowRefresh,
@@ -117,7 +117,7 @@ export class CentralSceneCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			CentralSceneCCConfigurationReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return {
 			slowRefresh: response.slowRefresh,
 		};
@@ -134,7 +134,7 @@ export class CentralSceneCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			slowRefresh,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (

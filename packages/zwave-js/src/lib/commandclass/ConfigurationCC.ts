@@ -244,7 +244,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		try {
 			const response = (await this.driver.sendCommand<
 				ConfigurationCCReport
-			>(cc))!;
+			>(cc, this.commandOptions))!;
 			// Nodes may respond with a different parameter, e.g. if we
 			// requested a non-existing one
 			if (response.parameter === parameter) {
@@ -303,7 +303,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			valueSize,
 		});
 		try {
-			await this.driver.sendCommand(cc);
+			await this.driver.sendCommand(cc, this.commandOptions);
 			return true;
 		} catch (e: unknown) {
 			if (
@@ -337,7 +337,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			resetToDefault: true,
 		});
 		try {
-			await this.driver.sendCommand(cc);
+			await this.driver.sendCommand(cc, this.commandOptions);
 			return true;
 		} catch (e: unknown) {
 			if (
@@ -363,7 +363,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -375,7 +375,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ConfigurationCCPropertiesReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return {
 			valueSize: response.valueSize,
 			valueFormat: response.valueFormat,
@@ -399,7 +399,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ConfigurationCCNameReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.name;
 	}
 
@@ -412,7 +412,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ConfigurationCCInfoReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.info;
 	}
 

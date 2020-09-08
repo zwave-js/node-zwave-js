@@ -1,10 +1,10 @@
+import type { Maybe } from "@zwave-js/core";
 import {
 	CommandClasses,
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { Maybe } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import {
 	decodeSetbackState,
@@ -81,7 +81,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			weekday,
 			switchPoints,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	public async get(weekday: Weekday): Promise<readonly Switchpoint[]> {
@@ -97,7 +97,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ClimateControlScheduleCCReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.switchPoints;
 	}
 
@@ -113,7 +113,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ClimateControlScheduleCCChangedReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.changeCounter;
 	}
 
@@ -130,7 +130,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ClimateControlScheduleCCOverrideReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return {
 			type: response.overrideType,
 			state: response.overrideState,
@@ -152,7 +152,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			overrideType: type,
 			overrideState: state,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 }
 

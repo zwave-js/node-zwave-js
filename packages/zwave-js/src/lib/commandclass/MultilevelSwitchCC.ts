@@ -1,3 +1,4 @@
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
@@ -10,7 +11,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
@@ -116,7 +116,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultilevelSwitchCCReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return {
 			currentValue: response.currentValue,
 			targetValue: response.targetValue,
@@ -241,7 +241,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultilevelSwitchCCSupportedReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.switchType;
 	}
 

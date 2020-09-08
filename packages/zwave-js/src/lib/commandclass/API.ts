@@ -1,3 +1,4 @@
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Maybe,
@@ -5,9 +6,8 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
-import type { Driver } from "../driver/Driver";
+import type { Driver, SendCommandOptions } from "../driver/Driver";
 import type { Endpoint } from "../node/Endpoint";
 import { getCommandClass } from "./CommandClass";
 
@@ -132,6 +132,25 @@ export class CCAPI {
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
+	}
+
+	/** Returns the command options to use for sendCommand calls */
+	protected get commandOptions(): SendCommandOptions {
+		// No default options
+		return {};
+	}
+
+	/** Creates an instance of this API, scoped to use the given options */
+	public withOptions(options: SendCommandOptions): this {
+		return new Proxy(this, {
+			get: (target, property) => {
+				if (property === "commandOptions") {
+					return options;
+				} else {
+					return (target as any)[property];
+				}
+			},
+		});
 	}
 }
 

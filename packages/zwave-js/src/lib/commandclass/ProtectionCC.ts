@@ -1,3 +1,4 @@
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -10,7 +11,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
@@ -208,6 +208,7 @@ export class ProtectionCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<ProtectionCCReport>(
 			cc,
+			this.commandOptions,
 		))!;
 		return {
 			local: response.local,
@@ -227,7 +228,7 @@ export class ProtectionCCAPI extends CCAPI {
 			local,
 			rf,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -243,7 +244,7 @@ export class ProtectionCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ProtectionCCSupportedReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return {
 			supportsExclusiveControl: response.supportsExclusiveControl,
 			supportsTimeout: response.supportsTimeout,
@@ -264,7 +265,7 @@ export class ProtectionCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ProtectionCCExclusiveControlReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.exclusiveControlNodeId;
 	}
 
@@ -279,7 +280,7 @@ export class ProtectionCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			exclusiveControlNodeId: nodeId,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getTimeout(): Promise<Timeout> {
@@ -294,7 +295,7 @@ export class ProtectionCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ProtectionCCTimeoutReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.timeout;
 	}
 
@@ -309,7 +310,7 @@ export class ProtectionCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			timeout,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 }
 

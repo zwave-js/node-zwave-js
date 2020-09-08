@@ -1,3 +1,4 @@
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	encodeBitMask,
@@ -9,7 +10,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { CCAPI } from "./API";
@@ -209,7 +209,7 @@ export class MultiChannelAssociationCCAPI extends CCAPI {
 		);
 		const response = (await this.driver.sendCommand<
 			MultiChannelAssociationCCSupportedGroupingsReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.groupCount;
 	}
 
@@ -230,7 +230,7 @@ export class MultiChannelAssociationCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultiChannelAssociationCCReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return {
 			maxNodes: response.maxNodes,
 			nodeIds: response.nodeIds,
@@ -254,7 +254,7 @@ export class MultiChannelAssociationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -287,7 +287,7 @@ export class MultiChannelAssociationCCAPI extends CCAPI {
 							!!d.endpoint,
 					),
 				});
-				await this.driver.sendCommand(cc);
+				await this.driver.sendCommand(cc, this.commandOptions);
 			}
 		} else {
 			const cc = new MultiChannelAssociationCCRemove(this.driver, {
@@ -295,7 +295,7 @@ export class MultiChannelAssociationCCAPI extends CCAPI {
 				endpoint: this.endpoint.index,
 				...options,
 			});
-			await this.driver.sendCommand(cc);
+			await this.driver.sendCommand(cc, this.commandOptions);
 		}
 	}
 }

@@ -72,7 +72,10 @@ export class BasicCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<BasicCCReport>(cc))!;
+		const response = (await this.driver.sendCommand<BasicCCReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			currentValue: response.currentValue,
 			targetValue: response.targetValue,
@@ -88,7 +91,7 @@ export class BasicCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			targetValue,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 
 		// Refresh the current value
 		await this.get();

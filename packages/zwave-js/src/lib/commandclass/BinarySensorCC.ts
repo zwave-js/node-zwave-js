@@ -104,6 +104,7 @@ export class BinarySensorCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<BinarySensorCCReport>(
 			cc,
+			this.commandOptions,
 		))!;
 		// We don't want to repeat the sensor type
 		return response.value;
@@ -122,7 +123,7 @@ export class BinarySensorCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			BinarySensorCCSupportedReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		// We don't want to repeat the sensor type
 		return response.supportedSensorTypes;
 	}

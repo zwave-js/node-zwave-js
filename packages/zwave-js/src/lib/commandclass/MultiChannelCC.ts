@@ -129,6 +129,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCEndPointReport
 		>(cc, {
+			...this.commandOptions,
 			priority: MessagePriority.NodeQuery,
 		}))!;
 		return {
@@ -155,6 +156,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCCapabilityReport
 		>(cc, {
+			...this.commandOptions,
 			priority: MessagePriority.NodeQuery,
 		}))!;
 		return response.capability;
@@ -178,6 +180,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCEndPointFindReport
 		>(cc, {
+			...this.commandOptions,
 			priority: MessagePriority.NodeQuery,
 		}))!;
 		return response.foundEndpoints;
@@ -199,6 +202,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCAggregatedMembersReport
 		>(cc, {
+			...this.commandOptions,
 			priority: MessagePriority.NodeQuery,
 		}))!;
 		return response.members;
@@ -219,7 +223,7 @@ export class MultiChannelCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			...options,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getEndpointCountV1(ccId: CommandClasses): Promise<number> {
@@ -235,6 +239,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<MultiChannelCCV1Report>(
 			cc,
 			{
+				...this.commandOptions,
 				priority: MessagePriority.NodeQuery,
 			},
 		))!;
@@ -251,7 +256,7 @@ export class MultiChannelCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			encapsulated,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 }
 

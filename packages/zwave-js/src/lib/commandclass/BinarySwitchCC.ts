@@ -64,6 +64,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<BinarySwitchCCReport>(
 			cc,
+			this.commandOptions,
 		))!;
 		return {
 			// interpret unknown values as false
@@ -90,7 +91,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 			targetValue,
 			duration,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 
 		// Refresh the current value
 		await this.get();
