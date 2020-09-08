@@ -40,7 +40,7 @@
 		"sourceMap": true,
 		"inlineSourceMap": false,
 		"stripInternal": true,
-		"target": "es2017",
+		"target": "es2018",
 		"skipLibCheck": true,
 		"strictNullChecks": true,
 		"strictPropertyInitialization": true,
