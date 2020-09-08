@@ -1087,8 +1087,6 @@ export class Driver extends EventEmitter {
 
 		// If the message could be decoded, forward it to the send thread
 		if (msg) {
-			log.driver.logMessage(msg, { direction: "inbound" });
-
 			if (isCommandClassContainer(msg)) {
 				// SecurityCCCommandEncapsulationNonceGet is two commands in one, but
 				// we're not set up to handle things like this. Reply to the nonce get
@@ -1104,6 +1102,7 @@ export class Driver extends EventEmitter {
 				if (!this.assemblePartialCCs(msg)) return;
 			}
 
+			log.driver.logMessage(msg, { direction: "inbound" });
 			this.sendThread.send({ type: "message", message: msg });
 		}
 	}
