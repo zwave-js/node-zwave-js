@@ -4,6 +4,18 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Breaking changes
+* The status `Alive` was added to the `NodeStatus` enumeration. The node status can no longer switch between all states, only between `Dead` and `Alive`, between `Asleep` and `Awake` and from and to `Unknown`.
+
+### Features
+* A new method `withOptions` was added to `CCAPI`, which controls the used `SendCommandOptions`. For example, this allows changing the priority of each API call for that instance.
+
+### Changes under the hood
+* The driver has been completely rewritten with state machines for a well-defined program flow and better testability. This should solve issues where communication may get stuck for unknown reasons.
+* A node's `status` and `ready` properties are now managed by state machines to have better control over how and when the status changes.
+* The TypeScript option `strictFunctionTypes` was enabled and the usage of several decorators is now enforced statically
+
 ## 4.2.0 (2020-09-04)
 ### Features
 * Invalid `Multi Channel CC::Command Encapsulation` which follow the V2+ format but use a V1 header are now treated like valid commands
