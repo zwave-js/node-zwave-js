@@ -1,10 +1,10 @@
+import type { Maybe } from "@zwave-js/core";
 import {
 	CommandClasses,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { Maybe } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import {
 	CCAPI,
@@ -88,7 +88,7 @@ export class NodeNamingAndLocationCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			NodeNamingAndLocationCCNameReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.name;
 	}
 
@@ -103,7 +103,7 @@ export class NodeNamingAndLocationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			name,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getLocation(): Promise<string> {
@@ -118,7 +118,7 @@ export class NodeNamingAndLocationCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			NodeNamingAndLocationCCLocationReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.location;
 	}
 
@@ -133,7 +133,7 @@ export class NodeNamingAndLocationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			location,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 }
 

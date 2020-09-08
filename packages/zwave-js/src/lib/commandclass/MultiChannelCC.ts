@@ -8,7 +8,6 @@ import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	encodeBitMask,
-	ignoreTimeout,
 	Maybe,
 	MessageOrCCLogEntry,
 	parseBitMask,
@@ -21,7 +20,7 @@ import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI } from "./API";
+import { CCAPI, ignoreTimeout } from "./API";
 import {
 	API,
 	CCCommand,
@@ -129,6 +128,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCEndPointReport
 		>(cc, {
+			...this.commandOptions,
 			priority: MessagePriority.NodeQuery,
 		}))!;
 		return {
@@ -155,6 +155,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCCapabilityReport
 		>(cc, {
+			...this.commandOptions,
 			priority: MessagePriority.NodeQuery,
 		}))!;
 		return response.capability;
@@ -178,6 +179,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCEndPointFindReport
 		>(cc, {
+			...this.commandOptions,
 			priority: MessagePriority.NodeQuery,
 		}))!;
 		return response.foundEndpoints;
@@ -199,6 +201,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCAggregatedMembersReport
 		>(cc, {
+			...this.commandOptions,
 			priority: MessagePriority.NodeQuery,
 		}))!;
 		return response.members;
@@ -219,7 +222,7 @@ export class MultiChannelCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			...options,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getEndpointCountV1(ccId: CommandClasses): Promise<number> {
@@ -235,6 +238,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<MultiChannelCCV1Report>(
 			cc,
 			{
+				...this.commandOptions,
 				priority: MessagePriority.NodeQuery,
 			},
 		))!;
@@ -251,7 +255,7 @@ export class MultiChannelCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			encapsulated,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -343,7 +347,8 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 		if (api.supportsCommand(MultiChannelCommand.EndPointFind)) {
 			// Step 2a: Find all endpoints
 			await ignoreTimeout(
-				async () => {
+				api,
+				async (api) => {
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying all endpoints...",

@@ -41,7 +41,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		cc.manufacturerId = manufacturerId;
 		cc.payload = data ?? Buffer.allocUnsafe(0);
 
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -56,7 +56,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			FibaroVenetianBlindCCReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return {
 			position: response.position,
 			tilt: response.tilt,
@@ -73,7 +73,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			position: value,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	public async fibaroVenetianBlindsSetTilt(value: number): Promise<void> {
@@ -86,7 +86,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			tilt: value,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (

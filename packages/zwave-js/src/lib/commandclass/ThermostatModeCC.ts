@@ -1,3 +1,4 @@
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -8,7 +9,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
@@ -105,6 +105,7 @@ export class ThermostatModeCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<ThermostatModeCCReport>(
 			cc,
+			this.commandOptions,
 		))!;
 		return {
 			mode: response.mode,
@@ -138,7 +139,7 @@ export class ThermostatModeCCAPI extends CCAPI {
 			mode,
 			manufacturerData: manufacturerData as any,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getSupportedModes(): Promise<readonly ThermostatMode[]> {
@@ -153,7 +154,7 @@ export class ThermostatModeCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ThermostatModeCCSupportedReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.supportedModes;
 	}
 }

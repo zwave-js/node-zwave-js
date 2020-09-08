@@ -1,5 +1,5 @@
-import { CommandClasses, validatePayload } from "@zwave-js/core";
 import type { Maybe } from "@zwave-js/core";
+import { CommandClasses, validatePayload } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { CCAPI } from "./API";
 import {
@@ -44,7 +44,7 @@ export class MultiCommandCCAPI extends CCAPI {
 			encapsulated: commands,
 		});
 		cc.endpointIndex = this.endpoint.index;
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 }
 

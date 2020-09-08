@@ -43,7 +43,7 @@ export class CRC16CCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			encapsulated: encapsulatedCC,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 }
 

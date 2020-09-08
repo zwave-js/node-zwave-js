@@ -1,5 +1,5 @@
-import { CommandClasses, validatePayload, ValueMetadata } from "@zwave-js/core";
 import type { Maybe, ValueID } from "@zwave-js/core";
+import { CommandClasses, validatePayload, ValueMetadata } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
@@ -74,6 +74,7 @@ export class ZWavePlusCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<ZWavePlusCCReport>(cc, {
+			...this.commandOptions,
 			priority: MessagePriority.NodeQuery,
 		}))!;
 		return {

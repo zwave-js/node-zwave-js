@@ -116,6 +116,7 @@ export class AlarmSensorCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<AlarmSensorCCReport>(
 			cc,
+			this.commandOptions,
 		))!;
 		return pick(response, ["state", "severity", "duration"]);
 	}
@@ -133,7 +134,7 @@ export class AlarmSensorCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			AlarmSensorCCSupportedReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.supportedSensorTypes;
 	}
 }

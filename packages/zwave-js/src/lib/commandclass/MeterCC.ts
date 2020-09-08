@@ -148,7 +148,10 @@ export class MeterCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		const response = (await this.driver.sendCommand<MeterCCReport>(cc))!;
+		const response = (await this.driver.sendCommand<MeterCCReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			type: response.type,
 			scale: response.scale,
@@ -204,6 +207,7 @@ export class MeterCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<MeterCCSupportedReport>(
 			cc,
+			this.commandOptions,
 		))!;
 		return {
 			type: response.type,
@@ -221,7 +225,7 @@ export class MeterCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (

@@ -74,7 +74,7 @@ export class SupervisionCCAPI extends CCAPI {
 			requestStatusUpdates,
 			encapsulated,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 }
 

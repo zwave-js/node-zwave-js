@@ -8,7 +8,6 @@ import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	encodeFloatWithScale,
-	ignoreTimeout,
 	Maybe,
 	parseBitMask,
 	parseFloatWithScale,
@@ -19,7 +18,7 @@ import {
 } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
-import { CCAPI } from "./API";
+import { CCAPI, ignoreTimeout } from "./API";
 import {
 	API,
 	CCCommand,
@@ -85,7 +84,7 @@ export class MultilevelSensorCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultilevelSensorCCReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 
 		if (sensorType === undefined) {
 			// Overload #1: return the full response
@@ -112,7 +111,7 @@ export class MultilevelSensorCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultilevelSensorCCSupportedSensorReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.supportedSensorTypes;
 	}
 
@@ -131,7 +130,7 @@ export class MultilevelSensorCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultilevelSensorCCSupportedScaleReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.sensorSupportedScales;
 	}
 
@@ -152,7 +151,7 @@ export class MultilevelSensorCCAPI extends CCAPI {
 			scale,
 			value,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -263,7 +262,8 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 
 				// Always query the current sensor reading
 				await ignoreTimeout(
-					async () => {
+					api,
+					async (api) => {
 						log.controller.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `querying ${getSensorTypeName(

@@ -1,10 +1,10 @@
+import type { Maybe } from "@zwave-js/core";
 import {
 	CommandClasses,
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { Maybe } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { CCAPI } from "./API";
@@ -62,7 +62,10 @@ export class ClockCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ClockCCReport>(cc))!;
+		const response = (await this.driver.sendCommand<ClockCCReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			weekday: response.weekday,
 			hour: response.hour,
@@ -84,7 +87,7 @@ export class ClockCCAPI extends CCAPI {
 			minute,
 			weekday: weekday ?? Weekday.Unknown,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 
 		// Refresh the current value
 		await this.get();

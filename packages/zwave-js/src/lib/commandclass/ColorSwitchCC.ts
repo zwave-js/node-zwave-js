@@ -161,7 +161,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ColorSwitchCCSupportedReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.supportedColorComponents;
 	}
 
@@ -176,6 +176,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<ColorSwitchCCReport>(
 			cc,
+			this.commandOptions,
 		))!;
 		return {
 			currentValue: response.currentValue,
@@ -193,7 +194,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 			...options,
 		});
 
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	public async startLevelChange(
@@ -210,7 +211,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 			...options,
 		});
 
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	public async stopLevelChange(
@@ -227,7 +228,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 			colorComponent,
 		});
 
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (

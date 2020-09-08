@@ -1,3 +1,4 @@
+import type { Maybe } from "@zwave-js/core";
 import {
 	CommandClasses,
 	DSTInfo,
@@ -7,7 +8,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { Maybe } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { CCAPI } from "./API";
@@ -59,7 +59,10 @@ export class TimeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<TimeCCTimeReport>(cc))!;
+		const response = (await this.driver.sendCommand<TimeCCTimeReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			hour: response.hour,
 			minute: response.minute,
@@ -75,7 +78,10 @@ export class TimeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<TimeCCDateReport>(cc))!;
+		const response = (await this.driver.sendCommand<TimeCCDateReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			day: response.day,
 			month: response.month,
@@ -94,7 +100,7 @@ export class TimeCCAPI extends CCAPI {
 			dstStart: timezone.startDate,
 			dstEnd: timezone.endDate,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getTimezone(): Promise<DSTInfo> {
@@ -106,6 +112,7 @@ export class TimeCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<TimeCCTimeOffsetReport>(
 			cc,
+			this.commandOptions,
 		))!;
 		return {
 			standardOffset: response.standardOffset,

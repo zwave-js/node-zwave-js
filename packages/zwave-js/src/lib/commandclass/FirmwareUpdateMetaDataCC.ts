@@ -1,3 +1,4 @@
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	CRC16_CCITT,
@@ -8,7 +9,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { AllOrNone, getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { CCAPI } from "./API";
@@ -142,7 +142,7 @@ export class FirmwareUpdateMetaDataCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			FirmwareUpdateMetaDataCCMetaDataReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return pick(response, [
 			"manufacturerId",
 			"firmwareId",
@@ -176,7 +176,7 @@ export class FirmwareUpdateMetaDataCCAPI extends CCAPI {
 		// Since the response may take longer than with other commands,
 		// we do not use the built-in waiting functionality, which would block
 		// all other communication
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 		const { status } = await this.driver.waitForCommand<
 			FirmwareUpdateMetaDataCCRequestReport
 		>(
@@ -208,7 +208,7 @@ export class FirmwareUpdateMetaDataCCAPI extends CCAPI {
 			isLast: isLastFragment,
 			firmwareData: data,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 }
 
