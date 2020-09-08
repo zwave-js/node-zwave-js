@@ -12,6 +12,7 @@ import {
 import { num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
+import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -297,7 +298,9 @@ export class IndicatorCC extends CommandClass {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
-		const api = endpoint.commandClasses.Indicator;
+		const api = endpoint.commandClasses.Indicator.withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
 
 		log.controller.logNode(node.id, {
 			endpoint: this.endpointIndex,

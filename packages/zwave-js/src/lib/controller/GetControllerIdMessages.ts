@@ -1,5 +1,5 @@
-import { num2hex } from "@zwave-js/shared";
 import type { JSONObject } from "@zwave-js/shared";
+import { num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import {
 	FunctionType,

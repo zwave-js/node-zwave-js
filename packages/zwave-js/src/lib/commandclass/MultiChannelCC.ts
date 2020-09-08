@@ -127,10 +127,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCEndPointReport
-		>(cc, {
-			...this.commandOptions,
-			priority: MessagePriority.NodeQuery,
-		}))!;
+		>(cc, this.commandOptions))!;
 		return {
 			isDynamicEndpointCount: response.countIsDynamic,
 			identicalCapabilities: response.identicalCapabilities,
@@ -154,10 +151,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCCapabilityReport
-		>(cc, {
-			...this.commandOptions,
-			priority: MessagePriority.NodeQuery,
-		}))!;
+		>(cc, this.commandOptions))!;
 		return response.capability;
 	}
 
@@ -178,10 +172,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCEndPointFindReport
-		>(cc, {
-			...this.commandOptions,
-			priority: MessagePriority.NodeQuery,
-		}))!;
+		>(cc, this.commandOptions))!;
 		return response.foundEndpoints;
 	}
 
@@ -200,10 +191,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCAggregatedMembersReport
-		>(cc, {
-			...this.commandOptions,
-			priority: MessagePriority.NodeQuery,
-		}))!;
+		>(cc, this.commandOptions))!;
 		return response.members;
 	}
 
@@ -237,10 +225,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<MultiChannelCCV1Report>(
 			cc,
-			{
-				...this.commandOptions,
-				priority: MessagePriority.NodeQuery,
-			},
+			this.commandOptions,
 		))!;
 		return response.endpointCount;
 	}
@@ -307,9 +292,10 @@ export class MultiChannelCC extends CommandClass {
 		if (this.version === 1) return this.interviewV1(complete);
 
 		const node = this.getNode()!;
-		const api = node.getEndpoint(this.endpointIndex)!.commandClasses[
-			"Multi Channel"
-		];
+		const endpoint = node.getEndpoint(this.endpointIndex)!;
+		const api = endpoint.commandClasses["Multi Channel"].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
 
 		// Step 1: Retrieve general information about end points
 		log.controller.logNode(node.id, {

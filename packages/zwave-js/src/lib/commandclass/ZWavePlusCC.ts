@@ -73,10 +73,10 @@ export class ZWavePlusCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ZWavePlusCCReport>(cc, {
-			...this.commandOptions,
-			priority: MessagePriority.NodeQuery,
-		}))!;
+		const response = (await this.driver.sendCommand<ZWavePlusCCReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			zwavePlusVersion: response.zwavePlusVersion,
 			nodeType: response.nodeType,
@@ -95,7 +95,9 @@ export class ZWavePlusCC extends CommandClass {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
-		const api = endpoint.commandClasses["Z-Wave Plus Info"];
+		const api = endpoint.commandClasses["Z-Wave Plus Info"].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
 
 		log.controller.logNode(node.id, {
 			endpoint: this.endpointIndex,

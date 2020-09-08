@@ -15,6 +15,7 @@ import { getEnumMemberName } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
+import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -321,7 +322,10 @@ export class ProtectionCC extends CommandClass {
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
-		const api = this.getEndpoint()!.commandClasses.Protection;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Protection.withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${

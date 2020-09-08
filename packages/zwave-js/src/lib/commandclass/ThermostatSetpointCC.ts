@@ -14,6 +14,7 @@ import {
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
+import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -268,7 +269,9 @@ export class ThermostatSetpointCC extends CommandClass {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
-		const api = endpoint.commandClasses["Thermostat Setpoint"];
+		const api = endpoint.commandClasses["Thermostat Setpoint"].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
 
 		log.controller.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -364,7 +367,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					| undefined;
 				try {
 					setpoint = await api.get(type);
-				} catch (e: unknown) {
+				} catch (e) {
 					if (
 						e instanceof ZWaveError &&
 						e.code === ZWaveErrorCodes.Controller_NodeTimeout

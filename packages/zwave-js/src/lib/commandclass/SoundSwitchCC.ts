@@ -11,6 +11,7 @@ import { pick } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
+import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -272,7 +273,9 @@ export class SoundSwitchCC extends CommandClass {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
-		const api = endpoint.commandClasses["Sound Switch"];
+		const api = endpoint.commandClasses["Sound Switch"].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
 
 		log.controller.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${

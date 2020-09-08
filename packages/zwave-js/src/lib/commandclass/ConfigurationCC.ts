@@ -23,6 +23,7 @@ import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
+import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -267,7 +268,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber,
 				response.parameter,
 			);
-		} catch (e: unknown) {
+		} catch (e) {
 			if (
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
@@ -305,7 +306,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		try {
 			await this.driver.sendCommand(cc, this.commandOptions);
 			return true;
-		} catch (e: unknown) {
+		} catch (e) {
 			if (
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
@@ -339,7 +340,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		try {
 			await this.driver.sendCommand(cc, this.commandOptions);
 			return true;
-		} catch (e: unknown) {
+		} catch (e) {
 			if (
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
@@ -465,7 +466,7 @@ export class ConfigurationCCAPI extends CCAPI {
 						direction: "inbound",
 					});
 				}
-			} catch (e: unknown) {
+			} catch (e) {
 				if (
 					e instanceof ConfigurationCCError &&
 					e.code ===
@@ -504,7 +505,10 @@ export class ConfigurationCC extends CommandClass {
 			this.deserializeParamInformationFromConfig(config);
 		}
 
-		const api = this.getEndpoint()!.commandClasses.Configuration;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Configuration.withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
 
 		if (this.version < 3) {
 			const paramInfo = node.deviceConfig?.paramInformation;

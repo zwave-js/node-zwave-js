@@ -9,6 +9,7 @@ import {
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
+import { MessagePriority } from "../message/Constants";
 import { CCAPI } from "./API";
 import type { AssociationCC } from "./AssociationCC";
 import {
@@ -437,7 +438,9 @@ export class AssociationGroupInfoCC extends CommandClass {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
-		const api = endpoint.commandClasses["Association Group Information"];
+		const api = endpoint.commandClasses[
+			"Association Group Information"
+		].withOptions({ priority: MessagePriority.NodeQuery });
 
 		log.controller.logNode(node.id, {
 			endpoint: this.endpointIndex,

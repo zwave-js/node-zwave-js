@@ -11,6 +11,7 @@ import {
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
+import { MessagePriority } from "../message/Constants";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -159,7 +160,9 @@ export class AlarmSensorCC extends CommandClass {
 			return;
 		}
 
-		const api = endpoint.commandClasses["Alarm Sensor"];
+		const api = endpoint.commandClasses["Alarm Sensor"].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
 
 		log.controller.logNode(node.id, {
 			endpoint: this.endpointIndex,

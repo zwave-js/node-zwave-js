@@ -13,11 +13,6 @@
 		"typescript",
 		"typescriptreact"
 	],
-	"[typescript]": {
-		"editor.codeActionsOnSave": {
-			"source.organizeImports": true
-		}
-	},
 	"files.exclude": {
 		"node_modules/": true,
 		"coverage/": true,
@@ -99,10 +94,6 @@
 	"files.associations": {
 		"**/config/**/*.json": "jsonc"
 	},
-	"editor.rulers": [
-		72,
-		80,
-		120
-	],
+	"editor.rulers": [72, 80, 120],
 	"files.participants.timeout": 10000
 }

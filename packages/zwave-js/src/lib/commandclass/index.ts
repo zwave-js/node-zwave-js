@@ -13,30 +13,30 @@ for (const file of definedCCs) {
 
 // explicitly export specific things from the CCs
 export { AlarmSensorType } from "./AlarmSensorCC";
-export type { AssociationGroup } from "./AssociationGroupInfoCC";
 export { AssociationGroupInfoProfile } from "./AssociationGroupInfoCC";
+export type { AssociationGroup } from "./AssociationGroupInfoCC";
 export { BatteryChargingStatus, BatteryReplacementStatus } from "./BatteryCC";
 export { BinarySensorType } from "./BinarySensorCC";
 export { CentralSceneKeys } from "./CentralSceneCC";
 export { ScheduleOverrideType } from "./ClimateControlScheduleCC";
 export { Weekday } from "./ClockCC";
-export type { ColorTable } from "./ColorSwitchCC";
 export { ColorComponent } from "./ColorSwitchCC";
+export type { ColorTable } from "./ColorSwitchCC";
 export type { ConfigValue } from "./ConfigurationCC";
-export type { DoorHandleStatus } from "./DoorLockCC";
 export { DoorLockMode, DoorLockOperationType } from "./DoorLockCC";
+export type { DoorHandleStatus } from "./DoorLockCC";
 export {
+	FirmwareDownloadStatus,
+	FirmwareUpdateActivationStatus,
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateStatus,
-	FirmwareUpdateActivationStatus,
-	FirmwareDownloadStatus,
 } from "./FirmwareUpdateMetaDataCC";
 export { DeviceIdType } from "./ManufacturerSpecificCC";
 export { RateType } from "./MeterCC";
 export type { Association } from "./MultiChannelAssociationCC";
 export type {
-	MultilevelSensorValue,
 	MultilevelSensorCCReportOptions,
+	MultilevelSensorValue,
 } from "./MultilevelSensorCC";
 export { LevelChangeDirection, SwitchType } from "./MultilevelSwitchCC";
 export { LocalProtectionState, RFProtectionState } from "./ProtectionCC";
@@ -45,4 +45,4 @@ export { ThermostatMode } from "./ThermostatModeCC";
 export { ThermostatOperatingState } from "./ThermostatOperatingStateCC";
 export { SetbackType } from "./ThermostatSetbackCC";
 export { ThermostatSetpointType } from "./ThermostatSetpointCC";
-export { ZWavePlusRoleType, ZWavePlusNodeType } from "./ZWavePlusCC";
+export { ZWavePlusNodeType, ZWavePlusRoleType } from "./ZWavePlusCC";
