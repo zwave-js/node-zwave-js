@@ -1369,6 +1369,9 @@ ${handlers.length} left`,
 	private async handleRequest(msg: Message): Promise<void> {
 		let handlers: RequestHandlerEntry[] | undefined;
 
+		// For further actions, we are only interested in the innermost CC
+		if (isCommandClassContainer(msg)) this.unwrapCommands(msg);
+
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
 			const node = msg.getNodeUnsafe();
 			if (node?.status === NodeStatus.Dead) {
