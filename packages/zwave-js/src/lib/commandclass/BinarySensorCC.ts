@@ -1,6 +1,5 @@
 import {
 	CommandClasses,
-	ignoreTimeout,
 	Maybe,
 	parseBitMask,
 	validatePayload,
@@ -12,7 +11,7 @@ import {
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
-import { CCAPI } from "./API";
+import { CCAPI, ignoreTimeout } from "./API";
 import {
 	API,
 	CCCommand,
@@ -174,7 +173,8 @@ export class BinarySensorCC extends CommandClass {
 		// Always query (all of) the sensor's current value(s)
 		if (this.version === 1) {
 			await ignoreTimeout(
-				async () => {
+				api,
+				async (api) => {
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying current value...",
@@ -200,7 +200,8 @@ export class BinarySensorCC extends CommandClass {
 			for (const type of supportedSensorTypes) {
 				const sensorName = getEnumMemberName(BinarySensorType, type);
 				await ignoreTimeout(
-					async () => {
+					api,
+					async (api) => {
 						log.controller.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `querying current value for ${sensorName}...`,

@@ -142,15 +142,45 @@ export class CCAPI {
 
 	/** Creates an instance of this API, scoped to use the given options */
 	public withOptions(options: SendCommandOptions): this {
+		const mergedOptions = {
+			...this.commandOptions,
+			...options,
+		};
 		return new Proxy(this, {
 			get: (target, property) => {
 				if (property === "commandOptions") {
-					return options;
+					return mergedOptions;
 				} else {
 					return (target as any)[property];
 				}
 			},
 		});
+	}
+}
+
+/**
+ * Executes the given action and ignores any node timeout errors
+ * Returns whether the execution was successful (`true`) or timed out (`false`)
+ */
+export async function ignoreTimeout<T extends CCAPI>(
+	api: T,
+	action: (api: T) => Promise<void>,
+	onTimeout?: () => void,
+): Promise<boolean> {
+	try {
+		// Inside the action, an API must be used which does not update the node status
+		await action(api.withOptions({ changeNodeStatusOnTimeout: false }));
+		return true;
+	} catch (e: unknown) {
+		if (
+			e instanceof ZWaveError &&
+			e.code === ZWaveErrorCodes.Controller_NodeTimeout
+		) {
+			onTimeout?.();
+			return false;
+		}
+		// We don't want to swallow any other errors
+		throw e;
 	}
 }
 

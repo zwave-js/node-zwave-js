@@ -8,7 +8,6 @@ import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	encodeBitMask,
-	ignoreTimeout,
 	Maybe,
 	MessageOrCCLogEntry,
 	parseBitMask,
@@ -21,7 +20,7 @@ import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI } from "./API";
+import { CCAPI, ignoreTimeout } from "./API";
 import {
 	API,
 	CCCommand,
@@ -348,7 +347,8 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 		if (api.supportsCommand(MultiChannelCommand.EndPointFind)) {
 			// Step 2a: Find all endpoints
 			await ignoreTimeout(
-				async () => {
+				api,
+				async (api) => {
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying all endpoints...",

@@ -48,27 +48,3 @@ export function getMinimumShiftForBitMask(mask: number): number {
 	}
 	return i;
 }
-
-/**
- * Executes the given action and ignores any node timeout errors
- * Returns whether the execution was successful (`true`) or timed out (`false`)
- */
-export async function ignoreTimeout(
-	action: () => Promise<void>,
-	onTimeout?: () => void,
-): Promise<boolean> {
-	try {
-		await action();
-		return true;
-	} catch (e: unknown) {
-		if (
-			e instanceof ZWaveError &&
-			e.code === ZWaveErrorCodes.Controller_NodeTimeout
-		) {
-			onTimeout?.();
-			return false;
-		}
-		// We don't want to swallow any other errors
-		throw e;
-	}
-}

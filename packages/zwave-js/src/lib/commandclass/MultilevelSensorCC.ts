@@ -8,7 +8,6 @@ import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	encodeFloatWithScale,
-	ignoreTimeout,
 	Maybe,
 	parseBitMask,
 	parseFloatWithScale,
@@ -19,7 +18,7 @@ import {
 } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
-import { CCAPI } from "./API";
+import { CCAPI, ignoreTimeout } from "./API";
 import {
 	API,
 	CCCommand,
@@ -263,7 +262,8 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 
 				// Always query the current sensor reading
 				await ignoreTimeout(
-					async () => {
+					api,
+					async (api) => {
 						log.controller.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `querying ${getSensorTypeName(

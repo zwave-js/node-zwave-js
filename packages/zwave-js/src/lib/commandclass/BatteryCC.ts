@@ -2,7 +2,6 @@ import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
-	ignoreTimeout,
 	Maybe,
 	parseFloatWithScale,
 	validatePayload,
@@ -11,7 +10,7 @@ import {
 import type { JSONObject } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
-import { CCAPI } from "./API";
+import { CCAPI, ignoreTimeout } from "./API";
 import {
 	API,
 	CCCommand,
@@ -126,7 +125,8 @@ export class BatteryCC extends CommandClass {
 		});
 
 		await ignoreTimeout(
-			async () => {
+			api,
+			async (api) => {
 				// always query the status
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
@@ -174,7 +174,8 @@ is disconnected:                 ${batteryStatus.disconnected}`;
 
 		if (this.version >= 2) {
 			await ignoreTimeout(
-				async () => {
+				api,
+				async (api) => {
 					// always query the health
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
